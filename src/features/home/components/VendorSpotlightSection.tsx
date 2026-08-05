@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
@@ -10,21 +11,32 @@ interface VendorSpotlightSectionProps {
   isLoading?: boolean
 }
 
+function vendorInitials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? '')
+    .join('')
+}
+
 export function VendorSpotlightSection({ vendors, isLoading }: VendorSpotlightSectionProps) {
   if (isLoading) {
     return (
       <section>
         <div className="mb-6 space-y-2">
           <TextEyebrow brand>Curated makers</TextEyebrow>
-          <h2 className="text-[1.375rem] font-semibold text-ink">Vendor spotlight</h2>
+          <h2 className="font-display text-[1.75rem] leading-tight text-ink">Vendor spotlight</h2>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 lg:gap-6">
+        <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-4 lg:gap-6">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="space-y-3 rounded-md border border-line bg-surface p-4">
-              <Skeleton className="h-20 w-full rounded-md" />
-              <Skeleton className="h-5 w-2/3" />
-              <Skeleton className="h-3 w-full" />
-              <Skeleton className="h-3 w-20" />
+            <div key={i} className="overflow-hidden rounded-md border border-line bg-surface">
+              <Skeleton className="aspect-[16/10] w-full rounded-none" />
+              <div className="space-y-3 p-4">
+                <Skeleton className="h-5 w-2/3" />
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-3 w-24" />
+              </div>
             </div>
           ))}
         </div>
@@ -36,37 +48,69 @@ export function VendorSpotlightSection({ vendors, isLoading }: VendorSpotlightSe
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-end justify-between gap-4">
         <div>
           <TextEyebrow brand className="mb-2">
             Curated makers
           </TextEyebrow>
-          <h2 className="text-[1.375rem] font-semibold text-ink">Vendor spotlight</h2>
+          <h2 className="font-display text-[1.75rem] leading-tight text-ink">Vendor spotlight</h2>
         </div>
         <Link
           href="/products"
-          className="text-[0.8125rem] text-brand hover:underline inline-flex items-center gap-1"
+          className="inline-flex shrink-0 items-center gap-1 text-[0.8125rem] text-brand hover:underline"
         >
           Browse all <ArrowRight size={14} />
         </Link>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
+
+      <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-4 lg:gap-6">
         {vendors.map((vendor) => (
-          <article key={vendor.id} className="rounded-md border border-line bg-surface p-4 space-y-3">
-            <div className="h-20 rounded-md bg-brand-subtle" />
-            <div>
-              <h3 className="text-[1.125rem] font-semibold text-ink">{vendor.businessName}</h3>
-              <p className="text-[0.8125rem] text-ink-muted mt-1 line-clamp-2">
-                Known for {vendor.highlightProduct}
-              </p>
+          <article
+            key={vendor.id}
+            className="group overflow-hidden rounded-md border border-line bg-surface shadow-elevation-1 transition-colors hover:border-ink/20"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden bg-[color-mix(in_srgb,var(--brand)_10%,var(--paper))]">
+              {vendor.logoUrl || vendor.coverImageUrl ? (
+                <Image
+                  src={(vendor.logoUrl || vendor.coverImageUrl)!}
+                  alt={
+                    vendor.logoUrl
+                      ? `${vendor.businessName} logo`
+                      : `${vendor.highlightProduct} from ${vendor.businessName}`
+                  }
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                  <span className="font-display text-[2.5rem] leading-none tracking-tight text-brand">
+                    {vendorInitials(vendor.businessName) || 'V'}
+                  </span>
+                </div>
+              )}
             </div>
-            <RatingStars value={vendor.avgRating || 4} size="sm" />
-            <Link
-              href={`/products?vendorId=${vendor.id}`}
-              className="inline-flex text-[0.8125rem] text-brand hover:underline"
-            >
-              Visit storefront
-            </Link>
+
+            <div className="space-y-3 p-4">
+              <div>
+                <h3 className="font-display text-[1.25rem] leading-tight text-ink transition-colors group-hover:text-brand">
+                  {vendor.businessName}
+                </h3>
+                <p className="mt-1.5 line-clamp-2 text-[0.8125rem] leading-relaxed text-ink-muted">
+                  Known for {vendor.highlightProduct}
+                </p>
+              </div>
+
+              <RatingStars value={vendor.avgRating || 4} size="sm" />
+
+              <Link
+                href={`/products?vendorId=${vendor.id}`}
+                className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:underline"
+              >
+                Visit storefront
+                <ArrowRight size={13} />
+              </Link>
+            </div>
           </article>
         ))}
       </div>

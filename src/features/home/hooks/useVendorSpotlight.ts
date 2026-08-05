@@ -8,6 +8,8 @@ export interface SpotlightVendor {
   businessName: string
   slug: string
   logoUrl: string | null
+  /** Highlight product image — used when the vendor has no logo. */
+  coverImageUrl: string | null
   avgRating: number
   highlightProduct: string
 }
@@ -24,12 +26,18 @@ export function useVendorSpotlight() {
             item.vendor.id,
             {
               ...item.vendor,
+              coverImageUrl: item.imageUrl || null,
               avgRating: item.avgRating,
               highlightProduct: item.name,
             },
           ])
       ).values()
-    ).slice(0, 4)
+    )
+      .slice(0, 4)
+      .map((vendor, index) =>
+        // TEMP: clear first card images to verify monogram fallback
+        index === 0 ? { ...vendor, logoUrl: null, coverImageUrl: null } : vendor
+      )
   }, [data])
 
   return { vendors, isLoading }
