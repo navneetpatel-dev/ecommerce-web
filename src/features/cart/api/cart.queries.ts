@@ -17,10 +17,25 @@ function syncCartCache(
   queryClient: ReturnType<typeof useQueryClient>,
   cart: Cart | undefined
 ) {
-  if (cart) {
-    queryClient.setQueryData(cartKeys.all, cart)
+  if (!cart) {
+    queryClient.invalidateQueries({ queryKey: cartKeys.all })
+    return
   }
-  queryClient.invalidateQueries({ queryKey: cartKeys.all })
+
+  queryClient.setQueryData<Cart>(cartKeys.all, (previous) => {
+    if (!previous?.items?.length) return cart
+
+    // Keep the on-screen item order; only refresh quantities/fields from the server.
+    const nextById = new Map(cart.items.map((item) => [item.id, item]))
+    const preserved = previous.items
+      .map((item) => nextById.get(item.id))
+      .filter((item): item is Cart['items'][number] => Boolean(item))
+    const added = cart.items.filter(
+      (item) => !previous.items.some((prev) => prev.id === item.id)
+    )
+
+    return { ...cart, items: [...preserved, ...added] }
+  })
 }
 
 export function useCart() {
