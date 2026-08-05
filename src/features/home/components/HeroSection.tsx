@@ -29,7 +29,7 @@ export function HeroSection({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="relative w-full overflow-hidden bg-brand"
+      className="relative w-full overflow-hidden bg-ink"
     >
       {/* Image */}
       {imageSrc ? (
@@ -59,7 +59,7 @@ export function HeroSection({
           <div className="absolute inset-0 bg-ink/40" />
         </>
       ) : (
-        <div className="absolute inset-0 bg-brand" />
+        <div className="absolute inset-0 bg-ink" />
       )}
 
       {/* Content */}
@@ -70,14 +70,21 @@ export function HeroSection({
           transition={{ duration: 0.4, delay: 0.08 }}
           className="max-w-lg"
         >
-          <h1 className="font-display text-white leading-tight" style={{ fontSize: 'var(--text-display-lg)', lineHeight: 1.05 }}>
+          <h1
+            className="font-display text-paper leading-tight"
+            style={{ fontSize: 'var(--text-display-lg)', lineHeight: 1.05 }}
+          >
             {headline}
           </h1>
-          <p className="mt-4 text-[1.0625rem] text-white/80 max-w-md">
+          <p className="mt-4 text-[1.0625rem] text-paper/80 max-w-md">
             {subheadline}
           </p>
           <div className="mt-8">
-            <Button size="lg" variant="default" asChild>
+            <Button
+              size="lg"
+              className="bg-paper text-ink hover:bg-paper/90"
+              asChild
+            >
               <Link href={ctaHref}>{ctaLabel}</Link>
             </Button>
           </div>

@@ -70,7 +70,11 @@ export function Pagination({
             size="sm"
             onClick={() => onPageChange(item)}
             aria-current={currentPage === item ? 'page' : undefined}
-            className={currentPage === item ? 'bg-brand text-white hover:bg-brand-hover' : ''}
+            className={
+              currentPage === item
+                ? 'bg-brand-subtle text-brand hover:bg-brand-subtle'
+                : ''
+            }
           >
             {item}
           </Button>

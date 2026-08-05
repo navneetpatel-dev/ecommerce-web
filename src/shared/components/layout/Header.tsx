@@ -73,7 +73,7 @@ export function Header({
           <Link
             href="/"
             className={cn(
-              'font-display text-[1.375rem] font-semibold shrink-0',
+              'font-display text-[1.75rem] font-semibold shrink-0',
               isTransparent ? 'text-white' : 'text-brand'
             )}
           >

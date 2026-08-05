@@ -27,7 +27,7 @@ export function MobileNavDrawer({
       <div className="absolute inset-0 bg-overlay animate-fade-in" onClick={onClose} />
       <div className="absolute left-0 top-0 bottom-0 w-72 bg-surface shadow-elevation-4 animate-slide-in-left flex flex-col">
         <div className="flex items-center justify-between px-4 h-14 border-b border-line">
-          <span className="font-display text-[1.125rem] font-semibold text-brand">Menu</span>
+          <span className="text-[1.125rem] font-semibold text-brand">Menu</span>
           <button onClick={onClose} className="p-1 text-ink-muted" aria-label="Close menu">
             <X size={20} />
           </button>

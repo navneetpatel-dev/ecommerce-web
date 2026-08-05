@@ -32,7 +32,7 @@ export function VendorApprovalTable({
 }: VendorApprovalTableProps) {
   return (
     <div>
-      <h2 className="font-display text-[1.375rem] font-semibold text-ink mb-4">Vendor Approval Queue</h2>
+      <h2 className="text-[1.375rem] font-semibold text-ink mb-4">Vendor Approval Queue</h2>
       <Table>
         <TableHeader>
           <TableRow>

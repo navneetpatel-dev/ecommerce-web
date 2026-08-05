@@ -23,7 +23,7 @@ interface VendorOrdersTableProps {
 export function VendorOrdersTable({ orders, updatingId, onSetUpdatingId, onStatusChange }: VendorOrdersTableProps) {
   return (
     <div className="space-y-4">
-      <h2 className="font-display text-[1.375rem] font-semibold text-ink">Order Management</h2>
+      <h2 className="text-[1.375rem] font-semibold text-ink">Order Management</h2>
       <Table>
         <TableHeader>
           <TableRow>

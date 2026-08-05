@@ -16,7 +16,7 @@ interface PayoutsTableProps {
 export function PayoutsTable({ payouts }: PayoutsTableProps) {
   return (
     <div>
-      <h2 className="font-display text-[1.375rem] font-semibold text-ink mb-4">Payouts</h2>
+      <h2 className="text-[1.375rem] font-semibold text-ink mb-4">Payouts</h2>
       <Table>
         <TableHeader>
           <TableRow>

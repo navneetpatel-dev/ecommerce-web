@@ -8,6 +8,7 @@ import type { ProductListItem } from '@/shared/api/types'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { DiscountBadge } from '@/shared/components/DiscountBadge'
+import { ProductImagePlaceholder } from '@/shared/components/ProductImagePlaceholder'
 import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 
@@ -62,13 +63,11 @@ export function ProductCard({
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-brand-subtle text-ink-faint font-display font-medium text-[1.75rem]">
-              {product.name?.charAt(0)}
-            </div>
+            <ProductImagePlaceholder />
           )}
 
           {product.stock <= 5 && product.stock > 0 && (
-            <span className="absolute top-2 left-2 bg-accent text-white text-[0.8125rem] font-semibold rounded-sm px-2 py-1">
+            <span className="absolute top-2 left-2 bg-accent-subtle text-accent text-[0.8125rem] font-semibold rounded-sm px-2 py-1">
               Only {product.stock} left
             </span>
           )}

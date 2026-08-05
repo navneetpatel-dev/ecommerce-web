@@ -26,7 +26,7 @@ export function ProductsTableHeader({ search, onSearchChange, onAddProduct }: Pr
     <div className="mb-4 space-y-2">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <h2 className="font-display text-[1.375rem] font-semibold text-ink">Products</h2>
+          <h2 className="text-[1.375rem] font-semibold text-ink">Products</h2>
           <Input
             placeholder="Search products..."
             className="w-64 text-[0.9375rem]"

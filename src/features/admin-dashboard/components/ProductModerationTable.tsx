@@ -31,7 +31,7 @@ export function ProductModerationTable({
 }: ProductModerationTableProps) {
   return (
     <div>
-      <h2 className="font-display text-[1.375rem] font-semibold text-ink mb-4">Product Moderation Queue</h2>
+      <h2 className="text-[1.375rem] font-semibold text-ink mb-4">Product Moderation Queue</h2>
       <Table>
         <TableHeader>
           <TableRow>

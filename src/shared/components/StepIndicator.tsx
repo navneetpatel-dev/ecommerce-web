@@ -43,8 +43,8 @@ export function StepIndicator({
               <span
                 className={cn(
                   'flex items-center justify-center w-11 h-11 rounded-full text-[0.8125rem] font-semibold transition-all',
-                  isCompleted && 'bg-brand text-white',
-                  isCurrent && 'bg-brand text-white',
+                  isCompleted && 'bg-ink text-paper',
+                  isCurrent && 'bg-ink text-paper',
                   isUpcoming && 'border-2 border-line text-ink-muted bg-surface'
                 )}
               >
@@ -53,7 +53,7 @@ export function StepIndicator({
               <span
                 className={cn(
                   'text-[0.8125rem] font-medium transition-colors',
-                  isCompleted && 'text-brand',
+                  isCompleted && 'text-ink',
                   isCurrent && 'text-ink',
                   isUpcoming && 'text-ink-muted'
                 )}
@@ -65,7 +65,7 @@ export function StepIndicator({
               <div
                 className={cn(
                   'w-12 md:w-16 h-0.5 mx-2 transition-colors',
-                  isCompleted ? 'bg-brand' : 'bg-line'
+                  isCompleted ? 'bg-ink' : 'bg-line'
                 )}
               />
             )}

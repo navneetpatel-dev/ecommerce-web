@@ -44,7 +44,7 @@ export function ReviewForm({
               onMouseLeave={() => onSetHoverRating(0)}
             >
               <Star
-                className={`h-6 w-6 ${i <= (hoverRating || rating) ? 'fill-accent text-accent' : 'text-line'}`}
+                className={`h-6 w-6 ${i <= (hoverRating || rating) ? 'fill-warning text-warning' : 'text-line'}`}
               />
             </button>
           ))}

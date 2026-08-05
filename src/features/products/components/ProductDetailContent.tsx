@@ -7,6 +7,7 @@ import { ProductReviewsContainer } from '@/features/reviews/containers/ProductRe
 import { ShareButtonContainer } from '@/shared/containers/ShareButtonContainer'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { RatingStars } from '@/shared/components/RatingStars'
+import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { Button } from '@/shared/components/ui/button'
 import { Breadcrumbs } from '@/shared/components/Breadcrumbs'
 import { QuantitySelector } from '@/shared/components/QuantitySelector'
@@ -101,6 +102,12 @@ export function ProductDetailContent({
         <div className="md:col-span-5" ref={addSectionRef}>
           <div className="space-y-6 lg:sticky lg:top-[88px]">
             <VendorStrip vendor={product.vendor} size="md" rating={product.avgRating} />
+
+            {(product.category?.name || product.categoryName) && (
+              <TextEyebrow className="-mb-2">
+                {product.category?.name ?? product.categoryName}
+              </TextEyebrow>
+            )}
 
             <h1 className="font-display text-ink leading-tight" style={{ fontSize: 'var(--text-display-sm)' }}>
               {product.name}

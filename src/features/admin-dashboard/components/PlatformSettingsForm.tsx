@@ -25,7 +25,7 @@ export function PlatformSettingsForm({
 }: PlatformSettingsFormProps) {
   return (
     <div className="max-w-lg space-y-6">
-      <h2 className="font-display text-[1.375rem] font-semibold text-ink">Platform Settings</h2>
+      <h2 className="text-[1.375rem] font-semibold text-ink">Platform Settings</h2>
       <p className="text-[0.9375rem] text-ink-muted">
         Manage default commission, return window, payout cycle, and moderation behavior.
       </p>

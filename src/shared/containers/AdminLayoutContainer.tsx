@@ -18,7 +18,7 @@ export function AdminLayoutContainer({ children }: { children: React.ReactNode }
           header={
             <div className="flex items-center gap-2 px-3 py-2 mb-4">
               <ShieldCheck className="h-5 w-5 text-brand" />
-              <span className="font-display font-semibold text-brand">Admin</span>
+              <span className="text-[1.125rem] font-semibold text-brand">Admin</span>
             </div>
           }
         />

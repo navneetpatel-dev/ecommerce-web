@@ -15,7 +15,7 @@ export function ReviewStep({ quote, isPending, onPlaceOrder, onBack }: ReviewSte
   if (!quote) {
     return (
       <div className="space-y-4">
-        <h2 className="font-display text-[1.375rem] font-semibold text-ink">Order review</h2>
+        <h2 className="text-[1.375rem] font-semibold text-ink">Order review</h2>
         <p className="text-[0.9375rem] text-ink-muted">Preparing your order summary…</p>
         <Button variant="outline" onClick={onBack}>
           Back
@@ -26,7 +26,7 @@ export function ReviewStep({ quote, isPending, onPlaceOrder, onBack }: ReviewSte
 
   return (
     <div className="space-y-4">
-      <h2 className="font-display text-[1.375rem] font-semibold text-ink">Order review</h2>
+      <h2 className="text-[1.375rem] font-semibold text-ink">Order review</h2>
       {quote.vendorBreakdowns.map((vb) => (
         <Card key={vb.vendorId}>
           <CardHeader>

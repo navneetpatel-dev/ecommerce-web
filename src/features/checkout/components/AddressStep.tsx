@@ -56,7 +56,7 @@ export function AddressStep({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-display text-[1.375rem] font-semibold text-ink">Select delivery address</h2>
+        <h2 className="text-[1.375rem] font-semibold text-ink">Select delivery address</h2>
         <Button type="button" variant="outline" size="sm" onClick={() => setShowForm((v) => !v)}>
           {showForm ? 'Cancel' : 'Add address'}
         </Button>

@@ -21,7 +21,7 @@ export function PaymentStep({
 }: PaymentStepProps) {
   return (
     <div className="space-y-4">
-      <h2 className="font-display text-[1.375rem] font-semibold text-ink">Payment method</h2>
+      <h2 className="text-[1.375rem] font-semibold text-ink">Payment method</h2>
       <p className="text-[0.9375rem] text-ink-muted">Choose how you want to pay, then review your order.</p>
       <div className="space-y-3">
         <button

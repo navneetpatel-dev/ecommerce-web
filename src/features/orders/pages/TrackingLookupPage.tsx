@@ -9,7 +9,7 @@ export function TrackingLookupPage() {
 
   return (
     <div className="max-w-md mx-auto px-4 py-8 space-y-4">
-      <h1 className="font-display text-[1.375rem] font-semibold text-ink">Track Shipment</h1>
+      <h1 className="text-[1.375rem] font-semibold text-ink">Track Shipment</h1>
       <TrackingForm
         trackingNumber={tracking.trackingNumber}
         onTrackingNumberChange={tracking.setTrackingNumber}
