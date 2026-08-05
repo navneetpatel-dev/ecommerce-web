@@ -96,16 +96,24 @@ export function CartPageSkeleton() {
 
 export function CheckoutPageSkeleton() {
   return (
-    <div className="mx-auto max-w-[1600px] space-y-6 px-4 py-8">
-      <Skeleton className="h-8 w-36" />
-      <Skeleton className="h-12 w-full rounded-md" />
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        <div className="space-y-4 lg:col-span-7">
-          <Skeleton className="h-56 w-full rounded-md" />
-          <Skeleton className="h-40 w-full rounded-md" />
+    <div className="relative">
+      <div className="mx-auto max-w-[1600px] space-y-8 px-4 py-6 md:py-8">
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-9 w-64" />
         </div>
-        <div className="lg:col-span-5">
-          <Skeleton className="h-72 w-full rounded-md" />
+        <Skeleton className="h-20 w-full" />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="space-y-4 lg:col-span-7 xl:col-span-8">
+            <Skeleton className="h-3 w-28" />
+            <Skeleton className="h-8 w-72" />
+            <Skeleton className="h-4 w-80" />
+            <Skeleton className="mt-4 h-40 w-full" />
+            <Skeleton className="h-28 w-full" />
+          </div>
+          <div className="lg:col-span-5 xl:col-span-4">
+            <Skeleton className="h-80 w-full" />
+          </div>
         </div>
       </div>
     </div>

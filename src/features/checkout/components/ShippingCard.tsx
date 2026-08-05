@@ -1,5 +1,5 @@
 import { VendorStrip } from '@/shared/components/VendorStrip'
-import { Card, CardHeader, CardContent } from '@/shared/components/ui/card'
+import { cn } from '@/shared/utils/cn'
 
 interface ShippingCardProps {
   vendorId: string
@@ -9,31 +9,56 @@ interface ShippingCardProps {
 }
 
 const SHIPPING_OPTIONS = [
-  { method: 'STANDARD' as const, label: 'Standard', cost: 0, days: '5-7' },
-  { method: 'EXPRESS' as const, label: 'Express', cost: 149, days: '2-3' },
+  {
+    method: 'STANDARD' as const,
+    label: 'Standard',
+    cost: 0,
+    days: '5–7 business days',
+    note: 'Best value',
+  },
+  {
+    method: 'EXPRESS' as const,
+    label: 'Express',
+    cost: 149,
+    days: '2–3 business days',
+    note: 'Faster delivery',
+  },
 ]
 
 export function ShippingCard({ vendor, selected, onSelect }: ShippingCardProps) {
   return (
-    <Card>
-      <CardHeader><VendorStrip vendor={vendor} /></CardHeader>
-      <CardContent className="space-y-2">
-        {SHIPPING_OPTIONS.map((r) => (
-          <button
-            key={r.method}
-            onClick={() => onSelect(r.method)}
-            className={`w-full text-left p-3 rounded-md border transition-colors ${
-              selected === r.method ? 'border-brand bg-brand-subtle' : 'border-line hover:border-brand'
-            }`}
-          >
-            <div className="flex justify-between">
-              <span className="font-medium">{r.label}</span>
-              <span className="font-mono">{r.cost === 0 ? 'Free' : `₹${r.cost}`}</span>
-            </div>
-            <p className="text-[0.8125rem] text-ink-muted">{r.days} days</p>
-          </button>
-        ))}
-      </CardContent>
-    </Card>
+    <section className="border border-line bg-surface-raised p-4 shadow-elevation-1 md:p-5">
+      <VendorStrip vendor={vendor} />
+
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        {SHIPPING_OPTIONS.map((option) => {
+          const isSelected = selected === option.method
+          return (
+            <button
+              key={option.method}
+              type="button"
+              onClick={() => onSelect(option.method)}
+              className={cn(
+                'border px-4 py-3.5 text-left transition-colors',
+                isSelected
+                  ? 'border-brand bg-brand-subtle shadow-[inset_3px_0_0_0_var(--brand)]'
+                  : 'border-line bg-surface hover:border-ink/25'
+              )}
+            >
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="font-medium text-ink">{option.label}</span>
+                <span className="font-mono text-[0.875rem] tabular-nums text-ink">
+                  {option.cost === 0 ? 'Free' : `₹${option.cost}`}
+                </span>
+              </div>
+              <p className="mt-1 text-[0.8125rem] text-ink-muted">{option.days}</p>
+              <p className="mt-2 text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-brand">
+                {option.note}
+              </p>
+            </button>
+          )
+        })}
+      </div>
+    </section>
   )
 }

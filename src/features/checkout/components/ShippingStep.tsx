@@ -1,3 +1,4 @@
+import { ArrowRight } from 'lucide-react'
 import type { CartItem } from '@/shared/api/types'
 import { ShippingCard } from './ShippingCard'
 import { Button } from '@/shared/components/ui/button'
@@ -18,24 +19,39 @@ export function ShippingStep({
   onSelect,
   onContinue,
 }: ShippingStepProps) {
+  const vendors = Object.entries(groupedByVendor)
+
   return (
-    <div className="space-y-6">
-      <h2 className="text-[1.375rem] font-semibold text-ink">Select shipping method</h2>
-      {Object.entries(groupedByVendor).map(([vid, items]) => (
-        <ShippingCard
-          key={vid}
-          vendorId={vid}
-          vendor={items[0].product.vendor}
-          selected={selectedMethods[vid]}
-          onSelect={(m) => onSelect(vid, m)}
-        />
-      ))}
+    <div className="space-y-5">
+      <p className="text-[0.875rem] text-ink-muted">
+        {vendors.length} {vendors.length === 1 ? 'vendor' : 'vendors'} in this order
+      </p>
+
+      <div className="space-y-4">
+        {vendors.map(([vid, items]) => (
+          <ShippingCard
+            key={vid}
+            vendorId={vid}
+            vendor={items[0].product.vendor}
+            selected={selectedMethods[vid]}
+            onSelect={(m) => onSelect(vid, m)}
+          />
+        ))}
+      </div>
+
       <DisabledActionHint
         disabled={!canContinue}
         message="Select a shipping method for each vendor to continue."
+        className="w-full sm:w-auto"
       >
-        <Button onClick={onContinue} disabled={!canContinue}>
-          Continue
+        <Button
+          size="lg"
+          onClick={onContinue}
+          disabled={!canContinue}
+          className="w-full gap-2 sm:w-auto"
+        >
+          Continue to payment
+          <ArrowRight size={16} />
         </Button>
       </DisabledActionHint>
     </div>
