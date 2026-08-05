@@ -64,17 +64,20 @@ export function Header({
         <div className="mx-auto px-4 h-full flex items-center gap-4 lg:gap-6 max-w-[1600px]">
           <button
             onClick={onOpenMobileNav}
-            className="lg:hidden p-2 -ml-2 hover:bg-paper rounded-md"
+            className={cn(
+              'lg:hidden p-2 -ml-2 rounded-md',
+              isTransparent ? 'hover:bg-white/10' : 'hover:bg-paper'
+            )}
             aria-label="Menu"
           >
-            <Menu size={20} className={cn(isTransparent ? 'text-white' : 'text-ink')} />
+            <Menu size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
           </button>
 
           <Link
             href="/"
             className={cn(
               'font-display text-[1.75rem] font-semibold shrink-0',
-              isTransparent ? 'text-white' : 'text-brand'
+              isTransparent ? 'text-paper' : 'text-brand'
             )}
           >
             Marketplace
@@ -90,7 +93,7 @@ export function Header({
                 type="button"
                 className={cn(
                   'inline-flex items-center gap-1 px-3 py-2 rounded-md text-[0.8125rem] font-medium transition-colors',
-                  isTransparent ? 'text-white hover:bg-white/10' : 'text-ink hover:bg-paper'
+                  isTransparent ? 'text-paper hover:bg-white/10' : 'text-ink hover:bg-paper'
                 )}
                 aria-expanded={megaMenuOpen}
                 aria-label="Browse categories"
@@ -139,7 +142,7 @@ export function Header({
                 href={link.href}
                 className={cn(
                   'px-3 py-2 rounded-md text-[0.8125rem] font-medium transition-colors',
-                  isTransparent ? 'text-white hover:bg-white/10' : 'text-ink hover:bg-paper'
+                  isTransparent ? 'text-paper hover:bg-white/10' : 'text-ink hover:bg-paper'
                 )}
               >
                 {link.label}
@@ -148,25 +151,31 @@ export function Header({
           </nav>
 
           <div className="hidden md:flex flex-1 max-w-xl mx-auto">
-            <SearchBarContainer />
+            <SearchBarContainer onDark={isTransparent} />
           </div>
 
           <nav aria-label="Header actions" className="flex items-center gap-1 shrink-0">
             <button
               type="button"
               onClick={onOpenMobileSearch}
-              className="md:hidden p-2 hover:bg-paper rounded-md"
+              className={cn(
+                'md:hidden p-2 rounded-md',
+                isTransparent ? 'hover:bg-white/10' : 'hover:bg-paper'
+              )}
               aria-label="Search"
             >
-              <Search size={20} className={cn(isTransparent ? 'text-white' : 'text-ink')} />
+              <Search size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
             </button>
 
             <button
               onClick={onOpenCart}
-              className="p-2 hover:bg-paper rounded-md transition-colors relative"
+              className={cn(
+                'p-2 rounded-md transition-colors relative',
+                isTransparent ? 'hover:bg-white/10' : 'hover:bg-paper'
+              )}
               aria-label="Cart"
             >
-              <ShoppingCart size={20} className={cn(isTransparent ? 'text-white' : 'text-ink')} />
+              <ShoppingCart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
             </button>
 
             {!currentUser ? (
@@ -175,7 +184,7 @@ export function Header({
                 className={cn(
                   'hidden sm:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                   isTransparent
-                    ? 'text-white hover:bg-white/10'
+                    ? 'text-paper hover:bg-white/10'
                     : 'text-ink hover:bg-paper'
                 )}
               >
@@ -185,15 +194,36 @@ export function Header({
               <>
                 {currentUser.role === 'CUSTOMER' && (
                   <div className="hidden lg:flex items-center gap-1">
-                    <Link href="/orders" className="px-3 py-1.5 text-[0.8125rem] font-medium rounded-md hover:bg-paper transition-colors">Orders</Link>
-                    <Link href="/wishlist" className="px-3 py-1.5 text-[0.8125rem] font-medium rounded-md hover:bg-paper transition-colors">Wishlist</Link>
+                    <Link
+                      href="/orders"
+                      className={cn(
+                        'px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
+                        isTransparent ? 'text-paper hover:bg-white/10' : 'hover:bg-paper'
+                      )}
+                    >
+                      Orders
+                    </Link>
+                    <Link
+                      href="/wishlist"
+                      className={cn(
+                        'px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
+                        isTransparent ? 'text-paper hover:bg-white/10' : 'hover:bg-paper'
+                      )}
+                    >
+                      Wishlist
+                    </Link>
                   </div>
                 )}
 
                 {(currentUser.role === 'VENDOR_OWNER' || currentUser.role === 'VENDOR_STAFF') && (
                   <Link
                     href="/vendor/dashboard/overview"
-                    className="hidden lg:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md text-brand hover:bg-brand-subtle transition-colors"
+                    className={cn(
+                      'hidden lg:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
+                      isTransparent
+                        ? 'text-paper hover:bg-white/10'
+                        : 'text-brand hover:bg-brand-subtle'
+                    )}
                   >
                     Vendor Dashboard
                   </Link>
@@ -202,7 +232,12 @@ export function Header({
                 {(currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'ADMIN_STAFF') && (
                   <Link
                     href="/admin/vendors"
-                    className="hidden lg:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md text-brand hover:bg-brand-subtle transition-colors"
+                    className={cn(
+                      'hidden lg:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
+                      isTransparent
+                        ? 'text-paper hover:bg-white/10'
+                        : 'text-brand hover:bg-brand-subtle'
+                    )}
                   >
                     Admin Panel
                   </Link>
@@ -210,18 +245,24 @@ export function Header({
 
                 <button
                   onClick={onGoToProfile}
-                  className="p-2 hover:bg-paper rounded-md transition-colors"
+                  className={cn(
+                    'p-2 rounded-md transition-colors',
+                    isTransparent ? 'hover:bg-white/10' : 'hover:bg-paper'
+                  )}
                   title={currentUser.name}
                 >
-                  <User size={20} className={cn(isTransparent ? 'text-white' : 'text-ink')} />
+                  <User size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
                 </button>
 
                 <button
                   onClick={onLogout}
-                  className="p-2 hover:bg-paper rounded-md transition-colors hidden sm:block"
+                  className={cn(
+                    'p-2 rounded-md transition-colors hidden sm:block',
+                    isTransparent ? 'hover:bg-white/10' : 'hover:bg-paper'
+                  )}
                   title="Log out"
                 >
-                  <LogOut size={20} className={cn(isTransparent ? 'text-white' : 'text-ink')} />
+                  <LogOut size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
                 </button>
               </>
             )}

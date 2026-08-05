@@ -13,6 +13,8 @@ interface SearchSuggestion {
 interface SearchBarProps {
   size?: 'lg' | 'sm'
   className?: string
+  /** High-contrast treatment when the header sits over a dark hero */
+  onDark?: boolean
   term: string
   open: boolean
   suggestions?: SearchSuggestion[]
@@ -26,6 +28,7 @@ interface SearchBarProps {
 export function SearchBar({
   size = 'lg',
   className,
+  onDark = false,
   term,
   open,
   suggestions,
@@ -38,7 +41,13 @@ export function SearchBar({
   return (
     <div className={cn('relative w-full', className)}>
       <form onSubmit={onSubmit} className="relative">
-        <Search size={size === 'sm' ? 16 : 20} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-muted pointer-events-none" />
+        <Search
+          size={size === 'sm' ? 16 : 20}
+          className={cn(
+            'absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none',
+            onDark ? 'text-paper/70' : 'text-ink-muted'
+          )}
+        />
         <input
           type="text"
           value={term}
@@ -47,8 +56,11 @@ export function SearchBar({
           onBlur={onBlur}
           placeholder="Search products, vendors..."
           className={cn(
-            'w-full rounded-full border border-line bg-paper px-4 placeholder:text-ink-faint focus-visible:outline-hidden focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
-            size === 'sm' ? 'h-11 text-[0.8125rem] pl-9' : 'h-11 text-[0.9375rem] pl-11'
+            'w-full rounded-full border px-4 focus-visible:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+            size === 'sm' ? 'h-11 text-[0.8125rem] pl-9' : 'h-11 text-[0.9375rem] pl-11',
+            onDark
+              ? 'border-paper/25 bg-paper/10 text-paper placeholder:text-paper/55 focus-visible:border-paper/50'
+              : 'border-line bg-paper placeholder:text-ink-faint focus-visible:border-brand'
           )}
         />
       </form>

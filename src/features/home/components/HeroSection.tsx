@@ -29,7 +29,7 @@ export function HeroSection({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="relative w-full overflow-hidden bg-ink"
+      className="relative w-full overflow-hidden bg-ink -mt-14 pt-14 lg:-mt-[72px] lg:pt-[72px]"
     >
       {/* Image */}
       {imageSrc ? (

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useLogout } from '@/features/auth/api/auth.queries'
 import { useCartDrawerStore } from '@/features/cart/store/cart.store'
@@ -18,21 +18,23 @@ export function useHeader() {
   const logout = useLogout()
   const openCart = useCartDrawerStore((s) => s.open)
   const router = useRouter()
+  const pathname = usePathname()
   const { data: categories = [] } = useCategories()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [isHomepage, setIsHomepage] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const openTimerRef = useRef<number | null>(null)
   const closeTimerRef = useRef<number | null>(null)
 
+  const isHomepage = pathname === '/'
+
   useEffect(() => {
-    setIsHomepage(window.location.pathname === '/')
-    const handleScroll = () => setScrolled(window.scrollY > 100)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    const updateScroll = () => setScrolled(window.scrollY > 24)
+    updateScroll()
+    window.addEventListener('scroll', updateScroll, { passive: true })
+    return () => window.removeEventListener('scroll', updateScroll)
+  }, [pathname])
 
   useEffect(() => {
     return () => {
@@ -51,6 +53,9 @@ export function useHeader() {
     closeTimerRef.current = window.setTimeout(() => setMegaMenuOpen(false), 200)
   }
 
+  // White-on-transparent only while over the dark homepage hero
+  const isTransparent = isHomepage && !scrolled && !megaMenuOpen && !mobileNavOpen
+
   return {
     currentUser,
     categories,
@@ -59,7 +64,7 @@ export function useHeader() {
     mobileNavOpen,
     mobileSearchOpen,
     megaMenuOpen,
-    isTransparent: isHomepage && !scrolled,
+    isTransparent,
     openMobileNav: () => setMobileNavOpen(true),
     closeMobileNav: () => setMobileNavOpen(false),
     openMobileSearch: () => setMobileSearchOpen(true),
