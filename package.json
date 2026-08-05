@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "spec:check": "npm run typecheck && npm run lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",

@@ -63,10 +63,10 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
         Your order may arrive in multiple shipments from different vendors. Each vendor handles their own shipping.
       </p>
       <div className="flex gap-3 justify-center">
-        <Button variant="outline" asChild>
+        <Button asChild>
           <Link href={orderId ? `/orders/${orderId}` : '/orders'}>View order</Link>
         </Button>
-        <Button asChild>
+        <Button variant="secondary" asChild>
           <Link href="/">Continue shopping</Link>
         </Button>
       </div>

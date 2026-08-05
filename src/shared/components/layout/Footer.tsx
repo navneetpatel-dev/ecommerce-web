@@ -115,9 +115,9 @@ export function Footer() {
             Marketplace &copy; {new Date().getFullYear()}
           </p>
           <div className="flex items-center gap-4 text-[0.8125rem] text-ink-muted">
-            <span className="flex items-center gap-1">💳 Visa</span>
-            <span className="flex items-center gap-1">💳 Mastercard</span>
-            <span className="flex items-center gap-1">💳 UPI</span>
+            <span>Visa</span>
+            <span>Mastercard</span>
+            <span>UPI</span>
           </div>
         </div>
       </div>

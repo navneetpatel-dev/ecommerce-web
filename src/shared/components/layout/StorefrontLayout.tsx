@@ -4,6 +4,7 @@ import { Header } from '@/shared/components/layout/Header'
 import { Footer } from '@/shared/components/layout/Footer'
 import { CartDrawer } from '@/features/cart/components/CartDrawer'
 import { ScrollToTop } from '@/shared/components/ScrollToTop'
+import { CookieBanner } from '@/shared/components/CookieBanner'
 
 export function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export function StorefrontLayout({ children }: { children: React.ReactNode }) {
       <CartDrawer />
       <Footer />
       <ScrollToTop />
+      <CookieBanner />
     </div>
   )
 }

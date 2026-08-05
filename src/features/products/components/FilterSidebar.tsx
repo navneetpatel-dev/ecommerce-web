@@ -14,13 +14,14 @@ interface FilterSidebarProps {
   rating: number | undefined
   onUpdateFilter: (key: string, value: unknown) => void
   onClear: () => void
+  className?: string
 }
 
-export function FilterSidebar({ minPrice, maxPrice, rating, onUpdateFilter, onClear }: FilterSidebarProps) {
+export function FilterSidebar({ minPrice, maxPrice, rating, onUpdateFilter, onClear, className }: FilterSidebarProps) {
   const hasFilters = minPrice !== undefined || maxPrice !== undefined || rating !== undefined
 
   return (
-    <aside className="w-60 shrink-0 hidden lg:block">
+    <aside className={className ?? "w-60 shrink-0 hidden lg:block"}>
       <div className="space-y-0 sticky top-[88px]">
         <Accordion type="multiple" defaultValue={['price', 'rating']}>
           <AccordionItem value="price">

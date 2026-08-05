@@ -40,14 +40,20 @@ export function ProductCard({
       >
         {/* Image */}
         <div className="aspect-square rounded-md overflow-hidden bg-paper border border-line relative">
-          <Image
-            src={product.imageUrl}
-            alt={product.name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            loading="lazy"
-          />
+          {product.imageUrl ? (
+            <Image
+              src={product.imageUrl}
+              alt={product.name}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-brand-subtle text-brand/30 font-display font-medium text-2xl">
+              {product.name?.charAt(0)}
+            </div>
+          )}
 
           {/* Scarcity badge */}
           {product.stock <= 5 && product.stock > 0 && (

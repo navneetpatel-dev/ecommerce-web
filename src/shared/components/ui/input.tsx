@@ -14,7 +14,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          "flex h-11 w-full rounded-sm border bg-surface px-4 text-[0.9375rem] shadow-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-ink-faint focus-visible:outline-hidden focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-11 w-full rounded-sm border bg-surface px-4 text-[0.9375rem] transition-colors file:border-0 file:bg-transparent file:text-[0.8125rem] file:font-medium placeholder:text-ink-faint focus-visible:outline-hidden focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50",
           error ? "border-danger" : "border-line",
           className
         )}
@@ -42,7 +42,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Omit<InputProps, 'type'
           type="button"
           onClick={() => setShow(!show)}
           className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink"
-          tabIndex={-1}
+          aria-label={show ? 'Hide password' : 'Show password'}
         >
           {show ? <EyeOff size={20} /> : <Eye size={20} />}
         </button>

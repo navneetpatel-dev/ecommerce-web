@@ -18,10 +18,10 @@ const buttonVariants = cva(
         link: "text-brand underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-9 px-6 rounded-md text-[0.9375rem]",
+        default: "h-11 px-6 rounded-md text-[0.9375rem]",
         sm: "h-8 px-4 rounded-md text-[0.8125rem]",
         lg: "h-11 px-6 rounded-md text-[0.9375rem]",
-        icon: "h-9 w-9 rounded-md",
+        icon: "h-11 w-11 rounded-md",
       },
       fullWidth: {
         true: "w-full",

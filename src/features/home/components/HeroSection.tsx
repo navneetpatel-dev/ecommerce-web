@@ -29,7 +29,7 @@ export function HeroSection({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="relative w-full overflow-hidden bg-brand-dark"
+      className="relative w-full overflow-hidden bg-brand"
     >
       {/* Image */}
       {imageSrc ? (
@@ -59,7 +59,7 @@ export function HeroSection({
           <div className="absolute inset-0 bg-ink/40" />
         </>
       ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-dark to-brand" />
+        <div className="absolute inset-0 bg-brand" />
       )}
 
       {/* Content */}

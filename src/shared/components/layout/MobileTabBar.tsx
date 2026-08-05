@@ -18,10 +18,10 @@ export function MobileTabBar() {
         <Home size={20} />
         <span className="text-[0.625rem]">Home</span>
       </Link>
-      <button className="flex flex-col items-center gap-0.5 text-ink-muted">
+      <Link href="/products" className="flex flex-col items-center gap-0.5 text-ink-muted">
         <Search size={20} />
         <span className="text-[0.625rem]">Search</span>
-      </button>
+      </Link>
       <button onClick={openCart} className="flex flex-col items-center gap-0.5 text-ink-muted">
         <ShoppingCart size={20} />
         <span className="text-[0.625rem]">Cart</span>

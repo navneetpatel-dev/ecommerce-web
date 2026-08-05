@@ -30,6 +30,12 @@ export function Header() {
 
   const isTransparent = isHomepage && !scrolled
 
+  const primaryLinks = [
+    { href: '/products', label: 'Shop' },
+    { href: '/products?sort=newest', label: 'New Arrivals' },
+    { href: '/products?sort=rating', label: 'Top Rated' },
+  ]
+
   return (
     <>
       <header
@@ -61,6 +67,22 @@ export function Header() {
           >
             Marketplace
           </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {primaryLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'px-3 py-2 rounded-md text-[0.8125rem] font-medium transition-colors',
+                  isTransparent ? 'text-white hover:bg-white/10' : 'text-ink hover:bg-paper'
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
 
           {/* Search (hidden on mobile, icon triggers mobile search) */}
           <div className="hidden md:flex flex-1 max-w-xl mx-auto">

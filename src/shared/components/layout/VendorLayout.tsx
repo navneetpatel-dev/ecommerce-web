@@ -20,7 +20,7 @@ export function VendorLayout({ children }: { children: React.ReactNode }) {
       <Header />
       <div className="flex">
         <SidebarNav items={navItems} currentPath={pathname} />
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 lg:p-8 bg-surface">
           {children}
         </main>
       </div>

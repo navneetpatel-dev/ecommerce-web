@@ -8,11 +8,11 @@ interface SortBarProps {
 export function SortBar({ sort, totalProducts, isFetching, onSortChange }: SortBarProps) {
   return (
     <div className="flex items-center justify-between mb-6">
-      <p className="text-sm text-ink/70">
+      <p className="text-[0.8125rem] text-ink-muted">
         {totalProducts !== undefined ? `${totalProducts} products` : isFetching ? 'Loading...' : ''}
       </p>
       <select
-        className="h-8 rounded border border-line bg-surface px-2 text-xs"
+        className="h-11 rounded-sm border border-line bg-surface px-4 text-[0.9375rem]"
         value={sort || ''}
         onChange={(e) => onSortChange(e.target.value)}
       >

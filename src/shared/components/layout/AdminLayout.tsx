@@ -30,7 +30,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             </div>
           }
         />
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 lg:p-8 bg-surface">
           {children}
         </main>
       </div>

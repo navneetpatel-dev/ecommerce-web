@@ -11,6 +11,7 @@ import { QuantitySelector } from '@/shared/components/QuantitySelector'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/components/ui/tabs'
 import { Heart, Truck, RotateCcw } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
+import type { ProductListItem } from '@/shared/api/types'
 
 interface Product {
   id: string
@@ -59,6 +60,30 @@ export function ProductDetailContent({
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  useEffect(() => {
+    const recentKey = 'recently-viewed-products'
+    const productSnapshot: ProductListItem = {
+      id: product.id,
+      slug: product.slug || product.id,
+      name: product.name,
+      basePrice: product.basePrice,
+      avgRating: product.avgRating,
+      reviewCount: product.reviewCount,
+      imageUrl: product.imageUrl,
+      stock: product.stock,
+      vendor: product.vendor,
+      compareAtPrice: product.compareAtPrice,
+    }
+    try {
+      const current = JSON.parse(localStorage.getItem(recentKey) || '[]') as ProductListItem[]
+      const withoutCurrent = current.filter((item) => item.id !== productSnapshot.id)
+      const next = [productSnapshot, ...withoutCurrent].slice(0, 12)
+      localStorage.setItem(recentKey, JSON.stringify(next))
+    } catch {
+      localStorage.setItem(recentKey, JSON.stringify([productSnapshot]))
+    }
+  }, [product])
 
   const breadcrumbItems = [
     { label: 'Products', href: '/products' },
@@ -152,6 +177,7 @@ export function ProductDetailContent({
         <Tabs defaultValue="description">
           <TabsList>
             <TabsTrigger value="description">Description</TabsTrigger>
+            <TabsTrigger value="specifications">Specifications</TabsTrigger>
             <TabsTrigger value="reviews">Reviews ({product.reviewCount})</TabsTrigger>
           </TabsList>
           <TabsContent value="description" className="py-6">
@@ -159,8 +185,19 @@ export function ProductDetailContent({
               <ProductInfo product={product} />
             </div>
           </TabsContent>
+          <TabsContent value="specifications" className="py-6">
+            <div className="max-w-[65ch] text-[0.9375rem] text-ink-muted space-y-2">
+              <p>SKU: {product?.variants?.[0]?.sku ?? 'Not available'}</p>
+              <p>Category: {product.categoryName ?? 'General'}</p>
+              <p>Stock: {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}</p>
+            </div>
+          </TabsContent>
           <TabsContent value="reviews" className="py-6">
-            <p className="text-ink-muted">Reviews will be displayed here.</p>
+            {product.reviewCount > 0 ? (
+              <p className="text-[0.9375rem] text-ink-muted">Reviews are available from verified buyers in order history.</p>
+            ) : (
+              <p className="text-[0.9375rem] text-ink-muted">No reviews yet. Be the first to review this product after purchase.</p>
+            )}
           </TabsContent>
         </Tabs>
       </div>

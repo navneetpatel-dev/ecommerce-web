@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9000'
     return [
       {
         source: '/api/:path*',
@@ -12,9 +12,20 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
-        port: '3000',
       },
     ],
   },
