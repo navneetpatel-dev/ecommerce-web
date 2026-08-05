@@ -1,10 +1,10 @@
 'use client'
 
-import { FilterSidebar } from '../components/FilterSidebar'
-import { SortBar } from '../components/SortBar'
-import { ProductGrid } from '../components/ProductGrid'
-import { ProductCompareBar } from '../components/ProductCompareBar'
-import { ProductCompareSection } from '../components/ProductCompareSection'
+import { FilterSidebar } from '@/features/products/components/FilterSidebar'
+import { SortBar } from '@/features/products/components/SortBar'
+import { ProductGrid } from '@/features/products/components/ProductGrid'
+import { ProductCompareBar } from '@/features/products/components/ProductCompareBar'
+import { ProductCompareSection } from '@/features/products/components/ProductCompareSection'
 import { PaginationContainer } from '@/shared/containers/PaginationContainer'
 import { Button } from '@/shared/components/ui/button'
 import { BottomSheet } from '@/shared/components/BottomSheet'
@@ -14,7 +14,7 @@ export function ProductListingPage() {
   const listing = useProductListing()
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 pt-8 pb-8">
       <div className="lg:hidden sticky top-14 z-20 bg-paper border-y border-line mb-4 -mx-4 px-4 py-3 flex items-center gap-2">
         <Button variant="secondary" size="sm" className="flex-1" onClick={listing.openFilters}>
           Filters
@@ -32,7 +32,7 @@ export function ProductListingPage() {
         </Button>
       </div>
 
-      <div className="flex gap-8">
+      <div className="flex gap-8 mb-20 lg:mb-28">
         <FilterSidebar
           idPrefix="desktop"
           minPrice={listing.filters.minPrice}

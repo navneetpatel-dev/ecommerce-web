@@ -1,3 +1,5 @@
+'use client'
+
 import type { ProductListItem } from '@/shared/api/types'
 import { Button } from '@/shared/components/ui/button'
 

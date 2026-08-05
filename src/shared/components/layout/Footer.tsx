@@ -90,7 +90,7 @@ function NewsletterForm({ idPrefix }: { idPrefix: string }) {
 
 export function Footer() {
   return (
-    <footer className="border-t border-line bg-surface">
+    <footer className="mt-16 lg:mt-24 border-t border-line bg-surface">
       <div className="hidden lg:grid grid-cols-4 gap-8 max-w-[1600px] mx-auto px-4 py-16">
         {footerSections.map((section) => (
           <div key={section.title}>
