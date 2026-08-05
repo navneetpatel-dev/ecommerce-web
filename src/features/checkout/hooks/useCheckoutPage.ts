@@ -7,6 +7,7 @@ import { useWalletBalance } from '@/features/wallet/api/wallet.queries'
 import { useCheckoutStore } from '../store/checkout.store'
 import { useAddresses, useCreateAddress } from '../api/checkout.queries'
 import { usePlaceOrderWithRazorpay } from './usePlaceOrder'
+import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
 import type { Address } from '@/shared/api/types'
 
 export function useCheckoutPage() {
@@ -25,6 +26,7 @@ export function useCheckoutPage() {
   const createAddress = useCreateAddress()
   const { data: walletBalance } = useWalletBalance()
   const { handlePlaceOrder, quote, isPending } = usePlaceOrderWithRazorpay()
+  const { requireAuth } = useRequireAuth()
 
   const isLoading = cartLoading || addressesLoading
 
@@ -78,9 +80,27 @@ export function useCheckoutPage() {
     },
     onPlaceOrder: () => {
       if (!paymentMethod) return
+      if (
+        !requireAuth({
+          title: 'Complete your order',
+          message: 'Sign in to place your order and track it in your account.',
+          redirectTo: '/checkout',
+        })
+      ) {
+        return
+      }
       void handlePlaceOrder(paymentMethod)
     },
     onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => {
+      if (
+        !requireAuth({
+          title: 'Add a shipping address',
+          message: 'Sign in to save addresses and continue checkout.',
+          redirectTo: '/checkout',
+        })
+      ) {
+        return
+      }
       createAddress.mutate(body, {
         onSuccess: (created) => {
           setAddress(created.id)

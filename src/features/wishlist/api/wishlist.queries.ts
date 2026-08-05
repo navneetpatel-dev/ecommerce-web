@@ -1,11 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { wishlistApi } from './wishlist.api'
 import { cartKeys } from '@/features/cart/api/cart.queries'
+import { useAuthStore } from '@/features/auth/store/auth.store'
 
 export function useWishlist() {
+  const accessToken = useAuthStore((s) => s.accessToken)
+
   return useQuery({
     queryKey: ['wishlist'],
     queryFn: () => wishlistApi.get(),
+    enabled: Boolean(accessToken),
+    retry: false,
   })
 }
 

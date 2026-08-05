@@ -8,6 +8,7 @@ import { groupItemsByVendor, calcCartTotal } from '../utils/cart.utils'
 import { couponsApi } from '@/features/coupons/api/coupons.api'
 import { useCheckoutStore } from '@/features/checkout/store/checkout.store'
 import { navigate } from '@/shared/utils/navigate'
+import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
 import type { CartItem } from '@/shared/api/types'
 
 export function useCartDrawer() {
@@ -19,6 +20,7 @@ export function useCartDrawer() {
   const { data: cart, isLoading } = useCart()
   const updateItem = useUpdateCartItem()
   const removeItem = useRemoveCartItem()
+  const { requireAuth } = useRequireAuth()
 
   const [couponInput, setCouponInput] = useState('')
   const [couponMessage, setCouponMessage] = useState<string | null>(null)
@@ -50,6 +52,14 @@ export function useCartDrawer() {
   const applyCoupon = async () => {
     const code = couponInput.trim()
     if (!code) return
+    if (
+      !requireAuth({
+        title: 'Apply coupon',
+        message: 'Sign in to apply coupon codes to your order.',
+      })
+    ) {
+      return
+    }
     setCouponPending(true)
     setCouponError(null)
     setCouponMessage(null)

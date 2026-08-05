@@ -22,12 +22,12 @@ interface Product {
   name: string
   imageUrl: string
   images?: Array<{ id: string; url: string; isPrimary: boolean }>
-  vendor: { id: string; businessName: string; slug: string; logoUrl: string | null }
-  avgRating: number
-  reviewCount: number
+  vendor?: { id: string; businessName: string; slug: string; logoUrl: string | null } | null
+  avgRating?: number
+  reviewCount?: number
   variants?: Array<{ id: string; sku?: string; stock?: number }>
   basePrice: number
-  stock: number
+  stock?: number
   description?: string
   categoryName?: string
   category?: { name?: string }
@@ -56,6 +56,7 @@ interface ProductDetailContentProps {
   onAddToCart?: (quantity: number) => void
   isAddingToCart?: boolean
   canAddToCart?: boolean
+  needsOptionSelection?: boolean
   selectedImage: number
   onSelectImage: (index: number) => void
   quantity: number
@@ -73,6 +74,7 @@ export function ProductDetailContent({
   onAddToCart,
   isAddingToCart,
   canAddToCart = true,
+  needsOptionSelection = false,
   selectedImage,
   onSelectImage,
   quantity,
@@ -82,9 +84,17 @@ export function ProductDetailContent({
   breadcrumbItems,
   variantSelection,
 }: ProductDetailContentProps) {
-  const displayPrice = variantSelection.currentPrice || product.basePrice
-  const displayStock = variantSelection.currentStock || product.stock
-  const addDisabled = !canAddToCart || displayStock === 0 || isAddingToCart
+  const displayPrice = Number(variantSelection.currentPrice || product.basePrice || 0)
+  const displayStock = Number(variantSelection.currentStock || product.stock || 0)
+  const addDisabled = !canAddToCart || isAddingToCart
+  const reviewCount = product.reviewCount ?? 0
+  const avgRating = product.avgRating ?? 0
+
+  const addToCartLabel = needsOptionSelection
+    ? 'Select options'
+    : displayStock === 0
+      ? 'Out of stock'
+      : 'Add to Cart'
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 py-8">
@@ -101,7 +111,9 @@ export function ProductDetailContent({
 
         <div className="md:col-span-5" ref={addSectionRef}>
           <div className="space-y-6 lg:sticky lg:top-[88px]">
-            <VendorStrip vendor={product.vendor} size="md" rating={product.avgRating} />
+            {product.vendor && (
+              <VendorStrip vendor={product.vendor} size="md" rating={avgRating} />
+            )}
 
             {(product.category?.name || product.categoryName) && (
               <TextEyebrow className="-mb-2">
@@ -113,7 +125,7 @@ export function ProductDetailContent({
               {product.name}
             </h1>
 
-            <RatingStars value={product.avgRating} count={product.reviewCount} size="md" />
+            <RatingStars value={avgRating} count={reviewCount} size="md" />
 
             <div aria-live="polite">
               <span className="font-sans text-[1.75rem] font-semibold text-brand">
@@ -141,7 +153,7 @@ export function ProductDetailContent({
               max={Math.max(displayStock, 1)}
             />
 
-            {!canAddToCart && product.variants && product.variants.length > 1 && (
+            {!canAddToCart && needsOptionSelection && (
               <p className="text-[0.8125rem] text-ink-muted">Select all options to add this item to your cart.</p>
             )}
 
@@ -153,7 +165,7 @@ export function ProductDetailContent({
                 onClick={() => onAddToCart?.(quantity)}
                 loading={isAddingToCart}
               >
-                {displayStock === 0 ? 'Out of stock' : 'Add to Cart'}
+                {addToCartLabel}
               </Button>
               <Button
                 variant="ghost"
@@ -195,7 +207,7 @@ export function ProductDetailContent({
           <TabsList>
             <TabsTrigger value="description">Description</TabsTrigger>
             <TabsTrigger value="specifications">Specifications</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews ({product.reviewCount})</TabsTrigger>
+            <TabsTrigger value="reviews">Reviews ({reviewCount})</TabsTrigger>
           </TabsList>
           <TabsContent value="description" className="py-6">
             <div className="max-w-[65ch]">
@@ -215,7 +227,7 @@ export function ProductDetailContent({
         </Tabs>
       </div>
 
-      {showStickyBar && displayStock > 0 && (
+      {(showStickyBar && (displayStock > 0 || needsOptionSelection)) && (
         <div className="fixed bottom-14 left-0 right-0 z-30 p-4 bg-surface border-t border-line shadow-elevation-3 md:hidden">
           <Button
             size="lg"
@@ -224,7 +236,9 @@ export function ProductDetailContent({
             onClick={() => onAddToCart?.(quantity)}
             loading={isAddingToCart}
           >
-            Add to Cart — ₹{displayPrice.toLocaleString('en-IN')}
+            {needsOptionSelection
+              ? 'Select options'
+              : `Add to Cart — ₹${displayPrice.toLocaleString('en-IN')}`}
           </Button>
         </div>
       )}

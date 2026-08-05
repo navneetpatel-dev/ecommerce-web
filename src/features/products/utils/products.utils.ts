@@ -47,9 +47,14 @@ export function findMatchingVariant(
   variants: ProductVariant[],
   selected: Record<string, string>
 ): ProductVariant | null {
+  const selectedEntries = Object.entries(selected)
+  if (selectedEntries.length === 0) {
+    return variants.length === 1 ? variants[0] ?? null : null
+  }
+
   return (
     variants.find((v) =>
-      Object.entries(selected).every(([k, val]) => v.attributes[k] === val)
+      selectedEntries.every(([k, val]) => v.attributes[k] === val)
     ) ?? null
   )
 }

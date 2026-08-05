@@ -4,16 +4,29 @@ import { useAuthStore, defaultRouteForRole } from '../store/auth.store'
 import { authApi } from './auth.api'
 import { navigate, navigateReplace } from '@/shared/utils/navigate'
 import type { LoginInput, RegisterInput } from '../schemas/auth.schema'
+import type { RoleName } from '@/shared/api/types'
+
+function postAuthPath(role: RoleName, redirect?: string | null) {
+  if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
+    return redirect
+  }
+  return defaultRouteForRole(role)
+}
 
 export function useLogin() {
   const setSession = useAuthStore((s) => s.setSession)
   const router = useRouter()
 
   return useMutation({
-    mutationFn: (input: LoginInput) => authApi.login(input),
-    onSuccess: (data) => {
+    mutationFn: ({ redirect: _redirect, ...input }: LoginInput & { redirect?: string | null }) =>
+      authApi.login(input),
+    onSuccess: (data, variables) => {
       setSession(data.accessToken, data.user)
-      navigateReplace(router, defaultRouteForRole(data.user.role))
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('accessToken', data.accessToken)
+        localStorage.setItem('session', JSON.stringify(data.user))
+      }
+      navigateReplace(router, postAuthPath(data.user.role, variables.redirect))
     },
   })
 }
@@ -40,11 +53,19 @@ export function useLogout() {
     mutationFn: () => authApi.logout(),
     onSuccess: () => {
       clearSession()
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('session')
+      }
       queryClient.clear()
       navigateReplace(router, '/login')
     },
     onError: () => {
       clearSession()
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('session')
+      }
       queryClient.clear()
       navigateReplace(router, '/login')
     },

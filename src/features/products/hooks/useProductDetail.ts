@@ -20,11 +20,11 @@ export function useProductDetail() {
   const addSectionRef = useRef<HTMLDivElement>(null)
 
   const variants = product?.variants ?? []
-  const selection = useVariantSelection(
-    variants,
-    product?.basePrice ?? 0,
-    product?.stock ?? 0
-  )
+  const variantStockTotal = variants.reduce((sum, variant) => sum + Number(variant.stock || 0), 0)
+  const baseStock = Number(product?.stock ?? 0) || variantStockTotal
+  const basePrice = Number(product?.basePrice ?? 0)
+
+  const selection = useVariantSelection(variants, basePrice, baseStock)
 
   useEffect(() => {
     if (!product) return
@@ -44,18 +44,26 @@ export function useProductDetail() {
   const resolvedVariantId =
     selection.variantId ?? (variants.length === 1 ? variants[0]?.id : null) ?? null
 
+  const selectedStock = selection.variantId
+    ? Number(selection.currentStock || 0)
+    : variants.length === 1
+      ? Number(variants[0]?.stock || 0)
+      : baseStock
+
+  const needsOptionSelection = variants.length > 1 && !selection.variantId
+
   const canAddToCart =
     Boolean(product) &&
-    (product?.stock ?? 0) > 0 &&
     Boolean(resolvedVariantId) &&
-    (variants.length <= 1 || selection.variantId != null)
+    selectedStock > 0 &&
+    !needsOptionSelection
 
   const handleAddToCart = useCallback(
     (qty: number) => {
-      if (!resolvedVariantId) return
+      if (!resolvedVariantId || needsOptionSelection) return
       addToCart.mutate({ variantId: resolvedVariantId, quantity: qty })
     },
-    [addToCart, resolvedVariantId]
+    [addToCart, needsOptionSelection, resolvedVariantId]
   )
 
   const breadcrumbItems = product
@@ -91,12 +99,13 @@ export function useProductDetail() {
     breadcrumbItems,
     isAddingToCart: addToCart.isPending,
     canAddToCart,
+    needsOptionSelection,
     onAddToCart: handleAddToCart,
     variantSelection: {
       attributeGroups: selection.attributeGroups,
-      currentPrice: selection.currentPrice,
-      currentStock: selection.currentStock,
-      basePrice: product?.basePrice ?? 0,
+      currentPrice: Number(selection.currentPrice || basePrice),
+      currentStock: Number(selection.currentStock || 0),
+      basePrice,
       hasPriceChange: selection.hasPriceChange,
       isAvailable: selection.isAvailable,
       isActive: selection.isActive,

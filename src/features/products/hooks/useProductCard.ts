@@ -4,6 +4,7 @@ import { useAddToCart } from '@/features/cart/api/cart.queries'
 import { useMoveToCart } from '@/features/wishlist/api/wishlist.queries'
 import { usePrefetchProduct } from '../api/products.queries'
 import { useWishlistToggle } from './useWishlistToggle'
+import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
 import type { ProductListItem } from '@/shared/api/types'
 
 interface UseProductCardOptions {
@@ -16,6 +17,7 @@ export function useProductCard(product: ProductListItem, options: UseProductCard
   const { mutate: moveToCart, isPending: isMoving } = useMoveToCart()
   const prefetch = usePrefetchProduct()
   const { isWishlisted, toggle } = useWishlistToggle(product.id)
+  const { requireAuth } = useRequireAuth()
 
   const hasDiscount = Boolean(product.compareAtPrice && product.compareAtPrice > product.basePrice)
   const discountPercent =
@@ -34,6 +36,15 @@ export function useProductCard(product: ProductListItem, options: UseProductCard
     toggleWishlist: toggle,
     addToCart: () => {
       if (options.moveToCart) {
+        if (
+          !requireAuth({
+            title: 'Move to cart',
+            message: 'Sign in to move wishlist items to your cart.',
+            redirectTo: '/wishlist',
+          })
+        ) {
+          return
+        }
         moveToCart(product.id)
         return
       }

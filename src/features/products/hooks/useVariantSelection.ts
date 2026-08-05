@@ -16,7 +16,16 @@ export function useVariantSelection(variants: ProductVariant[], basePrice: numbe
   )
 
   const selectValue = (key: string, value: string) => {
-    setSelected((s) => ({ ...s, [key]: value }))
+    setSelected((prev) => {
+      // Prefer a clean selection that still matches an in-stock variant.
+      const next = { ...prev, [key]: value }
+      if (findMatchingVariant(variants, next)) return next
+
+      const alone = { [key]: value }
+      if (findMatchingVariant(variants, alone)) return alone
+
+      return next
+    })
   }
 
   const isAvailable = (key: string, value: string) =>

@@ -1,6 +1,7 @@
 import type { CartItem } from '@/shared/api/types'
 import { ShippingCard } from './ShippingCard'
 import { Button } from '@/shared/components/ui/button'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 
 interface ShippingStepProps {
   groupedByVendor: Record<string, CartItem[]>
@@ -29,7 +30,14 @@ export function ShippingStep({
           onSelect={(m) => onSelect(vid, m)}
         />
       ))}
-      <Button onClick={onContinue} disabled={!canContinue}>Continue</Button>
+      <DisabledActionHint
+        disabled={!canContinue}
+        message="Select a shipping method for each vendor to continue."
+      >
+        <Button onClick={onContinue} disabled={!canContinue}>
+          Continue
+        </Button>
+      </DisabledActionHint>
     </div>
   )
 }

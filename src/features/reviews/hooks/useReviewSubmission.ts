@@ -3,9 +3,11 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ReviewFormSchema, type ReviewFormInput } from '../schemas/reviews.schema'
 import { useSubmitReview } from '../api/reviews.queries'
+import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
 
 export function useReviewSubmission(orderItemId: string, productId: string) {
   const submitReview = useSubmitReview()
+  const { requireAuth } = useRequireAuth()
   const [hoverRating, setHoverRating] = useState(0)
 
   const {
@@ -23,6 +25,14 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
   const setRating = (next: number) => setValue('rating', next, { shouldValidate: true })
 
   const onSubmit = (data: ReviewFormInput) => {
+    if (
+      !requireAuth({
+        title: 'Write a review',
+        message: 'Sign in to share your experience with this product.',
+      })
+    ) {
+      return
+    }
     submitReview.mutate({
       orderItemId,
       productId,
