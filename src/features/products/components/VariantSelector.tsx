@@ -63,7 +63,7 @@ export function VariantSelector({ variants, basePrice, baseStock, className }: V
       <Separator />
 
       <div className="flex items-baseline gap-3">
-        <span className="font-mono text-3xl font-bold text-brand">₹{currentPrice}</span>
+        <span className="font-mono text-[1.75rem] font-bold text-brand">₹{currentPrice}</span>
         {hasPriceChange && (
           <span className="font-mono text-[1.125rem] text-ink-faint line-through">₹{basePrice}</span>
         )}

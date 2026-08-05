@@ -50,7 +50,7 @@ export function ProductCard({
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-brand-subtle text-brand/30 font-display font-medium text-2xl">
+            <div className="w-full h-full flex items-center justify-center bg-brand-subtle text-ink-faint font-display font-medium text-[1.75rem]">
               {product.name?.charAt(0)}
             </div>
           )}

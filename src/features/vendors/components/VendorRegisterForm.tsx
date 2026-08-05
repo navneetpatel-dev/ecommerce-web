@@ -25,7 +25,7 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
     <div className="max-w-lg mx-auto px-4 py-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-display">Register as a Vendor</CardTitle>
+          <CardTitle className="text-[1.75rem] font-display">Register as a Vendor</CardTitle>
           <CardDescription>Start selling on the marketplace</CardDescription>
         </CardHeader>
         <CardContent>

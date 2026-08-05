@@ -13,7 +13,7 @@ export function ProfilePage() {
 
   return (
     <div className="max-w-lg mx-auto px-4 py-8 space-y-6">
-      <h1 className="font-display text-2xl font-semibold">Account Settings</h1>
+      <h1 className="font-display text-[1.75rem] font-semibold text-ink">Account Settings</h1>
       <ChangePasswordSection
         form={form}
         onSubmit={(data) => changePassword.mutate(data)}

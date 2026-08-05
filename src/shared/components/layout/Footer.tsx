@@ -64,8 +64,11 @@ export function Footer() {
                 <p className="text-[0.8125rem] text-ink-muted mb-3">
                   Get the latest deals and new arrivals.
                 </p>
+                <label htmlFor="newsletter-email-desktop" className="block text-[0.8125rem] font-medium text-ink mb-2">
+                  Email
+                </label>
                 <div className="flex gap-2">
-                  <Input placeholder="Your email" className="text-[0.9375rem]" />
+                  <Input id="newsletter-email-desktop" placeholder="Your email" className="text-[0.9375rem]" />
                   <Button size="sm" className="shrink-0">Subscribe</Button>
                 </div>
               </div>
@@ -101,8 +104,11 @@ export function Footer() {
         </Accordion>
         <div className="mt-6">
           <h4 className="text-[0.8125rem] font-semibold text-ink mb-2">Newsletter</h4>
+          <label htmlFor="newsletter-email-mobile" className="block text-[0.8125rem] font-medium text-ink mb-2">
+            Email
+          </label>
           <div className="flex flex-col gap-2">
-            <Input placeholder="Your email" className="text-[0.9375rem]" />
+            <Input id="newsletter-email-mobile" placeholder="Your email" className="text-[0.9375rem]" />
             <Button size="sm">Subscribe</Button>
           </div>
         </div>

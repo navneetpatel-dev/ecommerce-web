@@ -22,7 +22,7 @@ export function ResetPasswordCard({ form, onSubmit, error, isPending }: ResetPas
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-display">Reset password</CardTitle>
+        <CardTitle className="text-[1.75rem] font-display">Reset password</CardTitle>
         <CardDescription>Enter your new password</CardDescription>
       </CardHeader>
       <CardContent>

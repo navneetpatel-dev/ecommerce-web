@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react'
 import { VariantSelector } from './VariantSelector'
 import { ImageGallery } from './ImageGallery'
 import { ProductInfo } from './ProductInfo'
+import { ProductReviews } from '@/features/reviews/components/ProductReviews'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { Button } from '@/shared/components/ui/button'
@@ -115,8 +116,8 @@ export function ProductDetailContent({
 
             <RatingStars value={product.avgRating} count={product.reviewCount} size="md" />
 
-            <div>
-              <span className="font-sans text-2xl font-semibold text-brand">
+            <div aria-live="polite">
+              <span className="font-sans text-[1.75rem] font-semibold text-brand">
                 ₹{product.basePrice.toLocaleString('en-IN')}
               </span>
             </div>
@@ -192,12 +193,8 @@ export function ProductDetailContent({
               <p>Stock: {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}</p>
             </div>
           </TabsContent>
-          <TabsContent value="reviews" className="py-6">
-            {product.reviewCount > 0 ? (
-              <p className="text-[0.9375rem] text-ink-muted">Reviews are available from verified buyers in order history.</p>
-            ) : (
-              <p className="text-[0.9375rem] text-ink-muted">No reviews yet. Be the first to review this product after purchase.</p>
-            )}
+          <TabsContent value="reviews" className="py-6" id="reviews">
+            <ProductReviews productId={product.id} />
           </TabsContent>
         </Tabs>
       </div>

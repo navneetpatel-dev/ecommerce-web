@@ -1,6 +1,14 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { reviewsApi } from './reviews.api'
+
+export function useProductReviews(productId: string) {
+  return useQuery({
+    queryKey: ['reviews', 'product', productId],
+    queryFn: () => reviewsApi.forProduct(productId),
+    enabled: Boolean(productId),
+  })
+}
 
 export function useSubmitReview() {
   const router = useRouter()

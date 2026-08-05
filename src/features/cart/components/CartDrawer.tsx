@@ -122,9 +122,14 @@ export function CartDrawer() {
 
             {cart?.items?.length ? (
               <div className="border-t border-line p-4 space-y-3 shrink-0">
-                <div className="flex gap-2">
-                  <Input placeholder="Coupon code" className="text-[0.9375rem]" />
-                  <Button variant="outline" size="sm" className="shrink-0">Apply</Button>
+                <div className="space-y-2">
+                  <label htmlFor="cart-coupon-code" className="block text-[0.8125rem] font-medium text-ink">
+                    Coupon code
+                  </label>
+                  <div className="flex gap-2">
+                    <Input id="cart-coupon-code" placeholder="Coupon code" className="text-[0.9375rem]" />
+                    <Button variant="outline" size="sm" className="shrink-0">Apply</Button>
+                  </div>
                 </div>
                 <Separator />
                 <div className="flex justify-between items-center">

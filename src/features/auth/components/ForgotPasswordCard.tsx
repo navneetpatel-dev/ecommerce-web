@@ -21,7 +21,7 @@ export function ForgotPasswordCard({ form, onSubmit, isPending, isSuccess }: For
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-display">Forgot password</CardTitle>
+        <CardTitle className="text-[1.75rem] font-display">Forgot password</CardTitle>
         <CardDescription>Enter your email and we'll send you a reset link</CardDescription>
       </CardHeader>
       <CardContent>

@@ -24,7 +24,7 @@ export function StatCard({
   const sizeClasses = {
     sm: 'text-[1.375rem]',
     md: 'text-[1.75rem]',
-    lg: 'text-3xl'
+    lg: 'text-[1.75rem]'
   }
 
   return (

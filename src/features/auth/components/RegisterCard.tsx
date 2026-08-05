@@ -26,7 +26,7 @@ export function RegisterCard({ form, onSubmit, error, isPending }: RegisterCardP
   return (
     <Card className="w-full max-w-[400px] mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-display">Create an account</CardTitle>
+        <CardTitle className="text-[1.75rem] font-display">Create an account</CardTitle>
         <CardDescription>Join the marketplace</CardDescription>
       </CardHeader>
       <CardContent>

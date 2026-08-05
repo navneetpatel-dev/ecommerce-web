@@ -20,7 +20,7 @@ export function LoginCard({ form, onSubmit, error, isPending }: LoginCardProps) 
   return (
     <Card className="w-full max-w-[400px] mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-display">Welcome back</CardTitle>
+        <CardTitle className="text-[1.75rem] font-display">Welcome back</CardTitle>
         <CardDescription>Log in to your account</CardDescription>
       </CardHeader>
       <CardContent>
