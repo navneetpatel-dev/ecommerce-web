@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -35,10 +38,59 @@ const footerSections = [
   },
 ]
 
+const NEWSLETTER_KEY = 'newsletter-subscribed-email'
+
+function NewsletterForm({ idPrefix }: { idPrefix: string }) {
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
+    const trimmed = email.trim()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setError('Enter a valid email address')
+      setMessage(null)
+      return
+    }
+    try {
+      localStorage.setItem(NEWSLETTER_KEY, trimmed)
+    } catch {
+      // ignore storage failures
+    }
+    setError(null)
+    setMessage("Thanks — you're subscribed for deal alerts.")
+    setEmail('')
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-2">
+      <label htmlFor={`${idPrefix}-newsletter-email`} className="block text-[0.8125rem] font-medium text-ink mb-2">
+        Email
+      </label>
+      <div className="flex gap-2">
+        <Input
+          id={`${idPrefix}-newsletter-email`}
+          type="email"
+          placeholder="Your email"
+          className="text-[0.9375rem]"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <Button type="submit" size="sm" className="shrink-0">
+          Subscribe
+        </Button>
+      </div>
+      {error && <p className="text-[0.8125rem] text-danger">{error}</p>}
+      {message && <p className="text-[0.8125rem] text-success">{message}</p>}
+    </form>
+  )
+}
+
 export function Footer() {
   return (
     <footer className="border-t border-line bg-surface">
-      {/* Desktop columns */}
       <div className="hidden lg:grid grid-cols-4 gap-8 max-w-[1600px] mx-auto px-4 py-16">
         {footerSections.map((section) => (
           <div key={section.title}>
@@ -64,23 +116,16 @@ export function Footer() {
                 <p className="text-[0.8125rem] text-ink-muted mb-3">
                   Get the latest deals and new arrivals.
                 </p>
-                <label htmlFor="newsletter-email-desktop" className="block text-[0.8125rem] font-medium text-ink mb-2">
-                  Email
-                </label>
-                <div className="flex gap-2">
-                  <Input id="newsletter-email-desktop" placeholder="Your email" className="text-[0.9375rem]" />
-                  <Button size="sm" className="shrink-0">Subscribe</Button>
-                </div>
+                <NewsletterForm idPrefix="desktop" />
               </div>
             )}
           </div>
         ))}
       </div>
 
-      {/* Mobile accordion */}
       <div className="lg:hidden px-4 py-8">
         <Accordion type="single" collapsible>
-          {footerSections.map((section) => (
+          {footerSections.map((section) =>
             !section.isNewsletter ? (
               <AccordionItem key={section.title} value={section.title}>
                 <AccordionTrigger>{section.title}</AccordionTrigger>
@@ -100,21 +145,14 @@ export function Footer() {
                 </AccordionContent>
               </AccordionItem>
             ) : null
-          ))}
+          )}
         </Accordion>
         <div className="mt-6">
           <h4 className="text-[0.8125rem] font-semibold text-ink mb-2">Newsletter</h4>
-          <label htmlFor="newsletter-email-mobile" className="block text-[0.8125rem] font-medium text-ink mb-2">
-            Email
-          </label>
-          <div className="flex flex-col gap-2">
-            <Input id="newsletter-email-mobile" placeholder="Your email" className="text-[0.9375rem]" />
-            <Button size="sm">Subscribe</Button>
-          </div>
+          <NewsletterForm idPrefix="mobile" />
         </div>
       </div>
 
-      {/* Bottom bar */}
       <div className="border-t border-line py-6">
         <div className="max-w-[1600px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[0.8125rem] text-ink-muted">

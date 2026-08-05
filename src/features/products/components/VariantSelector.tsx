@@ -1,7 +1,6 @@
 import { Button } from '@/shared/components/ui/button'
 import { Badge } from '@/shared/components/ui/badge'
 import { Separator } from '@/shared/components/ui/separator'
-import { ShoppingCart } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 
 interface VariantSelectorProps {
@@ -13,8 +12,11 @@ interface VariantSelectorProps {
   isAvailable: (key: string, value: string) => boolean
   isActive: (key: string, value: string) => boolean
   onSelectValue: (key: string, value: string) => void
-  onAddToCart: () => void
+  /** When true, shows Add to Cart (legacy). Prefer page-level ATC. */
+  showAddToCart?: boolean
+  onAddToCart?: () => void
   isAddingToCart?: boolean
+  canAddToCart?: boolean
   className?: string
 }
 
@@ -27,42 +29,53 @@ export function VariantSelector({
   isAvailable,
   isActive,
   onSelectValue,
+  showAddToCart = false,
   onAddToCart,
   isAddingToCart,
+  canAddToCart = true,
   className,
 }: VariantSelectorProps) {
+  const hasAttributes = Object.keys(attributeGroups).length > 0
+
+  if (!hasAttributes && !showAddToCart) {
+    return null
+  }
+
   return (
     <div className={cn('space-y-6', className)}>
-      <div className="space-y-4">
-        {Object.entries(attributeGroups).map(([key, values]) => (
-          <div key={key}>
-            <p className="text-[0.9375rem] font-medium mb-2 capitalize">{key}</p>
-            <div className="flex flex-wrap gap-2">
-              {values.map((value) => {
-                const available = isAvailable(key, value)
-                const active = isActive(key, value)
-                return (
-                  <button
-                    key={value}
-                    disabled={!available}
-                    onClick={() => onSelectValue(key, value)}
-                    className={cn(
-                      'px-4 py-2 rounded-md border text-[0.9375rem] font-medium transition-colors',
-                      active
-                        ? 'border-brand bg-brand text-white'
-                        : available
-                        ? 'border-line bg-surface hover:border-brand hover:text-brand'
-                        : 'border-line bg-paper text-ink/30 line-through cursor-not-allowed'
-                    )}
-                  >
-                    {value}
-                  </button>
-                )
-              })}
+      {hasAttributes && (
+        <div className="space-y-4">
+          {Object.entries(attributeGroups).map(([key, values]) => (
+            <div key={key}>
+              <p className="text-[0.9375rem] font-medium mb-2 capitalize">{key}</p>
+              <div className="flex flex-wrap gap-2">
+                {values.map((value) => {
+                  const available = isAvailable(key, value)
+                  const active = isActive(key, value)
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      disabled={!available}
+                      onClick={() => onSelectValue(key, value)}
+                      className={cn(
+                        'px-4 py-2 rounded-md border text-[0.9375rem] font-medium transition-colors',
+                        active
+                          ? 'border-brand bg-brand text-white'
+                          : available
+                            ? 'border-line bg-surface hover:border-brand hover:text-brand'
+                            : 'border-line bg-paper text-ink/30 line-through cursor-not-allowed'
+                      )}
+                    >
+                      {value}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <Separator />
 
@@ -85,15 +98,17 @@ export function VariantSelector({
           <p className="text-[0.9375rem] text-ink-muted">Free shipping over ₹499</p>
         </div>
 
-        <Button
-          size="lg"
-          className="w-full"
-          disabled={currentStock === 0}
-          onClick={onAddToCart}
-          loading={isAddingToCart}
-        >
-          <ShoppingCart className="h-5 w-5" /> Add to Cart
-        </Button>
+        {showAddToCart && (
+          <Button
+            size="lg"
+            className="w-full"
+            disabled={currentStock === 0 || !canAddToCart}
+            onClick={onAddToCart}
+            loading={isAddingToCart}
+          >
+            Add to Cart
+          </Button>
+        )}
       </div>
     </div>
   )

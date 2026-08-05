@@ -23,7 +23,7 @@ export function ShareButton({
         size="lg"
         className="shrink-0 md:hidden"
         onClick={onShareNative}
-        aria-label="Share"
+        aria-label={copied ? 'Link copied' : 'Share'}
       >
         <Share2 size={20} />
       </Button>

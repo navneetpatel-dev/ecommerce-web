@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Minus, Plus } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 
@@ -11,6 +12,19 @@ interface QuantitySelectorProps {
 }
 
 export function QuantitySelector({ value, onChange, min = 1, max = 99 }: QuantitySelectorProps) {
+  const [draft, setDraft] = useState<string | null>(null)
+  const display = draft ?? String(value)
+
+  const commit = (raw: string) => {
+    setDraft(null)
+    const parsed = parseInt(raw, 10)
+    if (Number.isNaN(parsed)) {
+      onChange(min)
+      return
+    }
+    onChange(Math.min(max, Math.max(min, parsed)))
+  }
+
   return (
     <div className="inline-flex items-center border border-line rounded-sm overflow-hidden">
       <Button
@@ -25,12 +39,18 @@ export function QuantitySelector({ value, onChange, min = 1, max = 99 }: Quantit
       </Button>
       <input
         type="number"
-        value={value}
-        onChange={(e) => {
-          const v = parseInt(e.target.value, 10)
-          if (!isNaN(v) && v >= min && v <= max) onChange(v)
+        inputMode="numeric"
+        value={display}
+        onFocus={() => setDraft(String(value))}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={() => commit(draft ?? String(value))}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.currentTarget.blur()
+          }
         }}
         className="h-11 w-11 border-x border-line bg-transparent text-center text-[0.9375rem] font-medium text-ink [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        aria-label="Quantity"
       />
       <Button
         variant="ghost"

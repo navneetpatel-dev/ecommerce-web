@@ -18,6 +18,7 @@ export function ProductDetailPage() {
       onToggleWishlist={detail.toggleWishlist}
       onAddToCart={detail.onAddToCart}
       isAddingToCart={detail.isAddingToCart}
+      canAddToCart={detail.canAddToCart}
       selectedImage={detail.selectedImage}
       onSelectImage={detail.setSelectedImage}
       quantity={detail.quantity}
@@ -25,6 +26,7 @@ export function ProductDetailPage() {
       showStickyBar={detail.showStickyBar}
       addSectionRef={detail.addSectionRef}
       breadcrumbItems={detail.breadcrumbItems}
+      variantSelection={detail.variantSelection}
     />
   )
 }

@@ -10,6 +10,7 @@ interface ReviewFormProps {
   productName: string
   register: UseFormRegister<ReviewFormInput>
   errors: FieldErrors<ReviewFormInput>
+  rating: number
   hoverRating: number
   isPending: boolean
   onSetHoverRating: (value: number) => void
@@ -21,6 +22,7 @@ export function ReviewForm({
   productName,
   register,
   errors,
+  rating,
   hoverRating,
   isPending,
   onSetHoverRating,
@@ -42,7 +44,7 @@ export function ReviewForm({
               onMouseLeave={() => onSetHoverRating(0)}
             >
               <Star
-                className={`h-6 w-6 ${i <= (hoverRating || 0) ? 'fill-accent text-accent' : 'text-line'}`}
+                className={`h-6 w-6 ${i <= (hoverRating || rating) ? 'fill-accent text-accent' : 'text-line'}`}
               />
             </button>
           ))}

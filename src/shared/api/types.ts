@@ -29,6 +29,9 @@ export interface ProductListItem {
   stock: number;
   vendor: VendorInfo;
   isWishlisted?: boolean;
+  /** Present on list payloads when the API includes variants (used for quick-add). */
+  variants?: Array<{ id: string; stock?: number }>;
+  categoryId?: string;
 }
 
 export interface ProductVariant {

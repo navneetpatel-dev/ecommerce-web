@@ -20,6 +20,7 @@ export function useHeader() {
   const router = useRouter()
   const { data: categories = [] } = useCategories()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [isHomepage, setIsHomepage] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
@@ -56,10 +57,13 @@ export function useHeader() {
     topCategories: categories.filter((category) => !category.parentId).slice(0, 8),
     primaryLinks: HEADER_PRIMARY_LINKS,
     mobileNavOpen,
+    mobileSearchOpen,
     megaMenuOpen,
     isTransparent: isHomepage && !scrolled,
     openMobileNav: () => setMobileNavOpen(true),
     closeMobileNav: () => setMobileNavOpen(false),
+    openMobileSearch: () => setMobileSearchOpen(true),
+    closeMobileSearch: () => setMobileSearchOpen(false),
     toggleMegaMenu: () => setMegaMenuOpen((open) => !open),
     closeMegaMenu: () => setMegaMenuOpen(false),
     scheduleMegaOpen,

@@ -1,10 +1,19 @@
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { checkoutApi } from './checkout.api'
 
 export function useAddresses() {
   return useQuery({
     queryKey: ['addresses'],
     queryFn: () => checkoutApi.getAddresses(),
+  })
+}
+
+export function useCreateAddress() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (body: Parameters<typeof checkoutApi.createAddress>[0]) =>
+      checkoutApi.createAddress(body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['addresses'] }),
   })
 }
 
@@ -16,10 +25,15 @@ export function useShippingRates(pincode: string, weightGrams: number) {
   })
 }
 
-export function useCheckoutQuote(input: { addressId: string | null; shippingMethodByVendor: Record<string, string>; couponCode: string | null }) {
+export function useCheckoutQuote(input: {
+  addressId: string | null
+  shippingMethodByVendor: Record<string, string>
+  couponCode: string | null
+}) {
   return useQuery({
     queryKey: ['checkout', 'quote', input],
-    queryFn: () => checkoutApi.getCheckoutQuote(input as Parameters<typeof checkoutApi.getCheckoutQuote>[0]),
+    queryFn: () =>
+      checkoutApi.getCheckoutQuote(input as Parameters<typeof checkoutApi.getCheckoutQuote>[0]),
     enabled: !!input.addressId && Object.keys(input.shippingMethodByVendor).length > 0,
   })
 }

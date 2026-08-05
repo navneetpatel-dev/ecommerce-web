@@ -4,14 +4,23 @@ import { productsApi, type ProductFilters } from './products.api'
 export const productKeys = {
   all: ['products'] as const,
   list: (filters: ProductFilters) => [...productKeys.all, 'list', filters] as const,
-  detail: (id: string) => [...productKeys.all, 'detail', id] as const,
+  detail: (idOrSlug: string) => [...productKeys.all, 'detail', idOrSlug] as const,
 }
 
-export function useProduct(id: string) {
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+function fetchProduct(idOrSlug: string) {
+  return UUID_RE.test(idOrSlug)
+    ? productsApi.detail(idOrSlug)
+    : productsApi.detailBySlug(idOrSlug)
+}
+
+export function useProduct(idOrSlug: string) {
   return useQuery({
-    queryKey: productKeys.detail(id),
-    queryFn: () => productsApi.detail(id),
-    enabled: !!id,
+    queryKey: productKeys.detail(idOrSlug),
+    queryFn: () => fetchProduct(idOrSlug),
+    enabled: !!idOrSlug,
   })
 }
 
@@ -25,10 +34,10 @@ export function useProductList(filters: ProductFilters) {
 
 export function usePrefetchProduct() {
   const queryClient = useQueryClient()
-  return (id: string) => {
+  return (idOrSlug: string) => {
     queryClient.prefetchQuery({
-      queryKey: productKeys.detail(id),
-      queryFn: () => productsApi.detail(id),
+      queryKey: productKeys.detail(idOrSlug),
+      queryFn: () => fetchProduct(idOrSlug),
     })
   }
 }

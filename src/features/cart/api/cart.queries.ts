@@ -20,7 +20,8 @@ export function useAddToCart() {
   }
 
   return useMutation({
-    mutationFn: (variantId: string) => cartApi.addItem(variantId),
+    mutationFn: ({ variantId, quantity = 1 }: { variantId: string; quantity?: number }) =>
+      cartApi.addItem(variantId, quantity),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: cartKeys.all })
       openCart()

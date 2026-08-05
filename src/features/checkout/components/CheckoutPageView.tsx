@@ -16,8 +16,11 @@ interface CheckoutPageViewProps {
   shippingMethodByVendor: Record<string, 'STANDARD' | 'EXPRESS'>
   addresses?: Address[]
   walletBalance?: number
+  walletShortfall?: number
+  paymentMethod?: string | null
   quote?: CheckoutQuote | null
   isPending: boolean
+  isCreatingAddress?: boolean
   groupedByVendor: Record<string, CartItem[]>
   total: number
   shippingReady: boolean
@@ -29,8 +32,9 @@ interface CheckoutPageViewProps {
   onContinueToPayment: () => void
   onBackToShipping: () => void
   onBackToPayment: () => void
-  onPay: (method: string) => void
+  onSelectPayment: (method: string) => void
   onPlaceOrder: () => void
+  onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => void
 }
 
 export function CheckoutPageView({
@@ -40,8 +44,11 @@ export function CheckoutPageView({
   shippingMethodByVendor,
   addresses,
   walletBalance,
+  walletShortfall,
+  paymentMethod,
   quote,
   isPending,
+  isCreatingAddress,
   groupedByVendor,
   total,
   shippingReady,
@@ -53,8 +60,9 @@ export function CheckoutPageView({
   onContinueToPayment,
   onBackToShipping,
   onBackToPayment,
-  onPay,
+  onSelectPayment,
   onPlaceOrder,
+  onCreateAddress,
 }: CheckoutPageViewProps) {
   if (!hasItems) return <EmptyCart />
 
@@ -66,8 +74,12 @@ export function CheckoutPageView({
           <VendorStrip vendor={items[0].product.vendor} size="sm" />
           {items.map((item) => (
             <div key={item.id} className="flex justify-between text-[0.8125rem] mt-2">
-              <span className="text-ink-muted">{item.product.name} × {item.quantity}</span>
-              <span className="text-ink">₹{(item.product.price * item.quantity).toLocaleString('en-IN')}</span>
+              <span className="text-ink-muted">
+                {item.product.name} × {item.quantity}
+              </span>
+              <span className="text-ink">
+                ₹{(item.product.price * item.quantity).toLocaleString('en-IN')}
+              </span>
             </div>
           ))}
         </div>
@@ -90,8 +102,10 @@ export function CheckoutPageView({
             <AddressStep
               addresses={addresses}
               selectedId={addressId}
+              isCreating={isCreatingAddress}
               onSelect={onSelectAddress}
               onContinue={onContinueToShipping}
+              onCreateAddress={onCreateAddress}
             />
           )}
           {step === 2 && (
@@ -106,15 +120,17 @@ export function CheckoutPageView({
           {step === 3 && (
             <PaymentStep
               walletBalance={walletBalance}
+              walletShortfall={walletShortfall}
               isPending={isPending}
               walletDisabled={walletDisabled}
-              onPay={onPay}
+              selectedMethod={paymentMethod}
+              onSelect={onSelectPayment}
               onBack={onBackToShipping}
             />
           )}
-          {step === 4 && quote && (
+          {step === 4 && (
             <ReviewStep
-              quote={quote}
+              quote={quote ?? null}
               isPending={isPending}
               onPlaceOrder={onPlaceOrder}
               onBack={onBackToPayment}
@@ -123,18 +139,14 @@ export function CheckoutPageView({
         </div>
 
         <div className="hidden lg:block lg:col-span-5">
-          <div className="sticky top-[88px]">
-            {summaryCard}
-          </div>
+          <div className="sticky top-[88px]">{summaryCard}</div>
         </div>
 
         <div className="lg:hidden mt-6">
           <Accordion type="single" collapsible>
             <AccordionItem value="summary">
               <AccordionTrigger>Order Summary</AccordionTrigger>
-              <AccordionContent>
-                {summaryCard}
-              </AccordionContent>
+              <AccordionContent>{summaryCard}</AccordionContent>
             </AccordionItem>
           </Accordion>
         </div>

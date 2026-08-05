@@ -12,10 +12,13 @@ export function HeaderContainer() {
       topCategories={header.topCategories}
       primaryLinks={header.primaryLinks}
       mobileNavOpen={header.mobileNavOpen}
+      mobileSearchOpen={header.mobileSearchOpen}
       megaMenuOpen={header.megaMenuOpen}
       isTransparent={header.isTransparent}
       onOpenMobileNav={header.openMobileNav}
       onCloseMobileNav={header.closeMobileNav}
+      onOpenMobileSearch={header.openMobileSearch}
+      onCloseMobileSearch={header.closeMobileSearch}
       onToggleMegaMenu={header.toggleMegaMenu}
       onCloseMegaMenu={header.closeMegaMenu}
       onScheduleMegaOpen={header.scheduleMegaOpen}

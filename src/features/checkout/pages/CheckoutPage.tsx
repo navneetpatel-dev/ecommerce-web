@@ -14,8 +14,11 @@ export function CheckoutPage() {
       shippingMethodByVendor={checkout.shippingMethodByVendor}
       addresses={checkout.addresses}
       walletBalance={checkout.walletBalance}
+      walletShortfall={checkout.walletShortfall}
+      paymentMethod={checkout.paymentMethod}
       quote={checkout.quote}
       isPending={checkout.isPending}
+      isCreatingAddress={checkout.isCreatingAddress}
       groupedByVendor={checkout.groupedByVendor}
       total={checkout.total}
       shippingReady={checkout.shippingReady}
@@ -27,8 +30,9 @@ export function CheckoutPage() {
       onContinueToPayment={checkout.onContinueToPayment}
       onBackToShipping={checkout.onBackToShipping}
       onBackToPayment={checkout.onBackToPayment}
-      onPay={checkout.onPay}
+      onSelectPayment={checkout.onSelectPayment}
       onPlaceOrder={checkout.onPlaceOrder}
+      onCreateAddress={checkout.onCreateAddress}
     />
   )
 }

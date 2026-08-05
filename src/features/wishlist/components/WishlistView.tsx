@@ -30,6 +30,7 @@ export function WishlistView({ isLoading, isEmpty, products }: WishlistViewProps
             product={product}
             quickAddLabel="Move to cart"
             showWishlist
+            moveToCart
           />
         ))}
       </div>

@@ -2,7 +2,7 @@
 
 import { ImageGalleryContainer } from '@/shared/containers/ImageGalleryContainer'
 import { ProductInfo } from './ProductInfo'
-import { VariantSelectorContainer } from '../containers/VariantSelectorContainer'
+import { VariantSelector } from './VariantSelector'
 import { ProductReviewsContainer } from '@/features/reviews/containers/ProductReviewsContainer'
 import { ShareButtonContainer } from '@/shared/containers/ShareButtonContainer'
 import { VendorStrip } from '@/shared/components/VendorStrip'
@@ -20,21 +20,32 @@ interface Product {
   slug?: string
   name: string
   imageUrl: string
-  images?: any[]
-  vendor: any
+  images?: Array<{ id: string; url: string; isPrimary: boolean }>
+  vendor: { id: string; businessName: string; slug: string; logoUrl: string | null }
   avgRating: number
   reviewCount: number
-  variants?: any[]
+  variants?: Array<{ id: string; sku?: string; stock?: number }>
   basePrice: number
   stock: number
   description?: string
   categoryName?: string
-  [key: string]: any
+  category?: { name?: string }
 }
 
 interface BreadcrumbItem {
   label: string
   href?: string
+}
+
+interface VariantSelectionProps {
+  attributeGroups: Record<string, string[]>
+  currentPrice: number
+  currentStock: number
+  basePrice: number
+  hasPriceChange: boolean
+  isAvailable: (key: string, value: string) => boolean
+  isActive: (key: string, value: string) => boolean
+  onSelectValue: (key: string, value: string) => void
 }
 
 interface ProductDetailContentProps {
@@ -43,6 +54,7 @@ interface ProductDetailContentProps {
   onToggleWishlist: () => void
   onAddToCart?: (quantity: number) => void
   isAddingToCart?: boolean
+  canAddToCart?: boolean
   selectedImage: number
   onSelectImage: (index: number) => void
   quantity: number
@@ -50,6 +62,7 @@ interface ProductDetailContentProps {
   showStickyBar: boolean
   addSectionRef: RefObject<HTMLDivElement | null>
   breadcrumbItems: BreadcrumbItem[]
+  variantSelection: VariantSelectionProps
 }
 
 export function ProductDetailContent({
@@ -58,6 +71,7 @@ export function ProductDetailContent({
   onToggleWishlist,
   onAddToCart,
   isAddingToCart,
+  canAddToCart = true,
   selectedImage,
   onSelectImage,
   quantity,
@@ -65,7 +79,12 @@ export function ProductDetailContent({
   showStickyBar,
   addSectionRef,
   breadcrumbItems,
+  variantSelection,
 }: ProductDetailContentProps) {
+  const displayPrice = variantSelection.currentPrice || product.basePrice
+  const displayStock = variantSelection.currentStock || product.stock
+  const addDisabled = !canAddToCart || displayStock === 0 || isAddingToCart
+
   return (
     <div className="max-w-[1600px] mx-auto px-4 py-8">
       <Breadcrumbs items={breadcrumbItems} className="mb-6" />
@@ -91,29 +110,43 @@ export function ProductDetailContent({
 
             <div aria-live="polite">
               <span className="font-sans text-[1.75rem] font-semibold text-brand">
-                ₹{product.basePrice.toLocaleString('en-IN')}
+                ₹{displayPrice.toLocaleString('en-IN')}
               </span>
             </div>
 
             {product.variants && product.variants.length > 0 && (
-              <VariantSelectorContainer variants={product.variants} basePrice={product.basePrice} baseStock={product.stock} />
+              <VariantSelector
+                attributeGroups={variantSelection.attributeGroups}
+                currentPrice={variantSelection.currentPrice}
+                currentStock={variantSelection.currentStock}
+                basePrice={variantSelection.basePrice}
+                hasPriceChange={variantSelection.hasPriceChange}
+                isAvailable={variantSelection.isAvailable}
+                isActive={variantSelection.isActive}
+                onSelectValue={variantSelection.onSelectValue}
+                showAddToCart={false}
+              />
             )}
 
             <QuantitySelector
               value={quantity}
               onChange={onQuantityChange}
-              max={product.stock}
+              max={Math.max(displayStock, 1)}
             />
+
+            {!canAddToCart && product.variants && product.variants.length > 1 && (
+              <p className="text-[0.8125rem] text-ink-muted">Select all options to add this item to your cart.</p>
+            )}
 
             <div className="flex gap-3">
               <Button
                 size="lg"
                 className="flex-1"
-                disabled={product.stock === 0 || isAddingToCart}
+                disabled={addDisabled}
                 onClick={() => onAddToCart?.(quantity)}
                 loading={isAddingToCart}
               >
-                {product.stock === 0 ? 'Out of stock' : 'Add to Cart'}
+                {displayStock === 0 ? 'Out of stock' : 'Add to Cart'}
               </Button>
               <Button
                 variant="ghost"
@@ -165,8 +198,8 @@ export function ProductDetailContent({
           <TabsContent value="specifications" className="py-6">
             <div className="max-w-[65ch] text-[0.9375rem] text-ink-muted space-y-2">
               <p>SKU: {product?.variants?.[0]?.sku ?? 'Not available'}</p>
-              <p>Category: {product.categoryName ?? 'General'}</p>
-              <p>Stock: {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}</p>
+              <p>Category: {product.category?.name ?? product.categoryName ?? 'General'}</p>
+              <p>Stock: {displayStock > 0 ? `${displayStock} available` : 'Out of stock'}</p>
             </div>
           </TabsContent>
           <TabsContent value="reviews" className="py-6" id="reviews">
@@ -175,15 +208,16 @@ export function ProductDetailContent({
         </Tabs>
       </div>
 
-      {showStickyBar && product.stock > 0 && (
+      {showStickyBar && displayStock > 0 && (
         <div className="fixed bottom-14 left-0 right-0 z-30 p-4 bg-surface border-t border-line shadow-elevation-3 md:hidden">
           <Button
             size="lg"
             className="w-full"
+            disabled={addDisabled}
             onClick={() => onAddToCart?.(quantity)}
             loading={isAddingToCart}
           >
-            Add to Cart — ₹{product.basePrice.toLocaleString('en-IN')}
+            Add to Cart — ₹{displayPrice.toLocaleString('en-IN')}
           </Button>
         </div>
       )}

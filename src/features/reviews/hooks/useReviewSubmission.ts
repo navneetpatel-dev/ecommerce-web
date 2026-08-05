@@ -8,16 +8,39 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
   const submitReview = useSubmitReview()
   const [hoverRating, setHoverRating] = useState(0)
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<ReviewFormInput>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<ReviewFormInput>({
     resolver: zodResolver(ReviewFormSchema),
     defaultValues: { rating: 0 },
   })
 
-  const setRating = (rating: number) => setValue('rating', rating)
+  const rating = watch('rating') || 0
+  const setRating = (next: number) => setValue('rating', next, { shouldValidate: true })
 
   const onSubmit = (data: ReviewFormInput) => {
-    submitReview.mutate({ orderItemId, productId, rating: data.rating, title: data.title, body: data.body })
+    submitReview.mutate({
+      orderItemId,
+      productId,
+      rating: data.rating,
+      title: data.title,
+      body: data.body,
+    })
   }
 
-  return { register, handleSubmit, errors, hoverRating, setHoverRating, setRating, onSubmit, isPending: submitReview.isPending }
+  return {
+    register,
+    handleSubmit,
+    errors,
+    rating,
+    hoverRating,
+    setHoverRating,
+    setRating,
+    onSubmit,
+    isPending: submitReview.isPending,
+  }
 }

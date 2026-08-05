@@ -6,18 +6,22 @@ import type { PlatformSettings } from '../hooks/usePlatformSettingsForm'
 
 interface PlatformSettingsFormProps {
   form: PlatformSettings
+  message?: string | null
   onCommissionRateChange: (value: number) => void
   onAutoApproveChange: (value: boolean) => void
   onReturnWindowChange: (value: number) => void
   onPayoutCycleChange: (value: string) => void
+  onSave: () => void
 }
 
 export function PlatformSettingsForm({
   form,
+  message,
   onCommissionRateChange,
   onAutoApproveChange,
   onReturnWindowChange,
   onPayoutCycleChange,
+  onSave,
 }: PlatformSettingsFormProps) {
   return (
     <div className="max-w-lg space-y-6">
@@ -70,8 +74,11 @@ export function PlatformSettingsForm({
             </SelectContent>
           </Select>
         </div>
-        <div className="pt-2">
-          <Button size="sm">Save settings</Button>
+        <div className="pt-2 space-y-2">
+          <Button size="sm" type="button" onClick={onSave}>
+            Save settings
+          </Button>
+          {message && <p className="text-[0.8125rem] text-ink-muted">{message}</p>}
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { cn } from '@/shared/utils/cn'
 import { SearchBarContainer } from '@/features/search/containers/SearchBarContainer'
 import { MobileTabBar } from './MobileTabBar'
 import { MobileNavDrawer } from './MobileNavDrawer'
+import { BottomSheet } from '@/shared/components/BottomSheet'
 import type { Category, CurrentUser } from '@/shared/api/types'
 
 interface HeaderProps {
@@ -13,10 +14,13 @@ interface HeaderProps {
   topCategories: Category[]
   primaryLinks: readonly { href: string; label: string }[]
   mobileNavOpen: boolean
+  mobileSearchOpen: boolean
   megaMenuOpen: boolean
   isTransparent: boolean
   onOpenMobileNav: () => void
   onCloseMobileNav: () => void
+  onOpenMobileSearch: () => void
+  onCloseMobileSearch: () => void
   onToggleMegaMenu: () => void
   onCloseMegaMenu: () => void
   onScheduleMegaOpen: () => void
@@ -31,10 +35,13 @@ export function Header({
   topCategories,
   primaryLinks,
   mobileNavOpen,
+  mobileSearchOpen,
   megaMenuOpen,
   isTransparent,
   onOpenMobileNav,
   onCloseMobileNav,
+  onOpenMobileSearch,
+  onCloseMobileSearch,
   onToggleMegaMenu,
   onCloseMegaMenu,
   onScheduleMegaOpen,
@@ -99,7 +106,7 @@ export function Header({
                       {topCategories.map((category) => (
                         <Link
                           key={category.id}
-                          href={`/products?category=${category.slug}`}
+                          href={`/products?categoryId=${category.id}`}
                           className="rounded-md border border-line bg-surface px-4 py-3 text-[0.9375rem] font-medium text-ink hover:border-brand hover:text-brand transition-colors"
                           onClick={onCloseMegaMenu}
                         >
@@ -146,6 +153,8 @@ export function Header({
 
           <nav aria-label="Header actions" className="flex items-center gap-1 shrink-0">
             <button
+              type="button"
+              onClick={onOpenMobileSearch}
               className="md:hidden p-2 hover:bg-paper rounded-md"
               aria-label="Search"
             >
@@ -226,6 +235,9 @@ export function Header({
         currentUser={currentUser}
         onLogout={onLogout}
       />
+      <BottomSheet open={mobileSearchOpen} onClose={onCloseMobileSearch} title="Search">
+        <SearchBarContainer />
+      </BottomSheet>
       <MobileTabBar currentUser={currentUser} onOpenCart={onOpenCart} />
     </>
   )

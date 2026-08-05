@@ -22,6 +22,14 @@ export function ProductListingPage() {
         <Button variant="secondary" size="sm" className="flex-1" onClick={listing.openSort}>
           Sort
         </Button>
+        <Button
+          variant={listing.compareMode ? 'default' : 'secondary'}
+          size="sm"
+          className="flex-1"
+          onClick={listing.toggleCompareMode}
+        >
+          Compare
+        </Button>
       </div>
 
       <div className="flex gap-8">

@@ -20,7 +20,8 @@ export function useSearchNavigation() {
     e.preventDefault()
     if (term.trim()) {
       setOpen(false)
-      router.push(`/search?q=${encodeURIComponent(term.trim())}`)
+      router.push(`/products?search=${encodeURIComponent(term.trim())}`)
+      setTerm('')
     }
   }
 

@@ -65,7 +65,12 @@ export function useCookieBanner() {
     persistConsent(preferences, 'custom')
   }
 
-  const dismiss = () => setVisible(false)
+  const dismiss = () => {
+    persistConsent(
+      { necessary: true, analytics: false, marketing: false },
+      'custom'
+    )
+  }
 
   const openPreferences = () => {
     setPreferences(readStoredPreferences())

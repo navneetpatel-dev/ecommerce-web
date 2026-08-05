@@ -27,7 +27,7 @@ export function VendorSpotlightSection({ vendors }: VendorSpotlightSectionProps)
               <p className="text-[0.8125rem] text-ink-muted mt-1 line-clamp-2">Known for {vendor.highlightProduct}</p>
             </div>
             <RatingStars value={vendor.avgRating || 4} size="sm" />
-            <Link href={`/products?vendor=${vendor.slug}`} className="inline-flex text-[0.8125rem] text-brand hover:underline">
+            <Link href={`/products?vendorId=${vendor.id}`} className="inline-flex text-[0.8125rem] text-brand hover:underline">
               Visit storefront
             </Link>
           </article>

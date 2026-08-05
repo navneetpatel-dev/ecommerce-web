@@ -13,6 +13,14 @@ export function CartDrawerContainer() {
       hasItems={drawer.hasItems}
       groupedByVendor={drawer.groupedByVendor}
       total={drawer.total}
+      couponInput={drawer.couponInput}
+      couponMessage={drawer.couponMessage}
+      couponError={drawer.couponError}
+      couponPending={drawer.couponPending}
+      appliedCouponCode={drawer.appliedCouponCode}
+      onCouponInputChange={drawer.setCouponInput}
+      onApplyCoupon={() => void drawer.applyCoupon()}
+      onContinueShopping={drawer.continueShopping}
       onDecreaseQuantity={drawer.decreaseQuantity}
       onIncreaseQuantity={drawer.increaseQuantity}
       onRemoveItem={drawer.removeItem}

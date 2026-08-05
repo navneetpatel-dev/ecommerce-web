@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { reviewsApi } from './reviews.api'
 
@@ -22,8 +22,12 @@ export function useSubmitReview() {
 }
 
 export function useVoteReview() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (input: { reviewId: string; vote: 'HELPFUL' | 'UNHELPFUL' }) =>
       reviewsApi.vote(input.reviewId, input.vote),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviews'] })
+    },
   })
 }

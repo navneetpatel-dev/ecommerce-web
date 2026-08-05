@@ -18,9 +18,14 @@ export function useShare(url: string, title: string) {
 
   const shareNative = async () => {
     if (typeof navigator !== 'undefined' && navigator.share) {
-      await navigator.share({ title, url: resolvedUrl })
-      return true
+      try {
+        await navigator.share({ title, url: resolvedUrl })
+        return true
+      } catch {
+        // User cancelled or share failed — fall through to copy.
+      }
     }
+    await copyLink()
     return false
   }
 

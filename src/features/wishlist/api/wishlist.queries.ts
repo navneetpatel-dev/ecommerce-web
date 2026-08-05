@@ -32,6 +32,7 @@ export function useMoveToCart() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['wishlist'] })
       queryClient.invalidateQueries({ queryKey: cartKeys.all })
+      import('@/features/cart/store/cart.store').then((m) => m.useCartDrawerStore.getState().open())
     },
   })
 }

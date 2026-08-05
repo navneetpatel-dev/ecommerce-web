@@ -16,7 +16,7 @@ export function CategoryRail({ categories }: CategoryRailProps) {
         {categories.map((cat) => (
           <Link
             key={cat.id}
-            href={`/products?category=${cat.slug}`}
+            href={`/products?categoryId=${cat.id}`}
             className="shrink-0 snap-start w-40 lg:w-48 group relative rounded-md overflow-hidden"
             style={{ aspectRatio: '4/3' }}
           >

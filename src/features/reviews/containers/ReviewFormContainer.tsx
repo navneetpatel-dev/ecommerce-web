@@ -21,6 +21,7 @@ export function ReviewFormContainer({
       productName={productName}
       register={review.register}
       errors={review.errors}
+      rating={review.rating}
       hoverRating={review.hoverRating}
       isPending={review.isPending}
       onSetHoverRating={review.setHoverRating}

@@ -11,10 +11,17 @@ export function OtpPage() {
       <OtpCard
         digits={otp.digits}
         completed={otp.completed}
+        error={otp.error}
+        info={otp.info}
+        isVerifying={otp.isVerifying}
+        timerLabel={otp.timerLabel}
+        canResend={otp.canResend}
         onSetInputRef={otp.setInputRef}
         onUpdateDigit={otp.updateDigit}
         onKeyDown={otp.handleKeyDown}
         onPaste={otp.handlePaste}
+        onVerify={() => void otp.verify()}
+        onResend={otp.resend}
       />
     </div>
   )

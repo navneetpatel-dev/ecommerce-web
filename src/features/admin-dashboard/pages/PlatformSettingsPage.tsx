@@ -16,10 +16,12 @@ export function PlatformSettingsPage() {
   return (
     <PlatformSettingsForm
       form={settings.form}
+      message={settings.message}
       onCommissionRateChange={settings.setCommissionRate}
       onAutoApproveChange={settings.setAutoApproveProducts}
       onReturnWindowChange={settings.setReturnWindow}
       onPayoutCycleChange={settings.setPayoutCycle}
+      onSave={settings.save}
     />
   )
 }

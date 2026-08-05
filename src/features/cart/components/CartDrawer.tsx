@@ -16,6 +16,14 @@ interface CartDrawerProps {
   hasItems: boolean
   groupedByVendor: Record<string, CartItem[]>
   total: number
+  couponInput: string
+  couponMessage: string | null
+  couponError: string | null
+  couponPending: boolean
+  appliedCouponCode: string | null
+  onCouponInputChange: (value: string) => void
+  onApplyCoupon: () => void
+  onContinueShopping: () => void
   onDecreaseQuantity: (item: CartItem) => void
   onIncreaseQuantity: (item: CartItem) => void
   onRemoveItem: (itemId: string) => void
@@ -27,6 +35,14 @@ export function CartDrawer({
   hasItems,
   groupedByVendor,
   total,
+  couponInput,
+  couponMessage,
+  couponError,
+  couponPending,
+  appliedCouponCode,
+  onCouponInputChange,
+  onApplyCoupon,
+  onContinueShopping,
   onDecreaseQuantity,
   onIncreaseQuantity,
   onRemoveItem,
@@ -64,7 +80,7 @@ export function CartDrawer({
                   message="Add some items to get started."
                   icon={ShoppingBag}
                   actionLabel="Continue shopping"
-                  onAction={onClose}
+                  onAction={onContinueShopping}
                 />
               ) : (
                 Object.entries(groupedByVendor).map(([vendorId, items]) => (
@@ -127,17 +143,49 @@ export function CartDrawer({
                     Coupon code
                   </label>
                   <div className="flex gap-2">
-                    <Input id="cart-coupon-code" placeholder="Coupon code" className="text-[0.9375rem]" />
-                    <Button variant="outline" size="sm" className="shrink-0">Apply</Button>
+                    <Input
+                      id="cart-coupon-code"
+                      placeholder="Coupon code"
+                      className="text-[0.9375rem]"
+                      value={couponInput}
+                      onChange={(e) => onCouponInputChange(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          onApplyCoupon()
+                        }
+                      }}
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="shrink-0"
+                      onClick={onApplyCoupon}
+                      loading={couponPending}
+                      disabled={!couponInput.trim()}
+                    >
+                      Apply
+                    </Button>
                   </div>
+                  {couponMessage && (
+                    <p className="text-[0.8125rem] text-success">{couponMessage}</p>
+                  )}
+                  {couponError && <p className="text-[0.8125rem] text-danger">{couponError}</p>}
+                  {appliedCouponCode && !couponMessage && (
+                    <p className="text-[0.8125rem] text-ink-muted">Applied: {appliedCouponCode}</p>
+                  )}
                 </div>
                 <Separator />
                 <div className="flex justify-between items-center">
                   <span className="text-[0.9375rem] font-medium">Total</span>
-                  <span className="text-[1.125rem] font-bold text-brand">₹{total.toLocaleString('en-IN')}</span>
+                  <span className="text-[1.125rem] font-bold text-brand">
+                    ₹{total.toLocaleString('en-IN')}
+                  </span>
                 </div>
                 <Button asChild size="lg" className="w-full">
-                  <Link href="/checkout" onClick={onClose}>Checkout</Link>
+                  <Link href="/checkout" onClick={onClose}>
+                    Checkout
+                  </Link>
                 </Button>
                 <Link
                   href="/cart"

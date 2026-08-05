@@ -12,6 +12,7 @@ interface ProductCardContainerProps {
   compareMode?: boolean
   isCompared?: boolean
   onToggleCompare?: (product: ProductListItem) => void
+  moveToCart?: boolean
 }
 
 export function ProductCardContainer({
@@ -22,8 +23,9 @@ export function ProductCardContainer({
   compareMode,
   isCompared,
   onToggleCompare,
+  moveToCart,
 }: ProductCardContainerProps) {
-  const card = useProductCard(product)
+  const card = useProductCard(product, { moveToCart })
 
   return (
     <ProductCard

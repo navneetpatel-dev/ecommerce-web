@@ -9,6 +9,8 @@ interface VariantSelectorContainerProps {
   basePrice: number
   baseStock: number
   className?: string
+  /** Prefer false on PDP when page-level Add to Cart handles purchase. */
+  showAddToCart?: boolean
 }
 
 export function VariantSelectorContainer({
@@ -16,6 +18,7 @@ export function VariantSelectorContainer({
   basePrice,
   baseStock,
   className,
+  showAddToCart = false,
 }: VariantSelectorContainerProps) {
   const selector = useVariantSelector(variants, basePrice, baseStock)
 
@@ -29,8 +32,10 @@ export function VariantSelectorContainer({
       isAvailable={selector.isAvailable}
       isActive={selector.isActive}
       onSelectValue={selector.selectValue}
+      showAddToCart={showAddToCart}
       onAddToCart={selector.addSelectedToCart}
       isAddingToCart={selector.isAddingToCart}
+      canAddToCart={selector.canAddToCart}
       className={className}
     />
   )
