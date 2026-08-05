@@ -1,6 +1,6 @@
 'use client'
 
-import { useCategories } from '../api/home.queries'
+import { useCategories } from '@/features/categories/api/categories.queries'
 import { useTrendingProducts } from './useTrendingProducts'
 import { useVendorSpotlight } from './useVendorSpotlight'
 import { useRecentlyViewed } from './useRecentlyViewed'

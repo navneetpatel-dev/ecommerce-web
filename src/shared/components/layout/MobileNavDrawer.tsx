@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { X } from 'lucide-react'
-import type { CurrentUser } from '@/shared/api/types'
+import { ArrowRight, X } from 'lucide-react'
+import type { Category, CurrentUser } from '@/shared/api/types'
+import { resolveCategoryIcon } from '@/features/categories'
 
 const navLinks = [
   { href: '/products', label: 'All Products' },
@@ -11,6 +12,7 @@ interface MobileNavDrawerProps {
   open: boolean
   onClose: () => void
   currentUser: CurrentUser | null
+  categories: Category[]
   onLogout: () => void
 }
 
@@ -18,6 +20,7 @@ export function MobileNavDrawer({
   open,
   onClose,
   currentUser,
+  categories,
   onLogout,
 }: MobileNavDrawerProps) {
   if (!open) return null
@@ -45,9 +48,44 @@ export function MobileNavDrawer({
             </Link>
           ))}
 
+          <div className="mt-4 px-3 py-2 flex items-center justify-between">
+            <span className="text-[0.8125rem] font-medium text-ink-muted">Categories</span>
+            {categories.length > 0 ? (
+              <Link
+                href="/categories"
+                onClick={onClose}
+                className="inline-flex items-center gap-0.5 text-[0.75rem] font-medium text-brand"
+              >
+                View all <ArrowRight className="h-3 w-3" />
+              </Link>
+            ) : null}
+          </div>
+
+          {categories.length === 0 ? (
+            <p className="px-3 py-2 text-[0.8125rem] text-ink-faint">No categories yet</p>
+          ) : (
+            <ul className="space-y-0.5">
+              {categories.map((category) => {
+                const Icon = resolveCategoryIcon(category)
+                return (
+                  <li key={category.id}>
+                    <Link
+                      href={`/products?categoryId=${category.id}`}
+                      onClick={onClose}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-md text-[0.9375rem] font-medium hover:bg-paper transition-colors"
+                    >
+                      <Icon className="h-4 w-4 shrink-0 text-ink-muted" strokeWidth={1.5} />
+                      <span className="truncate">{category.name}</span>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+
           {currentUser && currentUser.role === 'CUSTOMER' && (
             <>
-              <div className="px-3 py-2 text-[0.8125rem] font-medium text-ink-muted mt-2">Account</div>
+              <div className="px-3 py-2 text-[0.8125rem] font-medium text-ink-muted mt-4">Account</div>
               <Link href="/orders" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Orders</Link>
               <Link href="/wishlist" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Wishlist</Link>
               <Link href="/wallet" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Wallet</Link>

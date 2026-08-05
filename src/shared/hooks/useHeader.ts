@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useLogout } from '@/features/auth/api/auth.queries'
 import { useCartDrawerStore } from '@/features/cart/store/cart.store'
-import { useCategories } from '@/features/home/api/home.queries'
+import { useCategories } from '@/features/categories/api/categories.queries'
+import { getRootCategories } from '@/features/categories/utils/categoryHelpers'
 
 export const HEADER_PRIMARY_LINKS = [
   { href: '/products', label: 'Shop' },
@@ -24,6 +25,8 @@ export function useHeader() {
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const openTimerRef = useRef<number | null>(null)
   const closeTimerRef = useRef<number | null>(null)
+
+  const rootCategories = getRootCategories(categories)
 
   useEffect(() => {
     return () => {
@@ -47,8 +50,7 @@ export function useHeader() {
 
   return {
     currentUser,
-    categories,
-    topCategories: categories.filter((category) => !category.parentId).slice(0, 8),
+    categories: rootCategories,
     primaryLinks: HEADER_PRIMARY_LINKS,
     mobileNavOpen,
     mobileSearchOpen,

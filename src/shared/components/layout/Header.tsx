@@ -6,12 +6,13 @@ import { cn } from '@/shared/utils/cn'
 import { SearchBarContainer } from '@/features/search/containers/SearchBarContainer'
 import { MobileTabBar } from './MobileTabBar'
 import { MobileNavDrawer } from './MobileNavDrawer'
+import { CategoriesMegaMenu } from '@/features/categories/components/CategoriesMegaMenu'
 import { BottomSheet } from '@/shared/components/BottomSheet'
 import type { Category, CurrentUser } from '@/shared/api/types'
 
 interface HeaderProps {
   currentUser: CurrentUser | null
-  topCategories: Category[]
+  categories: Category[]
   primaryLinks: readonly { href: string; label: string }[]
   mobileNavOpen: boolean
   mobileSearchOpen: boolean
@@ -32,7 +33,7 @@ interface HeaderProps {
 
 export function Header({
   currentUser,
-  topCategories,
+  categories,
   primaryLinks,
   mobileNavOpen,
   mobileSearchOpen,
@@ -103,36 +104,12 @@ export function Header({
               </button>
 
               {megaMenuOpen && (
-                <div className="absolute left-0 top-full mt-3 w-[720px] rounded-md border border-line bg-surface-raised p-6 shadow-elevation-2">
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="col-span-2 grid grid-cols-2 gap-3">
-                      {topCategories.map((category) => (
-                        <Link
-                          key={category.id}
-                          href={`/products?categoryId=${category.id}`}
-                          className="rounded-md border border-line bg-surface px-4 py-3 text-[0.9375rem] font-medium text-ink hover:border-brand hover:text-brand transition-colors"
-                          onClick={onCloseMegaMenu}
-                        >
-                          {category.name}
-                        </Link>
-                      ))}
-                    </div>
-                    <div className="rounded-md bg-brand-subtle p-5">
-                      <p className="text-[0.8125rem] font-medium text-brand">Featured Collection</p>
-                      <h3 className="mt-2 text-[1.125rem] font-semibold text-ink">Fresh arrivals from trusted vendors</h3>
-                      <p className="mt-2 text-[0.9375rem] text-ink-muted">
-                        Explore curated picks, trending categories, and top-rated finds.
-                      </p>
-                      <Link
-                        href="/products?sort=newest"
-                        className="mt-4 inline-flex text-[0.8125rem] font-medium text-brand hover:underline"
-                        onClick={onCloseMegaMenu}
-                      >
-                        Shop new arrivals
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+                <CategoriesMegaMenu
+                  categories={categories}
+                  onClose={onCloseMegaMenu}
+                  onMouseEnter={onScheduleMegaOpen}
+                  onMouseLeave={onScheduleMegaClose}
+                />
               )}
             </div>
 
@@ -274,6 +251,7 @@ export function Header({
         open={mobileNavOpen}
         onClose={onCloseMobileNav}
         currentUser={currentUser}
+        categories={categories}
         onLogout={onLogout}
       />
       <BottomSheet open={mobileSearchOpen} onClose={onCloseMobileSearch} title="Search">

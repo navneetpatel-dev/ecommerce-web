@@ -9,7 +9,7 @@ export function HeaderContainer() {
   return (
     <Header
       currentUser={header.currentUser}
-      topCategories={header.topCategories}
+      categories={header.categories}
       primaryLinks={header.primaryLinks}
       mobileNavOpen={header.mobileNavOpen}
       mobileSearchOpen={header.mobileSearchOpen}
