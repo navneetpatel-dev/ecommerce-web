@@ -8,11 +8,13 @@ import { Button } from '@/shared/components/ui/button'
 import { Separator } from '@/shared/components/ui/separator'
 import { Input } from '@/shared/components/ui/input'
 import { EmptyState } from '@/shared/components/EmptyState'
+import { Skeleton } from '@/shared/components/ui/skeleton'
 import type { CartItem } from '@/shared/api/types'
 
 interface CartDrawerProps {
   isOpen: boolean
   onClose: () => void
+  isLoading?: boolean
   hasItems: boolean
   groupedByVendor: Record<string, CartItem[]>
   total: number
@@ -32,6 +34,7 @@ interface CartDrawerProps {
 export function CartDrawer({
   isOpen,
   onClose,
+  isLoading,
   hasItems,
   groupedByVendor,
   total,
@@ -74,7 +77,13 @@ export function CartDrawer({
             </div>
 
             <div className="flex-1 overflow-auto p-4 space-y-4">
-              {!hasItems ? (
+              {isLoading ? (
+                <div className="space-y-3">
+                  <Skeleton className="h-20 w-full rounded-md" />
+                  <Skeleton className="h-20 w-full rounded-md" />
+                  <Skeleton className="h-20 w-full rounded-md" />
+                </div>
+              ) : !hasItems ? (
                 <EmptyState
                   heading="Your cart is empty"
                   message="Add some items to get started."

@@ -18,6 +18,7 @@ interface SearchBarProps {
   term: string
   open: boolean
   suggestions?: SearchSuggestion[]
+  isFetching?: boolean
   onTermChange: (value: string) => void
   onFocus: () => void
   onBlur: () => void
@@ -32,12 +33,15 @@ export function SearchBar({
   term,
   open,
   suggestions,
+  isFetching = false,
   onTermChange,
   onFocus,
   onBlur,
   onSubmit,
   onSelect,
 }: SearchBarProps) {
+  const showPanel = open && (isFetching || (suggestions && suggestions.length > 0))
+
   return (
     <div className={cn('relative w-full', className)}>
       <form onSubmit={onSubmit} className="relative">
@@ -64,23 +68,31 @@ export function SearchBar({
           )}
         />
       </form>
-      {open && suggestions && suggestions.length > 0 && (
+      {showPanel ? (
         <div className="absolute top-full left-0 right-0 mt-1 border border-line bg-surface-raised rounded-md shadow-elevation-2 max-h-80 overflow-auto z-50">
-          {suggestions.map((s) => (
-            <button
-              key={s.id}
-              className="flex items-center gap-3 w-full px-4 h-12 text-left hover:bg-brand-subtle transition-colors"
-              onMouseDown={() => onSelect(s.slug)}
-            >
-              <Image src={s.imageUrl} alt={s.name} width={32} height={32} className="rounded object-cover shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="text-[0.9375rem] font-medium truncate">{s.name}</p>
-                <p className="text-[0.8125rem] text-ink-muted">₹{s.basePrice}</p>
-              </div>
-            </button>
-          ))}
+          {isFetching && !suggestions?.length ? (
+            <div className="space-y-2 p-3">
+              <div className="h-10 animate-pulse rounded-md bg-line/60" />
+              <div className="h-10 animate-pulse rounded-md bg-line/60" />
+              <div className="h-10 animate-pulse rounded-md bg-line/60" />
+            </div>
+          ) : (
+            suggestions?.map((s) => (
+              <button
+                key={s.id}
+                className="flex items-center gap-3 w-full px-4 h-12 text-left hover:bg-brand-subtle transition-colors"
+                onMouseDown={() => onSelect(s.slug)}
+              >
+                <Image src={s.imageUrl} alt={s.name} width={32} height={32} className="rounded object-cover shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[0.9375rem] font-medium truncate">{s.name}</p>
+                  <p className="text-[0.8125rem] text-ink-muted">₹{s.basePrice}</p>
+                </div>
+              </button>
+            ))
+          )}
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

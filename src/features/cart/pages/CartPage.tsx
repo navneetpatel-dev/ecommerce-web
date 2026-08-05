@@ -8,6 +8,7 @@ export function CartPage() {
 
   return (
     <CartPageView
+      isLoading={cart.isLoading}
       hasItems={cart.hasItems}
       groupedByVendor={cart.groupedByVendor}
       total={cart.total}

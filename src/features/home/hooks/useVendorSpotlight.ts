@@ -13,7 +13,7 @@ export interface SpotlightVendor {
 }
 
 export function useVendorSpotlight() {
-  const { data } = useProductList({ sort: 'rating', limit: 24 })
+  const { data, isLoading } = useProductList({ sort: 'rating', limit: 24 })
 
   const vendors = useMemo<SpotlightVendor[]>(() => {
     return Array.from(
@@ -32,5 +32,5 @@ export function useVendorSpotlight() {
     ).slice(0, 4)
   }, [data])
 
-  return { vendors }
+  return { vendors, isLoading }
 }

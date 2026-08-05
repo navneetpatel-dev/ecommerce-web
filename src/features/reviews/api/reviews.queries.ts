@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { reviewsApi } from './reviews.api'
+import { navigate } from '@/shared/utils/navigate'
 
 export function useProductReviews(productId: string) {
   return useQuery({
@@ -16,7 +17,7 @@ export function useSubmitReview() {
     mutationFn: (input: { orderItemId: string; productId: string; rating: number; title?: string; body: string }) =>
       reviewsApi.submit(input),
     onSuccess: () => {
-      router.push('/orders')
+      navigate(router, '/orders')
     },
   })
 }

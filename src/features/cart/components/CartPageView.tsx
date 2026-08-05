@@ -7,9 +7,11 @@ import { EmptyState } from '@/shared/components/EmptyState'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { QuantitySelector } from '@/shared/components/QuantitySelector'
 import { Button } from '@/shared/components/ui/button'
+import { CartPageSkeleton } from '@/shared/components/Skeletons'
 import type { CartItem } from '@/shared/api/types'
 
 interface CartPageViewProps {
+  isLoading?: boolean
   hasItems: boolean
   groupedByVendor: Record<string, CartItem[]>
   total: number
@@ -18,12 +20,17 @@ interface CartPageViewProps {
 }
 
 export function CartPageView({
+  isLoading,
   hasItems,
   groupedByVendor,
   total,
   onUpdateQuantity,
   onRemoveItem,
 }: CartPageViewProps) {
+  if (isLoading) {
+    return <CartPageSkeleton />
+  }
+
   if (!hasItems) {
     return (
       <div className="max-w-[1200px] mx-auto px-4 py-16">

@@ -10,6 +10,7 @@ export function CartDrawerContainer() {
     <CartDrawer
       isOpen={drawer.isOpen}
       onClose={drawer.close}
+      isLoading={drawer.isLoading}
       hasItems={drawer.hasItems}
       groupedByVendor={drawer.groupedByVendor}
       total={drawer.total}

@@ -8,6 +8,7 @@ export function CheckoutPage() {
 
   return (
     <CheckoutPageView
+      isLoading={checkout.isLoading}
       hasItems={checkout.hasItems}
       step={checkout.step}
       addressId={checkout.addressId}

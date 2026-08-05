@@ -20,11 +20,13 @@ export function useCheckoutPage() {
     setShippingMethod,
     setPaymentMethod,
   } = useCheckoutStore()
-  const { data: cart } = useCart()
-  const { data: addresses } = useAddresses()
+  const { data: cart, isLoading: cartLoading } = useCart()
+  const { data: addresses, isLoading: addressesLoading } = useAddresses()
   const createAddress = useCreateAddress()
   const { data: walletBalance } = useWalletBalance()
   const { handlePlaceOrder, quote, isPending } = usePlaceOrderWithRazorpay()
+
+  const isLoading = cartLoading || addressesLoading
 
   const groupedByVendor = useMemo(() => {
     if (!cart?.items) return {}
@@ -54,6 +56,7 @@ export function useCheckoutPage() {
     walletShortfall,
     quote,
     isPending,
+    isLoading,
     groupedByVendor,
     total,
     hasItems: Boolean(cart?.items?.length),

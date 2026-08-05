@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useVendorProductsTable } from '../hooks/useVendorProductsTable'
 import { ProductsTableView } from '../components/ProductsTableView'
+import { navigate } from '@/shared/utils/navigate'
 
 export function ProductsTable() {
   const router = useRouter()
@@ -32,7 +33,7 @@ export function ProductsTable() {
       }
       onEditProduct={(product) => {
         if (product.slug) {
-          router.push(`/products/${product.slug}`)
+          navigate(router, `/products/${product.slug}`)
           return
         }
         window.alert('This product cannot be opened for editing yet.')

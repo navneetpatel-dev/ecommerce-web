@@ -1,5 +1,6 @@
 import { useSearchParams, useRouter } from 'next/navigation'
 import { parseFilters, filtersToParams, clearFacetFilters } from '../utils/products.utils'
+import { navigate } from '@/shared/utils/navigate'
 import type { ProductFilters } from '../api/products.api'
 
 export function useFilters() {
@@ -10,7 +11,7 @@ export function useFilters() {
   const pushFilters = (next: ProductFilters | Record<string, unknown>) => {
     const params = filtersToParams(next as Record<string, unknown>)
     const query = params.toString()
-    router.push(query ? `?${query}` : window.location.pathname)
+    navigate(router, query ? `?${query}` : window.location.pathname)
   }
 
   const updateFilter = (key: string, value: unknown) => {

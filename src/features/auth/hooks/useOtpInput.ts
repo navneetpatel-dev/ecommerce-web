@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { navigate } from '@/shared/utils/navigate'
 
 export function useOtpInput(length = 6) {
   const router = useRouter()
@@ -70,7 +71,7 @@ export function useOtpInput(length = 6) {
     await new Promise((resolve) => window.setTimeout(resolve, 400))
     setIsVerifying(false)
     setError('OTP verification is not available yet. Please sign in with your password.')
-    window.setTimeout(() => router.push('/login'), 1600)
+    window.setTimeout(() => navigate(router, '/login'), 1600)
   }
 
   const resend = () => {

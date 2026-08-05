@@ -4,16 +4,30 @@ import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { CategoryCard, getRootCategories } from '@/features/categories'
+import { CategoryGridSkeleton } from '@/shared/components/Skeletons'
 import { cn } from '@/shared/utils/cn'
 import type { Category } from '@/shared/api/types'
 
 const HOME_CATEGORY_LIMIT = 10
 
 interface CategoryRailProps {
-  categories: Category[]
+  categories?: Category[]
+  isLoading?: boolean
 }
 
-export function CategoryRail({ categories }: CategoryRailProps) {
+export function CategoryRail({ categories = [], isLoading }: CategoryRailProps) {
+  if (isLoading) {
+    return (
+      <section>
+        <div className="mb-8 space-y-2">
+          <TextEyebrow>Browse</TextEyebrow>
+          <h2 className="text-[1.375rem] font-semibold text-ink">Shop by Category</h2>
+        </div>
+        <CategoryGridSkeleton count={10} />
+      </section>
+    )
+  }
+
   const roots = getRootCategories(categories)
   if (!roots.length) return null
 

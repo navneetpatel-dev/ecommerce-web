@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation'
 import { useCheckoutStore } from '../store/checkout.store'
 import { usePlaceOrder, useCheckoutQuote } from '../api/checkout.queries'
 import { checkoutApi } from '../api/checkout.api'
+import { navigate } from '@/shared/utils/navigate'
 
 export function usePlaceOrderWithRazorpay() {
   const { addressId, shippingMethodByVendor, appliedCouponCode } = useCheckoutStore()
@@ -32,12 +33,12 @@ export function usePlaceOrderWithRazorpay() {
             razorpayPaymentId: response.razorpay_payment_id,
             razorpaySignature: response.razorpay_signature,
           })
-          router.push(`/orders/${result.orderId}/confirmation`)
+          navigate(router, `/orders/${result.orderId}/confirmation`)
         },
       })
       rzp.open()
     } else {
-      router.push(`/orders/${result.orderId}/confirmation`)
+      navigate(router, `/orders/${result.orderId}/confirmation`)
     }
   }
 

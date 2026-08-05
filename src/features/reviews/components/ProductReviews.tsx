@@ -2,6 +2,7 @@ import { ThumbsDown, ThumbsUp, MessageSquare } from 'lucide-react'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Button } from '@/shared/components/ui/button'
+import { ReviewListSkeleton } from '@/shared/components/Skeletons'
 import type { Review } from '@/shared/api/types'
 
 interface ProductReviewsProps {
@@ -18,7 +19,7 @@ export function ProductReviews({
   onVoteUnhelpful,
 }: ProductReviewsProps) {
   if (isLoading) {
-    return <p className="text-[0.9375rem] text-ink-muted">Loading reviews...</p>
+    return <ReviewListSkeleton count={3} />
   }
 
   if (!reviews.length) {

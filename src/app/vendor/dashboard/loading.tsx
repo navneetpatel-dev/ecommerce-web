@@ -1,16 +1,20 @@
 import { Skeleton } from '@/shared/components/ui/skeleton'
+import { SkeletonRows } from '@/shared/components/Skeletons'
 
+/** Content-only — vendor layout already keeps header + sidebar. */
 export default function VendorDashboardLoading() {
   return (
-    <div className="min-h-screen bg-paper">
-      <Skeleton className="h-14 w-full rounded-none" />
-      <div className="flex">
-        <Skeleton className="h-[calc(100vh-3.5rem)] w-56 shrink-0 rounded-none" />
-        <main className="flex-1 p-6 flex flex-col items-center justify-center gap-4">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-4 w-64" />
-        </main>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <Skeleton className="h-8 w-52" />
+        <Skeleton className="h-4 w-64" />
       </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Skeleton key={i} className="h-24 w-full rounded-md" />
+        ))}
+      </div>
+      <SkeletonRows count={5} height="h-12 w-full" />
     </div>
   )
 }

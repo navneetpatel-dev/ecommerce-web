@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ArrowRight, LayoutGrid } from 'lucide-react'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { CategoryCard } from './CategoryCard'
+import { CategoriesPageSkeleton } from '@/shared/components/Skeletons'
 import { resolveCategoryIcon } from '../utils/categoryHelpers'
 import type { Category } from '@/shared/api/types'
 import type { CategoryRootWithChildren } from '../hooks/useCategoriesPage'
@@ -22,6 +23,8 @@ export function CategoriesView({
   isLoading,
   isEmpty,
 }: CategoriesViewProps) {
+  if (isLoading) return <CategoriesPageSkeleton />
+
   return (
     <div className="mx-auto max-w-[1600px] px-4 py-10 md:py-14">
       <div className="mb-10 max-w-2xl">
@@ -34,13 +37,7 @@ export function CategoriesView({
         </p>
       </div>
 
-      {isLoading ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-4">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div key={i} className="aspect-[4/3] animate-pulse rounded-md bg-paper border border-line" />
-          ))}
-        </div>
-      ) : isEmpty ? (
+      {isEmpty ? (
         <div className="rounded-md border border-line bg-surface px-6 py-16 text-center">
           <LayoutGrid className="mx-auto h-8 w-8 text-ink-faint" strokeWidth={1.25} />
           <p className="mt-4 text-[1.0625rem] font-medium text-ink">No categories yet</p>

@@ -20,6 +20,7 @@ export function SearchBarContainer({ size, className, onDark }: SearchBarContain
       term={search.term}
       open={search.open}
       suggestions={search.suggestions}
+      isFetching={search.isFetching}
       onTermChange={search.updateTerm}
       onFocus={search.openDropdown}
       onBlur={search.closeDropdown}

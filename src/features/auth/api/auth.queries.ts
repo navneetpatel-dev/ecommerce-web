@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuthStore, defaultRouteForRole } from '../store/auth.store'
 import { authApi } from './auth.api'
+import { navigate, navigateReplace } from '@/shared/utils/navigate'
 import type { LoginInput, RegisterInput } from '../schemas/auth.schema'
 
 export function useLogin() {
@@ -12,7 +13,7 @@ export function useLogin() {
     mutationFn: (input: LoginInput) => authApi.login(input),
     onSuccess: (data) => {
       setSession(data.accessToken, data.user)
-      router.replace(defaultRouteForRole(data.user.role))
+      navigateReplace(router, defaultRouteForRole(data.user.role))
     },
   })
 }
@@ -25,7 +26,7 @@ export function useRegister() {
     mutationFn: (input: RegisterInput) => authApi.register(input),
     onSuccess: (data) => {
       setSession(data.accessToken, data.user)
-      router.replace(defaultRouteForRole(data.user.role))
+      navigateReplace(router, defaultRouteForRole(data.user.role))
     },
   })
 }
@@ -40,12 +41,12 @@ export function useLogout() {
     onSuccess: () => {
       clearSession()
       queryClient.clear()
-      router.replace('/login')
+      navigateReplace(router, '/login')
     },
     onError: () => {
       clearSession()
       queryClient.clear()
-      router.replace('/login')
+      navigateReplace(router, '/login')
     },
   })
 }
@@ -61,7 +62,7 @@ export function useResetPassword() {
   return useMutation({
     mutationFn: (input: { token: string; newPassword: string }) =>
       authApi.resetPassword(input.token, input.newPassword),
-    onSuccess: () => router.push('/login'),
+    onSuccess: () => navigate(router, '/login'),
   })
 }
 

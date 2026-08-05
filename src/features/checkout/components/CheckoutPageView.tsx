@@ -7,9 +7,11 @@ import { CheckoutStepIndicator } from '../containers/CheckoutStepIndicator'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/components/ui/accordion'
 import { Separator } from '@/shared/components/ui/separator'
 import { VendorStrip } from '@/shared/components/VendorStrip'
+import { CheckoutPageSkeleton } from '@/shared/components/Skeletons'
 import type { Address, CartItem, CheckoutQuote } from '@/shared/api/types'
 
 interface CheckoutPageViewProps {
+  isLoading?: boolean
   hasItems: boolean
   step: number
   addressId: string | null
@@ -38,6 +40,7 @@ interface CheckoutPageViewProps {
 }
 
 export function CheckoutPageView({
+  isLoading,
   hasItems,
   step,
   addressId,
@@ -64,6 +67,7 @@ export function CheckoutPageView({
   onPlaceOrder,
   onCreateAddress,
 }: CheckoutPageViewProps) {
+  if (isLoading) return <CheckoutPageSkeleton />
   if (!hasItems) return <EmptyCart />
 
   const summaryCard = (

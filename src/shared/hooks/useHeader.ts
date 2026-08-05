@@ -7,6 +7,7 @@ import { useLogout } from '@/features/auth/api/auth.queries'
 import { useCartDrawerStore } from '@/features/cart/store/cart.store'
 import { useCategories } from '@/features/categories/api/categories.queries'
 import { getRootCategories } from '@/features/categories/utils/categoryHelpers'
+import { navigate } from '@/shared/utils/navigate'
 
 export const HEADER_PRIMARY_LINKS = [
   { href: '/products', label: 'Shop' },
@@ -65,7 +66,7 @@ export function useHeader() {
     scheduleMegaOpen,
     scheduleMegaClose,
     openCart,
-    goToProfile: () => router.push('/profile'),
+    goToProfile: () => navigate(router, '/profile'),
     logout: () => logout.mutate(),
   }
 }

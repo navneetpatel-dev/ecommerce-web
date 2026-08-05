@@ -7,6 +7,7 @@ import { useCartDrawerStore } from '../store/cart.store'
 import { groupItemsByVendor, calcCartTotal } from '../utils/cart.utils'
 import { couponsApi } from '@/features/coupons/api/coupons.api'
 import { useCheckoutStore } from '@/features/checkout/store/checkout.store'
+import { navigate } from '@/shared/utils/navigate'
 import type { CartItem } from '@/shared/api/types'
 
 export function useCartDrawer() {
@@ -15,7 +16,7 @@ export function useCartDrawer() {
   const close = useCartDrawerStore((s) => s.close)
   const setCouponCode = useCheckoutStore((s) => s.setCouponCode)
   const appliedCouponCode = useCheckoutStore((s) => s.appliedCouponCode)
-  const { data: cart } = useCart()
+  const { data: cart, isLoading } = useCart()
   const updateItem = useUpdateCartItem()
   const removeItem = useRemoveCartItem()
 
@@ -66,12 +67,13 @@ export function useCartDrawer() {
 
   const continueShopping = () => {
     close()
-    router.push('/products')
+    navigate(router, '/products')
   }
 
   return {
     isOpen,
     close,
+    isLoading,
     items: cart?.items ?? [],
     hasItems: Boolean(cart?.items?.length),
     groupedByVendor,
