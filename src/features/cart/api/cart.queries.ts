@@ -1,8 +1,26 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import type { Cart } from '@/shared/api/types'
 import { cartApi } from './cart.api'
 
 export const cartKeys = {
   all: ['cart'] as const,
+}
+
+type AddToCartVars = {
+  variantId: string
+  quantity?: number
+  /** Opens the cart drawer after a successful add. Defaults to true. */
+  openDrawer?: boolean
+}
+
+function syncCartCache(
+  queryClient: ReturnType<typeof useQueryClient>,
+  cart: Cart | undefined
+) {
+  if (cart) {
+    queryClient.setQueryData(cartKeys.all, cart)
+  }
+  queryClient.invalidateQueries({ queryKey: cartKeys.all })
 }
 
 export function useCart() {
@@ -15,16 +33,15 @@ export function useCart() {
 
 export function useAddToCart() {
   const queryClient = useQueryClient()
-  const openCart = () => {
-    import('../store/cart.store').then((m) => m.useCartDrawerStore.getState().open())
-  }
 
   return useMutation({
-    mutationFn: ({ variantId, quantity = 1 }: { variantId: string; quantity?: number }) =>
+    mutationFn: ({ variantId, quantity = 1 }: AddToCartVars) =>
       cartApi.addItem(variantId, quantity),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: cartKeys.all })
-      openCart()
+    onSuccess: (cart, variables) => {
+      syncCartCache(queryClient, cart)
+      if (variables.openDrawer !== false) {
+        import('../store/cart.store').then((m) => m.useCartDrawerStore.getState().open())
+      }
     },
   })
 }
@@ -34,7 +51,7 @@ export function useUpdateCartItem() {
   return useMutation({
     mutationFn: ({ itemId, quantity }: { itemId: string; quantity: number }) =>
       cartApi.updateItem(itemId, quantity),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.all }),
+    onSuccess: (cart) => syncCartCache(queryClient, cart),
   })
 }
 
@@ -42,6 +59,6 @@ export function useRemoveCartItem() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (itemId: string) => cartApi.removeItem(itemId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.all }),
+    onSuccess: (cart) => syncCartCache(queryClient, cart),
   })
 }

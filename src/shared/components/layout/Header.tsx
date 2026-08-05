@@ -8,6 +8,7 @@ import { MobileTabBar } from './MobileTabBar'
 import { MobileNavDrawer } from './MobileNavDrawer'
 import { CategoriesMegaMenu } from '@/features/categories/components/CategoriesMegaMenu'
 import { BottomSheet } from '@/shared/components/BottomSheet'
+import { CartCountBadge } from '@/shared/components/CartCountBadge'
 import { useTheme } from '@/shared/hooks/use-theme'
 import type { Category, CurrentUser } from '@/shared/api/types'
 
@@ -179,11 +180,7 @@ export function Header({
               aria-label={cartItemCount > 0 ? `Cart, ${cartItemCount} items` : 'Cart'}
             >
               <ShoppingCart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-              {cartItemCount > 0 && (
-                <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand px-1 font-mono text-[0.625rem] font-medium leading-none text-paper">
-                  {cartItemCount > 99 ? '99+' : cartItemCount}
-                </span>
-              )}
+              <CartCountBadge count={cartItemCount} />
             </button>
 
             {!currentUser ? (

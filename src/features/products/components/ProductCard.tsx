@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react'
 import Link from 'next/link'
 import { Heart, Plus } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
 import { Checkbox } from '@/shared/components/ui/checkbox'
 import type { ProductListItem } from '@/shared/api/types'
 import { VendorStrip } from '@/shared/components/VendorStrip'
@@ -10,6 +11,7 @@ import { RatingStars } from '@/shared/components/RatingStars'
 import { DiscountBadge } from '@/shared/components/DiscountBadge'
 import { MediaImage } from '@/shared/components/MediaImage'
 import { Button } from '@/shared/components/ui/button'
+import { CardQuantityControl } from './CardQuantityControl'
 import { cn } from '@/shared/utils/cn'
 
 interface ProductCardProps {
@@ -21,12 +23,22 @@ interface ProductCardProps {
   isCompared?: boolean
   isWishlisted?: boolean
   isAddingToCart?: boolean
+  cartQuantity?: number
+  maxQuantity?: number
   hasDiscount?: boolean
   discountPercent?: number
   onPrefetch?: () => void
   onToggleWishlist?: () => void
   onAddToCart?: () => void
+  onQuantityChange?: (quantity: number) => void
   onToggleCompare?: (product: ProductListItem) => void
+}
+
+const controlMotion = {
+  initial: { opacity: 0, y: 6 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -4 },
+  transition: { duration: 0.2, ease: [0.2, 0, 0, 1] as const },
 }
 
 export function ProductCard({
@@ -38,17 +50,68 @@ export function ProductCard({
   isCompared = false,
   isWishlisted = false,
   isAddingToCart = false,
+  cartQuantity = 0,
+  maxQuantity = 99,
   hasDiscount = false,
   discountPercent = 0,
   onPrefetch,
   onToggleWishlist,
   onAddToCart,
+  onQuantityChange,
   onToggleCompare,
 }: ProductCardProps) {
   const [imageUnavailable, setImageUnavailable] = useState(!product.imageUrl)
   const handleUnavailableChange = useCallback((unavailable: boolean) => {
     setImageUnavailable(unavailable)
   }, [])
+
+  const inCart = cartQuantity > 0
+  const canQuickAdd = showQuickAdd && product.stock > 0
+
+  const renderQuickAddButton = (variant: 'overlay' | 'mobile') => (
+    <Button
+      size="sm"
+      variant={variant === 'mobile' ? 'secondary' : 'default'}
+      className={cn(
+        'w-full',
+        variant === 'overlay' &&
+          'rounded-full bg-surface/90 hover:bg-surface backdrop-blur-xs text-ink border border-line'
+      )}
+      disabled={isAddingToCart}
+      onClick={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        onAddToCart?.()
+      }}
+    >
+      {isAddingToCart && !inCart ? (
+        <span className="animate-spin h-4 w-4 border-2 border-ink border-t-transparent rounded-full" />
+      ) : (
+        <>
+          <Plus size={16} />
+          {quickAddLabel}
+        </>
+      )}
+    </Button>
+  )
+
+  const renderControls = (variant: 'overlay' | 'mobile') => (
+    <AnimatePresence mode="wait" initial={false}>
+      {inCart ? (
+        <motion.div key="qty" className="w-full" {...controlMotion}>
+          <CardQuantityControl
+            value={cartQuantity}
+            max={maxQuantity}
+            onChange={(qty) => onQuantityChange?.(qty)}
+          />
+        </motion.div>
+      ) : (
+        <motion.div key="add" className="w-full" {...controlMotion}>
+          {renderQuickAddButton(variant)}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
 
   return (
     <div className="group relative">
@@ -111,27 +174,17 @@ export function ProductCard({
             </button>
           )}
 
-          {showQuickAdd && product.stock > 0 && (
-            <div className="absolute bottom-0 left-0 right-0 p-3 hidden md:flex opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-200">
-              <Button
-                size="sm"
-                className="w-full rounded-full bg-surface/90 hover:bg-surface backdrop-blur-xs text-ink border border-line"
-                disabled={isAddingToCart}
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  onAddToCart?.()
-                }}
-              >
-                {isAddingToCart ? (
-                  <span className="animate-spin h-4 w-4 border-2 border-ink border-t-transparent rounded-full" />
-                ) : (
-                  <>
-                    <Plus size={16} />
-                    {quickAddLabel}
-                  </>
-                )}
-              </Button>
+          {canQuickAdd && (
+            <div
+              className={cn(
+                'absolute bottom-0 left-0 right-0 hidden p-3 md:flex',
+                'transition-[opacity,transform] duration-200',
+                inCart
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0'
+              )}
+            >
+              {renderControls('overlay')}
             </div>
           )}
         </div>
@@ -162,27 +215,9 @@ export function ProductCard({
         <RatingStars value={product.avgRating} count={product.reviewCount} size="sm" />
       </div>
 
-      {showQuickAdd && product.stock > 0 && (
+      {canQuickAdd && (
         <div className="mt-2 md:hidden">
-          <Button
-            size="sm"
-            variant="secondary"
-            className="w-full"
-            disabled={isAddingToCart}
-            onClick={(e) => {
-              e.preventDefault()
-              onAddToCart?.()
-            }}
-          >
-            {isAddingToCart ? (
-              <span className="animate-spin h-4 w-4 border-2 border-ink border-t-transparent rounded-full" />
-            ) : (
-              <>
-                <Plus size={16} />
-                {quickAddLabel}
-              </>
-            )}
-          </Button>
+          {renderControls('mobile')}
         </div>
       )}
 

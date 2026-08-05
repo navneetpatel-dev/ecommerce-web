@@ -68,17 +68,17 @@ function NewsletterForm({ idPrefix }: { idPrefix: string }) {
       <label htmlFor={`${idPrefix}-newsletter-email`} className="block text-[0.8125rem] font-medium text-ink mb-2">
         Email
       </label>
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <Input
           id={`${idPrefix}-newsletter-email`}
           type="email"
           placeholder="Your email"
-          className="text-[0.9375rem]"
+          className="min-w-0 flex-1 text-[0.9375rem]"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <Button type="submit" size="sm" className="shrink-0">
+        <Button type="submit" className="h-11 shrink-0">
           Subscribe
         </Button>
       </div>

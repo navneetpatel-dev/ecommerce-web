@@ -37,11 +37,14 @@ export function ProductCardContainer({
       isCompared={isCompared}
       isWishlisted={card.isWishlisted}
       isAddingToCart={card.isAddingToCart}
+      cartQuantity={card.cartQuantity}
+      maxQuantity={card.maxQuantity}
       hasDiscount={card.hasDiscount}
       discountPercent={card.discountPercent}
       onPrefetch={card.prefetch}
       onToggleWishlist={card.toggleWishlist}
       onAddToCart={card.addToCart}
+      onQuantityChange={card.setQuantity}
       onToggleCompare={onToggleCompare}
     />
   )

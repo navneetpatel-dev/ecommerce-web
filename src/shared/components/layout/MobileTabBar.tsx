@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Home, Search, ShoppingCart, User } from 'lucide-react'
 import type { CurrentUser } from '@/shared/api/types'
+import { CartCountBadge } from '@/shared/components/CartCountBadge'
 
 interface MobileTabBarProps {
   currentUser: CurrentUser | null
@@ -24,11 +25,7 @@ export function MobileTabBar({ currentUser, onOpenCart, cartItemCount = 0 }: Mob
       </Link>
       <button onClick={onOpenCart} className="relative flex flex-col items-center gap-0.5 text-ink-muted">
         <ShoppingCart size={20} />
-        {cartItemCount > 0 && (
-          <span className="absolute right-1 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand px-1 font-mono text-[0.5625rem] font-medium leading-none text-paper">
-            {cartItemCount > 99 ? '99+' : cartItemCount}
-          </span>
-        )}
+        <CartCountBadge count={cartItemCount} size="sm" />
         <span className="text-[0.625rem]">Cart</span>
       </button>
       <Link
