@@ -98,7 +98,7 @@ export function ProductListingPage() {
     <div className="mx-auto max-w-[1600px] px-4 pt-6 pb-8 md:pt-8">
       <h1 className="sr-only">All products</h1>
 
-      <div className="lg:hidden sticky top-14 z-20 -mx-4 mb-6 border-y border-line-strong bg-paper/95 px-4 py-3 backdrop-blur-sm">
+      <div className="lg:hidden sticky top-14 z-20 -mx-4 mb-6 border-y border-line bg-paper/95 px-4 py-3 backdrop-blur-sm">
         <div className="flex items-center gap-2">
           <Button
             variant="secondary"

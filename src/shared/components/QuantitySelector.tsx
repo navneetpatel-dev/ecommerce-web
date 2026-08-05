@@ -49,7 +49,7 @@ export function QuantitySelector({ value, onChange, min = 1, max = 99 }: Quantit
             e.currentTarget.blur()
           }
         }}
-        className="h-11 w-11 border-x border-line bg-transparent text-center text-[0.9375rem] font-medium text-ink [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        className="h-11 w-11 border-x border-line bg-transparent text-center text-[0.9375rem] font-medium text-ink outline-none [appearance:textfield] focus-visible:shadow-[inset_0_0_0_1px_var(--brand)] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         aria-label="Quantity"
       />
       <Button
