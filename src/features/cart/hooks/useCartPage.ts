@@ -12,6 +12,7 @@ export function useCartPage() {
 
   const items = cart?.items ?? []
   const hasItems = items.length > 0
+  const itemCount = items.reduce((sum, item) => sum + Number(item.quantity || 0), 0)
 
   const groupedByVendor = useMemo(
     () => (hasItems ? groupItemsByVendor(items) : {}),
@@ -26,6 +27,7 @@ export function useCartPage() {
   return {
     isLoading,
     hasItems,
+    itemCount,
     groupedByVendor,
     total,
     updateQuantity: (itemId: string, quantity: number) =>

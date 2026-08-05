@@ -5,9 +5,10 @@ import type { CurrentUser } from '@/shared/api/types'
 interface MobileTabBarProps {
   currentUser: CurrentUser | null
   onOpenCart: () => void
+  cartItemCount?: number
 }
 
-export function MobileTabBar({ currentUser, onOpenCart }: MobileTabBarProps) {
+export function MobileTabBar({ currentUser, onOpenCart, cartItemCount = 0 }: MobileTabBarProps) {
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 z-40 lg:hidden flex items-center justify-around bg-surface border-t border-line h-14"
@@ -21,8 +22,13 @@ export function MobileTabBar({ currentUser, onOpenCart }: MobileTabBarProps) {
         <Search size={20} />
         <span className="text-[0.625rem]">Search</span>
       </Link>
-      <button onClick={onOpenCart} className="flex flex-col items-center gap-0.5 text-ink-muted">
+      <button onClick={onOpenCart} className="relative flex flex-col items-center gap-0.5 text-ink-muted">
         <ShoppingCart size={20} />
+        {cartItemCount > 0 && (
+          <span className="absolute right-1 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand px-1 font-mono text-[0.5625rem] font-medium leading-none text-paper">
+            {cartItemCount > 99 ? '99+' : cartItemCount}
+          </span>
+        )}
         <span className="text-[0.625rem]">Cart</span>
       </button>
       <Link

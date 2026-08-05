@@ -73,15 +73,21 @@ export function CategoryGridSkeleton({ count = 10 }: { count?: number }) {
 
 export function CartPageSkeleton() {
   return (
-    <div className="mx-auto max-w-[1200px] space-y-6 px-4 py-8">
-      <Skeleton className="h-8 w-40" />
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        <div className="space-y-4 lg:col-span-7">
-          <Skeleton className="h-48 w-full rounded-md" />
-          <Skeleton className="h-48 w-full rounded-md" />
+    <div className="relative">
+      <div className="mx-auto max-w-[1400px] space-y-6 px-4 py-6 md:px-6 md:py-8">
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-8 w-48" />
         </div>
-        <div className="lg:col-span-5">
-          <Skeleton className="h-64 w-full rounded-md" />
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="space-y-4 lg:col-span-7 xl:col-span-8">
+            <Skeleton className="h-28 w-full" />
+            <Skeleton className="h-28 w-full" />
+            <Skeleton className="h-28 w-full" />
+          </div>
+          <div className="lg:col-span-5 xl:col-span-4">
+            <Skeleton className="h-64 w-full" />
+          </div>
         </div>
       </div>
     </div>

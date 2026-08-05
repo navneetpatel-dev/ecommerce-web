@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useLogout } from '@/features/auth/api/auth.queries'
 import { useCartDrawerStore } from '@/features/cart/store/cart.store'
+import { useCart } from '@/features/cart/api/cart.queries'
 import { useCategories } from '@/features/categories/api/categories.queries'
 import { getRootCategories } from '@/features/categories/utils/categoryHelpers'
 import { navigate } from '@/shared/utils/navigate'
@@ -19,6 +20,7 @@ export function useHeader() {
   const currentUser = useAuthStore((s) => s.currentUser)
   const logout = useLogout()
   const openCart = useCartDrawerStore((s) => s.open)
+  const { data: cart } = useCart()
   const router = useRouter()
   const { data: categories = [] } = useCategories()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
@@ -28,6 +30,10 @@ export function useHeader() {
   const closeTimerRef = useRef<number | null>(null)
 
   const rootCategories = getRootCategories(categories)
+  const cartItemCount = (cart?.items ?? []).reduce(
+    (sum, item) => sum + Number(item.quantity || 0),
+    0
+  )
 
   useEffect(() => {
     return () => {
@@ -66,6 +72,7 @@ export function useHeader() {
     scheduleMegaOpen,
     scheduleMegaClose,
     openCart,
+    cartItemCount,
     goToProfile: () => navigate(router, '/profile'),
     logout: () => logout.mutate(),
   }

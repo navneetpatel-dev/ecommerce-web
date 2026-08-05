@@ -10,6 +10,7 @@ export function CartPage() {
     <CartPageView
       isLoading={cart.isLoading}
       hasItems={cart.hasItems}
+      itemCount={cart.itemCount}
       groupedByVendor={cart.groupedByVendor}
       total={cart.total}
       onUpdateQuantity={cart.updateQuantity}

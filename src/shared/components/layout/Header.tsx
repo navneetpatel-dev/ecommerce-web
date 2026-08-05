@@ -28,6 +28,7 @@ interface HeaderProps {
   onScheduleMegaOpen: () => void
   onScheduleMegaClose: () => void
   onOpenCart: () => void
+  cartItemCount?: number
   onGoToProfile: () => void
   onLogout: () => void
 }
@@ -49,6 +50,7 @@ export function Header({
   onScheduleMegaOpen,
   onScheduleMegaClose,
   onOpenCart,
+  cartItemCount = 0,
   onGoToProfile,
   onLogout,
 }: HeaderProps) {
@@ -174,9 +176,14 @@ export function Header({
                 'p-2 rounded-md transition-colors relative',
                 isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
               )}
-              aria-label="Cart"
+              aria-label={cartItemCount > 0 ? `Cart, ${cartItemCount} items` : 'Cart'}
             >
               <ShoppingCart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
+              {cartItemCount > 0 && (
+                <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand px-1 font-mono text-[0.625rem] font-medium leading-none text-paper">
+                  {cartItemCount > 99 ? '99+' : cartItemCount}
+                </span>
+              )}
             </button>
 
             {!currentUser ? (
@@ -281,7 +288,7 @@ export function Header({
       <BottomSheet open={mobileSearchOpen} onClose={onCloseMobileSearch} title="Search">
         <SearchBarContainer />
       </BottomSheet>
-      <MobileTabBar currentUser={currentUser} onOpenCart={onOpenCart} />
+      <MobileTabBar currentUser={currentUser} onOpenCart={onOpenCart} cartItemCount={cartItemCount} />
     </>
   )
 }
