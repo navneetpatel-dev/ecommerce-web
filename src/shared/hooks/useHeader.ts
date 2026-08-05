@@ -53,7 +53,7 @@ export function useHeader() {
     closeTimerRef.current = window.setTimeout(() => setMegaMenuOpen(false), 200)
   }
 
-  // White-on-transparent only while over the dark homepage hero
+  // Transparent chrome only while over the homepage hero (token `bg-ink`, inverts by theme)
   const isTransparent = isHomepage && !scrolled && !megaMenuOpen && !mobileNavOpen
 
   return {

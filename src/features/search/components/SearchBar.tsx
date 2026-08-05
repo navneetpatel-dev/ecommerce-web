@@ -13,7 +13,7 @@ interface SearchSuggestion {
 interface SearchBarProps {
   size?: 'lg' | 'sm'
   className?: string
-  /** High-contrast treatment when the header sits over a dark hero */
+  /** High-contrast treatment when the header sits over the homepage hero (`bg-ink`). */
   onDark?: boolean
   term: string
   open: boolean

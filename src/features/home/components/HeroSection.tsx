@@ -4,6 +4,7 @@ import { motion } from 'motion/react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/shared/components/ui/button'
+import { cn } from '@/shared/utils/cn'
 
 interface HeroSectionProps {
   headline?: string
@@ -56,7 +57,7 @@ export function HeroSection({
               style={{ aspectRatio: '4/5' }}
             />
           </div>
-          <div className="absolute inset-0 bg-ink/40" />
+          <div className="absolute inset-0 bg-black/45" />
         </>
       ) : (
         <div className="absolute inset-0 bg-ink" />
@@ -71,12 +72,20 @@ export function HeroSection({
           className="max-w-lg"
         >
           <h1
-            className="font-display text-paper leading-tight"
+            className={cn(
+              'font-display leading-tight',
+              imageSrc ? 'text-white' : 'text-paper'
+            )}
             style={{ fontSize: 'var(--text-display-lg)', lineHeight: 1.05 }}
           >
             {headline}
           </h1>
-          <p className="mt-4 text-[1.0625rem] text-paper/80 max-w-md">
+          <p
+            className={cn(
+              'mt-4 text-[1.0625rem] max-w-md',
+              imageSrc ? 'text-white/80' : 'text-paper/80'
+            )}
+          >
             {subheadline}
           </p>
           <div className="mt-8">

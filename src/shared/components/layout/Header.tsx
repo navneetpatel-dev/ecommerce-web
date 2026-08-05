@@ -66,7 +66,7 @@ export function Header({
             onClick={onOpenMobileNav}
             className={cn(
               'lg:hidden p-2 -ml-2 rounded-md',
-              isTransparent ? 'hover:bg-white/10' : 'hover:bg-paper'
+              isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
             )}
             aria-label="Menu"
           >
@@ -93,7 +93,7 @@ export function Header({
                 type="button"
                 className={cn(
                   'inline-flex items-center gap-1 px-3 py-2 rounded-md text-[0.8125rem] font-medium transition-colors',
-                  isTransparent ? 'text-paper hover:bg-white/10' : 'text-ink hover:bg-paper'
+                  isTransparent ? 'text-paper hover:bg-paper/10' : 'text-ink hover:bg-paper'
                 )}
                 aria-expanded={megaMenuOpen}
                 aria-label="Browse categories"
@@ -142,7 +142,7 @@ export function Header({
                 href={link.href}
                 className={cn(
                   'px-3 py-2 rounded-md text-[0.8125rem] font-medium transition-colors',
-                  isTransparent ? 'text-paper hover:bg-white/10' : 'text-ink hover:bg-paper'
+                  isTransparent ? 'text-paper hover:bg-paper/10' : 'text-ink hover:bg-paper'
                 )}
               >
                 {link.label}
@@ -160,7 +160,7 @@ export function Header({
               onClick={onOpenMobileSearch}
               className={cn(
                 'md:hidden p-2 rounded-md',
-                isTransparent ? 'hover:bg-white/10' : 'hover:bg-paper'
+                isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
               )}
               aria-label="Search"
             >
@@ -171,7 +171,7 @@ export function Header({
               onClick={onOpenCart}
               className={cn(
                 'p-2 rounded-md transition-colors relative',
-                isTransparent ? 'hover:bg-white/10' : 'hover:bg-paper'
+                isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
               )}
               aria-label="Cart"
             >
@@ -184,7 +184,7 @@ export function Header({
                 className={cn(
                   'hidden sm:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                   isTransparent
-                    ? 'text-paper hover:bg-white/10'
+                    ? 'text-paper hover:bg-paper/10'
                     : 'text-ink hover:bg-paper'
                 )}
               >
@@ -198,7 +198,7 @@ export function Header({
                       href="/orders"
                       className={cn(
                         'px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
-                        isTransparent ? 'text-paper hover:bg-white/10' : 'hover:bg-paper'
+                        isTransparent ? 'text-paper hover:bg-paper/10' : 'hover:bg-paper'
                       )}
                     >
                       Orders
@@ -207,7 +207,7 @@ export function Header({
                       href="/wishlist"
                       className={cn(
                         'px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
-                        isTransparent ? 'text-paper hover:bg-white/10' : 'hover:bg-paper'
+                        isTransparent ? 'text-paper hover:bg-paper/10' : 'hover:bg-paper'
                       )}
                     >
                       Wishlist
@@ -221,7 +221,7 @@ export function Header({
                     className={cn(
                       'hidden lg:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                       isTransparent
-                        ? 'text-paper hover:bg-white/10'
+                        ? 'text-paper hover:bg-paper/10'
                         : 'text-brand hover:bg-brand-subtle'
                     )}
                   >
@@ -235,7 +235,7 @@ export function Header({
                     className={cn(
                       'hidden lg:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                       isTransparent
-                        ? 'text-paper hover:bg-white/10'
+                        ? 'text-paper hover:bg-paper/10'
                         : 'text-brand hover:bg-brand-subtle'
                     )}
                   >
@@ -247,7 +247,7 @@ export function Header({
                   onClick={onGoToProfile}
                   className={cn(
                     'p-2 rounded-md transition-colors',
-                    isTransparent ? 'hover:bg-white/10' : 'hover:bg-paper'
+                    isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
                   )}
                   title={currentUser.name}
                 >
@@ -258,7 +258,7 @@ export function Header({
                   onClick={onLogout}
                   className={cn(
                     'p-2 rounded-md transition-colors hidden sm:block',
-                    isTransparent ? 'hover:bg-white/10' : 'hover:bg-paper'
+                    isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
                   )}
                   title="Log out"
                 >

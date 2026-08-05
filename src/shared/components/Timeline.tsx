@@ -23,7 +23,7 @@ export function Timeline({ steps, className }: TimelineProps) {
           <div className="relative z-10 mt-0.5">
             {step.status === 'completed' ? (
               <span className="flex h-3 w-3 items-center justify-center rounded-full bg-brand">
-                <Check size={8} className="text-white" strokeWidth={3} />
+                <Check size={8} className="text-paper" strokeWidth={3} />
               </span>
             ) : step.status === 'current' ? (
               <span className="flex h-3 w-3 items-center justify-center rounded-full bg-brand animate-pulse-ring" />

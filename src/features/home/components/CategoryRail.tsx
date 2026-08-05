@@ -86,14 +86,14 @@ export function CategoryRail({ categories }: CategoryRailProps) {
               )}
 
               {hasImage && (
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/65 via-transparent to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
               )}
 
               <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 p-3 md:p-3.5">
                 <h3
                   className={cn(
                     'text-[0.9375rem] font-medium leading-snug',
-                    hasImage ? 'text-paper' : 'text-ink group-hover:text-brand'
+                    hasImage ? 'text-white' : 'text-ink group-hover:text-brand'
                   )}
                 >
                   {cat.name}
@@ -103,7 +103,7 @@ export function CategoryRail({ categories }: CategoryRailProps) {
                     'h-3.5 w-3.5 shrink-0 transition-all duration-200',
                     'group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
                     hasImage
-                      ? 'text-paper/75 group-hover:text-paper'
+                      ? 'text-white/80 group-hover:text-white'
                       : 'text-ink-faint group-hover:text-brand'
                   )}
                   strokeWidth={1.5}
