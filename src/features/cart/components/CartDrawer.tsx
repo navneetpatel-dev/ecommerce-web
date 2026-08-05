@@ -9,6 +9,7 @@ import { Separator } from '@/shared/components/ui/separator'
 import { Input } from '@/shared/components/ui/input'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import type { CartItem } from '@/shared/api/types'
 
 interface CartDrawerProps {
@@ -165,16 +166,21 @@ export function CartDrawer({
                         }
                       }}
                     />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="shrink-0"
-                      onClick={onApplyCoupon}
-                      loading={couponPending}
+                    <DisabledActionHint
                       disabled={!couponInput.trim()}
+                      message="Enter a coupon code to apply it."
                     >
-                      Apply
-                    </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="shrink-0"
+                        onClick={onApplyCoupon}
+                        loading={couponPending}
+                        disabled={!couponInput.trim()}
+                      >
+                        Apply
+                      </Button>
+                    </DisabledActionHint>
                   </div>
                   {couponMessage && (
                     <p className="text-[0.8125rem] text-success">{couponMessage}</p>

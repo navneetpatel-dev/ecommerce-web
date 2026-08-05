@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Minus, Plus } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 
 interface QuantitySelectorProps {
   value: number
@@ -27,16 +28,21 @@ export function QuantitySelector({ value, onChange, min = 1, max = 99 }: Quantit
 
   return (
     <div className="inline-flex items-center border border-line rounded-sm overflow-hidden">
-      <Button
-        variant="ghost"
-        size="sm"
-        className="h-11 w-11 rounded-none border-0"
+      <DisabledActionHint
         disabled={value <= min}
-        onClick={() => onChange(value - 1)}
-        aria-label="Decrease quantity"
+        message={`Minimum quantity is ${min}.`}
       >
-        <Minus size={16} />
-      </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-11 w-11 rounded-none border-0"
+          disabled={value <= min}
+          onClick={() => onChange(value - 1)}
+          aria-label="Decrease quantity"
+        >
+          <Minus size={16} />
+        </Button>
+      </DisabledActionHint>
       <input
         type="number"
         inputMode="numeric"
@@ -52,16 +58,21 @@ export function QuantitySelector({ value, onChange, min = 1, max = 99 }: Quantit
         className="h-11 w-11 border-x border-line bg-transparent text-center text-[0.9375rem] font-medium text-ink outline-none [appearance:textfield] focus-visible:shadow-[inset_0_0_0_1px_var(--brand)] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         aria-label="Quantity"
       />
-      <Button
-        variant="ghost"
-        size="sm"
-        className="h-11 w-11 rounded-none border-0"
+      <DisabledActionHint
         disabled={value >= max}
-        onClick={() => onChange(value + 1)}
-        aria-label="Increase quantity"
+        message={max <= 1 ? 'Only 1 available in stock.' : `Maximum quantity is ${max}.`}
       >
-        <Plus size={16} />
-      </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-11 w-11 rounded-none border-0"
+          disabled={value >= max}
+          onClick={() => onChange(value + 1)}
+          aria-label="Increase quantity"
+        >
+          <Plus size={16} />
+        </Button>
+      </DisabledActionHint>
     </div>
   )
 }

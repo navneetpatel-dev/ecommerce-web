@@ -2,6 +2,7 @@
 
 import type { ProductListItem } from '@/shared/api/types'
 import { Button } from '@/shared/components/ui/button'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 
 interface ProductCompareBarProps {
   products: ProductListItem[]
@@ -37,14 +38,19 @@ export function ProductCompareBar({
           <Button type="button" variant="ghost" size="sm" onClick={onClear}>
             Clear
           </Button>
-          <Button
-            type="button"
-            size="sm"
+          <DisabledActionHint
             disabled={products.length < 2}
-            onClick={onCompareNow}
+            message="Add at least 2 products to compare."
           >
-            Compare now
-          </Button>
+            <Button
+              type="button"
+              size="sm"
+              disabled={products.length < 2}
+              onClick={onCompareNow}
+            >
+              Compare now
+            </Button>
+          </DisabledActionHint>
         </div>
       </div>
     </div>

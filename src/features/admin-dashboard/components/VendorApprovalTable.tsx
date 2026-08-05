@@ -1,5 +1,6 @@
 import { Button } from '@/shared/components/ui/button'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/components/ui/table'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 
 interface Vendor {
   id: string
@@ -65,14 +66,19 @@ export function VendorApprovalTable({
                         value={rejectReason}
                         onChange={(e) => onRejectReasonChange(e.target.value)}
                       />
-                      <Button 
-                        size="sm" 
-                        variant="destructive" 
-                        disabled={!rejectReason} 
-                        onClick={() => onSubmitReject(v.id)}
+                      <DisabledActionHint
+                        disabled={!rejectReason}
+                        message="Enter a rejection reason before rejecting."
                       >
-                        Reject
-                      </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          disabled={!rejectReason}
+                          onClick={() => onSubmitReject(v.id)}
+                        >
+                          Reject
+                        </Button>
+                      </DisabledActionHint>
                       <Button size="sm" variant="ghost" onClick={onCancelReject}>
                         Cancel
                       </Button>

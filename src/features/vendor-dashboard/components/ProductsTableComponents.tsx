@@ -2,6 +2,7 @@ import { StatusBadge } from '@/shared/components/StatusBadge'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/components/ui/table'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { Plus, Pencil, Trash2 } from 'lucide-react'
 
 interface Product {
@@ -77,16 +78,18 @@ export function ProductRow({ product, onEdit, onDelete, isDeleting }: ProductRow
           >
             <Pencil className="h-4 w-4" />
           </Button>
-          <Button
-            size="icon"
-            variant="ghost"
-            type="button"
-            aria-label={`Delete ${product.name}`}
-            disabled={isDeleting}
-            onClick={() => onDelete?.(product)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          <DisabledActionHint disabled={Boolean(isDeleting)} message="Deleting this product…">
+            <Button
+              size="icon"
+              variant="ghost"
+              type="button"
+              aria-label={`Delete ${product.name}`}
+              disabled={isDeleting}
+              onClick={() => onDelete?.(product)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </DisabledActionHint>
         </div>
       </TableCell>
     </TableRow>

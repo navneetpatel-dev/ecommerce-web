@@ -1,5 +1,6 @@
 import { Button } from '@/shared/components/ui/button'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/components/ui/table'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 
 interface Product {
   id: string
@@ -68,14 +69,19 @@ export function ProductModerationTable({
                         value={rejectNote}
                         onChange={(e) => onRejectNoteChange(e.target.value)}
                       />
-                      <Button 
-                        size="sm" 
-                        variant="destructive" 
-                        disabled={!rejectNote} 
-                        onClick={() => onSubmitReject(p.id)}
+                      <DisabledActionHint
+                        disabled={!rejectNote}
+                        message="Enter a rejection note before rejecting."
                       >
-                        Reject
-                      </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          disabled={!rejectNote}
+                          onClick={() => onSubmitReject(p.id)}
+                        >
+                          Reject
+                        </Button>
+                      </DisabledActionHint>
                       <Button size="sm" variant="ghost" onClick={onCancelReject}>
                         Cancel
                       </Button>

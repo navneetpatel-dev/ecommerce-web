@@ -27,21 +27,21 @@ export function DisabledActionHint({
   className,
   side = 'top',
 }: DisabledActionHintProps) {
-  if (!disabled) return <>{children}</>
+  if (!disabled || !message) return <>{children}</>
 
   return (
     <TooltipProvider delayDuration={150}>
       <Tooltip>
         <TooltipTrigger asChild>
           <span
-            className={cn('inline-flex cursor-not-allowed', className)}
+            className={cn('inline-flex max-w-full cursor-not-allowed', className)}
             tabIndex={0}
             aria-disabled="true"
           >
             {children}
           </span>
         </TooltipTrigger>
-        <TooltipContent side={side} className="max-w-[240px] text-center leading-snug">
+        <TooltipContent side={side} className="max-w-[260px] text-center leading-snug">
           {message}
         </TooltipContent>
       </Tooltip>

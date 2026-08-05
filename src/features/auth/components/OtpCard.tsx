@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/components/ui/card'
 import { Button } from '@/shared/components/ui/button'
 import { OtpInput } from '@/shared/components/OtpInput'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 
 interface OtpCardProps {
   digits: string[]
@@ -49,20 +50,31 @@ export function OtpCard({
         />
         <div className="flex items-center justify-between gap-3">
           <span className="text-[0.8125rem] text-ink-muted">{timerLabel}</span>
-          <button
-            type="button"
-            className="text-[0.8125rem] text-brand hover:underline disabled:opacity-50 disabled:no-underline"
+          <DisabledActionHint
             disabled={!canResend}
-            onClick={onResend}
+            message="You can resend a new code after the timer ends."
           >
-            Resend code
-          </button>
+            <button
+              type="button"
+              className="text-[0.8125rem] text-brand hover:underline disabled:opacity-50 disabled:no-underline"
+              disabled={!canResend}
+              onClick={onResend}
+            >
+              Resend code
+            </button>
+          </DisabledActionHint>
         </div>
         {info && <p className="text-[0.8125rem] text-ink-muted">{info}</p>}
         {error && <p className="text-[0.8125rem] text-danger">{error}</p>}
-        <Button className="w-full" disabled={!completed} loading={isVerifying} onClick={onVerify}>
-          Verify code
-        </Button>
+        <DisabledActionHint
+          disabled={!completed}
+          message="Enter the complete 6-digit code to verify."
+          className="w-full"
+        >
+          <Button className="w-full" disabled={!completed} loading={isVerifying} onClick={onVerify}>
+            Verify code
+          </Button>
+        </DisabledActionHint>
       </CardContent>
     </Card>
   )

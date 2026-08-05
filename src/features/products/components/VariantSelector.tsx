@@ -1,6 +1,7 @@
 import { Button } from '@/shared/components/ui/button'
 import { Badge } from '@/shared/components/ui/badge'
 import { Separator } from '@/shared/components/ui/separator'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { cn } from '@/shared/utils/cn'
 
 interface VariantSelectorProps {
@@ -53,22 +54,27 @@ export function VariantSelector({
                   const available = isAvailable(key, value)
                   const active = isActive(key, value)
                   return (
-                    <button
+                    <DisabledActionHint
                       key={value}
-                      type="button"
                       disabled={!available}
-                      onClick={() => onSelectValue(key, value)}
-                      className={cn(
-                        'px-4 py-2 rounded-md border text-[0.9375rem] font-medium transition-colors',
-                        active
-                          ? 'border-brand bg-brand-subtle text-brand'
-                          : available
-                            ? 'border-line bg-surface hover:border-brand hover:text-brand'
-                            : 'border-line bg-paper text-ink/30 line-through cursor-not-allowed'
-                      )}
+                      message="Not available with your current selection."
                     >
-                      {value}
-                    </button>
+                      <button
+                        type="button"
+                        disabled={!available}
+                        onClick={() => onSelectValue(key, value)}
+                        className={cn(
+                          'px-4 py-2 rounded-md border text-[0.9375rem] font-medium transition-colors',
+                          active
+                            ? 'border-brand bg-brand-subtle text-brand'
+                            : available
+                              ? 'border-line bg-surface hover:border-brand hover:text-brand'
+                              : 'border-line bg-paper text-ink/30 line-through cursor-not-allowed'
+                        )}
+                      >
+                        {value}
+                      </button>
+                    </DisabledActionHint>
                   )
                 })}
               </div>
@@ -99,15 +105,27 @@ export function VariantSelector({
         </div>
 
         {showAddToCart && (
-          <Button
-            size="lg"
-            className="w-full"
+          <DisabledActionHint
             disabled={currentStock === 0 || !canAddToCart}
-            onClick={onAddToCart}
-            loading={isAddingToCart}
+            message={
+              currentStock === 0
+                ? 'This item is currently out of stock.'
+                : !canAddToCart
+                  ? 'Select all required options to add this item to your cart.'
+                  : ''
+            }
+            className="w-full"
           >
-            Add to Cart
-          </Button>
+            <Button
+              size="lg"
+              className="w-full"
+              disabled={currentStock === 0 || !canAddToCart}
+              onClick={onAddToCart}
+              loading={isAddingToCart}
+            >
+              Add to Cart
+            </Button>
+          </DisabledActionHint>
         )}
       </div>
     </div>

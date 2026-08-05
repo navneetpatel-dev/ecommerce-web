@@ -14,6 +14,7 @@ import { QuantitySelector } from '@/shared/components/QuantitySelector'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/components/ui/tabs'
 import { Heart, Truck, RotateCcw } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import type { RefObject } from 'react'
 
 interface Product {
@@ -86,7 +87,7 @@ export function ProductDetailContent({
 }: ProductDetailContentProps) {
   const displayPrice = Number(variantSelection.currentPrice || product.basePrice || 0)
   const displayStock = Number(variantSelection.currentStock || product.stock || 0)
-  const addDisabled = !canAddToCart || isAddingToCart
+  const addDisabled = Boolean(!canAddToCart || isAddingToCart)
   const reviewCount = product.reviewCount ?? 0
   const avgRating = product.avgRating ?? 0
 
@@ -95,6 +96,14 @@ export function ProductDetailContent({
     : displayStock === 0
       ? 'Out of stock'
       : 'Add to Cart'
+
+  const addToCartHint = needsOptionSelection
+    ? 'Select product options to add this item to your cart.'
+    : displayStock === 0
+      ? 'This item is currently out of stock.'
+      : isAddingToCart
+        ? 'Adding to your cart…'
+        : ''
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 py-8">
@@ -158,15 +167,17 @@ export function ProductDetailContent({
             )}
 
             <div className="flex gap-3">
-              <Button
-                size="lg"
-                className="flex-1"
-                disabled={addDisabled}
-                onClick={() => onAddToCart?.(quantity)}
-                loading={isAddingToCart}
-              >
-                {addToCartLabel}
-              </Button>
+              <DisabledActionHint disabled={addDisabled} message={addToCartHint} className="min-w-0 flex-1">
+                <Button
+                  size="lg"
+                  className="w-full"
+                  disabled={addDisabled}
+                  onClick={() => onAddToCart?.(quantity)}
+                  loading={isAddingToCart}
+                >
+                  {addToCartLabel}
+                </Button>
+              </DisabledActionHint>
               <Button
                 variant="ghost"
                 size="lg"
@@ -229,17 +240,19 @@ export function ProductDetailContent({
 
       {(showStickyBar && (displayStock > 0 || needsOptionSelection)) && (
         <div className="fixed bottom-14 left-0 right-0 z-30 p-4 bg-surface border-t border-line shadow-elevation-3 md:hidden">
-          <Button
-            size="lg"
-            className="w-full"
-            disabled={addDisabled}
-            onClick={() => onAddToCart?.(quantity)}
-            loading={isAddingToCart}
-          >
-            {needsOptionSelection
-              ? 'Select options'
-              : `Add to Cart — ₹${displayPrice.toLocaleString('en-IN')}`}
-          </Button>
+          <DisabledActionHint disabled={addDisabled} message={addToCartHint} className="w-full">
+            <Button
+              size="lg"
+              className="w-full"
+              disabled={addDisabled}
+              onClick={() => onAddToCart?.(quantity)}
+              loading={isAddingToCart}
+            >
+              {needsOptionSelection
+                ? 'Select options'
+                : `Add to Cart — ₹${displayPrice.toLocaleString('en-IN')}`}
+            </Button>
+          </DisabledActionHint>
         </div>
       )}
     </div>

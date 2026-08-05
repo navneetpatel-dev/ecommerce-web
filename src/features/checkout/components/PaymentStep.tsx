@@ -1,4 +1,5 @@
 import { Button } from '@/shared/components/ui/button'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 
 interface PaymentStepProps {
   walletBalance: number | undefined
@@ -19,6 +20,13 @@ export function PaymentStep({
   onSelect,
   onBack,
 }: PaymentStepProps) {
+  const walletHint =
+    walletDisabled && walletShortfall > 0
+      ? `Insufficient wallet balance — you need ₹${walletShortfall.toLocaleString('en-IN')} more.`
+      : walletDisabled
+        ? 'Wallet payment is unavailable right now.'
+        : ''
+
   return (
     <div className="space-y-4">
       <h2 className="text-[1.375rem] font-semibold text-ink">Payment method</h2>
@@ -36,21 +44,23 @@ export function PaymentStep({
           <p className="text-[0.9375rem] text-ink-muted">Pay securely via Razorpay</p>
         </button>
         {walletBalance !== undefined && (
-          <button
-            type="button"
-            onClick={() => onSelect('wallet')}
-            disabled={walletDisabled}
-            className={`w-full text-left p-4 rounded-md border disabled:opacity-50 ${
-              selectedMethod === 'wallet' ? 'border-brand bg-brand-subtle' : 'border-line hover:border-brand'
-            }`}
-          >
-            <p className="font-medium">Wallet Balance (₹{walletBalance.toLocaleString('en-IN')})</p>
-            <p className="text-[0.9375rem] text-ink-muted">
-              {walletDisabled && walletShortfall > 0
-                ? `Insufficient balance — need ₹${walletShortfall.toLocaleString('en-IN')} more`
-                : 'Pay using your wallet'}
-            </p>
-          </button>
+          <DisabledActionHint disabled={walletDisabled} message={walletHint} className="w-full">
+            <button
+              type="button"
+              onClick={() => onSelect('wallet')}
+              disabled={walletDisabled}
+              className={`w-full text-left p-4 rounded-md border disabled:opacity-50 ${
+                selectedMethod === 'wallet' ? 'border-brand bg-brand-subtle' : 'border-line hover:border-brand'
+              }`}
+            >
+              <p className="font-medium">Wallet Balance (₹{walletBalance.toLocaleString('en-IN')})</p>
+              <p className="text-[0.9375rem] text-ink-muted">
+                {walletDisabled && walletShortfall > 0
+                  ? `Insufficient balance — need ₹${walletShortfall.toLocaleString('en-IN')} more`
+                  : 'Pay using your wallet'}
+              </p>
+            </button>
+          </DisabledActionHint>
         )}
         <button
           type="button"
