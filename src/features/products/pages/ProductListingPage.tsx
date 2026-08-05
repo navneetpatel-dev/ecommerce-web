@@ -1,6 +1,6 @@
 'use client'
 
-import { Columns2, SlidersHorizontal, ArrowUpDown } from 'lucide-react'
+import { Columns2, Package, Search, SlidersHorizontal, ArrowUpDown, type LucideIcon } from 'lucide-react'
 import { FilterSidebar } from '@/features/products/components/FilterSidebar'
 import { SortBar } from '@/features/products/components/SortBar'
 import { ProductGrid } from '@/features/products/components/ProductGrid'
@@ -10,11 +10,89 @@ import { PaginationContainer } from '@/shared/containers/PaginationContainer'
 import { Button } from '@/shared/components/ui/button'
 import { BottomSheet } from '@/shared/components/BottomSheet'
 import { EmptyState } from '@/shared/components/EmptyState'
+import { useCategories } from '@/features/categories'
 import { SORT_OPTIONS, useProductListing } from '../hooks/useProductListing'
 import { cn } from '@/shared/utils/cn'
+import type { ProductFilters } from '../api/products.api'
+
+function getListingEmptyState(
+  filters: ProductFilters,
+  categoryName?: string
+): {
+  icon: LucideIcon
+  eyebrow: string
+  heading: string
+  message: string
+  actionLabel: string
+  actionTo?: string
+  onAction?: 'clearFilters'
+} {
+  const hasFacets =
+    filters.minPrice !== undefined ||
+    filters.maxPrice !== undefined ||
+    filters.rating !== undefined
+
+  if (hasFacets) {
+    return {
+      icon: SlidersHorizontal,
+      eyebrow: 'Filters',
+      heading: 'Nothing in this range',
+      message: 'No pieces match these filters. Reset them to browse the full collection.',
+      actionLabel: 'Reset filters',
+      onAction: 'clearFilters',
+    }
+  }
+
+  if (filters.search) {
+    return {
+      icon: Search,
+      eyebrow: 'Search',
+      heading: 'No results',
+      message: `Nothing matched “${filters.search}”. Try another term or browse the full collection.`,
+      actionLabel: 'Browse all products',
+      actionTo: '/products',
+    }
+  }
+
+  if (filters.categoryId) {
+    return {
+      icon: Package,
+      eyebrow: 'Category',
+      heading: 'No products here yet',
+      message: categoryName
+        ? `“${categoryName}” doesn’t have any products right now. Browse the full collection instead.`
+        : 'This category doesn’t have any products right now. Browse the full collection instead.',
+      actionLabel: 'Browse all products',
+      actionTo: '/products',
+    }
+  }
+
+  if (filters.vendorId) {
+    return {
+      icon: Package,
+      eyebrow: 'Shop',
+      heading: 'No products from this vendor',
+      message: 'This vendor has nothing listed right now. Browse the full collection instead.',
+      actionLabel: 'Browse all products',
+      actionTo: '/products',
+    }
+  }
+
+  return {
+    icon: Package,
+    eyebrow: 'Shop',
+    heading: 'No products yet',
+    message: 'The collection is empty for now. Check back soon for new pieces.',
+    actionLabel: 'Go to home',
+    actionTo: '/',
+  }
+}
 
 export function ProductListingPage() {
   const listing = useProductListing()
+  const { data: categories } = useCategories()
+  const categoryName = categories?.find((category) => category.id === listing.filters.categoryId)?.name
+  const empty = getListingEmptyState(listing.filters, categoryName)
 
   return (
     <div className="mx-auto max-w-[1600px] px-4 pt-6 pb-8 md:pt-8">
@@ -77,12 +155,13 @@ export function ProductListingPage() {
             <ProductGrid loading skeletonCount={12} />
           ) : listing.data?.items.length === 0 ? (
             <EmptyState
-              icon={SlidersHorizontal}
-              eyebrow="Filters"
-              heading="Nothing in this range"
-              message="No pieces match these filters. Reset them to browse the full collection."
-              actionLabel="Reset filters"
-              onAction={listing.clearFilters}
+              icon={empty.icon}
+              eyebrow={empty.eyebrow}
+              heading={empty.heading}
+              message={empty.message}
+              actionLabel={empty.actionLabel}
+              actionTo={empty.actionTo}
+              onAction={empty.onAction === 'clearFilters' ? listing.clearFilters : undefined}
             />
           ) : (
             <>

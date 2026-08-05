@@ -31,9 +31,11 @@ export function filtersToParams(filters: Record<string, unknown>) {
   return p
 }
 
-/** Clears price/rating/category facets; keeps sort and search. */
+/** Clears price/rating facets; keeps category, vendor, sort, and search. */
 export function clearFacetFilters(filters: ProductFilters): ProductFilters {
   return {
+    categoryId: filters.categoryId,
+    vendorId: filters.vendorId,
     sort: filters.sort,
     search: filters.search,
     page: 1,
