@@ -14,7 +14,7 @@ export function ShippingStep({ groupedByVendor, selectedMethods, onSelect, onCon
 
   return (
     <div className="space-y-6">
-      <h2 className="font-display text-xl font-semibold">Select shipping method</h2>
+      <h2 className="font-display text-[1.375rem] font-semibold text-ink">Select shipping method</h2>
       {Object.entries(groupedByVendor).map(([vid, items]) => (
         <ShippingCard
           key={vid}

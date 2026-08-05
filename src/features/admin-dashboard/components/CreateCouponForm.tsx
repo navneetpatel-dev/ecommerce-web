@@ -15,7 +15,7 @@ export function CreateCouponForm({ register, isPending }: CreateCouponFormProps)
       <div><Label>Code</Label><Input {...register('code')} /></div>
       <div>
         <Label>Type</Label>
-        <select className="w-full h-9 rounded-md border border-line bg-surface px-3 text-sm" {...register('type')}>
+        <select className="w-full h-11 rounded-sm border border-line bg-surface px-4 text-[0.9375rem]" {...register('type')}>
           <option value="PERCENTAGE">Percentage</option>
           <option value="FLAT">Flat Amount</option>
           <option value="FREE_SHIPPING">Free Shipping</option>

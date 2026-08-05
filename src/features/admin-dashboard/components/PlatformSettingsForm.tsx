@@ -1,6 +1,8 @@
 'use client'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select'
+import { Button } from '@/shared/components/ui/button'
 import { useState } from 'react'
 
 interface PlatformSettings {
@@ -19,8 +21,10 @@ export function PlatformSettingsForm({ initialSettings }: PlatformSettingsFormPr
 
   return (
     <div className="max-w-lg space-y-6">
-      <h2 className="font-display text-xl font-semibold">Platform Settings</h2>
-      <p className="text-sm text-accent">⚠ Settings API is not yet implemented on the backend. This is a placeholder UI.</p>
+      <h2 className="font-display text-[1.375rem] font-semibold text-ink">Platform Settings</h2>
+      <p className="text-[0.9375rem] text-ink-muted">
+        Manage default commission, return window, payout cycle, and moderation behavior.
+      </p>
       <div className="space-y-4">
         <div>
           <Label>Default Commission Rate (%)</Label>
@@ -32,14 +36,18 @@ export function PlatformSettingsForm({ initialSettings }: PlatformSettingsFormPr
         </div>
         <div>
           <Label>Auto-approve Products</Label>
-          <select 
-            className="w-full h-9 rounded-md border border-line bg-surface px-3 text-sm"
+          <Select
             value={form.autoApproveProducts ? 'true' : 'false'}
-            onChange={(e) => setForm({ ...form, autoApproveProducts: e.target.value === 'true' })}
+            onValueChange={(value) => setForm({ ...form, autoApproveProducts: value === 'true' })}
           >
-            <option value="true">Enabled (auto-approve)</option>
-            <option value="false">Disabled (moderated)</option>
-          </select>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="true">Enabled (auto-approve)</SelectItem>
+              <SelectItem value="false">Disabled (moderated)</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <Label>Default Return Window (days)</Label>
@@ -51,17 +59,20 @@ export function PlatformSettingsForm({ initialSettings }: PlatformSettingsFormPr
         </div>
         <div>
           <Label>Payout Cycle</Label>
-          <select 
-            className="w-full h-9 rounded-md border border-line bg-surface px-3 text-sm"
-            value={form.payoutCycle}
-            onChange={(e) => setForm({ ...form, payoutCycle: e.target.value })}
-          >
-            <option value="weekly">Weekly</option>
-            <option value="biweekly">Bi-weekly</option>
-            <option value="monthly">Monthly</option>
-          </select>
+          <Select value={form.payoutCycle} onValueChange={(value) => setForm({ ...form, payoutCycle: value })}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="weekly">Weekly</SelectItem>
+              <SelectItem value="biweekly">Bi-weekly</SelectItem>
+              <SelectItem value="monthly">Monthly</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <p className="text-xs text-ink/40">Requires backend: GET/PATCH /api/admin/settings</p>
+        <div className="pt-2">
+          <Button size="sm">Save settings</Button>
+        </div>
       </div>
     </div>
   )

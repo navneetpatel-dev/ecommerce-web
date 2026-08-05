@@ -19,7 +19,7 @@ export function SubOrderCard({ subOrder }: SubOrderCardProps) {
       </CardHeader>
       <CardContent className="space-y-3">
         {subOrder.items?.map((item) => (
-          <div key={item.id} className="flex justify-between items-center text-sm">
+          <div key={item.id} className="flex justify-between items-center text-[0.9375rem]">
             <span>{item.productName} × {item.quantity}</span>
             <span className="font-mono">₹{item.unitPrice * item.quantity}</span>
           </div>
@@ -31,8 +31,8 @@ export function SubOrderCard({ subOrder }: SubOrderCardProps) {
         </div>
         {subOrder.shipment && (
           <div className="mt-3 bg-paper rounded-md p-3">
-            <p className="text-sm font-medium">Tracking: {subOrder.shipment.carrier}</p>
-            <p className="font-mono text-xs text-ink/50">{subOrder.shipment.trackingNumber}</p>
+            <p className="text-[0.9375rem] font-medium">Tracking: {subOrder.shipment.carrier}</p>
+            <p className="font-mono text-[0.8125rem] text-ink-muted">{subOrder.shipment.trackingNumber}</p>
             <StatusBadge status={subOrder.shipment.status} />
           </div>
         )}

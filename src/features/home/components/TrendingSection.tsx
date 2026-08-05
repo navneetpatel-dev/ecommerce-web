@@ -11,8 +11,8 @@ export function TrendingSection() {
   return (
     <section>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-display text-2xl font-semibold">Trending now</h2>
-        <Link href="/products?sort=trending" className="text-sm text-brand hover:underline inline-flex items-center gap-1">
+        <h2 className="font-display text-[1.75rem] font-semibold text-ink">Trending now</h2>
+        <Link href="/products?sort=trending" className="text-[0.9375rem] text-brand hover:underline inline-flex items-center gap-1">
           View all <ArrowRight className="h-3 w-3" />
         </Link>
       </div>

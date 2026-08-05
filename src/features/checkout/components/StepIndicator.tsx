@@ -42,7 +42,7 @@ export function StepIndicator({ currentStep, onStepClick }: StepIndicatorProps) 
             >
               <span
                 className={cn(
-                  'flex items-center justify-center w-8 h-8 rounded-full text-[0.8125rem] font-semibold transition-all',
+                  'flex items-center justify-center w-11 h-11 rounded-full text-[0.8125rem] font-semibold transition-all',
                   isCompleted && 'bg-brand text-white',
                   isCurrent && 'bg-brand text-white',
                   isUpcoming && 'border-2 border-line text-ink-muted bg-surface'

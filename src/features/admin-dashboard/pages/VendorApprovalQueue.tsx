@@ -9,7 +9,7 @@ export function VendorApprovalQueue() {
   const { rejectingId, rejectReason, setRejectReason, approve, startReject, cancelReject, submitReject } = useVendorApproval()
 
   if (isLoading) return <Skeleton className="h-40 w-full" />
-  if (!vendors?.length) return <p className="text-ink/50 py-8 text-center">No pending vendor approvals</p>
+  if (!vendors?.length) return <p className="text-ink-muted py-8 text-center text-[0.9375rem]">No pending vendor approvals</p>
 
   return (
     <VendorApprovalTable

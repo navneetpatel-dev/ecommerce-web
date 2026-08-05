@@ -23,7 +23,7 @@ interface VendorOrdersTableProps {
 export function VendorOrdersTable({ orders, updatingId, onSetUpdatingId, onStatusChange }: VendorOrdersTableProps) {
   return (
     <div className="space-y-4">
-      <h2 className="font-display text-xl font-semibold">Order Management</h2>
+      <h2 className="font-display text-[1.375rem] font-semibold text-ink">Order Management</h2>
       <Table>
         <TableHeader>
           <TableRow>
@@ -38,7 +38,7 @@ export function VendorOrdersTable({ orders, updatingId, onSetUpdatingId, onStatu
           {orders.map((order: any) =>
             (order.subOrders as any[])?.map((so: any) => (
               <TableRow key={so.id}>
-                <TableCell className="font-mono text-xs">{order.id.slice(0, 8)}</TableCell>
+                <TableCell className="font-mono text-[0.8125rem]">{order.id.slice(0, 8)}</TableCell>
                 <TableCell><VendorStrip vendor={so.vendor} size="sm" /></TableCell>
                 <TableCell className="font-mono">₹{so.subtotal}</TableCell>
                 <TableCell><StatusBadge status={so.status} /></TableCell>
@@ -46,7 +46,7 @@ export function VendorOrdersTable({ orders, updatingId, onSetUpdatingId, onStatu
                   {updatingId === so.id ? (
                     <div className="flex items-center justify-end gap-1">
                       <select
-                        className="h-7 rounded border border-line bg-surface text-xs"
+                        className="h-11 rounded-sm border border-line bg-surface px-3 text-[0.9375rem]"
                         defaultValue="SHIPPED"
                         onChange={(e) => onStatusChange(so.id, e.target.value)}
                       >

@@ -17,7 +17,7 @@ export function QuantitySelector({ value, onChange, min = 1, max = 99 }: Quantit
       <Button
         variant="ghost"
         size="sm"
-        className="h-8 w-8 rounded-none border-0"
+        className="h-11 w-11 rounded-none border-0"
         disabled={value <= min}
         onClick={() => onChange(value - 1)}
         aria-label="Decrease quantity"
@@ -31,12 +31,12 @@ export function QuantitySelector({ value, onChange, min = 1, max = 99 }: Quantit
           const v = parseInt(e.target.value, 10)
           if (!isNaN(v) && v >= min && v <= max) onChange(v)
         }}
-        className="h-8 w-11 border-x border-line bg-transparent text-center text-[0.9375rem] font-medium text-ink [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        className="h-11 w-11 border-x border-line bg-transparent text-center text-[0.9375rem] font-medium text-ink [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       />
       <Button
         variant="ghost"
         size="sm"
-        className="h-8 w-8 rounded-none border-0"
+        className="h-11 w-11 rounded-none border-0"
         disabled={value >= max}
         onClick={() => onChange(value + 1)}
         aria-label="Increase quantity"

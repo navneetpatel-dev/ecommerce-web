@@ -26,7 +26,7 @@ export function SearchBar({ size = 'lg', className }: SearchBarProps) {
           placeholder="Search products, vendors..."
           className={cn(
             'w-full rounded-full border border-line bg-paper px-4 placeholder:text-ink-faint focus-visible:outline-hidden focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
-            size === 'sm' ? 'h-9 text-[0.8125rem] pl-9' : 'h-11 text-[0.9375rem] pl-11'
+            size === 'sm' ? 'h-11 text-[0.8125rem] pl-9' : 'h-11 text-[0.9375rem] pl-11'
           )}
         />
       </form>

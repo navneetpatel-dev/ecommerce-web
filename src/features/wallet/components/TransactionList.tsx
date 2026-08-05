@@ -16,10 +16,10 @@ export function TransactionList({ transactions, isLoading }: TransactionListProp
       {transactions.map((tx) => (
         <div key={tx.id} className="flex justify-between items-center py-2 border-b border-line last:border-0">
           <div>
-            <p className="text-sm">{tx.description}</p>
-            <p className="text-xs text-ink/50">{new Date(tx.createdAt).toLocaleDateString()}</p>
+            <p className="text-[0.9375rem]">{tx.description}</p>
+            <p className="text-[0.8125rem] text-ink-muted">{new Date(tx.createdAt).toLocaleDateString()}</p>
           </div>
-          <span className={`font-mono text-sm font-medium ${tx.type === 'CREDIT' ? 'text-success' : 'text-danger'}`}>
+          <span className={`font-mono text-[0.9375rem] font-medium ${tx.type === 'CREDIT' ? 'text-success' : 'text-danger'}`}>
             {tx.type === 'CREDIT' ? '+' : '-'}₹{tx.amount}
           </span>
         </div>

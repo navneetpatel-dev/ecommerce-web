@@ -33,7 +33,7 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
             <div className="space-y-2">
               <Label htmlFor="businessName">Business Name</Label>
               <Input id="businessName" {...register('businessName')} />
-              {errors.businessName && <p className="text-sm text-danger">{errors.businessName.message}</p>}
+              {errors.businessName && <p className="text-[0.9375rem] text-danger">{errors.businessName.message}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Description (optional)</Label>
@@ -43,7 +43,7 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
               <Label htmlFor="gstNumber">GST Number (optional)</Label>
               <Input id="gstNumber" {...register('gstNumber')} />
             </div>
-            {error && <p className="text-sm text-danger">Registration failed. Try again.</p>}
+            {error && <p className="text-[0.9375rem] text-danger">Registration failed. Try again.</p>}
             <Button type="submit" className="w-full" loading={isPending}>Register as Vendor</Button>
           </form>
         </CardContent>

@@ -32,7 +32,7 @@ export function VendorApprovalTable({
 }: VendorApprovalTableProps) {
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold mb-4">Vendor Approval Queue</h2>
+      <h2 className="font-display text-[1.375rem] font-semibold text-ink mb-4">Vendor Approval Queue</h2>
       <Table>
         <TableHeader>
           <TableRow>
@@ -45,7 +45,7 @@ export function VendorApprovalTable({
           {vendors.map((v) => (
             <TableRow key={v.id}>
               <TableCell className="font-medium">{v.businessName}</TableCell>
-              <TableCell className="text-ink/50">{v.slug}</TableCell>
+              <TableCell className="text-ink-muted">{v.slug}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
                   <Button 
@@ -60,7 +60,7 @@ export function VendorApprovalTable({
                   {rejectingId === v.id ? (
                     <div className="flex gap-1">
                       <input
-                        className="h-8 w-32 rounded border border-line px-2 text-xs"
+                        className="h-11 w-40 rounded-sm border border-line px-3 text-[0.9375rem]"
                         placeholder="Reason required"
                         value={rejectReason}
                         onChange={(e) => onRejectReasonChange(e.target.value)}

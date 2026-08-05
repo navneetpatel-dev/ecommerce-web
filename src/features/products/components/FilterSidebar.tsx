@@ -32,15 +32,15 @@ export function FilterSidebar({ minPrice, maxPrice, rating, onUpdateFilter, onCl
                   <input
                     type="number"
                     placeholder="Min"
-                    className="w-full h-9 rounded-sm border border-line bg-surface px-3 text-[0.8125rem]"
+                    className="w-full h-11 rounded-sm border border-line bg-surface px-4 text-[0.9375rem]"
                     value={minPrice ?? ''}
                     onChange={(e) => onUpdateFilter('minPrice', e.target.value ? Number(e.target.value) : undefined)}
                   />
-                  <span className="text-ink-faint text-xs">—</span>
+                  <span className="text-ink-faint text-[0.8125rem]">—</span>
                   <input
                     type="number"
                     placeholder="Max"
-                    className="w-full h-9 rounded-sm border border-line bg-surface px-3 text-[0.8125rem]"
+                    className="w-full h-11 rounded-sm border border-line bg-surface px-4 text-[0.9375rem]"
                     value={maxPrice ?? ''}
                     onChange={(e) => onUpdateFilter('maxPrice', e.target.value ? Number(e.target.value) : undefined)}
                   />

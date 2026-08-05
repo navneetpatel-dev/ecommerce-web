@@ -9,7 +9,7 @@ export function ProductModerationQueue() {
   const { rejectingId, rejectNote, setRejectNote, approve, startReject, cancelReject, submitReject } = useProductModeration()
 
   if (isLoading) return <Skeleton className="h-40 w-full" />
-  if (!products?.length) return <p className="text-ink/50 py-8 text-center">No pending product approvals</p>
+  if (!products?.length) return <p className="text-ink-muted py-8 text-center text-[0.9375rem]">No pending product approvals</p>
 
   return (
     <ProductModerationTable

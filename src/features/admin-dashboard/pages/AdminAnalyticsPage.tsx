@@ -7,7 +7,7 @@ export function AdminAnalyticsPage() {
   const { data, isLoading } = useAdminAnalytics()
 
   if (isLoading) return <Skeleton className="h-96 w-full" />
-  if (!data) return <p className="text-ink/50">No analytics data available</p>
+  if (!data) return <p className="text-ink-muted text-[0.9375rem]">No analytics data available</p>
 
   return <AdminAnalyticsLayout data={data} />
 }

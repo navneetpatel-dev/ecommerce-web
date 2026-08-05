@@ -14,12 +14,12 @@ export function LoginFormFields({ register, errors }: LoginFormFieldsProps) {
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" {...register('email')} />
-        {errors.email && <p className="text-sm text-danger">{errors.email.message}</p>}
+        {errors.email && <p className="text-[0.9375rem] text-danger">{errors.email.message}</p>}
       </div>
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
         <Input id="password" type="password" {...register('password')} />
-        {errors.password && <p className="text-sm text-danger">{errors.password.message}</p>}
+        {errors.password && <p className="text-[0.9375rem] text-danger">{errors.password.message}</p>}
       </div>
     </>
   )

@@ -27,7 +27,7 @@ export function ChangePasswordSection({ form, onSubmit, error, isPending, isSucc
       </CardHeader>
       <CardContent>
         {isSuccess ? (
-          <p className="text-sm text-success">Password changed successfully.</p>
+          <p className="text-[0.9375rem] text-success">Password changed successfully.</p>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <FormField 

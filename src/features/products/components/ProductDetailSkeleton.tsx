@@ -9,7 +9,7 @@ export function ProductDetailSkeleton() {
           <Skeleton className="h-6 w-32" />
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-6 w-20" />
-          <Skeleton className="h-8 w-16" />
+          <Skeleton className="h-11 w-20" />
         </div>
       </div>
     </div>

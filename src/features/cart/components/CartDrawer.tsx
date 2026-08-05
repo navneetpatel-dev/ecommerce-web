@@ -123,7 +123,7 @@ export function CartDrawer() {
             {cart?.items?.length ? (
               <div className="border-t border-line p-4 space-y-3 shrink-0">
                 <div className="flex gap-2">
-                  <Input placeholder="Coupon code" className="h-9 text-[0.8125rem]" />
+                  <Input placeholder="Coupon code" className="text-[0.9375rem]" />
                   <Button variant="outline" size="sm" className="shrink-0">Apply</Button>
                 </div>
                 <Separator />

@@ -23,14 +23,14 @@ export function ShippingCard({ vendor, selected, onSelect }: ShippingCardProps) 
             key={r.method}
             onClick={() => onSelect(r.method)}
             className={`w-full text-left p-3 rounded-md border transition-colors ${
-              selected === r.method ? 'border-brand bg-brand-light' : 'border-line hover:border-brand'
+              selected === r.method ? 'border-brand bg-brand-subtle' : 'border-line hover:border-brand'
             }`}
           >
             <div className="flex justify-between">
               <span className="font-medium">{r.label}</span>
               <span className="font-mono">{r.cost === 0 ? 'Free' : `₹${r.cost}`}</span>
             </div>
-            <p className="text-xs text-ink/50">{r.days} days</p>
+            <p className="text-[0.8125rem] text-ink-muted">{r.days} days</p>
           </button>
         ))}
       </CardContent>

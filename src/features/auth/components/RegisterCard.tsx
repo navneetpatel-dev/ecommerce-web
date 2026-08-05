@@ -41,7 +41,7 @@ export function RegisterCard({ form, onSubmit, error, isPending }: RegisterCardP
       </CardContent>
       <CardFooter className="flex flex-col gap-4">
         <OAuthButton provider="google" />
-        <p className="text-sm text-ink/70">
+        <p className="text-[0.9375rem] text-ink-muted">
           Already have an account? <Link href="/login" className="text-brand hover:underline">Log in</Link>
         </p>
       </CardFooter>

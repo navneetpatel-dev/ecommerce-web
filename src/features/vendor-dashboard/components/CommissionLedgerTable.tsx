@@ -17,7 +17,7 @@ interface CommissionLedgerTableProps {
 export function CommissionLedgerTable({ commissions }: CommissionLedgerTableProps) {
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold mb-4">Commission Ledger</h2>
+      <h2 className="font-display text-[1.375rem] font-semibold text-ink mb-4">Commission Ledger</h2>
       <Table>
         <TableHeader>
           <TableRow>
@@ -30,10 +30,10 @@ export function CommissionLedgerTable({ commissions }: CommissionLedgerTableProp
         </TableHeader>
         <TableBody>
           {commissions?.items?.length === 0 ? (
-            <TableRow><TableCell colSpan={5} className="text-center text-ink/50">No entries yet</TableCell></TableRow>
+            <TableRow><TableCell colSpan={5} className="text-center text-ink-muted">No entries yet</TableCell></TableRow>
           ) : commissions?.items?.map((c) => (
             <TableRow key={c.id}>
-              <TableCell className="text-sm">{new Date(c.createdAt).toLocaleDateString()}</TableCell>
+              <TableCell className="text-[0.9375rem]">{new Date(c.createdAt).toLocaleDateString()}</TableCell>
               <TableCell className="font-mono">₹{c.saleAmount}</TableCell>
               <TableCell>{c.commissionRate}%</TableCell>
               <TableCell className="font-mono">₹{c.commissionAmount}</TableCell>

@@ -11,7 +11,7 @@ export function TrackingResult({ status, lastUpdate }: TrackingResultProps) {
       <CardHeader><CardTitle>Tracking Result</CardTitle></CardHeader>
       <CardContent>
         <p>Status: <span className="font-medium">{status}</span></p>
-        <p className="text-sm text-ink/50">Last update: {new Date(lastUpdate).toLocaleString()}</p>
+        <p className="text-[0.9375rem] text-ink-muted">Last update: {new Date(lastUpdate).toLocaleString()}</p>
       </CardContent>
     </Card>
   )

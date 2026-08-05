@@ -22,16 +22,16 @@ export function StatCard({
   size = 'md'
 }: StatCardProps) {
   const sizeClasses = {
-    sm: 'text-xl',
-    md: 'text-2xl',
+    sm: 'text-[1.375rem]',
+    md: 'text-[1.75rem]',
     lg: 'text-3xl'
   }
 
   return (
     <Card>
       <CardHeader className={cn(Icon ? 'flex-row items-center justify-between pb-2' : '')}>
-        <CardTitle className={cn(Icon ? 'text-xs font-normal text-ink/60' : '')}>{title}</CardTitle>
-        {Icon && <Icon className="h-4 w-4 text-ink/40" />}
+        <CardTitle className={cn(Icon ? 'text-[0.8125rem] font-normal text-ink-muted' : '')}>{title}</CardTitle>
+        {Icon && <Icon className="h-4 w-4 text-ink-faint" />}
       </CardHeader>
       <CardContent>
         {isLoading ? (

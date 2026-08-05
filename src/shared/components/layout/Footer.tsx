@@ -65,7 +65,7 @@ export function Footer() {
                   Get the latest deals and new arrivals.
                 </p>
                 <div className="flex gap-2">
-                  <Input placeholder="Your email" className="h-9 text-[0.8125rem]" />
+                  <Input placeholder="Your email" className="text-[0.9375rem]" />
                   <Button size="sm" className="shrink-0">Subscribe</Button>
                 </div>
               </div>
@@ -102,7 +102,7 @@ export function Footer() {
         <div className="mt-6">
           <h4 className="text-[0.8125rem] font-semibold text-ink mb-2">Newsletter</h4>
           <div className="flex flex-col gap-2">
-            <Input placeholder="Your email" className="h-9 text-[0.8125rem]" />
+            <Input placeholder="Your email" className="text-[0.9375rem]" />
             <Button size="sm">Subscribe</Button>
           </div>
         </div>

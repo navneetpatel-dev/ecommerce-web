@@ -35,7 +35,7 @@ export function ProductListingPage() {
             <ProductGrid loading skeletonCount={12} />
           ) : data?.items.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-ink/50 text-lg mb-4">No products match these filters</p>
+              <p className="text-[1.0625rem] text-ink-muted mb-4">No products match these filters</p>
               <Button variant="outline" onClick={clearFilters}>Clear all filters</Button>
             </div>
           ) : (

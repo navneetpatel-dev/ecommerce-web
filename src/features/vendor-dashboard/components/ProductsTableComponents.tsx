@@ -23,10 +23,10 @@ export function ProductsTableHeader({ search, onSearchChange }: ProductsTableHea
   return (
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-center gap-3">
-        <h2 className="font-display text-xl font-semibold">Products</h2>
+        <h2 className="font-display text-[1.375rem] font-semibold text-ink">Products</h2>
         <Input
           placeholder="Search products..."
-          className="w-64 h-8 text-xs"
+          className="w-64 text-[0.9375rem]"
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
         />
@@ -44,7 +44,7 @@ export function ProductRow({ product }: ProductRowProps) {
   return (
     <TableRow>
       <TableCell className="font-medium">{product.name}</TableCell>
-      <TableCell className="font-mono text-xs">{product.sku}</TableCell>
+      <TableCell className="font-mono text-[0.8125rem]">{product.sku}</TableCell>
       <TableCell>
         <span className={product.stock <= product.lowStockAt ? 'text-danger font-medium' : ''}>
           {product.stock}
@@ -54,8 +54,8 @@ export function ProductRow({ product }: ProductRowProps) {
       <TableCell><StatusBadge status={product.status} /></TableCell>
       <TableCell className="text-right">
         <div className="flex justify-end gap-1">
-          <Button size="icon" variant="ghost" className="h-8 w-8"><Pencil className="h-3 w-3" /></Button>
-          <Button size="icon" variant="ghost" className="h-8 w-8"><Trash2 className="h-3 w-3" /></Button>
+          <Button size="icon" variant="ghost"><Pencil className="h-4 w-4" /></Button>
+          <Button size="icon" variant="ghost"><Trash2 className="h-4 w-4" /></Button>
         </div>
       </TableCell>
     </TableRow>
@@ -81,7 +81,7 @@ export function ProductsTableContent({ products }: ProductsTableContentProps) {
       </TableHeader>
       <TableBody>
         {products?.length === 0 ? (
-          <TableRow><TableCell colSpan={6} className="text-center text-ink/50">No products found</TableCell></TableRow>
+          <TableRow><TableCell colSpan={6} className="text-center text-ink-muted">No products found</TableCell></TableRow>
         ) : products?.map((product) => (
           <ProductRow key={product.id} product={product} />
         ))}

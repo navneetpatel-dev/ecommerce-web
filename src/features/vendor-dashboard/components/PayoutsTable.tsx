@@ -16,7 +16,7 @@ interface PayoutsTableProps {
 export function PayoutsTable({ payouts }: PayoutsTableProps) {
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold mb-4">Payouts</h2>
+      <h2 className="font-display text-[1.375rem] font-semibold text-ink mb-4">Payouts</h2>
       <Table>
         <TableHeader>
           <TableRow>
@@ -27,10 +27,10 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
         </TableHeader>
         <TableBody>
           {payouts?.items?.length === 0 ? (
-            <TableRow><TableCell colSpan={3} className="text-center text-ink/50">No payouts yet</TableCell></TableRow>
+            <TableRow><TableCell colSpan={3} className="text-center text-ink-muted">No payouts yet</TableCell></TableRow>
           ) : payouts?.items?.map((p) => (
             <TableRow key={p.id}>
-              <TableCell className="text-sm">
+              <TableCell className="text-[0.9375rem]">
                 {new Date(p.periodStart).toLocaleDateString()} – {new Date(p.periodEnd).toLocaleDateString()}
               </TableCell>
               <TableCell className="font-mono">₹{p.amount}</TableCell>

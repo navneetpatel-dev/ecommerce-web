@@ -31,7 +31,7 @@ export function ProductModerationTable({
 }: ProductModerationTableProps) {
   return (
     <div>
-      <h2 className="font-display text-xl font-semibold mb-4">Product Moderation Queue</h2>
+      <h2 className="font-display text-[1.375rem] font-semibold text-ink mb-4">Product Moderation Queue</h2>
       <Table>
         <TableHeader>
           <TableRow>
@@ -63,7 +63,7 @@ export function ProductModerationTable({
                   {rejectingId === p.id ? (
                     <div className="flex gap-1">
                       <input
-                        className="h-8 w-32 rounded border border-line px-2 text-xs"
+                        className="h-11 w-40 rounded-sm border border-line px-3 text-[0.9375rem]"
                         placeholder="Rejection note"
                         value={rejectNote}
                         onChange={(e) => onRejectNoteChange(e.target.value)}

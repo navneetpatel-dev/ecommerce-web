@@ -13,21 +13,21 @@ export function OrderCard({ order }: OrderCardProps) {
     <Card>
       <CardHeader className="flex-row items-center justify-between">
         <div className="flex items-center gap-4">
-          <span className="font-mono text-xs text-ink/50">Order #{order.id.slice(0, 8)}</span>
+          <span className="font-mono text-[0.8125rem] text-ink-muted">Order #{order.id.slice(0, 8)}</span>
           <StatusBadge status={order.status} />
-          <span className="text-sm text-ink/50">{new Date(order.createdAt).toLocaleDateString()}</span>
+          <span className="text-[0.9375rem] text-ink-muted">{new Date(order.createdAt).toLocaleDateString()}</span>
         </div>
         <span className="font-mono font-bold">₹{order.totalAmount}</span>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
           {order.subOrders?.map((so) => (
-            <div key={so.id} className="flex items-center justify-between text-sm">
+            <div key={so.id} className="flex items-center justify-between text-[0.9375rem]">
               <div className="flex items-center gap-2">
                 <VendorStrip vendor={so.vendor} size="sm" />
                 <StatusBadge status={so.status} />
               </div>
-              <Link href={`/orders/${order.id}`} className="text-brand hover:underline text-xs">View details</Link>
+              <Link href={`/orders/${order.id}`} className="text-brand hover:underline text-[0.8125rem]">View details</Link>
             </div>
           ))}
         </div>

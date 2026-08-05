@@ -33,7 +33,7 @@ export function LoginCard({ form, onSubmit, error, isPending }: LoginCardProps) 
       <CardFooter className="flex flex-col gap-4">
         <OAuthDivider />
         <OAuthButton provider="google" />
-        <p className="text-sm text-ink/70">
+        <p className="text-[0.9375rem] text-ink-muted">
           Don't have an account? <Link href="/register" className="text-brand hover:underline">Register</Link>
         </p>
       </CardFooter>

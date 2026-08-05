@@ -17,7 +17,7 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
 
   return (
     <div className="flex items-center justify-between">
-      <h2 className="font-display text-xl font-semibold">Coupons</h2>
+      <h2 className="font-display text-[1.375rem] font-semibold text-ink">Coupons</h2>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button size="sm">

@@ -18,7 +18,7 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
           <h3 className="font-semibold mb-3">Order Volume Trend</h3>
-          <p className="text-ink/50 text-sm">Chart available only on supported renderers</p>
+          <p className="text-ink-muted text-[0.9375rem]">Chart available only on supported renderers</p>
         </div>
         <div>
           <h3 className="font-semibold mb-3">Top Vendors</h3>

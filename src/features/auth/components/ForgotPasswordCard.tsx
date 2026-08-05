@@ -26,7 +26,7 @@ export function ForgotPasswordCard({ form, onSubmit, isPending, isSuccess }: For
       </CardHeader>
       <CardContent>
         {isSuccess ? (
-          <p className="text-sm text-success">If that email exists, a reset link has been sent.</p>
+          <p className="text-[0.9375rem] text-success">If that email exists, a reset link has been sent.</p>
         ) : (
           <form onSubmit={handleSubmit((data) => onSubmit(data))} className="space-y-4">
             <FormField id="email" label="Email" type="email" registration={register('email')} error={errors.email} />
@@ -35,7 +35,7 @@ export function ForgotPasswordCard({ form, onSubmit, isPending, isSuccess }: For
         )}
       </CardContent>
       <CardFooter>
-        <Link href="/login" className="text-sm text-brand hover:underline">Back to login</Link>
+        <Link href="/login" className="text-[0.9375rem] text-brand hover:underline">Back to login</Link>
       </CardFooter>
     </Card>
   )

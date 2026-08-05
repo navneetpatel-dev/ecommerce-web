@@ -32,7 +32,7 @@ export function VariantSelector({ variants, basePrice, baseStock, className }: V
       <div className="space-y-4">
         {Object.entries(attributeGroups).map(([key, values]) => (
           <div key={key}>
-            <p className="text-sm font-medium mb-2 capitalize">{key}</p>
+            <p className="text-[0.9375rem] font-medium mb-2 capitalize">{key}</p>
             <div className="flex flex-wrap gap-2">
               {values.map((value) => {
                 const available = isAvailable(key, value)
@@ -43,7 +43,7 @@ export function VariantSelector({ variants, basePrice, baseStock, className }: V
                     disabled={!available}
                     onClick={() => selectValue(key, value)}
                     className={cn(
-                      'px-3 py-1.5 rounded-md border text-sm font-medium transition-colors',
+                      'px-4 py-2 rounded-md border text-[0.9375rem] font-medium transition-colors',
                       active
                         ? 'border-brand bg-brand text-white'
                         : available
@@ -65,7 +65,7 @@ export function VariantSelector({ variants, basePrice, baseStock, className }: V
       <div className="flex items-baseline gap-3">
         <span className="font-mono text-3xl font-bold text-brand">₹{currentPrice}</span>
         {hasPriceChange && (
-          <span className="font-mono text-lg text-ink/40 line-through">₹{basePrice}</span>
+          <span className="font-mono text-[1.125rem] text-ink-faint line-through">₹{basePrice}</span>
         )}
       </div>
 
@@ -96,7 +96,7 @@ function ConditionalStockBadge({ currentStock }: { currentStock: number }) {
       ) : (
         <Badge variant="success">In stock</Badge>
       )}
-      <p className="text-sm text-ink/50">Free shipping over ₹499</p>
+      <p className="text-[0.9375rem] text-ink-muted">Free shipping over ₹499</p>
     </div>
   )
 }

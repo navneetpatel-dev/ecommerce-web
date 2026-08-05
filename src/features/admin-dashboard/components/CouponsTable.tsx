@@ -30,20 +30,20 @@ export function CouponsTable({ coupons }: CouponsTableProps) {
       <TableBody>
         {coupons?.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={5} className="text-center text-ink/50">No coupons</TableCell>
+            <TableCell colSpan={5} className="text-center text-ink-muted">No coupons</TableCell>
           </TableRow>
         ) : (
           coupons?.map((c) => (
             <TableRow key={c.id}>
               <TableCell className="font-mono">{c.code}</TableCell>
               <TableCell>{c.type}</TableCell>
-              <TableCell className="font-mono text-xs">
+              <TableCell className="font-mono text-[0.8125rem]">
                 {c.usedCount}/{c.usageLimitTotal || '∞'}
               </TableCell>
               <TableCell>
                 <StatusBadge status={c.status} />
               </TableCell>
-              <TableCell className="text-xs">
+              <TableCell className="text-[0.8125rem]">
                 {new Date(c.endDate).toLocaleDateString()}
               </TableCell>
             </TableRow>
