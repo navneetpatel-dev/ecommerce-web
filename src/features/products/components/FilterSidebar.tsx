@@ -6,6 +6,8 @@ import { Input } from '@/shared/components/ui/input'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/components/ui/accordion'
 import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
 import { Label } from '@/shared/components/ui/label'
+import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { cn } from '@/shared/utils/cn'
 
 interface FilterSidebarProps {
   minPrice: number | undefined
@@ -31,11 +33,28 @@ export function FilterSidebar({
   const ratingValue = rating != null ? String(rating) : ''
 
   return (
-    <aside className={className ?? 'w-60 shrink-0 hidden lg:block'}>
-      <div className="space-y-0 sticky top-[88px]">
+    <aside className={cn(className ?? 'hidden w-64 shrink-0 lg:block')}>
+      <div className="sticky top-[88px] space-y-5">
+        <div className="flex items-end justify-between gap-3 border-b border-line pb-3">
+          <div>
+            <TextEyebrow className="mb-1">Refine</TextEyebrow>
+            <h2 className="text-[1.0625rem] font-semibold text-ink">Filters</h2>
+          </div>
+          {hasFilters ? (
+            <button
+              type="button"
+              onClick={onClear}
+              className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-brand transition-colors hover:text-brand-hover"
+            >
+              <X size={12} strokeWidth={2} aria-hidden />
+              Clear
+            </button>
+          ) : null}
+        </div>
+
         <Accordion type="multiple" defaultValue={['price', 'rating']}>
           <AccordionItem value="price">
-            <AccordionTrigger>Price Range</AccordionTrigger>
+            <AccordionTrigger>Price</AccordionTrigger>
             <AccordionContent>
               <div className="flex items-center gap-2">
                 <Input
@@ -49,7 +68,7 @@ export function FilterSidebar({
                     onUpdateFilter('minPrice', e.target.value === '' ? undefined : Number(e.target.value))
                   }
                 />
-                <span className="text-ink-faint text-[0.8125rem]">—</span>
+                <span className="text-[0.8125rem] text-ink-faint">—</span>
                 <Input
                   type="number"
                   inputMode="numeric"
@@ -72,39 +91,32 @@ export function FilterSidebar({
                 key={`${idPrefix}-rating-${ratingValue || 'none'}`}
                 value={ratingValue}
                 onValueChange={(v) => onUpdateFilter('rating', v ? Number(v) : undefined)}
+                className="gap-2.5"
               >
                 {[4, 3, 2, 1].map((r) => (
-                  <div key={r} className="flex items-center gap-2">
+                  <div key={r} className="flex items-center gap-2.5">
                     <RadioGroupItem value={String(r)} id={`${idPrefix}-rating-${r}`} />
                     <Label
                       htmlFor={`${idPrefix}-rating-${r}`}
-                      className="text-[0.8125rem] cursor-pointer font-normal"
+                      className="cursor-pointer text-[0.8125rem] font-normal text-ink"
                     >
-                      {r} stars & up
+                      {r}+ stars
                     </Label>
                   </div>
                 ))}
               </RadioGroup>
-              {rating != null && (
+              {rating != null ? (
                 <button
                   type="button"
-                  className="mt-3 text-[0.8125rem] text-brand hover:underline"
+                  className="mt-3 text-[0.8125rem] font-medium text-brand transition-colors hover:text-brand-hover"
                   onClick={() => onUpdateFilter('rating', undefined)}
                 >
                   Clear rating
                 </button>
-              )}
+              ) : null}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-
-        {hasFilters && (
-          <div className="pt-4">
-            <Button variant="ghost" size="sm" onClick={onClear}>
-              <X size={14} className="mr-1" /> Clear all filters
-            </Button>
-          </div>
-        )}
       </div>
     </aside>
   )
