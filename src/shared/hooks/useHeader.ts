@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useLogout } from '@/features/auth/api/auth.queries'
 import { useCartDrawerStore } from '@/features/cart/store/cart.store'
@@ -18,23 +18,12 @@ export function useHeader() {
   const logout = useLogout()
   const openCart = useCartDrawerStore((s) => s.open)
   const router = useRouter()
-  const pathname = usePathname()
   const { data: categories = [] } = useCategories()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const openTimerRef = useRef<number | null>(null)
   const closeTimerRef = useRef<number | null>(null)
-
-  const isHomepage = pathname === '/'
-
-  useEffect(() => {
-    const updateScroll = () => setScrolled(window.scrollY > 24)
-    updateScroll()
-    window.addEventListener('scroll', updateScroll, { passive: true })
-    return () => window.removeEventListener('scroll', updateScroll)
-  }, [pathname])
 
   useEffect(() => {
     return () => {
@@ -53,8 +42,8 @@ export function useHeader() {
     closeTimerRef.current = window.setTimeout(() => setMegaMenuOpen(false), 200)
   }
 
-  // Transparent chrome only while over the homepage hero (token `bg-ink`, inverts by theme)
-  const isTransparent = isHomepage && !scrolled && !megaMenuOpen && !mobileNavOpen
+  // Always solid chrome so header and hero stay visually distinct in light + dark.
+  const isTransparent = false
 
   return {
     currentUser,
