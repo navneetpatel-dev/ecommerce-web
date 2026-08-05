@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 interface EmptyStateProps {
   message: string
+  heading?: string
   icon?: LucideIcon
   iconClassName?: string
   actionLabel?: string
@@ -15,10 +16,11 @@ interface EmptyStateProps {
   maxWidth?: string
 }
 
-export function EmptyState({ 
-  message, 
-  icon: Icon, 
-  iconClassName = 'h-12 w-12 text-ink/20',
+export function EmptyState({
+  message,
+  heading,
+  icon: Icon,
+  iconClassName = 'h-12 w-12 text-ink-faint',
   actionLabel,
   actionTo,
   onAction,
@@ -28,9 +30,10 @@ export function EmptyState({
   return (
     <div className={`${maxWidth} mx-auto px-4 py-16 text-center ${className}`}>
       {Icon && <Icon className={`${iconClassName} mx-auto mb-4`} />}
-      <p className="text-ink/50 text-lg">{message}</p>
+      {heading && <h3 className="text-[1.125rem] font-semibold text-ink mb-2">{heading}</h3>}
+      <p className="text-ink-muted text-[0.9375rem] max-w-xs mx-auto">{message}</p>
       {actionLabel && (actionTo || onAction) && (
-        <Button variant="outline" className="mt-4" asChild={!!actionTo} onClick={onAction}>
+        <Button variant="default" className="mt-6" asChild={!!actionTo} onClick={onAction}>
           {actionTo ? <Link href={actionTo}>{actionLabel}</Link> : actionLabel}
         </Button>
       )}

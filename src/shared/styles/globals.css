@@ -1,35 +1,200 @@
 @import 'tailwindcss';
 
+/* ============================================
+   1.1 Color Tokens (Light mode — default)
+   ============================================ */
+:root {
+  --brand: #2A5C4B;
+  --brand-hover: #1D4237;
+  --brand-subtle: #EAF2EE;
+  --accent: #C9722C;
+  --ink: #14171C;
+  --ink-muted: #5B6069;
+  --ink-faint: #8B9098;
+  --paper: #FAFAF8;
+  --surface: #FFFFFF;
+  --surface-raised: #FFFFFF;
+  --line: #E4E2DD;
+  --line-strong: #CFCCC5;
+  --danger: #B3261E;
+  --danger-subtle: #FCEBEA;
+  --success: #1E6B45;
+  --success-subtle: #E9F5EE;
+  --warning: #946200;
+  --warning-subtle: #FBF1DC;
+  --overlay: rgba(20, 23, 28, 0.48);
+
+  /* 1.2 Typography Scale */
+  --text-display-lg: clamp(2rem, 5vw + 1rem, 3.5rem);
+  --text-display-md: clamp(1.75rem, 3vw + 0.75rem, 2.5rem);
+  --text-display-sm: clamp(1.375rem, 2vw + 0.5rem, 1.75rem);
+  --text-h1: clamp(1.375rem, 3vw + 0.5rem, 1.75rem);
+  --text-h2: 1.375rem;
+  --text-h3: 1.125rem;
+  --text-body-lg: 1.0625rem;
+  --text-body: 0.9375rem;
+  --text-body-sm: 0.8125rem;
+  --text-label: 0.8125rem;
+  --text-mono: 0.8125rem;
+
+  /* 1.3 Spacing Scale (8px grid) */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* 1.5 Elevation (shadow) */
+  --elevation-0: none;
+  --elevation-1: 0 1px 2px rgba(20, 23, 28, 0.06);
+  --elevation-2: 0 4px 12px rgba(20, 23, 28, 0.08);
+  --elevation-3: 0 12px 32px rgba(20, 23, 28, 0.14);
+  --elevation-4: 0 24px 48px rgba(20, 23, 28, 0.18);
+
+  /* 1.6 Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* 2.1 Motion Timing */
+  --motion-instant: 100ms;
+  --motion-fast: 150ms;
+  --motion-base: 200ms;
+  --motion-moderate: 300ms;
+  --motion-slow: 400ms;
+}
+
+/* ============================================
+   1.1 Color Tokens (Dark mode)
+   ============================================ */
+[data-theme='dark'] {
+  --brand: #4F9C82;
+  --brand-hover: #63B396;
+  --brand-subtle: #16302A;
+  --accent: #E08D46;
+  --ink: #F2F1EC;
+  --ink-muted: #A6ACB5;
+  --ink-faint: #6E747D;
+  --paper: #121417;
+  --surface: #1B1E22;
+  --surface-raised: #23272C;
+  --line: #2C3036;
+  --line-strong: #3A3F46;
+  --danger: #E5645B;
+  --danger-subtle: #3A1E1C;
+  --success: #4CAE83;
+  --success-subtle: #16302A;
+  --warning: #E0A828;
+  --warning-subtle: #3A2E10;
+  --overlay: rgba(0, 0, 0, 0.64);
+
+  /* 1.5 Elevation (dark mode — surface lightness steps) */
+  --elevation-0: none;
+  --elevation-1: none;
+  --elevation-2: none;
+  --elevation-3: none;
+  --elevation-4: none;
+}
+
+/* ============================================
+   6.7 Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-instant: 0ms;
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+    --motion-moderate: 0ms;
+    --motion-slow: 0ms;
+  }
+}
+
+/* ============================================
+   Tailwind v4 @theme — map CSS vars to utility classes
+   ============================================ */
 @theme {
-  --color-ink: #14171c;
-  --color-paper: #fafaf8;
-  --color-surface: #ffffff;
-  --color-line: #e4e2dd;
+  /* Colors */
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-accent: var(--accent);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-danger: var(--danger);
+  --color-danger-subtle: var(--danger-subtle);
+  --color-success: var(--success);
+  --color-success-subtle: var(--success-subtle);
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-overlay: var(--overlay);
 
-  --color-brand: #2a5c4b;
-  --color-brand-dark: #1d4237;
-  --color-brand-light: #eaf2ee;
-
-  --color-accent: #c9722c;
-  --color-danger: #b3261e;
-  --color-success: #1e6b45;
-
+  /* Typography */
   --font-display: var(--font-display), Fraunces, serif;
   --font-sans: var(--font-sans), Inter, sans-serif;
   --font-mono: var(--font-mono), 'IBM Plex Mono', monospace;
 
+  /* Border radius (spec tokens) */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-full: var(--radius-full);
+
+  /* Keep Tailwind-compatible radius tokens */
   --radius: 0.5rem;
-  --radius-lg: 0.75rem;
+  --radius-lg-tailwind: 0.75rem;
+
+  /* Breakpoints (reference only — Tailwind responsive utilities handle these) */
+  --bp-xs: 0;
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1536px;
+  --bp-3xl: 1920px;
+
+  /* Custom shadow utilities for elevation */
+  --shadow-elevation-1: var(--elevation-1);
+  --shadow-elevation-2: var(--elevation-2);
+  --shadow-elevation-3: var(--elevation-3);
+  --shadow-elevation-4: var(--elevation-4);
+
+  /* Motion durations */
+  --animate-duration-instant: var(--motion-instant);
+  --animate-duration-fast: var(--motion-fast);
+  --animate-duration-base: var(--motion-base);
+  --animate-duration-moderate: var(--motion-moderate);
+  --animate-duration-slow: var(--motion-slow);
+
+  /* Keyframe animations */
+  --animate-shimmer: shimmer 1.2s linear infinite;
+  --animate-slide-in-right: slide-in-right var(--motion-moderate) cubic-bezier(0.2, 0, 0, 1) forwards;
+  --animate-slide-in-bottom: slide-in-bottom var(--motion-moderate) cubic-bezier(0.2, 0, 0, 1) forwards;
+  --animate-slide-in-left: slide-in-left var(--motion-moderate) cubic-bezier(0.2, 0, 0, 1) forwards;
+  --animate-scale-in: scale-in var(--motion-moderate) cubic-bezier(0.2, 0, 0, 1) forwards;
+  --animate-fade-in: fade-in var(--motion-moderate) ease-out forwards;
+  --animate-pulse-scale: pulse-scale var(--motion-fast) ease-out;
+  --animate-pulse-ring: pulse-ring 1.5s ease-out infinite;
+  --animate-accordion-down: accordion-down var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+  --animate-accordion-up: accordion-up var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
 }
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
+/* ============================================
+   Base border reset (Tailwind v4 compat)
+   ============================================ */
 @layer base {
   *,
   ::after,
@@ -40,8 +205,85 @@
   }
 }
 
+/* ============================================
+   Body defaults
+   ============================================ */
 body {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
+  background-color: var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans);
+}
+
+/* ============================================
+   1.3 Keyframe Animations
+   ============================================ */
+
+/* Shimmer (skeleton) — left-to-right gradient sweep, 1.2s linear infinite */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Slide in from right (cart drawer, etc.) */
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Slide in from bottom (mobile bottom sheet, toast) */
+@keyframes slide-in-bottom {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Slide in from left (mobile nav drawer) */
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Scale + fade in (dropdowns, popovers, modals) */
+@keyframes scale-in {
+  from { transform: scale(0.98); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Fade in (overlays) */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Pulse scale (add-to-cart icon, wishlist heart) */
+@keyframes pulse-scale {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Checkmark circle draw (order success) */
+@keyframes checkmark-circle {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes checkmark-check {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Pulsing ring (timeline current step) */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 var(--brand); }
+  70% { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* Accordion expand/collapse */
+@keyframes accordion-down {
+  from { grid-template-rows: 0fr; opacity: 0; }
+  to { grid-template-rows: 1fr; opacity: 1; }
+}
+
+@keyframes accordion-up {
+  from { grid-template-rows: 1fr; opacity: 1; }
+  to { grid-template-rows: 0fr; opacity: 0; }
 }

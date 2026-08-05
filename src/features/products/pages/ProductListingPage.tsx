@@ -14,7 +14,7 @@ export function ProductListingPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex gap-8">
-        <FilterSidebar minPrice={filters.minPrice} maxPrice={filters.maxPrice} onUpdateFilter={updateFilter} onClear={clearFilters} />
+        <FilterSidebar minPrice={filters.minPrice} maxPrice={filters.maxPrice} rating={undefined} onUpdateFilter={updateFilter} onClear={clearFilters} />
         <div className="flex-1 min-w-0">
           <SortBar sort={filters.sort} totalProducts={data?.total} isFetching={isFetching} onSortChange={(v) => updateFilter('sort', v)} />
 

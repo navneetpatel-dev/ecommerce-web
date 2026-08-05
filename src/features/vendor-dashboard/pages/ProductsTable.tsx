@@ -22,7 +22,7 @@ export function ProductsTable() {
       {isLoading ? (
         <SkeletonRows count={5} height="h-10 w-full" />
       ) : (
-        <ProductsTableContent products={data?.items} />
+        <ProductsTableContent products={data?.items as any} />
       )}
 
       {data && data.totalPages > 1 && (

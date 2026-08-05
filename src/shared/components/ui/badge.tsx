@@ -1,17 +1,22 @@
+import * as React from 'react'
+import { X } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border border-line px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-brand",
+  "inline-flex items-center rounded-sm px-2 py-1 text-[0.8125rem] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-ink text-white",
-        secondary: "border-transparent bg-paper text-ink",
-        destructive: "border-transparent bg-danger text-white",
-        success: "border-transparent bg-success text-white",
-        outline: "text-ink",
-        brand: "border-transparent bg-brand-light text-brand",
+        default: "bg-ink text-white",
+        secondary: "bg-paper text-ink",
+        destructive: "bg-danger text-white",
+        success: "bg-success-subtle text-success",
+        outline: "border border-line text-ink",
+        brand: "bg-brand-subtle text-brand",
+        warning: "bg-warning-subtle text-warning",
+        filter: "rounded-full bg-brand-subtle text-brand gap-1 cursor-default",
+        tag: "bg-line text-ink-muted",
       },
     },
     defaultVariants: {
@@ -20,10 +25,29 @@ const badgeVariants = cva(
   }
 )
 
-export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {}
+export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {
+  removable?: boolean
+  onRemove?: () => void
+}
 
-function Badge({ className, variant, ...props }: BadgeProps) {
-  return <div className={cn(badgeVariants({ variant }), className)} {...props} />
+function Badge({ className, variant, removable, onRemove, children, ...props }: BadgeProps) {
+  if (variant === 'filter' && removable && onRemove) {
+    return (
+      <span className={cn(badgeVariants({ variant }), className)} {...props}>
+        {children}
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); onRemove() }}
+          className="ml-0.5 rounded-full hover:bg-brand/20 p-0.5"
+        >
+          <X size={12} />
+          <span className="sr-only">Remove</span>
+        </button>
+      </span>
+    )
+  }
+
+  return <span className={cn(badgeVariants({ variant }), className)} {...props}>{children}</span>
 }
 
 export { Badge, badgeVariants }

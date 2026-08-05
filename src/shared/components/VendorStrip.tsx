@@ -16,22 +16,22 @@ export function VendorStrip({ vendor, size = 'sm', rating, className }: VendorSt
     <Link
       href={`/products?vendor=${vendor.slug}`}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-0.5 text-brand hover:bg-brand-light transition-colors',
+        'inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-0.5 text-brand hover:bg-brand-subtle transition-colors',
         size === 'md' && 'px-3 py-1',
         className
       )}
     >
       {vendor.logoUrl ? (
-        <Image src={vendor.logoUrl} alt={`${vendor.businessName} logo`} width={16} height={16} className="rounded-full object-cover" />
+        <Image src={vendor.logoUrl} alt={`${vendor.businessName} logo`} width={20} height={20} className="rounded-full object-cover" />
       ) : (
-        <div className="h-4 w-4 rounded-full bg-brand-light flex items-center justify-center text-[10px] font-medium">
+        <div className="h-5 w-5 rounded-full bg-brand-subtle flex items-center justify-center text-[0.6875rem] font-medium text-brand">
           {vendor.businessName.charAt(0)}
         </div>
       )}
-      <span className={cn('text-xs font-medium', size === 'md' && 'text-sm')}>{vendor.businessName}</span>
+      <span className={cn('text-[0.8125rem] font-medium', size === 'md' && 'text-[0.9375rem]')}>{vendor.businessName}</span>
       {rating !== undefined && (
-        <span className="flex items-center gap-0.5 text-xs text-ink/60">
-          <Star className="h-3 w-3 fill-accent text-accent" />
+        <span className="flex items-center gap-0.5 text-[0.8125rem] text-ink-muted">
+          <Star className="h-3.5 w-3.5 fill-warning text-warning" />
           {rating.toFixed(1)}
         </span>
       )}

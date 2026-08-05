@@ -1,39 +1,80 @@
+'use client'
+
 import { X } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
+import { Slider } from '@/shared/components/ui/slider'
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/components/ui/accordion'
+import { Checkbox } from '@/shared/components/ui/checkbox'
+import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
+import { Label } from '@/shared/components/ui/label'
 
 interface FilterSidebarProps {
-  minPrice: string | number | undefined
-  maxPrice: string | number | undefined
+  minPrice: number | undefined
+  maxPrice: number | undefined
+  rating: number | undefined
   onUpdateFilter: (key: string, value: unknown) => void
   onClear: () => void
 }
 
-export function FilterSidebar({ minPrice, maxPrice, onUpdateFilter, onClear }: FilterSidebarProps) {
+export function FilterSidebar({ minPrice, maxPrice, rating, onUpdateFilter, onClear }: FilterSidebarProps) {
+  const hasFilters = minPrice !== undefined || maxPrice !== undefined || rating !== undefined
+
   return (
-    <aside className="w-56 shrink-0 hidden lg:block">
-      <div className="space-y-6 sticky top-20">
-        <div>
-          <h3 className="font-semibold text-sm mb-3">Price Range</h3>
-          <div className="flex items-center gap-2">
-            <input
-              type="number"
-              placeholder="Min"
-              className="w-full h-8 rounded border border-line bg-surface px-2 text-xs"
-              value={minPrice || ''}
-              onChange={(e) => onUpdateFilter('minPrice', e.target.value ? Number(e.target.value) : undefined)}
-            />
-            <input
-              type="number"
-              placeholder="Max"
-              className="w-full h-8 rounded border border-line bg-surface px-2 text-xs"
-              value={maxPrice || ''}
-              onChange={(e) => onUpdateFilter('maxPrice', e.target.value ? Number(e.target.value) : undefined)}
-            />
+    <aside className="w-60 shrink-0 hidden lg:block">
+      <div className="space-y-0 sticky top-[88px]">
+        <Accordion type="multiple" defaultValue={['price', 'rating']}>
+          <AccordionItem value="price">
+            <AccordionTrigger>Price Range</AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    className="w-full h-9 rounded-sm border border-line bg-surface px-3 text-[0.8125rem]"
+                    value={minPrice ?? ''}
+                    onChange={(e) => onUpdateFilter('minPrice', e.target.value ? Number(e.target.value) : undefined)}
+                  />
+                  <span className="text-ink-faint text-xs">—</span>
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    className="w-full h-9 rounded-sm border border-line bg-surface px-3 text-[0.8125rem]"
+                    value={maxPrice ?? ''}
+                    onChange={(e) => onUpdateFilter('maxPrice', e.target.value ? Number(e.target.value) : undefined)}
+                  />
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="rating">
+            <AccordionTrigger>Rating</AccordionTrigger>
+            <AccordionContent>
+              <RadioGroup
+                value={rating?.toString() ?? ''}
+                onValueChange={(v) => onUpdateFilter('rating', v ? Number(v) : undefined)}
+              >
+                {[4, 3, 2, 1].map((r) => (
+                  <div key={r} className="flex items-center space-x-2">
+                    <RadioGroupItem value={r.toString()} id={`rating-${r}`} />
+                    <Label htmlFor={`rating-${r}`} className="text-[0.8125rem] cursor-pointer">
+                      {r} stars & up
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        {hasFilters && (
+          <div className="pt-4">
+            <Button variant="ghost" size="sm" onClick={onClear}>
+              <X size={14} className="mr-1" /> Clear all filters
+            </Button>
           </div>
-        </div>
-        <Button variant="ghost" size="sm" className="text-ink/50" onClick={onClear}>
-          <X className="h-3 w-3" /> Clear all filters
-        </Button>
+        )}
       </div>
     </aside>
   )

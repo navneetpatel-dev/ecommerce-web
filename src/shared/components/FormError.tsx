@@ -5,5 +5,5 @@ interface FormErrorProps {
 
 export function FormError({ error, fallback }: FormErrorProps) {
   if (!error) return null
-  return <p className="text-sm text-danger">{error.message || fallback}</p>
+  return <p role="alert" className="text-[0.8125rem] text-danger">{error.message || fallback}</p>
 }

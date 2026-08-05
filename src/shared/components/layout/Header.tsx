@@ -2,86 +2,151 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ShoppingCart, User, LogOut } from 'lucide-react'
+import { ShoppingCart, User, LogOut, Search, Menu, Heart } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useLogout } from '@/features/auth/api/auth.queries'
 import { useCartDrawerStore } from '@/features/cart/store/cart.store'
 import { cn } from '@/shared/utils/cn'
 import { SearchBar } from '@/features/search/components/SearchBar'
-
-const navLinkClass = cn(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium',
-  'transition-colors h-8 px-3 text-xs hover:bg-paper hover:text-ink'
-)
+import { MobileTabBar } from './MobileTabBar'
+import { MobileNavDrawer } from './MobileNavDrawer'
 
 export function Header() {
   const currentUser = useAuthStore((s) => s.currentUser)
   const logout = useLogout()
   const openCart = useCartDrawerStore((s) => s.open)
   const router = useRouter()
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [isHomepage, setIsHomepage] = useState(false)
+
+  useEffect(() => {
+    setIsHomepage(window.location.pathname === '/')
+    const handleScroll = () => setScrolled(window.scrollY > 100)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const isTransparent = isHomepage && !scrolled
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-surface/80 backdrop-blur-xs">
-      <div className="max-w-7xl mx-auto px-4 h-14 flex items-center gap-6">
-        <Link href="/" className="font-display text-xl font-semibold text-brand shrink-0">
-          Marketplace
-        </Link>
-
-        <div className="flex-1 max-w-xl">
-          <SearchBar />
-        </div>
-
-        <nav className="flex items-center gap-3 shrink-0">
-          <button onClick={openCart} className="p-2 hover:bg-paper rounded-md transition-colors relative">
-            <ShoppingCart className="h-5 w-5" />
+    <>
+      <header
+        className={cn(
+          'sticky top-0 z-40 transition-all duration-200',
+          'h-14 lg:h-[72px]',
+          isTransparent
+            ? 'bg-transparent border-transparent'
+            : 'bg-surface border-b border-line shadow-elevation-1'
+        )}
+      >
+        <div className="mx-auto px-4 h-full flex items-center gap-4 lg:gap-6 max-w-[1600px]">
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileNavOpen(true)}
+            className="lg:hidden p-2 -ml-2 hover:bg-paper rounded-md"
+            aria-label="Menu"
+          >
+            <Menu size={20} className={cn(isTransparent ? 'text-white' : 'text-ink')} />
           </button>
 
-          {!currentUser ? (
-            <Link href="/login" className={navLinkClass}>Log in</Link>
-          ) : (
-            <>
-              {currentUser.role === 'CUSTOMER' && (
-                <div className="flex items-center gap-1">
-                  <Link href="/orders" className={navLinkClass}>Orders</Link>
-                  <Link href="/wishlist" className={navLinkClass}>Wishlist</Link>
-                  <Link href="/wallet" className={navLinkClass}>Wallet</Link>
-                </div>
-              )}
+          {/* Logo */}
+          <Link
+            href="/"
+            className={cn(
+              'font-display text-xl font-semibold shrink-0',
+              isTransparent ? 'text-white' : 'text-brand'
+            )}
+          >
+            Marketplace
+          </Link>
 
-              {(currentUser.role === 'VENDOR_OWNER' || currentUser.role === 'VENDOR_STAFF') && (
-                <div className="flex items-center gap-1">
-                  <Link href="/vendor/dashboard/overview" className={cn(navLinkClass, 'font-medium text-brand')}>
+          {/* Search (hidden on mobile, icon triggers mobile search) */}
+          <div className="hidden md:flex flex-1 max-w-xl mx-auto">
+            <SearchBar />
+          </div>
+
+          {/* Right actions */}
+          <nav className="flex items-center gap-1 shrink-0">
+            {/* Mobile search icon */}
+            <button
+              className="md:hidden p-2 hover:bg-paper rounded-md"
+              aria-label="Search"
+            >
+              <Search size={20} className={cn(isTransparent ? 'text-white' : 'text-ink')} />
+            </button>
+
+            <button
+              onClick={openCart}
+              className="p-2 hover:bg-paper rounded-md transition-colors relative"
+              aria-label="Cart"
+            >
+              <ShoppingCart size={20} className={cn(isTransparent ? 'text-white' : 'text-ink')} />
+            </button>
+
+            {!currentUser ? (
+              <Link
+                href="/login"
+                className={cn(
+                  'hidden sm:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
+                  isTransparent
+                    ? 'text-white hover:bg-white/10'
+                    : 'text-ink hover:bg-paper'
+                )}
+              >
+                Log in
+              </Link>
+            ) : (
+              <>
+                {currentUser.role === 'CUSTOMER' && (
+                  <div className="hidden lg:flex items-center gap-1">
+                    <Link href="/orders" className="px-3 py-1.5 text-[0.8125rem] font-medium rounded-md hover:bg-paper transition-colors">Orders</Link>
+                    <Link href="/wishlist" className="px-3 py-1.5 text-[0.8125rem] font-medium rounded-md hover:bg-paper transition-colors">Wishlist</Link>
+                  </div>
+                )}
+
+                {(currentUser.role === 'VENDOR_OWNER' || currentUser.role === 'VENDOR_STAFF') && (
+                  <Link
+                    href="/vendor/dashboard/overview"
+                    className="hidden lg:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md text-brand hover:bg-brand-subtle transition-colors"
+                  >
                     Vendor Dashboard
                   </Link>
-                  <Link href="/orders" className={navLinkClass}>Orders</Link>
-                </div>
-              )}
+                )}
 
-              {(currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'ADMIN_STAFF') && (
-                <Link href="/admin/vendors" className={cn(navLinkClass, 'font-medium text-brand')}>
-                  Admin Panel
-                </Link>
-              )}
+                {(currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'ADMIN_STAFF') && (
+                  <Link
+                    href="/admin/vendors"
+                    className="hidden lg:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md text-brand hover:bg-brand-subtle transition-colors"
+                  >
+                    Admin Panel
+                  </Link>
+                )}
 
-              <button
-                onClick={() => router.push('/profile')}
-                className="p-2 hover:bg-paper rounded-md transition-colors"
-                title={currentUser.name}
-              >
-                <User className="h-5 w-5" />
-              </button>
+                <button
+                  onClick={() => router.push('/profile')}
+                  className="p-2 hover:bg-paper rounded-md transition-colors"
+                  title={currentUser.name}
+                >
+                  <User size={20} className={cn(isTransparent ? 'text-white' : 'text-ink')} />
+                </button>
 
-              <button
-                onClick={() => logout.mutate()}
-                className="p-2 hover:bg-paper rounded-md transition-colors"
-                title="Log out"
-              >
-                <LogOut className="h-5 w-5" />
-              </button>
-            </>
-          )}
-        </nav>
-      </div>
-    </header>
+                <button
+                  onClick={() => logout.mutate()}
+                  className="p-2 hover:bg-paper rounded-md transition-colors hidden sm:block"
+                  title="Log out"
+                >
+                  <LogOut size={20} className={cn(isTransparent ? 'text-white' : 'text-ink')} />
+                </button>
+              </>
+            )}
+          </nav>
+        </div>
+      </header>
+
+      <MobileNavDrawer open={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
+      <MobileTabBar />
+    </>
   )
 }

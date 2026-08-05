@@ -18,7 +18,7 @@ export function LoginCard({ form, onSubmit, error, isPending }: LoginCardProps) 
   const { register, handleSubmit, formState: { errors } } = form
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-[400px] mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-display">Welcome back</CardTitle>
         <CardDescription>Log in to your account</CardDescription>

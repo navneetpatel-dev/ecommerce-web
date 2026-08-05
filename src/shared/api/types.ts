@@ -22,11 +22,13 @@ export interface ProductListItem {
   slug: string;
   name: string;
   basePrice: number;
+  compareAtPrice?: number;
   avgRating: number;
   reviewCount: number;
   imageUrl: string;
   stock: number;
   vendor: VendorInfo;
+  isWishlisted?: boolean;
 }
 
 export interface ProductVariant {
@@ -57,6 +59,7 @@ export interface Category {
   name: string;
   slug: string;
   parentId: string | null;
+  imageUrl?: string;
 }
 
 export interface CartItem {

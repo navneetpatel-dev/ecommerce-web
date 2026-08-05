@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { PackageSearch } from 'lucide-react'
+import { Button } from '@/shared/components/ui/button'
 
 export const metadata: Metadata = {
   title: 'Page Not Found',
@@ -8,15 +10,17 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-paper gap-4 p-8">
-      <h1 className="text-4xl font-display font-bold text-ink">404</h1>
-      <p className="text-ink/60 text-sm">This page could not be found.</p>
-      <Link
-        href="/"
-        className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg-brand text-white hover:bg-brand-dark h-9 px-4 py-2 transition-colors"
-      >
-        Go home
-      </Link>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-paper gap-6 p-8">
+      <PackageSearch size={160} className="text-ink-faint" strokeWidth={1} />
+      <h1 className="text-ink font-display" style={{ fontSize: 'var(--text-display-sm)' }}>
+        Page not found
+      </h1>
+      <p className="text-[0.9375rem] text-ink-muted max-w-sm text-center">
+        The page you&apos;re looking for doesn&apos;t exist or has been moved.
+      </p>
+      <Button asChild>
+        <Link href="/">Go to homepage</Link>
+      </Button>
     </div>
   )
 }

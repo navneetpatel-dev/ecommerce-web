@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent } from '@/shared/components/ui/card'
 
 interface ShippingCardProps {
   vendorId: string
-  vendor: { id: string; businessName: string; slug: string }
+  vendor: { id: string; businessName: string; slug: string; logoUrl: string | null }
   selected?: string
   onSelect: (method: 'STANDARD' | 'EXPRESS') => void
 }

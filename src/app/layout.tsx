@@ -92,7 +92,30 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang={SITE.locale.split('_')[0]} className={`${inter.variable} ${fraunces.variable} ${ibmPlexMono.variable}`}>
+    <html
+      lang={SITE.locale.split('_')[0]}
+      className={`${inter.variable} ${fraunces.variable} ${ibmPlexMono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var stored = localStorage.getItem('theme');
+                  var theme = stored === 'light' || stored === 'dark'
+                    ? stored
+                    : window.matchMedia('(prefers-color-scheme: dark)').matches
+                      ? 'dark'
+                      : 'light';
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="antialiased">
         <Providers>{children}</Providers>
       </body>

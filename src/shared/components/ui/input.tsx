@@ -1,16 +1,25 @@
+'use client'
+
 import * as React from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 
-const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-  ({ className, type, ...props }, ref) => {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  error?: boolean
+}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, error, ...props }, ref) => {
     return (
       <input
         type={type}
         className={cn(
-          "flex h-9 w-full rounded-md border border-line bg-surface px-3 py-1 text-sm shadow-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-ink/50 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-brand disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-11 w-full rounded-sm border bg-surface px-4 text-[0.9375rem] shadow-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-ink-faint focus-visible:outline-hidden focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50",
+          error ? "border-danger" : "border-line",
           className
         )}
         ref={ref}
+        aria-invalid={error ? true : undefined}
         {...props}
       />
     )
@@ -18,4 +27,29 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
 )
 Input.displayName = "Input"
 
-export { Input }
+const PasswordInput = React.forwardRef<HTMLInputElement, Omit<InputProps, 'type'>>(
+  ({ className, ...props }, ref) => {
+    const [show, setShow] = React.useState(false)
+    return (
+      <div className="relative">
+        <Input
+          ref={ref}
+          type={show ? 'text' : 'password'}
+          className={cn('pr-10', className)}
+          {...props}
+        />
+        <button
+          type="button"
+          onClick={() => setShow(!show)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink"
+          tabIndex={-1}
+        >
+          {show ? <EyeOff size={20} /> : <Eye size={20} />}
+        </button>
+      </div>
+    )
+  }
+)
+PasswordInput.displayName = "PasswordInput"
+
+export { Input, PasswordInput }
