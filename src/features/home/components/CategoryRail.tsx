@@ -17,8 +17,8 @@ export function CategoryRail({ categories }: CategoryRailProps) {
   const roots = getRootCategories(categories)
   if (!roots.length) return null
 
-  const showViewAll = roots.length > HOME_CATEGORY_LIMIT
-  const visible = showViewAll ? roots.slice(0, HOME_CATEGORY_LIMIT) : roots
+  const hasMore = roots.length > HOME_CATEGORY_LIMIT
+  const visible = hasMore ? roots.slice(0, HOME_CATEGORY_LIMIT) : roots
 
   return (
     <section>
@@ -27,16 +27,16 @@ export function CategoryRail({ categories }: CategoryRailProps) {
           <TextEyebrow className="mb-2">Browse</TextEyebrow>
           <h2 className="text-[1.375rem] font-semibold text-ink">Shop by Category</h2>
         </div>
-        {showViewAll ? (
-          <Link
-            href="/categories"
-            className="inline-flex shrink-0 items-center gap-1 text-[0.9375rem] font-medium text-brand transition-colors hover:text-brand-hover"
-          >
-            View all
+        <Link
+          href="/categories"
+          className="inline-flex shrink-0 items-center gap-1 text-[0.9375rem] font-medium text-brand transition-colors hover:text-brand-hover"
+        >
+          View all
+          {hasMore ? (
             <span className="tabular-nums text-ink-muted">({roots.length})</span>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        ) : null}
+          ) : null}
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-4">
@@ -44,12 +44,13 @@ export function CategoryRail({ categories }: CategoryRailProps) {
           <CategoryCard key={cat.id} category={cat} />
         ))}
 
-        {showViewAll ? (
+        {hasMore ? (
           <Link
             href="/categories"
             className={cn(
               'group relative flex aspect-[4/3] flex-col items-start justify-between overflow-hidden rounded-md',
-              'border border-dashed border-line bg-surface p-3 md:p-3.5',
+              'border border-dashed border-line-strong bg-paper p-3 md:p-3.5',
+              'dark:bg-surface',
               'transition-colors duration-200 hover:border-brand hover:bg-brand-subtle',
               'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand'
             )}

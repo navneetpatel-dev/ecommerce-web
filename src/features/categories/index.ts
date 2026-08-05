@@ -8,4 +8,5 @@ export {
   getRootCategories,
   getChildCategories,
   resolveCategoryIcon,
+  resolveCategoryImageUrl,
 } from './utils/categoryHelpers'

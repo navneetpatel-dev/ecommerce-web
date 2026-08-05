@@ -1,11 +1,12 @@
 'use client'
 
+import { useCallback, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
+import { MediaImage } from '@/shared/components/MediaImage'
+import { resolveCategoryImageUrl } from '../utils/categoryHelpers'
 import type { Category } from '@/shared/api/types'
-import { resolveCategoryIcon } from '../utils/categoryHelpers'
 
 interface CategoryCardProps {
   category: Category
@@ -13,43 +14,47 @@ interface CategoryCardProps {
 }
 
 export function CategoryCard({ category, className }: CategoryCardProps) {
-  const Icon = resolveCategoryIcon(category)
-  const hasImage = Boolean(category.imageUrl)
+  const imageUrl = resolveCategoryImageUrl(category)
+  const [unavailable, setUnavailable] = useState(!imageUrl)
+  const hasImage = !unavailable
+
+  const handleUnavailableChange = useCallback((next: boolean) => {
+    setUnavailable(next)
+  }, [])
 
   return (
     <Link
       href={`/products?categoryId=${category.id}`}
       className={cn(
-        'group relative block aspect-[4/3] overflow-hidden rounded-md border border-line',
+        'group relative block aspect-[4/3] overflow-hidden rounded-md border border-line bg-paper',
         'transition-colors duration-200',
-        hasImage ? 'bg-ink' : 'bg-paper',
-        'hover:border-ink/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+        !hasImage && 'hover:border-brand',
+        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
         className
       )}
     >
+      <MediaImage
+        src={imageUrl}
+        alt=""
+        unavailableLabel={`${category.name} image not available`}
+        sizes="(max-width: 640px) 50vw, (max-width: 1280px) 25vw, 20vw"
+        imageClassName="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+        onUnavailableChange={handleUnavailableChange}
+      />
+
       {hasImage ? (
-        <Image
-          src={category.imageUrl!}
-          alt=""
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-          sizes="(max-width: 640px) 50vw, (max-width: 1280px) 25vw, 20vw"
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
+          aria-hidden
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center pb-6">
-          <Icon
-            className="h-8 w-8 text-ink-faint transition-colors duration-200 group-hover:text-brand md:h-9 md:w-9"
-            strokeWidth={1.25}
-            aria-hidden
-          />
-        </div>
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-paper/90 to-transparent"
+          aria-hidden
+        />
       )}
 
-      {hasImage && (
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-      )}
-
-      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 p-3 md:p-3.5">
+      <div className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between gap-2 p-3 md:p-3.5">
         <h3
           className={cn(
             'text-[0.9375rem] font-medium leading-snug',
@@ -64,7 +69,7 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
             'group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
             hasImage
               ? 'text-white/80 group-hover:text-white'
-              : 'text-ink-faint group-hover:text-brand'
+              : 'text-ink-muted group-hover:text-brand'
           )}
           strokeWidth={1.5}
           aria-hidden

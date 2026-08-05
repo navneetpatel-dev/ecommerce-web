@@ -22,6 +22,8 @@ export function ProductImagePlaceholder({
       )}
       role="img"
       aria-label={label}
+      data-image-state="unavailable"
+      title={label}
     >
       <div className="flex h-[28%] w-[28%] max-h-14 max-w-14 min-h-9 min-w-9 items-center justify-center">
         <svg

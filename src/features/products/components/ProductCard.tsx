@@ -1,14 +1,14 @@
 'use client'
 
+import { useCallback, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Heart, Plus } from 'lucide-react'
 import { Checkbox } from '@/shared/components/ui/checkbox'
 import type { ProductListItem } from '@/shared/api/types'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { DiscountBadge } from '@/shared/components/DiscountBadge'
-import { ProductImagePlaceholder } from '@/shared/components/ProductImagePlaceholder'
+import { MediaImage } from '@/shared/components/MediaImage'
 import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 
@@ -45,6 +45,11 @@ export function ProductCard({
   onAddToCart,
   onToggleCompare,
 }: ProductCardProps) {
+  const [imageUnavailable, setImageUnavailable] = useState(!product.imageUrl)
+  const handleUnavailableChange = useCallback((unavailable: boolean) => {
+    setImageUnavailable(unavailable)
+  }, [])
+
   return (
     <div className="group relative">
       <Link
@@ -52,19 +57,22 @@ export function ProductCard({
         className="block"
         onMouseEnter={onPrefetch}
       >
-        <div className="aspect-square rounded-md overflow-hidden bg-paper border border-line relative">
-          {product.imageUrl ? (
-            <Image
-              src={product.imageUrl}
-              alt={product.name}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              loading="lazy"
-            />
-          ) : (
-            <ProductImagePlaceholder />
+        <div
+          className={cn(
+            'aspect-square rounded-md overflow-hidden bg-paper border border-line relative',
+            'transition-colors duration-200',
+            imageUnavailable && 'group-hover:border-brand'
           )}
+        >
+          <MediaImage
+            src={product.imageUrl}
+            alt={product.name}
+            unavailableLabel={`${product.name} image not available`}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            loading="lazy"
+            imageClassName="object-cover group-hover:scale-105 transition-transform duration-300"
+            onUnavailableChange={handleUnavailableChange}
+          />
 
           {product.stock <= 5 && product.stock > 0 && (
             <span className="absolute top-2 left-2 bg-accent-subtle text-accent text-[0.8125rem] font-semibold rounded-sm px-2 py-1">
