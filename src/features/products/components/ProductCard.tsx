@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Heart, Plus } from 'lucide-react'
+import { Checkbox } from '@/shared/components/ui/checkbox'
 import type { ProductListItem } from '@/shared/api/types'
 import { useAddToCart } from '@/features/cart/api/cart.queries'
 import { usePrefetchProduct } from '../api/products.queries'
@@ -18,6 +19,9 @@ interface ProductCardProps {
   quickAddLabel?: string
   showWishlist?: boolean
   showQuickAdd?: boolean
+  compareMode?: boolean
+  isCompared?: boolean
+  onToggleCompare?: (product: ProductListItem) => void
 }
 
 export function ProductCard({
@@ -25,6 +29,9 @@ export function ProductCard({
   quickAddLabel = 'Quick add',
   showWishlist = true,
   showQuickAdd = true,
+  compareMode = false,
+  isCompared = false,
+  onToggleCompare,
 }: ProductCardProps) {
   const { mutate: addToCart, isPending } = useAddToCart()
   const prefetch = usePrefetchProduct()
@@ -171,6 +178,17 @@ export function ProductCard({
             )}
           </Button>
         </div>
+      )}
+
+      {compareMode && (
+        <label className="mt-2 flex items-center gap-2 text-[0.8125rem] text-ink-muted">
+          <Checkbox
+            checked={isCompared}
+            onCheckedChange={() => onToggleCompare?.(product)}
+            aria-label={`Compare ${product.name}`}
+          />
+          Compare
+        </label>
       )}
     </div>
   )

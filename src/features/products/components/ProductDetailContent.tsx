@@ -4,6 +4,7 @@ import { VariantSelector } from './VariantSelector'
 import { ImageGallery } from './ImageGallery'
 import { ProductInfo } from './ProductInfo'
 import { ProductReviews } from '@/features/reviews/components/ProductReviews'
+import { ShareButton } from './ShareButton'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { Button } from '@/shared/components/ui/button'
@@ -157,6 +158,10 @@ export function ProductDetailContent({
                   )}
                 />
               </Button>
+              <ShareButton
+                title={product.name}
+                url={`/products/${product.slug ?? product.id}`}
+              />
             </div>
 
             <div className="space-y-2 pt-4 border-t border-line">

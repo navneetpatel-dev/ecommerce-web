@@ -12,6 +12,9 @@ interface ProductGridProps {
   emptyMessage?: string
   emptyActionLabel?: string
   emptyActionTo?: string
+  compareMode?: boolean
+  comparedIds?: string[]
+  onToggleCompare?: (product: ProductListItem) => void
 }
 
 export function ProductGrid({
@@ -22,6 +25,9 @@ export function ProductGrid({
   emptyMessage = 'No products match these filters.',
   emptyActionLabel = 'Clear all filters',
   emptyActionTo,
+  compareMode = false,
+  comparedIds = [],
+  onToggleCompare,
 }: ProductGridProps) {
   if (loading) return <SkeletonGrid count={skeletonCount} />
 
@@ -40,7 +46,13 @@ export function ProductGrid({
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 gap-4 lg:gap-6">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard
+          key={product.id}
+          product={product}
+          compareMode={compareMode}
+          isCompared={comparedIds.includes(product.id)}
+          onToggleCompare={onToggleCompare}
+        />
       ))}
     </div>
   )
