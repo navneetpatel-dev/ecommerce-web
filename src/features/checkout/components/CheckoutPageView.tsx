@@ -97,7 +97,7 @@ export function CheckoutPageView({
   )
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 py-8">
+    <div className="max-w-[1600px] mx-auto px-4 py-8">
       <CheckoutStepIndicator currentStep={step} onStepClick={onStepClick} />
 
       <div className="lg:grid lg:grid-cols-12 lg:gap-12">
