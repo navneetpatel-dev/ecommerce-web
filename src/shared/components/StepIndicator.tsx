@@ -1,33 +1,33 @@
-'use client'
-
 import { Check } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
-import { useMediaQuery } from '@/shared/hooks/use-media-query'
 
 interface StepIndicatorProps {
   currentStep: number
+  steps: readonly string[]
+  isMobile: boolean
   onStepClick: (step: number) => void
 }
 
-const STEPS = ['Address', 'Shipping', 'Payment', 'Review']
-
-export function StepIndicator({ currentStep, onStepClick }: StepIndicatorProps) {
-  const isMobile = useMediaQuery('(max-width: 767px)')
-
+export function StepIndicator({
+  currentStep,
+  steps,
+  isMobile,
+  onStepClick,
+}: StepIndicatorProps) {
   if (isMobile) {
     return (
       <div className="mb-8 text-center">
         <span className="text-[0.8125rem] font-medium text-ink-muted">
-          Step {currentStep} of {STEPS.length}
+          Step {currentStep} of {steps.length}
         </span>
-        <p className="text-[1.125rem] font-semibold text-ink mt-1">{STEPS[currentStep - 1]}</p>
+        <p className="text-[1.125rem] font-semibold text-ink mt-1">{steps[currentStep - 1]}</p>
       </div>
     )
   }
 
   return (
     <div className="flex items-center justify-center mb-8">
-      {STEPS.map((label, i) => {
+      {steps.map((label, i) => {
         const stepNum = i + 1
         const isCompleted = stepNum < currentStep
         const isCurrent = stepNum === currentStep
@@ -61,7 +61,7 @@ export function StepIndicator({ currentStep, onStepClick }: StepIndicatorProps) 
                 {label}
               </span>
             </button>
-            {i < STEPS.length - 1 && (
+            {i < steps.length - 1 && (
               <div
                 className={cn(
                   'w-12 md:w-16 h-0.5 mx-2 transition-colors',

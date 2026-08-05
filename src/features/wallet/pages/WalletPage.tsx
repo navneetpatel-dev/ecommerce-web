@@ -1,17 +1,17 @@
 'use client'
-import { useWalletBalance, useWalletTransactions } from '../api/wallet.queries'
+
+import { useWalletPage } from '../hooks/useWalletPage'
 import { WalletContent } from '../components/WalletContent'
 
 export function WalletPage() {
-  const { data: balance, isLoading: loadingBalance } = useWalletBalance()
-  const { data: transactionsData, isLoading: loadingTx } = useWalletTransactions()
+  const wallet = useWalletPage()
 
   return (
     <WalletContent
-      balance={balance}
-      transactions={transactionsData?.items}
-      isLoadingBalance={loadingBalance}
-      isLoadingTransactions={loadingTx}
+      balance={wallet.balance}
+      transactions={wallet.transactions}
+      isLoadingBalance={wallet.isLoadingBalance}
+      isLoadingTransactions={wallet.isLoadingTransactions}
     />
   )
 }

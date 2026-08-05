@@ -1,22 +1,20 @@
 'use client'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { LoginSchema, type LoginInput } from '../schemas/auth.schema'
-import { useLogin } from '../api/auth.queries'
+
+import { useLoginForm } from '../hooks/useLoginForm'
 import { LoginCard } from '../components/LoginCard'
+import { AuthPageShell } from '../components/AuthPageShell'
 
 export function LoginForm() {
-  const login = useLogin()
-  const form = useForm<LoginInput>({
-    resolver: zodResolver(LoginSchema),
-  })
+  const login = useLoginForm()
 
   return (
-    <LoginCard
-      form={form}
-      onSubmit={(data) => login.mutate(data)}
-      error={login.error as Error | null}
-      isPending={login.isPending}
-    />
+    <AuthPageShell>
+      <LoginCard
+        form={login.form}
+        onSubmit={login.onSubmit}
+        error={login.error}
+        isPending={login.isPending}
+      />
+    </AuthPageShell>
   )
 }

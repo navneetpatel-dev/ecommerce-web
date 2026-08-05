@@ -2,7 +2,6 @@
 
 import { Minus, Plus } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
 
 interface QuantitySelectorProps {
   value: number

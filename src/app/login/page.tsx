@@ -4,9 +4,5 @@ import { LoginForm } from '@/features/auth/pages/LoginForm'
 export const metadata = generateNoIndexMetadata('Login')
 
 export default function LoginPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-paper p-4">
-      <LoginForm />
-    </div>
-  )
+  return <LoginForm />
 }

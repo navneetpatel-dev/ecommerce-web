@@ -4,7 +4,6 @@ import * as React from 'react'
 import * as SelectPrimitive from '@radix-ui/react-select'
 import { Check, ChevronDown } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
-import { useMediaQuery } from '@/shared/hooks/use-media-query'
 
 const Select = SelectPrimitive.Root
 const SelectGroup = SelectPrimitive.Group

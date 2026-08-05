@@ -1,19 +1,25 @@
-'use client'
-
 import Link from 'next/link'
 import { X } from 'lucide-react'
-import { useAuthStore } from '@/features/auth/store/auth.store'
-import { useLogout } from '@/features/auth/api/auth.queries'
+import type { CurrentUser } from '@/shared/api/types'
 
 const navLinks = [
   { href: '/products', label: 'All Products' },
   { href: '/products?sort=newest', label: 'New Arrivals' },
 ]
 
-export function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const currentUser = useAuthStore((s) => s.currentUser)
-  const logout = useLogout()
+interface MobileNavDrawerProps {
+  open: boolean
+  onClose: () => void
+  currentUser: CurrentUser | null
+  onLogout: () => void
+}
 
+export function MobileNavDrawer({
+  open,
+  onClose,
+  currentUser,
+  onLogout,
+}: MobileNavDrawerProps) {
   if (!open) return null
 
   return (
@@ -51,7 +57,10 @@ export function MobileNavDrawer({ open, onClose }: { open: boolean; onClose: () 
 
           {currentUser && (
             <button
-              onClick={() => { logout.mutate(); onClose() }}
+              onClick={() => {
+                onLogout()
+                onClose()
+              }}
               className="w-full text-left flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] text-danger hover:bg-danger-subtle transition-colors mt-4"
             >
               Log out

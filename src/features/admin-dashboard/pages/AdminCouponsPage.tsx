@@ -1,24 +1,23 @@
 'use client'
-import { useAdminCoupons } from '../api/admin.queries'
-import { useCreateCoupon } from '../hooks/useCreateCoupon'
+
+import { useAdminCouponsPage } from '../hooks/useAdminCouponsPage'
 import { CouponsPageHeader } from '../components/CouponsPageHeader'
 import { CouponsTable } from '../components/CouponsTable'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 
 export function AdminCouponsPage() {
-  const { data, isLoading } = useAdminCoupons()
-  const { open, setOpen, createCoupon, form } = useCreateCoupon()
+  const page = useAdminCouponsPage()
 
   return (
     <div className="space-y-6">
-      <CouponsPageHeader 
-        open={open}
-        setOpen={setOpen}
-        form={form}
-        onSubmit={(data) => createCoupon.mutate(data)}
-        isPending={createCoupon.isPending}
+      <CouponsPageHeader
+        open={page.open}
+        setOpen={page.setOpen}
+        form={page.form}
+        onSubmit={page.onSubmit}
+        isPending={page.isPending}
       />
-      {isLoading ? <Skeleton className="h-40 w-full" /> : <CouponsTable coupons={data?.items as any} />}
+      {page.isLoading ? <Skeleton className="h-40 w-full" /> : <CouponsTable coupons={page.coupons as any} />}
     </div>
   )
 }

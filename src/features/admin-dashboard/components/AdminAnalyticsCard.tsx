@@ -6,5 +6,5 @@ interface AdminAnalyticsCardProps {
 }
 
 export function AdminAnalyticsCard({ title, value }: AdminAnalyticsCardProps) {
-  return <StatCard title={title} value={value} size="lg" valueClassName="text-brand" />
+  return <StatCard title={title} value={value} />
 }

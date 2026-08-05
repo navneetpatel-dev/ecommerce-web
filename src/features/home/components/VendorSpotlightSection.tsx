@@ -1,28 +1,13 @@
-'use client'
-
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { useProductList } from '@/features/products/api/products.queries'
 import { RatingStars } from '@/shared/components/RatingStars'
+import type { SpotlightVendor } from '../hooks/useVendorSpotlight'
 
-export function VendorSpotlightSection() {
-  const { data } = useProductList({ sort: 'rating', limit: 24 })
+interface VendorSpotlightSectionProps {
+  vendors: SpotlightVendor[]
+}
 
-  const vendors = Array.from(
-    new Map(
-      (data?.items ?? [])
-        .filter((item) => item.vendor?.id)
-        .map((item) => [
-          item.vendor.id,
-          {
-            ...item.vendor,
-            avgRating: item.avgRating,
-            highlightProduct: item.name,
-          },
-        ])
-    ).values()
-  ).slice(0, 4)
-
+export function VendorSpotlightSection({ vendors }: VendorSpotlightSectionProps) {
   if (!vendors.length) return null
 
   return (

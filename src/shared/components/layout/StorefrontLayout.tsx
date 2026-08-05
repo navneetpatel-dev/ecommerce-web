@@ -1,24 +1,24 @@
 'use client'
 
-import { Header } from '@/shared/components/layout/Header'
+import { HeaderContainer } from '@/shared/containers/HeaderContainer'
 import { Footer } from '@/shared/components/layout/Footer'
-import { CartDrawer } from '@/features/cart/components/CartDrawer'
-import { ScrollToTop } from '@/shared/components/ScrollToTop'
-import { CookieBanner } from '@/shared/components/CookieBanner'
-import { ChatWidget } from '@/shared/components/ChatWidget'
+import { CartDrawerContainer } from '@/features/cart/containers/CartDrawerContainer'
+import { ScrollToTopContainer } from '@/shared/containers/ScrollToTopContainer'
+import { CookieBannerContainer } from '@/shared/containers/CookieBannerContainer'
+import { ChatWidgetContainer } from '@/shared/containers/ChatWidgetContainer'
 
 export function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-paper">
-      <Header />
+      <HeaderContainer />
       <main className="min-h-[calc(100vh-3.5rem)] lg:min-h-[calc(100vh-72px)] pb-14 lg:pb-0">
         {children}
       </main>
-      <CartDrawer />
+      <CartDrawerContainer />
       <Footer />
-      <ScrollToTop />
-      <CookieBanner />
-      <ChatWidget />
+      <ScrollToTopContainer />
+      <CookieBannerContainer />
+      <ChatWidgetContainer />
     </div>
   )
 }

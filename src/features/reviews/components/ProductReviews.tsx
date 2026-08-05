@@ -1,24 +1,27 @@
-'use client'
-
 import { ThumbsDown, ThumbsUp, MessageSquare } from 'lucide-react'
-import { useProductReviews, useVoteReview } from '../api/reviews.queries'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Button } from '@/shared/components/ui/button'
+import type { Review } from '@/shared/api/types'
 
 interface ProductReviewsProps {
-  productId: string
+  reviews: Review[]
+  isLoading?: boolean
+  onVoteHelpful: (reviewId: string) => void
+  onVoteUnhelpful: (reviewId: string) => void
 }
 
-export function ProductReviews({ productId }: ProductReviewsProps) {
-  const { data: reviews, isLoading } = useProductReviews(productId)
-  const voteReview = useVoteReview()
-
+export function ProductReviews({
+  reviews,
+  isLoading,
+  onVoteHelpful,
+  onVoteUnhelpful,
+}: ProductReviewsProps) {
   if (isLoading) {
     return <p className="text-[0.9375rem] text-ink-muted">Loading reviews...</p>
   }
 
-  if (!reviews?.length) {
+  if (!reviews.length) {
     return (
       <EmptyState
         heading="No reviews yet"
@@ -61,7 +64,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => voteReview.mutate({ reviewId: review.id, vote: 'HELPFUL' })}
+              onClick={() => onVoteHelpful(review.id)}
             >
               <ThumbsUp className="h-4 w-4" /> {review.helpfulCount}
             </Button>
@@ -69,7 +72,7 @@ export function ProductReviews({ productId }: ProductReviewsProps) {
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => voteReview.mutate({ reviewId: review.id, vote: 'UNHELPFUL' })}
+              onClick={() => onVoteUnhelpful(review.id)}
             >
               <ThumbsDown className="h-4 w-4" /> {review.unhelpfulCount}
             </Button>

@@ -1,24 +1,30 @@
 'use client'
-import { useParams } from 'next/navigation'
-import { useProduct } from '../api/products.queries'
-import { useWishlistToggle } from '../hooks/useWishlistToggle'
+
+import { useProductDetail } from '../hooks/useProductDetail'
 import { ProductDetailSkeleton } from '../components/ProductDetailSkeleton'
 import { ProductNotFound } from '../components/ProductNotFound'
 import { ProductDetailContent } from '../components/ProductDetailContent'
 
 export function ProductDetailPage() {
-  const params = useParams<{ slug: string }>()
-  const { data: product, isLoading } = useProduct(params?.slug || '')
-  const { isWishlisted, toggle } = useWishlistToggle(product?.id)
+  const detail = useProductDetail()
 
-  if (isLoading) return <ProductDetailSkeleton />
-  if (!product) return <ProductNotFound />
+  if (detail.isLoading) return <ProductDetailSkeleton />
+  if (!detail.product) return <ProductNotFound />
 
   return (
     <ProductDetailContent
-      product={product}
-      isWishlisted={isWishlisted || false}
-      onToggleWishlist={toggle}
+      product={detail.product}
+      isWishlisted={detail.isWishlisted}
+      onToggleWishlist={detail.toggleWishlist}
+      onAddToCart={detail.onAddToCart}
+      isAddingToCart={detail.isAddingToCart}
+      selectedImage={detail.selectedImage}
+      onSelectImage={detail.setSelectedImage}
+      quantity={detail.quantity}
+      onQuantityChange={detail.setQuantity}
+      showStickyBar={detail.showStickyBar}
+      addSectionRef={detail.addSectionRef}
+      breadcrumbItems={detail.breadcrumbItems}
     />
   )
 }

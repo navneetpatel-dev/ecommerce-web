@@ -1,22 +1,34 @@
-import { useReviewSubmission } from '../hooks/useReviewSubmission'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Star } from 'lucide-react'
+import type { UseFormRegister, FieldErrors } from 'react-hook-form'
+import type { ReviewFormInput } from '../schemas/reviews.schema'
 
 interface ReviewFormProps {
-  orderItemId: string
-  productId: string
   productName: string
+  register: UseFormRegister<ReviewFormInput>
+  errors: FieldErrors<ReviewFormInput>
+  hoverRating: number
+  isPending: boolean
+  onSetHoverRating: (value: number) => void
+  onSetRating: (value: number) => void
+  onSubmit: (event: React.FormEvent) => void
 }
 
-export function ReviewForm({ orderItemId, productId, productName }: ReviewFormProps) {
-  const { register, handleSubmit, errors, hoverRating, setHoverRating, setRating, onSubmit, isPending } =
-    useReviewSubmission(orderItemId, productId)
-
+export function ReviewForm({
+  productName,
+  register,
+  errors,
+  hoverRating,
+  isPending,
+  onSetHoverRating,
+  onSetRating,
+  onSubmit,
+}: ReviewFormProps) {
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg space-y-4">
+    <form onSubmit={onSubmit} className="max-w-lg space-y-4">
       <p className="text-[0.9375rem] text-ink-muted">Reviewing: {productName}</p>
       <div>
         <Label>Rating</Label>
@@ -25,9 +37,9 @@ export function ReviewForm({ orderItemId, productId, productName }: ReviewFormPr
             <button
               key={i}
               type="button"
-              onClick={() => setRating(i)}
-              onMouseEnter={() => setHoverRating(i)}
-              onMouseLeave={() => setHoverRating(0)}
+              onClick={() => onSetRating(i)}
+              onMouseEnter={() => onSetHoverRating(i)}
+              onMouseLeave={() => onSetHoverRating(0)}
             >
               <Star
                 className={`h-6 w-6 ${i <= (hoverRating || 0) ? 'fill-accent text-accent' : 'text-line'}`}

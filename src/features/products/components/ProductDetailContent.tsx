@@ -1,10 +1,10 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
-import { VariantSelector } from './VariantSelector'
-import { ImageGallery } from './ImageGallery'
+
+import { ImageGalleryContainer } from '@/shared/containers/ImageGalleryContainer'
 import { ProductInfo } from './ProductInfo'
-import { ProductReviews } from '@/features/reviews/components/ProductReviews'
-import { ShareButton } from './ShareButton'
+import { VariantSelectorContainer } from '../containers/VariantSelectorContainer'
+import { ProductReviewsContainer } from '@/features/reviews/containers/ProductReviewsContainer'
+import { ShareButtonContainer } from '@/shared/containers/ShareButtonContainer'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { Button } from '@/shared/components/ui/button'
@@ -13,7 +13,7 @@ import { QuantitySelector } from '@/shared/components/QuantitySelector'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/components/ui/tabs'
 import { Heart, Truck, RotateCcw } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
-import type { ProductListItem } from '@/shared/api/types'
+import type { RefObject } from 'react'
 
 interface Product {
   id: string
@@ -32,12 +32,24 @@ interface Product {
   [key: string]: any
 }
 
+interface BreadcrumbItem {
+  label: string
+  href?: string
+}
+
 interface ProductDetailContentProps {
   product: Product
   isWishlisted: boolean
   onToggleWishlist: () => void
   onAddToCart?: (quantity: number) => void
   isAddingToCart?: boolean
+  selectedImage: number
+  onSelectImage: (index: number) => void
+  quantity: number
+  onQuantityChange: (quantity: number) => void
+  showStickyBar: boolean
+  addSectionRef: RefObject<HTMLDivElement | null>
+  breadcrumbItems: BreadcrumbItem[]
 }
 
 export function ProductDetailContent({
@@ -46,67 +58,27 @@ export function ProductDetailContent({
   onToggleWishlist,
   onAddToCart,
   isAddingToCart,
+  selectedImage,
+  onSelectImage,
+  quantity,
+  onQuantityChange,
+  showStickyBar,
+  addSectionRef,
+  breadcrumbItems,
 }: ProductDetailContentProps) {
-  const [selectedImage, setSelectedImage] = useState(0)
-  const [quantity, setQuantity] = useState(1)
-  const [showStickyBar, setShowStickyBar] = useState(false)
-  const addSectionRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (addSectionRef.current) {
-        const rect = addSectionRef.current.getBoundingClientRect()
-        setShowStickyBar(rect.bottom < 0)
-      }
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    const recentKey = 'recently-viewed-products'
-    const productSnapshot: ProductListItem = {
-      id: product.id,
-      slug: product.slug || product.id,
-      name: product.name,
-      basePrice: product.basePrice,
-      avgRating: product.avgRating,
-      reviewCount: product.reviewCount,
-      imageUrl: product.imageUrl,
-      stock: product.stock,
-      vendor: product.vendor,
-      compareAtPrice: product.compareAtPrice,
-    }
-    try {
-      const current = JSON.parse(localStorage.getItem(recentKey) || '[]') as ProductListItem[]
-      const withoutCurrent = current.filter((item) => item.id !== productSnapshot.id)
-      const next = [productSnapshot, ...withoutCurrent].slice(0, 12)
-      localStorage.setItem(recentKey, JSON.stringify(next))
-    } catch {
-      localStorage.setItem(recentKey, JSON.stringify([productSnapshot]))
-    }
-  }, [product])
-
-  const breadcrumbItems = [
-    { label: 'Products', href: '/products' },
-    ...(product.categoryName ? [{ label: product.categoryName, href: `/products?category=${product.categoryName.toLowerCase()}` }] : []),
-    { label: product.name },
-  ]
-
   return (
     <div className="max-w-[1600px] mx-auto px-4 py-8">
       <Breadcrumbs items={breadcrumbItems} className="mb-6" />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
-        <ImageGallery
+        <ImageGalleryContainer
           mainImageUrl={product.imageUrl}
           images={product.images}
           selectedIndex={selectedImage}
-          onSelect={setSelectedImage}
+          onSelect={onSelectImage}
           productName={product.name}
         />
 
-        {/* Purchase Panel */}
         <div className="md:col-span-5" ref={addSectionRef}>
           <div className="space-y-6 lg:sticky lg:top-[88px]">
             <VendorStrip vendor={product.vendor} size="md" rating={product.avgRating} />
@@ -124,12 +96,12 @@ export function ProductDetailContent({
             </div>
 
             {product.variants && product.variants.length > 0 && (
-              <VariantSelector variants={product.variants} basePrice={product.basePrice} baseStock={product.stock} />
+              <VariantSelectorContainer variants={product.variants} basePrice={product.basePrice} baseStock={product.stock} />
             )}
 
             <QuantitySelector
               value={quantity}
-              onChange={setQuantity}
+              onChange={onQuantityChange}
               max={product.stock}
             />
 
@@ -158,7 +130,7 @@ export function ProductDetailContent({
                   )}
                 />
               </Button>
-              <ShareButton
+              <ShareButtonContainer
                 title={product.name}
                 url={`/products/${product.slug ?? product.id}`}
               />
@@ -178,7 +150,6 @@ export function ProductDetailContent({
         </div>
       </div>
 
-      {/* Tabs */}
       <div className="mt-12 md:mt-16">
         <Tabs defaultValue="description">
           <TabsList>
@@ -199,12 +170,11 @@ export function ProductDetailContent({
             </div>
           </TabsContent>
           <TabsContent value="reviews" className="py-6" id="reviews">
-            <ProductReviews productId={product.id} />
+            <ProductReviewsContainer productId={product.id} />
           </TabsContent>
         </Tabs>
       </div>
 
-      {/* Mobile sticky Add to Cart */}
       {showStickyBar && product.stock > 0 && (
         <div className="fixed bottom-14 left-0 right-0 z-30 p-4 bg-surface border-t border-line shadow-elevation-3 md:hidden">
           <Button

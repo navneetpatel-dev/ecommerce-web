@@ -1,28 +1,50 @@
-'use client'
-
 import Image from 'next/image'
 import { Search } from 'lucide-react'
-import { useSearchNavigation } from '../hooks/useSearchNavigation'
 import { cn } from '@/shared/utils/cn'
+
+interface SearchSuggestion {
+  id: string
+  slug: string
+  name: string
+  imageUrl: string
+  basePrice: number
+}
 
 interface SearchBarProps {
   size?: 'lg' | 'sm'
   className?: string
+  term: string
+  open: boolean
+  suggestions?: SearchSuggestion[]
+  onTermChange: (value: string) => void
+  onFocus: () => void
+  onBlur: () => void
+  onSubmit: (event: React.FormEvent) => void
+  onSelect: (slug: string) => void
 }
 
-export function SearchBar({ size = 'lg', className }: SearchBarProps) {
-  const { term, open, suggestions, updateTerm, handleSelect, handleSubmit, openDropdown, closeDropdown } = useSearchNavigation()
-
+export function SearchBar({
+  size = 'lg',
+  className,
+  term,
+  open,
+  suggestions,
+  onTermChange,
+  onFocus,
+  onBlur,
+  onSubmit,
+  onSelect,
+}: SearchBarProps) {
   return (
     <div className={cn('relative w-full', className)}>
-      <form onSubmit={handleSubmit} className="relative">
+      <form onSubmit={onSubmit} className="relative">
         <Search size={size === 'sm' ? 16 : 20} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-muted pointer-events-none" />
         <input
           type="text"
           value={term}
-          onChange={(e) => updateTerm(e.target.value)}
-          onFocus={openDropdown}
-          onBlur={closeDropdown}
+          onChange={(e) => onTermChange(e.target.value)}
+          onFocus={onFocus}
+          onBlur={onBlur}
           placeholder="Search products, vendors..."
           className={cn(
             'w-full rounded-full border border-line bg-paper px-4 placeholder:text-ink-faint focus-visible:outline-hidden focus-visible:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
@@ -36,7 +58,7 @@ export function SearchBar({ size = 'lg', className }: SearchBarProps) {
             <button
               key={s.id}
               className="flex items-center gap-3 w-full px-4 h-12 text-left hover:bg-brand-subtle transition-colors"
-              onMouseDown={() => handleSelect(s.slug)}
+              onMouseDown={() => onSelect(s.slug)}
             >
               <Image src={s.imageUrl} alt={s.name} width={32} height={32} className="rounded object-cover shrink-0" />
               <div className="flex-1 min-w-0">

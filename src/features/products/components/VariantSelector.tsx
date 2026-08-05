@@ -1,32 +1,36 @@
-import { useAddToCart } from '@/features/cart/api/cart.queries'
-import { useVariantSelection } from '../hooks/useVariantSelection'
 import { Button } from '@/shared/components/ui/button'
-import { Separator } from '@/shared/components/ui/separator'
 import { Badge } from '@/shared/components/ui/badge'
+import { Separator } from '@/shared/components/ui/separator'
 import { ShoppingCart } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
-import type { ProductVariant } from '@/shared/api/types'
 
 interface VariantSelectorProps {
-  variants: ProductVariant[]
+  attributeGroups: Record<string, string[]>
+  currentPrice: number
+  currentStock: number
   basePrice: number
-  baseStock: number
+  hasPriceChange: boolean
+  isAvailable: (key: string, value: string) => boolean
+  isActive: (key: string, value: string) => boolean
+  onSelectValue: (key: string, value: string) => void
+  onAddToCart: () => void
+  isAddingToCart?: boolean
   className?: string
 }
 
-export function VariantSelector({ variants, basePrice, baseStock, className }: VariantSelectorProps) {
-  const addToCart = useAddToCart()
-  const {
-    attributeGroups,
-    currentPrice,
-    currentStock,
-    variantId,
-    isAvailable,
-    isActive,
-    selectValue,
-    hasPriceChange,
-  } = useVariantSelection(variants, basePrice, baseStock)
-
+export function VariantSelector({
+  attributeGroups,
+  currentPrice,
+  currentStock,
+  basePrice,
+  hasPriceChange,
+  isAvailable,
+  isActive,
+  onSelectValue,
+  onAddToCart,
+  isAddingToCart,
+  className,
+}: VariantSelectorProps) {
   return (
     <div className={cn('space-y-6', className)}>
       <div className="space-y-4">
@@ -41,7 +45,7 @@ export function VariantSelector({ variants, basePrice, baseStock, className }: V
                   <button
                     key={value}
                     disabled={!available}
-                    onClick={() => selectValue(key, value)}
+                    onClick={() => onSelectValue(key, value)}
                     className={cn(
                       'px-4 py-2 rounded-md border text-[0.9375rem] font-medium transition-colors',
                       active
@@ -70,33 +74,27 @@ export function VariantSelector({ variants, basePrice, baseStock, className }: V
       </div>
 
       <div className="space-y-3">
-        <ConditionalStockBadge currentStock={currentStock} />
+        <div className="flex items-center gap-2">
+          {currentStock === 0 ? (
+            <Badge variant="destructive">Out of stock</Badge>
+          ) : currentStock <= 5 ? (
+            <Badge variant="destructive">Only {currentStock} left</Badge>
+          ) : (
+            <Badge variant="success">In stock</Badge>
+          )}
+          <p className="text-[0.9375rem] text-ink-muted">Free shipping over ₹499</p>
+        </div>
 
         <Button
           size="lg"
           className="w-full"
           disabled={currentStock === 0}
-          onClick={() => variantId && addToCart.mutate(variantId)}
-          loading={addToCart.isPending}
+          onClick={onAddToCart}
+          loading={isAddingToCart}
         >
           <ShoppingCart className="h-5 w-5" /> Add to Cart
         </Button>
       </div>
-    </div>
-  )
-}
-
-function ConditionalStockBadge({ currentStock }: { currentStock: number }) {
-  return (
-    <div className="flex items-center gap-2">
-      {currentStock === 0 ? (
-        <Badge variant="destructive">Out of stock</Badge>
-      ) : currentStock <= 5 ? (
-        <Badge variant="destructive">Only {currentStock} left</Badge>
-      ) : (
-        <Badge variant="success">In stock</Badge>
-      )}
-      <p className="text-[0.9375rem] text-ink-muted">Free shipping over ₹499</p>
     </div>
   )
 }

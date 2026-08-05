@@ -1,13 +1,14 @@
-'use client'
-
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { useProductList } from '@/features/products/api/products.queries'
 import { ProductGrid } from '@/features/products/components/ProductGrid'
+import type { ProductListItem } from '@/shared/api/types'
 
-export function TrendingSection() {
-  const { data: trending, isLoading } = useProductList({ sort: 'trending', limit: 12 })
+interface TrendingSectionProps {
+  products?: ProductListItem[]
+  isLoading?: boolean
+}
 
+export function TrendingSection({ products, isLoading }: TrendingSectionProps) {
   return (
     <section>
       <div className="flex items-center justify-between mb-6">
@@ -16,7 +17,7 @@ export function TrendingSection() {
           View all <ArrowRight className="h-3 w-3" />
         </Link>
       </div>
-      <ProductGrid products={trending?.items} loading={isLoading} skeletonCount={8} />
+      <ProductGrid products={products} loading={isLoading} skeletonCount={8} />
     </section>
   )
 }

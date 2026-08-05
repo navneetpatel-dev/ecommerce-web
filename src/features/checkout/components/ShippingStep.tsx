@@ -5,13 +5,18 @@ import { Button } from '@/shared/components/ui/button'
 interface ShippingStepProps {
   groupedByVendor: Record<string, CartItem[]>
   selectedMethods: Record<string, string>
+  canContinue: boolean
   onSelect: (vendorId: string, method: 'STANDARD' | 'EXPRESS') => void
   onContinue: () => void
 }
 
-export function ShippingStep({ groupedByVendor, selectedMethods, onSelect, onContinue }: ShippingStepProps) {
-  const allSelected = Object.keys(groupedByVendor).every((vid) => selectedMethods[vid])
-
+export function ShippingStep({
+  groupedByVendor,
+  selectedMethods,
+  canContinue,
+  onSelect,
+  onContinue,
+}: ShippingStepProps) {
   return (
     <div className="space-y-6">
       <h2 className="font-display text-[1.375rem] font-semibold text-ink">Select shipping method</h2>
@@ -24,7 +29,7 @@ export function ShippingStep({ groupedByVendor, selectedMethods, onSelect, onCon
           onSelect={(m) => onSelect(vid, m)}
         />
       ))}
-      <Button onClick={onContinue} disabled={!allSelected}>Continue</Button>
+      <Button onClick={onContinue} disabled={!canContinue}>Continue</Button>
     </div>
   )
 }

@@ -1,8 +1,9 @@
 'use client'
-import { useParams } from 'next/navigation'
+
+import { useOrderConfirmationPage } from '../hooks/useOrderConfirmationPage'
 import { OrderConfirmation } from '../components/OrderConfirmation'
 
 export function OrderConfirmationPage() {
-  const params = useParams<{ orderId: string }>()
-  return <OrderConfirmation orderId={params?.orderId} />
+  const page = useOrderConfirmationPage()
+  return <OrderConfirmation orderId={page.orderId} />
 }

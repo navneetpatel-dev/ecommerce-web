@@ -1,7 +1,4 @@
-'use client'
-
 import Image from 'next/image'
-import { useState } from 'react'
 import type { ProductImage } from '@/shared/api/types'
 import { cn } from '@/shared/utils/cn'
 
@@ -9,22 +6,21 @@ interface ImageGalleryProps {
   mainImageUrl: string
   images?: ProductImage[]
   selectedIndex: number
+  prevIndex: number
+  transitioning: boolean
   onSelect: (index: number) => void
   productName: string
 }
 
-export function ImageGallery({ mainImageUrl, images, selectedIndex, onSelect, productName }: ImageGalleryProps) {
-  const [prevIndex, setPrevIndex] = useState(selectedIndex)
-  const [transitioning, setTransitioning] = useState(false)
-
-  const handleSelect = (i: number) => {
-    if (i === selectedIndex) return
-    setPrevIndex(selectedIndex)
-    setTransitioning(true)
-    onSelect(i)
-    setTimeout(() => setTransitioning(false), 200)
-  }
-
+export function ImageGallery({
+  mainImageUrl,
+  images,
+  selectedIndex,
+  prevIndex,
+  transitioning,
+  onSelect,
+  productName,
+}: ImageGalleryProps) {
   const currentUrl = images?.[selectedIndex]?.url || mainImageUrl
   const prevUrl = images?.[prevIndex]?.url || mainImageUrl
 
@@ -57,7 +53,7 @@ export function ImageGallery({ mainImageUrl, images, selectedIndex, onSelect, pr
           {images.map((img, i) => (
             <button
               key={img.id}
-              onClick={() => handleSelect(i)}
+              onClick={() => onSelect(i)}
               className={cn(
                 'relative h-16 w-16 rounded-sm overflow-hidden border-2 transition-colors',
                 i === selectedIndex ? 'border-brand' : 'border-transparent hover:border-line'

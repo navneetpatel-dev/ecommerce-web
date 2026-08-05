@@ -1,6 +1,6 @@
 import { Package } from 'lucide-react'
 import type { ProductListItem } from '@/shared/api/types'
-import { ProductCard } from './ProductCard'
+import { ProductCardContainer } from '../containers/ProductCardContainer'
 import { SkeletonGrid } from '@/shared/components/Skeletons'
 import { EmptyState } from '@/shared/components/EmptyState'
 
@@ -46,7 +46,7 @@ export function ProductGrid({
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 gap-4 lg:gap-6">
       {products.map((product) => (
-        <ProductCard
+        <ProductCardContainer
           key={product.id}
           product={product}
           compareMode={compareMode}

@@ -1,18 +1,19 @@
-'use client'
-
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
-import { useMediaQuery } from '@/shared/hooks/use-media-query'
 
 interface PaginationProps {
   currentPage: number
   totalPages: number
+  isMobile: boolean
   onPageChange: (page: number) => void
 }
 
-export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
-  const isMobile = useMediaQuery('(max-width: 767px)')
-
+export function Pagination({
+  currentPage,
+  totalPages,
+  isMobile,
+  onPageChange,
+}: PaginationProps) {
   if (totalPages <= 1) return null
 
   if (isMobile) {

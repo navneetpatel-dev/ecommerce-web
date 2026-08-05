@@ -27,29 +27,34 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 )
 Input.displayName = "Input"
 
-const PasswordInput = React.forwardRef<HTMLInputElement, Omit<InputProps, 'type'>>(
-  ({ className, ...props }, ref) => {
-    const [show, setShow] = React.useState(false)
-    return (
-      <div className="relative">
-        <Input
-          ref={ref}
-          type={show ? 'text' : 'password'}
-          className={cn('pr-10', className)}
-          {...props}
-        />
-        <button
-          type="button"
-          onClick={() => setShow(!show)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink"
-          aria-label={show ? 'Hide password' : 'Show password'}
-        >
-          {show ? <EyeOff size={20} /> : <Eye size={20} />}
-        </button>
-      </div>
-    )
-  }
+interface PasswordInputProps extends Omit<InputProps, 'type'> {
+  visible: boolean
+  inputType: string
+  showLabel: string
+  onVisibilityToggle: () => void
+}
+
+const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
+  ({ className, visible, inputType, showLabel, onVisibilityToggle, ...props }, ref) => (
+    <div className="relative">
+      <Input
+        ref={ref}
+        type={inputType}
+        className={cn('pr-10', className)}
+        {...props}
+      />
+      <button
+        type="button"
+        onClick={onVisibilityToggle}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink"
+        aria-label={showLabel}
+      >
+        {visible ? <EyeOff size={20} /> : <Eye size={20} />}
+      </button>
+    </div>
+  )
 )
 PasswordInput.displayName = "PasswordInput"
 
 export { Input, PasswordInput }
+export type { PasswordInputProps }

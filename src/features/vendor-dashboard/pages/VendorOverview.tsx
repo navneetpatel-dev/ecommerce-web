@@ -1,17 +1,18 @@
 'use client'
-import { useVendorSummary } from '../api/vendor.queries'
+
+import { useVendorOverview } from '../hooks/useVendorOverview'
 import { ProductsTable } from './ProductsTable'
 import { VendorSummaryGrid } from '../components/VendorSummaryGrid'
 import { SkeletonGrid } from '@/shared/components/Skeletons'
 
 export function VendorOverview() {
-  const { data: summary, isLoading } = useVendorSummary()
+  const overview = useVendorOverview()
 
-  if (isLoading) return <SkeletonGrid count={4} aspect="h-24" />
+  if (overview.isLoading) return <SkeletonGrid count={4} aspect="h-24" />
 
   return (
     <div className="space-y-8">
-      <VendorSummaryGrid summary={summary} />
+      <VendorSummaryGrid summary={overview.summary} />
       <ProductsTable />
     </div>
   )

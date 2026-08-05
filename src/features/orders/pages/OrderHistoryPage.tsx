@@ -1,16 +1,22 @@
 'use client'
-import { useMyOrders } from '../api/orders.queries'
-import { useAuthStore } from '@/features/auth/store/auth.store'
+
+import { useOrderHistoryPage } from '../hooks/useOrderHistoryPage'
 import { OrdersList } from '../components/OrdersList'
 import { EmptyOrdersState } from '../components/EmptyOrdersState'
 import { SkeletonCard } from '@/shared/components/Skeletons'
 
 export function OrderHistoryPage() {
-  const role = useAuthStore((s) => s.currentUser?.role)
-  const { data, isLoading } = useMyOrders(role)
+  const history = useOrderHistoryPage()
 
-  if (isLoading) return <div className="max-w-4xl mx-auto px-4 py-8"><SkeletonCard count={3} /></div>
-  if (!data?.items.length) return <EmptyOrdersState />
+  if (history.isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <SkeletonCard count={3} />
+      </div>
+    )
+  }
 
-  return <OrdersList orders={data.items} />
+  if (history.isEmpty) return <EmptyOrdersState />
+
+  return <OrdersList orders={history.orders} />
 }

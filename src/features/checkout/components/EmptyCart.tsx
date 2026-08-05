@@ -1,15 +1,14 @@
-'use client'
 import { EmptyState } from '@/shared/components/EmptyState'
-import { useRouter } from 'next/navigation'
+import { ShoppingBag } from 'lucide-react'
 
 export function EmptyCart() {
-  const router = useRouter()
-
   return (
     <EmptyState
-      message="Your cart is empty"
+      icon={ShoppingBag}
+      heading="Your cart is empty"
+      message="Add some items to get started."
       actionLabel="Continue shopping"
-      onAction={() => router.push('/')}
+      actionTo="/products"
       maxWidth="max-w-2xl"
     />
   )

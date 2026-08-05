@@ -1,11 +1,8 @@
-'use client'
-
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Order } from '@/shared/api/types'
 import { StatusBadge } from '@/shared/components/StatusBadge'
-import { Pagination } from '@/shared/components/Pagination'
-import { useState } from 'react'
+import { PaginationContainer } from '@/shared/containers/PaginationContainer'
 
 interface OrdersListProps {
   orders: Order[]
@@ -62,7 +59,7 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
         ))}
       </div>
       {pagination && (
-        <Pagination
+        <PaginationContainer
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
           onPageChange={pagination.onPageChange}

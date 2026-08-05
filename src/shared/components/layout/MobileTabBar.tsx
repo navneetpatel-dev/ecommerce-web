@@ -1,14 +1,13 @@
-'use client'
-
 import Link from 'next/link'
 import { Home, Search, ShoppingCart, User } from 'lucide-react'
-import { useCartDrawerStore } from '@/features/cart/store/cart.store'
-import { useAuthStore } from '@/features/auth/store/auth.store'
+import type { CurrentUser } from '@/shared/api/types'
 
-export function MobileTabBar() {
-  const openCart = useCartDrawerStore((s) => s.open)
-  const currentUser = useAuthStore((s) => s.currentUser)
+interface MobileTabBarProps {
+  currentUser: CurrentUser | null
+  onOpenCart: () => void
+}
 
+export function MobileTabBar({ currentUser, onOpenCart }: MobileTabBarProps) {
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 z-40 lg:hidden flex items-center justify-around bg-surface border-t border-line h-14"
@@ -22,7 +21,7 @@ export function MobileTabBar() {
         <Search size={20} />
         <span className="text-[0.625rem]">Search</span>
       </Link>
-      <button onClick={openCart} className="flex flex-col items-center gap-0.5 text-ink-muted">
+      <button onClick={onOpenCart} className="flex flex-col items-center gap-0.5 text-ink-muted">
         <ShoppingCart size={20} />
         <span className="text-[0.625rem]">Cart</span>
       </button>

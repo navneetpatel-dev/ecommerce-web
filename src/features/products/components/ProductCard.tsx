@@ -5,9 +5,6 @@ import Image from 'next/image'
 import { Heart, Plus } from 'lucide-react'
 import { Checkbox } from '@/shared/components/ui/checkbox'
 import type { ProductListItem } from '@/shared/api/types'
-import { useAddToCart } from '@/features/cart/api/cart.queries'
-import { usePrefetchProduct } from '../api/products.queries'
-import { useWishlistToggle } from '../hooks/useWishlistToggle'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { DiscountBadge } from '@/shared/components/DiscountBadge'
@@ -21,6 +18,13 @@ interface ProductCardProps {
   showQuickAdd?: boolean
   compareMode?: boolean
   isCompared?: boolean
+  isWishlisted?: boolean
+  isAddingToCart?: boolean
+  hasDiscount?: boolean
+  discountPercent?: number
+  onPrefetch?: () => void
+  onToggleWishlist?: () => void
+  onAddToCart?: () => void
   onToggleCompare?: (product: ProductListItem) => void
 }
 
@@ -31,21 +35,22 @@ export function ProductCard({
   showQuickAdd = true,
   compareMode = false,
   isCompared = false,
+  isWishlisted = false,
+  isAddingToCart = false,
+  hasDiscount = false,
+  discountPercent = 0,
+  onPrefetch,
+  onToggleWishlist,
+  onAddToCart,
   onToggleCompare,
 }: ProductCardProps) {
-  const { mutate: addToCart, isPending } = useAddToCart()
-  const prefetch = usePrefetchProduct()
-  const { isWishlisted, toggle } = useWishlistToggle(product.isWishlisted ? product.id : undefined)
-  const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.basePrice
-
   return (
     <div className="group relative">
       <Link
         href={`/products/${product.slug}`}
         className="block"
-        onMouseEnter={() => prefetch(product.id)}
+        onMouseEnter={onPrefetch}
       >
-        {/* Image */}
         <div className="aspect-square rounded-md overflow-hidden bg-paper border border-line relative">
           {product.imageUrl ? (
             <Image
@@ -62,14 +67,12 @@ export function ProductCard({
             </div>
           )}
 
-          {/* Scarcity badge */}
           {product.stock <= 5 && product.stock > 0 && (
             <span className="absolute top-2 left-2 bg-accent text-white text-[0.8125rem] font-semibold rounded-sm px-2 py-1">
               Only {product.stock} left
             </span>
           )}
 
-          {/* Out of stock overlay */}
           {product.stock === 0 && (
             <div className="absolute inset-0 bg-overlay flex items-center justify-center">
               <span className="bg-surface text-ink text-[0.8125rem] font-medium rounded-sm px-3 py-1.5">
@@ -78,13 +81,12 @@ export function ProductCard({
             </div>
           )}
 
-          {/* Wishlist heart */}
           {showWishlist && (
             <button
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                toggle()
+                onToggleWishlist?.()
               }}
               className={cn(
                 'absolute top-2 right-2 h-8 w-8 flex items-center justify-center rounded-full bg-surface/80 backdrop-blur-xs hover:bg-surface transition-colors',
@@ -102,20 +104,19 @@ export function ProductCard({
             </button>
           )}
 
-          {/* Quick add overlay (desktop hover) */}
           {showQuickAdd && product.stock > 0 && (
             <div className="absolute bottom-0 left-0 right-0 p-3 hidden md:flex opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-200">
               <Button
                 size="sm"
                 className="w-full rounded-full bg-surface/90 hover:bg-surface backdrop-blur-xs text-ink border border-line"
-                disabled={isPending}
+                disabled={isAddingToCart}
                 onClick={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
-                  addToCart(product.id)
+                  onAddToCart?.()
                 }}
               >
-                {isPending ? (
+                {isAddingToCart ? (
                   <span className="animate-spin h-4 w-4 border-2 border-ink border-t-transparent rounded-full" />
                 ) : (
                   <>
@@ -129,7 +130,6 @@ export function ProductCard({
         </div>
       </Link>
 
-      {/* Info */}
       <div className="mt-3 space-y-1">
         <VendorStrip vendor={product.vendor} size="sm" />
         <Link href={`/products/${product.slug}`}>
@@ -147,7 +147,7 @@ export function ProductCard({
                 ₹{product.compareAtPrice!.toLocaleString('en-IN')}
               </span>
               <DiscountBadge>
-                -{Math.round(((product.compareAtPrice! - product.basePrice) / product.compareAtPrice!) * 100)}%
+                -{discountPercent}%
               </DiscountBadge>
             </>
           )}
@@ -155,20 +155,19 @@ export function ProductCard({
         <RatingStars value={product.avgRating} count={product.reviewCount} size="sm" />
       </div>
 
-      {/* Quick add (mobile — always visible below price) */}
       {showQuickAdd && product.stock > 0 && (
         <div className="mt-2 md:hidden">
           <Button
             size="sm"
             variant="secondary"
             className="w-full"
-            disabled={isPending}
+            disabled={isAddingToCart}
             onClick={(e) => {
               e.preventDefault()
-              addToCart(product.id)
+              onAddToCart?.()
             }}
           >
-            {isPending ? (
+            {isAddingToCart ? (
               <span className="animate-spin h-4 w-4 border-2 border-ink border-t-transparent rounded-full" />
             ) : (
               <>

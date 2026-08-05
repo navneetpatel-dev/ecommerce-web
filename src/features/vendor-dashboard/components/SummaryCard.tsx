@@ -4,7 +4,7 @@ import type { LucideIcon } from 'lucide-react'
 interface SummaryCardProps {
   title: string
   value: number | string
-  icon: LucideIcon
+  icon?: LucideIcon
   valueClassName?: string
 }
 

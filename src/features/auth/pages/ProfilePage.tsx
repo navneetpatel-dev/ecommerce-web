@@ -1,25 +1,20 @@
 'use client'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { ChangePasswordSchema, type ChangePasswordInput } from '../schemas/auth.schema'
-import { useChangePassword } from '../api/auth.queries'
+
+import { useProfilePage } from '../hooks/useProfilePage'
 import { ChangePasswordSection } from '../components/ChangePasswordSection'
 
 export function ProfilePage() {
-  const changePassword = useChangePassword()
-  const form = useForm<ChangePasswordInput>({
-    resolver: zodResolver(ChangePasswordSchema),
-  })
+  const profile = useProfilePage()
 
   return (
     <div className="max-w-lg mx-auto px-4 py-8 space-y-6">
       <h1 className="font-display text-[1.75rem] font-semibold text-ink">Account Settings</h1>
       <ChangePasswordSection
-        form={form}
-        onSubmit={(data) => changePassword.mutate(data)}
-        error={changePassword.error as Error | null}
-        isPending={changePassword.isPending}
-        isSuccess={changePassword.isSuccess}
+        form={profile.form}
+        onSubmit={profile.onSubmit}
+        error={profile.error}
+        isPending={profile.isPending}
+        isSuccess={profile.isSuccess}
       />
     </div>
   )

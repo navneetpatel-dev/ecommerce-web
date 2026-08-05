@@ -1,9 +1,5 @@
-import { OtpCard } from '@/features/auth/components/OtpCard'
+import { OtpPage } from '@/features/auth/pages/OtpPage'
 
-export default function OtpPage() {
-  return (
-    <div className="min-h-screen bg-paper px-4 py-10 flex items-start justify-center">
-      <OtpCard />
-    </div>
-  )
+export default function Otp() {
+  return <OtpPage />
 }

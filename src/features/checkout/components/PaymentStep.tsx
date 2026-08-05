@@ -2,15 +2,19 @@ import { Button } from '@/shared/components/ui/button'
 
 interface PaymentStepProps {
   walletBalance: number | undefined
-  grandTotal: number | undefined
   isPending: boolean
+  walletDisabled: boolean
   onPay: (method: string) => void
   onBack: () => void
 }
 
-export function PaymentStep({ walletBalance, grandTotal, isPending, onPay, onBack }: PaymentStepProps) {
-  const walletDisabled = isPending || (walletBalance ?? 0) < (grandTotal ?? 0)
-
+export function PaymentStep({
+  walletBalance,
+  isPending,
+  walletDisabled,
+  onPay,
+  onBack,
+}: PaymentStepProps) {
   return (
     <div className="space-y-4">
       <h2 className="font-display text-[1.375rem] font-semibold text-ink">Payment method</h2>

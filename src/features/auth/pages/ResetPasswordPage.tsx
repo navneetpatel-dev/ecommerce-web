@@ -1,25 +1,20 @@
 'use client'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useSearchParams } from 'next/navigation'
-import { ResetPasswordSchema, type ResetPasswordInput } from '../schemas/auth.schema'
-import { useResetPassword } from '../api/auth.queries'
+
+import { useResetPasswordForm } from '../hooks/useResetPasswordForm'
 import { ResetPasswordCard } from '../components/ResetPasswordCard'
+import { AuthPageShell } from '../components/AuthPageShell'
 
 export function ResetPasswordPage() {
-  const searchParams = useSearchParams()
-  const resetPassword = useResetPassword()
-  const form = useForm<ResetPasswordInput>({
-    resolver: zodResolver(ResetPasswordSchema),
-    defaultValues: { token: searchParams.get('token') || '' },
-  })
+  const reset = useResetPasswordForm()
 
   return (
-    <ResetPasswordCard
-      form={form}
-      onSubmit={(data) => resetPassword.mutate(data)}
-      error={resetPassword.error as Error | null}
-      isPending={resetPassword.isPending}
-    />
+    <AuthPageShell>
+      <ResetPasswordCard
+        form={reset.form}
+        onSubmit={reset.onSubmit}
+        error={reset.error}
+        isPending={reset.isPending}
+      />
+    </AuthPageShell>
   )
 }

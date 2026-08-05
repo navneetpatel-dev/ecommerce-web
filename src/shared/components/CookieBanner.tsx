@@ -1,26 +1,14 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import { Button } from './ui/button'
 
-export function CookieBanner() {
-  const [visible, setVisible] = useState(false)
+interface CookieBannerProps {
+  visible: boolean
+  onAccept: () => void
+  onDismiss: () => void
+}
 
-  useEffect(() => {
-    const dismissed = localStorage.getItem('cookie-consent')
-    if (!dismissed) {
-      const timer = setTimeout(() => setVisible(true), 500)
-      return () => clearTimeout(timer)
-    }
-  }, [])
-
+export function CookieBanner({ visible, onAccept, onDismiss }: CookieBannerProps) {
   if (!visible) return null
-
-  const accept = () => {
-    localStorage.setItem('cookie-consent', 'accepted')
-    setVisible(false)
-  }
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 animate-slide-in-bottom">
@@ -32,12 +20,12 @@ export function CookieBanner() {
           <Button variant="link" size="sm" className="text-[0.8125rem]">
             Manage preferences
           </Button>
-          <Button variant="default" size="sm" onClick={accept}>
+          <Button variant="default" size="sm" onClick={onAccept}>
             Accept
           </Button>
         </div>
         <button
-          onClick={() => setVisible(false)}
+          onClick={onDismiss}
           className="absolute top-2 right-2 sm:hidden text-ink-muted"
           aria-label="Dismiss"
         >

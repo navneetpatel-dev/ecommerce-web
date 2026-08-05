@@ -1,22 +1,20 @@
 'use client'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { RegisterSchema, type RegisterInput } from '../schemas/auth.schema'
-import { useRegister } from '../api/auth.queries'
+
+import { useRegisterForm } from '../hooks/useRegisterForm'
 import { RegisterCard } from '../components/RegisterCard'
+import { AuthPageShell } from '../components/AuthPageShell'
 
 export function RegisterForm() {
-  const register = useRegister()
-  const form = useForm<RegisterInput>({
-    resolver: zodResolver(RegisterSchema),
-  })
+  const register = useRegisterForm()
 
   return (
-    <RegisterCard
-      form={form}
-      onSubmit={(data) => register.mutate(data)}
-      error={register.error as Error | null}
-      isPending={register.isPending}
-    />
+    <AuthPageShell>
+      <RegisterCard
+        form={register.form}
+        onSubmit={register.onSubmit}
+        error={register.error}
+        isPending={register.isPending}
+      />
+    </AuthPageShell>
   )
 }

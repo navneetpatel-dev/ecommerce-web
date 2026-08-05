@@ -1,25 +1,11 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import type { ProductListItem } from '@/shared/api/types'
 import { ProductGrid } from '@/features/products/components/ProductGrid'
+import type { ProductListItem } from '@/shared/api/types'
 
-const RECENTLY_VIEWED_KEY = 'recently-viewed-products'
+interface RecentlyViewedSectionProps {
+  products: ProductListItem[]
+}
 
-export function RecentlyViewedSection() {
-  const [products, setProducts] = useState<ProductListItem[]>([])
-
-  useEffect(() => {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(RECENTLY_VIEWED_KEY) || '[]') as ProductListItem[]
-      if (Array.isArray(parsed) && parsed.length) {
-        setProducts(parsed.slice(0, 8))
-      }
-    } catch {
-      setProducts([])
-    }
-  }, [])
-
+export function RecentlyViewedSection({ products }: RecentlyViewedSectionProps) {
   if (!products.length) return null
 
   return (
