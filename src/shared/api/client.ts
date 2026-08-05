@@ -89,8 +89,37 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return body.data;
 }
 
+async function requestWithResponse<T>(path: string, options: RequestInit = {}): Promise<ApiSuccess<T>> {
+  const token = useAuthStore.getState().accessToken;
+
+  const res = await fetch(`${BASE_URL}${path}`, {
+    ...options,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
+  });
+
+  if (res.status === 401) {
+    const refreshed = await refreshAccessTokenAndRetry();
+    if (refreshed) {
+      return requestWithResponse<T>(path, options);
+    }
+    throw new ApiError('UNAUTHORIZED', 'Session expired. Please log in again.');
+  }
+
+  const body = (await res.json()) as ApiSuccess<T> | ApiFailure;
+  if (!body.success) {
+    throw new ApiError(body.error.code, body.error.message, body.error.details);
+  }
+  return body;
+}
+
 export const apiClient = {
   get: <T>(path: string) => request<T>(path),
+  getWithResponse: <T>(path: string) => requestWithResponse<T>(path),
   post: <T>(path: string, body?: unknown) =>
     request<T>(path, { method: 'POST', body: JSON.stringify(body) }),
   patch: <T>(path: string, body?: unknown) =>

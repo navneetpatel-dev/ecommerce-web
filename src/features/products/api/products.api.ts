@@ -20,7 +20,7 @@ export interface ProductListResponse {
 }
 
 export const productsApi = {
-  list: (filters: ProductFilters) => {
+  list: async (filters: ProductFilters): Promise<ProductListResponse> => {
     const params = new URLSearchParams()
     if (filters.categoryId) params.set('categoryId', filters.categoryId)
     if (filters.vendorId) params.set('vendorId', filters.vendorId)
@@ -31,7 +31,13 @@ export const productsApi = {
     if (filters.page) params.set('page', String(filters.page))
     if (filters.limit) params.set('limit', String(filters.limit))
     if (filters.status) params.set('status', filters.status)
-    return apiClient.get<ProductListResponse>(`/api/products?${params.toString()}`)
+    const res = await apiClient.getWithResponse<ProductListItem[]>(`/api/products?${params.toString()}`)
+    const pagination = res.meta?.pagination as { total?: number; totalPages?: number } | undefined
+    return {
+      items: Array.isArray(res.data) ? res.data : [],
+      total: pagination?.total ?? 0,
+      totalPages: pagination?.totalPages ?? 1,
+    }
   },
   detail: (slugOrId: string) => apiClient.get<ProductDetail>(`/api/products/${slugOrId}`),
   detailBySlug: (slug: string) => apiClient.get<ProductDetail>(`/api/products/slug/${slug}`),

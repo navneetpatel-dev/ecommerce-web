@@ -2,7 +2,15 @@ import { apiClient } from '@/shared/api/client'
 import type { Order, ReturnRequest } from '@/shared/api/types'
 
 export const ordersApi = {
-  myOrders: (page = 1) => apiClient.get<{ items: Order[]; total: number; totalPages: number }>(`/api/orders?page=${page}`),
+  myOrders: async (page = 1) => {
+    const res = await apiClient.getWithResponse<Order[]>(`/api/orders?page=${page}`)
+    const pagination = res.meta?.pagination as { total?: number; totalPages?: number } | undefined
+    return {
+      items: Array.isArray(res.data) ? res.data : [],
+      total: pagination?.total ?? 0,
+      totalPages: pagination?.totalPages ?? 1,
+    }
+  },
   detail: (id: string) => apiClient.get<Order>(`/api/orders/${id}`),
   create: (body: { shippingAddressId: string; couponId?: string }) =>
     apiClient.post<Order>('/api/orders', body),
