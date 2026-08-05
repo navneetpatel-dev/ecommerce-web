@@ -1,13 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { ShoppingCart, User, LogOut, Search, Menu, ChevronDown } from 'lucide-react'
+import { ShoppingCart, User, LogOut, Search, Menu, ChevronDown, Moon, Sun } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { SearchBarContainer } from '@/features/search/containers/SearchBarContainer'
 import { MobileTabBar } from './MobileTabBar'
 import { MobileNavDrawer } from './MobileNavDrawer'
 import { CategoriesMegaMenu } from '@/features/categories/components/CategoriesMegaMenu'
 import { BottomSheet } from '@/shared/components/BottomSheet'
+import { useTheme } from '@/shared/hooks/use-theme'
 import type { Category, CurrentUser } from '@/shared/api/types'
 
 interface HeaderProps {
@@ -51,6 +52,8 @@ export function Header({
   onGoToProfile,
   onLogout,
 }: HeaderProps) {
+  const { theme, toggleTheme, mounted } = useTheme()
+
   return (
     <>
       <header
@@ -132,6 +135,27 @@ export function Header({
           </div>
 
           <nav aria-label="Header actions" className="flex items-center gap-1 shrink-0">
+            {/* TEMP: remove theme toggle when dark-mode testing is done */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wide transition-colors',
+                isTransparent
+                  ? 'border-paper/30 text-paper hover:bg-paper/10'
+                  : 'border-line text-ink-muted hover:bg-paper hover:text-ink'
+              )}
+              aria-label={mounted && theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+              title="Temporary theme switcher"
+            >
+              {mounted && theme === 'dark' ? (
+                <Sun size={14} strokeWidth={1.75} aria-hidden />
+              ) : (
+                <Moon size={14} strokeWidth={1.75} aria-hidden />
+              )}
+              <span className="hidden sm:inline">{mounted && theme === 'dark' ? 'Light' : 'Dark'}</span>
+            </button>
+
             <button
               type="button"
               onClick={onOpenMobileSearch}
