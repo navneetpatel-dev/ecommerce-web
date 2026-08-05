@@ -199,6 +199,11 @@
     border-color: var(--color-gray-200, currentcolor);
   }
 
+  /* Mouse / non-keyboard focus: no ring. Keyboard keeps :focus-visible styles. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
   /* Hand cursor on interactive controls (browsers often leave buttons as default). */
   a[href],
   button:not(:disabled):not([aria-disabled='true']),

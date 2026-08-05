@@ -30,6 +30,7 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
         'transition-colors duration-200',
         !hasImage && 'hover:border-brand',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+        'outline-none',
         className
       )}
     >

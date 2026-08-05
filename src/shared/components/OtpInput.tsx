@@ -26,7 +26,7 @@ export function OtpInput({
           onChange={(e) => onUpdateDigit(index, e.target.value)}
           onKeyDown={(event) => onKeyDown(index, event)}
           onPaste={onPaste}
-          className="h-11 w-11 rounded-sm border border-line bg-surface text-center text-[0.9375rem] font-semibold text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className="h-11 w-11 rounded-sm border border-line bg-surface text-center text-[0.9375rem] font-semibold text-ink outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           aria-label={`OTP digit ${index + 1}`}
         />
       ))}

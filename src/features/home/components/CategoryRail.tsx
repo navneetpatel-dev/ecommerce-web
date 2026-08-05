@@ -66,7 +66,7 @@ export function CategoryRail({ categories = [], isLoading }: CategoryRailProps) 
               'border border-dashed border-line-strong bg-paper p-3 md:p-3.5',
               'dark:bg-surface',
               'transition-colors duration-200 hover:border-brand hover:bg-brand-subtle',
-              'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand'
+              'outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand'
             )}
           >
             <span className="text-[0.75rem] font-medium uppercase tracking-[0.14em] text-ink-muted group-hover:text-brand">

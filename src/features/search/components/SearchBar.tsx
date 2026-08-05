@@ -60,7 +60,7 @@ export function SearchBar({
           onBlur={onBlur}
           placeholder="Search products, vendors..."
           className={cn(
-            'w-full rounded-full border px-4 focus-visible:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+            'w-full rounded-full border px-4 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
             size === 'sm' ? 'h-11 text-[0.8125rem] pl-9' : 'h-11 text-[0.9375rem] pl-11',
             onDark
               ? 'border-paper/25 bg-paper/10 text-paper placeholder:text-paper/55 focus-visible:border-paper/50'
