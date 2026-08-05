@@ -7,6 +7,7 @@ export interface ProductFilters {
   search?: string
   minPrice?: number
   maxPrice?: number
+  rating?: number
   sort?: string
   page?: number
   limit?: number
@@ -25,8 +26,9 @@ export const productsApi = {
     if (filters.categoryId) params.set('categoryId', filters.categoryId)
     if (filters.vendorId) params.set('vendorId', filters.vendorId)
     if (filters.search) params.set('search', filters.search)
-    if (filters.minPrice) params.set('minPrice', String(filters.minPrice))
-    if (filters.maxPrice) params.set('maxPrice', String(filters.maxPrice))
+    if (filters.minPrice != null) params.set('minPrice', String(filters.minPrice))
+    if (filters.maxPrice != null) params.set('maxPrice', String(filters.maxPrice))
+    if (filters.rating != null) params.set('rating', String(filters.rating))
     if (filters.sort) params.set('sort', filters.sort)
     if (filters.page) params.set('page', String(filters.page))
     if (filters.limit) params.set('limit', String(filters.limit))

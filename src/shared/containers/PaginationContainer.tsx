@@ -1,6 +1,7 @@
 'use client'
 
 import { useMediaQuery } from '@/shared/hooks/use-media-query'
+import { getPaginationItems } from '@/shared/utils/pagination'
 import { Pagination } from '@/shared/components/Pagination'
 
 interface PaginationContainerProps {
@@ -15,12 +16,14 @@ export function PaginationContainer({
   onPageChange,
 }: PaginationContainerProps) {
   const isMobile = useMediaQuery('(max-width: 767px)')
+  const items = getPaginationItems(currentPage, totalPages)
 
   return (
     <Pagination
       currentPage={currentPage}
       totalPages={totalPages}
       isMobile={isMobile}
+      items={items}
       onPageChange={onPageChange}
     />
   )

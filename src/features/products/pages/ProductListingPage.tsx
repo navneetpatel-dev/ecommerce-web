@@ -26,9 +26,10 @@ export function ProductListingPage() {
 
       <div className="flex gap-8">
         <FilterSidebar
+          idPrefix="desktop"
           minPrice={listing.filters.minPrice}
           maxPrice={listing.filters.maxPrice}
-          rating={undefined}
+          rating={listing.filters.rating}
           onUpdateFilter={listing.updateFilter}
           onClear={listing.clearFilters}
         />
@@ -68,7 +69,7 @@ export function ProductListingPage() {
               />
               {listing.data && listing.data.totalPages > 1 && (
                 <PaginationContainer
-                  currentPage={listing.filters.page}
+                  currentPage={listing.filters.page ?? 1}
                   totalPages={listing.data.totalPages}
                   onPageChange={(p) => listing.updateFilter('page', p)}
                 />
@@ -80,12 +81,16 @@ export function ProductListingPage() {
 
       <BottomSheet open={listing.filterOpen} onClose={listing.closeFilters} title="Filters">
         <FilterSidebar
+          idPrefix="mobile"
           className="w-full"
           minPrice={listing.filters.minPrice}
           maxPrice={listing.filters.maxPrice}
-          rating={undefined}
+          rating={listing.filters.rating}
           onUpdateFilter={listing.updateFilter}
-          onClear={listing.clearFilters}
+          onClear={() => {
+            listing.clearFilters()
+            listing.closeFilters()
+          }}
         />
         <Button className="w-full mt-4" onClick={listing.closeFilters}>
           Show results

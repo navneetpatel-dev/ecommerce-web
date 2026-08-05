@@ -1,10 +1,12 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
+import type { PaginationItem } from '@/shared/utils/pagination'
 
 interface PaginationProps {
   currentPage: number
   totalPages: number
   isMobile: boolean
+  items: PaginationItem[]
   onPageChange: (page: number) => void
 }
 
@@ -12,6 +14,7 @@ export function Pagination({
   currentPage,
   totalPages,
   isMobile,
+  items,
   onPageChange,
 }: PaginationProps) {
   if (totalPages <= 1) return null
@@ -41,31 +44,44 @@ export function Pagination({
   }
 
   return (
-    <div className="flex justify-center gap-2 mt-8">
+    <div className="flex flex-wrap justify-center gap-2 mt-8">
       <Button
         variant="ghost"
         size="sm"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage <= 1}
+        aria-label="Previous page"
       >
         <ChevronLeft size={16} />
       </Button>
-      {Array.from({ length: totalPages }).map((_, i) => (
-        <Button
-          key={i}
-          variant={currentPage === i + 1 ? 'default' : 'ghost'}
-          size="sm"
-          onClick={() => onPageChange(i + 1)}
-          className={currentPage === i + 1 ? 'bg-brand text-white hover:bg-brand-hover' : ''}
-        >
-          {i + 1}
-        </Button>
-      ))}
+      {items.map((item, index) =>
+        item === 'ellipsis' ? (
+          <span
+            key={`ellipsis-${index}`}
+            className="inline-flex h-9 min-w-9 items-center justify-center text-[0.8125rem] text-ink-muted"
+            aria-hidden
+          >
+            …
+          </span>
+        ) : (
+          <Button
+            key={item}
+            variant={currentPage === item ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => onPageChange(item)}
+            aria-current={currentPage === item ? 'page' : undefined}
+            className={currentPage === item ? 'bg-brand text-white hover:bg-brand-hover' : ''}
+          >
+            {item}
+          </Button>
+        )
+      )}
       <Button
         variant="ghost"
         size="sm"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
+        aria-label="Next page"
       >
         <ChevronRight size={16} />
       </Button>

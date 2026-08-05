@@ -9,8 +9,15 @@ export function CookieBannerContainer() {
   return (
     <CookieBanner
       visible={banner.visible}
-      onAccept={banner.accept}
+      preferencesOpen={banner.preferencesOpen}
+      preferences={banner.preferences}
+      onAcceptAll={banner.acceptAll}
       onDismiss={banner.dismiss}
+      onOpenPreferences={banner.openPreferences}
+      onClosePreferences={banner.closePreferences}
+      onAnalyticsChange={banner.setAnalytics}
+      onMarketingChange={banner.setMarketing}
+      onSavePreferences={banner.savePreferences}
     />
   )
 }
