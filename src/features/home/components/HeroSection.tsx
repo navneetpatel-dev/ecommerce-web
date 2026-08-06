@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { MediaImage } from '@/shared/components/MediaImage'
 import { cn } from '@/shared/utils/cn'
 
 export interface HeroSlide {
@@ -21,7 +21,8 @@ export interface HeroSlide {
   imageAlt: string
 }
 
-const AUTOPLAY_MS = 3000
+const AUTOPLAY_MS = 4500
+const EASE = [0.22, 1, 0.36, 1] as const
 
 const DEFAULT_SLIDES: HeroSlide[] = [
   {
@@ -51,9 +52,9 @@ const DEFAULT_SLIDES: HeroSlide[] = [
     secondaryCtaLabel: 'New arrivals',
     secondaryCtaHref: '/products?sort=newest',
     imageSrc:
-      'https://images.unsplash.com/photo-1558171813-4c0880cb1189?auto=format&fit=crop&w=2400&q=80',
+      'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=2400&q=80',
     imageMobileSrc:
-      'https://images.unsplash.com/photo-1558171813-4c0880cb1189?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80',
     imageAlt: 'Folded handwoven textiles in warm natural tones',
   },
   {
@@ -74,6 +75,66 @@ const DEFAULT_SLIDES: HeroSlide[] = [
   },
 ]
 
+function resolveDirection(from: number, to: number, count: number) {
+  if (from === count - 1 && to === 0) return 1
+  if (from === 0 && to === count - 1) return -1
+  return to > from ? 1 : -1
+}
+
+const imageVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? '72%' : '-72%',
+    opacity: 0.35,
+    scale: 1.12,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? '-28%' : '28%',
+    opacity: 0,
+    scale: 1.04,
+  }),
+}
+
+const copyContainer = {
+  enter: (direction: number) => ({
+    opacity: 0,
+    x: direction > 0 ? 56 : -56,
+  }),
+  center: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.65,
+      ease: EASE,
+      staggerChildren: 0.08,
+      delayChildren: 0.12,
+    },
+  },
+  exit: (direction: number) => ({
+    opacity: 0,
+    x: direction > 0 ? -36 : 36,
+    transition: { duration: 0.35, ease: EASE },
+  }),
+}
+
+const copyItem = {
+  enter: (direction: number) => ({
+    opacity: 0,
+    x: direction > 0 ? 28 : -28,
+    y: 10,
+  }),
+  center: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    transition: { duration: 0.55, ease: EASE },
+  },
+}
+
 interface HeroSectionProps {
   slides?: HeroSlide[]
   autoplayMs?: number
@@ -86,26 +147,29 @@ export function HeroSection({
   const labelId = useId()
   const reduceMotion = useReducedMotion()
   const [index, setIndex] = useState(0)
-  const [hoverPaused, setHoverPaused] = useState(false)
+  const [direction, setDirection] = useState(1)
   const touchStartX = useRef<number | null>(null)
   const indexRef = useRef(0)
 
   const count = slides.length
   const active = slides[index] ?? slides[0]
-  const paused = hoverPaused || Boolean(reduceMotion) || count <= 1
+  const paused = Boolean(reduceMotion) || count <= 1
 
   const goTo = useCallback(
-    (next: number) => {
+    (next: number, forcedDirection?: 1 | -1) => {
       if (count === 0) return
+      const from = indexRef.current
       const normalized = ((next % count) + count) % count
+      if (normalized === from) return
+      setDirection(forcedDirection ?? resolveDirection(from, normalized, count))
       indexRef.current = normalized
       setIndex(normalized)
     },
     [count]
   )
 
-  const goNext = useCallback(() => goTo(indexRef.current + 1), [goTo])
-  const goPrev = useCallback(() => goTo(indexRef.current - 1), [goTo])
+  const goNext = useCallback(() => goTo(indexRef.current + 1, 1), [goTo])
+  const goPrev = useCallback(() => goTo(indexRef.current - 1, -1), [goTo])
 
   useEffect(() => {
     indexRef.current = index
@@ -149,14 +213,6 @@ export function HeroSection({
       aria-labelledby={labelId}
       tabIndex={0}
       onKeyDown={onKeyDown}
-      onMouseEnter={() => setHoverPaused(true)}
-      onMouseLeave={() => setHoverPaused(false)}
-      onFocus={() => setHoverPaused(true)}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-          setHoverPaused(false)
-        }
-      }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       className="relative w-full overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset"
@@ -166,36 +222,47 @@ export function HeroSection({
       </h2>
 
       <div className="relative min-h-[min(78vh,640px)] md:min-h-[min(82vh,720px)]">
-        <AnimatePresence mode="sync" initial={false}>
+        <AnimatePresence initial={false} custom={direction} mode="sync">
           <motion.div
             key={active.id}
-            className="absolute inset-0"
-            initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+            custom={direction}
+            variants={reduceMotion ? undefined : imageVariants}
+            initial={reduceMotion ? { opacity: 0 } : 'enter'}
+            animate={reduceMotion ? { opacity: 1 } : 'center'}
+            exit={reduceMotion ? { opacity: 0 } : 'exit'}
+            transition={{ duration: reduceMotion ? 0.25 : 0.9, ease: EASE }}
+            className="absolute inset-0 will-change-transform"
           >
-            <div className="absolute inset-0">
-              <div className="hidden md:block absolute inset-0">
-                <Image
-                  src={active.imageSrc}
-                  alt={active.imageAlt}
-                  fill
-                  priority={index === 0}
-                  className="object-cover"
-                  sizes="100vw"
-                />
-              </div>
-              <div className="block md:hidden absolute inset-0">
-                <Image
-                  src={active.imageMobileSrc || active.imageSrc}
-                  alt={active.imageAlt}
-                  fill
-                  priority={index === 0}
-                  className="object-cover"
-                  sizes="100vw"
-                />
-              </div>
+            <div className="absolute inset-0 overflow-hidden">
+              <motion.div
+                className="absolute inset-0"
+                initial={reduceMotion ? false : { scale: 1.08 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: reduceMotion ? 0 : autoplayMs / 1000, ease: 'linear' }}
+              >
+                <div className="absolute inset-0 hidden md:block">
+                  <MediaImage
+                    src={active.imageSrc}
+                    alt={active.imageAlt}
+                    unavailableLabel={`${active.headline} image not available`}
+                    priority={index === 0}
+                    imageClassName="object-cover"
+                    sizes="100vw"
+                    className="absolute inset-0"
+                  />
+                </div>
+                <div className="absolute inset-0 block md:hidden">
+                  <MediaImage
+                    src={active.imageMobileSrc || active.imageSrc}
+                    alt={active.imageAlt}
+                    unavailableLabel={`${active.headline} image not available`}
+                    priority={index === 0}
+                    imageClassName="object-cover"
+                    sizes="100vw"
+                    className="absolute inset-0"
+                  />
+                </div>
+              </motion.div>
             </div>
 
             <div
@@ -209,31 +276,46 @@ export function HeroSection({
           </motion.div>
         </AnimatePresence>
 
-        <div className="relative z-10 mx-auto flex h-full min-h-[min(78vh,640px)] md:min-h-[min(82vh,720px)] max-w-[1600px] flex-col justify-end px-4 pb-16 pt-16 md:justify-center md:pb-24 md:pt-20">
-          <AnimatePresence mode="wait" initial={false}>
+        <div className="relative z-10 mx-auto flex h-full min-h-[min(78vh,640px)] max-w-[1600px] flex-col justify-end px-4 pb-16 pt-16 md:min-h-[min(82vh,720px)] md:justify-center md:pb-24 md:pt-20">
+          <AnimatePresence mode="wait" initial={false} custom={direction}>
             <motion.div
               key={active.id + '-copy'}
-              initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -10 }}
-              transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+              custom={direction}
+              variants={reduceMotion ? undefined : copyContainer}
+              initial={reduceMotion ? { opacity: 0 } : 'enter'}
+              animate={reduceMotion ? { opacity: 1 } : 'center'}
+              exit={reduceMotion ? { opacity: 0 } : 'exit'}
               className="max-w-xl"
               aria-live="polite"
               aria-atomic="true"
             >
-              <p className="text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-white/70">
+              <motion.p
+                custom={direction}
+                variants={reduceMotion ? undefined : copyItem}
+                className="text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-white/70"
+              >
                 {active.eyebrow}
-              </p>
-              <h1
-                className="mt-3 font-display text-white leading-[1.05]"
+              </motion.p>
+              <motion.h1
+                custom={direction}
+                variants={reduceMotion ? undefined : copyItem}
+                className="mt-3 font-display leading-[1.05] text-white"
                 style={{ fontSize: 'var(--text-display-lg)' }}
               >
                 {active.headline}
-              </h1>
-              <p className="mt-4 max-w-md text-[1.0625rem] text-white/80">
+              </motion.h1>
+              <motion.p
+                custom={direction}
+                variants={reduceMotion ? undefined : copyItem}
+                className="mt-4 max-w-md text-[1.0625rem] text-white/80"
+              >
                 {active.subheadline}
-              </p>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
+              </motion.p>
+              <motion.div
+                custom={direction}
+                variants={reduceMotion ? undefined : copyItem}
+                className="mt-8 flex flex-wrap items-center gap-3"
+              >
                 <Link
                   href={active.ctaHref}
                   className={cn(
@@ -260,7 +342,7 @@ export function HeroSection({
                     {active.secondaryCtaLabel}
                   </Link>
                 ) : null}
-              </div>
+              </motion.div>
             </motion.div>
           </AnimatePresence>
         </div>

@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { Skeleton } from '@/shared/components/ui/skeleton'
+import { MediaImage } from '@/shared/components/MediaImage'
 import type { SpotlightVendor } from '../hooks/useVendorSpotlight'
 
 interface VendorSpotlightSectionProps {
@@ -71,16 +71,17 @@ export function VendorSpotlightSection({ vendors, isLoading }: VendorSpotlightSe
           >
             <div className="relative aspect-[16/10] overflow-hidden bg-[color-mix(in_srgb,var(--brand)_10%,var(--paper))]">
               {vendor.logoUrl || vendor.coverImageUrl ? (
-                <Image
+                <MediaImage
                   src={(vendor.logoUrl || vendor.coverImageUrl)!}
                   alt={
                     vendor.logoUrl
                       ? `${vendor.businessName} logo`
                       : `${vendor.highlightProduct} from ${vendor.businessName}`
                   }
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  unavailableLabel={`${vendor.businessName} image not available`}
+                  imageClassName="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                   sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
+                  className="absolute inset-0"
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">

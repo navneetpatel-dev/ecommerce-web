@@ -32,12 +32,7 @@ export function useVendorSpotlight() {
             },
           ])
       ).values()
-    )
-      .slice(0, 4)
-      .map((vendor, index) =>
-        // TEMP: clear first card images to verify monogram fallback
-        index === 0 ? { ...vendor, logoUrl: null, coverImageUrl: null } : vendor
-      )
+    ).slice(0, 4)
   }, [data])
 
   return { vendors, isLoading }
