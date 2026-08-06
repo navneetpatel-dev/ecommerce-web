@@ -9,7 +9,7 @@ export function useAdminCouponsPage() {
   const { open, setOpen, createCoupon, form } = useCreateCoupon()
 
   return {
-    coupons: data?.items,
+    coupons: data?.items ?? [],
     isLoading,
     open,
     setOpen,

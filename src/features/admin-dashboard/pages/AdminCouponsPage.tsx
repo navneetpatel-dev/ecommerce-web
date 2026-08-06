@@ -3,7 +3,6 @@
 import { useAdminCouponsPage } from '../hooks/useAdminCouponsPage'
 import { CouponsPageHeader } from '../components/CouponsPageHeader'
 import { CouponsTable } from '../components/CouponsTable'
-import { Skeleton } from '@/shared/components/ui/skeleton'
 
 export function AdminCouponsPage() {
   const page = useAdminCouponsPage()
@@ -17,7 +16,7 @@ export function AdminCouponsPage() {
         onSubmit={page.onSubmit}
         isPending={page.isPending}
       />
-      {page.isLoading ? <Skeleton className="h-40 w-full" /> : <CouponsTable coupons={page.coupons as any} />}
+      <CouponsTable coupons={page.coupons} loading={page.isLoading} />
     </div>
   )
 }

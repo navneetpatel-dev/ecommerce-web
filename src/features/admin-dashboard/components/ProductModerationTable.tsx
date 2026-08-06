@@ -1,7 +1,11 @@
-import { Button } from '@/shared/components/ui/button'
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/components/ui/table'
-import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+'use client'
+
+import { DataTable, type DataTableColumn } from '@/shared/components/DataTable'
 import { MediaImage } from '@/shared/components/MediaImage'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
+import { useClientPagination } from '@/shared/hooks/useClientPagination'
+import { ModerationRowActions } from './ModerationRowActions'
 
 interface Product {
   id: string
@@ -12,99 +16,74 @@ interface Product {
 
 interface ProductModerationTableProps {
   products: Product[]
-  rejectingId: string | null
-  rejectNote: string
-  onRejectNoteChange: (note: string) => void
-  onApprove: (id: string) => void
-  onStartReject: (id: string) => void
-  onSubmitReject: (id: string) => void
-  onCancelReject: () => void
+  onApprove: (id: string) => void | Promise<unknown>
+  onReject: (id: string, note: string) => void | Promise<unknown>
+  isApproving?: boolean
+  isRejecting?: boolean
+  loading?: boolean
 }
 
 export function ProductModerationTable({
   products,
-  rejectingId,
-  rejectNote,
-  onRejectNoteChange,
   onApprove,
-  onStartReject,
-  onSubmitReject,
-  onCancelReject
+  onReject,
+  isApproving = false,
+  isRejecting = false,
+  loading = false,
 }: ProductModerationTableProps) {
+  const pagination = useClientPagination(products)
+
+  const columns: DataTableColumn<Product>[] = [
+    {
+      id: 'product',
+      header: LABELS.product,
+      truncate: false,
+      cell: (p) => (
+        <div className="flex items-center gap-3">
+          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded bg-paper">
+            <MediaImage src={p.imageUrl} alt={p.name} sizes="40px" imageClassName="object-cover" />
+          </div>
+          <span className="font-medium">{p.name}</span>
+        </div>
+      ),
+    },
+    {
+      id: 'price',
+      header: LABELS.price,
+      className: 'font-mono',
+      cell: (p) => `₹${p.basePrice}`,
+    },
+  ]
+
   return (
-    <div>
-      <h2 className="text-[1.375rem] font-semibold text-ink mb-4">Product Moderation Queue</h2>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Product</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((p) => (
-            <TableRow key={p.id}>
-              <TableCell>
-                <div className="flex items-center gap-3">
-                  <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded bg-paper">
-                    <MediaImage
-                      src={p.imageUrl}
-                      alt={p.name}
-                      sizes="40px"
-                      imageClassName="object-cover"
-                    />
-                  </div>
-                  <span className="font-medium">{p.name}</span>
-                </div>
-              </TableCell>
-              <TableCell className="font-mono">₹{p.basePrice}</TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-2">
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="text-success" 
-                    onClick={() => onApprove(p.id)}
-                  >
-                    Approve
-                  </Button>
-                  {rejectingId === p.id ? (
-                    <div className="flex gap-1">
-                      <input
-                        className="h-11 w-40 rounded-sm border border-line px-3 text-[0.9375rem]"
-                        placeholder="Rejection note"
-                        value={rejectNote}
-                        onChange={(e) => onRejectNoteChange(e.target.value)}
-                      />
-                      <DisabledActionHint
-                        disabled={!rejectNote}
-                        message="Enter a rejection note before rejecting."
-                      >
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          disabled={!rejectNote}
-                          onClick={() => onSubmitReject(p.id)}
-                        >
-                          Reject
-                        </Button>
-                      </DisabledActionHint>
-                      <Button size="sm" variant="ghost" onClick={onCancelReject}>
-                        Cancel
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button size="sm" variant="destructive" onClick={() => onStartReject(p.id)}>
-                      Reject
-                    </Button>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <DataTable
+      columns={columns}
+      rows={pagination.pageRows}
+      loading={loading}
+      getRowId={(row) => row.id}
+      actionsClassName="w-56"
+      pagination={{
+        page: pagination.page,
+        totalPages: pagination.totalPages,
+        total: pagination.total,
+        from: pagination.from,
+        to: pagination.to,
+        onPageChange: pagination.onPageChange,
+      }}
+      actions={(p) => (
+        <ModerationRowActions
+          approveTitle={LABELS.confirmApproveProductTitle}
+          approveDescription={formatLabel(LABELS.confirmApproveProductBody, { name: p.name })}
+          rejectTitle={LABELS.confirmRejectProductTitle}
+          rejectDescription={formatLabel(LABELS.confirmRejectProductBody, { name: p.name })}
+          rejectFieldLabel={LABELS.rejectionNote}
+          rejectEmptyHint={LABELS.enterRejectionNote}
+          onConfirmApprove={() => onApprove(p.id)}
+          onConfirmReject={(note) => onReject(p.id, note)}
+          isApproving={isApproving}
+          isRejecting={isRejecting}
+        />
+      )}
+    />
   )
 }

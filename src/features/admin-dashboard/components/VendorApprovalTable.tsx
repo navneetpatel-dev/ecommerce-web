@@ -1,6 +1,10 @@
-import { Button } from '@/shared/components/ui/button'
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/components/ui/table'
-import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+'use client'
+
+import { DataTable, type DataTableColumn } from '@/shared/components/DataTable'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
+import { useClientPagination } from '@/shared/hooks/useClientPagination'
+import { ModerationRowActions } from './ModerationRowActions'
 
 interface Vendor {
   id: string
@@ -10,90 +14,71 @@ interface Vendor {
 
 interface VendorApprovalTableProps {
   vendors: Vendor[]
-  rejectingId: string | null
-  rejectReason: string
-  onRejectReasonChange: (reason: string) => void
-  onApprove: (id: string) => void
-  onStartReject: (id: string) => void
-  onSubmitReject: (id: string) => void
-  onCancelReject: () => void
-  isApproving: boolean
+  onApprove: (id: string) => void | Promise<unknown>
+  onReject: (id: string, reason: string) => void | Promise<unknown>
+  isApproving?: boolean
+  isRejecting?: boolean
+  loading?: boolean
 }
 
 export function VendorApprovalTable({
   vendors,
-  rejectingId,
-  rejectReason,
-  onRejectReasonChange,
   onApprove,
-  onStartReject,
-  onSubmitReject,
-  onCancelReject,
-  isApproving
+  onReject,
+  isApproving = false,
+  isRejecting = false,
+  loading = false,
 }: VendorApprovalTableProps) {
+  const pagination = useClientPagination(vendors)
+
+  const columns: DataTableColumn<Vendor>[] = [
+    {
+      id: 'businessName',
+      header: LABELS.businessName,
+      className: 'font-medium',
+      accessor: 'businessName',
+    },
+    {
+      id: 'slug',
+      header: LABELS.slug,
+      className: 'text-ink-muted',
+      accessor: 'slug',
+    },
+  ]
+
   return (
-    <div>
-      <h2 className="text-[1.375rem] font-semibold text-ink mb-4">Vendor Approval Queue</h2>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Business Name</TableHead>
-            <TableHead>Slug</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {vendors.map((v) => (
-            <TableRow key={v.id}>
-              <TableCell className="font-medium">{v.businessName}</TableCell>
-              <TableCell className="text-ink-muted">{v.slug}</TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-2">
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="text-success" 
-                    onClick={() => onApprove(v.id)} 
-                    loading={isApproving}
-                  >
-                    Approve
-                  </Button>
-                  {rejectingId === v.id ? (
-                    <div className="flex gap-1">
-                      <input
-                        className="h-11 w-40 rounded-sm border border-line px-3 text-[0.9375rem]"
-                        placeholder="Reason required"
-                        value={rejectReason}
-                        onChange={(e) => onRejectReasonChange(e.target.value)}
-                      />
-                      <DisabledActionHint
-                        disabled={!rejectReason}
-                        message="Enter a rejection reason before rejecting."
-                      >
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          disabled={!rejectReason}
-                          onClick={() => onSubmitReject(v.id)}
-                        >
-                          Reject
-                        </Button>
-                      </DisabledActionHint>
-                      <Button size="sm" variant="ghost" onClick={onCancelReject}>
-                        Cancel
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button size="sm" variant="destructive" onClick={() => onStartReject(v.id)}>
-                      Reject
-                    </Button>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <DataTable
+      columns={columns}
+      rows={pagination.pageRows}
+      loading={loading}
+      getRowId={(row) => row.id}
+      actionsClassName="w-56"
+      pagination={{
+        page: pagination.page,
+        totalPages: pagination.totalPages,
+        total: pagination.total,
+        from: pagination.from,
+        to: pagination.to,
+        onPageChange: pagination.onPageChange,
+      }}
+      actions={(v) => (
+        <ModerationRowActions
+          approveTitle={LABELS.confirmApproveVendorTitle}
+          approveDescription={formatLabel(LABELS.confirmApproveVendorBody, {
+            name: v.businessName,
+          })}
+          rejectTitle={LABELS.confirmRejectVendorTitle}
+          rejectDescription={formatLabel(LABELS.confirmRejectVendorBody, {
+            name: v.businessName,
+          })}
+          rejectFieldLabel={LABELS.reasonRequired}
+          rejectEmptyHint={LABELS.enterRejectionReason}
+          onConfirmApprove={() => onApprove(v.id)}
+          onConfirmReject={(reason) => onReject(v.id, reason)}
+          isApproving={isApproving}
+          isRejecting={isRejecting}
+        />
+      )}
+    />
   )
 }

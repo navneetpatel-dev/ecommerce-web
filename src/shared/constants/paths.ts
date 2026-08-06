@@ -50,6 +50,7 @@ export const PATHS = {
     analytics: '/admin/analytics',
     audit: '/admin/audit',
     settings: '/admin/settings',
+    profile: '/admin/profile',
   },
   vendor: {
     register: '/vendor/register',
@@ -59,5 +60,6 @@ export const PATHS = {
     orders: '/vendor/dashboard/orders',
     payouts: '/vendor/dashboard/payouts',
     reviews: '/vendor/dashboard/reviews',
+    profile: '/vendor/dashboard/profile',
   },
 } as const

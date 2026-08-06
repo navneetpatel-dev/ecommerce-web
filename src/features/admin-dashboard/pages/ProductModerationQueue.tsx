@@ -2,26 +2,27 @@
 
 import { useProductModerationQueue } from '../hooks/useProductModerationQueue'
 import { ProductModerationTable } from '../components/ProductModerationTable'
-import { Skeleton } from '@/shared/components/ui/skeleton'
+import { LABELS } from '@/shared/constants/labels'
 
 export function ProductModerationQueue() {
   const queue = useProductModerationQueue()
 
-  if (queue.isLoading) return <Skeleton className="h-40 w-full" />
-  if (!queue.products?.length) {
-    return <p className="text-ink-muted py-8 text-center text-[0.9375rem]">No pending product approvals</p>
+  if (!queue.isLoading && !queue.products?.length) {
+    return (
+      <p className="py-8 text-center text-[0.9375rem] text-ink-muted">
+        {LABELS.noPendingProductApprovals}
+      </p>
+    )
   }
 
   return (
     <ProductModerationTable
-      products={queue.products}
-      rejectingId={queue.rejectingId}
-      rejectNote={queue.rejectNote}
-      onRejectNoteChange={queue.onRejectNoteChange}
+      products={queue.products ?? []}
+      loading={queue.isLoading}
       onApprove={queue.onApprove}
-      onStartReject={queue.onStartReject}
-      onSubmitReject={queue.onSubmitReject}
-      onCancelReject={queue.onCancelReject}
+      onReject={queue.onReject}
+      isApproving={queue.isApproving}
+      isRejecting={queue.isRejecting}
     />
   )
 }

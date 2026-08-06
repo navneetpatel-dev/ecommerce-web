@@ -5,17 +5,14 @@ import { useProductModeration } from './useProductModeration'
 
 export function useProductModerationQueue() {
   const { data: products, isLoading } = usePendingProducts()
-  const moderation = useProductModeration()
+  const { approve, reject } = useProductModeration()
 
   return {
     products,
     isLoading,
-    rejectingId: moderation.rejectingId,
-    rejectNote: moderation.rejectNote,
-    onRejectNoteChange: moderation.setRejectNote,
-    onApprove: (id: string) => moderation.approve.mutate(id),
-    onStartReject: moderation.startReject,
-    onSubmitReject: moderation.submitReject,
-    onCancelReject: moderation.cancelReject,
+    onApprove: (id: string) => approve.mutateAsync(id),
+    onReject: (id: string, note: string) => reject.mutateAsync({ id, note }),
+    isApproving: approve.isPending,
+    isRejecting: reject.isPending,
   }
 }

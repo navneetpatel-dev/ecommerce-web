@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api/client'
+import { unwrapPaginatedList } from '@/shared/api/pagination'
 import { API } from '@/shared/constants/apiRoutes'
 import type { ProductListItem, ProductDetail, ProductVariant, ProductImage } from '@/shared/api/types'
 
@@ -19,6 +20,8 @@ export interface ProductListResponse {
   items: ProductListItem[]
   total: number
   totalPages: number
+  page: number
+  limit: number
 }
 
 export const productsApi = {
@@ -36,12 +39,7 @@ export const productsApi = {
     if (filters.status) params.set('status', filters.status)
     const query = params.toString()
     const res = await apiClient.getWithResponse<ProductListItem[]>(API.products.list(query))
-    const pagination = res.meta?.pagination as { total?: number; totalPages?: number } | undefined
-    return {
-      items: Array.isArray(res.data) ? res.data : [],
-      total: pagination?.total ?? 0,
-      totalPages: pagination?.totalPages ?? 1,
-    }
+    return unwrapPaginatedList(res)
   },
   detail: (slugOrId: string) => apiClient.get<ProductDetail>(API.products.detail(slugOrId)),
   detailBySlug: (slug: string) => apiClient.get<ProductDetail>(API.products.bySlug(slug)),

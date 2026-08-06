@@ -15,6 +15,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useTheme } from '@/shared/hooks/use-theme'
 import { PATHS } from '@/shared/constants/paths'
 import { STORAGE_KEYS } from '@/shared/constants/storage'
+import { LABELS } from '@/shared/constants/labels'
+import { isCustomerRole, isWorkspaceRole } from '@/shared/utils/roles'
 import { useDeleteAccount, useExportAccount } from '../../api/account.queries'
 
 export function PrivacySection() {
@@ -25,10 +27,13 @@ export function PrivacySection() {
   const exportAccount = useExportAccount()
   const logout = useLogout()
   const clearSession = useAuthStore((s) => s.clearSession)
+  const currentUser = useAuthStore((s) => s.currentUser)
   const queryClient = useQueryClient()
   const router = useRouter()
   const { theme, setTheme, mounted } = useTheme()
 
+  const isCustomer = isCustomerRole(currentUser?.role)
+  const isWorkspace = isWorkspaceRole(currentUser?.role)
   const canConfirm = confirmText.trim().toUpperCase() === 'DELETE'
 
   const handleDelete = async () => {
@@ -58,21 +63,21 @@ export function PrivacySection() {
     <div className="space-y-6">
       <section className="border border-line bg-surface shadow-elevation-1">
         <div className="border-b border-line bg-paper/65 px-5 py-4 md:px-6">
-          <TextEyebrow>Preferences</TextEyebrow>
+          <TextEyebrow>{LABELS.privacyPreferences}</TextEyebrow>
           <h2 className="mt-1 font-display text-[1.1875rem] tracking-tight text-ink">
-            Privacy & data
+            {LABELS.privacyAndData}
           </h2>
           <p className="mt-1 text-[0.875rem] text-ink-muted">
-            Control appearance on this device, export your data, or end your session.
+            {isWorkspace ? LABELS.privacyAndDataHintWorkspace : LABELS.privacyAndDataHintCustomer}
           </p>
         </div>
 
         <ul className="divide-y divide-line">
           <li className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
             <div className="min-w-0">
-              <p className="text-[0.9375rem] font-medium text-ink">Appearance</p>
+              <p className="text-[0.9375rem] font-medium text-ink">{LABELS.appearance}</p>
               <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
-                Light or dark for the storefront. Saved on this device.
+                {isWorkspace ? LABELS.appearanceHintWorkspace : LABELS.appearanceHintCustomer}
               </p>
             </div>
             <div className="flex shrink-0 gap-2">
@@ -82,7 +87,7 @@ export function PrivacySection() {
                 size="sm"
                 onClick={() => setTheme('light')}
               >
-                Light
+                {LABELS.themeLight}
               </Button>
               <Button
                 type="button"
@@ -90,42 +95,41 @@ export function PrivacySection() {
                 size="sm"
                 onClick={() => setTheme('dark')}
               >
-                Dark
+                {LABELS.themeDark}
               </Button>
             </div>
           </li>
 
-          <li className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
-            <div className="min-w-0">
-              <p className="text-[0.9375rem] font-medium text-ink">Download my data</p>
-              <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
-                Export a JSON copy of your profile, addresses, orders, reviews, returns, and
-                wishlist.
-              </p>
-              <FormError
-                error={exportAccount.error as Error | null}
-                fallback="Could not export account data."
-              />
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="shrink-0 gap-2"
-              loading={exportAccount.isPending}
-              onClick={() => void handleExport()}
-            >
-              <Download size={14} strokeWidth={1.5} />
-              Download
-            </Button>
-          </li>
+          {isCustomer ? (
+            <li className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
+              <div className="min-w-0">
+                <p className="text-[0.9375rem] font-medium text-ink">{LABELS.downloadMyData}</p>
+                <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
+                  {LABELS.downloadMyDataHintCustomer}
+                </p>
+                <FormError
+                  error={exportAccount.error as Error | null}
+                  fallback={LABELS.couldNotExportAccount}
+                />
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="shrink-0 gap-2"
+                loading={exportAccount.isPending}
+                onClick={() => void handleExport()}
+              >
+                <Download size={14} strokeWidth={1.5} />
+                {LABELS.download}
+              </Button>
+            </li>
+          ) : null}
 
           <li className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
             <div className="min-w-0">
-              <p className="text-[0.9375rem] font-medium text-ink">Sign out</p>
-              <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
-                End this session on this device.
-              </p>
+              <p className="text-[0.9375rem] font-medium text-ink">{LABELS.signOut}</p>
+              <p className="mt-0.5 text-[0.8125rem] text-ink-muted">{LABELS.signOutHint}</p>
             </div>
             <Button
               type="button"
@@ -135,7 +139,7 @@ export function PrivacySection() {
               onClick={() => setLogoutOpen(true)}
             >
               <LogOut size={14} strokeWidth={1.5} />
-              Sign out
+              {LABELS.signOut}
             </Button>
           </li>
         </ul>
@@ -143,19 +147,17 @@ export function PrivacySection() {
 
       <section className="border border-line bg-surface shadow-elevation-1">
         <div className="border-b border-line px-5 py-4 md:px-6">
-          <TextEyebrow>Danger zone</TextEyebrow>
+          <TextEyebrow>{LABELS.dangerZone}</TextEyebrow>
           <h2 className="mt-1 font-display text-[1.1875rem] tracking-tight text-ink">
-            Delete account
+            {LABELS.deleteAccount}
           </h2>
           <p className="mt-1 text-[0.875rem] text-ink-muted">
-            Permanently deactivate your account. This cannot be undone from the storefront.
+            {isWorkspace ? LABELS.deleteAccountHintWorkspace : LABELS.deleteAccountHintCustomer}
           </p>
         </div>
 
         <div className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
-          <p className="text-[0.8125rem] leading-6 text-ink-muted">
-            Your profile will be deactivated and you&apos;ll be signed out immediately.
-          </p>
+          <p className="text-[0.8125rem] leading-6 text-ink-muted">{LABELS.deleteAccountBody}</p>
           <Button
             type="button"
             variant="destructive"
@@ -167,7 +169,7 @@ export function PrivacySection() {
             }}
           >
             <Trash2 size={14} strokeWidth={1.5} />
-            Delete account
+            {LABELS.deleteAccount}
           </Button>
         </div>
       </section>
@@ -177,14 +179,14 @@ export function PrivacySection() {
         onOpenChange={setLogoutOpen}
         variant="warning"
         icon={LogOut}
-        title="Sign out?"
-        description="You'll need to sign in again to access your account on this device."
+        title={LABELS.signOutConfirmTitle}
+        description={LABELS.signOutConfirmBody}
         secondaryAction={{
-          label: 'Cancel',
+          label: LABELS.cancel,
           onClick: () => setLogoutOpen(false),
         }}
         primaryAction={{
-          label: 'Sign out',
+          label: LABELS.signOut,
           loading: logout.isPending,
           onClick: () => logout.mutate(),
         }}
@@ -198,19 +200,14 @@ export function PrivacySection() {
         }}
         variant="danger"
         icon={Trash2}
-        title="Delete your account?"
-        description={
-          <>
-            Type <span className="font-semibold text-ink">DELETE</span> to confirm. Your profile
-            will be deactivated and you&apos;ll be signed out.
-          </>
-        }
+        title={LABELS.deleteAccountConfirmTitle}
+        description={LABELS.deleteAccountConfirmBody}
         secondaryAction={{
-          label: 'Cancel',
+          label: LABELS.cancel,
           onClick: () => setDeleteOpen(false),
         }}
         primaryAction={{
-          label: 'Delete account',
+          label: LABELS.deleteAccount,
           variant: 'destructive',
           disabled: !canConfirm,
           loading: deleteAccount.isPending,
@@ -218,7 +215,7 @@ export function PrivacySection() {
         }}
       >
         <div className="space-y-2">
-          <Label htmlFor="delete-confirm">Confirmation</Label>
+          <Label htmlFor="delete-confirm">{LABELS.confirmation}</Label>
           <Input
             id="delete-confirm"
             value={confirmText}
@@ -229,7 +226,7 @@ export function PrivacySection() {
         </div>
         <FormError
           error={deleteAccount.error as Error | null}
-          fallback="Could not delete account."
+          fallback={LABELS.couldNotDeleteAccount}
         />
       </StatusDialog>
     </div>

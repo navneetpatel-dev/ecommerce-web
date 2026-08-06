@@ -2,7 +2,7 @@
 
 import { X } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
+import { NumberInput } from '@/shared/components/NumberInput'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/components/ui/accordion'
 import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
 import { Label } from '@/shared/components/ui/label'
@@ -57,28 +57,24 @@ export function FilterSidebar({
             <AccordionTrigger>Price</AccordionTrigger>
             <AccordionContent>
               <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  inputMode="numeric"
+                <NumberInput
+                  showSteppers={false}
+                  min={0}
                   placeholder="Min"
                   aria-label="Minimum price"
-                  className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  value={minPrice ?? ''}
-                  onChange={(e) =>
-                    onUpdateFilter('minPrice', e.target.value === '' ? undefined : Number(e.target.value))
-                  }
+                  prefix="₹"
+                  value={minPrice}
+                  onChange={(value) => onUpdateFilter('minPrice', value)}
                 />
                 <span className="text-[0.8125rem] text-ink-faint">—</span>
-                <Input
-                  type="number"
-                  inputMode="numeric"
+                <NumberInput
+                  showSteppers={false}
+                  min={0}
                   placeholder="Max"
                   aria-label="Maximum price"
-                  className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  value={maxPrice ?? ''}
-                  onChange={(e) =>
-                    onUpdateFilter('maxPrice', e.target.value === '' ? undefined : Number(e.target.value))
-                  }
+                  prefix="₹"
+                  value={maxPrice}
+                  onChange={(value) => onUpdateFilter('maxPrice', value)}
                 />
               </div>
             </AccordionContent>

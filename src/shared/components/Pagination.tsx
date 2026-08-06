@@ -1,6 +1,8 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import type { PaginationItem } from '@/shared/utils/pagination'
 
 interface PaginationProps {
@@ -22,24 +24,28 @@ export function Pagination({
 
   if (isMobile) {
     return (
-      <div className="flex items-center justify-center gap-3 mt-8">
-        <DisabledActionHint disabled={currentPage <= 1} message="You're on the first page.">
+      <div className="mt-8 flex items-center justify-center gap-3">
+        <DisabledActionHint disabled={currentPage <= 1} message={LABELS.firstPageHint}>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage <= 1}
+            aria-label={LABELS.previousPage}
           >
             <ChevronLeft size={16} />
           </Button>
         </DisabledActionHint>
-        <span className="text-[0.8125rem] text-ink-muted">Page {currentPage} of {totalPages}</span>
-        <DisabledActionHint disabled={currentPage >= totalPages} message="You're on the last page.">
+        <span className="text-[0.8125rem] text-ink-muted">
+          {formatLabel(LABELS.pageOf, { current: currentPage, total: totalPages })}
+        </span>
+        <DisabledActionHint disabled={currentPage >= totalPages} message={LABELS.lastPageHint}>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage >= totalPages}
+            aria-label={LABELS.nextPage}
           >
             <ChevronRight size={16} />
           </Button>
@@ -49,14 +55,14 @@ export function Pagination({
   }
 
   return (
-    <div className="flex flex-wrap justify-center gap-2 mt-8">
-      <DisabledActionHint disabled={currentPage <= 1} message="You're on the first page.">
+    <div className="mt-8 flex flex-wrap justify-center gap-2">
+      <DisabledActionHint disabled={currentPage <= 1} message={LABELS.firstPageHint}>
         <Button
           variant="ghost"
           size="sm"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          aria-label="Previous page"
+          aria-label={LABELS.previousPage}
         >
           <ChevronLeft size={16} />
         </Button>
@@ -85,15 +91,15 @@ export function Pagination({
           >
             {item}
           </Button>
-        )
+        ),
       )}
-      <DisabledActionHint disabled={currentPage >= totalPages} message="You're on the last page.">
+      <DisabledActionHint disabled={currentPage >= totalPages} message={LABELS.lastPageHint}>
         <Button
           variant="ghost"
           size="sm"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          aria-label="Next page"
+          aria-label={LABELS.nextPage}
         >
           <ChevronRight size={16} />
         </Button>

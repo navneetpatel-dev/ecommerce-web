@@ -6,11 +6,12 @@ import { CheckCircle2, Mail, UserRound } from 'lucide-react'
 import { FormField } from '@/shared/components/FormField'
 import { FormError } from '@/shared/components/FormError'
 import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { Badge } from '@/shared/components/ui/badge'
+import { LABELS } from '@/shared/constants/labels'
+import { useAuthStore } from '@/features/auth/store/auth.store'
+import { isWorkspaceRole } from '@/shared/utils/roles'
 import { useAccountProfile, useUpdateProfile } from '../../api/account.queries'
 
 interface PersonalForm {
@@ -19,6 +20,8 @@ interface PersonalForm {
 }
 
 export function PersonalInfoSection() {
+  const currentUser = useAuthStore((s) => s.currentUser)
+  const isWorkspace = isWorkspaceRole(currentUser?.role)
   const { data: profile, isLoading, isError, error } = useAccountProfile()
   const updateProfile = useUpdateProfile()
   const {
@@ -65,14 +68,10 @@ export function PersonalInfoSection() {
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.8fr)]">
         <form
           onSubmit={handleSubmit(async (data) => {
-            const body: {
-              name: string
-              phone: string | null
-            } = {
+            await updateProfile.mutateAsync({
               name: data.name.trim(),
               phone: data.phone.trim() || null,
-            }
-            await updateProfile.mutateAsync(body)
+            })
           })}
           className="border border-line bg-surface shadow-elevation-1"
         >
@@ -102,7 +101,9 @@ export function PersonalInfoSection() {
                 registration={register('phone')}
                 error={errors.phone}
                 placeholder="+91…"
-                helperText="Optional — used for delivery updates."
+                helperText={
+                  isWorkspace ? LABELS.phoneOptionalContact : LABELS.phoneOptionalDelivery
+                }
               />
             </div>
             <FormError error={updateProfile.error as Error | null} fallback="Could not save profile." />
@@ -112,7 +113,9 @@ export function PersonalInfoSection() {
 
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
               <p className="text-[0.8125rem] text-ink-faint">
-                Keep your name, phone, and email current for orders and account recovery.
+                {isWorkspace
+                  ? LABELS.personalInfoFooterWorkspace
+                  : LABELS.personalInfoFooterCustomer}
               </p>
               <Button type="submit" loading={updateProfile.isPending} disabled={!isDirty}>
                 Save changes
@@ -171,7 +174,7 @@ export function PersonalInfoSection() {
 
             <div className="border-t border-line pt-4">
               <p className="text-[0.8125rem] leading-6 text-ink-muted">
-                Email addresses are fixed on this account and cannot be changed from the storefront.
+                {isWorkspace ? LABELS.emailFixedWorkspace : LABELS.emailFixedStorefront}
               </p>
             </div>
           </div>

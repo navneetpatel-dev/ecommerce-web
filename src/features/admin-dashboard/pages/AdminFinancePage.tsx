@@ -1,15 +1,44 @@
 'use client'
 
 import { AdminDataPage } from './AdminDataPage'
+import { AdminSectionTabs } from '../components/AdminSectionTabs'
 import { useAdminFinancePage } from '../hooks/useAdminFinancePage'
+import { LABELS } from '@/shared/constants/labels'
 
 export function AdminFinancePage() {
   const page = useAdminFinancePage()
 
   return (
-    <div className="space-y-10">
-      <AdminDataPage {...page.commissions} />
-      <AdminDataPage {...page.payouts} />
-    </div>
+    <AdminSectionTabs
+      title={LABELS.financePayouts}
+      defaultValue="commissions"
+      tabs={[
+        {
+          value: 'commissions',
+          label: LABELS.commissions,
+          content: (
+            <AdminDataPage
+              title={page.commissions.title}
+              permission={page.commissions.permission}
+              load={page.commissions.load}
+              hideTitle
+            />
+          ),
+        },
+        {
+          value: 'payouts',
+          label: LABELS.payouts,
+          content: (
+            <AdminDataPage
+              title={page.payouts.title}
+              permission={page.payouts.permission}
+              load={page.payouts.load}
+              actions={page.payouts.actions}
+              hideTitle
+            />
+          ),
+        },
+      ]}
+    />
   )
 }

@@ -1,28 +1,127 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  isPaginatedList,
+  type PaginatedList,
+} from '@/shared/api/pagination'
+import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
+import { LABELS } from '@/shared/constants/labels'
+import { useClientPagination } from '@/shared/hooks/useClientPagination'
 
 export type AdminDataRow = Record<string, unknown>
 
-export function useAdminDataList(load: () => Promise<unknown>) {
-  const [rows, setRows] = useState<AdminDataRow[]>([])
+export type AdminListLoadFn = (params: { page: number; limit: number }) => Promise<unknown>
+
+function normalizeResult(data: unknown): PaginatedList<AdminDataRow> | AdminDataRow[] {
+  if (Array.isArray(data)) return data as AdminDataRow[]
+  if (isPaginatedList<AdminDataRow>(data)) return data
+  if (data && typeof data === 'object' && Array.isArray((data as { items?: unknown }).items)) {
+    const value = data as { items: AdminDataRow[]; total?: number; totalPages?: number; page?: number; limit?: number }
+    return {
+      items: value.items,
+      total: value.total ?? value.items.length,
+      page: value.page ?? 1,
+      limit: value.limit ?? (value.items.length || 1),
+      totalPages: value.totalPages ?? 1,
+    }
+  }
+  return []
+}
+
+export function useAdminDataList(load: AdminListLoadFn, pageSize = DEFAULT_PAGE_LIMIT) {
+  const [mode, setMode] = useState<'server' | 'client'>('server')
+  const [serverRows, setServerRows] = useState<AdminDataRow[]>([])
+  const [clientRows, setClientRows] = useState<AdminDataRow[]>([])
+  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const reload = useCallback(() => {
-    setLoading(true)
-    load()
-      .then((data) => {
-        const value = data as { items?: AdminDataRow[] } | AdminDataRow[]
-        setRows(Array.isArray(value) ? value : value.items ?? [])
-      })
-      .catch((err) => setError(err instanceof Error ? err.message : 'Could not load data'))
-      .finally(() => setLoading(false))
-  }, [load])
+  const client = useClientPagination(clientRows, pageSize)
+
+  const fetchPage = useCallback(
+    (nextPage: number) => {
+      setLoading(true)
+      setError(null)
+      load({ page: nextPage, limit: pageSize })
+        .then((raw) => {
+          const data = normalizeResult(raw)
+          if (Array.isArray(data)) {
+            setMode('client')
+            setClientRows(data)
+            setPage(1)
+            setTotal(data.length)
+            setTotalPages(Math.max(1, Math.ceil(data.length / pageSize)))
+            return
+          }
+          setMode('server')
+          setServerRows(data.items)
+          setPage(data.page || nextPage)
+          setTotal(data.total)
+          setTotalPages(Math.max(1, data.totalPages))
+        })
+        .catch((err) => setError(err instanceof Error ? err.message : LABELS.couldNotLoadData))
+        .finally(() => setLoading(false))
+    },
+    [load, pageSize],
+  )
 
   useEffect(() => {
-    reload()
-  }, [reload])
+    fetchPage(1)
+  }, [fetchPage])
 
-  return { rows, loading, error, reload }
+  const onPageChange = useCallback(
+    (nextPage: number) => {
+      if (mode === 'client') {
+        client.onPageChange(nextPage)
+        return
+      }
+      setPage(nextPage)
+      fetchPage(nextPage)
+    },
+    [mode, client, fetchPage],
+  )
+
+  const reload = useCallback(() => {
+    if (mode === 'client') {
+      fetchPage(1)
+      return
+    }
+    fetchPage(page)
+  }, [mode, fetchPage, page])
+
+  const rows = mode === 'client' ? client.pageRows : serverRows
+  const currentPage = mode === 'client' ? client.page : page
+  const pages = mode === 'client' ? client.totalPages : totalPages
+  const resultTotal = mode === 'client' ? client.total : total
+  const from = mode === 'client' ? client.from : resultTotal === 0 ? 0 : (currentPage - 1) * pageSize + 1
+  const to = mode === 'client' ? client.to : Math.min(currentPage * pageSize, resultTotal)
+
+  return useMemo(
+    () => ({
+      rows,
+      loading,
+      error,
+      reload,
+      page: currentPage,
+      totalPages: pages,
+      total: resultTotal,
+      from,
+      to,
+      onPageChange,
+      mode,
+    }),
+    [rows, loading, error, reload, currentPage, pages, resultTotal, from, to, onPageChange, mode],
+  )
+}
+
+/** Infer readable columns from the first row (skips bulky nested payloads). */
+export function inferAdminColumns(rows: AdminDataRow[], max = 5): string[] {
+  if (!rows[0]) return []
+  const skip = new Set(['bankDetails', 'passwordHash', 'createdBy', 'updatedBy', 'deletedBy', 'deletedAt'])
+  return Object.keys(rows[0])
+    .filter((key) => !skip.has(key))
+    .slice(0, max)
 }

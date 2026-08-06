@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuthStore, postAuthPath, defaultRouteForRole } from '../store/auth.store'
-import { authApi, isLoginRoleSelection } from './auth.api'
+import { authApi } from './auth.api'
 import { cartApi } from '@/features/cart/api/cart.api'
 import { cartKeys } from '@/features/cart/api/cart.queries'
 import { clearClientGuestSessionCookie } from '@/features/cart/utils/guest-session'
@@ -50,10 +50,6 @@ export function useLogin() {
     mutationFn: ({ redirect: _redirect, ...input }: LoginInput & { redirect?: string | null }) =>
       authApi.login(input),
     onSuccess: async (data, variables) => {
-      if (isLoginRoleSelection(data)) {
-        // Role picker is handled by the login form — do not set session yet.
-        return
-      }
       setSession(data.accessToken, data.user)
       persistSession(data.accessToken, data.user)
       const cart = await absorbGuestCartAfterAuth(data.accessToken)

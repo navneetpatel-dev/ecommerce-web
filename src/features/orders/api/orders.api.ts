@@ -1,17 +1,16 @@
 import { apiClient } from '@/shared/api/client'
+import { unwrapPaginatedList } from '@/shared/api/pagination'
 import { API } from '@/shared/constants/apiRoutes'
+import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
 import type { Order, ReturnRequest } from '@/shared/api/types'
 import type { OrderStatus } from '@/shared/constants/statuses'
 
 export const ordersApi = {
-  myOrders: async (page = 1) => {
-    const res = await apiClient.getWithResponse<Order[]>(API.orders.list(`page=${page}`))
-    const pagination = res.meta?.pagination as { total?: number; totalPages?: number } | undefined
-    return {
-      items: Array.isArray(res.data) ? res.data : [],
-      total: pagination?.total ?? 0,
-      totalPages: pagination?.totalPages ?? 1,
-    }
+  myOrders: async (page = 1, limit = DEFAULT_PAGE_LIMIT) => {
+    const res = await apiClient.getWithResponse<Order[]>(
+      API.orders.list(`page=${page}&limit=${limit}`),
+    )
+    return unwrapPaginatedList(res)
   },
   detail: (id: string) => apiClient.get<Order>(API.orders.detail(id)),
   create: (body: { shippingAddressId: string; couponId?: string }) =>
@@ -21,14 +20,11 @@ export const ordersApi = {
 }
 
 export const subOrdersApi = {
-  vendorSubOrders: async (page = 1) => {
-    const res = await apiClient.getWithResponse<Order[]>(API.suborders.list(`page=${page}`))
-    const pagination = res.meta?.pagination as { total?: number; totalPages?: number } | undefined
-    return {
-      items: Array.isArray(res.data) ? res.data : [],
-      total: pagination?.total ?? 0,
-      totalPages: pagination?.totalPages ?? 1,
-    }
+  vendorSubOrders: async (page = 1, limit = DEFAULT_PAGE_LIMIT) => {
+    const res = await apiClient.getWithResponse<Order[]>(
+      API.suborders.list(`page=${page}&limit=${limit}`),
+    )
+    return unwrapPaginatedList(res)
   },
   updateStatus: (id: string, body: { status: string; trackingId?: string }) =>
     apiClient.patch<{ message: string }>(API.suborders.status(id), body),

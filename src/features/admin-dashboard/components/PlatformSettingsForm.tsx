@@ -1,7 +1,9 @@
+import { NumberInput } from '@/shared/components/NumberInput'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select'
 import { Button } from '@/shared/components/ui/button'
+import { LABELS } from '@/shared/constants/labels'
 import type { PlatformSettings } from '../hooks/usePlatformSettingsForm'
 
 interface PlatformSettingsFormProps {
@@ -36,15 +38,18 @@ export function PlatformSettingsForm({
         Manage commission, returns, shipping thresholds, support contact, and moderation defaults.
       </p>
       <div className="space-y-4">
-        <div>
+        <div className="space-y-2">
           <Label>Default Commission Rate (%)</Label>
-          <Input
-            type="number"
+          <NumberInput
             value={form.defaultCommissionRate}
-            onChange={(e) => onCommissionRateChange(Number(e.target.value))}
+            min={0}
+            max={100}
+            step={0.5}
+            suffix="%"
+            onChange={(value) => onCommissionRateChange(value ?? 0)}
           />
         </div>
-        <div>
+        <div className="space-y-2">
           <Label>Auto-approve Products</Label>
           <Select
             value={form.autoApproveProducts ? 'true' : 'false'}
@@ -59,23 +64,28 @@ export function PlatformSettingsForm({
             </SelectContent>
           </Select>
         </div>
-        <div>
+        <div className="space-y-2">
           <Label>Default Return Window (days)</Label>
-          <Input
-            type="number"
+          <NumberInput
             value={form.defaultReturnWindow}
-            onChange={(e) => onReturnWindowChange(Number(e.target.value))}
+            min={0}
+            max={365}
+            step={1}
+            suffix={LABELS.daysShort}
+            onChange={(value) => onReturnWindowChange(value ?? 0)}
           />
         </div>
-        <div>
+        <div className="space-y-2">
           <Label>Free shipping threshold (₹)</Label>
-          <Input
-            type="number"
+          <NumberInput
             value={form.freeShippingThreshold}
-            onChange={(e) => onFreeShippingThresholdChange(Number(e.target.value))}
+            min={0}
+            step={50}
+            prefix="₹"
+            onChange={(value) => onFreeShippingThresholdChange(value ?? 0)}
           />
         </div>
-        <div>
+        <div className="space-y-2">
           <Label>Payout Cycle</Label>
           <Select value={form.payoutCycle} onValueChange={onPayoutCycleChange}>
             <SelectTrigger>
@@ -89,7 +99,7 @@ export function PlatformSettingsForm({
             </SelectContent>
           </Select>
         </div>
-        <div>
+        <div className="space-y-2">
           <Label>Support email</Label>
           <Input
             type="email"
@@ -97,7 +107,7 @@ export function PlatformSettingsForm({
             onChange={(e) => onSupportEmailChange(e.target.value)}
           />
         </div>
-        <div>
+        <div className="space-y-2">
           <Label>Support hours</Label>
           <Input
             value={form.supportHours}

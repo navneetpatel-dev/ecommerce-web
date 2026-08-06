@@ -2,11 +2,14 @@
 
 import Link from 'next/link'
 import { Suspense } from 'react'
+import { usePathname } from 'next/navigation'
 import { UserRound } from 'lucide-react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Button } from '@/shared/components/ui/button'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
+import { isWorkspaceProfilePath } from '@/shared/utils/profilePaths'
 import { AccountLayout } from '../components/AccountLayout'
 import { OverviewSection } from '../components/sections/OverviewSection'
 import { PersonalInfoSection } from '../components/sections/PersonalInfoSection'
@@ -43,9 +46,16 @@ function AccountSectionBody({
 }
 
 function AccountPageInner() {
-  const { isAuthenticated, sections, activeSection, setSection } = useAccountPage()
+  const pathname = usePathname()
+  const { isAuthenticated, authBootstrapped, sections, activeSection, setSection } =
+    useAccountPage()
+
+  if (!authBootstrapped) {
+    return <AccountPageFallback />
+  }
 
   if (!isAuthenticated) {
+    const loginNext = isWorkspaceProfilePath(pathname) ? pathname : PATHS.profile
     return (
       <div className="relative">
         <div
@@ -56,9 +66,9 @@ function AccountPageInner() {
           <EmptyState
             icon={UserRound}
             heading="Sign in to manage your account"
-            message="Access profile settings, addresses, orders, and preferences after you log in."
-            actionLabel="Sign in"
-            actionTo={PATHS.loginWithRedirect(PATHS.profile)}
+            message="Access profile settings and preferences after you log in."
+            actionLabel={LABELS.logIn}
+            actionTo={PATHS.loginWithRedirect(loginNext)}
           />
           <div className="mt-4 flex justify-center">
             <Button variant="ghost" asChild>
@@ -68,6 +78,10 @@ function AccountPageInner() {
         </div>
       </div>
     )
+  }
+
+  if (sections.length === 0) {
+    return <AccountPageFallback />
   }
 
   return (

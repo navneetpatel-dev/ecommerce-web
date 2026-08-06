@@ -1,9 +1,13 @@
 'use client'
 
 import { useState, useCallback, type FormEvent, type ReactNode } from 'react'
-import { Button } from '@/shared/components/ui/button'
 import { PERMISSIONS } from '@/shared/constants/permissions'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { categoriesApi } from '@/features/categories/api/categories.api'
+import { AdminConfirmAction } from '../components/AdminConfirmAction'
+import { AdminEditNameAction } from '../components/AdminEditNameAction'
+import { adminRowLabel } from '../utils/adminRowLabel'
 import type { AdminDataRow } from './useAdminDataList'
 import type { AdminListPageModel } from './adminListPage.types'
 
@@ -30,41 +34,35 @@ export function useAdminCategoriesPage(): AdminCategoriesPageModel {
     [name],
   )
 
-  const handleEdit = useCallback(async (id: string, currentName: string, reload: () => void) => {
-    const nextName = window.prompt('Category name', currentName)
-    if (nextName && nextName !== currentName) {
-      await categoriesApi.update(id, { name: nextName })
-      reload()
-    }
-  }, [])
-
-  const handleDelete = useCallback(async (id: string, reload: () => void) => {
-    await categoriesApi.delete(id)
-    reload()
-  }, [])
-
-  const load = useCallback(() => {
+  const load = useCallback(async () => {
     void listVersion
     return categoriesApi.list()
   }, [listVersion])
 
-  const actions = useCallback(
-    (row: AdminDataRow, reload: () => void): ReactNode => (
-      <div className="flex gap-2">
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => handleEdit(String(row.id), String(row.name ?? ''), reload)}
-        >
-          Edit
-        </Button>
-        <Button size="sm" variant="ghost" onClick={() => handleDelete(String(row.id), reload)}>
-          Delete
-        </Button>
-      </div>
-    ),
-    [handleEdit, handleDelete],
-  )
+  const actions = useCallback((row: AdminDataRow, reload: () => void): ReactNode => {
+    const label = adminRowLabel(row)
+    const currentName = String(row.name ?? '')
+
+    return (
+      <>
+        <AdminEditNameAction
+          currentName={currentName}
+          title={LABELS.editCategoryTitle}
+          description={LABELS.editCategoryBody}
+          fieldLabel={LABELS.categoryName}
+          emptyHint={LABELS.enterCategoryNameToSave}
+          onSave={(nextName) => categoriesApi.update(String(row.id), { name: nextName }).then(reload)}
+        />
+        <AdminConfirmAction
+          label={LABELS.delete}
+          dialogVariant="danger"
+          title={LABELS.confirmDeleteCategoryTitle}
+          description={formatLabel(LABELS.confirmDeleteCategoryBody, { name: label })}
+          onConfirm={() => categoriesApi.delete(String(row.id)).then(reload)}
+        />
+      </>
+    )
+  }, [])
 
   return {
     form: {
@@ -72,7 +70,7 @@ export function useAdminCategoriesPage(): AdminCategoriesPageModel {
       onNameChange: setName,
       onSubmit: handleCreate,
     },
-    title: 'Categories',
+    title: LABELS.categories,
     permission: PERMISSIONS.CATEGORY_MANAGE,
     load,
     actions,

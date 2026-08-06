@@ -3,6 +3,9 @@
 import { cn } from '@/shared/utils/cn'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { motion } from 'motion/react'
+import { LABELS } from '@/shared/constants/labels'
+import { useAuthStore } from '@/features/auth/store/auth.store'
+import { isWorkspaceRole } from '@/shared/utils/roles'
 import type { AccountNavItem, AccountSectionId } from '../types'
 
 interface AccountLayoutProps {
@@ -18,31 +21,42 @@ export function AccountLayout({
   onSectionChange,
   children,
 }: AccountLayoutProps) {
+  const role = useAuthStore((s) => s.currentUser?.role)
+  const isWorkspace = isWorkspaceRole(role)
   const active = sections.find((s) => s.id === activeSection) ?? sections[0]!
 
   return (
-    <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[280px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
-      />
+    <div className={cn('relative', isWorkspace ? 'min-w-0' : undefined)}>
+      {!isWorkspace ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[200px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_8%,transparent),transparent_60%)]"
+        />
+      ) : null}
 
-      <div className="storefront-container relative py-6 md:py-8">
+      <div
+        className={cn(
+          'relative',
+          isWorkspace ? 'max-w-5xl' : 'storefront-container py-6 md:py-8',
+        )}
+      >
         <motion.header
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
-          className="mb-8"
+          className={cn(isWorkspace ? 'mb-6' : 'mb-8')}
         >
-          <TextEyebrow brand>Account</TextEyebrow>
+          <TextEyebrow brand>{LABELS.account}</TextEyebrow>
           <h1
             className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
             style={{ fontSize: 'var(--text-display-sm)' }}
           >
-            Settings
+            {LABELS.settings}
           </h1>
           <p className="mt-2 max-w-xl text-[0.9375rem] text-ink-muted">
-            Manage your profile, security, addresses, and preferences — quietly, clearly.
+            {isWorkspace
+              ? LABELS.accountSettingsHintWorkspace
+              : LABELS.accountSettingsHintCustomer}
           </p>
         </motion.header>
 
@@ -80,7 +94,7 @@ export function AccountLayout({
           <aside className="hidden lg:block">
             <nav
               aria-label="Account sections"
-              className="sticky top-24 border border-line bg-surface shadow-elevation-1"
+              className="sticky top-24 isolate border border-line bg-paper shadow-elevation-1"
             >
               <ul className="divide-y divide-line">
                 {sections.map((section) => {

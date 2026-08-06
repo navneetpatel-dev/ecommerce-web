@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { ShoppingCart, UserRound, Search, Menu, ChevronDown, Moon, Sun } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { SearchBarContainer } from '@/features/search/containers/SearchBarContainer'
@@ -13,6 +14,13 @@ import { CartCountBadge } from '@/shared/components/CartCountBadge'
 import { useTheme } from '@/shared/hooks/use-theme'
 import { PATHS } from '@/shared/constants/paths'
 import { LABELS, ROLES } from '@/shared/constants/labels'
+import {
+  accountSectionsForRole,
+  workspaceAccountSections,
+} from '@/features/account/constants'
+import { profilePathForRole } from '@/shared/utils/profilePaths'
+import { homePathForContext, isWorkspacePath } from '@/shared/utils/roleSurface'
+import { isAdminRole, isCustomerRole, isVendorRole, isWorkspaceRole } from '@/shared/utils/roles'
 import type { Category, CurrentUser } from '@/shared/api/types'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
 
@@ -24,6 +32,8 @@ interface HeaderProps {
   mobileSearchOpen: boolean
   megaMenuOpen: boolean
   isTransparent: boolean
+  /** Shopper chrome: categories, search, cart, mobile tabs. Off on admin/vendor dashboards. */
+  showStorefrontChrome?: boolean
   onOpenMobileNav: () => void
   onCloseMobileNav: () => void
   onOpenMobileSearch: () => void
@@ -44,6 +54,7 @@ export function Header({
   mobileSearchOpen,
   megaMenuOpen,
   isTransparent,
+  showStorefrontChrome = true,
   onOpenMobileNav,
   onCloseMobileNav,
   onOpenMobileSearch,
@@ -55,45 +66,46 @@ export function Header({
   onOpenCart,
   cartItemCount = 0,
 }: HeaderProps) {
+  const pathname = usePathname()
   const { theme, toggleTheme, mounted } = useTheme()
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
   const [canHoverAccountMenu, setCanHoverAccountMenu] = useState(false)
   const accountMenuRef = useRef<HTMLDivElement | null>(null)
 
   const fallbackLabel = useMemo(() => {
-    if (!currentUser?.name) return 'Profile'
+    if (!currentUser?.name) return LABELS.profile
     const initials = currentUser.name
       .trim()
       .split(/\s+/)
       .slice(0, 2)
       .map((part) => part[0]?.toUpperCase() ?? '')
       .join('')
-    return initials || 'Profile'
+    return initials || LABELS.profile
   }, [currentUser?.name])
+
+  const homeHref = useMemo(
+    () => homePathForContext(currentUser?.role, pathname),
+    [currentUser?.role, pathname],
+  )
 
   const accountLinks = useMemo(() => {
     if (!currentUser) return []
-
-    const links: Array<{ href: string; label: string }> = [
-      { href: PATHS.profile, label: LABELS.overview },
-      { href: PATHS.profileTab('personal'), label: LABELS.personalInfo },
-      { href: PATHS.profileTab('security'), label: LABELS.security },
-    ]
-
-    if (currentUser.role === ROLES.CUSTOMER) {
-      links.push(
-        { href: PATHS.profileTab('orders'), label: LABELS.orders },
-        { href: PATHS.profileTab('addresses'), label: LABELS.addresses },
-        { href: PATHS.profileTab('privacy'), label: LABELS.privacy }
-      )
-    } else {
-      links.push(
-        { href: PATHS.profileTab('privacy'), label: LABELS.privacy }
-      )
-    }
-
-    return links
-  }, [currentUser])
+    const onWorkspace = isWorkspaceRole(currentUser.role) || isWorkspacePath(pathname)
+    const sections = onWorkspace
+      ? workspaceAccountSections()
+      : accountSectionsForRole(currentUser.role)
+    const roleForPaths = isWorkspaceRole(currentUser.role)
+      ? currentUser.role
+      : pathname.startsWith(PATHS.admin.root)
+        ? ROLES.SUPER_ADMIN
+        : pathname.startsWith('/vendor')
+          ? ROLES.VENDOR_OWNER
+          : currentUser.role
+    return sections.map((section) => ({
+      href: profilePathForRole(roleForPaths, section.id),
+      label: section.label,
+    }))
+  }, [currentUser, pathname])
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return
@@ -148,73 +160,82 @@ export function Header({
         )}
       >
         <div className="storefront-container flex h-full items-center gap-2 sm:gap-3 lg:gap-4 xl:gap-6">
-          <button
-            onClick={onOpenMobileNav}
-            className={cn(
-              'lg:hidden p-2 -ml-2 rounded-md',
-              isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
-            )}
-            aria-label="Menu"
-          >
-            <Menu size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-          </button>
+          {showStorefrontChrome ? (
+            <button
+              onClick={onOpenMobileNav}
+              className={cn(
+                'lg:hidden p-2 -ml-2 rounded-md',
+                isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
+              )}
+              aria-label={LABELS.menu}
+            >
+              <Menu size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
+            </button>
+          ) : null}
 
           <Link
-            href={PATHS.home}
+            href={homeHref}
             className={cn(
               'min-w-0 shrink text-[1.375rem] font-display font-semibold leading-none sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]',
               isTransparent ? 'text-paper' : 'text-brand'
             )}
           >
-            Marketplace
+            {LABELS.brandName}
           </Link>
 
-          <nav aria-label="Primary navigation" className="hidden xl:flex items-center gap-1">
-            <div
-              className="relative"
-              onMouseEnter={onScheduleMegaOpen}
-              onMouseLeave={onScheduleMegaClose}
-            >
-              <button
-                type="button"
-                className={cn(
-                  'inline-flex items-center gap-1 px-3 py-2 rounded-md text-[0.8125rem] font-medium transition-colors',
-                  isTransparent ? 'text-paper hover:bg-paper/10' : 'text-ink hover:bg-paper'
-                )}
-                aria-expanded={megaMenuOpen}
-                aria-label="Browse categories"
-                onClick={onToggleMegaMenu}
-              >
-                Categories <ChevronDown size={16} className={cn('transition-transform', megaMenuOpen && 'rotate-180')} />
-              </button>
-
-              {megaMenuOpen && (
-                <CategoriesMegaMenu
-                  categories={categories}
-                  onClose={onCloseMegaMenu}
+          {showStorefrontChrome ? (
+            <>
+              <nav aria-label="Primary navigation" className="hidden xl:flex items-center gap-1">
+                <div
+                  className="relative"
                   onMouseEnter={onScheduleMegaOpen}
                   onMouseLeave={onScheduleMegaClose}
-                />
-              )}
-            </div>
+                >
+                  <button
+                    type="button"
+                    className={cn(
+                      'inline-flex items-center gap-1 px-3 py-2 rounded-md text-[0.8125rem] font-medium transition-colors',
+                      isTransparent ? 'text-paper hover:bg-paper/10' : 'text-ink hover:bg-paper'
+                    )}
+                    aria-expanded={megaMenuOpen}
+                    aria-label={LABELS.browseCategories}
+                    onClick={onToggleMegaMenu}
+                  >
+                    {LABELS.categories}{' '}
+                    <ChevronDown size={16} className={cn('transition-transform', megaMenuOpen && 'rotate-180')} />
+                  </button>
 
-            {primaryLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'px-3 py-2 rounded-md text-[0.8125rem] font-medium transition-colors',
-                  isTransparent ? 'text-paper hover:bg-paper/10' : 'text-ink hover:bg-paper'
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+                  {megaMenuOpen && (
+                    <CategoriesMegaMenu
+                      categories={categories}
+                      onClose={onCloseMegaMenu}
+                      onMouseEnter={onScheduleMegaOpen}
+                      onMouseLeave={onScheduleMegaClose}
+                    />
+                  )}
+                </div>
 
-          <div className="hidden xl:flex flex-1 max-w-xl mx-auto">
-            <SearchBarContainer onDark={isTransparent} />
-          </div>
+                {primaryLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      'px-3 py-2 rounded-md text-[0.8125rem] font-medium transition-colors',
+                      isTransparent ? 'text-paper hover:bg-paper/10' : 'text-ink hover:bg-paper'
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="hidden xl:flex flex-1 max-w-xl mx-auto">
+                <SearchBarContainer onDark={isTransparent} />
+              </div>
+            </>
+          ) : (
+            <div className="hidden flex-1 xl:block" />
+          )}
 
           <nav aria-label="Header actions" className="ml-auto flex shrink-0 items-center gap-1">
             <button
@@ -226,40 +247,48 @@ export function Header({
                   ? 'border-paper/30 text-paper hover:bg-paper/10'
                   : 'border-line text-ink-muted hover:bg-paper hover:text-ink'
               )}
-              aria-label={mounted && theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-              title="Toggle theme"
+              aria-label={
+                mounted && theme === 'dark' ? LABELS.themeLight : LABELS.themeDark
+              }
+              title={mounted && theme === 'dark' ? LABELS.themeLight : LABELS.themeDark}
             >
               {mounted && theme === 'dark' ? (
                 <Sun size={14} strokeWidth={1.75} aria-hidden />
               ) : (
                 <Moon size={14} strokeWidth={1.75} aria-hidden />
               )}
-              <span className="hidden sm:inline">{mounted && theme === 'dark' ? 'Light' : 'Dark'}</span>
+              <span className="hidden sm:inline">
+                {mounted && theme === 'dark' ? LABELS.themeLight : LABELS.themeDark}
+              </span>
             </button>
 
-            <button
-              type="button"
-              onClick={onOpenMobileSearch}
-              className={cn(
-                'md:hidden p-2 rounded-md',
-                isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
-              )}
-              aria-label="Search"
-            >
-              <Search size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-            </button>
+            {showStorefrontChrome ? (
+              <>
+                <button
+                  type="button"
+                  onClick={onOpenMobileSearch}
+                  className={cn(
+                    'md:hidden p-2 rounded-md',
+                    isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
+                  )}
+                  aria-label={LABELS.search}
+                >
+                  <Search size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
+                </button>
 
-            <button
-              onClick={onOpenCart}
-              className={cn(
-                'p-2 rounded-md transition-colors relative',
-                isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
-              )}
-              aria-label={cartItemCount > 0 ? `Cart, ${cartItemCount} items` : 'Cart'}
-            >
-              <ShoppingCart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-              <CartCountBadge count={cartItemCount} />
-            </button>
+                <button
+                  onClick={onOpenCart}
+                  className={cn(
+                    'p-2 rounded-md transition-colors relative',
+                    isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
+                  )}
+                  aria-label={cartItemCount > 0 ? `${LABELS.cart}, ${cartItemCount}` : LABELS.cart}
+                >
+                  <ShoppingCart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
+                  <CartCountBadge count={cartItemCount} />
+                </button>
+              </>
+            ) : null}
 
             {!currentUser ? (
               <Link
@@ -271,11 +300,11 @@ export function Header({
                     : 'text-ink hover:bg-paper'
                 )}
               >
-                Log in
+                {LABELS.logIn}
               </Link>
             ) : (
               <>
-                {currentUser.role === ROLES.CUSTOMER && (
+                {isCustomerRole(currentUser.role) && showStorefrontChrome ? (
                   <div className="hidden xl:flex items-center gap-1">
                     <Link
                       href={PATHS.orders}
@@ -284,7 +313,7 @@ export function Header({
                         isTransparent ? 'text-paper hover:bg-paper/10' : 'hover:bg-paper'
                       )}
                     >
-                      Orders
+                      {LABELS.orders}
                     </Link>
                     <Link
                       href={PATHS.wishlist}
@@ -293,12 +322,12 @@ export function Header({
                         isTransparent ? 'text-paper hover:bg-paper/10' : 'hover:bg-paper'
                       )}
                     >
-                      Wishlist
+                      {LABELS.wishlist}
                     </Link>
                   </div>
-                )}
+                ) : null}
 
-                {(currentUser.role === ROLES.VENDOR_OWNER || currentUser.role === ROLES.VENDOR_STAFF) && (
+                {isVendorRole(currentUser.role) ? (
                   <Link
                     href={PATHS.vendor.overview}
                     className={cn(
@@ -310,11 +339,9 @@ export function Header({
                   >
                     {LABELS.vendorDashboard}
                   </Link>
-                )}
+                ) : null}
 
-                {(currentUser.role === ROLES.SUPER_ADMIN ||
-                  currentUser.role === ROLES.ADMIN_ORDER_MANAGER ||
-                  currentUser.role === ROLES.ADMIN_CATALOG_MANAGER) && (
+                {isAdminRole(currentUser.role) ? (
                   <Link
                     href={PATHS.admin.vendors}
                     className={cn(
@@ -324,9 +351,9 @@ export function Header({
                         : 'text-brand hover:bg-brand-subtle'
                     )}
                   >
-                    Admin Panel
+                    {LABELS.adminPanel}
                   </Link>
-                )}
+                ) : null}
 
                 <div
                   ref={accountMenuRef}
@@ -350,7 +377,7 @@ export function Header({
                     title={currentUser.name}
                     aria-haspopup="menu"
                     aria-expanded={accountMenuOpen}
-                    aria-label="Open account menu"
+                    aria-label={LABELS.openAccountMenu}
                   >
                     <Avatar className="h-8 w-8 border border-line/70">
                       {currentUser.avatarUrl ? <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} /> : null}
@@ -405,16 +432,20 @@ export function Header({
         </div>
       </header>
 
-      <MobileNavDrawer
-        open={mobileNavOpen}
-        onClose={onCloseMobileNav}
-        currentUser={currentUser}
-        categories={categories}
-      />
-      <BottomSheet open={mobileSearchOpen} onClose={onCloseMobileSearch} title="Search">
-        <SearchBarContainer />
-      </BottomSheet>
-      <MobileTabBar currentUser={currentUser} onOpenCart={onOpenCart} cartItemCount={cartItemCount} />
+      {showStorefrontChrome ? (
+        <>
+          <MobileNavDrawer
+            open={mobileNavOpen}
+            onClose={onCloseMobileNav}
+            currentUser={currentUser}
+            categories={categories}
+          />
+          <BottomSheet open={mobileSearchOpen} onClose={onCloseMobileSearch} title={LABELS.search}>
+            <SearchBarContainer />
+          </BottomSheet>
+          <MobileTabBar currentUser={currentUser} onOpenCart={onOpenCart} cartItemCount={cartItemCount} />
+        </>
+      ) : null}
     </>
   )
 }

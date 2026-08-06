@@ -11,6 +11,17 @@ export function useCreateCoupon() {
 
   const form = useForm<CouponFormInput>({
     resolver: zodResolver(CouponSchema),
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
+    defaultValues: {
+      code: '',
+      type: 'PERCENTAGE',
+      value: undefined,
+      maxDiscountCap: undefined,
+      minOrderValue: undefined,
+      startDate: '',
+      endDate: '',
+    },
   })
 
   const createCoupon = useMutation({

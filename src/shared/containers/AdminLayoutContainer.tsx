@@ -13,7 +13,7 @@ export function AdminLayoutContainer({ children }: { children: React.ReactNode }
 
   return (
     <div className="min-h-screen bg-paper">
-      <HeaderContainer />
+      <HeaderContainer showStorefrontChrome={false} />
       <div className="flex min-w-0">
         <SidebarNav
           items={navItems}
@@ -26,7 +26,7 @@ export function AdminLayoutContainer({ children }: { children: React.ReactNode }
           }
         />
         <main className="min-w-0 flex-1 overflow-x-hidden p-6 lg:p-8 bg-surface">
-          {pathname === PATHS.admin.root ? (
+          {pathname === PATHS.admin.root || pathname === PATHS.admin.profile ? (
             children
           ) : (
             <RequirePermission permission={adminPermissionsForPath(pathname)}>

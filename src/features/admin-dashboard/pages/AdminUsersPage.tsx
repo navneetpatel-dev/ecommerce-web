@@ -12,6 +12,7 @@ export function AdminUsersPage() {
       permission={page.permission}
       load={page.load}
       actions={page.actions}
+      columnKeys={page.columnKeys}
     />
   )
 }

@@ -12,9 +12,6 @@ export function LoginForm() {
       <LoginCard
         form={login.form}
         onSubmit={login.onSubmit}
-        onSelectRole={login.onSelectRole}
-        onBackFromRoleSelect={login.clearRoleSelection}
-        roleAccounts={login.roleAccounts}
         error={login.error}
         isPending={login.isPending}
       />

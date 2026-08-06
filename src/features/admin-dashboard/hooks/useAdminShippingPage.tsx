@@ -1,9 +1,12 @@
 'use client'
 
 import { useState, useCallback, type FormEvent, type ReactNode } from 'react'
-import { Button } from '@/shared/components/ui/button'
 import { PERMISSIONS } from '@/shared/constants/permissions'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { adminShippingApi } from '@/features/admin-dashboard/api/shipping.api'
+import { AdminConfirmAction } from '../components/AdminConfirmAction'
+import { adminRowLabel } from '../utils/adminRowLabel'
 import type { AdminDataRow } from './useAdminDataList'
 import type { AdminListPageModel } from './adminListPage.types'
 
@@ -30,24 +33,23 @@ export function useAdminShippingPage(): AdminShippingPageModel {
     [name],
   )
 
-  const handleDelete = useCallback(async (id: string, reload: () => void) => {
-    await adminShippingApi.deleteZone(id)
-    reload()
-  }, [])
-
-  const load = useCallback(() => {
+  const load = useCallback(async () => {
     void listVersion
     return adminShippingApi.zones()
   }, [listVersion])
 
-  const actions = useCallback(
-    (row: AdminDataRow, reload: () => void): ReactNode => (
-      <Button size="sm" variant="ghost" onClick={() => handleDelete(String(row.id), reload)}>
-        Delete
-      </Button>
-    ),
-    [handleDelete],
-  )
+  const actions = useCallback((row: AdminDataRow, reload: () => void): ReactNode => {
+    const label = adminRowLabel(row)
+    return (
+      <AdminConfirmAction
+        label={LABELS.delete}
+        dialogVariant="danger"
+        title={LABELS.confirmDeleteShippingTitle}
+        description={formatLabel(LABELS.confirmDeleteShippingBody, { name: label })}
+        onConfirm={() => adminShippingApi.deleteZone(String(row.id)).then(reload)}
+      />
+    )
+  }, [])
 
   return {
     form: {
@@ -55,7 +57,7 @@ export function useAdminShippingPage(): AdminShippingPageModel {
       onNameChange: setName,
       onSubmit: handleCreate,
     },
-    title: 'Shipping zones',
+    title: LABELS.shipping,
     permission: PERMISSIONS.SHIPPING_MANAGE,
     load,
     actions,

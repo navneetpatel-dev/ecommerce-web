@@ -1,9 +1,12 @@
 'use client'
 
 import { useState, useCallback, type FormEvent, type ReactNode } from 'react'
-import { Button } from '@/shared/components/ui/button'
 import { PERMISSIONS } from '@/shared/constants/permissions'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { taxApi } from '@/features/admin-dashboard/api/tax.api'
+import { AdminConfirmAction } from '../components/AdminConfirmAction'
+import { adminRowLabel } from '../utils/adminRowLabel'
 import type { AdminDataRow } from './useAdminDataList'
 import type { AdminListPageModel } from './adminListPage.types'
 
@@ -33,24 +36,23 @@ export function useAdminTaxPage(): AdminTaxPageModel {
     [gstPercentage, hsnCode],
   )
 
-  const handleDelete = useCallback(async (id: string, reload: () => void) => {
-    await taxApi.deleteRule(id)
-    reload()
-  }, [])
-
-  const load = useCallback(() => {
+  const load = useCallback(async () => {
     void listVersion
     return taxApi.getRules()
   }, [listVersion])
 
-  const actions = useCallback(
-    (row: AdminDataRow, reload: () => void): ReactNode => (
-      <Button size="sm" variant="ghost" onClick={() => handleDelete(String(row.id), reload)}>
-        Delete
-      </Button>
-    ),
-    [handleDelete],
-  )
+  const actions = useCallback((row: AdminDataRow, reload: () => void): ReactNode => {
+    const name = adminRowLabel(row)
+    return (
+      <AdminConfirmAction
+        label={LABELS.delete}
+        dialogVariant="danger"
+        title={LABELS.confirmDeleteTaxTitle}
+        description={formatLabel(LABELS.confirmDeleteTaxBody, { name })}
+        onConfirm={() => taxApi.deleteRule(String(row.id)).then(reload)}
+      />
+    )
+  }, [])
 
   return {
     form: {
@@ -60,7 +62,7 @@ export function useAdminTaxPage(): AdminTaxPageModel {
       onHsnChange: setHsnCode,
       onSubmit: handleCreate,
     },
-    title: 'Tax rules',
+    title: LABELS.tax,
     permission: PERMISSIONS.TAX_MANAGE,
     load,
     actions,

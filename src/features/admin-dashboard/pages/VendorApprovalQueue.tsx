@@ -2,27 +2,27 @@
 
 import { useVendorApprovalQueue } from '../hooks/useVendorApprovalQueue'
 import { VendorApprovalTable } from '../components/VendorApprovalTable'
-import { Skeleton } from '@/shared/components/ui/skeleton'
+import { LABELS } from '@/shared/constants/labels'
 
 export function VendorApprovalQueue() {
   const queue = useVendorApprovalQueue()
 
-  if (queue.isLoading) return <Skeleton className="h-40 w-full" />
-  if (!queue.vendors?.length) {
-    return <p className="text-ink-muted py-8 text-center text-[0.9375rem]">No pending vendor approvals</p>
+  if (!queue.isLoading && !queue.vendors?.length) {
+    return (
+      <p className="py-8 text-center text-[0.9375rem] text-ink-muted">
+        {LABELS.noPendingVendorApprovals}
+      </p>
+    )
   }
 
   return (
     <VendorApprovalTable
-      vendors={queue.vendors}
-      rejectingId={queue.rejectingId}
-      rejectReason={queue.rejectReason}
-      onRejectReasonChange={queue.onRejectReasonChange}
+      vendors={queue.vendors ?? []}
+      loading={queue.isLoading}
       onApprove={queue.onApprove}
-      onStartReject={queue.onStartReject}
-      onSubmitReject={queue.onSubmitReject}
-      onCancelReject={queue.onCancelReject}
+      onReject={queue.onReject}
       isApproving={queue.isApproving}
+      isRejecting={queue.isRejecting}
     />
   )
 }

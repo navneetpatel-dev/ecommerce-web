@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from './ui/dialog'
+import { DisabledActionHint } from './DisabledActionHint'
 import { cn } from '@/shared/utils/cn'
 
 export type StatusDialogVariant = 'info' | 'success' | 'warning' | 'danger'
@@ -22,6 +23,8 @@ interface StatusDialogAction {
   variant?: 'default' | 'outline' | 'ghost' | 'secondary' | 'destructive'
   loading?: boolean
   disabled?: boolean
+  /** Shown on hover when the action is disabled (cursor popover). */
+  disabledHint?: string
 }
 
 interface StatusDialogProps {
@@ -114,15 +117,20 @@ export function StatusDialog({
               </Button>
             ) : null}
             {primaryAction ? (
-              <Button
-                type="button"
-                variant={primaryAction.variant ?? 'default'}
-                loading={primaryAction.loading}
-                disabled={primaryAction.disabled}
-                onClick={primaryAction.onClick}
+              <DisabledActionHint
+                disabled={Boolean(primaryAction.disabled && primaryAction.disabledHint)}
+                message={primaryAction.disabledHint ?? ''}
               >
-                {primaryAction.label}
-              </Button>
+                <Button
+                  type="button"
+                  variant={primaryAction.variant ?? 'default'}
+                  loading={primaryAction.loading}
+                  disabled={primaryAction.disabled}
+                  onClick={primaryAction.onClick}
+                >
+                  {primaryAction.label}
+                </Button>
+              </DisabledActionHint>
             ) : null}
           </DialogFooter>
         )}
