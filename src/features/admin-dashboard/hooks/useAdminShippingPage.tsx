@@ -33,10 +33,13 @@ export function useAdminShippingPage(): AdminShippingPageModel {
     [name],
   )
 
-  const load = useCallback(async () => {
-    void listVersion
-    return adminShippingApi.zones()
-  }, [listVersion])
+  const load = useCallback(
+    async ({ page, limit }: { page: number; limit: number }) => {
+      void listVersion
+      return adminShippingApi.zones({ page, limit })
+    },
+    [listVersion],
+  )
 
   const actions = useCallback((row: AdminDataRow, reload: () => void): ReactNode => {
     const label = adminRowLabel(row)

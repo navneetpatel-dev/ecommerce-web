@@ -1,19 +1,17 @@
 'use client'
 
-import { DataTable, type DataTableColumn } from '@/shared/components/DataTable'
+import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import { LABELS } from '@/shared/constants/labels'
-import { useClientPagination } from '@/shared/hooks/useClientPagination'
 import type { Coupon } from '@/shared/api/types'
 
 interface CouponsTableProps {
   coupons?: Coupon[]
   loading?: boolean
+  pagination?: DataTablePaginationProps
 }
 
-export function CouponsTable({ coupons = [], loading = false }: CouponsTableProps) {
-  const pagination = useClientPagination(coupons)
-
+export function CouponsTable({ coupons = [], loading = false, pagination }: CouponsTableProps) {
   const columns: DataTableColumn<Coupon>[] = [
     {
       id: 'code',
@@ -49,18 +47,11 @@ export function CouponsTable({ coupons = [], loading = false }: CouponsTableProp
   return (
     <DataTable
       columns={columns}
-      rows={pagination.pageRows}
+      rows={coupons}
       loading={loading}
       emptyMessage={LABELS.noCoupons}
       getRowId={(row) => row.id}
-      pagination={{
-        page: pagination.page,
-        totalPages: pagination.totalPages,
-        total: pagination.total,
-        from: pagination.from,
-        to: pagination.to,
-        onPageChange: pagination.onPageChange,
-      }}
+      pagination={pagination}
     />
   )
 }

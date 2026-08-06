@@ -50,6 +50,6 @@ export function useAdminProductsPage(): AdminProductsPageModel {
     actions,
     columnKeys: ['name', 'status', 'basePrice', 'slug'],
     showApprovalQueue: hasPermission(PERMISSIONS.PRODUCT_APPROVE),
-    pendingCount: pendingProducts?.length ?? 0,
+    pendingCount: pendingProducts?.total ?? 0,
   }
 }

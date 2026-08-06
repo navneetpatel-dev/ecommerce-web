@@ -1,9 +1,8 @@
 'use client'
 
-import { DataTable, type DataTableColumn } from '@/shared/components/DataTable'
+import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
 import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
-import { useClientPagination } from '@/shared/hooks/useClientPagination'
 import { ModerationRowActions } from './ModerationRowActions'
 
 interface Vendor {
@@ -19,6 +18,7 @@ interface VendorApprovalTableProps {
   isApproving?: boolean
   isRejecting?: boolean
   loading?: boolean
+  pagination?: DataTablePaginationProps
 }
 
 export function VendorApprovalTable({
@@ -28,9 +28,8 @@ export function VendorApprovalTable({
   isApproving = false,
   isRejecting = false,
   loading = false,
+  pagination,
 }: VendorApprovalTableProps) {
-  const pagination = useClientPagination(vendors)
-
   const columns: DataTableColumn<Vendor>[] = [
     {
       id: 'businessName',
@@ -49,18 +48,11 @@ export function VendorApprovalTable({
   return (
     <DataTable
       columns={columns}
-      rows={pagination.pageRows}
+      rows={vendors}
       loading={loading}
       getRowId={(row) => row.id}
       actionsClassName="w-auto min-w-[11rem]"
-      pagination={{
-        page: pagination.page,
-        totalPages: pagination.totalPages,
-        total: pagination.total,
-        from: pagination.from,
-        to: pagination.to,
-        onPageChange: pagination.onPageChange,
-      }}
+      pagination={pagination}
       actions={(v) => (
         <ModerationRowActions
           approveTitle={LABELS.confirmApproveVendorTitle}

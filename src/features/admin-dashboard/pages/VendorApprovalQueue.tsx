@@ -7,7 +7,7 @@ import { LABELS } from '@/shared/constants/labels'
 export function VendorApprovalQueue() {
   const queue = useVendorApprovalQueue()
 
-  if (!queue.isLoading && !queue.vendors?.length) {
+  if (!queue.isLoading && queue.pagination.total === 0) {
     return (
       <p className="py-8 text-center text-[0.9375rem] text-ink-muted">
         {LABELS.noPendingVendorApprovals}
@@ -17,8 +17,9 @@ export function VendorApprovalQueue() {
 
   return (
     <VendorApprovalTable
-      vendors={queue.vendors ?? []}
+      vendors={queue.vendors}
       loading={queue.isLoading}
+      pagination={queue.pagination}
       onApprove={queue.onApprove}
       onReject={queue.onReject}
       isApproving={queue.isApproving}

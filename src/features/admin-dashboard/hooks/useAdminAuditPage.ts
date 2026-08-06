@@ -7,7 +7,10 @@ import { LABELS } from '@/shared/constants/labels'
 import type { AdminListPageModel } from './adminListPage.types'
 
 export function useAdminAuditPage(): AdminListPageModel {
-  const load = useCallback(async () => auditApi.list(), [])
+  const load = useCallback(
+    ({ page, limit }: { page: number; limit: number }) => auditApi.list({ page, limit }),
+    [],
+  )
 
   return {
     title: LABELS.audit,

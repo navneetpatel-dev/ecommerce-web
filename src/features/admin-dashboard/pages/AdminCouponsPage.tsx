@@ -16,7 +16,11 @@ export function AdminCouponsPage() {
         onSubmit={page.onSubmit}
         isPending={page.isPending}
       />
-      <CouponsTable coupons={page.coupons} loading={page.isLoading} />
+      <CouponsTable
+        coupons={page.coupons}
+        loading={page.isLoading}
+        pagination={page.pagination}
+      />
     </div>
   )
 }

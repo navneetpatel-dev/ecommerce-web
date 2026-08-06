@@ -1,10 +1,9 @@
 'use client'
 
-import { DataTable, type DataTableColumn } from '@/shared/components/DataTable'
+import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
 import { MediaImage } from '@/shared/components/MediaImage'
 import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
-import { useClientPagination } from '@/shared/hooks/useClientPagination'
 import { ModerationRowActions } from './ModerationRowActions'
 
 interface Product {
@@ -21,6 +20,7 @@ interface ProductModerationTableProps {
   isApproving?: boolean
   isRejecting?: boolean
   loading?: boolean
+  pagination?: DataTablePaginationProps
 }
 
 export function ProductModerationTable({
@@ -30,9 +30,8 @@ export function ProductModerationTable({
   isApproving = false,
   isRejecting = false,
   loading = false,
+  pagination,
 }: ProductModerationTableProps) {
-  const pagination = useClientPagination(products)
-
   const columns: DataTableColumn<Product>[] = [
     {
       id: 'product',
@@ -58,18 +57,11 @@ export function ProductModerationTable({
   return (
     <DataTable
       columns={columns}
-      rows={pagination.pageRows}
+      rows={products}
       loading={loading}
       getRowId={(row) => row.id}
       actionsClassName="w-auto min-w-[11rem]"
-      pagination={{
-        page: pagination.page,
-        totalPages: pagination.totalPages,
-        total: pagination.total,
-        from: pagination.from,
-        to: pagination.to,
-        onPageChange: pagination.onPageChange,
-      }}
+      pagination={pagination}
       actions={(p) => (
         <ModerationRowActions
           approveTitle={LABELS.confirmApproveProductTitle}

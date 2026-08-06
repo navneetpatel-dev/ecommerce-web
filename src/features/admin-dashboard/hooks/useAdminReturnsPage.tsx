@@ -12,7 +12,10 @@ import type { AdminDataRow } from './useAdminDataList'
 import type { AdminListPageModel } from './adminListPage.types'
 
 export function useAdminReturnsPage(): AdminListPageModel {
-  const load = useCallback(async () => returnsApi.listAdmin(), [])
+  const load = useCallback(
+    ({ page, limit }: { page: number; limit: number }) => returnsApi.listAdmin({ page, limit }),
+    [],
+  )
 
   const actions = useCallback((row: AdminDataRow, reload: () => void): ReactNode => {
     const name = adminRowLabel(row)

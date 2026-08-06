@@ -36,10 +36,13 @@ export function useAdminTaxPage(): AdminTaxPageModel {
     [gstPercentage, hsnCode],
   )
 
-  const load = useCallback(async () => {
-    void listVersion
-    return taxApi.getRules()
-  }, [listVersion])
+  const load = useCallback(
+    async ({ page, limit }: { page: number; limit: number }) => {
+      void listVersion
+      return taxApi.getRules({ page, limit })
+    },
+    [listVersion],
+  )
 
   const actions = useCallback((row: AdminDataRow, reload: () => void): ReactNode => {
     const name = adminRowLabel(row)

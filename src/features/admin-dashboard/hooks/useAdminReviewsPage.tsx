@@ -11,7 +11,10 @@ import type { AdminDataRow } from './useAdminDataList'
 import type { AdminListPageModel } from './adminListPage.types'
 
 export function useAdminReviewsPage(): AdminListPageModel {
-  const load = useCallback(async () => reviewsApi.pending(), [])
+  const load = useCallback(
+    ({ page, limit }: { page: number; limit: number }) => reviewsApi.pending({ page, limit }),
+    [],
+  )
 
   const actions = useCallback((row: AdminDataRow, reload: () => void): ReactNode => {
     const name = adminRowLabel(row)

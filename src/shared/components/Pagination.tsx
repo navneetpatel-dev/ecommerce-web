@@ -20,11 +20,11 @@ export function Pagination({
   items,
   onPageChange,
 }: PaginationProps) {
-  if (totalPages <= 1) return null
+  if (totalPages < 1) return null
 
   if (isMobile) {
     return (
-      <div className="mt-8 flex items-center justify-center gap-3">
+      <div className="flex items-center justify-center gap-3">
         <DisabledActionHint disabled={currentPage <= 1} message={LABELS.firstPageHint}>
           <Button
             variant="ghost"
@@ -55,7 +55,7 @@ export function Pagination({
   }
 
   return (
-    <div className="mt-8 flex flex-wrap justify-center gap-2">
+    <div className="flex flex-wrap items-center justify-center gap-2">
       <DisabledActionHint disabled={currentPage <= 1} message={LABELS.firstPageHint}>
         <Button
           variant="ghost"

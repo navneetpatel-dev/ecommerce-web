@@ -2,13 +2,15 @@ export type PaginationItem = number | 'ellipsis'
 
 /**
  * Builds a compact page list like: 1 … 4 5 6 … 90
+ * Always includes at least page 1 when there is a page of results.
  */
 export function getPaginationItems(
   currentPage: number,
   totalPages: number,
   siblingCount = 1
 ): PaginationItem[] {
-  if (totalPages <= 1) return []
+  if (totalPages < 1) return []
+  if (totalPages === 1) return [1]
 
   const totalNumbers = siblingCount * 2 + 5
 

@@ -34,10 +34,13 @@ export function useAdminCategoriesPage(): AdminCategoriesPageModel {
     [name],
   )
 
-  const load = useCallback(async () => {
-    void listVersion
-    return categoriesApi.list()
-  }, [listVersion])
+  const load = useCallback(
+    async ({ page, limit }: { page: number; limit: number }) => {
+      void listVersion
+      return categoriesApi.listPaginated({ page, limit })
+    },
+    [listVersion],
+  )
 
   const actions = useCallback((row: AdminDataRow, reload: () => void): ReactNode => {
     const label = adminRowLabel(row)

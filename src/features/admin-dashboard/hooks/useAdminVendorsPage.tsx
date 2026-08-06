@@ -59,6 +59,6 @@ export function useAdminVendorsPage(): AdminVendorsPageModel {
       'suspensionReason',
     ],
     showApprovalQueue: hasPermission(PERMISSIONS.VENDOR_APPROVE),
-    pendingCount: pendingVendors?.length ?? 0,
+    pendingCount: pendingVendors?.total ?? 0,
   }
 }

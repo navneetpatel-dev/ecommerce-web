@@ -284,11 +284,11 @@ export function DataTable<T>({
         </>
       )}
 
-      {pagination && pagination.totalPages > 1 ? (
+      {pagination != null && (pagination.total == null ? pagination.totalPages >= 1 : pagination.total > 0) ? (
         <div className="flex justify-center border-t border-line/70 pt-2">
           <PaginationContainer
             currentPage={pagination.page}
-            totalPages={pagination.totalPages}
+            totalPages={Math.max(1, pagination.totalPages)}
             onPageChange={pagination.onPageChange}
           />
         </div>

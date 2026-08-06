@@ -14,8 +14,14 @@ export type AdminFinancePageModel = {
 }
 
 export function useAdminFinancePage(): AdminFinancePageModel {
-  const loadCommissions = useCallback(async () => commissionsApi.list(), [])
-  const loadPayouts = useCallback(async () => payoutsApi.list(), [])
+  const loadCommissions = useCallback(
+    ({ page, limit }: { page: number; limit: number }) => commissionsApi.list({ page, limit }),
+    [],
+  )
+  const loadPayouts = useCallback(
+    ({ page, limit }: { page: number; limit: number }) => payoutsApi.list({ page, limit }),
+    [],
+  )
 
   const payoutActions = useCallback((_row: AdminDataRow, reload: () => void): ReactNode => (
     <AdminConfirmAction

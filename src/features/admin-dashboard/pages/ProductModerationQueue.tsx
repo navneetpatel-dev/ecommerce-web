@@ -7,7 +7,7 @@ import { LABELS } from '@/shared/constants/labels'
 export function ProductModerationQueue() {
   const queue = useProductModerationQueue()
 
-  if (!queue.isLoading && !queue.products?.length) {
+  if (!queue.isLoading && queue.pagination.total === 0) {
     return (
       <p className="py-8 text-center text-[0.9375rem] text-ink-muted">
         {LABELS.noPendingProductApprovals}
@@ -17,8 +17,9 @@ export function ProductModerationQueue() {
 
   return (
     <ProductModerationTable
-      products={queue.products ?? []}
+      products={queue.products}
       loading={queue.isLoading}
+      pagination={queue.pagination}
       onApprove={queue.onApprove}
       onReject={queue.onReject}
       isApproving={queue.isApproving}
