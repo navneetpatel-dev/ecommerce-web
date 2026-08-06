@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
+import { LABELS } from '@/shared/constants/labels'
 import { HelpPage } from '@/features/help/pages/HelpPage'
 
 export const metadata: Metadata = {
-  title: 'Help Centre',
+  title: LABELS.helpCenter,
   description:
     'Guides for orders, shipping, returns, payments, and your account on our marketplace.',
 }

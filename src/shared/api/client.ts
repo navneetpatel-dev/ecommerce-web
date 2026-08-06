@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/features/auth/store/auth.store';
+import { API } from '@/shared/constants/apiRoutes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 
@@ -67,7 +68,7 @@ async function refreshAccessTokenAndRetry(): Promise<boolean> {
   if (isRefreshing && refreshPromise) return refreshPromise;
 
   isRefreshing = true;
-  refreshPromise = fetch(`${BASE_URL}/api/auth/refresh`, {
+  refreshPromise = fetch(`${BASE_URL}${API.auth.refresh}`, {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },

@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { FormField } from '@/shared/components/FormField'
 import { Button } from '@/shared/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/shared/components/ui/card'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 
 interface ForgotPasswordInput {
   email: string
@@ -35,7 +37,7 @@ export function ForgotPasswordCard({ form, onSubmit, isPending, isSuccess }: For
         )}
       </CardContent>
       <CardFooter>
-        <Link href="/login" className="text-[0.9375rem] text-brand hover:underline">Back to login</Link>
+        <Link href={PATHS.login} className="text-[0.9375rem] text-brand hover:underline">{LABELS.backToLogin}</Link>
       </CardFooter>
     </Card>
   )

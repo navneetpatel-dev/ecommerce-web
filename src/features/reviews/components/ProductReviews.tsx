@@ -3,6 +3,7 @@ import { RatingStars } from '@/shared/components/RatingStars'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Button } from '@/shared/components/ui/button'
 import { ReviewListSkeleton } from '@/shared/components/Skeletons'
+import { REVIEW_STATUS } from '@/shared/constants/statuses'
 import type { Review } from '@/shared/api/types'
 
 interface ProductReviewsProps {
@@ -45,7 +46,7 @@ export function ProductReviews({
               </p>
               <RatingStars value={review.rating} size="sm" />
             </div>
-            {review.status === 'APPROVED' && (
+            {review.status === REVIEW_STATUS.APPROVED && (
               <span className="rounded-sm bg-success-subtle px-2 py-1 text-[0.8125rem] font-medium text-success">
                 Verified Purchase
               </span>

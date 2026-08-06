@@ -6,6 +6,7 @@ import { UserRound } from 'lucide-react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Button } from '@/shared/components/ui/button'
 import { Skeleton } from '@/shared/components/ui/skeleton'
+import { PATHS } from '@/shared/constants/paths'
 import { AccountLayout } from '../components/AccountLayout'
 import { OverviewSection } from '../components/sections/OverviewSection'
 import { PersonalInfoSection } from '../components/sections/PersonalInfoSection'
@@ -57,11 +58,11 @@ function AccountPageInner() {
             heading="Sign in to manage your account"
             message="Access profile settings, addresses, orders, and preferences after you log in."
             actionLabel="Sign in"
-            actionTo="/login?redirect=/profile"
+            actionTo={PATHS.loginWithRedirect(PATHS.profile)}
           />
           <div className="mt-4 flex justify-center">
             <Button variant="ghost" asChild>
-              <Link href="/register">Create an account</Link>
+              <Link href={PATHS.register}>Create an account</Link>
             </Button>
           </div>
         </div>

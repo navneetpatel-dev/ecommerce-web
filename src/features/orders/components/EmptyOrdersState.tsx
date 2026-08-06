@@ -1,5 +1,6 @@
 import { Package } from 'lucide-react'
 import { EmptyState } from '@/shared/components/EmptyState'
+import { PATHS } from '@/shared/constants/paths'
 
 export function EmptyOrdersState() {
   return (
@@ -15,7 +16,7 @@ export function EmptyOrdersState() {
           heading="No orders yet"
           message="When you place an order, it will appear here with per-seller tracking and updates."
           actionLabel="Start shopping"
-          actionTo="/products"
+          actionTo={PATHS.products}
         />
       </div>
     </div>

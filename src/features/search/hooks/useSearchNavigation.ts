@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useDebouncedValue } from '@/shared/hooks/use-debounce'
 import { useAutocomplete } from '../api/search.queries'
 import { navigate } from '@/shared/utils/navigate'
+import { PATHS } from '@/shared/constants/paths'
 
 export function useSearchNavigation() {
   const [term, setTerm] = useState('')
@@ -14,14 +15,14 @@ export function useSearchNavigation() {
   const handleSelect = (slug: string) => {
     setOpen(false)
     setTerm('')
-    navigate(router, `/products/${slug}`)
+    navigate(router, PATHS.product(slug))
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (term.trim()) {
       setOpen(false)
-      navigate(router, `/products?search=${encodeURIComponent(term.trim())}`)
+      navigate(router, `${PATHS.products}?search=${encodeURIComponent(term.trim())}`)
       setTerm('')
     }
   }

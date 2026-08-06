@@ -17,6 +17,7 @@ import { FormError } from '@/shared/components/FormError'
 import { cn } from '@/shared/utils/cn'
 import { formatInr } from '../utils/format'
 import { buildSubOrderTimeline } from '../utils/timeline'
+import { ORDER_STATUS } from '@/shared/constants/statuses'
 import { REASON_CODES, type ReturnReasonCode } from '../hooks/useSubOrderReturn'
 
 interface SubOrderCardProps {
@@ -49,14 +50,14 @@ export function SubOrderCard({
   onSubmitReturn,
 }: SubOrderCardProps) {
   const timeline = buildSubOrderTimeline(subOrder)
-  const showTimeline = subOrder.status !== 'PENDING'
+  const showTimeline = subOrder.status !== ORDER_STATUS.PENDING
   const shippingCost = Number(subOrder.shippingCost ?? 0)
   const taxAmount = Number(subOrder.taxAmount ?? 0)
   const sellerTotal = Number(subOrder.subtotal) + shippingCost + taxAmount
   const showBreakdown = shippingCost > 0 || taxAmount > 0
   const vendorName = subOrder.vendor?.businessName || 'Seller'
   const itemCount = subOrder.items?.length ?? 0
-  const canReturn = subOrder.status === 'DELIVERED'
+  const canReturn = subOrder.status === ORDER_STATUS.DELIVERED
 
   return (
     <section>

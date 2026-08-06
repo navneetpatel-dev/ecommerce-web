@@ -4,6 +4,7 @@ import { AdminDataPage } from './AdminDataPage'
 import { RequirePermission } from '@/shared/components/RequirePermission'
 import { VendorApprovalQueue } from './VendorApprovalQueue'
 import { useAdminVendorsPage } from '../hooks/useAdminVendorsPage'
+import { LABELS } from '@/shared/constants/labels'
 
 export function AdminVendorsPage() {
   const page = useAdminVendorsPage()
@@ -19,7 +20,7 @@ export function AdminVendorsPage() {
         />
         {page.showApprovalQueue && (
           <div>
-            <h2 className="mb-4 font-display text-xl font-semibold text-ink">Approval queue</h2>
+            <h2 className="mb-4 font-display text-xl font-semibold text-ink">{LABELS.approvalQueue}</h2>
             <VendorApprovalQueue />
           </div>
         )}

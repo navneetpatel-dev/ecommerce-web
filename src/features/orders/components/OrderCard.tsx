@@ -3,6 +3,7 @@ import type { Order } from '@/shared/api/types'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import { Card, CardHeader, CardContent } from '@/shared/components/ui/card'
+import { PATHS } from '@/shared/constants/paths'
 
 interface OrderCardProps {
   order: Order
@@ -27,7 +28,7 @@ export function OrderCard({ order }: OrderCardProps) {
                 <VendorStrip vendor={so.vendor} size="sm" />
                 <StatusBadge status={so.status} />
               </div>
-              <Link href={`/orders/${order.id}`} className="text-brand hover:underline text-[0.8125rem]">View details</Link>
+              <Link href={PATHS.order(order.id)} className="text-brand hover:underline text-[0.8125rem]">View details</Link>
             </div>
           ))}
         </div>

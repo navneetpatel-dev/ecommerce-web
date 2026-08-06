@@ -3,6 +3,7 @@ import { Badge } from '@/shared/components/ui/badge'
 import { Separator } from '@/shared/components/ui/separator'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { cn } from '@/shared/utils/cn'
+import { LABELS } from '@/shared/constants/labels'
 
 interface VariantSelectorProps {
   attributeGroups: Record<string, string[]>
@@ -97,7 +98,7 @@ export function VariantSelector({
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           {currentStock === 0 ? (
-            <Badge variant="destructive">Out of stock</Badge>
+            <Badge variant="destructive">{LABELS.outOfStock}</Badge>
           ) : currentStock <= 5 ? (
             <Badge variant="destructive">Only {currentStock} left</Badge>
           ) : (

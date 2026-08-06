@@ -9,6 +9,7 @@ import { useAddToCart } from '@/features/cart/api/cart.queries'
 import { trackRecentlyViewed } from '../utils/recently-viewed'
 import { cartLineQuantityMax, clampCartQuantity } from '@/shared/constants/cart'
 import { usePublicSettings } from '@/shared/hooks/usePublicSettings'
+import { PATHS } from '@/shared/constants/paths'
 import type { ProductDetail } from '@/shared/api/types'
 
 export function useProductDetail() {
@@ -87,7 +88,7 @@ export function useProductDetail() {
 
   const breadcrumbItems = product
     ? [
-        { label: 'Products', href: '/products' },
+        { label: 'Products', href: PATHS.products },
         ...(product.categoryId
           ? [
               {
@@ -96,7 +97,7 @@ export function useProductDetail() {
                     .category?.name ||
                   (product as ProductDetail & { categoryName?: string }).categoryName ||
                   'Category',
-                href: `/products?categoryId=${product.categoryId}`,
+                href: `${PATHS.products}?categoryId=${product.categoryId}`,
               },
             ]
           : []),

@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { X, Minus, Plus, Trash2, ShoppingBag } from 'lucide-react'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 import { motion, AnimatePresence } from 'motion/react'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { Button } from '@/shared/components/ui/button'
@@ -90,7 +92,7 @@ export function CartDrawer({
                   heading="Your cart is empty"
                   message="Add some items to get started."
                   icon={ShoppingBag}
-                  actionLabel="Continue shopping"
+                  actionLabel={LABELS.continueShopping}
                   onAction={onContinueShopping}
                 />
               ) : (
@@ -106,7 +108,7 @@ export function CartDrawer({
                         />
                         <div className="flex-1 min-w-0">
                           <Link
-                            href={`/products/${item.product.slug}`}
+                            href={PATHS.product(item.product.slug)}
                             onClick={onClose}
                             className="text-[0.9375rem] font-medium line-clamp-2 hover:text-brand"
                           >
@@ -205,12 +207,12 @@ export function CartDrawer({
                   </span>
                 </div>
                 <Button asChild size="lg" className="w-full">
-                  <Link href="/checkout" onClick={onClose}>
+                  <Link href={PATHS.checkout} onClick={onClose}>
                     Checkout
                   </Link>
                 </Button>
                 <Link
-                  href="/cart"
+                  href={PATHS.cart}
                   onClick={onClose}
                   className="block text-center text-[0.8125rem] text-brand hover:underline"
                 >

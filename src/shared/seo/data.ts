@@ -1,6 +1,8 @@
-import { SITE } from './constants'
 import type { BreadcrumbItem, ProductSeoData, CategorySeoData } from './types'
 import { canonicalUrl } from './canonical'
+import { API } from '@/shared/constants/apiRoutes'
+import { PATHS } from '@/shared/constants/paths'
+import { PRODUCT_STATUS } from '@/shared/constants/statuses'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 
@@ -49,14 +51,14 @@ interface BackendCategory {
 }
 
 export async function getProductBySlug(slug: string): Promise<ProductSeoData | null> {
-  const product = await fetchApi<BackendProduct>(`/api/products/slug/${slug}`)
+  const product = await fetchApi<BackendProduct>(API.products.bySlug(slug))
   if (!product) return null
 
-  const breadcrumbs: BreadcrumbItem[] = [{ name: 'Home', href: canonicalUrl('/') }]
+  const breadcrumbs: BreadcrumbItem[] = [{ name: 'Home', href: canonicalUrl(PATHS.home) }]
   if (product.category) {
     breadcrumbs.push({
       name: product.category.name,
-      href: canonicalUrl(`/categories/${product.category.slug}`),
+      href: canonicalUrl(PATHS.category(product.category.slug)),
     })
   }
   breadcrumbs.push({ name: product.name, href: '' })
@@ -84,13 +86,13 @@ export async function getProductBySlug(slug: string): Promise<ProductSeoData | n
 }
 
 export async function getCategories(): Promise<CategorySeoData[]> {
-  const categories = await fetchApi<BackendCategory[]>(`/api/categories`)
+  const categories = await fetchApi<BackendCategory[]>(API.categories.list)
   if (!categories) return []
   return categories.map((cat) => ({
     name: cat.name,
     slug: cat.slug,
     breadcrumbs: [
-      { name: 'Home', href: canonicalUrl('/') },
+      { name: 'Home', href: canonicalUrl(PATHS.home) },
       { name: cat.name, href: '' },
     ],
   }))
@@ -98,14 +100,14 @@ export async function getCategories(): Promise<CategorySeoData[]> {
 
 export async function getLiveProductSlugs(): Promise<string[]> {
   const data = await fetchApi<{ items: BackendProduct[] }>(
-    `/api/products?status=LIVE&limit=1000`
+    API.products.list(`status=${PRODUCT_STATUS.LIVE}&limit=1000`)
   )
   if (!data?.items) return []
   return data.items.map((p) => p.slug)
 }
 
 export async function getCategorySlugs(): Promise<{ name: string; slug: string }[]> {
-  const categories = await fetchApi<BackendCategory[]>(`/api/categories`)
+  const categories = await fetchApi<BackendCategory[]>(API.categories.list)
   if (!categories) return []
 
   const result: { name: string; slug: string }[] = []

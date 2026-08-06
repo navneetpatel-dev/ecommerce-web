@@ -15,6 +15,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/components/ui
 import { Heart, Truck, RotateCcw } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 import { cartLineQuantityMax } from '@/shared/constants/cart'
 import type { RefObject } from 'react'
 
@@ -102,7 +104,7 @@ export function ProductDetailContent({
   const addToCartLabel = needsOptionSelection
     ? 'Select options'
     : displayStock === 0
-      ? 'Out of stock'
+      ? LABELS.outOfStock
       : 'Add to Cart'
 
   const addToCartHint = needsOptionSelection
@@ -203,7 +205,7 @@ export function ProductDetailContent({
               </Button>
               <ShareButtonContainer
                 title={product.name}
-                url={`/products/${product.slug ?? product.id}`}
+                url={PATHS.product(product.slug ?? product.id)}
               />
             </div>
 
@@ -245,7 +247,7 @@ export function ProductDetailContent({
             <div className="max-w-[65ch] text-[0.9375rem] text-ink-muted space-y-2">
               <p>SKU: {product?.variants?.[0]?.sku ?? 'Not available'}</p>
               <p>Category: {product.category?.name ?? product.categoryName ?? 'General'}</p>
-              <p>Stock: {displayStock > 0 ? `${displayStock} available` : 'Out of stock'}</p>
+              <p>Stock: {displayStock > 0 ? `${displayStock} available` : LABELS.outOfStock}</p>
             </div>
           </TabsContent>
           <TabsContent value="reviews" className="py-6" id="reviews">

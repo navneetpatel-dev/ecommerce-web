@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { LoginRequiredDialog } from '@/shared/components/LoginRequiredDialog'
 import { useAuthPromptStore } from '@/shared/stores/auth-prompt.store'
 import { navigate } from '@/shared/utils/navigate'
+import { PATHS } from '@/shared/constants/paths'
 
 export function LoginRequiredDialogContainer() {
   const router = useRouter()
@@ -15,8 +16,8 @@ export function LoginRequiredDialogContainer() {
 
   const goToLogin = () => {
     closePrompt()
-    const next = redirectTo && redirectTo !== '/login' ? redirectTo : '/'
-    navigate(router, `/login?redirect=${encodeURIComponent(next)}`)
+    const next = redirectTo && redirectTo !== PATHS.login ? redirectTo : PATHS.home
+    navigate(router, PATHS.loginWithRedirect(next))
   }
 
   return (

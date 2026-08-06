@@ -5,6 +5,7 @@ import { authApi } from './auth.api'
 import { cartApi } from '@/features/cart/api/cart.api'
 import { clearClientGuestSessionCookie } from '@/features/cart/utils/guest-session'
 import { navigate, navigateReplace } from '@/shared/utils/navigate'
+import { PATHS } from '@/shared/constants/paths'
 import type { LoginInput, RegisterInput } from '../schemas/auth.schema'
 import type { RoleName } from '@/shared/api/types'
 
@@ -96,7 +97,7 @@ export function useLogout() {
       }
       clearClientGuestSessionCookie()
       queryClient.clear()
-      navigateReplace(router, '/login')
+      navigateReplace(router, PATHS.login)
     },
     onError: () => {
       clearSession()
@@ -106,7 +107,7 @@ export function useLogout() {
       }
       clearClientGuestSessionCookie()
       queryClient.clear()
-      navigateReplace(router, '/login')
+      navigateReplace(router, PATHS.login)
     },
   })
 }
@@ -122,7 +123,7 @@ export function useResetPassword() {
   return useMutation({
     mutationFn: (input: { token: string; newPassword: string }) =>
       authApi.resetPassword(input.token, input.newPassword),
-    onSuccess: () => navigate(router, '/login'),
+    onSuccess: () => navigate(router, PATHS.login),
   })
 }
 

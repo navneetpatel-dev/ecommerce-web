@@ -1,5 +1,6 @@
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Heart } from 'lucide-react'
+import { PATHS } from '@/shared/constants/paths'
 
 export function EmptyWishlistState() {
   return (
@@ -7,7 +8,7 @@ export function EmptyWishlistState() {
       message="Your wishlist is empty"
       icon={Heart}
       actionLabel="Browse products"
-      actionTo="/"
+      actionTo={PATHS.home}
     />
   )
 }

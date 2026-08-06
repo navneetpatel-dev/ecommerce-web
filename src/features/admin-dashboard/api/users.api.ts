@@ -1,4 +1,6 @@
 import { apiClient } from '@/shared/api/client'
+import { API } from '@/shared/constants/apiRoutes'
+import type { UserStatus } from '@/shared/constants/statuses'
 import type { CurrentUser } from '@/shared/api/types'
 
 export const adminUsersApi = {
@@ -8,7 +10,7 @@ export const adminUsersApi = {
     if (params?.status) q.set('status', params.status)
     if (params?.roleId) q.set('roleId', params.roleId)
     if (params?.search) q.set('search', params.search)
-    const res = await apiClient.getWithResponse<CurrentUser[]>(`/api/users?${q}`)
+    const res = await apiClient.getWithResponse<CurrentUser[]>(API.users.list(q.toString()))
     const pagination = res.meta?.pagination as { total?: number; totalPages?: number } | undefined
     return {
       items: Array.isArray(res.data) ? res.data : [],
@@ -16,8 +18,8 @@ export const adminUsersApi = {
       totalPages: pagination?.totalPages ?? 1,
     }
   },
-  getById: (id: string) => apiClient.get<CurrentUser>(`/api/users/${id}`),
-  updateStatus: (id: string, status: 'ACTIVE' | 'BLOCKED') =>
-    apiClient.patch<{ message: string }>(`/api/users/${id}/status`, { status }),
-  delete: (id: string) => apiClient.delete(`/api/users/${id}`),
+  getById: (id: string) => apiClient.get<CurrentUser>(API.users.detail(id)),
+  updateStatus: (id: string, status: UserStatus) =>
+    apiClient.patch<{ message: string }>(API.users.status(id), { status }),
+  delete: (id: string) => apiClient.delete(API.users.detail(id)),
 }

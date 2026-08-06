@@ -13,6 +13,7 @@ import { EmptyState } from '@/shared/components/EmptyState'
 import { useCategories } from '@/features/categories'
 import { SORT_OPTIONS, useProductListing } from '../hooks/useProductListing'
 import { cn } from '@/shared/utils/cn'
+import { PATHS } from '@/shared/constants/paths'
 import type { ProductFilters } from '../api/products.api'
 
 function getListingEmptyState(
@@ -50,7 +51,7 @@ function getListingEmptyState(
       heading: 'No results',
       message: `Nothing matched “${filters.search}”. Try another term or browse the full collection.`,
       actionLabel: 'Browse all products',
-      actionTo: '/products',
+      actionTo: PATHS.products,
     }
   }
 
@@ -63,7 +64,7 @@ function getListingEmptyState(
         ? `“${categoryName}” doesn’t have any products right now. Browse the full collection instead.`
         : 'This category doesn’t have any products right now. Browse the full collection instead.',
       actionLabel: 'Browse all products',
-      actionTo: '/products',
+      actionTo: PATHS.products,
     }
   }
 
@@ -74,7 +75,7 @@ function getListingEmptyState(
       heading: 'No products from this vendor',
       message: 'This vendor has nothing listed right now. Browse the full collection instead.',
       actionLabel: 'Browse all products',
-      actionTo: '/products',
+      actionTo: PATHS.products,
     }
   }
 
@@ -84,7 +85,7 @@ function getListingEmptyState(
     heading: 'No products yet',
     message: 'The collection is empty for now. Check back soon for new pieces.',
     actionLabel: 'Go to home',
-    actionTo: '/',
+    actionTo: PATHS.home,
   }
 }
 

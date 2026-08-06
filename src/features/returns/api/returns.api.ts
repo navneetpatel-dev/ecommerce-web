@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api/client'
+import { API } from '@/shared/constants/apiRoutes'
 import type { ReturnRequest } from '@/shared/api/types'
 
 export type CreateReturnBody = {
@@ -8,9 +9,9 @@ export type CreateReturnBody = {
 }
 
 export const returnsApi = {
-  list: () => apiClient.get<ReturnRequest[]>('/api/returns'),
-  listAdmin: () => apiClient.get<ReturnRequest[]>('/api/returns/admin'),
-  create: (body: CreateReturnBody) => apiClient.post<ReturnRequest>('/api/returns', body),
+  list: () => apiClient.get<ReturnRequest[]>(API.returns.list),
+  listAdmin: () => apiClient.get<ReturnRequest[]>(API.returns.admin),
+  create: (body: CreateReturnBody) => apiClient.post<ReturnRequest>(API.returns.create, body),
   transition: (id: string, status: ReturnRequest['status']) =>
-    apiClient.patch<{ message: string }>(`/api/returns/${id}/transition`, { status }),
+    apiClient.patch<{ message: string }>(API.returns.transition(id), { status }),
 }

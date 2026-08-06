@@ -4,17 +4,19 @@ import { RotateCcw } from 'lucide-react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { Badge } from '@/shared/components/ui/badge'
+import { PATHS } from '@/shared/constants/paths'
+import { RETURN_STATUS } from '@/shared/constants/statuses'
 import { formatOrderDate, formatInr } from '@/features/orders/utils/format'
 import { useMyReturns } from '../api/returns.queries'
 
 const STATUS_LABEL: Record<string, string> = {
-  REQUESTED: 'Requested',
-  APPROVED: 'Approved',
-  REJECTED: 'Rejected',
-  PICKUP_SCHEDULED: 'Pickup scheduled',
-  RECEIVED: 'Received',
-  REFUNDED: 'Refunded',
-  CLOSED: 'Closed',
+  [RETURN_STATUS.REQUESTED]: 'Requested',
+  [RETURN_STATUS.APPROVED]: 'Approved',
+  [RETURN_STATUS.REJECTED]: 'Rejected',
+  [RETURN_STATUS.PICKUP_SCHEDULED]: 'Pickup scheduled',
+  [RETURN_STATUS.RECEIVED]: 'Received',
+  [RETURN_STATUS.REFUNDED]: 'Refunded',
+  [RETURN_STATUS.CLOSED]: 'Closed',
 }
 
 export function MyReturnsPage() {
@@ -47,7 +49,7 @@ export function MyReturnsPage() {
             heading="No returns yet"
             message="When you request a return on a delivered order, it will show up here."
             actionLabel="View orders"
-            actionTo="/orders"
+            actionTo={PATHS.orders}
             className="py-14"
           />
         </div>

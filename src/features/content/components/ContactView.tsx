@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { HelpContactForm } from '@/features/help/components/HelpContactForm'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 
 interface ContactViewProps {
   supportEmail: string | null
@@ -33,8 +35,8 @@ export function ContactView({ supportEmail, supportHours, isLoading }: ContactVi
         )}
         <p className="text-[0.8125rem] text-ink-muted">
           Prefer self-serve? Visit the{' '}
-          <Link href="/help" className="text-brand underline-offset-2 hover:underline">
-            Help Centre
+          <Link href={PATHS.help} className="text-brand underline-offset-2 hover:underline">
+            {LABELS.helpCenter}
           </Link>
           .
         </p>

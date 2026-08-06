@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api/client'
+import { API } from '@/shared/constants/apiRoutes'
 import type { Address, ShippingRate, CheckoutQuote } from '@/shared/api/types'
 import { usersApi } from '@/features/users/api/users.api'
 
@@ -26,22 +27,22 @@ export const checkoutApi = {
   getShippingRates: (pincode: string, weight: number, method?: string) => {
     const params = new URLSearchParams({ pincode, weight: String(weight) })
     if (method) params.set('method', method)
-    return apiClient.get<ShippingRate[]>(`/api/shipping/rates?${params.toString()}`)
+    return apiClient.get<ShippingRate[]>(`${API.shipping.rates}?${params.toString()}`)
   },
   getCheckoutQuote: (body: {
     addressId: string
     shippingMethodByVendor: Record<string, string>
     couponCode?: string | null
-  }) => apiClient.post<CheckoutQuote>('/api/checkout/quote', body),
+  }) => apiClient.post<CheckoutQuote>(API.checkout.quote, body),
   placeOrder: (body: {
     addressId: string
     paymentMethod: string
     couponCode?: string | null
     shippingMethodByVendor: Record<string, string>
-  }) => apiClient.post<PlaceOrderResponse>('/api/checkout', body),
+  }) => apiClient.post<PlaceOrderResponse>(API.checkout.create, body),
   /** UX confirmation only — webhook is the source of truth for PAID. */
   verifyPayment: (payload: VerifyPaymentPayload) =>
-    apiClient.post<{ verified: boolean }>('/api/checkout/verify', payload),
+    apiClient.post<{ verified: boolean }>(API.checkout.verify, payload),
   cancelCheckout: (payload: CancelCheckoutPayload) =>
-    apiClient.post<{ restored: boolean; orderId: string }>('/api/checkout/cancel', payload),
+    apiClient.post<{ restored: boolean; orderId: string }>(API.checkout.cancel, payload),
 }

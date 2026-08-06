@@ -1,3 +1,4 @@
+import { ORDER_STATUS } from '@/shared/constants/statuses'
 import type { SubOrder } from '@/shared/api/types'
 
 type TimelineStatus = 'completed' | 'current' | 'upcoming'
@@ -8,15 +9,20 @@ export interface OrderTimelineStep {
   status: TimelineStatus
 }
 
-const FLOW = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED'] as const
+const FLOW = [
+  ORDER_STATUS.PENDING,
+  ORDER_STATUS.CONFIRMED,
+  ORDER_STATUS.SHIPPED,
+  ORDER_STATUS.DELIVERED,
+] as const
 
-const LABELS: Record<string, string> = {
-  PENDING: 'Order placed',
-  CONFIRMED: 'Confirmed',
-  SHIPPED: 'Shipped',
-  DELIVERED: 'Delivered',
-  CANCELLED: 'Cancelled',
-  RETURNED: 'Returned',
+const STEP_LABELS: Record<string, string> = {
+  [ORDER_STATUS.PENDING]: 'Order placed',
+  [ORDER_STATUS.CONFIRMED]: 'Confirmed',
+  [ORDER_STATUS.SHIPPED]: 'Shipped',
+  [ORDER_STATUS.DELIVERED]: 'Delivered',
+  [ORDER_STATUS.CANCELLED]: 'Cancelled',
+  [ORDER_STATUS.RETURNED]: 'Returned',
 }
 
 function formatShortDate(value: string) {
@@ -29,10 +35,10 @@ function formatShortDate(value: string) {
 export function buildSubOrderTimeline(subOrder: SubOrder): OrderTimelineStep[] {
   const status = subOrder.status
 
-  if (status === 'CANCELLED' || status === 'RETURNED') {
+  if (status === ORDER_STATUS.CANCELLED || status === ORDER_STATUS.RETURNED) {
     return [
-      { label: LABELS.PENDING, status: 'completed' },
-      { label: LABELS[status] ?? status, status: 'current' },
+      { label: STEP_LABELS[ORDER_STATUS.PENDING], status: 'completed' },
+      { label: STEP_LABELS[status] ?? status, status: 'current' },
     ]
   }
 
@@ -45,15 +51,15 @@ export function buildSubOrderTimeline(subOrder: SubOrder): OrderTimelineStep[] {
     else if (i === currentIdx) stepStatus = 'current'
 
     let timestamp: string | undefined
-    if (key === 'SHIPPED' && subOrder.shipment?.shippedAt) {
+    if (key === ORDER_STATUS.SHIPPED && subOrder.shipment?.shippedAt) {
       timestamp = formatShortDate(subOrder.shipment.shippedAt)
     }
-    if (key === 'DELIVERED' && subOrder.shipment?.deliveredAt) {
+    if (key === ORDER_STATUS.DELIVERED && subOrder.shipment?.deliveredAt) {
       timestamp = formatShortDate(subOrder.shipment.deliveredAt)
     }
 
     return {
-      label: LABELS[key] ?? key,
+      label: STEP_LABELS[key] ?? key,
       status: stepStatus,
       timestamp,
     }

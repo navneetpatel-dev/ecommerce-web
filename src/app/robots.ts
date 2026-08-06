@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { SITE } from '@/shared/seo/constants'
+import { PATHS } from '@/shared/constants/paths'
 
 export default function robots(): MetadataRoute.Robots {
   const isProduction = process.env.NODE_ENV === 'production'
@@ -14,16 +15,16 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: PATHS.home,
         disallow: [
-          '/login',
-          '/register',
-          '/forgot-password',
-          '/reset-password',
-          '/checkout',
-          '/profile',
-          '/orders',
-          '/wishlist',
+          PATHS.login,
+          PATHS.register,
+          PATHS.forgotPassword,
+          PATHS.resetPassword,
+          PATHS.checkout,
+          PATHS.profile,
+          PATHS.orders,
+          PATHS.wishlist,
           '/admin/',
           '/vendor/',
           '/search?',

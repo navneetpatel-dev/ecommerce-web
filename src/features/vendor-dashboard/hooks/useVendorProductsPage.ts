@@ -8,6 +8,7 @@ import { categoriesApi } from '@/features/categories/api/categories.api'
 import { productsApi } from '@/features/products/api/products.api'
 import { usePermissions } from '@/shared/hooks/usePermissions'
 import { PERMISSIONS } from '@/shared/constants/permissions'
+import { PRODUCT_STATUS } from '@/shared/constants/statuses'
 import type { ProductListItem } from '@/shared/api/types'
 
 type RichProductItem = ProductListItem & {
@@ -82,7 +83,7 @@ export function useVendorProductsPage() {
         stock: product.stock ?? product.variants?.[0]?.stock ?? 0,
         lowStockAt: product.variants?.[0]?.lowStockAt ?? 5,
         basePrice: product.basePrice,
-        status: product.status ?? 'LIVE',
+        status: product.status ?? PRODUCT_STATUS.LIVE,
       })),
     [table.data?.items],
   )

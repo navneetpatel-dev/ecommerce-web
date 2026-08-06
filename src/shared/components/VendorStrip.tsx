@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Star } from 'lucide-react'
 import type { VendorInfo } from '@/shared/api/types'
+import { PATHS } from '@/shared/constants/paths'
 import { cn } from '@/shared/utils/cn'
 
 interface VendorStripProps {
@@ -18,7 +19,7 @@ export function VendorStrip({ vendor, size = 'sm', rating, className }: VendorSt
 
   return (
     <Link
-      href={`/products?vendorId=${vendor.id}`}
+      href={`${PATHS.products}?vendorId=${vendor.id}`}
       className={cn(
         'inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-0.5 text-brand hover:bg-brand-subtle transition-colors',
         size === 'md' && 'px-3 py-1',

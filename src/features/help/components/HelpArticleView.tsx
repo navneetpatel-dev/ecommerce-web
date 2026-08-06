@@ -6,6 +6,8 @@ import { motion } from 'motion/react'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { LifeBuoy } from 'lucide-react'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 import {
   getAllArticles,
   getArticleBySlug,
@@ -27,8 +29,8 @@ export function HelpArticleView({ slug }: { slug: string }) {
             icon={LifeBuoy}
             heading="Article not found"
             message="That help article doesn’t exist or may have moved."
-            actionLabel="Back to Help Centre"
-            actionTo="/help"
+            actionLabel={`Back to ${LABELS.helpCenter}`}
+            actionTo={PATHS.help}
           />
         </div>
       </div>
@@ -57,11 +59,11 @@ export function HelpArticleView({ slug }: { slug: string }) {
           className="max-w-2xl"
         >
           <Link
-            href="/help"
+            href={PATHS.help}
             className="mb-4 inline-flex items-center gap-1.5 text-[0.875rem] text-ink-muted transition-colors hover:text-brand"
           >
             <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
-            Help Centre
+            {LABELS.helpCenter}
           </Link>
           {category ? <TextEyebrow brand>{category.title}</TextEyebrow> : null}
           <h1
@@ -103,7 +105,7 @@ export function HelpArticleView({ slug }: { slug: string }) {
                 item ? (
                   <li key={item.slug}>
                     <Link
-                      href={`/help/${item.slug}`}
+                      href={`${PATHS.help}/${item.slug}`}
                       className="flex items-center justify-between gap-3 py-3 text-[0.875rem] font-medium text-ink hover:text-brand"
                     >
                       {item.title}
@@ -118,7 +120,7 @@ export function HelpArticleView({ slug }: { slug: string }) {
 
         <p className="mt-10 max-w-2xl text-[0.875rem] text-ink-muted">
           Still need help?{' '}
-          <Link href="/help#contact" className="font-medium text-brand hover:text-brand-hover">
+          <Link href={`${PATHS.help}#contact`} className="font-medium text-brand hover:text-brand-hover">
             Contact support
           </Link>
           .

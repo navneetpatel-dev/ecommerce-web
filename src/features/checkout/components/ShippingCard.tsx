@@ -1,5 +1,7 @@
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { cn } from '@/shared/utils/cn'
+import { SHIPPING_METHOD } from '@/shared/constants/statuses'
+import type { ShippingMethod } from '@/shared/constants/statuses'
 import type { ShippingRate } from '@/shared/api/types'
 
 interface ShippingCardProps {
@@ -8,7 +10,7 @@ interface ShippingCardProps {
   isLoading: boolean
   isError: boolean
   selected?: string
-  onSelect: (method: 'STANDARD' | 'EXPRESS') => void
+  onSelect: (method: ShippingMethod) => void
 }
 
 function formatDays(days: number) {
@@ -41,7 +43,7 @@ export function ShippingCard({
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {options.map((option) => {
           const isSelected = selected === option.method
-          const label = option.method === 'EXPRESS' ? 'Express' : 'Standard'
+          const label = option.method === SHIPPING_METHOD.EXPRESS ? 'Express' : 'Standard'
           return (
             <button
               key={option.method}

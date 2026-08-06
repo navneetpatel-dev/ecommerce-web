@@ -6,6 +6,7 @@ import { useOrderDetailPage } from '../hooks/useOrderDetailPage'
 import { OrderDetailContent } from '../components/OrderDetailContent'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
+import { PATHS } from '@/shared/constants/paths'
 
 export function OrderDetailPage() {
   const detail = useOrderDetailPage()
@@ -40,11 +41,11 @@ export function OrderDetailPage() {
             heading="Order not found"
             message="This order may have been removed, or you may not have access to view it."
             actionLabel="Back to orders"
-            actionTo="/orders"
+            actionTo={PATHS.orders}
           />
           <p className="mt-4 text-center text-[0.8125rem] text-ink-faint">
             Or{' '}
-            <Link href="/products" className="text-brand underline-offset-2 hover:underline">
+            <Link href={PATHS.products} className="text-brand underline-offset-2 hover:underline">
               continue shopping
             </Link>
           </p>

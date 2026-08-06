@@ -5,6 +5,7 @@ import { Star } from 'lucide-react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { Badge } from '@/shared/components/ui/badge'
+import { PATHS } from '@/shared/constants/paths'
 import { formatOrderDate } from '@/features/orders/utils/format'
 import { useMyReviews } from '../api/reviews.queries'
 
@@ -37,7 +38,7 @@ export function MyReviewsPage() {
             heading="No reviews yet"
             message="After an order is delivered, you can leave a review from the order page."
             actionLabel="View orders"
-            actionTo="/orders"
+            actionTo={PATHS.orders}
             className="py-14"
           />
         </div>
@@ -49,7 +50,7 @@ export function MyReviewsPage() {
                 <div className="min-w-0">
                   {review.product ? (
                     <Link
-                      href={`/products/${review.product.slug}`}
+                      href={PATHS.product(review.product.slug)}
                       className="font-medium text-ink hover:text-brand"
                     >
                       {review.product.name}

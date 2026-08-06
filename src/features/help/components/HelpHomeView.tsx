@@ -27,6 +27,8 @@ import {
   type HelpCategory,
 } from '../data/help-content'
 import { HelpContactForm } from './HelpContactForm'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 
 const ICON_MAP: Record<string, LucideIcon> = {
   BookOpen,
@@ -69,7 +71,7 @@ export function HelpHomeView() {
             className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
             style={{ fontSize: 'var(--text-display-sm)' }}
           >
-            Help Centre
+            {LABELS.helpCenter}
           </h1>
           <p className="mt-2 text-[0.9375rem] text-ink-muted">
             Guides for orders, shipping, returns, payments, and your account — written for real
@@ -108,7 +110,7 @@ export function HelpHomeView() {
                 {results.map((article) => (
                   <li key={article.slug}>
                     <Link
-                      href={`/help/${article.slug}`}
+                      href={`${PATHS.help}/${article.slug}`}
                       className="flex items-start justify-between gap-4 px-5 py-4 transition-colors hover:bg-paper"
                     >
                       <div className="min-w-0">
@@ -192,7 +194,7 @@ function CategoryCard({ category }: { category: HelpCategory }) {
         {category.articles.map((article) => (
           <li key={article.slug}>
             <Link
-              href={`/help/${article.slug}`}
+              href={`${PATHS.help}/${article.slug}`}
               className="flex items-center justify-between gap-3 py-3 text-[0.875rem] text-ink transition-colors hover:text-brand"
             >
               <span className="min-w-0 truncate">{article.title}</span>

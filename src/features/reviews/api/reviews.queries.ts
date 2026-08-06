@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import { reviewsApi } from './reviews.api'
 import { navigate } from '@/shared/utils/navigate'
 import { useAuthStore } from '@/features/auth/store/auth.store'
+import { PATHS } from '@/shared/constants/paths'
 
 export function useProductReviews(productId: string) {
   return useQuery({
@@ -27,7 +28,7 @@ export function useSubmitReview() {
     mutationFn: (input: { orderItemId: string; productId: string; rating: number; title?: string; body: string }) =>
       reviewsApi.submit(input),
     onSuccess: () => {
-      navigate(router, '/orders')
+      navigate(router, PATHS.orders)
     },
   })
 }

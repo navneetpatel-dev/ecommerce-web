@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { motion } from 'motion/react'
 import { ArrowRight, ChevronRight } from 'lucide-react'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 import type { Order } from '@/shared/api/types'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { PaginationContainer } from '@/shared/containers/PaginationContainer'
@@ -53,10 +55,10 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
             </p>
           </div>
           <Link
-            href="/products"
+            href={PATHS.products}
             className="inline-flex items-center gap-2 text-[0.875rem] font-medium text-brand transition-colors hover:text-brand-hover"
           >
-            Continue shopping
+            {LABELS.continueShopping}
             <ArrowRight size={15} />
           </Link>
         </motion.header>
@@ -98,7 +100,7 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
                 }}
               >
                 <Link
-                  href={`/orders/${order.id}`}
+                  href={PATHS.order(order.id)}
                   className="group grid grid-cols-1 gap-3 py-4 transition-colors hover:bg-brand-subtle/40 md:grid-cols-[7rem_8rem_minmax(0,1fr)_7rem_minmax(9rem,auto)_1.5rem] md:items-center md:gap-4"
                 >
                   <div className="flex items-center justify-between gap-2 md:block">

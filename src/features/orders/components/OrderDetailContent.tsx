@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 import { motion } from 'motion/react'
 import type { Order } from '@/shared/api/types'
 import { SubOrderCardContainer } from '../containers/SubOrderCardContainer'
@@ -36,7 +38,7 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
           transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
         >
           <Link
-            href="/orders"
+            href={PATHS.orders}
             className="mb-4 inline-flex items-center gap-1.5 text-[0.875rem] text-ink-muted transition-colors hover:text-brand"
           >
             <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
@@ -93,10 +95,10 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
 
             <div className="mt-6 border-t border-line pt-4">
               <Link
-                href="/products"
+                href={PATHS.products}
                 className="inline-flex items-center gap-2 text-[0.875rem] font-medium text-brand transition-colors hover:text-brand-hover"
               >
-                Continue shopping
+                {LABELS.continueShopping}
                 <ArrowRight size={15} />
               </Link>
             </div>
@@ -158,7 +160,7 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
 
               <div className="mt-5 border-t border-line pt-5">
                 <Button className="w-full" asChild>
-                  <Link href="/orders">All orders</Link>
+                  <Link href={PATHS.orders}>{LABELS.allOrders}</Link>
                 </Button>
               </div>
             </div>

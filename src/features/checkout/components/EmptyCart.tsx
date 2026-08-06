@@ -1,5 +1,7 @@
 import { ShoppingBag } from 'lucide-react'
 import { EmptyState } from '@/shared/components/EmptyState'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 
 export function EmptyCart() {
   return (
@@ -13,8 +15,8 @@ export function EmptyCart() {
           icon={ShoppingBag}
           heading="Nothing to check out"
           message="Your bag is empty — add a few pieces, then return here to complete your order."
-          actionLabel="Continue shopping"
-          actionTo="/products"
+          actionLabel={LABELS.continueShopping}
+          actionTo={PATHS.products}
         />
       </div>
     </div>

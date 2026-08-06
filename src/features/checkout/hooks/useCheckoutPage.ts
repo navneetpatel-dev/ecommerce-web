@@ -7,6 +7,7 @@ import { useCheckoutStore } from '../store/checkout.store'
 import { useAddresses, useCreateAddress } from '../api/checkout.queries'
 import { usePlaceOrderWithRazorpay } from './usePlaceOrder'
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
+import { PATHS } from '@/shared/constants/paths'
 import type { Address } from '@/shared/api/types'
 
 export function useCheckoutPage() {
@@ -97,7 +98,7 @@ export function useCheckoutPage() {
         !requireAuth({
           title: 'Complete your order',
           message: 'Sign in to place your order and track it in your account.',
-          redirectTo: '/checkout',
+          redirectTo: PATHS.checkout,
         })
       ) {
         return
@@ -109,7 +110,7 @@ export function useCheckoutPage() {
         !requireAuth({
           title: 'Add a shipping address',
           message: 'Sign in to save addresses and continue checkout.',
-          redirectTo: '/checkout',
+          redirectTo: PATHS.checkout,
         })
       ) {
         return Promise.reject(new Error('Sign in required'))

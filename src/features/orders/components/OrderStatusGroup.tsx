@@ -1,5 +1,6 @@
 import { cn } from '@/shared/utils/cn'
 import { StatusBadge } from '@/shared/components/StatusBadge'
+import { ORDER_STATUS, PAYMENT_STATUS } from '@/shared/constants/statuses'
 
 type Density = 'compact' | 'comfortable'
 
@@ -37,18 +38,18 @@ type Tone = 'neutral' | 'progress' | 'positive' | 'caution' | 'danger'
 
 function orderTone(status: string): Tone {
   const key = status.toUpperCase()
-  if (key === 'DELIVERED' || key === 'CONFIRMED') return 'positive'
-  if (key === 'SHIPPED') return 'progress'
-  if (key === 'PENDING') return 'caution'
-  if (key === 'CANCELLED' || key === 'RETURNED') return 'danger'
+  if (key === ORDER_STATUS.DELIVERED || key === ORDER_STATUS.CONFIRMED) return 'positive'
+  if (key === ORDER_STATUS.SHIPPED) return 'progress'
+  if (key === ORDER_STATUS.PENDING) return 'caution'
+  if (key === ORDER_STATUS.CANCELLED || key === ORDER_STATUS.RETURNED) return 'danger'
   return 'neutral'
 }
 
 function paymentTone(status: string): Tone {
   const key = status.toUpperCase()
-  if (key === 'PAID') return 'positive'
-  if (key === 'PENDING') return 'caution'
-  if (key === 'FAILED' || key === 'REFUNDED') return 'danger'
+  if (key === PAYMENT_STATUS.PAID) return 'positive'
+  if (key === PAYMENT_STATUS.PENDING) return 'caution'
+  if (key === PAYMENT_STATUS.FAILED || key === PAYMENT_STATUS.REFUNDED) return 'danger'
   return 'neutral'
 }
 

@@ -3,6 +3,8 @@ import { motion } from 'motion/react'
 import { Button } from '@/shared/components/ui/button'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { SuccessCheckmarkContainer } from '@/shared/containers/SuccessCheckmarkContainer'
+import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
 import { shortOrderId } from '../utils/format'
 
 interface OrderConfirmationProps {
@@ -48,10 +50,10 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
         </p>
         <div className="mt-8 flex flex-col-reverse justify-center gap-3 sm:flex-row">
           <Button variant="secondary" asChild>
-            <Link href="/products">Continue shopping</Link>
+            <Link href={PATHS.products}>{LABELS.continueShopping}</Link>
           </Button>
           <Button asChild>
-            <Link href={orderId ? `/orders/${orderId}` : '/orders'}>View order</Link>
+            <Link href={orderId ? PATHS.order(orderId) : PATHS.orders}>View order</Link>
           </Button>
         </div>
         </div>

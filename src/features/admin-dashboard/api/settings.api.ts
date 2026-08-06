@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api/client'
+import { API } from '@/shared/constants/apiRoutes'
 
 export type PublicPlatformSettings = {
   freeShippingThreshold: number
@@ -14,7 +15,7 @@ export type AdminPlatformSettings = PublicPlatformSettings & {
 }
 
 export const settingsApi = {
-  getPublic: () => apiClient.get<PublicPlatformSettings>('/api/settings/public'),
-  get: () => apiClient.get<AdminPlatformSettings>('/api/settings'),
-  update: (body: AdminPlatformSettings) => apiClient.put<AdminPlatformSettings>('/api/settings', body),
+  getPublic: () => apiClient.get<PublicPlatformSettings>(API.settings.public),
+  get: () => apiClient.get<AdminPlatformSettings>(API.settings.root),
+  update: (body: AdminPlatformSettings) => apiClient.put<AdminPlatformSettings>(API.settings.root, body),
 }

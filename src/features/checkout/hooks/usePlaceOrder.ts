@@ -6,6 +6,7 @@ import { usePlaceOrder, useCheckoutQuote } from '../api/checkout.queries'
 import { checkoutApi } from '../api/checkout.api'
 import { loadRazorpayScript } from '../utils/loadRazorpayScript'
 import { navigate } from '@/shared/utils/navigate'
+import { PATHS } from '@/shared/constants/paths'
 import type { StatusDialogVariant } from '@/shared/components/StatusDialog'
 
 export type PaymentNotice = {
@@ -105,7 +106,7 @@ export function usePlaceOrderWithRazorpay() {
                 razorpay_signature: response.razorpay_signature,
               })
               clearCartCache()
-              navigate(router, `/orders/${result.orderId}/confirmation`)
+              navigate(router, PATHS.orderConfirmation(result.orderId))
             } catch {
               showNotice({
                 variant: 'warning',
@@ -143,7 +144,7 @@ export function usePlaceOrderWithRazorpay() {
       }
 
       clearCartCache()
-      navigate(router, `/orders/${result.orderId}/confirmation`)
+      navigate(router, PATHS.orderConfirmation(result.orderId))
     } catch (err) {
       const description =
         err && typeof err === 'object' && 'message' in err

@@ -1,75 +1,77 @@
 import { PERMISSIONS, type PermissionKey } from '@/shared/constants/permissions'
+import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
 
 /** Admin sidebar labels + permission gates — single source for nav copy and route auth. */
 export const ADMIN_NAV = [
   {
-    href: '/admin/vendors',
-    label: 'Vendors',
+    href: PATHS.admin.vendors,
+    label: LABELS.vendors,
     permissions: [PERMISSIONS.VENDOR_MANAGE, PERMISSIONS.VENDOR_APPROVE] as PermissionKey[],
   },
   {
-    href: '/admin/products',
-    label: 'Products',
+    href: PATHS.admin.products,
+    label: LABELS.products,
     permissions: [PERMISSIONS.PRODUCT_MANAGE, PERMISSIONS.PRODUCT_APPROVE] as PermissionKey[],
   },
   {
-    href: '/admin/categories',
-    label: 'Categories',
+    href: PATHS.admin.categories,
+    label: LABELS.categories,
     permissions: [PERMISSIONS.CATEGORY_MANAGE] as PermissionKey[],
   },
   {
-    href: '/admin/orders',
-    label: 'Orders',
+    href: PATHS.admin.orders,
+    label: LABELS.orders,
     permissions: [PERMISSIONS.ORDER_MANAGE] as PermissionKey[],
   },
   {
-    href: '/admin/returns',
-    label: 'Returns / Refunds',
+    href: PATHS.admin.returns,
+    label: LABELS.returnsRefunds,
     permissions: [PERMISSIONS.ORDER_REFUND] as PermissionKey[],
   },
   {
-    href: '/admin/coupons',
-    label: 'Coupons',
+    href: PATHS.admin.coupons,
+    label: LABELS.coupons,
     permissions: [PERMISSIONS.COUPON_MANAGE] as PermissionKey[],
   },
   {
-    href: '/admin/reviews',
-    label: 'Reviews',
+    href: PATHS.admin.reviews,
+    label: LABELS.reviews,
     permissions: [PERMISSIONS.REVIEW_MODERATE] as PermissionKey[],
   },
   {
-    href: '/admin/tax',
-    label: 'Tax',
+    href: PATHS.admin.tax,
+    label: LABELS.tax,
     permissions: [PERMISSIONS.TAX_MANAGE] as PermissionKey[],
   },
   {
-    href: '/admin/shipping',
-    label: 'Shipping',
+    href: PATHS.admin.shipping,
+    label: LABELS.shipping,
     permissions: [PERMISSIONS.SHIPPING_MANAGE] as PermissionKey[],
   },
   {
-    href: '/admin/finance',
-    label: 'Finance / Payouts',
+    href: PATHS.admin.finance,
+    label: LABELS.financePayouts,
     permissions: [PERMISSIONS.PAYOUT_MANAGE, PERMISSIONS.COMMISSION_VIEW] as PermissionKey[],
   },
   {
-    href: '/admin/users',
-    label: 'Users',
+    href: PATHS.admin.users,
+    label: LABELS.users,
     permissions: [PERMISSIONS.USER_MANAGE] as PermissionKey[],
   },
   {
-    href: '/admin/analytics',
-    label: 'Analytics',
+    href: PATHS.admin.analytics,
+    label: LABELS.analytics,
     permissions: [PERMISSIONS.ANALYTICS_VIEW] as PermissionKey[],
   },
   {
-    href: '/admin/audit',
-    label: 'Audit',
+    href: PATHS.admin.audit,
+    label: LABELS.audit,
     permissions: [PERMISSIONS.AUDIT_VIEW] as PermissionKey[],
   },
   {
-    href: '/admin/settings',
-    label: 'Settings',
+    href: PATHS.admin.settings,
+    label: LABELS.settings,
     permissions: [PERMISSIONS.SETTINGS_MANAGE] as PermissionKey[],
   },
 ] as const

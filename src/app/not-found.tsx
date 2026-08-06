@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { PackageSearch } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { StorefrontLayout } from '@/shared/components/layout/StorefrontLayout'
+import { PATHS } from '@/shared/constants/paths'
 
 export const metadata: Metadata = {
   title: 'Page Not Found',
@@ -21,7 +22,7 @@ export default function NotFound() {
           The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
         <Button asChild>
-          <Link href="/">Go to homepage</Link>
+          <Link href={PATHS.home}>Go to homepage</Link>
         </Button>
       </div>
     </StorefrontLayout>

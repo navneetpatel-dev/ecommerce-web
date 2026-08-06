@@ -6,6 +6,7 @@ import { ShieldCheck } from 'lucide-react'
 import { useAdminLayout } from '@/shared/hooks/useAdminLayout'
 import { RequirePermission } from '@/shared/components/RequirePermission'
 import { adminPermissionsForPath } from '@/shared/constants/adminNav'
+import { PATHS } from '@/shared/constants/paths'
 
 export function AdminLayoutContainer({ children }: { children: React.ReactNode }) {
   const { pathname, navItems } = useAdminLayout()
@@ -25,7 +26,7 @@ export function AdminLayoutContainer({ children }: { children: React.ReactNode }
           }
         />
         <main className="flex-1 p-6 lg:p-8 bg-surface">
-          {pathname === '/admin' ? (
+          {pathname === PATHS.admin.root ? (
             children
           ) : (
             <RequirePermission permission={adminPermissionsForPath(pathname)}>

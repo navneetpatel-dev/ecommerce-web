@@ -3,6 +3,8 @@
  * Plain TypeScript data only (no React).
  */
 
+import { PATHS } from '@/shared/constants/paths'
+
 export type HelpCategoryId =
   | 'getting-started'
   | 'account-security'
@@ -1953,22 +1955,22 @@ export const CONTACT_TOPICS: HelpTopicOption[] = [
 export const HELP_QUICK_LINKS: HelpQuickLink[] = [
   {
     label: 'My orders',
-    href: '/orders',
+    href: PATHS.orders,
     description: 'View order history, status, and tracking for each shipment.',
   },
   {
     label: 'Profile',
-    href: '/profile',
+    href: PATHS.profile,
     description: 'Update personal details, addresses, and account preferences.',
   },
   {
     label: 'Returns policy',
-    href: '/returns',
+    href: PATHS.returns,
     description: 'Read eligibility windows, conditions, and item-level return rules.',
   },
   {
     label: 'My returns',
-    href: '/my-returns',
+    href: PATHS.myReturns,
     description: 'Track return requests, pickups, and refund progress.',
   },
   {

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
+import { PATHS } from '@/shared/constants/paths'
 import { resolveCategoryIcon } from '../utils/categoryHelpers'
 import type { Category } from '@/shared/api/types'
 
@@ -41,7 +42,7 @@ export function CategoriesMegaMenu({
           </p>
         </div>
         <Link
-          href="/categories"
+          href={PATHS.categories}
           onClick={onClose}
           className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand transition-colors hover:text-brand-hover"
         >
@@ -62,7 +63,7 @@ export function CategoriesMegaMenu({
                 return (
                   <li key={category.id}>
                     <Link
-                      href={`/products?categoryId=${category.id}`}
+                      href={`${PATHS.products}?categoryId=${category.id}`}
                       onClick={onClose}
                       className={cn(
                         'group flex items-center gap-3 rounded-md px-3 py-2.5',
@@ -92,14 +93,14 @@ export function CategoriesMegaMenu({
           </p>
           <div className="mt-5 flex flex-col gap-2">
             <Link
-              href="/products?sort=newest"
+              href={PATHS.productsNewest}
               onClick={onClose}
               className="inline-flex text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
             >
               Shop new arrivals
             </Link>
             <Link
-              href="/categories"
+              href={PATHS.categories}
               onClick={onClose}
               className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-ink transition-colors hover:text-brand"
             >

@@ -5,6 +5,7 @@ import { ArrowRight, LayoutGrid } from 'lucide-react'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { CategoryCard } from './CategoryCard'
 import { CategoriesPageSkeleton } from '@/shared/components/Skeletons'
+import { PATHS } from '@/shared/constants/paths'
 import { resolveCategoryIcon } from '../utils/categoryHelpers'
 import type { Category } from '@/shared/api/types'
 import type { CategoryRootWithChildren } from '../hooks/useCategoriesPage'
@@ -41,7 +42,7 @@ export function CategoriesView({
         <div className="rounded-md border border-line bg-surface px-6 py-16 text-center">
           <LayoutGrid className="mx-auto h-8 w-8 text-ink-faint" strokeWidth={1.25} />
           <p className="mt-4 text-[1.0625rem] font-medium text-ink">No categories yet</p>
-          <Link href="/products" className="mt-3 inline-flex items-center gap-1 text-[0.9375rem] text-brand">
+          <Link href={PATHS.products} className="mt-3 inline-flex items-center gap-1 text-[0.9375rem] text-brand">
             Browse products <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
@@ -64,7 +65,7 @@ export function CategoriesView({
                   <div className="mb-4 flex items-baseline justify-between gap-3">
                     <h3 className="text-[1.0625rem] font-semibold text-ink">{root.name}</h3>
                     <Link
-                      href={`/products?categoryId=${root.id}`}
+                      href={`${PATHS.products}?categoryId=${root.id}`}
                       className="text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
                     >
                       Shop all
@@ -76,7 +77,7 @@ export function CategoriesView({
                       return (
                         <li key={child.id}>
                           <Link
-                            href={`/products?categoryId=${child.id}`}
+                            href={`${PATHS.products}?categoryId=${child.id}`}
                             className={cn(
                               'flex items-center gap-3 rounded-md border border-line bg-surface px-4 py-3',
                               'text-[0.9375rem] font-medium text-ink transition-colors',

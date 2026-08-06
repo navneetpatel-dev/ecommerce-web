@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api/client'
+import { API } from '@/shared/constants/apiRoutes'
 import type { ProductListItem, ProductDetail, ProductVariant, ProductImage } from '@/shared/api/types'
 
 export interface ProductFilters {
@@ -33,7 +34,8 @@ export const productsApi = {
     if (filters.page) params.set('page', String(filters.page))
     if (filters.limit) params.set('limit', String(filters.limit))
     if (filters.status) params.set('status', filters.status)
-    const res = await apiClient.getWithResponse<ProductListItem[]>(`/api/products?${params.toString()}`)
+    const query = params.toString()
+    const res = await apiClient.getWithResponse<ProductListItem[]>(API.products.list(query))
     const pagination = res.meta?.pagination as { total?: number; totalPages?: number } | undefined
     return {
       items: Array.isArray(res.data) ? res.data : [],
@@ -41,21 +43,21 @@ export const productsApi = {
       totalPages: pagination?.totalPages ?? 1,
     }
   },
-  detail: (slugOrId: string) => apiClient.get<ProductDetail>(`/api/products/${slugOrId}`),
-  detailBySlug: (slug: string) => apiClient.get<ProductDetail>(`/api/products/slug/${slug}`),
+  detail: (slugOrId: string) => apiClient.get<ProductDetail>(API.products.detail(slugOrId)),
+  detailBySlug: (slug: string) => apiClient.get<ProductDetail>(API.products.bySlug(slug)),
   create: (body: { name: string; categoryId: string; basePrice: number; description: string; tags?: string[] }) =>
-    apiClient.post<ProductDetail>('/api/products', body),
+    apiClient.post<ProductDetail>(API.products.list(), body),
   update: (id: string, body: Partial<{ name: string; categoryId: string; basePrice: number; description: string; tags: string[] }>) =>
-    apiClient.patch<ProductDetail>(`/api/products/${id}`, body),
-  delete: (id: string) => apiClient.delete(`/api/products/${id}`),
-  submitForApproval: (id: string) => apiClient.post<{ message: string }>(`/api/products/${id}/submit`, {}),
+    apiClient.patch<ProductDetail>(API.products.detail(id), body),
+  delete: (id: string) => apiClient.delete(API.products.detail(id)),
+  submitForApproval: (id: string) => apiClient.post<{ message: string }>(API.products.submit(id), {}),
   addVariant: (productId: string, body: { sku: string; attributes: Record<string, string>; price: number; stock: number }) =>
-    apiClient.post<ProductVariant>(`/api/products/${productId}/variants`, body),
+    apiClient.post<ProductVariant>(API.products.variants(productId), body),
   updateVariant: (variantId: string, body: Partial<{ attributes: Record<string, string>; price: number; stock: number }>) =>
-    apiClient.patch<ProductVariant>(`/api/products/variants/${variantId}`, body),
-  deleteVariant: (variantId: string) => apiClient.delete(`/api/products/variants/${variantId}`),
+    apiClient.patch<ProductVariant>(API.products.variant(variantId), body),
+  deleteVariant: (variantId: string) => apiClient.delete(API.products.variant(variantId)),
   addImage: (productId: string, body: { url: string; isPrimary?: boolean }) =>
-    apiClient.post<ProductImage>(`/api/products/${productId}/images`, body),
-  deleteImage: (imageId: string) => apiClient.delete(`/api/products/images/${imageId}`),
-  setPrimaryImage: (imageId: string) => apiClient.patch<{ message: string }>(`/api/products/images/${imageId}/primary`, {}),
+    apiClient.post<ProductImage>(API.products.images(productId), body),
+  deleteImage: (imageId: string) => apiClient.delete(API.products.image(imageId)),
+  setPrimaryImage: (imageId: string) => apiClient.patch<{ message: string }>(API.products.imagePrimary(imageId), {}),
 }

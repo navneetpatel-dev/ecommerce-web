@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { CategoryCard, getRootCategories } from '@/features/categories'
 import { CategoryGridSkeleton } from '@/shared/components/Skeletons'
+import { PATHS } from '@/shared/constants/paths'
 import { cn } from '@/shared/utils/cn'
 import type { Category } from '@/shared/api/types'
 
@@ -42,7 +43,7 @@ export function CategoryRail({ categories = [], isLoading }: CategoryRailProps) 
           <h2 className="text-[1.375rem] font-semibold text-ink">Shop by Category</h2>
         </div>
         <Link
-          href="/categories"
+          href={PATHS.categories}
           className="inline-flex shrink-0 items-center gap-1 text-[0.9375rem] font-medium text-brand transition-colors hover:text-brand-hover"
         >
           View all
@@ -60,7 +61,7 @@ export function CategoryRail({ categories = [], isLoading }: CategoryRailProps) 
 
         {hasMore ? (
           <Link
-            href="/categories"
+            href={PATHS.categories}
             className={cn(
               'group relative flex aspect-[4/3] flex-col items-start justify-between overflow-hidden rounded-md',
               'border border-dashed border-line-strong bg-paper p-3 md:p-3.5',

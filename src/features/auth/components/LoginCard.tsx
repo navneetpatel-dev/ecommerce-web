@@ -6,6 +6,7 @@ import { OAuthDivider } from './OAuthDivider'
 import { OAuthButton } from './OAuthButton'
 import { Button } from '@/shared/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/shared/components/ui/card'
+import { PATHS } from '@/shared/constants/paths'
 
 interface LoginCardProps {
   form: UseFormReturn<any>
@@ -34,7 +35,7 @@ export function LoginCard({ form, onSubmit, error, isPending }: LoginCardProps) 
         <OAuthDivider />
         <OAuthButton provider="google" />
         <p className="text-[0.9375rem] text-ink-muted">
-          Don't have an account? <Link href="/register" className="text-brand hover:underline">Register</Link>
+          Don't have an account? <Link href={PATHS.register} className="text-brand hover:underline">Register</Link>
         </p>
       </CardFooter>
     </Card>

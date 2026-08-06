@@ -4,6 +4,7 @@ import { RatingStars } from '@/shared/components/RatingStars'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { MediaImage } from '@/shared/components/MediaImage'
+import { PATHS } from '@/shared/constants/paths'
 import type { SpotlightVendor } from '../hooks/useVendorSpotlight'
 
 interface VendorSpotlightSectionProps {
@@ -56,7 +57,7 @@ export function VendorSpotlightSection({ vendors, isLoading }: VendorSpotlightSe
           <h2 className="font-display text-[1.75rem] leading-tight text-ink">Vendor spotlight</h2>
         </div>
         <Link
-          href="/products"
+          href={PATHS.products}
           className="inline-flex shrink-0 items-center gap-1 text-[0.8125rem] text-brand hover:underline"
         >
           Browse all <ArrowRight size={14} />
@@ -105,7 +106,7 @@ export function VendorSpotlightSection({ vendors, isLoading }: VendorSpotlightSe
               <RatingStars value={vendor.avgRating || 4} size="sm" />
 
               <Link
-                href={`/products?vendorId=${vendor.id}`}
+                href={`${PATHS.products}?vendorId=${vendor.id}`}
                 className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:underline"
               >
                 Visit storefront

@@ -9,6 +9,7 @@ import { Badge } from '@/shared/components/ui/badge'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { FormError } from '@/shared/components/FormError'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { PATHS } from '@/shared/constants/paths'
 import { formatOrderDate } from '@/features/orders/utils/format'
 import { useAccountOverview } from '../../hooks/useAccountOverview'
 import { useUploadAvatar } from '../../api/account.queries'
@@ -175,7 +176,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
             icon={Heart}
             label="Wishlist"
             value={isLoadingStats ? '—' : String(wishlistCount)}
-            href="/wishlist"
+            href={PATHS.wishlist}
           />
         </ul>
       </section>

@@ -11,6 +11,8 @@ import { CategoriesMegaMenu } from '@/features/categories/components/CategoriesM
 import { BottomSheet } from '@/shared/components/BottomSheet'
 import { CartCountBadge } from '@/shared/components/CartCountBadge'
 import { useTheme } from '@/shared/hooks/use-theme'
+import { PATHS } from '@/shared/constants/paths'
+import { LABELS, ROLES } from '@/shared/constants/labels'
 import type { Category, CurrentUser } from '@/shared/api/types'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
 
@@ -72,21 +74,21 @@ export function Header({
   const accountLinks = useMemo(() => {
     if (!currentUser) return []
 
-    const links = [
-      { href: '/profile', label: 'Overview' },
-      { href: '/profile?tab=personal', label: 'Personal info' },
-      { href: '/profile?tab=security', label: 'Security' },
+    const links: Array<{ href: string; label: string }> = [
+      { href: PATHS.profile, label: LABELS.overview },
+      { href: PATHS.profileTab('personal'), label: LABELS.personalInfo },
+      { href: PATHS.profileTab('security'), label: LABELS.security },
     ]
 
-    if (currentUser.role === 'CUSTOMER') {
+    if (currentUser.role === ROLES.CUSTOMER) {
       links.push(
-        { href: '/profile?tab=orders', label: 'Orders' },
-        { href: '/profile?tab=addresses', label: 'Addresses' },
-        { href: '/profile?tab=privacy', label: 'Privacy' }
+        { href: PATHS.profileTab('orders'), label: LABELS.orders },
+        { href: PATHS.profileTab('addresses'), label: LABELS.addresses },
+        { href: PATHS.profileTab('privacy'), label: LABELS.privacy }
       )
     } else {
       links.push(
-        { href: '/profile?tab=privacy', label: 'Privacy' }
+        { href: PATHS.profileTab('privacy'), label: LABELS.privacy }
       )
     }
 
@@ -158,7 +160,7 @@ export function Header({
           </button>
 
           <Link
-            href="/"
+            href={PATHS.home}
             className={cn(
               'min-w-0 shrink text-[1.375rem] font-display font-semibold leading-none sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]',
               isTransparent ? 'text-paper' : 'text-brand'
@@ -261,7 +263,7 @@ export function Header({
 
             {!currentUser ? (
               <Link
-                href="/login"
+                href={PATHS.login}
                 className={cn(
                   'hidden sm:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                   isTransparent
@@ -273,10 +275,10 @@ export function Header({
               </Link>
             ) : (
               <>
-                {currentUser.role === 'CUSTOMER' && (
+                {currentUser.role === ROLES.CUSTOMER && (
                   <div className="hidden xl:flex items-center gap-1">
                     <Link
-                      href="/orders"
+                      href={PATHS.orders}
                       className={cn(
                         'px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                         isTransparent ? 'text-paper hover:bg-paper/10' : 'hover:bg-paper'
@@ -285,7 +287,7 @@ export function Header({
                       Orders
                     </Link>
                     <Link
-                      href="/wishlist"
+                      href={PATHS.wishlist}
                       className={cn(
                         'px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                         isTransparent ? 'text-paper hover:bg-paper/10' : 'hover:bg-paper'
@@ -296,9 +298,9 @@ export function Header({
                   </div>
                 )}
 
-                {(currentUser.role === 'VENDOR_OWNER' || currentUser.role === 'VENDOR_STAFF') && (
+                {(currentUser.role === ROLES.VENDOR_OWNER || currentUser.role === ROLES.VENDOR_STAFF) && (
                   <Link
-                    href="/vendor/dashboard/overview"
+                    href={PATHS.vendor.overview}
                     className={cn(
                       'hidden xl:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                       isTransparent
@@ -306,15 +308,15 @@ export function Header({
                         : 'text-brand hover:bg-brand-subtle'
                     )}
                   >
-                    Vendor Dashboard
+                    {LABELS.vendorDashboard}
                   </Link>
                 )}
 
-                {(currentUser.role === 'SUPER_ADMIN' ||
-                  currentUser.role === 'ADMIN_ORDER_MANAGER' ||
-                  currentUser.role === 'ADMIN_CATALOG_MANAGER') && (
+                {(currentUser.role === ROLES.SUPER_ADMIN ||
+                  currentUser.role === ROLES.ADMIN_ORDER_MANAGER ||
+                  currentUser.role === ROLES.ADMIN_CATALOG_MANAGER) && (
                   <Link
-                    href="/admin/vendors"
+                    href={PATHS.admin.vendors}
                     className={cn(
                       'hidden xl:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                       isTransparent

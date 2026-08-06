@@ -5,6 +5,8 @@ import { FormError } from '@/shared/components/FormError'
 import { OAuthButton } from './OAuthButton'
 import { Button } from '@/shared/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/shared/components/ui/card'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 
 interface RegisterInput {
   name: string
@@ -42,7 +44,8 @@ export function RegisterCard({ form, onSubmit, error, isPending }: RegisterCardP
       <CardFooter className="flex flex-col gap-4">
         <OAuthButton provider="google" />
         <p className="text-[0.9375rem] text-ink-muted">
-          Already have an account? <Link href="/login" className="text-brand hover:underline">Log in</Link>
+          {LABELS.alreadyHaveAccount}{' '}
+          <Link href={PATHS.login} className="text-brand hover:underline">{LABELS.logIn}</Link>
         </p>
       </CardFooter>
     </Card>

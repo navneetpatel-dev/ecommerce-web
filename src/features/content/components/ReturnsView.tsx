@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { Button } from '@/shared/components/ui/button'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 
 /** Educational returns overview — real requests go through order history. */
 export function ReturnsView() {
@@ -21,13 +23,13 @@ export function ReturnsView() {
       </ol>
       <div className="flex flex-wrap gap-3">
         <Button asChild>
-          <Link href="/orders">Go to my orders</Link>
+          <Link href={PATHS.orders}>{LABELS.goToMyOrders}</Link>
         </Button>
         <Button asChild variant="secondary">
-          <Link href="/my-returns">View my returns</Link>
+          <Link href={PATHS.myReturns}>View my returns</Link>
         </Button>
         <Button asChild variant="ghost">
-          <Link href="/help">Help centre</Link>
+          <Link href={PATHS.help}>{LABELS.helpCenter}</Link>
         </Button>
       </div>
     </div>

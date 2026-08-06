@@ -6,11 +6,13 @@ import { useCartDrawerStore } from '@/features/cart/store/cart.store'
 import { useCart } from '@/features/cart/api/cart.queries'
 import { useCategories } from '@/features/categories/api/categories.queries'
 import { getRootCategories } from '@/features/categories/utils/categoryHelpers'
+import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
 
 export const HEADER_PRIMARY_LINKS = [
-  { href: '/products', label: 'Shop' },
-  { href: '/products?sort=newest', label: 'New Arrivals' },
-  { href: '/products?sort=rating', label: 'Top Rated' },
+  { href: PATHS.products, label: LABELS.shop },
+  { href: PATHS.productsNewest, label: LABELS.newArrivals },
+  { href: PATHS.productsTopRated, label: LABELS.topRated },
 ] as const
 
 export function useHeader() {

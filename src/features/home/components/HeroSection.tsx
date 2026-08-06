@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { MediaImage } from '@/shared/components/MediaImage'
 import { cn } from '@/shared/utils/cn'
+import { PATHS } from '@/shared/constants/paths'
 
 export interface HeroSlide {
   id: string
@@ -32,9 +33,9 @@ const DEFAULT_SLIDES: HeroSlide[] = [
     subheadline:
       "Handcrafted goods, artisan food, and unique finds from India's best small businesses.",
     ctaLabel: 'Shop Now',
-    ctaHref: '/products',
+    ctaHref: PATHS.products,
     secondaryCtaLabel: 'New arrivals',
-    secondaryCtaHref: '/products?sort=newest',
+    secondaryCtaHref: PATHS.productsNewest,
     imageSrc:
       'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=2400&q=80',
     imageMobileSrc:
@@ -48,9 +49,9 @@ const DEFAULT_SLIDES: HeroSlide[] = [
     subheadline:
       'From handloom cotton to block-printed linen — pieces made slowly, meant to last.',
     ctaLabel: 'Shop Now',
-    ctaHref: '/products?search=textile',
+    ctaHref: `${PATHS.products}?search=textile`,
     secondaryCtaLabel: 'New arrivals',
-    secondaryCtaHref: '/products?sort=newest',
+    secondaryCtaHref: PATHS.productsNewest,
     imageSrc:
       'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=2400&q=80',
     imageMobileSrc:
@@ -64,9 +65,9 @@ const DEFAULT_SLIDES: HeroSlide[] = [
     subheadline:
       'Spice blends, preserves, and tableware from kitchens and studios across the country.',
     ctaLabel: 'Shop Now',
-    ctaHref: '/products?search=food',
+    ctaHref: `${PATHS.products}?search=food`,
     secondaryCtaLabel: 'New arrivals',
-    secondaryCtaHref: '/products?sort=newest',
+    secondaryCtaHref: PATHS.productsNewest,
     imageSrc:
       'https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=2400&q=80',
     imageMobileSrc:

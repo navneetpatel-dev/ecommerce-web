@@ -2,6 +2,7 @@
 
 import { ShippingCard } from '../components/ShippingCard'
 import { useShippingCard } from '../hooks/useShippingCard'
+import type { ShippingMethod } from '@/shared/constants/statuses'
 
 interface ShippingCardContainerProps {
   vendorId: string
@@ -9,7 +10,7 @@ interface ShippingCardContainerProps {
   pincode: string
   weightGrams: number
   selected?: string
-  onSelect: (method: 'STANDARD' | 'EXPRESS') => void
+  onSelect: (method: ShippingMethod) => void
 }
 
 export function ShippingCardContainer({

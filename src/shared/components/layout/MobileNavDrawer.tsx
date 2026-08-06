@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import { ArrowRight, X } from 'lucide-react'
+import { PATHS } from '@/shared/constants/paths'
+import { LABELS, ROLES } from '@/shared/constants/labels'
 import type { Category, CurrentUser } from '@/shared/api/types'
 import { resolveCategoryIcon } from '@/features/categories'
 
 const navLinks = [
-  { href: '/products', label: 'All Products' },
-  { href: '/products?sort=newest', label: 'New Arrivals' },
+  { href: PATHS.products, label: LABELS.allProducts },
+  { href: PATHS.productsNewest, label: LABELS.newArrivals },
 ]
 
 interface MobileNavDrawerProps {
@@ -50,7 +52,7 @@ export function MobileNavDrawer({
             <span className="text-[0.8125rem] font-medium text-ink-muted">Categories</span>
             {categories.length > 0 ? (
               <Link
-                href="/categories"
+                href={PATHS.categories}
                 onClick={onClose}
                 className="inline-flex items-center gap-0.5 text-[0.75rem] font-medium text-brand"
               >
@@ -68,7 +70,7 @@ export function MobileNavDrawer({
                 return (
                   <li key={category.id}>
                     <Link
-                      href={`/products?categoryId=${category.id}`}
+                      href={`${PATHS.products}?categoryId=${category.id}`}
                       onClick={onClose}
                       className="flex items-center gap-3 px-3 py-2.5 rounded-md text-[0.9375rem] font-medium hover:bg-paper transition-colors"
                     >
@@ -81,19 +83,19 @@ export function MobileNavDrawer({
             </ul>
           )}
 
-          {currentUser && currentUser.role === 'CUSTOMER' && (
+          {currentUser && currentUser.role === ROLES.CUSTOMER && (
             <>
               <div className="px-3 py-2 text-[0.8125rem] font-medium text-ink-muted mt-4">Account</div>
-              <Link href="/orders" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Orders</Link>
-              <Link href="/wishlist" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Wishlist</Link>
-              <Link href="/help" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Help</Link>
-              <Link href="/profile" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Profile</Link>
+              <Link href={PATHS.orders} onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Orders</Link>
+              <Link href={PATHS.wishlist} onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Wishlist</Link>
+              <Link href={PATHS.help} onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Help</Link>
+              <Link href={PATHS.profile} onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Profile</Link>
             </>
           )}
 
           {!currentUser && (
             <Link
-              href="/login"
+              href={PATHS.login}
               onClick={onClose}
               className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] font-medium text-brand hover:bg-brand-subtle transition-colors mt-4"
             >

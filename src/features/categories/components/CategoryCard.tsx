@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { MediaImage } from '@/shared/components/MediaImage'
+import { PATHS } from '@/shared/constants/paths'
 import { resolveCategoryImageUrl } from '../utils/categoryHelpers'
 import type { Category } from '@/shared/api/types'
 
@@ -24,7 +25,7 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
 
   return (
     <Link
-      href={`/products?categoryId=${category.id}`}
+      href={`${PATHS.products}?categoryId=${category.id}`}
       className={cn(
         'group relative block aspect-[4/3] overflow-hidden rounded-md border border-line bg-paper',
         'transition-colors duration-200',

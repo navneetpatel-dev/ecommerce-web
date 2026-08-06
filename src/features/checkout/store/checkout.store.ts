@@ -1,14 +1,16 @@
 import { create } from 'zustand'
+import { SHIPPING_METHOD } from '@/shared/constants/statuses'
+import type { ShippingMethod } from '@/shared/constants/statuses'
 
 interface CheckoutState {
   step: 1 | 2 | 3 | 4
   addressId: string | null
-  shippingMethodByVendor: Record<string, 'STANDARD' | 'EXPRESS'>
+  shippingMethodByVendor: Record<string, ShippingMethod>
   appliedCouponCode: string | null
   paymentMethod: string | null
   setStep: (step: CheckoutState['step']) => void
   setAddress: (id: string) => void
-  setShippingMethod: (vendorId: string, method: 'STANDARD' | 'EXPRESS') => void
+  setShippingMethod: (vendorId: string, method: ShippingMethod) => void
   ensureDefaultShippingMethods: (vendorIds: string[]) => void
   setCouponCode: (code: string | null) => void
   setPaymentMethod: (method: string | null) => void
@@ -30,7 +32,7 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
       const next = { ...s.shippingMethodByVendor }
       for (const vendorId of vendorIds) {
         if (!next[vendorId]) {
-          next[vendorId] = 'STANDARD'
+          next[vendorId] = SHIPPING_METHOD.STANDARD
           changed = true
         }
       }

@@ -1,10 +1,12 @@
 import { PERMISSIONS, type PermissionKey } from '@/shared/constants/permissions'
+import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
 
 /** Vendor sidebar labels + permission gates. */
 export const VENDOR_NAV = [
   {
-    href: '/vendor/dashboard/overview',
-    label: 'Overview',
+    href: PATHS.vendor.overview,
+    label: LABELS.overview,
     permissions: [
       PERMISSIONS.VENDOR_MANAGE,
       PERMISSIONS.PRODUCT_CREATE,
@@ -16,8 +18,8 @@ export const VENDOR_NAV = [
     ] as PermissionKey[],
   },
   {
-    href: '/vendor/dashboard/products',
-    label: 'Products',
+    href: PATHS.vendor.products,
+    label: LABELS.products,
     permissions: [
       PERMISSIONS.PRODUCT_CREATE,
       PERMISSIONS.PRODUCT_UPDATE,
@@ -25,18 +27,18 @@ export const VENDOR_NAV = [
     ] as PermissionKey[],
   },
   {
-    href: '/vendor/dashboard/orders',
-    label: 'Orders',
+    href: PATHS.vendor.orders,
+    label: LABELS.orders,
     permissions: [PERMISSIONS.SUBORDER_MANAGE] as PermissionKey[],
   },
   {
-    href: '/vendor/dashboard/payouts',
-    label: 'Payouts',
+    href: PATHS.vendor.payouts,
+    label: LABELS.payouts,
     permissions: [PERMISSIONS.PAYOUT_VIEW] as PermissionKey[],
   },
   {
-    href: '/vendor/dashboard/reviews',
-    label: 'Reviews',
+    href: PATHS.vendor.reviews,
+    label: LABELS.reviews,
     permissions: [PERMISSIONS.REVIEW_RESPOND] as PermissionKey[],
   },
 ] as const

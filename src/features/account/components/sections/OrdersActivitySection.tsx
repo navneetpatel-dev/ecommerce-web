@@ -6,6 +6,8 @@ import { useQuery } from '@tanstack/react-query'
 import { reviewsApi } from '@/features/reviews/api/reviews.api'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 import { useAccountOverview } from '../../hooks/useAccountOverview'
 import {
   countOrderItems,
@@ -44,7 +46,7 @@ export function OrdersActivitySection() {
             </p>
           </div>
           <Link
-            href="/orders"
+            href={PATHS.orders}
             className="inline-flex shrink-0 items-center gap-1 self-center text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
           >
             View all
@@ -60,7 +62,7 @@ export function OrdersActivitySection() {
         ) : preview.length === 0 ? (
           <p className="px-5 py-10 text-center text-[0.9375rem] text-ink-muted">
             No orders yet.{' '}
-            <Link href="/products" className="font-medium text-brand hover:underline">
+            <Link href={PATHS.products} className="font-medium text-brand hover:underline">
               Start shopping
             </Link>
           </p>
@@ -69,7 +71,7 @@ export function OrdersActivitySection() {
             {preview.map((order) => (
               <li key={order.id}>
                 <Link
-                  href={`/orders/${order.id}`}
+                  href={PATHS.order(order.id)}
                   className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-paper md:px-6"
                 >
                   <div className="min-w-0">
@@ -96,20 +98,20 @@ export function OrdersActivitySection() {
           icon={Heart}
           label="Wishlist"
           value={isLoadingStats ? '—' : String(wishlistCount)}
-          href="/wishlist"
+          href={PATHS.wishlist}
         />
         <SummaryRow
           icon={Star}
           label="Your reviews"
           value={reviewsQuery.isLoading ? '—' : String(reviewsQuery.data?.length ?? 0)}
-          href="/reviews"
+          href={PATHS.reviews}
         />
-        <SummaryRow icon={RotateCcw} label="Returns" value="Manage" href="/my-returns" />
+        <SummaryRow icon={RotateCcw} label="Returns" value="Manage" href={PATHS.myReturns} />
         <SummaryRow
           icon={Package}
-          label="All orders"
+          label={LABELS.allOrders}
           value={isLoadingStats ? '—' : String(ordersCount)}
-          href="/orders"
+          href={PATHS.orders}
         />
       </ul>
     </div>

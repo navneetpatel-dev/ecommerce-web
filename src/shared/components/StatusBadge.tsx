@@ -1,51 +1,61 @@
 import { Badge } from './ui/badge'
+import {
+  ORDER_STATUS,
+  PAYMENT_STATUS,
+  PRODUCT_STATUS,
+  VENDOR_STATUS,
+  USER_STATUS,
+  SHIPMENT_STATUS,
+  REVIEW_STATUS,
+} from '@/shared/constants/statuses'
 
 type BadgeVariant = 'success' | 'warning' | 'destructive' | 'secondary' | 'brand'
 
+const SUCCESS = new Set<string>([
+  PRODUCT_STATUS.LIVE,
+  VENDOR_STATUS.APPROVED,
+  REVIEW_STATUS.APPROVED,
+  USER_STATUS.ACTIVE,
+  PAYMENT_STATUS.PAID,
+  ORDER_STATUS.DELIVERED,
+  ORDER_STATUS.CONFIRMED,
+  'COMPLETED',
+])
+
+const BRAND = new Set<string>([
+  ORDER_STATUS.SHIPPED,
+  SHIPMENT_STATUS.PICKED_UP,
+  SHIPMENT_STATUS.IN_TRANSIT,
+  SHIPMENT_STATUS.OUT_FOR_DELIVERY,
+  'PROCESSING',
+])
+
+const WARNING = new Set<string>([
+  ORDER_STATUS.PENDING,
+  PRODUCT_STATUS.PENDING_APPROVAL,
+  PRODUCT_STATUS.DRAFT,
+  ORDER_STATUS.RETURNED,
+  REVIEW_STATUS.PENDING,
+  VENDOR_STATUS.PENDING,
+  PAYMENT_STATUS.PENDING,
+])
+
+const DESTRUCTIVE = new Set<string>([
+  VENDOR_STATUS.REJECTED,
+  REVIEW_STATUS.REJECTED,
+  PRODUCT_STATUS.REJECTED,
+  PAYMENT_STATUS.FAILED,
+  ORDER_STATUS.CANCELLED,
+  USER_STATUS.BLOCKED,
+  PAYMENT_STATUS.REFUNDED,
+])
+
 function getVariant(status: string): BadgeVariant {
   const normalized = status.toUpperCase()
-
-  if (
-    normalized === 'LIVE' ||
-    normalized === 'APPROVED' ||
-    normalized === 'ACTIVE' ||
-    normalized === 'PAID' ||
-    normalized === 'DELIVERED' ||
-    normalized === 'COMPLETED' ||
-    normalized === 'CONFIRMED'
-  ) {
-    return 'success'
-  }
-
-  if (
-    normalized === 'SHIPPED' ||
-    normalized === 'PICKED_UP' ||
-    normalized === 'IN_TRANSIT' ||
-    normalized === 'OUT_FOR_DELIVERY' ||
-    normalized === 'PROCESSING'
-  ) {
-    return 'brand'
-  }
-
-  if (
-    normalized === 'PENDING' ||
-    normalized === 'PENDING_APPROVAL' ||
-    normalized === 'DRAFT' ||
-    normalized === 'RETURNED'
-  ) {
-    return 'warning'
-  }
-
-  if (
-    normalized === 'REJECTED' ||
-    normalized === 'FAILED' ||
-    normalized === 'CANCELLED' ||
-    normalized === 'BLOCKED' ||
-    normalized === 'REFUNDED'
-  ) {
-    return 'destructive'
-  }
-
+  if (SUCCESS.has(normalized)) return 'success'
+  if (BRAND.has(normalized)) return 'brand'
+  if (WARNING.has(normalized)) return 'warning'
+  if (DESTRUCTIVE.has(normalized)) return 'destructive'
   return 'secondary'
 }
 

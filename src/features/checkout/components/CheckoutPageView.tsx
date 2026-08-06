@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { PATHS } from '@/shared/constants/paths'
 import { AnimatePresence, motion } from 'motion/react'
 import { AddressStep } from './AddressStep'
 import { ShippingStep } from './ShippingStep'
@@ -14,6 +15,7 @@ import { VendorStrip } from '@/shared/components/VendorStrip'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { CheckoutPageSkeleton } from '@/shared/components/Skeletons'
 import { StatusDialog } from '@/shared/components/StatusDialog'
+import type { ShippingMethod } from '@/shared/constants/statuses'
 import type { Address, CartItem, CheckoutQuote } from '@/shared/api/types'
 import type { PaymentNotice } from '../hooks/usePlaceOrder'
 
@@ -22,7 +24,7 @@ interface CheckoutPageViewProps {
   hasItems: boolean
   step: number
   addressId: string | null
-  shippingMethodByVendor: Record<string, 'STANDARD' | 'EXPRESS'>
+  shippingMethodByVendor: Record<string, ShippingMethod>
   addresses?: Address[]
   paymentMethod?: string | null
   quote?: CheckoutQuote | null
@@ -35,7 +37,7 @@ interface CheckoutPageViewProps {
   shippingReady: boolean
   onStepClick: (step: number) => void
   onSelectAddress: (id: string) => void
-  onSelectShipping: (vendorId: string, method: 'STANDARD' | 'EXPRESS') => void
+  onSelectShipping: (vendorId: string, method: ShippingMethod) => void
   onContinueToShipping: () => void
   onContinueToPayment: () => void
   onBackToShipping: () => void
@@ -374,7 +376,7 @@ export function CheckoutPageView({
           variant: 'outline',
           onClick: () => {
             onClearPaymentNotice?.()
-            router.push('/cart')
+            router.push(PATHS.cart)
           },
         }}
       />

@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Trash2, ShoppingBag } from 'lucide-react'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 import { motion } from 'motion/react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
@@ -51,8 +53,8 @@ export function CartPageView({
             icon={ShoppingBag}
             heading="Your cart is empty"
             message="Browse the collection and add pieces you love — they’ll gather here."
-            actionLabel="Continue shopping"
-            actionTo="/products"
+            actionLabel={LABELS.continueShopping}
+            actionTo={PATHS.products}
           />
         </div>
       </div>
@@ -104,7 +106,7 @@ export function CartPageView({
                         <div className="flex items-baseline gap-2">
                           <TextEyebrow className="!mb-0">Sold by</TextEyebrow>
                           <Link
-                            href={`/products?vendorId=${vendor.id}`}
+                            href={`${PATHS.products}?vendorId=${vendor.id}`}
                             className="font-display text-[1.125rem] text-ink transition-colors hover:text-brand"
                           >
                             {vendor.businessName}
@@ -126,7 +128,7 @@ export function CartPageView({
                             className="group grid grid-cols-[4.5rem_1fr] gap-3 py-3.5 sm:grid-cols-[5.5rem_1fr_auto] sm:gap-4"
                           >
                             <Link
-                              href={`/products/${item.product.slug}`}
+                              href={PATHS.product(item.product.slug)}
                               className="relative aspect-square overflow-hidden bg-paper"
                             >
                               <Image
@@ -142,7 +144,7 @@ export function CartPageView({
                               <div className="flex items-start justify-between gap-2">
                                 <div className="min-w-0">
                                   <Link
-                                    href={`/products/${item.product.slug}`}
+                                    href={PATHS.product(item.product.slug)}
                                     className="block text-[0.9375rem] font-medium leading-snug text-ink transition-colors hover:text-brand"
                                   >
                                     {item.product.name}
@@ -203,10 +205,10 @@ export function CartPageView({
 
             <div className="mt-6 border-t border-line pt-4">
               <Link
-                href="/products"
+                href={PATHS.products}
                 className="inline-flex items-center gap-2 text-[0.875rem] font-medium text-brand transition-colors hover:text-brand-hover"
               >
-                Continue shopping
+                {LABELS.continueShopping}
                 <ArrowRight size={15} />
               </Link>
             </div>
@@ -252,7 +254,7 @@ export function CartPageView({
               </div>
 
               <Button asChild className="mt-5 w-full" size="lg">
-                <Link href="/checkout" className="inline-flex items-center justify-center gap-2">
+                <Link href={PATHS.checkout} className="inline-flex items-center justify-center gap-2">
                   Checkout
                   <ArrowRight size={16} />
                 </Link>

@@ -10,6 +10,7 @@ import { useCheckoutStore } from '@/features/checkout/store/checkout.store'
 import { navigate } from '@/shared/utils/navigate'
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
 import { MAX_CART_LINE_QUANTITY, clampCartQuantity } from '@/shared/constants/cart'
+import { PATHS } from '@/shared/constants/paths'
 import type { CartItem } from '@/shared/api/types'
 
 export function useCartDrawer() {
@@ -86,7 +87,7 @@ export function useCartDrawer() {
 
   const continueShopping = () => {
     close()
-    navigate(router, '/products')
+    navigate(router, PATHS.products)
   }
 
   return {

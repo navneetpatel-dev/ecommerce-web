@@ -1,4 +1,5 @@
 import { SITE } from './constants'
+import { PATHS } from '@/shared/constants/paths'
 
 export function canonicalUrl(path: string): string {
   const base = SITE.url.endsWith('/') ? SITE.url.slice(0, -1) : SITE.url
@@ -7,9 +8,9 @@ export function canonicalUrl(path: string): string {
 }
 
 export function productCanonical(slug: string): string {
-  return canonicalUrl(`/products/${slug}`)
+  return canonicalUrl(PATHS.product(slug))
 }
 
 export function categoryCanonical(slug: string): string {
-  return canonicalUrl(`/categories/${slug}`)
+  return canonicalUrl(PATHS.category(slug))
 }

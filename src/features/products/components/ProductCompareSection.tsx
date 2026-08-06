@@ -2,6 +2,7 @@
 
 import { forwardRef } from 'react'
 import type { ProductListItem } from '@/shared/api/types'
+import { LABELS } from '@/shared/constants/labels'
 
 interface ProductCompareSectionProps {
   products: ProductListItem[]
@@ -38,7 +39,7 @@ export const ProductCompareSection = forwardRef<HTMLElement, ProductCompareSecti
                 </div>
                 <div>
                   <dt className="text-ink-muted">Stock</dt>
-                  <dd className="text-ink">{product.stock > 0 ? `${product.stock} available` : 'Out of stock'}</dd>
+                  <dd className="text-ink">{product.stock > 0 ? `${product.stock} available` : LABELS.outOfStock}</dd>
                 </div>
                 <div>
                   <dt className="text-ink-muted">Vendor</dt>

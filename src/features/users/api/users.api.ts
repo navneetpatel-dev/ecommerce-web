@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api/client'
+import { API } from '@/shared/constants/apiRoutes'
 import type { Address, CurrentUser } from '@/shared/api/types'
 
 export type UpdateProfileBody = {
@@ -10,21 +11,21 @@ export type UpdateProfileBody = {
 export type AddressInput = Omit<Address, 'id' | 'userId'>
 
 export const usersApi = {
-  getProfile: () => apiClient.get<CurrentUser>('/api/users/me'),
+  getProfile: () => apiClient.get<CurrentUser>(API.usersMe.profile),
   updateProfile: (body: UpdateProfileBody) =>
-    apiClient.patch<CurrentUser>('/api/users/me', body),
-  deleteAccount: () => apiClient.delete<void>('/api/users/me'),
-  exportAccount: () => apiClient.get<Record<string, unknown>>('/api/users/me/export'),
+    apiClient.patch<CurrentUser>(API.usersMe.profile, body),
+  deleteAccount: () => apiClient.delete<void>(API.usersMe.profile),
+  exportAccount: () => apiClient.get<Record<string, unknown>>(API.usersMe.export),
   uploadAvatar: (dataUrl: string) =>
-    apiClient.post<CurrentUser>('/api/users/me/avatar', { dataUrl }),
+    apiClient.post<CurrentUser>(API.usersMe.avatar, { dataUrl }),
 
-  getAddresses: () => apiClient.get<Address[]>('/api/users/addresses'),
+  getAddresses: () => apiClient.get<Address[]>(API.usersMe.addresses),
   createAddress: (body: AddressInput) =>
-    apiClient.post<Address>('/api/users/addresses', body),
+    apiClient.post<Address>(API.usersMe.addresses, body),
   updateAddress: (addressId: string, body: Partial<AddressInput>) =>
-    apiClient.patch<Address>(`/api/users/addresses/${addressId}`, body),
+    apiClient.patch<Address>(API.usersMe.address(addressId), body),
   deleteAddress: (addressId: string) =>
-    apiClient.delete<void>(`/api/users/addresses/${addressId}`),
+    apiClient.delete<void>(API.usersMe.address(addressId)),
   setDefaultAddress: (addressId: string) =>
-    apiClient.post<Address>(`/api/users/addresses/${addressId}/default`),
+    apiClient.post<Address>(API.usersMe.addressDefault(addressId)),
 }

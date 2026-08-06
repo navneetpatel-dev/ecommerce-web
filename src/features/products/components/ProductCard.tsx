@@ -13,6 +13,8 @@ import { MediaImage } from '@/shared/components/MediaImage'
 import { Button } from '@/shared/components/ui/button'
 import { CardQuantityControl } from './CardQuantityControl'
 import { cn } from '@/shared/utils/cn'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 
 interface ProductCardProps {
   product: ProductListItem
@@ -116,7 +118,7 @@ export function ProductCard({
   return (
     <div className="group relative">
       <Link
-        href={`/products/${product.slug}`}
+        href={PATHS.product(product.slug)}
         className="block"
         onMouseEnter={onPrefetch}
       >
@@ -146,7 +148,7 @@ export function ProductCard({
           {product.stock === 0 && (
             <div className="absolute inset-0 bg-overlay flex items-center justify-center">
               <span className="bg-surface text-ink text-[0.8125rem] font-medium rounded-sm px-3 py-1.5">
-                Out of stock
+                {LABELS.outOfStock}
               </span>
             </div>
           )}
@@ -192,7 +194,7 @@ export function ProductCard({
 
       <div className="mt-3 space-y-1">
         <VendorStrip vendor={product.vendor} size="sm" />
-        <Link href={`/products/${product.slug}`}>
+        <Link href={PATHS.product(product.slug)}>
           <h3 className="font-sans text-[0.9375rem] font-medium text-ink line-clamp-2 group-hover:text-brand transition-colors">
             {product.name}
           </h3>

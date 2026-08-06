@@ -1,7 +1,8 @@
 import { apiClient } from '@/shared/api/client'
+import { API } from '@/shared/constants/apiRoutes'
 
 export const inventoryApi = {
-  lowStock: () => apiClient.get<unknown[]>('/api/inventory/low-stock'),
+  lowStock: () => apiClient.get<unknown[]>(API.inventory.lowStock),
   updateStock: (variantId: string, stock: number) =>
-    apiClient.patch<{ message: string }>(`/api/inventory/variants/${variantId}/stock`, { stock }),
+    apiClient.patch<{ message: string }>(API.inventory.variantStock(variantId), { stock }),
 }

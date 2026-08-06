@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import type { CartItem } from '@/shared/api/types'
+import type { ShippingMethod } from '@/shared/constants/statuses'
 import { ShippingCardContainer } from '../containers/ShippingCardContainer'
 import { Button } from '@/shared/components/ui/button'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
@@ -9,7 +10,7 @@ interface ShippingStepProps {
   selectedMethods: Record<string, string>
   pincode: string
   canContinue: boolean
-  onSelect: (vendorId: string, method: 'STANDARD' | 'EXPRESS') => void
+  onSelect: (vendorId: string, method: ShippingMethod) => void
   onContinue: () => void
 }
 

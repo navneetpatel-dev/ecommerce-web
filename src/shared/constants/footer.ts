@@ -1,31 +1,34 @@
+import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
+
 export const FOOTER_SECTIONS = [
   {
-    title: 'Company',
+    title: LABELS.company,
     links: [
-      { href: '/about', label: 'About' },
-      { href: '/contact', label: 'Contact' },
-      { href: '/blog', label: 'Blog' },
+      { href: PATHS.about, label: LABELS.about },
+      { href: PATHS.contact, label: LABELS.contact },
+      { href: PATHS.blog, label: LABELS.blog },
     ],
   },
   {
-    title: 'Customer Service',
+    title: LABELS.customerService,
     links: [
-      { href: '/orders', label: 'Track Order' },
-      { href: '/help', label: 'Help Center' },
-      { href: '/faq', label: 'FAQ' },
-      { href: '/privacy', label: 'Privacy Policy' },
-      { href: '/terms', label: 'Terms of Service' },
+      { href: PATHS.orders, label: LABELS.trackOrder },
+      { href: PATHS.help, label: LABELS.helpCenter },
+      { href: PATHS.faq, label: LABELS.faq },
+      { href: PATHS.privacy, label: LABELS.privacyPolicy },
+      { href: PATHS.terms, label: LABELS.termsOfService },
     ],
   },
   {
-    title: 'Sell on Marketplace',
+    title: LABELS.sellOnMarketplace,
     links: [
-      { href: '/vendor/register', label: 'Become a Seller' },
-      { href: '/vendor/dashboard/overview', label: 'Vendor Dashboard' },
+      { href: PATHS.vendor.register, label: LABELS.becomeSeller },
+      { href: PATHS.vendor.overview, label: LABELS.vendorDashboard },
     ],
   },
   {
-    title: 'Connect',
+    title: LABELS.connect,
     links: [] as Array<{ href: string; label: string }>,
     isNewsletter: true,
   },

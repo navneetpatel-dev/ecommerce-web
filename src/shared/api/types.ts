@@ -1,10 +1,17 @@
-export type RoleName =
-  | 'CUSTOMER'
-  | 'VENDOR_OWNER'
-  | 'VENDOR_STAFF'
-  | 'SUPER_ADMIN'
-  | 'ADMIN_ORDER_MANAGER'
-  | 'ADMIN_CATALOG_MANAGER';
+import type {
+  CommissionStatus,
+  OrderStatus,
+  PaymentStatus,
+  PayoutStatus,
+  ProductStatus,
+  ReturnStatus,
+  ReviewStatus,
+  ShipmentStatus,
+  ShippingMethod,
+} from '@/shared/constants/statuses'
+import type { RoleName } from '@/shared/constants/labels'
+
+export type { RoleName };
 
 export interface CurrentUser {
   id: string;
@@ -113,7 +120,7 @@ export interface Shipment {
   carrier: string;
   trackingNumber: string;
   trackingUrl: string | null;
-  status: 'PENDING' | 'PICKED_UP' | 'IN_TRANSIT' | 'OUT_FOR_DELIVERY' | 'DELIVERED' | 'FAILED';
+  status: ShipmentStatus;
   estimatedDeliveryDate: string | null;
   shippedAt: string | null;
   deliveredAt: string | null;
@@ -124,7 +131,7 @@ export interface SubOrder {
   orderId: string;
   vendorId: string;
   vendor: VendorInfo;
-  status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'RETURNED';
+  status: OrderStatus;
   subtotal: number;
   shippingCost?: number;
   taxAmount?: number;
@@ -137,8 +144,8 @@ export interface Order {
   userId: string;
   totalAmount: number;
   discountTotal: number;
-  status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'RETURNED';
-  paymentStatus: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
   createdAt: string;
   subOrders: SubOrder[];
   shippingAddress?: Address | null;
@@ -164,7 +171,7 @@ export interface Review {
   rating: number;
   title: string | null;
   body: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  status: ReviewStatus;
   helpfulCount: number;
   unhelpfulCount: number;
   createdAt: string;
@@ -189,7 +196,7 @@ export interface ReturnRequest {
   userId: string;
   reason: string;
   reasonCode: 'DAMAGED' | 'WRONG_ITEM' | 'NOT_AS_DESCRIBED' | 'NO_LONGER_NEEDED' | 'OTHER';
-  status: 'REQUESTED' | 'APPROVED' | 'REJECTED' | 'PICKUP_SCHEDULED' | 'RECEIVED' | 'REFUNDED' | 'CLOSED';
+  status: ReturnStatus;
   refundAmount: number | null;
   resolvedAt: string | null;
   createdAt: string;
@@ -204,7 +211,7 @@ export interface WishlistItem {
 }
 
 export interface ShippingRate {
-  method: 'STANDARD' | 'EXPRESS';
+  method: ShippingMethod;
   cost: number;
   estimatedDays: number;
 }
@@ -233,7 +240,7 @@ export interface CommissionLedgerEntry {
   saleAmount: number;
   commissionRate: number;
   commissionAmount: number;
-  status: 'PENDING' | 'SETTLED' | 'CLAWED_BACK';
+  status: CommissionStatus;
   createdAt: string;
 }
 
@@ -243,19 +250,8 @@ export interface PayoutEntry {
   amount: number;
   periodStart: string;
   periodEnd: string;
-  status: 'PENDING' | 'PROCESSING' | 'PAID' | 'FAILED';
+  status: PayoutStatus;
   paidAt: string | null;
-}
-
-export interface ReturnRequest {
-  id: string;
-  subOrderId: string;
-  orderItemId: string;
-  reason: string;
-  reasonCode: 'DAMAGED' | 'WRONG_ITEM' | 'NOT_AS_DESCRIBED' | 'NO_LONGER_NEEDED' | 'OTHER';
-  status: 'REQUESTED' | 'APPROVED' | 'REJECTED' | 'PICKUP_SCHEDULED' | 'RECEIVED' | 'REFUNDED' | 'CLOSED';
-  refundAmount: number | null;
-  createdAt: string;
 }
 
 export type CouponType = 'PERCENTAGE' | 'FLAT' | 'FREE_SHIPPING' | 'BOGO' | 'TIERED' | 'CASHBACK' | 'BUNDLE';
@@ -283,7 +279,7 @@ export interface Coupon {
 
 export interface VendorProduct extends ProductListItem {
   sku: string;
-  status: 'DRAFT' | 'PENDING_APPROVAL' | 'LIVE' | 'REJECTED' | 'ARCHIVED';
+  status: ProductStatus;
   lowStockAt: number;
 }
 

@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/api/client'
+import { API } from '@/shared/constants/apiRoutes'
 
 export type HelpTicketTopic =
   | 'ORDERS'
@@ -29,6 +30,6 @@ export type HelpTicket = {
 
 export const helpApi = {
   createTicket: (body: CreateHelpTicketBody) =>
-    apiClient.post<HelpTicket>('/api/help/tickets', body),
-  myTickets: () => apiClient.get<HelpTicket[]>('/api/help/tickets/mine'),
+    apiClient.post<HelpTicket>(API.help.tickets, body),
+  myTickets: () => apiClient.get<HelpTicket[]>(`${API.help.tickets}/mine`),
 }

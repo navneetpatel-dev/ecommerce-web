@@ -18,22 +18,23 @@ import {
 } from 'lucide-react'
 import { usePermissions } from './usePermissions'
 import { ADMIN_NAV } from '@/shared/constants/adminNav'
+import { PATHS } from '@/shared/constants/paths'
 
 const ADMIN_NAV_ICONS = {
-  '/admin/vendors': Users,
-  '/admin/products': Package,
-  '/admin/categories': FolderTree,
-  '/admin/orders': ShoppingBag,
-  '/admin/returns': RotateCcw,
-  '/admin/coupons': Tags,
-  '/admin/reviews': MessageSquare,
-  '/admin/tax': Percent,
-  '/admin/shipping': Truck,
-  '/admin/finance': Wallet,
-  '/admin/users': Users,
-  '/admin/analytics': BarChart3,
-  '/admin/audit': ClipboardList,
-  '/admin/settings': Settings,
+  [PATHS.admin.vendors]: Users,
+  [PATHS.admin.products]: Package,
+  [PATHS.admin.categories]: FolderTree,
+  [PATHS.admin.orders]: ShoppingBag,
+  [PATHS.admin.returns]: RotateCcw,
+  [PATHS.admin.coupons]: Tags,
+  [PATHS.admin.reviews]: MessageSquare,
+  [PATHS.admin.tax]: Percent,
+  [PATHS.admin.shipping]: Truck,
+  [PATHS.admin.finance]: Wallet,
+  [PATHS.admin.users]: Users,
+  [PATHS.admin.analytics]: BarChart3,
+  [PATHS.admin.audit]: ClipboardList,
+  [PATHS.admin.settings]: Settings,
 } as const
 
 export function useAdminLayout() {
@@ -42,7 +43,7 @@ export function useAdminLayout() {
   const navItems = ADMIN_NAV.filter((item) => hasAnyPermission(...item.permissions)).map((item) => ({
     href: item.href,
     label: item.label,
-    icon: ADMIN_NAV_ICONS[item.href],
+    icon: ADMIN_NAV_ICONS[item.href as keyof typeof ADMIN_NAV_ICONS],
     permissions: item.permissions,
   }))
   return { pathname, navItems }

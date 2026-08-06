@@ -13,6 +13,7 @@ import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useLogout } from '@/features/auth/api/auth.queries'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTheme } from '@/shared/hooks/use-theme'
+import { PATHS } from '@/shared/constants/paths'
 import { useDeleteAccount, useExportAccount } from '../../api/account.queries'
 
 export function PrivacySection() {
@@ -38,7 +39,7 @@ export function PrivacySection() {
     }
     queryClient.clear()
     setDeleteOpen(false)
-    router.replace('/')
+    router.replace(PATHS.home)
   }
 
   const handleExport = async () => {
