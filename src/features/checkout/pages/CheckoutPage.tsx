@@ -14,8 +14,6 @@ export function CheckoutPage() {
       addressId={checkout.addressId}
       shippingMethodByVendor={checkout.shippingMethodByVendor}
       addresses={checkout.addresses}
-      walletBalance={checkout.walletBalance}
-      walletShortfall={checkout.walletShortfall}
       paymentMethod={checkout.paymentMethod}
       quote={checkout.quote}
       isPending={checkout.isPending}
@@ -24,7 +22,6 @@ export function CheckoutPage() {
       groupedByVendor={checkout.groupedByVendor}
       total={checkout.total}
       shippingReady={checkout.shippingReady}
-      walletDisabled={checkout.walletDisabled}
       onStepClick={checkout.onStepClick}
       onSelectAddress={checkout.onSelectAddress}
       onSelectShipping={checkout.onSelectShipping}

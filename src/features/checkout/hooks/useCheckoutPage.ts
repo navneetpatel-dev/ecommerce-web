@@ -3,7 +3,6 @@
 import { useEffect, useMemo } from 'react'
 import { useCart } from '@/features/cart/api/cart.queries'
 import { groupItemsByVendor, calcCartTotal } from '@/features/cart/utils/cart.utils'
-import { useWalletBalance } from '@/features/wallet/api/wallet.queries'
 import { useCheckoutStore } from '../store/checkout.store'
 import { useAddresses, useCreateAddress } from '../api/checkout.queries'
 import { usePlaceOrderWithRazorpay } from './usePlaceOrder'
@@ -24,7 +23,6 @@ export function useCheckoutPage() {
   const { data: cart, isLoading: cartLoading } = useCart()
   const { data: addresses, isLoading: addressesLoading } = useAddresses()
   const createAddress = useCreateAddress()
-  const { data: walletBalance } = useWalletBalance()
   const { handlePlaceOrder, quote, isPending, paymentError } = usePlaceOrderWithRazorpay()
   const { requireAuth } = useRequireAuth()
 
@@ -38,6 +36,11 @@ export function useCheckoutPage() {
     const preferred = addresses.find((a) => a.isDefault) ?? addresses[0]
     if (preferred) setAddress(preferred.id)
   }, [addresses, addressId, setAddress])
+
+  // Drop legacy wallet selection if it was persisted in the store
+  useEffect(() => {
+    if (paymentMethod === 'wallet') setPaymentMethod(null)
+  }, [paymentMethod, setPaymentMethod])
 
   const groupedByVendor = useMemo(() => {
     if (!cart?.items) return {}
@@ -54,17 +57,12 @@ export function useCheckoutPage() {
     [groupedByVendor, shippingMethodByVendor]
   )
 
-  const walletDisabled = isPending || (walletBalance ?? 0) < (quote?.grandTotal ?? total)
-  const walletShortfall = Math.max(0, (quote?.grandTotal ?? total) - (walletBalance ?? 0))
-
   return {
     step,
     addressId,
     shippingMethodByVendor,
     paymentMethod,
     addresses,
-    walletBalance,
-    walletShortfall,
     quote,
     isPending,
     paymentError,
@@ -73,7 +71,6 @@ export function useCheckoutPage() {
     total,
     hasItems: Boolean(cart?.items?.length),
     shippingReady,
-    walletDisabled,
     isCreatingAddress: createAddress.isPending,
     onStepClick: (nextStep: number) => {
       if (nextStep < step) setStep(nextStep as 1 | 2 | 3 | 4)

@@ -21,8 +21,6 @@ interface CheckoutPageViewProps {
   addressId: string | null
   shippingMethodByVendor: Record<string, 'STANDARD' | 'EXPRESS'>
   addresses?: Address[]
-  walletBalance?: number
-  walletShortfall?: number
   paymentMethod?: string | null
   quote?: CheckoutQuote | null
   isPending: boolean
@@ -31,7 +29,6 @@ interface CheckoutPageViewProps {
   groupedByVendor: Record<string, CartItem[]>
   total: number
   shippingReady: boolean
-  walletDisabled: boolean
   onStepClick: (step: number) => void
   onSelectAddress: (id: string) => void
   onSelectShipping: (vendorId: string, method: 'STANDARD' | 'EXPRESS') => void
@@ -177,8 +174,6 @@ export function CheckoutPageView({
   addressId,
   shippingMethodByVendor,
   addresses,
-  walletBalance,
-  walletShortfall,
   paymentMethod,
   quote,
   isPending,
@@ -187,7 +182,6 @@ export function CheckoutPageView({
   groupedByVendor,
   total,
   shippingReady,
-  walletDisabled,
   onStepClick,
   onSelectAddress,
   onSelectShipping,
@@ -310,10 +304,7 @@ export function CheckoutPageView({
                         transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
                       >
                         <PaymentStep
-                          walletBalance={walletBalance}
-                          walletShortfall={walletShortfall}
                           isPending={isPending}
-                          walletDisabled={walletDisabled}
                           selectedMethod={paymentMethod}
                           onSelect={onSelectPayment}
                           onBack={onBackToShipping}
