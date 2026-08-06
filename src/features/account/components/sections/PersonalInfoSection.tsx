@@ -49,7 +49,7 @@ export function PersonalInfoSection() {
 
   if (isLoading) {
     return (
-      <div className="max-w-md space-y-4 border border-line bg-surface-raised p-6">
+      <div className="max-w-md space-y-4 border border-line bg-surface p-6">
         <Skeleton className="h-5 w-32" />
         <Skeleton className="h-11 w-full" />
         <Skeleton className="h-11 w-full" />
@@ -59,7 +59,7 @@ export function PersonalInfoSection() {
 
   if (isError || !profile) {
     return (
-      <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+      <div className="border border-line bg-surface px-5 py-10 text-center">
         <p className="text-[0.9375rem] text-ink-muted">
           {(error as Error | null)?.message || 'Could not load your profile. Please try again.'}
         </p>
@@ -88,7 +88,7 @@ export function PersonalInfoSection() {
             setVerifyToken(result.emailVerificationToken)
           }
         })}
-        className="space-y-5 border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6"
+        className="space-y-5 border border-line bg-surface p-5 shadow-elevation-1 md:p-6"
       >
         <div>
           <TextEyebrow className="hidden lg:block">Identity</TextEyebrow>
@@ -138,7 +138,7 @@ export function PersonalInfoSection() {
       </form>
 
       {(profile.pendingEmail || pendingToken) && (
-        <div className="space-y-3 border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6">
+        <div className="space-y-3 border border-line bg-surface p-5 shadow-elevation-1 md:p-6">
           <TextEyebrow>Verify</TextEyebrow>
           <h3 className="mt-1 text-[1.0625rem] font-semibold tracking-tight text-ink">
             Confirm email change

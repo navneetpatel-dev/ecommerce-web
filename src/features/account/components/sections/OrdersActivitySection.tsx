@@ -32,7 +32,7 @@ export function OrdersActivitySection() {
 
   return (
     <div className="space-y-6">
-      <section className="border border-line bg-surface-raised shadow-elevation-1">
+      <section className="border border-line bg-surface shadow-elevation-1">
         <div className="flex items-center justify-between border-b border-line px-5 py-4 md:px-6">
           <div>
             <TextEyebrow>Recent</TextEyebrow>
@@ -91,7 +91,7 @@ export function OrdersActivitySection() {
         )}
       </section>
 
-      <ul className="divide-y divide-line border border-line bg-surface-raised shadow-elevation-1">
+      <ul className="divide-y divide-line border border-line bg-surface shadow-elevation-1">
         <SummaryRow
           icon={Heart}
           label="Wishlist"

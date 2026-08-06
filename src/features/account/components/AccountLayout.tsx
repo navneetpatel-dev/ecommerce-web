@@ -63,8 +63,8 @@ export function AccountLayout({
                     className={cn(
                       'inline-flex items-center gap-2 border px-3.5 py-2 text-[0.8125rem] font-medium transition-colors',
                       selected
-                        ? 'border-brand bg-brand-subtle text-ink shadow-[inset_0_-2px_0_0_var(--brand)]'
-                        : 'border-line bg-surface text-ink-muted hover:border-ink/25 hover:text-ink'
+                        ? 'border-line-strong bg-paper text-brand shadow-[inset_0_-2px_0_0_var(--brand)]'
+                        : 'border-line bg-surface text-ink-muted hover:border-ink/25 hover:bg-paper hover:text-ink'
                     )}
                   >
                     <Icon size={15} strokeWidth={1.5} aria-hidden />
@@ -80,7 +80,7 @@ export function AccountLayout({
           <aside className="hidden lg:block">
             <nav
               aria-label="Account sections"
-              className="sticky top-24 border border-line bg-surface-raised shadow-elevation-1"
+              className="sticky top-24 border border-line bg-surface shadow-elevation-1"
             >
               <ul className="divide-y divide-line">
                 {sections.map((section) => {
@@ -95,8 +95,8 @@ export function AccountLayout({
                         className={cn(
                           'flex w-full items-start gap-3 px-4 py-3.5 text-left transition-colors',
                           selected
-                            ? 'bg-brand-subtle shadow-[inset_3px_0_0_0_var(--brand)]'
-                            : 'hover:bg-paper'
+                            ? 'bg-paper shadow-[inset_3px_0_0_0_var(--brand)]'
+                            : 'hover:bg-paper/70'
                         )}
                       >
                         <Icon

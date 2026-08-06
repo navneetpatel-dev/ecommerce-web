@@ -40,7 +40,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
 
   if (isLoadingProfile) {
     return (
-      <div className="space-y-4 border border-line bg-surface-raised p-6">
+      <div className="space-y-4 border border-line bg-surface p-6">
         <div className="flex items-center gap-4">
           <Skeleton className="h-24 w-24 rounded-full" />
           <div className="space-y-2">
@@ -54,7 +54,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
 
   if (profileError || !profile) {
     return (
-      <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+      <div className="border border-line bg-surface px-5 py-10 text-center">
         <p className="text-[0.9375rem] text-ink-muted">
           {profileError?.message || 'Could not load your profile. Please try again.'}
         </p>
@@ -89,8 +89,12 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
-        className="border border-line bg-surface-raised p-6 shadow-elevation-1 md:p-8"
+        className="relative border border-line bg-surface p-6 shadow-elevation-1 md:p-8"
       >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/70 via-brand/30 to-transparent"
+        />
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
           <div className="relative inline-flex shrink-0">
             <button
@@ -155,7 +159,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
         </div>
       </motion.section>
 
-      <section className="border border-line bg-surface-raised shadow-elevation-1">
+      <section className="border border-line bg-surface shadow-elevation-1">
         <div className="border-b border-line px-5 py-4 md:px-6">
           <TextEyebrow>At a glance</TextEyebrow>
           <p className="mt-1 text-[0.875rem] text-ink-muted">Jump into what matters most.</p>

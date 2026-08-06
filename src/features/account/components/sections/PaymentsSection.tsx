@@ -5,7 +5,7 @@ import { EmptyState } from '@/shared/components/EmptyState'
 
 export function PaymentsSection() {
   return (
-    <div className="border border-line bg-surface-raised">
+    <div className="border border-line bg-surface">
       <EmptyState
         icon={CreditCard}
         heading="No saved cards"

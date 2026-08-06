@@ -57,7 +57,7 @@ export function PrivacySection() {
 
   return (
     <div className="space-y-4">
-      <section className="border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6">
+      <section className="border border-line bg-surface p-5 shadow-elevation-1 md:p-6">
         <div className="flex items-start gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted">
             {theme === 'dark' ? <Moon size={18} strokeWidth={1.5} /> : <Sun size={18} strokeWidth={1.5} />}
@@ -89,7 +89,7 @@ export function PrivacySection() {
         </div>
       </section>
 
-      <section className="border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6">
+      <section className="border border-line bg-surface p-5 shadow-elevation-1 md:p-6">
         <div className="flex items-start gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted">
             <Download size={18} strokeWidth={1.5} />
@@ -120,7 +120,7 @@ export function PrivacySection() {
         </div>
       </section>
 
-      <section className="border border-line border-danger/30 bg-surface-raised p-5 shadow-elevation-1 md:p-6">
+      <section className="border border-line border-danger/30 bg-surface p-5 shadow-elevation-1 md:p-6">
         <div className="flex items-start gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-danger">
             <Trash2 size={18} strokeWidth={1.5} />

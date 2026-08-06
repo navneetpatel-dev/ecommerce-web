@@ -33,7 +33,7 @@ export function NotificationsSection() {
 
   if (isLoading) {
     return (
-      <div className="space-y-4 border border-line bg-surface-raised p-6">
+      <div className="space-y-4 border border-line bg-surface p-6">
         <Skeleton className="h-16 w-full" />
         <Skeleton className="h-16 w-full" />
       </div>
@@ -42,7 +42,7 @@ export function NotificationsSection() {
 
   if (isError || !profile) {
     return (
-      <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+      <div className="border border-line bg-surface px-5 py-10 text-center">
         <p className="text-[0.9375rem] text-ink-muted">
           {(error as Error | null)?.message || 'Could not load preferences. Please try again.'}
         </p>
@@ -58,7 +58,7 @@ export function NotificationsSection() {
   }
 
   return (
-    <div className="space-y-4 border border-line bg-surface-raised shadow-elevation-1">
+    <div className="space-y-4 border border-line bg-surface shadow-elevation-1">
       <div className="border-b border-line px-5 py-4 md:px-6">
         <h2 className="hidden font-display text-[1.125rem] text-ink lg:block">Notifications</h2>
         <p className="text-[0.875rem] text-ink-muted lg:mt-1">

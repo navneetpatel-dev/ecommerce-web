@@ -45,7 +45,7 @@ export function SecuritySection() {
         onChangeAgain={profile.resetSuccess}
       />
 
-      <section className="border border-line bg-surface-raised shadow-elevation-1">
+      <section className="border border-line bg-surface shadow-elevation-1">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
           <div>
             <h2 className="font-display text-[1.125rem] text-ink">Active sessions</h2>

@@ -166,7 +166,7 @@ export function AddressesSection() {
           {list.map((addr) => (
             <li
               key={addr.id}
-              className="flex flex-col border border-line bg-surface-raised p-4 shadow-elevation-1"
+              className="flex flex-col border border-line bg-surface p-4 shadow-elevation-1"
             >
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-ink">
