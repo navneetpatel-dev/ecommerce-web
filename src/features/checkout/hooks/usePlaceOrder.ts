@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCheckoutStore } from '../store/checkout.store'
@@ -20,6 +20,7 @@ export function usePlaceOrderWithRazorpay() {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [paymentNotice, setPaymentNotice] = useState<PaymentNotice | null>(null)
+  const cancelInFlightRef = useRef<Set<string>>(new Set())
 
   const quoteInput = { addressId, shippingMethodByVendor, couponCode: appliedCouponCode }
   const { data: quote } = useCheckoutQuote(quoteInput)
@@ -36,6 +37,9 @@ export function usePlaceOrderWithRazorpay() {
     orderId: string,
     notice: PaymentNotice,
   ) => {
+    if (cancelInFlightRef.current.has(orderId)) return
+    cancelInFlightRef.current.add(orderId)
+
     try {
       await checkoutApi.cancelCheckout({ orderId })
       clearCartCache()

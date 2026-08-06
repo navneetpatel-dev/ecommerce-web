@@ -110,7 +110,7 @@ export function CartPageView({
                           </Link>
                         </div>
                         <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-ink-faint">
-                          {items.length} {items.length === 1 ? 'piece' : 'pieces'}
+                          {items.reduce((sum, item) => sum + Number(item.quantity || 0), 0)} items
                         </span>
                       </div>
                     )}

@@ -19,6 +19,7 @@ export const sessionKeys = {
 
 export function useLogin() {
   const setSession = useAuthStore((s) => s.setSession)
+  const queryClient = useQueryClient()
   const router = useRouter()
 
   return useMutation({
@@ -30,6 +31,8 @@ export function useLogin() {
         localStorage.setItem('accessToken', data.accessToken)
         localStorage.setItem('session', JSON.stringify(data.user))
       }
+      // Guest session cookie may still exist — refetch so server can merge carts.
+      void queryClient.invalidateQueries({ queryKey: ['cart'] })
       navigateReplace(router, postAuthPath(data.user.role, variables.redirect))
     },
   })
@@ -37,12 +40,14 @@ export function useLogin() {
 
 export function useRegister() {
   const setSession = useAuthStore((s) => s.setSession)
+  const queryClient = useQueryClient()
   const router = useRouter()
 
   return useMutation({
     mutationFn: (input: RegisterInput) => authApi.register(input),
     onSuccess: (data) => {
       setSession(data.accessToken, data.user)
+      void queryClient.invalidateQueries({ queryKey: ['cart'] })
       navigateReplace(router, defaultRouteForRole(data.user.role))
     },
   })
