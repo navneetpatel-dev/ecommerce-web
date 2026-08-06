@@ -45,6 +45,11 @@ export function useCheckoutPage() {
     return groupItemsByVendor(cart.items)
   }, [cart])
 
+  const hasUnavailableItems = useMemo(
+    () => (cart?.items ?? []).some((item) => item.isAvailable === false),
+    [cart]
+  )
+
   // Default every vendor to Standard (Free) when shipping methods are missing
   useEffect(() => {
     const vendorIds = Object.keys(groupedByVendor)
@@ -76,6 +81,7 @@ export function useCheckoutPage() {
     groupedByVendor,
     total,
     hasItems: Boolean(cart?.items?.length),
+    hasUnavailableItems,
     shippingReady,
     isCreatingAddress: createAddress.isPending,
     onStepClick: (nextStep: number) => {

@@ -38,6 +38,8 @@ export function useAddToWishlist() {
               id: `optimistic-${productId}`,
               productId,
               priceAtAdd: 0,
+              isAvailable: true,
+              unavailableReason: null,
               product: { id: productId } as WishlistItem['product'],
             },
           ],

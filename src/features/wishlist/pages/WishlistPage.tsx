@@ -10,7 +10,8 @@ export function WishlistPage() {
     <WishlistView
       isLoading={wishlist.isLoading}
       isEmpty={wishlist.isEmpty}
-      products={wishlist.products}
+      items={wishlist.items}
+      onRemoveItem={wishlist.removeItem}
     />
   )
 }

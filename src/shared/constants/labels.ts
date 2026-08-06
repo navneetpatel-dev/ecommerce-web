@@ -67,6 +67,24 @@ export const LABELS = {
   returnReasonNotAsDescribed: 'Not as described',
   returnReasonNoLongerNeeded: 'No longer needed',
   returnReasonOther: 'Other',
+
+  // Unavailable item badges
+  unavailableReasonOutOfStock: 'Out of stock',
+  unavailableReasonProductUnpublished: 'No longer available',
+  unavailableReasonVendorUnavailable: 'Shop unavailable',
+  unavailableGeneric: 'Unavailable',
+
+  // Cart / checkout unavailability
+  removeUnavailableToCheckout: 'Remove unavailable items to continue',
+
+  // Vendor storefront unavailable
+  shopUnavailableHeading: 'This shop is unavailable',
+  shopUnavailableBody: 'The shop you are looking for is no longer active or has been removed.',
+  browseOtherShops: 'Browse other shops',
+
+  // Coupon messages
+  couponRemovedUnavailable: 'Coupon was removed because some items are no longer available.',
+  couponRemovedCartChange: 'Your coupon was removed due to cart changes.',
 } as const
 
 export const ROLES = {

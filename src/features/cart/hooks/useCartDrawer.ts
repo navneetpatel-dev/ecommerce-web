@@ -9,7 +9,7 @@ import { couponsApi } from '@/features/coupons/api/coupons.api'
 import { useCheckoutStore } from '@/features/checkout/store/checkout.store'
 import { navigate } from '@/shared/utils/navigate'
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
-import { MAX_CART_LINE_QUANTITY, clampCartQuantity } from '@/shared/constants/cart'
+import { clampCartQuantity } from '@/shared/constants/cart'
 import { PATHS } from '@/shared/constants/paths'
 import type { CartItem } from '@/shared/api/types'
 
@@ -39,20 +39,10 @@ export function useCartDrawer() {
     return calcCartTotal(cart.items)
   }, [cart])
 
-  const decreaseQuantity = (item: CartItem) => {
-    if (item.quantity > 1) {
-      updateItem.mutate({ itemId: item.id, quantity: item.quantity - 1 })
-      return
-    }
-    removeItem.mutate(item.id)
-  }
+  const hasUnavailableItems = cart?.items?.some((item) => item.isAvailable === false) ?? false
 
-  const increaseQuantity = (item: CartItem) => {
-    if (item.quantity >= MAX_CART_LINE_QUANTITY) return
-    updateItem.mutate({
-      itemId: item.id,
-      quantity: clampCartQuantity(item.quantity + 1),
-    })
+  const updateQuantity = (itemId: string, quantity: number) => {
+    updateItem.mutate({ itemId, quantity: clampCartQuantity(quantity) })
   }
 
   const applyCoupon = async () => {
@@ -96,10 +86,10 @@ export function useCartDrawer() {
     isLoading,
     items: cart?.items ?? [],
     hasItems: Boolean(cart?.items?.length),
+    hasUnavailableItems,
     groupedByVendor,
     total,
-    decreaseQuantity,
-    increaseQuantity,
+    updateQuantity,
     removeItem: (itemId: string) => removeItem.mutate(itemId),
     couponInput,
     setCouponInput,

@@ -9,6 +9,7 @@ import type {
   ReviewStatus,
   ShipmentStatus,
   ShippingMethod,
+  UnavailableReason,
 } from '@/shared/constants/statuses'
 import type { RoleName } from '@/shared/constants/labels'
 
@@ -33,6 +34,11 @@ export interface VendorInfo {
   businessName: string;
   slug: string;
   logoUrl: string | null;
+}
+
+export interface VendorDetail extends VendorInfo {
+  description?: string | null;
+  bannerUrl?: string | null;
 }
 
 export interface ProductListItem {
@@ -88,6 +94,8 @@ export interface CartItem {
   id: string;
   variantId: string;
   quantity: number;
+  isAvailable: boolean;
+  unavailableReason: UnavailableReason | null;
   product: {
     id: string;
     name: string;
@@ -208,6 +216,8 @@ export interface WishlistItem {
   id: string;
   productId: string;
   priceAtAdd: number;
+  isAvailable: boolean;
+  unavailableReason: UnavailableReason | null;
   product: ProductListItem;
 }
 
@@ -313,4 +323,18 @@ export interface PlatformSettings {
   freeShippingThreshold: number;
   supportEmail: string;
   supportHours: string;
+}
+
+export interface PromoBanner {
+  id: string;
+  eyebrow: string;
+  headline: string;
+  subheadline: string;
+  ctaLabel: string;
+  ctaHref: string;
+  secondaryCtaLabel?: string | null;
+  secondaryCtaHref?: string | null;
+  imageSrc: string;
+  imageMobileSrc?: string | null;
+  imageAlt: string;
 }

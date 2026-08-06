@@ -56,6 +56,8 @@ function patchCartQuantity(
         id: `optimistic-${variantId}`,
         variantId,
         quantity,
+        isAvailable: true,
+        unavailableReason: null,
         product: {
           id: product.id,
           name: product.name,

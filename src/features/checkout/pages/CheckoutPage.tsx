@@ -23,6 +23,7 @@ export function CheckoutPage() {
       groupedByVendor={checkout.groupedByVendor}
       total={checkout.total}
       shippingReady={checkout.shippingReady}
+      hasUnavailableItems={checkout.hasUnavailableItems}
       onStepClick={checkout.onStepClick}
       onSelectAddress={checkout.onSelectAddress}
       onSelectShipping={checkout.onSelectShipping}

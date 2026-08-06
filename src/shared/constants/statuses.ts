@@ -115,3 +115,17 @@ export const COMMISSION_STATUS = {
   CLAWED_BACK: 'CLAWED_BACK',
 } as const
 export type CommissionStatus = (typeof COMMISSION_STATUS)[keyof typeof COMMISSION_STATUS]
+
+export const CATEGORY_STATUS = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+} as const
+export type CategoryStatus = (typeof CATEGORY_STATUS)[keyof typeof CATEGORY_STATUS]
+
+/** Matches backend unavailableReason values on cart/wishlist items. */
+export const UNAVAILABLE_REASON = {
+  OUT_OF_STOCK: 'OUT_OF_STOCK',
+  PRODUCT_UNPUBLISHED: 'PRODUCT_UNPUBLISHED',
+  VENDOR_UNAVAILABLE: 'VENDOR_UNAVAILABLE',
+} as const
+export type UnavailableReason = (typeof UNAVAILABLE_REASON)[keyof typeof UNAVAILABLE_REASON]

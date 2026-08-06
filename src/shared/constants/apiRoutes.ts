@@ -113,6 +113,9 @@ export const API = {
     public: '/api/settings/public',
     root: '/api/settings',
   },
+  homepage: {
+    banners: '/api/homepage/banners',
+  },
   admin: {
     dashboard: '/api/admin/dashboard',
     analytics: '/api/admin/analytics/platform',

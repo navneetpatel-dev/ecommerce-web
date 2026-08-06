@@ -35,6 +35,7 @@ interface CheckoutPageViewProps {
   groupedByVendor: Record<string, CartItem[]>
   total: number
   shippingReady: boolean
+  hasUnavailableItems?: boolean
   onStepClick: (step: number) => void
   onSelectAddress: (id: string) => void
   onSelectShipping: (vendorId: string, method: ShippingMethod) => void
@@ -190,6 +191,7 @@ export function CheckoutPageView({
   groupedByVendor,
   total,
   shippingReady,
+  hasUnavailableItems,
   onStepClick,
   onSelectAddress,
   onSelectShipping,
@@ -340,6 +342,7 @@ export function CheckoutPageView({
                         <ReviewStep
                           quote={quote ?? null}
                           isPending={isPending}
+                          hasUnavailableItems={hasUnavailableItems}
                           onPlaceOrder={onPlaceOrder}
                           onBack={onBackToPayment}
                         />

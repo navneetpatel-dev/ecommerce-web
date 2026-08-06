@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { X, Minus, Plus, Trash2, ShoppingBag } from 'lucide-react'
+import { X, ShoppingBag } from 'lucide-react'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import { motion, AnimatePresence } from 'motion/react'
@@ -12,7 +12,7 @@ import { Input } from '@/shared/components/ui/input'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
-import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
+import { CartLineItem } from './CartLineItem'
 import type { CartItem } from '@/shared/api/types'
 
 interface CartDrawerProps {
@@ -27,11 +27,11 @@ interface CartDrawerProps {
   couponError: string | null
   couponPending: boolean
   appliedCouponCode: string | null
+  hasUnavailableItems?: boolean
   onCouponInputChange: (value: string) => void
   onApplyCoupon: () => void
   onContinueShopping: () => void
-  onDecreaseQuantity: (item: CartItem) => void
-  onIncreaseQuantity: (item: CartItem) => void
+  onUpdateQuantity: (itemId: string, quantity: number) => void
   onRemoveItem: (itemId: string) => void
 }
 
@@ -47,11 +47,11 @@ export function CartDrawer({
   couponError,
   couponPending,
   appliedCouponCode,
+  hasUnavailableItems,
   onCouponInputChange,
   onApplyCoupon,
   onContinueShopping,
-  onDecreaseQuantity,
-  onIncreaseQuantity,
+  onUpdateQuantity,
   onRemoveItem,
 }: CartDrawerProps) {
   return (
@@ -100,55 +100,13 @@ export function CartDrawer({
                   <div key={vendorId} className="space-y-3">
                     <VendorStrip vendor={items[0].product.vendor} size="sm" />
                     {items.map((item) => (
-                      <div key={item.id} className="flex gap-3 pb-3 border-b border-line last:border-0">
-                        <img
-                          src={item.product.imageUrl}
-                          alt={item.product.name}
-                          className="h-16 w-16 rounded-sm object-cover shrink-0"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <Link
-                            href={PATHS.product(item.product.slug)}
-                            onClick={onClose}
-                            className="text-[0.9375rem] font-medium line-clamp-2 hover:text-brand"
-                          >
-                            {item.product.name}
-                          </Link>
-                          <p className="font-sans text-[0.9375rem] font-semibold text-brand mt-0.5">
-                            ₹{item.product.price.toLocaleString('en-IN')}
-                          </p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <button
-                              onClick={() => onDecreaseQuantity(item)}
-                              className="p-0.5 hover:bg-paper rounded"
-                              aria-label="Decrease quantity"
-                            >
-                              <Minus size={14} />
-                            </button>
-                            <span className="text-[0.8125rem] w-6 text-center">{item.quantity}</span>
-                            <DisabledActionHint
-                              disabled={item.quantity >= MAX_CART_LINE_QUANTITY}
-                              message={`Maximum quantity is ${MAX_CART_LINE_QUANTITY}.`}
-                            >
-                              <button
-                                onClick={() => onIncreaseQuantity(item)}
-                                className="p-0.5 hover:bg-paper rounded disabled:opacity-40"
-                                aria-label="Increase quantity"
-                                disabled={item.quantity >= MAX_CART_LINE_QUANTITY}
-                              >
-                                <Plus size={14} />
-                              </button>
-                            </DisabledActionHint>
-                            <button
-                              onClick={() => onRemoveItem(item.id)}
-                              className="p-0.5 hover:bg-paper rounded ml-auto"
-                              aria-label="Remove item"
-                            >
-                              <Trash2 size={14} className="text-ink-muted" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                      <CartLineItem
+                        key={item.id}
+                        item={item}
+                        onUpdateQuantity={onUpdateQuantity}
+                        onRemoveItem={onRemoveItem}
+                        compact
+                      />
                     ))}
                   </div>
                 ))
@@ -206,11 +164,17 @@ export function CartDrawer({
                     ₹{total.toLocaleString('en-IN')}
                   </span>
                 </div>
-                <Button asChild size="lg" className="w-full">
-                  <Link href={PATHS.checkout} onClick={onClose}>
-                    Checkout
-                  </Link>
-                </Button>
+                {hasUnavailableItems ? (
+                  <p className="rounded-sm bg-warning-subtle px-3 py-2 text-[0.8125rem] text-warning-foreground">
+                    {LABELS.removeUnavailableToCheckout}
+                  </p>
+                ) : (
+                  <Button asChild size="lg" className="w-full">
+                    <Link href={PATHS.checkout} onClick={onClose}>
+                      Checkout
+                    </Link>
+                  </Button>
+                )}
                 <Link
                   href={PATHS.cart}
                   onClick={onClose}

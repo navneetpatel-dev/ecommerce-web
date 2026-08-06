@@ -7,6 +7,9 @@ import { checkoutApi } from '../api/checkout.api'
 import { loadRazorpayScript } from '../utils/loadRazorpayScript'
 import { navigate } from '@/shared/utils/navigate'
 import { PATHS } from '@/shared/constants/paths'
+import { ERROR_CODES } from '@/shared/constants/errors'
+import { LABELS } from '@/shared/constants/labels'
+import { ApiError } from '@/shared/api/client'
 import { cartKeys } from '@/features/cart/api/cart.queries'
 import type { StatusDialogVariant } from '@/shared/components/StatusDialog'
 
@@ -147,15 +150,21 @@ export function usePlaceOrderWithRazorpay() {
       clearCartCache()
       navigate(router, PATHS.orderConfirmation(result.orderId))
     } catch (err) {
-      const description =
-        err && typeof err === 'object' && 'message' in err
+      const isItemsUnavailable =
+        err instanceof ApiError && err.code === ERROR_CODES.ITEMS_UNAVAILABLE
+      const description = isItemsUnavailable
+        ? LABELS.removeUnavailableToCheckout
+        : err && typeof err === 'object' && 'message' in err
           ? String((err as { message: string }).message)
           : 'Could not place order. Please try again.'
       showNotice({
-        variant: 'danger',
-        title: 'Could not place order',
+        variant: isItemsUnavailable ? 'warning' : 'danger',
+        title: isItemsUnavailable ? 'Items unavailable' : 'Could not place order',
         description,
       })
+      if (isItemsUnavailable) {
+        clearCartCache()
+      }
     }
   }
 

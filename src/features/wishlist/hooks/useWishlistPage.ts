@@ -1,13 +1,20 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useWishlist } from '../api/wishlist.queries'
-import type { ProductListItem } from '@/shared/api/types'
+import { useWishlist, useRemoveFromWishlist } from '../api/wishlist.queries'
+import type { ProductListItem, WishlistItem } from '@/shared/api/types'
+
+export interface WishlistPageItem {
+  wishlistItem: WishlistItem
+  product: ProductListItem
+  isAvailable: boolean
+}
 
 export function useWishlistPage() {
   const { data, isLoading } = useWishlist()
+  const removeFromWishlist = useRemoveFromWishlist()
 
-  const products = useMemo<ProductListItem[]>(() => {
+  const items = useMemo<WishlistPageItem[]>(() => {
     if (!data?.items?.length) return []
     return data.items.flatMap((item) => {
       const product = item.product
@@ -17,19 +24,26 @@ export function useWishlistPage() {
         (sum, variant) => sum + Number(variant.stock ?? 0),
         0
       )
-      const next: ProductListItem = {
+      const hydratedProduct: ProductListItem = {
         ...product,
         stock: Number(product.stock ?? stockFromVariants),
         variants,
         isWishlisted: true,
       }
-      return [next]
+      return [{ wishlistItem: item, product: hydratedProduct, isAvailable: item.isAvailable !== false }]
     })
   }, [data])
 
+  const availableProducts = useMemo(
+    () => items.filter((i) => i.isAvailable).map((i) => i.product),
+    [items]
+  )
+
   return {
     isLoading,
-    products,
-    isEmpty: !isLoading && products.length === 0,
+    items,
+    availableProducts,
+    isEmpty: !isLoading && items.length === 0,
+    removeItem: (productId: string) => removeFromWishlist.mutate(productId),
   }
 }

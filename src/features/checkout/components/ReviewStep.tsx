@@ -1,11 +1,13 @@
 import type { CheckoutQuote } from '@/shared/api/types'
+import { LABELS } from '@/shared/constants/labels'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { Button } from '@/shared/components/ui/button'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, AlertTriangle } from 'lucide-react'
 
 interface ReviewStepProps {
   quote: CheckoutQuote | null
   isPending: boolean
+  hasUnavailableItems?: boolean
   onPlaceOrder: () => void
   onBack: () => void
 }
@@ -14,7 +16,7 @@ function formatInr(value: number) {
   return `₹${value.toLocaleString('en-IN')}`
 }
 
-export function ReviewStep({ quote, isPending, onPlaceOrder, onBack }: ReviewStepProps) {
+export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder, onBack }: ReviewStepProps) {
   if (!quote) {
     return (
       <div className="space-y-5">
@@ -108,6 +110,15 @@ export function ReviewStep({ quote, isPending, onPlaceOrder, onBack }: ReviewSte
         )}
       </div>
 
+      {hasUnavailableItems && (
+        <div className="flex items-start gap-2 rounded-sm border border-warning bg-warning-subtle px-4 py-3">
+          <AlertTriangle size={16} className="mt-0.5 shrink-0 text-warning" aria-hidden />
+          <p className="text-[0.875rem] text-warning-foreground">
+            {LABELS.removeUnavailableToCheckout}
+          </p>
+        </div>
+      )}
+
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
         <Button variant="outline" onClick={onBack} className="w-full sm:w-auto">
           Back to payment
@@ -117,6 +128,7 @@ export function ReviewStep({ quote, isPending, onPlaceOrder, onBack }: ReviewSte
           className="w-full gap-2 sm:w-auto"
           onClick={onPlaceOrder}
           loading={isPending}
+          disabled={Boolean(hasUnavailableItems)}
         >
           Place order
           <ArrowRight size={16} />

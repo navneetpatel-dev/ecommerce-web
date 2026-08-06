@@ -1,17 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowRight, Trash2, ShoppingBag } from 'lucide-react'
+import { ArrowRight, ShoppingBag } from 'lucide-react'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import { motion } from 'motion/react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { QuantitySelector } from '@/shared/components/QuantitySelector'
-import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
 import { Button } from '@/shared/components/ui/button'
 import { CartPageSkeleton } from '@/shared/components/Skeletons'
+import { CartLineItem } from './CartLineItem'
 import type { CartItem } from '@/shared/api/types'
 
 interface CartPageViewProps {
@@ -20,12 +18,9 @@ interface CartPageViewProps {
   itemCount: number
   groupedByVendor: Record<string, CartItem[]>
   total: number
+  hasUnavailableItems: boolean
   onUpdateQuantity: (itemId: string, quantity: number) => void
   onRemoveItem: (itemId: string) => void
-}
-
-function variantLabel(item: CartItem) {
-  return Object.values(item.variant?.attributes || {}).filter(Boolean).join(' · ')
 }
 
 export function CartPageView({
@@ -34,6 +29,7 @@ export function CartPageView({
   itemCount,
   groupedByVendor,
   total,
+  hasUnavailableItems,
   onUpdateQuantity,
   onRemoveItem,
 }: CartPageViewProps) {
@@ -52,7 +48,7 @@ export function CartPageView({
           <EmptyState
             icon={ShoppingBag}
             heading="Your cart is empty"
-            message="Browse the collection and add pieces you love — they’ll gather here."
+            message="Browse the collection and add pieces you love — they'll gather here."
             actionLabel={LABELS.continueShopping}
             actionTo={PATHS.products}
           />
@@ -119,84 +115,14 @@ export function CartPageView({
                     )}
 
                     <ul className="divide-y divide-line">
-                      {items.map((item) => {
-                        const attrs = variantLabel(item)
-                        const lineTotal = Number(item.product.price) * item.quantity
-                        return (
-                          <li
-                            key={item.id}
-                            className="group grid grid-cols-[4.5rem_1fr] gap-3 py-3.5 sm:grid-cols-[5.5rem_1fr_auto] sm:gap-4"
-                          >
-                            <Link
-                              href={PATHS.product(item.product.slug)}
-                              className="relative aspect-square overflow-hidden bg-paper"
-                            >
-                              <Image
-                                src={item.product.imageUrl}
-                                alt={item.product.name}
-                                fill
-                                sizes="88px"
-                                className="object-cover transition-transform duration-[var(--motion-moderate)] group-hover:scale-[1.03]"
-                              />
-                            </Link>
-
-                            <div className="min-w-0 flex flex-col gap-2.5">
-                              <div className="flex items-start justify-between gap-2">
-                                <div className="min-w-0">
-                                  <Link
-                                    href={PATHS.product(item.product.slug)}
-                                    className="block text-[0.9375rem] font-medium leading-snug text-ink transition-colors hover:text-brand"
-                                  >
-                                    {item.product.name}
-                                  </Link>
-                                  {attrs ? (
-                                    <p className="mt-0.5 font-mono text-[0.6875rem] tracking-wide text-ink-muted">
-                                      {attrs}
-                                    </p>
-                                  ) : null}
-                                  <p className="mt-1 text-[0.8125rem] text-ink-muted sm:hidden">
-                                    ₹{Number(item.product.price).toLocaleString('en-IN')} each
-                                  </p>
-                                </div>
-                                <button
-                                  type="button"
-                                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-danger-subtle hover:text-danger sm:hidden"
-                                  aria-label={`Remove ${item.product.name}`}
-                                  onClick={() => onRemoveItem(item.id)}
-                                >
-                                  <Trash2 size={15} />
-                                </button>
-                              </div>
-
-                              <div className="flex flex-wrap items-center gap-3">
-                                <QuantitySelector
-                                  value={item.quantity}
-                                  onChange={(quantity) => onUpdateQuantity(item.id, quantity)}
-                                  min={1}
-                                  max={MAX_CART_LINE_QUANTITY}
-                                />
-                                <button
-                                  type="button"
-                                  className="hidden items-center gap-1.5 text-[0.8125rem] text-ink-muted transition-colors hover:text-danger sm:inline-flex"
-                                  onClick={() => onRemoveItem(item.id)}
-                                >
-                                  <Trash2 size={14} />
-                                  Remove
-                                </button>
-                              </div>
-                            </div>
-
-                            <div className="hidden flex-col items-end justify-start gap-1 pt-0.5 sm:flex">
-                              <p className="font-display text-[1.125rem] tabular-nums text-ink">
-                                ₹{lineTotal.toLocaleString('en-IN')}
-                              </p>
-                              <p className="text-[0.75rem] text-ink-muted">
-                                ₹{Number(item.product.price).toLocaleString('en-IN')} each
-                              </p>
-                            </div>
-                          </li>
-                        )
-                      })}
+                      {items.map((item) => (
+                        <CartLineItem
+                          key={item.id}
+                          item={item}
+                          onUpdateQuantity={onUpdateQuantity}
+                          onRemoveItem={onRemoveItem}
+                        />
+                      ))}
                     </ul>
                   </motion.section>
                 )
@@ -253,12 +179,18 @@ export function CartPageView({
                 </p>
               </div>
 
-              <Button asChild className="mt-5 w-full" size="lg">
-                <Link href={PATHS.checkout} className="inline-flex items-center justify-center gap-2">
-                  Checkout
-                  <ArrowRight size={16} />
-                </Link>
-              </Button>
+              {hasUnavailableItems ? (
+                <p className="mt-4 rounded-sm bg-warning-subtle px-3 py-2 text-[0.8125rem] text-warning-foreground">
+                  {LABELS.removeUnavailableToCheckout}
+                </p>
+              ) : (
+                <Button asChild className="mt-5 w-full" size="lg">
+                  <Link href={PATHS.checkout} className="inline-flex items-center justify-center gap-2">
+                    Checkout
+                    <ArrowRight size={16} />
+                  </Link>
+                </Button>
+              )}
 
               <p className="mt-3 text-center text-[0.75rem] text-ink-muted">
                 Secure checkout · Easy returns
