@@ -12,7 +12,7 @@ import { PersonalInfoSection } from '../components/sections/PersonalInfoSection'
 import { SecuritySection } from '../components/sections/SecuritySection'
 import { AddressesSection } from '../components/sections/AddressesSection'
 import { PaymentsSection } from '../components/sections/PaymentsSection'
-import { OrdersWalletSection } from '../components/sections/OrdersWalletSection'
+import { OrdersActivitySection } from '../components/sections/OrdersActivitySection'
 import { NotificationsSection } from '../components/sections/NotificationsSection'
 import { PrivacySection } from '../components/sections/PrivacySection'
 import { useAccountPage } from '../hooks/useAccountPage'
@@ -37,7 +37,7 @@ function AccountSectionBody({
     case 'payments':
       return <PaymentsSection />
     case 'orders':
-      return <OrdersWalletSection />
+      return <OrdersActivitySection />
     case 'notifications':
       return <NotificationsSection />
     case 'privacy':

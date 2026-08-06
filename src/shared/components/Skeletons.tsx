@@ -146,16 +146,6 @@ export function ProfilePageSkeleton() {
   )
 }
 
-export function WalletPageSkeleton() {
-  return (
-    <div className="mx-auto max-w-[1000px] space-y-6 px-4 py-10">
-      <Skeleton className="h-8 w-32" />
-      <Skeleton className="h-36 w-full rounded-md" />
-      <SkeletonRows count={4} height="h-12 w-full" />
-    </div>
-  )
-}
-
 export function WishlistPageSkeleton() {
   return (
     <div className="storefront-container space-y-6 py-10">

@@ -88,7 +88,7 @@ export function MobileNavDrawer({
               <div className="px-3 py-2 text-[0.8125rem] font-medium text-ink-muted mt-4">Account</div>
               <Link href="/orders" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Orders</Link>
               <Link href="/wishlist" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Wishlist</Link>
-              <Link href="/wallet" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Wallet</Link>
+              <Link href="/help" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Help</Link>
               <Link href="/profile" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Profile</Link>
             </>
           )}

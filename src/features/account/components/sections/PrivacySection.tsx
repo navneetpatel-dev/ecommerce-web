@@ -97,7 +97,7 @@ export function PrivacySection() {
           <div className="min-w-0 flex-1">
             <h2 className="font-display text-[1.125rem] text-ink">Download my data</h2>
             <p className="mt-1 text-[0.875rem] text-ink-muted">
-              Export a JSON copy of your profile, addresses, orders, reviews, returns, wallet, and
+              Export a JSON copy of your profile, addresses, orders, reviews, returns, and
               wishlist.
             </p>
             <div className="mt-4">

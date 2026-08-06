@@ -243,16 +243,6 @@ export interface PayoutEntry {
   paidAt: string | null;
 }
 
-export interface WalletLedgerEntry {
-  id: string;
-  type: 'CREDIT' | 'DEBIT';
-  amount: number;
-  balanceAfter: number;
-  referenceType: string;
-  description: string;
-  createdAt: string;
-}
-
 export interface ReturnRequest {
   id: string;
   subOrderId: string;

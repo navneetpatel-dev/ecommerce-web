@@ -2,6 +2,7 @@
 
 import { cn } from '@/shared/utils/cn'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { motion } from 'motion/react'
 import type { AccountNavItem, AccountSectionId } from '../types'
 
 interface AccountLayoutProps {
@@ -27,7 +28,12 @@ export function AccountLayout({
       />
 
       <div className="storefront-container relative py-6 md:py-8">
-        <header className="mb-8">
+        <motion.header
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
+          className="mb-8"
+        >
           <TextEyebrow brand>Account</TextEyebrow>
           <h1
             className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
@@ -36,11 +42,10 @@ export function AccountLayout({
             Settings
           </h1>
           <p className="mt-2 max-w-xl text-[0.9375rem] text-ink-muted">
-            Manage your profile, security, addresses, and preferences.
+            Manage your profile, security, addresses, and preferences — quietly, clearly.
           </p>
-        </header>
+        </motion.header>
 
-        {/* Mobile / tablet: horizontal scrollable tabs */}
         <nav
           aria-label="Account sections"
           className="mb-6 -mx-1 overflow-x-auto overscroll-x-contain pb-1 lg:hidden"
@@ -72,11 +77,10 @@ export function AccountLayout({
         </nav>
 
         <div className="grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10">
-          {/* Desktop: left nav */}
           <aside className="hidden lg:block">
             <nav
               aria-label="Account sections"
-              className="sticky top-24 border border-line bg-surface-raised"
+              className="sticky top-24 border border-line bg-surface-raised shadow-elevation-1"
             >
               <ul className="divide-y divide-line">
                 {sections.map((section) => {
@@ -127,7 +131,7 @@ export function AccountLayout({
 
           <div className="min-w-0">
             <div className="mb-5 lg:hidden">
-              <h2 className="font-display text-[1.25rem] text-ink">{active.label}</h2>
+              <TextEyebrow>{active.label}</TextEyebrow>
               <p className="mt-1 text-[0.875rem] text-ink-muted">{active.description}</p>
             </div>
             {children}

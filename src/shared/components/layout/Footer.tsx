@@ -19,6 +19,7 @@ const footerSections = [
     title: 'Customer Service',
     links: [
       { href: '/orders', label: 'Track Order' },
+      { href: '/help', label: 'Help Center' },
       { href: '/faq', label: 'FAQ' },
       { href: '/privacy', label: 'Privacy Policy' },
       { href: '/terms', label: 'Terms of Service' },

@@ -2,29 +2,23 @@
 
 import { useRef, useState } from 'react'
 import Link from 'next/link'
-import { Camera, CheckCircle2, ChevronRight, Heart, Package, Wallet } from 'lucide-react'
+import { Camera, CheckCircle2, ChevronRight, Heart, Package } from 'lucide-react'
+import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
 import { Badge } from '@/shared/components/ui/badge'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { FormError } from '@/shared/components/FormError'
-import { formatOrderDate, formatInr } from '@/features/orders/utils/format'
+import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { formatOrderDate } from '@/features/orders/utils/format'
 import { useAccountOverview } from '../../hooks/useAccountOverview'
 import { useUploadAvatar } from '../../api/account.queries'
 import type { AccountSectionId } from '../../types'
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? ''
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean)
   if (parts.length === 0) return '?'
   if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase()
   return `${parts[0]![0] ?? ''}${parts[1]![0] ?? ''}`.toUpperCase()
-}
-
-function resolveAvatarUrl(url: string | null | undefined) {
-  if (!url) return undefined
-  if (url.startsWith('http') || url.startsWith('data:')) return url
-  return `${API_BASE}${url}`
 }
 
 interface OverviewSectionProps {
@@ -38,7 +32,6 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
     profileError,
     ordersCount,
     wishlistCount,
-    walletBalance,
     isLoadingStats,
   } = useAccountOverview()
   const uploadAvatar = useUploadAvatar()
@@ -70,7 +63,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
   }
 
   const memberSince = profile.createdAt ? formatOrderDate(profile.createdAt) : null
-  const avatarSrc = resolveAvatarUrl(profile.avatarUrl)
+  const avatarSrc = profile.avatarUrl || undefined
 
   const onPickFile = async (file: File | null) => {
     if (!file) return
@@ -85,22 +78,26 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
     setLocalError(null)
     const reader = new FileReader()
     reader.onload = () => {
-      const dataUrl = String(reader.result ?? '')
-      uploadAvatar.mutate(dataUrl)
+      uploadAvatar.mutate(String(reader.result ?? ''))
     }
     reader.readAsDataURL(file)
   }
 
   return (
-    <div className="space-y-6">
-      <div className="border border-line bg-surface-raised p-6 shadow-elevation-1">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+    <div className="space-y-8">
+      <motion.section
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
+        className="border border-line bg-surface-raised p-6 shadow-elevation-1 md:p-8"
+      >
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
           <div className="relative inline-flex shrink-0">
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
               disabled={uploadAvatar.isPending}
-              className="group relative rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              className="group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               aria-label="Upload profile photo"
             >
               <Avatar className="h-24 w-24 border border-line text-[1.25rem] font-semibold text-ink">
@@ -109,8 +106,8 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
                   {initials(profile.name)}
                 </AvatarFallback>
               </Avatar>
-              <span className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors group-hover:text-brand">
-                <Camera size={14} />
+              <span className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center border border-line bg-surface text-ink-muted transition-colors group-hover:text-brand">
+                <Camera size={14} strokeWidth={1.5} />
               </span>
             </button>
             <input
@@ -123,8 +120,14 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
           </div>
 
           <div className="min-w-0">
-            <h2 className="font-display text-[1.5rem] text-ink">{profile.name}</h2>
-            <div className="mt-1.5 flex flex-wrap items-center gap-2">
+            <TextEyebrow brand>Profile</TextEyebrow>
+            <h2
+              className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
+              style={{ fontSize: 'var(--text-display-sm)' }}
+            >
+              {profile.name}
+            </h2>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
               <p className="text-[0.9375rem] text-ink-muted">{profile.email}</p>
               {profile.emailVerified ? (
                 <Badge variant="success" className="gap-1">
@@ -138,80 +141,85 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
             {memberSince ? (
               <p className="mt-2 text-[0.8125rem] text-ink-faint">Member since {memberSince}</p>
             ) : null}
+            <p className="mt-3 text-[0.8125rem] text-ink-muted">
+              Photo stored securely on AWS S3. PNG, JPEG, or WebP up to 1.5MB.
+            </p>
             <FormError
-              error={(uploadAvatar.error as Error | null) ?? (localError ? new Error(localError) : null)}
+              error={
+                (uploadAvatar.error as Error | null) ??
+                (localError ? new Error(localError) : null)
+              }
               fallback="Could not upload photo."
             />
           </div>
         </div>
-      </div>
+      </motion.section>
 
-      <div className="grid gap-3 sm:grid-cols-3">
-        <StatLink
-          icon={Package}
-          label="Orders"
-          value={isLoadingStats ? '—' : String(ordersCount)}
-          href="/orders"
-          onQuick={() => onNavigate('orders')}
-        />
-        <StatLink
-          icon={Heart}
-          label="Wishlist"
-          value={isLoadingStats ? '—' : String(wishlistCount)}
-          href="/wishlist"
-        />
-        <StatLink
-          icon={Wallet}
-          label="Wallet"
-          value={isLoadingStats ? '—' : formatInr(walletBalance)}
-          href="/wallet"
-          onQuick={() => onNavigate('orders')}
-        />
-      </div>
+      <section className="border border-line bg-surface-raised shadow-elevation-1">
+        <div className="border-b border-line px-5 py-4 md:px-6">
+          <TextEyebrow>At a glance</TextEyebrow>
+          <p className="mt-1 text-[0.875rem] text-ink-muted">Jump into what matters most.</p>
+        </div>
+        <ul className="divide-y divide-line">
+          <GlanceRow
+            icon={Package}
+            label="Orders"
+            value={isLoadingStats ? '—' : String(ordersCount)}
+            href="/orders"
+            onDetails={() => onNavigate('orders')}
+          />
+          <GlanceRow
+            icon={Heart}
+            label="Wishlist"
+            value={isLoadingStats ? '—' : String(wishlistCount)}
+            href="/wishlist"
+          />
+        </ul>
+      </section>
     </div>
   )
 }
 
-function StatLink({
+function GlanceRow({
   icon: Icon,
   label,
   value,
   href,
-  onQuick,
+  onDetails,
 }: {
   icon: typeof Package
   label: string
   value: string
   href: string
-  onQuick?: () => void
+  onDetails?: () => void
 }) {
   return (
-    <div className="border border-line bg-surface-raised p-4 transition-colors hover:border-ink/25">
-      <div className="flex items-start justify-between gap-2">
-        <span className="flex h-9 w-9 items-center justify-center border border-line bg-paper text-brand">
-          <Icon size={16} strokeWidth={1.5} />
-        </span>
-        {onQuick ? (
+    <li className="flex items-center justify-between gap-4 px-5 py-4 md:px-6">
+      <div className="flex min-w-0 items-center gap-3">
+        <Icon size={16} strokeWidth={1.5} className="shrink-0 text-ink-muted" aria-hidden />
+        <div className="min-w-0">
+          <p className="text-[0.9375rem] text-ink">{label}</p>
+          <p className="mt-0.5 font-display text-[1.25rem] tabular-nums text-ink">{value}</p>
+        </div>
+      </div>
+      <div className="flex shrink-0 items-center gap-3">
+        {onDetails ? (
           <button
             type="button"
-            onClick={onQuick}
+            onClick={onDetails}
             className="text-[0.75rem] font-medium text-ink-muted hover:text-brand"
           >
             Details
           </button>
         ) : null}
+        <Link
+          href={href}
+          className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
+        >
+          View
+          <ChevronRight size={14} />
+        </Link>
       </div>
-      <p className="mt-3 text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-        {label}
-      </p>
-      <p className="mt-1 font-display text-[1.375rem] tabular-nums text-ink">{value}</p>
-      <Link
-        href={href}
-        className="mt-3 inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
-      >
-        View
-        <ChevronRight size={14} />
-      </Link>
-    </div>
+    </li>
   )
 }

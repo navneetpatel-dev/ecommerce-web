@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { ChevronRight, Heart, Package, RotateCcw, Star, Wallet } from 'lucide-react'
+import { ChevronRight, Heart, Package, RotateCcw, Star } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { reviewsApi } from '@/features/reviews/api/reviews.api'
 import { Skeleton } from '@/shared/components/ui/skeleton'
+import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { useAccountOverview } from '../../hooks/useAccountOverview'
 import {
   countOrderItems,
@@ -14,15 +15,12 @@ import {
   shortOrderId,
 } from '@/features/orders/utils/format'
 
-export function OrdersWalletSection() {
+export function OrdersActivitySection() {
   const {
     recentOrders,
     ordersCount,
     wishlistCount,
-    walletBalance,
-    recentWalletTx,
     isLoadingStats,
-    isLoadingWalletTx,
   } = useAccountOverview()
 
   const reviewsQuery = useQuery({
@@ -35,9 +33,12 @@ export function OrdersWalletSection() {
   return (
     <div className="space-y-6">
       <section className="border border-line bg-surface-raised shadow-elevation-1">
-        <div className="flex items-center justify-between border-b border-line px-5 py-4">
+        <div className="flex items-center justify-between border-b border-line px-5 py-4 md:px-6">
           <div>
-            <h2 className="font-display text-[1.125rem] text-ink">Recent orders</h2>
+            <TextEyebrow>Recent</TextEyebrow>
+            <h2 className="mt-1 text-[1.0625rem] font-semibold tracking-tight text-ink">
+              Orders
+            </h2>
             <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
               {isLoadingStats ? 'Loading…' : `${ordersCount} total`}
             </p>
@@ -69,7 +70,7 @@ export function OrdersWalletSection() {
               <li key={order.id}>
                 <Link
                   href={`/orders/${order.id}`}
-                  className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-paper"
+                  className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-paper md:px-6"
                 >
                   <div className="min-w-0">
                     <p className="font-medium text-ink">#{shortOrderId(order.id)}</p>
@@ -90,72 +91,7 @@ export function OrdersWalletSection() {
         )}
       </section>
 
-      <section className="border border-line bg-surface-raised p-5 shadow-elevation-1">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center border border-line bg-paper text-brand">
-              <Wallet size={18} strokeWidth={1.5} />
-            </span>
-            <div>
-              <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-                Wallet balance
-              </p>
-              <p className="mt-0.5 font-display text-[1.375rem] tabular-nums text-ink">
-                {isLoadingStats ? '—' : formatInr(walletBalance)}
-              </p>
-            </div>
-          </div>
-          <Link
-            href="/wallet"
-            className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
-          >
-            Open wallet
-            <ChevronRight size={14} />
-          </Link>
-        </div>
-
-        <div className="mt-5 border-t border-line pt-4">
-          <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            Recent activity
-          </p>
-          {isLoadingWalletTx ? (
-            <div className="mt-3 space-y-2">
-              <Skeleton className="h-10 w-full" />
-              <Skeleton className="h-10 w-full" />
-            </div>
-          ) : recentWalletTx.length === 0 ? (
-            <p className="mt-3 text-[0.875rem] text-ink-muted">No wallet transactions yet.</p>
-          ) : (
-            <ul className="mt-3 divide-y divide-line">
-              {recentWalletTx.map((tx) => (
-                <li
-                  key={tx.id}
-                  className="flex items-center justify-between gap-3 py-2.5 text-[0.875rem]"
-                >
-                  <div className="min-w-0">
-                    <p className="truncate text-ink">{tx.description || tx.referenceType}</p>
-                    <p className="mt-0.5 text-[0.75rem] text-ink-faint">
-                      {formatOrderDate(tx.createdAt)}
-                    </p>
-                  </div>
-                  <p
-                    className={
-                      tx.type === 'CREDIT'
-                        ? 'shrink-0 tabular-nums text-success'
-                        : 'shrink-0 tabular-nums text-ink'
-                    }
-                  >
-                    {tx.type === 'CREDIT' ? '+' : '−'}
-                    {formatInr(tx.amount)}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </section>
-
-      <ul className="divide-y divide-line border border-line bg-surface-raised">
+      <ul className="divide-y divide-line border border-line bg-surface-raised shadow-elevation-1">
         <SummaryRow
           icon={Heart}
           label="Wishlist"
@@ -168,12 +104,7 @@ export function OrdersWalletSection() {
           value={reviewsQuery.isLoading ? '—' : String(reviewsQuery.data?.length ?? 0)}
           href="/reviews"
         />
-        <SummaryRow
-          icon={RotateCcw}
-          label="Returns"
-          value="Manage"
-          href="/my-returns"
-        />
+        <SummaryRow icon={RotateCcw} label="Returns" value="Manage" href="/my-returns" />
         <SummaryRow
           icon={Package}
           label="All orders"
@@ -200,9 +131,7 @@ function SummaryRow({
     <>
       <span className="flex min-w-0 items-center gap-3">
         <Icon size={16} strokeWidth={1.5} className="shrink-0 text-ink-muted" aria-hidden />
-        <span className="min-w-0">
-          <span className="block text-[0.9375rem] text-ink">{label}</span>
-        </span>
+        <span className="block text-[0.9375rem] text-ink">{label}</span>
       </span>
       <span className="flex items-center gap-2">
         <span className="text-[0.875rem] font-medium tabular-nums text-ink">{value}</span>
@@ -216,7 +145,7 @@ function SummaryRow({
       <li>
         <Link
           href={href}
-          className="flex items-center justify-between gap-3 px-5 py-4 transition-colors hover:bg-paper"
+          className="flex items-center justify-between gap-3 px-5 py-4 transition-colors hover:bg-paper md:px-6"
         >
           {inner}
         </Link>
@@ -224,5 +153,5 @@ function SummaryRow({
     )
   }
 
-  return <li className="flex items-center justify-between gap-3 px-5 py-4">{inner}</li>
+  return <li className="flex items-center justify-between gap-3 px-5 py-4 md:px-6">{inner}</li>
 }

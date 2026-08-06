@@ -8,6 +8,7 @@ import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { Skeleton } from '@/shared/components/ui/skeleton'
+import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import {
   useAccountProfile,
   useUpdateProfile,
@@ -90,8 +91,8 @@ export function PersonalInfoSection() {
         className="space-y-5 border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6"
       >
         <div>
-          <h2 className="hidden font-display text-[1.25rem] text-ink lg:block">Personal info</h2>
-          <p className="mt-1 text-[0.875rem] text-ink-muted lg:mt-1">
+          <TextEyebrow className="hidden lg:block">Identity</TextEyebrow>
+          <p className="mt-1 text-[0.875rem] text-ink-muted">
             Update how we address you and how we can reach you.
           </p>
         </div>
@@ -138,11 +139,14 @@ export function PersonalInfoSection() {
 
       {(profile.pendingEmail || pendingToken) && (
         <div className="space-y-3 border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6">
-          <h3 className="font-display text-[1.125rem] text-ink">Confirm email change</h3>
+          <TextEyebrow>Verify</TextEyebrow>
+          <h3 className="mt-1 text-[1.0625rem] font-semibold tracking-tight text-ink">
+            Confirm email change
+          </h3>
           <p className="text-[0.875rem] text-ink-muted">
-            Enter the verification token sent for{' '}
+            Enter the verification token for{' '}
             <span className="font-medium text-ink">{profile.pendingEmail}</span>. In development the
-            token is shown below after you save.
+            token appears after you save.
           </p>
           <div className="space-y-1.5">
             <Label htmlFor="email-token">Verification token</Label>

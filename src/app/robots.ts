@@ -23,7 +23,6 @@ export default function robots(): MetadataRoute.Robots {
           '/checkout',
           '/profile',
           '/orders',
-          '/wallet',
           '/wishlist',
           '/admin/',
           '/vendor/',

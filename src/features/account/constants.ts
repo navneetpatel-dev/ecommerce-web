@@ -43,8 +43,8 @@ export const ACCOUNT_SECTIONS: AccountNavItem[] = [
   },
   {
     id: 'orders',
-    label: 'Orders & wallet',
-    description: 'Orders, wallet, wishlist',
+    label: 'Orders',
+    description: 'Orders, wishlist, returns',
     icon: Package,
   },
   {

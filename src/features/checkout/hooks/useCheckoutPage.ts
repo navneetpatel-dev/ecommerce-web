@@ -37,11 +37,6 @@ export function useCheckoutPage() {
     if (preferred) setAddress(preferred.id)
   }, [addresses, addressId, setAddress])
 
-  // Drop legacy wallet selection if it was persisted in the store
-  useEffect(() => {
-    if (paymentMethod === 'wallet') setPaymentMethod(null)
-  }, [paymentMethod, setPaymentMethod])
-
   const groupedByVendor = useMemo(() => {
     if (!cart?.items) return {}
     return groupItemsByVendor(cart.items)
