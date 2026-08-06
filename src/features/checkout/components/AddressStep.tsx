@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { ArrowRight, MapPin, Plus } from 'lucide-react'
 import type { Address } from '@/shared/api/types'
 import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
+import { AddressFormDialog } from '@/shared/components/AddressFormDialog'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { cn } from '@/shared/utils/cn'
 
@@ -18,16 +17,6 @@ interface AddressStepProps {
   onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => Promise<void>
 }
 
-const emptyForm = {
-  line1: '',
-  line2: '',
-  city: '',
-  state: '',
-  country: 'India',
-  pincode: '',
-  isDefault: false,
-}
-
 export function AddressStep({
   addresses,
   selectedId,
@@ -36,35 +25,8 @@ export function AddressStep({
   onContinue,
   onCreateAddress,
 }: AddressStepProps) {
-  const [showForm, setShowForm] = useState(false)
-  const [form, setForm] = useState(emptyForm)
-  const [formError, setFormError] = useState<string | null>(null)
+  const [showDialog, setShowDialog] = useState(false)
   const hasAddresses = Boolean(addresses?.length)
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    if (!form.line1.trim() || !form.city.trim() || !form.state.trim() || !form.pincode.trim()) return
-    setFormError(null)
-    try {
-      await onCreateAddress({
-        line1: form.line1.trim(),
-        line2: form.line2.trim() || null,
-        city: form.city.trim(),
-        state: form.state.trim(),
-        country: form.country.trim() || 'India',
-        pincode: form.pincode.trim(),
-        isDefault: form.isDefault || !hasAddresses,
-      })
-      setForm(emptyForm)
-      setShowForm(false)
-    } catch (err) {
-      const message =
-        err && typeof err === 'object' && 'message' in err
-          ? String((err as { message: string }).message)
-          : 'Could not save address. Please try again.'
-      setFormError(message)
-    }
-  }
 
   return (
     <div className="space-y-5">
@@ -77,24 +39,17 @@ export function AddressStep({
             type="button"
             variant="outline"
             onClick={() => {
-              setShowForm((v) => !v)
-              setFormError(null)
+              setShowDialog(true)
             }}
             className="gap-2"
           >
-            {showForm ? (
-              'Cancel'
-            ) : (
-              <>
-                <Plus size={16} />
-                Add address
-              </>
-            )}
+            <Plus size={16} />
+            Add address
           </Button>
         </div>
       )}
 
-      {!hasAddresses && !showForm && (
+      {!hasAddresses && !showDialog && (
         <div className="flex flex-col items-start gap-5 border border-dashed border-line bg-paper/50 px-6 py-10 md:px-8 md:py-12">
           <span className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-surface text-brand">
             <MapPin size={22} />
@@ -105,114 +60,21 @@ export function AddressStep({
               Save where your order should arrive so checkout stays quick next time.
             </p>
           </div>
-          <Button type="button" size="lg" onClick={() => setShowForm(true)} className="gap-2">
+          <Button type="button" size="lg" onClick={() => setShowDialog(true)} className="gap-2">
             <Plus size={16} />
             Add address
           </Button>
         </div>
       )}
 
-      {showForm && (
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4 border border-line bg-surface-raised p-5 shadow-elevation-1"
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="font-display text-[1.125rem] text-ink">New address</p>
-              <p className="mt-1 text-[0.8125rem] text-ink-muted">
-                All fields marked required must be filled.
-              </p>
-            </div>
-            {!hasAddresses && (
-              <Button type="button" variant="ghost" size="sm" onClick={() => setShowForm(false)}>
-                Cancel
-              </Button>
-            )}
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="addr-line1">Address line 1</Label>
-            <Input
-              id="addr-line1"
-              value={form.line1}
-              onChange={(e) => setForm((f) => ({ ...f, line1: e.target.value }))}
-              placeholder="House no., street, landmark"
-              required
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="addr-line2">Address line 2 (optional)</Label>
-            <Input
-              id="addr-line2"
-              value={form.line2}
-              onChange={(e) => setForm((f) => ({ ...f, line2: e.target.value }))}
-              placeholder="Apartment, suite, floor"
-            />
-          </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="space-y-1.5">
-              <Label htmlFor="addr-city">City</Label>
-              <Input
-                id="addr-city"
-                value={form.city}
-                onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
-                required
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="addr-state">State</Label>
-              <Input
-                id="addr-state"
-                value={form.state}
-                onChange={(e) => setForm((f) => ({ ...f, state: e.target.value }))}
-                required
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="space-y-1.5">
-              <Label htmlFor="addr-pincode">Pincode</Label>
-              <Input
-                id="addr-pincode"
-                value={form.pincode}
-                onChange={(e) => setForm((f) => ({ ...f, pincode: e.target.value }))}
-                required
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="addr-country">Country</Label>
-              <Input
-                id="addr-country"
-                value={form.country}
-                onChange={(e) => setForm((f) => ({ ...f, country: e.target.value }))}
-              />
-            </div>
-          </div>
-
-          {hasAddresses && (
-            <label className="flex items-center gap-2 text-[0.875rem] text-ink">
-              <input
-                type="checkbox"
-                checked={form.isDefault}
-                onChange={(e) => setForm((f) => ({ ...f, isDefault: e.target.checked }))}
-                className="h-4 w-4 accent-[var(--brand)]"
-              />
-              Set as default address
-            </label>
-          )}
-
-          {formError && (
-            <p role="alert" className="text-[0.875rem] text-danger">
-              {formError}
-            </p>
-          )}
-
-          <Button type="submit" loading={isCreating} className="w-full sm:w-auto">
-            Save address
-          </Button>
-        </form>
-      )}
+      <AddressFormDialog
+        open={showDialog}
+        onOpenChange={setShowDialog}
+        hasAddresses={hasAddresses}
+        isPending={isCreating}
+        title="New address"
+        onSubmit={onCreateAddress}
+      />
 
       {hasAddresses && (
         <ul className="space-y-3">

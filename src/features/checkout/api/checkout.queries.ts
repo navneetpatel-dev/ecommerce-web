@@ -1,6 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { checkoutApi } from './checkout.api'
 import { useAuthStore } from '@/features/auth/store/auth.store'
+import type { Address } from '@/shared/api/types'
+
+function sortAddresses(list: Address[]) {
+  return [...list].sort((a, b) => {
+    if (a.isDefault !== b.isDefault) return a.isDefault ? -1 : 1
+    return 0
+  })
+}
 
 export function useAddresses() {
   const currentUser = useAuthStore((s) => s.currentUser)
@@ -22,9 +30,9 @@ export function useCreateAddress() {
         const list = prev ?? []
         const without = list.filter((a) => a.id !== created.id)
         if (created.isDefault) {
-          return [created, ...without.map((a) => ({ ...a, isDefault: false }))]
+          return sortAddresses([created, ...without.map((a) => ({ ...a, isDefault: false }))])
         }
-        return [created, ...without]
+        return sortAddresses([created, ...without])
       })
       void queryClient.invalidateQueries({ queryKey: ['addresses'] })
     },

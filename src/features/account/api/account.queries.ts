@@ -89,10 +89,13 @@ export function useAccountAddresses() {
 
 function patchAddressCache(
   queryClient: ReturnType<typeof useQueryClient>,
-  updater: (list: Address[]) => Address[]
+  updater: (list: Address[]) => Address[],
+  options?: { revalidate?: boolean }
 ) {
   queryClient.setQueryData<Address[]>(ADDRESS_QUERY_KEY, (prev) => updater(prev ?? []))
-  void queryClient.invalidateQueries({ queryKey: ADDRESS_QUERY_KEY })
+  if (options?.revalidate !== false) {
+    void queryClient.invalidateQueries({ queryKey: ADDRESS_QUERY_KEY })
+  }
 }
 
 export function useCreateAccountAddress() {
@@ -143,11 +146,14 @@ export function useSetDefaultAccountAddress() {
   return useMutation({
     mutationFn: (addressId: string) => accountApi.setDefaultAddress(addressId),
     onSuccess: (updated) => {
-      patchAddressCache(queryClient, (list) =>
-        list.map((a) => ({
-          ...a,
-          isDefault: a.id === updated.id,
-        }))
+      patchAddressCache(
+        queryClient,
+        (list) =>
+          list.map((a) => ({
+            ...a,
+            isDefault: a.id === updated.id,
+          })),
+        { revalidate: false }
       )
     },
   })

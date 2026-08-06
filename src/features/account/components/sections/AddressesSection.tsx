@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { MapPin, Plus, Pencil, Trash2, Star } from 'lucide-react'
 import type { Address } from '@/shared/api/types'
 import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
+import { AddressFormDialog } from '@/shared/components/AddressFormDialog'
+import { cn } from '@/shared/utils/cn'
 import {
   Dialog,
   DialogContent,
@@ -25,51 +25,6 @@ import {
 } from '../../api/account.queries'
 import type { AddressInput } from '@/features/users/api/users.api'
 
-type FormState = {
-  line1: string
-  line2: string
-  city: string
-  state: string
-  country: string
-  pincode: string
-  isDefault: boolean
-}
-
-function toFormState(addr?: Address | null): FormState {
-  if (!addr) {
-    return {
-      line1: '',
-      line2: '',
-      city: '',
-      state: '',
-      country: 'India',
-      pincode: '',
-      isDefault: false,
-    }
-  }
-  return {
-    line1: addr.line1,
-    line2: addr.line2 ?? '',
-    city: addr.city,
-    state: addr.state,
-    country: addr.country,
-    pincode: addr.pincode,
-    isDefault: addr.isDefault,
-  }
-}
-
-function toInput(form: FormState, hasAddresses: boolean): AddressInput {
-  return {
-    line1: form.line1.trim(),
-    line2: form.line2.trim() || null,
-    city: form.city.trim(),
-    state: form.state.trim(),
-    country: form.country.trim() || 'India',
-    pincode: form.pincode.trim(),
-    isDefault: form.isDefault || !hasAddresses,
-  }
-}
-
 export function AddressesSection() {
   const { data: addresses, isLoading } = useAccountAddresses()
   const createAddress = useCreateAccountAddress()
@@ -79,8 +34,6 @@ export function AddressesSection() {
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<Address | null>(null)
-  const [form, setForm] = useState<FormState>(toFormState())
-  const [formError, setFormError] = useState<string | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<Address | null>(null)
   const [listError, setListError] = useState<string | null>(null)
   const [defaultingId, setDefaultingId] = useState<string | null>(null)
@@ -91,40 +44,12 @@ export function AddressesSection() {
 
   const openCreate = () => {
     setEditing(null)
-    setForm(toFormState())
-    setFormError(null)
     setDialogOpen(true)
   }
 
   const openEdit = (addr: Address) => {
     setEditing(addr)
-    setForm(toFormState(addr))
-    setFormError(null)
     setDialogOpen(true)
-  }
-
-  const handleSave = async (event: React.FormEvent) => {
-    event.preventDefault()
-    if (!form.line1.trim() || !form.city.trim() || !form.state.trim() || !form.pincode.trim()) {
-      setFormError('Please fill all required fields.')
-      return
-    }
-    setFormError(null)
-    const body = toInput(form, hasAddresses)
-    try {
-      if (editing) {
-        await updateAddress.mutateAsync({ addressId: editing.id, body })
-      } else {
-        await createAddress.mutateAsync(body)
-      }
-      setDialogOpen(false)
-    } catch (err) {
-      const message =
-        err && typeof err === 'object' && 'message' in err
-          ? String((err as { message: string }).message)
-          : 'Could not save address.'
-      setFormError(message)
-    }
   }
 
   if (isLoading) {
@@ -183,49 +108,54 @@ export function AddressesSection() {
                   </span>
                 ) : null}
               </div>
-              <div className="mt-4 flex flex-wrap gap-2 border-t border-line pt-3">
+              <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-3">
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="gap-1.5"
+                  className="w-full justify-center gap-1.5"
                   onClick={() => openEdit(addr)}
                 >
                   <Pencil size={14} />
                   Edit
                 </Button>
-                {!addr.isDefault ? (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="gap-1.5"
-                    loading={defaultingId === addr.id && setDefault.isPending}
-                    onClick={async () => {
-                      setListError(null)
-                      setDefaultingId(addr.id)
-                      try {
-                        await setDefault.mutateAsync(addr.id)
-                      } catch (err) {
-                        setListError(
-                          err && typeof err === 'object' && 'message' in err
-                            ? String((err as { message: string }).message)
-                            : 'Could not set default address.'
-                        )
-                      } finally {
-                        setDefaultingId(null)
-                      }
-                    }}
-                  >
-                    <Star size={14} />
-                    Set default
-                  </Button>
-                ) : null}
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="gap-1.5 text-danger hover:text-danger"
+                  disabled={addr.isDefault || (defaultingId === addr.id && setDefault.isPending)}
+                  className={cn(
+                    'w-full justify-center gap-1.5 transition-colors',
+                    addr.isDefault
+                      ? 'text-brand hover:text-brand disabled:opacity-100'
+                      : 'text-ink-muted hover:text-brand'
+                  )}
+                  loading={defaultingId === addr.id && setDefault.isPending}
+                  onClick={async () => {
+                    if (addr.isDefault) return
+                    setListError(null)
+                    setDefaultingId(addr.id)
+                    try {
+                      await setDefault.mutateAsync(addr.id)
+                    } catch (err) {
+                      setListError(
+                        err && typeof err === 'object' && 'message' in err
+                          ? String((err as { message: string }).message)
+                          : 'Could not set default address.'
+                      )
+                    } finally {
+                      setDefaultingId(null)
+                    }
+                  }}
+                >
+                  <Star size={14} />
+                  {addr.isDefault ? 'Default' : 'Set default'}
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="w-full justify-center gap-1.5 text-danger hover:text-danger"
                   onClick={() => setDeleteTarget(addr)}
                 >
                   <Trash2 size={14} />
@@ -253,100 +183,20 @@ export function AddressesSection() {
         </p>
       ) : null}
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editing ? 'Edit address' : 'New address'}</DialogTitle>
-            <DialogDescription>
-              All fields marked required must be filled.
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleSave} className="space-y-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="acct-addr-line1">Address line 1</Label>
-              <Input
-                id="acct-addr-line1"
-                value={form.line1}
-                onChange={(e) => setForm((f) => ({ ...f, line1: e.target.value }))}
-                placeholder="House no., street, landmark"
-                required
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="acct-addr-line2">Address line 2 (optional)</Label>
-              <Input
-                id="acct-addr-line2"
-                value={form.line2}
-                onChange={(e) => setForm((f) => ({ ...f, line2: e.target.value }))}
-                placeholder="Apartment, suite, floor"
-              />
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="acct-addr-city">City</Label>
-                <Input
-                  id="acct-addr-city"
-                  value={form.city}
-                  onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
-                  required
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="acct-addr-state">State</Label>
-                <Input
-                  id="acct-addr-state"
-                  value={form.state}
-                  onChange={(e) => setForm((f) => ({ ...f, state: e.target.value }))}
-                  required
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="acct-addr-pincode">Pincode</Label>
-                <Input
-                  id="acct-addr-pincode"
-                  value={form.pincode}
-                  onChange={(e) => setForm((f) => ({ ...f, pincode: e.target.value }))}
-                  required
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="acct-addr-country">Country</Label>
-                <Input
-                  id="acct-addr-country"
-                  value={form.country}
-                  onChange={(e) => setForm((f) => ({ ...f, country: e.target.value }))}
-                />
-              </div>
-            </div>
-            {(hasAddresses || editing) && (
-              <label className="flex items-center gap-2 text-[0.875rem] text-ink">
-                <input
-                  type="checkbox"
-                  checked={form.isDefault}
-                  onChange={(e) => setForm((f) => ({ ...f, isDefault: e.target.checked }))}
-                  className="h-4 w-4 accent-[var(--brand)]"
-                />
-                Set as default address
-              </label>
-            )}
-            {formError ? (
-              <p role="alert" className="text-[0.875rem] text-danger">
-                {formError}
-              </p>
-            ) : null}
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button type="submit" loading={saving}>
-                Save address
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <AddressFormDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        address={editing}
+        hasAddresses={hasAddresses}
+        isPending={saving}
+        onSubmit={async (body: AddressInput) => {
+          if (editing) {
+            await updateAddress.mutateAsync({ addressId: editing.id, body })
+            return
+          }
+          await createAddress.mutateAsync(body)
+        }}
+      />
 
       <Dialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <DialogContent>
