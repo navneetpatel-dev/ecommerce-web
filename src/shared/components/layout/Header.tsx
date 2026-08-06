@@ -68,7 +68,7 @@ export function Header({
             : 'bg-surface border-b border-line shadow-elevation-1'
         )}
       >
-        <div className="storefront-container flex h-full items-center gap-4 lg:gap-6">
+        <div className="storefront-container flex h-full items-center gap-2 sm:gap-3 lg:gap-4 xl:gap-6">
           <button
             onClick={onOpenMobileNav}
             className={cn(
@@ -83,14 +83,14 @@ export function Header({
           <Link
             href="/"
             className={cn(
-              'font-display text-[1.75rem] font-semibold shrink-0',
+              'min-w-0 shrink text-[1.375rem] font-display font-semibold leading-none sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]',
               isTransparent ? 'text-paper' : 'text-brand'
             )}
           >
             Marketplace
           </Link>
 
-          <nav aria-label="Primary navigation" className="hidden lg:flex items-center gap-1">
+          <nav aria-label="Primary navigation" className="hidden xl:flex items-center gap-1">
             <div
               className="relative"
               onMouseEnter={onScheduleMegaOpen}
@@ -133,16 +133,16 @@ export function Header({
             ))}
           </nav>
 
-          <div className="hidden md:flex flex-1 max-w-xl mx-auto">
+          <div className="hidden xl:flex flex-1 max-w-xl mx-auto">
             <SearchBarContainer onDark={isTransparent} />
           </div>
 
-          <nav aria-label="Header actions" className="flex items-center gap-1 shrink-0">
+          <nav aria-label="Header actions" className="ml-auto flex shrink-0 items-center gap-1">
             <button
               type="button"
               onClick={toggleTheme}
               className={cn(
-                'inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wide transition-colors',
+                'hidden items-center gap-1.5 rounded-md border px-2.5 py-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wide transition-colors sm:inline-flex',
                 isTransparent
                   ? 'border-paper/30 text-paper hover:bg-paper/10'
                   : 'border-line text-ink-muted hover:bg-paper hover:text-ink'
@@ -197,7 +197,7 @@ export function Header({
             ) : (
               <>
                 {currentUser.role === 'CUSTOMER' && (
-                  <div className="hidden lg:flex items-center gap-1">
+                  <div className="hidden xl:flex items-center gap-1">
                     <Link
                       href="/orders"
                       className={cn(
@@ -223,7 +223,7 @@ export function Header({
                   <Link
                     href="/vendor/dashboard/overview"
                     className={cn(
-                      'hidden lg:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
+                      'hidden xl:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                       isTransparent
                         ? 'text-paper hover:bg-paper/10'
                         : 'text-brand hover:bg-brand-subtle'
@@ -237,7 +237,7 @@ export function Header({
                   <Link
                     href="/admin/vendors"
                     className={cn(
-                      'hidden lg:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
+                      'hidden xl:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
                       isTransparent
                         ? 'text-paper hover:bg-paper/10'
                         : 'text-brand hover:bg-brand-subtle'

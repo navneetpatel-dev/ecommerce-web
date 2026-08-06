@@ -98,7 +98,7 @@ export function ProductListingPage() {
     <div className="storefront-container pb-8 pt-6 md:pt-8">
       <h1 className="sr-only">All products</h1>
 
-      <div className="lg:hidden sticky top-14 z-20 -mx-4 mb-6 border-y border-line bg-paper/95 px-4 py-3 backdrop-blur-sm">
+      <div className="sticky top-14 z-20 -mx-4 mb-6 border-y border-line bg-paper/95 px-4 py-3 backdrop-blur-sm xl:hidden lg:top-[72px]">
         <div className="flex items-center gap-2">
           <Button
             variant="secondary"
@@ -131,7 +131,7 @@ export function ProductListingPage() {
         </div>
       </div>
 
-      <div className="mb-20 flex gap-10 lg:mb-28 lg:gap-12">
+      <div className="mb-20 flex gap-10 xl:mb-28 xl:gap-12">
         <FilterSidebar
           idPrefix="desktop"
           minPrice={listing.filters.minPrice}

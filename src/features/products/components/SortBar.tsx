@@ -79,7 +79,7 @@ export function SortBar({
             type="button"
             variant={compareMode ? 'default' : 'secondary'}
             size="sm"
-            className="hidden lg:inline-flex gap-1.5"
+            className="hidden xl:inline-flex gap-1.5"
             onClick={onToggleCompare}
             aria-pressed={compareMode}
           >

@@ -33,7 +33,7 @@ export function FilterSidebar({
   const ratingValue = rating != null ? String(rating) : ''
 
   return (
-    <aside className={cn(className ?? 'hidden w-64 shrink-0 lg:block')}>
+    <aside className={cn(className ?? 'hidden w-64 shrink-0 xl:block')}>
       <div className="sticky top-[88px] space-y-5">
         <div className="flex items-end justify-between gap-3 border-b border-line pb-3">
           <div>
