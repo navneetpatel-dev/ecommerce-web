@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Download, LogOut, Moon, Sun, Trash2 } from 'lucide-react'
+import { Download, LogOut, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 import { FormError } from '@/shared/components/FormError'
+import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useLogout } from '@/features/auth/api/auth.queries'
 import { useQueryClient } from '@tanstack/react-query'
@@ -58,18 +59,27 @@ export function PrivacySection() {
   }
 
   return (
-    <div className="space-y-4">
-      <section className="border border-line bg-surface p-5 shadow-elevation-1 md:p-6">
-        <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted">
-            {theme === 'dark' ? <Moon size={18} strokeWidth={1.5} /> : <Sun size={18} strokeWidth={1.5} />}
-          </span>
-          <div className="min-w-0 flex-1">
-            <h2 className="font-display text-[1.125rem] text-ink">Appearance</h2>
-            <p className="mt-1 text-[0.875rem] text-ink-muted">
-              Choose light or dark for the storefront. Saved on this device.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
+    <div className="space-y-6">
+      <section className="border border-line bg-surface shadow-elevation-1">
+        <div className="border-b border-line bg-paper/65 px-5 py-4 md:px-6">
+          <TextEyebrow>Preferences</TextEyebrow>
+          <h2 className="mt-1 font-display text-[1.1875rem] tracking-tight text-ink">
+            Privacy & data
+          </h2>
+          <p className="mt-1 text-[0.875rem] text-ink-muted">
+            Control appearance on this device, export your data, or end your session.
+          </p>
+        </div>
+
+        <ul className="divide-y divide-line">
+          <li className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
+            <div className="min-w-0">
+              <p className="text-[0.9375rem] font-medium text-ink">Appearance</p>
+              <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
+                Light or dark for the storefront. Saved on this device.
+              </p>
+            </div>
+            <div className="flex shrink-0 gap-2">
               <Button
                 type="button"
                 variant={mounted && theme === 'light' ? 'default' : 'outline'}
@@ -87,88 +97,83 @@ export function PrivacySection() {
                 Dark
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
+          </li>
 
-      <section className="border border-line bg-surface p-5 shadow-elevation-1 md:p-6">
-        <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted">
-            <Download size={18} strokeWidth={1.5} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <h2 className="font-display text-[1.125rem] text-ink">Download my data</h2>
-            <p className="mt-1 text-[0.875rem] text-ink-muted">
-              Export a JSON copy of your profile, addresses, orders, reviews, returns, and
-              wishlist.
-            </p>
-            <div className="mt-4">
-              <Button
-                type="button"
-                variant="outline"
-                className="gap-2"
-                loading={exportAccount.isPending}
-                onClick={() => void handleExport()}
-              >
-                <Download size={16} />
-                Download my data
-              </Button>
+          <li className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
+            <div className="min-w-0">
+              <p className="text-[0.9375rem] font-medium text-ink">Download my data</p>
+              <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
+                Export a JSON copy of your profile, addresses, orders, reviews, returns, and
+                wishlist.
+              </p>
+              <FormError
+                error={exportAccount.error as Error | null}
+                fallback="Could not export account data."
+              />
             </div>
-            <FormError
-              error={exportAccount.error as Error | null}
-              fallback="Could not export account data."
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="border border-line bg-surface p-5 shadow-elevation-1 md:p-6">
-        <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted">
-            <LogOut size={18} strokeWidth={1.5} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <h2 className="font-display text-[1.125rem] text-ink">Sign out</h2>
-            <p className="mt-1 text-[0.875rem] text-ink-muted">
-              End this session on this device from inside your account settings.
-            </p>
-            <div className="mt-4">
-              <Button
-                type="button"
-                variant="outline"
-                loading={logout.isPending}
-                onClick={() => logout.mutate()}
-              >
-                Sign out
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="border border-line border-danger/30 bg-surface p-5 shadow-elevation-1 md:p-6">
-        <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-danger">
-            <Trash2 size={18} strokeWidth={1.5} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <h2 className="font-display text-[1.125rem] text-ink">Delete account</h2>
-            <p className="mt-1 text-[0.875rem] text-ink-muted">
-              Permanently deactivate your account. This cannot be undone from the storefront.
-            </p>
             <Button
               type="button"
-              variant="destructive"
-              className="mt-4 gap-2"
-              onClick={() => {
-                setConfirmText('')
-                setConfirmOpen(true)
-              }}
+              variant="outline"
+              size="sm"
+              className="shrink-0 gap-2"
+              loading={exportAccount.isPending}
+              onClick={() => void handleExport()}
             >
-              <Trash2 size={16} />
-              Delete account
+              <Download size={14} strokeWidth={1.5} />
+              Download
             </Button>
-          </div>
+          </li>
+
+          <li className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
+            <div className="min-w-0">
+              <p className="text-[0.9375rem] font-medium text-ink">Sign out</p>
+              <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
+                End this session on this device.
+              </p>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="shrink-0 gap-2"
+              loading={logout.isPending}
+              onClick={() => logout.mutate()}
+            >
+              <LogOut size={14} strokeWidth={1.5} />
+              Sign out
+            </Button>
+          </li>
+        </ul>
+      </section>
+
+      <section className="border border-line bg-surface shadow-elevation-1">
+        <div className="border-b border-line px-5 py-4 md:px-6">
+          <TextEyebrow>Danger zone</TextEyebrow>
+          <h2 className="mt-1 font-display text-[1.1875rem] tracking-tight text-ink">
+            Delete account
+          </h2>
+          <p className="mt-1 text-[0.875rem] text-ink-muted">
+            Permanently deactivate your account. This cannot be undone from the storefront.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
+          <p className="text-[0.8125rem] leading-6 text-ink-muted">
+            Your profile will be deactivated and you&apos;ll be signed out immediately.
+          </p>
+          <Button
+            type="button"
+            variant="destructive"
+            size="sm"
+            className="shrink-0 gap-2"
+            onClick={() => {
+              setConfirmText('')
+              setConfirmOpen(true)
+            }}
+          >
+            <Trash2 size={14} strokeWidth={1.5} />
+            Delete account
+          </Button>
         </div>
       </section>
 
