@@ -45,7 +45,7 @@ export function StorefrontPageSkeleton() {
   return (
     <div className="space-y-12 md:space-y-20 pb-12">
       <Skeleton className="h-[min(78vh,640px)] w-full rounded-none md:h-[min(82vh,720px)]" />
-      <div className="mx-auto max-w-[1600px] space-y-10 px-4">
+      <div className="storefront-container space-y-10">
         <div className="space-y-3">
           <Skeleton className="h-3 w-16" />
           <Skeleton className="h-7 w-48" />
@@ -74,7 +74,7 @@ export function CategoryGridSkeleton({ count = 10 }: { count?: number }) {
 export function CartPageSkeleton() {
   return (
     <div className="relative">
-      <div className="mx-auto max-w-[1600px] space-y-6 px-4 py-6 md:py-8">
+      <div className="storefront-container space-y-6 py-6 md:py-8">
         <div className="space-y-2">
           <Skeleton className="h-3 w-24" />
           <Skeleton className="h-8 w-48" />
@@ -97,7 +97,7 @@ export function CartPageSkeleton() {
 export function CheckoutPageSkeleton() {
   return (
     <div className="relative">
-      <div className="mx-auto max-w-[1600px] space-y-8 px-4 py-6 md:py-8">
+      <div className="storefront-container space-y-8 py-6 md:py-8">
         <div className="space-y-2">
           <Skeleton className="h-3 w-20" />
           <Skeleton className="h-9 w-64" />
@@ -122,7 +122,7 @@ export function CheckoutPageSkeleton() {
 
 export function CategoriesPageSkeleton() {
   return (
-    <div className="mx-auto max-w-[1600px] space-y-10 px-4 py-10 md:py-14">
+    <div className="storefront-container space-y-10 py-10 md:py-14">
       <div className="max-w-2xl space-y-3">
         <Skeleton className="h-3 w-16" />
         <Skeleton className="h-10 w-64" />
@@ -155,7 +155,7 @@ export function WalletPageSkeleton() {
 
 export function WishlistPageSkeleton() {
   return (
-    <div className="mx-auto max-w-[1600px] space-y-6 px-4 py-10">
+    <div className="storefront-container space-y-6 py-10">
       <Skeleton className="h-8 w-36" />
       <SkeletonGrid count={8} />
     </div>

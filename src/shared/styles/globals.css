@@ -258,6 +258,30 @@ body {
   color: var(--brand);
 }
 
+/**
+ * Storefront content shell — §1.4 gutters
+ * 16px (xs–sm) → 24px (md+) → 32px (2xl+)
+ * Keeps header, footer, and page content on the same left/right edges.
+ */
+.storefront-container {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .storefront-container {
+    padding-inline: var(--space-6);
+  }
+}
+
+@media (min-width: 1536px) {
+  .storefront-container {
+    padding-inline: var(--space-8);
+  }
+}
+
 /* Dark mode: elevated panels lean on border + surface steps */
 [data-theme='dark'] .shadow-elevation-1,
 [data-theme='dark'] .shadow-elevation-2,

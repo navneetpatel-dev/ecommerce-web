@@ -91,7 +91,7 @@ function NewsletterForm({ idPrefix }: { idPrefix: string }) {
 export function Footer() {
   return (
     <footer className="mt-16 lg:mt-24 border-t border-line bg-surface">
-      <div className="hidden lg:grid grid-cols-4 gap-8 max-w-[1600px] mx-auto px-4 py-16">
+      <div className="storefront-container hidden grid-cols-4 gap-8 py-16 lg:grid">
         {footerSections.map((section) => (
           <div key={section.title}>
             {!section.isNewsletter ? (
@@ -123,7 +123,7 @@ export function Footer() {
         ))}
       </div>
 
-      <div className="lg:hidden px-4 py-8">
+      <div className="storefront-container py-8 lg:hidden">
         <Accordion type="single" collapsible>
           {footerSections.map((section) =>
             !section.isNewsletter ? (
@@ -154,7 +154,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-line py-6">
-        <div className="max-w-[1600px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="storefront-container flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-[0.8125rem] text-ink-muted">
             Marketplace &copy; {new Date().getFullYear()}
           </p>

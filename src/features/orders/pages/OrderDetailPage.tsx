@@ -1,7 +1,10 @@
 'use client'
 
+import Link from 'next/link'
+import { PackageX } from 'lucide-react'
 import { useOrderDetailPage } from '../hooks/useOrderDetailPage'
 import { OrderDetailContent } from '../components/OrderDetailContent'
+import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 
 export function OrderDetailPage() {
@@ -9,16 +12,43 @@ export function OrderDetailPage() {
 
   if (detail.isLoading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <Skeleton className="h-96 w-full" />
+      <div className="storefront-container space-y-4 py-8">
+        <Skeleton className="h-8 w-40" />
+        <Skeleton className="h-12 w-64" />
+        <div className="grid gap-8 lg:grid-cols-12">
+          <div className="space-y-4 lg:col-span-8">
+            <Skeleton className="h-40 w-full" />
+            <Skeleton className="h-40 w-full" />
+          </div>
+          <Skeleton className="h-64 w-full lg:col-span-4" />
+        </div>
       </div>
     )
   }
 
   if (detail.notFound || !detail.order) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <p className="text-ink-muted text-[0.9375rem]">Order not found</p>
+      <div className="relative">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
+        />
+        <div className="storefront-container relative py-16 md:py-20">
+          <EmptyState
+            icon={PackageX}
+            eyebrow="Orders"
+            heading="Order not found"
+            message="This order may have been removed, or you may not have access to view it."
+            actionLabel="Back to orders"
+            actionTo="/orders"
+          />
+          <p className="mt-4 text-center text-[0.8125rem] text-ink-faint">
+            Or{' '}
+            <Link href="/products" className="text-brand underline-offset-2 hover:underline">
+              continue shopping
+            </Link>
+          </p>
+        </div>
       </div>
     )
   }

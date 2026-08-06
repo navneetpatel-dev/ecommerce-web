@@ -276,7 +276,7 @@ export function HeroSection({
           </motion.div>
         </AnimatePresence>
 
-        <div className="relative z-10 mx-auto flex h-full min-h-[min(78vh,640px)] max-w-[1600px] flex-col justify-end px-4 pb-24 pt-16 md:min-h-[min(82vh,720px)] md:justify-center md:pb-24 md:pt-20">
+        <div className="storefront-container relative z-10 flex h-full min-h-[min(78vh,640px)] flex-col justify-end pb-24 pt-16 md:min-h-[min(82vh,720px)] md:justify-center md:pb-24 md:pt-20">
           <AnimatePresence mode="wait" initial={false} custom={direction}>
             <motion.div
               key={active.id + '-copy'}

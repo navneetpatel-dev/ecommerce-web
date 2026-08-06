@@ -26,7 +26,7 @@ export function CategoriesView({
   if (isLoading) return <CategoriesPageSkeleton />
 
   return (
-    <div className="mx-auto max-w-[1600px] px-4 py-10 md:py-14">
+    <div className="storefront-container py-10 md:py-14">
       <div className="mb-10 max-w-2xl">
         <TextEyebrow className="mb-2">Browse</TextEyebrow>
         <h1 className="font-display text-[2rem] font-semibold leading-tight text-ink md:text-[2.5rem]">

@@ -3,15 +3,19 @@
 import { useOrderHistoryPage } from '../hooks/useOrderHistoryPage'
 import { OrdersList } from '../components/OrdersList'
 import { EmptyOrdersState } from '../components/EmptyOrdersState'
-import { SkeletonCard } from '@/shared/components/Skeletons'
+import { Skeleton } from '@/shared/components/ui/skeleton'
 
 export function OrderHistoryPage() {
   const history = useOrderHistoryPage()
 
   if (history.isLoading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <SkeletonCard count={3} />
+      <div className="storefront-container space-y-3 py-8">
+        <Skeleton className="h-8 w-28" />
+        <Skeleton className="mb-6 h-12 w-48" />
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
       </div>
     )
   }

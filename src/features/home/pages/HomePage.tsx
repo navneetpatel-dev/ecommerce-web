@@ -13,7 +13,7 @@ export function HomePage() {
   return (
     <div className="space-y-12 md:space-y-20">
       <HeroSection />
-      <div className="max-w-[1600px] mx-auto px-4 space-y-12 md:space-y-20">
+      <div className="storefront-container space-y-12 md:space-y-20">
         <CategoryRail categories={home.categories} isLoading={home.categoriesLoading} />
         <TrendingSection products={home.trendingProducts} isLoading={home.trendingLoading} />
         <VendorSpotlightSection vendors={home.spotlightVendors} isLoading={home.spotlightLoading} />

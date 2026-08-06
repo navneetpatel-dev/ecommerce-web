@@ -128,6 +128,7 @@ export interface Order {
   paymentStatus: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
   createdAt: string;
   subOrders: SubOrder[];
+  shippingAddress?: Address | null;
 }
 
 export interface Address {

@@ -210,7 +210,7 @@ export function CheckoutPageView({
         className="pointer-events-none absolute inset-x-0 top-0 h-[280px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
       />
 
-      <div className="relative mx-auto max-w-[1600px] px-4 py-6 md:py-8">
+      <div className="storefront-container relative py-6 md:py-8">
         {/*
           Two-column layout from the top so the summary can stick:
           left column (title + steps + form) defines row height;

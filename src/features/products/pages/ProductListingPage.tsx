@@ -95,7 +95,7 @@ export function ProductListingPage() {
   const empty = getListingEmptyState(listing.filters, categoryName)
 
   return (
-    <div className="mx-auto max-w-[1600px] px-4 pt-6 pb-8 md:pt-8">
+    <div className="storefront-container pb-8 pt-6 md:pt-8">
       <h1 className="sr-only">All products</h1>
 
       <div className="lg:hidden sticky top-14 z-20 -mx-4 mb-6 border-y border-line bg-paper/95 px-4 py-3 backdrop-blur-sm">

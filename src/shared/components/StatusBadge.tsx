@@ -1,21 +1,66 @@
 import { Badge } from './ui/badge'
 
-type BadgeVariant = 'success' | 'warning' | 'destructive' | 'secondary'
+type BadgeVariant = 'success' | 'warning' | 'destructive' | 'secondary' | 'brand'
 
 function getVariant(status: string): BadgeVariant {
-  if (status === 'LIVE' || status === 'APPROVED' || status === 'ACTIVE' || status === 'PAID' || status === 'DELIVERED' || status === 'COMPLETED') {
+  const normalized = status.toUpperCase()
+
+  if (
+    normalized === 'LIVE' ||
+    normalized === 'APPROVED' ||
+    normalized === 'ACTIVE' ||
+    normalized === 'PAID' ||
+    normalized === 'DELIVERED' ||
+    normalized === 'COMPLETED' ||
+    normalized === 'CONFIRMED'
+  ) {
     return 'success'
   }
-  if (status === 'PENDING' || status === 'PENDING_APPROVAL' || status === 'DRAFT' || status === 'PROCESSING') {
+
+  if (
+    normalized === 'SHIPPED' ||
+    normalized === 'PICKED_UP' ||
+    normalized === 'IN_TRANSIT' ||
+    normalized === 'OUT_FOR_DELIVERY' ||
+    normalized === 'PROCESSING'
+  ) {
+    return 'brand'
+  }
+
+  if (
+    normalized === 'PENDING' ||
+    normalized === 'PENDING_APPROVAL' ||
+    normalized === 'DRAFT' ||
+    normalized === 'RETURNED'
+  ) {
     return 'warning'
   }
-  if (status === 'REJECTED' || status === 'FAILED' || status === 'CANCELLED' || status === 'BLOCKED') {
+
+  if (
+    normalized === 'REJECTED' ||
+    normalized === 'FAILED' ||
+    normalized === 'CANCELLED' ||
+    normalized === 'BLOCKED' ||
+    normalized === 'REFUNDED'
+  ) {
     return 'destructive'
   }
+
   return 'secondary'
 }
 
-export function StatusBadge({ status }: { status: string }) {
+interface StatusBadgeProps {
+  status: string
+  /** Override visible text (status still drives color). */
+  label?: string
+  className?: string
+}
+
+export function StatusBadge({ status, label, className }: StatusBadgeProps) {
   const variant = getVariant(status)
-  return <Badge variant={variant}>{status.replace(/_/g, ' ')}</Badge>
+  return (
+    <Badge variant={variant} className={className}>
+      {label ?? status.replace(/_/g, ' ')}
+    </Badge>
+  )
 }

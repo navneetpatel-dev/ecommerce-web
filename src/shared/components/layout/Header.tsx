@@ -68,7 +68,7 @@ export function Header({
             : 'bg-surface border-b border-line shadow-elevation-1'
         )}
       >
-        <div className="mx-auto px-4 h-full flex items-center gap-4 lg:gap-6 max-w-[1600px]">
+        <div className="storefront-container flex h-full items-center gap-4 lg:gap-6">
           <button
             onClick={onOpenMobileNav}
             className={cn(

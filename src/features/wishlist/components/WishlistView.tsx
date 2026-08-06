@@ -12,7 +12,7 @@ interface WishlistViewProps {
 export function WishlistView({ isLoading, isEmpty, products }: WishlistViewProps) {
   if (isLoading) {
     return (
-      <div className="max-w-[1600px] mx-auto px-4 py-8">
+      <div className="storefront-container py-8">
         <SkeletonGrid count={4} />
       </div>
     )
@@ -21,7 +21,7 @@ export function WishlistView({ isLoading, isEmpty, products }: WishlistViewProps
   if (isEmpty) return <EmptyWishlistState />
 
   return (
-    <div className="max-w-[1600px] mx-auto px-4 py-8">
+    <div className="storefront-container py-8">
       <h1 className="text-[1.75rem] font-semibold text-ink mb-6">My Wishlist</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
         {products.map((product) => (

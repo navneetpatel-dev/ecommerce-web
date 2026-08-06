@@ -1,6 +1,9 @@
 import Link from 'next/link'
+import { motion } from 'motion/react'
 import { Button } from '@/shared/components/ui/button'
+import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { SuccessCheckmarkContainer } from '@/shared/containers/SuccessCheckmarkContainer'
+import { shortOrderId } from '../utils/format'
 
 interface OrderConfirmationProps {
   orderId: string | undefined
@@ -8,24 +11,51 @@ interface OrderConfirmationProps {
 
 export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
   return (
-    <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-      <SuccessCheckmarkContainer />
-      <h1 className="text-[1.75rem] font-semibold text-ink mb-2 font-display">Order confirmed!</h1>
-      <p className="font-mono text-[0.8125rem] text-ink-muted mb-4">Order #{orderId?.slice(0, 8)}</p>
-      <p className="text-[0.9375rem] text-ink-muted mb-2 max-w-md mx-auto">
-        You&apos;ll get a shipping update by email for each seller&apos;s package separately.
-      </p>
-      <p className="text-[0.8125rem] text-ink-faint mb-8 max-w-md mx-auto">
-        Your order may arrive in multiple shipments from different vendors. Each vendor handles their own shipping.
-      </p>
-      <div className="flex gap-3 justify-center">
-        <Button asChild>
-          <Link href={orderId ? `/orders/${orderId}` : '/orders'}>View order</Link>
-        </Button>
-        <Button variant="secondary" asChild>
-          <Link href="/">Continue shopping</Link>
-        </Button>
-      </div>
+    <div className="relative">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_color-mix(in_srgb,var(--brand)_14%,transparent),transparent_50%)]"
+      />
+
+      <motion.div
+        className="storefront-container relative py-16 text-center md:py-20"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}
+      >
+        <div className="mx-auto max-w-lg">
+        <SuccessCheckmarkContainer />
+        <TextEyebrow brand className="mt-6">
+          Thank you
+        </TextEyebrow>
+        <h1
+          className="mt-2 font-display text-ink leading-[1.1] tracking-tight"
+          style={{ fontSize: 'var(--text-display-sm)' }}
+        >
+          Order confirmed
+        </h1>
+        {orderId ? (
+          <p className="mt-3 font-mono text-[0.8125rem] text-ink-muted">
+            #{shortOrderId(orderId)}
+          </p>
+        ) : null}
+        <p className="mx-auto mt-4 max-w-sm text-[0.9375rem] leading-relaxed text-ink-muted">
+          You&apos;ll get a shipping update by email for each seller&apos;s package separately.
+        </p>
+        <p className="mx-auto mt-2 max-w-sm text-[0.8125rem] leading-relaxed text-ink-faint">
+          Multi-vendor orders may arrive in more than one shipment — each maker handles their own
+          fulfillment.
+        </p>
+        <div className="mt-8 flex flex-col-reverse justify-center gap-3 sm:flex-row">
+          <Button variant="secondary" asChild>
+            <Link href="/products">Continue shopping</Link>
+          </Button>
+          <Button asChild>
+            <Link href={orderId ? `/orders/${orderId}` : '/orders'}>View order</Link>
+          </Button>
+        </div>
+        </div>
+      </motion.div>
     </div>
   )
 }

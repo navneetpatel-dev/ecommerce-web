@@ -106,7 +106,7 @@ export function ProductDetailContent({
         : ''
 
   return (
-    <div className="max-w-[1600px] mx-auto px-4 py-8">
+    <div className="storefront-container py-8">
       <Breadcrumbs items={breadcrumbItems} className="mb-6" />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
