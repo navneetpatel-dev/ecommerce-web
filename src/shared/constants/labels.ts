@@ -18,6 +18,13 @@ export const LABELS = {
   logIn: 'Log in',
   backToLogin: 'Back to login',
   alreadyHaveAccount: 'Already have an account?',
+  chooseAccount: 'Choose an account',
+  chooseAccountHint: 'This email has more than one account. Select which one to sign in as.',
+  welcomeBack: 'Welcome back',
+  logInToAccount: 'Log in to your account',
+  dontHaveAccount: "Don't have an account?",
+  register: 'Register',
+  loginFailed: 'Login failed',
 
   // Footer sections
   company: 'Company',
@@ -97,3 +104,21 @@ export const ROLES = {
 } as const
 
 export type RoleName = (typeof ROLES)[keyof typeof ROLES]
+export const ROLE_VALUES = Object.values(ROLES) as [RoleName, ...RoleName[]]
+
+export const ROLE_LABELS: Record<RoleName, string> = {
+  [ROLES.SUPER_ADMIN]: 'Super Admin',
+  [ROLES.ADMIN_ORDER_MANAGER]: 'Order Manager',
+  [ROLES.ADMIN_CATALOG_MANAGER]: 'Catalog Manager',
+  [ROLES.VENDOR_OWNER]: 'Vendor Owner',
+  [ROLES.VENDOR_STAFF]: 'Vendor Staff',
+  [ROLES.CUSTOMER]: 'Customer',
+}
+
+export const ADMIN_ROLES = [
+  ROLES.SUPER_ADMIN,
+  ROLES.ADMIN_ORDER_MANAGER,
+  ROLES.ADMIN_CATALOG_MANAGER,
+] as const
+
+export const VENDOR_ROLES = [ROLES.VENDOR_OWNER, ROLES.VENDOR_STAFF] as const

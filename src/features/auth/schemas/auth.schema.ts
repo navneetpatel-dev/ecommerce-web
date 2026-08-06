@@ -1,8 +1,10 @@
 import { z } from 'zod'
+import { ROLE_VALUES } from '@/shared/constants/labels'
 
 export const LoginSchema = z.object({
   email: z.string().email(),
   password: z.string(),
+  role: z.enum(ROLE_VALUES).optional(),
 })
 
 export const RegisterSchema = z.object({

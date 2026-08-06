@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { PATHS } from '@/shared/constants/paths'
-import { ROLES } from '@/shared/constants/labels'
-import type { CurrentUser, RoleName } from '@/shared/api/types'
+import { ADMIN_ROLES, ROLES, VENDOR_ROLES, type RoleName } from '@/shared/constants/labels'
+import type { CurrentUser } from '@/shared/api/types'
 
 interface AuthState {
   accessToken: string | null
@@ -25,15 +25,31 @@ export const useAuthStore = create<AuthState>((set) => ({
 }))
 
 export function defaultRouteForRole(role: RoleName): string {
-  switch (role) {
-    case ROLES.SUPER_ADMIN:
-    case ROLES.ADMIN_ORDER_MANAGER:
-    case ROLES.ADMIN_CATALOG_MANAGER:
-      return PATHS.admin.root
-    case ROLES.VENDOR_OWNER:
-    case ROLES.VENDOR_STAFF:
-      return PATHS.vendor.overview
-    default:
-      return PATHS.home
+  if ((ADMIN_ROLES as readonly string[]).includes(role)) {
+    return PATHS.admin.root
   }
+  if ((VENDOR_ROLES as readonly string[]).includes(role)) {
+    return PATHS.vendor.overview
+  }
+  return PATHS.home
+}
+
+/** Honor ?redirect= only when it stays inside that role's app surface. */
+export function postAuthPath(role: RoleName, redirect?: string | null): string {
+  const fallback = defaultRouteForRole(role)
+  if (!redirect || !redirect.startsWith('/') || redirect.startsWith('//')) {
+    return fallback
+  }
+
+  if ((ADMIN_ROLES as readonly string[]).includes(role)) {
+    return redirect.startsWith(PATHS.admin.root) ? redirect : fallback
+  }
+  if ((VENDOR_ROLES as readonly string[]).includes(role)) {
+    return redirect.startsWith('/vendor') ? redirect : fallback
+  }
+  // Customers stay on the storefront (not admin/vendor dashboards).
+  if (redirect.startsWith(PATHS.admin.root) || redirect.startsWith('/vendor')) {
+    return fallback
+  }
+  return redirect
 }

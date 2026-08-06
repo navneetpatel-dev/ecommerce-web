@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { useAuthStore, defaultRouteForRole } from '../store/auth.store'
-import { authApi } from './auth.api'
+import { useAuthStore, postAuthPath, defaultRouteForRole } from '../store/auth.store'
+import { authApi, isLoginRoleSelection } from './auth.api'
 import { cartApi } from '@/features/cart/api/cart.api'
 import { cartKeys } from '@/features/cart/api/cart.queries'
 import { clearClientGuestSessionCookie } from '@/features/cart/utils/guest-session'
@@ -21,13 +21,6 @@ function clearPersistedSession() {
   if (typeof window === 'undefined') return
   localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN)
   localStorage.removeItem(STORAGE_KEYS.SESSION)
-}
-
-function postAuthPath(role: RoleName, redirect?: string | null) {
-  if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
-    return redirect
-  }
-  return defaultRouteForRole(role)
 }
 
 async function absorbGuestCartAfterAuth(accessToken: string) {
@@ -57,6 +50,10 @@ export function useLogin() {
     mutationFn: ({ redirect: _redirect, ...input }: LoginInput & { redirect?: string | null }) =>
       authApi.login(input),
     onSuccess: async (data, variables) => {
+      if (isLoginRoleSelection(data)) {
+        // Role picker is handled by the login form — do not set session yet.
+        return
+      }
       setSession(data.accessToken, data.user)
       persistSession(data.accessToken, data.user)
       const cart = await absorbGuestCartAfterAuth(data.accessToken)
@@ -65,7 +62,7 @@ export function useLogin() {
       } else {
         void queryClient.invalidateQueries({ queryKey: cartKeys.all })
       }
-      navigateReplace(router, postAuthPath(data.user.role, variables.redirect))
+      navigateReplace(router, postAuthPath(data.user.role as RoleName, variables.redirect))
     },
   })
 }
@@ -86,7 +83,7 @@ export function useRegister() {
       } else {
         void queryClient.invalidateQueries({ queryKey: cartKeys.all })
       }
-      navigateReplace(router, defaultRouteForRole(data.user.role))
+      navigateReplace(router, defaultRouteForRole(data.user.role as RoleName))
     },
   })
 }
