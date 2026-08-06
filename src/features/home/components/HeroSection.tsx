@@ -21,7 +21,7 @@ export interface HeroSlide {
   imageAlt: string
 }
 
-const AUTOPLAY_MS = 6500
+const AUTOPLAY_MS = 3000
 
 const DEFAULT_SLIDES: HeroSlide[] = [
   {
@@ -173,7 +173,7 @@ export function HeroSection({
             initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="absolute inset-0">
               <div className="hidden md:block absolute inset-0">
