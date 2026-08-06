@@ -9,16 +9,9 @@ import {
   useRemoveCartItem,
   useUpdateCartItem,
 } from '@/features/cart/api/cart.queries'
-import { useMoveToCart } from '@/features/wishlist/api/wishlist.queries'
 import { usePrefetchProduct } from '../api/products.queries'
 import { useWishlistToggle } from './useWishlistToggle'
-import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
 import type { Cart, ProductListItem } from '@/shared/api/types'
-
-interface UseProductCardOptions {
-  /** Use wishlist move-to-cart API instead of cart add-by-variant. */
-  moveToCart?: boolean
-}
 
 function patchCartQuantity(
   cart: Cart | undefined,
@@ -76,16 +69,14 @@ function patchCartQuantity(
   }
 }
 
-export function useProductCard(product: ProductListItem, options: UseProductCardOptions = {}) {
+export function useProductCard(product: ProductListItem) {
   const queryClient = useQueryClient()
   const { mutate: addToCart, isPending: isAdding } = useAddToCart()
   const { mutate: updateCartItem, isPending: isUpdating } = useUpdateCartItem()
   const { mutate: removeCartItem, isPending: isRemoving } = useRemoveCartItem()
-  const { mutate: moveToCart, isPending: isMoving } = useMoveToCart()
   const { data: cart } = useCart()
   const prefetch = usePrefetchProduct()
   const { isWishlisted, toggle } = useWishlistToggle(product.id)
-  const { requireAuth } = useRequireAuth()
 
   const hasDiscount = Boolean(product.compareAtPrice && product.compareAtPrice > product.basePrice)
   const discountPercent =
@@ -111,7 +102,7 @@ export function useProductCard(product: ProductListItem, options: UseProductCard
 
   const cartQuantity = optimisticQty ?? serverQty
   const maxQuantity = Math.max(1, product.variants?.[0]?.stock ?? product.stock ?? 99)
-  const isMutating = isAdding || isUpdating || isRemoving || isMoving
+  const isMutating = isAdding || isUpdating || isRemoving
 
   const applyOptimisticCart = (variantId: string, quantity: number, itemId?: string) => {
     const previous = queryClient.getQueryData<Cart>(cartKeys.all)
@@ -128,7 +119,6 @@ export function useProductCard(product: ProductListItem, options: UseProductCard
   }
 
   const setQuantity = (next: number) => {
-    if (options.moveToCart) return
     if (!defaultVariantId) return
 
     const clamped = Math.max(0, Math.min(maxQuantity, next))
@@ -167,7 +157,7 @@ export function useProductCard(product: ProductListItem, options: UseProductCard
   }
 
   return {
-    isWishlisted: Boolean(isWishlisted || product.isWishlisted),
+    isWishlisted: typeof isWishlisted === 'boolean' ? isWishlisted : Boolean(product.isWishlisted),
     isAddingToCart: isMutating,
     hasDiscount,
     discountPercent,
@@ -175,22 +165,7 @@ export function useProductCard(product: ProductListItem, options: UseProductCard
     maxQuantity,
     prefetch: () => prefetch(product.slug || product.id),
     toggleWishlist: toggle,
-    addToCart: () => {
-      if (options.moveToCart) {
-        if (
-          !requireAuth({
-            title: 'Move to cart',
-            message: 'Sign in to move wishlist items to your cart.',
-            redirectTo: '/wishlist',
-          })
-        ) {
-          return
-        }
-        moveToCart(product.id)
-        return
-      }
-      setQuantity(Math.max(1, cartQuantity + 1))
-    },
+    addToCart: () => setQuantity(Math.max(1, cartQuantity + 1)),
     setQuantity,
   }
 }

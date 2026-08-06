@@ -2,12 +2,17 @@ import { useWishlist, useAddToWishlist, useRemoveFromWishlist } from '@/features
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
 
 export function useWishlistToggle(productId: string | undefined) {
-  const { data: wishlist } = useWishlist()
+  const { data: wishlist, isSuccess } = useWishlist()
   const addToWishlist = useAddToWishlist()
   const removeFromWishlist = useRemoveFromWishlist()
   const { requireAuth } = useRequireAuth()
 
-  const isWishlisted = wishlist?.items?.some((item) => item.productId === productId)
+  // undefined while wishlist hasn't loaded yet — callers can fall back to product.isWishlisted
+  const isWishlisted = !productId
+    ? false
+    : isSuccess
+      ? Boolean(wishlist?.items?.some((item) => item.productId === productId))
+      : undefined
 
   const toggle = () => {
     if (!productId) return
@@ -19,12 +24,22 @@ export function useWishlistToggle(productId: string | undefined) {
     ) {
       return
     }
-    if (isWishlisted) {
+
+    const currentlyWishlisted =
+      typeof isWishlisted === 'boolean'
+        ? isWishlisted
+        : Boolean(wishlist?.items?.some((item) => item.productId === productId))
+
+    if (currentlyWishlisted) {
       removeFromWishlist.mutate(productId)
     } else {
       addToWishlist.mutate(productId)
     }
   }
 
-  return { isWishlisted, toggle, isPending: addToWishlist.isPending || removeFromWishlist.isPending }
+  return {
+    isWishlisted,
+    toggle,
+    isPending: addToWishlist.isPending || removeFromWishlist.isPending,
+  }
 }
