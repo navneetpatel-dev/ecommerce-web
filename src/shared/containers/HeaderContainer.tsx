@@ -25,8 +25,6 @@ export function HeaderContainer() {
       onScheduleMegaClose={header.scheduleMegaClose}
       onOpenCart={header.openCart}
       cartItemCount={header.cartItemCount}
-      onGoToProfile={header.goToProfile}
-      onLogout={header.logout}
     />
   )
 }

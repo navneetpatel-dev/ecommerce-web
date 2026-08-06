@@ -48,7 +48,7 @@ export function AccountLayout({
 
         <nav
           aria-label="Account sections"
-          className="mb-6 -mx-1 overflow-x-auto overscroll-x-contain pb-1 lg:hidden"
+          className="scrollbar-none mb-6 -mx-1 overflow-x-auto overscroll-x-contain pb-1 lg:hidden"
         >
           <ul className="flex min-w-max gap-1 px-1">
             {sections.map((section) => {

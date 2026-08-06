@@ -13,7 +13,6 @@ interface MobileNavDrawerProps {
   onClose: () => void
   currentUser: CurrentUser | null
   categories: Category[]
-  onLogout: () => void
 }
 
 export function MobileNavDrawer({
@@ -21,7 +20,6 @@ export function MobileNavDrawer({
   onClose,
   currentUser,
   categories,
-  onLogout,
 }: MobileNavDrawerProps) {
   if (!open) return null
 
@@ -91,18 +89,6 @@ export function MobileNavDrawer({
               <Link href="/help" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Help</Link>
               <Link href="/profile" onClick={onClose} className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors">Profile</Link>
             </>
-          )}
-
-          {currentUser && (
-            <button
-              onClick={() => {
-                onLogout()
-                onClose()
-              }}
-              className="w-full text-left flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] text-danger hover:bg-danger-subtle transition-colors mt-4"
-            >
-              Log out
-            </button>
           )}
 
           {!currentUser && (

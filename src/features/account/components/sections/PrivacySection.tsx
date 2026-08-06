@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Download, Moon, Sun, Trash2 } from 'lucide-react'
+import { Download, LogOut, Moon, Sun, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -16,6 +16,7 @@ import {
 } from '@/shared/components/ui/dialog'
 import { FormError } from '@/shared/components/FormError'
 import { useAuthStore } from '@/features/auth/store/auth.store'
+import { useLogout } from '@/features/auth/api/auth.queries'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTheme } from '@/shared/hooks/use-theme'
 import { useDeleteAccount, useExportAccount } from '../../api/account.queries'
@@ -25,6 +26,7 @@ export function PrivacySection() {
   const [confirmText, setConfirmText] = useState('')
   const deleteAccount = useDeleteAccount()
   const exportAccount = useExportAccount()
+  const logout = useLogout()
   const clearSession = useAuthStore((s) => s.clearSession)
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -116,6 +118,30 @@ export function PrivacySection() {
               error={exportAccount.error as Error | null}
               fallback="Could not export account data."
             />
+          </div>
+        </div>
+      </section>
+
+      <section className="border border-line bg-surface p-5 shadow-elevation-1 md:p-6">
+        <div className="flex items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted">
+            <LogOut size={18} strokeWidth={1.5} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <h2 className="font-display text-[1.125rem] text-ink">Sign out</h2>
+            <p className="mt-1 text-[0.875rem] text-ink-muted">
+              End this session on this device from inside your account settings.
+            </p>
+            <div className="mt-4">
+              <Button
+                type="button"
+                variant="outline"
+                loading={logout.isPending}
+                onClick={() => logout.mutate()}
+              >
+                Sign out
+              </Button>
+            </div>
           </div>
         </div>
       </section>

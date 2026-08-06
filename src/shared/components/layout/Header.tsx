@@ -1,7 +1,8 @@
 'use client'
 
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ShoppingCart, User, LogOut, Search, Menu, ChevronDown, Moon, Sun } from 'lucide-react'
+import { ShoppingCart, UserRound, Search, Menu, ChevronDown, Moon, Sun } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { SearchBarContainer } from '@/features/search/containers/SearchBarContainer'
 import { MobileTabBar } from './MobileTabBar'
@@ -11,6 +12,7 @@ import { BottomSheet } from '@/shared/components/BottomSheet'
 import { CartCountBadge } from '@/shared/components/CartCountBadge'
 import { useTheme } from '@/shared/hooks/use-theme'
 import type { Category, CurrentUser } from '@/shared/api/types'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
 
 interface HeaderProps {
   currentUser: CurrentUser | null
@@ -30,8 +32,6 @@ interface HeaderProps {
   onScheduleMegaClose: () => void
   onOpenCart: () => void
   cartItemCount?: number
-  onGoToProfile: () => void
-  onLogout: () => void
 }
 
 export function Header({
@@ -52,10 +52,88 @@ export function Header({
   onScheduleMegaClose,
   onOpenCart,
   cartItemCount = 0,
-  onGoToProfile,
-  onLogout,
 }: HeaderProps) {
   const { theme, toggleTheme, mounted } = useTheme()
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false)
+  const [canHoverAccountMenu, setCanHoverAccountMenu] = useState(false)
+  const accountMenuRef = useRef<HTMLDivElement | null>(null)
+
+  const fallbackLabel = useMemo(() => {
+    if (!currentUser?.name) return 'Profile'
+    const initials = currentUser.name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('')
+    return initials || 'Profile'
+  }, [currentUser?.name])
+
+  const accountLinks = useMemo(() => {
+    if (!currentUser) return []
+
+    const links = [
+      { href: '/profile', label: 'Overview' },
+      { href: '/profile?tab=personal', label: 'Personal info' },
+      { href: '/profile?tab=security', label: 'Security' },
+    ]
+
+    if (currentUser.role === 'CUSTOMER') {
+      links.push(
+        { href: '/profile?tab=orders', label: 'Orders' },
+        { href: '/profile?tab=addresses', label: 'Addresses' },
+        { href: '/profile?tab=privacy', label: 'Privacy' }
+      )
+    } else {
+      links.push(
+        { href: '/profile?tab=notifications', label: 'Notifications' },
+        { href: '/profile?tab=privacy', label: 'Privacy' }
+      )
+    }
+
+    return links
+  }, [currentUser])
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return
+
+    const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)')
+    const syncHoverCapability = () => setCanHoverAccountMenu(mediaQuery.matches)
+
+    syncHoverCapability()
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', syncHoverCapability)
+      return () => mediaQuery.removeEventListener('change', syncHoverCapability)
+    }
+
+    mediaQuery.addListener(syncHoverCapability)
+    return () => mediaQuery.removeListener(syncHoverCapability)
+  }, [])
+
+  useEffect(() => {
+    if (!accountMenuOpen) return
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!accountMenuRef.current?.contains(event.target as Node)) {
+        setAccountMenuOpen(false)
+      }
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setAccountMenuOpen(false)
+      }
+    }
+
+    window.addEventListener('mousedown', handlePointerDown)
+    window.addEventListener('keydown', handleEscape)
+
+    return () => {
+      window.removeEventListener('mousedown', handlePointerDown)
+      window.removeEventListener('keydown', handleEscape)
+    }
+  }, [accountMenuOpen])
 
   return (
     <>
@@ -247,27 +325,77 @@ export function Header({
                   </Link>
                 )}
 
-                <button
-                  onClick={onGoToProfile}
-                  className={cn(
-                    'p-2 rounded-md transition-colors',
-                    isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
-                  )}
-                  title={currentUser.name}
+                <div
+                  ref={accountMenuRef}
+                  className="relative"
+                  onMouseEnter={() => {
+                    if (canHoverAccountMenu) setAccountMenuOpen(true)
+                  }}
+                  onMouseLeave={() => {
+                    if (canHoverAccountMenu) setAccountMenuOpen(false)
+                  }}
                 >
-                  <User size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => setAccountMenuOpen((open) => !open)}
+                    className={cn(
+                      'flex items-center gap-2 rounded-full border px-1.5 py-1 transition-colors',
+                      isTransparent
+                        ? 'border-paper/20 hover:bg-paper/10'
+                        : 'border-line bg-surface hover:bg-paper'
+                    )}
+                    title={currentUser.name}
+                    aria-haspopup="menu"
+                    aria-expanded={accountMenuOpen}
+                    aria-label="Open account menu"
+                  >
+                    <Avatar className="h-8 w-8 border border-line/70">
+                      {currentUser.avatarUrl ? <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} /> : null}
+                      <AvatarFallback className="bg-brand-subtle text-[0.75rem] font-semibold text-ink">
+                        {currentUser.avatarUrl ? fallbackLabel : <UserRound size={15} strokeWidth={1.8} />}
+                      </AvatarFallback>
+                    </Avatar>
+                    <ChevronDown
+                      size={14}
+                      className={cn(
+                        'hidden sm:block transition-transform',
+                        isTransparent ? 'text-paper' : 'text-ink-muted',
+                        accountMenuOpen && 'rotate-180'
+                      )}
+                    />
+                  </button>
 
-                <button
-                  onClick={onLogout}
-                  className={cn(
-                    'p-2 rounded-md transition-colors hidden sm:block',
-                    isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
-                  )}
-                  title="Log out"
-                >
-                  <LogOut size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-                </button>
+                  {accountMenuOpen ? (
+                    <div
+                      className="absolute right-0 top-full z-50 w-60 pt-2.5"
+                      role="presentation"
+                    >
+                      <div
+                        role="menu"
+                        className="overflow-hidden border border-line bg-surface shadow-elevation-4"
+                      >
+                        <div className="border-b border-line bg-paper/60 px-4 py-3">
+                          <p className="truncate text-[0.875rem] font-medium text-ink">{currentUser.name}</p>
+                          <p className="truncate text-[0.75rem] text-ink-muted">{currentUser.email}</p>
+                        </div>
+
+                        <div className="py-1.5">
+                          {accountLinks.map((link) => (
+                            <Link
+                              key={link.href}
+                              href={link.href}
+                              role="menuitem"
+                              onClick={() => setAccountMenuOpen(false)}
+                              className="block px-4 py-2.5 text-[0.875rem] text-ink-muted transition-colors hover:bg-paper hover:text-ink"
+                            >
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
               </>
             )}
           </nav>
@@ -279,7 +407,6 @@ export function Header({
         onClose={onCloseMobileNav}
         currentUser={currentUser}
         categories={categories}
-        onLogout={onLogout}
       />
       <BottomSheet open={mobileSearchOpen} onClose={onCloseMobileSearch} title="Search">
         <SearchBarContainer />

@@ -1,14 +1,11 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/features/auth/store/auth.store'
-import { useLogout } from '@/features/auth/api/auth.queries'
 import { useCartDrawerStore } from '@/features/cart/store/cart.store'
 import { useCart } from '@/features/cart/api/cart.queries'
 import { useCategories } from '@/features/categories/api/categories.queries'
 import { getRootCategories } from '@/features/categories/utils/categoryHelpers'
-import { navigate } from '@/shared/utils/navigate'
 
 export const HEADER_PRIMARY_LINKS = [
   { href: '/products', label: 'Shop' },
@@ -18,10 +15,8 @@ export const HEADER_PRIMARY_LINKS = [
 
 export function useHeader() {
   const currentUser = useAuthStore((s) => s.currentUser)
-  const logout = useLogout()
   const openCart = useCartDrawerStore((s) => s.open)
   const { data: cart } = useCart()
-  const router = useRouter()
   const { data: categories = [] } = useCategories()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
@@ -73,7 +68,5 @@ export function useHeader() {
     scheduleMegaClose,
     openCart,
     cartItemCount,
-    goToProfile: () => navigate(router, '/profile'),
-    logout: () => logout.mutate(),
   }
 }

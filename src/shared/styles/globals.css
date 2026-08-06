@@ -270,6 +270,15 @@ body {
   padding-inline: var(--space-4);
 }
 
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 @media (min-width: 768px) {
   .storefront-container {
     padding-inline: var(--space-6);
