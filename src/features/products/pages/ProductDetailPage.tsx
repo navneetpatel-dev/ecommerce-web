@@ -24,6 +24,7 @@ export function ProductDetailPage() {
       onSelectImage={detail.setSelectedImage}
       quantity={detail.quantity}
       onQuantityChange={detail.setQuantity}
+      maxQuantity={detail.maxQuantity}
       showStickyBar={detail.showStickyBar}
       addSectionRef={detail.addSectionRef}
       breadcrumbItems={detail.breadcrumbItems}

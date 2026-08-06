@@ -7,6 +7,7 @@ import { useWishlistToggle } from './useWishlistToggle'
 import { useVariantSelection } from './useVariantSelection'
 import { useAddToCart } from '@/features/cart/api/cart.queries'
 import { trackRecentlyViewed } from '../utils/recently-viewed'
+import { cartLineQuantityMax, clampCartQuantity } from '@/shared/constants/cart'
 import type { ProductDetail } from '@/shared/api/types'
 
 export function useProductDetail() {
@@ -52,18 +53,34 @@ export function useProductDetail() {
 
   const needsOptionSelection = variants.length > 1 && !selection.variantId
 
+  const maxQuantity = cartLineQuantityMax(selectedStock)
+
+  useEffect(() => {
+    setQuantity((current) => Math.min(current, maxQuantity))
+  }, [maxQuantity])
+
   const canAddToCart =
     Boolean(product) &&
     Boolean(resolvedVariantId) &&
     selectedStock > 0 &&
     !needsOptionSelection
 
+  const handleQuantityChange = useCallback(
+    (qty: number) => {
+      setQuantity(Math.min(maxQuantity, clampCartQuantity(qty)))
+    },
+    [maxQuantity],
+  )
+
   const handleAddToCart = useCallback(
     (qty: number) => {
       if (!resolvedVariantId || needsOptionSelection) return
-      addToCart.mutate({ variantId: resolvedVariantId, quantity: qty })
+      addToCart.mutate({
+        variantId: resolvedVariantId,
+        quantity: Math.min(maxQuantity, clampCartQuantity(qty)),
+      })
     },
-    [addToCart, needsOptionSelection, resolvedVariantId]
+    [addToCart, maxQuantity, needsOptionSelection, resolvedVariantId],
   )
 
   const breadcrumbItems = product
@@ -93,7 +110,8 @@ export function useProductDetail() {
     selectedImage,
     setSelectedImage,
     quantity,
-    setQuantity,
+    setQuantity: handleQuantityChange,
+    maxQuantity,
     showStickyBar,
     addSectionRef,
     breadcrumbItems,

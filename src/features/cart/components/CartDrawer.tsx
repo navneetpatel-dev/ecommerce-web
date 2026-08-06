@@ -10,6 +10,7 @@ import { Input } from '@/shared/components/ui/input'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
 import type { CartItem } from '@/shared/api/types'
 
 interface CartDrawerProps {
@@ -123,13 +124,19 @@ export function CartDrawer({
                               <Minus size={14} />
                             </button>
                             <span className="text-[0.8125rem] w-6 text-center">{item.quantity}</span>
-                            <button
-                              onClick={() => onIncreaseQuantity(item)}
-                              className="p-0.5 hover:bg-paper rounded"
-                              aria-label="Increase quantity"
+                            <DisabledActionHint
+                              disabled={item.quantity >= MAX_CART_LINE_QUANTITY}
+                              message={`Maximum quantity is ${MAX_CART_LINE_QUANTITY}.`}
                             >
-                              <Plus size={14} />
-                            </button>
+                              <button
+                                onClick={() => onIncreaseQuantity(item)}
+                                className="p-0.5 hover:bg-paper rounded disabled:opacity-40"
+                                aria-label="Increase quantity"
+                                disabled={item.quantity >= MAX_CART_LINE_QUANTITY}
+                              >
+                                <Plus size={14} />
+                              </button>
+                            </DisabledActionHint>
                             <button
                               onClick={() => onRemoveItem(item.id)}
                               className="p-0.5 hover:bg-paper rounded ml-auto"

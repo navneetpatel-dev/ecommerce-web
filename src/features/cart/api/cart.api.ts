@@ -1,19 +1,20 @@
 import { apiClient } from '@/shared/api/client'
 import type { Cart } from '@/shared/api/types'
-import { ensureGuestSessionId } from '../utils/guest-session'
-
-function withGuestSession<T>(fn: () => Promise<T>): Promise<T> {
-  ensureGuestSessionId()
-  return fn()
-}
+import { clampCartQuantity } from '@/shared/constants/cart'
 
 export const cartApi = {
-  get: () => withGuestSession(() => apiClient.get<Cart>('/api/cart')),
+  get: () => apiClient.get<Cart>('/api/cart'),
+  /** Merge leftover guest cart into the authenticated user cart (idempotent). */
+  mergeGuest: () => apiClient.post<Cart>('/api/cart/merge'),
   addItem: (variantId: string, quantity = 1) =>
-    withGuestSession(() => apiClient.post<Cart>('/api/cart/items', { variantId, quantity })),
+    apiClient.post<Cart>('/api/cart/items', {
+      variantId,
+      quantity: clampCartQuantity(quantity),
+    }),
   updateItem: (itemId: string, quantity: number) =>
-    withGuestSession(() => apiClient.patch<Cart>(`/api/cart/items/${itemId}`, { quantity })),
-  removeItem: (itemId: string) =>
-    withGuestSession(() => apiClient.delete<Cart>(`/api/cart/items/${itemId}`)),
-  clear: () => withGuestSession(() => apiClient.delete<Cart>('/api/cart')),
+    apiClient.patch<Cart>(`/api/cart/items/${itemId}`, {
+      quantity: clampCartQuantity(quantity),
+    }),
+  removeItem: (itemId: string) => apiClient.delete<Cart>(`/api/cart/items/${itemId}`),
+  clear: () => apiClient.delete<Cart>('/api/cart'),
 }

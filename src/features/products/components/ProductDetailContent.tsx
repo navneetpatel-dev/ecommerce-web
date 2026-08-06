@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/components/ui
 import { Heart, Truck, RotateCcw } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import { cartLineQuantityMax } from '@/shared/constants/cart'
 import type { RefObject } from 'react'
 
 interface Product {
@@ -62,6 +63,7 @@ interface ProductDetailContentProps {
   onSelectImage: (index: number) => void
   quantity: number
   onQuantityChange: (quantity: number) => void
+  maxQuantity?: number
   showStickyBar: boolean
   addSectionRef: RefObject<HTMLDivElement | null>
   breadcrumbItems: BreadcrumbItem[]
@@ -80,6 +82,7 @@ export function ProductDetailContent({
   onSelectImage,
   quantity,
   onQuantityChange,
+  maxQuantity,
   showStickyBar,
   addSectionRef,
   breadcrumbItems,
@@ -87,6 +90,7 @@ export function ProductDetailContent({
 }: ProductDetailContentProps) {
   const displayPrice = Number(variantSelection.currentPrice || product.basePrice || 0)
   const displayStock = Number(variantSelection.currentStock || product.stock || 0)
+  const quantityMax = maxQuantity ?? cartLineQuantityMax(displayStock)
   const addDisabled = Boolean(!canAddToCart || isAddingToCart)
   const reviewCount = product.reviewCount ?? 0
   const avgRating = product.avgRating ?? 0
@@ -159,7 +163,7 @@ export function ProductDetailContent({
             <QuantitySelector
               value={quantity}
               onChange={onQuantityChange}
-              max={Math.max(displayStock, 1)}
+              max={Math.max(quantityMax, 1)}
             />
 
             {!canAddToCart && needsOptionSelection && (

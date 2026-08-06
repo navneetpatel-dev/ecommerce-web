@@ -2,6 +2,7 @@
 
 import { Minus, Plus } from 'lucide-react'
 import { AnimatedQuantityValue } from '@/shared/components/AnimatedQuantityValue'
+import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
 import { cn } from '@/shared/utils/cn'
 
 interface CardQuantityControlProps {
@@ -14,7 +15,7 @@ interface CardQuantityControlProps {
 
 export function CardQuantityControl({
   value,
-  max = 99,
+  max = MAX_CART_LINE_QUANTITY,
   disabled = false,
   onChange,
   className,

@@ -9,6 +9,7 @@ import { couponsApi } from '@/features/coupons/api/coupons.api'
 import { useCheckoutStore } from '@/features/checkout/store/checkout.store'
 import { navigate } from '@/shared/utils/navigate'
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
+import { MAX_CART_LINE_QUANTITY, clampCartQuantity } from '@/shared/constants/cart'
 import type { CartItem } from '@/shared/api/types'
 
 export function useCartDrawer() {
@@ -46,7 +47,11 @@ export function useCartDrawer() {
   }
 
   const increaseQuantity = (item: CartItem) => {
-    updateItem.mutate({ itemId: item.id, quantity: item.quantity + 1 })
+    if (item.quantity >= MAX_CART_LINE_QUANTITY) return
+    updateItem.mutate({
+      itemId: item.id,
+      quantity: clampCartQuantity(item.quantity + 1),
+    })
   }
 
   const applyCoupon = async () => {

@@ -7,6 +7,7 @@ import { motion } from 'motion/react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { QuantitySelector } from '@/shared/components/QuantitySelector'
+import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
 import { Button } from '@/shared/components/ui/button'
 import { CartPageSkeleton } from '@/shared/components/Skeletons'
 import type { CartItem } from '@/shared/api/types'
@@ -170,7 +171,7 @@ export function CartPageView({
                                   value={item.quantity}
                                   onChange={(quantity) => onUpdateQuantity(item.id, quantity)}
                                   min={1}
-                                  max={99}
+                                  max={MAX_CART_LINE_QUANTITY}
                                 />
                                 <button
                                   type="button"

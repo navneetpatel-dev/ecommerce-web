@@ -5,6 +5,7 @@ import { Minus, Plus } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { AnimatedQuantityValue } from '@/shared/components/AnimatedQuantityValue'
+import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
 
 interface QuantitySelectorProps {
   value: number
@@ -13,7 +14,12 @@ interface QuantitySelectorProps {
   max?: number
 }
 
-export function QuantitySelector({ value, onChange, min = 1, max = 99 }: QuantitySelectorProps) {
+export function QuantitySelector({
+  value,
+  onChange,
+  min = 1,
+  max = MAX_CART_LINE_QUANTITY,
+}: QuantitySelectorProps) {
   const [draft, setDraft] = useState<string | null>(null)
   const editing = draft !== null
 

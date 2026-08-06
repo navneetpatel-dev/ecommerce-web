@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import { useCart, useUpdateCartItem, useRemoveCartItem } from '../api/cart.queries'
 import { groupItemsByVendor, calcCartTotal } from '../utils/cart.utils'
+import { clampCartQuantity } from '@/shared/constants/cart'
 import type { CartItem } from '@/shared/api/types'
 
 export function useCartPage() {
@@ -31,7 +32,7 @@ export function useCartPage() {
     groupedByVendor,
     total,
     updateQuantity: (itemId: string, quantity: number) =>
-      updateItem.mutate({ itemId, quantity }),
+      updateItem.mutate({ itemId, quantity: clampCartQuantity(quantity) }),
     removeItem: (itemId: string) => removeItem.mutate(itemId),
   }
 }
