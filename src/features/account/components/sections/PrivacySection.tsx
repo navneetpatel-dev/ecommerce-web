@@ -14,6 +14,7 @@ import { useLogout } from '@/features/auth/api/auth.queries'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTheme } from '@/shared/hooks/use-theme'
 import { PATHS } from '@/shared/constants/paths'
+import { STORAGE_KEYS } from '@/shared/constants/storage'
 import { useDeleteAccount, useExportAccount } from '../../api/account.queries'
 
 export function PrivacySection() {
@@ -34,8 +35,8 @@ export function PrivacySection() {
     await deleteAccount.mutateAsync()
     clearSession()
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('session')
+      localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN)
+      localStorage.removeItem(STORAGE_KEYS.SESSION)
     }
     queryClient.clear()
     setDeleteOpen(false)

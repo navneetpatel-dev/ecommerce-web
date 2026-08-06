@@ -106,10 +106,10 @@ export function useProductCard(product: ProductListItem) {
   const isMutating = isAdding || isUpdating || isRemoving
 
   const applyOptimisticCart = (variantId: string, quantity: number, itemId?: string) => {
-    const previous = queryClient.getQueryData<Cart>(cartKeys.all)
-    queryClient.setQueryData<Cart>(
-      cartKeys.all,
-      patchCartQuantity(previous, {
+    const entries = queryClient.getQueriesData<Cart>({ queryKey: cartKeys.all })
+    const previous = entries[0]?.[1]
+    queryClient.setQueriesData<Cart>({ queryKey: cartKeys.all }, (current) =>
+      patchCartQuantity(current ?? previous, {
         product,
         variantId,
         itemId,
@@ -129,7 +129,7 @@ export function useProductCard(product: ProductListItem) {
 
     const rollback = () => {
       setOptimisticQty(null)
-      if (previous) queryClient.setQueryData(cartKeys.all, previous)
+      if (previous) queryClient.setQueriesData({ queryKey: cartKeys.all }, previous)
     }
 
     if (clamped <= 0) {

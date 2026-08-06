@@ -4,6 +4,7 @@ import type {
   PaymentStatus,
   PayoutStatus,
   ProductStatus,
+  ReturnReason,
   ReturnStatus,
   ReviewStatus,
   ShipmentStatus,
@@ -195,7 +196,7 @@ export interface ReturnRequest {
   orderItemId: string;
   userId: string;
   reason: string;
-  reasonCode: 'DAMAGED' | 'WRONG_ITEM' | 'NOT_AS_DESCRIBED' | 'NO_LONGER_NEEDED' | 'OTHER';
+  reasonCode: ReturnReason;
   status: ReturnStatus;
   refundAmount: number | null;
   resolvedAt: string | null;

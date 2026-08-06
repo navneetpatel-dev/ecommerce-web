@@ -1,5 +1,8 @@
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { API } from '@/shared/constants/apiRoutes';
+import { ERROR_CODES, ERROR_MESSAGES } from '@/shared/constants/errors';
+import { BEARER_PREFIX } from '@/shared/constants/http';
+import { STORAGE_KEYS } from '@/shared/constants/storage';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 
@@ -29,6 +32,21 @@ class ApiError extends Error {
 let isRefreshing = false;
 let refreshPromise: Promise<boolean> | null = null;
 
+function persistAccessToken(accessToken: string) {
+  useAuthStore.getState().setAccessToken(accessToken);
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+  }
+}
+
+function clearPersistedSession() {
+  useAuthStore.getState().clearSession();
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.SESSION);
+  }
+}
+
 async function parseResponseBody(res: Response): Promise<ApiSuccess<unknown> | ApiFailure | null> {
   const text = await res.text();
   if (!text) return null;
@@ -38,12 +56,12 @@ async function parseResponseBody(res: Response): Promise<ApiSuccess<unknown> | A
   } catch {
     if (res.status === 429) {
       throw new ApiError(
-        'RATE_LIMITED',
-        text.trim().slice(0, 160) || 'Too many requests. Please wait and try again.',
+        ERROR_CODES.RATE_LIMITED,
+        text.trim().slice(0, 160) || ERROR_MESSAGES.RATE_LIMITED,
       );
     }
     throw new ApiError(
-      'INVALID_RESPONSE',
+      ERROR_CODES.INVALID_RESPONSE,
       text.trim().slice(0, 160) || `Unexpected response (${res.status})`,
     );
   }
@@ -51,12 +69,12 @@ async function parseResponseBody(res: Response): Promise<ApiSuccess<unknown> | A
 
 function assertSuccess<T>(body: ApiSuccess<unknown> | ApiFailure | null, status: number): T {
   if (!body) {
-    throw new ApiError('EMPTY_RESPONSE', `Empty response (${status})`);
+    throw new ApiError(ERROR_CODES.EMPTY_RESPONSE, `Empty response (${status})`);
   }
   if (!('success' in body) || !body.success) {
     const failure = body as ApiFailure;
     throw new ApiError(
-      failure.error?.code ?? 'REQUEST_FAILED',
+      failure.error?.code ?? ERROR_CODES.REQUEST_FAILED,
       failure.error?.message ?? `Request failed (${status})`,
       failure.error?.details,
     );
@@ -75,19 +93,19 @@ async function refreshAccessTokenAndRetry(): Promise<boolean> {
   })
     .then(async (res) => {
       if (!res.ok) {
-        useAuthStore.getState().clearSession();
+        clearPersistedSession();
         return false;
       }
       const body = await parseResponseBody(res);
       if (body && 'success' in body && body.success) {
         const data = body.data as { accessToken: string };
-        useAuthStore.getState().setAccessToken(data.accessToken);
+        persistAccessToken(data.accessToken);
         return true;
       }
       return false;
     })
     .catch(() => {
-      useAuthStore.getState().clearSession();
+      clearPersistedSession();
       return false;
     })
     .finally(() => {
@@ -106,7 +124,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
       ...options.headers,
     },
   });
@@ -116,7 +134,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     if (refreshed) {
       return request<T>(path, options);
     }
-    throw new ApiError('UNAUTHORIZED', 'Session expired. Please log in again.');
+    throw new ApiError(ERROR_CODES.UNAUTHORIZED, ERROR_MESSAGES.SESSION_EXPIRED);
   }
 
   // Soft-delete and similar endpoints return 204 with an empty body.
@@ -136,7 +154,7 @@ async function requestWithResponse<T>(path: string, options: RequestInit = {}): 
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
       ...options.headers,
     },
   });
@@ -146,7 +164,7 @@ async function requestWithResponse<T>(path: string, options: RequestInit = {}): 
     if (refreshed) {
       return requestWithResponse<T>(path, options);
     }
-    throw new ApiError('UNAUTHORIZED', 'Session expired. Please log in again.');
+    throw new ApiError(ERROR_CODES.UNAUTHORIZED, ERROR_MESSAGES.SESSION_EXPIRED);
   }
 
   const body = await parseResponseBody(res);

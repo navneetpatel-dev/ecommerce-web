@@ -1,9 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Cart } from '@/shared/api/types'
+import { useAuthStore } from '@/features/auth/store/auth.store'
 import { cartApi } from './cart.api'
 
 export const cartKeys = {
   all: ['cart'] as const,
+  /** Separate cache buckets so a pre-auth empty guest cart cannot stick after login/hydrate. */
+  forAuth: (accessToken: string | null) =>
+    [...cartKeys.all, accessToken ? 'user' : 'guest'] as const,
 }
 
 type AddToCartVars = {
@@ -18,11 +22,11 @@ function syncCartCache(
   cart: Cart | undefined
 ) {
   if (!cart) {
-    queryClient.invalidateQueries({ queryKey: cartKeys.all })
+    void queryClient.invalidateQueries({ queryKey: cartKeys.all })
     return
   }
 
-  queryClient.setQueryData<Cart>(cartKeys.all, (previous) => {
+  queryClient.setQueriesData<Cart>({ queryKey: cartKeys.all }, (previous) => {
     if (!previous?.items?.length) return cart
 
     // Keep the on-screen item order; only refresh quantities/fields from the server.
@@ -39,9 +43,14 @@ function syncCartCache(
 }
 
 export function useCart() {
+  const accessToken = useAuthStore((s) => s.accessToken)
+  const authBootstrapped = useAuthStore((s) => s.authBootstrapped)
+
   return useQuery({
-    queryKey: cartKeys.all,
+    queryKey: cartKeys.forAuth(accessToken),
     queryFn: () => cartApi.get(),
+    // Wait until localStorage auth is restored so refresh does not GET /cart as a new guest.
+    enabled: authBootstrapped,
     staleTime: 1000 * 30,
   })
 }

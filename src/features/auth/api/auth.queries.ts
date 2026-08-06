@@ -3,11 +3,25 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore, defaultRouteForRole } from '../store/auth.store'
 import { authApi } from './auth.api'
 import { cartApi } from '@/features/cart/api/cart.api'
+import { cartKeys } from '@/features/cart/api/cart.queries'
 import { clearClientGuestSessionCookie } from '@/features/cart/utils/guest-session'
 import { navigate, navigateReplace } from '@/shared/utils/navigate'
 import { PATHS } from '@/shared/constants/paths'
+import { STORAGE_KEYS } from '@/shared/constants/storage'
 import type { LoginInput, RegisterInput } from '../schemas/auth.schema'
-import type { RoleName } from '@/shared/api/types'
+import type { CurrentUser, RoleName } from '@/shared/api/types'
+
+function persistSession(accessToken: string, user: CurrentUser) {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken)
+  localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(user))
+}
+
+function clearPersistedSession() {
+  if (typeof window === 'undefined') return
+  localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN)
+  localStorage.removeItem(STORAGE_KEYS.SESSION)
+}
 
 function postAuthPath(role: RoleName, redirect?: string | null) {
   if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
@@ -19,6 +33,7 @@ function postAuthPath(role: RoleName, redirect?: string | null) {
 async function absorbGuestCartAfterAuth(accessToken: string) {
   // Token must be in the store before the merge request is authorized.
   useAuthStore.getState().setAccessToken(accessToken)
+  useAuthStore.getState().setAuthBootstrapped(true)
   try {
     const cart = await cartApi.mergeGuest()
     clearClientGuestSessionCookie()
@@ -43,15 +58,12 @@ export function useLogin() {
       authApi.login(input),
     onSuccess: async (data, variables) => {
       setSession(data.accessToken, data.user)
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('accessToken', data.accessToken)
-        localStorage.setItem('session', JSON.stringify(data.user))
-      }
+      persistSession(data.accessToken, data.user)
       const cart = await absorbGuestCartAfterAuth(data.accessToken)
       if (cart) {
-        queryClient.setQueryData(['cart'], cart)
+        queryClient.setQueriesData({ queryKey: cartKeys.all }, cart)
       } else {
-        void queryClient.invalidateQueries({ queryKey: ['cart'] })
+        void queryClient.invalidateQueries({ queryKey: cartKeys.all })
       }
       navigateReplace(router, postAuthPath(data.user.role, variables.redirect))
     },
@@ -67,15 +79,12 @@ export function useRegister() {
     mutationFn: (input: RegisterInput) => authApi.register(input),
     onSuccess: async (data) => {
       setSession(data.accessToken, data.user)
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('accessToken', data.accessToken)
-        localStorage.setItem('session', JSON.stringify(data.user))
-      }
+      persistSession(data.accessToken, data.user)
       const cart = await absorbGuestCartAfterAuth(data.accessToken)
       if (cart) {
-        queryClient.setQueryData(['cart'], cart)
+        queryClient.setQueriesData({ queryKey: cartKeys.all }, cart)
       } else {
-        void queryClient.invalidateQueries({ queryKey: ['cart'] })
+        void queryClient.invalidateQueries({ queryKey: cartKeys.all })
       }
       navigateReplace(router, defaultRouteForRole(data.user.role))
     },
@@ -91,20 +100,14 @@ export function useLogout() {
     mutationFn: () => authApi.logout(),
     onSuccess: () => {
       clearSession()
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('session')
-      }
+      clearPersistedSession()
       clearClientGuestSessionCookie()
       queryClient.clear()
       navigateReplace(router, PATHS.login)
     },
     onError: () => {
       clearSession()
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('session')
-      }
+      clearPersistedSession()
       clearClientGuestSessionCookie()
       queryClient.clear()
       navigateReplace(router, PATHS.login)

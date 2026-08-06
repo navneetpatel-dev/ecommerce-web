@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import type { Address, CurrentUser } from '@/shared/api/types'
+import { STORAGE_KEYS } from '@/shared/constants/storage'
 import { accountApi } from './account.api'
 import type { UpdateProfileBody, AddressInput } from '@/features/users/api/users.api'
 
@@ -28,7 +29,7 @@ function syncAuthUser(profile: CurrentUser) {
   }
   useAuthStore.getState().setSession(accessToken, next)
   if (typeof window !== 'undefined') {
-    localStorage.setItem('session', JSON.stringify(next))
+    localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(next))
   }
 }
 

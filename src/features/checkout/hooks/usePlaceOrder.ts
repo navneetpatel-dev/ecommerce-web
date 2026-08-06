@@ -7,6 +7,7 @@ import { checkoutApi } from '../api/checkout.api'
 import { loadRazorpayScript } from '../utils/loadRazorpayScript'
 import { navigate } from '@/shared/utils/navigate'
 import { PATHS } from '@/shared/constants/paths'
+import { cartKeys } from '@/features/cart/api/cart.queries'
 import type { StatusDialogVariant } from '@/shared/components/StatusDialog'
 
 export type PaymentNotice = {
@@ -27,7 +28,7 @@ export function usePlaceOrderWithRazorpay() {
   const { data: quote } = useCheckoutQuote(quoteInput)
 
   const clearCartCache = () => {
-    void queryClient.invalidateQueries({ queryKey: ['cart'] })
+    void queryClient.invalidateQueries({ queryKey: cartKeys.all })
   }
 
   const showNotice = (notice: PaymentNotice) => {

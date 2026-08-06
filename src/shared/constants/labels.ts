@@ -60,6 +60,13 @@ export const LABELS = {
   security: 'Security',
   addresses: 'Addresses',
   privacy: 'Privacy',
+
+  // Return reasons
+  returnReasonDamaged: 'Damaged',
+  returnReasonWrongItem: 'Wrong item',
+  returnReasonNotAsDescribed: 'Not as described',
+  returnReasonNoLongerNeeded: 'No longer needed',
+  returnReasonOther: 'Other',
 } as const
 
 export const ROLES = {

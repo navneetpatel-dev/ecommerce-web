@@ -6,17 +6,22 @@ import type { CurrentUser, RoleName } from '@/shared/api/types'
 interface AuthState {
   accessToken: string | null
   currentUser: CurrentUser | null
+  /** False until localStorage session is restored (or confirmed absent). Prevents cart race on refresh. */
+  authBootstrapped: boolean
   setSession: (token: string, user: CurrentUser) => void
   setAccessToken: (token: string) => void
   clearSession: () => void
+  setAuthBootstrapped: (value: boolean) => void
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
   currentUser: null,
+  authBootstrapped: false,
   setSession: (accessToken, currentUser) => set({ accessToken, currentUser }),
   setAccessToken: (accessToken) => set({ accessToken }),
   clearSession: () => set({ accessToken: null, currentUser: null }),
+  setAuthBootstrapped: (authBootstrapped) => set({ authBootstrapped }),
 }))
 
 export function defaultRouteForRole(role: RoleName): string {
