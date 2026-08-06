@@ -10,6 +10,10 @@ export type PlaceOrderResponse = {
   keyId?: string
 }
 
+export type CancelCheckoutPayload = {
+  orderId: string
+}
+
 export type VerifyPaymentPayload = {
   razorpay_order_id: string
   razorpay_payment_id: string
@@ -38,4 +42,6 @@ export const checkoutApi = {
   /** UX confirmation only — webhook is the source of truth for PAID. */
   verifyPayment: (payload: VerifyPaymentPayload) =>
     apiClient.post<{ verified: boolean }>('/api/checkout/verify', payload),
+  cancelCheckout: (payload: CancelCheckoutPayload) =>
+    apiClient.post<{ restored: boolean; orderId: string }>('/api/checkout/cancel', payload),
 }

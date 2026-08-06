@@ -21,6 +21,21 @@ export function usePlaceOrderWithRazorpay() {
     void queryClient.invalidateQueries({ queryKey: ['cart'] })
   }
 
+  const restoreCancelledCheckout = async (orderId: string, fallback: string) => {
+    try {
+      await checkoutApi.cancelCheckout({ orderId })
+      clearCartCache()
+      setPaymentError(fallback)
+    } catch (err) {
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message: string }).message)
+          : fallback
+      setPaymentError(message)
+      clearCartCache()
+    }
+  }
+
   const handlePlaceOrder = async (method: string) => {
     if (!addressId) return
     setPaymentError(null)
@@ -69,15 +84,19 @@ export function usePlaceOrderWithRazorpay() {
           },
           modal: {
             ondismiss: () => {
-              setPaymentError('Payment cancelled. Your order is reserved — you can try again from Orders.')
-              clearCartCache()
+              void restoreCancelledCheckout(
+                result.orderId,
+                'Payment cancelled. Your cart has been restored.',
+              )
             },
           },
         })
 
         rzp.on('payment.failed', (resp) => {
-          setPaymentError(resp.error?.description || 'Payment failed. Please try another method.')
-          clearCartCache()
+          void restoreCancelledCheckout(
+            result.orderId,
+            resp.error?.description || 'Payment failed. Your cart has been restored.',
+          )
         })
 
         rzp.open()
