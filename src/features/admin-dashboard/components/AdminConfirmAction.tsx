@@ -9,6 +9,7 @@ import {
 } from '@/shared/components/StatusDialog'
 import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
+import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { adminActionTone, type AdminActionTone } from '../utils/adminActionTone'
 
 type ButtonVariant = 'default' | 'outline' | 'ghost' | 'secondary' | 'destructive'
@@ -76,6 +77,7 @@ export function AdminConfirmAction({
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [reason, setReason] = useState('')
+  const [actionError, setActionError] = useState<string | null>(null)
 
   const resolvedTone = tone ?? toneFromDialog(dialogVariant)
   const Icon = toneIcon(resolvedTone)
@@ -84,15 +86,19 @@ export function AdminConfirmAction({
     if (loading) return
     setOpen(false)
     setReason('')
+    setActionError(null)
   }
 
   const run = async () => {
     if (requireReason && !reason.trim()) return
     setLoading(true)
+    setActionError(null)
     try {
       await onConfirm(requireReason ? reason.trim() : undefined)
       setOpen(false)
       setReason('')
+    } catch (err) {
+      setActionError(getApiErrorMessage(err, LABELS.couldNotLoadData))
     } finally {
       setLoading(false)
     }
@@ -114,6 +120,7 @@ export function AdminConfirmAction({
         disabled={disabled || loading}
         onClick={() => {
           setReason('')
+          setActionError(null)
           setOpen(true)
         }}
       >
@@ -164,6 +171,7 @@ export function AdminConfirmAction({
             ) : null}
           </label>
         ) : null}
+        {actionError ? <p className="text-[0.8125rem] text-danger">{actionError}</p> : null}
       </StatusDialog>
     </>
   )

@@ -17,9 +17,15 @@ export const categoriesApi = {
   },
 
   detail: (id: string) => apiClient.get<Category>(API.categories.detail(id)),
-  create: (body: { name: string; parentId?: string }) =>
-    apiClient.post<Category>(API.categories.list, body),
-  update: (id: string, body: { name?: string; parentId?: string | null }) =>
-    apiClient.patch<Category>(API.categories.detail(id), body),
+  create: (body: {
+    name: string
+    parentId?: string
+    imageUrl?: string | null
+    status?: string
+  }) => apiClient.post<Category>(API.categories.list, body),
+  update: (
+    id: string,
+    body: { name?: string; parentId?: string | null; imageUrl?: string | null; status?: string },
+  ) => apiClient.patch<Category>(API.categories.detail(id), body),
   delete: (id: string) => apiClient.delete(API.categories.detail(id)),
 }

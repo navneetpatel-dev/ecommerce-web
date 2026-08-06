@@ -57,10 +57,17 @@ export function useAdminDataList(load: AdminListLoadFn, pageSize = DEFAULT_PAGE_
             return
           }
           setMode('server')
+          const resolvedPage = data.page || nextPage
+          const resolvedTotalPages = Math.max(1, data.totalPages)
+          // Inflated totals can leave empty deep pages — clamp to last real page.
+          if (data.items.length === 0 && data.total > 0 && resolvedPage > resolvedTotalPages) {
+            fetchPage(resolvedTotalPages)
+            return
+          }
           setServerRows(data.items)
-          setPage(data.page || nextPage)
+          setPage(resolvedPage)
           setTotal(data.total)
-          setTotalPages(Math.max(1, data.totalPages))
+          setTotalPages(resolvedTotalPages)
         })
         .catch((err) => setError(err instanceof Error ? err.message : LABELS.couldNotLoadData))
         .finally(() => setLoading(false))
@@ -96,8 +103,18 @@ export function useAdminDataList(load: AdminListLoadFn, pageSize = DEFAULT_PAGE_
   const currentPage = mode === 'client' ? client.page : page
   const pages = mode === 'client' ? client.totalPages : totalPages
   const resultTotal = mode === 'client' ? client.total : total
-  const from = mode === 'client' ? client.from : resultTotal === 0 ? 0 : (currentPage - 1) * pageSize + 1
-  const to = mode === 'client' ? client.to : Math.min(currentPage * pageSize, resultTotal)
+  const from =
+    mode === 'client'
+      ? client.from
+      : resultTotal === 0 || rows.length === 0
+        ? 0
+        : (currentPage - 1) * pageSize + 1
+  const to =
+    mode === 'client'
+      ? client.to
+      : rows.length === 0
+        ? 0
+        : Math.min((currentPage - 1) * pageSize + rows.length, resultTotal)
 
   return useMemo(
     () => ({

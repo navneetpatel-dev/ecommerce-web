@@ -37,6 +37,19 @@ export function resolveCategoryImageUrl(category: Category): string | undefined 
   return category.imageUrl || undefined
 }
 
+/** Flatten a category tree into a stable name-ordered list. */
+export function flattenCategories(categories: Category[]): Category[] {
+  const out: Category[] = []
+  const walk = (nodes: Category[]) => {
+    for (const node of nodes) {
+      out.push(node)
+      if (node.children?.length) walk(node.children)
+    }
+  }
+  walk(categories)
+  return out.slice().sort((a, b) => a.name.localeCompare(b.name))
+}
+
 /** Top-level categories (no parent), stable name order. */
 export function getRootCategories(categories: Category[]): Category[] {
   return categories

@@ -87,7 +87,9 @@ export interface Category {
   name: string;
   slug: string;
   parentId: string | null;
-  imageUrl?: string;
+  imageUrl?: string | null;
+  status?: string;
+  children?: Category[];
 }
 
 export interface CartItem {

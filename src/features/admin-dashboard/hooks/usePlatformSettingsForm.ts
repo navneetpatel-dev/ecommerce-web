@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { settingsApi, type AdminPlatformSettings } from '../api/settings.api'
+import { LABELS } from '@/shared/constants/labels'
 
 export type PlatformSettings = AdminPlatformSettings
 
@@ -15,7 +16,7 @@ export function usePlatformSettingsForm() {
     settingsApi
       .get()
       .then((settings) => setForm(settings))
-      .catch(() => setLoadError('Could not load platform settings from the server.'))
+      .catch(() => setLoadError(LABELS.couldNotLoadSettings))
       .finally(() => setLoading(false))
   }, [])
 
@@ -25,9 +26,9 @@ export function usePlatformSettingsForm() {
       .update(form)
       .then((saved) => {
         setForm(saved)
-        setMessage('Settings saved.')
+        setMessage(LABELS.settingsSaved)
       })
-      .catch(() => setMessage('Could not save settings.'))
+      .catch(() => setMessage(LABELS.couldNotSaveSettings))
   }
 
   return {

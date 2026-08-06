@@ -2,16 +2,19 @@
 
 import { PlatformSettingsForm } from '../components/PlatformSettingsForm'
 import { usePlatformSettingsForm } from '../hooks/usePlatformSettingsForm'
+import { LABELS } from '@/shared/constants/labels'
 
 export function PlatformSettingsPage() {
   const settings = usePlatformSettingsForm()
 
   if (settings.loading) {
-    return <p className="text-ink-muted">Loading platform settings…</p>
+    return <p className="text-ink-muted">{LABELS.loadingPlatformSettings}</p>
   }
 
   if (settings.loadError || !settings.form) {
-    return <p className="text-red-600">{settings.loadError ?? 'Settings unavailable.'}</p>
+    return (
+      <p className="text-danger">{settings.loadError ?? LABELS.settingsUnavailable}</p>
+    )
   }
 
   return (

@@ -33,6 +33,7 @@ export function useVendorApprovalQueue() {
   return {
     vendors: list.rows as unknown as VendorInfo[],
     isLoading: list.loading,
+    reload: list.reload,
     pagination: {
       page: list.page,
       totalPages: list.totalPages,

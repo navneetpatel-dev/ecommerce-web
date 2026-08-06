@@ -108,7 +108,7 @@ export function DataTable<T>({
 
   return (
     <section className={cn('min-w-0 space-y-5', className)}>
-      {(title || onRefresh || toolbar) && (
+      {(title || onRefresh || toolbar || showSummary) && (
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="min-w-0 space-y-1">
             {title ? (

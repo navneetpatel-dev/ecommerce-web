@@ -118,9 +118,13 @@ export type CommissionStatus = (typeof COMMISSION_STATUS)[keyof typeof COMMISSIO
 
 export const CATEGORY_STATUS = {
   ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
+  ARCHIVED: 'ARCHIVED',
 } as const
 export type CategoryStatus = (typeof CATEGORY_STATUS)[keyof typeof CATEGORY_STATUS]
+export const CATEGORY_STATUS_VALUES = Object.values(CATEGORY_STATUS) as [
+  CategoryStatus,
+  ...CategoryStatus[],
+]
 
 /** Matches backend unavailableReason values on cart/wishlist items. */
 export const UNAVAILABLE_REASON = {

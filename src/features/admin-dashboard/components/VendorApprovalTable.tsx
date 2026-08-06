@@ -18,6 +18,7 @@ interface VendorApprovalTableProps {
   isApproving?: boolean
   isRejecting?: boolean
   loading?: boolean
+  onRefresh?: () => void
   pagination?: DataTablePaginationProps
 }
 
@@ -28,6 +29,7 @@ export function VendorApprovalTable({
   isApproving = false,
   isRejecting = false,
   loading = false,
+  onRefresh,
   pagination,
 }: VendorApprovalTableProps) {
   const columns: DataTableColumn<Vendor>[] = [
@@ -50,6 +52,7 @@ export function VendorApprovalTable({
       columns={columns}
       rows={vendors}
       loading={loading}
+      onRefresh={onRefresh}
       getRowId={(row) => row.id}
       actionsClassName="w-auto min-w-[11rem]"
       pagination={pagination}

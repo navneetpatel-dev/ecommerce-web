@@ -39,6 +39,7 @@ export function useProductModerationQueue() {
   return {
     products: list.rows as unknown as PendingProduct[],
     isLoading: list.loading,
+    reload: list.reload,
     pagination: {
       page: list.page,
       totalPages: list.totalPages,

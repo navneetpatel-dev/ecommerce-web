@@ -20,6 +20,7 @@ export function VendorApprovalQueue() {
       vendors={queue.vendors}
       loading={queue.isLoading}
       pagination={queue.pagination}
+      onRefresh={queue.reload}
       onApprove={queue.onApprove}
       onReject={queue.onReject}
       isApproving={queue.isApproving}

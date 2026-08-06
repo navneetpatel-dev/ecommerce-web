@@ -20,6 +20,7 @@ export function ProductModerationQueue() {
       products={queue.products}
       loading={queue.isLoading}
       pagination={queue.pagination}
+      onRefresh={queue.reload}
       onApprove={queue.onApprove}
       onReject={queue.onReject}
       isApproving={queue.isApproving}

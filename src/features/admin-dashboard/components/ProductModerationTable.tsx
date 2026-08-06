@@ -20,6 +20,7 @@ interface ProductModerationTableProps {
   isApproving?: boolean
   isRejecting?: boolean
   loading?: boolean
+  onRefresh?: () => void
   pagination?: DataTablePaginationProps
 }
 
@@ -30,6 +31,7 @@ export function ProductModerationTable({
   isApproving = false,
   isRejecting = false,
   loading = false,
+  onRefresh,
   pagination,
 }: ProductModerationTableProps) {
   const columns: DataTableColumn<Product>[] = [
@@ -59,6 +61,7 @@ export function ProductModerationTable({
       columns={columns}
       rows={products}
       loading={loading}
+      onRefresh={onRefresh}
       getRowId={(row) => row.id}
       actionsClassName="w-auto min-w-[11rem]"
       pagination={pagination}

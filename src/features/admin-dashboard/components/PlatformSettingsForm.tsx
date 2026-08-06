@@ -1,10 +1,19 @@
+'use client'
+
 import { NumberInput } from '@/shared/components/NumberInput'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select'
 import { Button } from '@/shared/components/ui/button'
 import { LABELS } from '@/shared/constants/labels'
 import type { PlatformSettings } from '../hooks/usePlatformSettingsForm'
+import type { ReactNode } from 'react'
 
 interface PlatformSettingsFormProps {
   form: PlatformSettings
@@ -17,6 +26,45 @@ interface PlatformSettingsFormProps {
   onSupportEmailChange: (value: string) => void
   onSupportHoursChange: (value: string) => void
   onSave: () => void
+}
+
+function SettingsSection({
+  title,
+  hint,
+  children,
+}: {
+  title: string
+  hint: string
+  children: ReactNode
+}) {
+  return (
+    <section className="overflow-hidden rounded-md border border-line bg-surface shadow-[0_1px_0_rgba(15,23,42,0.03)]">
+      <header className="border-b border-line/80 bg-paper/50 px-4 py-4 sm:px-5">
+        <h3 className="text-[0.9375rem] font-semibold tracking-tight text-ink">{title}</h3>
+        <p className="mt-1 text-[0.8125rem] text-ink-muted">{hint}</p>
+      </header>
+      <div className="grid gap-5 p-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-5 sm:p-5">{children}</div>
+    </section>
+  )
+}
+
+function Field({
+  label,
+  htmlFor,
+  className,
+  children,
+}: {
+  label: string
+  htmlFor?: string
+  className?: string
+  children: ReactNode
+}) {
+  return (
+    <div className={className ?? 'space-y-2'}>
+      <Label htmlFor={htmlFor}>{label}</Label>
+      {children}
+    </div>
+  )
 }
 
 export function PlatformSettingsForm({
@@ -32,14 +80,16 @@ export function PlatformSettingsForm({
   onSave,
 }: PlatformSettingsFormProps) {
   return (
-    <div className="max-w-lg space-y-6">
-      <h2 className="text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]">Platform Settings</h2>
-      <p className="text-[0.9375rem] text-ink-muted">
-        Manage commission, returns, shipping thresholds, support contact, and moderation defaults.
-      </p>
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label>Default Commission Rate (%)</Label>
+    <div className="mx-auto w-full max-w-3xl space-y-6">
+      <div className="space-y-1">
+        <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+          {LABELS.platformSettings}
+        </h2>
+        <p className="max-w-2xl text-[0.9375rem] text-ink-muted">{LABELS.platformSettingsHint}</p>
+      </div>
+
+      <SettingsSection title={LABELS.settingsCommerce} hint={LABELS.settingsCommerceHint}>
+        <Field label={LABELS.defaultCommissionRate}>
           <NumberInput
             value={form.defaultCommissionRate}
             min={0}
@@ -48,9 +98,8 @@ export function PlatformSettingsForm({
             suffix="%"
             onChange={(value) => onCommissionRateChange(value ?? 0)}
           />
-        </div>
-        <div className="space-y-2">
-          <Label>Auto-approve Products</Label>
+        </Field>
+        <Field label={LABELS.autoApproveProducts}>
           <Select
             value={form.autoApproveProducts ? 'true' : 'false'}
             onValueChange={(value) => onAutoApproveChange(value === 'true')}
@@ -59,13 +108,15 @@ export function PlatformSettingsForm({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="true">Enabled (auto-approve)</SelectItem>
-              <SelectItem value="false">Disabled (moderated)</SelectItem>
+              <SelectItem value="true">{LABELS.autoApproveEnabled}</SelectItem>
+              <SelectItem value="false">{LABELS.autoApproveDisabled}</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-        <div className="space-y-2">
-          <Label>Default Return Window (days)</Label>
+        </Field>
+      </SettingsSection>
+
+      <SettingsSection title={LABELS.settingsFulfillment} hint={LABELS.settingsFulfillmentHint}>
+        <Field label={LABELS.defaultReturnWindow}>
           <NumberInput
             value={form.defaultReturnWindow}
             min={0}
@@ -74,9 +125,8 @@ export function PlatformSettingsForm({
             suffix={LABELS.daysShort}
             onChange={(value) => onReturnWindowChange(value ?? 0)}
           />
-        </div>
-        <div className="space-y-2">
-          <Label>Free shipping threshold (₹)</Label>
+        </Field>
+        <Field label={LABELS.freeShippingThreshold}>
           <NumberInput
             value={form.freeShippingThreshold}
             min={0}
@@ -84,42 +134,47 @@ export function PlatformSettingsForm({
             prefix="₹"
             onChange={(value) => onFreeShippingThresholdChange(value ?? 0)}
           />
-        </div>
-        <div className="space-y-2">
-          <Label>Payout Cycle</Label>
+        </Field>
+        <Field label={LABELS.payoutCycle} className="space-y-2 sm:col-span-2 sm:max-w-md">
           <Select value={form.payoutCycle} onValueChange={onPayoutCycleChange}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="WEEKLY">Weekly</SelectItem>
-              <SelectItem value="BIWEEKLY">Bi-weekly</SelectItem>
-              <SelectItem value="MONTHLY">Monthly</SelectItem>
-              <SelectItem value="weekly">Weekly (legacy)</SelectItem>
+              <SelectItem value="WEEKLY">{LABELS.payoutCycleWeekly}</SelectItem>
+              <SelectItem value="BIWEEKLY">{LABELS.payoutCycleBiweekly}</SelectItem>
+              <SelectItem value="MONTHLY">{LABELS.payoutCycleMonthly}</SelectItem>
+              <SelectItem value="weekly">{LABELS.payoutCycleWeeklyLegacy}</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-        <div className="space-y-2">
-          <Label>Support email</Label>
+        </Field>
+      </SettingsSection>
+
+      <SettingsSection title={LABELS.settingsSupport} hint={LABELS.settingsSupportHint}>
+        <Field label={LABELS.supportEmail} htmlFor="platform-support-email">
           <Input
+            id="platform-support-email"
             type="email"
             value={form.supportEmail}
             onChange={(e) => onSupportEmailChange(e.target.value)}
           />
-        </div>
-        <div className="space-y-2">
-          <Label>Support hours</Label>
+        </Field>
+        <Field label={LABELS.supportHours} htmlFor="platform-support-hours">
           <Input
+            id="platform-support-hours"
             value={form.supportHours}
             onChange={(e) => onSupportHoursChange(e.target.value)}
           />
-        </div>
-        <div className="space-y-2 pt-2">
-          <Button size="sm" type="button" onClick={onSave}>
-            Save settings
-          </Button>
-          {message && <p className="text-[0.8125rem] text-ink-muted">{message}</p>}
-        </div>
+        </Field>
+      </SettingsSection>
+
+      <div className="flex flex-col gap-3 border-t border-line/70 pt-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="min-h-[1.25rem] text-[0.8125rem] text-ink-muted" aria-live="polite">
+          {message}
+        </p>
+        <Button type="button" className="w-full sm:w-auto" onClick={onSave}>
+          {LABELS.saveSettings}
+        </Button>
       </div>
     </div>
   )
