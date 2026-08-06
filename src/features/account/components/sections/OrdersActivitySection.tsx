@@ -33,19 +33,19 @@ export function OrdersActivitySection() {
   return (
     <div className="space-y-6">
       <section className="border border-line bg-surface shadow-elevation-1">
-        <div className="flex items-center justify-between border-b border-line px-5 py-4 md:px-6">
-          <div>
+        <div className="flex items-start justify-between gap-4 border-b border-line bg-paper/65 px-5 py-4 md:px-6">
+          <div className="min-w-0">
             <TextEyebrow>Recent</TextEyebrow>
-            <h2 className="mt-1 text-[1.0625rem] font-semibold tracking-tight text-ink">
-              Orders
+            <h2 className="mt-1 font-display text-[1.1875rem] leading-tight tracking-tight text-ink">
+              Recent orders
             </h2>
-            <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
+            <p className="mt-1 text-[0.8125rem] text-ink-muted">
               {isLoadingStats ? 'Loading…' : `${ordersCount} total`}
             </p>
           </div>
           <Link
             href="/orders"
-            className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
+            className="inline-flex shrink-0 items-center gap-1 self-center text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
           >
             View all
             <ChevronRight size={14} />
