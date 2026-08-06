@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { AlertCircle, CheckCircle2, Info, XCircle } from 'lucide-react'
 import { Button } from './ui/button'
@@ -19,17 +20,20 @@ interface StatusDialogAction {
   label: string
   onClick: () => void
   variant?: 'default' | 'outline' | 'ghost' | 'secondary' | 'destructive'
+  loading?: boolean
+  disabled?: boolean
 }
 
 interface StatusDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   title: string
-  description: string
+  description: ReactNode
   variant?: StatusDialogVariant
   icon?: LucideIcon
   primaryAction?: StatusDialogAction
   secondaryAction?: StatusDialogAction
+  children?: ReactNode
 }
 
 const VARIANT_STYLES: Record<
@@ -67,6 +71,7 @@ export function StatusDialog({
   icon,
   primaryAction,
   secondaryAction,
+  children,
 }: StatusDialogProps) {
   const styles = VARIANT_STYLES[variant]
   const Icon = icon ?? styles.Icon
@@ -93,12 +98,16 @@ export function StatusDialog({
           </div>
         </DialogHeader>
 
+        {children ? <div className="space-y-3">{children}</div> : null}
+
         {(primaryAction || secondaryAction) && (
-          <DialogFooter className="gap-2 sm:justify-start">
+          <DialogFooter className="dialog-footer-start">
             {secondaryAction ? (
               <Button
                 type="button"
                 variant={secondaryAction.variant ?? 'outline'}
+                loading={secondaryAction.loading}
+                disabled={secondaryAction.disabled}
                 onClick={secondaryAction.onClick}
               >
                 {secondaryAction.label}
@@ -108,6 +117,8 @@ export function StatusDialog({
               <Button
                 type="button"
                 variant={primaryAction.variant ?? 'default'}
+                loading={primaryAction.loading}
+                disabled={primaryAction.disabled}
                 onClick={primaryAction.onClick}
               >
                 {primaryAction.label}

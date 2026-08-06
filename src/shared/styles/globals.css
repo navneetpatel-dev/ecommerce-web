@@ -258,6 +258,48 @@ body {
   color: var(--brand);
 }
 
+/* Dialog action row — equal-height buttons on every breakpoint */
+.dialog-footer {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.dialog-footer > button {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 2.5rem !important;
+  min-height: 2.5rem !important;
+  max-height: 2.5rem !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 1 !important;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+@media (min-width: 480px) {
+  .dialog-footer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .dialog-footer > button {
+    width: auto;
+  }
+}
+
+.dialog-footer-start {
+  justify-content: flex-start;
+}
+
 /**
  * Storefront content shell — §1.4 gutters
  * 16px (xs–sm) → 24px (md+) → 32px (2xl+)

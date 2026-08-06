@@ -50,6 +50,7 @@ export function ChangePasswordSection({
               id="currentPassword"
               label="Current Password"
               type="password"
+              autoComplete="current-password"
               registration={register('currentPassword')}
               error={errors.currentPassword}
             />
@@ -57,6 +58,7 @@ export function ChangePasswordSection({
               id="newPassword"
               label="New Password"
               type="password"
+              autoComplete="new-password"
               registration={register('newPassword')}
               error={errors.newPassword}
             />

@@ -34,7 +34,7 @@ export function RegisterCard({ form, onSubmit, error, isPending }: RegisterCardP
           <FormField id="name" label="Name" registration={register('name')} error={errors.name} />
           <FormField id="email" label="Email" type="email" registration={register('email')} error={errors.email} />
           <FormField id="phone" label="Phone (optional)" type="tel" registration={register('phone')} error={errors.phone} />
-          <FormField id="password" label="Password" type="password" registration={register('password')} error={errors.password} />
+          <FormField id="password" label="Password" type="password" autoComplete="new-password" registration={register('password')} error={errors.password} />
           <FormError error={error} fallback="Registration failed" />
           <Button type="submit" className="w-full" loading={isPending}>Register</Button>
         </form>

@@ -1,10 +1,12 @@
 'use client'
 
-import { Monitor } from 'lucide-react'
+import { useState } from 'react'
+import { LogOut, Monitor } from 'lucide-react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Button } from '@/shared/components/ui/button'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { FormError } from '@/shared/components/FormError'
+import { StatusDialog } from '@/shared/components/StatusDialog'
 import { ChangePasswordSection } from '@/features/auth/components/ChangePasswordSection'
 import { useProfilePage } from '@/features/auth/hooks/useProfilePage'
 import {
@@ -30,9 +32,12 @@ export function SecuritySection() {
   const sessions = useSessions()
   const revoke = useRevokeSession()
   const revokeOthers = useRevokeOtherSessions()
+  const [revokeOthersOpen, setRevokeOthersOpen] = useState(false)
+  const [revokeFamily, setRevokeFamily] = useState<string | null>(null)
 
   const list = sessions.data ?? []
   const hasOthers = list.some((s) => !s.isCurrent)
+  const revokeTarget = list.find((s) => s.family === revokeFamily) ?? null
 
   return (
     <div className="space-y-6">
@@ -58,8 +63,7 @@ export function SecuritySection() {
               type="button"
               variant="outline"
               size="sm"
-              loading={revokeOthers.isPending}
-              onClick={() => revokeOthers.mutate()}
+              onClick={() => setRevokeOthersOpen(true)}
             >
               Sign out others
             </Button>
@@ -110,8 +114,7 @@ export function SecuritySection() {
                     variant="ghost"
                     size="sm"
                     className="text-danger hover:text-danger"
-                    loading={revoke.isPending && revoke.variables === session.family}
-                    onClick={() => revoke.mutate(session.family)}
+                    onClick={() => setRevokeFamily(session.family)}
                   >
                     Revoke
                   </Button>
@@ -128,6 +131,58 @@ export function SecuritySection() {
           />
         </div>
       </section>
+
+      <StatusDialog
+        open={revokeOthersOpen}
+        onOpenChange={setRevokeOthersOpen}
+        variant="warning"
+        icon={LogOut}
+        title="Sign out other devices?"
+        description="All sessions except this one will be ended. Those devices will need to sign in again."
+        secondaryAction={{
+          label: 'Cancel',
+          onClick: () => setRevokeOthersOpen(false),
+        }}
+        primaryAction={{
+          label: 'Sign out others',
+          loading: revokeOthers.isPending,
+          onClick: () => {
+            revokeOthers.mutate(undefined, {
+              onSuccess: () => setRevokeOthersOpen(false),
+            })
+          },
+        }}
+      />
+
+      <StatusDialog
+        open={Boolean(revokeFamily)}
+        onOpenChange={(open) => {
+          if (!open) setRevokeFamily(null)
+        }}
+        variant="warning"
+        icon={LogOut}
+        title="Revoke this session?"
+        description={
+          revokeTarget
+            ? `End the session on ${deviceLabel(revokeTarget.userAgent)}. That device will need to sign in again.`
+            : 'End this session. That device will need to sign in again.'
+        }
+        secondaryAction={{
+          label: 'Cancel',
+          onClick: () => setRevokeFamily(null),
+        }}
+        primaryAction={{
+          label: 'Revoke',
+          variant: 'destructive',
+          loading: revoke.isPending,
+          onClick: () => {
+            if (!revokeFamily) return
+            revoke.mutate(revokeFamily, {
+              onSuccess: () => setRevokeFamily(null),
+            })
+          },
+        }}
+      />
     </div>
   )
 }

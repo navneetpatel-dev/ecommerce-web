@@ -34,8 +34,8 @@ export function LoginRequiredDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{message}</DialogDescription>
         </DialogHeader>
-        <DialogFooter className="gap-2">
-          <Button type="button" variant="ghost" onClick={onCancel}>
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
           <Button type="button" onClick={onLogin}>

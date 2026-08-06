@@ -6,22 +6,22 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/shared/utils/cn'
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-5 [&_svg]:shrink-0",
+  "inline-flex box-border items-center justify-center gap-2 overflow-hidden whitespace-nowrap font-medium leading-none transition-colors cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-5 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default: "border border-transparent bg-ink text-paper hover:bg-ink/90",
         destructive: "border border-transparent bg-danger text-paper hover:bg-danger/90",
-        outline: "border border-line bg-surface hover:bg-paper hover:text-ink",
+        outline: "border border-line bg-surface text-ink hover:bg-paper hover:text-ink",
         secondary: "border border-line bg-surface text-ink hover:bg-paper",
-        ghost: "hover:bg-brand-subtle hover:text-ink",
-        link: "text-brand underline-offset-4 hover:underline",
+        ghost: "border border-transparent hover:bg-brand-subtle hover:text-ink",
+        link: "border border-transparent text-brand underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-11 px-6 rounded-md text-[0.9375rem]",
-        sm: "h-8 px-4 rounded-md text-[0.8125rem]",
-        lg: "h-11 px-6 rounded-md text-[0.9375rem]",
-        icon: "h-11 w-11 rounded-md",
+        default: "h-11 min-h-11 px-6 rounded-md text-[0.9375rem]",
+        sm: "h-8 min-h-8 px-4 rounded-md text-[0.8125rem]",
+        lg: "h-11 min-h-11 px-6 rounded-md text-[0.9375rem]",
+        icon: "h-11 min-h-11 w-11 rounded-md px-0",
       },
       fullWidth: {
         true: "w-full",

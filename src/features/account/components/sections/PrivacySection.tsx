@@ -6,16 +6,9 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/shared/components/ui/dialog'
 import { FormError } from '@/shared/components/FormError'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { StatusDialog } from '@/shared/components/StatusDialog'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useLogout } from '@/features/auth/api/auth.queries'
 import { useQueryClient } from '@tanstack/react-query'
@@ -23,7 +16,8 @@ import { useTheme } from '@/shared/hooks/use-theme'
 import { useDeleteAccount, useExportAccount } from '../../api/account.queries'
 
 export function PrivacySection() {
-  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [logoutOpen, setLogoutOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
   const [confirmText, setConfirmText] = useState('')
   const deleteAccount = useDeleteAccount()
   const exportAccount = useExportAccount()
@@ -43,7 +37,7 @@ export function PrivacySection() {
       localStorage.removeItem('session')
     }
     queryClient.clear()
-    setConfirmOpen(false)
+    setDeleteOpen(false)
     router.replace('/')
   }
 
@@ -136,8 +130,7 @@ export function PrivacySection() {
               variant="outline"
               size="sm"
               className="shrink-0 gap-2"
-              loading={logout.isPending}
-              onClick={() => logout.mutate()}
+              onClick={() => setLogoutOpen(true)}
             >
               <LogOut size={14} strokeWidth={1.5} />
               Sign out
@@ -168,7 +161,7 @@ export function PrivacySection() {
             className="shrink-0 gap-2"
             onClick={() => {
               setConfirmText('')
-              setConfirmOpen(true)
+              setDeleteOpen(true)
             }}
           >
             <Trash2 size={14} strokeWidth={1.5} />
@@ -177,51 +170,66 @@ export function PrivacySection() {
         </div>
       </section>
 
-      <Dialog
-        open={confirmOpen}
+      <StatusDialog
+        open={logoutOpen}
+        onOpenChange={setLogoutOpen}
+        variant="warning"
+        icon={LogOut}
+        title="Sign out?"
+        description="You'll need to sign in again to access your account on this device."
+        secondaryAction={{
+          label: 'Cancel',
+          onClick: () => setLogoutOpen(false),
+        }}
+        primaryAction={{
+          label: 'Sign out',
+          loading: logout.isPending,
+          onClick: () => logout.mutate(),
+        }}
+      />
+
+      <StatusDialog
+        open={deleteOpen}
         onOpenChange={(open) => {
-          setConfirmOpen(open)
+          setDeleteOpen(open)
           if (!open) setConfirmText('')
         }}
+        variant="danger"
+        icon={Trash2}
+        title="Delete your account?"
+        description={
+          <>
+            Type <span className="font-semibold text-ink">DELETE</span> to confirm. Your profile
+            will be deactivated and you&apos;ll be signed out.
+          </>
+        }
+        secondaryAction={{
+          label: 'Cancel',
+          onClick: () => setDeleteOpen(false),
+        }}
+        primaryAction={{
+          label: 'Delete account',
+          variant: 'destructive',
+          disabled: !canConfirm,
+          loading: deleteAccount.isPending,
+          onClick: () => void handleDelete(),
+        }}
       >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete your account?</DialogTitle>
-            <DialogDescription>
-              Type <span className="font-semibold text-ink">DELETE</span> to confirm. Your profile
-              will be deactivated and you&apos;ll be signed out.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-2">
-            <Label htmlFor="delete-confirm">Confirmation</Label>
-            <Input
-              id="delete-confirm"
-              value={confirmText}
-              onChange={(e) => setConfirmText(e.target.value)}
-              placeholder="DELETE"
-              autoComplete="off"
-            />
-          </div>
-          <FormError
-            error={deleteAccount.error as Error | null}
-            fallback="Could not delete account."
+        <div className="space-y-2">
+          <Label htmlFor="delete-confirm">Confirmation</Label>
+          <Input
+            id="delete-confirm"
+            value={confirmText}
+            onChange={(e) => setConfirmText(e.target.value)}
+            placeholder="DELETE"
+            autoComplete="off"
           />
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setConfirmOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              disabled={!canConfirm}
-              loading={deleteAccount.isPending}
-              onClick={() => void handleDelete()}
-            >
-              Delete account
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </div>
+        <FormError
+          error={deleteAccount.error as Error | null}
+          fallback="Could not delete account."
+        />
+      </StatusDialog>
     </div>
   )
 }

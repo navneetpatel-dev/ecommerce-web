@@ -7,15 +7,8 @@ import { Button } from '@/shared/components/ui/button'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { AddressFormDialog } from '@/shared/components/AddressFormDialog'
+import { StatusDialog } from '@/shared/components/StatusDialog'
 import { cn } from '@/shared/utils/cn'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/shared/components/ui/dialog'
 import {
   useAccountAddresses,
   useCreateAccountAddress,
@@ -198,43 +191,40 @@ export function AddressesSection() {
         }}
       />
 
-      <Dialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete address?</DialogTitle>
-            <DialogDescription>
-              This removes the address from your account. You can add it again later.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setDeleteTarget(null)}>
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              loading={deleteAddress.isPending}
-              onClick={async () => {
-                if (!deleteTarget) return
-                setListError(null)
-                try {
-                  await deleteAddress.mutateAsync(deleteTarget.id)
-                  setDeleteTarget(null)
-                } catch (err) {
-                  setDeleteTarget(null)
-                  setListError(
-                    err && typeof err === 'object' && 'message' in err
-                      ? String((err as { message: string }).message)
-                      : 'Could not delete address.'
-                  )
-                }
-              }}
-            >
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <StatusDialog
+        open={Boolean(deleteTarget)}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null)
+        }}
+        variant="danger"
+        icon={Trash2}
+        title="Delete address?"
+        description="This removes the address from your account. You can add it again later."
+        secondaryAction={{
+          label: 'Cancel',
+          onClick: () => setDeleteTarget(null),
+        }}
+        primaryAction={{
+          label: 'Delete',
+          variant: 'destructive',
+          loading: deleteAddress.isPending,
+          onClick: async () => {
+            if (!deleteTarget) return
+            setListError(null)
+            try {
+              await deleteAddress.mutateAsync(deleteTarget.id)
+              setDeleteTarget(null)
+            } catch (err) {
+              setDeleteTarget(null)
+              setListError(
+                err && typeof err === 'object' && 'message' in err
+                  ? String((err as { message: string }).message)
+                  : 'Could not delete address.'
+              )
+            }
+          },
+        }}
+      />
     </div>
   )
 }

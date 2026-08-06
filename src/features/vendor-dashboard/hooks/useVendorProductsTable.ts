@@ -9,21 +9,20 @@ export function useVendorProductsTable() {
   const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
   const { data, isLoading } = useVendorProducts(page, search ? { search } : undefined)
 
   const deleteProduct = useMutation({
     mutationFn: (id: string) => productsApi.delete(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['vendor', 'products'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vendor', 'products'] })
+      setDeleteTarget(null)
+    },
   })
 
   const handleSearchChange = (value: string) => {
     setSearch(value)
     setPage(1)
-  }
-
-  const handleDelete = (id: string, name: string) => {
-    if (!window.confirm(`Delete “${name}”? This cannot be undone.`)) return
-    deleteProduct.mutate(id)
   }
 
   return {
@@ -33,7 +32,12 @@ export function useVendorProductsTable() {
     isLoading,
     setPage,
     handleSearchChange,
-    handleDelete,
+    deleteTarget,
+    setDeleteTarget,
+    confirmDelete: () => {
+      if (!deleteTarget) return
+      deleteProduct.mutate(deleteTarget.id)
+    },
     isDeleting: deleteProduct.isPending,
   }
 }

@@ -31,7 +31,8 @@ export function ResetPasswordCard({ form, onSubmit, error, isPending }: ResetPas
           <FormField 
             id="newPassword" 
             label="New Password" 
-            type="password" 
+            type="password"
+            autoComplete="new-password"
             registration={register('newPassword')} 
             error={errors.newPassword} 
           />

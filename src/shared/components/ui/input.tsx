@@ -14,7 +14,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          "flex h-11 w-full rounded-sm border bg-surface px-4 text-[0.9375rem] transition-colors file:border-0 file:bg-transparent file:text-[0.8125rem] file:font-medium placeholder:text-ink-faint outline-none focus-visible:border-brand disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-11 w-full rounded-sm border bg-surface px-4 text-[0.9375rem] text-ink transition-colors file:border-0 file:bg-transparent file:text-[0.8125rem] file:font-medium placeholder:text-ink-faint outline-none focus-visible:border-brand disabled:cursor-not-allowed disabled:opacity-50",
           error ? "border-danger" : "border-line",
           className
         )}
@@ -40,16 +40,21 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
       <Input
         ref={ref}
         type={inputType}
-        className={cn('pr-10', className)}
+        className={cn('pr-11', className)}
         {...props}
       />
       <button
         type="button"
         onClick={onVisibilityToggle}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink"
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1.5 text-ink-muted transition-colors hover:bg-paper hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         aria-label={showLabel}
+        aria-pressed={visible}
       >
-        {visible ? <EyeOff size={20} /> : <Eye size={20} />}
+        {visible ? (
+          <EyeOff size={18} strokeWidth={1.5} aria-hidden />
+        ) : (
+          <Eye size={18} strokeWidth={1.5} aria-hidden />
+        )}
       </button>
     </div>
   )

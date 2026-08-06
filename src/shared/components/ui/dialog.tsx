@@ -46,7 +46,7 @@ const DialogContent = React.forwardRef<
         <DialogPrimitive.Content
           ref={ref}
           className={cn(
-            'fixed left-[50%] top-[50%] z-50 grid w-full max-w-[480px] translate-x-[-50%] translate-y-[-50%] gap-6 border border-line bg-surface-raised p-6 rounded-lg shadow-elevation-3 animate-scale-in outline-none',
+            'fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] max-w-[480px] max-h-[calc(100dvh-2rem)] -translate-x-1/2 -translate-y-1/2 gap-5 overflow-y-auto border border-line bg-surface-raised p-5 shadow-elevation-3 animate-scale-in outline-none rounded-lg sm:gap-6 sm:p-6',
             className
           )}
           style={{ animationDuration: 'var(--motion-moderate)' }}
@@ -91,7 +91,8 @@ const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
 
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}
+    data-slot="dialog-footer"
+    className={cn('dialog-footer', className)}
     {...props}
   />
 )
