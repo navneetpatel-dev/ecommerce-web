@@ -31,7 +31,7 @@ export function AdminSectionTabs({
   return (
     <div className={cn('min-w-0 space-y-6', className)}>
       <header className="space-y-1">
-        <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">{title}</h1>
+        <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">{title}</h1>
         {description ? (
           <p className="max-w-2xl text-[0.9375rem] text-ink-muted">{description}</p>
         ) : null}

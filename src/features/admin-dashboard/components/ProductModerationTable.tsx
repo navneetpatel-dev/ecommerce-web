@@ -61,7 +61,7 @@ export function ProductModerationTable({
       rows={pagination.pageRows}
       loading={loading}
       getRowId={(row) => row.id}
-      actionsClassName="w-56"
+      actionsClassName="w-auto min-w-[11rem]"
       pagination={{
         page: pagination.page,
         totalPages: pagination.totalPages,

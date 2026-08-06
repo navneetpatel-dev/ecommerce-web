@@ -10,9 +10,16 @@ import { PATHS } from '@/shared/constants/paths'
 interface HeaderContainerProps {
   /** When false, hide shopper chrome (search, cart, categories, mobile tabs). */
   showStorefrontChrome?: boolean
+  /** Show hamburger that opens workspace (admin/vendor) nav on small screens. */
+  showWorkspaceMenu?: boolean
+  onOpenWorkspaceNav?: () => void
 }
 
-export function HeaderContainer({ showStorefrontChrome = true }: HeaderContainerProps) {
+export function HeaderContainer({
+  showStorefrontChrome = true,
+  showWorkspaceMenu = false,
+  onOpenWorkspaceNav,
+}: HeaderContainerProps) {
   const header = useHeader()
   const pathname = usePathname()
   const authBootstrapped = useAuthStore((s) => s.authBootstrapped)
@@ -33,8 +40,10 @@ export function HeaderContainer({ showStorefrontChrome = true }: HeaderContainer
       megaMenuOpen={header.megaMenuOpen}
       isTransparent={header.isTransparent}
       showStorefrontChrome={storefrontChrome}
+      showWorkspaceMenu={showWorkspaceMenu && !storefrontChrome}
       onOpenMobileNav={header.openMobileNav}
       onCloseMobileNav={header.closeMobileNav}
+      onOpenWorkspaceNav={onOpenWorkspaceNav}
       onOpenMobileSearch={header.openMobileSearch}
       onCloseMobileSearch={header.closeMobileSearch}
       onToggleMegaMenu={header.toggleMegaMenu}

@@ -33,7 +33,7 @@ export function PlatformSettingsForm({
 }: PlatformSettingsFormProps) {
   return (
     <div className="max-w-lg space-y-6">
-      <h2 className="text-[1.375rem] font-semibold text-ink">Platform Settings</h2>
+      <h2 className="text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]">Platform Settings</h2>
       <p className="text-[0.9375rem] text-ink-muted">
         Manage commission, returns, shipping thresholds, support contact, and moderation defaults.
       </p>

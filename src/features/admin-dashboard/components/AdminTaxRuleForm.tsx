@@ -26,7 +26,7 @@ export function AdminTaxRuleForm({
 
   return (
     <form
-      className="flex flex-wrap items-center gap-2 rounded-md border border-line bg-surface p-3"
+      className="flex flex-col gap-3 rounded-md border border-line bg-surface p-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2"
       onSubmit={(e) => {
         if (!canCreate) {
           e.preventDefault()
@@ -36,7 +36,7 @@ export function AdminTaxRuleForm({
       }}
     >
       <NumberInput
-        className="w-36"
+        className="w-full sm:w-36"
         value={gstPercentage === '' ? undefined : Number(gstPercentage)}
         min={0}
         max={100}
@@ -46,13 +46,13 @@ export function AdminTaxRuleForm({
         onChange={(value) => onGstChange(value == null ? '' : String(value))}
       />
       <Input
-        className="min-w-[10rem] flex-1"
+        className="w-full min-w-0 flex-1 sm:min-w-[10rem]"
         placeholder={LABELS.hsnOptional}
         value={hsnCode}
         onChange={(e) => onHsnChange(e.target.value)}
       />
       <DisabledActionHint disabled={!canCreate} message={LABELS.enterGstPercentage}>
-        <Button type="submit" disabled={!canCreate}>
+        <Button type="submit" className="w-full sm:w-auto" disabled={!canCreate}>
           {LABELS.addTaxRule}
         </Button>
       </DisabledActionHint>

@@ -222,6 +222,7 @@ export const LABELS = {
   adminPanel: 'Admin Panel',
   brandName: 'Marketplace',
   menu: 'Menu',
+  closeMenu: 'Close menu',
   search: 'Search',
   cart: 'Cart',
   wishlist: 'Wishlist',

@@ -13,6 +13,7 @@ interface SidebarNavProps {
   currentPath: string
   header?: React.ReactNode
   variant?: 'dashboard' | 'account'
+  className?: string
 }
 
 export function SidebarNav({
@@ -20,26 +21,29 @@ export function SidebarNav({
   currentPath,
   header,
   variant = 'dashboard',
+  className,
 }: SidebarNavProps) {
   return (
     <aside
       className={cn(
-        'w-60 shrink-0 border-r border-line min-h-[calc(100vh-3.5rem)] lg:min-h-[calc(100vh-72px)] p-4 space-y-1',
-        variant === 'dashboard' ? 'bg-paper' : 'bg-surface'
+        'hidden w-60 shrink-0 overflow-y-auto border-r border-line p-4 space-y-1 lg:block',
+        'min-h-[calc(100vh-3.5rem)] lg:min-h-[calc(100vh-72px)]',
+        variant === 'dashboard' ? 'bg-paper' : 'bg-surface',
+        className,
       )}
     >
       {header}
       {items.map(({ href, icon: Icon, label }) => {
-        const isActive = currentPath === href || currentPath.startsWith(href + '/')
+        const isActive = currentPath === href || currentPath.startsWith(`${href}/`)
         return (
           <Link
             key={href}
             href={href}
             className={cn(
-              "flex items-center gap-3 px-3 h-11 rounded-md text-[0.8125rem] font-medium transition-colors border-l-[3px]",
+              'flex h-11 items-center gap-3 rounded-md border-l-[3px] px-3 text-[0.8125rem] font-medium transition-colors',
               isActive
-                ? "bg-brand-subtle text-brand border-l-brand"
-                : "text-ink-muted border-l-transparent hover:bg-paper hover:text-ink"
+                ? 'border-l-brand bg-brand-subtle text-brand'
+                : 'border-l-transparent text-ink-muted hover:bg-paper hover:text-ink',
             )}
           >
             <Icon size={16} />

@@ -258,7 +258,7 @@ body {
   color: var(--brand);
 }
 
-/* Dialog action row — equal-height buttons on every breakpoint */
+/* Dialog action row — equal-size buttons on every breakpoint */
 .dialog-footer {
   display: flex;
   flex-direction: column-reverse;
@@ -266,11 +266,17 @@ body {
   gap: 0.5rem;
 }
 
-.dialog-footer > button {
+.dialog-footer > * {
+  width: 100%;
+}
+
+.dialog-footer > button,
+.dialog-footer > * > button {
   box-sizing: border-box !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  width: 100% !important;
   height: 2.5rem !important;
   min-height: 2.5rem !important;
   max-height: 2.5rem !important;
@@ -291,8 +297,13 @@ body {
     justify-content: flex-end;
   }
 
-  .dialog-footer > button {
+  .dialog-footer > * {
     width: auto;
+  }
+
+  .dialog-footer > button,
+  .dialog-footer > * > button {
+    width: auto !important;
   }
 }
 

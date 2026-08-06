@@ -21,7 +21,7 @@ export function AdminCategoryCreateForm({
 
   return (
     <form
-      className="flex flex-wrap items-center gap-2 rounded-md border border-line bg-surface p-3"
+      className="flex flex-col gap-3 rounded-md border border-line bg-surface p-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2"
       onSubmit={(e) => {
         if (!canCreate) {
           e.preventDefault()
@@ -32,16 +32,16 @@ export function AdminCategoryCreateForm({
     >
       <input
         className={cn(
-          'h-11 min-w-[14rem] flex-1 rounded-md border border-line bg-paper px-3',
+          'h-11 w-full min-w-0 flex-1 rounded-md border border-line bg-paper px-3',
           'text-[0.9375rem] text-ink outline-none placeholder:text-ink-faint',
-          'focus-visible:border-brand',
+          'focus-visible:border-brand sm:min-w-[14rem]',
         )}
         value={name}
         onChange={(e) => onNameChange(e.target.value)}
         placeholder={LABELS.newCategory}
       />
       <DisabledActionHint disabled={!canCreate} message={LABELS.enterCategoryName}>
-        <Button type="submit" disabled={!canCreate}>
+        <Button type="submit" className="w-full sm:w-auto" disabled={!canCreate}>
           {LABELS.create}
         </Button>
       </DisabledActionHint>

@@ -88,7 +88,7 @@ export function ModerationRowActions({
     <>
       <Button
         size="sm"
-        className={approveButtonClass}
+        className={cn(approveButtonClass, 'flex-1 sm:flex-none')}
         disabled={busy}
         onClick={() => setMode('approve')}
       >
@@ -97,7 +97,7 @@ export function ModerationRowActions({
       </Button>
       <Button
         size="sm"
-        className={rejectButtonClass}
+        className={cn(rejectButtonClass, 'flex-1 sm:flex-none')}
         disabled={busy}
         onClick={() => {
           setReason('')

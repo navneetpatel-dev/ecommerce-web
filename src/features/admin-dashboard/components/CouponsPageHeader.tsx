@@ -16,11 +16,11 @@ interface CouponsPageHeaderProps {
 
 export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: CouponsPageHeaderProps) {
   return (
-    <div className="flex items-center justify-between">
-      <h2 className="text-[1.375rem] font-semibold text-ink">{LABELS.coupons}</h2>
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <h2 className="text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]">{LABELS.coupons}</h2>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button size="sm">
+          <Button size="sm" className="shrink-0">
             <Plus className="h-4 w-4" /> {LABELS.createCoupon}
           </Button>
         </DialogTrigger>

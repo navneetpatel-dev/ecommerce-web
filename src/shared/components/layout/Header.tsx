@@ -34,8 +34,11 @@ interface HeaderProps {
   isTransparent: boolean
   /** Shopper chrome: categories, search, cart, mobile tabs. Off on admin/vendor dashboards. */
   showStorefrontChrome?: boolean
+  /** Hamburger for admin/vendor sidebar drawer (lg and below). */
+  showWorkspaceMenu?: boolean
   onOpenMobileNav: () => void
   onCloseMobileNav: () => void
+  onOpenWorkspaceNav?: () => void
   onOpenMobileSearch: () => void
   onCloseMobileSearch: () => void
   onToggleMegaMenu: () => void
@@ -55,8 +58,10 @@ export function Header({
   megaMenuOpen,
   isTransparent,
   showStorefrontChrome = true,
+  showWorkspaceMenu = false,
   onOpenMobileNav,
   onCloseMobileNav,
+  onOpenWorkspaceNav,
   onOpenMobileSearch,
   onCloseMobileSearch,
   onToggleMegaMenu,
@@ -171,6 +176,15 @@ export function Header({
             >
               <Menu size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
             </button>
+          ) : showWorkspaceMenu ? (
+            <button
+              type="button"
+              onClick={onOpenWorkspaceNav}
+              className="lg:hidden -ml-2 rounded-md p-2 hover:bg-paper"
+              aria-label={LABELS.menu}
+            >
+              <Menu size={20} className="text-ink" />
+            </button>
           ) : null}
 
           <Link
@@ -242,7 +256,7 @@ export function Header({
               type="button"
               onClick={toggleTheme}
               className={cn(
-                'hidden items-center gap-1.5 rounded-md border px-2.5 py-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wide transition-colors sm:inline-flex',
+                'inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wide transition-colors',
                 isTransparent
                   ? 'border-paper/30 text-paper hover:bg-paper/10'
                   : 'border-line text-ink-muted hover:bg-paper hover:text-ink'

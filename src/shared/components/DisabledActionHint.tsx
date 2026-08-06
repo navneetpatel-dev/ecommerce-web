@@ -27,7 +27,10 @@ export function DisabledActionHint({
   className,
   side = 'top',
 }: DisabledActionHintProps) {
-  if (!disabled || !message) return <>{children}</>
+  if (!disabled || !message) {
+    if (!className) return <>{children}</>
+    return <span className={className}>{children}</span>
+  }
 
   return (
     <TooltipProvider delayDuration={150}>

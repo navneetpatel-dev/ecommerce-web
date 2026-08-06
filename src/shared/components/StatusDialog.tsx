@@ -108,6 +108,7 @@ export function StatusDialog({
             {secondaryAction ? (
               <Button
                 type="button"
+                className="w-full sm:w-auto"
                 variant={secondaryAction.variant ?? 'outline'}
                 loading={secondaryAction.loading}
                 disabled={secondaryAction.disabled}
@@ -118,11 +119,13 @@ export function StatusDialog({
             ) : null}
             {primaryAction ? (
               <DisabledActionHint
+                className="flex w-full sm:inline-flex sm:w-auto"
                 disabled={Boolean(primaryAction.disabled && primaryAction.disabledHint)}
                 message={primaryAction.disabledHint ?? ''}
               >
                 <Button
                   type="button"
+                  className="w-full sm:w-auto"
                   variant={primaryAction.variant ?? 'default'}
                   loading={primaryAction.loading}
                   disabled={primaryAction.disabled}
