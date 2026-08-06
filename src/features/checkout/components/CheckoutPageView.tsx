@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'motion/react'
 import { AddressStep } from './AddressStep'
 import { ShippingStep } from './ShippingStep'
@@ -12,7 +13,9 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { CheckoutPageSkeleton } from '@/shared/components/Skeletons'
+import { StatusDialog } from '@/shared/components/StatusDialog'
 import type { Address, CartItem, CheckoutQuote } from '@/shared/api/types'
+import type { PaymentNotice } from '../hooks/usePlaceOrder'
 
 interface CheckoutPageViewProps {
   isLoading?: boolean
@@ -24,7 +27,8 @@ interface CheckoutPageViewProps {
   paymentMethod?: string | null
   quote?: CheckoutQuote | null
   isPending: boolean
-  paymentError?: string | null
+  paymentNotice?: PaymentNotice | null
+  onClearPaymentNotice?: () => void
   isCreatingAddress?: boolean
   groupedByVendor: Record<string, CartItem[]>
   total: number
@@ -178,7 +182,8 @@ export function CheckoutPageView({
   paymentMethod,
   quote,
   isPending,
-  paymentError,
+  paymentNotice,
+  onClearPaymentNotice,
   isCreatingAddress,
   groupedByVendor,
   total,
@@ -195,8 +200,13 @@ export function CheckoutPageView({
   onPlaceOrder,
   onCreateAddress,
 }: CheckoutPageViewProps) {
+  const router = useRouter()
+
   if (isLoading) return <CheckoutPageSkeleton />
   if (!hasItems) return <EmptyCart />
+
+  const noticePrimaryLabel =
+    paymentNotice?.variant === 'danger' ? 'Try again' : 'Continue checkout'
 
   const copy = STEP_COPY[step] ?? STEP_COPY[1]
   const summary = (
@@ -325,7 +335,6 @@ export function CheckoutPageView({
                         <ReviewStep
                           quote={quote ?? null}
                           isPending={isPending}
-                          paymentError={paymentError}
                           onPlaceOrder={onPlaceOrder}
                           onBack={onBackToPayment}
                         />
@@ -344,6 +353,28 @@ export function CheckoutPageView({
           </aside>
         </div>
       </div>
+
+      <StatusDialog
+        open={Boolean(paymentNotice)}
+        onOpenChange={(open) => {
+          if (!open) onClearPaymentNotice?.()
+        }}
+        variant={paymentNotice?.variant ?? 'info'}
+        title={paymentNotice?.title ?? ''}
+        description={paymentNotice?.description ?? ''}
+        primaryAction={{
+          label: noticePrimaryLabel,
+          onClick: () => onClearPaymentNotice?.(),
+        }}
+        secondaryAction={{
+          label: 'View cart',
+          variant: 'outline',
+          onClick: () => {
+            onClearPaymentNotice?.()
+            router.push('/cart')
+          },
+        }}
+      />
     </div>
   )
 }

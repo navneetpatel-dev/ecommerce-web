@@ -6,13 +6,20 @@ import { usePlaceOrder, useCheckoutQuote } from '../api/checkout.queries'
 import { checkoutApi } from '../api/checkout.api'
 import { loadRazorpayScript } from '../utils/loadRazorpayScript'
 import { navigate } from '@/shared/utils/navigate'
+import type { StatusDialogVariant } from '@/shared/components/StatusDialog'
+
+export type PaymentNotice = {
+  variant: StatusDialogVariant
+  title: string
+  description: string
+}
 
 export function usePlaceOrderWithRazorpay() {
   const { addressId, shippingMethodByVendor, appliedCouponCode } = useCheckoutStore()
   const placeOrder = usePlaceOrder()
   const router = useRouter()
   const queryClient = useQueryClient()
-  const [paymentError, setPaymentError] = useState<string | null>(null)
+  const [paymentNotice, setPaymentNotice] = useState<PaymentNotice | null>(null)
 
   const quoteInput = { addressId, shippingMethodByVendor, couponCode: appliedCouponCode }
   const { data: quote } = useCheckoutQuote(quoteInput)
@@ -21,24 +28,35 @@ export function usePlaceOrderWithRazorpay() {
     void queryClient.invalidateQueries({ queryKey: ['cart'] })
   }
 
-  const restoreCancelledCheckout = async (orderId: string, fallback: string) => {
+  const showNotice = (notice: PaymentNotice) => {
+    setPaymentNotice(notice)
+  }
+
+  const restoreCancelledCheckout = async (
+    orderId: string,
+    notice: PaymentNotice,
+  ) => {
     try {
       await checkoutApi.cancelCheckout({ orderId })
       clearCartCache()
-      setPaymentError(fallback)
+      showNotice(notice)
     } catch (err) {
-      const message =
+      const description =
         err && typeof err === 'object' && 'message' in err
           ? String((err as { message: string }).message)
-          : fallback
-      setPaymentError(message)
+          : notice.description
+      showNotice({
+        variant: 'danger',
+        title: notice.title,
+        description,
+      })
       clearCartCache()
     }
   }
 
   const handlePlaceOrder = async (method: string) => {
     if (!addressId) return
-    setPaymentError(null)
+    setPaymentNotice(null)
 
     try {
       const result = await placeOrder.mutateAsync({
@@ -51,13 +69,21 @@ export function usePlaceOrderWithRazorpay() {
       if (method === 'razorpay' && result.razorpayOrderId) {
         await loadRazorpayScript()
         if (!window.Razorpay) {
-          setPaymentError('Unable to load payment checkout. Please try again.')
+          showNotice({
+            variant: 'danger',
+            title: 'Payment unavailable',
+            description: 'Unable to load payment checkout. Please try again.',
+          })
           return
         }
 
         const keyId = result.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || ''
         if (!keyId || !result.amount || !result.currency) {
-          setPaymentError('Payment could not be started. Missing order details from server.')
+          showNotice({
+            variant: 'danger',
+            title: 'Payment unavailable',
+            description: 'Payment could not be started. Missing order details from server.',
+          })
           return
         }
 
@@ -77,26 +103,35 @@ export function usePlaceOrderWithRazorpay() {
               clearCartCache()
               navigate(router, `/orders/${result.orderId}/confirmation`)
             } catch {
-              // Signature UX check failed — order still exists; webhook may still confirm
-              setPaymentError('Payment received but confirmation failed. Check your orders shortly.')
+              showNotice({
+                variant: 'warning',
+                title: 'Confirmation pending',
+                description:
+                  'Payment was received, but confirmation is still settling. Check Orders shortly.',
+              })
               clearCartCache()
             }
           },
           modal: {
             ondismiss: () => {
-              void restoreCancelledCheckout(
-                result.orderId,
-                'Payment cancelled. Your cart has been restored.',
-              )
+              void restoreCancelledCheckout(result.orderId, {
+                variant: 'info',
+                title: 'Payment cancelled',
+                description:
+                  'No charge was made. Your cart has been restored and is ready whenever you want to try again.',
+              })
             },
           },
         })
 
         rzp.on('payment.failed', (resp) => {
-          void restoreCancelledCheckout(
-            result.orderId,
-            resp.error?.description || 'Payment failed. Your cart has been restored.',
-          )
+          void restoreCancelledCheckout(result.orderId, {
+            variant: 'danger',
+            title: 'Payment failed',
+            description:
+              resp.error?.description ||
+              'Payment could not be completed. Your cart has been restored so you can try again.',
+          })
         })
 
         rzp.open()
@@ -106,11 +141,15 @@ export function usePlaceOrderWithRazorpay() {
       clearCartCache()
       navigate(router, `/orders/${result.orderId}/confirmation`)
     } catch (err) {
-      const message =
+      const description =
         err && typeof err === 'object' && 'message' in err
           ? String((err as { message: string }).message)
           : 'Could not place order. Please try again.'
-      setPaymentError(message)
+      showNotice({
+        variant: 'danger',
+        title: 'Could not place order',
+        description,
+      })
     }
   }
 
@@ -118,7 +157,7 @@ export function usePlaceOrderWithRazorpay() {
     handlePlaceOrder,
     quote,
     isPending: placeOrder.isPending,
-    paymentError,
-    clearPaymentError: () => setPaymentError(null),
+    paymentNotice,
+    clearPaymentNotice: () => setPaymentNotice(null),
   }
 }

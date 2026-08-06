@@ -18,12 +18,14 @@ export function useCheckoutPage() {
     setStep,
     setAddress,
     setShippingMethod,
+    ensureDefaultShippingMethods,
     setPaymentMethod,
   } = useCheckoutStore()
   const { data: cart, isLoading: cartLoading } = useCart()
   const { data: addresses, isLoading: addressesLoading } = useAddresses()
   const createAddress = useCreateAddress()
-  const { handlePlaceOrder, quote, isPending, paymentError } = usePlaceOrderWithRazorpay()
+  const { handlePlaceOrder, quote, isPending, paymentNotice, clearPaymentNotice } =
+    usePlaceOrderWithRazorpay()
   const { requireAuth } = useRequireAuth()
 
   const isLoading = cartLoading || addressesLoading
@@ -41,6 +43,13 @@ export function useCheckoutPage() {
     if (!cart?.items) return {}
     return groupItemsByVendor(cart.items)
   }, [cart])
+
+  // Default every vendor to Standard (Free) when shipping methods are missing
+  useEffect(() => {
+    const vendorIds = Object.keys(groupedByVendor)
+    if (!vendorIds.length) return
+    ensureDefaultShippingMethods(vendorIds)
+  }, [groupedByVendor, ensureDefaultShippingMethods])
 
   const total = useMemo(() => {
     if (!cart?.items) return 0
@@ -60,7 +69,8 @@ export function useCheckoutPage() {
     addresses,
     quote,
     isPending,
-    paymentError,
+    paymentNotice,
+    clearPaymentNotice,
     isLoading,
     groupedByVendor,
     total,
