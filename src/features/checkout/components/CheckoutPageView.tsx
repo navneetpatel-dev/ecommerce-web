@@ -37,6 +37,7 @@ interface CheckoutPageViewProps {
   onBackToShipping: () => void
   onBackToPayment: () => void
   onSelectPayment: (method: string) => void
+  onContinueToReview: () => void
   onPlaceOrder: () => void
   onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => Promise<void>
 }
@@ -190,6 +191,7 @@ export function CheckoutPageView({
   onBackToShipping,
   onBackToPayment,
   onSelectPayment,
+  onContinueToReview,
   onPlaceOrder,
   onCreateAddress,
 }: CheckoutPageViewProps) {
@@ -307,6 +309,7 @@ export function CheckoutPageView({
                           isPending={isPending}
                           selectedMethod={paymentMethod}
                           onSelect={onSelectPayment}
+                          onContinue={onContinueToReview}
                           onBack={onBackToShipping}
                         />
                       </motion.div>

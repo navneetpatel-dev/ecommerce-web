@@ -81,8 +81,9 @@ export function useCheckoutPage() {
     onContinueToPayment: () => setStep(3),
     onBackToShipping: () => setStep(2),
     onBackToPayment: () => setStep(3),
-    onSelectPayment: (method: string) => {
-      setPaymentMethod(method)
+    onSelectPayment: setPaymentMethod,
+    onContinueToReview: () => {
+      if (!paymentMethod) return
       setStep(4)
     },
     onPlaceOrder: () => {

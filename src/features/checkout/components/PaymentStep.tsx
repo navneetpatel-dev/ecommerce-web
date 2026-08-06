@@ -1,11 +1,13 @@
-import { CreditCard, Banknote } from 'lucide-react'
+import { ArrowRight, CreditCard, Banknote } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { cn } from '@/shared/utils/cn'
 
 interface PaymentStepProps {
   isPending: boolean
   selectedMethod?: string | null
   onSelect: (method: string) => void
+  onContinue: () => void
   onBack: () => void
 }
 
@@ -28,8 +30,11 @@ export function PaymentStep({
   isPending,
   selectedMethod,
   onSelect,
+  onContinue,
   onBack,
 }: PaymentStepProps) {
+  const canContinue = Boolean(selectedMethod)
+
   return (
     <div className="space-y-5">
       <div className="space-y-3">
@@ -75,9 +80,26 @@ export function PaymentStep({
         })}
       </div>
 
-      <Button variant="outline" onClick={onBack} className="w-full sm:w-auto">
-        Back to shipping
-      </Button>
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
+        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto">
+          Back to shipping
+        </Button>
+        <DisabledActionHint
+          disabled={!canContinue}
+          message="Select a payment method to continue."
+          className="w-full sm:w-auto"
+        >
+          <Button
+            size="lg"
+            onClick={onContinue}
+            disabled={!canContinue || isPending}
+            className="w-full gap-2 sm:w-auto"
+          >
+            Continue to review
+            <ArrowRight size={16} />
+          </Button>
+        </DisabledActionHint>
+      </div>
     </div>
   )
 }

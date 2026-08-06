@@ -30,6 +30,7 @@ export function CheckoutPage() {
       onBackToShipping={checkout.onBackToShipping}
       onBackToPayment={checkout.onBackToPayment}
       onSelectPayment={checkout.onSelectPayment}
+      onContinueToReview={checkout.onContinueToReview}
       onPlaceOrder={checkout.onPlaceOrder}
       onCreateAddress={checkout.onCreateAddress}
     />
