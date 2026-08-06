@@ -8,7 +8,6 @@ export const accountApi = {
   deleteAccount: () => usersApi.deleteAccount(),
   exportAccount: () => usersApi.exportAccount(),
   uploadAvatar: (dataUrl: string) => usersApi.uploadAvatar(dataUrl),
-  confirmEmail: (token: string) => usersApi.confirmEmail(token),
 
   getAddresses: () => usersApi.getAddresses(),
   createAddress: (body: AddressInput) => usersApi.createAddress(body),

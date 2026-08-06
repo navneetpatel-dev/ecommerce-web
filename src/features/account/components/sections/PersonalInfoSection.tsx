@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { CheckCircle2, Mail, UserRound } from 'lucide-react'
 import { FormField } from '@/shared/components/FormField'
 import { FormError } from '@/shared/components/FormError'
 import { Button } from '@/shared/components/ui/button'
@@ -9,32 +10,24 @@ import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import {
-  useAccountProfile,
-  useUpdateProfile,
-  useConfirmEmail,
-} from '../../api/account.queries'
-import type { UpdateProfileResult } from '@/features/users/api/users.api'
+import { Badge } from '@/shared/components/ui/badge'
+import { useAccountProfile, useUpdateProfile } from '../../api/account.queries'
 
 interface PersonalForm {
   name: string
   phone: string
-  email: string
 }
 
 export function PersonalInfoSection() {
   const { data: profile, isLoading, isError, error } = useAccountProfile()
   const updateProfile = useUpdateProfile()
-  const confirmEmail = useConfirmEmail()
-  const [verifyToken, setVerifyToken] = useState('')
-  const [pendingToken, setPendingToken] = useState<string | null>(null)
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isDirty },
   } = useForm<PersonalForm>({
-    defaultValues: { name: '', phone: '', email: '' },
+    defaultValues: { name: '', phone: '' },
   })
 
   useEffect(() => {
@@ -42,15 +35,15 @@ export function PersonalInfoSection() {
       reset({
         name: profile.name ?? '',
         phone: profile.phone ?? '',
-        email: profile.email ?? '',
       })
     }
   }, [profile, reset])
 
   if (isLoading) {
     return (
-      <div className="max-w-md space-y-4 border border-line bg-surface p-6">
+      <div className="space-y-4 border border-line bg-surface p-6 shadow-elevation-1">
         <Skeleton className="h-5 w-32" />
+        <Skeleton className="h-11 w-full" />
         <Skeleton className="h-11 w-full" />
         <Skeleton className="h-11 w-full" />
       </div>
@@ -68,112 +61,122 @@ export function PersonalInfoSection() {
   }
 
   return (
-    <div className="max-w-md space-y-5">
-      <form
-        onSubmit={handleSubmit(async (data) => {
-          const body: {
-            name: string
-            phone: string | null
-            email?: string
-          } = {
-            name: data.name.trim(),
-            phone: data.phone.trim() || null,
-          }
-          if (data.email.trim().toLowerCase() !== profile.email.toLowerCase()) {
-            body.email = data.email.trim()
-          }
-          const result = (await updateProfile.mutateAsync(body)) as UpdateProfileResult
-          if (result.emailVerificationToken) {
-            setPendingToken(result.emailVerificationToken)
-            setVerifyToken(result.emailVerificationToken)
-          }
-        })}
-        className="space-y-5 border border-line bg-surface p-5 shadow-elevation-1 md:p-6"
-      >
-        <div>
-          <TextEyebrow className="hidden lg:block">Identity</TextEyebrow>
-          <p className="mt-1 text-[0.875rem] text-ink-muted">
-            Update how we address you and how we can reach you.
-          </p>
-        </div>
-
-        <FormField
-          id="account-name"
-          label="Full name"
-          registration={register('name', { required: 'Name is required' })}
-          error={errors.name}
-        />
-
-        <FormField
-          id="account-phone"
-          label="Phone"
-          type="tel"
-          registration={register('phone')}
-          error={errors.phone}
-          placeholder="+91…"
-          helperText="Optional — used for delivery updates."
-        />
-
-        <FormField
-          id="account-email"
-          label="Email"
-          type="email"
-          registration={register('email', { required: 'Email is required' })}
-          error={errors.email}
-          helperText={
-            profile.pendingEmail
-              ? `Pending verification for ${profile.pendingEmail}`
-              : 'Changing email requires verification.'
-          }
-        />
-
-        <FormError error={updateProfile.error as Error | null} fallback="Could not save profile." />
-        {updateProfile.isSuccess && !isDirty ? (
-          <p className="text-[0.875rem] text-success">Profile saved.</p>
-        ) : null}
-
-        <Button type="submit" loading={updateProfile.isPending} disabled={!isDirty}>
-          Save changes
-        </Button>
-      </form>
-
-      {(profile.pendingEmail || pendingToken) && (
-        <div className="space-y-3 border border-line bg-surface p-5 shadow-elevation-1 md:p-6">
-          <TextEyebrow>Verify</TextEyebrow>
-          <h3 className="mt-1 text-[1.0625rem] font-semibold tracking-tight text-ink">
-            Confirm email change
-          </h3>
-          <p className="text-[0.875rem] text-ink-muted">
-            Enter the verification token for{' '}
-            <span className="font-medium text-ink">{profile.pendingEmail}</span>. In development the
-            token appears after you save.
-          </p>
-          <div className="space-y-1.5">
-            <Label htmlFor="email-token">Verification token</Label>
-            <Input
-              id="email-token"
-              value={verifyToken}
-              onChange={(e) => setVerifyToken(e.target.value)}
-              placeholder="Paste token"
-            />
+    <div className="space-y-6">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.8fr)]">
+        <form
+          onSubmit={handleSubmit(async (data) => {
+            const body: {
+              name: string
+              phone: string | null
+            } = {
+              name: data.name.trim(),
+              phone: data.phone.trim() || null,
+            }
+            await updateProfile.mutateAsync(body)
+          })}
+          className="border border-line bg-surface shadow-elevation-1"
+        >
+          <div className="border-b border-line bg-paper/65 px-5 py-4 md:px-6">
+            <TextEyebrow>Identity</TextEyebrow>
+            <h2 className="mt-1 font-display text-[1.1875rem] tracking-tight text-ink">
+              Personal information
+            </h2>
+            <p className="mt-1 text-[0.875rem] text-ink-muted">
+              Update how we address you and how we can reach you.
+            </p>
           </div>
-          <FormError
-            error={confirmEmail.error as Error | null}
-            fallback="Could not verify email."
-          />
-          {confirmEmail.isSuccess ? (
-            <p className="text-[0.875rem] text-success">Email updated.</p>
-          ) : null}
-          <Button
-            type="button"
-            loading={confirmEmail.isPending}
-            disabled={!verifyToken.trim()}
-            onClick={() => confirmEmail.mutate(verifyToken.trim())}
-          >
-            Confirm email
-          </Button>
-        </div>
-      )}
+
+          <div className="space-y-5 px-5 py-5 md:px-6 md:py-6">
+            <div className="grid gap-5 md:grid-cols-2">
+              <FormField
+                id="account-name"
+                label="Full name"
+                registration={register('name', { required: 'Name is required' })}
+                error={errors.name}
+              />
+
+              <FormField
+                id="account-phone"
+                label="Phone"
+                type="tel"
+                registration={register('phone')}
+                error={errors.phone}
+                placeholder="+91…"
+                helperText="Optional — used for delivery updates."
+              />
+            </div>
+            <FormError error={updateProfile.error as Error | null} fallback="Could not save profile." />
+            {updateProfile.isSuccess && !isDirty ? (
+              <p className="text-[0.875rem] text-success">Profile saved.</p>
+            ) : null}
+
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+              <p className="text-[0.8125rem] text-ink-faint">
+                Keep your name, phone, and email current for orders and account recovery.
+              </p>
+              <Button type="submit" loading={updateProfile.isPending} disabled={!isDirty}>
+                Save changes
+              </Button>
+            </div>
+          </div>
+        </form>
+
+        <aside className="border border-line bg-surface shadow-elevation-1">
+          <div className="border-b border-line bg-paper/55 px-5 py-4 md:px-6">
+            <TextEyebrow>Profile</TextEyebrow>
+            <p className="mt-1 text-[0.875rem] text-ink-muted">
+              A quick view of the details currently tied to your account.
+            </p>
+          </div>
+
+          <div className="space-y-4 px-5 py-5 md:px-6">
+            <div className="flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted">
+                <UserRound size={18} strokeWidth={1.5} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
+                  Account holder
+                </p>
+                <p className="mt-1 text-[0.9375rem] font-medium text-ink">{profile.name}</p>
+                {profile.phone ? (
+                  <p className="mt-0.5 text-[0.8125rem] text-ink-muted">{profile.phone}</p>
+                ) : (
+                  <p className="mt-0.5 text-[0.8125rem] text-ink-faint">No phone saved yet</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted">
+                <Mail size={18} strokeWidth={1.5} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
+                  Email status
+                </p>
+                <p className="mt-1 break-all text-[0.9375rem] font-medium text-ink">{profile.email}</p>
+                <div className="mt-2">
+                  {profile.emailVerified ? (
+                    <Badge variant="success" className="gap-1">
+                      <CheckCircle2 size={12} />
+                      Verified
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline">Unverified</Badge>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-line pt-4">
+              <p className="text-[0.8125rem] leading-6 text-ink-muted">
+                Email addresses are fixed on this account and cannot be changed from the storefront.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
   )
 }

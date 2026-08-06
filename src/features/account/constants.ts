@@ -1,6 +1,4 @@
 import {
-  Bell,
-  CreditCard,
   Lock,
   MapPin,
   Package,
@@ -36,22 +34,10 @@ export const ACCOUNT_SECTIONS: AccountNavItem[] = [
     icon: MapPin,
   },
   {
-    id: 'payments',
-    label: 'Payments',
-    description: 'Saved payment methods',
-    icon: CreditCard,
-  },
-  {
     id: 'orders',
     label: 'Orders',
     description: 'Orders, wishlist, returns',
     icon: Package,
-  },
-  {
-    id: 'notifications',
-    label: 'Notifications',
-    description: 'Email and marketing prefs',
-    icon: Bell,
   },
   {
     id: 'privacy',

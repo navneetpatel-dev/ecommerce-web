@@ -6,13 +6,6 @@ export type AccountProfile = CurrentUser & {
   emailMarketingConsent?: boolean
   createdAt?: string
   avatarUrl?: string | null
-  pendingEmail?: string | null
-  notificationPrefs?: {
-    orderUpdates: boolean
-    smsAlerts: boolean
-    shippingNotifications: boolean
-  }
-  emailVerificationToken?: string
 }
 
 export type AccountSectionId =
@@ -20,9 +13,7 @@ export type AccountSectionId =
   | 'personal'
   | 'security'
   | 'addresses'
-  | 'payments'
   | 'orders'
-  | 'notifications'
   | 'privacy'
 
 export interface AccountNavItem {

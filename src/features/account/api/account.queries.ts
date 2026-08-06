@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import type { Address, CurrentUser } from '@/shared/api/types'
 import { accountApi } from './account.api'
-import type { UpdateProfileBody, AddressInput, UpdateProfileResult } from '@/features/users/api/users.api'
+import type { UpdateProfileBody, AddressInput } from '@/features/users/api/users.api'
 
 export const accountKeys = {
   profile: ['account', 'profile'] as const,
@@ -24,8 +24,6 @@ function syncAuthUser(profile: CurrentUser) {
     emailMarketingConsent: profile.emailMarketingConsent,
     emailVerified: profile.emailVerified,
     avatarUrl: profile.avatarUrl,
-    pendingEmail: profile.pendingEmail,
-    notificationPrefs: profile.notificationPrefs,
     createdAt: profile.createdAt,
   }
   useAuthStore.getState().setSession(accessToken, next)
@@ -49,10 +47,9 @@ export function useUpdateProfile() {
 
   return useMutation({
     mutationFn: (body: UpdateProfileBody) => accountApi.updateProfile(body),
-    onSuccess: (profile: UpdateProfileResult) => {
-      const { emailVerificationToken: _token, ...rest } = profile
-      queryClient.setQueryData(accountKeys.profile, rest)
-      syncAuthUser(rest)
+    onSuccess: (profile) => {
+      queryClient.setQueryData(accountKeys.profile, profile)
+      syncAuthUser(profile)
     },
   })
 }
@@ -61,17 +58,6 @@ export function useUploadAvatar() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (dataUrl: string) => accountApi.uploadAvatar(dataUrl),
-    onSuccess: (profile) => {
-      queryClient.setQueryData(accountKeys.profile, profile)
-      syncAuthUser(profile)
-    },
-  })
-}
-
-export function useConfirmEmail() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (token: string) => accountApi.confirmEmail(token),
     onSuccess: (profile) => {
       queryClient.setQueryData(accountKeys.profile, profile)
       syncAuthUser(profile)

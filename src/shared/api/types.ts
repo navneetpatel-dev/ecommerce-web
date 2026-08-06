@@ -10,12 +10,6 @@ export interface CurrentUser {
   emailVerified: boolean;
   emailMarketingConsent?: boolean;
   avatarUrl?: string | null;
-  pendingEmail?: string | null;
-  notificationPrefs?: {
-    orderUpdates: boolean;
-    smsAlerts: boolean;
-    shippingNotifications: boolean;
-  };
   createdAt?: string;
 }
 

@@ -169,7 +169,6 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
             icon={Package}
             label="Orders"
             value={isLoadingStats ? '—' : String(ordersCount)}
-            href="/orders"
             onDetails={() => onNavigate('orders')}
           />
           <GlanceRow
@@ -194,7 +193,7 @@ function GlanceRow({
   icon: typeof Package
   label: string
   value: string
-  href: string
+  href?: string
   onDetails?: () => void
 }) {
   return (
@@ -211,18 +210,20 @@ function GlanceRow({
           <button
             type="button"
             onClick={onDetails}
-            className="text-[0.75rem] font-medium text-ink-muted hover:text-brand"
+            className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
           >
             Details
+            <ChevronRight size={14} />
           </button>
+        ) : href ? (
+          <Link
+            href={href}
+            className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
+          >
+            View
+            <ChevronRight size={14} />
+          </Link>
         ) : null}
-        <Link
-          href={href}
-          className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
-        >
-          View
-          <ChevronRight size={14} />
-        </Link>
       </div>
     </li>
   )

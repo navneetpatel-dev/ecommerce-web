@@ -86,7 +86,6 @@ export function Header({
       )
     } else {
       links.push(
-        { href: '/profile?tab=notifications', label: 'Notifications' },
         { href: '/profile?tab=privacy', label: 'Privacy' }
       )
     }

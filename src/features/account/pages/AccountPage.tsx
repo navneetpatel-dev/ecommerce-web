@@ -11,9 +11,7 @@ import { OverviewSection } from '../components/sections/OverviewSection'
 import { PersonalInfoSection } from '../components/sections/PersonalInfoSection'
 import { SecuritySection } from '../components/sections/SecuritySection'
 import { AddressesSection } from '../components/sections/AddressesSection'
-import { PaymentsSection } from '../components/sections/PaymentsSection'
 import { OrdersActivitySection } from '../components/sections/OrdersActivitySection'
-import { NotificationsSection } from '../components/sections/NotificationsSection'
 import { PrivacySection } from '../components/sections/PrivacySection'
 import { useAccountPage } from '../hooks/useAccountPage'
 import type { AccountSectionId } from '../types'
@@ -34,12 +32,8 @@ function AccountSectionBody({
       return <SecuritySection />
     case 'addresses':
       return <AddressesSection />
-    case 'payments':
-      return <PaymentsSection />
     case 'orders':
       return <OrdersActivitySection />
-    case 'notifications':
-      return <NotificationsSection />
     case 'privacy':
       return <PrivacySection />
     default:
