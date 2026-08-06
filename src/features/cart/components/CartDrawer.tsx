@@ -152,11 +152,11 @@ export function CartDrawer({
                   <label htmlFor="cart-coupon-code" className="block text-[0.8125rem] font-medium text-ink">
                     Coupon code
                   </label>
-                  <div className="flex items-center gap-2">
+                  <div className="flex w-full items-stretch gap-2">
                     <Input
                       id="cart-coupon-code"
                       placeholder="Coupon code"
-                      className="min-w-0 flex-1 text-[0.9375rem]"
+                      className="min-w-0 flex-1"
                       value={couponInput}
                       onChange={(e) => onCouponInputChange(e.target.value)}
                       onKeyDown={(e) => {
@@ -173,7 +173,7 @@ export function CartDrawer({
                     >
                       <Button
                         variant="outline"
-                        className="h-11 shrink-0"
+                        className="h-11 shrink-0 px-4"
                         onClick={onApplyCoupon}
                         loading={couponPending}
                         disabled={!couponInput.trim()}
