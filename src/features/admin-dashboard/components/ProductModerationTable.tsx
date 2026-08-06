@@ -1,11 +1,12 @@
 import { Button } from '@/shared/components/ui/button'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/components/ui/table'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import { MediaImage } from '@/shared/components/MediaImage'
 
 interface Product {
   id: string
   name: string
-  imageUrl: string
+  imageUrl?: string | null
   basePrice: number
 }
 
@@ -46,7 +47,14 @@ export function ProductModerationTable({
             <TableRow key={p.id}>
               <TableCell>
                 <div className="flex items-center gap-3">
-                  <img src={p.imageUrl} alt="" className="h-10 w-10 rounded object-cover" />
+                  <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded bg-paper">
+                    <MediaImage
+                      src={p.imageUrl}
+                      alt={p.name}
+                      sizes="40px"
+                      imageClassName="object-cover"
+                    />
+                  </div>
                   <span className="font-medium">{p.name}</span>
                 </div>
               </TableCell>
