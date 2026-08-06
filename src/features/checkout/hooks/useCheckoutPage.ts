@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useCart } from '@/features/cart/api/cart.queries'
 import { groupItemsByVendor, calcCartTotal } from '@/features/cart/utils/cart.utils'
 import { useWalletBalance } from '@/features/wallet/api/wallet.queries'
@@ -25,10 +25,19 @@ export function useCheckoutPage() {
   const { data: addresses, isLoading: addressesLoading } = useAddresses()
   const createAddress = useCreateAddress()
   const { data: walletBalance } = useWalletBalance()
-  const { handlePlaceOrder, quote, isPending } = usePlaceOrderWithRazorpay()
+  const { handlePlaceOrder, quote, isPending, paymentError } = usePlaceOrderWithRazorpay()
   const { requireAuth } = useRequireAuth()
 
   const isLoading = cartLoading || addressesLoading
+
+  // Prefer default address, otherwise first saved address
+  useEffect(() => {
+    if (!addresses?.length) return
+    const stillValid = addressId && addresses.some((a) => a.id === addressId)
+    if (stillValid) return
+    const preferred = addresses.find((a) => a.isDefault) ?? addresses[0]
+    if (preferred) setAddress(preferred.id)
+  }, [addresses, addressId, setAddress])
 
   const groupedByVendor = useMemo(() => {
     if (!cart?.items) return {}
@@ -58,6 +67,7 @@ export function useCheckoutPage() {
     walletShortfall,
     quote,
     isPending,
+    paymentError,
     isLoading,
     groupedByVendor,
     total,
@@ -99,12 +109,16 @@ export function useCheckoutPage() {
           redirectTo: '/checkout',
         })
       ) {
-        return
+        return Promise.reject(new Error('Sign in required'))
       }
-      createAddress.mutate(body, {
-        onSuccess: (created) => {
-          setAddress(created.id)
-        },
+      return new Promise<void>((resolve, reject) => {
+        createAddress.mutate(body, {
+          onSuccess: (created) => {
+            setAddress(created.id)
+            resolve()
+          },
+          onError: (err) => reject(err),
+        })
       })
     },
   }

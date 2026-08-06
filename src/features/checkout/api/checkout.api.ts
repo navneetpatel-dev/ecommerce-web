@@ -2,6 +2,20 @@ import { apiClient } from '@/shared/api/client'
 import type { Address, ShippingRate, CheckoutQuote } from '@/shared/api/types'
 import { usersApi } from '@/features/users/api/users.api'
 
+export type PlaceOrderResponse = {
+  orderId: string
+  razorpayOrderId?: string
+  amount?: number
+  currency?: string
+  keyId?: string
+}
+
+export type VerifyPaymentPayload = {
+  razorpay_order_id: string
+  razorpay_payment_id: string
+  razorpay_signature: string
+}
+
 export const checkoutApi = {
   getAddresses: () => usersApi.getAddresses(),
   createAddress: (body: Omit<Address, 'id' | 'userId'>) => usersApi.createAddress(body),
@@ -10,10 +24,18 @@ export const checkoutApi = {
     if (method) params.set('method', method)
     return apiClient.get<ShippingRate[]>(`/api/shipping/rates?${params.toString()}`)
   },
-  getCheckoutQuote: (body: { addressId: string; shippingMethodByVendor: Record<string, string>; couponCode?: string | null }) =>
-    apiClient.post<CheckoutQuote>('/api/checkout/quote', body),
-  placeOrder: (body: { addressId: string; paymentMethod: string; couponCode?: string | null; shippingMethodByVendor: Record<string, string> }) =>
-    apiClient.post<{ orderId: string; razorpayOrderId?: string }>('/api/checkout', body),
-  verifyPayment: (body: Record<string, unknown>) =>
-    apiClient.post<{ verified: boolean }>('/api/payments/verify', body),
+  getCheckoutQuote: (body: {
+    addressId: string
+    shippingMethodByVendor: Record<string, string>
+    couponCode?: string | null
+  }) => apiClient.post<CheckoutQuote>('/api/checkout/quote', body),
+  placeOrder: (body: {
+    addressId: string
+    paymentMethod: string
+    couponCode?: string | null
+    shippingMethodByVendor: Record<string, string>
+  }) => apiClient.post<PlaceOrderResponse>('/api/checkout', body),
+  /** UX confirmation only — webhook is the source of truth for PAID. */
+  verifyPayment: (payload: VerifyPaymentPayload) =>
+    apiClient.post<{ verified: boolean }>('/api/checkout/verify', payload),
 }

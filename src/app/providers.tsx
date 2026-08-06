@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { NavigationProgressContainer } from '@/shared/containers/NavigationProgressContainer'
 import { LoginRequiredDialogContainer } from '@/shared/containers/LoginRequiredDialogContainer'
+import { RouteScrollResetContainer } from '@/shared/containers/RouteScrollResetContainer'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -36,6 +37,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <RouteScrollResetContainer />
       <NavigationProgressContainer />
       <LoginRequiredDialogContainer />
       {children}

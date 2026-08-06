@@ -1,10 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { checkoutApi } from './checkout.api'
+import { useAuthStore } from '@/features/auth/store/auth.store'
 
 export function useAddresses() {
+  const currentUser = useAuthStore((s) => s.currentUser)
+
   return useQuery({
     queryKey: ['addresses'],
     queryFn: () => checkoutApi.getAddresses(),
+    enabled: Boolean(currentUser),
   })
 }
 
@@ -13,7 +17,17 @@ export function useCreateAddress() {
   return useMutation({
     mutationFn: (body: Parameters<typeof checkoutApi.createAddress>[0]) =>
       checkoutApi.createAddress(body),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['addresses'] }),
+    onSuccess: (created) => {
+      queryClient.setQueryData<typeof created[]>(['addresses'], (prev) => {
+        const list = prev ?? []
+        const without = list.filter((a) => a.id !== created.id)
+        if (created.isDefault) {
+          return [created, ...without.map((a) => ({ ...a, isDefault: false }))]
+        }
+        return [created, ...without]
+      })
+      void queryClient.invalidateQueries({ queryKey: ['addresses'] })
+    },
   })
 }
 

@@ -34,7 +34,7 @@ export function DisabledActionHint({
       <Tooltip>
         <TooltipTrigger asChild>
           <span
-            className={cn('inline-flex max-w-full cursor-not-allowed', className)}
+            className={cn('flex w-full max-w-full cursor-not-allowed', className)}
             tabIndex={0}
             aria-disabled="true"
           >

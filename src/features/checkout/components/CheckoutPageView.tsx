@@ -26,6 +26,7 @@ interface CheckoutPageViewProps {
   paymentMethod?: string | null
   quote?: CheckoutQuote | null
   isPending: boolean
+  paymentError?: string | null
   isCreatingAddress?: boolean
   groupedByVendor: Record<string, CartItem[]>
   total: number
@@ -40,7 +41,7 @@ interface CheckoutPageViewProps {
   onBackToPayment: () => void
   onSelectPayment: (method: string) => void
   onPlaceOrder: () => void
-  onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => void
+  onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => Promise<void>
 }
 
 const STEP_COPY: Record<number, { eyebrow: string; title: string; blurb: string }> = {
@@ -181,6 +182,7 @@ export function CheckoutPageView({
   paymentMethod,
   quote,
   isPending,
+  paymentError,
   isCreatingAddress,
   groupedByVendor,
   total,
@@ -329,6 +331,7 @@ export function CheckoutPageView({
                         <ReviewStep
                           quote={quote ?? null}
                           isPending={isPending}
+                          paymentError={paymentError}
                           onPlaceOrder={onPlaceOrder}
                           onBack={onBackToPayment}
                         />

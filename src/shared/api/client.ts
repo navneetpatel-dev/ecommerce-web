@@ -28,6 +28,41 @@ class ApiError extends Error {
 let isRefreshing = false;
 let refreshPromise: Promise<boolean> | null = null;
 
+async function parseResponseBody(res: Response): Promise<ApiSuccess<unknown> | ApiFailure | null> {
+  const text = await res.text();
+  if (!text) return null;
+
+  try {
+    return JSON.parse(text) as ApiSuccess<unknown> | ApiFailure;
+  } catch {
+    if (res.status === 429) {
+      throw new ApiError(
+        'RATE_LIMITED',
+        text.trim().slice(0, 160) || 'Too many requests. Please wait and try again.',
+      );
+    }
+    throw new ApiError(
+      'INVALID_RESPONSE',
+      text.trim().slice(0, 160) || `Unexpected response (${res.status})`,
+    );
+  }
+}
+
+function assertSuccess<T>(body: ApiSuccess<unknown> | ApiFailure | null, status: number): T {
+  if (!body) {
+    throw new ApiError('EMPTY_RESPONSE', `Empty response (${status})`);
+  }
+  if (!('success' in body) || !body.success) {
+    const failure = body as ApiFailure;
+    throw new ApiError(
+      failure.error?.code ?? 'REQUEST_FAILED',
+      failure.error?.message ?? `Request failed (${status})`,
+      failure.error?.details,
+    );
+  }
+  return body.data as T;
+}
+
 async function refreshAccessTokenAndRetry(): Promise<boolean> {
   if (isRefreshing && refreshPromise) return refreshPromise;
 
@@ -42,9 +77,10 @@ async function refreshAccessTokenAndRetry(): Promise<boolean> {
         useAuthStore.getState().clearSession();
         return false;
       }
-      const body = (await res.json()) as ApiSuccess<{ accessToken: string; user: unknown }>;
-      if (body.success) {
-        useAuthStore.getState().setAccessToken(body.data.accessToken);
+      const body = await parseResponseBody(res);
+      if (body && 'success' in body && body.success) {
+        const data = body.data as { accessToken: string };
+        useAuthStore.getState().setAccessToken(data.accessToken);
         return true;
       }
       return false;
@@ -82,11 +118,8 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     throw new ApiError('UNAUTHORIZED', 'Session expired. Please log in again.');
   }
 
-  const body = (await res.json()) as ApiSuccess<T> | ApiFailure;
-  if (!body.success) {
-    throw new ApiError(body.error.code, body.error.message, body.error.details);
-  }
-  return body.data;
+  const body = await parseResponseBody(res);
+  return assertSuccess<T>(body, res.status);
 }
 
 async function requestWithResponse<T>(path: string, options: RequestInit = {}): Promise<ApiSuccess<T>> {
@@ -110,11 +143,9 @@ async function requestWithResponse<T>(path: string, options: RequestInit = {}): 
     throw new ApiError('UNAUTHORIZED', 'Session expired. Please log in again.');
   }
 
-  const body = (await res.json()) as ApiSuccess<T> | ApiFailure;
-  if (!body.success) {
-    throw new ApiError(body.error.code, body.error.message, body.error.details);
-  }
-  return body;
+  const body = await parseResponseBody(res);
+  const data = assertSuccess<T>(body, res.status);
+  return { success: true, data, meta: (body as ApiSuccess<T>).meta };
 }
 
 export const apiClient = {

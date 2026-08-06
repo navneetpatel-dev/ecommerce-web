@@ -6,6 +6,7 @@ import { ArrowRight } from 'lucide-react'
 interface ReviewStepProps {
   quote: CheckoutQuote | null
   isPending: boolean
+  paymentError?: string | null
   onPlaceOrder: () => void
   onBack: () => void
 }
@@ -14,7 +15,7 @@ function formatInr(value: number) {
   return `₹${value.toLocaleString('en-IN')}`
 }
 
-export function ReviewStep({ quote, isPending, onPlaceOrder, onBack }: ReviewStepProps) {
+export function ReviewStep({ quote, isPending, paymentError, onPlaceOrder, onBack }: ReviewStepProps) {
   if (!quote) {
     return (
       <div className="space-y-5">
@@ -108,13 +109,13 @@ export function ReviewStep({ quote, isPending, onPlaceOrder, onBack }: ReviewSte
         )}
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row">
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
         <Button variant="outline" onClick={onBack} className="w-full sm:w-auto">
           Back to payment
         </Button>
         <Button
           size="lg"
-          className="w-full flex-1 gap-2 sm:flex-none"
+          className="w-full gap-2 sm:w-auto"
           onClick={onPlaceOrder}
           loading={isPending}
         >
@@ -122,6 +123,12 @@ export function ReviewStep({ quote, isPending, onPlaceOrder, onBack }: ReviewSte
           <ArrowRight size={16} />
         </Button>
       </div>
+
+      {paymentError && (
+        <p role="alert" className="border border-danger/30 bg-danger/5 px-4 py-3 text-[0.875rem] text-danger">
+          {paymentError}
+        </p>
+      )}
     </div>
   )
 }

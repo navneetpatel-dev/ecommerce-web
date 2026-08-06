@@ -19,6 +19,7 @@ export function CheckoutPage() {
       paymentMethod={checkout.paymentMethod}
       quote={checkout.quote}
       isPending={checkout.isPending}
+      paymentError={checkout.paymentError}
       isCreatingAddress={checkout.isCreatingAddress}
       groupedByVendor={checkout.groupedByVendor}
       total={checkout.total}

@@ -15,7 +15,7 @@ interface AddressStepProps {
   isCreating?: boolean
   onSelect: (id: string) => void
   onContinue: () => void
-  onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => void
+  onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => Promise<void>
 }
 
 const emptyForm = {
@@ -25,7 +25,7 @@ const emptyForm = {
   state: '',
   country: 'India',
   pincode: '',
-  isDefault: true,
+  isDefault: false,
 }
 
 export function AddressStep({
@@ -38,22 +38,32 @@ export function AddressStep({
 }: AddressStepProps) {
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState(emptyForm)
+  const [formError, setFormError] = useState<string | null>(null)
   const hasAddresses = Boolean(addresses?.length)
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     if (!form.line1.trim() || !form.city.trim() || !form.state.trim() || !form.pincode.trim()) return
-    onCreateAddress({
-      line1: form.line1.trim(),
-      line2: form.line2.trim() || null,
-      city: form.city.trim(),
-      state: form.state.trim(),
-      country: form.country.trim() || 'India',
-      pincode: form.pincode.trim(),
-      isDefault: form.isDefault || !hasAddresses,
-    })
-    setForm(emptyForm)
-    setShowForm(false)
+    setFormError(null)
+    try {
+      await onCreateAddress({
+        line1: form.line1.trim(),
+        line2: form.line2.trim() || null,
+        city: form.city.trim(),
+        state: form.state.trim(),
+        country: form.country.trim() || 'India',
+        pincode: form.pincode.trim(),
+        isDefault: form.isDefault || !hasAddresses,
+      })
+      setForm(emptyForm)
+      setShowForm(false)
+    } catch (err) {
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message: string }).message)
+          : 'Could not save address. Please try again.'
+      setFormError(message)
+    }
   }
 
   return (
@@ -66,7 +76,10 @@ export function AddressStep({
           <Button
             type="button"
             variant="outline"
-            onClick={() => setShowForm((v) => !v)}
+            onClick={() => {
+              setShowForm((v) => !v)
+              setFormError(null)
+            }}
             className="gap-2"
           >
             {showForm ? (
@@ -176,6 +189,25 @@ export function AddressStep({
               />
             </div>
           </div>
+
+          {hasAddresses && (
+            <label className="flex items-center gap-2 text-[0.875rem] text-ink">
+              <input
+                type="checkbox"
+                checked={form.isDefault}
+                onChange={(e) => setForm((f) => ({ ...f, isDefault: e.target.checked }))}
+                className="h-4 w-4 accent-[var(--brand)]"
+              />
+              Set as default address
+            </label>
+          )}
+
+          {formError && (
+            <p role="alert" className="text-[0.875rem] text-danger">
+              {formError}
+            </p>
+          )}
+
           <Button type="submit" loading={isCreating} className="w-full sm:w-auto">
             Save address
           </Button>
