@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/client'
-import type { CurrentUser } from '@/shared/api/types'
+import type { CurrentUser, AuthSession } from '@/shared/api/types'
 import type { LoginInput, RegisterInput, ChangePasswordInput } from '../schemas/auth.schema'
 
 interface AuthResponse {
@@ -18,4 +18,7 @@ export const authApi = {
     apiClient.post<{ message: string }>('/api/auth/reset-password', { token, newPassword }),
   changePassword: (input: ChangePasswordInput) =>
     apiClient.post<{ message: string }>('/api/auth/change-password', input),
+  listSessions: () => apiClient.get<AuthSession[]>('/api/auth/sessions'),
+  revokeSession: (family: string) => apiClient.delete<void>(`/api/auth/sessions/${family}`),
+  revokeOtherSessions: () => apiClient.delete<void>('/api/auth/sessions'),
 }

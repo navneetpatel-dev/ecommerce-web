@@ -9,23 +9,22 @@ export function useWishlistPage() {
 
   const products = useMemo<ProductListItem[]>(() => {
     if (!data?.items?.length) return []
-    return data.items
-      .map((item) => {
-        const product = item.product
-        if (!product?.id) return null
-        const variants = product.variants ?? []
-        const stockFromVariants = variants.reduce(
-          (sum, variant) => sum + Number(variant.stock ?? 0),
-          0
-        )
-        return {
-          ...product,
-          stock: Number(product.stock ?? stockFromVariants),
-          variants,
-          isWishlisted: true,
-        } satisfies ProductListItem
-      })
-      .filter((product): product is ProductListItem => Boolean(product))
+    return data.items.flatMap((item) => {
+      const product = item.product
+      if (!product?.id) return []
+      const variants = product.variants ?? []
+      const stockFromVariants = variants.reduce(
+        (sum, variant) => sum + Number(variant.stock ?? 0),
+        0
+      )
+      const next: ProductListItem = {
+        ...product,
+        stock: Number(product.stock ?? stockFromVariants),
+        variants,
+        isWishlisted: true,
+      }
+      return [next]
+    })
   }, [data])
 
   return {

@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuthStore, defaultRouteForRole } from '../store/auth.store'
 import { authApi } from './auth.api'
@@ -11,6 +11,10 @@ function postAuthPath(role: RoleName, redirect?: string | null) {
     return redirect
   }
   return defaultRouteForRole(role)
+}
+
+export const sessionKeys = {
+  all: ['auth', 'sessions'] as const,
 }
 
 export function useLogin() {
@@ -91,5 +95,34 @@ export function useChangePassword() {
   return useMutation({
     mutationFn: (input: { currentPassword: string; newPassword: string }) =>
       authApi.changePassword(input),
+  })
+}
+
+export function useSessions() {
+  const accessToken = useAuthStore((s) => s.accessToken)
+  return useQuery({
+    queryKey: sessionKeys.all,
+    queryFn: () => authApi.listSessions(),
+    enabled: Boolean(accessToken),
+  })
+}
+
+export function useRevokeSession() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (family: string) => authApi.revokeSession(family),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: sessionKeys.all })
+    },
+  })
+}
+
+export function useRevokeOtherSessions() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () => authApi.revokeOtherSessions(),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: sessionKeys.all })
+    },
   })
 }

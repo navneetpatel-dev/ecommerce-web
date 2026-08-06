@@ -1,8 +1,8 @@
 import { generateNoIndexMetadata } from '@/shared/seo/metadata'
-import { ProfilePage } from '@/features/auth/pages/ProfilePage'
+import { AccountPage } from '@/features/account'
 
-export const metadata = generateNoIndexMetadata('Profile')
+export const metadata = generateNoIndexMetadata('Account settings')
 
 export default function Profile() {
-  return <ProfilePage />
+  return <AccountPage />
 }

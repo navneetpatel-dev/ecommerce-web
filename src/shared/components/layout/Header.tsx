@@ -138,7 +138,6 @@ export function Header({
           </div>
 
           <nav aria-label="Header actions" className="flex items-center gap-1 shrink-0">
-            {/* TEMP: remove theme toggle when dark-mode testing is done */}
             <button
               type="button"
               onClick={toggleTheme}
@@ -149,7 +148,7 @@ export function Header({
                   : 'border-line text-ink-muted hover:bg-paper hover:text-ink'
               )}
               aria-label={mounted && theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-              title="Temporary theme switcher"
+              title="Toggle theme"
             >
               {mounted && theme === 'dark' ? (
                 <Sun size={14} strokeWidth={1.75} aria-hidden />

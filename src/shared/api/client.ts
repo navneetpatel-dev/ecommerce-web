@@ -118,6 +118,11 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     throw new ApiError('UNAUTHORIZED', 'Session expired. Please log in again.');
   }
 
+  // Soft-delete and similar endpoints return 204 with an empty body.
+  if (res.status === 204 || res.status === 205) {
+    return undefined as T;
+  }
+
   const body = await parseResponseBody(res);
   return assertSuccess<T>(body, res.status);
 }

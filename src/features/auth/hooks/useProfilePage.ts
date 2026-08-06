@@ -17,5 +17,9 @@ export function useProfilePage() {
     isPending: changePassword.isPending,
     isSuccess: changePassword.isSuccess,
     onSubmit: (data: ChangePasswordInput) => changePassword.mutate(data),
+    resetSuccess: () => {
+      changePassword.reset()
+      form.reset()
+    },
   }
 }

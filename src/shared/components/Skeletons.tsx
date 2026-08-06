@@ -135,10 +135,13 @@ export function CategoriesPageSkeleton() {
 
 export function ProfilePageSkeleton() {
   return (
-    <div className="mx-auto max-w-[800px] space-y-6 px-4 py-10">
-      <Skeleton className="h-8 w-40" />
-      <Skeleton className="h-32 w-full rounded-md" />
-      <Skeleton className="h-48 w-full rounded-md" />
+    <div className="storefront-container space-y-6 py-8">
+      <Skeleton className="h-4 w-24" />
+      <Skeleton className="h-10 w-48" />
+      <div className="grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+        <Skeleton className="hidden h-80 w-full lg:block" />
+        <Skeleton className="h-64 w-full" />
+      </div>
     </div>
   )
 }

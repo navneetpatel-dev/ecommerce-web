@@ -2,12 +2,22 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { reviewsApi } from './reviews.api'
 import { navigate } from '@/shared/utils/navigate'
+import { useAuthStore } from '@/features/auth/store/auth.store'
 
 export function useProductReviews(productId: string) {
   return useQuery({
     queryKey: ['reviews', 'product', productId],
     queryFn: () => reviewsApi.forProduct(productId),
     enabled: Boolean(productId),
+  })
+}
+
+export function useMyReviews() {
+  const accessToken = useAuthStore((s) => s.accessToken)
+  return useQuery({
+    queryKey: ['reviews', 'mine'],
+    queryFn: () => reviewsApi.myReviews(),
+    enabled: Boolean(accessToken),
   })
 }
 

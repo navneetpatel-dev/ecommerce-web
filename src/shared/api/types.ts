@@ -8,6 +8,15 @@ export interface CurrentUser {
   role: RoleName;
   vendorId: string | null;
   emailVerified: boolean;
+  emailMarketingConsent?: boolean;
+  avatarUrl?: string | null;
+  pendingEmail?: string | null;
+  notificationPrefs?: {
+    orderUpdates: boolean;
+    smsAlerts: boolean;
+    shippingNotifications: boolean;
+  };
+  createdAt?: string;
 }
 
 export interface VendorInfo {
@@ -156,6 +165,31 @@ export interface Review {
   unhelpfulCount: number;
   createdAt: string;
   user?: { name: string };
+  product?: { id: string; name: string; slug: string };
+}
+
+export interface AuthSession {
+  id: string;
+  family: string;
+  userAgent: string | null;
+  ipAddress: string | null;
+  createdAt: string;
+  lastUsedAt: string;
+  isCurrent: boolean;
+}
+
+export interface ReturnRequest {
+  id: string;
+  subOrderId: string;
+  orderItemId: string;
+  userId: string;
+  reason: string;
+  reasonCode: 'DAMAGED' | 'WRONG_ITEM' | 'NOT_AS_DESCRIBED' | 'NO_LONGER_NEEDED' | 'OTHER';
+  status: 'REQUESTED' | 'APPROVED' | 'REJECTED' | 'PICKUP_SCHEDULED' | 'RECEIVED' | 'REFUNDED' | 'CLOSED';
+  refundAmount: number | null;
+  resolvedAt: string | null;
+  createdAt: string;
+  productName: string | null;
 }
 
 export interface WishlistItem {

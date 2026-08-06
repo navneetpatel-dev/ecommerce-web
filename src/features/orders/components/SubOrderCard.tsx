@@ -1,10 +1,34 @@
-import type { SubOrder } from '@/shared/api/types'
+'use client'
+
+import { useState } from 'react'
+import type { OrderItem, SubOrder } from '@/shared/api/types'
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import { Timeline } from '@/shared/components/Timeline'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
+import { Label } from '@/shared/components/ui/label'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/components/ui/dialog'
+import { FormError } from '@/shared/components/FormError'
 import { cn } from '@/shared/utils/cn'
+import { useCreateReturn } from '@/features/returns/api/returns.queries'
 import { formatInr } from '../utils/format'
 import { buildSubOrderTimeline } from '../utils/timeline'
+
+const REASON_CODES = [
+  { value: 'DAMAGED', label: 'Damaged' },
+  { value: 'WRONG_ITEM', label: 'Wrong item' },
+  { value: 'NOT_AS_DESCRIBED', label: 'Not as described' },
+  { value: 'NO_LONGER_NEEDED', label: 'No longer needed' },
+  { value: 'OTHER', label: 'Other' },
+] as const
 
 interface SubOrderCardProps {
   subOrder: SubOrder
@@ -16,6 +40,13 @@ export function SubOrderCard({ subOrder }: SubOrderCardProps) {
   const shippingCost = Number(subOrder.shippingCost ?? 0)
   const vendorName = subOrder.vendor?.businessName || 'Seller'
   const itemCount = subOrder.items?.length ?? 0
+  const canReturn = subOrder.status === 'DELIVERED'
+
+  const [target, setTarget] = useState<OrderItem | null>(null)
+  const [reasonCode, setReasonCode] =
+    useState<(typeof REASON_CODES)[number]['value']>('DAMAGED')
+  const [reason, setReason] = useState('')
+  const createReturn = useCreateReturn()
 
   return (
     <section>
@@ -44,6 +75,22 @@ export function SubOrderCard({ subOrder }: SubOrderCardProps) {
             <div className="min-w-0">
               <p className="font-medium text-ink">{item.productName}</p>
               <p className="mt-0.5 text-[0.8125rem] text-ink-muted">Qty {item.quantity}</p>
+              {canReturn ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="mt-2 h-auto px-0 text-brand hover:text-brand-hover"
+                  onClick={() => {
+                    setTarget(item)
+                    setReason('')
+                    setReasonCode('DAMAGED')
+                    createReturn.reset()
+                  }}
+                >
+                  Request return
+                </Button>
+              ) : null}
             </div>
             <div className="shrink-0 text-right">
               <p className="font-display text-[1.0625rem] tabular-nums text-ink">
@@ -108,6 +155,75 @@ export function SubOrderCard({ subOrder }: SubOrderCardProps) {
           </div>
         </div>
       )}
+
+      <Dialog open={Boolean(target)} onOpenChange={(open) => !open && setTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Request a return</DialogTitle>
+            <DialogDescription>
+              {target?.productName
+                ? `Return “${target.productName}”. We’ll review and update you by email.`
+                : 'Tell us why you want to return this item.'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="return-reason-code">Reason</Label>
+              <select
+                id="return-reason-code"
+                value={reasonCode}
+                onChange={(e) =>
+                  setReasonCode(e.target.value as (typeof REASON_CODES)[number]['value'])
+                }
+                className="flex h-11 w-full border border-line bg-surface px-3 text-[0.9375rem] text-ink"
+              >
+                {REASON_CODES.map((code) => (
+                  <option key={code.value} value={code.value}>
+                    {code.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="return-reason">Details</Label>
+              <Input
+                id="return-reason"
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="Briefly describe the issue"
+              />
+            </div>
+            <FormError
+              error={createReturn.error as Error | null}
+              fallback="Could not submit return request."
+            />
+            {createReturn.isSuccess ? (
+              <p className="text-[0.875rem] text-success">Return requested.</p>
+            ) : null}
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setTarget(null)}>
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              loading={createReturn.isPending}
+              disabled={!reason.trim() || !target}
+              onClick={async () => {
+                if (!target) return
+                await createReturn.mutateAsync({
+                  orderItemId: target.id,
+                  reasonCode,
+                  reason: reason.trim(),
+                })
+                setTarget(null)
+              }}
+            >
+              Submit return
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </section>
   )
 }
