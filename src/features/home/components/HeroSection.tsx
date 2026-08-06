@@ -276,7 +276,7 @@ export function HeroSection({
           </motion.div>
         </AnimatePresence>
 
-        <div className="relative z-10 mx-auto flex h-full min-h-[min(78vh,640px)] max-w-[1600px] flex-col justify-end px-4 pb-16 pt-16 md:min-h-[min(82vh,720px)] md:justify-center md:pb-24 md:pt-20">
+        <div className="relative z-10 mx-auto flex h-full min-h-[min(78vh,640px)] max-w-[1600px] flex-col justify-end px-4 pb-24 pt-16 md:min-h-[min(82vh,720px)] md:justify-center md:pb-24 md:pt-20">
           <AnimatePresence mode="wait" initial={false} custom={direction}>
             <motion.div
               key={active.id + '-copy'}
@@ -349,6 +349,7 @@ export function HeroSection({
 
         {count > 1 ? (
           <>
+            {/* Desktop: stacked controls on the right */}
             <div className="pointer-events-none absolute inset-y-0 right-0 z-20 hidden items-center pr-4 md:flex lg:pr-8">
               <div className="pointer-events-auto flex flex-col gap-2">
                 <CarouselIconButton label="Previous slide" onClick={goPrev}>
@@ -360,15 +361,16 @@ export function HeroSection({
               </div>
             </div>
 
-            <div className="absolute inset-x-0 bottom-0 z-20 flex justify-end px-4 pb-5 md:hidden">
-              <div className="flex gap-2">
-                <CarouselIconButton label="Previous slide" onClick={goPrev}>
-                  <ChevronLeft size={18} />
-                </CarouselIconButton>
-                <CarouselIconButton label="Next slide" onClick={goNext}>
-                  <ChevronRight size={18} />
-                </CarouselIconButton>
-              </div>
+            {/* Mobile: bottom corners — clear of centered stack controls on desktop */}
+            <div className="absolute bottom-5 left-3 z-20 md:hidden">
+              <CarouselIconButton label="Previous slide" onClick={goPrev}>
+                <ChevronLeft size={18} />
+              </CarouselIconButton>
+            </div>
+            <div className="absolute bottom-5 right-3 z-20 md:hidden">
+              <CarouselIconButton label="Next slide" onClick={goNext}>
+                <ChevronRight size={18} />
+              </CarouselIconButton>
             </div>
           </>
         ) : null}
@@ -391,7 +393,7 @@ function CarouselIconButton({
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-black/35 text-white backdrop-blur-md transition-colors hover:border-white/55 hover:bg-black/50"
+      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-black/55 text-white shadow-elevation-2 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/70"
     >
       {children}
     </button>
