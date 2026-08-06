@@ -1,4 +1,10 @@
-export type RoleName = 'CUSTOMER' | 'VENDOR_OWNER' | 'VENDOR_STAFF' | 'SUPER_ADMIN' | 'ADMIN_STAFF' | 'SUPPORT_STAFF';
+export type RoleName =
+  | 'CUSTOMER'
+  | 'VENDOR_OWNER'
+  | 'VENDOR_STAFF'
+  | 'SUPER_ADMIN'
+  | 'ADMIN_ORDER_MANAGER'
+  | 'ADMIN_CATALOG_MANAGER';
 
 export interface CurrentUser {
   id: string;
@@ -6,6 +12,7 @@ export interface CurrentUser {
   name: string;
   phone: string | null;
   role: RoleName;
+  permissions?: string[];
   vendorId: string | null;
   emailVerified: boolean;
   emailMarketingConsent?: boolean;
@@ -44,6 +51,7 @@ export interface ProductVariant {
   price: number;
   stock: number;
   lowStockAt: number;
+  weightGrams?: number;
 }
 
 export interface ProductImage {
@@ -83,6 +91,7 @@ export interface CartItem {
   variant: {
     sku: string;
     attributes: Record<string, string>;
+    weightGrams?: number;
   };
 }
 
@@ -118,6 +127,7 @@ export interface SubOrder {
   status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'RETURNED';
   subtotal: number;
   shippingCost?: number;
+  taxAmount?: number;
   items: OrderItem[];
   shipment?: Shipment | null;
 }
@@ -281,7 +291,8 @@ export interface VendorSummary {
   todayOrders: number;
   pendingShipments: number;
   monthRevenue: number;
-  walletBalance: number;
+  pendingPayouts: number;
+  performanceScore?: number | null;
 }
 
 export interface VendorAnalytics {
@@ -302,4 +313,7 @@ export interface PlatformSettings {
   autoApproveProducts: boolean;
   defaultReturnWindow: number;
   payoutCycle: string;
+  freeShippingThreshold: number;
+  supportEmail: string;
+  supportHours: string;
 }

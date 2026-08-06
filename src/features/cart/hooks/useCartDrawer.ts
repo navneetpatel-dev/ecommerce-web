@@ -71,7 +71,11 @@ export function useCartDrawer() {
     try {
       const result = await couponsApi.apply(code)
       setCouponCode(code)
-      setCouponMessage(`Coupon applied — ₹${result.discount} off`)
+      if (result.discount > 0) {
+        setCouponMessage(`Coupon applied — ₹${result.discount} off`)
+      } else {
+        setCouponMessage('Coupon applied — discount will be calculated at checkout')
+      }
     } catch {
       setCouponError('Invalid or expired coupon code')
       setCouponCode(null)

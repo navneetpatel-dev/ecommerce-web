@@ -29,6 +29,8 @@ export function ProductDetailPage() {
       addSectionRef={detail.addSectionRef}
       breadcrumbItems={detail.breadcrumbItems}
       variantSelection={detail.variantSelection}
+      freeShippingThreshold={detail.freeShippingThreshold}
+      returnWindowDays={detail.returnWindowDays}
     />
   )
 }

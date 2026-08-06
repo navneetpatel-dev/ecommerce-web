@@ -1,8 +1,8 @@
 import { generateNoIndexMetadata } from '@/shared/seo/metadata'
-import { ProductModerationQueue } from '@/features/admin-dashboard/pages/ProductModerationQueue'
+import { AdminProductsPage } from '@/features/admin-dashboard/pages/AdminProductsPage'
 
 export const metadata = generateNoIndexMetadata('Product Moderation')
 
 export default function AdminProducts() {
-  return <ProductModerationQueue />
+  return <AdminProductsPage />
 }

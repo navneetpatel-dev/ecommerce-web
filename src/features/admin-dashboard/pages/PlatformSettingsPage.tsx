@@ -3,15 +3,16 @@
 import { PlatformSettingsForm } from '../components/PlatformSettingsForm'
 import { usePlatformSettingsForm } from '../hooks/usePlatformSettingsForm'
 
-const placeholderSettings = {
-  defaultCommissionRate: 10,
-  autoApproveProducts: true,
-  defaultReturnWindow: 7,
-  payoutCycle: 'weekly',
-}
-
 export function PlatformSettingsPage() {
-  const settings = usePlatformSettingsForm(placeholderSettings)
+  const settings = usePlatformSettingsForm()
+
+  if (settings.loading) {
+    return <p className="text-ink-muted">Loading platform settings…</p>
+  }
+
+  if (settings.loadError || !settings.form) {
+    return <p className="text-red-600">{settings.loadError ?? 'Settings unavailable.'}</p>
+  }
 
   return (
     <PlatformSettingsForm
@@ -21,6 +22,9 @@ export function PlatformSettingsPage() {
       onAutoApproveChange={settings.setAutoApproveProducts}
       onReturnWindowChange={settings.setReturnWindow}
       onPayoutCycleChange={settings.setPayoutCycle}
+      onFreeShippingThresholdChange={settings.setFreeShippingThreshold}
+      onSupportEmailChange={settings.setSupportEmail}
+      onSupportHoursChange={settings.setSupportHours}
       onSave={settings.save}
     />
   )

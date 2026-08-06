@@ -310,7 +310,9 @@ export function Header({
                   </Link>
                 )}
 
-                {(currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'ADMIN_STAFF') && (
+                {(currentUser.role === 'SUPER_ADMIN' ||
+                  currentUser.role === 'ADMIN_ORDER_MANAGER' ||
+                  currentUser.role === 'ADMIN_CATALOG_MANAGER') && (
                   <Link
                     href="/admin/vendors"
                     className={cn(

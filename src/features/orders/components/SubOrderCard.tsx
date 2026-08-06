@@ -1,6 +1,3 @@
-'use client'
-
-import { useState } from 'react'
 import type { OrderItem, SubOrder } from '@/shared/api/types'
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import { Timeline } from '@/shared/components/Timeline'
@@ -18,35 +15,48 @@ import {
 } from '@/shared/components/ui/dialog'
 import { FormError } from '@/shared/components/FormError'
 import { cn } from '@/shared/utils/cn'
-import { useCreateReturn } from '@/features/returns/api/returns.queries'
 import { formatInr } from '../utils/format'
 import { buildSubOrderTimeline } from '../utils/timeline'
-
-const REASON_CODES = [
-  { value: 'DAMAGED', label: 'Damaged' },
-  { value: 'WRONG_ITEM', label: 'Wrong item' },
-  { value: 'NOT_AS_DESCRIBED', label: 'Not as described' },
-  { value: 'NO_LONGER_NEEDED', label: 'No longer needed' },
-  { value: 'OTHER', label: 'Other' },
-] as const
+import { REASON_CODES, type ReturnReasonCode } from '../hooks/useSubOrderReturn'
 
 interface SubOrderCardProps {
   subOrder: SubOrder
+  returnTarget: OrderItem | null
+  reasonCode: ReturnReasonCode
+  reason: string
+  isPending: boolean
+  isSuccess: boolean
+  error: Error | null
+  onOpenReturn: (item: OrderItem) => void
+  onCloseReturn: () => void
+  onReasonCodeChange: (code: ReturnReasonCode) => void
+  onReasonChange: (value: string) => void
+  onSubmitReturn: () => void
 }
 
-export function SubOrderCard({ subOrder }: SubOrderCardProps) {
+export function SubOrderCard({
+  subOrder,
+  returnTarget,
+  reasonCode,
+  reason,
+  isPending,
+  isSuccess,
+  error,
+  onOpenReturn,
+  onCloseReturn,
+  onReasonCodeChange,
+  onReasonChange,
+  onSubmitReturn,
+}: SubOrderCardProps) {
   const timeline = buildSubOrderTimeline(subOrder)
   const showTimeline = subOrder.status !== 'PENDING'
   const shippingCost = Number(subOrder.shippingCost ?? 0)
+  const taxAmount = Number(subOrder.taxAmount ?? 0)
+  const sellerTotal = Number(subOrder.subtotal) + shippingCost + taxAmount
+  const showBreakdown = shippingCost > 0 || taxAmount > 0
   const vendorName = subOrder.vendor?.businessName || 'Seller'
   const itemCount = subOrder.items?.length ?? 0
   const canReturn = subOrder.status === 'DELIVERED'
-
-  const [target, setTarget] = useState<OrderItem | null>(null)
-  const [reasonCode, setReasonCode] =
-    useState<(typeof REASON_CODES)[number]['value']>('DAMAGED')
-  const [reason, setReason] = useState('')
-  const createReturn = useCreateReturn()
 
   return (
     <section>
@@ -81,12 +91,7 @@ export function SubOrderCard({ subOrder }: SubOrderCardProps) {
                   variant="ghost"
                   size="sm"
                   className="mt-2 h-auto px-0 text-brand hover:text-brand-hover"
-                  onClick={() => {
-                    setTarget(item)
-                    setReason('')
-                    setReasonCode('DAMAGED')
-                    createReturn.reset()
-                  }}
+                  onClick={() => onOpenReturn(item)}
                 >
                   Request return
                 </Button>
@@ -108,29 +113,35 @@ export function SubOrderCard({ subOrder }: SubOrderCardProps) {
 
       <dl className="mt-1 space-y-2 border-t border-line pt-4 text-[0.875rem]">
         <div className="flex justify-between gap-4">
-          <dt className={shippingCost > 0 ? 'text-ink-muted' : 'font-medium text-ink'}>
-            {shippingCost > 0 ? 'Subtotal' : 'Seller total'}
+          <dt className={showBreakdown ? 'text-ink-muted' : 'font-medium text-ink'}>
+            {showBreakdown ? 'Subtotal' : 'Seller total'}
           </dt>
           <dd
             className={cn(
               'tabular-nums',
-              shippingCost > 0 ? 'text-ink' : 'font-medium text-ink'
+              showBreakdown ? 'text-ink' : 'font-medium text-ink'
             )}
           >
             {formatInr(subOrder.subtotal)}
           </dd>
         </div>
-        {shippingCost > 0 && (
+        {showBreakdown && (
           <>
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">Shipping</dt>
-              <dd className="tabular-nums text-ink">{formatInr(shippingCost)}</dd>
-            </div>
+            {shippingCost > 0 && (
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">Shipping</dt>
+                <dd className="tabular-nums text-ink">{formatInr(shippingCost)}</dd>
+              </div>
+            )}
+            {taxAmount > 0 && (
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">Tax</dt>
+                <dd className="tabular-nums text-ink">{formatInr(taxAmount)}</dd>
+              </div>
+            )}
             <div className="flex justify-between gap-4 border-t border-line pt-3 font-medium">
               <dt className="text-ink">Seller total</dt>
-              <dd className="tabular-nums text-ink">
-                {formatInr(Number(subOrder.subtotal) + shippingCost)}
-              </dd>
+              <dd className="tabular-nums text-ink">{formatInr(sellerTotal)}</dd>
             </div>
           </>
         )}
@@ -156,13 +167,13 @@ export function SubOrderCard({ subOrder }: SubOrderCardProps) {
         </div>
       )}
 
-      <Dialog open={Boolean(target)} onOpenChange={(open) => !open && setTarget(null)}>
+      <Dialog open={Boolean(returnTarget)} onOpenChange={(open) => !open && onCloseReturn()}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Request a return</DialogTitle>
             <DialogDescription>
-              {target?.productName
-                ? `Return “${target.productName}”. We’ll review and update you by email.`
+              {returnTarget?.productName
+                ? `Return "${returnTarget.productName}". We'll review and update you by email.`
                 : 'Tell us why you want to return this item.'}
             </DialogDescription>
           </DialogHeader>
@@ -172,9 +183,7 @@ export function SubOrderCard({ subOrder }: SubOrderCardProps) {
               <select
                 id="return-reason-code"
                 value={reasonCode}
-                onChange={(e) =>
-                  setReasonCode(e.target.value as (typeof REASON_CODES)[number]['value'])
-                }
+                onChange={(e) => onReasonCodeChange(e.target.value as ReturnReasonCode)}
                 className="flex h-11 w-full border border-line bg-surface px-3 text-[0.9375rem] text-ink"
               >
                 {REASON_CODES.map((code) => (
@@ -189,35 +198,27 @@ export function SubOrderCard({ subOrder }: SubOrderCardProps) {
               <Input
                 id="return-reason"
                 value={reason}
-                onChange={(e) => setReason(e.target.value)}
+                onChange={(e) => onReasonChange(e.target.value)}
                 placeholder="Briefly describe the issue"
               />
             </div>
             <FormError
-              error={createReturn.error as Error | null}
+              error={error}
               fallback="Could not submit return request."
             />
-            {createReturn.isSuccess ? (
+            {isSuccess ? (
               <p className="text-[0.875rem] text-success">Return requested.</p>
             ) : null}
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setTarget(null)}>
+            <Button type="button" variant="outline" onClick={onCloseReturn}>
               Cancel
             </Button>
             <Button
               type="button"
-              loading={createReturn.isPending}
-              disabled={!reason.trim() || !target}
-              onClick={async () => {
-                if (!target) return
-                await createReturn.mutateAsync({
-                  orderItemId: target.id,
-                  reasonCode,
-                  reason: reason.trim(),
-                })
-                setTarget(null)
-              }}
+              loading={isPending}
+              disabled={!reason.trim() || !returnTarget}
+              onClick={onSubmitReturn}
             >
               Submit return
             </Button>

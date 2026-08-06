@@ -20,11 +20,12 @@ export const useAuthStore = create<AuthState>((set) => ({
 export function defaultRouteForRole(role: RoleName): string {
   switch (role) {
     case 'SUPER_ADMIN':
-    case 'ADMIN_STAFF':
+    case 'ADMIN_ORDER_MANAGER':
+    case 'ADMIN_CATALOG_MANAGER':
       return '/admin'
     case 'VENDOR_OWNER':
     case 'VENDOR_STAFF':
-      return '/vendor'
+      return '/vendor/dashboard/overview'
     default:
       return '/'
   }

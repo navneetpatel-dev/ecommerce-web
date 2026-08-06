@@ -11,4 +11,7 @@ export const reviewsApi = {
     apiClient.post<Review>(`/api/reviews/${reviewId}/vote`, { vote }),
   approve: (id: string) => apiClient.patch<Review>(`/api/reviews/${id}/approve`, {}),
   reject: (id: string) => apiClient.patch<Review>(`/api/reviews/${id}/reject`, {}),
+  pending: () => apiClient.get<Review[]>('/api/reviews/moderation'),
+  respond: (id: string, body: { response: string }) =>
+    apiClient.patch<Review>(`/api/reviews/${id}/respond`, body),
 }

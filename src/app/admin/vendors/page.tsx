@@ -1,8 +1,6 @@
-import { generateNoIndexMetadata } from '@/shared/seo/metadata'
-import { VendorApprovalQueue } from '@/features/admin-dashboard/pages/VendorApprovalQueue'
-
-export const metadata = generateNoIndexMetadata('Vendor Management')
+'use client'
+import { AdminVendorsPage } from '@/features/admin-dashboard/pages/AdminVendorsPage'
 
 export default function AdminVendors() {
-  return <VendorApprovalQueue />
+  return <AdminVendorsPage />
 }

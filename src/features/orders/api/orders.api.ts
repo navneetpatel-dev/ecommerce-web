@@ -19,8 +19,15 @@ export const ordersApi = {
 }
 
 export const subOrdersApi = {
-  vendorSubOrders: (page = 1) =>
-    apiClient.get<{ items: Order[]; total: number; totalPages: number }>(`/api/suborders?page=${page}`),
+  vendorSubOrders: async (page = 1) => {
+    const res = await apiClient.getWithResponse<Order[]>(`/api/suborders?page=${page}`)
+    const pagination = res.meta?.pagination as { total?: number; totalPages?: number } | undefined
+    return {
+      items: Array.isArray(res.data) ? res.data : [],
+      total: pagination?.total ?? 0,
+      totalPages: pagination?.totalPages ?? 1,
+    }
+  },
   updateStatus: (id: string, body: { status: string; trackingId?: string }) =>
     apiClient.patch<{ message: string }>(`/api/suborders/${id}/status`, body),
 }

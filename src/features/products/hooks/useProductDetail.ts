@@ -8,11 +8,13 @@ import { useVariantSelection } from './useVariantSelection'
 import { useAddToCart } from '@/features/cart/api/cart.queries'
 import { trackRecentlyViewed } from '../utils/recently-viewed'
 import { cartLineQuantityMax, clampCartQuantity } from '@/shared/constants/cart'
+import { usePublicSettings } from '@/shared/hooks/usePublicSettings'
 import type { ProductDetail } from '@/shared/api/types'
 
 export function useProductDetail() {
   const params = useParams<{ slug: string }>()
   const { data: product, isLoading } = useProduct(params?.slug || '')
+  const { data: settings } = usePublicSettings()
   const { isWishlisted, toggle } = useWishlistToggle(product?.id)
   const addToCart = useAddToCart()
   const [selectedImage, setSelectedImage] = useState(0)
@@ -105,6 +107,8 @@ export function useProductDetail() {
   return {
     product,
     isLoading,
+    freeShippingThreshold: settings?.freeShippingThreshold,
+    returnWindowDays: settings?.defaultReturnWindow,
     isWishlisted: isWishlisted || false,
     toggleWishlist: toggle,
     selectedImage,

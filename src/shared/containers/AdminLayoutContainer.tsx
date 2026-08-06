@@ -4,6 +4,8 @@ import { HeaderContainer } from '@/shared/containers/HeaderContainer'
 import { SidebarNav } from '@/shared/components/layout/SidebarNav'
 import { ShieldCheck } from 'lucide-react'
 import { useAdminLayout } from '@/shared/hooks/useAdminLayout'
+import { RequirePermission } from '@/shared/components/RequirePermission'
+import { adminPermissionsForPath } from '@/shared/constants/adminNav'
 
 export function AdminLayoutContainer({ children }: { children: React.ReactNode }) {
   const { pathname, navItems } = useAdminLayout()
@@ -23,7 +25,13 @@ export function AdminLayoutContainer({ children }: { children: React.ReactNode }
           }
         />
         <main className="flex-1 p-6 lg:p-8 bg-surface">
-          {children}
+          {pathname === '/admin' ? (
+            children
+          ) : (
+            <RequirePermission permission={adminPermissionsForPath(pathname)}>
+              {children}
+            </RequirePermission>
+          )}
         </main>
       </div>
     </div>

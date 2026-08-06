@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 import type { Order } from '@/shared/api/types'
-import { SubOrderCard } from './SubOrderCard'
+import { SubOrderCardContainer } from '../containers/SubOrderCardContainer'
 import { OrderStatusGroup } from './OrderStatusGroup'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { Button } from '@/shared/components/ui/button'
@@ -86,7 +86,7 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
                     ease: [0.2, 0, 0, 1],
                   }}
                 >
-                  <SubOrderCard subOrder={subOrder} />
+                  <SubOrderCardContainer subOrder={subOrder} />
                 </motion.div>
               ))}
             </div>

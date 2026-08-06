@@ -3,11 +3,13 @@ export const blogPosts = [
     slug: 'how-to-choose-right-size',
     title: 'How to choose the right size',
     excerpt: 'A quick guide to choosing fit, style, and confidence for every order.',
+    body: 'Start with the vendor size chart on each product page. Measure yourself against chest, waist, and length guidance, then prefer the larger size when you are between measurements. Save preferred sizes in your account notes for faster reordering.',
   },
   {
     slug: 'vendor-quality-checks',
     title: 'How vendor quality checks work',
     excerpt: 'Understand moderation, approval, and trust signals across the marketplace.',
+    body: 'New products enter a pending queue before they go live. Catalog managers review imagery, pricing, and category accuracy. Approved listings appear in search and collections; rejected listings return to the vendor with notes so they can resubmit.',
   },
 ] as const
 
@@ -26,14 +28,6 @@ export const faqItems = [
   },
 ] as const
 
-export const returnTimelineSteps = [
-  { label: 'Requested', status: 'completed' as const, timestamp: 'Today, 10:30 AM' },
-  { label: 'Approved', status: 'current' as const },
-  { label: 'Pickup Scheduled', status: 'upcoming' as const },
-  { label: 'Received', status: 'upcoming' as const },
-  { label: 'Refunded', status: 'upcoming' as const },
-]
-
-export function formatBlogTitle(slug: string) {
-  return slug.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase())
+export function getBlogPost(slug: string) {
+  return blogPosts.find((post) => post.slug === slug) ?? null
 }

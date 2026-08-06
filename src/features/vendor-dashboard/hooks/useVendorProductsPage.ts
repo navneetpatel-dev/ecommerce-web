@@ -1,0 +1,158 @@
+'use client'
+
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Trash2 } from 'lucide-react'
+import { useVendorProductsTable } from './useVendorProductsTable'
+import { categoriesApi } from '@/features/categories/api/categories.api'
+import { productsApi } from '@/features/products/api/products.api'
+import { usePermissions } from '@/shared/hooks/usePermissions'
+import { PERMISSIONS } from '@/shared/constants/permissions'
+import type { ProductListItem } from '@/shared/api/types'
+
+type RichProductItem = ProductListItem & {
+  sku?: string
+  status?: string
+  variants?: Array<{ id: string; sku?: string; stock?: number; lowStockAt?: number }>
+}
+
+export function useVendorProductsPage() {
+  const router = useRouter()
+  const table = useVendorProductsTable()
+  const { hasPermission } = usePermissions()
+
+  const [showCreate, setShowCreate] = useState(false)
+  const [name, setName] = useState('')
+  const [price, setPrice] = useState('')
+  const [description, setDescription] = useState('')
+  const [categoryId, setCategoryId] = useState('')
+  const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([])
+  const [createError, setCreateError] = useState<string | null>(null)
+  const [creating, setCreating] = useState(false)
+
+  useEffect(() => {
+    void categoriesApi.list().then((rows) => {
+      const list = Array.isArray(rows) ? rows : []
+      setCategories(list.map((row: { id: string; name: string }) => ({ id: row.id, name: row.name })))
+      if (list[0]?.id) setCategoryId(String(list[0].id))
+    })
+  }, [])
+
+  const handleCreate = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault()
+      if (!categoryId) { setCreateError('Select a category'); return }
+      setCreating(true)
+      setCreateError(null)
+      productsApi
+        .create({ name, categoryId, basePrice: Number(price), description: description || name })
+        .then(() => {
+          setName(''); setPrice(''); setDescription(''); setShowCreate(false)
+          router.refresh()
+        })
+        .catch((err: unknown) => {
+          setCreateError(err instanceof Error ? err.message : 'Could not create product')
+        })
+        .finally(() => setCreating(false))
+    },
+    [name, price, description, categoryId, router],
+  )
+
+  const handleEdit = useCallback(
+    (productId: string, productName: string) => {
+      const nextName = window.prompt('Product name', productName)
+      if (nextName && nextName !== productName) {
+        productsApi.update(productId, { name: nextName }).then(() => router.refresh())
+      }
+    },
+    [router],
+  )
+
+  const canCreate = hasPermission(PERMISSIONS.PRODUCT_CREATE)
+  const canEdit = hasPermission(PERMISSIONS.PRODUCT_UPDATE)
+  const canDelete = hasPermission(PERMISSIONS.PRODUCT_DELETE)
+
+  const products = useMemo(
+    () =>
+      (table.data?.items ?? []).map((product: RichProductItem) => ({
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        sku: product.variants?.[0]?.sku ?? product.sku ?? '—',
+        stock: product.stock ?? product.variants?.[0]?.stock ?? 0,
+        lowStockAt: product.variants?.[0]?.lowStockAt ?? 5,
+        basePrice: product.basePrice,
+        status: product.status ?? 'LIVE',
+      })),
+    [table.data?.items],
+  )
+
+  const createFormProps = {
+    name,
+    price,
+    description,
+    categoryId,
+    categories,
+    createError,
+    creating,
+    onNameChange: setName,
+    onPriceChange: setPrice,
+    onDescriptionChange: setDescription,
+    onCategoryChange: setCategoryId,
+    onSubmit: handleCreate,
+    onCancel: () => setShowCreate(false),
+  }
+
+  const tableViewProps = {
+    search: table.search,
+    isLoading: table.isLoading,
+    products,
+    page: table.page,
+    totalPages: table.data?.totalPages,
+    isDeleting: table.isDeleting,
+    onSearchChange: table.handleSearchChange,
+    onPageChange: table.setPage,
+    onAddProduct: canCreate ? () => setShowCreate(true) : undefined,
+    onEditProduct: canEdit
+      ? (product: { id: string; name: string }) => handleEdit(product.id, product.name)
+      : undefined,
+    onDeleteProduct: canDelete
+      ? (product: { id: string; name: string }) =>
+          table.setDeleteTarget({ id: product.id, name: product.name })
+      : undefined,
+  }
+
+  const deleteDialogProps = {
+    open: Boolean(table.deleteTarget),
+    onOpenChange: (open: boolean) => {
+      if (!open) table.setDeleteTarget(null)
+    },
+    variant: 'danger' as const,
+    icon: Trash2,
+    title: 'Delete product?',
+    description: table.deleteTarget
+      ? `Delete "${table.deleteTarget.name}"? This cannot be undone.`
+      : 'This cannot be undone.',
+    secondaryAction: { label: 'Cancel', onClick: () => table.setDeleteTarget(null) },
+    primaryAction: {
+      label: 'Delete',
+      variant: 'destructive' as const,
+      loading: table.isDeleting,
+      onClick: () => {
+        table.confirmDelete()
+      },
+    },
+  }
+
+  return {
+    permission: [
+      PERMISSIONS.PRODUCT_CREATE,
+      PERMISSIONS.PRODUCT_UPDATE,
+      PERMISSIONS.PRODUCT_DELETE,
+    ] as const,
+    showCreateForm: showCreate && canCreate,
+    createFormProps,
+    tableViewProps,
+    deleteDialogProps,
+  }
+}

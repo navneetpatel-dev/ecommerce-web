@@ -18,6 +18,7 @@ interface VariantSelectorProps {
   onAddToCart?: () => void
   isAddingToCart?: boolean
   canAddToCart?: boolean
+  freeShippingThreshold?: number
   className?: string
 }
 
@@ -34,6 +35,7 @@ export function VariantSelector({
   onAddToCart,
   isAddingToCart,
   canAddToCart = true,
+  freeShippingThreshold,
   className,
 }: VariantSelectorProps) {
   const hasAttributes = Object.keys(attributeGroups).length > 0
@@ -101,7 +103,11 @@ export function VariantSelector({
           ) : (
             <Badge variant="success">In stock</Badge>
           )}
-          <p className="text-[0.9375rem] text-ink-muted">Free shipping over ₹499</p>
+          {typeof freeShippingThreshold === 'number' && (
+            <p className="text-[0.9375rem] text-ink-muted">
+              Free shipping over ₹{freeShippingThreshold.toLocaleString('en-IN')}
+            </p>
+          )}
         </div>
 
         {showAddToCart && (

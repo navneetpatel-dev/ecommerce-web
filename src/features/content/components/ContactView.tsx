@@ -1,33 +1,43 @@
-import { Input } from '@/shared/components/ui/input'
-import { Textarea } from '@/shared/components/ui/textarea'
-import { Button } from '@/shared/components/ui/button'
+import Link from 'next/link'
+import { HelpContactForm } from '@/features/help/components/HelpContactForm'
 
-export function ContactView() {
+interface ContactViewProps {
+  supportEmail: string | null
+  supportHours: string | null
+  isLoading: boolean
+}
+
+export function ContactView({ supportEmail, supportHours, isLoading }: ContactViewProps) {
   return (
-    <div className="max-w-[1200px] mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-8 px-4 py-10 lg:grid-cols-2">
       <section className="space-y-4">
         <h1 className="text-[1.75rem] font-semibold text-ink">Contact Us</h1>
-        <p className="text-[0.9375rem] text-ink-muted">Have a question about orders, shipping, or returns? Send us a message.</p>
-        <div className="space-y-3">
-          <div>
-            <label className="text-[0.8125rem] font-medium text-ink mb-2 block">Name</label>
-            <Input placeholder="Your name" />
-          </div>
-          <div>
-            <label className="text-[0.8125rem] font-medium text-ink mb-2 block">Email</label>
-            <Input type="email" placeholder="you@example.com" />
-          </div>
-          <div>
-            <label className="text-[0.8125rem] font-medium text-ink mb-2 block">Message</label>
-            <Textarea placeholder="How can we help?" />
-          </div>
-          <Button>Send message</Button>
-        </div>
+        <p className="text-[0.9375rem] text-ink-muted">
+          Have a question about orders, shipping, or returns? Send us a message and our support team
+          will follow up.
+        </p>
+        <HelpContactForm />
       </section>
-      <aside className="bg-surface border border-line rounded-md p-5 space-y-3">
+      <aside className="space-y-3 rounded-md border border-line bg-surface p-5">
         <h2 className="text-[1.125rem] font-semibold text-ink">Support Details</h2>
-        <p className="text-[0.9375rem] text-ink-muted">Email: support@marketplace.local</p>
-        <p className="text-[0.9375rem] text-ink-muted">Working hours: Mon–Sat, 9:00 AM to 7:00 PM</p>
+        {isLoading && <p className="text-[0.9375rem] text-ink-muted">Loading support details…</p>}
+        {!isLoading && (
+          <>
+            <p className="text-[0.9375rem] text-ink-muted">
+              Email: {supportEmail ?? 'Not configured'}
+            </p>
+            <p className="text-[0.9375rem] text-ink-muted">
+              Working hours: {supportHours ?? 'Not configured'}
+            </p>
+          </>
+        )}
+        <p className="text-[0.8125rem] text-ink-muted">
+          Prefer self-serve? Visit the{' '}
+          <Link href="/help" className="text-brand underline-offset-2 hover:underline">
+            Help Centre
+          </Link>
+          .
+        </p>
       </aside>
     </div>
   )

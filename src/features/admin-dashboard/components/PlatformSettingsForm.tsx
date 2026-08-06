@@ -11,6 +11,9 @@ interface PlatformSettingsFormProps {
   onAutoApproveChange: (value: boolean) => void
   onReturnWindowChange: (value: number) => void
   onPayoutCycleChange: (value: string) => void
+  onFreeShippingThresholdChange: (value: number) => void
+  onSupportEmailChange: (value: string) => void
+  onSupportHoursChange: (value: string) => void
   onSave: () => void
 }
 
@@ -21,13 +24,16 @@ export function PlatformSettingsForm({
   onAutoApproveChange,
   onReturnWindowChange,
   onPayoutCycleChange,
+  onFreeShippingThresholdChange,
+  onSupportEmailChange,
+  onSupportHoursChange,
   onSave,
 }: PlatformSettingsFormProps) {
   return (
     <div className="max-w-lg space-y-6">
       <h2 className="text-[1.375rem] font-semibold text-ink">Platform Settings</h2>
       <p className="text-[0.9375rem] text-ink-muted">
-        Manage default commission, return window, payout cycle, and moderation behavior.
+        Manage commission, returns, shipping thresholds, support contact, and moderation defaults.
       </p>
       <div className="space-y-4">
         <div>
@@ -62,19 +68,43 @@ export function PlatformSettingsForm({
           />
         </div>
         <div>
+          <Label>Free shipping threshold (₹)</Label>
+          <Input
+            type="number"
+            value={form.freeShippingThreshold}
+            onChange={(e) => onFreeShippingThresholdChange(Number(e.target.value))}
+          />
+        </div>
+        <div>
           <Label>Payout Cycle</Label>
           <Select value={form.payoutCycle} onValueChange={onPayoutCycleChange}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="weekly">Weekly</SelectItem>
-              <SelectItem value="biweekly">Bi-weekly</SelectItem>
-              <SelectItem value="monthly">Monthly</SelectItem>
+              <SelectItem value="WEEKLY">Weekly</SelectItem>
+              <SelectItem value="BIWEEKLY">Bi-weekly</SelectItem>
+              <SelectItem value="MONTHLY">Monthly</SelectItem>
+              <SelectItem value="weekly">Weekly (legacy)</SelectItem>
             </SelectContent>
           </Select>
         </div>
-        <div className="pt-2 space-y-2">
+        <div>
+          <Label>Support email</Label>
+          <Input
+            type="email"
+            value={form.supportEmail}
+            onChange={(e) => onSupportEmailChange(e.target.value)}
+          />
+        </div>
+        <div>
+          <Label>Support hours</Label>
+          <Input
+            value={form.supportHours}
+            onChange={(e) => onSupportHoursChange(e.target.value)}
+          />
+        </div>
+        <div className="space-y-2 pt-2">
           <Button size="sm" type="button" onClick={onSave}>
             Save settings
           </Button>

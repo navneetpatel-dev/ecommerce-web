@@ -1,59 +1,68 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { settingsApi, type AdminPlatformSettings } from '../api/settings.api'
 
-export interface PlatformSettings {
-  defaultCommissionRate: number
-  autoApproveProducts: boolean
-  defaultReturnWindow: number
-  payoutCycle: string
-}
+export type PlatformSettings = AdminPlatformSettings
 
-const STORAGE_KEY = 'admin-platform-settings'
-
-export function usePlatformSettingsForm(initialSettings: PlatformSettings) {
-  const [form, setForm] = useState(initialSettings)
+export function usePlatformSettingsForm() {
+  const [form, setForm] = useState<PlatformSettings | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
-      const parsed = JSON.parse(raw) as Partial<PlatformSettings>
-      setForm((current) => ({ ...current, ...parsed }))
-    } catch {
-      // ignore
-    }
+    settingsApi
+      .get()
+      .then((settings) => setForm(settings))
+      .catch(() => setLoadError('Could not load platform settings from the server.'))
+      .finally(() => setLoading(false))
   }, [])
 
   const save = () => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(form))
-      setMessage('Saved locally. Server sync is not available yet.')
-    } catch {
-      setMessage('Could not save settings in this browser.')
-    }
+    if (!form) return
+    settingsApi
+      .update(form)
+      .then((saved) => {
+        setForm(saved)
+        setMessage('Settings saved.')
+      })
+      .catch(() => setMessage('Could not save settings.'))
   }
 
   return {
     form,
+    loading,
+    loadError,
     message,
     save,
     setCommissionRate: (value: number) => {
       setMessage(null)
-      setForm((current) => ({ ...current, defaultCommissionRate: value }))
+      setForm((current) => (current ? { ...current, defaultCommissionRate: value } : current))
     },
     setAutoApproveProducts: (value: boolean) => {
       setMessage(null)
-      setForm((current) => ({ ...current, autoApproveProducts: value }))
+      setForm((current) => (current ? { ...current, autoApproveProducts: value } : current))
     },
     setReturnWindow: (value: number) => {
       setMessage(null)
-      setForm((current) => ({ ...current, defaultReturnWindow: value }))
+      setForm((current) => (current ? { ...current, defaultReturnWindow: value } : current))
     },
     setPayoutCycle: (value: string) => {
       setMessage(null)
-      setForm((current) => ({ ...current, payoutCycle: value }))
+      setForm((current) => (current ? { ...current, payoutCycle: value } : current))
+    },
+    setFreeShippingThreshold: (value: number) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, freeShippingThreshold: value } : current))
+    },
+    setSupportEmail: (value: string) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, supportEmail: value } : current))
+    },
+    setSupportHours: (value: string) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, supportHours: value } : current))
     },
   }
 }

@@ -10,6 +10,7 @@ interface AuthResponse {
 export const authApi = {
   login: (input: LoginInput) => apiClient.post<AuthResponse>('/api/auth/login', input),
   register: (input: RegisterInput) => apiClient.post<AuthResponse>('/api/auth/register', input),
+  me: () => apiClient.get<CurrentUser>('/api/auth/me'),
   refresh: () => apiClient.post<{ accessToken: string }>('/api/auth/refresh'),
   logout: () => apiClient.post<{ message: string }>('/api/auth/logout'),
   forgotPassword: (email: string) =>

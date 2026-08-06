@@ -35,12 +35,14 @@ export function ProductsTableHeader({ search, onSearchChange, onAddProduct }: Pr
             onChange={(e) => onSearchChange(e.target.value)}
           />
         </div>
-        <Button size="sm" type="button" onClick={onAddProduct} title="Opens product create flow when available">
-          <Plus className="h-4 w-4" /> Add Product
-        </Button>
+        {onAddProduct && (
+          <Button size="sm" type="button" onClick={onAddProduct}>
+            <Plus className="h-4 w-4" /> Add Product
+          </Button>
+        )}
       </div>
       <p className="text-[0.8125rem] text-ink-muted">
-        Create/edit UI is limited for now — you can search and delete products here.
+        Manage your catalog — create, edit names, and delete products you own.
       </p>
     </div>
   )
@@ -69,27 +71,31 @@ export function ProductRow({ product, onEdit, onDelete, isDeleting }: ProductRow
       </TableCell>
       <TableCell className="text-right">
         <div className="flex justify-end gap-1">
-          <Button
-            size="icon"
-            variant="ghost"
-            type="button"
-            aria-label={`Edit ${product.name}`}
-            onClick={() => onEdit?.(product)}
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <DisabledActionHint disabled={Boolean(isDeleting)} message="Deleting this product…">
+          {onEdit && (
             <Button
               size="icon"
               variant="ghost"
               type="button"
-              aria-label={`Delete ${product.name}`}
-              disabled={isDeleting}
-              onClick={() => onDelete?.(product)}
+              aria-label={`Edit ${product.name}`}
+              onClick={() => onEdit(product)}
             >
-              <Trash2 className="h-4 w-4" />
+              <Pencil className="h-4 w-4" />
             </Button>
-          </DisabledActionHint>
+          )}
+          {onDelete && (
+            <DisabledActionHint disabled={Boolean(isDeleting)} message="Deleting this product…">
+              <Button
+                size="icon"
+                variant="ghost"
+                type="button"
+                aria-label={`Delete ${product.name}`}
+                disabled={isDeleting}
+                onClick={() => onDelete(product)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </DisabledActionHint>
+          )}
         </div>
       </TableCell>
     </TableRow>

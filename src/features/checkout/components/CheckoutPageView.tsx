@@ -301,6 +301,9 @@ export function CheckoutPageView({
                         <ShippingStep
                           groupedByVendor={groupedByVendor}
                           selectedMethods={shippingMethodByVendor}
+                          pincode={
+                            addresses?.find((address) => address.id === addressId)?.pincode ?? ''
+                          }
                           canContinue={shippingReady}
                           onSelect={onSelectShipping}
                           onContinue={onContinueToPayment}

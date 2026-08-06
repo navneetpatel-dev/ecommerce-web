@@ -68,6 +68,8 @@ interface ProductDetailContentProps {
   addSectionRef: RefObject<HTMLDivElement | null>
   breadcrumbItems: BreadcrumbItem[]
   variantSelection: VariantSelectionProps
+  freeShippingThreshold?: number
+  returnWindowDays?: number
 }
 
 export function ProductDetailContent({
@@ -87,6 +89,8 @@ export function ProductDetailContent({
   addSectionRef,
   breadcrumbItems,
   variantSelection,
+  freeShippingThreshold,
+  returnWindowDays,
 }: ProductDetailContentProps) {
   const displayPrice = Number(variantSelection.currentPrice || product.basePrice || 0)
   const displayStock = Number(variantSelection.currentStock || product.stock || 0)
@@ -206,11 +210,19 @@ export function ProductDetailContent({
             <div className="space-y-2 pt-4 border-t border-line">
               <div className="flex items-center gap-2 text-[0.8125rem] text-ink-muted">
                 <Truck size={16} />
-                <span>Free delivery on orders above ₹500</span>
+                <span>
+                  {typeof freeShippingThreshold === 'number'
+                    ? `Free delivery on orders above ₹${freeShippingThreshold.toLocaleString('en-IN')}`
+                    : 'Delivery options shown at checkout'}
+                </span>
               </div>
               <div className="flex items-center gap-2 text-[0.8125rem] text-ink-muted">
                 <RotateCcw size={16} />
-                <span>7-day easy returns</span>
+                <span>
+                  {typeof returnWindowDays === 'number'
+                    ? `${returnWindowDays}-day easy returns`
+                    : 'Returns available on eligible items'}
+                </span>
               </div>
             </div>
           </div>

@@ -1,20 +1,29 @@
 import { ArrowRight } from 'lucide-react'
 import type { CartItem } from '@/shared/api/types'
-import { ShippingCard } from './ShippingCard'
+import { ShippingCardContainer } from '../containers/ShippingCardContainer'
 import { Button } from '@/shared/components/ui/button'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 
 interface ShippingStepProps {
   groupedByVendor: Record<string, CartItem[]>
   selectedMethods: Record<string, string>
+  pincode: string
   canContinue: boolean
   onSelect: (vendorId: string, method: 'STANDARD' | 'EXPRESS') => void
   onContinue: () => void
 }
 
+function estimateWeightGrams(items: CartItem[]) {
+  return items.reduce((sum, item) => {
+    const unitWeight = Number(item.variant?.weightGrams ?? 500)
+    return sum + Number(item.quantity || 1) * unitWeight
+  }, 0)
+}
+
 export function ShippingStep({
   groupedByVendor,
   selectedMethods,
+  pincode,
   canContinue,
   onSelect,
   onContinue,
@@ -27,12 +36,18 @@ export function ShippingStep({
         {vendors.length} {vendors.length === 1 ? 'vendor' : 'vendors'} in this order
       </p>
 
+      {!pincode && (
+        <p className="text-[0.875rem] text-ink-muted">Select a delivery address to load shipping rates.</p>
+      )}
+
       <div className="space-y-4">
         {vendors.map(([vid, items]) => (
-          <ShippingCard
+          <ShippingCardContainer
             key={vid}
             vendorId={vid}
             vendor={items[0].product.vendor}
+            pincode={pincode}
+            weightGrams={estimateWeightGrams(items)}
             selected={selectedMethods[vid]}
             onSelect={(m) => onSelect(vid, m)}
           />

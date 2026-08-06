@@ -9,5 +9,8 @@ export type CreateReturnBody = {
 
 export const returnsApi = {
   list: () => apiClient.get<ReturnRequest[]>('/api/returns'),
+  listAdmin: () => apiClient.get<ReturnRequest[]>('/api/returns/admin'),
   create: (body: CreateReturnBody) => apiClient.post<ReturnRequest>('/api/returns', body),
+  transition: (id: string, status: ReturnRequest['status']) =>
+    apiClient.patch<{ message: string }>(`/api/returns/${id}/transition`, { status }),
 }

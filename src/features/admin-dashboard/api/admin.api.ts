@@ -5,6 +5,7 @@ import type { Coupon } from '@/shared/api/types'
 export const adminApi = {
   dashboard: () => apiClient.get<{ totalOrders: number; totalRevenue: number; totalVendors: number; totalCustomers: number; pendingApprovals: number }>('/api/admin/dashboard'),
   pendingVendors: () => apiClient.get<VendorInfo[]>('/api/vendors?status=PENDING'),
+  vendors: () => apiClient.get<VendorInfo[]>('/api/vendors'),
   approveVendor: (id: string) => apiClient.patch(`/api/vendors/${id}/approve`, {}),
   rejectVendor: (id: string, reason: string) =>
     apiClient.patch(`/api/vendors/${id}/reject`, { reason }),

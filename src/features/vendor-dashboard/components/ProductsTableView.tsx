@@ -22,9 +22,9 @@ interface ProductsTableViewProps {
   isDeleting?: boolean
   onSearchChange: (value: string) => void
   onPageChange: (page: number) => void
-  onAddProduct: () => void
-  onEditProduct: (product: ProductRow) => void
-  onDeleteProduct: (product: ProductRow) => void
+  onAddProduct?: () => void
+  onEditProduct?: (product: ProductRow) => void
+  onDeleteProduct?: (product: ProductRow) => void
 }
 
 export function ProductsTableView({
