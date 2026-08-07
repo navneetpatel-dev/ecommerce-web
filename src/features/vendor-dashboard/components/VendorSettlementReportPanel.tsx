@@ -5,6 +5,9 @@ import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { LABELS } from '@/shared/constants/labels'
+import { BEARER_PREFIX } from '@/shared/constants/http'
+import { STORAGE_KEYS } from '@/shared/constants/storage'
+import { API } from '@/shared/constants/apiRoutes'
 import { formatInr } from '@/features/orders/utils/format'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { reportsApi, type VendorReportSummary } from '@/features/admin-dashboard/api/reports.api'
@@ -20,6 +23,25 @@ function defaultRange() {
   }
 }
 
+async function downloadReport(path: string, filename: string) {
+  const token =
+    useAuthStore.getState().accessToken ||
+    (typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN) : null)
+  const base = process.env.NEXT_PUBLIC_API_URL ?? ''
+  const res = await fetch(`${base}${path}`, {
+    credentials: 'include',
+    headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
+  })
+  if (!res.ok) throw new Error(LABELS.couldNotLoadReport)
+  const blob = await res.blob()
+  const url = URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.href = url
+  anchor.download = filename
+  anchor.click()
+  URL.revokeObjectURL(url)
+}
+
 export function VendorSettlementReportPanel() {
   const vendorId = useAuthStore((s) => s.currentUser?.vendorId)
   const initial = useMemo(() => defaultRange(), [])
@@ -29,21 +51,32 @@ export function VendorSettlementReportPanel() {
   const [error, setError] = useState<string | null>(null)
   const [summary, setSummary] = useState<VendorReportSummary | null>(null)
 
+  const range = { from: `${from}T00:00:00.000Z`, to: `${to}T23:59:59.999Z` }
+
   const load = async () => {
     if (!vendorId) return
     setLoading(true)
     setError(null)
     try {
-      const data = await reportsApi.vendorSummary(vendorId, {
-        from: `${from}T00:00:00.000Z`,
-        to: `${to}T23:59:59.999Z`,
-      })
+      const data = await reportsApi.vendorSummary(vendorId, range)
       setSummary(data)
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotLoadReport))
       setSummary(null)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const exportFile = async (format: 'csv' | 'pdf') => {
+    if (!vendorId) return
+    try {
+      await downloadReport(
+        reportsApi.exportUrl(API.reports.vendor(vendorId), { ...range, format }),
+        `vendor-settlement.${format === 'pdf' ? 'html' : 'csv'}`,
+      )
+    } catch (err) {
+      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport))
     }
   }
 
@@ -81,40 +114,52 @@ export function VendorSettlementReportPanel() {
       ) : null}
 
       {summary ? (
-        <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <dt className="text-[0.8125rem] text-ink-muted">{LABELS.grossSales}</dt>
-            <dd className="font-semibold tabular-nums">{formatInr(summary.sales)}</dd>
+        <>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" disabled={!vendorId} onClick={() => void exportFile('csv')}>
+              {LABELS.exportCsv}
+            </Button>
+            <Button variant="outline" disabled={!vendorId} onClick={() => void exportFile('pdf')}>
+              {LABELS.exportPdf}
+            </Button>
           </div>
-          <div>
-            <dt className="text-[0.8125rem] text-ink-muted">{LABELS.commissionCharged}</dt>
-            <dd className="font-semibold tabular-nums">{formatInr(summary.commissionDeducted)}</dd>
-          </div>
-          <div>
-            <dt className="text-[0.8125rem] text-ink-muted">{LABELS.tcsCollected}</dt>
-            <dd className="font-semibold tabular-nums">{formatInr(summary.tcsDeducted)}</dd>
-          </div>
-          <div>
-            <dt className="text-[0.8125rem] text-ink-muted">{LABELS.ownCouponDiscounts}</dt>
-            <dd className="font-semibold tabular-nums">
-              {formatInr(summary.discountAbsorbed.ownCoupons)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-[0.8125rem] text-ink-muted">{LABELS.platformCouponDiscounts}</dt>
-            <dd className="font-semibold tabular-nums">
-              {formatInr(summary.discountAbsorbed.platformCouponsOnMyItems)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-[0.8125rem] text-ink-muted">{LABELS.upcomingPayout}</dt>
-            <dd className="font-semibold tabular-nums">{formatInr(summary.upcomingPayout)}</dd>
-          </div>
-          <div>
-            <dt className="text-[0.8125rem] text-ink-muted">{LABELS.historicalPayout}</dt>
-            <dd className="font-semibold tabular-nums">{formatInr(summary.historicalPayout)}</dd>
-          </div>
-        </dl>
+          <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div>
+              <dt className="text-[0.8125rem] text-ink-muted">{LABELS.grossSales}</dt>
+              <dd className="font-semibold tabular-nums">{formatInr(summary.sales)}</dd>
+            </div>
+            <div>
+              <dt className="text-[0.8125rem] text-ink-muted">{LABELS.commissionCharged}</dt>
+              <dd className="font-semibold tabular-nums">
+                {formatInr(summary.commissionDeducted)}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[0.8125rem] text-ink-muted">{LABELS.tcsCollected}</dt>
+              <dd className="font-semibold tabular-nums">{formatInr(summary.tcsDeducted)}</dd>
+            </div>
+            <div>
+              <dt className="text-[0.8125rem] text-ink-muted">{LABELS.ownCouponDiscounts}</dt>
+              <dd className="font-semibold tabular-nums">
+                {formatInr(summary.discountAbsorbed.ownCoupons)}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[0.8125rem] text-ink-muted">{LABELS.platformCouponDiscounts}</dt>
+              <dd className="font-semibold tabular-nums">
+                {formatInr(summary.discountAbsorbed.platformCouponsOnMyItems)}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-[0.8125rem] text-ink-muted">{LABELS.upcomingPayout}</dt>
+              <dd className="font-semibold tabular-nums">{formatInr(summary.upcomingPayout)}</dd>
+            </div>
+            <div>
+              <dt className="text-[0.8125rem] text-ink-muted">{LABELS.historicalPayout}</dt>
+              <dd className="font-semibold tabular-nums">{formatInr(summary.historicalPayout)}</dd>
+            </div>
+          </dl>
+        </>
       ) : null}
     </section>
   )
