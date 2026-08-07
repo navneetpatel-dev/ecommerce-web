@@ -596,6 +596,13 @@ export const LABELS = {
   returnShippingFee: 'Return shipping fee',
   returnShippingFeeHint:
     'Deducted from customer refunds when the return reason does not refund original shipping (for example no longer needed).',
+  vendorShopSettings: 'Shop settings',
+  vendorShopSettingsHint:
+    'Configure how returns affect your storefront. Leave blank to use the platform default return shipping fee.',
+  vendorReturnShippingFeeClear: 'Use platform default',
+  couldNotLoadVendorShopSettings: 'Could not load shop settings.',
+  couldNotSaveVendorShopSettings: 'Could not save shop settings.',
+  vendorShopSettingsSaved: 'Shop settings saved.',
   payoutCycle: 'Payout cycle',
   payoutCycleWeekly: 'Weekly',
   payoutCycleBiweekly: 'Bi-weekly',

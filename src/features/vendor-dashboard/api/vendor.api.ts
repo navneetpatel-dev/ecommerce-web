@@ -5,6 +5,18 @@ import type { VendorSummary, CommissionLedgerEntry, PayoutEntry, ProductListItem
 
 export const vendorApi = {
   summary: () => apiClient.get<VendorSummary>(API.vendors.dashboardSummary),
+  getMyShop: () =>
+    apiClient.get<{
+      id: string
+      businessName: string
+      returnShippingFee: number | null
+    }>(API.vendors.me),
+  updateMyShop: (body: { returnShippingFee?: number | null }) =>
+    apiClient.patch<{
+      id: string
+      businessName: string
+      returnShippingFee: number | null
+    }>(API.vendors.me, body),
   products: (page = 1, filters?: { status?: string; search?: string }) => {
     const params = new URLSearchParams({ page: String(page) })
     if (filters?.status) params.set('status', filters.status)

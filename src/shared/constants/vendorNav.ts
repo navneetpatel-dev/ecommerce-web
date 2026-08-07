@@ -49,4 +49,14 @@ export const VENDOR_NAV = [
     label: LABELS.reviews,
     permissions: [PERMISSIONS.REVIEW_RESPOND] as PermissionKey[],
   },
+  {
+    href: PATHS.vendor.shopSettings,
+    label: LABELS.vendorShopSettings,
+    permissions: [
+      PERMISSIONS.PRODUCT_UPDATE,
+      PERMISSIONS.PRODUCT_CREATE,
+      PERMISSIONS.SUBORDER_MANAGE,
+      PERMISSIONS.PAYOUT_VIEW,
+    ] as PermissionKey[],
+  },
 ] as const

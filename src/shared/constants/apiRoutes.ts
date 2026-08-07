@@ -50,6 +50,7 @@ export const API = {
     list: (query = '') => `/api/vendors${query ? `?${query}` : ''}`,
     detail: (id: string) => `/api/vendors/${id}`,
     bySlug: (slug: string) => `/api/vendors/slug/${slug}`,
+    me: '/api/vendors/me',
     approve: (id: string) => `/api/vendors/${id}/approve`,
     reject: (id: string) => `/api/vendors/${id}/reject`,
     suspend: (id: string) => `/api/vendors/${id}/suspend`,

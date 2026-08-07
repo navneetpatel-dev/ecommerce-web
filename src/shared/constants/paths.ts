@@ -65,5 +65,6 @@ export const PATHS = {
     coupons: '/vendor/dashboard/coupons',
     reviews: '/vendor/dashboard/reviews',
     profile: '/vendor/dashboard/profile',
+    shopSettings: '/vendor/dashboard/shop-settings',
   },
 } as const

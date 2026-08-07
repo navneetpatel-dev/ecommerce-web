@@ -16,7 +16,14 @@ export type VendorDocument = {
 export const vendorsApi = {
   getById: (id: string) => apiClient.get<VendorDetail>(API.vendors.detail(id)),
   getBySlug: (slug: string) => apiClient.get<VendorDetail>(API.vendors.bySlug(slug)),
-  update: (id: string, body: { businessName?: string; gstNumber?: string; description?: string; logoUrl?: string; bannerUrl?: string }) =>
+  update: (id: string, body: {
+    businessName?: string
+    gstNumber?: string
+    description?: string
+    logoUrl?: string
+    bannerUrl?: string
+    returnShippingFee?: number | null
+  }) =>
     apiClient.patch<VendorInfo>(API.vendors.detail(id), body),
   register: (body: { businessName: string; gstNumber?: string; description?: string; bankDetails?: Record<string, unknown> }) =>
     apiClient.post<VendorInfo>(API.vendors.register, body),
