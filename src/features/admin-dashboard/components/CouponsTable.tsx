@@ -24,8 +24,10 @@ interface CouponsTableProps {
   coupons?: Coupon[]
   loading?: boolean
   pagination?: DataTablePaginationProps
-  /** When true, hide status mutation actions (vendor oversight). */
+  /** When true, hide create/edit-style status mutations except moderation reject. */
   readOnly?: boolean
+  /** Allow reject on vendor-oversight rows (admin moderation). */
+  allowReject?: boolean
 }
 
 function bearerLabel(bearer: Coupon['discountBearer']) {
@@ -39,6 +41,7 @@ export function CouponsTable({
   loading = false,
   pagination,
   readOnly = false,
+  allowReject = false,
 }: CouponsTableProps) {
   const queryClient = useQueryClient()
   const [analyticsCoupon, setAnalyticsCoupon] = useState<Coupon | null>(null)
@@ -156,6 +159,23 @@ export function CouponsTable({
               }
             />
           ) : null}
+          {allowReject &&
+          row.vendorId &&
+          row.status !== COUPON_STATUS.REJECTED &&
+          row.status !== COUPON_STATUS.ARCHIVED ? (
+            <AdminConfirmAction
+              label={LABELS.rejectCoupon}
+              tone="danger"
+              dialogVariant="danger"
+              title={LABELS.confirmRejectCouponTitle}
+              description={formatLabel(LABELS.confirmRejectCouponBody, { code: row.code })}
+              onConfirm={() =>
+                statusMutation
+                  .mutateAsync({ id: row.id, status: COUPON_STATUS.REJECTED })
+                  .then(reload)
+              }
+            />
+          ) : null}
         </TableRowActions>
       ),
     },
@@ -191,9 +211,23 @@ export function CouponsTable({
                 <dd className="tabular-nums font-medium">{analytics.usedCount}</dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{LABELS.discountTotal}</dt>
+                <dt className="text-ink-muted">{LABELS.discountCostImpact}</dt>
                 <dd className="tabular-nums font-medium">
                   ₹{Number(analytics.totalDiscount).toLocaleString('en-IN')}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">{LABELS.revenueImpact}</dt>
+                <dd className="tabular-nums font-medium">
+                  ₹{Number(analytics.revenueImpact ?? 0).toLocaleString('en-IN')}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">{LABELS.conversionRate}</dt>
+                <dd className="tabular-nums font-medium">
+                  {analytics.conversionRate == null
+                    ? '—'
+                    : `${Math.round(Number(analytics.conversionRate) * 100)}%`}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">

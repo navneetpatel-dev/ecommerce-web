@@ -110,6 +110,12 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
       cell: (row) => `₹${Number(row.discountTotal ?? 0).toLocaleString('en-IN')}`,
     },
     {
+      id: 'revenue',
+      header: LABELS.batchRevenueImpact,
+      className: 'tabular-nums',
+      cell: (row) => `₹${Number(row.revenueImpact ?? 0).toLocaleString('en-IN')}`,
+    },
+    {
       id: 'expires',
       header: LABELS.batchExpires,
       cell: (row) => (row.expiresAt ? formatDateTime(row.expiresAt) : LABELS.usageUnlimited),
@@ -263,6 +269,12 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
                   <dt className="text-ink-muted">{LABELS.batchDiscountImpact}</dt>
                   <dd className="tabular-nums font-medium">
                     ₹{Number(batchDetail.discountTotal ?? 0).toLocaleString('en-IN')}
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-ink-muted">{LABELS.batchRevenueImpact}</dt>
+                  <dd className="tabular-nums font-medium">
+                    ₹{Number(batchDetail.revenueImpact ?? 0).toLocaleString('en-IN')}
                   </dd>
                 </div>
               </dl>

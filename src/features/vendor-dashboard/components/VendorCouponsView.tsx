@@ -130,7 +130,8 @@ export function VendorCouponsView({
           <p className="text-[0.875rem] text-ink-muted">
             {formatLabel(LABELS.absorbedDiscountsSummary, {
               amount: absorbedDiscountTotal.toLocaleString('en-IN'),
-            })}
+            })}{' '}
+            ({LABELS.absorbedThisPeriod})
           </p>
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
@@ -185,6 +186,20 @@ export function VendorCouponsView({
                 <dt className="text-ink-muted">{LABELS.absorbedDiscounts}</dt>
                 <dd className="tabular-nums font-medium">
                   ₹{Number(analytics.totalDiscount).toLocaleString('en-IN')}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">{LABELS.revenueImpact}</dt>
+                <dd className="tabular-nums font-medium">
+                  ₹{Number(analytics.revenueImpact ?? 0).toLocaleString('en-IN')}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">{LABELS.conversionRate}</dt>
+                <dd className="tabular-nums font-medium">
+                  {analytics.conversionRate == null
+                    ? '—'
+                    : `${Math.round(Number(analytics.conversionRate) * 100)}%`}
                 </dd>
               </div>
               <p className="text-[0.8125rem] text-ink-muted">

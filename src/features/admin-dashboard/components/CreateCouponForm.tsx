@@ -24,7 +24,14 @@ import { LABELS } from '@/shared/constants/labels'
 import { COUPON_USER_SEGMENT, DISCOUNT_BEARER } from '@/shared/constants/statuses'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { CouponScopeMultiSelect } from './CouponScopeMultiSelect'
+import {
+  InfiniteMultiSelect,
+  type InfiniteMultiSelectPageQuery,
+  type InfiniteMultiSelectPageResult,
+} from '@/shared/components/InfiniteMultiSelect'
+import { adminUsersApi } from '../api/users.api'
 import { cn } from '@/shared/utils/cn'
+import { useCallback } from 'react'
 
 const COUPON_TYPES: Array<{ value: CouponFormInput['type']; label: string }> = [
   { value: 'PERCENTAGE', label: LABELS.couponTypePercentage },
@@ -116,6 +123,12 @@ function couponDisableHint(values: CouponFormInput): string {
     return LABELS.couponSegmentRequired
   }
   if (
+    values.userRestrictionType === 'specific' &&
+    (!values.userRestrictionUserIds || values.userRestrictionUserIds.length === 0)
+  ) {
+    return LABELS.couponSpecificUsersRequired
+  }
+  if (
     values.type !== 'BUNDLE' &&
     values.applicableScopeType !== 'all' &&
     (!values.applicableScopeIds || values.applicableScopeIds.length === 0)
@@ -158,6 +171,27 @@ export function CreateCouponForm({
     !isBundle &&
     (scopeType === 'product' || scopeType === 'category' || (!vendorMode && scopeType === 'vendor'))
   const showSegment = values.userRestrictionType === 'segment'
+  const showSpecificUsers = values.userRestrictionType === 'specific'
+
+  const fetchUsersPage = useCallback(
+    async (query: InfiniteMultiSelectPageQuery): Promise<InfiniteMultiSelectPageResult> => {
+      const result = await adminUsersApi.list({
+        page: query.page,
+        limit: query.limit,
+        search: query.search,
+      })
+      return {
+        items: result.items.map((user) => ({
+          id: user.id,
+          label: user.name ? `${user.name} (${user.email})` : user.email,
+        })),
+        page: result.page,
+        totalPages: result.totalPages,
+        total: result.total,
+      }
+    },
+    [],
+  )
 
   const showFieldError = (name: keyof CouponFormInput) => {
     const touched = Boolean(touchedFields[name as keyof typeof touchedFields])
@@ -170,6 +204,10 @@ export function CreateCouponForm({
   const availableScopeTypes = vendorMode
     ? SCOPE_TYPES.filter((option) => option.value !== 'all')
     : SCOPE_TYPES
+
+  const availableUserRestrictions = vendorMode
+    ? USER_RESTRICTIONS.filter((option) => option.value !== 'specific')
+    : USER_RESTRICTIONS
 
   return (
     <div className="space-y-1">
@@ -601,13 +639,16 @@ export function CreateCouponForm({
                   if (next !== 'segment') {
                     setValue('userRestrictionSegment', null)
                   }
+                  if (next !== 'specific') {
+                    setValue('userRestrictionUserIds', [])
+                  }
                 }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder={LABELS.userRestriction} />
                 </SelectTrigger>
                 <SelectContent>
-                  {USER_RESTRICTIONS.map((option) => (
+                  {availableUserRestrictions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
@@ -650,6 +691,31 @@ export function CreateCouponForm({
               )}
             />
             <FieldError message={showFieldError('userRestrictionSegment')} />
+          </div>
+        ) : null}
+        {showSpecificUsers ? (
+          <div className="space-y-2">
+            <Label>
+              {LABELS.selectSpecificUsers}
+              <RequiredMark />
+            </Label>
+            <Controller
+              name="userRestrictionUserIds"
+              control={control}
+              render={({ field }) => (
+                <InfiniteMultiSelect
+                  value={field.value ?? []}
+                  onChange={field.onChange}
+                  fetchPage={fetchUsersPage}
+                  resetKey="coupon-specific-users"
+                  searchPlaceholder={LABELS.searchUsers}
+                  emptyMessage={LABELS.noUsersFound}
+                  error={fieldHasError('userRestrictionUserIds')}
+                  idPrefix="coupon-specific-users"
+                />
+              )}
+            />
+            <FieldError message={showFieldError('userRestrictionUserIds')} />
           </div>
         ) : null}
       </Section>

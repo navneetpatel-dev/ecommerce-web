@@ -64,6 +64,7 @@ export function AdminCouponsPage() {
             loading={page.isLoading}
             pagination={page.pagination}
             readOnly
+            allowReject
           />
         </TabsContent>
       </Tabs>

@@ -313,7 +313,7 @@ export interface PayoutEntry {
 }
 
 export type CouponType = 'PERCENTAGE' | 'FLAT' | 'FREE_SHIPPING' | 'BOGO' | 'TIERED' | 'CASHBACK' | 'BUNDLE';
-export type CouponStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'EXPIRED' | 'ARCHIVED';
+export type CouponStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'EXPIRED' | 'ARCHIVED' | 'REJECTED';
 export type DiscountBearer = 'PLATFORM' | 'VENDOR';
 export type CouponScopeType = 'all' | 'vendor' | 'product' | 'category';
 export type CouponUserRestrictionType = 'all' | 'firstOrder' | 'specific' | 'segment';
@@ -370,6 +370,8 @@ export interface CouponAnalytics {
   totalDiscount: number;
   usedCountCached: number;
   usageLimitTotal: number | null;
+  revenueImpact: number;
+  conversionRate: number | null;
 }
 
 export interface CouponBatch {
@@ -382,6 +384,7 @@ export interface CouponBatch {
   updatedAt?: string;
   redemptionCount?: number;
   discountTotal?: number;
+  revenueImpact?: number;
   codes?: string[];
   expiresAt?: string | null;
 }

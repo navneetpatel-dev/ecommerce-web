@@ -8,6 +8,7 @@ import {
   SHIPMENT_STATUS,
   REVIEW_STATUS,
   CATEGORY_STATUS,
+  COUPON_STATUS,
 } from '@/shared/constants/statuses'
 
 type BadgeVariant = 'success' | 'warning' | 'destructive' | 'secondary' | 'brand'
@@ -46,6 +47,7 @@ const DESTRUCTIVE = new Set<string>([
   VENDOR_STATUS.REJECTED,
   REVIEW_STATUS.REJECTED,
   PRODUCT_STATUS.REJECTED,
+  COUPON_STATUS.REJECTED,
   PAYMENT_STATUS.FAILED,
   ORDER_STATUS.CANCELLED,
   USER_STATUS.BLOCKED,

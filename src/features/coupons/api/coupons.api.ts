@@ -22,7 +22,15 @@ export const couponsApi = {
     apiClient.post<AppliedCouponSummary & { type: string }>(API.coupons.apply, { code }),
   remove: () =>
     apiClient.delete<{ removed: boolean }>(API.coupons.remove),
-  eligible: () => apiClient.get<EligibleCoupon[]>(API.coupons.eligible),
+  eligible: (params: { productId?: string; limit?: number } = {}) => {
+    const q = new URLSearchParams()
+    if (params.productId) q.set('productId', params.productId)
+    if (params.limit) q.set('limit', String(params.limit))
+    const qs = q.toString()
+    return apiClient.get<EligibleCoupon[]>(
+      qs ? `${API.coupons.eligible}?${qs}` : API.coupons.eligible,
+    )
+  },
 
   vendorList: async (params: PaginationQuery = {}): Promise<PaginatedList<Coupon>> => {
     const res = await apiClient.getWithResponse<Coupon[]>(
@@ -39,7 +47,11 @@ export const couponsApi = {
   vendorAnalytics: (id: string) =>
     apiClient.get<CouponAnalytics>(API.coupons.vendor.analytics(id)),
   vendorAbsorbedSummary: () =>
-    apiClient.get<{ vendorId: string; absorbedDiscountTotal: number; couponCount: number }>(
-      API.coupons.vendor.absorbedSummary,
-    ),
+    apiClient.get<{
+      vendorId: string
+      absorbedDiscountTotal: number
+      couponCount: number
+      periodStart?: string
+      periodEnd?: string
+    }>(API.coupons.vendor.absorbedSummary),
 }

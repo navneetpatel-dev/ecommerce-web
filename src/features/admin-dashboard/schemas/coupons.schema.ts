@@ -44,6 +44,7 @@ const CouponObjectSchema = z.object({
   applicableScopeIds: z.array(z.string().uuid()),
   userRestrictionType: z.enum(USER_RESTRICTION_TYPES).optional(),
   userRestrictionSegment: z.enum(COUPON_USER_SEGMENT_VALUES).optional().nullable(),
+  userRestrictionUserIds: z.array(z.string().uuid()).optional(),
   bundleProductIds: z.array(z.string().uuid()).optional(),
   tier2MinSubtotal: optionalNonNegative(LABELS.couponMinOrderNegative),
   tier2Percent: optionalNonNegative(LABELS.couponValueNegative),
@@ -72,6 +73,7 @@ function refineCouponValueAndDates(
     applicableScopeIds: string[]
     userRestrictionType?: (typeof USER_RESTRICTION_TYPES)[number]
     userRestrictionSegment?: string | null
+    userRestrictionUserIds?: string[]
     bundleProductIds?: string[]
     tier2MinSubtotal?: number | null
     tier2Percent?: number | null
@@ -122,6 +124,17 @@ function refineCouponValueAndDates(
     })
   }
 
+  if (
+    data.userRestrictionType === 'specific' &&
+    (!data.userRestrictionUserIds || data.userRestrictionUserIds.length === 0)
+  ) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['userRestrictionUserIds'],
+      message: LABELS.couponSpecificUsersRequired,
+    })
+  }
+
   const start = Date.parse(data.startDate)
   const end = Date.parse(data.endDate)
   if (!Number.isNaN(start) && !Number.isNaN(end) && end <= start) {
@@ -161,6 +174,7 @@ export const COUPON_FORM_DEFAULTS: CouponFormInput = {
   applicableScopeIds: [],
   userRestrictionType: 'all',
   userRestrictionSegment: null,
+  userRestrictionUserIds: [],
   bundleProductIds: [],
   tier2MinSubtotal: null,
   tier2Percent: null,
@@ -229,9 +243,11 @@ export function toCouponCreateBody(values: CouponFormInput, opts?: { forceVendor
   const userRestriction =
     values.userRestrictionType === 'segment'
       ? { type: 'segment' as const, value: values.userRestrictionSegment ?? undefined }
-      : values.userRestrictionType
-        ? { type: values.userRestrictionType }
-        : undefined
+      : values.userRestrictionType === 'specific'
+        ? { type: 'specific' as const, value: values.userRestrictionUserIds ?? [] }
+        : values.userRestrictionType
+          ? { type: values.userRestrictionType }
+          : undefined
 
   return {
     code: values.code.trim(),

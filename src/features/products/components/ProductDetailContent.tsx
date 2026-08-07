@@ -18,6 +18,7 @@ import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import { cartLineQuantityMax } from '@/shared/constants/cart'
+import { ProductEligibleOffers } from './ProductEligibleOffers'
 import type { RefObject } from 'react'
 
 interface Product {
@@ -153,6 +154,7 @@ export function ProductDetailContent({
             </div>
 
             <p className="text-[0.8125rem] text-ink-muted">{LABELS.offersAtCheckout}</p>
+            <ProductEligibleOffers productId={product.id} />
 
             {product.variants && product.variants.length > 0 && (
               <VariantSelector
