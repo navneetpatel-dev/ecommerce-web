@@ -547,7 +547,7 @@ export const LABELS = {
   reportDateTo: 'To',
   reportLoad: 'Load report',
   exportCsv: 'Export CSV',
-  exportPdf: 'Export printable PDF',
+  exportPdf: 'Export PDF',
   platformGmv: 'GMV',
   customerPayments: 'Customer payments',
   commissionEarned: 'Commission earned',

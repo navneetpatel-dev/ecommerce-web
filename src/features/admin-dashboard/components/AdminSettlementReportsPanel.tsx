@@ -94,7 +94,7 @@ export function AdminSettlementReportsPanel() {
     try {
       await downloadReport(
         reportsApi.exportUrl(API.reports.adminSummary, { ...range, format }),
-        `admin-summary.${format === 'pdf' ? 'html' : 'csv'}`,
+        `admin-summary.${format === 'pdf' ? 'pdf' : 'csv'}`,
       )
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotLoadReport))

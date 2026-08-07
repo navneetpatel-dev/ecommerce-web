@@ -73,7 +73,7 @@ export function VendorSettlementReportPanel() {
     try {
       await downloadReport(
         reportsApi.exportUrl(API.reports.vendor(vendorId), { ...range, format }),
-        `vendor-settlement.${format === 'pdf' ? 'html' : 'csv'}`,
+        `vendor-settlement.${format === 'pdf' ? 'pdf' : 'csv'}`,
       )
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotLoadReport))
