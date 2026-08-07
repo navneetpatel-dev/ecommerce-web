@@ -3,7 +3,7 @@ import { ArrowRight, X } from 'lucide-react'
 import { PATHS } from '@/shared/constants/paths'
 import { LABELS, ROLES } from '@/shared/constants/labels'
 import type { Category, CurrentUser } from '@/shared/api/types'
-import { resolveCategoryIcon } from '@/features/categories'
+import { resolveCategoryIcon, categoryHref } from '@/features/categories'
 
 const navLinks = [
   { href: PATHS.products, label: LABELS.allProducts },
@@ -70,7 +70,7 @@ export function MobileNavDrawer({
                 return (
                   <li key={category.id}>
                     <Link
-                      href={`${PATHS.products}?categoryId=${category.id}`}
+                      href={categoryHref(category, categories)}
                       onClick={onClose}
                       className="flex items-center gap-3 px-3 py-2.5 rounded-md text-[0.9375rem] font-medium hover:bg-paper transition-colors"
                     >

@@ -3,12 +3,12 @@ import { canonicalUrl } from './canonical'
 import { API } from '@/shared/constants/apiRoutes'
 import { PATHS } from '@/shared/constants/paths'
 import { PRODUCT_STATUS } from '@/shared/constants/statuses'
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
+import { getServerApiOrigin } from '@/shared/api/serverOrigin'
+import { LABELS } from '@/shared/constants/labels'
 
 async function fetchApi<T>(path: string): Promise<T | null> {
   try {
-    const res = await fetch(`${API_URL}${path}`, {
+    const res = await fetch(`${getServerApiOrigin()}${path}`, {
       headers: { 'Content-Type': 'application/json' },
       next: { revalidate: 300 },
     })
@@ -54,11 +54,22 @@ export async function getProductBySlug(slug: string): Promise<ProductSeoData | n
   const product = await fetchApi<BackendProduct>(API.products.bySlug(slug))
   if (!product) return null
 
-  const breadcrumbs: BreadcrumbItem[] = [{ name: 'Home', href: canonicalUrl(PATHS.home) }]
+  const breadcrumbs: BreadcrumbItem[] = [
+    { name: LABELS.categoryBreadcrumbHome, href: canonicalUrl(PATHS.home) },
+  ]
   if (product.category) {
-    breadcrumbs.push({
-      name: product.category.name,
-      href: canonicalUrl(PATHS.category(product.category.slug)),
+    const chain: Array<{ name: string; slug: string }> = []
+    let cursor: BackendProduct['category'] | null | undefined = product.category
+    while (cursor) {
+      chain.unshift({ name: cursor.name, slug: cursor.slug })
+      cursor = cursor.parent ?? null
+    }
+    chain.forEach((node, index) => {
+      const slugs = chain.slice(0, index + 1).map((item) => item.slug)
+      breadcrumbs.push({
+        name: node.name,
+        href: canonicalUrl(PATHS.category(...slugs)),
+      })
     })
   }
   breadcrumbs.push({ name: product.name, href: '' })
@@ -92,7 +103,7 @@ export async function getCategories(): Promise<CategorySeoData[]> {
     name: cat.name,
     slug: cat.slug,
     breadcrumbs: [
-      { name: 'Home', href: canonicalUrl(PATHS.home) },
+      { name: LABELS.categoryBreadcrumbHome, href: canonicalUrl(PATHS.home) },
       { name: cat.name, href: '' },
     ],
   }))

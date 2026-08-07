@@ -6,7 +6,7 @@ import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { CategoryCard } from './CategoryCard'
 import { CategoriesPageSkeleton } from '@/shared/components/Skeletons'
 import { PATHS } from '@/shared/constants/paths'
-import { resolveCategoryIcon } from '../utils/categoryHelpers'
+import { categoryHref, resolveCategoryIcon } from '../utils/categoryHelpers'
 import type { Category } from '@/shared/api/types'
 import type { CategoryRootWithChildren } from '../hooks/useCategoriesPage'
 import { cn } from '@/shared/utils/cn'
@@ -14,6 +14,7 @@ import { cn } from '@/shared/utils/cn'
 interface CategoriesViewProps {
   roots: Category[]
   rootsWithChildren: CategoryRootWithChildren[]
+  tree: Category[]
   isLoading?: boolean
   isEmpty?: boolean
 }
@@ -21,6 +22,7 @@ interface CategoriesViewProps {
 export function CategoriesView({
   roots,
   rootsWithChildren,
+  tree,
   isLoading,
   isEmpty,
 }: CategoriesViewProps) {
@@ -50,7 +52,11 @@ export function CategoriesView({
         <div className="space-y-12">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-4">
             {roots.map((category) => (
-              <CategoryCard key={category.id} category={category} />
+              <CategoryCard
+                key={category.id}
+                category={category}
+                href={categoryHref(category, tree)}
+              />
             ))}
           </div>
 
@@ -65,7 +71,7 @@ export function CategoriesView({
                   <div className="mb-4 flex items-baseline justify-between gap-3">
                     <h3 className="text-[1.0625rem] font-semibold text-ink">{root.name}</h3>
                     <Link
-                      href={`${PATHS.products}?categoryId=${root.id}`}
+                      href={categoryHref(root, tree)}
                       className="text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
                     >
                       Shop all
@@ -77,7 +83,7 @@ export function CategoriesView({
                       return (
                         <li key={child.id}>
                           <Link
-                            href={`${PATHS.products}?categoryId=${child.id}`}
+                            href={categoryHref(child, tree)}
                             className={cn(
                               'flex items-center gap-3 rounded-md border border-line bg-surface px-4 py-3',
                               'text-[0.9375rem] font-medium text-ink transition-colors',

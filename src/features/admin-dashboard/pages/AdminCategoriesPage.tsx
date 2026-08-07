@@ -17,6 +17,7 @@ export function AdminCategoriesPage() {
         onSubmit={page.onSubmit}
         isPending={page.isPending}
         error={page.createError}
+        toolbar={page.reassignToolbar}
       />
       <RequirePermission permission={page.permission}>
         <CategoriesTable

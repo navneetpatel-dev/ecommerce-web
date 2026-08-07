@@ -15,10 +15,15 @@ export function useCategoriesPage() {
       roots
         .map((root) => ({
           root,
-          children: getChildCategories(categories, root.id),
+          children: root.children?.length
+            ? [...root.children].sort(
+                (a, b) =>
+                  (a.displayOrder ?? 0) - (b.displayOrder ?? 0) || a.name.localeCompare(b.name),
+              )
+            : getChildCategories(categories, root.id),
         }))
         .filter((entry) => entry.children.length > 0),
-    [categories, roots]
+    [categories, roots],
   )
 
   return {

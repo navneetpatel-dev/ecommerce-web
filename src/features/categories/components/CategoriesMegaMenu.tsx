@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { PATHS } from '@/shared/constants/paths'
-import { resolveCategoryIcon } from '../utils/categoryHelpers'
+import { LABELS } from '@/shared/constants/labels'
+import { categoryHref, resolveCategoryIcon } from '../utils/categoryHelpers'
 import type { Category } from '@/shared/api/types'
 
 interface CategoriesMegaMenuProps {
@@ -15,8 +16,7 @@ interface CategoriesMegaMenuProps {
 }
 
 /**
- * Scales for any N: dense multi-column list with max-height scroll,
- * plus a fixed promo rail. Avoids card-grid explosion when categories grow.
+ * ACTIVE taxonomy mega menu — up to 3 levels (Department → Category → Subcategory).
  */
 export function CategoriesMegaMenu({
   categories,
@@ -25,20 +25,18 @@ export function CategoriesMegaMenu({
   onMouseLeave,
 }: CategoriesMegaMenuProps) {
   const count = categories.length
-  const columns =
-    count > 18 ? 'grid-cols-3' : count > 8 ? 'grid-cols-2' : 'grid-cols-1 sm:grid-cols-2'
 
   return (
     <div
-      className="absolute left-0 top-full mt-3 w-[min(920px,calc(100vw-2rem))] overflow-hidden rounded-md border border-line bg-surface-raised shadow-elevation-2"
+      className="absolute left-0 top-full mt-3 w-[min(960px,calc(100vw-2rem))] overflow-hidden rounded-md border border-line bg-surface-raised shadow-elevation-2"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       <div className="flex items-center justify-between gap-4 border-b border-line px-5 py-3.5">
         <div>
-          <p className="text-[0.8125rem] font-semibold text-ink">All categories</p>
+          <p className="text-[0.8125rem] font-semibold text-ink">{LABELS.allCategories}</p>
           <p className="mt-0.5 text-[0.75rem] text-ink-muted">
-            {count === 0 ? 'Nothing listed yet' : `${count} collection${count === 1 ? '' : 's'}`}
+            {count === 0 ? LABELS.categoryPlpEmpty : `${count}`}
           </p>
         </div>
         <Link
@@ -46,36 +44,64 @@ export function CategoriesMegaMenu({
           onClick={onClose}
           className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand transition-colors hover:text-brand-hover"
         >
-          View all <ArrowRight className="h-3 w-3" />
+          {LABELS.allCategories} <ArrowRight className="h-3 w-3" />
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_240px]">
-        <div className="max-h-[min(60vh,440px)] overflow-y-auto overscroll-contain p-3 md:p-4">
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_220px]">
+        <div className="max-h-[min(60vh,480px)] overflow-y-auto overscroll-contain p-3 md:p-4">
           {count === 0 ? (
             <p className="px-2 py-8 text-center text-[0.9375rem] text-ink-muted">
-              Categories will appear here once published.
+              {LABELS.categoryPlpEmpty}
             </p>
           ) : (
-            <ul className={cn('grid gap-1', columns)}>
-              {categories.map((category) => {
-                const Icon = resolveCategoryIcon(category)
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {categories.map((department) => {
+                const Icon = resolveCategoryIcon(department)
                 return (
-                  <li key={category.id}>
+                  <li key={department.id} className="min-w-0">
                     <Link
-                      href={`${PATHS.products}?categoryId=${category.id}`}
+                      href={categoryHref(department, categories)}
                       onClick={onClose}
-                      className={cn(
-                        'group flex items-center gap-3 rounded-md px-3 py-2.5',
-                        'text-[0.875rem] font-medium text-ink transition-colors',
-                        'hover:bg-paper hover:text-brand'
-                      )}
+                      className="group mb-2 flex items-center gap-2 text-[0.875rem] font-semibold text-ink hover:text-brand"
                     >
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-paper text-ink-muted transition-colors group-hover:bg-brand-subtle group-hover:text-brand">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-md bg-paper text-ink-muted group-hover:bg-brand-subtle group-hover:text-brand">
                         <Icon className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden />
                       </span>
-                      <span className="truncate">{category.name}</span>
+                      <span className="truncate">{department.name}</span>
                     </Link>
+                    {department.children?.length ? (
+                      <ul className="space-y-1.5 border-l border-line pl-3">
+                        {department.children.map((child) => (
+                          <li key={child.id}>
+                            <Link
+                              href={categoryHref(child, categories)}
+                              onClick={onClose}
+                              className="block truncate text-[0.8125rem] font-medium text-ink-muted hover:text-brand"
+                            >
+                              {child.name}
+                            </Link>
+                            {child.children?.length ? (
+                              <ul className="mt-1 space-y-1 pl-2">
+                                {child.children.map((leaf) => (
+                                  <li key={leaf.id}>
+                                    <Link
+                                      href={categoryHref(leaf, categories)}
+                                      onClick={onClose}
+                                      className={cn(
+                                        'block truncate text-[0.75rem] text-ink-faint hover:text-brand',
+                                      )}
+                                    >
+                                      {leaf.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : null}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
                   </li>
                 )
               })}
@@ -84,29 +110,14 @@ export function CategoriesMegaMenu({
         </div>
 
         <aside className="hidden border-t border-line bg-brand-subtle p-5 md:block md:border-l md:border-t-0">
-          <p className="text-[0.8125rem] font-medium text-brand">Featured</p>
-          <h3 className="mt-2 text-[1.0625rem] font-semibold leading-snug text-ink">
-            Fresh arrivals from trusted vendors
-          </h3>
-          <p className="mt-2 text-[0.875rem] leading-relaxed text-ink-muted">
-            Curated picks, trending collections, and top-rated finds.
-          </p>
-          <div className="mt-5 flex flex-col gap-2">
-            <Link
-              href={PATHS.productsNewest}
-              onClick={onClose}
-              className="inline-flex text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
-            >
-              Shop new arrivals
-            </Link>
-            <Link
-              href={PATHS.categories}
-              onClick={onClose}
-              className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-ink transition-colors hover:text-brand"
-            >
-              Browse all categories <ArrowRight className="h-3 w-3" />
-            </Link>
-          </div>
+          <p className="text-[0.8125rem] font-medium text-brand">{LABELS.featured}</p>
+          <Link
+            href={PATHS.productsNewest}
+            onClick={onClose}
+            className="mt-4 inline-flex text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
+          >
+            {LABELS.shopNewArrivals}
+          </Link>
         </aside>
       </div>
     </div>

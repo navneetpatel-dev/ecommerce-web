@@ -71,21 +71,42 @@ export function generateProductMetadata(product: ProductSeoData): Metadata {
   }
 }
 
-export function generateCategoryMetadata(category: CategorySeoData): Metadata {
+export function generateCategoryMetadata(
+  category: CategorySeoData & {
+    seoTitle?: string | null
+    seoDescription?: string | null
+    pathSlugs?: string[]
+  },
+  options: { noindex?: boolean } = {},
+): Metadata {
+  const slugs = category.pathSlugs?.length ? category.pathSlugs : [category.slug]
+  const title = category.seoTitle?.trim() || category.name
+  const description =
+    category.seoDescription?.trim() ||
+    `Shop ${category.name} online. Premium quality, fast delivery, and easy returns at ${SITE.name}.`
+  const canonical = categoryCanonical(...slugs)
+
   return {
-    title: `${category.name} T-Shirts`,
-    description: `Shop ${category.name} t-shirts online. Premium quality, fast delivery, and easy returns at ${SITE.name}.`,
-    keywords: [category.name, 't-shirts', 'buy online', 'e-commerce'],
-    alternates: { canonical: categoryCanonical(category.slug) },
+    title,
+    description,
+    keywords: [category.name, 'buy online', 'e-commerce', SITE.name],
+    alternates: { canonical },
+    robots: options.noindex
+      ? { index: false, follow: true }
+      : {
+          index: true,
+          follow: true,
+        },
     openGraph: {
       ...ogDefaults(),
-      title: `${category.name} T-Shirts | ${SITE.name}`,
-      description: `Shop ${category.name} t-shirts online. Premium quality, fast delivery, and easy returns.`,
+      title: `${title} | ${SITE.name}`,
+      description,
+      url: canonical,
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${category.name} T-Shirts | ${SITE.name}`,
-      description: `Shop ${category.name} t-shirts online. Premium quality, fast delivery, and easy returns.`,
+      title: `${title} | ${SITE.name}`,
+      description,
       site: SITE.twitter,
     },
   }

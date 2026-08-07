@@ -10,6 +10,7 @@ export function CategoriesPage() {
     <CategoriesView
       roots={page.roots}
       rootsWithChildren={page.rootsWithChildren}
+      tree={page.categories}
       isLoading={page.isLoading}
       isEmpty={page.isEmpty}
     />

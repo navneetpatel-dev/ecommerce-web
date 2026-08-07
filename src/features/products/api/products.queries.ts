@@ -24,11 +24,15 @@ export function useProduct(idOrSlug: string) {
   })
 }
 
-export function useProductList(filters: ProductFilters) {
+export function useProductList(
+  filters: ProductFilters,
+  options: { enabled?: boolean } = {},
+) {
   return useQuery({
     queryKey: productKeys.list(filters),
     queryFn: () => productsApi.list(filters),
     placeholderData: (prev) => prev,
+    enabled: options.enabled ?? true,
   })
 }
 

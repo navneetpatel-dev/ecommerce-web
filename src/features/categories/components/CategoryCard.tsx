@@ -12,12 +12,14 @@ import type { Category } from '@/shared/api/types'
 interface CategoryCardProps {
   category: Category
   className?: string
+  href?: string
 }
 
-export function CategoryCard({ category, className }: CategoryCardProps) {
+export function CategoryCard({ category, className, href }: CategoryCardProps) {
   const imageUrl = resolveCategoryImageUrl(category)
   const [unavailable, setUnavailable] = useState(!imageUrl)
   const hasImage = !unavailable
+  const linkHref = href ?? PATHS.category(category.slug)
 
   const handleUnavailableChange = useCallback((next: boolean) => {
     setUnavailable(next)
@@ -25,7 +27,7 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
 
   return (
     <Link
-      href={`${PATHS.products}?categoryId=${category.id}`}
+      href={linkHref}
       className={cn(
         'group relative block aspect-[4/3] overflow-hidden rounded-md border border-line bg-paper',
         'transition-colors duration-200',

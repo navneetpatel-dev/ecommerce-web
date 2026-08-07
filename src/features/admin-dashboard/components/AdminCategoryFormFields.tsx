@@ -153,6 +153,28 @@ export function AdminCategoryFormFields({
           )}
         />
       </div>
+
+      <div className="space-y-2">
+        <Label htmlFor={`${idPrefix}-seo-title`}>{LABELS.categorySeoTitle}</Label>
+        <Input id={`${idPrefix}-seo-title`} {...register('seoTitle')} />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor={`${idPrefix}-seo-desc`}>{LABELS.categorySeoDescription}</Label>
+        <Input id={`${idPrefix}-seo-desc`} {...register('seoDescription')} />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor={`${idPrefix}-commission`}>{LABELS.categoryCommissionRate}</Label>
+        <Input
+          id={`${idPrefix}-commission`}
+          inputMode="decimal"
+          placeholder="0–100"
+          {...register('commissionRate')}
+        />
+        <p className="text-[0.75rem] text-ink-muted">{LABELS.categoryCommissionRateHint}</p>
+        <FieldError message={showFieldError('commissionRate')} />
+      </div>
     </div>
   )
 }

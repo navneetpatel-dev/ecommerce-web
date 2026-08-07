@@ -10,6 +10,9 @@ import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { categoriesApi } from '@/features/categories/api/categories.api'
 import { AdminConfirmAction } from '../components/AdminConfirmAction'
 import { AdminEditCategoryAction } from '../components/AdminEditCategoryAction'
+import { AdminCategoryAttributesAction } from '../components/AdminCategoryAttributesAction'
+import { AdminArchiveCategoryAction } from '../components/AdminArchiveCategoryAction'
+import { AdminReassignProductsAction } from '../components/AdminReassignProductsAction'
 import { useAdminDataList } from './useAdminDataList'
 import {
   CATEGORY_FORM_DEFAULTS,
@@ -71,16 +74,9 @@ export function useAdminCategoriesPage() {
   const renderActions = useCallback(
     (row: Category) => (
       <>
-        <AdminEditCategoryAction
-          category={{
-            id: row.id,
-            name: row.name,
-            parentId: row.parentId,
-            imageUrl: row.imageUrl,
-            status: row.status,
-          }}
-          onSaved={list.reload}
-        />
+        <AdminEditCategoryAction category={row} onSaved={list.reload} />
+        <AdminCategoryAttributesAction categoryId={row.id} categoryName={row.name} />
+        <AdminArchiveCategoryAction category={row} onDone={list.reload} />
         <AdminConfirmAction
           label={LABELS.delete}
           dialogVariant="danger"
@@ -115,5 +111,6 @@ export function useAdminCategoriesPage() {
       onPageChange: list.onPageChange,
     },
     renderActions,
+    reassignToolbar: <AdminReassignProductsAction onDone={list.reload} />,
   }
 }

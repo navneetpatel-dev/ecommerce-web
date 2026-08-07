@@ -8,6 +8,9 @@ import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
 import { Label } from '@/shared/components/ui/label'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { cn } from '@/shared/utils/cn'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
+import type { CategoryFacet } from '@/shared/api/types'
 
 interface FilterSidebarProps {
   minPrice: number | undefined
@@ -18,6 +21,9 @@ interface FilterSidebarProps {
   className?: string
   /** Unique prefix so desktop + mobile instances don't share radio/input ids */
   idPrefix?: string
+  facets?: CategoryFacet[]
+  facetSelections?: Record<string, string[]>
+  onToggleFacet?: (filterKey: string, value: string) => void
 }
 
 export function FilterSidebar({
@@ -28,17 +34,23 @@ export function FilterSidebar({
   onClear,
   className,
   idPrefix = 'filters',
+  facets = [],
+  facetSelections = {},
+  onToggleFacet,
 }: FilterSidebarProps) {
-  const hasFilters = minPrice !== undefined || maxPrice !== undefined || rating !== undefined
+  const hasFacetSelections = Object.values(facetSelections).some((values) => values.length > 0)
+  const hasFilters =
+    minPrice !== undefined || maxPrice !== undefined || rating !== undefined || hasFacetSelections
   const ratingValue = rating != null ? String(rating) : ''
+  const defaultOpen = ['price', 'rating', ...facets.map((facet) => facet.filterKey)]
 
   return (
     <aside className={cn(className ?? 'hidden w-64 shrink-0 xl:block')}>
       <div className="sticky top-[88px] space-y-5">
         <div className="flex items-end justify-between gap-3 border-b border-line pb-3">
           <div>
-            <TextEyebrow className="mb-1">Refine</TextEyebrow>
-            <h2 className="text-[1.0625rem] font-semibold text-ink">Filters</h2>
+            <TextEyebrow className="mb-1">{LABELS.refine}</TextEyebrow>
+            <h2 className="text-[1.0625rem] font-semibold text-ink">{LABELS.filters}</h2>
           </div>
           {hasFilters ? (
             <button
@@ -47,14 +59,14 @@ export function FilterSidebar({
               className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-brand transition-colors hover:text-brand-hover"
             >
               <X size={12} strokeWidth={2} aria-hidden />
-              Clear
+              {LABELS.clearFacetFilters}
             </button>
           ) : null}
         </div>
 
-        <Accordion type="multiple" defaultValue={['price', 'rating']}>
+        <Accordion key={facets.map((f) => f.id).join('-') || 'base'} type="multiple" defaultValue={defaultOpen}>
           <AccordionItem value="price">
-            <AccordionTrigger>Price</AccordionTrigger>
+            <AccordionTrigger>{LABELS.price}</AccordionTrigger>
             <AccordionContent>
               <div className="flex items-center gap-2">
                 <NumberInput
@@ -80,8 +92,50 @@ export function FilterSidebar({
             </AccordionContent>
           </AccordionItem>
 
+          {facets.map((facet) => {
+            const selected = new Set(facetSelections[facet.filterKey] ?? [])
+            return (
+              <AccordionItem key={facet.id} value={facet.filterKey}>
+                <AccordionTrigger>{facet.name}</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="space-y-2">
+                    {facet.options.map((option) => {
+                      const id = `${idPrefix}-${facet.filterKey}-${option.value}`
+                      const checked = selected.has(option.value)
+                      return (
+                        <li key={option.value}>
+                          <label
+                            htmlFor={id}
+                            title={option.disabled ? LABELS.facetDisabledHint : undefined}
+                            className={cn(
+                              'flex cursor-pointer items-center gap-2.5 text-[0.8125rem]',
+                              option.disabled && !checked
+                                ? 'cursor-not-allowed text-ink-faint'
+                                : 'text-ink',
+                            )}
+                          >
+                            <input
+                              id={id}
+                              type="checkbox"
+                              className="size-3.5 rounded border-line accent-brand"
+                              checked={checked}
+                              disabled={option.disabled && !checked}
+                              onChange={() => onToggleFacet?.(facet.filterKey, option.value)}
+                            />
+                            <span className="min-w-0 flex-1 truncate capitalize">{option.value}</span>
+                            <span className="tabular-nums text-ink-faint">{option.count}</span>
+                          </label>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            )
+          })}
+
           <AccordionItem value="rating">
-            <AccordionTrigger>Rating</AccordionTrigger>
+            <AccordionTrigger>{LABELS.rating}</AccordionTrigger>
             <AccordionContent>
               <RadioGroup
                 key={`${idPrefix}-rating-${ratingValue || 'none'}`}
@@ -96,7 +150,7 @@ export function FilterSidebar({
                       htmlFor={`${idPrefix}-rating-${r}`}
                       className="cursor-pointer text-[0.8125rem] font-normal text-ink"
                     >
-                      {r}+ stars
+                      {formatLabel(LABELS.starsAndUp, { count: r })}
                     </Label>
                   </div>
                 ))}
@@ -107,7 +161,7 @@ export function FilterSidebar({
                   className="mt-3 text-[0.8125rem] font-medium text-brand transition-colors hover:text-brand-hover"
                   onClick={() => onUpdateFilter('rating', undefined)}
                 >
-                  Clear rating
+                  {LABELS.clearRating}
                 </button>
               ) : null}
             </AccordionContent>

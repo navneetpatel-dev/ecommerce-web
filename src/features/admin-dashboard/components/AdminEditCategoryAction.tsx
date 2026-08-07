@@ -32,6 +32,9 @@ interface AdminEditCategoryActionProps {
     parentId?: string | null
     imageUrl?: string | null
     status?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    commissionRate?: number | null
   }
   onSaved: () => void
 }
@@ -53,6 +56,9 @@ export function AdminEditCategoryAction({ category, onSaved }: AdminEditCategory
         category.status === CATEGORY_STATUS.ARCHIVED
           ? CATEGORY_STATUS.ARCHIVED
           : CATEGORY_STATUS.ACTIVE,
+      seoTitle: '',
+      seoDescription: '',
+      commissionRate: '',
     },
   })
 
@@ -66,6 +72,12 @@ export function AdminEditCategoryAction({ category, onSaved }: AdminEditCategory
       parentId: category.parentId ?? '',
       imageUrl: category.imageUrl ?? '',
       status: (category.status as CategoryStatus) || CATEGORY_STATUS.ACTIVE,
+      seoTitle: category.seoTitle ?? '',
+      seoDescription: category.seoDescription ?? '',
+      commissionRate:
+        category.commissionRate != null && category.commissionRate !== undefined
+          ? String(category.commissionRate)
+          : '',
     })
     setOpen(true)
   }

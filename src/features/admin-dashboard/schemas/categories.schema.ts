@@ -14,6 +14,14 @@ export const CategoryFormSchema = z.object({
       message: LABELS.categoryImageUrlInvalid,
     }),
   status: z.enum(CATEGORY_STATUS_VALUES),
+  seoTitle: z.string().trim().optional(),
+  seoDescription: z.string().trim().optional(),
+  commissionRate: z
+    .string()
+    .optional()
+    .refine((value) => !value || (!Number.isNaN(Number(value)) && Number(value) >= 0 && Number(value) <= 100), {
+      message: LABELS.fieldRequired,
+    }),
 })
 
 export type CategoryFormInput = z.infer<typeof CategoryFormSchema>
@@ -23,6 +31,14 @@ export const CATEGORY_FORM_DEFAULTS: CategoryFormInput = {
   parentId: '',
   imageUrl: '',
   status: CATEGORY_STATUS.ACTIVE,
+  seoTitle: '',
+  seoDescription: '',
+  commissionRate: '',
+}
+
+function optionalRate(value?: string) {
+  if (!value?.trim()) return null
+  return Number(value)
 }
 
 export function toCategoryCreateBody(values: CategoryFormInput) {
@@ -31,6 +47,9 @@ export function toCategoryCreateBody(values: CategoryFormInput) {
     parentId: values.parentId ? values.parentId : undefined,
     imageUrl: values.imageUrl?.trim() ? values.imageUrl.trim() : undefined,
     status: values.status,
+    seoTitle: values.seoTitle?.trim() ? values.seoTitle.trim() : undefined,
+    seoDescription: values.seoDescription?.trim() ? values.seoDescription.trim() : undefined,
+    commissionRate: optionalRate(values.commissionRate),
   }
 }
 
@@ -40,5 +59,8 @@ export function toCategoryUpdateBody(values: CategoryFormInput) {
     parentId: values.parentId ? values.parentId : null,
     imageUrl: values.imageUrl?.trim() ? values.imageUrl.trim() : null,
     status: values.status,
+    seoTitle: values.seoTitle?.trim() ? values.seoTitle.trim() : null,
+    seoDescription: values.seoDescription?.trim() ? values.seoDescription.trim() : null,
+    commissionRate: optionalRate(values.commissionRate),
   }
 }

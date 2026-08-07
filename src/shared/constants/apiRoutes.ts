@@ -34,6 +34,17 @@ export const API = {
   categories: {
     list: '/api/categories',
     detail: (id: string) => `/api/categories/${id}`,
+    resolve: (path: string) => `/api/categories/resolve?path=${encodeURIComponent(path)}`,
+    facets: (idOrSlug: string, query = '') =>
+      `/api/categories/${idOrSlug}/facets${query ? `?${query}` : ''}`,
+    productCount: (id: string) => `/api/categories/${id}/product-count`,
+    reorder: '/api/categories/reorder',
+    reassignProducts: '/api/categories/reassign-products',
+    attributes: (categoryId: string) => `/api/categories/${categoryId}/attributes`,
+    attribute: (categoryId: string, attributeId: string) =>
+      `/api/categories/${categoryId}/attributes/${attributeId}`,
+    attributesReorder: (categoryId: string) =>
+      `/api/categories/${categoryId}/attributes/reorder`,
   },
   vendors: {
     list: (query = '') => `/api/vendors${query ? `?${query}` : ''}`,

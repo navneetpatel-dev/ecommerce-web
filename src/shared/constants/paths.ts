@@ -7,7 +7,9 @@ export const PATHS = {
   productsTopRated: '/products?sort=rating',
   productsTrending: '/products?sort=trending',
   categories: '/categories',
-  category: (slug: string) => `/categories/${slug}`,
+  /** Hierarchical category path: `/category/home-kitchen/cookware` (prompt). */
+  category: (...slugs: string[]) =>
+    `/category/${slugs.map((slug) => encodeURIComponent(slug)).join('/')}`,
   vendors: '/vendors',
   vendorPage: (slug: string) => `/vendors/${slug}`,
   cart: '/cart',

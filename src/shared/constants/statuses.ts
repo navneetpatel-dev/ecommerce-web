@@ -126,6 +126,18 @@ export const CATEGORY_STATUS_VALUES = Object.values(CATEGORY_STATUS) as [
   ...CategoryStatus[],
 ]
 
+export const CATEGORY_ATTRIBUTE_TYPE = {
+  ENUM: 'ENUM',
+  RANGE: 'RANGE',
+  BOOLEAN: 'BOOLEAN',
+} as const
+export type CategoryAttributeType =
+  (typeof CATEGORY_ATTRIBUTE_TYPE)[keyof typeof CATEGORY_ATTRIBUTE_TYPE]
+export const CATEGORY_ATTRIBUTE_TYPE_VALUES = Object.values(CATEGORY_ATTRIBUTE_TYPE) as [
+  CategoryAttributeType,
+  ...CategoryAttributeType[],
+]
+
 /** Matches backend unavailableReason values on cart/wishlist items. */
 export const UNAVAILABLE_REASON = {
   OUT_OF_STOCK: 'OUT_OF_STOCK',

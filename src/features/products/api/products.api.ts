@@ -14,6 +14,9 @@ export interface ProductFilters {
   page?: number
   limit?: number
   status?: string
+  includeDescendants?: boolean
+  /** Attribute facet selections: filterKey → values (OR within key). */
+  attrs?: Record<string, string[]>
 }
 
 export interface ProductListResponse {
@@ -37,6 +40,12 @@ export const productsApi = {
     if (filters.page) params.set('page', String(filters.page))
     if (filters.limit) params.set('limit', String(filters.limit))
     if (filters.status) params.set('status', filters.status)
+    if (filters.includeDescendants) params.set('includeDescendants', 'true')
+    if (filters.attrs) {
+      for (const [key, values] of Object.entries(filters.attrs)) {
+        if (values.length) params.set(key, values.join(','))
+      }
+    }
     const query = params.toString()
     const res = await apiClient.getWithResponse<ProductListItem[]>(API.products.list(query))
     return unwrapPaginatedList(res)

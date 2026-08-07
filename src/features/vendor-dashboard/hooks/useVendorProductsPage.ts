@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation'
 import { Trash2 } from 'lucide-react'
 import { useVendorProductsTable } from './useVendorProductsTable'
 import { categoriesApi } from '@/features/categories/api/categories.api'
+import { flattenCategoriesWithDepth } from '@/features/categories/utils/categoryHelpers'
 import { productsApi } from '@/features/products/api/products.api'
 import { usePermissions } from '@/shared/hooks/usePermissions'
 import { PERMISSIONS } from '@/shared/constants/permissions'
+import { LABELS } from '@/shared/constants/labels'
 import { PRODUCT_STATUS } from '@/shared/constants/statuses'
 import type { ProductListItem } from '@/shared/api/types'
 
@@ -33,16 +35,23 @@ export function useVendorProductsPage() {
 
   useEffect(() => {
     void categoriesApi.list().then((rows) => {
-      const list = Array.isArray(rows) ? rows : []
-      setCategories(list.map((row: { id: string; name: string }) => ({ id: row.id, name: row.name })))
-      if (list[0]?.id) setCategoryId(String(list[0].id))
+      const tree = Array.isArray(rows) ? rows : []
+      const flat = flattenCategoriesWithDepth(tree).map((row) => ({
+        id: row.id,
+        name: `${'— '.repeat(row.depth)}${row.name}`.trim(),
+      }))
+      setCategories(flat)
+      if (flat[0]?.id) setCategoryId(String(flat[0].id))
     })
   }, [])
 
   const handleCreate = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault()
-      if (!categoryId) { setCreateError('Select a category'); return }
+      if (!categoryId) {
+        setCreateError(LABELS.selectCategory)
+        return
+      }
       setCreating(true)
       setCreateError(null)
       productsApi

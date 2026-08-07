@@ -11,6 +11,6 @@ export function productCanonical(slug: string): string {
   return canonicalUrl(PATHS.product(slug))
 }
 
-export function categoryCanonical(slug: string): string {
-  return canonicalUrl(PATHS.category(slug))
+export function categoryCanonical(...slugs: string[]): string {
+  return canonicalUrl(PATHS.category(...slugs))
 }

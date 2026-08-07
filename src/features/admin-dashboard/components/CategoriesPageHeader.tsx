@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { Plus } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
@@ -21,6 +22,7 @@ interface CategoriesPageHeaderProps {
   onSubmit: (data: CategoryFormInput) => void
   isPending: boolean
   error?: string | null
+  toolbar?: ReactNode
 }
 
 export function CategoriesPageHeader({
@@ -30,6 +32,7 @@ export function CategoriesPageHeader({
   onSubmit,
   isPending,
   error = null,
+  toolbar,
 }: CategoriesPageHeaderProps) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
@@ -39,27 +42,30 @@ export function CategoriesPageHeader({
         </h2>
         <p className="max-w-xl text-[0.875rem] text-ink-muted">{LABELS.createCategoryHint}</p>
       </div>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button size="sm" className="shrink-0">
-            <Plus className="h-4 w-4" />
-            {LABELS.createCategory}
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{LABELS.createCategory}</DialogTitle>
-          </DialogHeader>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, () => {
-              void form.trigger()
-            })}
-            className="space-y-1"
-          >
-            <AdminCategoryCreateForm form={form} isPending={isPending} error={error} />
-          </form>
-        </DialogContent>
-      </Dialog>
+      <div className="flex flex-wrap items-center gap-2">
+        {toolbar}
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button size="sm" className="shrink-0">
+              <Plus className="h-4 w-4" />
+              {LABELS.createCategory}
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>{LABELS.createCategory}</DialogTitle>
+            </DialogHeader>
+            <form
+              onSubmit={form.handleSubmit(onSubmit, () => {
+                void form.trigger()
+              })}
+              className="space-y-1"
+            >
+              <AdminCategoryCreateForm form={form} isPending={isPending} error={error} />
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   )
 }
