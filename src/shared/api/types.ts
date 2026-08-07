@@ -160,6 +160,7 @@ export interface AppliedCouponSummary {
   discount: number;
   cashbackAmount?: number;
   type?: string;
+  vendorDiscountShares?: Record<string, number>;
 }
 
 export interface OrderItem {
@@ -343,6 +344,10 @@ export interface Coupon {
   applicableScope: CouponApplicableScope;
   excludedItems?: CouponExcludedItems | null;
   userRestriction?: CouponUserRestriction | null;
+  config?: {
+    tiers?: Array<{ minSubtotal: number; percent: number }>;
+    bundleProductIds?: string[];
+  } | null;
   usageLimitTotal: number | null;
   usageLimitPerUser: number | null;
   usedCount: number;
@@ -375,6 +380,10 @@ export interface CouponBatch {
   createdById: string;
   createdAt: string;
   updatedAt?: string;
+  redemptionCount?: number;
+  discountTotal?: number;
+  codes?: string[];
+  expiresAt?: string | null;
 }
 
 export interface EligibleCoupon {

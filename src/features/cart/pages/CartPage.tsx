@@ -23,6 +23,7 @@ export function CartPage() {
       couponPending={cart.couponPending}
       appliedCouponCode={cart.appliedCouponCode}
       appliedDiscount={cart.appliedDiscount}
+      vendorDiscountBreakdown={cart.vendorDiscountBreakdown}
       eligible={cart.eligible}
       eligibleLoading={cart.eligibleLoading}
       onCouponInputChange={cart.setCouponInput}

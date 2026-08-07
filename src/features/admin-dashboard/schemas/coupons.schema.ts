@@ -3,6 +3,7 @@ import { LABELS } from '@/shared/constants/labels'
 import {
   DISCOUNT_BEARER,
   DISCOUNT_BEARER_VALUES,
+  COUPON_USER_SEGMENT_VALUES,
 } from '@/shared/constants/statuses'
 
 const COUPON_TYPES = [
@@ -22,6 +23,7 @@ const TYPES_REQUIRING_VALUE = new Set<(typeof COUPON_TYPES)[number]>([
   'PERCENTAGE',
   'FLAT',
   'CASHBACK',
+  'BUNDLE',
 ])
 
 const optionalNonNegative = (message: string) =>
@@ -41,6 +43,10 @@ const CouponObjectSchema = z.object({
   applicableScopeType: z.enum(SCOPE_TYPES, { message: LABELS.couponScopeTypeRequired }),
   applicableScopeIds: z.array(z.string().uuid()),
   userRestrictionType: z.enum(USER_RESTRICTION_TYPES).optional(),
+  userRestrictionSegment: z.enum(COUPON_USER_SEGMENT_VALUES).optional().nullable(),
+  bundleProductIds: z.array(z.string().uuid()).optional(),
+  tier2MinSubtotal: optionalNonNegative(LABELS.couponMinOrderNegative),
+  tier2Percent: optionalNonNegative(LABELS.couponValueNegative),
   usageLimitTotal: z.number().int().positive().optional().nullable(),
   usageLimitPerUser: z.number().int().positive().optional().nullable(),
   stackable: z.boolean().optional(),
@@ -64,6 +70,11 @@ function refineCouponValueAndDates(
     endDate: string
     applicableScopeType: (typeof SCOPE_TYPES)[number]
     applicableScopeIds: string[]
+    userRestrictionType?: (typeof USER_RESTRICTION_TYPES)[number]
+    userRestrictionSegment?: string | null
+    bundleProductIds?: string[]
+    tier2MinSubtotal?: number | null
+    tier2Percent?: number | null
   },
   ctx: z.RefinementCtx,
 ) {
@@ -75,11 +86,39 @@ function refineCouponValueAndDates(
     })
   }
 
-  if (data.type === 'PERCENTAGE' && data.value != null && data.value > 100) {
+  if (
+    (data.type === 'PERCENTAGE' || data.type === 'TIERED') &&
+    data.value != null &&
+    data.value > 100
+  ) {
     ctx.addIssue({
       code: 'custom',
       path: ['value'],
       message: LABELS.couponPercentageMax,
+    })
+  }
+
+  if (data.type === 'TIERED' && (data.value == null || Number.isNaN(data.value))) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['value'],
+      message: LABELS.couponValueRequired,
+    })
+  }
+
+  if (data.type === 'BUNDLE' && (!data.bundleProductIds || data.bundleProductIds.length === 0)) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['bundleProductIds'],
+      message: LABELS.couponBundleProductsRequired,
+    })
+  }
+
+  if (data.userRestrictionType === 'segment' && !data.userRestrictionSegment) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['userRestrictionSegment'],
+      message: LABELS.couponSegmentRequired,
     })
   }
 
@@ -95,6 +134,7 @@ function refineCouponValueAndDates(
 
   if (
     data.applicableScopeType !== 'all' &&
+    data.type !== 'BUNDLE' &&
     (!data.applicableScopeIds || data.applicableScopeIds.length === 0)
   ) {
     ctx.addIssue({
@@ -120,6 +160,10 @@ export const COUPON_FORM_DEFAULTS: CouponFormInput = {
   applicableScopeType: 'all',
   applicableScopeIds: [],
   userRestrictionType: 'all',
+  userRestrictionSegment: null,
+  bundleProductIds: [],
+  tier2MinSubtotal: null,
+  tier2Percent: null,
   usageLimitTotal: null,
   usageLimitPerUser: null,
   stackable: false,
@@ -136,21 +180,58 @@ export const VENDOR_COUPON_FORM_DEFAULTS: CouponFormInput = {
 }
 
 export function couponRequiresValue(type: CouponFormInput['type'] | undefined) {
-  return type != null && TYPES_REQUIRING_VALUE.has(type)
+  return type != null && (TYPES_REQUIRING_VALUE.has(type) || type === 'TIERED')
 }
 
 export function toCouponCreateBody(values: CouponFormInput, opts?: { forceVendorId?: string }) {
-  const scopeType = opts?.forceVendorId
-    ? values.applicableScopeType === 'product' || values.applicableScopeType === 'category'
-      ? values.applicableScopeType
-      : 'vendor'
-    : values.applicableScopeType
+  const isBundle = values.type === 'BUNDLE'
+  const scopeType = isBundle
+    ? 'product'
+    : opts?.forceVendorId
+      ? values.applicableScopeType === 'product' || values.applicableScopeType === 'category'
+        ? values.applicableScopeType
+        : 'vendor'
+      : values.applicableScopeType
 
-  const scopeIds = opts?.forceVendorId
-    ? scopeType === 'vendor'
-      ? [opts.forceVendorId]
+  const scopeIds = isBundle
+    ? values.bundleProductIds ?? []
+    : opts?.forceVendorId
+      ? scopeType === 'vendor'
+        ? [opts.forceVendorId]
+        : values.applicableScopeIds
       : values.applicableScopeIds
-    : values.applicableScopeIds
+
+  const tiers = [
+    {
+      minSubtotal: Number(values.minOrderValue ?? 0),
+      percent: Number(values.value ?? 0),
+    },
+  ]
+  if (
+    values.type === 'TIERED' &&
+    values.tier2MinSubtotal != null &&
+    values.tier2Percent != null &&
+    values.tier2Percent > 0
+  ) {
+    tiers.push({
+      minSubtotal: Number(values.tier2MinSubtotal),
+      percent: Number(values.tier2Percent),
+    })
+  }
+
+  const config =
+    values.type === 'TIERED'
+      ? { tiers }
+      : values.type === 'BUNDLE'
+        ? { bundleProductIds: values.bundleProductIds ?? [] }
+        : {}
+
+  const userRestriction =
+    values.userRestrictionType === 'segment'
+      ? { type: 'segment' as const, value: values.userRestrictionSegment ?? undefined }
+      : values.userRestrictionType
+        ? { type: values.userRestrictionType }
+        : undefined
 
   return {
     code: values.code.trim(),
@@ -163,9 +244,8 @@ export function toCouponCreateBody(values: CouponFormInput, opts?: { forceVendor
       type: scopeType,
       ids: scopeIds,
     },
-    userRestriction: values.userRestrictionType
-      ? { type: values.userRestrictionType }
-      : undefined,
+    userRestriction,
+    config,
     usageLimitTotal: values.usageLimitTotal ?? null,
     usageLimitPerUser: values.usageLimitPerUser ?? null,
     stackable: values.stackable ?? false,

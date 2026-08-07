@@ -21,7 +21,7 @@ import { Switch } from '@/shared/components/ui/switch'
 import { NumberInput } from '@/shared/components/NumberInput'
 import { DateTimePicker } from '@/shared/components/DateTimePicker'
 import { LABELS } from '@/shared/constants/labels'
-import { DISCOUNT_BEARER } from '@/shared/constants/statuses'
+import { COUPON_USER_SEGMENT, DISCOUNT_BEARER } from '@/shared/constants/statuses'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { CouponScopeMultiSelect } from './CouponScopeMultiSelect'
 import { cn } from '@/shared/utils/cn'
@@ -109,7 +109,14 @@ function couponDisableHint(values: CouponFormInput): string {
   }
   if (!values.startDate) return LABELS.enterCouponStartDate
   if (!values.endDate) return LABELS.enterCouponEndDate
+  if (values.type === 'BUNDLE' && (!values.bundleProductIds || values.bundleProductIds.length === 0)) {
+    return LABELS.couponBundleProductsRequired
+  }
+  if (values.userRestrictionType === 'segment' && !values.userRestrictionSegment) {
+    return LABELS.couponSegmentRequired
+  }
   if (
+    values.type !== 'BUNDLE' &&
     values.applicableScopeType !== 'all' &&
     (!values.applicableScopeIds || values.applicableScopeIds.length === 0)
   ) {
@@ -145,7 +152,12 @@ export function CreateCouponForm({
   const canSubmit = CouponSchema.safeParse(values).success
   const disableHint = couponDisableHint(values)
   const scopeType = values.applicableScopeType
-  const showScopeIds = scopeType === 'product' || scopeType === 'category' || (!vendorMode && scopeType === 'vendor')
+  const isBundle = type === 'BUNDLE'
+  const isTiered = type === 'TIERED'
+  const showScopeIds =
+    !isBundle &&
+    (scopeType === 'product' || scopeType === 'category' || (!vendorMode && scopeType === 'vendor'))
+  const showSegment = values.userRestrictionType === 'segment'
 
   const showFieldError = (name: keyof CouponFormInput) => {
     const touched = Boolean(touchedFields[name as keyof typeof touchedFields])
@@ -295,10 +307,12 @@ export function CreateCouponForm({
                 <NumberInput
                   value={field.value ?? undefined}
                   min={0}
-                  max={type === 'PERCENTAGE' ? 100 : undefined}
+                  max={type === 'PERCENTAGE' || type === 'TIERED' ? 100 : undefined}
                   step={1}
-                  suffix={type === 'PERCENTAGE' ? '%' : undefined}
-                  prefix={type === 'FLAT' || type === 'CASHBACK' ? '₹' : undefined}
+                  suffix={type === 'PERCENTAGE' || type === 'TIERED' ? '%' : undefined}
+                  prefix={
+                    type === 'FLAT' || type === 'CASHBACK' || type === 'BUNDLE' ? '₹' : undefined
+                  }
                   error={fieldHasError('value')}
                   onChange={(value) => field.onChange(value)}
                   onBlur={field.onBlur}
@@ -327,70 +341,137 @@ export function CreateCouponForm({
             <FieldError message={showFieldError('maxDiscountCap')} />
           </div>
         </div>
+        {isTiered ? (
+          <div className="space-y-3">
+            <p className="text-[0.8125rem] text-ink-muted">{LABELS.couponTierHint}</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label>{LABELS.couponTier2Min}</Label>
+                <Controller
+                  name="tier2MinSubtotal"
+                  control={control}
+                  render={({ field }) => (
+                    <NumberInput
+                      value={field.value ?? undefined}
+                      min={0}
+                      step={50}
+                      prefix="₹"
+                      onChange={(value) => field.onChange(value)}
+                      onBlur={field.onBlur}
+                    />
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>{LABELS.couponTier2Percent}</Label>
+                <Controller
+                  name="tier2Percent"
+                  control={control}
+                  render={({ field }) => (
+                    <NumberInput
+                      value={field.value ?? undefined}
+                      min={0}
+                      max={100}
+                      step={1}
+                      suffix="%"
+                      onChange={(value) => field.onChange(value)}
+                      onBlur={field.onBlur}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+        ) : null}
       </Section>
 
       <Section title={LABELS.couponSectionScope}>
         {vendorMode ? (
           <p className="text-[0.8125rem] text-ink-muted">{LABELS.couponVendorScopeLocked}</p>
         ) : null}
-        <div className="space-y-2">
-          <Label>{LABELS.applicableScope}</Label>
-          <Controller
-            name="applicableScopeType"
-            control={control}
-            render={({ field }) => (
-              <Select
-                value={field.value}
-                onValueChange={(next) => {
-                  field.onChange(next)
-                  if (next === 'all') {
-                    setValue('applicableScopeIds', [], { shouldValidate: true })
-                    return
-                  }
-                  if (vendorMode && next === 'vendor' && vendorId) {
-                    setValue('applicableScopeIds', [vendorId], { shouldValidate: true })
-                    return
-                  }
-                  setValue('applicableScopeIds', [], { shouldValidate: true })
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={LABELS.applicableScope} />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableScopeTypes.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-          <FieldError message={showFieldError('applicableScopeType')} />
-        </div>
-        {showScopeIds ? (
+        {isBundle ? (
           <div className="space-y-2">
             <Label>
-              {scopePickerLabel(scopeType)}
+              {LABELS.selectBundleProducts}
               <RequiredMark />
             </Label>
             <Controller
-              name="applicableScopeIds"
+              name="bundleProductIds"
               control={control}
               render={({ field }) => (
                 <CouponScopeMultiSelect
-                  scopeType={scopeType as 'vendor' | 'product' | 'category'}
+                  scopeType="product"
                   value={field.value ?? []}
                   onChange={field.onChange}
                   vendorId={vendorMode ? vendorId : null}
-                  error={fieldHasError('applicableScopeIds')}
+                  error={fieldHasError('bundleProductIds')}
                 />
               )}
             />
-            <FieldError message={showFieldError('applicableScopeIds')} />
+            <FieldError message={showFieldError('bundleProductIds')} />
           </div>
-        ) : null}
+        ) : (
+          <>
+            <div className="space-y-2">
+              <Label>{LABELS.applicableScope}</Label>
+              <Controller
+                name="applicableScopeType"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    value={field.value}
+                    onValueChange={(next) => {
+                      field.onChange(next)
+                      if (next === 'all') {
+                        setValue('applicableScopeIds', [], { shouldValidate: true })
+                        return
+                      }
+                      if (vendorMode && next === 'vendor' && vendorId) {
+                        setValue('applicableScopeIds', [vendorId], { shouldValidate: true })
+                        return
+                      }
+                      setValue('applicableScopeIds', [], { shouldValidate: true })
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={LABELS.applicableScope} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableScopeTypes.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              <FieldError message={showFieldError('applicableScopeType')} />
+            </div>
+            {showScopeIds ? (
+              <div className="space-y-2">
+                <Label>
+                  {scopePickerLabel(scopeType)}
+                  <RequiredMark />
+                </Label>
+                <Controller
+                  name="applicableScopeIds"
+                  control={control}
+                  render={({ field }) => (
+                    <CouponScopeMultiSelect
+                      scopeType={scopeType as 'vendor' | 'product' | 'category'}
+                      value={field.value ?? []}
+                      onChange={field.onChange}
+                      vendorId={vendorMode ? vendorId : null}
+                      error={fieldHasError('applicableScopeIds')}
+                    />
+                  )}
+                />
+                <FieldError message={showFieldError('applicableScopeIds')} />
+              </div>
+            ) : null}
+          </>
+        )}
       </Section>
 
       <Section title={LABELS.couponSectionConstraints}>
@@ -513,7 +594,15 @@ export function CreateCouponForm({
             name="userRestrictionType"
             control={control}
             render={({ field }) => (
-              <Select value={field.value ?? 'all'} onValueChange={field.onChange}>
+              <Select
+                value={field.value ?? 'all'}
+                onValueChange={(next) => {
+                  field.onChange(next)
+                  if (next !== 'segment') {
+                    setValue('userRestrictionSegment', null)
+                  }
+                }}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder={LABELS.userRestriction} />
                 </SelectTrigger>
@@ -529,6 +618,40 @@ export function CreateCouponForm({
           />
           <FieldError message={showFieldError('userRestrictionType')} />
         </div>
+        {showSegment ? (
+          <div className="space-y-2">
+            <Label>
+              {LABELS.userRestrictionSegment}
+              <RequiredMark />
+            </Label>
+            <Controller
+              name="userRestrictionSegment"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={field.value ?? undefined}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={LABELS.userRestrictionSegment} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={COUPON_USER_SEGMENT.NEW}>
+                      {LABELS.userRestrictionSegmentNew}
+                    </SelectItem>
+                    <SelectItem value={COUPON_USER_SEGMENT.RETURNING}>
+                      {LABELS.userRestrictionSegmentReturning}
+                    </SelectItem>
+                    <SelectItem value={COUPON_USER_SEGMENT.LOYAL}>
+                      {LABELS.userRestrictionSegmentLoyal}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            <FieldError message={showFieldError('userRestrictionSegment')} />
+          </div>
+        ) : null}
       </Section>
 
       {!hideSubmit ? (

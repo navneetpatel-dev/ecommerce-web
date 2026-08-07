@@ -29,6 +29,7 @@ interface CartPageViewProps {
   couponPending: boolean
   appliedCouponCode: string | null
   appliedDiscount: number
+  vendorDiscountBreakdown?: Array<{ vendorId: string; name: string; amount: number }>
   eligible: EligibleCoupon[]
   eligibleLoading?: boolean
   onCouponInputChange: (value: string) => void
@@ -53,6 +54,7 @@ export function CartPageView({
   couponPending,
   appliedCouponCode,
   appliedDiscount,
+  vendorDiscountBreakdown = [],
   eligible,
   eligibleLoading,
   onCouponInputChange,
@@ -194,6 +196,19 @@ export function CartPageView({
                     <dd className="tabular-nums">−₹{appliedDiscount.toLocaleString('en-IN')}</dd>
                   </div>
                 ) : null}
+                {vendorDiscountBreakdown.length > 1
+                  ? vendorDiscountBreakdown.map((row) => (
+                      <div
+                        key={row.vendorId}
+                        className="flex items-center justify-between gap-4 pl-2 text-[0.8125rem] text-success"
+                      >
+                        <dt className="text-ink-muted">
+                          {LABELS.vendorDiscountBreakdown}: {row.name}
+                        </dt>
+                        <dd className="tabular-nums">−₹{row.amount.toLocaleString('en-IN')}</dd>
+                      </div>
+                    ))
+                  : null}
                 <div className="flex items-center justify-between gap-4">
                   <dt className="text-ink-muted">{LABELS.shipping}</dt>
                   <dd className="text-right text-ink-muted">{LABELS.calculatingShippingTaxes}</dd>

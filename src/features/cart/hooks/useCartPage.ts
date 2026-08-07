@@ -30,6 +30,21 @@ export function useCartPage() {
 
   const total = Math.max(0, subtotal - (coupons.appliedDiscount || 0))
 
+  const vendorDiscountBreakdown = useMemo(() => {
+    const shares = cart?.appliedCoupon?.vendorDiscountShares
+    if (!shares || !hasItems) return []
+    return Object.entries(shares)
+      .filter(([, amount]) => Number(amount) > 0)
+      .map(([vendorId, amount]) => {
+        const vendorItems = groupedByVendor[vendorId] ?? []
+        const name =
+          vendorItems[0]?.product?.vendor?.businessName ??
+          vendorItems[0]?.product?.vendor?.slug ??
+          vendorId
+        return { vendorId, name, amount: Number(amount) }
+      })
+  }, [cart?.appliedCoupon?.vendorDiscountShares, groupedByVendor, hasItems])
+
   return {
     isLoading,
     hasItems,
@@ -38,6 +53,7 @@ export function useCartPage() {
     groupedByVendor,
     subtotal,
     total,
+    vendorDiscountBreakdown,
     updateQuantity: (itemId: string, quantity: number) =>
       updateItem.mutate({ itemId, quantity: clampCartQuantity(quantity) }),
     removeItem: (itemId: string) => removeItem.mutate(itemId),
