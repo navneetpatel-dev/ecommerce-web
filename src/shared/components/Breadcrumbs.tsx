@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
+import { LABELS } from '@/shared/constants/labels'
 
 interface BreadcrumbItem {
   label: string
@@ -12,18 +13,35 @@ interface BreadcrumbsProps {
   className?: string
 }
 
+/** Compact trail navigation — visually quieter than page title / body copy. */
 export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
   return (
-    <nav aria-label="Breadcrumbs" className={cn('flex items-center gap-1 text-[0.8125rem] text-ink-muted', className)}>
+    <nav
+      aria-label={LABELS.breadcrumb}
+      className={cn(
+        'flex flex-wrap items-center gap-x-1 gap-y-0.5 text-[0.75rem] leading-none text-ink-faint',
+        className,
+      )}
+    >
       {items.map((item, i) => {
         const isLast = i === items.length - 1
         return (
-          <span key={i} className="flex items-center gap-1">
-            {i > 0 && <span className="text-ink-faint">/</span>}
+          <span key={`${item.label}-${i}`} className="inline-flex items-center gap-1">
+            {i > 0 ? (
+              <ChevronRight className="h-3 w-3 shrink-0 text-ink-faint/70" strokeWidth={1.75} aria-hidden />
+            ) : null}
             {isLast || !item.href ? (
-              <span className={isLast ? 'text-ink' : ''}>{item.label}</span>
+              <span
+                className={cn(isLast && 'font-medium text-ink-muted')}
+                aria-current={isLast ? 'page' : undefined}
+              >
+                {item.label}
+              </span>
             ) : (
-              <Link href={item.href} className="hover:text-ink transition-colors">
+              <Link
+                href={item.href}
+                className="transition-colors hover:text-ink focus-visible:text-ink focus-visible:outline-none"
+              >
                 {item.label}
               </Link>
             )}

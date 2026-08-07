@@ -9,15 +9,17 @@ import {
   SelectValue,
 } from '@/shared/components/ui/select'
 import { Button } from '@/shared/components/ui/button'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { cn } from '@/shared/utils/cn'
 
 const SORT_OPTIONS = [
-  { value: 'trending', label: 'Trending' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'price_asc', label: 'Price: Low to High' },
-  { value: 'price_desc', label: 'Price: High to Low' },
-  { value: 'rating', label: 'Top Rated' },
-] as const
+  { value: 'trending', labelKey: 'sortTrending' as const },
+  { value: 'newest', labelKey: 'sortNewest' as const },
+  { value: 'price_asc', labelKey: 'sortPriceLowHigh' as const },
+  { value: 'price_desc', labelKey: 'sortPriceHighLow' as const },
+  { value: 'rating', labelKey: 'sortTopRated' as const },
+]
 
 interface SortBarProps {
   sort: string | undefined
@@ -26,6 +28,8 @@ interface SortBarProps {
   onSortChange: (value: string) => void
   compareMode?: boolean
   onToggleCompare?: () => void
+  /** Hide desktop sort control on small screens when a mobile Sort sheet exists. */
+  hideSortOnMobile?: boolean
   className?: string
 }
 
@@ -36,39 +40,43 @@ export function SortBar({
   onSortChange,
   compareMode = false,
   onToggleCompare,
+  hideSortOnMobile = false,
   className,
 }: SortBarProps) {
   const countLabel =
     totalProducts !== undefined
-      ? `${totalProducts.toLocaleString('en-IN')} ${totalProducts === 1 ? 'product' : 'products'}`
+      ? formatLabel(
+          totalProducts === 1 ? LABELS.productCountSingular : LABELS.productCountPlural,
+          { count: totalProducts.toLocaleString('en-IN') },
+        )
       : isFetching
-        ? 'Updating…'
-        : 'Browse collection'
+        ? LABELS.updatingEllipsis
+        : LABELS.browseCollection
 
   return (
     <div
       className={cn(
-        'flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4 mb-6',
-        className
+        'mb-6 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-4 sm:gap-3',
+        className,
       )}
     >
       <p className="text-[0.8125rem] tracking-wide text-ink-muted tabular-nums">{countLabel}</p>
 
       <div className="flex items-center gap-2">
-        <Select
-          value={sort || 'trending'}
-          onValueChange={onSortChange}
-        >
+        <Select value={sort || 'trending'} onValueChange={onSortChange}>
           <SelectTrigger
-            aria-label="Sort products"
-            className="h-9 w-[11.5rem] rounded-md border-line bg-surface text-[0.8125rem]"
+            aria-label={LABELS.sort}
+            className={cn(
+              'h-9 w-[11.5rem] rounded-md border-line bg-surface text-[0.8125rem]',
+              hideSortOnMobile && 'hidden xl:flex',
+            )}
           >
-            <SelectValue placeholder="Sort by" />
+            <SelectValue placeholder={LABELS.sort} />
           </SelectTrigger>
           <SelectContent>
             {SORT_OPTIONS.map((option) => (
               <SelectItem key={option.value} value={option.value}>
-                {option.label}
+                {LABELS[option.labelKey]}
               </SelectItem>
             ))}
           </SelectContent>
@@ -79,12 +87,12 @@ export function SortBar({
             type="button"
             variant={compareMode ? 'default' : 'secondary'}
             size="sm"
-            className="hidden xl:inline-flex gap-1.5"
+            className="hidden gap-1.5 xl:inline-flex"
             onClick={onToggleCompare}
             aria-pressed={compareMode}
           >
             <Columns2 size={14} strokeWidth={1.75} aria-hidden />
-            Compare
+            {LABELS.compare}
           </Button>
         ) : null}
       </div>

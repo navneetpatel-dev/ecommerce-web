@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowUpDown, Columns2, Package, SlidersHorizontal } from 'lucide-react'
+import { ArrowUpDown, ChevronRight, Columns2, Package, SlidersHorizontal } from 'lucide-react'
 import { FilterSidebar } from '@/features/products/components/FilterSidebar'
 import { SortBar } from '@/features/products/components/SortBar'
 import { ProductGrid } from '@/features/products/components/ProductGrid'
@@ -12,11 +12,9 @@ import { Button } from '@/shared/components/ui/button'
 import { BottomSheet } from '@/shared/components/BottomSheet'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Breadcrumbs } from '@/shared/components/Breadcrumbs'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { useCategoryPlp } from '../hooks/useCategoryPlp'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
-import { SITE } from '@/shared/seo/constants'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import { cn } from '@/shared/utils/cn'
 
@@ -29,8 +27,9 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
 
   if (plp.categoryLoading) {
     return (
-      <div className="storefront-container py-10 md:py-14">
-        <div className="h-8 w-48 animate-pulse rounded bg-paper" />
+      <div className="storefront-container py-4 md:py-5">
+        <div className="h-4 w-40 animate-pulse rounded bg-paper" />
+        <div className="mt-3 h-7 w-56 animate-pulse rounded bg-paper" />
         <div className="mt-6 h-64 animate-pulse rounded-md bg-paper" />
       </div>
     )
@@ -55,58 +54,89 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
   const emptyIcon = plp.hasActiveFacets ? SlidersHorizontal : Package
 
   return (
-    <div className="storefront-container pb-8 pt-6 md:pt-8">
-      <Breadcrumbs items={plp.breadcrumbItems} className="mb-6" />
+    <div className="storefront-container pb-8 pt-3 sm:pt-4 md:pt-5">
+      <header className="mb-3 sm:mb-4 md:mb-5">
+        <Breadcrumbs items={plp.breadcrumbItems} className="mb-1.5 sm:mb-2" />
 
-      <div className="mb-8 max-w-2xl">
-        <TextEyebrow className="mb-2">{LABELS.shop}</TextEyebrow>
-        <h1 className="font-display text-[2rem] font-semibold leading-tight text-ink md:text-[2.5rem]">
-          {plp.category.name}
-        </h1>
-        {plp.category.seoDescription ? (
-          <p className="mt-3 text-[1.0625rem] text-ink-muted">{plp.category.seoDescription}</p>
-        ) : null}
-      </div>
-
-      {childLinks.length > 0 ? (
-        <ul className="mb-8 flex flex-wrap gap-2">
-          {childLinks.map((child) => (
-            <li key={child.id}>
-              <Link
-                href={PATHS.category(...slugPath, child.slug)}
-                className="inline-flex rounded-md border border-line bg-surface px-3 py-1.5 text-[0.8125rem] font-medium text-ink transition-colors hover:border-brand hover:text-brand"
+        <div className="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
+          <div className="min-w-0 flex-1">
+            <h1
+              className="font-display font-semibold tracking-tight text-ink"
+              style={{ fontSize: 'var(--text-h1)', lineHeight: 1.15 }}
+            >
+              {plp.category.name}
+            </h1>
+            {plp.category.seoDescription ? (
+              <p
+                className="mt-1 line-clamp-2 max-w-2xl text-ink-muted sm:line-clamp-none"
+                style={{ fontSize: 'var(--text-body-sm)', lineHeight: 1.4 }}
               >
-                {child.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : null}
+                {plp.category.seoDescription}
+              </p>
+            ) : null}
+          </div>
 
-      <div className="sticky top-14 z-20 -mx-4 mb-6 border-y border-line bg-paper/95 px-4 py-3 backdrop-blur-sm xl:hidden lg:top-[72px]">
-        <div className="flex items-center gap-2">
-          <Button variant="secondary" size="sm" className="flex-1 gap-1.5" onClick={plp.openFilters}>
+          {childLinks.length > 0 ? (
+            <nav
+              aria-label={LABELS.shopInCategory}
+              className="min-w-0 lg:max-w-[min(100%,26rem)] lg:pt-0.5"
+            >
+              <div className="mb-1.5 flex items-center justify-between gap-2 lg:justify-end">
+                <p className="text-eyebrow leading-none">{LABELS.shopInCategory}</p>
+              </div>
+              <ul className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-0.5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 lg:justify-end [&::-webkit-scrollbar]:hidden">
+                {childLinks.map((child) => (
+                  <li key={child.id} className="shrink-0">
+                    <Link
+                      href={PATHS.category(...slugPath, child.slug)}
+                      title={formatLabel(LABELS.shopCategory, { name: child.name })}
+                      aria-label={formatLabel(LABELS.shopCategory, { name: child.name })}
+                      className={cn(
+                        'group inline-flex h-8 items-center gap-0.5 rounded-md border border-line bg-surface px-2.5',
+                        'text-[0.8125rem] font-medium text-ink shadow-[0_1px_0_rgba(15,23,42,0.04)]',
+                        'transition-colors hover:border-brand hover:bg-brand-subtle hover:text-brand',
+                        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+                      )}
+                    >
+                      <span>{child.name}</span>
+                      <ChevronRight
+                        className="h-3.5 w-3.5 text-ink-faint transition-colors group-hover:text-brand"
+                        strokeWidth={1.75}
+                        aria-hidden
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
+        </div>
+      </header>
+
+      <div className="sticky top-14 z-20 -mx-4 mb-3 border-y border-line bg-paper/95 px-4 py-2 backdrop-blur-sm xl:hidden lg:top-[72px]">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <Button variant="secondary" size="sm" className="min-w-0 flex-1 gap-1 px-2 sm:gap-1.5 sm:px-4" onClick={plp.openFilters}>
             <SlidersHorizontal size={14} strokeWidth={1.75} aria-hidden />
-            {LABELS.filters}
+            <span className="truncate">{LABELS.filters}</span>
           </Button>
-          <Button variant="secondary" size="sm" className="flex-1 gap-1.5" onClick={plp.openSort}>
+          <Button variant="secondary" size="sm" className="min-w-0 flex-1 gap-1 px-2 sm:gap-1.5 sm:px-4" onClick={plp.openSort}>
             <ArrowUpDown size={14} strokeWidth={1.75} aria-hidden />
-            {LABELS.sort}
+            <span className="truncate">{LABELS.sort}</span>
           </Button>
           <Button
             variant={plp.compareMode ? 'default' : 'secondary'}
             size="sm"
-            className="flex-1 gap-1.5"
+            className="min-w-0 flex-1 gap-1 px-2 sm:gap-1.5 sm:px-4"
             onClick={plp.toggleCompareMode}
             aria-pressed={plp.compareMode}
           >
             <Columns2 size={14} strokeWidth={1.75} aria-hidden />
-            {LABELS.compare}
+            <span className="truncate">{LABELS.compare}</span>
           </Button>
         </div>
       </div>
 
-      <div className="mb-20 flex gap-10 xl:mb-28 xl:gap-12">
+      <div className="mb-12 flex gap-6 sm:mb-16 xl:mb-24 xl:gap-10">
         <FilterSidebar
           idPrefix="cat-desktop"
           minPrice={plp.filters.minPrice}
@@ -127,6 +157,8 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
             onSortChange={(v) => plp.updateFilter('sort', v)}
             compareMode={plp.compareMode}
             onToggleCompare={plp.toggleCompareMode}
+            hideSortOnMobile
+            className="mb-4 border-b-0 pb-0 xl:mb-6 xl:border-b xl:pb-4"
           />
 
           {!plp.data && plp.isFetching ? (
@@ -134,19 +166,51 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
           ) : plp.data?.items.length === 0 ? (
             <EmptyState
               icon={emptyIcon}
-              eyebrow={plp.hasActiveFacets ? LABELS.filters : LABELS.shop}
-              heading={plp.hasActiveFacets ? LABELS.clearFacetFilters : LABELS.categoryPlpEmpty}
+              eyebrow={
+                plp.hasActiveFacets
+                  ? LABELS.categoryPlpNoFilterMatchesEyebrow
+                  : LABELS.categoryPlpEmptyEyebrow
+              }
+              heading={formatLabel(
+                plp.hasActiveFacets
+                  ? LABELS.categoryPlpNoFilterMatchesHeading
+                  : LABELS.categoryPlpEmptyHeading,
+                { name: plp.category.name },
+              )}
               message={
                 plp.hasActiveFacets
-                  ? LABELS.facetDisabledHint
-                  : formatLabel(LABELS.shopCategoryDescription, {
-                      name: plp.category.name,
-                      site: SITE.name,
-                    })
+                  ? LABELS.categoryPlpNoFilterMatchesBody
+                  : LABELS.categoryPlpEmptyBody
               }
-              actionLabel={plp.hasActiveFacets ? LABELS.clearFacetFilters : LABELS.allProducts}
-              actionTo={plp.hasActiveFacets ? undefined : PATHS.products}
+              actionLabel={
+                plp.hasActiveFacets ? LABELS.clearFacetFilters : LABELS.allCategories
+              }
+              actionTo={plp.hasActiveFacets ? undefined : PATHS.categories}
               onAction={plp.hasActiveFacets ? plp.clearFilters : undefined}
+              secondaryAction={
+                plp.hasActiveFacets
+                  ? {
+                      label: LABELS.allProducts,
+                      href: PATHS.products,
+                      variant: 'secondary',
+                    }
+                  : slugPath.length > 1
+                    ? {
+                        label: formatLabel(LABELS.browseParentCategory, {
+                          name:
+                            plp.breadcrumbItems[plp.breadcrumbItems.length - 2]?.label ??
+                            LABELS.categories,
+                        }),
+                        href: PATHS.category(...slugPath.slice(0, -1)),
+                        variant: 'secondary',
+                      }
+                    : {
+                        label: LABELS.allProducts,
+                        href: PATHS.products,
+                        variant: 'secondary',
+                      }
+              }
+              className="py-14 md:py-16"
             />
           ) : (
             <>
