@@ -3,6 +3,7 @@
 import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import { LABELS } from '@/shared/constants/labels'
+import { formatDateTime } from '@/shared/utils/formatDate'
 import type { Coupon } from '@/shared/api/types'
 
 interface CouponsTableProps {
@@ -40,7 +41,7 @@ export function CouponsTable({ coupons = [], loading = false, pagination }: Coup
     {
       id: 'expires',
       header: LABELS.expires,
-      cell: (row) => new Date(row.endDate).toLocaleDateString(),
+      cell: (row) => formatDateTime(row.endDate),
     },
   ]
 

@@ -1,4 +1,5 @@
 import { LABELS } from '@/shared/constants/labels'
+import { tryFormatDateTime } from '@/shared/utils/formatDate'
 import type { AdminDataRow } from '../hooks/useAdminDataList'
 
 const SKIP_COLUMN_KEYS = new Set([
@@ -28,6 +29,8 @@ export function getAdminCellValue(row: AdminDataRow, key: string): unknown {
 /** Prefer human labels over UUIDs / nested association dumps. */
 export function formatAdminCellValue(value: unknown): string {
   if (value == null || value === '') return '—'
+  const asDate = tryFormatDateTime(value)
+  if (asDate) return asDate
   if (typeof value === 'object') {
     const obj = value as Record<string, unknown>
     if (typeof obj.businessName === 'string' && obj.businessName.trim()) return obj.businessName

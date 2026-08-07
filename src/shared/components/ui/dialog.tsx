@@ -4,6 +4,7 @@ import * as React from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
+import { LABELS } from '@/shared/constants/labels'
 
 const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
@@ -76,7 +77,7 @@ const DialogContent = React.forwardRef<
             }}
           >
             <X size={20} />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{LABELS.close}</span>
           </DialogPrimitive.Close>
         </DialogPrimitive.Content>
       </DialogPortal>
