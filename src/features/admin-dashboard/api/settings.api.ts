@@ -14,6 +14,7 @@ export type AdminPlatformSettings = PublicPlatformSettings & {
   tdsRatePercent: number
   autoApproveProducts: boolean
   payoutCycle: string
+  returnShippingFee: number
 }
 
 export const settingsApi = {

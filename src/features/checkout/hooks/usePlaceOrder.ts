@@ -91,8 +91,8 @@ export function usePlaceOrderWithRazorpay() {
         if (!window.Razorpay) {
           showNotice({
             variant: 'danger',
-            title: 'Payment unavailable',
-            description: 'Unable to load payment checkout. Please try again.',
+            title: LABELS.paymentUnavailableTitle,
+            description: LABELS.paymentUnavailableLoadScript,
           })
           return
         }
@@ -101,8 +101,8 @@ export function usePlaceOrderWithRazorpay() {
         if (!keyId || !result.amount || !result.currency) {
           showNotice({
             variant: 'danger',
-            title: 'Payment unavailable',
-            description: 'Payment could not be started. Missing order details from server.',
+            title: LABELS.paymentUnavailableTitle,
+            description: LABELS.paymentUnavailableMissingDetails,
           })
           return
         }
@@ -112,7 +112,7 @@ export function usePlaceOrderWithRazorpay() {
           order_id: result.razorpayOrderId,
           amount: result.amount,
           currency: result.currency,
-          name: 'Marketplace',
+          name: LABELS.brandName,
           handler: async (response) => {
             try {
               await checkoutApi.verifyPayment({
@@ -125,9 +125,8 @@ export function usePlaceOrderWithRazorpay() {
             } catch {
               showNotice({
                 variant: 'warning',
-                title: 'Confirmation pending',
-                description:
-                  'Payment was received, but confirmation is still settling. Check Orders shortly.',
+                title: LABELS.paymentConfirmationPendingTitle,
+                description: LABELS.paymentConfirmationPendingBody,
               })
               clearCartCache()
             }
@@ -136,9 +135,8 @@ export function usePlaceOrderWithRazorpay() {
             ondismiss: () => {
               void restoreCancelledCheckout(result.orderId, {
                 variant: 'info',
-                title: 'Payment cancelled',
-                description:
-                  'No charge was made. Your cart has been restored and is ready whenever you want to try again.',
+                title: LABELS.paymentCancelledTitle,
+                description: LABELS.paymentCancelledBody,
               })
             },
           },
@@ -147,10 +145,8 @@ export function usePlaceOrderWithRazorpay() {
         rzp.on('payment.failed', (resp) => {
           void restoreCancelledCheckout(result.orderId, {
             variant: 'danger',
-            title: 'Payment failed',
-            description:
-              resp.error?.description ||
-              'Payment could not be completed. Your cart has been restored so you can try again.',
+            title: LABELS.paymentFailedTitle,
+            description: resp.error?.description || LABELS.paymentFailedBody,
           })
         })
 
@@ -167,10 +163,10 @@ export function usePlaceOrderWithRazorpay() {
         ? LABELS.removeUnavailableToCheckout
         : err && typeof err === 'object' && 'message' in err
           ? String((err as { message: string }).message)
-          : 'Could not place order. Please try again.'
+          : LABELS.placeOrderFailedBody
       showNotice({
         variant: isItemsUnavailable ? 'warning' : 'danger',
-        title: isItemsUnavailable ? 'Items unavailable' : 'Could not place order',
+        title: isItemsUnavailable ? LABELS.itemsUnavailableTitle : LABELS.placeOrderFailedTitle,
         description,
       })
       if (isItemsUnavailable) {

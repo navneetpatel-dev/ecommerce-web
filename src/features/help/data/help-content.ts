@@ -937,34 +937,35 @@ export const HELP_CATEGORIES: HelpCategory[] = [
           {
             heading: 'When refunds start',
             paragraphs: [
-              'Refunds are typically initiated after a return is approved and the item is received and inspected, or sooner for cancellations before ship. Exact timing depends on the case type.',
+              'Refunds start as soon as a return is approved — they are not blocked on reverse pickup or warehouse receipt. Logistics (pickup and receipt) can continue in parallel.',
             ],
           },
           {
             heading: 'Razorpay (prepaid) refunds',
             bullets: [
-              'Refunds go back to the original payment instrument when possible',
+              'The Razorpay-paid portion is refunded to the original payment method',
+              'Status becomes refunded only after Razorpay confirms the refund (refund.processed)',
               'UPI and wallets often post faster than credit cards',
               'Banks may take additional business days after Razorpay initiates the refund',
-              'Check Orders / My Returns for “refund initiated” before disputing with the bank',
+              'Check My Returns for refund progress before disputing with the bank',
             ],
           },
           {
-            heading: 'COD refunds',
+            heading: 'COD and wallet refunds',
             paragraphs: [
-              'For Cash on Delivery orders, refunds after a successful return are commonly issued via bank transfer or another method collected during the return process, as configured by the platform. Provide accurate account details when asked.',
+              'Cash on Delivery returns are credited to your store wallet automatically on approval — no bank account or UPI details are collected. Wallet-paid portions of an order are also credited back to your wallet immediately.',
             ],
           },
           {
             heading: 'Partial refunds',
             paragraphs: [
-              'If you return only some items from a multi-seller order, the refund covers those items and related shipping components as applicable under policy — not necessarily the full order total.',
+              'If you return only some items from a multi-seller order, the refund covers those items and related shipping components as applicable under policy — not necessarily the full order total. Split-paid orders (wallet + Razorpay) refund each portion to its original source.',
             ],
           },
           {
             heading: 'Refund not visible',
             paragraphs: [
-              'Confirm the return status shows refund initiated, then allow bank posting time. If the window has passed, contact support with Payments or Returns topic, order ID, and return ID.',
+              'Confirm My Returns shows the refund track as completed or initiated. For Razorpay, allow bank posting time after initiation. If the window has passed, contact support with order ID and return ID.',
             ],
           },
         ],

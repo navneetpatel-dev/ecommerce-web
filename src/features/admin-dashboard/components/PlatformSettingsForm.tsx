@@ -25,6 +25,7 @@ interface PlatformSettingsFormProps {
   onReturnWindowChange: (value: number) => void
   onPayoutCycleChange: (value: string) => void
   onFreeShippingThresholdChange: (value: number) => void
+  onReturnShippingFeeChange: (value: number) => void
   onSupportEmailChange: (value: string) => void
   onSupportHoursChange: (value: string) => void
   onSave: () => void
@@ -79,6 +80,7 @@ export function PlatformSettingsForm({
   onReturnWindowChange,
   onPayoutCycleChange,
   onFreeShippingThresholdChange,
+  onReturnShippingFeeChange,
   onSupportEmailChange,
   onSupportHoursChange,
   onSave,
@@ -160,6 +162,16 @@ export function PlatformSettingsForm({
             prefix="₹"
             onChange={(value) => onFreeShippingThresholdChange(value ?? 0)}
           />
+        </Field>
+        <Field label={LABELS.returnShippingFee}>
+          <NumberInput
+            value={form.returnShippingFee ?? 0}
+            min={0}
+            step={10}
+            prefix="₹"
+            onChange={(value) => onReturnShippingFeeChange(value ?? 0)}
+          />
+          <p className="text-[0.8125rem] text-ink-muted">{LABELS.returnShippingFeeHint}</p>
         </Field>
         <Field label={LABELS.payoutCycle} className="space-y-2 sm:col-span-2 sm:max-w-md">
           <Select value={form.payoutCycle} onValueChange={onPayoutCycleChange}>

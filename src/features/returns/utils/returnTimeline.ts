@@ -80,7 +80,14 @@ export function buildLogisticsTimeline(row: ReturnRequest): OrderTimelineStep[] 
     ]
   }
 
-  const status = row.status
+  // Refund track may stamp REFUNDED while logistics is still at APPROVED — treat as APPROVED+.
+  let status = row.status
+  if (status === RETURN_STATUS.REFUNDED) {
+    status = row.receivedAt
+      ? RETURN_STATUS.RECEIVED
+      : RETURN_STATUS.APPROVED
+  }
+
   const idx = LOGISTICS_FLOW.indexOf(status as (typeof LOGISTICS_FLOW)[number])
   const currentIdx = idx < 0 ? 0 : idx
 

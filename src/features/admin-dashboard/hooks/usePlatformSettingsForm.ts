@@ -65,6 +65,10 @@ export function usePlatformSettingsForm() {
       setMessage(null)
       setForm((current) => (current ? { ...current, freeShippingThreshold: value } : current))
     },
+    setReturnShippingFee: (value: number) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, returnShippingFee: value } : current))
+    },
     setSupportEmail: (value: string) => {
       setMessage(null)
       setForm((current) => (current ? { ...current, supportEmail: value } : current))

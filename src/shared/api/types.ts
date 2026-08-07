@@ -215,6 +215,8 @@ export interface Order {
   paymentStatus: PaymentStatus;
   paymentMethod?: string | null;
   walletAmountUsed?: number;
+  razorpayAmountPaid?: number;
+  originalTotalAmount?: number;
   pendingCashbackAmount?: number;
   cashbackCreditedAt?: string | null;
   createdAt: string;

@@ -9,12 +9,13 @@ import type { WalletTransaction } from '@/shared/api/types'
 
 function transactionSourceLabel(row: WalletTransaction): string {
   const ref = (row.referenceType ?? '').toUpperCase()
-  const desc = (row.description ?? '').toLowerCase()
-  if (ref.includes('RETURN') || desc.includes('refund')) return LABELS.walletTransactionSourceCodRefund
-  if (ref.includes('CASHBACK') || desc.includes('cashback')) return LABELS.walletTransactionSourceCashback
-  if (row.type === 'DEBIT' || desc.includes('checkout') || desc.includes('order'))
-    return LABELS.walletTransactionSourceCheckout
-  if (ref.includes('CLAWBACK') || desc.includes('clawback')) return LABELS.walletTransactionSourceClawback
+  if (ref.includes('CLAWBACK')) return LABELS.walletTransactionSourceClawback
+  if (ref.includes('CASHBACK')) return LABELS.walletTransactionSourceCashback
+  if (ref.includes('COD_REFUND')) return LABELS.walletTransactionSourceCodRefund
+  if (ref.includes('WALLET_REFUND') || ref.includes('RETURN')) {
+    return LABELS.walletTransactionSourceWalletRefund
+  }
+  if (ref.includes('ORDER') || row.type === 'DEBIT') return LABELS.walletTransactionSourceCheckout
   return LABELS.walletTransactionSourceOther
 }
 
