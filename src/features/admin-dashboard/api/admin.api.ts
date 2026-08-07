@@ -40,10 +40,14 @@ export const adminApi = {
     return unwrapPaginatedList(res)
   },
 
-  vendors: async (params: PaginationQuery = {}): Promise<PaginatedList<VendorInfo>> => {
+  vendors: async (
+    params: PaginationQuery & { search?: string; status?: string } = {},
+  ): Promise<PaginatedList<VendorInfo>> => {
     const q = new URLSearchParams()
     if (params.page) q.set('page', String(params.page))
     if (params.limit) q.set('limit', String(params.limit))
+    if (params.search) q.set('search', params.search)
+    if (params.status) q.set('status', params.status)
     const res = await apiClient.getWithResponse<VendorInfo[]>(API.vendors.list(q.toString()))
     return unwrapPaginatedList(res)
   },

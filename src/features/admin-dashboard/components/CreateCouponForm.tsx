@@ -23,6 +23,7 @@ import { DateTimePicker } from '@/shared/components/DateTimePicker'
 import { LABELS } from '@/shared/constants/labels'
 import { DISCOUNT_BEARER } from '@/shared/constants/statuses'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import { CouponScopeMultiSelect } from './CouponScopeMultiSelect'
 import { cn } from '@/shared/utils/cn'
 
 const COUPON_TYPES: Array<{ value: CouponFormInput['type']; label: string }> = [
@@ -57,11 +58,19 @@ interface CreateCouponFormProps {
   isPending: boolean
   /** When true, discountBearer is fixed to VENDOR and scope cannot be platform-wide. */
   vendorMode?: boolean
+  /** Required in vendorMode so vendor-scoped coupons keep the locked vendor id. */
+  vendorId?: string | null
   submitLabel?: string
   /** Hide the submit button (e.g. when parent owns submit). */
   hideSubmit?: boolean
   /** Hide the coupon code field (bulk template). */
   hideCodeField?: boolean
+}
+
+function scopePickerLabel(scopeType: CouponFormInput['applicableScopeType']) {
+  if (scopeType === 'category') return LABELS.selectScopeCategories
+  if (scopeType === 'product') return LABELS.selectScopeProducts
+  return LABELS.selectScopeVendors
 }
 
 function RequiredMark() {
@@ -100,6 +109,12 @@ function couponDisableHint(values: CouponFormInput): string {
   }
   if (!values.startDate) return LABELS.enterCouponStartDate
   if (!values.endDate) return LABELS.enterCouponEndDate
+  if (
+    values.applicableScopeType !== 'all' &&
+    (!values.applicableScopeIds || values.applicableScopeIds.length === 0)
+  ) {
+    return LABELS.enterCouponScopeIds
+  }
   const parsed = CouponSchema.safeParse(values)
   if (!parsed.success) {
     return parsed.error.issues[0]?.message ?? LABELS.couponCreateHint
@@ -111,6 +126,7 @@ export function CreateCouponForm({
   form,
   isPending,
   vendorMode = false,
+  vendorId = null,
   submitLabel = LABELS.createCoupon,
   hideSubmit = false,
   hideCodeField = false,
@@ -119,6 +135,7 @@ export function CreateCouponForm({
     register,
     control,
     watch,
+    setValue,
     formState: { errors, touchedFields, isSubmitted },
   } = form
 
@@ -322,7 +339,21 @@ export function CreateCouponForm({
             name="applicableScopeType"
             control={control}
             render={({ field }) => (
-              <Select value={field.value} onValueChange={field.onChange}>
+              <Select
+                value={field.value}
+                onValueChange={(next) => {
+                  field.onChange(next)
+                  if (next === 'all') {
+                    setValue('applicableScopeIds', [], { shouldValidate: true })
+                    return
+                  }
+                  if (vendorMode && next === 'vendor' && vendorId) {
+                    setValue('applicableScopeIds', [vendorId], { shouldValidate: true })
+                    return
+                  }
+                  setValue('applicableScopeIds', [], { shouldValidate: true })
+                }}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder={LABELS.applicableScope} />
                 </SelectTrigger>
@@ -340,8 +371,23 @@ export function CreateCouponForm({
         </div>
         {showScopeIds ? (
           <div className="space-y-2">
-            <Label htmlFor="coupon-scope-ids">{LABELS.scopeIds}</Label>
-            <Input id="coupon-scope-ids" placeholder={LABELS.scopeIds} {...register('applicableScopeIds')} />
+            <Label>
+              {scopePickerLabel(scopeType)}
+              <RequiredMark />
+            </Label>
+            <Controller
+              name="applicableScopeIds"
+              control={control}
+              render={({ field }) => (
+                <CouponScopeMultiSelect
+                  scopeType={scopeType as 'vendor' | 'product' | 'category'}
+                  value={field.value ?? []}
+                  onChange={field.onChange}
+                  vendorId={vendorMode ? vendorId : null}
+                  error={fieldHasError('applicableScopeIds')}
+                />
+              )}
+            />
             <FieldError message={showFieldError('applicableScopeIds')} />
           </div>
         ) : null}

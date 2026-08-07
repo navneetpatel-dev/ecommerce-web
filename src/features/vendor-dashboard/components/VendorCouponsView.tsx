@@ -25,6 +25,7 @@ interface VendorCouponsViewProps {
   form: UseFormReturn<CouponFormInput>
   isPending: boolean
   onSubmit: (data: CouponFormInput) => void
+  vendorId?: string | null
   analyticsId: string | null
   setAnalyticsId: (id: string | null) => void
   analytics?: CouponAnalytics
@@ -42,6 +43,7 @@ export function VendorCouponsView({
   form,
   isPending,
   onSubmit,
+  vendorId = null,
   analyticsId,
   setAnalyticsId,
   analytics,
@@ -146,7 +148,12 @@ export function VendorCouponsView({
                 void form.trigger()
               })}
             >
-              <CreateCouponForm form={form} isPending={isPending} vendorMode />
+              <CreateCouponForm
+                form={form}
+                isPending={isPending}
+                vendorMode
+                vendorId={vendorId}
+              />
             </form>
           </DialogContent>
         </Dialog>

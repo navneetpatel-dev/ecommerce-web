@@ -18,11 +18,15 @@ export const categoriesApi = {
   /** Storefront / pickers — full ACTIVE category tree (no pagination). */
   list: () => apiClient.get<Category[]>(API.categories.list),
 
-  /** Admin table — paginated flat categories. */
-  listPaginated: async (params: PaginationQuery = {}): Promise<PaginatedList<Category>> => {
+  /** Admin / pickers — paginated flat categories. */
+  listPaginated: async (
+    params: PaginationQuery & { search?: string; status?: string } = {},
+  ): Promise<PaginatedList<Category>> => {
     const q = new URLSearchParams()
     q.set('page', String(params.page ?? 1))
     if (params.limit) q.set('limit', String(params.limit))
+    if (params.search) q.set('search', params.search)
+    if (params.status) q.set('status', params.status)
     const res = await apiClient.getWithResponse<Category[]>(`${API.categories.list}?${q.toString()}`)
     return unwrapPaginatedList(res)
   },

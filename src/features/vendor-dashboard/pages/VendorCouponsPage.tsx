@@ -21,6 +21,7 @@ export function VendorCouponsPage() {
         form={page.form}
         isPending={page.isPending}
         onSubmit={page.onSubmit}
+        vendorId={page.vendorId}
         analyticsId={page.analyticsId}
         setAnalyticsId={page.setAnalyticsId}
         analytics={page.analytics}

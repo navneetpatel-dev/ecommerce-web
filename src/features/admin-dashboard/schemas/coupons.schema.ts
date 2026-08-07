@@ -39,7 +39,7 @@ const CouponObjectSchema = z.object({
   minOrderValue: optionalNonNegative(LABELS.couponMinOrderNegative),
   minQuantity: z.number().int().nonnegative().optional().nullable(),
   applicableScopeType: z.enum(SCOPE_TYPES, { message: LABELS.couponScopeTypeRequired }),
-  applicableScopeIds: z.string().optional(),
+  applicableScopeIds: z.array(z.string().uuid()),
   userRestrictionType: z.enum(USER_RESTRICTION_TYPES).optional(),
   usageLimitTotal: z.number().int().positive().optional().nullable(),
   usageLimitPerUser: z.number().int().positive().optional().nullable(),
@@ -62,6 +62,8 @@ function refineCouponValueAndDates(
     value?: number | null
     startDate: string
     endDate: string
+    applicableScopeType: (typeof SCOPE_TYPES)[number]
+    applicableScopeIds: string[]
   },
   ctx: z.RefinementCtx,
 ) {
@@ -90,6 +92,17 @@ function refineCouponValueAndDates(
       message: LABELS.couponEndAfterStart,
     })
   }
+
+  if (
+    data.applicableScopeType !== 'all' &&
+    (!data.applicableScopeIds || data.applicableScopeIds.length === 0)
+  ) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['applicableScopeIds'],
+      message: LABELS.couponScopeIdsRequired,
+    })
+  }
 }
 
 /** Keep in sync with backend CreateCouponSchema. */
@@ -105,7 +118,7 @@ export const COUPON_FORM_DEFAULTS: CouponFormInput = {
   minOrderValue: null,
   minQuantity: null,
   applicableScopeType: 'all',
-  applicableScopeIds: '',
+  applicableScopeIds: [],
   userRestrictionType: 'all',
   usageLimitTotal: null,
   usageLimitPerUser: null,
@@ -126,14 +139,6 @@ export function couponRequiresValue(type: CouponFormInput['type'] | undefined) {
   return type != null && TYPES_REQUIRING_VALUE.has(type)
 }
 
-function parseScopeIds(raw?: string): string[] {
-  if (!raw?.trim()) return []
-  return raw
-    .split(',')
-    .map((id) => id.trim())
-    .filter(Boolean)
-}
-
 export function toCouponCreateBody(values: CouponFormInput, opts?: { forceVendorId?: string }) {
   const scopeType = opts?.forceVendorId
     ? values.applicableScopeType === 'product' || values.applicableScopeType === 'category'
@@ -144,8 +149,8 @@ export function toCouponCreateBody(values: CouponFormInput, opts?: { forceVendor
   const scopeIds = opts?.forceVendorId
     ? scopeType === 'vendor'
       ? [opts.forceVendorId]
-      : parseScopeIds(values.applicableScopeIds)
-    : parseScopeIds(values.applicableScopeIds)
+      : values.applicableScopeIds
+    : values.applicableScopeIds
 
   return {
     code: values.code.trim(),

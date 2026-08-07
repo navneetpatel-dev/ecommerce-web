@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
@@ -40,9 +40,16 @@ export function useVendorCouponsPage() {
     reValidateMode: 'onChange',
     defaultValues: {
       ...VENDOR_COUPON_FORM_DEFAULTS,
-      applicableScopeIds: vendorId ?? '',
+      applicableScopeIds: vendorId ? [vendorId] : [],
     },
   })
+
+  useEffect(() => {
+    if (!vendorId) return
+    if (form.getValues('applicableScopeType') !== 'vendor') return
+    if (form.getValues('applicableScopeIds').length > 0) return
+    form.setValue('applicableScopeIds', [vendorId])
+  }, [vendorId, form])
 
   const coupons = data?.items ?? []
   const limit = data?.limit ?? DEFAULT_PAGE_LIMIT
@@ -56,7 +63,7 @@ export function useVendorCouponsPage() {
     if (!next) {
       form.reset({
         ...VENDOR_COUPON_FORM_DEFAULTS,
-        applicableScopeIds: vendorId ?? '',
+        applicableScopeIds: vendorId ? [vendorId] : [],
       })
       createMutation.reset()
     }
