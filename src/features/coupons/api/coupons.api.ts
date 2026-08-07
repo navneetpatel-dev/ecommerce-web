@@ -1,8 +1,45 @@
 import { apiClient } from '@/shared/api/client'
 import { API } from '@/shared/constants/apiRoutes'
+import type {
+  AppliedCouponSummary,
+  Coupon,
+  CouponAnalytics,
+  CouponStatus,
+  EligibleCoupon,
+} from '@/shared/api/types'
+import { unwrapPaginatedList, type PaginatedList, type PaginationQuery } from '@/shared/api/pagination'
+
+function withPaginationQuery(base: string, params: PaginationQuery = {}) {
+  const q = new URLSearchParams()
+  if (params.page) q.set('page', String(params.page))
+  if (params.limit) q.set('limit', String(params.limit))
+  const qs = q.toString()
+  return qs ? `${base}?${qs}` : base
+}
 
 export const couponsApi = {
   apply: (code: string) =>
-    apiClient.post<{ code: string; discount: number; type: string }>(API.coupons.apply, { code }),
-  remove: () => apiClient.delete(API.coupons.remove),
+    apiClient.post<AppliedCouponSummary & { type: string }>(API.coupons.apply, { code }),
+  remove: () =>
+    apiClient.delete<{ removed: boolean }>(API.coupons.remove),
+  eligible: () => apiClient.get<EligibleCoupon[]>(API.coupons.eligible),
+
+  vendorList: async (params: PaginationQuery = {}): Promise<PaginatedList<Coupon>> => {
+    const res = await apiClient.getWithResponse<Coupon[]>(
+      withPaginationQuery(API.coupons.vendor.list, params),
+    )
+    return unwrapPaginatedList(res)
+  },
+  vendorCreate: (body: unknown) =>
+    apiClient.post<Coupon>(API.coupons.vendor.create, body),
+  vendorUpdate: (id: string, body: unknown) =>
+    apiClient.patch<Coupon>(API.coupons.vendor.detail(id), body),
+  vendorUpdateStatus: (id: string, status: CouponStatus) =>
+    apiClient.patch<Coupon>(API.coupons.vendor.status(id), { status }),
+  vendorAnalytics: (id: string) =>
+    apiClient.get<CouponAnalytics>(API.coupons.vendor.analytics(id)),
+  vendorAbsorbedSummary: () =>
+    apiClient.get<{ vendorId: string; absorbedDiscountTotal: number; couponCount: number }>(
+      API.coupons.vendor.absorbedSummary,
+    ),
 }

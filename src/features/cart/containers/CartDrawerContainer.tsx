@@ -20,8 +20,13 @@ export function CartDrawerContainer() {
       couponError={drawer.couponError}
       couponPending={drawer.couponPending}
       appliedCouponCode={drawer.appliedCouponCode}
+      appliedDiscount={drawer.appliedDiscount}
+      eligible={drawer.eligible}
+      eligibleLoading={drawer.eligibleLoading}
       onCouponInputChange={drawer.setCouponInput}
       onApplyCoupon={() => void drawer.applyCoupon()}
+      onRemoveCoupon={() => void drawer.removeCoupon()}
+      onApplyEligible={(code) => void drawer.applyEligible(code)}
       onContinueShopping={drawer.continueShopping}
       onUpdateQuantity={drawer.updateQuantity}
       onRemoveItem={drawer.removeItem}

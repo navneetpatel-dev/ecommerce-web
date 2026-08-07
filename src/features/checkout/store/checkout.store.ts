@@ -7,12 +7,14 @@ interface CheckoutState {
   addressId: string | null
   shippingMethodByVendor: Record<string, ShippingMethod>
   appliedCouponCode: string | null
+  /** When true, auto-apply must not replace the customer's chosen code. */
+  manualCouponOverride: boolean
   paymentMethod: string | null
   setStep: (step: CheckoutState['step']) => void
   setAddress: (id: string) => void
   setShippingMethod: (vendorId: string, method: ShippingMethod) => void
   ensureDefaultShippingMethods: (vendorIds: string[]) => void
-  setCouponCode: (code: string | null) => void
+  setCouponCode: (code: string | null, opts?: { manual?: boolean }) => void
   setPaymentMethod: (method: string | null) => void
 }
 
@@ -21,6 +23,7 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
   addressId: null,
   shippingMethodByVendor: {},
   appliedCouponCode: null,
+  manualCouponOverride: false,
   paymentMethod: null,
   setStep: (step) => set({ step }),
   setAddress: (addressId) => set({ addressId }),
@@ -38,6 +41,11 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
       }
       return changed ? { shippingMethodByVendor: next } : s
     }),
-  setCouponCode: (code) => set({ appliedCouponCode: code }),
+  setCouponCode: (code, opts) =>
+    set((s) => ({
+      appliedCouponCode: code,
+      manualCouponOverride:
+        opts?.manual === true ? true : opts?.manual === false ? false : s.manualCouponOverride,
+    })),
   setPaymentMethod: (paymentMethod) => set({ paymentMethod }),
 }))

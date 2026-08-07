@@ -2,7 +2,16 @@ import { apiClient } from '@/shared/api/client'
 import { unwrapPaginatedList, type PaginatedList, type PaginationQuery } from '@/shared/api/pagination'
 import { API } from '@/shared/constants/apiRoutes'
 import { VENDOR_STATUS, PRODUCT_STATUS } from '@/shared/constants/statuses'
-import type { AdminAnalytics, VendorInfo, ProductDetail, Coupon } from '@/shared/api/types'
+import type {
+  AdminAnalytics,
+  VendorInfo,
+  ProductDetail,
+  Coupon,
+  CouponAnalytics,
+  CouponBatch,
+  BulkGenerateResult,
+  CouponStatus,
+} from '@/shared/api/types'
 
 function withPaginationQuery(base: string, params: PaginationQuery = {}) {
   const q = new URLSearchParams(base.includes('?') ? base.split('?')[1] : '')
@@ -58,13 +67,35 @@ export const adminApi = {
     apiClient.post<{ message: string }>(API.products.reject(id), { rejectionNote }),
   archiveProduct: (id: string) => apiClient.post<{ message: string }>(API.products.archive(id), {}),
 
-  coupons: async (params: PaginationQuery = {}): Promise<PaginatedList<Coupon>> => {
+  coupons: async (
+    params: PaginationQuery & {
+      vendorId?: string | null
+      status?: string
+      vendorScoped?: boolean
+    } = {},
+  ): Promise<PaginatedList<Coupon>> => {
+    const q = new URLSearchParams()
+    if (params.page) q.set('page', String(params.page))
+    if (params.limit) q.set('limit', String(params.limit))
+    if (params.vendorId) q.set('vendorId', params.vendorId)
+    if (params.status) q.set('status', params.status)
+    if (params.vendorScoped !== undefined) q.set('vendorScoped', String(params.vendorScoped))
+    const qs = q.toString()
     const res = await apiClient.getWithResponse<Coupon[]>(
-      withPaginationQuery(API.coupons.list, params),
+      qs ? `${API.coupons.list}?${qs}` : API.coupons.list,
     )
     return unwrapPaginatedList(res)
   },
 
   createCoupon: (body: unknown) => apiClient.post<Coupon>(API.coupons.create, body),
+  updateCoupon: (id: string, body: unknown) =>
+    apiClient.patch<Coupon>(API.coupons.detail(id), body),
+  updateCouponStatus: (id: string, status: CouponStatus) =>
+    apiClient.patch<Coupon>(API.coupons.status(id), { status }),
+  couponAnalytics: (id: string) =>
+    apiClient.get<CouponAnalytics>(API.coupons.analytics(id)),
+  bulkGenerateCoupons: (body: unknown) =>
+    apiClient.post<BulkGenerateResult>(API.coupons.bulk, body),
+  couponBatches: () => apiClient.get<CouponBatch[]>(API.coupons.batches),
   analytics: () => apiClient.get<AdminAnalytics>(API.admin.analytics),
 }

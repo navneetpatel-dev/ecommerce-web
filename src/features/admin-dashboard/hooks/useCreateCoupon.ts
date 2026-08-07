@@ -3,7 +3,12 @@ import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { adminApi } from '../api/admin.api'
-import { CouponSchema, type CouponFormInput } from '../schemas/coupons.schema'
+import {
+  CouponSchema,
+  COUPON_FORM_DEFAULTS,
+  toCouponCreateBody,
+  type CouponFormInput,
+} from '../schemas/coupons.schema'
 
 export function useCreateCoupon() {
   const queryClient = useQueryClient()
@@ -13,22 +18,14 @@ export function useCreateCoupon() {
     resolver: zodResolver(CouponSchema),
     mode: 'onTouched',
     reValidateMode: 'onChange',
-    defaultValues: {
-      code: '',
-      type: 'PERCENTAGE',
-      value: undefined,
-      maxDiscountCap: undefined,
-      minOrderValue: undefined,
-      startDate: '',
-      endDate: '',
-    },
+    defaultValues: COUPON_FORM_DEFAULTS,
   })
 
   const createCoupon = useMutation({
-    mutationFn: (body: CouponFormInput) => adminApi.createCoupon(body),
+    mutationFn: (body: CouponFormInput) => adminApi.createCoupon(toCouponCreateBody(body)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'coupons'] })
-      form.reset()
+      form.reset(COUPON_FORM_DEFAULTS)
       setOpen(false)
     },
   })
@@ -36,7 +33,7 @@ export function useCreateCoupon() {
   const setDialogOpen = (next: boolean) => {
     setOpen(next)
     if (!next) {
-      form.reset()
+      form.reset(COUPON_FORM_DEFAULTS)
       createCoupon.reset()
     }
   }

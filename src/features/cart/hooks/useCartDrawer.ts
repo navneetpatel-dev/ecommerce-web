@@ -1,14 +1,12 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart, useUpdateCartItem, useRemoveCartItem } from '../api/cart.queries'
 import { useCartDrawerStore } from '../store/cart.store'
 import { groupItemsByVendor, calcCartTotal } from '../utils/cart.utils'
-import { couponsApi } from '@/features/coupons/api/coupons.api'
-import { useCheckoutStore } from '@/features/checkout/store/checkout.store'
+import { useCartCoupons } from './useCartCoupons'
 import { navigate } from '@/shared/utils/navigate'
-import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
 import { clampCartQuantity } from '@/shared/constants/cart'
 import { PATHS } from '@/shared/constants/paths'
 import type { CartItem } from '@/shared/api/types'
@@ -17,17 +15,10 @@ export function useCartDrawer() {
   const router = useRouter()
   const isOpen = useCartDrawerStore((s) => s.isOpen)
   const close = useCartDrawerStore((s) => s.close)
-  const setCouponCode = useCheckoutStore((s) => s.setCouponCode)
-  const appliedCouponCode = useCheckoutStore((s) => s.appliedCouponCode)
   const { data: cart, isLoading } = useCart()
   const updateItem = useUpdateCartItem()
   const removeItem = useRemoveCartItem()
-  const { requireAuth } = useRequireAuth()
-
-  const [couponInput, setCouponInput] = useState('')
-  const [couponMessage, setCouponMessage] = useState<string | null>(null)
-  const [couponError, setCouponError] = useState<string | null>(null)
-  const [couponPending, setCouponPending] = useState(false)
+  const coupons = useCartCoupons({ cart, enabled: isOpen })
 
   const groupedByVendor = useMemo(() => {
     if (!cart?.items) return {} as Record<string, CartItem[]>
@@ -35,44 +26,17 @@ export function useCartDrawer() {
   }, [cart])
 
   const total = useMemo(() => {
+    if (typeof cart?.total === 'number') {
+      return Math.max(0, cart.total - (cart.appliedCoupon?.discount ?? 0))
+    }
     if (!cart?.items) return 0
-    return calcCartTotal(cart.items)
-  }, [cart])
+    return Math.max(0, calcCartTotal(cart.items) - (coupons.appliedDiscount || 0))
+  }, [cart, coupons.appliedDiscount])
 
   const hasUnavailableItems = cart?.items?.some((item) => item.isAvailable === false) ?? false
 
   const updateQuantity = (itemId: string, quantity: number) => {
     updateItem.mutate({ itemId, quantity: clampCartQuantity(quantity) })
-  }
-
-  const applyCoupon = async () => {
-    const code = couponInput.trim()
-    if (!code) return
-    if (
-      !requireAuth({
-        title: 'Apply coupon',
-        message: 'Sign in to apply coupon codes to your order.',
-      })
-    ) {
-      return
-    }
-    setCouponPending(true)
-    setCouponError(null)
-    setCouponMessage(null)
-    try {
-      const result = await couponsApi.apply(code)
-      setCouponCode(code)
-      if (result.discount > 0) {
-        setCouponMessage(`Coupon applied — ₹${result.discount} off`)
-      } else {
-        setCouponMessage('Coupon applied — discount will be calculated at checkout')
-      }
-    } catch {
-      setCouponError('Invalid or expired coupon code')
-      setCouponCode(null)
-    } finally {
-      setCouponPending(false)
-    }
   }
 
   const continueShopping = () => {
@@ -91,13 +55,18 @@ export function useCartDrawer() {
     total,
     updateQuantity,
     removeItem: (itemId: string) => removeItem.mutate(itemId),
-    couponInput,
-    setCouponInput,
-    couponMessage,
-    couponError,
-    couponPending,
-    appliedCouponCode,
-    applyCoupon,
+    couponInput: coupons.couponInput,
+    setCouponInput: coupons.setCouponInput,
+    couponMessage: coupons.couponMessage,
+    couponError: coupons.couponError,
+    couponPending: coupons.couponPending,
+    appliedCouponCode: coupons.appliedCouponCode,
+    appliedDiscount: coupons.appliedDiscount,
+    eligible: coupons.eligible,
+    eligibleLoading: coupons.eligibleLoading,
+    applyCoupon: coupons.applyCoupon,
+    applyEligible: coupons.applyEligible,
+    removeCoupon: coupons.removeCoupon,
     continueShopping,
   }
 }

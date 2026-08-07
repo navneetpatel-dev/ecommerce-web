@@ -1,5 +1,6 @@
 import type { CheckoutQuote } from '@/shared/api/types'
 import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { Button } from '@/shared/components/ui/button'
 import { ArrowRight, AlertTriangle } from 'lucide-react'
@@ -21,13 +22,11 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
     return (
       <div className="space-y-5">
         <div className="border border-line bg-paper/60 px-5 py-8">
-          <p className="font-display text-[1.125rem] text-ink">Preparing your summary</p>
-          <p className="mt-1 text-[0.875rem] text-ink-muted">
-            Calculating shipping and taxes for your order…
-          </p>
+          <p className="font-display text-[1.125rem] text-ink">{LABELS.preparingSummary}</p>
+          <p className="mt-1 text-[0.875rem] text-ink-muted">{LABELS.calculatingShippingTaxes}</p>
         </div>
         <Button variant="outline" onClick={onBack} className="w-full sm:w-auto">
-          Back to payment
+          {LABELS.backToPayment}
         </Button>
       </div>
     )
@@ -48,7 +47,10 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
                 <li key={item.id} className="flex items-start justify-between gap-4 text-[0.875rem]">
                   <span className="text-ink">
                     {item.productName}
-                    <span className="text-ink-muted"> · Qty {item.quantity}</span>
+                    <span className="text-ink-muted">
+                      {' '}
+                      · {formatLabel(LABELS.qtyLabel, { count: String(item.quantity) })}
+                    </span>
                   </span>
                   <span className="shrink-0 tabular-nums text-ink">
                     {formatInr(item.unitPrice * item.quantity)}
@@ -59,27 +61,27 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
 
             <dl className="mt-4 space-y-2 border-t border-line pt-4 text-[0.875rem]">
               <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">Subtotal</dt>
+                <dt className="text-ink-muted">{LABELS.subtotal}</dt>
                 <dd className="tabular-nums text-ink">{formatInr(vb.subtotal)}</dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">Shipping</dt>
+                <dt className="text-ink-muted">{LABELS.shipping}</dt>
                 <dd className="tabular-nums text-ink">
-                  {vb.shippingCost === 0 ? 'Free' : formatInr(vb.shippingCost)}
+                  {vb.shippingCost === 0 ? LABELS.freeShipping : formatInr(vb.shippingCost)}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{vb.tax.igst > 0 ? 'IGST' : 'CGST + SGST'}</dt>
+                <dt className="text-ink-muted">{vb.tax.igst > 0 ? LABELS.taxIgst : LABELS.taxCgstSgst}</dt>
                 <dd className="tabular-nums text-ink">{formatInr(vb.tax.total)}</dd>
               </div>
               {vb.discount > 0 && (
                 <div className="flex justify-between gap-4 text-success">
-                  <dt>Discount</dt>
+                  <dt>{LABELS.couponDiscount}</dt>
                   <dd className="tabular-nums">−{formatInr(vb.discount)}</dd>
                 </div>
               )}
               <div className="flex justify-between gap-4 border-t border-line pt-3 font-medium">
-                <dt className="text-ink">Vendor total</dt>
+                <dt className="text-ink">{LABELS.vendorTotal}</dt>
                 <dd className="tabular-nums text-ink">{formatInr(vb.total)}</dd>
               </div>
             </dl>
@@ -95,9 +97,9 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-brand">
-              Payable now
+              {LABELS.payableNow}
             </p>
-            <p className="mt-1 text-[0.875rem] text-ink-muted">Including shipping and taxes</p>
+            <p className="mt-1 text-[0.875rem] text-ink-muted">{LABELS.includingShippingTaxes}</p>
           </div>
           <p className="font-display text-[1.75rem] leading-none tabular-nums text-brand">
             {formatInr(quote.grandTotal)}
@@ -105,7 +107,10 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
         </div>
         {quote.appliedCoupon && (
           <p className="mt-3 text-[0.8125rem] text-success">
-            Coupon {quote.appliedCoupon.code} applied (−{formatInr(quote.appliedCoupon.discount)})
+            {formatLabel(LABELS.couponAppliedReview, {
+              code: quote.appliedCoupon.code,
+              amount: formatInr(quote.appliedCoupon.discount),
+            })}
           </p>
         )}
       </div>
@@ -121,7 +126,7 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
         <Button variant="outline" onClick={onBack} className="w-full sm:w-auto">
-          Back to payment
+          {LABELS.backToPayment}
         </Button>
         <Button
           size="lg"
@@ -130,7 +135,7 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
           loading={isPending}
           disabled={Boolean(hasUnavailableItems)}
         >
-          Place order
+          {LABELS.placeOrder}
           <ArrowRight size={16} />
         </Button>
       </div>

@@ -10,17 +10,31 @@ import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { Button } from '@/shared/components/ui/button'
 import { CartPageSkeleton } from '@/shared/components/Skeletons'
 import { CartLineItem } from './CartLineItem'
-import type { CartItem } from '@/shared/api/types'
+import { CartCouponSection } from './CartCouponSection'
+import type { CartItem, EligibleCoupon } from '@/shared/api/types'
 
 interface CartPageViewProps {
   isLoading?: boolean
   hasItems: boolean
   itemCount: number
   groupedByVendor: Record<string, CartItem[]>
+  subtotal: number
   total: number
   hasUnavailableItems: boolean
   onUpdateQuantity: (itemId: string, quantity: number) => void
   onRemoveItem: (itemId: string) => void
+  couponInput: string
+  couponMessage: string | null
+  couponError: string | null
+  couponPending: boolean
+  appliedCouponCode: string | null
+  appliedDiscount: number
+  eligible: EligibleCoupon[]
+  eligibleLoading?: boolean
+  onCouponInputChange: (value: string) => void
+  onApplyCoupon: () => void
+  onRemoveCoupon: () => void
+  onApplyEligible: (code: string) => void
 }
 
 export function CartPageView({
@@ -28,10 +42,23 @@ export function CartPageView({
   hasItems,
   itemCount,
   groupedByVendor,
+  subtotal,
   total,
   hasUnavailableItems,
   onUpdateQuantity,
   onRemoveItem,
+  couponInput,
+  couponMessage,
+  couponError,
+  couponPending,
+  appliedCouponCode,
+  appliedDiscount,
+  eligible,
+  eligibleLoading,
+  onCouponInputChange,
+  onApplyCoupon,
+  onRemoveCoupon,
+  onApplyEligible,
 }: CartPageViewProps) {
   if (isLoading) {
     return <CartPageSkeleton />
@@ -47,8 +74,8 @@ export function CartPageView({
         <div className="storefront-container relative py-16 md:py-20">
           <EmptyState
             icon={ShoppingBag}
-            heading="Your cart is empty"
-            message="Browse the collection and add pieces you love — they'll gather here."
+            heading={LABELS.cartEmptyHeading}
+            message={LABELS.cartEmptyMessage}
             actionLabel={LABELS.continueShopping}
             actionTo={PATHS.products}
           />
@@ -77,7 +104,7 @@ export function CartPageView({
             className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
             style={{ fontSize: 'var(--text-display-sm)' }}
           >
-            Your Cart
+            {LABELS.yourCart}
           </h1>
         </motion.header>
 
@@ -158,25 +185,45 @@ export function CartPageView({
 
               <dl className="mt-5 space-y-2.5 text-[0.875rem]">
                 <div className="flex items-center justify-between gap-4">
-                  <dt className="text-ink-muted">Subtotal</dt>
-                  <dd className="tabular-nums text-ink">₹{total.toLocaleString('en-IN')}</dd>
+                  <dt className="text-ink-muted">{LABELS.subtotal}</dt>
+                  <dd className="tabular-nums text-ink">₹{subtotal.toLocaleString('en-IN')}</dd>
                 </div>
+                {appliedDiscount > 0 ? (
+                  <div className="flex items-center justify-between gap-4 text-success">
+                    <dt>{LABELS.couponDiscount}</dt>
+                    <dd className="tabular-nums">−₹{appliedDiscount.toLocaleString('en-IN')}</dd>
+                  </div>
+                ) : null}
                 <div className="flex items-center justify-between gap-4">
-                  <dt className="text-ink-muted">Shipping</dt>
-                  <dd className="text-right text-ink-muted">Calculated at checkout</dd>
+                  <dt className="text-ink-muted">{LABELS.shipping}</dt>
+                  <dd className="text-right text-ink-muted">{LABELS.calculatingShippingTaxes}</dd>
                 </div>
               </dl>
 
               <div className="mt-4 border-t border-line pt-4">
+                <CartCouponSection
+                  couponInput={couponInput}
+                  couponMessage={couponMessage}
+                  couponError={couponError}
+                  couponPending={couponPending}
+                  appliedCouponCode={appliedCouponCode}
+                  appliedDiscount={appliedDiscount}
+                  eligible={eligible}
+                  eligibleLoading={eligibleLoading}
+                  onCouponInputChange={onCouponInputChange}
+                  onApplyCoupon={onApplyCoupon}
+                  onRemoveCoupon={onRemoveCoupon}
+                  onApplyEligible={onApplyEligible}
+                />
+              </div>
+
+              <div className="mt-4 border-t border-line pt-4">
                 <div className="flex items-end justify-between gap-4">
-                  <span className="text-[0.875rem] font-medium text-ink">Total</span>
+                  <span className="text-[0.875rem] font-medium text-ink">{LABELS.total}</span>
                   <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
                     ₹{total.toLocaleString('en-IN')}
                   </span>
                 </div>
-                <p className="mt-1.5 text-[0.75rem] text-ink-muted">
-                  Taxes and shipping confirmed at checkout.
-                </p>
               </div>
 
               {hasUnavailableItems ? (
@@ -186,7 +233,7 @@ export function CartPageView({
               ) : (
                 <Button asChild className="mt-5 w-full" size="lg">
                   <Link href={PATHS.checkout} className="inline-flex items-center justify-center gap-2">
-                    Checkout
+                    {LABELS.checkout}
                     <ArrowRight size={16} />
                   </Link>
                 </Button>

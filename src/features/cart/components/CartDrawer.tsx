@@ -8,12 +8,11 @@ import { motion, AnimatePresence } from 'motion/react'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { Button } from '@/shared/components/ui/button'
 import { Separator } from '@/shared/components/ui/separator'
-import { Input } from '@/shared/components/ui/input'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
-import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { CartLineItem } from './CartLineItem'
-import type { CartItem } from '@/shared/api/types'
+import { CartCouponSection } from './CartCouponSection'
+import type { CartItem, EligibleCoupon } from '@/shared/api/types'
 
 interface CartDrawerProps {
   isOpen: boolean
@@ -27,9 +26,14 @@ interface CartDrawerProps {
   couponError: string | null
   couponPending: boolean
   appliedCouponCode: string | null
+  appliedDiscount?: number
+  eligible: EligibleCoupon[]
+  eligibleLoading?: boolean
   hasUnavailableItems?: boolean
   onCouponInputChange: (value: string) => void
   onApplyCoupon: () => void
+  onRemoveCoupon: () => void
+  onApplyEligible: (code: string) => void
   onContinueShopping: () => void
   onUpdateQuantity: (itemId: string, quantity: number) => void
   onRemoveItem: (itemId: string) => void
@@ -47,9 +51,14 @@ export function CartDrawer({
   couponError,
   couponPending,
   appliedCouponCode,
+  appliedDiscount,
+  eligible,
+  eligibleLoading,
   hasUnavailableItems,
   onCouponInputChange,
   onApplyCoupon,
+  onRemoveCoupon,
+  onApplyEligible,
   onContinueShopping,
   onUpdateQuantity,
   onRemoveItem,
@@ -74,8 +83,8 @@ export function CartDrawer({
             className="fixed right-0 top-0 h-full w-[400px] max-w-[100vw] bg-surface-raised border-l border-line shadow-elevation-4 z-50 flex flex-col"
           >
             <div className="flex items-center justify-between px-4 h-14 border-b border-line shrink-0">
-              <h2 className="text-[1.125rem] font-semibold">Your Cart</h2>
-              <button onClick={onClose} className="p-1 hover:bg-paper rounded" aria-label="Close cart">
+              <h2 className="text-[1.125rem] font-semibold">{LABELS.yourCart}</h2>
+              <button onClick={onClose} className="p-1 hover:bg-paper rounded" aria-label={LABELS.closeCart}>
                 <X size={20} />
               </button>
             </div>
@@ -89,8 +98,8 @@ export function CartDrawer({
                 </div>
               ) : !hasItems ? (
                 <EmptyState
-                  heading="Your cart is empty"
-                  message="Add some items to get started."
+                  heading={LABELS.cartEmptyHeading}
+                  message={LABELS.cartEmptyMessage}
                   icon={ShoppingBag}
                   actionLabel={LABELS.continueShopping}
                   onAction={onContinueShopping}
@@ -115,51 +124,24 @@ export function CartDrawer({
 
             {hasItems ? (
               <div className="border-t border-line p-4 space-y-3 shrink-0">
-                <div className="space-y-2">
-                  <label htmlFor="cart-coupon-code" className="block text-[0.8125rem] font-medium text-ink">
-                    Coupon code
-                  </label>
-                  <div className="flex w-full items-stretch gap-2">
-                    <Input
-                      id="cart-coupon-code"
-                      placeholder="Coupon code"
-                      className="min-w-0 flex-1"
-                      value={couponInput}
-                      onChange={(e) => onCouponInputChange(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault()
-                          onApplyCoupon()
-                        }
-                      }}
-                    />
-                    <DisabledActionHint
-                      disabled={!couponInput.trim()}
-                      message="Enter a coupon code to apply it."
-                      className="shrink-0"
-                    >
-                      <Button
-                        variant="outline"
-                        className="h-11 shrink-0 px-4"
-                        onClick={onApplyCoupon}
-                        loading={couponPending}
-                        disabled={!couponInput.trim()}
-                      >
-                        Apply
-                      </Button>
-                    </DisabledActionHint>
-                  </div>
-                  {couponMessage && (
-                    <p className="text-[0.8125rem] text-success">{couponMessage}</p>
-                  )}
-                  {couponError && <p className="text-[0.8125rem] text-danger">{couponError}</p>}
-                  {appliedCouponCode && !couponMessage && (
-                    <p className="text-[0.8125rem] text-ink-muted">Applied: {appliedCouponCode}</p>
-                  )}
-                </div>
+                <CartCouponSection
+                  compact
+                  couponInput={couponInput}
+                  couponMessage={couponMessage}
+                  couponError={couponError}
+                  couponPending={couponPending}
+                  appliedCouponCode={appliedCouponCode}
+                  appliedDiscount={appliedDiscount}
+                  eligible={eligible}
+                  eligibleLoading={eligibleLoading}
+                  onCouponInputChange={onCouponInputChange}
+                  onApplyCoupon={onApplyCoupon}
+                  onRemoveCoupon={onRemoveCoupon}
+                  onApplyEligible={onApplyEligible}
+                />
                 <Separator />
                 <div className="flex justify-between items-center">
-                  <span className="text-[0.9375rem] font-medium">Total</span>
+                  <span className="text-[0.9375rem] font-medium">{LABELS.total}</span>
                   <span className="text-[1.125rem] font-bold text-brand">
                     ₹{total.toLocaleString('en-IN')}
                   </span>
@@ -171,7 +153,7 @@ export function CartDrawer({
                 ) : (
                   <Button asChild size="lg" className="w-full">
                     <Link href={PATHS.checkout} onClick={onClose}>
-                      Checkout
+                      {LABELS.checkout}
                     </Link>
                   </Button>
                 )}
@@ -180,7 +162,7 @@ export function CartDrawer({
                   onClick={onClose}
                   className="block text-center text-[0.8125rem] text-brand hover:underline"
                 >
-                  View full cart
+                  {LABELS.viewFullCart}
                 </Link>
               </div>
             ) : null}

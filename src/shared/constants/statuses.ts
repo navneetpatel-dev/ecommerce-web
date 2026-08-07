@@ -95,10 +95,27 @@ export const PAYMENT_METHOD = {
 export type PaymentMethod = (typeof PAYMENT_METHOD)[keyof typeof PAYMENT_METHOD]
 
 export const COUPON_STATUS = {
+  DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
+  PAUSED: 'PAUSED',
   EXPIRED: 'EXPIRED',
+  ARCHIVED: 'ARCHIVED',
 } as const
+export type CouponStatusValue = (typeof COUPON_STATUS)[keyof typeof COUPON_STATUS]
+export const COUPON_STATUS_VALUES = Object.values(COUPON_STATUS) as [
+  CouponStatusValue,
+  ...CouponStatusValue[],
+]
+
+export const DISCOUNT_BEARER = {
+  PLATFORM: 'PLATFORM',
+  VENDOR: 'VENDOR',
+} as const
+export type DiscountBearerValue = (typeof DISCOUNT_BEARER)[keyof typeof DISCOUNT_BEARER]
+export const DISCOUNT_BEARER_VALUES = Object.values(DISCOUNT_BEARER) as [
+  DiscountBearerValue,
+  ...DiscountBearerValue[],
+]
 
 /** Matches payouts table ENUM (not commission ledger). */
 export const PAYOUT_STATUS = {

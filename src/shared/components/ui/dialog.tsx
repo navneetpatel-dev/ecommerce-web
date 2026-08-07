@@ -44,45 +44,49 @@ const DialogContent = React.forwardRef<
     return (
       <DialogPortal>
         <DialogOverlay />
-        <DialogPrimitive.Content
-          ref={ref}
-          className={cn(
-            'fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] max-w-[480px] max-h-[calc(100dvh-2rem)] -translate-x-1/2 -translate-y-1/2 gap-5 overflow-y-auto border border-line bg-surface-raised p-5 shadow-elevation-3 animate-scale-in outline-none rounded-lg sm:gap-6 sm:p-6',
-            className
-          )}
-          style={{ animationDuration: 'var(--motion-moderate)' }}
-          onPointerDownOutside={(event) => {
-            closedByPointerRef.current = true
-            onPointerDownOutside?.(event)
-          }}
-          onEscapeKeyDown={(event) => {
-            closedByPointerRef.current = false
-            onEscapeKeyDown?.(event)
-          }}
-          onCloseAutoFocus={(event) => {
-            onCloseAutoFocus?.(event)
-            if (event.defaultPrevented) return
-            if (closedByPointerRef.current) {
-              event.preventDefault()
-            }
-            closedByPointerRef.current = false
-          }}
-          {...props}
-        >
-          {children}
-          <DialogPrimitive.Close
-            type="button"
-            className="absolute right-4 top-4 rounded-sm opacity-70 outline-none hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-            onPointerDown={(event) => {
-              // Keep focus in the dialog until close so field blur doesn't flash validation.
-              event.preventDefault()
+        {/* Flex centering avoids transform-based fixed positioning, which can
+            enlarge document overflow and leave a page scrollbar beside the modal. */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+          <DialogPrimitive.Content
+            ref={ref}
+            className={cn(
+              'pointer-events-auto relative grid w-full max-w-[480px] max-h-full gap-5 overflow-y-auto overscroll-contain border border-line bg-surface-raised p-5 shadow-elevation-3 animate-scale-in outline-none rounded-lg sm:gap-6 sm:p-6',
+              className
+            )}
+            style={{ animationDuration: 'var(--motion-moderate)' }}
+            onPointerDownOutside={(event) => {
               closedByPointerRef.current = true
+              onPointerDownOutside?.(event)
             }}
+            onEscapeKeyDown={(event) => {
+              closedByPointerRef.current = false
+              onEscapeKeyDown?.(event)
+            }}
+            onCloseAutoFocus={(event) => {
+              onCloseAutoFocus?.(event)
+              if (event.defaultPrevented) return
+              if (closedByPointerRef.current) {
+                event.preventDefault()
+              }
+              closedByPointerRef.current = false
+            }}
+            {...props}
           >
-            <X size={20} />
-            <span className="sr-only">{LABELS.close}</span>
-          </DialogPrimitive.Close>
-        </DialogPrimitive.Content>
+            {children}
+            <DialogPrimitive.Close
+              type="button"
+              className="absolute right-4 top-4 rounded-sm opacity-70 outline-none hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              onPointerDown={(event) => {
+                // Keep focus in the dialog until close so field blur doesn't flash validation.
+                event.preventDefault()
+                closedByPointerRef.current = true
+              }}
+            >
+              <X size={20} />
+              <span className="sr-only">{LABELS.close}</span>
+            </DialogPrimitive.Close>
+          </DialogPrimitive.Content>
+        </div>
       </DialogPortal>
     )
   }

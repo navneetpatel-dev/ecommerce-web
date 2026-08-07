@@ -21,10 +21,14 @@ export function usePendingProducts() {
   })
 }
 
-export function useAdminCoupons(page = 1, limit = DEFAULT_PAGE_LIMIT) {
+export function useAdminCoupons(
+  page = 1,
+  limit = DEFAULT_PAGE_LIMIT,
+  vendorScoped?: boolean,
+) {
   return useQuery({
-    queryKey: ['admin', 'coupons', page, limit],
-    queryFn: () => adminApi.coupons({ page, limit }),
+    queryKey: ['admin', 'coupons', page, limit, vendorScoped],
+    queryFn: () => adminApi.coupons({ page, limit, vendorScoped }),
   })
 }
 

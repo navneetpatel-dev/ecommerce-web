@@ -150,6 +150,16 @@ export interface CartItem {
 export interface Cart {
   id: string;
   items: CartItem[];
+  total?: number;
+  appliedCoupon?: AppliedCouponSummary | null;
+  removedCouponReason?: string | null;
+}
+
+export interface AppliedCouponSummary {
+  code: string;
+  discount: number;
+  cashbackAmount?: number;
+  type?: string;
 }
 
 export interface OrderItem {
@@ -303,6 +313,24 @@ export interface PayoutEntry {
 
 export type CouponType = 'PERCENTAGE' | 'FLAT' | 'FREE_SHIPPING' | 'BOGO' | 'TIERED' | 'CASHBACK' | 'BUNDLE';
 export type CouponStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'EXPIRED' | 'ARCHIVED';
+export type DiscountBearer = 'PLATFORM' | 'VENDOR';
+export type CouponScopeType = 'all' | 'vendor' | 'product' | 'category';
+export type CouponUserRestrictionType = 'all' | 'firstOrder' | 'specific' | 'segment';
+
+export interface CouponApplicableScope {
+  type: CouponScopeType;
+  ids: string[];
+}
+
+export interface CouponExcludedItems {
+  productIds?: string[];
+  categoryIds?: string[];
+}
+
+export interface CouponUserRestriction {
+  type: CouponUserRestrictionType;
+  value?: string | string[];
+}
 
 export interface Coupon {
   id: string;
@@ -312,9 +340,11 @@ export interface Coupon {
   maxDiscountCap: number | null;
   minOrderValue: number | null;
   minQuantity: number | null;
-  applicableScope: Record<string, unknown>;
+  applicableScope: CouponApplicableScope;
+  excludedItems?: CouponExcludedItems | null;
+  userRestriction?: CouponUserRestriction | null;
   usageLimitTotal: number | null;
-  usageLimitPerUser: number;
+  usageLimitPerUser: number | null;
   usedCount: number;
   startDate: string;
   endDate: string;
@@ -322,6 +352,42 @@ export interface Coupon {
   priority: number;
   status: CouponStatus;
   vendorId: string | null;
+  discountBearer: DiscountBearer;
+  batchId: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CouponAnalytics {
+  couponId: string;
+  code: string;
+  usedCount: number;
+  totalDiscount: number;
+  usedCountCached: number;
+  usageLimitTotal: number | null;
+}
+
+export interface CouponBatch {
+  id: string;
+  name: string;
+  templateCouponConfig: Record<string, unknown>;
+  generatedCount: number;
+  createdById: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface EligibleCoupon {
+  code: string;
+  type: string;
+  discount: number;
+  cashbackAmount: number;
+  priority: number;
+}
+
+export interface BulkGenerateResult {
+  batch: CouponBatch;
+  coupons: Coupon[];
 }
 
 export interface VendorProduct extends ProductListItem {

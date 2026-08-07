@@ -61,6 +61,7 @@ export const PATHS = {
     products: '/vendor/dashboard/products',
     orders: '/vendor/dashboard/orders',
     payouts: '/vendor/dashboard/payouts',
+    coupons: '/vendor/dashboard/coupons',
     reviews: '/vendor/dashboard/reviews',
     profile: '/vendor/dashboard/profile',
   },

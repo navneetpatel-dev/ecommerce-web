@@ -152,6 +152,8 @@ export function ProductDetailContent({
               </span>
             </div>
 
+            <p className="text-[0.8125rem] text-ink-muted">{LABELS.offersAtCheckout}</p>
+
             {product.variants && product.variants.length > 0 && (
               <VariantSelector
                 attributeGroups={variantSelection.attributeGroups}

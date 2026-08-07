@@ -1,18 +1,66 @@
 'use client'
 
+import { useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
 import { StatusBadge } from '@/shared/components/StatusBadge'
+import { TableRowActions } from '@/shared/components/TableRowActions'
+import { Button } from '@/shared/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/components/ui/dialog'
 import { LABELS } from '@/shared/constants/labels'
+import { COUPON_STATUS, DISCOUNT_BEARER } from '@/shared/constants/statuses'
 import { formatDateTime } from '@/shared/utils/formatDate'
-import type { Coupon } from '@/shared/api/types'
+import { formatLabel } from '@/shared/utils/formatLabel'
+import { AdminConfirmAction } from './AdminConfirmAction'
+import { adminApi } from '../api/admin.api'
+import type { Coupon, CouponAnalytics } from '@/shared/api/types'
 
 interface CouponsTableProps {
   coupons?: Coupon[]
   loading?: boolean
   pagination?: DataTablePaginationProps
+  /** When true, hide status mutation actions (vendor oversight). */
+  readOnly?: boolean
 }
 
-export function CouponsTable({ coupons = [], loading = false, pagination }: CouponsTableProps) {
+function bearerLabel(bearer: Coupon['discountBearer']) {
+  return bearer === DISCOUNT_BEARER.VENDOR
+    ? LABELS.discountBearerVendor
+    : LABELS.discountBearerPlatform
+}
+
+export function CouponsTable({
+  coupons = [],
+  loading = false,
+  pagination,
+  readOnly = false,
+}: CouponsTableProps) {
+  const queryClient = useQueryClient()
+  const [analyticsCoupon, setAnalyticsCoupon] = useState<Coupon | null>(null)
+
+  const analyticsQuery = useQuery({
+    queryKey: ['admin', 'coupon-analytics', analyticsCoupon?.id],
+    queryFn: () => adminApi.couponAnalytics(analyticsCoupon!.id),
+    enabled: Boolean(analyticsCoupon?.id),
+  })
+
+  const statusMutation = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: Coupon['status'] }) =>
+      adminApi.updateCouponStatus(id, status),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['admin', 'coupons'] })
+    },
+  })
+
+  const reload = () => {
+    void queryClient.invalidateQueries({ queryKey: ['admin', 'coupons'] })
+  }
+
   const columns: DataTableColumn<Coupon>[] = [
     {
       id: 'code',
@@ -26,11 +74,23 @@ export function CouponsTable({ coupons = [], loading = false, pagination }: Coup
       accessor: 'type',
     },
     {
+      id: 'bearer',
+      header: LABELS.discountBearer,
+      cell: (row) => bearerLabel(row.discountBearer),
+    },
+    {
+      id: 'vendor',
+      header: LABELS.vendorId,
+      className: 'font-mono text-[0.8125rem]',
+      cell: (row) => row.vendorId ?? '—',
+    },
+    {
       id: 'usage',
       header: LABELS.couponUsage,
       className: 'font-mono text-[0.8125rem]',
       truncate: false,
-      cell: (row) => `${row.usedCount}/${row.usageLimitTotal ?? '∞'}`,
+      cell: (row) =>
+        `${row.usedCount}/${row.usageLimitTotal ?? LABELS.usageUnlimited}`,
     },
     {
       id: 'status',
@@ -43,16 +103,112 @@ export function CouponsTable({ coupons = [], loading = false, pagination }: Coup
       header: LABELS.expires,
       cell: (row) => formatDateTime(row.endDate),
     },
+    {
+      id: 'actions',
+      header: LABELS.actions,
+      truncate: false,
+      cell: (row) => (
+        <TableRowActions>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => setAnalyticsCoupon(row)}
+          >
+            {LABELS.viewAnalytics}
+          </Button>
+          {!readOnly && row.status === COUPON_STATUS.ACTIVE ? (
+            <AdminConfirmAction
+              label={LABELS.pauseCoupon}
+              tone="neutral"
+              dialogVariant="warning"
+              title={LABELS.confirmPauseCouponTitle}
+              description={formatLabel(LABELS.confirmPauseCouponBody, { code: row.code })}
+              onConfirm={() =>
+                statusMutation.mutateAsync({ id: row.id, status: COUPON_STATUS.PAUSED }).then(reload)
+              }
+            />
+          ) : null}
+          {!readOnly &&
+          (row.status === COUPON_STATUS.PAUSED || row.status === COUPON_STATUS.DRAFT) ? (
+            <AdminConfirmAction
+              label={LABELS.activateCoupon}
+              tone="success"
+              dialogVariant="success"
+              title={LABELS.confirmActivateCouponTitle}
+              description={formatLabel(LABELS.confirmActivateCouponBody, { code: row.code })}
+              onConfirm={() =>
+                statusMutation.mutateAsync({ id: row.id, status: COUPON_STATUS.ACTIVE }).then(reload)
+              }
+            />
+          ) : null}
+          {!readOnly && row.status !== COUPON_STATUS.ARCHIVED ? (
+            <AdminConfirmAction
+              label={LABELS.archiveCoupon}
+              tone="archive"
+              dialogVariant="warning"
+              title={LABELS.confirmArchiveCouponTitle}
+              description={formatLabel(LABELS.confirmArchiveCouponBody, { code: row.code })}
+              onConfirm={() =>
+                statusMutation
+                  .mutateAsync({ id: row.id, status: COUPON_STATUS.ARCHIVED })
+                  .then(reload)
+              }
+            />
+          ) : null}
+        </TableRowActions>
+      ),
+    },
   ]
 
+  const analytics: CouponAnalytics | undefined = analyticsQuery.data
+
   return (
-    <DataTable
-      columns={columns}
-      rows={coupons}
-      loading={loading}
-      emptyMessage={LABELS.noCoupons}
-      getRowId={(row) => row.id}
-      pagination={pagination}
-    />
+    <>
+      <DataTable
+        columns={columns}
+        rows={coupons}
+        loading={loading}
+        emptyMessage={readOnly ? LABELS.noVendorCoupons : LABELS.noCoupons}
+        getRowId={(row) => row.id}
+        pagination={pagination}
+      />
+
+      <Dialog open={Boolean(analyticsCoupon)} onOpenChange={(open) => !open && setAnalyticsCoupon(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {LABELS.couponAnalytics}
+              {analyticsCoupon ? ` — ${analyticsCoupon.code}` : ''}
+            </DialogTitle>
+          </DialogHeader>
+          {analyticsQuery.isLoading ? (
+            <p className="text-[0.875rem] text-ink-muted">{LABELS.loading}</p>
+          ) : analytics ? (
+            <dl className="space-y-3 text-[0.875rem]">
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">{LABELS.redemptionCount}</dt>
+                <dd className="tabular-nums font-medium">{analytics.usedCount}</dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">{LABELS.discountTotal}</dt>
+                <dd className="tabular-nums font-medium">
+                  ₹{Number(analytics.totalDiscount).toLocaleString('en-IN')}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-ink-muted">{LABELS.couponUsage}</dt>
+                <dd className="tabular-nums font-medium">
+                  {analytics.usedCountCached}/
+                  {analytics.usageLimitTotal ?? LABELS.usageUnlimited}
+                </dd>
+              </div>
+            </dl>
+          ) : (
+            <p className="text-[0.875rem] text-ink-muted">{LABELS.couldNotLoadData}</p>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
