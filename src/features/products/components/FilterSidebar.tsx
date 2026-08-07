@@ -72,8 +72,8 @@ export function FilterSidebar({
                 <NumberInput
                   showSteppers={false}
                   min={0}
-                  placeholder="Min"
-                  aria-label="Minimum price"
+                  placeholder={LABELS.minPricePlaceholder}
+                  aria-label={LABELS.minimumPrice}
                   prefix="₹"
                   value={minPrice}
                   onChange={(value) => onUpdateFilter('minPrice', value)}
@@ -82,8 +82,8 @@ export function FilterSidebar({
                 <NumberInput
                   showSteppers={false}
                   min={0}
-                  placeholder="Max"
-                  aria-label="Maximum price"
+                  placeholder={LABELS.maxPricePlaceholder}
+                  aria-label={LABELS.maximumPrice}
                   prefix="₹"
                   value={maxPrice}
                   onChange={(value) => onUpdateFilter('maxPrice', value)}

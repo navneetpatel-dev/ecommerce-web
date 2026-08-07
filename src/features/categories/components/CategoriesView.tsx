@@ -6,6 +6,8 @@ import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { CategoryCard } from './CategoryCard'
 import { CategoriesPageSkeleton } from '@/shared/components/Skeletons'
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { categoryHref, resolveCategoryIcon } from '../utils/categoryHelpers'
 import type { Category } from '@/shared/api/types'
 import type { CategoryRootWithChildren } from '../hooks/useCategoriesPage'
@@ -31,21 +33,21 @@ export function CategoriesView({
   return (
     <div className="storefront-container py-10 md:py-14">
       <div className="mb-10 max-w-2xl">
-        <TextEyebrow className="mb-2">Browse</TextEyebrow>
+        <TextEyebrow className="mb-2">{LABELS.browse}</TextEyebrow>
         <h1 className="font-display text-[2rem] font-semibold leading-tight text-ink md:text-[2.5rem]">
-          All categories
+          {LABELS.allCategories}
         </h1>
         <p className="mt-3 text-[1.0625rem] text-ink-muted">
-          Explore every collection on Marketplace — from makers and studios across the country.
+          {formatLabel(LABELS.categoriesIndexHint, { site: LABELS.brandName })}
         </p>
       </div>
 
       {isEmpty ? (
         <div className="rounded-md border border-line bg-surface px-6 py-16 text-center">
           <LayoutGrid className="mx-auto h-8 w-8 text-ink-faint" strokeWidth={1.25} />
-          <p className="mt-4 text-[1.0625rem] font-medium text-ink">No categories yet</p>
+          <p className="mt-4 text-[1.0625rem] font-medium text-ink">{LABELS.noCategoriesYet}</p>
           <Link href={PATHS.products} className="mt-3 inline-flex items-center gap-1 text-[0.9375rem] text-brand">
-            Browse products <ArrowRight className="h-3.5 w-3.5" />
+            {LABELS.browseProducts} <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
       ) : (
@@ -63,8 +65,8 @@ export function CategoriesView({
           {rootsWithChildren.length > 0 ? (
             <div className="space-y-10 border-t border-line pt-10">
               <div>
-                <TextEyebrow className="mb-2">Dig deeper</TextEyebrow>
-                <h2 className="text-[1.375rem] font-semibold text-ink">Subcategories</h2>
+                <TextEyebrow className="mb-2">{LABELS.digDeeper}</TextEyebrow>
+                <h2 className="text-[1.375rem] font-semibold text-ink">{LABELS.subcategories}</h2>
               </div>
               {rootsWithChildren.map(({ root, children }) => (
                 <div key={root.id}>
@@ -74,7 +76,7 @@ export function CategoriesView({
                       href={categoryHref(root, tree)}
                       className="text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
                     >
-                      Shop all
+                      {LABELS.shopAll}
                     </Link>
                   </div>
                   <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

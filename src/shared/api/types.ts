@@ -81,6 +81,7 @@ export interface ProductDetail extends ProductListItem {
   images: ProductImage[];
   categoryId: string;
   status: string;
+  secondaryCategories?: Array<{ id: string; name: string; slug: string; status?: string }>;
 }
 
 export interface Category {

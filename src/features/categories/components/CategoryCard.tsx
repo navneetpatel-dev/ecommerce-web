@@ -6,6 +6,8 @@ import { ArrowUpRight } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { MediaImage } from '@/shared/components/MediaImage'
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { resolveCategoryImageUrl } from '../utils/categoryHelpers'
 import type { Category } from '@/shared/api/types'
 
@@ -40,7 +42,7 @@ export function CategoryCard({ category, className, href }: CategoryCardProps) {
       <MediaImage
         src={imageUrl}
         alt=""
-        unavailableLabel={`${category.name} image not available`}
+        unavailableLabel={formatLabel(LABELS.categoryImageUnavailable, { name: category.name })}
         sizes="(max-width: 640px) 50vw, (max-width: 1280px) 25vw, 20vw"
         imageClassName="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
         onUnavailableChange={handleUnavailableChange}

@@ -49,7 +49,7 @@ export function VendorProductCreateForm({
       onSubmit={onSubmit}
     >
       <Input
-        placeholder="Product name"
+        placeholder={LABELS.productNamePlaceholder}
         value={name}
         onChange={(e) => onNameChange(e.target.value)}
         required
@@ -58,7 +58,7 @@ export function VendorProductCreateForm({
         prefix="₹"
         min={1}
         step={1}
-        placeholder="Price"
+        placeholder={LABELS.pricePlaceholder}
         value={price === '' ? undefined : Number(price)}
         onChange={(value) => onPriceChange(value == null ? '' : String(value))}
       />
@@ -75,13 +75,13 @@ export function VendorProductCreateForm({
         </SelectContent>
       </Select>
       <Input
-        placeholder="Short description"
+        placeholder={LABELS.shortDescription}
         value={description}
         onChange={(e) => onDescriptionChange(e.target.value)}
       />
       <div className="flex gap-2 sm:col-span-2">
         <Button type="submit" disabled={creating} loading={creating}>
-          {creating ? 'Creating…' : 'Create product'}
+          {creating ? LABELS.creatingEllipsis : LABELS.createProduct}
         </Button>
         <Button variant="outline" type="button" onClick={onCancel}>
           {LABELS.cancel}

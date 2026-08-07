@@ -6,6 +6,8 @@ import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { CategoryCard, getRootCategories } from '@/features/categories'
 import { CategoryGridSkeleton } from '@/shared/components/Skeletons'
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { cn } from '@/shared/utils/cn'
 import type { Category } from '@/shared/api/types'
 
@@ -21,8 +23,8 @@ export function CategoryRail({ categories = [], isLoading }: CategoryRailProps) 
     return (
       <section>
         <div className="mb-8 space-y-2">
-          <TextEyebrow>Browse</TextEyebrow>
-          <h2 className="text-[1.375rem] font-semibold text-ink">Shop by Category</h2>
+          <TextEyebrow>{LABELS.browse}</TextEyebrow>
+          <h2 className="text-[1.375rem] font-semibold text-ink">{LABELS.shopByCategory}</h2>
         </div>
         <CategoryGridSkeleton count={10} />
       </section>
@@ -39,14 +41,14 @@ export function CategoryRail({ categories = [], isLoading }: CategoryRailProps) 
     <section>
       <div className="mb-8 flex items-end justify-between gap-4">
         <div>
-          <TextEyebrow className="mb-2">Browse</TextEyebrow>
-          <h2 className="text-[1.375rem] font-semibold text-ink">Shop by Category</h2>
+          <TextEyebrow className="mb-2">{LABELS.browse}</TextEyebrow>
+          <h2 className="text-[1.375rem] font-semibold text-ink">{LABELS.shopByCategory}</h2>
         </div>
         <Link
           href={PATHS.categories}
           className="inline-flex shrink-0 items-center gap-1 text-[0.9375rem] font-medium text-brand transition-colors hover:text-brand-hover"
         >
-          View all
+          {LABELS.viewAll}
           {hasMore ? (
             <span className="tabular-nums text-ink-muted">({roots.length})</span>
           ) : null}
@@ -71,11 +73,13 @@ export function CategoryRail({ categories = [], isLoading }: CategoryRailProps) 
             )}
           >
             <span className="text-[0.75rem] font-medium uppercase tracking-[0.14em] text-ink-muted group-hover:text-brand">
-              +{roots.length - HOME_CATEGORY_LIMIT} more
+              {formatLabel(LABELS.moreCategoriesCount, {
+                count: String(roots.length - HOME_CATEGORY_LIMIT),
+              })}
             </span>
             <div className="flex w-full items-center justify-between gap-2">
               <span className="text-[0.9375rem] font-medium text-ink group-hover:text-brand">
-                View all categories
+                {LABELS.browseCategories}
               </span>
               <ArrowUpRight
                 className="h-3.5 w-3.5 shrink-0 text-ink-faint transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand"
