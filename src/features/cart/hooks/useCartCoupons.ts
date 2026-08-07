@@ -80,6 +80,14 @@ export function useCartCoupons({ cart, enabled = true }: UseCartCouponsOptions) 
         setCouponCode(code, { manual: opts?.manual !== false })
         if (result.discount > 0) {
           setCouponMessage(formatLabel(LABELS.couponApplied, { amount: String(result.discount) }))
+        } else if ((result.cashbackAmount ?? 0) > 0) {
+          const payNow = cart?.pricingPreview?.grandTotal ?? cart?.total ?? 0
+          setCouponMessage(
+            formatLabel(LABELS.cashbackPayNowMessage, {
+              payNow: `₹${Number(payNow).toLocaleString('en-IN')}`,
+              cashback: `₹${Number(result.cashbackAmount).toLocaleString('en-IN')}`,
+            }),
+          )
         } else {
           setCouponMessage(LABELS.couponAppliedCheckout)
         }
@@ -95,7 +103,7 @@ export function useCartCoupons({ cart, enabled = true }: UseCartCouponsOptions) 
         setCouponPending(false)
       }
     },
-    [couponInput, loadEligible, refreshCart, requireAuth, setCouponCode],
+    [couponInput, cart?.pricingPreview?.grandTotal, cart?.total, loadEligible, refreshCart, requireAuth, setCouponCode],
   )
 
   const removeCoupon = useCallback(async () => {

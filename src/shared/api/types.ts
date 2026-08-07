@@ -6,6 +6,8 @@ import type {
   ProductStatus,
   ReturnReason,
   ReturnStatus,
+  RefundMethod,
+  RefundStatus,
   ReviewStatus,
   ShipmentStatus,
   ShippingMethod,
@@ -211,6 +213,10 @@ export interface Order {
   discountTotal: number;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
+  paymentMethod?: string | null;
+  walletAmountUsed?: number;
+  pendingCashbackAmount?: number;
+  cashbackCreditedAt?: string | null;
   createdAt: string;
   subOrders: SubOrder[];
   shippingAddress?: Address | null;
@@ -262,7 +268,12 @@ export interface ReturnRequest {
   reason: string;
   reasonCode: ReturnReason;
   status: ReturnStatus;
+  refundMethod?: RefundMethod | null;
+  refundStatus?: RefundStatus;
   refundAmount: number | null;
+  walletRefundAmount?: number;
+  razorpayRefundAmount?: number;
+  receivedAt?: string | null;
   resolvedAt: string | null;
   createdAt: string;
   productName: string | null;
@@ -297,8 +308,23 @@ export interface VendorBreakdown {
 export interface CheckoutQuote {
   vendorBreakdowns: VendorBreakdown[];
   grandTotal: number;
-  appliedCoupon: { code: string; discount: number } | null;
-  appliedCoupons?: Array<{ code: string; discount: number; cashbackAmount?: number }>;
+  cashbackAmount: number;
+  walletBalance: number;
+  walletAmountToUse: number;
+  amountDue: number;
+  appliedCoupon: { code: string; discount: number; cashbackAmount?: number; type?: string } | null;
+  appliedCoupons?: Array<{ code: string; discount: number; cashbackAmount?: number; type?: string }>;
+}
+
+export interface WalletTransaction {
+  id: string;
+  type: 'CREDIT' | 'DEBIT';
+  amount: number;
+  balanceAfter: number;
+  referenceType: string | null;
+  referenceId: string | null;
+  description: string | null;
+  createdAt: string;
 }
 
 export interface CommissionLedgerEntry {

@@ -107,6 +107,7 @@ export function OrdersActivitySection() {
           href={PATHS.reviews}
         />
         <SummaryRow icon={RotateCcw} label="Returns" value="Manage" href={PATHS.myReturns} />
+        <SummaryRow icon={Package} label={LABELS.wallet} value="View" href={PATHS.wallet} />
         <SummaryRow
           icon={Package}
           label={LABELS.allOrders}

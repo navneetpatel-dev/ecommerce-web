@@ -21,6 +21,8 @@ export function useCheckoutPage() {
     setShippingMethod,
     ensureDefaultShippingMethods,
     setPaymentMethod,
+    walletAmountToUse,
+    setWalletAmountToUse,
   } = useCheckoutStore()
   const { data: cart, isLoading: cartLoading } = useCart()
   const { data: addresses, isLoading: addressesLoading } = useAddresses()
@@ -72,6 +74,7 @@ export function useCheckoutPage() {
     addressId,
     shippingMethodByVendor,
     paymentMethod,
+    walletAmountToUse,
     addresses,
     quote,
     isPending,
@@ -94,6 +97,7 @@ export function useCheckoutPage() {
     onBackToShipping: () => setStep(2),
     onBackToPayment: () => setStep(3),
     onSelectPayment: setPaymentMethod,
+    onWalletAmountChange: setWalletAmountToUse,
     onContinueToReview: () => {
       if (!paymentMethod) return
       setStep(4)

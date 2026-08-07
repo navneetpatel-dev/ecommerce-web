@@ -14,6 +14,7 @@ import {
   formatOrderDate,
   shortOrderId,
 } from '../utils/format'
+import { OrderPaymentSummary } from './OrderPaymentSummary'
 
 interface OrderDetailContentProps {
   order: Order
@@ -140,6 +141,8 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
                   </dd>
                 </div>
               </dl>
+
+              <OrderPaymentSummary order={order} className="mt-5 border-t border-line pt-5" />
 
               {address && (
                 <div className="mt-5 border-t border-line pt-5">

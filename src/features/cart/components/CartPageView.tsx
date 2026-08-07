@@ -11,6 +11,7 @@ import { Button } from '@/shared/components/ui/button'
 import { CartPageSkeleton } from '@/shared/components/Skeletons'
 import { CartLineItem } from './CartLineItem'
 import { CartCouponSection } from './CartCouponSection'
+import { CashbackCouponNotice } from '@/features/checkout/components/CashbackCouponNotice'
 import type { CartItem, EligibleCoupon } from '@/shared/api/types'
 
 interface CartPageViewProps {
@@ -29,6 +30,8 @@ interface CartPageViewProps {
   couponPending: boolean
   appliedCouponCode: string | null
   appliedDiscount: number
+  appliedCashbackAmount?: number
+  appliedCouponType?: string | null
   vendorDiscountBreakdown?: Array<{ vendorId: string; name: string; amount: number }>
   eligible: EligibleCoupon[]
   eligibleLoading?: boolean
@@ -54,6 +57,8 @@ export function CartPageView({
   couponPending,
   appliedCouponCode,
   appliedDiscount,
+  appliedCashbackAmount = 0,
+  appliedCouponType,
   vendorDiscountBreakdown = [],
   eligible,
   eligibleLoading,
@@ -223,6 +228,8 @@ export function CartPageView({
                   couponPending={couponPending}
                   appliedCouponCode={appliedCouponCode}
                   appliedDiscount={appliedDiscount}
+                  appliedCashbackAmount={appliedCashbackAmount}
+                  orderTotal={total}
                   eligible={eligible}
                   eligibleLoading={eligibleLoading}
                   onCouponInputChange={onCouponInputChange}
@@ -239,6 +246,14 @@ export function CartPageView({
                     ₹{total.toLocaleString('en-IN')}
                   </span>
                 </div>
+                {(appliedCashbackAmount > 0 || appliedCouponType === 'CASHBACK') && (
+                  <CashbackCouponNotice
+                    className="mt-3 text-[0.8125rem] text-brand"
+                    payNow={total}
+                    cashbackAmount={appliedCashbackAmount}
+                    code={appliedCouponCode}
+                  />
+                )}
               </div>
 
               {hasUnavailableItems ? (

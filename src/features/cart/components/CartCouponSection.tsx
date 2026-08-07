@@ -6,6 +6,7 @@ import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import type { EligibleCoupon } from '@/shared/api/types'
+import { CashbackCouponNotice } from '@/features/checkout/components/CashbackCouponNotice'
 
 interface CartCouponSectionProps {
   couponInput: string
@@ -14,6 +15,8 @@ interface CartCouponSectionProps {
   couponPending: boolean
   appliedCouponCode: string | null
   appliedDiscount?: number
+  appliedCashbackAmount?: number
+  orderTotal?: number
   eligible: EligibleCoupon[]
   eligibleLoading?: boolean
   onCouponInputChange: (value: string) => void
@@ -30,6 +33,8 @@ export function CartCouponSection({
   couponPending,
   appliedCouponCode,
   appliedDiscount = 0,
+  appliedCashbackAmount = 0,
+  orderTotal = 0,
   eligible,
   eligibleLoading,
   onCouponInputChange,
@@ -80,12 +85,21 @@ export function CartCouponSection({
 
       {appliedCouponCode ? (
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-sm bg-success-subtle/40 px-3 py-2">
-          <p className="text-[0.8125rem] text-success">
-            {formatLabel(LABELS.couponAppliedLabel, { code: appliedCouponCode })}
-            {appliedDiscount > 0
-              ? ` (−₹${appliedDiscount.toLocaleString('en-IN')})`
-              : ''}
-          </p>
+          <div className="min-w-0">
+            <p className="text-[0.8125rem] text-success">
+              {formatLabel(LABELS.couponAppliedLabel, { code: appliedCouponCode })}
+              {appliedDiscount > 0
+                ? ` (−₹${appliedDiscount.toLocaleString('en-IN')})`
+                : ''}
+            </p>
+            {appliedCashbackAmount > 0 ? (
+              <CashbackCouponNotice
+                className="mt-1 text-[0.75rem] text-brand"
+                payNow={orderTotal}
+                cashbackAmount={appliedCashbackAmount}
+              />
+            ) : null}
+          </div>
           <Button
             type="button"
             size="sm"

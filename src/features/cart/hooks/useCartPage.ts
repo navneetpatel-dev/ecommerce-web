@@ -64,6 +64,8 @@ export function useCartPage() {
     couponPending: coupons.couponPending,
     appliedCouponCode: coupons.appliedCouponCode,
     appliedDiscount: coupons.appliedDiscount,
+    appliedCashbackAmount: Number(cart?.appliedCoupon?.cashbackAmount ?? 0),
+    appliedCouponType: cart?.appliedCoupon?.type ?? null,
     eligible: coupons.eligible,
     eligibleLoading: coupons.eligibleLoading,
     applyCoupon: coupons.applyCoupon,

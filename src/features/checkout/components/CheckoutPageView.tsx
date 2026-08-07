@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
 import { AnimatePresence, motion } from 'motion/react'
 import { AddressStep } from './AddressStep'
 import { ShippingStep } from './ShippingStep'
@@ -18,6 +19,7 @@ import { StatusDialog } from '@/shared/components/StatusDialog'
 import type { ShippingMethod } from '@/shared/constants/statuses'
 import type { Address, CartItem, CheckoutQuote } from '@/shared/api/types'
 import type { PaymentNotice } from '../hooks/usePlaceOrder'
+import { CashbackCouponNotice } from './CashbackCouponNotice'
 
 interface CheckoutPageViewProps {
   isLoading?: boolean
@@ -27,6 +29,7 @@ interface CheckoutPageViewProps {
   shippingMethodByVendor: Record<string, ShippingMethod>
   addresses?: Address[]
   paymentMethod?: string | null
+  walletAmountToUse?: number
   quote?: CheckoutQuote | null
   isPending: boolean
   paymentNotice?: PaymentNotice | null
@@ -44,6 +47,7 @@ interface CheckoutPageViewProps {
   onBackToShipping: () => void
   onBackToPayment: () => void
   onSelectPayment: (method: string) => void
+  onWalletAmountChange: (amount: number) => void
   onContinueToReview: () => void
   onPlaceOrder: () => void
   onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => Promise<void>
@@ -147,6 +151,22 @@ function OrderSummaryPanel({
               <dd className="tabular-nums">−₹{quote.appliedCoupon.discount.toLocaleString('en-IN')}</dd>
             </div>
           )}
+          {(quote?.cashbackAmount ?? 0) > 0 ? (
+            <CashbackCouponNotice
+              payNow={quote?.amountDue ?? quote?.grandTotal ?? total}
+              cashbackAmount={quote?.cashbackAmount ?? 0}
+              code={quote?.appliedCoupon?.code}
+              className="text-[0.8125rem] text-brand"
+            />
+          ) : null}
+          {(quote?.walletAmountToUse ?? 0) > 0 ? (
+            <div className="flex items-center justify-between gap-4 text-[0.8125rem]">
+              <dt className="text-ink-muted">{LABELS.walletAppliedAtCheckout}</dt>
+              <dd className="tabular-nums text-ink">
+                −₹{(quote?.walletAmountToUse ?? 0).toLocaleString('en-IN')}
+              </dd>
+            </div>
+          ) : null}
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">Shipping & tax</dt>
             <dd className="text-right text-ink-muted">
@@ -183,6 +203,7 @@ export function CheckoutPageView({
   shippingMethodByVendor,
   addresses,
   paymentMethod,
+  walletAmountToUse = 0,
   quote,
   isPending,
   paymentNotice,
@@ -200,6 +221,7 @@ export function CheckoutPageView({
   onBackToShipping,
   onBackToPayment,
   onSelectPayment,
+  onWalletAmountChange,
   onContinueToReview,
   onPlaceOrder,
   onCreateAddress,
@@ -325,7 +347,10 @@ export function CheckoutPageView({
                         <PaymentStep
                           isPending={isPending}
                           selectedMethod={paymentMethod}
+                          quote={quote}
+                          walletAmountToUse={walletAmountToUse}
                           onSelect={onSelectPayment}
+                          onWalletAmountChange={onWalletAmountChange}
                           onContinue={onContinueToReview}
                           onBack={onBackToShipping}
                         />

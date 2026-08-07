@@ -338,6 +338,15 @@ export function Header({
                     >
                       {LABELS.wishlist}
                     </Link>
+                    <Link
+                      href={PATHS.wallet}
+                      className={cn(
+                        'px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
+                        isTransparent ? 'text-paper hover:bg-paper/10' : 'hover:bg-paper'
+                      )}
+                    >
+                      {LABELS.wallet}
+                    </Link>
                   </div>
                 ) : null}
 

@@ -10,12 +10,14 @@ interface CheckoutState {
   /** When true, auto-apply must not replace the customer's chosen code. */
   manualCouponOverride: boolean
   paymentMethod: string | null
+  walletAmountToUse: number
   setStep: (step: CheckoutState['step']) => void
   setAddress: (id: string) => void
   setShippingMethod: (vendorId: string, method: ShippingMethod) => void
   ensureDefaultShippingMethods: (vendorIds: string[]) => void
   setCouponCode: (code: string | null, opts?: { manual?: boolean }) => void
   setPaymentMethod: (method: string | null) => void
+  setWalletAmountToUse: (amount: number) => void
 }
 
 export const useCheckoutStore = create<CheckoutState>((set) => ({
@@ -25,6 +27,7 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
   appliedCouponCode: null,
   manualCouponOverride: false,
   paymentMethod: null,
+  walletAmountToUse: 0,
   setStep: (step) => set({ step }),
   setAddress: (addressId) => set({ addressId }),
   setShippingMethod: (vendorId, method) =>
@@ -47,5 +50,10 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
       manualCouponOverride:
         opts?.manual === true ? true : opts?.manual === false ? false : s.manualCouponOverride,
     })),
-  setPaymentMethod: (paymentMethod) => set({ paymentMethod }),
+  setPaymentMethod: (paymentMethod) =>
+    set((s) => ({
+      paymentMethod,
+      walletAmountToUse: paymentMethod === 'cod' ? 0 : s.walletAmountToUse,
+    })),
+  setWalletAmountToUse: (walletAmountToUse) => set({ walletAmountToUse }),
 }))

@@ -18,6 +18,8 @@ import { cn } from '@/shared/utils/cn'
 import { formatInr } from '../utils/format'
 import { buildSubOrderTimeline } from '../utils/timeline'
 import { ORDER_STATUS } from '@/shared/constants/statuses'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { REASON_CODES, type ReturnReasonCode } from '../hooks/useSubOrderReturn'
 
 interface SubOrderCardProps {
@@ -94,7 +96,7 @@ export function SubOrderCard({
                   className="mt-2 h-auto px-0 text-brand hover:text-brand-hover"
                   onClick={() => onOpenReturn(item)}
                 >
-                  Request return
+                  {LABELS.requestReturn}
                 </Button>
               ) : null}
             </div>
@@ -171,16 +173,18 @@ export function SubOrderCard({
       <Dialog open={Boolean(returnTarget)} onOpenChange={(open) => !open && onCloseReturn()}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Request a return</DialogTitle>
+            <DialogTitle>{LABELS.requestReturnTitle}</DialogTitle>
             <DialogDescription>
               {returnTarget?.productName
-                ? `Return "${returnTarget.productName}". We'll review and update you by email.`
-                : 'Tell us why you want to return this item.'}
+                ? formatLabel(LABELS.requestReturnDescriptionItem, {
+                    product: returnTarget.productName,
+                  })
+                : LABELS.requestReturnDescription}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="return-reason-code">Reason</Label>
+              <Label htmlFor="return-reason-code">{LABELS.returnReasonLabel}</Label>
               <select
                 id="return-reason-code"
                 value={reasonCode}
@@ -195,25 +199,22 @@ export function SubOrderCard({
               </select>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="return-reason">Details</Label>
+              <Label htmlFor="return-reason">{LABELS.returnDetailsLabel}</Label>
               <Input
                 id="return-reason"
                 value={reason}
                 onChange={(e) => onReasonChange(e.target.value)}
-                placeholder="Briefly describe the issue"
+                placeholder={LABELS.returnDetailsPlaceholder}
               />
             </div>
-            <FormError
-              error={error}
-              fallback="Could not submit return request."
-            />
+            <FormError error={error} fallback={LABELS.couldNotSubmitReturn} />
             {isSuccess ? (
-              <p className="text-[0.875rem] text-success">Return requested.</p>
+              <p className="text-[0.875rem] text-success">{LABELS.returnRequestedSuccess}</p>
             ) : null}
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onCloseReturn}>
-              Cancel
+              {LABELS.cancelReturn}
             </Button>
             <Button
               type="button"
@@ -221,7 +222,7 @@ export function SubOrderCard({
               disabled={!reason.trim() || !returnTarget}
               onClick={onSubmitReturn}
             >
-              Submit return
+              {LABELS.submitReturn}
             </Button>
           </DialogFooter>
         </DialogContent>

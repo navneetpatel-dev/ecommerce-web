@@ -23,6 +23,8 @@ export function CartPage() {
       couponPending={cart.couponPending}
       appliedCouponCode={cart.appliedCouponCode}
       appliedDiscount={cart.appliedDiscount}
+      appliedCashbackAmount={cart.appliedCashbackAmount}
+      appliedCouponType={cart.appliedCouponType}
       vendorDiscountBreakdown={cart.vendorDiscountBreakdown}
       eligible={cart.eligible}
       eligibleLoading={cart.eligibleLoading}

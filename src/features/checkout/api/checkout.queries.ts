@@ -51,6 +51,7 @@ export function useCheckoutQuote(input: {
   addressId: string | null
   shippingMethodByVendor: Record<string, string>
   couponCode: string | null
+  walletAmountToUse?: number
 }) {
   return useQuery({
     queryKey: ['checkout', 'quote', input],

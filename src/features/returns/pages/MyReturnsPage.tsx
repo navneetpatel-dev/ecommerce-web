@@ -4,19 +4,23 @@ import { RotateCcw } from 'lucide-react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { Badge } from '@/shared/components/ui/badge'
+import { Timeline } from '@/shared/components/Timeline'
+import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
 import { RETURN_STATUS } from '@/shared/constants/statuses'
 import { formatOrderDate, formatInr } from '@/features/orders/utils/format'
+import { buildLogisticsTimeline, buildRefundTimeline } from '../utils/returnTimeline'
 import { useMyReturns } from '../api/returns.queries'
 
 const STATUS_LABEL: Record<string, string> = {
-  [RETURN_STATUS.REQUESTED]: 'Requested',
-  [RETURN_STATUS.APPROVED]: 'Approved',
-  [RETURN_STATUS.REJECTED]: 'Rejected',
-  [RETURN_STATUS.PICKUP_SCHEDULED]: 'Pickup scheduled',
-  [RETURN_STATUS.RECEIVED]: 'Received',
-  [RETURN_STATUS.REFUNDED]: 'Refunded',
-  [RETURN_STATUS.CLOSED]: 'Closed',
+  [RETURN_STATUS.REQUESTED]: LABELS.returnLogisticsRequested,
+  [RETURN_STATUS.APPROVED]: LABELS.returnLogisticsApproved,
+  [RETURN_STATUS.REJECTED]: LABELS.returnLogisticsRejected,
+  [RETURN_STATUS.PICKUP_SCHEDULED]: LABELS.returnLogisticsPickupScheduled,
+  [RETURN_STATUS.RECEIVED]: LABELS.returnLogisticsReceived,
+  [RETURN_STATUS.REFUNDED]: LABELS.returnRefundStatusCompleted,
+  [RETURN_STATUS.CLOSED]: LABELS.returnLogisticsClosed,
 }
 
 export function MyReturnsPage() {
@@ -26,11 +30,8 @@ export function MyReturnsPage() {
   return (
     <div className="storefront-container py-8 md:py-10">
       <header className="mb-8 max-w-2xl">
-        <h1 className="font-display text-[1.75rem] text-ink md:text-[2rem]">Returns</h1>
-        <p className="mt-2 text-[0.9375rem] text-ink-muted">
-          Track return requests for delivered items. Start a return from an order detail page when
-          an item qualifies.
-        </p>
+        <h1 className="font-display text-[1.75rem] text-ink md:text-[2rem]">{LABELS.returnsPageTitle}</h1>
+        <p className="mt-2 text-[0.9375rem] text-ink-muted">{LABELS.returnsPageDescription}</p>
       </header>
 
       {isLoading ? (
@@ -40,36 +41,49 @@ export function MyReturnsPage() {
         </div>
       ) : isError ? (
         <p className="border border-line bg-surface-raised px-5 py-10 text-center text-ink-muted">
-          {(error as Error)?.message || 'Could not load returns.'}
+          {(error as Error)?.message || LABELS.couldNotLoadReturns}
         </p>
       ) : returns.length === 0 ? (
         <div className="border border-dashed border-line bg-paper/50">
           <EmptyState
             icon={RotateCcw}
-            heading="No returns yet"
-            message="When you request a return on a delivered order, it will show up here."
-            actionLabel="View orders"
+            heading={LABELS.noReturnsYet}
+            message={LABELS.noReturnsYetMessage}
+            actionLabel={LABELS.viewOrders}
             actionTo={PATHS.orders}
             className="py-14"
           />
         </div>
       ) : (
-        <ul className="divide-y divide-line border border-line bg-surface-raised">
+        <ul className="space-y-4">
           {returns.map((row) => (
-            <li key={row.id} className="flex flex-wrap items-start justify-between gap-3 px-5 py-4">
-              <div className="min-w-0">
-                <p className="font-medium text-ink">{row.productName || 'Order item'}</p>
-                <p className="mt-1 text-[0.8125rem] text-ink-muted">
-                  {row.reasonCode.replaceAll('_', ' ')} · {formatOrderDate(row.createdAt)}
-                </p>
-                <p className="mt-1 text-[0.875rem] text-ink-muted">{row.reason}</p>
-                {row.refundAmount != null ? (
-                  <p className="mt-1 text-[0.8125rem] tabular-nums text-ink">
-                    Refund {formatInr(row.refundAmount)}
+            <li key={row.id} className="border border-line bg-surface-raised px-5 py-4">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-medium text-ink">{row.productName || LABELS.orderItemFallback}</p>
+                  <p className="mt-1 text-[0.8125rem] text-ink-muted">
+                    {row.reasonCode.replaceAll('_', ' ')} · {formatOrderDate(row.createdAt)}
                   </p>
-                ) : null}
+                  <p className="mt-1 text-[0.875rem] text-ink-muted">{row.reason}</p>
+                  {row.refundAmount != null ? (
+                    <p className="mt-1 text-[0.8125rem] tabular-nums text-ink">
+                      {LABELS.returnRefundStatusCompleted} {formatInr(row.refundAmount)}
+                    </p>
+                  ) : null}
+                </div>
+                <Badge variant="outline">{STATUS_LABEL[row.status] ?? row.status}</Badge>
               </div>
-              <Badge variant="outline">{STATUS_LABEL[row.status] ?? row.status}</Badge>
+
+              <div className="mt-5 grid gap-6 border-t border-line pt-5 md:grid-cols-2">
+                <div>
+                  <TextEyebrow className="mb-3">{LABELS.returnTimelineRefundTrack}</TextEyebrow>
+                  <Timeline steps={buildRefundTimeline(row)} />
+                </div>
+                <div>
+                  <TextEyebrow className="mb-3">{LABELS.returnTimelineLogisticsTrack}</TextEyebrow>
+                  <Timeline steps={buildLogisticsTimeline(row)} />
+                </div>
+              </div>
             </li>
           ))}
         </ul>

@@ -33,12 +33,14 @@ export const checkoutApi = {
     addressId: string
     shippingMethodByVendor: Record<string, string>
     couponCode?: string | null
+    walletAmountToUse?: number
   }) => apiClient.post<CheckoutQuote>(API.checkout.quote, body),
   placeOrder: (body: {
     addressId: string
     paymentMethod: string
     couponCode?: string | null
     shippingMethodByVendor: Record<string, string>
+    walletAmountToUse?: number
   }) => apiClient.post<PlaceOrderResponse>(API.checkout.create, body),
   /** UX confirmation only — webhook is the source of truth for PAID. */
   verifyPayment: (payload: VerifyPaymentPayload) =>

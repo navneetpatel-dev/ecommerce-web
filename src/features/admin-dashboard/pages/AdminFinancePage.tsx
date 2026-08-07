@@ -4,6 +4,8 @@ import { AdminDataPage } from './AdminDataPage'
 import { AdminSectionTabs } from '../components/AdminSectionTabs'
 import { useAdminFinancePage } from '../hooks/useAdminFinancePage'
 import { AdminSettlementReportsPanel } from '../components/AdminSettlementReportsPanel'
+import { AdminWalletLiabilityPanel } from '../components/AdminWalletLiabilityPanel'
+import { AdminCashbackWriteOffPanel } from '../components/AdminCashbackWriteOffPanel'
 import { LABELS } from '@/shared/constants/labels'
 
 export function AdminFinancePage() {
@@ -44,7 +46,13 @@ export function AdminFinancePage() {
         {
           value: 'reports',
           label: LABELS.reports,
-          content: <AdminSettlementReportsPanel />,
+          content: (
+            <div className="space-y-10">
+              <AdminSettlementReportsPanel />
+              <AdminWalletLiabilityPanel />
+              <AdminCashbackWriteOffPanel />
+            </div>
+          ),
         },
       ]}
     />

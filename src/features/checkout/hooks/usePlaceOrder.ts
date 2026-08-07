@@ -20,14 +20,20 @@ export type PaymentNotice = {
 }
 
 export function usePlaceOrderWithRazorpay() {
-  const { addressId, shippingMethodByVendor, appliedCouponCode } = useCheckoutStore()
+  const { addressId, shippingMethodByVendor, appliedCouponCode, walletAmountToUse } =
+    useCheckoutStore()
   const placeOrder = usePlaceOrder()
   const router = useRouter()
   const queryClient = useQueryClient()
   const [paymentNotice, setPaymentNotice] = useState<PaymentNotice | null>(null)
   const cancelInFlightRef = useRef<Set<string>>(new Set())
 
-  const quoteInput = { addressId, shippingMethodByVendor, couponCode: appliedCouponCode }
+  const quoteInput = {
+    addressId,
+    shippingMethodByVendor,
+    couponCode: appliedCouponCode,
+    walletAmountToUse,
+  }
   const { data: quote } = useCheckoutQuote(quoteInput)
 
   const clearCartCache = () => {
@@ -73,9 +79,14 @@ export function usePlaceOrderWithRazorpay() {
         paymentMethod: method,
         couponCode: appliedCouponCode || undefined,
         shippingMethodByVendor,
+        walletAmountToUse: method === 'cod' ? 0 : walletAmountToUse,
       })
 
-      if (method === 'razorpay' && result.razorpayOrderId) {
+      const skipRazorpay =
+        method === 'razorpay' &&
+        (!result.razorpayOrderId || (quote?.amountDue ?? 0) <= 0)
+
+      if (method === 'razorpay' && result.razorpayOrderId && !skipRazorpay) {
         await loadRazorpayScript()
         if (!window.Razorpay) {
           showNotice({

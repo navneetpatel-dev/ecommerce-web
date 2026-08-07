@@ -69,6 +69,10 @@ export const API = {
     cancel: '/api/checkout/cancel',
     verify: '/api/checkout/verify',
   },
+  wallet: {
+    balance: '/api/wallet/balance',
+    transactions: '/api/wallet/transactions',
+  },
   orders: {
     list: (query = '') => `/api/orders${query ? `?${query}` : ''}`,
     detail: (id: string) => `/api/orders/${id}`,
@@ -126,6 +130,8 @@ export const API = {
     adminSummary: '/api/reports/admin/summary',
     adminVendors: '/api/reports/admin/vendors',
     adminReconciliation: '/api/reports/admin/reconciliation',
+    adminWalletLiability: '/api/reports/admin/wallet-liability',
+    adminCashbackWriteOffs: '/api/reports/admin/cashback-write-offs',
     vendor: (vendorId: string) => `/api/reports/vendor/${vendorId}`,
   },
   shipping: {

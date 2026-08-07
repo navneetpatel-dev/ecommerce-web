@@ -52,6 +52,43 @@ export type ReconciliationReport = {
   error: string | null
 }
 
+export type WalletLiabilityRow = {
+  userId: string
+  balance: number
+  asOf: string
+}
+
+export type WalletLiabilityReport = {
+  totalLiability: number
+  customerCount: number
+  rows: WalletLiabilityRow[]
+}
+
+export type CashbackWriteOffRow = {
+  id: string
+  userId: string
+  originalClawbackAmount: number
+  recoveredAmount: number
+  writtenOffAmount: number
+  bornBy: 'PLATFORM' | 'VENDOR'
+  referenceType: string | null
+  referenceId: string | null
+  createdAt: string
+}
+
+export type CashbackWriteOffReport = {
+  from: string
+  to: string
+  bornBy: 'PLATFORM' | 'VENDOR' | null
+  recoveredTotal: number
+  writtenOffTotal: number
+  rows: CashbackWriteOffRow[]
+}
+
+export type WriteOffReportRange = ReportRange & {
+  bornBy?: 'PLATFORM' | 'VENDOR'
+}
+
 export type VendorReportSummary = {
   from: string
   to: string
@@ -77,6 +114,16 @@ function withRange(path: string, range: ReportRange) {
   return `${path}?${q.toString()}`
 }
 
+function withWriteOffRange(path: string, range: WriteOffReportRange) {
+  const q = new URLSearchParams({
+    from: range.from,
+    to: range.to,
+    format: range.format ?? 'json',
+  })
+  if (range.bornBy) q.set('bornBy', range.bornBy)
+  return `${path}?${q.toString()}`
+}
+
 export const reportsApi = {
   adminSummary: (range: ReportRange) =>
     apiClient.get<AdminReportSummary>(withRange(API.reports.adminSummary, range)),
@@ -86,6 +133,10 @@ export const reportsApi = {
     ),
   adminReconciliation: (range: ReportRange) =>
     apiClient.get<ReconciliationReport>(withRange(API.reports.adminReconciliation, range)),
+  adminWalletLiability: (range: ReportRange) =>
+    apiClient.get<WalletLiabilityReport>(withRange(API.reports.adminWalletLiability, range)),
+  adminCashbackWriteOffs: (range: WriteOffReportRange) =>
+    apiClient.get<CashbackWriteOffReport>(withWriteOffRange(API.reports.adminCashbackWriteOffs, range)),
   vendorSummary: (vendorId: string, range: ReportRange) =>
     apiClient.get<VendorReportSummary>(withRange(API.reports.vendor(vendorId), range)),
   exportUrl: (path: string, range: ReportRange) => withRange(path, range),

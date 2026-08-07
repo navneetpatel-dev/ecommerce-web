@@ -139,6 +139,13 @@ export function MobileNavDrawer({
                 {LABELS.wishlist}
               </Link>
               <Link
+                href={PATHS.wallet}
+                onClick={onClose}
+                className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors"
+              >
+                {LABELS.wallet}
+              </Link>
+              <Link
                 href={PATHS.help}
                 onClick={onClose}
                 className="flex items-center px-3 py-2.5 rounded-md text-[0.9375rem] hover:bg-paper transition-colors"

@@ -72,6 +72,27 @@ export const RETURN_REASON_VALUES = Object.values(RETURN_REASON) as [
   ...ReturnReason[],
 ]
 
+export const REFUND_STATUS = {
+  NONE: 'NONE',
+  PENDING: 'PENDING',
+  INITIATED: 'INITIATED',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+} as const
+export type RefundStatus = (typeof REFUND_STATUS)[keyof typeof REFUND_STATUS]
+
+export const REFUND_METHOD = {
+  RAZORPAY: 'RAZORPAY',
+  WALLET_CREDIT: 'WALLET_CREDIT',
+} as const
+export type RefundMethod = (typeof REFUND_METHOD)[keyof typeof REFUND_METHOD]
+
+export const WALLET_LEDGER_TYPE = {
+  CREDIT: 'CREDIT',
+  DEBIT: 'DEBIT',
+} as const
+export type WalletLedgerType = (typeof WALLET_LEDGER_TYPE)[keyof typeof WALLET_LEDGER_TYPE]
+
 export const SHIPMENT_STATUS = {
   PENDING: 'PENDING',
   PICKED_UP: 'PICKED_UP',

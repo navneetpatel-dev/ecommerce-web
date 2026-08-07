@@ -4,6 +4,7 @@ import { formatLabel } from '@/shared/utils/formatLabel'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { Button } from '@/shared/components/ui/button'
 import { ArrowRight, AlertTriangle } from 'lucide-react'
+import { CashbackCouponNotice } from './CashbackCouponNotice'
 
 interface ReviewStepProps {
   quote: CheckoutQuote | null
@@ -31,6 +32,8 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
       </div>
     )
   }
+
+  const payable = quote.amountDue ?? quote.grandTotal
 
   return (
     <div className="space-y-5">
@@ -94,18 +97,24 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand via-brand/70 to-transparent"
         />
+        {quote.walletAmountToUse > 0 ? (
+          <div className="mb-3 flex justify-between gap-4 text-[0.875rem]">
+            <span className="text-ink-muted">{LABELS.walletAppliedAtCheckout}</span>
+            <span className="tabular-nums text-ink">−{formatInr(quote.walletAmountToUse)}</span>
+          </div>
+        ) : null}
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-brand">
-              {LABELS.payableNow}
+              {LABELS.amountDueToday}
             </p>
             <p className="mt-1 text-[0.875rem] text-ink-muted">{LABELS.includingShippingTaxes}</p>
           </div>
           <p className="font-display text-[1.75rem] leading-none tabular-nums text-brand">
-            {formatInr(quote.grandTotal)}
+            {formatInr(payable)}
           </p>
         </div>
-        {quote.appliedCoupon && (
+        {quote.appliedCoupon && quote.appliedCoupon.discount > 0 && (
           <p className="mt-3 text-[0.8125rem] text-success">
             {formatLabel(LABELS.couponAppliedReview, {
               code: quote.appliedCoupon.code,
@@ -113,6 +122,17 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
             })}
           </p>
         )}
+        {(quote.cashbackAmount ?? 0) > 0 ? (
+          <CashbackCouponNotice
+            className="mt-3 text-[0.8125rem] text-brand"
+            payNow={payable}
+            cashbackAmount={quote.cashbackAmount}
+            code={quote.appliedCoupon?.code}
+          />
+        ) : null}
+        {payable <= 0 && quote.walletAmountToUse > 0 ? (
+          <p className="mt-3 text-[0.8125rem] font-medium text-success">{LABELS.walletFullyCoversOrder}</p>
+        ) : null}
       </div>
 
       {hasUnavailableItems && (

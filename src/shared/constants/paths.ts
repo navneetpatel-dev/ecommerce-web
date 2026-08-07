@@ -21,6 +21,7 @@ export const PATHS = {
   reviews: '/reviews',
   returns: '/returns',
   myReturns: '/my-returns',
+  wallet: '/wallet',
   profile: '/profile',
   profileTab: (tab: string) => `/profile?tab=${tab}`,
   login: '/login',

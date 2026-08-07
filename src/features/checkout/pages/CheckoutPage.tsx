@@ -15,6 +15,7 @@ export function CheckoutPage() {
       shippingMethodByVendor={checkout.shippingMethodByVendor}
       addresses={checkout.addresses}
       paymentMethod={checkout.paymentMethod}
+      walletAmountToUse={checkout.walletAmountToUse}
       quote={checkout.quote}
       isPending={checkout.isPending}
       paymentNotice={checkout.paymentNotice}
@@ -32,6 +33,7 @@ export function CheckoutPage() {
       onBackToShipping={checkout.onBackToShipping}
       onBackToPayment={checkout.onBackToPayment}
       onSelectPayment={checkout.onSelectPayment}
+      onWalletAmountChange={checkout.onWalletAmountChange}
       onContinueToReview={checkout.onContinueToReview}
       onPlaceOrder={checkout.onPlaceOrder}
       onCreateAddress={checkout.onCreateAddress}
