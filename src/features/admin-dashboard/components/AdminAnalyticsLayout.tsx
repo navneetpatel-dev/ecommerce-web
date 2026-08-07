@@ -1,57 +1,182 @@
-import { AdminAnalyticsCard } from './AdminAnalyticsCard'
-import { AnalyticsList } from './AnalyticsList'
+'use client'
 
-interface AdminAnalyticsData {
-  gmv: number
-  topVendors: any[]
-  topCategories: any[]
-  orderVolume: Array<{ date: string; count: number }>
-}
+import {
+  Banknote,
+  Package,
+  Percent,
+  RotateCcw,
+  ShoppingBag,
+  Store,
+  Users,
+  Wallet,
+} from 'lucide-react'
+import { motion } from 'motion/react'
+import type { AdminAnalytics } from '@/shared/api/types'
+import { LABELS } from '@/shared/constants/labels'
+import { AnalyticsMetricCard } from './AnalyticsMetricCard'
+import { AnalyticsTrendChart } from './AnalyticsTrendChart'
+import { AnalyticsStatusChart } from './AnalyticsStatusChart'
+import { AnalyticsRankedList } from './AnalyticsRankedList'
+import { AnalyticsRatingChart } from './AnalyticsRatingChart'
+import { AnalyticsOpsQueues } from './AnalyticsOpsQueues'
+import {
+  formatAnalyticsInr,
+  formatAnalyticsPercent,
+} from '../utils/analyticsFormat'
 
 interface AdminAnalyticsLayoutProps {
-  data: AdminAnalyticsData
+  data: AdminAnalytics
+}
+
+const fadeUp = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
 }
 
 export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
-  const maxOrderCount = Math.max(...(data.orderVolume?.map((item) => item.count) ?? [0]), 1)
-
   return (
-    <div className="space-y-8">
-      <AdminAnalyticsCard title="Gross Merchandise Volume" value={`₹${data.gmv}`} />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div>
-          <h3 className="font-semibold mb-3">Order Volume Trend</h3>
-          <div className="rounded-md border border-line bg-surface p-4">
-            <div className="-mx-1 overflow-x-auto px-1">
-              <div className="flex h-48 min-w-[28rem] items-end gap-3 sm:min-w-0">
-                {data.orderVolume?.map((point) => (
-                  <div key={point.date} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-2">
-                    <div
-                      className="w-full rounded-sm border border-brand/20 bg-brand-subtle"
-                      style={{ height: `${Math.max((point.count / maxOrderCount) * 100, 8)}%` }}
-                      aria-label={`${point.count} orders on ${point.date}`}
-                    />
-                    <div className="text-center">
-                      <p className="text-[0.8125rem] font-medium text-ink">{point.count}</p>
-                      <p className="max-w-full truncate text-[0.75rem] text-ink-muted sm:text-[0.8125rem]">
-                        {point.date}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+    <div className="space-y-6 sm:space-y-8">
+      <motion.header
+        className="relative overflow-hidden rounded-md border border-line bg-gradient-to-br from-brand-subtle/70 via-surface to-paper px-5 py-6 sm:px-7 sm:py-8"
+        {...fadeUp}
+        transition={{ duration: 0.35 }}
+      >
+        <div
+          className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-brand/10 blur-3xl"
+          aria-hidden
+        />
+        <div className="relative space-y-2">
+          <h1 className="font-display text-[1.75rem] leading-tight tracking-tight text-ink sm:text-[2rem]">
+            {LABELS.analytics}
+          </h1>
+          <p className="max-w-2xl text-[0.9375rem] text-ink-muted">{LABELS.analyticsHint}</p>
         </div>
-        <div>
-          <h3 className="font-semibold mb-3">Top Vendors</h3>
-          <AnalyticsList items={data.topVendors as any} labelKey="businessName" />
+      </motion.header>
+
+      <motion.div
+        className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
+        {...fadeUp}
+        transition={{ duration: 0.35, delay: 0.05 }}
+      >
+        <AnalyticsMetricCard
+          title={LABELS.analyticsGmv}
+          value={formatAnalyticsInr(data.gmv)}
+          icon={Banknote}
+          tone="brand"
+          trend={data.revenueGrowthPct}
+        />
+        <AnalyticsMetricCard
+          title={LABELS.analyticsPaidGmv}
+          value={formatAnalyticsInr(data.paidGmv)}
+          icon={Wallet}
+        />
+        <AnalyticsMetricCard
+          title={LABELS.analyticsAov}
+          value={formatAnalyticsInr(data.aov)}
+          icon={Package}
+        />
+        <AnalyticsMetricCard
+          title={LABELS.analyticsTotalOrders}
+          value={String(data.totalOrders)}
+          icon={ShoppingBag}
+          trend={data.ordersGrowthPct}
+        />
+      </motion.div>
+
+      <motion.div
+        className="grid grid-cols-2 gap-3 lg:grid-cols-4"
+        {...fadeUp}
+        transition={{ duration: 0.35, delay: 0.08 }}
+      >
+        <AnalyticsMetricCard
+          title={LABELS.analyticsCustomers}
+          value={String(data.totalCustomers)}
+          icon={Users}
+        />
+        <AnalyticsMetricCard
+          title={LABELS.analyticsVendors}
+          value={String(data.totalVendors)}
+          icon={Store}
+        />
+        <AnalyticsMetricCard
+          title={LABELS.analyticsCancellationRate}
+          value={formatAnalyticsPercent(data.cancellationRate)}
+          icon={Percent}
+          tone={data.cancellationRate > 15 ? 'warning' : 'default'}
+        />
+        <AnalyticsMetricCard
+          title={LABELS.analyticsReturnRate}
+          value={formatAnalyticsPercent(data.returnRate)}
+          icon={RotateCcw}
+          tone={data.returnRate > 10 ? 'warning' : 'default'}
+        />
+      </motion.div>
+
+      <motion.div {...fadeUp} transition={{ duration: 0.35, delay: 0.1 }}>
+        <AnalyticsOpsQueues
+          pendingProducts={data.pendingProducts}
+          pendingVendors={data.pendingVendors}
+          pendingReviews={data.pendingReviews}
+        />
+      </motion.div>
+
+      <motion.div
+        className="grid grid-cols-1 gap-4 xl:grid-cols-5"
+        {...fadeUp}
+        transition={{ duration: 0.35, delay: 0.12 }}
+      >
+        <div className="xl:col-span-3">
+          <AnalyticsTrendChart data={data.orderVolume} />
         </div>
-      </div>
-      <div>
-        <h3 className="font-semibold mb-3">Top Categories</h3>
-        <AnalyticsList items={data.topCategories as any} labelKey="name" />
-      </div>
+        <div className="xl:col-span-2">
+          <AnalyticsStatusChart
+            title={LABELS.analyticsOrdersByStatus}
+            data={data.ordersByStatus}
+            centerLabel={LABELS.analyticsTotalOrders}
+          />
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="grid grid-cols-1 gap-4 lg:grid-cols-2"
+        {...fadeUp}
+        transition={{ duration: 0.35, delay: 0.14 }}
+      >
+        <AnalyticsStatusChart
+          title={LABELS.analyticsPaymentsByStatus}
+          data={data.paymentsByStatus}
+          centerLabel={LABELS.analyticsPaymentsTotal}
+        />
+        <AnalyticsRatingChart data={data.ratingDistribution} />
+      </motion.div>
+
+      <motion.div
+        className="grid grid-cols-1 gap-4 lg:grid-cols-2"
+        {...fadeUp}
+        transition={{ duration: 0.35, delay: 0.16 }}
+      >
+        <AnalyticsRankedList
+          title={LABELS.analyticsTopVendors}
+          items={data.topVendors.map((v) => ({
+            id: v.id,
+            label: v.businessName,
+            revenue: v.revenue,
+          }))}
+        />
+        <AnalyticsRankedList
+          title={LABELS.analyticsTopCategories}
+          items={data.topCategories.map((c) => ({
+            id: c.id,
+            label: c.name,
+            revenue: c.revenue,
+          }))}
+        />
+      </motion.div>
+
+      <p className="flex items-center gap-2 text-[0.75rem] text-ink-faint">
+        <Package className="h-3.5 w-3.5" aria-hidden />
+        {LABELS.analyticsVsPriorPeriod}
+      </p>
     </div>
   )
 }
