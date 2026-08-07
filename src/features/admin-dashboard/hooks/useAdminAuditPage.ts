@@ -16,5 +16,6 @@ export function useAdminAuditPage(): AdminListPageModel {
     title: LABELS.audit,
     permission: PERMISSIONS.AUDIT_VIEW,
     load,
+    columnKeys: ['actorName', 'action', 'entityType', 'createdAt'],
   }
 }

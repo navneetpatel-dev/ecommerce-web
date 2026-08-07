@@ -64,5 +64,6 @@ export function useAdminShippingPage(): AdminShippingPageModel {
     permission: PERMISSIONS.SHIPPING_MANAGE,
     load,
     actions,
+    columnKeys: ['name', 'states', 'pincodePrefixes'],
   }
 }

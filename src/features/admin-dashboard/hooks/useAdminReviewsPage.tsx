@@ -43,5 +43,6 @@ export function useAdminReviewsPage(): AdminListPageModel {
     permission: PERMISSIONS.REVIEW_MODERATE,
     load,
     actions,
+    columnKeys: ['productName', 'customerName', 'rating', 'title', 'status', 'createdAt'],
   }
 }

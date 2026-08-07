@@ -37,5 +37,6 @@ export function useAdminReturnsPage(): AdminListPageModel {
     permission: PERMISSIONS.ORDER_REFUND,
     load,
     actions,
+    columnKeys: ['productName', 'customerName', 'reasonCode', 'status', 'refundAmount', 'createdAt'],
   }
 }

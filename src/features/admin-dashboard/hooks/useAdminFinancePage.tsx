@@ -39,12 +39,14 @@ export function useAdminFinancePage(): AdminFinancePageModel {
       title: LABELS.commissions,
       permission: PERMISSIONS.COMMISSION_VIEW,
       load: loadCommissions,
+      columnKeys: ['vendorName', 'saleAmount', 'commissionRate', 'commissionAmount', 'status', 'createdAt'],
     },
     payouts: {
       title: LABELS.payouts,
       permission: PERMISSIONS.PAYOUT_MANAGE,
       load: loadPayouts,
       actions: payoutActions,
+      columnKeys: ['vendorName', 'amount', 'periodStart', 'periodEnd', 'status', 'createdAt'],
     },
   }
 }

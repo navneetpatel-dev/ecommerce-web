@@ -38,6 +38,6 @@ export function useAdminOrdersPage(): AdminListPageModel {
     permission: PERMISSIONS.ORDER_MANAGE,
     load,
     actions,
-    columnKeys: ['id', 'status', 'total', 'createdAt'],
+    columnKeys: ['customerName', 'status', 'totalAmount', 'createdAt'],
   }
 }

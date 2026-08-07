@@ -5,10 +5,15 @@ import { LABELS } from '@/shared/constants/labels'
 export function adminRowLabel(row: AdminDataRow): string {
   const value =
     row.businessName ??
+    row.productName ??
+    row.customerName ??
+    row.vendorName ??
+    row.categoryName ??
+    row.actorName ??
     row.name ??
     row.email ??
     row.code ??
     row.slug ??
-    row.id
+    row.title
   return value == null || value === '' ? LABELS.thisItem : String(value)
 }

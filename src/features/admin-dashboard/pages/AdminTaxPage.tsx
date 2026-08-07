@@ -15,6 +15,7 @@ export function AdminTaxPage() {
         permission={page.permission}
         load={page.load}
         actions={page.actions}
+        columnKeys={page.columnKeys}
       />
     </div>
   )

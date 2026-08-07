@@ -8,6 +8,7 @@ import {
 import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
 import { LABELS } from '@/shared/constants/labels'
 import { useClientPagination } from '@/shared/hooks/useClientPagination'
+import { shouldInferAdminColumn } from '../utils/adminTableCells'
 
 export type AdminDataRow = Record<string, unknown>
 
@@ -134,11 +135,10 @@ export function useAdminDataList(load: AdminListLoadFn, pageSize = DEFAULT_PAGE_
   )
 }
 
-/** Infer readable columns from the first row (skips bulky nested payloads). */
+/** Infer readable columns from the first row (skips IDs and bulky nested payloads). */
 export function inferAdminColumns(rows: AdminDataRow[], max = 5): string[] {
   if (!rows[0]) return []
-  const skip = new Set(['bankDetails', 'passwordHash', 'createdBy', 'updatedBy', 'deletedBy', 'deletedAt'])
   return Object.keys(rows[0])
-    .filter((key) => !skip.has(key))
+    .filter((key) => shouldInferAdminColumn(key))
     .slice(0, max)
 }

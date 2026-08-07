@@ -5,6 +5,7 @@ import {
 } from '@/shared/components/DataTable'
 import { LABELS } from '@/shared/constants/labels'
 import { inferAdminColumns, type AdminDataRow } from '../hooks/useAdminDataList'
+import { formatAdminCellValue, getAdminCellValue } from '../utils/adminTableCells'
 
 interface AdminDataListViewProps {
   title: string
@@ -23,15 +24,10 @@ interface AdminDataListViewProps {
   columnKeys?: string[]
 }
 
-function formatCell(value: unknown): string {
-  if (value == null || value === '') return '—'
-  if (typeof value === 'object') return JSON.stringify(value)
-  return String(value)
-}
-
 function columnHeader(key: string): string {
+  const leaf = key.includes('.') ? key.split('.').pop()! : key
   const labels = LABELS as Record<string, string>
-  return labels[key] ?? key
+  return labels[leaf] ?? labels[key] ?? leaf
 }
 
 export function AdminDataListView({
@@ -54,7 +50,7 @@ export function AdminDataListView({
     id: key,
     header: columnHeader(key),
     truncate: true,
-    cell: (row) => formatCell(row[key]),
+    cell: (row) => formatAdminCellValue(getAdminCellValue(row, key)),
   }))
 
   return (

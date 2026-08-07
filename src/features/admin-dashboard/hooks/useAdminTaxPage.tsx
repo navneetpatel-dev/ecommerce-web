@@ -69,5 +69,6 @@ export function useAdminTaxPage(): AdminTaxPageModel {
     permission: PERMISSIONS.TAX_MANAGE,
     load,
     actions,
+    columnKeys: ['categoryName', 'hsnCode', 'gstPercentage', 'createdAt'],
   }
 }

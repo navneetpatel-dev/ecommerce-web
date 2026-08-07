@@ -48,7 +48,7 @@ export function useAdminProductsPage(): AdminProductsPageModel {
     permission: PERMISSIONS.PRODUCT_MANAGE,
     load,
     actions,
-    columnKeys: ['name', 'status', 'basePrice', 'slug'],
+    columnKeys: ['name', 'vendorName', 'categoryName', 'status', 'basePrice'],
     showApprovalQueue: hasPermission(PERMISSIONS.PRODUCT_APPROVE),
     pendingCount: pendingProducts?.total ?? 0,
   }

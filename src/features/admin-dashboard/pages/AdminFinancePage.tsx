@@ -21,6 +21,7 @@ export function AdminFinancePage() {
               title={page.commissions.title}
               permission={page.commissions.permission}
               load={page.commissions.load}
+              columnKeys={page.commissions.columnKeys}
               hideTitle
             />
           ),
@@ -34,6 +35,7 @@ export function AdminFinancePage() {
               permission={page.payouts.permission}
               load={page.payouts.load}
               actions={page.payouts.actions}
+              columnKeys={page.payouts.columnKeys}
               hideTitle
             />
           ),
