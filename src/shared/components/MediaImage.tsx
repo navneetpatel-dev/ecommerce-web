@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ProductImagePlaceholder } from '@/shared/components/ProductImagePlaceholder'
+import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
 
 interface MediaImageProps {
@@ -25,7 +26,7 @@ interface MediaImageProps {
 export function MediaImage({
   src,
   alt,
-  unavailableLabel = 'Image not available',
+  unavailableLabel = LABELS.imageNotAvailable,
   sizes,
   priority,
   loading,

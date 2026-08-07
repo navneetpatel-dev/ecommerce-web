@@ -20,6 +20,7 @@ interface CategoriesPageHeaderProps {
   form: UseFormReturn<CategoryFormInput>
   onSubmit: (data: CategoryFormInput) => void
   isPending: boolean
+  error?: string | null
 }
 
 export function CategoriesPageHeader({
@@ -28,6 +29,7 @@ export function CategoriesPageHeader({
   form,
   onSubmit,
   isPending,
+  error = null,
 }: CategoriesPageHeaderProps) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
@@ -54,7 +56,7 @@ export function CategoriesPageHeader({
             })}
             className="space-y-1"
           >
-            <AdminCategoryCreateForm form={form} isPending={isPending} />
+            <AdminCategoryCreateForm form={form} isPending={isPending} error={error} />
           </form>
         </DialogContent>
       </Dialog>

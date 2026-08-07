@@ -1,7 +1,8 @@
 'use client'
 
-import { AdminDataPage } from './AdminDataPage'
+import { RequirePermission } from '@/shared/components/RequirePermission'
 import { CategoriesPageHeader } from '../components/CategoriesPageHeader'
+import { CategoriesTable } from '../components/CategoriesTable'
 import { useAdminCategoriesPage } from '../hooks/useAdminCategoriesPage'
 
 export function AdminCategoriesPage() {
@@ -15,15 +16,18 @@ export function AdminCategoriesPage() {
         form={page.form}
         onSubmit={page.onSubmit}
         isPending={page.isPending}
+        error={page.createError}
       />
-      <AdminDataPage
-        title={page.title}
-        permission={page.permission}
-        load={page.load}
-        actions={page.actions}
-        columnKeys={page.columnKeys}
-        hideTitle
-      />
+      <RequirePermission permission={page.permission}>
+        <CategoriesTable
+          categories={page.categories}
+          loading={page.loading}
+          error={page.error}
+          onRefresh={page.reload}
+          pagination={page.pagination}
+          actions={page.renderActions}
+        />
+      </RequirePermission>
     </div>
   )
 }

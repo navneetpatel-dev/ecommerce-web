@@ -89,6 +89,7 @@ export interface Category {
   parentId: string | null;
   imageUrl?: string | null;
   status?: string;
+  parent?: { id: string; name: string } | null;
   children?: Category[];
 }
 

@@ -160,7 +160,8 @@ export const LABELS = {
   confirmRejectReviewTitle: 'Reject this review?',
   confirmRejectReviewBody: 'Reject review "{name}"? It will not appear publicly.',
   confirmDeleteCategoryTitle: 'Delete this category?',
-  confirmDeleteCategoryBody: 'Delete "{name}"? Products in this category may need reassignment.',
+  confirmDeleteCategoryBody:
+    'Delete "{name}"? Categories with products or subcategories cannot be deleted.',
   confirmDeleteTaxTitle: 'Delete this tax rule?',
   confirmDeleteTaxBody: 'Delete tax rule "{name}"? This cannot be undone.',
   confirmDeleteShippingTitle: 'Delete this shipping zone?',
@@ -185,6 +186,7 @@ export const LABELS = {
   categoryName: 'Category name',
   categoryNameRequired: 'Category name is required',
   enterCategoryNameToSave: 'Enter a category name to save.',
+  imageNotAvailable: 'Image not available',
   parentCategory: 'Parent category',
   parentCategoryNone: 'None (top-level)',
   selectParentCategory: 'Select a parent category',
@@ -195,8 +197,9 @@ export const LABELS = {
   categoryStatusActive: 'Active',
   categoryStatusArchived: 'Archived',
   name: 'Name',
-  imageUrl: 'Image URL',
+  imageUrl: 'Image',
   parentId: 'Parent',
+  parentName: 'Parent',
   // Platform settings
   platformSettings: 'Platform Settings',
   platformSettingsHint:

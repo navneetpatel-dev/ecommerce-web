@@ -7,6 +7,7 @@ import {
   USER_STATUS,
   SHIPMENT_STATUS,
   REVIEW_STATUS,
+  CATEGORY_STATUS,
 } from '@/shared/constants/statuses'
 
 type BadgeVariant = 'success' | 'warning' | 'destructive' | 'secondary' | 'brand'
@@ -19,6 +20,7 @@ const SUCCESS = new Set<string>([
   PAYMENT_STATUS.PAID,
   ORDER_STATUS.DELIVERED,
   ORDER_STATUS.CONFIRMED,
+  CATEGORY_STATUS.ACTIVE,
   'COMPLETED',
 ])
 
@@ -48,6 +50,7 @@ const DESTRUCTIVE = new Set<string>([
   ORDER_STATUS.CANCELLED,
   USER_STATUS.BLOCKED,
   PAYMENT_STATUS.REFUNDED,
+  CATEGORY_STATUS.ARCHIVED,
 ])
 
 function getVariant(status: string): BadgeVariant {

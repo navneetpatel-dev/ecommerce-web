@@ -1,36 +1,29 @@
 'use client'
 
-import { useCallback, useState, type ReactNode } from 'react'
+import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PERMISSIONS } from '@/shared/constants/permissions'
 import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
+import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { categoriesApi } from '@/features/categories/api/categories.api'
 import { AdminConfirmAction } from '../components/AdminConfirmAction'
 import { AdminEditCategoryAction } from '../components/AdminEditCategoryAction'
-import { adminRowLabel } from '../utils/adminRowLabel'
+import { useAdminDataList } from './useAdminDataList'
 import {
   CATEGORY_FORM_DEFAULTS,
   CategoryFormSchema,
   toCategoryCreateBody,
   type CategoryFormInput,
 } from '../schemas/categories.schema'
-import type { AdminDataRow } from './useAdminDataList'
-import type { AdminListPageModel } from './adminListPage.types'
+import type { Category } from '@/shared/api/types'
 
-export type AdminCategoriesPageModel = AdminListPageModel & {
-  open: boolean
-  setOpen: (open: boolean) => void
-  form: ReturnType<typeof useForm<CategoryFormInput>>
-  isPending: boolean
-  onSubmit: (data: CategoryFormInput) => Promise<void>
-}
-
-export function useAdminCategoriesPage(): AdminCategoriesPageModel {
+export function useAdminCategoriesPage() {
   const [listVersion, setListVersion] = useState(0)
   const [open, setOpen] = useState(false)
   const [isPending, setIsPending] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
 
   const form = useForm<CategoryFormInput>({
     resolver: zodResolver(CategoryFormSchema),
@@ -38,18 +31,6 @@ export function useAdminCategoriesPage(): AdminCategoriesPageModel {
     reValidateMode: 'onChange',
     defaultValues: CATEGORY_FORM_DEFAULTS,
   })
-
-  const onSubmit = useCallback(async (data: CategoryFormInput) => {
-    setIsPending(true)
-    try {
-      await categoriesApi.create(toCategoryCreateBody(data))
-      form.reset(CATEGORY_FORM_DEFAULTS)
-      setOpen(false)
-      setListVersion((version) => version + 1)
-    } finally {
-      setIsPending(false)
-    }
-  }, [form])
 
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
@@ -59,42 +40,80 @@ export function useAdminCategoriesPage(): AdminCategoriesPageModel {
     [listVersion],
   )
 
-  const actions = useCallback((row: AdminDataRow, reload: () => void): ReactNode => {
-    const label = adminRowLabel(row)
+  const list = useAdminDataList(load)
 
-    return (
+  const onSubmit = useCallback(
+    async (data: CategoryFormInput) => {
+      setIsPending(true)
+      setCreateError(null)
+      try {
+        await categoriesApi.create(toCategoryCreateBody(data))
+        form.reset(CATEGORY_FORM_DEFAULTS)
+        setOpen(false)
+        setListVersion((version) => version + 1)
+      } catch (err) {
+        setCreateError(getApiErrorMessage(err, LABELS.couldNotLoadData))
+      } finally {
+        setIsPending(false)
+      }
+    },
+    [form],
+  )
+
+  const setDialogOpen = useCallback(
+    (next: boolean) => {
+      setOpen(next)
+      if (!next) setCreateError(null)
+    },
+    [],
+  )
+
+  const renderActions = useCallback(
+    (row: Category) => (
       <>
         <AdminEditCategoryAction
           category={{
-            id: String(row.id),
-            name: String(row.name ?? ''),
-            parentId: (row.parentId as string | null | undefined) ?? null,
-            imageUrl: (row.imageUrl as string | null | undefined) ?? null,
-            status: (row.status as string | null | undefined) ?? null,
+            id: row.id,
+            name: row.name,
+            parentId: row.parentId,
+            imageUrl: row.imageUrl,
+            status: row.status,
           }}
-          onSaved={reload}
+          onSaved={list.reload}
         />
         <AdminConfirmAction
           label={LABELS.delete}
           dialogVariant="danger"
           title={LABELS.confirmDeleteCategoryTitle}
-          description={formatLabel(LABELS.confirmDeleteCategoryBody, { name: label })}
-          onConfirm={() => categoriesApi.delete(String(row.id)).then(reload)}
+          description={formatLabel(LABELS.confirmDeleteCategoryBody, { name: row.name })}
+          onConfirm={() => categoriesApi.delete(row.id).then(list.reload)}
         />
       </>
-    )
-  }, [])
+    ),
+    [list.reload],
+  )
 
   return {
     open,
-    setOpen,
+    setOpen: setDialogOpen,
     form,
     isPending,
+    createError,
     onSubmit,
     title: LABELS.categories,
     permission: PERMISSIONS.CATEGORY_MANAGE,
-    load,
-    actions,
-    columnKeys: ['name', 'slug', 'status', 'imageUrl', 'parentId'],
+    categories: list.rows as unknown as Category[],
+    loading: list.loading,
+    error: list.error,
+    reload: list.reload,
+    pagination: {
+      page: list.page,
+      totalPages: list.totalPages,
+      total: list.total,
+      from: list.from,
+      to: list.to,
+      onPageChange: list.onPageChange,
+    },
+    renderActions,
   }
 }

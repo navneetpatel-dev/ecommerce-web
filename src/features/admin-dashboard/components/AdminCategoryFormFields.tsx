@@ -5,7 +5,6 @@ import type { UseFormReturn } from 'react-hook-form'
 import { Controller } from 'react-hook-form'
 import type { CategoryFormInput } from '../schemas/categories.schema'
 import { categoriesApi } from '@/features/categories/api/categories.api'
-import { flattenCategories } from '@/features/categories/utils/categoryHelpers'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import {
@@ -17,6 +16,7 @@ import {
 } from '@/shared/components/ui/select'
 import { LABELS } from '@/shared/constants/labels'
 import { CATEGORY_STATUS } from '@/shared/constants/statuses'
+import { MAX_PAGE_LIMIT } from '@/shared/constants/pagination'
 import type { Category } from '@/shared/api/types'
 
 const NONE_PARENT = '__none__'
@@ -60,7 +60,9 @@ export function AdminCategoryFormFields({
   const [parents, setParents] = useState<Category[]>([])
 
   useEffect(() => {
-    void categoriesApi.list().then((rows) => setParents(flattenCategories(rows)))
+    void categoriesApi
+      .listPaginated({ page: 1, limit: MAX_PAGE_LIMIT })
+      .then((result) => setParents(result.items))
   }, [])
 
   const parentOptions = useMemo(
