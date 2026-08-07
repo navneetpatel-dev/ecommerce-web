@@ -183,5 +183,6 @@ export const API = {
     list: (vendorId: string) => `/api/vendors/${vendorId}/documents`,
     create: (vendorId: string) => `/api/vendors/${vendorId}/documents`,
     verify: (documentId: string) => `/api/vendors/documents/${documentId}/verify`,
+    reject: (documentId: string) => `/api/vendors/documents/${documentId}/reject`,
   },
 } as const

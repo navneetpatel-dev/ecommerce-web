@@ -1,14 +1,12 @@
 'use client'
 
-import { useCallback, type ReactNode } from 'react'
+import { useCallback } from 'react'
 import { PERMISSIONS, type PermissionKey } from '@/shared/constants/permissions'
 import { LABELS } from '@/shared/constants/labels'
-import { formatLabel } from '@/shared/utils/formatLabel'
 import { adminApi } from '../api/admin.api'
 import { usePendingVendors } from '../api/admin.queries'
 import { usePermissions } from '@/shared/hooks/usePermissions'
-import { AdminConfirmAction } from '../components/AdminConfirmAction'
-import { adminRowLabel } from '../utils/adminRowLabel'
+import { VendorRowActions } from '../components/VendorRowActions'
 import type { AdminDataRow } from './useAdminDataList'
 import type { AdminListPageModel } from './adminListPage.types'
 
@@ -27,20 +25,8 @@ export function useAdminVendorsPage(): AdminVendorsPageModel {
     [],
   )
 
-  const actions = useCallback((row: AdminDataRow, reload: () => void): ReactNode => {
-    const name = adminRowLabel(row)
-    return (
-      <AdminConfirmAction
-        label={LABELS.suspend}
-        dialogVariant="warning"
-        tone="neutral"
-        title={LABELS.confirmSuspendVendorTitle}
-        description={formatLabel(LABELS.confirmSuspendVendorBody, { name })}
-        requireReason
-        reasonHint={LABELS.enterSuspendReason}
-        onConfirm={(reason) => adminApi.suspendVendor(String(row.id), reason ?? '').then(reload)}
-      />
-    )
+  const actions = useCallback((row: AdminDataRow, reload: () => void) => {
+    return <VendorRowActions row={row} onReload={reload} />
   }, [])
 
   return {

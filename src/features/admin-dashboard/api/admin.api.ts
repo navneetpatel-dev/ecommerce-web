@@ -58,6 +58,24 @@ export const adminApi = {
   suspendVendor: (id: string, reason: string) =>
     apiClient.patch(API.vendors.suspend(id), { reason }),
 
+  getVendorDocuments: (vendorId: string) =>
+    apiClient.get<
+      Array<{
+        id: string
+        vendorId: string
+        type: 'GST_CERT' | 'PAN' | 'BANK_PROOF'
+        url: string
+        verified: boolean
+        createdAt?: string
+      }>
+    >(API.vendorDocs.list(vendorId)),
+  verifyVendorDocument: (documentId: string) =>
+    apiClient.patch(API.vendorDocs.verify(documentId), {}),
+  rejectVendorDocument: (documentId: string, reason: string) =>
+    apiClient.patch<{ id: string; rejected: boolean }>(API.vendorDocs.reject(documentId), {
+      reason,
+    }),
+
   pendingProducts: async (params: PaginationQuery = {}): Promise<PaginatedList<ProductDetail>> => {
     const q = new URLSearchParams({ status: PRODUCT_STATUS.PENDING_APPROVAL })
     if (params.page) q.set('page', String(params.page))
