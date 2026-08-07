@@ -151,7 +151,16 @@ export interface Cart {
   id: string;
   items: CartItem[];
   total?: number;
+  merchandiseSubtotal?: number;
+  pricingPreview?: {
+    merchandiseSubtotal: number;
+    discount: number;
+    taxTotal: number;
+    shippingTotal: number;
+    grandTotal: number;
+  };
   appliedCoupon?: AppliedCouponSummary | null;
+  appliedCoupons?: AppliedCouponSummary[];
   removedCouponReason?: string | null;
 }
 
@@ -289,6 +298,7 @@ export interface CheckoutQuote {
   vendorBreakdowns: VendorBreakdown[];
   grandTotal: number;
   appliedCoupon: { code: string; discount: number } | null;
+  appliedCoupons?: Array<{ code: string; discount: number; cashbackAmount?: number }>;
 }
 
 export interface CommissionLedgerEntry {
@@ -446,6 +456,8 @@ export interface AdminAnalytics {
 
 export interface PlatformSettings {
   defaultCommissionRate: number;
+  tcsRatePercent: number;
+  tdsRatePercent: number;
   autoApproveProducts: boolean;
   defaultReturnWindow: number;
   payoutCycle: string;

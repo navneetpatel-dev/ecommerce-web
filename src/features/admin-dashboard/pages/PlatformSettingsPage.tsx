@@ -22,6 +22,8 @@ export function PlatformSettingsPage() {
       form={settings.form}
       message={settings.message}
       onCommissionRateChange={settings.setCommissionRate}
+      onTcsRateChange={settings.setTcsRatePercent}
+      onTdsRateChange={settings.setTdsRatePercent}
       onAutoApproveChange={settings.setAutoApproveProducts}
       onReturnWindowChange={settings.setReturnWindow}
       onPayoutCycleChange={settings.setPayoutCycle}

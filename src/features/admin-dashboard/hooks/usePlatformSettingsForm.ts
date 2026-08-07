@@ -41,6 +41,14 @@ export function usePlatformSettingsForm() {
       setMessage(null)
       setForm((current) => (current ? { ...current, defaultCommissionRate: value } : current))
     },
+    setTcsRatePercent: (value: number) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, tcsRatePercent: value } : current))
+    },
+    setTdsRatePercent: (value: number) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, tdsRatePercent: value } : current))
+    },
     setAutoApproveProducts: (value: boolean) => {
       setMessage(null)
       setForm((current) => (current ? { ...current, autoApproveProducts: value } : current))

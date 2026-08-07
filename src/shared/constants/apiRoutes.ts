@@ -122,6 +122,12 @@ export const API = {
     list: '/api/payouts',
     process: '/api/payouts/process',
   },
+  reports: {
+    adminSummary: '/api/reports/admin/summary',
+    adminVendors: '/api/reports/admin/vendors',
+    adminReconciliation: '/api/reports/admin/reconciliation',
+    vendor: (vendorId: string) => `/api/reports/vendor/${vendorId}`,
+  },
   shipping: {
     rates: '/api/shipping/rates',
     zones: '/api/shipping/zones',

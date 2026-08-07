@@ -19,6 +19,8 @@ interface PlatformSettingsFormProps {
   form: PlatformSettings
   message?: string | null
   onCommissionRateChange: (value: number) => void
+  onTcsRateChange: (value: number) => void
+  onTdsRateChange: (value: number) => void
   onAutoApproveChange: (value: boolean) => void
   onReturnWindowChange: (value: number) => void
   onPayoutCycleChange: (value: string) => void
@@ -71,6 +73,8 @@ export function PlatformSettingsForm({
   form,
   message,
   onCommissionRateChange,
+  onTcsRateChange,
+  onTdsRateChange,
   onAutoApproveChange,
   onReturnWindowChange,
   onPayoutCycleChange,
@@ -98,6 +102,28 @@ export function PlatformSettingsForm({
             suffix="%"
             onChange={(value) => onCommissionRateChange(value ?? 0)}
           />
+        </Field>
+        <Field label={LABELS.tcsRatePercent}>
+          <NumberInput
+            value={form.tcsRatePercent}
+            min={0}
+            max={100}
+            step={0.1}
+            suffix="%"
+            onChange={(value) => onTcsRateChange(value ?? 0)}
+          />
+          <p className="text-[0.8125rem] text-ink-muted">{LABELS.tcsRateHint}</p>
+        </Field>
+        <Field label={LABELS.tdsRatePercent}>
+          <NumberInput
+            value={form.tdsRatePercent}
+            min={0}
+            max={100}
+            step={0.1}
+            suffix="%"
+            onChange={(value) => onTdsRateChange(value ?? 0)}
+          />
+          <p className="text-[0.8125rem] text-ink-muted">{LABELS.tdsRateHint}</p>
         </Field>
         <Field label={LABELS.autoApproveProducts}>
           <Select

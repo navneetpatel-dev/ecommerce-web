@@ -3,6 +3,7 @@
 import { AdminDataPage } from './AdminDataPage'
 import { AdminSectionTabs } from '../components/AdminSectionTabs'
 import { useAdminFinancePage } from '../hooks/useAdminFinancePage'
+import { AdminSettlementReportsPanel } from '../components/AdminSettlementReportsPanel'
 import { LABELS } from '@/shared/constants/labels'
 
 export function AdminFinancePage() {
@@ -39,6 +40,11 @@ export function AdminFinancePage() {
               hideTitle
             />
           ),
+        },
+        {
+          value: 'reports',
+          label: LABELS.reports,
+          content: <AdminSettlementReportsPanel />,
         },
       ]}
     />

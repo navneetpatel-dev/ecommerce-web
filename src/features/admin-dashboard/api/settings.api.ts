@@ -10,6 +10,8 @@ export type PublicPlatformSettings = {
 
 export type AdminPlatformSettings = PublicPlatformSettings & {
   defaultCommissionRate: number
+  tcsRatePercent: number
+  tdsRatePercent: number
   autoApproveProducts: boolean
   payoutCycle: string
 }
