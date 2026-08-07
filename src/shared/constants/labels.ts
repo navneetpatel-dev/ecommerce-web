@@ -134,6 +134,7 @@ export const LABELS = {
   close: 'Close',
   noCoupons: 'No coupons',
   actions: 'Actions',
+  moreActions: 'More actions',
   pageOf: 'Page {current} of {total}',
   showingResults: 'Showing {from}–{to} of {total}',
   previousPage: 'Previous page',

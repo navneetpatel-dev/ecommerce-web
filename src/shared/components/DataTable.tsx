@@ -13,6 +13,7 @@ import { SkeletonRows } from '@/shared/components/Skeletons'
 import { Button } from '@/shared/components/ui/button'
 import { TruncatedText } from '@/shared/components/TruncatedText'
 import { RecordDetailDialog } from '@/shared/components/RecordDetailDialog'
+import { TableRowActions } from '@/shared/components/TableRowActions'
 import { TooltipProvider } from '@/shared/components/ui/tooltip'
 import { PaginationContainer } from '@/shared/containers/PaginationContainer'
 import { LABELS } from '@/shared/constants/labels'
@@ -270,13 +271,12 @@ export function DataTable<T>({
                     {actions ? (
                       <div
                         className={cn(
-                          'flex flex-wrap gap-2',
                           primary || rest.length > 0 ? 'mt-4 border-t border-line/80 pt-3' : undefined,
                         )}
                         onClick={(event) => event.stopPropagation()}
                         onKeyDown={(event) => event.stopPropagation()}
                       >
-                        {actions(row, index)}
+                        <TableRowActions className="justify-start">{actions(row, index)}</TableRowActions>
                       </div>
                     ) : null}
                   </li>
@@ -285,7 +285,7 @@ export function DataTable<T>({
             </ul>
 
             {/* md+: classic table */}
-            <div className="hidden overflow-hidden rounded-md border border-line bg-surface shadow-[0_1px_0_rgba(15,23,42,0.03)] md:block">
+            <div className="hidden overflow-x-auto rounded-md border border-line bg-surface shadow-[0_1px_0_rgba(15,23,42,0.03)] md:block">
               <Table className={cn(tableLayout === 'fixed' && 'table-fixed')}>
                 <TableHeader>
                   <TableRow className="border-line bg-paper/70 hover:bg-paper/70">
@@ -303,7 +303,7 @@ export function DataTable<T>({
                     {actions ? (
                       <TableHead
                         className={cn(
-                          'min-w-[9rem] whitespace-nowrap text-center text-[0.75rem] uppercase tracking-[0.04em]',
+                          'w-[6.5rem] min-w-[6.5rem] max-w-[6.5rem] px-3 text-center text-[0.75rem] uppercase tracking-[0.04em]',
                           actionsClassName,
                         )}
                       >
@@ -342,15 +342,13 @@ export function DataTable<T>({
                         {actions ? (
                           <TableCell
                             className={cn(
-                              'min-w-[9rem] whitespace-nowrap text-center align-middle',
+                              'w-[6.5rem] min-w-[6.5rem] max-w-[6.5rem] px-3 text-center align-middle',
                               actionsClassName,
                             )}
                             onClick={(event) => event.stopPropagation()}
                             onKeyDown={(event) => event.stopPropagation()}
                           >
-                            <div className="flex flex-wrap items-center justify-center gap-2">
-                              {actions(row, index)}
-                            </div>
+                            <TableRowActions>{actions(row, index)}</TableRowActions>
                           </TableCell>
                         ) : null}
                       </TableRow>

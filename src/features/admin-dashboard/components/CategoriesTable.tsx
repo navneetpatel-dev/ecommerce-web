@@ -174,7 +174,6 @@ export function CategoriesTable({
           getRowId={(row) => row.id}
           pagination={pagination}
           actions={actions}
-          actionsClassName="w-auto min-w-[16rem]"
         />
       </SortableContext>
     </DndContext>
