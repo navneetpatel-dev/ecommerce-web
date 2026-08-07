@@ -66,9 +66,12 @@ export function useAdminCategoriesPage() {
   const setDialogOpen = useCallback(
     (next: boolean) => {
       setOpen(next)
-      if (!next) setCreateError(null)
+      if (!next) {
+        setCreateError(null)
+        form.reset(CATEGORY_FORM_DEFAULTS)
+      }
     },
-    [],
+    [form],
   )
 
   const renderActions = useCallback(

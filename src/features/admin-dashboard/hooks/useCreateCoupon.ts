@@ -33,5 +33,13 @@ export function useCreateCoupon() {
     },
   })
 
-  return { open, setOpen, createCoupon, form }
+  const setDialogOpen = (next: boolean) => {
+    setOpen(next)
+    if (!next) {
+      form.reset()
+      createCoupon.reset()
+    }
+  }
+
+  return { open, setOpen: setDialogOpen, createCoupon, form }
 }

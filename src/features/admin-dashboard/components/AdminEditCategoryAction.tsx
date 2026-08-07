@@ -109,7 +109,16 @@ export function AdminEditCategoryAction({ category, onSaved }: AdminEditCategory
         <span>{LABELS.edit}</span>
       </Button>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={(next) => {
+          setOpen(next)
+          if (!next) {
+            setError(null)
+            form.clearErrors()
+          }
+        }}
+      >
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>{LABELS.editCategoryTitle}</DialogTitle>

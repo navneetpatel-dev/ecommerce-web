@@ -1,4 +1,5 @@
 import { X } from 'lucide-react'
+import { LABELS } from '@/shared/constants/labels'
 
 interface BottomSheetProps {
   open: boolean
@@ -23,16 +24,15 @@ export function BottomSheetView({ open, onClose, title, children }: BottomSheetP
         <div className="flex items-center justify-between px-4 py-3 border-b border-line">
           {title && <h2 className="text-[1.125rem] font-semibold text-ink">{title}</h2>}
           <button
+            type="button"
             onClick={onClose}
             className="ml-auto rounded-full p-1 text-ink-muted hover:text-ink"
-            aria-label="Close"
+            aria-label={LABELS.close}
           >
             <X size={20} />
           </button>
         </div>
-        <div className="overflow-y-auto flex-1 px-4 py-4">
-          {children}
-        </div>
+        <div className="overflow-y-auto flex-1 px-4 py-4">{children}</div>
       </div>
     </div>
   )

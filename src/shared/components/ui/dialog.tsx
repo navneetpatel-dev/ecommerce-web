@@ -71,8 +71,11 @@ const DialogContent = React.forwardRef<
         >
           {children}
           <DialogPrimitive.Close
+            type="button"
             className="absolute right-4 top-4 rounded-sm opacity-70 outline-none hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-            onPointerDown={() => {
+            onPointerDown={(event) => {
+              // Keep focus in the dialog until close so field blur doesn't flash validation.
+              event.preventDefault()
               closedByPointerRef.current = true
             }}
           >
