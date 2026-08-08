@@ -5,6 +5,8 @@ export type ReportRange = {
   from: string
   to: string
   format?: 'json' | 'csv' | 'pdf'
+  page?: number
+  limit?: number
 }
 
 export type AdminReportSummary = {
@@ -45,6 +47,7 @@ export type ReconciliationReport = {
   taxCollected: number
   tcsCollected: number
   shippingCollected: number
+  refundsToCustomer?: number
   accountedTotal: number
   difference: number
   balanced: boolean
@@ -62,6 +65,12 @@ export type WalletLiabilityReport = {
   totalLiability: number
   customerCount: number
   rows: WalletLiabilityRow[]
+  pagination?: {
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }
 }
 
 export type CashbackWriteOffRow = {
@@ -83,6 +92,12 @@ export type CashbackWriteOffReport = {
   recoveredTotal: number
   writtenOffTotal: number
   rows: CashbackWriteOffRow[]
+  pagination?: {
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }
 }
 
 export type WriteOffReportRange = ReportRange & {
@@ -111,6 +126,8 @@ function withRange(path: string, range: ReportRange) {
     to: range.to,
     format: range.format ?? 'json',
   })
+  if (range.page) q.set('page', String(range.page))
+  if (range.limit) q.set('limit', String(range.limit))
   return `${path}?${q.toString()}`
 }
 
@@ -121,6 +138,8 @@ function withWriteOffRange(path: string, range: WriteOffReportRange) {
     format: range.format ?? 'json',
   })
   if (range.bornBy) q.set('bornBy', range.bornBy)
+  if (range.page) q.set('page', String(range.page))
+  if (range.limit) q.set('limit', String(range.limit))
   return `${path}?${q.toString()}`
 }
 

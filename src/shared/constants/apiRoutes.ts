@@ -128,6 +128,14 @@ export const API = {
     process: '/api/payouts/process',
   },
   reports: {
+    catalog: '/api/reports/catalog',
+    run: (type: string, query = '') =>
+      `/api/reports/run/${encodeURIComponent(type)}${query ? `?${query}` : ''}`,
+    exportDownload: (id: string) => `/api/reports/exports/${id}/download`,
+    exportStatus: (id: string) => `/api/reports/exports/${id}`,
+    customerOrderHistory: (query = '') =>
+      `/api/reports/customer/order-history${query ? `?${query}` : ''}`,
+    customerOrderInvoice: (orderId: string) => `/api/reports/customer/order-invoice/${orderId}`,
     adminSummary: '/api/reports/admin/summary',
     adminVendors: '/api/reports/admin/vendors',
     adminReconciliation: '/api/reports/admin/reconciliation',

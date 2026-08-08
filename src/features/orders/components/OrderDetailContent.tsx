@@ -15,6 +15,7 @@ import {
   shortOrderId,
 } from '../utils/format'
 import { OrderPaymentSummary } from './OrderPaymentSummary'
+import { reportsEngineApi } from '@/features/reports/api/reportsEngine.api'
 
 interface OrderDetailContentProps {
   order: Order
@@ -24,6 +25,10 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
   const itemCount = countOrderItems(order)
   const vendorCount = order.subOrders?.length ?? 0
   const address = order.shippingAddress
+
+  const downloadInvoice = () => {
+    void reportsEngineApi.customerOrderInvoice(order.id)
+  }
 
   return (
     <div className="relative">
@@ -161,7 +166,10 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
                 </div>
               )}
 
-              <div className="mt-5 border-t border-line pt-5">
+              <div className="mt-5 border-t border-line pt-5 space-y-2">
+                <Button type="button" variant="outline" className="w-full" onClick={downloadInvoice}>
+                  {LABELS.downloadTaxInvoice}
+                </Button>
                 <Button className="w-full" asChild>
                   <Link href={PATHS.orders}>{LABELS.allOrders}</Link>
                 </Button>

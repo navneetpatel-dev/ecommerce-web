@@ -7,6 +7,7 @@ import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import type { Order } from '@/shared/api/types'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { Button } from '@/shared/components/ui/button'
 import { PaginationContainer } from '@/shared/containers/PaginationContainer'
 import { OrderStatusGroup } from './OrderStatusGroup'
 import {
@@ -16,6 +17,7 @@ import {
   orderItemSummary,
   shortOrderId,
 } from '../utils/format'
+import { reportsEngineApi } from '@/features/reports/api/reportsEngine.api'
 
 interface OrdersListProps {
   orders: Order[]
@@ -26,7 +28,21 @@ interface OrdersListProps {
   }
 }
 
+function defaultHistoryRange() {
+  const to = new Date()
+  const from = new Date()
+  from.setFullYear(to.getFullYear() - 2)
+  return {
+    from: from.toISOString().slice(0, 10),
+    to: to.toISOString().slice(0, 10),
+  }
+}
+
 export function OrdersList({ orders, pagination }: OrdersListProps) {
+  const exportHistory = () => {
+    const range = defaultHistoryRange()
+    void reportsEngineApi.customerOrderHistoryExport(range)
+  }
   return (
     <div className="relative">
       <div
@@ -54,13 +70,18 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
               timelines.
             </p>
           </div>
-          <Link
-            href={PATHS.products}
-            className="inline-flex items-center gap-2 text-[0.875rem] font-medium text-brand transition-colors hover:text-brand-hover"
-          >
-            {LABELS.continueShopping}
-            <ArrowRight size={15} />
-          </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button type="button" variant="outline" onClick={exportHistory}>
+              {LABELS.exportOrderHistory}
+            </Button>
+            <Link
+              href={PATHS.products}
+              className="inline-flex items-center gap-2 text-[0.875rem] font-medium text-brand transition-colors hover:text-brand-hover"
+            >
+              {LABELS.continueShopping}
+              <ArrowRight size={15} />
+            </Link>
+          </div>
         </motion.header>
 
         {/* Column labels — desktop ledger header */}

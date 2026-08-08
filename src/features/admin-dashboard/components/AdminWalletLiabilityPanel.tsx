@@ -46,18 +46,25 @@ export function AdminWalletLiabilityPanel() {
   const initial = useMemo(() => defaultRange(), [])
   const [from, setFrom] = useState(initial.from)
   const [to, setTo] = useState(initial.to)
+  const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [report, setReport] = useState<WalletLiabilityReport | null>(null)
 
-  const range = { from: `${from}T00:00:00.000Z`, to: `${to}T23:59:59.999Z` }
+  const range = { from: `${from}T00:00:00.000Z`, to: `${to}T23:59:59.999Z`, page, limit: 50 }
 
-  const load = async () => {
+  const load = async (nextPage = page) => {
     setLoading(true)
     setError(null)
     try {
-      const data = await reportsApi.adminWalletLiability(range)
+      const data = await reportsApi.adminWalletLiability({
+        from: range.from,
+        to: range.to,
+        page: nextPage,
+        limit: 50,
+      })
       setReport(data)
+      setPage(nextPage)
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotLoadReport))
       setReport(null)
@@ -95,7 +102,7 @@ export function AdminWalletLiabilityPanel() {
           <Label htmlFor="wallet-liability-to">{LABELS.reportDateTo}</Label>
           <Input id="wallet-liability-to" type="date" value={to} onChange={(e) => setTo(e.target.value)} />
         </div>
-        <Button onClick={() => void load()} disabled={loading}>
+        <Button onClick={() => void load(1)} disabled={loading}>
           {LABELS.reportLoad}
         </Button>
         <Button variant="outline" disabled={!report} onClick={() => void exportFile('csv')}>
@@ -125,27 +132,52 @@ export function AdminWalletLiabilityPanel() {
           </div>
 
           {report.rows.length > 0 ? (
-            <div className="overflow-x-auto rounded-md border border-line">
-              <table className="min-w-full text-left text-[0.875rem]">
-                <thead className="border-b border-line bg-paper/60 text-ink-muted">
-                  <tr>
-                    <th className="px-3 py-2 font-medium">{LABELS.reportUserId}</th>
-                    <th className="px-3 py-2 font-medium">{LABELS.reportBalance}</th>
-                    <th className="px-3 py-2 font-medium">{LABELS.reportAsOf}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {report.rows.map((row) => (
-                    <tr key={row.userId} className="border-b border-line/70">
-                      <td className="px-3 py-2 font-mono text-[0.8125rem] text-ink">{row.userId}</td>
-                      <td className="px-3 py-2 tabular-nums">{formatInr(row.balance)}</td>
-                      <td className="px-3 py-2 text-ink-muted">
-                        {new Date(row.asOf).toLocaleDateString('en-IN')}
-                      </td>
+            <div className="space-y-3">
+              <div className="overflow-x-auto rounded-md border border-line">
+                <table className="min-w-full text-left text-[0.875rem]">
+                  <thead className="border-b border-line bg-paper/60 text-ink-muted">
+                    <tr>
+                      <th className="px-3 py-2 font-medium">{LABELS.reportUserId}</th>
+                      <th className="px-3 py-2 font-medium">{LABELS.reportBalance}</th>
+                      <th className="px-3 py-2 font-medium">{LABELS.reportAsOf}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {report.rows.map((row) => (
+                      <tr key={row.userId} className="border-b border-line/70">
+                        <td className="px-3 py-2 font-mono text-[0.8125rem] text-ink">{row.userId}</td>
+                        <td className="px-3 py-2 tabular-nums">{formatInr(row.balance)}</td>
+                        <td className="px-3 py-2 text-ink-muted">
+                          {new Date(row.asOf).toLocaleDateString('en-IN')}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {report.pagination && report.pagination.totalPages > 1 ? (
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={loading || page <= 1}
+                    onClick={() => void load(page - 1)}
+                  >
+                    {LABELS.previousPage}
+                  </Button>
+                  <span className="text-[0.8125rem] text-ink-muted">
+                    {page} / {report.pagination.totalPages}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={loading || page >= report.pagination.totalPages}
+                    onClick={() => void load(page + 1)}
+                  >
+                    {LABELS.nextPage}
+                  </Button>
+                </div>
+              ) : null}
             </div>
           ) : (
             <p className="text-[0.9375rem] text-ink-muted">{LABELS.noReportData}</p>

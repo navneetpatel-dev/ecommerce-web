@@ -15,6 +15,7 @@ import {
   Truck,
   Wallet,
   ClipboardList,
+  FileBarChart,
 } from 'lucide-react'
 import { usePermissions } from './usePermissions'
 import { ADMIN_NAV } from '@/shared/constants/adminNav'
@@ -31,6 +32,7 @@ const ADMIN_NAV_ICONS = {
   [PATHS.admin.tax]: Percent,
   [PATHS.admin.shipping]: Truck,
   [PATHS.admin.finance]: Wallet,
+  [PATHS.admin.reports]: FileBarChart,
   [PATHS.admin.users]: Users,
   [PATHS.admin.analytics]: BarChart3,
   [PATHS.admin.audit]: ClipboardList,

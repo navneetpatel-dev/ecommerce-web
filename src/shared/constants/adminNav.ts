@@ -55,6 +55,19 @@ export const ADMIN_NAV = [
     permissions: [PERMISSIONS.PAYOUT_MANAGE, PERMISSIONS.COMMISSION_VIEW] as PermissionKey[],
   },
   {
+    href: PATHS.admin.reports,
+    label: LABELS.reports,
+    permissions: [
+      PERMISSIONS.COMMISSION_VIEW,
+      PERMISSIONS.ORDER_MANAGE,
+      PERMISSIONS.PRODUCT_MANAGE,
+      PERMISSIONS.CATEGORY_MANAGE,
+      PERMISSIONS.PRODUCT_APPROVE,
+      PERMISSIONS.REVIEW_MODERATE,
+      PERMISSIONS.AUDIT_VIEW,
+    ] as PermissionKey[],
+  },
+  {
     href: PATHS.admin.users,
     label: LABELS.users,
     permissions: [PERMISSIONS.USER_MANAGE] as PermissionKey[],

@@ -49,6 +49,7 @@ export const PATHS = {
     tax: '/admin/tax',
     shipping: '/admin/shipping',
     finance: '/admin/finance',
+    reports: '/admin/reports',
     users: '/admin/users',
     analytics: '/admin/analytics',
     audit: '/admin/audit',
@@ -66,5 +67,6 @@ export const PATHS = {
     reviews: '/vendor/dashboard/reviews',
     profile: '/vendor/dashboard/profile',
     shopSettings: '/vendor/dashboard/shop-settings',
+    reports: '/vendor/dashboard/reports',
   },
 } as const
