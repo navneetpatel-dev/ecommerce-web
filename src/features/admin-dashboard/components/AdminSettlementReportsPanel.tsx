@@ -1,9 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { DateRangeFields } from '@/shared/components/DateRangeFields'
 import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
+import { ButtonGroup } from '@/shared/components/ui/button-group'
 import { LABELS } from '@/shared/constants/labels'
 import { BEARER_PREFIX } from '@/shared/constants/http'
 import { STORAGE_KEYS } from '@/shared/constants/storage'
@@ -103,24 +103,38 @@ export function AdminSettlementReportsPanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end gap-3">
-        <div className="space-y-2">
-          <Label htmlFor="report-from">{LABELS.reportDateFrom}</Label>
-          <Input id="report-from" type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="report-to">{LABELS.reportDateTo}</Label>
-          <Input id="report-to" type="date" value={to} onChange={(e) => setTo(e.target.value)} />
-        </div>
-        <Button onClick={() => void load()} disabled={loading}>
-          {LABELS.reportLoad}
-        </Button>
-        <Button variant="outline" disabled={!summary} onClick={() => void exportFile('csv')}>
-          {LABELS.exportCsv}
-        </Button>
-        <Button variant="outline" disabled={!summary} onClick={() => void exportFile('pdf')}>
-          {LABELS.exportPdf}
-        </Button>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+        <DateRangeFields
+          from={from}
+          to={to}
+          onFromChange={setFrom}
+          onToChange={setTo}
+          fromId="report-from"
+          toId="report-to"
+        />
+        <ButtonGroup align="start" className="sm:col-span-2 lg:col-span-1 lg:self-end">
+          <Button type="button" fullWidth="mobile" onClick={() => void load()} disabled={loading}>
+            {LABELS.reportLoad}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth="mobile"
+            disabled={!summary}
+            onClick={() => void exportFile('csv')}
+          >
+            {LABELS.exportCsv}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth="mobile"
+            disabled={!summary}
+            onClick={() => void exportFile('pdf')}
+          >
+            {LABELS.exportPdf}
+          </Button>
+        </ButtonGroup>
       </div>
 
       {error ? <p className="text-[0.9375rem] text-danger">{error}</p> : null}

@@ -9,7 +9,6 @@ import {
 } from '../schemas/coupons.schema'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -17,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select'
-import { Switch } from '@/shared/components/ui/switch'
 import { NumberInput } from '@/shared/components/NumberInput'
 import { DateTimePicker } from '@/shared/components/DateTimePicker'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
@@ -551,20 +549,30 @@ export function CreateCouponForm({
               )}
             />
           </FormFieldFrame>
-          <div className="flex items-center justify-between gap-3 rounded-sm border border-line px-3 py-2">
-            <Label htmlFor="coupon-stackable">{LABELS.stackable}</Label>
+          <FormFieldFrame
+            label={LABELS.stackable}
+            hint={LABELS.stackableHint}
+            htmlFor="coupon-stackable"
+          >
             <Controller
               name="stackable"
               control={control}
               render={({ field }) => (
-                <Switch
-                  id="coupon-stackable"
-                  checked={Boolean(field.value)}
-                  onCheckedChange={field.onChange}
-                />
+                <Select
+                  value={field.value ? 'true' : 'false'}
+                  onValueChange={(next) => field.onChange(next === 'true')}
+                >
+                  <SelectTrigger id="coupon-stackable">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="false">{LABELS.no}</SelectItem>
+                    <SelectItem value="true">{LABELS.yes}</SelectItem>
+                  </SelectContent>
+                </Select>
               )}
             />
-          </div>
+          </FormFieldFrame>
         </div>
       </FormSection>
 

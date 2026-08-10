@@ -22,12 +22,12 @@ export function VendorReportsPage() {
         PERMISSIONS.PRODUCT_UPDATE,
       ]}
     >
-      <div className="mx-auto w-full max-w-6xl space-y-6">
+      <div className="w-full min-w-0 space-y-6">
         <div className="space-y-1">
           <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
             {LABELS.reports}
           </h2>
-          <p className="max-w-2xl text-[0.9375rem] text-ink-muted">{LABELS.reportsHubHint}</p>
+          <p className="max-w-3xl text-[0.9375rem] text-ink-muted">{LABELS.reportsHubHint}</p>
         </div>
 
         <ReportFilterBar

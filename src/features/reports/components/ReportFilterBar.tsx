@@ -1,8 +1,17 @@
 'use client'
 
-import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
+import { DateRangeFields } from '@/shared/components/DateRangeFields'
+import { FormFieldFrame, FormSection } from '@/shared/components/forms'
 import { Button } from '@/shared/components/ui/button'
+import { ButtonGroup } from '@/shared/components/ui/button-group'
+import { Input } from '@/shared/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select'
 import { LABELS } from '@/shared/constants/labels'
 import type { ReportCatalogItem } from '../api/reportsEngine.api'
 
@@ -50,73 +59,75 @@ export function ReportFilterBar({
   exporting,
 }: ReportFilterBarProps) {
   return (
-    <div className="space-y-4 border border-line bg-surface-raised p-4 sm:p-5">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="space-y-2 sm:col-span-2 lg:col-span-3">
-          <Label htmlFor="report-type">{LABELS.reportSelect}</Label>
-          <select
-            id="report-type"
-            className="flex h-10 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink"
-            value={reportType}
-            onChange={(e) => onReportTypeChange(e.target.value)}
-          >
+    <FormSection
+      title={LABELS.reportFilters}
+      hint={LABELS.reportFiltersHint}
+      columns={3}
+    >
+      <FormFieldFrame label={LABELS.reportSelect} htmlFor="report-type" className="sm:col-span-2 xl:col-span-3">
+        <Select value={reportType || undefined} onValueChange={onReportTypeChange}>
+          <SelectTrigger id="report-type">
+            <SelectValue placeholder={LABELS.reportSelect} />
+          </SelectTrigger>
+          <SelectContent>
             {catalog.map((item) => (
-              <option key={item.type} value={item.type}>
+              <SelectItem key={item.type} value={item.type}>
                 {labelForKey(item.labelKey)}
-              </option>
+              </SelectItem>
             ))}
-          </select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="report-from">{LABELS.reportDateFrom}</Label>
+          </SelectContent>
+        </Select>
+      </FormFieldFrame>
+
+      <DateRangeFields
+        from={from}
+        to={to}
+        onFromChange={onFromChange}
+        onToChange={onToChange}
+        fromId="report-from"
+        toId="report-to"
+      />
+
+      {showVendorFilter ? (
+        <FormFieldFrame label={LABELS.reportVendor} htmlFor="report-vendor">
           <Input
-            id="report-from"
-            type="date"
-            value={from}
-            onChange={(e) => onFromChange(e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="report-to">{LABELS.reportDateTo}</Label>
-          <Input id="report-to" type="date" value={to} onChange={(e) => onToChange(e.target.value)} />
-        </div>
-        {showVendorFilter ? (
-          <div className="space-y-2">
-            <Label htmlFor="report-vendor">{LABELS.reportVendor}</Label>
-            <Input
-              id="report-vendor"
-              value={vendorId}
-              placeholder={LABELS.uuidPlaceholder}
-              onChange={(e) => onVendorIdChange(e.target.value)}
-            />
-          </div>
-        ) : null}
-        <div className="space-y-2">
-          <Label htmlFor="report-category">{LABELS.reportCategory}</Label>
-          <Input
-            id="report-category"
-            value={categoryId}
+            id="report-vendor"
+            value={vendorId}
             placeholder={LABELS.uuidPlaceholder}
-            onChange={(e) => onCategoryIdChange(e.target.value)}
+            onChange={(e) => onVendorIdChange(e.target.value)}
           />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="report-status">{LABELS.reportStatus}</Label>
-          <Input
-            id="report-status"
-            value={status}
-            onChange={(e) => onStatusChange(e.target.value)}
-          />
-        </div>
+        </FormFieldFrame>
+      ) : null}
+
+      <FormFieldFrame label={LABELS.reportCategory} htmlFor="report-category">
+        <Input
+          id="report-category"
+          value={categoryId}
+          placeholder={LABELS.uuidPlaceholder}
+          onChange={(e) => onCategoryIdChange(e.target.value)}
+        />
+      </FormFieldFrame>
+
+      <FormFieldFrame label={LABELS.reportStatus} htmlFor="report-status">
+        <Input id="report-status" value={status} onChange={(e) => onStatusChange(e.target.value)} />
+      </FormFieldFrame>
+
+      <div className="sm:col-span-2 xl:col-span-3">
+        <ButtonGroup align="start">
+          <Button type="button" fullWidth="mobile" onClick={onLoad} disabled={loading || !reportType}>
+            {LABELS.reportLoad}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth="mobile"
+            onClick={onExport}
+            disabled={exporting || !reportType}
+          >
+            {LABELS.exportExcel}
+          </Button>
+        </ButtonGroup>
       </div>
-      <div className="flex flex-wrap gap-2">
-        <Button type="button" onClick={onLoad} disabled={loading || !reportType}>
-          {LABELS.reportLoad}
-        </Button>
-        <Button type="button" variant="outline" onClick={onExport} disabled={exporting || !reportType}>
-          {LABELS.exportExcel}
-        </Button>
-      </div>
-    </div>
+    </FormSection>
   )
 }

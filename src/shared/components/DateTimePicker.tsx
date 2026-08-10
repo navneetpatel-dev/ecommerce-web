@@ -30,10 +30,23 @@ function sameDay(a: Date, b: Date) {
   )
 }
 
-function parseIso(value?: string | null): Date | null {
+/** Accepts ISO datetime or `YYYY-MM-DD`. */
+function parseValue(value?: string | null): Date | null {
   if (!value) return null
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const [y, m, d] = value.split('-').map(Number)
+    const next = new Date(y, m - 1, d)
+    return Number.isNaN(next.getTime()) ? null : next
+  }
   const d = new Date(value)
   return Number.isNaN(d.getTime()) ? null : d
+}
+
+function toDateOnly(date: Date) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
 }
 
 function toIso(date: Date) {
@@ -45,7 +58,14 @@ function roundMinute(m: number) {
   return Math.min(55, Math.max(0, stepped))
 }
 
-function formatDisplay(date: Date) {
+function formatDisplay(date: Date, mode: 'date' | 'datetime') {
+  if (mode === 'date') {
+    return new Intl.DateTimeFormat(undefined, {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    }).format(date)
+  }
   return new Intl.DateTimeFormat(undefined, {
     day: '2-digit',
     month: 'short',
@@ -63,7 +83,11 @@ function monthLabel(year: number, month: number) {
 
 interface DateTimePickerProps {
   value?: string
-  onChange: (iso: string) => void
+  /**
+   * `datetime` → ISO string. `date` → `YYYY-MM-DD` (filters / report ranges).
+   */
+  onChange: (value: string) => void
+  mode?: 'date' | 'datetime'
   placeholder?: string
   disabled?: boolean
   error?: boolean
@@ -71,17 +95,20 @@ interface DateTimePickerProps {
   id?: string
 }
 
-/** Classy datetime control: calendar + time selects (ISO string in/out). */
+/** Shared calendar control — date-only or date+time. */
 export function DateTimePicker({
   value,
   onChange,
-  placeholder = LABELS.pickDateTime,
+  mode = 'datetime',
+  placeholder,
   disabled = false,
   error = false,
   className,
   id,
 }: DateTimePickerProps) {
-  const selected = parseIso(value)
+  const resolvedPlaceholder =
+    placeholder ?? (mode === 'date' ? LABELS.pickDate : LABELS.pickDateTime)
+  const selected = parseValue(value)
   const [open, setOpen] = useState(false)
   const initial = selected ?? new Date()
   const [viewYear, setViewYear] = useState(initial.getFullYear())
@@ -91,7 +118,7 @@ export function DateTimePicker({
   const [minute, setMinute] = useState(String(roundMinute(initial.getMinutes())).padStart(2, '0'))
 
   const syncFromValue = () => {
-    const base = parseIso(value) ?? new Date()
+    const base = parseValue(value) ?? new Date()
     setViewYear(base.getFullYear())
     setViewMonth(base.getMonth())
     setDraftDay(startOfDay(base))
@@ -110,7 +137,12 @@ export function DateTimePicker({
     return cells
   }, [viewYear, viewMonth])
 
-  const apply = (day: Date, h: string, m: string) => {
+  const apply = (day: Date, h: string, m: string, close = false) => {
+    if (mode === 'date') {
+      onChange(toDateOnly(day))
+      if (close) setOpen(false)
+      return
+    }
     const next = new Date(day)
     next.setHours(Number(h), Number(m), 0, 0)
     onChange(toIso(next))
@@ -138,21 +170,21 @@ export function DateTimePicker({
           id={id}
           disabled={disabled}
           className={cn(
-            'flex h-11 w-full cursor-pointer items-center justify-between rounded-sm border bg-surface px-4 text-left text-[0.9375rem] outline-none',
+            'flex h-11 w-full cursor-pointer items-center justify-between rounded-sm border bg-surface-raised px-4 text-left text-[0.9375rem] outline-none',
             'hover:bg-paper/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
             'disabled:cursor-not-allowed disabled:opacity-50',
-            error ? 'border-danger' : 'border-line',
+            error ? 'border-danger' : 'border-line-strong',
             className,
           )}
         >
           <span className={cn('truncate', selected ? 'text-ink' : 'text-ink-faint')}>
-            {selected ? formatDisplay(selected) : placeholder}
+            {selected ? formatDisplay(selected, mode) : resolvedPlaceholder}
           </span>
           <CalendarDays size={16} className="shrink-0 text-ink-muted" aria-hidden />
         </button>
       </PopoverTrigger>
 
-      <PopoverContent align="start" className="w-[320px] space-y-4 p-3">
+      <PopoverContent align="start" className="w-[min(100vw-2rem,20rem)] space-y-4 p-3">
         <div className="flex items-center justify-between gap-2">
           <button
             type="button"
@@ -201,7 +233,7 @@ export function DateTimePicker({
                 )}
                 onClick={() => {
                   setDraftDay(day)
-                  apply(day, hour, minute)
+                  apply(day, hour, minute, mode === 'date')
                 }}
               >
                 {day.getDate()}
@@ -210,54 +242,56 @@ export function DateTimePicker({
           })}
         </div>
 
-        <div className="grid grid-cols-2 gap-2 border-t border-line pt-3">
-          <div className="space-y-1.5">
-            <p className="text-[0.6875rem] font-medium uppercase tracking-wide text-ink-faint">
-              {LABELS.hour}
-            </p>
-            <Select
-              value={hour}
-              onValueChange={(h) => {
-                setHour(h)
-                apply(draftDay, h, minute)
-              }}
-            >
-              <SelectTrigger className="h-10">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {HOURS.map((h) => (
-                  <SelectItem key={h} value={h}>
-                    {h}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+        {mode === 'datetime' ? (
+          <div className="grid grid-cols-2 gap-2 border-t border-line pt-3">
+            <div className="space-y-1.5">
+              <p className="text-[0.6875rem] font-medium uppercase tracking-wide text-ink-faint">
+                {LABELS.hour}
+              </p>
+              <Select
+                value={hour}
+                onValueChange={(h) => {
+                  setHour(h)
+                  apply(draftDay, h, minute)
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {HOURS.map((h) => (
+                    <SelectItem key={h} value={h}>
+                      {h}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <p className="text-[0.6875rem] font-medium uppercase tracking-wide text-ink-faint">
+                {LABELS.minute}
+              </p>
+              <Select
+                value={minute}
+                onValueChange={(m) => {
+                  setMinute(m)
+                  apply(draftDay, hour, m)
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {MINUTES.map((m) => (
+                    <SelectItem key={m} value={m}>
+                      {m}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          <div className="space-y-1.5">
-            <p className="text-[0.6875rem] font-medium uppercase tracking-wide text-ink-faint">
-              {LABELS.minute}
-            </p>
-            <Select
-              value={minute}
-              onValueChange={(m) => {
-                setMinute(m)
-                apply(draftDay, hour, m)
-              }}
-            >
-              <SelectTrigger className="h-10">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {MINUTES.map((m) => (
-                  <SelectItem key={m} value={m}>
-                    {m}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+        ) : null}
 
         <div className="flex justify-end gap-2">
           <Button type="button" size="sm" variant="ghost" onClick={() => setOpen(false)}>

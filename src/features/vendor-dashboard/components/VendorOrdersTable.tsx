@@ -4,6 +4,13 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import { VendorStrip } from '@/shared/components/VendorStrip'
 import { Button } from '@/shared/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select'
 import { TableRowActions, TableRowAction } from '@/shared/components/TableRowActions'
 import { tableMenuButtonClass } from '@/shared/constants/tableActionTone'
 import { TableScrollShell } from '@/shared/components/TableScrollShell'
@@ -69,17 +76,20 @@ function SubOrderActions({
       {updatingId === subOrderId ? (
         <>
           <TableRowAction>
-            <select
-              className="h-8 w-full min-w-0 rounded-sm border border-line bg-surface px-2 text-[0.8125rem]"
-              defaultValue="SHIPPED"
-              onChange={(e) => onStatusChange(subOrderId, e.target.value)}
-            >
-              <option value="">-- </option>
-              <option value="CONFIRMED">Confirm</option>
-              <option value="SHIPPED">Ship</option>
-              <option value="DELIVERED">Deliver</option>
-              <option value="CANCELLED">Cancel</option>
-            </select>
+            <Select defaultValue="SHIPPED" onValueChange={(value) => onStatusChange(subOrderId, value)}>
+              <SelectTrigger
+                aria-label={LABELS.selectStatus}
+                className="h-8 min-h-8 max-h-8 w-full rounded-sm px-2 text-[0.8125rem] [&_svg]:!size-3.5"
+              >
+                <SelectValue placeholder={LABELS.selectStatus} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="CONFIRMED">{LABELS.confirm}</SelectItem>
+                <SelectItem value="SHIPPED">{LABELS.orderActionShip}</SelectItem>
+                <SelectItem value="DELIVERED">{LABELS.orderActionDeliver}</SelectItem>
+                <SelectItem value="CANCELLED">{LABELS.cancel}</SelectItem>
+              </SelectContent>
+            </Select>
           </TableRowAction>
           <TableRowAction>
             <Button
@@ -100,7 +110,7 @@ function SubOrderActions({
             className={tableMenuButtonClass('edit')}
             onClick={() => onSetUpdatingId(subOrderId)}
           >
-            Update
+            {LABELS.updateStatus}
           </Button>
         </TableRowAction>
       )}

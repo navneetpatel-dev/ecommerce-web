@@ -15,6 +15,13 @@ import {
 import { FormError } from '@/shared/components/FormError'
 import { FileUpload } from '@/shared/components/FileUpload'
 import { FormFieldFrame, FormSection } from '@/shared/components/forms'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select'
 import { cn } from '@/shared/utils/cn'
 import { formatInr } from '../utils/format'
 import { buildSubOrderTimeline } from '../utils/timeline'
@@ -197,18 +204,21 @@ export function SubOrderCard({
               columns={1}
             >
               <FormFieldFrame label={LABELS.returnReasonLabel} htmlFor="return-reason-code">
-                <select
-                  id="return-reason-code"
+                <Select
                   value={reasonCode}
-                  onChange={(e) => onReasonCodeChange(e.target.value as ReturnReasonCode)}
-                  className="flex h-11 w-full border border-line bg-surface px-3 text-[0.9375rem] text-ink"
+                  onValueChange={(value) => onReasonCodeChange(value as ReturnReasonCode)}
                 >
-                  {REASON_CODES.map((code) => (
-                    <option key={code.value} value={code.value}>
-                      {code.label}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger id="return-reason-code">
+                    <SelectValue placeholder={LABELS.returnReasonLabel} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {REASON_CODES.map((code) => (
+                      <SelectItem key={code.value} value={code.value}>
+                        {code.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormFieldFrame>
               <FormFieldFrame label={LABELS.returnDetailsLabel} htmlFor="return-reason">
                 <Input

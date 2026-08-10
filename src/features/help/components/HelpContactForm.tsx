@@ -1,11 +1,18 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { FormError } from '@/shared/components/FormError'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { LABELS } from '@/shared/constants/labels'
 import { useAuthStore } from '@/features/auth/store/auth.store'
@@ -27,6 +34,7 @@ export function HelpContactForm() {
   const createTicket = useCreateHelpTicket()
   const {
     register,
+    control,
     handleSubmit,
     reset,
     formState: { errors },
@@ -99,17 +107,25 @@ export function HelpContactForm() {
             />
           </FormFieldFrame>
           <FormFieldFrame label={LABELS.helpTopic} htmlFor="help-topic" required>
-            <select
-              id="help-topic"
-              className="flex h-11 w-full border border-line bg-surface px-3 text-[0.9375rem] text-ink"
-              {...register('topic', { required: true })}
-            >
-              {CONTACT_TOPICS.map((topic) => (
-                <option key={topic.value} value={topic.value}>
-                  {topic.label}
-                </option>
-              ))}
-            </select>
+            <Controller
+              name="topic"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger id="help-topic">
+                    <SelectValue placeholder={LABELS.helpTopic} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CONTACT_TOPICS.map((topic) => (
+                      <SelectItem key={topic.value} value={topic.value}>
+                        {topic.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </FormFieldFrame>
           <FormFieldFrame
             label={LABELS.helpSubject}

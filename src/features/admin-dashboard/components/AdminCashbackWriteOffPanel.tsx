@@ -1,9 +1,10 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { DateRangeFields } from '@/shared/components/DateRangeFields'
+import { FormFieldFrame } from '@/shared/components/forms'
 import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
+import { ButtonGroup } from '@/shared/components/ui/button-group'
 import {
   Select,
   SelectContent,
@@ -99,19 +100,18 @@ export function AdminCashbackWriteOffPanel() {
     <div className="space-y-6">
       <h3 className="text-[0.9375rem] font-semibold text-ink">{LABELS.reportCashbackWriteOff}</h3>
 
-      <div className="flex flex-wrap items-end gap-3">
-        <div className="space-y-2">
-          <Label htmlFor="writeoff-from">{LABELS.reportDateFrom}</Label>
-          <Input id="writeoff-from" type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="writeoff-to">{LABELS.reportDateTo}</Label>
-          <Input id="writeoff-to" type="date" value={to} onChange={(e) => setTo(e.target.value)} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="writeoff-born-by">{LABELS.reportBornBy}</Label>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <DateRangeFields
+          from={from}
+          to={to}
+          onFromChange={setFrom}
+          onToChange={setTo}
+          fromId="writeoff-from"
+          toId="writeoff-to"
+        />
+        <FormFieldFrame label={LABELS.reportBornBy} htmlFor="writeoff-born-by">
           <Select value={bornBy} onValueChange={(v) => setBornBy(v as typeof bornBy)}>
-            <SelectTrigger id="writeoff-born-by" className="w-[160px]">
+            <SelectTrigger id="writeoff-born-by">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -120,16 +120,30 @@ export function AdminCashbackWriteOffPanel() {
               <SelectItem value="VENDOR">{LABELS.reportBornByVendor}</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-        <Button onClick={() => void load(1)} disabled={loading}>
-          {LABELS.reportLoad}
-        </Button>
-        <Button variant="outline" disabled={!report} onClick={() => void exportFile('csv')}>
-          {LABELS.exportCsv}
-        </Button>
-        <Button variant="outline" disabled={!report} onClick={() => void exportFile('pdf')}>
-          {LABELS.exportPdf}
-        </Button>
+        </FormFieldFrame>
+        <ButtonGroup align="start" className="sm:col-span-2 xl:col-span-4">
+          <Button type="button" fullWidth="mobile" onClick={() => void load(1)} disabled={loading}>
+            {LABELS.reportLoad}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth="mobile"
+            disabled={!report}
+            onClick={() => void exportFile('csv')}
+          >
+            {LABELS.exportCsv}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth="mobile"
+            disabled={!report}
+            onClick={() => void exportFile('pdf')}
+          >
+            {LABELS.exportPdf}
+          </Button>
+        </ButtonGroup>
       </div>
 
       {error ? <p className="text-[0.9375rem] text-danger">{error}</p> : null}
