@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ChevronRight, Heart, Package, RotateCcw, Star } from 'lucide-react'
+import { ChevronRight, Heart, LifeBuoy, Package, RotateCcw, Star } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { reviewsApi } from '@/features/reviews/api/reviews.api'
 import { Skeleton } from '@/shared/components/ui/skeleton'
@@ -107,6 +107,18 @@ export function OrdersActivitySection() {
           href={PATHS.reviews}
         />
         <SummaryRow icon={RotateCcw} label="Returns" value="Manage" href={PATHS.myReturns} />
+        <SummaryRow
+          icon={LifeBuoy}
+          label={LABELS.overviewSupportTickets}
+          value={LABELS.view}
+          href={PATHS.supportTickets}
+        />
+        <SummaryRow
+          icon={LifeBuoy}
+          label={LABELS.overviewBugReports}
+          value={LABELS.reportABug}
+          href={PATHS.bugReports}
+        />
         <SummaryRow icon={Package} label={LABELS.wallet} value="View" href={PATHS.wallet} />
         <SummaryRow
           icon={Package}

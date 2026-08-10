@@ -166,9 +166,22 @@ export function HelpHomeView() {
             Contact support
           </h2>
           <p className="mt-2 max-w-xl text-[0.9375rem] text-ink-muted">
-            Send a ticket with as much detail as you can. Include your order ID when the issue is
-            about a purchase.
+            {LABELS.helpContactDeskHint}
           </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href={PATHS.supportTickets}
+              className="text-[0.875rem] font-medium text-brand hover:text-brand-hover"
+            >
+              {LABELS.mySupportTickets}
+            </Link>
+            <Link
+              href={PATHS.bugReportNew}
+              className="text-[0.875rem] font-medium text-brand hover:text-brand-hover"
+            >
+              {LABELS.reportABug}
+            </Link>
+          </div>
           <div className="mt-6">
             <HelpContactForm />
           </div>

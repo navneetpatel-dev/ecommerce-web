@@ -83,6 +83,8 @@ export type DataTableProps<T> = {
    * Set false for tables that should not open row details.
    */
   rowDetails?: boolean
+  /** Optional row activation handler (e.g. navigate to detail). Takes precedence over the detail modal. */
+  onRowClick?: (row: T, index: number) => void
 }
 
 function columnFieldKey<T>(column: DataTableColumn<T>): string {
@@ -194,6 +196,7 @@ export function DataTable<T>({
   className,
   tableLayout = 'auto',
   rowDetails = true,
+  onRowClick,
 }: DataTableProps<T>) {
   const [detailRow, setDetailRow] = useState<T | null>(null)
   const mobileColumns = columns.filter((column) => !column.hideOnMobile)
@@ -204,16 +207,21 @@ export function DataTable<T>({
     pagination.to != null &&
     pagination.total > 0
 
-  const openDetails = (row: T) => {
-    if (!rowDetails) return
-    setDetailRow(row)
+  const rowsInteractive = Boolean(onRowClick) || rowDetails
+
+  const activateRow = (row: T, index: number) => {
+    if (onRowClick) {
+      onRowClick(row, index)
+      return
+    }
+    if (rowDetails) setDetailRow(row)
   }
 
-  const onRowKeyDown = (event: KeyboardEvent<HTMLElement>, row: T) => {
-    if (!rowDetails) return
+  const onRowKeyDown = (event: KeyboardEvent<HTMLElement>, row: T, index: number) => {
+    if (!rowsInteractive) return
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      openDetails(row)
+      activateRow(row, index)
     }
   }
 
@@ -275,14 +283,14 @@ export function DataTable<T>({
                     key={rowId}
                     className={cn(
                       'rounded-md border border-line bg-surface p-4 shadow-[0_1px_0_rgba(15,23,42,0.03)]',
-                      rowDetails &&
+                      rowsInteractive &&
                         'cursor-pointer transition-colors hover:border-brand/30 hover:bg-brand-subtle/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
                     )}
-                    role={rowDetails ? 'button' : undefined}
-                    tabIndex={rowDetails ? 0 : undefined}
-                    aria-label={rowDetails ? LABELS.viewRecordDetails : undefined}
-                    onClick={() => openDetails(row)}
-                    onKeyDown={(event) => onRowKeyDown(event, row)}
+                    role={rowsInteractive ? 'button' : undefined}
+                    tabIndex={rowsInteractive ? 0 : undefined}
+                    aria-label={rowsInteractive ? LABELS.viewRecordDetails : undefined}
+                    onClick={() => activateRow(row, index)}
+                    onKeyDown={(event) => onRowKeyDown(event, row, index)}
                   >
                     {primary ? (
                       <div className={cn('min-w-0 text-[0.9375rem] text-ink', primary.className)}>
@@ -378,13 +386,13 @@ export function DataTable<T>({
                       <TableRow
                         key={rowId}
                         className={cn(
-                          rowDetails &&
+                          rowsInteractive &&
                             'cursor-pointer hover:bg-brand-subtle/25 focus-visible:bg-brand-subtle/25',
                         )}
-                        tabIndex={rowDetails ? 0 : undefined}
-                        aria-label={rowDetails ? LABELS.viewRecordDetails : undefined}
-                        onClick={() => openDetails(row)}
-                        onKeyDown={(event) => onRowKeyDown(event, row)}
+                        tabIndex={rowsInteractive ? 0 : undefined}
+                        aria-label={rowsInteractive ? LABELS.viewRecordDetails : undefined}
+                        onClick={() => activateRow(row, index)}
+                        onKeyDown={(event) => onRowKeyDown(event, row, index)}
                       >
                         {columns.map((column) => {
                           const content = resolveCell(column, row, index)

@@ -193,6 +193,34 @@ export const API = {
   help: {
     tickets: '/api/help/tickets',
   },
+  supportTickets: {
+    root: '/api/support-tickets',
+    mine: (query = '') => `/api/support-tickets/mine${query ? `?${query}` : ''}`,
+    vendor: (query = '') => `/api/support-tickets/vendor${query ? `?${query}` : ''}`,
+    admin: (query = '') => `/api/support-tickets/admin${query ? `?${query}` : ''}`,
+    detail: (id: string) => `/api/support-tickets/${id}`,
+    messages: (id: string, query = '') =>
+      `/api/support-tickets/${id}/messages${query ? `?${query}` : ''}`,
+    reply: (id: string) => `/api/support-tickets/${id}/messages`,
+    resolve: (id: string) => `/api/support-tickets/${id}/resolve`,
+    reopen: (id: string) => `/api/support-tickets/${id}/reopen`,
+    close: (id: string) => `/api/support-tickets/${id}/close`,
+    reassign: (id: string) => `/api/support-tickets/${id}/reassign`,
+    rate: (id: string) => `/api/support-tickets/${id}/rate`,
+  },
+  bugReports: {
+    root: '/api/bug-reports',
+    mine: (query = '') => `/api/bug-reports/mine${query ? `?${query}` : ''}`,
+    admin: (query = '') => `/api/bug-reports/admin${query ? `?${query}` : ''}`,
+    detail: (id: string) => `/api/bug-reports/${id}`,
+    triage: (id: string) => `/api/bug-reports/${id}/triage`,
+    status: (id: string) => `/api/bug-reports/${id}/status`,
+    duplicate: (id: string) => `/api/bug-reports/${id}/duplicate`,
+    wontFix: (id: string) => `/api/bug-reports/${id}/wont-fix`,
+    verify: (id: string) => `/api/bug-reports/${id}/verify`,
+    comments: (id: string, query = '') =>
+      `/api/bug-reports/${id}/comments${query ? `?${query}` : ''}`,
+  },
   inventory: {
     lowStock: '/api/inventory/low-stock',
     variantStock: (variantId: string) => `/api/inventory/variants/${variantId}/stock`,

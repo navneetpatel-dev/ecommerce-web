@@ -6,6 +6,8 @@ export const UPLOAD_ENTITY = {
   USERS: 'users',
   RETURNS: 'returns',
   BANNERS: 'banners',
+  TICKETS: 'tickets',
+  BUG_REPORTS: 'bug-reports',
 } as const
 
 export type UploadEntityType = (typeof UPLOAD_ENTITY)[keyof typeof UPLOAD_ENTITY]
@@ -18,9 +20,11 @@ export const UPLOAD_PURPOSE = {
   IMAGE: 'image',
   AVATAR: 'avatar',
   PHOTOS: 'photos',
+  ATTACHMENTS: 'attachments',
 } as const
 
 export type UploadPurpose = (typeof UPLOAD_PURPOSE)[keyof typeof UPLOAD_PURPOSE]
 
 export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 export const MAX_AVATAR_UPLOAD_BYTES = 1.5 * 1024 * 1024
+export const MAX_VIDEO_UPLOAD_BYTES = 50 * 1024 * 1024

@@ -1,7 +1,18 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { BarChart3, Package, Truck, Wallet, MessageSquare, Tags, Settings, FileBarChart } from 'lucide-react'
+import {
+  BarChart3,
+  Package,
+  Truck,
+  Wallet,
+  MessageSquare,
+  Tags,
+  Settings,
+  FileBarChart,
+  LifeBuoy,
+  Bug,
+} from 'lucide-react'
 import { usePermissions } from './usePermissions'
 import { VENDOR_NAV } from '@/shared/constants/vendorNav'
 import { PATHS } from '@/shared/constants/paths'
@@ -14,6 +25,8 @@ const VENDOR_NAV_ICONS = {
   [PATHS.vendor.reports]: FileBarChart,
   [PATHS.vendor.coupons]: Tags,
   [PATHS.vendor.reviews]: MessageSquare,
+  [PATHS.vendor.supportTickets]: LifeBuoy,
+  [PATHS.vendor.bugReports]: Bug,
   [PATHS.vendor.shopSettings]: Settings,
 } as const
 

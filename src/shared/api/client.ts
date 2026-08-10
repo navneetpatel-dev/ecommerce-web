@@ -175,8 +175,12 @@ async function requestWithResponse<T>(path: string, options: RequestInit = {}): 
 export const apiClient = {
   get: <T>(path: string) => request<T>(path),
   getWithResponse: <T>(path: string) => requestWithResponse<T>(path),
-  post: <T>(path: string, body?: unknown) =>
-    request<T>(path, { method: 'POST', body: JSON.stringify(body) }),
+  post: <T>(path: string, body?: unknown, init?: RequestInit) =>
+    request<T>(path, {
+      method: 'POST',
+      body: body === undefined ? undefined : JSON.stringify(body),
+      ...init,
+    }),
   patch: <T>(path: string, body?: unknown) =>
     request<T>(path, { method: 'PATCH', body: JSON.stringify(body) }),
   put: <T>(path: string, body?: unknown) =>

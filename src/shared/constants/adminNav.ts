@@ -35,10 +35,21 @@ export const ADMIN_NAV = [
     permissions: [PERMISSIONS.ORDER_REFUND] as PermissionKey[],
   },
   {
+    href: PATHS.admin.supportTickets,
+    label: LABELS.supportTickets,
+    permissions: [PERMISSIONS.TICKET_MANAGE] as PermissionKey[],
+  },
+  {
+    href: PATHS.admin.bugReports,
+    label: LABELS.bugReports,
+    permissions: [PERMISSIONS.BUG_REPORT_MANAGE] as PermissionKey[],
+  },
+  {
     href: PATHS.admin.coupons,
     label: LABELS.coupons,
     permissions: [PERMISSIONS.COUPON_MANAGE] as PermissionKey[],
   },
+
   {
     href: PATHS.admin.reviews,
     label: LABELS.reviews,

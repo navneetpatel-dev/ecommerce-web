@@ -1,8 +1,13 @@
-import { MAX_AVATAR_UPLOAD_BYTES, MAX_UPLOAD_BYTES } from '@/shared/constants/uploads'
+import {
+  MAX_AVATAR_UPLOAD_BYTES,
+  MAX_UPLOAD_BYTES,
+  MAX_VIDEO_UPLOAD_BYTES,
+} from '@/shared/constants/uploads'
 import type { UploadEntityType, UploadPurpose } from '@/shared/constants/uploads'
 
 export const IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const
 export const DOCUMENT_MIME_TYPES = [...IMAGE_MIME_TYPES, 'application/pdf'] as const
+export const VIDEO_MIME_TYPES = ['video/mp4', 'video/webm'] as const
 
 export type ImageMimeType = (typeof IMAGE_MIME_TYPES)[number]
 
@@ -11,11 +16,14 @@ export interface ImageUploadSpec {
   outputHeight: number
   aspectRatio: number
   maxBytes: number
+  /** Optional higher ceiling for video mime types under the same purpose. */
+  videoMaxBytes?: number
   mimeTypes: readonly string[]
   cropRequired: boolean
 }
 
 const LOGO_MAX_BYTES = 2 * 1024 * 1024
+const ATTACHMENT_MEDIA_TYPES = [...IMAGE_MIME_TYPES, ...VIDEO_MIME_TYPES] as const
 
 /** Mirrors backend `IMAGE_UPLOAD_SPECS` in `backend/src/core/s3/imageSpecs.ts`. */
 export const IMAGE_UPLOAD_SPECS: Record<string, ImageUploadSpec> = {
@@ -83,6 +91,24 @@ export const IMAGE_UPLOAD_SPECS: Record<string, ImageUploadSpec> = {
     mimeTypes: DOCUMENT_MIME_TYPES,
     cropRequired: false,
   },
+  'tickets:attachments': {
+    outputWidth: 0,
+    outputHeight: 0,
+    aspectRatio: 0,
+    maxBytes: MAX_UPLOAD_BYTES,
+    videoMaxBytes: MAX_VIDEO_UPLOAD_BYTES,
+    mimeTypes: ATTACHMENT_MEDIA_TYPES,
+    cropRequired: false,
+  },
+  'bug-reports:attachments': {
+    outputWidth: 0,
+    outputHeight: 0,
+    aspectRatio: 0,
+    maxBytes: MAX_UPLOAD_BYTES,
+    videoMaxBytes: MAX_VIDEO_UPLOAD_BYTES,
+    mimeTypes: ATTACHMENT_MEDIA_TYPES,
+    cropRequired: false,
+  },
 }
 
 export type ImageUploadHintKey =
@@ -94,6 +120,8 @@ export type ImageUploadHintKey =
   | 'imageUploadHintAvatar'
   | 'imageUploadHintReturnPhoto'
   | 'imageUploadHintKyc'
+  | 'imageUploadHintTicketAttachment'
+  | 'imageUploadHintBugAttachment'
 
 const IMAGE_UPLOAD_HINT_KEYS: Record<string, ImageUploadHintKey> = {
   'banners:image': 'imageUploadHintPromoBanner',
@@ -104,6 +132,8 @@ const IMAGE_UPLOAD_HINT_KEYS: Record<string, ImageUploadHintKey> = {
   'users:avatar': 'imageUploadHintAvatar',
   'returns:photos': 'imageUploadHintReturnPhoto',
   'vendors:kyc': 'imageUploadHintKyc',
+  'tickets:attachments': 'imageUploadHintTicketAttachment',
+  'bug-reports:attachments': 'imageUploadHintBugAttachment',
 }
 
 export function imageUploadSpecKey(entityType: UploadEntityType, purpose: UploadPurpose): string {
@@ -130,11 +160,22 @@ export function getAcceptForUpload(entityType: UploadEntityType, purpose: Upload
   return spec.mimeTypes.join(',')
 }
 
+export function isVideoMimeType(mime: string): boolean {
+  const normalized = mime.split(';')[0]?.trim().toLowerCase() ?? ''
+  return (VIDEO_MIME_TYPES as readonly string[]).includes(normalized)
+}
+
 export function maxBytesForUpload(
   entityType: UploadEntityType,
   purpose: UploadPurpose,
+  contentType?: string,
 ): number {
-  return getImageUploadSpec(entityType, purpose)?.maxBytes ?? MAX_UPLOAD_BYTES
+  const spec = getImageUploadSpec(entityType, purpose)
+  if (!spec) return MAX_UPLOAD_BYTES
+  if (contentType && isVideoMimeType(contentType) && spec.videoMaxBytes != null) {
+    return spec.videoMaxBytes
+  }
+  return spec.maxBytes
 }
 
 export function isAllowedUploadMime(

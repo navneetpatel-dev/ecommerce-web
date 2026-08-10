@@ -4,6 +4,7 @@
  */
 
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
 
 export type HelpCategoryId =
   | 'getting-started'
@@ -1973,6 +1974,16 @@ export const HELP_QUICK_LINKS: HelpQuickLink[] = [
     label: 'My returns',
     href: PATHS.myReturns,
     description: 'Track return requests, pickups, and refund progress.',
+  },
+  {
+    label: LABELS.helpQuickLinkTickets,
+    href: PATHS.supportTickets,
+    description: LABELS.helpQuickLinkTicketsDesc,
+  },
+  {
+    label: LABELS.helpQuickLinkBugs,
+    href: PATHS.bugReportNew,
+    description: LABELS.helpQuickLinkBugsDesc,
   },
   {
     label: 'Contact support',

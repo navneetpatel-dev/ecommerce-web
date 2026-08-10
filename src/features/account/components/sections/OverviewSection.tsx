@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react'
 import Link from 'next/link'
-import { Camera, CheckCircle2, ChevronRight, Heart, Package } from 'lucide-react'
+import { Camera, CheckCircle2, ChevronRight, Heart, LifeBuoy, Package } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
 import { Badge } from '@/shared/components/ui/badge'
@@ -227,6 +227,18 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
             label="Wishlist"
             value={isLoadingStats ? '—' : String(wishlistCount)}
             href={PATHS.wishlist}
+          />
+          <GlanceRow
+            icon={LifeBuoy}
+            label={LABELS.overviewSupportTickets}
+            value={LABELS.view}
+            href={PATHS.supportTickets}
+          />
+          <GlanceRow
+            icon={LifeBuoy}
+            label={LABELS.overviewBugReports}
+            value={LABELS.reportABug}
+            href={PATHS.bugReportNew}
           />
         </ul>
       </section>

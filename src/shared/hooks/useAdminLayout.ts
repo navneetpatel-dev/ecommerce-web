@@ -17,6 +17,8 @@ import {
   ClipboardList,
   FileBarChart,
   Images,
+  LifeBuoy,
+  Bug,
 } from 'lucide-react'
 import { usePermissions } from './usePermissions'
 import { ADMIN_NAV } from '@/shared/constants/adminNav'
@@ -29,6 +31,8 @@ const ADMIN_NAV_ICONS = {
   [PATHS.admin.banners]: Images,
   [PATHS.admin.orders]: ShoppingBag,
   [PATHS.admin.returns]: RotateCcw,
+  [PATHS.admin.supportTickets]: LifeBuoy,
+  [PATHS.admin.bugReports]: Bug,
   [PATHS.admin.coupons]: Tags,
   [PATHS.admin.reviews]: MessageSquare,
   [PATHS.admin.tax]: Percent,
