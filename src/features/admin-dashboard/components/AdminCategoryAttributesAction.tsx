@@ -37,7 +37,7 @@ import { LABELS } from '@/shared/constants/labels'
 import { CATEGORY_ATTRIBUTE_TYPE } from '@/shared/constants/statuses'
 import { cn } from '@/shared/utils/cn'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import { adminActionTone } from '../utils/adminActionTone'
+import { tableMenuButtonClass } from '@/shared/constants/tableActionTone'
 import { categoriesApi } from '@/features/categories/api/categories.api'
 import type { CategoryAttribute } from '@/shared/api/types'
 
@@ -234,7 +234,7 @@ export function AdminCategoryAttributesAction({
       <Button
         size="sm"
         variant="outline"
-        className={cn('shrink-0', adminActionTone.neutral)}
+        className={tableMenuButtonClass('neutral')}
         onClick={() => setOpen(true)}
       >
         <SlidersHorizontal strokeWidth={2.25} aria-hidden />

@@ -6,7 +6,7 @@ import { Button } from '@/shared/components/ui/button'
 import { StatusDialog } from '@/shared/components/StatusDialog'
 import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
-import { adminActionTone } from '../utils/adminActionTone'
+import { tableMenuButtonClass } from '@/shared/constants/tableActionTone'
 
 interface AdminEditNameActionProps {
   currentName: string
@@ -54,7 +54,7 @@ export function AdminEditNameAction({
       <Button
         size="sm"
         variant="outline"
-        className={cn('shrink-0 overflow-visible', adminActionTone.edit)}
+        className={tableMenuButtonClass('edit')}
         disabled={loading}
         onClick={() => {
           setName(currentName)

@@ -16,7 +16,7 @@ import { LABELS } from '@/shared/constants/labels'
 import { CATEGORY_STATUS, type CategoryStatus } from '@/shared/constants/statuses'
 import { cn } from '@/shared/utils/cn'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import { adminActionTone } from '../utils/adminActionTone'
+import { tableMenuButtonClass } from '@/shared/constants/tableActionTone'
 import {
   CategoryFormSchema,
   toCategoryUpdateBody,
@@ -101,7 +101,7 @@ export function AdminEditCategoryAction({ category, onSaved }: AdminEditCategory
       <Button
         size="sm"
         variant="outline"
-        className={cn('shrink-0 overflow-visible', adminActionTone.edit)}
+        className={tableMenuButtonClass('edit')}
         disabled={isPending}
         onClick={openEditor}
       >

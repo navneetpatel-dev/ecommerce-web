@@ -27,6 +27,8 @@ import {
 import type { PromoBanner } from '@/shared/api/types'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { formatLabel } from '@/shared/utils/formatLabel'
+import { TableRowActions, TableRowAction } from '@/shared/components/TableRowActions'
+import { tableMenuButtonClass } from '@/shared/constants/tableActionTone'
 import { homepageAdminApi } from '../api/homepage.api'
 
 function newDraftId() {
@@ -352,19 +354,40 @@ export function AdminPromoBannersPage() {
                         {banner.priority}
                       </p>
                     </div>
-                    <div className="flex shrink-0 gap-2">
-                      <Button size="sm" variant="outline" onClick={() => startEdit(banner)}>
-                        {LABELS.editPromoBanner}
-                      </Button>
-                      {banner.status !== PROMO_BANNER_STATUS.ACTIVE ? (
-                        <Button size="sm" variant="outline" onClick={() => void onActivate(banner)}>
-                          {PROMO_BANNER_STATUS.ACTIVE}
+                    <TableRowActions className="shrink-0">
+                      <TableRowAction>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className={tableMenuButtonClass('edit')}
+                          onClick={() => startEdit(banner)}
+                        >
+                          {LABELS.editPromoBanner}
                         </Button>
+                      </TableRowAction>
+                      {banner.status !== PROMO_BANNER_STATUS.ACTIVE ? (
+                        <TableRowAction>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className={tableMenuButtonClass('success')}
+                            onClick={() => void onActivate(banner)}
+                          >
+                            {PROMO_BANNER_STATUS.ACTIVE}
+                          </Button>
+                        </TableRowAction>
                       ) : null}
-                      <Button size="sm" variant="outline" onClick={() => void onDelete(banner)}>
-                        {LABELS.delete}
-                      </Button>
-                    </div>
+                      <TableRowAction destructive>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className={tableMenuButtonClass('danger')}
+                          onClick={() => void onDelete(banner)}
+                        >
+                          {LABELS.delete}
+                        </Button>
+                      </TableRowAction>
+                    </TableRowActions>
                   </>
                 )}
               </li>

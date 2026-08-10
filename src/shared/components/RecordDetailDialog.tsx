@@ -1,5 +1,6 @@
 'use client'
 
+import { RecordDetailImage } from '@/shared/components/RecordDetailImage'
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import {
   Dialog,
@@ -10,6 +11,7 @@ import {
 } from '@/shared/components/ui/dialog'
 import { LABELS } from '@/shared/constants/labels'
 import { tryFormatDateTime } from '@/shared/utils/formatDate'
+import { isImageDetailValue } from '@/shared/utils/imageField'
 import {
   buildRecordDetailFields,
   getRecordDetailTitle,
@@ -25,9 +27,13 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
   return value != null && typeof value === 'object' && !Array.isArray(value)
 }
 
-function formatDetailValue(key: string, value: unknown) {
+function formatDetailValue(key: string, value: unknown, label: string) {
   if (value == null || value === '') {
     return <span className="text-ink-faint">—</span>
+  }
+
+  if (isImageDetailValue(key, value)) {
+    return <RecordDetailImage value={value} alt={label} />
   }
 
   if (typeof value === 'boolean') {
@@ -88,7 +94,7 @@ export function RecordDetailDialog({ open, onOpenChange, record }: RecordDetailD
                   {field.label}
                 </dt>
                 <dd className="min-w-0 text-[0.9375rem] text-ink">
-                  {formatDetailValue(field.key, field.value)}
+                  {formatDetailValue(field.key, field.value, field.label)}
                 </dd>
               </div>
             ))}

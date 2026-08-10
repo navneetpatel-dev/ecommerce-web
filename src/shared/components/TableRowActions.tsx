@@ -13,76 +13,148 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/
 import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
 
-const DEFAULT_MAX_INLINE = 2
+interface TableRowActionProps {
+  children: ReactNode
+  /** When true, action is sorted last (destructive / reject / delete). */
+  destructive?: boolean
+}
+
+/** Optional wrapper to mark an action as destructive for sort order inside `TableRowActions`. */
+export function TableRowAction({ destructive, children }: TableRowActionProps) {
+  return (
+    <span
+      className="block w-full min-w-0"
+      data-table-row-menu-item
+      data-table-action-destructive={destructive ? true : undefined}
+    >
+      {children}
+    </span>
+  )
+}
 
 interface TableRowActionsProps {
   children: ReactNode
-  /** Show actions inline when count is ≤ this; otherwise use a ⋮ menu. */
-  maxInline?: number
   className?: string
   menuClassName?: string
+}
+
+function componentDisplayName(type: unknown): string {
+  if (typeof type !== 'function' && typeof type !== 'object') return ''
+  const named = type as { displayName?: string; name?: string }
+  return named.displayName ?? named.name ?? ''
+}
+
+/** Dialogs/portals are not row action controls — exclude from the kebab menu list. */
+function isNonActionSlot(node: ReactNode): boolean {
+  if (!isValidElement(node)) return false
+  if (typeof node.type === 'string') return false
+  const name = componentDisplayName(node.type)
+  return /Dialog|Modal|Portal|TooltipProvider/i.test(name)
 }
 
 function flattenActionNodes(nodes: ReactNode): ReactNode[] {
   const out: ReactNode[] = []
   Children.forEach(nodes, (child) => {
     if (child == null || typeof child === 'boolean') return
+    if (isNonActionSlot(child)) return
+
     if (isValidElement(child) && child.type === Fragment) {
       out.push(...flattenActionNodes((child as ReactElement<{ children?: ReactNode }>).props.children))
       return
     }
+
     out.push(child)
   })
   return out
 }
 
-/**
- * Renders row action controls. When there are more than `maxInline` actions,
- * collapses them into a three-dot dropdown so table cells stay compact.
- */
-export function TableRowActions({
-  children,
-  maxInline = DEFAULT_MAX_INLINE,
-  className,
-  menuClassName,
-}: TableRowActionsProps) {
-  const items = flattenActionNodes(children)
+function isOpaqueActionWrapper(node: ReactNode): boolean {
+  if (!isValidElement(node)) return false
+  if (node.type === Fragment) return false
+  if (typeof node.type === 'string') return false
+  return !isNonActionSlot(node)
+}
 
-  if (items.length === 0) return null
+function isDestructiveAction(node: ReactNode): boolean {
+  if (!isValidElement(node)) return false
 
-  if (items.length <= maxInline) {
-    return (
-      <div className={cn('flex flex-wrap items-center justify-center gap-2', className)}>
-        {items}
-      </div>
-    )
+  const props = node.props as Record<string, unknown>
+
+  if (props['data-table-action-destructive'] === true) return true
+  if (props.tone === 'danger' || props.dialogVariant === 'danger') return true
+  if (props.variant === 'destructive') return true
+
+  const className = props.className
+  if (typeof className === 'string' && className.includes('bg-danger')) return true
+
+  if (node.type === Fragment) {
+    return flattenActionNodes(props.children as ReactNode).some(isDestructiveAction)
   }
 
+  return false
+}
+
+function sortActions(items: ReactNode[]): ReactNode[] {
+  const neutral: ReactNode[] = []
+  const destructive: ReactNode[] = []
+
+  for (const item of items) {
+    if (isDestructiveAction(item)) {
+      destructive.push(item)
+    } else {
+      neutral.push(item)
+    }
+  }
+
+  return [...neutral, ...destructive]
+}
+
+function resolveMenuItems(children: ReactNode): ReactNode[] {
+  const wrappedInSingleComponent =
+    Children.count(children) === 1 && isOpaqueActionWrapper(children)
+
+  if (wrappedInSingleComponent) {
+    return Children.toArray(children)
+  }
+
+  return sortActions(flattenActionNodes(children))
+}
+
+/**
+ * Row actions always render as a ⋮ kebab menu — never as inline buttons in table cells.
+ */
+export function TableRowActions({ children, className, menuClassName }: TableRowActionsProps) {
+  const menuItems = resolveMenuItems(children)
+
+  if (menuItems.length === 0) return null
+
   return (
-    <div className={cn('flex items-center justify-center', className)}>
+    <div className={cn('flex shrink-0 items-center justify-end', className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             type="button"
             size="sm"
             variant="ghost"
-            className="h-8 w-8 p-0 text-ink-muted hover:text-ink"
+            className="h-8 w-8 shrink-0 p-0 text-ink-muted hover:text-ink [&_svg]:size-4"
             aria-label={LABELS.moreActions}
+            onClick={(event) => event.stopPropagation()}
           >
-            <MoreHorizontal className="h-4 w-4" aria-hidden />
+            <MoreHorizontal aria-hidden />
           </Button>
         </PopoverTrigger>
         <PopoverContent
           align="end"
           className={cn(
-            'z-[80] w-auto min-w-[11rem] max-w-[16rem] space-y-1.5 p-2',
-            '[&_button]:h-auto [&_button]:w-full [&_button]:justify-start [&_button]:whitespace-normal',
+            'z-[80] w-[12.5rem] space-y-1 p-2',
+            '[&_[data-table-row-menu-item]]:w-full',
+            '[&_[data-table-row-menu-item]_button]:min-h-8 [&_[data-table-row-menu-item]_button]:w-full',
             menuClassName,
           )}
           onClick={(event) => event.stopPropagation()}
         >
-          {items.map((item, index) => (
-            <div key={index} className="min-w-0">
+          {menuItems.map((item, index) => (
+            <div key={index} className="min-w-0 w-full">
               {item}
             </div>
           ))}

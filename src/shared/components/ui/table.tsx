@@ -1,14 +1,33 @@
 import * as React from 'react'
 import { cn } from '@/shared/utils/cn'
 
-const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
-  ({ className, ...props }, ref) => (
-    <div className="scrollbar-none relative w-full overflow-auto">
-      <table ref={ref} className={cn("w-full caption-bottom text-[0.8125rem]", className)} {...props} />
-    </div>
-  )
+export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
+  /** When false, renders only `<table>` — scroll must live in a parent `TableScrollShell`. */
+  scrollContainer?: boolean
+}
+
+const Table = React.forwardRef<HTMLTableElement, TableProps>(
+  ({ className, scrollContainer = true, ...props }, ref) => {
+    const table = (
+      <table
+        ref={ref}
+        className={cn('w-full min-w-max caption-bottom text-[0.8125rem]', className)}
+        {...props}
+      />
+    )
+
+    if (!scrollContainer) {
+      return table
+    }
+
+    return (
+      <div className="scrollbar-none relative w-full overflow-auto">
+        {table}
+      </div>
+    )
+  },
 )
-Table.displayName = "Table"
+Table.displayName = 'Table'
 
 const TableHeader = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => <thead ref={ref} className={cn("[&_tr]:border-b border-line", className)} {...props} />
@@ -22,8 +41,15 @@ TableBody.displayName = "TableBody"
 
 const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTMLTableRowElement>>(
   ({ className, ...props }, ref) => (
-    <tr ref={ref} className={cn("border-b border-line transition-colors hover:bg-paper/50", className)} {...props} />
-  )
+    <tr
+      ref={ref}
+      className={cn(
+        'group border-b border-line transition-colors hover:bg-paper/50',
+        className,
+      )}
+      {...props}
+    />
+  ),
 )
 TableRow.displayName = "TableRow"
 

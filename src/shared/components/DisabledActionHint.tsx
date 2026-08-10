@@ -14,6 +14,8 @@ interface DisabledActionHintProps {
   message: string
   children: ReactNode
   className?: string
+  /** Use block layout so disabled menu triggers stay full width inside kebab popovers. */
+  block?: boolean
   side?: 'top' | 'right' | 'bottom' | 'left'
 }
 
@@ -25,11 +27,12 @@ export function DisabledActionHint({
   message,
   children,
   className,
+  block = false,
   side = 'top',
 }: DisabledActionHintProps) {
   if (!disabled || !message) {
-    if (!className) return <>{children}</>
-    return <span className={className}>{children}</span>
+    if (!className && !block) return <>{children}</>
+    return <span className={cn(block && 'block w-full', className)}>{children}</span>
   }
 
   return (
@@ -37,7 +40,11 @@ export function DisabledActionHint({
       <Tooltip>
         <TooltipTrigger asChild>
           <span
-            className={cn('inline-flex max-w-full cursor-not-allowed', className)}
+            className={cn(
+              block ? 'block w-full' : 'inline-flex max-w-full',
+              'cursor-not-allowed',
+              className,
+            )}
             tabIndex={0}
             aria-disabled="true"
           >

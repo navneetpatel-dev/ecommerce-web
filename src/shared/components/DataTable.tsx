@@ -11,16 +11,25 @@ import {
 } from '@/shared/components/ui/table'
 import { SkeletonRows } from '@/shared/components/Skeletons'
 import { Button } from '@/shared/components/ui/button'
+import { TableCellImage } from '@/shared/components/TableCellImage'
 import { TruncatedText } from '@/shared/components/TruncatedText'
 import { RecordDetailDialog } from '@/shared/components/RecordDetailDialog'
 import { TableRowActions } from '@/shared/components/TableRowActions'
+import { TableScrollShell } from '@/shared/components/TableScrollShell'
 import { TooltipProvider } from '@/shared/components/ui/tooltip'
 import { PaginationContainer } from '@/shared/containers/PaginationContainer'
 import { LABELS } from '@/shared/constants/labels'
-import { TABLE_CELL_MAX_CHARS } from '@/shared/constants/table'
+import {
+  TABLE_ACTIONS_CELL_CLASS,
+  TABLE_ACTIONS_HEAD_CLASS,
+  TABLE_CELL_MAX_CHARS,
+  TABLE_DATA_CELL_CLASS,
+  TABLE_PINNED_LAYOUT_CLASS,
+} from '@/shared/constants/table'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import { tryFormatDateTime } from '@/shared/utils/formatDate'
 import { cn } from '@/shared/utils/cn'
+import { extractImageUrls, isImageFieldKey } from '@/shared/utils/imageField'
 
 export type DataTableColumn<T> = {
   id: string
@@ -63,16 +72,31 @@ export type DataTableProps<T> = {
   pagination?: DataTablePaginationProps
   actions?: (row: T, index: number) => ReactNode
   actionsHeader?: ReactNode
-  /** Extra classes for the actions column header/cells (e.g. wider for multi-button rows). */
+  /** Extra classes merged onto the sticky actions column header/cells. */
   actionsClassName?: string
   className?: string
-  /** Use fixed layout so wide cells truncate instead of expanding the page. */
+  /** @default 'auto' — data columns scroll horizontally; actions stay pinned. */
   tableLayout?: 'auto' | 'fixed'
   /**
    * When true (default), rows are clickable and open a detail modal with all record fields.
    * Set false for tables that should not open row details.
    */
   rowDetails?: boolean
+}
+
+function columnFieldKey<T>(column: DataTableColumn<T>): string {
+  return column.accessor != null ? String(column.accessor) : column.id
+}
+
+function imageAltFromRow<T>(row: T, column: DataTableColumn<T>): string {
+  if (row != null && typeof row === 'object') {
+    const record = row as Record<string, unknown>
+    for (const key of ['name', 'title', 'businessName', 'code', 'slug']) {
+      const value = record[key]
+      if (typeof value === 'string' && value.trim()) return value.trim()
+    }
+  }
+  return columnLabel(column)
 }
 
 function resolveCell<T>(column: DataTableColumn<T>, row: T, index: number): ReactNode {
@@ -87,6 +111,10 @@ function resolveCell<T>(column: DataTableColumn<T>, row: T, index: number): Reac
   if (column.accessor != null) {
     const value = row[column.accessor]
     if (value == null || value === '') return '—'
+    const fieldKey = String(column.accessor)
+    if (isImageFieldKey(fieldKey)) {
+      return value as ReactNode
+    }
     const asDate = tryFormatDateTime(value)
     if (asDate) return asDate
     if (typeof value === 'object') return JSON.stringify(value)
@@ -103,7 +131,31 @@ function columnLabel<T>(column: DataTableColumn<T>): string {
   return column.id
 }
 
-function renderCellContent<T>(column: DataTableColumn<T>, content: ReactNode): ReactNode {
+function renderCellContent<T>(
+  column: DataTableColumn<T>,
+  content: ReactNode,
+  row: T,
+): ReactNode {
+  const fieldKey = columnFieldKey(column)
+  if (!column.cell && isImageFieldKey(fieldKey)) {
+    const urls = extractImageUrls(content)
+    if (urls.length === 1) {
+      return <TableCellImage src={urls[0]} alt={imageAltFromRow(row, column)} />
+    }
+    if (urls.length > 1) {
+      return (
+        <div className="flex flex-nowrap items-center gap-2">
+          {urls.slice(0, 4).map((url) => (
+            <TableCellImage key={url} src={url} alt={imageAltFromRow(row, column)} />
+          ))}
+          {urls.length > 4 ? (
+            <span className="text-[0.75rem] text-ink-muted">+{urls.length - 4}</span>
+          ) : null}
+        </div>
+      )
+    }
+  }
+
   const shouldTruncate =
     column.truncate !== false && (typeof content === 'string' || typeof content === 'number')
 
@@ -139,7 +191,7 @@ export function DataTable<T>({
   actionsHeader = LABELS.actions,
   actionsClassName,
   className,
-  tableLayout = 'fixed',
+  tableLayout = 'auto',
   rowDetails = true,
 }: DataTableProps<T>) {
   const [detailRow, setDetailRow] = useState<T | null>(null)
@@ -210,8 +262,8 @@ export function DataTable<T>({
           </div>
         ) : (
           <>
-            {/* Mobile / narrow: stacked cards */}
-            <ul className="space-y-3 md:hidden">
+            {/* Below lg: stacked cards — row actions collapse to kebab */}
+            <ul className="space-y-3 lg:hidden">
               {rows.map((row, index) => {
                 const rowId = getRowId?.(row, index) ?? String((row as { id?: unknown }).id ?? index)
                 const [primary, ...rest] = mobileColumns
@@ -233,7 +285,7 @@ export function DataTable<T>({
                   >
                     {primary ? (
                       <div className={cn('min-w-0 text-[0.9375rem] text-ink', primary.className)}>
-                        {renderCellContent(primary, primaryContent)}
+                        {renderCellContent(primary, primaryContent, row)}
                       </div>
                     ) : null}
 
@@ -260,7 +312,7 @@ export function DataTable<T>({
                                   column.className,
                                 )}
                               >
-                                {renderCellContent(column, content)}
+                                {renderCellContent(column, content, row)}
                               </dd>
                             </div>
                           )
@@ -276,7 +328,9 @@ export function DataTable<T>({
                         onClick={(event) => event.stopPropagation()}
                         onKeyDown={(event) => event.stopPropagation()}
                       >
-                        <TableRowActions className="justify-start">{actions(row, index)}</TableRowActions>
+                        <TableRowActions className="justify-end">
+                          {actions(row, index)}
+                        </TableRowActions>
                       </div>
                     ) : null}
                   </li>
@@ -284,15 +338,23 @@ export function DataTable<T>({
               })}
             </ul>
 
-            {/* md+: classic table */}
-            <div className="hidden overflow-x-auto rounded-md border border-line bg-surface shadow-[0_1px_0_rgba(15,23,42,0.03)] md:block">
-              <Table className={cn(tableLayout === 'fixed' && 'table-fixed')}>
+            {/* lg+: scrollable data columns + pinned actions */}
+            <TableScrollShell desktopOnly>
+              <Table
+                scrollContainer={false}
+                className={cn(
+                  actions && TABLE_PINNED_LAYOUT_CLASS,
+                  tableLayout === 'fixed' && 'table-fixed w-full min-w-0',
+                )}
+              >
                 <TableHeader>
                   <TableRow className="border-line bg-paper/70 hover:bg-paper/70">
                     {columns.map((column) => (
                       <TableHead
                         key={column.id}
                         className={cn(
+                          TABLE_DATA_CELL_CLASS,
+                          tableLayout === 'auto' && column.truncate !== false && 'max-w-[14rem]',
                           'text-[0.75rem] uppercase tracking-[0.04em]',
                           column.headerClassName,
                         )}
@@ -301,12 +363,7 @@ export function DataTable<T>({
                       </TableHead>
                     ))}
                     {actions ? (
-                      <TableHead
-                        className={cn(
-                          'w-[6.5rem] min-w-[6.5rem] max-w-[6.5rem] px-3 text-center text-[0.75rem] uppercase tracking-[0.04em]',
-                          actionsClassName,
-                        )}
-                      >
+                      <TableHead className={cn(TABLE_ACTIONS_HEAD_CLASS, actionsClassName)}>
                         {actionsHeader}
                       </TableHead>
                     ) : null}
@@ -333,22 +390,28 @@ export function DataTable<T>({
                           return (
                             <TableCell
                               key={column.id}
-                              className={cn(tableLayout === 'fixed' && 'max-w-0', column.className)}
+                              className={cn(
+                                TABLE_DATA_CELL_CLASS,
+                                tableLayout === 'fixed' && 'max-w-0',
+                                tableLayout === 'auto' &&
+                                  column.truncate !== false &&
+                                  'max-w-[14rem]',
+                                column.className,
+                              )}
                             >
-                              {renderCellContent(column, content)}
+                              {renderCellContent(column, content, row)}
                             </TableCell>
                           )
                         })}
                         {actions ? (
                           <TableCell
-                            className={cn(
-                              'w-[6.5rem] min-w-[6.5rem] max-w-[6.5rem] px-3 text-center align-middle',
-                              actionsClassName,
-                            )}
+                            className={cn(TABLE_ACTIONS_CELL_CLASS, actionsClassName)}
                             onClick={(event) => event.stopPropagation()}
                             onKeyDown={(event) => event.stopPropagation()}
                           >
-                            <TableRowActions>{actions(row, index)}</TableRowActions>
+                            <TableRowActions>
+                              {actions(row, index)}
+                            </TableRowActions>
                           </TableCell>
                         ) : null}
                       </TableRow>
@@ -356,7 +419,7 @@ export function DataTable<T>({
                   })}
                 </TableBody>
               </Table>
-            </div>
+            </TableScrollShell>
           </>
         )}
 

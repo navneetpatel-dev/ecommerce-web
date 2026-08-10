@@ -1,13 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-import { FileText } from 'lucide-react'
-import { Button } from '@/shared/components/ui/button'
 import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
+import { TableRowAction } from '@/shared/components/TableRowActions'
 import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
-import { ModerationRowActions } from './ModerationRowActions'
-import { VendorKycDocumentsDialog } from './VendorKycDocumentsDialog'
+import { AdminConfirmAction } from './AdminConfirmAction'
+import { VendorKycDocumentsMenuAction } from './VendorKycDocumentsMenuAction'
 
 interface Vendor {
   id: string
@@ -37,8 +35,6 @@ export function VendorApprovalTable({
   onRefresh,
   pagination,
 }: VendorApprovalTableProps) {
-  const [docsVendor, setDocsVendor] = useState<Vendor | null>(null)
-
   const columns: DataTableColumn<Vendor>[] = [
     {
       id: 'businessName',
@@ -60,62 +56,58 @@ export function VendorApprovalTable({
     },
   ]
 
-  return (
-    <>
-      <DataTable
-        columns={columns}
-        rows={vendors}
-        loading={loading}
-        onRefresh={onRefresh}
-        getRowId={(row) => row.id}
-        actionsClassName="w-auto min-w-[14rem]"
-        pagination={pagination}
-        actions={(v) => (
-          <div className="flex flex-wrap items-center gap-2">
-            <Button
-              size="sm"
-              variant="outline"
-              className="gap-1.5"
-              onClick={() => setDocsVendor(v)}
-            >
-              <FileText className="size-3.5" aria-hidden />
-              {LABELS.viewKycDocuments}
-            </Button>
-            <ModerationRowActions
-              approveTitle={LABELS.confirmApproveVendorTitle}
-              approveDescription={formatLabel(LABELS.confirmApproveVendorBody, {
-                name: v.businessName,
-              })}
-              rejectTitle={LABELS.confirmRejectVendorTitle}
-              rejectDescription={formatLabel(LABELS.confirmRejectVendorBody, {
-                name: v.businessName,
-              })}
-              rejectFieldLabel={LABELS.reasonRequired}
-              rejectEmptyHint={LABELS.enterRejectionReason}
-              onConfirmApprove={() => onApprove(v.id)}
-              onConfirmReject={(reason) => onReject(v.id, reason)}
-              isApproving={isApproving}
-              isRejecting={isRejecting}
-              approveDisabled={!v.kycComplete}
-              approveDisabledHint={LABELS.kycApproveBlocked}
-            />
-          </div>
-        )}
-      />
+  const rowBusy = isApproving || isRejecting
 
-      {docsVendor ? (
-        <VendorKycDocumentsDialog
-          vendorId={docsVendor.id}
-          vendorName={docsVendor.businessName}
-          open={Boolean(docsVendor)}
-          onOpenChange={(open) => {
-            if (!open) {
-              setDocsVendor(null)
-              onRefresh?.()
-            }
-          }}
-        />
-      ) : null}
-    </>
+  return (
+    <DataTable
+      columns={columns}
+      rows={vendors}
+      loading={loading}
+      onRefresh={onRefresh}
+      getRowId={(row) => row.id}
+      pagination={pagination}
+      actions={(v) => (
+        <>
+          <TableRowAction>
+            <VendorKycDocumentsMenuAction
+              vendorId={v.id}
+              vendorName={v.businessName}
+              onClose={onRefresh}
+            />
+          </TableRowAction>
+          <TableRowAction>
+            <AdminConfirmAction
+              label={LABELS.approve}
+              tone="success"
+              dialogVariant="success"
+              title={LABELS.confirmApproveVendorTitle}
+              description={formatLabel(LABELS.confirmApproveVendorBody, {
+                name: v.businessName,
+              })}
+              confirmLabel={LABELS.approve}
+              onConfirm={() => onApprove(v.id)}
+              disabled={!v.kycComplete || rowBusy}
+              disabledHint={!v.kycComplete ? LABELS.kycApproveBlocked : undefined}
+            />
+          </TableRowAction>
+          <TableRowAction destructive>
+            <AdminConfirmAction
+              label={LABELS.reject}
+              tone="danger"
+              dialogVariant="danger"
+              title={LABELS.confirmRejectVendorTitle}
+              description={formatLabel(LABELS.confirmRejectVendorBody, {
+                name: v.businessName,
+              })}
+              confirmLabel={LABELS.reject}
+              requireReason
+              reasonHint={LABELS.enterRejectionReason}
+              onConfirm={(reason) => onReject(v.id, reason ?? '')}
+              disabled={rowBusy}
+            />
+          </TableRowAction>
+        </>
+      )}
+    />
   )
 }

@@ -1,10 +1,11 @@
 'use client'
 
 import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
-import { MediaImage } from '@/shared/components/MediaImage'
+import { TableCellImage } from '@/shared/components/TableCellImage'
+import { TableRowAction } from '@/shared/components/TableRowActions'
 import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
-import { ModerationRowActions } from './ModerationRowActions'
+import { AdminConfirmAction } from './AdminConfirmAction'
 
 interface Product {
   id: string
@@ -41,9 +42,7 @@ export function ProductModerationTable({
       truncate: false,
       cell: (p) => (
         <div className="flex items-center gap-3">
-          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded bg-paper">
-            <MediaImage src={p.imageUrl} alt={p.name} sizes="40px" imageClassName="object-cover" />
-          </div>
+          <TableCellImage src={p.imageUrl} alt={p.name} />
           <span className="font-medium">{p.name}</span>
         </div>
       ),
@@ -56,6 +55,8 @@ export function ProductModerationTable({
     },
   ]
 
+  const rowBusy = isApproving || isRejecting
+
   return (
     <DataTable
       columns={columns}
@@ -63,21 +64,37 @@ export function ProductModerationTable({
       loading={loading}
       onRefresh={onRefresh}
       getRowId={(row) => row.id}
-      actionsClassName="w-auto min-w-[11rem]"
       pagination={pagination}
       actions={(p) => (
-        <ModerationRowActions
-          approveTitle={LABELS.confirmApproveProductTitle}
-          approveDescription={formatLabel(LABELS.confirmApproveProductBody, { name: p.name })}
-          rejectTitle={LABELS.confirmRejectProductTitle}
-          rejectDescription={formatLabel(LABELS.confirmRejectProductBody, { name: p.name })}
-          rejectFieldLabel={LABELS.rejectionNote}
-          rejectEmptyHint={LABELS.enterRejectionNote}
-          onConfirmApprove={() => onApprove(p.id)}
-          onConfirmReject={(note) => onReject(p.id, note)}
-          isApproving={isApproving}
-          isRejecting={isRejecting}
-        />
+        <>
+          <TableRowAction>
+            <AdminConfirmAction
+              label={LABELS.approve}
+              tone="success"
+              dialogVariant="success"
+              title={LABELS.confirmApproveProductTitle}
+              description={formatLabel(LABELS.confirmApproveProductBody, { name: p.name })}
+              confirmLabel={LABELS.approve}
+              onConfirm={() => onApprove(p.id)}
+              disabled={rowBusy}
+            />
+          </TableRowAction>
+          <TableRowAction destructive>
+            <AdminConfirmAction
+              label={LABELS.reject}
+              tone="danger"
+              dialogVariant="danger"
+              title={LABELS.confirmRejectProductTitle}
+              description={formatLabel(LABELS.confirmRejectProductBody, { name: p.name })}
+              confirmLabel={LABELS.reject}
+              requireReason
+              reasonLabel={LABELS.rejectionNote}
+              reasonHint={LABELS.enterRejectionNote}
+              onConfirm={(note) => onReject(p.id, note ?? '')}
+              disabled={rowBusy}
+            />
+          </TableRowAction>
+        </>
       )}
     />
   )

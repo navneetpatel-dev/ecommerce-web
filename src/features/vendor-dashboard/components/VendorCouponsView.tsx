@@ -4,7 +4,6 @@ import { Button } from '@/shared/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/components/ui/dialog'
 import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
 import { StatusBadge } from '@/shared/components/StatusBadge'
-import { TableRowActions } from '@/shared/components/TableRowActions'
 import { Plus } from 'lucide-react'
 import { CreateCouponForm } from '@/features/admin-dashboard/components/CreateCouponForm'
 import { AdminConfirmAction } from '@/features/admin-dashboard/components/AdminConfirmAction'
@@ -80,47 +79,43 @@ export function VendorCouponsView({
       header: LABELS.expires,
       cell: (row) => formatDateTime(row.endDate),
     },
-    {
-      id: 'actions',
-      header: LABELS.actions,
-      truncate: false,
-      cell: (row) => (
-        <TableRowActions>
-          <Button type="button" size="sm" variant="outline" onClick={() => setAnalyticsId(row.id)}>
-            {LABELS.viewAnalytics}
-          </Button>
-          {row.status === COUPON_STATUS.ACTIVE ? (
-            <AdminConfirmAction
-              label={LABELS.pauseCoupon}
-              tone="neutral"
-              title={LABELS.confirmPauseCouponTitle}
-              description={formatLabel(LABELS.confirmPauseCouponBody, { code: row.code })}
-              onConfirm={() => onUpdateStatus(row, COUPON_STATUS.PAUSED)}
-            />
-          ) : null}
-          {row.status === COUPON_STATUS.PAUSED || row.status === COUPON_STATUS.DRAFT ? (
-            <AdminConfirmAction
-              label={LABELS.activateCoupon}
-              tone="success"
-              dialogVariant="success"
-              title={LABELS.confirmActivateCouponTitle}
-              description={formatLabel(LABELS.confirmActivateCouponBody, { code: row.code })}
-              onConfirm={() => onUpdateStatus(row, COUPON_STATUS.ACTIVE)}
-            />
-          ) : null}
-          {row.status !== COUPON_STATUS.ARCHIVED ? (
-            <AdminConfirmAction
-              label={LABELS.archiveCoupon}
-              tone="archive"
-              title={LABELS.confirmArchiveCouponTitle}
-              description={formatLabel(LABELS.confirmArchiveCouponBody, { code: row.code })}
-              onConfirm={() => onUpdateStatus(row, COUPON_STATUS.ARCHIVED)}
-            />
-          ) : null}
-        </TableRowActions>
-      ),
-    },
   ]
+
+  const renderActions = (row: Coupon) => (
+    <>
+      <Button type="button" size="sm" variant="outline" onClick={() => setAnalyticsId(row.id)}>
+        {LABELS.viewAnalytics}
+      </Button>
+      {row.status === COUPON_STATUS.ACTIVE ? (
+        <AdminConfirmAction
+          label={LABELS.pauseCoupon}
+          tone="neutral"
+          title={LABELS.confirmPauseCouponTitle}
+          description={formatLabel(LABELS.confirmPauseCouponBody, { code: row.code })}
+          onConfirm={() => onUpdateStatus(row, COUPON_STATUS.PAUSED)}
+        />
+      ) : null}
+      {row.status === COUPON_STATUS.PAUSED || row.status === COUPON_STATUS.DRAFT ? (
+        <AdminConfirmAction
+          label={LABELS.activateCoupon}
+          tone="success"
+          dialogVariant="success"
+          title={LABELS.confirmActivateCouponTitle}
+          description={formatLabel(LABELS.confirmActivateCouponBody, { code: row.code })}
+          onConfirm={() => onUpdateStatus(row, COUPON_STATUS.ACTIVE)}
+        />
+      ) : null}
+      {row.status !== COUPON_STATUS.ARCHIVED ? (
+        <AdminConfirmAction
+          label={LABELS.archiveCoupon}
+          tone="archive"
+          title={LABELS.confirmArchiveCouponTitle}
+          description={formatLabel(LABELS.confirmArchiveCouponBody, { code: row.code })}
+          onConfirm={() => onUpdateStatus(row, COUPON_STATUS.ARCHIVED)}
+        />
+      ) : null}
+    </>
+  )
 
   return (
     <div className="space-y-6">
@@ -167,6 +162,7 @@ export function VendorCouponsView({
         emptyMessage={LABELS.noVendorCoupons}
         getRowId={(row) => row.id}
         pagination={pagination}
+        actions={renderActions}
       />
 
       <Dialog open={Boolean(analyticsId)} onOpenChange={(next) => !next && setAnalyticsId(null)}>

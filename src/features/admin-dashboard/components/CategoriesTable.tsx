@@ -22,7 +22,7 @@ import {
   type DataTableColumn,
   type DataTablePaginationProps,
 } from '@/shared/components/DataTable'
-import { MediaImage } from '@/shared/components/MediaImage'
+import { TableCellImage } from '@/shared/components/TableCellImage'
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import { LABELS } from '@/shared/constants/labels'
 import { CATEGORY_STATUS } from '@/shared/constants/statuses'
@@ -114,15 +114,7 @@ export function CategoriesTable({
       truncate: false,
       className: 'w-14',
       cell: (row) => (
-        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded bg-paper">
-          <MediaImage
-            src={row.imageUrl}
-            alt={row.name}
-            unavailableLabel={LABELS.imageNotAvailable}
-            sizes="40px"
-            imageClassName="object-cover"
-          />
-        </div>
+        <TableCellImage src={row.imageUrl} alt={row.name} />
       ),
     },
     {

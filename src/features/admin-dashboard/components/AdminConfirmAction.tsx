@@ -7,10 +7,12 @@ import {
   StatusDialog,
   type StatusDialogVariant,
 } from '@/shared/components/StatusDialog'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { LABELS } from '@/shared/constants/labels'
+import { tableMenuButtonClass, type TableActionTone } from '@/shared/constants/tableActionTone'
 import { cn } from '@/shared/utils/cn'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import { adminActionTone, type AdminActionTone } from '../utils/adminActionTone'
+import type { AdminActionTone } from '../utils/adminActionTone'
 
 type ButtonVariant = 'default' | 'outline' | 'ghost' | 'secondary' | 'destructive'
 
@@ -30,6 +32,8 @@ interface AdminConfirmActionProps {
   reasonHint?: string
   onConfirm: (reason?: string) => void | Promise<unknown>
   disabled?: boolean
+  /** Shown when the trigger is disabled (e.g. KYC incomplete). */
+  disabledHint?: string
   showIcon?: boolean
 }
 
@@ -72,6 +76,7 @@ export function AdminConfirmAction({
   reasonHint = LABELS.enterRejectionReason,
   onConfirm,
   disabled = false,
+  disabledHint,
   showIcon = true,
 }: AdminConfirmActionProps) {
   const [open, setOpen] = useState(false)
@@ -107,26 +112,32 @@ export function AdminConfirmAction({
   const primaryVariant =
     confirmVariant ?? (dialogVariant === 'danger' ? 'destructive' : 'default')
 
+  const triggerButton = (
+    <Button
+      size="sm"
+      variant={triggerVariant}
+      className={cn(tableMenuButtonClass(resolvedTone as TableActionTone), triggerClassName)}
+      disabled={disabled || loading}
+      onClick={() => {
+        setReason('')
+        setActionError(null)
+        setOpen(true)
+      }}
+    >
+      {showIcon ? <Icon strokeWidth={2.25} aria-hidden /> : null}
+      <span>{label}</span>
+    </Button>
+  )
+
   return (
     <>
-      <Button
-        size="sm"
-        variant={triggerVariant}
-        className={cn(
-          'shrink-0 overflow-visible',
-          adminActionTone[resolvedTone],
-          triggerClassName,
-        )}
-        disabled={disabled || loading}
-        onClick={() => {
-          setReason('')
-          setActionError(null)
-          setOpen(true)
-        }}
-      >
-        {showIcon ? <Icon strokeWidth={2.25} aria-hidden /> : null}
-        <span>{label}</span>
-      </Button>
+      {disabled && disabledHint ? (
+        <DisabledActionHint disabled message={disabledHint} block>
+          {triggerButton}
+        </DisabledActionHint>
+      ) : (
+        triggerButton
+      )}
 
       <StatusDialog
         open={open}

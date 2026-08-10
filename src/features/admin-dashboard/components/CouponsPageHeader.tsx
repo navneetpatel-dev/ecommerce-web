@@ -121,21 +121,6 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
       cell: (row) => (row.expiresAt ? formatDateTime(row.expiresAt) : LABELS.usageUnlimited),
     },
     {
-      id: 'codes',
-      header: LABELS.batchCodes,
-      truncate: false,
-      cell: (row) => (
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          onClick={() => setBatchDetail(row)}
-        >
-          {LABELS.viewBatchCodes}
-        </Button>
-      ),
-    },
-    {
       id: 'created',
       header: LABELS.startDate,
       cell: (row) => formatDateTime(row.createdAt),
@@ -246,6 +231,16 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
           loading={batchesQuery.isLoading}
           emptyMessage={LABELS.noCouponBatches}
           getRowId={(row) => row.id}
+          actions={(row) => (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => setBatchDetail(row)}
+            >
+              {LABELS.viewBatchCodes}
+            </Button>
+          )}
         />
       </section>
 

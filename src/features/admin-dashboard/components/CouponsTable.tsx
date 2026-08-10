@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
 import { StatusBadge } from '@/shared/components/StatusBadge'
-import { TableRowActions } from '@/shared/components/TableRowActions'
 import { Button } from '@/shared/components/ui/button'
 import {
   Dialog,
@@ -106,80 +105,76 @@ export function CouponsTable({
       header: LABELS.expires,
       cell: (row) => formatDateTime(row.endDate),
     },
-    {
-      id: 'actions',
-      header: LABELS.actions,
-      truncate: false,
-      cell: (row) => (
-        <TableRowActions>
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={() => setAnalyticsCoupon(row)}
-          >
-            {LABELS.viewAnalytics}
-          </Button>
-          {!readOnly && row.status === COUPON_STATUS.ACTIVE ? (
-            <AdminConfirmAction
-              label={LABELS.pauseCoupon}
-              tone="neutral"
-              dialogVariant="warning"
-              title={LABELS.confirmPauseCouponTitle}
-              description={formatLabel(LABELS.confirmPauseCouponBody, { code: row.code })}
-              onConfirm={() =>
-                statusMutation.mutateAsync({ id: row.id, status: COUPON_STATUS.PAUSED }).then(reload)
-              }
-            />
-          ) : null}
-          {!readOnly &&
-          (row.status === COUPON_STATUS.PAUSED || row.status === COUPON_STATUS.DRAFT) ? (
-            <AdminConfirmAction
-              label={LABELS.activateCoupon}
-              tone="success"
-              dialogVariant="success"
-              title={LABELS.confirmActivateCouponTitle}
-              description={formatLabel(LABELS.confirmActivateCouponBody, { code: row.code })}
-              onConfirm={() =>
-                statusMutation.mutateAsync({ id: row.id, status: COUPON_STATUS.ACTIVE }).then(reload)
-              }
-            />
-          ) : null}
-          {!readOnly && row.status !== COUPON_STATUS.ARCHIVED ? (
-            <AdminConfirmAction
-              label={LABELS.archiveCoupon}
-              tone="archive"
-              dialogVariant="warning"
-              title={LABELS.confirmArchiveCouponTitle}
-              description={formatLabel(LABELS.confirmArchiveCouponBody, { code: row.code })}
-              onConfirm={() =>
-                statusMutation
-                  .mutateAsync({ id: row.id, status: COUPON_STATUS.ARCHIVED })
-                  .then(reload)
-              }
-            />
-          ) : null}
-          {allowReject &&
-          row.vendorId &&
-          row.status !== COUPON_STATUS.REJECTED &&
-          row.status !== COUPON_STATUS.ARCHIVED ? (
-            <AdminConfirmAction
-              label={LABELS.rejectCoupon}
-              tone="danger"
-              dialogVariant="danger"
-              title={LABELS.confirmRejectCouponTitle}
-              description={formatLabel(LABELS.confirmRejectCouponBody, { code: row.code })}
-              onConfirm={() =>
-                statusMutation
-                  .mutateAsync({ id: row.id, status: COUPON_STATUS.REJECTED })
-                  .then(reload)
-              }
-            />
-          ) : null}
-        </TableRowActions>
-      ),
-    },
   ]
+
+  const renderActions = (row: Coupon) => (
+    <>
+      <Button
+        type="button"
+        size="sm"
+        variant="outline"
+        onClick={() => setAnalyticsCoupon(row)}
+      >
+        {LABELS.viewAnalytics}
+      </Button>
+      {!readOnly && row.status === COUPON_STATUS.ACTIVE ? (
+        <AdminConfirmAction
+          label={LABELS.pauseCoupon}
+          tone="neutral"
+          dialogVariant="warning"
+          title={LABELS.confirmPauseCouponTitle}
+          description={formatLabel(LABELS.confirmPauseCouponBody, { code: row.code })}
+          onConfirm={() =>
+            statusMutation.mutateAsync({ id: row.id, status: COUPON_STATUS.PAUSED }).then(reload)
+          }
+        />
+      ) : null}
+      {!readOnly &&
+      (row.status === COUPON_STATUS.PAUSED || row.status === COUPON_STATUS.DRAFT) ? (
+        <AdminConfirmAction
+          label={LABELS.activateCoupon}
+          tone="success"
+          dialogVariant="success"
+          title={LABELS.confirmActivateCouponTitle}
+          description={formatLabel(LABELS.confirmActivateCouponBody, { code: row.code })}
+          onConfirm={() =>
+            statusMutation.mutateAsync({ id: row.id, status: COUPON_STATUS.ACTIVE }).then(reload)
+          }
+        />
+      ) : null}
+      {!readOnly && row.status !== COUPON_STATUS.ARCHIVED ? (
+        <AdminConfirmAction
+          label={LABELS.archiveCoupon}
+          tone="archive"
+          dialogVariant="warning"
+          title={LABELS.confirmArchiveCouponTitle}
+          description={formatLabel(LABELS.confirmArchiveCouponBody, { code: row.code })}
+          onConfirm={() =>
+            statusMutation
+              .mutateAsync({ id: row.id, status: COUPON_STATUS.ARCHIVED })
+              .then(reload)
+          }
+        />
+      ) : null}
+      {allowReject &&
+      row.vendorId &&
+      row.status !== COUPON_STATUS.REJECTED &&
+      row.status !== COUPON_STATUS.ARCHIVED ? (
+        <AdminConfirmAction
+          label={LABELS.rejectCoupon}
+          tone="danger"
+          dialogVariant="danger"
+          title={LABELS.confirmRejectCouponTitle}
+          description={formatLabel(LABELS.confirmRejectCouponBody, { code: row.code })}
+          onConfirm={() =>
+            statusMutation
+              .mutateAsync({ id: row.id, status: COUPON_STATUS.REJECTED })
+              .then(reload)
+          }
+        />
+      ) : null}
+    </>
+  )
 
   const analytics: CouponAnalytics | undefined = analyticsQuery.data
 
@@ -192,6 +187,7 @@ export function CouponsTable({
         emptyMessage={readOnly ? LABELS.noVendorCoupons : LABELS.noCoupons}
         getRowId={(row) => row.id}
         pagination={pagination}
+        actions={renderActions}
       />
 
       <Dialog open={Boolean(analyticsCoupon)} onOpenChange={(open) => !open && setAnalyticsCoupon(null)}>

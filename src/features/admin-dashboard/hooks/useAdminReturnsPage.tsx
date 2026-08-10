@@ -94,7 +94,7 @@ export function useAdminReturnsPage(): AdminListPageModel {
       />,
     )
 
-    return <div className="flex flex-wrap gap-2">{buttons}</div>
+    return <>{buttons}</>
   }, [])
 
   return {

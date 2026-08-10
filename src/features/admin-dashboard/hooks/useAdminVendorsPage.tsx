@@ -6,7 +6,7 @@ import { LABELS } from '@/shared/constants/labels'
 import { adminApi } from '../api/admin.api'
 import { usePendingVendors } from '../api/admin.queries'
 import { usePermissions } from '@/shared/hooks/usePermissions'
-import { VendorRowActions } from '../components/VendorRowActions'
+import { renderVendorRowActions } from '../components/VendorRowActions'
 import type { AdminDataRow } from './useAdminDataList'
 import type { AdminListPageModel } from './adminListPage.types'
 
@@ -26,7 +26,7 @@ export function useAdminVendorsPage(): AdminVendorsPageModel {
   )
 
   const actions = useCallback((row: AdminDataRow, reload: () => void) => {
-    return <VendorRowActions row={row} onReload={reload} />
+    return renderVendorRowActions({ row, onReload: reload })
   }, [])
 
   return {

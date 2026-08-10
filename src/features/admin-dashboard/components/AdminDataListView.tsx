@@ -4,7 +4,9 @@ import {
   type DataTableColumn,
 } from '@/shared/components/DataTable'
 import { StatusBadge } from '@/shared/components/StatusBadge'
+import { TableCellImage } from '@/shared/components/TableCellImage'
 import { LABELS } from '@/shared/constants/labels'
+import { extractImageUrls, isImageFieldKey } from '@/shared/utils/imageField'
 import { inferAdminColumns, type AdminDataRow } from '../hooks/useAdminDataList'
 import { formatAdminCellValue, getAdminCellValue } from '../utils/adminTableCells'
 
@@ -33,6 +35,27 @@ function columnHeader(key: string): string {
 
 function renderAdminCell(row: AdminDataRow, key: string): ReactNode {
   const value = getAdminCellValue(row, key)
+  if (isImageFieldKey(key)) {
+    const urls = extractImageUrls(value)
+    if (urls.length === 1) {
+      const alt =
+        typeof row.name === 'string'
+          ? row.name
+          : typeof row.businessName === 'string'
+            ? row.businessName
+            : key
+      return <TableCellImage src={urls[0]} alt={alt} />
+    }
+    if (urls.length > 1) {
+      return (
+        <div className="flex flex-nowrap items-center gap-2">
+          {urls.slice(0, 4).map((url) => (
+            <TableCellImage key={url} src={url} alt={key} />
+          ))}
+        </div>
+      )
+    }
+  }
   if (key === 'status' || key.endsWith('.status')) {
     if (typeof value === 'string' && value.trim()) {
       return <StatusBadge status={value} />
@@ -61,7 +84,7 @@ export function AdminDataListView({
   const columns: DataTableColumn<AdminDataRow>[] = keys.map((key) => ({
     id: key,
     header: columnHeader(key),
-    truncate: key !== 'status' && !key.endsWith('.status'),
+    truncate: key !== 'status' && !key.endsWith('.status') && !isImageFieldKey(key),
     cell: (row) => renderAdminCell(row, key),
   }))
 
