@@ -11,6 +11,7 @@ import {
 } from '@/shared/components/ui/dialog'
 import { Button } from '@/shared/components/ui/button'
 import { FileUpload } from '@/shared/components/FileUpload'
+import { FormSection } from '@/shared/components/forms'
 import { LABELS } from '@/shared/constants/labels'
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
 import { productsApi } from '@/features/products/api/products.api'
@@ -168,15 +169,17 @@ export function VendorProductImagesDialog({
           ))}
         </ul>
 
-        <FileUpload
-          entityType={UPLOAD_ENTITY.PRODUCTS}
-          entityId={productId}
-          purpose={UPLOAD_PURPOSE.IMAGES}
-          accept="image/png,image/jpeg,image/webp"
-          disabled={busyId === 'new'}
-          label={LABELS.addProductImage}
-          onUploaded={(url) => void onAddImage(url)}
-        />
+        <FormSection title={LABELS.productFormSectionImages} hint={LABELS.productFormSectionImagesHint} columns={1}>
+          <FileUpload
+            entityType={UPLOAD_ENTITY.PRODUCTS}
+            entityId={productId}
+            purpose={UPLOAD_PURPOSE.IMAGES}
+            accept="image/png,image/jpeg,image/webp"
+            disabled={busyId === 'new'}
+            label={LABELS.addProductImage}
+            onUploaded={(url) => void onAddImage(url)}
+          />
+        </FormSection>
       </DialogContent>
     </Dialog>
   )

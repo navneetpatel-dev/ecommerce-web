@@ -51,7 +51,7 @@ export function CategoriesPageHeader({
               {LABELS.createCategory}
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{LABELS.createCategory}</DialogTitle>
             </DialogHeader>

@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog'
-import { Label } from '@/shared/components/ui/label'
+import { FormActions, FormFieldFrame, FormSection } from '@/shared/components/forms'
 import {
   Select,
   SelectContent,
@@ -83,9 +83,8 @@ export function AdminReassignProductsAction({ onDone }: AdminReassignProductsAct
             <DialogTitle>{LABELS.reassignProductsTitle}</DialogTitle>
           </DialogHeader>
           <p className="text-[0.875rem] text-ink-muted">{LABELS.reassignProductsBody}</p>
-          <div className="space-y-3">
-            <div className="space-y-2">
-              <Label>{LABELS.reassignFrom}</Label>
+          <FormSection title={LABELS.reassignProducts} columns={1} className="mt-2">
+            <FormFieldFrame label={LABELS.reassignFrom}>
               <Select value={fromId} onValueChange={setFromId}>
                 <SelectTrigger>
                   <SelectValue placeholder={LABELS.selectCategory} />
@@ -98,9 +97,8 @@ export function AdminReassignProductsAction({ onDone }: AdminReassignProductsAct
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>{LABELS.reassignTo}</Label>
+            </FormFieldFrame>
+            <FormFieldFrame label={LABELS.reassignTo}>
               <Select value={toId} onValueChange={setToId}>
                 <SelectTrigger>
                   <SelectValue placeholder={LABELS.selectCategory} />
@@ -113,16 +111,18 @@ export function AdminReassignProductsAction({ onDone }: AdminReassignProductsAct
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </FormFieldFrame>
             {error ? <p className="text-[0.8125rem] text-danger">{error}</p> : null}
             {message ? <p className="text-[0.8125rem] text-success">{message}</p> : null}
-            <Button
-              disabled={loading || !fromId || !toId || fromId === toId}
-              onClick={() => void onSubmit()}
-            >
-              {LABELS.reassignConfirm}
-            </Button>
-          </div>
+            <FormActions className="border-0 pt-0">
+              <Button
+                disabled={loading || !fromId || !toId || fromId === toId}
+                onClick={() => void onSubmit()}
+              >
+                {LABELS.reassignConfirm}
+              </Button>
+            </FormActions>
+          </FormSection>
         </DialogContent>
       </Dialog>
     </>

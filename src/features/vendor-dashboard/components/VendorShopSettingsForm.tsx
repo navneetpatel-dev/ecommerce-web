@@ -1,11 +1,10 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import type { ReactNode } from 'react'
 import { NumberInput } from '@/shared/components/NumberInput'
 import { FileUpload } from '@/shared/components/FileUpload'
+import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Button } from '@/shared/components/ui/button'
-import { Label } from '@/shared/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -47,43 +46,6 @@ interface VendorShopSettingsFormProps {
   onSaveCategories: () => void
   onSave: () => void
   onClearOverride: () => void
-}
-
-function SettingsSection({
-  title,
-  hint,
-  children,
-}: {
-  title: string
-  hint: string
-  children: ReactNode
-}) {
-  return (
-    <section className="overflow-hidden rounded-md border border-line bg-surface shadow-[0_1px_0_rgba(15,23,42,0.03)]">
-      <header className="border-b border-line/80 bg-paper/50 px-4 py-4 sm:px-5">
-        <h3 className="text-[0.9375rem] font-semibold tracking-tight text-ink">{title}</h3>
-        <p className="mt-1 text-[0.8125rem] text-ink-muted">{hint}</p>
-      </header>
-      <div className="grid gap-5 p-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-5 sm:p-5">{children}</div>
-    </section>
-  )
-}
-
-function Field({
-  label,
-  className,
-  children,
-}: {
-  label: string
-  className?: string
-  children: ReactNode
-}) {
-  return (
-    <div className={className ?? 'space-y-2'}>
-      <Label>{label}</Label>
-      {children}
-    </div>
-  )
 }
 
 export function VendorShopSettingsForm({
@@ -177,7 +139,8 @@ export function VendorShopSettingsForm({
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-6">
+    <div className="mx-auto w-full max-w-3xl">
+      <FormStack>
       <div className="space-y-1">
         <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
           {LABELS.vendorShopSettings}
@@ -188,8 +151,8 @@ export function VendorShopSettingsForm({
         ) : null}
       </div>
 
-      <SettingsSection title={LABELS.vendorCategories} hint={LABELS.vendorCategoriesHint}>
-        <Field label={LABELS.entityType} className="space-y-2 sm:col-span-2 sm:max-w-md">
+      <FormSection title={LABELS.vendorCategories} hint={LABELS.vendorCategoriesHint}>
+        <FormFieldFrame label={LABELS.entityType} className="sm:col-span-2 sm:max-w-md">
           <Select
             value={entityType ?? undefined}
             onValueChange={(value) => onEntityTypeChange(value as VendorEntityType)}
@@ -205,7 +168,7 @@ export function VendorShopSettingsForm({
               ))}
             </SelectContent>
           </Select>
-        </Field>
+        </FormFieldFrame>
         <div className="sm:col-span-2 max-h-48 space-y-2 overflow-y-auto rounded-md border border-line p-3">
           {categories.map((category) => (
             <label key={category.id} className="flex items-center gap-2 text-[0.875rem] text-ink">
@@ -227,9 +190,9 @@ export function VendorShopSettingsForm({
             {LABELS.saveCategories}
           </Button>
         </div>
-      </SettingsSection>
+      </FormSection>
 
-      <SettingsSection title={LABELS.vendorLogoUpload} hint={LABELS.uploadProfilePhotoHint}>
+      <FormSection title={LABELS.vendorLogoUpload} hint={LABELS.uploadProfilePhotoHint}>
         <div className="sm:col-span-2">
           <FileUpload
             entityType={UPLOAD_ENTITY.VENDORS}
@@ -254,9 +217,9 @@ export function VendorShopSettingsForm({
             label={LABELS.vendorBannerUpload}
           />
         </div>
-      </SettingsSection>
+      </FormSection>
 
-      <SettingsSection title={LABELS.kycChecklist} hint={LABELS.kycChecklistHint}>
+      <FormSection title={LABELS.kycChecklist} hint={LABELS.kycChecklistHint}>
         <p className="sm:col-span-2 text-[0.8125rem] text-ink-muted">
           {isComplete ? LABELS.kycChecklistComplete : LABELS.kycChecklistIncomplete}
         </p>
@@ -320,10 +283,10 @@ export function VendorShopSettingsForm({
             {kycMessage}
           </p>
         ) : null}
-      </SettingsSection>
+      </FormSection>
 
-      <SettingsSection title={LABELS.settingsFulfillment} hint={LABELS.settingsFulfillmentHint}>
-        <Field label={LABELS.returnShippingFee} className="space-y-2 sm:col-span-2 sm:max-w-md">
+      <FormSection title={LABELS.settingsFulfillment} hint={LABELS.settingsFulfillmentHint}>
+        <FormFieldFrame label={LABELS.returnShippingFee} hint={LABELS.returnShippingFeeHint} className="sm:col-span-2 sm:max-w-md">
           <NumberInput
             value={returnShippingFee ?? undefined}
             min={0}
@@ -331,23 +294,18 @@ export function VendorShopSettingsForm({
             prefix="₹"
             onChange={(value) => onReturnShippingFeeChange(value == null ? null : value)}
           />
-          <p className="text-[0.8125rem] text-ink-muted">{LABELS.returnShippingFeeHint}</p>
-        </Field>
-      </SettingsSection>
+        </FormFieldFrame>
+      </FormSection>
 
-      <div className="flex flex-col gap-3 border-t border-line/70 pt-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="min-h-[1.25rem] text-[0.8125rem] text-ink-muted" aria-live="polite">
-          {message}
-        </p>
-        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+      <FormActions leading={message}>
           <Button type="button" variant="outline" disabled={saving} onClick={onClearOverride}>
             {LABELS.vendorReturnShippingFeeClear}
           </Button>
           <Button type="button" disabled={saving} onClick={onSave}>
             {LABELS.saveSettings}
           </Button>
-        </div>
-      </div>
+        </FormActions>
+      </FormStack>
     </div>
   )
 }

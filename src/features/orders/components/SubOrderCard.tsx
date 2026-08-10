@@ -4,7 +4,6 @@ import { Timeline } from '@/shared/components/Timeline'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
 import {
   Dialog,
   DialogContent,
@@ -15,6 +14,7 @@ import {
 } from '@/shared/components/ui/dialog'
 import { FormError } from '@/shared/components/FormError'
 import { FileUpload } from '@/shared/components/FileUpload'
+import { FormFieldFrame, FormSection } from '@/shared/components/forms'
 import { cn } from '@/shared/utils/cn'
 import { formatInr } from '../utils/format'
 import { buildSubOrderTimeline } from '../utils/timeline'
@@ -191,40 +191,44 @@ export function SubOrderCard({
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="return-reason-code">{LABELS.returnReasonLabel}</Label>
-              <select
-                id="return-reason-code"
-                value={reasonCode}
-                onChange={(e) => onReasonCodeChange(e.target.value as ReturnReasonCode)}
-                className="flex h-11 w-full border border-line bg-surface px-3 text-[0.9375rem] text-ink"
-              >
-                {REASON_CODES.map((code) => (
-                  <option key={code.value} value={code.value}>
-                    {code.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="return-reason">{LABELS.returnDetailsLabel}</Label>
-              <Input
-                id="return-reason"
-                value={reason}
-                onChange={(e) => onReasonChange(e.target.value)}
-                placeholder={LABELS.returnDetailsPlaceholder}
+            <FormSection
+              title={LABELS.returnRequestFormSection}
+              hint={LABELS.returnRequestFormSectionHint}
+              columns={1}
+            >
+              <FormFieldFrame label={LABELS.returnReasonLabel} htmlFor="return-reason-code">
+                <select
+                  id="return-reason-code"
+                  value={reasonCode}
+                  onChange={(e) => onReasonCodeChange(e.target.value as ReturnReasonCode)}
+                  className="flex h-11 w-full border border-line bg-surface px-3 text-[0.9375rem] text-ink"
+                >
+                  {REASON_CODES.map((code) => (
+                    <option key={code.value} value={code.value}>
+                      {code.label}
+                    </option>
+                  ))}
+                </select>
+              </FormFieldFrame>
+              <FormFieldFrame label={LABELS.returnDetailsLabel} htmlFor="return-reason">
+                <Input
+                  id="return-reason"
+                  value={reason}
+                  onChange={(e) => onReasonChange(e.target.value)}
+                  placeholder={LABELS.returnDetailsPlaceholder}
+                />
+              </FormFieldFrame>
+              <FileUpload
+                mode="multiple"
+                entityType={UPLOAD_ENTITY.RETURNS}
+                entityId={draftUploadId}
+                purpose={UPLOAD_PURPOSE.PHOTOS}
+                accept="image/png,image/jpeg,image/webp"
+                valueUrls={photoUrls}
+                onUploaded={onPhotoUrlsChange}
+                label={LABELS.returnPhotosLabel}
               />
-            </div>
-            <FileUpload
-              mode="multiple"
-              entityType={UPLOAD_ENTITY.RETURNS}
-              entityId={draftUploadId}
-              purpose={UPLOAD_PURPOSE.PHOTOS}
-              accept="image/png,image/jpeg,image/webp"
-              valueUrls={photoUrls}
-              onUploaded={onPhotoUrlsChange}
-              label={LABELS.returnPhotosLabel}
-            />
+            </FormSection>
             <FormError error={error} fallback={LABELS.couldNotSubmitReturn} />
             {isSuccess ? (
               <p className="text-[0.875rem] text-success">{LABELS.returnRequestedSuccess}</p>

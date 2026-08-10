@@ -11,7 +11,23 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   })
 }
 
-/** Crop and resize to the target output dimensions. */
+function getRadianAngle(degreeValue: number): number {
+  return (degreeValue * Math.PI) / 180
+}
+
+/** Bounding box size after rotating a rectangle by `rotation` degrees. */
+function rotateSize(width: number, height: number, rotation: number) {
+  const rotRad = getRadianAngle(rotation)
+  return {
+    width: Math.abs(Math.cos(rotRad) * width) + Math.abs(Math.sin(rotRad) * height),
+    height: Math.abs(Math.sin(rotRad) * width) + Math.abs(Math.cos(rotRad) * height),
+  }
+}
+
+/**
+ * Crop (and optionally rotate) then resize to the target output dimensions.
+ * Rotation follows the react-easy-crop canvas pattern so pixelCrop matches the preview.
+ */
 export async function getCroppedImageBlob(
   imageSrc: string,
   pixelCrop: Area,
@@ -19,29 +35,54 @@ export async function getCroppedImageBlob(
   outputHeight: number,
   mimeType: ImageMimeType = 'image/jpeg',
   quality = 0.92,
+  rotation = 0,
 ): Promise<Blob> {
   const image = await loadImage(imageSrc)
-  const canvas = document.createElement('canvas')
-  canvas.width = outputWidth
-  canvas.height = outputHeight
+  const rotRad = getRadianAngle(rotation)
+  const { width: bBoxWidth, height: bBoxHeight } = rotateSize(image.width, image.height, rotation)
 
-  const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('Canvas is not supported')
+  const rotatedCanvas = document.createElement('canvas')
+  rotatedCanvas.width = Math.max(1, Math.round(bBoxWidth))
+  rotatedCanvas.height = Math.max(1, Math.round(bBoxHeight))
 
-  ctx.drawImage(
-    image,
+  const rotatedCtx = rotatedCanvas.getContext('2d')
+  if (!rotatedCtx) throw new Error('Canvas is not supported')
+
+  rotatedCtx.translate(bBoxWidth / 2, bBoxHeight / 2)
+  rotatedCtx.rotate(rotRad)
+  rotatedCtx.translate(-image.width / 2, -image.height / 2)
+  rotatedCtx.drawImage(image, 0, 0)
+
+  const cropCanvas = document.createElement('canvas')
+  cropCanvas.width = Math.max(1, Math.round(pixelCrop.width))
+  cropCanvas.height = Math.max(1, Math.round(pixelCrop.height))
+
+  const cropCtx = cropCanvas.getContext('2d')
+  if (!cropCtx) throw new Error('Canvas is not supported')
+
+  cropCtx.drawImage(
+    rotatedCanvas,
     pixelCrop.x,
     pixelCrop.y,
     pixelCrop.width,
     pixelCrop.height,
     0,
     0,
-    outputWidth,
-    outputHeight,
+    cropCanvas.width,
+    cropCanvas.height,
   )
 
+  const outputCanvas = document.createElement('canvas')
+  outputCanvas.width = outputWidth
+  outputCanvas.height = outputHeight
+
+  const outputCtx = outputCanvas.getContext('2d')
+  if (!outputCtx) throw new Error('Canvas is not supported')
+
+  outputCtx.drawImage(cropCanvas, 0, 0, outputWidth, outputHeight)
+
   return new Promise((resolve, reject) => {
-    canvas.toBlob(
+    outputCanvas.toBlob(
       (blob) => (blob ? resolve(blob) : reject(new Error('Failed to export image'))),
       mimeType,
       quality,

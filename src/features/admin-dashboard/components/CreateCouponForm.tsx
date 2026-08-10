@@ -20,6 +20,7 @@ import {
 import { Switch } from '@/shared/components/ui/switch'
 import { NumberInput } from '@/shared/components/NumberInput'
 import { DateTimePicker } from '@/shared/components/DateTimePicker'
+import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { LABELS } from '@/shared/constants/labels'
 import { COUPON_USER_SEGMENT, DISCOUNT_BEARER } from '@/shared/constants/statuses'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
@@ -78,35 +79,6 @@ function scopePickerLabel(scopeType: CouponFormInput['applicableScopeType']) {
   if (scopeType === 'category') return LABELS.selectScopeCategories
   if (scopeType === 'product') return LABELS.selectScopeProducts
   return LABELS.selectScopeVendors
-}
-
-function RequiredMark() {
-  return (
-    <span className="text-danger" aria-hidden>
-      {' '}
-      *
-    </span>
-  )
-}
-
-function FieldError({ message }: { message?: string }) {
-  if (!message) return null
-  return (
-    <p role="alert" className="text-[0.8125rem] text-danger">
-      {message}
-    </p>
-  )
-}
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="space-y-3 border-t border-line pt-4 first:border-t-0 first:pt-0">
-      <h3 className="text-[0.8125rem] font-semibold uppercase tracking-[0.06em] text-ink-muted">
-        {title}
-      </h3>
-      <div className="space-y-3">{children}</div>
-    </section>
-  )
 }
 
 function couponDisableHint(values: CouponFormInput): string {
@@ -210,29 +182,25 @@ export function CreateCouponForm({
     : USER_RESTRICTIONS
 
   return (
-    <div className="space-y-1">
-      <Section title={LABELS.couponSectionBasics}>
+    <FormStack>
+      <FormSection title={LABELS.couponSectionBasics} columns={1}>
         {!hideCodeField ? (
-          <div className="space-y-2">
-            <Label htmlFor="coupon-code">
-              {LABELS.couponCode}
-              <RequiredMark />
-            </Label>
+          <FormFieldFrame
+            label={LABELS.couponCode}
+            htmlFor="coupon-code"
+            required
+            error={showFieldError('code')}
+          >
             <Input
               id="coupon-code"
               error={fieldHasError('code')}
               placeholder={LABELS.couponCode}
               {...register('code')}
             />
-            <FieldError message={showFieldError('code')} />
-          </div>
+          </FormFieldFrame>
         ) : null}
 
-        <div className="space-y-2">
-          <Label>
-            {LABELS.couponType}
-            <RequiredMark />
-          </Label>
+        <FormFieldFrame label={LABELS.couponType} required error={showFieldError('type')}>
           <Controller
             name="type"
             control={control}
@@ -251,14 +219,13 @@ export function CreateCouponForm({
               </Select>
             )}
           />
-          <FieldError message={showFieldError('type')} />
-        </div>
+        </FormFieldFrame>
 
-        <div className="space-y-2">
-          <Label>
-            {LABELS.discountBearer}
-            <RequiredMark />
-          </Label>
+        <FormFieldFrame
+          label={LABELS.discountBearer}
+          required
+          error={showFieldError('discountBearer')}
+        >
           {vendorMode ? (
             <Input value={LABELS.discountBearerVendor} disabled readOnly />
           ) : (
@@ -282,15 +249,10 @@ export function CreateCouponForm({
               )}
             />
           )}
-          <FieldError message={showFieldError('discountBearer')} />
-        </div>
+        </FormFieldFrame>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label>
-              {LABELS.startDate}
-              <RequiredMark />
-            </Label>
+          <FormFieldFrame label={LABELS.startDate} required error={showFieldError('startDate')}>
             <Controller
               name="startDate"
               control={control}
@@ -305,13 +267,8 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('startDate')} />
-          </div>
-          <div className="space-y-2">
-            <Label>
-              {LABELS.endDate}
-              <RequiredMark />
-            </Label>
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.endDate} required error={showFieldError('endDate')}>
             <Controller
               name="endDate"
               control={control}
@@ -326,18 +283,17 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('endDate')} />
-          </div>
+          </FormFieldFrame>
         </div>
-      </Section>
+      </FormSection>
 
-      <Section title={LABELS.couponSectionValue}>
+      <FormSection title={LABELS.couponSectionValue} columns={1}>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label>
-              {LABELS.couponValue}
-              {needsValue ? <RequiredMark /> : null}
-            </Label>
+          <FormFieldFrame
+            label={LABELS.couponValue}
+            required={needsValue}
+            error={showFieldError('value')}
+          >
             <Controller
               name="value"
               control={control}
@@ -357,10 +313,8 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('value')} />
-          </div>
-          <div className="space-y-2">
-            <Label>{LABELS.maxDiscountCap}</Label>
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.maxDiscountCap} error={showFieldError('maxDiscountCap')}>
             <Controller
               name="maxDiscountCap"
               control={control}
@@ -376,15 +330,13 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('maxDiscountCap')} />
-          </div>
+          </FormFieldFrame>
         </div>
         {isTiered ? (
           <div className="space-y-3">
             <p className="text-[0.8125rem] text-ink-muted">{LABELS.couponTierHint}</p>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label>{LABELS.couponTier2Min}</Label>
+              <FormFieldFrame label={LABELS.couponTier2Min}>
                 <Controller
                   name="tier2MinSubtotal"
                   control={control}
@@ -399,9 +351,8 @@ export function CreateCouponForm({
                     />
                   )}
                 />
-              </div>
-              <div className="space-y-2">
-                <Label>{LABELS.couponTier2Percent}</Label>
+              </FormFieldFrame>
+              <FormFieldFrame label={LABELS.couponTier2Percent}>
                 <Controller
                   name="tier2Percent"
                   control={control}
@@ -417,22 +368,22 @@ export function CreateCouponForm({
                     />
                   )}
                 />
-              </div>
+              </FormFieldFrame>
             </div>
           </div>
         ) : null}
-      </Section>
+      </FormSection>
 
-      <Section title={LABELS.couponSectionScope}>
+      <FormSection title={LABELS.couponSectionScope} columns={1}>
         {vendorMode ? (
           <p className="text-[0.8125rem] text-ink-muted">{LABELS.couponVendorScopeLocked}</p>
         ) : null}
         {isBundle ? (
-          <div className="space-y-2">
-            <Label>
-              {LABELS.selectBundleProducts}
-              <RequiredMark />
-            </Label>
+          <FormFieldFrame
+            label={LABELS.selectBundleProducts}
+            required
+            error={showFieldError('bundleProductIds')}
+          >
             <Controller
               name="bundleProductIds"
               control={control}
@@ -446,12 +397,13 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('bundleProductIds')} />
-          </div>
+          </FormFieldFrame>
         ) : (
           <>
-            <div className="space-y-2">
-              <Label>{LABELS.applicableScope}</Label>
+            <FormFieldFrame
+              label={LABELS.applicableScope}
+              error={showFieldError('applicableScopeType')}
+            >
               <Controller
                 name="applicableScopeType"
                 control={control}
@@ -484,14 +436,13 @@ export function CreateCouponForm({
                   </Select>
                 )}
               />
-              <FieldError message={showFieldError('applicableScopeType')} />
-            </div>
+            </FormFieldFrame>
             {showScopeIds ? (
-              <div className="space-y-2">
-                <Label>
-                  {scopePickerLabel(scopeType)}
-                  <RequiredMark />
-                </Label>
+              <FormFieldFrame
+                label={scopePickerLabel(scopeType)}
+                required
+                error={showFieldError('applicableScopeIds')}
+              >
                 <Controller
                   name="applicableScopeIds"
                   control={control}
@@ -505,17 +456,15 @@ export function CreateCouponForm({
                     />
                   )}
                 />
-                <FieldError message={showFieldError('applicableScopeIds')} />
-              </div>
+              </FormFieldFrame>
             ) : null}
           </>
         )}
-      </Section>
+      </FormSection>
 
-      <Section title={LABELS.couponSectionConstraints}>
+      <FormSection title={LABELS.couponSectionConstraints} columns={1}>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label>{LABELS.minOrderValue}</Label>
+          <FormFieldFrame label={LABELS.minOrderValue} error={showFieldError('minOrderValue')}>
             <Controller
               name="minOrderValue"
               control={control}
@@ -531,10 +480,8 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('minOrderValue')} />
-          </div>
-          <div className="space-y-2">
-            <Label>{LABELS.minQuantity}</Label>
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.minQuantity} error={showFieldError('minQuantity')}>
             <Controller
               name="minQuantity"
               control={control}
@@ -549,12 +496,10 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('minQuantity')} />
-          </div>
+          </FormFieldFrame>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label>{LABELS.usageLimitTotal}</Label>
+          <FormFieldFrame label={LABELS.usageLimitTotal} error={showFieldError('usageLimitTotal')}>
             <Controller
               name="usageLimitTotal"
               control={control}
@@ -569,10 +514,11 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('usageLimitTotal')} />
-          </div>
-          <div className="space-y-2">
-            <Label>{LABELS.usageLimitPerUser}</Label>
+          </FormFieldFrame>
+          <FormFieldFrame
+            label={LABELS.usageLimitPerUser}
+            error={showFieldError('usageLimitPerUser')}
+          >
             <Controller
               name="usageLimitPerUser"
               control={control}
@@ -587,12 +533,10 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('usageLimitPerUser')} />
-          </div>
+          </FormFieldFrame>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label>{LABELS.priority}</Label>
+          <FormFieldFrame label={LABELS.priority} error={showFieldError('priority')}>
             <Controller
               name="priority"
               control={control}
@@ -606,8 +550,7 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('priority')} />
-          </div>
+          </FormFieldFrame>
           <div className="flex items-center justify-between gap-3 rounded-sm border border-line px-3 py-2">
             <Label htmlFor="coupon-stackable">{LABELS.stackable}</Label>
             <Controller
@@ -623,11 +566,13 @@ export function CreateCouponForm({
             />
           </div>
         </div>
-      </Section>
+      </FormSection>
 
-      <Section title={LABELS.couponSectionRestrictions}>
-        <div className="space-y-2">
-          <Label>{LABELS.userRestriction}</Label>
+      <FormSection title={LABELS.couponSectionRestrictions} columns={1}>
+        <FormFieldFrame
+          label={LABELS.userRestriction}
+          error={showFieldError('userRestrictionType')}
+        >
           <Controller
             name="userRestrictionType"
             control={control}
@@ -657,22 +602,18 @@ export function CreateCouponForm({
               </Select>
             )}
           />
-          <FieldError message={showFieldError('userRestrictionType')} />
-        </div>
+        </FormFieldFrame>
         {showSegment ? (
-          <div className="space-y-2">
-            <Label>
-              {LABELS.userRestrictionSegment}
-              <RequiredMark />
-            </Label>
+          <FormFieldFrame
+            label={LABELS.userRestrictionSegment}
+            required
+            error={showFieldError('userRestrictionSegment')}
+          >
             <Controller
               name="userRestrictionSegment"
               control={control}
               render={({ field }) => (
-                <Select
-                  value={field.value ?? undefined}
-                  onValueChange={field.onChange}
-                >
+                <Select value={field.value ?? undefined} onValueChange={field.onChange}>
                   <SelectTrigger>
                     <SelectValue placeholder={LABELS.userRestrictionSegment} />
                   </SelectTrigger>
@@ -690,15 +631,14 @@ export function CreateCouponForm({
                 </Select>
               )}
             />
-            <FieldError message={showFieldError('userRestrictionSegment')} />
-          </div>
+          </FormFieldFrame>
         ) : null}
         {showSpecificUsers ? (
-          <div className="space-y-2">
-            <Label>
-              {LABELS.selectSpecificUsers}
-              <RequiredMark />
-            </Label>
+          <FormFieldFrame
+            label={LABELS.selectSpecificUsers}
+            required
+            error={showFieldError('userRestrictionUserIds')}
+          >
             <Controller
               name="userRestrictionUserIds"
               control={control}
@@ -715,18 +655,24 @@ export function CreateCouponForm({
                 />
               )}
             />
-            <FieldError message={showFieldError('userRestrictionUserIds')} />
-          </div>
+          </FormFieldFrame>
         ) : null}
-      </Section>
+      </FormSection>
 
       {!hideSubmit ? (
-        <DisabledActionHint disabled={!canSubmit} message={disableHint} className="w-full pt-2">
-          <Button type="submit" className="w-full" loading={isPending} disabled={!canSubmit || isPending}>
-            {submitLabel}
-          </Button>
-        </DisabledActionHint>
+        <FormActions>
+          <DisabledActionHint disabled={!canSubmit} message={disableHint} className="w-full">
+            <Button
+              type="submit"
+              className="w-full"
+              loading={isPending}
+              disabled={!canSubmit || isPending}
+            >
+              {submitLabel}
+            </Button>
+          </DisabledActionHint>
+        </FormActions>
       ) : null}
-    </div>
+    </FormStack>
   )
 }

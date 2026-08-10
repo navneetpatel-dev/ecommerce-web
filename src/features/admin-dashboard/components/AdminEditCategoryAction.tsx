@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import { FormActions } from '@/shared/components/forms'
 import { LABELS } from '@/shared/constants/labels'
 import { CATEGORY_STATUS, type CategoryStatus } from '@/shared/constants/statuses'
 import { cn } from '@/shared/utils/cn'
@@ -119,19 +120,19 @@ export function AdminEditCategoryAction({ category, onSaved }: AdminEditCategory
           }
         }}
       >
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{LABELS.editCategoryTitle}</DialogTitle>
           </DialogHeader>
           <p className="text-[0.875rem] text-ink-muted">{LABELS.editCategoryBody}</p>
-          <form onSubmit={onSubmit} className="space-y-4">
+          <form onSubmit={onSubmit} className="space-y-6">
             <AdminCategoryFormFields
               form={form}
               excludeCategoryId={category.id}
               idPrefix={`category-edit-${category.id}`}
             />
             {error ? <p className="text-[0.8125rem] text-danger">{error}</p> : null}
-            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <FormActions>
               <Button type="button" variant="secondary" onClick={() => setOpen(false)} disabled={isPending}>
                 {LABELS.cancel}
               </Button>
@@ -140,7 +141,7 @@ export function AdminEditCategoryAction({ category, onSaved }: AdminEditCategory
                   {LABELS.save}
                 </Button>
               </DisabledActionHint>
-            </div>
+            </FormActions>
           </form>
         </DialogContent>
       </Dialog>

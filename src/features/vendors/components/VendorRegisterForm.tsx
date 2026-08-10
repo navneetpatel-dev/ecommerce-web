@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { UseFormReturn, Controller } from 'react-hook-form'
 import { Button } from '@/shared/components/ui/button'
+import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
 import { Textarea } from '@/shared/components/ui/textarea'
 import {
   Select,
@@ -82,110 +82,138 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
   }
 
   return (
-    <div className="mx-auto max-w-lg px-4 py-8">
+    <div className="mx-auto max-w-2xl px-4 py-8">
       <Card>
         <CardHeader>
           <CardTitle className="font-display text-[1.75rem]">{LABELS.registerAsVendor}</CardTitle>
           <CardDescription>{LABELS.registerAsVendorHint}</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="businessName">{LABELS.businessName}</Label>
-              <Input id="businessName" {...register('businessName')} />
-              {errors.businessName ? (
-                <p className="text-[0.9375rem] text-danger">{errors.businessName.message}</p>
-              ) : null}
-            </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FormStack>
+              <FormSection
+                title={LABELS.vendorRegisterSectionBasics}
+                hint={LABELS.vendorRegisterSectionBasicsHint}
+              >
+                <FormFieldFrame
+                  label={LABELS.businessName}
+                  htmlFor="businessName"
+                  required
+                  error={errors.businessName?.message}
+                  className="sm:col-span-2"
+                >
+                  <Input id="businessName" {...register('businessName')} />
+                </FormFieldFrame>
 
-            <div className="space-y-2">
-              <Label>{LABELS.entityType}</Label>
-              <Controller
-                control={control}
-                name="entityType"
-                render={({ field }) => (
-                  <Select
-                    value={field.value}
-                    onValueChange={(value) => field.onChange(value as VendorEntityType)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={LABELS.entityType} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {VENDOR_ENTITY_TYPE_VALUES.map((value) => (
-                        <SelectItem key={value} value={value}>
-                          {vendorEntityTypeLabel(value)}
-                        </SelectItem>
+                <FormFieldFrame
+                  label={LABELS.entityType}
+                  required
+                  error={errors.entityType?.message}
+                >
+                  <Controller
+                    control={control}
+                    name="entityType"
+                    render={({ field }) => (
+                      <Select
+                        value={field.value}
+                        onValueChange={(value) => field.onChange(value as VendorEntityType)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={LABELS.entityType} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {VENDOR_ENTITY_TYPE_VALUES.map((value) => (
+                            <SelectItem key={value} value={value}>
+                              {vendorEntityTypeLabel(value)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </FormFieldFrame>
+
+                <FormFieldFrame
+                  label={LABELS.businessDescriptionOptional}
+                  htmlFor="description"
+                >
+                  <Textarea id="description" {...register('description')} />
+                </FormFieldFrame>
+
+                <FormFieldFrame label={LABELS.gstNumberOptional} htmlFor="gstNumber">
+                  <Input id="gstNumber" {...register('gstNumber')} />
+                </FormFieldFrame>
+              </FormSection>
+
+              <FormSection
+                title={LABELS.vendorRegisterSectionCategories}
+                hint={LABELS.vendorRegisterSectionCategoriesHint}
+                columns={1}
+              >
+                <FormFieldFrame
+                  label={LABELS.vendorCategories}
+                  hint={LABELS.vendorCategoriesHint}
+                  error={errors.categoryIds ? LABELS.vendorCategories : undefined}
+                >
+                  <div className="max-h-48 space-y-2 overflow-y-auto rounded-md border border-line p-3">
+                    {categories.map((category) => (
+                      <label
+                        key={category.id}
+                        className="flex items-center gap-2 text-[0.875rem] text-ink"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedSet.has(category.id)}
+                          onChange={() => toggleCategory(category.id)}
+                        />
+                        {category.name}
+                      </label>
+                    ))}
+                  </div>
+                </FormFieldFrame>
+
+                {requiredDocs.length > 0 ? (
+                  <div className="space-y-2 rounded-md border border-line bg-paper/40 p-3">
+                    <p className="text-[0.875rem] font-medium text-ink">{LABELS.requiredDocuments}</p>
+                    <ul className="list-disc space-y-1 pl-5 text-[0.8125rem] text-ink-muted">
+                      {requiredDocs.map((type) => (
+                        <li key={type}>{vendorDocumentTypeLabel(type)}</li>
                       ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              {errors.entityType ? (
-                <p className="text-[0.9375rem] text-danger">{errors.entityType.message}</p>
+                    </ul>
+                  </div>
+                ) : null}
+              </FormSection>
+
+              <FormSection
+                title={LABELS.vendorRegisterSectionIdentity}
+                hint={LABELS.vendorRegisterSectionIdentityHint}
+              >
+                <FormFieldFrame label={LABELS.panHolderName} htmlFor="panHolderName">
+                  <Input id="panHolderName" {...register('panHolderName')} />
+                </FormFieldFrame>
+                <FormFieldFrame
+                  label={LABELS.bankAccountHolderName}
+                  htmlFor="bankAccountHolderName"
+                >
+                  <Input id="bankAccountHolderName" {...register('bankAccountHolderName')} />
+                </FormFieldFrame>
+                {showNameWarning ? (
+                  <p className="rounded-sm bg-warning-subtle px-3 py-2 text-[0.8125rem] text-warning sm:col-span-2">
+                    {LABELS.kycNameMismatchWarning}
+                  </p>
+                ) : null}
+              </FormSection>
+
+              {error ? (
+                <p className="text-[0.9375rem] text-danger">{LABELS.registrationFailed}</p>
               ) : null}
-            </div>
 
-            <div className="space-y-2">
-              <Label>{LABELS.vendorCategories}</Label>
-              <p className="text-[0.8125rem] text-ink-muted">{LABELS.vendorCategoriesHint}</p>
-              <div className="max-h-48 space-y-2 overflow-y-auto rounded-md border border-line p-3">
-                {categories.map((category) => (
-                  <label key={category.id} className="flex items-center gap-2 text-[0.875rem] text-ink">
-                    <input
-                      type="checkbox"
-                      checked={selectedSet.has(category.id)}
-                      onChange={() => toggleCategory(category.id)}
-                    />
-                    {category.name}
-                  </label>
-                ))}
-              </div>
-              {errors.categoryIds ? (
-                <p className="text-[0.9375rem] text-danger">{LABELS.vendorCategories}</p>
-              ) : null}
-            </div>
-
-            {requiredDocs.length > 0 ? (
-              <div className="space-y-2 rounded-md border border-line bg-paper/40 p-3">
-                <p className="text-[0.875rem] font-medium text-ink">{LABELS.requiredDocuments}</p>
-                <ul className="list-disc space-y-1 pl-5 text-[0.8125rem] text-ink-muted">
-                  {requiredDocs.map((type) => (
-                    <li key={type}>{vendorDocumentTypeLabel(type)}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-
-            <div className="space-y-2">
-              <Label htmlFor="panHolderName">{LABELS.panHolderName}</Label>
-              <Input id="panHolderName" {...register('panHolderName')} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="bankAccountHolderName">{LABELS.bankAccountHolderName}</Label>
-              <Input id="bankAccountHolderName" {...register('bankAccountHolderName')} />
-            </div>
-            {showNameWarning ? (
-              <p className="rounded-sm bg-warning-subtle px-3 py-2 text-[0.8125rem] text-warning">
-                {LABELS.kycNameMismatchWarning}
-              </p>
-            ) : null}
-
-            <div className="space-y-2">
-              <Label htmlFor="description">{LABELS.businessDescriptionOptional}</Label>
-              <Textarea id="description" {...register('description')} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="gstNumber">{LABELS.gstNumberOptional}</Label>
-              <Input id="gstNumber" {...register('gstNumber')} />
-            </div>
-
-            {error ? (
-              <p className="text-[0.9375rem] text-danger">{LABELS.registrationFailed}</p>
-            ) : null}
-            <Button type="submit" className="w-full" loading={isPending}>
-              {LABELS.registerAsVendor}
-            </Button>
+              <FormActions>
+                <Button type="submit" className="w-full sm:w-auto" loading={isPending}>
+                  {LABELS.registerAsVendor}
+                </Button>
+              </FormActions>
+            </FormStack>
           </form>
         </CardContent>
       </Card>

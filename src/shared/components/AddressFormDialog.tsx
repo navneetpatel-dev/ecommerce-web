@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from 'react'
 import { Button } from '@/shared/components/ui/button'
+import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog'
+import { LABELS } from '@/shared/constants/labels'
+import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import type { AddressInput } from '@/features/users/api/users.api'
 import type { Address } from '@/shared/api/types'
 
@@ -31,7 +32,7 @@ function toFormState(address?: Address | null): AddressFormState {
     line2: address?.line2 ?? '',
     city: address?.city ?? '',
     state: address?.state ?? '',
-    country: address?.country ?? 'India',
+    country: address?.country ?? LABELS.defaultCountry,
     pincode: address?.pincode ?? '',
     isDefault: address?.isDefault ?? false,
   }
@@ -43,7 +44,7 @@ function toInput(form: AddressFormState, hasAddresses: boolean): AddressInput {
     line2: form.line2.trim() || null,
     city: form.city.trim(),
     state: form.state.trim(),
-    country: form.country.trim() || 'India',
+    country: form.country.trim() || LABELS.defaultCountry,
     pincode: form.pincode.trim(),
     isDefault: form.isDefault || !hasAddresses,
   }
@@ -70,7 +71,7 @@ export function AddressFormDialog({
   hasAddresses,
   title,
   description,
-  submitLabel = 'Save address',
+  submitLabel = LABELS.saveAddress,
 }: AddressFormDialogProps) {
   const [form, setForm] = useState<AddressFormState>(toFormState(address))
   const [formError, setFormError] = useState<string | null>(null)
@@ -84,19 +85,19 @@ export function AddressFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{title ?? (address ? 'Edit address' : 'New address')}</DialogTitle>
-          <DialogDescription>
-            {description ?? 'All fields marked required must be filled.'}
-          </DialogDescription>
+          <DialogTitle>
+            {title ?? (address ? LABELS.editAddress : LABELS.newAddress)}
+          </DialogTitle>
+          <DialogDescription>{description ?? LABELS.addressFormHint}</DialogDescription>
         </DialogHeader>
 
         <form
           onSubmit={async (event) => {
             event.preventDefault()
             if (!form.line1.trim() || !form.city.trim() || !form.state.trim() || !form.pincode.trim()) {
-              setFormError('Please fill all required fields.')
+              setFormError(LABELS.addressRequiredFields)
               return
             }
 
@@ -106,103 +107,103 @@ export function AddressFormDialog({
               await onSubmit(toInput(form, hasAddresses))
               onOpenChange(false)
             } catch (err) {
-              const message =
-                err && typeof err === 'object' && 'message' in err
-                  ? String((err as { message: string }).message)
-                  : 'Could not save address.'
-              setFormError(message)
+              setFormError(getApiErrorMessage(err, LABELS.couldNotSaveAddress))
             }
           }}
-          className="space-y-4"
         >
-          <div className="space-y-1.5">
-            <Label htmlFor="shared-addr-line1">Address line 1</Label>
-            <Input
-              id="shared-addr-line1"
-              value={form.line1}
-              onChange={(e) => setForm((prev) => ({ ...prev, line1: e.target.value }))}
-              placeholder="House no., street, landmark"
-              required
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="shared-addr-line2">Address line 2 (optional)</Label>
-            <Input
-              id="shared-addr-line2"
-              value={form.line2}
-              onChange={(e) => setForm((prev) => ({ ...prev, line2: e.target.value }))}
-              placeholder="Apartment, suite, floor"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="space-y-1.5">
-              <Label htmlFor="shared-addr-city">City</Label>
-              <Input
-                id="shared-addr-city"
-                value={form.city}
-                onChange={(e) => setForm((prev) => ({ ...prev, city: e.target.value }))}
+          <FormStack>
+            <FormSection title={LABELS.addressFormSection} hint={LABELS.addressFormSectionHint}>
+              <FormFieldFrame
+                label={LABELS.addressLine1}
+                htmlFor="shared-addr-line1"
                 required
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="shared-addr-state">State</Label>
-              <Input
-                id="shared-addr-state"
-                value={form.state}
-                onChange={(e) => setForm((prev) => ({ ...prev, state: e.target.value }))}
-                required
-              />
-            </div>
-          </div>
+                className="sm:col-span-2"
+              >
+                <Input
+                  id="shared-addr-line1"
+                  value={form.line1}
+                  onChange={(e) => setForm((prev) => ({ ...prev, line1: e.target.value }))}
+                  placeholder={LABELS.addressLine1Placeholder}
+                  required
+                />
+              </FormFieldFrame>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="space-y-1.5">
-              <Label htmlFor="shared-addr-pincode">Pincode</Label>
-              <Input
-                id="shared-addr-pincode"
-                value={form.pincode}
-                onChange={(e) => setForm((prev) => ({ ...prev, pincode: e.target.value }))}
-                required
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="shared-addr-country">Country</Label>
-              <Input
-                id="shared-addr-country"
-                value={form.country}
-                onChange={(e) => setForm((prev) => ({ ...prev, country: e.target.value }))}
-              />
-            </div>
-          </div>
+              <FormFieldFrame
+                label={LABELS.addressLine2Optional}
+                htmlFor="shared-addr-line2"
+                className="sm:col-span-2"
+              >
+                <Input
+                  id="shared-addr-line2"
+                  value={form.line2}
+                  onChange={(e) => setForm((prev) => ({ ...prev, line2: e.target.value }))}
+                  placeholder={LABELS.addressLine2Placeholder}
+                />
+              </FormFieldFrame>
 
-          {(hasAddresses || address) && (
-            <label className="flex items-center gap-2 text-[0.875rem] text-ink">
-              <input
-                type="checkbox"
-                checked={form.isDefault}
-                onChange={(e) => setForm((prev) => ({ ...prev, isDefault: e.target.checked }))}
-                className="h-4 w-4 accent-[var(--brand)]"
-              />
-              Set as default address
-            </label>
-          )}
+              <FormFieldFrame label={LABELS.addressCity} htmlFor="shared-addr-city" required>
+                <Input
+                  id="shared-addr-city"
+                  value={form.city}
+                  onChange={(e) => setForm((prev) => ({ ...prev, city: e.target.value }))}
+                  required
+                />
+              </FormFieldFrame>
 
-          {formError ? (
-            <p role="alert" className="text-[0.875rem] text-danger">
-              {formError}
-            </p>
-          ) : null}
+              <FormFieldFrame label={LABELS.addressState} htmlFor="shared-addr-state" required>
+                <Input
+                  id="shared-addr-state"
+                  value={form.state}
+                  onChange={(e) => setForm((prev) => ({ ...prev, state: e.target.value }))}
+                  required
+                />
+              </FormFieldFrame>
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" loading={isPending}>
-              {submitLabel}
-            </Button>
-          </DialogFooter>
+              <FormFieldFrame label={LABELS.addressPincode} htmlFor="shared-addr-pincode" required>
+                <Input
+                  id="shared-addr-pincode"
+                  value={form.pincode}
+                  onChange={(e) => setForm((prev) => ({ ...prev, pincode: e.target.value }))}
+                  required
+                />
+              </FormFieldFrame>
+
+              <FormFieldFrame label={LABELS.addressCountry} htmlFor="shared-addr-country">
+                <Input
+                  id="shared-addr-country"
+                  value={form.country}
+                  onChange={(e) => setForm((prev) => ({ ...prev, country: e.target.value }))}
+                />
+              </FormFieldFrame>
+
+              {hasAddresses || address ? (
+                <label className="flex items-center gap-2 text-[0.875rem] text-ink sm:col-span-2">
+                  <input
+                    type="checkbox"
+                    checked={form.isDefault}
+                    onChange={(e) => setForm((prev) => ({ ...prev, isDefault: e.target.checked }))}
+                    className="h-4 w-4 accent-[var(--brand)]"
+                  />
+                  {LABELS.addressSetDefault}
+                </label>
+              ) : null}
+            </FormSection>
+
+            {formError ? (
+              <p role="alert" className="text-[0.875rem] text-danger">
+                {formError}
+              </p>
+            ) : null}
+
+            <FormActions>
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                {LABELS.cancel}
+              </Button>
+              <Button type="submit" loading={isPending}>
+                {submitLabel}
+              </Button>
+            </FormActions>
+          </FormStack>
         </form>
       </DialogContent>
     </Dialog>

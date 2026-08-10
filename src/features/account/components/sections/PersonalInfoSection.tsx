@@ -3,9 +3,10 @@
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { CheckCircle2, Mail, UserRound } from 'lucide-react'
-import { FormField } from '@/shared/components/FormField'
 import { FormError } from '@/shared/components/FormError'
+import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { Badge } from '@/shared/components/ui/badge'
@@ -57,7 +58,7 @@ export function PersonalInfoSection() {
     return (
       <div className="border border-line bg-surface px-5 py-10 text-center">
         <p className="text-[0.9375rem] text-ink-muted">
-          {(error as Error | null)?.message || 'Could not load your profile. Please try again.'}
+          {(error as Error | null)?.message || LABELS.couldNotLoadProfile}
         </p>
       </div>
     )
@@ -73,63 +74,69 @@ export function PersonalInfoSection() {
               phone: data.phone.trim() || null,
             })
           })}
-          className="border border-line bg-surface shadow-elevation-1"
         >
-          <div className="border-b border-line bg-paper/65 px-5 py-4 md:px-6">
-            <TextEyebrow>Identity</TextEyebrow>
-            <h2 className="mt-1 font-display text-[1.1875rem] tracking-tight text-ink">
-              Personal information
-            </h2>
-            <p className="mt-1 text-[0.875rem] text-ink-muted">
-              Update how we address you and how we can reach you.
-            </p>
-          </div>
+          <FormStack>
+            <FormSection
+              title={LABELS.personalInfoSectionTitle}
+              hint={LABELS.personalInfoSectionHint}
+            >
+              <FormFieldFrame
+                label={LABELS.fullName}
+                htmlFor="account-name"
+                required
+                error={errors.name?.message}
+              >
+                <Input
+                  id="account-name"
+                  {...register('name', { required: LABELS.nameRequired })}
+                />
+              </FormFieldFrame>
 
-          <div className="space-y-5 px-5 py-5 md:px-6 md:py-6">
-            <div className="grid gap-5 md:grid-cols-2">
-              <FormField
-                id="account-name"
-                label="Full name"
-                registration={register('name', { required: 'Name is required' })}
-                error={errors.name}
-              />
-
-              <FormField
-                id="account-phone"
-                label="Phone"
-                type="tel"
-                registration={register('phone')}
-                error={errors.phone}
-                placeholder="+91…"
-                helperText={
+              <FormFieldFrame
+                label={LABELS.phone}
+                htmlFor="account-phone"
+                hint={
                   isWorkspace ? LABELS.phoneOptionalContact : LABELS.phoneOptionalDelivery
                 }
-              />
-            </div>
-            <FormError error={updateProfile.error as Error | null} fallback="Could not save profile." />
-            {updateProfile.isSuccess && !isDirty ? (
-              <p className="text-[0.875rem] text-success">Profile saved.</p>
-            ) : null}
+                error={errors.phone?.message}
+              >
+                <Input
+                  id="account-phone"
+                  type="tel"
+                  placeholder={LABELS.phonePlaceholder}
+                  {...register('phone')}
+                />
+              </FormFieldFrame>
 
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
-              <p className="text-[0.8125rem] text-ink-faint">
-                {isWorkspace
+              <div className="sm:col-span-2 space-y-3">
+                <FormError
+                  error={updateProfile.error as Error | null}
+                  fallback={LABELS.couldNotSaveProfile}
+                />
+                {updateProfile.isSuccess && !isDirty ? (
+                  <p className="text-[0.875rem] text-success">{LABELS.personalInfoSaved}</p>
+                ) : null}
+              </div>
+            </FormSection>
+
+            <FormActions
+              leading={
+                isWorkspace
                   ? LABELS.personalInfoFooterWorkspace
-                  : LABELS.personalInfoFooterCustomer}
-              </p>
+                  : LABELS.personalInfoFooterCustomer
+              }
+            >
               <Button type="submit" loading={updateProfile.isPending} disabled={!isDirty}>
-                Save changes
+                {LABELS.saveChanges}
               </Button>
-            </div>
-          </div>
+            </FormActions>
+          </FormStack>
         </form>
 
         <aside className="border border-line bg-surface shadow-elevation-1">
           <div className="border-b border-line bg-paper/55 px-5 py-4 md:px-6">
-            <TextEyebrow>Profile</TextEyebrow>
-            <p className="mt-1 text-[0.875rem] text-ink-muted">
-              A quick view of the details currently tied to your account.
-            </p>
+            <TextEyebrow>{LABELS.personalInfoProfileEyebrow}</TextEyebrow>
+            <p className="mt-1 text-[0.875rem] text-ink-muted">{LABELS.personalInfoProfileHint}</p>
           </div>
 
           <div className="space-y-4 px-5 py-5 md:px-6">
@@ -139,13 +146,13 @@ export function PersonalInfoSection() {
               </span>
               <div className="min-w-0">
                 <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-                  Account holder
+                  {LABELS.personalInfoAccountHolder}
                 </p>
                 <p className="mt-1 text-[0.9375rem] font-medium text-ink">{profile.name}</p>
                 {profile.phone ? (
                   <p className="mt-0.5 text-[0.8125rem] text-ink-muted">{profile.phone}</p>
                 ) : (
-                  <p className="mt-0.5 text-[0.8125rem] text-ink-faint">No phone saved yet</p>
+                  <p className="mt-0.5 text-[0.8125rem] text-ink-faint">{LABELS.personalInfoNoPhone}</p>
                 )}
               </div>
             </div>
@@ -156,17 +163,17 @@ export function PersonalInfoSection() {
               </span>
               <div className="min-w-0">
                 <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-                  Email status
+                  {LABELS.personalInfoEmailStatus}
                 </p>
                 <p className="mt-1 break-all text-[0.9375rem] font-medium text-ink">{profile.email}</p>
                 <div className="mt-2">
                   {profile.emailVerified ? (
                     <Badge variant="success" className="gap-1">
                       <CheckCircle2 size={12} />
-                      Verified
+                      {LABELS.personalInfoVerified}
                     </Badge>
                   ) : (
-                    <Badge variant="outline">Unverified</Badge>
+                    <Badge variant="outline">{LABELS.personalInfoUnverified}</Badge>
                   )}
                 </div>
               </div>

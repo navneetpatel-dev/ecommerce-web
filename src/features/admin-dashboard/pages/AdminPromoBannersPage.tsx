@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FileUpload } from '@/shared/components/FileUpload'
+import { FormActions, FormFieldFrame, FormSection } from '@/shared/components/forms'
 import { RequirePermission } from '@/shared/components/RequirePermission'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -191,90 +191,81 @@ export function AdminPromoBannersPage() {
           <p className="max-w-2xl text-[0.9375rem] text-ink-muted">{LABELS.promoBannersHint}</p>
         </div>
 
-        <section className="space-y-4 rounded-md border border-line bg-surface p-4 sm:p-5">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2 sm:col-span-2">
-              <Label>{LABELS.promoBannerTitle}</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-            </div>
-            <div className="space-y-2 sm:col-span-2">
-              <Label>{LABELS.promoBannerImage}</Label>
-              <FileUpload
-                entityType={UPLOAD_ENTITY.BANNERS}
-                entityId={draftId}
-                purpose={UPLOAD_PURPOSE.IMAGE}
-                accept="image/png,image/jpeg,image/webp"
-                valueUrl={imageUrl}
-                onUploaded={setImageUrl}
-                disabled={saving}
-                label={LABELS.promoBannerImage}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>{LABELS.promoBannerLinkType}</Label>
-              <Select
-                value={linkType}
-                onValueChange={(value) => setLinkType(value as PromoBannerLinkType)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {PROMO_BANNER_LINK_TYPE_VALUES.map((value) => (
-                    <SelectItem key={value} value={value}>
-                      {value}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>{LABELS.promoBannerStatus}</Label>
-              <Select
-                value={status}
-                onValueChange={(value) => setStatus(value as PromoBannerStatus)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {PROMO_BANNER_STATUS_VALUES.map((value) => (
-                    <SelectItem key={value} value={value}>
-                      {value}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            {linkType === PROMO_BANNER_LINK_TYPE.URL ? (
-              <div className="space-y-2 sm:col-span-2">
-                <Label>{LABELS.promoBannerLinkUrl}</Label>
-                <Input value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} />
-              </div>
-            ) : (
-              <div className="space-y-2 sm:col-span-2">
-                <Label>{LABELS.promoBannerLinkTargetId}</Label>
-                <Input value={linkTargetId} onChange={(e) => setLinkTargetId(e.target.value)} />
-              </div>
-            )}
-            <div className="space-y-2">
-              <Label>{LABELS.promoBannerPriority}</Label>
-              <Input
-                type="number"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="flex items-center justify-between gap-3">
-            <p className="min-h-[1.25rem] text-[0.8125rem] text-ink-muted" aria-live="polite">
-              {message}
-            </p>
+        <FormSection
+          title={LABELS.promoBannerFormSection}
+          hint={LABELS.promoBannerFormSectionHint}
+        >
+          <FormFieldFrame label={LABELS.promoBannerTitle} className="sm:col-span-2">
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.promoBannerImage} className="sm:col-span-2">
+            <FileUpload
+              entityType={UPLOAD_ENTITY.BANNERS}
+              entityId={draftId}
+              purpose={UPLOAD_PURPOSE.IMAGE}
+              accept="image/png,image/jpeg,image/webp"
+              valueUrl={imageUrl}
+              onUploaded={setImageUrl}
+              disabled={saving}
+              label={LABELS.promoBannerImage}
+            />
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.promoBannerLinkType}>
+            <Select
+              value={linkType}
+              onValueChange={(value) => setLinkType(value as PromoBannerLinkType)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PROMO_BANNER_LINK_TYPE_VALUES.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.promoBannerStatus}>
+            <Select
+              value={status}
+              onValueChange={(value) => setStatus(value as PromoBannerStatus)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PROMO_BANNER_STATUS_VALUES.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+          {linkType === PROMO_BANNER_LINK_TYPE.URL ? (
+            <FormFieldFrame label={LABELS.promoBannerLinkUrl} className="sm:col-span-2">
+              <Input value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} />
+            </FormFieldFrame>
+          ) : (
+            <FormFieldFrame label={LABELS.promoBannerLinkTargetId} className="sm:col-span-2">
+              <Input value={linkTargetId} onChange={(e) => setLinkTargetId(e.target.value)} />
+            </FormFieldFrame>
+          )}
+          <FormFieldFrame label={LABELS.promoBannerPriority}>
+            <Input
+              type="number"
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+            />
+          </FormFieldFrame>
+          <FormActions className="sm:col-span-2 border-0 pt-0" leading={message}>
             <Button type="button" disabled={saving || !canSubmit} onClick={() => void onCreate()}>
               {LABELS.createPromoBanner}
             </Button>
-          </div>
-        </section>
+          </FormActions>
+        </FormSection>
 
         {loading ? <p className="text-ink-muted">{LABELS.loading}</p> : null}
         {error ? <p className="text-danger">{error}</p> : null}
@@ -290,61 +281,68 @@ export function AdminPromoBannersPage() {
                 className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
               >
                 {editingId === banner.id ? (
-                  <div className="w-full space-y-3">
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <div className="space-y-2 sm:col-span-2">
-                        <Label>{LABELS.promoBannerTitle}</Label>
-                        <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
-                      </div>
-                      <div className="space-y-2 sm:col-span-2">
-                        <Label>{LABELS.promoBannerImage}</Label>
-                        <FileUpload
-                          entityType={UPLOAD_ENTITY.BANNERS}
-                          entityId={banner.id}
-                          purpose={UPLOAD_PURPOSE.IMAGE}
-                          accept="image/png,image/jpeg,image/webp"
-                          valueUrl={editImageUrl}
-                          onUploaded={setEditImageUrl}
-                          disabled={saving}
-                          label={LABELS.replaceImage}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>{LABELS.promoBannerStatus}</Label>
-                        <Select
-                          value={editStatus}
-                          onValueChange={(value) => setEditStatus(value as PromoBannerStatus)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {PROMO_BANNER_STATUS_VALUES.map((value) => (
-                              <SelectItem key={value} value={value}>
-                                {value}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>{LABELS.promoBannerPriority}</Label>
-                        <Input
-                          type="number"
-                          value={editPriority}
-                          onChange={(e) => setEditPriority(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" disabled={saving || !editImageUrl} onClick={() => void onSaveEdit()}>
-                        {LABELS.savePromoBanner}
-                      </Button>
-                      <Button size="sm" variant="outline" disabled={saving} onClick={cancelEdit}>
+                  <FormSection
+                    title={LABELS.promoBannerEditSection}
+                    hint={LABELS.promoBannerEditSectionHint}
+                    className="w-full border-0 shadow-none"
+                  >
+                    <FormFieldFrame label={LABELS.promoBannerTitle} className="sm:col-span-2">
+                      <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
+                    </FormFieldFrame>
+                    <FormFieldFrame label={LABELS.promoBannerImage} className="sm:col-span-2">
+                      <FileUpload
+                        entityType={UPLOAD_ENTITY.BANNERS}
+                        entityId={banner.id}
+                        purpose={UPLOAD_PURPOSE.IMAGE}
+                        accept="image/png,image/jpeg,image/webp"
+                        valueUrl={editImageUrl}
+                        onUploaded={setEditImageUrl}
+                        disabled={saving}
+                        label={LABELS.replaceImage}
+                      />
+                    </FormFieldFrame>
+                    <FormFieldFrame label={LABELS.promoBannerStatus}>
+                      <Select
+                        value={editStatus}
+                        onValueChange={(value) => setEditStatus(value as PromoBannerStatus)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {PROMO_BANNER_STATUS_VALUES.map((value) => (
+                            <SelectItem key={value} value={value}>
+                              {value}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormFieldFrame>
+                    <FormFieldFrame label={LABELS.promoBannerPriority}>
+                      <Input
+                        type="number"
+                        value={editPriority}
+                        onChange={(e) => setEditPriority(e.target.value)}
+                      />
+                    </FormFieldFrame>
+                    <FormActions className="sm:col-span-2 border-0 pt-0">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={saving}
+                        onClick={cancelEdit}
+                      >
                         {LABELS.cancel}
                       </Button>
-                    </div>
-                  </div>
+                      <Button
+                        size="sm"
+                        disabled={saving || !editImageUrl}
+                        onClick={() => void onSaveEdit()}
+                      >
+                        {LABELS.savePromoBanner}
+                      </Button>
+                    </FormActions>
+                  </FormSection>
                 ) : (
                   <>
                     <div className="min-w-0 space-y-1">

@@ -2,6 +2,7 @@
 
 import type { FormEvent } from 'react'
 import { Button } from '@/shared/components/ui/button'
+import { FormActions, FormFieldFrame, FormSection } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
 import { NumberInput } from '@/shared/components/NumberInput'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
@@ -26,7 +27,6 @@ export function AdminTaxRuleForm({
 
   return (
     <form
-      className="flex flex-col gap-3 rounded-md border border-line bg-surface p-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2"
       onSubmit={(e) => {
         if (!canCreate) {
           e.preventDefault()
@@ -35,27 +35,33 @@ export function AdminTaxRuleForm({
         onSubmit(e)
       }}
     >
-      <NumberInput
-        className="w-full sm:w-36"
-        value={gstPercentage === '' ? undefined : Number(gstPercentage)}
-        min={0}
-        max={100}
-        step={0.5}
-        suffix="%"
-        placeholder={LABELS.gstPercentage}
-        onChange={(value) => onGstChange(value == null ? '' : String(value))}
-      />
-      <Input
-        className="w-full min-w-0 flex-1 sm:min-w-[10rem]"
-        placeholder={LABELS.hsnOptional}
-        value={hsnCode}
-        onChange={(e) => onHsnChange(e.target.value)}
-      />
-      <DisabledActionHint disabled={!canCreate} message={LABELS.enterGstPercentage}>
-        <Button type="submit" className="w-full sm:w-auto" disabled={!canCreate}>
-          {LABELS.addTaxRule}
-        </Button>
-      </DisabledActionHint>
+      <FormSection title={LABELS.addTaxRule} columns={2}>
+        <FormFieldFrame label={LABELS.gstPercentage}>
+          <NumberInput
+            value={gstPercentage === '' ? undefined : Number(gstPercentage)}
+            min={0}
+            max={100}
+            step={0.5}
+            suffix="%"
+            placeholder={LABELS.gstPercentage}
+            onChange={(value) => onGstChange(value == null ? '' : String(value))}
+          />
+        </FormFieldFrame>
+        <FormFieldFrame label={LABELS.hsnOptional}>
+          <Input
+            placeholder={LABELS.hsnOptional}
+            value={hsnCode}
+            onChange={(e) => onHsnChange(e.target.value)}
+          />
+        </FormFieldFrame>
+        <FormActions className="sm:col-span-2 border-0 pt-0">
+          <DisabledActionHint disabled={!canCreate} message={LABELS.enterGstPercentage}>
+            <Button type="submit" className="w-full sm:w-auto" disabled={!canCreate}>
+              {LABELS.addTaxRule}
+            </Button>
+          </DisabledActionHint>
+        </FormActions>
+      </FormSection>
     </form>
   )
 }

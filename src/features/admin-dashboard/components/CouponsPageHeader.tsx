@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
+import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/components/ui/dialog'
 import { NumberInput } from '@/shared/components/NumberInput'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
@@ -143,18 +143,23 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
                 <Layers className="h-4 w-4" /> {LABELS.bulkGenerate}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{LABELS.bulkGenerateTitle}</DialogTitle>
               </DialogHeader>
-              <div className="space-y-4">
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="space-y-2 sm:col-span-2">
-                    <Label htmlFor="bulk-name">{LABELS.bulkBatchName}</Label>
+              <FormStack>
+                <FormSection
+                  title={LABELS.bulkCouponMetaSection}
+                  hint={LABELS.bulkCouponMetaSectionHint}
+                >
+                  <FormFieldFrame
+                    label={LABELS.bulkBatchName}
+                    htmlFor="bulk-name"
+                    className="sm:col-span-2"
+                  >
                     <Input id="bulk-name" {...bulkMetaForm.register('name')} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>{LABELS.bulkCount}</Label>
+                  </FormFieldFrame>
+                  <FormFieldFrame label={LABELS.bulkCount}>
                     <Controller
                       name="count"
                       control={bulkMetaForm.control}
@@ -169,34 +174,35 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
                         />
                       )}
                     />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="bulk-prefix">{LABELS.bulkPrefix}</Label>
+                  </FormFieldFrame>
+                  <FormFieldFrame label={LABELS.bulkPrefix} htmlFor="bulk-prefix">
                     <Input id="bulk-prefix" {...bulkMetaForm.register('prefix')} />
-                  </div>
-                </div>
+                  </FormFieldFrame>
+                </FormSection>
                 <CreateCouponForm
                   form={templateForm}
                   isPending={false}
                   hideSubmit
                   hideCodeField
                 />
-                <DisabledActionHint
-                  disabled={!canBulk}
-                  message={LABELS.bulkGenerateHint}
-                  className="w-full"
-                >
-                  <Button
-                    type="button"
+                <FormActions>
+                  <DisabledActionHint
+                    disabled={!canBulk}
+                    message={LABELS.bulkGenerateHint}
                     className="w-full"
-                    loading={bulkMutation.isPending}
-                    disabled={!canBulk || bulkMutation.isPending}
-                    onClick={() => bulkMutation.mutate()}
                   >
-                    {LABELS.bulkGenerate}
-                  </Button>
-                </DisabledActionHint>
-              </div>
+                    <Button
+                      type="button"
+                      className="w-full"
+                      loading={bulkMutation.isPending}
+                      disabled={!canBulk || bulkMutation.isPending}
+                      onClick={() => bulkMutation.mutate()}
+                    >
+                      {LABELS.bulkGenerate}
+                    </Button>
+                  </DisabledActionHint>
+                </FormActions>
+              </FormStack>
             </DialogContent>
           </Dialog>
 
@@ -206,7 +212,7 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
                 <Plus className="h-4 w-4" /> {LABELS.createCoupon}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{LABELS.createCoupon}</DialogTitle>
               </DialogHeader>

@@ -135,7 +135,7 @@ export function VendorCouponsView({
               <Plus className="h-4 w-4" /> {LABELS.createVendorCoupon}
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{LABELS.createVendorCoupon}</DialogTitle>
             </DialogHeader>

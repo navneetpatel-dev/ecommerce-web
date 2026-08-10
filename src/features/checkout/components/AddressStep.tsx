@@ -6,6 +6,7 @@ import type { Address } from '@/shared/api/types'
 import { Button } from '@/shared/components/ui/button'
 import { AddressFormDialog } from '@/shared/components/AddressFormDialog'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
 
 interface AddressStepProps {
@@ -72,7 +73,7 @@ export function AddressStep({
         onOpenChange={setShowDialog}
         hasAddresses={hasAddresses}
         isPending={isCreating}
-        title="New address"
+        title={LABELS.newAddress}
         onSubmit={onCreateAddress}
       />
 

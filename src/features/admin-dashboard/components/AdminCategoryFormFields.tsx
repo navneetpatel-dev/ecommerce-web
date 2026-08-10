@@ -6,8 +6,8 @@ import { Controller } from 'react-hook-form'
 import type { CategoryFormInput } from '../schemas/categories.schema'
 import { categoriesApi } from '@/features/categories/api/categories.api'
 import { FileUpload } from '@/shared/components/FileUpload'
+import { FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -28,24 +28,6 @@ interface AdminCategoryFormFieldsProps {
   /** Exclude this category from parent options (edit self). */
   excludeCategoryId?: string
   idPrefix?: string
-}
-
-function RequiredMark() {
-  return (
-    <span className="text-danger" aria-hidden>
-      {' '}
-      *
-    </span>
-  )
-}
-
-function FieldError({ message }: { message?: string }) {
-  if (!message) return null
-  return (
-    <p role="alert" className="text-[0.8125rem] text-danger">
-      {message}
-    </p>
-  )
 }
 
 export function AdminCategoryFormFields({
@@ -102,110 +84,120 @@ export function AdminCategoryFormFields({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor={`${idPrefix}-name`}>
-          {LABELS.categoryName}
-          <RequiredMark />
-        </Label>
-        <Input
-          id={`${idPrefix}-name`}
-          error={Boolean(showFieldError('name'))}
-          placeholder={LABELS.categoryName}
-          {...register('name')}
-        />
-        <FieldError message={showFieldError('name')} />
-      </div>
+    <FormStack>
+      <FormSection
+        title={LABELS.categoryFormSectionBasics}
+        hint={LABELS.categoryFormSectionBasicsHint}
+      >
+        <FormFieldFrame
+          label={LABELS.categoryName}
+          htmlFor={`${idPrefix}-name`}
+          required
+          error={showFieldError('name')}
+          className="sm:col-span-2"
+        >
+          <Input
+            id={`${idPrefix}-name`}
+            error={Boolean(showFieldError('name'))}
+            placeholder={LABELS.categoryName}
+            {...register('name')}
+          />
+        </FormFieldFrame>
 
-      <div className="space-y-2">
-        <Label>{LABELS.parentCategory}</Label>
-        <Controller
-          name="parentId"
-          control={control}
-          render={({ field }) => (
-            <Select
-              value={field.value ? field.value : NONE_PARENT}
-              onValueChange={(value) => field.onChange(value === NONE_PARENT ? '' : value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder={LABELS.selectParentCategory} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={NONE_PARENT}>{LABELS.parentCategoryNone}</SelectItem>
-                {parentOptions.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.name}
+        <FormFieldFrame label={LABELS.parentCategory}>
+          <Controller
+            name="parentId"
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value ? field.value : NONE_PARENT}
+                onValueChange={(value) => field.onChange(value === NONE_PARENT ? '' : value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={LABELS.selectParentCategory} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={NONE_PARENT}>{LABELS.parentCategoryNone}</SelectItem>
+                  {parentOptions.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+        </FormFieldFrame>
+
+        <FormFieldFrame label={LABELS.categoryStatus}>
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={CATEGORY_STATUS.ACTIVE}>
+                    {LABELS.categoryStatusActive}
                   </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        />
-      </div>
+                  <SelectItem value={CATEGORY_STATUS.ARCHIVED}>
+                    {LABELS.categoryStatusArchived}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
+        </FormFieldFrame>
+      </FormSection>
 
-      <div className="space-y-2">
-        <Label>{LABELS.categoryImageUpload}</Label>
-        <FileUpload
-          entityType={UPLOAD_ENTITY.CATEGORIES}
-          entityId={uploadEntityId}
-          purpose={UPLOAD_PURPOSE.IMAGE}
-          accept="image/png,image/jpeg,image/webp"
-          valueUrl={watchedImageUrl?.trim() ? watchedImageUrl.trim() : null}
-          onUploaded={(url) =>
-            setValue('imageUrl', url, { shouldDirty: true, shouldValidate: true })
-          }
-        />
-        <Input
-          id={`${idPrefix}-image`}
-          error={Boolean(showFieldError('imageUrl'))}
-          placeholder={LABELS.categoryImageUrlPlaceholder}
-          {...register('imageUrl')}
-        />
-        <FieldError message={showFieldError('imageUrl')} />
-      </div>
+      <FormSection
+        title={LABELS.categoryFormSectionImage}
+        hint={LABELS.categoryFormSectionImageHint}
+        columns={1}
+      >
+        <FormFieldFrame label={LABELS.categoryImageUpload} error={showFieldError('imageUrl')}>
+          <FileUpload
+            entityType={UPLOAD_ENTITY.CATEGORIES}
+            entityId={uploadEntityId}
+            purpose={UPLOAD_PURPOSE.IMAGE}
+            accept="image/png,image/jpeg,image/webp"
+            valueUrl={watchedImageUrl?.trim() ? watchedImageUrl.trim() : null}
+            onUploaded={(url) =>
+              setValue('imageUrl', url, { shouldDirty: true, shouldValidate: true })
+            }
+          />
+        </FormFieldFrame>
+      </FormSection>
 
-      <div className="space-y-2">
-        <Label>{LABELS.categoryStatus}</Label>
-        <Controller
-          name="status"
-          control={control}
-          render={({ field }) => (
-            <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={CATEGORY_STATUS.ACTIVE}>{LABELS.categoryStatusActive}</SelectItem>
-                <SelectItem value={CATEGORY_STATUS.ARCHIVED}>
-                  {LABELS.categoryStatusArchived}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          )}
-        />
-      </div>
+      <FormSection
+        title={LABELS.categoryFormSectionSeo}
+        hint={LABELS.categoryFormSectionSeoHint}
+      >
+        <FormFieldFrame label={LABELS.categorySeoTitle} htmlFor={`${idPrefix}-seo-title`}>
+          <Input id={`${idPrefix}-seo-title`} {...register('seoTitle')} />
+        </FormFieldFrame>
 
-      <div className="space-y-2">
-        <Label htmlFor={`${idPrefix}-seo-title`}>{LABELS.categorySeoTitle}</Label>
-        <Input id={`${idPrefix}-seo-title`} {...register('seoTitle')} />
-      </div>
+        <FormFieldFrame label={LABELS.categorySeoDescription} htmlFor={`${idPrefix}-seo-desc`}>
+          <Input id={`${idPrefix}-seo-desc`} {...register('seoDescription')} />
+        </FormFieldFrame>
 
-      <div className="space-y-2">
-        <Label htmlFor={`${idPrefix}-seo-desc`}>{LABELS.categorySeoDescription}</Label>
-        <Input id={`${idPrefix}-seo-desc`} {...register('seoDescription')} />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor={`${idPrefix}-commission`}>{LABELS.categoryCommissionRate}</Label>
-        <Input
-          id={`${idPrefix}-commission`}
-          inputMode="decimal"
-          placeholder="0–100"
-          {...register('commissionRate')}
-        />
-        <p className="text-[0.75rem] text-ink-muted">{LABELS.categoryCommissionRateHint}</p>
-        <FieldError message={showFieldError('commissionRate')} />
-      </div>
-    </div>
+        <FormFieldFrame
+          label={LABELS.categoryCommissionRate}
+          htmlFor={`${idPrefix}-commission`}
+          hint={LABELS.categoryCommissionRateHint}
+          error={showFieldError('commissionRate')}
+          className="sm:col-span-2 sm:max-w-md"
+        >
+          <Input
+            id={`${idPrefix}-commission`}
+            inputMode="decimal"
+            placeholder={LABELS.categoryCommissionPlaceholder}
+            {...register('commissionRate')}
+          />
+        </FormFieldFrame>
+      </FormSection>
+    </FormStack>
   )
 }

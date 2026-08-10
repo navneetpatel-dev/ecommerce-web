@@ -25,7 +25,7 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
+import { FormActions, FormFieldFrame, FormSection } from '@/shared/components/forms'
 import {
   Select,
   SelectContent,
@@ -242,7 +242,7 @@ export function AdminCategoryAttributesAction({
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-h-[min(92vh,48rem)] max-w-lg overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {LABELS.categoryAttributes} — {categoryName}
@@ -270,13 +270,16 @@ export function AdminCategoryAttributesAction({
             </SortableContext>
           </DndContext>
 
-          <div className="space-y-3 border-t border-line pt-4">
-            <div className="space-y-2">
-              <Label>{LABELS.attributeName}</Label>
+          <FormSection
+            title={LABELS.attributeFormSection}
+            hint={LABELS.attributeFormSectionHint}
+            columns={1}
+            className="mt-4"
+          >
+            <FormFieldFrame label={LABELS.attributeName}>
               <Input value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label>{LABELS.attributeType}</Label>
+            </FormFieldFrame>
+            <FormFieldFrame label={LABELS.attributeType}>
               <Select value={type} onValueChange={setType} disabled={Boolean(editingId)}>
                 <SelectTrigger>
                   <SelectValue />
@@ -293,25 +296,24 @@ export function AdminCategoryAttributesAction({
                   </SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </FormFieldFrame>
             {type !== CATEGORY_ATTRIBUTE_TYPE.BOOLEAN ? (
-              <div className="space-y-2">
-                <Label>{LABELS.attributeOptions}</Label>
+              <FormFieldFrame label={LABELS.attributeOptions}>
                 <Input value={options} onChange={(e) => setOptions(e.target.value)} />
-              </div>
+              </FormFieldFrame>
             ) : null}
             {error ? <p className="text-[0.8125rem] text-danger">{error}</p> : null}
-            <div className="flex gap-2">
-              <Button className="flex-1" disabled={loading || !name.trim()} onClick={() => void onSave()}>
-                {editingId ? LABELS.saveCategoryAttribute : LABELS.addCategoryAttribute}
-              </Button>
+            <FormActions className="border-0 pt-0">
               {editingId ? (
                 <Button variant="secondary" disabled={loading} onClick={resetForm}>
                   {LABELS.cancelEditAttribute}
                 </Button>
               ) : null}
-            </div>
-          </div>
+              <Button disabled={loading || !name.trim()} onClick={() => void onSave()}>
+                {editingId ? LABELS.saveCategoryAttribute : LABELS.addCategoryAttribute}
+              </Button>
+            </FormActions>
+          </FormSection>
         </DialogContent>
       </Dialog>
     </>

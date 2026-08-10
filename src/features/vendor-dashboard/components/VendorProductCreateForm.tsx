@@ -2,6 +2,7 @@
 
 import { Button } from '@/shared/components/ui/button'
 import { FileUpload } from '@/shared/components/FileUpload'
+import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
 import { NumberInput } from '@/shared/components/NumberInput'
 import {
@@ -52,63 +53,82 @@ export function VendorProductCreateForm({
   onCancel,
 }: VendorProductCreateFormProps) {
   return (
-    <form
-      className="mb-5 grid gap-3 rounded-md border border-line bg-surface p-4 sm:grid-cols-2"
-      onSubmit={onSubmit}
-    >
-      <Input
-        placeholder={LABELS.productNamePlaceholder}
-        value={name}
-        onChange={(e) => onNameChange(e.target.value)}
-        required
-      />
-      <NumberInput
-        prefix="₹"
-        min={1}
-        step={1}
-        placeholder={LABELS.pricePlaceholder}
-        value={price === '' ? undefined : Number(price)}
-        onChange={(value) => onPriceChange(value == null ? '' : String(value))}
-      />
-      <Select value={categoryId || undefined} onValueChange={onCategoryChange}>
-        <SelectTrigger>
-          <SelectValue placeholder={LABELS.selectCategory} />
-        </SelectTrigger>
-        <SelectContent>
-          {categories.map((cat) => (
-            <SelectItem key={cat.id} value={cat.id}>
-              {cat.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Input
-        placeholder={LABELS.shortDescription}
-        value={description}
-        onChange={(e) => onDescriptionChange(e.target.value)}
-      />
-      <div className="sm:col-span-2">
-        <FileUpload
-          mode="multiple"
-          entityType={UPLOAD_ENTITY.PRODUCTS}
-          entityId={draftUploadId}
-          purpose={UPLOAD_PURPOSE.IMAGES}
-          accept="image/png,image/jpeg,image/webp"
-          valueUrls={imageUrls}
-          onUploaded={onImageUrlsChange}
-          label={LABELS.productImagesLabel}
-          disabled={creating}
-        />
-      </div>
-      <div className="flex gap-2 sm:col-span-2">
-        <Button type="submit" disabled={creating} loading={creating}>
-          {creating ? LABELS.creatingEllipsis : LABELS.createProduct}
-        </Button>
-        <Button variant="outline" type="button" onClick={onCancel}>
-          {LABELS.cancel}
-        </Button>
-      </div>
-      {createError ? <p className="text-sm text-danger sm:col-span-2">{createError}</p> : null}
+    <form className="mb-5" onSubmit={onSubmit}>
+      <FormStack>
+        <FormSection
+          title={LABELS.productFormSectionDetails}
+          hint={LABELS.productFormSectionDetailsHint}
+        >
+          <FormFieldFrame label={LABELS.productName} required>
+            <Input
+              placeholder={LABELS.productNamePlaceholder}
+              value={name}
+              onChange={(e) => onNameChange(e.target.value)}
+              required
+            />
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.pricePlaceholder} required>
+            <NumberInput
+              prefix="₹"
+              min={1}
+              step={1}
+              placeholder={LABELS.pricePlaceholder}
+              value={price === '' ? undefined : Number(price)}
+              onChange={(value) => onPriceChange(value == null ? '' : String(value))}
+            />
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.selectCategory} required>
+            <Select value={categoryId || undefined} onValueChange={onCategoryChange}>
+              <SelectTrigger>
+                <SelectValue placeholder={LABELS.selectCategory} />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.shortDescription}>
+            <Input
+              placeholder={LABELS.shortDescription}
+              value={description}
+              onChange={(e) => onDescriptionChange(e.target.value)}
+            />
+          </FormFieldFrame>
+        </FormSection>
+
+        <FormSection
+          title={LABELS.productFormSectionImages}
+          hint={LABELS.productFormSectionImagesHint}
+          columns={1}
+        >
+          <FileUpload
+            mode="multiple"
+            entityType={UPLOAD_ENTITY.PRODUCTS}
+            entityId={draftUploadId}
+            purpose={UPLOAD_PURPOSE.IMAGES}
+            accept="image/png,image/jpeg,image/webp"
+            valueUrls={imageUrls}
+            onUploaded={onImageUrlsChange}
+            label={LABELS.productImagesLabel}
+            disabled={creating}
+          />
+        </FormSection>
+
+        {createError ? <p className="text-sm text-danger">{createError}</p> : null}
+
+        <FormActions>
+          <Button variant="outline" type="button" onClick={onCancel}>
+            {LABELS.cancel}
+          </Button>
+          <Button type="submit" disabled={creating} loading={creating}>
+            {creating ? LABELS.creatingEllipsis : LABELS.createProduct}
+          </Button>
+        </FormActions>
+      </FormStack>
     </form>
   )
 }
