@@ -1,10 +1,9 @@
 'use client'
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { Check, ChevronDown } from 'lucide-react'
 import { Input } from '@/shared/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover'
-import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
 import { LABELS } from '@/shared/constants/labels'
 import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
 import { cn } from '@/shared/utils/cn'
@@ -53,7 +52,6 @@ export interface InfiniteSingleSelectProps {
   pageSize?: number
   className?: string
   listClassName?: string
-  idPrefix?: string
 }
 
 function mergeUnique(
@@ -69,6 +67,39 @@ function mergeUnique(
     next.push(item)
   }
   return next
+}
+
+function OptionRow({
+  selected,
+  label,
+  disabled,
+  onSelect,
+}: {
+  selected: boolean
+  label: string
+  disabled?: boolean
+  onSelect: () => void
+}) {
+  return (
+    <button
+      type="button"
+      role="option"
+      aria-selected={selected}
+      disabled={disabled}
+      onClick={onSelect}
+      className={cn(
+        'relative flex h-10 w-full cursor-pointer select-none items-center rounded-sm px-4 pr-10 text-left text-[0.9375rem] outline-none hover:bg-brand-subtle focus-visible:bg-brand-subtle disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+        selected && 'bg-brand-subtle/60',
+      )}
+    >
+      <span className="line-clamp-1 min-w-0 flex-1 text-ink">{label}</span>
+      {selected ? (
+        <span className="absolute right-2 flex items-center justify-center">
+          <Check size={16} className="text-brand" />
+        </span>
+      ) : null}
+    </button>
+  )
 }
 
 export function InfiniteSingleSelect({
@@ -89,7 +120,6 @@ export function InfiniteSingleSelect({
   pageSize = DEFAULT_PAGE_LIMIT,
   className,
   listClassName,
-  idPrefix = 'infinite-single-select',
 }: InfiniteSingleSelectProps) {
   const listboxId = useId()
   const [open, setOpen] = useState(false)
@@ -223,7 +253,6 @@ export function InfiniteSingleSelect({
   }, [disabled, hasMore, initialLoading, loadPage, open, page, options.length])
 
   const showEmpty = !initialLoading && options.length === 0 && !allowNone
-  const radioValue = value || (allowNone ? noneValue : '')
 
   const triggerLabel =
     !value
@@ -280,77 +309,69 @@ export function InfiniteSingleSelect({
         </PopoverTrigger>
         <PopoverContent
           align="start"
-          className="w-[var(--radix-popover-trigger-width)] space-y-2 p-2"
+          className="w-[var(--radix-popover-trigger-width)] space-y-2 p-1"
           onOpenAutoFocus={(event) => {
             if (!searchable) event.preventDefault()
           }}
         >
           {searchable ? (
-            <Input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={searchPlaceholder}
-              aria-label={searchPlaceholder}
-              disabled={disabled}
-              autoFocus
-            />
+            <div className="px-1 pt-1">
+              <Input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={searchPlaceholder}
+                aria-label={searchPlaceholder}
+                disabled={disabled}
+                autoFocus
+              />
+            </div>
           ) : null}
           <div
             ref={listRef}
             id={listboxId}
             role="listbox"
             className={cn(
-              'max-h-56 space-y-1 overflow-y-auto overscroll-contain rounded-md border border-line p-1.5',
+              'max-h-56 overflow-y-auto overscroll-contain p-1',
               disabled && 'pointer-events-none opacity-60',
               listClassName,
             )}
             aria-busy={initialLoading || loadingMore}
           >
             {initialLoading ? (
-              <p className="px-1 py-2 text-[0.8125rem] text-ink-muted">{LABELS.loading}</p>
+              <p className="px-4 py-2 text-[0.8125rem] text-ink-muted">{LABELS.loading}</p>
             ) : showEmpty ? (
-              <p className="px-1 py-2 text-[0.8125rem] text-ink-muted">
+              <p className="px-4 py-2 text-[0.8125rem] text-ink-muted">
                 {loadError ? LABELS.couldNotLoadOptions : emptyMessage}
               </p>
             ) : (
-              <RadioGroup
-                value={radioValue}
-                onValueChange={handleSelect}
-                disabled={disabled}
-                className="gap-0"
-              >
+              <>
                 {allowNone ? (
-                  <label
-                    htmlFor={`${idPrefix}-none`}
-                    className="flex cursor-pointer items-start gap-2 rounded-sm px-1 py-1.5 hover:bg-surface"
-                  >
-                    <RadioGroupItem id={`${idPrefix}-none`} value={noneValue} className="mt-0.5" />
-                    <span className="text-[0.875rem] leading-snug text-ink">{noneLabel}</span>
-                  </label>
+                  <OptionRow
+                    selected={!value}
+                    label={noneLabel}
+                    disabled={disabled}
+                    onSelect={() => handleSelect(noneValue)}
+                  />
                 ) : null}
-                {options.map((option) => {
-                  const inputId = `${idPrefix}-${option.id}`
-                  return (
-                    <label
-                      key={option.id}
-                      htmlFor={inputId}
-                      className="flex cursor-pointer items-start gap-2 rounded-sm px-1 py-1.5 hover:bg-surface"
-                    >
-                      <RadioGroupItem id={inputId} value={option.id} className="mt-0.5" />
-                      <span className="text-[0.875rem] leading-snug text-ink">{option.label}</span>
-                    </label>
-                  )
-                })}
+                {options.map((option) => (
+                  <OptionRow
+                    key={option.id}
+                    selected={value === option.id}
+                    label={option.label}
+                    disabled={disabled}
+                    onSelect={() => handleSelect(option.id)}
+                  />
+                ))}
                 {!initialLoading && options.length === 0 && allowNone ? (
-                  <p className="px-1 py-2 text-[0.8125rem] text-ink-muted">
+                  <p className="px-4 py-2 text-[0.8125rem] text-ink-muted">
                     {loadError ? LABELS.couldNotLoadOptions : emptyMessage}
                   </p>
                 ) : null}
                 <div ref={sentinelRef} className="h-1 w-full" aria-hidden />
                 {loadingMore ? (
-                  <p className="px-1 py-1 text-[0.8125rem] text-ink-muted">{LABELS.loadingMore}</p>
+                  <p className="px-4 py-1 text-[0.8125rem] text-ink-muted">{LABELS.loadingMore}</p>
                 ) : null}
-              </RadioGroup>
+              </>
             )}
           </div>
         </PopoverContent>

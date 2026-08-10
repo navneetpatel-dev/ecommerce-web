@@ -222,7 +222,6 @@ export function CreateTicketForm({ successHref }: Props) {
               searchable={false}
               emptyMessage={LABELS.ticketNoOrdersYet}
               pageSize={DEFAULT_PAGE_LIMIT}
-              idPrefix="ticket-order"
             />
           </FormFieldFrame>
         </FormSection>

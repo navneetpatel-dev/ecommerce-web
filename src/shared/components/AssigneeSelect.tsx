@@ -89,7 +89,6 @@ export function AssigneeSelect({
       error={error}
       pageSize={DEFAULT_PAGE_LIMIT}
       className={className}
-      idPrefix={`assignee-${permission}`}
     />
   )
 }
