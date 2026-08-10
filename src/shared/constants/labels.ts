@@ -521,11 +521,41 @@ export const LABELS = {
   uploadFiles: 'Upload files',
   uploading: 'Uploading…',
   uploadFailed: 'Could not upload file.',
+  uploadStorageUnavailable:
+    'File upload is temporarily unavailable. Please try again later.',
+  uploadForbidden: 'You do not have permission to upload this file.',
+  uploadTooLargeGeneric: 'File is too large.',
+  unexpectedError: 'Something went wrong. Please try again.',
+  unexpectedErrorHeading: 'Something went wrong',
+  unexpectedErrorBody: 'Please try again. If the problem continues, contact support.',
+  validationFailedGeneric: 'Please check the form and try again.',
   uploadTooLargeMb: 'File must be under {mb}MB.',
   uploadFileFailedAt: 'File {index}: {message}',
   uploadProfilePhoto: 'Upload profile photo',
-  uploadProfilePhotoHint: 'PNG, JPEG, or WebP up to 1.5MB. Stored on AWS S3.',
+  uploadProfilePhotoHint:
+    'Recommended 512×512 (1:1). PNG, JPEG, or WebP up to 1.5MB. Crop after selecting.',
   uploadInvalidImageType: 'Please choose a PNG, JPEG, or WebP image.',
+  imageCropTitle: 'Crop image',
+  imageCropHint: 'Drag to reposition. Use the slider to zoom in or out.',
+  imageCropZoom: 'Zoom',
+  imageCropConfirm: 'Apply crop',
+  imageCropProcessing: 'Processing…',
+  imageUploadHintPromoBanner:
+    'Recommended 1920×1080 (16:9). PNG, JPEG, or WebP up to {mb}MB. Crop after selecting.',
+  imageUploadHintCategory:
+    'Recommended 1200×900 (4:3). PNG, JPEG, or WebP up to {mb}MB. Crop after selecting.',
+  imageUploadHintProduct:
+    'Recommended 1200×1200 (1:1). PNG, JPEG, or WebP up to {mb}MB. Crop after selecting.',
+  imageUploadHintVendorLogo:
+    'Recommended 512×512 (1:1). PNG, JPEG, or WebP up to {mb}MB. Crop after selecting.',
+  imageUploadHintVendorBanner:
+    'Recommended 1680×525 (16:5). PNG, JPEG, or WebP up to {mb}MB. Crop after selecting.',
+  imageUploadHintAvatar:
+    'Recommended 512×512 (1:1). PNG, JPEG, or WebP up to {mb}MB. Crop after selecting.',
+  imageUploadHintReturnPhoto:
+    'Recommended 1600×1200 (4:3). PNG, JPEG, or WebP up to {mb}MB. Crop after selecting.',
+  imageUploadHintKyc: 'PNG, JPEG, WebP, or PDF up to {mb}MB.',
+  imageUploadInvalidDocumentType: 'Please choose a PNG, JPEG, WebP, or PDF file.',
   returnPhotosLabel: 'Photos (optional)',
   productImagesLabel: 'Product images',
   manageProductImages: 'Manage product images',

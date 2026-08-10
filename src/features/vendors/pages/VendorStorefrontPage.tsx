@@ -3,6 +3,7 @@
 import { Store } from 'lucide-react'
 import { useVendorStorefrontPage } from '../hooks/useVendorStorefrontPage'
 import { EmptyState } from '@/shared/components/EmptyState'
+import { MediaImage } from '@/shared/components/MediaImage'
 import { ProductGrid } from '@/features/products/components/ProductGrid'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
@@ -20,6 +21,7 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
   if (vendorLoading) {
     return (
       <div className="storefront-container py-10 space-y-4">
+        <Skeleton className="aspect-[16/5] w-full rounded-md" />
         <Skeleton className="h-10 w-64" />
         <Skeleton className="h-5 w-96" />
         <div className="mt-8 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -47,13 +49,27 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
 
   return (
     <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[200px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_10%,transparent),transparent_55%)]"
-      />
+      {vendor.bannerUrl ? (
+        <div className="relative aspect-[16/5] w-full overflow-hidden border-b border-line bg-paper">
+          <MediaImage
+            src={vendor.bannerUrl}
+            alt={vendor.businessName}
+            unavailableLabel={LABELS.imageNotAvailable}
+            sizes="100vw"
+            className="absolute inset-0"
+            imageClassName="object-cover"
+            priority
+          />
+        </div>
+      ) : (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[200px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_10%,transparent),transparent_55%)]"
+        />
+      )}
 
       <div className="storefront-container relative py-8">
-        <header className="flex items-center gap-4 mb-8">
+        <header className="mb-8 flex items-center gap-4">
           {vendor.logoUrl ? (
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-line bg-surface">
               <Image
@@ -77,7 +93,7 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
               {vendor.businessName}
             </h1>
             {vendor.description ? (
-              <p className="mt-1 text-[0.9375rem] text-ink-muted max-w-prose">
+              <p className="mt-1 max-w-prose text-[0.9375rem] text-ink-muted">
                 {vendor.description}
               </p>
             ) : null}

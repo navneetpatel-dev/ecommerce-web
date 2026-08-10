@@ -8,13 +8,18 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avat
 import { Badge } from '@/shared/components/ui/badge'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { FormError } from '@/shared/components/FormError'
+import { ImageCropDialog } from '@/shared/components/ImageCropDialog'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { PATHS } from '@/shared/constants/paths'
 import { LABELS } from '@/shared/constants/labels'
-import { MAX_AVATAR_UPLOAD_BYTES } from '@/shared/constants/uploads'
+import type { ImageMimeType } from '@/shared/constants/imageSpecs'
+import { getImageUploadSpec } from '@/shared/constants/imageSpecs'
+import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
 import { formatLabel } from '@/shared/utils/formatLabel'
+import { normalizeImageMimeType } from '@/shared/utils/imageProcessing'
 import { formatOrderDate } from '@/features/orders/utils/format'
 import { readFileAsDataUrl } from '@/features/uploads/api/uploads.queries'
+import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { useAccountOverview } from '../../hooks/useAccountOverview'
 import { useUploadAvatar } from '../../api/account.queries'
 import type { AccountSectionId } from '../../types'
@@ -42,6 +47,10 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
   const uploadAvatar = useUploadAvatar()
   const fileRef = useRef<HTMLInputElement>(null)
   const [localError, setLocalError] = useState<string | null>(null)
+  const [cropSrc, setCropSrc] = useState<string | null>(null)
+  const [cropFilename, setCropFilename] = useState('avatar.jpg')
+  const [cropMimeType, setCropMimeType] = useState<ImageMimeType>('image/jpeg')
+  const avatarSpec = getImageUploadSpec(UPLOAD_ENTITY.USERS, UPLOAD_PURPOSE.AVATAR)
 
   if (isLoadingProfile) {
     return (
@@ -70,16 +79,24 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
   const memberSince = profile.createdAt ? formatOrderDate(profile.createdAt) : null
   const avatarSrc = profile.avatarUrl || undefined
 
-  const onPickFile = async (file: File | null) => {
-    if (!file) return
+  const onPickFile = (file: File | null) => {
+    if (!file || !avatarSpec) return
     if (!file.type.startsWith('image/')) {
       setLocalError(LABELS.uploadInvalidImageType)
       return
     }
-    if (file.size > MAX_AVATAR_UPLOAD_BYTES) {
+    if (file.size > avatarSpec.maxBytes) {
       setLocalError(formatLabel(LABELS.uploadTooLargeMb, { mb: '1.5' }))
       return
     }
+    setLocalError(null)
+    setCropFilename(file.name)
+    setCropMimeType(normalizeImageMimeType(file))
+    setCropSrc(URL.createObjectURL(file))
+    if (fileRef.current) fileRef.current.value = ''
+  }
+
+  const onAvatarCropped = async (file: File) => {
     setLocalError(null)
     try {
       const dataUrl = await readFileAsDataUrl(file)
@@ -89,8 +106,16 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
         filename: file.name,
       })
     } catch (err) {
-      setLocalError(err instanceof Error ? err.message : LABELS.uploadFailed)
+      setLocalError(getApiErrorMessage(err, LABELS.uploadFailed))
+    } finally {
+      if (cropSrc) URL.revokeObjectURL(cropSrc)
+      setCropSrc(null)
     }
+  }
+
+  const onAvatarCropCancelled = () => {
+    if (cropSrc) URL.revokeObjectURL(cropSrc)
+    setCropSrc(null)
   }
 
   return (
@@ -129,7 +154,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
               type="file"
               accept="image/png,image/jpeg,image/webp"
               className="sr-only"
-              onChange={(e) => void onPickFile(e.target.files?.[0] ?? null)}
+              onChange={(e) => onPickFile(e.target.files?.[0] ?? null)}
             />
           </div>
 
@@ -166,6 +191,22 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
           </div>
         </div>
       </motion.section>
+
+      {avatarSpec && cropSrc ? (
+        <ImageCropDialog
+          open
+          imageSrc={cropSrc}
+          aspectRatio={avatarSpec.aspectRatio}
+          outputWidth={avatarSpec.outputWidth}
+          outputHeight={avatarSpec.outputHeight}
+          sourceFilename={cropFilename}
+          mimeType={cropMimeType}
+          onOpenChange={(open) => {
+            if (!open) onAvatarCropCancelled()
+          }}
+          onConfirm={onAvatarCropped}
+        />
+      ) : null}
 
       <section className="border border-line bg-surface shadow-elevation-1">
         <div className="border-b border-line px-5 py-4 md:px-6">

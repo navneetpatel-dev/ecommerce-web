@@ -24,6 +24,8 @@ export type UploadBulkBody = {
 export type PresignFilePayload = {
   filename: string
   contentType: string
+  /** Exact byte length — must match the File body PUT to S3. */
+  contentLength: number
 }
 
 export type PresignSingleBody = {
@@ -32,6 +34,8 @@ export type PresignSingleBody = {
   purpose: UploadPurpose
   filename: string
   contentType: string
+  /** Exact byte length — must match the File body PUT to S3. */
+  contentLength: number
 }
 
 export type PresignBulkBody = {

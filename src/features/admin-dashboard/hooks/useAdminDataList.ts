@@ -7,6 +7,7 @@ import {
 } from '@/shared/api/pagination'
 import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
 import { LABELS } from '@/shared/constants/labels'
+import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { useClientPagination } from '@/shared/hooks/useClientPagination'
 import { shouldInferAdminColumn } from '../utils/adminTableCells'
 
@@ -70,7 +71,7 @@ export function useAdminDataList(load: AdminListLoadFn, pageSize = DEFAULT_PAGE_
           setTotal(data.total)
           setTotalPages(resolvedTotalPages)
         })
-        .catch((err) => setError(err instanceof Error ? err.message : LABELS.couldNotLoadData))
+        .catch((err) => setError(getApiErrorMessage(err, LABELS.couldNotLoadData)))
         .finally(() => setLoading(false))
     },
     [load, pageSize],

@@ -10,6 +10,7 @@ import { productsApi } from '@/features/products/api/products.api'
 import { usePermissions } from '@/shared/hooks/usePermissions'
 import { PERMISSIONS } from '@/shared/constants/permissions'
 import { LABELS } from '@/shared/constants/labels'
+import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { PRODUCT_STATUS } from '@/shared/constants/statuses'
 import { VendorProductImagesDialog } from '../components/VendorProductImagesDialog'
 import type { ProductListItem } from '@/shared/api/types'
@@ -77,7 +78,7 @@ export function useVendorProductsPage() {
         setShowCreate(false)
         router.refresh()
       } catch (err: unknown) {
-        setCreateError(err instanceof Error ? err.message : LABELS.uploadFailed)
+        setCreateError(getApiErrorMessage(err, LABELS.uploadFailed))
       } finally {
         setCreating(false)
       }
