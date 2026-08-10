@@ -12,24 +12,23 @@ const buttonVariants = cva(
       variant: {
         default: 'border border-transparent bg-ink text-paper hover:bg-ink/90',
         destructive: 'border border-transparent bg-danger text-paper hover:bg-danger/90',
-        outline: 'border border-line bg-surface text-ink hover:bg-paper hover:text-ink',
-        secondary: 'border border-line bg-surface text-ink hover:bg-paper',
+        /** Stronger edge so outline reads equal height to solid fills in dark mode. */
+        outline: 'border border-line-strong bg-surface text-ink hover:bg-paper hover:text-ink',
+        secondary: 'border border-line-strong bg-surface text-ink hover:bg-paper',
         ghost: 'border border-transparent hover:bg-brand-subtle hover:text-ink',
         link: 'border border-transparent text-brand underline-offset-4 hover:underline',
       },
       size: {
-        /** Standard CTA / form actions — 44px. */
-        default: 'h-11 min-h-11 px-5 sm:px-6 rounded-md text-[0.9375rem] [&_svg]:size-5',
         /**
-         * Page headers, toolbars, paired actions — 40px.
-         * Keep siblings on this size so rows align. Table menus override via TABLE_ROW_MENU_BUTTON_LAYOUT.
+         * One project control height (44px) — matches Input / Select.
+         * Use any size token for padding/icon density; height stays uniform.
+         * Table row menus override via TABLE_ROW_MENU_BUTTON_LAYOUT.
          */
-        sm: 'h-10 min-h-10 px-3.5 sm:px-4 rounded-md text-[0.8125rem] sm:text-[0.875rem] [&_svg]:size-4',
+        default: 'h-11 min-h-11 px-5 sm:px-6 rounded-md text-[0.9375rem] [&_svg]:size-5',
+        sm: 'h-11 min-h-11 px-4 sm:px-5 rounded-md text-[0.875rem] sm:text-[0.9375rem] [&_svg]:size-4',
         lg: 'h-11 min-h-11 px-5 sm:px-6 rounded-md text-[0.9375rem] [&_svg]:size-5',
-        /** Square control matching `default` height. */
         icon: 'h-11 min-h-11 w-11 rounded-md px-0 [&_svg]:size-5',
-        /** Square control matching `sm` height — use beside `size="sm"` buttons. */
-        'icon-sm': 'h-10 min-h-10 w-10 rounded-md px-0 [&_svg]:size-4',
+        'icon-sm': 'h-11 min-h-11 w-11 rounded-md px-0 [&_svg]:size-4',
       },
       fullWidth: {
         true: 'w-full',

@@ -95,15 +95,15 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     return (
       <div
         className={cn(
-          'flex h-11 w-full items-stretch overflow-hidden rounded-sm border bg-surface transition-colors',
+          'flex h-11 w-full items-stretch overflow-hidden rounded-sm border bg-surface-raised transition-colors',
           'focus-within:border-brand',
-          error ? 'border-danger' : 'border-line',
+          error ? 'border-danger' : 'border-line-strong',
           disabled && 'cursor-not-allowed opacity-50',
           className,
         )}
       >
         {prefix ? (
-          <span className="flex shrink-0 items-center border-r border-line bg-paper/60 px-3 text-[0.8125rem] font-medium text-ink-muted">
+          <span className="flex shrink-0 items-center border-r border-line-strong bg-paper/60 px-3 text-[0.8125rem] font-medium text-ink-muted">
             {prefix}
           </span>
         ) : null}
@@ -157,7 +157,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         ) : null}
 
         {showSteppers ? (
-          <div className="flex w-9 shrink-0 flex-col border-l border-line">
+          <div className="flex w-9 shrink-0 flex-col border-l border-line-strong">
             <button
               type="button"
               tabIndex={-1}
@@ -177,7 +177,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               disabled={disabled || atMin}
               aria-label={LABELS.decreaseValue}
               className={cn(
-                'flex flex-1 items-center justify-center border-t border-line text-ink-muted transition-colors',
+                'flex flex-1 items-center justify-center border-t border-line-strong text-ink-muted transition-colors',
                 'hover:bg-paper hover:text-ink disabled:pointer-events-none disabled:opacity-40',
               )}
               onClick={() => bump(-1)}

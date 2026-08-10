@@ -46,16 +46,27 @@ export function PlatformSettingsForm({
   onSave,
 }: PlatformSettingsFormProps) {
   return (
-    <div className="mx-auto w-full max-w-3xl">
-      <FormStack>
-        <div className="space-y-1">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-            {LABELS.platformSettings}
-          </h2>
-          <p className="max-w-2xl text-[0.9375rem] text-ink-muted">{LABELS.platformSettingsHint}</p>
+    <div className="w-full min-w-0">
+      <FormStack className="space-y-8">
+        <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+          <div className="min-w-0 space-y-1.5">
+            <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+              {LABELS.platformSettings}
+            </h2>
+            <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
+              {LABELS.platformSettingsHint}
+            </p>
+          </div>
+          <Button
+            type="button"
+            className="hidden w-full shrink-0 sm:inline-flex sm:w-auto"
+            onClick={onSave}
+          >
+            {LABELS.saveSettings}
+          </Button>
         </div>
 
-        <FormSection title={LABELS.settingsCommerce} hint={LABELS.settingsCommerceHint}>
+        <FormSection title={LABELS.settingsCommerce} hint={LABELS.settingsCommerceHint} columns={3}>
           <FormFieldFrame label={LABELS.defaultCommissionRate}>
             <NumberInput
               value={form.defaultCommissionRate}
@@ -102,7 +113,11 @@ export function PlatformSettingsForm({
           </FormFieldFrame>
         </FormSection>
 
-        <FormSection title={LABELS.settingsFulfillment} hint={LABELS.settingsFulfillmentHint}>
+        <FormSection
+          title={LABELS.settingsFulfillment}
+          hint={LABELS.settingsFulfillmentHint}
+          columns={3}
+        >
           <FormFieldFrame label={LABELS.defaultReturnWindow}>
             <NumberInput
               value={form.defaultReturnWindow}
@@ -131,10 +146,7 @@ export function PlatformSettingsForm({
               onChange={(value) => onReturnShippingFeeChange(value ?? 0)}
             />
           </FormFieldFrame>
-          <FormFieldFrame
-            label={LABELS.payoutCycle}
-            className="sm:col-span-2 sm:max-w-md"
-          >
+          <FormFieldFrame label={LABELS.payoutCycle}>
             <Select value={form.payoutCycle} onValueChange={onPayoutCycleChange}>
               <SelectTrigger>
                 <SelectValue />
@@ -149,7 +161,7 @@ export function PlatformSettingsForm({
           </FormFieldFrame>
         </FormSection>
 
-        <FormSection title={LABELS.settingsSupport} hint={LABELS.settingsSupportHint}>
+        <FormSection title={LABELS.settingsSupport} hint={LABELS.settingsSupportHint} columns={2}>
           <FormFieldFrame label={LABELS.supportEmail} htmlFor="platform-support-email">
             <Input
               id="platform-support-email"

@@ -14,10 +14,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          "flex h-11 w-full rounded-sm border bg-surface px-4 text-[0.9375rem] text-ink transition-colors file:border-0 file:bg-transparent file:text-[0.8125rem] file:font-medium placeholder:text-ink-faint outline-none focus-visible:border-brand disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-11 w-full rounded-sm border bg-surface-raised px-4 text-[0.9375rem] text-ink transition-colors file:border-0 file:bg-transparent file:text-[0.8125rem] file:font-medium placeholder:text-ink-faint outline-none focus-visible:border-brand disabled:cursor-not-allowed disabled:opacity-50",
           type === 'number' &&
             '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
-          error ? "border-danger" : "border-line",
+          error ? "border-danger" : "border-line-strong",
           className
         )}
         ref={ref}

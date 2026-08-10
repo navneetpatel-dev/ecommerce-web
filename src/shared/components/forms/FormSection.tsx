@@ -5,8 +5,8 @@ interface FormSectionProps {
   title: string
   hint?: string
   children: ReactNode
-  /** Grid columns from `sm` breakpoint. Defaults to 2. Pass 1 for stacked fields. */
-  columns?: 1 | 2
+  /** Grid columns from `sm` breakpoint. Defaults to 2. Pass 1 for stacked, 3 for wide settings pages. */
+  columns?: 1 | 2 | 3
   className?: string
   contentClassName?: string
 }
@@ -29,14 +29,16 @@ export function FormSection({
         className,
       )}
     >
-      <header className="border-b border-line/80 bg-paper/50 px-4 py-4 sm:px-5">
+      <header className="border-b border-line/80 bg-paper/50 px-4 py-4 sm:px-6 sm:py-5">
         <h3 className="text-[0.9375rem] font-semibold tracking-tight text-ink">{title}</h3>
-        {hint ? <p className="mt-1 text-[0.8125rem] text-ink-muted">{hint}</p> : null}
+        {hint ? <p className="mt-1 max-w-3xl text-[0.8125rem] text-ink-muted">{hint}</p> : null}
       </header>
       <div
         className={cn(
-          'grid gap-5 p-4 sm:gap-x-6 sm:gap-y-5 sm:p-5',
-          columns === 2 ? 'sm:grid-cols-2' : 'grid-cols-1',
+          'grid gap-5 p-4 sm:gap-x-6 sm:gap-y-6 sm:p-6 lg:gap-x-8 lg:p-8',
+          columns === 3 && 'sm:grid-cols-2 xl:grid-cols-3',
+          columns === 2 && 'sm:grid-cols-2',
+          columns === 1 && 'grid-cols-1',
           contentClassName,
         )}
       >

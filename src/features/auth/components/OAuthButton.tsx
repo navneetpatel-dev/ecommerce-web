@@ -7,7 +7,7 @@ export function OAuthButton({ provider }: { provider: string }) {
   return (
     <a
       href={`${apiUrl}/api/auth/${provider}`}
-      className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-line bg-surface px-4 py-2.5 text-[0.9375rem] font-medium text-ink shadow-[0_1px_0_rgba(15,23,42,0.03)] transition-colors hover:border-line-strong hover:bg-paper"
+      className="inline-flex h-11 min-h-11 w-full items-center justify-center gap-2 rounded-md border border-line-strong bg-surface px-4 text-[0.9375rem] font-medium text-ink transition-colors hover:border-line-strong hover:bg-paper"
     >
       {provider === 'google' ? (
         <svg aria-hidden viewBox="0 0 24 24" className="h-4 w-4 shrink-0">

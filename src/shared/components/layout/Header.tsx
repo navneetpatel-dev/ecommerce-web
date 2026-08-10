@@ -256,10 +256,10 @@ export function Header({
               type="button"
               onClick={toggleTheme}
               className={cn(
-                'inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wide transition-colors',
+                'inline-flex h-11 min-h-11 items-center gap-1.5 rounded-md border border-line-strong px-3 font-mono text-[0.6875rem] font-medium uppercase tracking-wide transition-colors',
                 isTransparent
                   ? 'border-paper/30 text-paper hover:bg-paper/10'
-                  : 'border-line text-ink-muted hover:bg-paper hover:text-ink'
+                  : 'bg-surface text-ink-muted hover:bg-paper hover:text-ink'
               )}
               aria-label={
                 mounted && theme === 'dark' ? LABELS.themeLight : LABELS.themeDark

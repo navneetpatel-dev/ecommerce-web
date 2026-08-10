@@ -91,8 +91,9 @@
   --paper: #121113;
   --surface: #1C1B1D;
   --surface-raised: #242226;
-  --line: #453F3A;
-  --line-strong: #5C554E;
+  /* Stronger lines so bordered controls keep visual weight vs light mode */
+  --line: #5A534C;
+  --line-strong: #746C63;
   --danger: #E2685C;
   --danger-subtle: #3A211D;
   --success: #7FA6C9;
