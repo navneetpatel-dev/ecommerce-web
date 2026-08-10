@@ -1,7 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/components/ui/card'
+import { AuthFormCard } from './AuthFormCard'
 import { Button } from '@/shared/components/ui/button'
 import { OtpInput } from '@/shared/components/OtpInput'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import { LABELS } from '@/shared/constants/labels'
 
 interface OtpCardProps {
   digits: string[]
@@ -35,12 +36,8 @@ export function OtpCard({
   onResend,
 }: OtpCardProps) {
   return (
-    <Card className="w-full max-w-[400px] border-line bg-surface shadow-elevation-1">
-      <CardHeader>
-        <CardTitle className="text-[1.75rem] font-display">Verify OTP</CardTitle>
-        <CardDescription>Enter the 6-digit code sent to your email.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <AuthFormCard title={LABELS.verifyOtpTitle} description={LABELS.verifyOtpHint}>
+      <div className="space-y-5">
         <OtpInput
           digits={digits}
           onSetInputRef={onSetInputRef}
@@ -50,32 +47,35 @@ export function OtpCard({
         />
         <div className="flex items-center justify-between gap-3">
           <span className="text-[0.8125rem] text-ink-muted">{timerLabel}</span>
-          <DisabledActionHint
-            disabled={!canResend}
-            message="You can resend a new code after the timer ends."
-          >
+          <DisabledActionHint disabled={!canResend} message={LABELS.resendCodeWait}>
             <button
               type="button"
-              className="text-[0.8125rem] text-brand hover:underline disabled:opacity-50 disabled:no-underline"
+              className="text-[0.8125rem] font-medium text-brand transition-colors hover:text-brand-hover hover:underline disabled:opacity-50 disabled:no-underline"
               disabled={!canResend}
               onClick={onResend}
             >
-              Resend code
+              {LABELS.resendCode}
             </button>
           </DisabledActionHint>
         </div>
-        {info && <p className="text-[0.8125rem] text-ink-muted">{info}</p>}
-        {error && <p className="text-[0.8125rem] text-danger">{error}</p>}
+        {info ? <p className="text-[0.8125rem] text-ink-muted">{info}</p> : null}
+        {error ? <p className="text-[0.8125rem] text-danger">{error}</p> : null}
         <DisabledActionHint
           disabled={!completed}
-          message="Enter the complete 6-digit code to verify."
+          message={LABELS.enterCompleteOtp}
           className="w-full"
         >
-          <Button className="w-full" disabled={!completed} loading={isVerifying} onClick={onVerify}>
-            Verify code
+          <Button
+            className="w-full"
+            size="lg"
+            disabled={!completed}
+            loading={isVerifying}
+            onClick={onVerify}
+          >
+            {LABELS.verifyCode}
           </Button>
         </DisabledActionHint>
-      </CardContent>
-    </Card>
+      </div>
+    </AuthFormCard>
   )
 }

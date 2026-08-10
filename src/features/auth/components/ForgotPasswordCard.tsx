@@ -1,8 +1,9 @@
 import { UseFormReturn } from 'react-hook-form'
 import Link from 'next/link'
-import { FormField } from '@/shared/components/FormField'
+import { FormFieldFrame } from '@/shared/components/forms'
+import { AuthFormCard } from './AuthFormCard'
 import { Button } from '@/shared/components/ui/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/shared/components/ui/card'
+import { Input } from '@/shared/components/ui/input'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 
@@ -17,28 +18,51 @@ interface ForgotPasswordCardProps {
   isSuccess: boolean
 }
 
-export function ForgotPasswordCard({ form, onSubmit, isPending, isSuccess }: ForgotPasswordCardProps) {
-  const { register, handleSubmit, formState: { errors } } = form
+export function ForgotPasswordCard({
+  form,
+  onSubmit,
+  isPending,
+  isSuccess,
+}: ForgotPasswordCardProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle className="text-[1.75rem] font-display">Forgot password</CardTitle>
-        <CardDescription>Enter your email and we'll send you a reset link</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {isSuccess ? (
-          <p className="text-[0.9375rem] text-success">If that email exists, a reset link has been sent.</p>
-        ) : (
-          <form onSubmit={handleSubmit((data) => onSubmit(data))} className="space-y-4">
-            <FormField id="email" label="Email" type="email" registration={register('email')} error={errors.email} />
-            <Button type="submit" className="w-full" loading={isPending}>Send reset link</Button>
-          </form>
-        )}
-      </CardContent>
-      <CardFooter>
-        <Link href={PATHS.login} className="text-[0.9375rem] text-brand hover:underline">{LABELS.backToLogin}</Link>
-      </CardFooter>
-    </Card>
+    <AuthFormCard
+      title={LABELS.forgotPasswordTitle}
+      description={LABELS.forgotPasswordHint}
+      footer={
+        <Link
+          href={PATHS.login}
+          className="block text-center text-[0.9375rem] font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
+        >
+          {LABELS.backToLogin}
+        </Link>
+      }
+    >
+      {isSuccess ? (
+        <p className="rounded-md border border-success/25 bg-success-subtle/60 px-4 py-3 text-[0.9375rem] text-success">
+          {LABELS.resetLinkSent}
+        </p>
+      ) : (
+        <form onSubmit={handleSubmit((data) => onSubmit(data))} className="space-y-5">
+          <FormFieldFrame label={LABELS.email} htmlFor="email" required error={errors.email?.message}>
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              error={Boolean(errors.email)}
+              {...register('email')}
+            />
+          </FormFieldFrame>
+          <Button type="submit" className="w-full" size="lg" loading={isPending}>
+            {LABELS.sendResetLink}
+          </Button>
+        </form>
+      )}
+    </AuthFormCard>
   )
 }

@@ -1,8 +1,12 @@
 import { UseFormReturn } from 'react-hook-form'
-import { FormField } from '@/shared/components/FormField'
+import Link from 'next/link'
+import { FormFieldFrame } from '@/shared/components/forms'
 import { FormError } from '@/shared/components/FormError'
+import { AuthFormCard } from './AuthFormCard'
 import { Button } from '@/shared/components/ui/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/shared/components/ui/card'
+import { PasswordInputContainer } from '@/shared/containers/PasswordInputContainer'
+import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from '@/shared/constants/paths'
 
 interface ResetPasswordInput {
   token: string
@@ -17,29 +21,45 @@ interface ResetPasswordCardProps {
 }
 
 export function ResetPasswordCard({ form, onSubmit, error, isPending }: ResetPasswordCardProps) {
-  const { register, handleSubmit, formState: { errors } } = form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle className="text-[1.75rem] font-display">Reset password</CardTitle>
-        <CardDescription>Enter your new password</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <input type="hidden" {...register('token')} />
-          <FormField 
-            id="newPassword" 
-            label="New Password" 
-            type="password"
+    <AuthFormCard
+      title={LABELS.resetPasswordTitle}
+      description={LABELS.resetPasswordHint}
+      footer={
+        <Link
+          href={PATHS.login}
+          className="block text-center text-[0.9375rem] font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
+        >
+          {LABELS.backToLogin}
+        </Link>
+      }
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <input type="hidden" {...register('token')} />
+        <FormFieldFrame
+          label={LABELS.newPassword}
+          htmlFor="newPassword"
+          required
+          error={errors.newPassword?.message}
+        >
+          <PasswordInputContainer
+            id="newPassword"
             autoComplete="new-password"
-            registration={register('newPassword')} 
-            error={errors.newPassword} 
+            error={!!errors.newPassword}
+            {...register('newPassword')}
           />
-          <FormError error={error} fallback="Reset failed or link expired." />
-          <Button type="submit" className="w-full" loading={isPending}>Reset password</Button>
-        </form>
-      </CardContent>
-    </Card>
+        </FormFieldFrame>
+        <FormError error={error} fallback={LABELS.resetPasswordFailed} />
+        <Button type="submit" className="w-full" size="lg" loading={isPending}>
+          {LABELS.resetPassword}
+        </Button>
+      </form>
+    </AuthFormCard>
   )
 }

@@ -1,7 +1,9 @@
 import { UseFormReturn } from 'react-hook-form'
-import { FormField } from '@/shared/components/FormField'
+import { FormFieldFrame, FormSection, FormStack, FormActions } from '@/shared/components/forms'
 import { FormError } from '@/shared/components/FormError'
 import { Button } from '@/shared/components/ui/button'
+import { PasswordInputContainer } from '@/shared/containers/PasswordInputContainer'
+import { LABELS } from '@/shared/constants/labels'
 
 interface ChangePasswordInput {
   currentPassword: string
@@ -25,50 +27,61 @@ export function ChangePasswordSection({
   isSuccess,
   onChangeAgain,
 }: ChangePasswordSectionProps) {
-  const { register, handleSubmit, formState: { errors } } = form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form
 
   return (
-    <div className="border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6">
-      <h2 className="font-display text-[1.125rem] text-ink">Change password</h2>
-      <p className="mt-1 text-[0.875rem] text-ink-muted">
-        Use a strong password you don&apos;t reuse elsewhere.
-      </p>
-
-      <div className="mt-5">
+    <FormStack>
+      <FormSection title={LABELS.changePasswordTitle} hint={LABELS.changePasswordHint} columns={1}>
         {isSuccess ? (
           <div className="space-y-3">
-            <p className="text-[0.9375rem] text-success">Password changed successfully.</p>
+            <p className="text-[0.9375rem] text-success">{LABELS.changePasswordSuccess}</p>
             {onChangeAgain ? (
               <Button type="button" variant="outline" onClick={onChangeAgain}>
-                Change again
+                {LABELS.changePasswordAgain}
               </Button>
             ) : null}
           </div>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              id="currentPassword"
-              label="Current Password"
-              type="password"
-              autoComplete="current-password"
-              registration={register('currentPassword')}
-              error={errors.currentPassword}
-            />
-            <FormField
-              id="newPassword"
-              label="New Password"
-              type="password"
-              autoComplete="new-password"
-              registration={register('newPassword')}
-              error={errors.newPassword}
-            />
-            <FormError error={error} fallback="Could not change password." />
-            <Button type="submit" loading={isPending}>
-              Change password
-            </Button>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:col-span-2">
+            <FormFieldFrame
+              label={LABELS.currentPassword}
+              htmlFor="currentPassword"
+              required
+              error={errors.currentPassword?.message}
+            >
+              <PasswordInputContainer
+                id="currentPassword"
+                autoComplete="current-password"
+                error={!!errors.currentPassword}
+                {...register('currentPassword')}
+              />
+            </FormFieldFrame>
+            <FormFieldFrame
+              label={LABELS.newPassword}
+              htmlFor="newPassword"
+              required
+              error={errors.newPassword?.message}
+            >
+              <PasswordInputContainer
+                id="newPassword"
+                autoComplete="new-password"
+                error={!!errors.newPassword}
+                {...register('newPassword')}
+              />
+            </FormFieldFrame>
+            <FormError error={error} fallback={LABELS.couldNotChangePassword} />
+            <FormActions className="border-0 pt-1">
+              <Button type="submit" loading={isPending}>
+                {LABELS.changePassword}
+              </Button>
+            </FormActions>
           </form>
         )}
-      </div>
-    </div>
+      </FormSection>
+    </FormStack>
   )
 }

@@ -1,9 +1,5 @@
-import { ContentPageSkeleton } from '@/shared/components/Skeletons'
+import { AuthPageSkeleton } from '@/features/auth/components/AuthPageSkeleton'
 
-export default function RegisterLoading() {
-  return (
-    <div className="min-h-screen bg-paper">
-      <ContentPageSkeleton />
-    </div>
-  )
+export default function AuthLoading() {
+  return <AuthPageSkeleton />
 }

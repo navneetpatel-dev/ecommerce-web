@@ -1,10 +1,13 @@
 import { UseFormReturn } from 'react-hook-form'
 import Link from 'next/link'
-import { FormField } from '@/shared/components/FormField'
+import { FormFieldFrame } from '@/shared/components/forms'
 import { FormError } from '@/shared/components/FormError'
+import { AuthFormCard } from './AuthFormCard'
+import { OAuthDivider } from './OAuthDivider'
 import { OAuthButton } from './OAuthButton'
 import { Button } from '@/shared/components/ui/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/shared/components/ui/card'
+import { Input } from '@/shared/components/ui/input'
+import { PasswordInputContainer } from '@/shared/containers/PasswordInputContainer'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 
@@ -23,31 +26,73 @@ interface RegisterCardProps {
 }
 
 export function RegisterCard({ form, onSubmit, error, isPending }: RegisterCardProps) {
-  const { register, handleSubmit, formState: { errors } } = form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form
 
   return (
-    <Card className="w-full max-w-[400px] mx-auto">
-      <CardHeader>
-        <CardTitle className="text-[1.75rem] font-display">Create an account</CardTitle>
-        <CardDescription>Join the marketplace</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <FormField id="name" label="Name" registration={register('name')} error={errors.name} />
-          <FormField id="email" label="Email" type="email" registration={register('email')} error={errors.email} />
-          <FormField id="phone" label="Phone (optional)" type="tel" registration={register('phone')} error={errors.phone} />
-          <FormField id="password" label="Password" type="password" autoComplete="new-password" registration={register('password')} error={errors.password} />
-          <FormError error={error} fallback="Registration failed" />
-          <Button type="submit" className="w-full" loading={isPending}>Register</Button>
-        </form>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-4">
-        <OAuthButton provider="google" />
-        <p className="text-[0.9375rem] text-ink-muted">
+    <AuthFormCard
+      title={LABELS.createAccount}
+      description={LABELS.createAccountHint}
+      footer={
+        <p className="text-center text-[0.9375rem] text-ink-muted">
           {LABELS.alreadyHaveAccount}{' '}
-          <Link href={PATHS.login} className="text-brand hover:underline">{LABELS.logIn}</Link>
+          <Link
+            href={PATHS.login}
+            className="font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
+          >
+            {LABELS.logIn}
+          </Link>
         </p>
-      </CardFooter>
-    </Card>
+      }
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <FormFieldFrame label={LABELS.name} htmlFor="name" required error={errors.name?.message}>
+          <Input id="name" autoComplete="name" error={Boolean(errors.name)} {...register('name')} />
+        </FormFieldFrame>
+        <FormFieldFrame label={LABELS.email} htmlFor="email" required error={errors.email?.message}>
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            error={Boolean(errors.email)}
+            {...register('email')}
+          />
+        </FormFieldFrame>
+        <FormFieldFrame label={LABELS.phoneOptional} htmlFor="phone" error={errors.phone?.message}>
+          <Input
+            id="phone"
+            type="tel"
+            autoComplete="tel"
+            error={Boolean(errors.phone)}
+            {...register('phone')}
+          />
+        </FormFieldFrame>
+        <FormFieldFrame
+          label={LABELS.password}
+          htmlFor="password"
+          required
+          error={errors.password?.message}
+        >
+          <PasswordInputContainer
+            id="password"
+            autoComplete="new-password"
+            error={!!errors.password}
+            {...register('password')}
+          />
+        </FormFieldFrame>
+        <FormError error={error} fallback={LABELS.registrationFailed} />
+        <Button type="submit" className="w-full" size="lg" loading={isPending}>
+          {LABELS.register}
+        </Button>
+      </form>
+
+      <div className="space-y-3">
+        <OAuthDivider />
+        <OAuthButton provider="google" />
+      </div>
+    </AuthFormCard>
   )
 }

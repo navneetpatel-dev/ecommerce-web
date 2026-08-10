@@ -1,11 +1,11 @@
 import { UseFormReturn } from 'react-hook-form'
 import Link from 'next/link'
 import { LoginFormFields } from './LoginFormFields'
+import { AuthFormCard } from './AuthFormCard'
 import { FormError } from '@/shared/components/FormError'
 import { OAuthDivider } from './OAuthDivider'
 import { OAuthButton } from './OAuthButton'
 import { Button } from '@/shared/components/ui/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/shared/components/ui/card'
 import { PATHS } from '@/shared/constants/paths'
 import { LABELS } from '@/shared/constants/labels'
 import type { LoginInput } from '../schemas/auth.schema'
@@ -18,33 +18,40 @@ interface LoginCardProps {
 }
 
 export function LoginCard({ form, onSubmit, error, isPending }: LoginCardProps) {
-  const { register, handleSubmit, formState: { errors } } = form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form
 
   return (
-    <Card className="w-full max-w-[400px] mx-auto">
-      <CardHeader>
-        <CardTitle className="text-[1.75rem] font-display">{LABELS.welcomeBack}</CardTitle>
-        <CardDescription>{LABELS.logInToAccount}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <LoginFormFields register={register} errors={errors} />
-          <FormError error={error} fallback={LABELS.loginFailed} />
-          <Button type="submit" className="w-full" loading={isPending}>
-            {LABELS.logIn}
-          </Button>
-        </form>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-4">
-        <OAuthDivider />
-        <OAuthButton provider="google" />
-        <p className="text-[0.9375rem] text-ink-muted">
+    <AuthFormCard
+      title={LABELS.welcomeBack}
+      description={LABELS.logInToAccount}
+      footer={
+        <p className="text-center text-[0.9375rem] text-ink-muted">
           {LABELS.dontHaveAccount}{' '}
-          <Link href={PATHS.register} className="text-brand hover:underline">
+          <Link
+            href={PATHS.register}
+            className="font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
+          >
             {LABELS.register}
           </Link>
         </p>
-      </CardFooter>
-    </Card>
+      }
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <LoginFormFields register={register} errors={errors} />
+        <FormError error={error} fallback={LABELS.loginFailed} />
+        <Button type="submit" className="w-full" size="lg" loading={isPending}>
+          {LABELS.logIn}
+        </Button>
+      </form>
+
+      <div className="space-y-3">
+        <OAuthDivider />
+        <OAuthButton provider="google" />
+      </div>
+    </AuthFormCard>
   )
 }
