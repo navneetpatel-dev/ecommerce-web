@@ -28,9 +28,21 @@ export const adminUsersApi = {
     const res = await apiClient.getWithResponse<CurrentUser[]>(API.users.list(q.toString()))
     return unwrapPaginatedList(res)
   },
-  listAssignees: (permission: AssigneePermission) => {
-    const q = new URLSearchParams({ permission })
-    return apiClient.get<AssigneeCandidate[]>(API.users.assignees(q.toString()))
+  listAssignees: async (params: {
+    permission: AssigneePermission
+    page?: number
+    limit?: number
+    search?: string
+  }): Promise<PaginatedList<AssigneeCandidate>> => {
+    const q = new URLSearchParams()
+    q.set('permission', params.permission)
+    if (params.page) q.set('page', String(params.page))
+    if (params.limit) q.set('limit', String(params.limit))
+    if (params.search) q.set('search', params.search)
+    const res = await apiClient.getWithResponse<AssigneeCandidate[]>(
+      API.users.assignees(q.toString()),
+    )
+    return unwrapPaginatedList(res)
   },
   getById: (id: string) => apiClient.get<CurrentUser>(API.users.detail(id)),
   updateStatus: (id: string, status: UserStatus) =>

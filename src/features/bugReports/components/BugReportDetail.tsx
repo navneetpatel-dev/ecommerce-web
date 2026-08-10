@@ -512,7 +512,6 @@ export function BugReportDetail({ report, mode, backHref }: Props) {
                       onChange={setAssigneeId}
                       allowNone
                       noneLabel={LABELS.bugAssigneeNone}
-                      placeholder={LABELS.bugAssigneePlaceholder}
                       currentOption={
                         report.assignedToId
                           ? {

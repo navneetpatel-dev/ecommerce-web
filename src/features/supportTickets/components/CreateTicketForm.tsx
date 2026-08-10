@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useMemo, useState } from 'react'
+import { useCallback, useId, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { FormError } from '@/shared/components/FormError'
@@ -14,8 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select'
+import {
+  InfiniteSingleSelect,
+  type InfiniteSingleSelectPageQuery,
+  type InfiniteSingleSelectPageResult,
+} from '@/shared/components/InfiniteSingleSelect'
 import { LABELS } from '@/shared/constants/labels'
-import { MAX_PAGE_LIMIT } from '@/shared/constants/pagination'
+import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
 import {
   SUPPORT_TICKET_CATEGORY,
   SUPPORT_TICKET_CATEGORY_VALUES,
@@ -25,7 +30,6 @@ import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import { formatInr, formatOrderDate, shortOrderId } from '@/features/orders/utils/format'
 import { ordersApi } from '@/features/orders/api/orders.api'
-import { useQuery } from '@tanstack/react-query'
 import { useCreateSupportTicket } from '../api/supportTickets.queries'
 import {
   TICKET_DESCRIPTION_MAX,
@@ -34,20 +38,23 @@ import {
 import { TicketAttachmentUploader, type UploadedMediaAttachment } from './TicketAttachmentUploader'
 import { TICKET_CATEGORY_LABEL } from '../utils/labels'
 
-const NO_ORDER = '__none__'
-
 type Props = {
   successHref: (id: string) => string
+}
+
+function formatOrderOption(order: {
+  id: string
+  createdAt: string
+  status: string
+  totalAmount: string | number
+}): string {
+  return `#${shortOrderId(order.id)} · ${formatOrderDate(order.createdAt)} · ${order.status.replaceAll('_', ' ')} · ${formatInr(Number(order.totalAmount))}`
 }
 
 export function CreateTicketForm({ successHref }: Props) {
   const router = useRouter()
   const draftId = useMemo(() => crypto.randomUUID(), [])
   const create = useCreateSupportTicket()
-  const ordersQuery = useQuery({
-    queryKey: ['orders', 'mine', 'ticket-picker', MAX_PAGE_LIMIT],
-    queryFn: () => ordersApi.myOrders(1, MAX_PAGE_LIMIT),
-  })
 
   const subjectId = useId()
   const descId = useId()
@@ -55,11 +62,25 @@ export function CreateTicketForm({ successHref }: Props) {
   const [subject, setSubject] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState<SupportTicketCategory>(SUPPORT_TICKET_CATEGORY.OTHER)
-  const [relatedOrderId, setRelatedOrderId] = useState(NO_ORDER)
+  const [relatedOrderId, setRelatedOrderId] = useState('')
   const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>([])
   const [formError, setFormError] = useState<string | null>(null)
 
-  const orders = ordersQuery.data?.items ?? []
+  const fetchOrdersPage = useCallback(
+    async (query: InfiniteSingleSelectPageQuery): Promise<InfiniteSingleSelectPageResult> => {
+      const result = await ordersApi.myOrders(query.page, query.limit)
+      return {
+        items: result.items.map((order) => ({
+          id: order.id,
+          label: formatOrderOption(order),
+        })),
+        page: result.page,
+        totalPages: result.totalPages,
+        total: result.total,
+      }
+    },
+    [],
+  )
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -93,7 +114,7 @@ export function CreateTicketForm({ successHref }: Props) {
         subject: trimmedSubject.slice(0, TICKET_SUBJECT_MAX),
         description: trimmedDescription.slice(0, TICKET_DESCRIPTION_MAX),
         category,
-        relatedOrderId: relatedOrderId === NO_ORDER ? null : relatedOrderId,
+        relatedOrderId: relatedOrderId.trim() || null,
         attachmentUrls: attachments.map(({ url, type, durationSeconds }) => ({
           url,
           type,
@@ -191,23 +212,18 @@ export function CreateTicketForm({ successHref }: Props) {
           columns={1}
         >
           <FormFieldFrame label={LABELS.ticketSelectOrder}>
-            <Select value={relatedOrderId} onValueChange={setRelatedOrderId}>
-              <SelectTrigger>
-                <SelectValue placeholder={LABELS.ticketSelectOrder} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={NO_ORDER}>{LABELS.ticketNoOrder}</SelectItem>
-                {orders.map((order) => (
-                  <SelectItem key={order.id} value={order.id}>
-                    #{shortOrderId(order.id)} · {formatOrderDate(order.createdAt)} ·{' '}
-                    {order.status.replaceAll('_', ' ')} · {formatInr(order.totalAmount)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {!ordersQuery.isLoading && orders.length === 0 ? (
-              <p className="mt-1 text-[0.75rem] text-ink-muted">{LABELS.ticketNoOrdersYet}</p>
-            ) : null}
+            <InfiniteSingleSelect
+              value={relatedOrderId}
+              onChange={setRelatedOrderId}
+              fetchPage={fetchOrdersPage}
+              allowNone
+              noneLabel={LABELS.ticketNoOrder}
+              placeholder={LABELS.ticketSelectOrder}
+              searchable={false}
+              emptyMessage={LABELS.ticketNoOrdersYet}
+              pageSize={DEFAULT_PAGE_LIMIT}
+              idPrefix="ticket-order"
+            />
           </FormFieldFrame>
         </FormSection>
 

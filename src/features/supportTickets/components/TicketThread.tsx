@@ -252,7 +252,6 @@ function TicketDetailsPanel({
                 permission={PERMISSIONS.TICKET_MANAGE}
                 value={assigneeId}
                 onChange={onAssigneeChange}
-                placeholder={LABELS.ticketAssigneePlaceholder}
                 currentOption={
                   ticket.assignedToId
                     ? {

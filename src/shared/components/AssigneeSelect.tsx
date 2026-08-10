@@ -1,21 +1,15 @@
 'use client'
 
-import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useCallback, useMemo } from 'react'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/components/ui/select'
+  InfiniteSingleSelect,
+  type InfiniteSingleSelectPageQuery,
+  type InfiniteSingleSelectPageResult,
+} from '@/shared/components/InfiniteSingleSelect'
 import { adminUsersApi } from '@/features/admin-dashboard/api/users.api'
 import { LABELS } from '@/shared/constants/labels'
 import { PERMISSIONS } from '@/shared/constants/permissions'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { cn } from '@/shared/utils/cn'
-
-const NONE_VALUE = '__none__'
+import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
 
 type AssigneePermission =
   | typeof PERMISSIONS.TICKET_MANAGE
@@ -29,9 +23,9 @@ type Props = {
   currentOption?: { id: string; name: string; email?: string | null } | null
   allowNone?: boolean
   noneLabel?: string
-  placeholder?: string
   disabled?: boolean
   className?: string
+  error?: boolean
 }
 
 function formatAssignee(user: { name: string; email?: string | null }): string {
@@ -46,63 +40,56 @@ export function AssigneeSelect({
   currentOption,
   allowNone = false,
   noneLabel = LABELS.ticketAssigneeNone,
-  placeholder = LABELS.ticketAssigneePlaceholder,
   disabled,
   className,
+  error,
 }: Props) {
-  const query = useQuery({
-    queryKey: ['users', 'assignees', permission],
-    queryFn: () => adminUsersApi.listAssignees(permission),
-    staleTime: 60_000,
-  })
-
-  const assignees = useMemo(() => {
-    const rows = [...(query.data ?? [])]
-    if (currentOption?.id && !rows.some((u) => u.id === currentOption.id)) {
-      rows.unshift({
-        id: currentOption.id,
-        name: currentOption.name,
-        email: currentOption.email ?? '',
+  const fetchPage = useCallback(
+    async (query: InfiniteSingleSelectPageQuery): Promise<InfiniteSingleSelectPageResult> => {
+      const result = await adminUsersApi.listAssignees({
+        permission,
+        page: query.page,
+        limit: query.limit,
+        search: query.search,
       })
+      return {
+        items: result.items.map((user) => ({
+          id: user.id,
+          label: formatAssignee(user),
+        })),
+        page: result.page,
+        totalPages: result.totalPages,
+        total: result.total,
+      }
+    },
+    [permission],
+  )
+
+  const pinnedOption = useMemo(() => {
+    if (!currentOption?.id) return null
+    return {
+      id: currentOption.id,
+      label: formatAssignee(currentOption),
     }
-    return rows
-  }, [query.data, currentOption])
-
-  const selectValue = value || (allowNone ? NONE_VALUE : undefined)
-
-  if (query.isLoading) {
-    return <Skeleton className={cn('h-10 w-full', className)} />
-  }
+  }, [currentOption])
 
   return (
-    <Select
-      value={selectValue}
-      disabled={disabled || query.isError}
-      onValueChange={(next) => {
-        if (next === NONE_VALUE) {
-          onChange('')
-          return
-        }
-        onChange(next)
-      }}
-    >
-      <SelectTrigger className={className}>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {allowNone ? <SelectItem value={NONE_VALUE}>{noneLabel}</SelectItem> : null}
-        {assignees.length === 0 ? (
-          <SelectItem value="__empty__" disabled>
-            {LABELS.ticketAssigneesEmpty}
-          </SelectItem>
-        ) : (
-          assignees.map((user) => (
-            <SelectItem key={user.id} value={user.id}>
-              {formatAssignee(user)}
-            </SelectItem>
-          ))
-        )}
-      </SelectContent>
-    </Select>
+    <InfiniteSingleSelect
+      value={value}
+      onChange={onChange}
+      fetchPage={fetchPage}
+      resetKey={permission}
+      pinnedOption={pinnedOption}
+      allowNone={allowNone}
+      noneLabel={noneLabel}
+      placeholder={LABELS.ticketAssigneePlaceholder}
+      searchPlaceholder={LABELS.searchUsers}
+      emptyMessage={LABELS.ticketAssigneesEmpty}
+      disabled={disabled}
+      error={error}
+      pageSize={DEFAULT_PAGE_LIMIT}
+      className={className}
+      idPrefix={`assignee-${permission}`}
+    />
   )
 }
