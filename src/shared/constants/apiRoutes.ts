@@ -54,8 +54,13 @@ export const API = {
     approve: (id: string) => `/api/vendors/${id}/approve`,
     reject: (id: string) => `/api/vendors/${id}/reject`,
     suspend: (id: string) => `/api/vendors/${id}/suspend`,
+    delete: (id: string) => `/api/vendors/${id}`,
     dashboardSummary: '/api/vendors/dashboard/summary',
     register: '/api/vendors/register',
+    documentRequirements: (query = '') =>
+      `/api/vendors/document-requirements${query ? `?${query}` : ''}`,
+    meKycChecklist: '/api/vendors/me/kyc-checklist',
+    kycChecklist: (id: string) => `/api/vendors/${id}/kyc-checklist`,
   },
   cart: {
     root: '/api/cart',
@@ -88,6 +93,8 @@ export const API = {
     admin: '/api/returns/admin',
     create: '/api/returns',
     transition: (id: string) => `/api/returns/${id}/transition`,
+    detail: (id: string) => `/api/returns/${id}`,
+    delete: (id: string) => `/api/returns/${id}`,
   },
   reviews: {
     forProduct: (productId: string) => `/api/reviews/product/${productId}`,
@@ -161,6 +168,8 @@ export const API = {
   },
   homepage: {
     banners: '/api/homepage/banners',
+    adminBanners: '/api/homepage/admin/banners',
+    adminBanner: (id: string) => `/api/homepage/admin/banners/${id}`,
   },
   admin: {
     dashboard: '/api/admin/dashboard',
@@ -195,15 +204,23 @@ export const API = {
   usersMe: {
     profile: '/api/users/me',
     export: '/api/users/me/export',
-    avatar: '/api/users/me/avatar',
     addresses: '/api/users/addresses',
     address: (id: string) => `/api/users/addresses/${id}`,
     addressDefault: (id: string) => `/api/users/addresses/${id}/default`,
   },
+  uploads: {
+    root: '/api/uploads',
+    bulk: '/api/uploads/bulk',
+    presign: '/api/uploads/presign',
+    presignBulk: '/api/uploads/presign/bulk',
+  },
   vendorDocs: {
     list: (vendorId: string) => `/api/vendors/${vendorId}/documents`,
     create: (vendorId: string) => `/api/vendors/${vendorId}/documents`,
+    meList: '/api/vendors/me/documents',
+    meCreate: '/api/vendors/me/documents',
     verify: (documentId: string) => `/api/vendors/documents/${documentId}/verify`,
     reject: (documentId: string) => `/api/vendors/documents/${documentId}/reject`,
+    viewUrl: (documentId: string) => `/api/vendors/documents/${documentId}/view-url`,
   },
 } as const

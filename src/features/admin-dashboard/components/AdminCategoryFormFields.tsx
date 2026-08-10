@@ -5,6 +5,7 @@ import type { UseFormReturn } from 'react-hook-form'
 import { Controller } from 'react-hook-form'
 import type { CategoryFormInput } from '../schemas/categories.schema'
 import { categoriesApi } from '@/features/categories/api/categories.api'
+import { FileUpload } from '@/shared/components/FileUpload'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import {
@@ -17,6 +18,7 @@ import {
 import { LABELS } from '@/shared/constants/labels'
 import { CATEGORY_STATUS } from '@/shared/constants/statuses'
 import { MAX_PAGE_LIMIT } from '@/shared/constants/pagination'
+import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
 import type { Category } from '@/shared/api/types'
 
 const NONE_PARENT = '__none__'
@@ -54,10 +56,15 @@ export function AdminCategoryFormFields({
   const {
     register,
     control,
+    setValue,
+    watch,
     formState: { errors, touchedFields, isSubmitted },
   } = form
 
   const [parents, setParents] = useState<Category[]>([])
+  const draftUploadId = useMemo(() => crypto.randomUUID(), [])
+  const uploadEntityId = excludeCategoryId ?? draftUploadId
+  const watchedImageUrl = watch('imageUrl')
 
   useEffect(() => {
     void categoriesApi
@@ -137,7 +144,17 @@ export function AdminCategoryFormFields({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor={`${idPrefix}-image`}>{LABELS.categoryImageUrl}</Label>
+        <Label>{LABELS.categoryImageUpload}</Label>
+        <FileUpload
+          entityType={UPLOAD_ENTITY.CATEGORIES}
+          entityId={uploadEntityId}
+          purpose={UPLOAD_PURPOSE.IMAGE}
+          accept="image/png,image/jpeg,image/webp"
+          valueUrl={watchedImageUrl?.trim() ? watchedImageUrl.trim() : null}
+          onUploaded={(url) =>
+            setValue('imageUrl', url, { shouldDirty: true, shouldValidate: true })
+          }
+        />
         <Input
           id={`${idPrefix}-image`}
           error={Boolean(showFieldError('imageUrl'))}

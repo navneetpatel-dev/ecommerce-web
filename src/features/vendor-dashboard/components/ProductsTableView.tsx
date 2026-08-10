@@ -20,11 +20,15 @@ interface ProductsTableViewProps {
   page: number
   totalPages?: number
   isDeleting?: boolean
+  isSubmitting?: boolean
+  actionMessage?: string | null
   onSearchChange: (value: string) => void
   onPageChange: (page: number) => void
   onAddProduct?: () => void
   onEditProduct?: (product: ProductRow) => void
   onDeleteProduct?: (product: ProductRow) => void
+  onSubmitForApproval?: (product: ProductRow) => void
+  onManageImages?: (product: ProductRow) => void
 }
 
 export function ProductsTableView({
@@ -34,11 +38,15 @@ export function ProductsTableView({
   page,
   totalPages,
   isDeleting,
+  isSubmitting,
+  actionMessage,
   onSearchChange,
   onPageChange,
   onAddProduct,
   onEditProduct,
   onDeleteProduct,
+  onSubmitForApproval,
+  onManageImages,
 }: ProductsTableViewProps) {
   return (
     <div>
@@ -48,6 +56,10 @@ export function ProductsTableView({
         onAddProduct={onAddProduct}
       />
 
+      {actionMessage ? (
+        <p className="mb-3 text-[0.8125rem] text-ink-muted">{actionMessage}</p>
+      ) : null}
+
       {isLoading ? (
         <SkeletonRows count={5} height="h-10 w-full" />
       ) : (
@@ -55,7 +67,10 @@ export function ProductsTableView({
           products={products}
           onEdit={onEditProduct}
           onDelete={onDeleteProduct}
+          onSubmitForApproval={onSubmitForApproval}
+          onManageImages={onManageImages}
           isDeleting={isDeleting}
+          isSubmitting={isSubmitting}
         />
       )}
 

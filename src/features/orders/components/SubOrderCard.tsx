@@ -14,11 +14,13 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 import { FormError } from '@/shared/components/FormError'
+import { FileUpload } from '@/shared/components/FileUpload'
 import { cn } from '@/shared/utils/cn'
 import { formatInr } from '../utils/format'
 import { buildSubOrderTimeline } from '../utils/timeline'
 import { ORDER_STATUS } from '@/shared/constants/statuses'
 import { LABELS } from '@/shared/constants/labels'
+import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import { REASON_CODES, type ReturnReasonCode } from '../hooks/useSubOrderReturn'
 
@@ -27,6 +29,8 @@ interface SubOrderCardProps {
   returnTarget: OrderItem | null
   reasonCode: ReturnReasonCode
   reason: string
+  photoUrls: string[]
+  draftUploadId: string
   isPending: boolean
   isSuccess: boolean
   error: Error | null
@@ -34,6 +38,7 @@ interface SubOrderCardProps {
   onCloseReturn: () => void
   onReasonCodeChange: (code: ReturnReasonCode) => void
   onReasonChange: (value: string) => void
+  onPhotoUrlsChange: (urls: string[]) => void
   onSubmitReturn: () => void
 }
 
@@ -42,6 +47,8 @@ export function SubOrderCard({
   returnTarget,
   reasonCode,
   reason,
+  photoUrls,
+  draftUploadId,
   isPending,
   isSuccess,
   error,
@@ -49,6 +56,7 @@ export function SubOrderCard({
   onCloseReturn,
   onReasonCodeChange,
   onReasonChange,
+  onPhotoUrlsChange,
   onSubmitReturn,
 }: SubOrderCardProps) {
   const timeline = buildSubOrderTimeline(subOrder)
@@ -207,6 +215,16 @@ export function SubOrderCard({
                 placeholder={LABELS.returnDetailsPlaceholder}
               />
             </div>
+            <FileUpload
+              mode="multiple"
+              entityType={UPLOAD_ENTITY.RETURNS}
+              entityId={draftUploadId}
+              purpose={UPLOAD_PURPOSE.PHOTOS}
+              accept="image/png,image/jpeg,image/webp"
+              valueUrls={photoUrls}
+              onUploaded={onPhotoUrlsChange}
+              label={LABELS.returnPhotosLabel}
+            />
             <FormError error={error} fallback={LABELS.couldNotSubmitReturn} />
             {isSuccess ? (
               <p className="text-[0.875rem] text-success">{LABELS.returnRequestedSuccess}</p>

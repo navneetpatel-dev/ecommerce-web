@@ -27,11 +27,22 @@ export function VendorShopSettingsPage() {
       ]}
     >
       <VendorShopSettingsForm
+        vendorId={settings.vendorId}
         businessName={settings.businessName}
         returnShippingFee={settings.returnShippingFee}
+        logoUrl={settings.logoUrl}
+        bannerUrl={settings.bannerUrl}
+        entityType={settings.entityType}
+        categoryIds={settings.categoryIds}
+        checklistKey={settings.checklistKey}
         message={settings.message}
         saving={settings.saving}
         onReturnShippingFeeChange={settings.setReturnShippingFee}
+        onLogoUploaded={settings.setLogoUrl}
+        onBannerUploaded={settings.setBannerUrl}
+        onEntityTypeChange={settings.setEntityType}
+        onCategoryIdsChange={settings.setCategoryIds}
+        onSaveCategories={settings.saveCategories}
         onSave={settings.save}
         onClearOverride={settings.clearOverride}
       />

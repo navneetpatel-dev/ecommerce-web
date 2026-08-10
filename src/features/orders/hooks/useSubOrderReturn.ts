@@ -22,12 +22,16 @@ export function useSubOrderReturn() {
   const [target, setTarget] = useState<OrderItem | null>(null)
   const [reasonCode, setReasonCode] = useState<ReturnReasonCode>(RETURN_REASON.DAMAGED)
   const [reason, setReason] = useState('')
+  const [photoUrls, setPhotoUrls] = useState<string[]>([])
+  const [draftUploadId, setDraftUploadId] = useState(() => crypto.randomUUID())
   const createReturn = useCreateReturn()
 
   const openDialog = (item: OrderItem) => {
     setTarget(item)
     setReason('')
     setReasonCode(RETURN_REASON.DAMAGED)
+    setPhotoUrls([])
+    setDraftUploadId(crypto.randomUUID())
     createReturn.reset()
   }
 
@@ -39,6 +43,7 @@ export function useSubOrderReturn() {
       orderItemId: target.id,
       reasonCode,
       reason: reason.trim(),
+      photoUrls,
     })
     setTarget(null)
   }
@@ -49,6 +54,9 @@ export function useSubOrderReturn() {
     setReasonCode,
     reason,
     setReason,
+    photoUrls,
+    setPhotoUrls,
+    draftUploadId,
     openDialog,
     closeDialog,
     submitReturn,

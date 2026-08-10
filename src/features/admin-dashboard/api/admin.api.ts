@@ -57,13 +57,14 @@ export const adminApi = {
     apiClient.patch(API.vendors.reject(id), { reason }),
   suspendVendor: (id: string, reason: string) =>
     apiClient.patch(API.vendors.suspend(id), { reason }),
+  deleteVendor: (id: string) => apiClient.delete(API.vendors.delete(id)),
 
   getVendorDocuments: (vendorId: string) =>
     apiClient.get<
       Array<{
         id: string
         vendorId: string
-        type: 'GST_CERT' | 'PAN' | 'BANK_PROOF'
+        type: import('@/shared/constants/statuses').VendorDocumentType
         url: string
         verified: boolean
         createdAt?: string
@@ -72,9 +73,12 @@ export const adminApi = {
   verifyVendorDocument: (documentId: string) =>
     apiClient.patch(API.vendorDocs.verify(documentId), {}),
   rejectVendorDocument: (documentId: string, reason: string) =>
-    apiClient.patch<{ id: string; rejected: boolean }>(API.vendorDocs.reject(documentId), {
-      reason,
-    }),
+    apiClient.patch<{ id: string; rejected: boolean; rejectionReason: string }>(
+      API.vendorDocs.reject(documentId),
+      {
+        reason,
+      },
+    ),
 
   pendingProducts: async (params: PaginationQuery = {}): Promise<PaginatedList<ProductDetail>> => {
     const q = new URLSearchParams({ status: PRODUCT_STATUS.PENDING_APPROVAL })

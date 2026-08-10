@@ -65,6 +65,8 @@ export const productsApi = {
   deleteVariant: (variantId: string) => apiClient.delete(API.products.variant(variantId)),
   addImage: (productId: string, body: { url: string; isPrimary?: boolean }) =>
     apiClient.post<ProductImage>(API.products.images(productId), body),
+  replaceImage: (imageId: string, body: { url: string; isPrimary?: boolean }) =>
+    apiClient.patch<ProductImage>(API.products.image(imageId), body),
   deleteImage: (imageId: string) => apiClient.delete(API.products.image(imageId)),
   setPrimaryImage: (imageId: string) => apiClient.patch<{ message: string }>(API.products.imagePrimary(imageId), {}),
 }

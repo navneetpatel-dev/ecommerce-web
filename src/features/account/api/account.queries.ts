@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import type { Address, CurrentUser } from '@/shared/api/types'
 import { STORAGE_KEYS } from '@/shared/constants/storage'
+import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
+import { useUploadFile } from '@/features/uploads/api/uploads.queries'
 import { accountApi } from './account.api'
 import type { UpdateProfileBody, AddressInput } from '@/features/users/api/users.api'
 
@@ -57,8 +59,18 @@ export function useUpdateProfile() {
 
 export function useUploadAvatar() {
   const queryClient = useQueryClient()
+  const uploadFile = useUploadFile()
+
   return useMutation({
-    mutationFn: (dataUrl: string) => accountApi.uploadAvatar(dataUrl),
+    mutationFn: async ({ userId, dataUrl, filename }: { userId: string; dataUrl: string; filename?: string }) => {
+      const uploaded = await uploadFile.mutateAsync({
+        entityType: UPLOAD_ENTITY.USERS,
+        entityId: userId,
+        purpose: UPLOAD_PURPOSE.AVATAR,
+        file: { dataUrl, filename: filename ?? 'avatar.jpg' },
+      })
+      return accountApi.updateProfile({ avatarUrl: uploaded.url })
+    },
     onSuccess: (profile) => {
       queryClient.setQueryData(accountKeys.profile, profile)
       syncAuthUser(profile)

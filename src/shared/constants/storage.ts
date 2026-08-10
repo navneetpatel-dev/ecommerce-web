@@ -2,6 +2,7 @@
 export const STORAGE_KEYS = {
   ACCESS_TOKEN: 'accessToken',
   SESSION: 'session',
+  KYC_NAME_MISMATCH_WARNING: 'kycNameMismatchWarning',
 } as const
 
 /** Cookie names shared with the API (must match backend COOKIES). */

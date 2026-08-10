@@ -16,7 +16,7 @@ interface VendorRowActionsProps {
   onReload: () => void
 }
 
-/** Suspend + KYC documents actions for the all-vendors list. */
+/** Suspend, delete, and KYC documents actions for the all-vendors list. */
 export function VendorRowActions({ row, onReload }: VendorRowActionsProps): ReactNode {
   const [docsOpen, setDocsOpen] = useState(false)
   const name = adminRowLabel(row)
@@ -42,6 +42,14 @@ export function VendorRowActions({ row, onReload }: VendorRowActionsProps): Reac
           requireReason
           reasonHint={LABELS.enterSuspendReason}
           onConfirm={(reason) => adminApi.suspendVendor(String(row.id), reason ?? '').then(onReload)}
+        />
+        <AdminConfirmAction
+          label={LABELS.delete}
+          dialogVariant="danger"
+          tone="danger"
+          title={LABELS.confirmDeleteVendorTitle}
+          description={formatLabel(LABELS.confirmDeleteVendorBody, { name })}
+          onConfirm={() => adminApi.deleteVendor(String(row.id)).then(onReload)}
         />
       </div>
 

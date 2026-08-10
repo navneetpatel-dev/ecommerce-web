@@ -3,7 +3,9 @@ import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/shared/components/ui/table'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
+import { Plus, Pencil, Trash2, Send, Images } from 'lucide-react'
+import { LABELS } from '@/shared/constants/labels'
+import { PRODUCT_STATUS } from '@/shared/constants/statuses'
 
 interface Product {
   id: string
@@ -52,10 +54,24 @@ interface ProductRowProps {
   product: Product
   onEdit?: (product: Product) => void
   onDelete?: (product: Product) => void
+  onSubmitForApproval?: (product: Product) => void
+  onManageImages?: (product: Product) => void
   isDeleting?: boolean
+  isSubmitting?: boolean
 }
 
-export function ProductRow({ product, onEdit, onDelete, isDeleting }: ProductRowProps) {
+export function ProductRow({
+  product,
+  onEdit,
+  onDelete,
+  onSubmitForApproval,
+  onManageImages,
+  isDeleting,
+  isSubmitting,
+}: ProductRowProps) {
+  const canSubmit =
+    Boolean(onSubmitForApproval) && product.status === PRODUCT_STATUS.DRAFT
+
   return (
     <TableRow>
       <TableCell className="font-medium">{product.name}</TableCell>
@@ -71,6 +87,31 @@ export function ProductRow({ product, onEdit, onDelete, isDeleting }: ProductRow
       </TableCell>
       <TableCell className="text-right">
         <div className="flex justify-end gap-1">
+          {canSubmit ? (
+            <DisabledActionHint disabled={Boolean(isSubmitting)} message={LABELS.submitForApproval}>
+              <Button
+                size="icon"
+                variant="ghost"
+                type="button"
+                aria-label={`${LABELS.submitForApproval}: ${product.name}`}
+                disabled={isSubmitting}
+                onClick={() => onSubmitForApproval?.(product)}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </DisabledActionHint>
+          ) : null}
+          {onManageImages ? (
+            <Button
+              size="icon"
+              variant="ghost"
+              type="button"
+              aria-label={`${LABELS.manageProductImages}: ${product.name}`}
+              onClick={() => onManageImages(product)}
+            >
+              <Images className="h-4 w-4" />
+            </Button>
+          ) : null}
           {onEdit && (
             <Button
               size="icon"
@@ -106,14 +147,20 @@ interface ProductsTableContentProps {
   products?: Product[]
   onEdit?: (product: Product) => void
   onDelete?: (product: Product) => void
+  onSubmitForApproval?: (product: Product) => void
+  onManageImages?: (product: Product) => void
   isDeleting?: boolean
+  isSubmitting?: boolean
 }
 
 export function ProductsTableContent({
   products,
   onEdit,
   onDelete,
+  onSubmitForApproval,
+  onManageImages,
   isDeleting,
+  isSubmitting,
 }: ProductsTableContentProps) {
   return (
     <Table>
@@ -141,7 +188,10 @@ export function ProductsTableContent({
               product={product}
               onEdit={onEdit}
               onDelete={onDelete}
+              onSubmitForApproval={onSubmitForApproval}
+              onManageImages={onManageImages}
               isDeleting={isDeleting}
+              isSubmitting={isSubmitting}
             />
           ))
         )}

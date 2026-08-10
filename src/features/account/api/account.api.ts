@@ -7,7 +7,6 @@ export const accountApi = {
   updateProfile: (body: UpdateProfileBody) => usersApi.updateProfile(body),
   deleteAccount: () => usersApi.deleteAccount(),
   exportAccount: () => usersApi.exportAccount(),
-  uploadAvatar: (dataUrl: string) => usersApi.uploadAvatar(dataUrl),
 
   getAddresses: () => usersApi.getAddresses(),
   createAddress: (body: AddressInput) => usersApi.createAddress(body),

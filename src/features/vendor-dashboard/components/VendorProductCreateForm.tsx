@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/shared/components/ui/button'
+import { FileUpload } from '@/shared/components/FileUpload'
 import { Input } from '@/shared/components/ui/input'
 import { NumberInput } from '@/shared/components/NumberInput'
 import {
@@ -11,6 +12,7 @@ import {
   SelectValue,
 } from '@/shared/components/ui/select'
 import { LABELS } from '@/shared/constants/labels'
+import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
 
 interface VendorProductCreateFormProps {
   name: string
@@ -18,12 +20,15 @@ interface VendorProductCreateFormProps {
   description: string
   categoryId: string
   categories: Array<{ id: string; name: string }>
+  imageUrls: string[]
+  draftUploadId: string
   createError: string | null
   creating: boolean
   onNameChange: (v: string) => void
   onPriceChange: (v: string) => void
   onDescriptionChange: (v: string) => void
   onCategoryChange: (v: string) => void
+  onImageUrlsChange: (urls: string[]) => void
   onSubmit: (e: React.FormEvent) => void
   onCancel: () => void
 }
@@ -34,12 +39,15 @@ export function VendorProductCreateForm({
   description,
   categoryId,
   categories,
+  imageUrls,
+  draftUploadId,
   createError,
   creating,
   onNameChange,
   onPriceChange,
   onDescriptionChange,
   onCategoryChange,
+  onImageUrlsChange,
   onSubmit,
   onCancel,
 }: VendorProductCreateFormProps) {
@@ -79,6 +87,19 @@ export function VendorProductCreateForm({
         value={description}
         onChange={(e) => onDescriptionChange(e.target.value)}
       />
+      <div className="sm:col-span-2">
+        <FileUpload
+          mode="multiple"
+          entityType={UPLOAD_ENTITY.PRODUCTS}
+          entityId={draftUploadId}
+          purpose={UPLOAD_PURPOSE.IMAGES}
+          accept="image/png,image/jpeg,image/webp"
+          valueUrls={imageUrls}
+          onUploaded={onImageUrlsChange}
+          label={LABELS.productImagesLabel}
+          disabled={creating}
+        />
+      </div>
       <div className="flex gap-2 sm:col-span-2">
         <Button type="submit" disabled={creating} loading={creating}>
           {creating ? LABELS.creatingEllipsis : LABELS.createProduct}

@@ -16,6 +16,7 @@ import {
   Wallet,
   ClipboardList,
   FileBarChart,
+  Images,
 } from 'lucide-react'
 import { usePermissions } from './usePermissions'
 import { ADMIN_NAV } from '@/shared/constants/adminNav'
@@ -25,6 +26,7 @@ const ADMIN_NAV_ICONS = {
   [PATHS.admin.vendors]: Users,
   [PATHS.admin.products]: Package,
   [PATHS.admin.categories]: FolderTree,
+  [PATHS.admin.banners]: Images,
   [PATHS.admin.orders]: ShoppingBag,
   [PATHS.admin.returns]: RotateCcw,
   [PATHS.admin.coupons]: Tags,

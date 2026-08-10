@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { Check, X } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { StatusDialog } from '@/shared/components/StatusDialog'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
+import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 
 type ConfirmMode = 'approve' | 'reject' | null
 
@@ -20,6 +22,8 @@ interface ModerationRowActionsProps {
   onConfirmReject: (reason: string) => void | Promise<unknown>
   isApproving?: boolean
   isRejecting?: boolean
+  approveDisabled?: boolean
+  approveDisabledHint?: string
 }
 
 const approveButtonClass = cn(
@@ -48,23 +52,30 @@ export function ModerationRowActions({
   onConfirmReject,
   isApproving = false,
   isRejecting = false,
+  approveDisabled = false,
+  approveDisabledHint,
 }: ModerationRowActionsProps) {
   const [mode, setMode] = useState<ConfirmMode>(null)
   const [reason, setReason] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [actionError, setActionError] = useState<string | null>(null)
 
   const close = () => {
     if (submitting) return
     setMode(null)
     setReason('')
+    setActionError(null)
   }
 
   const runApprove = async () => {
     setSubmitting(true)
+    setActionError(null)
     try {
       await onConfirmApprove()
       setMode(null)
       setReason('')
+    } catch (err) {
+      setActionError(getApiErrorMessage(err, LABELS.kycApproveBlocked))
     } finally {
       setSubmitting(false)
     }
@@ -73,10 +84,13 @@ export function ModerationRowActions({
   const runReject = async () => {
     if (!reason.trim()) return
     setSubmitting(true)
+    setActionError(null)
     try {
       await onConfirmReject(reason.trim())
       setMode(null)
       setReason('')
+    } catch (err) {
+      setActionError(getApiErrorMessage(err, LABELS.registrationFailed))
     } finally {
       setSubmitting(false)
     }
@@ -86,21 +100,30 @@ export function ModerationRowActions({
 
   return (
     <>
-      <Button
-        size="sm"
-        className={cn(approveButtonClass, 'flex-1 sm:flex-none')}
-        disabled={busy}
-        onClick={() => setMode('approve')}
+      <DisabledActionHint
+        disabled={approveDisabled}
+        message={approveDisabledHint ?? LABELS.kycApproveBlocked}
       >
-        <Check strokeWidth={2.5} aria-hidden />
-        <span>{LABELS.approve}</span>
-      </Button>
+        <Button
+          size="sm"
+          className={cn(approveButtonClass, 'flex-1 sm:flex-none')}
+          disabled={busy || approveDisabled}
+          onClick={() => {
+            setActionError(null)
+            setMode('approve')
+          }}
+        >
+          <Check strokeWidth={2.5} aria-hidden />
+          <span>{LABELS.approve}</span>
+        </Button>
+      </DisabledActionHint>
       <Button
         size="sm"
         className={cn(rejectButtonClass, 'flex-1 sm:flex-none')}
         disabled={busy}
         onClick={() => {
           setReason('')
+          setActionError(null)
           setMode('reject')
         }}
       >
@@ -115,7 +138,12 @@ export function ModerationRowActions({
         }}
         variant="success"
         title={approveTitle}
-        description={approveDescription}
+        description={
+          <>
+            <p>{approveDescription}</p>
+            {actionError ? <p className="mt-2 text-danger">{actionError}</p> : null}
+          </>
+        }
         secondaryAction={{
           label: LABELS.cancel,
           disabled: submitting || isApproving,
@@ -124,6 +152,8 @@ export function ModerationRowActions({
         primaryAction={{
           label: LABELS.approve,
           loading: submitting || isApproving,
+          disabled: approveDisabled,
+          disabledHint: approveDisabledHint,
           onClick: () => {
             void runApprove()
           },
@@ -137,7 +167,12 @@ export function ModerationRowActions({
         }}
         variant="danger"
         title={rejectTitle}
-        description={rejectDescription}
+        description={
+          <>
+            <p>{rejectDescription}</p>
+            {actionError ? <p className="mt-2 text-danger">{actionError}</p> : null}
+          </>
+        }
         secondaryAction={{
           label: LABELS.cancel,
           disabled: submitting || isRejecting,

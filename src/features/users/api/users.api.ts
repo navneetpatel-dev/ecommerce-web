@@ -6,6 +6,7 @@ export type UpdateProfileBody = {
   name?: string
   phone?: string | null
   emailMarketingConsent?: boolean
+  avatarUrl?: string | null
 }
 
 export type AddressInput = Omit<Address, 'id' | 'userId'>
@@ -16,8 +17,6 @@ export const usersApi = {
     apiClient.patch<CurrentUser>(API.usersMe.profile, body),
   deleteAccount: () => apiClient.delete<void>(API.usersMe.profile),
   exportAccount: () => apiClient.get<Record<string, unknown>>(API.usersMe.export),
-  uploadAvatar: (dataUrl: string) =>
-    apiClient.post<CurrentUser>(API.usersMe.avatar, { dataUrl }),
 
   getAddresses: () => apiClient.get<Address[]>(API.usersMe.addresses),
   createAddress: (body: AddressInput) =>

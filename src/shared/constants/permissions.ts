@@ -18,6 +18,7 @@ export const PERMISSIONS = {
   TAX_MANAGE: 'tax.manage',
   SHIPPING_MANAGE: 'shipping.manage',
   SETTINGS_MANAGE: 'settings.manage',
+  BANNER_MANAGE: 'banner.manage',
   AUDIT_VIEW: 'audit.view',
   ANALYTICS_VIEW: 'analytics.view',
   PRODUCT_CREATE: 'product.create',

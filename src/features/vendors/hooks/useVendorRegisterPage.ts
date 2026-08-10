@@ -9,6 +9,14 @@ export function useVendorRegisterPage() {
   const register = useVendorRegistration()
   const form = useForm<VendorRegisterInput>({
     resolver: zodResolver(VendorRegisterSchema),
+    defaultValues: {
+      businessName: '',
+      categoryIds: [],
+      description: '',
+      gstNumber: '',
+      panHolderName: '',
+      bankAccountHolderName: '',
+    },
   })
 
   return {

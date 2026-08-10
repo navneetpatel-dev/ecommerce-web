@@ -13,6 +13,7 @@ interface Vendor {
   id: string
   businessName: string
   slug: string
+  kycComplete?: boolean
 }
 
 interface VendorApprovalTableProps {
@@ -50,6 +51,12 @@ export function VendorApprovalTable({
       header: LABELS.slug,
       className: 'text-ink-muted',
       accessor: 'slug',
+    },
+    {
+      id: 'kyc',
+      header: LABELS.kycChecklist,
+      cell: (v) =>
+        v.kycComplete ? LABELS.kycChecklistComplete : LABELS.kycChecklistIncomplete,
     },
   ]
 
@@ -89,6 +96,8 @@ export function VendorApprovalTable({
               onConfirmReject={(reason) => onReject(v.id, reason)}
               isApproving={isApproving}
               isRejecting={isRejecting}
+              approveDisabled={!v.kycComplete}
+              approveDisabledHint={LABELS.kycApproveBlocked}
             />
           </div>
         )}
@@ -100,7 +109,10 @@ export function VendorApprovalTable({
           vendorName={docsVendor.businessName}
           open={Boolean(docsVendor)}
           onOpenChange={(open) => {
-            if (!open) setDocsVendor(null)
+            if (!open) {
+              setDocsVendor(null)
+              onRefresh?.()
+            }
           }}
         />
       ) : null}

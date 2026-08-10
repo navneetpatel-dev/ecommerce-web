@@ -20,6 +20,11 @@ export const ADMIN_NAV = [
     permissions: [PERMISSIONS.CATEGORY_MANAGE] as PermissionKey[],
   },
   {
+    href: PATHS.admin.banners,
+    label: LABELS.promoBanners,
+    permissions: [PERMISSIONS.BANNER_MANAGE] as PermissionKey[],
+  },
+  {
     href: PATHS.admin.orders,
     label: LABELS.orders,
     permissions: [PERMISSIONS.ORDER_MANAGE] as PermissionKey[],

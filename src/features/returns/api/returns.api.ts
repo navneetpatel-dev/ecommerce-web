@@ -7,6 +7,7 @@ export type CreateReturnBody = {
   orderItemId: string
   reasonCode: ReturnRequest['reasonCode']
   reason: string
+  photoUrls?: string[]
 }
 
 export const returnsApi = {
@@ -24,4 +25,5 @@ export const returnsApi = {
   create: (body: CreateReturnBody) => apiClient.post<ReturnRequest>(API.returns.create, body),
   transition: (id: string, status: ReturnRequest['status']) =>
     apiClient.patch<{ message: string }>(API.returns.transition(id), { status }),
+  delete: (id: string) => apiClient.delete(API.returns.delete(id)),
 }

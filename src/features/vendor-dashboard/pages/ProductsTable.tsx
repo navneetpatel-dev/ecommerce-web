@@ -8,6 +8,7 @@ import { useVendorProductsPage } from '../hooks/useVendorProductsPage'
 
 export function ProductsTable() {
   const page = useVendorProductsPage()
+  const ImagesDialog = page.ImagesDialog
 
   return (
     <RequirePermission permission={[...page.permission]}>
@@ -15,6 +16,7 @@ export function ProductsTable() {
         {page.showCreateForm && <VendorProductCreateForm {...page.createFormProps} />}
         <ProductsTableView {...page.tableViewProps} />
         <StatusDialog {...page.deleteDialogProps} />
+        {page.imagesDialogProps ? <ImagesDialog {...page.imagesDialogProps} /> : null}
       </>
     </RequirePermission>
   )

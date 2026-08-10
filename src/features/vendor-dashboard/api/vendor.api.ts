@@ -2,27 +2,35 @@ import { apiClient } from '@/shared/api/client'
 import { unwrapPaginatedList, type PaginatedList } from '@/shared/api/pagination'
 import { API } from '@/shared/constants/apiRoutes'
 import type { VendorSummary, CommissionLedgerEntry, PayoutEntry, ProductListItem } from '@/shared/api/types'
+import type { VendorEntityType } from '@/shared/constants/statuses'
+
+export type VendorShop = {
+  id: string
+  businessName: string
+  returnShippingFee: number | null
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  entityType?: VendorEntityType | null
+  categoryIds?: string[]
+  status?: string
+}
 
 export const vendorApi = {
   summary: () => apiClient.get<VendorSummary>(API.vendors.dashboardSummary),
-  getMyShop: () =>
-    apiClient.get<{
-      id: string
-      businessName: string
-      returnShippingFee: number | null
-    }>(API.vendors.me),
-  updateMyShop: (body: { returnShippingFee?: number | null }) =>
-    apiClient.patch<{
-      id: string
-      businessName: string
-      returnShippingFee: number | null
-    }>(API.vendors.me, body),
+  getMyShop: () => apiClient.get<VendorShop>(API.vendors.me),
+  updateMyShop: (body: {
+    returnShippingFee?: number | null
+    logoUrl?: string | null
+    bannerUrl?: string | null
+    entityType?: VendorEntityType
+    categoryIds?: string[]
+  }) => apiClient.patch<VendorShop>(API.vendors.me, body),
   products: (page = 1, filters?: { status?: string; search?: string }) => {
     const params = new URLSearchParams({ page: String(page) })
     if (filters?.status) params.set('status', filters.status)
     if (filters?.search) params.set('search', filters.search)
     return apiClient.get<{ items: ProductListItem[]; total: number; totalPages: number }>(
-      API.products.list(params.toString())
+      API.products.list(params.toString()),
     )
   },
   commissions: async (page = 1): Promise<PaginatedList<CommissionLedgerEntry>> => {

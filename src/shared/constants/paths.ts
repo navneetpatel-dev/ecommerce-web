@@ -42,6 +42,7 @@ export const PATHS = {
     vendors: '/admin/vendors',
     products: '/admin/products',
     categories: '/admin/categories',
+    banners: '/admin/banners',
     orders: '/admin/orders',
     returns: '/admin/returns',
     coupons: '/admin/coupons',

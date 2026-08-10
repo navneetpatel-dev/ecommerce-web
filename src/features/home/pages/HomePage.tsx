@@ -8,25 +8,14 @@ import { TrendingSection } from '../components/TrendingSection'
 import { VendorSpotlightSection } from '../components/VendorSpotlightSection'
 import { RecentlyViewedSection } from '../components/RecentlyViewedSection'
 import type { HeroSlide } from '../components/HeroSection'
+import { promoBannerToHeroSlide } from '../utils/promoBanner'
 
 export function HomePage() {
   const home = useHomePage()
 
   const heroSlides = useMemo<HeroSlide[] | undefined>(() => {
     if (!home.banners?.length) return undefined
-    return home.banners.map((banner) => ({
-      id: banner.id,
-      eyebrow: banner.eyebrow,
-      headline: banner.headline,
-      subheadline: banner.subheadline,
-      ctaLabel: banner.ctaLabel,
-      ctaHref: banner.ctaHref,
-      secondaryCtaLabel: banner.secondaryCtaLabel ?? undefined,
-      secondaryCtaHref: banner.secondaryCtaHref ?? undefined,
-      imageSrc: banner.imageSrc,
-      imageMobileSrc: banner.imageMobileSrc ?? undefined,
-      imageAlt: banner.imageAlt,
-    }))
+    return home.banners.map(promoBannerToHeroSlide)
   }, [home.banners])
 
   return (

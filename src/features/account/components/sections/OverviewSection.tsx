@@ -10,7 +10,11 @@ import { Skeleton } from '@/shared/components/ui/skeleton'
 import { FormError } from '@/shared/components/FormError'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
+import { MAX_AVATAR_UPLOAD_BYTES } from '@/shared/constants/uploads'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { formatOrderDate } from '@/features/orders/utils/format'
+import { readFileAsDataUrl } from '@/features/uploads/api/uploads.queries'
 import { useAccountOverview } from '../../hooks/useAccountOverview'
 import { useUploadAvatar } from '../../api/account.queries'
 import type { AccountSectionId } from '../../types'
@@ -69,19 +73,24 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
   const onPickFile = async (file: File | null) => {
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      setLocalError('Please choose a PNG, JPEG, or WebP image.')
+      setLocalError(LABELS.uploadInvalidImageType)
       return
     }
-    if (file.size > 1.5 * 1024 * 1024) {
-      setLocalError('Image must be under 1.5MB.')
+    if (file.size > MAX_AVATAR_UPLOAD_BYTES) {
+      setLocalError(formatLabel(LABELS.uploadTooLargeMb, { mb: '1.5' }))
       return
     }
     setLocalError(null)
-    const reader = new FileReader()
-    reader.onload = () => {
-      uploadAvatar.mutate(String(reader.result ?? ''))
+    try {
+      const dataUrl = await readFileAsDataUrl(file)
+      await uploadAvatar.mutateAsync({
+        userId: profile.id,
+        dataUrl,
+        filename: file.name,
+      })
+    } catch (err) {
+      setLocalError(err instanceof Error ? err.message : LABELS.uploadFailed)
     }
-    reader.readAsDataURL(file)
   }
 
   return (
@@ -103,7 +112,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
               onClick={() => fileRef.current?.click()}
               disabled={uploadAvatar.isPending}
               className="group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-              aria-label="Upload profile photo"
+              aria-label={LABELS.uploadProfilePhoto}
             >
               <Avatar className="h-24 w-24 border border-line text-[1.25rem] font-semibold text-ink">
                 {avatarSrc ? <AvatarImage src={avatarSrc} alt="" /> : null}
@@ -146,15 +155,13 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
             {memberSince ? (
               <p className="mt-2 text-[0.8125rem] text-ink-faint">Member since {memberSince}</p>
             ) : null}
-            <p className="mt-3 text-[0.8125rem] text-ink-muted">
-              Photo stored securely on AWS S3. PNG, JPEG, or WebP up to 1.5MB.
-            </p>
+            <p className="mt-3 text-[0.8125rem] text-ink-muted">{LABELS.uploadProfilePhotoHint}</p>
             <FormError
               error={
                 (uploadAvatar.error as Error | null) ??
                 (localError ? new Error(localError) : null)
               }
-              fallback="Could not upload photo."
+              fallback={LABELS.uploadFailed}
             />
           </div>
         </div>

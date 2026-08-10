@@ -82,7 +82,18 @@ export function useAdminReturnsPage(): AdminListPageModel {
       )
     }
 
-    if (buttons.length === 0) return null
+    buttons.push(
+      <AdminConfirmAction
+        key="delete"
+        label={LABELS.delete}
+        dialogVariant="danger"
+        tone="danger"
+        title={LABELS.confirmDeleteReturnTitle}
+        description={formatLabel(LABELS.confirmDeleteReturnBody, { name })}
+        onConfirm={() => returnsApi.delete(String(row.id)).then(reload)}
+      />,
+    )
+
     return <div className="flex flex-wrap gap-2">{buttons}</div>
   }, [])
 

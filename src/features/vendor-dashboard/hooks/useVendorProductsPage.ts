@@ -11,6 +11,7 @@ import { usePermissions } from '@/shared/hooks/usePermissions'
 import { PERMISSIONS } from '@/shared/constants/permissions'
 import { LABELS } from '@/shared/constants/labels'
 import { PRODUCT_STATUS } from '@/shared/constants/statuses'
+import { VendorProductImagesDialog } from '../components/VendorProductImagesDialog'
 import type { ProductListItem } from '@/shared/api/types'
 
 type RichProductItem = ProductListItem & {
@@ -29,9 +30,12 @@ export function useVendorProductsPage() {
   const [price, setPrice] = useState('')
   const [description, setDescription] = useState('')
   const [categoryId, setCategoryId] = useState('')
+  const [imageUrls, setImageUrls] = useState<string[]>([])
+  const [draftUploadId, setDraftUploadId] = useState(() => crypto.randomUUID())
   const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([])
   const [createError, setCreateError] = useState<string | null>(null)
   const [creating, setCreating] = useState(false)
+  const [imagesTarget, setImagesTarget] = useState<{ id: string; name: string } | null>(null)
 
   useEffect(() => {
     void categoriesApi.list().then((rows) => {
@@ -54,18 +58,31 @@ export function useVendorProductsPage() {
       }
       setCreating(true)
       setCreateError(null)
-      productsApi
-        .create({ name, categoryId, basePrice: Number(price), description: description || name })
-        .then(() => {
-          setName(''); setPrice(''); setDescription(''); setShowCreate(false)
-          router.refresh()
+      try {
+        const product = await productsApi.create({
+          name,
+          categoryId,
+          basePrice: Number(price),
+          description: description || name,
         })
-        .catch((err: unknown) => {
-          setCreateError(err instanceof Error ? err.message : 'Could not create product')
-        })
-        .finally(() => setCreating(false))
+        for (let i = 0; i < imageUrls.length; i += 1) {
+          const url = imageUrls[i]!
+          await productsApi.addImage(product.id, { url, isPrimary: i === 0 })
+        }
+        setName('')
+        setPrice('')
+        setDescription('')
+        setImageUrls([])
+        setDraftUploadId(crypto.randomUUID())
+        setShowCreate(false)
+        router.refresh()
+      } catch (err: unknown) {
+        setCreateError(err instanceof Error ? err.message : LABELS.uploadFailed)
+      } finally {
+        setCreating(false)
+      }
     },
-    [name, price, description, categoryId, router],
+    [name, price, description, categoryId, imageUrls, router],
   )
 
   const handleEdit = useCallback(
@@ -103,14 +120,21 @@ export function useVendorProductsPage() {
     description,
     categoryId,
     categories,
+    imageUrls,
+    draftUploadId,
     createError,
     creating,
     onNameChange: setName,
     onPriceChange: setPrice,
     onDescriptionChange: setDescription,
     onCategoryChange: setCategoryId,
+    onImageUrlsChange: setImageUrls,
     onSubmit: handleCreate,
-    onCancel: () => setShowCreate(false),
+    onCancel: () => {
+      setShowCreate(false)
+      setImageUrls([])
+      setDraftUploadId(crypto.randomUUID())
+    },
   }
 
   const tableViewProps = {
@@ -120,6 +144,8 @@ export function useVendorProductsPage() {
     page: table.page,
     totalPages: table.data?.totalPages,
     isDeleting: table.isDeleting,
+    isSubmitting: table.isSubmitting,
+    actionMessage: table.actionMessage,
     onSearchChange: table.handleSearchChange,
     onPageChange: table.setPage,
     onAddProduct: canCreate ? () => setShowCreate(true) : undefined,
@@ -129,6 +155,13 @@ export function useVendorProductsPage() {
     onDeleteProduct: canDelete
       ? (product: { id: string; name: string }) =>
           table.setDeleteTarget({ id: product.id, name: product.name })
+      : undefined,
+    onSubmitForApproval: canEdit
+      ? (product: { id: string }) => table.submitForApproval(product.id)
+      : undefined,
+    onManageImages: canEdit
+      ? (product: { id: string; name: string }) =>
+          setImagesTarget({ id: product.id, name: product.name })
       : undefined,
   }
 
@@ -164,5 +197,17 @@ export function useVendorProductsPage() {
     createFormProps,
     tableViewProps,
     deleteDialogProps,
+    imagesDialogProps: imagesTarget
+      ? {
+          productId: imagesTarget.id,
+          productName: imagesTarget.name,
+          open: true,
+          onOpenChange: (open: boolean) => {
+            if (!open) setImagesTarget(null)
+          },
+          onChanged: () => router.refresh(),
+        }
+      : null,
+    ImagesDialog: VendorProductImagesDialog,
   }
 }

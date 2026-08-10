@@ -37,11 +37,16 @@ export interface VendorInfo {
   businessName: string;
   slug: string;
   logoUrl: string | null;
+  entityType?: string | null;
+  categoryIds?: string[];
+  kycComplete?: boolean;
+  status?: string;
 }
 
 export interface VendorDetail extends VendorInfo {
   description?: string | null;
   bannerUrl?: string | null;
+  returnShippingFee?: number | null;
 }
 
 export interface ProductListItem {
@@ -270,6 +275,7 @@ export interface ReturnRequest {
   reason: string;
   reasonCode: ReturnReason;
   status: ReturnStatus;
+  photoUrls?: string[];
   refundMethod?: RefundMethod | null;
   refundStatus?: RefundStatus;
   refundAmount: number | null;
@@ -496,14 +502,16 @@ export interface PlatformSettings {
 
 export interface PromoBanner {
   id: string;
-  eyebrow: string;
-  headline: string;
-  subheadline: string;
-  ctaLabel: string;
-  ctaHref: string;
-  secondaryCtaLabel?: string | null;
-  secondaryCtaHref?: string | null;
-  imageSrc: string;
-  imageMobileSrc?: string | null;
-  imageAlt: string;
+  title: string;
+  imageUrl: string;
+  linkType: 'PRODUCT' | 'CATEGORY' | 'VENDOR' | 'URL';
+  linkTargetId: string | null;
+  linkUrl: string | null;
+  linkSlug?: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  status: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
+  priority: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
