@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/shared/components/ui/button'
 import { DataTable, type DataTableColumn } from '@/shared/components/DataTable'
 import { StatusBadge } from '@/shared/components/StatusBadge'
-import { TableRowAction } from '@/shared/components/TableRowActions'
 import { LABELS } from '@/shared/constants/labels'
 import { formatOrderDate } from '@/features/orders/utils/format'
 import {
@@ -123,18 +122,6 @@ export function BugReportList({
         onRefresh={onRefresh}
         rowDetails={false}
         onRowClick={(row) => router.push(detailHref(row.id))}
-        actions={(row) => (
-          <TableRowAction>
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              onClick={() => router.push(detailHref(row.id))}
-            >
-              {LABELS.bugView}
-            </Button>
-          </TableRowAction>
-        )}
       />
       {hasNextPage ? (
         <div className="flex justify-center border-t border-line/70 pt-4">

@@ -49,6 +49,7 @@ export type SupportTicket = {
   priority: SupportTicketPriority
   status: SupportTicketStatus
   assignedToId: string | null
+  assignedToName: string | null
   firstResponseAt: string | null
   resolvedAt: string | null
   closedAt: string | null

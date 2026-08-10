@@ -14,6 +14,7 @@ export const API = {
   },
   users: {
     list: (query = '') => `/api/users${query ? `?${query}` : ''}`,
+    assignees: (query = '') => `/api/users/assignees${query ? `?${query}` : ''}`,
     detail: (id: string) => `/api/users/${id}`,
     status: (id: string) => `/api/users/${id}/status`,
   },

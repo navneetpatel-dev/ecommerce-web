@@ -3,6 +3,17 @@ import { unwrapPaginatedList, type PaginatedList, type PaginationQuery } from '@
 import { API } from '@/shared/constants/apiRoutes'
 import type { UserStatus } from '@/shared/constants/statuses'
 import type { CurrentUser } from '@/shared/api/types'
+import { PERMISSIONS } from '@/shared/constants/permissions'
+
+export type AssigneeCandidate = {
+  id: string
+  name: string
+  email: string
+}
+
+export type AssigneePermission =
+  | typeof PERMISSIONS.TICKET_MANAGE
+  | typeof PERMISSIONS.BUG_REPORT_MANAGE
 
 export const adminUsersApi = {
   list: async (
@@ -16,6 +27,10 @@ export const adminUsersApi = {
     if (params.search) q.set('search', params.search)
     const res = await apiClient.getWithResponse<CurrentUser[]>(API.users.list(q.toString()))
     return unwrapPaginatedList(res)
+  },
+  listAssignees: (permission: AssigneePermission) => {
+    const q = new URLSearchParams({ permission })
+    return apiClient.get<AssigneeCandidate[]>(API.users.assignees(q.toString()))
   },
   getById: (id: string) => apiClient.get<CurrentUser>(API.users.detail(id)),
   updateStatus: (id: string, status: UserStatus) =>

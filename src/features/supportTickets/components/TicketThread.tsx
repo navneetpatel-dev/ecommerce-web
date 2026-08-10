@@ -1,13 +1,12 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Send } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/shared/components/ui/avatar'
 import { Button } from '@/shared/components/ui/button'
 import { FormFieldFrame } from '@/shared/components/forms'
 import { FormError } from '@/shared/components/FormError'
-import { Input } from '@/shared/components/ui/input'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { StatusBadge } from '@/shared/components/StatusBadge'
@@ -19,6 +18,7 @@ import {
   SelectValue,
 } from '@/shared/components/ui/select'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { AssigneeSelect } from '@/shared/components/AssigneeSelect'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import {
@@ -171,6 +171,10 @@ function TicketDetailsPanel({
   onResolve,
   onReopen,
   onClose,
+  assigneeId,
+  onAssigneeChange,
+  reassignPending,
+  onReassign,
 }: {
   ticket: SupportTicket
   showResolve: boolean
@@ -182,86 +186,135 @@ function TicketDetailsPanel({
   onResolve: () => void
   onReopen: () => void
   onClose: () => void
+  assigneeId: string
+  onAssigneeChange: (id: string) => void
+  reassignPending: boolean
+  onReassign: () => void
 }) {
   return (
     <>
-      <TextEyebrow>{LABELS.ticketAboutTicket}</TextEyebrow>
-      <dl className="mt-3 space-y-2.5 text-[0.8125rem]">
-        <div className="flex items-center justify-between gap-3">
-          <dt className="text-ink-muted">{LABELS.status}</dt>
-          <dd>
-            <StatusBadge status={ticket.status} label={TICKET_STATUS_LABEL[ticket.status]} />
-          </dd>
-        </div>
-        <div className="flex items-center justify-between gap-3">
-          <dt className="text-ink-muted">{LABELS.priority}</dt>
-          <dd>
-            <StatusBadge status={ticket.priority} label={TICKET_PRIORITY_LABEL[ticket.priority]} />
-          </dd>
-        </div>
-        <div className="flex items-center justify-between gap-3">
-          <dt className="text-ink-muted">{LABELS.category}</dt>
-          <dd className="text-ink">{TICKET_CATEGORY_LABEL[ticket.category]}</dd>
-        </div>
-        <div className="flex items-center justify-between gap-3 border-t border-line/70 pt-2.5">
-          <dt className="text-ink-muted">{LABELS.createdAt}</dt>
-          <dd className="text-ink">{formatOrderDate(ticket.createdAt)}</dd>
-        </div>
-        {ticket.relatedOrderId ? (
-          <div className="flex items-center justify-between gap-3">
-            <dt className="text-ink-muted">{LABELS.ticketOrderSection}</dt>
-            <dd className="font-mono text-[0.75rem] text-ink">
-              #{ticket.relatedOrderId.slice(0, 8)}
-            </dd>
-          </div>
-        ) : null}
-      </dl>
-
-      <div className="mt-4 border-t border-line/70 pt-3">
-        <TextEyebrow>{LABELS.ticketOriginalRequest}</TextEyebrow>
-        <p className="mt-2 whitespace-pre-wrap text-[0.8125rem] leading-relaxed text-ink-muted">
-          {ticket.description}
-        </p>
-        <AttachmentThumbs attachments={ticket.attachments ?? []} />
+      <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+        <TextEyebrow brand>{LABELS.ticketAboutTicket}</TextEyebrow>
       </div>
 
-      {showResolve || canReopen || canManage ? (
-        <div className="mt-4 flex flex-wrap gap-2 border-t border-line/70 pt-3">
-          {showResolve ? (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              loading={resolvePending}
-              onClick={onResolve}
-            >
-              {LABELS.ticketResolve}
-            </Button>
+      <div className="space-y-4 px-4 py-4 sm:px-5 sm:py-5">
+        <dl className="grid gap-3 text-[0.8125rem]">
+          <div className="flex items-center justify-between gap-3">
+            <dt className="text-ink-muted">{LABELS.status}</dt>
+            <dd>
+              <StatusBadge status={ticket.status} label={TICKET_STATUS_LABEL[ticket.status]} />
+            </dd>
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <dt className="text-ink-muted">{LABELS.priority}</dt>
+            <dd>
+              <StatusBadge status={ticket.priority} label={TICKET_PRIORITY_LABEL[ticket.priority]} />
+            </dd>
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <dt className="text-ink-muted">{LABELS.category}</dt>
+            <dd className="font-medium text-ink">{TICKET_CATEGORY_LABEL[ticket.category]}</dd>
+          </div>
+          <div className="flex items-center justify-between gap-3 border-t border-line/60 pt-3">
+            <dt className="text-ink-muted">{LABELS.createdAt}</dt>
+            <dd className="text-ink">{formatOrderDate(ticket.createdAt)}</dd>
+          </div>
+          {ticket.assignedToName || ticket.assignedToId ? (
+            <div className="flex items-center justify-between gap-3">
+              <dt className="text-ink-muted">{LABELS.ticketAssignee}</dt>
+              <dd className="truncate text-ink">
+                {ticket.assignedToName || LABELS.ticketAssigneeNone}
+              </dd>
+            </div>
           ) : null}
-          {canReopen ? (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              loading={reopenPending}
-              onClick={onReopen}
-            >
-              {LABELS.ticketReopen}
-            </Button>
+          {ticket.relatedOrderId ? (
+            <div className="flex items-center justify-between gap-3">
+              <dt className="text-ink-muted">{LABELS.ticketOrderSection}</dt>
+              <dd className="font-mono text-[0.75rem] text-ink">
+                #{ticket.relatedOrderId.slice(0, 8)}
+              </dd>
+            </div>
           ) : null}
-          {canManage ? (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              loading={closePending}
-              onClick={onClose}
-            >
-              {LABELS.ticketClose}
-            </Button>
-          ) : null}
+        </dl>
+
+        <div className="border-t border-line/60 pt-4">
+          <TextEyebrow>{LABELS.ticketOriginalRequest}</TextEyebrow>
+          <p className="mt-2 whitespace-pre-wrap text-[0.8125rem] leading-relaxed text-ink-muted">
+            {ticket.description}
+          </p>
+          <AttachmentThumbs attachments={ticket.attachments ?? []} />
         </div>
-      ) : null}
+
+        {canManage ? (
+          <div className="space-y-3 border-t border-line/60 pt-4">
+            <FormFieldFrame label={LABELS.ticketAssignee}>
+              <AssigneeSelect
+                permission={PERMISSIONS.TICKET_MANAGE}
+                value={assigneeId}
+                onChange={onAssigneeChange}
+                placeholder={LABELS.ticketAssigneePlaceholder}
+                currentOption={
+                  ticket.assignedToId
+                    ? {
+                        id: ticket.assignedToId,
+                        name: ticket.assignedToName || ticket.assignedToId,
+                      }
+                    : null
+                }
+              />
+            </FormFieldFrame>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="w-full sm:w-auto"
+              loading={reassignPending}
+              disabled={!assigneeId.trim() || assigneeId === (ticket.assignedToId ?? '')}
+              onClick={onReassign}
+            >
+              {LABELS.ticketReassign}
+            </Button>
+          </div>
+        ) : null}
+
+        {showResolve || canReopen || canManage ? (
+          <div className="flex flex-wrap gap-2 border-t border-line/60 pt-4">
+            {showResolve ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                loading={resolvePending}
+                onClick={onResolve}
+              >
+                {LABELS.ticketResolve}
+              </Button>
+            ) : null}
+            {canReopen ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                loading={reopenPending}
+                onClick={onReopen}
+              >
+                {LABELS.ticketReopen}
+              </Button>
+            ) : null}
+            {canManage ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                loading={closePending}
+                onClick={onClose}
+              >
+                {LABELS.ticketClose}
+              </Button>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
     </>
   )
 }
@@ -279,9 +332,13 @@ export function TicketThread({ ticket, mode }: Props) {
 
   const [body, setBody] = useState('')
   const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>([])
-  const [assigneeId, setAssigneeId] = useState('')
+  const [assigneeId, setAssigneeId] = useState(ticket.assignedToId ?? '')
   const [rating, setRating] = useState('5')
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    setAssigneeId(ticket.assignedToId ?? '')
+  }, [ticket.assignedToId])
 
   const messages = useMemo(() => {
     const pages = messagesQuery.data?.pages ?? []
@@ -492,7 +549,11 @@ export function TicketThread({ ticket, mode }: Props) {
         </div>
 
         <aside className="min-w-0 space-y-4 lg:col-span-4">
-          <section className="border border-line bg-surface p-4 shadow-elevation-1 lg:sticky lg:top-24">
+          <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1 lg:sticky lg:top-24">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/70 via-brand/30 to-transparent"
+            />
             <TicketDetailsPanel
               ticket={ticket}
               showResolve={showResolve}
@@ -504,25 +565,12 @@ export function TicketThread({ ticket, mode }: Props) {
               onResolve={() => void resolve.mutateAsync()}
               onReopen={() => void reopen.mutateAsync()}
               onClose={() => void close.mutateAsync()}
+              assigneeId={assigneeId}
+              onAssigneeChange={setAssigneeId}
+              reassignPending={reassign.isPending}
+              onReassign={() => void reassign.mutateAsync(assigneeId.trim())}
             />
           </section>
-
-          {canManage ? (
-            <section className="space-y-3 border border-line bg-surface p-4 shadow-elevation-1">
-              <FormFieldFrame label={LABELS.ticketAssignedToId}>
-                <Input value={assigneeId} onChange={(e) => setAssigneeId(e.target.value)} />
-              </FormFieldFrame>
-              <Button
-                type="button"
-                variant="outline"
-                loading={reassign.isPending}
-                disabled={!assigneeId.trim()}
-                onClick={() => void reassign.mutateAsync(assigneeId.trim())}
-              >
-                {LABELS.ticketReassign}
-              </Button>
-            </section>
-          ) : null}
         </aside>
       </div>
     </div>
