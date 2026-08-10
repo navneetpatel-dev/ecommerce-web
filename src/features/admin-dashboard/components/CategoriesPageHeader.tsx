@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { Plus } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
+import { ButtonGroup } from '@/shared/components/ui/button-group'
 import {
   Dialog,
   DialogContent,
@@ -35,18 +36,18 @@ export function CategoriesPageHeader({
   toolbar,
 }: CategoriesPageHeaderProps) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4 sm:items-center">
+    <div className="flex w-full min-w-0 flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
       <div className="min-w-0 space-y-1">
         <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
           {LABELS.categories}
         </h2>
         <p className="max-w-xl text-[0.875rem] text-ink-muted">{LABELS.createCategoryHint}</p>
       </div>
-      <div className="flex flex-wrap items-center gap-2 shrink-0">
+      <ButtonGroup className="sm:shrink-0">
         {toolbar}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button type="button" size="sm" className="shrink-0">
+            <Button type="button" size="sm" fullWidth="mobile">
               <Plus aria-hidden />
               {LABELS.createCategory}
             </Button>
@@ -65,7 +66,7 @@ export function CategoriesPageHeader({
             </form>
           </DialogContent>
         </Dialog>
-      </div>
+      </ButtonGroup>
     </div>
   )
 }

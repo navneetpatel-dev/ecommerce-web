@@ -50,8 +50,8 @@ export function ProductsTableHeader({ search, onSearchChange, onAddProduct }: Pr
           />
         </div>
         {onAddProduct && (
-          <Button size="sm" type="button" className="w-full sm:w-auto" onClick={onAddProduct}>
-            <Plus className="h-4 w-4" /> Add Product
+          <Button size="sm" type="button" fullWidth="mobile" onClick={onAddProduct}>
+            <Plus aria-hidden /> Add Product
           </Button>
         )}
       </div>

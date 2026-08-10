@@ -139,7 +139,8 @@ export function AddressStep({
           size="lg"
           onClick={onContinue}
           disabled={!selectedId}
-          className="w-full gap-2 sm:w-auto"
+          fullWidth="mobile"
+          className="gap-2"
         >
           Continue to shipping
           <ArrowRight size={16} />

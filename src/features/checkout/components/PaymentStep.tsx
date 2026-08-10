@@ -105,7 +105,7 @@ export function PaymentStep({
       </div>
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
-        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto">
+        <Button variant="outline" onClick={onBack} fullWidth="mobile">
           {LABELS.backToShipping}
         </Button>
         <DisabledActionHint
@@ -117,7 +117,8 @@ export function PaymentStep({
             size="lg"
             onClick={onContinue}
             disabled={!canContinue || isPending}
-            className="w-full gap-2 sm:w-auto"
+            fullWidth="mobile"
+            className="gap-2"
           >
             {LABELS.continueToReview}
             <ArrowRight size={16} />

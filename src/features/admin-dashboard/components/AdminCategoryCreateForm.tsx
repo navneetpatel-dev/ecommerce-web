@@ -28,7 +28,7 @@ export function AdminCategoryCreateForm({
       {error ? <p className="text-[0.8125rem] text-danger">{error}</p> : null}
       <FormActions>
         <DisabledActionHint disabled={!canSubmit || isPending} message={LABELS.enterCategoryName}>
-          <Button type="submit" className="w-full sm:w-auto" disabled={!canSubmit || isPending}>
+          <Button type="submit" fullWidth="mobile" disabled={!canSubmit || isPending}>
             {LABELS.createCategory}
           </Button>
         </DisabledActionHint>

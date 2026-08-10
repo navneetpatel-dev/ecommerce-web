@@ -41,7 +41,7 @@ export function AdminShippingZoneForm({
         </FormFieldFrame>
         <FormActions className="border-0 pt-0">
           <DisabledActionHint disabled={!canCreate} message={LABELS.enterZoneName}>
-            <Button type="submit" className="w-full sm:w-auto" disabled={!canCreate}>
+            <Button type="submit" fullWidth="mobile" disabled={!canCreate}>
               {LABELS.addShippingZone}
             </Button>
           </DisabledActionHint>

@@ -6,7 +6,16 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/shared/utils/cn'
 
 const buttonVariants = cva(
-  'inline-flex box-border items-center justify-center gap-2 overflow-hidden whitespace-nowrap font-medium leading-none transition-colors cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  [
+    'inline-flex box-border items-center justify-center gap-2 overflow-hidden',
+    'whitespace-nowrap font-medium leading-none transition-colors cursor-pointer',
+    'touch-manipulation outline-none',
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+    '[&_svg]:pointer-events-none [&_svg]:shrink-0',
+    /* Locked control height — matches Input / Select on every breakpoint */
+    'h-11 min-h-11 max-h-11 py-0',
+  ].join(' '),
   {
     variants: {
       variant: {
@@ -20,18 +29,20 @@ const buttonVariants = cva(
       },
       size: {
         /**
-         * One project control height (44px) — matches Input / Select.
-         * Use any size token for padding/icon density; height stays uniform.
+         * Project control height is fixed at 44px for all sizes.
+         * Size only changes horizontal padding / icon density.
          * Table row menus override via TABLE_ROW_MENU_BUTTON_LAYOUT.
          */
-        default: 'h-11 min-h-11 px-5 sm:px-6 rounded-md text-[0.9375rem] [&_svg]:size-5',
-        sm: 'h-11 min-h-11 px-4 sm:px-5 rounded-md text-[0.875rem] sm:text-[0.9375rem] [&_svg]:size-4',
-        lg: 'h-11 min-h-11 px-5 sm:px-6 rounded-md text-[0.9375rem] [&_svg]:size-5',
-        icon: 'h-11 min-h-11 w-11 rounded-md px-0 [&_svg]:size-5',
-        'icon-sm': 'h-11 min-h-11 w-11 rounded-md px-0 [&_svg]:size-4',
+        default: 'rounded-md px-4 text-[0.875rem] sm:px-5 sm:text-[0.9375rem] [&_svg]:!size-4',
+        sm: 'rounded-md px-4 text-[0.875rem] sm:px-5 sm:text-[0.9375rem] [&_svg]:!size-4',
+        lg: 'rounded-md px-4 text-[0.875rem] sm:px-5 sm:text-[0.9375rem] [&_svg]:!size-4',
+        icon: 'w-11 shrink-0 rounded-md px-0 [&_svg]:!size-4',
+        'icon-sm': 'w-11 shrink-0 rounded-md px-0 [&_svg]:!size-4',
       },
       fullWidth: {
         true: 'w-full',
+        /** Full width below `sm`, intrinsic width from `sm` up — use in toolbars / page actions. */
+        mobile: 'w-full sm:w-auto',
       },
     },
     defaultVariants: {
@@ -46,22 +57,26 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
   loading?: boolean
-  fullWidth?: boolean
+  fullWidth?: boolean | 'mobile'
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, loading, fullWidth, children, disabled, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+    const Comp = asChild ? Slot : 'button'
+    const resolvedFullWidth =
+      fullWidth === true ? true : fullWidth === 'mobile' ? 'mobile' : undefined
+
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, fullWidth }), className)}
+        className={cn(buttonVariants({ variant, size, fullWidth: resolvedFullWidth }), className)}
         ref={ref}
         disabled={disabled || loading}
         aria-busy={loading ? true : undefined}
+        data-size={size ?? 'default'}
         {...props}
       >
         {loading ? (
-          <svg className="animate-spin h-4 w-4 shrink-0" viewBox="0 0 24 24">
+          <svg className="h-4 w-4 shrink-0 animate-spin" viewBox="0 0 24 24" aria-hidden>
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
@@ -70,8 +85,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
       </Comp>
     )
-  }
+  },
 )
-Button.displayName = "Button"
+Button.displayName = 'Button'
 
 export { Button, buttonVariants }

@@ -6,6 +6,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button } from '@/shared/components/ui/button'
+import { ButtonGroup } from '@/shared/components/ui/button-group'
 import { Input } from '@/shared/components/ui/input'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/components/ui/dialog'
@@ -134,12 +135,12 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]">{LABELS.coupons}</h2>
-        <div className="flex flex-wrap gap-2">
+        <ButtonGroup>
           <Dialog open={bulkOpen} onOpenChange={setBulkOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" variant="outline" className="shrink-0">
+              <Button size="sm" variant="outline" fullWidth="mobile">
                 <Layers aria-hidden /> {LABELS.bulkGenerate}
               </Button>
             </DialogTrigger>
@@ -208,7 +209,7 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
 
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" className="shrink-0">
+              <Button size="sm" fullWidth="mobile">
                 <Plus aria-hidden /> {LABELS.createCoupon}
               </Button>
             </DialogTrigger>
@@ -226,7 +227,7 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
               </form>
             </DialogContent>
           </Dialog>
-        </div>
+        </ButtonGroup>
       </div>
 
       <section className="space-y-3">

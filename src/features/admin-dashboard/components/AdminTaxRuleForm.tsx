@@ -56,7 +56,7 @@ export function AdminTaxRuleForm({
         </FormFieldFrame>
         <FormActions className="sm:col-span-2 border-0 pt-0">
           <DisabledActionHint disabled={!canCreate} message={LABELS.enterGstPercentage}>
-            <Button type="submit" className="w-full sm:w-auto" disabled={!canCreate}>
+            <Button type="submit" fullWidth="mobile" disabled={!canCreate}>
               {LABELS.addTaxRule}
             </Button>
           </DisabledActionHint>

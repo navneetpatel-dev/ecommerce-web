@@ -66,7 +66,7 @@ export function AdminReassignProductsAction({ onDone }: AdminReassignProductsAct
         type="button"
         size="sm"
         variant="outline"
-        className="shrink-0"
+        fullWidth="mobile"
         onClick={() => {
           setOpen(true)
           setError(null)

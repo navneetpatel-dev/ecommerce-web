@@ -59,7 +59,7 @@ export function PlatformSettingsForm({
           </div>
           <Button
             type="button"
-            className="hidden w-full shrink-0 sm:inline-flex sm:w-auto"
+            className="hidden shrink-0 sm:inline-flex"
             onClick={onSave}
           >
             {LABELS.saveSettings}
@@ -180,7 +180,7 @@ export function PlatformSettingsForm({
         </FormSection>
 
         <FormActions leading={message}>
-          <Button type="button" className="w-full sm:w-auto" onClick={onSave}>
+          <Button type="button" fullWidth="mobile" onClick={onSave}>
             {LABELS.saveSettings}
           </Button>
         </FormActions>

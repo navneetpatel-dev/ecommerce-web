@@ -64,7 +64,8 @@ export function ShippingStep({
           size="lg"
           onClick={onContinue}
           disabled={!canContinue}
-          className="w-full gap-2 sm:w-auto"
+          fullWidth="mobile"
+          className="gap-2"
         >
           Continue to payment
           <ArrowRight size={16} />

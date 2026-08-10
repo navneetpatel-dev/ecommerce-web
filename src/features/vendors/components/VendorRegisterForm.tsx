@@ -209,7 +209,7 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
               ) : null}
 
               <FormActions>
-                <Button type="submit" className="w-full sm:w-auto" loading={isPending}>
+                <Button type="submit" fullWidth="mobile" loading={isPending}>
                   {LABELS.registerAsVendor}
                 </Button>
               </FormActions>

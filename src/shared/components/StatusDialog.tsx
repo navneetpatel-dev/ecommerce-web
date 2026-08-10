@@ -108,7 +108,7 @@ export function StatusDialog({
             {secondaryAction ? (
               <Button
                 type="button"
-                className="w-full sm:w-auto"
+                fullWidth="mobile"
                 variant={secondaryAction.variant ?? 'outline'}
                 loading={secondaryAction.loading}
                 disabled={secondaryAction.disabled}
@@ -125,7 +125,7 @@ export function StatusDialog({
               >
                 <Button
                   type="button"
-                  className="w-full sm:w-auto"
+                  fullWidth="mobile"
                   variant={primaryAction.variant ?? 'default'}
                   loading={primaryAction.loading}
                   disabled={primaryAction.disabled}

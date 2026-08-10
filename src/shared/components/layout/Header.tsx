@@ -256,7 +256,7 @@ export function Header({
               type="button"
               onClick={toggleTheme}
               className={cn(
-                'inline-flex h-11 min-h-11 items-center gap-1.5 rounded-md border border-line-strong px-3 font-mono text-[0.6875rem] font-medium uppercase tracking-wide transition-colors',
+                'inline-flex h-11 w-11 shrink-0 items-center justify-center gap-1.5 rounded-md border border-line-strong font-mono text-[0.6875rem] font-medium uppercase tracking-wide transition-colors sm:w-auto sm:px-3',
                 isTransparent
                   ? 'border-paper/30 text-paper hover:bg-paper/10'
                   : 'bg-surface text-ink-muted hover:bg-paper hover:text-ink'

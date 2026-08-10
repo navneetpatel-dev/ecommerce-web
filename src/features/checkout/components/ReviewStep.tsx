@@ -26,7 +26,7 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
           <p className="font-display text-[1.125rem] text-ink">{LABELS.preparingSummary}</p>
           <p className="mt-1 text-[0.875rem] text-ink-muted">{LABELS.calculatingShippingTaxes}</p>
         </div>
-        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto">
+        <Button variant="outline" onClick={onBack} fullWidth="mobile">
           {LABELS.backToPayment}
         </Button>
       </div>
@@ -145,12 +145,13 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
       )}
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
-        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto">
+        <Button variant="outline" onClick={onBack} fullWidth="mobile">
           {LABELS.backToPayment}
         </Button>
         <Button
           size="lg"
-          className="w-full gap-2 sm:w-auto"
+          fullWidth="mobile"
+          className="gap-2"
           onClick={onPlaceOrder}
           loading={isPending}
           disabled={Boolean(hasUnavailableItems)}

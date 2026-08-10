@@ -11,6 +11,7 @@ import {
 } from '@/shared/components/ui/table'
 import { SkeletonRows } from '@/shared/components/Skeletons'
 import { Button } from '@/shared/components/ui/button'
+import { ButtonGroup } from '@/shared/components/ui/button-group'
 import { TableCellImage } from '@/shared/components/TableCellImage'
 import { TruncatedText } from '@/shared/components/TruncatedText'
 import { RecordDetailDialog } from '@/shared/components/RecordDetailDialog'
@@ -241,20 +242,14 @@ export function DataTable<T>({
                 </p>
               ) : null}
             </div>
-            <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
+            <ButtonGroup className="sm:shrink-0">
               {toolbar}
               {onRefresh ? (
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  className="w-full sm:w-auto"
-                  onClick={onRefresh}
-                >
+                <Button type="button" size="sm" variant="outline" fullWidth="mobile" onClick={onRefresh}>
                   {LABELS.refresh}
                 </Button>
               ) : null}
-            </div>
+            </ButtonGroup>
           </div>
         )}
 

@@ -2,7 +2,7 @@ import { cn } from '@/shared/utils/cn'
 
 /** Layout for labeled buttons inside table row kebab menus. */
 export const TABLE_ROW_MENU_BUTTON_LAYOUT = cn(
-  'h-8 min-h-8 w-full min-w-0 justify-start overflow-visible',
+  'h-8 min-h-8 max-h-8 w-full min-w-0 justify-start overflow-visible',
   'text-[0.8125rem] font-medium leading-none',
 )
 

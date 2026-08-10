@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/shared/components/ui/button'
+import { ButtonGroup } from '@/shared/components/ui/button-group'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/components/ui/dialog'
 import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
 import { StatusBadge } from '@/shared/components/StatusBadge'
@@ -119,8 +120,8 @@ export function VendorCouponsView({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="space-y-1">
+      <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 space-y-1">
           <h2 className="text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]">{LABELS.coupons}</h2>
           <p className="text-[0.875rem] text-ink-muted">
             {formatLabel(LABELS.absorbedDiscountsSummary, {
@@ -129,9 +130,10 @@ export function VendorCouponsView({
             ({LABELS.absorbedThisPeriod})
           </p>
         </div>
+        <ButtonGroup>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button size="sm">
+            <Button size="sm" fullWidth="mobile">
               <Plus aria-hidden /> {LABELS.createVendorCoupon}
             </Button>
           </DialogTrigger>
@@ -153,6 +155,7 @@ export function VendorCouponsView({
             </form>
           </DialogContent>
         </Dialog>
+        </ButtonGroup>
       </div>
 
       <DataTable

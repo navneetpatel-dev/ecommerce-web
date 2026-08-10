@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { ButtonGroup } from '@/shared/components/ui/button-group'
 import { cn } from '@/shared/utils/cn'
 
 interface FormActionsProps {
@@ -24,9 +25,7 @@ export function FormActions({ children, leading, className }: FormActionsProps) 
       ) : (
         <span className="hidden sm:block" />
       )}
-      <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:justify-end">
-        {children}
-      </div>
+      <ButtonGroup align="end">{children}</ButtonGroup>
     </div>
   )
 }
