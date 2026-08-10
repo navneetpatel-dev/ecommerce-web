@@ -156,14 +156,14 @@ export function VendorProductImagesDialog({
                 />
               </div>
               <Button
-                size="icon"
+                size="icon-sm"
                 variant="ghost"
                 type="button"
                 aria-label={LABELS.deleteImage}
                 disabled={busyId === image.id}
                 onClick={() => void onDeleteImage(image.id)}
               >
-                <Trash2 className="size-4" />
+                <Trash2 aria-hidden />
               </Button>
             </li>
           ))}

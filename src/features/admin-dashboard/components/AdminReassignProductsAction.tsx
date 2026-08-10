@@ -19,10 +19,8 @@ import {
 } from '@/shared/components/ui/select'
 import { LABELS } from '@/shared/constants/labels'
 import { MAX_PAGE_LIMIT } from '@/shared/constants/pagination'
-import { cn } from '@/shared/utils/cn'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import { adminActionTone } from '../utils/adminActionTone'
 import { categoriesApi } from '@/features/categories/api/categories.api'
 import type { Category } from '@/shared/api/types'
 
@@ -65,15 +63,17 @@ export function AdminReassignProductsAction({ onDone }: AdminReassignProductsAct
   return (
     <>
       <Button
-        variant="secondary"
-        className={cn(adminActionTone.neutral)}
+        type="button"
+        size="sm"
+        variant="outline"
+        className="shrink-0"
         onClick={() => {
           setOpen(true)
           setError(null)
           setMessage(null)
         }}
       >
-        <ArrowRightLeft className="h-4 w-4" aria-hidden />
+        <ArrowRightLeft aria-hidden />
         {LABELS.reassignProducts}
       </Button>
 

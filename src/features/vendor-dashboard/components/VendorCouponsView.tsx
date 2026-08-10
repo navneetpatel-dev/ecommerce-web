@@ -132,7 +132,7 @@ export function VendorCouponsView({
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button size="sm">
-              <Plus className="h-4 w-4" /> {LABELS.createVendorCoupon}
+              <Plus aria-hidden /> {LABELS.createVendorCoupon}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">

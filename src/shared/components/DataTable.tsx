@@ -244,7 +244,13 @@ export function DataTable<T>({
             <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:justify-end">
               {toolbar}
               {onRefresh ? (
-                <Button variant="secondary" className="w-full sm:w-auto" onClick={onRefresh}>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  className="w-full sm:w-auto"
+                  onClick={onRefresh}
+                >
                   {LABELS.refresh}
                 </Button>
               ) : null}

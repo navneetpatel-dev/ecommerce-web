@@ -35,19 +35,19 @@ export function CategoriesPageHeader({
   toolbar,
 }: CategoriesPageHeaderProps) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4">
+    <div className="flex flex-wrap items-start justify-between gap-4 sm:items-center">
       <div className="min-w-0 space-y-1">
         <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
           {LABELS.categories}
         </h2>
         <p className="max-w-xl text-[0.875rem] text-ink-muted">{LABELS.createCategoryHint}</p>
       </div>
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 shrink-0">
         {toolbar}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button size="sm" className="shrink-0">
-              <Plus className="h-4 w-4" />
+            <Button type="button" size="sm" className="shrink-0">
+              <Plus aria-hidden />
               {LABELS.createCategory}
             </Button>
           </DialogTrigger>

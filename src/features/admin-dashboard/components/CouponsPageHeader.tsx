@@ -140,7 +140,7 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
           <Dialog open={bulkOpen} onOpenChange={setBulkOpen}>
             <DialogTrigger asChild>
               <Button size="sm" variant="outline" className="shrink-0">
-                <Layers className="h-4 w-4" /> {LABELS.bulkGenerate}
+                <Layers aria-hidden /> {LABELS.bulkGenerate}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
@@ -209,7 +209,7 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button size="sm" className="shrink-0">
-                <Plus className="h-4 w-4" /> {LABELS.createCoupon}
+                <Plus aria-hidden /> {LABELS.createCoupon}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">

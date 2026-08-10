@@ -73,7 +73,7 @@ export function CartCouponSection({
         >
           <Button
             variant="outline"
-            className="h-11 shrink-0 px-4"
+            className="shrink-0 px-4"
             onClick={onApplyCoupon}
             loading={couponPending}
             disabled={!couponInput.trim()}
@@ -104,7 +104,7 @@ export function CartCouponSection({
             type="button"
             size="sm"
             variant="ghost"
-            className="h-8 text-ink-muted"
+            className="text-ink-muted"
             onClick={onRemoveCoupon}
             disabled={couponPending}
           >
@@ -146,7 +146,6 @@ export function CartCouponSection({
                   type="button"
                   size="sm"
                   variant="outline"
-                  className="h-7"
                   onClick={() => onApplyEligible(offer.code)}
                   disabled={couponPending}
                 >
