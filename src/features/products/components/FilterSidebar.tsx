@@ -2,6 +2,7 @@
 
 import { X } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
+import { CheckboxField } from '@/shared/components/CheckboxField'
 import { NumberInput } from '@/shared/components/NumberInput'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/components/ui/accordion'
 import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group'
@@ -53,14 +54,16 @@ export function FilterSidebar({
             <h2 className="text-[1.0625rem] font-semibold text-ink">{LABELS.filters}</h2>
           </div>
           {hasFilters ? (
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={onClear}
-              className="inline-flex items-center gap-1 text-[0.75rem] font-medium text-brand transition-colors hover:text-brand-hover"
+              className="h-auto min-h-0 max-h-none gap-1 px-2 py-1 text-[0.75rem] font-medium text-brand hover:bg-transparent hover:text-brand-hover"
             >
               <X size={12} strokeWidth={2} aria-hidden />
               {LABELS.clearFacetFilters}
-            </button>
+            </Button>
           ) : null}
         </div>
 
@@ -104,27 +107,23 @@ export function FilterSidebar({
                       const checked = selected.has(option.value)
                       return (
                         <li key={option.value}>
-                          <label
-                            htmlFor={id}
-                            title={option.disabled ? LABELS.facetDisabledHint : undefined}
+                          <CheckboxField
+                            id={id}
+                            checked={checked}
+                            disabled={option.disabled && !checked}
+                            onCheckedChange={() => onToggleFacet?.(facet.filterKey, option.value)}
                             className={cn(
-                              'flex cursor-pointer items-center gap-2.5 text-[0.8125rem]',
-                              option.disabled && !checked
-                                ? 'cursor-not-allowed text-ink-faint'
-                                : 'text-ink',
+                              'w-full gap-2.5 text-[0.8125rem]',
+                              option.disabled && !checked && 'text-ink-faint',
                             )}
-                          >
-                            <input
-                              id={id}
-                              type="checkbox"
-                              className="size-3.5 rounded border-line accent-brand"
-                              checked={checked}
-                              disabled={option.disabled && !checked}
-                              onChange={() => onToggleFacet?.(facet.filterKey, option.value)}
-                            />
-                            <span className="min-w-0 flex-1 truncate capitalize">{option.value}</span>
-                            <span className="tabular-nums text-ink-faint">{option.count}</span>
-                          </label>
+                            labelClassName="flex items-center justify-between gap-2"
+                            label={
+                              <>
+                                <span className="min-w-0 truncate capitalize">{option.value}</span>
+                                <span className="shrink-0 tabular-nums text-ink-faint">{option.count}</span>
+                              </>
+                            }
+                          />
                         </li>
                       )
                     })}
@@ -156,13 +155,15 @@ export function FilterSidebar({
                 ))}
               </RadioGroup>
               {rating != null ? (
-                <button
+                <Button
                   type="button"
-                  className="mt-3 text-[0.8125rem] font-medium text-brand transition-colors hover:text-brand-hover"
+                  variant="ghost"
+                  size="sm"
+                  className="mt-3 h-auto min-h-0 max-h-none px-0 py-0 text-[0.8125rem] font-medium text-brand hover:bg-transparent hover:text-brand-hover"
                   onClick={() => onUpdateFilter('rating', undefined)}
                 >
                   {LABELS.clearRating}
-                </button>
+                </Button>
               ) : null}
             </AccordionContent>
           </AccordionItem>

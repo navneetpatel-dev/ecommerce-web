@@ -17,6 +17,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical } from 'lucide-react'
+import { Button } from '@/shared/components/ui/button'
 import {
   DataTable,
   type DataTableColumn,
@@ -44,10 +45,12 @@ function SortableHandle({ id }: { id: string }) {
     id,
   })
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="icon-sm"
       ref={setNodeRef}
-      className="inline-flex cursor-grab touch-none text-ink-faint hover:text-ink active:cursor-grabbing"
+      className="h-auto min-h-0 max-h-none w-auto cursor-grab touch-none px-0 text-ink-faint hover:bg-transparent hover:text-ink active:cursor-grabbing"
       style={{
         transform: CSS.Transform.toString(transform),
         transition,
@@ -59,7 +62,7 @@ function SortableHandle({ id }: { id: string }) {
       onClick={(event) => event.stopPropagation()}
     >
       <GripVertical className="h-4 w-4" />
-    </button>
+    </Button>
   )
 }
 

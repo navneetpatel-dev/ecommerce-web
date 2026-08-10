@@ -3,9 +3,10 @@
 import { useState } from 'react'
 import { Pencil } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
+import { FormFieldFrame } from '@/shared/components/forms'
+import { Input } from '@/shared/components/ui/input'
 import { StatusDialog } from '@/shared/components/StatusDialog'
 import { LABELS } from '@/shared/constants/labels'
-import { cn } from '@/shared/utils/cn'
 import { tableMenuButtonClass } from '@/shared/constants/tableActionTone'
 
 interface AdminEditNameActionProps {
@@ -88,23 +89,19 @@ export function AdminEditNameAction({
           },
         }}
       >
-        <label className="block space-y-2">
-          <span className="text-[0.8125rem] font-medium text-ink">{fieldLabel}</span>
-          <input
+        <FormFieldFrame
+          label={fieldLabel}
+          htmlFor="admin-edit-name"
+          hint={!name.trim() ? emptyHint : undefined}
+        >
+          <Input
+            id="admin-edit-name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoFocus
-            className={cn(
-              'h-11 w-full rounded-md border border-line bg-surface px-3',
-              'text-[0.9375rem] text-ink outline-none',
-              'placeholder:text-ink-faint focus-visible:border-brand',
-            )}
             placeholder={fieldLabel}
           />
-          {!name.trim() ? (
-            <p className="text-[0.8125rem] text-ink-muted">{emptyHint}</p>
-          ) : null}
-        </label>
+        </FormFieldFrame>
       </StatusDialog>
     </>
   )

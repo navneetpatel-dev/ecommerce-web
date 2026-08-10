@@ -2,7 +2,9 @@
 
 import { Minus, Plus } from 'lucide-react'
 import { AnimatedQuantityValue } from '@/shared/components/AnimatedQuantityValue'
+import { Button } from '@/shared/components/ui/button'
 import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
+import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
 
 interface CardQuantityControlProps {
@@ -33,11 +35,13 @@ export function CardQuantityControl({
         e.stopPropagation()
       }}
     >
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon-sm"
         disabled={disabled || value <= 0}
-        aria-label="Decrease quantity"
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-ink transition-colors hover:bg-paper disabled:opacity-40"
+        aria-label={LABELS.decreaseQuantity}
+        className="h-9 w-9 min-h-9 max-h-9 shrink-0 rounded-full hover:bg-paper"
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -45,7 +49,7 @@ export function CardQuantityControl({
         }}
       >
         <Minus size={16} strokeWidth={2.25} />
-      </button>
+      </Button>
 
       <AnimatedQuantityValue
         value={value}
@@ -53,11 +57,13 @@ export function CardQuantityControl({
         digitClassName="font-mono text-[0.875rem] font-semibold text-ink"
       />
 
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon-sm"
         disabled={disabled || atMax}
-        aria-label="Increase quantity"
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-ink transition-colors hover:bg-paper disabled:opacity-40"
+        aria-label={LABELS.increaseQuantity}
+        className="h-9 w-9 min-h-9 max-h-9 shrink-0 rounded-full hover:bg-paper"
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -65,7 +71,7 @@ export function CardQuantityControl({
         }}
       >
         <Plus size={16} strokeWidth={2.25} />
-      </button>
+      </Button>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/shared/components/ui/button'
+import { FormFieldFrame } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { LABELS } from '@/shared/constants/labels'
@@ -49,39 +50,38 @@ export function CartCouponSection({
 
   return (
     <div className={compact ? 'space-y-2' : 'space-y-3'}>
-      <label htmlFor="cart-coupon-code" className="block text-[0.8125rem] font-medium text-ink">
-        {LABELS.couponCodeLabel}
-      </label>
-      <div className="flex w-full items-stretch gap-2">
-        <Input
-          id="cart-coupon-code"
-          placeholder={LABELS.couponCodePlaceholder}
-          className="min-w-0 flex-1"
-          value={couponInput}
-          onChange={(e) => onCouponInputChange(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault()
-              onApplyCoupon()
-            }
-          }}
-        />
-        <DisabledActionHint
-          disabled={!couponInput.trim()}
-          message={LABELS.enterCouponCodeToApply}
-          className="shrink-0"
-        >
-          <Button
-            variant="outline"
-            className="shrink-0 px-4"
-            onClick={onApplyCoupon}
-            loading={couponPending}
+      <FormFieldFrame label={LABELS.couponCodeLabel} htmlFor="cart-coupon-code">
+        <div className="flex w-full items-stretch gap-2">
+          <Input
+            id="cart-coupon-code"
+            placeholder={LABELS.couponCodePlaceholder}
+            className="min-w-0 flex-1"
+            value={couponInput}
+            onChange={(e) => onCouponInputChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                onApplyCoupon()
+              }
+            }}
+          />
+          <DisabledActionHint
             disabled={!couponInput.trim()}
+            message={LABELS.enterCouponCodeToApply}
+            className="shrink-0"
           >
-            {LABELS.applyCoupon}
-          </Button>
-        </DisabledActionHint>
-      </div>
+            <Button
+              variant="outline"
+              className="shrink-0 px-4"
+              onClick={onApplyCoupon}
+              loading={couponPending}
+              disabled={!couponInput.trim()}
+            >
+              {LABELS.applyCoupon}
+            </Button>
+          </DisabledActionHint>
+        </div>
+      </FormFieldFrame>
 
       {appliedCouponCode ? (
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-sm bg-success-subtle/40 px-3 py-2">

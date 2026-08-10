@@ -1,8 +1,8 @@
 'use client'
 
 import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
+import { FormFieldFrame } from '@/shared/components/forms'
+import { NumberInput } from '@/shared/components/NumberInput'
 import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
 
@@ -31,11 +31,6 @@ export function WalletApplySection({
 }: WalletApplySectionProps) {
   if (walletBalance <= 0) return null
 
-  const clampAmount = (raw: number) => {
-    const n = Number.isFinite(raw) ? raw : 0
-    return Math.max(0, Math.min(n, maxApplicable))
-  }
-
   return (
     <div className="space-y-3 border border-line bg-paper/40 p-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -62,22 +57,23 @@ export function WalletApplySection({
         <p className="text-[0.8125rem] text-ink-muted">{LABELS.walletNotAvailableWithCod}</p>
       ) : (
         <>
-          <div className="space-y-1.5">
-            <Label htmlFor="wallet-amount">{LABELS.walletAmountToApply}</Label>
-            <Input
+          <FormFieldFrame
+            label={LABELS.walletAmountToApply}
+            htmlFor="wallet-amount"
+            hint={formatLabel(LABELS.walletRemainderDue, { amount: formatInr(amountDue) })}
+          >
+            <NumberInput
               id="wallet-amount"
-              type="number"
+              value={walletAmountToUse || undefined}
               min={0}
               max={maxApplicable}
-              step="0.01"
-              value={walletAmountToUse || ''}
+              step={0.01}
+              prefix="₹"
               disabled={disabled}
-              onChange={(e) => onAmountChange(clampAmount(Number(e.target.value)))}
+              showSteppers={false}
+              onChange={(value) => onAmountChange(value ?? 0)}
             />
-            <p className="text-[0.75rem] text-ink-muted">
-              {formatLabel(LABELS.walletRemainderDue, { amount: formatInr(amountDue) })}
-            </p>
-          </div>
+          </FormFieldFrame>
           {amountDue <= 0 && walletAmountToUse > 0 ? (
             <p className="text-[0.8125rem] font-medium text-success">{LABELS.walletFullyCoversOrder}</p>
           ) : null}

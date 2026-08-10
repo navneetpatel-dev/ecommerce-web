@@ -1,5 +1,8 @@
 import Image from 'next/image'
 import { Search } from 'lucide-react'
+import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
+import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
 
 interface SearchSuggestion {
@@ -48,28 +51,28 @@ export function SearchBar({
         <Search
           size={size === 'sm' ? 16 : 20}
           className={cn(
-            'absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none',
-            onDark ? 'text-paper/70' : 'text-ink-muted'
+            'pointer-events-none absolute left-4 top-1/2 z-[1] -translate-y-1/2',
+            onDark ? 'text-paper/70' : 'text-ink-muted',
           )}
+          aria-hidden
         />
-        <input
-          type="text"
+        <Input
+          type="search"
           value={term}
           onChange={(e) => onTermChange(e.target.value)}
           onFocus={onFocus}
           onBlur={onBlur}
-          placeholder="Search products, vendors..."
+          placeholder={LABELS.searchProductsVendors}
           className={cn(
-            'w-full rounded-full border px-4 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
-            size === 'sm' ? 'h-11 text-[0.8125rem] pl-9' : 'h-11 text-[0.9375rem] pl-11',
-            onDark
-              ? 'border-paper/25 bg-paper/10 text-paper placeholder:text-paper/55 focus-visible:border-paper/50'
-              : 'border-line bg-paper placeholder:text-ink-faint focus-visible:border-brand'
+            'rounded-full',
+            size === 'sm' ? 'pl-9 text-[0.8125rem]' : 'pl-11',
+            onDark &&
+              'border-paper/25 bg-paper/10 text-paper placeholder:text-paper/55 focus-visible:border-paper/50',
           )}
         />
       </form>
       {showPanel ? (
-        <div className="absolute top-full left-0 right-0 mt-1 border border-line bg-surface-raised rounded-md shadow-elevation-2 max-h-80 overflow-auto z-50">
+        <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-80 overflow-auto rounded-md border border-line bg-surface-raised shadow-elevation-2">
           {isFetching && !suggestions?.length ? (
             <div className="space-y-2 p-3">
               <div className="h-10 animate-pulse rounded-md bg-line/60" />
@@ -78,17 +81,25 @@ export function SearchBar({
             </div>
           ) : (
             suggestions?.map((s) => (
-              <button
+              <Button
                 key={s.id}
-                className="flex items-center gap-3 w-full px-4 h-12 text-left hover:bg-brand-subtle transition-colors"
+                type="button"
+                variant="ghost"
+                className="h-12 w-full justify-start gap-3 rounded-none px-4"
                 onMouseDown={() => onSelect(s.slug)}
               >
-                <Image src={s.imageUrl} alt={s.name} width={32} height={32} className="rounded object-cover shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-[0.9375rem] font-medium truncate">{s.name}</p>
-                  <p className="text-[0.8125rem] text-ink-muted">₹{s.basePrice}</p>
-                </div>
-              </button>
+                <Image
+                  src={s.imageUrl}
+                  alt={s.name}
+                  width={32}
+                  height={32}
+                  className="shrink-0 rounded object-cover"
+                />
+                <span className="min-w-0 flex-1 text-left">
+                  <span className="block truncate text-[0.9375rem] font-medium text-ink">{s.name}</span>
+                  <span className="block text-[0.8125rem] text-ink-muted">₹{s.basePrice}</span>
+                </span>
+              </Button>
             ))
           )}
         </div>

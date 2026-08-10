@@ -6,6 +6,7 @@ import { FormActions, FormFieldFrame, FormSection } from '@/shared/components/fo
 import { RequirePermission } from '@/shared/components/RequirePermission'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
+import { NumberInput } from '@/shared/components/NumberInput'
 import {
   Select,
   SelectContent,
@@ -254,10 +255,10 @@ export function AdminPromoBannersPage() {
             </FormFieldFrame>
           )}
           <FormFieldFrame label={LABELS.promoBannerPriority}>
-            <Input
-              type="number"
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
+            <NumberInput
+              value={priority === '' ? undefined : Number(priority)}
+              step={1}
+              onChange={(value) => setPriority(value == null ? '' : String(value))}
             />
           </FormFieldFrame>
           <FormActions className="sm:col-span-2 border-0 pt-0" leading={message}>
@@ -319,10 +320,10 @@ export function AdminPromoBannersPage() {
                       </Select>
                     </FormFieldFrame>
                     <FormFieldFrame label={LABELS.promoBannerPriority}>
-                      <Input
-                        type="number"
-                        value={editPriority}
-                        onChange={(e) => setEditPriority(e.target.value)}
+                      <NumberInput
+                        value={editPriority === '' ? undefined : Number(editPriority)}
+                        step={1}
+                        onChange={(value) => setEditPriority(value == null ? '' : String(value))}
                       />
                     </FormFieldFrame>
                     <FormActions className="sm:col-span-2 border-0 pt-0">

@@ -67,7 +67,7 @@ export function SortBar({
           <SelectTrigger
             aria-label={LABELS.sort}
             className={cn(
-              'h-9 w-[11.5rem] rounded-md border-line bg-surface text-[0.8125rem]',
+              'w-[11.5rem] rounded-md text-[0.8125rem] sm:text-[0.875rem]',
               hideSortOnMobile && 'hidden xl:flex',
             )}
           >

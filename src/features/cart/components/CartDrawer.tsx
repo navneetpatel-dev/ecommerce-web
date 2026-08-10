@@ -84,9 +84,15 @@ export function CartDrawer({
           >
             <div className="flex items-center justify-between px-4 h-14 border-b border-line shrink-0">
               <h2 className="text-[1.125rem] font-semibold">{LABELS.yourCart}</h2>
-              <button onClick={onClose} className="p-1 hover:bg-paper rounded" aria-label={LABELS.closeCart}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                onClick={onClose}
+                aria-label={LABELS.closeCart}
+              >
                 <X size={20} />
-              </button>
+              </Button>
             </div>
 
             <div className="flex-1 overflow-auto p-4 space-y-4">

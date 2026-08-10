@@ -154,17 +154,20 @@ export function ProductCard({
           )}
 
           {showWishlist && (
-            <button
+            <Button
+              type="button"
+              variant="secondary"
+              size="icon-sm"
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
                 onToggleWishlist?.()
               }}
               className={cn(
-                'absolute top-2 right-2 h-8 w-8 flex items-center justify-center rounded-full bg-surface/80 backdrop-blur-xs hover:bg-surface transition-colors',
+                'absolute top-2 right-2 h-8 w-8 min-h-8 max-h-8 rounded-full bg-surface/80 backdrop-blur-xs hover:bg-surface',
                 isWishlisted ? 'text-danger' : 'text-ink-muted'
               )}
-              aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+              aria-label={isWishlisted ? LABELS.removeFromWishlist : LABELS.addToWishlist}
             >
               <Heart
                 size={18}
@@ -173,7 +176,7 @@ export function ProductCard({
                   isWishlisted && 'animate-pulse-scale'
                 )}
               />
-            </button>
+            </Button>
           )}
 
           {canQuickAdd && (

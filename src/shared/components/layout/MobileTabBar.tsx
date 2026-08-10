@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { Home, Search, ShoppingCart, User } from 'lucide-react'
+import { Button } from '@/shared/components/ui/button'
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
 import type { CurrentUser } from '@/shared/api/types'
 import { CartCountBadge } from '@/shared/components/CartCountBadge'
 
@@ -18,23 +20,28 @@ export function MobileTabBar({ currentUser, onOpenCart, cartItemCount = 0 }: Mob
     >
       <Link href={PATHS.home} className="flex flex-col items-center gap-0.5 text-ink-muted">
         <Home size={20} />
-        <span className="text-[0.625rem]">Home</span>
+        <span className="text-[0.625rem]">{LABELS.home}</span>
       </Link>
       <Link href={PATHS.products} className="flex flex-col items-center gap-0.5 text-ink-muted">
         <Search size={20} />
-        <span className="text-[0.625rem]">Search</span>
+        <span className="text-[0.625rem]">{LABELS.search}</span>
       </Link>
-      <button onClick={onOpenCart} className="relative flex flex-col items-center gap-0.5 text-ink-muted">
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={onOpenCart}
+        className="relative h-auto min-h-0 max-h-none w-auto flex-col gap-0.5 px-2 py-1 text-ink-muted hover:bg-transparent hover:text-ink-muted"
+      >
         <ShoppingCart size={20} />
         <CartCountBadge count={cartItemCount} size="sm" />
-        <span className="text-[0.625rem]">Cart</span>
-      </button>
+        <span className="text-[0.625rem] font-normal">{LABELS.cart}</span>
+      </Button>
       <Link
         href={currentUser ? PATHS.profile : PATHS.login}
         className="flex flex-col items-center gap-0.5 text-ink-muted"
       >
         <User size={20} />
-        <span className="text-[0.625rem]">{currentUser ? 'Account' : 'Log in'}</span>
+        <span className="text-[0.625rem]">{currentUser ? LABELS.account : LABELS.logIn}</span>
       </Link>
     </nav>
   )

@@ -8,8 +8,10 @@ import { LABELS } from '@/shared/constants/labels'
 import { UNAVAILABLE_REASON } from '@/shared/constants/statuses'
 import { QuantitySelector } from '@/shared/components/QuantitySelector'
 import { Badge } from '@/shared/components/ui/badge'
+import { Button } from '@/shared/components/ui/button'
 import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
 import { cn } from '@/shared/utils/cn'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import type { CartItem } from '@/shared/api/types'
 import type { UnavailableReason } from '@/shared/constants/statuses'
 
@@ -81,13 +83,16 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
                 max={MAX_CART_LINE_QUANTITY}
               />
             ) : null}
-            <button
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
               onClick={() => onRemoveItem(item.id)}
-              className="p-0.5 hover:bg-paper rounded ml-auto"
-              aria-label={`Remove ${item.product.name}`}
+              className="ml-auto h-auto min-h-0 max-h-none w-auto p-0.5"
+              aria-label={formatLabel(LABELS.removeNamed, { name: item.product.name })}
             >
               <Trash2 size={14} className="text-ink-muted" />
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -139,14 +144,16 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
               </p>
             )}
           </div>
-          <button
+          <Button
             type="button"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-danger-subtle hover:text-danger sm:hidden"
-            aria-label={`Remove ${item.product.name}`}
+            variant="ghost"
+            size="icon-sm"
+            className="h-9 w-9 min-h-9 max-h-9 shrink-0 text-ink-muted hover:bg-danger-subtle hover:text-danger sm:hidden"
+            aria-label={formatLabel(LABELS.removeNamed, { name: item.product.name })}
             onClick={() => onRemoveItem(item.id)}
           >
             <Trash2 size={15} />
-          </button>
+          </Button>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -158,14 +165,16 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
               max={MAX_CART_LINE_QUANTITY}
             />
           ) : null}
-          <button
+          <Button
             type="button"
-            className="hidden items-center gap-1.5 text-[0.8125rem] text-ink-muted transition-colors hover:text-danger sm:inline-flex"
+            variant="ghost"
+            size="sm"
+            className="hidden h-auto min-h-0 max-h-none items-center gap-1.5 px-0 py-0 text-[0.8125rem] text-ink-muted hover:bg-transparent hover:text-danger sm:inline-flex"
             onClick={() => onRemoveItem(item.id)}
           >
             <Trash2 size={14} />
-            Remove
-          </button>
+            {LABELS.remove}
+          </Button>
         </div>
       </div>
 

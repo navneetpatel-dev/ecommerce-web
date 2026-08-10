@@ -10,6 +10,7 @@ import { Skeleton } from '@/shared/components/ui/skeleton'
 import { FormError } from '@/shared/components/FormError'
 import { ImageCropDialog } from '@/shared/components/ImageCropDialog'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { Button } from '@/shared/components/ui/button'
 import { PATHS } from '@/shared/constants/paths'
 import { LABELS } from '@/shared/constants/labels'
 import type { ImageMimeType } from '@/shared/constants/imageSpecs'
@@ -132,11 +133,12 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
         />
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
           <div className="relative inline-flex shrink-0">
-            <button
+            <Button
               type="button"
+              variant="ghost"
               onClick={() => fileRef.current?.click()}
               disabled={uploadAvatar.isPending}
-              className="group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              className="group relative h-auto min-h-0 max-h-none w-auto rounded-full p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               aria-label={LABELS.uploadProfilePhoto}
             >
               <Avatar className="h-24 w-24 border border-line text-[1.25rem] font-semibold text-ink">
@@ -148,7 +150,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
               <span className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center border border-line bg-surface text-ink-muted transition-colors group-hover:text-brand">
                 <Camera size={14} strokeWidth={1.5} />
               </span>
-            </button>
+            </Button>
             <input
               ref={fileRef}
               type="file"
@@ -256,20 +258,22 @@ function GlanceRow({
       </div>
       <div className="flex shrink-0 items-center gap-3">
         {onDetails ? (
-          <button
+          <Button
             type="button"
+            variant="link"
+            size="sm"
             onClick={onDetails}
-            className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
+            className="h-auto min-h-0 max-h-none gap-1 px-0 py-0 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
           >
-            Details
+            {LABELS.details}
             <ChevronRight size={14} />
-          </button>
+          </Button>
         ) : href ? (
           <Link
             href={href}
             className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
           >
-            View
+            {LABELS.view}
             <ChevronRight size={14} />
           </Link>
         ) : null}

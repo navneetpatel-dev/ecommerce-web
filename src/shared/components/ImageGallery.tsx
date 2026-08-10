@@ -1,6 +1,9 @@
 import Image from 'next/image'
 import type { ProductImage } from '@/shared/api/types'
+import { Button } from '@/shared/components/ui/button'
+import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
+import { formatLabel } from '@/shared/utils/formatLabel'
 
 interface ImageGalleryProps {
   mainImageUrl: string
@@ -51,22 +54,27 @@ export function ImageGallery({
       {images && images.length > 1 && (
         <div className="flex gap-2 mt-3">
           {images.map((img, i) => (
-            <button
+            <Button
               key={img.id}
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              aria-pressed={i === selectedIndex}
               onClick={() => onSelect(i)}
               className={cn(
-                'relative h-16 w-16 rounded-sm overflow-hidden border-2 transition-colors',
+                'relative h-16 w-16 min-h-16 max-h-none overflow-hidden rounded-sm border-2 p-0',
                 i === selectedIndex ? 'border-brand' : 'border-transparent hover:border-line'
               )}
+              aria-label={formatLabel(LABELS.productImageView, { name: productName, index: i + 1 })}
             >
               <Image
                 src={img.url}
-                alt={`${productName} - view ${i + 1}`}
+                alt={formatLabel(LABELS.productImageView, { name: productName, index: i + 1 })}
                 fill
                 className="object-cover"
                 sizes="64px"
               />
-            </button>
+            </Button>
           ))}
         </div>
       )}

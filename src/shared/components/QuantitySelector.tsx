@@ -6,6 +6,8 @@ import { Button } from '@/shared/components/ui/button'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { AnimatedQuantityValue } from '@/shared/components/AnimatedQuantityValue'
 import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 
 interface QuantitySelectorProps {
   value: number
@@ -45,7 +47,7 @@ export function QuantitySelector({
           className="h-11 w-11 rounded-none border-0"
           disabled={value <= min}
           onClick={() => onChange(value - 1)}
-          aria-label="Decrease quantity"
+          aria-label={LABELS.decreaseQuantity}
         >
           <Minus size={16} />
         </Button>
@@ -64,21 +66,23 @@ export function QuantitySelector({
             if (e.key === 'Escape') setDraft(null)
           }}
           className="h-11 w-11 border-x border-line bg-transparent text-center font-mono text-[0.9375rem] font-medium tabular-nums text-ink outline-none [appearance:textfield] focus-visible:shadow-[inset_0_0_0_1px_var(--brand)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-          aria-label="Quantity"
+          aria-label={LABELS.quantityField}
         />
       ) : (
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon-sm"
           onClick={() => setDraft(String(value))}
-          className="flex h-11 w-11 items-center justify-center border-x border-line bg-transparent"
-          aria-label={`Quantity ${value}. Click to edit.`}
+          className="h-11 w-11 rounded-none border-0 border-x border-line"
+          aria-label={formatLabel(LABELS.editQuantity, { value })}
         >
           <AnimatedQuantityValue
             value={value}
             className="h-5 w-8"
             digitClassName="font-mono text-[0.9375rem] font-medium text-ink"
           />
-        </button>
+        </Button>
       )}
 
       <DisabledActionHint
@@ -91,7 +95,7 @@ export function QuantitySelector({
           className="h-11 w-11 rounded-none border-0"
           disabled={value >= max}
           onClick={() => onChange(value + 1)}
-          aria-label="Increase quantity"
+          aria-label={LABELS.increaseQuantity}
         >
           <Plus size={16} />
         </Button>

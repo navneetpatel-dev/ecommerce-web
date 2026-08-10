@@ -11,6 +11,7 @@ import { PaginationContainer } from '@/shared/containers/PaginationContainer'
 import { Button } from '@/shared/components/ui/button'
 import { BottomSheet } from '@/shared/components/BottomSheet'
 import { EmptyState } from '@/shared/components/EmptyState'
+import { SelectableOptionButton } from '@/shared/components/SelectableOptionButton'
 import { Breadcrumbs } from '@/shared/components/Breadcrumbs'
 import { useCategoryPlp } from '../hooks/useCategoryPlp'
 import { LABELS } from '@/shared/constants/labels'
@@ -256,19 +257,13 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
       <BottomSheet open={plp.sortOpen} onClose={plp.closeSort} title={LABELS.sort}>
         <div className="space-y-2">
           {plp.sortOptions.map((option) => (
-            <button
+            <SelectableOptionButton
               key={option.value}
-              type="button"
-              className={cn(
-                'h-11 w-full rounded-md border px-4 text-left text-[0.9375rem] transition-colors',
-                plp.filters.sort === option.value
-                  ? 'border-brand bg-brand-subtle font-medium text-brand'
-                  : 'border-line bg-surface text-ink hover:bg-paper',
-              )}
+              selected={plp.filters.sort === option.value}
               onClick={() => plp.selectSort(option.value)}
             >
               {option.label}
-            </button>
+            </SelectableOptionButton>
           ))}
         </div>
       </BottomSheet>

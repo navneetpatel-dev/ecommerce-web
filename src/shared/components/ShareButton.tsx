@@ -1,6 +1,7 @@
 import { Share2, Link as LinkIcon } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { Popover, PopoverTrigger, PopoverContent } from '@/shared/components/ui/popover'
+import { LABELS } from '@/shared/constants/labels'
 
 interface ShareButtonProps {
   copied: boolean
@@ -13,7 +14,7 @@ export function ShareButton({
   copied,
   onShareNative,
   onCopyLink,
-  label = 'Share this product',
+  label = LABELS.shareThisProduct,
 }: ShareButtonProps) {
   return (
     <>
@@ -23,7 +24,7 @@ export function ShareButton({
         size="lg"
         className="shrink-0 md:hidden"
         onClick={onShareNative}
-        aria-label={copied ? 'Link copied' : 'Share'}
+        aria-label={copied ? LABELS.linkCopied : LABELS.share}
       >
         <Share2 size={20} />
       </Button>
@@ -35,7 +36,7 @@ export function ShareButton({
             variant="ghost"
             size="lg"
             className="hidden md:inline-flex shrink-0"
-            aria-label="Share"
+            aria-label={LABELS.share}
           >
             <Share2 size={20} />
           </Button>
@@ -43,14 +44,15 @@ export function ShareButton({
         <PopoverContent className="w-64">
           <div className="space-y-3">
             <h3 className="text-[0.9375rem] font-medium text-ink">{label}</h3>
-            <button
+            <Button
               type="button"
+              variant="outline"
               onClick={onCopyLink}
-              className="flex w-full items-center gap-2 rounded-md border border-line bg-surface px-3 py-2 text-left text-[0.9375rem] text-ink hover:bg-paper"
+              className="w-full justify-start gap-2 font-normal"
             >
               <LinkIcon className="h-4 w-4" />
-              {copied ? 'Link copied' : 'Copy link'}
-            </button>
+              {copied ? LABELS.linkCopied : LABELS.copyLink}
+            </Button>
           </div>
         </PopoverContent>
       </Popover>

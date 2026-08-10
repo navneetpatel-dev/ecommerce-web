@@ -3,6 +3,7 @@
 import type { ProductListItem } from '@/shared/api/types'
 import { Button } from '@/shared/components/ui/button'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import { LABELS } from '@/shared/constants/labels'
 
 interface ProductCompareBarProps {
   products: ProductListItem[]
@@ -24,19 +25,21 @@ export function ProductCompareBar({
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           {products.map((product) => (
-            <button
+            <Button
               key={product.id}
               type="button"
-              className="rounded-full bg-brand-subtle px-3 py-1 text-[0.8125rem] font-medium text-brand"
+              variant="secondary"
+              size="sm"
+              className="h-auto min-h-0 max-h-none rounded-full bg-brand-subtle px-3 py-1 text-[0.8125rem] font-medium text-brand hover:bg-brand-subtle hover:text-brand"
               onClick={() => onToggleProduct(product)}
             >
               {product.name}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="flex items-center gap-2">
           <Button type="button" variant="ghost" size="sm" onClick={onClear}>
-            Clear
+            {LABELS.clear}
           </Button>
           <DisabledActionHint
             disabled={products.length < 2}
@@ -48,7 +51,7 @@ export function ProductCompareBar({
               disabled={products.length < 2}
               onClick={onCompareNow}
             >
-              Compare now
+              {LABELS.compareNow}
             </Button>
           </DisabledActionHint>
         </div>

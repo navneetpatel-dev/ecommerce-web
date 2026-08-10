@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { X } from 'lucide-react'
+import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 import { LABELS } from '@/shared/constants/labels'
 import type { SidebarNavItem } from './SidebarNav'
@@ -32,14 +33,16 @@ export function WorkspaceNavDrawer({
       <div className="absolute left-0 top-0 bottom-0 flex w-72 flex-col bg-surface shadow-elevation-4 animate-slide-in-left">
         <div className="flex h-14 items-center justify-between border-b border-line px-4">
           <span className="text-[1.125rem] font-semibold text-brand">{title}</span>
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon-sm"
             onClick={onClose}
-            className="rounded-md p-1 text-ink-muted hover:bg-paper hover:text-ink"
+            className="text-ink-muted hover:text-ink"
             aria-label={LABELS.closeMenu}
           >
             <X size={20} />
-          </button>
+          </Button>
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto p-4">

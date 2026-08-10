@@ -1,4 +1,6 @@
 import { MessageCircle } from 'lucide-react'
+import { Button } from '@/shared/components/ui/button'
+import { LABELS } from '@/shared/constants/labels'
 
 interface ChatWidgetProps {
   open: boolean
@@ -11,27 +13,29 @@ export function ChatWidget({ open, onToggle, onClose }: ChatWidgetProps) {
     <div className="fixed bottom-6 right-6 z-40">
       {open && (
         <div className="mb-4 w-80 rounded-lg border border-line bg-surface-raised p-4 shadow-elevation-3">
-          <h3 className="text-[1.125rem] font-semibold text-ink">Need help?</h3>
-          <p className="mt-2 text-[0.9375rem] text-ink-muted">
-            Chat support is available for orders, returns, and account questions.
-          </p>
-          <button
+          <h3 className="text-[1.125rem] font-semibold text-ink">{LABELS.chatNeedHelpTitle}</h3>
+          <p className="mt-2 text-[0.9375rem] text-ink-muted">{LABELS.chatSupportMessage}</p>
+          <Button
             type="button"
-            className="mt-4 inline-flex text-[0.8125rem] font-medium text-brand hover:underline"
+            variant="link"
+            size="sm"
+            className="mt-4 h-auto min-h-0 max-h-none px-0 py-0 text-[0.8125rem] font-medium text-brand"
             onClick={onClose}
           >
-            Close
-          </button>
+            {LABELS.close}
+          </Button>
         </div>
       )}
-      <button
+      <Button
         type="button"
-        aria-label="Open chat support"
+        variant="secondary"
+        size="icon"
+        aria-label={LABELS.openChatSupport}
         onClick={onToggle}
-        className="flex h-14 w-14 items-center justify-center rounded-full border border-line bg-surface-raised shadow-elevation-2 hover:shadow-elevation-3 transition-all"
+        className="h-14 w-14 min-h-14 max-h-14 rounded-full shadow-elevation-2 hover:shadow-elevation-3"
       >
         <MessageCircle className="h-6 w-6 text-ink" />
-      </button>
+      </Button>
     </div>
   )
 }

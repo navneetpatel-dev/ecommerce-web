@@ -42,19 +42,22 @@ export function ReviewForm({
           <FormFieldFrame label={LABELS.rating} error={errors.rating?.message}>
             <div className="mt-1 flex gap-1">
               {[1, 2, 3, 4, 5].map((i) => (
-                <button
+                <Button
                   key={i}
                   type="button"
+                  size="icon-sm"
+                  variant="ghost"
                   onClick={() => onSetRating(i)}
                   onMouseEnter={() => onSetHoverRating(i)}
                   onMouseLeave={() => onSetHoverRating(0)}
+                  className="h-auto min-h-0 max-h-none w-auto px-0"
                 >
                   <Star
                     className={`h-6 w-6 ${
                       i <= (hoverRating || rating) ? 'fill-warning text-warning' : 'text-line'
                     }`}
                   />
-                </button>
+                </Button>
               ))}
             </div>
           </FormFieldFrame>

@@ -62,21 +62,24 @@ export function VariantSelector({
                       disabled={!available}
                       message="Not available with your current selection."
                     >
-                      <button
+                      <Button
                         type="button"
+                        variant="outline"
+                        size="sm"
                         disabled={!available}
+                        aria-pressed={active}
                         onClick={() => onSelectValue(key, value)}
                         className={cn(
-                          'px-4 py-2 rounded-md border text-[0.9375rem] font-medium transition-colors',
+                          'h-auto min-h-0 max-h-none px-4 py-2 font-medium',
                           active
-                            ? 'border-brand bg-brand-subtle text-brand'
+                            ? 'border-brand bg-brand-subtle text-brand hover:bg-brand-subtle hover:text-brand'
                             : available
-                              ? 'border-line bg-surface hover:border-brand hover:text-brand'
-                              : 'border-line bg-paper text-ink/30 line-through cursor-not-allowed'
+                              ? 'border-line hover:border-brand hover:text-brand'
+                              : 'border-line bg-paper text-ink/30 line-through'
                         )}
                       >
                         {value}
-                      </button>
+                      </Button>
                     </DisabledActionHint>
                   )
                 })}

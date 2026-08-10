@@ -4,6 +4,7 @@ import { Button } from '@/shared/components/ui/button'
 import { FileUpload } from '@/shared/components/FileUpload'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
+import { Textarea } from '@/shared/components/ui/textarea'
 import { NumberInput } from '@/shared/components/NumberInput'
 import {
   Select,
@@ -92,10 +93,11 @@ export function VendorProductCreateForm({
             </Select>
           </FormFieldFrame>
           <FormFieldFrame label={LABELS.shortDescription}>
-            <Input
+            <Textarea
               placeholder={LABELS.shortDescription}
               value={description}
               onChange={(e) => onDescriptionChange(e.target.value)}
+              className="min-h-[6.5rem]"
             />
           </FormFieldFrame>
         </FormSection>

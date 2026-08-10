@@ -1,6 +1,7 @@
 'use client'
 
 import { Check } from 'lucide-react'
+import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 
 interface StepIndicatorProps {
@@ -98,13 +99,14 @@ export function StepIndicator({
                 />
               )}
 
-              <button
+              <Button
                 type="button"
+                variant="ghost"
                 onClick={() => onStepClick(stepNum)}
                 disabled={isUpcoming}
                 aria-current={isCurrent ? 'step' : undefined}
                 className={cn(
-                  'group relative z-[1] flex w-full flex-col items-center gap-3 px-2 text-center',
+                  'relative z-[1] h-auto min-h-0 max-h-none w-full flex-col gap-3 px-2 text-center font-normal hover:bg-transparent',
                   isUpcoming && 'cursor-not-allowed'
                 )}
               >
@@ -134,7 +136,7 @@ export function StepIndicator({
                     {meta?.description}
                   </span>
                 </span>
-              </button>
+              </Button>
             </li>
           )
         })}

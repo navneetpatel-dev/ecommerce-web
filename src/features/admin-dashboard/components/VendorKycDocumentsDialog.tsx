@@ -11,6 +11,8 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 import { StatusDialog } from '@/shared/components/StatusDialog'
+import { FormFieldFrame } from '@/shared/components/forms'
+import { Textarea } from '@/shared/components/ui/textarea'
 import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
@@ -174,15 +176,17 @@ export function VendorKycDocumentsDialog({
                         </p>
                       ) : null}
                       {item.documentId ? (
-                        <button
+                        <Button
                           type="button"
+                          variant="link"
+                          size="sm"
                           onClick={() => void openDocument(item.documentId!)}
                           disabled={openingDocId === item.documentId}
-                          className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-brand hover:underline disabled:opacity-60"
+                          className="h-auto min-h-0 max-h-none gap-1.5 px-0 py-0 text-[0.8125rem] font-medium text-brand"
                         >
                           <FileText className="size-3.5" aria-hidden />
                           {LABELS.openDocument}
-                        </button>
+                        </Button>
                       ) : null}
                     </div>
                     {canReview ? (
@@ -275,17 +279,14 @@ export function VendorKycDocumentsDialog({
           },
         }}
       >
-        <div className="space-y-2">
-          <label className="text-[0.8125rem] font-medium text-ink" htmlFor="kyc-reject-reason">
-            {LABELS.documentRejectionReason}
-          </label>
-          <textarea
+        <FormFieldFrame label={LABELS.documentRejectionReason} htmlFor="kyc-reject-reason">
+          <Textarea
             id="kyc-reject-reason"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="min-h-24 w-full rounded-md border border-line bg-surface px-3 py-2 text-[0.875rem] text-ink"
+            className="min-h-24 resize-y"
           />
-        </div>
+        </FormFieldFrame>
       </StatusDialog>
     </>
   )

@@ -2,6 +2,7 @@
 
 import { cn } from '@/shared/utils/cn'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
+import { Button } from '@/shared/components/ui/button'
 import { motion } from 'motion/react'
 import { LABELS } from '@/shared/constants/labels'
 import { useAuthStore } from '@/features/auth/store/auth.store'
@@ -70,20 +71,22 @@ export function AccountLayout({
               const Icon = section.icon
               return (
                 <li key={section.id}>
-                  <button
+                  <Button
                     type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={() => onSectionChange(section.id)}
                     aria-current={selected ? 'page' : undefined}
                     className={cn(
-                      'inline-flex items-center gap-2 border px-3.5 py-2 text-[0.8125rem] font-medium transition-colors',
+                      'h-auto min-h-0 max-h-none gap-2 px-3.5 py-2 text-[0.8125rem]',
                       selected
-                        ? 'border-line-strong bg-paper text-brand shadow-[inset_0_-2px_0_0_var(--brand)]'
-                        : 'border-line bg-surface text-ink-muted hover:border-ink/25 hover:bg-paper hover:text-ink'
+                        ? 'border-line-strong bg-paper text-brand shadow-[inset_0_-2px_0_0_var(--brand)] hover:bg-paper hover:text-brand'
+                        : 'border-line text-ink-muted hover:border-ink/25 hover:text-ink'
                     )}
                   >
                     <Icon size={15} strokeWidth={1.5} aria-hidden />
                     {section.label}
-                  </button>
+                  </Button>
                 </li>
               )
             })}
@@ -102,14 +105,15 @@ export function AccountLayout({
                   const Icon = section.icon
                   return (
                     <li key={section.id}>
-                      <button
+                      <Button
                         type="button"
+                        variant="ghost"
                         onClick={() => onSectionChange(section.id)}
                         aria-current={selected ? 'page' : undefined}
                         className={cn(
-                          'flex w-full items-start gap-3 px-4 py-3.5 text-left transition-colors',
+                          'h-auto min-h-0 max-h-none w-full items-start gap-3 rounded-none px-4 py-3.5 text-left font-normal',
                           selected
-                            ? 'bg-paper shadow-[inset_3px_0_0_0_var(--brand)]'
+                            ? 'bg-paper shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-paper'
                             : 'hover:bg-paper/70'
                         )}
                       >
@@ -135,7 +139,7 @@ export function AccountLayout({
                             {section.description}
                           </span>
                         </span>
-                      </button>
+                      </Button>
                     </li>
                   )
                 })}

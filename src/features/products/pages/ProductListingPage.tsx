@@ -10,10 +10,12 @@ import { PaginationContainer } from '@/shared/containers/PaginationContainer'
 import { Button } from '@/shared/components/ui/button'
 import { BottomSheet } from '@/shared/components/BottomSheet'
 import { EmptyState } from '@/shared/components/EmptyState'
+import { SelectableOptionButton } from '@/shared/components/SelectableOptionButton'
 import { useCategories } from '@/features/categories'
 import { SORT_OPTIONS, useProductListing } from '../hooks/useProductListing'
-import { cn } from '@/shared/utils/cn'
+import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import type { ProductFilters } from '../api/products.api'
 
 function getListingEmptyState(
@@ -36,10 +38,10 @@ function getListingEmptyState(
   if (hasFacets) {
     return {
       icon: SlidersHorizontal,
-      eyebrow: 'Filters',
-      heading: 'Nothing in this range',
-      message: 'No pieces match these filters. Reset them to browse the full collection.',
-      actionLabel: 'Reset filters',
+      eyebrow: LABELS.filters,
+      heading: LABELS.nothingInThisRange,
+      message: LABELS.nothingInThisRangeHint,
+      actionLabel: LABELS.resetFilters,
       onAction: 'clearFilters',
     }
   }
@@ -47,10 +49,10 @@ function getListingEmptyState(
   if (filters.search) {
     return {
       icon: Search,
-      eyebrow: 'Search',
-      heading: 'No results',
-      message: `Nothing matched “${filters.search}”. Try another term or browse the full collection.`,
-      actionLabel: 'Browse all products',
+      eyebrow: LABELS.search,
+      heading: LABELS.noSearchResultsHeading,
+      message: formatLabel(LABELS.noSearchResultsHint, { search: filters.search }),
+      actionLabel: LABELS.browseAllProducts,
       actionTo: PATHS.products,
     }
   }
@@ -58,12 +60,12 @@ function getListingEmptyState(
   if (filters.categoryId) {
     return {
       icon: Package,
-      eyebrow: 'Category',
-      heading: 'No products here yet',
+      eyebrow: LABELS.category,
+      heading: LABELS.noCategoryProductsHeading,
       message: categoryName
-        ? `“${categoryName}” doesn’t have any products right now. Browse the full collection instead.`
-        : 'This category doesn’t have any products right now. Browse the full collection instead.',
-      actionLabel: 'Browse all products',
+        ? formatLabel(LABELS.noCategoryProductsHintNamed, { name: categoryName })
+        : LABELS.noCategoryProductsHint,
+      actionLabel: LABELS.browseAllProducts,
       actionTo: PATHS.products,
     }
   }
@@ -71,20 +73,20 @@ function getListingEmptyState(
   if (filters.vendorId) {
     return {
       icon: Package,
-      eyebrow: 'Shop',
-      heading: 'No products from this vendor',
-      message: 'This vendor has nothing listed right now. Browse the full collection instead.',
-      actionLabel: 'Browse all products',
+      eyebrow: LABELS.shop,
+      heading: LABELS.noVendorProductsHeading,
+      message: LABELS.noVendorProductsHint,
+      actionLabel: LABELS.browseAllProducts,
       actionTo: PATHS.products,
     }
   }
 
   return {
     icon: Package,
-    eyebrow: 'Shop',
-    heading: 'No products yet',
-    message: 'The collection is empty for now. Check back soon for new pieces.',
-    actionLabel: 'Go to home',
+    eyebrow: LABELS.shop,
+    heading: LABELS.noProductsYetHeading,
+    message: LABELS.noProductsYetHint,
+    actionLabel: LABELS.goToHomepage,
     actionTo: PATHS.home,
   }
 }
@@ -97,7 +99,7 @@ export function ProductListingPage() {
 
   return (
     <div className="storefront-container pb-8 pt-6 md:pt-8">
-      <h1 className="sr-only">All products</h1>
+      <h1 className="sr-only">{LABELS.allProducts}</h1>
 
       <div className="sticky top-14 z-20 -mx-4 mb-6 border-y border-line bg-paper/95 px-4 py-3 backdrop-blur-sm xl:hidden lg:top-[72px]">
         <div className="flex items-center gap-2">
@@ -108,7 +110,7 @@ export function ProductListingPage() {
             onClick={listing.openFilters}
           >
             <SlidersHorizontal size={14} strokeWidth={1.75} aria-hidden />
-            Filters
+            {LABELS.filters}
           </Button>
           <Button
             variant="secondary"
@@ -117,7 +119,7 @@ export function ProductListingPage() {
             onClick={listing.openSort}
           >
             <ArrowUpDown size={14} strokeWidth={1.75} aria-hidden />
-            Sort
+            {LABELS.sort}
           </Button>
           <Button
             variant={listing.compareMode ? 'default' : 'secondary'}
@@ -127,7 +129,7 @@ export function ProductListingPage() {
             aria-pressed={listing.compareMode}
           >
             <Columns2 size={14} strokeWidth={1.75} aria-hidden />
-            Compare
+            {LABELS.compare}
           </Button>
         </div>
       </div>
@@ -184,7 +186,7 @@ export function ProductListingPage() {
         </div>
       </div>
 
-      <BottomSheet open={listing.filterOpen} onClose={listing.closeFilters} title="Filters">
+      <BottomSheet open={listing.filterOpen} onClose={listing.closeFilters} title={LABELS.filters}>
         <FilterSidebar
           idPrefix="mobile"
           className="w-full"
@@ -198,26 +200,20 @@ export function ProductListingPage() {
           }}
         />
         <Button className="mt-4 w-full" onClick={listing.closeFilters}>
-          Show results
+          {LABELS.showResults}
         </Button>
       </BottomSheet>
 
-      <BottomSheet open={listing.sortOpen} onClose={listing.closeSort} title="Sort">
+      <BottomSheet open={listing.sortOpen} onClose={listing.closeSort} title={LABELS.sort}>
         <div className="space-y-2">
           {SORT_OPTIONS.map((option) => (
-            <button
+            <SelectableOptionButton
               key={option.value}
-              type="button"
-              className={cn(
-                'h-11 w-full rounded-md border px-4 text-left text-[0.9375rem] transition-colors',
-                listing.filters.sort === option.value
-                  ? 'border-brand bg-brand-subtle font-medium text-brand'
-                  : 'border-line bg-surface text-ink hover:bg-paper'
-              )}
+              selected={listing.filters.sort === option.value}
               onClick={() => listing.selectSort(option.value)}
             >
               {option.label}
-            </button>
+            </SelectableOptionButton>
           ))}
         </div>
       </BottomSheet>

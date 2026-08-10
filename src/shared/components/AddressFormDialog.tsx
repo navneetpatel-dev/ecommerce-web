@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Button } from '@/shared/components/ui/button'
+import { CheckboxField } from '@/shared/components/CheckboxField'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
 import {
@@ -177,15 +178,15 @@ export function AddressFormDialog({
               </FormFieldFrame>
 
               {hasAddresses || address ? (
-                <label className="flex items-center gap-2 text-[0.875rem] text-ink sm:col-span-2">
-                  <input
-                    type="checkbox"
-                    checked={form.isDefault}
-                    onChange={(e) => setForm((prev) => ({ ...prev, isDefault: e.target.checked }))}
-                    className="h-4 w-4 accent-[var(--brand)]"
-                  />
-                  {LABELS.addressSetDefault}
-                </label>
+                <CheckboxField
+                  id="shared-addr-default"
+                  className="sm:col-span-2"
+                  checked={form.isDefault}
+                  onCheckedChange={(checked) =>
+                    setForm((prev) => ({ ...prev, isDefault: checked }))
+                  }
+                  label={LABELS.addressSetDefault}
+                />
               ) : null}
             </FormSection>
 

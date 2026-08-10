@@ -48,14 +48,16 @@ export function OtpCard({
         <div className="flex items-center justify-between gap-3">
           <span className="text-[0.8125rem] text-ink-muted">{timerLabel}</span>
           <DisabledActionHint disabled={!canResend} message={LABELS.resendCodeWait}>
-            <button
+            <Button
               type="button"
-              className="text-[0.8125rem] font-medium text-brand transition-colors hover:text-brand-hover hover:underline disabled:opacity-50 disabled:no-underline"
+              variant="link"
+              size="sm"
+              className="h-auto min-h-0 max-h-none px-0 py-0 text-[0.8125rem] font-medium text-brand hover:text-brand-hover"
               disabled={!canResend}
               onClick={onResend}
             >
               {LABELS.resendCode}
-            </button>
+            </Button>
           </DisabledActionHint>
         </div>
         {info ? <p className="text-[0.8125rem] text-ink-muted">{info}</p> : null}

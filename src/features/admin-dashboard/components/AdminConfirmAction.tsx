@@ -3,6 +3,8 @@
 import { useState, type ReactNode } from 'react'
 import { Archive, Check, Trash2, Ban, Play } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
+import { FormFieldFrame } from '@/shared/components/forms'
+import { Textarea } from '@/shared/components/ui/textarea'
 import {
   StatusDialog,
   type StatusDialogVariant,
@@ -164,23 +166,20 @@ export function AdminConfirmAction({
         }}
       >
         {requireReason ? (
-          <label className="block space-y-2">
-            <span className="text-[0.8125rem] font-medium text-ink">{reasonLabel}</span>
-            <textarea
+          <FormFieldFrame
+            label={reasonLabel}
+            htmlFor="admin-confirm-reason"
+            hint={!reason.trim() ? reasonHint : undefined}
+          >
+            <Textarea
+              id="admin-confirm-reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               rows={3}
               placeholder={reasonLabel}
-              className={cn(
-                'w-full resize-none rounded-md border border-line bg-surface px-3 py-2.5',
-                'text-[0.9375rem] text-ink outline-none',
-                'placeholder:text-ink-faint focus-visible:border-brand',
-              )}
+              className="min-h-[6.5rem] resize-none"
             />
-            {!reason.trim() ? (
-              <p className="text-[0.8125rem] text-ink-muted">{reasonHint}</p>
-            ) : null}
-          </label>
+          </FormFieldFrame>
         ) : null}
         {actionError ? <p className="text-[0.8125rem] text-danger">{actionError}</p> : null}
       </StatusDialog>

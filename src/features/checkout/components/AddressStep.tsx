@@ -45,7 +45,7 @@ export function AddressStep({
             className="gap-2"
           >
             <Plus size={16} />
-            Add address
+            {LABELS.addAddress}
           </Button>
         </div>
       )}
@@ -63,7 +63,7 @@ export function AddressStep({
           </div>
           <Button type="button" size="lg" onClick={() => setShowDialog(true)} className="gap-2">
             <Plus size={16} />
-            Add address
+            {LABELS.addAddress}
           </Button>
         </div>
       )}
@@ -83,17 +83,19 @@ export function AddressStep({
             const selected = selectedId === addr.id
             return (
               <li key={addr.id}>
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  aria-pressed={selected}
                   onClick={() => onSelect(addr.id)}
                   className={cn(
-                    'w-full border px-4 py-4 text-left transition-colors',
+                    'h-auto min-h-11 max-h-none w-full px-4 py-4 text-left font-normal',
                     selected
-                      ? 'border-brand bg-brand-subtle shadow-[inset_3px_0_0_0_var(--brand)]'
-                      : 'border-line bg-surface hover:border-ink/25'
+                      ? 'border-brand bg-brand-subtle shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-brand-subtle hover:text-ink'
+                      : 'border-line hover:border-ink/25'
                   )}
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex w-full items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="font-medium text-ink">
                         {addr.line1}
@@ -116,10 +118,10 @@ export function AddressStep({
                   </div>
                   {addr.isDefault && (
                     <span className="mt-3 inline-block text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-brand">
-                      Default
+                      {LABELS.addressDefault}
                     </span>
                   )}
-                </button>
+                </Button>
               </li>
             )
           })}

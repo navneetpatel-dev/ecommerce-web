@@ -5,8 +5,10 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import Link from 'next/link'
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { MediaImage } from '@/shared/components/MediaImage'
+import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
 
 export interface HeroSlide {
   id: string
@@ -353,10 +355,10 @@ export function HeroSection({
             {/* Desktop: stacked controls on the right */}
             <div className="pointer-events-none absolute inset-y-0 right-0 z-20 hidden items-center pr-4 md:flex lg:pr-8">
               <div className="pointer-events-auto flex flex-col gap-2">
-                <CarouselIconButton label="Previous slide" onClick={goPrev}>
+                <CarouselIconButton label={LABELS.previousSlide} onClick={goPrev}>
                   <ChevronLeft size={20} />
                 </CarouselIconButton>
-                <CarouselIconButton label="Next slide" onClick={goNext}>
+                <CarouselIconButton label={LABELS.nextSlide} onClick={goNext}>
                   <ChevronRight size={20} />
                 </CarouselIconButton>
               </div>
@@ -364,12 +366,12 @@ export function HeroSection({
 
             {/* Mobile: bottom corners — clear of centered stack controls on desktop */}
             <div className="absolute bottom-5 left-3 z-20 md:hidden">
-              <CarouselIconButton label="Previous slide" onClick={goPrev}>
+              <CarouselIconButton label={LABELS.previousSlide} onClick={goPrev}>
                 <ChevronLeft size={18} />
               </CarouselIconButton>
             </div>
             <div className="absolute bottom-5 right-3 z-20 md:hidden">
-              <CarouselIconButton label="Next slide" onClick={goNext}>
+              <CarouselIconButton label={LABELS.nextSlide} onClick={goNext}>
                 <ChevronRight size={18} />
               </CarouselIconButton>
             </div>
@@ -390,13 +392,15 @@ function CarouselIconButton({
   children: React.ReactNode
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="secondary"
+      size="icon-sm"
       aria-label={label}
       onClick={onClick}
-      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-black/55 text-white shadow-elevation-2 backdrop-blur-md transition-colors hover:border-white/70 hover:bg-black/70"
+      className="rounded-full border-white/40 bg-black/55 text-white shadow-elevation-2 backdrop-blur-md hover:border-white/70 hover:bg-black/70 hover:text-white"
     >
       {children}
-    </button>
+    </Button>
   )
 }

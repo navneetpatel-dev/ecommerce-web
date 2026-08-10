@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ShoppingCart, UserRound, Search, Menu, ChevronDown, Moon, Sun } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
+import { Button } from '@/shared/components/ui/button'
 import { SearchBarContainer } from '@/features/search/containers/SearchBarContainer'
 import { MobileTabBar } from './MobileTabBar'
 import { MobileNavDrawer } from './MobileNavDrawer'
@@ -166,25 +167,30 @@ export function Header({
       >
         <div className="storefront-container flex h-full items-center gap-2 sm:gap-3 lg:gap-4 xl:gap-6">
           {showStorefrontChrome ? (
-            <button
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
               onClick={onOpenMobileNav}
               className={cn(
-                'lg:hidden p-2 -ml-2 rounded-md',
-                isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
+                'lg:hidden -ml-2',
+                isTransparent ? 'hover:bg-paper/10' : undefined
               )}
               aria-label={LABELS.menu}
             >
               <Menu size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-            </button>
+            </Button>
           ) : showWorkspaceMenu ? (
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon-sm"
               onClick={onOpenWorkspaceNav}
-              className="lg:hidden -ml-2 rounded-md p-2 hover:bg-paper"
+              className="lg:hidden -ml-2"
               aria-label={LABELS.menu}
             >
               <Menu size={20} className="text-ink" />
-            </button>
+            </Button>
           ) : null}
 
           <Link
@@ -205,11 +211,13 @@ export function Header({
                   onMouseEnter={onScheduleMegaOpen}
                   onMouseLeave={onScheduleMegaClose}
                 >
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
                     className={cn(
-                      'inline-flex items-center gap-1 px-3 py-2 rounded-md text-[0.8125rem] font-medium transition-colors',
-                      isTransparent ? 'text-paper hover:bg-paper/10' : 'text-ink hover:bg-paper'
+                      'gap-1',
+                      isTransparent ? 'text-paper hover:bg-paper/10 hover:text-paper' : undefined
                     )}
                     aria-expanded={megaMenuOpen}
                     aria-label={LABELS.browseCategories}
@@ -217,7 +225,7 @@ export function Header({
                   >
                     {LABELS.categories}{' '}
                     <ChevronDown size={16} className={cn('transition-transform', megaMenuOpen && 'rotate-180')} />
-                  </button>
+                  </Button>
 
                   {megaMenuOpen && (
                     <CategoriesMegaMenu
@@ -252,14 +260,16 @@ export function Header({
           )}
 
           <nav aria-label="Header actions" className="ml-auto flex shrink-0 items-center gap-1">
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="sm"
               onClick={toggleTheme}
               className={cn(
-                'inline-flex h-11 w-11 shrink-0 items-center justify-center gap-1.5 rounded-md border border-line-strong font-mono text-[0.6875rem] font-medium uppercase tracking-wide transition-colors sm:w-auto sm:px-3',
+                'w-11 shrink-0 gap-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wide sm:w-auto',
                 isTransparent
-                  ? 'border-paper/30 text-paper hover:bg-paper/10'
-                  : 'bg-surface text-ink-muted hover:bg-paper hover:text-ink'
+                  ? 'border-paper/30 bg-transparent text-paper hover:bg-paper/10 hover:text-paper'
+                  : 'text-ink-muted'
               )}
               aria-label={
                 mounted && theme === 'dark' ? LABELS.themeLight : LABELS.themeDark
@@ -274,33 +284,38 @@ export function Header({
               <span className="hidden sm:inline">
                 {mounted && theme === 'dark' ? LABELS.themeLight : LABELS.themeDark}
               </span>
-            </button>
+            </Button>
 
             {showStorefrontChrome ? (
               <>
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon-sm"
                   onClick={onOpenMobileSearch}
                   className={cn(
-                    'md:hidden p-2 rounded-md',
-                    isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
+                    'md:hidden',
+                    isTransparent ? 'hover:bg-paper/10' : undefined
                   )}
                   aria-label={LABELS.search}
                 >
                   <Search size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-                </button>
+                </Button>
 
-                <button
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
                   onClick={onOpenCart}
                   className={cn(
-                    'p-2 rounded-md transition-colors relative',
-                    isTransparent ? 'hover:bg-paper/10' : 'hover:bg-paper'
+                    'relative',
+                    isTransparent ? 'hover:bg-paper/10' : undefined
                   )}
                   aria-label={cartItemCount > 0 ? `${LABELS.cart}, ${cartItemCount}` : LABELS.cart}
                 >
                   <ShoppingCart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
                   <CartCountBadge count={cartItemCount} />
-                </button>
+                </Button>
               </>
             ) : null}
 
@@ -388,11 +403,12 @@ export function Header({
                     if (canHoverAccountMenu) setAccountMenuOpen(false)
                   }}
                 >
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
                     onClick={() => setAccountMenuOpen((open) => !open)}
                     className={cn(
-                      'flex items-center gap-2 rounded-full border px-1.5 py-1 transition-colors',
+                      'h-auto min-h-0 max-h-none gap-2 rounded-full border px-1.5 py-1',
                       isTransparent
                         ? 'border-paper/20 hover:bg-paper/10'
                         : 'border-line bg-surface hover:bg-paper'
@@ -416,7 +432,7 @@ export function Header({
                         accountMenuOpen && 'rotate-180'
                       )}
                     />
-                  </button>
+                  </Button>
 
                   {accountMenuOpen ? (
                     <div

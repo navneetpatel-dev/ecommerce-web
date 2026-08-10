@@ -17,6 +17,7 @@ import {
   useSetDefaultAccountAddress,
 } from '../../api/account.queries'
 import type { AddressInput } from '@/features/users/api/users.api'
+import { LABELS } from '@/shared/constants/labels'
 
 export function AddressesSection() {
   const { data: addresses, isLoading } = useAccountAddresses()
@@ -97,7 +98,7 @@ export function AddressesSection() {
                 <p className="mt-0.5 text-[0.8125rem] text-ink-muted">{addr.country}</p>
                 {addr.isDefault ? (
                   <span className="mt-3 inline-block text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-brand">
-                    Default
+                    {LABELS.addressDefault}
                   </span>
                 ) : null}
               </div>
@@ -110,7 +111,7 @@ export function AddressesSection() {
                   onClick={() => openEdit(addr)}
                 >
                   <Pencil size={14} />
-                  Edit
+                  {LABELS.edit}
                 </Button>
                 <Button
                   type="button"
@@ -142,7 +143,7 @@ export function AddressesSection() {
                   }}
                 >
                   <Star size={14} />
-                  {addr.isDefault ? 'Default' : 'Set default'}
+                  {addr.isDefault ? LABELS.addressDefault : LABELS.setDefaultShort}
                 </Button>
                 <Button
                   type="button"
@@ -152,20 +153,21 @@ export function AddressesSection() {
                   onClick={() => setDeleteTarget(addr)}
                 >
                   <Trash2 size={14} />
-                  Delete
+                  {LABELS.delete}
                 </Button>
               </div>
             </li>
           ))}
           <li>
-            <button
+            <Button
               type="button"
+              variant="outline"
               onClick={openCreate}
-              className="flex h-full min-h-[10rem] w-full flex-col items-center justify-center gap-2 border border-dashed border-line bg-paper/40 p-4 text-ink-muted transition-colors hover:border-ink/30 hover:bg-paper hover:text-ink"
+              className="h-full min-h-[10rem] max-h-none w-full flex-col gap-2 border-dashed border-line bg-paper/40 p-4 text-ink-muted hover:border-ink/30 hover:bg-paper hover:text-ink"
             >
               <Plus size={20} strokeWidth={1.5} />
-              <span className="text-[0.875rem] font-medium">Add address</span>
-            </button>
+              <span className="text-[0.875rem] font-medium">{LABELS.addAddress}</span>
+            </Button>
           </li>
         </ul>
       )}

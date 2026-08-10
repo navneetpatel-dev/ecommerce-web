@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { UseFormReturn, Controller } from 'react-hook-form'
 import { Button } from '@/shared/components/ui/button'
+import { CheckboxField } from '@/shared/components/CheckboxField'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
 import { Textarea } from '@/shared/components/ui/textarea'
@@ -157,17 +158,13 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
                 >
                   <div className="max-h-48 space-y-2 overflow-y-auto rounded-md border border-line p-3">
                     {categories.map((category) => (
-                      <label
+                      <CheckboxField
                         key={category.id}
-                        className="flex items-center gap-2 text-[0.875rem] text-ink"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedSet.has(category.id)}
-                          onChange={() => toggleCategory(category.id)}
-                        />
-                        {category.name}
-                      </label>
+                        id={`vendor-register-category-${category.id}`}
+                        checked={selectedSet.has(category.id)}
+                        onCheckedChange={() => toggleCategory(category.id)}
+                        label={category.name}
+                      />
                     ))}
                   </div>
                 </FormFieldFrame>

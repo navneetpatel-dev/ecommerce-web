@@ -79,7 +79,7 @@ function SubOrderActions({
             <Select defaultValue="SHIPPED" onValueChange={(value) => onStatusChange(subOrderId, value)}>
               <SelectTrigger
                 aria-label={LABELS.selectStatus}
-                className="h-8 min-h-8 max-h-8 w-full rounded-sm px-2 text-[0.8125rem] [&_svg]:!size-3.5"
+                className="w-full min-w-[8.5rem] rounded-sm px-2 text-[0.8125rem]"
               >
                 <SelectValue placeholder={LABELS.selectStatus} />
               </SelectTrigger>

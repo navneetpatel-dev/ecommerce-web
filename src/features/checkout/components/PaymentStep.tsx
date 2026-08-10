@@ -66,16 +66,18 @@ export function PaymentStep({
           const Icon = method.icon
           const selected = selectedMethod === method.id
           return (
-            <button
+            <Button
               key={method.id}
               type="button"
+              variant="outline"
+              aria-pressed={selected}
               onClick={() => onSelect(method.id)}
               disabled={isPending}
               className={cn(
-                'flex w-full items-start gap-4 border px-4 py-4 text-left transition-colors',
+                'h-auto min-h-11 max-h-none w-full items-start gap-4 px-4 py-4 text-left font-normal',
                 selected
-                  ? 'border-brand bg-brand-subtle shadow-[inset_3px_0_0_0_var(--brand)]'
-                  : 'border-line bg-surface hover:border-ink/25',
+                  ? 'border-brand bg-brand-subtle shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-brand-subtle hover:text-ink'
+                  : 'border-line hover:border-ink/25',
               )}
             >
               <span
@@ -99,7 +101,7 @@ export function PaymentStep({
               >
                 {selected && <span className="h-1.5 w-1.5 rounded-full bg-paper" />}
               </span>
-            </button>
+            </Button>
           )
         })}
       </div>

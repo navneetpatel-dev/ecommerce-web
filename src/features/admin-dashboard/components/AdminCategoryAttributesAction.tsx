@@ -85,15 +85,17 @@ function SortableAttributeRow({
       }}
     >
       <div className="flex min-w-0 flex-1 items-center gap-2">
-        <button
+        <Button
           type="button"
-          className="inline-flex cursor-grab touch-none text-ink-faint hover:text-ink active:cursor-grabbing"
+          variant="ghost"
+          size="icon-sm"
+          className="h-auto min-h-0 max-h-none w-auto cursor-grab touch-none px-0 text-ink-faint hover:bg-transparent hover:text-ink active:cursor-grabbing"
           aria-label={LABELS.dragToReorder}
           {...attributes}
           {...listeners}
         >
           <GripVertical className="h-4 w-4" />
-        </button>
+        </Button>
         <span className="truncate">
           {row.name} <span className="text-ink-muted">({row.type})</span>
         </span>

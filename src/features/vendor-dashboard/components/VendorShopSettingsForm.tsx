@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { NumberInput } from '@/shared/components/NumberInput'
 import { FileUpload } from '@/shared/components/FileUpload'
+import { CheckboxField } from '@/shared/components/CheckboxField'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -171,14 +172,13 @@ export function VendorShopSettingsForm({
         </FormFieldFrame>
         <div className="sm:col-span-2 max-h-48 space-y-2 overflow-y-auto rounded-md border border-line p-3">
           {categories.map((category) => (
-            <label key={category.id} className="flex items-center gap-2 text-[0.875rem] text-ink">
-              <input
-                type="checkbox"
-                checked={selectedSet.has(category.id)}
-                onChange={() => toggleCategory(category.id)}
-              />
-              {category.name}
-            </label>
+            <CheckboxField
+              key={category.id}
+              id={`vendor-shop-category-${category.id}`}
+              checked={selectedSet.has(category.id)}
+              onCheckedChange={() => toggleCategory(category.id)}
+              label={category.name}
+            />
           ))}
         </div>
         <div className="sm:col-span-2">
@@ -232,13 +232,15 @@ export function VendorShopSettingsForm({
         <ul className="sm:col-span-2 space-y-2">
           {items.map((item) => (
             <li key={item.documentType}>
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                aria-pressed={activeType === item.documentType}
                 onClick={() => setActiveType(item.documentType)}
-                className={`flex w-full items-center justify-between gap-3 rounded-md border px-3 py-2 text-left text-[0.8125rem] ${
+                className={`h-auto min-h-0 max-h-none w-full justify-between gap-3 px-3 py-2 text-left text-[0.8125rem] font-normal ${
                   activeType === item.documentType
-                    ? 'border-brand bg-brand-subtle/40'
-                    : 'border-line bg-surface'
+                    ? 'border-brand bg-brand-subtle/40 hover:bg-brand-subtle/40'
+                    : 'border-line'
                 }`}
               >
                 <span className="font-medium text-ink">
@@ -247,20 +249,22 @@ export function VendorShopSettingsForm({
                 <span className="text-ink-muted">
                   {vendorDocumentChecklistStatusLabel(item.status)}
                 </span>
-              </button>
+              </Button>
               {item.rejectionReason ? (
                 <p className="mt-1 px-1 text-[0.75rem] text-danger">
                   {LABELS.documentRejectionReason}: {item.rejectionReason}
                 </p>
               ) : null}
               {item.documentId && item.url ? (
-                <button
+                <Button
                   type="button"
-                  className="mt-1 px-1 text-[0.75rem] font-medium text-brand hover:underline"
+                  variant="link"
+                  size="sm"
+                  className="mt-1 h-auto min-h-0 max-h-none px-1 py-0 text-[0.75rem] font-medium text-brand"
                   onClick={() => void openKycDocument(item.documentId!)}
                 >
                   {LABELS.openDocument}
-                </button>
+                </Button>
               ) : null}
             </li>
           ))}

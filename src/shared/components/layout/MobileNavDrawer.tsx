@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, X } from 'lucide-react'
+import { Button } from '@/shared/components/ui/button'
 import { PATHS } from '@/shared/constants/paths'
 import { LABELS, ROLES } from '@/shared/constants/labels'
 import type { Category, CurrentUser } from '@/shared/api/types'
@@ -35,9 +36,16 @@ export function MobileNavDrawer({
       <div className="absolute left-0 top-0 bottom-0 w-72 bg-surface shadow-elevation-4 animate-slide-in-left flex flex-col">
         <div className="flex items-center justify-between px-4 h-14 border-b border-line">
           <span className="text-[1.125rem] font-semibold text-brand">{LABELS.menu}</span>
-          <button onClick={onClose} className="p-1 text-ink-muted" aria-label={LABELS.closeMenu}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            onClick={onClose}
+            className="text-ink-muted"
+            aria-label={LABELS.closeMenu}
+          >
             <X size={20} />
-          </button>
+          </Button>
         </div>
 
         <nav className="flex-1 overflow-y-auto py-4 px-2">

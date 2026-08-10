@@ -1,4 +1,5 @@
 import { VendorStrip } from '@/shared/components/VendorStrip'
+import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/utils/cn'
 import { SHIPPING_METHOD } from '@/shared/constants/statuses'
 import type { ShippingMethod } from '@/shared/constants/statuses'
@@ -45,18 +46,20 @@ export function ShippingCard({
           const isSelected = selected === option.method
           const label = option.method === SHIPPING_METHOD.EXPRESS ? 'Express' : 'Standard'
           return (
-            <button
+            <Button
               key={option.method}
               type="button"
+              variant="outline"
+              aria-pressed={isSelected}
               onClick={() => onSelect(option.method)}
               className={cn(
-                'border px-4 py-3.5 text-left transition-colors',
+                'h-auto min-h-11 max-h-none px-4 py-3.5 text-left font-normal',
                 isSelected
-                  ? 'border-brand bg-brand-subtle shadow-[inset_3px_0_0_0_var(--brand)]'
-                  : 'border-line bg-surface hover:border-ink/25',
+                  ? 'border-brand bg-brand-subtle shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-brand-subtle hover:text-ink'
+                  : 'border-line hover:border-ink/25',
               )}
             >
-              <div className="flex items-baseline justify-between gap-3">
+              <div className="flex w-full items-baseline justify-between gap-3">
                 <span className="font-medium text-ink">{label}</span>
                 <span className="font-mono text-[0.875rem] tabular-nums text-ink">
                   {Number(option.cost) === 0 ? 'Free' : `₹${Number(option.cost)}`}
@@ -65,7 +68,7 @@ export function ShippingCard({
               <p className="mt-1 text-[0.8125rem] text-ink-muted">
                 {formatDays(Number(option.estimatedDays || 5))}
               </p>
-            </button>
+            </Button>
           )
         })}
       </div>
