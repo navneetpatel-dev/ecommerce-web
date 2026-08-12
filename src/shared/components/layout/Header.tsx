@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ShoppingCart, UserRound, Search, Menu, ChevronDown, Moon, Sun } from 'lucide-react'
+import { ShoppingCart, Heart, UserRound, Search, Menu, ChevronDown, Moon, Sun } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { Button } from '@/shared/components/ui/button'
 import { SearchBarContainer } from '@/features/search/containers/SearchBarContainer'
@@ -12,6 +12,7 @@ import { MobileNavDrawer } from './MobileNavDrawer'
 import { CategoriesMegaMenu } from '@/features/categories/components/CategoriesMegaMenu'
 import { BottomSheet } from '@/shared/components/BottomSheet'
 import { CartCountBadge } from '@/shared/components/CartCountBadge'
+import { WalletIcon } from '@/shared/components/WalletIcon'
 import { useTheme } from '@/shared/hooks/use-theme'
 import { PATHS } from '@/shared/constants/paths'
 import { LABELS, ROLES } from '@/shared/constants/labels'
@@ -24,6 +25,10 @@ import { homePathForContext, isWorkspacePath } from '@/shared/utils/roleSurface'
 import { isAdminRole, isCustomerRole, isVendorRole, isWorkspaceRole } from '@/shared/utils/roles'
 import type { Category, CurrentUser } from '@/shared/api/types'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
+import { formatInrCompact } from '@/features/orders/utils/format'
+
+const HEADER_ICON_BTN =
+  'relative overflow-visible [&_svg]:!size-5'
 
 interface HeaderProps {
   currentUser: CurrentUser | null
@@ -48,6 +53,8 @@ interface HeaderProps {
   onScheduleMegaClose: () => void
   onOpenCart: () => void
   cartItemCount?: number
+  wishlistItemCount?: number
+  walletBalance?: number
 }
 
 export function Header({
@@ -71,6 +78,8 @@ export function Header({
   onScheduleMegaClose,
   onOpenCart,
   cartItemCount = 0,
+  wishlistItemCount = 0,
+  walletBalance = 0,
 }: HeaderProps) {
   const pathname = usePathname()
   const { theme, toggleTheme, mounted } = useTheme()
@@ -308,13 +317,59 @@ export function Header({
                   size="icon-sm"
                   onClick={onOpenCart}
                   className={cn(
-                    'relative',
+                    HEADER_ICON_BTN,
                     isTransparent ? 'hover:bg-paper/10' : undefined
                   )}
                   aria-label={cartItemCount > 0 ? `${LABELS.cart}, ${cartItemCount}` : LABELS.cart}
                 >
                   <ShoppingCart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
                   <CartCountBadge count={cartItemCount} />
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  asChild
+                  className={cn(
+                    HEADER_ICON_BTN,
+                    isTransparent ? 'hover:bg-paper/10' : undefined
+                  )}
+                >
+                  <Link
+                    href={PATHS.wishlist}
+                    aria-label={
+                      wishlistItemCount > 0
+                        ? `${LABELS.wishlist}, ${wishlistItemCount}`
+                        : LABELS.wishlist
+                    }
+                  >
+                    <Heart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
+                    <CartCountBadge count={wishlistItemCount} />
+                  </Link>
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  asChild
+                  className={cn(
+                    HEADER_ICON_BTN,
+                    isTransparent ? 'hover:bg-paper/10' : undefined
+                  )}
+                >
+                  <Link
+                    href={PATHS.wallet}
+                    aria-label={`${LABELS.walletBalance}, ${formatInrCompact(walletBalance)}`}
+                  >
+                    <WalletIcon size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
+                    <CartCountBadge
+                      count={walletBalance}
+                      label={formatInrCompact(walletBalance)}
+                      alwaysShow
+                    />
+                  </Link>
                 </Button>
               </>
             ) : null}
@@ -343,24 +398,6 @@ export function Header({
                       )}
                     >
                       {LABELS.orders}
-                    </Link>
-                    <Link
-                      href={PATHS.wishlist}
-                      className={cn(
-                        'px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
-                        isTransparent ? 'text-paper hover:bg-paper/10' : 'hover:bg-paper'
-                      )}
-                    >
-                      {LABELS.wishlist}
-                    </Link>
-                    <Link
-                      href={PATHS.wallet}
-                      className={cn(
-                        'px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors',
-                        isTransparent ? 'text-paper hover:bg-paper/10' : 'hover:bg-paper'
-                      )}
-                    >
-                      {LABELS.wallet}
                     </Link>
                   </div>
                 ) : null}

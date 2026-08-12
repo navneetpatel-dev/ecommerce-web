@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useCart, useUpdateCartItem, useRemoveCartItem } from '../api/cart.queries'
 import { useCartDrawerStore } from '../store/cart.store'
 import { groupItemsByVendor, calcCartTotal } from '../utils/cart.utils'
-import { useCartCoupons } from './useCartCoupons'
 import { navigate } from '@/shared/utils/navigate'
 import { clampCartQuantity } from '@/shared/constants/cart'
 import { PATHS } from '@/shared/constants/paths'
@@ -18,7 +17,6 @@ export function useCartDrawer() {
   const { data: cart, isLoading } = useCart()
   const updateItem = useUpdateCartItem()
   const removeItem = useRemoveCartItem()
-  const coupons = useCartCoupons({ cart, enabled: isOpen })
 
   const groupedByVendor = useMemo(() => {
     if (!cart?.items) return {} as Record<string, CartItem[]>
@@ -26,12 +24,10 @@ export function useCartDrawer() {
   }, [cart])
 
   const total = useMemo(() => {
-    if (typeof cart?.total === 'number') {
-      return Math.max(0, cart.total - (cart.appliedCoupon?.discount ?? 0))
-    }
+    if (typeof cart?.merchandiseSubtotal === 'number') return cart.merchandiseSubtotal
     if (!cart?.items) return 0
-    return Math.max(0, calcCartTotal(cart.items) - (coupons.appliedDiscount || 0))
-  }, [cart, coupons.appliedDiscount])
+    return calcCartTotal(cart.items)
+  }, [cart])
 
   const hasUnavailableItems = cart?.items?.some((item) => item.isAvailable === false) ?? false
 
@@ -55,18 +51,6 @@ export function useCartDrawer() {
     total,
     updateQuantity,
     removeItem: (itemId: string) => removeItem.mutate(itemId),
-    couponInput: coupons.couponInput,
-    setCouponInput: coupons.setCouponInput,
-    couponMessage: coupons.couponMessage,
-    couponError: coupons.couponError,
-    couponPending: coupons.couponPending,
-    appliedCouponCode: coupons.appliedCouponCode,
-    appliedDiscount: coupons.appliedDiscount,
-    eligible: coupons.eligible,
-    eligibleLoading: coupons.eligibleLoading,
-    applyCoupon: coupons.applyCoupon,
-    applyEligible: coupons.applyEligible,
-    removeCoupon: coupons.removeCoupon,
     continueShopping,
   }
 }

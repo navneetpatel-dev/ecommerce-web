@@ -49,51 +49,53 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
     return (
       <div
         className={cn(
-          'flex gap-3 pb-3 border-b border-line last:border-0',
-          !available && 'opacity-50 grayscale'
+          'flex items-center gap-3 py-2',
+          !available && 'opacity-50 grayscale',
         )}
       >
         <img
           src={item.product.imageUrl}
           alt={item.product.name}
-          className="h-16 w-16 rounded-sm object-cover shrink-0"
+          className="h-14 w-14 shrink-0 rounded-sm object-cover"
         />
-        <div className="flex-1 min-w-0">
+        <div className="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1">
           <Link
             href={PATHS.product(item.product.slug)}
-            className="text-[0.9375rem] font-medium line-clamp-2 hover:text-brand"
+            className="truncate text-[0.8125rem] font-medium leading-snug text-ink hover:text-brand"
           >
             {item.product.name}
           </Link>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => onRemoveItem(item.id)}
+            className="h-8 w-8 min-h-8 max-h-8 shrink-0 justify-self-end p-0 text-ink-muted hover:bg-danger-subtle hover:text-danger"
+            aria-label={formatLabel(LABELS.removeNamed, { name: item.product.name })}
+          >
+            <Trash2 size={14} />
+          </Button>
           {!available ? (
-            <Badge variant="destructive" className="mt-1 text-[0.6875rem]">
+            <Badge variant="destructive" className="w-fit text-[0.6875rem]">
               {unavailableLabel(item.unavailableReason)}
             </Badge>
           ) : (
-            <p className="font-sans text-[0.9375rem] font-semibold text-brand mt-0.5">
+            <p className="truncate text-[0.8125rem] font-semibold tabular-nums text-brand">
               ₹{item.product.price.toLocaleString('en-IN')}
             </p>
           )}
-          <div className="flex items-center gap-2 mt-1">
-            {available ? (
-              <QuantitySelector
-                value={item.quantity}
-                onChange={(quantity) => onUpdateQuantity(item.id, quantity)}
-                min={1}
-                max={MAX_CART_LINE_QUANTITY}
-              />
-            ) : null}
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              onClick={() => onRemoveItem(item.id)}
-              className="ml-auto h-auto min-h-0 max-h-none w-auto p-0.5"
-              aria-label={formatLabel(LABELS.removeNamed, { name: item.product.name })}
-            >
-              <Trash2 size={14} className="text-ink-muted" />
-            </Button>
-          </div>
+          {available ? (
+            <QuantitySelector
+              value={item.quantity}
+              onChange={(quantity) => onUpdateQuantity(item.id, quantity)}
+              min={1}
+              max={MAX_CART_LINE_QUANTITY}
+              controlClassName="h-8 w-8 min-h-8 max-h-8 [&_svg]:size-3.5"
+              valueClassName="h-4 w-5 text-[0.8125rem]"
+            />
+          ) : (
+            <span />
+          )}
         </div>
       </div>
     )
@@ -156,13 +158,15 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
           </Button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-3">
           {available ? (
             <QuantitySelector
               value={item.quantity}
               onChange={(quantity) => onUpdateQuantity(item.id, quantity)}
               min={1}
               max={MAX_CART_LINE_QUANTITY}
+              controlClassName="h-8 w-8 min-h-8 max-h-8 sm:h-9 sm:w-9 sm:min-h-9 sm:max-h-9 lg:h-10 lg:w-10 lg:min-h-10 lg:max-h-10"
+              valueClassName="h-4 w-5 text-[0.75rem] sm:h-5 sm:w-6 sm:text-[0.8125rem]"
             />
           ) : null}
           <Button

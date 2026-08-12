@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type MouseEvent } from 'react'
 import { Minus, Plus } from 'lucide-react'
-import { Button } from '@/shared/components/ui/button'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { AnimatedQuantityValue } from '@/shared/components/AnimatedQuantityValue'
 import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
 import { LABELS } from '@/shared/constants/labels'
+import { cn } from '@/shared/utils/cn'
 import { formatLabel } from '@/shared/utils/formatLabel'
 
 interface QuantitySelectorProps {
@@ -14,6 +14,19 @@ interface QuantitySelectorProps {
   onChange: (value: number) => void
   min?: number
   max?: number
+  className?: string
+  /** Overrides minus / value / plus cell size. */
+  controlClassName?: string
+  valueClassName?: string
+}
+
+const DEFAULT_CELL =
+  'h-8 w-8 min-h-8 max-h-8 sm:h-9 sm:w-9 sm:min-h-9 sm:max-h-9 lg:h-11 lg:w-11 lg:min-h-11 lg:max-h-11 [&_svg]:size-3 sm:[&_svg]:size-3.5 lg:[&_svg]:size-4'
+const DEFAULT_VALUE =
+  'h-4 w-5 text-[0.75rem] sm:h-5 sm:w-6 sm:text-[0.8125rem] lg:w-8 lg:text-[0.9375rem]'
+
+function stopBubble(event: MouseEvent) {
+  event.stopPropagation()
 }
 
 export function QuantitySelector({
@@ -21,9 +34,20 @@ export function QuantitySelector({
   onChange,
   min = 1,
   max = MAX_CART_LINE_QUANTITY,
+  className,
+  controlClassName,
+  valueClassName,
 }: QuantitySelectorProps) {
   const [draft, setDraft] = useState<string | null>(null)
   const editing = draft !== null
+  const cellClass = controlClassName ?? DEFAULT_CELL
+  const valueSizeClass = valueClassName ?? DEFAULT_VALUE
+  const atMin = value <= min
+  const atMax = value >= max
+  const maxHint =
+    max <= 1
+      ? LABELS.onlyOneInStock
+      : formatLabel(LABELS.maximumQuantityHint, { max })
 
   const commit = (raw: string) => {
     setDraft(null)
@@ -35,22 +59,42 @@ export function QuantitySelector({
     onChange(Math.min(max, Math.max(min, parsed)))
   }
 
+  const controlBtnClass = cn(
+    'relative z-[1] inline-flex shrink-0 items-center justify-center text-ink',
+    'touch-manipulation transition-colors hover:bg-paper',
+    'outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+    'disabled:cursor-not-allowed disabled:opacity-50',
+    '[&_svg]:pointer-events-none [&_svg]:shrink-0',
+    cellClass,
+  )
+
   return (
-    <div className="inline-flex items-center overflow-hidden rounded-sm border border-line">
+    <div
+      className={cn(
+        'relative z-[1] inline-flex shrink-0 items-center rounded-sm border border-line',
+        className,
+      )}
+      onClick={stopBubble}
+    >
       <DisabledActionHint
-        disabled={value <= min}
-        message={`Minimum quantity is ${min}.`}
+        disabled={atMin}
+        message={formatLabel(LABELS.minimumQuantityHint, { min })}
+        className="relative z-[1] max-w-none shrink-0"
       >
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-11 w-11 rounded-none border-0"
-          disabled={value <= min}
-          onClick={() => onChange(value - 1)}
+        <button
+          type="button"
+          className={controlBtnClass}
+          disabled={atMin}
+          onClick={(event) => {
+            event.preventDefault()
+            event.stopPropagation()
+            if (atMin) return
+            onChange(value - 1)
+          }}
           aria-label={LABELS.decreaseQuantity}
         >
-          <Minus size={16} />
-        </Button>
+          <Minus size={12} />
+        </button>
       </DisabledActionHint>
 
       {editing ? (
@@ -65,40 +109,51 @@ export function QuantitySelector({
             if (e.key === 'Enter') e.currentTarget.blur()
             if (e.key === 'Escape') setDraft(null)
           }}
-          className="h-11 w-11 border-x border-line bg-transparent text-center font-mono text-[0.9375rem] font-medium tabular-nums text-ink outline-none [appearance:textfield] focus-visible:shadow-[inset_0_0_0_1px_var(--brand)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          onClick={stopBubble}
+          className={cn(
+            'relative z-[1] shrink-0 border-x border-line bg-transparent text-center font-mono font-medium tabular-nums text-ink outline-none [appearance:textfield] focus-visible:shadow-[inset_0_0_0_1px_var(--brand)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+            cellClass,
+          )}
           aria-label={LABELS.quantityField}
         />
       ) : (
-        <Button
+        <button
           type="button"
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => setDraft(String(value))}
-          className="h-11 w-11 rounded-none border-0 border-x border-line"
+          onClick={(event) => {
+            event.preventDefault()
+            event.stopPropagation()
+            setDraft(String(value))
+          }}
+          className={cn(controlBtnClass, 'border-x border-line')}
           aria-label={formatLabel(LABELS.editQuantity, { value })}
         >
           <AnimatedQuantityValue
             value={value}
-            className="h-5 w-8"
-            digitClassName="font-mono text-[0.9375rem] font-medium text-ink"
+            className={valueSizeClass}
+            digitClassName={cn('font-mono font-medium tabular-nums text-ink', valueSizeClass)}
           />
-        </Button>
+        </button>
       )}
 
       <DisabledActionHint
-        disabled={value >= max}
-        message={max <= 1 ? 'Only 1 available in stock.' : `Maximum quantity is ${max}.`}
+        disabled={atMax}
+        message={maxHint}
+        className="relative z-[1] max-w-none shrink-0"
       >
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-11 w-11 rounded-none border-0"
-          disabled={value >= max}
-          onClick={() => onChange(value + 1)}
+        <button
+          type="button"
+          className={controlBtnClass}
+          disabled={atMax}
+          onClick={(event) => {
+            event.preventDefault()
+            event.stopPropagation()
+            if (atMax) return
+            onChange(value + 1)
+          }}
           aria-label={LABELS.increaseQuantity}
         >
-          <Plus size={16} />
-        </Button>
+          <Plus size={12} />
+        </button>
       </DisabledActionHint>
     </div>
   )

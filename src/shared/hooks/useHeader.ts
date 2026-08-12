@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useCartDrawerStore } from '@/features/cart/store/cart.store'
 import { useCart } from '@/features/cart/api/cart.queries'
+import { useWishlist } from '@/features/wishlist/api/wishlist.queries'
+import { useWalletBalance } from '@/features/wallet/api/wallet.queries'
 import { useCategories } from '@/features/categories/api/categories.queries'
 import { getRootCategories } from '@/features/categories/utils/categoryHelpers'
 import { PATHS } from '@/shared/constants/paths'
@@ -19,6 +21,8 @@ export function useHeader() {
   const currentUser = useAuthStore((s) => s.currentUser)
   const openCart = useCartDrawerStore((s) => s.open)
   const { data: cart } = useCart()
+  const { data: wishlist } = useWishlist()
+  const { data: wallet } = useWalletBalance()
   const { data: categories = [] } = useCategories()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
@@ -31,6 +35,8 @@ export function useHeader() {
     (sum, item) => sum + Number(item.quantity || 0),
     0
   )
+  const wishlistItemCount = (wishlist?.items ?? []).length
+  const walletBalance = Number(wallet?.balance || 0)
 
   useEffect(() => {
     return () => {
@@ -70,5 +76,7 @@ export function useHeader() {
     scheduleMegaClose,
     openCart,
     cartItemCount,
+    wishlistItemCount,
+    walletBalance,
   }
 }

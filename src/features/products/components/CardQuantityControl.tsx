@@ -41,10 +41,11 @@ export function CardQuantityControl({
         size="icon-sm"
         disabled={disabled || value <= 0}
         aria-label={LABELS.decreaseQuantity}
-        className="h-9 w-9 min-h-9 max-h-9 shrink-0 rounded-full hover:bg-paper"
+        className="relative z-[1] h-9 w-9 min-h-9 max-h-9 shrink-0 rounded-full hover:bg-paper"
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
+          if (disabled || value <= 0) return
           onChange(value - 1)
         }}
       >
@@ -63,10 +64,11 @@ export function CardQuantityControl({
         size="icon-sm"
         disabled={disabled || atMax}
         aria-label={LABELS.increaseQuantity}
-        className="h-9 w-9 min-h-9 max-h-9 shrink-0 rounded-full hover:bg-paper"
+        className="relative z-[1] h-9 w-9 min-h-9 max-h-9 shrink-0 rounded-full hover:bg-paper"
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
+          if (disabled || atMax) return
           onChange(value + 1)
         }}
       >

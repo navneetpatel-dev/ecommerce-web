@@ -4,8 +4,15 @@ import { Button } from '@/shared/components/ui/button'
 import { FormFieldFrame } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/shared/components/ui/accordion'
 import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
+import { cn } from '@/shared/utils/cn'
 import type { EligibleCoupon } from '@/shared/api/types'
 import { CashbackCouponNotice } from '@/features/checkout/components/CashbackCouponNotice'
 
@@ -47,6 +54,10 @@ export function CartCouponSection({
   const unusedOffers = eligible.filter(
     (offer) => offer.code.toUpperCase() !== appliedCouponCode?.toUpperCase(),
   )
+  const offersLabel =
+    unusedOffers.length > 0
+      ? formatLabel(LABELS.availableOffersCount, { count: unusedOffers.length })
+      : LABELS.availableOffers
 
   return (
     <div className={compact ? 'space-y-2' : 'space-y-3'}>
@@ -121,41 +132,56 @@ export function CartCouponSection({
       ) : null}
       {couponError ? <p className="text-[0.8125rem] text-danger">{couponError}</p> : null}
 
-      <div className="space-y-1.5">
-        <p className="text-[0.75rem] font-medium uppercase tracking-[0.06em] text-ink-muted">
-          {LABELS.availableOffers}
-        </p>
-        {eligibleLoading ? (
-          <p className="text-[0.8125rem] text-ink-muted">{LABELS.loading}</p>
-        ) : unusedOffers.length === 0 ? (
-          <p className="text-[0.8125rem] text-ink-muted">{LABELS.noAvailableOffers}</p>
-        ) : (
-          <ul className="space-y-1.5">
-            {unusedOffers.map((offer) => (
-              <li
-                key={offer.code}
-                className="flex items-center justify-between gap-2 text-[0.8125rem]"
+      <Accordion type="single" collapsible>
+        <AccordionItem value="offers" className="border-0">
+          <AccordionTrigger
+            className={cn(
+              'py-2 text-[0.75rem] font-medium uppercase tracking-[0.06em] text-ink-muted hover:text-ink',
+              compact && 'py-1.5',
+            )}
+          >
+            {offersLabel}
+          </AccordionTrigger>
+          <AccordionContent className="pb-0">
+            {eligibleLoading ? (
+              <p className="text-[0.8125rem] text-ink-muted">{LABELS.loading}</p>
+            ) : unusedOffers.length === 0 ? (
+              <p className="text-[0.8125rem] text-ink-muted">{LABELS.noAvailableOffers}</p>
+            ) : (
+              <ul
+                className={cn(
+                  'space-y-1.5 overflow-y-auto overscroll-contain pr-1',
+                  compact ? 'max-h-36' : 'max-h-48',
+                )}
               >
-                <span className="font-mono text-ink">
-                  {offer.code}
-                  {offer.discount > 0
-                    ? ` · ₹${offer.discount.toLocaleString('en-IN')} ${LABELS.couponDiscount.toLowerCase()}`
-                    : ''}
-                </span>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onApplyEligible(offer.code)}
-                  disabled={couponPending}
-                >
-                  {LABELS.applyOffer}
-                </Button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+                {unusedOffers.map((offer) => (
+                  <li
+                    key={offer.code}
+                    className="flex items-center justify-between gap-2 text-[0.8125rem]"
+                  >
+                    <span className="min-w-0 truncate font-mono text-ink">
+                      {offer.code}
+                      {offer.discount > 0
+                        ? ` · ₹${offer.discount.toLocaleString('en-IN')} ${LABELS.couponDiscount.toLowerCase()}`
+                        : ''}
+                    </span>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="shrink-0"
+                      onClick={() => onApplyEligible(offer.code)}
+                      disabled={couponPending}
+                    >
+                      {LABELS.applyOffer}
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   )
 }

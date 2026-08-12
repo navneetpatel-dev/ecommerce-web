@@ -13,7 +13,6 @@ const API_ERROR_LABEL_KEYS: Partial<Record<string, keyof typeof LABELS>> = {
   UPLOAD_INVALID_DATA_URL: 'uploadFailed',
   INTERNAL_ERROR: 'unexpectedError',
   CONFIG_ERROR: 'unexpectedError',
-  VALIDATION_ERROR: 'validationFailedGeneric',
 }
 
 const INTERNAL_ERROR_PATTERNS = [
@@ -81,6 +80,7 @@ export function getApiErrorMessage(err: unknown, fallback: string): string {
       return sanitizeUserFacingMessage(err.details, fallback)
     }
 
+    // Business validation (coupons, stock, etc.) uses VALIDATION_ERROR with a user-facing message.
     return sanitizeUserFacingMessage(err.message, fallback)
   }
 

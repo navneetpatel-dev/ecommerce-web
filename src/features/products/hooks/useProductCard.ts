@@ -143,20 +143,21 @@ export function useProductCard(product: ProductListItem) {
       return
     }
 
-    if (!cartItem || cartItem.id.startsWith('optimistic-')) {
-      // Backend add increments — only fire once for the first unit while pending.
-      if (!cartItem) {
-        addToCart(
-          { variantId: defaultVariantId, quantity: 1, openDrawer: false },
-          { onError: rollback }
-        )
-      }
+    if (!cartItem) {
+      addToCart(
+        { variantId: defaultVariantId, quantity: clamped, openDrawer: false },
+        { onError: rollback },
+      )
+      return
+    }
+
+    if (cartItem.id.startsWith('optimistic-')) {
       return
     }
 
     updateCartItem(
       { itemId: cartItem.id, quantity: clamped },
-      { onError: rollback }
+      { onError: rollback },
     )
   }
 

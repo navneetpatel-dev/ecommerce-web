@@ -52,6 +52,8 @@ export function HeaderContainer({
       onScheduleMegaClose={header.scheduleMegaClose}
       onOpenCart={header.openCart}
       cartItemCount={header.cartItemCount}
+      wishlistItemCount={header.wishlistItemCount}
+      walletBalance={header.walletBalance}
     />
   )
 }

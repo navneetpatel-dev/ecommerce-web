@@ -6,6 +6,24 @@ export function formatInr(value: number) {
   })}`
 }
 
+/** Short INR for header pills (₹499, ₹12,500, ₹1.2L). */
+export function formatInrCompact(value: number) {
+  const amount = Math.round(Number(value) || 0)
+  if (amount >= 10_000_000) {
+    const crore = amount / 10_000_000
+    return `₹${trimCompact(crore, crore >= 10 ? 0 : 1)}Cr`
+  }
+  if (amount >= 100_000) {
+    const lakh = amount / 100_000
+    return `₹${trimCompact(lakh, lakh >= 10 ? 0 : 1)}L`
+  }
+  return `₹${amount.toLocaleString('en-IN')}`
+}
+
+function trimCompact(value: number, digits: number) {
+  return value.toFixed(digits).replace(/\.0$/, '')
+}
+
 export function formatOrderDate(value: string | Date) {
   return new Date(value).toLocaleDateString('en-IN', {
     day: 'numeric',

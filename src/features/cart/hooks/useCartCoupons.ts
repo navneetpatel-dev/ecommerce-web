@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { couponsApi } from '@/features/coupons/api/coupons.api'
 import { cartKeys } from '@/features/cart/api/cart.queries'
@@ -31,7 +31,6 @@ export function useCartCoupons({ cart, enabled = true }: UseCartCouponsOptions) 
   const [couponPending, setCouponPending] = useState(false)
   const [eligible, setEligible] = useState<EligibleCoupon[]>([])
   const [eligibleLoading, setEligibleLoading] = useState(false)
-  const autoApplyAttempted = useRef(false)
 
   const cartApplied = cart?.appliedCoupon ?? null
   const displayCode = cartApplied?.code ?? appliedCouponCode
@@ -140,36 +139,14 @@ export function useCartCoupons({ cart, enabled = true }: UseCartCouponsOptions) 
     }
   }, [cartApplied?.code, manualCouponOverride, removedReason, setCouponCode])
 
-  // Load eligible + auto-apply best offer when no manual override
+  // Load eligible offers without auto-applying
   useEffect(() => {
     if (!enabled || !accessToken || !cart?.items?.length) return
-    if (autoApplyAttempted.current) return
-    autoApplyAttempted.current = true
+    void loadEligible()
+  }, [accessToken, cart?.items?.length, enabled, loadEligible])
 
-    void (async () => {
-      const list = await loadEligible()
-      if (manualCouponOverride || cartApplied?.code || appliedCouponCode) return
-      const best = list[0]
-      if (best?.code) {
-        await applyCoupon(best.code, { manual: false })
-        setCouponMessage(LABELS.autoAppliedOffer)
-      }
-    })()
-  }, [
-    accessToken,
-    appliedCouponCode,
-    applyCoupon,
-    cart?.items?.length,
-    cartApplied?.code,
-    enabled,
-    loadEligible,
-    manualCouponOverride,
-  ])
-
-  // Reset auto-apply when cart empties
   useEffect(() => {
     if (!cart?.items?.length) {
-      autoApplyAttempted.current = false
       setEligible([])
     }
   }, [cart?.items?.length])
