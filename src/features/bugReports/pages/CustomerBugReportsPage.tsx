@@ -1,23 +1,32 @@
 'use client'
 
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { Button } from '@/shared/components/ui/button'
+import { Skeleton } from '@/shared/components/ui/skeleton'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import { SupportAuthGate } from '@/features/supportTickets/components/SupportAuthGate'
 import { useMyBugReportsInfinite } from '../api/bugReports.queries'
 import { BugReportCardList } from '../components/BugReportCardList'
+import { BugReportFilters, useBugFiltersFromUrl } from '../components/BugReportFilters'
 
 export function CustomerBugReportsPage() {
   return (
     <SupportAuthGate message={LABELS.bugSignInRequired} loginNext={PATHS.bugReports}>
-      <CustomerBugReportsContent />
+      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+        <CustomerBugReportsContent />
+      </Suspense>
     </SupportAuthGate>
   )
 }
 
 function CustomerBugReportsContent() {
-  const query = useMyBugReportsInfinite()
+  const filters = useBugFiltersFromUrl()
+  const query = useMyBugReportsInfinite({
+    status: filters.status,
+    severity: filters.severity,
+  })
   const reports = query.data?.pages.flatMap((p) => p.items) ?? []
 
   return (
@@ -33,6 +42,10 @@ function CustomerBugReportsContent() {
           <Link href={PATHS.bugReportNew}>{LABELS.reportABug}</Link>
         </Button>
       </header>
+
+      <div className="mb-5">
+        <BugReportFilters variant="reporter" />
+      </div>
 
       <BugReportCardList
         reports={reports}

@@ -5,7 +5,7 @@ import { LifeBuoy } from 'lucide-react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { FormError } from '@/shared/components/FormError'
 import { StatusBadge } from '@/shared/components/StatusBadge'
-import { Button } from '@/shared/components/ui/button'
+import { InfiniteLoadMore } from '@/shared/components/InfiniteLoadMore'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { LABELS } from '@/shared/constants/labels'
 import { formatOrderDate } from '@/features/orders/utils/format'
@@ -84,6 +84,13 @@ export function TicketCardList({
             >
               <div className="min-w-0 flex-1 space-y-2">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  {ticket.hasUnread ? (
+                    <span
+                      className="inline-block h-1.5 w-1.5 rounded-full bg-brand"
+                      title={LABELS.ticketHasUnread}
+                      aria-label={LABELS.ticketHasUnread}
+                    />
+                  ) : null}
                   <span className="font-mono text-[0.75rem] tabular-nums text-ink-muted">
                     {ticket.ticketNumber}
                   </span>
@@ -113,18 +120,11 @@ export function TicketCardList({
         ))}
       </ul>
 
-      {hasNextPage ? (
-        <div className="flex justify-center border-t border-line/70 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            loading={isFetchingNextPage}
-            onClick={onLoadMore}
-          >
-            {isFetchingNextPage ? LABELS.loadingMore : LABELS.loadMore}
-          </Button>
-        </div>
-      ) : null}
+      <InfiniteLoadMore
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={onLoadMore}
+      />
     </div>
   )
 }

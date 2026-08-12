@@ -1,23 +1,33 @@
 'use client'
 
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { Button } from '@/shared/components/ui/button'
+import { Skeleton } from '@/shared/components/ui/skeleton'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import { useMyTicketsInfinite } from '../api/supportTickets.queries'
 import { SupportAuthGate } from '../components/SupportAuthGate'
 import { TicketCardList } from '../components/TicketCardList'
+import { TicketFilters, useTicketFiltersFromUrl } from '../components/TicketFilters'
 
 export function CustomerTicketsPage() {
   return (
     <SupportAuthGate message={LABELS.ticketSignInRequired} loginNext={PATHS.supportTickets}>
-      <CustomerTicketsContent />
+      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+        <CustomerTicketsContent />
+      </Suspense>
     </SupportAuthGate>
   )
 }
 
 function CustomerTicketsContent() {
-  const query = useMyTicketsInfinite()
+  const filters = useTicketFiltersFromUrl()
+  const query = useMyTicketsInfinite({
+    status: filters.status,
+    priority: filters.priority,
+    category: filters.category,
+  })
   const tickets = query.data?.pages.flatMap((p) => p.items) ?? []
 
   return (
@@ -33,6 +43,10 @@ function CustomerTicketsContent() {
           <Link href={PATHS.supportTicketNew}>{LABELS.createSupportTicket}</Link>
         </Button>
       </header>
+
+      <div className="mb-5">
+        <TicketFilters showVendorId={false} />
+      </div>
 
       <TicketCardList
         tickets={tickets}

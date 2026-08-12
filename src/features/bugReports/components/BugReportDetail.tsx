@@ -39,23 +39,25 @@ import { cn } from '@/shared/utils/cn'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import {
   BUG_MODULE_LABEL,
+  BUG_REPORTER_ROLE_LABEL,
   BUG_SEVERITY_LABEL,
   BUG_STATUS_LABEL,
-} from '@/features/supportTickets/utils/labels'
+} from '../utils/labels'
 import {
   BUG_COMMENT_MAX,
   BUG_WONT_FIX_REASON_MAX,
-} from '@/features/supportTickets/constants/fieldLimits'
+} from '../constants/fieldLimits'
 import {
   useAddBugComment,
   useBugCommentsInfinite,
   useMarkBugDuplicate,
   useTriageBugReport,
+  useUpdateBugAssignment,
   useUpdateBugStatus,
   useVerifyBug,
   useWontFixBug,
 } from '../api/bugReports.queries'
-import type { BugAttachment, BugReport } from '../api/bugReports.api'
+import type { BugAttachment, BugReport, BugTimelineEntry } from '../api/bugReports.api'
 
 type Props = {
   report: BugReport
@@ -63,16 +65,48 @@ type Props = {
   backHref?: string
 }
 
-const ADMIN_STATUS_OPTIONS: BugReportStatus[] = [
-  BUG_REPORT_STATUS.IN_PROGRESS,
-  BUG_REPORT_STATUS.FIXED,
-  BUG_REPORT_STATUS.VERIFIED,
-  BUG_REPORT_STATUS.CLOSED,
-]
+const ADMIN_STATUS_TRANSITIONS: Partial<Record<BugReportStatus, BugReportStatus[]>> = {
+  [BUG_REPORT_STATUS.TRIAGED]: [BUG_REPORT_STATUS.IN_PROGRESS],
+  [BUG_REPORT_STATUS.IN_PROGRESS]: [BUG_REPORT_STATUS.FIXED],
+  [BUG_REPORT_STATUS.FIXED]: [BUG_REPORT_STATUS.VERIFIED, BUG_REPORT_STATUS.IN_PROGRESS],
+  [BUG_REPORT_STATUS.VERIFIED]: [BUG_REPORT_STATUS.CLOSED],
+}
 
 type ProgressStep = {
   label: string
   status: 'completed' | 'current' | 'upcoming'
+  date?: string | null
+}
+
+function timelineActionLabel(entry: BugTimelineEntry): string {
+  switch (entry.action) {
+    case 'BUG_REPORT_CREATED':
+      return LABELS.bugTimelineFiled
+    case 'BUG_REPORT_TRIAGED':
+      return LABELS.bugTimelineTriaged
+    case 'BUG_REPORT_ASSIGNMENT_UPDATED':
+      return LABELS.bugTimelineAssignmentUpdated
+    case 'BUG_REPORT_DUPLICATE':
+      return LABELS.bugTimelineDuplicate
+    case 'BUG_REPORT_WONT_FIX':
+      return LABELS.bugTimelineWontFix
+    case 'BUG_REPORT_VERIFIED':
+      return LABELS.bugTimelineVerified
+    case 'BUG_REPORT_AUTO_VERIFIED':
+      return LABELS.bugTimelineAutoVerified
+    case 'BUG_REPORT_AUTO_CLOSED':
+      return LABELS.bugTimelineAutoClosed
+    case 'BUG_REPORT_STATUS': {
+      const next = entry.to ?? entry.status
+      if (next === BUG_REPORT_STATUS.IN_PROGRESS) return LABELS.bugTimelineInProgress
+      if (next === BUG_REPORT_STATUS.FIXED) return LABELS.bugTimelineResolved
+      if (next === BUG_REPORT_STATUS.VERIFIED) return LABELS.bugTimelineVerified
+      if (next === BUG_REPORT_STATUS.CLOSED) return LABELS.bugStatusClosed
+      return LABELS.bugTimelineStatusChanged
+    }
+    default:
+      return LABELS.bugTimelineStatusChanged
+  }
 }
 
 function AttachmentGrid({ attachments }: { attachments?: BugAttachment[] }) {
@@ -104,6 +138,17 @@ function AttachmentGrid({ attachments }: { attachments?: BugAttachment[] }) {
 }
 
 function statusTimeline(report: BugReport): ProgressStep[] {
+  if (report.timeline?.length) {
+    return report.timeline.map((entry, index) => ({
+      label: timelineActionLabel(entry),
+      date: String(entry.createdAt),
+      status:
+        index === report.timeline!.length - 1
+          ? ('current' as const)
+          : ('completed' as const),
+    }))
+  }
+
   const order: BugReportStatus[] = [
     BUG_REPORT_STATUS.NEW,
     BUG_REPORT_STATUS.TRIAGED,
@@ -119,18 +164,46 @@ function statusTimeline(report: BugReport): ProgressStep[] {
     [BUG_REPORT_STATUS.VERIFIED]: LABELS.bugStatusVerified,
   }
 
-  let currentIndex = order.indexOf(report.status)
-  if (report.status === BUG_REPORT_STATUS.CLOSED) currentIndex = order.length
-  if (
-    report.status === BUG_REPORT_STATUS.WONT_FIX ||
-    report.status === BUG_REPORT_STATUS.DUPLICATE
-  ) {
-    currentIndex = Math.max(order.indexOf(BUG_REPORT_STATUS.TRIAGED), 0)
+  const dates: Record<string, string | null> = {
+    [BUG_REPORT_STATUS.NEW]: report.createdAt,
+    [BUG_REPORT_STATUS.TRIAGED]: report.triagedAt,
+    [BUG_REPORT_STATUS.IN_PROGRESS]: report.inProgressAt ?? null,
+    [BUG_REPORT_STATUS.FIXED]: report.resolvedAt,
+    [BUG_REPORT_STATUS.VERIFIED]: report.verifiedAt ?? null,
   }
+
+  const isTerminal =
+    report.status === BUG_REPORT_STATUS.WONT_FIX ||
+    report.status === BUG_REPORT_STATUS.DUPLICATE ||
+    report.status === BUG_REPORT_STATUS.CLOSED
+
+  if (isTerminal) {
+    const terminalLabels: Record<string, string> = {
+      [BUG_REPORT_STATUS.WONT_FIX]: LABELS.bugStatusWontFix,
+      [BUG_REPORT_STATUS.DUPLICATE]: LABELS.bugStatusDuplicate,
+      [BUG_REPORT_STATUS.CLOSED]: LABELS.bugStatusClosed,
+    }
+    const completedSteps: ProgressStep[] = order
+      .filter((s) => dates[s])
+      .map((s) => ({
+        label: labels[s]!,
+        date: dates[s],
+        status: 'completed' as const,
+      }))
+    completedSteps.push({
+      label: terminalLabels[report.status] ?? report.status,
+      date: report.resolvedAt ?? report.updatedAt,
+      status: 'current' as const,
+    })
+    return completedSteps
+  }
+
+  let currentIndex = order.indexOf(report.status)
   if (currentIndex < 0) currentIndex = 0
 
   return order.map((status, index) => ({
     label: labels[status]!,
+    date: dates[status] ?? null,
     status:
       index < currentIndex
         ? ('completed' as const)
@@ -173,7 +246,9 @@ function ProgressTrack({ steps }: { steps: ProgressStep[] }) {
             >
               {step.label}
             </p>
-            {step.status === 'current' ? (
+            {step.date ? (
+              <p className="mt-0.5 text-[0.75rem] text-ink-muted">{formatOrderDate(step.date)}</p>
+            ) : step.status === 'current' ? (
               <p className="mt-0.5 text-[0.75rem] text-brand">{LABELS.bugCurrentStatus}</p>
             ) : null}
           </div>
@@ -199,9 +274,16 @@ function ContextRow({ label, value, mono }: { label: string; value: string; mono
   )
 }
 
+const ASSIGNMENT_EDITABLE_STATUSES: BugReportStatus[] = [
+  BUG_REPORT_STATUS.TRIAGED,
+  BUG_REPORT_STATUS.IN_PROGRESS,
+  BUG_REPORT_STATUS.FIXED,
+]
+
 export function BugReportDetail({ report, mode, backHref }: Props) {
   const verify = useVerifyBug(report.id)
   const triage = useTriageBugReport(report.id)
+  const updateAssignment = useUpdateBugAssignment(report.id)
   const updateStatus = useUpdateBugStatus(report.id)
   const duplicate = useMarkBugDuplicate(report.id)
   const wontFix = useWontFixBug(report.id)
@@ -215,11 +297,15 @@ export function BugReportDetail({ report, mode, backHref }: Props) {
     report.affectedModule ?? BUG_AFFECTED_MODULE.OTHER,
   )
   const [assigneeId, setAssigneeId] = useState(report.assignedToId ?? '')
-  const [status, setStatus] = useState<BugReportStatus>(BUG_REPORT_STATUS.IN_PROGRESS)
-  const [duplicateOfId, setDuplicateOfId] = useState('')
+  const [status, setStatus] = useState<BugReportStatus>(
+    ADMIN_STATUS_TRANSITIONS[report.status]?.[0] ?? BUG_REPORT_STATUS.IN_PROGRESS,
+  )
+  const [duplicateOf, setDuplicateOf] = useState('')
   const [wontFixReason, setWontFixReason] = useState('')
   const [comment, setComment] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [assignmentError, setAssignmentError] = useState<string | null>(null)
+  const [actionError, setActionError] = useState<string | null>(null)
 
   useEffect(() => {
     setAssigneeId(report.assignedToId ?? '')
@@ -227,20 +313,52 @@ export function BugReportDetail({ report, mode, backHref }: Props) {
     setModule(report.affectedModule ?? BUG_AFFECTED_MODULE.OTHER)
   }, [report.assignedToId, report.severity, report.affectedModule])
 
+  const statusOptions = useMemo(
+    () => ADMIN_STATUS_TRANSITIONS[report.status] ?? [],
+    [report.status],
+  )
+  const canMarkDuplicate = useMemo(
+    () =>
+      (
+        [
+          BUG_REPORT_STATUS.NEW,
+          BUG_REPORT_STATUS.TRIAGED,
+          BUG_REPORT_STATUS.IN_PROGRESS,
+        ] as BugReportStatus[]
+      ).includes(report.status),
+    [report.status],
+  )
+  const canWontFix = useMemo(
+    () => report.status === BUG_REPORT_STATUS.TRIAGED,
+    [report.status],
+  )
+
+  useEffect(() => {
+    if (statusOptions.length > 0 && !statusOptions.includes(status)) {
+      setStatus(statusOptions[0]!)
+    }
+  }, [statusOptions, status])
+
   const comments = useMemo(
     () => commentsQuery.data?.pages.flatMap((p) => p.items) ?? report.comments ?? [],
     [commentsQuery.data, report.comments],
   )
 
   const progress = useMemo(() => statusTimeline(report), [report])
+  const isNewReport = report.status === BUG_REPORT_STATUS.NEW
+  const canEditAssignment = isNewReport || ASSIGNMENT_EDITABLE_STATUSES.includes(report.status)
 
-  const appVersionDisplay =
-    report.appVersion ||
-    (typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_APP_VERSION : undefined) ||
-    LABELS.emptyCell
+  const appVersionDisplay = report.appVersion || LABELS.emptyCell
 
   const listHref =
     backHref ?? (mode === 'admin' ? PATHS.admin.bugReports : PATHS.bugReports)
+  const duplicateOfHref = report.duplicateOfId
+    ? mode === 'admin'
+      ? PATHS.admin.bugReport(report.duplicateOfId)
+      : listHref.startsWith('/vendor/')
+        ? PATHS.vendor.bugReport(report.duplicateOfId)
+        : PATHS.bugReport(report.duplicateOfId)
+    : null
 
   return (
     <div className="w-full min-w-0 space-y-5 sm:space-y-6">
@@ -275,7 +393,12 @@ export function BugReportDetail({ report, mode, backHref }: Props) {
             <StatusBadge status={report.status} label={BUG_STATUS_LABEL[report.status]} />
             {mode === 'admin' ? (
               <>
-                <StatusBadge status={report.severity} label={BUG_SEVERITY_LABEL[report.severity]} />
+                <StatusBadge
+                  status={report.severity ?? 'NONE'}
+                  label={
+                    report.severity ? BUG_SEVERITY_LABEL[report.severity] : LABELS.bugSeverityNone
+                  }
+                />
                 <StatusBadge
                   status={report.affectedModule}
                   label={BUG_MODULE_LABEL[report.affectedModule]}
@@ -321,6 +444,25 @@ export function BugReportDetail({ report, mode, backHref }: Props) {
                 <p className="border border-line bg-paper/50 px-3 py-2.5 text-[0.875rem] text-ink-muted sm:px-4 sm:py-3">
                   <span className="font-medium text-ink">{LABELS.bugWontFixReason}: </span>
                   {report.wontFixReason}
+                </p>
+              ) : null}
+
+              {report.status === BUG_REPORT_STATUS.DUPLICATE && report.duplicateOfId ? (
+                <p className="border border-line bg-paper/50 px-3 py-2.5 text-[0.875rem] text-ink-muted sm:px-4 sm:py-3">
+                  <span className="font-medium text-ink">{LABELS.bugDuplicateOf}: </span>
+                  {mode === 'admin' && duplicateOfHref ? (
+                    <Link
+                      href={duplicateOfHref}
+                      className="font-mono text-[0.8125rem] text-brand hover:underline"
+                    >
+                      #
+                      {report.duplicateOfReportNumber ?? report.duplicateOfId.slice(0, 8)}
+                    </Link>
+                  ) : (
+                    <span className="font-mono text-[0.8125rem] text-ink">
+                      #{report.duplicateOfReportNumber ?? report.duplicateOfId.slice(0, 8)}
+                    </span>
+                  )}
                 </p>
               ) : null}
             </div>
@@ -429,8 +571,59 @@ export function BugReportDetail({ report, mode, backHref }: Props) {
         </div>
 
         <aside className="min-w-0 space-y-4 lg:col-span-5 xl:col-span-4">
-          {mode === 'reporter' ? (
-            <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1 lg:sticky lg:top-24">
+          <div className="space-y-4 lg:sticky lg:top-24">
+            {mode === 'admin' ? (
+              <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/70 via-brand/30 to-transparent"
+                />
+                <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+                  <TextEyebrow brand>{LABELS.bugContextPanel}</TextEyebrow>
+                </div>
+                <dl className="grid gap-3.5 px-4 py-4 sm:px-5">
+                  <ContextRow
+                    label={LABELS.bugPageUrl}
+                    value={report.pageUrl || LABELS.emptyCell}
+                    mono
+                  />
+                  <ContextRow
+                    label={LABELS.bugBrowser}
+                    value={report.browserName || LABELS.emptyCell}
+                  />
+                  <ContextRow label={LABELS.bugOs} value={report.osName || LABELS.emptyCell} />
+                  <ContextRow
+                    label={LABELS.bugDevice}
+                    value={report.deviceType || LABELS.emptyCell}
+                  />
+                  <ContextRow label={LABELS.bugAppVersion} value={appVersionDisplay} />
+                  <ContextRow
+                    label={LABELS.bugUserAgent}
+                    value={report.userAgent || LABELS.emptyCell}
+                    mono
+                  />
+                  <ContextRow
+                    label={LABELS.bugOccurredAt}
+                    value={report.occurredAt ? formatOrderDate(report.occurredAt) : LABELS.emptyCell}
+                  />
+                  <ContextRow
+                    label={LABELS.bugReporterRoleLabel}
+                    value={report.reporterRole ? BUG_REPORTER_ROLE_LABEL[report.reporterRole] : LABELS.emptyCell}
+                  />
+                  <ContextRow
+                    label={LABELS.bugReporterUserId}
+                    value={report.userId || LABELS.emptyCell}
+                    mono
+                  />
+                  <ContextRow
+                    label={LABELS.bugReporterUserRole}
+                    value={report.userRole || LABELS.emptyCell}
+                  />
+                </dl>
+              </section>
+            ) : null}
+
+            <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1">
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/70 via-brand/30 to-transparent"
@@ -443,25 +636,95 @@ export function BugReportDetail({ report, mode, backHref }: Props) {
               </div>
               <div className="px-4 py-4 sm:px-5 sm:py-5">
                 <ProgressTrack steps={progress} />
-                {report.status === BUG_REPORT_STATUS.FIXED ? (
+                <div className="mt-5 border-t border-line/60 pt-4">
+                  <TextEyebrow>{LABELS.bugTimeline}</TextEyebrow>
+                  <dl className="mt-3 space-y-2.5 text-[0.8125rem]">
+                    <div className="flex items-center justify-between gap-3">
+                      <dt className="text-ink-muted">{LABELS.bugTimelineFiled}</dt>
+                      <dd className="text-ink">{formatOrderDate(report.createdAt)}</dd>
+                    </div>
+                    {report.triagedAt ? (
+                      <div className="flex items-center justify-between gap-3">
+                        <dt className="text-ink-muted">{LABELS.bugTimelineTriaged}</dt>
+                        <dd className="text-ink">{formatOrderDate(report.triagedAt)}</dd>
+                      </div>
+                    ) : null}
+                    {report.inProgressAt ? (
+                      <div className="flex items-center justify-between gap-3">
+                        <dt className="text-ink-muted">{LABELS.bugTimelineInProgress}</dt>
+                        <dd className="text-ink">{formatOrderDate(report.inProgressAt)}</dd>
+                      </div>
+                    ) : null}
+                    {report.resolvedAt ? (
+                      <div className="flex items-center justify-between gap-3">
+                        <dt className="text-ink-muted">{LABELS.bugTimelineResolved}</dt>
+                        <dd className="text-ink">{formatOrderDate(report.resolvedAt)}</dd>
+                      </div>
+                    ) : null}
+                    <div className="flex items-center justify-between gap-3">
+                      <dt className="text-ink-muted">{LABELS.bugTimelineCurrent}</dt>
+                      <dd>
+                        <StatusBadge
+                          status={report.status}
+                          label={BUG_STATUS_LABEL[report.status]}
+                        />
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+                {mode === 'reporter' && report.status === BUG_REPORT_STATUS.FIXED ? (
                   <div className="mt-4 border border-brand/30 bg-brand-subtle/50 px-3 py-3 sm:px-4 sm:py-4">
                     <p className="text-[0.875rem] text-ink">{LABELS.bugVerifyHint}</p>
                     <Button
                       type="button"
                       className="mt-3"
                       loading={verify.isPending}
-                      onClick={() => void verify.mutateAsync()}
+                      onClick={async () => {
+                        setActionError(null)
+                        try {
+                          await verify.mutateAsync()
+                        } catch (err) {
+                          setActionError(getApiErrorMessage(err, LABELS.bugCouldNotUpdate))
+                        }
+                      }}
                     >
                       {LABELS.bugVerifyFixed}
                     </Button>
+                    {actionError ? (
+                      <FormError error={new Error(actionError)} fallback={LABELS.bugCouldNotUpdate} />
+                    ) : null}
                   </div>
                 ) : null}
               </div>
             </section>
-          ) : null}
+
+            {mode === 'reporter' ? (
+              <section className="overflow-hidden border border-line bg-surface shadow-elevation-1">
+                <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+                  <TextEyebrow brand>{LABELS.bugContextPanel}</TextEyebrow>
+                </div>
+                <dl className="grid gap-3.5 px-4 py-4 sm:px-5">
+                  <ContextRow
+                    label={LABELS.bugPageUrl}
+                    value={report.pageUrl || LABELS.emptyCell}
+                    mono
+                  />
+                  <ContextRow
+                    label={LABELS.bugBrowser}
+                    value={report.browserName || LABELS.emptyCell}
+                  />
+                  <ContextRow label={LABELS.bugOs} value={report.osName || LABELS.emptyCell} />
+                  <ContextRow
+                    label={LABELS.bugDevice}
+                    value={report.deviceType || LABELS.emptyCell}
+                  />
+                  <ContextRow label={LABELS.bugAppVersion} value={appVersionDisplay} />
+                </dl>
+              </section>
+            ) : null}
 
           {mode === 'admin' ? (
-            <div className="space-y-4 lg:sticky lg:top-24">
+            <>
               <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1">
                 <div
                   aria-hidden
@@ -522,134 +785,162 @@ export function BugReportDetail({ report, mode, backHref }: Props) {
                       }
                     />
                   </FormFieldFrame>
+                  <FormError
+                    error={assignmentError ? new Error(assignmentError) : null}
+                    fallback={LABELS.bugCouldNotSaveAssignment}
+                  />
                   <Button
                     type="button"
                     className="w-full"
-                    loading={triage.isPending}
-                    onClick={() =>
-                      void triage.mutateAsync({
+                    loading={triage.isPending || updateAssignment.isPending}
+                    disabled={!canEditAssignment}
+                    onClick={async () => {
+                      setAssignmentError(null)
+                      const body = {
                         severity,
                         affectedModule: module,
                         assignedToId: assigneeId.trim() || null,
-                      })
-                    }
+                      }
+                      try {
+                        if (isNewReport) {
+                          await triage.mutateAsync(body)
+                        } else {
+                          await updateAssignment.mutateAsync(body)
+                        }
+                      } catch (err) {
+                        setAssignmentError(
+                          getApiErrorMessage(err, LABELS.bugCouldNotSaveAssignment),
+                        )
+                      }
+                    }}
                   >
-                    {LABELS.bugTriageSubmit}
+                    {isNewReport ? LABELS.bugTriageSubmit : LABELS.bugSaveAssignment}
                   </Button>
                 </div>
               </section>
 
+              {statusOptions.length > 0 || canMarkDuplicate || canWontFix ? (
               <section className="overflow-hidden border border-line bg-surface shadow-elevation-1">
                 <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
                   <TextEyebrow>{LABELS.bugUpdateStatus}</TextEyebrow>
                 </div>
                 <div className="space-y-3 px-4 py-4 sm:px-5">
-                  <FormFieldFrame label={LABELS.status}>
-                    <Select
-                      value={status}
-                      onValueChange={(v) => setStatus(v as BugReportStatus)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {ADMIN_STATUS_OPTIONS.map((value) => (
-                          <SelectItem key={value} value={value}>
-                            {BUG_STATUS_LABEL[value]}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormFieldFrame>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full"
-                    loading={updateStatus.isPending}
-                    onClick={() => void updateStatus.mutateAsync(status)}
-                  >
-                    {LABELS.bugUpdateStatus}
-                  </Button>
+                  {statusOptions.length > 0 ? (
+                    <>
+                      <FormFieldFrame label={LABELS.status}>
+                        <Select
+                          value={status}
+                          onValueChange={(v) => setStatus(v as BugReportStatus)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {statusOptions.map((value) => (
+                              <SelectItem key={value} value={value}>
+                                {BUG_STATUS_LABEL[value]}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormFieldFrame>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        loading={updateStatus.isPending}
+                        onClick={async () => {
+                          setActionError(null)
+                          try {
+                            await updateStatus.mutateAsync(status)
+                          } catch (err) {
+                            setActionError(getApiErrorMessage(err, LABELS.bugCouldNotUpdate))
+                          }
+                        }}
+                      >
+                        {LABELS.bugUpdateStatus}
+                      </Button>
+                    </>
+                  ) : null}
 
-                  <div className="border-t border-line/60 pt-3">
-                    <FormFieldFrame label={LABELS.bugDuplicateOfId}>
-                      <Input
-                        value={duplicateOfId}
-                        onChange={(e) => setDuplicateOfId(e.target.value)}
-                      />
-                    </FormFieldFrame>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="mt-3 w-full"
-                      loading={duplicate.isPending}
-                      disabled={!duplicateOfId.trim()}
-                      onClick={() => void duplicate.mutateAsync(duplicateOfId.trim())}
-                    >
-                      {LABELS.bugMarkDuplicate}
-                    </Button>
-                  </div>
+                  {canMarkDuplicate ? (
+                    <div className="border-t border-line/60 pt-3">
+                      <FormFieldFrame label={LABELS.bugDuplicateOfId}>
+                        <Input
+                          value={duplicateOf}
+                          onChange={(e) => setDuplicateOf(e.target.value)}
+                          placeholder={LABELS.bugDuplicateOfPlaceholder}
+                        />
+                        <p className="mt-1 text-[0.75rem] text-ink-muted">
+                          {LABELS.bugDuplicateOfHint}
+                        </p>
+                      </FormFieldFrame>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="mt-3 w-full"
+                        loading={duplicate.isPending}
+                        disabled={!duplicateOf.trim()}
+                        onClick={async () => {
+                          setActionError(null)
+                          try {
+                            await duplicate.mutateAsync(duplicateOf.trim())
+                          } catch (err) {
+                            setActionError(getApiErrorMessage(err, LABELS.bugCouldNotUpdate))
+                          }
+                        }}
+                      >
+                        {LABELS.bugMarkDuplicate}
+                      </Button>
+                    </div>
+                  ) : null}
 
-                  <div className="border-t border-line/60 pt-3">
-                    <FormFieldFrame label={LABELS.bugWontFixReason}>
-                      <Textarea
-                        value={wontFixReason}
-                        onChange={(e) =>
-                          setWontFixReason(e.target.value.slice(0, BUG_WONT_FIX_REASON_MAX))
-                        }
-                        rows={3}
-                        maxLength={BUG_WONT_FIX_REASON_MAX}
-                      />
-                      <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
-                        {formatLabel(LABELS.ticketCharCounter, {
-                          count: wontFixReason.length,
-                          max: BUG_WONT_FIX_REASON_MAX,
-                        })}
-                      </p>
-                    </FormFieldFrame>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="mt-3 w-full"
-                      loading={wontFix.isPending}
-                      disabled={!wontFixReason.trim()}
-                      onClick={() => void wontFix.mutateAsync(wontFixReason.trim())}
-                    >
-                      {LABELS.bugWontFixSubmit}
-                    </Button>
-                  </div>
+                  {canWontFix ? (
+                    <div className="border-t border-line/60 pt-3">
+                      <FormFieldFrame label={LABELS.bugWontFixReason}>
+                        <Textarea
+                          value={wontFixReason}
+                          onChange={(e) =>
+                            setWontFixReason(e.target.value.slice(0, BUG_WONT_FIX_REASON_MAX))
+                          }
+                          rows={3}
+                          maxLength={BUG_WONT_FIX_REASON_MAX}
+                        />
+                        <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
+                          {formatLabel(LABELS.ticketCharCounter, {
+                            count: wontFixReason.length,
+                            max: BUG_WONT_FIX_REASON_MAX,
+                          })}
+                        </p>
+                      </FormFieldFrame>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="mt-3 w-full"
+                        loading={wontFix.isPending}
+                        disabled={!wontFixReason.trim()}
+                        onClick={async () => {
+                          setActionError(null)
+                          try {
+                            await wontFix.mutateAsync(wontFixReason.trim())
+                          } catch (err) {
+                            setActionError(getApiErrorMessage(err, LABELS.bugCouldNotUpdate))
+                          }
+                        }}
+                      >
+                        {LABELS.bugWontFixSubmit}
+                      </Button>
+                    </div>
+                  ) : null}
+                  {actionError ? (
+                    <FormError error={new Error(actionError)} fallback={LABELS.bugCouldNotUpdate} />
+                  ) : null}
                 </div>
               </section>
-
-              <section className="overflow-hidden border border-line bg-surface shadow-elevation-1">
-                <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
-                  <TextEyebrow>{LABELS.bugContextPanel}</TextEyebrow>
-                </div>
-                <dl className="grid gap-3.5 px-4 py-4 sm:px-5">
-                  <ContextRow
-                    label={LABELS.bugPageUrl}
-                    value={report.pageUrl || LABELS.emptyCell}
-                    mono
-                  />
-                  <ContextRow
-                    label={LABELS.bugBrowser}
-                    value={report.browserName || LABELS.emptyCell}
-                  />
-                  <ContextRow label={LABELS.bugOs} value={report.osName || LABELS.emptyCell} />
-                  <ContextRow
-                    label={LABELS.bugDevice}
-                    value={report.deviceType || LABELS.emptyCell}
-                  />
-                  <ContextRow label={LABELS.bugAppVersion} value={appVersionDisplay} />
-                  <ContextRow
-                    label={LABELS.bugUserAgent}
-                    value={report.userAgent || LABELS.emptyCell}
-                    mono
-                  />
-                </dl>
-              </section>
-            </div>
+              ) : null}
+            </>
           ) : null}
+          </div>
         </aside>
       </div>
     </div>

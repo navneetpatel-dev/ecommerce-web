@@ -41,19 +41,6 @@ export type HelpCategory = {
   articles: HelpArticle[];
 };
 
-export type HelpTopicOption = {
-  value:
-    | 'ORDERS'
-    | 'SHIPPING'
-    | 'RETURNS'
-    | 'PAYMENTS'
-    | 'ACCOUNT'
-    | 'PRODUCTS'
-    | 'SELLERS'
-    | 'OTHER';
-  label: string;
-};
-
 export type HelpQuickLink = {
   label: string;
   href: string;
@@ -1879,7 +1866,7 @@ export const HELP_CATEGORIES: HelpCategory[] = [
           {
             heading: 'Where to submit',
             paragraphs: [
-              'Use the Contact page at /contact. For policy reading, see /returns. For open return cases, monitor /my-returns while you wait for a reply.',
+              'Go to My Account → Support Tickets and open a new ticket. For policy reading, see /returns. For open return cases, monitor /my-returns while you wait for a reply. You can also report bugs via My Account → Bug Reports.',
             ],
           },
           {
@@ -1940,40 +1927,29 @@ export const HELP_CATEGORIES: HelpCategory[] = [
 ];
 
 /* -------------------------------------------------------------------------- */
-/* Contact topics & quick links                                               */
+/* Quick links                                                                */
 /* -------------------------------------------------------------------------- */
-
-export const CONTACT_TOPICS: HelpTopicOption[] = [
-  { value: 'ORDERS', label: 'Orders' },
-  { value: 'SHIPPING', label: 'Shipping & delivery' },
-  { value: 'RETURNS', label: 'Returns & refunds' },
-  { value: 'PAYMENTS', label: 'Payments' },
-  { value: 'ACCOUNT', label: 'Account & security' },
-  { value: 'PRODUCTS', label: 'Products & listings' },
-  { value: 'SELLERS', label: 'Sellers & marketplace' },
-  { value: 'OTHER', label: 'Other' },
-];
 
 export const HELP_QUICK_LINKS: HelpQuickLink[] = [
   {
-    label: 'My orders',
+    label: LABELS.helpQuickLinkOrders,
     href: PATHS.orders,
-    description: 'View order history, status, and tracking for each shipment.',
+    description: LABELS.helpQuickLinkOrdersDesc,
   },
   {
-    label: 'Profile',
+    label: LABELS.helpQuickLinkProfile,
     href: PATHS.profile,
-    description: 'Update personal details, addresses, and account preferences.',
+    description: LABELS.helpQuickLinkProfileDesc,
   },
   {
-    label: 'Returns policy',
+    label: LABELS.helpQuickLinkReturnsPolicy,
     href: PATHS.returns,
-    description: 'Read eligibility windows, conditions, and item-level return rules.',
+    description: LABELS.helpQuickLinkReturnsPolicyDesc,
   },
   {
-    label: 'My returns',
+    label: LABELS.helpQuickLinkMyReturns,
     href: PATHS.myReturns,
-    description: 'Track return requests, pickups, and refund progress.',
+    description: LABELS.helpQuickLinkMyReturnsDesc,
   },
   {
     label: LABELS.helpQuickLinkTickets,
@@ -1986,9 +1962,9 @@ export const HELP_QUICK_LINKS: HelpQuickLink[] = [
     description: LABELS.helpQuickLinkBugsDesc,
   },
   {
-    label: 'Contact support',
-    href: '/contact',
-    description: 'Send a help request with the right topic and order details.',
+    label: LABELS.helpQuickLinkContact,
+    href: PATHS.contact,
+    description: LABELS.helpQuickLinkContactDesc,
   },
 ];
 

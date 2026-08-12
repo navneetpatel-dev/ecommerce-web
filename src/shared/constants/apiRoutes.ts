@@ -49,6 +49,7 @@ export const API = {
   },
   vendors: {
     list: (query = '') => `/api/vendors${query ? `?${query}` : ''}`,
+    directory: (query = '') => `/api/vendors/directory${query ? `?${query}` : ''}`,
     detail: (id: string) => `/api/vendors/${id}`,
     bySlug: (slug: string) => `/api/vendors/slug/${slug}`,
     me: '/api/vendors/me',
@@ -191,8 +192,8 @@ export const API = {
     query: (term: string, page: number) =>
       `/api/search?q=${encodeURIComponent(term)}&page=${page}`,
   },
-  help: {
-    tickets: '/api/help/tickets',
+  newsletter: {
+    subscribe: '/api/newsletter/subscribe',
   },
   supportTickets: {
     root: '/api/support-tickets',
@@ -207,6 +208,8 @@ export const API = {
     reopen: (id: string) => `/api/support-tickets/${id}/reopen`,
     close: (id: string) => `/api/support-tickets/${id}/close`,
     reassign: (id: string) => `/api/support-tickets/${id}/reassign`,
+    priority: (id: string) => `/api/support-tickets/${id}/priority`,
+    escalate: (id: string) => `/api/support-tickets/${id}/escalate`,
     rate: (id: string) => `/api/support-tickets/${id}/rate`,
   },
   bugReports: {
@@ -215,6 +218,7 @@ export const API = {
     admin: (query = '') => `/api/bug-reports/admin${query ? `?${query}` : ''}`,
     detail: (id: string) => `/api/bug-reports/${id}`,
     triage: (id: string) => `/api/bug-reports/${id}/triage`,
+    assignment: (id: string) => `/api/bug-reports/${id}/assignment`,
     status: (id: string) => `/api/bug-reports/${id}/status`,
     duplicate: (id: string) => `/api/bug-reports/${id}/duplicate`,
     wontFix: (id: string) => `/api/bug-reports/${id}/wont-fix`,

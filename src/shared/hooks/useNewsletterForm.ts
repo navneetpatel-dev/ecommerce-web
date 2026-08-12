@@ -1,8 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { apiClient } from '@/shared/api/client'
+import { API } from '@/shared/constants/apiRoutes'
+import { LABELS } from '@/shared/constants/labels'
+import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 
 const NEWSLETTER_KEY = 'newsletter-subscribed-email'
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function useNewsletterForm() {
   const [email, setEmail] = useState('')
@@ -13,8 +19,8 @@ export function useNewsletterForm() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     const trimmed = email.trim()
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setError('Enter a valid email address')
+    if (!EMAIL_RE.test(trimmed)) {
+      setError(LABELS.newsletterInvalidEmail)
       setMessage(null)
       return
     }
@@ -22,23 +28,23 @@ export function useNewsletterForm() {
     setError(null)
     setMessage(null)
     try {
-      const { helpApi } = await import('@/features/help/api/help.api')
-      await helpApi.createTicket({
-        name: 'Newsletter subscriber',
-        email: trimmed,
-        topic: 'OTHER',
-        subject: 'Newsletter subscription request',
-        message: `Please add ${trimmed} to the deal-alert mailing list.`,
-      })
+      const result = await apiClient.post<{
+        subscribed: boolean
+        alreadySubscribed: boolean
+      }>(API.newsletter.subscribe, { email: trimmed })
       try {
         localStorage.setItem(NEWSLETTER_KEY, trimmed)
       } catch {
         // ignore storage failures
       }
-      setMessage("Thanks — you're on the list. We'll be in touch.")
+      setMessage(
+        result.alreadySubscribed
+          ? LABELS.newsletterAlreadySubscribed
+          : LABELS.newsletterSuccess,
+      )
       setEmail('')
-    } catch {
-      setError('Could not subscribe right now. Try again or contact support.')
+    } catch (err) {
+      setError(getApiErrorMessage(err, LABELS.newsletterCouldNotSubscribe))
     } finally {
       setPending(false)
     }

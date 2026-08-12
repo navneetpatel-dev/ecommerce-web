@@ -27,6 +27,9 @@ interface PlatformSettingsFormProps {
   onReturnShippingFeeChange: (value: number) => void
   onSupportEmailChange: (value: string) => void
   onSupportHoursChange: (value: string) => void
+  onTicketReopenWindowDaysChange: (value: number) => void
+  onBugVerifyWindowDaysChange: (value: number) => void
+  onBugCloseWindowDaysChange: (value: number) => void
   onSave: () => void
 }
 
@@ -43,6 +46,9 @@ export function PlatformSettingsForm({
   onReturnShippingFeeChange,
   onSupportEmailChange,
   onSupportHoursChange,
+  onTicketReopenWindowDaysChange,
+  onBugVerifyWindowDaysChange,
+  onBugCloseWindowDaysChange,
   onSave,
 }: PlatformSettingsFormProps) {
   return (
@@ -175,6 +181,45 @@ export function PlatformSettingsForm({
               id="platform-support-hours"
               value={form.supportHours}
               onChange={(e) => onSupportHoursChange(e.target.value)}
+            />
+          </FormFieldFrame>
+          <FormFieldFrame
+            label={LABELS.ticketReopenWindowDays}
+            hint={LABELS.ticketReopenWindowDaysHint}
+          >
+            <NumberInput
+              value={form.ticketReopenWindowDays ?? 7}
+              min={1}
+              max={365}
+              step={1}
+              suffix={LABELS.daysShort}
+              onChange={(value) => onTicketReopenWindowDaysChange(value ?? 7)}
+            />
+          </FormFieldFrame>
+          <FormFieldFrame
+            label={LABELS.bugVerifyWindowDays}
+            hint={LABELS.bugVerifyWindowDaysHint}
+          >
+            <NumberInput
+              value={form.bugVerifyWindowDays ?? 7}
+              min={1}
+              max={365}
+              step={1}
+              suffix={LABELS.daysShort}
+              onChange={(value) => onBugVerifyWindowDaysChange(value ?? 7)}
+            />
+          </FormFieldFrame>
+          <FormFieldFrame
+            label={LABELS.bugCloseWindowDays}
+            hint={LABELS.bugCloseWindowDaysHint}
+          >
+            <NumberInput
+              value={form.bugCloseWindowDays ?? 7}
+              min={1}
+              max={365}
+              step={1}
+              suffix={LABELS.daysShort}
+              onChange={(value) => onBugCloseWindowDaysChange(value ?? 7)}
             />
           </FormFieldFrame>
         </FormSection>

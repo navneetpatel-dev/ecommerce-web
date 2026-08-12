@@ -1,7 +1,7 @@
 'use client'
 
 import { RequirePermission } from '@/shared/components/RequirePermission'
-import { PERMISSIONS } from '@/shared/constants/permissions'
+import { VENDOR_SUPPORT_ACCESS } from '@/shared/constants/permissions'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import { BugReportForm } from '../components/BugReportForm'
@@ -9,11 +9,7 @@ import { BugReportForm } from '../components/BugReportForm'
 export function VendorNewBugReportPage() {
   return (
     <RequirePermission
-      permission={[
-        PERMISSIONS.PRODUCT_CREATE,
-        PERMISSIONS.PRODUCT_UPDATE,
-        PERMISSIONS.SUBORDER_MANAGE,
-      ]}
+      permission={VENDOR_SUPPORT_ACCESS}
     >
       <div className="space-y-6">
         <header>
@@ -21,7 +17,7 @@ export function VendorNewBugReportPage() {
           <p className="mt-1 text-[0.875rem] text-ink-muted">{LABELS.newBugReportDescription}</p>
         </header>
         <div className="max-w-2xl">
-          <BugReportForm successHref={PATHS.vendor.bugReport} />
+          <BugReportForm successHref={PATHS.vendor.bugReport} hideTitle />
         </div>
       </div>
     </RequirePermission>

@@ -29,6 +29,7 @@ import {
 import { HelpContactForm } from './HelpContactForm'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
+import { formatLabel } from '@/shared/utils/formatLabel'
 
 const ICON_MAP: Record<string, LucideIcon> = {
   BookOpen,
@@ -66,7 +67,7 @@ export function HelpHomeView() {
           transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
           className="max-w-2xl"
         >
-          <TextEyebrow brand>Support</TextEyebrow>
+          <TextEyebrow brand>{LABELS.helpSupportEyebrow}</TextEyebrow>
           <h1
             className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
             style={{ fontSize: 'var(--text-display-sm)' }}
@@ -74,8 +75,7 @@ export function HelpHomeView() {
             {LABELS.helpCenter}
           </h1>
           <p className="mt-2 text-[0.9375rem] text-ink-muted">
-            Guides for orders, shipping, returns, payments, and your account — written for real
-            shopping on this marketplace.
+            {LABELS.helpCenterIntro}
           </p>
         </motion.header>
 
@@ -88,9 +88,9 @@ export function HelpHomeView() {
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search help articles…"
+            placeholder={LABELS.helpSearchPlaceholder}
             className="pl-10"
-            aria-label="Search help"
+            aria-label={LABELS.helpSearchAriaLabel}
           />
         </div>
 
@@ -98,12 +98,17 @@ export function HelpHomeView() {
           <section className="mt-8 border border-line bg-surface-raised shadow-elevation-1">
             <div className="border-b border-line px-5 py-4">
               <p className="text-[0.875rem] text-ink-muted">
-                {results.length} {results.length === 1 ? 'result' : 'results'} for “{query.trim()}”
+                {formatLabel(
+                  results.length === 1
+                    ? LABELS.helpSearchResultSingular
+                    : LABELS.helpSearchResultPlural,
+                  { count: String(results.length), query: query.trim() },
+                )}
               </p>
             </div>
             {results.length === 0 ? (
               <p className="px-5 py-10 text-center text-[0.9375rem] text-ink-muted">
-                No articles matched. Try different words, or contact support below.
+                {LABELS.helpSearchEmpty}
               </p>
             ) : (
               <ul className="divide-y divide-line">
@@ -127,7 +132,7 @@ export function HelpHomeView() {
         ) : (
           <>
             <section className="mt-10">
-              <TextEyebrow>Quick links</TextEyebrow>
+              <TextEyebrow>{LABELS.helpQuickLinksEyebrow}</TextEyebrow>
               <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {HELP_QUICK_LINKS.map((link) => (
                   <li key={link.href}>
@@ -144,7 +149,7 @@ export function HelpHomeView() {
             </section>
 
             <section className="mt-12">
-              <TextEyebrow>Browse topics</TextEyebrow>
+              <TextEyebrow>{LABELS.helpBrowseTopicsEyebrow}</TextEyebrow>
               <ul className="mt-3 grid gap-3 sm:grid-cols-2">
                 {HELP_CATEGORIES.map((category) => (
                   <CategoryCard key={category.id} category={category} />
@@ -158,12 +163,12 @@ export function HelpHomeView() {
           id="contact"
           className="mt-14 scroll-mt-24 border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-8"
         >
-          <TextEyebrow brand>Still stuck?</TextEyebrow>
+          <TextEyebrow brand>{LABELS.helpStillStuckEyebrow}</TextEyebrow>
           <h2
             className="mt-1.5 font-display text-ink leading-[1.15] tracking-tight"
             style={{ fontSize: 'var(--text-display-sm)' }}
           >
-            Contact support
+            {LABELS.helpContactSupportHeading}
           </h2>
           <p className="mt-2 max-w-xl text-[0.9375rem] text-ink-muted">
             {LABELS.helpContactDeskHint}

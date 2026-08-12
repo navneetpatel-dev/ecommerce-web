@@ -34,3 +34,10 @@ export const PERMISSIONS = {
 export type PermissionKey = (typeof PERMISSIONS)[keyof typeof PERMISSIONS]
 
 export const PERMISSION_KEYS = Object.values(PERMISSIONS) as PermissionKey[]
+
+/** Vendor dashboard access for support tickets + bug reports (matches API vendor role scope). */
+export const VENDOR_SUPPORT_ACCESS: PermissionKey[] = [
+  PERMISSIONS.PRODUCT_CREATE,
+  PERMISSIONS.PRODUCT_UPDATE,
+  PERMISSIONS.SUBORDER_MANAGE,
+]

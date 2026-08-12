@@ -77,5 +77,19 @@ export function usePlatformSettingsForm() {
       setMessage(null)
       setForm((current) => (current ? { ...current, supportHours: value } : current))
     },
+    setTicketReopenWindowDays: (value: number) => {
+      setMessage(null)
+      setForm((current) =>
+        current ? { ...current, ticketReopenWindowDays: value } : current,
+      )
+    },
+    setBugVerifyWindowDays: (value: number) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, bugVerifyWindowDays: value } : current))
+    },
+    setBugCloseWindowDays: (value: number) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, bugCloseWindowDays: value } : current))
+    },
   }
 }

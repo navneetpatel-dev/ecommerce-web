@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Send } from 'lucide-react'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import { ArrowLeft, Send, Star } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/shared/components/ui/avatar'
 import { Button } from '@/shared/components/ui/button'
 import { FormFieldFrame } from '@/shared/components/forms'
@@ -22,9 +23,12 @@ import { AssigneeSelect } from '@/shared/components/AssigneeSelect'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import {
+  SUPPORT_TICKET_PRIORITY,
+  SUPPORT_TICKET_PRIORITY_VALUES,
   SUPPORT_TICKET_STATUS,
   TICKET_ATTACHMENT_TYPE,
   TICKET_SENDER_ROLE,
+  type SupportTicketPriority,
 } from '@/shared/constants/statuses'
 import { PERMISSIONS } from '@/shared/constants/permissions'
 import { usePermissions } from '@/shared/hooks/usePermissions'
@@ -34,18 +38,21 @@ import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { cn } from '@/shared/utils/cn'
 import {
   useCloseSupportTicket,
+  useEscalateSupportTicket,
   useRateSupportTicket,
   useReassignSupportTicket,
   useReopenSupportTicket,
   useReplySupportTicket,
   useResolveSupportTicket,
   useTicketMessagesInfinite,
+  useUpdateTicketPriority,
 } from '../api/supportTickets.queries'
 import type { SupportTicket, TicketAttachment, TicketMessage } from '../api/supportTickets.api'
 import { TicketAttachmentUploader, type UploadedMediaAttachment } from './TicketAttachmentUploader'
 import { TICKET_CATEGORY_LABEL, TICKET_PRIORITY_LABEL, TICKET_STATUS_LABEL } from '../utils/labels'
 import { TICKET_REPLY_MAX } from '../constants/fieldLimits'
 import { formatLabel } from '@/shared/utils/formatLabel'
+import { usePublicSettings } from '@/shared/hooks/usePublicSettings'
 
 type RoleMode = 'customer' | 'vendor' | 'admin'
 
@@ -55,9 +62,12 @@ type Props = {
 }
 
 function initials(name: string | null | undefined): string {
-  if (!name?.trim()) return '?'
+  if (!name?.trim()) return LABELS.ticketAvatarInitialsFallback
   const parts = name.trim().split(/\s+/)
-  return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() || '?'
+  return (
+    ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() ||
+    LABELS.ticketAvatarInitialsFallback
+  )
 }
 
 function isStaffRole(role: string): boolean {
@@ -114,10 +124,10 @@ function MessageBubble({
   const displayName = isOwn
     ? LABELS.ticketMessageYou
     : message.senderName ||
-      (isStaffRole(message.senderRole) ? LABELS.ticketMessageSupport : message.senderRole)
+      (isStaffRole(message.senderRole) ? LABELS.ticketMessageSupport : LABELS.ticketMessageCustomer)
 
   return (
-    <li className={cn('flex gap-2.5 sm:gap-3', isOwn ? 'flex-row-reverse' : 'flex-row')}>
+    <div className={cn('flex gap-2.5 sm:gap-3', isOwn ? 'flex-row-reverse' : 'flex-row')}>
       <Avatar className="mt-1 h-8 w-8 shrink-0 border border-line sm:h-9 sm:w-9">
         <AvatarFallback
           className={cn(
@@ -156,7 +166,7 @@ function MessageBubble({
           <AttachmentThumbs attachments={message.attachments ?? []} size="sm" />
         </div>
       </div>
-    </li>
+    </div>
   )
 }
 
@@ -175,6 +185,13 @@ function TicketDetailsPanel({
   onAssigneeChange,
   reassignPending,
   onReassign,
+  priority,
+  onPriorityChange,
+  priorityPending,
+  onSavePriority,
+  escalatePending,
+  onEscalate,
+  actionError,
 }: {
   ticket: SupportTicket
   showResolve: boolean
@@ -190,6 +207,13 @@ function TicketDetailsPanel({
   onAssigneeChange: (id: string) => void
   reassignPending: boolean
   onReassign: () => void
+  priority: SupportTicketPriority
+  onPriorityChange: (priority: SupportTicketPriority) => void
+  priorityPending: boolean
+  onSavePriority: () => void
+  escalatePending: boolean
+  onEscalate: () => void
+  actionError: string | null
 }) {
   return (
     <>
@@ -247,11 +271,56 @@ function TicketDetailsPanel({
 
         {canManage ? (
           <div className="space-y-3 border-t border-line/60 pt-4">
+            <FormFieldFrame label={LABELS.ticketUpdatePriority}>
+              <Select
+                value={priority}
+                onValueChange={(v) => onPriorityChange(v as SupportTicketPriority)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {SUPPORT_TICKET_PRIORITY_VALUES.map((value) => (
+                    <SelectItem key={value} value={value}>
+                      {TICKET_PRIORITY_LABEL[value]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormFieldFrame>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                loading={priorityPending}
+                disabled={priority === ticket.priority}
+                onClick={onSavePriority}
+              >
+                {LABELS.ticketUpdatePriority}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                loading={escalatePending}
+                disabled={ticket.priority === SUPPORT_TICKET_PRIORITY.URGENT}
+                onClick={onEscalate}
+              >
+                {LABELS.ticketEscalate}
+              </Button>
+            </div>
+          </div>
+        ) : null}
+
+        {canManage ? (
+          <div className="space-y-3 border-t border-line/60 pt-4">
             <FormFieldFrame label={LABELS.ticketAssignee}>
               <AssigneeSelect
                 permission={PERMISSIONS.TICKET_MANAGE}
                 value={assigneeId}
                 onChange={onAssigneeChange}
+                vendorId={ticket.relatedVendorId}
                 currentOption={
                   ticket.assignedToId
                     ? {
@@ -274,6 +343,10 @@ function TicketDetailsPanel({
               {LABELS.ticketReassign}
             </Button>
           </div>
+        ) : null}
+
+        {actionError ? (
+          <FormError error={new Error(actionError)} fallback={actionError} />
         ) : null}
 
         {showResolve || canReopen || canManage ? (
@@ -321,23 +394,34 @@ function TicketDetailsPanel({
 export function TicketThread({ ticket, mode }: Props) {
   const { hasPermission } = usePermissions()
   const currentUserId = useAuthStore((s) => s.currentUser?.id)
+  const { data: publicSettings } = usePublicSettings()
   const messagesQuery = useTicketMessagesInfinite(ticket.id)
   const reply = useReplySupportTicket(ticket.id)
   const resolve = useResolveSupportTicket(ticket.id)
   const reopen = useReopenSupportTicket(ticket.id)
   const close = useCloseSupportTicket(ticket.id)
   const reassign = useReassignSupportTicket(ticket.id)
+  const updatePriority = useUpdateTicketPriority(ticket.id)
+  const escalate = useEscalateSupportTicket(ticket.id)
   const rate = useRateSupportTicket(ticket.id)
+  const messagesParentRef = useRef<HTMLDivElement | null>(null)
 
   const [body, setBody] = useState('')
   const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>([])
   const [assigneeId, setAssigneeId] = useState(ticket.assignedToId ?? '')
+  const [priority, setPriority] = useState<SupportTicketPriority>(ticket.priority)
   const [rating, setRating] = useState('5')
   const [error, setError] = useState<string | null>(null)
+  const [actionError, setActionError] = useState<string | null>(null)
+  const [ratingError, setRatingError] = useState<string | null>(null)
 
   useEffect(() => {
     setAssigneeId(ticket.assignedToId ?? '')
   }, [ticket.assignedToId])
+
+  useEffect(() => {
+    setPriority(ticket.priority)
+  }, [ticket.priority])
 
   const messages = useMemo(() => {
     const pages = messagesQuery.data?.pages ?? []
@@ -345,23 +429,73 @@ export function TicketThread({ ticket, mode }: Props) {
     return [...flat].reverse()
   }, [messagesQuery.data])
 
+  const existingImageCount = ticket.imageAttachmentCount ?? 0
+  const existingVideoCount = ticket.videoAttachmentCount ?? 0
+
+  const useVirtual = messages.length > 0
+  const virtualizer = useVirtualizer({
+    count: messages.length,
+    getScrollElement: () => messagesParentRef.current,
+    estimateSize: () => 104,
+    overscan: 8,
+    enabled: useVirtual,
+  })
+
+  const scrollToBottom = () => {
+    if (messages.length > 0) {
+      virtualizer.scrollToIndex(messages.length - 1, { align: 'end' })
+    }
+  }
+
+  const initialScrollDone = useRef(false)
+  useEffect(() => {
+    if (messages.length > 0 && !initialScrollDone.current) {
+      initialScrollDone.current = true
+      requestAnimationFrame(scrollToBottom)
+    }
+  }, [messages.length])
+
+  const reopenWindowDays = publicSettings?.ticketReopenWindowDays ?? 7
+  const withinReopenWindow = Boolean(
+    ticket.resolvedAt &&
+      Date.now() - new Date(ticket.resolvedAt).getTime() <=
+        reopenWindowDays * 24 * 60 * 60 * 1000,
+  )
+
   const canManage = mode === 'admin' && hasPermission(PERMISSIONS.TICKET_MANAGE)
   const canResolve = mode === 'admin' || mode === 'vendor'
   const canReopen =
-    ticket.status === SUPPORT_TICKET_STATUS.RESOLVED && mode === 'customer'
+    ticket.status === SUPPORT_TICKET_STATUS.RESOLVED &&
+    mode === 'customer' &&
+    withinReopenWindow
   const canRate =
     mode === 'customer' &&
-    ticket.status === SUPPORT_TICKET_STATUS.RESOLVED &&
-    ticket.customerSatisfactionRating == null
+    ticket.customerSatisfactionRating == null &&
+    (ticket.status === SUPPORT_TICKET_STATUS.RESOLVED ||
+      (ticket.status === SUPPORT_TICKET_STATUS.CLOSED && Boolean(ticket.resolvedAt)))
   const replyClosed = ticket.status === SUPPORT_TICKET_STATUS.CLOSED
+  const replyNeedsReopen = ticket.status === SUPPORT_TICKET_STATUS.RESOLVED
+  const replyBlocked = replyClosed || replyNeedsReopen
   const showResolve =
     canResolve &&
     (ticket.status === SUPPORT_TICKET_STATUS.OPEN ||
       ticket.status === SUPPORT_TICKET_STATUS.IN_PROGRESS ||
       ticket.status === SUPPORT_TICKET_STATUS.REOPENED)
 
+  const runAction = async (
+    action: () => Promise<unknown>,
+    fallback: string,
+  ) => {
+    setActionError(null)
+    try {
+      await action()
+    } catch (err) {
+      setActionError(getApiErrorMessage(err, fallback))
+    }
+  }
+
   const onReply = async () => {
-    if (!body.trim() || replyClosed) return
+    if (!body.trim() || replyBlocked) return
     setError(null)
     try {
       await reply.mutateAsync({
@@ -374,6 +508,7 @@ export function TicketThread({ ticket, mode }: Props) {
       })
       setBody('')
       setAttachments([])
+      requestAnimationFrame(scrollToBottom)
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.ticketCouldNotReply))
     }
@@ -420,7 +555,7 @@ export function TicketThread({ ticket, mode }: Props) {
             />
             <div className="flex items-center justify-between gap-3 border-b border-line/80 px-3 py-2.5 sm:px-4">
               <TextEyebrow>{LABELS.ticketConversation}</TextEyebrow>
-              {messages.length > 0 ? (
+              {messages.length > 0 && !messagesQuery.hasNextPage ? (
                 <span className="text-[0.75rem] tabular-nums text-ink-muted">{messages.length}</span>
               ) : null}
             </div>
@@ -433,7 +568,17 @@ export function TicketThread({ ticket, mode }: Props) {
                     variant="outline"
                     size="sm"
                     loading={messagesQuery.isFetchingNextPage}
-                    onClick={() => void messagesQuery.fetchNextPage()}
+                    onClick={async () => {
+                      const el = messagesParentRef.current
+                      const prevHeight = el ? virtualizer.getTotalSize() : 0
+                      await messagesQuery.fetchNextPage()
+                      if (el) {
+                        requestAnimationFrame(() => {
+                          const newHeight = virtualizer.getTotalSize()
+                          el.scrollTop += newHeight - prevHeight
+                        })
+                      }
+                    }}
                   >
                     {LABELS.ticketLoadEarlier}
                   </Button>
@@ -449,22 +594,59 @@ export function TicketThread({ ticket, mode }: Props) {
                 <p className="border border-dashed border-line bg-paper/40 px-4 py-8 text-center text-[0.875rem] text-ink-muted">
                   {LABELS.ticketNoMessages}
                 </p>
+              ) : useVirtual ? (
+                <div
+                  ref={messagesParentRef}
+                  className="max-h-[min(70vh,36rem)] overflow-y-auto overscroll-contain"
+                >
+                  <ul
+                    className="relative w-full"
+                    style={{ height: `${virtualizer.getTotalSize()}px` }}
+                  >
+                    {virtualizer.getVirtualItems().map((item) => {
+                      const message = messages[item.index]!
+                      return (
+                        <li
+                          key={message.id}
+                          data-index={item.index}
+                          ref={virtualizer.measureElement}
+                          className="absolute left-0 top-0 w-full pb-3"
+                          style={{
+                            transform: `translateY(${item.start}px)`,
+                          }}
+                        >
+                          <MessageBubble
+                            message={message}
+                            isOwn={Boolean(currentUserId && message.senderId === currentUserId)}
+                          />
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
               ) : (
                 <ul className="space-y-3">
                   {messages.map((message) => (
-                    <MessageBubble
-                      key={message.id}
-                      message={message}
-                      isOwn={Boolean(currentUserId && message.senderId === currentUserId)}
-                    />
+                    <li key={message.id}>
+                      <MessageBubble
+                        message={message}
+                        isOwn={Boolean(currentUserId && message.senderId === currentUserId)}
+                      />
+                    </li>
                   ))}
                 </ul>
               )}
             </div>
 
-            {replyClosed ? (
+            {replyBlocked ? (
               <div className="border-t border-line bg-paper/40 px-3 py-3 sm:px-4">
-                <p className="text-[0.8125rem] text-ink-muted">{LABELS.ticketClosedNotice}</p>
+                <p className="text-[0.8125rem] text-ink-muted">
+                  {replyClosed
+                    ? LABELS.ticketClosedNotice
+                    : mode === 'customer'
+                      ? LABELS.ticketMustReopenToReplyCustomer
+                      : LABELS.ticketMustReopenToReplyStaff}
+                </p>
               </div>
             ) : (
               <div className="space-y-2 border-t border-line bg-paper/30 px-3 py-3 sm:px-4">
@@ -488,6 +670,8 @@ export function TicketThread({ ticket, mode }: Props) {
                   value={attachments}
                   onChange={setAttachments}
                   disabled={reply.isPending}
+                  existingImageCount={existingImageCount}
+                  existingVideoCount={existingVideoCount}
                 />
                 <FormError
                   error={error ? new Error(error) : null}
@@ -513,37 +697,67 @@ export function TicketThread({ ticket, mode }: Props) {
             <section className="border border-line bg-surface p-3 shadow-elevation-1 sm:p-4">
               <TextEyebrow>{LABELS.ticketRate}</TextEyebrow>
               <p className="mt-1 text-[0.75rem] text-ink-muted">{LABELS.ticketRateHint}</p>
-              <div className="mt-3 flex flex-wrap items-end gap-2">
-                <FormFieldFrame label={LABELS.ticketRate}>
-                  <Select value={rating} onValueChange={setRating}>
-                    <SelectTrigger className="w-24">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {[1, 2, 3, 4, 5].map((n) => (
-                        <SelectItem key={n} value={String(n)}>
-                          {n}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormFieldFrame>
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <div className="flex gap-0.5" role="radiogroup" aria-label={LABELS.ticketRate}>
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <button
+                      key={n}
+                      type="button"
+                      aria-checked={Number(rating) >= n}
+                      className="rounded-sm p-0.5 transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
+                      onClick={() => setRating(String(n))}
+                    >
+                      <Star
+                        size={22}
+                        className={cn(
+                          'transition-colors',
+                          Number(rating) >= n
+                            ? 'fill-brand text-brand'
+                            : 'fill-transparent text-ink-muted/50',
+                        )}
+                      />
+                    </button>
+                  ))}
+                </div>
                 <Button
                   type="button"
                   size="sm"
                   loading={rate.isPending}
-                  onClick={() => void rate.mutateAsync(Number(rating))}
+                  onClick={async () => {
+                    setRatingError(null)
+                    try {
+                      await rate.mutateAsync(Number(rating))
+                    } catch (err) {
+                      setRatingError(getApiErrorMessage(err, LABELS.ticketCouldNotRate))
+                    }
+                  }}
                 >
                   {LABELS.ticketRateSubmit}
                 </Button>
               </div>
+              {ratingError ? (
+                <FormError error={new Error(ratingError)} fallback={LABELS.ticketCouldNotRate} />
+              ) : null}
             </section>
           ) : null}
 
           {ticket.customerSatisfactionRating != null ? (
-            <p className="border border-brand/25 bg-brand-subtle/50 px-3 py-2 text-[0.8125rem] text-ink">
-              {LABELS.ticketRatedThanks}
-            </p>
+            <div className="flex items-center gap-2 border border-brand/25 bg-brand-subtle/50 px-3 py-2">
+              <span className="text-[0.8125rem] text-ink">{LABELS.ticketRatedThanks}</span>
+              <span className="flex gap-0.5">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <Star
+                    key={n}
+                    size={14}
+                    className={cn(
+                      n <= ticket.customerSatisfactionRating!
+                        ? 'fill-brand text-brand'
+                        : 'fill-transparent text-ink-muted/40',
+                    )}
+                  />
+                ))}
+              </span>
+            </div>
           ) : null}
         </div>
 
@@ -561,13 +775,36 @@ export function TicketThread({ ticket, mode }: Props) {
               resolvePending={resolve.isPending}
               reopenPending={reopen.isPending}
               closePending={close.isPending}
-              onResolve={() => void resolve.mutateAsync()}
-              onReopen={() => void reopen.mutateAsync()}
-              onClose={() => void close.mutateAsync()}
+              onResolve={() =>
+                void runAction(() => resolve.mutateAsync(), LABELS.ticketCouldNotResolve)
+              }
+              onReopen={() =>
+                void runAction(() => reopen.mutateAsync(), LABELS.ticketCouldNotReopen)
+              }
+              onClose={() => void runAction(() => close.mutateAsync(), LABELS.ticketCouldNotClose)}
               assigneeId={assigneeId}
               onAssigneeChange={setAssigneeId}
               reassignPending={reassign.isPending}
-              onReassign={() => void reassign.mutateAsync(assigneeId.trim())}
+              onReassign={() =>
+                void runAction(
+                  () => reassign.mutateAsync(assigneeId.trim()),
+                  LABELS.ticketCouldNotReassign,
+                )
+              }
+              priority={priority}
+              onPriorityChange={setPriority}
+              priorityPending={updatePriority.isPending}
+              onSavePriority={() =>
+                void runAction(
+                  () => updatePriority.mutateAsync(priority),
+                  LABELS.ticketCouldNotUpdatePriority,
+                )
+              }
+              escalatePending={escalate.isPending}
+              onEscalate={() =>
+                void runAction(() => escalate.mutateAsync(), LABELS.ticketCouldNotEscalate)
+              }
+              actionError={actionError}
             />
           </section>
         </aside>

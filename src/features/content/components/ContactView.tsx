@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { HelpContactForm } from '@/features/help/components/HelpContactForm'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
+import { formatLabel } from '@/shared/utils/formatLabel'
 
 interface ContactViewProps {
   supportEmail: string | null
@@ -13,28 +14,31 @@ export function ContactView({ supportEmail, supportHours, isLoading }: ContactVi
   return (
     <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-8 px-4 py-10 lg:grid-cols-2">
       <section className="space-y-4">
-        <h1 className="text-[1.75rem] font-semibold text-ink">Contact Us</h1>
-        <p className="text-[0.9375rem] text-ink-muted">
-          Have a question about orders, shipping, or returns? Send us a message and our support team
-          will follow up.
-        </p>
+        <h1 className="text-[1.75rem] font-semibold text-ink">{LABELS.contactUsHeading}</h1>
+        <p className="text-[0.9375rem] text-ink-muted">{LABELS.contactUsIntro}</p>
         <HelpContactForm />
       </section>
       <aside className="space-y-3 rounded-md border border-line bg-surface p-5">
-        <h2 className="text-[1.125rem] font-semibold text-ink">Support Details</h2>
-        {isLoading && <p className="text-[0.9375rem] text-ink-muted">Loading support details…</p>}
+        <h2 className="text-[1.125rem] font-semibold text-ink">{LABELS.contactSupportDetails}</h2>
+        {isLoading && (
+          <p className="text-[0.9375rem] text-ink-muted">{LABELS.contactLoadingDetails}</p>
+        )}
         {!isLoading && (
           <>
             <p className="text-[0.9375rem] text-ink-muted">
-              Email: {supportEmail ?? 'Not configured'}
+              {formatLabel(LABELS.contactEmailLabel, {
+                email: supportEmail ?? LABELS.contactNotConfigured,
+              })}
             </p>
             <p className="text-[0.9375rem] text-ink-muted">
-              Working hours: {supportHours ?? 'Not configured'}
+              {formatLabel(LABELS.contactHoursLabel, {
+                hours: supportHours ?? LABELS.contactNotConfigured,
+              })}
             </p>
           </>
         )}
         <p className="text-[0.8125rem] text-ink-muted">
-          Prefer self-serve? Visit the{' '}
+          {LABELS.contactPreferSelfServe}{' '}
           <Link href={PATHS.help} className="text-brand underline-offset-2 hover:underline">
             {LABELS.helpCenter}
           </Link>

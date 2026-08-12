@@ -16,7 +16,7 @@ const FLOW = [
   ORDER_STATUS.DELIVERED,
 ] as const
 
-const STEP_LABELS: Record<string, string> = {
+export const STEP_LABELS: Record<string, string> = {
   [ORDER_STATUS.PENDING]: 'Order placed',
   [ORDER_STATUS.CONFIRMED]: 'Confirmed',
   [ORDER_STATUS.SHIPPED]: 'Shipped',

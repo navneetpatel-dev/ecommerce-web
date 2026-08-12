@@ -6,6 +6,7 @@ import { useAuthBootstrap } from '@/shared/hooks/useAuthBootstrap'
 import { NavigationProgressContainer } from '@/shared/containers/NavigationProgressContainer'
 import { LoginRequiredDialogContainer } from '@/shared/containers/LoginRequiredDialogContainer'
 import { RouteScrollResetContainer } from '@/shared/containers/RouteScrollResetContainer'
+import { BrowseUrlTrackerContainer } from '@/shared/containers/BrowseUrlTrackerContainer'
 import { RoleSurfaceGuard } from '@/shared/components/RoleSurfaceGuard'
 
 function AuthBootstrap() {
@@ -30,6 +31,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <AuthBootstrap />
       <RouteScrollResetContainer />
+      <BrowseUrlTrackerContainer />
       <NavigationProgressContainer />
       <LoginRequiredDialogContainer />
       <RoleSurfaceGuard>{children}</RoleSurfaceGuard>

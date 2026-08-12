@@ -1,9 +1,13 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FormFieldFrame } from '@/shared/components/forms'
-import { Input } from '@/shared/components/ui/input'
+import {
+  InfiniteSingleSelect,
+  type InfiniteSingleSelectPageQuery,
+  type InfiniteSingleSelectPageResult,
+} from '@/shared/components/InfiniteSingleSelect'
 import {
   Select,
   SelectContent,
@@ -16,10 +20,12 @@ import {
   SUPPORT_TICKET_CATEGORY_VALUES,
   SUPPORT_TICKET_PRIORITY_VALUES,
   SUPPORT_TICKET_STATUS_VALUES,
+  VENDOR_STATUS,
   type SupportTicketCategory,
   type SupportTicketPriority,
   type SupportTicketStatus,
 } from '@/shared/constants/statuses'
+import { adminApi } from '@/features/admin-dashboard/api/admin.api'
 import type { TicketListParams } from '../api/supportTickets.api'
 import { TICKET_CATEGORY_LABEL, TICKET_PRIORITY_LABEL, TICKET_STATUS_LABEL } from '../utils/labels'
 
@@ -55,6 +61,24 @@ export function TicketFilters({ showVendorId = true }: { showVendorId?: boolean 
     const qs = next.toString()
     router.replace(qs ? `${pathname}?${qs}` : pathname)
   }
+
+  const fetchVendorPage = useCallback(
+    async (query: InfiniteSingleSelectPageQuery): Promise<InfiniteSingleSelectPageResult> => {
+      const result = await adminApi.vendors({
+        page: query.page,
+        limit: query.limit,
+        search: query.search,
+        status: VENDOR_STATUS.APPROVED,
+      })
+      return {
+        items: result.items.map((vendor) => ({ id: vendor.id, label: vendor.businessName })),
+        page: result.page,
+        totalPages: result.totalPages,
+        total: result.total,
+      }
+    },
+    [],
+  )
 
   return (
     <div
@@ -118,15 +142,16 @@ export function TicketFilters({ showVendorId = true }: { showVendorId?: boolean 
       </FormFieldFrame>
       {showVendorId ? (
         <FormFieldFrame label={LABELS.ticketFilterVendorId}>
-          <Input
-            defaultValue={searchParams.get('vendorId') ?? ''}
-            placeholder={LABELS.ticketFilterVendorId}
-            onBlur={(e) => setParam('vendorId', e.target.value.trim() || null)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                setParam('vendorId', (e.target as HTMLInputElement).value.trim() || null)
-              }
-            }}
+          <InfiniteSingleSelect
+            value={searchParams.get('vendorId') ?? ''}
+            onChange={(id) => setParam('vendorId', id || null)}
+            fetchPage={fetchVendorPage}
+            allowNone
+            searchable
+            noneLabel={LABELS.ticketFilterAllVendors}
+            placeholder={LABELS.ticketFilterAllVendors}
+            searchPlaceholder={LABELS.searchVendors}
+            emptyMessage={LABELS.noVendorsFound}
           />
         </FormFieldFrame>
       ) : null}

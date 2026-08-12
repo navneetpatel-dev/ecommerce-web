@@ -5,14 +5,15 @@ import { Bug } from 'lucide-react'
 import { EmptyState } from '@/shared/components/EmptyState'
 import { FormError } from '@/shared/components/FormError'
 import { StatusBadge } from '@/shared/components/StatusBadge'
-import { Button } from '@/shared/components/ui/button'
+import { InfiniteLoadMore } from '@/shared/components/InfiniteLoadMore'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { LABELS } from '@/shared/constants/labels'
+import { BUG_REPORT_STATUS } from '@/shared/constants/statuses'
 import { formatOrderDate } from '@/features/orders/utils/format'
 import {
   BUG_SEVERITY_LABEL,
   BUG_STATUS_LABEL,
-} from '@/features/supportTickets/utils/labels'
+} from '../utils/labels'
 import type { BugReport } from '../api/bugReports.api'
 
 type Props = {
@@ -90,10 +91,14 @@ export function BugReportCardList({
                     status={report.status}
                     label={BUG_STATUS_LABEL[report.status]}
                   />
-                  <StatusBadge
-                    status={report.severity}
-                    label={BUG_SEVERITY_LABEL[report.severity]}
-                  />
+                  {report.severity ? (
+                    <StatusBadge
+                      status={report.severity}
+                      label={BUG_SEVERITY_LABEL[report.severity]}
+                    />
+                  ) : report.status !== BUG_REPORT_STATUS.NEW ? (
+                    <StatusBadge status="NONE" label={LABELS.bugSeverityNone} />
+                  ) : null}
                 </div>
                 <p className="line-clamp-2 font-medium text-ink group-hover:text-brand">
                   {report.title}
@@ -108,18 +113,11 @@ export function BugReportCardList({
         ))}
       </ul>
 
-      {hasNextPage ? (
-        <div className="flex justify-center border-t border-line/70 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            loading={isFetchingNextPage}
-            onClick={onLoadMore}
-          >
-            {isFetchingNextPage ? LABELS.loadingMore : LABELS.loadMore}
-          </Button>
-        </div>
-      ) : null}
+      <InfiniteLoadMore
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={onLoadMore}
+      />
     </div>
   )
 }

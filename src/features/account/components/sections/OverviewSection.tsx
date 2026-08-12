@@ -238,7 +238,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
             icon={LifeBuoy}
             label={LABELS.overviewBugReports}
             value={LABELS.reportABug}
-            href={PATHS.bugReportNew}
+            href={PATHS.bugReports}
           />
         </ul>
       </section>

@@ -57,8 +57,11 @@ export type SupportTicket = {
   createdAt: string
   updatedAt: string
   latestMessagePreview?: string | null
+  hasUnread?: boolean
   messages?: TicketMessage[]
   attachments?: TicketAttachment[]
+  imageAttachmentCount?: number
+  videoAttachmentCount?: number
 }
 
 export type CreateSupportTicketBody = {
@@ -66,6 +69,7 @@ export type CreateSupportTicketBody = {
   description: string
   category: SupportTicketCategory
   relatedOrderId?: string | null
+  relatedVendorId?: string | null
   attachmentUrls?: TicketAttachmentInput[]
 }
 
@@ -110,12 +114,28 @@ export const supportTicketsApi = {
 
   listMine: (params: TicketListParams = {}) =>
     fetchCursorPage<SupportTicket>(
-      API.supportTickets.mine(buildQuery({ limit: params.limit, cursor: params.cursor })),
+      API.supportTickets.mine(
+        buildQuery({
+          limit: params.limit,
+          cursor: params.cursor,
+          status: params.status,
+          priority: params.priority,
+          category: params.category,
+        }),
+      ),
     ),
 
   listVendor: (params: TicketListParams = {}) =>
     fetchCursorPage<SupportTicket>(
-      API.supportTickets.vendor(buildQuery({ limit: params.limit, cursor: params.cursor })),
+      API.supportTickets.vendor(
+        buildQuery({
+          limit: params.limit,
+          cursor: params.cursor,
+          status: params.status,
+          priority: params.priority,
+          category: params.category,
+        }),
+      ),
     ),
 
   listAdmin: (params: TicketListParams = {}) =>
@@ -153,6 +173,11 @@ export const supportTicketsApi = {
 
   reassign: (id: string, assignedToId: string) =>
     apiClient.post<SupportTicket>(API.supportTickets.reassign(id), { assignedToId }),
+
+  updatePriority: (id: string, priority: SupportTicketPriority) =>
+    apiClient.post<SupportTicket>(API.supportTickets.priority(id), { priority }),
+
+  escalate: (id: string) => apiClient.post<SupportTicket>(API.supportTickets.escalate(id)),
 
   rate: (id: string, rating: number) =>
     apiClient.post<SupportTicket>(API.supportTickets.rate(id), { rating }),

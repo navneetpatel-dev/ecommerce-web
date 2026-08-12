@@ -1,8 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button } from '@/shared/components/ui/button'
-import { DataTable, type DataTableColumn } from '@/shared/components/DataTable'
+import { type DataTableColumn } from '@/shared/components/DataTable'
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import { LABELS } from '@/shared/constants/labels'
 import { formatOrderDate } from '@/features/orders/utils/format'
@@ -12,6 +11,7 @@ import {
   TICKET_PRIORITY_LABEL,
   TICKET_STATUS_LABEL,
 } from '../utils/labels'
+import { KeysetDataTable } from '@/shared/components/KeysetDataTable'
 
 type Props = {
   tickets: SupportTicket[]
@@ -53,7 +53,12 @@ export function TicketList({
       id: 'ticketNumber',
       header: LABELS.ticketNumber,
       cell: (row) => (
-        <span className="font-mono text-[0.8125rem] tabular-nums text-ink">{row.ticketNumber}</span>
+        <span className="font-mono text-[0.8125rem] tabular-nums text-ink">
+          {row.hasUnread ? (
+            <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-brand align-middle" title={LABELS.ticketHasUnread} />
+          ) : null}
+          {row.ticketNumber}
+        </span>
       ),
       className: 'whitespace-nowrap',
     },
@@ -120,32 +125,20 @@ export function TicketList({
   ]
 
   return (
-    <div className="space-y-4">
-      <DataTable
-        title={title}
-        toolbar={toolbar}
-        columns={columns}
-        rows={tickets}
-        getRowId={(row) => row.id}
-        loading={isLoading}
-        error={isError ? errorMessage || LABELS.ticketCouldNotLoad : null}
-        emptyMessage={emptyMessage}
-        onRefresh={onRefresh}
-        rowDetails={false}
-        onRowClick={(row) => router.push(detailHref(row.id))}
-      />
-      {hasNextPage ? (
-        <div className="flex justify-center border-t border-line/70 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            loading={isFetchingNextPage}
-            onClick={onLoadMore}
-          >
-            {isFetchingNextPage ? LABELS.loadingMore : LABELS.loadMore}
-          </Button>
-        </div>
-      ) : null}
-    </div>
+    <KeysetDataTable
+      title={title}
+      toolbar={toolbar}
+      columns={columns}
+      rows={tickets}
+      getRowId={(row) => row.id}
+      loading={isLoading}
+      error={isError ? errorMessage || LABELS.ticketCouldNotLoad : null}
+      emptyMessage={emptyMessage}
+      onRefresh={onRefresh}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      onLoadMore={onLoadMore}
+      onRowClick={(row) => router.push(detailHref(row.id))}
+    />
   )
 }

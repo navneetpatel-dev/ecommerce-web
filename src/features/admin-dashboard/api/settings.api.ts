@@ -6,6 +6,9 @@ export type PublicPlatformSettings = {
   defaultReturnWindow: number
   supportEmail: string
   supportHours: string
+  ticketReopenWindowDays: number
+  bugVerifyWindowDays: number
+  bugCloseWindowDays: number
 }
 
 export type AdminPlatformSettings = PublicPlatformSettings & {

@@ -61,11 +61,15 @@ export const VENDOR_NAV = [
   {
     href: PATHS.vendor.supportTickets,
     label: LABELS.supportTickets,
-    permissions: [PERMISSIONS.SUBORDER_MANAGE] as PermissionKey[],
+    permissions: [
+      PERMISSIONS.PRODUCT_CREATE,
+      PERMISSIONS.PRODUCT_UPDATE,
+      PERMISSIONS.SUBORDER_MANAGE,
+    ] as PermissionKey[],
   },
   {
     href: PATHS.vendor.bugReports,
-    label: LABELS.bugReports,
+    label: LABELS.vendorBugReportsUtility,
     permissions: [
       PERMISSIONS.PRODUCT_CREATE,
       PERMISSIONS.PRODUCT_UPDATE,

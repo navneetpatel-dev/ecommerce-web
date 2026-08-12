@@ -32,7 +32,7 @@ import {
   TICKET_MAX_IMAGES,
   TICKET_MAX_VIDEO_SECONDS,
   TICKET_MAX_VIDEOS,
-} from '@/features/supportTickets/constants/mediaLimits'
+} from '@/shared/constants/mediaLimits'
 import type { TicketAttachmentInput } from '../api/supportTickets.api'
 
 export type UploadedMediaAttachment = TicketAttachmentInput & {
@@ -51,6 +51,9 @@ type Props = {
   onChange: (next: UploadedMediaAttachment[]) => void
   disabled?: boolean
   label?: string
+  /** Attachments already on the ticket/report (reply path). */
+  existingImageCount?: number
+  existingVideoCount?: number
 }
 
 function mbLabel(bytes: number): string {
@@ -81,6 +84,8 @@ export function TicketAttachmentUploader({
   onChange,
   disabled,
   label,
+  existingImageCount = 0,
+  existingVideoCount = 0,
 }: Props) {
   const inputId = useId()
   const fileRef = useRef<HTMLInputElement>(null)
@@ -98,8 +103,8 @@ export function TicketAttachmentUploader({
   const maxVideos = mode === 'bug' ? BUG_MAX_RECORDINGS : TICKET_MAX_VIDEOS
   const maxVideoSeconds = mode === 'bug' ? BUG_MAX_RECORDING_SECONDS : TICKET_MAX_VIDEO_SECONDS
 
-  const imageCount = value.filter((a) => !isVideoAttachment(a)).length
-  const videoCount = value.filter((a) => isVideoAttachment(a)).length
+  const imageCount = existingImageCount + value.filter((a) => !isVideoAttachment(a)).length
+  const videoCount = existingVideoCount + value.filter((a) => isVideoAttachment(a)).length
 
   const processFile = async (file: File) => {
     setError(null)
@@ -133,15 +138,25 @@ export function TicketAttachmentUploader({
       let durationSeconds: number | null = null
 
       if (video) {
-        setStatus(LABELS.ticketCompressingVideo)
+        setStatus(mode === 'bug' ? LABELS.bugCompressingVideo : LABELS.ticketCompressingVideo)
         const prepared = await compressVideoIfNeeded(file, maxVideoSeconds, MAX_VIDEO_BYTES)
         if (!prepared.ok) {
           if (prepared.reason === 'TOO_LONG') {
-            setError(formatLabel(LABELS.ticketVideoTooLong, { seconds: maxVideoSeconds }))
+            setError(
+              formatLabel(
+                mode === 'bug' ? LABELS.bugVideoTooLong : LABELS.ticketVideoTooLong,
+                { seconds: maxVideoSeconds },
+              ),
+            )
           } else if (prepared.reason === 'TOO_LARGE') {
-            setError(formatLabel(LABELS.ticketVideoTooLarge, { mb: mbLabel(MAX_VIDEO_BYTES) }))
+            setError(
+              formatLabel(
+                mode === 'bug' ? LABELS.bugVideoTooLarge : LABELS.ticketVideoTooLarge,
+                { mb: mbLabel(MAX_VIDEO_BYTES) },
+              ),
+            )
           } else {
-            setError(LABELS.ticketCompressFailed)
+            setError(mode === 'bug' ? LABELS.bugCompressFailed : LABELS.ticketCompressFailed)
           }
           return
         }
@@ -216,6 +231,14 @@ export function TicketAttachmentUploader({
           onChange={(e) => onPick(e.target.files)}
         />
       </div>
+      <p className="text-[0.75rem] tabular-nums text-ink-muted">
+        {formatLabel(LABELS.attachmentCounter, {
+          count: imageCount,
+          max: maxImages,
+          videoCount,
+          videoMax: maxVideos,
+        })}
+      </p>
       {status ? <p className="text-[0.8125rem] text-ink-muted">{status}</p> : null}
       {value.length > 0 ? (
         <ul className="flex flex-wrap gap-2">

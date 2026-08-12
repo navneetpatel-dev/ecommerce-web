@@ -1,9 +1,10 @@
 'use client'
 
+import Link from 'next/link'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import { RequirePermission } from '@/shared/components/RequirePermission'
-import { PERMISSIONS } from '@/shared/constants/permissions'
+import { VENDOR_SUPPORT_ACCESS } from '@/shared/constants/permissions'
 import { Suspense } from 'react'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { useVendorTicketsInfinite } from '../api/supportTickets.queries'
@@ -12,7 +13,7 @@ import { TicketList } from '../components/TicketList'
 
 export function VendorTicketsPage() {
   return (
-    <RequirePermission permission={PERMISSIONS.SUBORDER_MANAGE}>
+    <RequirePermission permission={VENDOR_SUPPORT_ACCESS}>
       <Suspense fallback={<Skeleton className="h-40 w-full" />}>
         <VendorTicketsContent />
       </Suspense>
@@ -39,6 +40,14 @@ function VendorTicketsContent() {
               {LABELS.supportTickets}
             </h1>
             <p className="text-[0.8125rem] text-ink-muted">{LABELS.ticketVendorQueueDescription}</p>
+            <p className="text-[0.8125rem]">
+              <Link
+                href={PATHS.vendor.bugReports}
+                className="text-ink-muted underline-offset-2 transition-colors hover:text-brand hover:underline"
+              >
+                {LABELS.vendorBugReportsUtility}
+              </Link>
+            </p>
           </div>
         }
         tickets={tickets}

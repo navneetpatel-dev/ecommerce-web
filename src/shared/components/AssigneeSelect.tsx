@@ -21,6 +21,8 @@ type Props = {
   onChange: (userId: string) => void
   /** Keep a current assignee visible even if they are not in the eligible list. */
   currentOption?: { id: string; name: string; email?: string | null } | null
+  /** When set, scopes ticket assignees to staff for this vendor. */
+  vendorId?: string | null
   allowNone?: boolean
   noneLabel?: string
   disabled?: boolean
@@ -38,6 +40,7 @@ export function AssigneeSelect({
   value,
   onChange,
   currentOption,
+  vendorId,
   allowNone = false,
   noneLabel = LABELS.ticketAssigneeNone,
   disabled,
@@ -51,6 +54,7 @@ export function AssigneeSelect({
         page: query.page,
         limit: query.limit,
         search: query.search,
+        vendorId: vendorId || undefined,
       })
       return {
         items: result.items.map((user) => ({
@@ -62,7 +66,7 @@ export function AssigneeSelect({
         total: result.total,
       }
     },
-    [permission],
+    [permission, vendorId],
   )
 
   const pinnedOption = useMemo(() => {
@@ -78,7 +82,7 @@ export function AssigneeSelect({
       value={value}
       onChange={onChange}
       fetchPage={fetchPage}
-      resetKey={permission}
+      resetKey={`${permission}:${vendorId ?? ''}`}
       pinnedOption={pinnedOption}
       allowNone={allowNone}
       noneLabel={noneLabel}

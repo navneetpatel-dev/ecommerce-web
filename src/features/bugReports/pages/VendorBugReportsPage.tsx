@@ -1,30 +1,33 @@
 'use client'
 
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { Button } from '@/shared/components/ui/button'
+import { Skeleton } from '@/shared/components/ui/skeleton'
 import { RequirePermission } from '@/shared/components/RequirePermission'
-import { PERMISSIONS } from '@/shared/constants/permissions'
+import { VENDOR_SUPPORT_ACCESS } from '@/shared/constants/permissions'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import { useMyBugReportsInfinite } from '../api/bugReports.queries'
+import { BugReportFilters, useBugFiltersFromUrl } from '../components/BugReportFilters'
 import { BugReportList } from '../components/BugReportList'
 
 export function VendorBugReportsPage() {
   return (
-    <RequirePermission
-      permission={[
-        PERMISSIONS.PRODUCT_CREATE,
-        PERMISSIONS.PRODUCT_UPDATE,
-        PERMISSIONS.SUBORDER_MANAGE,
-      ]}
-    >
-      <VendorBugReportsContent />
+    <RequirePermission permission={VENDOR_SUPPORT_ACCESS}>
+      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+        <VendorBugReportsContent />
+      </Suspense>
     </RequirePermission>
   )
 }
 
 function VendorBugReportsContent() {
-  const query = useMyBugReportsInfinite()
+  const filters = useBugFiltersFromUrl()
+  const query = useMyBugReportsInfinite({
+    status: filters.status,
+    severity: filters.severity,
+  })
   const reports = query.data?.pages.flatMap((p) => p.items) ?? []
 
   return (
@@ -38,6 +41,7 @@ function VendorBugReportsContent() {
           <Link href={PATHS.vendor.bugReportNew}>{LABELS.reportABug}</Link>
         </Button>
       </header>
+      <BugReportFilters variant="reporter" />
       <BugReportList
         reports={reports}
         detailHref={PATHS.vendor.bugReport}
@@ -48,6 +52,7 @@ function VendorBugReportsContent() {
         isFetchingNextPage={query.isFetchingNextPage}
         onLoadMore={() => void query.fetchNextPage()}
         onRefresh={() => void query.refetch()}
+        showSeverity
       />
     </div>
   )

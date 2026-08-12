@@ -10,6 +10,7 @@ import { Textarea } from '@/shared/components/ui/textarea'
 import { LABELS } from '@/shared/constants/labels'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { formatLabel } from '@/shared/utils/formatLabel'
+import { readLastBrowseUrl } from '@/shared/utils/lastBrowseUrl'
 import {
   BugAttachmentUploader,
   type UploadedMediaAttachment,
@@ -18,19 +19,19 @@ import {
   BUG_DESCRIPTION_MAX,
   BUG_STEPS_MAX,
   BUG_TITLE_MAX,
-} from '@/features/supportTickets/constants/fieldLimits'
+} from '../constants/fieldLimits'
 import { useCreateBugReport } from '../api/bugReports.queries'
 
 type Props = {
   successHref: (id: string) => string
+  /** When true, omit the page H1 (parent already renders one). */
+  hideTitle?: boolean
 }
 
-export function BugReportForm({ successHref }: Props) {
+export function BugReportForm({ successHref, hideTitle = false }: Props) {
   const router = useRouter()
   const draftId = useMemo(() => crypto.randomUUID(), [])
-  const capturedPageUrl = useRef(
-    typeof document !== 'undefined' ? document.referrer || window.location.href : null,
-  )
+  const capturedPageUrl = useRef(readLastBrowseUrl())
   const create = useCreateBugReport()
 
   const titleId = useId()
@@ -71,6 +72,10 @@ export function BugReportForm({ successHref }: Props) {
       setFormError(formatLabel(LABELS.bugStepsTooLong, { max: String(BUG_STEPS_MAX) }))
       return
     }
+    if (attachments.some((a) => !a.bugType)) {
+      setFormError(LABELS.bugAttachmentTypeMissing)
+      return
+    }
     try {
       const bug = await create.mutateAsync({
         body: {
@@ -94,19 +99,21 @@ export function BugReportForm({ successHref }: Props) {
   return (
     <form onSubmit={onSubmit} className="w-full min-w-0">
       <FormStack className="space-y-8">
-        <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-          <div className="min-w-0 space-y-1.5">
-            <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-              {LABELS.newBugReport}
-            </h1>
-            <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
-              {LABELS.newBugReportDescription}
-            </p>
+        {hideTitle ? null : (
+          <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+            <div className="min-w-0 space-y-1.5">
+              <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+                {LABELS.newBugReport}
+              </h1>
+              <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
+                {LABELS.newBugReportDescription}
+              </p>
+            </div>
+            <Button type="submit" className="hidden shrink-0 sm:inline-flex" loading={create.isPending}>
+              {LABELS.bugSubmit}
+            </Button>
           </div>
-          <Button type="submit" className="hidden shrink-0 sm:inline-flex" loading={create.isPending}>
-            {LABELS.bugSubmit}
-          </Button>
-        </div>
+        )}
 
         <FormSection title={LABELS.bugBasicsSection} hint={LABELS.bugBasicsSectionHint} columns={1}>
           <FormFieldFrame label={LABELS.bugTitle} htmlFor={titleId} required>

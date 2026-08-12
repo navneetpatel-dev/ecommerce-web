@@ -103,6 +103,21 @@ export function useTriageBugReport(id: string) {
   })
 }
 
+export function useUpdateBugAssignment(id: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (body: {
+      severity: BugReportSeverity
+      affectedModule: BugAffectedModule
+      assignedToId?: string | null
+    }) => bugReportsApi.updateAssignment(id, body),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: bugReportKeys.detail(id) })
+      void queryClient.invalidateQueries({ queryKey: bugReportKeys.all })
+    },
+  })
+}
+
 export function useUpdateBugStatus(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
@@ -117,7 +132,7 @@ export function useUpdateBugStatus(id: string) {
 export function useMarkBugDuplicate(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (duplicateOfId: string) => bugReportsApi.markDuplicate(id, duplicateOfId),
+    mutationFn: (duplicateOf: string) => bugReportsApi.markDuplicate(id, duplicateOf),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: bugReportKeys.detail(id) })
       void queryClient.invalidateQueries({ queryKey: bugReportKeys.all })

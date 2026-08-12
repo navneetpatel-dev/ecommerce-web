@@ -119,7 +119,7 @@ export function OrdersActivitySection() {
           value={LABELS.reportABug}
           href={PATHS.bugReports}
         />
-        <SummaryRow icon={Package} label={LABELS.wallet} value="View" href={PATHS.wallet} />
+        <SummaryRow icon={Package} label={LABELS.wallet} value={LABELS.view} href={PATHS.wallet} />
         <SummaryRow
           icon={Package}
           label={LABELS.allOrders}

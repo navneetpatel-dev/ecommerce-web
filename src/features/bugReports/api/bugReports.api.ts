@@ -31,6 +31,16 @@ export type BugComment = {
   createdAt: string
 }
 
+export type BugTimelineEntry = {
+  action: string
+  createdAt: string
+  status: string | null
+  from: string | null
+  to: string | null
+  automated: boolean
+  duplicateOfReportNumber: string | null
+}
+
 export type BugReport = {
   id: string
   reportNumber: string
@@ -40,9 +50,10 @@ export type BugReport = {
   title: string
   description: string
   stepsToReproduce: string | null
-  severity: BugReportSeverity
+  severity: BugReportSeverity | null
   status: BugReportStatus
   duplicateOfId: string | null
+  duplicateOfReportNumber?: string | null
   assignedToId: string | null
   assignedToName: string | null
   affectedModule: BugAffectedModule
@@ -56,12 +67,15 @@ export type BugReport = {
   userRole: string
   occurredAt: string
   triagedAt: string | null
+  inProgressAt?: string | null
   resolvedAt: string | null
+  verifiedAt?: string | null
   wontFixReason: string | null
   createdAt: string
   updatedAt: string
   attachments?: BugAttachment[]
   comments?: BugComment[]
+  timeline?: BugTimelineEntry[]
 }
 
 export type CreateBugReportBody = {
@@ -113,7 +127,14 @@ export const bugReportsApi = {
 
   listMine: (params: BugListParams = {}) =>
     fetchCursorPage<BugReport>(
-      API.bugReports.mine(buildQuery({ limit: params.limit, cursor: params.cursor })),
+      API.bugReports.mine(
+        buildQuery({
+          limit: params.limit,
+          cursor: params.cursor,
+          status: params.status,
+          severity: params.severity,
+        }),
+      ),
     ),
 
   listAdmin: (params: BugListParams = {}) =>
@@ -141,11 +162,20 @@ export const bugReportsApi = {
     },
   ) => apiClient.post<BugReport>(API.bugReports.triage(id), body),
 
+  updateAssignment: (
+    id: string,
+    body: {
+      severity: BugReportSeverity
+      affectedModule: BugAffectedModule
+      assignedToId?: string | null
+    },
+  ) => apiClient.post<BugReport>(API.bugReports.assignment(id), body),
+
   updateStatus: (id: string, status: BugReportStatus) =>
     apiClient.post<BugReport>(API.bugReports.status(id), { status }),
 
-  markDuplicate: (id: string, duplicateOfId: string) =>
-    apiClient.post<BugReport>(API.bugReports.duplicate(id), { duplicateOfId }),
+  markDuplicate: (id: string, duplicateOf: string) =>
+    apiClient.post<BugReport>(API.bugReports.duplicate(id), { duplicateOf }),
 
   wontFix: (id: string, reason: string) =>
     apiClient.post<BugReport>(API.bugReports.wontFix(id), { reason }),

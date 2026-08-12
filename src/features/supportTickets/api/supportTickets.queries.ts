@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
+import type { SupportTicketPriority } from '@/shared/constants/statuses'
 import {
   supportTicketsApi,
   type CreateSupportTicketBody,
@@ -148,6 +149,28 @@ export function useReassignSupportTicket(id: string) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (assignedToId: string) => supportTicketsApi.reassign(id, assignedToId),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: supportTicketKeys.detail(id) })
+      void queryClient.invalidateQueries({ queryKey: supportTicketKeys.all })
+    },
+  })
+}
+
+export function useUpdateTicketPriority(id: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (priority: SupportTicketPriority) => supportTicketsApi.updatePriority(id, priority),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: supportTicketKeys.detail(id) })
+      void queryClient.invalidateQueries({ queryKey: supportTicketKeys.all })
+    },
+  })
+}
+
+export function useEscalateSupportTicket(id: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: () => supportTicketsApi.escalate(id),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: supportTicketKeys.detail(id) })
       void queryClient.invalidateQueries({ queryKey: supportTicketKeys.all })

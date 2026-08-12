@@ -31,6 +31,9 @@ export function PlatformSettingsPage() {
       onReturnShippingFeeChange={settings.setReturnShippingFee}
       onSupportEmailChange={settings.setSupportEmail}
       onSupportHoursChange={settings.setSupportHours}
+      onTicketReopenWindowDaysChange={settings.setTicketReopenWindowDays}
+      onBugVerifyWindowDaysChange={settings.setBugVerifyWindowDays}
+      onBugCloseWindowDaysChange={settings.setBugCloseWindowDays}
       onSave={settings.save}
     />
   )

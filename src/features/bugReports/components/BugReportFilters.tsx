@@ -26,7 +26,7 @@ import {
   BUG_REPORTER_ROLE_LABEL,
   BUG_SEVERITY_LABEL,
   BUG_STATUS_LABEL,
-} from '@/features/supportTickets/utils/labels'
+} from '../utils/labels'
 import type { BugListParams } from '../api/bugReports.api'
 
 const ALL = 'ALL'
@@ -54,10 +54,16 @@ export function useBugFiltersFromUrl(): BugListParams {
   }, [searchParams])
 }
 
-export function BugReportFilters() {
+type BugReportFiltersProps = {
+  /** Admin queue shows module + reporter role; reporters only status + severity. */
+  variant?: 'admin' | 'reporter'
+}
+
+export function BugReportFilters({ variant = 'admin' }: BugReportFiltersProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const isAdmin = variant === 'admin'
 
   const setParam = (key: string, value: string | null) => {
     const next = new URLSearchParams(searchParams.toString())
@@ -68,7 +74,11 @@ export function BugReportFilters() {
   }
 
   return (
-    <div className="grid gap-3 border border-line bg-surface-raised p-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div
+      className={`grid gap-3 border border-line bg-surface-raised p-4 sm:grid-cols-2 ${
+        isAdmin ? 'lg:grid-cols-4' : 'lg:grid-cols-2'
+      }`}
+    >
       <FormFieldFrame label={LABELS.status}>
         <Select
           value={searchParams.get('status') ?? ALL}
@@ -105,42 +115,46 @@ export function BugReportFilters() {
           </SelectContent>
         </Select>
       </FormFieldFrame>
-      <FormFieldFrame label={LABELS.bugAffectedModule}>
-        <Select
-          value={searchParams.get('affectedModule') ?? ALL}
-          onValueChange={(v) => setParam('affectedModule', v)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder={LABELS.bugFilterAllModules} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL}>{LABELS.bugFilterAllModules}</SelectItem>
-            {BUG_AFFECTED_MODULE_VALUES.map((mod) => (
-              <SelectItem key={mod} value={mod}>
-                {BUG_MODULE_LABEL[mod]}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </FormFieldFrame>
-      <FormFieldFrame label={LABELS.bugFilterReporterRole}>
-        <Select
-          value={searchParams.get('reporterRole') ?? ALL}
-          onValueChange={(v) => setParam('reporterRole', v)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder={LABELS.bugFilterAllReporterRoles} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL}>{LABELS.bugFilterAllReporterRoles}</SelectItem>
-            {BUG_REPORTER_ROLE_VALUES.map((role) => (
-              <SelectItem key={role} value={role}>
-                {BUG_REPORTER_ROLE_LABEL[role]}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </FormFieldFrame>
+      {isAdmin ? (
+        <>
+          <FormFieldFrame label={LABELS.bugAffectedModule}>
+            <Select
+              value={searchParams.get('affectedModule') ?? ALL}
+              onValueChange={(v) => setParam('affectedModule', v)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={LABELS.bugFilterAllModules} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={ALL}>{LABELS.bugFilterAllModules}</SelectItem>
+                {BUG_AFFECTED_MODULE_VALUES.map((mod) => (
+                  <SelectItem key={mod} value={mod}>
+                    {BUG_MODULE_LABEL[mod]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.bugFilterReporterRole}>
+            <Select
+              value={searchParams.get('reporterRole') ?? ALL}
+              onValueChange={(v) => setParam('reporterRole', v)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={LABELS.bugFilterAllReporterRoles} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={ALL}>{LABELS.bugFilterAllReporterRoles}</SelectItem>
+                {BUG_REPORTER_ROLE_VALUES.map((role) => (
+                  <SelectItem key={role} value={role}>
+                    {BUG_REPORTER_ROLE_LABEL[role]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+        </>
+      ) : null}
     </div>
   )
 }

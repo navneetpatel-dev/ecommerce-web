@@ -27,9 +27,9 @@ export function HelpArticleView({ slug }: { slug: string }) {
         <div className="storefront-container relative py-16 md:py-20">
           <EmptyState
             icon={LifeBuoy}
-            heading="Article not found"
-            message="That help article doesn’t exist or may have moved."
-            actionLabel={`Back to ${LABELS.helpCenter}`}
+            heading={LABELS.helpArticleNotFound}
+            message={LABELS.helpArticleNotFoundMessage}
+            actionLabel={LABELS.helpBackToCenter}
             actionTo={PATHS.help}
           />
         </div>
@@ -38,7 +38,7 @@ export function HelpArticleView({ slug }: { slug: string }) {
   }
 
   const category = HELP_CATEGORIES.find((c) =>
-    c.articles.some((a) => a.slug === article.slug)
+    c.articles.some((a) => a.slug === article.slug),
   )
   const related = article.relatedSlugs
     .map((s) => getAllArticles().find((a) => a.slug === s))
@@ -82,7 +82,10 @@ export function HelpArticleView({ slug }: { slug: string }) {
                 {section.heading}
               </h2>
               {section.paragraphs?.map((p) => (
-                <p key={p.slice(0, 48)} className="mt-3 text-[0.9375rem] leading-relaxed text-ink-muted">
+                <p
+                  key={p.slice(0, 48)}
+                  className="mt-3 text-[0.9375rem] leading-relaxed text-ink-muted"
+                >
                   {p}
                 </p>
               ))}
@@ -99,7 +102,7 @@ export function HelpArticleView({ slug }: { slug: string }) {
 
         {related.length > 0 ? (
           <aside className="mt-12 max-w-2xl border border-line bg-surface-raised p-5 shadow-elevation-1">
-            <TextEyebrow>Related</TextEyebrow>
+            <TextEyebrow>{LABELS.helpRelatedEyebrow}</TextEyebrow>
             <ul className="mt-3 divide-y divide-line">
               {related.map((item) =>
                 item ? (
@@ -112,16 +115,19 @@ export function HelpArticleView({ slug }: { slug: string }) {
                       <ChevronRight size={14} className="text-ink-muted" />
                     </Link>
                   </li>
-                ) : null
+                ) : null,
               )}
             </ul>
           </aside>
         ) : null}
 
         <p className="mt-10 max-w-2xl text-[0.875rem] text-ink-muted">
-          Still need help?{' '}
-          <Link href={`${PATHS.help}#contact`} className="font-medium text-brand hover:text-brand-hover">
-            Contact support
+          {LABELS.helpStillNeedHelp}{' '}
+          <Link
+            href={`${PATHS.help}#contact`}
+            className="font-medium text-brand hover:text-brand-hover"
+          >
+            {LABELS.helpContactSupportLink}
           </Link>
           .
         </p>

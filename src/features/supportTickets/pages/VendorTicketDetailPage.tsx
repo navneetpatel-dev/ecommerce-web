@@ -3,14 +3,14 @@
 import { useParams } from 'next/navigation'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { RequirePermission } from '@/shared/components/RequirePermission'
-import { PERMISSIONS } from '@/shared/constants/permissions'
+import { VENDOR_SUPPORT_ACCESS } from '@/shared/constants/permissions'
 import { LABELS } from '@/shared/constants/labels'
 import { useSupportTicket } from '../api/supportTickets.queries'
 import { TicketThread } from '../components/TicketThread'
 
 export function VendorTicketDetailPage() {
   return (
-    <RequirePermission permission={PERMISSIONS.SUBORDER_MANAGE}>
+    <RequirePermission permission={VENDOR_SUPPORT_ACCESS}>
       <VendorTicketDetailContent />
     </RequirePermission>
   )
