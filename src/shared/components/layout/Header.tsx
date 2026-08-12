@@ -456,7 +456,12 @@ export function Header({
                     variant="ghost"
                     onClick={() => setAccountMenuOpen((open) => !open)}
                     className={cn(
-                      'h-auto min-h-0 max-h-none gap-2 rounded-full border px-1.5 py-1',
+                      'shrink-0 overflow-visible rounded-full border',
+                      'flex size-8 items-center justify-center p-0',
+                      'sm:size-auto sm:gap-0.5 sm:py-0.5 sm:pl-0.5 sm:pr-1.5',
+                      '!h-8 !min-h-8 !max-h-8',
+                      'sm:!h-auto sm:!min-h-0 sm:!max-h-none sm:!w-auto',
+                      '[&_svg]:!size-[0.875rem] sm:[&_svg]:!size-3',
                       isTransparent
                         ? 'border-paper/20 hover:bg-paper/10'
                         : 'border-line bg-surface hover:bg-paper'
@@ -466,16 +471,21 @@ export function Header({
                     aria-expanded={accountMenuOpen}
                     aria-label={LABELS.openAccountMenu}
                   >
-                    <Avatar className="h-8 w-8 border border-line/70">
+                    <Avatar className="size-7 border-0 sm:size-8 sm:border sm:border-line/70">
                       {currentUser.avatarUrl ? <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} /> : null}
-                      <AvatarFallback className="bg-brand-subtle text-[0.75rem] font-semibold text-ink">
-                        {currentUser.avatarUrl ? fallbackLabel : <UserRound size={15} strokeWidth={1.8} />}
+                      <AvatarFallback className="flex items-center justify-center bg-brand-subtle text-[0.6875rem] font-semibold leading-none text-ink sm:text-[0.75rem]">
+                        {currentUser.avatarUrl ? (
+                          fallbackLabel
+                        ) : (
+                          <UserRound size={14} strokeWidth={1.8} className="block shrink-0" aria-hidden />
+                        )}
                       </AvatarFallback>
                     </Avatar>
                     <ChevronDown
-                      size={14}
+                      size={12}
+                      strokeWidth={2}
                       className={cn(
-                        'hidden sm:block transition-transform',
+                        'hidden shrink-0 sm:block transition-transform',
                         isTransparent ? 'text-paper' : 'text-ink-muted',
                         accountMenuOpen && 'rotate-180'
                       )}
