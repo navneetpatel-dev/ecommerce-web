@@ -94,7 +94,7 @@ export function SearchBar({
   const renderPanelBody = () => {
     if (isFetching && !suggestions?.length) {
       return (
-        <div className="space-y-2 p-3">
+        <div className="min-h-[7.75rem] space-y-2 p-3">
           <div className="h-10 animate-pulse rounded-md bg-line/60" />
           <div className="h-10 animate-pulse rounded-md bg-line/60" />
           <div className="h-10 animate-pulse rounded-md bg-line/60" />
@@ -104,7 +104,9 @@ export function SearchBar({
 
     if (!suggestions?.length) {
       return (
-        <p className="px-4 py-3.5 text-[0.8125rem] text-ink-muted">{LABELS.searchAutocompleteEmpty}</p>
+        <p className="min-h-[3.25rem] px-4 py-3.5 text-[0.8125rem] text-ink-muted">
+          {LABELS.searchAutocompleteEmpty}
+        </p>
       )
     }
 

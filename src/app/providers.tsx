@@ -3,7 +3,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useAuthBootstrap } from '@/shared/hooks/useAuthBootstrap'
-import { NavigationProgressContainer } from '@/shared/containers/NavigationProgressContainer'
 import { LoginRequiredDialogContainer } from '@/shared/containers/LoginRequiredDialogContainer'
 import { RouteScrollResetContainer } from '@/shared/containers/RouteScrollResetContainer'
 import { BrowseUrlTrackerContainer } from '@/shared/containers/BrowseUrlTrackerContainer'
@@ -32,7 +31,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <AuthBootstrap />
       <RouteScrollResetContainer />
       <BrowseUrlTrackerContainer />
-      <NavigationProgressContainer />
       <LoginRequiredDialogContainer />
       <RoleSurfaceGuard>{children}</RoleSurfaceGuard>
     </QueryClientProvider>
