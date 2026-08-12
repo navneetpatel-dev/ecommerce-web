@@ -13,6 +13,7 @@ import { usePrefetchProduct } from '../api/products.queries'
 import { useWishlistToggle } from './useWishlistToggle'
 import type { Cart, ProductListItem } from '@/shared/api/types'
 import { cartLineQuantityMax, clampCartQuantity } from '@/shared/constants/cart'
+import { resolveProductStock } from '../utils/productListItem'
 
 function patchCartQuantity(
   cart: Cart | undefined,
@@ -104,7 +105,7 @@ export function useProductCard(product: ProductListItem) {
   }, [serverQty, optimisticQty])
 
   const cartQuantity = optimisticQty ?? serverQty
-  const maxQuantity = cartLineQuantityMax(product.variants?.[0]?.stock ?? product.stock)
+  const maxQuantity = cartLineQuantityMax(resolveProductStock(product))
   const isMutating = isAdding || isUpdating || isRemoving
 
   const applyOptimisticCart = (variantId: string, quantity: number, itemId?: string) => {

@@ -15,6 +15,7 @@ import { CardQuantityControl } from './CardQuantityControl'
 import { cn } from '@/shared/utils/cn'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
+import { resolveProductStock } from '../utils/productListItem'
 
 interface ProductCardProps {
   product: ProductListItem
@@ -45,7 +46,7 @@ const controlMotion = {
 
 export function ProductCard({
   product,
-  quickAddLabel = 'Quick add',
+  quickAddLabel = LABELS.quickAdd,
   showWishlist = true,
   showQuickAdd = true,
   compareMode = false,
@@ -68,7 +69,10 @@ export function ProductCard({
   }, [])
 
   const inCart = cartQuantity > 0
-  const canQuickAdd = showQuickAdd && product.stock > 0
+  const canQuickAdd =
+    showQuickAdd &&
+    Boolean(product.variants?.[0]?.id) &&
+    resolveProductStock(product) > 0
 
   const renderQuickAddButton = (variant: 'overlay' | 'mobile') => (
     <Button

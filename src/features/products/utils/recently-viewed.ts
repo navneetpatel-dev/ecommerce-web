@@ -1,33 +1,14 @@
 import type { ProductListItem } from '@/shared/api/types'
+import { toProductListItem } from './productListItem'
 
 const RECENT_KEY = 'recently-viewed-products'
 
-export function trackRecentlyViewed(product: {
-  id: string
-  slug?: string
-  name: string
-  basePrice: number
-  avgRating: number
-  reviewCount: number
-  imageUrl: string
-  stock: number
-  vendor: ProductListItem['vendor']
-  compareAtPrice?: number
-}) {
+export function trackRecentlyViewed(
+  product: Parameters<typeof toProductListItem>[0],
+) {
   if (typeof window === 'undefined') return
 
-  const productSnapshot: ProductListItem = {
-    id: product.id,
-    slug: product.slug || product.id,
-    name: product.name,
-    basePrice: product.basePrice,
-    avgRating: product.avgRating,
-    reviewCount: product.reviewCount,
-    imageUrl: product.imageUrl,
-    stock: product.stock,
-    vendor: product.vendor,
-    compareAtPrice: product.compareAtPrice,
-  }
+  const productSnapshot = toProductListItem(product)
 
   try {
     const current = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]') as ProductListItem[]

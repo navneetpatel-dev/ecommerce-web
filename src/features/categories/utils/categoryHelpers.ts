@@ -1,3 +1,4 @@
+import { CATEGORY_STATUS } from '@/shared/constants/statuses'
 import {
   Baby,
   BookOpen,
@@ -95,9 +96,21 @@ export function categoryHref(category: Category, tree: Category[]): string {
   return slugs.length ? PATHS.category(...slugs) : PATHS.categories
 }
 
+/** Drop archived nodes from a nested category tree (storefront safety net). */
+export function filterActiveCategoryTree(categories: Category[]): Category[] {
+  return categories
+    .filter((category) => category.status !== CATEGORY_STATUS.ARCHIVED)
+    .map((category) => ({
+      ...category,
+      children: category.children?.length
+        ? filterActiveCategoryTree(category.children)
+        : undefined,
+    }))
+}
+
 /** Top-level categories (no parent), stable displayOrder then name. */
 export function getRootCategories(categories: Category[]): Category[] {
-  return categories
+  return filterActiveCategoryTree(categories)
     .filter((category) => !category.parentId)
     .slice()
     .sort(
@@ -107,7 +120,7 @@ export function getRootCategories(categories: Category[]): Category[] {
 }
 
 export function getChildCategories(categories: Category[], parentId: string): Category[] {
-  return categories
+  return filterActiveCategoryTree(categories)
     .filter((category) => category.parentId === parentId)
     .slice()
     .sort(

@@ -5,6 +5,8 @@ import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import { MediaImage } from '@/shared/components/MediaImage'
 import { PATHS } from '@/shared/constants/paths'
+import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import type { SpotlightVendor } from '../hooks/useVendorSpotlight'
 
 interface VendorSpotlightSectionProps {
@@ -21,13 +23,17 @@ function vendorInitials(name: string) {
     .join('')
 }
 
+function vendorHref(vendorId: string) {
+  return `${PATHS.products}?vendorId=${vendorId}`
+}
+
 export function VendorSpotlightSection({ vendors, isLoading }: VendorSpotlightSectionProps) {
   if (isLoading) {
     return (
       <section>
         <div className="mb-6 space-y-2">
-          <TextEyebrow brand>Curated makers</TextEyebrow>
-          <h2 className="font-display text-[1.75rem] leading-tight text-ink">Vendor spotlight</h2>
+          <TextEyebrow brand>{LABELS.homeCuratedMakers}</TextEyebrow>
+          <h2 className="font-display text-[1.75rem] leading-tight text-ink">{LABELS.homeVendorSpotlight}</h2>
         </div>
         <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-4 lg:gap-6">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -52,23 +58,24 @@ export function VendorSpotlightSection({ vendors, isLoading }: VendorSpotlightSe
       <div className="mb-6 flex items-end justify-between gap-4">
         <div>
           <TextEyebrow brand className="mb-2">
-            Curated makers
+            {LABELS.homeCuratedMakers}
           </TextEyebrow>
-          <h2 className="font-display text-[1.75rem] leading-tight text-ink">Vendor spotlight</h2>
+          <h2 className="font-display text-[1.75rem] leading-tight text-ink">{LABELS.homeVendorSpotlight}</h2>
         </div>
         <Link
           href={PATHS.products}
           className="inline-flex shrink-0 items-center gap-1 text-[0.8125rem] text-brand hover:underline"
         >
-          Browse all <ArrowRight size={14} />
+          {LABELS.homeBrowseAll} <ArrowRight size={14} />
         </Link>
       </div>
 
       <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-4 lg:gap-6">
         {vendors.map((vendor) => (
-          <article
+          <Link
             key={vendor.id}
-            className="group overflow-hidden rounded-md border border-line bg-surface shadow-elevation-1 transition-colors hover:border-ink/20"
+            href={vendorHref(vendor.id)}
+            className="group block overflow-hidden rounded-md border border-line bg-surface shadow-elevation-1 transition-all duration-200 hover:border-ink/20 hover:shadow-elevation-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             <div className="relative aspect-[16/10] overflow-hidden bg-[color-mix(in_srgb,var(--brand)_10%,var(--paper))]">
               {vendor.logoUrl || vendor.coverImageUrl ? (
@@ -99,21 +106,13 @@ export function VendorSpotlightSection({ vendors, isLoading }: VendorSpotlightSe
                   {vendor.businessName}
                 </h3>
                 <p className="mt-1.5 line-clamp-2 text-[0.8125rem] leading-relaxed text-ink-muted">
-                  Known for {vendor.highlightProduct}
+                  {formatLabel(LABELS.homeKnownFor, { product: vendor.highlightProduct })}
                 </p>
               </div>
 
               <RatingStars value={vendor.avgRating || 4} size="sm" />
-
-              <Link
-                href={`${PATHS.products}?vendorId=${vendor.id}`}
-                className="inline-flex items-center gap-1 text-[0.8125rem] font-medium text-brand hover:underline"
-              >
-                Visit storefront
-                <ArrowRight size={13} />
-              </Link>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </section>
