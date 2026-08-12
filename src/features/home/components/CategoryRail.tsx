@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
@@ -18,20 +19,50 @@ interface CategoryRailProps {
   isLoading?: boolean
 }
 
+function CategoryRailHeader({ totalCount }: { totalCount?: number }) {
+  const hasMore = totalCount != null && totalCount > HOME_CATEGORY_LIMIT
+
+  return (
+    <div className="mb-8 flex items-end justify-between gap-4">
+      <div>
+        <TextEyebrow className="mb-2">{LABELS.browse}</TextEyebrow>
+        <h2 className="text-[1.375rem] font-semibold text-ink">{LABELS.shopByCategory}</h2>
+      </div>
+      {hasMore ? (
+        <Link
+          href={PATHS.categories}
+          className="inline-flex shrink-0 items-center gap-1 text-[0.9375rem] font-medium text-brand transition-colors hover:text-brand-hover"
+        >
+          {LABELS.viewAll}
+          <span className="tabular-nums text-ink-muted">({totalCount})</span>
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      ) : (
+        <span className="invisible inline-flex shrink-0 items-center gap-1 text-[0.9375rem] font-medium" aria-hidden>
+          {LABELS.viewAll}
+          <ArrowRight className="h-3.5 w-3.5" />
+        </span>
+      )}
+    </div>
+  )
+}
+
 export function CategoryRail({ categories = [], isLoading }: CategoryRailProps) {
-  if (isLoading) {
+  const [mounted, setMounted] = useState(false)
+  const roots = getRootCategories(categories)
+  const showSkeleton = !mounted || (isLoading && roots.length === 0)
+
+  useEffect(() => setMounted(true), [])
+
+  if (showSkeleton) {
     return (
       <section>
-        <div className="mb-8 space-y-2">
-          <TextEyebrow>{LABELS.browse}</TextEyebrow>
-          <h2 className="text-[1.375rem] font-semibold text-ink">{LABELS.shopByCategory}</h2>
-        </div>
+        <CategoryRailHeader />
         <CategoryGridSkeleton count={10} />
       </section>
     )
   }
 
-  const roots = getRootCategories(categories)
   if (!roots.length) return null
 
   const hasMore = roots.length > HOME_CATEGORY_LIMIT
@@ -39,22 +70,7 @@ export function CategoryRail({ categories = [], isLoading }: CategoryRailProps) 
 
   return (
     <section>
-      <div className="mb-8 flex items-end justify-between gap-4">
-        <div>
-          <TextEyebrow className="mb-2">{LABELS.browse}</TextEyebrow>
-          <h2 className="text-[1.375rem] font-semibold text-ink">{LABELS.shopByCategory}</h2>
-        </div>
-        <Link
-          href={PATHS.categories}
-          className="inline-flex shrink-0 items-center gap-1 text-[0.9375rem] font-medium text-brand transition-colors hover:text-brand-hover"
-        >
-          {LABELS.viewAll}
-          {hasMore ? (
-            <span className="tabular-nums text-ink-muted">({roots.length})</span>
-          ) : null}
-          <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
-      </div>
+      <CategoryRailHeader totalCount={mounted ? roots.length : undefined} />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-4">
         {visible.map((cat) => (
