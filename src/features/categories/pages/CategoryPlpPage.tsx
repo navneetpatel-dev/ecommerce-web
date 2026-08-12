@@ -59,8 +59,8 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
       <header className="mb-3 sm:mb-4 md:mb-5">
         <Breadcrumbs items={plp.breadcrumbItems} className="mb-1.5 sm:mb-2" />
 
-        <div className="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
-          <div className="min-w-0 flex-1">
+        <div className="flex flex-col gap-2.5 lg:flex-row lg:items-end lg:gap-6 xl:gap-8">
+          <div className="min-w-0 shrink-0 lg:max-w-[min(100%,22rem)] xl:max-w-[min(100%,28rem)]">
             <h1
               className="font-display font-semibold tracking-tight text-ink"
               style={{ fontSize: 'var(--text-h1)', lineHeight: 1.15 }}
@@ -80,12 +80,12 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
           {childLinks.length > 0 ? (
             <nav
               aria-label={LABELS.shopInCategory}
-              className="min-w-0 lg:max-w-[min(100%,26rem)] lg:pt-0.5"
+              className="min-w-0 flex-1 lg:pt-0.5"
             >
-              <div className="mb-1.5 flex items-center justify-between gap-2 lg:justify-end">
-                <p className="text-eyebrow leading-none">{LABELS.shopInCategory}</p>
-              </div>
-              <ul className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-0.5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 lg:justify-end [&::-webkit-scrollbar]:hidden">
+              <p className="mb-1.5 text-eyebrow leading-none lg:text-right">
+                {LABELS.shopInCategory}
+              </p>
+              <ul className="-mx-4 flex flex-nowrap gap-2 overflow-x-auto overscroll-x-contain px-4 pb-0.5 [scrollbar-width:none] touch-pan-x sm:mx-0 sm:px-0 lg:justify-end [&::-webkit-scrollbar]:hidden">
                 {childLinks.map((child) => (
                   <li key={child.id} className="shrink-0">
                     <Link
