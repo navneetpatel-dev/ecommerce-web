@@ -1,4 +1,5 @@
 import { Button } from '@/shared/components/ui/button'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
 import { Textarea } from '@/shared/components/ui/textarea'
@@ -13,6 +14,7 @@ interface ReviewFormProps {
   register: UseFormRegister<ReviewFormInput>
   errors: FieldErrors<ReviewFormInput>
   rating: number
+  body: string
   hoverRating: number
   isPending: boolean
   onSetHoverRating: (value: number) => void
@@ -25,12 +27,17 @@ export function ReviewForm({
   register,
   errors,
   rating,
+  body,
   hoverRating,
   isPending,
   onSetHoverRating,
   onSetRating,
   onSubmit,
 }: ReviewFormProps) {
+  const canSubmit = rating >= 1 && body.trim().length >= 10
+  const disableHint =
+    rating < 1 ? LABELS.selectReviewRating : LABELS.enterReviewBody
+
   return (
     <form onSubmit={onSubmit} className="max-w-lg">
       <FormStack>
@@ -77,6 +84,7 @@ export function ReviewForm({
           >
             <Textarea
               id="body"
+              error={Boolean(errors.body?.message)}
               {...register('body')}
               placeholder={LABELS.reviewBodyPlaceholder}
               rows={4}
@@ -85,9 +93,11 @@ export function ReviewForm({
         </FormSection>
 
         <FormActions>
-          <Button type="submit" loading={isPending}>
-            {LABELS.submitReview}
-          </Button>
+          <DisabledActionHint disabled={!canSubmit} message={disableHint}>
+            <Button type="submit" loading={isPending} disabled={!canSubmit || isPending}>
+              {LABELS.submitReview}
+            </Button>
+          </DisabledActionHint>
         </FormActions>
       </FormStack>
     </form>

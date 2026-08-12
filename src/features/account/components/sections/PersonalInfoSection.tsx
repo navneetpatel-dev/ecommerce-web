@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { CheckCircle2, Mail, UserRound } from 'lucide-react'
 import { FormError } from '@/shared/components/FormError'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
@@ -29,10 +30,16 @@ export function PersonalInfoSection() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isDirty },
   } = useForm<PersonalForm>({
     defaultValues: { name: '', phone: '' },
   })
+
+  const nameValue = watch('name')
+  const nameMissing = !nameValue?.trim()
+  const canSubmit = !nameMissing && isDirty
+  const disableHint = nameMissing ? LABELS.enterFullName : ''
 
   useEffect(() => {
     if (profile) {
@@ -88,6 +95,7 @@ export function PersonalInfoSection() {
               >
                 <Input
                   id="account-name"
+                  error={Boolean(errors.name?.message)}
                   {...register('name', { required: LABELS.nameRequired })}
                 />
               </FormFieldFrame>
@@ -104,6 +112,7 @@ export function PersonalInfoSection() {
                   id="account-phone"
                   type="tel"
                   placeholder={LABELS.phonePlaceholder}
+                  error={Boolean(errors.phone?.message)}
                   {...register('phone')}
                 />
               </FormFieldFrame>
@@ -126,9 +135,15 @@ export function PersonalInfoSection() {
                   : LABELS.personalInfoFooterCustomer
               }
             >
-              <Button type="submit" loading={updateProfile.isPending} disabled={!isDirty}>
-                {LABELS.saveChanges}
-              </Button>
+              <DisabledActionHint disabled={!canSubmit} message={disableHint}>
+                <Button
+                  type="submit"
+                  loading={updateProfile.isPending}
+                  disabled={!canSubmit || updateProfile.isPending}
+                >
+                  {LABELS.saveChanges}
+                </Button>
+              </DisabledActionHint>
             </FormActions>
           </FormStack>
         </form>

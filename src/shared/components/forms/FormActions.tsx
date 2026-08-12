@@ -14,7 +14,7 @@ export function FormActions({ children, leading, className }: FormActionsProps) 
   return (
     <div
       className={cn(
-        'flex flex-col gap-3 border-t border-line/70 pt-4 sm:flex-row sm:items-center sm:justify-between',
+        'flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between',
         className,
       )}
     >

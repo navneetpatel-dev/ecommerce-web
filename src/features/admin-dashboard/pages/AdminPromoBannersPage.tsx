@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FileUpload } from '@/shared/components/FileUpload'
 import { FormActions, FormFieldFrame, FormSection } from '@/shared/components/forms'
 import { RequirePermission } from '@/shared/components/RequirePermission'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { NumberInput } from '@/shared/components/NumberInput'
@@ -28,6 +29,10 @@ import {
 import type { PromoBanner } from '@/shared/api/types'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { formatLabel } from '@/shared/utils/formatLabel'
+import {
+  allRequiredFieldsMet,
+  firstMissingRequiredHint,
+} from '@/shared/utils/firstMissingRequiredHint'
 import { TableRowActions, TableRowAction } from '@/shared/components/TableRowActions'
 import { tableMenuButtonClass } from '@/shared/constants/tableActionTone'
 import { homepageAdminApi } from '../api/homepage.api'
@@ -87,11 +92,25 @@ export function AdminPromoBannersPage() {
     setPriority('0')
   }
 
-  const canSubmit = useMemo(() => {
-    if (!title.trim() || !imageUrl) return false
-    if (linkType === PROMO_BANNER_LINK_TYPE.URL) return Boolean(linkUrl.trim())
-    return Boolean(linkTargetId.trim())
-  }, [title, imageUrl, linkType, linkUrl, linkTargetId])
+  const requiredChecks = useMemo(
+    () => [
+      { ok: Boolean(title.trim()), message: LABELS.enterPromoBannerTitle },
+      { ok: Boolean(imageUrl), message: LABELS.uploadPromoBannerImage },
+      {
+        ok:
+          linkType === PROMO_BANNER_LINK_TYPE.URL
+            ? Boolean(linkUrl.trim())
+            : Boolean(linkTargetId.trim()),
+        message:
+          linkType === PROMO_BANNER_LINK_TYPE.URL
+            ? LABELS.enterPromoBannerLinkUrl
+            : LABELS.enterPromoBannerLinkTarget,
+      },
+    ],
+    [title, imageUrl, linkType, linkUrl, linkTargetId],
+  )
+  const canSubmit = allRequiredFieldsMet(requiredChecks)
+  const disableHint = firstMissingRequiredHint(requiredChecks) ?? ''
 
   const onCreate = async () => {
     if (!canSubmit || !imageUrl) return
@@ -261,10 +280,16 @@ export function AdminPromoBannersPage() {
               onChange={(value) => setPriority(value == null ? '' : String(value))}
             />
           </FormFieldFrame>
-          <FormActions className="sm:col-span-2 border-0 pt-0" leading={message}>
-            <Button type="button" disabled={saving || !canSubmit} onClick={() => void onCreate()}>
-              {LABELS.createPromoBanner}
-            </Button>
+          <FormActions className="sm:col-span-2" leading={message}>
+            <DisabledActionHint disabled={!canSubmit} message={disableHint}>
+              <Button
+                type="button"
+                disabled={saving || !canSubmit}
+                onClick={() => void onCreate()}
+              >
+                {LABELS.createPromoBanner}
+              </Button>
+            </DisabledActionHint>
           </FormActions>
         </FormSection>
 
@@ -326,7 +351,7 @@ export function AdminPromoBannersPage() {
                         onChange={(value) => setEditPriority(value == null ? '' : String(value))}
                       />
                     </FormFieldFrame>
-                    <FormActions className="sm:col-span-2 border-0 pt-0">
+                    <FormActions className="sm:col-span-2">
                       <Button
                         size="sm"
                         variant="outline"

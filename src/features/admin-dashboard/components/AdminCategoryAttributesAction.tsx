@@ -305,7 +305,7 @@ export function AdminCategoryAttributesAction({
               </FormFieldFrame>
             ) : null}
             {error ? <p className="text-[0.8125rem] text-danger">{error}</p> : null}
-            <FormActions className="border-0 pt-0">
+            <FormActions>
               {editingId ? (
                 <Button variant="secondary" disabled={loading} onClick={resetForm}>
                   {LABELS.cancelEditAttribute}

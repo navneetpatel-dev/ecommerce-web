@@ -39,7 +39,7 @@ export function AdminShippingZoneForm({
             onChange={(e) => onNameChange(e.target.value)}
           />
         </FormFieldFrame>
-        <FormActions className="border-0 pt-0">
+        <FormActions>
           <DisabledActionHint disabled={!canCreate} message={LABELS.enterZoneName}>
             <Button type="submit" fullWidth="mobile" disabled={!canCreate}>
               {LABELS.addShippingZone}

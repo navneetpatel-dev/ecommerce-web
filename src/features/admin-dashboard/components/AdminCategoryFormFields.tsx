@@ -194,6 +194,7 @@ export function AdminCategoryFormFields({
             id={`${idPrefix}-commission`}
             inputMode="decimal"
             placeholder={LABELS.categoryCommissionPlaceholder}
+            error={Boolean(showFieldError('commissionRate'))}
             {...register('commissionRate')}
           />
         </FormFieldFrame>

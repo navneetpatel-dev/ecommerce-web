@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Button } from '@/shared/components/ui/button'
 import { CheckboxField } from '@/shared/components/CheckboxField'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
 import {
@@ -14,6 +15,10 @@ import {
 } from '@/shared/components/ui/dialog'
 import { LABELS } from '@/shared/constants/labels'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
+import {
+  allRequiredFieldsMet,
+  firstMissingRequiredHint,
+} from '@/shared/utils/firstMissingRequiredHint'
 import type { AddressInput } from '@/features/users/api/users.api'
 import type { Address } from '@/shared/api/types'
 
@@ -83,6 +88,15 @@ export function AddressFormDialog({
       setFormError(null)
     }
   }, [address, open])
+
+  const requiredChecks = [
+    { ok: Boolean(form.line1.trim()), message: LABELS.enterAddressLine1 },
+    { ok: Boolean(form.city.trim()), message: LABELS.enterAddressCity },
+    { ok: Boolean(form.state.trim()), message: LABELS.enterAddressState },
+    { ok: Boolean(form.pincode.trim()), message: LABELS.enterAddressPincode },
+  ]
+  const canSubmit = allRequiredFieldsMet(requiredChecks)
+  const disableHint = firstMissingRequiredHint(requiredChecks) ?? ''
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -200,9 +214,11 @@ export function AddressFormDialog({
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 {LABELS.cancel}
               </Button>
-              <Button type="submit" loading={isPending}>
-                {submitLabel}
-              </Button>
+              <DisabledActionHint disabled={!canSubmit} message={disableHint}>
+                <Button type="submit" loading={isPending} disabled={!canSubmit || isPending}>
+                  {submitLabel}
+                </Button>
+              </DisabledActionHint>
             </FormActions>
           </FormStack>
         </form>

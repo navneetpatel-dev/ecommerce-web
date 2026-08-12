@@ -2,6 +2,7 @@
 
 import { Button } from '@/shared/components/ui/button'
 import { FileUpload } from '@/shared/components/FileUpload'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
 import { Textarea } from '@/shared/components/ui/textarea'
@@ -15,6 +16,10 @@ import {
 } from '@/shared/components/ui/select'
 import { LABELS } from '@/shared/constants/labels'
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
+import {
+  allRequiredFieldsMet,
+  firstMissingRequiredHint,
+} from '@/shared/utils/firstMissingRequiredHint'
 
 interface VendorProductCreateFormProps {
   name: string
@@ -53,6 +58,17 @@ export function VendorProductCreateForm({
   onSubmit,
   onCancel,
 }: VendorProductCreateFormProps) {
+  const requiredChecks = [
+    { ok: Boolean(name.trim()), message: LABELS.enterProductName },
+    {
+      ok: price !== '' && Number(price) >= 1,
+      message: LABELS.enterProductPrice,
+    },
+    { ok: Boolean(categoryId), message: LABELS.selectProductCategory },
+  ]
+  const canSubmit = allRequiredFieldsMet(requiredChecks)
+  const disableHint = firstMissingRequiredHint(requiredChecks) ?? ''
+
   return (
     <form className="mb-5" onSubmit={onSubmit}>
       <FormStack>
@@ -126,9 +142,15 @@ export function VendorProductCreateForm({
           <Button variant="outline" type="button" onClick={onCancel}>
             {LABELS.cancel}
           </Button>
-          <Button type="submit" disabled={creating} loading={creating}>
-            {creating ? LABELS.creatingEllipsis : LABELS.createProduct}
-          </Button>
+          <DisabledActionHint disabled={!canSubmit} message={disableHint}>
+            <Button
+              type="submit"
+              disabled={!canSubmit || creating}
+              loading={creating}
+            >
+              {creating ? LABELS.creatingEllipsis : LABELS.createProduct}
+            </Button>
+          </DisabledActionHint>
         </FormActions>
       </FormStack>
     </form>

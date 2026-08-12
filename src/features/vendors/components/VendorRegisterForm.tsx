@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { UseFormReturn, Controller } from 'react-hook-form'
 import { Button } from '@/shared/components/ui/button'
 import { CheckboxField } from '@/shared/components/CheckboxField'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { Input } from '@/shared/components/ui/input'
 import { Textarea } from '@/shared/components/ui/textarea'
@@ -23,6 +24,11 @@ import {
 } from '@/shared/constants/statuses'
 import { vendorEntityTypeLabel } from '@/shared/utils/vendorEntityTypeLabel'
 import { vendorDocumentTypeLabel } from '@/shared/utils/vendorDocumentTypeLabel'
+import { cn } from '@/shared/utils/cn'
+import {
+  allRequiredFieldsMet,
+  firstMissingRequiredHint,
+} from '@/shared/utils/firstMissingRequiredHint'
 import { categoriesApi } from '@/features/categories/api/categories.api'
 import { vendorsApi } from '../api/vendors.api'
 import type { VendorRegisterInput } from '../schemas/vendor.schema'
@@ -57,6 +63,15 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
   const panHolderName = watch('panHolderName')
   const bankAccountHolderName = watch('bankAccountHolderName')
   const showNameWarning = namesMismatch(panHolderName, bankAccountHolderName)
+
+  const businessName = watch('businessName')
+  const requiredChecks = [
+    { ok: Boolean(businessName?.trim()), message: LABELS.enterBusinessName },
+    { ok: Boolean(entityType), message: LABELS.selectVendorEntityType },
+    { ok: categoryIds.length > 0, message: LABELS.selectVendorCategories },
+  ]
+  const canSubmit = allRequiredFieldsMet(requiredChecks)
+  const disableHint = firstMissingRequiredHint(requiredChecks) ?? ''
 
   useEffect(() => {
     void categoriesApi.list().then(setCategories).catch(() => setCategories([]))
@@ -103,7 +118,11 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
                   error={errors.businessName?.message}
                   className="sm:col-span-2"
                 >
-                  <Input id="businessName" {...register('businessName')} />
+                  <Input
+                    id="businessName"
+                    error={Boolean(errors.businessName?.message)}
+                    {...register('businessName')}
+                  />
                 </FormFieldFrame>
 
                 <FormFieldFrame
@@ -119,7 +138,9 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
                         value={field.value}
                         onValueChange={(value) => field.onChange(value as VendorEntityType)}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger
+                          className={cn(Boolean(errors.entityType?.message) && 'border-danger')}
+                        >
                           <SelectValue placeholder={LABELS.entityType} />
                         </SelectTrigger>
                         <SelectContent>
@@ -156,7 +177,12 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
                   hint={LABELS.vendorCategoriesHint}
                   error={errors.categoryIds ? LABELS.vendorCategories : undefined}
                 >
-                  <div className="max-h-48 space-y-2 overflow-y-auto rounded-md border border-line p-3">
+                  <div
+                    className={cn(
+                      'max-h-48 space-y-2 overflow-y-auto rounded-md border p-3',
+                      errors.categoryIds ? 'border-danger' : 'border-line',
+                    )}
+                  >
                     {categories.map((category) => (
                       <CheckboxField
                         key={category.id}
@@ -206,9 +232,16 @@ export function VendorRegisterForm({ form, onSubmit, error, isPending }: VendorR
               ) : null}
 
               <FormActions>
-                <Button type="submit" fullWidth="mobile" loading={isPending}>
-                  {LABELS.registerAsVendor}
-                </Button>
+                <DisabledActionHint disabled={!canSubmit} message={disableHint} className="w-full">
+                  <Button
+                    type="submit"
+                    fullWidth="mobile"
+                    loading={isPending}
+                    disabled={!canSubmit || isPending}
+                  >
+                    {LABELS.registerAsVendor}
+                  </Button>
+                </DisabledActionHint>
               </FormActions>
             </FormStack>
           </form>

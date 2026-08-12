@@ -16,6 +16,11 @@ export function useNewsletterForm() {
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
 
+  const onEmailChange = (value: string) => {
+    setEmail(value)
+    if (error) setError(null)
+  }
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     const trimmed = email.trim()
@@ -50,5 +55,5 @@ export function useNewsletterForm() {
     }
   }
 
-  return { email, setEmail, message, error, pending, handleSubmit }
+  return { email, setEmail: onEmailChange, message, error, pending, handleSubmit }
 }

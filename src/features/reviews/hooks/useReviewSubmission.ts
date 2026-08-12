@@ -22,6 +22,7 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
   })
 
   const rating = watch('rating') || 0
+  const body = watch('body') || ''
   const setRating = (next: number) => setValue('rating', next, { shouldValidate: true })
 
   const onSubmit = (data: ReviewFormInput) => {
@@ -47,6 +48,7 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
     handleSubmit,
     errors,
     rating,
+    body,
     hoverRating,
     setHoverRating,
     setRating,

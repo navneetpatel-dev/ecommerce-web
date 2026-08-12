@@ -4,6 +4,7 @@ import { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
 import { FormError } from '@/shared/components/FormError'
+import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Textarea } from '@/shared/components/ui/textarea'
@@ -26,8 +27,14 @@ import {
   SUPPORT_TICKET_CATEGORY_VALUES,
   type SupportTicketCategory,
 } from '@/shared/constants/statuses'
+import { useManualFormFieldErrors } from '@/shared/hooks/useManualFormFieldErrors'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
+import { cn } from '@/shared/utils/cn'
 import { formatLabel } from '@/shared/utils/formatLabel'
+import {
+  allRequiredFieldsMet,
+  firstMissingRequiredHint,
+} from '@/shared/utils/firstMissingRequiredHint'
 import { formatInr, formatOrderDate, shortOrderId } from '@/features/orders/utils/format'
 import { STEP_LABELS } from '@/features/orders/utils/timeline'
 import { ordersApi } from '@/features/orders/api/orders.api'
@@ -39,6 +46,8 @@ import {
 } from '../constants/fieldLimits'
 import { TicketAttachmentUploader, type UploadedMediaAttachment } from './TicketAttachmentUploader'
 import { TICKET_CATEGORY_LABEL } from '../utils/labels'
+
+type TicketField = 'subject' | 'description' | 'relatedVendorId'
 
 type Props = {
   successHref: (id: string) => string
@@ -88,7 +97,9 @@ export function CreateTicketForm({ successHref }: Props) {
   const [relatedVendorId, setRelatedVendorId] = useState('')
   const [orderVendors, setOrderVendors] = useState<OrderVendorOption[]>([])
   const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>([])
-  const [formError, setFormError] = useState<string | null>(null)
+  const [apiError, setApiError] = useState<string | null>(null)
+  const { clearAll, clearField, setErrors, getError, hasError } =
+    useManualFormFieldErrors<TicketField>()
 
   const hasOrder = Boolean(relatedOrderId.trim())
   const showDirectoryVendorPicker =
@@ -173,39 +184,57 @@ export function CreateTicketForm({ successHref }: Props) {
     [],
   )
 
+  const vendorRequired =
+    category === SUPPORT_TICKET_CATEGORY.VENDOR || orderVendors.length > 1
+
+  const requiredChecks = useMemo(
+    () => [
+      { ok: Boolean(subject.trim()), message: LABELS.enterTicketSubject },
+      { ok: Boolean(description.trim()), message: LABELS.enterTicketDescription },
+      {
+        ok: !vendorRequired || Boolean(relatedVendorId.trim()),
+        message: LABELS.selectTicketVendor,
+      },
+    ],
+    [subject, description, vendorRequired, relatedVendorId],
+  )
+  const canSubmit = allRequiredFieldsMet(requiredChecks)
+  const disableHint = firstMissingRequiredHint(requiredChecks) ?? ''
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setFormError(null)
+    setApiError(null)
+    clearAll()
+
     const trimmedSubject = subject.trim()
     const trimmedDescription = description.trim()
+    const nextErrors: Partial<Record<TicketField, string>> = {}
+
     if (!trimmedSubject) {
-      setFormError(LABELS.ticketSubjectRequired)
-      return
+      nextErrors.subject = LABELS.ticketSubjectRequired
+    } else if (trimmedSubject.length > TICKET_SUBJECT_MAX) {
+      nextErrors.subject = formatLabel(LABELS.ticketSubjectTooLong, {
+        max: String(TICKET_SUBJECT_MAX),
+      })
     }
-    if (trimmedSubject.length > TICKET_SUBJECT_MAX) {
-      setFormError(
-        formatLabel(LABELS.ticketSubjectTooLong, { max: String(TICKET_SUBJECT_MAX) }),
-      )
-      return
-    }
+
     if (!trimmedDescription) {
-      setFormError(LABELS.ticketDescriptionRequired)
-      return
+      nextErrors.description = LABELS.ticketDescriptionRequired
+    } else if (trimmedDescription.length > TICKET_DESCRIPTION_MAX) {
+      nextErrors.description = formatLabel(LABELS.ticketDescriptionTooLong, {
+        max: String(TICKET_DESCRIPTION_MAX),
+      })
     }
-    if (trimmedDescription.length > TICKET_DESCRIPTION_MAX) {
-      setFormError(
-        formatLabel(LABELS.ticketDescriptionTooLong, {
-          max: String(TICKET_DESCRIPTION_MAX),
-        }),
-      )
-      return
-    }
-    const vendorRequired =
-      category === SUPPORT_TICKET_CATEGORY.VENDOR || orderVendors.length > 1
+
     if (vendorRequired && !relatedVendorId.trim()) {
-      setFormError(LABELS.ticketVendorRequired)
+      nextErrors.relatedVendorId = LABELS.ticketVendorRequired
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors)
       return
     }
+
     try {
       const ticket = await create.mutateAsync({
         subject: trimmedSubject.slice(0, TICKET_SUBJECT_MAX),
@@ -221,25 +250,20 @@ export function CreateTicketForm({ successHref }: Props) {
       })
       router.push(successHref(ticket.id))
     } catch (err) {
-      setFormError(getApiErrorMessage(err, LABELS.ticketCouldNotCreate))
+      setApiError(getApiErrorMessage(err, LABELS.ticketCouldNotCreate))
     }
   }
 
   return (
     <form onSubmit={onSubmit} className="w-full min-w-0">
       <FormStack className="space-y-8">
-        <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-          <div className="min-w-0 space-y-1.5">
-            <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-              {LABELS.newSupportTicket}
-            </h1>
-            <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
-              {LABELS.newSupportTicketDescription}
-            </p>
-          </div>
-          <Button type="submit" className="hidden shrink-0 sm:inline-flex" loading={create.isPending}>
-            {LABELS.ticketSubmit}
-          </Button>
+        <div className="space-y-1.5 border-b border-line/70 pb-6">
+          <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+            {LABELS.newSupportTicket}
+          </h1>
+          <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
+            {LABELS.newSupportTicketDescription}
+          </p>
         </div>
 
         <FormSection
@@ -247,13 +271,22 @@ export function CreateTicketForm({ successHref }: Props) {
           hint={LABELS.ticketBasicsSectionHint}
           columns={1}
         >
-          <FormFieldFrame label={LABELS.ticketSubject} htmlFor={subjectId} required>
+          <FormFieldFrame
+            label={LABELS.ticketSubject}
+            htmlFor={subjectId}
+            required
+            error={getError('subject')}
+          >
             <Input
               id={subjectId}
               value={subject}
-              onChange={(e) => setSubject(e.target.value.slice(0, TICKET_SUBJECT_MAX))}
+              onChange={(e) => {
+                clearField('subject')
+                setSubject(e.target.value.slice(0, TICKET_SUBJECT_MAX))
+              }}
               placeholder={LABELS.ticketSubjectPlaceholder}
               maxLength={TICKET_SUBJECT_MAX}
+              error={hasError('subject')}
             />
             <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
               {formatLabel(LABELS.ticketCharCounter, {
@@ -286,14 +319,23 @@ export function CreateTicketForm({ successHref }: Props) {
           hint={LABELS.ticketDescriptionSectionHint}
           columns={1}
         >
-          <FormFieldFrame label={LABELS.ticketDescription} htmlFor={descId} required>
+          <FormFieldFrame
+            label={LABELS.ticketDescription}
+            htmlFor={descId}
+            required
+            error={getError('description')}
+          >
             <Textarea
               id={descId}
               value={description}
-              onChange={(e) => setDescription(e.target.value.slice(0, TICKET_DESCRIPTION_MAX))}
+              onChange={(e) => {
+                clearField('description')
+                setDescription(e.target.value.slice(0, TICKET_DESCRIPTION_MAX))
+              }}
               placeholder={LABELS.ticketDescriptionPlaceholder}
               rows={8}
               maxLength={TICKET_DESCRIPTION_MAX}
+              error={hasError('description')}
             />
             <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
               {formatLabel(LABELS.ticketCharCounter, {
@@ -331,9 +373,21 @@ export function CreateTicketForm({ successHref }: Props) {
             columns={1}
           >
             {showOrderVendorPicker ? (
-              <FormFieldFrame label={LABELS.ticketSelectVendor} required>
-                <Select value={relatedVendorId} onValueChange={setRelatedVendorId}>
-                  <SelectTrigger>
+              <FormFieldFrame
+                label={LABELS.ticketSelectVendor}
+                required
+                error={getError('relatedVendorId')}
+              >
+                <Select
+                  value={relatedVendorId}
+                  onValueChange={(value) => {
+                    clearField('relatedVendorId')
+                    setRelatedVendorId(value)
+                  }}
+                >
+                  <SelectTrigger
+                    className={cn(hasError('relatedVendorId') && 'border-danger')}
+                  >
                     <SelectValue placeholder={LABELS.ticketSelectVendor} />
                   </SelectTrigger>
                   <SelectContent>
@@ -354,15 +408,23 @@ export function CreateTicketForm({ successHref }: Props) {
             ) : null}
 
             {showDirectoryVendorPicker ? (
-              <FormFieldFrame label={LABELS.ticketSelectVendor} required>
+              <FormFieldFrame
+                label={LABELS.ticketSelectVendor}
+                required
+                error={getError('relatedVendorId')}
+              >
                 <InfiniteSingleSelect
                   value={relatedVendorId}
-                  onChange={setRelatedVendorId}
+                  onChange={(value) => {
+                    clearField('relatedVendorId')
+                    setRelatedVendorId(value)
+                  }}
                   fetchPage={fetchVendorsPage}
                   placeholder={LABELS.ticketSelectVendor}
                   searchPlaceholder={LABELS.ticketSearchVendors}
                   emptyMessage={LABELS.noVendorsFound}
                   pageSize={DEFAULT_PAGE_LIMIT}
+                  error={hasError('relatedVendorId')}
                 />
               </FormFieldFrame>
             ) : null}
@@ -383,13 +445,19 @@ export function CreateTicketForm({ successHref }: Props) {
         </FormSection>
 
         <FormError
-          error={formError ? new Error(formError) : (create.error as Error | null)}
+          error={apiError ? new Error(apiError) : (create.error as Error | null)}
           fallback={LABELS.ticketCouldNotCreate}
         />
         <FormActions>
-          <Button type="submit" loading={create.isPending} className="sm:hidden">
-            {LABELS.ticketSubmit}
-          </Button>
+          <DisabledActionHint disabled={!canSubmit} message={disableHint}>
+            <Button
+              type="submit"
+              loading={create.isPending}
+              disabled={!canSubmit || create.isPending}
+            >
+              {LABELS.ticketSubmit}
+            </Button>
+          </DisabledActionHint>
         </FormActions>
       </FormStack>
     </form>

@@ -54,7 +54,7 @@ export function AdminTaxRuleForm({
             onChange={(e) => onHsnChange(e.target.value)}
           />
         </FormFieldFrame>
-        <FormActions className="sm:col-span-2 border-0 pt-0">
+        <FormActions className="sm:col-span-2">
           <DisabledActionHint disabled={!canCreate} message={LABELS.enterGstPercentage}>
             <Button type="submit" fullWidth="mobile" disabled={!canCreate}>
               {LABELS.addTaxRule}

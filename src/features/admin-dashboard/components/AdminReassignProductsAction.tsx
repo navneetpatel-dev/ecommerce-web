@@ -114,7 +114,7 @@ export function AdminReassignProductsAction({ onDone }: AdminReassignProductsAct
             </FormFieldFrame>
             {error ? <p className="text-[0.8125rem] text-danger">{error}</p> : null}
             {message ? <p className="text-[0.8125rem] text-success">{message}</p> : null}
-            <FormActions className="border-0 pt-0">
+            <FormActions>
               <Button
                 disabled={loading || !fromId || !toId || fromId === toId}
                 onClick={() => void onSubmit()}

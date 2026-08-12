@@ -74,7 +74,7 @@ export function ChangePasswordSection({
               />
             </FormFieldFrame>
             <FormError error={error} fallback={LABELS.couldNotChangePassword} />
-            <FormActions className="border-0 pt-1">
+            <FormActions>
               <Button type="submit" loading={isPending}>
                 {LABELS.changePassword}
               </Button>
