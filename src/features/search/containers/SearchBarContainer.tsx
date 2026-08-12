@@ -7,10 +7,17 @@ interface SearchBarContainerProps {
   size?: 'lg' | 'sm'
   className?: string
   onDark?: boolean
+  /** e.g. close the mobile search sheet after navigating to results */
+  onAfterSubmit?: () => void
 }
 
-export function SearchBarContainer({ size, className, onDark }: SearchBarContainerProps) {
-  const search = useSearchNavigation()
+export function SearchBarContainer({
+  size,
+  className,
+  onDark,
+  onAfterSubmit,
+}: SearchBarContainerProps) {
+  const search = useSearchNavigation(onAfterSubmit)
 
   return (
     <SearchBar

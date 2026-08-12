@@ -8,6 +8,7 @@ interface BottomSheetContainerProps {
   onClose: () => void
   title?: string
   children: React.ReactNode
+  hideFrom?: 'md' | 'lg' | 'xl'
 }
 
 export function BottomSheetContainer({
@@ -15,11 +16,12 @@ export function BottomSheetContainer({
   onClose,
   title,
   children,
+  hideFrom,
 }: BottomSheetContainerProps) {
   useBodyScrollLock(open)
 
   return (
-    <BottomSheetView open={open} onClose={onClose} title={title}>
+    <BottomSheetView open={open} onClose={onClose} title={title} hideFrom={hideFrom}>
       {children}
     </BottomSheetView>
   )

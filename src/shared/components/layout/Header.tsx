@@ -11,7 +11,7 @@ import { MobileTabBar } from './MobileTabBar'
 import { MobileNavDrawer } from './MobileNavDrawer'
 import { CategoriesMegaMenu } from '@/features/categories/components/CategoriesMegaMenu'
 import { BottomSheet } from '@/shared/components/BottomSheet'
-import { CartCountBadge } from '@/shared/components/CartCountBadge'
+import { CartCountBadge, IconBadgeAnchor } from '@/shared/components/CartCountBadge'
 import { WalletIcon } from '@/shared/components/WalletIcon'
 import { useTheme } from '@/shared/hooks/use-theme'
 import { PATHS } from '@/shared/constants/paths'
@@ -28,7 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avat
 import { formatInrCompact } from '@/features/orders/utils/format'
 
 const HEADER_ICON_BTN =
-  'relative overflow-visible [&_svg]:!size-5'
+  'relative !overflow-visible [&_svg]:!size-5 max-sm:h-9 max-sm:w-9 max-sm:min-h-9 max-sm:max-h-9'
 
 interface HeaderProps {
   currentUser: CurrentUser | null
@@ -167,14 +167,14 @@ export function Header({
     <>
       <header
         className={cn(
-          'sticky top-0 z-40 transition-all duration-200',
+          'sticky top-0 z-40 overflow-visible transition-all duration-200',
           'h-14 lg:h-[72px]',
           isTransparent
             ? 'bg-transparent border-transparent'
             : 'bg-surface border-b border-line shadow-elevation-1'
         )}
       >
-        <div className="storefront-container flex h-full items-center gap-2 sm:gap-3 lg:gap-4 xl:gap-6">
+        <div className="storefront-container flex h-full flex-nowrap items-center gap-1.5 sm:gap-3 lg:gap-4 xl:gap-6">
           {showStorefrontChrome ? (
             <Button
               type="button"
@@ -182,7 +182,7 @@ export function Header({
               size="icon-sm"
               onClick={onOpenMobileNav}
               className={cn(
-                'lg:hidden -ml-2',
+                'xl:hidden -ml-2 max-sm:h-9 max-sm:w-9 max-sm:min-h-9 max-sm:max-h-9',
                 isTransparent ? 'hover:bg-paper/10' : undefined
               )}
               aria-label={LABELS.menu}
@@ -205,7 +205,7 @@ export function Header({
           <Link
             href={homeHref}
             className={cn(
-              'min-w-0 shrink text-[1.375rem] font-display font-semibold leading-none sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]',
+              'min-w-0 shrink truncate text-[1.25rem] font-display font-semibold leading-none sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]',
               isTransparent ? 'text-paper' : 'text-brand'
             )}
           >
@@ -268,7 +268,7 @@ export function Header({
             <div className="hidden flex-1 xl:block" />
           )}
 
-          <nav aria-label="Header actions" className="ml-auto flex shrink-0 items-center gap-1">
+          <nav aria-label="Header actions" className="ml-auto flex shrink-0 items-center gap-1.5 overflow-visible sm:gap-2">
             <Button
               type="button"
               variant="outline"
@@ -276,6 +276,7 @@ export function Header({
               onClick={toggleTheme}
               className={cn(
                 'w-11 shrink-0 gap-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-wide sm:w-auto',
+                'max-sm:h-9 max-sm:w-9 max-sm:min-h-9 max-sm:max-h-9 max-sm:px-0',
                 isTransparent
                   ? 'border-paper/30 bg-transparent text-paper hover:bg-paper/10 hover:text-paper'
                   : 'text-ink-muted'
@@ -303,7 +304,8 @@ export function Header({
                   size="icon-sm"
                   onClick={onOpenMobileSearch}
                   className={cn(
-                    'md:hidden',
+                    'hidden lg:inline-flex xl:hidden',
+                    HEADER_ICON_BTN,
                     isTransparent ? 'hover:bg-paper/10' : undefined
                   )}
                   aria-label={LABELS.search}
@@ -317,13 +319,16 @@ export function Header({
                   size="icon-sm"
                   onClick={onOpenCart}
                   className={cn(
+                    'hidden lg:inline-flex',
                     HEADER_ICON_BTN,
                     isTransparent ? 'hover:bg-paper/10' : undefined
                   )}
                   aria-label={cartItemCount > 0 ? `${LABELS.cart}, ${cartItemCount}` : LABELS.cart}
                 >
-                  <ShoppingCart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-                  <CartCountBadge count={cartItemCount} />
+                  <IconBadgeAnchor>
+                    <ShoppingCart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
+                    <CartCountBadge count={cartItemCount} placement="header" />
+                  </IconBadgeAnchor>
                 </Button>
 
                 <Button
@@ -344,8 +349,10 @@ export function Header({
                         : LABELS.wishlist
                     }
                   >
-                    <Heart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-                    <CartCountBadge count={wishlistItemCount} />
+                    <IconBadgeAnchor>
+                      <Heart size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
+                      <CartCountBadge count={wishlistItemCount} placement="header" />
+                    </IconBadgeAnchor>
                   </Link>
                 </Button>
 
@@ -356,6 +363,7 @@ export function Header({
                   asChild
                   className={cn(
                     HEADER_ICON_BTN,
+                    'mr-0.5',
                     isTransparent ? 'hover:bg-paper/10' : undefined
                   )}
                 >
@@ -363,12 +371,15 @@ export function Header({
                     href={PATHS.wallet}
                     aria-label={`${LABELS.walletBalance}, ${formatInrCompact(walletBalance)}`}
                   >
-                    <WalletIcon size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
-                    <CartCountBadge
-                      count={walletBalance}
-                      label={formatInrCompact(walletBalance)}
-                      alwaysShow
-                    />
+                    <IconBadgeAnchor className="min-w-5">
+                      <WalletIcon size={20} className={cn(isTransparent ? 'text-paper' : 'text-ink')} />
+                      <CartCountBadge
+                        count={walletBalance}
+                        label={formatInrCompact(walletBalance)}
+                        alwaysShow
+                        placement="header"
+                      />
+                    </IconBadgeAnchor>
                   </Link>
                 </Button>
               </>
@@ -516,10 +527,20 @@ export function Header({
             currentUser={currentUser}
             categories={categories}
           />
-          <BottomSheet open={mobileSearchOpen} onClose={onCloseMobileSearch} title={LABELS.search}>
-            <SearchBarContainer />
+          <BottomSheet
+            open={mobileSearchOpen}
+            onClose={onCloseMobileSearch}
+            title={LABELS.search}
+            hideFrom="xl"
+          >
+            <SearchBarContainer onAfterSubmit={onCloseMobileSearch} />
           </BottomSheet>
-          <MobileTabBar currentUser={currentUser} onOpenCart={onOpenCart} cartItemCount={cartItemCount} />
+          <MobileTabBar
+            currentUser={currentUser}
+            onOpenCart={onOpenCart}
+            onOpenSearch={onOpenMobileSearch}
+            cartItemCount={cartItemCount}
+          />
         </>
       ) : null}
     </>

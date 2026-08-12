@@ -5,7 +5,7 @@ import { useAutocomplete } from '../api/search.queries'
 import { navigate } from '@/shared/utils/navigate'
 import { PATHS } from '@/shared/constants/paths'
 
-export function useSearchNavigation() {
+export function useSearchNavigation(onAfterSubmit?: () => void) {
   const [term, setTerm] = useState('')
   const [open, setOpen] = useState(false)
   const debouncedTerm = useDebouncedValue(term, 200)
@@ -24,6 +24,7 @@ export function useSearchNavigation() {
       setOpen(false)
       navigate(router, `${PATHS.products}?search=${encodeURIComponent(term.trim())}`)
       setTerm('')
+      onAfterSubmit?.()
     }
   }
 
