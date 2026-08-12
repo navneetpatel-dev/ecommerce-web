@@ -261,7 +261,7 @@ export function Header({
               </nav>
 
               <div className="hidden xl:flex flex-1 max-w-xl mx-auto">
-                <SearchBarContainer onDark={isTransparent} />
+                <SearchBarContainer onDark={isTransparent} panelLayout="dropdown" />
               </div>
             </>
           ) : (
@@ -533,7 +533,7 @@ export function Header({
             title={LABELS.search}
             hideFrom="xl"
           >
-            <SearchBarContainer onAfterSubmit={onCloseMobileSearch} />
+            <SearchBarContainer onAfterSubmit={onCloseMobileSearch} panelLayout="inline" />
           </BottomSheet>
           <MobileTabBar
             currentUser={currentUser}

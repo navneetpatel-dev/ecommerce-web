@@ -191,6 +191,8 @@ export const LABELS = {
   searchProducts: 'Search products',
   searchProductsVendors: 'Search products, vendors...',
   searchVendors: 'Search vendors',
+  searchSuggestions: 'Search suggestions',
+  searchAutocompleteEmpty: 'No matching products',
   noCategoriesFound: 'No categories found',
   noProductsFound: 'No products found',
   noVendorsFound: 'No vendors found',
