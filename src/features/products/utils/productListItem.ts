@@ -16,7 +16,7 @@ export function toProductListItem(
     'id' | 'slug' | 'name' | 'basePrice' | 'avgRating' | 'reviewCount' | 'imageUrl' | 'vendor'
   > & {
     stock?: number
-    compareAtPrice?: number
+    compareAtPrice?: number | null
     isWishlisted?: boolean
     variants?: Array<{ id: string; stock?: number }>
   },
@@ -32,7 +32,7 @@ export function toProductListItem(
     slug: product.slug || product.id,
     name: product.name,
     basePrice: product.basePrice,
-    compareAtPrice: product.compareAtPrice,
+    compareAtPrice: product.compareAtPrice ?? undefined,
     avgRating: product.avgRating,
     reviewCount: product.reviewCount,
     imageUrl: product.imageUrl,

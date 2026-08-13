@@ -1,7 +1,10 @@
 'use client'
 
+import Link from 'next/link'
 import { ImageGalleryContainer } from '@/shared/containers/ImageGalleryContainer'
 import { ProductInfo } from './ProductInfo'
+import { ProductHighlights } from './ProductHighlights'
+import { ProductSpecifications } from './ProductSpecifications'
 import { VariantSelector } from './VariantSelector'
 import { ProductReviewsContainer } from '@/features/reviews/containers/ProductReviewsContainer'
 import { ShareButtonContainer } from '@/shared/containers/ShareButtonContainer'
@@ -21,24 +24,8 @@ import { PATHS } from '@/shared/constants/paths'
 import { cartLineQuantityMax } from '@/shared/constants/cart'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import { ProductEligibleOffers } from './ProductEligibleOffers'
+import type { ProductDetail, ProductVariant } from '@/shared/api/types'
 import type { RefObject } from 'react'
-
-interface Product {
-  id: string
-  slug?: string
-  name: string
-  imageUrl: string
-  images?: Array<{ id: string; url: string; isPrimary: boolean }>
-  vendor?: { id: string; businessName: string; slug: string; logoUrl: string | null } | null
-  avgRating?: number
-  reviewCount?: number
-  variants?: Array<{ id: string; sku?: string; stock?: number }>
-  basePrice: number
-  stock?: number
-  description?: string
-  categoryName?: string
-  category?: { name?: string }
-}
 
 interface BreadcrumbItem {
   label: string
@@ -51,13 +38,14 @@ interface VariantSelectionProps {
   currentStock: number
   basePrice: number
   hasPriceChange: boolean
+  matchedVariant?: ProductVariant | null
   isAvailable: (key: string, value: string) => boolean
   isActive: (key: string, value: string) => boolean
   onSelectValue: (key: string, value: string) => void
 }
 
 interface ProductDetailContentProps {
-  product: Product
+  product: ProductDetail
   isWishlisted: boolean
   onToggleWishlist: () => void
   onAddToCart?: (quantity: number) => void
@@ -104,6 +92,18 @@ export function ProductDetailContent({
   const reviewCount = product.reviewCount ?? 0
   const avgRating = product.avgRating ?? 0
   const formattedPrice = displayPrice.toLocaleString('en-IN')
+  const compareAtPrice = product.compareAtPrice ?? null
+  const showMrp =
+    compareAtPrice != null && compareAtPrice > displayPrice
+  const discountPercent = showMrp
+    ? Math.round((1 - displayPrice / compareAtPrice) * 100)
+    : null
+
+  const resolvedVariant =
+    variantSelection.matchedVariant ??
+    (product.variants?.length === 1 ? product.variants[0] : null)
+
+  const categoryName = product.category?.name ?? product.categoryName ?? null
 
   const addToCartLabel = needsOptionSelection
     ? LABELS.selectOptions
@@ -143,11 +143,16 @@ export function ProductDetailContent({
             ) : null}
 
             <div className="space-y-3">
-              {(product.category?.name || product.categoryName) ? (
-                <TextEyebrow>
-                  {product.category?.name ?? product.categoryName}
-                </TextEyebrow>
-              ) : null}
+              <div className="flex flex-wrap items-center gap-2">
+                {product.brand ? (
+                  <TextEyebrow>{product.brand}</TextEyebrow>
+                ) : null}
+                {(product.category?.name || product.categoryName) ? (
+                  <TextEyebrow>
+                    {product.category?.name ?? product.categoryName}
+                  </TextEyebrow>
+                ) : null}
+              </div>
 
               <h1
                 className="font-display font-semibold leading-[1.15] tracking-tight text-ink"
@@ -167,16 +172,43 @@ export function ProductDetailContent({
                   </a>
                 ) : null}
               </div>
+
+              {product.tags?.length ? (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {product.tags.slice(0, 4).map((tag) => (
+                    <Badge key={tag} variant="secondary" className="rounded-full font-normal">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              ) : null}
             </div>
 
             <div className="flex flex-wrap items-end justify-between gap-3 border-y border-line py-4">
-              <div aria-live="polite" className="space-y-1">
-                <p className="font-sans text-[1.875rem] font-semibold leading-none text-brand">
-                  ₹{formattedPrice}
-                </p>
-                {variantSelection.hasPriceChange ? (
+              <div aria-live="polite" className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="font-sans text-[1.875rem] font-semibold leading-none text-brand">
+                    ₹{formattedPrice}
+                  </p>
+                  {discountPercent != null && discountPercent > 0 ? (
+                    <Badge variant="destructive" className="rounded-full">
+                      {formatLabel(LABELS.discountPercentOff, { percent: discountPercent })}
+                    </Badge>
+                  ) : null}
+                </div>
+                {showMrp ? (
+                  <p className="text-[0.9375rem] text-ink-faint">
+                    <span className="mr-1.5">{LABELS.listPrice}:</span>
+                    <span className="line-through">₹{compareAtPrice.toLocaleString('en-IN')}</span>
+                  </p>
+                ) : variantSelection.hasPriceChange ? (
                   <p className="text-[0.9375rem] text-ink-faint line-through">
                     ₹{variantSelection.basePrice.toLocaleString('en-IN')}
+                  </p>
+                ) : null}
+                {resolvedVariant?.sku ? (
+                  <p className="text-[0.8125rem] text-ink-muted">
+                    {LABELS.sku}: {resolvedVariant.sku}
                   </p>
                 ) : null}
               </div>
@@ -190,6 +222,10 @@ export function ProductDetailContent({
                 <Badge variant="success">{LABELS.inStock}</Badge>
               )}
             </div>
+
+            {product.highlights?.length ? (
+              <ProductHighlights highlights={product.highlights.slice(0, 4)} />
+            ) : null}
 
             <div className="space-y-2">
               <p className="text-[0.8125rem] text-ink-muted">{LABELS.offersAtCheckout}</p>
@@ -262,6 +298,20 @@ export function ProductDetailContent({
               </div>
             </div>
 
+            {product.vendor?.slug ? (
+              <div className="rounded-lg border border-line bg-surface px-3 py-3">
+                <p className="text-[0.8125rem] text-ink-muted">
+                  {LABELS.soldBy}{' '}
+                  <Link
+                    href={PATHS.vendorPage(product.vendor.slug)}
+                    className="font-medium text-brand underline-offset-2 hover:underline"
+                  >
+                    {product.vendor.businessName}
+                  </Link>
+                </p>
+              </div>
+            ) : null}
+
             <div className="grid gap-2.5 sm:grid-cols-2">
               <div className="flex items-start gap-2.5 rounded-lg border border-line bg-surface px-3 py-3">
                 <Truck className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={1.75} />
@@ -309,35 +359,21 @@ export function ProductDetailContent({
             </TabsTrigger>
           </TabsList>
           <TabsContent value="description" className="py-6 md:py-8">
-            <div className="max-w-3xl">
+            <div className="max-w-3xl space-y-8">
               <ProductInfo product={product} />
+              {product.highlights?.length ? (
+                <ProductHighlights highlights={product.highlights} />
+              ) : null}
             </div>
           </TabsContent>
           <TabsContent value="specifications" className="py-6 md:py-8">
-            <dl className="max-w-xl divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
-              <div className="grid grid-cols-[8rem_1fr] gap-3 px-4 py-3 sm:grid-cols-[10rem_1fr]">
-                <dt className="text-[0.8125rem] font-medium text-ink-muted">{LABELS.sku}</dt>
-                <dd className="text-[0.9375rem] text-ink">
-                  {product?.variants?.[0]?.sku ?? LABELS.notAvailable}
-                </dd>
-              </div>
-              <div className="grid grid-cols-[8rem_1fr] gap-3 px-4 py-3 sm:grid-cols-[10rem_1fr]">
-                <dt className="text-[0.8125rem] font-medium text-ink-muted">
-                  {LABELS.categoryLabel}
-                </dt>
-                <dd className="text-[0.9375rem] text-ink">
-                  {product.category?.name ?? product.categoryName ?? LABELS.generalCategory}
-                </dd>
-              </div>
-              <div className="grid grid-cols-[8rem_1fr] gap-3 px-4 py-3 sm:grid-cols-[10rem_1fr]">
-                <dt className="text-[0.8125rem] font-medium text-ink-muted">{LABELS.stock}</dt>
-                <dd className="text-[0.9375rem] text-ink">
-                  {displayStock > 0
-                    ? formatLabel(LABELS.stockAvailable, { count: displayStock })
-                    : LABELS.outOfStock}
-                </dd>
-              </div>
-            </dl>
+            <ProductSpecifications
+              specs={product.specs}
+              matchedVariant={resolvedVariant}
+              categoryName={categoryName}
+              secondaryCategories={product.secondaryCategories}
+              displayStock={displayStock}
+            />
           </TabsContent>
           <TabsContent value="reviews" className="py-6 md:py-8" id="reviews">
             <ProductReviewsContainer productId={product.id} />

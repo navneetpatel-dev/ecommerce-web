@@ -55,9 +55,12 @@ export function useProductDetail() {
     ? Number(selection.currentStock || 0)
     : variants.length === 1
       ? Number(variants[0]?.stock || 0)
-      : baseStock
+      : 0
 
-  const needsOptionSelection = variants.length > 1 && !selection.variantId
+  const needsOptionSelection =
+    variants.length > 1 &&
+    !selection.variantId &&
+    Object.keys(selection.attributeGroups).length > 0
 
   const maxQuantity = cartLineQuantityMax(selectedStock)
 
@@ -170,6 +173,7 @@ export function useProductDetail() {
       currentStock: Number(selection.currentStock || 0),
       basePrice,
       hasPriceChange: selection.hasPriceChange,
+      matchedVariant: selection.matchedVariant,
       isAvailable: selection.isAvailable,
       isActive: selection.isActive,
       onSelectValue: selection.selectValue,

@@ -54,7 +54,8 @@ export interface ProductListItem {
   slug: string;
   name: string;
   basePrice: number;
-  compareAtPrice?: number;
+  compareAtPrice?: number | null;
+  brand?: string | null;
   avgRating: number;
   reviewCount: number;
   imageUrl: string;
@@ -84,6 +85,11 @@ export interface ProductImage {
 
 export interface ProductDetail extends ProductListItem {
   description: string;
+  specs?: Record<string, string>;
+  highlights?: string[];
+  tags?: string[];
+  categoryName?: string | null;
+  category?: Category | null;
   variants: ProductVariant[];
   images: ProductImage[];
   categoryId: string;

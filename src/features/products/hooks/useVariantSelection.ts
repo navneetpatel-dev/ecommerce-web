@@ -1,28 +1,46 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import type { ProductVariant } from '@/shared/api/types'
-import { findMatchingVariant, groupVariantAttributes, isVariantCombinationAvailable } from '../utils/products.utils'
+import {
+  findMatchingVariant,
+  getMatrixAttributeKeys,
+  getMatrixVariants,
+  groupVariantAttributes,
+  isVariantCombinationAvailable,
+  resolveDefaultVariantSelection,
+} from '../utils/products.utils'
 
 export function useVariantSelection(variants: ProductVariant[], basePrice: number, baseStock: number) {
   const [selected, setSelected] = useState<Record<string, string>>({})
 
+  const variantKey = useMemo(() => variants.map((variant) => variant.id).join('|'), [variants])
+
+  useEffect(() => {
+    setSelected(resolveDefaultVariantSelection(variants))
+  }, [variantKey, variants])
+
   const matchedVariant = useMemo(
     () => findMatchingVariant(variants, selected),
-    [variants, selected]
+    [variants, selected],
   )
 
   const attributeGroups = useMemo(
     () => groupVariantAttributes(variants),
-    [variants]
+    [variants],
   )
 
   const selectValue = (key: string, value: string) => {
     setSelected((prev) => {
-      // Prefer a clean selection that still matches an in-stock variant.
       const next = { ...prev, [key]: value }
       if (findMatchingVariant(variants, next)) return next
 
-      const alone = { [key]: value }
-      if (findMatchingVariant(variants, alone)) return alone
+      const matrixKeys = getMatrixAttributeKeys(variants)
+      const matrixVariants = getMatrixVariants(variants, matrixKeys)
+      const inStockMatch = matrixVariants.find(
+        (variant) =>
+          Number(variant.stock) > 0 && variant.attributes[key] === value,
+      )
+
+      if (inStockMatch) return { ...inStockMatch.attributes }
 
       return next
     })
@@ -34,7 +52,9 @@ export function useVariantSelection(variants: ProductVariant[], basePrice: numbe
   const isActive = (key: string, value: string) => selected[key] === value
 
   const currentPrice = matchedVariant?.price ?? basePrice
-  const currentStock = matchedVariant?.stock ?? baseStock
+  const currentStock =
+    matchedVariant?.stock ??
+    (variants.length === 1 ? baseStock : 0)
   const variantId = matchedVariant?.id ?? null
 
   return {
@@ -42,6 +62,7 @@ export function useVariantSelection(variants: ProductVariant[], basePrice: numbe
     currentPrice,
     currentStock,
     variantId,
+    matchedVariant,
     isAvailable,
     isActive,
     selectValue,
