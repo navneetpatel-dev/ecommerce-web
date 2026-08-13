@@ -21,6 +21,8 @@ export const UPLOAD_PURPOSE = {
   AVATAR: 'avatar',
   PHOTOS: 'photos',
   ATTACHMENTS: 'attachments',
+  VIDEO: 'video',
+  SIZE_CHART: 'size-chart',
 } as const
 
 export type UploadPurpose = (typeof UPLOAD_PURPOSE)[keyof typeof UPLOAD_PURPOSE]

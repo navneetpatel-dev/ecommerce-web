@@ -113,6 +113,7 @@ export const API = {
     apply: '/api/coupons/apply',
     remove: '/api/coupons/remove',
     eligible: '/api/coupons/eligible',
+    eligiblePublic: '/api/coupons/eligible-public',
     list: '/api/coupons',
     create: '/api/coupons',
     detail: (id: string) => `/api/coupons/${id}`,

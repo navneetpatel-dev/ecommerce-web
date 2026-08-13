@@ -10,6 +10,7 @@ import {
   getImageUploadHintKey,
   getImageUploadSpec,
   isAllowedUploadMime,
+  isVideoMimeType,
   maxBytesForUpload,
   type ImageMimeType,
 } from '@/shared/constants/imageSpecs'
@@ -61,8 +62,16 @@ function isPdfUrl(url: string): boolean {
   return /\.pdf($|\?)/i.test(url)
 }
 
+function isVideoUrl(url: string): boolean {
+  return /\.(mp4|webm)($|\?)/i.test(url)
+}
+
 function isPdfFile(file: File): boolean {
   return file.type === 'application/pdf' || /\.pdf$/i.test(file.name)
+}
+
+function isVideoFile(file: File): boolean {
+  return isVideoMimeType(file.type) || /\.(mp4|webm)$/i.test(file.name)
 }
 
 function mbLabel(bytes: number): string {
@@ -97,6 +106,9 @@ export function FileUpload(props: FileUploadProps) {
     }
     const mime = file.type.toLowerCase()
     if (!isAllowedUploadMime(props.entityType, props.purpose, mime)) {
+      if (spec?.mimeTypes.every((type) => type.startsWith('video/'))) {
+        return LABELS.imageUploadInvalidVideoType
+      }
       return spec?.mimeTypes.includes('application/pdf')
         ? LABELS.imageUploadInvalidDocumentType
         : LABELS.uploadInvalidImageType
@@ -213,7 +225,7 @@ export function FileUpload(props: FileUploadProps) {
     const cropCandidates: File[] = []
 
     for (const file of files) {
-      const needsCrop = spec?.cropRequired && !isPdfFile(file)
+      const needsCrop = spec?.cropRequired && !isPdfFile(file) && !isVideoFile(file)
       if (needsCrop) {
         cropCandidates.push(file)
       } else {
@@ -312,7 +324,20 @@ export function FileUpload(props: FileUploadProps) {
                   key={entry.storedUrl}
                   className="flex h-16 min-w-[4rem] items-center justify-center border border-line bg-paper px-2 text-[0.6875rem] text-ink-muted"
                 >
-                  PDF
+                  {LABELS.pdfPreview}
+                </li>
+              ) : isVideoUrl(entry.displayUrl) ? (
+                <li
+                  key={entry.storedUrl}
+                  className="relative h-16 w-24 overflow-hidden border border-line bg-paper"
+                >
+                  <video
+                    src={entry.displayUrl}
+                    className="h-full w-full object-cover"
+                    muted
+                    playsInline
+                    aria-label={LABELS.videoPreview}
+                  />
                 </li>
               ) : (
                 <li

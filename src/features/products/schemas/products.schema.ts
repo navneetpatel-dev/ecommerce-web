@@ -3,6 +3,9 @@ import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import type { ProductDetail } from '@/shared/api/types'
 import { PRODUCT_FIELD_LIMITS } from '../constants/productFields'
+import { WARRANTY_TYPE, WARRANTY_TYPE_VALUES } from '@/shared/constants/statuses'
+
+export type ProductCodMode = 'inherit' | 'on' | 'off'
 
 export type ProductListingFormValues = {
   name: string
@@ -16,6 +19,14 @@ export type ProductListingFormValues = {
   specs: Array<{ key: string; value: string }>
   deliveryNote: string
   returnNote: string
+  warrantyMonths: string
+  warrantyType: string
+  hsnCode: string
+  seoTitle: string
+  seoDescription: string
+  videoUrl: string
+  sizeChartUrl: string
+  codMode: ProductCodMode
 }
 
 export type ProductListingFormField = keyof ProductListingFormValues
@@ -28,6 +39,27 @@ const optionalNote = z
   .trim()
   .max(PRODUCT_FIELD_LIMITS.NOTE_MAX, tooLong(PRODUCT_FIELD_LIMITS.NOTE_MAX))
   .transform((value) => (value ? value : undefined))
+
+const optionalUrl = z
+  .string()
+  .trim()
+  .max(2048, tooLong(2048))
+  .refine((value) => !value || z.string().url().safeParse(value).success, {
+    message: LABELS.productMediaUrlInvalid,
+  })
+  .transform((value) => (value ? value : undefined))
+
+const optionalWarrantyMonths = z
+  .string()
+  .trim()
+  .refine(
+    (value) =>
+      !value ||
+      (/^\d+$/.test(value) &&
+        Number(value) >= 0 &&
+        Number(value) <= PRODUCT_FIELD_LIMITS.WARRANTY_MONTHS_MAX),
+    formatLabel(LABELS.enterWarrantyMonths, { max: PRODUCT_FIELD_LIMITS.WARRANTY_MONTHS_MAX }),
+  )
 
 export function emptySpecRow() {
   return { key: '', value: '' }
@@ -46,6 +78,14 @@ export function emptyProductListingValues(categoryId = ''): ProductListingFormVa
     specs: [emptySpecRow()],
     deliveryNote: '',
     returnNote: '',
+    warrantyMonths: '',
+    warrantyType: '',
+    hsnCode: '',
+    seoTitle: '',
+    seoDescription: '',
+    videoUrl: '',
+    sizeChartUrl: '',
+    codMode: 'inherit',
   }
 }
 
@@ -84,6 +124,15 @@ export function listingValuesFromProduct(product: ProductDetail): ProductListing
       : [emptySpecRow()],
     deliveryNote: product.deliveryNote ?? '',
     returnNote: product.returnNote ?? '',
+    warrantyMonths: product.warrantyMonths != null ? String(product.warrantyMonths) : '',
+    warrantyType: product.warrantyType ?? '',
+    hsnCode: product.hsnCode ?? '',
+    seoTitle: product.seoTitle ?? '',
+    seoDescription: product.seoDescription ?? '',
+    videoUrl: product.videoUrl ?? '',
+    sizeChartUrl: product.sizeChartUrl ?? '',
+    codMode:
+      product.codEnabled === true ? 'on' : product.codEnabled === false ? 'off' : 'inherit',
   }
 }
 
@@ -164,6 +213,29 @@ export const ProductListingFormSchema = z
       }),
     deliveryNote: optionalNote,
     returnNote: optionalNote,
+    warrantyMonths: optionalWarrantyMonths,
+    warrantyType: z.string().refine(
+      (value) => !value || (WARRANTY_TYPE_VALUES as readonly string[]).includes(value),
+      LABELS.productWarrantyType,
+    ),
+    hsnCode: z
+      .string()
+      .trim()
+      .max(PRODUCT_FIELD_LIMITS.HSN_MAX, tooLong(PRODUCT_FIELD_LIMITS.HSN_MAX)),
+    seoTitle: z
+      .string()
+      .trim()
+      .max(PRODUCT_FIELD_LIMITS.SEO_TITLE_MAX, tooLong(PRODUCT_FIELD_LIMITS.SEO_TITLE_MAX)),
+    seoDescription: z
+      .string()
+      .trim()
+      .max(
+        PRODUCT_FIELD_LIMITS.SEO_DESCRIPTION_MAX,
+        tooLong(PRODUCT_FIELD_LIMITS.SEO_DESCRIPTION_MAX),
+      ),
+    videoUrl: optionalUrl,
+    sizeChartUrl: optionalUrl,
+    codMode: z.enum(['inherit', 'on', 'off']),
   })
   .superRefine((values, ctx) => {
     const tags = splitCommaList(values.tagsInput)
@@ -217,6 +289,16 @@ export function toProductWriteBody(values: ProductListingFormInput) {
     specs,
     deliveryNote: values.deliveryNote ?? null,
     returnNote: values.returnNote ?? null,
+    warrantyMonths: values.warrantyMonths ? Number(values.warrantyMonths) : null,
+    warrantyType: values.warrantyType
+      ? (values.warrantyType as (typeof WARRANTY_TYPE)[keyof typeof WARRANTY_TYPE])
+      : null,
+    hsnCode: values.hsnCode.trim() ? values.hsnCode.trim() : null,
+    seoTitle: values.seoTitle.trim() ? values.seoTitle.trim() : null,
+    seoDescription: values.seoDescription.trim() ? values.seoDescription.trim() : null,
+    videoUrl: values.videoUrl ?? null,
+    sizeChartUrl: values.sizeChartUrl ?? null,
+    codEnabled: values.codMode === 'inherit' ? null : values.codMode === 'on',
   }
 }
 

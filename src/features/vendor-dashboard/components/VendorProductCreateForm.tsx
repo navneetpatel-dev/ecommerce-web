@@ -25,11 +25,13 @@ import {
   firstMissingRequiredHint,
 } from '@/shared/utils/firstMissingRequiredHint'
 import { PRODUCT_FIELD_LIMITS } from '@/features/products/constants/productFields'
+import { WARRANTY_TYPE } from '@/shared/constants/statuses'
 import {
   emptySpecRow,
   parseProductListingForm,
   productFormFieldErrors,
   toProductWriteBody,
+  type ProductCodMode,
   type ProductListingFormField,
   type ProductListingFormValues,
   type ProductWriteBody,
@@ -353,6 +355,118 @@ export function VendorProductCreateForm({
               error={Boolean(getError('returnNote'))}
               disabled={disabled}
               onChange={(event) => patchValues({ returnNote: event.target.value })}
+              className="min-h-[5.5rem]"
+            />
+          </FormFieldFrame>
+          <FormFieldFrame
+            label={LABELS.productWarrantyMonths}
+            hint={LABELS.productWarrantyMonthsHint}
+            error={getError('warrantyMonths')}
+          >
+            <NumberInput
+              value={values.warrantyMonths === '' ? undefined : Number(values.warrantyMonths)}
+              min={0}
+              max={PRODUCT_FIELD_LIMITS.WARRANTY_MONTHS_MAX}
+              step={1}
+              disabled={disabled}
+              onChange={(value) =>
+                patchValues({ warrantyMonths: value == null ? '' : String(value) })
+              }
+            />
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.productWarrantyType} error={getError('warrantyType')}>
+            <Select
+              value={values.warrantyType || '__inherit__'}
+              onValueChange={(value) =>
+                patchValues({ warrantyType: value === '__inherit__' ? '' : value })
+              }
+            >
+              <SelectTrigger disabled={disabled}>
+                <SelectValue placeholder={LABELS.inheritDefault} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__inherit__">{LABELS.inheritDefault}</SelectItem>
+                <SelectItem value={WARRANTY_TYPE.MANUFACTURER}>
+                  {LABELS.warrantyManufacturer}
+                </SelectItem>
+                <SelectItem value={WARRANTY_TYPE.SELLER}>{LABELS.warrantySeller}</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+          <FormFieldFrame
+            label={LABELS.productHsnCode}
+            hint={LABELS.productHsnCodeHint}
+            error={getError('hsnCode')}
+          >
+            <Input
+              value={values.hsnCode}
+              maxLength={PRODUCT_FIELD_LIMITS.HSN_MAX}
+              error={Boolean(getError('hsnCode'))}
+              disabled={disabled}
+              onChange={(event) => patchValues({ hsnCode: event.target.value })}
+            />
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.productCodEnabled} error={getError('codMode')}>
+            <Select
+              value={values.codMode}
+              onValueChange={(value) => patchValues({ codMode: value as ProductCodMode })}
+            >
+              <SelectTrigger disabled={disabled}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inherit">{LABELS.productCodInherit}</SelectItem>
+                <SelectItem value="on">{LABELS.productCodOn}</SelectItem>
+                <SelectItem value="off">{LABELS.productCodOff}</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+        </FormSection>
+
+        <FormSection
+          title={LABELS.productFormSectionMedia}
+          hint={LABELS.productFormSectionMediaHint}
+          columns={1}
+        >
+          <FormFieldFrame label={LABELS.productVideoUrl} error={getError('videoUrl')}>
+            <FileUpload
+              entityType={UPLOAD_ENTITY.PRODUCTS}
+              entityId={draftUploadId}
+              purpose={UPLOAD_PURPOSE.VIDEO}
+              valueUrl={values.videoUrl || null}
+              onUploaded={(url) => patchValues({ videoUrl: url })}
+              disabled={disabled}
+            />
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.productSizeChart} error={getError('sizeChartUrl')}>
+            <FileUpload
+              entityType={UPLOAD_ENTITY.PRODUCTS}
+              entityId={draftUploadId}
+              purpose={UPLOAD_PURPOSE.SIZE_CHART}
+              valueUrl={values.sizeChartUrl || null}
+              onUploaded={(url) => patchValues({ sizeChartUrl: url })}
+              disabled={disabled}
+            />
+          </FormFieldFrame>
+        </FormSection>
+
+        <FormSection title={LABELS.productFormSectionSeo} hint={LABELS.productFormSectionSeoHint}>
+          <FormFieldFrame label={LABELS.productSeoTitle} error={getError('seoTitle')}>
+            <Input
+              value={values.seoTitle}
+              maxLength={PRODUCT_FIELD_LIMITS.SEO_TITLE_MAX}
+              error={Boolean(getError('seoTitle'))}
+              disabled={disabled}
+              onChange={(event) => patchValues({ seoTitle: event.target.value })}
+            />
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.productSeoDescription} error={getError('seoDescription')}>
+            <Textarea
+              value={values.seoDescription}
+              maxLength={PRODUCT_FIELD_LIMITS.SEO_DESCRIPTION_MAX}
+              error={Boolean(getError('seoDescription'))}
+              disabled={disabled}
+              onChange={(event) => patchValues({ seoDescription: event.target.value })}
               className="min-h-[5.5rem]"
             />
           </FormFieldFrame>

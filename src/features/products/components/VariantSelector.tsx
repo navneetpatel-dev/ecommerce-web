@@ -5,6 +5,7 @@ import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { cn } from '@/shared/utils/cn'
 import { LABELS } from '@/shared/constants/labels'
 import { formatLabel } from '@/shared/utils/formatLabel'
+import { VARIANT_LOW_STOCK_DEFAULT } from '../constants/productFields'
 
 interface VariantSelectorProps {
   attributeGroups: Record<string, string[]>
@@ -22,6 +23,7 @@ interface VariantSelectorProps {
   onAddToCart?: () => void
   isAddingToCart?: boolean
   canAddToCart?: boolean
+  lowStockAt?: number
   freeShippingThreshold?: number
   className?: string
 }
@@ -40,6 +42,7 @@ export function VariantSelector({
   onAddToCart,
   isAddingToCart,
   canAddToCart = true,
+  lowStockAt = VARIANT_LOW_STOCK_DEFAULT,
   freeShippingThreshold,
   className,
 }: VariantSelectorProps) {
@@ -122,7 +125,7 @@ export function VariantSelector({
             <div className="flex flex-wrap items-center gap-2">
               {currentStock === 0 ? (
                 <Badge variant="destructive">{LABELS.outOfStock}</Badge>
-              ) : currentStock <= 5 ? (
+              ) : currentStock <= lowStockAt ? (
                 <Badge variant="destructive">
                   {formatLabel(LABELS.onlyLeft, { count: currentStock })}
                 </Badge>

@@ -10,6 +10,7 @@ import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 export function useVendorShopSettingsForm() {
   const [vendorId, setVendorId] = useState('')
   const [returnShippingFee, setReturnShippingFee] = useState<number | null>(null)
+  const [codEnabled, setCodEnabled] = useState(true)
   const [logoUrl, setLogoUrl] = useState<string | null>(null)
   const [bannerUrl, setBannerUrl] = useState<string | null>(null)
   const [businessName, setBusinessName] = useState('')
@@ -42,6 +43,7 @@ export function useVendorShopSettingsForm() {
         setReturnShippingFee(
           shop.returnShippingFee == null ? null : Number(shop.returnShippingFee),
         )
+        setCodEnabled(shop.codEnabled !== false)
       })
       .catch(() => setLoadError(LABELS.couldNotLoadVendorShopSettings))
       .finally(() => setLoading(false))
@@ -53,6 +55,7 @@ export function useVendorShopSettingsForm() {
     bannerUrl?: string | null
     entityType?: VendorEntityType | null
     categoryIds?: string[]
+    codEnabled?: boolean
   }) => {
     setSaving(true)
     setMessage(null)
@@ -67,6 +70,7 @@ export function useVendorShopSettingsForm() {
           override && 'returnShippingFee' in override
             ? override.returnShippingFee
             : returnShippingFee,
+        codEnabled: override && 'codEnabled' in override ? override.codEnabled : codEnabled,
         logoUrl: override && 'logoUrl' in override ? override.logoUrl : logoUrl,
         bannerUrl: override && 'bannerUrl' in override ? override.bannerUrl : bannerUrl,
         ...(nextEntityType ? { entityType: nextEntityType } : {}),
@@ -78,6 +82,7 @@ export function useVendorShopSettingsForm() {
         setReturnShippingFee(
           shop.returnShippingFee == null ? null : Number(shop.returnShippingFee),
         )
+        setCodEnabled(shop.codEnabled !== false)
         setLogoUrl(shop.logoUrl ?? null)
         setBannerUrl(shop.bannerUrl ?? null)
         setEntityType((shop.entityType as VendorEntityType | null) ?? null)
@@ -112,6 +117,7 @@ export function useVendorShopSettingsForm() {
     vendorId,
     businessName,
     returnShippingFee,
+    codEnabled,
     logoUrl,
     bannerUrl,
     entityType,
@@ -126,6 +132,10 @@ export function useVendorShopSettingsForm() {
     setReturnShippingFee: (value: number | null) => {
       setMessage(null)
       setReturnShippingFee(value)
+    },
+    setCodEnabled: (value: boolean) => {
+      setMessage(null)
+      setCodEnabled(value)
     },
     setLogoUrl: (url: string) => {
       setMessage(null)

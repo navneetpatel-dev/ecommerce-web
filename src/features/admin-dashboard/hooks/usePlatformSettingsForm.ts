@@ -15,7 +15,15 @@ export function usePlatformSettingsForm() {
   useEffect(() => {
     settingsApi
       .get()
-      .then((settings) => setForm(settings))
+      .then((settings) =>
+        setForm({
+          ...settings,
+          returnShippingFee: settings.returnShippingFee ?? 0,
+          codEnabled: settings.codEnabled !== false,
+          codMinOrderValue: settings.codMinOrderValue ?? 0,
+          codMaxOrderValue: settings.codMaxOrderValue ?? null,
+        }),
+      )
       .catch(() => setLoadError(LABELS.couldNotLoadSettings))
       .finally(() => setLoading(false))
   }, [])
@@ -90,6 +98,18 @@ export function usePlatformSettingsForm() {
     setBugCloseWindowDays: (value: number) => {
       setMessage(null)
       setForm((current) => (current ? { ...current, bugCloseWindowDays: value } : current))
+    },
+    setCodEnabled: (value: boolean) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, codEnabled: value } : current))
+    },
+    setCodMinOrderValue: (value: number) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, codMinOrderValue: value } : current))
+    },
+    setCodMaxOrderValue: (value: number | null) => {
+      setMessage(null)
+      setForm((current) => (current ? { ...current, codMaxOrderValue: value } : current))
     },
   }
 }

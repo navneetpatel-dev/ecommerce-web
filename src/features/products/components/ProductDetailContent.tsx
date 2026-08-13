@@ -16,7 +16,7 @@ import { Badge } from '@/shared/components/ui/badge'
 import { Breadcrumbs } from '@/shared/components/Breadcrumbs'
 import { QuantitySelector } from '@/shared/components/QuantitySelector'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/components/ui/tabs'
-import { Heart, RotateCcw, Truck } from 'lucide-react'
+import { Heart, RotateCcw, Shield, Truck } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { LABELS } from '@/shared/constants/labels'
@@ -24,6 +24,11 @@ import { PATHS } from '@/shared/constants/paths'
 import { cartLineQuantityMax } from '@/shared/constants/cart'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import { ProductEligibleOffers } from './ProductEligibleOffers'
+import { ProductDeliveryCheck } from './ProductDeliveryCheck'
+import { ProductSizeChartButton } from './ProductSizeChartButton'
+import { ProductRelatedRails } from './ProductRelatedRails'
+import { WARRANTY_TYPE } from '@/shared/constants/statuses'
+import { VARIANT_LOW_STOCK_DEFAULT } from '../constants/productFields'
 import type { ProductDetail, ProductVariant } from '@/shared/api/types'
 import type { RefObject } from 'react'
 
@@ -62,7 +67,8 @@ interface ProductDetailContentProps {
   breadcrumbItems: BreadcrumbItem[]
   variantSelection: VariantSelectionProps
   freeShippingThreshold?: number
-  returnWindowDays?: number
+  returnWindowDays?: number | null
+  returnsAllowed?: boolean
 }
 
 export function ProductDetailContent({
@@ -84,6 +90,7 @@ export function ProductDetailContent({
   variantSelection,
   freeShippingThreshold,
   returnWindowDays,
+  returnsAllowed,
 }: ProductDetailContentProps) {
   const displayPrice = Number(variantSelection.currentPrice || product.basePrice || 0)
   const displayStock = Number(variantSelection.currentStock || product.stock || 0)
@@ -102,6 +109,21 @@ export function ProductDetailContent({
   const resolvedVariant =
     variantSelection.matchedVariant ??
     (product.variants?.length === 1 ? product.variants[0] : null)
+
+  const galleryImages = (product.images ?? []).filter(
+    (image) => !image.variantId || image.variantId === resolvedVariant?.id,
+  )
+  const selectedGalleryIndex =
+    galleryImages.length === 0 ? 0 : Math.min(selectedImage, galleryImages.length - 1)
+  const lowStockAt = Number(resolvedVariant?.lowStockAt ?? VARIANT_LOW_STOCK_DEFAULT)
+  const gstPercentage = Number(product.gstPercentage ?? 0)
+  const taxInclusiveEstimate =
+    gstPercentage > 0 ? Math.round(displayPrice * (1 + gstPercentage / 100)) : null
+  const warrantyTypeLabel =
+    product.displayWarrantyType === WARRANTY_TYPE.SELLER
+      ? LABELS.warrantySeller
+      : LABELS.warrantyManufacturer
+  const sellerScore = product.vendorPerformanceScore ?? product.vendor?.performanceScore ?? null
 
   const categoryName = product.category?.name ?? product.categoryName ?? null
 
@@ -129,9 +151,9 @@ export function ProductDetailContent({
 
       <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-12 lg:gap-12 xl:gap-14">
         <ImageGalleryContainer
-          mainImageUrl={product.imageUrl}
-          images={product.images}
-          selectedIndex={selectedImage}
+          mainImageUrl={galleryImages[0]?.url || product.imageUrl}
+          images={galleryImages}
+          selectedIndex={selectedGalleryIndex}
           onSelect={onSelectImage}
           productName={product.name}
         />
@@ -139,7 +161,11 @@ export function ProductDetailContent({
         <div className="md:col-span-5" ref={addSectionRef}>
           <div className="space-y-5 lg:sticky lg:top-[88px] lg:space-y-6">
             {product.vendor ? (
-              <VendorStrip vendor={product.vendor} size="md" rating={avgRating} />
+              <VendorStrip
+                vendor={product.vendor}
+                size="md"
+                rating={sellerScore == null ? undefined : sellerScore}
+              />
             ) : null}
 
             <div className="space-y-3">
@@ -206,6 +232,23 @@ export function ProductDetailContent({
                     ₹{variantSelection.basePrice.toLocaleString('en-IN')}
                   </p>
                 ) : null}
+                {gstPercentage > 0 ? (
+                  <p className="text-[0.8125rem] text-ink-muted">
+                    {formatLabel(LABELS.taxExclusiveGst, { percent: gstPercentage })}
+                  </p>
+                ) : null}
+                {product.displayHsnCode ? (
+                  <p className="text-[0.8125rem] text-ink-muted">
+                    {formatLabel(LABELS.hsnCodeLabel, { code: product.displayHsnCode })}
+                  </p>
+                ) : null}
+                {taxInclusiveEstimate != null ? (
+                  <p className="text-[0.8125rem] text-ink-faint">
+                    {formatLabel(LABELS.taxInclusiveEstimate, {
+                      amount: taxInclusiveEstimate.toLocaleString('en-IN'),
+                    })}
+                  </p>
+                ) : null}
                 {resolvedVariant?.sku ? (
                   <p className="text-[0.8125rem] text-ink-muted">
                     {LABELS.sku}: {resolvedVariant.sku}
@@ -214,7 +257,7 @@ export function ProductDetailContent({
               </div>
               {displayStock === 0 ? (
                 <Badge variant="destructive">{LABELS.outOfStock}</Badge>
-              ) : displayStock <= 5 ? (
+              ) : displayStock <= lowStockAt ? (
                 <Badge variant="destructive">
                   {formatLabel(LABELS.onlyLeft, { count: displayStock })}
                 </Badge>
@@ -225,6 +268,10 @@ export function ProductDetailContent({
 
             {product.highlights?.length ? (
               <ProductHighlights highlights={product.highlights.slice(0, 4)} />
+            ) : null}
+
+            {product.sizeChartUrl ? (
+              <ProductSizeChartButton url={product.sizeChartUrl} productName={product.name} />
             ) : null}
 
             <ProductEligibleOffers productId={product.id} />
@@ -241,6 +288,7 @@ export function ProductDetailContent({
                 onSelectValue={variantSelection.onSelectValue}
                 showAddToCart={false}
                 optionsOnly
+                lowStockAt={lowStockAt}
               />
             ) : null}
 
@@ -334,10 +382,21 @@ export function ProductDetailContent({
                 <RotateCcw className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={1.75} />
                 <div className="space-y-1">
                   <p className="text-[0.8125rem] leading-snug text-ink-muted">
-                    {typeof returnWindowDays === 'number'
-                      ? formatLabel(LABELS.easyReturnsDays, { days: returnWindowDays })
-                      : LABELS.returnsEligible}
+                    {returnsAllowed === false
+                      ? LABELS.notReturnable
+                      : typeof returnWindowDays === 'number'
+                        ? formatLabel(LABELS.easyReturnsDays, { days: returnWindowDays })
+                        : LABELS.returnsEligible}
                   </p>
+                  {typeof product.returnShippingFee === 'number' && returnsAllowed !== false ? (
+                    <p className="text-[0.8125rem] leading-snug text-ink-muted">
+                      {product.returnShippingFee > 0
+                        ? formatLabel(LABELS.returnShippingFeeAmount, {
+                            amount: product.returnShippingFee.toLocaleString('en-IN'),
+                          })
+                        : LABELS.returnShippingFree}
+                    </p>
+                  ) : null}
                   {product.returnNote ? (
                     <p className="text-[0.8125rem] leading-snug text-ink-muted">
                       {product.returnNote}
@@ -346,6 +405,28 @@ export function ProductDetailContent({
                 </div>
               </div>
             </div>
+
+            {product.displayWarrantyMonths ? (
+              <div className="flex items-start gap-2.5 rounded-lg border border-line bg-surface px-3 py-3">
+                <Shield className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={1.75} />
+                <p className="text-[0.8125rem] leading-snug text-ink-muted">
+                  {formatLabel(LABELS.warrantyMonthsLabel, {
+                    months: product.displayWarrantyMonths,
+                    type: warrantyTypeLabel,
+                  })}
+                </p>
+              </div>
+            ) : null}
+
+            <ProductDeliveryCheck
+              productId={product.id}
+              variantId={resolvedVariant?.id}
+              vendorId={product.vendor?.id}
+              price={displayPrice}
+              codAvailable={product.codAvailable}
+              codMinOrderValue={product.codMinOrderValue}
+              codMaxOrderValue={product.codMaxOrderValue}
+            />
           </div>
         </div>
       </div>
@@ -375,6 +456,19 @@ export function ProductDetailContent({
           <TabsContent value="description" className="py-6 md:py-8">
             <div className="max-w-3xl space-y-8">
               <ProductInfo product={product} />
+              {product.videoUrl ? (
+                <div className="space-y-2">
+                  <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-ink-muted">
+                    {LABELS.productVideo}
+                  </p>
+                  <video
+                    src={product.videoUrl}
+                    controls
+                    className="w-full rounded-xl border border-line bg-paper"
+                    aria-label={LABELS.productVideo}
+                  />
+                </div>
+              ) : null}
               {product.highlights?.length ? (
                 <ProductHighlights highlights={product.highlights} />
               ) : null}
@@ -394,6 +488,12 @@ export function ProductDetailContent({
           </TabsContent>
         </Tabs>
       </div>
+
+      <ProductRelatedRails
+        productId={product.id}
+        categoryId={product.categoryId}
+        vendorId={product.vendor?.id}
+      />
 
       {showStickyBar && (displayStock > 0 || needsOptionSelection) ? (
         <div className="fixed bottom-14 left-0 right-0 z-30 border-t border-line bg-surface/95 p-3 shadow-elevation-3 backdrop-blur-sm md:hidden">

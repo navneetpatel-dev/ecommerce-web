@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 import { LABELS } from '@/shared/constants/labels'
+import { PINCODE_LENGTH, PINCODE_PATTERN } from '@/shared/constants/pincode'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import {
   allRequiredFieldsMet,
@@ -93,7 +94,7 @@ export function AddressFormDialog({
     { ok: Boolean(form.line1.trim()), message: LABELS.enterAddressLine1 },
     { ok: Boolean(form.city.trim()), message: LABELS.enterAddressCity },
     { ok: Boolean(form.state.trim()), message: LABELS.enterAddressState },
-    { ok: Boolean(form.pincode.trim()), message: LABELS.enterAddressPincode },
+    { ok: PINCODE_PATTERN.test(form.pincode.trim()), message: LABELS.invalidPincode },
   ]
   const canSubmit = allRequiredFieldsMet(requiredChecks)
   const disableHint = firstMissingRequiredHint(requiredChecks) ?? ''
@@ -111,7 +112,12 @@ export function AddressFormDialog({
         <form
           onSubmit={async (event) => {
             event.preventDefault()
-            if (!form.line1.trim() || !form.city.trim() || !form.state.trim() || !form.pincode.trim()) {
+            if (
+              !form.line1.trim() ||
+              !form.city.trim() ||
+              !form.state.trim() ||
+              !PINCODE_PATTERN.test(form.pincode.trim())
+            ) {
               setFormError(LABELS.addressRequiredFields)
               return
             }
@@ -177,8 +183,15 @@ export function AddressFormDialog({
               <FormFieldFrame label={LABELS.addressPincode} htmlFor="shared-addr-pincode" required>
                 <Input
                   id="shared-addr-pincode"
+                  inputMode="numeric"
+                  maxLength={PINCODE_LENGTH}
                   value={form.pincode}
-                  onChange={(e) => setForm((prev) => ({ ...prev, pincode: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      pincode: e.target.value.replace(/\D/g, '').slice(0, PINCODE_LENGTH),
+                    }))
+                  }
                   required
                 />
               </FormFieldFrame>

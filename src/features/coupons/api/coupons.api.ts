@@ -31,6 +31,12 @@ export const couponsApi = {
       qs ? `${API.coupons.eligible}?${qs}` : API.coupons.eligible,
     )
   },
+  eligiblePublic: (params: { productId: string; limit?: number }) => {
+    const q = new URLSearchParams()
+    q.set('productId', params.productId)
+    if (params.limit) q.set('limit', String(params.limit))
+    return apiClient.get<EligibleCoupon[]>(`${API.coupons.eligiblePublic}?${q.toString()}`)
+  },
 
   vendorList: async (params: PaginationQuery = {}): Promise<PaginatedList<Coupon>> => {
     const res = await apiClient.getWithResponse<Coupon[]>(

@@ -30,6 +30,7 @@ export function VendorShopSettingsPage() {
         vendorId={settings.vendorId}
         businessName={settings.businessName}
         returnShippingFee={settings.returnShippingFee}
+        codEnabled={settings.codEnabled}
         logoUrl={settings.logoUrl}
         bannerUrl={settings.bannerUrl}
         entityType={settings.entityType}
@@ -38,6 +39,7 @@ export function VendorShopSettingsPage() {
         message={settings.message}
         saving={settings.saving}
         onReturnShippingFeeChange={settings.setReturnShippingFee}
+        onCodEnabledChange={settings.setCodEnabled}
         onLogoUploaded={settings.setLogoUrl}
         onBannerUploaded={settings.setBannerUrl}
         onEntityTypeChange={settings.setEntityType}

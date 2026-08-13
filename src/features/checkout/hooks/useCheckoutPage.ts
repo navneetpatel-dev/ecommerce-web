@@ -59,6 +59,12 @@ export function useCheckoutPage() {
     ensureDefaultShippingMethods(vendorIds)
   }, [groupedByVendor, ensureDefaultShippingMethods])
 
+  useEffect(() => {
+    if (paymentMethod === 'cod' && quote && quote.codAvailable === false) {
+      setPaymentMethod(null)
+    }
+  }, [paymentMethod, quote, setPaymentMethod])
+
   const total = useMemo(() => {
     if (!cart?.items) return 0
     return calcCartTotal(cart.items)
@@ -100,10 +106,12 @@ export function useCheckoutPage() {
     onWalletAmountChange: setWalletAmountToUse,
     onContinueToReview: () => {
       if (!paymentMethod) return
+      if (paymentMethod === 'cod' && quote?.codAvailable !== true) return
       setStep(4)
     },
     onPlaceOrder: () => {
       if (!paymentMethod) return
+      if (paymentMethod === 'cod' && quote?.codAvailable !== true) return
       if (
         !requireAuth({
           title: 'Complete your order',

@@ -6,6 +6,8 @@ export interface BreadcrumbItem {
 export interface ProductSeoData {
   name: string
   description: string
+  seoTitle?: string | null
+  seoDescription?: string | null
   slug: string
   imageUrl: string
   basePrice: number

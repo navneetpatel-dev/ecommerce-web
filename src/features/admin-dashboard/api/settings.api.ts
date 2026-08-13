@@ -9,6 +9,10 @@ export type PublicPlatformSettings = {
   ticketReopenWindowDays: number
   bugVerifyWindowDays: number
   bugCloseWindowDays: number
+  returnShippingFee: number
+  codEnabled: boolean
+  codMinOrderValue: number
+  codMaxOrderValue: number | null
 }
 
 export type AdminPlatformSettings = PublicPlatformSettings & {

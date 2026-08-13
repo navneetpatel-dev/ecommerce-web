@@ -51,6 +51,23 @@ export const IMAGE_UPLOAD_SPECS: Record<string, ImageUploadSpec> = {
     mimeTypes: IMAGE_MIME_TYPES,
     cropRequired: true,
   },
+  'products:video': {
+    outputWidth: 0,
+    outputHeight: 0,
+    aspectRatio: 0,
+    maxBytes: MAX_VIDEO_UPLOAD_BYTES,
+    videoMaxBytes: MAX_VIDEO_UPLOAD_BYTES,
+    mimeTypes: VIDEO_MIME_TYPES,
+    cropRequired: false,
+  },
+  'products:size-chart': {
+    outputWidth: 1200,
+    outputHeight: 900,
+    aspectRatio: 4 / 3,
+    maxBytes: MAX_UPLOAD_BYTES,
+    mimeTypes: IMAGE_MIME_TYPES,
+    cropRequired: true,
+  },
   'vendors:logo': {
     outputWidth: 512,
     outputHeight: 512,
@@ -115,6 +132,8 @@ export type ImageUploadHintKey =
   | 'imageUploadHintPromoBanner'
   | 'imageUploadHintCategory'
   | 'imageUploadHintProduct'
+  | 'imageUploadHintProductVideo'
+  | 'imageUploadHintSizeChart'
   | 'imageUploadHintVendorLogo'
   | 'imageUploadHintVendorBanner'
   | 'imageUploadHintAvatar'
@@ -127,6 +146,8 @@ const IMAGE_UPLOAD_HINT_KEYS: Record<string, ImageUploadHintKey> = {
   'banners:image': 'imageUploadHintPromoBanner',
   'categories:image': 'imageUploadHintCategory',
   'products:images': 'imageUploadHintProduct',
+  'products:video': 'imageUploadHintProductVideo',
+  'products:size-chart': 'imageUploadHintSizeChart',
   'vendors:logo': 'imageUploadHintVendorLogo',
   'vendors:banner': 'imageUploadHintVendorBanner',
   'users:avatar': 'imageUploadHintAvatar',

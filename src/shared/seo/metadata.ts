@@ -26,10 +26,12 @@ export function generateHomeMetadata(): Metadata {
 }
 
 export function generateProductMetadata(product: ProductSeoData): Metadata {
-  const title = `${product.name}`
-  const description = product.description
-    ? product.description.slice(0, 160).replace(/\s+/g, ' ').trim()
-    : `Buy ${product.name} online at the best price. Fast delivery, easy returns.`
+  const title = product.seoTitle?.trim() || product.name
+  const description = product.seoDescription?.trim()
+    ? product.seoDescription.trim()
+    : product.description
+      ? product.description.slice(0, 160).replace(/\s+/g, ' ').trim()
+      : `Buy ${product.name} online at the best price. Fast delivery, easy returns.`
 
   return {
     title,

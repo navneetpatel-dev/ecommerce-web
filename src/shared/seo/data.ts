@@ -25,6 +25,8 @@ interface BackendProduct {
   name: string
   slug: string
   description: string
+  seoTitle?: string | null
+  seoDescription?: string | null
   basePrice: number
   avgRating: number
   reviewCount: number
@@ -77,6 +79,8 @@ export async function getProductBySlug(slug: string): Promise<ProductSeoData | n
   return {
     name: product.name,
     description: product.description || '',
+    seoTitle: product.seoTitle ?? null,
+    seoDescription: product.seoDescription ?? null,
     slug: product.slug,
     imageUrl: product.imageUrl || '',
     basePrice: product.basePrice,

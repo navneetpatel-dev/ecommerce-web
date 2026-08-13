@@ -2,6 +2,7 @@
 
 import { useVariantSelector } from '../hooks/useVariantSelector'
 import { VariantSelector } from '../components/VariantSelector'
+import { VARIANT_LOW_STOCK_DEFAULT } from '../constants/productFields'
 import type { ProductVariant } from '@/shared/api/types'
 
 interface VariantSelectorContainerProps {
@@ -36,6 +37,11 @@ export function VariantSelectorContainer({
       onAddToCart={selector.addSelectedToCart}
       isAddingToCart={selector.isAddingToCart}
       canAddToCart={selector.canAddToCart}
+      lowStockAt={
+        selector.matchedVariant?.lowStockAt ??
+        variants[0]?.lowStockAt ??
+        VARIANT_LOW_STOCK_DEFAULT
+      }
       className={className}
     />
   )

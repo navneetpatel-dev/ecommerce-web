@@ -16,6 +16,7 @@ export interface ProductFilters {
   limit?: number
   status?: string
   includeDescendants?: boolean
+  excludeProductId?: string
   /** Attribute facet selections: filterKey → values (OR within key). */
   attrs?: Record<string, string[]>
 }
@@ -42,6 +43,7 @@ export const productsApi = {
     if (filters.limit) params.set('limit', String(filters.limit))
     if (filters.status) params.set('status', filters.status)
     if (filters.includeDescendants) params.set('includeDescendants', 'true')
+    if (filters.excludeProductId) params.set('excludeProductId', filters.excludeProductId)
     if (filters.attrs) {
       for (const [key, values] of Object.entries(filters.attrs)) {
         if (values.length) params.set(key, values.join(','))
@@ -64,7 +66,7 @@ export const productsApi = {
   updateVariant: (variantId: string, body: Partial<{ attributes: Record<string, string>; price: number; stock: number }>) =>
     apiClient.patch<ProductVariant>(API.products.variant(variantId), body),
   deleteVariant: (variantId: string) => apiClient.delete(API.products.variant(variantId)),
-  addImage: (productId: string, body: { url: string; isPrimary?: boolean }) =>
+  addImage: (productId: string, body: { url: string; isPrimary?: boolean; variantId?: string | null }) =>
     apiClient.post<ProductImage>(API.products.images(productId), body),
   replaceImage: (imageId: string, body: { url: string; isPrimary?: boolean }) =>
     apiClient.patch<ProductImage>(API.products.image(imageId), body),

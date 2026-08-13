@@ -24,9 +24,17 @@ export type VerifyPaymentPayload = {
 export const checkoutApi = {
   getAddresses: () => usersApi.getAddresses(),
   createAddress: (body: Omit<Address, 'id' | 'userId'>) => usersApi.createAddress(body),
-  getShippingRates: (pincode: string, weight: number, method?: string) => {
-    const params = new URLSearchParams({ pincode, weight: String(weight) })
-    if (method) params.set('method', method)
+  getShippingRates: (
+    pincode: string,
+    weight?: number,
+    options?: { method?: string; productId?: string; variantId?: string; vendorId?: string },
+  ) => {
+    const params = new URLSearchParams({ pincode })
+    if (weight != null) params.set('weight', String(weight))
+    if (options?.method) params.set('method', options.method)
+    if (options?.productId) params.set('productId', options.productId)
+    if (options?.variantId) params.set('variantId', options.variantId)
+    if (options?.vendorId) params.set('vendorId', options.vendorId)
     return apiClient.get<ShippingRate[]>(`${API.shipping.rates}?${params.toString()}`)
   },
   getCheckoutQuote: (body: {

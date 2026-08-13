@@ -34,6 +34,9 @@ export function PlatformSettingsPage() {
       onTicketReopenWindowDaysChange={settings.setTicketReopenWindowDays}
       onBugVerifyWindowDaysChange={settings.setBugVerifyWindowDays}
       onBugCloseWindowDaysChange={settings.setBugCloseWindowDays}
+      onCodEnabledChange={settings.setCodEnabled}
+      onCodMinOrderValueChange={settings.setCodMinOrderValue}
+      onCodMaxOrderValueChange={settings.setCodMaxOrderValue}
       onSave={settings.save}
     />
   )

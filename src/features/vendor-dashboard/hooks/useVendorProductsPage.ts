@@ -147,7 +147,7 @@ export function useVendorProductsPage() {
     values,
     categories,
     imageUrls,
-    draftUploadId,
+    draftUploadId: editingId ?? draftUploadId,
     submitError,
     submitting,
     loading,

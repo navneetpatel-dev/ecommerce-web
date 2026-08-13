@@ -31,6 +31,7 @@ export function ProductDetailPage() {
       variantSelection={detail.variantSelection}
       freeShippingThreshold={detail.freeShippingThreshold}
       returnWindowDays={detail.returnWindowDays}
+      returnsAllowed={detail.returnsAllowed}
     />
   )
 }

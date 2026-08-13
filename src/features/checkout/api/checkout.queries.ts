@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { checkoutApi } from './checkout.api'
 import { useAuthStore } from '@/features/auth/store/auth.store'
+import { PINCODE_PATTERN } from '@/shared/constants/pincode'
 import type { Address } from '@/shared/api/types'
 
 function sortAddresses(list: Address[]) {
@@ -43,7 +44,7 @@ export function useShippingRates(pincode: string, weightGrams: number) {
   return useQuery({
     queryKey: ['shipping', 'rates', pincode, weightGrams],
     queryFn: () => checkoutApi.getShippingRates(pincode, weightGrams),
-    enabled: !!pincode && weightGrams > 0,
+    enabled: PINCODE_PATTERN.test(pincode) && weightGrams > 0,
   })
 }
 

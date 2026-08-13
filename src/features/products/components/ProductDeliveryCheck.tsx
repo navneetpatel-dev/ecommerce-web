@@ -1,0 +1,152 @@
+'use client'
+
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
+import { LABELS } from '@/shared/constants/labels'
+import { PINCODE_LENGTH, PINCODE_PATTERN } from '@/shared/constants/pincode'
+import { checkoutApi } from '@/features/checkout/api/checkout.api'
+import { formatLabel } from '@/shared/utils/formatLabel'
+import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
+
+interface ProductDeliveryCheckProps {
+  productId: string
+  variantId?: string | null
+  vendorId?: string | null
+  price: number
+  codAvailable?: boolean
+  codMinOrderValue?: number
+  codMaxOrderValue?: number | null
+}
+
+export function ProductDeliveryCheck({
+  productId,
+  variantId,
+  vendorId,
+  price,
+  codAvailable = false,
+  codMinOrderValue = 0,
+  codMaxOrderValue = null,
+}: ProductDeliveryCheckProps) {
+  const [pincode, setPincode] = useState('')
+  const [submitted, setSubmitted] = useState('')
+
+  const quoteQuery = useQuery({
+    queryKey: ['shipping', 'pdp', submitted, productId, variantId],
+    queryFn: () =>
+      checkoutApi.getShippingRates(submitted, undefined, {
+        productId,
+        variantId: variantId ?? undefined,
+        vendorId: vendorId ?? undefined,
+      }),
+    enabled: PINCODE_PATTERN.test(submitted),
+  })
+
+  const handleCheck = () => {
+    const next = pincode.trim()
+    if (!PINCODE_PATTERN.test(next)) return
+    setSubmitted(next)
+  }
+
+  const pincodeError =
+    pincode.length > 0 && !PINCODE_PATTERN.test(pincode.trim()) ? LABELS.invalidPincode : null
+  const rates = quoteQuery.data ?? []
+  const fastest = rates.reduce<(typeof rates)[number] | null>((best, rate) => {
+    if (!best || rate.estimatedDays < best.estimatedDays) return rate
+    return best
+  }, null)
+  const serviceable = Boolean(submitted) && !quoteQuery.isFetching && rates.length > 0
+  const notServiceable = Boolean(submitted) && !quoteQuery.isFetching && rates.length === 0
+  const inCodRange =
+    price >= Number(codMinOrderValue ?? 0) &&
+    (codMaxOrderValue == null || price <= Number(codMaxOrderValue))
+  const showCod = Boolean(codAvailable && inCodRange)
+  const codConfirmed = showCod && serviceable
+  const codBlockedByPincode = showCod && notServiceable
+  const belowCodMin = price < Number(codMinOrderValue ?? 0)
+
+  return (
+    <div className="space-y-2">
+      <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-muted">
+        {LABELS.enterDeliveryPincode}
+      </p>
+      <p className="text-[0.8125rem] leading-snug text-ink-muted">{LABELS.deliveryPincodeHint}</p>
+      <div className="flex flex-wrap gap-2">
+        <Input
+          inputMode="numeric"
+          maxLength={PINCODE_LENGTH}
+          value={pincode}
+          error={Boolean(pincodeError)}
+          onChange={(event) => setPincode(event.target.value.replace(/\D/g, '').slice(0, PINCODE_LENGTH))}
+          aria-label={LABELS.enterDeliveryPincode}
+          className="w-[8.5rem]"
+        />
+        <Button
+          type="button"
+          variant="outline"
+          disabled={!PINCODE_PATTERN.test(pincode.trim()) || quoteQuery.isFetching}
+          onClick={handleCheck}
+        >
+          {LABELS.checkPincode}
+        </Button>
+      </div>
+      {pincodeError ? <p className="text-[0.8125rem] text-danger">{pincodeError}</p> : null}
+      {quoteQuery.isError ? (
+        <p className="text-[0.8125rem] text-danger">
+          {getApiErrorMessage(quoteQuery.error, LABELS.deliveryCheckFailed)}
+        </p>
+      ) : null}
+      {fastest ? (
+        <p className="text-[0.8125rem] leading-snug text-ink-muted">
+          {fastest.cost === 0
+            ? formatLabel(LABELS.deliveryEtaFree, { days: fastest.estimatedDays })
+            : formatLabel(LABELS.deliveryEtaWithCost, {
+                days: fastest.estimatedDays,
+                amount: fastest.cost.toLocaleString('en-IN'),
+              })}
+        </p>
+      ) : null}
+      {notServiceable ? (
+        <p className="text-[0.8125rem] leading-snug text-ink-muted">{LABELS.deliveryNotServiceable}</p>
+      ) : null}
+      {!codAvailable ? (
+        <p className="text-[0.8125rem] leading-snug text-ink-muted">{LABELS.codUnavailable}</p>
+      ) : !inCodRange ? (
+        <p className="text-[0.8125rem] leading-snug text-ink-muted">
+          {belowCodMin
+            ? formatLabel(LABELS.codMinOrder, {
+                amount: Number(codMinOrderValue ?? 0).toLocaleString('en-IN'),
+              })
+            : formatLabel(LABELS.codMaxOrder, {
+                amount: Number(codMaxOrderValue ?? 0).toLocaleString('en-IN'),
+              })}
+        </p>
+      ) : (
+        <>
+          <p className="text-[0.8125rem] leading-snug text-ink-muted">
+            {codConfirmed
+              ? LABELS.codAvailable
+              : codBlockedByPincode
+                ? LABELS.codUnavailable
+                : LABELS.codConfirmPincode}
+          </p>
+          {Number(codMinOrderValue ?? 0) > 0 ? (
+            <p className="text-[0.8125rem] leading-snug text-ink-muted">
+              {formatLabel(LABELS.codMinOrder, {
+                amount: Number(codMinOrderValue).toLocaleString('en-IN'),
+              })}
+            </p>
+          ) : null}
+          {codMaxOrderValue != null ? (
+            <p className="text-[0.8125rem] leading-snug text-ink-muted">
+              {formatLabel(LABELS.codMaxOrder, {
+                amount: Number(codMaxOrderValue).toLocaleString('en-IN'),
+              })}
+            </p>
+          ) : null}
+        </>
+      )}
+    </div>
+  )
+}

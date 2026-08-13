@@ -16,9 +16,10 @@ import {
   SelectValue,
 } from '@/shared/components/ui/select'
 import { LABELS } from '@/shared/constants/labels'
-import { CATEGORY_STATUS } from '@/shared/constants/statuses'
+import { CATEGORY_STATUS, WARRANTY_TYPE } from '@/shared/constants/statuses'
 import { MAX_PAGE_LIMIT } from '@/shared/constants/pagination'
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
+import { CheckboxField } from '@/shared/components/CheckboxField'
 import type { Category } from '@/shared/api/types'
 
 const NONE_PARENT = '__none__'
@@ -196,6 +197,77 @@ export function AdminCategoryFormFields({
             placeholder={LABELS.categoryCommissionPlaceholder}
             error={Boolean(showFieldError('commissionRate'))}
             {...register('commissionRate')}
+          />
+        </FormFieldFrame>
+      </FormSection>
+
+      <FormSection
+        title={LABELS.categoryFormSectionPolicies}
+        hint={LABELS.categoryFormSectionPoliciesHint}
+      >
+        <FormFieldFrame
+          label={LABELS.categoryReturnWindowDays}
+          htmlFor={`${idPrefix}-return-window`}
+          hint={LABELS.categoryReturnWindowHint}
+          error={showFieldError('returnWindowDays')}
+        >
+          <Input
+            id={`${idPrefix}-return-window`}
+            inputMode="numeric"
+            error={Boolean(showFieldError('returnWindowDays'))}
+            {...register('returnWindowDays')}
+          />
+        </FormFieldFrame>
+
+        <FormFieldFrame label={LABELS.categoryCodEnabled}>
+          <Controller
+            name="codEnabled"
+            control={control}
+            render={({ field }) => (
+              <CheckboxField
+                id={`${idPrefix}-cod`}
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                label={LABELS.categoryCodEnabled}
+              />
+            )}
+          />
+        </FormFieldFrame>
+
+        <FormFieldFrame
+          label={LABELS.categoryDefaultWarrantyMonths}
+          htmlFor={`${idPrefix}-warranty-months`}
+          error={showFieldError('defaultWarrantyMonths')}
+        >
+          <Input
+            id={`${idPrefix}-warranty-months`}
+            inputMode="numeric"
+            error={Boolean(showFieldError('defaultWarrantyMonths'))}
+            {...register('defaultWarrantyMonths')}
+          />
+        </FormFieldFrame>
+
+        <FormFieldFrame label={LABELS.categoryDefaultWarrantyType}>
+          <Controller
+            name="defaultWarrantyType"
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value ? field.value : '__inherit__'}
+                onValueChange={(value) => field.onChange(value === '__inherit__' ? '' : value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={LABELS.inheritDefault} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__inherit__">{LABELS.inheritDefault}</SelectItem>
+                  <SelectItem value={WARRANTY_TYPE.MANUFACTURER}>
+                    {LABELS.warrantyManufacturer}
+                  </SelectItem>
+                  <SelectItem value={WARRANTY_TYPE.SELLER}>{LABELS.warrantySeller}</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
           />
         </FormFieldFrame>
       </FormSection>

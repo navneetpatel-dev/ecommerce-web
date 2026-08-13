@@ -136,6 +136,13 @@ export const PAYMENT_METHOD = {
 } as const
 export type PaymentMethod = (typeof PAYMENT_METHOD)[keyof typeof PAYMENT_METHOD]
 
+export const WARRANTY_TYPE = {
+  MANUFACTURER: 'MANUFACTURER',
+  SELLER: 'SELLER',
+} as const
+export type WarrantyType = (typeof WARRANTY_TYPE)[keyof typeof WARRANTY_TYPE]
+export const WARRANTY_TYPE_VALUES = Object.values(WARRANTY_TYPE) as [WarrantyType, ...WarrantyType[]]
+
 export const COUPON_STATUS = {
   DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE',

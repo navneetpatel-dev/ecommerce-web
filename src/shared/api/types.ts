@@ -41,12 +41,14 @@ export interface VendorInfo {
   categoryIds?: string[];
   kycComplete?: boolean;
   status?: string;
+  performanceScore?: number | null;
+  returnShippingFee?: number | null;
+  codEnabled?: boolean;
 }
 
 export interface VendorDetail extends VendorInfo {
   description?: string | null;
   bannerUrl?: string | null;
-  returnShippingFee?: number | null;
 }
 
 export interface ProductListItem {
@@ -81,6 +83,7 @@ export interface ProductImage {
   id: string;
   url: string;
   isPrimary: boolean;
+  variantId?: string | null;
 }
 
 export interface ProductDetail extends ProductListItem {
@@ -98,6 +101,27 @@ export interface ProductDetail extends ProductListItem {
   categoryId: string;
   status: string;
   secondaryCategories?: Array<{ id: string; name: string; slug: string; status?: string }>;
+  warrantyMonths?: number | null;
+  warrantyType?: string | null;
+  hsnCode?: string | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  videoUrl?: string | null;
+  sizeChartUrl?: string | null;
+  /** Stored product flag: null inherits category and seller. */
+  codEnabled?: boolean | null;
+  returnsAllowed?: boolean;
+  returnWindowDays?: number | null;
+  returnShippingFee?: number;
+  gstPercentage?: number;
+  displayHsnCode?: string | null;
+  taxInclusive?: boolean;
+  codAvailable?: boolean;
+  codMinOrderValue?: number;
+  codMaxOrderValue?: number | null;
+  displayWarrantyMonths?: number | null;
+  displayWarrantyType?: string | null;
+  vendorPerformanceScore?: number | null;
 }
 
 export interface Category {
@@ -111,6 +135,10 @@ export interface Category {
   seoTitle?: string | null;
   seoDescription?: string | null;
   commissionRate?: number | null;
+  returnWindowDays?: number | null;
+  codEnabled?: boolean;
+  defaultWarrantyMonths?: number | null;
+  defaultWarrantyType?: string | null;
   parent?: { id: string; name: string; slug?: string } | null;
   children?: Category[];
   attributes?: CategoryAttribute[];
@@ -331,6 +359,7 @@ export interface CheckoutQuote {
   amountDue: number;
   appliedCoupon: { code: string; discount: number; cashbackAmount?: number; type?: string } | null;
   appliedCoupons?: Array<{ code: string; discount: number; cashbackAmount?: number; type?: string }>;
+  codAvailable?: boolean;
 }
 
 export interface WalletTransaction {

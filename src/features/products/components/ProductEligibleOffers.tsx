@@ -36,18 +36,13 @@ export function ProductEligibleOffers({ productId, className }: ProductEligibleO
   const [expanded, setExpanded] = useState(false)
 
   const offersQuery = useQuery({
-    queryKey: ['coupons', 'eligible', 'product', productId],
-    queryFn: () => couponsApi.eligible({ productId, limit: PDP_OFFERS_FETCH_LIMIT }),
-    enabled: Boolean(accessToken && productId),
+    queryKey: ['coupons', 'eligible', 'product', productId, Boolean(accessToken)],
+    queryFn: () =>
+      accessToken
+        ? couponsApi.eligible({ productId, limit: PDP_OFFERS_FETCH_LIMIT })
+        : couponsApi.eligiblePublic({ productId, limit: PDP_OFFERS_FETCH_LIMIT }),
+    enabled: Boolean(productId),
   })
-
-  if (!accessToken) {
-    return (
-      <p className={cn('text-[0.8125rem] text-ink-muted', className)}>
-        {LABELS.signInToApplyCoupon}
-      </p>
-    )
-  }
 
   if (offersQuery.isLoading) {
     return (

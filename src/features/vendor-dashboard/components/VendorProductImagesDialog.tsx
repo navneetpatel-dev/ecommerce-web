@@ -16,7 +16,14 @@ import { LABELS } from '@/shared/constants/labels'
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
 import { productsApi } from '@/features/products/api/products.api'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import type { ProductImage } from '@/shared/api/types'
+import type { ProductImage, ProductVariant } from '@/shared/api/types'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select'
 
 interface VendorProductImagesDialogProps {
   productId: string
@@ -34,6 +41,8 @@ export function VendorProductImagesDialog({
   onChanged,
 }: VendorProductImagesDialogProps) {
   const [images, setImages] = useState<ProductImage[]>([])
+  const [variants, setVariants] = useState<ProductVariant[]>([])
+  const [variantId, setVariantId] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
@@ -44,6 +53,7 @@ export function VendorProductImagesDialog({
     try {
       const product = await productsApi.detail(productId)
       setImages(product.images ?? [])
+      setVariants(product.variants ?? [])
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotLoadProduct))
       setImages([])
@@ -60,7 +70,11 @@ export function VendorProductImagesDialog({
   const onAddImage = async (url: string) => {
     setBusyId('new')
     try {
-      await productsApi.addImage(productId, { url, isPrimary: images.length === 0 })
+      await productsApi.addImage(productId, {
+        url,
+        isPrimary: images.length === 0,
+        variantId: variantId || null,
+      })
       await load()
       onChanged?.()
     } catch (err) {
@@ -145,6 +159,13 @@ export function VendorProductImagesDialog({
                     {LABELS.setPrimaryImage}
                   </Button>
                 )}
+                {image.variantId ? (
+                  <p className="text-[0.75rem] text-ink-muted">
+                    {LABELS.sku}: {variants.find((variant) => variant.id === image.variantId)?.sku ?? image.variantId}
+                  </p>
+                ) : (
+                  <p className="text-[0.75rem] text-ink-muted">{LABELS.productImageAllVariants}</p>
+                )}
                 <FileUpload
                   entityType={UPLOAD_ENTITY.PRODUCTS}
                   entityId={productId}
@@ -170,6 +191,21 @@ export function VendorProductImagesDialog({
         </ul>
 
         <FormSection title={LABELS.productFormSectionImages} hint={LABELS.productFormSectionImagesHint} columns={1}>
+          {variants.length > 0 ? (
+            <Select value={variantId || '__all__'} onValueChange={(value) => setVariantId(value === '__all__' ? '' : value)}>
+              <SelectTrigger aria-label={LABELS.productImageVariant}>
+                <SelectValue placeholder={LABELS.productImageAllVariants} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__all__">{LABELS.productImageAllVariants}</SelectItem>
+                {variants.map((variant) => (
+                  <SelectItem key={variant.id} value={variant.id}>
+                    {variant.sku}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : null}
           <FileUpload
             entityType={UPLOAD_ENTITY.PRODUCTS}
             entityId={productId}

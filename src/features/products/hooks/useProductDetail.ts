@@ -51,6 +51,10 @@ export function useProductDetail() {
   const resolvedVariantId =
     selection.variantId ?? (variants.length === 1 ? variants[0]?.id : null) ?? null
 
+  useEffect(() => {
+    setSelectedImage(0)
+  }, [resolvedVariantId])
+
   const selectedStock = selection.variantId
     ? Number(selection.currentStock || 0)
     : variants.length === 1
@@ -154,7 +158,8 @@ export function useProductDetail() {
     isLoading,
     freeShippingThreshold:
       product?.vendorFreeShippingThreshold ?? settings?.freeShippingThreshold,
-    returnWindowDays: settings?.defaultReturnWindow,
+    returnWindowDays: product?.returnWindowDays ?? settings?.defaultReturnWindow,
+    returnsAllowed: product?.returnsAllowed,
     isWishlisted: isWishlisted || false,
     toggleWishlist: toggle,
     selectedImage,

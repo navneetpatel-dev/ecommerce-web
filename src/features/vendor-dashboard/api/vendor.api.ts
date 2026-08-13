@@ -13,6 +13,7 @@ export type VendorShop = {
   entityType?: VendorEntityType | null
   categoryIds?: string[]
   status?: string
+  codEnabled?: boolean
 }
 
 export const vendorApi = {
@@ -24,6 +25,7 @@ export const vendorApi = {
     bannerUrl?: string | null
     entityType?: VendorEntityType
     categoryIds?: string[]
+    codEnabled?: boolean
   }) => apiClient.patch<VendorShop>(API.vendors.me, body),
   products: (page = 1, filters?: { status?: string; search?: string }) => {
     const params = new URLSearchParams({ page: String(page) })

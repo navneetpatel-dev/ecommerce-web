@@ -32,6 +32,7 @@ interface VendorShopSettingsFormProps {
   vendorId: string
   businessName: string
   returnShippingFee: number | null
+  codEnabled: boolean
   logoUrl: string | null
   bannerUrl: string | null
   entityType: VendorEntityType | null
@@ -40,6 +41,7 @@ interface VendorShopSettingsFormProps {
   message?: string | null
   saving: boolean
   onReturnShippingFeeChange: (value: number | null) => void
+  onCodEnabledChange: (value: boolean) => void
   onLogoUploaded: (url: string) => void
   onBannerUploaded: (url: string) => void
   onEntityTypeChange: (value: VendorEntityType) => void
@@ -53,6 +55,7 @@ export function VendorShopSettingsForm({
   vendorId,
   businessName,
   returnShippingFee,
+  codEnabled,
   logoUrl,
   bannerUrl,
   entityType,
@@ -61,6 +64,7 @@ export function VendorShopSettingsForm({
   message,
   saving,
   onReturnShippingFeeChange,
+  onCodEnabledChange,
   onLogoUploaded,
   onBannerUploaded,
   onEntityTypeChange,
@@ -297,6 +301,14 @@ export function VendorShopSettingsForm({
             step={10}
             prefix="₹"
             onChange={(value) => onReturnShippingFeeChange(value == null ? null : value)}
+          />
+        </FormFieldFrame>
+        <FormFieldFrame label={LABELS.vendorCodEnabled} hint={LABELS.vendorCodEnabledHint} className="sm:col-span-2">
+          <CheckboxField
+            id="vendor-shop-cod"
+            checked={codEnabled}
+            onCheckedChange={onCodEnabledChange}
+            label={LABELS.vendorCodEnabled}
           />
         </FormFieldFrame>
       </FormSection>

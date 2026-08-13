@@ -36,6 +36,10 @@ interface AdminEditCategoryActionProps {
     seoTitle?: string | null
     seoDescription?: string | null
     commissionRate?: number | null
+    returnWindowDays?: number | null
+    codEnabled?: boolean
+    defaultWarrantyMonths?: number | null
+    defaultWarrantyType?: string | null
   }
   onSaved: () => void
 }
@@ -60,6 +64,10 @@ export function AdminEditCategoryAction({ category, onSaved }: AdminEditCategory
       seoTitle: '',
       seoDescription: '',
       commissionRate: '',
+      returnWindowDays: '',
+      codEnabled: true,
+      defaultWarrantyMonths: '',
+      defaultWarrantyType: '',
     },
   })
 
@@ -79,6 +87,12 @@ export function AdminEditCategoryAction({ category, onSaved }: AdminEditCategory
         category.commissionRate != null && category.commissionRate !== undefined
           ? String(category.commissionRate)
           : '',
+      returnWindowDays:
+        category.returnWindowDays != null ? String(category.returnWindowDays) : '',
+      codEnabled: category.codEnabled !== false,
+      defaultWarrantyMonths:
+        category.defaultWarrantyMonths != null ? String(category.defaultWarrantyMonths) : '',
+      defaultWarrantyType: category.defaultWarrantyType ?? '',
     })
     setOpen(true)
   }

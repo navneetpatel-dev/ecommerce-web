@@ -30,6 +30,9 @@ interface PlatformSettingsFormProps {
   onTicketReopenWindowDaysChange: (value: number) => void
   onBugVerifyWindowDaysChange: (value: number) => void
   onBugCloseWindowDaysChange: (value: number) => void
+  onCodEnabledChange: (value: boolean) => void
+  onCodMinOrderValueChange: (value: number) => void
+  onCodMaxOrderValueChange: (value: number | null) => void
   onSave: () => void
 }
 
@@ -49,6 +52,9 @@ export function PlatformSettingsForm({
   onTicketReopenWindowDaysChange,
   onBugVerifyWindowDaysChange,
   onBugCloseWindowDaysChange,
+  onCodEnabledChange,
+  onCodMinOrderValueChange,
+  onCodMaxOrderValueChange,
   onSave,
 }: PlatformSettingsFormProps) {
   return (
@@ -220,6 +226,41 @@ export function PlatformSettingsForm({
               step={1}
               suffix={LABELS.daysShort}
               onChange={(value) => onBugCloseWindowDaysChange(value ?? 7)}
+            />
+          </FormFieldFrame>
+        </FormSection>
+
+        <FormSection title={LABELS.settingsCod} hint={LABELS.settingsCodHint} columns={2}>
+          <FormFieldFrame label={LABELS.settingsCodEnabled}>
+            <Select
+              value={form.codEnabled === false ? 'false' : 'true'}
+              onValueChange={(value) => onCodEnabledChange(value === 'true')}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="true">{LABELS.productCodOn}</SelectItem>
+                <SelectItem value="false">{LABELS.productCodOff}</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.settingsCodMinOrder}>
+            <NumberInput
+              value={form.codMinOrderValue ?? 0}
+              min={0}
+              step={50}
+              prefix="₹"
+              onChange={(value) => onCodMinOrderValueChange(value ?? 0)}
+            />
+          </FormFieldFrame>
+          <FormFieldFrame label={LABELS.settingsCodMaxOrder}>
+            <NumberInput
+              value={form.codMaxOrderValue ?? undefined}
+              min={0}
+              step={50}
+              prefix="₹"
+              onChange={(value) => onCodMaxOrderValueChange(value ?? null)}
             />
           </FormFieldFrame>
         </FormSection>

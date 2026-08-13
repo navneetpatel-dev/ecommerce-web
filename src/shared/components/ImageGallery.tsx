@@ -28,18 +28,19 @@ export function ImageGallery({
   productName,
 }: ImageGalleryProps) {
   const gallery = images?.length ? images : [{ id: 'main', url: mainImageUrl, isPrimary: true }]
-  const currentUrl = gallery[selectedIndex]?.url || mainImageUrl
+  const safeIndex = Math.min(Math.max(selectedIndex, 0), Math.max(gallery.length - 1, 0))
+  const currentUrl = gallery[safeIndex]?.url || mainImageUrl
   const prevUrl = gallery[prevIndex]?.url || mainImageUrl
   const hasMultiple = gallery.length > 1
 
   const goPrev = () => {
     if (!hasMultiple) return
-    onSelect((selectedIndex - 1 + gallery.length) % gallery.length)
+    onSelect((safeIndex - 1 + gallery.length) % gallery.length)
   }
 
   const goNext = () => {
     if (!hasMultiple) return
-    onSelect((selectedIndex + 1) % gallery.length)
+    onSelect((safeIndex + 1) % gallery.length)
   }
 
   return (
@@ -59,12 +60,12 @@ export function ImageGallery({
                 type="button"
                 variant="outline"
                 size="icon-sm"
-                aria-pressed={i === selectedIndex}
+                aria-pressed={i === safeIndex}
                 onClick={() => onSelect(i)}
                 className={cn(
                   'relative h-16 w-16 min-h-16 max-h-none shrink-0 overflow-hidden rounded-md border p-0',
                   'lg:h-[4.5rem] lg:w-[4.5rem] lg:min-h-[4.5rem]',
-                  i === selectedIndex
+                  i === safeIndex
                     ? 'border-brand ring-1 ring-brand/40'
                     : 'border-line hover:border-ink/30',
                 )}
@@ -145,7 +146,7 @@ export function ImageGallery({
 
           {hasMultiple ? (
             <p className="mt-2 text-center text-[0.75rem] tabular-nums text-ink-faint lg:text-left">
-              {selectedIndex + 1} / {gallery.length}
+              {safeIndex + 1} / {gallery.length}
             </p>
           ) : null}
         </div>

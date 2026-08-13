@@ -42,12 +42,13 @@ export function PaymentStep({
   onContinue,
   onBack,
 }: PaymentStepProps) {
-  const canContinue = Boolean(selectedMethod)
+  const canContinue = Boolean(selectedMethod) && (selectedMethod !== 'cod' || quote?.codAvailable === true)
   const walletBalance = quote?.walletBalance ?? 0
   const grandTotal = quote?.grandTotal ?? 0
   const maxApplicable = Math.min(walletBalance, grandTotal)
   const amountDue = quote?.amountDue ?? Math.max(0, grandTotal - walletAmountToUse)
   const codSelected = selectedMethod === 'cod'
+  const canUseCod = quote?.codAvailable === true
 
   return (
     <div className="space-y-5">
@@ -65,14 +66,15 @@ export function PaymentStep({
         {METHODS.map((method) => {
           const Icon = method.icon
           const selected = selectedMethod === method.id
-          return (
+          const isCod = method.id === 'cod'
+          const methodDisabled = isPending || (isCod && !canUseCod)
+          const button = (
             <Button
-              key={method.id}
               type="button"
               variant="outline"
               aria-pressed={selected}
               onClick={() => onSelect(method.id)}
-              disabled={isPending}
+              disabled={methodDisabled}
               className={cn(
                 'h-auto min-h-11 max-h-none w-full items-start gap-4 px-4 py-4 text-left font-normal',
                 selected
@@ -102,6 +104,23 @@ export function PaymentStep({
                 {selected && <span className="h-1.5 w-1.5 rounded-full bg-paper" />}
               </span>
             </Button>
+          )
+          if (isCod && !canUseCod) {
+            return (
+              <DisabledActionHint
+                key={method.id}
+                disabled
+                message={LABELS.codUnavailable}
+                className="w-full"
+              >
+                {button}
+              </DisabledActionHint>
+            )
+          }
+          return (
+            <div key={method.id} className="w-full">
+              {button}
+            </div>
           )
         })}
       </div>
