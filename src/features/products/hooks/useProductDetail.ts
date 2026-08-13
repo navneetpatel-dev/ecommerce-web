@@ -87,6 +87,7 @@ export function useProductDetail() {
       addToCart.mutate({
         variantId: resolvedVariantId,
         quantity: Math.min(maxQuantity, clampCartQuantity(qty)),
+        openDrawer: false,
       })
     },
     [addToCart, maxQuantity, needsOptionSelection, resolvedVariantId],

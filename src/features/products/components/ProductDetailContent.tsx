@@ -227,10 +227,7 @@ export function ProductDetailContent({
               <ProductHighlights highlights={product.highlights.slice(0, 4)} />
             ) : null}
 
-            <div className="space-y-2">
-              <p className="text-[0.8125rem] text-ink-muted">{LABELS.offersAtCheckout}</p>
-              <ProductEligibleOffers productId={product.id} />
-            </div>
+            <ProductEligibleOffers productId={product.id} />
 
             {product.variants && product.variants.length > 0 ? (
               <VariantSelector
@@ -247,26 +244,28 @@ export function ProductDetailContent({
               />
             ) : null}
 
-            <div className="space-y-3 rounded-xl border border-line bg-paper/50 p-4 sm:p-5">
-              <QuantitySelector
-                value={quantity}
-                onChange={onQuantityChange}
-                max={Math.max(quantityMax, 1)}
-              />
-
+            <div className="space-y-2.5 rounded-xl border border-line bg-paper/50 p-3 sm:p-4">
               {!canAddToCart && needsOptionSelection ? (
                 <p className="text-[0.8125rem] text-ink-muted">{LABELS.selectAllOptionsHint}</p>
               ) : null}
 
-              <div className="flex items-center gap-2.5">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+                <QuantitySelector
+                  value={quantity}
+                  onChange={onQuantityChange}
+                  max={Math.max(quantityMax, 1)}
+                  className="shrink-0"
+                  controlClassName="h-9 w-9 min-h-9 max-h-9 [&_svg]:size-3.5"
+                  valueClassName="h-5 w-6 text-[0.8125rem]"
+                />
+
                 <DisabledActionHint
                   disabled={addDisabled}
                   message={addToCartHint}
                   className="min-w-0 flex-1"
                 >
                   <Button
-                    size="lg"
-                    className="w-full rounded-full"
+                    className="w-full rounded-md sm:min-w-[10rem]"
                     disabled={addDisabled}
                     onClick={() => onAddToCart?.(quantity)}
                     loading={isAddingToCart}
@@ -274,17 +273,18 @@ export function ProductDetailContent({
                     {addToCartLabel}
                   </Button>
                 </DisabledActionHint>
+
                 <Button
                   variant="outline"
-                  size="lg"
-                  className="h-11 w-11 shrink-0 rounded-full border-line px-0"
+                  size="icon"
+                  className="shrink-0 rounded-md border-line"
                   onClick={onToggleWishlist}
                   aria-label={
                     isWishlisted ? LABELS.removeFromWishlist : LABELS.addToWishlist
                   }
                 >
                   <Heart
-                    size={18}
+                    size={16}
                     className={cn(
                       isWishlisted ? 'fill-danger text-danger' : 'text-ink-muted',
                       isWishlisted && 'animate-pulse-scale',
