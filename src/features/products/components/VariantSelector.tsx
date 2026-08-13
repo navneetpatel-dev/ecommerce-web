@@ -4,6 +4,7 @@ import { Separator } from '@/shared/components/ui/separator'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { cn } from '@/shared/utils/cn'
 import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 
 interface VariantSelectorProps {
   attributeGroups: Record<string, string[]>
@@ -16,6 +17,8 @@ interface VariantSelectorProps {
   onSelectValue: (key: string, value: string) => void
   /** When true, shows Add to Cart (legacy). Prefer page-level ATC. */
   showAddToCart?: boolean
+  /** Hide price/stock block when the parent buy box already shows them. */
+  optionsOnly?: boolean
   onAddToCart?: () => void
   isAddingToCart?: boolean
   canAddToCart?: boolean
@@ -33,6 +36,7 @@ export function VariantSelector({
   isActive,
   onSelectValue,
   showAddToCart = false,
+  optionsOnly = false,
   onAddToCart,
   isAddingToCart,
   canAddToCart = true,
@@ -46,98 +50,120 @@ export function VariantSelector({
   }
 
   return (
-    <div className={cn('space-y-6', className)}>
-      {hasAttributes && (
+    <div className={cn('space-y-5', className)}>
+      {hasAttributes ? (
         <div className="space-y-4">
-          {Object.entries(attributeGroups).map(([key, values]) => (
-            <div key={key}>
-              <p className="text-[0.9375rem] font-medium mb-2 capitalize">{key}</p>
-              <div className="flex flex-wrap gap-2">
-                {values.map((value) => {
-                  const available = isAvailable(key, value)
-                  const active = isActive(key, value)
-                  return (
-                    <DisabledActionHint
-                      key={value}
-                      disabled={!available}
-                      message="Not available with your current selection."
-                    >
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
+          {Object.entries(attributeGroups).map(([key, values]) => {
+            const selected = values.find((value) => isActive(key, value))
+            return (
+              <div key={key}>
+                <div className="mb-2.5 flex items-baseline justify-between gap-3">
+                  <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-ink-muted">
+                    {key}
+                  </p>
+                  {selected ? (
+                    <p className="truncate text-[0.8125rem] font-medium text-ink">{selected}</p>
+                  ) : null}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {values.map((value) => {
+                    const available = isAvailable(key, value)
+                    const active = isActive(key, value)
+                    return (
+                      <DisabledActionHint
+                        key={value}
                         disabled={!available}
-                        aria-pressed={active}
-                        onClick={() => onSelectValue(key, value)}
-                        className={cn(
-                          'h-auto min-h-0 max-h-none px-4 py-2 font-medium',
-                          active
-                            ? 'border-brand bg-brand-subtle text-brand hover:bg-brand-subtle hover:text-brand'
-                            : available
-                              ? 'border-line hover:border-brand hover:text-brand'
-                              : 'border-line bg-paper text-ink/30 line-through'
-                        )}
+                        message={LABELS.variantUnavailableHint}
                       >
-                        {value}
-                      </Button>
-                    </DisabledActionHint>
-                  )
-                })}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          disabled={!available}
+                          aria-pressed={active}
+                          onClick={() => onSelectValue(key, value)}
+                          className={cn(
+                            'h-10 min-h-10 max-h-none rounded-full px-4 font-medium transition-all',
+                            active
+                              ? 'border-brand bg-brand text-paper hover:bg-brand-hover hover:text-paper'
+                              : available
+                                ? 'border-line bg-surface hover:border-brand hover:text-brand'
+                                : 'border-line bg-paper text-ink/30 line-through',
+                          )}
+                        >
+                          {value}
+                        </Button>
+                      </DisabledActionHint>
+                    )
+                  })}
+                </div>
               </div>
+            )
+          })}
+        </div>
+      ) : null}
+
+      {!optionsOnly ? (
+        <>
+          <Separator />
+
+          <div className="flex items-baseline gap-3">
+            <span className="font-sans text-[1.75rem] font-semibold text-brand">
+              ₹{currentPrice.toLocaleString('en-IN')}
+            </span>
+            {hasPriceChange ? (
+              <span className="text-[1.0625rem] text-ink-faint line-through">
+                ₹{basePrice.toLocaleString('en-IN')}
+              </span>
+            ) : null}
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-2">
+              {currentStock === 0 ? (
+                <Badge variant="destructive">{LABELS.outOfStock}</Badge>
+              ) : currentStock <= 5 ? (
+                <Badge variant="destructive">
+                  {formatLabel(LABELS.onlyLeft, { count: currentStock })}
+                </Badge>
+              ) : (
+                <Badge variant="success">{LABELS.inStock}</Badge>
+              )}
+              {typeof freeShippingThreshold === 'number' ? (
+                <p className="text-[0.8125rem] text-ink-muted">
+                  {formatLabel(LABELS.freeDeliveryAbove, {
+                    amount: freeShippingThreshold.toLocaleString('en-IN'),
+                  })}
+                </p>
+              ) : null}
             </div>
-          ))}
-        </div>
-      )}
 
-      <Separator />
-
-      <div className="flex items-baseline gap-3">
-        <span className="font-mono text-[1.75rem] font-bold text-brand">₹{currentPrice}</span>
-        {hasPriceChange && (
-          <span className="font-mono text-[1.125rem] text-ink-faint line-through">₹{basePrice}</span>
-        )}
-      </div>
-
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          {currentStock === 0 ? (
-            <Badge variant="destructive">{LABELS.outOfStock}</Badge>
-          ) : currentStock <= 5 ? (
-            <Badge variant="destructive">Only {currentStock} left</Badge>
-          ) : (
-            <Badge variant="success">In stock</Badge>
-          )}
-          {typeof freeShippingThreshold === 'number' && (
-            <p className="text-[0.9375rem] text-ink-muted">
-              Free shipping over ₹{freeShippingThreshold.toLocaleString('en-IN')}
-            </p>
-          )}
-        </div>
-
-        {showAddToCart && (
-          <DisabledActionHint
-            disabled={currentStock === 0 || !canAddToCart}
-            message={
-              currentStock === 0
-                ? 'This item is currently out of stock.'
-                : !canAddToCart
-                  ? 'Select all required options to add this item to your cart.'
-                  : ''
-            }
-            className="w-full"
-          >
-            <Button
-              size="lg"
-              className="w-full"
-              disabled={currentStock === 0 || !canAddToCart}
-              onClick={onAddToCart}
-              loading={isAddingToCart}
-            >
-              Add to Cart
-            </Button>
-          </DisabledActionHint>
-        )}
-      </div>
+            {showAddToCart ? (
+              <DisabledActionHint
+                disabled={currentStock === 0 || !canAddToCart}
+                message={
+                  currentStock === 0
+                    ? LABELS.outOfStockHint
+                    : !canAddToCart
+                      ? LABELS.selectAllOptionsHint
+                      : ''
+                }
+                className="w-full"
+              >
+                <Button
+                  size="lg"
+                  className="w-full"
+                  disabled={currentStock === 0 || !canAddToCart}
+                  onClick={onAddToCart}
+                  loading={isAddingToCart}
+                >
+                  {LABELS.addToCart}
+                </Button>
+              </DisabledActionHint>
+            ) : null}
+          </div>
+        </>
+      ) : null}
     </div>
   )
 }

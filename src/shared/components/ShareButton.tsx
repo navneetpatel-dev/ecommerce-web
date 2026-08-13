@@ -20,22 +20,22 @@ export function ShareButton({
     <>
       <Button
         type="button"
-        variant="ghost"
+        variant="outline"
         size="lg"
-        className="shrink-0 md:hidden"
+        className="h-11 w-11 shrink-0 rounded-full border-line px-0 md:hidden"
         onClick={onShareNative}
         aria-label={copied ? LABELS.linkCopied : LABELS.share}
       >
-        <Share2 size={20} />
+        <Share2 size={18} />
       </Button>
 
       <Popover>
         <PopoverTrigger asChild>
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             size="lg"
-            className="hidden md:inline-flex shrink-0"
+            className="hidden h-11 w-11 shrink-0 rounded-full border-line px-0 md:inline-flex"
             aria-label={LABELS.share}
           >
             <Share2 size={20} />

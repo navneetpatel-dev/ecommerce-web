@@ -9,15 +9,17 @@ import { VendorStrip } from '@/shared/components/VendorStrip'
 import { RatingStars } from '@/shared/components/RatingStars'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { Button } from '@/shared/components/ui/button'
+import { Badge } from '@/shared/components/ui/badge'
 import { Breadcrumbs } from '@/shared/components/Breadcrumbs'
 import { QuantitySelector } from '@/shared/components/QuantitySelector'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/shared/components/ui/tabs'
-import { Heart, Truck, RotateCcw } from 'lucide-react'
+import { Heart, RotateCcw, Truck } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import { cartLineQuantityMax } from '@/shared/constants/cart'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { ProductEligibleOffers } from './ProductEligibleOffers'
 import type { RefObject } from 'react'
 
@@ -101,26 +103,31 @@ export function ProductDetailContent({
   const addDisabled = Boolean(!canAddToCart || isAddingToCart)
   const reviewCount = product.reviewCount ?? 0
   const avgRating = product.avgRating ?? 0
+  const formattedPrice = displayPrice.toLocaleString('en-IN')
 
   const addToCartLabel = needsOptionSelection
-    ? 'Select options'
+    ? LABELS.selectOptions
     : displayStock === 0
       ? LABELS.outOfStock
-      : 'Add to Cart'
+      : LABELS.addToCart
+
+  const stickyAddLabel = needsOptionSelection
+    ? LABELS.selectOptions
+    : formatLabel(LABELS.addToCartWithPrice, { price: formattedPrice })
 
   const addToCartHint = needsOptionSelection
-    ? 'Select product options to add this item to your cart.'
+    ? LABELS.selectOptionsHint
     : displayStock === 0
-      ? 'This item is currently out of stock.'
+      ? LABELS.outOfStockHint
       : isAddingToCart
-        ? 'Adding to your cart…'
+        ? LABELS.addingToCart
         : ''
 
   return (
-    <div className="storefront-container py-8">
-      <Breadcrumbs items={breadcrumbItems} className="mb-6" />
+    <div className="storefront-container pb-10 pt-4 sm:pt-6 md:pb-14 md:pt-8">
+      <Breadcrumbs items={breadcrumbItems} className="mb-5 sm:mb-6" />
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
+      <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-12 lg:gap-12 xl:gap-14">
         <ImageGalleryContainer
           mainImageUrl={product.imageUrl}
           images={product.images}
@@ -130,33 +137,66 @@ export function ProductDetailContent({
         />
 
         <div className="md:col-span-5" ref={addSectionRef}>
-          <div className="space-y-6 lg:sticky lg:top-[88px]">
-            {product.vendor && (
+          <div className="space-y-5 lg:sticky lg:top-[88px] lg:space-y-6">
+            {product.vendor ? (
               <VendorStrip vendor={product.vendor} size="md" rating={avgRating} />
-            )}
+            ) : null}
 
-            {(product.category?.name || product.categoryName) && (
-              <TextEyebrow className="-mb-2">
-                {product.category?.name ?? product.categoryName}
-              </TextEyebrow>
-            )}
+            <div className="space-y-3">
+              {(product.category?.name || product.categoryName) ? (
+                <TextEyebrow>
+                  {product.category?.name ?? product.categoryName}
+                </TextEyebrow>
+              ) : null}
 
-            <h1 className="font-display text-ink leading-tight" style={{ fontSize: 'var(--text-display-sm)' }}>
-              {product.name}
-            </h1>
+              <h1
+                className="font-display font-semibold leading-[1.15] tracking-tight text-ink"
+                style={{ fontSize: 'var(--text-display-sm)' }}
+              >
+                {product.name}
+              </h1>
 
-            <RatingStars value={avgRating} count={reviewCount} size="md" />
-
-            <div aria-live="polite">
-              <span className="font-sans text-[1.75rem] font-semibold text-brand">
-                ₹{displayPrice.toLocaleString('en-IN')}
-              </span>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <RatingStars value={avgRating} count={reviewCount} size="md" />
+                {reviewCount > 0 ? (
+                  <a
+                    href="#reviews"
+                    className="text-[0.8125rem] text-ink-muted underline-offset-2 hover:text-brand hover:underline"
+                  >
+                    {formatLabel(LABELS.reviewsWithCount, { count: reviewCount })}
+                  </a>
+                ) : null}
+              </div>
             </div>
 
-            <p className="text-[0.8125rem] text-ink-muted">{LABELS.offersAtCheckout}</p>
-            <ProductEligibleOffers productId={product.id} />
+            <div className="flex flex-wrap items-end justify-between gap-3 border-y border-line py-4">
+              <div aria-live="polite" className="space-y-1">
+                <p className="font-sans text-[1.875rem] font-semibold leading-none text-brand">
+                  ₹{formattedPrice}
+                </p>
+                {variantSelection.hasPriceChange ? (
+                  <p className="text-[0.9375rem] text-ink-faint line-through">
+                    ₹{variantSelection.basePrice.toLocaleString('en-IN')}
+                  </p>
+                ) : null}
+              </div>
+              {displayStock === 0 ? (
+                <Badge variant="destructive">{LABELS.outOfStock}</Badge>
+              ) : displayStock <= 5 ? (
+                <Badge variant="destructive">
+                  {formatLabel(LABELS.onlyLeft, { count: displayStock })}
+                </Badge>
+              ) : (
+                <Badge variant="success">{LABELS.inStock}</Badge>
+              )}
+            </div>
 
-            {product.variants && product.variants.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-[0.8125rem] text-ink-muted">{LABELS.offersAtCheckout}</p>
+              <ProductEligibleOffers productId={product.id} />
+            </div>
+
+            {product.variants && product.variants.length > 0 ? (
               <VariantSelector
                 attributeGroups={variantSelection.attributeGroups}
                 currentPrice={variantSelection.currentPrice}
@@ -167,116 +207,165 @@ export function ProductDetailContent({
                 isActive={variantSelection.isActive}
                 onSelectValue={variantSelection.onSelectValue}
                 showAddToCart={false}
+                optionsOnly
               />
-            )}
+            ) : null}
 
-            <QuantitySelector
-              value={quantity}
-              onChange={onQuantityChange}
-              max={Math.max(quantityMax, 1)}
-            />
+            <div className="space-y-3 rounded-xl border border-line bg-paper/50 p-4 sm:p-5">
+              <QuantitySelector
+                value={quantity}
+                onChange={onQuantityChange}
+                max={Math.max(quantityMax, 1)}
+              />
 
-            {!canAddToCart && needsOptionSelection && (
-              <p className="text-[0.8125rem] text-ink-muted">Select all options to add this item to your cart.</p>
-            )}
+              {!canAddToCart && needsOptionSelection ? (
+                <p className="text-[0.8125rem] text-ink-muted">{LABELS.selectAllOptionsHint}</p>
+              ) : null}
 
-            <div className="flex gap-3">
-              <DisabledActionHint disabled={addDisabled} message={addToCartHint} className="min-w-0 flex-1">
-                <Button
-                  size="lg"
-                  className="w-full"
+              <div className="flex items-center gap-2.5">
+                <DisabledActionHint
                   disabled={addDisabled}
-                  onClick={() => onAddToCart?.(quantity)}
-                  loading={isAddingToCart}
+                  message={addToCartHint}
+                  className="min-w-0 flex-1"
                 >
-                  {addToCartLabel}
+                  <Button
+                    size="lg"
+                    className="w-full rounded-full"
+                    disabled={addDisabled}
+                    onClick={() => onAddToCart?.(quantity)}
+                    loading={isAddingToCart}
+                  >
+                    {addToCartLabel}
+                  </Button>
+                </DisabledActionHint>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="h-11 w-11 shrink-0 rounded-full border-line px-0"
+                  onClick={onToggleWishlist}
+                  aria-label={
+                    isWishlisted ? LABELS.removeFromWishlist : LABELS.addToWishlist
+                  }
+                >
+                  <Heart
+                    size={18}
+                    className={cn(
+                      isWishlisted ? 'fill-danger text-danger' : 'text-ink-muted',
+                      isWishlisted && 'animate-pulse-scale',
+                    )}
+                  />
                 </Button>
-              </DisabledActionHint>
-              <Button
-                variant="ghost"
-                size="lg"
-                className="shrink-0"
-                onClick={onToggleWishlist}
-                aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-              >
-                <Heart
-                  size={20}
-                  className={cn(
-                    isWishlisted ? 'fill-danger text-danger' : 'text-ink-muted',
-                    isWishlisted && 'animate-pulse-scale'
-                  )}
+                <ShareButtonContainer
+                  title={product.name}
+                  url={PATHS.product(product.slug ?? product.id)}
                 />
-              </Button>
-              <ShareButtonContainer
-                title={product.name}
-                url={PATHS.product(product.slug ?? product.id)}
-              />
+              </div>
             </div>
 
-            <div className="space-y-2 pt-4 border-t border-line">
-              <div className="flex items-center gap-2 text-[0.8125rem] text-ink-muted">
-                <Truck size={16} />
-                <span>
+            <div className="grid gap-2.5 sm:grid-cols-2">
+              <div className="flex items-start gap-2.5 rounded-lg border border-line bg-surface px-3 py-3">
+                <Truck className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={1.75} />
+                <p className="text-[0.8125rem] leading-snug text-ink-muted">
                   {typeof freeShippingThreshold === 'number'
-                    ? `Free delivery on orders above ₹${freeShippingThreshold.toLocaleString('en-IN')}`
-                    : 'Delivery options shown at checkout'}
-                </span>
+                    ? formatLabel(LABELS.freeDeliveryAbove, {
+                        amount: freeShippingThreshold.toLocaleString('en-IN'),
+                      })
+                    : LABELS.deliveryAtCheckout}
+                </p>
               </div>
-              <div className="flex items-center gap-2 text-[0.8125rem] text-ink-muted">
-                <RotateCcw size={16} />
-                <span>
+              <div className="flex items-start gap-2.5 rounded-lg border border-line bg-surface px-3 py-3">
+                <RotateCcw className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={1.75} />
+                <p className="text-[0.8125rem] leading-snug text-ink-muted">
                   {typeof returnWindowDays === 'number'
-                    ? `${returnWindowDays}-day easy returns`
-                    : 'Returns available on eligible items'}
-                </span>
+                    ? formatLabel(LABELS.easyReturnsDays, { days: returnWindowDays })
+                    : LABELS.returnsEligible}
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-12 md:mt-16">
+      <div className="mt-12 border-t border-line pt-8 md:mt-16 md:pt-10">
         <Tabs defaultValue="description">
-          <TabsList>
-            <TabsTrigger value="description">Description</TabsTrigger>
-            <TabsTrigger value="specifications">Specifications</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews ({reviewCount})</TabsTrigger>
+          <TabsList className="w-full justify-start gap-1 overflow-x-auto rounded-none border-b border-line bg-transparent p-0">
+            <TabsTrigger
+              value="description"
+              className="rounded-none border-b-2 border-transparent px-3 pb-3 pt-1 data-[state=active]:border-brand data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            >
+              {LABELS.description}
+            </TabsTrigger>
+            <TabsTrigger
+              value="specifications"
+              className="rounded-none border-b-2 border-transparent px-3 pb-3 pt-1 data-[state=active]:border-brand data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            >
+              {LABELS.specifications}
+            </TabsTrigger>
+            <TabsTrigger
+              value="reviews"
+              className="rounded-none border-b-2 border-transparent px-3 pb-3 pt-1 data-[state=active]:border-brand data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            >
+              {formatLabel(LABELS.reviewsWithCount, { count: reviewCount })}
+            </TabsTrigger>
           </TabsList>
-          <TabsContent value="description" className="py-6">
-            <div className="max-w-[65ch]">
+          <TabsContent value="description" className="py-6 md:py-8">
+            <div className="max-w-3xl">
               <ProductInfo product={product} />
             </div>
           </TabsContent>
-          <TabsContent value="specifications" className="py-6">
-            <div className="max-w-[65ch] text-[0.9375rem] text-ink-muted space-y-2">
-              <p>SKU: {product?.variants?.[0]?.sku ?? 'Not available'}</p>
-              <p>Category: {product.category?.name ?? product.categoryName ?? 'General'}</p>
-              <p>Stock: {displayStock > 0 ? `${displayStock} available` : LABELS.outOfStock}</p>
-            </div>
+          <TabsContent value="specifications" className="py-6 md:py-8">
+            <dl className="max-w-xl divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
+              <div className="grid grid-cols-[8rem_1fr] gap-3 px-4 py-3 sm:grid-cols-[10rem_1fr]">
+                <dt className="text-[0.8125rem] font-medium text-ink-muted">{LABELS.sku}</dt>
+                <dd className="text-[0.9375rem] text-ink">
+                  {product?.variants?.[0]?.sku ?? LABELS.notAvailable}
+                </dd>
+              </div>
+              <div className="grid grid-cols-[8rem_1fr] gap-3 px-4 py-3 sm:grid-cols-[10rem_1fr]">
+                <dt className="text-[0.8125rem] font-medium text-ink-muted">
+                  {LABELS.categoryLabel}
+                </dt>
+                <dd className="text-[0.9375rem] text-ink">
+                  {product.category?.name ?? product.categoryName ?? LABELS.generalCategory}
+                </dd>
+              </div>
+              <div className="grid grid-cols-[8rem_1fr] gap-3 px-4 py-3 sm:grid-cols-[10rem_1fr]">
+                <dt className="text-[0.8125rem] font-medium text-ink-muted">{LABELS.stock}</dt>
+                <dd className="text-[0.9375rem] text-ink">
+                  {displayStock > 0
+                    ? formatLabel(LABELS.stockAvailable, { count: displayStock })
+                    : LABELS.outOfStock}
+                </dd>
+              </div>
+            </dl>
           </TabsContent>
-          <TabsContent value="reviews" className="py-6" id="reviews">
+          <TabsContent value="reviews" className="py-6 md:py-8" id="reviews">
             <ProductReviewsContainer productId={product.id} />
           </TabsContent>
         </Tabs>
       </div>
 
-      {(showStickyBar && (displayStock > 0 || needsOptionSelection)) && (
-        <div className="fixed bottom-14 left-0 right-0 z-30 p-4 bg-surface border-t border-line shadow-elevation-3 md:hidden">
-          <DisabledActionHint disabled={addDisabled} message={addToCartHint} className="w-full">
-            <Button
-              size="lg"
-              className="w-full"
-              disabled={addDisabled}
-              onClick={() => onAddToCart?.(quantity)}
-              loading={isAddingToCart}
-            >
-              {needsOptionSelection
-                ? 'Select options'
-                : `Add to Cart — ₹${displayPrice.toLocaleString('en-IN')}`}
-            </Button>
-          </DisabledActionHint>
+      {showStickyBar && (displayStock > 0 || needsOptionSelection) ? (
+        <div className="fixed bottom-14 left-0 right-0 z-30 border-t border-line bg-surface/95 p-3 shadow-elevation-3 backdrop-blur-sm md:hidden">
+          <div className="flex items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[0.8125rem] font-medium text-ink">{product.name}</p>
+              <p className="text-[0.9375rem] font-semibold text-brand">₹{formattedPrice}</p>
+            </div>
+            <DisabledActionHint disabled={addDisabled} message={addToCartHint} className="shrink-0">
+              <Button
+                size="lg"
+                className="rounded-full px-5"
+                disabled={addDisabled}
+                onClick={() => onAddToCart?.(quantity)}
+                loading={isAddingToCart}
+              >
+                {stickyAddLabel}
+              </Button>
+            </DisabledActionHint>
+          </div>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
