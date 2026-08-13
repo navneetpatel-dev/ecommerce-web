@@ -88,6 +88,9 @@ export interface ProductDetail extends ProductListItem {
   specs?: Record<string, string>;
   highlights?: string[];
   tags?: string[];
+  deliveryNote?: string | null;
+  returnNote?: string | null;
+  vendorFreeShippingThreshold?: number | null;
   categoryName?: string | null;
   category?: Category | null;
   variants: ProductVariant[];

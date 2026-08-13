@@ -315,21 +315,35 @@ export function ProductDetailContent({
             <div className="grid gap-2.5 sm:grid-cols-2">
               <div className="flex items-start gap-2.5 rounded-lg border border-line bg-surface px-3 py-3">
                 <Truck className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={1.75} />
-                <p className="text-[0.8125rem] leading-snug text-ink-muted">
-                  {typeof freeShippingThreshold === 'number'
-                    ? formatLabel(LABELS.freeDeliveryAbove, {
-                        amount: freeShippingThreshold.toLocaleString('en-IN'),
-                      })
-                    : LABELS.deliveryAtCheckout}
-                </p>
+                <div className="space-y-1">
+                  <p className="text-[0.8125rem] leading-snug text-ink-muted">
+                    {typeof freeShippingThreshold === 'number'
+                      ? formatLabel(LABELS.freeDeliveryAbove, {
+                          amount: freeShippingThreshold.toLocaleString('en-IN'),
+                        })
+                      : LABELS.deliveryAtCheckout}
+                  </p>
+                  {product.deliveryNote ? (
+                    <p className="text-[0.8125rem] leading-snug text-ink-muted">
+                      {product.deliveryNote}
+                    </p>
+                  ) : null}
+                </div>
               </div>
               <div className="flex items-start gap-2.5 rounded-lg border border-line bg-surface px-3 py-3">
                 <RotateCcw className="mt-0.5 h-4 w-4 shrink-0 text-brand" strokeWidth={1.75} />
-                <p className="text-[0.8125rem] leading-snug text-ink-muted">
-                  {typeof returnWindowDays === 'number'
-                    ? formatLabel(LABELS.easyReturnsDays, { days: returnWindowDays })
-                    : LABELS.returnsEligible}
-                </p>
+                <div className="space-y-1">
+                  <p className="text-[0.8125rem] leading-snug text-ink-muted">
+                    {typeof returnWindowDays === 'number'
+                      ? formatLabel(LABELS.easyReturnsDays, { days: returnWindowDays })
+                      : LABELS.returnsEligible}
+                  </p>
+                  {product.returnNote ? (
+                    <p className="text-[0.8125rem] leading-snug text-ink-muted">
+                      {product.returnNote}
+                    </p>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>

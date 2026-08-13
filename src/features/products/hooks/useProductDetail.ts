@@ -152,7 +152,8 @@ export function useProductDetail() {
   return {
     product,
     isLoading,
-    freeShippingThreshold: settings?.freeShippingThreshold,
+    freeShippingThreshold:
+      product?.vendorFreeShippingThreshold ?? settings?.freeShippingThreshold,
     returnWindowDays: settings?.defaultReturnWindow,
     isWishlisted: isWishlisted || false,
     toggleWishlist: toggle,

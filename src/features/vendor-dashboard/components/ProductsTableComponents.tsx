@@ -41,9 +41,9 @@ export function ProductsTableHeader({ search, onSearchChange, onAddProduct }: Pr
     <div className="mb-4 space-y-2">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <h2 className="text-[1.375rem] font-semibold text-ink">Products</h2>
+          <h2 className="text-[1.375rem] font-semibold text-ink">{LABELS.products}</h2>
           <Input
-            placeholder="Search products..."
+            placeholder={LABELS.searchProducts}
             className="w-full text-[0.9375rem] sm:w-64"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
@@ -51,12 +51,12 @@ export function ProductsTableHeader({ search, onSearchChange, onAddProduct }: Pr
         </div>
         {onAddProduct && (
           <Button size="sm" type="button" fullWidth="mobile" onClick={onAddProduct}>
-            <Plus aria-hidden /> Add Product
+            <Plus aria-hidden /> {LABELS.addProduct}
           </Button>
         )}
       </div>
       <p className="text-[0.8125rem] text-ink-muted">
-        Manage your catalog — create, edit names, and delete products you own.
+        {LABELS.vendorProductsHint}
       </p>
     </div>
   )
@@ -133,7 +133,7 @@ function ProductActions({
       ) : null}
       {onDelete ? (
         <TableRowAction destructive>
-          <DisabledActionHint disabled={Boolean(isDeleting)} message="Deleting this product…" block>
+          <DisabledActionHint disabled={Boolean(isDeleting)} message={LABELS.deletingProductEllipsis} block>
             <Button
               size="sm"
               variant="outline"
@@ -221,7 +221,7 @@ export function ProductsTableContent({
   if (products?.length === 0) {
     return (
       <div className="rounded-md border border-line bg-surface px-4 py-14 text-center text-ink-muted">
-        No products found
+        {LABELS.noProductsFound}
       </div>
     )
   }
@@ -244,13 +244,13 @@ export function ProductsTableContent({
             </div>
             <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 border-t border-line/80 pt-3 text-[0.875rem]">
               <div>
-                <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">Stock</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">{LABELS.stock}</dt>
                 <dd className={product.stock <= product.lowStockAt ? 'text-danger font-medium' : 'text-ink'}>
                   {product.stock}
                 </dd>
               </div>
               <div>
-                <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">Price</dt>
+                <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">{LABELS.price}</dt>
                 <dd className="font-mono text-ink">₹{product.basePrice}</dd>
               </div>
             </dl>
@@ -274,11 +274,11 @@ export function ProductsTableContent({
         <Table scrollContainer={false} className={TABLE_PINNED_LAYOUT_CLASS}>
           <TableHeader>
             <TableRow>
-              <TableHead className={TABLE_DATA_CELL_CLASS}>Product</TableHead>
-              <TableHead className={TABLE_DATA_CELL_CLASS}>SKU</TableHead>
-              <TableHead className={TABLE_DATA_CELL_CLASS}>Stock</TableHead>
-              <TableHead className={TABLE_DATA_CELL_CLASS}>Price</TableHead>
-              <TableHead className={TABLE_DATA_CELL_CLASS}>Status</TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>{LABELS.productName}</TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>{LABELS.sku}</TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>{LABELS.stock}</TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>{LABELS.price}</TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>{LABELS.status}</TableHead>
               <TableHead className={TABLE_ACTIONS_HEAD_CLASS}>{LABELS.actions}</TableHead>
             </TableRow>
           </TableHeader>

@@ -7,10 +7,17 @@ import { useVendorProductsTable } from './useVendorProductsTable'
 import { categoriesApi } from '@/features/categories/api/categories.api'
 import { flattenCategoriesWithDepth } from '@/features/categories/utils/categoryHelpers'
 import { productsApi } from '@/features/products/api/products.api'
+import {
+  emptyProductListingValues,
+  listingValuesFromProduct,
+  type ProductListingFormValues,
+  type ProductWriteBody,
+} from '@/features/products/schemas/products.schema'
 import { usePermissions } from '@/shared/hooks/usePermissions'
 import { PERMISSIONS } from '@/shared/constants/permissions'
 import { LABELS } from '@/shared/constants/labels'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { PRODUCT_STATUS } from '@/shared/constants/statuses'
 import { VendorProductImagesDialog } from '../components/VendorProductImagesDialog'
 import type { ProductListItem } from '@/shared/api/types'
@@ -21,21 +28,22 @@ type RichProductItem = ProductListItem & {
   variants?: Array<{ id: string; sku?: string; stock?: number; lowStockAt?: number }>
 }
 
+type FormMode = 'create' | 'edit'
+
 export function useVendorProductsPage() {
   const router = useRouter()
   const table = useVendorProductsTable()
   const { hasPermission } = usePermissions()
 
-  const [showCreate, setShowCreate] = useState(false)
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
-  const [description, setDescription] = useState('')
-  const [categoryId, setCategoryId] = useState('')
+  const [mode, setMode] = useState<FormMode | null>(null)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [values, setValues] = useState<ProductListingFormValues>(() => emptyProductListingValues())
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [draftUploadId, setDraftUploadId] = useState(() => crypto.randomUUID())
   const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([])
-  const [createError, setCreateError] = useState<string | null>(null)
-  const [creating, setCreating] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [imagesTarget, setImagesTarget] = useState<{ id: string; name: string } | null>(null)
 
   useEffect(() => {
@@ -46,54 +54,70 @@ export function useVendorProductsPage() {
         name: `${'— '.repeat(row.depth)}${row.name}`.trim(),
       }))
       setCategories(flat)
-      if (flat[0]?.id) setCategoryId(String(flat[0].id))
+      setValues((current) =>
+        current.categoryId || !flat[0]?.id
+          ? current
+          : { ...current, categoryId: String(flat[0].id) },
+      )
     })
   }, [])
 
-  const handleCreate = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault()
-      if (!categoryId) {
-        setCreateError(LABELS.selectCategory)
-        return
-      }
-      setCreating(true)
-      setCreateError(null)
+  const resetForm = useCallback(
+    (nextMode: FormMode | null, categoryId?: string) => {
+      setMode(nextMode)
+      setEditingId(null)
+      setValues(emptyProductListingValues(categoryId ?? categories[0]?.id ?? ''))
+      setImageUrls([])
+      setDraftUploadId(crypto.randomUUID())
+      setSubmitError(null)
+      setLoading(false)
+    },
+    [categories],
+  )
+
+  const handleValidSubmit = useCallback(
+    async (body: ProductWriteBody) => {
+      setSubmitting(true)
+      setSubmitError(null)
       try {
-        const product = await productsApi.create({
-          name,
-          categoryId,
-          basePrice: Number(price),
-          description: description || name,
-        })
-        for (let i = 0; i < imageUrls.length; i += 1) {
-          const url = imageUrls[i]!
-          await productsApi.addImage(product.id, { url, isPrimary: i === 0 })
+        if (mode === 'edit' && editingId) {
+          await productsApi.update(editingId, body)
+        } else {
+          const product = await productsApi.create(body)
+          for (let index = 0; index < imageUrls.length; index += 1) {
+            const url = imageUrls[index]!
+            await productsApi.addImage(product.id, { url, isPrimary: index === 0 })
+          }
         }
-        setName('')
-        setPrice('')
-        setDescription('')
-        setImageUrls([])
-        setDraftUploadId(crypto.randomUUID())
-        setShowCreate(false)
+        resetForm(null)
         router.refresh()
       } catch (err: unknown) {
-        setCreateError(getApiErrorMessage(err, LABELS.uploadFailed))
+        setSubmitError(getApiErrorMessage(err, LABELS.couldNotSaveProduct))
       } finally {
-        setCreating(false)
+        setSubmitting(false)
       }
     },
-    [name, price, description, categoryId, imageUrls, router],
+    [editingId, imageUrls, mode, resetForm, router],
   )
 
   const handleEdit = useCallback(
-    (productId: string, productName: string) => {
-      const nextName = window.prompt('Product name', productName)
-      if (nextName && nextName !== productName) {
-        productsApi.update(productId, { name: nextName }).then(() => router.refresh())
+    async (productId: string) => {
+      setMode('edit')
+      setEditingId(productId)
+      setValues(emptyProductListingValues(categories[0]?.id ?? ''))
+      setImageUrls([])
+      setSubmitError(null)
+      setLoading(true)
+      try {
+        const product = await productsApi.detail(productId)
+        setValues(listingValuesFromProduct(product))
+      } catch (err: unknown) {
+        setSubmitError(getApiErrorMessage(err, LABELS.couldNotLoadProduct))
+      } finally {
+        setLoading(false)
       }
     },
-    [router],
+    [categories],
   )
 
   const canCreate = hasPermission(PERMISSIONS.PRODUCT_CREATE)
@@ -115,27 +139,24 @@ export function useVendorProductsPage() {
     [table.data?.items],
   )
 
-  const createFormProps = {
-    name,
-    price,
-    description,
-    categoryId,
+  const showForm =
+    (mode === 'create' && canCreate) || (mode === 'edit' && canEdit)
+
+  const formProps = {
+    mode: mode === 'edit' ? ('edit' as const) : ('create' as const),
+    values,
     categories,
     imageUrls,
     draftUploadId,
-    createError,
-    creating,
-    onNameChange: setName,
-    onPriceChange: setPrice,
-    onDescriptionChange: setDescription,
-    onCategoryChange: setCategoryId,
-    onImageUrlsChange: setImageUrls,
-    onSubmit: handleCreate,
-    onCancel: () => {
-      setShowCreate(false)
-      setImageUrls([])
-      setDraftUploadId(crypto.randomUUID())
+    submitError,
+    submitting,
+    loading,
+    onChange: (patch: Partial<ProductListingFormValues>) => {
+      setValues((current) => ({ ...current, ...patch }))
     },
+    onImageUrlsChange: setImageUrls,
+    onValidSubmit: handleValidSubmit,
+    onCancel: () => resetForm(null),
   }
 
   const tableViewProps = {
@@ -149,10 +170,10 @@ export function useVendorProductsPage() {
     actionMessage: table.actionMessage,
     onSearchChange: table.handleSearchChange,
     onPageChange: table.setPage,
-    onAddProduct: canCreate ? () => setShowCreate(true) : undefined,
-    onEditProduct: canEdit
-      ? (product: { id: string; name: string }) => handleEdit(product.id, product.name)
+    onAddProduct: canCreate
+      ? () => resetForm('create', categories[0]?.id)
       : undefined,
+    onEditProduct: canEdit ? (product: { id: string }) => void handleEdit(product.id) : undefined,
     onDeleteProduct: canDelete
       ? (product: { id: string; name: string }) =>
           table.setDeleteTarget({ id: product.id, name: product.name })
@@ -173,13 +194,13 @@ export function useVendorProductsPage() {
     },
     variant: 'danger' as const,
     icon: Trash2,
-    title: 'Delete product?',
+    title: LABELS.confirmDeleteProductTitle,
     description: table.deleteTarget
-      ? `Delete "${table.deleteTarget.name}"? This cannot be undone.`
-      : 'This cannot be undone.',
-    secondaryAction: { label: 'Cancel', onClick: () => table.setDeleteTarget(null) },
+      ? formatLabel(LABELS.confirmDeleteProductBody, { name: table.deleteTarget.name })
+      : LABELS.confirmDeleteProductFallback,
+    secondaryAction: { label: LABELS.cancel, onClick: () => table.setDeleteTarget(null) },
     primaryAction: {
-      label: 'Delete',
+      label: LABELS.delete,
       variant: 'destructive' as const,
       loading: table.isDeleting,
       onClick: () => {
@@ -194,8 +215,9 @@ export function useVendorProductsPage() {
       PERMISSIONS.PRODUCT_UPDATE,
       PERMISSIONS.PRODUCT_DELETE,
     ] as const,
-    showCreateForm: showCreate && canCreate,
-    createFormProps,
+    showForm,
+    formKey: editingId ?? 'create',
+    formProps,
     tableViewProps,
     deleteDialogProps,
     imagesDialogProps: imagesTarget

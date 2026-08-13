@@ -13,7 +13,9 @@ export function ProductsTable() {
   return (
     <RequirePermission permission={[...page.permission]}>
       <>
-        {page.showCreateForm && <VendorProductCreateForm {...page.createFormProps} />}
+        {page.showForm && (
+          <VendorProductCreateForm key={page.formKey} {...page.formProps} />
+        )}
         <ProductsTableView {...page.tableViewProps} />
         <StatusDialog {...page.deleteDialogProps} />
         {page.imagesDialogProps ? <ImagesDialog {...page.imagesDialogProps} /> : null}

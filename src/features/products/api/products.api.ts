@@ -2,6 +2,7 @@ import { apiClient } from '@/shared/api/client'
 import { unwrapPaginatedList } from '@/shared/api/pagination'
 import { API } from '@/shared/constants/apiRoutes'
 import type { ProductListItem, ProductDetail, ProductVariant, ProductImage } from '@/shared/api/types'
+import type { ProductWriteBody } from '../schemas/products.schema'
 
 export interface ProductFilters {
   categoryId?: string
@@ -52,9 +53,9 @@ export const productsApi = {
   },
   detail: (slugOrId: string) => apiClient.get<ProductDetail>(API.products.detail(slugOrId)),
   detailBySlug: (slug: string) => apiClient.get<ProductDetail>(API.products.bySlug(slug)),
-  create: (body: { name: string; categoryId: string; basePrice: number; description: string; tags?: string[] }) =>
+  create: (body: ProductWriteBody) =>
     apiClient.post<ProductDetail>(API.products.list(), body),
-  update: (id: string, body: Partial<{ name: string; categoryId: string; basePrice: number; description: string; tags: string[] }>) =>
+  update: (id: string, body: Partial<ProductWriteBody>) =>
     apiClient.patch<ProductDetail>(API.products.detail(id), body),
   delete: (id: string) => apiClient.delete(API.products.detail(id)),
   submitForApproval: (id: string) => apiClient.post<{ message: string }>(API.products.submit(id), {}),
