@@ -58,6 +58,14 @@ export type VendorDirectoryItem = {
   businessName: string
 }
 
+export type StorefrontVendor = {
+  id: string
+  businessName: string
+  slug: string
+  logoUrl: string | null
+  description: string | null
+}
+
 export const vendorsApi = {
   directory: async (
     params: PaginationQuery & { search?: string } = {},
@@ -68,6 +76,18 @@ export const vendorsApi = {
     if (params.search) q.set('search', params.search)
     const res = await apiClient.getWithResponse<VendorDirectoryItem[]>(
       API.vendors.directory(q.toString()),
+    )
+    return unwrapPaginatedList(res)
+  },
+  listStorefront: async (
+    params: PaginationQuery & { search?: string } = {},
+  ): Promise<PaginatedList<StorefrontVendor>> => {
+    const q = new URLSearchParams()
+    if (params.page) q.set('page', String(params.page))
+    if (params.limit) q.set('limit', String(params.limit))
+    if (params.search) q.set('search', params.search)
+    const res = await apiClient.getWithResponse<StorefrontVendor[]>(
+      API.vendors.storefront(q.toString()),
     )
     return unwrapPaginatedList(res)
   },

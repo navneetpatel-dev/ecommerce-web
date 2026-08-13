@@ -23,8 +23,10 @@ function vendorInitials(name: string) {
     .join('')
 }
 
-function vendorHref(vendorId: string) {
-  return `${PATHS.products}?vendorId=${vendorId}`
+function vendorHref(vendor: SpotlightVendor) {
+  return vendor.slug
+    ? PATHS.vendorPage(vendor.slug)
+    : `${PATHS.products}?vendorId=${vendor.id}`
 }
 
 export function VendorSpotlightSection({ vendors, isLoading }: VendorSpotlightSectionProps) {
@@ -74,7 +76,7 @@ export function VendorSpotlightSection({ vendors, isLoading }: VendorSpotlightSe
         {vendors.map((vendor) => (
           <Link
             key={vendor.id}
-            href={vendorHref(vendor.id)}
+            href={vendorHref(vendor)}
             className="group block overflow-hidden rounded-md border border-line bg-surface shadow-elevation-1 transition-all duration-200 hover:border-ink/20 hover:shadow-elevation-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             <div className="relative aspect-[16/10] overflow-hidden bg-[color-mix(in_srgb,var(--brand)_10%,var(--paper))]">

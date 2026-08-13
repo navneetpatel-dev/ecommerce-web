@@ -50,6 +50,7 @@ export const API = {
   vendors: {
     list: (query = '') => `/api/vendors${query ? `?${query}` : ''}`,
     directory: (query = '') => `/api/vendors/directory${query ? `?${query}` : ''}`,
+    storefront: (query = '') => `/api/vendors/storefront${query ? `?${query}` : ''}`,
     detail: (id: string) => `/api/vendors/${id}`,
     bySlug: (slug: string) => `/api/vendors/slug/${slug}`,
     me: '/api/vendors/me',

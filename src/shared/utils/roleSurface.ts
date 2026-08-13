@@ -4,6 +4,14 @@ import { isAdminRole, isCustomerRole, isVendorRole, isWorkspaceRole } from '@/sh
 
 export type AppSurface = 'admin' | 'vendor' | 'storefront' | 'auth'
 
+/**
+ * Vendor dashboard surface (`/vendor`, `/vendor/dashboard/...`).
+ * Must not match public storefront shops under `/vendors/...`.
+ */
+export function isVendorWorkspacePath(pathname: string): boolean {
+  return pathname === PATHS.vendor.root || pathname.startsWith(`${PATHS.vendor.root}/`)
+}
+
 /** Default landing path for a signed-in role. */
 export function defaultRouteForRole(role: RoleName): string {
   if ((ADMIN_ROLES as readonly string[]).includes(role)) return PATHS.admin.root
@@ -23,7 +31,7 @@ export function surfaceForPath(pathname: string): AppSurface {
     return 'auth'
   }
   if (pathname.startsWith(PATHS.admin.root)) return 'admin'
-  if (pathname.startsWith('/vendor')) return 'vendor'
+  if (isVendorWorkspacePath(pathname)) return 'vendor'
   return 'storefront'
 }
 

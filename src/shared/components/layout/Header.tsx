@@ -21,7 +21,7 @@ import {
   workspaceAccountSections,
 } from '@/features/account/constants'
 import { profilePathForRole } from '@/shared/utils/profilePaths'
-import { homePathForContext, isWorkspacePath } from '@/shared/utils/roleSurface'
+import { homePathForContext, isVendorWorkspacePath, isWorkspacePath } from '@/shared/utils/roleSurface'
 import { isAdminRole, isCustomerRole, isVendorRole, isWorkspaceRole } from '@/shared/utils/roles'
 import type { Category, CurrentUser } from '@/shared/api/types'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
@@ -113,7 +113,7 @@ export function Header({
       ? currentUser.role
       : pathname.startsWith(PATHS.admin.root)
         ? ROLES.SUPER_ADMIN
-        : pathname.startsWith('/vendor')
+        : isVendorWorkspacePath(pathname)
           ? ROLES.VENDOR_OWNER
           : currentUser.role
     return sections.map((section) => ({

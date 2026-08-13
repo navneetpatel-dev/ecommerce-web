@@ -8,6 +8,8 @@ import {
   SEARCH_AUTOCOMPLETE_DEBOUNCE_MS,
   SEARCH_AUTOCOMPLETE_MIN_CHARS,
 } from '../constants'
+import { suggestionHref } from '../utils/suggestionHref'
+import type { SearchSuggestion } from '../types'
 
 export function useSearchNavigation(onAfterSubmit?: () => void) {
   const [term, setTerm] = useState('')
@@ -33,10 +35,10 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
   }, [])
 
   const handleSelect = useCallback(
-    (slug: string) => {
+    (suggestion: SearchSuggestion) => {
       closeDropdown()
       setTerm('')
-      navigate(router, PATHS.product(slug))
+      navigate(router, suggestionHref(suggestion))
     },
     [closeDropdown, router],
   )
@@ -48,7 +50,7 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
       if (!trimmed) return
 
       if (activeIndex >= 0 && suggestions[activeIndex]) {
-        handleSelect(suggestions[activeIndex].slug)
+        handleSelect(suggestions[activeIndex])
         onAfterSubmit?.()
         return
       }
@@ -101,7 +103,7 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
 
       if (event.key === 'Enter' && activeIndex >= 0 && suggestions[activeIndex]) {
         event.preventDefault()
-        handleSelect(suggestions[activeIndex].slug)
+        handleSelect(suggestions[activeIndex])
       }
     },
     [activeIndex, canSuggest, closeDropdown, handleSelect, open, suggestions],

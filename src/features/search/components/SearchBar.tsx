@@ -8,8 +8,9 @@ import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { formatInr } from '@/features/orders/utils/format'
 import { LABELS } from '@/shared/constants/labels'
+import { formatLabel } from '@/shared/utils/formatLabel'
 import { cn } from '@/shared/utils/cn'
-import type { SearchPanelLayout } from '../constants'
+import { SEARCH_SUGGESTION_TYPE, type SearchPanelLayout } from '../constants'
 import type { SearchSuggestion } from '../types'
 
 interface SearchBarProps {
@@ -30,10 +31,33 @@ interface SearchBarProps {
   onBlur: () => void
   onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void
   onSubmit: (event: React.FormEvent) => void
-  onSelect: (slug: string) => void
+  onSelect: (suggestion: SearchSuggestion) => void
 }
 
-function SuggestionImage({ src, alt }: { src: string; alt: string }) {
+function suggestionTypeLabel(type: SearchSuggestion['type']): string {
+  switch (type) {
+    case SEARCH_SUGGESTION_TYPE.VENDOR:
+      return LABELS.searchSuggestionTypeVendor
+    case SEARCH_SUGGESTION_TYPE.CATEGORY:
+      return LABELS.searchSuggestionTypeCategory
+    case SEARCH_SUGGESTION_TYPE.PRODUCT:
+    default:
+      return LABELS.searchSuggestionTypeProduct
+  }
+}
+
+function suggestionMeta(suggestion: SearchSuggestion): string | null {
+  if (suggestion.type !== SEARCH_SUGGESTION_TYPE.PRODUCT) return null
+  if (suggestion.sku) {
+    return formatLabel(LABELS.searchSuggestionSku, { sku: suggestion.sku })
+  }
+  if (suggestion.basePrice != null) {
+    return formatInr(suggestion.basePrice)
+  }
+  return null
+}
+
+function SuggestionImage({ src, alt }: { src?: string; alt: string }) {
   const [unavailable, setUnavailable] = useState(!src)
 
   if (unavailable) {
@@ -49,7 +73,7 @@ function SuggestionImage({ src, alt }: { src: string; alt: string }) {
 
   return (
     <Image
-      src={src}
+      src={src!}
       alt=""
       width={32}
       height={32}
@@ -110,30 +134,42 @@ export function SearchBar({
       )
     }
 
-    return suggestions.map((suggestion, index) => (
-      <Button
-        key={suggestion.id}
-        type="button"
-        variant="ghost"
-        role="option"
-        aria-selected={index === activeIndex}
-        id={`${listId}-option-${index}`}
-        className={cn(
-          'h-12 w-full justify-start gap-3 rounded-none px-4 last:rounded-b-2xl',
-          index === activeIndex && 'bg-paper',
-        )}
-        onMouseDown={(event) => {
-          event.preventDefault()
-          onSelect(suggestion.slug)
-        }}
-      >
-        <SuggestionImage src={suggestion.imageUrl} alt={suggestion.name} />
-        <span className="min-w-0 flex-1 text-left">
-          <span className="block truncate text-[0.9375rem] font-medium text-ink">{suggestion.name}</span>
-          <span className="block text-[0.8125rem] text-ink-muted">{formatInr(suggestion.basePrice)}</span>
-        </span>
-      </Button>
-    ))
+    return suggestions.map((suggestion, index) => {
+      const meta = suggestionMeta(suggestion)
+      return (
+        <Button
+          key={`${suggestion.type}-${suggestion.id}`}
+          type="button"
+          variant="ghost"
+          role="option"
+          aria-selected={index === activeIndex}
+          id={`${listId}-option-${index}`}
+          className={cn(
+            'h-12 w-full justify-start gap-3 rounded-none px-4 last:rounded-b-2xl',
+            index === activeIndex && 'bg-paper',
+          )}
+          onMouseDown={(event) => {
+            event.preventDefault()
+            onSelect(suggestion)
+          }}
+        >
+          <SuggestionImage src={suggestion.imageUrl} alt={suggestion.name} />
+          <span className="min-w-0 flex-1 text-left">
+            <span className="block truncate text-[0.9375rem] font-medium text-ink">
+              {suggestion.name}
+            </span>
+            {meta ? (
+              <span className="block truncate text-[0.8125rem] text-ink-muted">{meta}</span>
+            ) : null}
+          </span>
+          {suggestion.type !== SEARCH_SUGGESTION_TYPE.PRODUCT ? (
+            <span className="shrink-0 text-[0.6875rem] font-medium uppercase tracking-wide text-ink-faint">
+              {suggestionTypeLabel(suggestion.type)}
+            </span>
+          ) : null}
+        </Button>
+      )
+    })
   }
 
   return (

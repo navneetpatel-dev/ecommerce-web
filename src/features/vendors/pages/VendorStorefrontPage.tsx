@@ -103,8 +103,10 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
         <ProductGrid
           products={products}
           loading={productsLoading}
-          emptyHeading="No products yet"
-          emptyMessage="This shop hasn't listed any products yet. Check back soon."
+          emptyHeading={LABELS.noVendorProductsHeading}
+          emptyMessage={LABELS.noVendorProductsHint}
+          emptyActionLabel={LABELS.browseAllProducts}
+          emptyActionTo={PATHS.products}
         />
       </div>
     </div>
