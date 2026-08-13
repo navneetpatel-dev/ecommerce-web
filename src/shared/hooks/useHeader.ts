@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useCartDrawerStore } from '@/features/cart/store/cart.store'
 import { useCart } from '@/features/cart/api/cart.queries'
@@ -18,6 +19,7 @@ export const HEADER_PRIMARY_LINKS = [
 ] as const
 
 export function useHeader() {
+  const pathname = usePathname()
   const currentUser = useAuthStore((s) => s.currentUser)
   const openCart = useCartDrawerStore((s) => s.open)
   const { data: cart } = useCart()
@@ -44,6 +46,13 @@ export function useHeader() {
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
     }
   }, [])
+
+  // Close overlays when the route changes (search select, links, etc.).
+  useEffect(() => {
+    setMobileSearchOpen(false)
+    setMobileNavOpen(false)
+    setMegaMenuOpen(false)
+  }, [pathname])
 
   const scheduleMegaOpen = () => {
     if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)

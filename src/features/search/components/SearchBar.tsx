@@ -1,17 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Image from 'next/image'
+import { useEffect, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
-import { formatInr } from '@/features/orders/utils/format'
 import { LABELS } from '@/shared/constants/labels'
-import { formatLabel } from '@/shared/utils/formatLabel'
 import { cn } from '@/shared/utils/cn'
 import { SEARCH_SUGGESTION_TYPE, type SearchPanelLayout } from '../constants'
 import type { SearchSuggestion } from '../types'
+import { SearchSuggestionRow } from './SearchSuggestionRow'
 
 interface SearchBarProps {
   size?: 'lg' | 'sm'
@@ -34,58 +31,27 @@ interface SearchBarProps {
   onSelect: (suggestion: SearchSuggestion) => void
 }
 
-function suggestionTypeLabel(type: SearchSuggestion['type']): string {
-  switch (type) {
-    case SEARCH_SUGGESTION_TYPE.VENDOR:
-      return LABELS.searchSuggestionTypeVendor
-    case SEARCH_SUGGESTION_TYPE.CATEGORY:
-      return LABELS.searchSuggestionTypeCategory
-    case SEARCH_SUGGESTION_TYPE.PRODUCT:
-    default:
-      return LABELS.searchSuggestionTypeProduct
-  }
-}
-
-function suggestionMeta(suggestion: SearchSuggestion): string | null {
-  if (suggestion.type !== SEARCH_SUGGESTION_TYPE.PRODUCT) return null
-  if (suggestion.sku) {
-    return formatLabel(LABELS.searchSuggestionSku, { sku: suggestion.sku })
-  }
-  if (suggestion.basePrice != null) {
-    return formatInr(suggestion.basePrice)
-  }
-  return null
-}
-
-function SuggestionImage({ src, alt }: { src?: string; alt: string }) {
-  const [unavailable, setUnavailable] = useState(!src)
-
-  if (unavailable) {
-    return (
-      <span
-        aria-hidden
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-line/60 text-[0.625rem] font-medium uppercase text-ink-muted"
-      >
-        {alt.slice(0, 1)}
-      </span>
-    )
-  }
-
-  return (
-    <Image
-      src={src!}
-      alt=""
-      width={32}
-      height={32}
-      className="h-8 w-8 shrink-0 rounded object-cover"
-      onError={() => setUnavailable(true)}
-    />
-  )
-}
-
 const panelTransition = {
   height: { duration: 0.26, ease: [0.16, 1, 0.3, 1] as const },
   opacity: { duration: 0.2, ease: 'easeOut' as const },
+}
+
+const SECTION_ORDER = [
+  SEARCH_SUGGESTION_TYPE.PRODUCT,
+  SEARCH_SUGGESTION_TYPE.CATEGORY,
+  SEARCH_SUGGESTION_TYPE.VENDOR,
+] as const
+
+function sectionLabel(type: SearchSuggestion['type']): string {
+  switch (type) {
+    case SEARCH_SUGGESTION_TYPE.VENDOR:
+      return LABELS.searchSuggestionVendors
+    case SEARCH_SUGGESTION_TYPE.CATEGORY:
+      return LABELS.searchSuggestionCategories
+    case SEARCH_SUGGESTION_TYPE.PRODUCT:
+    default:
+      return LABELS.searchSuggestionProducts
+  }
 }
 
 export function SearchBar({
@@ -115,61 +81,70 @@ export function SearchBar({
     if (showPanel) setShellExpanded(true)
   }, [showPanel])
 
+  const grouped = useMemo(() => {
+    const items = suggestions ?? []
+    return SECTION_ORDER.map((type) => ({
+      type,
+      items: items
+        .map((suggestion, index) => ({ suggestion, index }))
+        .filter(({ suggestion }) => suggestion.type === type),
+    })).filter((section) => section.items.length > 0)
+  }, [suggestions])
+
   const renderPanelBody = () => {
     if (isFetching && !suggestions?.length) {
       return (
-        <div className="min-h-[7.75rem] space-y-2 p-3">
-          <div className="h-10 animate-pulse rounded-md bg-line/60" />
-          <div className="h-10 animate-pulse rounded-md bg-line/60" />
-          <div className="h-10 animate-pulse rounded-md bg-line/60" />
+        <div className="space-y-2 p-3">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className="flex items-center gap-3 rounded-lg px-1 py-1">
+              <div className="h-11 w-11 shrink-0 animate-pulse rounded-lg bg-line/60" />
+              <div className="min-w-0 flex-1 space-y-2">
+                <div className="h-3.5 w-2/3 animate-pulse rounded bg-line/60" />
+                <div className="h-3 w-1/3 animate-pulse rounded bg-line/50" />
+              </div>
+            </div>
+          ))}
         </div>
       )
     }
 
     if (!suggestions?.length) {
       return (
-        <p className="min-h-[3.25rem] px-4 py-3.5 text-[0.8125rem] text-ink-muted">
-          {LABELS.searchAutocompleteEmpty}
-        </p>
+        <div className="flex flex-col items-center px-5 py-8 text-center">
+          <span className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-paper text-ink-faint">
+            <Search className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+          </span>
+          <p className="text-[0.9375rem] font-medium text-ink">{LABELS.searchAutocompleteEmpty}</p>
+          <p className="mt-1 max-w-xs text-[0.8125rem] leading-relaxed text-ink-muted">
+            {LABELS.searchAutocompleteEmptyHint}
+          </p>
+        </div>
       )
     }
 
-    return suggestions.map((suggestion, index) => {
-      const meta = suggestionMeta(suggestion)
-      return (
-        <Button
-          key={`${suggestion.type}-${suggestion.id}`}
-          type="button"
-          variant="ghost"
-          role="option"
-          aria-selected={index === activeIndex}
-          id={`${listId}-option-${index}`}
-          className={cn(
-            'h-12 w-full justify-start gap-3 rounded-none px-4 last:rounded-b-2xl',
-            index === activeIndex && 'bg-paper',
-          )}
-          onMouseDown={(event) => {
-            event.preventDefault()
-            onSelect(suggestion)
-          }}
-        >
-          <SuggestionImage src={suggestion.imageUrl} alt={suggestion.name} />
-          <span className="min-w-0 flex-1 text-left">
-            <span className="block truncate text-[0.9375rem] font-medium text-ink">
-              {suggestion.name}
-            </span>
-            {meta ? (
-              <span className="block truncate text-[0.8125rem] text-ink-muted">{meta}</span>
-            ) : null}
-          </span>
-          {suggestion.type !== SEARCH_SUGGESTION_TYPE.PRODUCT ? (
-            <span className="shrink-0 text-[0.6875rem] font-medium uppercase tracking-wide text-ink-faint">
-              {suggestionTypeLabel(suggestion.type)}
-            </span>
-          ) : null}
-        </Button>
-      )
-    })
+    return (
+      <div className="py-1.5">
+        {grouped.map((section, sectionIndex) => (
+          <div key={section.type} className={cn(sectionIndex > 0 && 'mt-1 border-t border-line/70 pt-1')}>
+            <p className="px-4 pb-1 pt-2 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-faint">
+              {sectionLabel(section.type)}
+            </p>
+            <ul className="px-1.5">
+              {section.items.map(({ suggestion, index }) => (
+                <li key={`${suggestion.type}-${suggestion.id}`}>
+                  <SearchSuggestionRow
+                    suggestion={suggestion}
+                    active={index === activeIndex}
+                    id={`${listId}-option-${index}`}
+                    onSelect={onSelect}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    )
   }
 
   return (

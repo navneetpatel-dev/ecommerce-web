@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useDebouncedValue } from '@/shared/hooks/use-debounce'
 import { useAutocomplete } from '../api/search.queries'
 import { navigate } from '@/shared/utils/navigate'
@@ -18,6 +18,7 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
   const inputRef = useRef<HTMLInputElement>(null)
   const debouncedTerm = useDebouncedValue(term, SEARCH_AUTOCOMPLETE_DEBOUNCE_MS)
   const router = useRouter()
+  const pathname = usePathname()
   const trimmedDebounced = debouncedTerm.trim()
   const canSuggest = trimmedDebounced.length >= SEARCH_AUTOCOMPLETE_MIN_CHARS
   const { data: suggestions = [], isFetching, isFetched } = useAutocomplete(
@@ -25,22 +26,29 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
     open && canSuggest,
   )
 
-  useEffect(() => {
-    setActiveIndex(-1)
-  }, [trimmedDebounced, suggestions])
-
   const closeDropdown = useCallback(() => {
     setOpen(false)
     setActiveIndex(-1)
   }, [])
 
+  useEffect(() => {
+    setActiveIndex(-1)
+  }, [trimmedDebounced, suggestions])
+
+  useEffect(() => {
+    closeDropdown()
+    setTerm('')
+  }, [pathname, closeDropdown])
+
   const handleSelect = useCallback(
     (suggestion: SearchSuggestion) => {
       closeDropdown()
       setTerm('')
+      inputRef.current?.blur()
       navigate(router, suggestionHref(suggestion))
+      onAfterSubmit?.()
     },
-    [closeDropdown, router],
+    [closeDropdown, onAfterSubmit, router],
   )
 
   const handleSubmit = useCallback(
@@ -51,13 +59,13 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
 
       if (activeIndex >= 0 && suggestions[activeIndex]) {
         handleSelect(suggestions[activeIndex])
-        onAfterSubmit?.()
         return
       }
 
       closeDropdown()
-      navigate(router, `${PATHS.products}?search=${encodeURIComponent(trimmed)}`)
       setTerm('')
+      inputRef.current?.blur()
+      navigate(router, `${PATHS.products}?search=${encodeURIComponent(trimmed)}`)
       onAfterSubmit?.()
     },
     [activeIndex, closeDropdown, handleSelect, onAfterSubmit, router, suggestions, term],
@@ -98,6 +106,7 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
       if (event.key === 'Escape') {
         event.preventDefault()
         closeDropdown()
+        onAfterSubmit?.()
         return
       }
 
@@ -106,7 +115,7 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
         handleSelect(suggestions[activeIndex])
       }
     },
-    [activeIndex, canSuggest, closeDropdown, handleSelect, open, suggestions],
+    [activeIndex, canSuggest, closeDropdown, handleSelect, onAfterSubmit, open, suggestions],
   )
 
   const showPanel =
