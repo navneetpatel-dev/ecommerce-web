@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { Truck } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { LABELS } from '@/shared/constants/labels'
@@ -18,6 +19,7 @@ interface ProductDeliveryCheckProps {
   codAvailable?: boolean
   codMinOrderValue?: number
   codMaxOrderValue?: number | null
+  onBlockedChange?: (blocked: boolean) => void
 }
 
 export function ProductDeliveryCheck({
@@ -28,6 +30,7 @@ export function ProductDeliveryCheck({
   codAvailable = false,
   codMinOrderValue = 0,
   codMaxOrderValue = null,
+  onBlockedChange,
 }: ProductDeliveryCheckProps) {
   const [pincode, setPincode] = useState('')
   const [submitted, setSubmitted] = useState('')
@@ -66,20 +69,35 @@ export function ProductDeliveryCheck({
   const codBlockedByPincode = showCod && notServiceable
   const belowCodMin = price < Number(codMinOrderValue ?? 0)
 
+  useEffect(() => {
+    onBlockedChange?.(notServiceable)
+  }, [notServiceable, onBlockedChange])
+
   return (
     <div className="space-y-2">
-      <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-muted">
-        {LABELS.enterDeliveryPincode}
-      </p>
+      <div className="flex items-center gap-2">
+        <Truck className="h-4 w-4 shrink-0 text-brand" strokeWidth={1.75} />
+        <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-muted">
+          {LABELS.enterDeliveryPincode}
+        </p>
+      </div>
       <p className="text-[0.8125rem] leading-snug text-ink-muted">{LABELS.deliveryPincodeHint}</p>
       <div className="flex flex-wrap gap-2">
         <Input
           inputMode="numeric"
           maxLength={PINCODE_LENGTH}
           value={pincode}
-          error={Boolean(pincodeError)}
+          error={Boolean(pincodeError) || notServiceable}
           onChange={(event) => setPincode(event.target.value.replace(/\D/g, '').slice(0, PINCODE_LENGTH))}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault()
+              handleCheck()
+            }
+          }}
           aria-label={LABELS.enterDeliveryPincode}
+          placeholder={LABELS.enterDeliveryPincode}
+          autoComplete="postal-code"
           className="w-[8.5rem]"
         />
         <Button
@@ -108,9 +126,8 @@ export function ProductDeliveryCheck({
         </p>
       ) : null}
       {notServiceable ? (
-        <p className="text-[0.8125rem] leading-snug text-ink-muted">{LABELS.deliveryNotServiceable}</p>
-      ) : null}
-      {!codAvailable ? (
+        <p className="text-[0.8125rem] leading-snug text-danger">{LABELS.deliveryNotServiceable}</p>
+      ) : !codAvailable ? (
         <p className="text-[0.8125rem] leading-snug text-ink-muted">{LABELS.codUnavailable}</p>
       ) : !inCodRange ? (
         <p className="text-[0.8125rem] leading-snug text-ink-muted">

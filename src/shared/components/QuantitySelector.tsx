@@ -14,6 +14,8 @@ interface QuantitySelectorProps {
   onChange: (value: number) => void
   min?: number
   max?: number
+  disabled?: boolean
+  disabledHint?: string
   className?: string
   /** Overrides minus / value / plus cell size. */
   controlClassName?: string
@@ -34,6 +36,8 @@ export function QuantitySelector({
   onChange,
   min = 1,
   max = MAX_CART_LINE_QUANTITY,
+  disabled = false,
+  disabledHint,
   className,
   controlClassName,
   valueClassName,
@@ -42,12 +46,18 @@ export function QuantitySelector({
   const editing = draft !== null
   const cellClass = controlClassName ?? DEFAULT_CELL
   const valueSizeClass = valueClassName ?? DEFAULT_VALUE
-  const atMin = value <= min
-  const atMax = value >= max
+  const atMin = disabled || value <= min
+  const atMax = disabled || value >= max
   const maxHint =
-    max <= 1
-      ? LABELS.onlyOneInStock
-      : formatLabel(LABELS.maximumQuantityHint, { max })
+    disabled && disabledHint
+      ? disabledHint
+      : max <= 1
+        ? LABELS.onlyOneInStock
+        : formatLabel(LABELS.maximumQuantityHint, { max })
+  const minHint =
+    disabled && disabledHint
+      ? disabledHint
+      : formatLabel(LABELS.minimumQuantityHint, { min })
 
   const commit = (raw: string) => {
     setDraft(null)
@@ -68,7 +78,7 @@ export function QuantitySelector({
     cellClass,
   )
 
-  return (
+  const control = (
     <div
       className={cn(
         'relative z-[1] inline-flex shrink-0 items-center rounded-sm border border-line',
@@ -77,8 +87,8 @@ export function QuantitySelector({
       onClick={stopBubble}
     >
       <DisabledActionHint
-        disabled={atMin}
-        message={formatLabel(LABELS.minimumQuantityHint, { min })}
+        disabled={!disabled && atMin}
+        message={minHint}
         className="relative z-[1] max-w-none shrink-0"
       >
         <button
@@ -97,7 +107,7 @@ export function QuantitySelector({
         </button>
       </DisabledActionHint>
 
-      {editing ? (
+      {editing && !disabled ? (
         <input
           type="number"
           inputMode="numeric"
@@ -122,8 +132,10 @@ export function QuantitySelector({
           onClick={(event) => {
             event.preventDefault()
             event.stopPropagation()
+            if (disabled) return
             setDraft(String(value))
           }}
+          disabled={disabled}
           className={cn(controlBtnClass, 'border-x border-line')}
           aria-label={formatLabel(LABELS.editQuantity, { value })}
         >
@@ -136,7 +148,7 @@ export function QuantitySelector({
       )}
 
       <DisabledActionHint
-        disabled={atMax}
+        disabled={!disabled && atMax}
         message={maxHint}
         className="relative z-[1] max-w-none shrink-0"
       >
@@ -157,4 +169,14 @@ export function QuantitySelector({
       </DisabledActionHint>
     </div>
   )
+
+  if (disabled && disabledHint) {
+    return (
+      <DisabledActionHint disabled message={disabledHint} className="shrink-0">
+        {control}
+      </DisabledActionHint>
+    )
+  }
+
+  return control
 }

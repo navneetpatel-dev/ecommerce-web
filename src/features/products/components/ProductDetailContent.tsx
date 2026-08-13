@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, type RefObject } from 'react'
 import Link from 'next/link'
 import { ImageGalleryContainer } from '@/shared/containers/ImageGalleryContainer'
 import { ProductInfo } from './ProductInfo'
@@ -30,7 +31,6 @@ import { ProductRelatedRails } from './ProductRelatedRails'
 import { WARRANTY_TYPE } from '@/shared/constants/statuses'
 import { VARIANT_LOW_STOCK_DEFAULT } from '../constants/productFields'
 import type { ProductDetail, ProductVariant } from '@/shared/api/types'
-import type { RefObject } from 'react'
 
 interface BreadcrumbItem {
   label: string
@@ -92,10 +92,11 @@ export function ProductDetailContent({
   returnWindowDays,
   returnsAllowed,
 }: ProductDetailContentProps) {
+  const [deliveryBlocked, setDeliveryBlocked] = useState(false)
   const displayPrice = Number(variantSelection.currentPrice || product.basePrice || 0)
   const displayStock = Number(variantSelection.currentStock || product.stock || 0)
   const quantityMax = maxQuantity ?? cartLineQuantityMax(displayStock)
-  const addDisabled = Boolean(!canAddToCart || isAddingToCart)
+  const addDisabled = Boolean(!canAddToCart || isAddingToCart || deliveryBlocked)
   const reviewCount = product.reviewCount ?? 0
   const avgRating = product.avgRating ?? 0
   const formattedPrice = displayPrice.toLocaleString('en-IN')
@@ -141,9 +142,11 @@ export function ProductDetailContent({
     ? LABELS.selectOptionsHint
     : displayStock === 0
       ? LABELS.outOfStockHint
-      : isAddingToCart
-        ? LABELS.addingToCart
-        : ''
+      : deliveryBlocked
+        ? LABELS.deliveryNotServiceable
+        : isAddingToCart
+          ? LABELS.addingToCart
+          : ''
 
   return (
     <div className="storefront-container pb-10 pt-4 sm:pt-6 md:pb-14 md:pt-8">
@@ -292,16 +295,29 @@ export function ProductDetailContent({
               />
             ) : null}
 
-            <div className="space-y-2.5 rounded-xl border border-line bg-paper/50 p-3 sm:p-4">
+            <div className="space-y-3 rounded-xl border border-line bg-paper/50 p-3 sm:p-4">
               {!canAddToCart && needsOptionSelection ? (
                 <p className="text-[0.8125rem] text-ink-muted">{LABELS.selectAllOptionsHint}</p>
               ) : null}
 
-              <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+              <ProductDeliveryCheck
+                productId={product.id}
+                variantId={resolvedVariant?.id}
+                vendorId={product.vendor?.id}
+                price={displayPrice}
+                codAvailable={product.codAvailable}
+                codMinOrderValue={product.codMinOrderValue}
+                codMaxOrderValue={product.codMaxOrderValue}
+                onBlockedChange={setDeliveryBlocked}
+              />
+
+              <div className="flex flex-wrap items-center gap-2 border-t border-line pt-3 sm:gap-2.5">
                 <QuantitySelector
                   value={quantity}
                   onChange={onQuantityChange}
                   max={Math.max(quantityMax, 1)}
+                  disabled={deliveryBlocked}
+                  disabledHint={LABELS.deliveryNotServiceable}
                   className="shrink-0"
                   controlClassName="h-9 w-9 min-h-9 max-h-9 [&_svg]:size-3.5"
                   valueClassName="h-5 w-6 text-[0.8125rem]"
@@ -315,7 +331,10 @@ export function ProductDetailContent({
                   <Button
                     className="w-full rounded-md sm:min-w-[10rem]"
                     disabled={addDisabled}
-                    onClick={() => onAddToCart?.(quantity)}
+                    onClick={() => {
+                      if (addDisabled) return
+                      onAddToCart?.(quantity)
+                    }}
                     loading={isAddingToCart}
                   >
                     {addToCartLabel}
@@ -418,15 +437,6 @@ export function ProductDetailContent({
               </div>
             ) : null}
 
-            <ProductDeliveryCheck
-              productId={product.id}
-              variantId={resolvedVariant?.id}
-              vendorId={product.vendor?.id}
-              price={displayPrice}
-              codAvailable={product.codAvailable}
-              codMinOrderValue={product.codMinOrderValue}
-              codMaxOrderValue={product.codMaxOrderValue}
-            />
           </div>
         </div>
       </div>
@@ -507,7 +517,10 @@ export function ProductDetailContent({
                 size="lg"
                 className="rounded-full px-5"
                 disabled={addDisabled}
-                onClick={() => onAddToCart?.(quantity)}
+                onClick={() => {
+                  if (addDisabled) return
+                  onAddToCart?.(quantity)
+                }}
                 loading={isAddingToCart}
               >
                 {stickyAddLabel}
