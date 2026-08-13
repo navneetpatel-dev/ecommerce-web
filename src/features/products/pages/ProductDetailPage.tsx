@@ -20,6 +20,7 @@ export function ProductDetailPage() {
       isAddingToCart={detail.isAddingToCart}
       canAddToCart={detail.canAddToCart}
       needsOptionSelection={detail.needsOptionSelection}
+      variantUnavailable={detail.variantUnavailable}
       selectedImage={detail.selectedImage}
       onSelectImage={detail.setSelectedImage}
       quantity={detail.quantity}

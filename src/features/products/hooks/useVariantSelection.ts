@@ -51,6 +51,10 @@ export function useVariantSelection(variants: ProductVariant[], basePrice: numbe
 
   const isActive = (key: string, value: string) => selected[key] === value
 
+  const hasCompleteSelection =
+    Object.keys(attributeGroups).length === 0 ||
+    Object.keys(attributeGroups).every((key) => Boolean(selected[key]))
+
   const currentPrice = matchedVariant?.price ?? basePrice
   const currentStock =
     matchedVariant?.stock ??
@@ -66,6 +70,7 @@ export function useVariantSelection(variants: ProductVariant[], basePrice: numbe
     isAvailable,
     isActive,
     selectValue,
+    hasCompleteSelection,
     hasPriceChange: matchedVariant?.price !== undefined && matchedVariant.price !== basePrice,
   }
 }

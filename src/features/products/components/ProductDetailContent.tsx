@@ -57,6 +57,7 @@ interface ProductDetailContentProps {
   isAddingToCart?: boolean
   canAddToCart?: boolean
   needsOptionSelection?: boolean
+  variantUnavailable?: boolean
   selectedImage: number
   onSelectImage: (index: number) => void
   quantity: number
@@ -79,6 +80,7 @@ export function ProductDetailContent({
   isAddingToCart,
   canAddToCart = true,
   needsOptionSelection = false,
+  variantUnavailable = false,
   selectedImage,
   onSelectImage,
   quantity,
@@ -96,7 +98,16 @@ export function ProductDetailContent({
   const displayPrice = Number(variantSelection.currentPrice || product.basePrice || 0)
   const displayStock = Number(variantSelection.currentStock || product.stock || 0)
   const quantityMax = maxQuantity ?? cartLineQuantityMax(displayStock)
-  const addDisabled = Boolean(!canAddToCart || isAddingToCart || deliveryBlocked)
+  const purchaseBlocked = Boolean(!canAddToCart || deliveryBlocked)
+  const addDisabled = Boolean(purchaseBlocked || isAddingToCart)
+  const quantityDisabled = purchaseBlocked
+  const quantityDisabledHint = needsOptionSelection
+    ? LABELS.selectAllOptionsHint
+    : variantUnavailable
+      ? LABELS.variantUnavailableHint
+      : !canAddToCart
+        ? LABELS.outOfStockHint
+        : LABELS.deliveryNotServiceable
   const reviewCount = product.reviewCount ?? 0
   const avgRating = product.avgRating ?? 0
   const formattedPrice = displayPrice.toLocaleString('en-IN')
@@ -130,23 +141,29 @@ export function ProductDetailContent({
 
   const addToCartLabel = needsOptionSelection
     ? LABELS.selectOptions
-    : displayStock === 0
-      ? LABELS.outOfStock
-      : LABELS.addToCart
+    : variantUnavailable
+      ? LABELS.notAvailable
+      : displayStock === 0
+        ? LABELS.outOfStock
+        : LABELS.addToCart
 
   const stickyAddLabel = needsOptionSelection
     ? LABELS.selectOptions
-    : formatLabel(LABELS.addToCartWithPrice, { price: formattedPrice })
+    : variantUnavailable
+      ? LABELS.notAvailable
+      : formatLabel(LABELS.addToCartWithPrice, { price: formattedPrice })
 
   const addToCartHint = needsOptionSelection
     ? LABELS.selectOptionsHint
-    : displayStock === 0
-      ? LABELS.outOfStockHint
-      : deliveryBlocked
-        ? LABELS.deliveryNotServiceable
-        : isAddingToCart
-          ? LABELS.addingToCart
-          : ''
+    : variantUnavailable
+      ? LABELS.variantUnavailableHint
+      : displayStock === 0
+        ? LABELS.outOfStockHint
+        : deliveryBlocked
+          ? LABELS.deliveryNotServiceable
+          : isAddingToCart
+            ? LABELS.addingToCart
+            : ''
 
   return (
     <div className="storefront-container pb-10 pt-4 sm:pt-6 md:pb-14 md:pt-8">
@@ -258,8 +275,10 @@ export function ProductDetailContent({
                   </p>
                 ) : null}
               </div>
-              {displayStock === 0 ? (
-                <Badge variant="destructive">{LABELS.outOfStock}</Badge>
+              {needsOptionSelection ? null : displayStock === 0 || variantUnavailable ? (
+                <Badge variant="destructive">
+                  {variantUnavailable ? LABELS.notAvailable : LABELS.outOfStock}
+                </Badge>
               ) : displayStock <= lowStockAt ? (
                 <Badge variant="destructive">
                   {formatLabel(LABELS.onlyLeft, { count: displayStock })}
@@ -296,8 +315,12 @@ export function ProductDetailContent({
             ) : null}
 
             <div className="space-y-3 rounded-xl border border-line bg-paper/50 p-3 sm:p-4">
-              {!canAddToCart && needsOptionSelection ? (
+              {needsOptionSelection ? (
                 <p className="text-[0.8125rem] text-ink-muted">{LABELS.selectAllOptionsHint}</p>
+              ) : variantUnavailable ? (
+                <p className="text-[0.8125rem] text-ink-muted">{LABELS.variantUnavailableHint}</p>
+              ) : !canAddToCart && displayStock === 0 ? (
+                <p className="text-[0.8125rem] text-ink-muted">{LABELS.outOfStockHint}</p>
               ) : null}
 
               <ProductDeliveryCheck
@@ -316,8 +339,8 @@ export function ProductDetailContent({
                   value={quantity}
                   onChange={onQuantityChange}
                   max={Math.max(quantityMax, 1)}
-                  disabled={deliveryBlocked}
-                  disabledHint={LABELS.deliveryNotServiceable}
+                  disabled={quantityDisabled}
+                  disabledHint={quantityDisabledHint}
                   className="shrink-0"
                   controlClassName="h-9 w-9 min-h-9 max-h-9 [&_svg]:size-3.5"
                   valueClassName="h-5 w-6 text-[0.8125rem]"
@@ -505,7 +528,7 @@ export function ProductDetailContent({
         vendorId={product.vendor?.id}
       />
 
-      {showStickyBar && (displayStock > 0 || needsOptionSelection) ? (
+      {showStickyBar && (displayStock > 0 || needsOptionSelection || variantUnavailable) ? (
         <div className="fixed bottom-14 left-0 right-0 z-30 border-t border-line bg-surface/95 p-3 shadow-elevation-3 backdrop-blur-sm md:hidden">
           <div className="flex items-center gap-3">
             <div className="min-w-0 flex-1">

@@ -61,10 +61,10 @@ export function useProductDetail() {
       ? Number(variants[0]?.stock || 0)
       : 0
 
-  const needsOptionSelection =
-    variants.length > 1 &&
-    !selection.variantId &&
-    Object.keys(selection.attributeGroups).length > 0
+  const hasAttributeOptions = Object.keys(selection.attributeGroups).length > 0
+  const needsOptionSelection = hasAttributeOptions && !selection.hasCompleteSelection
+  const variantUnavailable =
+    hasAttributeOptions && selection.hasCompleteSelection && !selection.matchedVariant
 
   const maxQuantity = cartLineQuantityMax(selectedStock)
 
@@ -76,7 +76,8 @@ export function useProductDetail() {
     Boolean(product) &&
     Boolean(resolvedVariantId) &&
     selectedStock > 0 &&
-    !needsOptionSelection
+    !needsOptionSelection &&
+    !variantUnavailable
 
   const handleQuantityChange = useCallback(
     (qty: number) => {
@@ -87,14 +88,14 @@ export function useProductDetail() {
 
   const handleAddToCart = useCallback(
     (qty: number) => {
-      if (!resolvedVariantId || needsOptionSelection) return
+      if (!resolvedVariantId || needsOptionSelection || variantUnavailable) return
       addToCart.mutate({
         variantId: resolvedVariantId,
         quantity: Math.min(maxQuantity, clampCartQuantity(qty)),
         openDrawer: false,
       })
     },
-    [addToCart, maxQuantity, needsOptionSelection, resolvedVariantId],
+    [addToCart, maxQuantity, needsOptionSelection, resolvedVariantId, variantUnavailable],
   )
 
   const breadcrumbItems = product
@@ -173,6 +174,7 @@ export function useProductDetail() {
     isAddingToCart: addToCart.isPending,
     canAddToCart,
     needsOptionSelection,
+    variantUnavailable,
     onAddToCart: handleAddToCart,
     variantSelection: {
       attributeGroups: selection.attributeGroups,
