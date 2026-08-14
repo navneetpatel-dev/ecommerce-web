@@ -3,7 +3,7 @@
 import { RequirePermission } from '@/shared/components/RequirePermission'
 import { StatusDialog } from '@/shared/components/StatusDialog'
 import { ProductsTableView } from '../components/ProductsTableView'
-import { VendorProductCreateForm } from '../components/VendorProductCreateForm'
+import { VendorProductFormDialog } from '../components/VendorProductFormDialog'
 import { useVendorProductsPage } from '../hooks/useVendorProductsPage'
 
 export function ProductsTable() {
@@ -13,10 +13,8 @@ export function ProductsTable() {
   return (
     <RequirePermission permission={[...page.permission]}>
       <>
-        {page.showForm && (
-          <VendorProductCreateForm key={page.formKey} {...page.formProps} />
-        )}
         <ProductsTableView {...page.tableViewProps} />
+        <VendorProductFormDialog {...page.formDialogProps} />
         <StatusDialog {...page.deleteDialogProps} />
         {page.imagesDialogProps ? <ImagesDialog {...page.imagesDialogProps} /> : null}
       </>

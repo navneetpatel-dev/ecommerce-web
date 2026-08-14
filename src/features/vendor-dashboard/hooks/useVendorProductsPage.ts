@@ -1,7 +1,7 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Trash2 } from 'lucide-react'
 import { useVendorProductsTable } from './useVendorProductsTable'
 import { categoriesApi } from '@/features/categories/api/categories.api'
@@ -14,7 +14,9 @@ import {
   type ProductWriteBody,
 } from '@/features/products/schemas/products.schema'
 import { usePermissions } from '@/shared/hooks/usePermissions'
+import { useRouteQueryDialog } from '@/shared/hooks/useRouteQueryDialog'
 import { PERMISSIONS } from '@/shared/constants/permissions'
+import { QUERY_PARAMS } from '@/shared/constants/queryParams'
 import { LABELS } from '@/shared/constants/labels'
 import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
 import { formatLabel } from '@/shared/utils/formatLabel'
@@ -28,15 +30,13 @@ type RichProductItem = ProductListItem & {
   variants?: Array<{ id: string; sku?: string; stock?: number; lowStockAt?: number }>
 }
 
-type FormMode = 'create' | 'edit'
-
 export function useVendorProductsPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const table = useVendorProductsTable()
   const { hasPermission } = usePermissions()
+  const dialog = useRouteQueryDialog()
 
-  const [mode, setMode] = useState<FormMode | null>(null)
-  const [editingId, setEditingId] = useState<string | null>(null)
   const [values, setValues] = useState<ProductListingFormValues>(() => emptyProductListingValues())
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [draftUploadId, setDraftUploadId] = useState(() => crypto.randomUUID())
@@ -44,7 +44,8 @@ export function useVendorProductsPage() {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [imagesTarget, setImagesTarget] = useState<{ id: string; name: string } | null>(null)
+
+  const imagesProductId = searchParams.get(QUERY_PARAMS.images)
 
   useEffect(() => {
     void categoriesApi.list().then((rows) => {
@@ -62,10 +63,8 @@ export function useVendorProductsPage() {
     })
   }, [])
 
-  const resetForm = useCallback(
-    (nextMode: FormMode | null, categoryId?: string) => {
-      setMode(nextMode)
-      setEditingId(null)
+  const resetFormState = useCallback(
+    (categoryId?: string) => {
       setValues(emptyProductListingValues(categoryId ?? categories[0]?.id ?? ''))
       setImageUrls([])
       setDraftUploadId(crypto.randomUUID())
@@ -75,35 +74,8 @@ export function useVendorProductsPage() {
     [categories],
   )
 
-  const handleValidSubmit = useCallback(
-    async (body: ProductWriteBody) => {
-      setSubmitting(true)
-      setSubmitError(null)
-      try {
-        if (mode === 'edit' && editingId) {
-          await productsApi.update(editingId, body)
-        } else {
-          const product = await productsApi.create(body)
-          for (let index = 0; index < imageUrls.length; index += 1) {
-            const url = imageUrls[index]!
-            await productsApi.addImage(product.id, { url, isPrimary: index === 0 })
-          }
-        }
-        resetForm(null)
-        router.refresh()
-      } catch (err: unknown) {
-        setSubmitError(getApiErrorMessage(err, LABELS.couldNotSaveProduct))
-      } finally {
-        setSubmitting(false)
-      }
-    },
-    [editingId, imageUrls, mode, resetForm, router],
-  )
-
-  const handleEdit = useCallback(
+  const loadEditProduct = useCallback(
     async (productId: string) => {
-      setMode('edit')
-      setEditingId(productId)
       setValues(emptyProductListingValues(categories[0]?.id ?? ''))
       setImageUrls([])
       setSubmitError(null)
@@ -124,6 +96,76 @@ export function useVendorProductsPage() {
   const canEdit = hasPermission(PERMISSIONS.PRODUCT_UPDATE)
   const canDelete = hasPermission(PERMISSIONS.PRODUCT_DELETE)
 
+  const { open, mode, editId, openCreate, openEdit, close, setOpen, setQuery } = dialog
+
+  const lastDialogKeyRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (!open || !mode) {
+      lastDialogKeyRef.current = null
+      return
+    }
+
+    const dialogKey = mode === 'edit' ? `edit:${editId ?? ''}` : 'create'
+    if (lastDialogKeyRef.current === dialogKey) return
+    lastDialogKeyRef.current = dialogKey
+
+    if (mode === 'create') {
+      if (!canCreate) {
+        close()
+        return
+      }
+      queueMicrotask(() => resetFormState(categories[0]?.id))
+      return
+    }
+
+    if (mode === 'edit' && editId) {
+      if (!canEdit) {
+        close()
+        return
+      }
+      queueMicrotask(() => {
+        void loadEditProduct(editId)
+      })
+    }
+  }, [
+    canCreate,
+    canEdit,
+    categories,
+    close,
+    editId,
+    loadEditProduct,
+    mode,
+    open,
+    resetFormState,
+  ])
+
+  const handleValidSubmit = useCallback(
+    async (body: ProductWriteBody) => {
+      setSubmitting(true)
+      setSubmitError(null)
+      try {
+        if (mode === 'edit' && editId) {
+          await productsApi.update(editId, body)
+        } else {
+          const product = await productsApi.create(body)
+          for (let index = 0; index < imageUrls.length; index += 1) {
+            const url = imageUrls[index]!
+            await productsApi.addImage(product.id, { url, isPrimary: index === 0 })
+          }
+        }
+        close()
+        resetFormState(categories[0]?.id)
+        router.refresh()
+      } catch (err: unknown) {
+        setSubmitError(getApiErrorMessage(err, LABELS.couldNotSaveProduct))
+      } finally {
+        setSubmitting(false)
+      }
+    },
+    [categories, close, editId, imageUrls, mode, resetFormState, router],
+  )
+
   const products = useMemo(
     () =>
       (table.data?.items ?? []).map((product: RichProductItem) => ({
@@ -139,24 +181,34 @@ export function useVendorProductsPage() {
     [table.data?.items],
   )
 
-  const showForm =
-    (mode === 'create' && canCreate) || (mode === 'edit' && canEdit)
+  const imagesTarget = useMemo(() => {
+    if (!imagesProductId) return null
+    const product = products.find((row) => row.id === imagesProductId)
+    return product ? { id: product.id, name: product.name } : null
+  }, [imagesProductId, products])
 
-  const formProps = {
-    mode: mode === 'edit' ? ('edit' as const) : ('create' as const),
-    values,
-    categories,
-    imageUrls,
-    draftUploadId: editingId ?? draftUploadId,
-    submitError,
-    submitting,
-    loading,
-    onChange: (patch: Partial<ProductListingFormValues>) => {
-      setValues((current) => ({ ...current, ...patch }))
+  const showProductDialog =
+    open && ((mode === 'create' && canCreate) || (mode === 'edit' && canEdit))
+
+  const formDialogProps = {
+    open: showProductDialog,
+    mode: (mode === 'edit' ? 'edit' : 'create') as 'create' | 'edit',
+    onOpenChange: setOpen,
+    onCancel: close,
+    formProps: {
+      values,
+      categories,
+      imageUrls,
+      draftUploadId: editId ?? draftUploadId,
+      submitError,
+      submitting,
+      loading,
+      onChange: (patch: Partial<ProductListingFormValues>) => {
+        setValues((current) => ({ ...current, ...patch }))
+      },
+      onImageUrlsChange: setImageUrls,
+      onValidSubmit: handleValidSubmit,
     },
-    onImageUrlsChange: setImageUrls,
-    onValidSubmit: handleValidSubmit,
-    onCancel: () => resetForm(null),
   }
 
   const tableViewProps = {
@@ -170,10 +222,8 @@ export function useVendorProductsPage() {
     actionMessage: table.actionMessage,
     onSearchChange: table.handleSearchChange,
     onPageChange: table.setPage,
-    onAddProduct: canCreate
-      ? () => resetForm('create', categories[0]?.id)
-      : undefined,
-    onEditProduct: canEdit ? (product: { id: string }) => void handleEdit(product.id) : undefined,
+    onAddProduct: canCreate ? () => openCreate() : undefined,
+    onEditProduct: canEdit ? (product: { id: string }) => openEdit(product.id) : undefined,
     onDeleteProduct: canDelete
       ? (product: { id: string; name: string }) =>
           table.setDeleteTarget({ id: product.id, name: product.name })
@@ -183,7 +233,11 @@ export function useVendorProductsPage() {
       : undefined,
     onManageImages: canEdit
       ? (product: { id: string; name: string }) =>
-          setImagesTarget({ id: product.id, name: product.name })
+          setQuery({
+            [QUERY_PARAMS.images]: product.id,
+            [QUERY_PARAMS.create]: null,
+            [QUERY_PARAMS.edit]: null,
+          })
       : undefined,
   }
 
@@ -215,9 +269,7 @@ export function useVendorProductsPage() {
       PERMISSIONS.PRODUCT_UPDATE,
       PERMISSIONS.PRODUCT_DELETE,
     ] as const,
-    showForm,
-    formKey: editingId ?? 'create',
-    formProps,
+    formDialogProps,
     tableViewProps,
     deleteDialogProps,
     imagesDialogProps: imagesTarget
@@ -226,7 +278,9 @@ export function useVendorProductsPage() {
           productName: imagesTarget.name,
           open: true,
           onOpenChange: (open: boolean) => {
-            if (!open) setImagesTarget(null)
+            if (!open) {
+              setQuery({ [QUERY_PARAMS.images]: null })
+            }
           },
           onChanged: () => router.refresh(),
         }

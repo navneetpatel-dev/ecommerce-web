@@ -2,7 +2,7 @@
 
 import { Button } from '@/shared/components/ui/button'
 import { ButtonGroup } from '@/shared/components/ui/button-group'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog'
 import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import { Plus } from 'lucide-react'
@@ -132,11 +132,9 @@ export function VendorCouponsView({
         </div>
         <ButtonGroup>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button size="sm" fullWidth="mobile">
-              <Plus aria-hidden /> {LABELS.createVendorCoupon}
-            </Button>
-          </DialogTrigger>
+          <Button type="button" size="sm" fullWidth="mobile" onClick={() => setOpen(true)}>
+            <Plus aria-hidden /> {LABELS.createVendorCoupon}
+          </Button>
           <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{LABELS.createVendorCoupon}</DialogTitle>

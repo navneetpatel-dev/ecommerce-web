@@ -72,9 +72,15 @@ export const PATHS = {
     root: '/vendor',
     overview: '/vendor/dashboard/overview',
     products: '/vendor/dashboard/products',
+    productCreateQuery: '/vendor/dashboard/products?create=1',
+    productEditQuery: (id: string) =>
+      `/vendor/dashboard/products?edit=${encodeURIComponent(id)}`,
+    productImagesQuery: (id: string) =>
+      `/vendor/dashboard/products?images=${encodeURIComponent(id)}`,
     orders: '/vendor/dashboard/orders',
     payouts: '/vendor/dashboard/payouts',
     coupons: '/vendor/dashboard/coupons',
+    couponCreateQuery: '/vendor/dashboard/coupons?create=1',
     reviews: '/vendor/dashboard/reviews',
     profile: '/vendor/dashboard/profile',
     shopSettings: '/vendor/dashboard/shop-settings',

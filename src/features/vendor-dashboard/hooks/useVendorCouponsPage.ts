@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
+import { useSearchParams } from 'next/navigation'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import {
   CouponSchema,
@@ -18,16 +19,20 @@ import {
   vendorCouponKeys,
 } from '../api/vendor-coupons.queries'
 import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
+import { QUERY_PARAMS } from '@/shared/constants/queryParams'
 import { couponsApi } from '@/features/coupons/api/coupons.api'
+import { useRouteQueryDialog } from '@/shared/hooks/useRouteQueryDialog'
 import type { Coupon } from '@/shared/api/types'
 
 export function useVendorCouponsPage() {
   const user = useAuthStore((s) => s.currentUser)
   const vendorId = user?.vendorId ?? null
   const queryClient = useQueryClient()
+  const searchParams = useSearchParams()
+  const dialog = useRouteQueryDialog()
   const [page, setPage] = useState(1)
-  const [open, setOpen] = useState(false)
-  const [analyticsId, setAnalyticsId] = useState<string | null>(null)
+
+  const analyticsId = searchParams.get(QUERY_PARAMS.analytics)
 
   const { data, isLoading } = useVendorCoupons(page, DEFAULT_PAGE_LIMIT)
   const createMutation = useCreateVendorCoupon(vendorId)
@@ -51,6 +56,19 @@ export function useVendorCouponsPage() {
     form.setValue('applicableScopeIds', [vendorId])
   }, [vendorId, form])
 
+  const prevCreateOpenRef = useRef(false)
+
+  useEffect(() => {
+    if (dialog.open && !prevCreateOpenRef.current) {
+      form.reset({
+        ...VENDOR_COUPON_FORM_DEFAULTS,
+        applicableScopeIds: vendorId ? [vendorId] : [],
+      })
+      createMutation.reset()
+    }
+    prevCreateOpenRef.current = dialog.open
+  }, [dialog.open, vendorId, form, createMutation])
+
   const coupons = data?.items ?? []
   const limit = data?.limit ?? DEFAULT_PAGE_LIMIT
   const total = data?.total ?? 0
@@ -59,19 +77,16 @@ export function useVendorCouponsPage() {
   const to = Math.min(currentPage * limit, total)
 
   const setDialogOpen = (next: boolean) => {
-    setOpen(next)
-    if (!next) {
-      form.reset({
-        ...VENDOR_COUPON_FORM_DEFAULTS,
-        applicableScopeIds: vendorId ? [vendorId] : [],
-      })
-      createMutation.reset()
+    if (next) {
+      dialog.openCreate()
+      return
     }
+    dialog.close()
   }
 
   const onSubmit = (values: CouponFormInput) => {
     createMutation.mutate(values, {
-      onSuccess: () => setDialogOpen(false),
+      onSuccess: () => dialog.close(),
     })
   }
 
@@ -84,7 +99,7 @@ export function useVendorCouponsPage() {
     vendorId,
     coupons,
     isLoading,
-    open,
+    open: dialog.open,
     setOpen: setDialogOpen,
     form,
     isPending: createMutation.isPending,
@@ -98,7 +113,9 @@ export function useVendorCouponsPage() {
       onPageChange: setPage,
     },
     analyticsId,
-    setAnalyticsId,
+    setAnalyticsId: (id: string | null) => {
+      dialog.setQuery({ [QUERY_PARAMS.analytics]: id })
+    },
     analytics: analyticsQuery.data,
     analyticsLoading: analyticsQuery.isLoading,
     absorbedDiscountTotal: Number(absorbedQuery.data?.absorbedDiscountTotal ?? 0),
