@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import {
-  ProductImagePlaceholder,
-  type ProductImagePlaceholderFit,
-} from '@/shared/components/ProductImagePlaceholder'
+import { ProductImagePlaceholder } from '@/shared/components/ProductImagePlaceholder'
 import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
 
@@ -29,10 +26,6 @@ type LoadStatus = 'idle' | 'ready' | 'error'
 interface ProbeState {
   src: string | null
   status: LoadStatus
-}
-
-function fitFromClassName(className?: string): ProductImagePlaceholderFit {
-  return className?.includes('object-cover') ? 'cover' : 'contain'
 }
 
 function initialProbeState(src?: string | null): ProbeState {
@@ -59,7 +52,6 @@ export function MediaImage({
   imageClassName,
   onUnavailableChange,
 }: MediaImageProps) {
-  const fit = fitFromClassName(imageClassName)
   const currentSrc = src ?? null
   const [probeState, setProbeState] = useState<ProbeState>(() => initialProbeState(src))
 
@@ -111,7 +103,6 @@ export function MediaImage({
   if (unavailable) {
     return (
       <ProductImagePlaceholder
-        fit={fit}
         className={cn(className)}
         label={unavailableLabel}
       />
