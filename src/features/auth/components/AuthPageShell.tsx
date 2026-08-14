@@ -5,8 +5,8 @@ import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 
 /**
- * Full-page auth layout — brand panel + form column.
- * Split layout starts at xl so lg / narrowed viewports stay single-column.
+ * Full-page auth layout — brand panel + form column from lg (1024px).
+ * Below lg the form is the only content and sits centered in the viewport.
  */
 const BRAND_LINK_CLASS =
   'min-w-0 shrink truncate font-display text-[1.25rem] font-semibold leading-none text-brand sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]'
@@ -35,17 +35,17 @@ export function AuthPageShell({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <div className="relative grid min-h-[100dvh] w-full xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.95fr)] xl:gap-10 2xl:gap-14">
-        <aside className="relative hidden min-w-0 xl:flex xl:min-h-[100dvh]">
+      <div className="relative grid min-h-[100dvh] w-full lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.95fr)] lg:gap-8 xl:grid-cols-[minmax(0,1.15fr)_minmax(22rem,0.95fr)] xl:gap-10 2xl:gap-14">
+        <aside className="relative hidden min-w-0 overflow-y-auto lg:flex lg:min-h-[100dvh]">
           <AuthBrandVisual />
 
-          <div className="relative z-[1] flex min-h-[100dvh] w-full flex-col justify-between px-10 pb-10 pt-14 lg:pt-[72px] 2xl:px-16 2xl:pb-12">
+          <div className="relative z-[1] flex min-h-[100dvh] w-full flex-col justify-between px-10 pb-10 pt-[72px] 2xl:px-16 2xl:pb-12">
             <div className="my-auto max-w-xl space-y-6 2xl:max-w-2xl 2xl:space-y-7">
               <div className="space-y-4">
                 <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-brand">
                   {LABELS.authBrandEyebrow}
                 </p>
-                <p className="font-display text-[clamp(2.25rem,3.2vw,3.5rem)] leading-[1.08] tracking-tight text-ink">
+                <p className="font-display text-[clamp(1.75rem,3.2vw,3.5rem)] leading-[1.08] tracking-tight text-ink">
                   {LABELS.authBrandHeadline}
                 </p>
                 <p className="max-w-lg text-[1.0625rem] leading-relaxed text-ink-muted 2xl:text-[1.125rem]">
@@ -56,43 +56,24 @@ export function AuthPageShell({ children }: { children: React.ReactNode }) {
               <AuthBrandFeatures className="max-w-md" />
             </div>
 
-            <p className="text-[0.8125rem] text-ink-faint">{LABELS.authBrandFooter}</p>
+            <p className="mt-8 text-[0.8125rem] text-ink-faint">{LABELS.authBrandFooter}</p>
           </div>
         </aside>
 
-        <main className="relative flex min-w-0 flex-col justify-center px-5 pb-10 pt-14 sm:px-8 md:px-10 lg:pt-[72px] xl:px-10 xl:pb-12 2xl:px-14">
+        <main className="relative flex min-h-[100dvh] min-w-0 flex-col items-center justify-center px-4 py-8 pt-16 sm:px-6 md:px-8 lg:px-10 lg:py-12 lg:pt-[72px] 2xl:px-14">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-y-[8%] right-[6%] hidden w-[min(42%,18rem)] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--brand)_14%,transparent),transparent_70%)] blur-2xl xl:block"
+            className="pointer-events-none absolute inset-y-[8%] right-[6%] hidden w-[min(42%,18rem)] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--brand)_14%,transparent),transparent_70%)] blur-2xl lg:block"
           />
 
-          <div className="relative mx-auto w-full max-w-[min(100%,28rem)] xl:max-w-[min(100%,26rem)] 2xl:max-w-[min(100%,28rem)]">
-            <div className="mb-8 space-y-4 text-center xl:hidden">
-              <div className="space-y-3 px-1">
-                <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-brand">
-                  {LABELS.authBrandEyebrow}
-                </p>
-                <p className="font-display text-[clamp(1.875rem,6vw,2.5rem)] leading-[1.12] tracking-tight text-ink">
-                  {LABELS.authBrandHeadline}
-                </p>
-                <p className="mx-auto max-w-md text-[0.9375rem] leading-relaxed text-ink-muted sm:text-[1rem]">
-                  {LABELS.authBrandBody}
-                </p>
-              </div>
-              <AuthBrandFeatures variant="pills" />
-            </div>
-
+          <div className="relative w-full max-w-[min(100%,28rem)] xl:max-w-[min(100%,26rem)] 2xl:max-w-[min(100%,28rem)]">
             <div className="relative motion-safe:animate-[auth-rise_420ms_ease-out_both]">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -inset-3 rounded-[1.25rem] bg-[radial-gradient(ellipse_at_center,color-mix(in_srgb,var(--brand-subtle)_35%,transparent),transparent_72%)] opacity-80 sm:-inset-4"
+                className="pointer-events-none absolute -inset-3 hidden rounded-[1.25rem] bg-[radial-gradient(ellipse_at_center,color-mix(in_srgb,var(--brand-subtle)_35%,transparent),transparent_72%)] opacity-80 sm:block sm:-inset-4"
               />
               {children}
             </div>
-
-            <p className="mt-6 text-center text-[0.8125rem] text-ink-faint xl:hidden">
-              {LABELS.authBrandFooter}
-            </p>
           </div>
         </main>
       </div>

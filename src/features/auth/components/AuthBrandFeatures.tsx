@@ -51,7 +51,7 @@ export function AuthBrandFeatures({ variant = 'list', className }: AuthBrandFeat
       )}
     >
       {FEATURES.map(({ icon: Icon, title, hint }) => (
-        <li key={title} className="flex items-start gap-3 px-4 py-3.5 sm:px-4 sm:py-4">
+        <li key={title} className="flex items-start gap-3 px-3.5 py-3 md:px-4 md:py-3.5 lg:py-4">
           <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-subtle/35 ring-1 ring-line/50">
             <Icon aria-hidden className="h-4 w-4 text-brand" strokeWidth={1.75} />
           </span>

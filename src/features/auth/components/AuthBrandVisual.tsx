@@ -36,7 +36,7 @@ export function AuthBrandVisual({ className }: { className?: string }) {
               src={src}
               alt={alt}
               fill
-              sizes="(min-width: 1280px) 240px, 0px"
+              sizes="(min-width: 1024px) 240px, 0px"
               className="object-cover"
               priority={false}
             />

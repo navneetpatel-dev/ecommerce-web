@@ -2,12 +2,13 @@
 
 import { useOtpInput } from '../hooks/useOtpInput'
 import { OtpCard } from '../components/OtpCard'
+import { AuthPageShell } from '../components/AuthPageShell'
 
 export function OtpPage() {
   const otp = useOtpInput()
 
   return (
-    <div className="min-h-screen bg-paper px-4 py-10 flex items-start justify-center">
+    <AuthPageShell>
       <OtpCard
         digits={otp.digits}
         completed={otp.completed}
@@ -23,6 +24,6 @@ export function OtpPage() {
         onVerify={() => void otp.verify()}
         onResend={otp.resend}
       />
-    </div>
+    </AuthPageShell>
   )
 }

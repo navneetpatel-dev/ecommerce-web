@@ -5,11 +5,11 @@ import { Skeleton } from '@/shared/components/ui/skeleton'
 export function AuthFormSkeleton() {
   return (
     <div className="relative overflow-hidden rounded-xl border border-line/90 bg-surface/95 shadow-elevation-3 ring-1 ring-inset ring-white/[0.04] backdrop-blur-sm">
-      <header className="space-y-3 border-b border-line/80 bg-gradient-to-b from-paper/55 to-paper/25 px-6 py-6 sm:px-8 sm:py-8">
+      <header className="space-y-3 border-b border-line/80 bg-gradient-to-b from-paper/55 to-paper/25 px-5 py-5 sm:px-8 sm:py-8">
         <Skeleton className="h-8 w-48 sm:h-9 sm:w-56" />
         <Skeleton className="h-4 w-full max-w-[16rem]" />
       </header>
-      <div className="space-y-5 px-6 py-6 sm:px-8 sm:py-8">
+      <div className="space-y-5 px-5 py-5 sm:px-8 sm:py-8">
         <div className="space-y-2">
           <Skeleton className="h-3.5 w-16" />
           <Skeleton className="h-11 w-full" />
@@ -26,7 +26,7 @@ export function AuthFormSkeleton() {
         </div>
         <Skeleton className="h-11 w-full" />
       </div>
-      <footer className="border-t border-line/80 bg-paper/30 px-6 py-5 sm:px-8">
+      <footer className="border-t border-line/80 bg-paper/30 px-5 py-4 sm:px-8 sm:py-5">
         <Skeleton className="mx-auto h-4 w-48" />
       </footer>
     </div>
