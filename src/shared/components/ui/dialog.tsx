@@ -52,17 +52,17 @@ const DialogContent = React.forwardRef<
             enlarge document overflow and leave a page scrollbar beside the modal. */}
         <div
           className={cn(
-            'fixed inset-0 z-50 flex items-center justify-center pointer-events-none',
-            isFullscreen ? 'p-0' : 'p-4',
+            'fixed inset-0 z-50 pointer-events-none',
+            isFullscreen ? 'p-0' : 'flex items-center justify-center p-4',
           )}
         >
           <DialogPrimitive.Content
             ref={ref}
             className={cn(
-              'pointer-events-auto relative grid w-full max-h-full overscroll-contain outline-none animate-scale-in',
+              'pointer-events-auto overscroll-contain outline-none animate-scale-in',
               isFullscreen
-                ? 'max-w-none gap-0 overflow-hidden border-0 bg-transparent p-0 shadow-none rounded-none'
-                : 'max-w-[480px] gap-5 overflow-y-auto border border-line bg-surface-raised p-5 shadow-elevation-3 rounded-lg sm:gap-6 sm:p-6',
+                ? 'fixed inset-0 flex h-[100dvh] w-full max-h-none max-w-none flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none rounded-none'
+                : 'relative grid w-full max-w-[480px] max-h-full gap-5 overflow-y-auto border border-line bg-surface-raised p-5 shadow-elevation-3 rounded-lg sm:gap-6 sm:p-6',
               className
             )}
             style={{ animationDuration: 'var(--motion-moderate)' }}
@@ -87,7 +87,12 @@ const DialogContent = React.forwardRef<
             {children}
             <DialogPrimitive.Close
               type="button"
-              className="absolute right-4 top-4 rounded-sm opacity-70 outline-none hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              className={cn(
+                'rounded-sm opacity-70 outline-none hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+                isFullscreen
+                  ? 'fixed right-3 top-3 z-[60] rounded-full border border-line bg-surface/90 p-2 opacity-100 shadow-elevation-1 backdrop-blur-sm'
+                  : 'absolute right-4 top-4',
+              )}
               onPointerDown={(event) => {
                 // Keep focus in the dialog until close so field blur doesn't flash validation.
                 event.preventDefault()

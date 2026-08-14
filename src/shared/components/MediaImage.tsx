@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { ProductImagePlaceholder } from '@/shared/components/ProductImagePlaceholder'
+import {
+  ProductImagePlaceholder,
+  type ProductImagePlaceholderFit,
+} from '@/shared/components/ProductImagePlaceholder'
 import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
 
@@ -21,6 +24,25 @@ interface MediaImageProps {
   onUnavailableChange?: (unavailable: boolean) => void
 }
 
+type LoadStatus = 'idle' | 'ready' | 'error'
+
+interface ProbeState {
+  src: string | null
+  status: LoadStatus
+}
+
+function fitFromClassName(className?: string): ProductImagePlaceholderFit {
+  return className?.includes('object-cover') ? 'cover' : 'contain'
+}
+
+function initialProbeState(src?: string | null): ProbeState {
+  const normalized = src ?? null
+  return {
+    src: normalized,
+    status: normalized ? 'idle' : 'error',
+  }
+}
+
 /**
  * Renders a media image, or the shared unavailable placeholder when
  * `src` is missing or the remote asset fails to load.
@@ -37,17 +59,60 @@ export function MediaImage({
   imageClassName,
   onUnavailableChange,
 }: MediaImageProps) {
-  const [failedSrc, setFailedSrc] = useState<string | null>(null)
-  const unavailable = !src || failedSrc === src
+  const fit = fitFromClassName(imageClassName)
+  const currentSrc = src ?? null
+  const [probeState, setProbeState] = useState<ProbeState>(() => initialProbeState(src))
+
+  if (currentSrc !== probeState.src) {
+    setProbeState(initialProbeState(src))
+  }
+
+  useEffect(() => {
+    if (!currentSrc || probeState.status !== 'idle') return
+
+    let cancelled = false
+    const probe = new window.Image()
+    probe.decoding = 'async'
+    probe.onload = () => {
+      if (cancelled) return
+      setProbeState((prev) =>
+        prev.src === currentSrc ? { ...prev, status: 'ready' } : prev,
+      )
+    }
+    probe.onerror = () => {
+      if (cancelled) return
+      setProbeState((prev) =>
+        prev.src === currentSrc ? { ...prev, status: 'error' } : prev,
+      )
+    }
+    probe.src = currentSrc
+
+    return () => {
+      cancelled = true
+    }
+  }, [currentSrc, probeState.status])
+
+  const unavailable = !currentSrc || probeState.status === 'error'
 
   useEffect(() => {
     onUnavailableChange?.(unavailable)
   }, [unavailable, onUnavailableChange])
 
+  if (probeState.status === 'idle' && currentSrc) {
+    return (
+      <div
+        aria-hidden
+        className={cn('absolute inset-0 bg-paper', className)}
+        data-image-state="loading"
+      />
+    )
+  }
+
   if (unavailable) {
     return (
       <ProductImagePlaceholder
-        className={className}
+        fit={fit}
+        className={cn(className)}
         label={unavailableLabel}
       />
     )
@@ -55,7 +120,7 @@ export function MediaImage({
 
   return (
     <Image
-      src={src}
+      src={currentSrc}
       alt={alt}
       fill
       sizes={sizes}
@@ -63,7 +128,11 @@ export function MediaImage({
       priority={priority}
       loading={loading}
       className={cn(imageClassName, className)}
-      onError={() => setFailedSrc(src)}
+      onError={() => {
+        setProbeState((prev) =>
+          prev.src === currentSrc ? { ...prev, status: 'error' } : prev,
+        )
+      }}
       data-image-state="loaded"
     />
   )

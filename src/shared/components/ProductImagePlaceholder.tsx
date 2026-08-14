@@ -1,65 +1,78 @@
 import { cn } from '@/shared/utils/cn'
 
+export type ProductImagePlaceholderFit = 'contain' | 'cover'
+
 interface ProductImagePlaceholderProps {
   className?: string
-  /** Icon size in pixels — keep small relative to the media frame. */
-  iconSize?: number
   label?: string
+  fit?: ProductImagePlaceholderFit
 }
 
-/** Default “image not available” graphic for product media. */
+/** Default “image not available” graphic — fills the media frame like object-fit. */
 export function ProductImagePlaceholder({
   className,
-  iconSize = 40,
   label = 'Image not available',
+  fit = 'contain',
 }: ProductImagePlaceholderProps) {
   return (
     <div
       className={cn(
-        'relative flex h-full w-full items-center justify-center',
-        'bg-brand-subtle/80 text-ink-faint',
-        className
+        'absolute inset-0 overflow-hidden bg-paper text-ink-faint',
+        className,
       )}
       role="img"
       aria-label={label}
       data-image-state="unavailable"
       title={label}
     >
-      <div className="flex h-[28%] w-[28%] max-h-14 max-w-14 min-h-9 min-w-9 items-center justify-center">
-        <svg
-          width={iconSize}
-          height={iconSize}
-          viewBox="0 0 24 24"
+      <svg
+        className="h-full w-full"
+        preserveAspectRatio={fit === 'cover' ? 'xMidYMid slice' : 'xMidYMid meet'}
+        viewBox="0 0 1200 900"
+        aria-hidden
+      >
+        <rect width="1200" height="900" fill="currentColor" fillOpacity="0.06" />
+        <rect
+          x="56"
+          y="56"
+          width="1088"
+          height="788"
+          rx="28"
           fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden
-          className="h-full w-full text-ink-faint opacity-80"
-        >
+          stroke="currentColor"
+          strokeOpacity="0.18"
+          strokeWidth="3"
+          strokeDasharray="18 14"
+        />
+        <g transform="translate(600 450)" opacity="0.55">
           <rect
-            x="2.75"
-            y="2.75"
-            width="18.5"
-            height="18.5"
-            rx="3"
+            x="-88"
+            y="-88"
+            width="176"
+            height="176"
+            rx="20"
+            fill="none"
             stroke="currentColor"
-            strokeWidth="1.35"
+            strokeWidth="4"
           />
           <circle
-            cx="15.25"
-            cy="8.5"
-            r="1.65"
+            cx="28"
+            cy="-28"
+            r="14"
+            fill="none"
             stroke="currentColor"
-            strokeWidth="1.35"
+            strokeWidth="4"
           />
           <path
-            d="M4.25 17.25 9.1 12.2a1.1 1.1 0 0 1 1.55 0l2.35 2.4 3.2-3.85a1.1 1.1 0 0 1 1.7 0l2.85 3.5"
+            d="M-58 46 18-18a10 10 0 0 1 14 0l28 28 46-56a10 10 0 0 1 15 0l57 70"
+            fill="none"
             stroke="currentColor"
-            strokeWidth="1.35"
+            strokeWidth="4"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-        </svg>
-      </div>
+        </g>
+      </svg>
     </div>
   )
 }

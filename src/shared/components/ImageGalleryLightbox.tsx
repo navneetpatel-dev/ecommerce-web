@@ -12,12 +12,10 @@ import { MediaImage } from '@/shared/components/MediaImage'
 import { ImageGalleryThumbnailStrip } from '@/shared/components/ImageGalleryThumbnailStrip'
 import { LABELS } from '@/shared/constants/labels'
 import {
-  IMAGE_GALLERY_LIGHTBOX_HEIGHT_CLASS,
   IMAGE_GALLERY_LIGHTBOX_QUALITY,
   IMAGE_GALLERY_LIGHTBOX_SIZES,
 } from '@/shared/constants/imageGallery'
 import { useImageLightboxGestures } from '@/shared/hooks/useImageLightboxGestures'
-import { cn } from '@/shared/utils/cn'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import type { ProductImage } from '@/shared/api/types'
 
@@ -76,11 +74,6 @@ export function ImageGalleryLightbox({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         presentation="fullscreen"
-        className={cn(
-          'w-full max-w-none',
-          IMAGE_GALLERY_LIGHTBOX_HEIGHT_CLASS,
-          '[&>button]:right-2 [&>button]:top-2 [&>button]:z-[3] [&>button]:rounded-full [&>button]:border [&>button]:border-line [&>button]:bg-surface/90 [&>button]:p-2 [&>button]:opacity-100 [&>button]:shadow-elevation-1 [&>button]:backdrop-blur-sm sm:[&>button]:right-3 sm:[&>button]:top-3',
-        )}
         onKeyDown={(event) => {
           if (event.key === 'ArrowLeft') {
             event.preventDefault()
@@ -93,11 +86,11 @@ export function ImageGalleryLightbox({
         }}
       >
         <DialogTitle className="sr-only">{productName}</DialogTitle>
-        <div className="flex h-full min-h-0 w-full flex-col bg-paper sm:rounded-none">
+        <div className="flex h-full min-h-0 w-full flex-col bg-paper">
           <div
             ref={viewportRef}
             {...viewportHandlers}
-            className="relative min-h-0 flex-1 touch-none overflow-hidden bg-paper"
+            className="relative h-0 min-h-0 flex-1 touch-none overflow-hidden bg-paper"
           >
             <div
               className="absolute inset-0 will-change-transform"
@@ -105,14 +98,16 @@ export function ImageGalleryLightbox({
                 transform: `translate3d(${transform.x}px, ${transform.y}px, 0) scale(${transform.scale})`,
               }}
             >
-              <MediaImage
-                src={current?.url}
-                alt={productName}
-                unavailableLabel={LABELS.imageNotAvailable}
-                sizes={IMAGE_GALLERY_LIGHTBOX_SIZES}
-                quality={IMAGE_GALLERY_LIGHTBOX_QUALITY}
-                imageClassName="object-contain"
-              />
+              <div className="relative h-full w-full">
+                <MediaImage
+                  src={current?.url}
+                  alt={productName}
+                  unavailableLabel={LABELS.imageNotAvailable}
+                  sizes={IMAGE_GALLERY_LIGHTBOX_SIZES}
+                  quality={IMAGE_GALLERY_LIGHTBOX_QUALITY}
+                  imageClassName="object-contain"
+                />
+              </div>
             </div>
 
             {hasMultiple ? (
@@ -154,8 +149,8 @@ export function ImageGalleryLightbox({
               onSelect={onSelect}
               productName={productName}
               orientation="horizontal"
-              className="shrink-0 border-t border-line bg-surface/95 px-3 py-2.5 backdrop-blur-sm sm:px-4 sm:py-3"
-              thumbClassName="h-12 w-12 min-h-12 sm:h-14 sm:w-14 sm:min-h-14"
+              className="w-full min-w-0 shrink-0 border-t border-line bg-surface/95 px-3 py-2.5 backdrop-blur-sm sm:px-4 sm:py-3"
+              thumbClassName="h-12 w-12 min-h-12 max-h-none sm:h-14 sm:w-14 sm:min-h-14 sm:max-h-none"
             />
           ) : null}
         </div>

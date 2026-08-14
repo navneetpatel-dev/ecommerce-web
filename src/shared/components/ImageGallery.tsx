@@ -101,7 +101,7 @@ export function ImageGallery({
 
   return (
     <div className="min-w-0 md:col-span-6 lg:col-span-7 lg:sticky lg:top-[88px] lg:z-[1] lg:self-start">
-      <div className="flex flex-col gap-2.5 sm:gap-3 lg:flex-row lg:items-stretch lg:gap-3.5">
+      <div className="flex min-w-0 flex-col gap-2.5 sm:gap-3 lg:flex-row lg:items-stretch lg:gap-3.5">
         {hasMultiple ? (
           <ImageGalleryThumbnailStrip
             images={gallery}
@@ -110,12 +110,12 @@ export function ImageGallery({
             productName={productName}
             orientation="responsive"
             className={cn(
-              'order-2 pb-0.5 touch-pan-x lg:order-1 lg:w-[4.25rem] lg:shrink-0 lg:touch-auto',
+              'order-2 w-full min-w-0 pb-0.5 lg:order-1 lg:w-[4.25rem] lg:shrink-0',
               THUMB_COLUMN_HEIGHT_CLASS,
             )}
             thumbClassName={cn(
               'h-14 w-14 min-h-14 max-h-none sm:h-16 sm:w-16 sm:min-h-16',
-              'lg:h-[4.25rem] lg:w-[4.25rem] lg:min-h-[4.25rem]',
+              'lg:h-[4.25rem] lg:w-[4.25rem] lg:min-h-[4.25rem] lg:max-h-none',
             )}
           />
         ) : null}

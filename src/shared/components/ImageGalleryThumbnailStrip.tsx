@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import type { ProductImage } from '@/shared/api/types'
 import { Button } from '@/shared/components/ui/button'
 import { MediaImage } from '@/shared/components/MediaImage'
@@ -26,20 +27,33 @@ export function ImageGalleryThumbnailStrip({
   className,
   thumbClassName,
 }: ImageGalleryThumbnailStripProps) {
+  const stripRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const strip = stripRef.current
+    if (!strip) return
+    const selected = strip.querySelector<HTMLElement>('[aria-selected="true"]')
+    selected?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' })
+  }, [selectedIndex])
+
   if (images.length <= 1) return null
+
+  const isHorizontal =
+    orientation === 'horizontal' ||
+    orientation === 'responsive'
 
   return (
     <div
+      ref={stripRef}
       role="tablist"
       aria-label={LABELS.imageGalleryThumbnails}
       className={cn(
-        'flex gap-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-        orientation === 'horizontal' &&
-          'overflow-x-auto overscroll-x-contain',
+        'flex w-full min-w-0 gap-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+        isHorizontal && 'flex-nowrap overflow-x-auto overscroll-x-contain touch-pan-x',
         orientation === 'vertical' &&
-          'flex-col overflow-y-auto overflow-x-hidden overscroll-y-contain',
+          'min-h-0 flex-col overflow-y-auto overflow-x-hidden overscroll-y-contain',
         orientation === 'responsive' &&
-          'overflow-x-auto overscroll-x-contain touch-pan-x lg:flex-col lg:overflow-y-auto lg:overflow-x-hidden lg:touch-auto',
+          'lg:min-h-0 lg:flex-col lg:overflow-y-auto lg:overflow-x-hidden lg:touch-auto',
         className,
       )}
     >
