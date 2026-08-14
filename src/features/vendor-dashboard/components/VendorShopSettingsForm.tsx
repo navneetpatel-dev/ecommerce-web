@@ -103,14 +103,14 @@ export function VendorShopSettingsForm({
   }, [vendorId])
 
   useEffect(() => {
-    void loadChecklist()
+    queueMicrotask(() => {
+      void loadChecklist()
+    })
   }, [loadChecklist, checklistKey])
 
   useEffect(() => {
     void categoriesApi.list().then(setCategories).catch(() => setCategories([]))
   }, [])
-
-  const activeItem = items.find((item) => item.documentType === activeType) ?? null
 
   const openKycDocument = async (documentId: string) => {
     try {
@@ -144,16 +144,28 @@ export function VendorShopSettingsForm({
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl">
-      <FormStack>
-      <div className="space-y-1">
-        <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-          {LABELS.vendorShopSettings}
-        </h2>
-        <p className="max-w-2xl text-[0.9375rem] text-ink-muted">{LABELS.vendorShopSettingsHint}</p>
-        {businessName ? (
-          <p className="text-[0.8125rem] text-ink-faint">{businessName}</p>
-        ) : null}
+    <div className="w-full min-w-0">
+      <FormStack className="space-y-8">
+      <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+        <div className="min-w-0 space-y-1.5">
+          <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+            {LABELS.vendorShopSettings}
+          </h2>
+          <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
+            {LABELS.vendorShopSettingsHint}
+          </p>
+          {businessName ? (
+            <p className="text-[0.8125rem] text-ink-faint">{businessName}</p>
+          ) : null}
+        </div>
+        <Button
+          type="button"
+          className="hidden shrink-0 sm:inline-flex"
+          disabled={saving}
+          onClick={onSave}
+        >
+          {LABELS.saveSettings}
+        </Button>
       </div>
 
       <FormSection title={LABELS.vendorCategories} hint={LABELS.vendorCategoriesHint}>
@@ -293,8 +305,8 @@ export function VendorShopSettingsForm({
         ) : null}
       </FormSection>
 
-      <FormSection title={LABELS.settingsFulfillment} hint={LABELS.settingsFulfillmentHint}>
-        <FormFieldFrame label={LABELS.returnShippingFee} hint={LABELS.returnShippingFeeHint} className="sm:col-span-2 sm:max-w-md">
+      <FormSection title={LABELS.settingsFulfillment} hint={LABELS.settingsFulfillmentHint} columns={3}>
+        <FormFieldFrame label={LABELS.returnShippingFee} hint={LABELS.returnShippingFeeHint}>
           <NumberInput
             value={returnShippingFee ?? undefined}
             min={0}
@@ -303,7 +315,7 @@ export function VendorShopSettingsForm({
             onChange={(value) => onReturnShippingFeeChange(value == null ? null : value)}
           />
         </FormFieldFrame>
-        <FormFieldFrame label={LABELS.vendorCodEnabled} hint={LABELS.vendorCodEnabledHint} className="sm:col-span-2">
+        <FormFieldFrame label={LABELS.vendorCodEnabled} hint={LABELS.vendorCodEnabledHint}>
           <CheckboxField
             id="vendor-shop-cod"
             checked={codEnabled}
@@ -317,7 +329,7 @@ export function VendorShopSettingsForm({
           <Button type="button" variant="outline" disabled={saving} onClick={onClearOverride}>
             {LABELS.vendorReturnShippingFeeClear}
           </Button>
-          <Button type="button" disabled={saving} onClick={onSave}>
+          <Button type="button" fullWidth="mobile" disabled={saving} onClick={onSave}>
             {LABELS.saveSettings}
           </Button>
         </FormActions>

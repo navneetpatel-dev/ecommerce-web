@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 import { RequirePermission } from '@/shared/components/RequirePermission'
@@ -31,22 +30,16 @@ function VendorTicketsContent() {
   const tickets = query.data?.pages.flatMap((p) => p.items) ?? []
 
   return (
-    <div className="w-full min-w-0 space-y-5">
+    <div className="w-full min-w-0 space-y-8">
       <TicketFilters showVendorId={false} />
       <TicketList
         title={
-          <div className="min-w-0 space-y-1">
+          <div className="min-w-0 space-y-1.5">
             <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
               {LABELS.supportTickets}
             </h1>
-            <p className="text-[0.8125rem] text-ink-muted">{LABELS.ticketVendorQueueDescription}</p>
-            <p className="text-[0.8125rem]">
-              <Link
-                href={PATHS.vendor.bugReports}
-                className="text-ink-muted underline-offset-2 transition-colors hover:text-brand hover:underline"
-              >
-                {LABELS.vendorBugReportsUtility}
-              </Link>
+            <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
+              {LABELS.ticketVendorQueueDescription}
             </p>
           </div>
         }

@@ -31,16 +31,20 @@ function VendorBugReportsContent() {
   const reports = query.data?.pages.flatMap((p) => p.items) ?? []
 
   return (
-    <div className="space-y-6">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="font-display text-[1.5rem] text-ink">{LABELS.bugReports}</h1>
-          <p className="mt-1 text-[0.875rem] text-ink-muted">{LABELS.bugReportsPageDescription}</p>
+    <div className="w-full min-w-0 space-y-8">
+      <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+        <div className="min-w-0 space-y-1.5">
+          <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+            {LABELS.bugReports}
+          </h1>
+          <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
+            {LABELS.bugReportsPageDescription}
+          </p>
         </div>
-        <Button asChild>
+        <Button asChild className="shrink-0" fullWidth="mobile">
           <Link href={PATHS.vendor.bugReportNew}>{LABELS.reportABug}</Link>
         </Button>
-      </header>
+      </div>
       <BugReportFilters variant="reporter" />
       <BugReportList
         reports={reports}

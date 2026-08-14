@@ -125,13 +125,25 @@ export function BugReportForm({ successHref, hideTitle = false }: Props) {
     <form onSubmit={onSubmit} className="w-full min-w-0">
       <FormStack className="space-y-8">
         {hideTitle ? null : (
-          <div className="space-y-1.5 border-b border-line/70 pb-6">
-            <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-              {LABELS.newBugReport}
-            </h1>
-            <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
-              {LABELS.newBugReportDescription}
-            </p>
+          <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+            <div className="min-w-0 space-y-1.5">
+              <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+                {LABELS.newBugReport}
+              </h1>
+              <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
+                {LABELS.newBugReportDescription}
+              </p>
+            </div>
+            <DisabledActionHint disabled={!canSubmit} message={disableHint}>
+              <Button
+                type="submit"
+                className="hidden shrink-0 sm:inline-flex"
+                loading={create.isPending}
+                disabled={!canSubmit || create.isPending}
+              >
+                {LABELS.bugSubmit}
+              </Button>
+            </DisabledActionHint>
           </div>
         )}
 
@@ -165,7 +177,7 @@ export function BugReportForm({ successHref, hideTitle = false }: Props) {
         <FormSection
           title={LABELS.bugDescriptionSection}
           hint={LABELS.bugDescriptionSectionHint}
-          columns={1}
+          columns={2}
         >
           <FormFieldFrame
             label={LABELS.bugDescription}
@@ -245,7 +257,12 @@ export function BugReportForm({ successHref, hideTitle = false }: Props) {
         />
         <FormActions>
           <DisabledActionHint disabled={!canSubmit} message={disableHint}>
-            <Button type="submit" loading={create.isPending} disabled={!canSubmit || create.isPending}>
+            <Button
+              type="submit"
+              fullWidth="mobile"
+              loading={create.isPending}
+              disabled={!canSubmit || create.isPending}
+            >
               {LABELS.bugSubmit}
             </Button>
           </DisabledActionHint>

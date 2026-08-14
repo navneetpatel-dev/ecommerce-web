@@ -79,7 +79,6 @@ export const VENDOR_NAV = [
   {
     href: PATHS.vendor.shopSettings,
     label: LABELS.vendorShopSettings,
-
     permissions: [
       PERMISSIONS.PRODUCT_UPDATE,
       PERMISSIONS.PRODUCT_CREATE,
