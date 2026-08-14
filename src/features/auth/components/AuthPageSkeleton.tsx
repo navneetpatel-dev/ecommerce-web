@@ -4,8 +4,8 @@ import { Skeleton } from '@/shared/components/ui/skeleton'
 /** Form-slot skeleton for login/register/password/OTP route transitions. */
 export function AuthFormSkeleton() {
   return (
-    <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-elevation-2">
-      <header className="space-y-3 border-b border-line/80 bg-paper/45 px-6 py-6 sm:px-8 sm:py-8">
+    <div className="relative overflow-hidden rounded-xl border border-line/90 bg-surface/95 shadow-elevation-3 ring-1 ring-inset ring-white/[0.04] backdrop-blur-sm">
+      <header className="space-y-3 border-b border-line/80 bg-gradient-to-b from-paper/55 to-paper/25 px-6 py-6 sm:px-8 sm:py-8">
         <Skeleton className="h-8 w-48 sm:h-9 sm:w-56" />
         <Skeleton className="h-4 w-full max-w-[16rem]" />
       </header>

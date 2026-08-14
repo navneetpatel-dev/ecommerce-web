@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { AuthBrandFeatures } from '@/features/auth/components/AuthBrandFeatures'
+import { AuthBrandVisual } from '@/features/auth/components/AuthBrandVisual'
 import { LABELS } from '@/shared/constants/labels'
 import { PATHS } from '@/shared/constants/paths'
 
@@ -6,16 +8,15 @@ import { PATHS } from '@/shared/constants/paths'
  * Full-page auth layout — brand panel + form column.
  * Split layout starts at xl so lg / narrowed viewports stay single-column.
  */
+const BRAND_LINK_CLASS =
+  'min-w-0 shrink truncate font-display text-[1.25rem] font-semibold leading-none text-brand sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]'
+
 export function AuthPageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-paper">
+    <div className="relative isolate min-h-[100dvh] overflow-x-clip bg-paper">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_0%,color-mix(in_srgb,var(--brand-subtle)_55%,transparent),transparent_62%),radial-gradient(ellipse_80%_60%_at_100%_100%,color-mix(in_srgb,var(--accent-subtle)_40%,transparent),transparent_58%)]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.22] [background-image:linear-gradient(color-mix(in_srgb,var(--line)_55%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--line)_55%,transparent)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]"
       />
       <div
         aria-hidden
@@ -26,44 +27,72 @@ export function AuthPageShell({ children }: { children: React.ReactNode }) {
         className="pointer-events-none absolute right-[6%] top-[10%] h-56 w-56 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--brand)_12%,transparent),transparent_68%)]"
       />
 
-      <div className="relative mx-auto grid min-h-screen w-full max-w-[100rem] xl:grid-cols-[minmax(18rem,1.15fr)_minmax(22rem,1fr)] xl:gap-10 2xl:grid-cols-[minmax(20rem,1.25fr)_minmax(24rem,1fr)] 2xl:gap-14">
-        <aside className="relative hidden min-w-0 flex-col justify-between px-8 py-12 xl:flex 2xl:px-16">
-          <div className="relative z-[1] flex h-full w-full max-w-lg flex-col justify-between 2xl:max-w-xl">
-            <Link
-              href={PATHS.home}
-              className="font-display text-[1.375rem] font-semibold tracking-tight text-ink transition-opacity hover:opacity-80"
-            >
-              {LABELS.brandName}
-            </Link>
+      <div className="absolute inset-x-0 top-0 z-10 h-14 lg:h-[72px]">
+        <div className="storefront-container flex h-full items-center">
+          <Link href={PATHS.home} className={BRAND_LINK_CLASS}>
+            {LABELS.brandName}
+          </Link>
+        </div>
+      </div>
 
-            <div className="space-y-4 py-8 2xl:py-10">
-              <p className="font-display text-[clamp(2rem,2.5vw,3rem)] leading-[1.1] tracking-tight text-ink">
-                {LABELS.authBrandHeadline}
-              </p>
-              <p className="max-w-md text-[1rem] leading-relaxed text-ink-muted 2xl:text-[1.0625rem]">
-                {LABELS.authBrandBody}
-              </p>
+      <div className="relative grid min-h-[100dvh] w-full xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.95fr)] xl:gap-10 2xl:gap-14">
+        <aside className="relative hidden min-w-0 xl:flex xl:min-h-[100dvh]">
+          <AuthBrandVisual />
+
+          <div className="relative z-[1] flex min-h-[100dvh] w-full flex-col justify-between px-10 pb-10 pt-14 lg:pt-[72px] 2xl:px-16 2xl:pb-12">
+            <div className="my-auto max-w-xl space-y-6 2xl:max-w-2xl 2xl:space-y-7">
+              <div className="space-y-4">
+                <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-brand">
+                  {LABELS.authBrandEyebrow}
+                </p>
+                <p className="font-display text-[clamp(2.25rem,3.2vw,3.5rem)] leading-[1.08] tracking-tight text-ink">
+                  {LABELS.authBrandHeadline}
+                </p>
+                <p className="max-w-lg text-[1.0625rem] leading-relaxed text-ink-muted 2xl:text-[1.125rem]">
+                  {LABELS.authBrandBody}
+                </p>
+              </div>
+
+              <AuthBrandFeatures className="max-w-md" />
             </div>
 
             <p className="text-[0.8125rem] text-ink-faint">{LABELS.authBrandFooter}</p>
           </div>
         </aside>
 
-        <main className="relative flex min-w-0 flex-col justify-center px-5 py-10 sm:px-8 md:px-10 xl:px-8 xl:py-12 2xl:px-12">
-          <div className="mb-8 flex items-center justify-between gap-4 xl:hidden">
-            <Link
-              href={PATHS.home}
-              className="font-display text-[1.25rem] font-semibold tracking-tight text-ink"
-            >
-              {LABELS.brandName}
-            </Link>
-            <p className="max-w-[12rem] text-right text-[0.8125rem] leading-snug text-ink-muted sm:max-w-none">
-              {LABELS.authBrandHeadline}
-            </p>
-          </div>
+        <main className="relative flex min-w-0 flex-col justify-center px-5 pb-10 pt-14 sm:px-8 md:px-10 lg:pt-[72px] xl:px-10 xl:pb-12 2xl:px-14">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-y-[8%] right-[6%] hidden w-[min(42%,18rem)] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--brand)_14%,transparent),transparent_70%)] blur-2xl xl:block"
+          />
 
-          <div className="mx-auto w-full max-w-[min(100%,28rem)] motion-safe:animate-[auth-rise_420ms_ease-out_both]">
-            {children}
+          <div className="relative mx-auto w-full max-w-[min(100%,28rem)] xl:max-w-[min(100%,26rem)] 2xl:max-w-[min(100%,28rem)]">
+            <div className="mb-8 space-y-4 text-center xl:hidden">
+              <div className="space-y-3 px-1">
+                <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-brand">
+                  {LABELS.authBrandEyebrow}
+                </p>
+                <p className="font-display text-[clamp(1.875rem,6vw,2.5rem)] leading-[1.12] tracking-tight text-ink">
+                  {LABELS.authBrandHeadline}
+                </p>
+                <p className="mx-auto max-w-md text-[0.9375rem] leading-relaxed text-ink-muted sm:text-[1rem]">
+                  {LABELS.authBrandBody}
+                </p>
+              </div>
+              <AuthBrandFeatures variant="pills" />
+            </div>
+
+            <div className="relative motion-safe:animate-[auth-rise_420ms_ease-out_both]">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-3 rounded-[1.25rem] bg-[radial-gradient(ellipse_at_center,color-mix(in_srgb,var(--brand-subtle)_35%,transparent),transparent_72%)] opacity-80 sm:-inset-4"
+              />
+              {children}
+            </div>
+
+            <p className="mt-6 text-center text-[0.8125rem] text-ink-faint xl:hidden">
+              {LABELS.authBrandFooter}
+            </p>
           </div>
         </main>
       </div>

@@ -14,11 +14,11 @@ export function AuthFormCard({ title, description, children, footer, className }
   return (
     <div
       className={cn(
-        'overflow-hidden rounded-lg border border-line bg-surface shadow-elevation-2',
+        'relative overflow-hidden rounded-xl border border-line/90 bg-surface/95 shadow-elevation-3 ring-1 ring-inset ring-white/[0.04] backdrop-blur-sm',
         className,
       )}
     >
-      <header className="space-y-2 border-b border-line/80 bg-paper/45 px-6 py-6 sm:px-8 sm:py-8">
+      <header className="space-y-2 border-b border-line/80 bg-gradient-to-b from-paper/55 to-paper/25 px-6 py-6 sm:px-8 sm:py-8">
         <h1 className="font-display text-[1.75rem] font-semibold leading-tight tracking-tight text-ink sm:text-[2rem]">
           {title}
         </h1>
