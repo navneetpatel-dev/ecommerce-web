@@ -11,6 +11,8 @@ interface MediaImageProps {
   alt: string
   unavailableLabel?: string
   sizes?: string
+  /** Next/Image quality 1–100. Defaults to the Next.js default when omitted. */
+  quality?: number
   priority?: boolean
   loading?: 'lazy' | 'eager'
   className?: string
@@ -28,18 +30,15 @@ export function MediaImage({
   alt,
   unavailableLabel = LABELS.imageNotAvailable,
   sizes,
+  quality,
   priority,
   loading,
   className,
   imageClassName,
   onUnavailableChange,
 }: MediaImageProps) {
-  const [failed, setFailed] = useState(false)
-  const unavailable = !src || failed
-
-  useEffect(() => {
-    setFailed(false)
-  }, [src])
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  const unavailable = !src || failedSrc === src
 
   useEffect(() => {
     onUnavailableChange?.(unavailable)
@@ -60,10 +59,11 @@ export function MediaImage({
       alt={alt}
       fill
       sizes={sizes}
+      quality={quality}
       priority={priority}
       loading={loading}
       className={cn(imageClassName, className)}
-      onError={() => setFailed(true)}
+      onError={() => setFailedSrc(src)}
       data-image-state="loaded"
     />
   )

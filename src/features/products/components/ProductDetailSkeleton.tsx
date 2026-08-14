@@ -7,12 +7,12 @@ export function ProductDetailSkeleton() {
       <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-12 lg:gap-10">
         <div className="md:col-span-6 lg:col-span-7">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:gap-4">
-            <div className="order-2 flex gap-2 lg:order-1 lg:w-[4.5rem] lg:flex-col">
-              <Skeleton className="h-16 w-16 shrink-0 rounded-md lg:h-[4.5rem] lg:w-[4.5rem]" />
-              <Skeleton className="h-16 w-16 shrink-0 rounded-md lg:h-[4.5rem] lg:w-[4.5rem]" />
-              <Skeleton className="hidden h-16 w-16 shrink-0 rounded-md lg:block lg:h-[4.5rem] lg:w-[4.5rem]" />
+            <div className="order-2 flex gap-2 lg:order-1 lg:w-[4.25rem] lg:flex-col">
+              <Skeleton className="h-14 w-14 shrink-0 rounded-lg sm:h-16 sm:w-16 lg:h-[4.25rem] lg:w-[4.25rem]" />
+              <Skeleton className="h-14 w-14 shrink-0 rounded-lg sm:h-16 sm:w-16 lg:h-[4.25rem] lg:w-[4.25rem]" />
+              <Skeleton className="hidden h-14 w-14 shrink-0 rounded-lg sm:h-16 sm:w-16 lg:block lg:h-[4.25rem] lg:w-[4.25rem]" />
             </div>
-            <Skeleton className="order-1 aspect-square w-full rounded-xl lg:order-2 lg:aspect-auto lg:h-[min(56rem,calc(100dvh-7.5rem))]" />
+            <Skeleton className="order-1 mx-auto aspect-[4/5] w-full max-w-[36rem] rounded-2xl sm:aspect-square lg:order-2 lg:mx-0 lg:max-w-none lg:aspect-auto lg:h-[min(32rem,calc(100dvh-10rem))]" />
           </div>
         </div>
         <div className="space-y-5 md:col-span-6 lg:col-span-5">

@@ -9,6 +9,10 @@ import {
 import { Button } from '@/shared/components/ui/button'
 import { MediaImage } from '@/shared/components/MediaImage'
 import { LABELS } from '@/shared/constants/labels'
+import {
+  IMAGE_GALLERY_STAGE_QUALITY,
+  IMAGE_GALLERY_STAGE_SIZES,
+} from '@/shared/constants/imageGallery'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import type { ProductImage } from '@/shared/api/types'
 
@@ -60,14 +64,15 @@ export function ImageGalleryLightbox({
         }}
       >
         <DialogTitle className="sr-only">{productName}</DialogTitle>
-        <div className="relative overflow-hidden rounded-lg border border-line bg-paper bg-[radial-gradient(ellipse_at_50%_42%,var(--surface-raised),transparent_70%)]">
+        <div className="relative overflow-hidden rounded-lg border border-line bg-paper">
           <div className="relative h-[min(78dvh,48rem)] w-full">
             <MediaImage
               src={current?.url}
               alt={productName}
               unavailableLabel={LABELS.imageNotAvailable}
-              sizes="96vw"
-              imageClassName="object-contain p-4 sm:p-8"
+              sizes={IMAGE_GALLERY_STAGE_SIZES}
+              quality={IMAGE_GALLERY_STAGE_QUALITY}
+              imageClassName="object-contain"
             />
           </div>
           {hasMultiple ? (

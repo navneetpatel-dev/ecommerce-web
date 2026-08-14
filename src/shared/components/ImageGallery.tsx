@@ -1,6 +1,6 @@
 'use client'
 
-import type { CSSProperties, MouseEvent } from 'react'
+import { useEffect, type CSSProperties, type MouseEvent } from 'react'
 import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react'
 import { useReducedMotion } from 'motion/react'
 import type { ProductImage } from '@/shared/api/types'
@@ -8,7 +8,11 @@ import { Button } from '@/shared/components/ui/button'
 import { MediaImage } from '@/shared/components/MediaImage'
 import { ImageGalleryLightbox } from '@/shared/components/ImageGalleryLightbox'
 import { LABELS } from '@/shared/constants/labels'
-import { IMAGE_GALLERY_ZOOM_SCALE } from '@/shared/constants/imageGallery'
+import {
+  IMAGE_GALLERY_STAGE_QUALITY,
+  IMAGE_GALLERY_STAGE_SIZES,
+  IMAGE_GALLERY_ZOOM_SCALE,
+} from '@/shared/constants/imageGallery'
 import { cn } from '@/shared/utils/cn'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import type { useImageGalleryZoom } from '@/shared/hooks/useImageGalleryZoom'
@@ -29,6 +33,13 @@ interface ImageGalleryProps {
   lightboxOpen: boolean
   onOpenLightbox: () => void
   onCloseLightbox: () => void
+}
+
+const STAGE_HEIGHT_CLASS = 'lg:h-[min(32rem,calc(100dvh-10rem))]'
+const THUMB_COLUMN_HEIGHT_CLASS = 'lg:h-[min(32rem,calc(100dvh-10rem))]'
+
+function cssUrl(value: string) {
+  return `url(${JSON.stringify(value)})`
 }
 
 export function ImageGallery({
@@ -52,12 +63,23 @@ export function ImageGallery({
   const currentUrl = gallery[safeIndex]?.url || mainImageUrl
   const prevUrl = gallery[prevIndex]?.url || mainImageUrl
   const hasMultiple = gallery.length > 1
-  const zoomScale = zooming && !reduceMotion ? IMAGE_GALLERY_ZOOM_SCALE : 1
-  const zoomStyle: CSSProperties = {
-    transform: `scale(${zoomScale})`,
-    transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
-    transition: zooming || reduceMotion ? 'none' : 'transform var(--motion-base) ease-out',
-  }
+  const showZoom = Boolean(zooming && !reduceMotion && currentUrl)
+
+  useEffect(() => {
+    if (!currentUrl || typeof window === 'undefined') return
+    const preload = new window.Image()
+    preload.decoding = 'async'
+    preload.src = currentUrl
+  }, [currentUrl])
+
+  const zoomOverlayStyle: CSSProperties | undefined = showZoom
+    ? {
+        backgroundImage: cssUrl(currentUrl),
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: `${IMAGE_GALLERY_ZOOM_SCALE * 100}%`,
+        backgroundPosition: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
+      }
+    : undefined
 
   const goPrev = () => {
     if (!hasMultiple) return
@@ -75,12 +97,13 @@ export function ImageGallery({
 
   return (
     <div className="min-w-0 md:col-span-6 lg:col-span-7 lg:sticky lg:top-[88px] lg:z-[1] lg:self-start">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-4">
+      <div className="flex flex-col gap-2.5 sm:gap-3 lg:flex-row lg:items-stretch lg:gap-3.5">
         {hasMultiple ? (
           <div
             className={cn(
               'order-2 flex gap-2 overflow-x-auto overscroll-x-contain pb-0.5 [scrollbar-width:none] touch-pan-x',
-              'lg:order-1 lg:h-[min(56rem,calc(100dvh-7.5rem))] lg:w-[4.5rem] lg:shrink-0 lg:flex-col lg:overflow-y-auto lg:overflow-x-hidden lg:pb-0',
+              'lg:order-1 lg:w-[4.25rem] lg:shrink-0 lg:flex-col lg:overflow-y-auto lg:overflow-x-hidden lg:pb-0',
+              THUMB_COLUMN_HEIGHT_CLASS,
               '[&::-webkit-scrollbar]:hidden',
             )}
           >
@@ -93,8 +116,9 @@ export function ImageGallery({
                 aria-pressed={i === safeIndex}
                 onClick={() => onSelect(i)}
                 className={cn(
-                  'relative h-16 w-16 min-h-16 max-h-none shrink-0 overflow-hidden rounded-md border p-0',
-                  'lg:h-[4.5rem] lg:w-[4.5rem] lg:min-h-[4.5rem]',
+                  'relative h-14 w-14 min-h-14 max-h-none shrink-0 overflow-hidden rounded-lg border p-0',
+                  'sm:h-16 sm:w-16 sm:min-h-16',
+                  'lg:h-[4.25rem] lg:w-[4.25rem] lg:min-h-[4.25rem]',
                   i === safeIndex
                     ? 'border-brand ring-1 ring-brand/40'
                     : 'border-line hover:border-ink/30',
@@ -119,30 +143,29 @@ export function ImageGallery({
           </div>
         ) : null}
 
-        <div className="group relative order-1 min-w-0 flex-1 lg:order-2">
+        <div className="group relative order-1 mx-auto w-full min-w-0 max-w-[36rem] flex-1 lg:order-2 lg:mx-0 lg:max-w-none">
           <div
             onClick={onOpenLightbox}
             {...zoomHandlers}
             className={cn(
-              'relative aspect-square cursor-zoom-in overflow-hidden rounded-xl border border-line select-none touch-pan-y',
-              'bg-paper bg-[radial-gradient(ellipse_at_50%_42%,var(--surface-raised),transparent_70%)]',
-              'shadow-elevation-1',
-              'lg:aspect-auto lg:h-[min(56rem,calc(100dvh-7.5rem))]',
+              'relative aspect-[4/5] cursor-zoom-in overflow-hidden rounded-2xl border border-line bg-paper select-none touch-pan-y',
+              'shadow-elevation-1 ring-1 ring-ink/5',
+              'w-full sm:aspect-square',
+              'lg:aspect-auto lg:max-h-none',
+              STAGE_HEIGHT_CLASS,
             )}
           >
-            <div
-              className="pointer-events-none absolute inset-3 sm:inset-5 lg:inset-8"
-              style={zoomStyle}
-            >
+            <div className="pointer-events-none absolute inset-0">
               <div className="relative h-full w-full">
                 <MediaImage
                   src={currentUrl}
-                  alt={zooming ? LABELS.imageZoomPreview : productName}
+                  alt={showZoom ? LABELS.imageZoomPreview : productName}
                   unavailableLabel={LABELS.imageNotAvailable}
-                  sizes="(max-width: 768px) 100vw, 55vw"
+                  sizes={IMAGE_GALLERY_STAGE_SIZES}
+                  quality={IMAGE_GALLERY_STAGE_QUALITY}
                   priority
                   imageClassName={cn(
-                    'object-contain',
+                    'object-cover',
                     transitioning ? 'opacity-0' : 'opacity-100',
                     reduceMotion ? '' : 'transition-opacity duration-[var(--motion-base)]',
                   )}
@@ -153,16 +176,25 @@ export function ImageGallery({
                       src={prevUrl}
                       alt={productName}
                       unavailableLabel={LABELS.imageNotAvailable}
-                      sizes="(max-width: 768px) 100vw, 55vw"
-                      imageClassName="object-contain opacity-100"
+                      sizes={IMAGE_GALLERY_STAGE_SIZES}
+                      quality={IMAGE_GALLERY_STAGE_QUALITY}
+                      imageClassName="object-cover opacity-100"
                     />
                   </div>
                 ) : null}
               </div>
             </div>
 
+            {showZoom ? (
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 z-[1]"
+                style={zoomOverlayStyle}
+              />
+            ) : null}
+
             {hasMultiple ? (
-              <p className="pointer-events-none absolute left-3 top-3 z-[1] rounded-full border border-line bg-surface/90 px-2.5 py-1 text-[0.75rem] tabular-nums text-ink-muted backdrop-blur-sm">
+              <p className="pointer-events-none absolute left-2.5 top-2.5 z-[2] rounded-full border border-line bg-surface/90 px-2.5 py-1 text-[0.75rem] tabular-nums text-ink-muted backdrop-blur-sm sm:left-3 sm:top-3">
                 {formatLabel(LABELS.imagePosition, {
                   current: safeIndex + 1,
                   total: gallery.length,
@@ -179,7 +211,7 @@ export function ImageGallery({
                 onOpenLightbox()
               }}
               aria-label={LABELS.viewLargerImage}
-              className="absolute right-3 top-3 z-[1] h-11 w-11 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm"
+              className="absolute right-2.5 top-2.5 z-[2] h-10 w-10 min-h-10 max-h-10 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:top-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11"
             >
               <Maximize2 className="h-4 w-4" strokeWidth={1.75} />
             </Button>
@@ -196,7 +228,7 @@ export function ImageGallery({
                   }}
                   aria-label={LABELS.previousImage}
                   className={cn(
-                    'absolute left-3 top-1/2 z-[1] h-11 w-11 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm',
+                    'absolute left-2.5 top-1/2 z-[2] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:left-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11',
                     'opacity-100 lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100',
                   )}
                 >
@@ -212,7 +244,7 @@ export function ImageGallery({
                   }}
                   aria-label={LABELS.nextImage}
                   className={cn(
-                    'absolute right-3 top-1/2 z-[1] h-11 w-11 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm',
+                    'absolute right-2.5 top-1/2 z-[2] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11',
                     'opacity-100 lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100',
                   )}
                 >
@@ -220,29 +252,6 @@ export function ImageGallery({
                 </Button>
               </>
             ) : null}
-
-            {reduceMotion ? null : (
-              <>
-                <p
-                  className={cn(
-                    'pointer-events-none absolute bottom-3 left-1/2 z-[1] -translate-x-1/2 rounded-full border border-line bg-surface/90 px-3 py-1 text-[0.75rem] text-ink-muted backdrop-blur-sm',
-                    'hidden [@media(hover:hover)_and_(pointer:fine)]:block',
-                    zooming && 'opacity-0',
-                  )}
-                >
-                  {LABELS.hoverToZoom}
-                </p>
-                <p
-                  className={cn(
-                    'pointer-events-none absolute bottom-3 left-1/2 z-[1] -translate-x-1/2 rounded-full border border-line bg-surface/90 px-3 py-1 text-[0.75rem] text-ink-muted backdrop-blur-sm',
-                    '[@media(hover:hover)_and_(pointer:fine)]:hidden',
-                    zooming && 'opacity-0',
-                  )}
-                >
-                  {LABELS.longTouchToZoom}
-                </p>
-              </>
-            )}
           </div>
         </div>
       </div>
