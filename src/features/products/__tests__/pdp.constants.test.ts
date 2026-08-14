@@ -6,7 +6,9 @@ import {
 } from '../constants/pdpOffers'
 import {
   IMAGE_GALLERY_LIGHTBOX_HEIGHT_CLASS,
+  IMAGE_GALLERY_LIGHTBOX_PINCH_MAX_SCALE,
   IMAGE_GALLERY_STAGE_HEIGHT_CLASS,
+  IMAGE_GALLERY_STAGE_OBJECT_FIT_CLASS,
   IMAGE_GALLERY_THUMB_COLUMN_HEIGHT_CLASS,
   IMAGE_GALLERY_ZOOM_SCALE,
 } from '../../../shared/constants/imageGallery'
@@ -29,6 +31,8 @@ describe('PDP gallery constants', () => {
     assert.match(IMAGE_GALLERY_STAGE_HEIGHT_CLASS, /\blg:h-\[/)
     assert.match(IMAGE_GALLERY_THUMB_COLUMN_HEIGHT_CLASS, /^lg:h-\[/)
     assert.doesNotMatch(IMAGE_GALLERY_THUMB_COLUMN_HEIGHT_CLASS, /(^|\s)h-\[/)
-    assert.match(IMAGE_GALLERY_LIGHTBOX_HEIGHT_CLASS, /dvh/)
+    assert.match(IMAGE_GALLERY_LIGHTBOX_HEIGHT_CLASS, /100dvh/)
+    assert.equal(IMAGE_GALLERY_STAGE_OBJECT_FIT_CLASS, 'object-cover')
+    assert.ok(IMAGE_GALLERY_LIGHTBOX_PINCH_MAX_SCALE > 1)
   })
 })

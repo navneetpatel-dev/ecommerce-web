@@ -26,12 +26,15 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const DialogContent = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    presentation?: 'default' | 'fullscreen'
+  }
 >(
   (
     {
       className,
       children,
+      presentation = 'default',
       onCloseAutoFocus,
       onPointerDownOutside,
       onEscapeKeyDown,
@@ -40,17 +43,26 @@ const DialogContent = React.forwardRef<
     ref
   ) => {
     const closedByPointerRef = React.useRef(false)
+    const isFullscreen = presentation === 'fullscreen'
 
     return (
       <DialogPortal>
         <DialogOverlay />
         {/* Flex centering avoids transform-based fixed positioning, which can
             enlarge document overflow and leave a page scrollbar beside the modal. */}
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+        <div
+          className={cn(
+            'fixed inset-0 z-50 flex items-center justify-center pointer-events-none',
+            isFullscreen ? 'p-0' : 'p-4',
+          )}
+        >
           <DialogPrimitive.Content
             ref={ref}
             className={cn(
-              'pointer-events-auto relative grid w-full max-w-[480px] max-h-full gap-5 overflow-y-auto overscroll-contain border border-line bg-surface-raised p-5 shadow-elevation-3 animate-scale-in outline-none rounded-lg sm:gap-6 sm:p-6',
+              'pointer-events-auto relative grid w-full max-h-full overscroll-contain outline-none animate-scale-in',
+              isFullscreen
+                ? 'max-w-none gap-0 overflow-hidden border-0 bg-transparent p-0 shadow-none rounded-none'
+                : 'max-w-[480px] gap-5 overflow-y-auto border border-line bg-surface-raised p-5 shadow-elevation-3 rounded-lg sm:gap-6 sm:p-6',
               className
             )}
             style={{ animationDuration: 'var(--motion-moderate)' }}

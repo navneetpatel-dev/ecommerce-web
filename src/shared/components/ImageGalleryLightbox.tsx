@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import {
   Dialog,
@@ -8,11 +9,15 @@ import {
 } from '@/shared/components/ui/dialog'
 import { Button } from '@/shared/components/ui/button'
 import { MediaImage } from '@/shared/components/MediaImage'
+import { ImageGalleryThumbnailStrip } from '@/shared/components/ImageGalleryThumbnailStrip'
 import { LABELS } from '@/shared/constants/labels'
 import {
   IMAGE_GALLERY_LIGHTBOX_HEIGHT_CLASS,
-  IMAGE_GALLERY_STAGE_QUALITY,
+  IMAGE_GALLERY_LIGHTBOX_QUALITY,
+  IMAGE_GALLERY_LIGHTBOX_SIZES,
 } from '@/shared/constants/imageGallery'
+import { useImageLightboxGestures } from '@/shared/hooks/useImageLightboxGestures'
+import { cn } from '@/shared/utils/cn'
 import { formatLabel } from '@/shared/utils/formatLabel'
 import type { ProductImage } from '@/shared/api/types'
 
@@ -37,6 +42,7 @@ export function ImageGalleryLightbox({
   const safeIndex = Math.min(Math.max(selectedIndex, 0), Math.max(count - 1, 0))
   const current = images[safeIndex]
   const hasMultiple = count > 1
+  const viewportRef = useRef<HTMLDivElement>(null)
 
   const goPrev = () => {
     if (!hasMultiple) return
@@ -48,10 +54,33 @@ export function ImageGalleryLightbox({
     onSelect((safeIndex + 1) % count)
   }
 
+  const { transform, resetTransform, viewportHandlers } = useImageLightboxGestures({
+    enabled: open,
+    viewportRef,
+    onSwipe: (direction) => {
+      if (direction < 0) goPrev()
+      else goNext()
+    },
+  })
+
+  useEffect(() => {
+    if (!open) resetTransform()
+  }, [open, resetTransform])
+
+  useEffect(() => {
+    if (!open) return
+    resetTransform()
+  }, [safeIndex, open, resetTransform])
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-[min(100vw-1rem,72rem)] gap-0 overflow-hidden border-0 bg-transparent p-0 shadow-none sm:max-w-[min(96vw,72rem)] [&>button]:right-2 [&>button]:top-2 [&>button]:z-[2] [&>button]:rounded-full [&>button]:border [&>button]:border-line [&>button]:bg-surface/90 [&>button]:p-2 [&>button]:opacity-100 [&>button]:shadow-elevation-1 [&>button]:backdrop-blur-sm sm:[&>button]:right-3 sm:[&>button]:top-3"
+        presentation="fullscreen"
+        className={cn(
+          'w-full max-w-none',
+          IMAGE_GALLERY_LIGHTBOX_HEIGHT_CLASS,
+          '[&>button]:right-2 [&>button]:top-2 [&>button]:z-[3] [&>button]:rounded-full [&>button]:border [&>button]:border-line [&>button]:bg-surface/90 [&>button]:p-2 [&>button]:opacity-100 [&>button]:shadow-elevation-1 [&>button]:backdrop-blur-sm sm:[&>button]:right-3 sm:[&>button]:top-3',
+        )}
         onKeyDown={(event) => {
           if (event.key === 'ArrowLeft') {
             event.preventDefault()
@@ -64,46 +93,70 @@ export function ImageGalleryLightbox({
         }}
       >
         <DialogTitle className="sr-only">{productName}</DialogTitle>
-        <div
-          className={`relative w-full overflow-hidden rounded-xl bg-paper sm:rounded-2xl ${IMAGE_GALLERY_LIGHTBOX_HEIGHT_CLASS}`}
-        >
-          <MediaImage
-            src={current?.url}
-            alt={productName}
-            unavailableLabel={LABELS.imageNotAvailable}
-            sizes="96vw"
-            quality={IMAGE_GALLERY_STAGE_QUALITY}
-            imageClassName="object-cover"
-          />
+        <div className="flex h-full min-h-0 w-full flex-col bg-paper sm:rounded-none">
+          <div
+            ref={viewportRef}
+            {...viewportHandlers}
+            className="relative min-h-0 flex-1 touch-none overflow-hidden bg-paper"
+          >
+            <div
+              className="absolute inset-0 will-change-transform"
+              style={{
+                transform: `translate3d(${transform.x}px, ${transform.y}px, 0) scale(${transform.scale})`,
+              }}
+            >
+              <MediaImage
+                src={current?.url}
+                alt={productName}
+                unavailableLabel={LABELS.imageNotAvailable}
+                sizes={IMAGE_GALLERY_LIGHTBOX_SIZES}
+                quality={IMAGE_GALLERY_LIGHTBOX_QUALITY}
+                imageClassName="object-contain"
+              />
+            </div>
+
+            {hasMultiple ? (
+              <>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="icon"
+                  onClick={goPrev}
+                  aria-label={LABELS.previousImage}
+                  className="absolute left-2 top-1/2 z-[2] hidden h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:left-3 sm:flex sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11"
+                >
+                  <ChevronLeft className="h-4 w-4" strokeWidth={1.75} />
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="icon"
+                  onClick={goNext}
+                  aria-label={LABELS.nextImage}
+                  className="absolute right-2 top-1/2 z-[2] hidden h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:flex sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11"
+                >
+                  <ChevronRight className="h-4 w-4" strokeWidth={1.75} />
+                </Button>
+                <p className="pointer-events-none absolute bottom-3 left-1/2 z-[2] -translate-x-1/2 rounded-full bg-surface/90 px-2.5 py-1 text-[0.75rem] tabular-nums text-ink-muted backdrop-blur-sm sm:bottom-4">
+                  {formatLabel(LABELS.imagePosition, {
+                    current: safeIndex + 1,
+                    total: count,
+                  })}
+                </p>
+              </>
+            ) : null}
+          </div>
+
           {hasMultiple ? (
-            <>
-              <Button
-                type="button"
-                variant="secondary"
-                size="icon"
-                onClick={goPrev}
-                aria-label={LABELS.previousImage}
-                className="absolute left-2 top-1/2 z-[1] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:left-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11"
-              >
-                <ChevronLeft className="h-4 w-4" strokeWidth={1.75} />
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                size="icon"
-                onClick={goNext}
-                aria-label={LABELS.nextImage}
-                className="absolute right-2 top-1/2 z-[1] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11"
-              >
-                <ChevronRight className="h-4 w-4" strokeWidth={1.75} />
-              </Button>
-              <p className="pointer-events-none absolute bottom-2.5 left-1/2 z-[1] -translate-x-1/2 rounded-full bg-surface/90 px-2.5 py-1 text-[0.75rem] tabular-nums text-ink-muted backdrop-blur-sm sm:bottom-3">
-                {formatLabel(LABELS.imagePosition, {
-                  current: safeIndex + 1,
-                  total: count,
-                })}
-              </p>
-            </>
+            <ImageGalleryThumbnailStrip
+              images={images}
+              selectedIndex={safeIndex}
+              onSelect={onSelect}
+              productName={productName}
+              orientation="horizontal"
+              className="shrink-0 border-t border-line bg-surface/95 px-3 py-2.5 backdrop-blur-sm sm:px-4 sm:py-3"
+              thumbClassName="h-12 w-12 min-h-12 sm:h-14 sm:w-14 sm:min-h-14"
+            />
           ) : null}
         </div>
       </DialogContent>

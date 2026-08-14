@@ -64,6 +64,7 @@ export const LABELS = {
   imageZoomPreview: 'Zoomed product image',
   imagePosition: '{current} / {total}',
   viewLargerImage: 'View larger image',
+  imageGalleryThumbnails: 'Image thumbnails',
   productBrand: 'Brand',
   productHighlights: 'Highlights',
   productWeight: 'Weight',
