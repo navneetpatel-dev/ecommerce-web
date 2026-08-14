@@ -62,6 +62,8 @@ export const LABELS = {
   hoverToZoom: 'Hover to zoom',
   longTouchToZoom: 'Long-press to zoom',
   imageZoomPreview: 'Zoomed product image',
+  imagePosition: '{current} / {total}',
+  viewLargerImage: 'View larger image',
   productBrand: 'Brand',
   productHighlights: 'Highlights',
   productWeight: 'Weight',

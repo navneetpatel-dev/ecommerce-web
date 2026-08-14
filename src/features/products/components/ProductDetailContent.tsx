@@ -169,7 +169,7 @@ export function ProductDetailContent({
     <div className="storefront-container pb-10 pt-4 sm:pt-6 md:pb-14 md:pt-8">
       <Breadcrumbs items={breadcrumbItems} className="mb-5 sm:mb-6" />
 
-      <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-12 lg:gap-12 xl:gap-14">
+      <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-12 lg:gap-10 xl:gap-14">
         <ImageGalleryContainer
           mainImageUrl={galleryImages[0]?.url || product.imageUrl}
           images={galleryImages}
@@ -178,8 +178,8 @@ export function ProductDetailContent({
           productName={product.name}
         />
 
-        <div className="md:col-span-5" ref={addSectionRef}>
-          <div className="space-y-5 lg:sticky lg:top-[88px] lg:space-y-6">
+        <div className="min-w-0 md:col-span-6 lg:col-span-5" ref={addSectionRef}>
+          <div className="space-y-5 lg:space-y-6">
             {product.vendor ? (
               <VendorStrip
                 vendor={product.vendor}
