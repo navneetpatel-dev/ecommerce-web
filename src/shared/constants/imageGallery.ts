@@ -7,4 +7,4 @@ export const IMAGE_GALLERY_MOVE_PX = 12
 /** Resting PDP stage — sized for the frame, not for CSS upscaling. */
 export const IMAGE_GALLERY_STAGE_QUALITY = 90
 export const IMAGE_GALLERY_STAGE_SIZES =
-  '(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 640px'
+  '(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 800px'

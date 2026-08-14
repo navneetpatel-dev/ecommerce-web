@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import type { ProductVariant } from '@/shared/api/types'
 import {
   findMatchingVariant,
@@ -9,14 +9,26 @@ import {
   resolveDefaultVariantSelection,
 } from '../utils/products.utils'
 
+function isSameSelection(a: Record<string, string>, b: Record<string, string>) {
+  const aKeys = Object.keys(a)
+  const bKeys = Object.keys(b)
+  if (aKeys.length !== bKeys.length) return false
+  return aKeys.every((key) => a[key] === b[key])
+}
+
 export function useVariantSelection(variants: ProductVariant[], basePrice: number, baseStock: number) {
-  const [selected, setSelected] = useState<Record<string, string>>({})
-
   const variantKey = useMemo(() => variants.map((variant) => variant.id).join('|'), [variants])
+  const [selectionState, setSelectionState] = useState(() => ({
+    key: variantKey,
+    selected: resolveDefaultVariantSelection(variants),
+  }))
 
-  useEffect(() => {
-    setSelected(resolveDefaultVariantSelection(variants))
-  }, [variantKey, variants])
+  let selected = selectionState.selected
+  if (selectionState.key !== variantKey) {
+    const next = resolveDefaultVariantSelection(variants)
+    selected = next
+    setSelectionState({ key: variantKey, selected: next })
+  }
 
   const matchedVariant = useMemo(
     () => findMatchingVariant(variants, selected),
@@ -29,20 +41,27 @@ export function useVariantSelection(variants: ProductVariant[], basePrice: numbe
   )
 
   const selectValue = (key: string, value: string) => {
-    setSelected((prev) => {
-      const next = { ...prev, [key]: value }
-      if (findMatchingVariant(variants, next)) return next
+    setSelectionState((prev) => {
+      const current = prev.key === variantKey ? prev.selected : selected
+      const next = { ...current, [key]: value }
+      const resolved = (() => {
+        if (findMatchingVariant(variants, next)) return next
 
-      const matrixKeys = getMatrixAttributeKeys(variants)
-      const matrixVariants = getMatrixVariants(variants, matrixKeys)
-      const inStockMatch = matrixVariants.find(
-        (variant) =>
-          Number(variant.stock) > 0 && variant.attributes[key] === value,
-      )
+        const matrixKeys = getMatrixAttributeKeys(variants)
+        const matrixVariants = getMatrixVariants(variants, matrixKeys)
+        const inStockMatch = matrixVariants.find(
+          (variant) =>
+            Number(variant.stock) > 0 && variant.attributes[key] === value,
+        )
 
-      if (inStockMatch) return { ...inStockMatch.attributes }
+        if (inStockMatch) return { ...inStockMatch.attributes }
+        return next
+      })()
 
-      return next
+      if (prev.key === variantKey && isSameSelection(prev.selected, resolved)) {
+        return prev
+      }
+      return { key: variantKey, selected: resolved }
     })
   }
 

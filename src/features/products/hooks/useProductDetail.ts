@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useProduct } from '../api/products.queries'
 import { useWishlistToggle } from './useWishlistToggle'
@@ -22,11 +22,12 @@ export function useProductDetail() {
   const { isWishlisted, toggle } = useWishlistToggle(product?.id)
   const addToCart = useAddToCart()
   const [selectedImage, setSelectedImage] = useState(0)
+  const [galleryVariantId, setGalleryVariantId] = useState<string | null>(null)
   const [quantity, setQuantity] = useState(1)
   const [showStickyBar, setShowStickyBar] = useState(false)
   const addSectionRef = useRef<HTMLDivElement>(null)
 
-  const variants = product?.variants ?? []
+  const variants = useMemo(() => product?.variants ?? [], [product?.variants])
   const variantStockTotal = variants.reduce((sum, variant) => sum + Number(variant.stock || 0), 0)
   const baseStock = Number(product?.stock ?? 0) || variantStockTotal
   const basePrice = Number(product?.basePrice ?? 0)
@@ -51,9 +52,10 @@ export function useProductDetail() {
   const resolvedVariantId =
     selection.variantId ?? (variants.length === 1 ? variants[0]?.id : null) ?? null
 
-  useEffect(() => {
+  if (galleryVariantId !== resolvedVariantId) {
+    setGalleryVariantId(resolvedVariantId)
     setSelectedImage(0)
-  }, [resolvedVariantId])
+  }
 
   const selectedStock = selection.variantId
     ? Number(selection.currentStock || 0)
@@ -67,10 +69,9 @@ export function useProductDetail() {
     hasAttributeOptions && selection.hasCompleteSelection && !selection.matchedVariant
 
   const maxQuantity = cartLineQuantityMax(selectedStock)
-
-  useEffect(() => {
-    setQuantity((current) => Math.min(current, maxQuantity))
-  }, [maxQuantity])
+  if (quantity > maxQuantity) {
+    setQuantity(maxQuantity)
+  }
 
   const canAddToCart =
     Boolean(product) &&

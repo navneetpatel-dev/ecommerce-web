@@ -35,8 +35,8 @@ interface ImageGalleryProps {
   onCloseLightbox: () => void
 }
 
-const STAGE_HEIGHT_CLASS = 'lg:h-[min(32rem,calc(100dvh-10rem))]'
-const THUMB_COLUMN_HEIGHT_CLASS = 'lg:h-[min(32rem,calc(100dvh-10rem))]'
+const STAGE_HEIGHT_CLASS = 'lg:h-[min(44rem,calc(100dvh-8.75rem))]'
+const THUMB_COLUMN_HEIGHT_CLASS = 'lg:h-[min(44rem,calc(100dvh-8.75rem))]'
 
 function cssUrl(value: string) {
   return `url(${JSON.stringify(value)})`
