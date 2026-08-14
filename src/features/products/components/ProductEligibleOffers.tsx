@@ -9,15 +9,18 @@ import { Button } from '@/shared/components/ui/button'
 import { LABELS } from '@/shared/constants/labels'
 import { cn } from '@/shared/utils/cn'
 import { formatLabel } from '@/shared/utils/formatLabel'
-
-const PDP_OFFERS_PREVIEW_COUNT = 2
-const PDP_OFFERS_FETCH_LIMIT = 20
-const PDP_OFFERS_EXPANDED_SCROLL_CLASS =
-  'max-h-[13.5rem] overflow-y-auto overscroll-contain [scrollbar-width:thin]'
+import {
+  PDP_OFFERS_EXPANDED_SCROLL_CLASS,
+  PDP_OFFERS_FETCH_LIMIT,
+  PDP_OFFERS_PREVIEW_COUNT,
+  PDP_OFFERS_STALE_MS,
+} from '../constants/pdpOffers'
 
 interface ProductEligibleOffersProps {
   productId: string
   className?: string
+  /** When false, skip the network call (e.g. product still loading). */
+  enabled?: boolean
 }
 
 function offerDetailLabel(offer: {
@@ -31,7 +34,11 @@ function offerDetailLabel(offer: {
   return LABELS.offersAtCheckout
 }
 
-export function ProductEligibleOffers({ productId, className }: ProductEligibleOffersProps) {
+export function ProductEligibleOffers({
+  productId,
+  className,
+  enabled = true,
+}: ProductEligibleOffersProps) {
   const accessToken = useAuthStore((s) => s.accessToken)
   const [expanded, setExpanded] = useState(false)
 
@@ -41,8 +48,11 @@ export function ProductEligibleOffers({ productId, className }: ProductEligibleO
       accessToken
         ? couponsApi.eligible({ productId, limit: PDP_OFFERS_FETCH_LIMIT })
         : couponsApi.eligiblePublic({ productId, limit: PDP_OFFERS_FETCH_LIMIT }),
-    enabled: Boolean(productId),
+    enabled: Boolean(productId) && enabled,
+    staleTime: PDP_OFFERS_STALE_MS,
   })
+
+  if (!enabled) return null
 
   if (offersQuery.isLoading) {
     return (
@@ -65,31 +75,31 @@ export function ProductEligibleOffers({ productId, className }: ProductEligibleO
   return (
     <div
       className={cn(
-        'rounded-lg border border-line bg-surface/60 px-3 py-2.5 sm:px-3.5 sm:py-3',
+        'rounded-lg border border-line bg-surface/60 px-2.5 py-2',
         className,
       )}
     >
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-2">
+      <div className="mb-1.5 flex items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-1.5">
           <Tag className="h-3.5 w-3.5 shrink-0 text-brand" strokeWidth={1.75} aria-hidden />
           <p className="truncate text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-muted">
             {LABELS.availableOffers}
           </p>
         </div>
-        <span className="shrink-0 rounded-full bg-paper px-2 py-0.5 text-[0.6875rem] tabular-nums text-ink-muted">
+        <span className="shrink-0 rounded-full bg-paper px-1.5 py-px text-[0.6875rem] tabular-nums text-ink-muted">
           {formatLabel(LABELS.availableOffersCount, { count: offers.length })}
         </span>
       </div>
 
       <ul
-        className={cn('space-y-1.5 pr-0.5', isScrollable && PDP_OFFERS_EXPANDED_SCROLL_CLASS)}
+        className={cn('space-y-1 pr-0.5', isScrollable && PDP_OFFERS_EXPANDED_SCROLL_CLASS)}
         aria-label={isScrollable ? LABELS.availableOffersList : LABELS.availableOffers}
         tabIndex={isScrollable ? 0 : undefined}
       >
         {visibleOffers.map((offer) => (
           <li
             key={offer.code}
-            className="flex items-center justify-between gap-2 rounded-md border border-dashed border-brand/25 bg-brand-subtle/30 px-2.5 py-2"
+            className="flex items-center justify-between gap-2 rounded-md border border-dashed border-brand/25 bg-brand-subtle/30 px-2 py-1"
           >
             <span className="truncate font-mono text-[0.75rem] font-semibold tracking-wide text-ink">
               {offer.code}
@@ -106,7 +116,7 @@ export function ProductEligibleOffers({ productId, className }: ProductEligibleO
           type="button"
           variant="ghost"
           size="sm"
-          className="mt-2 h-8 min-h-8 max-h-8 w-full rounded-md text-[0.8125rem] text-brand hover:bg-brand-subtle/60"
+          className="mt-1 h-auto min-h-0 max-h-none w-full gap-1 px-0 py-1 text-[0.75rem] font-medium text-brand hover:bg-transparent hover:text-brand-hover"
           onClick={() => setExpanded((current) => !current)}
           aria-expanded={expanded}
         >
@@ -114,13 +124,13 @@ export function ProductEligibleOffers({ productId, className }: ProductEligibleO
             ? LABELS.showLessOffers
             : formatLabel(LABELS.showMoreOffers, { count: hiddenCount })}
           <ChevronDown
-            className={cn('ml-1 !size-3.5 transition-transform', expanded && 'rotate-180')}
+            className={cn('!size-3.5 transition-transform', expanded && 'rotate-180')}
             aria-hidden
           />
         </Button>
       ) : null}
 
-      <p className="mt-2 text-[0.6875rem] leading-snug text-ink-faint">{LABELS.offersAtCheckout}</p>
+      <p className="mt-1 text-[0.6875rem] leading-snug text-ink-faint">{LABELS.offersAtCheckout}</p>
     </div>
   )
 }

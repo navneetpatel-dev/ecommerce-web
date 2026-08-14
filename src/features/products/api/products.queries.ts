@@ -21,6 +21,7 @@ export function useProduct(idOrSlug: string) {
     queryKey: productKeys.detail(idOrSlug),
     queryFn: () => fetchProduct(idOrSlug),
     enabled: !!idOrSlug,
+    staleTime: 1000 * 60,
   })
 }
 
@@ -33,6 +34,7 @@ export function useProductList(
     queryFn: () => productsApi.list(filters),
     placeholderData: (prev) => prev,
     enabled: options.enabled ?? true,
+    staleTime: 1000 * 30,
   })
 }
 

@@ -95,6 +95,7 @@ export function ProductDetailContent({
   returnsAllowed,
 }: ProductDetailContentProps) {
   const [deliveryBlocked, setDeliveryBlocked] = useState(false)
+  const [detailTab, setDetailTab] = useState('description')
   const displayPrice = Number(variantSelection.currentPrice || product.basePrice || 0)
   const displayStock = Number(variantSelection.currentStock || product.stock || 0)
   const quantityMax = maxQuantity ?? cartLineQuantityMax(displayStock)
@@ -213,6 +214,7 @@ export function ProductDetailContent({
                   <a
                     href="#reviews"
                     className="text-[0.8125rem] text-ink-muted underline-offset-2 hover:text-brand hover:underline"
+                    onClick={() => setDetailTab('reviews')}
                   >
                     {formatLabel(LABELS.reviewsWithCount, { count: reviewCount })}
                   </a>
@@ -465,7 +467,7 @@ export function ProductDetailContent({
       </div>
 
       <div className="mt-12 border-t border-line pt-8 md:mt-16 md:pt-10">
-        <Tabs defaultValue="description">
+        <Tabs value={detailTab} onValueChange={setDetailTab}>
           <TabsList className="w-full justify-start gap-1 overflow-x-auto rounded-none border-b border-line bg-transparent p-0">
             <TabsTrigger
               value="description"
@@ -517,7 +519,7 @@ export function ProductDetailContent({
             />
           </TabsContent>
           <TabsContent value="reviews" className="py-6 md:py-8" id="reviews">
-            <ProductReviewsContainer productId={product.id} />
+            <ProductReviewsContainer productId={product.id} enabled={detailTab === 'reviews'} />
           </TabsContent>
         </Tabs>
       </div>

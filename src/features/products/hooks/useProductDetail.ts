@@ -17,7 +17,7 @@ import type { Category, ProductDetail } from '@/shared/api/types'
 export function useProductDetail() {
   const params = useParams<{ slug: string }>()
   const { data: product, isLoading } = useProduct(params?.slug || '')
-  const { data: categories = [] } = useCategories()
+  const { data: categories = [] } = useCategories({ enabled: Boolean(product) })
   const { data: settings } = usePublicSettings()
   const { isWishlisted, toggle } = useWishlistToggle(product?.id)
   const addToCart = useAddToCart()

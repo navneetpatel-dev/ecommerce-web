@@ -4,8 +4,8 @@ import { useProductReviews, useVoteReview } from '../api/reviews.queries'
 import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
 import type { Review } from '@/shared/api/types'
 
-export function useProductReviewsView(productId: string) {
-  const { data: reviews, isLoading } = useProductReviews(productId)
+export function useProductReviewsView(productId: string, options: { enabled?: boolean } = {}) {
+  const { data: reviews, isLoading } = useProductReviews(productId, options)
   const voteReview = useVoteReview()
   const { requireAuth } = useRequireAuth()
 

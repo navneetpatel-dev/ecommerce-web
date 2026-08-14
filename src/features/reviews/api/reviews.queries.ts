@@ -5,11 +5,12 @@ import { navigate } from '@/shared/utils/navigate'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { PATHS } from '@/shared/constants/paths'
 
-export function useProductReviews(productId: string) {
+export function useProductReviews(productId: string, options: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: ['reviews', 'product', productId],
     queryFn: () => reviewsApi.forProduct(productId),
-    enabled: Boolean(productId),
+    enabled: Boolean(productId) && (options.enabled ?? true),
+    staleTime: 1000 * 60,
   })
 }
 

@@ -1,4 +1,5 @@
 import { Skeleton } from '@/shared/components/ui/skeleton'
+import { IMAGE_GALLERY_STAGE_HEIGHT_CLASS } from '@/shared/constants/imageGallery'
 
 export function ProductDetailSkeleton() {
   return (
@@ -12,7 +13,9 @@ export function ProductDetailSkeleton() {
               <Skeleton className="h-14 w-14 shrink-0 rounded-lg sm:h-16 sm:w-16 lg:h-[4.25rem] lg:w-[4.25rem]" />
               <Skeleton className="hidden h-14 w-14 shrink-0 rounded-lg sm:h-16 sm:w-16 lg:block lg:h-[4.25rem] lg:w-[4.25rem]" />
             </div>
-            <Skeleton className="order-1 mx-auto aspect-[4/5] w-full max-w-[36rem] rounded-2xl sm:aspect-square lg:order-2 lg:mx-0 lg:max-w-none lg:aspect-auto lg:h-[min(44rem,calc(100dvh-8.75rem))]" />
+            <Skeleton
+              className={`order-1 w-full rounded-2xl lg:order-2 ${IMAGE_GALLERY_STAGE_HEIGHT_CLASS}`}
+            />
           </div>
         </div>
         <div className="space-y-5 md:col-span-6 lg:col-span-5">

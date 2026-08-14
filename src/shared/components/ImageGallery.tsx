@@ -9,8 +9,10 @@ import { MediaImage } from '@/shared/components/MediaImage'
 import { ImageGalleryLightbox } from '@/shared/components/ImageGalleryLightbox'
 import { LABELS } from '@/shared/constants/labels'
 import {
+  IMAGE_GALLERY_STAGE_HEIGHT_CLASS,
   IMAGE_GALLERY_STAGE_QUALITY,
   IMAGE_GALLERY_STAGE_SIZES,
+  IMAGE_GALLERY_THUMB_COLUMN_HEIGHT_CLASS,
   IMAGE_GALLERY_ZOOM_SCALE,
 } from '@/shared/constants/imageGallery'
 import { cn } from '@/shared/utils/cn'
@@ -35,8 +37,8 @@ interface ImageGalleryProps {
   onCloseLightbox: () => void
 }
 
-const STAGE_HEIGHT_CLASS = 'lg:h-[min(44rem,calc(100dvh-8.75rem))]'
-const THUMB_COLUMN_HEIGHT_CLASS = 'lg:h-[min(44rem,calc(100dvh-8.75rem))]'
+const STAGE_HEIGHT_CLASS = IMAGE_GALLERY_STAGE_HEIGHT_CLASS
+const THUMB_COLUMN_HEIGHT_CLASS = IMAGE_GALLERY_THUMB_COLUMN_HEIGHT_CLASS
 
 function cssUrl(value: string) {
   return `url(${JSON.stringify(value)})`
@@ -143,15 +145,13 @@ export function ImageGallery({
           </div>
         ) : null}
 
-        <div className="group relative order-1 mx-auto w-full min-w-0 max-w-[36rem] flex-1 lg:order-2 lg:mx-0 lg:max-w-none">
+        <div className="group relative order-1 min-w-0 flex-1 lg:order-2">
           <div
             onClick={onOpenLightbox}
             {...zoomHandlers}
             className={cn(
-              'relative aspect-[4/5] cursor-zoom-in overflow-hidden rounded-2xl border border-line bg-paper select-none touch-pan-y',
-              'shadow-elevation-1 ring-1 ring-ink/5',
-              'w-full sm:aspect-square',
-              'lg:aspect-auto lg:max-h-none',
+              'relative w-full cursor-zoom-in overflow-hidden rounded-2xl border border-line bg-paper select-none touch-pan-y',
+              'shadow-elevation-1',
               STAGE_HEIGHT_CLASS,
             )}
           >

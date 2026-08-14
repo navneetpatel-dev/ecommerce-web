@@ -6,6 +6,7 @@ import { RecentlyViewedSection } from '@/features/home/components/RecentlyViewed
 import { useRecentlyViewed } from '@/features/home/hooks/useRecentlyViewed'
 import { TextEyebrow } from '@/shared/components/TextEyebrow'
 import { LABELS } from '@/shared/constants/labels'
+import { useInView } from '@/shared/hooks/useInView'
 
 interface ProductRelatedRailsProps {
   productId: string
@@ -14,6 +15,7 @@ interface ProductRelatedRailsProps {
 }
 
 export function ProductRelatedRails({ productId, categoryId, vendorId }: ProductRelatedRailsProps) {
+  const { ref, inView } = useInView<HTMLDivElement>({ rootMargin: '320px 0px' })
   const related = useProductList(
     {
       categoryId: categoryId ?? undefined,
@@ -22,7 +24,7 @@ export function ProductRelatedRails({ productId, categoryId, vendorId }: Product
       limit: 8,
       sort: 'popular',
     },
-    { enabled: Boolean(categoryId) },
+    { enabled: Boolean(categoryId) && inView },
   )
   const fromSeller = useProductList(
     {
@@ -31,7 +33,7 @@ export function ProductRelatedRails({ productId, categoryId, vendorId }: Product
       limit: 8,
       sort: 'newest',
     },
-    { enabled: Boolean(vendorId) },
+    { enabled: Boolean(vendorId) && inView },
   )
   const recentlyViewed = useRecentlyViewed(8)
   const recent = recentlyViewed.products.filter((item) => item.id !== productId)
@@ -41,7 +43,7 @@ export function ProductRelatedRails({ productId, categoryId, vendorId }: Product
   const sellerLoading = fromSeller.isLoading
 
   return (
-    <div className="mt-12 space-y-12 border-t border-line pt-10 md:mt-16 md:pt-12">
+    <div ref={ref} className="mt-12 space-y-12 border-t border-line pt-10 md:mt-16 md:pt-12">
       {categoryId && (relatedLoading || relatedItems.length > 0) ? (
         <section>
           <TextEyebrow className="mb-2">{LABELS.relatedProducts}</TextEyebrow>
