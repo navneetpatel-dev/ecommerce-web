@@ -1,33 +1,39 @@
-'use client'
+"use client";
 
-import { Suspense } from 'react'
-import Link from 'next/link'
-import { Button } from '@/shared/components/ui/button'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { SupportAuthGate } from '@/features/supportTickets/components/SupportAuthGate'
-import { useMyBugReportsInfinite } from '../api/bugReports.queries'
-import { BugReportCardList } from '../components/BugReportCardList'
-import { BugReportFilters, useBugFiltersFromUrl } from '../components/BugReportFilters'
+import { Suspense } from "react";
+import Link from "next/link";
+import { Button } from "@/shared/components/ui/button";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { SupportAuthGate } from "@/features/supportTickets";
+import { useMyBugReportsInfinite } from "../api/bugReports.queries";
+import { BugReportCardList } from "../components/BugReportCardList";
+import {
+  BugReportFilters,
+  useBugFiltersFromUrl,
+} from "../components/BugReportFilters";
 
 export function CustomerBugReportsPage() {
   return (
-    <SupportAuthGate message={LABELS.bugSignInRequired} loginNext={PATHS.bugReports}>
+    <SupportAuthGate
+      message={LABELS.bugSignInRequired}
+      loginNext={PATHS.bugReports}
+    >
       <Suspense fallback={<Skeleton className="h-40 w-full" />}>
         <CustomerBugReportsContent />
       </Suspense>
     </SupportAuthGate>
-  )
+  );
 }
 
 function CustomerBugReportsContent() {
-  const filters = useBugFiltersFromUrl()
+  const filters = useBugFiltersFromUrl();
   const query = useMyBugReportsInfinite({
     status: filters.status,
     severity: filters.severity,
-  })
-  const reports = query.data?.pages.flatMap((p) => p.items) ?? []
+  });
+  const reports = query.data?.pages.flatMap((p) => p.items) ?? [];
 
   return (
     <div className="storefront-container py-8 md:py-10">
@@ -36,7 +42,9 @@ function CustomerBugReportsContent() {
           <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
             {LABELS.myBugReports}
           </h1>
-          <p className="text-[0.9375rem] text-ink-muted">{LABELS.bugReportsPageDescription}</p>
+          <p className="text-[0.9375rem] text-ink-muted">
+            {LABELS.bugReportsPageDescription}
+          </p>
         </div>
         <Button asChild className="shrink-0">
           <Link href={PATHS.bugReportNew}>{LABELS.reportABug}</Link>
@@ -59,5 +67,5 @@ function CustomerBugReportsContent() {
         onLoadMore={() => void query.fetchNextPage()}
       />
     </div>
-  )
+  );
 }

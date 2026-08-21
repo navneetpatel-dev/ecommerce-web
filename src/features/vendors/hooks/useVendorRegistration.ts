@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { vendorsApi } from "../api/vendors.api";
-import { authApi } from "@/features/auth/api/auth.api";
+import { authApi } from "@/features/auth";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { navigate } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";

@@ -1,36 +1,34 @@
-'use client'
+"use client";
 
-import { useCallback, useEffect, useState } from 'react'
-import { FileText } from 'lucide-react'
-import { Button } from '@/shared/components/ui/button'
+import { useCallback, useEffect, useState } from "react";
+import { FileText } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/shared/components/ui/dialog'
-import { StatusDialog } from '@/shared/components/StatusDialog'
-import { FormFieldFrame } from '@/shared/components/forms'
-import { Textarea } from '@/shared/components/ui/textarea'
-import { LABELS } from '@/shared/constants/labels'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import { vendorDocumentTypeLabel } from '@/shared/utils/vendorDocumentTypeLabel'
-import { vendorDocumentChecklistStatusLabel } from '@/shared/utils/vendorDocumentChecklistStatusLabel'
-import {
-  VENDOR_DOCUMENT_CHECKLIST_STATUS,
-} from '@/shared/constants/statuses'
-import { vendorsApi, type KycChecklistItem } from '@/features/vendors/api/vendors.api'
-import { adminApi } from '../api/admin.api'
+} from "@/shared/components/ui/dialog";
+import { StatusDialog } from "@/shared/components/StatusDialog";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { vendorDocumentTypeLabel } from "@/shared/utils/vendorDocumentTypeLabel";
+import { vendorDocumentChecklistStatusLabel } from "@/shared/utils/vendorDocumentChecklistStatusLabel";
+import { VENDOR_DOCUMENT_CHECKLIST_STATUS } from "@/shared/constants/statuses";
+import { vendorsApi, type KycChecklistItem } from "@/features/vendors";
+import { adminApi } from "../api/admin.api";
 
-type ConfirmMode = 'verify' | 'reject' | null
+type ConfirmMode = "verify" | "reject" | null;
 
 interface VendorKycDocumentsDialogProps {
-  vendorId: string
-  vendorName: string
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  vendorId: string;
+  vendorName: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function VendorKycDocumentsDialog({
@@ -39,87 +37,87 @@ export function VendorKycDocumentsDialog({
   open,
   onOpenChange,
 }: VendorKycDocumentsDialogProps) {
-  const [items, setItems] = useState<KycChecklistItem[]>([])
-  const [isComplete, setIsComplete] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [mode, setMode] = useState<ConfirmMode>(null)
-  const [activeItem, setActiveItem] = useState<KycChecklistItem | null>(null)
-  const [reason, setReason] = useState('')
-  const [submitting, setSubmitting] = useState(false)
+  const [items, setItems] = useState<KycChecklistItem[]>([]);
+  const [isComplete, setIsComplete] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [mode, setMode] = useState<ConfirmMode>(null);
+  const [activeItem, setActiveItem] = useState<KycChecklistItem | null>(null);
+  const [reason, setReason] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const [actionError, setActionError] = useState<string | null>(null)
-  const [openingDocId, setOpeningDocId] = useState<string | null>(null)
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [openingDocId, setOpeningDocId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const checklist = await vendorsApi.getKycChecklist(vendorId)
-      setItems(checklist.items)
-      setIsComplete(checklist.isComplete)
+      const checklist = await vendorsApi.getKycChecklist(vendorId);
+      setItems(checklist.items);
+      setIsComplete(checklist.isComplete);
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist))
-      setItems([])
+      setError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist));
+      setItems([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [vendorId])
+  }, [vendorId]);
 
   useEffect(() => {
-    if (!open) return
-    void load()
-  }, [open, load])
+    if (!open) return;
+    void load();
+  }, [open, load]);
 
   const openDocument = async (documentId: string) => {
-    setOpeningDocId(documentId)
-    setActionError(null)
+    setOpeningDocId(documentId);
+    setActionError(null);
     try {
-      const { url } = await vendorsApi.getDocumentViewUrl(documentId)
-      window.open(url, '_blank', 'noopener,noreferrer')
+      const { url } = await vendorsApi.getDocumentViewUrl(documentId);
+      window.open(url, "_blank", "noopener,noreferrer");
     } catch (err) {
-      setActionError(getApiErrorMessage(err, LABELS.couldNotOpenDocument))
+      setActionError(getApiErrorMessage(err, LABELS.couldNotOpenDocument));
     } finally {
-      setOpeningDocId(null)
+      setOpeningDocId(null);
     }
-  }
+  };
 
   const closeConfirm = () => {
-    if (submitting) return
-    setMode(null)
-    setActiveItem(null)
-    setReason('')
-  }
+    if (submitting) return;
+    setMode(null);
+    setActiveItem(null);
+    setReason("");
+  };
 
   const runVerify = async () => {
-    if (!activeItem?.documentId) return
-    setSubmitting(true)
-    setActionError(null)
+    if (!activeItem?.documentId) return;
+    setSubmitting(true);
+    setActionError(null);
     try {
-      await adminApi.verifyVendorDocument(activeItem.documentId)
-      closeConfirm()
-      await load()
+      await adminApi.verifyVendorDocument(activeItem.documentId);
+      closeConfirm();
+      await load();
     } catch (err) {
-      setActionError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist))
+      setActionError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   const runReject = async () => {
-    if (!activeItem?.documentId || !reason.trim()) return
-    setSubmitting(true)
-    setActionError(null)
+    if (!activeItem?.documentId || !reason.trim()) return;
+    setSubmitting(true);
+    setActionError(null);
     try {
-      await adminApi.rejectVendorDocument(activeItem.documentId, reason.trim())
-      closeConfirm()
-      await load()
+      await adminApi.rejectVendorDocument(activeItem.documentId, reason.trim());
+      closeConfirm();
+      await load();
     } catch (err) {
-      setActionError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist))
+      setActionError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist));
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <>
@@ -129,21 +127,29 @@ export function VendorKycDocumentsDialog({
             <DialogTitle>{LABELS.kycChecklist}</DialogTitle>
             <DialogDescription>
               {vendorName}
-              {' · '}
-              {isComplete ? LABELS.kycChecklistComplete : LABELS.kycChecklistIncomplete}
+              {" · "}
+              {isComplete
+                ? LABELS.kycChecklistComplete
+                : LABELS.kycChecklistIncomplete}
             </DialogDescription>
           </DialogHeader>
 
           {loading ? (
-            <p className="py-6 text-center text-[0.9375rem] text-ink-muted">{LABELS.loading}</p>
+            <p className="py-6 text-center text-[0.9375rem] text-ink-muted">
+              {LABELS.loading}
+            </p>
           ) : null}
 
           {!loading && error ? (
-            <p className="py-6 text-center text-[0.9375rem] text-danger">{error}</p>
+            <p className="py-6 text-center text-[0.9375rem] text-danger">
+              {error}
+            </p>
           ) : null}
 
           {actionError ? (
-            <p className="text-center text-[0.8125rem] text-danger">{actionError}</p>
+            <p className="text-center text-[0.8125rem] text-danger">
+              {actionError}
+            </p>
           ) : null}
 
           {!loading && !error && items.length === 0 ? (
@@ -155,24 +161,27 @@ export function VendorKycDocumentsDialog({
           {!loading && !error && items.length > 0 ? (
             <ul className="space-y-3">
               {items.map((item) => {
-                const typeLabel = vendorDocumentTypeLabel(item.documentType)
+                const typeLabel = vendorDocumentTypeLabel(item.documentType);
                 const canReview =
                   Boolean(item.documentId) &&
                   item.status !== VENDOR_DOCUMENT_CHECKLIST_STATUS.VERIFIED &&
-                  item.status !== VENDOR_DOCUMENT_CHECKLIST_STATUS.NOT_UPLOADED
+                  item.status !== VENDOR_DOCUMENT_CHECKLIST_STATUS.NOT_UPLOADED;
                 return (
                   <li
                     key={item.documentType}
                     className="flex flex-col gap-3 rounded-md border border-line bg-surface px-3 py-3 sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div className="min-w-0 space-y-1">
-                      <p className="truncate text-[0.9375rem] font-medium text-ink">{typeLabel}</p>
+                      <p className="truncate text-[0.9375rem] font-medium text-ink">
+                        {typeLabel}
+                      </p>
                       <p className="text-[0.8125rem] text-ink-muted">
                         {vendorDocumentChecklistStatusLabel(item.status)}
                       </p>
                       {item.rejectionReason ? (
                         <p className="text-[0.75rem] text-danger">
-                          {LABELS.documentRejectionReason}: {item.rejectionReason}
+                          {LABELS.documentRejectionReason}:{" "}
+                          {item.rejectionReason}
                         </p>
                       ) : null}
                       {item.documentId ? (
@@ -195,8 +204,8 @@ export function VendorKycDocumentsDialog({
                           size="sm"
                           className="bg-brand text-paper hover:bg-brand-hover"
                           onClick={() => {
-                            setActiveItem(item)
-                            setMode('verify')
+                            setActiveItem(item);
+                            setMode("verify");
                           }}
                         >
                           {LABELS.verifyDocument}
@@ -205,8 +214,8 @@ export function VendorKycDocumentsDialog({
                           size="sm"
                           variant="outline"
                           onClick={() => {
-                            setActiveItem(item)
-                            setMode('reject')
+                            setActiveItem(item);
+                            setMode("reject");
                           }}
                         >
                           {LABELS.rejectDocument}
@@ -214,7 +223,7 @@ export function VendorKycDocumentsDialog({
                       </div>
                     ) : null}
                   </li>
-                )
+                );
               })}
             </ul>
           ) : null}
@@ -222,9 +231,9 @@ export function VendorKycDocumentsDialog({
       </Dialog>
 
       <StatusDialog
-        open={mode === 'verify' && Boolean(activeItem)}
+        open={mode === "verify" && Boolean(activeItem)}
         onOpenChange={(next) => {
-          if (!next) closeConfirm()
+          if (!next) closeConfirm();
         }}
         variant="success"
         title={LABELS.confirmVerifyDocumentTitle}
@@ -245,15 +254,15 @@ export function VendorKycDocumentsDialog({
           label: LABELS.verifyDocument,
           loading: submitting,
           onClick: () => {
-            void runVerify()
+            void runVerify();
           },
         }}
       />
 
       <StatusDialog
-        open={mode === 'reject' && Boolean(activeItem)}
+        open={mode === "reject" && Boolean(activeItem)}
         onOpenChange={(next) => {
-          if (!next) closeConfirm()
+          if (!next) closeConfirm();
         }}
         variant="danger"
         title={LABELS.confirmRejectDocumentTitle}
@@ -275,11 +284,14 @@ export function VendorKycDocumentsDialog({
           loading: submitting,
           disabled: !reason.trim(),
           onClick: () => {
-            void runReject()
+            void runReject();
           },
         }}
       >
-        <FormFieldFrame label={LABELS.documentRejectionReason} htmlFor="kyc-reject-reason">
+        <FormFieldFrame
+          label={LABELS.documentRejectionReason}
+          htmlFor="kyc-reject-reason"
+        >
           <Textarea
             id="kyc-reject-reason"
             value={reason}
@@ -289,5 +301,5 @@ export function VendorKycDocumentsDialog({
         </FormFieldFrame>
       </StatusDialog>
     </>
-  )
+  );
 }

@@ -6,6 +6,16 @@ export {
   useAdminCoupons,
   useAdminAnalytics,
 } from "./api/admin.queries";
+export { adminApi } from "./api/admin.api";
+export { reportsApi, type VendorReportSummary } from "./api/reports.api";
+export {
+  CouponSchema,
+  VENDOR_COUPON_FORM_DEFAULTS,
+  toCouponCreateBody,
+  type CouponFormInput,
+} from "./schemas/coupons.schema";
+export { CreateCouponForm } from "./components/CreateCouponForm";
+export { AdminConfirmAction } from "./components/AdminConfirmAction";
 export { AdminHomePage } from "./pages/AdminHomePage";
 export { AdminAnalyticsPage } from "./pages/AdminAnalyticsPage";
 export { AdminAuditPage } from "./pages/AdminAuditPage";

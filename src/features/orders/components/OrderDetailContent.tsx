@@ -1,34 +1,34 @@
-import Link from 'next/link'
-import { ArrowLeft, ArrowRight, MapPin } from 'lucide-react'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { motion } from 'motion/react'
-import type { Order } from '@/shared/api/types'
-import { SubOrderCardContainer } from '../containers/SubOrderCardContainer'
-import { OrderStatusGroup } from './OrderStatusGroup'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { Button } from '@/shared/components/ui/button'
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, MapPin } from "lucide-react";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { motion } from "motion/react";
+import type { Order } from "@/shared/api/types";
+import { SubOrderCardContainer } from "../containers/SubOrderCardContainer";
+import { OrderStatusGroup } from "./OrderStatusGroup";
+import { TextEyebrow } from "@/shared/components/TextEyebrow";
+import { Button } from "@/shared/components/ui/button";
 import {
   countOrderItems,
   formatInr,
   formatOrderDate,
   shortOrderId,
-} from '../utils/format'
-import { OrderPaymentSummary } from './OrderPaymentSummary'
-import { reportsEngineApi } from '@/features/reports/api/reportsEngine.api'
+} from "../utils/format";
+import { OrderPaymentSummary } from "./OrderPaymentSummary";
+import { reportsEngineApi } from "@/features/reports";
 
 interface OrderDetailContentProps {
-  order: Order
+  order: Order;
 }
 
 export function OrderDetailContent({ order }: OrderDetailContentProps) {
-  const itemCount = countOrderItems(order)
-  const vendorCount = order.subOrders?.length ?? 0
-  const address = order.shippingAddress
+  const itemCount = countOrderItems(order);
+  const vendorCount = order.subOrders?.length ?? 0;
+  const address = order.shippingAddress;
 
   const downloadInvoice = () => {
-    void reportsEngineApi.customerOrderInvoice(order.id)
-  }
+    void reportsEngineApi.customerOrderInvoice(order.id);
+  };
 
   return (
     <div className="relative">
@@ -56,7 +56,7 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
             <div>
               <h1
                 className="font-display text-ink leading-[1.1] tracking-tight"
-                style={{ fontSize: 'var(--text-display-sm)' }}
+                style={{ fontSize: "var(--text-display-sm)" }}
               >
                 Order #{shortOrderId(order.id)}
               </h1>
@@ -64,10 +64,10 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
                 Placed {formatOrderDate(order.createdAt)}
                 {vendorCount > 0 && (
                   <>
-                    {' · '}
-                    {vendorCount} {vendorCount === 1 ? 'seller' : 'sellers'}
-                    {' · '}
-                    {itemCount} {itemCount === 1 ? 'item' : 'items'}
+                    {" · "}
+                    {vendorCount} {vendorCount === 1 ? "seller" : "sellers"}
+                    {" · "}
+                    {itemCount} {itemCount === 1 ? "item" : "items"}
                   </>
                 )}
               </p>
@@ -118,13 +118,17 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
               />
 
               <p className="text-[0.875rem] text-ink-muted">
-                {itemCount} {itemCount === 1 ? 'item' : 'items'}
+                {itemCount} {itemCount === 1 ? "item" : "items"}
                 <span className="mx-2 text-line">·</span>
-                <span className="font-medium text-ink">{formatInr(order.totalAmount)}</span>
+                <span className="font-medium text-ink">
+                  {formatInr(order.totalAmount)}
+                </span>
               </p>
 
               <TextEyebrow className="mt-4">Order summary</TextEyebrow>
-              <h2 className="mt-1 font-display text-[1.25rem] text-ink">What you paid</h2>
+              <h2 className="mt-1 font-display text-[1.25rem] text-ink">
+                What you paid
+              </h2>
 
               <dl className="mt-5 space-y-2.5 text-[0.875rem]">
                 <div className="flex items-center justify-between gap-4">
@@ -134,7 +138,9 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
                 {Number(order.discountTotal) > 0 && (
                   <div className="flex items-center justify-between gap-4 text-success">
                     <dt>Discount</dt>
-                    <dd className="tabular-nums">−{formatInr(order.discountTotal)}</dd>
+                    <dd className="tabular-nums">
+                      −{formatInr(order.discountTotal)}
+                    </dd>
                   </div>
                 )}
                 <div className="flex items-end justify-between gap-4 border-t border-line pt-3">
@@ -147,27 +153,42 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
                 </div>
               </dl>
 
-              <OrderPaymentSummary order={order} className="mt-5 border-t border-line pt-5" />
+              <OrderPaymentSummary
+                order={order}
+                className="mt-5 border-t border-line pt-5"
+              />
 
               {address && (
                 <div className="mt-5 border-t border-line pt-5">
                   <div className="flex items-center gap-2">
-                    <MapPin className="h-3.5 w-3.5 text-ink-muted" strokeWidth={1.5} />
+                    <MapPin
+                      className="h-3.5 w-3.5 text-ink-muted"
+                      strokeWidth={1.5}
+                    />
                     <TextEyebrow className="!mb-0">Shipping to</TextEyebrow>
                   </div>
                   <address className="mt-2 not-italic text-[0.875rem] leading-relaxed text-ink">
                     <span className="block">{address.line1}</span>
-                    {address.line2 ? <span className="block">{address.line2}</span> : null}
+                    {address.line2 ? (
+                      <span className="block">{address.line2}</span>
+                    ) : null}
                     <span className="block text-ink-muted">
                       {address.city}, {address.state} {address.pincode}
                     </span>
-                    <span className="block text-ink-muted">{address.country}</span>
+                    <span className="block text-ink-muted">
+                      {address.country}
+                    </span>
                   </address>
                 </div>
               )}
 
               <div className="mt-5 border-t border-line pt-5 space-y-2">
-                <Button type="button" variant="outline" className="w-full" onClick={downloadInvoice}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={downloadInvoice}
+                >
                   {LABELS.downloadTaxInvoice}
                 </Button>
                 <Button className="w-full" asChild>
@@ -179,5 +200,5 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

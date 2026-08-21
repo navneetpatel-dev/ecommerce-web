@@ -24,7 +24,7 @@ import {
   type BugAttachmentType,
   type TicketAttachmentType,
 } from "@/shared/constants/statuses";
-import { usePresignUpload } from "@/features/uploads/api/uploads.queries";
+import { usePresignUpload } from "@/shared/hooks/useUploads";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { compressVideoIfNeeded } from "@/shared/utils/videoMedia";

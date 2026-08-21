@@ -1,39 +1,49 @@
-import type { CheckoutQuote } from '@/shared/api/types'
-import { LABELS } from '@/shared/constants/labels'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import { VendorStrip } from '@/shared/components/VendorStrip'
-import { Button } from '@/shared/components/ui/button'
-import { ArrowRight, AlertTriangle } from 'lucide-react'
-import { CashbackCouponNotice } from './CashbackCouponNotice'
+import type { CheckoutQuote } from "@/shared/api/types";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { VendorStrip } from "@/shared/components/VendorStrip";
+import { Button } from "@/shared/components/ui/button";
+import { ArrowRight, AlertTriangle } from "lucide-react";
+import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice";
 
 interface ReviewStepProps {
-  quote: CheckoutQuote | null
-  isPending: boolean
-  hasUnavailableItems?: boolean
-  onPlaceOrder: () => void
-  onBack: () => void
+  quote: CheckoutQuote | null;
+  isPending: boolean;
+  hasUnavailableItems?: boolean;
+  onPlaceOrder: () => void;
+  onBack: () => void;
 }
 
 function formatInr(value: number) {
-  return `₹${value.toLocaleString('en-IN')}`
+  return `₹${value.toLocaleString("en-IN")}`;
 }
 
-export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder, onBack }: ReviewStepProps) {
+export function ReviewStep({
+  quote,
+  isPending,
+  hasUnavailableItems,
+  onPlaceOrder,
+  onBack,
+}: ReviewStepProps) {
   if (!quote) {
     return (
       <div className="space-y-5">
         <div className="border border-line bg-paper/60 px-5 py-8">
-          <p className="font-display text-[1.125rem] text-ink">{LABELS.preparingSummary}</p>
-          <p className="mt-1 text-[0.875rem] text-ink-muted">{LABELS.calculatingShippingTaxes}</p>
+          <p className="font-display text-[1.125rem] text-ink">
+            {LABELS.preparingSummary}
+          </p>
+          <p className="mt-1 text-[0.875rem] text-ink-muted">
+            {LABELS.calculatingShippingTaxes}
+          </p>
         </div>
         <Button variant="outline" onClick={onBack} fullWidth="mobile">
           {LABELS.backToPayment}
         </Button>
       </div>
-    )
+    );
   }
 
-  const payable = quote.amountDue ?? quote.grandTotal
+  const payable = quote.amountDue ?? quote.grandTotal;
 
   return (
     <div className="space-y-5">
@@ -47,12 +57,18 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
 
             <ul className="mt-4 space-y-2.5 border-t border-line pt-4">
               {vb.items.map((item) => (
-                <li key={item.id} className="flex items-start justify-between gap-4 text-[0.875rem]">
+                <li
+                  key={item.id}
+                  className="flex items-start justify-between gap-4 text-[0.875rem]"
+                >
                   <span className="text-ink">
                     {item.productName}
                     <span className="text-ink-muted">
-                      {' '}
-                      · {formatLabel(LABELS.qtyLabel, { count: String(item.quantity) })}
+                      {" "}
+                      ·{" "}
+                      {formatLabel(LABELS.qtyLabel, {
+                        count: String(item.quantity),
+                      })}
                     </span>
                   </span>
                   <span className="shrink-0 tabular-nums text-ink">
@@ -65,17 +81,25 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
             <dl className="mt-4 space-y-2 border-t border-line pt-4 text-[0.875rem]">
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">{LABELS.subtotal}</dt>
-                <dd className="tabular-nums text-ink">{formatInr(vb.subtotal)}</dd>
+                <dd className="tabular-nums text-ink">
+                  {formatInr(vb.subtotal)}
+                </dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">{LABELS.shipping}</dt>
                 <dd className="tabular-nums text-ink">
-                  {vb.shippingCost === 0 ? LABELS.freeShipping : formatInr(vb.shippingCost)}
+                  {vb.shippingCost === 0
+                    ? LABELS.freeShipping
+                    : formatInr(vb.shippingCost)}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{vb.tax.igst > 0 ? LABELS.taxIgst : LABELS.taxCgstSgst}</dt>
-                <dd className="tabular-nums text-ink">{formatInr(vb.tax.total)}</dd>
+                <dt className="text-ink-muted">
+                  {vb.tax.igst > 0 ? LABELS.taxIgst : LABELS.taxCgstSgst}
+                </dt>
+                <dd className="tabular-nums text-ink">
+                  {formatInr(vb.tax.total)}
+                </dd>
               </div>
               {vb.discount > 0 && (
                 <div className="flex justify-between gap-4 text-success">
@@ -99,8 +123,12 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
         />
         {quote.walletAmountToUse > 0 ? (
           <div className="mb-3 flex justify-between gap-4 text-[0.875rem]">
-            <span className="text-ink-muted">{LABELS.walletAppliedAtCheckout}</span>
-            <span className="tabular-nums text-ink">−{formatInr(quote.walletAmountToUse)}</span>
+            <span className="text-ink-muted">
+              {LABELS.walletAppliedAtCheckout}
+            </span>
+            <span className="tabular-nums text-ink">
+              −{formatInr(quote.walletAmountToUse)}
+            </span>
           </div>
         ) : null}
         <div className="flex items-end justify-between gap-4">
@@ -108,7 +136,9 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
             <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-brand">
               {LABELS.amountDueToday}
             </p>
-            <p className="mt-1 text-[0.875rem] text-ink-muted">{LABELS.includingShippingTaxes}</p>
+            <p className="mt-1 text-[0.875rem] text-ink-muted">
+              {LABELS.includingShippingTaxes}
+            </p>
           </div>
           <p className="font-display text-[1.75rem] leading-none tabular-nums text-brand">
             {formatInr(payable)}
@@ -131,13 +161,19 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
           />
         ) : null}
         {payable <= 0 && quote.walletAmountToUse > 0 ? (
-          <p className="mt-3 text-[0.8125rem] font-medium text-success">{LABELS.walletFullyCoversOrder}</p>
+          <p className="mt-3 text-[0.8125rem] font-medium text-success">
+            {LABELS.walletFullyCoversOrder}
+          </p>
         ) : null}
       </div>
 
       {hasUnavailableItems && (
         <div className="flex items-start gap-2 rounded-sm border border-warning bg-warning-subtle px-4 py-3">
-          <AlertTriangle size={16} className="mt-0.5 shrink-0 text-warning" aria-hidden />
+          <AlertTriangle
+            size={16}
+            className="mt-0.5 shrink-0 text-warning"
+            aria-hidden
+          />
           <p className="text-[0.875rem] text-warning-foreground">
             {LABELS.removeUnavailableToCheckout}
           </p>
@@ -161,5 +197,5 @@ export function ReviewStep({ quote, isPending, hasUnavailableItems, onPlaceOrder
         </Button>
       </div>
     </div>
-  )
+  );
 }

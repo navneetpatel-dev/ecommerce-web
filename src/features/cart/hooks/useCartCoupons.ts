@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { couponsApi } from "@/features/coupons/api/coupons.api";
+import { couponsApi } from "@/features/coupons";
 import { cartKeys } from "@/features/cart/api/cart.queries";
-import { useCheckoutStore } from "@/features/checkout/store/checkout.store";
+import { useCheckoutStore } from "@/shared/stores/checkout.store";
 import { useRequireAuth } from "@/shared/hooks/useRequireAuth";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { LABELS } from "@/shared/constants/labels";

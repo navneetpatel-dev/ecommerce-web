@@ -1,58 +1,63 @@
-'use client'
+"use client";
 
-import { useId, useMemo, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
-import { FormError } from '@/shared/components/FormError'
-import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
-import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { Textarea } from '@/shared/components/ui/textarea'
-import { LABELS } from '@/shared/constants/labels'
-import { useManualFormFieldErrors } from '@/shared/hooks/useManualFormFieldErrors'
-import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import { formatLabel } from '@/shared/utils/formatLabel'
+import { useId, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  FormActions,
+  FormFieldFrame,
+  FormSection,
+  FormStack,
+} from "@/shared/components/forms";
+import { FormError } from "@/shared/components/FormError";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { LABELS } from "@/shared/constants/labels";
+import { useManualFormFieldErrors } from "@/shared/hooks/useManualFormFieldErrors";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { formatLabel } from "@/shared/utils/formatLabel";
 import {
   allRequiredFieldsMet,
   firstMissingRequiredHint,
-} from '@/shared/utils/firstMissingRequiredHint'
-import { readLastBrowseUrl } from '@/shared/utils/lastBrowseUrl'
+} from "@/shared/utils/firstMissingRequiredHint";
+import { readLastBrowseUrl } from "@/shared/utils/lastBrowseUrl";
 import {
   BugAttachmentUploader,
   type UploadedMediaAttachment,
-} from '@/features/supportTickets/components/TicketAttachmentUploader'
+} from "@/features/supportTickets";
 import {
   BUG_DESCRIPTION_MAX,
   BUG_STEPS_MAX,
   BUG_TITLE_MAX,
-} from '../constants/fieldLimits'
-import { useCreateBugReport } from '../api/bugReports.queries'
+} from "../constants/fieldLimits";
+import { useCreateBugReport } from "../api/bugReports.queries";
 
-type BugReportField = 'title' | 'description' | 'steps' | 'attachments'
+type BugReportField = "title" | "description" | "steps" | "attachments";
 
 type Props = {
-  successHref: (id: string) => string
+  successHref: (id: string) => string;
   /** When true, omit the page H1 (parent already renders one). */
-  hideTitle?: boolean
-}
+  hideTitle?: boolean;
+};
 
 export function BugReportForm({ successHref, hideTitle = false }: Props) {
-  const router = useRouter()
-  const draftId = useMemo(() => crypto.randomUUID(), [])
-  const capturedPageUrl = useRef(readLastBrowseUrl())
-  const create = useCreateBugReport()
+  const router = useRouter();
+  const draftId = useMemo(() => crypto.randomUUID(), []);
+  const capturedPageUrl = useRef(readLastBrowseUrl());
+  const create = useCreateBugReport();
 
-  const titleId = useId()
-  const descId = useId()
-  const stepsId = useId()
+  const titleId = useId();
+  const descId = useId();
+  const stepsId = useId();
 
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [steps, setSteps] = useState('')
-  const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>([])
-  const [apiError, setApiError] = useState<string | null>(null)
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [steps, setSteps] = useState("");
+  const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>([]);
+  const [apiError, setApiError] = useState<string | null>(null);
   const { clearAll, clearField, setErrors, getError, hasError } =
-    useManualFormFieldErrors<BugReportField>()
+    useManualFormFieldErrors<BugReportField>();
 
   const requiredChecks = useMemo(
     () => [
@@ -60,45 +65,49 @@ export function BugReportForm({ successHref, hideTitle = false }: Props) {
       { ok: Boolean(description.trim()), message: LABELS.enterBugDescription },
     ],
     [title, description],
-  )
-  const canSubmit = allRequiredFieldsMet(requiredChecks)
-  const disableHint = firstMissingRequiredHint(requiredChecks) ?? ''
+  );
+  const canSubmit = allRequiredFieldsMet(requiredChecks);
+  const disableHint = firstMissingRequiredHint(requiredChecks) ?? "";
 
   const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setApiError(null)
-    clearAll()
+    e.preventDefault();
+    setApiError(null);
+    clearAll();
 
-    const trimmedTitle = title.trim()
-    const trimmedDescription = description.trim()
-    const trimmedSteps = steps.trim()
-    const nextErrors: Partial<Record<BugReportField, string>> = {}
+    const trimmedTitle = title.trim();
+    const trimmedDescription = description.trim();
+    const trimmedSteps = steps.trim();
+    const nextErrors: Partial<Record<BugReportField, string>> = {};
 
     if (!trimmedTitle) {
-      nextErrors.title = LABELS.bugTitleRequired
+      nextErrors.title = LABELS.bugTitleRequired;
     } else if (trimmedTitle.length > BUG_TITLE_MAX) {
-      nextErrors.title = formatLabel(LABELS.bugTitleTooLong, { max: String(BUG_TITLE_MAX) })
+      nextErrors.title = formatLabel(LABELS.bugTitleTooLong, {
+        max: String(BUG_TITLE_MAX),
+      });
     }
 
     if (!trimmedDescription) {
-      nextErrors.description = LABELS.bugDescriptionRequired
+      nextErrors.description = LABELS.bugDescriptionRequired;
     } else if (trimmedDescription.length > BUG_DESCRIPTION_MAX) {
       nextErrors.description = formatLabel(LABELS.bugDescriptionTooLong, {
         max: String(BUG_DESCRIPTION_MAX),
-      })
+      });
     }
 
     if (trimmedSteps.length > BUG_STEPS_MAX) {
-      nextErrors.steps = formatLabel(LABELS.bugStepsTooLong, { max: String(BUG_STEPS_MAX) })
+      nextErrors.steps = formatLabel(LABELS.bugStepsTooLong, {
+        max: String(BUG_STEPS_MAX),
+      });
     }
 
     if (attachments.some((a) => !a.bugType)) {
-      nextErrors.attachments = LABELS.bugAttachmentTypeMissing
+      nextErrors.attachments = LABELS.bugAttachmentTypeMissing;
     }
 
     if (Object.keys(nextErrors).length > 0) {
-      setErrors(nextErrors)
-      return
+      setErrors(nextErrors);
+      return;
     }
 
     try {
@@ -114,12 +123,12 @@ export function BugReportForm({ successHref, hideTitle = false }: Props) {
           })),
         },
         pageUrl: capturedPageUrl.current,
-      })
-      router.push(successHref(bug.id))
+      });
+      router.push(successHref(bug.id));
     } catch (err) {
-      setApiError(getApiErrorMessage(err, LABELS.bugCouldNotCreate))
+      setApiError(getApiErrorMessage(err, LABELS.bugCouldNotCreate));
     }
-  }
+  };
 
   return (
     <form onSubmit={onSubmit} className="w-full min-w-0">
@@ -147,23 +156,27 @@ export function BugReportForm({ successHref, hideTitle = false }: Props) {
           </div>
         )}
 
-        <FormSection title={LABELS.bugBasicsSection} hint={LABELS.bugBasicsSectionHint} columns={1}>
+        <FormSection
+          title={LABELS.bugBasicsSection}
+          hint={LABELS.bugBasicsSectionHint}
+          columns={1}
+        >
           <FormFieldFrame
             label={LABELS.bugTitle}
             htmlFor={titleId}
             required
-            error={getError('title')}
+            error={getError("title")}
           >
             <Input
               id={titleId}
               value={title}
               onChange={(e) => {
-                clearField('title')
-                setTitle(e.target.value.slice(0, BUG_TITLE_MAX))
+                clearField("title");
+                setTitle(e.target.value.slice(0, BUG_TITLE_MAX));
               }}
               placeholder={LABELS.bugTitlePlaceholder}
               maxLength={BUG_TITLE_MAX}
-              error={hasError('title')}
+              error={hasError("title")}
             />
             <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
               {formatLabel(LABELS.ticketCharCounter, {
@@ -183,19 +196,19 @@ export function BugReportForm({ successHref, hideTitle = false }: Props) {
             label={LABELS.bugDescription}
             htmlFor={descId}
             required
-            error={getError('description')}
+            error={getError("description")}
           >
             <Textarea
               id={descId}
               value={description}
               onChange={(e) => {
-                clearField('description')
-                setDescription(e.target.value.slice(0, BUG_DESCRIPTION_MAX))
+                clearField("description");
+                setDescription(e.target.value.slice(0, BUG_DESCRIPTION_MAX));
               }}
               placeholder={LABELS.bugDescriptionPlaceholder}
               rows={6}
               maxLength={BUG_DESCRIPTION_MAX}
-              error={hasError('description')}
+              error={hasError("description")}
             />
             <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
               {formatLabel(LABELS.ticketCharCounter, {
@@ -207,19 +220,19 @@ export function BugReportForm({ successHref, hideTitle = false }: Props) {
           <FormFieldFrame
             label={LABELS.bugStepsToReproduce}
             htmlFor={stepsId}
-            error={getError('steps')}
+            error={getError("steps")}
           >
             <Textarea
               id={stepsId}
               value={steps}
               onChange={(e) => {
-                clearField('steps')
-                setSteps(e.target.value.slice(0, BUG_STEPS_MAX))
+                clearField("steps");
+                setSteps(e.target.value.slice(0, BUG_STEPS_MAX));
               }}
               placeholder={LABELS.bugStepsPlaceholder}
               rows={5}
               maxLength={BUG_STEPS_MAX}
-              error={hasError('steps')}
+              error={hasError("steps")}
             />
             <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
               {formatLabel(LABELS.ticketCharCounter, {
@@ -239,20 +252,22 @@ export function BugReportForm({ successHref, hideTitle = false }: Props) {
             entityId={draftId}
             value={attachments}
             onChange={(next) => {
-              clearField('attachments')
-              setAttachments(next)
+              clearField("attachments");
+              setAttachments(next);
             }}
             disabled={create.isPending}
           />
-          {getError('attachments') ? (
+          {getError("attachments") ? (
             <p role="alert" className="text-[0.8125rem] text-danger">
-              {getError('attachments')}
+              {getError("attachments")}
             </p>
           ) : null}
         </FormSection>
 
         <FormError
-          error={apiError ? new Error(apiError) : (create.error as Error | null)}
+          error={
+            apiError ? new Error(apiError) : (create.error as Error | null)
+          }
           fallback={LABELS.bugCouldNotCreate}
         />
         <FormActions>
@@ -269,5 +284,5 @@ export function BugReportForm({ successHref, hideTitle = false }: Props) {
         </FormActions>
       </FormStack>
     </form>
-  )
+  );
 }

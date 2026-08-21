@@ -1,94 +1,102 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { PATHS } from '@/shared/constants/paths'
-import { LABELS } from '@/shared/constants/labels'
-import { AnimatePresence, motion } from 'motion/react'
-import { AddressStep } from './AddressStep'
-import { ShippingStep } from './ShippingStep'
-import { PaymentStep } from './PaymentStep'
-import { ReviewStep } from './ReviewStep'
-import { EmptyCart } from './EmptyCart'
-import { CheckoutStepIndicator } from '../containers/CheckoutStepIndicator'
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/components/ui/accordion'
-import { VendorStrip } from '@/shared/components/VendorStrip'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { CheckoutPageSkeleton } from '@/shared/components/Skeletons'
-import { StatusDialog } from '@/shared/components/StatusDialog'
-import type { ShippingMethod } from '@/shared/constants/statuses'
-import type { Address, CartItem, CheckoutQuote } from '@/shared/api/types'
-import type { PaymentNotice } from '../hooks/usePlaceOrder'
-import { CashbackCouponNotice } from './CashbackCouponNotice'
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { PATHS } from "@/shared/constants/paths";
+import { LABELS } from "@/shared/constants/labels";
+import { AnimatePresence, motion } from "motion/react";
+import { AddressStep } from "./AddressStep";
+import { ShippingStep } from "./ShippingStep";
+import { PaymentStep } from "./PaymentStep";
+import { ReviewStep } from "./ReviewStep";
+import { EmptyCart } from "./EmptyCart";
+import { CheckoutStepIndicator } from "../containers/CheckoutStepIndicator";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/shared/components/ui/accordion";
+import { VendorStrip } from "@/shared/components/VendorStrip";
+import { TextEyebrow } from "@/shared/components/TextEyebrow";
+import { CheckoutPageSkeleton } from "@/shared/components/Skeletons";
+import { StatusDialog } from "@/shared/components/StatusDialog";
+import type { ShippingMethod } from "@/shared/constants/statuses";
+import type { Address, CartItem, CheckoutQuote } from "@/shared/api/types";
+import type { PaymentNotice } from "../hooks/usePlaceOrder";
+import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice";
 
 interface CheckoutPageViewProps {
-  isLoading?: boolean
-  hasItems: boolean
-  step: number
-  addressId: string | null
-  shippingMethodByVendor: Record<string, ShippingMethod>
-  addresses?: Address[]
-  paymentMethod?: string | null
-  walletAmountToUse?: number
-  quote?: CheckoutQuote | null
-  isPending: boolean
-  paymentNotice?: PaymentNotice | null
-  onClearPaymentNotice?: () => void
-  isCreatingAddress?: boolean
-  groupedByVendor: Record<string, CartItem[]>
-  total: number
-  shippingReady: boolean
-  hasUnavailableItems?: boolean
-  onStepClick: (step: number) => void
-  onSelectAddress: (id: string) => void
-  onSelectShipping: (vendorId: string, method: ShippingMethod) => void
-  onContinueToShipping: () => void
-  onContinueToPayment: () => void
-  onBackToShipping: () => void
-  onBackToPayment: () => void
-  onSelectPayment: (method: string) => void
-  onWalletAmountChange: (amount: number) => void
-  onContinueToReview: () => void
-  onPlaceOrder: () => void
-  onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => Promise<void>
+  isLoading?: boolean;
+  hasItems: boolean;
+  step: number;
+  addressId: string | null;
+  shippingMethodByVendor: Record<string, ShippingMethod>;
+  addresses?: Address[];
+  paymentMethod?: string | null;
+  walletAmountToUse?: number;
+  quote?: CheckoutQuote | null;
+  isPending: boolean;
+  paymentNotice?: PaymentNotice | null;
+  onClearPaymentNotice?: () => void;
+  isCreatingAddress?: boolean;
+  groupedByVendor: Record<string, CartItem[]>;
+  total: number;
+  shippingReady: boolean;
+  hasUnavailableItems?: boolean;
+  onStepClick: (step: number) => void;
+  onSelectAddress: (id: string) => void;
+  onSelectShipping: (vendorId: string, method: ShippingMethod) => void;
+  onContinueToShipping: () => void;
+  onContinueToPayment: () => void;
+  onBackToShipping: () => void;
+  onBackToPayment: () => void;
+  onSelectPayment: (method: string) => void;
+  onWalletAmountChange: (amount: number) => void;
+  onContinueToReview: () => void;
+  onPlaceOrder: () => void;
+  onCreateAddress: (body: Omit<Address, "id" | "userId">) => Promise<void>;
 }
 
-const STEP_COPY: Record<number, { eyebrow: string; title: string; blurb: string }> = {
+const STEP_COPY: Record<
+  number,
+  { eyebrow: string; title: string; blurb: string }
+> = {
   1: {
-    eyebrow: 'Step 1 · Address',
-    title: 'Where should we send it?',
-    blurb: 'Choose a saved address or add a new one for delivery.',
+    eyebrow: "Step 1 · Address",
+    title: "Where should we send it?",
+    blurb: "Choose a saved address or add a new one for delivery.",
   },
   2: {
-    eyebrow: 'Step 2 · Shipping',
-    title: 'How should it arrive?',
-    blurb: 'Pick a shipping speed for each vendor in your bag.',
+    eyebrow: "Step 2 · Shipping",
+    title: "How should it arrive?",
+    blurb: "Pick a shipping speed for each vendor in your bag.",
   },
   3: {
-    eyebrow: 'Step 3 · Payment',
-    title: 'How will you pay?',
-    blurb: 'Select a payment method, then review your order.',
+    eyebrow: "Step 3 · Payment",
+    title: "How will you pay?",
+    blurb: "Select a payment method, then review your order.",
   },
   4: {
-    eyebrow: 'Step 4 · Review',
-    title: 'Confirm your order',
-    blurb: 'One last look — totals, shipping, and taxes included.',
+    eyebrow: "Step 4 · Review",
+    title: "Confirm your order",
+    blurb: "One last look — totals, shipping, and taxes included.",
   },
-}
+};
 
 function OrderSummaryPanel({
   groupedByVendor,
   total,
   quote,
 }: {
-  groupedByVendor: Record<string, CartItem[]>
-  total: number
-  quote?: CheckoutQuote | null
+  groupedByVendor: Record<string, CartItem[]>;
+  total: number;
+  quote?: CheckoutQuote | null;
 }) {
-  const items = Object.values(groupedByVendor).flat()
-  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
-  const displayTotal = quote?.grandTotal ?? total
-  const vendorEntries = Object.entries(groupedByVendor)
+  const items = Object.values(groupedByVendor).flat();
+  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const displayTotal = quote?.grandTotal ?? total;
+  const vendorEntries = Object.entries(groupedByVendor);
 
   return (
     <div className="relative flex max-h-[calc(100vh-7rem)] flex-col border border-line bg-surface-raised shadow-elevation-1">
@@ -99,9 +107,11 @@ function OrderSummaryPanel({
 
       <div className="shrink-0 border-b border-line px-5 pb-4 pt-5 md:px-6 md:pt-6">
         <p className="text-[0.875rem] text-ink-muted">
-          {itemCount} {itemCount === 1 ? 'item' : 'items'}
+          {itemCount} {itemCount === 1 ? "item" : "items"}
           <span className="mx-2 text-line">·</span>
-          <span className="font-medium text-ink">₹{displayTotal.toLocaleString('en-IN')}</span>
+          <span className="font-medium text-ink">
+            ₹{displayTotal.toLocaleString("en-IN")}
+          </span>
         </p>
         <TextEyebrow className="mt-4">Order summary</TextEyebrow>
         <h2 className="mt-1 font-display text-[1.25rem] text-ink">Your bag</h2>
@@ -126,11 +136,18 @@ function OrderSummaryPanel({
                     ) : null}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[0.875rem] font-medium text-ink">{item.product.name}</p>
-                    <p className="mt-0.5 text-[0.75rem] text-ink-muted">Qty {item.quantity}</p>
+                    <p className="truncate text-[0.875rem] font-medium text-ink">
+                      {item.product.name}
+                    </p>
+                    <p className="mt-0.5 text-[0.75rem] text-ink-muted">
+                      Qty {item.quantity}
+                    </p>
                   </div>
                   <p className="shrink-0 text-[0.875rem] tabular-nums text-ink">
-                    ₹{(item.product.price * item.quantity).toLocaleString('en-IN')}
+                    ₹
+                    {(item.product.price * item.quantity).toLocaleString(
+                      "en-IN",
+                    )}
                   </p>
                 </li>
               ))}
@@ -143,12 +160,16 @@ function OrderSummaryPanel({
         <dl className="space-y-2.5 text-[0.875rem]">
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">Subtotal</dt>
-            <dd className="tabular-nums text-ink">₹{total.toLocaleString('en-IN')}</dd>
+            <dd className="tabular-nums text-ink">
+              ₹{total.toLocaleString("en-IN")}
+            </dd>
           </div>
           {quote?.appliedCoupon && (
             <div className="flex items-center justify-between gap-4 text-success">
               <dt>Coupon · {quote.appliedCoupon.code}</dt>
-              <dd className="tabular-nums">−₹{quote.appliedCoupon.discount.toLocaleString('en-IN')}</dd>
+              <dd className="tabular-nums">
+                −₹{quote.appliedCoupon.discount.toLocaleString("en-IN")}
+              </dd>
             </div>
           )}
           {(quote?.cashbackAmount ?? 0) > 0 ? (
@@ -161,16 +182,18 @@ function OrderSummaryPanel({
           ) : null}
           {(quote?.walletAmountToUse ?? 0) > 0 ? (
             <div className="flex items-center justify-between gap-4 text-[0.8125rem]">
-              <dt className="text-ink-muted">{LABELS.walletAppliedAtCheckout}</dt>
+              <dt className="text-ink-muted">
+                {LABELS.walletAppliedAtCheckout}
+              </dt>
               <dd className="tabular-nums text-ink">
-                −₹{(quote?.walletAmountToUse ?? 0).toLocaleString('en-IN')}
+                −₹{(quote?.walletAmountToUse ?? 0).toLocaleString("en-IN")}
               </dd>
             </div>
           ) : null}
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">Shipping & tax</dt>
             <dd className="text-right text-ink-muted">
-              {quote ? 'Included below' : 'Confirmed on review'}
+              {quote ? "Included below" : "Confirmed on review"}
             </dd>
           </div>
         </dl>
@@ -178,21 +201,21 @@ function OrderSummaryPanel({
         <div className="mt-4 border-t border-line pt-4">
           <div className="flex items-end justify-between gap-4">
             <span className="text-[0.875rem] font-medium text-ink">
-              {quote ? 'Order total' : 'Estimated total'}
+              {quote ? "Order total" : "Estimated total"}
             </span>
             <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
-              ₹{displayTotal.toLocaleString('en-IN')}
+              ₹{displayTotal.toLocaleString("en-IN")}
             </span>
           </div>
           <p className="mt-1.5 text-[0.75rem] text-ink-muted">
             {quote
-              ? 'Final amount including shipping and taxes.'
-              : 'Shipping and taxes confirmed before you place the order.'}
+              ? "Final amount including shipping and taxes."
+              : "Shipping and taxes confirmed before you place the order."}
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export function CheckoutPageView({
@@ -226,18 +249,22 @@ export function CheckoutPageView({
   onPlaceOrder,
   onCreateAddress,
 }: CheckoutPageViewProps) {
-  const router = useRouter()
+  const router = useRouter();
 
-  if (isLoading) return <CheckoutPageSkeleton />
-  if (!hasItems) return <EmptyCart />
+  if (isLoading) return <CheckoutPageSkeleton />;
+  if (!hasItems) return <EmptyCart />;
 
   const noticePrimaryLabel =
-    paymentNotice?.variant === 'danger' ? 'Try again' : 'Continue checkout'
+    paymentNotice?.variant === "danger" ? "Try again" : "Continue checkout";
 
-  const copy = STEP_COPY[step] ?? STEP_COPY[1]
+  const copy = STEP_COPY[step] ?? STEP_COPY[1];
   const summary = (
-    <OrderSummaryPanel groupedByVendor={groupedByVendor} total={total} quote={quote} />
-  )
+    <OrderSummaryPanel
+      groupedByVendor={groupedByVendor}
+      total={total}
+      quote={quote}
+    />
+  );
 
   return (
     <div className="relative">
@@ -262,21 +289,25 @@ export function CheckoutPageView({
               <TextEyebrow brand>Checkout</TextEyebrow>
               <h1
                 className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
-                style={{ fontSize: 'var(--text-display-sm)' }}
+                style={{ fontSize: "var(--text-display-sm)" }}
               >
                 Complete your order
               </h1>
             </motion.header>
 
             <div className="mt-6 md:mt-8">
-              <CheckoutStepIndicator currentStep={step} onStepClick={onStepClick} />
+              <CheckoutStepIndicator
+                currentStep={step}
+                onStepClick={onStepClick}
+              />
             </div>
 
             <div className="mt-6 lg:hidden">
               <Accordion type="single" collapsible>
                 <AccordionItem value="summary" className="border-line">
                   <AccordionTrigger className="text-[0.9375rem] font-medium">
-                    Order summary · ₹{(quote?.grandTotal ?? total).toLocaleString('en-IN')}
+                    Order summary · ₹
+                    {(quote?.grandTotal ?? total).toLocaleString("en-IN")}
                   </AccordionTrigger>
                   <AccordionContent>{summary}</AccordionContent>
                 </AccordionItem>
@@ -294,7 +325,9 @@ export function CheckoutPageView({
                 <h2 className="mt-1.5 font-display text-[1.5rem] leading-tight text-ink md:text-[1.75rem]">
                   {copy.title}
                 </h2>
-                <p className="mt-2 max-w-[42ch] text-[0.9375rem] text-ink-muted">{copy.blurb}</p>
+                <p className="mt-2 max-w-[42ch] text-[0.9375rem] text-ink-muted">
+                  {copy.blurb}
+                </p>
 
                 <div className="mt-6 border-t border-line pt-6 md:mt-8 md:pt-8">
                   <AnimatePresence mode="wait" initial={false}>
@@ -328,7 +361,9 @@ export function CheckoutPageView({
                           groupedByVendor={groupedByVendor}
                           selectedMethods={shippingMethodByVendor}
                           pincode={
-                            addresses?.find((address) => address.id === addressId)?.pincode ?? ''
+                            addresses?.find(
+                              (address) => address.id === addressId,
+                            )?.pincode ?? ""
                           }
                           canContinue={shippingReady}
                           onSelect={onSelectShipping}
@@ -380,9 +415,7 @@ export function CheckoutPageView({
           </div>
 
           <aside className="relative hidden lg:col-span-5 lg:block xl:col-span-4">
-            <div className="sticky top-[88px] z-10">
-              {summary}
-            </div>
+            <div className="sticky top-[88px] z-10">{summary}</div>
           </aside>
         </div>
       </div>
@@ -390,24 +423,24 @@ export function CheckoutPageView({
       <StatusDialog
         open={Boolean(paymentNotice)}
         onOpenChange={(open) => {
-          if (!open) onClearPaymentNotice?.()
+          if (!open) onClearPaymentNotice?.();
         }}
-        variant={paymentNotice?.variant ?? 'info'}
-        title={paymentNotice?.title ?? ''}
-        description={paymentNotice?.description ?? ''}
+        variant={paymentNotice?.variant ?? "info"}
+        title={paymentNotice?.title ?? ""}
+        description={paymentNotice?.description ?? ""}
         primaryAction={{
           label: noticePrimaryLabel,
           onClick: () => onClearPaymentNotice?.(),
         }}
         secondaryAction={{
-          label: 'View cart',
-          variant: 'outline',
+          label: "View cart",
+          variant: "outline",
           onClick: () => {
-            onClearPaymentNotice?.()
-            router.push(PATHS.cart)
+            onClearPaymentNotice?.();
+            router.push(PATHS.cart);
           },
         }}
       />
     </div>
-  )
+  );
 }

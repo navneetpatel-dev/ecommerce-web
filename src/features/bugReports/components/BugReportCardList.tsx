@@ -1,32 +1,29 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { Bug } from 'lucide-react'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { FormError } from '@/shared/components/FormError'
-import { StatusBadge } from '@/shared/components/StatusBadge'
-import { InfiniteLoadMore } from '@/shared/components/InfiniteLoadMore'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { LABELS } from '@/shared/constants/labels'
-import { BUG_REPORT_STATUS } from '@/shared/constants/statuses'
-import { formatOrderDate } from '@/features/orders/utils/format'
-import {
-  BUG_SEVERITY_LABEL,
-  BUG_STATUS_LABEL,
-} from '../utils/labels'
-import type { BugReport } from '../api/bugReports.api'
+import Link from "next/link";
+import { Bug } from "lucide-react";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { FormError } from "@/shared/components/FormError";
+import { StatusBadge } from "@/shared/components/StatusBadge";
+import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { LABELS } from "@/shared/constants/labels";
+import { BUG_REPORT_STATUS } from "@/shared/constants/statuses";
+import { formatOrderDate } from "@/shared/utils/orderFormat";
+import { BUG_SEVERITY_LABEL, BUG_STATUS_LABEL } from "../utils/labels";
+import type { BugReport } from "../api/bugReports.api";
 
 type Props = {
-  reports: BugReport[]
-  detailHref: (id: string) => string
-  createHref: string
-  isLoading?: boolean
-  isError?: boolean
-  errorMessage?: string
-  hasNextPage?: boolean
-  isFetchingNextPage?: boolean
-  onLoadMore?: () => void
-}
+  reports: BugReport[];
+  detailHref: (id: string) => string;
+  createHref: string;
+  isLoading?: boolean;
+  isError?: boolean;
+  errorMessage?: string;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  onLoadMore?: () => void;
+};
 
 export function BugReportCardList({
   reports,
@@ -46,7 +43,7 @@ export function BugReportCardList({
         <Skeleton className="h-36 w-full" />
         <Skeleton className="h-36 w-full" />
       </div>
-    )
+    );
   }
 
   if (isError) {
@@ -55,7 +52,7 @@ export function BugReportCardList({
         error={new Error(errorMessage || LABELS.bugCouldNotLoad)}
         fallback={LABELS.bugCouldNotLoad}
       />
-    )
+    );
   }
 
   if (reports.length === 0) {
@@ -70,7 +67,7 @@ export function BugReportCardList({
           className="py-14"
         />
       </div>
-    )
+    );
   }
 
   return (
@@ -103,7 +100,9 @@ export function BugReportCardList({
                 <p className="line-clamp-2 font-medium text-ink group-hover:text-brand">
                   {report.title}
                 </p>
-                <p className="line-clamp-2 text-[0.875rem] text-ink-muted">{report.description}</p>
+                <p className="line-clamp-2 text-[0.875rem] text-ink-muted">
+                  {report.description}
+                </p>
                 <p className="text-[0.8125rem] text-ink-faint">
                   {formatOrderDate(report.createdAt)}
                 </p>
@@ -119,5 +118,5 @@ export function BugReportCardList({
         onLoadMore={onLoadMore}
       />
     </div>
-  )
+  );
 }

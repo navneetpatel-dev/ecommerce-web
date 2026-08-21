@@ -7,6 +7,7 @@ export {
   useResetPassword,
   useChangePassword,
 } from "./api/auth.queries";
+export { authApi } from "./api/auth.api";
 export { useAuthStore, defaultRouteForRole } from "@/shared/stores/auth.store";
 export { LoginForm } from "./pages/LoginForm";
 export { RegisterForm } from "./pages/RegisterForm";

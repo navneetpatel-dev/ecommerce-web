@@ -1,40 +1,44 @@
-'use client'
+"use client";
 
-import { useEffect, useMemo, useState } from 'react'
-import type { UseFormReturn } from 'react-hook-form'
-import { Controller } from 'react-hook-form'
-import type { CategoryFormInput } from '../schemas/categories.schema'
-import { categoriesApi } from '@/features/categories/api/categories.api'
-import { FileUpload } from '@/shared/components/FileUpload'
-import { FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
-import { Input } from '@/shared/components/ui/input'
+import { useEffect, useMemo, useState } from "react";
+import type { UseFormReturn } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import type { CategoryFormInput } from "../schemas/categories.schema";
+import { categoriesApi } from "@/features/categories";
+import { FileUpload } from "@/shared/components/FileUpload";
+import {
+  FormFieldFrame,
+  FormSection,
+  FormStack,
+} from "@/shared/components/forms";
+import { Input } from "@/shared/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/shared/components/ui/select'
-import { LABELS } from '@/shared/constants/labels'
-import { CATEGORY_STATUS, WARRANTY_TYPE } from '@/shared/constants/statuses'
-import { MAX_PAGE_LIMIT } from '@/shared/constants/pagination'
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
-import { CheckboxField } from '@/shared/components/CheckboxField'
-import type { Category } from '@/shared/api/types'
+} from "@/shared/components/ui/select";
+import { LABELS } from "@/shared/constants/labels";
+import { CATEGORY_STATUS, WARRANTY_TYPE } from "@/shared/constants/statuses";
+import { MAX_PAGE_LIMIT } from "@/shared/constants/pagination";
+import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
+import { CheckboxField } from "@/shared/components/CheckboxField";
+import type { Category } from "@/shared/api/types";
 
-const NONE_PARENT = '__none__'
+const NONE_PARENT = "__none__";
 
 interface AdminCategoryFormFieldsProps {
-  form: UseFormReturn<CategoryFormInput>
+  form: UseFormReturn<CategoryFormInput>;
   /** Exclude this category from parent options (edit self). */
-  excludeCategoryId?: string
-  idPrefix?: string
+  excludeCategoryId?: string;
+  idPrefix?: string;
 }
 
 export function AdminCategoryFormFields({
   form,
   excludeCategoryId,
-  idPrefix = 'category',
+  idPrefix = "category",
 }: AdminCategoryFormFieldsProps) {
   const {
     register,
@@ -42,47 +46,47 @@ export function AdminCategoryFormFields({
     setValue,
     watch,
     formState: { errors, touchedFields, isSubmitted },
-  } = form
+  } = form;
 
-  const [parents, setParents] = useState<Category[]>([])
-  const draftUploadId = useMemo(() => crypto.randomUUID(), [])
-  const uploadEntityId = excludeCategoryId ?? draftUploadId
-  const watchedImageUrl = watch('imageUrl')
+  const [parents, setParents] = useState<Category[]>([]);
+  const draftUploadId = useMemo(() => crypto.randomUUID(), []);
+  const uploadEntityId = excludeCategoryId ?? draftUploadId;
+  const watchedImageUrl = watch("imageUrl");
 
   useEffect(() => {
     void categoriesApi
       .listPaginated({ page: 1, limit: MAX_PAGE_LIMIT })
-      .then((result) => setParents(result.items))
-  }, [])
+      .then((result) => setParents(result.items));
+  }, []);
 
   const parentOptions = useMemo(() => {
-    const byId = new Map(parents.map((category) => [category.id, category]))
+    const byId = new Map(parents.map((category) => [category.id, category]));
     const depthOf = (category: Category): number => {
-      let depth = 0
-      let cursor: Category | undefined = category
-      const seen = new Set<string>()
+      let depth = 0;
+      let cursor: Category | undefined = category;
+      const seen = new Set<string>();
       while (cursor?.parentId) {
-        if (seen.has(cursor.id)) break
-        seen.add(cursor.id)
-        depth += 1
-        cursor = byId.get(cursor.parentId)
+        if (seen.has(cursor.id)) break;
+        seen.add(cursor.id);
+        depth += 1;
+        cursor = byId.get(cursor.parentId);
       }
-      return depth
-    }
+      return depth;
+    };
     // Max taxonomy depth is 3 — only depth 0–1 nodes may be parents.
     return parents.filter(
       (category) =>
         category.status !== CATEGORY_STATUS.ARCHIVED &&
         category.id !== excludeCategoryId &&
         depthOf(category) < 2,
-    )
-  }, [parents, excludeCategoryId])
+    );
+  }, [parents, excludeCategoryId]);
 
   const showFieldError = (name: keyof CategoryFormInput) => {
-    const touched = Boolean(touchedFields[name as keyof typeof touchedFields])
-    if (!touched && !isSubmitted) return undefined
-    return errors[name]?.message
-  }
+    const touched = Boolean(touchedFields[name as keyof typeof touchedFields]);
+    if (!touched && !isSubmitted) return undefined;
+    return errors[name]?.message;
+  };
 
   return (
     <FormStack>
@@ -94,14 +98,14 @@ export function AdminCategoryFormFields({
           label={LABELS.categoryName}
           htmlFor={`${idPrefix}-name`}
           required
-          error={showFieldError('name')}
+          error={showFieldError("name")}
           className="sm:col-span-2"
         >
           <Input
             id={`${idPrefix}-name`}
-            error={Boolean(showFieldError('name'))}
+            error={Boolean(showFieldError("name"))}
             placeholder={LABELS.categoryName}
-            {...register('name')}
+            {...register("name")}
           />
         </FormFieldFrame>
 
@@ -112,13 +116,17 @@ export function AdminCategoryFormFields({
             render={({ field }) => (
               <Select
                 value={field.value ? field.value : NONE_PARENT}
-                onValueChange={(value) => field.onChange(value === NONE_PARENT ? '' : value)}
+                onValueChange={(value) =>
+                  field.onChange(value === NONE_PARENT ? "" : value)
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder={LABELS.selectParentCategory} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={NONE_PARENT}>{LABELS.parentCategoryNone}</SelectItem>
+                  <SelectItem value={NONE_PARENT}>
+                    {LABELS.parentCategoryNone}
+                  </SelectItem>
                   {parentOptions.map((category) => (
                     <SelectItem key={category.id} value={category.id}>
                       {category.name}
@@ -158,7 +166,10 @@ export function AdminCategoryFormFields({
         hint={LABELS.categoryFormSectionImageHint}
         columns={1}
       >
-        <FormFieldFrame label={LABELS.categoryImageUpload} error={showFieldError('imageUrl')}>
+        <FormFieldFrame
+          label={LABELS.categoryImageUpload}
+          error={showFieldError("imageUrl")}
+        >
           <FileUpload
             entityType={UPLOAD_ENTITY.CATEGORIES}
             entityId={uploadEntityId}
@@ -166,7 +177,10 @@ export function AdminCategoryFormFields({
             accept="image/png,image/jpeg,image/webp"
             valueUrl={watchedImageUrl?.trim() ? watchedImageUrl.trim() : null}
             onUploaded={(url) =>
-              setValue('imageUrl', url, { shouldDirty: true, shouldValidate: true })
+              setValue("imageUrl", url, {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
             }
           />
         </FormFieldFrame>
@@ -176,27 +190,33 @@ export function AdminCategoryFormFields({
         title={LABELS.categoryFormSectionSeo}
         hint={LABELS.categoryFormSectionSeoHint}
       >
-        <FormFieldFrame label={LABELS.categorySeoTitle} htmlFor={`${idPrefix}-seo-title`}>
-          <Input id={`${idPrefix}-seo-title`} {...register('seoTitle')} />
+        <FormFieldFrame
+          label={LABELS.categorySeoTitle}
+          htmlFor={`${idPrefix}-seo-title`}
+        >
+          <Input id={`${idPrefix}-seo-title`} {...register("seoTitle")} />
         </FormFieldFrame>
 
-        <FormFieldFrame label={LABELS.categorySeoDescription} htmlFor={`${idPrefix}-seo-desc`}>
-          <Input id={`${idPrefix}-seo-desc`} {...register('seoDescription')} />
+        <FormFieldFrame
+          label={LABELS.categorySeoDescription}
+          htmlFor={`${idPrefix}-seo-desc`}
+        >
+          <Input id={`${idPrefix}-seo-desc`} {...register("seoDescription")} />
         </FormFieldFrame>
 
         <FormFieldFrame
           label={LABELS.categoryCommissionRate}
           htmlFor={`${idPrefix}-commission`}
           hint={LABELS.categoryCommissionRateHint}
-          error={showFieldError('commissionRate')}
+          error={showFieldError("commissionRate")}
           className="sm:col-span-2 sm:max-w-md"
         >
           <Input
             id={`${idPrefix}-commission`}
             inputMode="decimal"
             placeholder={LABELS.categoryCommissionPlaceholder}
-            error={Boolean(showFieldError('commissionRate'))}
-            {...register('commissionRate')}
+            error={Boolean(showFieldError("commissionRate"))}
+            {...register("commissionRate")}
           />
         </FormFieldFrame>
       </FormSection>
@@ -209,13 +229,13 @@ export function AdminCategoryFormFields({
           label={LABELS.categoryReturnWindowDays}
           htmlFor={`${idPrefix}-return-window`}
           hint={LABELS.categoryReturnWindowHint}
-          error={showFieldError('returnWindowDays')}
+          error={showFieldError("returnWindowDays")}
         >
           <Input
             id={`${idPrefix}-return-window`}
             inputMode="numeric"
-            error={Boolean(showFieldError('returnWindowDays'))}
-            {...register('returnWindowDays')}
+            error={Boolean(showFieldError("returnWindowDays"))}
+            {...register("returnWindowDays")}
           />
         </FormFieldFrame>
 
@@ -237,13 +257,13 @@ export function AdminCategoryFormFields({
         <FormFieldFrame
           label={LABELS.categoryDefaultWarrantyMonths}
           htmlFor={`${idPrefix}-warranty-months`}
-          error={showFieldError('defaultWarrantyMonths')}
+          error={showFieldError("defaultWarrantyMonths")}
         >
           <Input
             id={`${idPrefix}-warranty-months`}
             inputMode="numeric"
-            error={Boolean(showFieldError('defaultWarrantyMonths'))}
-            {...register('defaultWarrantyMonths')}
+            error={Boolean(showFieldError("defaultWarrantyMonths"))}
+            {...register("defaultWarrantyMonths")}
           />
         </FormFieldFrame>
 
@@ -253,18 +273,24 @@ export function AdminCategoryFormFields({
             control={control}
             render={({ field }) => (
               <Select
-                value={field.value ? field.value : '__inherit__'}
-                onValueChange={(value) => field.onChange(value === '__inherit__' ? '' : value)}
+                value={field.value ? field.value : "__inherit__"}
+                onValueChange={(value) =>
+                  field.onChange(value === "__inherit__" ? "" : value)
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder={LABELS.inheritDefault} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="__inherit__">{LABELS.inheritDefault}</SelectItem>
+                  <SelectItem value="__inherit__">
+                    {LABELS.inheritDefault}
+                  </SelectItem>
                   <SelectItem value={WARRANTY_TYPE.MANUFACTURER}>
                     {LABELS.warrantyManufacturer}
                   </SelectItem>
-                  <SelectItem value={WARRANTY_TYPE.SELLER}>{LABELS.warrantySeller}</SelectItem>
+                  <SelectItem value={WARRANTY_TYPE.SELLER}>
+                    {LABELS.warrantySeller}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             )}
@@ -272,5 +298,5 @@ export function AdminCategoryFormFields({
         </FormFieldFrame>
       </FormSection>
     </FormStack>
-  )
+  );
 }

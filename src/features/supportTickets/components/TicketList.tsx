@@ -1,34 +1,34 @@
-'use client'
+"use client";
 
-import { useRouter } from 'next/navigation'
-import { type DataTableColumn } from '@/shared/components/DataTable'
-import { StatusBadge } from '@/shared/components/StatusBadge'
-import { LABELS } from '@/shared/constants/labels'
-import { formatOrderDate } from '@/features/orders/utils/format'
-import type { SupportTicket } from '../api/supportTickets.api'
+import { useRouter } from "next/navigation";
+import { type DataTableColumn } from "@/shared/components/DataTable";
+import { StatusBadge } from "@/shared/components/StatusBadge";
+import { LABELS } from "@/shared/constants/labels";
+import { formatOrderDate } from "@/shared/utils/orderFormat";
+import type { SupportTicket } from "../api/supportTickets.api";
 import {
   TICKET_CATEGORY_LABEL,
   TICKET_PRIORITY_LABEL,
   TICKET_STATUS_LABEL,
-} from '../utils/labels'
-import { KeysetDataTable } from '@/shared/components/KeysetDataTable'
+} from "../utils/labels";
+import { KeysetDataTable } from "@/shared/components/KeysetDataTable";
 
 type Props = {
-  tickets: SupportTicket[]
-  detailHref: (id: string) => string
-  isLoading?: boolean
-  isError?: boolean
-  errorMessage?: string
-  emptyMessage?: string
-  hasNextPage?: boolean
-  isFetchingNextPage?: boolean
-  onLoadMore?: () => void
-  onRefresh?: () => void
-  toolbar?: React.ReactNode
-  title?: React.ReactNode
-  showCustomer?: boolean
-  showVendor?: boolean
-}
+  tickets: SupportTicket[];
+  detailHref: (id: string) => string;
+  isLoading?: boolean;
+  isError?: boolean;
+  errorMessage?: string;
+  emptyMessage?: string;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  onLoadMore?: () => void;
+  onRefresh?: () => void;
+  toolbar?: React.ReactNode;
+  title?: React.ReactNode;
+  showCustomer?: boolean;
+  showVendor?: boolean;
+};
 
 export function TicketList({
   tickets,
@@ -46,24 +46,27 @@ export function TicketList({
   showCustomer,
   showVendor,
 }: Props) {
-  const router = useRouter()
+  const router = useRouter();
 
   const columns: DataTableColumn<SupportTicket>[] = [
     {
-      id: 'ticketNumber',
+      id: "ticketNumber",
       header: LABELS.ticketNumber,
       cell: (row) => (
         <span className="font-mono text-[0.8125rem] tabular-nums text-ink">
           {row.hasUnread ? (
-            <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-brand align-middle" title={LABELS.ticketHasUnread} />
+            <span
+              className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-brand align-middle"
+              title={LABELS.ticketHasUnread}
+            />
           ) : null}
           {row.ticketNumber}
         </span>
       ),
-      className: 'whitespace-nowrap',
+      className: "whitespace-nowrap",
     },
     {
-      id: 'subject',
+      id: "subject",
       header: LABELS.ticketSubject,
       cell: (row) => (
         <div className="min-w-0">
@@ -80,7 +83,7 @@ export function TicketList({
     ...(showCustomer
       ? [
           {
-            id: 'customerName',
+            id: "customerName",
             header: LABELS.ticketCustomer,
             cell: (row: SupportTicket) => row.customerName || LABELS.emptyCell,
           } satisfies DataTableColumn<SupportTicket>,
@@ -89,7 +92,7 @@ export function TicketList({
     ...(showVendor
       ? [
           {
-            id: 'vendorName',
+            id: "vendorName",
             header: LABELS.ticketVendor,
             cell: (row: SupportTicket) => row.vendorName || LABELS.emptyCell,
             hideOnMobile: true,
@@ -97,32 +100,38 @@ export function TicketList({
         ]
       : []),
     {
-      id: 'category',
+      id: "category",
       header: LABELS.category,
       cell: (row) => TICKET_CATEGORY_LABEL[row.category],
       hideOnMobile: true,
     },
     {
-      id: 'priority',
+      id: "priority",
       header: LABELS.priority,
       cell: (row) => (
-        <StatusBadge status={row.priority} label={TICKET_PRIORITY_LABEL[row.priority]} />
+        <StatusBadge
+          status={row.priority}
+          label={TICKET_PRIORITY_LABEL[row.priority]}
+        />
       ),
     },
     {
-      id: 'status',
+      id: "status",
       header: LABELS.status,
       cell: (row) => (
-        <StatusBadge status={row.status} label={TICKET_STATUS_LABEL[row.status]} />
+        <StatusBadge
+          status={row.status}
+          label={TICKET_STATUS_LABEL[row.status]}
+        />
       ),
     },
     {
-      id: 'createdAt',
+      id: "createdAt",
       header: LABELS.createdAt,
       cell: (row) => formatOrderDate(row.createdAt),
       hideOnMobile: true,
     },
-  ]
+  ];
 
   return (
     <KeysetDataTable
@@ -140,5 +149,5 @@ export function TicketList({
       onLoadMore={onLoadMore}
       onRowClick={(row) => router.push(detailHref(row.id))}
     />
-  )
+  );
 }

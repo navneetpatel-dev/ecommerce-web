@@ -10,7 +10,7 @@ import {
   CouponSchema,
   VENDOR_COUPON_FORM_DEFAULTS,
   type CouponFormInput,
-} from "@/features/admin-dashboard/schemas/coupons.schema";
+} from "@/features/admin-dashboard";
 import {
   useCreateVendorCoupon,
   useVendorAbsorbedSummary,
@@ -20,7 +20,7 @@ import {
 } from "../api/vendor-coupons.queries";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { QUERY_PARAMS } from "@/shared/constants/queryParams";
-import { couponsApi } from "@/features/coupons/api/coupons.api";
+import { couponsApi } from "@/features/coupons";
 import { useRouteQueryDialog } from "@/shared/hooks/useRouteQueryDialog";
 import type { Coupon } from "@/shared/api/types";
 

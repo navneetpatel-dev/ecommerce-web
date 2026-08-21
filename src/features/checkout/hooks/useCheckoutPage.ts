@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
-import { useEffect, useMemo } from 'react'
-import { useCart } from '@/features/cart/api/cart.queries'
-import { groupItemsByVendor, calcCartTotal } from '@/features/cart/utils/cart.utils'
-import { useCheckoutStore } from '../store/checkout.store'
-import { useAddresses, useCreateAddress } from '../api/checkout.queries'
-import { usePlaceOrderWithRazorpay } from './usePlaceOrder'
-import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
-import { PATHS } from '@/shared/constants/paths'
-import type { Address } from '@/shared/api/types'
+import { useEffect, useMemo } from "react";
+import { useCart } from "@/features/cart";
+import { groupItemsByVendor, calcCartTotal } from "@/features/cart";
+import { useCheckoutStore } from "@/shared/stores/checkout.store";
+import { useAddresses, useCreateAddress } from "../api/checkout.queries";
+import { usePlaceOrderWithRazorpay } from "./usePlaceOrder";
+import { useRequireAuth } from "@/shared/hooks/useRequireAuth";
+import { PATHS } from "@/shared/constants/paths";
+import type { Address } from "@/shared/api/types";
 
 export function useCheckoutPage() {
   const {
@@ -23,57 +23,65 @@ export function useCheckoutPage() {
     setPaymentMethod,
     walletAmountToUse,
     setWalletAmountToUse,
-  } = useCheckoutStore()
-  const { data: cart, isLoading: cartLoading } = useCart()
-  const { data: addresses, isLoading: addressesLoading } = useAddresses()
-  const createAddress = useCreateAddress()
-  const { handlePlaceOrder, quote, isPending, paymentNotice, clearPaymentNotice } =
-    usePlaceOrderWithRazorpay()
-  const { requireAuth } = useRequireAuth()
+  } = useCheckoutStore();
+  const { data: cart, isLoading: cartLoading } = useCart();
+  const { data: addresses, isLoading: addressesLoading } = useAddresses();
+  const createAddress = useCreateAddress();
+  const {
+    handlePlaceOrder,
+    quote,
+    isPending,
+    paymentNotice,
+    clearPaymentNotice,
+  } = usePlaceOrderWithRazorpay();
+  const { requireAuth } = useRequireAuth();
 
-  const isLoading = cartLoading || addressesLoading
+  const isLoading = cartLoading || addressesLoading;
 
   // Prefer default address, otherwise first saved address
   useEffect(() => {
-    if (!addresses?.length) return
-    const stillValid = addressId && addresses.some((a) => a.id === addressId)
-    if (stillValid) return
-    const preferred = addresses.find((a) => a.isDefault) ?? addresses[0]
-    if (preferred) setAddress(preferred.id)
-  }, [addresses, addressId, setAddress])
+    if (!addresses?.length) return;
+    const stillValid = addressId && addresses.some((a) => a.id === addressId);
+    if (stillValid) return;
+    const preferred = addresses.find((a) => a.isDefault) ?? addresses[0];
+    if (preferred) setAddress(preferred.id);
+  }, [addresses, addressId, setAddress]);
 
   const groupedByVendor = useMemo(() => {
-    if (!cart?.items) return {}
-    return groupItemsByVendor(cart.items)
-  }, [cart])
+    if (!cart?.items) return {};
+    return groupItemsByVendor(cart.items);
+  }, [cart]);
 
   const hasUnavailableItems = useMemo(
     () => (cart?.items ?? []).some((item) => item.isAvailable === false),
-    [cart]
-  )
+    [cart],
+  );
 
   // Default every vendor to Standard (Free) when shipping methods are missing
   useEffect(() => {
-    const vendorIds = Object.keys(groupedByVendor)
-    if (!vendorIds.length) return
-    ensureDefaultShippingMethods(vendorIds)
-  }, [groupedByVendor, ensureDefaultShippingMethods])
+    const vendorIds = Object.keys(groupedByVendor);
+    if (!vendorIds.length) return;
+    ensureDefaultShippingMethods(vendorIds);
+  }, [groupedByVendor, ensureDefaultShippingMethods]);
 
   useEffect(() => {
-    if (paymentMethod === 'cod' && quote && quote.codAvailable === false) {
-      setPaymentMethod(null)
+    if (paymentMethod === "cod" && quote && quote.codAvailable === false) {
+      setPaymentMethod(null);
     }
-  }, [paymentMethod, quote, setPaymentMethod])
+  }, [paymentMethod, quote, setPaymentMethod]);
 
   const total = useMemo(() => {
-    if (!cart?.items) return 0
-    return calcCartTotal(cart.items)
-  }, [cart])
+    if (!cart?.items) return 0;
+    return calcCartTotal(cart.items);
+  }, [cart]);
 
   const shippingReady = useMemo(
-    () => Object.keys(groupedByVendor).every((vendorId) => Boolean(shippingMethodByVendor[vendorId])),
-    [groupedByVendor, shippingMethodByVendor]
-  )
+    () =>
+      Object.keys(groupedByVendor).every((vendorId) =>
+        Boolean(shippingMethodByVendor[vendorId]),
+      ),
+    [groupedByVendor, shippingMethodByVendor],
+  );
 
   return {
     step,
@@ -94,7 +102,7 @@ export function useCheckoutPage() {
     shippingReady,
     isCreatingAddress: createAddress.isPending,
     onStepClick: (nextStep: number) => {
-      if (nextStep < step) setStep(nextStep as 1 | 2 | 3 | 4)
+      if (nextStep < step) setStep(nextStep as 1 | 2 | 3 | 4);
     },
     onSelectAddress: setAddress,
     onSelectShipping: setShippingMethod,
@@ -105,43 +113,43 @@ export function useCheckoutPage() {
     onSelectPayment: setPaymentMethod,
     onWalletAmountChange: setWalletAmountToUse,
     onContinueToReview: () => {
-      if (!paymentMethod) return
-      if (paymentMethod === 'cod' && quote?.codAvailable !== true) return
-      setStep(4)
+      if (!paymentMethod) return;
+      if (paymentMethod === "cod" && quote?.codAvailable !== true) return;
+      setStep(4);
     },
     onPlaceOrder: () => {
-      if (!paymentMethod) return
-      if (paymentMethod === 'cod' && quote?.codAvailable !== true) return
+      if (!paymentMethod) return;
+      if (paymentMethod === "cod" && quote?.codAvailable !== true) return;
       if (
         !requireAuth({
-          title: 'Complete your order',
-          message: 'Sign in to place your order and track it in your account.',
+          title: "Complete your order",
+          message: "Sign in to place your order and track it in your account.",
           redirectTo: PATHS.checkout,
         })
       ) {
-        return
+        return;
       }
-      void handlePlaceOrder(paymentMethod)
+      void handlePlaceOrder(paymentMethod);
     },
-    onCreateAddress: (body: Omit<Address, 'id' | 'userId'>) => {
+    onCreateAddress: (body: Omit<Address, "id" | "userId">) => {
       if (
         !requireAuth({
-          title: 'Add a shipping address',
-          message: 'Sign in to save addresses and continue checkout.',
+          title: "Add a shipping address",
+          message: "Sign in to save addresses and continue checkout.",
           redirectTo: PATHS.checkout,
         })
       ) {
-        return Promise.reject(new Error('Sign in required'))
+        return Promise.reject(new Error("Sign in required"));
       }
       return new Promise<void>((resolve, reject) => {
         createAddress.mutate(body, {
           onSuccess: (created) => {
-            setAddress(created.id)
-            resolve()
+            setAddress(created.id);
+            resolve();
           },
           onError: (err) => reject(err),
-        })
-      })
+        });
+      });
     },
-  }
+  };
 }

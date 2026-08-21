@@ -34,7 +34,7 @@ import {
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { usePermissions } from "@/shared/hooks/usePermissions";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { formatOrderDate } from "@/features/orders/utils/format";
+import { formatOrderDate } from "@/shared/utils/orderFormat";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { cn } from "@/shared/utils/cn";
 import {

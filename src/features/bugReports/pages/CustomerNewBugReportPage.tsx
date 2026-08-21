@@ -1,16 +1,19 @@
-'use client'
+"use client";
 
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { SupportAuthGate } from '@/features/supportTickets/components/SupportAuthGate'
-import { BugReportForm } from '../components/BugReportForm'
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { SupportAuthGate } from "@/features/supportTickets";
+import { BugReportForm } from "../components/BugReportForm";
 
 export function CustomerNewBugReportPage() {
   return (
-    <SupportAuthGate message={LABELS.bugSignInRequired} loginNext={PATHS.bugReportNew}>
+    <SupportAuthGate
+      message={LABELS.bugSignInRequired}
+      loginNext={PATHS.bugReportNew}
+    >
       <div className="storefront-container py-8 md:py-10">
         <BugReportForm successHref={PATHS.bugReport} />
       </div>
     </SupportAuthGate>
-  )
+  );
 }

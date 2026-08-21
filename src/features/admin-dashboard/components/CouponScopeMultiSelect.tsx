@@ -1,42 +1,42 @@
-'use client'
+"use client";
 
-import { useCallback } from 'react'
+import { useCallback } from "react";
 import {
   InfiniteMultiSelect,
   type InfiniteMultiSelectPageQuery,
   type InfiniteMultiSelectPageResult,
-} from '@/shared/components/InfiniteMultiSelect'
-import { LABELS } from '@/shared/constants/labels'
+} from "@/shared/components/InfiniteMultiSelect";
+import { LABELS } from "@/shared/constants/labels";
 import {
   CATEGORY_STATUS,
   PRODUCT_STATUS,
   VENDOR_STATUS,
-} from '@/shared/constants/statuses'
-import { categoriesApi } from '@/features/categories/api/categories.api'
-import { productsApi } from '@/features/products/api/products.api'
-import { adminApi } from '../api/admin.api'
+} from "@/shared/constants/statuses";
+import { categoriesApi } from "@/features/categories";
+import { productsApi } from "@/features/products";
+import { adminApi } from "../api/admin.api";
 
-type ScopeKind = 'vendor' | 'product' | 'category'
+type ScopeKind = "vendor" | "product" | "category";
 
 interface CouponScopeMultiSelectProps {
-  scopeType: ScopeKind
-  value: string[]
-  onChange: (ids: string[]) => void
+  scopeType: ScopeKind;
+  value: string[];
+  onChange: (ids: string[]) => void;
   /** When set, product options are limited to this vendor. */
-  vendorId?: string | null
-  error?: boolean
+  vendorId?: string | null;
+  error?: boolean;
 }
 
 function scopeSearchPlaceholder(scopeType: ScopeKind) {
-  if (scopeType === 'category') return LABELS.searchCategories
-  if (scopeType === 'product') return LABELS.searchProducts
-  return LABELS.searchVendors
+  if (scopeType === "category") return LABELS.searchCategories;
+  if (scopeType === "product") return LABELS.searchProducts;
+  return LABELS.searchVendors;
 }
 
 function emptyScopeMessage(scopeType: ScopeKind) {
-  if (scopeType === 'category') return LABELS.noCategoriesFound
-  if (scopeType === 'product') return LABELS.noProductsFound
-  return LABELS.noVendorsFound
+  if (scopeType === "category") return LABELS.noCategoriesFound;
+  if (scopeType === "product") return LABELS.noProductsFound;
+  return LABELS.noVendorsFound;
 }
 
 export function CouponScopeMultiSelect({
@@ -47,14 +47,16 @@ export function CouponScopeMultiSelect({
   error = false,
 }: CouponScopeMultiSelectProps) {
   const fetchPage = useCallback(
-    async (query: InfiniteMultiSelectPageQuery): Promise<InfiniteMultiSelectPageResult> => {
-      if (scopeType === 'category') {
+    async (
+      query: InfiniteMultiSelectPageQuery,
+    ): Promise<InfiniteMultiSelectPageResult> => {
+      if (scopeType === "category") {
         const result = await categoriesApi.listPaginated({
           page: query.page,
           limit: query.limit,
           search: query.search,
           status: CATEGORY_STATUS.ACTIVE,
-        })
+        });
         return {
           items: result.items.map((category) => ({
             id: category.id,
@@ -65,17 +67,17 @@ export function CouponScopeMultiSelect({
           page: result.page,
           totalPages: result.totalPages,
           total: result.total,
-        }
+        };
       }
 
-      if (scopeType === 'product') {
+      if (scopeType === "product") {
         const result = await productsApi.list({
           page: query.page,
           limit: query.limit,
           status: PRODUCT_STATUS.LIVE,
           search: query.search,
           vendorId: vendorId || undefined,
-        })
+        });
         return {
           items: result.items.map((product) => ({
             id: product.id,
@@ -84,7 +86,7 @@ export function CouponScopeMultiSelect({
           page: result.page,
           totalPages: result.totalPages,
           total: result.total,
-        }
+        };
       }
 
       const result = await adminApi.vendors({
@@ -92,7 +94,7 @@ export function CouponScopeMultiSelect({
         limit: query.limit,
         status: VENDOR_STATUS.APPROVED,
         search: query.search,
-      })
+      });
       return {
         items: result.items.map((vendor) => ({
           id: vendor.id,
@@ -101,21 +103,21 @@ export function CouponScopeMultiSelect({
         page: result.page,
         totalPages: result.totalPages,
         total: result.total,
-      }
+      };
     },
     [scopeType, vendorId],
-  )
+  );
 
   return (
     <InfiniteMultiSelect
       value={value}
       onChange={onChange}
       fetchPage={fetchPage}
-      resetKey={`${scopeType}:${vendorId ?? ''}`}
+      resetKey={`${scopeType}:${vendorId ?? ""}`}
       searchPlaceholder={scopeSearchPlaceholder(scopeType)}
       emptyMessage={emptyScopeMessage(scopeType)}
       error={error}
       idPrefix={`coupon-scope-${scopeType}`}
     />
-  )
+  );
 }

@@ -8,12 +8,12 @@ import { LABELS } from "@/shared/constants/labels";
 import { BEARER_PREFIX } from "@/shared/constants/http";
 import { STORAGE_KEYS } from "@/shared/constants/storage";
 import { API } from "@/shared/constants/apiRoutes";
-import { formatInr } from "@/features/orders/utils/format";
+import { formatInr } from "@/shared/utils/orderFormat";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import {
   reportsApi,
   type VendorReportSummary,
-} from "@/features/admin-dashboard/api/reports.api";
+} from "@/features/admin-dashboard";
 import { useAuthStore } from "@/shared/stores/auth.store";
 
 function defaultRange() {

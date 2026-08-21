@@ -1,132 +1,146 @@
-'use client'
+"use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Trash2 } from 'lucide-react'
-import { useVendorProductsTable } from './useVendorProductsTable'
-import { categoriesApi } from '@/features/categories/api/categories.api'
-import { flattenCategoriesWithDepth } from '@/features/categories/utils/categoryHelpers'
-import { productsApi } from '@/features/products/api/products.api'
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Trash2 } from "lucide-react";
+import { useVendorProductsTable } from "./useVendorProductsTable";
 import {
+  categoriesApi,
+  flattenCategoriesWithDepth,
+} from "@/features/categories";
+import {
+  productsApi,
   emptyProductListingValues,
   listingValuesFromProduct,
   type ProductListingFormValues,
   type ProductWriteBody,
-} from '@/features/products/schemas/products.schema'
-import { usePermissions } from '@/shared/hooks/usePermissions'
-import { useRouteQueryDialog } from '@/shared/hooks/useRouteQueryDialog'
-import { PERMISSIONS } from '@/shared/constants/permissions'
-import { QUERY_PARAMS } from '@/shared/constants/queryParams'
-import { LABELS } from '@/shared/constants/labels'
-import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import { PRODUCT_STATUS } from '@/shared/constants/statuses'
-import { VendorProductImagesDialog } from '../components/VendorProductImagesDialog'
-import type { ProductListItem } from '@/shared/api/types'
+} from "@/features/products";
+import { usePermissions } from "@/shared/hooks/usePermissions";
+import { useRouteQueryDialog } from "@/shared/hooks/useRouteQueryDialog";
+import { PERMISSIONS } from "@/shared/constants/permissions";
+import { QUERY_PARAMS } from "@/shared/constants/queryParams";
+import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { PRODUCT_STATUS } from "@/shared/constants/statuses";
+import { VendorProductImagesDialog } from "../components/VendorProductImagesDialog";
+import type { ProductListItem } from "@/shared/api/types";
 
 type RichProductItem = ProductListItem & {
-  sku?: string
-  status?: string
-  variants?: Array<{ id: string; sku?: string; stock?: number; lowStockAt?: number }>
-}
+  sku?: string;
+  status?: string;
+  variants?: Array<{
+    id: string;
+    sku?: string;
+    stock?: number;
+    lowStockAt?: number;
+  }>;
+};
 
 export function useVendorProductsPage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const table = useVendorProductsTable()
-  const { hasPermission } = usePermissions()
-  const dialog = useRouteQueryDialog()
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const table = useVendorProductsTable();
+  const { hasPermission } = usePermissions();
+  const dialog = useRouteQueryDialog();
 
-  const [values, setValues] = useState<ProductListingFormValues>(() => emptyProductListingValues())
-  const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [draftUploadId, setDraftUploadId] = useState(() => crypto.randomUUID())
-  const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([])
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const [submitting, setSubmitting] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [values, setValues] = useState<ProductListingFormValues>(() =>
+    emptyProductListingValues(),
+  );
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [draftUploadId, setDraftUploadId] = useState(() => crypto.randomUUID());
+  const [categories, setCategories] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const imagesProductId = searchParams.get(QUERY_PARAMS.images)
+  const imagesProductId = searchParams.get(QUERY_PARAMS.images);
 
   useEffect(() => {
     void categoriesApi.list().then((rows) => {
-      const tree = Array.isArray(rows) ? rows : []
+      const tree = Array.isArray(rows) ? rows : [];
       const flat = flattenCategoriesWithDepth(tree).map((row) => ({
         id: row.id,
-        name: `${'— '.repeat(row.depth)}${row.name}`.trim(),
-      }))
-      setCategories(flat)
+        name: `${"— ".repeat(row.depth)}${row.name}`.trim(),
+      }));
+      setCategories(flat);
       setValues((current) =>
         current.categoryId || !flat[0]?.id
           ? current
           : { ...current, categoryId: String(flat[0].id) },
-      )
-    })
-  }, [])
+      );
+    });
+  }, []);
 
   const resetFormState = useCallback(
     (categoryId?: string) => {
-      setValues(emptyProductListingValues(categoryId ?? categories[0]?.id ?? ''))
-      setImageUrls([])
-      setDraftUploadId(crypto.randomUUID())
-      setSubmitError(null)
-      setLoading(false)
+      setValues(
+        emptyProductListingValues(categoryId ?? categories[0]?.id ?? ""),
+      );
+      setImageUrls([]);
+      setDraftUploadId(crypto.randomUUID());
+      setSubmitError(null);
+      setLoading(false);
     },
     [categories],
-  )
+  );
 
   const loadEditProduct = useCallback(
     async (productId: string) => {
-      setValues(emptyProductListingValues(categories[0]?.id ?? ''))
-      setImageUrls([])
-      setSubmitError(null)
-      setLoading(true)
+      setValues(emptyProductListingValues(categories[0]?.id ?? ""));
+      setImageUrls([]);
+      setSubmitError(null);
+      setLoading(true);
       try {
-        const product = await productsApi.detail(productId)
-        setValues(listingValuesFromProduct(product))
+        const product = await productsApi.detail(productId);
+        setValues(listingValuesFromProduct(product));
       } catch (err: unknown) {
-        setSubmitError(getApiErrorMessage(err, LABELS.couldNotLoadProduct))
+        setSubmitError(getApiErrorMessage(err, LABELS.couldNotLoadProduct));
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     },
     [categories],
-  )
+  );
 
-  const canCreate = hasPermission(PERMISSIONS.PRODUCT_CREATE)
-  const canEdit = hasPermission(PERMISSIONS.PRODUCT_UPDATE)
-  const canDelete = hasPermission(PERMISSIONS.PRODUCT_DELETE)
+  const canCreate = hasPermission(PERMISSIONS.PRODUCT_CREATE);
+  const canEdit = hasPermission(PERMISSIONS.PRODUCT_UPDATE);
+  const canDelete = hasPermission(PERMISSIONS.PRODUCT_DELETE);
 
-  const { open, mode, editId, openCreate, openEdit, close, setOpen, setQuery } = dialog
+  const { open, mode, editId, openCreate, openEdit, close, setOpen, setQuery } =
+    dialog;
 
-  const lastDialogKeyRef = useRef<string | null>(null)
+  const lastDialogKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!open || !mode) {
-      lastDialogKeyRef.current = null
-      return
+      lastDialogKeyRef.current = null;
+      return;
     }
 
-    const dialogKey = mode === 'edit' ? `edit:${editId ?? ''}` : 'create'
-    if (lastDialogKeyRef.current === dialogKey) return
-    lastDialogKeyRef.current = dialogKey
+    const dialogKey = mode === "edit" ? `edit:${editId ?? ""}` : "create";
+    if (lastDialogKeyRef.current === dialogKey) return;
+    lastDialogKeyRef.current = dialogKey;
 
-    if (mode === 'create') {
+    if (mode === "create") {
       if (!canCreate) {
-        close()
-        return
+        close();
+        return;
       }
-      queueMicrotask(() => resetFormState(categories[0]?.id))
-      return
+      queueMicrotask(() => resetFormState(categories[0]?.id));
+      return;
     }
 
-    if (mode === 'edit' && editId) {
+    if (mode === "edit" && editId) {
       if (!canEdit) {
-        close()
-        return
+        close();
+        return;
       }
       queueMicrotask(() => {
-        void loadEditProduct(editId)
-      })
+        void loadEditProduct(editId);
+      });
     }
   }, [
     canCreate,
@@ -138,33 +152,36 @@ export function useVendorProductsPage() {
     mode,
     open,
     resetFormState,
-  ])
+  ]);
 
   const handleValidSubmit = useCallback(
     async (body: ProductWriteBody) => {
-      setSubmitting(true)
-      setSubmitError(null)
+      setSubmitting(true);
+      setSubmitError(null);
       try {
-        if (mode === 'edit' && editId) {
-          await productsApi.update(editId, body)
+        if (mode === "edit" && editId) {
+          await productsApi.update(editId, body);
         } else {
-          const product = await productsApi.create(body)
+          const product = await productsApi.create(body);
           for (let index = 0; index < imageUrls.length; index += 1) {
-            const url = imageUrls[index]!
-            await productsApi.addImage(product.id, { url, isPrimary: index === 0 })
+            const url = imageUrls[index]!;
+            await productsApi.addImage(product.id, {
+              url,
+              isPrimary: index === 0,
+            });
           }
         }
-        close()
-        resetFormState(categories[0]?.id)
-        router.refresh()
+        close();
+        resetFormState(categories[0]?.id);
+        router.refresh();
       } catch (err: unknown) {
-        setSubmitError(getApiErrorMessage(err, LABELS.couldNotSaveProduct))
+        setSubmitError(getApiErrorMessage(err, LABELS.couldNotSaveProduct));
       } finally {
-        setSubmitting(false)
+        setSubmitting(false);
       }
     },
     [categories, close, editId, imageUrls, mode, resetFormState, router],
-  )
+  );
 
   const products = useMemo(
     () =>
@@ -172,27 +189,27 @@ export function useVendorProductsPage() {
         id: product.id,
         name: product.name,
         slug: product.slug,
-        sku: product.variants?.[0]?.sku ?? product.sku ?? '—',
+        sku: product.variants?.[0]?.sku ?? product.sku ?? "—",
         stock: product.stock ?? product.variants?.[0]?.stock ?? 0,
         lowStockAt: product.variants?.[0]?.lowStockAt ?? 5,
         basePrice: product.basePrice,
         status: product.status ?? PRODUCT_STATUS.LIVE,
       })),
     [table.data?.items],
-  )
+  );
 
   const imagesTarget = useMemo(() => {
-    if (!imagesProductId) return null
-    const product = products.find((row) => row.id === imagesProductId)
-    return product ? { id: product.id, name: product.name } : null
-  }, [imagesProductId, products])
+    if (!imagesProductId) return null;
+    const product = products.find((row) => row.id === imagesProductId);
+    return product ? { id: product.id, name: product.name } : null;
+  }, [imagesProductId, products]);
 
   const showProductDialog =
-    open && ((mode === 'create' && canCreate) || (mode === 'edit' && canEdit))
+    open && ((mode === "create" && canCreate) || (mode === "edit" && canEdit));
 
   const formDialogProps = {
     open: showProductDialog,
-    mode: (mode === 'edit' ? 'edit' : 'create') as 'create' | 'edit',
+    mode: (mode === "edit" ? "edit" : "create") as "create" | "edit",
     onOpenChange: setOpen,
     onCancel: close,
     formProps: {
@@ -204,12 +221,12 @@ export function useVendorProductsPage() {
       submitting,
       loading,
       onChange: (patch: Partial<ProductListingFormValues>) => {
-        setValues((current) => ({ ...current, ...patch }))
+        setValues((current) => ({ ...current, ...patch }));
       },
       onImageUrlsChange: setImageUrls,
       onValidSubmit: handleValidSubmit,
     },
-  }
+  };
 
   const tableViewProps = {
     search: table.search,
@@ -223,7 +240,9 @@ export function useVendorProductsPage() {
     onSearchChange: table.handleSearchChange,
     onPageChange: table.setPage,
     onAddProduct: canCreate ? () => openCreate() : undefined,
-    onEditProduct: canEdit ? (product: { id: string }) => openEdit(product.id) : undefined,
+    onEditProduct: canEdit
+      ? (product: { id: string }) => openEdit(product.id)
+      : undefined,
     onDeleteProduct: canDelete
       ? (product: { id: string; name: string }) =>
           table.setDeleteTarget({ id: product.id, name: product.name })
@@ -239,29 +258,34 @@ export function useVendorProductsPage() {
             [QUERY_PARAMS.edit]: null,
           })
       : undefined,
-  }
+  };
 
   const deleteDialogProps = {
     open: Boolean(table.deleteTarget),
     onOpenChange: (open: boolean) => {
-      if (!open) table.setDeleteTarget(null)
+      if (!open) table.setDeleteTarget(null);
     },
-    variant: 'danger' as const,
+    variant: "danger" as const,
     icon: Trash2,
     title: LABELS.confirmDeleteProductTitle,
     description: table.deleteTarget
-      ? formatLabel(LABELS.confirmDeleteProductBody, { name: table.deleteTarget.name })
+      ? formatLabel(LABELS.confirmDeleteProductBody, {
+          name: table.deleteTarget.name,
+        })
       : LABELS.confirmDeleteProductFallback,
-    secondaryAction: { label: LABELS.cancel, onClick: () => table.setDeleteTarget(null) },
+    secondaryAction: {
+      label: LABELS.cancel,
+      onClick: () => table.setDeleteTarget(null),
+    },
     primaryAction: {
       label: LABELS.delete,
-      variant: 'destructive' as const,
+      variant: "destructive" as const,
       loading: table.isDeleting,
       onClick: () => {
-        table.confirmDelete()
+        table.confirmDelete();
       },
     },
-  }
+  };
 
   return {
     permission: [
@@ -279,12 +303,12 @@ export function useVendorProductsPage() {
           open: true,
           onOpenChange: (open: boolean) => {
             if (!open) {
-              setQuery({ [QUERY_PARAMS.images]: null })
+              setQuery({ [QUERY_PARAMS.images]: null });
             }
           },
           onChanged: () => router.refresh(),
         }
       : null,
     ImagesDialog: VendorProductImagesDialog,
-  }
+  };
 }

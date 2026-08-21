@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { subOrdersApi } from "@/features/orders/api/orders.api";
+import { subOrdersApi } from "@/features/orders";
 import { vendorKeys } from "../api/vendor.queries";
 
 export function useVendorOrderManagement() {

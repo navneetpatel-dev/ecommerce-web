@@ -1,44 +1,48 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { ArrowRight, ShoppingBag } from 'lucide-react'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { motion } from 'motion/react'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { Button } from '@/shared/components/ui/button'
-import { CartPageSkeleton } from '@/shared/components/Skeletons'
-import { CartLineItem } from './CartLineItem'
-import { CartCouponSection } from './CartCouponSection'
-import { CashbackCouponNotice } from '@/features/checkout/components/CashbackCouponNotice'
-import type { CartItem, EligibleCoupon } from '@/shared/api/types'
+import Link from "next/link";
+import { ArrowRight, ShoppingBag } from "lucide-react";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { motion } from "motion/react";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { TextEyebrow } from "@/shared/components/TextEyebrow";
+import { Button } from "@/shared/components/ui/button";
+import { CartPageSkeleton } from "@/shared/components/Skeletons";
+import { CartLineItem } from "./CartLineItem";
+import { CartCouponSection } from "./CartCouponSection";
+import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice";
+import type { CartItem, EligibleCoupon } from "@/shared/api/types";
 
 interface CartPageViewProps {
-  isLoading?: boolean
-  hasItems: boolean
-  itemCount: number
-  groupedByVendor: Record<string, CartItem[]>
-  subtotal: number
-  total: number
-  hasUnavailableItems: boolean
-  onUpdateQuantity: (itemId: string, quantity: number) => void
-  onRemoveItem: (itemId: string) => void
-  couponInput: string
-  couponMessage: string | null
-  couponError: string | null
-  couponPending: boolean
-  appliedCouponCode: string | null
-  appliedDiscount: number
-  appliedCashbackAmount?: number
-  appliedCouponType?: string | null
-  vendorDiscountBreakdown?: Array<{ vendorId: string; name: string; amount: number }>
-  eligible: EligibleCoupon[]
-  eligibleLoading?: boolean
-  onCouponInputChange: (value: string) => void
-  onApplyCoupon: () => void
-  onRemoveCoupon: () => void
-  onApplyEligible: (code: string) => void
+  isLoading?: boolean;
+  hasItems: boolean;
+  itemCount: number;
+  groupedByVendor: Record<string, CartItem[]>;
+  subtotal: number;
+  total: number;
+  hasUnavailableItems: boolean;
+  onUpdateQuantity: (itemId: string, quantity: number) => void;
+  onRemoveItem: (itemId: string) => void;
+  couponInput: string;
+  couponMessage: string | null;
+  couponError: string | null;
+  couponPending: boolean;
+  appliedCouponCode: string | null;
+  appliedDiscount: number;
+  appliedCashbackAmount?: number;
+  appliedCouponType?: string | null;
+  vendorDiscountBreakdown?: Array<{
+    vendorId: string;
+    name: string;
+    amount: number;
+  }>;
+  eligible: EligibleCoupon[];
+  eligibleLoading?: boolean;
+  onCouponInputChange: (value: string) => void;
+  onApplyCoupon: () => void;
+  onRemoveCoupon: () => void;
+  onApplyEligible: (code: string) => void;
 }
 
 export function CartPageView({
@@ -68,7 +72,7 @@ export function CartPageView({
   onApplyEligible,
 }: CartPageViewProps) {
   if (isLoading) {
-    return <CartPageSkeleton />
+    return <CartPageSkeleton />;
   }
 
   if (!hasItems) {
@@ -88,10 +92,10 @@ export function CartPageView({
           />
         </div>
       </div>
-    )
+    );
   }
 
-  const vendorEntries = Object.entries(groupedByVendor)
+  const vendorEntries = Object.entries(groupedByVendor);
 
   return (
     <div className="relative">
@@ -109,7 +113,7 @@ export function CartPageView({
           <TextEyebrow brand>Shopping bag</TextEyebrow>
           <h1
             className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
-            style={{ fontSize: 'var(--text-display-sm)' }}
+            style={{ fontSize: "var(--text-display-sm)" }}
           >
             {LABELS.yourCart}
           </h1>
@@ -119,7 +123,7 @@ export function CartPageView({
           <div className="lg:col-span-7 xl:col-span-8">
             <div className="space-y-8">
               {vendorEntries.map(([vendorId, items], vendorIndex) => {
-                const vendor = items[0]?.product?.vendor
+                const vendor = items[0]?.product?.vendor;
                 return (
                   <motion.section
                     key={vendorId}
@@ -143,7 +147,11 @@ export function CartPageView({
                           </Link>
                         </div>
                         <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-ink-faint">
-                          {items.reduce((sum, item) => sum + Number(item.quantity || 0), 0)} items
+                          {items.reduce(
+                            (sum, item) => sum + Number(item.quantity || 0),
+                            0,
+                          )}{" "}
+                          items
                         </span>
                       </div>
                     )}
@@ -159,7 +167,7 @@ export function CartPageView({
                       ))}
                     </ul>
                   </motion.section>
-                )
+                );
               })}
             </div>
 
@@ -182,23 +190,31 @@ export function CartPageView({
               />
 
               <p className="text-[0.875rem] text-ink-muted">
-                {itemCount} {itemCount === 1 ? 'item' : 'items'}
+                {itemCount} {itemCount === 1 ? "item" : "items"}
                 <span className="mx-2 text-line">·</span>
-                <span className="font-medium text-ink">₹{total.toLocaleString('en-IN')}</span>
+                <span className="font-medium text-ink">
+                  ₹{total.toLocaleString("en-IN")}
+                </span>
               </p>
 
               <TextEyebrow className="mt-4">Order summary</TextEyebrow>
-              <h2 className="mt-1 font-display text-[1.25rem] text-ink">Ready to checkout</h2>
+              <h2 className="mt-1 font-display text-[1.25rem] text-ink">
+                Ready to checkout
+              </h2>
 
               <dl className="mt-5 space-y-2.5 text-[0.875rem]">
                 <div className="flex items-center justify-between gap-4">
                   <dt className="text-ink-muted">{LABELS.subtotal}</dt>
-                  <dd className="tabular-nums text-ink">₹{subtotal.toLocaleString('en-IN')}</dd>
+                  <dd className="tabular-nums text-ink">
+                    ₹{subtotal.toLocaleString("en-IN")}
+                  </dd>
                 </div>
                 {appliedDiscount > 0 ? (
                   <div className="flex items-center justify-between gap-4 text-success">
                     <dt>{LABELS.couponDiscount}</dt>
-                    <dd className="tabular-nums">−₹{appliedDiscount.toLocaleString('en-IN')}</dd>
+                    <dd className="tabular-nums">
+                      −₹{appliedDiscount.toLocaleString("en-IN")}
+                    </dd>
                   </div>
                 ) : null}
                 {vendorDiscountBreakdown.length > 1
@@ -210,13 +226,17 @@ export function CartPageView({
                         <dt className="text-ink-muted">
                           {LABELS.vendorDiscountBreakdown}: {row.name}
                         </dt>
-                        <dd className="tabular-nums">−₹{row.amount.toLocaleString('en-IN')}</dd>
+                        <dd className="tabular-nums">
+                          −₹{row.amount.toLocaleString("en-IN")}
+                        </dd>
                       </div>
                     ))
                   : null}
                 <div className="flex items-center justify-between gap-4">
                   <dt className="text-ink-muted">{LABELS.shipping}</dt>
-                  <dd className="text-right text-ink-muted">{LABELS.calculatingShippingTaxes}</dd>
+                  <dd className="text-right text-ink-muted">
+                    {LABELS.calculatingShippingTaxes}
+                  </dd>
                 </div>
               </dl>
 
@@ -241,12 +261,15 @@ export function CartPageView({
 
               <div className="mt-4 border-t border-line pt-4">
                 <div className="flex items-end justify-between gap-4">
-                  <span className="text-[0.875rem] font-medium text-ink">{LABELS.total}</span>
+                  <span className="text-[0.875rem] font-medium text-ink">
+                    {LABELS.total}
+                  </span>
                   <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
-                    ₹{total.toLocaleString('en-IN')}
+                    ₹{total.toLocaleString("en-IN")}
                   </span>
                 </div>
-                {(appliedCashbackAmount > 0 || appliedCouponType === 'CASHBACK') && (
+                {(appliedCashbackAmount > 0 ||
+                  appliedCouponType === "CASHBACK") && (
                   <CashbackCouponNotice
                     className="mt-3 text-[0.8125rem] text-brand"
                     payNow={total}
@@ -262,7 +285,10 @@ export function CartPageView({
                 </p>
               ) : (
                 <Button asChild className="mt-5 w-full" size="lg">
-                  <Link href={PATHS.checkout} className="inline-flex items-center justify-center gap-2">
+                  <Link
+                    href={PATHS.checkout}
+                    className="inline-flex items-center justify-center gap-2"
+                  >
                     {LABELS.checkout}
                     <ArrowRight size={16} />
                   </Link>
@@ -277,5 +303,5 @@ export function CartPageView({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,48 +1,48 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { motion } from 'motion/react'
-import { ArrowRight, ChevronRight } from 'lucide-react'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import type { Order } from '@/shared/api/types'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { Button } from '@/shared/components/ui/button'
-import { PaginationContainer } from '@/shared/containers/PaginationContainer'
-import { OrderStatusGroup } from './OrderStatusGroup'
+import Link from "next/link";
+import { motion } from "motion/react";
+import { ArrowRight, ChevronRight } from "lucide-react";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import type { Order } from "@/shared/api/types";
+import { TextEyebrow } from "@/shared/components/TextEyebrow";
+import { Button } from "@/shared/components/ui/button";
+import { PaginationContainer } from "@/shared/containers/PaginationContainer";
+import { OrderStatusGroup } from "./OrderStatusGroup";
 import {
   countOrderItems,
   formatInr,
   formatOrderDate,
   orderItemSummary,
   shortOrderId,
-} from '../utils/format'
-import { reportsEngineApi } from '@/features/reports/api/reportsEngine.api'
+} from "../utils/format";
+import { reportsEngineApi } from "@/features/reports";
 
 interface OrdersListProps {
-  orders: Order[]
+  orders: Order[];
   pagination?: {
-    currentPage: number
-    totalPages: number
-    onPageChange: (page: number) => void
-  }
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+  };
 }
 
 function defaultHistoryRange() {
-  const to = new Date()
-  const from = new Date()
-  from.setFullYear(to.getFullYear() - 2)
+  const to = new Date();
+  const from = new Date();
+  from.setFullYear(to.getFullYear() - 2);
   return {
     from: from.toISOString().slice(0, 10),
     to: to.toISOString().slice(0, 10),
-  }
+  };
 }
 
 export function OrdersList({ orders, pagination }: OrdersListProps) {
   const exportHistory = () => {
-    const range = defaultHistoryRange()
-    void reportsEngineApi.customerOrderHistoryExport(range)
-  }
+    const range = defaultHistoryRange();
+    void reportsEngineApi.customerOrderHistoryExport(range);
+  };
   return (
     <div className="relative">
       <div
@@ -61,13 +61,13 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
             <TextEyebrow brand>Account</TextEyebrow>
             <h1
               className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
-              style={{ fontSize: 'var(--text-display-sm)' }}
+              style={{ fontSize: "var(--text-display-sm)" }}
             >
               Your Orders
             </h1>
             <p className="mt-2 max-w-xl text-[0.9375rem] text-ink-muted">
-              Track each seller&apos;s package separately — multi-vendor orders ship on their own
-              timelines.
+              Track each seller&apos;s package separately — multi-vendor orders
+              ship on their own timelines.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -106,8 +106,8 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
 
         <ul className="divide-y divide-line border-b border-line">
           {orders.map((order, index) => {
-            const itemCount = countOrderItems(order)
-            const vendorCount = order.subOrders?.length ?? 0
+            const itemCount = countOrderItems(order);
+            const vendorCount = order.subOrders?.length ?? 0;
 
             return (
               <motion.li
@@ -138,8 +138,8 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
                   <div className="text-[0.8125rem] text-ink-muted">
                     {formatOrderDate(order.createdAt)}
                     <span className="md:hidden">
-                      {' · '}
-                      {vendorCount} {vendorCount === 1 ? 'seller' : 'sellers'}
+                      {" · "}
+                      {vendorCount} {vendorCount === 1 ? "seller" : "sellers"}
                     </span>
                   </div>
 
@@ -148,9 +148,9 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
                       {orderItemSummary(order)}
                     </p>
                     <p className="mt-0.5 hidden text-[0.75rem] text-ink-faint md:block">
-                      {vendorCount} {vendorCount === 1 ? 'seller' : 'sellers'}
-                      {' · '}
-                      {itemCount} {itemCount === 1 ? 'item' : 'items'}
+                      {vendorCount} {vendorCount === 1 ? "seller" : "sellers"}
+                      {" · "}
+                      {itemCount} {itemCount === 1 ? "item" : "items"}
                     </p>
                   </div>
 
@@ -171,7 +171,7 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
                   />
                 </Link>
               </motion.li>
-            )
+            );
           })}
         </ul>
 
@@ -186,5 +186,5 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

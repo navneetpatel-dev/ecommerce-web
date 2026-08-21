@@ -15,3 +15,5 @@ export { AdminTicketsPage } from "./pages/AdminTicketsPage";
 export { AdminTicketDetailPage } from "./pages/AdminTicketDetailPage";
 export { SupportAuthGate } from "./components/SupportAuthGate";
 export { TicketAttachmentUploader } from "./components/TicketAttachmentUploader";
+export { BugAttachmentUploader } from "./components/TicketAttachmentUploader";
+export type { UploadedMediaAttachment } from "./components/TicketAttachmentUploader";

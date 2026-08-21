@@ -1,22 +1,22 @@
-'use client'
+"use client";
 
-import { Store } from 'lucide-react'
-import { useVendorStorefrontPage } from '../hooks/useVendorStorefrontPage'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { MediaImage } from '@/shared/components/MediaImage'
-import { ProductGrid } from '@/features/products/components/ProductGrid'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import Image from 'next/image'
+import { Store } from "lucide-react";
+import { useVendorStorefrontPage } from "../hooks/useVendorStorefrontPage";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { MediaImage } from "@/shared/components/MediaImage";
+import { ProductGrid } from "@/features/products";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import Image from "next/image";
 
 interface VendorStorefrontPageProps {
-  slug: string
+  slug: string;
 }
 
 export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
   const { vendor, vendorLoading, vendorNotFound, products, productsLoading } =
-    useVendorStorefrontPage(slug)
+    useVendorStorefrontPage(slug);
 
   if (vendorLoading) {
     return (
@@ -30,7 +30,7 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   if (vendorNotFound || !vendor) {
@@ -44,7 +44,7 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
           actionTo={PATHS.vendors}
         />
       </div>
-    )
+    );
   }
 
   return (
@@ -110,5 +110,5 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
         />
       </div>
     </div>
-  )
+  );
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { productsApi } from "@/features/products/api/products.api";
-import { reviewsApi } from "@/features/reviews/api/reviews.api";
+import { productsApi } from "@/features/products";
+import { reviewsApi } from "@/features/reviews";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import type { Review } from "@/shared/api/types";
 

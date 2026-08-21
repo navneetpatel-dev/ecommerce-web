@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { wishlistApi } from "./wishlist.api";
-import { cartKeys } from "@/features/cart/api/cart.queries";
+import { cartKeys } from "@/features/cart";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import type { WishlistItem } from "@/shared/api/types";
 

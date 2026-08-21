@@ -34,7 +34,7 @@ import {
   type BugReportSeverity,
   type BugReportStatus,
 } from "@/shared/constants/statuses";
-import { formatOrderDate } from "@/features/orders/utils/format";
+import { formatOrderDate } from "@/shared/utils/orderFormat";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { cn } from "@/shared/utils/cn";
 import { formatLabel } from "@/shared/utils/formatLabel";

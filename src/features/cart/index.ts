@@ -5,6 +5,7 @@ export {
   useUpdateCartItem,
   useRemoveCartItem,
 } from "./api/cart.queries";
+export { cartKeys } from "./api/cart.queries";
 export { useCartDrawerStore } from "./store/cart.store";
 export { groupItemsByVendor, calcCartTotal } from "./utils/cart.utils";
 export { CartDrawer } from "./components/CartDrawer";

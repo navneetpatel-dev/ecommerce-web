@@ -26,7 +26,7 @@ import {
   type CategoryFormInput,
 } from "../schemas/categories.schema";
 import { AdminCategoryFormFields } from "./AdminCategoryFormFields";
-import { categoriesApi } from "@/features/categories/api/categories.api";
+import { categoriesApi } from "@/features/categories";
 
 interface AdminEditCategoryActionProps {
   category: {

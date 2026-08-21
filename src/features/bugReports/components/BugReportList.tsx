@@ -1,35 +1,35 @@
-'use client'
+"use client";
 
-import { useRouter } from 'next/navigation'
-import { type DataTableColumn } from '@/shared/components/DataTable'
-import { StatusBadge } from '@/shared/components/StatusBadge'
-import { LABELS } from '@/shared/constants/labels'
-import { formatOrderDate } from '@/features/orders/utils/format'
+import { useRouter } from "next/navigation";
+import { type DataTableColumn } from "@/shared/components/DataTable";
+import { StatusBadge } from "@/shared/components/StatusBadge";
+import { LABELS } from "@/shared/constants/labels";
+import { formatOrderDate } from "@/shared/utils/orderFormat";
 import {
   BUG_MODULE_LABEL,
   BUG_SEVERITY_LABEL,
   BUG_STATUS_LABEL,
-} from '../utils/labels'
-import { KeysetDataTable } from '@/shared/components/KeysetDataTable'
-import type { BugReport } from '../api/bugReports.api'
+} from "../utils/labels";
+import { KeysetDataTable } from "@/shared/components/KeysetDataTable";
+import type { BugReport } from "../api/bugReports.api";
 
 type Props = {
-  reports: BugReport[]
-  detailHref: (id: string) => string
-  isLoading?: boolean
-  isError?: boolean
-  errorMessage?: string
-  emptyMessage?: string
-  hasNextPage?: boolean
-  isFetchingNextPage?: boolean
-  onLoadMore?: () => void
-  onRefresh?: () => void
-  toolbar?: React.ReactNode
-  title?: React.ReactNode
-  showSeverity?: boolean
-  showReporter?: boolean
-  showModule?: boolean
-}
+  reports: BugReport[];
+  detailHref: (id: string) => string;
+  isLoading?: boolean;
+  isError?: boolean;
+  errorMessage?: string;
+  emptyMessage?: string;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  onLoadMore?: () => void;
+  onRefresh?: () => void;
+  toolbar?: React.ReactNode;
+  title?: React.ReactNode;
+  showSeverity?: boolean;
+  showReporter?: boolean;
+  showModule?: boolean;
+};
 
 export function BugReportList({
   reports,
@@ -48,26 +48,28 @@ export function BugReportList({
   showReporter,
   showModule,
 }: Props) {
-  const router = useRouter()
+  const router = useRouter();
 
   const columns: DataTableColumn<BugReport>[] = [
     {
-      id: 'reportNumber',
+      id: "reportNumber",
       header: LABELS.bugReportNumber,
       cell: (row) => (
-        <span className="font-mono text-[0.8125rem] tabular-nums text-ink">{row.reportNumber}</span>
+        <span className="font-mono text-[0.8125rem] tabular-nums text-ink">
+          {row.reportNumber}
+        </span>
       ),
-      className: 'whitespace-nowrap',
+      className: "whitespace-nowrap",
     },
     {
-      id: 'title',
+      id: "title",
       header: LABELS.bugTitle,
       cell: (row) => <span className="font-medium text-ink">{row.title}</span>,
     },
     ...(showReporter
       ? [
           {
-            id: 'reporterName',
+            id: "reporterName",
             header: LABELS.bugReporter,
             cell: (row: BugReport) => row.reporterName || LABELS.emptyCell,
             hideOnMobile: true,
@@ -77,7 +79,7 @@ export function BugReportList({
     ...(showModule
       ? [
           {
-            id: 'affectedModule',
+            id: "affectedModule",
             header: LABELS.bugAffectedModule,
             cell: (row: BugReport) => BUG_MODULE_LABEL[row.affectedModule],
             hideOnMobile: true,
@@ -87,13 +89,15 @@ export function BugReportList({
     ...(showSeverity
       ? [
           {
-            id: 'severity',
+            id: "severity",
             header: LABELS.bugSeverity,
             cell: (row: BugReport) => (
               <StatusBadge
-                status={row.severity ?? 'NONE'}
+                status={row.severity ?? "NONE"}
                 label={
-                  row.severity ? BUG_SEVERITY_LABEL[row.severity] : LABELS.bugSeverityNone
+                  row.severity
+                    ? BUG_SEVERITY_LABEL[row.severity]
+                    : LABELS.bugSeverityNone
                 }
               />
             ),
@@ -101,17 +105,19 @@ export function BugReportList({
         ]
       : []),
     {
-      id: 'status',
+      id: "status",
       header: LABELS.status,
-      cell: (row) => <StatusBadge status={row.status} label={BUG_STATUS_LABEL[row.status]} />,
+      cell: (row) => (
+        <StatusBadge status={row.status} label={BUG_STATUS_LABEL[row.status]} />
+      ),
     },
     {
-      id: 'createdAt',
+      id: "createdAt",
       header: LABELS.createdAt,
       cell: (row) => formatOrderDate(row.createdAt),
       hideOnMobile: true,
     },
-  ]
+  ];
 
   return (
     <KeysetDataTable
@@ -129,5 +135,5 @@ export function BugReportList({
       onLoadMore={onLoadMore}
       onRowClick={(row) => router.push(detailHref(row.id))}
     />
-  )
+  );
 }

@@ -41,7 +41,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { CATEGORY_ATTRIBUTE_TYPE } from "@/shared/constants/statuses";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
-import { categoriesApi } from "@/features/categories/api/categories.api";
+import { categoriesApi } from "@/features/categories";
 import type { CategoryAttribute } from "@/shared/api/types";
 
 interface AdminCategoryAttributesActionProps {

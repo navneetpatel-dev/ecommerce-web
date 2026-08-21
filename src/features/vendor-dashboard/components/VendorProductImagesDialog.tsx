@@ -15,7 +15,7 @@ import { MediaImage } from "@/shared/components/MediaImage";
 import { FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
-import { productsApi } from "@/features/products/api/products.api";
+import { productsApi } from "@/features/products";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import type { ProductImage, ProductVariant } from "@/shared/api/types";
 import {

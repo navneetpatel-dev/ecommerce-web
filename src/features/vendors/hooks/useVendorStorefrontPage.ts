@@ -1,28 +1,26 @@
-'use client'
+"use client";
 
-import { useVendorBySlug } from '../api/vendors.queries'
-import { useProductList } from '@/features/products/api/products.queries'
-import { ApiError } from '@/shared/api/client'
-import { ERROR_CODES } from '@/shared/constants/errors'
+import { useVendorBySlug } from "../api/vendors.queries";
+import { useProductList } from "@/features/products";
+import { ApiError } from "@/shared/api/client";
+import { ERROR_CODES } from "@/shared/constants/errors";
 
 export function useVendorStorefrontPage(slug: string) {
   const {
     data: vendor,
     isLoading: vendorLoading,
     error: vendorError,
-  } = useVendorBySlug(slug)
+  } = useVendorBySlug(slug);
 
   const vendorNotFound =
-    vendorError instanceof ApiError && vendorError.code === ERROR_CODES.NOT_FOUND
+    vendorError instanceof ApiError &&
+    vendorError.code === ERROR_CODES.NOT_FOUND;
 
-  const {
-    data: productsData,
-    isFetching: productsLoading,
-  } = useProductList({
+  const { data: productsData, isFetching: productsLoading } = useProductList({
     vendorId: vendor?.id,
-  })
+  });
 
-  const products = productsData?.items ?? []
+  const products = productsData?.items ?? [];
 
   return {
     vendor,
@@ -30,5 +28,5 @@ export function useVendorStorefrontPage(slug: string) {
     vendorNotFound,
     products,
     productsLoading,
-  }
+  };
 }

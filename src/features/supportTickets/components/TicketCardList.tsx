@@ -1,32 +1,32 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { LifeBuoy } from 'lucide-react'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { FormError } from '@/shared/components/FormError'
-import { StatusBadge } from '@/shared/components/StatusBadge'
-import { InfiniteLoadMore } from '@/shared/components/InfiniteLoadMore'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { LABELS } from '@/shared/constants/labels'
-import { formatOrderDate } from '@/features/orders/utils/format'
-import type { SupportTicket } from '../api/supportTickets.api'
+import Link from "next/link";
+import { LifeBuoy } from "lucide-react";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { FormError } from "@/shared/components/FormError";
+import { StatusBadge } from "@/shared/components/StatusBadge";
+import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { LABELS } from "@/shared/constants/labels";
+import { formatOrderDate } from "@/shared/utils/orderFormat";
+import type { SupportTicket } from "../api/supportTickets.api";
 import {
   TICKET_CATEGORY_LABEL,
   TICKET_PRIORITY_LABEL,
   TICKET_STATUS_LABEL,
-} from '../utils/labels'
+} from "../utils/labels";
 
 type Props = {
-  tickets: SupportTicket[]
-  detailHref: (id: string) => string
-  createHref: string
-  isLoading?: boolean
-  isError?: boolean
-  errorMessage?: string
-  hasNextPage?: boolean
-  isFetchingNextPage?: boolean
-  onLoadMore?: () => void
-}
+  tickets: SupportTicket[];
+  detailHref: (id: string) => string;
+  createHref: string;
+  isLoading?: boolean;
+  isError?: boolean;
+  errorMessage?: string;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  onLoadMore?: () => void;
+};
 
 export function TicketCardList({
   tickets,
@@ -46,7 +46,7 @@ export function TicketCardList({
         <Skeleton className="h-36 w-full" />
         <Skeleton className="h-36 w-full" />
       </div>
-    )
+    );
   }
 
   if (isError) {
@@ -55,7 +55,7 @@ export function TicketCardList({
         error={new Error(errorMessage || LABELS.ticketCouldNotLoad)}
         fallback={LABELS.ticketCouldNotLoad}
       />
-    )
+    );
   }
 
   if (tickets.length === 0) {
@@ -70,7 +70,7 @@ export function TicketCardList({
           className="py-14"
         />
       </div>
-    )
+    );
   }
 
   return (
@@ -112,7 +112,8 @@ export function TicketCardList({
                   </p>
                 ) : null}
                 <p className="text-[0.8125rem] text-ink-faint">
-                  {TICKET_CATEGORY_LABEL[ticket.category]} · {formatOrderDate(ticket.createdAt)}
+                  {TICKET_CATEGORY_LABEL[ticket.category]} ·{" "}
+                  {formatOrderDate(ticket.createdAt)}
                 </p>
               </div>
             </Link>
@@ -126,5 +127,5 @@ export function TicketCardList({
         onLoadMore={onLoadMore}
       />
     </div>
-  )
+  );
 }

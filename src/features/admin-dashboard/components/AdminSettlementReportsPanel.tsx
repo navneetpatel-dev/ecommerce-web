@@ -7,7 +7,7 @@ import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { BEARER_PREFIX } from "@/shared/constants/http";
 import { STORAGE_KEYS } from "@/shared/constants/storage";
-import { formatInr } from "@/features/orders/utils/format";
+import { formatInr } from "@/shared/utils/orderFormat";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { API } from "@/shared/constants/apiRoutes";
 import { useAuthStore } from "@/shared/stores/auth.store";

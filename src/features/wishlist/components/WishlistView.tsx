@@ -3,7 +3,7 @@
 import { Trash2 } from "lucide-react";
 import { EmptyWishlistState } from "./EmptyWishlistState";
 import { SkeletonGrid } from "@/shared/components/Skeletons";
-import { ProductCardContainer } from "@/features/products/containers/ProductCardContainer";
+import { ProductCardContainer } from "@/features/products";
 import { PaginationContainer } from "@/shared/containers/PaginationContainer";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
