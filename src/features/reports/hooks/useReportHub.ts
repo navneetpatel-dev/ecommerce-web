@@ -1,48 +1,19 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LABELS } from '@/shared/constants/labels'
+import type { ReportRunResult } from '../api/reportsEngine.api'
 import {
-  reportsEngineApi,
-  type ReportCatalogItem,
-  type ReportRunResult,
-} from '../api/reportsEngine.api'
-
-function defaultRange() {
-  const to = new Date()
-  const from = new Date()
-  from.setDate(to.getDate() - 30)
-  return {
-    from: from.toISOString().slice(0, 10),
-    to: to.toISOString().slice(0, 10),
-  }
-}
-
-function labelForKey(key: string): string {
-  const map = LABELS as Record<string, string>
-  return map[key] ?? key
-}
-
-async function pollExportUntilReady(exportId: string) {
-  const maxAttempts = 40
-  for (let i = 0; i < maxAttempts; i += 1) {
-    const status = await reportsEngineApi.exportStatus(exportId)
-    if (status.status === 'READY' || status.status === 'SYNC') {
-      await reportsEngineApi.downloadExport(exportId)
-      return 'ready' as const
-    }
-    if (status.status === 'FAILED') {
-      return 'failed' as const
-    }
-    await new Promise((r) => setTimeout(r, 1500))
-  }
-  return 'pending' as const
-}
+  defaultRange,
+  labelForKey,
+  pollExportUntilReady,
+} from './useReportHubHelpers/index'
+import { useReportCatalog } from './useReportCatalog/index'
 
 export function useReportHub(options?: { preferAudience?: string }) {
-  const [catalog, setCatalog] = useState<ReportCatalogItem[]>([])
-  const [catalogError, setCatalogError] = useState<string | null>(null)
-  const [reportType, setReportType] = useState<string>('')
+  const { catalog, catalogError, reportType, setReportTypeState, selected } =
+    useReportCatalog(options)
+
   const [from, setFrom] = useState(defaultRange().from)
   const [to, setTo] = useState(defaultRange().to)
   const [vendorId, setVendorId] = useState('')
@@ -54,21 +25,6 @@ export function useReportHub(options?: { preferAudience?: string }) {
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
   const [exporting, setExporting] = useState(false)
-
-  useEffect(() => {
-    reportsEngineApi
-      .catalog()
-      .then((items) => {
-        const filtered = options?.preferAudience
-          ? items.filter((i) => i.audience.startsWith(options.preferAudience!))
-          : items
-        setCatalog(filtered.length ? filtered : items)
-        if ((filtered.length ? filtered : items)[0]) {
-          setReportType((filtered.length ? filtered : items)[0]!.type)
-        }
-      })
-      .catch(() => setCatalogError(LABELS.reportCatalogError))
-  }, [options?.preferAudience])
 
   // Resume download if navigated with ?exportId=
   useEffect(() => {
@@ -82,11 +38,6 @@ export function useReportHub(options?: { preferAudience?: string }) {
       else setMessage(LABELS.reportAsyncQueued)
     })
   }, [])
-
-  const selected = useMemo(
-    () => catalog.find((c) => c.type === reportType) ?? null,
-    [catalog, reportType],
-  )
 
   const load = (nextPage = page) => {
     if (!reportType) return
@@ -143,7 +94,7 @@ export function useReportHub(options?: { preferAudience?: string }) {
     catalogError,
     reportType,
     setReportType: (type: string) => {
-      setReportType(type)
+      setReportTypeState(type)
       setResult(null)
       setPage(1)
     },
