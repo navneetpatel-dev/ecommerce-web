@@ -1,0 +1,89 @@
+"use client";
+
+import Link from "next/link";
+import { cn } from "@/shared/utils/cn";
+import { PATHS } from "@/shared/constants/paths";
+import { LABELS } from "@/shared/constants/labels";
+import {
+  isAdminRole,
+  isCustomerRole,
+  isVendorRole,
+} from "@/shared/utils/roles";
+import type { CurrentUser } from "@/shared/api/types";
+import { AccountMenu } from "./AccountMenu";
+
+interface AccountSectionProps {
+  currentUser: CurrentUser | null;
+  isTransparent: boolean;
+  showStorefrontChrome: boolean;
+}
+
+export function AccountSection({
+  currentUser,
+  isTransparent,
+  showStorefrontChrome,
+}: AccountSectionProps) {
+  if (!currentUser) {
+    return (
+      <Link
+        href={PATHS.login}
+        className={cn(
+          "hidden sm:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors",
+          isTransparent
+            ? "text-paper hover:bg-paper/10"
+            : "text-ink hover:bg-paper",
+        )}
+      >
+        {LABELS.logIn}
+      </Link>
+    );
+  }
+
+  return (
+    <>
+      {isCustomerRole(currentUser.role) && showStorefrontChrome ? (
+        <div className="hidden xl:flex items-center gap-1">
+          <Link
+            href={PATHS.orders}
+            className={cn(
+              "px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors",
+              isTransparent ? "text-paper hover:bg-paper/10" : "hover:bg-paper",
+            )}
+          >
+            {LABELS.orders}
+          </Link>
+        </div>
+      ) : null}
+
+      {isVendorRole(currentUser.role) ? (
+        <Link
+          href={PATHS.vendor.overview}
+          className={cn(
+            "hidden xl:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors",
+            isTransparent
+              ? "text-paper hover:bg-paper/10"
+              : "text-brand hover:bg-brand-subtle",
+          )}
+        >
+          {LABELS.vendorDashboard}
+        </Link>
+      ) : null}
+
+      {isAdminRole(currentUser.role) ? (
+        <Link
+          href={PATHS.admin.vendors}
+          className={cn(
+            "hidden xl:inline-flex items-center px-3 py-1.5 text-[0.8125rem] font-medium rounded-md transition-colors",
+            isTransparent
+              ? "text-paper hover:bg-paper/10"
+              : "text-brand hover:bg-brand-subtle",
+          )}
+        >
+          {LABELS.adminPanel}
+        </Link>
+      ) : null}
+
+      <AccountMenu currentUser={currentUser} isTransparent={isTransparent} />
+    </>
+  );
+}
