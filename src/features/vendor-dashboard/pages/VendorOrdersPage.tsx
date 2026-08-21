@@ -1,26 +1,30 @@
-'use client'
+"use client";
 
-import { useVendorOrderManagement } from '../hooks/useVendorOrderManagement'
-import { SkeletonRows } from '@/shared/components/Skeletons'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { VendorOrdersTable } from '../components/VendorOrdersTable'
-import { RequirePermission } from '@/shared/components/RequirePermission'
-import { PERMISSIONS } from '@/shared/constants/permissions'
+import { useVendorOrderManagement } from "../hooks/useVendorOrderManagement";
+import { SkeletonRows } from "@/shared/components/Skeletons";
+import { EmptyState } from "@/shared/components/EmptyState";
+import {
+  VendorOrdersTable,
+  type VendorOrder,
+} from "../components/VendorOrdersTable";
+import { RequirePermission } from "@/shared/components/RequirePermission";
+import { PERMISSIONS } from "@/shared/constants/permissions";
 
 export function VendorOrdersPage() {
-  const orders = useVendorOrderManagement()
+  const orders = useVendorOrderManagement();
 
-  if (orders.isLoading) return <SkeletonRows count={5} />
-  if (!orders.data?.items?.length) return <EmptyState message="No orders to manage" />
+  if (orders.isLoading) return <SkeletonRows count={5} />;
+  if (!orders.data?.items?.length)
+    return <EmptyState message="No orders to manage" />;
 
   return (
     <RequirePermission permission={PERMISSIONS.SUBORDER_MANAGE}>
       <VendorOrdersTable
-        orders={orders.data.items as any}
+        orders={orders.data.items as VendorOrder[]}
         updatingId={orders.updatingId}
         onSetUpdatingId={orders.setUpdatingId}
         onStatusChange={orders.handleStatusChange}
       />
     </RequirePermission>
-  )
+  );
 }

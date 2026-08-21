@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -8,55 +8,58 @@ import {
   useSensor,
   useSensors,
   type DragEndEvent,
-} from '@dnd-kit/core'
+} from "@dnd-kit/core";
 import {
   SortableContext,
   arrayMove,
   useSortable,
   verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, Pencil, SlidersHorizontal, Trash2 } from 'lucide-react'
-import { Button } from '@/shared/components/ui/button'
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVertical, Pencil, SlidersHorizontal, Trash2 } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/shared/components/ui/dialog'
-import { Input } from '@/shared/components/ui/input'
-import { FormActions, FormFieldFrame, FormSection } from '@/shared/components/forms'
+} from "@/shared/components/ui/dialog";
+import { Input } from "@/shared/components/ui/input";
+import {
+  FormActions,
+  FormFieldFrame,
+  FormSection,
+} from "@/shared/components/forms";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/shared/components/ui/select'
-import { LABELS } from '@/shared/constants/labels'
-import { CATEGORY_ATTRIBUTE_TYPE } from '@/shared/constants/statuses'
-import { cn } from '@/shared/utils/cn'
-import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import { tableMenuButtonClass } from '@/shared/constants/tableActionTone'
-import { categoriesApi } from '@/features/categories/api/categories.api'
-import type { CategoryAttribute } from '@/shared/api/types'
+} from "@/shared/components/ui/select";
+import { LABELS } from "@/shared/constants/labels";
+import { CATEGORY_ATTRIBUTE_TYPE } from "@/shared/constants/statuses";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
+import { categoriesApi } from "@/features/categories/api/categories.api";
+import type { CategoryAttribute } from "@/shared/api/types";
 
 interface AdminCategoryAttributesActionProps {
-  categoryId: string
-  categoryName: string
+  categoryId: string;
+  categoryName: string;
 }
 
 function parseOptions(type: string, raw: string): unknown[] {
-  if (type === CATEGORY_ATTRIBUTE_TYPE.BOOLEAN) return ['true', 'false']
+  if (type === CATEGORY_ATTRIBUTE_TYPE.BOOLEAN) return ["true", "false"];
   return raw
-    .split(',')
+    .split(",")
     .map((part) => part.trim())
-    .filter(Boolean)
+    .filter(Boolean);
 }
 
 function optionsToInput(options: unknown[] | undefined): string {
-  if (!options?.length) return ''
-  return options.map((opt) => String(opt)).join(', ')
+  if (!options?.length) return "";
+  return options.map((opt) => String(opt)).join(", ");
 }
 
 function SortableAttributeRow({
@@ -65,14 +68,21 @@ function SortableAttributeRow({
   onEdit,
   onDelete,
 }: {
-  row: CategoryAttribute
-  disabled: boolean
-  onEdit: () => void
-  onDelete: () => void
+  row: CategoryAttribute;
+  disabled: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: row.id,
-  })
+  });
 
   return (
     <li
@@ -122,121 +132,123 @@ function SortableAttributeRow({
         </Button>
       </div>
     </li>
-  )
+  );
 }
 
 export function AdminCategoryAttributesAction({
   categoryId,
   categoryName,
 }: AdminCategoryAttributesActionProps) {
-  const [open, setOpen] = useState(false)
-  const [rows, setRows] = useState<CategoryAttribute[]>([])
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [name, setName] = useState('')
-  const [type, setType] = useState<string>(CATEGORY_ATTRIBUTE_TYPE.ENUM)
-  const [options, setOptions] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }))
-  const ids = useMemo(() => rows.map((row) => row.id), [rows])
+  const [open, setOpen] = useState(false);
+  const [rows, setRows] = useState<CategoryAttribute[]>([]);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [type, setType] = useState<string>(CATEGORY_ATTRIBUTE_TYPE.ENUM);
+  const [options, setOptions] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+  );
+  const ids = useMemo(() => rows.map((row) => row.id), [rows]);
 
   const resetForm = () => {
-    setEditingId(null)
-    setName('')
-    setType(CATEGORY_ATTRIBUTE_TYPE.ENUM)
-    setOptions('')
-  }
+    setEditingId(null);
+    setName("");
+    setType(CATEGORY_ATTRIBUTE_TYPE.ENUM);
+    setOptions("");
+  };
 
   const load = async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      setRows(await categoriesApi.listAttributes(categoryId))
+      setRows(await categoriesApi.listAttributes(categoryId));
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadData))
+      setError(getApiErrorMessage(err, LABELS.couldNotLoadData));
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (open) {
-      resetForm()
-      void load()
+      resetForm();
+      void load();
     }
-  }, [open, categoryId])
+  }, [open, categoryId]);
 
   const onSave = async () => {
-    if (!name.trim()) return
-    setLoading(true)
-    setError(null)
+    if (!name.trim()) return;
+    setLoading(true);
+    setError(null);
     try {
       const body = {
         name: name.trim(),
         type,
         options: parseOptions(type, options),
-      }
+      };
       if (editingId) {
-        await categoriesApi.updateAttribute(categoryId, editingId, body)
+        await categoriesApi.updateAttribute(categoryId, editingId, body);
       } else {
-        await categoriesApi.createAttribute(categoryId, body)
+        await categoriesApi.createAttribute(categoryId, body);
       }
-      resetForm()
-      await load()
+      resetForm();
+      await load();
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotSaveAttribute))
+      setError(getApiErrorMessage(err, LABELS.couldNotSaveAttribute));
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const onDelete = async (attributeId: string) => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      await categoriesApi.deleteAttribute(categoryId, attributeId)
-      if (editingId === attributeId) resetForm()
-      await load()
+      await categoriesApi.deleteAttribute(categoryId, attributeId);
+      if (editingId === attributeId) resetForm();
+      await load();
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotDeleteAttribute))
+      setError(getApiErrorMessage(err, LABELS.couldNotDeleteAttribute));
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const onDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event
-    if (!over || active.id === over.id) return
-    const oldIndex = rows.findIndex((row) => row.id === active.id)
-    const newIndex = rows.findIndex((row) => row.id === over.id)
-    if (oldIndex < 0 || newIndex < 0) return
-    const next = arrayMove(rows, oldIndex, newIndex)
-    setRows(next)
-    setError(null)
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = rows.findIndex((row) => row.id === active.id);
+    const newIndex = rows.findIndex((row) => row.id === over.id);
+    if (oldIndex < 0 || newIndex < 0) return;
+    const next = arrayMove(rows, oldIndex, newIndex);
+    setRows(next);
+    setError(null);
     try {
       await categoriesApi.reorderAttributes(
         categoryId,
         next.map((row) => row.id),
-      )
+      );
     } catch (err) {
-      setRows(rows)
-      setError(getApiErrorMessage(err, LABELS.couldNotReorderAttributes))
+      setRows(rows);
+      setError(getApiErrorMessage(err, LABELS.couldNotReorderAttributes));
     }
-  }
+  };
 
   const startEdit = (row: CategoryAttribute) => {
-    setEditingId(row.id)
-    setName(row.name)
-    setType(row.type)
-    setOptions(optionsToInput(row.options))
-  }
+    setEditingId(row.id);
+    setName(row.name);
+    setType(row.type);
+    setOptions(optionsToInput(row.options));
+  };
 
   return (
     <>
       <Button
         size="sm"
         variant="outline"
-        className={tableMenuButtonClass('neutral')}
+        className={tableMenuButtonClass("neutral")}
         onClick={() => setOpen(true)}
       >
         <SlidersHorizontal strokeWidth={2.25} aria-hidden />
@@ -250,13 +262,21 @@ export function AdminCategoryAttributesAction({
               {LABELS.categoryAttributes} — {categoryName}
             </DialogTitle>
           </DialogHeader>
-          <p className="text-[0.875rem] text-ink-muted">{LABELS.categoryAttributesHint}</p>
+          <p className="text-[0.875rem] text-ink-muted">
+            {LABELS.categoryAttributesHint}
+          </p>
 
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={onDragEnd}
+          >
             <SortableContext items={ids} strategy={verticalListSortingStrategy}>
               <ul className="max-h-48 space-y-2 overflow-y-auto rounded-md border border-line p-3">
                 {rows.length === 0 ? (
-                  <li className="text-[0.875rem] text-ink-muted">{LABELS.noRecordsFound}</li>
+                  <li className="text-[0.875rem] text-ink-muted">
+                    {LABELS.noRecordsFound}
+                  </li>
                 ) : (
                   rows.map((row) => (
                     <SortableAttributeRow
@@ -282,7 +302,11 @@ export function AdminCategoryAttributesAction({
               <Input value={name} onChange={(e) => setName(e.target.value)} />
             </FormFieldFrame>
             <FormFieldFrame label={LABELS.attributeType}>
-              <Select value={type} onValueChange={setType} disabled={Boolean(editingId)}>
+              <Select
+                value={type}
+                onValueChange={setType}
+                disabled={Boolean(editingId)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -301,23 +325,37 @@ export function AdminCategoryAttributesAction({
             </FormFieldFrame>
             {type !== CATEGORY_ATTRIBUTE_TYPE.BOOLEAN ? (
               <FormFieldFrame label={LABELS.attributeOptions}>
-                <Input value={options} onChange={(e) => setOptions(e.target.value)} />
+                <Input
+                  value={options}
+                  onChange={(e) => setOptions(e.target.value)}
+                />
               </FormFieldFrame>
             ) : null}
-            {error ? <p className="text-[0.8125rem] text-danger">{error}</p> : null}
+            {error ? (
+              <p className="text-[0.8125rem] text-danger">{error}</p>
+            ) : null}
             <FormActions>
               {editingId ? (
-                <Button variant="secondary" disabled={loading} onClick={resetForm}>
+                <Button
+                  variant="secondary"
+                  disabled={loading}
+                  onClick={resetForm}
+                >
                   {LABELS.cancelEditAttribute}
                 </Button>
               ) : null}
-              <Button disabled={loading || !name.trim()} onClick={() => void onSave()}>
-                {editingId ? LABELS.saveCategoryAttribute : LABELS.addCategoryAttribute}
+              <Button
+                disabled={loading || !name.trim()}
+                onClick={() => void onSave()}
+              >
+                {editingId
+                  ? LABELS.saveCategoryAttribute
+                  : LABELS.addCategoryAttribute}
               </Button>
             </FormActions>
           </FormSection>
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

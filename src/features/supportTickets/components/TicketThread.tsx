@@ -1,27 +1,27 @@
-'use client'
+"use client";
 
-import { useEffect, useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { ArrowLeft, Send, Star } from 'lucide-react'
-import { Avatar, AvatarFallback } from '@/shared/components/ui/avatar'
-import { Button } from '@/shared/components/ui/button'
-import { FormFieldFrame } from '@/shared/components/forms'
-import { FormError } from '@/shared/components/FormError'
-import { Textarea } from '@/shared/components/ui/textarea'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { StatusBadge } from '@/shared/components/StatusBadge'
+import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { ArrowLeft, Send, Star } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
+import { Button } from "@/shared/components/ui/button";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { FormError } from "@/shared/components/FormError";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { StatusBadge } from "@/shared/components/StatusBadge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/shared/components/ui/select'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { AssigneeSelect } from '@/shared/components/AssigneeSelect'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
+} from "@/shared/components/ui/select";
+import { TextEyebrow } from "@/shared/components/TextEyebrow";
+import { AssigneeSelect } from "@/shared/components/AssigneeSelect";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
 import {
   SUPPORT_TICKET_PRIORITY,
   SUPPORT_TICKET_PRIORITY_VALUES,
@@ -29,13 +29,13 @@ import {
   TICKET_ATTACHMENT_TYPE,
   TICKET_SENDER_ROLE,
   type SupportTicketPriority,
-} from '@/shared/constants/statuses'
-import { PERMISSIONS } from '@/shared/constants/permissions'
-import { usePermissions } from '@/shared/hooks/usePermissions'
-import { useAuthStore } from '@/features/auth/store/auth.store'
-import { formatOrderDate } from '@/features/orders/utils/format'
-import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import { cn } from '@/shared/utils/cn'
+} from "@/shared/constants/statuses";
+import { PERMISSIONS } from "@/shared/constants/permissions";
+import { usePermissions } from "@/shared/hooks/usePermissions";
+import { useAuthStore } from "@/features/auth/store/auth.store";
+import { formatOrderDate } from "@/features/orders/utils/format";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { cn } from "@/shared/utils/cn";
 import {
   useCloseSupportTicket,
   useEscalateSupportTicket,
@@ -46,55 +46,69 @@ import {
   useResolveSupportTicket,
   useTicketMessagesInfinite,
   useUpdateTicketPriority,
-} from '../api/supportTickets.queries'
-import type { SupportTicket, TicketAttachment, TicketMessage } from '../api/supportTickets.api'
-import { TicketAttachmentUploader, type UploadedMediaAttachment } from './TicketAttachmentUploader'
-import { TICKET_CATEGORY_LABEL, TICKET_PRIORITY_LABEL, TICKET_STATUS_LABEL } from '../utils/labels'
-import { TICKET_REPLY_MAX } from '../constants/fieldLimits'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import { usePublicSettings } from '@/shared/hooks/usePublicSettings'
+} from "../api/supportTickets.queries";
+import type {
+  SupportTicket,
+  TicketAttachment,
+  TicketMessage,
+} from "../api/supportTickets.api";
+import {
+  TicketAttachmentUploader,
+  type UploadedMediaAttachment,
+} from "./TicketAttachmentUploader";
+import {
+  TICKET_CATEGORY_LABEL,
+  TICKET_PRIORITY_LABEL,
+  TICKET_STATUS_LABEL,
+} from "../utils/labels";
+import { TICKET_REPLY_MAX } from "../constants/fieldLimits";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { usePublicSettings } from "@/shared/hooks/usePublicSettings";
 
-type RoleMode = 'customer' | 'vendor' | 'admin'
+type RoleMode = "customer" | "vendor" | "admin";
 
 type Props = {
-  ticket: SupportTicket
-  mode: RoleMode
-}
+  ticket: SupportTicket;
+  mode: RoleMode;
+};
 
 function initials(name: string | null | undefined): string {
-  if (!name?.trim()) return LABELS.ticketAvatarInitialsFallback
-  const parts = name.trim().split(/\s+/)
+  if (!name?.trim()) return LABELS.ticketAvatarInitialsFallback;
+  const parts = name.trim().split(/\s+/);
   return (
-    ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() ||
+    ((parts[0]?.[0] ?? "") + (parts[1]?.[0] ?? "")).toUpperCase() ||
     LABELS.ticketAvatarInitialsFallback
-  )
+  );
 }
 
 function isStaffRole(role: string): boolean {
-  return role !== TICKET_SENDER_ROLE.CUSTOMER
+  return role !== TICKET_SENDER_ROLE.CUSTOMER;
 }
 
 function listHref(mode: RoleMode): string {
-  if (mode === 'admin') return PATHS.admin.supportTickets
-  if (mode === 'vendor') return PATHS.vendor.supportTickets
-  return PATHS.supportTickets
+  if (mode === "admin") return PATHS.admin.supportTickets;
+  if (mode === "vendor") return PATHS.vendor.supportTickets;
+  return PATHS.supportTickets;
 }
 
 function AttachmentThumbs({
   attachments,
-  size = 'md',
+  size = "md",
 }: {
-  attachments: TicketAttachment[]
-  size?: 'sm' | 'md'
+  attachments: TicketAttachment[];
+  size?: "sm" | "md";
 }) {
-  if (!attachments.length) return null
-  const box = size === 'sm' ? 'h-14 w-14' : 'h-20 w-20'
+  if (!attachments.length) return null;
+  const box = size === "sm" ? "h-14 w-14" : "h-20 w-20";
   return (
     <ul className="mt-3 flex flex-wrap gap-2">
       {attachments.map((item) => (
         <li
           key={item.id ?? item.url}
-          className={cn('overflow-hidden rounded-md border border-line bg-paper', box)}
+          className={cn(
+            "overflow-hidden rounded-md border border-line bg-paper",
+            box,
+          )}
         >
           {item.type === TICKET_ATTACHMENT_TYPE.VIDEO ? (
             <video
@@ -106,33 +120,45 @@ function AttachmentThumbs({
             />
           ) : (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={item.url} alt="" loading="lazy" className="h-full w-full object-cover" />
+            <img
+              src={item.url}
+              alt=""
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
           )}
         </li>
       ))}
     </ul>
-  )
+  );
 }
 
 function MessageBubble({
   message,
   isOwn,
 }: {
-  message: TicketMessage
-  isOwn: boolean
+  message: TicketMessage;
+  isOwn: boolean;
 }) {
   const displayName = isOwn
     ? LABELS.ticketMessageYou
     : message.senderName ||
-      (isStaffRole(message.senderRole) ? LABELS.ticketMessageSupport : LABELS.ticketMessageCustomer)
+      (isStaffRole(message.senderRole)
+        ? LABELS.ticketMessageSupport
+        : LABELS.ticketMessageCustomer);
 
   return (
-    <div className={cn('flex gap-2.5 sm:gap-3', isOwn ? 'flex-row-reverse' : 'flex-row')}>
+    <div
+      className={cn(
+        "flex gap-2.5 sm:gap-3",
+        isOwn ? "flex-row-reverse" : "flex-row",
+      )}
+    >
       <Avatar className="mt-1 h-8 w-8 shrink-0 border border-line sm:h-9 sm:w-9">
         <AvatarFallback
           className={cn(
-            'text-[0.7rem] font-semibold sm:text-[0.75rem]',
-            isOwn ? 'bg-brand-subtle text-brand' : 'bg-paper text-ink-muted',
+            "text-[0.7rem] font-semibold sm:text-[0.75rem]",
+            isOwn ? "bg-brand-subtle text-brand" : "bg-paper text-ink-muted",
           )}
         >
           {initials(isOwn ? displayName : message.senderName || displayName)}
@@ -141,16 +167,16 @@ function MessageBubble({
       <div className="max-w-[min(100%,32rem)] min-w-0">
         <div
           className={cn(
-            'px-3.5 py-2.5 sm:px-4 sm:py-3',
+            "px-3.5 py-2.5 sm:px-4 sm:py-3",
             isOwn
-              ? 'rounded-[1.15rem] rounded-tr-md border border-brand/30 bg-brand-subtle shadow-elevation-1'
-              : 'rounded-[1.15rem] rounded-tl-md border border-line bg-surface shadow-[0_1px_0_rgba(15,23,42,0.04)]',
+              ? "rounded-[1.15rem] rounded-tr-md border border-brand/30 bg-brand-subtle shadow-elevation-1"
+              : "rounded-[1.15rem] rounded-tl-md border border-line bg-surface shadow-[0_1px_0_rgba(15,23,42,0.04)]",
           )}
         >
           <div
             className={cn(
-              'mb-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5',
-              isOwn ? 'justify-end' : 'justify-start',
+              "mb-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5",
+              isOwn ? "justify-end" : "justify-start",
             )}
           >
             <span className="text-[0.75rem] font-semibold text-ink sm:text-[0.8125rem]">
@@ -167,7 +193,7 @@ function MessageBubble({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function TicketDetailsPanel({
@@ -193,27 +219,27 @@ function TicketDetailsPanel({
   onEscalate,
   actionError,
 }: {
-  ticket: SupportTicket
-  showResolve: boolean
-  canReopen: boolean
-  canManage: boolean
-  resolvePending: boolean
-  reopenPending: boolean
-  closePending: boolean
-  onResolve: () => void
-  onReopen: () => void
-  onClose: () => void
-  assigneeId: string
-  onAssigneeChange: (id: string) => void
-  reassignPending: boolean
-  onReassign: () => void
-  priority: SupportTicketPriority
-  onPriorityChange: (priority: SupportTicketPriority) => void
-  priorityPending: boolean
-  onSavePriority: () => void
-  escalatePending: boolean
-  onEscalate: () => void
-  actionError: string | null
+  ticket: SupportTicket;
+  showResolve: boolean;
+  canReopen: boolean;
+  canManage: boolean;
+  resolvePending: boolean;
+  reopenPending: boolean;
+  closePending: boolean;
+  onResolve: () => void;
+  onReopen: () => void;
+  onClose: () => void;
+  assigneeId: string;
+  onAssigneeChange: (id: string) => void;
+  reassignPending: boolean;
+  onReassign: () => void;
+  priority: SupportTicketPriority;
+  onPriorityChange: (priority: SupportTicketPriority) => void;
+  priorityPending: boolean;
+  onSavePriority: () => void;
+  escalatePending: boolean;
+  onEscalate: () => void;
+  actionError: string | null;
 }) {
   return (
     <>
@@ -226,18 +252,26 @@ function TicketDetailsPanel({
           <div className="flex items-center justify-between gap-3">
             <dt className="text-ink-muted">{LABELS.status}</dt>
             <dd>
-              <StatusBadge status={ticket.status} label={TICKET_STATUS_LABEL[ticket.status]} />
+              <StatusBadge
+                status={ticket.status}
+                label={TICKET_STATUS_LABEL[ticket.status]}
+              />
             </dd>
           </div>
           <div className="flex items-center justify-between gap-3">
             <dt className="text-ink-muted">{LABELS.priority}</dt>
             <dd>
-              <StatusBadge status={ticket.priority} label={TICKET_PRIORITY_LABEL[ticket.priority]} />
+              <StatusBadge
+                status={ticket.priority}
+                label={TICKET_PRIORITY_LABEL[ticket.priority]}
+              />
             </dd>
           </div>
           <div className="flex items-center justify-between gap-3">
             <dt className="text-ink-muted">{LABELS.category}</dt>
-            <dd className="font-medium text-ink">{TICKET_CATEGORY_LABEL[ticket.category]}</dd>
+            <dd className="font-medium text-ink">
+              {TICKET_CATEGORY_LABEL[ticket.category]}
+            </dd>
           </div>
           <div className="flex items-center justify-between gap-3 border-t border-line/60 pt-3">
             <dt className="text-ink-muted">{LABELS.createdAt}</dt>
@@ -274,7 +308,9 @@ function TicketDetailsPanel({
             <FormFieldFrame label={LABELS.ticketUpdatePriority}>
               <Select
                 value={priority}
-                onValueChange={(v) => onPriorityChange(v as SupportTicketPriority)}
+                onValueChange={(v) =>
+                  onPriorityChange(v as SupportTicketPriority)
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -337,7 +373,9 @@ function TicketDetailsPanel({
               size="sm"
               className="w-full sm:w-auto"
               loading={reassignPending}
-              disabled={!assigneeId.trim() || assigneeId === (ticket.assignedToId ?? '')}
+              disabled={
+                !assigneeId.trim() || assigneeId === (ticket.assignedToId ?? "")
+              }
               onClick={onReassign}
             >
               {LABELS.ticketReassign}
@@ -388,115 +426,119 @@ function TicketDetailsPanel({
         ) : null}
       </div>
     </>
-  )
+  );
 }
 
 export function TicketThread({ ticket, mode }: Props) {
-  const { hasPermission } = usePermissions()
-  const currentUserId = useAuthStore((s) => s.currentUser?.id)
-  const { data: publicSettings } = usePublicSettings()
-  const messagesQuery = useTicketMessagesInfinite(ticket.id)
-  const reply = useReplySupportTicket(ticket.id)
-  const resolve = useResolveSupportTicket(ticket.id)
-  const reopen = useReopenSupportTicket(ticket.id)
-  const close = useCloseSupportTicket(ticket.id)
-  const reassign = useReassignSupportTicket(ticket.id)
-  const updatePriority = useUpdateTicketPriority(ticket.id)
-  const escalate = useEscalateSupportTicket(ticket.id)
-  const rate = useRateSupportTicket(ticket.id)
-  const messagesParentRef = useRef<HTMLDivElement | null>(null)
+  const { hasPermission } = usePermissions();
+  const currentUserId = useAuthStore((s) => s.currentUser?.id);
+  const { data: publicSettings } = usePublicSettings();
+  const messagesQuery = useTicketMessagesInfinite(ticket.id);
+  const reply = useReplySupportTicket(ticket.id);
+  const resolve = useResolveSupportTicket(ticket.id);
+  const reopen = useReopenSupportTicket(ticket.id);
+  const close = useCloseSupportTicket(ticket.id);
+  const reassign = useReassignSupportTicket(ticket.id);
+  const updatePriority = useUpdateTicketPriority(ticket.id);
+  const escalate = useEscalateSupportTicket(ticket.id);
+  const rate = useRateSupportTicket(ticket.id);
+  const messagesParentRef = useRef<HTMLDivElement | null>(null);
 
-  const [body, setBody] = useState('')
-  const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>([])
-  const [assigneeId, setAssigneeId] = useState(ticket.assignedToId ?? '')
-  const [priority, setPriority] = useState<SupportTicketPriority>(ticket.priority)
-  const [rating, setRating] = useState('5')
-  const [error, setError] = useState<string | null>(null)
-  const [actionError, setActionError] = useState<string | null>(null)
-  const [ratingError, setRatingError] = useState<string | null>(null)
-
-  useEffect(() => {
-    setAssigneeId(ticket.assignedToId ?? '')
-  }, [ticket.assignedToId])
+  const [body, setBody] = useState("");
+  const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>([]);
+  const [assigneeId, setAssigneeId] = useState(ticket.assignedToId ?? "");
+  const [priority, setPriority] = useState<SupportTicketPriority>(
+    ticket.priority,
+  );
+  const [rating, setRating] = useState("5");
+  const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [ratingError, setRatingError] = useState<string | null>(null);
 
   useEffect(() => {
-    setPriority(ticket.priority)
-  }, [ticket.priority])
+    setAssigneeId(ticket.assignedToId ?? "");
+  }, [ticket.assignedToId]);
+
+  useEffect(() => {
+    setPriority(ticket.priority);
+  }, [ticket.priority]);
 
   const messages = useMemo(() => {
-    const pages = messagesQuery.data?.pages ?? []
-    const flat = pages.flatMap((p) => p.items)
-    return [...flat].reverse()
-  }, [messagesQuery.data])
+    const pages = messagesQuery.data?.pages ?? [];
+    const flat = pages.flatMap((p) => p.items);
+    return [...flat].reverse();
+  }, [messagesQuery.data]);
 
-  const existingImageCount = ticket.imageAttachmentCount ?? 0
-  const existingVideoCount = ticket.videoAttachmentCount ?? 0
+  const existingImageCount = ticket.imageAttachmentCount ?? 0;
+  const existingVideoCount = ticket.videoAttachmentCount ?? 0;
 
-  const useVirtual = messages.length > 0
+  const useVirtual = messages.length > 0;
   const virtualizer = useVirtualizer({
     count: messages.length,
     getScrollElement: () => messagesParentRef.current,
     estimateSize: () => 104,
     overscan: 8,
     enabled: useVirtual,
-  })
+  });
 
   const scrollToBottom = () => {
     if (messages.length > 0) {
-      virtualizer.scrollToIndex(messages.length - 1, { align: 'end' })
+      virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
     }
-  }
+  };
 
-  const initialScrollDone = useRef(false)
+  const initialScrollDone = useRef(false);
   useEffect(() => {
     if (messages.length > 0 && !initialScrollDone.current) {
-      initialScrollDone.current = true
-      requestAnimationFrame(scrollToBottom)
+      initialScrollDone.current = true;
+      requestAnimationFrame(scrollToBottom);
     }
-  }, [messages.length])
+  }, [messages.length]);
 
-  const reopenWindowDays = publicSettings?.ticketReopenWindowDays ?? 7
+  const reopenWindowDays = publicSettings?.ticketReopenWindowDays ?? 7;
   const withinReopenWindow = Boolean(
     ticket.resolvedAt &&
-      Date.now() - new Date(ticket.resolvedAt).getTime() <=
-        reopenWindowDays * 24 * 60 * 60 * 1000,
-  )
+    Date.now() - new Date(ticket.resolvedAt).getTime() <=
+      reopenWindowDays * 24 * 60 * 60 * 1000,
+  );
 
-  const canManage = mode === 'admin' && hasPermission(PERMISSIONS.TICKET_MANAGE)
-  const canResolve = mode === 'admin' || mode === 'vendor'
+  const canManage =
+    mode === "admin" && hasPermission(PERMISSIONS.TICKET_MANAGE);
+  const canResolve = mode === "admin" || mode === "vendor";
   const canReopen =
     ticket.status === SUPPORT_TICKET_STATUS.RESOLVED &&
-    mode === 'customer' &&
-    withinReopenWindow
+    mode === "customer" &&
+    withinReopenWindow;
   const canRate =
-    mode === 'customer' &&
+    mode === "customer" &&
     ticket.customerSatisfactionRating == null &&
     (ticket.status === SUPPORT_TICKET_STATUS.RESOLVED ||
-      (ticket.status === SUPPORT_TICKET_STATUS.CLOSED && Boolean(ticket.resolvedAt)))
-  const replyClosed = ticket.status === SUPPORT_TICKET_STATUS.CLOSED
-  const replyNeedsReopen = ticket.status === SUPPORT_TICKET_STATUS.RESOLVED
-  const replyBlocked = replyClosed || replyNeedsReopen
+      (ticket.status === SUPPORT_TICKET_STATUS.CLOSED &&
+        Boolean(ticket.resolvedAt)));
+  const replyClosed = ticket.status === SUPPORT_TICKET_STATUS.CLOSED;
+  const replyNeedsReopen = ticket.status === SUPPORT_TICKET_STATUS.RESOLVED;
+  const replyBlocked = replyClosed || replyNeedsReopen;
   const showResolve =
     canResolve &&
     (ticket.status === SUPPORT_TICKET_STATUS.OPEN ||
       ticket.status === SUPPORT_TICKET_STATUS.IN_PROGRESS ||
-      ticket.status === SUPPORT_TICKET_STATUS.REOPENED)
+      ticket.status === SUPPORT_TICKET_STATUS.REOPENED);
 
   const runAction = async (
     action: () => Promise<unknown>,
     fallback: string,
   ) => {
-    setActionError(null)
+    setActionError(null);
     try {
-      await action()
+      await action();
     } catch (err) {
-      setActionError(getApiErrorMessage(err, fallback))
+      setActionError(getApiErrorMessage(err, fallback));
     }
-  }
+  };
 
   const onReply = async () => {
-    if (!body.trim() || replyBlocked) return
-    setError(null)
+    if (!body.trim() || replyBlocked) return;
+    setError(null);
     try {
       await reply.mutateAsync({
         body: body.trim(),
@@ -505,14 +547,14 @@ export function TicketThread({ ticket, mode }: Props) {
           type,
           durationSeconds,
         })),
-      })
-      setBody('')
-      setAttachments([])
-      requestAnimationFrame(scrollToBottom)
+      });
+      setBody("");
+      setAttachments([]);
+      requestAnimationFrame(scrollToBottom);
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.ticketCouldNotReply))
+      setError(getApiErrorMessage(err, LABELS.ticketCouldNotReply));
     }
-  }
+  };
 
   return (
     <div className="w-full min-w-0 space-y-5 md:space-y-6">
@@ -535,11 +577,17 @@ export function TicketThread({ ticket, mode }: Props) {
             {ticket.subject}
           </h1>
           <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-            <StatusBadge status={ticket.status} label={TICKET_STATUS_LABEL[ticket.status]} />
-            <StatusBadge status={ticket.priority} label={TICKET_PRIORITY_LABEL[ticket.priority]} />
+            <StatusBadge
+              status={ticket.status}
+              label={TICKET_STATUS_LABEL[ticket.status]}
+            />
+            <StatusBadge
+              status={ticket.priority}
+              label={TICKET_PRIORITY_LABEL[ticket.priority]}
+            />
             <span className="text-[0.75rem] text-ink-muted">
               {TICKET_CATEGORY_LABEL[ticket.category]}
-              {' · '}
+              {" · "}
               {formatOrderDate(ticket.createdAt)}
             </span>
           </div>
@@ -556,7 +604,9 @@ export function TicketThread({ ticket, mode }: Props) {
             <div className="flex items-center justify-between gap-3 border-b border-line/80 px-3 py-2.5 sm:px-4">
               <TextEyebrow>{LABELS.ticketConversation}</TextEyebrow>
               {messages.length > 0 && !messagesQuery.hasNextPage ? (
-                <span className="text-[0.75rem] tabular-nums text-ink-muted">{messages.length}</span>
+                <span className="text-[0.75rem] tabular-nums text-ink-muted">
+                  {messages.length}
+                </span>
               ) : null}
             </div>
 
@@ -569,14 +619,14 @@ export function TicketThread({ ticket, mode }: Props) {
                     size="sm"
                     loading={messagesQuery.isFetchingNextPage}
                     onClick={async () => {
-                      const el = messagesParentRef.current
-                      const prevHeight = el ? virtualizer.getTotalSize() : 0
-                      await messagesQuery.fetchNextPage()
+                      const el = messagesParentRef.current;
+                      const prevHeight = el ? virtualizer.getTotalSize() : 0;
+                      await messagesQuery.fetchNextPage();
                       if (el) {
                         requestAnimationFrame(() => {
-                          const newHeight = virtualizer.getTotalSize()
-                          el.scrollTop += newHeight - prevHeight
-                        })
+                          const newHeight = virtualizer.getTotalSize();
+                          el.scrollTop += newHeight - prevHeight;
+                        });
                       }
                     }}
                   >
@@ -604,7 +654,7 @@ export function TicketThread({ ticket, mode }: Props) {
                     style={{ height: `${virtualizer.getTotalSize()}px` }}
                   >
                     {virtualizer.getVirtualItems().map((item) => {
-                      const message = messages[item.index]!
+                      const message = messages[item.index]!;
                       return (
                         <li
                           key={message.id}
@@ -617,10 +667,13 @@ export function TicketThread({ ticket, mode }: Props) {
                         >
                           <MessageBubble
                             message={message}
-                            isOwn={Boolean(currentUserId && message.senderId === currentUserId)}
+                            isOwn={Boolean(
+                              currentUserId &&
+                              message.senderId === currentUserId,
+                            )}
                           />
                         </li>
-                      )
+                      );
                     })}
                   </ul>
                 </div>
@@ -630,7 +683,9 @@ export function TicketThread({ ticket, mode }: Props) {
                     <li key={message.id}>
                       <MessageBubble
                         message={message}
-                        isOwn={Boolean(currentUserId && message.senderId === currentUserId)}
+                        isOwn={Boolean(
+                          currentUserId && message.senderId === currentUserId,
+                        )}
                       />
                     </li>
                   ))}
@@ -643,7 +698,7 @@ export function TicketThread({ ticket, mode }: Props) {
                 <p className="text-[0.8125rem] text-ink-muted">
                   {replyClosed
                     ? LABELS.ticketClosedNotice
-                    : mode === 'customer'
+                    : mode === "customer"
                       ? LABELS.ticketMustReopenToReplyCustomer
                       : LABELS.ticketMustReopenToReplyStaff}
                 </p>
@@ -652,7 +707,9 @@ export function TicketThread({ ticket, mode }: Props) {
               <div className="space-y-2 border-t border-line bg-paper/30 px-3 py-3 sm:px-4">
                 <Textarea
                   value={body}
-                  onChange={(e) => setBody(e.target.value.slice(0, TICKET_REPLY_MAX))}
+                  onChange={(e) =>
+                    setBody(e.target.value.slice(0, TICKET_REPLY_MAX))
+                  }
                   placeholder={LABELS.ticketReplyPlaceholder}
                   rows={3}
                   className="min-h-[4.5rem] resize-y"
@@ -696,13 +753,20 @@ export function TicketThread({ ticket, mode }: Props) {
           {canRate ? (
             <section className="border border-line bg-surface p-3 shadow-elevation-1 sm:p-4">
               <TextEyebrow>{LABELS.ticketRate}</TextEyebrow>
-              <p className="mt-1 text-[0.75rem] text-ink-muted">{LABELS.ticketRateHint}</p>
+              <p className="mt-1 text-[0.75rem] text-ink-muted">
+                {LABELS.ticketRateHint}
+              </p>
               <div className="mt-3 flex flex-wrap items-center gap-3">
-                <div className="flex gap-0.5" role="radiogroup" aria-label={LABELS.ticketRate}>
+                <div
+                  className="flex gap-0.5"
+                  role="radiogroup"
+                  aria-label={LABELS.ticketRate}
+                >
                   {[1, 2, 3, 4, 5].map((n) => (
                     <button
                       key={n}
                       type="button"
+                      role="radio"
                       aria-checked={Number(rating) >= n}
                       className="rounded-sm p-0.5 transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
                       onClick={() => setRating(String(n))}
@@ -710,10 +774,10 @@ export function TicketThread({ ticket, mode }: Props) {
                       <Star
                         size={22}
                         className={cn(
-                          'transition-colors',
+                          "transition-colors",
                           Number(rating) >= n
-                            ? 'fill-brand text-brand'
-                            : 'fill-transparent text-ink-muted/50',
+                            ? "fill-brand text-brand"
+                            : "fill-transparent text-ink-muted/50",
                         )}
                       />
                     </button>
@@ -724,11 +788,13 @@ export function TicketThread({ ticket, mode }: Props) {
                   size="sm"
                   loading={rate.isPending}
                   onClick={async () => {
-                    setRatingError(null)
+                    setRatingError(null);
                     try {
-                      await rate.mutateAsync(Number(rating))
+                      await rate.mutateAsync(Number(rating));
                     } catch (err) {
-                      setRatingError(getApiErrorMessage(err, LABELS.ticketCouldNotRate))
+                      setRatingError(
+                        getApiErrorMessage(err, LABELS.ticketCouldNotRate),
+                      );
                     }
                   }}
                 >
@@ -736,14 +802,19 @@ export function TicketThread({ ticket, mode }: Props) {
                 </Button>
               </div>
               {ratingError ? (
-                <FormError error={new Error(ratingError)} fallback={LABELS.ticketCouldNotRate} />
+                <FormError
+                  error={new Error(ratingError)}
+                  fallback={LABELS.ticketCouldNotRate}
+                />
               ) : null}
             </section>
           ) : null}
 
           {ticket.customerSatisfactionRating != null ? (
             <div className="flex items-center gap-2 border border-brand/25 bg-brand-subtle/50 px-3 py-2">
-              <span className="text-[0.8125rem] text-ink">{LABELS.ticketRatedThanks}</span>
+              <span className="text-[0.8125rem] text-ink">
+                {LABELS.ticketRatedThanks}
+              </span>
               <span className="flex gap-0.5">
                 {[1, 2, 3, 4, 5].map((n) => (
                   <Star
@@ -751,8 +822,8 @@ export function TicketThread({ ticket, mode }: Props) {
                     size={14}
                     className={cn(
                       n <= ticket.customerSatisfactionRating!
-                        ? 'fill-brand text-brand'
-                        : 'fill-transparent text-ink-muted/40',
+                        ? "fill-brand text-brand"
+                        : "fill-transparent text-ink-muted/40",
                     )}
                   />
                 ))}
@@ -776,12 +847,23 @@ export function TicketThread({ ticket, mode }: Props) {
               reopenPending={reopen.isPending}
               closePending={close.isPending}
               onResolve={() =>
-                void runAction(() => resolve.mutateAsync(), LABELS.ticketCouldNotResolve)
+                void runAction(
+                  () => resolve.mutateAsync(),
+                  LABELS.ticketCouldNotResolve,
+                )
               }
               onReopen={() =>
-                void runAction(() => reopen.mutateAsync(), LABELS.ticketCouldNotReopen)
+                void runAction(
+                  () => reopen.mutateAsync(),
+                  LABELS.ticketCouldNotReopen,
+                )
               }
-              onClose={() => void runAction(() => close.mutateAsync(), LABELS.ticketCouldNotClose)}
+              onClose={() =>
+                void runAction(
+                  () => close.mutateAsync(),
+                  LABELS.ticketCouldNotClose,
+                )
+              }
               assigneeId={assigneeId}
               onAssigneeChange={setAssigneeId}
               reassignPending={reassign.isPending}
@@ -802,7 +884,10 @@ export function TicketThread({ ticket, mode }: Props) {
               }
               escalatePending={escalate.isPending}
               onEscalate={() =>
-                void runAction(() => escalate.mutateAsync(), LABELS.ticketCouldNotEscalate)
+                void runAction(
+                  () => escalate.mutateAsync(),
+                  LABELS.ticketCouldNotEscalate,
+                )
               }
               actionError={actionError}
             />
@@ -810,5 +895,5 @@ export function TicketThread({ ticket, mode }: Props) {
         </aside>
       </div>
     </div>
-  )
+  );
 }
