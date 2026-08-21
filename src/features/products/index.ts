@@ -25,7 +25,7 @@ export {
   type ProductWriteBody,
 } from "./schemas/products.schema";
 export { SORT_OPTIONS } from "./hooks/useProductListing";
-export type { ProductFilters } from "./api/products.api";
+export type { ProductFilters, ProductListResponse } from "./api/products.api";
 export { FilterSidebar } from "./components/FilterSidebar";
 export { SortBar } from "./components/SortBar";
 export { RecentlyViewedSection } from "./components/RecentlyViewedSection";
