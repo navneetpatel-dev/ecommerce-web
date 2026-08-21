@@ -8,9 +8,9 @@ import {
   defaultRouteForRole,
 } from "@/shared/stores/auth.store";
 import { authApi } from "./auth.api";
-import { cartApi } from "@/features/cart/api/cart.api";
-import { cartKeys } from "@/features/cart/api/cart.queries";
-import { clearClientGuestSessionCookie } from "@/features/cart/utils/guest-session";
+import { cartApi } from "@/features/cart";
+import { cartKeys } from "@/features/cart";
+import { clearClientGuestSessionCookie } from "@/features/cart";
 import { navigate, navigateReplace } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";
 import { STORAGE_KEYS } from "@/shared/constants/storage";

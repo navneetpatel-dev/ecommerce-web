@@ -3,12 +3,9 @@ import { useAuthStore } from "@/shared/stores/auth.store";
 import type { Address, CurrentUser } from "@/shared/api/types";
 import { STORAGE_KEYS } from "@/shared/constants/storage";
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
-import { useUploadFile } from "@/features/uploads/api/uploads.queries";
+import { useUploadFile } from "@/features/uploads";
 import { accountApi } from "./account.api";
-import type {
-  UpdateProfileBody,
-  AddressInput,
-} from "@/features/users/api/users.api";
+import type { UpdateProfileBody, AddressInput } from "@/features/users";
 
 export const accountKeys = {
   profile: ["account", "profile"] as const,

@@ -11,3 +11,5 @@ export { groupItemsByVendor, calcCartTotal } from "./utils/cart.utils";
 export { CartDrawer } from "./components/CartDrawer";
 export { CartDrawerContainer } from "./containers/CartDrawerContainer";
 export { CartPage } from "./pages/CartPage";
+export { cartApi } from "./api/cart.api";
+export { clearClientGuestSessionCookie } from "./utils/guest-session";

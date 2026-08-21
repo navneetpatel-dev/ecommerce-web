@@ -1,50 +1,50 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { MapPin, Plus, Pencil, Trash2, Star } from 'lucide-react'
-import type { Address } from '@/shared/api/types'
-import { Button } from '@/shared/components/ui/button'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { AddressFormDialog } from '@/shared/components/AddressFormDialog'
-import { StatusDialog } from '@/shared/components/StatusDialog'
-import { cn } from '@/shared/utils/cn'
+import { useState } from "react";
+import { MapPin, Plus, Pencil, Trash2, Star } from "lucide-react";
+import type { Address } from "@/shared/api/types";
+import { Button } from "@/shared/components/ui/button";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { AddressFormDialog } from "@/shared/components/AddressFormDialog";
+import { StatusDialog } from "@/shared/components/StatusDialog";
+import { cn } from "@/shared/utils/cn";
 import {
   useAccountAddresses,
   useCreateAccountAddress,
   useUpdateAccountAddress,
   useDeleteAccountAddress,
   useSetDefaultAccountAddress,
-} from '../../api/account.queries'
-import type { AddressInput } from '@/features/users/api/users.api'
-import { LABELS } from '@/shared/constants/labels'
+} from "../../api/account.queries";
+import type { AddressInput } from "@/shared/api/types";
+import { LABELS } from "@/shared/constants/labels";
 
 export function AddressesSection() {
-  const { data: addresses, isLoading } = useAccountAddresses()
-  const createAddress = useCreateAccountAddress()
-  const updateAddress = useUpdateAccountAddress()
-  const deleteAddress = useDeleteAccountAddress()
-  const setDefault = useSetDefaultAccountAddress()
+  const { data: addresses, isLoading } = useAccountAddresses();
+  const createAddress = useCreateAccountAddress();
+  const updateAddress = useUpdateAccountAddress();
+  const deleteAddress = useDeleteAccountAddress();
+  const setDefault = useSetDefaultAccountAddress();
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editing, setEditing] = useState<Address | null>(null)
-  const [deleteTarget, setDeleteTarget] = useState<Address | null>(null)
-  const [listError, setListError] = useState<string | null>(null)
-  const [defaultingId, setDefaultingId] = useState<string | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<Address | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Address | null>(null);
+  const [listError, setListError] = useState<string | null>(null);
+  const [defaultingId, setDefaultingId] = useState<string | null>(null);
 
-  const list = addresses ?? []
-  const hasAddresses = list.length > 0
-  const saving = createAddress.isPending || updateAddress.isPending
+  const list = addresses ?? [];
+  const hasAddresses = list.length > 0;
+  const saving = createAddress.isPending || updateAddress.isPending;
 
   const openCreate = () => {
-    setEditing(null)
-    setDialogOpen(true)
-  }
+    setEditing(null);
+    setDialogOpen(true);
+  };
 
   const openEdit = (addr: Address) => {
-    setEditing(addr)
-    setDialogOpen(true)
-  }
+    setEditing(addr);
+    setDialogOpen(true);
+  };
 
   if (isLoading) {
     return (
@@ -52,7 +52,7 @@ export function AddressesSection() {
         <Skeleton className="h-28 w-full" />
         <Skeleton className="h-28 w-full" />
       </div>
-    )
+    );
   }
 
   return (
@@ -60,10 +60,15 @@ export function AddressesSection() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-[0.875rem] text-ink-muted">
           {hasAddresses
-            ? `${list.length} saved ${list.length === 1 ? 'address' : 'addresses'}`
-            : 'No addresses yet'}
+            ? `${list.length} saved ${list.length === 1 ? "address" : "addresses"}`
+            : "No addresses yet"}
         </p>
-        <Button type="button" variant="outline" onClick={openCreate} className="gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={openCreate}
+          className="gap-2"
+        >
           <Plus size={16} />
           Add address
         </Button>
@@ -90,12 +95,14 @@ export function AddressesSection() {
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-ink">
                   {addr.line1}
-                  {addr.line2 ? `, ${addr.line2}` : ''}
+                  {addr.line2 ? `, ${addr.line2}` : ""}
                 </p>
                 <p className="mt-1 text-[0.875rem] text-ink-muted">
                   {addr.city}, {addr.state} {addr.pincode}
                 </p>
-                <p className="mt-0.5 text-[0.8125rem] text-ink-muted">{addr.country}</p>
+                <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
+                  {addr.country}
+                </p>
                 {addr.isDefault ? (
                   <span className="mt-3 inline-block text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-brand">
                     {LABELS.addressDefault}
@@ -117,33 +124,38 @@ export function AddressesSection() {
                   type="button"
                   variant="ghost"
                   size="sm"
-                  disabled={addr.isDefault || (defaultingId === addr.id && setDefault.isPending)}
+                  disabled={
+                    addr.isDefault ||
+                    (defaultingId === addr.id && setDefault.isPending)
+                  }
                   className={cn(
-                    'w-full justify-center gap-1.5 transition-colors',
+                    "w-full justify-center gap-1.5 transition-colors",
                     addr.isDefault
-                      ? 'text-brand hover:text-brand disabled:opacity-100'
-                      : 'text-ink-muted hover:text-brand'
+                      ? "text-brand hover:text-brand disabled:opacity-100"
+                      : "text-ink-muted hover:text-brand",
                   )}
                   loading={defaultingId === addr.id && setDefault.isPending}
                   onClick={async () => {
-                    if (addr.isDefault) return
-                    setListError(null)
-                    setDefaultingId(addr.id)
+                    if (addr.isDefault) return;
+                    setListError(null);
+                    setDefaultingId(addr.id);
                     try {
-                      await setDefault.mutateAsync(addr.id)
+                      await setDefault.mutateAsync(addr.id);
                     } catch (err) {
                       setListError(
-                        err && typeof err === 'object' && 'message' in err
+                        err && typeof err === "object" && "message" in err
                           ? String((err as { message: string }).message)
-                          : 'Could not set default address.'
-                      )
+                          : "Could not set default address.",
+                      );
                     } finally {
-                      setDefaultingId(null)
+                      setDefaultingId(null);
                     }
                   }}
                 >
                   <Star size={14} />
-                  {addr.isDefault ? LABELS.addressDefault : LABELS.setDefaultShort}
+                  {addr.isDefault
+                    ? LABELS.addressDefault
+                    : LABELS.setDefaultShort}
                 </Button>
                 <Button
                   type="button"
@@ -166,7 +178,9 @@ export function AddressesSection() {
               className="h-full min-h-[10rem] max-h-none w-full flex-col gap-2 border-dashed border-line bg-paper/40 p-4 text-ink-muted hover:border-ink/30 hover:bg-paper hover:text-ink"
             >
               <Plus size={20} strokeWidth={1.5} />
-              <span className="text-[0.875rem] font-medium">{LABELS.addAddress}</span>
+              <span className="text-[0.875rem] font-medium">
+                {LABELS.addAddress}
+              </span>
             </Button>
           </li>
         </ul>
@@ -186,47 +200,47 @@ export function AddressesSection() {
         isPending={saving}
         onSubmit={async (body: AddressInput) => {
           if (editing) {
-            await updateAddress.mutateAsync({ addressId: editing.id, body })
-            return
+            await updateAddress.mutateAsync({ addressId: editing.id, body });
+            return;
           }
-          await createAddress.mutateAsync(body)
+          await createAddress.mutateAsync(body);
         }}
       />
 
       <StatusDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null)
+          if (!open) setDeleteTarget(null);
         }}
         variant="danger"
         icon={Trash2}
         title="Delete address?"
         description="This removes the address from your account. You can add it again later."
         secondaryAction={{
-          label: 'Cancel',
+          label: "Cancel",
           onClick: () => setDeleteTarget(null),
         }}
         primaryAction={{
-          label: 'Delete',
-          variant: 'destructive',
+          label: "Delete",
+          variant: "destructive",
           loading: deleteAddress.isPending,
           onClick: async () => {
-            if (!deleteTarget) return
-            setListError(null)
+            if (!deleteTarget) return;
+            setListError(null);
             try {
-              await deleteAddress.mutateAsync(deleteTarget.id)
-              setDeleteTarget(null)
+              await deleteAddress.mutateAsync(deleteTarget.id);
+              setDeleteTarget(null);
             } catch (err) {
-              setDeleteTarget(null)
+              setDeleteTarget(null);
               setListError(
-                err && typeof err === 'object' && 'message' in err
+                err && typeof err === "object" && "message" in err
                   ? String((err as { message: string }).message)
-                  : 'Could not delete address.'
-              )
+                  : "Could not delete address.",
+              );
             }
           },
         }}
       />
     </div>
-  )
+  );
 }

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, Tag } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { couponsApi } from "@/features/coupons/api/coupons.api";
+import { couponsApi } from "@/features/coupons";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";

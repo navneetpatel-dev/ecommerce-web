@@ -5,3 +5,4 @@ export { ReviewForm } from "./components/ReviewForm";
 export { ReviewFormContainer } from "./containers/ReviewFormContainer";
 export { reviewKeys } from "./api/reviews.queries";
 export { MyReviewsPage } from "./pages/MyReviewsPage";
+export { ProductReviewsContainer } from "./containers/ProductReviewsContainer";

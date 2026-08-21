@@ -1,13 +1,13 @@
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { ProductGrid } from '@/features/products/components/ProductGrid'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { PATHS } from '@/shared/constants/paths'
-import type { ProductListItem } from '@/shared/api/types'
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { ProductGrid } from "@/features/products";
+import { TextEyebrow } from "@/shared/components/TextEyebrow";
+import { PATHS } from "@/shared/constants/paths";
+import type { ProductListItem } from "@/shared/api/types";
 
 interface TrendingSectionProps {
-  products?: ProductListItem[]
-  isLoading?: boolean
+  products?: ProductListItem[];
+  isLoading?: boolean;
 }
 
 export function TrendingSection({ products, isLoading }: TrendingSectionProps) {
@@ -16,7 +16,9 @@ export function TrendingSection({ products, isLoading }: TrendingSectionProps) {
       <div className="flex items-center justify-between mb-6">
         <div>
           <TextEyebrow className="mb-2">Featured this week</TextEyebrow>
-          <h2 className="font-display text-[1.75rem] font-semibold text-ink">Trending now</h2>
+          <h2 className="font-display text-[1.75rem] font-semibold text-ink">
+            Trending now
+          </h2>
         </div>
         <Link
           href={PATHS.productsTrending}
@@ -27,5 +29,5 @@ export function TrendingSection({ products, isLoading }: TrendingSectionProps) {
       </div>
       <ProductGrid products={products} loading={isLoading} skeletonCount={8} />
     </section>
-  )
+  );
 }

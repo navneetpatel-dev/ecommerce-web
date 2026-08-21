@@ -24,3 +24,15 @@ export {
   type ProductListingFormValues,
   type ProductWriteBody,
 } from "./schemas/products.schema";
+export { SORT_OPTIONS } from "./hooks/useProductListing";
+export type { ProductFilters } from "./api/products.api";
+export { FilterSidebar } from "./components/FilterSidebar";
+export { SortBar } from "./components/SortBar";
+export { RecentlyViewedSection } from "./components/RecentlyViewedSection";
+export { useRecentlyViewed } from "./hooks/useRecentlyViewed";
+export {
+  productDetailToListItem,
+  productNeedsVariantHydration,
+} from "./utils/productListItem";
+export { ProductCompareBar } from "./components/ProductCompareBar";
+export { ProductCompareSection } from "./components/ProductCompareSection";

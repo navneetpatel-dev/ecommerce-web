@@ -16,3 +16,10 @@ export { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 export { OtpPage } from "./pages/OtpPage";
 export { ResetPasswordPage } from "./pages/ResetPasswordPage";
 export { AuthPageSkeleton } from "./components/AuthPageSkeleton";
+export { ChangePasswordSection } from "./components/ChangePasswordSection";
+export { useProfilePage } from "./hooks/useProfilePage";
+export {
+  useSessions,
+  useRevokeSession,
+  useRevokeOtherSessions,
+} from "./api/auth.queries";

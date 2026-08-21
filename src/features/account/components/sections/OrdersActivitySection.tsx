@@ -10,7 +10,7 @@ import {
   Star,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { reviewsApi } from "@/features/reviews/api/reviews.api";
+import { reviewsApi } from "@/features/reviews";
 import { reviewKeys } from "@/features/reviews";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { TextEyebrow } from "@/shared/components/TextEyebrow";
@@ -23,7 +23,7 @@ import {
   formatOrderDate,
   orderItemSummary,
   shortOrderId,
-} from "@/features/orders/utils/format";
+} from "@/shared/utils/orderFormat";
 
 export function OrdersActivitySection() {
   const { recentOrders, ordersCount, wishlistCount, isLoadingStats } =

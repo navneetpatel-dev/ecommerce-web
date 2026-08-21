@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { categoriesApi } from "../api/categories.api";
 import { categoryKeys } from "../api/categories.queries";
-import { useProductList } from "@/features/products/api/products.queries";
-import { SORT_OPTIONS } from "@/features/products/hooks/useProductListing";
+import { useProductList } from "@/features/products";
+import { SORT_OPTIONS } from "@/features/products";
 import { navigate } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
-import type { ProductFilters } from "@/features/products/api/products.api";
+import type { ProductFilters } from "@/features/products";
 import type { ProductListItem } from "@/shared/api/types";
 
 const RESERVED_PARAMS = new Set([

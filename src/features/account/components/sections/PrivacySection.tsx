@@ -10,7 +10,7 @@ import { FormError } from "@/shared/components/FormError";
 import { TextEyebrow } from "@/shared/components/TextEyebrow";
 import { StatusDialog } from "@/shared/components/StatusDialog";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { useLogout } from "@/features/auth/api/auth.queries";
+import { useLogout } from "@/features/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "@/shared/hooks/use-theme";
 import { PATHS } from "@/shared/constants/paths";

@@ -1,43 +1,43 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { LogOut, Monitor } from 'lucide-react'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { Button } from '@/shared/components/ui/button'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { FormError } from '@/shared/components/FormError'
-import { StatusDialog } from '@/shared/components/StatusDialog'
-import { ChangePasswordSection } from '@/features/auth/components/ChangePasswordSection'
-import { useProfilePage } from '@/features/auth/hooks/useProfilePage'
+import { useState } from "react";
+import { LogOut, Monitor } from "lucide-react";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { Button } from "@/shared/components/ui/button";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { FormError } from "@/shared/components/FormError";
+import { StatusDialog } from "@/shared/components/StatusDialog";
+import { ChangePasswordSection } from "@/features/auth";
+import { useProfilePage } from "@/features/auth";
 import {
   useSessions,
   useRevokeSession,
   useRevokeOtherSessions,
-} from '@/features/auth/api/auth.queries'
-import { formatOrderDate } from '@/features/orders/utils/format'
+} from "@/features/auth";
+import { formatOrderDate } from "@/shared/utils/orderFormat";
 
 function deviceLabel(userAgent: string | null) {
-  if (!userAgent) return 'Unknown device'
-  const ua = userAgent.toLowerCase()
-  if (ua.includes('iphone') || ua.includes('ipad')) return 'Apple device'
-  if (ua.includes('android')) return 'Android device'
-  if (ua.includes('mac')) return 'Mac'
-  if (ua.includes('windows')) return 'Windows'
-  if (ua.includes('linux')) return 'Linux'
-  return 'Browser session'
+  if (!userAgent) return "Unknown device";
+  const ua = userAgent.toLowerCase();
+  if (ua.includes("iphone") || ua.includes("ipad")) return "Apple device";
+  if (ua.includes("android")) return "Android device";
+  if (ua.includes("mac")) return "Mac";
+  if (ua.includes("windows")) return "Windows";
+  if (ua.includes("linux")) return "Linux";
+  return "Browser session";
 }
 
 export function SecuritySection() {
-  const profile = useProfilePage()
-  const sessions = useSessions()
-  const revoke = useRevokeSession()
-  const revokeOthers = useRevokeOtherSessions()
-  const [revokeOthersOpen, setRevokeOthersOpen] = useState(false)
-  const [revokeFamily, setRevokeFamily] = useState<string | null>(null)
+  const profile = useProfilePage();
+  const sessions = useSessions();
+  const revoke = useRevokeSession();
+  const revokeOthers = useRevokeOtherSessions();
+  const [revokeOthersOpen, setRevokeOthersOpen] = useState(false);
+  const [revokeFamily, setRevokeFamily] = useState<string | null>(null);
 
-  const list = sessions.data ?? []
-  const hasOthers = list.some((s) => !s.isCurrent)
-  const revokeTarget = list.find((s) => s.family === revokeFamily) ?? null
+  const list = sessions.data ?? [];
+  const hasOthers = list.some((s) => !s.isCurrent);
+  const revokeTarget = list.find((s) => s.family === revokeFamily) ?? null;
 
   return (
     <div className="space-y-6">
@@ -53,7 +53,9 @@ export function SecuritySection() {
       <section className="border border-line bg-surface shadow-elevation-1">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
           <div>
-            <h2 className="font-display text-[1.125rem] text-ink">Active sessions</h2>
+            <h2 className="font-display text-[1.125rem] text-ink">
+              Active sessions
+            </h2>
             <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
               Devices signed in with your account.
             </p>
@@ -77,7 +79,7 @@ export function SecuritySection() {
           </div>
         ) : sessions.isError ? (
           <p className="px-5 py-8 text-center text-[0.9375rem] text-ink-muted">
-            {(sessions.error as Error)?.message || 'Could not load sessions.'}
+            {(sessions.error as Error)?.message || "Could not load sessions."}
           </p>
         ) : list.length === 0 ? (
           <EmptyState
@@ -104,7 +106,7 @@ export function SecuritySection() {
                     ) : null}
                   </p>
                   <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
-                    {session.ipAddress || 'IP unknown'} · Last active{' '}
+                    {session.ipAddress || "IP unknown"} · Last active{" "}
                     {formatOrderDate(session.lastUsedAt)}
                   </p>
                 </div>
@@ -140,16 +142,16 @@ export function SecuritySection() {
         title="Sign out other devices?"
         description="All sessions except this one will be ended. Those devices will need to sign in again."
         secondaryAction={{
-          label: 'Cancel',
+          label: "Cancel",
           onClick: () => setRevokeOthersOpen(false),
         }}
         primaryAction={{
-          label: 'Sign out others',
+          label: "Sign out others",
           loading: revokeOthers.isPending,
           onClick: () => {
             revokeOthers.mutate(undefined, {
               onSuccess: () => setRevokeOthersOpen(false),
-            })
+            });
           },
         }}
       />
@@ -157,7 +159,7 @@ export function SecuritySection() {
       <StatusDialog
         open={Boolean(revokeFamily)}
         onOpenChange={(open) => {
-          if (!open) setRevokeFamily(null)
+          if (!open) setRevokeFamily(null);
         }}
         variant="warning"
         icon={LogOut}
@@ -165,24 +167,24 @@ export function SecuritySection() {
         description={
           revokeTarget
             ? `End the session on ${deviceLabel(revokeTarget.userAgent)}. That device will need to sign in again.`
-            : 'End this session. That device will need to sign in again.'
+            : "End this session. That device will need to sign in again."
         }
         secondaryAction={{
-          label: 'Cancel',
+          label: "Cancel",
           onClick: () => setRevokeFamily(null),
         }}
         primaryAction={{
-          label: 'Revoke',
-          variant: 'destructive',
+          label: "Revoke",
+          variant: "destructive",
           loading: revoke.isPending,
           onClick: () => {
-            if (!revokeFamily) return
+            if (!revokeFamily) return;
             revoke.mutate(revokeFamily, {
               onSuccess: () => setRevokeFamily(null),
-            })
+            });
           },
         }}
       />
     </div>
-  )
+  );
 }

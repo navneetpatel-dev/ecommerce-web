@@ -7,7 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { PINCODE_LENGTH, PINCODE_PATTERN } from "@/shared/constants/pincode";
-import { checkoutApi } from "@/features/checkout/api/checkout.api";
+import { checkoutApi } from "@/features/checkout";
 import { checkoutKeys } from "@/features/checkout";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";

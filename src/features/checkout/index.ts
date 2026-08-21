@@ -9,3 +9,4 @@ export {
 export { useCheckoutStore } from "@/shared/stores/checkout.store";
 export { checkoutKeys } from "./api/checkout.queries";
 export { CheckoutPage } from "./pages/CheckoutPage";
+export { checkoutApi } from "./api/checkout.api";

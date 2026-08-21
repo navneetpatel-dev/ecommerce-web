@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { authApi } from "../api/auth.api";
-import { cartKeys } from "@/features/cart/api/cart.queries";
+import { cartKeys } from "@/features/cart";
 import { registerApiSessionAdapter } from "@/shared/api/sessionAdapter";
 import { STORAGE_KEYS } from "@/shared/constants/storage";
 

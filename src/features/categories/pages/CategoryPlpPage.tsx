@@ -1,30 +1,36 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { ArrowUpDown, ChevronRight, Columns2, Package, SlidersHorizontal } from 'lucide-react'
-import { FilterSidebar } from '@/features/products/components/FilterSidebar'
-import { SortBar } from '@/features/products/components/SortBar'
-import { ProductGrid } from '@/features/products/components/ProductGrid'
-import { ProductCompareBar } from '@/features/products/components/ProductCompareBar'
-import { ProductCompareSection } from '@/features/products/components/ProductCompareSection'
-import { PaginationContainer } from '@/shared/containers/PaginationContainer'
-import { Button } from '@/shared/components/ui/button'
-import { BottomSheet } from '@/shared/components/BottomSheet'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { SelectableOptionButton } from '@/shared/components/SelectableOptionButton'
-import { Breadcrumbs } from '@/shared/components/Breadcrumbs'
-import { useCategoryPlp } from '../hooks/useCategoryPlp'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import { cn } from '@/shared/utils/cn'
+import Link from "next/link";
+import {
+  ArrowUpDown,
+  ChevronRight,
+  Columns2,
+  Package,
+  SlidersHorizontal,
+} from "lucide-react";
+import { FilterSidebar } from "@/features/products";
+import { SortBar } from "@/features/products";
+import { ProductGrid } from "@/features/products";
+import { ProductCompareBar } from "@/features/products";
+import { ProductCompareSection } from "@/features/products";
+import { PaginationContainer } from "@/shared/containers/PaginationContainer";
+import { Button } from "@/shared/components/ui/button";
+import { BottomSheet } from "@/shared/components/BottomSheet";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { SelectableOptionButton } from "@/shared/components/SelectableOptionButton";
+import { Breadcrumbs } from "@/shared/components/Breadcrumbs";
+import { useCategoryPlp } from "../hooks/useCategoryPlp";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { cn } from "@/shared/utils/cn";
 
 interface CategoryPlpPageProps {
-  slugPath: string[]
+  slugPath: string[];
 }
 
 export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
-  const plp = useCategoryPlp(slugPath)
+  const plp = useCategoryPlp(slugPath);
 
   if (plp.categoryLoading) {
     return (
@@ -33,7 +39,7 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
         <div className="mt-3 h-7 w-56 animate-pulse rounded bg-paper" />
         <div className="mt-6 h-64 animate-pulse rounded-md bg-paper" />
       </div>
-    )
+    );
   }
 
   if (plp.categoryError || !plp.category) {
@@ -48,11 +54,11 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
           actionTo={PATHS.categories}
         />
       </div>
-    )
+    );
   }
 
-  const childLinks = plp.category.children ?? []
-  const emptyIcon = plp.hasActiveFacets ? SlidersHorizontal : Package
+  const childLinks = plp.category.children ?? [];
+  const emptyIcon = plp.hasActiveFacets ? SlidersHorizontal : Package;
 
   return (
     <div className="storefront-container pb-8 pt-3 sm:pt-4 md:pt-5">
@@ -63,14 +69,14 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
           <div className="min-w-0 shrink-0 lg:max-w-[min(100%,22rem)] xl:max-w-[min(100%,28rem)]">
             <h1
               className="font-display font-semibold tracking-tight text-ink"
-              style={{ fontSize: 'var(--text-h1)', lineHeight: 1.15 }}
+              style={{ fontSize: "var(--text-h1)", lineHeight: 1.15 }}
             >
               {plp.category.name}
             </h1>
             {plp.category.seoDescription ? (
               <p
                 className="mt-1 line-clamp-2 max-w-2xl text-ink-muted sm:line-clamp-none"
-                style={{ fontSize: 'var(--text-body-sm)', lineHeight: 1.4 }}
+                style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.4 }}
               >
                 {plp.category.seoDescription}
               </p>
@@ -90,13 +96,17 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
                   <li key={child.id} className="shrink-0">
                     <Link
                       href={PATHS.category(...slugPath, child.slug)}
-                      title={formatLabel(LABELS.shopCategory, { name: child.name })}
-                      aria-label={formatLabel(LABELS.shopCategory, { name: child.name })}
+                      title={formatLabel(LABELS.shopCategory, {
+                        name: child.name,
+                      })}
+                      aria-label={formatLabel(LABELS.shopCategory, {
+                        name: child.name,
+                      })}
                       className={cn(
-                        'group inline-flex h-8 items-center gap-0.5 rounded-md border border-line bg-surface px-2.5',
-                        'text-[0.8125rem] font-medium text-ink shadow-[0_1px_0_rgba(15,23,42,0.04)]',
-                        'transition-colors hover:border-brand hover:bg-brand-subtle hover:text-brand',
-                        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+                        "group inline-flex h-8 items-center gap-0.5 rounded-md border border-line bg-surface px-2.5",
+                        "text-[0.8125rem] font-medium text-ink shadow-[0_1px_0_rgba(15,23,42,0.04)]",
+                        "transition-colors hover:border-brand hover:bg-brand-subtle hover:text-brand",
+                        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
                       )}
                     >
                       <span>{child.name}</span>
@@ -116,16 +126,26 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
 
       <div className="sticky top-14 z-20 -mx-4 mb-3 border-y border-line bg-paper/95 px-4 py-2 backdrop-blur-sm xl:hidden lg:top-[72px]">
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <Button variant="secondary" size="sm" className="min-w-0 flex-1 gap-1 px-2 sm:gap-1.5 sm:px-4" onClick={plp.openFilters}>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="min-w-0 flex-1 gap-1 px-2 sm:gap-1.5 sm:px-4"
+            onClick={plp.openFilters}
+          >
             <SlidersHorizontal size={14} strokeWidth={1.75} aria-hidden />
             <span className="truncate">{LABELS.filters}</span>
           </Button>
-          <Button variant="secondary" size="sm" className="min-w-0 flex-1 gap-1 px-2 sm:gap-1.5 sm:px-4" onClick={plp.openSort}>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="min-w-0 flex-1 gap-1 px-2 sm:gap-1.5 sm:px-4"
+            onClick={plp.openSort}
+          >
             <ArrowUpDown size={14} strokeWidth={1.75} aria-hidden />
             <span className="truncate">{LABELS.sort}</span>
           </Button>
           <Button
-            variant={plp.compareMode ? 'default' : 'secondary'}
+            variant={plp.compareMode ? "default" : "secondary"}
             size="sm"
             className="min-w-0 flex-1 gap-1 px-2 sm:gap-1.5 sm:px-4"
             onClick={plp.toggleCompareMode}
@@ -155,7 +175,7 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
             sort={plp.filters.sort}
             totalProducts={plp.data?.total}
             isFetching={plp.isFetching}
-            onSortChange={(v) => plp.updateFilter('sort', v)}
+            onSortChange={(v) => plp.updateFilter("sort", v)}
             compareMode={plp.compareMode}
             onToggleCompare={plp.toggleCompareMode}
             hideSortOnMobile
@@ -184,7 +204,9 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
                   : LABELS.categoryPlpEmptyBody
               }
               actionLabel={
-                plp.hasActiveFacets ? LABELS.clearFacetFilters : LABELS.allCategories
+                plp.hasActiveFacets
+                  ? LABELS.clearFacetFilters
+                  : LABELS.allCategories
               }
               actionTo={plp.hasActiveFacets ? undefined : PATHS.categories}
               onAction={plp.hasActiveFacets ? plp.clearFilters : undefined}
@@ -193,22 +215,22 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
                   ? {
                       label: LABELS.allProducts,
                       href: PATHS.products,
-                      variant: 'secondary',
+                      variant: "secondary",
                     }
                   : slugPath.length > 1
                     ? {
                         label: formatLabel(LABELS.browseParentCategory, {
                           name:
-                            plp.breadcrumbItems[plp.breadcrumbItems.length - 2]?.label ??
-                            LABELS.categories,
+                            plp.breadcrumbItems[plp.breadcrumbItems.length - 2]
+                              ?.label ?? LABELS.categories,
                         }),
                         href: PATHS.category(...slugPath.slice(0, -1)),
-                        variant: 'secondary',
+                        variant: "secondary",
                       }
                     : {
                         label: LABELS.allProducts,
                         href: PATHS.products,
-                        variant: 'secondary',
+                        variant: "secondary",
                       }
               }
               className="py-14 md:py-16"
@@ -225,7 +247,7 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
                 <PaginationContainer
                   currentPage={plp.filters.page ?? 1}
                   totalPages={plp.data.totalPages}
-                  onPageChange={(p) => plp.updateFilter('page', p)}
+                  onPageChange={(p) => plp.updateFilter("page", p)}
                 />
               ) : null}
             </>
@@ -233,7 +255,11 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
         </div>
       </div>
 
-      <BottomSheet open={plp.filterOpen} onClose={plp.closeFilters} title={LABELS.filters}>
+      <BottomSheet
+        open={plp.filterOpen}
+        onClose={plp.closeFilters}
+        title={LABELS.filters}
+      >
         <FilterSidebar
           idPrefix="cat-mobile"
           className="w-full"
@@ -245,8 +271,8 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
           onToggleFacet={plp.toggleFacetValue}
           onUpdateFilter={plp.updateFilter}
           onClear={() => {
-            plp.clearFilters()
-            plp.closeFilters()
+            plp.clearFilters();
+            plp.closeFilters();
           }}
         />
         <Button className="mt-4 w-full" onClick={plp.closeFilters}>
@@ -254,7 +280,11 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
         </Button>
       </BottomSheet>
 
-      <BottomSheet open={plp.sortOpen} onClose={plp.closeSort} title={LABELS.sort}>
+      <BottomSheet
+        open={plp.sortOpen}
+        onClose={plp.closeSort}
+        title={LABELS.sort}
+      >
         <div className="space-y-2">
           {plp.sortOptions.map((option) => (
             <SelectableOptionButton
@@ -275,7 +305,10 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
         onCompareNow={plp.scrollToCompare}
       />
 
-      <ProductCompareSection ref={plp.compareSectionRef} products={plp.comparedProducts} />
+      <ProductCompareSection
+        ref={plp.compareSectionRef}
+        products={plp.comparedProducts}
+      />
     </div>
-  )
+  );
 }
