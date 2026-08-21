@@ -1,38 +1,36 @@
-'use client'
+"use client";
 
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from "react";
 import {
   InfiniteSingleSelect,
   type InfiniteSingleSelectPageQuery,
   type InfiniteSingleSelectPageResult,
-} from '@/shared/components/InfiniteSingleSelect'
-import { adminUsersApi } from '@/features/admin-dashboard/api/users.api'
-import { LABELS } from '@/shared/constants/labels'
-import { PERMISSIONS } from '@/shared/constants/permissions'
-import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
-
-type AssigneePermission =
-  | typeof PERMISSIONS.TICKET_MANAGE
-  | typeof PERMISSIONS.BUG_REPORT_MANAGE
+} from "@/shared/components/InfiniteSingleSelect";
+import {
+  assigneesApi,
+  type AssigneePermission,
+} from "@/shared/api/assignees.api";
+import { LABELS } from "@/shared/constants/labels";
+import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 
 type Props = {
-  permission: AssigneePermission
-  value: string
-  onChange: (userId: string) => void
+  permission: AssigneePermission;
+  value: string;
+  onChange: (userId: string) => void;
   /** Keep a current assignee visible even if they are not in the eligible list. */
-  currentOption?: { id: string; name: string; email?: string | null } | null
+  currentOption?: { id: string; name: string; email?: string | null } | null;
   /** When set, scopes ticket assignees to staff for this vendor. */
-  vendorId?: string | null
-  allowNone?: boolean
-  noneLabel?: string
-  disabled?: boolean
-  className?: string
-  error?: boolean
-}
+  vendorId?: string | null;
+  allowNone?: boolean;
+  noneLabel?: string;
+  disabled?: boolean;
+  className?: string;
+  error?: boolean;
+};
 
 function formatAssignee(user: { name: string; email?: string | null }): string {
-  if (user.email) return `${user.name} (${user.email})`
-  return user.name
+  if (user.email) return `${user.name} (${user.email})`;
+  return user.name;
 }
 
 export function AssigneeSelect({
@@ -48,14 +46,16 @@ export function AssigneeSelect({
   error,
 }: Props) {
   const fetchPage = useCallback(
-    async (query: InfiniteSingleSelectPageQuery): Promise<InfiniteSingleSelectPageResult> => {
-      const result = await adminUsersApi.listAssignees({
+    async (
+      query: InfiniteSingleSelectPageQuery,
+    ): Promise<InfiniteSingleSelectPageResult> => {
+      const result = await assigneesApi.listAssignees({
         permission,
         page: query.page,
         limit: query.limit,
         search: query.search,
         vendorId: vendorId || undefined,
-      })
+      });
       return {
         items: result.items.map((user) => ({
           id: user.id,
@@ -64,25 +64,25 @@ export function AssigneeSelect({
         page: result.page,
         totalPages: result.totalPages,
         total: result.total,
-      }
+      };
     },
     [permission, vendorId],
-  )
+  );
 
   const pinnedOption = useMemo(() => {
-    if (!currentOption?.id) return null
+    if (!currentOption?.id) return null;
     return {
       id: currentOption.id,
       label: formatAssignee(currentOption),
-    }
-  }, [currentOption])
+    };
+  }, [currentOption]);
 
   return (
     <InfiniteSingleSelect
       value={value}
       onChange={onChange}
       fetchPage={fetchPage}
-      resetKey={`${permission}:${vendorId ?? ''}`}
+      resetKey={`${permission}:${vendorId ?? ""}`}
       pinnedOption={pinnedOption}
       allowNone={allowNone}
       noneLabel={noneLabel}
@@ -94,5 +94,5 @@ export function AssigneeSelect({
       pageSize={DEFAULT_PAGE_LIMIT}
       className={className}
     />
-  )
+  );
 }

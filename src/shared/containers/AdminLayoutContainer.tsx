@@ -1,40 +1,48 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { HeaderContainer } from '@/shared/containers/HeaderContainer'
-import { SidebarNav } from '@/shared/components/layout/SidebarNav'
-import { WorkspaceNavDrawer } from '@/shared/components/layout/WorkspaceNavDrawer'
-import { ShieldCheck } from 'lucide-react'
-import { useAdminLayout } from '@/shared/hooks/useAdminLayout'
-import { RequirePermission } from '@/shared/components/RequirePermission'
-import { adminPermissionsForPath } from '@/shared/constants/adminNav'
-import { PATHS } from '@/shared/constants/paths'
-import { LABELS } from '@/shared/constants/labels'
+import { useEffect, useState } from "react";
+import { SidebarNav } from "@/shared/components/layout/SidebarNav";
+import { WorkspaceNavDrawer } from "@/shared/components/layout/WorkspaceNavDrawer";
+import { ShieldCheck } from "lucide-react";
+import { useAdminLayout } from "@/shared/hooks/useAdminLayout";
+import { RequirePermission } from "@/shared/components/RequirePermission";
+import { adminPermissionsForPath } from "@/shared/constants/adminNav";
+import { PATHS } from "@/shared/constants/paths";
+import { LABELS } from "@/shared/constants/labels";
 
-export function AdminLayoutContainer({ children }: { children: React.ReactNode }) {
-  const { pathname, navItems } = useAdminLayout()
-  const [navOpen, setNavOpen] = useState(false)
+export function AdminLayoutContainer({
+  children,
+  renderHeader,
+}: {
+  children: React.ReactNode;
+  /** Renders the top header; receives the callback that opens the workspace nav drawer. */
+  renderHeader: (openWorkspaceNav: () => void) => React.ReactNode;
+}) {
+  const { pathname, navItems } = useAdminLayout();
+  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
-    setNavOpen(false)
-  }, [pathname])
+    setNavOpen(false);
+  }, [pathname]);
 
   const sidebarHeader = (
     <div className="mb-4 flex items-center gap-2 px-3 py-2">
       <ShieldCheck className="h-5 w-5 text-brand" />
-      <span className="text-[1.125rem] font-semibold text-brand">{LABELS.adminPanel}</span>
+      <span className="text-[1.125rem] font-semibold text-brand">
+        {LABELS.adminPanel}
+      </span>
     </div>
-  )
+  );
 
   return (
     <div className="min-h-screen bg-paper">
-      <HeaderContainer
-        showStorefrontChrome={false}
-        showWorkspaceMenu
-        onOpenWorkspaceNav={() => setNavOpen(true)}
-      />
+      {renderHeader(() => setNavOpen(true))}
       <div className="flex min-w-0">
-        <SidebarNav items={navItems} currentPath={pathname} header={sidebarHeader} />
+        <SidebarNav
+          items={navItems}
+          currentPath={pathname}
+          header={sidebarHeader}
+        />
         <WorkspaceNavDrawer
           open={navOpen}
           onClose={() => setNavOpen(false)}
@@ -53,5 +61,5 @@ export function AdminLayoutContainer({ children }: { children: React.ReactNode }
         </main>
       </div>
     </div>
-  )
+  );
 }

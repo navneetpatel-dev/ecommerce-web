@@ -1,36 +1,37 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { wishlistApi } from './wishlist.api'
-import { cartKeys } from '@/features/cart/api/cart.queries'
-import { useAuthStore } from '@/features/auth/store/auth.store'
-import type { WishlistItem } from '@/shared/api/types'
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { wishlistApi } from "./wishlist.api";
+import { cartKeys } from "@/features/cart/api/cart.queries";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import type { WishlistItem } from "@/shared/api/types";
 
-type WishlistData = { items: WishlistItem[] }
+type WishlistData = { items: WishlistItem[] };
 
 export const wishlistKeys = {
-  all: ['wishlist'] as const,
-}
+  all: ["wishlist"] as const,
+};
 
 export function useWishlist() {
-  const accessToken = useAuthStore((s) => s.accessToken)
+  const accessToken = useAuthStore((s) => s.accessToken);
 
   return useQuery({
     queryKey: wishlistKeys.all,
     queryFn: () => wishlistApi.get(),
     enabled: Boolean(accessToken),
     retry: false,
-  })
+  });
 }
 
 export function useAddToWishlist() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (productId: string) => wishlistApi.add(productId),
     onMutate: async (productId) => {
-      await queryClient.cancelQueries({ queryKey: wishlistKeys.all })
-      const previous = queryClient.getQueryData<WishlistData>(wishlistKeys.all)
+      await queryClient.cancelQueries({ queryKey: wishlistKeys.all });
+      const previous = queryClient.getQueryData<WishlistData>(wishlistKeys.all);
       queryClient.setQueryData<WishlistData>(wishlistKeys.all, (current) => {
-        const items = current?.items ?? []
-        if (items.some((item) => item.productId === productId)) return current ?? { items }
+        const items = current?.items ?? [];
+        if (items.some((item) => item.productId === productId))
+          return current ?? { items };
         return {
           items: [
             ...items,
@@ -40,78 +41,80 @@ export function useAddToWishlist() {
               priceAtAdd: 0,
               isAvailable: true,
               unavailableReason: null,
-              product: { id: productId } as WishlistItem['product'],
+              product: { id: productId } as WishlistItem["product"],
             },
           ],
-        }
-      })
-      return { previous }
+        };
+      });
+      return { previous };
     },
     onError: (_error, _productId, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(wishlistKeys.all, context.previous)
+        queryClient.setQueryData(wishlistKeys.all, context.previous);
       }
     },
     onSettled: () => {
-      void queryClient.invalidateQueries({ queryKey: wishlistKeys.all })
+      void queryClient.invalidateQueries({ queryKey: wishlistKeys.all });
     },
-  })
+  });
 }
 
 export function useRemoveFromWishlist() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (productId: string) => wishlistApi.remove(productId),
     onMutate: async (productId) => {
-      await queryClient.cancelQueries({ queryKey: wishlistKeys.all })
-      const previous = queryClient.getQueryData<WishlistData>(wishlistKeys.all)
+      await queryClient.cancelQueries({ queryKey: wishlistKeys.all });
+      const previous = queryClient.getQueryData<WishlistData>(wishlistKeys.all);
       queryClient.setQueryData<WishlistData>(wishlistKeys.all, (current) => {
-        if (!current) return current
+        if (!current) return current;
         return {
           ...current,
           items: current.items.filter((item) => item.productId !== productId),
-        }
-      })
-      return { previous }
+        };
+      });
+      return { previous };
     },
     onError: (_error, _productId, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(wishlistKeys.all, context.previous)
+        queryClient.setQueryData(wishlistKeys.all, context.previous);
       }
     },
     onSettled: () => {
-      void queryClient.invalidateQueries({ queryKey: wishlistKeys.all })
+      void queryClient.invalidateQueries({ queryKey: wishlistKeys.all });
     },
-  })
+  });
 }
 
 export function useMoveToCart() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (productId: string) => wishlistApi.moveToCart(productId),
     onMutate: async (productId) => {
-      await queryClient.cancelQueries({ queryKey: wishlistKeys.all })
-      const previous = queryClient.getQueryData<WishlistData>(wishlistKeys.all)
+      await queryClient.cancelQueries({ queryKey: wishlistKeys.all });
+      const previous = queryClient.getQueryData<WishlistData>(wishlistKeys.all);
       queryClient.setQueryData<WishlistData>(wishlistKeys.all, (current) => {
-        if (!current) return current
+        if (!current) return current;
         return {
           ...current,
           items: current.items.filter((item) => item.productId !== productId),
-        }
-      })
-      return { previous }
+        };
+      });
+      return { previous };
     },
     onError: (_error, _productId, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(wishlistKeys.all, context.previous)
+        queryClient.setQueryData(wishlistKeys.all, context.previous);
       }
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: cartKeys.all })
-      void import('@/features/cart/store/cart.store').then((m) => m.useCartDrawerStore.getState().open())
+      void queryClient.invalidateQueries({ queryKey: cartKeys.all });
+      void import("@/features/cart/store/cart.store").then((m) =>
+        m.useCartDrawerStore.getState().open(),
+      );
     },
     onSettled: () => {
-      void queryClient.invalidateQueries({ queryKey: wishlistKeys.all })
+      void queryClient.invalidateQueries({ queryKey: wishlistKeys.all });
     },
-  })
+  });
 }

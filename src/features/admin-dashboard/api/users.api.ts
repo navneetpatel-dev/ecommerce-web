@@ -1,53 +1,43 @@
-import { apiClient } from '@/shared/api/client'
-import { unwrapPaginatedList, type PaginatedList, type PaginationQuery } from '@/shared/api/pagination'
-import { API } from '@/shared/constants/apiRoutes'
-import type { UserStatus } from '@/shared/constants/statuses'
-import type { CurrentUser } from '@/shared/api/types'
-import { PERMISSIONS } from '@/shared/constants/permissions'
+import { apiClient } from "@/shared/api/client";
+import {
+  unwrapPaginatedList,
+  type PaginatedList,
+  type PaginationQuery,
+} from "@/shared/api/pagination";
+import { API } from "@/shared/constants/apiRoutes";
+import type { UserStatus } from "@/shared/constants/statuses";
+import type { CurrentUser } from "@/shared/api/types";
+import { assigneesApi } from "@/shared/api/assignees.api";
 
-export type AssigneeCandidate = {
-  id: string
-  name: string
-  email: string
-}
-
-export type AssigneePermission =
-  | typeof PERMISSIONS.TICKET_MANAGE
-  | typeof PERMISSIONS.BUG_REPORT_MANAGE
+// Assignee lookup is shared infrastructure (consumed by shared/AssigneeSelect);
+// re-exported here so existing admin-dashboard consumers keep their import paths.
+export type {
+  AssigneeCandidate,
+  AssigneePermission,
+} from "@/shared/api/assignees.api";
 
 export const adminUsersApi = {
   list: async (
-    params: PaginationQuery & { status?: string; roleId?: string; search?: string } = {},
+    params: PaginationQuery & {
+      status?: string;
+      roleId?: string;
+      search?: string;
+    } = {},
   ): Promise<PaginatedList<CurrentUser>> => {
-    const q = new URLSearchParams()
-    if (params.page) q.set('page', String(params.page))
-    if (params.limit) q.set('limit', String(params.limit))
-    if (params.status) q.set('status', params.status)
-    if (params.roleId) q.set('roleId', params.roleId)
-    if (params.search) q.set('search', params.search)
-    const res = await apiClient.getWithResponse<CurrentUser[]>(API.users.list(q.toString()))
-    return unwrapPaginatedList(res)
+    const q = new URLSearchParams();
+    if (params.page) q.set("page", String(params.page));
+    if (params.limit) q.set("limit", String(params.limit));
+    if (params.status) q.set("status", params.status);
+    if (params.roleId) q.set("roleId", params.roleId);
+    if (params.search) q.set("search", params.search);
+    const res = await apiClient.getWithResponse<CurrentUser[]>(
+      API.users.list(q.toString()),
+    );
+    return unwrapPaginatedList(res);
   },
-  listAssignees: async (params: {
-    permission: AssigneePermission
-    page?: number
-    limit?: number
-    search?: string
-    vendorId?: string
-  }): Promise<PaginatedList<AssigneeCandidate>> => {
-    const q = new URLSearchParams()
-    q.set('permission', params.permission)
-    if (params.page) q.set('page', String(params.page))
-    if (params.limit) q.set('limit', String(params.limit))
-    if (params.search) q.set('search', params.search)
-    if (params.vendorId) q.set('vendorId', params.vendorId)
-    const res = await apiClient.getWithResponse<AssigneeCandidate[]>(
-      API.users.assignees(q.toString()),
-    )
-    return unwrapPaginatedList(res)
-  },
+  listAssignees: assigneesApi.listAssignees,
   getById: (id: string) => apiClient.get<CurrentUser>(API.users.detail(id)),
   updateStatus: (id: string, status: UserStatus) =>
     apiClient.patch<{ message: string }>(API.users.status(id), { status }),
   delete: (id: string) => apiClient.delete(API.users.detail(id)),
-}
+};

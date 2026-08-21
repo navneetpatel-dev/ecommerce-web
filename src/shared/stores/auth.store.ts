@@ -1,20 +1,20 @@
-import { create } from 'zustand'
-import type { RoleName } from '@/shared/constants/labels'
-import type { CurrentUser } from '@/shared/api/types'
+import { create } from "zustand";
+import type { RoleName } from "@/shared/constants/labels";
+import type { CurrentUser } from "@/shared/api/types";
 import {
   defaultRouteForRole as defaultRouteForRoleFromSurface,
   postAuthPath as postAuthPathFromSurface,
-} from '@/shared/utils/roleSurface'
+} from "@/shared/utils/roleSurface";
 
 interface AuthState {
-  accessToken: string | null
-  currentUser: CurrentUser | null
+  accessToken: string | null;
+  currentUser: CurrentUser | null;
   /** False until localStorage session is restored (or confirmed absent). Prevents cart race on refresh. */
-  authBootstrapped: boolean
-  setSession: (token: string, user: CurrentUser) => void
-  setAccessToken: (token: string) => void
-  clearSession: () => void
-  setAuthBootstrapped: (value: boolean) => void
+  authBootstrapped: boolean;
+  setSession: (token: string, user: CurrentUser) => void;
+  setAccessToken: (token: string) => void;
+  clearSession: () => void;
+  setAuthBootstrapped: (value: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -25,12 +25,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   setAccessToken: (accessToken) => set({ accessToken }),
   clearSession: () => set({ accessToken: null, currentUser: null }),
   setAuthBootstrapped: (authBootstrapped) => set({ authBootstrapped }),
-}))
+}));
 
 export function defaultRouteForRole(role: RoleName): string {
-  return defaultRouteForRoleFromSurface(role)
+  return defaultRouteForRoleFromSurface(role);
 }
 
 export function postAuthPath(role: RoleName, redirect?: string | null): string {
-  return postAuthPathFromSurface(role, redirect)
+  return postAuthPathFromSurface(role, redirect);
 }

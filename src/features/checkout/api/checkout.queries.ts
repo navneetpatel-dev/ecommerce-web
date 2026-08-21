@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { checkoutApi } from "./checkout.api";
-import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import { PINCODE_PATTERN } from "@/shared/constants/pincode";
 import type { Address } from "@/shared/api/types";
 

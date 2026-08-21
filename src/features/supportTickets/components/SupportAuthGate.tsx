@@ -1,24 +1,24 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { UserRound } from 'lucide-react'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { Button } from '@/shared/components/ui/button'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { useAuthStore } from '@/features/auth/store/auth.store'
-import { useIsAuthenticated } from '@/shared/hooks/useRequireAuth'
+import Link from "next/link";
+import { UserRound } from "lucide-react";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { Button } from "@/shared/components/ui/button";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { useIsAuthenticated } from "@/shared/hooks/useRequireAuth";
 
 type Props = {
-  message: string
-  loginNext: string
-  children: React.ReactNode
-}
+  message: string;
+  loginNext: string;
+  children: React.ReactNode;
+};
 
 export function SupportAuthGate({ message, loginNext, children }: Props) {
-  const authBootstrapped = useAuthStore((s) => s.authBootstrapped)
-  const isAuthenticated = useIsAuthenticated()
+  const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
+  const isAuthenticated = useIsAuthenticated();
 
   if (!authBootstrapped) {
     return (
@@ -26,7 +26,7 @@ export function SupportAuthGate({ message, loginNext, children }: Props) {
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-20 w-full" />
       </div>
-    )
+    );
   }
 
   if (!isAuthenticated) {
@@ -45,8 +45,8 @@ export function SupportAuthGate({ message, loginNext, children }: Props) {
           </Button>
         </div>
       </div>
-    )
+    );
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }

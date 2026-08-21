@@ -33,7 +33,7 @@ import {
 } from "@/shared/constants/statuses";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { usePermissions } from "@/shared/hooks/usePermissions";
-import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import { formatOrderDate } from "@/features/orders/utils/format";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { cn } from "@/shared/utils/cn";

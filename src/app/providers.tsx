@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useState } from "react";
-import { useAuthBootstrap } from "@/shared/hooks/useAuthBootstrap";
+import { useAuthBootstrap } from "@/features/auth";
 import { LoginRequiredDialogContainer } from "@/shared/containers/LoginRequiredDialogContainer";
 import { RouteScrollResetContainer } from "@/shared/containers/RouteScrollResetContainer";
 import { BrowseUrlTrackerContainer } from "@/shared/containers/BrowseUrlTrackerContainer";

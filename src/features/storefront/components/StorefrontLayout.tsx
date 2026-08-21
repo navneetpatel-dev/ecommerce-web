@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import { HeaderContainer } from '@/shared/containers/HeaderContainer'
-import { Footer } from '@/shared/components/layout/Footer'
-import { CartDrawerContainer } from '@/features/cart/containers/CartDrawerContainer'
-import { ScrollToTopContainer } from '@/shared/containers/ScrollToTopContainer'
-import { CookieBannerContainer } from '@/shared/containers/CookieBannerContainer'
+import { HeaderContainer } from "../containers/HeaderContainer";
+import { Footer } from "@/shared/components/layout/Footer";
+import { CartDrawerContainer } from "@/features/cart";
+import { ScrollToTopContainer } from "@/shared/containers/ScrollToTopContainer";
+import { CookieBannerContainer } from "@/shared/containers/CookieBannerContainer";
 
 export function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,5 +18,5 @@ export function StorefrontLayout({ children }: { children: React.ReactNode }) {
       <ScrollToTopContainer />
       <CookieBannerContainer />
     </div>
-  )
+  );
 }

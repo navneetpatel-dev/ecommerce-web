@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import { useAuthStore } from '@/features/auth/store/auth.store'
+import { useAuthStore } from "@/shared/stores/auth.store";
 import {
   useAuthPromptStore,
   type AuthPromptOptions,
-} from '@/shared/stores/auth-prompt.store'
+} from "@/shared/stores/auth-prompt.store";
 
 export function useIsAuthenticated() {
-  return useAuthStore((s) => Boolean(s.accessToken || s.currentUser))
+  return useAuthStore((s) => Boolean(s.accessToken || s.currentUser));
 }
 
 /**
@@ -15,18 +15,18 @@ export function useIsAuthenticated() {
  * When not, opens the login prompt and returns false — call before gated actions.
  */
 export function useRequireAuth() {
-  const isAuthenticated = useIsAuthenticated()
-  const openPrompt = useAuthPromptStore((s) => s.openPrompt)
+  const isAuthenticated = useIsAuthenticated();
+  const openPrompt = useAuthPromptStore((s) => s.openPrompt);
 
   const requireAuth = (options: AuthPromptOptions | string): boolean => {
-    if (isAuthenticated) return true
-    if (typeof options === 'string') {
-      openPrompt({ message: options })
+    if (isAuthenticated) return true;
+    if (typeof options === "string") {
+      openPrompt({ message: options });
     } else {
-      openPrompt(options)
+      openPrompt(options);
     }
-    return false
-  }
+    return false;
+  };
 
-  return { isAuthenticated, requireAuth }
+  return { isAuthenticated, requireAuth };
 }

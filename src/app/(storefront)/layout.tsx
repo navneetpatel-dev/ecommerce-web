@@ -1,8 +1,11 @@
-'use client'
+"use client";
 
-import { StorefrontLayout } from '@/shared/components/layout/StorefrontLayout'
+import { StorefrontLayout } from "@/features/storefront";
 
-export default function StorefrontRouteLayout({ children }: { children: React.ReactNode }) {
-  return <StorefrontLayout>{children}</StorefrontLayout>
+export default function StorefrontRouteLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <StorefrontLayout>{children}</StorefrontLayout>;
 }
-

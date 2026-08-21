@@ -1,22 +1,22 @@
-import Link from 'next/link'
-import { ArrowRight, X } from 'lucide-react'
-import { Button } from '@/shared/components/ui/button'
-import { PATHS } from '@/shared/constants/paths'
-import { LABELS, ROLES } from '@/shared/constants/labels'
-import type { Category, CurrentUser } from '@/shared/api/types'
-import { resolveCategoryIcon, categoryHref } from '@/features/categories'
-import { cn } from '@/shared/utils/cn'
+import Link from "next/link";
+import { ArrowRight, X } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
+import { PATHS } from "@/shared/constants/paths";
+import { LABELS, ROLES } from "@/shared/constants/labels";
+import type { Category, CurrentUser } from "@/shared/api/types";
+import { resolveCategoryIcon, categoryHref } from "@/features/categories";
+import { cn } from "@/shared/utils/cn";
 
 const navLinks = [
   { href: PATHS.products, label: LABELS.allProducts },
   { href: PATHS.productsNewest, label: LABELS.newArrivals },
-]
+];
 
 interface MobileNavDrawerProps {
-  open: boolean
-  onClose: () => void
-  currentUser: CurrentUser | null
-  categories: Category[]
+  open: boolean;
+  onClose: () => void;
+  currentUser: CurrentUser | null;
+  categories: Category[];
 }
 
 /**
@@ -28,14 +28,19 @@ export function MobileNavDrawer({
   currentUser,
   categories,
 }: MobileNavDrawerProps) {
-  if (!open) return null
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-50 xl:hidden">
-      <div className="absolute inset-0 bg-overlay animate-fade-in" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-overlay animate-fade-in"
+        onClick={onClose}
+      />
       <div className="absolute left-0 top-0 bottom-0 w-72 bg-surface shadow-elevation-4 animate-slide-in-left flex flex-col">
         <div className="flex items-center justify-between px-4 h-14 border-b border-line">
-          <span className="text-[1.125rem] font-semibold text-brand">{LABELS.menu}</span>
+          <span className="text-[1.125rem] font-semibold text-brand">
+            {LABELS.menu}
+          </span>
           <Button
             type="button"
             variant="ghost"
@@ -61,7 +66,9 @@ export function MobileNavDrawer({
           ))}
 
           <div className="mt-4 px-3 py-2 flex items-center justify-between">
-            <span className="text-[0.8125rem] font-medium text-ink-muted">{LABELS.categories}</span>
+            <span className="text-[0.8125rem] font-medium text-ink-muted">
+              {LABELS.categories}
+            </span>
             {categories.length > 0 ? (
               <Link
                 href={PATHS.categories}
@@ -74,11 +81,13 @@ export function MobileNavDrawer({
           </div>
 
           {categories.length === 0 ? (
-            <p className="px-3 py-2 text-[0.8125rem] text-ink-faint">{LABELS.noCategoriesYet}</p>
+            <p className="px-3 py-2 text-[0.8125rem] text-ink-faint">
+              {LABELS.noCategoriesYet}
+            </p>
           ) : (
             <ul className="space-y-1">
               {categories.map((department) => {
-                const Icon = resolveCategoryIcon(department)
+                const Icon = resolveCategoryIcon(department);
                 return (
                   <li key={department.id}>
                     <Link
@@ -86,7 +95,10 @@ export function MobileNavDrawer({
                       onClick={onClose}
                       className="flex items-center gap-3 px-3 py-2.5 rounded-md text-[0.9375rem] font-medium hover:bg-paper transition-colors"
                     >
-                      <Icon className="h-4 w-4 shrink-0 text-ink-muted" strokeWidth={1.5} />
+                      <Icon
+                        className="h-4 w-4 shrink-0 text-ink-muted"
+                        strokeWidth={1.5}
+                      />
                       <span className="truncate">{department.name}</span>
                     </Link>
                     {department.children?.length ? (
@@ -108,7 +120,7 @@ export function MobileNavDrawer({
                                       href={categoryHref(leaf, categories)}
                                       onClick={onClose}
                                       className={cn(
-                                        'block truncate rounded-md px-2 py-1 text-[0.75rem] text-ink-faint hover:bg-paper hover:text-ink',
+                                        "block truncate rounded-md px-2 py-1 text-[0.75rem] text-ink-faint hover:bg-paper hover:text-ink",
                                       )}
                                     >
                                       {leaf.name}
@@ -122,7 +134,7 @@ export function MobileNavDrawer({
                       </ul>
                     ) : null}
                   </li>
-                )
+                );
               })}
             </ul>
           )}
@@ -182,5 +194,5 @@ export function MobileNavDrawer({
         </nav>
       </div>
     </div>
-  )
+  );
 }

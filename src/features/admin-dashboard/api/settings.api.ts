@@ -1,31 +1,22 @@
-import { apiClient } from '@/shared/api/client'
-import { API } from '@/shared/constants/apiRoutes'
+import { apiClient } from "@/shared/api/client";
+import { API } from "@/shared/constants/apiRoutes";
+import { publicSettingsApi } from "@/shared/api/publicSettings.api";
 
-export type PublicPlatformSettings = {
-  freeShippingThreshold: number
-  defaultReturnWindow: number
-  supportEmail: string
-  supportHours: string
-  ticketReopenWindowDays: number
-  bugVerifyWindowDays: number
-  bugCloseWindowDays: number
-  returnShippingFee: number
-  codEnabled: boolean
-  codMinOrderValue: number
-  codMaxOrderValue: number | null
-}
+export type { PublicPlatformSettings } from "@/shared/api/publicSettings.api";
+import type { PublicPlatformSettings } from "@/shared/api/publicSettings.api";
 
 export type AdminPlatformSettings = PublicPlatformSettings & {
-  defaultCommissionRate: number
-  tcsRatePercent: number
-  tdsRatePercent: number
-  autoApproveProducts: boolean
-  payoutCycle: string
-  returnShippingFee: number
-}
+  defaultCommissionRate: number;
+  tcsRatePercent: number;
+  tdsRatePercent: number;
+  autoApproveProducts: boolean;
+  payoutCycle: string;
+  returnShippingFee: number;
+};
 
 export const settingsApi = {
-  getPublic: () => apiClient.get<PublicPlatformSettings>(API.settings.public),
+  getPublic: publicSettingsApi.getPublic,
   get: () => apiClient.get<AdminPlatformSettings>(API.settings.root),
-  update: (body: AdminPlatformSettings) => apiClient.put<AdminPlatformSettings>(API.settings.root, body),
-}
+  update: (body: AdminPlatformSettings) =>
+    apiClient.put<AdminPlatformSettings>(API.settings.root, body),
+};

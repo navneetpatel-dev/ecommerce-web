@@ -1,10 +1,9 @@
-import { useAuthStore } from '@/features/auth/store/auth.store';
-import { API } from '@/shared/constants/apiRoutes';
-import { ERROR_CODES, ERROR_MESSAGES } from '@/shared/constants/errors';
-import { BEARER_PREFIX } from '@/shared/constants/http';
-import { STORAGE_KEYS } from '@/shared/constants/storage';
+import { getApiSessionAdapter } from "@/shared/api/sessionAdapter";
+import { API } from "@/shared/constants/apiRoutes";
+import { ERROR_CODES, ERROR_MESSAGES } from "@/shared/constants/errors";
+import { BEARER_PREFIX } from "@/shared/constants/http";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 interface ApiSuccess<T> {
   success: true;
@@ -25,7 +24,7 @@ class ApiError extends Error {
     super(message);
     this.code = code;
     this.details = details;
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 }
 
@@ -33,21 +32,16 @@ let isRefreshing = false;
 let refreshPromise: Promise<boolean> | null = null;
 
 function persistAccessToken(accessToken: string) {
-  useAuthStore.getState().setAccessToken(accessToken);
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-  }
+  getApiSessionAdapter().persistAccessToken(accessToken);
 }
 
 function clearPersistedSession() {
-  useAuthStore.getState().clearSession();
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.SESSION);
-  }
+  getApiSessionAdapter().clearSession();
 }
 
-async function parseResponseBody(res: Response): Promise<ApiSuccess<unknown> | ApiFailure | null> {
+async function parseResponseBody(
+  res: Response,
+): Promise<ApiSuccess<unknown> | ApiFailure | null> {
   const text = await res.text();
   if (!text) return null;
 
@@ -67,11 +61,17 @@ async function parseResponseBody(res: Response): Promise<ApiSuccess<unknown> | A
   }
 }
 
-function assertSuccess<T>(body: ApiSuccess<unknown> | ApiFailure | null, status: number): T {
+function assertSuccess<T>(
+  body: ApiSuccess<unknown> | ApiFailure | null,
+  status: number,
+): T {
   if (!body) {
-    throw new ApiError(ERROR_CODES.EMPTY_RESPONSE, `Empty response (${status})`);
+    throw new ApiError(
+      ERROR_CODES.EMPTY_RESPONSE,
+      `Empty response (${status})`,
+    );
   }
-  if (!('success' in body) || !body.success) {
+  if (!("success" in body) || !body.success) {
     const failure = body as ApiFailure;
     throw new ApiError(
       failure.error?.code ?? ERROR_CODES.REQUEST_FAILED,
@@ -87,9 +87,9 @@ async function refreshAccessTokenAndRetry(): Promise<boolean> {
 
   isRefreshing = true;
   refreshPromise = fetch(`${BASE_URL}${API.auth.refresh}`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
   })
     .then(async (res) => {
       if (!res.ok) {
@@ -97,7 +97,7 @@ async function refreshAccessTokenAndRetry(): Promise<boolean> {
         return false;
       }
       const body = await parseResponseBody(res);
-      if (body && 'success' in body && body.success) {
+      if (body && "success" in body && body.success) {
         const data = body.data as { accessToken: string };
         persistAccessToken(data.accessToken);
         return true;
@@ -117,13 +117,13 @@ async function refreshAccessTokenAndRetry(): Promise<boolean> {
 }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = useAuthStore.getState().accessToken;
+  const token = getApiSessionAdapter().getAccessToken();
 
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
-    credentials: 'include',
+    credentials: "include",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
       ...options.headers,
     },
@@ -134,7 +134,10 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     if (refreshed) {
       return request<T>(path, options);
     }
-    throw new ApiError(ERROR_CODES.UNAUTHORIZED, ERROR_MESSAGES.SESSION_EXPIRED);
+    throw new ApiError(
+      ERROR_CODES.UNAUTHORIZED,
+      ERROR_MESSAGES.SESSION_EXPIRED,
+    );
   }
 
   // Soft-delete and similar endpoints return 204 with an empty body.
@@ -146,14 +149,17 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return assertSuccess<T>(body, res.status);
 }
 
-async function requestWithResponse<T>(path: string, options: RequestInit = {}): Promise<ApiSuccess<T>> {
-  const token = useAuthStore.getState().accessToken;
+async function requestWithResponse<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<ApiSuccess<T>> {
+  const token = getApiSessionAdapter().getAccessToken();
 
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
-    credentials: 'include',
+    credentials: "include",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
       ...options.headers,
     },
@@ -164,7 +170,10 @@ async function requestWithResponse<T>(path: string, options: RequestInit = {}): 
     if (refreshed) {
       return requestWithResponse<T>(path, options);
     }
-    throw new ApiError(ERROR_CODES.UNAUTHORIZED, ERROR_MESSAGES.SESSION_EXPIRED);
+    throw new ApiError(
+      ERROR_CODES.UNAUTHORIZED,
+      ERROR_MESSAGES.SESSION_EXPIRED,
+    );
   }
 
   const body = await parseResponseBody(res);
@@ -177,15 +186,15 @@ export const apiClient = {
   getWithResponse: <T>(path: string) => requestWithResponse<T>(path),
   post: <T>(path: string, body?: unknown, init?: RequestInit) =>
     request<T>(path, {
-      method: 'POST',
+      method: "POST",
       body: body === undefined ? undefined : JSON.stringify(body),
       ...init,
     }),
   patch: <T>(path: string, body?: unknown) =>
-    request<T>(path, { method: 'PATCH', body: JSON.stringify(body) }),
+    request<T>(path, { method: "PATCH", body: JSON.stringify(body) }),
   put: <T>(path: string, body?: unknown) =>
-    request<T>(path, { method: 'PUT', body: JSON.stringify(body) }),
-  delete: <T>(path: string) => request<T>(path, { method: 'DELETE' }),
+    request<T>(path, { method: "PUT", body: JSON.stringify(body) }),
+  delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
 };
 
 export { ApiError };

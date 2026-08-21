@@ -1,31 +1,36 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { CheckCircle2, Mail, UserRound } from 'lucide-react'
-import { FormError } from '@/shared/components/FormError'
-import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
-import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
-import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { Badge } from '@/shared/components/ui/badge'
-import { LABELS } from '@/shared/constants/labels'
-import { useAuthStore } from '@/features/auth/store/auth.store'
-import { isWorkspaceRole } from '@/shared/utils/roles'
-import { useAccountProfile, useUpdateProfile } from '../../api/account.queries'
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { CheckCircle2, Mail, UserRound } from "lucide-react";
+import { FormError } from "@/shared/components/FormError";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint";
+import {
+  FormActions,
+  FormFieldFrame,
+  FormSection,
+  FormStack,
+} from "@/shared/components/forms";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { TextEyebrow } from "@/shared/components/TextEyebrow";
+import { Badge } from "@/shared/components/ui/badge";
+import { LABELS } from "@/shared/constants/labels";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { isWorkspaceRole } from "@/shared/utils/roles";
+import { useAccountProfile, useUpdateProfile } from "../../api/account.queries";
 
 interface PersonalForm {
-  name: string
-  phone: string
+  name: string;
+  phone: string;
 }
 
 export function PersonalInfoSection() {
-  const currentUser = useAuthStore((s) => s.currentUser)
-  const isWorkspace = isWorkspaceRole(currentUser?.role)
-  const { data: profile, isLoading, isError, error } = useAccountProfile()
-  const updateProfile = useUpdateProfile()
+  const currentUser = useAuthStore((s) => s.currentUser);
+  const isWorkspace = isWorkspaceRole(currentUser?.role);
+  const { data: profile, isLoading, isError, error } = useAccountProfile();
+  const updateProfile = useUpdateProfile();
   const {
     register,
     handleSubmit,
@@ -33,22 +38,22 @@ export function PersonalInfoSection() {
     watch,
     formState: { errors, isDirty },
   } = useForm<PersonalForm>({
-    defaultValues: { name: '', phone: '' },
-  })
+    defaultValues: { name: "", phone: "" },
+  });
 
-  const nameValue = watch('name')
-  const nameMissing = !nameValue?.trim()
-  const canSubmit = !nameMissing && isDirty
-  const disableHint = nameMissing ? LABELS.enterFullName : ''
+  const nameValue = watch("name");
+  const nameMissing = !nameValue?.trim();
+  const canSubmit = !nameMissing && isDirty;
+  const disableHint = nameMissing ? LABELS.enterFullName : "";
 
   useEffect(() => {
     if (profile) {
       reset({
-        name: profile.name ?? '',
-        phone: profile.phone ?? '',
-      })
+        name: profile.name ?? "",
+        phone: profile.phone ?? "",
+      });
     }
-  }, [profile, reset])
+  }, [profile, reset]);
 
   if (isLoading) {
     return (
@@ -58,7 +63,7 @@ export function PersonalInfoSection() {
         <Skeleton className="h-11 w-full" />
         <Skeleton className="h-11 w-full" />
       </div>
-    )
+    );
   }
 
   if (isError || !profile) {
@@ -68,7 +73,7 @@ export function PersonalInfoSection() {
           {(error as Error | null)?.message || LABELS.couldNotLoadProfile}
         </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -79,7 +84,7 @@ export function PersonalInfoSection() {
             await updateProfile.mutateAsync({
               name: data.name.trim(),
               phone: data.phone.trim() || null,
-            })
+            });
           })}
         >
           <FormStack>
@@ -96,7 +101,7 @@ export function PersonalInfoSection() {
                 <Input
                   id="account-name"
                   error={Boolean(errors.name?.message)}
-                  {...register('name', { required: LABELS.nameRequired })}
+                  {...register("name", { required: LABELS.nameRequired })}
                 />
               </FormFieldFrame>
 
@@ -104,7 +109,9 @@ export function PersonalInfoSection() {
                 label={LABELS.phone}
                 htmlFor="account-phone"
                 hint={
-                  isWorkspace ? LABELS.phoneOptionalContact : LABELS.phoneOptionalDelivery
+                  isWorkspace
+                    ? LABELS.phoneOptionalContact
+                    : LABELS.phoneOptionalDelivery
                 }
                 error={errors.phone?.message}
               >
@@ -113,7 +120,7 @@ export function PersonalInfoSection() {
                   type="tel"
                   placeholder={LABELS.phonePlaceholder}
                   error={Boolean(errors.phone?.message)}
-                  {...register('phone')}
+                  {...register("phone")}
                 />
               </FormFieldFrame>
 
@@ -123,7 +130,9 @@ export function PersonalInfoSection() {
                   fallback={LABELS.couldNotSaveProfile}
                 />
                 {updateProfile.isSuccess && !isDirty ? (
-                  <p className="text-[0.875rem] text-success">{LABELS.personalInfoSaved}</p>
+                  <p className="text-[0.875rem] text-success">
+                    {LABELS.personalInfoSaved}
+                  </p>
                 ) : null}
               </div>
             </FormSection>
@@ -151,7 +160,9 @@ export function PersonalInfoSection() {
         <aside className="border border-line bg-surface shadow-elevation-1">
           <div className="border-b border-line bg-paper/55 px-5 py-4 md:px-6">
             <TextEyebrow>{LABELS.personalInfoProfileEyebrow}</TextEyebrow>
-            <p className="mt-1 text-[0.875rem] text-ink-muted">{LABELS.personalInfoProfileHint}</p>
+            <p className="mt-1 text-[0.875rem] text-ink-muted">
+              {LABELS.personalInfoProfileHint}
+            </p>
           </div>
 
           <div className="space-y-4 px-5 py-5 md:px-6">
@@ -163,11 +174,17 @@ export function PersonalInfoSection() {
                 <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
                   {LABELS.personalInfoAccountHolder}
                 </p>
-                <p className="mt-1 text-[0.9375rem] font-medium text-ink">{profile.name}</p>
+                <p className="mt-1 text-[0.9375rem] font-medium text-ink">
+                  {profile.name}
+                </p>
                 {profile.phone ? (
-                  <p className="mt-0.5 text-[0.8125rem] text-ink-muted">{profile.phone}</p>
+                  <p className="mt-0.5 text-[0.8125rem] text-ink-muted">
+                    {profile.phone}
+                  </p>
                 ) : (
-                  <p className="mt-0.5 text-[0.8125rem] text-ink-faint">{LABELS.personalInfoNoPhone}</p>
+                  <p className="mt-0.5 text-[0.8125rem] text-ink-faint">
+                    {LABELS.personalInfoNoPhone}
+                  </p>
                 )}
               </div>
             </div>
@@ -180,7 +197,9 @@ export function PersonalInfoSection() {
                 <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
                   {LABELS.personalInfoEmailStatus}
                 </p>
-                <p className="mt-1 break-all text-[0.9375rem] font-medium text-ink">{profile.email}</p>
+                <p className="mt-1 break-all text-[0.9375rem] font-medium text-ink">
+                  {profile.email}
+                </p>
                 <div className="mt-2">
                   {profile.emailVerified ? (
                     <Badge variant="success" className="gap-1">
@@ -188,7 +207,9 @@ export function PersonalInfoSection() {
                       {LABELS.personalInfoVerified}
                     </Badge>
                   ) : (
-                    <Badge variant="outline">{LABELS.personalInfoUnverified}</Badge>
+                    <Badge variant="outline">
+                      {LABELS.personalInfoUnverified}
+                    </Badge>
                   )}
                 </div>
               </div>
@@ -196,12 +217,14 @@ export function PersonalInfoSection() {
 
             <div className="border-t border-line pt-4">
               <p className="text-[0.8125rem] leading-6 text-ink-muted">
-                {isWorkspace ? LABELS.emailFixedWorkspace : LABELS.emailFixedStorefront}
+                {isWorkspace
+                  ? LABELS.emailFixedWorkspace
+                  : LABELS.emailFixedStorefront}
               </p>
             </div>
           </div>
         </aside>
       </div>
     </div>
-  )
+  );
 }

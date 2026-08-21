@@ -20,6 +20,7 @@ const FEATURES = [
   "returns",
   "reviews",
   "search",
+  "storefront",
   "supportTickets",
   "uploads",
   "users",

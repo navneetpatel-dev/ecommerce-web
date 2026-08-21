@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { settingsApi } from "@/features/admin-dashboard/api/settings.api";
+import { publicSettingsApi } from "@/shared/api/publicSettings.api";
 
 export const settingsKeys = {
   public: ["settings", "public"] as const,
@@ -10,7 +10,7 @@ export const settingsKeys = {
 export function usePublicSettings() {
   return useQuery({
     queryKey: settingsKeys.public,
-    queryFn: () => settingsApi.getPublic(),
+    queryFn: () => publicSettingsApi.getPublic(),
     staleTime: 1000 * 60 * 5,
   });
 }

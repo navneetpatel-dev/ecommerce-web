@@ -18,7 +18,7 @@ import {
 import {
   usePresignUpload,
   usePresignUploadBulk,
-} from "@/features/uploads/api/uploads.queries";
+} from "@/shared/hooks/useUploads";
 import type {
   UploadEntityType,
   UploadPurpose,

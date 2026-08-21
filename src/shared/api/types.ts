@@ -12,8 +12,8 @@ import type {
   ShipmentStatus,
   ShippingMethod,
   UnavailableReason,
-} from '@/shared/constants/statuses'
-import type { RoleName } from '@/shared/constants/labels'
+} from "@/shared/constants/statuses";
+import type { RoleName } from "@/shared/constants/labels";
 
 export type { RoleName };
 
@@ -100,7 +100,12 @@ export interface ProductDetail extends ProductListItem {
   images: ProductImage[];
   categoryId: string;
   status: string;
-  secondaryCategories?: Array<{ id: string; name: string; slug: string; status?: string }>;
+  secondaryCategories?: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    status?: string;
+  }>;
   warrantyMonths?: number | null;
   warrantyType?: string | null;
   hsnCode?: string | null;
@@ -150,7 +155,7 @@ export interface CategoryAttribute {
   id: string;
   categoryId: string;
   name: string;
-  type: 'ENUM' | 'RANGE' | 'BOOLEAN';
+  type: "ENUM" | "RANGE" | "BOOLEAN";
   options: unknown[];
   displayOrder: number;
   filterKey?: string;
@@ -278,6 +283,9 @@ export interface Address {
   isDefault: boolean;
 }
 
+/** Writable address payload (create/update) — shared because AddressFormDialog is generic. */
+export type AddressInput = Omit<Address, "id" | "userId">;
+
 export interface Review {
   id: string;
   productId: string;
@@ -357,14 +365,24 @@ export interface CheckoutQuote {
   walletBalance: number;
   walletAmountToUse: number;
   amountDue: number;
-  appliedCoupon: { code: string; discount: number; cashbackAmount?: number; type?: string } | null;
-  appliedCoupons?: Array<{ code: string; discount: number; cashbackAmount?: number; type?: string }>;
+  appliedCoupon: {
+    code: string;
+    discount: number;
+    cashbackAmount?: number;
+    type?: string;
+  } | null;
+  appliedCoupons?: Array<{
+    code: string;
+    discount: number;
+    cashbackAmount?: number;
+    type?: string;
+  }>;
   codAvailable?: boolean;
 }
 
 export interface WalletTransaction {
   id: string;
-  type: 'CREDIT' | 'DEBIT';
+  type: "CREDIT" | "DEBIT";
   amount: number;
   balanceAfter: number;
   referenceType: string | null;
@@ -394,11 +412,20 @@ export interface PayoutEntry {
   paidAt: string | null;
 }
 
-export type CouponType = 'PERCENTAGE' | 'FLAT' | 'FREE_SHIPPING' | 'BOGO' | 'TIERED' | 'CASHBACK' | 'BUNDLE';
-export type CouponStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED' | 'EXPIRED' | 'ARCHIVED' | 'REJECTED';
-export type DiscountBearer = 'PLATFORM' | 'VENDOR';
-export type CouponScopeType = 'all' | 'vendor' | 'product' | 'category';
-export type CouponUserRestrictionType = 'all' | 'firstOrder' | 'specific' | 'segment';
+export type CouponType =
+  | "PERCENTAGE"
+  | "FLAT"
+  | "FREE_SHIPPING"
+  | "BOGO"
+  | "TIERED"
+  | "CASHBACK"
+  | "BUNDLE";
+export type CouponStatus =
+  "DRAFT" | "ACTIVE" | "PAUSED" | "EXPIRED" | "ARCHIVED" | "REJECTED";
+export type DiscountBearer = "PLATFORM" | "VENDOR";
+export type CouponScopeType = "all" | "vendor" | "product" | "category";
+export type CouponUserRestrictionType =
+  "all" | "firstOrder" | "specific" | "segment";
 
 export interface CouponApplicableScope {
   type: CouponScopeType;
@@ -500,7 +527,12 @@ export interface VendorSummary {
 
 export interface VendorAnalytics {
   revenue: { date: string; amount: number }[];
-  topProducts: { id: string; name: string; unitsSold: number; revenue: number }[];
+  topProducts: {
+    id: string;
+    name: string;
+    unitsSold: number;
+    revenue: number;
+  }[];
   fulfillmentSLA: { onTimePercent: number; latePercent: number };
 }
 
@@ -542,13 +574,13 @@ export interface PromoBanner {
   id: string;
   title: string;
   imageUrl: string;
-  linkType: 'PRODUCT' | 'CATEGORY' | 'VENDOR' | 'URL';
+  linkType: "PRODUCT" | "CATEGORY" | "VENDOR" | "URL";
   linkTargetId: string | null;
   linkUrl: string | null;
   linkSlug?: string | null;
   startDate: string | null;
   endDate: string | null;
-  status: 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
+  status: "DRAFT" | "ACTIVE" | "ARCHIVED";
   priority: number;
   createdAt?: string;
   updatedAt?: string;

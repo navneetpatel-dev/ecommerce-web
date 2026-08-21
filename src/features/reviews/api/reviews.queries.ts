@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { reviewsApi } from "./reviews.api";
 import { navigate } from "@/shared/utils/navigate";
-import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import { PATHS } from "@/shared/constants/paths";
 
 export const reviewKeys = {

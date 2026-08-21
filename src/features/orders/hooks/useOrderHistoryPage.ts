@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMyOrders } from "../api/orders.queries";
-import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import { navigate } from "@/shared/utils/navigate";
 
 export function useOrderHistoryPage() {

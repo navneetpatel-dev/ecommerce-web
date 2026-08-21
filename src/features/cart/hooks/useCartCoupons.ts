@@ -1,109 +1,124 @@
-'use client'
+"use client";
 
-import { useCallback, useEffect, useState } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
-import { couponsApi } from '@/features/coupons/api/coupons.api'
-import { cartKeys } from '@/features/cart/api/cart.queries'
-import { useCheckoutStore } from '@/features/checkout/store/checkout.store'
-import { useRequireAuth } from '@/shared/hooks/useRequireAuth'
-import { useAuthStore } from '@/features/auth/store/auth.store'
-import { LABELS } from '@/shared/constants/labels'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import type { Cart, EligibleCoupon } from '@/shared/api/types'
+import { useCallback, useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { couponsApi } from "@/features/coupons/api/coupons.api";
+import { cartKeys } from "@/features/cart/api/cart.queries";
+import { useCheckoutStore } from "@/features/checkout/store/checkout.store";
+import { useRequireAuth } from "@/shared/hooks/useRequireAuth";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import type { Cart, EligibleCoupon } from "@/shared/api/types";
 
 interface UseCartCouponsOptions {
-  cart?: Cart | null
-  enabled?: boolean
+  cart?: Cart | null;
+  enabled?: boolean;
 }
 
-export function useCartCoupons({ cart, enabled = true }: UseCartCouponsOptions) {
-  const queryClient = useQueryClient()
-  const { requireAuth } = useRequireAuth()
-  const accessToken = useAuthStore((s) => s.accessToken)
-  const setCouponCode = useCheckoutStore((s) => s.setCouponCode)
-  const appliedCouponCode = useCheckoutStore((s) => s.appliedCouponCode)
-  const manualCouponOverride = useCheckoutStore((s) => s.manualCouponOverride)
+export function useCartCoupons({
+  cart,
+  enabled = true,
+}: UseCartCouponsOptions) {
+  const queryClient = useQueryClient();
+  const { requireAuth } = useRequireAuth();
+  const accessToken = useAuthStore((s) => s.accessToken);
+  const setCouponCode = useCheckoutStore((s) => s.setCouponCode);
+  const appliedCouponCode = useCheckoutStore((s) => s.appliedCouponCode);
+  const manualCouponOverride = useCheckoutStore((s) => s.manualCouponOverride);
 
-  const [couponInput, setCouponInput] = useState('')
-  const [couponMessage, setCouponMessage] = useState<string | null>(null)
-  const [couponError, setCouponError] = useState<string | null>(null)
-  const [couponPending, setCouponPending] = useState(false)
-  const [eligible, setEligible] = useState<EligibleCoupon[]>([])
-  const [eligibleLoading, setEligibleLoading] = useState(false)
+  const [couponInput, setCouponInput] = useState("");
+  const [couponMessage, setCouponMessage] = useState<string | null>(null);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [couponPending, setCouponPending] = useState(false);
+  const [eligible, setEligible] = useState<EligibleCoupon[]>([]);
+  const [eligibleLoading, setEligibleLoading] = useState(false);
 
-  const cartApplied = cart?.appliedCoupon ?? null
-  const displayCode = cartApplied?.code ?? appliedCouponCode
-  const displayDiscount = cartApplied?.discount ?? 0
-  const removedReason = cart?.removedCouponReason ?? null
+  const cartApplied = cart?.appliedCoupon ?? null;
+  const displayCode = cartApplied?.code ?? appliedCouponCode;
+  const displayDiscount = cartApplied?.discount ?? 0;
+  const removedReason = cart?.removedCouponReason ?? null;
 
   const refreshCart = useCallback(() => {
-    void queryClient.invalidateQueries({ queryKey: cartKeys.all })
-  }, [queryClient])
+    void queryClient.invalidateQueries({ queryKey: cartKeys.all });
+  }, [queryClient]);
 
   const loadEligible = useCallback(async () => {
     if (!accessToken || !enabled) {
-      setEligible([])
-      return []
+      setEligible([]);
+      return [];
     }
-    setEligibleLoading(true)
+    setEligibleLoading(true);
     try {
-      const list = await couponsApi.eligible()
-      setEligible(list)
-      return list
+      const list = await couponsApi.eligible();
+      setEligible(list);
+      return list;
     } catch {
-      setEligible([])
-      return []
+      setEligible([]);
+      return [];
     } finally {
-      setEligibleLoading(false)
+      setEligibleLoading(false);
     }
-  }, [accessToken, enabled])
+  }, [accessToken, enabled]);
 
   const applyCoupon = useCallback(
     async (rawCode?: string, opts?: { manual?: boolean }) => {
-      const code = (rawCode ?? couponInput).trim()
-      if (!code) return
+      const code = (rawCode ?? couponInput).trim();
+      if (!code) return;
       if (
         !requireAuth({
           title: LABELS.applyCoupon,
           message: LABELS.signInToApplyCoupon,
         })
       ) {
-        return
+        return;
       }
-      setCouponPending(true)
-      setCouponError(null)
-      setCouponMessage(null)
+      setCouponPending(true);
+      setCouponError(null);
+      setCouponMessage(null);
       try {
-        const result = await couponsApi.apply(code)
-        setCouponCode(code, { manual: opts?.manual !== false })
+        const result = await couponsApi.apply(code);
+        setCouponCode(code, { manual: opts?.manual !== false });
         if (result.discount > 0) {
-          setCouponMessage(formatLabel(LABELS.couponApplied, { amount: String(result.discount) }))
+          setCouponMessage(
+            formatLabel(LABELS.couponApplied, {
+              amount: String(result.discount),
+            }),
+          );
         } else if ((result.cashbackAmount ?? 0) > 0) {
-          const payNow = cart?.pricingPreview?.grandTotal ?? cart?.total ?? 0
+          const payNow = cart?.pricingPreview?.grandTotal ?? cart?.total ?? 0;
           setCouponMessage(
             formatLabel(LABELS.cashbackPayNowMessage, {
-              payNow: `₹${Number(payNow).toLocaleString('en-IN')}`,
-              cashback: `₹${Number(result.cashbackAmount).toLocaleString('en-IN')}`,
+              payNow: `₹${Number(payNow).toLocaleString("en-IN")}`,
+              cashback: `₹${Number(result.cashbackAmount).toLocaleString("en-IN")}`,
             }),
-          )
+          );
         } else {
-          setCouponMessage(LABELS.couponAppliedCheckout)
+          setCouponMessage(LABELS.couponAppliedCheckout);
         }
-        setCouponInput('')
-        refreshCart()
-        void loadEligible()
+        setCouponInput("");
+        refreshCart();
+        void loadEligible();
       } catch (error) {
-        setCouponError(getApiErrorMessage(error, LABELS.couponInvalid))
+        setCouponError(getApiErrorMessage(error, LABELS.couponInvalid));
         if (opts?.manual !== false) {
-          setCouponCode(null, { manual: true })
+          setCouponCode(null, { manual: true });
         }
       } finally {
-        setCouponPending(false)
+        setCouponPending(false);
       }
     },
-    [couponInput, cart?.pricingPreview?.grandTotal, cart?.total, loadEligible, refreshCart, requireAuth, setCouponCode],
-  )
+    [
+      couponInput,
+      cart?.pricingPreview?.grandTotal,
+      cart?.total,
+      loadEligible,
+      refreshCart,
+      requireAuth,
+      setCouponCode,
+    ],
+  );
 
   const removeCoupon = useCallback(async () => {
     if (
@@ -112,44 +127,44 @@ export function useCartCoupons({ cart, enabled = true }: UseCartCouponsOptions) 
         message: LABELS.signInToApplyCoupon,
       })
     ) {
-      return
+      return;
     }
-    setCouponPending(true)
-    setCouponError(null)
-    setCouponMessage(null)
+    setCouponPending(true);
+    setCouponError(null);
+    setCouponMessage(null);
     try {
-      await couponsApi.remove()
-      setCouponCode(null, { manual: true })
-      refreshCart()
-      void loadEligible()
+      await couponsApi.remove();
+      setCouponCode(null, { manual: true });
+      refreshCart();
+      void loadEligible();
     } catch (error) {
-      setCouponError(getApiErrorMessage(error, LABELS.couponInvalid))
+      setCouponError(getApiErrorMessage(error, LABELS.couponInvalid));
     } finally {
-      setCouponPending(false)
+      setCouponPending(false);
     }
-  }, [loadEligible, refreshCart, requireAuth, setCouponCode])
+  }, [loadEligible, refreshCart, requireAuth, setCouponCode]);
 
   // Sync store from cart revalidation
   useEffect(() => {
     if (cartApplied?.code) {
-      setCouponCode(cartApplied.code, { manual: manualCouponOverride })
+      setCouponCode(cartApplied.code, { manual: manualCouponOverride });
     } else if (removedReason) {
-      setCouponCode(null)
-      setCouponMessage(removedReason)
+      setCouponCode(null);
+      setCouponMessage(removedReason);
     }
-  }, [cartApplied?.code, manualCouponOverride, removedReason, setCouponCode])
+  }, [cartApplied?.code, manualCouponOverride, removedReason, setCouponCode]);
 
   // Load eligible offers without auto-applying
   useEffect(() => {
-    if (!enabled || !accessToken || !cart?.items?.length) return
-    void loadEligible()
-  }, [accessToken, cart?.items?.length, enabled, loadEligible])
+    if (!enabled || !accessToken || !cart?.items?.length) return;
+    void loadEligible();
+  }, [accessToken, cart?.items?.length, enabled, loadEligible]);
 
   useEffect(() => {
     if (!cart?.items?.length) {
-      setEligible([])
+      setEligible([]);
     }
-  }, [cart?.items?.length])
+  }, [cart?.items?.length]);
 
   return {
     couponInput,
@@ -165,5 +180,5 @@ export function useCartCoupons({ cart, enabled = true }: UseCartCouponsOptions) 
     applyEligible: (code: string) => applyCoupon(code, { manual: true }),
     removeCoupon,
     refreshEligible: loadEligible,
-  }
+  };
 }
