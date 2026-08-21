@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { AdminPromoBannersPage } from '@/features/admin-dashboard/pages/AdminPromoBannersPage'
+import { AdminPromoBannersPage } from "@/features/admin-dashboard";
 
 export default function AdminBannersPage() {
-  return <AdminPromoBannersPage />
+  return <AdminPromoBannersPage />;
 }

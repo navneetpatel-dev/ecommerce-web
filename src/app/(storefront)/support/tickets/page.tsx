@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { CustomerTicketsPage } from '@/features/supportTickets/pages/CustomerTicketsPage'
+import { CustomerTicketsPage } from "@/features/supportTickets";
 
 export default function SupportTicketsRoute() {
-  return <CustomerTicketsPage />
+  return <CustomerTicketsPage />;
 }

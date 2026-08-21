@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { AdminBugReportsPage } from '@/features/bugReports/pages/AdminBugReportsPage'
+import { AdminBugReportsPage } from "@/features/bugReports";
 
 export default function AdminBugReportsRoute() {
-  return <AdminBugReportsPage />
+  return <AdminBugReportsPage />;
 }

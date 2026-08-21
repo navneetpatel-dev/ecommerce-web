@@ -1,6 +1,6 @@
-'use client'
-import { AdminCategoriesPage } from '@/features/admin-dashboard/pages/AdminCategoriesPage'
+"use client";
+import { AdminCategoriesPage } from "@/features/admin-dashboard";
 
 export default function CategoriesPage() {
-  return <AdminCategoriesPage />
+  return <AdminCategoriesPage />;
 }

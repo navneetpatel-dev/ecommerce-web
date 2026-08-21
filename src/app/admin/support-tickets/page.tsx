@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { AdminTicketsPage } from '@/features/supportTickets/pages/AdminTicketsPage'
+import { AdminTicketsPage } from "@/features/supportTickets";
 
 export default function AdminSupportTicketsRoute() {
-  return <AdminTicketsPage />
+  return <AdminTicketsPage />;
 }

@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { VendorCouponsPage } from '@/features/vendor-dashboard/pages/VendorCouponsPage'
+import { VendorCouponsPage } from "@/features/vendor-dashboard";
 
 export default function VendorCouponsRoute() {
-  return <VendorCouponsPage />
+  return <VendorCouponsPage />;
 }

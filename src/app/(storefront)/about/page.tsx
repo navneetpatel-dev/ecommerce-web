@@ -1,5 +1,5 @@
-import { AboutPage } from '@/features/content/pages/AboutPage'
+import { AboutPage } from "@/features/content";
 
 export default function About() {
-  return <AboutPage />
+  return <AboutPage />;
 }

@@ -1,8 +1,8 @@
-import { generateNoIndexMetadata } from '@/shared/seo/metadata'
-import { OrderConfirmationPage } from '@/features/orders/pages/OrderConfirmationPage'
+import { generateNoIndexMetadata } from "@/shared/seo/metadata";
+import { OrderConfirmationPage } from "@/features/orders";
 
-export const metadata = generateNoIndexMetadata('Order Confirmation')
+export const metadata = generateNoIndexMetadata("Order Confirmation");
 
 export default function OrderConfirmationRoute() {
-  return <OrderConfirmationPage />
+  return <OrderConfirmationPage />;
 }

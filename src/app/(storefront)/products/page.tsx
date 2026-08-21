@@ -1,13 +1,13 @@
-import { generateStaticPageMetadata } from '@/shared/seo/metadata'
-import { PATHS } from '@/shared/constants/paths'
-import { ProductListingPage } from '@/features/products/pages/ProductListingPage'
+import { generateStaticPageMetadata } from "@/shared/seo/metadata";
+import { PATHS } from "@/shared/constants/paths";
+import { ProductListingPage } from "@/features/products";
 
 export const metadata = generateStaticPageMetadata(
-  'Products',
-  'Browse our complete collection of premium t-shirts. Find the perfect fit, style, and design from multiple brands.',
-  PATHS.products
-)
+  "Products",
+  "Browse our complete collection of premium t-shirts. Find the perfect fit, style, and design from multiple brands.",
+  PATHS.products,
+);
 
 export default function Products() {
-  return <ProductListingPage />
+  return <ProductListingPage />;
 }

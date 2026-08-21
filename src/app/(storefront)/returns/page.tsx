@@ -1,5 +1,5 @@
-import { ReturnsPage } from '@/features/content/pages/ReturnsPage'
+import { ReturnsPage } from "@/features/content";
 
 export default function Returns() {
-  return <ReturnsPage />
+  return <ReturnsPage />;
 }

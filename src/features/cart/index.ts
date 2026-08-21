@@ -9,3 +9,4 @@ export { useCartDrawerStore } from "./store/cart.store";
 export { groupItemsByVendor, calcCartTotal } from "./utils/cart.utils";
 export { CartDrawer } from "./components/CartDrawer";
 export { CartDrawerContainer } from "./containers/CartDrawerContainer";
+export { CartPage } from "./pages/CartPage";

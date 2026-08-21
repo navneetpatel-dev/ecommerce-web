@@ -1,5 +1,5 @@
-import { TermsPage } from '@/features/content/pages/TermsPage'
+import { TermsPage } from "@/features/content";
 
 export default function Terms() {
-  return <TermsPage />
+  return <TermsPage />;
 }

@@ -1,6 +1,6 @@
-'use client'
-import { VendorHomePage } from '@/features/vendor-dashboard/pages/VendorHomePage'
+"use client";
+import { VendorHomePage } from "@/features/vendor-dashboard";
 
 export default function VendorPage() {
-  return <VendorHomePage />
+  return <VendorHomePage />;
 }

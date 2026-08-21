@@ -1,6 +1,6 @@
-'use client'
-import { AdminReturnsPage } from '@/features/admin-dashboard/pages/AdminReturnsPage'
+"use client";
+import { AdminReturnsPage } from "@/features/admin-dashboard";
 
 export default function ReturnsPage() {
-  return <AdminReturnsPage />
+  return <AdminReturnsPage />;
 }

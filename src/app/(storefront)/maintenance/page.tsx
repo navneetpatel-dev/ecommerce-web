@@ -1,5 +1,5 @@
-import { MaintenancePage } from '@/features/content/pages/MaintenancePage'
+import { MaintenancePage } from "@/features/content";
 
 export default function Maintenance() {
-  return <MaintenancePage />
+  return <MaintenancePage />;
 }

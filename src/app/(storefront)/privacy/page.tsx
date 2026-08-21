@@ -1,5 +1,5 @@
-import { PrivacyPage } from '@/features/content/pages/PrivacyPage'
+import { PrivacyPage } from "@/features/content";
 
 export default function Privacy() {
-  return <PrivacyPage />
+  return <PrivacyPage />;
 }

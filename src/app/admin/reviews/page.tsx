@@ -1,6 +1,6 @@
-'use client'
-import { AdminReviewsPage } from '@/features/admin-dashboard/pages/AdminReviewsPage'
+"use client";
+import { AdminReviewsPage } from "@/features/admin-dashboard";
 
 export default function ReviewsPage() {
-  return <AdminReviewsPage />
+  return <AdminReviewsPage />;
 }

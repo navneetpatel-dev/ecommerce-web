@@ -1,5 +1,5 @@
-import { BlogPage } from '@/features/content/pages/BlogPage'
+import { BlogPage } from "@/features/content";
 
 export default function Blog() {
-  return <BlogPage />
+  return <BlogPage />;
 }

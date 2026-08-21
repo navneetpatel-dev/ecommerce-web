@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { CustomerBugReportDetailPage } from '@/features/bugReports/pages/CustomerBugReportDetailPage'
+import { CustomerBugReportDetailPage } from "@/features/bugReports";
 
 export default function BugReportDetailRoute() {
-  return <CustomerBugReportDetailPage />
+  return <CustomerBugReportDetailPage />;
 }

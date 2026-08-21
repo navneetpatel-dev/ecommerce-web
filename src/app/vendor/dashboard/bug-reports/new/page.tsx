@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { VendorNewBugReportPage } from '@/features/bugReports/pages/VendorNewBugReportPage'
+import { VendorNewBugReportPage } from "@/features/bugReports";
 
 export default function VendorNewBugReportRoute() {
-  return <VendorNewBugReportPage />
+  return <VendorNewBugReportPage />;
 }
