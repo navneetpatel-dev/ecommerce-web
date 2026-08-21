@@ -1,31 +1,43 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import type { UseFormReturn } from 'react-hook-form'
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button } from '@/shared/components/ui/button'
-import { ButtonGroup } from '@/shared/components/ui/button-group'
-import { Input } from '@/shared/components/ui/input'
-import { FormActions, FormFieldFrame, FormSection, FormStack } from '@/shared/components/forms'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/components/ui/dialog'
-import { NumberInput } from '@/shared/components/NumberInput'
-import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
-import { DataTable, type DataTableColumn } from '@/shared/components/DataTable'
-import { Plus, Layers } from 'lucide-react'
-import { CreateCouponForm } from './CreateCouponForm'
-import { adminApi } from '../api/admin.api'
+import { useState } from "react";
+import type { UseFormReturn } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/shared/components/ui/button";
+import { ButtonGroup } from "@/shared/components/ui/button-group";
+import { Input } from "@/shared/components/ui/input";
+import {
+  FormActions,
+  FormFieldFrame,
+  FormSection,
+  FormStack,
+} from "@/shared/components/forms";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/components/ui/dialog";
+import { NumberInput } from "@/shared/components/NumberInput";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
+import { Plus, Layers } from "lucide-react";
+import { CreateCouponForm } from "./CreateCouponForm";
+import { adminApi } from "../api/admin.api";
+import { adminKeys } from "../api/admin.queries";
 import {
   CouponSchema,
   COUPON_FORM_DEFAULTS,
   toCouponCreateBody,
   type CouponFormInput,
-} from '../schemas/coupons.schema'
-import { LABELS } from '@/shared/constants/labels'
-import { formatDateTime } from '@/shared/utils/formatDate'
-import type { CouponBatch } from '@/shared/api/types'
-import { z } from 'zod'
+} from "../schemas/coupons.schema";
+import { LABELS } from "@/shared/constants/labels";
+import { formatDateTime } from "@/shared/utils/formatDate";
+import type { CouponBatch } from "@/shared/api/types";
+import { z } from "zod";
 
 const BulkFormSchema = z.object({
   name: z.string().trim().min(1, LABELS.couponBatchNameRequired),
@@ -35,108 +47,119 @@ const BulkFormSchema = z.object({
     .min(1, LABELS.couponBulkCountInvalid)
     .max(500, LABELS.couponBulkCountInvalid),
   prefix: z.string().trim().max(8).optional(),
-})
+});
 
-type BulkMetaInput = z.infer<typeof BulkFormSchema>
+type BulkMetaInput = z.infer<typeof BulkFormSchema>;
 
 interface CouponsPageHeaderProps {
-  open: boolean
-  setOpen: (open: boolean) => void
-  form: UseFormReturn<CouponFormInput>
-  onSubmit: (data: CouponFormInput) => void
-  isPending: boolean
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  form: UseFormReturn<CouponFormInput>;
+  onSubmit: (data: CouponFormInput) => void;
+  isPending: boolean;
 }
 
-export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: CouponsPageHeaderProps) {
-  const queryClient = useQueryClient()
-  const [bulkOpen, setBulkOpen] = useState(false)
-  const [batchDetail, setBatchDetail] = useState<CouponBatch | null>(null)
+export function CouponsPageHeader({
+  open,
+  setOpen,
+  form,
+  onSubmit,
+  isPending,
+}: CouponsPageHeaderProps) {
+  const queryClient = useQueryClient();
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [batchDetail, setBatchDetail] = useState<CouponBatch | null>(null);
 
   const templateForm = useForm<CouponFormInput>({
     resolver: zodResolver(CouponSchema),
-    mode: 'onTouched',
-    defaultValues: { ...COUPON_FORM_DEFAULTS, code: 'BULK' },
-  })
+    mode: "onTouched",
+    defaultValues: { ...COUPON_FORM_DEFAULTS, code: "BULK" },
+  });
 
   const bulkMetaForm = useForm<BulkMetaInput>({
     resolver: zodResolver(BulkFormSchema),
-    defaultValues: { name: '', count: 10, prefix: 'CS' },
-  })
+    defaultValues: { name: "", count: 10, prefix: "CS" },
+  });
 
   const batchesQuery = useQuery({
-    queryKey: ['admin', 'coupon-batches'],
+    queryKey: adminKeys.couponBatches,
     queryFn: () => adminApi.couponBatches(),
-  })
+  });
 
   const bulkMutation = useMutation({
     mutationFn: async () => {
-      const metaValid = await bulkMetaForm.trigger()
-      const templateValid = await templateForm.trigger()
-      if (!metaValid || !templateValid) throw new Error('validation')
-      const meta = bulkMetaForm.getValues()
-      const template = templateForm.getValues()
-      const { code: _code, ...templateFields } = toCouponCreateBody(template)
+      const metaValid = await bulkMetaForm.trigger();
+      const templateValid = await templateForm.trigger();
+      if (!metaValid || !templateValid) throw new Error("validation");
+      const meta = bulkMetaForm.getValues();
+      const template = templateForm.getValues();
+      const { code: _code, ...templateFields } = toCouponCreateBody(template);
       return adminApi.bulkGenerateCoupons({
         name: meta.name,
         count: meta.count,
         prefix: meta.prefix || undefined,
         template: templateFields,
-      })
+      });
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['admin', 'coupons'] })
-      void queryClient.invalidateQueries({ queryKey: ['admin', 'coupon-batches'] })
-      bulkMetaForm.reset({ name: '', count: 10, prefix: 'CS' })
-      templateForm.reset({ ...COUPON_FORM_DEFAULTS, code: 'BULK' })
-      setBulkOpen(false)
+      void queryClient.invalidateQueries({ queryKey: adminKeys.coupons.all });
+      void queryClient.invalidateQueries({ queryKey: adminKeys.couponBatches });
+      bulkMetaForm.reset({ name: "", count: 10, prefix: "CS" });
+      templateForm.reset({ ...COUPON_FORM_DEFAULTS, code: "BULK" });
+      setBulkOpen(false);
     },
-  })
+  });
 
   const batchColumns: DataTableColumn<CouponBatch>[] = [
-    { id: 'name', header: LABELS.bulkBatchName, accessor: 'name' },
+    { id: "name", header: LABELS.bulkBatchName, accessor: "name" },
     {
-      id: 'count',
+      id: "count",
       header: LABELS.batchGeneratedCount,
       cell: (row) => row.generatedCount,
     },
     {
-      id: 'redemptions',
+      id: "redemptions",
       header: LABELS.batchRedemptions,
       cell: (row) => row.redemptionCount ?? 0,
     },
     {
-      id: 'discount',
+      id: "discount",
       header: LABELS.batchDiscountImpact,
-      className: 'tabular-nums',
-      cell: (row) => `₹${Number(row.discountTotal ?? 0).toLocaleString('en-IN')}`,
+      className: "tabular-nums",
+      cell: (row) =>
+        `₹${Number(row.discountTotal ?? 0).toLocaleString("en-IN")}`,
     },
     {
-      id: 'revenue',
+      id: "revenue",
       header: LABELS.batchRevenueImpact,
-      className: 'tabular-nums',
-      cell: (row) => `₹${Number(row.revenueImpact ?? 0).toLocaleString('en-IN')}`,
+      className: "tabular-nums",
+      cell: (row) =>
+        `₹${Number(row.revenueImpact ?? 0).toLocaleString("en-IN")}`,
     },
     {
-      id: 'expires',
+      id: "expires",
       header: LABELS.batchExpires,
-      cell: (row) => (row.expiresAt ? formatDateTime(row.expiresAt) : LABELS.usageUnlimited),
+      cell: (row) =>
+        row.expiresAt ? formatDateTime(row.expiresAt) : LABELS.usageUnlimited,
     },
     {
-      id: 'created',
+      id: "created",
       header: LABELS.startDate,
       cell: (row) => formatDateTime(row.createdAt),
     },
-  ]
+  ];
 
-  const bulkMeta = bulkMetaForm.watch()
+  const bulkMeta = bulkMetaForm.watch();
   const canBulk =
     BulkFormSchema.safeParse(bulkMeta).success &&
-    CouponSchema.safeParse(templateForm.watch()).success
+    CouponSchema.safeParse(templateForm.watch()).success;
 
   return (
     <div className="space-y-6">
       <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]">{LABELS.coupons}</h2>
+        <h2 className="text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]">
+          {LABELS.coupons}
+        </h2>
         <ButtonGroup>
           <Dialog open={bulkOpen} onOpenChange={setBulkOpen}>
             <DialogTrigger asChild>
@@ -158,7 +181,7 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
                     htmlFor="bulk-name"
                     className="sm:col-span-2"
                   >
-                    <Input id="bulk-name" {...bulkMetaForm.register('name')} />
+                    <Input id="bulk-name" {...bulkMetaForm.register("name")} />
                   </FormFieldFrame>
                   <FormFieldFrame label={LABELS.bulkCount}>
                     <Controller
@@ -176,8 +199,14 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
                       )}
                     />
                   </FormFieldFrame>
-                  <FormFieldFrame label={LABELS.bulkPrefix} htmlFor="bulk-prefix">
-                    <Input id="bulk-prefix" {...bulkMetaForm.register('prefix')} />
+                  <FormFieldFrame
+                    label={LABELS.bulkPrefix}
+                    htmlFor="bulk-prefix"
+                  >
+                    <Input
+                      id="bulk-prefix"
+                      {...bulkMetaForm.register("prefix")}
+                    />
                   </FormFieldFrame>
                 </FormSection>
                 <CreateCouponForm
@@ -219,7 +248,7 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
               </DialogHeader>
               <form
                 onSubmit={form.handleSubmit(onSubmit, () => {
-                  void form.trigger()
+                  void form.trigger();
                 })}
                 className="space-y-1"
               >
@@ -231,7 +260,9 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
       </div>
 
       <section className="space-y-3">
-        <h3 className="text-[1rem] font-semibold text-ink">{LABELS.couponBatches}</h3>
+        <h3 className="text-[1rem] font-semibold text-ink">
+          {LABELS.couponBatches}
+        </h3>
         <DataTable
           columns={batchColumns}
           rows={batchesQuery.data ?? []}
@@ -251,32 +282,53 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
         />
       </section>
 
-      <Dialog open={Boolean(batchDetail)} onOpenChange={(next) => !next && setBatchDetail(null)}>
+      <Dialog
+        open={Boolean(batchDetail)}
+        onOpenChange={(next) => !next && setBatchDetail(null)}
+      >
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>{batchDetail?.name ?? LABELS.couponBatches}</DialogTitle>
+            <DialogTitle>
+              {batchDetail?.name ?? LABELS.couponBatches}
+            </DialogTitle>
           </DialogHeader>
           {batchDetail ? (
             <div className="space-y-3">
               <dl className="space-y-2 text-[0.875rem]">
                 <div className="flex justify-between gap-4">
-                  <dt className="text-ink-muted">{LABELS.batchGeneratedCount}</dt>
-                  <dd className="tabular-nums font-medium">{batchDetail.generatedCount}</dd>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-ink-muted">{LABELS.batchRedemptions}</dt>
-                  <dd className="tabular-nums font-medium">{batchDetail.redemptionCount ?? 0}</dd>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-ink-muted">{LABELS.batchDiscountImpact}</dt>
+                  <dt className="text-ink-muted">
+                    {LABELS.batchGeneratedCount}
+                  </dt>
                   <dd className="tabular-nums font-medium">
-                    ₹{Number(batchDetail.discountTotal ?? 0).toLocaleString('en-IN')}
+                    {batchDetail.generatedCount}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <dt className="text-ink-muted">{LABELS.batchRevenueImpact}</dt>
+                  <dt className="text-ink-muted">{LABELS.batchRedemptions}</dt>
                   <dd className="tabular-nums font-medium">
-                    ₹{Number(batchDetail.revenueImpact ?? 0).toLocaleString('en-IN')}
+                    {batchDetail.redemptionCount ?? 0}
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-ink-muted">
+                    {LABELS.batchDiscountImpact}
+                  </dt>
+                  <dd className="tabular-nums font-medium">
+                    ₹
+                    {Number(batchDetail.discountTotal ?? 0).toLocaleString(
+                      "en-IN",
+                    )}
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-ink-muted">
+                    {LABELS.batchRevenueImpact}
+                  </dt>
+                  <dd className="tabular-nums font-medium">
+                    ₹
+                    {Number(batchDetail.revenueImpact ?? 0).toLocaleString(
+                      "en-IN",
+                    )}
                   </dd>
                 </div>
               </dl>
@@ -292,5 +344,5 @@ export function CouponsPageHeader({ open, setOpen, form, onSubmit, isPending }: 
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

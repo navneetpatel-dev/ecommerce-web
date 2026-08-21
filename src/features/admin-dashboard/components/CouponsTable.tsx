@@ -1,38 +1,43 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { DataTable, type DataTableColumn, type DataTablePaginationProps } from '@/shared/components/DataTable'
-import { StatusBadge } from '@/shared/components/StatusBadge'
-import { Button } from '@/shared/components/ui/button'
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  DataTable,
+  type DataTableColumn,
+  type DataTablePaginationProps,
+} from "@/shared/components/DataTable";
+import { StatusBadge } from "@/shared/components/StatusBadge";
+import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/shared/components/ui/dialog'
-import { LABELS } from '@/shared/constants/labels'
-import { COUPON_STATUS, DISCOUNT_BEARER } from '@/shared/constants/statuses'
-import { formatDateTime } from '@/shared/utils/formatDate'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import { AdminConfirmAction } from './AdminConfirmAction'
-import { adminApi } from '../api/admin.api'
-import type { Coupon, CouponAnalytics } from '@/shared/api/types'
+} from "@/shared/components/ui/dialog";
+import { LABELS } from "@/shared/constants/labels";
+import { COUPON_STATUS, DISCOUNT_BEARER } from "@/shared/constants/statuses";
+import { formatDateTime } from "@/shared/utils/formatDate";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { AdminConfirmAction } from "./AdminConfirmAction";
+import { adminApi } from "../api/admin.api";
+import { adminKeys } from "../api/admin.queries";
+import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 
 interface CouponsTableProps {
-  coupons?: Coupon[]
-  loading?: boolean
-  pagination?: DataTablePaginationProps
+  coupons?: Coupon[];
+  loading?: boolean;
+  pagination?: DataTablePaginationProps;
   /** When true, hide create/edit-style status mutations except moderation reject. */
-  readOnly?: boolean
+  readOnly?: boolean;
   /** Allow reject on vendor-oversight rows (admin moderation). */
-  allowReject?: boolean
+  allowReject?: boolean;
 }
 
-function bearerLabel(bearer: Coupon['discountBearer']) {
+function bearerLabel(bearer: Coupon["discountBearer"]) {
   return bearer === DISCOUNT_BEARER.VENDOR
     ? LABELS.discountBearerVendor
-    : LABELS.discountBearerPlatform
+    : LABELS.discountBearerPlatform;
 }
 
 export function CouponsTable({
@@ -42,70 +47,70 @@ export function CouponsTable({
   readOnly = false,
   allowReject = false,
 }: CouponsTableProps) {
-  const queryClient = useQueryClient()
-  const [analyticsCoupon, setAnalyticsCoupon] = useState<Coupon | null>(null)
+  const queryClient = useQueryClient();
+  const [analyticsCoupon, setAnalyticsCoupon] = useState<Coupon | null>(null);
 
   const analyticsQuery = useQuery({
-    queryKey: ['admin', 'coupon-analytics', analyticsCoupon?.id],
+    queryKey: adminKeys.couponAnalytics(analyticsCoupon?.id),
     queryFn: () => adminApi.couponAnalytics(analyticsCoupon!.id),
     enabled: Boolean(analyticsCoupon?.id),
-  })
+  });
 
   const statusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: Coupon['status'] }) =>
+    mutationFn: ({ id, status }: { id: string; status: Coupon["status"] }) =>
       adminApi.updateCouponStatus(id, status),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['admin', 'coupons'] })
+      void queryClient.invalidateQueries({ queryKey: adminKeys.coupons.all });
     },
-  })
+  });
 
   const reload = () => {
-    void queryClient.invalidateQueries({ queryKey: ['admin', 'coupons'] })
-  }
+    void queryClient.invalidateQueries({ queryKey: adminKeys.coupons.all });
+  };
 
   const columns: DataTableColumn<Coupon>[] = [
     {
-      id: 'code',
+      id: "code",
       header: LABELS.couponCode,
-      className: 'font-mono',
+      className: "font-mono",
       cell: (row) => row.code,
     },
     {
-      id: 'type',
+      id: "type",
       header: LABELS.couponType,
-      accessor: 'type',
+      accessor: "type",
     },
     {
-      id: 'bearer',
+      id: "bearer",
       header: LABELS.discountBearer,
       cell: (row) => bearerLabel(row.discountBearer),
     },
     {
-      id: 'vendor',
+      id: "vendor",
       header: LABELS.vendorId,
-      className: 'font-mono text-[0.8125rem]',
-      cell: (row) => row.vendorId ?? '—',
+      className: "font-mono text-[0.8125rem]",
+      cell: (row) => row.vendorId ?? "—",
     },
     {
-      id: 'usage',
+      id: "usage",
       header: LABELS.couponUsage,
-      className: 'font-mono text-[0.8125rem]',
+      className: "font-mono text-[0.8125rem]",
       truncate: false,
       cell: (row) =>
         `${row.usedCount}/${row.usageLimitTotal ?? LABELS.usageUnlimited}`,
     },
     {
-      id: 'status',
+      id: "status",
       header: LABELS.status,
       truncate: false,
       cell: (row) => <StatusBadge status={row.status} />,
     },
     {
-      id: 'expires',
+      id: "expires",
       header: LABELS.expires,
       cell: (row) => formatDateTime(row.endDate),
     },
-  ]
+  ];
 
   const renderActions = (row: Coupon) => (
     <>
@@ -123,22 +128,31 @@ export function CouponsTable({
           tone="neutral"
           dialogVariant="warning"
           title={LABELS.confirmPauseCouponTitle}
-          description={formatLabel(LABELS.confirmPauseCouponBody, { code: row.code })}
+          description={formatLabel(LABELS.confirmPauseCouponBody, {
+            code: row.code,
+          })}
           onConfirm={() =>
-            statusMutation.mutateAsync({ id: row.id, status: COUPON_STATUS.PAUSED }).then(reload)
+            statusMutation
+              .mutateAsync({ id: row.id, status: COUPON_STATUS.PAUSED })
+              .then(reload)
           }
         />
       ) : null}
       {!readOnly &&
-      (row.status === COUPON_STATUS.PAUSED || row.status === COUPON_STATUS.DRAFT) ? (
+      (row.status === COUPON_STATUS.PAUSED ||
+        row.status === COUPON_STATUS.DRAFT) ? (
         <AdminConfirmAction
           label={LABELS.activateCoupon}
           tone="success"
           dialogVariant="success"
           title={LABELS.confirmActivateCouponTitle}
-          description={formatLabel(LABELS.confirmActivateCouponBody, { code: row.code })}
+          description={formatLabel(LABELS.confirmActivateCouponBody, {
+            code: row.code,
+          })}
           onConfirm={() =>
-            statusMutation.mutateAsync({ id: row.id, status: COUPON_STATUS.ACTIVE }).then(reload)
+            statusMutation
+              .mutateAsync({ id: row.id, status: COUPON_STATUS.ACTIVE })
+              .then(reload)
           }
         />
       ) : null}
@@ -148,7 +162,9 @@ export function CouponsTable({
           tone="archive"
           dialogVariant="warning"
           title={LABELS.confirmArchiveCouponTitle}
-          description={formatLabel(LABELS.confirmArchiveCouponBody, { code: row.code })}
+          description={formatLabel(LABELS.confirmArchiveCouponBody, {
+            code: row.code,
+          })}
           onConfirm={() =>
             statusMutation
               .mutateAsync({ id: row.id, status: COUPON_STATUS.ARCHIVED })
@@ -165,7 +181,9 @@ export function CouponsTable({
           tone="danger"
           dialogVariant="danger"
           title={LABELS.confirmRejectCouponTitle}
-          description={formatLabel(LABELS.confirmRejectCouponBody, { code: row.code })}
+          description={formatLabel(LABELS.confirmRejectCouponBody, {
+            code: row.code,
+          })}
           onConfirm={() =>
             statusMutation
               .mutateAsync({ id: row.id, status: COUPON_STATUS.REJECTED })
@@ -174,9 +192,9 @@ export function CouponsTable({
         />
       ) : null}
     </>
-  )
+  );
 
-  const analytics: CouponAnalytics | undefined = analyticsQuery.data
+  const analytics: CouponAnalytics | undefined = analyticsQuery.data;
 
   return (
     <>
@@ -190,12 +208,15 @@ export function CouponsTable({
         actions={renderActions}
       />
 
-      <Dialog open={Boolean(analyticsCoupon)} onOpenChange={(open) => !open && setAnalyticsCoupon(null)}>
+      <Dialog
+        open={Boolean(analyticsCoupon)}
+        onOpenChange={(open) => !open && setAnalyticsCoupon(null)}
+      >
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>
               {LABELS.couponAnalytics}
-              {analyticsCoupon ? ` — ${analyticsCoupon.code}` : ''}
+              {analyticsCoupon ? ` — ${analyticsCoupon.code}` : ""}
             </DialogTitle>
           </DialogHeader>
           {analyticsQuery.isLoading ? (
@@ -204,25 +225,28 @@ export function CouponsTable({
             <dl className="space-y-3 text-[0.875rem]">
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">{LABELS.redemptionCount}</dt>
-                <dd className="tabular-nums font-medium">{analytics.usedCount}</dd>
+                <dd className="tabular-nums font-medium">
+                  {analytics.usedCount}
+                </dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">{LABELS.discountCostImpact}</dt>
                 <dd className="tabular-nums font-medium">
-                  ₹{Number(analytics.totalDiscount).toLocaleString('en-IN')}
+                  ₹{Number(analytics.totalDiscount).toLocaleString("en-IN")}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">{LABELS.revenueImpact}</dt>
                 <dd className="tabular-nums font-medium">
-                  ₹{Number(analytics.revenueImpact ?? 0).toLocaleString('en-IN')}
+                  ₹
+                  {Number(analytics.revenueImpact ?? 0).toLocaleString("en-IN")}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">{LABELS.conversionRate}</dt>
                 <dd className="tabular-nums font-medium">
                   {analytics.conversionRate == null
-                    ? '—'
+                    ? "—"
                     : `${Math.round(Number(analytics.conversionRate) * 100)}%`}
                 </dd>
               </div>
@@ -235,10 +259,12 @@ export function CouponsTable({
               </div>
             </dl>
           ) : (
-            <p className="text-[0.875rem] text-ink-muted">{LABELS.couldNotLoadData}</p>
+            <p className="text-[0.875rem] text-ink-muted">
+              {LABELS.couldNotLoadData}
+            </p>
           )}
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

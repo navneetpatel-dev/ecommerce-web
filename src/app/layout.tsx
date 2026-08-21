@@ -1,38 +1,39 @@
-import type { Metadata, Viewport } from 'next'
-import { Inter, Fraunces, IBM_Plex_Mono } from 'next/font/google'
-import { SITE } from '@/shared/seo/constants'
-import '@/shared/styles/globals.css'
-import { Providers } from './providers'
+import type { Metadata, Viewport } from "next";
+import { Inter, Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { SITE } from "@/shared/seo/constants";
+import "@/shared/styles/globals.css";
+import { Providers } from "./providers";
+import { WebVitalsReporter } from "@/shared/components/WebVitalsReporter";
 
 const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-})
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 const fraunces = Fraunces({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-})
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
 
 const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-mono',
-  display: 'swap',
-})
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F6F3EC' },
-    { media: '(prefers-color-scheme: dark)', color: '#121113' },
+    { media: "(prefers-color-scheme: light)", color: "#F6F3EC" },
+    { media: "(prefers-color-scheme: dark)", color: "#121113" },
   ],
-}
+};
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -41,15 +42,21 @@ export const metadata: Metadata = {
     default: SITE.name,
   },
   description: SITE.description,
-  keywords: ['t-shirts', 'online shopping', 'premium clothing', 'e-commerce', 'multi-vendor'],
+  keywords: [
+    "t-shirts",
+    "online shopping",
+    "premium clothing",
+    "e-commerce",
+    "multi-vendor",
+  ],
   authors: [{ name: SITE.author }],
   creator: SITE.author,
   publisher: SITE.author,
-  generator: 'Next.js',
+  generator: "Next.js",
   applicationName: SITE.name,
-  category: 'e-commerce',
+  category: "e-commerce",
   openGraph: {
-    type: 'website',
+    type: "website",
     siteName: SITE.name,
     locale: SITE.locale,
     url: siteUrl,
@@ -58,7 +65,7 @@ export const metadata: Metadata = {
     images: [{ url: SITE.ogImage, width: 1200, height: 630 }],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     site: SITE.twitter,
     creator: SITE.twitter,
     title: SITE.name,
@@ -71,29 +78,29 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-      'max-video-preview': -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
   icons: {
-    icon: '/favicon.ico',
-    apple: [{ url: '/icon-192.png', sizes: '192x192' }],
-    other: [{ url: '/icon-512.png', sizes: '512x512' }],
+    icon: "/favicon.ico",
+    apple: [{ url: "/icon-192.png", sizes: "192x192" }],
+    other: [{ url: "/icon-512.png", sizes: "512x512" }],
   },
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION,
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html
-      lang={SITE.locale.split('_')[0]}
+      lang={SITE.locale.split("_")[0]}
       className={`${inter.variable} ${fraunces.variable} ${ibmPlexMono.variable}`}
       suppressHydrationWarning
     >
@@ -118,7 +125,8 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <Providers>{children}</Providers>
+        <WebVitalsReporter />
       </body>
     </html>
-  )
+  );
 }

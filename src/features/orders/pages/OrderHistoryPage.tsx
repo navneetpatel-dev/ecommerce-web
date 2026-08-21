@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import { useOrderHistoryPage } from '../hooks/useOrderHistoryPage'
-import { OrdersList } from '../components/OrdersList'
-import { EmptyOrdersState } from '../components/EmptyOrdersState'
-import { Skeleton } from '@/shared/components/ui/skeleton'
+import { useOrderHistoryPage } from "../hooks/useOrderHistoryPage";
+import { OrdersList } from "../components/OrdersList";
+import { EmptyOrdersState } from "../components/EmptyOrdersState";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export function OrderHistoryPage() {
-  const history = useOrderHistoryPage()
+  const history = useOrderHistoryPage();
 
   if (history.isLoading) {
     return (
@@ -17,10 +17,10 @@ export function OrderHistoryPage() {
         <Skeleton className="h-16 w-full" />
         <Skeleton className="h-16 w-full" />
       </div>
-    )
+    );
   }
 
-  if (history.isEmpty) return <EmptyOrdersState />
+  if (history.isEmpty) return <EmptyOrdersState />;
 
-  return <OrdersList orders={history.orders} />
+  return <OrdersList orders={history.orders} pagination={history.pagination} />;
 }

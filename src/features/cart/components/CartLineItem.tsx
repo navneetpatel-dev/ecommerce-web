@@ -1,63 +1,76 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { Trash2 } from 'lucide-react'
-import { PATHS } from '@/shared/constants/paths'
-import { LABELS } from '@/shared/constants/labels'
-import { UNAVAILABLE_REASON } from '@/shared/constants/statuses'
-import { QuantitySelector } from '@/shared/components/QuantitySelector'
-import { Badge } from '@/shared/components/ui/badge'
-import { Button } from '@/shared/components/ui/button'
-import { MAX_CART_LINE_QUANTITY } from '@/shared/constants/cart'
-import { cn } from '@/shared/utils/cn'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import type { CartItem } from '@/shared/api/types'
-import type { UnavailableReason } from '@/shared/constants/statuses'
+import Link from "next/link";
+import Image from "next/image";
+import { Trash2 } from "lucide-react";
+import { PATHS } from "@/shared/constants/paths";
+import { LABELS } from "@/shared/constants/labels";
+import { UNAVAILABLE_REASON } from "@/shared/constants/statuses";
+import { QuantitySelector } from "@/shared/components/QuantitySelector";
+import { MediaImage } from "@/shared/components/MediaImage";
+import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
+import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart";
+import { cn } from "@/shared/utils/cn";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import type { CartItem } from "@/shared/api/types";
+import type { UnavailableReason } from "@/shared/constants/statuses";
 
-function unavailableLabel(reason: UnavailableReason | null | undefined): string {
+function unavailableLabel(
+  reason: UnavailableReason | null | undefined,
+): string {
   switch (reason) {
     case UNAVAILABLE_REASON.OUT_OF_STOCK:
-      return LABELS.unavailableReasonOutOfStock
+      return LABELS.unavailableReasonOutOfStock;
     case UNAVAILABLE_REASON.PRODUCT_UNPUBLISHED:
-      return LABELS.unavailableReasonProductUnpublished
+      return LABELS.unavailableReasonProductUnpublished;
     case UNAVAILABLE_REASON.VENDOR_UNAVAILABLE:
-      return LABELS.unavailableReasonVendorUnavailable
+      return LABELS.unavailableReasonVendorUnavailable;
     default:
-      return LABELS.unavailableGeneric
+      return LABELS.unavailableGeneric;
   }
 }
 
 function variantLabel(item: CartItem) {
-  return Object.values(item.variant?.attributes || {}).filter(Boolean).join(' · ')
+  return Object.values(item.variant?.attributes || {})
+    .filter(Boolean)
+    .join(" · ");
 }
 
 interface CartLineItemProps {
-  item: CartItem
-  onUpdateQuantity: (itemId: string, quantity: number) => void
-  onRemoveItem: (itemId: string) => void
+  item: CartItem;
+  onUpdateQuantity: (itemId: string, quantity: number) => void;
+  onRemoveItem: (itemId: string) => void;
   /** Compact layout used inside CartDrawer */
-  compact?: boolean
+  compact?: boolean;
 }
 
-export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = false }: CartLineItemProps) {
-  const available = item.isAvailable !== false
-  const attrs = variantLabel(item)
-  const lineTotal = Number(item.product.price) * item.quantity
+export function CartLineItem({
+  item,
+  onUpdateQuantity,
+  onRemoveItem,
+  compact = false,
+}: CartLineItemProps) {
+  const available = item.isAvailable !== false;
+  const attrs = variantLabel(item);
+  const lineTotal = Number(item.product.price) * item.quantity;
 
   if (compact) {
     return (
       <div
         className={cn(
-          'flex items-center gap-3 py-2',
-          !available && 'opacity-50 grayscale',
+          "flex items-center gap-3 py-2",
+          !available && "opacity-50 grayscale",
         )}
       >
-        <img
-          src={item.product.imageUrl}
-          alt={item.product.name}
-          className="h-14 w-14 shrink-0 rounded-sm object-cover"
-        />
+        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-sm">
+          <MediaImage
+            src={item.product.imageUrl}
+            alt={item.product.name}
+            sizes="56px"
+            imageClassName="object-cover"
+          />
+        </div>
         <div className="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1">
           <Link
             href={PATHS.product(item.product.slug)}
@@ -71,7 +84,9 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
             size="icon-sm"
             onClick={() => onRemoveItem(item.id)}
             className="h-8 w-8 min-h-8 max-h-8 shrink-0 justify-self-end p-0 text-ink-muted hover:bg-danger-subtle hover:text-danger"
-            aria-label={formatLabel(LABELS.removeNamed, { name: item.product.name })}
+            aria-label={formatLabel(LABELS.removeNamed, {
+              name: item.product.name,
+            })}
           >
             <Trash2 size={14} />
           </Button>
@@ -81,7 +96,7 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
             </Badge>
           ) : (
             <p className="truncate text-[0.8125rem] font-semibold tabular-nums text-brand">
-              ₹{item.product.price.toLocaleString('en-IN')}
+              ₹{item.product.price.toLocaleString("en-IN")}
             </p>
           )}
           {available ? (
@@ -98,14 +113,14 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
           )}
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <li
       className={cn(
-        'group grid grid-cols-[4.5rem_1fr] gap-3 py-3.5 sm:grid-cols-[5.5rem_1fr_auto] sm:gap-4',
-        !available && 'opacity-50 grayscale'
+        "group grid grid-cols-[4.5rem_1fr] gap-3 py-3.5 sm:grid-cols-[5.5rem_1fr_auto] sm:gap-4",
+        !available && "opacity-50 grayscale",
       )}
     >
       <Link
@@ -142,7 +157,7 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
               </Badge>
             ) : (
               <p className="mt-1 text-[0.8125rem] text-ink-muted sm:hidden">
-                ₹{Number(item.product.price).toLocaleString('en-IN')} each
+                ₹{Number(item.product.price).toLocaleString("en-IN")} each
               </p>
             )}
           </div>
@@ -151,7 +166,9 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
             variant="ghost"
             size="icon-sm"
             className="h-9 w-9 min-h-9 max-h-9 shrink-0 text-ink-muted hover:bg-danger-subtle hover:text-danger sm:hidden"
-            aria-label={formatLabel(LABELS.removeNamed, { name: item.product.name })}
+            aria-label={formatLabel(LABELS.removeNamed, {
+              name: item.product.name,
+            })}
             onClick={() => onRemoveItem(item.id)}
           >
             <Trash2 size={15} />
@@ -185,15 +202,15 @@ export function CartLineItem({ item, onUpdateQuantity, onRemoveItem, compact = f
       {available ? (
         <div className="hidden flex-col items-end justify-start gap-1 pt-0.5 sm:flex">
           <p className="font-display text-[1.125rem] tabular-nums text-ink">
-            ₹{lineTotal.toLocaleString('en-IN')}
+            ₹{lineTotal.toLocaleString("en-IN")}
           </p>
           <p className="text-[0.75rem] text-ink-muted">
-            ₹{Number(item.product.price).toLocaleString('en-IN')} each
+            ₹{Number(item.product.price).toLocaleString("en-IN")} each
           </p>
         </div>
       ) : (
         <div className="hidden sm:block" />
       )}
     </li>
-  )
+  );
 }

@@ -11,6 +11,7 @@ import { FormError } from "@/shared/components/FormError";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { StatusBadge } from "@/shared/components/StatusBadge";
+import { MediaImage } from "@/shared/components/MediaImage";
 import {
   Select,
   SelectContent,
@@ -106,7 +107,7 @@ function AttachmentThumbs({
         <li
           key={item.id ?? item.url}
           className={cn(
-            "overflow-hidden rounded-md border border-line bg-paper",
+            "relative overflow-hidden rounded-md border border-line bg-paper",
             box,
           )}
         >
@@ -119,12 +120,11 @@ function AttachmentThumbs({
               preload="metadata"
             />
           ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <MediaImage
               src={item.url}
               alt=""
-              loading="lazy"
-              className="h-full w-full object-cover"
+              sizes={size === "sm" ? "56px" : "80px"}
+              imageClassName="object-cover"
             />
           )}
         </li>

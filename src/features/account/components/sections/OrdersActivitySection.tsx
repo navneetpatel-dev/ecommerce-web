@@ -1,36 +1,40 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { ChevronRight, Heart, LifeBuoy, Package, RotateCcw, Star } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
-import { reviewsApi } from '@/features/reviews/api/reviews.api'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { useAccountOverview } from '../../hooks/useAccountOverview'
+import Link from "next/link";
+import {
+  ChevronRight,
+  Heart,
+  LifeBuoy,
+  Package,
+  RotateCcw,
+  Star,
+} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { reviewsApi } from "@/features/reviews/api/reviews.api";
+import { reviewKeys } from "@/features/reviews";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { TextEyebrow } from "@/shared/components/TextEyebrow";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { useAccountOverview } from "../../hooks/useAccountOverview";
 import {
   countOrderItems,
   formatInr,
   formatOrderDate,
   orderItemSummary,
   shortOrderId,
-} from '@/features/orders/utils/format'
+} from "@/features/orders/utils/format";
 
 export function OrdersActivitySection() {
-  const {
-    recentOrders,
-    ordersCount,
-    wishlistCount,
-    isLoadingStats,
-  } = useAccountOverview()
+  const { recentOrders, ordersCount, wishlistCount, isLoadingStats } =
+    useAccountOverview();
 
   const reviewsQuery = useQuery({
-    queryKey: ['reviews', 'mine'],
+    queryKey: reviewKeys.mine(),
     queryFn: () => reviewsApi.myReviews(),
-  })
+  });
 
-  const preview = recentOrders.slice(0, 4)
+  const preview = recentOrders.slice(0, 4);
 
   return (
     <div className="space-y-6">
@@ -42,7 +46,7 @@ export function OrdersActivitySection() {
               Recent orders
             </h2>
             <p className="mt-1 text-[0.8125rem] text-ink-muted">
-              {isLoadingStats ? 'Loading…' : `${ordersCount} total`}
+              {isLoadingStats ? "Loading…" : `${ordersCount} total`}
             </p>
           </div>
           <Link
@@ -61,8 +65,11 @@ export function OrdersActivitySection() {
           </div>
         ) : preview.length === 0 ? (
           <p className="px-5 py-10 text-center text-[0.9375rem] text-ink-muted">
-            No orders yet.{' '}
-            <Link href={PATHS.products} className="font-medium text-brand hover:underline">
+            No orders yet.{" "}
+            <Link
+              href={PATHS.products}
+              className="font-medium text-brand hover:underline"
+            >
               Start shopping
             </Link>
           </p>
@@ -75,7 +82,9 @@ export function OrdersActivitySection() {
                   className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-paper md:px-6"
                 >
                   <div className="min-w-0">
-                    <p className="font-medium text-ink">#{shortOrderId(order.id)}</p>
+                    <p className="font-medium text-ink">
+                      #{shortOrderId(order.id)}
+                    </p>
                     <p className="mt-0.5 truncate text-[0.8125rem] text-ink-muted">
                       {orderItemSummary(order)} · {countOrderItems(order)} items
                     </p>
@@ -97,16 +106,25 @@ export function OrdersActivitySection() {
         <SummaryRow
           icon={Heart}
           label="Wishlist"
-          value={isLoadingStats ? '—' : String(wishlistCount)}
+          value={isLoadingStats ? "—" : String(wishlistCount)}
           href={PATHS.wishlist}
         />
         <SummaryRow
           icon={Star}
           label="Your reviews"
-          value={reviewsQuery.isLoading ? '—' : String(reviewsQuery.data?.length ?? 0)}
+          value={
+            reviewsQuery.isLoading
+              ? "—"
+              : String(reviewsQuery.data?.length ?? 0)
+          }
           href={PATHS.reviews}
         />
-        <SummaryRow icon={RotateCcw} label="Returns" value="Manage" href={PATHS.myReturns} />
+        <SummaryRow
+          icon={RotateCcw}
+          label="Returns"
+          value="Manage"
+          href={PATHS.myReturns}
+        />
         <SummaryRow
           icon={LifeBuoy}
           label={LABELS.overviewSupportTickets}
@@ -119,16 +137,21 @@ export function OrdersActivitySection() {
           value={LABELS.reportABug}
           href={PATHS.bugReports}
         />
-        <SummaryRow icon={Package} label={LABELS.wallet} value={LABELS.view} href={PATHS.wallet} />
+        <SummaryRow
+          icon={Package}
+          label={LABELS.wallet}
+          value={LABELS.view}
+          href={PATHS.wallet}
+        />
         <SummaryRow
           icon={Package}
           label={LABELS.allOrders}
-          value={isLoadingStats ? '—' : String(ordersCount)}
+          value={isLoadingStats ? "—" : String(ordersCount)}
           href={PATHS.orders}
         />
       </ul>
     </div>
-  )
+  );
 }
 
 function SummaryRow({
@@ -137,23 +160,30 @@ function SummaryRow({
   value,
   href,
 }: {
-  icon: typeof Heart
-  label: string
-  value: string
-  href?: string
+  icon: typeof Heart;
+  label: string;
+  value: string;
+  href?: string;
 }) {
   const inner = (
     <>
       <span className="flex min-w-0 items-center gap-3">
-        <Icon size={16} strokeWidth={1.5} className="shrink-0 text-ink-muted" aria-hidden />
+        <Icon
+          size={16}
+          strokeWidth={1.5}
+          className="shrink-0 text-ink-muted"
+          aria-hidden
+        />
         <span className="block text-[0.9375rem] text-ink">{label}</span>
       </span>
       <span className="flex items-center gap-2">
-        <span className="text-[0.875rem] font-medium tabular-nums text-ink">{value}</span>
+        <span className="text-[0.875rem] font-medium tabular-nums text-ink">
+          {value}
+        </span>
         {href ? <ChevronRight size={14} className="text-ink-muted" /> : null}
       </span>
     </>
-  )
+  );
 
   if (href) {
     return (
@@ -165,8 +195,12 @@ function SummaryRow({
           {inner}
         </Link>
       </li>
-    )
+    );
   }
 
-  return <li className="flex items-center justify-between gap-3 px-5 py-4 md:px-6">{inner}</li>
+  return (
+    <li className="flex items-center justify-between gap-3 px-5 py-4 md:px-6">
+      {inner}
+    </li>
+  );
 }

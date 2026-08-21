@@ -1,24 +1,49 @@
-import { useQuery } from '@tanstack/react-query'
-import { adminApi } from './admin.api'
-import { DEFAULT_PAGE_LIMIT } from '@/shared/constants/pagination'
+import { useQuery } from "@tanstack/react-query";
+import { adminApi } from "./admin.api";
+import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
+
+export const adminKeys = {
+  all: ["admin"] as const,
+  dashboard: () => [...adminKeys.all, "dashboard"] as const,
+  analytics: () => [...adminKeys.all, "analytics"] as const,
+  vendors: {
+    all: ["admin", "vendors"] as const,
+    pendingMeta: () => [...adminKeys.vendors.all, "pending", "meta"] as const,
+  },
+  products: {
+    all: ["admin", "products"] as const,
+    pendingMeta: () => [...adminKeys.products.all, "pending", "meta"] as const,
+  },
+  coupons: {
+    all: ["admin", "coupons"] as const,
+    page: (page: number, limit: number, vendorScoped?: boolean) =>
+      [...adminKeys.coupons.all, page, limit, vendorScoped] as const,
+  },
+  couponAnalytics: (couponId: string | null | undefined) =>
+    [...adminKeys.all, "coupon-analytics", couponId] as const,
+  couponBatches: ["admin", "coupon-batches"] as const,
+};
 
 export function useAdminDashboard() {
-  return useQuery({ queryKey: ['admin', 'dashboard'], queryFn: () => adminApi.dashboard() })
+  return useQuery({
+    queryKey: adminKeys.dashboard(),
+    queryFn: () => adminApi.dashboard(),
+  });
 }
 
 /** Lightweight fetch for tab badge counts (uses pagination total). */
 export function usePendingVendors() {
   return useQuery({
-    queryKey: ['admin', 'vendors', 'pending', 'meta'],
+    queryKey: adminKeys.vendors.pendingMeta(),
     queryFn: () => adminApi.pendingVendors({ page: 1, limit: 1 }),
-  })
+  });
 }
 
 export function usePendingProducts() {
   return useQuery({
-    queryKey: ['admin', 'products', 'pending', 'meta'],
+    queryKey: adminKeys.products.pendingMeta(),
     queryFn: () => adminApi.pendingProducts({ page: 1, limit: 1 }),
-  })
+  });
 }
 
 export function useAdminCoupons(
@@ -27,11 +52,15 @@ export function useAdminCoupons(
   vendorScoped?: boolean,
 ) {
   return useQuery({
-    queryKey: ['admin', 'coupons', page, limit, vendorScoped],
+    queryKey: adminKeys.coupons.page(page, limit, vendorScoped),
     queryFn: () => adminApi.coupons({ page, limit, vendorScoped }),
-  })
+    placeholderData: (prev) => prev,
+  });
 }
 
 export function useAdminAnalytics() {
-  return useQuery({ queryKey: ['admin', 'analytics'], queryFn: () => adminApi.analytics() })
+  return useQuery({
+    queryKey: adminKeys.analytics(),
+    queryFn: () => adminApi.analytics(),
+  });
 }

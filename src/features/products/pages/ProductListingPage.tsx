@@ -1,39 +1,46 @@
-'use client'
+"use client";
 
-import { Columns2, Package, Search, SlidersHorizontal, ArrowUpDown, type LucideIcon } from 'lucide-react'
-import { FilterSidebar } from '@/features/products/components/FilterSidebar'
-import { SortBar } from '@/features/products/components/SortBar'
-import { ProductGrid } from '@/features/products/components/ProductGrid'
-import { ProductCompareBar } from '@/features/products/components/ProductCompareBar'
-import { ProductCompareSection } from '@/features/products/components/ProductCompareSection'
-import { PaginationContainer } from '@/shared/containers/PaginationContainer'
-import { Button } from '@/shared/components/ui/button'
-import { BottomSheet } from '@/shared/components/BottomSheet'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { SelectableOptionButton } from '@/shared/components/SelectableOptionButton'
-import { useCategories } from '@/features/categories'
-import { SORT_OPTIONS, useProductListing } from '../hooks/useProductListing'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import type { ProductFilters } from '../api/products.api'
+import {
+  Columns2,
+  Package,
+  Search,
+  SlidersHorizontal,
+  ArrowUpDown,
+  type LucideIcon,
+} from "lucide-react";
+import { FilterSidebar } from "@/features/products/components/FilterSidebar";
+import { SortBar } from "@/features/products/components/SortBar";
+import { ProductGrid } from "@/features/products/components/ProductGrid";
+import { ProductCompareBar } from "@/features/products/components/ProductCompareBar";
+import { ProductCompareSection } from "@/features/products/components/ProductCompareSection";
+import { PaginationContainer } from "@/shared/containers/PaginationContainer";
+import { Button } from "@/shared/components/ui/button";
+import { BottomSheet } from "@/shared/components/BottomSheet";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { SelectableOptionButton } from "@/shared/components/SelectableOptionButton";
+import { useCategories } from "@/features/categories";
+import { SORT_OPTIONS, useProductListing } from "../hooks/useProductListing";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import type { ProductFilters } from "../api/products.api";
 
 function getListingEmptyState(
   filters: ProductFilters,
-  categoryName?: string
+  categoryName?: string,
 ): {
-  icon: LucideIcon
-  eyebrow: string
-  heading: string
-  message: string
-  actionLabel: string
-  actionTo?: string
-  onAction?: 'clearFilters'
+  icon: LucideIcon;
+  eyebrow: string;
+  heading: string;
+  message: string;
+  actionLabel: string;
+  actionTo?: string;
+  onAction?: "clearFilters";
 } {
   const hasFacets =
     filters.minPrice !== undefined ||
     filters.maxPrice !== undefined ||
-    filters.rating !== undefined
+    filters.rating !== undefined;
 
   if (hasFacets) {
     return {
@@ -42,8 +49,8 @@ function getListingEmptyState(
       heading: LABELS.nothingInThisRange,
       message: LABELS.nothingInThisRangeHint,
       actionLabel: LABELS.resetFilters,
-      onAction: 'clearFilters',
-    }
+      onAction: "clearFilters",
+    };
   }
 
   if (filters.search) {
@@ -51,10 +58,12 @@ function getListingEmptyState(
       icon: Search,
       eyebrow: LABELS.search,
       heading: LABELS.noSearchResultsHeading,
-      message: formatLabel(LABELS.noSearchResultsHint, { search: filters.search }),
+      message: formatLabel(LABELS.noSearchResultsHint, {
+        search: filters.search,
+      }),
       actionLabel: LABELS.browseAllProducts,
       actionTo: PATHS.products,
-    }
+    };
   }
 
   if (filters.categoryId) {
@@ -63,11 +72,13 @@ function getListingEmptyState(
       eyebrow: LABELS.category,
       heading: LABELS.noCategoryProductsHeading,
       message: categoryName
-        ? formatLabel(LABELS.noCategoryProductsHintNamed, { name: categoryName })
+        ? formatLabel(LABELS.noCategoryProductsHintNamed, {
+            name: categoryName,
+          })
         : LABELS.noCategoryProductsHint,
       actionLabel: LABELS.browseAllProducts,
       actionTo: PATHS.products,
-    }
+    };
   }
 
   if (filters.vendorId) {
@@ -78,7 +89,7 @@ function getListingEmptyState(
       message: LABELS.noVendorProductsHint,
       actionLabel: LABELS.browseAllProducts,
       actionTo: PATHS.products,
-    }
+    };
   }
 
   return {
@@ -88,14 +99,16 @@ function getListingEmptyState(
     message: LABELS.noProductsYetHint,
     actionLabel: LABELS.goToHomepage,
     actionTo: PATHS.home,
-  }
+  };
 }
 
 export function ProductListingPage() {
-  const listing = useProductListing()
-  const { data: categories } = useCategories()
-  const categoryName = categories?.find((category) => category.id === listing.filters.categoryId)?.name
-  const empty = getListingEmptyState(listing.filters, categoryName)
+  const listing = useProductListing();
+  const { data: categories } = useCategories();
+  const categoryName = categories?.find(
+    (category) => category.id === listing.filters.categoryId,
+  )?.name;
+  const empty = getListingEmptyState(listing.filters, categoryName);
 
   return (
     <div className="storefront-container pb-8 pt-6 md:pt-8">
@@ -122,7 +135,7 @@ export function ProductListingPage() {
             {LABELS.sort}
           </Button>
           <Button
-            variant={listing.compareMode ? 'default' : 'secondary'}
+            variant={listing.compareMode ? "default" : "secondary"}
             size="sm"
             className="flex-1 gap-1.5"
             onClick={listing.toggleCompareMode}
@@ -140,7 +153,7 @@ export function ProductListingPage() {
           minPrice={listing.filters.minPrice}
           maxPrice={listing.filters.maxPrice}
           rating={listing.filters.rating}
-          onUpdateFilter={listing.updateFilter}
+          onUpdateFilter={listing.updateFilterDebounced}
           onClear={listing.clearFilters}
         />
 
@@ -149,7 +162,7 @@ export function ProductListingPage() {
             sort={listing.filters.sort}
             totalProducts={listing.data?.total}
             isFetching={listing.isFetching}
-            onSortChange={(v) => listing.updateFilter('sort', v)}
+            onSortChange={(v) => listing.updateFilter("sort", v)}
             compareMode={listing.compareMode}
             onToggleCompare={listing.toggleCompareMode}
           />
@@ -164,7 +177,11 @@ export function ProductListingPage() {
               message={empty.message}
               actionLabel={empty.actionLabel}
               actionTo={empty.actionTo}
-              onAction={empty.onAction === 'clearFilters' ? listing.clearFilters : undefined}
+              onAction={
+                empty.onAction === "clearFilters"
+                  ? listing.clearFilters
+                  : undefined
+              }
             />
           ) : (
             <>
@@ -178,7 +195,7 @@ export function ProductListingPage() {
                 <PaginationContainer
                   currentPage={listing.filters.page ?? 1}
                   totalPages={listing.data.totalPages}
-                  onPageChange={(p) => listing.updateFilter('page', p)}
+                  onPageChange={(p) => listing.updateFilter("page", p)}
                 />
               )}
             </>
@@ -186,17 +203,21 @@ export function ProductListingPage() {
         </div>
       </div>
 
-      <BottomSheet open={listing.filterOpen} onClose={listing.closeFilters} title={LABELS.filters}>
+      <BottomSheet
+        open={listing.filterOpen}
+        onClose={listing.closeFilters}
+        title={LABELS.filters}
+      >
         <FilterSidebar
           idPrefix="mobile"
           className="w-full"
           minPrice={listing.filters.minPrice}
           maxPrice={listing.filters.maxPrice}
           rating={listing.filters.rating}
-          onUpdateFilter={listing.updateFilter}
+          onUpdateFilter={listing.updateFilterDebounced}
           onClear={() => {
-            listing.clearFilters()
-            listing.closeFilters()
+            listing.clearFilters();
+            listing.closeFilters();
           }}
         />
         <Button className="mt-4 w-full" onClick={listing.closeFilters}>
@@ -204,7 +225,11 @@ export function ProductListingPage() {
         </Button>
       </BottomSheet>
 
-      <BottomSheet open={listing.sortOpen} onClose={listing.closeSort} title={LABELS.sort}>
+      <BottomSheet
+        open={listing.sortOpen}
+        onClose={listing.closeSort}
+        title={LABELS.sort}
+      >
         <div className="space-y-2">
           {SORT_OPTIONS.map((option) => (
             <SelectableOptionButton
@@ -230,5 +255,5 @@ export function ProductListingPage() {
         products={listing.comparedProducts}
       />
     </div>
-  )
+  );
 }

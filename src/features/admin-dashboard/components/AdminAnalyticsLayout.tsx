@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Banknote,
@@ -9,29 +9,43 @@ import {
   Store,
   Users,
   Wallet,
-} from 'lucide-react'
-import { motion } from 'motion/react'
-import type { AdminAnalytics } from '@/shared/api/types'
-import { LABELS } from '@/shared/constants/labels'
-import { AnalyticsMetricCard } from './AnalyticsMetricCard'
-import { AnalyticsTrendChart } from './AnalyticsTrendChart'
-import { AnalyticsStatusChart } from './AnalyticsStatusChart'
-import { AnalyticsRankedList } from './AnalyticsRankedList'
-import { AnalyticsRatingChart } from './AnalyticsRatingChart'
-import { AnalyticsOpsQueues } from './AnalyticsOpsQueues'
+} from "lucide-react";
+import { motion } from "motion/react";
+import dynamic from "next/dynamic";
+import type { AdminAnalytics } from "@/shared/api/types";
+import { LABELS } from "@/shared/constants/labels";
+import { SkeletonChartCard } from "@/shared/components/Skeletons";
+import { AnalyticsMetricCard } from "./AnalyticsMetricCard";
+import { AnalyticsRankedList } from "./AnalyticsRankedList";
+import { AnalyticsOpsQueues } from "./AnalyticsOpsQueues";
 import {
   formatAnalyticsInr,
   formatAnalyticsPercent,
-} from '../utils/analyticsFormat'
+} from "../utils/analyticsFormat";
+
+const AnalyticsTrendChart = dynamic(
+  () => import("./AnalyticsTrendChart").then((mod) => mod.AnalyticsTrendChart),
+  { loading: () => <SkeletonChartCard bodyHeight="h-72 sm:h-80" /> },
+);
+const AnalyticsStatusChart = dynamic(
+  () =>
+    import("./AnalyticsStatusChart").then((mod) => mod.AnalyticsStatusChart),
+  { loading: () => <SkeletonChartCard bodyHeight="h-44 sm:h-48" /> },
+);
+const AnalyticsRatingChart = dynamic(
+  () =>
+    import("./AnalyticsRatingChart").then((mod) => mod.AnalyticsRatingChart),
+  { loading: () => <SkeletonChartCard bodyHeight="h-56 sm:h-64" /> },
+);
 
 interface AdminAnalyticsLayoutProps {
-  data: AdminAnalytics
+  data: AdminAnalytics;
 }
 
 const fadeUp = {
   initial: { opacity: 0, y: 12 },
   animate: { opacity: 1, y: 0 },
-}
+};
 
 export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
   return (
@@ -49,7 +63,9 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
           <h1 className="font-display text-[1.75rem] leading-tight tracking-tight text-ink sm:text-[2rem]">
             {LABELS.analytics}
           </h1>
-          <p className="max-w-2xl text-[0.9375rem] text-ink-muted">{LABELS.analyticsHint}</p>
+          <p className="max-w-2xl text-[0.9375rem] text-ink-muted">
+            {LABELS.analyticsHint}
+          </p>
         </div>
       </motion.header>
 
@@ -102,13 +118,13 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
           title={LABELS.analyticsCancellationRate}
           value={formatAnalyticsPercent(data.cancellationRate)}
           icon={Percent}
-          tone={data.cancellationRate > 15 ? 'warning' : 'default'}
+          tone={data.cancellationRate > 15 ? "warning" : "default"}
         />
         <AnalyticsMetricCard
           title={LABELS.analyticsReturnRate}
           value={formatAnalyticsPercent(data.returnRate)}
           icon={RotateCcw}
-          tone={data.returnRate > 10 ? 'warning' : 'default'}
+          tone={data.returnRate > 10 ? "warning" : "default"}
         />
       </motion.div>
 
@@ -178,5 +194,5 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
         {LABELS.analyticsVsPriorPeriod}
       </p>
     </div>
-  )
+  );
 }

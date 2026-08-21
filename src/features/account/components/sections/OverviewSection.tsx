@@ -1,39 +1,59 @@
-'use client'
+"use client";
 
-import { useRef, useState } from 'react'
-import Link from 'next/link'
-import { Camera, CheckCircle2, ChevronRight, Heart, LifeBuoy, Package } from 'lucide-react'
-import { motion } from 'motion/react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
-import { Badge } from '@/shared/components/ui/badge'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { FormError } from '@/shared/components/FormError'
-import { ImageCropDialog } from '@/shared/components/ImageCropDialog'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { Button } from '@/shared/components/ui/button'
-import { PATHS } from '@/shared/constants/paths'
-import { LABELS } from '@/shared/constants/labels'
-import type { ImageMimeType } from '@/shared/constants/imageSpecs'
-import { getImageUploadSpec } from '@/shared/constants/imageSpecs'
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from '@/shared/constants/uploads'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import { normalizeImageMimeType } from '@/shared/utils/imageProcessing'
-import { formatOrderDate } from '@/features/orders/utils/format'
-import { readFileAsDataUrl } from '@/features/uploads/api/uploads.queries'
-import { getApiErrorMessage } from '@/shared/utils/apiErrorMessage'
-import { useAccountOverview } from '../../hooks/useAccountOverview'
-import { useUploadAvatar } from '../../api/account.queries'
-import type { AccountSectionId } from '../../types'
+import { useRef, useState } from "react";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import {
+  Camera,
+  CheckCircle2,
+  ChevronRight,
+  Heart,
+  LifeBuoy,
+  Package,
+} from "lucide-react";
+import { motion } from "motion/react";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/shared/components/ui/avatar";
+import { Badge } from "@/shared/components/ui/badge";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { FormError } from "@/shared/components/FormError";
+import { TextEyebrow } from "@/shared/components/TextEyebrow";
+import { Button } from "@/shared/components/ui/button";
+import { PATHS } from "@/shared/constants/paths";
+import { LABELS } from "@/shared/constants/labels";
+import type { ImageMimeType } from "@/shared/constants/imageSpecs";
+import { getImageUploadSpec } from "@/shared/constants/imageSpecs";
+import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { normalizeImageMimeType } from "@/shared/utils/imageProcessing";
+import { formatOrderDate } from "@/features/orders/utils/format";
+import { readFileAsDataUrl } from "@/features/uploads/api/uploads.queries";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { useAccountOverview } from "../../hooks/useAccountOverview";
+import { useUploadAvatar } from "../../api/account.queries";
+import type { AccountSectionId } from "../../types";
+
+/** Rendered only while a crop is active (overlay/dialog), so no skeleton fallback is needed. */
+const ImageCropDialog = dynamic(
+  () =>
+    import("@/shared/components/ImageCropDialog").then(
+      (mod) => mod.ImageCropDialog,
+    ),
+  { loading: () => null },
+);
 
 function initials(name: string) {
-  const parts = name.trim().split(/\s+/).filter(Boolean)
-  if (parts.length === 0) return '?'
-  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase()
-  return `${parts[0]![0] ?? ''}${parts[1]![0] ?? ''}`.toUpperCase()
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
+  return `${parts[0]![0] ?? ""}${parts[1]![0] ?? ""}`.toUpperCase();
 }
 
 interface OverviewSectionProps {
-  onNavigate: (id: AccountSectionId) => void
+  onNavigate: (id: AccountSectionId) => void;
 }
 
 export function OverviewSection({ onNavigate }: OverviewSectionProps) {
@@ -44,14 +64,17 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
     ordersCount,
     wishlistCount,
     isLoadingStats,
-  } = useAccountOverview()
-  const uploadAvatar = useUploadAvatar()
-  const fileRef = useRef<HTMLInputElement>(null)
-  const [localError, setLocalError] = useState<string | null>(null)
-  const [cropSrc, setCropSrc] = useState<string | null>(null)
-  const [cropFilename, setCropFilename] = useState('avatar.jpg')
-  const [cropMimeType, setCropMimeType] = useState<ImageMimeType>('image/jpeg')
-  const avatarSpec = getImageUploadSpec(UPLOAD_ENTITY.USERS, UPLOAD_PURPOSE.AVATAR)
+  } = useAccountOverview();
+  const uploadAvatar = useUploadAvatar();
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [localError, setLocalError] = useState<string | null>(null);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
+  const [cropFilename, setCropFilename] = useState("avatar.jpg");
+  const [cropMimeType, setCropMimeType] = useState<ImageMimeType>("image/jpeg");
+  const avatarSpec = getImageUploadSpec(
+    UPLOAD_ENTITY.USERS,
+    UPLOAD_PURPOSE.AVATAR,
+  );
 
   if (isLoadingProfile) {
     return (
@@ -64,60 +87,63 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (profileError || !profile) {
     return (
       <div className="border border-line bg-surface px-5 py-10 text-center">
         <p className="text-[0.9375rem] text-ink-muted">
-          {profileError?.message || 'Could not load your profile. Please try again.'}
+          {profileError?.message ||
+            "Could not load your profile. Please try again."}
         </p>
       </div>
-    )
+    );
   }
 
-  const memberSince = profile.createdAt ? formatOrderDate(profile.createdAt) : null
-  const avatarSrc = profile.avatarUrl || undefined
+  const memberSince = profile.createdAt
+    ? formatOrderDate(profile.createdAt)
+    : null;
+  const avatarSrc = profile.avatarUrl || undefined;
 
   const onPickFile = (file: File | null) => {
-    if (!file || !avatarSpec) return
-    if (!file.type.startsWith('image/')) {
-      setLocalError(LABELS.uploadInvalidImageType)
-      return
+    if (!file || !avatarSpec) return;
+    if (!file.type.startsWith("image/")) {
+      setLocalError(LABELS.uploadInvalidImageType);
+      return;
     }
     if (file.size > avatarSpec.maxBytes) {
-      setLocalError(formatLabel(LABELS.uploadTooLargeMb, { mb: '1.5' }))
-      return
+      setLocalError(formatLabel(LABELS.uploadTooLargeMb, { mb: "1.5" }));
+      return;
     }
-    setLocalError(null)
-    setCropFilename(file.name)
-    setCropMimeType(normalizeImageMimeType(file))
-    setCropSrc(URL.createObjectURL(file))
-    if (fileRef.current) fileRef.current.value = ''
-  }
+    setLocalError(null);
+    setCropFilename(file.name);
+    setCropMimeType(normalizeImageMimeType(file));
+    setCropSrc(URL.createObjectURL(file));
+    if (fileRef.current) fileRef.current.value = "";
+  };
 
   const onAvatarCropped = async (file: File) => {
-    setLocalError(null)
+    setLocalError(null);
     try {
-      const dataUrl = await readFileAsDataUrl(file)
+      const dataUrl = await readFileAsDataUrl(file);
       await uploadAvatar.mutateAsync({
         userId: profile.id,
         dataUrl,
         filename: file.name,
-      })
+      });
     } catch (err) {
-      setLocalError(getApiErrorMessage(err, LABELS.uploadFailed))
+      setLocalError(getApiErrorMessage(err, LABELS.uploadFailed));
     } finally {
-      if (cropSrc) URL.revokeObjectURL(cropSrc)
-      setCropSrc(null)
+      if (cropSrc) URL.revokeObjectURL(cropSrc);
+      setCropSrc(null);
     }
-  }
+  };
 
   const onAvatarCropCancelled = () => {
-    if (cropSrc) URL.revokeObjectURL(cropSrc)
-    setCropSrc(null)
-  }
+    if (cropSrc) URL.revokeObjectURL(cropSrc);
+    setCropSrc(null);
+  };
 
   return (
     <div className="space-y-8">
@@ -164,7 +190,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
             <TextEyebrow brand>Profile</TextEyebrow>
             <h2
               className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
-              style={{ fontSize: 'var(--text-display-sm)' }}
+              style={{ fontSize: "var(--text-display-sm)" }}
             >
               {profile.name}
             </h2>
@@ -180,9 +206,13 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
               )}
             </div>
             {memberSince ? (
-              <p className="mt-2 text-[0.8125rem] text-ink-faint">Member since {memberSince}</p>
+              <p className="mt-2 text-[0.8125rem] text-ink-faint">
+                Member since {memberSince}
+              </p>
             ) : null}
-            <p className="mt-3 text-[0.8125rem] text-ink-muted">{LABELS.uploadProfilePhotoHint}</p>
+            <p className="mt-3 text-[0.8125rem] text-ink-muted">
+              {LABELS.uploadProfilePhotoHint}
+            </p>
             <FormError
               error={
                 (uploadAvatar.error as Error | null) ??
@@ -204,7 +234,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
           sourceFilename={cropFilename}
           mimeType={cropMimeType}
           onOpenChange={(open) => {
-            if (!open) onAvatarCropCancelled()
+            if (!open) onAvatarCropCancelled();
           }}
           onConfirm={onAvatarCropped}
         />
@@ -213,19 +243,21 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
       <section className="border border-line bg-surface shadow-elevation-1">
         <div className="border-b border-line px-5 py-4 md:px-6">
           <TextEyebrow>At a glance</TextEyebrow>
-          <p className="mt-1 text-[0.875rem] text-ink-muted">Jump into what matters most.</p>
+          <p className="mt-1 text-[0.875rem] text-ink-muted">
+            Jump into what matters most.
+          </p>
         </div>
         <ul className="divide-y divide-line">
           <GlanceRow
             icon={Package}
             label="Orders"
-            value={isLoadingStats ? '—' : String(ordersCount)}
-            onDetails={() => onNavigate('orders')}
+            value={isLoadingStats ? "—" : String(ordersCount)}
+            onDetails={() => onNavigate("orders")}
           />
           <GlanceRow
             icon={Heart}
             label="Wishlist"
-            value={isLoadingStats ? '—' : String(wishlistCount)}
+            value={isLoadingStats ? "—" : String(wishlistCount)}
             href={PATHS.wishlist}
           />
           <GlanceRow
@@ -243,7 +275,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
         </ul>
       </section>
     </div>
-  )
+  );
 }
 
 function GlanceRow({
@@ -253,19 +285,26 @@ function GlanceRow({
   href,
   onDetails,
 }: {
-  icon: typeof Package
-  label: string
-  value: string
-  href?: string
-  onDetails?: () => void
+  icon: typeof Package;
+  label: string;
+  value: string;
+  href?: string;
+  onDetails?: () => void;
 }) {
   return (
     <li className="flex items-center justify-between gap-4 px-5 py-4 md:px-6">
       <div className="flex min-w-0 items-center gap-3">
-        <Icon size={16} strokeWidth={1.5} className="shrink-0 text-ink-muted" aria-hidden />
+        <Icon
+          size={16}
+          strokeWidth={1.5}
+          className="shrink-0 text-ink-muted"
+          aria-hidden
+        />
         <div className="min-w-0">
           <p className="text-[0.9375rem] text-ink">{label}</p>
-          <p className="mt-0.5 font-display text-[1.25rem] tabular-nums text-ink">{value}</p>
+          <p className="mt-0.5 font-display text-[1.25rem] tabular-nums text-ink">
+            {value}
+          </p>
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-3">
@@ -291,5 +330,5 @@ function GlanceRow({
         ) : null}
       </div>
     </li>
-  )
+  );
 }
