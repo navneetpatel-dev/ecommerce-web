@@ -1,31 +1,32 @@
-import { Button } from '@/shared/components/ui/button'
-import { Badge } from '@/shared/components/ui/badge'
-import { Separator } from '@/shared/components/ui/separator'
-import { DisabledActionHint } from '@/shared/components/DisabledActionHint'
-import { cn } from '@/shared/utils/cn'
-import { LABELS } from '@/shared/constants/labels'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import { VARIANT_LOW_STOCK_DEFAULT } from '../constants/productFields'
+import { Button } from "@/shared/components/ui/button";
+import { Badge } from "@/shared/components/ui/badge";
+import { Separator } from "@/shared/components/ui/separator";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint";
+import { cn } from "@/shared/utils/cn";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { VARIANT_LOW_STOCK_DEFAULT } from "../constants/productFields";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface VariantSelectorProps {
-  attributeGroups: Record<string, string[]>
-  currentPrice: number
-  currentStock: number
-  basePrice: number
-  hasPriceChange: boolean
-  isAvailable: (key: string, value: string) => boolean
-  isActive: (key: string, value: string) => boolean
-  onSelectValue: (key: string, value: string) => void
+  attributeGroups: Record<string, string[]>;
+  currentPrice: number;
+  currentStock: number;
+  basePrice: number;
+  hasPriceChange: boolean;
+  isAvailable: (key: string, value: string) => boolean;
+  isActive: (key: string, value: string) => boolean;
+  onSelectValue: (key: string, value: string) => void;
   /** When true, shows Add to Cart (legacy). Prefer page-level ATC. */
-  showAddToCart?: boolean
+  showAddToCart?: boolean;
   /** Hide price/stock block when the parent buy box already shows them. */
-  optionsOnly?: boolean
-  onAddToCart?: () => void
-  isAddingToCart?: boolean
-  canAddToCart?: boolean
-  lowStockAt?: number
-  freeShippingThreshold?: number
-  className?: string
+  optionsOnly?: boolean;
+  onAddToCart?: () => void;
+  isAddingToCart?: boolean;
+  canAddToCart?: boolean;
+  lowStockAt?: number;
+  freeShippingThreshold?: number;
+  className?: string;
 }
 
 export function VariantSelector({
@@ -46,18 +47,18 @@ export function VariantSelector({
   freeShippingThreshold,
   className,
 }: VariantSelectorProps) {
-  const hasAttributes = Object.keys(attributeGroups).length > 0
+  const hasAttributes = Object.keys(attributeGroups).length > 0;
 
   if (!hasAttributes && !showAddToCart) {
-    return null
+    return null;
   }
 
   return (
-    <div className={cn('space-y-5', className)}>
+    <div className={cn("space-y-5", className)}>
       {hasAttributes ? (
         <div className="space-y-4">
           {Object.entries(attributeGroups).map(([key, values]) => {
-            const selected = values.find((value) => isActive(key, value))
+            const selected = values.find((value) => isActive(key, value));
             return (
               <div key={key}>
                 <div className="mb-2.5 flex items-baseline justify-between gap-3">
@@ -65,13 +66,15 @@ export function VariantSelector({
                     {key}
                   </p>
                   {selected ? (
-                    <p className="truncate text-[0.8125rem] font-medium text-ink">{selected}</p>
+                    <p className="truncate text-[0.8125rem] font-medium text-ink">
+                      {selected}
+                    </p>
                   ) : null}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {values.map((value) => {
-                    const available = isAvailable(key, value)
-                    const active = isActive(key, value)
+                    const available = isAvailable(key, value);
+                    const active = isActive(key, value);
                     return (
                       <DisabledActionHint
                         key={value}
@@ -86,22 +89,22 @@ export function VariantSelector({
                           aria-pressed={active}
                           onClick={() => onSelectValue(key, value)}
                           className={cn(
-                            'h-10 min-h-10 max-h-none rounded-full px-4 font-medium transition-all',
+                            "h-10 min-h-10 max-h-none rounded-full px-4 font-medium transition-all",
                             active
-                              ? 'border-brand bg-brand text-paper hover:bg-brand-hover hover:text-paper'
+                              ? "border-brand bg-brand text-paper hover:bg-brand-hover hover:text-paper"
                               : available
-                                ? 'border-line bg-surface hover:border-brand hover:text-brand'
-                                : 'border-line bg-paper text-ink/30 line-through',
+                                ? "border-line bg-surface hover:border-brand hover:text-brand"
+                                : "border-line bg-paper text-ink/30 line-through",
                           )}
                         >
                           {value}
                         </Button>
                       </DisabledActionHint>
-                    )
+                    );
                   })}
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       ) : null}
@@ -112,11 +115,11 @@ export function VariantSelector({
 
           <div className="flex items-baseline gap-3">
             <span className="font-sans text-[1.75rem] font-semibold text-brand">
-              ₹{currentPrice.toLocaleString('en-IN')}
+              ₹{formatInrAmount(currentPrice)}
             </span>
             {hasPriceChange ? (
               <span className="text-[1.0625rem] text-ink-faint line-through">
-                ₹{basePrice.toLocaleString('en-IN')}
+                ₹{formatInrAmount(basePrice)}
               </span>
             ) : null}
           </div>
@@ -132,10 +135,10 @@ export function VariantSelector({
               ) : (
                 <Badge variant="success">{LABELS.inStock}</Badge>
               )}
-              {typeof freeShippingThreshold === 'number' ? (
+              {typeof freeShippingThreshold === "number" ? (
                 <p className="text-[0.8125rem] text-ink-muted">
                   {formatLabel(LABELS.freeDeliveryAbove, {
-                    amount: freeShippingThreshold.toLocaleString('en-IN'),
+                    amount: formatInrAmount(freeShippingThreshold),
                   })}
                 </p>
               ) : null}
@@ -149,7 +152,7 @@ export function VariantSelector({
                     ? LABELS.outOfStockHint
                     : !canAddToCart
                       ? LABELS.selectAllOptionsHint
-                      : ''
+                      : ""
                 }
                 className="w-full"
               >
@@ -168,5 +171,5 @@ export function VariantSelector({
         </>
       ) : null}
     </div>
-  )
+  );
 }

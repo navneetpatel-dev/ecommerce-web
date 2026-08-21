@@ -19,47 +19,19 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
-import { PINCODE_LENGTH, PINCODE_PATTERN } from "@/shared/constants/pincode";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import {
   allRequiredFieldsMet,
   firstMissingRequiredHint,
 } from "@/shared/utils/firstMissingRequiredHint";
+import {
+  addressFieldChecks,
+  toAddressFormState as toFormState,
+  toAddressInput as toInput,
+  PINCODE_LENGTH,
+  type AddressFormValues,
+} from "@/shared/schemas/address.schema";
 import type { Address, AddressInput } from "@/shared/api/types";
-
-type AddressFormState = {
-  line1: string;
-  line2: string;
-  city: string;
-  state: string;
-  country: string;
-  pincode: string;
-  isDefault: boolean;
-};
-
-function toFormState(address?: Address | null): AddressFormState {
-  return {
-    line1: address?.line1 ?? "",
-    line2: address?.line2 ?? "",
-    city: address?.city ?? "",
-    state: address?.state ?? "",
-    country: address?.country ?? LABELS.defaultCountry,
-    pincode: address?.pincode ?? "",
-    isDefault: address?.isDefault ?? false,
-  };
-}
-
-function toInput(form: AddressFormState, hasAddresses: boolean): AddressInput {
-  return {
-    line1: form.line1.trim(),
-    line2: form.line2.trim() || null,
-    city: form.city.trim(),
-    state: form.state.trim(),
-    country: form.country.trim() || LABELS.defaultCountry,
-    pincode: form.pincode.trim(),
-    isDefault: form.isDefault || !hasAddresses,
-  };
-}
 
 interface AddressFormDialogProps {
   open: boolean;
@@ -84,7 +56,7 @@ export function AddressFormDialog({
   description,
   submitLabel = LABELS.saveAddress,
 }: AddressFormDialogProps) {
-  const [form, setForm] = useState<AddressFormState>(toFormState(address));
+  const [form, setForm] = useState<AddressFormValues>(toFormState(address));
   const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -94,15 +66,7 @@ export function AddressFormDialog({
     }
   }, [address, open]);
 
-  const requiredChecks = [
-    { ok: Boolean(form.line1.trim()), message: LABELS.enterAddressLine1 },
-    { ok: Boolean(form.city.trim()), message: LABELS.enterAddressCity },
-    { ok: Boolean(form.state.trim()), message: LABELS.enterAddressState },
-    {
-      ok: PINCODE_PATTERN.test(form.pincode.trim()),
-      message: LABELS.invalidPincode,
-    },
-  ];
+  const requiredChecks = addressFieldChecks(form);
   const canSubmit = allRequiredFieldsMet(requiredChecks);
   const disableHint = firstMissingRequiredHint(requiredChecks) ?? "";
 
@@ -121,12 +85,7 @@ export function AddressFormDialog({
         <form
           onSubmit={async (event) => {
             event.preventDefault();
-            if (
-              !form.line1.trim() ||
-              !form.city.trim() ||
-              !form.state.trim() ||
-              !PINCODE_PATTERN.test(form.pincode.trim())
-            ) {
+            if (!allRequiredFieldsMet(requiredChecks)) {
               setFormError(LABELS.addressRequiredFields);
               return;
             }

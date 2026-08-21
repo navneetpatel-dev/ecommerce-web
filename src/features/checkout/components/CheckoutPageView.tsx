@@ -25,6 +25,7 @@ import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { Address, CartItem, CheckoutQuote } from "@/shared/api/types";
 import type { PaymentNotice } from "../hooks/usePlaceOrder";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface CheckoutPageViewProps {
   isLoading?: boolean;
@@ -110,7 +111,7 @@ function OrderSummaryPanel({
           {itemCount} {itemCount === 1 ? "item" : "items"}
           <span className="mx-2 text-line">·</span>
           <span className="font-medium text-ink">
-            ₹{displayTotal.toLocaleString("en-IN")}
+            ₹{formatInrAmount(displayTotal)}
           </span>
         </p>
         <TextEyebrow className="mt-4">Order summary</TextEyebrow>
@@ -144,10 +145,7 @@ function OrderSummaryPanel({
                     </p>
                   </div>
                   <p className="shrink-0 text-[0.875rem] tabular-nums text-ink">
-                    ₹
-                    {(item.product.price * item.quantity).toLocaleString(
-                      "en-IN",
-                    )}
+                    ₹{formatInrAmount(item.product.price * item.quantity)}
                   </p>
                 </li>
               ))}
@@ -160,15 +158,13 @@ function OrderSummaryPanel({
         <dl className="space-y-2.5 text-[0.875rem]">
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">Subtotal</dt>
-            <dd className="tabular-nums text-ink">
-              ₹{total.toLocaleString("en-IN")}
-            </dd>
+            <dd className="tabular-nums text-ink">₹{formatInrAmount(total)}</dd>
           </div>
           {quote?.appliedCoupon && (
             <div className="flex items-center justify-between gap-4 text-success">
               <dt>Coupon · {quote.appliedCoupon.code}</dt>
               <dd className="tabular-nums">
-                −₹{quote.appliedCoupon.discount.toLocaleString("en-IN")}
+                −₹{formatInrAmount(quote.appliedCoupon.discount)}
               </dd>
             </div>
           )}
@@ -186,7 +182,7 @@ function OrderSummaryPanel({
                 {LABELS.walletAppliedAtCheckout}
               </dt>
               <dd className="tabular-nums text-ink">
-                −₹{(quote?.walletAmountToUse ?? 0).toLocaleString("en-IN")}
+                −₹{quote?.walletAmountToUse ?? formatInrAmount(0)}
               </dd>
             </div>
           ) : null}
@@ -204,7 +200,7 @@ function OrderSummaryPanel({
               {quote ? "Order total" : "Estimated total"}
             </span>
             <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
-              ₹{displayTotal.toLocaleString("en-IN")}
+              ₹{formatInrAmount(displayTotal)}
             </span>
           </div>
           <p className="mt-1.5 text-[0.75rem] text-ink-muted">
@@ -307,7 +303,7 @@ export function CheckoutPageView({
                 <AccordionItem value="summary" className="border-line">
                   <AccordionTrigger className="text-[0.9375rem] font-medium">
                     Order summary · ₹
-                    {(quote?.grandTotal ?? total).toLocaleString("en-IN")}
+                    {quote?.grandTotal ?? formatInrAmount(total)}
                   </AccordionTrigger>
                   <AccordionContent>{summary}</AccordionContent>
                 </AccordionItem>

@@ -6,6 +6,11 @@ export function formatInr(value: number) {
   })}`;
 }
 
+/** Plain grouped INR amount without the ₹ prefix (₹ is rendered by markup). */
+export function formatInrAmount(value: number) {
+  return Number(value || 0).toLocaleString("en-IN");
+}
+
 /** Short INR for header pills (₹499, ₹12,500, ₹1.2L). */
 export function formatInrCompact(value: number) {
   const amount = Math.round(Number(value) || 0);

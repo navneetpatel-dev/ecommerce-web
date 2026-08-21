@@ -11,6 +11,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import type { Cart, EligibleCoupon } from "@/shared/api/types";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface UseCartCouponsOptions {
   cart?: Cart | null;
@@ -90,8 +91,8 @@ export function useCartCoupons({
           const payNow = cart?.pricingPreview?.grandTotal ?? cart?.total ?? 0;
           setCouponMessage(
             formatLabel(LABELS.cashbackPayNowMessage, {
-              payNow: `₹${Number(payNow).toLocaleString("en-IN")}`,
-              cashback: `₹${Number(result.cashbackAmount).toLocaleString("en-IN")}`,
+              payNow: `₹${formatInrAmount(Number(payNow))}`,
+              cashback: `₹${formatInrAmount(Number(result.cashbackAmount))}`,
             }),
           );
         } else {

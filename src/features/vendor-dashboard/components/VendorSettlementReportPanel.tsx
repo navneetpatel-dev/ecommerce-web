@@ -1,92 +1,25 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
-import { BEARER_PREFIX } from "@/shared/constants/http";
-import { STORAGE_KEYS } from "@/shared/constants/storage";
-import { API } from "@/shared/constants/apiRoutes";
 import { formatInr } from "@/shared/utils/orderFormat";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import {
-  reportsApi,
-  type VendorReportSummary,
-} from "@/features/admin-dashboard";
-import { useAuthStore } from "@/shared/stores/auth.store";
-
-function defaultRange() {
-  const to = new Date();
-  const from = new Date();
-  from.setDate(to.getDate() - 30);
-  return {
-    from: from.toISOString().slice(0, 10),
-    to: to.toISOString().slice(0, 10),
-  };
-}
-
-async function downloadReport(path: string, filename: string) {
-  const token =
-    useAuthStore.getState().accessToken ||
-    (typeof window !== "undefined"
-      ? localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
-      : null);
-  const base = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const res = await fetch(`${base}${path}`, {
-    credentials: "include",
-    headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
-  });
-  if (!res.ok) throw new Error(LABELS.couldNotLoadReport);
-  const blob = await res.blob();
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
+import { useVendorSettlementReport } from "../hooks/useVendorSettlementReport";
 
 export function VendorSettlementReportPanel() {
-  const vendorId = useAuthStore((s) => s.currentUser?.vendorId);
-  const initial = useMemo(() => defaultRange(), []);
-  const [from, setFrom] = useState(initial.from);
-  const [to, setTo] = useState(initial.to);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [summary, setSummary] = useState<VendorReportSummary | null>(null);
-
-  const range = { from: `${from}T00:00:00.000Z`, to: `${to}T23:59:59.999Z` };
-
-  const load = async () => {
-    if (!vendorId) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await reportsApi.vendorSummary(vendorId, range);
-      setSummary(data);
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
-      setSummary(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const exportFile = async (format: "csv" | "pdf") => {
-    if (!vendorId) return;
-    try {
-      await downloadReport(
-        reportsApi.exportUrl(API.reports.vendor(vendorId), {
-          ...range,
-          format,
-        }),
-        `vendor-settlement.${format === "pdf" ? "pdf" : "csv"}`,
-      );
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
-    }
-  };
+  const {
+    vendorId,
+    from,
+    setFrom,
+    to,
+    setTo,
+    loading,
+    error,
+    summary,
+    load,
+    exportFile,
+  } = useVendorSettlementReport();
 
   return (
     <section className="space-y-4 rounded-md border border-line bg-surface p-4">

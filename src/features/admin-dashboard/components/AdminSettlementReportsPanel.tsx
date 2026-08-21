@@ -1,32 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
-import { BEARER_PREFIX } from "@/shared/constants/http";
-import { STORAGE_KEYS } from "@/shared/constants/storage";
 import { formatInr } from "@/shared/utils/orderFormat";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import { API } from "@/shared/constants/apiRoutes";
-import { useAuthStore } from "@/shared/stores/auth.store";
-import {
-  reportsApi,
-  type AdminReportSummary,
-  type ReconciliationReport,
-  type VendorSettlementRow,
-} from "../api/reports.api";
-
-function defaultRange() {
-  const to = new Date();
-  const from = new Date();
-  from.setDate(to.getDate() - 30);
-  return {
-    from: from.toISOString().slice(0, 10),
-    to: to.toISOString().slice(0, 10),
-  };
-}
+import { useAdminSettlementReports } from "../hooks/useAdminSettlementReports";
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
@@ -39,71 +18,20 @@ function Metric({ label, value }: { label: string; value: string }) {
   );
 }
 
-async function downloadReport(path: string, filename: string) {
-  const token =
-    useAuthStore.getState().accessToken ||
-    (typeof window !== "undefined"
-      ? localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
-      : null);
-  const base = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const res = await fetch(`${base}${path}`, {
-    credentials: "include",
-    headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
-  });
-  if (!res.ok) throw new Error(LABELS.couldNotLoadReport);
-  const blob = await res.blob();
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
-
 export function AdminSettlementReportsPanel() {
-  const initial = useMemo(() => defaultRange(), []);
-  const [from, setFrom] = useState(initial.from);
-  const [to, setTo] = useState(initial.to);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [summary, setSummary] = useState<AdminReportSummary | null>(null);
-  const [vendors, setVendors] = useState<VendorSettlementRow[]>([]);
-  const [recon, setRecon] = useState<ReconciliationReport | null>(null);
-
-  const range = { from: `${from}T00:00:00.000Z`, to: `${to}T23:59:59.999Z` };
-
-  const load = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const [summaryRes, vendorsRes, reconRes] = await Promise.all([
-        reportsApi.adminSummary(range),
-        reportsApi.adminVendors(range),
-        reportsApi.adminReconciliation(range),
-      ]);
-      setSummary(summaryRes);
-      setVendors(vendorsRes.vendors);
-      setRecon(reconRes);
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
-      setSummary(null);
-      setVendors([]);
-      setRecon(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const exportFile = async (format: "csv" | "pdf") => {
-    try {
-      await downloadReport(
-        reportsApi.exportUrl(API.reports.adminSummary, { ...range, format }),
-        `admin-summary.${format === "pdf" ? "pdf" : "csv"}`,
-      );
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
-    }
-  };
+  const {
+    from,
+    setFrom,
+    to,
+    setTo,
+    loading,
+    error,
+    summary,
+    vendors,
+    recon,
+    load,
+    exportFile,
+  } = useAdminSettlementReports();
 
   return (
     <div className="space-y-6">

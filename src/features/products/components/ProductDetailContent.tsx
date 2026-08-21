@@ -36,6 +36,7 @@ import { ProductRelatedRails } from "./ProductRelatedRails";
 import { WARRANTY_TYPE } from "@/shared/constants/statuses";
 import { VARIANT_LOW_STOCK_DEFAULT } from "../constants/productFields";
 import type { ProductDetail, ProductVariant } from "@/shared/api/types";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface BreadcrumbItem {
   label: string;
@@ -120,7 +121,7 @@ export function ProductDetailContent({
         : LABELS.deliveryNotServiceable;
   const reviewCount = product.reviewCount ?? 0;
   const avgRating = product.avgRating ?? 0;
-  const formattedPrice = displayPrice.toLocaleString("en-IN");
+  const formattedPrice = formatInrAmount(displayPrice);
   const compareAtPrice = product.compareAtPrice ?? null;
   const showMrp = compareAtPrice != null && compareAtPrice > displayPrice;
   const discountPercent = showMrp
@@ -274,12 +275,12 @@ export function ProductDetailContent({
                   <p className="text-[0.9375rem] text-ink-faint">
                     <span className="mr-1.5">{LABELS.listPrice}:</span>
                     <span className="line-through">
-                      ₹{compareAtPrice.toLocaleString("en-IN")}
+                      ₹{formatInrAmount(compareAtPrice)}
                     </span>
                   </p>
                 ) : variantSelection.hasPriceChange ? (
                   <p className="text-[0.9375rem] text-ink-faint line-through">
-                    ₹{variantSelection.basePrice.toLocaleString("en-IN")}
+                    ₹{formatInrAmount(variantSelection.basePrice)}
                   </p>
                 ) : null}
                 {gstPercentage > 0 ? (
@@ -299,7 +300,7 @@ export function ProductDetailContent({
                 {taxInclusiveEstimate != null ? (
                   <p className="text-[0.8125rem] text-ink-faint">
                     {formatLabel(LABELS.taxInclusiveEstimate, {
-                      amount: taxInclusiveEstimate.toLocaleString("en-IN"),
+                      amount: formatInrAmount(taxInclusiveEstimate),
                     })}
                   </p>
                 ) : null}
@@ -460,7 +461,7 @@ export function ProductDetailContent({
                   <p className="text-[0.8125rem] leading-snug text-ink-muted">
                     {typeof freeShippingThreshold === "number"
                       ? formatLabel(LABELS.freeDeliveryAbove, {
-                          amount: freeShippingThreshold.toLocaleString("en-IN"),
+                          amount: formatInrAmount(freeShippingThreshold),
                         })
                       : LABELS.deliveryAtCheckout}
                   </p>
@@ -491,8 +492,7 @@ export function ProductDetailContent({
                     <p className="text-[0.8125rem] leading-snug text-ink-muted">
                       {product.returnShippingFee > 0
                         ? formatLabel(LABELS.returnShippingFeeAmount, {
-                            amount:
-                              product.returnShippingFee.toLocaleString("en-IN"),
+                            amount: formatInrAmount(product.returnShippingFee),
                           })
                         : LABELS.returnShippingFree}
                     </p>

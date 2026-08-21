@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { Truck } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
-import { PINCODE_LENGTH, PINCODE_PATTERN } from "@/shared/constants/pincode";
-import { checkoutApi } from "@/features/checkout";
-import { checkoutKeys } from "@/features/checkout";
+import { PINCODE_LENGTH } from "@/shared/constants/pincode";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { useDeliveryCheck } from "../hooks/useDeliveryCheck";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface ProductDeliveryCheckProps {
   productId: string;
@@ -33,28 +32,17 @@ export function ProductDeliveryCheck({
   codMaxOrderValue = null,
   onBlockedChange,
 }: ProductDeliveryCheckProps) {
-  const [pincode, setPincode] = useState("");
-  const [submitted, setSubmitted] = useState("");
-
-  const quoteQuery = useQuery({
-    queryKey: checkoutKeys.pdpShippingRates(submitted, productId, variantId),
-    queryFn: () =>
-      checkoutApi.getShippingRates(submitted, undefined, {
-        productId,
-        variantId: variantId ?? undefined,
-        vendorId: vendorId ?? undefined,
-      }),
-    enabled: PINCODE_PATTERN.test(submitted),
-  });
-
-  const handleCheck = () => {
-    const next = pincode.trim();
-    if (!PINCODE_PATTERN.test(next)) return;
-    setSubmitted(next);
-  };
-
+  const delivery = useDeliveryCheck({ productId, variantId, vendorId });
+  const {
+    pincode,
+    setPincode,
+    submitted,
+    quoteQuery,
+    handleCheck,
+    isValidPincode,
+  } = delivery;
   const pincodeError =
-    pincode.length > 0 && !PINCODE_PATTERN.test(pincode.trim())
+    pincode.length > 0 && !isValidPincode(pincode)
       ? LABELS.invalidPincode
       : null;
   const rates = quoteQuery.data ?? [];
@@ -114,9 +102,7 @@ export function ProductDeliveryCheck({
         <Button
           type="button"
           variant="outline"
-          disabled={
-            !PINCODE_PATTERN.test(pincode.trim()) || quoteQuery.isFetching
-          }
+          disabled={!isValidPincode(pincode) || quoteQuery.isFetching}
           onClick={handleCheck}
         >
           {LABELS.checkPincode}
@@ -138,7 +124,7 @@ export function ProductDeliveryCheck({
               })
             : formatLabel(LABELS.deliveryEtaWithCost, {
                 days: fastest.estimatedDays,
-                amount: fastest.cost.toLocaleString("en-IN"),
+                amount: formatInrAmount(fastest.cost),
               })}
         </p>
       ) : null}
@@ -154,10 +140,10 @@ export function ProductDeliveryCheck({
         <p className="text-[0.8125rem] leading-snug text-ink-muted">
           {belowCodMin
             ? formatLabel(LABELS.codMinOrder, {
-                amount: Number(codMinOrderValue ?? 0).toLocaleString("en-IN"),
+                amount: formatInrAmount(Number(codMinOrderValue ?? 0)),
               })
             : formatLabel(LABELS.codMaxOrder, {
-                amount: Number(codMaxOrderValue ?? 0).toLocaleString("en-IN"),
+                amount: formatInrAmount(Number(codMaxOrderValue ?? 0)),
               })}
         </p>
       ) : (
@@ -172,14 +158,14 @@ export function ProductDeliveryCheck({
           {Number(codMinOrderValue ?? 0) > 0 ? (
             <p className="text-[0.8125rem] leading-snug text-ink-muted">
               {formatLabel(LABELS.codMinOrder, {
-                amount: Number(codMinOrderValue).toLocaleString("en-IN"),
+                amount: formatInrAmount(Number(codMinOrderValue)),
               })}
             </p>
           ) : null}
           {codMaxOrderValue != null ? (
             <p className="text-[0.8125rem] leading-snug text-ink-muted">
               {formatLabel(LABELS.codMaxOrder, {
-                amount: Number(codMaxOrderValue).toLocaleString("en-IN"),
+                amount: formatInrAmount(Number(codMaxOrderValue)),
               })}
             </p>
           ) : null}

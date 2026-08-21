@@ -2,24 +2,16 @@
 
 import { useState } from "react";
 import { ChevronDown, Tag } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { couponsApi } from "@/features/coupons";
-import { useAuthStore } from "@/shared/stores/auth.store";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import {
   PDP_OFFERS_EXPANDED_SCROLL_CLASS,
-  PDP_OFFERS_FETCH_LIMIT,
   PDP_OFFERS_PREVIEW_COUNT,
-  PDP_OFFERS_STALE_MS,
 } from "../constants/pdpOffers";
-
-export const eligibleOffersKeys = {
-  product: (productId: string, authenticated: boolean) =>
-    ["coupons", "eligible", "product", productId, authenticated] as const,
-};
+import { useEligibleOffers } from "../hooks/useEligibleOffers";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface ProductEligibleOffersProps {
   productId: string;
@@ -30,7 +22,7 @@ interface ProductEligibleOffersProps {
 
 function offerDetailLabel(offer: { discount: number; type: string }): string {
   if (offer.discount > 0) {
-    return `₹${offer.discount.toLocaleString("en-IN")} ${LABELS.couponDiscount.toLowerCase()}`;
+    return `₹${formatInrAmount(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`;
   }
   if (offer.type === "FREE_SHIPPING") return LABELS.couponTypeFreeShipping;
   return LABELS.offersAtCheckout;
@@ -41,21 +33,8 @@ export function ProductEligibleOffers({
   className,
   enabled = true,
 }: ProductEligibleOffersProps) {
-  const accessToken = useAuthStore((s) => s.accessToken);
   const [expanded, setExpanded] = useState(false);
-
-  const offersQuery = useQuery({
-    queryKey: eligibleOffersKeys.product(productId, Boolean(accessToken)),
-    queryFn: () =>
-      accessToken
-        ? couponsApi.eligible({ productId, limit: PDP_OFFERS_FETCH_LIMIT })
-        : couponsApi.eligiblePublic({
-            productId,
-            limit: PDP_OFFERS_FETCH_LIMIT,
-          }),
-    enabled: Boolean(productId) && enabled,
-    staleTime: PDP_OFFERS_STALE_MS,
-  });
+  const offersQuery = useEligibleOffers(productId, enabled);
 
   if (!enabled) return null;
 

@@ -15,6 +15,7 @@ import { cn } from "@/shared/utils/cn";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { CartItem } from "@/shared/api/types";
 import type { UnavailableReason } from "@/shared/constants/statuses";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 function unavailableLabel(
   reason: UnavailableReason | null | undefined,
@@ -96,7 +97,7 @@ export function CartLineItem({
             </Badge>
           ) : (
             <p className="truncate text-[0.8125rem] font-semibold tabular-nums text-brand">
-              ₹{item.product.price.toLocaleString("en-IN")}
+              ₹{formatInrAmount(item.product.price)}
             </p>
           )}
           {available ? (
@@ -157,7 +158,7 @@ export function CartLineItem({
               </Badge>
             ) : (
               <p className="mt-1 text-[0.8125rem] text-ink-muted sm:hidden">
-                ₹{Number(item.product.price).toLocaleString("en-IN")} each
+                ₹{formatInrAmount(Number(item.product.price))} each
               </p>
             )}
           </div>
@@ -202,10 +203,10 @@ export function CartLineItem({
       {available ? (
         <div className="hidden flex-col items-end justify-start gap-1 pt-0.5 sm:flex">
           <p className="font-display text-[1.125rem] tabular-nums text-ink">
-            ₹{lineTotal.toLocaleString("en-IN")}
+            ₹{formatInrAmount(lineTotal)}
           </p>
           <p className="text-[0.75rem] text-ink-muted">
-            ₹{Number(item.product.price).toLocaleString("en-IN")} each
+            ₹{formatInrAmount(Number(item.product.price))} each
           </p>
         </div>
       ) : (

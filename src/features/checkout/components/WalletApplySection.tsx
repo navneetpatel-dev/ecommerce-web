@@ -1,23 +1,24 @@
-'use client'
+"use client";
 
-import { Button } from '@/shared/components/ui/button'
-import { FormFieldFrame } from '@/shared/components/forms'
-import { NumberInput } from '@/shared/components/NumberInput'
-import { LABELS } from '@/shared/constants/labels'
-import { formatLabel } from '@/shared/utils/formatLabel'
+import { Button } from "@/shared/components/ui/button";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { NumberInput } from "@/shared/components/NumberInput";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface WalletApplySectionProps {
-  walletBalance: number
-  maxApplicable: number
-  walletAmountToUse: number
-  amountDue: number
-  disabled?: boolean
-  codSelected?: boolean
-  onAmountChange: (amount: number) => void
+  walletBalance: number;
+  maxApplicable: number;
+  walletAmountToUse: number;
+  amountDue: number;
+  disabled?: boolean;
+  codSelected?: boolean;
+  onAmountChange: (amount: number) => void;
 }
 
 function formatInr(value: number) {
-  return `₹${value.toLocaleString('en-IN')}`
+  return `₹${formatInrAmount(value)}`;
 }
 
 export function WalletApplySection({
@@ -29,13 +30,15 @@ export function WalletApplySection({
   codSelected,
   onAmountChange,
 }: WalletApplySectionProps) {
-  if (walletBalance <= 0) return null
+  if (walletBalance <= 0) return null;
 
   return (
     <div className="space-y-3 border border-line bg-paper/40 p-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-[0.8125rem] font-medium text-ink">{LABELS.walletBalance}</p>
+          <p className="text-[0.8125rem] font-medium text-ink">
+            {LABELS.walletBalance}
+          </p>
           <p className="mt-0.5 font-display text-[1.25rem] tabular-nums text-brand">
             {formatInr(walletBalance)}
           </p>
@@ -54,13 +57,17 @@ export function WalletApplySection({
       </div>
 
       {codSelected ? (
-        <p className="text-[0.8125rem] text-ink-muted">{LABELS.walletNotAvailableWithCod}</p>
+        <p className="text-[0.8125rem] text-ink-muted">
+          {LABELS.walletNotAvailableWithCod}
+        </p>
       ) : (
         <>
           <FormFieldFrame
             label={LABELS.walletAmountToApply}
             htmlFor="wallet-amount"
-            hint={formatLabel(LABELS.walletRemainderDue, { amount: formatInr(amountDue) })}
+            hint={formatLabel(LABELS.walletRemainderDue, {
+              amount: formatInr(amountDue),
+            })}
           >
             <NumberInput
               id="wallet-amount"
@@ -75,10 +82,12 @@ export function WalletApplySection({
             />
           </FormFieldFrame>
           {amountDue <= 0 && walletAmountToUse > 0 ? (
-            <p className="text-[0.8125rem] font-medium text-success">{LABELS.walletFullyCoversOrder}</p>
+            <p className="text-[0.8125rem] font-medium text-success">
+              {LABELS.walletFullyCoversOrder}
+            </p>
           ) : null}
         </>
       )}
     </div>
-  )
+  );
 }

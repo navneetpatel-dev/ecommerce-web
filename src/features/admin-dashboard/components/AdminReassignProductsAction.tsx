@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArrowRightLeft } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -22,11 +22,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
-import { MAX_PAGE_LIMIT } from "@/shared/constants/pagination";
-import { formatLabel } from "@/shared/utils/formatLabel";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import { categoriesApi } from "@/features/categories";
-import type { Category } from "@/shared/api/types";
+import { useReassignProducts } from "../hooks/useReassignProducts";
 
 interface AdminReassignProductsActionProps {
   onDone: () => void;
@@ -36,40 +32,23 @@ export function AdminReassignProductsAction({
   onDone,
 }: AdminReassignProductsActionProps) {
   const [open, setOpen] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [fromId, setFromId] = useState("");
-  const [toId, setToId] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const reassign = useReassignProducts(open, onDone);
+  const {
+    categories,
+    fromId,
+    setFromId,
+    toId,
+    setToId,
+    error,
+    message,
+    loading,
+    onSubmit,
+    clearFeedback,
+  } = reassign;
 
-  useEffect(() => {
-    if (!open) return;
-    void categoriesApi
-      .listPaginated({ page: 1, limit: MAX_PAGE_LIMIT })
-      .then((result) => {
-        setCategories(result.items);
-      });
-  }, [open]);
-
-  const onSubmit = async () => {
-    if (!fromId || !toId || fromId === toId) return;
-    setLoading(true);
-    setError(null);
-    setMessage(null);
-    try {
-      const result = await categoriesApi.reassignProducts(fromId, toId);
-      setMessage(
-        formatLabel(LABELS.productsReassigned, {
-          count: String(result.updatedCount),
-        }),
-      );
-      onDone();
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotReassignProducts));
-    } finally {
-      setLoading(false);
-    }
+  const beginReassign = () => {
+    setOpen(true);
+    clearFeedback();
   };
 
   return (
@@ -79,11 +58,7 @@ export function AdminReassignProductsAction({
         size="sm"
         variant="outline"
         fullWidth="mobile"
-        onClick={() => {
-          setOpen(true);
-          setError(null);
-          setMessage(null);
-        }}
+        onClick={beginReassign}
       >
         <ArrowRightLeft aria-hidden />
         {LABELS.reassignProducts}

@@ -1,40 +1,41 @@
-'use client'
+"use client";
 
-import { useCallback, useState } from 'react'
-import Link from 'next/link'
-import { Heart, Plus } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
-import { Checkbox } from '@/shared/components/ui/checkbox'
-import type { ProductListItem } from '@/shared/api/types'
-import { VendorStrip } from '@/shared/components/VendorStrip'
-import { RatingStars } from '@/shared/components/RatingStars'
-import { DiscountBadge } from '@/shared/components/DiscountBadge'
-import { MediaImage } from '@/shared/components/MediaImage'
-import { Button } from '@/shared/components/ui/button'
-import { CardQuantityControl } from './CardQuantityControl'
-import { cn } from '@/shared/utils/cn'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { resolveProductStock } from '../utils/productListItem'
+import { useCallback, useState } from "react";
+import Link from "next/link";
+import { Heart, Plus } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { Checkbox } from "@/shared/components/ui/checkbox";
+import type { ProductListItem } from "@/shared/api/types";
+import { VendorStrip } from "@/shared/components/VendorStrip";
+import { RatingStars } from "@/shared/components/RatingStars";
+import { DiscountBadge } from "@/shared/components/DiscountBadge";
+import { MediaImage } from "@/shared/components/MediaImage";
+import { Button } from "@/shared/components/ui/button";
+import { CardQuantityControl } from "./CardQuantityControl";
+import { cn } from "@/shared/utils/cn";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { resolveProductStock } from "../utils/productListItem";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface ProductCardProps {
-  product: ProductListItem
-  quickAddLabel?: string
-  showWishlist?: boolean
-  showQuickAdd?: boolean
-  compareMode?: boolean
-  isCompared?: boolean
-  isWishlisted?: boolean
-  isAddingToCart?: boolean
-  cartQuantity?: number
-  maxQuantity?: number
-  hasDiscount?: boolean
-  discountPercent?: number
-  onPrefetch?: () => void
-  onToggleWishlist?: () => void
-  onAddToCart?: () => void
-  onQuantityChange?: (quantity: number) => void
-  onToggleCompare?: (product: ProductListItem) => void
+  product: ProductListItem;
+  quickAddLabel?: string;
+  showWishlist?: boolean;
+  showQuickAdd?: boolean;
+  compareMode?: boolean;
+  isCompared?: boolean;
+  isWishlisted?: boolean;
+  isAddingToCart?: boolean;
+  cartQuantity?: number;
+  maxQuantity?: number;
+  hasDiscount?: boolean;
+  discountPercent?: number;
+  onPrefetch?: () => void;
+  onToggleWishlist?: () => void;
+  onAddToCart?: () => void;
+  onQuantityChange?: (quantity: number) => void;
+  onToggleCompare?: (product: ProductListItem) => void;
 }
 
 const controlMotion = {
@@ -42,7 +43,7 @@ const controlMotion = {
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -4 },
   transition: { duration: 0.2, ease: [0.2, 0, 0, 1] as const },
-}
+};
 
 export function ProductCard({
   product,
@@ -63,31 +64,31 @@ export function ProductCard({
   onQuantityChange,
   onToggleCompare,
 }: ProductCardProps) {
-  const [imageUnavailable, setImageUnavailable] = useState(!product.imageUrl)
+  const [imageUnavailable, setImageUnavailable] = useState(!product.imageUrl);
   const handleUnavailableChange = useCallback((unavailable: boolean) => {
-    setImageUnavailable(unavailable)
-  }, [])
+    setImageUnavailable(unavailable);
+  }, []);
 
-  const inCart = cartQuantity > 0
+  const inCart = cartQuantity > 0;
   const canQuickAdd =
     showQuickAdd &&
     Boolean(product.variants?.[0]?.id) &&
-    resolveProductStock(product) > 0
+    resolveProductStock(product) > 0;
 
-  const renderQuickAddButton = (variant: 'overlay' | 'mobile') => (
+  const renderQuickAddButton = (variant: "overlay" | "mobile") => (
     <Button
       size="sm"
-      variant={variant === 'mobile' ? 'secondary' : 'default'}
+      variant={variant === "mobile" ? "secondary" : "default"}
       className={cn(
-        'w-full',
-        variant === 'overlay' &&
-          'rounded-full bg-surface/90 hover:bg-surface backdrop-blur-xs text-ink border border-line'
+        "w-full",
+        variant === "overlay" &&
+          "rounded-full bg-surface/90 hover:bg-surface backdrop-blur-xs text-ink border border-line",
       )}
       disabled={isAddingToCart}
       onClick={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        onAddToCart?.()
+        e.preventDefault();
+        e.stopPropagation();
+        onAddToCart?.();
       }}
     >
       {isAddingToCart && !inCart ? (
@@ -99,9 +100,9 @@ export function ProductCard({
         </>
       )}
     </Button>
-  )
+  );
 
-  const renderControls = (variant: 'overlay' | 'mobile') => (
+  const renderControls = (variant: "overlay" | "mobile") => (
     <AnimatePresence mode="wait" initial={false}>
       {inCart ? (
         <motion.div key="qty" className="w-full" {...controlMotion}>
@@ -117,7 +118,7 @@ export function ProductCard({
         </motion.div>
       )}
     </AnimatePresence>
-  )
+  );
 
   return (
     <div className="group relative">
@@ -128,9 +129,9 @@ export function ProductCard({
       >
         <div
           className={cn(
-            'aspect-square rounded-md overflow-hidden bg-paper border border-line relative',
-            'transition-colors duration-200',
-            imageUnavailable && 'group-hover:border-brand'
+            "aspect-square rounded-md overflow-hidden bg-paper border border-line relative",
+            "transition-colors duration-200",
+            imageUnavailable && "group-hover:border-brand",
           )}
         >
           <MediaImage
@@ -163,21 +164,23 @@ export function ProductCard({
               variant="secondary"
               size="icon-sm"
               onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                onToggleWishlist?.()
+                e.preventDefault();
+                e.stopPropagation();
+                onToggleWishlist?.();
               }}
               className={cn(
-                'absolute top-2 right-2 h-8 w-8 min-h-8 max-h-8 rounded-full bg-surface/80 backdrop-blur-xs hover:bg-surface',
-                isWishlisted ? 'text-danger' : 'text-ink-muted'
+                "absolute top-2 right-2 h-8 w-8 min-h-8 max-h-8 rounded-full bg-surface/80 backdrop-blur-xs hover:bg-surface",
+                isWishlisted ? "text-danger" : "text-ink-muted",
               )}
-              aria-label={isWishlisted ? LABELS.removeFromWishlist : LABELS.addToWishlist}
+              aria-label={
+                isWishlisted ? LABELS.removeFromWishlist : LABELS.addToWishlist
+              }
             >
               <Heart
                 size={18}
                 className={cn(
-                  isWishlisted && 'fill-current',
-                  isWishlisted && 'animate-pulse-scale'
+                  isWishlisted && "fill-current",
+                  isWishlisted && "animate-pulse-scale",
                 )}
               />
             </Button>
@@ -186,14 +189,14 @@ export function ProductCard({
           {canQuickAdd && (
             <div
               className={cn(
-                'absolute bottom-0 left-0 right-0 hidden p-3 md:flex',
-                'transition-[opacity,transform] duration-200',
+                "absolute bottom-0 left-0 right-0 hidden p-3 md:flex",
+                "transition-[opacity,transform] duration-200",
                 inCart
-                  ? 'opacity-100 translate-y-0'
-                  : 'opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0'
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0",
               )}
             >
-              {renderControls('overlay')}
+              {renderControls("overlay")}
             </div>
           )}
         </div>
@@ -208,26 +211,26 @@ export function ProductCard({
         </Link>
         <div className="flex items-baseline gap-2">
           <span className="font-sans text-[0.9375rem] font-semibold text-brand">
-            ₹{product.basePrice.toLocaleString('en-IN')}
+            ₹{formatInrAmount(product.basePrice)}
           </span>
           {hasDiscount && (
             <>
               <span className="font-sans text-[0.8125rem] text-ink-faint line-through">
-                ₹{product.compareAtPrice!.toLocaleString('en-IN')}
+                ₹{product.compareAtPrice!.toLocaleString("en-IN")}
               </span>
-              <DiscountBadge>
-                -{discountPercent}%
-              </DiscountBadge>
+              <DiscountBadge>-{discountPercent}%</DiscountBadge>
             </>
           )}
         </div>
-        <RatingStars value={product.avgRating} count={product.reviewCount} size="sm" />
+        <RatingStars
+          value={product.avgRating}
+          count={product.reviewCount}
+          size="sm"
+        />
       </div>
 
       {canQuickAdd && (
-        <div className="mt-2 md:hidden">
-          {renderControls('mobile')}
-        </div>
+        <div className="mt-2 md:hidden">{renderControls("mobile")}</div>
       )}
 
       {compareMode && (
@@ -241,5 +244,5 @@ export function ProductCard({
         </label>
       )}
     </div>
-  )
+  );
 }

@@ -15,6 +15,7 @@ import { formatLabel } from "@/shared/utils/formatLabel";
 import { cn } from "@/shared/utils/cn";
 import type { EligibleCoupon } from "@/shared/api/types";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface CartCouponSectionProps {
   couponInput: string;
@@ -102,7 +103,7 @@ export function CartCouponSection({
                 code: appliedCouponCode,
               })}
               {appliedDiscount > 0
-                ? ` (−₹${appliedDiscount.toLocaleString("en-IN")})`
+                ? ` (−₹${formatInrAmount(appliedDiscount)})`
                 : ""}
             </p>
             {appliedCashbackAmount > 0 ? (
@@ -170,7 +171,7 @@ export function CartCouponSection({
                     <span className="min-w-0 truncate font-mono text-ink">
                       {offer.code}
                       {offer.discount > 0
-                        ? ` · ₹${offer.discount.toLocaleString("en-IN")} ${LABELS.couponDiscount.toLowerCase()}`
+                        ? ` · ₹${formatInrAmount(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`
                         : ""}
                     </span>
                     <Button

@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   DataTable,
   type DataTableColumn,
@@ -20,9 +18,9 @@ import { COUPON_STATUS, DISCOUNT_BEARER } from "@/shared/constants/statuses";
 import { formatDateTime } from "@/shared/utils/formatDate";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { AdminConfirmAction } from "./AdminConfirmAction";
-import { adminApi } from "../api/admin.api";
-import { adminKeys } from "../api/admin.queries";
+import { useCouponRowActions } from "../hooks/useCouponRowActions";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface CouponsTableProps {
   coupons?: Coupon[];
@@ -47,26 +45,9 @@ export function CouponsTable({
   readOnly = false,
   allowReject = false,
 }: CouponsTableProps) {
-  const queryClient = useQueryClient();
-  const [analyticsCoupon, setAnalyticsCoupon] = useState<Coupon | null>(null);
-
-  const analyticsQuery = useQuery({
-    queryKey: adminKeys.couponAnalytics(analyticsCoupon?.id),
-    queryFn: () => adminApi.couponAnalytics(analyticsCoupon!.id),
-    enabled: Boolean(analyticsCoupon?.id),
-  });
-
-  const statusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: Coupon["status"] }) =>
-      adminApi.updateCouponStatus(id, status),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: adminKeys.coupons.all });
-    },
-  });
-
-  const reload = () => {
-    void queryClient.invalidateQueries({ queryKey: adminKeys.coupons.all });
-  };
+  const rowActions = useCouponRowActions();
+  const analyticsCouponId = rowActions.analyticsCouponId;
+  const setAnalyticsCouponId = rowActions.setAnalyticsCouponId;
 
   const columns: DataTableColumn<Coupon>[] = [
     {
@@ -118,7 +99,7 @@ export function CouponsTable({
         type="button"
         size="sm"
         variant="outline"
-        onClick={() => setAnalyticsCoupon(row)}
+        onClick={() => setAnalyticsCouponId(row.id)}
       >
         {LABELS.viewAnalytics}
       </Button>
@@ -132,9 +113,10 @@ export function CouponsTable({
             code: row.code,
           })}
           onConfirm={() =>
-            statusMutation
-              .mutateAsync({ id: row.id, status: COUPON_STATUS.PAUSED })
-              .then(reload)
+            rowActions.changeStatus({
+              id: row.id,
+              status: COUPON_STATUS.PAUSED,
+            })
           }
         />
       ) : null}
@@ -150,9 +132,10 @@ export function CouponsTable({
             code: row.code,
           })}
           onConfirm={() =>
-            statusMutation
-              .mutateAsync({ id: row.id, status: COUPON_STATUS.ACTIVE })
-              .then(reload)
+            rowActions.changeStatus({
+              id: row.id,
+              status: COUPON_STATUS.ACTIVE,
+            })
           }
         />
       ) : null}
@@ -166,9 +149,10 @@ export function CouponsTable({
             code: row.code,
           })}
           onConfirm={() =>
-            statusMutation
-              .mutateAsync({ id: row.id, status: COUPON_STATUS.ARCHIVED })
-              .then(reload)
+            rowActions.changeStatus({
+              id: row.id,
+              status: COUPON_STATUS.ARCHIVED,
+            })
           }
         />
       ) : null}
@@ -185,16 +169,19 @@ export function CouponsTable({
             code: row.code,
           })}
           onConfirm={() =>
-            statusMutation
-              .mutateAsync({ id: row.id, status: COUPON_STATUS.REJECTED })
-              .then(reload)
+            rowActions.changeStatus({
+              id: row.id,
+              status: COUPON_STATUS.REJECTED,
+            })
           }
         />
       ) : null}
     </>
   );
 
-  const analytics: CouponAnalytics | undefined = analyticsQuery.data;
+  const analytics: CouponAnalytics | undefined = rowActions.analytics;
+  const analyticsCoupon =
+    coupons.find((row) => row.id === analyticsCouponId) ?? null;
 
   return (
     <>
@@ -210,7 +197,7 @@ export function CouponsTable({
 
       <Dialog
         open={Boolean(analyticsCoupon)}
-        onOpenChange={(open) => !open && setAnalyticsCoupon(null)}
+        onOpenChange={(open) => !open && setAnalyticsCouponId(null)}
       >
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -219,7 +206,7 @@ export function CouponsTable({
               {analyticsCoupon ? ` — ${analyticsCoupon.code}` : ""}
             </DialogTitle>
           </DialogHeader>
-          {analyticsQuery.isLoading ? (
+          {rowActions.analyticsLoading ? (
             <p className="text-[0.875rem] text-ink-muted">{LABELS.loading}</p>
           ) : analytics ? (
             <dl className="space-y-3 text-[0.875rem]">
@@ -232,14 +219,13 @@ export function CouponsTable({
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">{LABELS.discountCostImpact}</dt>
                 <dd className="tabular-nums font-medium">
-                  ₹{Number(analytics.totalDiscount).toLocaleString("en-IN")}
+                  ₹{formatInrAmount(Number(analytics.totalDiscount))}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">{LABELS.revenueImpact}</dt>
                 <dd className="tabular-nums font-medium">
-                  ₹
-                  {Number(analytics.revenueImpact ?? 0).toLocaleString("en-IN")}
+                  ₹{formatInrAmount(Number(analytics.revenueImpact ?? 0))}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">

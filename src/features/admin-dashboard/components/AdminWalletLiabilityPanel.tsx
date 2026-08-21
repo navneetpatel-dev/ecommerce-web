@@ -1,98 +1,26 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
-import { BEARER_PREFIX } from "@/shared/constants/http";
-import { STORAGE_KEYS } from "@/shared/constants/storage";
 import { formatInr } from "@/shared/utils/orderFormat";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import { API } from "@/shared/constants/apiRoutes";
-import { useAuthStore } from "@/shared/stores/auth.store";
-import { reportsApi, type WalletLiabilityReport } from "../api/reports.api";
-
-function defaultRange() {
-  const to = new Date();
-  const from = new Date();
-  from.setDate(to.getDate() - 30);
-  return {
-    from: from.toISOString().slice(0, 10),
-    to: to.toISOString().slice(0, 10),
-  };
-}
-
-async function downloadReport(path: string, filename: string) {
-  const token =
-    useAuthStore.getState().accessToken ||
-    (typeof window !== "undefined"
-      ? localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
-      : null);
-  const base = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const res = await fetch(`${base}${path}`, {
-    credentials: "include",
-    headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
-  });
-  if (!res.ok) throw new Error(LABELS.couldNotLoadReport);
-  const blob = await res.blob();
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
+import { useWalletLiabilityReport } from "../hooks/useWalletLiabilityReport";
 
 export function AdminWalletLiabilityPanel() {
-  const initial = useMemo(() => defaultRange(), []);
-  const [from, setFrom] = useState(initial.from);
-  const [to, setTo] = useState(initial.to);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [report, setReport] = useState<WalletLiabilityReport | null>(null);
-
-  const range = {
-    from: `${from}T00:00:00.000Z`,
-    to: `${to}T23:59:59.999Z`,
+  const reportPanel = useWalletLiabilityReport();
+  const {
+    from,
+    setFrom,
+    to,
+    setTo,
     page,
-    limit: 50,
-  };
-
-  const load = async (nextPage = page) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await reportsApi.adminWalletLiability({
-        from: range.from,
-        to: range.to,
-        page: nextPage,
-        limit: 50,
-      });
-      setReport(data);
-      setPage(nextPage);
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
-      setReport(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const exportFile = async (format: "csv" | "pdf") => {
-    try {
-      await downloadReport(
-        reportsApi.exportUrl(API.reports.adminWalletLiability, {
-          ...range,
-          format,
-        }),
-        `wallet-liability.${format === "pdf" ? "pdf" : "csv"}`,
-      );
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
-    }
-  };
+    loading,
+    error,
+    report,
+    load,
+    exportFile,
+  } = reportPanel;
 
   return (
     <div className="space-y-6">

@@ -38,6 +38,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatDateTime } from "@/shared/utils/formatDate";
 import type { CouponBatch } from "@/shared/api/types";
 import { z } from "zod";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 const BulkFormSchema = z.object({
   name: z.string().trim().min(1, LABELS.couponBatchNameRequired),
@@ -126,15 +127,13 @@ export function CouponsPageHeader({
       id: "discount",
       header: LABELS.batchDiscountImpact,
       className: "tabular-nums",
-      cell: (row) =>
-        `₹${Number(row.discountTotal ?? 0).toLocaleString("en-IN")}`,
+      cell: (row) => `₹${formatInrAmount(Number(row.discountTotal ?? 0))}`,
     },
     {
       id: "revenue",
       header: LABELS.batchRevenueImpact,
       className: "tabular-nums",
-      cell: (row) =>
-        `₹${Number(row.revenueImpact ?? 0).toLocaleString("en-IN")}`,
+      cell: (row) => `₹${formatInrAmount(Number(row.revenueImpact ?? 0))}`,
     },
     {
       id: "expires",
@@ -314,10 +313,7 @@ export function CouponsPageHeader({
                     {LABELS.batchDiscountImpact}
                   </dt>
                   <dd className="tabular-nums font-medium">
-                    ₹
-                    {Number(batchDetail.discountTotal ?? 0).toLocaleString(
-                      "en-IN",
-                    )}
+                    ₹{formatInrAmount(Number(batchDetail.discountTotal ?? 0))}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-4">
@@ -325,10 +321,7 @@ export function CouponsPageHeader({
                     {LABELS.batchRevenueImpact}
                   </dt>
                   <dd className="tabular-nums font-medium">
-                    ₹
-                    {Number(batchDetail.revenueImpact ?? 0).toLocaleString(
-                      "en-IN",
-                    )}
+                    ₹{formatInrAmount(Number(batchDetail.revenueImpact ?? 0))}
                   </dd>
                 </div>
               </dl>

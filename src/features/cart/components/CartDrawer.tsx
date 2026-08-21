@@ -1,29 +1,30 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { X, ShoppingBag } from 'lucide-react'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { motion, AnimatePresence } from 'motion/react'
-import { VendorStrip } from '@/shared/components/VendorStrip'
-import { Button } from '@/shared/components/ui/button'
-import { EmptyState } from '@/shared/components/EmptyState'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { useBodyScrollLock } from '@/shared/hooks/useBodyScrollLock'
-import { CartLineItem } from './CartLineItem'
-import type { CartItem } from '@/shared/api/types'
+import Link from "next/link";
+import { X, ShoppingBag } from "lucide-react";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { motion, AnimatePresence } from "motion/react";
+import { VendorStrip } from "@/shared/components/VendorStrip";
+import { Button } from "@/shared/components/ui/button";
+import { EmptyState } from "@/shared/components/EmptyState";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock";
+import { CartLineItem } from "./CartLineItem";
+import type { CartItem } from "@/shared/api/types";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface CartDrawerProps {
-  isOpen: boolean
-  onClose: () => void
-  isLoading?: boolean
-  hasItems: boolean
-  groupedByVendor: Record<string, CartItem[]>
-  total: number
-  hasUnavailableItems?: boolean
-  onContinueShopping: () => void
-  onUpdateQuantity: (itemId: string, quantity: number) => void
-  onRemoveItem: (itemId: string) => void
+  isOpen: boolean;
+  onClose: () => void;
+  isLoading?: boolean;
+  hasItems: boolean;
+  groupedByVendor: Record<string, CartItem[]>;
+  total: number;
+  hasUnavailableItems?: boolean;
+  onContinueShopping: () => void;
+  onUpdateQuantity: (itemId: string, quantity: number) => void;
+  onRemoveItem: (itemId: string) => void;
 }
 
 export function CartDrawer({
@@ -38,7 +39,7 @@ export function CartDrawer({
   onUpdateQuantity,
   onRemoveItem,
 }: CartDrawerProps) {
-  useBodyScrollLock(isOpen)
+  useBodyScrollLock(isOpen);
 
   return (
     <AnimatePresence>
@@ -53,14 +54,16 @@ export function CartDrawer({
             onClick={onClose}
           />
           <motion.aside
-            initial={{ x: '100%' }}
+            initial={{ x: "100%" }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 28, stiffness: 280 }}
             className="fixed right-0 top-0 z-50 flex h-full w-[min(100vw,24rem)] flex-col overflow-hidden border-l border-line bg-surface-raised shadow-elevation-4 overscroll-contain"
           >
             <div className="flex items-center justify-between px-4 h-14 border-b border-line shrink-0">
-              <h2 className="text-[1.125rem] font-semibold">{LABELS.yourCart}</h2>
+              <h2 className="text-[1.125rem] font-semibold">
+                {LABELS.yourCart}
+              </h2>
               <Button
                 type="button"
                 variant="ghost"
@@ -90,7 +93,10 @@ export function CartDrawer({
               ) : (
                 <div className="divide-y divide-line">
                   {Object.entries(groupedByVendor).map(([vendorId, items]) => (
-                    <div key={vendorId} className="space-y-1 py-3 first:pt-0 last:pb-0">
+                    <div
+                      key={vendorId}
+                      className="space-y-1 py-3 first:pt-0 last:pb-0"
+                    >
                       <VendorStrip vendor={items[0].product.vendor} size="sm" />
                       {items.map((item) => (
                         <CartLineItem
@@ -110,9 +116,11 @@ export function CartDrawer({
             {hasItems ? (
               <div className="shrink-0 space-y-3 border-t border-line p-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-[0.9375rem] font-medium">{LABELS.total}</span>
+                  <span className="text-[0.9375rem] font-medium">
+                    {LABELS.total}
+                  </span>
                   <span className="text-[1.125rem] font-bold text-brand">
-                    ₹{total.toLocaleString('en-IN')}
+                    ₹{formatInrAmount(total)}
                   </span>
                 </div>
                 {hasUnavailableItems ? (
@@ -139,5 +147,5 @@ export function CartDrawer({
         </>
       )}
     </AnimatePresence>
-  )
+  );
 }

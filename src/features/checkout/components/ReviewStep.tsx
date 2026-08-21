@@ -5,6 +5,7 @@ import { VendorStrip } from "@/shared/components/VendorStrip";
 import { Button } from "@/shared/components/ui/button";
 import { ArrowRight, AlertTriangle } from "lucide-react";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface ReviewStepProps {
   quote: CheckoutQuote | null;
@@ -15,7 +16,7 @@ interface ReviewStepProps {
 }
 
 function formatInr(value: number) {
-  return `₹${value.toLocaleString("en-IN")}`;
+  return `₹${formatInrAmount(value)}`;
 }
 
 export function ReviewStep({

@@ -9,9 +9,6 @@ import {
   RotateCcw,
   Star,
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { reviewsApi } from "@/features/reviews";
-import { reviewKeys } from "@/features/reviews";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { TextEyebrow } from "@/shared/components/TextEyebrow";
 import { LABELS } from "@/shared/constants/labels";
@@ -26,13 +23,14 @@ import {
 } from "@/shared/utils/orderFormat";
 
 export function OrdersActivitySection() {
-  const { recentOrders, ordersCount, wishlistCount, isLoadingStats } =
-    useAccountOverview();
-
-  const reviewsQuery = useQuery({
-    queryKey: reviewKeys.mine(),
-    queryFn: () => reviewsApi.myReviews(),
-  });
+  const {
+    recentOrders,
+    ordersCount,
+    wishlistCount,
+    reviewsCount,
+    isLoadingReviews,
+    isLoadingStats,
+  } = useAccountOverview();
 
   const preview = recentOrders.slice(0, 4);
 
@@ -112,11 +110,7 @@ export function OrdersActivitySection() {
         <SummaryRow
           icon={Star}
           label="Your reviews"
-          value={
-            reviewsQuery.isLoading
-              ? "—"
-              : String(reviewsQuery.data?.length ?? 0)
-          }
+          value={isLoadingReviews ? "—" : String(reviewsCount)}
           href={PATHS.reviews}
         />
         <SummaryRow

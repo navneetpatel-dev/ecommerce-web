@@ -13,6 +13,7 @@ import { CartLineItem } from "./CartLineItem";
 import { CartCouponSection } from "./CartCouponSection";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice";
 import type { CartItem, EligibleCoupon } from "@/shared/api/types";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface CartPageViewProps {
   isLoading?: boolean;
@@ -193,7 +194,7 @@ export function CartPageView({
                 {itemCount} {itemCount === 1 ? "item" : "items"}
                 <span className="mx-2 text-line">·</span>
                 <span className="font-medium text-ink">
-                  ₹{total.toLocaleString("en-IN")}
+                  ₹{formatInrAmount(total)}
                 </span>
               </p>
 
@@ -206,14 +207,14 @@ export function CartPageView({
                 <div className="flex items-center justify-between gap-4">
                   <dt className="text-ink-muted">{LABELS.subtotal}</dt>
                   <dd className="tabular-nums text-ink">
-                    ₹{subtotal.toLocaleString("en-IN")}
+                    ₹{formatInrAmount(subtotal)}
                   </dd>
                 </div>
                 {appliedDiscount > 0 ? (
                   <div className="flex items-center justify-between gap-4 text-success">
                     <dt>{LABELS.couponDiscount}</dt>
                     <dd className="tabular-nums">
-                      −₹{appliedDiscount.toLocaleString("en-IN")}
+                      −₹{formatInrAmount(appliedDiscount)}
                     </dd>
                   </div>
                 ) : null}
@@ -227,7 +228,7 @@ export function CartPageView({
                           {LABELS.vendorDiscountBreakdown}: {row.name}
                         </dt>
                         <dd className="tabular-nums">
-                          −₹{row.amount.toLocaleString("en-IN")}
+                          −₹{formatInrAmount(row.amount)}
                         </dd>
                       </div>
                     ))
@@ -265,7 +266,7 @@ export function CartPageView({
                     {LABELS.total}
                   </span>
                   <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
-                    ₹{total.toLocaleString("en-IN")}
+                    ₹{formatInrAmount(total)}
                   </span>
                 </div>
                 {(appliedCashbackAmount > 0 ||

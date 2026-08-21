@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
@@ -13,90 +12,25 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
-import { BEARER_PREFIX } from "@/shared/constants/http";
-import { STORAGE_KEYS } from "@/shared/constants/storage";
 import { formatInr } from "@/shared/utils/orderFormat";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import { API } from "@/shared/constants/apiRoutes";
-import { useAuthStore } from "@/shared/stores/auth.store";
-import { reportsApi, type CashbackWriteOffReport } from "../api/reports.api";
-
-function defaultRange() {
-  const to = new Date();
-  const from = new Date();
-  from.setDate(to.getDate() - 30);
-  return {
-    from: from.toISOString().slice(0, 10),
-    to: to.toISOString().slice(0, 10),
-  };
-}
-
-async function downloadReport(path: string, filename: string) {
-  const token =
-    useAuthStore.getState().accessToken ||
-    (typeof window !== "undefined"
-      ? localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
-      : null);
-  const base = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const res = await fetch(`${base}${path}`, {
-    credentials: "include",
-    headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
-  });
-  if (!res.ok) throw new Error(LABELS.couldNotLoadReport);
-  const blob = await res.blob();
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
+import { useCashbackWriteOffReport } from "../hooks/useCashbackWriteOffReport";
 
 export function AdminCashbackWriteOffPanel() {
-  const initial = useMemo(() => defaultRange(), []);
-  const [from, setFrom] = useState(initial.from);
-  const [to, setTo] = useState(initial.to);
-  const [bornBy, setBornBy] = useState<"ALL" | "PLATFORM" | "VENDOR">("ALL");
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [report, setReport] = useState<CashbackWriteOffReport | null>(null);
-
-  const range = {
-    from: `${from}T00:00:00.000Z`,
-    to: `${to}T23:59:59.999Z`,
-    bornBy: bornBy === "ALL" ? undefined : bornBy,
-  };
-
-  const load = async (nextPage = page) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await reportsApi.adminCashbackWriteOffs({
-        ...range,
-        page: nextPage,
-        limit: 50,
-      });
-      setReport(data);
-      setPage(nextPage);
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
-      setReport(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const exportFile = async (format: "csv" | "pdf") => {
-    try {
-      await downloadReport(
-        `${API.reports.adminCashbackWriteOffs}?from=${encodeURIComponent(range.from)}&to=${encodeURIComponent(range.to)}&format=${format}${range.bornBy ? `&bornBy=${range.bornBy}` : ""}`,
-        `cashback-write-offs.${format === "pdf" ? "pdf" : "csv"}`,
-      );
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
-    }
-  };
+  const reportPanel = useCashbackWriteOffReport();
+  const {
+    from,
+    setFrom,
+    to,
+    setTo,
+    bornBy,
+    setBornBy,
+    page,
+    loading,
+    error,
+    report,
+    load,
+    exportFile,
+  } = reportPanel;
 
   return (
     <div className="space-y-6">

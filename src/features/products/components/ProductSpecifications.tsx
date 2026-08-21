@@ -1,32 +1,40 @@
-import Link from 'next/link'
-import { LABELS } from '@/shared/constants/labels'
-import { PATHS } from '@/shared/constants/paths'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import type { ProductVariant } from '@/shared/api/types'
+import Link from "next/link";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import type { ProductVariant } from "@/shared/api/types";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface SpecRow {
-  label: string
-  value: string
+  label: string;
+  value: string;
 }
 
 interface ProductSpecificationsProps {
-  specs?: Record<string, string> | null
-  matchedVariant?: ProductVariant | null
-  categoryName?: string | null
-  secondaryCategories?: Array<{ id: string; name: string; slug: string }>
-  displayStock: number
+  specs?: Record<string, string> | null;
+  matchedVariant?: ProductVariant | null;
+  categoryName?: string | null;
+  secondaryCategories?: Array<{ id: string; name: string; slug: string }>;
+  displayStock: number;
 }
 
 function formatWeightGrams(grams?: number) {
-  if (!grams || grams <= 0) return null
-  return formatLabel(LABELS.productWeightGrams, { grams: grams.toLocaleString('en-IN') })
+  if (!grams || grams <= 0) return null;
+  return formatLabel(LABELS.productWeightGrams, {
+    grams: formatInrAmount(grams),
+  });
 }
 
-function pushUniqueRow(rows: SpecRow[], seen: Set<string>, label: string, value: string) {
-  const normalized = label.trim().toLowerCase()
-  if (!value || seen.has(normalized)) return
-  seen.add(normalized)
-  rows.push({ label, value })
+function pushUniqueRow(
+  rows: SpecRow[],
+  seen: Set<string>,
+  label: string,
+  value: string,
+) {
+  const normalized = label.trim().toLowerCase();
+  if (!value || seen.has(normalized)) return;
+  seen.add(normalized);
+  rows.push({ label, value });
 }
 
 export function ProductSpecifications({
@@ -36,11 +44,11 @@ export function ProductSpecifications({
   secondaryCategories,
   displayStock,
 }: ProductSpecificationsProps) {
-  const rows: SpecRow[] = []
-  const seenLabels = new Set<string>()
+  const rows: SpecRow[] = [];
+  const seenLabels = new Set<string>();
 
   if (matchedVariant?.sku) {
-    pushUniqueRow(rows, seenLabels, LABELS.sku, matchedVariant.sku)
+    pushUniqueRow(rows, seenLabels, LABELS.sku, matchedVariant.sku);
   }
 
   if (matchedVariant?.price != null) {
@@ -48,28 +56,28 @@ export function ProductSpecifications({
       rows,
       seenLabels,
       LABELS.variantPrice,
-      `₹${Number(matchedVariant.price).toLocaleString('en-IN')}`,
-    )
+      `₹${formatInrAmount(Number(matchedVariant.price))}`,
+    );
   }
 
   if (matchedVariant?.attributes) {
     for (const [key, value] of Object.entries(matchedVariant.attributes)) {
-      pushUniqueRow(rows, seenLabels, key, value)
+      pushUniqueRow(rows, seenLabels, key, value);
     }
   }
 
-  const weight = formatWeightGrams(matchedVariant?.weightGrams)
+  const weight = formatWeightGrams(matchedVariant?.weightGrams);
   if (weight) {
-    pushUniqueRow(rows, seenLabels, LABELS.productWeight, weight)
+    pushUniqueRow(rows, seenLabels, LABELS.productWeight, weight);
   }
 
   if (categoryName) {
-    pushUniqueRow(rows, seenLabels, LABELS.categoryLabel, categoryName)
+    pushUniqueRow(rows, seenLabels, LABELS.categoryLabel, categoryName);
   }
 
   if (specs) {
     for (const [key, value] of Object.entries(specs)) {
-      pushUniqueRow(rows, seenLabels, key, value)
+      pushUniqueRow(rows, seenLabels, key, value);
     }
   }
 
@@ -80,9 +88,9 @@ export function ProductSpecifications({
     displayStock > 0
       ? formatLabel(LABELS.stockAvailable, { count: displayStock })
       : LABELS.outOfStock,
-  )
+  );
 
-  if (!rows.length) return null
+  if (!rows.length) return null;
 
   return (
     <div className="space-y-6">
@@ -92,7 +100,9 @@ export function ProductSpecifications({
             key={`${index}-${row.label}`}
             className="grid grid-cols-[8rem_1fr] gap-3 px-4 py-3 sm:grid-cols-[10rem_1fr]"
           >
-            <dt className="text-[0.8125rem] font-medium text-ink-muted">{row.label}</dt>
+            <dt className="text-[0.8125rem] font-medium text-ink-muted">
+              {row.label}
+            </dt>
             <dd className="text-[0.9375rem] text-ink">{row.value}</dd>
           </div>
         ))}
@@ -117,5 +127,5 @@ export function ProductSpecifications({
         </div>
       ) : null}
     </div>
-  )
+  );
 }

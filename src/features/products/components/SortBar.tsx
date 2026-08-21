@@ -1,36 +1,37 @@
-'use client'
+"use client";
 
-import { Columns2 } from 'lucide-react'
+import { Columns2 } from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/shared/components/ui/select'
-import { Button } from '@/shared/components/ui/button'
-import { LABELS } from '@/shared/constants/labels'
-import { formatLabel } from '@/shared/utils/formatLabel'
-import { cn } from '@/shared/utils/cn'
+} from "@/shared/components/ui/select";
+import { Button } from "@/shared/components/ui/button";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { cn } from "@/shared/utils/cn";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 const SORT_OPTIONS = [
-  { value: 'trending', labelKey: 'sortTrending' as const },
-  { value: 'newest', labelKey: 'sortNewest' as const },
-  { value: 'price_asc', labelKey: 'sortPriceLowHigh' as const },
-  { value: 'price_desc', labelKey: 'sortPriceHighLow' as const },
-  { value: 'rating', labelKey: 'sortTopRated' as const },
-]
+  { value: "trending", labelKey: "sortTrending" as const },
+  { value: "newest", labelKey: "sortNewest" as const },
+  { value: "price_asc", labelKey: "sortPriceLowHigh" as const },
+  { value: "price_desc", labelKey: "sortPriceHighLow" as const },
+  { value: "rating", labelKey: "sortTopRated" as const },
+];
 
 interface SortBarProps {
-  sort: string | undefined
-  totalProducts: number | undefined
-  isFetching: boolean
-  onSortChange: (value: string) => void
-  compareMode?: boolean
-  onToggleCompare?: () => void
+  sort: string | undefined;
+  totalProducts: number | undefined;
+  isFetching: boolean;
+  onSortChange: (value: string) => void;
+  compareMode?: boolean;
+  onToggleCompare?: () => void;
   /** Hide desktop sort control on small screens when a mobile Sort sheet exists. */
-  hideSortOnMobile?: boolean
-  className?: string
+  hideSortOnMobile?: boolean;
+  className?: string;
 }
 
 export function SortBar({
@@ -46,29 +47,33 @@ export function SortBar({
   const countLabel =
     totalProducts !== undefined
       ? formatLabel(
-          totalProducts === 1 ? LABELS.productCountSingular : LABELS.productCountPlural,
-          { count: totalProducts.toLocaleString('en-IN') },
+          totalProducts === 1
+            ? LABELS.productCountSingular
+            : LABELS.productCountPlural,
+          { count: formatInrAmount(totalProducts) },
         )
       : isFetching
         ? LABELS.updatingEllipsis
-        : LABELS.browseCollection
+        : LABELS.browseCollection;
 
   return (
     <div
       className={cn(
-        'mb-6 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-4 sm:gap-3',
+        "mb-6 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-4 sm:gap-3",
         className,
       )}
     >
-      <p className="text-[0.8125rem] tracking-wide text-ink-muted tabular-nums">{countLabel}</p>
+      <p className="text-[0.8125rem] tracking-wide text-ink-muted tabular-nums">
+        {countLabel}
+      </p>
 
       <div className="flex items-center gap-2">
-        <Select value={sort || 'trending'} onValueChange={onSortChange}>
+        <Select value={sort || "trending"} onValueChange={onSortChange}>
           <SelectTrigger
             aria-label={LABELS.sort}
             className={cn(
-              'w-[11.5rem] rounded-md text-[0.8125rem] sm:text-[0.875rem]',
-              hideSortOnMobile && 'hidden xl:flex',
+              "w-[11.5rem] rounded-md text-[0.8125rem] sm:text-[0.875rem]",
+              hideSortOnMobile && "hidden xl:flex",
             )}
           >
             <SelectValue placeholder={LABELS.sort} />
@@ -85,7 +90,7 @@ export function SortBar({
         {onToggleCompare ? (
           <Button
             type="button"
-            variant={compareMode ? 'default' : 'secondary'}
+            variant={compareMode ? "default" : "secondary"}
             size="sm"
             className="hidden gap-1.5 xl:inline-flex"
             onClick={onToggleCompare}
@@ -97,5 +102,5 @@ export function SortBar({
         ) : null}
       </div>
     </div>
-  )
+  );
 }

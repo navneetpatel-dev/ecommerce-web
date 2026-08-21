@@ -26,6 +26,7 @@ import { formatDateTime } from "@/shared/utils/formatDate";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface VendorCouponsViewProps {
   coupons: Coupon[];
@@ -151,7 +152,7 @@ export function VendorCouponsView({
           </h2>
           <p className="text-[0.875rem] text-ink-muted">
             {formatLabel(LABELS.absorbedDiscountsSummary, {
-              amount: absorbedDiscountTotal.toLocaleString("en-IN"),
+              amount: formatInrAmount(absorbedDiscountTotal),
             })}{" "}
             ({LABELS.absorbedThisPeriod})
           </p>
@@ -218,14 +219,13 @@ export function VendorCouponsView({
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">{LABELS.absorbedDiscounts}</dt>
                 <dd className="tabular-nums font-medium">
-                  ₹{Number(analytics.totalDiscount).toLocaleString("en-IN")}
+                  ₹{formatInrAmount(Number(analytics.totalDiscount))}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-ink-muted">{LABELS.revenueImpact}</dt>
                 <dd className="tabular-nums font-medium">
-                  ₹
-                  {Number(analytics.revenueImpact ?? 0).toLocaleString("en-IN")}
+                  ₹{formatInrAmount(Number(analytics.revenueImpact ?? 0))}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">
@@ -238,9 +238,7 @@ export function VendorCouponsView({
               </div>
               <p className="text-[0.8125rem] text-ink-muted">
                 {formatLabel(LABELS.absorbedDiscountsSummary, {
-                  amount: Number(analytics.totalDiscount).toLocaleString(
-                    "en-IN",
-                  ),
+                  amount: formatInrAmount(Number(analytics.totalDiscount)),
                 })}
               </p>
             </dl>

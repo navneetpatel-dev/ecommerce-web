@@ -2,6 +2,7 @@
 
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface CashbackCouponNoticeProps {
   payNow: number;
@@ -11,7 +12,7 @@ interface CashbackCouponNoticeProps {
 }
 
 function formatInr(value: number) {
-  return `₹${value.toLocaleString("en-IN")}`;
+  return `₹${formatInrAmount(value)}`;
 }
 
 export function CashbackCouponNotice({
