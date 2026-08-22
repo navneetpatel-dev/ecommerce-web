@@ -1,5 +1,3 @@
-"use client";
-
 import { VendorReportsPage } from "@/features/reports";
 
 export default function VendorReportsRoute() {

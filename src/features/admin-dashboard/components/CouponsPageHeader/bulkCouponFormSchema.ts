@@ -12,3 +12,9 @@ export const BulkFormSchema = z.object({
 });
 
 export type BulkMetaInput = z.infer<typeof BulkFormSchema>;
+
+export const BULK_FORM_DEFAULTS: BulkMetaInput = {
+  name: "",
+  count: 10,
+  prefix: "CS",
+};

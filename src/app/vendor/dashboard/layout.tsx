@@ -1,5 +1,3 @@
-"use client";
-
 import { VendorLayout } from "@/shared/components/layout/VendorLayout";
 import { HeaderContainer } from "@/features/storefront";
 

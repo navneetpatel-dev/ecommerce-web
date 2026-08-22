@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useLogout } from "@/features/auth";
-import { useTheme } from "@/shared/hooks/use-theme";
+import { useThemePalette } from "@/shared/hooks/useThemePalette.hook";
 import { PATHS } from "@/shared/constants/paths";
 import { STORAGE_KEYS } from "@/shared/constants/storage";
 import { isCustomerRole, isWorkspaceRole } from "@/shared/utils/roles";
@@ -29,7 +29,7 @@ export function PrivacySection() {
   const currentUser = useAuthStore((s) => s.currentUser);
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { theme, setTheme, mounted } = useTheme();
+  const { mode: theme, setMode: setTheme, mounted } = useThemePalette();
 
   const isCustomer = isCustomerRole(currentUser?.role);
   const isWorkspace = isWorkspaceRole(currentUser?.role);

@@ -1,5 +1,3 @@
-"use client";
-
 import { AdminLayout } from "@/shared/components/layout/AdminLayout";
 import { HeaderContainer } from "@/features/storefront";
 

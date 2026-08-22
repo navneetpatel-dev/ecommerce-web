@@ -2,10 +2,8 @@
 
 import { useEffect, type CSSProperties, type MouseEvent } from "react";
 import dynamic from "next/dynamic";
-import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { useReducedMotion } from "motion/react";
 import type { ProductImage } from "@/shared/api/types";
-import { Button } from "@/shared/components/ui/button";
 import { MediaImage } from "@/shared/components/MediaImage";
 import { ImageGalleryThumbnailStrip } from "@/shared/components/ImageGalleryThumbnailStrip";
 import { LABELS } from "@/shared/constants/labels";
@@ -20,6 +18,7 @@ import {
 import { cn } from "@/shared/utils/cn";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { useImageGalleryZoom } from "@/shared/hooks/useImageGalleryZoom";
+import { ImageStageControls } from "./ImageGallery/ImageStageControls";
 
 type ZoomHandlers = ReturnType<typeof useImageGalleryZoom>["stageHandlers"];
 
@@ -193,56 +192,13 @@ export function ImageGallery({
               </p>
             ) : null}
 
-            <Button
-              type="button"
-              variant="secondary"
-              size="icon-sm"
-              onClick={(event) => {
-                stopStageClick(event);
-                onOpenLightbox();
-              }}
-              aria-label={LABELS.viewLargerImage}
-              className="absolute right-2.5 top-2.5 z-[2] h-10 w-10 min-h-10 max-h-10 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:top-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11"
-            >
-              <Maximize2 className="h-4 w-4" strokeWidth={1.75} />
-            </Button>
-
-            {hasMultiple ? (
-              <>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="icon-sm"
-                  onClick={(event) => {
-                    stopStageClick(event);
-                    goPrev();
-                  }}
-                  aria-label={LABELS.previousImage}
-                  className={cn(
-                    "absolute left-2.5 top-1/2 z-[2] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:left-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11",
-                    "opacity-100 lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100",
-                  )}
-                >
-                  <ChevronLeft className="h-4 w-4" strokeWidth={1.75} />
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="icon-sm"
-                  onClick={(event) => {
-                    stopStageClick(event);
-                    goNext();
-                  }}
-                  aria-label={LABELS.nextImage}
-                  className={cn(
-                    "absolute right-2.5 top-1/2 z-[2] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11",
-                    "opacity-100 lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100",
-                  )}
-                >
-                  <ChevronRight className="h-4 w-4" strokeWidth={1.75} />
-                </Button>
-              </>
-            ) : null}
+            <ImageStageControls
+              hasMultiple={hasMultiple}
+              onOpenLightbox={onOpenLightbox}
+              onPrev={goPrev}
+              onNext={goNext}
+              stopStageClick={stopStageClick}
+            />
           </div>
         </div>
       </div>

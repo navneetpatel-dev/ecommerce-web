@@ -43,13 +43,20 @@ const files = execFileSync("git", ["ls-files", "*.ts", "*.tsx"], {
   encoding: "utf8",
 })
   .split("\n")
-  .filter(Boolean);
+  .filter(Boolean)
+  // Skip files deleted from the working tree but still in the git index
+  // (e.g. mid-refactor) so the ratchet does not crash on ENOENT.
+  .filter((file) => existsSync(path.join(ROOT, file)));
 
 const violations = {};
 for (const file of files) {
   const ceiling = ceilingFor(file);
   if (!ceiling) continue;
-  const lines = readFileSync(path.join(ROOT, file), "utf8").split("\n").length;
+  const content = readFileSync(path.join(ROOT, file), "utf8");
+  // Count physical lines (a trailing newline does not start a new line).
+  const lines = content.endsWith("\n")
+    ? content.slice(0, -1).split("\n").length
+    : content.split("\n").length;
   if (lines > ceiling) violations[file] = { lines, ceiling };
 }
 

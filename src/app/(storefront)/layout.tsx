@@ -1,5 +1,3 @@
-"use client";
-
 import { StorefrontLayout } from "@/features/storefront";
 
 export default function StorefrontRouteLayout({

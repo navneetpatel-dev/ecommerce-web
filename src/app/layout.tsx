@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces, IBM_Plex_Mono } from "next/font/google";
 import { SITE } from "@/shared/seo/constants";
+import { STORAGE_KEYS } from "@/shared/constants/storage";
+import { generateRootMetadata, ROOT_VIEWPORT } from "@/shared/seo/rootMetadata";
 import "@/shared/styles/globals.css";
 import { Providers } from "./providers";
 import { WebVitalsReporter } from "@/shared/components/WebVitalsReporter";
@@ -24,74 +26,30 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F6F3EC" },
-    { media: "(prefers-color-scheme: dark)", color: "#121113" },
-  ],
-};
+export const viewport: Viewport = ROOT_VIEWPORT;
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+export const metadata: Metadata = generateRootMetadata();
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    template: `%s | ${SITE.name}`,
-    default: SITE.name,
-  },
-  description: SITE.description,
-  keywords: [
-    "t-shirts",
-    "online shopping",
-    "premium clothing",
-    "e-commerce",
-    "multi-vendor",
-  ],
-  authors: [{ name: SITE.author }],
-  creator: SITE.author,
-  publisher: SITE.author,
-  generator: "Next.js",
-  applicationName: SITE.name,
-  category: "e-commerce",
-  openGraph: {
-    type: "website",
-    siteName: SITE.name,
-    locale: SITE.locale,
-    url: siteUrl,
-    title: SITE.name,
-    description: SITE.description,
-    images: [{ url: SITE.ogImage, width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    site: SITE.twitter,
-    creator: SITE.twitter,
-    title: SITE.name,
-    description: SITE.description,
-    images: [SITE.ogImage],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
-  },
-  icons: {
-    icon: "/favicon.ico",
-    apple: [{ url: "/icon-192.png", sizes: "192x192" }],
-    other: [{ url: "/icon-512.png", sizes: "512x512" }],
-  },
-  verification: {
-    google: process.env.GOOGLE_SITE_VERIFICATION,
-  },
-};
+/**
+ * Pre-hydration theme hint (Rule 29 hydration safety): applies the stored
+ * color mode before first paint so the default-palette dark mode never
+ * flashes. The stylesheet baseline matches `activeThemeConfig`, so no
+ * script is needed for the default light mode or non-default palettes —
+ * ThemePaletteProvider resolves those after mount.
+ */
+const THEME_BOOTSTRAP_SCRIPT = `
+  (function() {
+    try {
+      var stored = localStorage.getItem('${STORAGE_KEYS.THEME_MODE}');
+      var theme = stored === 'light' || stored === 'dark'
+        ? stored
+        : window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+`;
 
 export default function RootLayout({
   children,
@@ -105,23 +63,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var stored = localStorage.getItem('theme');
-                  var theme = stored === 'light' || stored === 'dark'
-                    ? stored
-                    : window.matchMedia('(prefers-color-scheme: dark)').matches
-                      ? 'dark'
-                      : 'light';
-                  document.documentElement.setAttribute('data-theme', theme);
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }} />
       </head>
       <body className="antialiased">
         <Providers>{children}</Providers>

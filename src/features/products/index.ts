@@ -5,6 +5,7 @@ export {
   usePrefetchProduct,
 } from "./api/products.queries";
 export { ProductCard } from "./components/ProductCard";
+export { ProductSeoJsonLd } from "./components/ProductSeoJsonLd";
 export { ProductGrid } from "./components/ProductGrid";
 export { ProductCardContainer } from "./containers/ProductCardContainer";
 export { VariantSelector } from "./components/VariantSelector";

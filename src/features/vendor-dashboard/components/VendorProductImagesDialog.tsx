@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Trash2, Star } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -9,9 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { Button } from "@/shared/components/ui/button";
 import { FileUpload } from "@/shared/components/FileUpload";
-import { MediaImage } from "@/shared/components/MediaImage";
 import { FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
@@ -25,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { ProductImageRow } from "./VendorProductImagesDialog/ProductImageRow";
 
 interface VendorProductImagesDialogProps {
   productId: string;
@@ -34,6 +32,9 @@ interface VendorProductImagesDialogProps {
   onChanged?: () => void;
 }
 
+const ALL_VARIANTS_VALUE = "__all__";
+
+/** Manage product images: list, replace/delete, set primary, add new. */
 export function VendorProductImagesDialog({
   productId,
   productName,
@@ -68,61 +69,62 @@ export function VendorProductImagesDialog({
     void load();
   }, [open, load]);
 
-  const onAddImage = async (url: string) => {
-    setBusyId("new");
+  const runImageAction = async (
+    busyKey: string,
+    action: () => Promise<void>,
+  ) => {
+    setBusyId(busyKey);
     try {
+      await action();
+      await load();
+      onChanged?.();
+    } catch (err) {
+      setError(getApiErrorMessage(err, LABELS.couldNotSaveProductImages));
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const onAddImage = (url: string) =>
+    void runImageAction("new", async () => {
       await productsApi.addImage(productId, {
         url,
         isPrimary: images.length === 0,
         variantId: variantId || null,
       });
-      await load();
-      onChanged?.();
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotSaveProductImages));
-    } finally {
-      setBusyId(null);
-    }
-  };
+    });
 
-  const onReplaceImage = async (imageId: string, url: string) => {
-    setBusyId(imageId);
-    try {
+  const onReplaceImage = (imageId: string, url: string) =>
+    void runImageAction(imageId, async () => {
       await productsApi.replaceImage(imageId, { url });
-      await load();
-      onChanged?.();
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotSaveProductImages));
-    } finally {
-      setBusyId(null);
-    }
-  };
+    });
 
-  const onDeleteImage = async (imageId: string) => {
-    setBusyId(imageId);
-    try {
+  const onDeleteImage = (imageId: string) =>
+    void runImageAction(imageId, async () => {
       await productsApi.deleteImage(imageId);
-      await load();
-      onChanged?.();
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotSaveProductImages));
-    } finally {
-      setBusyId(null);
-    }
+    });
+
+  const onSetPrimary = (imageId: string) =>
+    void runImageAction(imageId, async () => {
+      await productsApi.setPrimaryImage(imageId);
+    });
+
+  const handleVariantFilter = (value: string) => {
+    setVariantId(value === ALL_VARIANTS_VALUE ? "" : value);
   };
 
-  const onSetPrimary = async (imageId: string) => {
-    setBusyId(imageId);
-    try {
-      await productsApi.setPrimaryImage(imageId);
-      await load();
-      onChanged?.();
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotSaveProductImages));
-    } finally {
-      setBusyId(null);
-    }
-  };
+  const renderImageRow = (image: ProductImage) => (
+    <ProductImageRow
+      key={image.id}
+      image={image}
+      variants={variants}
+      productId={productId}
+      busyId={busyId}
+      onReplaceImage={onReplaceImage}
+      onDeleteImage={onDeleteImage}
+      onSetPrimary={onSetPrimary}
+    />
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -135,71 +137,7 @@ export function VendorProductImagesDialog({
         {loading ? <p className="text-ink-muted">{LABELS.loading}</p> : null}
         {error ? <p className="text-danger text-[0.8125rem]">{error}</p> : null}
 
-        <ul className="space-y-3">
-          {images.map((image) => (
-            <li
-              key={image.id}
-              className="flex flex-col gap-2 rounded-md border border-line bg-surface p-3 sm:flex-row sm:items-start"
-            >
-              <div className="relative h-20 w-20 shrink-0 overflow-hidden border border-line bg-paper">
-                <MediaImage
-                  src={image.url}
-                  alt=""
-                  sizes="80px"
-                  imageClassName="object-cover"
-                />
-              </div>
-              <div className="min-w-0 flex-1 space-y-2">
-                {image.isPrimary ? (
-                  <p className="text-[0.75rem] font-medium text-brand">
-                    {LABELS.primaryImage}
-                  </p>
-                ) : (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    type="button"
-                    disabled={busyId === image.id}
-                    onClick={() => void onSetPrimary(image.id)}
-                  >
-                    <Star className="mr-1 size-3.5" aria-hidden />
-                    {LABELS.setPrimaryImage}
-                  </Button>
-                )}
-                {image.variantId ? (
-                  <p className="text-[0.75rem] text-ink-muted">
-                    {LABELS.sku}:{" "}
-                    {variants.find((variant) => variant.id === image.variantId)
-                      ?.sku ?? image.variantId}
-                  </p>
-                ) : (
-                  <p className="text-[0.75rem] text-ink-muted">
-                    {LABELS.productImageAllVariants}
-                  </p>
-                )}
-                <FileUpload
-                  entityType={UPLOAD_ENTITY.PRODUCTS}
-                  entityId={productId}
-                  purpose={UPLOAD_PURPOSE.IMAGES}
-                  accept="image/png,image/jpeg,image/webp"
-                  disabled={busyId === image.id}
-                  label={LABELS.replaceImage}
-                  onUploaded={(url) => void onReplaceImage(image.id, url)}
-                />
-              </div>
-              <Button
-                size="icon-sm"
-                variant="ghost"
-                type="button"
-                aria-label={LABELS.deleteImage}
-                disabled={busyId === image.id}
-                onClick={() => void onDeleteImage(image.id)}
-              >
-                <Trash2 aria-hidden />
-              </Button>
-            </li>
-          ))}
-        </ul>
+        <ul className="space-y-3">{images.map(renderImageRow)}</ul>
 
         <FormSection
           title={LABELS.productFormSectionImages}
@@ -208,16 +146,14 @@ export function VendorProductImagesDialog({
         >
           {variants.length > 0 ? (
             <Select
-              value={variantId || "__all__"}
-              onValueChange={(value) =>
-                setVariantId(value === "__all__" ? "" : value)
-              }
+              value={variantId || ALL_VARIANTS_VALUE}
+              onValueChange={handleVariantFilter}
             >
               <SelectTrigger aria-label={LABELS.productImageVariant}>
                 <SelectValue placeholder={LABELS.productImageAllVariants} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="__all__">
+                <SelectItem value={ALL_VARIANTS_VALUE}>
                   {LABELS.productImageAllVariants}
                 </SelectItem>
                 {variants.map((variant) => (
@@ -235,7 +171,7 @@ export function VendorProductImagesDialog({
             accept="image/png,image/jpeg,image/webp"
             disabled={busyId === "new"}
             label={LABELS.addProductImage}
-            onUploaded={(url) => void onAddImage(url)}
+            onUploaded={onAddImage}
           />
         </FormSection>
       </DialogContent>

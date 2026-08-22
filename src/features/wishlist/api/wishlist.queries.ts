@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { wishlistApi } from "./wishlist.api";
-import { cartKeys } from "@/features/cart";
+import { cartKeys, useCartDrawerStore } from "@/features/cart";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import type { WishlistItem } from "@/shared/api/types";
 
@@ -109,9 +109,7 @@ export function useMoveToCart() {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: cartKeys.all });
-      void import("@/features/cart/store/cart.store").then((m) =>
-        m.useCartDrawerStore.getState().open(),
-      );
+      useCartDrawerStore.getState().open();
     },
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: wishlistKeys.all });

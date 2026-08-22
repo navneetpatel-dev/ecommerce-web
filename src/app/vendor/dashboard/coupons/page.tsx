@@ -1,5 +1,3 @@
-"use client";
-
 import { VendorCouponsPage } from "@/features/vendor-dashboard";
 
 export default function VendorCouponsRoute() {

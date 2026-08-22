@@ -1,29 +1,33 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* ============================================
-   Ink & Brass theme tokens (Light mode — default)
-   See: ecommerce-theme-revision-ink-brass.md
+   Theme baseline (Light mode — default palette "Ink & Brass")
+   The values below MUST mirror
+   shared/config/themePresets/* + shared/config/theme.config.ts
+   (`activeThemeConfig`) exactly: they are the pre-hydration paint so there
+   is no flash before ThemePaletteProvider resolves stored preferences.
+   Runtime switching applies the same token names inline on <html>.
    ============================================ */
 :root {
-  --brand: #8A6A2E;
-  --brand-hover: #6E5322;
-  --brand-subtle: #F3ECDA;
-  --accent: #A8432B;
-  --accent-subtle: #F5E6E1;
-  --ink: #1B1917;
-  --ink-muted: #5C5750;
-  --ink-faint: #9C968D;
-  --paper: #F6F3EC;
-  --surface: #FFFFFF;
-  --surface-raised: #FFFFFF;
-  --line: #D8D1C2;
-  --line-strong: #C4BAA6;
-  --danger: #A13A32;
-  --danger-subtle: #F6E7E4;
-  --success: #2C4A6B;
-  --success-subtle: #E7ECF1;
-  --warning: #9C5A12;
-  --warning-subtle: #FBEEDD;
+  --brand: #8a6a2e;
+  --brand-hover: #6e5322;
+  --brand-subtle: #f3ecda;
+  --accent: #a8432b;
+  --accent-subtle: #f5e6e1;
+  --ink: #1b1917;
+  --ink-muted: #5c5750;
+  --ink-faint: #9c968d;
+  --paper: #f6f3ec;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --line: #d8d1c2;
+  --line-strong: #c4baa6;
+  --danger: #a13a32;
+  --danger-subtle: #f6e7e4;
+  --success: #2c4a6b;
+  --success-subtle: #e7ecf1;
+  --warning: #9c5a12;
+  --warning-subtle: #fbeedd;
   --overlay: rgba(27, 25, 23, 0.55);
 
   /* Typography Scale */
@@ -57,9 +61,10 @@
 
   /* Elevation — soft warm diffused shadows */
   --elevation-0: none;
-  --elevation-1: 0 1px 3px rgba(27, 25, 23, 0.05), 0 1px 2px rgba(27, 25, 23, 0.03);
+  --elevation-1:
+    0 1px 3px rgba(27, 25, 23, 0.05), 0 1px 2px rgba(27, 25, 23, 0.03);
   --elevation-2: 0 6px 16px rgba(27, 25, 23, 0.07);
-  --elevation-3: 0 16px 40px rgba(27, 25, 23, 0.10);
+  --elevation-3: 0 16px 40px rgba(27, 25, 23, 0.1);
   --elevation-4: 0 28px 64px rgba(27, 25, 23, 0.14);
 
   /* Border Radius — tighter / more tailored */
@@ -67,6 +72,9 @@
   --radius-md: 8px;
   --radius-lg: 14px;
   --radius-full: 9999px;
+  --radius-card: 14px;
+  --radius-button: 8px;
+  --radius-input: 8px;
 
   /* Motion Timing — unchanged */
   --motion-instant: 100ms;
@@ -79,26 +87,26 @@
 /* ============================================
    Ink & Brass theme tokens (Dark mode)
    ============================================ */
-[data-theme='dark'] {
-  --brand: #D9B25E;
-  --brand-hover: #E8C476;
-  --brand-subtle: #2E2717;
-  --accent: #D2694A;
-  --accent-subtle: #3A241E;
-  --ink: #F4F1EA;
-  --ink-muted: #B7B1A8;
-  --ink-faint: #7C766D;
+[data-theme="dark"] {
+  --brand: #d9b25e;
+  --brand-hover: #e8c476;
+  --brand-subtle: #2e2717;
+  --accent: #d2694a;
+  --accent-subtle: #3a241e;
+  --ink: #f4f1ea;
+  --ink-muted: #b7b1a8;
+  --ink-faint: #7c766d;
   --paper: #121113;
-  --surface: #1C1B1D;
+  --surface: #1c1b1d;
   --surface-raised: #242226;
   /* Stronger lines so bordered controls keep visual weight vs light mode */
-  --line: #5A534C;
-  --line-strong: #746C63;
-  --danger: #E2685C;
-  --danger-subtle: #3A211D;
-  --success: #7FA6C9;
-  --success-subtle: #1C2A36;
-  --warning: #E0902E;
+  --line: #5a534c;
+  --line-strong: #746c63;
+  --danger: #e2685c;
+  --danger-subtle: #3a211d;
+  --success: #7fa6c9;
+  --success-subtle: #1c2a36;
+  --warning: #e0902e;
   --warning-subtle: #362613;
   --overlay: rgba(0, 0, 0, 0.7);
 
@@ -124,9 +132,12 @@
 }
 
 /* ============================================
-   Tailwind v4 @theme — map CSS vars to utilities
+   Tailwind v4 @theme inline — bind CSS vars to utilities.
+   `inline` makes utilities reference the runtime CSS custom properties
+   directly, so ThemePaletteProvider can re-resolve every token on
+   <html> without rebuilding styles (Rule 29).
    ============================================ */
-@theme {
+@theme inline {
   --color-brand: var(--brand);
   --color-brand-hover: var(--brand-hover);
   --color-brand-subtle: var(--brand-subtle);
@@ -150,12 +161,15 @@
 
   --font-display: var(--font-display), Fraunces, serif;
   --font-sans: var(--font-sans), Inter, sans-serif;
-  --font-mono: var(--font-mono), 'IBM Plex Mono', monospace;
+  --font-mono: var(--font-mono), "IBM Plex Mono", monospace;
 
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
   --radius-full: var(--radius-full);
+  --radius-card: var(--radius-card);
+  --radius-button: var(--radius-button);
+  --radius-input: var(--radius-input);
 
   --radius: 0.5rem;
   --radius-lg-tailwind: 0.75rem;
@@ -180,15 +194,21 @@
   --animate-duration-slow: var(--motion-slow);
 
   --animate-shimmer: shimmer 1.2s linear infinite;
-  --animate-slide-in-right: slide-in-right var(--motion-moderate) cubic-bezier(0.2, 0, 0, 1) forwards;
-  --animate-slide-in-bottom: slide-in-bottom var(--motion-moderate) cubic-bezier(0.2, 0, 0, 1) forwards;
-  --animate-slide-in-left: slide-in-left var(--motion-moderate) cubic-bezier(0.2, 0, 0, 1) forwards;
-  --animate-scale-in: scale-in var(--motion-moderate) cubic-bezier(0.2, 0, 0, 1) forwards;
+  --animate-slide-in-right: slide-in-right var(--motion-moderate)
+    cubic-bezier(0.2, 0, 0, 1) forwards;
+  --animate-slide-in-bottom: slide-in-bottom var(--motion-moderate)
+    cubic-bezier(0.2, 0, 0, 1) forwards;
+  --animate-slide-in-left: slide-in-left var(--motion-moderate)
+    cubic-bezier(0.2, 0, 0, 1) forwards;
+  --animate-scale-in: scale-in var(--motion-moderate) cubic-bezier(0.2, 0, 0, 1)
+    forwards;
   --animate-fade-in: fade-in var(--motion-moderate) ease-out forwards;
   --animate-pulse-scale: pulse-scale var(--motion-fast) ease-out;
   --animate-pulse-ring: pulse-ring 1.5s ease-out infinite;
-  --animate-accordion-down: accordion-down var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
-  --animate-accordion-up: accordion-up var(--motion-base) cubic-bezier(0.2, 0, 0, 1);
+  --animate-accordion-down: accordion-down var(--motion-base)
+    cubic-bezier(0.2, 0, 0, 1);
+  --animate-accordion-up: accordion-up var(--motion-base)
+    cubic-bezier(0.2, 0, 0, 1);
 }
 
 @layer base {
@@ -207,21 +227,21 @@
 
   /* Hand cursor on interactive controls (browsers often leave buttons as default). */
   a[href],
-  button:not(:disabled):not([aria-disabled='true']),
-  [role='button']:not([aria-disabled='true']),
-  [type='button']:not(:disabled),
-  [type='submit']:not(:disabled),
-  [type='reset']:not(:disabled),
+  button:not(:disabled):not([aria-disabled="true"]),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
   label[for],
   summary,
   select:not(:disabled),
-  input[type='checkbox']:not(:disabled),
-  input[type='radio']:not(:disabled) {
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
     cursor: pointer;
   }
 
   button:disabled,
-  [aria-disabled='true'],
+  [aria-disabled="true"],
   input:disabled,
   select:disabled,
   textarea:disabled {
@@ -236,7 +256,7 @@ body {
   color-scheme: light;
 }
 
-[data-theme='dark'] body {
+[data-theme="dark"] body {
   color-scheme: dark;
 }
 
@@ -346,71 +366,127 @@ body {
 }
 
 /* Dark mode: elevated panels lean on border + surface steps */
-[data-theme='dark'] .shadow-elevation-1,
-[data-theme='dark'] .shadow-elevation-2,
-[data-theme='dark'] .shadow-elevation-3,
-[data-theme='dark'] .shadow-elevation-4 {
+[data-theme="dark"] .shadow-elevation-1,
+[data-theme="dark"] .shadow-elevation-2,
+[data-theme="dark"] .shadow-elevation-3,
+[data-theme="dark"] .shadow-elevation-4 {
   box-shadow: none;
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 @keyframes slide-in-right {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slide-in-bottom {
-  from { transform: translateY(100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slide-in-left {
-  from { transform: translateX(-100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes scale-in {
-  from { transform: scale(0.98); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes pulse-scale {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes checkmark-circle {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes checkmark-check {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 var(--brand); }
-  70% { box-shadow: 0 0 0 6px transparent; }
-  100% { box-shadow: 0 0 0 0 transparent; }
+  0% {
+    box-shadow: 0 0 0 0 var(--brand);
+  }
+  70% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
 }
 
 @keyframes accordion-down {
-  from { height: 0; }
-  to { height: var(--radix-accordion-content-height); }
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
 }
 
 @keyframes accordion-up {
-  from { height: var(--radix-accordion-content-height); }
-  to { height: 0; }
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
 }
 
 @keyframes auth-rise {

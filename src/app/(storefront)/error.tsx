@@ -1,27 +1,29 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import { Button } from '@/shared/components/ui/button'
-import { LABELS } from '@/shared/constants/labels'
+import { useEffect } from "react";
+import { LABELS } from "@/shared/constants/labels";
+import { reportError } from "@/shared/lib/errorReporting";
+import { ErrorFallbackActions } from "@/shared/components/ErrorFallbackActions";
+import { errorBoundaryStyles as styles } from "@/shared/components/errorBoundary.styles";
 
+interface StorefrontErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
+/** Storefront route error boundary (Rule 13/20). */
 export default function StorefrontError({
   error,
   reset,
-}: {
-  error: Error & { digest?: string }
-  reset: () => void
-}) {
+}: StorefrontErrorProps) {
   useEffect(() => {
-    console.error(error)
-  }, [error])
+    reportError(error, { boundary: "storefront", digest: error.digest });
+  }, [error]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-paper p-8">
-      <h2 className="text-[1.375rem] font-semibold text-ink">{LABELS.unexpectedErrorHeading}</h2>
-      <p className="max-w-md text-center text-[0.9375rem] text-ink-muted">
-        {LABELS.unexpectedErrorBody}
-      </p>
-      <Button onClick={reset}>Try again</Button>
+      <h2 className={styles.heading}>{LABELS.unexpectedErrorHeading}</h2>
+      <ErrorFallbackActions onReset={reset} />
     </div>
-  )
+  );
 }

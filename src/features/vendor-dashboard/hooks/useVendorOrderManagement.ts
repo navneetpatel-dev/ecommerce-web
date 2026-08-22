@@ -2,7 +2,19 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { subOrdersApi } from "@/features/orders";
 import { vendorKeys } from "../api/vendor.queries";
+import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 
+interface SubOrderStatusInput {
+  id: string;
+  status: string;
+  trackingId?: string;
+}
+
+/**
+ * Vendor order management data (Rule 12): sub-order listing plus guarded
+ * status updates with surfaced errors.
+ */
 export function useVendorOrderManagement() {
   const [page] = useState(1);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -14,7 +26,7 @@ export function useVendorOrderManagement() {
   });
 
   const updateStatus = useMutation({
-    mutationFn: (input: { id: string; status: string; trackingId?: string }) =>
+    mutationFn: (input: SubOrderStatusInput) =>
       subOrdersApi.updateStatus(input.id, {
         status: input.status,
         trackingId: input.trackingId,
@@ -24,8 +36,12 @@ export function useVendorOrderManagement() {
   });
 
   const handleStatusChange = (id: string, status: string) => {
-    updateStatus.mutate({ id, status });
-    setUpdatingId(null);
+    updateStatus.mutate(
+      { id, status },
+      {
+        onSettled: () => setUpdatingId(null),
+      },
+    );
   };
 
   return {
@@ -35,5 +51,8 @@ export function useVendorOrderManagement() {
     setUpdatingId,
     handleStatusChange,
     isPending: updateStatus.isPending,
+    statusError: updateStatus.isError
+      ? getApiErrorMessage(updateStatus.error, LABELS.couldNotUpdateOrderStatus)
+      : null,
   };
 }

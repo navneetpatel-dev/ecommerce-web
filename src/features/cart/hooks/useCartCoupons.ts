@@ -3,28 +3,28 @@
 import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { couponsApi } from "@/features/coupons";
-import { cartKeys } from "@/features/cart/api/cart.queries";
+import { cartKeys } from "../api/cart.queries";
 import { useCheckoutStore } from "@/shared/stores/checkout.store";
 import { useRequireAuth } from "@/shared/hooks/useRequireAuth";
-import { useAuthStore } from "@/shared/stores/auth.store";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import type { Cart, EligibleCoupon } from "@/shared/api/types";
+import type { Cart } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { useCouponEligibility } from "./useCouponEligibility";
 
 interface UseCartCouponsOptions {
   cart?: Cart | null;
   enabled?: boolean;
 }
 
+/** Cart coupon apply/remove flow; eligibility loading lives in its own hook. */
 export function useCartCoupons({
   cart,
   enabled = true,
 }: UseCartCouponsOptions) {
   const queryClient = useQueryClient();
   const { requireAuth } = useRequireAuth();
-  const accessToken = useAuthStore((s) => s.accessToken);
   const setCouponCode = useCheckoutStore((s) => s.setCouponCode);
   const appliedCouponCode = useCheckoutStore((s) => s.appliedCouponCode);
   const manualCouponOverride = useCheckoutStore((s) => s.manualCouponOverride);
@@ -33,8 +33,10 @@ export function useCartCoupons({
   const [couponMessage, setCouponMessage] = useState<string | null>(null);
   const [couponError, setCouponError] = useState<string | null>(null);
   const [couponPending, setCouponPending] = useState(false);
-  const [eligible, setEligible] = useState<EligibleCoupon[]>([]);
-  const [eligibleLoading, setEligibleLoading] = useState(false);
+
+  const hasItems = Boolean(cart?.items?.length);
+  const { eligible, eligibleLoading, eligibleError, loadEligible } =
+    useCouponEligibility(enabled, hasItems);
 
   const cartApplied = cart?.appliedCoupon ?? null;
   const displayCode = cartApplied?.code ?? appliedCouponCode;
@@ -44,24 +46,6 @@ export function useCartCoupons({
   const refreshCart = useCallback(() => {
     void queryClient.invalidateQueries({ queryKey: cartKeys.all });
   }, [queryClient]);
-
-  const loadEligible = useCallback(async () => {
-    if (!accessToken || !enabled) {
-      setEligible([]);
-      return [];
-    }
-    setEligibleLoading(true);
-    try {
-      const list = await couponsApi.eligible();
-      setEligible(list);
-      return list;
-    } catch {
-      setEligible([]);
-      return [];
-    } finally {
-      setEligibleLoading(false);
-    }
-  }, [accessToken, enabled]);
 
   const applyCoupon = useCallback(
     async (rawCode?: string, opts?: { manual?: boolean }) => {
@@ -81,23 +65,7 @@ export function useCartCoupons({
       try {
         const result = await couponsApi.apply(code);
         setCouponCode(code, { manual: opts?.manual !== false });
-        if (result.discount > 0) {
-          setCouponMessage(
-            formatLabel(LABELS.couponApplied, {
-              amount: String(result.discount),
-            }),
-          );
-        } else if ((result.cashbackAmount ?? 0) > 0) {
-          const payNow = cart?.pricingPreview?.grandTotal ?? cart?.total ?? 0;
-          setCouponMessage(
-            formatLabel(LABELS.cashbackPayNowMessage, {
-              payNow: `₹${formatInrAmount(Number(payNow))}`,
-              cashback: `₹${formatInrAmount(Number(result.cashbackAmount))}`,
-            }),
-          );
-        } else {
-          setCouponMessage(LABELS.couponAppliedCheckout);
-        }
+        setCouponMessage(describeApplyResult(result, cart));
         setCouponInput("");
         refreshCart();
         void loadEligible();
@@ -110,15 +78,7 @@ export function useCartCoupons({
         setCouponPending(false);
       }
     },
-    [
-      couponInput,
-      cart?.pricingPreview?.grandTotal,
-      cart?.total,
-      loadEligible,
-      refreshCart,
-      requireAuth,
-      setCouponCode,
-    ],
+    [couponInput, cart, loadEligible, refreshCart, requireAuth, setCouponCode],
   );
 
   const removeCoupon = useCallback(async () => {
@@ -155,18 +115,6 @@ export function useCartCoupons({
     }
   }, [cartApplied?.code, manualCouponOverride, removedReason, setCouponCode]);
 
-  // Load eligible offers without auto-applying
-  useEffect(() => {
-    if (!enabled || !accessToken || !cart?.items?.length) return;
-    void loadEligible();
-  }, [accessToken, cart?.items?.length, enabled, loadEligible]);
-
-  useEffect(() => {
-    if (!cart?.items?.length) {
-      setEligible([]);
-    }
-  }, [cart?.items?.length]);
-
   return {
     couponInput,
     setCouponInput,
@@ -177,9 +125,29 @@ export function useCartCoupons({
     appliedDiscount: displayDiscount,
     eligible,
     eligibleLoading,
+    eligibleError,
     applyCoupon: () => applyCoupon(undefined, { manual: true }),
     applyEligible: (code: string) => applyCoupon(code, { manual: true }),
     removeCoupon,
     refreshEligible: loadEligible,
   };
+}
+
+function describeApplyResult(
+  result: Awaited<ReturnType<typeof couponsApi.apply>>,
+  cart?: Cart | null,
+): string {
+  if (result.discount > 0) {
+    return formatLabel(LABELS.couponApplied, {
+      amount: String(result.discount),
+    });
+  }
+  if ((result.cashbackAmount ?? 0) > 0) {
+    const payNow = cart?.pricingPreview?.grandTotal ?? cart?.total ?? 0;
+    return formatLabel(LABELS.cashbackPayNowMessage, {
+      payNow: `₹${formatInrAmount(Number(payNow))}`,
+      cashback: `₹${formatInrAmount(Number(result.cashbackAmount))}`,
+    });
+  }
+  return LABELS.couponAppliedCheckout;
 }

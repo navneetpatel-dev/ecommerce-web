@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import {
@@ -15,14 +14,14 @@ import {
 import { DataTable } from "@/shared/components/DataTable";
 import { Plus } from "lucide-react";
 import { CreateCouponForm } from "../CreateCouponForm";
-import { adminApi } from "../../api/admin.api";
-import { adminKeys } from "../../api/admin.queries";
 import type { CouponFormInput } from "../../schemas/coupons.schema";
 import { LABELS } from "@/shared/constants/labels";
 import type { CouponBatch } from "@/shared/api/types";
+import { useCouponBatches } from "../../hooks/useCouponBatches";
 import { BulkGenerateDialog } from "./BulkGenerateDialog";
 import { CouponBatchDetailDialog } from "./CouponBatchDetailDialog";
 import { buildCouponBatchColumns } from "./couponBatchColumns";
+import { couponsPageHeaderStyles as styles } from "./couponsPageHeader.styles";
 
 interface CouponsPageHeaderProps {
   open: boolean;
@@ -32,29 +31,35 @@ interface CouponsPageHeaderProps {
   isPending: boolean;
 }
 
-export function CouponsPageHeader({
-  open,
-  setOpen,
-  form,
-  onSubmit,
-  isPending,
-}: CouponsPageHeaderProps) {
+export function CouponsPageHeader(props: CouponsPageHeaderProps) {
+  const { open, setOpen, form, onSubmit, isPending } = props;
   const [bulkOpen, setBulkOpen] = useState(false);
   const [batchDetail, setBatchDetail] = useState<CouponBatch | null>(null);
-
-  const batchesQuery = useQuery({
-    queryKey: adminKeys.couponBatches,
-    queryFn: () => adminApi.couponBatches(),
-  });
+  const batches = useCouponBatches();
 
   const batchColumns = buildCouponBatchColumns();
 
+  const submitWithValidation = (data: CouponFormInput) => {
+    onSubmit(data);
+  };
+
+  const handleInvalidSubmit = () => {
+    void form.trigger();
+  };
+
+  const openBatchDetail = (row: CouponBatch) => {
+    setBatchDetail(row);
+    return null;
+  };
+
+  const closeBatchDetail = () => {
+    setBatchDetail(null);
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]">
-          {LABELS.coupons}
-        </h2>
+    <div className={styles.root}>
+      <div className={styles.headerRow}>
+        <h2 className={styles.heading}>{LABELS.coupons}</h2>
         <ButtonGroup>
           <BulkGenerateDialog open={bulkOpen} setOpen={setBulkOpen} />
 
@@ -64,15 +69,16 @@ export function CouponsPageHeader({
                 <Plus aria-hidden /> {LABELS.createCoupon}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
+            <DialogContent className={styles.dialog}>
               <DialogHeader>
                 <DialogTitle>{LABELS.createCoupon}</DialogTitle>
               </DialogHeader>
               <form
-                onSubmit={form.handleSubmit(onSubmit, () => {
-                  void form.trigger();
-                })}
-                className="space-y-1"
+                onSubmit={form.handleSubmit(
+                  submitWithValidation,
+                  handleInvalidSubmit,
+                )}
+                className={styles.form}
               >
                 <CreateCouponForm form={form} isPending={isPending} />
               </form>
@@ -81,32 +87,23 @@ export function CouponsPageHeader({
         </ButtonGroup>
       </div>
 
-      <section className="space-y-3">
-        <h3 className="text-[1rem] font-semibold text-ink">
-          {LABELS.couponBatches}
-        </h3>
+      <section className={styles.batchesSection}>
+        <h3 className={styles.batchesHeading}>{LABELS.couponBatches}</h3>
         <DataTable
           columns={batchColumns}
-          rows={batchesQuery.data ?? []}
-          loading={batchesQuery.isLoading}
+          rows={batches.batches ?? []}
+          loading={batches.isLoading}
+          error={batches.isError ? LABELS.couldNotLoadData : undefined}
+          onRefresh={batches.onRetry}
           emptyMessage={LABELS.noCouponBatches}
-          getRowId={(row) => row.id}
-          actions={(row) => (
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              onClick={() => setBatchDetail(row)}
-            >
-              {LABELS.viewBatchCodes}
-            </Button>
-          )}
+          getRowId={(row: CouponBatch) => row.id}
+          actions={openBatchDetail}
         />
       </section>
 
       <CouponBatchDetailDialog
         batchDetail={batchDetail}
-        onClose={() => setBatchDetail(null)}
+        onClose={closeBatchDetail}
       />
     </div>
   );

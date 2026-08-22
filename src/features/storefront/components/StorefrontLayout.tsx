@@ -5,6 +5,7 @@ import { Footer } from "@/shared/components/layout/Footer";
 import { CartDrawerContainer } from "@/features/cart";
 import { ScrollToTopContainer } from "@/shared/containers/ScrollToTopContainer";
 import { CookieBannerContainer } from "@/shared/containers/CookieBannerContainer";
+import { ChatWidgetMount } from "@/shared/containers/ChatWidgetMount";
 
 export function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -17,6 +18,7 @@ export function StorefrontLayout({ children }: { children: React.ReactNode }) {
       <Footer />
       <ScrollToTopContainer />
       <CookieBannerContainer />
+      <ChatWidgetMount />
     </div>
   );
 }

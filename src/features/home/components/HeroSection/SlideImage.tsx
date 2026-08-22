@@ -2,6 +2,9 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { MediaImage } from "@/shared/components/MediaImage";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { useMediaQuery } from "@/shared/hooks/use-media-query";
 import { EASE, imageVariants } from "./constants";
 import type { HeroSlide } from "./types";
 
@@ -13,13 +16,21 @@ interface SlideImageProps {
   reduceMotion: boolean;
 }
 
-export function SlideImage({
-  slide,
-  index,
-  direction,
-  autoplayMs,
-  reduceMotion,
-}: SlideImageProps) {
+const DESKTOP_MEDIA_QUERY = "(min-width: 768px)";
+
+export function SlideImage(props: SlideImageProps) {
+  const { slide, index, direction, autoplayMs, reduceMotion } = props;
+  const isDesktop = useMediaQuery(DESKTOP_MEDIA_QUERY);
+
+  // Art-directed variants: only the active breakpoint's image mounts so the
+  // hidden variant is never downloaded (§7 — do not fetch offscreen media).
+  const activeSrc = isDesktop
+    ? slide.imageSrc
+    : (slide.imageMobileSrc ?? slide.imageSrc);
+  const unavailableCopy = formatLabel(LABELS.heroSlideImageUnavailable, {
+    headline: slide.headline,
+  });
+
   return (
     <AnimatePresence initial={false} custom={direction} mode="sync">
       <motion.div
@@ -42,28 +53,15 @@ export function SlideImage({
               ease: "linear",
             }}
           >
-            <div className="absolute inset-0 hidden md:block">
-              <MediaImage
-                src={slide.imageSrc}
-                alt={slide.imageAlt}
-                unavailableLabel={`${slide.headline} image not available`}
-                priority={index === 0}
-                imageClassName="object-cover"
-                sizes="100vw"
-                className="absolute inset-0"
-              />
-            </div>
-            <div className="absolute inset-0 block md:hidden">
-              <MediaImage
-                src={slide.imageMobileSrc || slide.imageSrc}
-                alt={slide.imageAlt}
-                unavailableLabel={`${slide.headline} image not available`}
-                priority={index === 0}
-                imageClassName="object-cover"
-                sizes="100vw"
-                className="absolute inset-0"
-              />
-            </div>
+            <MediaImage
+              src={activeSrc}
+              alt={slide.imageAlt}
+              unavailableLabel={unavailableCopy}
+              priority={index === 0}
+              imageClassName="object-cover"
+              sizes="100vw"
+              className="absolute inset-0"
+            />
           </motion.div>
         </div>
 

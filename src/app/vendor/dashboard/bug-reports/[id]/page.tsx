@@ -1,5 +1,3 @@
-"use client";
-
 import { VendorBugReportDetailPage } from "@/features/bugReports";
 
 export default function VendorBugReportDetailRoute() {

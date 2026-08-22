@@ -10,19 +10,6 @@ import {
 } from "@/shared/components/ui/table";
 import { StatusBadge } from "@/shared/components/StatusBadge";
 import { VendorStrip } from "@/shared/components/VendorStrip";
-import { Button } from "@/shared/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
-import {
-  TableRowActions,
-  TableRowAction,
-} from "@/shared/components/TableRowActions";
-import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import { TableScrollShell } from "@/shared/components/TableScrollShell";
 import { LABELS } from "@/shared/constants/labels";
 import {
@@ -32,27 +19,12 @@ import {
   TABLE_PINNED_LAYOUT_CLASS,
 } from "@/shared/constants/table";
 import { cn } from "@/shared/utils/cn";
-import type { VendorInfo } from "@/shared/api/types";
+import type { SubOrderRow, VendorOrder } from "../types/vendorOrders.types";
+import { formatInr, shortOrderId } from "./VendorOrdersTable/vendorOrderFormat";
+import { SubOrderActions } from "./VendorOrdersTable/SubOrderActions";
+import { VendorSubOrderCards } from "./VendorOrdersTable/VendorSubOrderCards";
 
-export interface VendorOrder {
-  id: string;
-  subOrders?: Array<{
-    id: string;
-    vendor: VendorInfo;
-    subtotal: number;
-    status: string;
-  }>;
-}
-
-interface SubOrderRow {
-  orderId: string;
-  subOrder: {
-    id: string;
-    vendor: VendorInfo;
-    subtotal: number;
-    status: string;
-  };
-}
+export type { VendorOrder } from "../types/vendorOrders.types";
 
 interface VendorOrdersTableProps {
   orders: VendorOrder[];
@@ -71,123 +43,67 @@ function flattenSubOrders(orders: VendorOrder[]): SubOrderRow[] {
   return rows;
 }
 
-function SubOrderActions({
-  subOrderId,
-  updatingId,
-  onSetUpdatingId,
-  onStatusChange,
-}: {
-  subOrderId: string;
-  updatingId: string | null;
-  onSetUpdatingId: (id: string | null) => void;
-  onStatusChange: (id: string, status: string) => void;
-}) {
-  return (
-    <TableRowActions>
-      {updatingId === subOrderId ? (
-        <>
-          <TableRowAction>
-            <Select
-              defaultValue="SHIPPED"
-              onValueChange={(value) => onStatusChange(subOrderId, value)}
-            >
-              <SelectTrigger
-                aria-label={LABELS.selectStatus}
-                className="w-full min-w-[8.5rem] rounded-sm px-2 text-[0.8125rem]"
-              >
-                <SelectValue placeholder={LABELS.selectStatus} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="CONFIRMED">{LABELS.confirm}</SelectItem>
-                <SelectItem value="SHIPPED">
-                  {LABELS.orderActionShip}
-                </SelectItem>
-                <SelectItem value="DELIVERED">
-                  {LABELS.orderActionDeliver}
-                </SelectItem>
-                <SelectItem value="CANCELLED">{LABELS.cancel}</SelectItem>
-              </SelectContent>
-            </Select>
-          </TableRowAction>
-          <TableRowAction>
-            <Button
-              size="sm"
-              variant="outline"
-              className={tableMenuButtonClass("neutral")}
-              onClick={() => onSetUpdatingId(null)}
-            >
-              {LABELS.cancel}
-            </Button>
-          </TableRowAction>
-        </>
-      ) : (
-        <TableRowAction>
-          <Button
-            size="sm"
-            variant="outline"
-            className={tableMenuButtonClass("edit")}
-            onClick={() => onSetUpdatingId(subOrderId)}
-          >
-            {LABELS.updateStatus}
-          </Button>
-        </TableRowAction>
-      )}
-    </TableRowActions>
-  );
-}
+const CARD_SHADOW_CLASS = "rounded-md border border-line bg-surface p-4";
 
-export function VendorOrdersTable({
-  orders,
-  updatingId,
-  onSetUpdatingId,
-  onStatusChange,
-}: VendorOrdersTableProps) {
+/** Vendor order management table with inline status updates. */
+export function VendorOrdersTable(props: VendorOrdersTableProps) {
+  const { orders, updatingId, onSetUpdatingId, onStatusChange } = props;
   const rows = flattenSubOrders(orders);
+
+  const renderActions = (subOrderId: string) => (
+    <SubOrderActions
+      subOrderId={subOrderId}
+      updatingId={updatingId}
+      onSetUpdatingId={onSetUpdatingId}
+      onStatusChange={onStatusChange}
+    />
+  );
+
+  const renderDesktopRow = (row: SubOrderRow) => (
+    <TableRow key={row.subOrder.id}>
+      <TableCell
+        className={cn(TABLE_DATA_CELL_CLASS, "font-mono text-[0.8125rem]")}
+      >
+        {shortOrderId(row.orderId)}
+      </TableCell>
+      <TableCell className={TABLE_DATA_CELL_CLASS}>
+        <VendorStrip vendor={row.subOrder.vendor} size="sm" />
+      </TableCell>
+      <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
+        {formatInr(row.subOrder.subtotal)}
+      </TableCell>
+      <TableCell className={TABLE_DATA_CELL_CLASS}>
+        <StatusBadge status={row.subOrder.status} />
+      </TableCell>
+      <TableCell className={TABLE_ACTIONS_CELL_CLASS}>
+        {renderActions(row.subOrder.id)}
+      </TableCell>
+    </TableRow>
+  );
 
   return (
     <div className="space-y-4">
       <h2 className="text-[1.375rem] font-semibold text-ink">
-        Order Management
+        {LABELS.orderManagement}
       </h2>
 
       {rows.length === 0 ? (
-        <div className="rounded-md border border-line bg-surface px-4 py-14 text-center text-ink-muted">
-          No orders found
+        <div
+          className={cn(
+            CARD_SHADOW_CLASS,
+            "px-4 py-14 text-center text-ink-muted",
+          )}
+        >
+          {LABELS.noOrdersFound}
         </div>
       ) : (
         <>
           {/* Below lg: card list */}
-          <ul className="space-y-3 lg:hidden">
-            {rows.map(({ orderId, subOrder }) => (
-              <li
-                key={subOrder.id}
-                className="rounded-md border border-line bg-surface p-4 shadow-[0_1px_0_rgba(15,23,42,0.03)]"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="font-mono text-[0.8125rem] text-ink">
-                      #{orderId.slice(0, 8)}
-                    </p>
-                    <div className="mt-2">
-                      <VendorStrip vendor={subOrder.vendor} size="sm" />
-                    </div>
-                  </div>
-                  <StatusBadge status={subOrder.status} />
-                </div>
-                <p className="mt-3 font-mono text-[0.9375rem] text-ink">
-                  ₹{subOrder.subtotal}
-                </p>
-                <div className="mt-4 border-t border-line/80 pt-3">
-                  <SubOrderActions
-                    subOrderId={subOrder.id}
-                    updatingId={updatingId}
-                    onSetUpdatingId={onSetUpdatingId}
-                    onStatusChange={onStatusChange}
-                  />
-                </div>
-              </li>
-            ))}
-          </ul>
+          <VendorSubOrderCards
+            rows={rows}
+            updatingId={updatingId}
+            renderActions={renderActions}
+          />
 
           {/* lg+: scroll + pinned actions */}
           <TableScrollShell desktopOnly>
@@ -198,55 +114,23 @@ export function VendorOrdersTable({
               <TableHeader>
                 <TableRow>
                   <TableHead className={TABLE_DATA_CELL_CLASS}>
-                    Order ID
+                    {LABELS.orderId}
                   </TableHead>
                   <TableHead className={TABLE_DATA_CELL_CLASS}>
-                    Vendor
+                    {LABELS.vendorColumn}
                   </TableHead>
                   <TableHead className={TABLE_DATA_CELL_CLASS}>
-                    Subtotal
+                    {LABELS.subtotal}
                   </TableHead>
                   <TableHead className={TABLE_DATA_CELL_CLASS}>
-                    Status
+                    {LABELS.status}
                   </TableHead>
                   <TableHead className={TABLE_ACTIONS_HEAD_CLASS}>
                     {LABELS.actions}
                   </TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {rows.map(({ orderId, subOrder }) => (
-                  <TableRow key={subOrder.id}>
-                    <TableCell
-                      className={cn(
-                        TABLE_DATA_CELL_CLASS,
-                        "font-mono text-[0.8125rem]",
-                      )}
-                    >
-                      {orderId.slice(0, 8)}
-                    </TableCell>
-                    <TableCell className={TABLE_DATA_CELL_CLASS}>
-                      <VendorStrip vendor={subOrder.vendor} size="sm" />
-                    </TableCell>
-                    <TableCell
-                      className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}
-                    >
-                      ₹{subOrder.subtotal}
-                    </TableCell>
-                    <TableCell className={TABLE_DATA_CELL_CLASS}>
-                      <StatusBadge status={subOrder.status} />
-                    </TableCell>
-                    <TableCell className={TABLE_ACTIONS_CELL_CLASS}>
-                      <SubOrderActions
-                        subOrderId={subOrder.id}
-                        updatingId={updatingId}
-                        onSetUpdatingId={onSetUpdatingId}
-                        onStatusChange={onStatusChange}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+              <TableBody>{rows.map(renderDesktopRow)}</TableBody>
             </Table>
           </TableScrollShell>
         </>

@@ -1,0 +1,51 @@
+/** Platform settings copy. Subset of LABELS; merged in labels/index.ts. */
+export const settingsLabels = {
+  platformSettings: "Platform Settings",
+  platformSettingsHint:
+    "Manage commission, returns, shipping thresholds, support contact, and moderation defaults.",
+  settingsCommerce: "Commerce",
+  settingsCommerceHint: "Commission and product moderation defaults.",
+  settingsFulfillment: "Fulfillment",
+  settingsFulfillmentHint: "Returns, free shipping, and payout timing.",
+  settingsSupport: "Support",
+  settingsSupportHint: "Customer-facing contact details and helpdesk windows.",
+  ticketReopenWindowDays: "Ticket reopen window",
+  ticketReopenWindowDaysHint:
+    "Days after resolve during which a customer may reopen a support ticket.",
+  bugVerifyWindowDays: "Bug auto-verify window",
+  bugVerifyWindowDaysHint:
+    "Days after a bug is marked fixed before it auto-transitions to verified.",
+  bugCloseWindowDays: "Bug auto-close window",
+  bugCloseWindowDaysHint:
+    "Days after a bug is verified before it auto-transitions to closed.",
+  defaultCommissionRate: "Default commission rate",
+  tcsRatePercent: "Marketplace TCS rate (%)",
+  tcsRateHint:
+    "Tax collected at source on taxable marketplace sales. Set 0 to disable.",
+  tdsRatePercent: "TDS rate at payout (%)",
+  tdsRateHint:
+    "TDS under section 194-O deducted when settling vendor payouts. Set 0 to disable.",
+  reports: "Reports",
+  reportsHubHint:
+    "Filtered, paginated tabular reports with Excel export from frozen ledger data.",
+  reportFilters: "Filters",
+  reportFiltersHint:
+    "Choose a report and date range, then load or export results.",
+  reportSelect: "Report",
+  reportCategory: "Category",
+  reportStatus: "Status",
+  reportVendor: "Vendor",
+  exportExcel: "Export Excel",
+  reportAsyncQueued: "Large export queued — waiting for file…",
+  reportAsyncReady: "Export ready — downloading…",
+  reportAsyncFailed: "Export failed. Try again with a narrower date range.",
+  reportLoadError: "Could not load report.",
+  reportCatalogError: "Could not load report catalog.",
+  uuidPlaceholder: "UUID",
+  refundsToCustomer: "Refunds to customer",
+  emptyCell: "—",
+  approvedCount: "Approved",
+  pendingCount: "Pending",
+  rejectedCount: "Rejected",
+  // Report column headers not already covered above (must match BE REPORT_COLUMN_LABELS keys)
+} as const;

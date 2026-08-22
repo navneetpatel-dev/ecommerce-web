@@ -8,6 +8,8 @@ import { LoginRequiredDialogContainer } from "@/shared/containers/LoginRequiredD
 import { RouteScrollResetContainer } from "@/shared/containers/RouteScrollResetContainer";
 import { BrowseUrlTrackerContainer } from "@/shared/containers/BrowseUrlTrackerContainer";
 import { RoleSurfaceGuard } from "@/shared/components/RoleSurfaceGuard";
+import { ThemePaletteProvider } from "@/shared/context/ThemePalette.context";
+import { ErrorReportingProvider } from "@/shared/providers/ErrorReportingProvider";
 import { createQueryPersister } from "@/shared/api/queryPersister";
 
 function AuthBootstrap() {
@@ -38,6 +40,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         persistOptions={{
           persister,
           maxAge: 24 * 60 * 60 * 1000,
+          buster: QUERY_CACHE_BUSTER,
           dehydrateOptions: {
             shouldDehydrateQuery: (query) =>
               query.state.status === "success" &&
@@ -47,12 +50,21 @@ export function Providers({ children }: { children: React.ReactNode }) {
           },
         }}
       >
-        <AuthBootstrap />
-        <RouteScrollResetContainer />
-        <BrowseUrlTrackerContainer />
-        <LoginRequiredDialogContainer />
-        <RoleSurfaceGuard>{children}</RoleSurfaceGuard>
+        <ThemePaletteProvider>
+          <ErrorReportingProvider />
+          <AuthBootstrap />
+          <RouteScrollResetContainer />
+          <BrowseUrlTrackerContainer />
+          <LoginRequiredDialogContainer />
+          <RoleSurfaceGuard>{children}</RoleSurfaceGuard>
+        </ThemePaletteProvider>
       </PersistQueryClientProvider>
     </QueryClientProvider>
   );
 }
+
+/**
+ * Bump when a persisted cache shape changes so stale entries are discarded
+ * on restore instead of being rehydrated for up to maxAge (§11).
+ */
+const QUERY_CACHE_BUSTER = "v1";

@@ -21,6 +21,7 @@ import { CreateCouponValueFields } from "./CreateCouponValueFields";
 import { CreateCouponScopeFields } from "./CreateCouponScopeFields";
 import { CreateCouponConstraintFields } from "./CreateCouponConstraintFields";
 import { CreateCouponRestrictionFields } from "./CreateCouponRestrictionFields";
+import { couponDisableHint } from "./couponDisableHint";
 
 interface CreateCouponFormProps {
   form: UseFormReturn<CouponFormInput>;
@@ -34,49 +35,6 @@ interface CreateCouponFormProps {
   hideSubmit?: boolean;
   /** Hide the coupon code field (bulk template). */
   hideCodeField?: boolean;
-}
-
-function couponDisableHint(values: CouponFormInput): string {
-  if (!values.code?.trim()) return LABELS.enterCouponCode;
-  if (
-    couponRequiresValue(values.type) &&
-    (values.value == null || Number.isNaN(values.value))
-  ) {
-    return LABELS.enterCouponValue;
-  }
-  if (!values.startDate) return LABELS.enterCouponStartDate;
-  if (!values.endDate) return LABELS.enterCouponEndDate;
-  if (
-    values.type === "BUNDLE" &&
-    (!values.bundleProductIds || values.bundleProductIds.length === 0)
-  ) {
-    return LABELS.couponBundleProductsRequired;
-  }
-  if (
-    values.userRestrictionType === "segment" &&
-    !values.userRestrictionSegment
-  ) {
-    return LABELS.couponSegmentRequired;
-  }
-  if (
-    values.userRestrictionType === "specific" &&
-    (!values.userRestrictionUserIds ||
-      values.userRestrictionUserIds.length === 0)
-  ) {
-    return LABELS.couponSpecificUsersRequired;
-  }
-  if (
-    values.type !== "BUNDLE" &&
-    values.applicableScopeType !== "all" &&
-    (!values.applicableScopeIds || values.applicableScopeIds.length === 0)
-  ) {
-    return LABELS.enterCouponScopeIds;
-  }
-  const parsed = CouponSchema.safeParse(values);
-  if (!parsed.success) {
-    return parsed.error.issues[0]?.message ?? LABELS.couponCreateHint;
-  }
-  return LABELS.couponCreateHint;
 }
 
 export function CreateCouponForm({

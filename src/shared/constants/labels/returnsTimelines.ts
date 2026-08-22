@@ -1,0 +1,48 @@
+/** Return timeline copy. Subset of LABELS; merged in labels/index.ts. */
+export const returnsTimelinesLabels = {
+  returnTimelineRefundTrack: "Refund",
+  returnTimelineLogisticsTrack: "Return pickup",
+  returnRefundStatusNone: "Not started",
+  returnRefundStatusPending: "Processing",
+  returnRefundStatusInitiated: "Refund initiated",
+  returnRefundStatusCompleted: "Refunded",
+  returnRefundStatusFailed: "Refund failed",
+  returnLogisticsRequested: "Return requested",
+  returnLogisticsApproved: "Approved",
+  returnLogisticsPickupScheduled: "Pickup scheduled",
+  returnLogisticsReceived: "Item received",
+  returnLogisticsClosed: "Closed",
+  returnLogisticsRejected: "Rejected",
+  returnSchedulePickup: "Schedule pickup",
+  returnMarkReceived: "Mark received",
+  returnClose: "Close return",
+  confirmSchedulePickupTitle: "Schedule reverse pickup?",
+  confirmSchedulePickupBody: 'Schedule pickup for return "{name}"?',
+  confirmMarkReceivedTitle: "Mark return as received?",
+  confirmMarkReceivedBody: 'Confirm warehouse receipt for return "{name}"?',
+  confirmCloseReturnTitle: "Close this return?",
+  confirmCloseReturnBody: 'Close return "{name}" after receipt?',
+  returnsPageTitle: "Returns",
+  returnsPageDescription:
+    "Track return requests for delivered items. Start a return from an order detail page when an item qualifies.",
+  noReturnsYet: "No returns yet",
+  noReturnsYetMessage:
+    "When you request a return on a delivered order, it will show up here.",
+  viewOrders: "View orders",
+  couldNotLoadReturns: "Could not load returns.",
+  orderItemFallback: "Order item",
+  requestReturn: "Request return",
+  submitReturn: "Submit return",
+  cancelReturn: "Cancel",
+  returnRequestedSuccess: "Return requested.",
+  couldNotSubmitReturn: "Could not submit return request.",
+  requestReturnTitle: "Request a return",
+  requestReturnDescription: "Tell us why you want to return this item.",
+  requestReturnDescriptionItem:
+    'Return "{product}". We\'ll review and update you by email.',
+  returnReasonLabel: "Reason",
+  returnDetailsLabel: "Details",
+  returnDetailsPlaceholder: "Briefly describe the issue",
+
+  // Admin wallet reports
+} as const;

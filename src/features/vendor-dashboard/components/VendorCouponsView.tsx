@@ -1,23 +1,14 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { ButtonGroup } from "@/shared/components/ui/button-group";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/shared/components/ui/dialog";
 import {
   DataTable,
   type DataTableColumn,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
 import { StatusBadge } from "@/shared/components/StatusBadge";
-import { Plus } from "lucide-react";
 import {
   AdminConfirmAction,
-  CreateCouponForm,
   type CouponFormInput,
 } from "@/features/admin-dashboard";
 import { LABELS } from "@/shared/constants/labels";
@@ -26,7 +17,8 @@ import { formatDateTime } from "@/shared/utils/formatDate";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
-import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { CouponAnalyticsDialog } from "./VendorCouponsView/CouponAnalyticsDialog";
+import { CouponsHeaderSection } from "./VendorCouponsView/CouponsHeaderSection";
 
 interface VendorCouponsViewProps {
   coupons: Coupon[];
@@ -46,23 +38,29 @@ interface VendorCouponsViewProps {
   onUpdateStatus: (coupon: Coupon, status: Coupon["status"]) => Promise<void>;
 }
 
-export function VendorCouponsView({
-  coupons,
-  loading,
-  pagination,
-  open,
-  setOpen,
-  form,
-  isPending,
-  onSubmit,
-  vendorId = null,
-  analyticsId,
-  setAnalyticsId,
-  analytics,
-  analyticsLoading,
-  absorbedDiscountTotal = 0,
-  onUpdateStatus,
-}: VendorCouponsViewProps) {
+const usageCell = (row: Coupon) =>
+  `${row.usedCount}/${row.usageLimitTotal ?? LABELS.usageUnlimited}`;
+
+/** Vendor coupons screen: header + table with status actions + analytics. */
+export function VendorCouponsView(props: VendorCouponsViewProps) {
+  const {
+    coupons,
+    loading,
+    pagination,
+    open,
+    setOpen,
+    form,
+    isPending,
+    onSubmit,
+    vendorId = null,
+    analyticsId,
+    setAnalyticsId,
+    analytics,
+    analyticsLoading,
+    absorbedDiscountTotal = 0,
+    onUpdateStatus,
+  } = props;
+
   const columns: DataTableColumn<Coupon>[] = [
     {
       id: "code",
@@ -79,8 +77,7 @@ export function VendorCouponsView({
       id: "usage",
       header: LABELS.couponUsage,
       className: "font-mono text-[0.8125rem]",
-      cell: (row) =>
-        `${row.usedCount}/${row.usageLimitTotal ?? LABELS.usageUnlimited}`,
+      cell: usageCell,
     },
     {
       id: "status",
@@ -145,48 +142,15 @@ export function VendorCouponsView({
 
   return (
     <div className="space-y-6">
-      <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0 space-y-1">
-          <h2 className="text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]">
-            {LABELS.coupons}
-          </h2>
-          <p className="text-[0.875rem] text-ink-muted">
-            {formatLabel(LABELS.absorbedDiscountsSummary, {
-              amount: formatInrAmount(absorbedDiscountTotal),
-            })}{" "}
-            ({LABELS.absorbedThisPeriod})
-          </p>
-        </div>
-        <ButtonGroup>
-          <Dialog open={open} onOpenChange={setOpen}>
-            <Button
-              type="button"
-              size="sm"
-              fullWidth="mobile"
-              onClick={() => setOpen(true)}
-            >
-              <Plus aria-hidden /> {LABELS.createVendorCoupon}
-            </Button>
-            <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>{LABELS.createVendorCoupon}</DialogTitle>
-              </DialogHeader>
-              <form
-                onSubmit={form.handleSubmit(onSubmit, () => {
-                  void form.trigger();
-                })}
-              >
-                <CreateCouponForm
-                  form={form}
-                  isPending={isPending}
-                  vendorMode
-                  vendorId={vendorId}
-                />
-              </form>
-            </DialogContent>
-          </Dialog>
-        </ButtonGroup>
-      </div>
+      <CouponsHeaderSection
+        absorbedDiscountTotal={absorbedDiscountTotal}
+        open={open}
+        setOpen={setOpen}
+        form={form}
+        isPending={isPending}
+        onSubmit={onSubmit}
+        vendorId={vendorId}
+      />
 
       <DataTable
         columns={columns}
@@ -198,57 +162,12 @@ export function VendorCouponsView({
         actions={renderActions}
       />
 
-      <Dialog
-        open={Boolean(analyticsId)}
-        onOpenChange={(next) => !next && setAnalyticsId(null)}
-      >
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>{LABELS.couponAnalytics}</DialogTitle>
-          </DialogHeader>
-          {analyticsLoading ? (
-            <p className="text-[0.875rem] text-ink-muted">{LABELS.loading}</p>
-          ) : analytics ? (
-            <dl className="space-y-3 text-[0.875rem]">
-              <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{LABELS.redemptionCount}</dt>
-                <dd className="tabular-nums font-medium">
-                  {analytics.usedCount}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{LABELS.absorbedDiscounts}</dt>
-                <dd className="tabular-nums font-medium">
-                  ₹{formatInrAmount(Number(analytics.totalDiscount))}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{LABELS.revenueImpact}</dt>
-                <dd className="tabular-nums font-medium">
-                  ₹{formatInrAmount(Number(analytics.revenueImpact ?? 0))}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{LABELS.conversionRate}</dt>
-                <dd className="tabular-nums font-medium">
-                  {analytics.conversionRate == null
-                    ? "—"
-                    : `${Math.round(Number(analytics.conversionRate) * 100)}%`}
-                </dd>
-              </div>
-              <p className="text-[0.8125rem] text-ink-muted">
-                {formatLabel(LABELS.absorbedDiscountsSummary, {
-                  amount: formatInrAmount(Number(analytics.totalDiscount)),
-                })}
-              </p>
-            </dl>
-          ) : (
-            <p className="text-[0.875rem] text-ink-muted">
-              {LABELS.couldNotLoadData}
-            </p>
-          )}
-        </DialogContent>
-      </Dialog>
+      <CouponAnalyticsDialog
+        analyticsId={analyticsId}
+        setAnalyticsId={setAnalyticsId}
+        analytics={analytics}
+        analyticsLoading={analyticsLoading}
+      />
     </div>
   );
 }

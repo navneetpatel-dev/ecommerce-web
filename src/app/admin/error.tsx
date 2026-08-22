@@ -1,19 +1,21 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import { Button } from '@/shared/components/ui/button'
-import { LABELS } from '@/shared/constants/labels'
+import { useEffect } from "react";
+import { LABELS } from "@/shared/constants/labels";
+import { reportError } from "@/shared/lib/errorReporting";
+import { ErrorFallbackActions } from "@/shared/components/ErrorFallbackActions";
+import { errorBoundaryStyles as styles } from "@/shared/components/errorBoundary.styles";
 
-export default function AdminError({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string }
-  reset: () => void
-}) {
+interface AdminErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
+/** Admin workspace route error boundary (Rule 13/20). */
+export default function AdminError({ error, reset }: AdminErrorProps) {
   useEffect(() => {
-    console.error(error)
-  }, [error])
+    reportError(error, { boundary: "admin", digest: error.digest });
+  }, [error]);
 
   return (
     <div className="min-h-screen bg-paper">
@@ -21,13 +23,10 @@ export default function AdminError({
       <div className="flex">
         <aside className="w-56 shrink-0 border-r border-line min-h-[calc(100vh-3.5rem)]" />
         <main className="flex-1 p-6 flex flex-col items-center justify-center gap-4">
-          <h2 className="text-[1.375rem] font-semibold text-ink">{LABELS.unexpectedErrorHeading}</h2>
-          <p className="max-w-md text-center text-[0.9375rem] text-ink-muted">
-            {LABELS.unexpectedErrorBody}
-          </p>
-          <Button onClick={reset}>Try again</Button>
+          <h2 className={styles.heading}>{LABELS.unexpectedErrorHeading}</h2>
+          <ErrorFallbackActions onReset={reset} />
         </main>
       </div>
     </div>
-  )
+  );
 }
