@@ -12,6 +12,7 @@ export function WishlistPage() {
       isEmpty={wishlist.isEmpty}
       items={wishlist.items}
       pagination={wishlist.pagination}
+      removeError={wishlist.removeError}
       onRemoveItem={wishlist.removeItem}
     />
   );

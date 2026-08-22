@@ -1,15 +1,21 @@
-'use client'
+"use client";
 
-import { useProductDetail } from '../hooks/useProductDetail'
-import { ProductDetailSkeleton } from '../components/ProductDetailSkeleton'
-import { ProductNotFound } from '../components/ProductNotFound'
-import { ProductDetailContent } from '../components/ProductDetailContent'
+import { useProductDetail } from "../hooks/useProductDetail";
+import { ProductDetailSkeleton } from "../components/ProductDetailSkeleton";
+import { ProductNotFound } from "../components/ProductNotFound";
+import { ProductDetailContent } from "../components/ProductDetailContent";
 
 export function ProductDetailPage() {
-  const detail = useProductDetail()
+  const detail = useProductDetail();
 
-  if (detail.isLoading) return <ProductDetailSkeleton />
-  if (!detail.product) return <ProductNotFound />
+  if (detail.isLoading) return <ProductDetailSkeleton />;
+  if (!detail.product) {
+    return detail.isError ? (
+      <ProductNotFound variant="error" onRetry={detail.retryProduct} />
+    ) : (
+      <ProductNotFound />
+    );
+  }
 
   return (
     <ProductDetailContent
@@ -34,5 +40,5 @@ export function ProductDetailPage() {
       returnWindowDays={detail.returnWindowDays}
       returnsAllowed={detail.returnsAllowed}
     />
-  )
+  );
 }

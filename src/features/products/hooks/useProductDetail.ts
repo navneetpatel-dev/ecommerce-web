@@ -12,6 +12,8 @@ export function useProductDetail() {
   const {
     product,
     isLoading,
+    isError,
+    onRetry: retryProduct,
     categories,
     settings,
     basePrice,
@@ -41,6 +43,8 @@ export function useProductDetail() {
   return {
     product,
     isLoading,
+    isError,
+    retryProduct,
     freeShippingThreshold:
       product?.vendorFreeShippingThreshold ?? settings?.freeShippingThreshold,
     returnWindowDays:

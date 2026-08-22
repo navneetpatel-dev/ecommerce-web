@@ -13,3 +13,4 @@ export { MaintenancePage } from "./pages/MaintenancePage";
 export { ReturnsPage } from "./pages/ReturnsPage";
 export { BlogPage } from "./pages/BlogPage";
 export { BlogDetailPage } from "./pages/BlogDetailPage";
+export { getBlogPost } from "./data/content";

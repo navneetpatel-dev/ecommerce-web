@@ -1,19 +1,13 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import { usePathname } from 'next/navigation'
-import { captureBrowseUrl } from '@/shared/utils/lastBrowseUrl'
+import { useLastBrowseUrlTracker } from "@/shared/hooks/useLastBrowseUrlTracker";
 
 /**
- * Records the current page as the "last browsed URL" on every client navigation, so bug report
- * forms can prefill a useful page context even when `document.referrer` is empty (SPA nav).
+ * Mount-only component that keeps the "last browsed URL" up to date.
+ * Logic lives in the hook; this is a rendering shell (Rule 1/14).
  */
 export function BrowseUrlTracker() {
-  const pathname = usePathname()
+  useLastBrowseUrlTracker();
 
-  useEffect(() => {
-    captureBrowseUrl(pathname)
-  }, [pathname])
-
-  return null
+  return null;
 }

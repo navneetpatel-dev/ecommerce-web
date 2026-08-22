@@ -13,6 +13,7 @@ import {
   CardContent,
 } from "@/shared/components/ui/card";
 import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import type { VendorDocumentType } from "@/shared/constants/statuses";
 import {
   allRequiredFieldsMet,
@@ -53,6 +54,7 @@ export function VendorRegisterForm({
     setValue,
     formState: { errors },
   } = form;
+  const [auxError, setAuxError] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [requiredDocs, setRequiredDocs] = useState<VendorDocumentType[]>([]);
   const entityType = watch("entityType");
@@ -73,8 +75,15 @@ export function VendorRegisterForm({
   useEffect(() => {
     void categoriesApi
       .list()
-      .then(setCategories)
-      .catch(() => setCategories([]));
+      .then((items) => {
+        setCategories(items);
+        setAuxError(null);
+      })
+      .catch((err: unknown) => {
+        // Category options are auxiliary; the form stays usable without them.
+        setCategories([]);
+        setAuxError(getApiErrorMessage(err, LABELS.couldNotLoadData));
+      });
   }, []);
 
   useEffect(() => {
@@ -84,8 +93,14 @@ export function VendorRegisterForm({
     }
     void vendorsApi
       .previewRequiredDocuments(entityType, categoryIds)
-      .then((res) => setRequiredDocs(res.requiredDocumentTypes))
-      .catch(() => setRequiredDocs([]));
+      .then((res) => {
+        setRequiredDocs(res.requiredDocumentTypes);
+        setAuxError(null);
+      })
+      .catch((err: unknown) => {
+        setRequiredDocs([]);
+        setAuxError(getApiErrorMessage(err, LABELS.couldNotLoadData));
+      });
   }, [entityType, categoryIds]);
 
   const selectedSet = useMemo(() => new Set(categoryIds), [categoryIds]);
@@ -109,6 +124,11 @@ export function VendorRegisterForm({
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormStack>
+              {auxError ? (
+                <p role="alert" className="text-[0.8125rem] text-danger">
+                  {auxError}
+                </p>
+              ) : null}
               <VendorRegisterBasicsSection
                 register={register}
                 control={control}

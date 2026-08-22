@@ -1,47 +1,31 @@
 "use client";
 
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { isWorkspaceRole } from "@/shared/utils/roles";
-import {
-  useAccountProfile,
-  useUpdateProfile,
-} from "../../../api/account.queries";
+import { usePersonalInfoForm } from "../../../hooks/usePersonalInfoForm";
 import { PersonalInfoForm } from "./PersonalInfoForm";
-import type { PersonalForm } from "./PersonalInfoForm";
 import { ProfileAside } from "./ProfileAside";
 
+/** Personal-info section: renders the form hook's prepared state (Rule 1). */
 export function PersonalInfoSection() {
   const currentUser = useAuthStore((s) => s.currentUser);
   const isWorkspace = isWorkspaceRole(currentUser?.role);
-  const { data: profile, isLoading, isError, error } = useAccountProfile();
-  const updateProfile = useUpdateProfile();
   const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors, isDirty },
-  } = useForm<PersonalForm>({
-    defaultValues: { name: "", phone: "" },
-  });
-
-  const nameValue = watch("name");
-  const nameMissing = !nameValue?.trim();
-  const canSubmit = !nameMissing && isDirty;
-  const disableHint = nameMissing ? LABELS.enterFullName : "";
-
-  useEffect(() => {
-    if (profile) {
-      reset({
-        name: profile.name ?? "",
-        phone: profile.phone ?? "",
-      });
-    }
-  }, [profile, reset]);
+    profile,
+    isLoading,
+    isError,
+    error,
+    form,
+    errors,
+    canSubmit,
+    disableHint,
+    showSaved,
+    pending,
+    submitError,
+    onSubmit,
+  } = usePersonalInfoForm();
 
   if (isLoading) {
     return (
@@ -68,20 +52,15 @@ export function PersonalInfoSection() {
     <div className="space-y-6">
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.8fr)]">
         <PersonalInfoForm
-          register={register}
+          register={form.register}
           errors={errors}
           isWorkspace={isWorkspace}
           canSubmit={canSubmit}
           disableHint={disableHint}
-          showSaved={updateProfile.isSuccess && !isDirty}
-          pending={updateProfile.isPending}
-          submitError={updateProfile.error as Error | null}
-          onSubmit={handleSubmit(async (data) => {
-            await updateProfile.mutateAsync({
-              name: data.name.trim(),
-              phone: data.phone.trim() || null,
-            });
-          })}
+          showSaved={showSaved}
+          pending={pending}
+          submitError={submitError}
+          onSubmit={onSubmit}
         />
 
         <ProfileAside profile={profile} isWorkspace={isWorkspace} />

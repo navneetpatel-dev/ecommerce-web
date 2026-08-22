@@ -11,6 +11,8 @@ import { returnsLabels } from "./labels/returns";
 import { availabilityLabels } from "./labels/availability";
 import { couponsLabels } from "./labels/coupons";
 import { tablesLabels } from "./labels/tables";
+import { tables2Labels } from "./labels/tables2";
+import { tables3Labels } from "./labels/tables3";
 import { settingsLabels } from "./labels/settings";
 import { reportsLabels } from "./labels/reports";
 import { walletLabels } from "./labels/wallet";
@@ -18,6 +20,11 @@ import { returnsTimelinesLabels } from "./labels/returnsTimelines";
 import { walletReportsLabels } from "./labels/walletReports";
 import { ticketsLabels } from "./labels/tickets";
 import { bugsLabels } from "./labels/bugs";
+import { bugs2Labels } from "./labels/bugs2";
+
+import { coupons2Labels } from "./labels/coupons2";
+import { reports2Labels } from "./labels/reports2";
+import { reports3Labels } from "./labels/reports3";
 
 export const LABELS = {
   ...commerceLabels,
@@ -29,6 +36,8 @@ export const LABELS = {
   ...availabilityLabels,
   ...couponsLabels,
   ...tablesLabels,
+  ...tables2Labels,
+  ...tables3Labels,
   ...settingsLabels,
   ...reportsLabels,
   ...walletLabels,
@@ -36,6 +45,10 @@ export const LABELS = {
   ...walletReportsLabels,
   ...ticketsLabels,
   ...bugsLabels,
+  ...bugs2Labels,
+  ...coupons2Labels,
+  ...reports2Labels,
+  ...reports3Labels,
 } as const;
 
 export const ROLES = {

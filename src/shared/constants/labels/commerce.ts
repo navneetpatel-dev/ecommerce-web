@@ -86,4 +86,7 @@ export const commerceLabels = {
   allOrders: "All orders",
 
   // Auth
+  maintenanceHeading: "Scheduled maintenance",
+  maintenanceBody:
+    "We're making improvements to the marketplace. Please check back shortly.",
 } as const;

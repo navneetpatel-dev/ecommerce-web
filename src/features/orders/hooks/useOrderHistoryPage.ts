@@ -11,7 +11,7 @@ export function useOrderHistoryPage() {
   const router = useRouter();
 
   const page = Math.max(1, Number(searchParams.get("page")) || 1);
-  const { data, isLoading } = useMyOrders(role, page);
+  const { data, isLoading, isError, refetch } = useMyOrders(role, page);
 
   const onPageChange = (nextPage: number) => {
     const params = new URLSearchParams(searchParams);
@@ -26,6 +26,8 @@ export function useOrderHistoryPage() {
 
   return {
     isLoading,
+    isError,
+    onRetry: () => void refetch(),
     orders: data?.items ?? [],
     isEmpty: !isLoading && !data?.items.length,
     pagination: {

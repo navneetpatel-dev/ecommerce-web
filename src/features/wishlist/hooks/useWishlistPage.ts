@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import { useWishlist, useRemoveFromWishlist } from "../api/wishlist.queries";
 import { useClientPagination } from "@/shared/hooks/useClientPagination";
+import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import type { ProductListItem, WishlistItem } from "@/shared/api/types";
 
 export interface WishlistPageItem {
@@ -47,6 +49,9 @@ export function useWishlistPage() {
   );
 
   const pagination = useClientPagination(items);
+  const removeError = removeFromWishlist.isError
+    ? getApiErrorMessage(removeFromWishlist.error, LABELS.genericActionFailed)
+    : null;
 
   return {
     isLoading,
@@ -54,6 +59,8 @@ export function useWishlistPage() {
     availableProducts,
     isEmpty: !isLoading && items.length === 0,
     pagination,
+    removePending: removeFromWishlist.isPending,
+    removeError,
     removeItem: (productId: string) => removeFromWishlist.mutate(productId),
   };
 }

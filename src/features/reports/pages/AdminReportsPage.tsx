@@ -1,17 +1,28 @@
-'use client'
+"use client";
 
-import { RequirePermission } from '@/shared/components/RequirePermission'
-import { LABELS } from '@/shared/constants/labels'
-import { PERMISSIONS } from '@/shared/constants/permissions'
-import { ReportFilterBar } from '../components/ReportFilterBar'
-import { ReportTable } from '../components/ReportTable'
-import { useReportHub } from '../hooks/useReportHub'
+import { RequirePermission } from "@/shared/components/RequirePermission";
+import { LABELS } from "@/shared/constants/labels";
+import { PERMISSIONS } from "@/shared/constants/permissions";
+import { ReportFilterBar } from "../components/ReportFilterBar";
+import { ReportTable } from "../components/ReportTable";
+import { useReportHub } from "../hooks/useReportHub";
 
 export function AdminReportsPage() {
-  const hub = useReportHub()
+  const hub = useReportHub();
 
   if (hub.catalogError) {
-    return <p className="text-danger">{hub.catalogError}</p>
+    return (
+      <div className="border border-line bg-surface px-5 py-10 text-center">
+        <p className="text-[0.9375rem] text-danger">{hub.catalogError}</p>
+        <button
+          type="button"
+          onClick={hub.onRetryCatalog}
+          className="mt-2 text-[0.875rem] font-medium text-brand underline-offset-4 hover:underline"
+        >
+          {LABELS.retry}
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -31,7 +42,9 @@ export function AdminReportsPage() {
           <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
             {LABELS.reports}
           </h2>
-          <p className="max-w-3xl text-[0.9375rem] text-ink-muted">{LABELS.reportsHubHint}</p>
+          <p className="max-w-3xl text-[0.9375rem] text-ink-muted">
+            {LABELS.reportsHubHint}
+          </p>
         </div>
 
         <ReportFilterBar
@@ -63,6 +76,7 @@ export function AdminReportsPage() {
         ) : null}
 
         <ReportTable
+          onRetry={() => hub.load()}
           result={hub.result}
           loading={hub.loading}
           error={hub.error}
@@ -70,5 +84,5 @@ export function AdminReportsPage() {
         />
       </div>
     </RequirePermission>
-  )
+  );
 }

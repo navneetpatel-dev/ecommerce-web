@@ -12,11 +12,7 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
-
-export interface PersonalForm {
-  name: string;
-  phone: string;
-}
+import type { ProfileFormInput as PersonalForm } from "../../../schemas/profile.schema";
 
 interface PersonalInfoFormProps {
   register: UseFormRegister<PersonalForm>;
@@ -57,7 +53,7 @@ export function PersonalInfoForm({
             <Input
               id="account-name"
               error={Boolean(errors.name?.message)}
-              {...register("name", { required: LABELS.nameRequired })}
+              {...register("name")}
             />
           </FormFieldFrame>
 

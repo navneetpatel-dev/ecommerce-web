@@ -13,6 +13,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "limits": "node scripts/check-line-limits.mjs",
+    "budgets": "node scripts/check-bundle-budgets.mjs",
     "analyze": "ANALYZE=true next build",
     "spec:check": "npm run typecheck && npm run lint && npm run test && npm run limits",
     "prepare": "husky"

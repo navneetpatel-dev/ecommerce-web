@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import {
   reportsEngineApi,
   type ReportRunResult,
@@ -14,8 +15,14 @@ import {
 import { useReportCatalog } from "./useReportCatalog/index";
 
 export function useReportHub(options?: { preferAudience?: string }) {
-  const { catalog, catalogError, reportType, setReportTypeState, selected } =
-    useReportCatalog(options);
+  const {
+    catalog,
+    catalogError,
+    onRetryCatalog,
+    reportType,
+    setReportTypeState,
+    selected,
+  } = useReportCatalog(options);
 
   const [from, setFrom] = useState(defaultRange().from);
   const [to, setTo] = useState(defaultRange().to);
@@ -63,7 +70,7 @@ export function useReportHub(options?: { preferAudience?: string }) {
         setResult(data);
         setPage(nextPage);
       })
-      .catch(() => setError(LABELS.reportLoadError))
+      .catch((err) => setError(getApiErrorMessage(err, LABELS.reportLoadError)))
       .finally(() => setLoading(false));
   };
 
@@ -97,13 +104,14 @@ export function useReportHub(options?: { preferAudience?: string }) {
           else setMessage(LABELS.reportAsyncQueued);
         }
       })
-      .catch(() => setError(LABELS.reportLoadError))
+      .catch((err) => setError(getApiErrorMessage(err, LABELS.reportLoadError)))
       .finally(() => setExporting(false));
   };
 
   return {
     catalog,
     catalogError,
+    onRetryCatalog,
     reportType,
     setReportType: (type: string) => {
       setReportTypeState(type);

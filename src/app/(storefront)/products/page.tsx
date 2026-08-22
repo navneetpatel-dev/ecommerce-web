@@ -1,10 +1,11 @@
 import { generateStaticPageMetadata } from "@/shared/seo/metadata";
+import { SEO_PAGE_COPY } from "@/shared/seo/constants";
 import { PATHS } from "@/shared/constants/paths";
 import { ProductListingPage } from "@/features/products";
 
 export const metadata = generateStaticPageMetadata(
-  "Products",
-  "Browse our complete collection of premium t-shirts. Find the perfect fit, style, and design from multiple brands.",
+  SEO_PAGE_COPY.products.title,
+  SEO_PAGE_COPY.products.description,
   PATHS.products,
 );
 

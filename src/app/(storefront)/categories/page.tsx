@@ -1,10 +1,11 @@
 import { generateStaticPageMetadata } from "@/shared/seo/metadata";
 import { CategoriesPage } from "@/features/categories";
+import { SEO_PAGE_COPY } from "@/shared/seo/constants";
 import { PATHS } from "@/shared/constants/paths";
 
 export const metadata = generateStaticPageMetadata(
-  "Categories",
-  "Browse every category on Marketplace — handcrafted goods, artisan food, and more from independent sellers.",
+  SEO_PAGE_COPY.categories.title,
+  SEO_PAGE_COPY.categories.description,
   PATHS.categories,
 );
 

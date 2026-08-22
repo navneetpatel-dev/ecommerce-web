@@ -1,22 +1,23 @@
-import { UseFormReturn } from 'react-hook-form'
-import { FormFieldFrame, FormSection, FormStack, FormActions } from '@/shared/components/forms'
-import { FormError } from '@/shared/components/FormError'
-import { Button } from '@/shared/components/ui/button'
-import { PasswordInputContainer } from '@/shared/containers/PasswordInputContainer'
-import { LABELS } from '@/shared/constants/labels'
-
-interface ChangePasswordInput {
-  currentPassword: string
-  newPassword: string
-}
+import { UseFormReturn } from "react-hook-form";
+import {
+  FormFieldFrame,
+  FormSection,
+  FormStack,
+  FormActions,
+} from "@/shared/components/forms";
+import { FormError } from "@/shared/components/FormError";
+import { Button } from "@/shared/components/ui/button";
+import { PasswordInputContainer } from "@/shared/containers/PasswordInputContainer";
+import { LABELS } from "@/shared/constants/labels";
+import type { ChangePasswordInput } from "../schemas/auth.schema";
 
 interface ChangePasswordSectionProps {
-  form: UseFormReturn<ChangePasswordInput>
-  onSubmit: (data: ChangePasswordInput) => void
-  error: Error | null
-  isPending: boolean
-  isSuccess: boolean
-  onChangeAgain?: () => void
+  form: UseFormReturn<ChangePasswordInput>;
+  onSubmit: (data: ChangePasswordInput) => void;
+  error: Error | null;
+  isPending: boolean;
+  isSuccess: boolean;
+  onChangeAgain?: () => void;
 }
 
 export function ChangePasswordSection({
@@ -31,14 +32,20 @@ export function ChangePasswordSection({
     register,
     handleSubmit,
     formState: { errors },
-  } = form
+  } = form;
 
   return (
     <FormStack>
-      <FormSection title={LABELS.changePasswordTitle} hint={LABELS.changePasswordHint} columns={1}>
+      <FormSection
+        title={LABELS.changePasswordTitle}
+        hint={LABELS.changePasswordHint}
+        columns={1}
+      >
         {isSuccess ? (
           <div className="space-y-3">
-            <p className="text-[0.9375rem] text-success">{LABELS.changePasswordSuccess}</p>
+            <p className="text-[0.9375rem] text-success">
+              {LABELS.changePasswordSuccess}
+            </p>
             {onChangeAgain ? (
               <Button type="button" variant="outline" onClick={onChangeAgain}>
                 {LABELS.changePasswordAgain}
@@ -46,7 +53,10 @@ export function ChangePasswordSection({
             ) : null}
           </div>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:col-span-2">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4 sm:col-span-2"
+          >
             <FormFieldFrame
               label={LABELS.currentPassword}
               htmlFor="currentPassword"
@@ -57,7 +67,7 @@ export function ChangePasswordSection({
                 id="currentPassword"
                 autoComplete="current-password"
                 error={!!errors.currentPassword}
-                {...register('currentPassword')}
+                {...register("currentPassword")}
               />
             </FormFieldFrame>
             <FormFieldFrame
@@ -70,7 +80,7 @@ export function ChangePasswordSection({
                 id="newPassword"
                 autoComplete="new-password"
                 error={!!errors.newPassword}
-                {...register('newPassword')}
+                {...register("newPassword")}
               />
             </FormFieldFrame>
             <FormError error={error} fallback={LABELS.couldNotChangePassword} />
@@ -83,5 +93,5 @@ export function ChangePasswordSection({
         )}
       </FormSection>
     </FormStack>
-  )
+  );
 }

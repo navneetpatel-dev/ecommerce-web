@@ -10,7 +10,12 @@ import { cartLineQuantityMax } from "@/shared/constants/cart";
 
 export function useProductDetailData() {
   const params = useParams<{ slug: string }>();
-  const { data: product, isLoading } = useProduct(params?.slug || "");
+  const {
+    data: product,
+    isLoading,
+    isError,
+    refetch,
+  } = useProduct(params?.slug || "");
   const { data: categories = [] } = useCategories({
     enabled: Boolean(product),
   });
@@ -57,6 +62,8 @@ export function useProductDetailData() {
   return {
     product,
     isLoading,
+    isError,
+    onRetry: () => void refetch(),
     categories,
     settings,
     basePrice,

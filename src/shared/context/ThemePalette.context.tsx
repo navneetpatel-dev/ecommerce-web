@@ -11,8 +11,6 @@ import {
 } from "react";
 import type {
   ActiveThemeSelection,
-  ColorModeTokens,
-  ThemeConfig,
   ThemeMode,
 } from "@/shared/types/theme.types";
 import { STORAGE_KEYS } from "@/shared/constants/storage";
@@ -20,88 +18,10 @@ import {
   activeThemeConfig,
   getThemePalette,
 } from "@/shared/config/theme.config";
-
-/**
- * CSS custom property names for every color token, in application order.
- * Names mirror the stylesheet baseline in globals.css so inline overrides
- * (set here) win over the :root / [data-theme] defaults after hydration.
- */
-const COLOR_VAR_NAMES: readonly (keyof ColorModeTokens)[] = [
-  "brand",
-  "brandHover",
-  "brandSubtle",
-  "accent",
-  "accentSubtle",
-  "ink",
-  "inkMuted",
-  "inkFaint",
-  "paper",
-  "surface",
-  "surfaceRaised",
-  "line",
-  "lineStrong",
-  "danger",
-  "dangerSubtle",
-  "success",
-  "successSubtle",
-  "warning",
-  "warningSubtle",
-  "overlay",
-];
-
-function kebab(name: string): string {
-  return name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
-}
-
-function readStoredMode(): ThemeMode | null {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEYS.THEME_MODE);
-    return stored === "light" || stored === "dark" ? stored : null;
-  } catch {
-    // Storage unavailable (private mode / SSR guard) — fall back to system.
-    return null;
-  }
-}
-
-function readStoredPaletteId(): string | null {
-  try {
-    return localStorage.getItem(STORAGE_KEYS.THEME_PALETTE);
-  } catch {
-    // Storage unavailable — keep the default palette.
-    return null;
-  }
-}
-
-function resolveStoredSelection(): ActiveThemeSelection {
-  const paletteId = readStoredPaletteId();
-  const mode = readStoredMode();
-  return {
-    paletteId:
-      paletteId && getThemePalette(paletteId)
-        ? paletteId
-        : activeThemeConfig.paletteId,
-    mode:
-      mode ??
-      (typeof window !== "undefined" &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : activeThemeConfig.mode),
-  };
-}
-
-/** Writes the resolved token set onto <html> as inline CSS custom properties. */
-export function applyThemeToDocument(
-  palette: ThemeConfig,
-  mode: ThemeMode,
-): void {
-  if (typeof document === "undefined") return;
-  const root = document.documentElement;
-  const tokens = palette.modes[mode];
-  COLOR_VAR_NAMES.forEach((name) => {
-    root.style.setProperty(`--${kebab(name)}`, tokens[name]);
-  });
-  root.setAttribute("data-theme", mode);
-}
+import {
+  applyThemeToDocument,
+  resolveStoredSelection,
+} from "./themePaletteDom";
 
 interface ThemePaletteContextValue extends ActiveThemeSelection {
   /** True once client preferences have been synchronized after mount. */
@@ -117,6 +37,15 @@ interface ThemePaletteContextValue extends ActiveThemeSelection {
 const ThemePaletteContext = createContext<ThemePaletteContextValue | null>(
   null,
 );
+
+function persistPreferences(selection: ActiveThemeSelection) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.THEME_MODE, selection.mode);
+    localStorage.setItem(STORAGE_KEYS.THEME_PALETTE, selection.paletteId);
+  } catch {
+    // Persistence is best-effort; the runtime switch still applies.
+  }
+}
 
 /**
  * Runtime theme synchronization (Rule 29): persists preferences, resolves
@@ -145,7 +74,7 @@ export function ThemePaletteProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleSystemChange = (event: MediaQueryListEvent) => {
-      if (readStoredMode()) return;
+      if (localStorage.getItem(STORAGE_KEYS.THEME_MODE)) return;
       const nextMode: ThemeMode = event.matches ? "dark" : "light";
       setSelection((current) => {
         const palette = getThemePalette(current.paletteId);
@@ -160,35 +89,23 @@ export function ThemePaletteProvider({ children }: { children: ReactNode }) {
   const persistAndApply = useCallback((next: ActiveThemeSelection) => {
     const palette = getThemePalette(next.paletteId);
     if (!palette) return;
-    try {
-      localStorage.setItem(STORAGE_KEYS.THEME_MODE, next.mode);
-      localStorage.setItem(STORAGE_KEYS.THEME_PALETTE, next.paletteId);
-    } catch {
-      // Persistence is best-effort; the runtime switch still applies.
-    }
+    persistPreferences(next);
     applyThemeToDocument(palette, next.mode);
     setSelection(next);
   }, []);
 
   const setMode = useCallback(
-    (mode: ThemeMode) => {
-      if (!getThemePalette(selection.paletteId)) return;
-      persistAndApply({ ...selection, mode });
-    },
+    (mode: ThemeMode) => persistAndApply({ ...selection, mode }),
     [persistAndApply, selection],
   );
 
   const toggleMode = useCallback(() => {
     const nextMode: ThemeMode = selection.mode === "light" ? "dark" : "light";
-    if (!getThemePalette(selection.paletteId)) return;
     persistAndApply({ ...selection, mode: nextMode });
   }, [persistAndApply, selection]);
 
   const setPaletteId = useCallback(
-    (paletteId: string) => {
-      if (!getThemePalette(paletteId)) return;
-      persistAndApply({ ...selection, paletteId });
-    },
+    (paletteId: string) => persistAndApply({ ...selection, paletteId }),
     [persistAndApply, selection],
   );
 

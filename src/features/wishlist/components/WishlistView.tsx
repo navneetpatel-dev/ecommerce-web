@@ -40,16 +40,13 @@ interface WishlistViewProps {
   isEmpty: boolean;
   items: WishlistPageItem[];
   pagination: WishlistPagination;
+  removeError?: string | null;
   onRemoveItem: (productId: string) => void;
 }
 
-export function WishlistView({
-  isLoading,
-  isEmpty,
-  items,
-  pagination,
-  onRemoveItem,
-}: WishlistViewProps) {
+export function WishlistView(props: WishlistViewProps) {
+  const { isLoading, isEmpty, items, pagination, removeError, onRemoveItem } =
+    props;
   if (isLoading) {
     return (
       <div className="storefront-container py-8">
@@ -65,6 +62,11 @@ export function WishlistView({
       <h1 className="text-[1.75rem] font-semibold text-ink mb-6">
         {LABELS.myWishlist}
       </h1>
+      {removeError ? (
+        <p role="alert" className="mb-4 text-[0.875rem] text-danger">
+          {removeError}
+        </p>
+      ) : null}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
         {items.map(({ wishlistItem, product, isAvailable }) => {
           if (!isAvailable) {

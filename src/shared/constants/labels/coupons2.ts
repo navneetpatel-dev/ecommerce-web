@@ -1,0 +1,35 @@
+/** Copy subset (part 2); merged via labels.ts. */
+export const coupons2Labels = {
+  each: "each",
+  heroSlideImageUnavailable: "{headline} image not available",
+  completeYourOrderTitle: "Complete your order",
+  completeYourOrderMessage:
+    "Sign in to place your order and track it in your account.",
+  addShippingAddressTitle: "Add a shipping address",
+  addShippingAddressMessage: "Sign in to save addresses and continue checkout.",
+  signInRequired: "Sign in required",
+  backToOrders: "Back to orders",
+  orderDetails: "Order details",
+  placedOn: "Placed {date}",
+  sellerSingular: "seller",
+  sellerPlural: "sellers",
+  itemSingular: "item",
+  itemPlural: "items",
+  orderSummary: "Order summary",
+  whatYouPaid: "What you paid",
+  itemsLine: "Items",
+  discount: "Discount",
+  shippingTo: "Shipping to",
+  qtyLabel: "Qty {count}",
+  taxIgst: "IGST",
+  taxCgstSgst: "CGST + SGST",
+  enterBatchName: "Enter a batch name.",
+  enterBulkCount: "Enter how many codes to generate.",
+  bulkGenerateHint: "Complete the batch fields to generate codes.",
+  createVendorCoupon: "Create vendor coupon",
+  noVendorCoupons: "No vendor coupons",
+  couponVendorScopeLocked: "Scope is locked to your vendor catalog.",
+  usageUnlimited: "∞",
+
+  // Tables / pagination
+} as const;
