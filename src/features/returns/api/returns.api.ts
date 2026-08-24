@@ -23,6 +23,7 @@ export const returnsApi = {
     return unwrapPaginatedList(res)
   },
   create: (body: CreateReturnBody) => apiClient.post<ReturnRequest>(API.returns.create, body),
+  get: (id: string) => apiClient.get<ReturnRequest>(API.returns.detail(id)),
   transition: (id: string, status: ReturnRequest['status']) =>
     apiClient.patch<{ message: string }>(API.returns.transition(id), { status }),
   delete: (id: string) => apiClient.delete(API.returns.delete(id)),

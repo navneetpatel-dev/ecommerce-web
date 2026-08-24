@@ -1,10 +1,10 @@
 "use client";
 
-import { CheckCircle2, Mail, UserRound } from "lucide-react";
+import { Mail, UserRound } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { Badge } from "@/shared/components/ui/badge";
 import { LABELS } from "@/shared/constants/labels";
 import type { AccountProfile } from "../../../types";
+import { EmailVerificationStatus } from "../../EmailVerificationStatus.component";
 
 interface ProfileAsideProps {
   profile: Pick<AccountProfile, "name" | "phone" | "email" | "emailVerified">;
@@ -57,14 +57,7 @@ export function ProfileAside({ profile, isWorkspace }: ProfileAsideProps) {
               {profile.email}
             </p>
             <div className="mt-2">
-              {profile.emailVerified ? (
-                <Badge variant="success" className="gap-1">
-                  <CheckCircle2 size={12} />
-                  {LABELS.personalInfoVerified}
-                </Badge>
-              ) : (
-                <Badge variant="outline">{LABELS.personalInfoUnverified}</Badge>
-              )}
+              <EmailVerificationStatus emailVerified={profile.emailVerified} />
             </div>
           </div>
         </div>

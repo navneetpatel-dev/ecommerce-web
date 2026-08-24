@@ -28,6 +28,26 @@ export const reports3Labels = {
     "Control appearance on this device or end your session.",
   privacySectionDescCustomer: "Data and account deletion",
   privacySectionDescWorkspace: "Appearance, sign out, and account deletion",
+  noPayoutsYet: "No payouts yet",
+  editShippingZoneTitle: "Edit shipping zone",
+  editShippingZoneBody: "Update the zone name, states, and pincode prefixes.",
+  zoneStatesHint: "Comma-separated state names. Leave blank if unused.",
+  zonePincodePrefixesHint: "Comma-separated pincode prefixes. Leave blank if unused.",
+  runCouponAlerts: "Send coupon alerts",
+  couponAlertsSent: "Sent {count} coupon expiry and usage alerts.",
+  couponAlertsNoneSent: "No coupon alerts needed right now.",
+  couponAlertsFailed: "Could not send coupon alerts.",
+  yourOrders: "Your Orders",
+  ordersPageHint:
+    "Track each seller's package separately — multi-vendor orders ship on their own timelines.",
+  ordersColumnOrder: "Order",
+  ordersColumnPlaced: "Placed",
+  ordersColumnItems: "Items",
+  ordersColumnTotal: "Total",
+  ordersColumnStatus: "Status",
+  ordersColumnOpen: "Open",
+  orderHistoryStatement: "Order history statement",
+  loadOrderHistory: "Load statement",
 
   // Wallet
 } as const;

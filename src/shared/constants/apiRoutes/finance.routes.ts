@@ -12,6 +12,7 @@ export const commissionsRoutes = {
 export const payoutsRoutes = {
   list: "/api/payouts",
   process: "/api/payouts/process",
+  vendor: (vendorId: string) => `/api/payouts/vendor/${vendorId}`,
 } as const;
 
 export const couponsRoutes = {
@@ -26,6 +27,7 @@ export const couponsRoutes = {
   analytics: (id: string) => `/api/coupons/${id}/analytics`,
   bulk: "/api/coupons/bulk",
   batches: "/api/coupons/batches",
+  notifyAlerts: "/api/coupons/jobs/notify-alerts",
   vendor: {
     list: "/api/coupons/vendor",
     create: "/api/coupons/vendor",

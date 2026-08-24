@@ -1,5 +1,5 @@
 import { apiClient } from '@/shared/api/client'
-import { unwrapPaginatedList, type PaginatedList } from '@/shared/api/pagination'
+import { asClientPaginatedList, unwrapPaginatedList, type PaginatedList } from '@/shared/api/pagination'
 import { API } from '@/shared/constants/apiRoutes'
 import type { VendorSummary, CommissionLedgerEntry, PayoutEntry, ProductListItem } from '@/shared/api/types'
 import type { VendorEntityType } from '@/shared/constants/statuses'
@@ -41,8 +41,10 @@ export const vendorApi = {
     )
     return unwrapPaginatedList(res)
   },
-  payouts: async (page = 1): Promise<PaginatedList<PayoutEntry>> => {
-    const res = await apiClient.getWithResponse<PayoutEntry[]>(`${API.payouts.list}?page=${page}`)
-    return unwrapPaginatedList(res)
+  payouts: async (vendorId: string): Promise<PaginatedList<PayoutEntry>> => {
+    const res = await apiClient.getWithResponse<PayoutEntry[]>(
+      API.payouts.vendor(vendorId),
+    )
+    return asClientPaginatedList(Array.isArray(res.data) ? res.data : [])
   },
 }

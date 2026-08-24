@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import { vendorApi } from "./vendor.api";
 
 export type VendorProductFilters = { status?: string; search?: string };
@@ -17,7 +18,7 @@ export const vendorKeys = {
   },
   payouts: {
     all: ["vendor", "payouts"] as const,
-    page: (page: number) => [...vendorKeys.payouts.all, page] as const,
+    vendor: (vendorId: string) => [...vendorKeys.payouts.all, vendorId] as const,
   },
   suborders: {
     all: ["vendor", "suborders"] as const,
@@ -48,10 +49,12 @@ export function useVendorCommissions(page = 1) {
   });
 }
 
-export function useVendorPayouts(page = 1) {
+export function useVendorPayouts() {
+  const vendorId = useAuthStore((s) => s.currentUser?.vendorId);
   return useQuery({
-    queryKey: vendorKeys.payouts.page(page),
-    queryFn: () => vendorApi.payouts(page),
+    queryKey: vendorKeys.payouts.vendor(vendorId ?? ""),
+    queryFn: () => vendorApi.payouts(vendorId!),
+    enabled: Boolean(vendorId),
     placeholderData: (prev) => prev,
   });
 }

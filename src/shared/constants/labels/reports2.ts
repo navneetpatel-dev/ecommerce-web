@@ -145,6 +145,7 @@ export const reports2Labels = {
   personalInfoNoPhone: "No phone saved yet",
   personalInfoVerified: "Verified",
   personalInfoUnverified: "Unverified",
+  memberSince: "Member since {date}",
   personalInfoSaved: "Profile saved.",
   fullName: "Full name",
   phone: "Phone",

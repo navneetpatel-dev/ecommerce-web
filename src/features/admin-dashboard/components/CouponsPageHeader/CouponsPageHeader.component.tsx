@@ -12,12 +12,14 @@ import {
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
 import { DataTable } from "@/shared/components/DataTable.component";
-import { Plus } from "lucide-react";
+import { Plus, Bell } from "lucide-react";
 import { CreateCouponForm } from "../CreateCouponForm.component";
 import type { CouponFormInput } from "../../schemas/coupons.schema";
 import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
 import type { CouponBatch } from "@/shared/api/types";
 import { useCouponBatches } from "../../hooks/useCouponBatches.hook";
+import { useNotifyCouponAlerts } from "../../hooks/useNotifyCouponAlerts.hook";
 import { BulkGenerateDialog } from "./BulkGenerateDialog.component";
 import { CouponBatchDetailDialog } from "./CouponBatchDetailDialog.component";
 import { buildCouponBatchColumns } from "./couponBatchColumns";
@@ -36,6 +38,7 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
   const [bulkOpen, setBulkOpen] = useState(false);
   const [batchDetail, setBatchDetail] = useState<CouponBatch | null>(null);
   const batches = useCouponBatches();
+  const notifyAlerts = useNotifyCouponAlerts();
 
   const batchColumns = buildCouponBatchColumns();
 
@@ -61,6 +64,16 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
       <div className={styles.headerRow}>
         <h2 className={styles.heading}>{LABELS.coupons}</h2>
         <ButtonGroup>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            fullWidth="mobile"
+            loading={notifyAlerts.isPending}
+            onClick={() => notifyAlerts.mutate()}
+          >
+            <Bell aria-hidden /> {LABELS.runCouponAlerts}
+          </Button>
           <BulkGenerateDialog open={bulkOpen} setOpen={setBulkOpen} />
 
           <Dialog open={open} onOpenChange={setOpen}>
@@ -86,6 +99,21 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
           </Dialog>
         </ButtonGroup>
       </div>
+
+      {notifyAlerts.isSuccess ? (
+        <p className="text-body-sm text-ink-muted" aria-live="polite">
+          {(notifyAlerts.data?.notified ?? 0) > 0
+            ? formatLabel(LABELS.couponAlertsSent, {
+                count: String(notifyAlerts.data?.notified ?? 0),
+              })
+            : LABELS.couponAlertsNoneSent}
+        </p>
+      ) : null}
+      {notifyAlerts.isError ? (
+        <p className="text-body-sm text-danger" role="alert">
+          {LABELS.couponAlertsFailed}
+        </p>
+      ) : null}
 
       <section className={styles.batchesSection}>
         <h3 className={styles.batchesHeading}>{LABELS.couponBatches}</h3>

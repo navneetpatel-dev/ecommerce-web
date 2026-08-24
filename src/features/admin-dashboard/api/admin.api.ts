@@ -134,5 +134,7 @@ export const adminApi = {
   bulkGenerateCoupons: (body: unknown) =>
     apiClient.post<BulkGenerateResult>(API.coupons.bulk, body),
   couponBatches: () => apiClient.get<CouponBatch[]>(API.coupons.batches),
+  notifyCouponAlerts: () =>
+    apiClient.post<{ notified: number }>(API.coupons.notifyAlerts),
   analytics: () => apiClient.get<AdminAnalytics>(API.admin.analytics),
 };

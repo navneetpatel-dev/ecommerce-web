@@ -7,6 +7,8 @@ export const authRoutes = {
   logout: "/api/auth/logout",
   forgotPassword: "/api/auth/forgot-password",
   resetPassword: "/api/auth/reset-password",
+  verifyEmail: "/api/auth/verify-email",
+  resendVerification: "/api/auth/resend-verification",
   changePassword: "/api/auth/change-password",
   sessions: "/api/auth/sessions",
   session: (family: string) => `/api/auth/sessions/${family}`,

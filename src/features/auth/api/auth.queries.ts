@@ -134,6 +134,30 @@ export function useResetPassword() {
   });
 }
 
+export function useVerifyEmail() {
+  return useMutation({
+    mutationFn: (token: string) => authApi.verifyEmail(token),
+    onSuccess: async () => {
+      const token = useAuthStore.getState().accessToken;
+      const currentUser = useAuthStore.getState().currentUser;
+      if (!token || !currentUser) return;
+      try {
+        const user = await authApi.me();
+        useAuthStore.getState().setSession(token, user);
+        persistSession(token, user);
+      } catch {
+        // Non-fatal: next authenticated load still refreshes emailVerified.
+      }
+    },
+  });
+}
+
+export function useResendVerification() {
+  return useMutation({
+    mutationFn: () => authApi.resendVerification(),
+  });
+}
+
 export function useChangePassword() {
   return useMutation({
     mutationFn: (input: { currentPassword: string; newPassword: string }) =>

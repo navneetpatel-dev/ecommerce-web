@@ -6,6 +6,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { adminShippingApi } from "@/features/admin-dashboard/api/shipping.api";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
+import { AdminEditShippingZoneAction } from "../components/AdminEditShippingZoneAction.component";
 import { adminRowLabel } from "../utils/adminRowLabel";
 import type { AdminDataRow } from "./useAdminDataList.hook";
 import type { AdminListPageModel } from "../types/adminListPage.types";
@@ -49,17 +50,20 @@ export function useAdminShippingPage(): AdminShippingPageModel {
     (row: AdminDataRow, reload: () => void): ReactNode => {
       const label = adminRowLabel(row);
       return (
-        <AdminConfirmAction
-          label={LABELS.delete}
-          dialogVariant="danger"
-          title={LABELS.confirmDeleteShippingTitle}
-          description={formatLabel(LABELS.confirmDeleteShippingBody, {
-            name: label,
-          })}
-          onConfirm={() =>
-            adminShippingApi.deleteZone(String(row.id)).then(reload)
-          }
-        />
+        <>
+          <AdminEditShippingZoneAction row={row} onSaved={reload} />
+          <AdminConfirmAction
+            label={LABELS.delete}
+            dialogVariant="danger"
+            title={LABELS.confirmDeleteShippingTitle}
+            description={formatLabel(LABELS.confirmDeleteShippingBody, {
+              name: label,
+            })}
+            onConfirm={() =>
+              adminShippingApi.deleteZone(String(row.id)).then(reload)
+            }
+          />
+        </>
       );
     },
     [],

@@ -1,19 +1,20 @@
 "use client";
 
 import type { RefObject } from "react";
-import { Camera, CheckCircle2 } from "lucide-react";
+import { Camera } from "lucide-react";
 import { motion } from "motion/react";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/shared/components/ui/avatar";
-import { Badge } from "@/shared/components/ui/badge";
 import { FormError } from "@/shared/components/FormError.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
 import type { AccountProfile } from "../../../types";
+import { EmailVerificationStatus } from "../../EmailVerificationStatus.component";
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -87,7 +88,7 @@ export function ProfileCard({
         </div>
 
         <div className="min-w-0">
-          <TextEyebrow brand>Profile</TextEyebrow>
+          <TextEyebrow brand>{LABELS.profile}</TextEyebrow>
           <h2
             className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
             style={{ fontSize: "var(--text-display-sm)" }}
@@ -96,18 +97,11 @@ export function ProfileCard({
           </h2>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <p className="text-body text-ink-muted">{profile.email}</p>
-            {profile.emailVerified ? (
-              <Badge variant="success" className="gap-1">
-                <CheckCircle2 size={12} />
-                Verified
-              </Badge>
-            ) : (
-              <Badge variant="outline">Unverified</Badge>
-            )}
+            <EmailVerificationStatus emailVerified={profile.emailVerified} />
           </div>
           {memberSince ? (
             <p className="mt-2 text-body-sm text-ink-faint">
-              Member since {memberSince}
+              {formatLabel(LABELS.memberSince, { date: memberSince })}
             </p>
           ) : null}
           <p className="mt-3 text-body-sm text-ink-muted">

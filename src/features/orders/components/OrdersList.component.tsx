@@ -18,6 +18,7 @@ import {
   shortOrderId,
 } from "../utils/format";
 import { reportsEngineApi } from "@/features/reports";
+import { CustomerOrderHistoryPanel } from "@/features/reports";
 
 interface OrdersListProps {
   orders: Order[];
@@ -58,16 +59,15 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
           className="flex flex-wrap items-end justify-between gap-4"
         >
           <div>
-            <TextEyebrow brand>Account</TextEyebrow>
+            <TextEyebrow brand>{LABELS.account}</TextEyebrow>
             <h1
               className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
               style={{ fontSize: "var(--text-display-sm)" }}
             >
-              Your Orders
+              {LABELS.yourOrders}
             </h1>
             <p className="mt-2 max-w-xl text-body text-ink-muted">
-              Track each seller&apos;s package separately — multi-vendor orders
-              ship on their own timelines.
+              {LABELS.ordersPageHint}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -87,21 +87,21 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
         {/* Column labels — desktop ledger header */}
         <div className="mt-8 hidden border-b border-line pb-2 md:grid md:grid-cols-[7rem_8rem_minmax(0,1fr)_7rem_minmax(9rem,auto)_1.5rem] md:gap-4">
           <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            Order
+            {LABELS.ordersColumnOrder}
           </span>
           <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            Placed
+            {LABELS.ordersColumnPlaced}
           </span>
           <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            Items
+            {LABELS.ordersColumnItems}
           </span>
           <span className="text-right text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            Total
+            {LABELS.ordersColumnTotal}
           </span>
           <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            Status
+            {LABELS.ordersColumnStatus}
           </span>
-          <span className="sr-only">Open</span>
+          <span className="sr-only">{LABELS.ordersColumnOpen}</span>
         </div>
 
         <ul className="divide-y divide-line border-b border-line">
@@ -139,7 +139,10 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
                     {formatOrderDate(order.createdAt)}
                     <span className="md:hidden">
                       {" · "}
-                      {vendorCount} {vendorCount === 1 ? "seller" : "sellers"}
+                      {vendorCount}{" "}
+                      {vendorCount === 1
+                        ? LABELS.sellerSingular
+                        : LABELS.sellerPlural}
                     </span>
                   </div>
 
@@ -148,9 +151,13 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
                       {orderItemSummary(order)}
                     </p>
                     <p className="mt-0.5 hidden text-[0.75rem] text-ink-faint md:block">
-                      {vendorCount} {vendorCount === 1 ? "seller" : "sellers"}
+                      {vendorCount}{" "}
+                      {vendorCount === 1
+                        ? LABELS.sellerSingular
+                        : LABELS.sellerPlural}
                       {" · "}
-                      {itemCount} {itemCount === 1 ? "item" : "items"}
+                      {itemCount}{" "}
+                      {itemCount === 1 ? LABELS.itemSingular : LABELS.itemPlural}
                     </p>
                   </div>
 
@@ -184,6 +191,8 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
             />
           </div>
         )}
+
+        <CustomerOrderHistoryPanel />
       </div>
     </div>
   );

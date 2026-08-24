@@ -112,6 +112,12 @@ export const reportsEngineApi = {
       ),
       "order-history.xlsx",
     ),
+  customerOrderHistory: (filters: ReportFiltersInput) =>
+    apiClient.get<ReportRunResult>(
+      API.reports.customerOrderHistory(
+        buildQuery({ ...filters, format: "json" }),
+      ),
+    ),
   customerOrderInvoice: (orderId: string) =>
     downloadBlob(
       API.reports.customerOrderInvoice(orderId),

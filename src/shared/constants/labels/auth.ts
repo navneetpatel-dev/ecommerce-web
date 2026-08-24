@@ -48,6 +48,17 @@ export const authLabels = {
   currentPassword: "Current password",
   changePassword: "Change password",
   couldNotChangePassword: "Could not change password.",
+  verifyEmailTitle: "Verify your email",
+  verifyEmailHint: "Confirm the address we sent this link to so you can keep using your account.",
+  verifyEmailSuccess: "Your email is verified. You can continue shopping.",
+  verifyEmailFailed: "This verification link is invalid or has expired.",
+  verifyEmailMissingToken: "This link is missing a verification token. Use the latest email we sent.",
+  verifyingEmail: "Verifying your email…",
+  continueToAccount: "Continue to account",
+  resendVerificationEmail: "Resend verification email",
+  verificationEmailSent: "A new verification email is on its way.",
+  emailAlreadyVerified: "This email is already verified.",
+  couldNotSendVerificationEmail: "Could not send a verification email. Try again shortly.",
 
   // Footer sections
 } as const;

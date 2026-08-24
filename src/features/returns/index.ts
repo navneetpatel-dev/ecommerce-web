@@ -6,5 +6,6 @@
 // Its query hooks and API client are also consumed by the orders feature to
 // let customers start a return from an order.
 export { MyReturnsPage } from "./pages/MyReturnsPage.page";
+export { MyReturnDetailPage } from "./pages/MyReturnDetailPage.page";
 export { returnsApi } from "./api/returns.api";
-export { useCreateReturn } from "./api/returns.queries";
+export { useCreateReturn, useReturn } from "./api/returns.queries";

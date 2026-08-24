@@ -5,6 +5,8 @@ export {
   useLogout,
   useForgotPassword,
   useResetPassword,
+  useVerifyEmail,
+  useResendVerification,
   useChangePassword,
 } from "./api/auth.queries";
 export { authApi } from "./api/auth.api";
@@ -15,6 +17,7 @@ export { useAuthBootstrap } from "./hooks/useAuthBootstrap.hook";
 export { ForgotPasswordPage } from "./pages/ForgotPasswordPage.page";
 export { OtpPage } from "./pages/OtpPage.page";
 export { ResetPasswordPage } from "./pages/ResetPasswordPage.page";
+export { VerifyEmailPage } from "./pages/VerifyEmailPage.page";
 export { AuthPageSkeleton } from "./components/AuthPageSkeleton.component";
 export { ChangePasswordSection } from "./components/ChangePasswordSection.component";
 export { useProfilePage } from "./hooks/useProfilePage.hook";

@@ -4,6 +4,7 @@ import { returnsApi, type CreateReturnBody } from "./returns.api";
 
 export const returnsKeys = {
   mine: ["returns", "mine"] as const,
+  detail: (id: string) => ["returns", "detail", id] as const,
 };
 
 export function useMyReturns() {
@@ -12,6 +13,15 @@ export function useMyReturns() {
     queryKey: returnsKeys.mine,
     queryFn: () => returnsApi.list(),
     enabled: Boolean(accessToken),
+  });
+}
+
+export function useReturn(id: string) {
+  const accessToken = useAuthStore((s) => s.accessToken);
+  return useQuery({
+    queryKey: returnsKeys.detail(id),
+    queryFn: () => returnsApi.get(id),
+    enabled: Boolean(accessToken && id),
   });
 }
 

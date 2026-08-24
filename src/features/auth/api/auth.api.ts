@@ -18,6 +18,10 @@ export const authApi = {
     apiClient.post<{ message: string }>(API.auth.forgotPassword, { email }),
   resetPassword: (token: string, newPassword: string) =>
     apiClient.post<{ message: string }>(API.auth.resetPassword, { token, newPassword }),
+  verifyEmail: (token: string) =>
+    apiClient.post<{ verified: boolean }>(API.auth.verifyEmail, { token }),
+  resendVerification: () =>
+    apiClient.post<{ sent: boolean; alreadyVerified: boolean }>(API.auth.resendVerification),
   changePassword: (input: ChangePasswordInput) =>
     apiClient.post<{ message: string }>(API.auth.changePassword, input),
   listSessions: () => apiClient.get<AuthSession[]>(API.auth.sessions),

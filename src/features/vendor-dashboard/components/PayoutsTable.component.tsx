@@ -9,79 +9,84 @@ import {
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
 import { TABLE_DATA_CELL_CLASS } from "@/shared/constants/table";
+import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
-
-interface Payout {
-  id: string;
-  periodStart: string;
-  periodEnd: string;
-  amount: number;
-  status: string;
-}
+import { formatInr } from "@/shared/utils/orderFormat";
+import type { PayoutEntry } from "@/shared/api/types";
 
 interface PayoutsTableProps {
-  payouts?: { items?: Payout[] };
+  payouts?: { items?: PayoutEntry[] };
 }
 
 export function PayoutsTable({ payouts }: PayoutsTableProps) {
+  const items = payouts?.items ?? [];
+
   return (
     <div>
-      <h2 className="mb-4 text-[1.375rem] font-semibold text-ink">Payouts</h2>
+      <h2 className="mb-4 text-[1.375rem] font-semibold text-ink">
+        {LABELS.payouts}
+      </h2>
 
-      {/* Mobile: stacked cards */}
       <ul className="space-y-3 lg:hidden">
-        {payouts?.items?.length === 0 ? (
+        {items.length === 0 ? (
           <li className="rounded-md border border-line bg-surface px-4 py-10 text-center text-ink-muted">
-            No payouts yet
+            {LABELS.noPayoutsYet}
           </li>
         ) : (
-          payouts?.items?.map((p) => (
+          items.map((payout) => (
             <li
-              key={p.id}
+              key={payout.id}
               className="rounded-md border border-line bg-surface p-4 shadow-card-hairline"
             >
               <div className="flex items-start justify-between gap-3">
                 <p className="text-[0.875rem] text-ink">
-                  {new Date(p.periodStart).toLocaleDateString()} –{" "}
-                  {new Date(p.periodEnd).toLocaleDateString()}
+                  {new Date(payout.periodStart).toLocaleDateString()} –{" "}
+                  {new Date(payout.periodEnd).toLocaleDateString()}
                 </p>
-                <StatusBadge status={p.status} />
+                <StatusBadge status={payout.status} />
               </div>
-              <p className="mt-2 font-mono text-[1rem] text-ink">₹{p.amount}</p>
+              <p className="mt-2 font-mono text-[1rem] text-ink">
+                {formatInr(payout.amount)}
+              </p>
             </li>
           ))
         )}
       </ul>
 
-      {/* lg+: scrollable table */}
       <TableScrollShell desktopOnly>
         <Table scrollContainer={false}>
           <TableHeader>
             <TableRow>
-              <TableHead className={TABLE_DATA_CELL_CLASS}>Period</TableHead>
-              <TableHead className={TABLE_DATA_CELL_CLASS}>Amount</TableHead>
-              <TableHead className={TABLE_DATA_CELL_CLASS}>Status</TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>
+                {LABELS.period}
+              </TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>
+                {LABELS.amount}
+              </TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>
+                {LABELS.status}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {payouts?.items?.length === 0 ? (
+            {items.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={3} className="text-center text-ink-muted">
-                  No payouts yet
+                  {LABELS.noPayoutsYet}
                 </TableCell>
               </TableRow>
             ) : (
-              payouts?.items?.map((p) => (
-                <TableRow key={p.id}>
+              items.map((payout) => (
+                <TableRow key={payout.id}>
                   <TableCell className={cn(TABLE_DATA_CELL_CLASS, "text-body")}>
-                    {new Date(p.periodStart).toLocaleDateString()} –{" "}
-                    {new Date(p.periodEnd).toLocaleDateString()}
+                    {new Date(payout.periodStart).toLocaleDateString()} –{" "}
+                    {new Date(payout.periodEnd).toLocaleDateString()}
                   </TableCell>
                   <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-                    ₹{p.amount}
+                    {formatInr(payout.amount)}
                   </TableCell>
                   <TableCell className={TABLE_DATA_CELL_CLASS}>
-                    <StatusBadge status={p.status} />
+                    <StatusBadge status={payout.status} />
                   </TableCell>
                 </TableRow>
               ))

@@ -9,3 +9,4 @@
 export { AdminReportsPage } from "./pages/AdminReportsPage.page";
 export { VendorReportsPage } from "./pages/VendorReportsPage.page";
 export { reportsEngineApi } from "./api/reportsEngine.api";
+export { CustomerOrderHistoryPanel } from "./components/CustomerOrderHistoryPanel.component";
