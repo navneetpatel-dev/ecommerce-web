@@ -1,5 +1,7 @@
 import { getApiSessionAdapter } from "@/shared/api/sessionAdapter";
+import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
 import { BEARER_PREFIX } from "@/shared/constants/http";
+import { API_TIMEOUT_MS } from "@/shared/constants/timing";
 import { LABELS } from "@/shared/constants/labels";
 
 /**
@@ -12,9 +14,9 @@ export async function downloadReport(
   filename: string,
 ): Promise<void> {
   const token = getApiSessionAdapter().getAccessToken();
-  const base = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const res = await fetch(`${base}${path}`, {
+  const res = await fetch(`${CLIENT_API_BASE_URL}${path}`, {
     credentials: "include",
+    signal: AbortSignal.timeout(API_TIMEOUT_MS),
     headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
   });
   if (!res.ok) throw new Error(LABELS.couldNotLoadReport);

@@ -8,8 +8,8 @@ export {
 export { cartKeys } from "./api/cart.queries";
 export { useCartDrawerStore } from "./store/cart.store";
 export { groupItemsByVendor, calcCartTotal } from "./utils/cart.utils";
-export { CartDrawer } from "./components/CartDrawer";
-export { CartDrawerContainer } from "./containers/CartDrawerContainer";
-export { CartPage } from "./pages/CartPage";
+export { CartDrawer } from "./components/CartDrawer.component";
+export { CartDrawerContainer } from "./containers/CartDrawerContainer.container";
+export { CartPage } from "./pages/CartPage.page";
 export { cartApi } from "./api/cart.api";
 export { clearClientGuestSessionCookie } from "./utils/guest-session";

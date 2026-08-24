@@ -2,15 +2,15 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { usePermissions } from "@/shared/hooks/usePermissions";
-import { useRouteQueryDialog } from "@/shared/hooks/useRouteQueryDialog";
+import { usePermissions } from "@/shared/hooks/usePermissions.hook";
+import { useRouteQueryDialog } from "@/shared/hooks/useRouteQueryDialog.hook";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { QUERY_PARAMS } from "@/shared/constants/queryParams";
 import type { ProductListingFormValues } from "@/features/products";
-import { VendorProductImagesDialog } from "../../components/VendorProductImagesDialog";
-import { useVendorProductsTable } from "../useVendorProductsTable";
-import { useVendorProductFormState } from "./useVendorProductFormState";
-import { useVendorProductsListView } from "./useVendorProductsListView";
+import { VendorProductImagesDialog } from "../../components/VendorProductImagesDialog.component";
+import { useVendorProductsTable } from "../useVendorProductsTable.hook";
+import { useVendorProductFormState } from "./useVendorProductFormState.hook";
+import { useVendorProductsListView } from "./useVendorProductsListView.hook";
 
 export function useVendorProductsPage() {
   const router = useRouter();

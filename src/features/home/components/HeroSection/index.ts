@@ -1,2 +1,2 @@
-export { HeroSection } from "./HeroSection";
+export { HeroSection } from "./HeroSection.component";
 export type { HeroSlide } from "./types";

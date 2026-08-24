@@ -9,15 +9,15 @@ export {
 } from "./api/auth.queries";
 export { authApi } from "./api/auth.api";
 export { useAuthStore, defaultRouteForRole } from "@/shared/stores/auth.store";
-export { LoginForm } from "./pages/LoginForm";
-export { RegisterForm } from "./pages/RegisterForm";
-export { useAuthBootstrap } from "./hooks/useAuthBootstrap";
-export { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
-export { OtpPage } from "./pages/OtpPage";
-export { ResetPasswordPage } from "./pages/ResetPasswordPage";
-export { AuthPageSkeleton } from "./components/AuthPageSkeleton";
-export { ChangePasswordSection } from "./components/ChangePasswordSection";
-export { useProfilePage } from "./hooks/useProfilePage";
+export { LoginForm } from "./pages/LoginForm.page";
+export { RegisterForm } from "./pages/RegisterForm.page";
+export { useAuthBootstrap } from "./hooks/useAuthBootstrap.hook";
+export { ForgotPasswordPage } from "./pages/ForgotPasswordPage.page";
+export { OtpPage } from "./pages/OtpPage.page";
+export { ResetPasswordPage } from "./pages/ResetPasswordPage.page";
+export { AuthPageSkeleton } from "./components/AuthPageSkeleton.component";
+export { ChangePasswordSection } from "./components/ChangePasswordSection.component";
+export { useProfilePage } from "./hooks/useProfilePage.hook";
 export {
   useSessions,
   useRevokeSession,

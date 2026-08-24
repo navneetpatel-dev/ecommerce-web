@@ -38,3 +38,14 @@ export function registerApiSessionAdapter(next: ApiSessionAdapter): void {
 export function getApiSessionAdapter(): ApiSessionAdapter {
   return adapter;
 }
+
+/**
+ * Removes persisted credentials straight from storage without going through
+ * the registered adapter. Lets store/session owners clear credentials without
+ * an adapter→store→adapter recursion (Rule 21: one storage owner per concern).
+ */
+export function clearPersistedCredentials(): void {
+  if (typeof window === "undefined") return;
+  window.localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+  window.localStorage.removeItem(STORAGE_KEYS.SESSION);
+}

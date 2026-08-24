@@ -5,6 +5,6 @@
 // customer-facing MyReturnsPage rendered by the storefront returns route.
 // Its query hooks and API client are also consumed by the orders feature to
 // let customers start a return from an order.
-export { MyReturnsPage } from "./pages/MyReturnsPage";
+export { MyReturnsPage } from "./pages/MyReturnsPage.page";
 export { returnsApi } from "./api/returns.api";
 export { useCreateReturn } from "./api/returns.queries";

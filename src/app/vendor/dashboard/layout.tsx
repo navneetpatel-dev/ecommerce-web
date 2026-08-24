@@ -1,6 +1,6 @@
 "use client";
 
-import { VendorLayout } from "@/shared/components/layout/VendorLayout";
+import { VendorLayout } from "@/shared/components/layout/VendorLayout.component";
 import { HeaderContainer } from "@/features/storefront";
 
 export default function VendorDashboardLayout({

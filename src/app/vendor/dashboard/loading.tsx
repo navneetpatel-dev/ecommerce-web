@@ -1,5 +1,5 @@
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { SkeletonRows } from '@/shared/components/Skeletons'
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { SkeletonRows } from "@/shared/components/Skeletons.component";
 
 /** Content-only — vendor layout already keeps header + sidebar. */
 export default function VendorDashboardLoading() {
@@ -16,5 +16,5 @@ export default function VendorDashboardLoading() {
       </div>
       <SkeletonRows count={5} height="h-12 w-full" />
     </div>
-  )
+  );
 }

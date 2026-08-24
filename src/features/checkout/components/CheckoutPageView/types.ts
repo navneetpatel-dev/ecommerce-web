@@ -1,6 +1,6 @@
 import type { Address, CartItem, CheckoutQuote } from "@/shared/api/types";
 import type { ShippingMethod } from "@/shared/constants/statuses";
-import type { PaymentNotice } from "../../hooks/usePlaceOrder";
+import type { PaymentNotice } from "../../hooks/usePlaceOrder.hook";
 
 export interface CheckoutPageViewProps {
   isLoading?: boolean;

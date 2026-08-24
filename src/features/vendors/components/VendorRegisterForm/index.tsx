@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormActions, FormStack } from "@/shared/components/forms";
 import {
   Card,
@@ -23,9 +23,9 @@ import { categoriesApi } from "@/features/categories";
 import { vendorsApi } from "../../api/vendors.api";
 import type { VendorRegisterInput } from "../../schemas/vendor.schema";
 import type { Category } from "@/shared/api/types";
-import { VendorRegisterBasicsSection } from "./BasicsSection";
-import { VendorRegisterCategoriesSection } from "./CategoriesSection";
-import { VendorRegisterIdentitySection } from "./IdentitySection";
+import { VendorRegisterBasicsSection } from "./BasicsSection.component";
+import { VendorRegisterCategoriesSection } from "./CategoriesSection.component";
+import { VendorRegisterIdentitySection } from "./IdentitySection.component";
 
 interface VendorRegisterFormProps {
   form: UseFormReturn<VendorRegisterInput>;
@@ -125,7 +125,7 @@ export function VendorRegisterForm({
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormStack>
               {auxError ? (
-                <p role="alert" className="text-[0.8125rem] text-danger">
+                <p role="alert" className="text-body-sm text-danger">
                   {auxError}
                 </p>
               ) : null}
@@ -151,7 +151,7 @@ export function VendorRegisterForm({
               />
 
               {error ? (
-                <p className="text-[0.9375rem] text-danger">
+                <p className="text-body text-danger">
                   {LABELS.registrationFailed}
                 </p>
               ) : null}

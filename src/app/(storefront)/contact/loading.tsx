@@ -1,5 +1,5 @@
-import { ContentPageSkeleton } from '@/shared/components/Skeletons'
+import { ContentPageSkeleton } from "@/shared/components/Skeletons.component";
 
 export default function ContactLoading() {
-  return <ContentPageSkeleton />
+  return <ContentPageSkeleton />;
 }

@@ -1,2 +1,2 @@
-export { CartPageView } from "./CartPageView";
-export type { CartPageViewProps } from "./CartPageView";
+export { CartPageView } from "./CartPageView.component";
+export type { CartPageViewProps } from "./CartPageView.component";

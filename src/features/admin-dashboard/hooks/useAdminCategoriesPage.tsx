@@ -8,12 +8,12 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { categoriesApi } from "@/features/categories";
-import { AdminConfirmAction } from "../components/AdminConfirmAction";
-import { AdminEditCategoryAction } from "../components/AdminEditCategoryAction";
-import { AdminCategoryAttributesAction } from "../components/AdminCategoryAttributesAction";
-import { AdminArchiveCategoryAction } from "../components/AdminArchiveCategoryAction";
-import { AdminReassignProductsAction } from "../components/AdminReassignProductsAction";
-import { useAdminDataList } from "./useAdminDataList";
+import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
+import { AdminEditCategoryAction } from "../components/AdminEditCategoryAction.component";
+import { AdminCategoryAttributesAction } from "../components/AdminCategoryAttributesAction.component";
+import { AdminArchiveCategoryAction } from "../components/AdminArchiveCategoryAction.component";
+import { AdminReassignProductsAction } from "../components/AdminReassignProductsAction.component";
+import { useAdminDataList } from "./useAdminDataList.hook";
 import {
   CATEGORY_FORM_DEFAULTS,
   CategoryFormSchema,

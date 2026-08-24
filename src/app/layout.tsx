@@ -5,7 +5,7 @@ import { STORAGE_KEYS } from "@/shared/constants/storage";
 import { generateRootMetadata, ROOT_VIEWPORT } from "@/shared/seo/rootMetadata";
 import "@/shared/styles/globals.css";
 import { Providers } from "./providers";
-import { WebVitalsReporter } from "@/shared/components/WebVitalsReporter";
+import { WebVitalsReporter } from "@/shared/components/WebVitalsReporter.component";
 
 const inter = Inter({
   subsets: ["latin"],

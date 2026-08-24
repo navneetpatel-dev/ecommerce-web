@@ -6,7 +6,7 @@ import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { Category } from "@/shared/api/types";
-import { CategoryMegaMenuTile } from "./CategoryMegaMenuTile";
+import { CategoryMegaMenuTile } from "./CategoryMegaMenuTile.component";
 
 interface CategoriesMegaMenuProps {
   categories: Category[];
@@ -46,7 +46,7 @@ export function CategoriesMegaMenu({
         <Link
           href={PATHS.categories}
           onClick={onClose}
-          className="inline-flex items-center gap-1 rounded-full border border-line bg-surface px-3 py-1.5 text-[0.8125rem] font-medium text-brand transition-colors hover:border-brand/30 hover:bg-brand-subtle"
+          className="inline-flex items-center gap-1 rounded-full border border-line bg-surface px-3 py-1.5 text-body-sm font-medium text-brand transition-colors hover:border-brand/30 hover:bg-brand-subtle"
         >
           {LABELS.allCategories} <ArrowRight className="h-3 w-3" />
         </Link>
@@ -55,7 +55,7 @@ export function CategoriesMegaMenu({
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_240px]">
         <div className="max-h-[min(62vh,520px)] overflow-y-auto overscroll-contain p-3 sm:p-4">
           {count === 0 ? (
-            <p className="px-2 py-10 text-center text-[0.9375rem] text-ink-muted">
+            <p className="px-2 py-10 text-center text-body text-ink-muted">
               {LABELS.categoryPlpEmpty}
             </p>
           ) : (
@@ -81,14 +81,14 @@ export function CategoriesMegaMenu({
               <p className="mt-3 font-display text-[1.125rem] leading-snug text-ink">
                 {LABELS.featured}
               </p>
-              <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-ink-muted">
+              <p className="mt-1.5 text-body-sm leading-relaxed text-ink-muted">
                 {LABELS.categoryExploreCollection}
               </p>
             </div>
             <Link
               href={PATHS.productsNewest}
               onClick={onClose}
-              className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-brand px-4 py-2.5 text-[0.8125rem] font-semibold text-paper transition-colors hover:bg-brand-hover sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-brand px-4 py-2.5 text-body-sm font-semibold text-paper transition-colors hover:bg-brand-hover sm:w-auto"
             >
               {LABELS.shopNewArrivals}
               <ArrowRight className="h-3.5 w-3.5" />

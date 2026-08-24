@@ -1,1 +1,1 @@
-export { PersonalInfoSection } from "./PersonalInfoSection";
+export { PersonalInfoSection } from "./PersonalInfoSection.component";

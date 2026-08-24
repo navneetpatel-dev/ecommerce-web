@@ -1,4 +1,4 @@
-export { InfiniteMultiSelect } from "./InfiniteMultiSelect";
+export { InfiniteMultiSelect } from "./InfiniteMultiSelect.component";
 export type {
   InfiniteMultiSelectProps,
   InfiniteMultiSelectOption,

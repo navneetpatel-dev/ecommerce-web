@@ -1,20 +1,23 @@
-'use client'
+"use client";
 
-import { useMemo, useState } from 'react'
-import { Search } from 'lucide-react'
-import { motion } from 'motion/react'
-import { TextEyebrow } from '@/shared/components/TextEyebrow'
-import { Input } from '@/shared/components/ui/input'
-import { LABELS } from '@/shared/constants/labels'
-import { searchHelp } from '../../data/help-content'
-import { BrowseTopicsSection } from './BrowseTopicsSection'
-import { ContactSection } from './ContactSection'
-import { QuickLinksSection } from './QuickLinksSection'
-import { SearchResultsSection } from './SearchResultsSection'
+import { useMemo, useState } from "react";
+import { Search } from "lucide-react";
+import { motion } from "motion/react";
+import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { Input } from "@/shared/components/ui/input";
+import { LABELS } from "@/shared/constants/labels";
+import { searchHelp } from "../../constants/helpContent";
+import { BrowseTopicsSection } from "./BrowseTopicsSection.component";
+import { ContactSection } from "./ContactSection.component";
+import { QuickLinksSection } from "./QuickLinksSection.component";
+import { SearchResultsSection } from "./SearchResultsSection.component";
 
 export function HelpHomeView() {
-  const [query, setQuery] = useState('')
-  const results = useMemo(() => (query.trim().length >= 2 ? searchHelp(query) : []), [query])
+  const [query, setQuery] = useState("");
+  const results = useMemo(
+    () => (query.trim().length >= 2 ? searchHelp(query) : []),
+    [query],
+  );
 
   return (
     <div className="relative">
@@ -33,11 +36,11 @@ export function HelpHomeView() {
           <TextEyebrow brand>{LABELS.helpSupportEyebrow}</TextEyebrow>
           <h1
             className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
-            style={{ fontSize: 'var(--text-display-sm)' }}
+            style={{ fontSize: "var(--text-display-sm)" }}
           >
             {LABELS.helpCenter}
           </h1>
-          <p className="mt-2 text-[0.9375rem] text-ink-muted">
+          <p className="mt-2 text-body text-ink-muted">
             {LABELS.helpCenterIntro}
           </p>
         </motion.header>
@@ -69,5 +72,5 @@ export function HelpHomeView() {
         <ContactSection />
       </div>
     </div>
-  )
+  );
 }

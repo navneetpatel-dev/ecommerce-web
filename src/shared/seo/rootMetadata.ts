@@ -11,15 +11,13 @@ export const ROOT_VIEWPORT: Viewport = {
   ],
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || SITE.url;
-
 /**
  * Root application metadata (Rule 27): title template, Open Graph/Twitter,
  * robots and icons — all copy pulled from the centralized `SITE` constants.
  */
 export function generateRootMetadata(): Metadata {
   return {
-    metadataBase: new URL(siteUrl),
+    metadataBase: new URL(SITE.url),
     title: {
       template: `%s | ${SITE.name}`,
       default: SITE.name,
@@ -42,7 +40,7 @@ export function generateRootMetadata(): Metadata {
       type: "website",
       siteName: SITE.name,
       locale: SITE.locale,
-      url: siteUrl,
+      url: SITE.url,
       title: SITE.name,
       description: SITE.description,
       images: [{ url: SITE.ogImage, width: 1200, height: 630 }],

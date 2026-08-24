@@ -10,11 +10,11 @@ import { formatLabel } from "@/shared/utils/formatLabel";
 import { productsApi } from "@/features/products";
 import { adminApi } from "../api/admin.api";
 import { usePendingProducts } from "../api/admin.queries";
-import { usePermissions } from "@/shared/hooks/usePermissions";
-import { AdminConfirmAction } from "../components/AdminConfirmAction";
+import { usePermissions } from "@/shared/hooks/usePermissions.hook";
+import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import { adminRowLabel } from "../utils/adminRowLabel";
-import type { AdminDataRow } from "./useAdminDataList";
-import type { AdminListPageModel } from "./adminListPage.types";
+import type { AdminDataRow } from "./useAdminDataList.hook";
+import type { AdminListPageModel } from "../types/adminListPage.types";
 
 export type AdminProductsPageModel = AdminListPageModel & {
   approvePermission: PermissionKey;

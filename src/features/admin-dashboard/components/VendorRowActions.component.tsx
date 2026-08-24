@@ -1,0 +1,53 @@
+"use client";
+
+import type { ReactNode } from "react";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { AdminConfirmAction } from "./AdminConfirmAction.component";
+import { VendorKycDocumentsMenuAction } from "./VendorKycDocumentsMenuAction.component";
+import { adminApi } from "../api/admin.api";
+import { adminRowLabel } from "../utils/adminRowLabel";
+import type { AdminDataRow } from "../hooks/useAdminDataList.hook";
+
+interface VendorRowActionsProps {
+  row: AdminDataRow;
+  onReload: () => void;
+}
+
+/**
+ * Flat action slots for the all-vendors list.
+ * Return this Fragment directly from DataTable `actions` — do not wrap in another component.
+ */
+export function renderVendorRowActions({
+  row,
+  onReload,
+}: VendorRowActionsProps): ReactNode {
+  const name = adminRowLabel(row);
+  const vendorId = String(row.id);
+
+  return (
+    <>
+      <VendorKycDocumentsMenuAction vendorId={vendorId} vendorName={name} />
+      <AdminConfirmAction
+        label={LABELS.suspend}
+        dialogVariant="warning"
+        tone="neutral"
+        title={LABELS.confirmSuspendVendorTitle}
+        description={formatLabel(LABELS.confirmSuspendVendorBody, { name })}
+        requireReason
+        reasonHint={LABELS.enterSuspendReason}
+        onConfirm={(reason) =>
+          adminApi.suspendVendor(vendorId, reason ?? "").then(onReload)
+        }
+      />
+      <AdminConfirmAction
+        label={LABELS.delete}
+        dialogVariant="danger"
+        tone="danger"
+        title={LABELS.confirmDeleteVendorTitle}
+        description={formatLabel(LABELS.confirmDeleteVendorBody, { name })}
+        onConfirm={() => adminApi.deleteVendor(vendorId).then(onReload)}
+      />
+    </>
+  );
+}

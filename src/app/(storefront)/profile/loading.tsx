@@ -1,5 +1,5 @@
-import { ProfilePageSkeleton } from '@/shared/components/Skeletons'
+import { ProfilePageSkeleton } from "@/shared/components/Skeletons.component";
 
 export default function ProfileLoading() {
-  return <ProfilePageSkeleton />
+  return <ProfilePageSkeleton />;
 }

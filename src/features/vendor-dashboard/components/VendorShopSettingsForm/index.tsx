@@ -1,7 +1,7 @@
 "use client";
 
-import { NumberInput } from "@/shared/components/NumberInput";
-import { CheckboxField } from "@/shared/components/CheckboxField";
+import { NumberInput } from "@/shared/components/NumberInput.component";
+import { CheckboxField } from "@/shared/components/CheckboxField.component";
 import {
   FormActions,
   FormFieldFrame,
@@ -11,9 +11,9 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorEntityType } from "@/shared/constants/statuses";
-import { CategoriesSection } from "./CategoriesSection";
-import { UploadsSection } from "./UploadsSection";
-import { KycChecklistSection } from "./KycChecklistSection";
+import { CategoriesSection } from "./CategoriesSection.component";
+import { UploadsSection } from "./UploadsSection.component";
+import { KycChecklistSection } from "./KycChecklistSection.component";
 
 interface VendorShopSettingsFormProps {
   vendorId: string;
@@ -68,11 +68,11 @@ export function VendorShopSettingsForm({
             <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
               {LABELS.vendorShopSettings}
             </h2>
-            <p className="max-w-3xl text-[0.9375rem] leading-relaxed text-ink-muted">
+            <p className="max-w-3xl text-body leading-relaxed text-ink-muted">
               {LABELS.vendorShopSettingsHint}
             </p>
             {businessName ? (
-              <p className="text-[0.8125rem] text-ink-faint">{businessName}</p>
+              <p className="text-body-sm text-ink-faint">{businessName}</p>
             ) : null}
           </div>
           <Button

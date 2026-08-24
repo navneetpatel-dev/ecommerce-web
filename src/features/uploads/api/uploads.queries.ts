@@ -11,7 +11,7 @@ export {
   readFileAsDataUrl,
   usePresignUpload,
   usePresignUploadBulk,
-} from "@/shared/hooks/useUploads";
+} from "@/shared/hooks/useUploads.hook";
 
 /** Server-side upload (data URL) — used directly for avatars and as presign fallback. */
 export function useUploadFile() {

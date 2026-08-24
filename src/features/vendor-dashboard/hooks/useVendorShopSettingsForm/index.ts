@@ -1,8 +1,8 @@
 "use client";
 
 import type { VendorEntityType } from "@/shared/constants/statuses";
-import { useVendorShopSettingsData } from "./useVendorShopSettingsData";
-import { useVendorShopSettingsSave } from "./useVendorShopSettingsSave";
+import { useVendorShopSettingsData } from "./useVendorShopSettingsData.hook";
+import { useVendorShopSettingsSave } from "./useVendorShopSettingsSave.hook";
 
 export function useVendorShopSettingsForm() {
   const data = useVendorShopSettingsData();

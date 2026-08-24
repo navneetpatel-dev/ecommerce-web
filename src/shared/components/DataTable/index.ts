@@ -1,4 +1,4 @@
-export { DataTable } from "./DataTable";
+export { DataTable } from "./DataTable.component";
 export type {
   DataTableColumn,
   DataTablePaginationProps,

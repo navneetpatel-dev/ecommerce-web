@@ -72,6 +72,9 @@ export {
   DEFAULT_WORKSPACE_ACCOUNT_SECTION,
 } from "@/shared/constants/profileSections";
 
+/** Filename prefix for the customer data-export download (Rule 8). */
+export const ACCOUNT_EXPORT_FILENAME_PREFIX = "account-export";
+
 export const ACCOUNT_SECTION_IDS = ACCOUNT_SECTIONS.map((s) => s.id);
 
 export function isAccountSectionId(

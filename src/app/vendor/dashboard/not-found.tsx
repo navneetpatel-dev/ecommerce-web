@@ -10,7 +10,7 @@ export default function VendorDashboardNotFound() {
       <h2 className="text-[1.375rem] font-semibold text-ink">
         {LABELS.notFoundHeading}
       </h2>
-      <p className="max-w-md text-center text-[0.9375rem] text-ink-muted">
+      <p className="max-w-md text-center text-body text-ink-muted">
         {LABELS.notFoundVendorBody}
       </p>
     </div>

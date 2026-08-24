@@ -1,6 +1,6 @@
 "use client";
 
-import { AdminLayout } from "@/shared/components/layout/AdminLayout";
+import { AdminLayout } from "@/shared/components/layout/AdminLayout.component";
 import { HeaderContainer } from "@/features/storefront";
 
 export default function AdminRouteLayout({

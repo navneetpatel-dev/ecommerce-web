@@ -3,9 +3,9 @@
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { useProduct } from "../../api/products.queries";
-import { useVariantSelection } from "../useVariantSelection";
+import { useVariantSelection } from "../useVariantSelection.hook";
 import { useCategories } from "@/features/categories";
-import { usePublicSettings } from "@/shared/hooks/usePublicSettings";
+import { usePublicSettings } from "@/shared/hooks/usePublicSettings.hook";
 import { cartLineQuantityMax } from "@/shared/constants/cart";
 
 export function useProductDetailData() {

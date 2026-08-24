@@ -4,7 +4,7 @@
 export const bulkGenerateDialogStyles = {
   dialog: "max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto",
   metaNameField: "sm:col-span-2",
-  errorMessage: "text-[0.8125rem] text-danger",
+  errorMessage: "text-body-sm text-danger",
   actionsWrapper: "w-full",
   submitButton: "w-full",
 } as const;

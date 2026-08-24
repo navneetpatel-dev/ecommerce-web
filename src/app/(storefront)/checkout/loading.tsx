@@ -1,5 +1,5 @@
-import { CheckoutPageSkeleton } from '@/shared/components/Skeletons'
+import { CheckoutPageSkeleton } from "@/shared/components/Skeletons.component";
 
 export default function CheckoutLoading() {
-  return <CheckoutPageSkeleton />
+  return <CheckoutPageSkeleton />;
 }

@@ -1,0 +1,120 @@
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { CategoryGridSkeleton, SkeletonGrid } from "./primitives.component";
+
+/** Home / generic storefront content while a soft navigation settles. */
+export function StorefrontPageSkeleton() {
+  return (
+    <div className="space-y-12 md:space-y-20 pb-12">
+      <Skeleton className="h-[min(78vh,640px)] w-full rounded-none md:h-[min(82vh,720px)]" />
+      <div className="storefront-container space-y-10">
+        <div className="space-y-3">
+          <Skeleton className="h-3 w-16" />
+          <Skeleton className="h-7 w-48" />
+        </div>
+        <CategoryGridSkeleton count={10} />
+        <div className="space-y-3 pt-4">
+          <Skeleton className="h-3 w-28" />
+          <Skeleton className="h-8 w-40" />
+        </div>
+        <SkeletonGrid count={8} />
+      </div>
+    </div>
+  );
+}
+
+export function CartPageSkeleton() {
+  return (
+    <div className="relative">
+      <div className="storefront-container space-y-6 py-6 md:py-8">
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-8 w-48" />
+        </div>
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="space-y-4 lg:col-span-7 xl:col-span-8">
+            <Skeleton className="h-28 w-full" />
+            <Skeleton className="h-28 w-full" />
+            <Skeleton className="h-28 w-full" />
+          </div>
+          <div className="lg:col-span-5 xl:col-span-4">
+            <Skeleton className="h-64 w-full" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function CheckoutPageSkeleton() {
+  return (
+    <div className="relative">
+      <div className="storefront-container space-y-8 py-6 md:py-8">
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-9 w-64" />
+        </div>
+        <Skeleton className="h-20 w-full" />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="space-y-4 lg:col-span-7 xl:col-span-8">
+            <Skeleton className="h-3 w-28" />
+            <Skeleton className="h-8 w-72" />
+            <Skeleton className="h-4 w-80" />
+            <Skeleton className="mt-4 h-40 w-full" />
+            <Skeleton className="h-28 w-full" />
+          </div>
+          <div className="lg:col-span-5 xl:col-span-4">
+            <Skeleton className="h-80 w-full" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function CategoriesPageSkeleton() {
+  return (
+    <div className="storefront-container space-y-10 py-10 md:py-14">
+      <div className="max-w-2xl space-y-3">
+        <Skeleton className="h-3 w-16" />
+        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-4 w-full max-w-md" />
+      </div>
+      <CategoryGridSkeleton count={10} />
+    </div>
+  );
+}
+
+export function ProfilePageSkeleton() {
+  return (
+    <div className="storefront-container space-y-6 py-8">
+      <Skeleton className="h-4 w-24" />
+      <Skeleton className="h-10 w-48" />
+      <div className="grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+        <Skeleton className="hidden h-80 w-full lg:block" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    </div>
+  );
+}
+
+export function WishlistPageSkeleton() {
+  return (
+    <div className="storefront-container space-y-6 py-10">
+      <Skeleton className="h-8 w-36" />
+      <SkeletonGrid count={8} />
+    </div>
+  );
+}
+
+export function ContentPageSkeleton() {
+  return (
+    <div className="mx-auto max-w-[800px] space-y-4 px-4 py-12">
+      <Skeleton className="h-3 w-20" />
+      <Skeleton className="h-10 w-2/3" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-4/5" />
+      <Skeleton className="mt-6 h-48 w-full rounded-md" />
+    </div>
+  );
+}

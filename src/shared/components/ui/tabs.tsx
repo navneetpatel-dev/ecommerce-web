@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import * as TabsPrimitive from '@radix-ui/react-tabs'
-import { cn } from '@/shared/utils/cn'
+import * as React from "react";
+import * as TabsPrimitive from "@radix-ui/react-tabs";
+import { cn } from "@/shared/utils/cn";
 
-const Tabs = TabsPrimitive.Root
+const Tabs = TabsPrimitive.Root;
 
 const TabsList = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.List>,
@@ -13,13 +13,13 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-10 items-center justify-center text-[0.8125rem] text-ink-muted border-b border-line",
-      className
+      "inline-flex h-10 items-center justify-center text-body-sm text-ink-muted border-b border-line",
+      className,
     )}
     {...props}
   />
-))
-TabsList.displayName = "TabsList"
+));
+TabsList.displayName = "TabsList";
 
 const TabsTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.Trigger>,
@@ -29,13 +29,13 @@ const TabsTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       "inline-flex cursor-pointer items-center justify-center whitespace-nowrap px-4 py-2 font-medium transition-all outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 border-b-2 border-transparent data-[state=active]:border-brand data-[state=active]:text-ink",
-      className
+      className,
     )}
-    style={{ transitionDuration: 'var(--motion-base)' }}
+    style={{ transitionDuration: "var(--motion-base)" }}
     {...props}
   />
-))
-TabsTrigger.displayName = "TabsTrigger"
+));
+TabsTrigger.displayName = "TabsTrigger";
 
 const TabsContent = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.Content>,
@@ -45,11 +45,11 @@ const TabsContent = React.forwardRef<
     ref={ref}
     className={cn(
       "mt-2 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand data-[state=inactive]:hidden",
-      className
+      className,
     )}
     {...props}
   />
-))
-TabsContent.displayName = "TabsContent"
+));
+TabsContent.displayName = "TabsContent";
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+export { Tabs, TabsList, TabsTrigger, TabsContent };

@@ -1,6 +1,6 @@
 /** Frontend API path builders — must stay aligned with backend mounts under `/api`. */
 import { authRoutes } from "./auth.routes";
-import { usersMeRoutes, usersRoutes } from "./users.routes";
+import { usersMeRoutes, usersRoutes } from "./users.routes.hook";
 import { categoriesRoutes, productsRoutes } from "./catalog.routes";
 import { vendorDocsRoutes, vendorsRoutes } from "./vendors.routes";
 import {

@@ -6,6 +6,6 @@
 // useReportHub hook, and the AdminReportsPage/VendorReportsPage rendered by
 // the workspace dashboard report routes. The reports engine API is also
 // consumed by the orders feature for order-level reporting.
-export { AdminReportsPage } from "./pages/AdminReportsPage";
-export { VendorReportsPage } from "./pages/VendorReportsPage";
+export { AdminReportsPage } from "./pages/AdminReportsPage.page";
+export { VendorReportsPage } from "./pages/VendorReportsPage.page";
 export { reportsEngineApi } from "./api/reportsEngine.api";

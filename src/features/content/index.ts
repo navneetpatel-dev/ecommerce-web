@@ -5,12 +5,12 @@
 // listing and article detail pages, their presentational views, the contact
 // form hook, and the content data source. These pages are rendered directly
 // by the storefront routes.
-export { AboutPage } from "./pages/AboutPage";
-export { TermsPage } from "./pages/TermsPage";
-export { PrivacyPage } from "./pages/PrivacyPage";
-export { ContactPage } from "./pages/ContactPage";
-export { MaintenancePage } from "./pages/MaintenancePage";
-export { ReturnsPage } from "./pages/ReturnsPage";
-export { BlogPage } from "./pages/BlogPage";
-export { BlogDetailPage } from "./pages/BlogDetailPage";
-export { getBlogPost } from "./data/content";
+export { AboutPage } from "./pages/AboutPage.page";
+export { TermsPage } from "./pages/TermsPage.page";
+export { PrivacyPage } from "./pages/PrivacyPage.page";
+export { ContactPage } from "./pages/ContactPage.page";
+export { MaintenancePage } from "./pages/MaintenancePage.page";
+export { ReturnsPage } from "./pages/ReturnsPage.page";
+export { BlogPage } from "./pages/BlogPage.page";
+export { BlogDetailPage } from "./pages/BlogDetailPage.page";
+export { getBlogPost, blogPosts } from "./constants/siteContent";

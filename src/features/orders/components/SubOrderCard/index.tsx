@@ -1,14 +1,14 @@
 import type { OrderItem, SubOrder } from "@/shared/api/types";
-import { TextEyebrow } from "@/shared/components/TextEyebrow";
-import { StatusBadge } from "@/shared/components/StatusBadge";
-import { Timeline } from "@/shared/components/Timeline";
+import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { Timeline } from "@/shared/components/Timeline.component";
 import { buildSubOrderTimeline } from "../../utils/timeline";
 import { ORDER_STATUS } from "@/shared/constants/statuses";
-import type { ReturnReasonCode } from "../../hooks/useSubOrderReturn";
-import { SubOrderCardHeader } from "./SubOrderCardHeader";
-import { SubOrderCardItems } from "./SubOrderCardItems";
-import { SubOrderCardTotals } from "./SubOrderCardTotals";
-import { SubOrderReturnDialog } from "./SubOrderReturnDialog";
+import type { ReturnReasonCode } from "../../hooks/useSubOrderReturn.hook";
+import { SubOrderCardHeader } from "./SubOrderCardHeader.component";
+import { SubOrderCardItems } from "./SubOrderCardItems.component";
+import { SubOrderCardTotals } from "./SubOrderCardTotals.component";
+import { SubOrderReturnDialog } from "./SubOrderReturnDialog.component";
 
 interface SubOrderCardProps {
   subOrder: SubOrder;
@@ -77,10 +77,8 @@ export function SubOrderCard({
       {subOrder.shipment && (
         <div className="mt-4 border-t border-dashed border-line pt-4">
           <TextEyebrow className="mb-2">Tracking</TextEyebrow>
-          <p className="text-[0.9375rem] text-ink">
-            {subOrder.shipment.carrier}
-          </p>
-          <p className="mt-0.5 font-mono text-[0.8125rem] text-ink-muted">
+          <p className="text-body text-ink">{subOrder.shipment.carrier}</p>
+          <p className="mt-0.5 font-mono text-body-sm text-ink-muted">
             {subOrder.shipment.trackingNumber}
           </p>
           <div className="mt-2">

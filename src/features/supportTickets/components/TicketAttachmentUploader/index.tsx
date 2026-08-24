@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef } from "react";
-import { FormError } from "@/shared/components/FormError";
+import { FormError } from "@/shared/components/FormError.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import {
@@ -18,9 +18,9 @@ import {
   TICKET_MAX_VIDEO_SECONDS,
   TICKET_MAX_VIDEOS,
 } from "@/shared/constants/mediaLimits";
-import { AttachmentList } from "./AttachmentList";
+import { AttachmentList } from "./AttachmentList.component";
 import { isVideoAttachment } from "./utils";
-import { useFileProcessor } from "./useFileProcessor";
+import { useFileProcessor } from "./useFileProcessor.hook";
 import type { Props } from "./types";
 
 export type { UploadedMediaAttachment } from "./types";
@@ -82,12 +82,10 @@ export function TicketAttachmentUploader({
   return (
     <div className="space-y-2">
       {label ? (
-        <p className="text-[0.8125rem] font-medium text-ink">{label}</p>
+        <p className="text-body-sm font-medium text-ink">{label}</p>
       ) : null}
       {hintText ? (
-        <p className="text-[0.8125rem] leading-snug text-ink-muted">
-          {hintText}
-        </p>
+        <p className="text-body-sm leading-snug text-ink-muted">{hintText}</p>
       ) : null}
       <div className="flex flex-wrap items-center gap-2">
         <Button
@@ -117,9 +115,7 @@ export function TicketAttachmentUploader({
           videoMax: maxVideos,
         })}
       </p>
-      {status ? (
-        <p className="text-[0.8125rem] text-ink-muted">{status}</p>
-      ) : null}
+      {status ? <p className="text-body-sm text-ink-muted">{status}</p> : null}
       <AttachmentList items={value} onRemove={removeAt} />
       <FormError
         error={error ? new Error(error) : null}

@@ -1,4 +1,4 @@
-import { SkeletonCard } from "@/shared/components/Skeletons";
+import { SkeletonCard } from "@/shared/components/Skeletons.component";
 
 export default function BugReportsLoading() {
   return (

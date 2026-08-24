@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { Eye, EyeOff } from 'lucide-react'
-import { cn } from '@/shared/utils/cn'
+import * as React from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { cn } from "@/shared/utils/cn";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  error?: boolean
+  error?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -14,35 +14,38 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          "flex h-11 w-full rounded-sm border bg-surface-raised px-4 text-[0.9375rem] text-ink transition-colors file:border-0 file:bg-transparent file:text-[0.8125rem] file:font-medium placeholder:text-ink-faint outline-none focus-visible:border-brand disabled:cursor-not-allowed disabled:opacity-50",
-          type === 'number' &&
-            '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+          "flex h-11 w-full rounded-sm border bg-surface-raised px-4 text-body text-ink transition-colors file:border-0 file:bg-transparent file:text-body-sm file:font-medium placeholder:text-ink-faint outline-none focus-visible:border-brand disabled:cursor-not-allowed disabled:opacity-50",
+          type === "number" &&
+            "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
           error ? "border-danger" : "border-line-strong",
-          className
+          className,
         )}
         ref={ref}
         aria-invalid={error ? true : undefined}
         {...props}
       />
-    )
-  }
-)
-Input.displayName = "Input"
+    );
+  },
+);
+Input.displayName = "Input";
 
-interface PasswordInputProps extends Omit<InputProps, 'type'> {
-  visible: boolean
-  inputType: string
-  showLabel: string
-  onVisibilityToggle: () => void
+interface PasswordInputProps extends Omit<InputProps, "type"> {
+  visible: boolean;
+  inputType: string;
+  showLabel: string;
+  onVisibilityToggle: () => void;
 }
 
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
-  ({ className, visible, inputType, showLabel, onVisibilityToggle, ...props }, ref) => (
+  (
+    { className, visible, inputType, showLabel, onVisibilityToggle, ...props },
+    ref,
+  ) => (
     <div className="relative">
       <Input
         ref={ref}
         type={inputType}
-        className={cn('pr-11', className)}
+        className={cn("pr-11", className)}
         {...props}
       />
       <button
@@ -59,9 +62,9 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
         )}
       </button>
     </div>
-  )
-)
-PasswordInput.displayName = "PasswordInput"
+  ),
+);
+PasswordInput.displayName = "PasswordInput";
 
-export { Input, PasswordInput }
-export type { PasswordInputProps }
+export { Input, PasswordInput };
+export type { PasswordInputProps };

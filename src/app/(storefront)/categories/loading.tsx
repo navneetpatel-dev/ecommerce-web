@@ -1,5 +1,5 @@
-import { CategoriesPageSkeleton } from '@/shared/components/Skeletons'
+import { CategoriesPageSkeleton } from "@/shared/components/Skeletons.component";
 
 export default function CategoriesLoading() {
-  return <CategoriesPageSkeleton />
+  return <CategoriesPageSkeleton />;
 }

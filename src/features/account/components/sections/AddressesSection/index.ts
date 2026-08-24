@@ -1,1 +1,1 @@
-export { AddressesSection } from "./AddressesSection";
+export { AddressesSection } from "./AddressesSection.component";

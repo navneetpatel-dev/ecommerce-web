@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import type { RoleName } from "@/shared/constants/labels";
 import type { CurrentUser } from "@/shared/api/types";
+import { clearPersistedCredentials } from "@/shared/api/sessionAdapter";
 import {
   defaultRouteForRole as defaultRouteForRoleFromSurface,
   postAuthPath as postAuthPathFromSurface,
@@ -23,7 +24,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   authBootstrapped: false,
   setSession: (accessToken, currentUser) => set({ accessToken, currentUser }),
   setAccessToken: (accessToken) => set({ accessToken }),
-  clearSession: () => set({ accessToken: null, currentUser: null }),
+  /**
+   * Clears the in-memory session AND the persisted credentials (Rule 21:
+   * single storage owner — components never touch storage directly).
+   */
+  clearSession: () => {
+    clearPersistedCredentials();
+    set({ accessToken: null, currentUser: null });
+  },
   setAuthBootstrapped: (authBootstrapped) => set({ authBootstrapped }),
 }));
 

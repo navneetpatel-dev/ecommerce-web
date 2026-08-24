@@ -4,7 +4,7 @@
 // the header cluster (Header, MobileNavDrawer, useHeader, HeaderContainer).
 // The workspace (admin/vendor) layouts also render HeaderContainer in
 // "workspace menu" mode, so it is part of this feature's public surface.
-import { StorefrontLayout } from "./components/StorefrontLayout";
-import { HeaderContainer } from "./containers/HeaderContainer";
+import { StorefrontLayout } from "./components/StorefrontLayout.component";
+import { HeaderContainer } from "./containers/HeaderContainer.container";
 
 export { StorefrontLayout, HeaderContainer };

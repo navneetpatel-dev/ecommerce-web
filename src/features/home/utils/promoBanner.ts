@@ -1,24 +1,24 @@
-import { PATHS } from '@/shared/constants/paths'
-import { PROMO_BANNER_LINK_TYPE } from '@/shared/constants/statuses'
-import type { PromoBanner } from '@/shared/api/types'
-import type { HeroSlide } from '@/features/home/components/HeroSection'
-import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from "@/shared/constants/paths";
+import { PROMO_BANNER_LINK_TYPE } from "@/shared/constants/statuses";
+import type { PromoBanner } from "@/shared/api/types";
+import type { HeroSlide } from "@/features/home/components/HeroSection.component";
+import { LABELS } from "@/shared/constants/labels";
 
 export function resolvePromoBannerHref(banner: PromoBanner): string {
   if (banner.linkType === PROMO_BANNER_LINK_TYPE.URL) {
-    return banner.linkUrl || PATHS.products
+    return banner.linkUrl || PATHS.products;
   }
-  if (!banner.linkSlug) return PATHS.products
+  if (!banner.linkSlug) return PATHS.products;
   if (banner.linkType === PROMO_BANNER_LINK_TYPE.PRODUCT) {
-    return PATHS.product(banner.linkSlug)
+    return PATHS.product(banner.linkSlug);
   }
   if (banner.linkType === PROMO_BANNER_LINK_TYPE.CATEGORY) {
-    return PATHS.category(banner.linkSlug)
+    return PATHS.category(banner.linkSlug);
   }
   if (banner.linkType === PROMO_BANNER_LINK_TYPE.VENDOR) {
-    return PATHS.vendorPage(banner.linkSlug)
+    return PATHS.vendorPage(banner.linkSlug);
   }
-  return PATHS.products
+  return PATHS.products;
 }
 
 export function promoBannerToHeroSlide(banner: PromoBanner): HeroSlide {
@@ -26,10 +26,10 @@ export function promoBannerToHeroSlide(banner: PromoBanner): HeroSlide {
     id: banner.id,
     eyebrow: LABELS.promoBannerEyebrow,
     headline: banner.title,
-    subheadline: '',
+    subheadline: "",
     ctaLabel: LABELS.shopNow,
     ctaHref: resolvePromoBannerHref(banner),
     imageSrc: banner.imageUrl,
     imageAlt: banner.title,
-  }
+  };
 }

@@ -1,33 +1,37 @@
-'use client'
+"use client";
 
-import { useCallback } from 'react'
-import { PERMISSIONS, type PermissionKey } from '@/shared/constants/permissions'
-import { LABELS } from '@/shared/constants/labels'
-import { adminApi } from '../api/admin.api'
-import { usePendingVendors } from '../api/admin.queries'
-import { usePermissions } from '@/shared/hooks/usePermissions'
-import { renderVendorRowActions } from '../components/VendorRowActions'
-import type { AdminDataRow } from './useAdminDataList'
-import type { AdminListPageModel } from './adminListPage.types'
+import { useCallback } from "react";
+import {
+  PERMISSIONS,
+  type PermissionKey,
+} from "@/shared/constants/permissions";
+import { LABELS } from "@/shared/constants/labels";
+import { adminApi } from "../api/admin.api";
+import { usePendingVendors } from "../api/admin.queries";
+import { usePermissions } from "@/shared/hooks/usePermissions.hook";
+import { renderVendorRowActions } from "../components/VendorRowActions.component";
+import type { AdminDataRow } from "./useAdminDataList.hook";
+import type { AdminListPageModel } from "../types/adminListPage.types";
 
 export type AdminVendorsPageModel = AdminListPageModel & {
-  gatePermission: PermissionKey[]
-  showApprovalQueue: boolean
-  pendingCount: number
-}
+  gatePermission: PermissionKey[];
+  showApprovalQueue: boolean;
+  pendingCount: number;
+};
 
 export function useAdminVendorsPage(): AdminVendorsPageModel {
-  const { hasPermission } = usePermissions()
-  const { data: pendingVendors } = usePendingVendors()
+  const { hasPermission } = usePermissions();
+  const { data: pendingVendors } = usePendingVendors();
 
   const load = useCallback(
-    ({ page, limit }: { page: number; limit: number }) => adminApi.vendors({ page, limit }),
+    ({ page, limit }: { page: number; limit: number }) =>
+      adminApi.vendors({ page, limit }),
     [],
-  )
+  );
 
   const actions = useCallback((row: AdminDataRow, reload: () => void) => {
-    return renderVendorRowActions({ row, onReload: reload })
-  }, [])
+    return renderVendorRowActions({ row, onReload: reload });
+  }, []);
 
   return {
     gatePermission: [PERMISSIONS.VENDOR_MANAGE, PERMISSIONS.VENDOR_APPROVE],
@@ -36,15 +40,15 @@ export function useAdminVendorsPage(): AdminVendorsPageModel {
     load,
     actions,
     columnKeys: [
-      'businessName',
-      'slug',
-      'gstNumber',
-      'state',
-      'status',
-      'rejectionReason',
-      'suspensionReason',
+      "businessName",
+      "slug",
+      "gstNumber",
+      "state",
+      "status",
+      "rejectionReason",
+      "suspensionReason",
     ],
     showApprovalQueue: hasPermission(PERMISSIONS.VENDOR_APPROVE),
     pendingCount: pendingVendors?.total ?? 0,
-  }
+  };
 }

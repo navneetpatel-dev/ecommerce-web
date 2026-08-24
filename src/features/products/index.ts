@@ -4,13 +4,13 @@ export {
   useProductList,
   usePrefetchProduct,
 } from "./api/products.queries";
-export { ProductCard } from "./components/ProductCard";
-export { ProductSeoJsonLd } from "./components/ProductSeoJsonLd";
-export { ProductGrid } from "./components/ProductGrid";
-export { ProductCardContainer } from "./containers/ProductCardContainer";
-export { VariantSelector } from "./components/VariantSelector";
-export { ProductListingPage } from "./pages/ProductListingPage";
-export { ProductDetailPage } from "./pages/ProductDetailPage";
+export { ProductCard } from "./components/ProductCard.component";
+export { ProductSeoJsonLd } from "./components/ProductSeoJsonLd.component";
+export { ProductGrid } from "./components/ProductGrid.component";
+export { ProductCardContainer } from "./containers/ProductCardContainer.container";
+export { VariantSelector } from "./components/VariantSelector.component";
+export { ProductListingPage } from "./pages/ProductListingPage.page";
+export { ProductDetailPage } from "./pages/ProductDetailPage.page";
 export { productsApi } from "./api/products.api";
 export { PRODUCT_FIELD_LIMITS } from "./constants/productFields";
 export {
@@ -25,15 +25,15 @@ export {
   type ProductListingFormValues,
   type ProductWriteBody,
 } from "./schemas/products.schema";
-export { SORT_OPTIONS } from "./hooks/useProductListing";
+export { SORT_OPTIONS } from "./hooks/useProductListing.hook";
 export type { ProductFilters, ProductListResponse } from "./api/products.api";
-export { FilterSidebar } from "./components/FilterSidebar";
-export { SortBar } from "./components/SortBar";
-export { RecentlyViewedSection } from "./components/RecentlyViewedSection";
-export { useRecentlyViewed } from "./hooks/useRecentlyViewed";
+export { FilterSidebar } from "./components/FilterSidebar.component";
+export { SortBar } from "./components/SortBar.component";
+export { RecentlyViewedSection } from "./components/RecentlyViewedSection.component";
+export { useRecentlyViewed } from "./hooks/useRecentlyViewed.hook";
 export {
   productDetailToListItem,
   productNeedsVariantHydration,
 } from "./utils/productListItem";
-export { ProductCompareBar } from "./components/ProductCompareBar";
-export { ProductCompareSection } from "./components/ProductCompareSection";
+export { ProductCompareBar } from "./components/ProductCompareBar.component";
+export { ProductCompareSection } from "./components/ProductCompareSection.component";

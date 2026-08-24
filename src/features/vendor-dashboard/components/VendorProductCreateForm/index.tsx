@@ -1,16 +1,16 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormActions, FormStack } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
-import { ProductCatalogSection } from "./ProductCatalogSection";
-import { ProductDetailsSection } from "./ProductDetailsSection";
-import { ProductImagesSection } from "./ProductImagesSection";
-import { ProductMediaSection } from "./ProductMediaSection";
-import { ProductPoliciesSection } from "./ProductPoliciesSection";
-import { ProductSeoSection } from "./ProductSeoSection";
-import { useProductFormController } from "./useProductFormController";
+import { ProductCatalogSection } from "./ProductCatalogSection.component";
+import { ProductDetailsSection } from "./ProductDetailsSection.component";
+import { ProductImagesSection } from "./ProductImagesSection.component";
+import { ProductMediaSection } from "./ProductMediaSection.component";
+import { ProductPoliciesSection } from "./ProductPoliciesSection.component";
+import { ProductSeoSection } from "./ProductSeoSection.component";
+import { useProductFormController } from "./useProductFormController.hook";
 import type { VendorProductCreateFormProps } from "./types";
 
 export function VendorProductCreateForm({

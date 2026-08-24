@@ -1,1 +1,1 @@
-export { OverviewSection } from "./OverviewSection";
+export { OverviewSection } from "./OverviewSection.component";

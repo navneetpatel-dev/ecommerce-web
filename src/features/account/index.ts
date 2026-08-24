@@ -1,4 +1,6 @@
-export { AccountPage } from "./pages/AccountPage";
+/** Public surface for the account feature: the customer/workspace
+ * account page and its section navigation constants. */
+export { AccountPage } from "./pages/AccountPage.page";
 export {
   ACCOUNT_SECTIONS,
   DEFAULT_ACCOUNT_SECTION,

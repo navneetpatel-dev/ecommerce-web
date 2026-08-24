@@ -1,1 +1,1 @@
-export { PrivacySection } from "./PrivacySection";
+export { PrivacySection } from "./PrivacySection.component";

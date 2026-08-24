@@ -23,7 +23,7 @@ export default function NotFound() {
         >
           {LABELS.pageNotFound}
         </h1>
-        <p className="max-w-sm text-center text-[0.9375rem] text-ink-muted">
+        <p className="max-w-sm text-center text-body text-ink-muted">
           {LABELS.pageNotFoundBody}
         </p>
         <Button asChild>

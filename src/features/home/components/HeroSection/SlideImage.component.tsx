@@ -1,0 +1,79 @@
+"use client";
+
+import { AnimatePresence, motion } from "motion/react";
+import { MediaImage } from "@/shared/components/MediaImage.component";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { useMediaQuery } from "@/shared/hooks/use-media-query.hook";
+import { EASE, imageVariants } from "./constants";
+import type { HeroSlide } from "./types";
+
+interface SlideImageProps {
+  slide: HeroSlide;
+  index: number;
+  direction: number;
+  autoplayMs: number;
+  reduceMotion: boolean;
+}
+
+const DESKTOP_MEDIA_QUERY = "(min-width: 768px)";
+
+export function SlideImage(props: SlideImageProps) {
+  const { slide, index, direction, autoplayMs, reduceMotion } = props;
+  const isDesktop = useMediaQuery(DESKTOP_MEDIA_QUERY);
+
+  // Art-directed variants: only the active breakpoint's image mounts so the
+  // hidden variant is never downloaded (§7 — do not fetch offscreen media).
+  const activeSrc = isDesktop
+    ? slide.imageSrc
+    : (slide.imageMobileSrc ?? slide.imageSrc);
+  const unavailableCopy = formatLabel(LABELS.heroSlideImageUnavailable, {
+    headline: slide.headline,
+  });
+
+  return (
+    <AnimatePresence initial={false} custom={direction} mode="sync">
+      <motion.div
+        key={slide.id}
+        custom={direction}
+        variants={reduceMotion ? undefined : imageVariants}
+        initial={reduceMotion ? { opacity: 0 } : "enter"}
+        animate={reduceMotion ? { opacity: 1 } : "center"}
+        exit={reduceMotion ? { opacity: 0 } : "exit"}
+        transition={{ duration: reduceMotion ? 0.25 : 0.9, ease: EASE }}
+        className="absolute inset-0 will-change-transform"
+      >
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            className="absolute inset-0"
+            initial={reduceMotion ? false : { scale: 1.08 }}
+            animate={{ scale: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : autoplayMs / 1000,
+              ease: "linear",
+            }}
+          >
+            <MediaImage
+              src={activeSrc}
+              alt={slide.imageAlt}
+              unavailableLabel={unavailableCopy}
+              priority={index === 0}
+              imageClassName="object-cover"
+              sizes="100vw"
+              className="absolute inset-0"
+            />
+          </motion.div>
+        </div>
+
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-black/25"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20"
+          aria-hidden
+        />
+      </motion.div>
+    </AnimatePresence>
+  );
+}

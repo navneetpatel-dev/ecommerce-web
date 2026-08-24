@@ -1,4 +1,4 @@
-import type { DataTableColumn } from "@/shared/components/DataTable";
+import type { DataTableColumn } from "@/shared/components/DataTable.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatDateTime } from "@/shared/utils/formatDate";
 import type { CouponBatch } from "@/shared/api/types";

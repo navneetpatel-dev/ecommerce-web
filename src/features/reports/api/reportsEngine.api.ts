@@ -1,7 +1,9 @@
 import { apiClient } from "@/shared/api/client";
+import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
 import { API } from "@/shared/constants/apiRoutes";
 import { BEARER_PREFIX } from "@/shared/constants/http";
 import { LABELS } from "@/shared/constants/labels";
+import { API_TIMEOUT_MS } from "@/shared/constants/timing";
 import { useAuthStore } from "@/shared/stores/auth.store";
 
 export type ReportColumnMeta = {
@@ -57,9 +59,9 @@ function buildQuery(filters: ReportFiltersInput & { format?: string }) {
 
 async function downloadBlob(path: string, fallbackName: string) {
   const token = useAuthStore.getState().accessToken;
-  const base = process.env.NEXT_PUBLIC_API_URL ?? "";
-  const res = await fetch(`${base}${path}`, {
+  const res = await fetch(`${CLIENT_API_BASE_URL}${path}`, {
     credentials: "include",
+    signal: AbortSignal.timeout(API_TIMEOUT_MS),
     headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
   });
   if (!res.ok) {

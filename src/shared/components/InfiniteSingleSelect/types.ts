@@ -45,3 +45,15 @@ export interface InfiniteSingleSelectProps {
   className?: string;
   listClassName?: string;
 }
+
+export interface UseInfiniteSelectOptionsArgs {
+  open: boolean;
+  disabled: boolean;
+  fetchPage: (
+    query: InfiniteSingleSelectPageQuery,
+  ) => Promise<InfiniteSingleSelectPageResult>;
+  resetKey: string | number | null;
+  pinnedOption: InfiniteSingleSelectOption | null;
+  pageSize: number;
+  searchable: boolean;
+}

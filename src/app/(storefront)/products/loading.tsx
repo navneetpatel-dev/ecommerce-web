@@ -1,5 +1,5 @@
-import { SkeletonGrid } from '@/shared/components/Skeletons'
-import { Skeleton } from '@/shared/components/ui/skeleton'
+import { SkeletonGrid } from "@/shared/components/Skeletons.component";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export default function ProductsLoading() {
   return (
@@ -19,5 +19,5 @@ export default function ProductsLoading() {
         </div>
       </div>
     </div>
-  )
+  );
 }

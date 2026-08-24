@@ -1,1 +1,1 @@
-export { CheckoutPageView } from "./CheckoutPageView";
+export { CheckoutPageView } from "./CheckoutPageView.component";

@@ -85,6 +85,9 @@ export const commerceLabels = {
   goToMyOrders: "Go to my orders",
   allOrders: "All orders",
 
+  // Content
+  readArticle: "Read article",
+
   // Auth
   maintenanceHeading: "Scheduled maintenance",
   maintenanceBody:
