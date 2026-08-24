@@ -13,10 +13,17 @@ import {
   SUPPORT_TICKET_PRIORITY,
   BUG_REPORT_STATUS,
   BUG_REPORT_SEVERITY,
+  VENDOR_DOCUMENT_CHECKLIST_STATUS,
 } from "@/shared/constants/statuses";
 
 type BadgeVariant =
-  "success" | "warning" | "destructive" | "secondary" | "brand";
+  | "success"
+  | "warning"
+  | "destructive"
+  | "secondary"
+  | "brand"
+  | "tag"
+  | "outline";
 
 const SUCCESS = new Set<string>([
   PRODUCT_STATUS.LIVE,
@@ -59,6 +66,7 @@ const WARNING = new Set<string>([
   BUG_REPORT_STATUS.NEW,
   SUPPORT_TICKET_PRIORITY.URGENT,
   BUG_REPORT_SEVERITY.CRITICAL,
+  VENDOR_DOCUMENT_CHECKLIST_STATUS.PENDING_REVIEW,
 ]);
 
 const DESTRUCTIVE = new Set<string>([
@@ -75,7 +83,10 @@ const DESTRUCTIVE = new Set<string>([
   BUG_REPORT_STATUS.CLOSED,
   BUG_REPORT_STATUS.WONT_FIX,
   BUG_REPORT_STATUS.DUPLICATE,
+  VENDOR_DOCUMENT_CHECKLIST_STATUS.REJECTED,
 ]);
+
+const TAG = new Set<string>([VENDOR_DOCUMENT_CHECKLIST_STATUS.NOT_UPLOADED]);
 
 function getVariant(status: string): BadgeVariant {
   const normalized = status.toUpperCase();
@@ -83,6 +94,7 @@ function getVariant(status: string): BadgeVariant {
   if (BRAND.has(normalized)) return "brand";
   if (WARNING.has(normalized)) return "warning";
   if (DESTRUCTIVE.has(normalized)) return "destructive";
+  if (TAG.has(normalized)) return "tag";
   return "secondary";
 }
 

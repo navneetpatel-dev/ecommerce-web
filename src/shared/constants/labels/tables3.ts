@@ -188,4 +188,18 @@ export const tables3Labels = {
   updatingEllipsis: "Updating…",
   browseCollection: "Browse collection",
   starsAndUp: "{count}+ stars",
+  kycVerificationProgress: "Verification progress",
+  kycDocumentsVerifiedCount: "{verified} of {total} verified",
+  kycSelectToUpload: "Click a document to upload or replace",
+  kycReplaceDocumentNotice:
+    "Uploading a new file will submit it for review and replace any existing file.",
+  kycAllDocumentsVerified: "All required documents are verified and approved.",
+  previewPdf: "PDF document",
+  previewDocx: "Word document",
+  previewImage: "Image file",
+  previewDocument: "Document",
+  openInNewTab: "Open in new tab",
+  clickToUpload: "Click to upload",
+  clickToCollapse: "Click to close",
+  rejectionActionHint: "Upload a replacement file to request verification.",
 } as const;
