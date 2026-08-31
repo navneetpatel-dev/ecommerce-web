@@ -56,6 +56,14 @@ const fadeUp = {
 };
 
 export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
+  const exportRange =
+    data.orderVolume.length > 0
+      ? {
+          from: data.orderVolume[0]!.date,
+          to: data.orderVolume[data.orderVolume.length - 1]!.date,
+        }
+      : undefined;
+
   return (
     <div className="space-y-6 sm:space-y-8">
       <motion.header
@@ -76,7 +84,7 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
               {LABELS.analyticsHint}
             </p>
           </div>
-          <AdminAnalyticsExportBar />
+          <AdminAnalyticsExportBar range={exportRange} />
         </div>
       </motion.header>
 

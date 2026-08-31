@@ -16,6 +16,9 @@ export const reportsRoutes = {
     `/api/reports/run/${encodeURIComponent(type)}${query ? `?${query}` : ""}`,
   exportDownload: (id: string) => `/api/reports/exports/${id}/download`,
   exportStatus: (id: string) => `/api/reports/exports/${id}`,
+  adminExports: (query = "") =>
+    `/api/reports/admin/exports${query ? `?${query}` : ""}`,
+  adminExportRetry: (id: string) => `/api/reports/admin/exports/${id}/retry`,
   customerOrderHistory: (query = "") =>
     `/api/reports/customer/order-history${query ? `?${query}` : ""}`,
   customerOrderInvoice: (orderId: string) =>

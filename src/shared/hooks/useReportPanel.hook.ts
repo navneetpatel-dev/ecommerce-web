@@ -1,10 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { downloadReport } from "@/shared/api/reportDownload";
+import { initiateAsyncExport } from "@/shared/api/reportDownload";
+import { parseFormatFromExportPath } from "@/features/reports/hooks/useReportHubHelpers/index";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import { buildDatedExportFilenameFallback } from "@/shared/utils/downloadFilename";
 import { LABELS } from "@/shared/constants/labels";
+import {
+  isReportExportLocked,
+  useReportExportLockStore,
+} from "@/features/reports/stores/reportExportLock.store";
 
 export interface ReportRangeInput {
   from: string;
@@ -31,8 +35,12 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
   const [to, setTo] = useState(initial.to);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<TReport | null>(null);
+  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
+  const acquire = useReportExportLockStore((s) => s.acquire);
+  const release = useReportExportLockStore((s) => s.release);
 
   const load = async (nextPage = page) => {
     setLoading(true);
@@ -50,13 +58,17 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
   };
 
   const exportFile = async (format: "csv" | "pdf") => {
+    if (isReportExportLocked()) return;
+    setExporting(true);
+    acquire();
     try {
-      await downloadReport(
-        params.exportPath({ from, to, page }, format),
-        buildDatedExportFilenameFallback(params.documentKey, from, to, format),
-      );
+      const path = params.exportPath({ from, to, page }, format);
+      await initiateAsyncExport(path, parseFormatFromExportPath(path));
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
+    } finally {
+      release();
+      setExporting(false);
     }
   };
 
@@ -67,6 +79,7 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
     setTo,
     page,
     loading,
+    exporting: exporting || globalLocked,
     error,
     report,
     load,

@@ -8,12 +8,20 @@ import {
   reportsEngineApi,
   type ReportRunResult,
 } from "../api/reportsEngine.api";
-import { pollExportUntilReady } from "./useReportHubHelpers/index";
+import {
+  normalizeExportFormat,
+  pollExportUntilReady,
+  type ExportFileFormat,
+} from "./useReportHubHelpers/index";
+import {
+  isReportExportLocked,
+  useReportExportLockStore,
+} from "../stores/reportExportLock.store";
 
 function defaultOrderHistoryRange() {
   const to = new Date();
   const from = new Date();
-  from.setFullYear(to.getFullYear() - 2);
+  from.setDate(to.getDate() - 365);
   return {
     from: from.toISOString().slice(0, 10),
     to: to.toISOString().slice(0, 10),
@@ -30,6 +38,9 @@ export function useCustomerOrderHistory() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
+  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
+  const acquire = useReportExportLockStore((s) => s.acquire);
+  const release = useReportExportLockStore((s) => s.release);
 
   const filters = useCallback(() => ({ from, to }), [from, to]);
 
@@ -51,31 +62,41 @@ export function useCustomerOrderHistory() {
       .finally(() => setLoading(false));
   };
 
-  const runExport = (format: "xlsx" | "csv" | "pdf") => {
+  const runExport = (format: ExportFileFormat) => {
+    if (isReportExportLocked()) return;
     setExporting(true);
     setMessage(null);
     setError(null);
+    acquire();
     reportsEngineApi
       .customerOrderHistoryExport(filters(), format)
-      .then(async (maybeAsync) => {
-        if (
-          maybeAsync &&
-          typeof maybeAsync === "object" &&
-          "async" in maybeAsync &&
-          maybeAsync.async
-        ) {
-          const exportId = String(
-            (maybeAsync as { exportId: string }).exportId,
+      .then(async (result) => {
+        const exportFormat = normalizeExportFormat(result.format ?? format);
+        if (result.status === "READY") {
+          await reportsEngineApi.downloadExport(
+            result.exportId,
+            "customer-order-history",
+            from,
+            to,
+            exportFormat,
           );
-          setMessage(LABELS.reportAsyncQueued);
-          const outcome = await pollExportUntilReady(exportId);
-          if (outcome === "ready") setMessage(LABELS.reportAsyncReady);
-          else if (outcome === "failed") setError(LABELS.reportAsyncFailed);
-          else setMessage(LABELS.reportAsyncQueued);
+          setMessage(LABELS.reportAsyncReady);
+          return;
         }
+        setMessage(LABELS.reportAsyncQueued);
+        const outcome = await pollExportUntilReady(
+          result.exportId,
+          exportFormat,
+        );
+        if (outcome === "ready") setMessage(LABELS.reportAsyncReady);
+        else if (outcome === "failed") setError(LABELS.reportAsyncFailed);
+        else setMessage(LABELS.reportAsyncQueued);
       })
       .catch((err) => setError(getApiErrorMessage(err, LABELS.reportLoadError)))
-      .finally(() => setExporting(false));
+      .finally(() => {
+        release();
+        setExporting(false);
+      });
   };
 
   return {
@@ -88,7 +109,7 @@ export function useCustomerOrderHistory() {
     loading,
     error,
     message,
-    exporting,
+    exporting: exporting || globalLocked,
     load,
     exportExcel: () => runExport("xlsx"),
     exportCsv: () => runExport("csv"),

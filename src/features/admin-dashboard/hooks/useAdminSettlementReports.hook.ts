@@ -1,11 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { downloadReport } from "@/shared/api/reportDownload";
-import { buildDatedExportFilenameFallback } from "@/shared/utils/downloadFilename";
+import { initiateAsyncExport } from "@/shared/api/reportDownload";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
 import { API } from "@/shared/constants/apiRoutes";
+import {
+  isReportExportLocked,
+  useReportExportLockStore,
+} from "@/features/reports/stores/reportExportLock.store";
 import {
   reportsApi,
   type AdminReportSummary,
@@ -22,10 +25,14 @@ export function useAdminSettlementReports() {
   const [from, setFrom] = useState(initial.from);
   const [to, setTo] = useState(initial.to);
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [summary, setSummary] = useState<AdminReportSummary | null>(null);
   const [vendors, setVendors] = useState<VendorSettlementRow[]>([]);
   const [recon, setRecon] = useState<ReconciliationReport | null>(null);
+  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
+  const acquire = useReportExportLockStore((s) => s.acquire);
+  const release = useReportExportLockStore((s) => s.release);
 
   const buildRange = () => ({
     from: `${from}T00:00:00.000Z`,
@@ -55,58 +62,33 @@ export function useAdminSettlementReports() {
     }
   };
 
-  const exportSummary = async (format: "csv" | "pdf") => {
+  const runExport = async (path: string, format: "csv" | "pdf") => {
+    if (isReportExportLocked()) return;
+    setExporting(true);
+    acquire();
     try {
-      await downloadReport(
-        reportsApi.exportUrl(API.reports.adminSummary, {
-          ...buildRange(),
-          format,
-        }),
-        buildDatedExportFilenameFallback(
-          "admin-dashboard-summary",
-          from,
-          to,
-          format,
-        ),
+      await initiateAsyncExport(
+        reportsApi.exportUrl(path, { ...buildRange(), format }),
       );
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
+    } finally {
+      release();
+      setExporting(false);
     }
   };
 
-  const exportVendors = async (format: "csv" | "pdf") => {
+  const exportSummary = (format: "csv" | "pdf") =>
+    void runExport(API.reports.adminSummary, format);
+
+  const exportVendors = (format: "csv" | "pdf") => {
     if (vendors.length === 0) return;
-    try {
-      await downloadReport(
-        reportsApi.exportUrl(API.reports.adminVendors, {
-          ...buildRange(),
-          format,
-        }),
-        buildDatedExportFilenameFallback(
-          "admin-vendor-settlements",
-          from,
-          to,
-          format,
-        ),
-      );
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
-    }
+    void runExport(API.reports.adminVendors, format);
   };
 
-  const exportReconciliation = async (format: "csv" | "pdf") => {
+  const exportReconciliation = (format: "csv" | "pdf") => {
     if (!recon) return;
-    try {
-      await downloadReport(
-        reportsApi.exportUrl(API.reports.adminReconciliation, {
-          ...buildRange(),
-          format,
-        }),
-        buildDatedExportFilenameFallback("admin-reconciliation", from, to, format),
-      );
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
-    }
+    void runExport(API.reports.adminReconciliation, format);
   };
 
   return {
@@ -115,6 +97,7 @@ export function useAdminSettlementReports() {
     to,
     setTo,
     loading,
+    exporting: exporting || globalLocked,
     error,
     summary,
     vendors,

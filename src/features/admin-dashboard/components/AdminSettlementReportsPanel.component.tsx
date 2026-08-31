@@ -58,6 +58,7 @@ export function AdminSettlementReportsPanel() {
     to,
     setTo,
     loading,
+    exporting,
     error,
     summary,
     vendors,
@@ -87,7 +88,7 @@ export function AdminSettlementReportsPanel() {
             type="button"
             fullWidth="mobile"
             onClick={() => void load()}
-            disabled={loading}
+            disabled={loading || exporting}
           >
             {LABELS.reportLoad}
           </Button>
@@ -95,7 +96,7 @@ export function AdminSettlementReportsPanel() {
             type="button"
             variant="outline"
             fullWidth="mobile"
-            disabled={!summary}
+            disabled={!summary || exporting}
             onClick={() => void exportSummary("csv")}
           >
             {LABELS.exportCsv}
@@ -104,7 +105,7 @@ export function AdminSettlementReportsPanel() {
             type="button"
             variant="outline"
             fullWidth="mobile"
-            disabled={!summary}
+            disabled={!summary || exporting}
             onClick={() => void exportSummary("pdf")}
           >
             {LABELS.exportPdf}
@@ -166,6 +167,7 @@ export function AdminSettlementReportsPanel() {
               {LABELS.reconciliation}
             </h3>
             <ExportButtons
+              disabled={exporting}
               onCsv={() => void exportReconciliation("csv")}
               onPdf={() => void exportReconciliation("pdf")}
             />
@@ -194,6 +196,7 @@ export function AdminSettlementReportsPanel() {
               {LABELS.vendorSettlements}
             </h3>
             <ExportButtons
+              disabled={exporting}
               onCsv={() => void exportVendors("csv")}
               onPdf={() => void exportVendors("pdf")}
             />

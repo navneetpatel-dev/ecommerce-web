@@ -7,9 +7,17 @@ import {
   reportsEngineApi,
   type ReportFiltersInput,
 } from "../api/reportsEngine.api";
-import { pollExportUntilReady } from "./useReportHubHelpers/index";
+import {
+  normalizeExportFormat,
+  pollExportUntilReady,
+  type ExportFileFormat,
+} from "./useReportHubHelpers/index";
+import {
+  isReportExportLocked,
+  useReportExportLockStore,
+} from "../stores/reportExportLock.store";
 
-type ExportFormat = "xlsx" | "csv" | "pdf";
+type ExportFormat = ExportFileFormat;
 
 export function useReportExport(
   reportType: string,
@@ -18,13 +26,17 @@ export function useReportExport(
   const [exporting, setExporting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
+  const acquire = useReportExportLockStore((s) => s.acquire);
+  const release = useReportExportLockStore((s) => s.release);
 
   const runExport = useCallback(
     (format: ExportFormat) => {
-      if (!reportType) return;
+      if (!reportType || isReportExportLocked()) return;
       setExporting(true);
       setMessage(null);
       setError(null);
+      acquire();
       const filters = buildFilters();
       const request =
         format === "xlsx"
@@ -34,33 +46,41 @@ export function useReportExport(
             : reportsEngineApi.exportPdf(reportType, filters);
 
       void request
-        .then(async (maybeAsync) => {
-          if (
-            maybeAsync &&
-            typeof maybeAsync === "object" &&
-            "async" in maybeAsync &&
-            maybeAsync.async
-          ) {
-            const exportId = String(
-              (maybeAsync as { exportId: string }).exportId,
+        .then(async (result) => {
+          const exportFormat = normalizeExportFormat(result.format ?? format);
+          if (result.status === "READY") {
+            await reportsEngineApi.downloadExport(
+              result.exportId,
+              reportType,
+              filters.from,
+              filters.to,
+              exportFormat,
             );
-            setMessage(LABELS.reportAsyncQueued);
-            const outcome = await pollExportUntilReady(exportId);
-            if (outcome === "ready") setMessage(LABELS.reportAsyncReady);
-            else if (outcome === "failed") setError(LABELS.reportAsyncFailed);
-            else setMessage(LABELS.reportAsyncQueued);
+            setMessage(LABELS.reportAsyncReady);
+            return;
           }
+          setMessage(LABELS.reportAsyncQueued);
+          const outcome = await pollExportUntilReady(
+            result.exportId,
+            exportFormat,
+          );
+          if (outcome === "ready") setMessage(LABELS.reportAsyncReady);
+          else if (outcome === "failed") setError(LABELS.reportAsyncFailed);
+          else setMessage(LABELS.reportAsyncQueued);
         })
         .catch((err) =>
           setError(getApiErrorMessage(err, LABELS.reportLoadError)),
         )
-        .finally(() => setExporting(false));
+        .finally(() => {
+          release();
+          setExporting(false);
+        });
     },
-    [buildFilters, reportType],
+    [acquire, buildFilters, release, reportType],
   );
 
   return {
-    exporting,
+    exporting: exporting || globalLocked,
     message,
     error,
     exportExcel: () => runExport("xlsx"),

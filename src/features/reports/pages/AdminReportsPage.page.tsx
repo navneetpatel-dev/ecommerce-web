@@ -5,6 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { ReportFilterBar } from "../components/ReportFilterBar.component";
 import { ReportTable } from "../components/ReportTable.component";
+import { AdminExportsPanel } from "../components/AdminExportsPanel.component";
 import { useReportHub } from "../hooks/useReportHub.hook";
 
 export function AdminReportsPage() {
@@ -84,6 +85,8 @@ export function AdminReportsPage() {
           error={hub.error}
           onPageChange={hub.setPage}
         />
+
+        <AdminExportsPanel />
       </div>
     </RequirePermission>
   );

@@ -1,6 +1,15 @@
 import { LABELS } from "@/shared/constants/labels";
-import { REPORT_DOWNLOAD_TOAST_MS } from "@/shared/constants/timing";
-import { reportsEngineApi } from "../../api/reportsEngine.api";
+import {
+  EXPORT_POLL_INITIAL_MS,
+  EXPORT_POLL_MAX_DURATION_MS,
+  EXPORT_POLL_MAX_MS,
+} from "@/shared/constants/timing";
+import {
+  reportsEngineApi,
+  type ExportStatusResult,
+} from "../../api/reportsEngine.api";
+
+export type ExportFileFormat = "csv" | "pdf" | "xlsx";
 
 export function defaultRange() {
   const to = new Date();
@@ -17,18 +26,92 @@ export function labelForKey(key: string): string {
   return map[key] ?? key;
 }
 
-export async function pollExportUntilReady(exportId: string) {
-  const maxAttempts = 40;
-  for (let i = 0; i < maxAttempts; i += 1) {
-    const status = await reportsEngineApi.exportStatus(exportId);
+export function normalizeExportFormat(value: unknown): ExportFileFormat {
+  if (value === "csv" || value === "pdf" || value === "xlsx") return value;
+  return "xlsx";
+}
+
+export function parseFormatFromExportPath(path: string): ExportFileFormat {
+  try {
+    const url = new URL(path, "http://local");
+    return normalizeExportFormat(url.searchParams.get("format"));
+  } catch {
+    const match = path.match(/[?&]format=(csv|pdf|xlsx)/i);
+    return normalizeExportFormat(match?.[1]?.toLowerCase());
+  }
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function filterDatePart(iso: string | null | undefined): string | undefined {
+  if (!iso) return undefined;
+  return iso.slice(0, 10);
+}
+
+async function downloadFromStatus(
+  exportId: string,
+  status: ExportStatusResult,
+  formatHint: ExportFileFormat,
+) {
+  const format = normalizeExportFormat(status.format ?? formatHint);
+  await reportsEngineApi.downloadExport(
+    exportId,
+    status.reportType,
+    filterDatePart(status.filterFrom),
+    filterDatePart(status.filterTo),
+    format,
+    status.downloadUrl,
+  );
+}
+
+export async function pollExportUntilReady(
+  exportId: string,
+  formatHint: ExportFileFormat = "xlsx",
+) {
+  const started = Date.now();
+  let interval = EXPORT_POLL_INITIAL_MS;
+  let etag: string | undefined;
+
+  while (Date.now() - started < EXPORT_POLL_MAX_DURATION_MS) {
+    const status = await reportsEngineApi.exportStatus(exportId, etag);
+    if ("notModified" in status) {
+      etag = status.etag;
+      await sleep(interval);
+      interval = Math.min(interval * 2, EXPORT_POLL_MAX_MS);
+      continue;
+    }
+    etag = status.etag;
+    const format = normalizeExportFormat(status.format ?? formatHint);
     if (status.status === "READY" || status.status === "SYNC") {
-      await reportsEngineApi.downloadExport(exportId, status.reportType);
+      await downloadFromStatus(exportId, status, format);
       return "ready" as const;
     }
     if (status.status === "FAILED") {
       return "failed" as const;
     }
-    await new Promise((r) => setTimeout(r, REPORT_DOWNLOAD_TOAST_MS));
+    await sleep(interval);
+    interval = Math.min(interval * 2, EXPORT_POLL_MAX_MS);
   }
   return "pending" as const;
+}
+
+/** Poll and download for legacy panel exports returning async JSON. */
+export async function pollAsyncExportResponse(response: {
+  exportId: string;
+  status?: string;
+  reportType?: string;
+  format?: string;
+}) {
+  const format = normalizeExportFormat(response.format);
+  if (response.status === "READY") {
+    const status = await reportsEngineApi.exportStatus(response.exportId);
+    if ("notModified" in status) {
+      return pollExportUntilReady(response.exportId, format);
+    }
+    await downloadFromStatus(response.exportId, status, format);
+    return "ready" as const;
+  }
+  return pollExportUntilReady(response.exportId, format);
 }

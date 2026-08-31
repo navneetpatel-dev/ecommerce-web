@@ -8,9 +8,10 @@ import {
   buildDatedExportFilenameFallback,
   resolveDownloadFilename,
 } from "@/shared/utils/downloadFilename";
+import { pollAsyncExportResponse } from "@/features/reports/hooks/useReportHubHelpers/index";
 import type { WalletTransaction } from "@/shared/api/types";
 
-async function downloadStatement(
+async function exportStatement(
   from: string,
   to: string,
   format: "xlsx" | "csv" | "pdf",
@@ -26,6 +27,13 @@ async function downloadStatement(
     },
   );
   if (!res.ok) throw new Error("Download failed");
+  const body = (await res.json()) as {
+    data?: { exportId: string; status: string };
+  };
+  if (body.data?.exportId) {
+    await pollAsyncExportResponse(body.data);
+    return;
+  }
   const blob = await res.blob();
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -49,5 +57,5 @@ export const walletApi = {
       qs ? `${API.wallet.transactions}?${qs}` : API.wallet.transactions,
     );
   },
-  exportStatement: downloadStatement,
+  exportStatement,
 };
