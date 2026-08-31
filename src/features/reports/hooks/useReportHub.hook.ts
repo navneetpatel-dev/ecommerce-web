@@ -4,16 +4,18 @@ import { useCallback, useEffect, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import {
-  reportsEngineApi,
-  type ReportRunResult,
-} from "../api/reportsEngine.api";
-import {
+  applyPollOutcome,
   defaultRange,
   labelForKey,
   pollExportUntilReady,
 } from "./useReportHubHelpers/index";
+import {
+  reportsEngineApi,
+  type ReportRunResult,
+} from "../api/reportsEngine.api";
 import { useReportCatalog } from "./useReportCatalog/index";
 import { useReportExport } from "./useReportExport.hook";
+import { withReportExportLock } from "../utils/withReportExportLock";
 
 export function useReportHub(options?: { preferAudience?: string }) {
   const {
@@ -57,10 +59,9 @@ export function useReportHub(options?: { preferAudience?: string }) {
     );
     if (!exportId) return;
     setMessage(LABELS.reportAsyncQueued);
-    void pollExportUntilReady(exportId).then((outcome) => {
-      if (outcome === "ready") setMessage(LABELS.reportAsyncReady);
-      else if (outcome === "failed") setError(LABELS.reportAsyncFailed);
-      else setMessage(LABELS.reportAsyncQueued);
+    void withReportExportLock(async () => {
+      const outcome = await pollExportUntilReady(exportId);
+      applyPollOutcome(outcome, { setMessage, setError });
     });
   }, []);
 

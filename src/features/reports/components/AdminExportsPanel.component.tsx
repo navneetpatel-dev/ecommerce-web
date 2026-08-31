@@ -11,9 +11,16 @@ import {
   type AdminExportRow,
 } from "../api/reportsEngine.api";
 import {
+  applyPollOutcome,
   normalizeExportFormat,
   pollExportUntilReady,
 } from "../hooks/useReportHubHelpers/index";
+import { withReportExportLock } from "../utils/withReportExportLock";
+import {
+  isReportExportLocked,
+  useReportExportLockStore,
+} from "../stores/reportExportLock.store";
+import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
 
 function filterDatePart(value: unknown): string | undefined {
   if (typeof value !== "string") return undefined;
@@ -36,6 +43,7 @@ export function AdminExportsPanel() {
   const [reportTypeFilter, setReportTypeFilter] = useState("");
   const [retryingId, setRetryingId] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
 
   const filters = useMemo(
     () => ({
@@ -66,19 +74,32 @@ export function AdminExportsPanel() {
   }, [filters.status, filters.reportType]);
 
   const retryExport = async (row: AdminExportRow) => {
+    if (isReportExportLocked()) return;
     setRetryingId(row.id);
     setMessage(null);
     setError(null);
     try {
-      const result = await reportsEngineApi.retryAdminExport(row.id);
-      setMessage(LABELS.reportExportRetryQueued);
-      const format = normalizeExportFormat(result.format ?? row.format);
-      if (result.status !== "READY") {
-        await pollExportUntilReady(result.exportId, format);
-      }
+      await withReportExportLock(async () => {
+        const result = await reportsEngineApi.retryAdminExport(row.id);
+        setMessage(LABELS.reportExportRetryQueued);
+        const format = normalizeExportFormat(result.format ?? row.format);
+        if (result.status === "READY") {
+          await reportsEngineApi.downloadExport(
+            result.exportId,
+            row.reportType,
+            filterDatePart(row.filtersUsed?.from),
+            filterDatePart(row.filtersUsed?.to),
+            format,
+          );
+          setMessage(LABELS.reportAsyncReady);
+          return;
+        }
+        const outcome = await pollExportUntilReady(result.exportId, format);
+        applyPollOutcome(outcome, { setMessage, setError });
+      });
       await load();
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.reportLoadError));
+      setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
     } finally {
       setRetryingId(null);
     }
@@ -172,6 +193,7 @@ export function AdminExportsPanel() {
                           variant="ghost"
                           size="sm"
                           loading={retryingId === row.id}
+                          disabled={globalLocked && retryingId !== row.id}
                           onClick={() => void retryExport(row)}
                         >
                           {LABELS.reportExportRetry}

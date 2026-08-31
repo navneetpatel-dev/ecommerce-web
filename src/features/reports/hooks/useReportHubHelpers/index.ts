@@ -69,7 +69,7 @@ async function downloadFromStatus(
 export async function pollExportUntilReady(
   exportId: string,
   formatHint: ExportFileFormat = "xlsx",
-) {
+): Promise<ExportPollOutcome> {
   const started = Date.now();
   let interval = EXPORT_POLL_INITIAL_MS;
   let etag: string | undefined;
@@ -86,15 +86,46 @@ export async function pollExportUntilReady(
     const format = normalizeExportFormat(status.format ?? formatHint);
     if (status.status === "READY" || status.status === "SYNC") {
       await downloadFromStatus(exportId, status, format);
-      return "ready" as const;
+      return "ready";
     }
     if (status.status === "FAILED") {
-      return "failed" as const;
+      return "failed";
+    }
+    if (status.status === "PROCESSING" && !status.rowCountKnown) {
+      // streaming export — keep polling until row count is known or READY
     }
     await sleep(interval);
     interval = Math.min(interval * 2, EXPORT_POLL_MAX_MS);
   }
-  return "pending" as const;
+  return "timeout";
+}
+
+export type ExportPollOutcome = "ready" | "failed" | "pending" | "timeout";
+
+export function applyPollOutcome(
+  outcome: ExportPollOutcome,
+  handlers: {
+    setMessage: (message: string | null) => void;
+    setError: (error: string | null) => void;
+  },
+) {
+  if (outcome === "ready") {
+    handlers.setMessage(LABELS.reportAsyncReady);
+    handlers.setError(null);
+    return;
+  }
+  if (outcome === "failed") {
+    handlers.setError(LABELS.reportAsyncFailed);
+    handlers.setMessage(null);
+    return;
+  }
+  if (outcome === "timeout") {
+    handlers.setMessage(LABELS.reportAsyncTimeout);
+    handlers.setError(null);
+    return;
+  }
+  handlers.setMessage(LABELS.reportAsyncQueued);
+  handlers.setError(null);
 }
 
 /** Poll and download for legacy panel exports returning async JSON. */
@@ -103,7 +134,7 @@ export async function pollAsyncExportResponse(response: {
   status?: string;
   reportType?: string;
   format?: string;
-}) {
+}): Promise<ExportPollOutcome> {
   const format = normalizeExportFormat(response.format);
   if (response.status === "READY") {
     const status = await reportsEngineApi.exportStatus(response.exportId);
@@ -111,7 +142,7 @@ export async function pollAsyncExportResponse(response: {
       return pollExportUntilReady(response.exportId, format);
     }
     await downloadFromStatus(response.exportId, status, format);
-    return "ready" as const;
+    return "ready";
   }
   return pollExportUntilReady(response.exportId, format);
 }

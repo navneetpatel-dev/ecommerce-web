@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { downloadReport } from "@/shared/api/reportDownload";
 import { buildDatedExportFilenameFallback } from "@/shared/utils/downloadFilename";
+import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
 import { API } from "@/shared/constants/apiRoutes";
@@ -11,6 +12,11 @@ import {
   reportsApi,
   type VendorReportSummary,
 } from "@/features/admin-dashboard";
+import {
+  isReportExportLocked,
+  useReportExportLockStore,
+} from "@/features/reports/stores/reportExportLock.store";
+import { withReportExportLock } from "@/features/reports/utils/withReportExportLock";
 
 /** Owns the vendor settlement report panel state (Rule 1/12). */
 export function useVendorSettlementReport() {
@@ -19,8 +25,11 @@ export function useVendorSettlementReport() {
   const [from, setFrom] = useState(initial.from);
   const [to, setTo] = useState(initial.to);
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [summary, setSummary] = useState<VendorReportSummary | null>(null);
+  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
 
   const buildRange = () => ({
     from: `${from}T00:00:00.000Z`,
@@ -42,23 +51,32 @@ export function useVendorSettlementReport() {
     }
   };
 
-  const exportFile = async (format: "csv" | "pdf") => {
-    if (!vendorId) return;
+  const exportFile = async (format: "csv" | "pdf" | "xlsx") => {
+    if (!vendorId || isReportExportLocked()) return;
+    setExporting(true);
+    setError(null);
+    setMessage(null);
     try {
-      await downloadReport(
-        reportsApi.exportUrl(API.reports.vendor(vendorId), {
-          ...buildRange(),
-          format,
-        }),
-        buildDatedExportFilenameFallback(
-          "vendor-settlement-summary",
-          from,
-          to,
-          format,
-        ),
-      );
+      await withReportExportLock(async () => {
+        setMessage(LABELS.reportAsyncQueued);
+        await downloadReport(
+          reportsApi.exportUrl(API.reports.vendor(vendorId), {
+            ...buildRange(),
+            format,
+          }),
+          buildDatedExportFilenameFallback(
+            "vendor-settlement-summary",
+            from,
+            to,
+            format === "xlsx" ? "xlsx" : format,
+          ),
+        );
+        setMessage(LABELS.reportAsyncReady);
+      });
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
+      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -69,7 +87,9 @@ export function useVendorSettlementReport() {
     to,
     setTo,
     loading,
+    exporting: exporting || globalLocked,
     error,
+    message,
     summary,
     load,
     exportFile,

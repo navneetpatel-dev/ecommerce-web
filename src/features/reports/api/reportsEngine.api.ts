@@ -220,6 +220,8 @@ export const reportsEngineApi = {
   },
   retryAdminExport: (id: string) =>
     apiClient.post<AsyncExportResponse>(API.reports.adminExportRetry(id), {}),
+  retryExport: (id: string) =>
+    apiClient.post<AsyncExportResponse>(API.reports.exportRetry(id), {}),
   customerOrderHistoryExport: (
     filters: ReportFiltersInput,
     format: "xlsx" | "csv" | "pdf" = "xlsx",

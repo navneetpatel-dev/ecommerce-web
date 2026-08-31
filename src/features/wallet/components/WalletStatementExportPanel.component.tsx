@@ -1,28 +1,41 @@
 "use client";
 
+import { useState } from "react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { FormSection } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
-import { useState } from "react";
+import { withReportExportLock } from "@/features/reports/utils/withReportExportLock";
+import {
+  isReportExportLocked,
+  useReportExportLockStore,
+} from "@/features/reports/stores/reportExportLock.store";
 import { walletApi } from "../api/wallet.api";
 
 export function WalletStatementExportPanel() {
   const [from, setFrom] = useState(defaultRange().from);
   const [to, setTo] = useState(defaultRange().to);
   const [exporting, setExporting] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
 
   const run = async (format: "xlsx" | "csv" | "pdf") => {
+    if (isReportExportLocked()) return;
     setExporting(true);
+    setMessage(null);
     setError(null);
     try {
-      await walletApi.exportStatement(from, to, format);
+      await withReportExportLock(async () => {
+        setMessage(LABELS.reportAsyncQueued);
+        await walletApi.exportStatement(from, to, format);
+        setMessage(LABELS.reportAsyncReady);
+      });
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
+      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
     } finally {
       setExporting(false);
     }
@@ -44,7 +57,8 @@ export function WalletStatementExportPanel() {
             type="button"
             variant="outline"
             fullWidth="mobile"
-            loading={exporting}
+            loading={exporting || globalLocked}
+            disabled={globalLocked}
             onClick={() => void run("xlsx")}
           >
             {LABELS.exportExcel}
@@ -53,7 +67,8 @@ export function WalletStatementExportPanel() {
             type="button"
             variant="outline"
             fullWidth="mobile"
-            loading={exporting}
+            loading={exporting || globalLocked}
+            disabled={globalLocked}
             onClick={() => void run("csv")}
           >
             {LABELS.exportCsv}
@@ -62,12 +77,16 @@ export function WalletStatementExportPanel() {
             type="button"
             variant="outline"
             fullWidth="mobile"
-            loading={exporting}
+            loading={exporting || globalLocked}
+            disabled={globalLocked}
             onClick={() => void run("pdf")}
           >
             {LABELS.exportPdf}
           </Button>
         </ButtonGroup>
+        {message ? (
+          <p className="mt-2 text-body-sm text-ink-muted">{message}</p>
+        ) : null}
         {error ? (
           <p className="mt-2 text-body-sm text-danger">{error}</p>
         ) : null}

@@ -4,7 +4,7 @@ import { API } from '@/shared/constants/apiRoutes'
 export type ReportRange = {
   from: string
   to: string
-  format?: 'json' | 'csv' | 'pdf'
+  format?: 'json' | 'xlsx' | 'csv' | 'pdf'
   page?: number
   limit?: number
 }

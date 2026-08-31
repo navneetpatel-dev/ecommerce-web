@@ -9,6 +9,7 @@ import {
   type ReportRunResult,
 } from "../api/reportsEngine.api";
 import {
+  applyPollOutcome,
   normalizeExportFormat,
   pollExportUntilReady,
   type ExportFileFormat,
@@ -17,6 +18,7 @@ import {
   isReportExportLocked,
   useReportExportLockStore,
 } from "../stores/reportExportLock.store";
+import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
 
 function defaultOrderHistoryRange() {
   const to = new Date();
@@ -83,16 +85,18 @@ export function useCustomerOrderHistory() {
           setMessage(LABELS.reportAsyncReady);
           return;
         }
-        setMessage(LABELS.reportAsyncQueued);
+        setMessage(
+          result.cached ? LABELS.reportAsyncReady : LABELS.reportAsyncQueued,
+        );
         const outcome = await pollExportUntilReady(
           result.exportId,
           exportFormat,
         );
-        if (outcome === "ready") setMessage(LABELS.reportAsyncReady);
-        else if (outcome === "failed") setError(LABELS.reportAsyncFailed);
-        else setMessage(LABELS.reportAsyncQueued);
+        applyPollOutcome(outcome, { setMessage, setError });
       })
-      .catch((err) => setError(getApiErrorMessage(err, LABELS.reportLoadError)))
+      .catch((err) =>
+        setError(getReportExportErrorMessage(err, LABELS.reportLoadError)),
+      )
       .finally(() => {
         release();
         setExporting(false);

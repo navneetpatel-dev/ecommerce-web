@@ -2,12 +2,12 @@
 
 import { useCallback, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import {
   reportsEngineApi,
   type ReportFiltersInput,
 } from "../api/reportsEngine.api";
 import {
+  applyPollOutcome,
   normalizeExportFormat,
   pollExportUntilReady,
   type ExportFileFormat,
@@ -16,6 +16,7 @@ import {
   isReportExportLocked,
   useReportExportLockStore,
 } from "../stores/reportExportLock.store";
+import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
 
 type ExportFormat = ExportFileFormat;
 
@@ -59,17 +60,17 @@ export function useReportExport(
             setMessage(LABELS.reportAsyncReady);
             return;
           }
-          setMessage(LABELS.reportAsyncQueued);
+          setMessage(
+            result.cached ? LABELS.reportAsyncReady : LABELS.reportAsyncQueued,
+          );
           const outcome = await pollExportUntilReady(
             result.exportId,
             exportFormat,
           );
-          if (outcome === "ready") setMessage(LABELS.reportAsyncReady);
-          else if (outcome === "failed") setError(LABELS.reportAsyncFailed);
-          else setMessage(LABELS.reportAsyncQueued);
+          applyPollOutcome(outcome, { setMessage, setError });
         })
         .catch((err) =>
-          setError(getApiErrorMessage(err, LABELS.reportLoadError)),
+          setError(getReportExportErrorMessage(err, LABELS.reportLoadError)),
         )
         .finally(() => {
           release();
