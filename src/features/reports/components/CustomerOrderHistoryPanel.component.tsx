@@ -69,6 +69,12 @@ export function CustomerOrderHistoryPanel() {
         </p>
       ) : null}
 
+      {history.error ? (
+        <p className="text-[0.875rem] text-danger" role="alert">
+          {history.error}
+        </p>
+      ) : null}
+
       {history.result || history.loading || history.error ? (
         <ReportTable
           result={history.result}

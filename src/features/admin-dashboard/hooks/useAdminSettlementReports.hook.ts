@@ -1,10 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { initiateAsyncExport } from "@/shared/api/reportDownload";
 import { LABELS } from "@/shared/constants/labels";
 import { API } from "@/shared/constants/apiRoutes";
 import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
+import {
+  followAsyncExport,
+  isBenignExportError,
+} from "@/features/reports/utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { runReportExport } from "@/features/reports/utils/runReportExport";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
@@ -27,6 +31,7 @@ export function useAdminSettlementReports() {
   const [vendors, setVendors] = useState<VendorSettlementRow[]>([]);
   const [recon, setRecon] = useState<ReconciliationReport | null>(null);
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
+  const runRef = useRef<Promise<void> | null>(null);
 
   const buildRange = () => ({
     from: `${from}T00:00:00.000Z`,
@@ -56,34 +61,34 @@ export function useAdminSettlementReports() {
     }
   };
 
-  const runExport = async (path: string, format: "csv" | "pdf") => {
+  const runExport = async (path: string, format: "csv" | "pdf" | "xlsx") => {
+    void runRef.current?.catch(() => undefined);
     setExporting(true);
     setError(null);
     setMessage(null);
-    try {
-      await runReportExport(async () => {
-        setMessage(LABELS.reportAsyncQueued);
-        await initiateAsyncExport(
-          reportsApi.exportUrl(path, { ...buildRange(), format }),
-        );
-        setMessage(LABELS.reportAsyncReady);
-      }, { onMessage: setMessage, onError: setError });
-    } catch (err) {
-      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
-    } finally {
-      setExporting(false);
-    }
+    const task = runReportExport(async () => {
+      const payload = await initiateAsyncExport(
+        reportsApi.exportUrl(path, { ...buildRange(), format }),
+      );
+      await followAsyncExport(payload, format, { setMessage, setError });
+    }, { onMessage: setMessage, onError: setError })
+      .catch((err) => {
+        if (!isBenignExportError(err)) {
+          setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
+        }
+      })
+      .finally(() => setExporting(false));
+    runRef.current = task;
+    await task;
   };
 
-  const exportSummary = (format: "csv" | "pdf") =>
+  const exportSummary = (format: "csv" | "pdf" | "xlsx") =>
     void runExport(API.reports.adminSummary, format);
 
-  const exportVendors = (format: "csv" | "pdf") => {
-    if (vendors.length === 0) return;
+  const exportVendors = (format: "csv" | "pdf" | "xlsx") =>
     void runExport(API.reports.adminVendors, format);
-  };
 
-  const exportReconciliation = (format: "csv" | "pdf") => {
+  const exportReconciliation = (format: "csv" | "pdf" | "xlsx") => {
     if (!recon) return;
     void runExport(API.reports.adminReconciliation, format);
   };

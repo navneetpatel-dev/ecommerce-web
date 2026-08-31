@@ -7,35 +7,51 @@ import {
   buildDatedExportFilenameFallback,
   resolveDownloadFilename,
 } from "@/shared/utils/downloadFilename";
-import { pollAsyncExportResponse } from "@/features/reports/hooks/useReportHubHelpers/index";
+import {
+  pollAsyncExportResponse,
+  type ExportFileFormat,
+} from "@/features/reports/hooks/useReportHubHelpers/index";
+import type { AsyncExportResponse } from "@/features/reports/api/reportsEngine.api";
+import type { PollExportResult } from "@/features/reports/utils/reportExportPollError";
 import type { WalletTransaction } from "@/shared/api/types";
+import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { apiClient } from "@/shared/api/client";
 
 async function exportStatement(
   from: string,
   to: string,
-  format: "xlsx" | "csv" | "pdf",
-) {
+  format: ExportFileFormat,
+  options?: { signal?: AbortSignal },
+): Promise<PollExportResult | null> {
   const token = getApiSessionAdapter().getAccessToken();
   const params = new URLSearchParams({ from, to, format });
   const res = await fetch(
     `${CLIENT_API_BASE_URL}${API.wallet.statement(params.toString())}`,
     {
       credentials: "include",
-      signal: AbortSignal.timeout(API_TIMEOUT_MS),
+      signal: options?.signal ?? AbortSignal.timeout(API_TIMEOUT_MS),
       headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
     },
   );
-  if (!res.ok) throw new Error("Download failed");
+  if (!res.ok) {
+    let message: string = LABELS.couldNotLoadReport;
+    try {
+      message = getApiErrorMessage(await res.json(), message);
+    } catch {
+      /* ignore */
+    }
+    throw new Error(message);
+  }
 
   const contentType = res.headers.get("content-type") ?? "";
   if (contentType.includes("application/json")) {
-    const body = (await res.json()) as {
-      data?: { exportId: string; status: string; format?: string };
-    };
+    const body = (await res.json()) as { data?: Omit<AsyncExportResponse, "async"> };
     if (body.data?.exportId) {
-      await pollAsyncExportResponse({ ...body.data, format });
-      return;
+      return pollAsyncExportResponse(
+        { ...body.data, format: body.data.format ?? format },
+        options,
+      );
     }
   }
 
@@ -49,6 +65,7 @@ async function exportStatement(
   );
   a.click();
   URL.revokeObjectURL(url);
+  return { outcome: "ready" };
 }
 
 export const walletApi = {

@@ -80,6 +80,15 @@ export function AdminCashbackWriteOffPanel() {
             variant="outline"
             fullWidth="mobile"
             disabled={!report}
+            onClick={() => void exportFile("xlsx")}
+          >
+            {LABELS.exportExcel}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth="mobile"
+            disabled={!report}
             onClick={() => void exportFile("csv")}
           >
             {LABELS.exportCsv}

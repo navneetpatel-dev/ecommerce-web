@@ -6,9 +6,10 @@ import {
 } from "@/shared/constants/timing";
 import {
   reportsEngineApi,
+  type ExportStatus,
   type ExportStatusResult,
 } from "../../api/reportsEngine.api";
-import { assertPollOutcome } from "../../utils/reportExportPollError";
+import type { PollExportResult } from "../../utils/reportExportPollError";
 
 export type ExportFileFormat = "csv" | "pdf" | "xlsx";
 
@@ -42,8 +43,22 @@ export function parseFormatFromExportPath(path: string): ExportFileFormat {
   }
 }
 
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+function sleep(ms: number, signal?: AbortSignal) {
+  return new Promise<void>((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(new DOMException("Aborted", "AbortError"));
+      return;
+    }
+    const timer = setTimeout(resolve, ms);
+    signal?.addEventListener(
+      "abort",
+      () => {
+        clearTimeout(timer);
+        reject(new DOMException("Aborted", "AbortError"));
+      },
+      { once: true },
+    );
+  });
 }
 
 function filterDatePart(iso: string | null | undefined): string | undefined {
@@ -67,19 +82,30 @@ async function downloadFromStatus(
   );
 }
 
+export type ExportPollOutcome = "ready" | "failed" | "timeout" | "aborted";
+
 export async function pollExportUntilReady(
   exportId: string,
   formatHint: ExportFileFormat = "xlsx",
-): Promise<ExportPollOutcome> {
+  options?: { signal?: AbortSignal },
+): Promise<PollExportResult> {
   const started = Date.now();
   let interval = EXPORT_POLL_INITIAL_MS;
   let etag: string | undefined;
 
   while (Date.now() - started < EXPORT_POLL_MAX_DURATION_MS) {
-    const status = await reportsEngineApi.exportStatus(exportId, etag);
+    if (options?.signal?.aborted) {
+      return { outcome: "aborted" };
+    }
+
+    const status = await reportsEngineApi.exportStatus(exportId, etag, options?.signal);
     if ("notModified" in status) {
       etag = status.etag;
-      await sleep(interval);
+      try {
+        await sleep(interval, options?.signal);
+      } catch {
+        return { outcome: "aborted" };
+      }
       interval = Math.min(interval * 2, EXPORT_POLL_MAX_MS);
       continue;
     }
@@ -87,41 +113,45 @@ export async function pollExportUntilReady(
     const format = normalizeExportFormat(status.format ?? formatHint);
     if (status.status === "READY" || status.status === "SYNC") {
       await downloadFromStatus(exportId, status, format);
-      return "ready";
+      return { outcome: "ready" };
     }
     if (status.status === "FAILED") {
-      return "failed";
+      return { outcome: "failed", errorMessage: status.errorMessage };
     }
-    if (status.status === "PROCESSING" && !status.rowCountKnown) {
-      // streaming export — keep polling until row count is known or READY
+    try {
+      await sleep(interval, options?.signal);
+    } catch {
+      return { outcome: "aborted" };
     }
-    await sleep(interval);
     interval = Math.min(interval * 2, EXPORT_POLL_MAX_MS);
   }
-  return "timeout";
+  return { outcome: "timeout" };
 }
 
-export type ExportPollOutcome = "ready" | "failed" | "pending" | "timeout";
-
 export function applyPollOutcome(
-  outcome: ExportPollOutcome,
+  result: PollExportResult,
   handlers: {
     setMessage: (message: string | null) => void;
     setError: (error: string | null) => void;
   },
 ) {
-  if (outcome === "ready") {
+  if (result.outcome === "ready") {
     handlers.setMessage(LABELS.reportAsyncReady);
     handlers.setError(null);
     return;
   }
-  if (outcome === "failed") {
-    handlers.setError(LABELS.reportAsyncFailed);
+  if (result.outcome === "failed") {
+    handlers.setError(result.errorMessage?.trim() || LABELS.reportAsyncFailed);
     handlers.setMessage(null);
     return;
   }
-  if (outcome === "timeout") {
+  if (result.outcome === "timeout") {
     handlers.setMessage(LABELS.reportAsyncTimeout);
+    handlers.setError(null);
+    return;
+  }
+  if (result.outcome === "aborted") {
+    handlers.setMessage(null);
     handlers.setError(null);
     return;
   }
@@ -129,22 +159,30 @@ export function applyPollOutcome(
   handlers.setError(null);
 }
 
-/** Poll and download for legacy panel exports returning async JSON. Throws on failed/timeout. */
-export async function pollAsyncExportResponse(response: {
-  exportId: string;
-  status?: string;
-  reportType?: string;
-  format?: string;
-}): Promise<void> {
+/** Poll and download for legacy panel exports — no throw on timeout/abort. */
+export async function pollAsyncExportResponse(
+  response: {
+    exportId: string;
+    status?: ExportStatus;
+    reportType?: string;
+    format?: string;
+    deduped?: boolean;
+    cached?: boolean;
+  },
+  options?: { signal?: AbortSignal },
+): Promise<PollExportResult> {
   const format = normalizeExportFormat(response.format);
   if (response.status === "READY") {
-    const status = await reportsEngineApi.exportStatus(response.exportId);
+    const status = await reportsEngineApi.exportStatus(
+      response.exportId,
+      undefined,
+      options?.signal,
+    );
     if ("notModified" in status) {
-      assertPollOutcome(await pollExportUntilReady(response.exportId, format));
-      return;
+      return pollExportUntilReady(response.exportId, format, options);
     }
     await downloadFromStatus(response.exportId, status, format);
-    return;
+    return { outcome: "ready" };
   }
-  assertPollOutcome(await pollExportUntilReady(response.exportId, format));
+  return pollExportUntilReady(response.exportId, format, options);
 }

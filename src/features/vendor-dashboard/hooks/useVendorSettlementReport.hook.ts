@@ -1,9 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { downloadReport } from "@/shared/api/reportDownload";
-import { buildDatedExportFilenameFallback } from "@/shared/utils/downloadFilename";
+import { initiateAsyncExport } from "@/shared/api/reportDownload";
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
@@ -13,6 +12,10 @@ import {
   type VendorReportSummary,
 } from "@/features/admin-dashboard";
 import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
+import {
+  followAsyncExport,
+  isBenignExportError,
+} from "@/features/reports/utils/asyncExportFlow";
 import { runReportExport } from "@/features/reports/utils/runReportExport";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
 
@@ -28,6 +31,7 @@ export function useVendorSettlementReport() {
   const [message, setMessage] = useState<string | null>(null);
   const [summary, setSummary] = useState<VendorReportSummary | null>(null);
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
+  const runRef = useRef<Promise<void> | null>(null);
 
   const buildRange = () => ({
     from: `${from}T00:00:00.000Z`,
@@ -51,31 +55,26 @@ export function useVendorSettlementReport() {
 
   const exportFile = async (format: "csv" | "pdf" | "xlsx") => {
     if (!vendorId) return;
+    void runRef.current?.catch(() => undefined);
     setExporting(true);
     setError(null);
     setMessage(null);
-    try {
-      await runReportExport(async () => {
-        setMessage(LABELS.reportAsyncQueued);
-        await downloadReport(
-          reportsApi.exportUrl(API.reports.vendor(vendorId), {
-            ...buildRange(),
-            format,
-          }),
-          buildDatedExportFilenameFallback(
-            "vendor-settlement-summary",
-            from,
-            to,
-            format === "xlsx" ? "xlsx" : format,
-          ),
-        );
-        setMessage(LABELS.reportAsyncReady);
-      }, { onMessage: setMessage, onError: setError });
-    } catch (err) {
-      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
-    } finally {
-      setExporting(false);
-    }
+    const path = reportsApi.exportUrl(API.reports.vendor(vendorId), {
+      ...buildRange(),
+      format,
+    });
+    const task = runReportExport(async () => {
+      const payload = await initiateAsyncExport(path);
+      await followAsyncExport(payload, format, { setMessage, setError });
+    }, { onMessage: setMessage, onError: setError })
+      .catch((err) => {
+        if (!isBenignExportError(err)) {
+          setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
+        }
+      })
+      .finally(() => setExporting(false));
+    runRef.current = task;
+    await task;
   };
 
   return {

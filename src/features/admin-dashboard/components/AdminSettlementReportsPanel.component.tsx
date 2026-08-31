@@ -20,15 +20,26 @@ function Metric({ label, value }: { label: string; value: string }) {
 
 function ExportButtons({
   disabled,
+  onXlsx,
   onCsv,
   onPdf,
 }: {
   disabled?: boolean;
+  onXlsx: () => void;
   onCsv: () => void;
   onPdf: () => void;
 }) {
   return (
     <ButtonGroup align="start">
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        disabled={disabled}
+        onClick={onXlsx}
+      >
+        {LABELS.exportExcel}
+      </Button>
       <Button
         type="button"
         variant="outline"
@@ -92,6 +103,15 @@ export function AdminSettlementReportsPanel() {
             disabled={loading || exporting}
           >
             {LABELS.reportLoad}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth="mobile"
+            disabled={!summary || exporting}
+            onClick={() => void exportSummary("xlsx")}
+          >
+            {LABELS.exportExcel}
           </Button>
           <Button
             type="button"
@@ -170,6 +190,7 @@ export function AdminSettlementReportsPanel() {
             </h3>
             <ExportButtons
               disabled={exporting}
+              onXlsx={() => void exportReconciliation("xlsx")}
               onCsv={() => void exportReconciliation("csv")}
               onPdf={() => void exportReconciliation("pdf")}
             />
@@ -199,6 +220,7 @@ export function AdminSettlementReportsPanel() {
             </h3>
             <ExportButtons
               disabled={exporting}
+              onXlsx={() => void exportVendors("xlsx")}
               onCsv={() => void exportVendors("csv")}
               onPdf={() => void exportVendors("pdf")}
             />

@@ -11,16 +11,18 @@ import {
   type AdminExportRow,
 } from "../api/reportsEngine.api";
 import {
-  applyPollOutcome,
   normalizeExportFormat,
-  pollExportUntilReady,
 } from "../hooks/useReportHubHelpers/index";
-import { withReportExportLock } from "../utils/withReportExportLock";
 import {
-  isReportExportLocked,
-  useReportExportLockStore,
-} from "../stores/reportExportLock.store";
+  followAsyncExport,
+  isBenignExportError,
+} from "../utils/asyncExportFlow";
+import {
+  runReportExport,
+  ReportExportLockedError,
+} from "../utils/runReportExport";
 import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
+import { useReportExportLockStore } from "../stores/reportExportLock.store";
 
 function filterDatePart(value: unknown): string | undefined {
   if (typeof value !== "string") return undefined;
@@ -80,35 +82,68 @@ export function AdminExportsPanel() {
   }, [filters.status, filters.reportType]);
 
   const retryExport = async (row: AdminExportRow) => {
-    if (isReportExportLocked()) return;
     setRetryingId(row.id);
     setMessage(null);
     setError(null);
     try {
-      await withReportExportLock(async () => {
-        const result = await reportsEngineApi.retryAdminExport(row.id);
-        setMessage(LABELS.reportExportRetryQueued);
-        const format = normalizeExportFormat(result.format ?? row.format);
-        if (result.status === "READY") {
-          await reportsEngineApi.downloadExport(
-            result.exportId,
-            row.reportType,
-            filterDatePart(row.filtersUsed?.from),
-            filterDatePart(row.filtersUsed?.to),
+      await runReportExport(
+        async () => {
+          const result = await reportsEngineApi.retryAdminExport(row.id);
+          const format = normalizeExportFormat(result.format ?? row.format);
+          await followAsyncExport(
+            {
+              exportId: result.exportId,
+              status: result.status,
+              format,
+            },
             format,
+            { setMessage, setError },
+            {
+              downloadReady: async (exportId, fmt) => {
+                await reportsEngineApi.downloadExport(
+                  exportId,
+                  row.reportType,
+                  filterDatePart(row.filtersUsed?.from),
+                  filterDatePart(row.filtersUsed?.to),
+                  fmt,
+                );
+              },
+            },
           );
-          setMessage(LABELS.reportAsyncReady);
-          return;
-        }
-        const outcome = await pollExportUntilReady(result.exportId, format);
-        applyPollOutcome(outcome, { setMessage, setError });
-      });
+        },
+        { onMessage: setMessage, onError: setError },
+      );
       await load();
     } catch (err) {
+      if (isBenignExportError(err)) return;
       setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
     } finally {
       setRetryingId(null);
     }
+  };
+
+  const downloadReadyExport = (row: AdminExportRow) => {
+    if (globalLocked) {
+      setError(LABELS.reportExportLocked);
+      return;
+    }
+    void runReportExport(
+      () =>
+        reportsEngineApi.downloadExport(
+          row.id,
+          row.reportType,
+          filterDatePart(row.filtersUsed?.from),
+          filterDatePart(row.filtersUsed?.to),
+          normalizeExportFormat(row.format),
+        ),
+      { onError: setError },
+    ).catch((err) => {
+      if (err instanceof ReportExportLockedError) {
+        setError(err.message);
+        return;
+      }
+      setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
+    });
   };
 
   const queueLabel = LABELS.reportExportQueueDepth
@@ -177,15 +212,8 @@ export function AdminExportsPanel() {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() =>
-                          void reportsEngineApi.downloadExport(
-                            row.id,
-                            row.reportType,
-                            filterDatePart(row.filtersUsed?.from),
-                            filterDatePart(row.filtersUsed?.to),
-                            normalizeExportFormat(row.format),
-                          )
-                        }
+                        disabled={globalLocked}
+                        onClick={() => downloadReadyExport(row)}
                       >
                         {LABELS.download}
                       </Button>

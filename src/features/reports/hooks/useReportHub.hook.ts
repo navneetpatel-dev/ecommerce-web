@@ -7,6 +7,7 @@ import {
   applyPollOutcome,
   defaultRange,
   labelForKey,
+  normalizeExportFormat,
   pollExportUntilReady,
 } from "./useReportHubHelpers/index";
 import {
@@ -15,7 +16,21 @@ import {
 } from "../api/reportsEngine.api";
 import { useReportCatalog } from "./useReportCatalog/index";
 import { useReportExport } from "./useReportExport.hook";
-import { withReportExportLock } from "../utils/withReportExportLock";
+import { isBenignExportError } from "../utils/asyncExportFlow";
+import {
+  runReportExport,
+  ReportExportLockedError,
+} from "../utils/runReportExport";
+import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
+
+function stripResumeQueryParams() {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has("exportId")) return;
+  url.searchParams.delete("exportId");
+  url.searchParams.delete("format");
+  window.history.replaceState({}, "", url.pathname + url.search + url.hash);
+}
 
 export function useReportHub(options?: { preferAudience?: string }) {
   const {
@@ -51,24 +66,45 @@ export function useReportHub(options?: { preferAudience?: string }) {
 
   const exportHub = useReportExport(reportType, buildFilters);
 
-  // Resume download if navigated with ?exportId=
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const exportId = new URLSearchParams(window.location.search).get(
-      "exportId",
-    );
+    const params = new URLSearchParams(window.location.search);
+    const exportId = params.get("exportId");
     if (!exportId) return;
     let active = true;
+    const controller = new AbortController();
+    const format = normalizeExportFormat(params.get("format"));
     setMessage(LABELS.reportAsyncQueued);
-    void withReportExportLock(async () => {
-      const outcome = await pollExportUntilReady(exportId);
-      if (!active) return;
-      applyPollOutcome(outcome, { setMessage, setError });
-    }).catch(() => {
-      if (active) setError(LABELS.reportExportLocked);
+    setError(null);
+    void runReportExport(
+      async () => {
+        const outcome = await pollExportUntilReady(exportId, format, {
+          signal: controller.signal,
+        });
+        if (!active) return;
+        applyPollOutcome(outcome, { setMessage, setError });
+        if (
+          outcome.outcome === "ready" ||
+          outcome.outcome === "failed" ||
+          outcome.outcome === "timeout" ||
+          outcome.outcome === "aborted"
+        ) {
+          stripResumeQueryParams();
+        }
+      },
+      { onMessage: setMessage, onError: setError },
+      { skipLock: true },
+    ).catch((err) => {
+      if (!active || isBenignExportError(err)) return;
+      if (err instanceof ReportExportLockedError) {
+        setError(err.message);
+        return;
+      }
+      setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
     });
     return () => {
       active = false;
+      controller.abort();
     };
   }, []);
 
@@ -100,13 +136,8 @@ export function useReportHub(options?: { preferAudience?: string }) {
     catalogError,
     onRetryCatalog,
     reportType,
-    setReportType: (type: string) => {
-      setReportTypeState(type);
-      setResult(null);
-      setPage(1);
-    },
+    setReportType: setReportTypeState,
     selected,
-    labelForKey,
     from,
     setFrom,
     to,
@@ -122,11 +153,12 @@ export function useReportHub(options?: { preferAudience?: string }) {
     loading,
     error: displayError,
     message: displayMessage,
-    exporting: exportHub.exporting,
     load,
     exportExcel: exportHub.exportExcel,
     exportCsv: exportHub.exportCsv,
     exportPdf: exportHub.exportPdf,
-    setPage: (p: number) => load(p),
+    exporting: exportHub.exporting,
+    labelForKey,
+    setPage: (nextPage: number) => load(nextPage),
   };
 }

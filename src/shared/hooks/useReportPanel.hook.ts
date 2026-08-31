@@ -9,6 +9,10 @@ import {
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
 import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
+import {
+  followAsyncExport,
+  isBenignExportError,
+} from "@/features/reports/utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { runReportExport } from "@/features/reports/utils/runReportExport";
 
@@ -20,7 +24,7 @@ export interface ReportRangeInput {
 
 export interface UseReportPanelParams<TReport> {
   fetchReport: (input: ReportRangeInput) => Promise<TReport>;
-  exportPath: (input: ReportRangeInput, format: "csv" | "pdf") => string;
+  exportPath: (input: ReportRangeInput, format: "csv" | "pdf" | "xlsx") => string;
   documentKey: string;
 }
 
@@ -51,19 +55,21 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
     }
   };
 
-  const exportFile = async (format: "csv" | "pdf") => {
+  const exportFile = async (format: "csv" | "pdf" | "xlsx") => {
     setExporting(true);
     setError(null);
     setMessage(null);
     try {
       await runReportExport(async () => {
         const path = params.exportPath({ from, to, page }, format);
-        setMessage(LABELS.reportAsyncQueued);
-        await initiateAsyncExport(path, parseFormatFromExportPath(path));
-        setMessage(LABELS.reportAsyncReady);
+        const formatHint = parseFormatFromExportPath(path);
+        const payload = await initiateAsyncExport(path);
+        await followAsyncExport(payload, formatHint, { setMessage, setError });
       }, { onMessage: setMessage, onError: setError });
     } catch (err) {
-      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
+      if (!isBenignExportError(err)) {
+        setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
+      }
     } finally {
       setExporting(false);
     }

@@ -14,12 +14,10 @@ export function useWalletLiabilityReport() {
         page,
         limit: 50,
       }),
-    exportPath: ({ from, to, page }, format) =>
+    exportPath: ({ from, to }, format) =>
       reportsApi.exportUrl(API.reports.adminWalletLiability, {
         from: `${from}T00:00:00.000Z`,
         to: `${to}T23:59:59.999Z`,
-        page,
-        limit: 50,
         format,
       }),
     documentKey: "admin-wallet-liability",

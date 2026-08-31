@@ -11,6 +11,7 @@ import { API } from "@/shared/constants/apiRoutes";
 import { BEARER_PREFIX } from "@/shared/constants/http";
 import { LABELS } from "@/shared/constants/labels";
 import { EXPORT_DOWNLOAD_TIMEOUT_MS } from "@/shared/constants/timing";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 
 export type ReportColumnMeta = {
   key: string;
@@ -40,12 +41,19 @@ export type ReportRunResult = {
   };
 };
 
+export type ExportStatus =
+  | "PENDING"
+  | "PROCESSING"
+  | "READY"
+  | "FAILED"
+  | "SYNC";
+
 export type AsyncExportResponse = {
-  async: true;
+  async?: true;
   exportId: string;
-  status: string;
+  status: ExportStatus;
   format?: string;
-  rowCount: number;
+  rowCount?: number;
   rowCountKnown?: boolean;
   cached?: boolean;
   deduped?: boolean;
@@ -55,7 +63,7 @@ export type ExportStatusResult = {
   id: string;
   reportType: string;
   format: string;
-  status: string;
+  status: ExportStatus;
   rowCount: number;
   rowCountKnown: boolean;
   fileUrl: string | null;
@@ -76,7 +84,7 @@ export type AdminExportRow = {
   userId: string;
   reportType: string;
   format: string;
-  status: string;
+  status: ExportStatus;
   rowCount: number;
   rowCountKnown?: boolean;
   byteSize: number | null;
@@ -144,10 +152,12 @@ function triggerPresignedDownload(url: string, fallbackName?: string) {
 async function fetchExportStatus(
   id: string,
   ifNoneMatch?: string,
+  signal?: AbortSignal,
 ): Promise<ExportStatusPollResult> {
   const token = getApiSessionAdapter().getAccessToken();
   const res = await fetch(`${CLIENT_API_BASE_URL}${API.reports.exportStatus(id)}`, {
     credentials: "include",
+    signal,
     headers: {
       ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
       ...(ifNoneMatch ? { "If-None-Match": ifNoneMatch } : {}),
@@ -158,11 +168,18 @@ async function fetchExportStatus(
     return { notModified: true, etag };
   }
   if (!res.ok) {
-    throw new Error(LABELS.couldNotLoadReport);
+    let message: string = LABELS.couldNotLoadReport;
+    try {
+      const body = (await res.json()) as unknown;
+      message = getApiErrorMessage(body, message);
+    } catch {
+      /* non-JSON error body */
+    }
+    throw new Error(message);
   }
   const body = (await res.json()) as { success: boolean; data: ExportStatusResult };
   if (!body.success) {
-    throw new Error(LABELS.couldNotLoadReport);
+    throw new Error(getApiErrorMessage(body, LABELS.couldNotLoadReport));
   }
   return body.data;
 }

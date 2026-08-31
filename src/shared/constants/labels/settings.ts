@@ -49,6 +49,8 @@ export const settingsLabels = {
   reportExportLocked: "Another export is running — wait for it to finish.",
   reportAsyncStreaming: "Generating export…",
   reportAsyncReady: "Export ready — downloading…",
+  reportAsyncCached: "Reusing recent export — downloading…",
+  reportAsyncDeduped: "Export already in progress — waiting for file…",
   reportAsyncFailed: "Export failed. Try again with a narrower date range.",
   reportLoadError: "Could not load report.",
   reportCatalogError: "Could not load report catalog.",

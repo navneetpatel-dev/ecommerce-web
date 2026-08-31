@@ -1,14 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Download } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
+import { isBenignExportError } from "@/features/reports/utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { runReportExport } from "@/features/reports/utils/runReportExport";
 import { adminApi } from "../api/admin.api";
+import { followAsyncExport } from "@/features/reports/utils/asyncExportFlow";
 
 type AdminAnalyticsExportBarProps = {
   range?: { from?: string; to?: string };
@@ -19,6 +21,7 @@ export function AdminAnalyticsExportBar({ range }: AdminAnalyticsExportBarProps)
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
+  const runRef = useRef<Promise<void> | null>(null);
 
   const exportRange = useMemo(
     () => ({
@@ -29,20 +32,22 @@ export function AdminAnalyticsExportBar({ range }: AdminAnalyticsExportBarProps)
   );
 
   const run = async (format: "xlsx" | "csv" | "pdf") => {
+    void runRef.current?.catch(() => undefined);
     setExporting(true);
     setError(null);
     setMessage(null);
-    try {
-      await runReportExport(async () => {
-        setMessage(LABELS.reportAsyncQueued);
-        await adminApi.exportAnalytics(format, exportRange);
-        setMessage(LABELS.reportAsyncReady);
-      }, { onMessage: setMessage, onError: setError });
-    } catch (err) {
-      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
-    } finally {
-      setExporting(false);
-    }
+    const task = runReportExport(async () => {
+      const payload = await adminApi.exportAnalyticsAsync(format, exportRange);
+      await followAsyncExport(payload, format, { setMessage, setError });
+    }, { onMessage: setMessage, onError: setError })
+      .catch((err) => {
+        if (!isBenignExportError(err)) {
+          setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
+        }
+      })
+      .finally(() => setExporting(false));
+    runRef.current = task;
+    await task;
   };
 
   return (

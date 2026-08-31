@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { FormSection } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
+import { applyPollOutcome } from "@/features/reports/hooks/useReportHubHelpers/index";
 import { runReportExport } from "@/features/reports/utils/runReportExport";
+import { isBenignExportError } from "@/features/reports/utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
 import { walletApi } from "../api/wallet.api";
@@ -19,22 +21,31 @@ export function WalletStatementExportPanel() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
+  const abortRef = useRef<AbortController | null>(null);
+  const runRef = useRef<Promise<void> | null>(null);
 
   const run = async (format: "xlsx" | "csv" | "pdf") => {
+    abortRef.current?.abort();
+    void runRef.current?.catch(() => undefined);
+    const controller = new AbortController();
+    abortRef.current = controller;
     setExporting(true);
     setMessage(null);
     setError(null);
-    try {
-      await runReportExport(async () => {
-        setMessage(LABELS.reportAsyncQueued);
-        await walletApi.exportStatement(from, to, format);
-        setMessage(LABELS.reportAsyncReady);
-      }, { onMessage: setMessage, onError: setError });
-    } catch (err) {
-      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
-    } finally {
-      setExporting(false);
-    }
+    const task = runReportExport(async () => {
+      const result = await walletApi.exportStatement(from, to, format, {
+        signal: controller.signal,
+      });
+      if (result) applyPollOutcome(result, { setMessage, setError });
+    }, { onMessage: setMessage, onError: setError })
+      .catch((err) => {
+        if (!isBenignExportError(err)) {
+          setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
+        }
+      })
+      .finally(() => setExporting(false));
+    runRef.current = task;
+    await task;
   };
 
   return (
