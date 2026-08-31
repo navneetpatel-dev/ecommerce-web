@@ -167,6 +167,12 @@ export const couponsLabels = {
   confirmingPayment: "Confirming your payment…",
   confirmingPaymentBody:
     "Payment received. We're verifying it with our payment partner.",
+  restoringCart: "Restoring your cart…",
+  restoringCartBody:
+    "We're putting your items back in your cart so you can try again.",
+  cartEmptyCheckoutTitle: "Your cart needs a moment",
+  cartEmptyCheckoutBody:
+    "Your items are being restored. Please wait a moment, then try placing your order again.",
   orderDetailsLoading: "Loading order details…",
   orderDetailsLoadFailed:
     "We couldn't load payment details right now. View your order for the full breakdown.",

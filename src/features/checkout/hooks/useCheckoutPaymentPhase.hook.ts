@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-export type CheckoutPaymentPhase = "idle" | "placing" | "verifying";
+export type CheckoutPaymentPhase =
+  | "idle"
+  | "placing"
+  | "verifying"
+  | "restoring";
 
 export function useCheckoutPaymentPhase() {
   const [phase, setPhase] = useState<CheckoutPaymentPhase>("idle");

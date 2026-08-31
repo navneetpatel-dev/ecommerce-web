@@ -62,11 +62,15 @@ export function CheckoutPageView({
   const paymentOverlayTitle =
     paymentPhase === "verifying"
       ? LABELS.confirmingPayment
-      : LABELS.placingOrder;
+      : paymentPhase === "restoring"
+        ? LABELS.restoringCart
+        : LABELS.placingOrder;
   const paymentOverlayDescription =
     paymentPhase === "verifying"
       ? LABELS.confirmingPaymentBody
-      : LABELS.placingOrderBody;
+      : paymentPhase === "restoring"
+        ? LABELS.restoringCartBody
+        : LABELS.placingOrderBody;
 
   const summary = (
     <OrderSummaryPanel

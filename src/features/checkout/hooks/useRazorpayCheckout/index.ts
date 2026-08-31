@@ -2,13 +2,17 @@ import { useRouter } from "next/navigation";
 import { checkoutApi } from "../../api/checkout.api";
 import { loadRazorpayScript } from "../../utils/loadRazorpayScript";
 import { getRazorpayCheckoutTheme } from "../../utils/razorpayTheme";
-import { getRazorpayCheckoutConfig, getRazorpayCheckoutMethods } from "../../utils/razorpayCheckoutConfig";
+import {
+  getRazorpayCheckoutConfig,
+  getRazorpayCheckoutMethods,
+} from "../../utils/razorpayCheckoutConfig";
 import { navigate } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { PaymentNotice } from "../usePaymentNotice/index";
+import type { CheckoutPaymentPhase } from "../useCheckoutPaymentPhase.hook";
 
-export type CheckoutPaymentPhase = "idle" | "placing" | "verifying";
+export type { CheckoutPaymentPhase };
 
 type PlaceOrderResult = {
   orderId: string;
@@ -19,12 +23,21 @@ type PlaceOrderResult = {
   checkoutConfigId?: string;
 };
 
+type RestoreOptions = {
+  silent?: boolean;
+};
+
 interface LaunchRazorpayPaymentHelpers {
   router: ReturnType<typeof useRouter>;
   showNotice: (notice: PaymentNotice) => void;
   clearCartCache: () => void;
-  restoreCancelledCheckout: (orderId: string, notice: PaymentNotice) => Promise<void>;
+  restoreCancelledCheckout: (
+    orderId: string,
+    notice: PaymentNotice | null,
+    options?: RestoreOptions,
+  ) => Promise<void>;
   onPhaseChange?: (phase: CheckoutPaymentPhase) => void;
+  onCheckoutComplete?: (orderId: string) => void;
   prefill?: {
     name?: string;
     email?: string;
@@ -40,6 +53,7 @@ export async function launchRazorpayPayment(
     clearCartCache,
     restoreCancelledCheckout,
     onPhaseChange,
+    onCheckoutComplete,
     prefill,
   }: LaunchRazorpayPaymentHelpers,
 ): Promise<void> {
@@ -74,7 +88,8 @@ export async function launchRazorpayPayment(
     theme,
     method: getRazorpayCheckoutMethods(),
     config: getRazorpayCheckoutConfig(),
-    ...(result.checkoutConfigId || process.env.NEXT_PUBLIC_RAZORPAY_CHECKOUT_CONFIG_ID
+    ...(result.checkoutConfigId ||
+    process.env.NEXT_PUBLIC_RAZORPAY_CHECKOUT_CONFIG_ID
       ? {
           checkout_config_id:
             result.checkoutConfigId ||
@@ -104,10 +119,12 @@ export async function launchRazorpayPayment(
           razorpay_payment_id: response.razorpay_payment_id,
           razorpay_signature: response.razorpay_signature,
         });
+        onCheckoutComplete?.(result.orderId);
         clearCartCache();
         navigate(router, PATHS.orderConfirmation(result.orderId));
       } catch {
         onPhaseChange?.("idle");
+        onCheckoutComplete?.(result.orderId);
         showNotice({
           variant: "warning",
           title: LABELS.paymentConfirmationPendingTitle,
