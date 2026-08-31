@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import {
@@ -13,6 +13,7 @@ import {
   pollExportUntilReady,
 } from "./useReportHubHelpers/index";
 import { useReportCatalog } from "./useReportCatalog/index";
+import { useReportExport } from "./useReportExport.hook";
 
 export function useReportHub(options?: { preferAudience?: string }) {
   const {
@@ -34,7 +35,19 @@ export function useReportHub(options?: { preferAudience?: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [exporting, setExporting] = useState(false);
+
+  const buildFilters = useCallback(
+    () => ({
+      from,
+      to,
+      vendorId: vendorId || undefined,
+      categoryId: categoryId || undefined,
+      status: status || undefined,
+    }),
+    [categoryId, from, status, to, vendorId],
+  );
+
+  const exportHub = useReportExport(reportType, buildFilters);
 
   // Resume download if navigated with ?exportId=
   useEffect(() => {
@@ -56,15 +69,12 @@ export function useReportHub(options?: { preferAudience?: string }) {
     setLoading(true);
     setError(null);
     setMessage(null);
+    exportHub.clearMessages();
     reportsEngineApi
       .run(reportType, {
-        from,
-        to,
+        ...buildFilters(),
         page: nextPage,
         limit: 50,
-        vendorId: vendorId || undefined,
-        categoryId: categoryId || undefined,
-        status: status || undefined,
       })
       .then((data) => {
         setResult(data);
@@ -74,39 +84,8 @@ export function useReportHub(options?: { preferAudience?: string }) {
       .finally(() => setLoading(false));
   };
 
-  const exportExcel = () => {
-    if (!reportType) return;
-    setExporting(true);
-    setMessage(null);
-    setError(null);
-    reportsEngineApi
-      .exportExcel(reportType, {
-        from,
-        to,
-        vendorId: vendorId || undefined,
-        categoryId: categoryId || undefined,
-        status: status || undefined,
-      })
-      .then(async (maybeAsync) => {
-        if (
-          maybeAsync &&
-          typeof maybeAsync === "object" &&
-          "async" in maybeAsync &&
-          maybeAsync.async
-        ) {
-          const exportId = String(
-            (maybeAsync as { exportId: string }).exportId,
-          );
-          setMessage(LABELS.reportAsyncQueued);
-          const outcome = await pollExportUntilReady(exportId);
-          if (outcome === "ready") setMessage(LABELS.reportAsyncReady);
-          else if (outcome === "failed") setError(LABELS.reportAsyncFailed);
-          else setMessage(LABELS.reportAsyncQueued);
-        }
-      })
-      .catch((err) => setError(getApiErrorMessage(err, LABELS.reportLoadError)))
-      .finally(() => setExporting(false));
-  };
+  const displayMessage = exportHub.message ?? message;
+  const displayError = exportHub.error ?? error;
 
   return {
     catalog,
@@ -133,11 +112,13 @@ export function useReportHub(options?: { preferAudience?: string }) {
     page,
     result,
     loading,
-    error,
-    message,
-    exporting,
+    error: displayError,
+    message: displayMessage,
+    exporting: exportHub.exporting,
     load,
-    exportExcel,
+    exportExcel: exportHub.exportExcel,
+    exportCsv: exportHub.exportCsv,
+    exportPdf: exportHub.exportPdf,
     setPage: (p: number) => load(p),
   };
 }

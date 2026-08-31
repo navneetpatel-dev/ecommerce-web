@@ -6,6 +6,11 @@ import {
 } from "@/shared/api/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 import { VENDOR_STATUS, PRODUCT_STATUS } from "@/shared/constants/statuses";
+import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
+import { BEARER_PREFIX } from "@/shared/constants/http";
+import { API_TIMEOUT_MS } from "@/shared/constants/timing";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { resolveDownloadFilename } from "@/shared/utils/downloadFilename";
 import type {
   AdminAnalytics,
   VendorInfo,
@@ -16,6 +21,23 @@ import type {
   BulkGenerateResult,
   CouponStatus,
 } from "@/shared/api/types";
+
+async function downloadBlob(path: string, fallbackName: string) {
+  const token = useAuthStore.getState().accessToken;
+  const res = await fetch(`${CLIENT_API_BASE_URL}${path}`, {
+    credentials: "include",
+    signal: AbortSignal.timeout(API_TIMEOUT_MS),
+    headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
+  });
+  if (!res.ok) throw new Error("Download failed");
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = resolveDownloadFilename(res, fallbackName);
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 export const adminApi = {
   dashboard: () =>
@@ -137,4 +159,9 @@ export const adminApi = {
   notifyCouponAlerts: () =>
     apiClient.post<{ notified: number }>(API.coupons.notifyAlerts),
   analytics: () => apiClient.get<AdminAnalytics>(API.admin.analytics),
+  exportAnalytics: (format: "xlsx" | "csv" | "pdf" = "xlsx") =>
+    downloadBlob(
+      API.admin.analyticsExport(`format=${format}`),
+      `platform-analytics_${new Date().toISOString().slice(0, 10)}.${format}`,
+    ),
 };

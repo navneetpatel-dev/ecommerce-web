@@ -64,7 +64,9 @@ export function AdminReportsPage() {
           status={hub.status}
           onStatusChange={hub.setStatus}
           onLoad={() => hub.load(1)}
-          onExport={hub.exportExcel}
+          onExportExcel={hub.exportExcel}
+          onExportCsv={hub.exportCsv}
+          onExportPdf={hub.exportPdf}
           loading={hub.loading}
           exporting={hub.exporting}
         />

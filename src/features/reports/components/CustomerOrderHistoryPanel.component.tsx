@@ -39,7 +39,25 @@ export function CustomerOrderHistoryPanel() {
               onClick={history.exportExcel}
               disabled={history.exporting}
             >
-              {LABELS.exportOrderHistory}
+              {LABELS.exportExcel}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              fullWidth="mobile"
+              onClick={history.exportCsv}
+              disabled={history.exporting}
+            >
+              {LABELS.exportCsv}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              fullWidth="mobile"
+              onClick={history.exportPdf}
+              disabled={history.exporting}
+            >
+              {LABELS.exportPdf}
             </Button>
           </ButtonGroup>
         </div>

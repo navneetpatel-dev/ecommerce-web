@@ -29,13 +29,12 @@ export type AdminReportSummary = {
 export type VendorSettlementRow = {
   vendorId: string
   vendorName: string
-  grossSales: number
-  discountsAbsorbed: number
-  commissionCharged: number
-  tcsCharged: number
-  netPaidOut: number
   pendingNet: number
   settledNet: number
+  payoutAmount: number
+  payoutPending: number
+  payoutPaid: number
+  payoutStatus: string
 }
 
 export type ReconciliationReport = {

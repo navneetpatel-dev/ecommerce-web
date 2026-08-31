@@ -18,6 +18,39 @@ function Metric({ label, value }: { label: string; value: string }) {
   );
 }
 
+function ExportButtons({
+  disabled,
+  onCsv,
+  onPdf,
+}: {
+  disabled?: boolean;
+  onCsv: () => void;
+  onPdf: () => void;
+}) {
+  return (
+    <ButtonGroup align="start">
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        disabled={disabled}
+        onClick={onCsv}
+      >
+        {LABELS.exportCsv}
+      </Button>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        disabled={disabled}
+        onClick={onPdf}
+      >
+        {LABELS.exportPdf}
+      </Button>
+    </ButtonGroup>
+  );
+}
+
 export function AdminSettlementReportsPanel() {
   const {
     from,
@@ -30,7 +63,9 @@ export function AdminSettlementReportsPanel() {
     vendors,
     recon,
     load,
-    exportFile,
+    exportSummary,
+    exportVendors,
+    exportReconciliation,
   } = useAdminSettlementReports();
 
   return (
@@ -61,7 +96,7 @@ export function AdminSettlementReportsPanel() {
             variant="outline"
             fullWidth="mobile"
             disabled={!summary}
-            onClick={() => void exportFile("csv")}
+            onClick={() => void exportSummary("csv")}
           >
             {LABELS.exportCsv}
           </Button>
@@ -70,7 +105,7 @@ export function AdminSettlementReportsPanel() {
             variant="outline"
             fullWidth="mobile"
             disabled={!summary}
-            onClick={() => void exportFile("pdf")}
+            onClick={() => void exportSummary("pdf")}
           >
             {LABELS.exportPdf}
           </Button>
@@ -125,12 +160,18 @@ export function AdminSettlementReportsPanel() {
       ) : null}
 
       {recon ? (
-        <div className="rounded-md border border-line bg-surface p-4">
-          <h3 className="text-body font-semibold text-ink">
-            {LABELS.reconciliation}
-          </h3>
+        <div className="rounded-md border border-line bg-surface p-4 space-y-3">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <h3 className="text-body font-semibold text-ink">
+              {LABELS.reconciliation}
+            </h3>
+            <ExportButtons
+              onCsv={() => void exportReconciliation("csv")}
+              onPdf={() => void exportReconciliation("pdf")}
+            />
+          </div>
           <p
-            className={`mt-2 text-body font-medium ${
+            className={`text-body font-medium ${
               recon.balanced ? "text-success" : "text-danger"
             }`}
           >
@@ -139,7 +180,7 @@ export function AdminSettlementReportsPanel() {
               : LABELS.reconciliationMismatch}
           </p>
           {!recon.balanced ? (
-            <p className="mt-1 text-body-sm text-ink-muted">
+            <p className="text-body-sm text-ink-muted">
               {LABELS.reconciliationDifference}: {formatInr(recon.difference)}
             </p>
           ) : null}
@@ -147,45 +188,56 @@ export function AdminSettlementReportsPanel() {
       ) : null}
 
       {vendors.length > 0 ? (
-        <div className="overflow-x-auto rounded-md border border-line">
-          <table className="min-w-full text-left text-[0.875rem]">
-            <thead className="border-b border-line bg-paper/60 text-ink-muted">
-              <tr>
-                <th className="px-3 py-2 font-medium">{LABELS.vendorName}</th>
-                <th className="px-3 py-2 font-medium">{LABELS.grossSales}</th>
-                <th className="px-3 py-2 font-medium">
-                  {LABELS.discountsAbsorbed}
-                </th>
-                <th className="px-3 py-2 font-medium">
-                  {LABELS.commissionCharged}
-                </th>
-                <th className="px-3 py-2 font-medium">{LABELS.pendingNet}</th>
-                <th className="px-3 py-2 font-medium">{LABELS.settledNet}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {vendors.map((row) => (
-                <tr key={row.vendorId} className="border-b border-line/70">
-                  <td className="px-3 py-2 text-ink">{row.vendorName}</td>
-                  <td className="px-3 py-2 tabular-nums">
-                    {formatInr(row.grossSales)}
-                  </td>
-                  <td className="px-3 py-2 tabular-nums">
-                    {formatInr(row.discountsAbsorbed)}
-                  </td>
-                  <td className="px-3 py-2 tabular-nums">
-                    {formatInr(row.commissionCharged)}
-                  </td>
-                  <td className="px-3 py-2 tabular-nums">
-                    {formatInr(row.pendingNet)}
-                  </td>
-                  <td className="px-3 py-2 tabular-nums">
-                    {formatInr(row.settledNet)}
-                  </td>
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="text-body font-semibold text-ink">
+              {LABELS.vendorSettlements}
+            </h3>
+            <ExportButtons
+              onCsv={() => void exportVendors("csv")}
+              onPdf={() => void exportVendors("pdf")}
+            />
+          </div>
+          <div className="overflow-x-auto rounded-md border border-line">
+            <table className="min-w-full text-left text-[0.875rem]">
+              <thead className="border-b border-line bg-paper/60 text-ink-muted">
+                <tr>
+                  <th className="px-3 py-2 font-medium">{LABELS.vendorName}</th>
+                  <th className="px-3 py-2 font-medium">{LABELS.pendingNet}</th>
+                  <th className="px-3 py-2 font-medium">{LABELS.settledNet}</th>
+                  <th className="px-3 py-2 font-medium">
+                    {LABELS.payoutAmount}
+                  </th>
+                  <th className="px-3 py-2 font-medium">
+                    {LABELS.payoutPaid}
+                  </th>
+                  <th className="px-3 py-2 font-medium">
+                    {LABELS.payoutStatus}
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {vendors.map((row) => (
+                  <tr key={row.vendorId} className="border-b border-line/70">
+                    <td className="px-3 py-2 text-ink">{row.vendorName}</td>
+                    <td className="px-3 py-2 tabular-nums">
+                      {formatInr(row.pendingNet)}
+                    </td>
+                    <td className="px-3 py-2 tabular-nums">
+                      {formatInr(row.settledNet)}
+                    </td>
+                    <td className="px-3 py-2 tabular-nums">
+                      {formatInr(row.payoutAmount)}
+                    </td>
+                    <td className="px-3 py-2 tabular-nums">
+                      {formatInr(row.payoutPaid)}
+                    </td>
+                    <td className="px-3 py-2">{row.payoutStatus}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : null}
     </div>

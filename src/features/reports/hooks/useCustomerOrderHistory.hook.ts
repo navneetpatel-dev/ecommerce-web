@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
@@ -31,14 +31,15 @@ export function useCustomerOrderHistory() {
   const [message, setMessage] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
 
+  const filters = useCallback(() => ({ from, to }), [from, to]);
+
   const load = (nextPage = page) => {
     setLoading(true);
     setError(null);
     setMessage(null);
     reportsEngineApi
       .customerOrderHistory({
-        from,
-        to,
+        ...filters(),
         page: nextPage,
         limit: DEFAULT_PAGE_LIMIT,
       })
@@ -50,12 +51,12 @@ export function useCustomerOrderHistory() {
       .finally(() => setLoading(false));
   };
 
-  const exportExcel = () => {
+  const runExport = (format: "xlsx" | "csv" | "pdf") => {
     setExporting(true);
     setMessage(null);
     setError(null);
     reportsEngineApi
-      .customerOrderHistoryExport({ from, to })
+      .customerOrderHistoryExport(filters(), format)
       .then(async (maybeAsync) => {
         if (
           maybeAsync &&
@@ -89,7 +90,9 @@ export function useCustomerOrderHistory() {
     message,
     exporting,
     load,
-    exportExcel,
+    exportExcel: () => runExport("xlsx"),
+    exportCsv: () => runExport("csv"),
+    exportPdf: () => runExport("pdf"),
     setPage: (nextPage: number) => load(nextPage),
   };
 }

@@ -55,7 +55,7 @@ export function useAdminSettlementReports() {
     }
   };
 
-  const exportFile = async (format: "csv" | "pdf") => {
+  const exportSummary = async (format: "csv" | "pdf") => {
     try {
       await downloadReport(
         reportsApi.exportUrl(API.reports.adminSummary, {
@@ -74,6 +74,41 @@ export function useAdminSettlementReports() {
     }
   };
 
+  const exportVendors = async (format: "csv" | "pdf") => {
+    if (vendors.length === 0) return;
+    try {
+      await downloadReport(
+        reportsApi.exportUrl(API.reports.adminVendors, {
+          ...buildRange(),
+          format,
+        }),
+        buildDatedExportFilenameFallback(
+          "admin-vendor-settlements",
+          from,
+          to,
+          format,
+        ),
+      );
+    } catch (err) {
+      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
+    }
+  };
+
+  const exportReconciliation = async (format: "csv" | "pdf") => {
+    if (!recon) return;
+    try {
+      await downloadReport(
+        reportsApi.exportUrl(API.reports.adminReconciliation, {
+          ...buildRange(),
+          format,
+        }),
+        buildDatedExportFilenameFallback("admin-reconciliation", from, to, format),
+      );
+    } catch (err) {
+      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
+    }
+  };
+
   return {
     from,
     setFrom,
@@ -85,7 +120,9 @@ export function useAdminSettlementReports() {
     vendors,
     recon,
     load,
-    exportFile,
+    exportSummary,
+    exportVendors,
+    exportReconciliation,
   };
 }
 

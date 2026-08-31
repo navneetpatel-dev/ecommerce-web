@@ -32,7 +32,9 @@ interface ReportFilterBarProps {
   status: string;
   onStatusChange: (value: string) => void;
   onLoad: () => void;
-  onExport: () => void;
+  onExportExcel: () => void;
+  onExportCsv: () => void;
+  onExportPdf: () => void;
   loading: boolean;
   exporting: boolean;
 }
@@ -54,7 +56,9 @@ export function ReportFilterBar({
   status,
   onStatusChange,
   onLoad,
-  onExport,
+  onExportExcel,
+  onExportCsv,
+  onExportPdf,
   loading,
   exporting,
 }: ReportFilterBarProps) {
@@ -137,10 +141,28 @@ export function ReportFilterBar({
             type="button"
             variant="outline"
             fullWidth="mobile"
-            onClick={onExport}
+            onClick={onExportExcel}
             disabled={exporting || !reportType}
           >
             {LABELS.exportExcel}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth="mobile"
+            onClick={onExportCsv}
+            disabled={exporting || !reportType}
+          >
+            {LABELS.exportCsv}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            fullWidth="mobile"
+            onClick={onExportPdf}
+            disabled={exporting || !reportType}
+          >
+            {LABELS.exportPdf}
           </Button>
         </ButtonGroup>
       </div>

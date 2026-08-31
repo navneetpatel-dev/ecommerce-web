@@ -96,14 +96,30 @@ export const reportsEngineApi = {
   exportExcel: (type: string, filters: ReportFiltersInput) =>
     downloadBlob(
       API.reports.run(type, buildQuery({ ...filters, format: "xlsx" })),
-      buildReportExportFilenameFallback(type, filters.from, filters.to),
+      buildReportExportFilenameFallback(type, filters.from, filters.to, "xlsx"),
     ),
-  downloadExport: (id: string, reportType?: string, from?: string, to?: string) =>
+  exportCsv: (type: string, filters: ReportFiltersInput) =>
+    downloadBlob(
+      API.reports.run(type, buildQuery({ ...filters, format: "csv" })),
+      buildReportExportFilenameFallback(type, filters.from, filters.to, "csv"),
+    ),
+  exportPdf: (type: string, filters: ReportFiltersInput) =>
+    downloadBlob(
+      API.reports.run(type, buildQuery({ ...filters, format: "pdf" })),
+      buildReportExportFilenameFallback(type, filters.from, filters.to, "pdf"),
+    ),
+  downloadExport: (
+    id: string,
+    reportType?: string,
+    from?: string,
+    to?: string,
+    extension: "csv" | "pdf" | "xlsx" = "xlsx",
+  ) =>
     downloadBlob(
       API.reports.exportDownload(id),
       reportType && from && to
-        ? buildReportExportFilenameFallback(reportType, from, to)
-        : `report-export_${id}.xlsx`,
+        ? buildReportExportFilenameFallback(reportType, from, to, extension)
+        : `report-export_${id}.${extension}`,
     ),
   exportStatus: (id: string) =>
     apiClient.get<{
@@ -114,16 +130,19 @@ export const reportsEngineApi = {
       fileUrl: string | null;
       errorMessage: string | null;
     }>(API.reports.exportStatus(id)),
-  customerOrderHistoryExport: (filters: ReportFiltersInput) =>
+  customerOrderHistoryExport: (
+    filters: ReportFiltersInput,
+    format: "xlsx" | "csv" | "pdf" = "xlsx",
+  ) =>
     downloadBlob(
       API.reports.customerOrderHistory(
-        buildQuery({ ...filters, format: "xlsx" }),
+        buildQuery({ ...filters, format }),
       ),
       buildDatedExportFilenameFallback(
         "customer-order-history",
         filters.from,
         filters.to,
-        "xlsx",
+        format,
       ),
     ),
   customerOrderHistory: (filters: ReportFiltersInput) =>

@@ -2,6 +2,8 @@
 export const adminRoutes = {
   dashboard: "/api/admin/dashboard",
   analytics: "/api/admin/analytics/platform",
+  analyticsExport: (query = "") =>
+    `/api/admin/analytics/platform/export${query ? `?${query}` : ""}`,
 } as const;
 
 export const auditRoutes = {

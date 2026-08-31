@@ -40,6 +40,7 @@ export function buildReportExportFilenameFallback(
   reportType: string,
   from: string,
   to: string,
+  extension: "csv" | "pdf" | "xlsx" = "xlsx",
 ): string {
-  return buildDatedExportFilenameFallback(reportType, from, to, 'xlsx');
+  return buildDatedExportFilenameFallback(reportType, from, to, extension);
 }

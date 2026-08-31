@@ -18,6 +18,7 @@ import { SkeletonChartCard } from "@/shared/components/Skeletons.component";
 import { AnalyticsMetricCard } from "./AnalyticsMetricCard.component";
 import { AnalyticsRankedList } from "./AnalyticsRankedList.component";
 import { AnalyticsOpsQueues } from "./AnalyticsOpsQueues.component";
+import { AdminAnalyticsExportBar } from "./AdminAnalyticsExportBar.component";
 import {
   formatAnalyticsInr,
   formatAnalyticsPercent,
@@ -66,13 +67,16 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
           className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-brand/10 blur-3xl"
           aria-hidden
         />
-        <div className="relative space-y-2">
-          <h1 className="font-display text-[1.75rem] leading-tight tracking-tight text-ink sm:text-[2rem]">
-            {LABELS.analytics}
-          </h1>
-          <p className="max-w-2xl text-body text-ink-muted">
-            {LABELS.analyticsHint}
-          </p>
+        <div className="relative flex flex-wrap items-start justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="font-display text-[1.75rem] leading-tight tracking-tight text-ink sm:text-[2rem]">
+              {LABELS.analytics}
+            </h1>
+            <p className="max-w-2xl text-body text-ink-muted">
+              {LABELS.analyticsHint}
+            </p>
+          </div>
+          <AdminAnalyticsExportBar />
         </div>
       </motion.header>
 

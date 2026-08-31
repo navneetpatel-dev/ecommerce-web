@@ -2,6 +2,8 @@
 export const walletRoutes = {
   balance: "/api/wallet/balance",
   transactions: "/api/wallet/transactions",
+  statement: (query = "") =>
+    `/api/wallet/statement${query ? `?${query}` : ""}`,
 } as const;
 
 export const commissionsRoutes = {
