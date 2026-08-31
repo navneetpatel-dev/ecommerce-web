@@ -47,7 +47,6 @@ export function patchCartQuantity(
         id: `optimistic-${variantId}`,
         variantId,
         quantity,
-        lineSubtotal: product.basePrice * quantity,
         isAvailable: true,
         unavailableReason: null,
         product: {

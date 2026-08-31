@@ -30,7 +30,7 @@ export function FullCartLine(props: FullCartLineProps) {
   const { item, onUpdateQuantity, onRemoveItem } = props;
   const available = item.isAvailable !== false;
   const attrs = variantLabel(item);
-  const lineTotal = item.lineSubtotal;
+  const lineTotal = item.lineSubtotal ?? 0;
   const mobileEachPrice = `${eachPriceCopy(item)}`;
 
   const handleQuantityChange = (quantity: number) => {

@@ -15,7 +15,10 @@ type OrderPaymentFields = Pick<
 /** Whether the confirmation page should show the payment breakdown card. */
 export function hasOrderPaymentSummaryContent(order: OrderPaymentFields): boolean {
   const walletUsed = Number(order.walletAmountUsed ?? 0);
-  const razorpayPaid = Number(order.razorpayAmountPaid ?? order.amountDue ?? 0);
+  const razorpayPaid = Number(
+    order.razorpayAmountPaid ??
+      (order.paymentMethod === "COD" ? 0 : order.amountDue ?? 0),
+  );
   const pendingCashback = Number(order.pendingCashbackAmount ?? 0);
   const isCod = order.paymentMethod === "COD";
   const showSplit = walletUsed > 0 && razorpayPaid > 0;

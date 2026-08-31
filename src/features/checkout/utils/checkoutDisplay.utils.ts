@@ -10,5 +10,5 @@ export function resolveCartLineSubtotal(
       if (line) return line.lineSubtotal;
     }
   }
-  return item.lineSubtotal;
+  return item.lineSubtotal ?? 0;
 }
