@@ -9,6 +9,10 @@ export type AdminPlatformSettings = PublicPlatformSettings & {
   defaultCommissionRate: number;
   tcsRatePercent: number;
   tdsRatePercent: number;
+  commissionGstRatePercent: number;
+  platformGstin: string;
+  platformLegalName: string;
+  platformState: string;
   autoApproveProducts: boolean;
   payoutCycle: string;
   returnShippingFee: number;

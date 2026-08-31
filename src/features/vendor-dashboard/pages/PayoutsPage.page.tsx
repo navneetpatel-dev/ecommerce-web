@@ -2,6 +2,7 @@
 
 import { usePayoutsPage } from "../hooks/usePayoutsPage.hook";
 import { CommissionLedgerTable } from "../components/CommissionLedgerTable.component";
+import { CommissionInvoicesTable } from "../components/CommissionInvoicesTable.component";
 import { PayoutsTable } from "../components/PayoutsTable.component";
 import { VendorSettlementReportPanel } from "../components/VendorSettlementReportPanel.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
@@ -19,6 +20,11 @@ export function PayoutsPage() {
           <Skeleton className="h-40 w-full" />
         ) : (
           <CommissionLedgerTable commissions={page.commissions} />
+        )}
+        {page.loadingInv ? (
+          <Skeleton className="h-40 w-full" />
+        ) : (
+          <CommissionInvoicesTable invoices={page.invoices} />
         )}
         {page.loadingPay ? (
           <Skeleton className="h-40 w-full" />

@@ -26,6 +26,10 @@ export function PlatformSettingsPage() {
       onCommissionRateChange={settings.setCommissionRate}
       onTcsRateChange={settings.setTcsRatePercent}
       onTdsRateChange={settings.setTdsRatePercent}
+      onCommissionGstRateChange={settings.setCommissionGstRatePercent}
+      onPlatformGstinChange={settings.setPlatformGstin}
+      onPlatformLegalNameChange={settings.setPlatformLegalName}
+      onPlatformStateChange={settings.setPlatformState}
       onAutoApproveChange={settings.setAutoApproveProducts}
       onReturnWindowChange={settings.setReturnWindow}
       onPayoutCycleChange={settings.setPayoutCycle}

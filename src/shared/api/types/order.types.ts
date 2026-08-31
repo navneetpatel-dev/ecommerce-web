@@ -113,6 +113,11 @@ export interface ReturnRequest {
   resolvedAt: string | null;
   createdAt: string;
   productName: string | null;
+  creditNoteNumber?: string | null;
+  creditNoteId?: string | null;
+  debitNoteNumber?: string | null;
+  debitNoteId?: string | null;
+  againstInvoiceNumber?: string | null;
 }
 
 export interface ShippingRate {

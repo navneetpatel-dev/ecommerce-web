@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, type ReactNode } from "react";
+import { Button } from "@/shared/components/ui/button";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { RETURN_STATUS } from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
@@ -23,6 +24,33 @@ export function useAdminReturnsPage(): AdminListPageModel {
       const name = adminRowLabel(row);
       const status = String(row.status ?? "");
       const buttons: ReactNode[] = [];
+
+      if (row.creditNoteNumber) {
+        buttons.push(
+          <Button
+            key="cn"
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => void returnsApi.downloadCreditNote(String(row.id))}
+          >
+            {LABELS.downloadCreditNote}
+          </Button>,
+        );
+      }
+      if (row.debitNoteNumber) {
+        buttons.push(
+          <Button
+            key="dn"
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => void returnsApi.downloadDebitNote(String(row.id))}
+          >
+            {LABELS.downloadDebitNote}
+          </Button>,
+        );
+      }
 
       if (status === RETURN_STATUS.REQUESTED) {
         buttons.push(
@@ -129,6 +157,8 @@ export function useAdminReturnsPage(): AdminListPageModel {
       "status",
       "refundStatus",
       "refundAmount",
+      "creditNoteNumber",
+      "debitNoteNumber",
       "createdAt",
     ],
   };

@@ -17,6 +17,8 @@ export const returnsRoutes = {
   transition: (id: string) => `/api/returns/${id}/transition`,
   detail: (id: string) => `/api/returns/${id}`,
   delete: (id: string) => `/api/returns/${id}`,
+  creditNote: (id: string) => `/api/returns/${id}/credit-note`,
+  debitNote: (id: string) => `/api/returns/${id}/debit-note`,
 } as const;
 
 export const reviewsRoutes = {

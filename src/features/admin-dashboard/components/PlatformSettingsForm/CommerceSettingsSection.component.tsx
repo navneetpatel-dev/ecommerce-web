@@ -2,6 +2,7 @@
 
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
+import { Input } from "@/shared/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -17,6 +18,10 @@ interface CommerceSettingsSectionProps {
   onCommissionRateChange: (value: number) => void;
   onTcsRateChange: (value: number) => void;
   onTdsRateChange: (value: number) => void;
+  onCommissionGstRateChange: (value: number) => void;
+  onPlatformGstinChange: (value: string) => void;
+  onPlatformLegalNameChange: (value: string) => void;
+  onPlatformStateChange: (value: string) => void;
   onAutoApproveChange: (value: boolean) => void;
 }
 
@@ -25,6 +30,10 @@ export function CommerceSettingsSection({
   onCommissionRateChange,
   onTcsRateChange,
   onTdsRateChange,
+  onCommissionGstRateChange,
+  onPlatformGstinChange,
+  onPlatformLegalNameChange,
+  onPlatformStateChange,
   onAutoApproveChange,
 }: CommerceSettingsSectionProps) {
   return (
@@ -61,6 +70,37 @@ export function CommerceSettingsSection({
           step={0.1}
           suffix="%"
           onChange={(value) => onTdsRateChange(value ?? 0)}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        label={LABELS.commissionGstRatePercent}
+        hint={LABELS.commissionGstRateHint}
+      >
+        <NumberInput
+          value={form.commissionGstRatePercent ?? 18}
+          min={0}
+          max={100}
+          step={0.5}
+          suffix="%"
+          onChange={(value) => onCommissionGstRateChange(value ?? 18)}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame label={LABELS.platformLegalName}>
+        <Input
+          value={form.platformLegalName ?? ""}
+          onChange={(e) => onPlatformLegalNameChange(e.target.value)}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame label={LABELS.platformGstin} hint={LABELS.platformGstinHint}>
+        <Input
+          value={form.platformGstin ?? ""}
+          onChange={(e) => onPlatformGstinChange(e.target.value)}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame label={LABELS.platformState}>
+        <Input
+          value={form.platformState ?? ""}
+          onChange={(e) => onPlatformStateChange(e.target.value)}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.autoApproveProducts}>

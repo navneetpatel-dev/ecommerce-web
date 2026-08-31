@@ -16,6 +16,10 @@ interface PlatformSettingsFormProps {
   onCommissionRateChange: (value: number) => void;
   onTcsRateChange: (value: number) => void;
   onTdsRateChange: (value: number) => void;
+  onCommissionGstRateChange: (value: number) => void;
+  onPlatformGstinChange: (value: string) => void;
+  onPlatformLegalNameChange: (value: string) => void;
+  onPlatformStateChange: (value: string) => void;
   onAutoApproveChange: (value: boolean) => void;
   onReturnWindowChange: (value: number) => void;
   onPayoutCycleChange: (value: string) => void;
@@ -45,6 +49,10 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onCommissionRateChange={props.onCommissionRateChange}
           onTcsRateChange={props.onTcsRateChange}
           onTdsRateChange={props.onTdsRateChange}
+          onCommissionGstRateChange={props.onCommissionGstRateChange}
+          onPlatformGstinChange={props.onPlatformGstinChange}
+          onPlatformLegalNameChange={props.onPlatformLegalNameChange}
+          onPlatformStateChange={props.onPlatformStateChange}
           onAutoApproveChange={props.onAutoApproveChange}
         />
 

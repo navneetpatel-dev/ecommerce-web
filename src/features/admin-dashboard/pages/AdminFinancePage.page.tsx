@@ -30,6 +30,20 @@ export function AdminFinancePage() {
           ),
         },
         {
+          value: "commission-invoices",
+          label: LABELS.commissionInvoices,
+          content: (
+            <AdminDataPage
+              title={page.commissionInvoices.title}
+              permission={page.commissionInvoices.permission}
+              load={page.commissionInvoices.load}
+              actions={page.commissionInvoices.actions}
+              columnKeys={page.commissionInvoices.columnKeys}
+              hideTitle
+            />
+          ),
+        },
+        {
           value: "payouts",
           label: LABELS.payouts,
           content: (

@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
 import { Timeline } from "@/shared/components/Timeline.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
@@ -11,6 +13,7 @@ import {
   buildLogisticsTimeline,
   buildRefundTimeline,
 } from "../utils/returnTimeline";
+import { returnsApi } from "../api/returns.api";
 
 const STATUS_LABEL: Record<string, string> = {
   [RETURN_STATUS.REQUESTED]: LABELS.returnLogisticsRequested,
@@ -27,6 +30,17 @@ interface ReturnRequestCardProps {
 }
 
 export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
+  const [pending, setPending] = useState(false);
+
+  const downloadCredit = async () => {
+    setPending(true);
+    try {
+      await returnsApi.downloadCreditNote(row.id);
+    } finally {
+      setPending(false);
+    }
+  };
+
   return (
     <div className="border border-line bg-surface-raised px-5 py-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -44,9 +58,31 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
               {LABELS.returnRefundStatusCompleted} {formatInr(row.refundAmount)}
             </p>
           ) : null}
+          {row.creditNoteNumber ? (
+            <p className="mt-1 text-body-sm text-ink-muted">
+              CN: {row.creditNoteNumber}
+              {row.againstInvoiceNumber
+                ? ` · ${LABELS.againstInvoiceNumber}: ${row.againstInvoiceNumber}`
+                : ""}
+            </p>
+          ) : null}
         </div>
         <Badge variant="outline">{STATUS_LABEL[row.status] ?? row.status}</Badge>
       </div>
+
+      {row.creditNoteNumber ? (
+        <div className="mt-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            loading={pending}
+            onClick={() => void downloadCredit()}
+          >
+            {LABELS.downloadCreditNote}
+          </Button>
+        </div>
+      ) : null}
 
       <div className="mt-5 grid gap-6 border-t border-line pt-5 md:grid-cols-2">
         <div>

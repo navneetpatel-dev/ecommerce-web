@@ -6,6 +6,8 @@ export const walletRoutes = {
 
 export const commissionsRoutes = {
   list: "/api/commissions",
+  invoices: "/api/commissions/invoices",
+  invoicePdf: (invoiceId: string) => `/api/commissions/invoices/${invoiceId}/pdf`,
   vendor: (vendorId: string) => `/api/commissions/vendor/${vendorId}`,
 } as const;
 

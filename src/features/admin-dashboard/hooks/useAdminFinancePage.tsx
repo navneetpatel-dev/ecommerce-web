@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, type ReactNode } from "react";
+import { Button } from "@/shared/components/ui/button";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { commissionsApi, payoutsApi } from "../api/finance.api";
@@ -10,6 +11,7 @@ import type { AdminListPageModel } from "../types/adminListPage.types";
 
 export type AdminFinancePageModel = {
   commissions: AdminListPageModel;
+  commissionInvoices: AdminListPageModel;
   payouts: AdminListPageModel;
 };
 
@@ -17,6 +19,21 @@ export function useAdminFinancePage(): AdminFinancePageModel {
   const loadCommissions = useCallback(
     ({ page, limit }: { page: number; limit: number }) =>
       commissionsApi.list({ page, limit }),
+    [],
+  );
+  const loadCommissionInvoices = useCallback(
+    async ({ page, limit }: { page: number; limit: number }) => {
+      const result = await commissionsApi.listInvoices({ page, limit });
+      return {
+        ...result,
+        items: result.items.map((row) => ({
+          ...row,
+          taxableAmount: row.taxablePaise / 100,
+          gstAmount: row.gstPaise / 100,
+          totalAmount: row.totalPaise / 100,
+        })),
+      };
+    },
     [],
   );
   const loadPayouts = useCallback(
@@ -51,6 +68,29 @@ export function useAdminFinancePage(): AdminFinancePageModel {
         "commissionAmount",
         "status",
         "createdAt",
+      ],
+    },
+    commissionInvoices: {
+      title: LABELS.commissionInvoices,
+      permission: PERMISSIONS.COMMISSION_VIEW,
+      load: loadCommissionInvoices,
+      actions: (row) => (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => void commissionsApi.downloadInvoice(String(row.id))}
+        >
+          {LABELS.downloadCommissionInvoice}
+        </Button>
+      ),
+      columnKeys: [
+        "number",
+        "vendorName",
+        "taxableAmount",
+        "gstAmount",
+        "totalAmount",
+        "issuedAt",
       ],
     },
     payouts: {

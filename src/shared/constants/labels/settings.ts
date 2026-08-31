@@ -21,10 +21,17 @@ export const settingsLabels = {
   defaultCommissionRate: "Default commission rate",
   tcsRatePercent: "Marketplace TCS rate (%)",
   tcsRateHint:
-    "Tax collected at source on taxable marketplace sales. Set 0 to disable.",
+    "Tax collected at source under CGST Act s.52 on taxable marketplace sales. Set 0 to disable.",
   tdsRatePercent: "TDS rate at payout (%)",
   tdsRateHint:
     "TDS under section 194-O deducted when settling vendor payouts. Set 0 to disable.",
+  commissionGstRatePercent: "Commission GST rate (%)",
+  commissionGstRateHint:
+    "GST charged on marketplace commission invoices issued to vendors (SAC 9985).",
+  platformLegalName: "Platform legal name",
+  platformGstin: "Platform GSTIN",
+  platformGstinHint: "Ecommerce operator GSTIN used on commission invoices and GSTR-8.",
+  platformState: "Platform state",
   reports: "Reports",
   reportsHubHint:
     "Filtered, paginated tabular reports with Excel export from frozen ledger data.",

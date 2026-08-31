@@ -19,6 +19,10 @@ export function usePlatformSettingsForm() {
         setForm({
           ...settings,
           returnShippingFee: settings.returnShippingFee ?? 0,
+          commissionGstRatePercent: settings.commissionGstRatePercent ?? 18,
+          platformGstin: settings.platformGstin ?? "",
+          platformLegalName: settings.platformLegalName ?? "",
+          platformState: settings.platformState ?? "",
           codEnabled: settings.codEnabled !== false,
           codMinOrderValue: settings.codMinOrderValue ?? 0,
           codMaxOrderValue: settings.codMaxOrderValue ?? null,
@@ -61,6 +65,30 @@ export function usePlatformSettingsForm() {
       setMessage(null);
       setForm((current) =>
         current ? { ...current, tdsRatePercent: value } : current,
+      );
+    },
+    setCommissionGstRatePercent: (value: number) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, commissionGstRatePercent: value } : current,
+      );
+    },
+    setPlatformGstin: (value: string) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, platformGstin: value } : current,
+      );
+    },
+    setPlatformLegalName: (value: string) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, platformLegalName: value } : current,
+      );
+    },
+    setPlatformState: (value: string) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, platformState: value } : current,
       );
     },
     setAutoApproveProducts: (value: boolean) => {
