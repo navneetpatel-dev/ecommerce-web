@@ -8,6 +8,7 @@ import {
   useRemoveCartItem,
 } from "../api/cart.queries";
 import { useCartDrawerStore } from "../store/cart.store";
+import { cartHasPendingLineSubtotals } from "../utils/cartDisplay.utils";
 import { groupItemsByVendor } from "../utils/cart.utils";
 import { navigate } from "@/shared/utils/navigate";
 import { clampCartQuantity } from "@/shared/constants/cart";
@@ -27,7 +28,11 @@ export function useCartDrawer() {
     return groupItemsByVendor(cart.items);
   }, [cart]);
 
-  const grandTotal = cart?.total ?? cart?.pricingPreview?.grandTotal;
+  const pendingLineTotals = cartHasPendingLineSubtotals(cart);
+  const grandTotal =
+    !pendingLineTotals && cart
+      ? (cart.total ?? cart.pricingPreview?.grandTotal)
+      : undefined;
   const total = grandTotal ?? cart?.merchandiseSubtotal ?? 0;
   const totalIsEstimated = grandTotal == null;
 
@@ -57,6 +62,7 @@ export function useCartDrawer() {
     groupedByVendor,
     total,
     totalIsEstimated,
+    pendingLineTotals,
     updateQuantity,
     removeItem: removeItemById,
     continueShopping,

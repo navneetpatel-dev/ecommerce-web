@@ -9,6 +9,10 @@ import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart";
 import { cn } from "@/shared/utils/cn";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import type { CartItem } from "@/shared/api/types";
+import {
+  hasPendingCartLineSubtotal,
+  resolveCartLineDisplaySubtotal,
+} from "@/features/cart/utils/cartDisplay.utils";
 import { RemoveLineButton, unavailableLabel } from "./cartLineShared.component";
 
 interface CompactCartLineProps {
@@ -21,7 +25,8 @@ interface CompactCartLineProps {
 export function CompactCartLine(props: CompactCartLineProps) {
   const { item, onUpdateQuantity, onRemoveItem } = props;
   const available = item.isAvailable !== false;
-  const lineTotal = item.lineSubtotal ?? item.product.price;
+  const linePending = hasPendingCartLineSubtotal(item);
+  const lineTotal = resolveCartLineDisplaySubtotal(item);
 
   const handleQuantityChange = (quantity: number) => {
     onUpdateQuantity(item.id, quantity);
@@ -61,9 +66,11 @@ export function CompactCartLine(props: CompactCartLineProps) {
           <Badge variant="destructive" className="w-fit text-[0.6875rem]">
             {unavailableLabel(item.unavailableReason)}
           </Badge>
+        ) : linePending ? (
+          <p className="truncate text-body-sm text-ink-muted">Updating…</p>
         ) : (
           <p className="truncate text-body-sm font-semibold tabular-nums text-brand">
-            ₹{formatInrAmount(lineTotal)}
+            ₹{formatInrAmount(lineTotal ?? 0)}
           </p>
         )}
         {available ? (

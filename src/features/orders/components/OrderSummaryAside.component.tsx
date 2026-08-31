@@ -7,6 +7,7 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import { formatInr } from "../utils/format";
 import { OrderPaymentSummary } from "./OrderPaymentSummary.component";
+import { OrderMoneyBreakdown } from "./OrderMoneyBreakdown.component";
 
 interface OrderSummaryAsideProps {
   order: Order;
@@ -25,21 +26,6 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
   const itemCopy = `${itemCount} ${
     itemCount === 1 ? LABELS.itemSingular : LABELS.itemPlural
   }`;
-
-  const merchandiseSubtotal = order.merchandiseSubtotal;
-  const taxTotal = order.taxTotal;
-  const shippingTotal = order.shippingTotal;
-  const showMoneyBreakdown =
-    merchandiseSubtotal != null ||
-    taxTotal != null ||
-    shippingTotal != null;
-
-  const renderDiscountRow = () => (
-    <div className="flex items-center justify-between gap-4 text-success">
-      <dt>{LABELS.discount}</dt>
-      <dd className="tabular-nums">−{formatInr(order.discountTotal)}</dd>
-    </div>
-  );
 
   return (
     <div className="relative border border-line bg-surface-raised p-5 shadow-elevation-1">
@@ -61,41 +47,13 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
         {LABELS.whatYouPaid}
       </h2>
 
-      <dl className="mt-5 space-y-2.5 text-[0.875rem]">
-        <div className="flex items-center justify-between gap-4">
+      <div className="mt-5 space-y-2.5 text-[0.875rem]">
+        <dl className="flex items-center justify-between gap-4">
           <dt className="text-ink-muted">{LABELS.itemsLine}</dt>
           <dd className="tabular-nums text-ink">{itemCount}</dd>
-        </div>
-        {showMoneyBreakdown && merchandiseSubtotal != null ? (
-          <div className="flex items-center justify-between gap-4">
-            <dt className="text-ink-muted">{LABELS.subtotal}</dt>
-            <dd className="tabular-nums text-ink">
-              {formatInr(merchandiseSubtotal)}
-            </dd>
-          </div>
-        ) : null}
-        {showMoneyBreakdown && Number(shippingTotal) > 0 ? (
-          <div className="flex items-center justify-between gap-4">
-            <dt className="text-ink-muted">Shipping</dt>
-            <dd className="tabular-nums text-ink">{formatInr(shippingTotal!)}</dd>
-          </div>
-        ) : null}
-        {showMoneyBreakdown && Number(taxTotal) > 0 ? (
-          <div className="flex items-center justify-between gap-4">
-            <dt className="text-ink-muted">{LABELS.taxTotal}</dt>
-            <dd className="tabular-nums text-ink">{formatInr(taxTotal!)}</dd>
-          </div>
-        ) : null}
-        {Number(order.discountTotal) > 0 ? renderDiscountRow() : null}
-        <div className="flex items-end justify-between gap-4 border-t border-line pt-3">
-          <dt className="text-body-sm font-semibold uppercase tracking-[0.08em] text-brand">
-            {LABELS.total}
-          </dt>
-          <dd className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
-            {formatInr(order.totalAmount)}
-          </dd>
-        </div>
-      </dl>
+        </dl>
+        <OrderMoneyBreakdown order={order} />
+      </div>
 
       <OrderPaymentSummary
         order={order}

@@ -3,6 +3,7 @@
 import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { cartKeys } from "@/features/cart";
+import { scaleCartLineSubtotal } from "@/features/cart/utils/cartDisplay.utils";
 import type { Cart, ProductListItem } from "@/shared/api/types";
 
 export function patchCartQuantity(
@@ -18,11 +19,15 @@ export function patchCartQuantity(
   const { product, variantId, itemId, quantity } = args;
 
   if (quantity <= 0) {
+    const items = base.items.filter((item) =>
+      itemId ? item.id !== itemId : item.variantId !== variantId,
+    );
     return {
       ...base,
-      items: base.items.filter((item) =>
-        itemId ? item.id !== itemId : item.variantId !== variantId,
-      ),
+      items,
+      merchandiseSubtotal: undefined,
+      total: undefined,
+      pricingPreview: undefined,
     };
   }
 
@@ -31,11 +36,20 @@ export function patchCartQuantity(
   );
 
   if (existing) {
+    const nextLineSubtotal = scaleCartLineSubtotal(
+      existing.lineSubtotal,
+      existing.quantity,
+      quantity,
+    );
     return {
       ...base,
       items: base.items.map((item) =>
-        item.id === existing.id ? { ...item, quantity } : item,
+        item.id === existing.id
+          ? { ...item, quantity, lineSubtotal: nextLineSubtotal }
+          : item,
       ),
+      total: undefined,
+      pricingPreview: undefined,
     };
   }
 
@@ -60,6 +74,9 @@ export function patchCartQuantity(
         variant: { sku: "", attributes: {} },
       },
     ],
+    merchandiseSubtotal: undefined,
+    total: undefined,
+    pricingPreview: undefined,
   };
 }
 

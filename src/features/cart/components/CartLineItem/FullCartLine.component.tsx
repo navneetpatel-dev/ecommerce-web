@@ -18,6 +18,10 @@ import {
   variantLabel,
 } from "./cartLineShared.component";
 import { formatLabel } from "@/shared/utils/formatLabel";
+import {
+  hasPendingCartLineSubtotal,
+  resolveCartLineDisplaySubtotal,
+} from "@/features/cart/utils/cartDisplay.utils";
 
 interface FullCartLineProps {
   item: CartItem;
@@ -30,7 +34,8 @@ export function FullCartLine(props: FullCartLineProps) {
   const { item, onUpdateQuantity, onRemoveItem } = props;
   const available = item.isAvailable !== false;
   const attrs = variantLabel(item);
-  const lineTotal = item.lineSubtotal ?? 0;
+  const linePending = hasPendingCartLineSubtotal(item);
+  const lineTotal = resolveCartLineDisplaySubtotal(item);
   const mobileEachPrice = `${eachPriceCopy(item)}`;
 
   const handleQuantityChange = (quantity: number) => {
@@ -128,9 +133,13 @@ export function FullCartLine(props: FullCartLineProps) {
 
       {available ? (
         <div className="hidden flex-col items-end justify-start gap-1 pt-0.5 sm:flex">
-          <p className="font-display text-[1.125rem] tabular-nums text-ink">
-            ₹{formatInrAmount(lineTotal)}
-          </p>
+          {linePending ? (
+            <p className="text-[0.875rem] text-ink-muted">Updating…</p>
+          ) : (
+            <p className="font-display text-[1.125rem] tabular-nums text-ink">
+              ₹{formatInrAmount(lineTotal ?? 0)}
+            </p>
+          )}
           <p className="text-[0.75rem] text-ink-muted">{mobileEachPrice}</p>
         </div>
       ) : (

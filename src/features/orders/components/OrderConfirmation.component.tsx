@@ -11,6 +11,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { shortOrderId } from "../utils/format";
 import { hasOrderPaymentSummaryContent } from "../utils/orderPaymentSummary.utils";
 import { OrderPaymentSummary } from "./OrderPaymentSummary.component";
+import { OrderMoneyBreakdown } from "./OrderMoneyBreakdown.component";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useOrder } from "../api/orders.queries";
 import type { Order } from "@/shared/api/types";
@@ -44,6 +45,7 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
 
   const showPaymentSummary =
     order != null && hasOrderPaymentSummaryContent(order as Order);
+  const showOrderSummary = order != null;
 
   return (
     <div className="relative">
@@ -81,9 +83,15 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
 
           {orderId && isOrderLoading ? <OrderPaymentSummarySkeleton /> : null}
 
-          {showPaymentSummary ? (
+          {showOrderSummary ? (
             <div className="mx-auto mt-6 max-w-sm rounded-md border border-line bg-surface-raised px-4 py-4 text-left">
-              <OrderPaymentSummary order={order as Order} />
+              <OrderMoneyBreakdown order={order as Order} />
+              {showPaymentSummary ? (
+                <OrderPaymentSummary
+                  order={order as Order}
+                  className="mt-4 border-t border-line pt-4"
+                />
+              ) : null}
             </div>
           ) : null}
 
