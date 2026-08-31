@@ -128,7 +128,13 @@ export function CartDrawer({
                       : LABELS.total}
                   </span>
                   <span className="text-[1.125rem] font-bold text-brand">
-                    ₹{formatInrAmount(total)}
+                    {totalIsEstimated && pendingLineTotals ? (
+                      <span className="text-body font-medium text-ink-muted">
+                        Updating…
+                      </span>
+                    ) : (
+                      <>₹{formatInrAmount(total)}</>
+                    )}
                   </span>
                 </div>
                 {hasUnavailableItems ? (

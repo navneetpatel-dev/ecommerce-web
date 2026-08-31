@@ -15,7 +15,10 @@ export interface CartPageViewProps {
   itemCount: number;
   groupedByVendor: Record<string, CartItem[]>;
   subtotal: number;
+  subtotalPending?: boolean;
   total: number;
+  totalIsEstimated?: boolean;
+  pendingLineTotals?: boolean;
   hasUnavailableItems: boolean;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
@@ -46,7 +49,10 @@ export function CartPageView({
   itemCount,
   groupedByVendor,
   subtotal,
+  subtotalPending = false,
   total,
+  totalIsEstimated = false,
+  pendingLineTotals = false,
   hasUnavailableItems,
   onUpdateQuantity,
   onRemoveItem,
@@ -108,7 +114,10 @@ export function CartPageView({
           <OrderSummaryAside
             itemCount={itemCount}
             subtotal={subtotal}
+            subtotalPending={subtotalPending}
             total={total}
+            totalIsEstimated={totalIsEstimated}
+            pendingLineTotals={pendingLineTotals}
             hasUnavailableItems={hasUnavailableItems}
             couponInput={couponInput}
             couponMessage={couponMessage}

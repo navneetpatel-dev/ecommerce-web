@@ -8,7 +8,7 @@ import {
   useRemoveCartItem,
 } from "../api/cart.queries";
 import { useCartDrawerStore } from "../store/cart.store";
-import { cartHasPendingLineSubtotals } from "../utils/cartDisplay.utils";
+import { resolveCartDisplayTotals } from "../utils/cartDisplay.utils";
 import { groupItemsByVendor } from "../utils/cart.utils";
 import { navigate } from "@/shared/utils/navigate";
 import { clampCartQuantity } from "@/shared/constants/cart";
@@ -28,13 +28,7 @@ export function useCartDrawer() {
     return groupItemsByVendor(cart.items);
   }, [cart]);
 
-  const pendingLineTotals = cartHasPendingLineSubtotals(cart);
-  const grandTotal =
-    !pendingLineTotals && cart
-      ? (cart.total ?? cart.pricingPreview?.grandTotal)
-      : undefined;
-  const total = grandTotal ?? cart?.merchandiseSubtotal ?? 0;
-  const totalIsEstimated = grandTotal == null;
+  const displayTotals = resolveCartDisplayTotals(cart);
 
   const hasUnavailableItems =
     cart?.items?.some((item) => item.isAvailable === false) ?? false;
@@ -60,9 +54,9 @@ export function useCartDrawer() {
     hasItems,
     hasUnavailableItems,
     groupedByVendor,
-    total,
-    totalIsEstimated,
-    pendingLineTotals,
+    total: displayTotals.total,
+    totalIsEstimated: displayTotals.totalIsEstimated,
+    pendingLineTotals: displayTotals.pendingLineTotals,
     updateQuantity,
     removeItem: removeItemById,
     continueShopping,

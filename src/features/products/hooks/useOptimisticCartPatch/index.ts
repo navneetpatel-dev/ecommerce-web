@@ -3,7 +3,10 @@
 import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { cartKeys } from "@/features/cart";
-import { scaleCartLineSubtotal } from "@/features/cart/utils/cartDisplay.utils";
+import {
+  patchExistingCartItemQuantity,
+  patchRemoveCartItem,
+} from "@/features/cart/utils/cartDisplay.utils";
 import type { Cart, ProductListItem } from "@/shared/api/types";
 
 export function patchCartQuantity(
@@ -19,12 +22,12 @@ export function patchCartQuantity(
   const { product, variantId, itemId, quantity } = args;
 
   if (quantity <= 0) {
-    const items = base.items.filter((item) =>
-      itemId ? item.id !== itemId : item.variantId !== variantId,
-    );
+    if (itemId) return patchRemoveCartItem(base, itemId);
+    const existing = base.items.find((item) => item.variantId === variantId);
+    if (existing) return patchRemoveCartItem(base, existing.id);
     return {
       ...base,
-      items,
+      items: base.items.filter((item) => item.variantId !== variantId),
       merchandiseSubtotal: undefined,
       total: undefined,
       pricingPreview: undefined,
@@ -36,21 +39,7 @@ export function patchCartQuantity(
   );
 
   if (existing) {
-    const nextLineSubtotal = scaleCartLineSubtotal(
-      existing.lineSubtotal,
-      existing.quantity,
-      quantity,
-    );
-    return {
-      ...base,
-      items: base.items.map((item) =>
-        item.id === existing.id
-          ? { ...item, quantity, lineSubtotal: nextLineSubtotal }
-          : item,
-      ),
-      total: undefined,
-      pricingPreview: undefined,
-    };
+    return patchExistingCartItemQuantity(base, existing.id, quantity);
   }
 
   return {

@@ -8,6 +8,7 @@ import {
 } from "../api/cart.queries";
 import { groupItemsByVendor } from "../utils/cart.utils";
 import { useCartCoupons } from "./useCartCoupons.hook";
+import { resolveCartDisplayTotals } from "../utils/cartDisplay.utils";
 import { clampCartQuantity } from "@/shared/constants/cart";
 import type { CartItem } from "@/shared/api/types";
 
@@ -30,8 +31,7 @@ export function useCartPage() {
     [hasItems, items],
   );
 
-  const subtotal = cart?.merchandiseSubtotal ?? 0;
-  const total = cart?.pricingPreview?.grandTotal ?? cart?.total ?? 0;
+  const displayTotals = resolveCartDisplayTotals(cart);
 
   const vendorDiscountBreakdown = useMemo(() => {
     const shares = cart?.appliedCoupon?.vendorDiscountShares;
@@ -58,8 +58,11 @@ export function useCartPage() {
     itemCount,
     hasUnavailableItems,
     groupedByVendor,
-    subtotal,
-    total,
+    subtotal: displayTotals.subtotal ?? 0,
+    subtotalPending: displayTotals.subtotalPending,
+    total: displayTotals.total,
+    totalIsEstimated: displayTotals.totalIsEstimated,
+    pendingLineTotals: displayTotals.pendingLineTotals,
     vendorDiscountBreakdown,
     updateQuantity,
     removeItem: removeItemById,

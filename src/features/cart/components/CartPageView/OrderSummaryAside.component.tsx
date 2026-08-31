@@ -14,7 +14,10 @@ import { formatInrAmount } from "@/shared/utils/orderFormat";
 interface OrderSummaryAsideProps {
   itemCount: number;
   subtotal: number;
+  subtotalPending?: boolean;
   total: number;
+  totalIsEstimated?: boolean;
+  pendingLineTotals?: boolean;
   hasUnavailableItems: boolean;
   couponInput: string;
   couponMessage: string | null;
@@ -40,7 +43,10 @@ interface OrderSummaryAsideProps {
 export function OrderSummaryAside({
   itemCount,
   subtotal,
+  subtotalPending = false,
   total,
+  totalIsEstimated = false,
+  pendingLineTotals = false,
   hasUnavailableItems,
   couponInput,
   couponMessage,
@@ -58,6 +64,12 @@ export function OrderSummaryAside({
   onRemoveCoupon,
   onApplyEligible,
 }: OrderSummaryAsideProps) {
+  const totalLabel = totalIsEstimated
+    ? pendingLineTotals
+      ? "Updating…"
+      : "Estimated total"
+    : LABELS.total;
+
   return (
     <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-[88px] lg:self-start lg:z-10">
       <div className="relative border border-line bg-surface-raised p-5 shadow-elevation-1">
@@ -70,7 +82,9 @@ export function OrderSummaryAside({
           {itemCount} {itemCount === 1 ? "item" : "items"}
           <span className="mx-2 text-line">·</span>
           <span className="font-medium text-ink">
-            ₹{formatInrAmount(total)}
+            {totalIsEstimated && pendingLineTotals
+              ? "Updating…"
+              : `₹${formatInrAmount(total)}`}
           </span>
         </p>
 
@@ -83,7 +97,11 @@ export function OrderSummaryAside({
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">{LABELS.subtotal}</dt>
             <dd className="tabular-nums text-ink">
-              ₹{formatInrAmount(subtotal)}
+              {subtotalPending ? (
+                <span className="text-ink-muted">Updating…</span>
+              ) : (
+                <>₹{formatInrAmount(subtotal)}</>
+              )}
             </dd>
           </div>
           {appliedDiscount > 0 ? (
@@ -139,10 +157,14 @@ export function OrderSummaryAside({
         <div className="mt-4 border-t border-line pt-4">
           <div className="flex items-end justify-between gap-4">
             <span className="text-[0.875rem] font-medium text-ink">
-              {LABELS.total}
+              {totalLabel}
             </span>
             <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
-              ₹{formatInrAmount(total)}
+              {totalIsEstimated && pendingLineTotals ? (
+                <span className="text-[1rem] text-ink-muted">Updating…</span>
+              ) : (
+                <>₹{formatInrAmount(total)}</>
+              )}
             </span>
           </div>
           {(appliedCashbackAmount > 0 || appliedCouponType === "CASHBACK") && (

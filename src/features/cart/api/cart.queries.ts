@@ -1,6 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Cart } from "@/shared/api/types";
 import { useAuthStore } from "@/shared/stores/auth.store";
+import {
+  patchExistingCartItemQuantity,
+  patchRemoveCartItem,
+} from "../utils/cartDisplay.utils";
 import { cartApi } from "./cart.api";
 
 export const cartKeys = {
@@ -84,12 +88,7 @@ export function useUpdateCartItem() {
       });
       queryClient.setQueriesData<Cart>({ queryKey: cartKeys.all }, (cart) => {
         if (!cart?.items.length) return cart;
-        return {
-          ...cart,
-          items: cart.items.map((item) =>
-            item.id === itemId ? { ...item, quantity } : item,
-          ),
-        };
+        return patchExistingCartItemQuantity(cart, itemId, quantity);
       });
       return { previous };
     },
@@ -106,6 +105,22 @@ export function useRemoveCartItem() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (itemId: string) => cartApi.removeItem(itemId),
+    onMutate: async (itemId) => {
+      await queryClient.cancelQueries({ queryKey: cartKeys.all });
+      const previous = queryClient.getQueriesData<Cart>({
+        queryKey: cartKeys.all,
+      });
+      queryClient.setQueriesData<Cart>({ queryKey: cartKeys.all }, (cart) => {
+        if (!cart?.items.length) return cart;
+        return patchRemoveCartItem(cart, itemId);
+      });
+      return { previous };
+    },
+    onError: (_error, _variables, context) => {
+      context?.previous.forEach(([queryKey, data]) => {
+        queryClient.setQueryData(queryKey, data);
+      });
+    },
     onSuccess: (cart) => syncCartCache(queryClient, cart),
   });
 }

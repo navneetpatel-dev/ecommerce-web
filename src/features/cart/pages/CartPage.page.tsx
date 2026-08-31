@@ -13,7 +13,10 @@ export function CartPage() {
       itemCount={cart.itemCount}
       groupedByVendor={cart.groupedByVendor}
       subtotal={cart.subtotal}
+      subtotalPending={cart.subtotalPending}
       total={cart.total}
+      totalIsEstimated={cart.totalIsEstimated}
+      pendingLineTotals={cart.pendingLineTotals}
       hasUnavailableItems={cart.hasUnavailableItems}
       onUpdateQuantity={cart.updateQuantity}
       onRemoveItem={cart.removeItem}
