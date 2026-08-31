@@ -12,6 +12,9 @@ export interface CheckoutPageViewProps {
   paymentMethod?: string | null;
   walletAmountToUse?: number;
   quote?: CheckoutQuote | null;
+  isQuoteLoading?: boolean;
+  isQuoteError?: boolean;
+  quoteErrorMessage?: string;
   isPending: boolean;
   paymentNotice?: PaymentNotice | null;
   onClearPaymentNotice?: () => void;

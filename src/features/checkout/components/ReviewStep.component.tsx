@@ -7,6 +7,9 @@ import { PayableSummary } from "./ReviewStep/PayableSummary.component";
 
 interface ReviewStepProps {
   quote: CheckoutQuote | null;
+  isQuoteLoading?: boolean;
+  isQuoteError?: boolean;
+  quoteErrorMessage?: string;
   isPending: boolean;
   hasUnavailableItems?: boolean;
   onPlaceOrder: () => void;
@@ -15,7 +18,36 @@ interface ReviewStepProps {
 
 /** Order review step: vendor breakdowns + payable summary + actions. */
 export function ReviewStep(props: ReviewStepProps) {
-  const { quote, isPending, hasUnavailableItems, onPlaceOrder, onBack } = props;
+  const {
+    quote,
+    isQuoteLoading,
+    isQuoteError,
+    quoteErrorMessage,
+    isPending,
+    hasUnavailableItems,
+    onPlaceOrder,
+    onBack,
+  } = props;
+
+  if (!quote && isQuoteError) {
+    return (
+      <div className="space-y-5">
+        <div className="border border-danger bg-danger-subtle px-5 py-8">
+          <p className="font-display text-[1.125rem] text-danger-foreground">
+            {LABELS.summaryLoadFailed}
+          </p>
+          {quoteErrorMessage ? (
+            <p className="mt-1 text-[0.875rem] text-danger-foreground/90">
+              {quoteErrorMessage}
+            </p>
+          ) : null}
+        </div>
+        <Button variant="outline" onClick={onBack} fullWidth="mobile">
+          {LABELS.backToPayment}
+        </Button>
+      </div>
+    );
+  }
 
   if (!quote) {
     return (

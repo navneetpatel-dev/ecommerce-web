@@ -23,6 +23,9 @@ export function CheckoutPageView({
   paymentMethod,
   walletAmountToUse = 0,
   quote,
+  isQuoteLoading,
+  isQuoteError,
+  quoteErrorMessage,
   isPending,
   paymentNotice,
   onClearPaymentNotice,
@@ -110,6 +113,9 @@ export function CheckoutPageView({
               paymentMethod={paymentMethod}
               walletAmountToUse={walletAmountToUse}
               quote={quote}
+              isQuoteLoading={isQuoteLoading}
+              isQuoteError={isQuoteError}
+              quoteErrorMessage={quoteErrorMessage}
               isPending={isPending}
               isCreatingAddress={isCreatingAddress}
               groupedByVendor={groupedByVendor}

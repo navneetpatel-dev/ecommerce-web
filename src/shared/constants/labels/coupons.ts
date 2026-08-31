@@ -182,6 +182,8 @@ export const couponsLabels = {
   backToPayment: "Back to payment",
   preparingSummary: "Preparing your summary",
   calculatingShippingTaxes: "Calculating shipping and taxes for your order…",
+  summaryLoadFailed:
+    "We couldn't calculate shipping and taxes. Go back to payment and try again.",
   couponCodeLabel: "Coupon code",
   yourCart: "Your Cart",
   closeCart: "Close cart",

@@ -34,7 +34,12 @@ export function usePlaceOrderWithRazorpay() {
     couponCode: appliedCouponCode,
     walletAmountToUse,
   };
-  const { data: quote } = useCheckoutQuote(quoteInput);
+  const {
+    data: quote,
+    isLoading: isQuoteLoading,
+    isError: isQuoteError,
+    error: quoteError,
+  } = useCheckoutQuote(quoteInput);
 
   const clearCartCache = useCallback(() => {
     void queryClient.invalidateQueries({ queryKey: cartKeys.all });
@@ -98,6 +103,14 @@ export function usePlaceOrderWithRazorpay() {
   return {
     handlePlaceOrder,
     quote,
+    isQuoteLoading,
+    isQuoteError,
+    quoteErrorMessage:
+      quoteError instanceof ApiError
+        ? quoteError.message
+        : isQuoteError
+          ? LABELS.summaryLoadFailed
+          : undefined,
     isPending: placeOrder.isPending,
     paymentNotice,
     clearPaymentNotice,

@@ -43,6 +43,9 @@ interface CheckoutStepCardProps {
   paymentMethod?: string | null;
   walletAmountToUse: number;
   quote?: CheckoutQuote | null;
+  isQuoteLoading?: boolean;
+  isQuoteError?: boolean;
+  quoteErrorMessage?: string;
   isPending: boolean;
   isCreatingAddress?: boolean;
   groupedByVendor: Record<string, CartItem[]>;
@@ -69,6 +72,9 @@ export function CheckoutStepCard({
   paymentMethod,
   walletAmountToUse,
   quote,
+  isQuoteLoading,
+  isQuoteError,
+  quoteErrorMessage,
   isPending,
   isCreatingAddress,
   groupedByVendor,
@@ -175,6 +181,9 @@ export function CheckoutStepCard({
               >
                 <ReviewStep
                   quote={quote ?? null}
+                  isQuoteLoading={isQuoteLoading}
+                  isQuoteError={isQuoteError}
+                  quoteErrorMessage={quoteErrorMessage}
                   isPending={isPending}
                   hasUnavailableItems={hasUnavailableItems}
                   onPlaceOrder={onPlaceOrder}
