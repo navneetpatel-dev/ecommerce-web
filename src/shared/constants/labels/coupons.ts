@@ -162,6 +162,14 @@ export const couponsLabels = {
   payableNow: "Payable now",
   includingShippingTaxes: "Including shipping and taxes",
   placeOrder: "Place order",
+  placingOrder: "Placing your order…",
+  placingOrderBody: "Hang tight — we're reserving your items and preparing checkout.",
+  confirmingPayment: "Confirming your payment…",
+  confirmingPaymentBody:
+    "Payment received. We're verifying it with our payment partner.",
+  orderDetailsLoading: "Loading order details…",
+  orderDetailsLoadFailed:
+    "We couldn't load payment details right now. View your order for the full breakdown.",
   paymentUnavailableTitle: "Payment unavailable",
   paymentUnavailableLoadScript:
     "Unable to load payment checkout. Please try again.",

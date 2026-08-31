@@ -6,6 +6,8 @@ import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { PaymentNotice } from "../usePaymentNotice/index";
 
+export type CheckoutPaymentPhase = "idle" | "placing" | "verifying";
+
 type PlaceOrderResult = {
   orderId: string;
   razorpayOrderId?: string;
@@ -19,6 +21,7 @@ interface LaunchRazorpayPaymentHelpers {
   showNotice: (notice: PaymentNotice) => void;
   clearCartCache: () => void;
   restoreCancelledCheckout: (orderId: string, notice: PaymentNotice) => Promise<void>;
+  onPhaseChange?: (phase: CheckoutPaymentPhase) => void;
 }
 
 export async function launchRazorpayPayment(
@@ -28,6 +31,7 @@ export async function launchRazorpayPayment(
     showNotice,
     clearCartCache,
     restoreCancelledCheckout,
+    onPhaseChange,
   }: LaunchRazorpayPaymentHelpers,
 ): Promise<void> {
   await loadRazorpayScript();
@@ -57,6 +61,7 @@ export async function launchRazorpayPayment(
     currency: result.currency,
     name: LABELS.brandName,
     handler: async (response) => {
+      onPhaseChange?.("verifying");
       try {
         await checkoutApi.verifyPayment({
           razorpay_order_id: response.razorpay_order_id,
@@ -66,6 +71,7 @@ export async function launchRazorpayPayment(
         clearCartCache();
         navigate(router, PATHS.orderConfirmation(result.orderId));
       } catch {
+        onPhaseChange?.("idle");
         showNotice({
           variant: "warning",
           title: LABELS.paymentConfirmationPendingTitle,
@@ -76,6 +82,7 @@ export async function launchRazorpayPayment(
     },
     modal: {
       ondismiss: () => {
+        onPhaseChange?.("idle");
         void restoreCancelledCheckout(result.orderId, {
           variant: "info",
           title: LABELS.paymentCancelledTitle,
@@ -86,6 +93,7 @@ export async function launchRazorpayPayment(
   });
 
   rzp.on("payment.failed", (resp) => {
+    onPhaseChange?.("idle");
     void restoreCancelledCheckout(result.orderId, {
       variant: "danger",
       title: LABELS.paymentFailedTitle,

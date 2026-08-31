@@ -21,6 +21,8 @@ export function CheckoutPage() {
       isQuoteError={checkout.isQuoteError}
       quoteErrorMessage={checkout.quoteErrorMessage}
       isPending={checkout.isPending}
+      paymentPhase={checkout.paymentPhase}
+      isPaymentOverlayOpen={checkout.isPaymentOverlayOpen}
       paymentNotice={checkout.paymentNotice}
       onClearPaymentNotice={checkout.clearPaymentNotice}
       isCreatingAddress={checkout.isCreatingAddress}

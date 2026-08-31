@@ -1,6 +1,7 @@
 import type { Address, CartItem, CheckoutQuote } from "@/shared/api/types";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { PaymentNotice } from "../../hooks/usePlaceOrder.hook";
+import type { CheckoutPaymentPhase } from "../../hooks/useCheckoutPaymentPhase.hook";
 
 export interface CheckoutPageViewProps {
   isLoading?: boolean;
@@ -16,6 +17,8 @@ export interface CheckoutPageViewProps {
   isQuoteError?: boolean;
   quoteErrorMessage?: string;
   isPending: boolean;
+  paymentPhase?: CheckoutPaymentPhase;
+  isPaymentOverlayOpen?: boolean;
   paymentNotice?: PaymentNotice | null;
   onClearPaymentNotice?: () => void;
   isCreatingAddress?: boolean;

@@ -12,6 +12,7 @@ import { cartKeys } from "@/features/cart";
 import { usePaymentNotice, type PaymentNotice } from "./usePaymentNotice/index";
 import { useRestoreCancelledCheckout } from "./useRestoreCancelledCheckout/index";
 import { launchRazorpayPayment } from "./useRazorpayCheckout/index";
+import { useCheckoutPaymentPhase } from "./useCheckoutPaymentPhase.hook";
 
 export type { PaymentNotice };
 
@@ -27,6 +28,8 @@ export function usePlaceOrderWithRazorpay() {
   const queryClient = useQueryClient();
   const { paymentNotice, showNotice, resetNotice, clearPaymentNotice } =
     usePaymentNotice();
+  const { paymentPhase, setPaymentPhase, isPaymentOverlayOpen } =
+    useCheckoutPaymentPhase();
 
   const quoteInput = {
     addressId,
@@ -53,6 +56,7 @@ export function usePlaceOrderWithRazorpay() {
   const handlePlaceOrder = async (method: string) => {
     if (!addressId) return;
     resetNotice();
+    setPaymentPhase("placing");
 
     try {
       const result = await placeOrder.mutateAsync({
@@ -68,11 +72,13 @@ export function usePlaceOrderWithRazorpay() {
         result.razorpayOrderId &&
         (quote?.amountDue ?? 0) > 0
       ) {
+        setPaymentPhase("idle");
         await launchRazorpayPayment(result, {
           router,
           showNotice,
           clearCartCache,
           restoreCancelledCheckout,
+          onPhaseChange: setPaymentPhase,
         });
         return;
       }
@@ -80,6 +86,7 @@ export function usePlaceOrderWithRazorpay() {
       clearCartCache();
       navigate(router, PATHS.orderConfirmation(result.orderId));
     } catch (err) {
+      setPaymentPhase("idle");
       const isItemsUnavailable =
         err instanceof ApiError && err.code === ERROR_CODES.ITEMS_UNAVAILABLE;
       const description = isItemsUnavailable
@@ -112,6 +119,8 @@ export function usePlaceOrderWithRazorpay() {
           ? LABELS.summaryLoadFailed
           : undefined,
     isPending: placeOrder.isPending,
+    paymentPhase,
+    isPaymentOverlayOpen,
     paymentNotice,
     clearPaymentNotice,
   };

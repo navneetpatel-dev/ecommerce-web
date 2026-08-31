@@ -3,6 +3,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInr } from "../utils/format";
+import { hasOrderPaymentSummaryContent } from "../utils/orderPaymentSummary.utils";
 import type { Order } from "@/shared/api/types";
 
 interface OrderPaymentSummaryProps {
@@ -23,6 +24,10 @@ export function OrderPaymentSummary({
   order,
   className,
 }: OrderPaymentSummaryProps) {
+  if (!hasOrderPaymentSummaryContent(order)) {
+    return null;
+  }
+
   const walletUsed = Number(order.walletAmountUsed ?? 0);
   const originalTotal = Number(
     order.originalTotalAmount ?? order.totalAmount ?? 0,
@@ -33,15 +38,6 @@ export function OrderPaymentSummary({
   const pendingCashback = Number(order.pendingCashbackAmount ?? 0);
   const isCod = order.paymentMethod === "COD";
   const showSplit = walletUsed > 0 && razorpayPaid > 0;
-
-  if (
-    !showSplit &&
-    walletUsed <= 0 &&
-    pendingCashback <= 0 &&
-    !order.cashbackCreditedAt
-  ) {
-    return null;
-  }
 
   return (
     <div className={className}>

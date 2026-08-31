@@ -11,7 +11,9 @@ import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { OrderSummaryPanel } from "./OrderSummaryPanel.component";
 import { MobileSummaryAccordion } from "./MobileSummaryAccordion.component";
 import { CheckoutStepCard } from "./CheckoutStepCard.component";
+import { PaymentProcessingOverlay } from "../PaymentProcessingOverlay.component";
 import type { CheckoutPageViewProps } from "./types";
+import { LABELS } from "@/shared/constants/labels";
 
 export function CheckoutPageView({
   isLoading,
@@ -27,6 +29,8 @@ export function CheckoutPageView({
   isQuoteError,
   quoteErrorMessage,
   isPending,
+  paymentPhase = "idle",
+  isPaymentOverlayOpen = false,
   paymentNotice,
   onClearPaymentNotice,
   isCreatingAddress,
@@ -54,6 +58,15 @@ export function CheckoutPageView({
 
   const noticePrimaryLabel =
     paymentNotice?.variant === "danger" ? "Try again" : "Continue checkout";
+
+  const paymentOverlayTitle =
+    paymentPhase === "verifying"
+      ? LABELS.confirmingPayment
+      : LABELS.placingOrder;
+  const paymentOverlayDescription =
+    paymentPhase === "verifying"
+      ? LABELS.confirmingPaymentBody
+      : LABELS.placingOrderBody;
 
   const summary = (
     <OrderSummaryPanel
@@ -161,6 +174,12 @@ export function CheckoutPageView({
             router.push(PATHS.cart);
           },
         }}
+      />
+
+      <PaymentProcessingOverlay
+        open={isPaymentOverlayOpen}
+        title={paymentOverlayTitle}
+        description={paymentOverlayDescription}
       />
     </div>
   );

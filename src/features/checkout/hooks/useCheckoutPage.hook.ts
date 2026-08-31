@@ -34,6 +34,8 @@ export function useCheckoutPage() {
     isQuoteError,
     quoteErrorMessage,
     isPending,
+    paymentPhase,
+    isPaymentOverlayOpen,
     paymentNotice,
     clearPaymentNotice,
   } = usePlaceOrderWithRazorpay();
@@ -126,6 +128,8 @@ export function useCheckoutPage() {
     isQuoteError,
     quoteErrorMessage,
     isPending,
+    paymentPhase,
+    isPaymentOverlayOpen,
     paymentNotice,
     clearPaymentNotice,
     isLoading,
