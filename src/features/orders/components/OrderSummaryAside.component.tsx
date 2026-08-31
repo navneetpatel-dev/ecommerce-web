@@ -13,15 +13,26 @@ interface OrderSummaryAsideProps {
   order: Order;
   itemCount: number;
   invoicePending: boolean;
+  pendingSubOrderId: string | null;
   invoiceError: string | null;
-  onDownloadInvoice: () => void;
+  onDownloadAllInvoices: () => void;
+  onDownloadSubOrderInvoice: (subOrderId: string) => void;
 }
 
 /** Sticky order-summary sidebar for the order detail screen (Rule 3 split). */
 export function OrderSummaryAside(props: OrderSummaryAsideProps) {
-  const { order, itemCount, invoicePending, invoiceError, onDownloadInvoice } =
-    props;
+  const {
+    order,
+    itemCount,
+    invoicePending,
+    pendingSubOrderId,
+    invoiceError,
+    onDownloadAllInvoices,
+    onDownloadSubOrderInvoice,
+  } = props;
   const address = order.shippingAddress;
+  const subOrders = order.subOrders ?? [];
+  const hasMultipleSellers = subOrders.length > 1;
 
   const itemCopy = `${itemCount} ${
     itemCount === 1 ? LABELS.itemSingular : LABELS.itemPlural
@@ -63,15 +74,51 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
       {address ? <ShippingAddressBlock address={address} /> : null}
 
       <div className="mt-5 border-t border-line pt-5 space-y-2">
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={onDownloadInvoice}
-          loading={invoicePending}
-        >
-          {LABELS.downloadTaxInvoice}
-        </Button>
+        {hasMultipleSellers ? (
+          <div className="space-y-2">
+            <p className="text-body-sm font-medium text-ink">
+              {LABELS.downloadTaxInvoice}
+            </p>
+            {subOrders.map((sub) => (
+              <Button
+                key={sub.id}
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => onDownloadSubOrderInvoice(sub.id)}
+                loading={invoicePending && pendingSubOrderId === sub.id}
+                disabled={!sub.taxInvoiceNumber || invoicePending}
+              >
+                {sub.vendor?.businessName ?? LABELS.sellerFallback}
+                {sub.taxInvoiceNumber ? ` · ${sub.taxInvoiceNumber}` : ""}
+              </Button>
+            ))}
+            <Button
+              type="button"
+              variant="secondary"
+              className="w-full"
+              onClick={onDownloadAllInvoices}
+              loading={invoicePending && pendingSubOrderId == null}
+              disabled={
+                invoicePending ||
+                subOrders.every((sub) => !sub.taxInvoiceNumber)
+              }
+            >
+              {LABELS.downloadAllTaxInvoices}
+            </Button>
+          </div>
+        ) : (
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={onDownloadAllInvoices}
+            loading={invoicePending}
+            disabled={!subOrders[0]?.taxInvoiceNumber}
+          >
+            {LABELS.downloadTaxInvoice}
+          </Button>
+        )}
         {invoiceError ? (
           <p role="alert" className="text-body-sm text-danger">
             {invoiceError}

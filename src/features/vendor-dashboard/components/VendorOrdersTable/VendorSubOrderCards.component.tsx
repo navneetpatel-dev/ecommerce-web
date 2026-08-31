@@ -8,7 +8,10 @@ import { formatInr, shortOrderId } from "./vendorOrderFormat";
 interface VendorSubOrderCardsProps {
   rows: SubOrderRow[];
   updatingId: string | null;
-  renderActions: (subOrderId: string) => React.ReactNode;
+  renderActions: (
+    subOrderId: string,
+    canDownloadInvoice: boolean,
+  ) => React.ReactNode;
 }
 
 /** Below-lg card list for vendor sub-orders (Rule 3 split). */
@@ -35,7 +38,7 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
         {formatInr(row.subOrder.subtotal)}
       </p>
       <div className="mt-4 border-t border-line/80 pt-3">
-        {renderActions(row.subOrder.id)}
+        {renderActions(row.subOrder.id, Boolean(row.subOrder.taxInvoiceNumber))}
       </div>
     </li>
   );

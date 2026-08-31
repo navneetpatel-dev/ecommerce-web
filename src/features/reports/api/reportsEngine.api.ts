@@ -137,4 +137,14 @@ export const reportsEngineApi = {
       API.reports.customerOrderInvoice(orderId),
       buildTaxInvoiceFilenameFallback(orderId),
     ),
+  customerOrderSubInvoice: (orderId: string, subOrderId: string) =>
+    downloadBlob(
+      API.reports.customerOrderSubInvoice(orderId, subOrderId),
+      buildTaxInvoiceFilenameFallback(orderId),
+    ),
+  vendorSubOrderInvoice: (subOrderId: string) =>
+    downloadBlob(
+      API.reports.vendorSubOrderInvoice(subOrderId),
+      `gst-tax-invoice_suborder-${subOrderId.slice(0, 8)}.pdf`,
+    ),
 };

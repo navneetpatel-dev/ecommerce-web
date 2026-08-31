@@ -71,6 +71,8 @@ export const reportsLabels = {
   subOrderCount: "Sub-orders",
   variantId: "Variant ID",
   downloadTaxInvoice: "Download tax invoice",
+  downloadAllTaxInvoices: "Download all invoices (ZIP)",
+  sellerFallback: "Seller",
   exportOrderHistory: "Export order history",
   reportGstTcsSummary: "GST TCS summary (GSTR-8)",
   reportTds194oSummary: "Income tax TDS (194-O) summary",

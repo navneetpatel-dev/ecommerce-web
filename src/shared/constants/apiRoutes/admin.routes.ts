@@ -18,6 +18,10 @@ export const reportsRoutes = {
     `/api/reports/customer/order-history${query ? `?${query}` : ""}`,
   customerOrderInvoice: (orderId: string) =>
     `/api/reports/customer/order-invoice/${orderId}`,
+  customerOrderSubInvoice: (orderId: string, subOrderId: string) =>
+    `/api/reports/customer/order-invoice/${orderId}/${subOrderId}`,
+  vendorSubOrderInvoice: (subOrderId: string) =>
+    `/api/reports/vendor/sub-orders/${subOrderId}/invoice`,
   adminSummary: "/api/reports/admin/summary",
   adminVendors: "/api/reports/admin/vendors",
   adminReconciliation: "/api/reports/admin/reconciliation",

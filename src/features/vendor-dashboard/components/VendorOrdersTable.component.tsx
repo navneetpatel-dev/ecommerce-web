@@ -50,9 +50,10 @@ export function VendorOrdersTable(props: VendorOrdersTableProps) {
   const { orders, updatingId, onSetUpdatingId, onStatusChange } = props;
   const rows = flattenSubOrders(orders);
 
-  const renderActions = (subOrderId: string) => (
+  const renderActions = (subOrderId: string, canDownloadInvoice: boolean) => (
     <SubOrderActions
       subOrderId={subOrderId}
+      canDownloadInvoice={canDownloadInvoice}
       updatingId={updatingId}
       onSetUpdatingId={onSetUpdatingId}
       onStatusChange={onStatusChange}
@@ -76,7 +77,7 @@ export function VendorOrdersTable(props: VendorOrdersTableProps) {
         <StatusBadge status={row.subOrder.status} />
       </TableCell>
       <TableCell className={TABLE_ACTIONS_CELL_CLASS}>
-        {renderActions(row.subOrder.id)}
+        {renderActions(row.subOrder.id, Boolean(row.subOrder.taxInvoiceNumber))}
       </TableCell>
     </TableRow>
   );

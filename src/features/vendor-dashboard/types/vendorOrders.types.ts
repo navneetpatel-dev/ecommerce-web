@@ -11,6 +11,7 @@ export interface VendorSubOrder {
   vendor: VendorInfo;
   subtotal: number;
   status: string;
+  taxInvoiceNumber?: string | null;
 }
 
 /** A flattened order/sub-order pair for table rows. */

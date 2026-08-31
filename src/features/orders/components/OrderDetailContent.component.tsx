@@ -38,7 +38,7 @@ function subOrderEntrance(index: number) {
 export function OrderDetailContent({ order }: OrderDetailContentProps) {
   const itemCount = countOrderItems(order);
   const vendorCount = order.subOrders?.length ?? 0;
-  const documents = useOrderDocuments(order.id);
+  const documents = useOrderDocuments(order);
 
   const renderSubOrder = (
     subOrder: NonNullable<Order["subOrders"]>[number],
@@ -87,8 +87,10 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
               order={order}
               itemCount={itemCount}
               invoicePending={documents.invoicePending}
+              pendingSubOrderId={documents.pendingSubOrderId}
               invoiceError={documents.invoiceError}
-              onDownloadInvoice={documents.downloadInvoice}
+              onDownloadAllInvoices={documents.downloadAllInvoices}
+              onDownloadSubOrderInvoice={documents.downloadSubOrderInvoice}
             />
           </aside>
         </div>

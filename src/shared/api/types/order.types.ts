@@ -51,6 +51,8 @@ export interface SubOrder {
   discountAmount?: number;
   discountTotal?: number;
   customerTotal: number;
+  taxInvoiceNumber?: string | null;
+  taxInvoiceIssuedAt?: string | null;
   items: OrderItem[];
   shipment?: Shipment | null;
 }
