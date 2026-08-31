@@ -4,15 +4,20 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { RotateCcw } from "lucide-react";
 import { EmptyState } from "@/shared/components/EmptyState.component";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+import { DetailQuerySkeleton } from "@/shared/components/DetailQuerySkeleton.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
+import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useReturn } from "../api/returns.queries";
 import { ReturnRequestCard } from "../components/ReturnRequestCard.component";
 
 export function MyReturnDetailPage() {
   const params = useParams<{ id: string }>();
-  const { data, isLoading, isError, error } = useReturn(params.id);
+  const returnId = params.id;
+  const query = useReturn(returnId);
+  const { data, isLoading, isEmpty, error } = resolveQueryDetailState(query, {
+    enabled: Boolean(returnId),
+  });
 
   return (
     <div className="storefront-container py-8 md:py-10">
@@ -24,11 +29,8 @@ export function MyReturnDetailPage() {
       </Link>
 
       {isLoading ? (
-        <div className="mt-6 space-y-3">
-          <Skeleton className="h-20 w-full" />
-          <Skeleton className="h-40 w-full" />
-        </div>
-      ) : isError || !data ? (
+        <DetailQuerySkeleton className="mt-6 space-y-3" />
+      ) : isEmpty ? (
         <div className="mt-8">
           <EmptyState
             icon={RotateCcw}
@@ -42,7 +44,7 @@ export function MyReturnDetailPage() {
         </div>
       ) : (
         <div className="mt-6">
-          <ReturnRequestCard row={data} />
+          <ReturnRequestCard row={data!} />
         </div>
       )}
     </div>

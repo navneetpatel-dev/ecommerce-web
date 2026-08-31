@@ -7,15 +7,19 @@ import { useVariantSelection } from "../useVariantSelection.hook";
 import { useCategories } from "@/features/categories";
 import { usePublicSettings } from "@/shared/hooks/usePublicSettings.hook";
 import { cartLineQuantityMax } from "@/shared/constants/cart";
+import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 
 export function useProductDetailData() {
   const params = useParams<{ slug: string }>();
+  const slug = params?.slug ?? "";
+  const productQuery = useProduct(slug);
   const {
     data: product,
     isLoading,
+    isEmpty: isProductEmpty,
     isError,
-    refetch,
-  } = useProduct(params?.slug || "");
+  } = resolveQueryDetailState(productQuery, { enabled: Boolean(slug) });
+  const refetch = productQuery.refetch;
   const { data: categories = [] } = useCategories({
     enabled: Boolean(product),
   });
@@ -62,6 +66,7 @@ export function useProductDetailData() {
   return {
     product,
     isLoading,
+    isProductEmpty,
     isError,
     onRetry: () => void refetch(),
     categories,

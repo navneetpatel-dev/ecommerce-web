@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCheckoutStore } from "@/shared/stores/checkout.store";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import { usePlaceOrder, useCheckoutQuote } from "../api/checkout.queries";
 import { navigate } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";
@@ -25,6 +26,7 @@ export function usePlaceOrderWithRazorpay() {
   } = useCheckoutStore();
   const placeOrder = usePlaceOrder();
   const router = useRouter();
+  const currentUser = useAuthStore((s) => s.currentUser);
   const queryClient = useQueryClient();
   const { paymentNotice, showNotice, resetNotice, clearPaymentNotice } =
     usePaymentNotice();
@@ -79,6 +81,11 @@ export function usePlaceOrderWithRazorpay() {
           clearCartCache,
           restoreCancelledCheckout,
           onPhaseChange: setPaymentPhase,
+          prefill: {
+            name: currentUser?.name,
+            email: currentUser?.email,
+            contact: currentUser?.phone ?? undefined,
+          },
         });
         return;
       }

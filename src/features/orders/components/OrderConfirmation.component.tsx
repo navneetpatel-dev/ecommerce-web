@@ -11,6 +11,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { shortOrderId } from "../utils/format";
 import { hasOrderPaymentSummaryContent } from "../utils/orderPaymentSummary.utils";
 import { OrderPaymentSummary } from "./OrderPaymentSummary.component";
+import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useOrder } from "../api/orders.queries";
 import type { Order } from "@/shared/api/types";
 
@@ -37,7 +38,9 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
     data: order,
     isLoading: isOrderLoading,
     isError: isOrderError,
-  } = useOrder(orderId ?? "");
+  } = resolveQueryDetailState(useOrder(orderId ?? ""), {
+    enabled: Boolean(orderId),
+  });
 
   const showPaymentSummary =
     order != null && hasOrderPaymentSummaryContent(order as Order);

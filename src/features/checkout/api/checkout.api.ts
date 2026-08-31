@@ -9,6 +9,7 @@ export type PlaceOrderResponse = {
   amount?: number;
   currency?: string;
   keyId?: string;
+  checkoutConfigId?: string;
 };
 
 export type CancelCheckoutPayload = {

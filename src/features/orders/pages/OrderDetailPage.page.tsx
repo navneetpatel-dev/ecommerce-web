@@ -4,27 +4,15 @@ import Link from "next/link";
 import { PackageX } from "lucide-react";
 import { useOrderDetailPage } from "../hooks/useOrderDetailPage.hook";
 import { OrderDetailContent } from "../components/OrderDetailContent.component";
+import { OrderDetailSkeleton } from "../components/OrderDetailSkeleton.component";
 import { EmptyState } from "@/shared/components/EmptyState.component";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { PATHS } from "@/shared/constants/paths";
 
 export function OrderDetailPage() {
   const detail = useOrderDetailPage();
 
   if (detail.isLoading) {
-    return (
-      <div className="storefront-container space-y-4 py-8">
-        <Skeleton className="h-8 w-40" />
-        <Skeleton className="h-12 w-64" />
-        <div className="grid gap-8 lg:grid-cols-12">
-          <div className="space-y-4 lg:col-span-8">
-            <Skeleton className="h-40 w-full" />
-            <Skeleton className="h-40 w-full" />
-          </div>
-          <Skeleton className="h-64 w-full lg:col-span-4" />
-        </div>
-      </div>
-    );
+    return <OrderDetailSkeleton />;
   }
 
   if (detail.notFound || !detail.order) {

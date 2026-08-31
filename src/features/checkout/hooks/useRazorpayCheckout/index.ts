@@ -1,6 +1,8 @@
 import { useRouter } from "next/navigation";
 import { checkoutApi } from "../../api/checkout.api";
 import { loadRazorpayScript } from "../../utils/loadRazorpayScript";
+import { getRazorpayCheckoutTheme } from "../../utils/razorpayTheme";
+import { getRazorpayCheckoutConfig, getRazorpayCheckoutMethods } from "../../utils/razorpayCheckoutConfig";
 import { navigate } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
@@ -14,6 +16,7 @@ type PlaceOrderResult = {
   amount?: number;
   currency?: string;
   keyId?: string;
+  checkoutConfigId?: string;
 };
 
 interface LaunchRazorpayPaymentHelpers {
@@ -22,6 +25,11 @@ interface LaunchRazorpayPaymentHelpers {
   clearCartCache: () => void;
   restoreCancelledCheckout: (orderId: string, notice: PaymentNotice) => Promise<void>;
   onPhaseChange?: (phase: CheckoutPaymentPhase) => void;
+  prefill?: {
+    name?: string;
+    email?: string;
+    contact?: string;
+  };
 }
 
 export async function launchRazorpayPayment(
@@ -32,6 +40,7 @@ export async function launchRazorpayPayment(
     clearCartCache,
     restoreCancelledCheckout,
     onPhaseChange,
+    prefill,
   }: LaunchRazorpayPaymentHelpers,
 ): Promise<void> {
   await loadRazorpayScript();
@@ -54,12 +63,39 @@ export async function launchRazorpayPayment(
     return;
   }
 
+  const theme = getRazorpayCheckoutTheme();
+
   const rzp = new window.Razorpay({
     key: keyId,
     order_id: result.razorpayOrderId!,
     amount: result.amount,
     currency: result.currency,
     name: LABELS.brandName,
+    theme,
+    method: getRazorpayCheckoutMethods(),
+    config: getRazorpayCheckoutConfig(),
+    ...(result.checkoutConfigId || process.env.NEXT_PUBLIC_RAZORPAY_CHECKOUT_CONFIG_ID
+      ? {
+          checkout_config_id:
+            result.checkoutConfigId ||
+            process.env.NEXT_PUBLIC_RAZORPAY_CHECKOUT_CONFIG_ID,
+        }
+      : {}),
+    ...(prefill ? { prefill } : {}),
+    modal: {
+      backdropclose: true,
+      escape: true,
+      handleback: true,
+      animation: true,
+      ondismiss: () => {
+        onPhaseChange?.("idle");
+        void restoreCancelledCheckout(result.orderId, {
+          variant: "info",
+          title: LABELS.paymentCancelledTitle,
+          description: LABELS.paymentCancelledBody,
+        });
+      },
+    },
     handler: async (response) => {
       onPhaseChange?.("verifying");
       try {
@@ -79,16 +115,6 @@ export async function launchRazorpayPayment(
         });
         clearCartCache();
       }
-    },
-    modal: {
-      ondismiss: () => {
-        onPhaseChange?.("idle");
-        void restoreCancelledCheckout(result.orderId, {
-          variant: "info",
-          title: LABELS.paymentCancelledTitle,
-          description: LABELS.paymentCancelledBody,
-        });
-      },
     },
   });
 

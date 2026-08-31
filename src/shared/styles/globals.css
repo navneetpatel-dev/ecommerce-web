@@ -524,3 +524,24 @@ body {
     transform: translateY(0);
   }
 }
+
+/* ============================================
+   Razorpay Checkout — modal overlay on storefront
+   Dark `data-theme` inherits color-scheme into the iframe and paints an
+   opaque white layer instead of a translucent backdrop (Razorpay + browsers).
+   ============================================ */
+.razorpay-container {
+  color-scheme: light !important;
+  background: transparent !important;
+}
+
+.razorpay-container iframe,
+iframe.razorpay-checkout-frame,
+iframe[src*="razorpay.com"] {
+  color-scheme: light !important;
+}
+
+.razorpay-backdrop {
+  background: var(--overlay) !important;
+  backdrop-filter: blur(3px);
+}

@@ -1,10 +1,11 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Skeleton } from "@/shared/components/ui/skeleton";
+import { DetailQuerySkeleton } from "@/shared/components/DetailQuerySkeleton.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import { SupportAuthGate } from "@/features/supportTickets";
+import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useBugReport } from "../api/bugReports.queries";
 import { BugReportDetail } from "../components/BugReportDetail.component";
 
@@ -21,18 +22,16 @@ export function CustomerBugReportDetailPage() {
 }
 
 function CustomerBugReportDetailContent({ id }: { id: string }) {
-  const { data, isLoading, isError, error } = useBugReport(id);
+  const query = useBugReport(id);
+  const { data, isLoading, isEmpty, error } = resolveQueryDetailState(query, {
+    enabled: Boolean(id),
+  });
 
   if (isLoading) {
-    return (
-      <div className="storefront-container space-y-3 py-4">
-        <Skeleton className="h-16 w-full max-w-xl" />
-        <Skeleton className="h-48 w-full" />
-      </div>
-    );
+    return <DetailQuerySkeleton className="space-y-3 py-4" />;
   }
 
-  if (isError || !data) {
+  if (isEmpty) {
     return (
       <div className="storefront-container py-8">
         <p className="border border-line bg-surface-raised px-5 py-10 text-center text-ink-muted">
@@ -50,7 +49,7 @@ function CustomerBugReportDetailContent({ id }: { id: string }) {
       />
       <div className="storefront-container relative py-4 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:py-5 lg:pb-8">
         <BugReportDetail
-          report={data}
+          report={data!}
           mode="reporter"
           backHref={PATHS.bugReports}
         />

@@ -23,8 +23,40 @@ export type RazorpayCheckoutOptions = {
   currency: string
   name?: string
   description?: string
+  image?: string
+  theme?: {
+    color?: string
+    backdrop_color?: string
+    hide_topbar?: boolean
+  }
+  prefill?: {
+    name?: string
+    email?: string
+    contact?: string
+  }
+  method?: {
+    upi?: boolean
+    card?: boolean
+    netbanking?: boolean
+    wallet?: boolean
+    emi?: boolean
+    paylater?: boolean
+  }
+  checkout_config_id?: string
+  config?: {
+    display?: {
+      sequence?: string[]
+      preferences?: {
+        show_default_blocks?: boolean
+      }
+    }
+  }
   handler: (response: RazorpayHandlerResponse) => void | Promise<void>
   modal?: {
+    backdropclose?: boolean
+    escape?: boolean
+    handleback?: boolean
+    animation?: boolean
     ondismiss?: () => void
   }
 }
