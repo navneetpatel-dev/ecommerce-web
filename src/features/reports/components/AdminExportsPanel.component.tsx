@@ -28,6 +28,12 @@ function filterDatePart(value: unknown): string | undefined {
 }
 
 function formatRowCount(row: AdminExportRow): string {
+  if (
+    !row.rowCountKnown &&
+    (row.status === "PROCESSING" || row.status === "PENDING")
+  ) {
+    return "…";
+  }
   if (row.status !== "READY" && row.status !== "SYNC" && row.rowCount === 0) {
     return "—";
   }
@@ -193,7 +199,7 @@ export function AdminExportsPanel() {
                           variant="ghost"
                           size="sm"
                           loading={retryingId === row.id}
-                          disabled={globalLocked && retryingId !== row.id}
+                          disabled={globalLocked}
                           onClick={() => void retryExport(row)}
                         >
                           {LABELS.reportExportRetry}

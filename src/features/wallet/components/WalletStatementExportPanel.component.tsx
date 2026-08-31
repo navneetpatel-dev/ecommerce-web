@@ -6,13 +6,10 @@ import { FormSection } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
-import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
-import { withReportExportLock } from "@/features/reports/utils/withReportExportLock";
-import {
-  isReportExportLocked,
-  useReportExportLockStore,
-} from "@/features/reports/stores/reportExportLock.store";
+import { runReportExport } from "@/features/reports/utils/runReportExport";
+import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
+import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
 import { walletApi } from "../api/wallet.api";
 
 export function WalletStatementExportPanel() {
@@ -24,16 +21,15 @@ export function WalletStatementExportPanel() {
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
 
   const run = async (format: "xlsx" | "csv" | "pdf") => {
-    if (isReportExportLocked()) return;
     setExporting(true);
     setMessage(null);
     setError(null);
     try {
-      await withReportExportLock(async () => {
+      await runReportExport(async () => {
         setMessage(LABELS.reportAsyncQueued);
         await walletApi.exportStatement(from, to, format);
         setMessage(LABELS.reportAsyncReady);
-      });
+      }, { onMessage: setMessage, onError: setError });
     } catch (err) {
       setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
     } finally {

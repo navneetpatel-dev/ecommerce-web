@@ -1,22 +1,22 @@
-import { apiClient } from "@/shared/api/client";
+import { getApiSessionAdapter } from "@/shared/api/sessionAdapter";
 import { API } from "@/shared/constants/apiRoutes";
 import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
 import { BEARER_PREFIX } from "@/shared/constants/http";
 import { API_TIMEOUT_MS } from "@/shared/constants/timing";
-import { useAuthStore } from "@/shared/stores/auth.store";
 import {
   buildDatedExportFilenameFallback,
   resolveDownloadFilename,
 } from "@/shared/utils/downloadFilename";
 import { pollAsyncExportResponse } from "@/features/reports/hooks/useReportHubHelpers/index";
 import type { WalletTransaction } from "@/shared/api/types";
+import { apiClient } from "@/shared/api/client";
 
 async function exportStatement(
   from: string,
   to: string,
   format: "xlsx" | "csv" | "pdf",
 ) {
-  const token = useAuthStore.getState().accessToken;
+  const token = getApiSessionAdapter().getAccessToken();
   const params = new URLSearchParams({ from, to, format });
   const res = await fetch(
     `${CLIENT_API_BASE_URL}${API.wallet.statement(params.toString())}`,
@@ -27,13 +27,18 @@ async function exportStatement(
     },
   );
   if (!res.ok) throw new Error("Download failed");
-  const body = (await res.json()) as {
-    data?: { exportId: string; status: string };
-  };
-  if (body.data?.exportId) {
-    await pollAsyncExportResponse(body.data);
-    return;
+
+  const contentType = res.headers.get("content-type") ?? "";
+  if (contentType.includes("application/json")) {
+    const body = (await res.json()) as {
+      data?: { exportId: string; status: string; format?: string };
+    };
+    if (body.data?.exportId) {
+      await pollAsyncExportResponse({ ...body.data, format });
+      return;
+    }
   }
+
   const blob = await res.blob();
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

@@ -46,6 +46,8 @@ export const settingsLabels = {
   reportAsyncQueued: "Large export queued — waiting for file…",
   reportAsyncTimeout: "Export is still running — check notifications or try again later.",
   reportExportTooManyPending: "You already have exports in progress. Wait for them to finish.",
+  reportExportLocked: "Another export is running — wait for it to finish.",
+  reportAsyncStreaming: "Generating export…",
   reportAsyncReady: "Export ready — downloading…",
   reportAsyncFailed: "Export failed. Try again with a narrower date range.",
   reportLoadError: "Could not load report.",

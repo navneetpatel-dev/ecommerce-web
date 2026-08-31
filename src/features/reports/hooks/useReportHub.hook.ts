@@ -58,11 +58,18 @@ export function useReportHub(options?: { preferAudience?: string }) {
       "exportId",
     );
     if (!exportId) return;
+    let active = true;
     setMessage(LABELS.reportAsyncQueued);
     void withReportExportLock(async () => {
       const outcome = await pollExportUntilReady(exportId);
+      if (!active) return;
       applyPollOutcome(outcome, { setMessage, setError });
+    }).catch(() => {
+      if (active) setError(LABELS.reportExportLocked);
     });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const load = (nextPage = page) => {

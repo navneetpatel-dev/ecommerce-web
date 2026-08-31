@@ -12,11 +12,9 @@ import {
   reportsApi,
   type VendorReportSummary,
 } from "@/features/admin-dashboard";
-import {
-  isReportExportLocked,
-  useReportExportLockStore,
-} from "@/features/reports/stores/reportExportLock.store";
-import { withReportExportLock } from "@/features/reports/utils/withReportExportLock";
+import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
+import { runReportExport } from "@/features/reports/utils/runReportExport";
+import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
 
 /** Owns the vendor settlement report panel state (Rule 1/12). */
 export function useVendorSettlementReport() {
@@ -52,12 +50,12 @@ export function useVendorSettlementReport() {
   };
 
   const exportFile = async (format: "csv" | "pdf" | "xlsx") => {
-    if (!vendorId || isReportExportLocked()) return;
+    if (!vendorId) return;
     setExporting(true);
     setError(null);
     setMessage(null);
     try {
-      await withReportExportLock(async () => {
+      await runReportExport(async () => {
         setMessage(LABELS.reportAsyncQueued);
         await downloadReport(
           reportsApi.exportUrl(API.reports.vendor(vendorId), {
@@ -72,7 +70,7 @@ export function useVendorSettlementReport() {
           ),
         );
         setMessage(LABELS.reportAsyncReady);
-      });
+      }, { onMessage: setMessage, onError: setError });
     } catch (err) {
       setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
     } finally {
@@ -93,15 +91,5 @@ export function useVendorSettlementReport() {
     summary,
     load,
     exportFile,
-  };
-}
-
-function defaultRange() {
-  const to = new Date();
-  const from = new Date();
-  from.setDate(to.getDate() - 30);
-  return {
-    from: from.toISOString().slice(0, 10),
-    to: to.toISOString().slice(0, 10),
   };
 }

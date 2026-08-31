@@ -1,3 +1,4 @@
+import { getApiSessionAdapter } from "@/shared/api/sessionAdapter";
 import { apiClient } from "@/shared/api/client";
 import {
   buildDatedExportFilenameFallback,
@@ -10,7 +11,6 @@ import { API } from "@/shared/constants/apiRoutes";
 import { BEARER_PREFIX } from "@/shared/constants/http";
 import { LABELS } from "@/shared/constants/labels";
 import { EXPORT_DOWNLOAD_TIMEOUT_MS } from "@/shared/constants/timing";
-import { useAuthStore } from "@/shared/stores/auth.store";
 
 export type ReportColumnMeta = {
   key: string;
@@ -48,6 +48,7 @@ export type AsyncExportResponse = {
   rowCount: number;
   rowCountKnown?: boolean;
   cached?: boolean;
+  deduped?: boolean;
 };
 
 export type ExportStatusResult = {
@@ -77,6 +78,7 @@ export type AdminExportRow = {
   format: string;
   status: string;
   rowCount: number;
+  rowCountKnown?: boolean;
   byteSize: number | null;
   errorMessage: string | null;
   exportedAt: string;
@@ -112,7 +114,7 @@ function buildQuery(filters: ReportFiltersInput & { format?: string }) {
 }
 
 async function downloadBlob(path: string, fallbackName: string) {
-  const token = useAuthStore.getState().accessToken;
+  const token = getApiSessionAdapter().getAccessToken();
   const res = await fetch(`${CLIENT_API_BASE_URL}${path}`, {
     credentials: "include",
     signal: AbortSignal.timeout(EXPORT_DOWNLOAD_TIMEOUT_MS),
@@ -143,7 +145,7 @@ async function fetchExportStatus(
   id: string,
   ifNoneMatch?: string,
 ): Promise<ExportStatusPollResult> {
-  const token = useAuthStore.getState().accessToken;
+  const token = getApiSessionAdapter().getAccessToken();
   const res = await fetch(`${CLIENT_API_BASE_URL}${API.reports.exportStatus(id)}`, {
     credentials: "include",
     headers: {

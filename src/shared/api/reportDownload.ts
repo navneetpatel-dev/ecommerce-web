@@ -67,7 +67,7 @@ export async function downloadReport(
   URL.revokeObjectURL(url);
 }
 
-/** Initiate async export via JSON API (legacy panels). */
+/** Initiate async export via JSON API (legacy panels). Throws on poll failed/timeout. */
 export async function initiateAsyncExport(
   path: string,
   formatHint?: ExportFileFormat,

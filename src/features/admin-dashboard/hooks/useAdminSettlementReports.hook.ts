@@ -2,13 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { initiateAsyncExport } from "@/shared/api/reportDownload";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
 import { API } from "@/shared/constants/apiRoutes";
-import {
-  isReportExportLocked,
-  useReportExportLockStore,
-} from "@/features/reports/stores/reportExportLock.store";
+import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
+import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
+import { runReportExport } from "@/features/reports/utils/runReportExport";
+import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
 import {
   reportsApi,
   type AdminReportSummary,
@@ -16,10 +15,6 @@ import {
   type ReconciliationReport,
 } from "../api/reports.api";
 
-/**
- * Owns the admin settlement reports panel state: summary, vendor rows and
- * reconciliation load together concurrently (Rule 1/12).
- */
 export function useAdminSettlementReports() {
   const initial = useMemo(() => defaultRange(), []);
   const [from, setFrom] = useState(initial.from);
@@ -27,12 +22,11 @@ export function useAdminSettlementReports() {
   const [loading, setLoading] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [summary, setSummary] = useState<AdminReportSummary | null>(null);
   const [vendors, setVendors] = useState<VendorSettlementRow[]>([]);
   const [recon, setRecon] = useState<ReconciliationReport | null>(null);
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
-  const acquire = useReportExportLockStore((s) => s.acquire);
-  const release = useReportExportLockStore((s) => s.release);
 
   const buildRange = () => ({
     from: `${from}T00:00:00.000Z`,
@@ -53,7 +47,7 @@ export function useAdminSettlementReports() {
       setVendors(vendorsRes.vendors);
       setRecon(reconRes);
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
+      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
       setSummary(null);
       setVendors([]);
       setRecon(null);
@@ -63,17 +57,20 @@ export function useAdminSettlementReports() {
   };
 
   const runExport = async (path: string, format: "csv" | "pdf") => {
-    if (isReportExportLocked()) return;
     setExporting(true);
-    acquire();
+    setError(null);
+    setMessage(null);
     try {
-      await initiateAsyncExport(
-        reportsApi.exportUrl(path, { ...buildRange(), format }),
-      );
+      await runReportExport(async () => {
+        setMessage(LABELS.reportAsyncQueued);
+        await initiateAsyncExport(
+          reportsApi.exportUrl(path, { ...buildRange(), format }),
+        );
+        setMessage(LABELS.reportAsyncReady);
+      }, { onMessage: setMessage, onError: setError });
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
+      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
     } finally {
-      release();
       setExporting(false);
     }
   };
@@ -99,6 +96,7 @@ export function useAdminSettlementReports() {
     loading,
     exporting: exporting || globalLocked,
     error,
+    message,
     summary,
     vendors,
     recon,
@@ -106,15 +104,5 @@ export function useAdminSettlementReports() {
     exportSummary,
     exportVendors,
     exportReconciliation,
-  };
-}
-
-function defaultRange() {
-  const to = new Date();
-  const from = new Date();
-  from.setDate(to.getDate() - 30);
-  return {
-    from: from.toISOString().slice(0, 10),
-    to: to.toISOString().slice(0, 10),
   };
 }

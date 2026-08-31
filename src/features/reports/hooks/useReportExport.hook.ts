@@ -8,15 +8,14 @@ import {
 } from "../api/reportsEngine.api";
 import {
   applyPollOutcome,
+  defaultRange,
   normalizeExportFormat,
   pollExportUntilReady,
   type ExportFileFormat,
 } from "./useReportHubHelpers/index";
-import {
-  isReportExportLocked,
-  useReportExportLockStore,
-} from "../stores/reportExportLock.store";
+import { useReportExportLockStore } from "../stores/reportExportLock.store";
 import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
+import { runReportExport } from "../utils/runReportExport";
 
 type ExportFormat = ExportFileFormat;
 
@@ -28,16 +27,13 @@ export function useReportExport(
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
-  const acquire = useReportExportLockStore((s) => s.acquire);
-  const release = useReportExportLockStore((s) => s.release);
 
   const runExport = useCallback(
     (format: ExportFormat) => {
-      if (!reportType || isReportExportLocked()) return;
+      if (!reportType) return;
       setExporting(true);
       setMessage(null);
       setError(null);
-      acquire();
       const filters = buildFilters();
       const request =
         format === "xlsx"
@@ -46,8 +42,9 @@ export function useReportExport(
             ? reportsEngineApi.exportCsv(reportType, filters)
             : reportsEngineApi.exportPdf(reportType, filters);
 
-      void request
-        .then(async (result) => {
+      void runReportExport(
+        async () => {
+          const result = await request;
           const exportFormat = normalizeExportFormat(result.format ?? format);
           if (result.status === "READY") {
             await reportsEngineApi.downloadExport(
@@ -60,24 +57,21 @@ export function useReportExport(
             setMessage(LABELS.reportAsyncReady);
             return;
           }
-          setMessage(
-            result.cached ? LABELS.reportAsyncReady : LABELS.reportAsyncQueued,
-          );
+          setMessage(LABELS.reportAsyncQueued);
           const outcome = await pollExportUntilReady(
             result.exportId,
             exportFormat,
           );
           applyPollOutcome(outcome, { setMessage, setError });
-        })
+        },
+        { onMessage: setMessage, onError: setError },
+      )
         .catch((err) =>
           setError(getReportExportErrorMessage(err, LABELS.reportLoadError)),
         )
-        .finally(() => {
-          release();
-          setExporting(false);
-        });
+        .finally(() => setExporting(false));
     },
-    [acquire, buildFilters, release, reportType],
+    [buildFilters, reportType],
   );
 
   return {
@@ -93,3 +87,5 @@ export function useReportExport(
     },
   };
 }
+
+export { defaultRange };

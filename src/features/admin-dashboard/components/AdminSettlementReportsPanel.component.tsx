@@ -60,6 +60,7 @@ export function AdminSettlementReportsPanel() {
     loading,
     exporting,
     error,
+    message,
     summary,
     vendors,
     recon,
@@ -114,6 +115,7 @@ export function AdminSettlementReportsPanel() {
       </div>
 
       {error ? <p className="text-body text-danger">{error}</p> : null}
+      {message ? <p className="text-body-sm text-ink-muted">{message}</p> : null}
       {loading ? (
         <p className="text-body text-ink-muted">{LABELS.loading}</p>
       ) : null}

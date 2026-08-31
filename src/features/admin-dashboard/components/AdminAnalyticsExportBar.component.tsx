@@ -5,11 +5,9 @@ import { Download } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import {
-  isReportExportLocked,
-  useReportExportLockStore,
-} from "@/features/reports/stores/reportExportLock.store";
+import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
+import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
+import { runReportExport } from "@/features/reports/utils/runReportExport";
 import { adminApi } from "../api/admin.api";
 
 type AdminAnalyticsExportBarProps = {
@@ -19,9 +17,8 @@ type AdminAnalyticsExportBarProps = {
 export function AdminAnalyticsExportBar({ range }: AdminAnalyticsExportBarProps) {
   const [exporting, setExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
-  const acquire = useReportExportLockStore((s) => s.acquire);
-  const release = useReportExportLockStore((s) => s.release);
 
   const exportRange = useMemo(
     () => ({
@@ -32,16 +29,18 @@ export function AdminAnalyticsExportBar({ range }: AdminAnalyticsExportBarProps)
   );
 
   const run = async (format: "xlsx" | "csv" | "pdf") => {
-    if (isReportExportLocked()) return;
     setExporting(true);
     setError(null);
-    acquire();
+    setMessage(null);
     try {
-      await adminApi.exportAnalytics(format, exportRange);
+      await runReportExport(async () => {
+        setMessage(LABELS.reportAsyncQueued);
+        await adminApi.exportAnalytics(format, exportRange);
+        setMessage(LABELS.reportAsyncReady);
+      }, { onMessage: setMessage, onError: setError });
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
+      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
     } finally {
-      release();
       setExporting(false);
     }
   };
@@ -81,6 +80,7 @@ export function AdminAnalyticsExportBar({ range }: AdminAnalyticsExportBarProps)
           {LABELS.exportPdf}
         </Button>
       </ButtonGroup>
+      {message ? <p className="text-body-sm text-ink-muted">{message}</p> : null}
       {error ? <p className="text-body-sm text-danger">{error}</p> : null}
     </div>
   );

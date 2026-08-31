@@ -141,6 +141,7 @@ export function ReportFilterBar({
             type="button"
             variant="outline"
             fullWidth="mobile"
+            loading={exporting}
             onClick={onExportExcel}
             disabled={exporting || !reportType}
           >
@@ -150,6 +151,7 @@ export function ReportFilterBar({
             type="button"
             variant="outline"
             fullWidth="mobile"
+            loading={exporting}
             onClick={onExportCsv}
             disabled={exporting || !reportType}
           >
@@ -159,6 +161,7 @@ export function ReportFilterBar({
             type="button"
             variant="outline"
             fullWidth="mobile"
+            loading={exporting}
             onClick={onExportPdf}
             disabled={exporting || !reportType}
           >

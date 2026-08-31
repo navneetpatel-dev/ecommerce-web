@@ -8,6 +8,7 @@ import {
   reportsEngineApi,
   type ExportStatusResult,
 } from "../../api/reportsEngine.api";
+import { assertPollOutcome } from "../../utils/reportExportPollError";
 
 export type ExportFileFormat = "csv" | "pdf" | "xlsx";
 
@@ -128,21 +129,22 @@ export function applyPollOutcome(
   handlers.setError(null);
 }
 
-/** Poll and download for legacy panel exports returning async JSON. */
+/** Poll and download for legacy panel exports returning async JSON. Throws on failed/timeout. */
 export async function pollAsyncExportResponse(response: {
   exportId: string;
   status?: string;
   reportType?: string;
   format?: string;
-}): Promise<ExportPollOutcome> {
+}): Promise<void> {
   const format = normalizeExportFormat(response.format);
   if (response.status === "READY") {
     const status = await reportsEngineApi.exportStatus(response.exportId);
     if ("notModified" in status) {
-      return pollExportUntilReady(response.exportId, format);
+      assertPollOutcome(await pollExportUntilReady(response.exportId, format));
+      return;
     }
     await downloadFromStatus(response.exportId, status, format);
-    return "ready";
+    return;
   }
-  return pollExportUntilReady(response.exportId, format);
+  assertPollOutcome(await pollExportUntilReady(response.exportId, format));
 }

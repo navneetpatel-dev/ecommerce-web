@@ -15,7 +15,9 @@ export function VendorSettlementReportPanel() {
     to,
     setTo,
     loading,
+    exporting,
     error,
+    message,
     summary,
     load,
     exportFile,
@@ -51,6 +53,7 @@ export function VendorSettlementReportPanel() {
       </div>
 
       {error ? <p className="text-body text-danger">{error}</p> : null}
+      {message ? <p className="text-body-sm text-ink-muted">{message}</p> : null}
       {loading ? (
         <p className="text-body text-ink-muted">{LABELS.loading}</p>
       ) : null}
@@ -63,17 +66,27 @@ export function VendorSettlementReportPanel() {
           <div className="flex flex-wrap gap-2">
             <Button
               variant="outline"
-              disabled={!vendorId}
+              loading={exporting}
+              disabled={!vendorId || exporting}
               onClick={() => void exportFile("csv")}
             >
               {LABELS.exportCsv}
             </Button>
             <Button
               variant="outline"
-              disabled={!vendorId}
+              loading={exporting}
+              disabled={!vendorId || exporting}
               onClick={() => void exportFile("pdf")}
             >
               {LABELS.exportPdf}
+            </Button>
+            <Button
+              variant="outline"
+              loading={exporting}
+              disabled={!vendorId || exporting}
+              onClick={() => void exportFile("xlsx")}
+            >
+              {LABELS.exportExcel}
             </Button>
           </div>
           <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

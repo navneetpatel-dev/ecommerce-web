@@ -78,6 +78,12 @@ export function AdminReportsPage() {
           </p>
         ) : null}
 
+        {hub.error ? (
+          <p className="text-[0.875rem] text-danger" aria-live="polite">
+            {hub.error}
+          </p>
+        ) : null}
+
         <ReportTable
           onRetry={() => hub.load()}
           result={hub.result}
