@@ -23,7 +23,8 @@ export interface CheckoutPageViewProps {
   onClearPaymentNotice?: () => void;
   isCreatingAddress?: boolean;
   groupedByVendor: Record<string, CartItem[]>;
-  total: number;
+  subtotal: number;
+  estimatedTotal: number;
   shippingReady: boolean;
   hasUnavailableItems?: boolean;
   onStepClick: (step: number) => void;

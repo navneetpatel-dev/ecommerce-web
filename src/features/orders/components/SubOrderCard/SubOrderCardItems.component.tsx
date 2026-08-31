@@ -40,7 +40,7 @@ export function SubOrderCardItems({
           </div>
           <div className="shrink-0 text-right">
             <p className="font-display text-body-lg tabular-nums text-ink">
-              {formatInr(Number(item.unitPrice) * Number(item.quantity))}
+              {formatInr(item.lineSubtotal)}
             </p>
             {item.quantity > 1 && (
               <p className="mt-0.5 text-[0.75rem] text-ink-muted">

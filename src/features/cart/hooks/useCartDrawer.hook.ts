@@ -8,7 +8,7 @@ import {
   useRemoveCartItem,
 } from "../api/cart.queries";
 import { useCartDrawerStore } from "../store/cart.store";
-import { groupItemsByVendor, calcCartTotal } from "../utils/cart.utils";
+import { groupItemsByVendor } from "../utils/cart.utils";
 import { navigate } from "@/shared/utils/navigate";
 import { clampCartQuantity } from "@/shared/constants/cart";
 import { PATHS } from "@/shared/constants/paths";
@@ -27,12 +27,7 @@ export function useCartDrawer() {
     return groupItemsByVendor(cart.items);
   }, [cart]);
 
-  const total = useMemo(() => {
-    if (typeof cart?.merchandiseSubtotal === "number")
-      return cart.merchandiseSubtotal;
-    if (!cart?.items) return 0;
-    return calcCartTotal(cart.items);
-  }, [cart]);
+  const total = cart?.merchandiseSubtotal ?? 0;
 
   const hasUnavailableItems =
     cart?.items?.some((item) => item.isAvailable === false) ?? false;

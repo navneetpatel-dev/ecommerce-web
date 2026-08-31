@@ -35,7 +35,8 @@ export function CheckoutPageView({
   onClearPaymentNotice,
   isCreatingAddress,
   groupedByVendor,
-  total,
+  subtotal,
+  estimatedTotal,
   shippingReady,
   hasUnavailableItems,
   onStepClick,
@@ -75,7 +76,8 @@ export function CheckoutPageView({
   const summary = (
     <OrderSummaryPanel
       groupedByVendor={groupedByVendor}
-      total={total}
+      subtotal={subtotal}
+      estimatedTotal={estimatedTotal}
       quote={quote}
     />
   );
@@ -118,7 +120,8 @@ export function CheckoutPageView({
 
             <MobileSummaryAccordion
               summary={summary}
-              total={total}
+              subtotal={subtotal}
+              estimatedTotal={estimatedTotal}
               quote={quote}
             />
 

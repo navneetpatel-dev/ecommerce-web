@@ -18,6 +18,11 @@ export interface OrderItem {
   productName: string;
   quantity: number;
   unitPrice: number;
+  lineSubtotal: number;
+  lineTotal: number;
+  discountAmount?: number;
+  taxableAmount?: number;
+  taxAmount?: number;
 }
 
 export interface Shipment {
@@ -39,7 +44,13 @@ export interface SubOrder {
   status: OrderStatus;
   subtotal: number;
   shippingCost?: number;
+  shippingCharged?: number;
+  shippingDiscountAmount?: number;
   taxAmount?: number;
+  taxableAmount?: number;
+  discountAmount?: number;
+  discountTotal?: number;
+  customerTotal: number;
   items: OrderItem[];
   shipment?: Shipment | null;
 }
@@ -49,6 +60,10 @@ export interface Order {
   userId: string;
   totalAmount: number;
   discountTotal: number;
+  merchandiseSubtotal?: number;
+  taxTotal?: number;
+  shippingTotal?: number;
+  amountDue?: number;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
   paymentMethod?: string | null;
@@ -122,6 +137,7 @@ export interface CheckoutQuote {
   walletBalance: number;
   walletAmountToUse: number;
   amountDue: number;
+  maxWalletApplicable?: number;
   appliedCoupon: {
     code: string;
     discount: number;

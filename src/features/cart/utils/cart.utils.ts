@@ -9,12 +9,3 @@ export function groupItemsByVendor(items: CartItem[]): Record<string, CartItem[]
     return acc
   }, {})
 }
-
-/** Only sum available items; unavailable items are excluded by the backend total but
- *  this guards against stale cache showing wrong totals in the UI. */
-export function calcCartTotal(items: CartItem[]): number {
-  return items.reduce((sum, item) => {
-    if (item.isAvailable === false) return sum
-    return sum + Number(item.product?.price ?? 0) * item.quantity
-  }, 0)
-}

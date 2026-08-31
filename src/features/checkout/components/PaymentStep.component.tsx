@@ -46,10 +46,8 @@ export function PaymentStep({
     Boolean(selectedMethod) &&
     (selectedMethod !== "cod" || quote?.codAvailable === true);
   const walletBalance = quote?.walletBalance ?? 0;
-  const grandTotal = quote?.grandTotal ?? 0;
-  const maxApplicable = Math.min(walletBalance, grandTotal);
-  const amountDue =
-    quote?.amountDue ?? Math.max(0, grandTotal - walletAmountToUse);
+  const amountDue = quote?.amountDue ?? 0;
+  const maxApplicable = quote?.maxWalletApplicable ?? walletBalance;
   const codSelected = selectedMethod === "cod";
   const canUseCod = quote?.codAvailable === true;
 
@@ -59,7 +57,7 @@ export function PaymentStep({
         walletBalance={walletBalance}
         maxApplicable={maxApplicable}
         walletAmountToUse={codSelected ? 0 : walletAmountToUse}
-        amountDue={codSelected ? grandTotal : amountDue}
+        amountDue={codSelected ? (quote?.grandTotal ?? amountDue) : amountDue}
         disabled={isPending || !quote}
         codSelected={codSelected}
         onAmountChange={onWalletAmountChange}

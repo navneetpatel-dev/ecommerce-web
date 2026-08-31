@@ -5,21 +5,24 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { resolveCartLineSubtotal } from "../../utils/checkoutDisplay.utils";
 
 interface OrderSummaryPanelProps {
   groupedByVendor: Record<string, CartItem[]>;
-  total: number;
+  subtotal: number;
+  estimatedTotal: number;
   quote?: CheckoutQuote | null;
 }
 
 export function OrderSummaryPanel({
   groupedByVendor,
-  total,
+  subtotal,
+  estimatedTotal,
   quote,
 }: OrderSummaryPanelProps) {
   const items = Object.values(groupedByVendor).flat();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const displayTotal = quote?.grandTotal ?? total;
+  const displayTotal = quote?.grandTotal ?? estimatedTotal;
   const vendorEntries = Object.entries(groupedByVendor);
 
   return (
@@ -68,7 +71,7 @@ export function OrderSummaryPanel({
                     </p>
                   </div>
                   <p className="shrink-0 text-[0.875rem] tabular-nums text-ink">
-                    ₹{formatInrAmount(item.product.price * item.quantity)}
+                    ₹{formatInrAmount(resolveCartLineSubtotal(item, quote))}
                   </p>
                 </li>
               ))}
@@ -81,7 +84,7 @@ export function OrderSummaryPanel({
         <dl className="space-y-2.5 text-[0.875rem]">
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">Subtotal</dt>
-            <dd className="tabular-nums text-ink">₹{formatInrAmount(total)}</dd>
+            <dd className="tabular-nums text-ink">₹{formatInrAmount(subtotal)}</dd>
           </div>
           {quote?.appliedCoupon && (
             <div className="flex items-center justify-between gap-4 text-success">
@@ -93,7 +96,7 @@ export function OrderSummaryPanel({
           )}
           {(quote?.cashbackAmount ?? 0) > 0 ? (
             <CashbackCouponNotice
-              payNow={quote?.amountDue ?? quote?.grandTotal ?? total}
+              payNow={quote?.amountDue ?? estimatedTotal}
               cashbackAmount={quote?.cashbackAmount ?? 0}
               code={quote?.appliedCoupon?.code}
               className="text-body-sm text-brand"

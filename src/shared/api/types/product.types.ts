@@ -8,6 +8,7 @@ export interface ProductListItem {
   name: string;
   basePrice: number;
   compareAtPrice?: number | null;
+  discountPercent?: number | null;
   brand?: string | null;
   avgRating: number;
   reviewCount: number;
@@ -72,6 +73,7 @@ export interface ProductDetail extends ProductListItem {
   gstPercentage?: number;
   displayHsnCode?: string | null;
   taxInclusive?: boolean;
+  taxInclusivePrice?: number | null;
   codAvailable?: boolean;
   codMinOrderValue?: number;
   codMaxOrderValue?: number | null;

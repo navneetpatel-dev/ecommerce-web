@@ -7,9 +7,9 @@ interface SubOrderCardTotalsProps {
 }
 
 export function SubOrderCardTotals({ subOrder }: SubOrderCardTotalsProps) {
-  const shippingCost = Number(subOrder.shippingCost ?? 0);
+  const shippingCost = Number(subOrder.shippingCharged ?? subOrder.shippingCost ?? 0);
   const taxAmount = Number(subOrder.taxAmount ?? 0);
-  const sellerTotal = Number(subOrder.subtotal) + shippingCost + taxAmount;
+  const sellerTotal = Number(subOrder.customerTotal);
   const showBreakdown = shippingCost > 0 || taxAmount > 0;
   const subtotalTone = showBreakdown
     ? "text-ink-muted"

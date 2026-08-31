@@ -64,9 +64,8 @@ export function ProductDetailContent({
   const formattedPrice = formatInrAmount(displayPrice);
   const compareAtPrice = product.compareAtPrice ?? null;
   const showMrp = compareAtPrice != null && compareAtPrice > displayPrice;
-  const discountPercent = showMrp
-    ? Math.round((1 - displayPrice / compareAtPrice) * 100)
-    : null;
+  const discountPercent = product.discountPercent ?? null;
+  const taxInclusiveEstimate = product.taxInclusivePrice ?? null;
 
   const resolvedVariant =
     variantSelection.matchedVariant ??
@@ -75,11 +74,6 @@ export function ProductDetailContent({
   const lowStockAt = Number(
     resolvedVariant?.lowStockAt ?? VARIANT_LOW_STOCK_DEFAULT,
   );
-  const gstPercentage = Number(product.gstPercentage ?? 0);
-  const taxInclusiveEstimate =
-    gstPercentage > 0
-      ? Math.round(displayPrice * (1 + gstPercentage / 100))
-      : null;
   const warrantyTypeLabel =
     product.displayWarrantyType === WARRANTY_TYPE.SELLER
       ? LABELS.warrantySeller
@@ -133,7 +127,7 @@ export function ProductDetailContent({
           compareAtPrice={compareAtPrice}
           showMrp={showMrp}
           discountPercent={discountPercent}
-          gstPercentage={gstPercentage}
+          gstPercentage={Number(product.gstPercentage ?? 0)}
           taxInclusiveEstimate={taxInclusiveEstimate}
           lowStockAt={lowStockAt}
           displayStock={displayStock}

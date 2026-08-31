@@ -27,7 +27,7 @@ export function VendorBreakdownCard({ breakdown }: VendorBreakdownCardProps) {
         </span>
       </span>
       <span className="shrink-0 tabular-nums text-ink">
-        {formatInr(item.unitPrice * item.quantity)}
+        {formatInr(item.lineSubtotal)}
       </span>
     </li>
   );

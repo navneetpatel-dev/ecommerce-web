@@ -6,7 +6,7 @@ import {
   useUpdateCartItem,
   useRemoveCartItem,
 } from "../api/cart.queries";
-import { groupItemsByVendor, calcCartTotal } from "../utils/cart.utils";
+import { groupItemsByVendor } from "../utils/cart.utils";
 import { useCartCoupons } from "./useCartCoupons.hook";
 import { clampCartQuantity } from "@/shared/constants/cart";
 import type { CartItem } from "@/shared/api/types";
@@ -30,12 +30,8 @@ export function useCartPage() {
     [hasItems, items],
   );
 
-  const subtotal = useMemo(() => {
-    if (typeof cart?.total === "number") return cart.total;
-    return hasItems ? calcCartTotal(items) : 0;
-  }, [cart?.total, hasItems, items]);
-
-  const total = Math.max(0, subtotal - (coupons.appliedDiscount || 0));
+  const subtotal = cart?.merchandiseSubtotal ?? 0;
+  const total = cart?.pricingPreview?.grandTotal ?? cart?.total ?? 0;
 
   const vendorDiscountBreakdown = useMemo(() => {
     const shares = cart?.appliedCoupon?.vendorDiscountShares;

@@ -6,6 +6,7 @@ export interface CartItem {
   id: string;
   variantId: string;
   quantity: number;
+  lineSubtotal: number;
   isAvailable: boolean;
   unavailableReason: UnavailableReason | null;
   product: {

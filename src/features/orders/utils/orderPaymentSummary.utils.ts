@@ -9,17 +9,13 @@ type OrderPaymentFields = Pick<
   | "pendingCashbackAmount"
   | "cashbackCreditedAt"
   | "paymentMethod"
+  | "amountDue"
 >;
 
 /** Whether the confirmation page should show the payment breakdown card. */
 export function hasOrderPaymentSummaryContent(order: OrderPaymentFields): boolean {
   const walletUsed = Number(order.walletAmountUsed ?? 0);
-  const originalTotal = Number(
-    order.originalTotalAmount ?? order.totalAmount ?? 0,
-  );
-  const razorpayPaid = Number(
-    order.razorpayAmountPaid ?? Math.max(0, originalTotal - walletUsed),
-  );
+  const razorpayPaid = Number(order.razorpayAmountPaid ?? order.amountDue ?? 0);
   const pendingCashback = Number(order.pendingCashbackAmount ?? 0);
   const isCod = order.paymentMethod === "COD";
   const showSplit = walletUsed > 0 && razorpayPaid > 0;

@@ -27,7 +27,8 @@ export function CheckoutPage() {
       onClearPaymentNotice={checkout.clearPaymentNotice}
       isCreatingAddress={checkout.isCreatingAddress}
       groupedByVendor={checkout.groupedByVendor}
-      total={checkout.total}
+      subtotal={checkout.subtotal}
+      estimatedTotal={checkout.estimatedTotal}
       shippingReady={checkout.shippingReady}
       hasUnavailableItems={checkout.hasUnavailableItems}
       onStepClick={checkout.onStepClick}

@@ -16,6 +16,7 @@ interface OrderPaymentSummaryProps {
     | "pendingCashbackAmount"
     | "cashbackCreditedAt"
     | "paymentMethod"
+    | "amountDue"
   >;
   className?: string;
 }
@@ -29,12 +30,7 @@ export function OrderPaymentSummary({
   }
 
   const walletUsed = Number(order.walletAmountUsed ?? 0);
-  const originalTotal = Number(
-    order.originalTotalAmount ?? order.totalAmount ?? 0,
-  );
-  const razorpayPaid = Number(
-    order.razorpayAmountPaid ?? Math.max(0, originalTotal - walletUsed),
-  );
+  const razorpayPaid = Number(order.razorpayAmountPaid ?? order.amountDue ?? 0);
   const pendingCashback = Number(order.pendingCashbackAmount ?? 0);
   const isCod = order.paymentMethod === "COD";
   const showSplit = walletUsed > 0 && razorpayPaid > 0;

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import { useCart } from "@/features/cart";
-import { groupItemsByVendor, calcCartTotal } from "@/features/cart";
+import { groupItemsByVendor } from "@/features/cart";
 import { useCheckoutStore } from "@/shared/stores/checkout.store";
 import { usePlaceOrderWithRazorpay } from "./usePlaceOrder.hook";
 import { useRequireAuth } from "@/shared/hooks/useRequireAuth.hook";
@@ -71,10 +71,8 @@ export function useCheckoutPage() {
     }
   }, [paymentMethod, quote, setPaymentMethod]);
 
-  const total = useMemo(() => {
-    if (!cart?.items) return 0;
-    return calcCartTotal(cart.items);
-  }, [cart]);
+  const subtotal = cart?.merchandiseSubtotal ?? 0;
+  const estimatedTotal = quote?.grandTotal ?? cart?.total ?? subtotal;
 
   const shippingReady = useMemo(
     () =>
@@ -134,7 +132,8 @@ export function useCheckoutPage() {
     clearPaymentNotice,
     isLoading,
     groupedByVendor,
-    total,
+    subtotal,
+    estimatedTotal,
     hasItems: Boolean(cart?.items?.length),
     hasUnavailableItems,
     shippingReady,
