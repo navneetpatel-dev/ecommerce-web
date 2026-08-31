@@ -27,7 +27,9 @@ export function useCartDrawer() {
     return groupItemsByVendor(cart.items);
   }, [cart]);
 
-  const total = cart?.merchandiseSubtotal ?? 0;
+  const grandTotal = cart?.total ?? cart?.pricingPreview?.grandTotal;
+  const total = grandTotal ?? cart?.merchandiseSubtotal ?? 0;
+  const totalIsEstimated = grandTotal == null;
 
   const hasUnavailableItems =
     cart?.items?.some((item) => item.isAvailable === false) ?? false;
@@ -54,6 +56,7 @@ export function useCartDrawer() {
     hasUnavailableItems,
     groupedByVendor,
     total,
+    totalIsEstimated,
     updateQuantity,
     removeItem: removeItemById,
     continueShopping,

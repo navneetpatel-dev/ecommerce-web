@@ -3,7 +3,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInr } from "../utils/format";
-import { hasOrderPaymentSummaryContent } from "../utils/orderPaymentSummary.utils";
+import { hasOrderPaymentSummaryContent, resolveOrderRazorpayPaid } from "../utils/orderPaymentSummary.utils";
 import type { Order } from "@/shared/api/types";
 
 interface OrderPaymentSummaryProps {
@@ -30,7 +30,7 @@ export function OrderPaymentSummary({
   }
 
   const walletUsed = Number(order.walletAmountUsed ?? 0);
-  const razorpayPaid = Number(order.razorpayAmountPaid ?? order.amountDue ?? 0);
+  const razorpayPaid = resolveOrderRazorpayPaid(order);
   const pendingCashback = Number(order.pendingCashbackAmount ?? 0);
   const isCod = order.paymentMethod === "COD";
   const showSplit = walletUsed > 0 && razorpayPaid > 0;

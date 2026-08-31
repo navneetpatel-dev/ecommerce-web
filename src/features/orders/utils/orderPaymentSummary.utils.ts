@@ -1,6 +1,6 @@
 import type { Order } from "@/shared/api/types";
 
-type OrderPaymentFields = Pick<
+export type OrderPaymentFields = Pick<
   Order,
   | "totalAmount"
   | "walletAmountUsed"
@@ -12,13 +12,18 @@ type OrderPaymentFields = Pick<
   | "amountDue"
 >;
 
-/** Whether the confirmation page should show the payment breakdown card. */
-export function hasOrderPaymentSummaryContent(order: OrderPaymentFields): boolean {
-  const walletUsed = Number(order.walletAmountUsed ?? 0);
-  const razorpayPaid = Number(
+/** Razorpay portion for display — never treat COD amountDue as Razorpay paid. */
+export function resolveOrderRazorpayPaid(order: OrderPaymentFields): number {
+  return Number(
     order.razorpayAmountPaid ??
       (order.paymentMethod === "COD" ? 0 : order.amountDue ?? 0),
   );
+}
+
+/** Whether the confirmation page should show the payment breakdown card. */
+export function hasOrderPaymentSummaryContent(order: OrderPaymentFields): boolean {
+  const walletUsed = Number(order.walletAmountUsed ?? 0);
+  const razorpayPaid = resolveOrderRazorpayPaid(order);
   const pendingCashback = Number(order.pendingCashbackAmount ?? 0);
   const isCod = order.paymentMethod === "COD";
   const showSplit = walletUsed > 0 && razorpayPaid > 0;

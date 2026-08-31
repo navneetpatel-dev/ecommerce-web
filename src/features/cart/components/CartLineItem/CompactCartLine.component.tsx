@@ -21,6 +21,7 @@ interface CompactCartLineProps {
 export function CompactCartLine(props: CompactCartLineProps) {
   const { item, onUpdateQuantity, onRemoveItem } = props;
   const available = item.isAvailable !== false;
+  const lineTotal = item.lineSubtotal ?? item.product.price;
 
   const handleQuantityChange = (quantity: number) => {
     onUpdateQuantity(item.id, quantity);
@@ -62,7 +63,7 @@ export function CompactCartLine(props: CompactCartLineProps) {
           </Badge>
         ) : (
           <p className="truncate text-body-sm font-semibold tabular-nums text-brand">
-            ₹{formatInrAmount(item.product.price)}
+            ₹{formatInrAmount(lineTotal)}
           </p>
         )}
         {available ? (

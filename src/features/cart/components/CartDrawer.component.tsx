@@ -21,6 +21,7 @@ interface CartDrawerProps {
   hasItems: boolean;
   groupedByVendor: Record<string, CartItem[]>;
   total: number;
+  totalIsEstimated?: boolean;
   hasUnavailableItems?: boolean;
   onContinueShopping: () => void;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
@@ -34,6 +35,7 @@ export function CartDrawer({
   hasItems,
   groupedByVendor,
   total,
+  totalIsEstimated = false,
   hasUnavailableItems,
   onContinueShopping,
   onUpdateQuantity,
@@ -116,7 +118,9 @@ export function CartDrawer({
             {hasItems ? (
               <div className="shrink-0 space-y-3 border-t border-line p-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-body font-medium">{LABELS.total}</span>
+                  <span className="text-body font-medium">
+                    {totalIsEstimated ? "Estimated total" : LABELS.total}
+                  </span>
                   <span className="text-[1.125rem] font-bold text-brand">
                     ₹{formatInrAmount(total)}
                   </span>

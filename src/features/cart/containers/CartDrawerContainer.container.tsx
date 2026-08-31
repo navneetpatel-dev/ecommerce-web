@@ -14,6 +14,7 @@ export function CartDrawerContainer() {
       hasItems={drawer.hasItems}
       groupedByVendor={drawer.groupedByVendor}
       total={drawer.total}
+      totalIsEstimated={drawer.totalIsEstimated}
       hasUnavailableItems={drawer.hasUnavailableItems}
       onContinueShopping={drawer.continueShopping}
       onUpdateQuantity={drawer.updateQuantity}

@@ -26,6 +26,14 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
     itemCount === 1 ? LABELS.itemSingular : LABELS.itemPlural
   }`;
 
+  const merchandiseSubtotal = order.merchandiseSubtotal;
+  const taxTotal = order.taxTotal;
+  const shippingTotal = order.shippingTotal;
+  const showMoneyBreakdown =
+    merchandiseSubtotal != null ||
+    taxTotal != null ||
+    shippingTotal != null;
+
   const renderDiscountRow = () => (
     <div className="flex items-center justify-between gap-4 text-success">
       <dt>{LABELS.discount}</dt>
@@ -58,6 +66,26 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
           <dt className="text-ink-muted">{LABELS.itemsLine}</dt>
           <dd className="tabular-nums text-ink">{itemCount}</dd>
         </div>
+        {showMoneyBreakdown && merchandiseSubtotal != null ? (
+          <div className="flex items-center justify-between gap-4">
+            <dt className="text-ink-muted">{LABELS.subtotal}</dt>
+            <dd className="tabular-nums text-ink">
+              {formatInr(merchandiseSubtotal)}
+            </dd>
+          </div>
+        ) : null}
+        {showMoneyBreakdown && Number(shippingTotal) > 0 ? (
+          <div className="flex items-center justify-between gap-4">
+            <dt className="text-ink-muted">Shipping</dt>
+            <dd className="tabular-nums text-ink">{formatInr(shippingTotal!)}</dd>
+          </div>
+        ) : null}
+        {showMoneyBreakdown && Number(taxTotal) > 0 ? (
+          <div className="flex items-center justify-between gap-4">
+            <dt className="text-ink-muted">{LABELS.taxTotal}</dt>
+            <dd className="tabular-nums text-ink">{formatInr(taxTotal!)}</dd>
+          </div>
+        ) : null}
         {Number(order.discountTotal) > 0 ? renderDiscountRow() : null}
         <div className="flex items-end justify-between gap-4 border-t border-line pt-3">
           <dt className="text-body-sm font-semibold uppercase tracking-[0.08em] text-brand">
