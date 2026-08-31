@@ -3,6 +3,7 @@ import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
 import { BEARER_PREFIX } from "@/shared/constants/http";
 import { API_TIMEOUT_MS } from "@/shared/constants/timing";
 import { LABELS } from "@/shared/constants/labels";
+import { resolveDownloadFilename } from "@/shared/utils/downloadFilename";
 
 /**
  * Authenticated blob download of a report export (network I/O — api layer,
@@ -11,7 +12,7 @@ import { LABELS } from "@/shared/constants/labels";
  */
 export async function downloadReport(
   path: string,
-  filename: string,
+  fallbackFilename: string,
 ): Promise<void> {
   const token = getApiSessionAdapter().getAccessToken();
   const res = await fetch(`${CLIENT_API_BASE_URL}${path}`, {
@@ -24,7 +25,7 @@ export async function downloadReport(
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = filename;
+  anchor.download = resolveDownloadFilename(res, fallbackFilename);
   anchor.click();
   URL.revokeObjectURL(url);
 }

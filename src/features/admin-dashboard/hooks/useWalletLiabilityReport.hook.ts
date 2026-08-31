@@ -22,7 +22,7 @@ export function useWalletLiabilityReport() {
         limit: 50,
         format,
       }),
-    filenameBase: "wallet-liability",
+    documentKey: "admin-wallet-liability",
   });
 
   return panel;

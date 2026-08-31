@@ -30,7 +30,7 @@ export function useCashbackWriteOffReport() {
         `${from}T00:00:00.000Z`,
       )}&to=${encodeURIComponent(`${to}T23:59:59.999Z`)}&format=${format}${bornQuery}`;
     },
-    filenameBase: "cashback-write-offs",
+    documentKey: "admin-cashback-write-offs",
   });
 
   return { ...panel, bornBy, setBornBy };

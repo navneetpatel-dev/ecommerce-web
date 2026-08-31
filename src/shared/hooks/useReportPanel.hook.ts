@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { downloadReport } from "@/shared/api/reportDownload";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { buildDatedExportFilenameFallback } from "@/shared/utils/downloadFilename";
 import { LABELS } from "@/shared/constants/labels";
 
 export interface ReportRangeInput {
@@ -16,8 +17,8 @@ export interface UseReportPanelParams<TReport> {
   fetchReport: (input: ReportRangeInput) => Promise<TReport>;
   /** Builds the authenticated export path for csv/pdf downloads. */
   exportPath: (input: ReportRangeInput, format: "csv" | "pdf") => string;
-  /** Base filename without extension, e.g. "wallet-liability". */
-  filenameBase: string;
+  /** Identifies the export in download filenames, e.g. "admin-wallet-liability". */
+  documentKey: string;
 }
 
 /**
@@ -52,7 +53,7 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
     try {
       await downloadReport(
         params.exportPath({ from, to, page }, format),
-        `${params.filenameBase}.${format === "pdf" ? "pdf" : "csv"}`,
+        buildDatedExportFilenameFallback(params.documentKey, from, to, format),
       );
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));

@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { downloadReport } from "@/shared/api/reportDownload";
+import { buildDatedExportFilenameFallback } from "@/shared/utils/downloadFilename";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
 import { API } from "@/shared/constants/apiRoutes";
@@ -49,7 +50,12 @@ export function useVendorSettlementReport() {
           ...buildRange(),
           format,
         }),
-        `vendor-settlement.${format === "pdf" ? "pdf" : "csv"}`,
+        buildDatedExportFilenameFallback(
+          "vendor-settlement-summary",
+          from,
+          to,
+          format,
+        ),
       );
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));

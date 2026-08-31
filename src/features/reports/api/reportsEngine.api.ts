@@ -1,4 +1,10 @@
 import { apiClient } from "@/shared/api/client";
+import {
+  buildDatedExportFilenameFallback,
+  buildReportExportFilenameFallback,
+  buildTaxInvoiceFilenameFallback,
+  resolveDownloadFilename,
+} from "@/shared/utils/downloadFilename";
 import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
 import { API } from "@/shared/constants/apiRoutes";
 import { BEARER_PREFIX } from "@/shared/constants/http";
@@ -74,10 +80,8 @@ async function downloadBlob(path: string, fallbackName: string) {
   const blob = await res.blob();
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  const disposition = res.headers.get("content-disposition") ?? "";
-  const match = /filename="([^"]+)"/.exec(disposition);
   a.href = url;
-  a.download = match?.[1] ?? fallbackName;
+  a.download = resolveDownloadFilename(res, fallbackName);
   a.click();
   URL.revokeObjectURL(url);
   return null;
@@ -92,10 +96,15 @@ export const reportsEngineApi = {
   exportExcel: (type: string, filters: ReportFiltersInput) =>
     downloadBlob(
       API.reports.run(type, buildQuery({ ...filters, format: "xlsx" })),
-      `${type}.xlsx`,
+      buildReportExportFilenameFallback(type, filters.from, filters.to),
     ),
-  downloadExport: (id: string) =>
-    downloadBlob(API.reports.exportDownload(id), `export_${id}.xlsx`),
+  downloadExport: (id: string, reportType?: string, from?: string, to?: string) =>
+    downloadBlob(
+      API.reports.exportDownload(id),
+      reportType && from && to
+        ? buildReportExportFilenameFallback(reportType, from, to)
+        : `report-export_${id}.xlsx`,
+    ),
   exportStatus: (id: string) =>
     apiClient.get<{
       id: string;
@@ -110,7 +119,12 @@ export const reportsEngineApi = {
       API.reports.customerOrderHistory(
         buildQuery({ ...filters, format: "xlsx" }),
       ),
-      "order-history.xlsx",
+      buildDatedExportFilenameFallback(
+        "customer-order-history",
+        filters.from,
+        filters.to,
+        "xlsx",
+      ),
     ),
   customerOrderHistory: (filters: ReportFiltersInput) =>
     apiClient.get<ReportRunResult>(
@@ -121,6 +135,6 @@ export const reportsEngineApi = {
   customerOrderInvoice: (orderId: string) =>
     downloadBlob(
       API.reports.customerOrderInvoice(orderId),
-      `invoice_${orderId.slice(0, 8)}.pdf`,
+      buildTaxInvoiceFilenameFallback(orderId),
     ),
 };

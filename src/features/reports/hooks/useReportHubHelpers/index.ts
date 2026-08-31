@@ -22,7 +22,7 @@ export async function pollExportUntilReady(exportId: string) {
   for (let i = 0; i < maxAttempts; i += 1) {
     const status = await reportsEngineApi.exportStatus(exportId);
     if (status.status === "READY" || status.status === "SYNC") {
-      await reportsEngineApi.downloadExport(exportId);
+      await reportsEngineApi.downloadExport(exportId, status.reportType);
       return "ready" as const;
     }
     if (status.status === "FAILED") {

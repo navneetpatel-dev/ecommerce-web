@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { downloadReport } from "@/shared/api/reportDownload";
+import { buildDatedExportFilenameFallback } from "@/shared/utils/downloadFilename";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
 import { API } from "@/shared/constants/apiRoutes";
@@ -61,7 +62,12 @@ export function useAdminSettlementReports() {
           ...buildRange(),
           format,
         }),
-        `admin-summary.${format === "pdf" ? "pdf" : "csv"}`,
+        buildDatedExportFilenameFallback(
+          "admin-dashboard-summary",
+          from,
+          to,
+          format,
+        ),
       );
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotLoadReport));
