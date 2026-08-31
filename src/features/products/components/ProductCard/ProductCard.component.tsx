@@ -2,7 +2,10 @@
 
 import { useCallback, useState } from "react";
 import { Checkbox } from "@/shared/components/ui/checkbox";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { MAX_COMPARED_PRODUCTS } from "../../constants/compare";
 import { resolveProductStock } from "../../utils/productListItem";
 import { CardControls } from "./CardControls.component";
 import { CardDetails } from "./CardDetails.component";
@@ -16,6 +19,7 @@ export function ProductCard({
   showQuickAdd = true,
   compareMode = false,
   isCompared = false,
+  compareAtLimit = false,
   isWishlisted = false,
   isAddingToCart = false,
   cartQuantity = 0,
@@ -81,14 +85,27 @@ export function ProductCard({
       )}
 
       {compareMode && (
-        <label className="mt-2 flex items-center gap-2 text-body-sm text-ink-muted">
-          <Checkbox
-            checked={isCompared}
-            onCheckedChange={() => onToggleCompare?.(product)}
-            aria-label={`Compare ${product.name}`}
-          />
-          Compare
-        </label>
+        <DisabledActionHint
+          disabled={compareAtLimit && !isCompared}
+          message={formatLabel(LABELS.compareMaxReached, {
+            max: String(MAX_COMPARED_PRODUCTS),
+          })}
+          className="mt-2"
+          block
+        >
+          <label className="flex items-center gap-2 text-body-sm text-ink-muted">
+            <Checkbox
+              checked={isCompared}
+              disabled={compareAtLimit && !isCompared}
+              onCheckedChange={() => {
+                if (compareAtLimit && !isCompared) return;
+                onToggleCompare?.(product);
+              }}
+              aria-label={`Compare ${product.name}`}
+            />
+            {LABELS.compare}
+          </label>
+        </DisabledActionHint>
       )}
     </div>
   );

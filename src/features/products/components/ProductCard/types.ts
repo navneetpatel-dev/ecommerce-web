@@ -7,6 +7,7 @@ export interface ProductCardProps {
   showQuickAdd?: boolean;
   compareMode?: boolean;
   isCompared?: boolean;
+  compareAtLimit?: boolean;
   isWishlisted?: boolean;
   isAddingToCart?: boolean;
   cartQuantity?: number;

@@ -14,6 +14,7 @@ interface ProductGridProps {
   emptyActionTo?: string;
   compareMode?: boolean;
   comparedIds?: string[];
+  compareAtLimit?: boolean;
   onToggleCompare?: (product: ProductListItem) => void;
 }
 
@@ -27,6 +28,7 @@ export function ProductGrid({
   emptyActionTo,
   compareMode = false,
   comparedIds = [],
+  compareAtLimit = false,
   onToggleCompare,
 }: ProductGridProps) {
   if (loading) return <SkeletonGrid count={skeletonCount} />;
@@ -51,6 +53,7 @@ export function ProductGrid({
           product={product}
           compareMode={compareMode}
           isCompared={comparedIds.includes(product.id)}
+          compareAtLimit={compareAtLimit}
           onToggleCompare={onToggleCompare}
         />
       ))}

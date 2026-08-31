@@ -19,6 +19,7 @@ interface ListingResultsProps {
   empty: ListingEmptyState;
   products?: ProductListItem[];
   comparedIds: ProductListItem["id"][];
+  compareAtLimit?: boolean;
   onToggleCompareProduct: (product: ProductListItem) => void;
   currentPage: number;
   totalPages?: number;
@@ -38,6 +39,7 @@ export function ListingResults({
   empty,
   products,
   comparedIds,
+  compareAtLimit = false,
   onToggleCompareProduct,
   currentPage,
   totalPages,
@@ -75,6 +77,7 @@ export function ListingResults({
             products={products}
             compareMode={compareMode}
             comparedIds={comparedIds}
+            compareAtLimit={compareAtLimit}
             onToggleCompare={onToggleCompareProduct}
           />
           {(totalPages ?? 0) > 1 && (

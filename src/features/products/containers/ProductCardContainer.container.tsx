@@ -11,6 +11,7 @@ interface ProductCardContainerProps {
   showQuickAdd?: boolean;
   compareMode?: boolean;
   isCompared?: boolean;
+  compareAtLimit?: boolean;
   onToggleCompare?: (product: ProductListItem) => void;
 }
 
@@ -21,6 +22,7 @@ export function ProductCardContainer({
   showQuickAdd,
   compareMode,
   isCompared,
+  compareAtLimit,
   onToggleCompare,
 }: ProductCardContainerProps) {
   const card = useProductCard(product);
@@ -33,6 +35,7 @@ export function ProductCardContainer({
       showQuickAdd={showQuickAdd}
       compareMode={compareMode}
       isCompared={isCompared}
+      compareAtLimit={compareAtLimit}
       isWishlisted={card.isWishlisted}
       isAddingToCart={card.isAddingToCart}
       cartQuantity={card.cartQuantity}

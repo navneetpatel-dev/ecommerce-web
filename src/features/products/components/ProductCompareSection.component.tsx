@@ -18,7 +18,7 @@ export const ProductCompareSection = forwardRef<
   return (
     <section
       ref={ref}
-      className="mt-12 rounded-lg border border-line bg-surface p-6"
+      className="mt-12 scroll-mt-16 rounded-lg border border-line bg-surface p-6 lg:scroll-mt-[88px]"
     >
       <div className="mb-6">
         <h2 className="text-[1.375rem] font-semibold text-ink">

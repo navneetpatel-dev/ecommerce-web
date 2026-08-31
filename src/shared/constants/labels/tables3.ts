@@ -178,6 +178,10 @@ export const tables3Labels = {
   browseAllProducts: "Browse all products",
   sort: "Sort",
   compare: "Compare",
+  compareMinRequired: "Add at least 2 products to compare.",
+  compareSelectionCount: "{count} of {max} selected",
+  compareMaxReached:
+    "Maximum of {max} products reached. Remove one to add another.",
   sortTrending: "Trending",
   sortNewest: "Newest",
   sortPriceLowHigh: "Price: Low to High",

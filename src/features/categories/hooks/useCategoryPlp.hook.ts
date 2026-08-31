@@ -50,6 +50,7 @@ export function useCategoryPlp(slugPath: string[]) {
     compareMode: compareTray.compareMode,
     comparedProducts: compareTray.comparedProducts,
     comparedIds: compareTray.comparedProducts.map((item) => item.id),
+    compareAtLimit: compareTray.compareAtLimit,
     compareSectionRef: compareTray.compareSectionRef,
     breadcrumbItems,
     hasActiveFacets,

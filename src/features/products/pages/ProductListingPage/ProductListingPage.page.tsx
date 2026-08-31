@@ -54,6 +54,7 @@ export function ProductListingPage() {
             empty={empty}
             products={listing.data?.items}
             comparedIds={listing.comparedIds}
+            compareAtLimit={listing.compareAtLimit}
             onToggleCompareProduct={listing.toggleCompareProduct}
             currentPage={listing.filters.page ?? 1}
             totalPages={listing.data?.totalPages}

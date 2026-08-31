@@ -2,8 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { ProductListItem } from "@/shared/api/types";
-
-const MAX_COMPARED_PRODUCTS = 4;
+import { MAX_COMPARED_PRODUCTS } from "@/features/products/constants/compare";
 
 export function useCompareTray() {
   const [compareMode, setCompareMode] = useState(false);
@@ -25,6 +24,8 @@ export function useCompareTray() {
   return {
     compareMode,
     comparedProducts,
+    compareAtLimit: comparedProducts.length >= MAX_COMPARED_PRODUCTS,
+    compareMax: MAX_COMPARED_PRODUCTS,
     compareSectionRef,
     toggleCompareMode: () => setCompareMode((value) => !value),
     toggleCompareProduct,

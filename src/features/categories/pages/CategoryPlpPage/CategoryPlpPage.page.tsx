@@ -83,6 +83,7 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
           isFetching={plp.isFetching}
           compareMode={plp.compareMode}
           comparedIds={plp.comparedIds}
+          compareAtLimit={plp.compareAtLimit}
           onToggleCompare={plp.toggleCompareProduct}
           onToggleCompareMode={plp.toggleCompareMode}
           onUpdateFilter={plp.updateFilter}

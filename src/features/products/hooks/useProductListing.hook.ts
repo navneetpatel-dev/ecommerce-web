@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useFilters } from "./useFilters.hook";
 import { useProductList } from "../api/products.queries";
 import type { ProductListItem } from "@/shared/api/types";
+import { MAX_COMPARED_PRODUCTS } from "../constants/compare";
 
 export const SORT_OPTIONS = [
   { value: "trending", label: "Trending" },
@@ -30,7 +31,7 @@ export function useProductListing() {
       if (current.some((item) => item.id === product.id)) {
         return current.filter((item) => item.id !== product.id);
       }
-      if (current.length >= 4) return current;
+      if (current.length >= MAX_COMPARED_PRODUCTS) return current;
       return [...current, product];
     });
   };
@@ -55,6 +56,8 @@ export function useProductListing() {
     compareMode,
     comparedProducts,
     comparedIds: comparedProducts.map((item) => item.id),
+    compareAtLimit: comparedProducts.length >= MAX_COMPARED_PRODUCTS,
+    compareMax: MAX_COMPARED_PRODUCTS,
     compareSectionRef,
     filters,
     data,

@@ -14,6 +14,7 @@ interface ProductResultsProps {
   isFetching: boolean;
   compareMode: boolean;
   comparedIds: string[];
+  compareAtLimit: boolean;
   onToggleCompare: (product: ProductListItem) => void;
   onToggleCompareMode: () => void;
   onUpdateFilter: (key: string, value: unknown) => void;
@@ -30,6 +31,7 @@ export function ProductResults({
   isFetching,
   compareMode,
   comparedIds,
+  compareAtLimit,
   onToggleCompare,
   onToggleCompareMode,
   onUpdateFilter,
@@ -109,6 +111,7 @@ export function ProductResults({
             products={data?.items}
             compareMode={compareMode}
             comparedIds={comparedIds}
+            compareAtLimit={compareAtLimit}
             onToggleCompare={onToggleCompare}
           />
           {data && data.totalPages > 1 ? (
