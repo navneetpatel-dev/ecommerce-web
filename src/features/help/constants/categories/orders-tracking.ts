@@ -96,7 +96,8 @@ export const ORDERS_TRACKING_CATEGORY: HelpCategory = {
         {
           heading: "Before the seller ships",
           paragraphs: [
-            "Cancellation is most likely while items are still processing. Once a package is shipped, cancellation is usually not available; use the returns flow after delivery if the item is eligible.",
+            "You can cancel a paid order from the order detail page while every seller slice is still pending or confirmed. Cancellation is not available after any item has shipped — use the returns flow after delivery if the item is eligible.",
+            "On cancel, wallet points used at checkout are restored immediately. Card or UPI amounts are refunded to the original method after the bank posts the refund.",
           ],
         },
         {

@@ -47,6 +47,8 @@ export type ReconciliationReport = {
   tcsCollected: number
   shippingCollected: number
   refundsToCustomer?: number
+  walletRechargeInflow?: number
+  walletPointsRedeemedAtCheckout?: number
   accountedTotal: number
   difference: number
   balanced: boolean

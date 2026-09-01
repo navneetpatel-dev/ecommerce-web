@@ -203,6 +203,8 @@ export const reportsLabels = {
   reconciliationBalanced: "Balanced",
   reconciliationMismatch: "Mismatch — totals do not reconcile",
   reconciliationDifference: "Difference",
+  walletRechargeInflow: "Wallet recharge inflow",
+  walletPointsRedeemedAtCheckout: "Points redeemed at checkout",
   vendorSettlements: "Vendor settlements",
   grossSales: "Gross sales",
   discountsAbsorbed: "Discounts absorbed",

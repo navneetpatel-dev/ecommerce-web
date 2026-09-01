@@ -9,6 +9,7 @@ import {
 } from "../components/WalletPageContent.component";
 import { WalletRechargePanel } from "../components/WalletRechargePanel.component";
 import { WalletStatementExportPanel } from "../components/WalletStatementExportPanel.component";
+import { walletApi } from "../api/wallet.api";
 
 export function WalletPage() {
   const balanceQuery = useWalletBalance();
@@ -37,6 +38,8 @@ export function WalletPage() {
         <div className="lg:col-span-5 space-y-6">
           <WalletBalanceCard
             balance={balanceQuery.data?.points ?? balanceQuery.data?.balance ?? 0}
+            purchasedBalance={balanceQuery.data?.purchasedBalance}
+            promotionalBalance={balanceQuery.data?.promotionalBalance}
             isLoading={balanceQuery.isLoading}
           />
           <WalletRechargePanel
@@ -57,6 +60,7 @@ export function WalletPage() {
             hasNextPage={transactionsQuery.hasNextPage}
             isFetchingNextPage={transactionsQuery.isFetchingNextPage}
             onLoadMore={() => void transactionsQuery.fetchNextPage()}
+            onDownloadInvoice={(id) => void walletApi.downloadRechargeInvoice(id)}
           />
         </div>
       </div>

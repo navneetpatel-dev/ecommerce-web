@@ -13,6 +13,8 @@ export const ordersApi = {
     return unwrapPaginatedList(res)
   },
   detail: (id: string) => apiClient.get<Order>(API.orders.detail(id)),
+  cancel: (id: string) =>
+    apiClient.post<{ orderId: string; cancelled: boolean }>(API.orders.cancel(id)),
   create: (body: { shippingAddressId: string; couponId?: string }) =>
     apiClient.post<Order>(API.orders.list(), body),
   updateStatus: (id: string, status: OrderStatus) =>

@@ -22,6 +22,11 @@ export const returnsTimelinesLabels = {
   confirmMarkReceivedBody: 'Confirm warehouse receipt for return "{name}"?',
   confirmCloseReturnTitle: "Close this return?",
   confirmCloseReturnBody: 'Close return "{name}" after receipt?',
+  retryRefund: "Retry refund",
+  confirmRetryRefundTitle: "Retry bank refund?",
+  confirmRetryRefundBody: "Retry the failed Razorpay refund for {name}.",
+  returnRefundToBank: " · {amount} to bank",
+  returnRefundToWallet: " · {amount} to wallet",
   returnsPageTitle: "Returns",
   returnsPageDescription:
     "Track return requests for delivered items. Start a return from an order detail page when an item qualifies.",
@@ -43,6 +48,4 @@ export const returnsTimelinesLabels = {
   returnReasonLabel: "Reason",
   returnDetailsLabel: "Details",
   returnDetailsPlaceholder: "Briefly describe the issue",
-
-  // Admin wallet reports
 } as const;

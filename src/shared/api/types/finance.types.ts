@@ -10,6 +10,7 @@ export interface WalletTransaction {
   balanceAfter: number;
   referenceType: string | null;
   referenceId: string | null;
+  rechargeId?: string | null;
   description: string | null;
   pointSource?: string | null;
   createdAt: string;

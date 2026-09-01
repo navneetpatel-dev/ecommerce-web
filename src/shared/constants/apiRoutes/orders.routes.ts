@@ -3,6 +3,7 @@ export const ordersRoutes = {
   list: (query = "") => `/api/orders${query ? `?${query}` : ""}`,
   detail: (id: string) => `/api/orders/${id}`,
   status: (id: string) => `/api/orders/${id}/status`,
+  cancel: (id: string) => `/api/orders/${id}/cancel`,
 } as const;
 
 export const subordersRoutes = {
@@ -19,6 +20,7 @@ export const returnsRoutes = {
   delete: (id: string) => `/api/returns/${id}`,
   creditNote: (id: string) => `/api/returns/${id}/credit-note`,
   debitNote: (id: string) => `/api/returns/${id}/debit-note`,
+  retryRefund: (id: string) => `/api/returns/${id}/retry-refund`,
 } as const;
 
 export const reviewsRoutes = {

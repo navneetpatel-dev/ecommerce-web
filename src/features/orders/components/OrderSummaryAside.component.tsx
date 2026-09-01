@@ -8,6 +8,7 @@ import { Button } from "@/shared/components/ui/button";
 import { formatInr } from "../utils/format";
 import { OrderPaymentSummary } from "./OrderPaymentSummary.component";
 import { OrderMoneyBreakdown } from "./OrderMoneyBreakdown.component";
+import { OrderCancelAction } from "./OrderCancelAction.component";
 
 interface OrderSummaryAsideProps {
   order: Order;
@@ -124,6 +125,7 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
             {invoiceError}
           </p>
         ) : null}
+        <OrderCancelAction order={order} />
         <Button className="w-full" asChild>
           <Link href={PATHS.orders}>{LABELS.allOrders}</Link>
         </Button>

@@ -24,6 +24,10 @@ function formatCell(value: unknown, format?: string): string {
     const n = Number(value);
     return Number.isFinite(n) ? `₹${n.toFixed(2)}` : String(value);
   }
+  if (format === "points") {
+    const n = Number(value);
+    return Number.isFinite(n) ? `${n.toLocaleString()} pts` : String(value);
+  }
   if (format === "date") {
     const d = new Date(String(value));
     return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleString();

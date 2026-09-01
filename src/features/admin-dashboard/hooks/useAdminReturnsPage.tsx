@@ -3,7 +3,7 @@
 import { useCallback, type ReactNode } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { PERMISSIONS } from "@/shared/constants/permissions";
-import { RETURN_STATUS } from "@/shared/constants/statuses";
+import { RETURN_STATUS, REFUND_STATUS } from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { returnsApi } from "@/features/returns";
@@ -49,6 +49,24 @@ export function useAdminReturnsPage(): AdminListPageModel {
           >
             {LABELS.downloadDebitNote}
           </Button>,
+        );
+      }
+
+      if (
+        row.refundStatus === REFUND_STATUS.FAILED &&
+        Number(row.razorpayRefundAmount ?? 0) > 0
+      ) {
+        buttons.push(
+          <AdminConfirmAction
+            key="retry-refund"
+            label={LABELS.retryRefund}
+            dialogVariant="warning"
+            title={LABELS.confirmRetryRefundTitle}
+            description={formatLabel(LABELS.confirmRetryRefundBody, { name })}
+            onConfirm={() =>
+              returnsApi.retryRefund(String(row.id)).then(reload)
+            }
+          />,
         );
       }
 

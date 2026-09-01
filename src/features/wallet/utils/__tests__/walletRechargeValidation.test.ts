@@ -1,23 +1,34 @@
-import assert from "node:assert/strict";
-import { describe, it } from "node:test";
-import { validateWalletRechargeAmount } from "../walletRechargeValidation";
+import { describe, expect, it } from "vitest";
+import {
+  validateWalletRechargeAmount,
+  type WalletRechargeLimits,
+} from "../walletRechargeValidation";
+
+const limits: WalletRechargeLimits = {
+  minInr: 100,
+  maxInr: 10000,
+  maxBalance: 50000,
+  pointsPerRupee: 2,
+};
 
 describe("validateWalletRechargeAmount", () => {
-  const limits = { minInr: 100, maxInr: 10000, maxBalance: 50000 };
-
-  it("flags below minimum", () => {
-    assert.equal(validateWalletRechargeAmount(50, 0, limits), "below-min");
+  it("rejects amount below minimum", () => {
+    expect(validateWalletRechargeAmount(50, 0, limits)).toBe("below-min");
   });
 
-  it("flags above maximum", () => {
-    assert.equal(validateWalletRechargeAmount(15000, 0, limits), "above-max");
+  it("rejects amount above maximum", () => {
+    expect(validateWalletRechargeAmount(20000, 0, limits)).toBe("above-max");
   });
 
-  it("flags projected balance cap", () => {
-    assert.equal(validateWalletRechargeAmount(1000, 49500, limits), "max-balance");
+  it("allows valid recharge amount", () => {
+    expect(validateWalletRechargeAmount(500, 0, limits)).toBeNull();
   });
 
-  it("accepts valid recharge", () => {
-    assert.equal(validateWalletRechargeAmount(500, 1000, limits), null);
+  it("rejects when bonus points would exceed max balance", () => {
+    expect(validateWalletRechargeAmount(100, 49900, limits)).toBe("max-balance");
+  });
+
+  it("allows recharge when bonus points fit under cap", () => {
+    expect(validateWalletRechargeAmount(100, 49800, limits)).toBeNull();
   });
 });

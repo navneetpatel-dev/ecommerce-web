@@ -40,7 +40,7 @@ export function useHeader() {
     0,
   );
   const wishlistItemCount = (wishlist?.items ?? []).length;
-  const walletBalance = Number(wallet?.balance || 0);
+  const walletBalance = Number(wallet?.points ?? wallet?.balance ?? 0);
 
   useEffect(() => {
     return () => {

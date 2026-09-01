@@ -6,6 +6,7 @@ import { useAdminFinancePage } from "../hooks/useAdminFinancePage";
 import { AdminSettlementReportsPanel } from "../components/AdminSettlementReportsPanel.component";
 import { AdminWalletLiabilityPanel } from "../components/AdminWalletLiabilityPanel.component";
 import { AdminWalletRechargePanel } from "../components/AdminWalletRechargePanel.component";
+import { AdminWalletAdjustPanel } from "../components/AdminWalletAdjustPanel.component";
 import { AdminCashbackWriteOffPanel } from "../components/AdminCashbackWriteOffPanel.component";
 import { LABELS } from "@/shared/constants/labels";
 
@@ -66,6 +67,7 @@ export function AdminFinancePage() {
               <AdminSettlementReportsPanel />
               <AdminWalletLiabilityPanel />
               <AdminWalletRechargePanel />
+              <AdminWalletAdjustPanel />
               <AdminCashbackWriteOffPanel />
             </div>
           ),

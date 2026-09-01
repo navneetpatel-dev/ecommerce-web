@@ -54,7 +54,10 @@ export function WalletPointsSettingsSection({
           </SelectContent>
         </Select>
       </FormFieldFrame>
-      <FormFieldFrame label={LABELS.settingsPointsPerRupee}>
+      <FormFieldFrame
+        label={LABELS.settingsPointsPerRupee}
+        hint={LABELS.settingsPointsPerRupeeHint}
+      >
         <NumberInput
           value={form.pointsPerRupee ?? 1}
           min={0.01}

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/shared/components/ui/button";
 import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
@@ -19,6 +20,7 @@ interface WalletTransactionsListProps {
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;
   onLoadMore?: () => void;
+  onDownloadInvoice?: (rechargeId: string) => void;
 }
 
 function creditAmountClass(isCredit: boolean) {
@@ -27,9 +29,13 @@ function creditAmountClass(isCredit: boolean) {
   }`;
 }
 
-function renderRow(row: WalletTransaction) {
+function renderRow(
+  row: WalletTransaction,
+  onDownloadInvoice?: (rechargeId: string) => void,
+) {
   const isCredit = row.type === "CREDIT";
   const signedAmount = `${isCredit ? "+" : "−"}${formatPoints(row.amount)}`;
+  const rechargeId = row.rechargeId ?? (row.referenceType === "TOPUP" ? row.referenceId : null);
   return (
     <li
       key={row.id}
@@ -43,6 +49,17 @@ function renderRow(row: WalletTransaction) {
         <p className="mt-1 text-[0.75rem] text-ink-faint">
           {formatOrderDate(row.createdAt)}
         </p>
+        {rechargeId && onDownloadInvoice ? (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-2"
+            onClick={() => onDownloadInvoice(rechargeId)}
+          >
+            {LABELS.walletDownloadRechargeInvoice}
+          </Button>
+        ) : null}
       </div>
       <div className="text-right">
         <p className={creditAmountClass(isCredit)}>{signedAmount}</p>
@@ -67,6 +84,7 @@ export function WalletTransactionsList(props: WalletTransactionsListProps) {
     hasNextPage,
     isFetchingNextPage,
     onLoadMore,
+    onDownloadInvoice,
   } = props;
 
   if (isLoading) {
@@ -106,7 +124,7 @@ export function WalletTransactionsList(props: WalletTransactionsListProps) {
   return (
     <>
       <ul className="divide-y divide-line border border-line bg-surface-raised">
-        {transactions.map(renderRow)}
+        {transactions.map((row) => renderRow(row, onDownloadInvoice))}
       </ul>
       {hasNextPage ? (
         <InfiniteLoadMore
@@ -121,11 +139,15 @@ export function WalletTransactionsList(props: WalletTransactionsListProps) {
 
 interface WalletBalanceCardProps {
   balance: number;
+  purchasedBalance?: number;
+  promotionalBalance?: number;
   isLoading?: boolean;
 }
 
 export function WalletBalanceCard({
   balance,
+  purchasedBalance,
+  promotionalBalance,
   isLoading,
 }: WalletBalanceCardProps) {
   return (
@@ -145,6 +167,13 @@ export function WalletBalanceCard({
       <p className="mt-3 text-[0.875rem] text-ink-muted">
         {LABELS.walletPageDescription}
       </p>
+      {!isLoading && (purchasedBalance != null || promotionalBalance != null) ? (
+        <p className="mt-2 text-[0.75rem] tabular-nums text-ink-faint">
+          {LABELS.walletPurchasedBalance} {formatPoints(purchasedBalance ?? 0)}
+          {" · "}
+          {LABELS.walletPromotionalBalance} {formatPoints(promotionalBalance ?? 0)}
+        </p>
+      ) : null}
     </div>
   );
 }

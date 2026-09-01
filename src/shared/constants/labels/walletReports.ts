@@ -29,6 +29,17 @@ export const walletReportsLabels = {
   reportPointsCredited: "Points credited",
   reportStatus: "Status",
   reportPaidAt: "Paid at",
-
-  // Support tickets
+  reportLiabilityFifoNote:
+    "Purchased vs promotional split follows FIFO (promotional first) from the ledger.",
+  walletAdjustTitle: "Manual wallet adjustment",
+  walletAdjustUserId: "Customer user ID",
+  walletAdjustDirection: "Direction",
+  walletAdjustAmount: "Points amount",
+  walletAdjustReason: "Reason",
+  walletAdjustPointSource: "Point source (credits only)",
+  walletAdjustSubmit: "Apply adjustment",
+  walletAdjustSuccess: "Wallet updated — new balance: {balance} pts",
+  walletAdjustValidationError:
+    "Enter user ID, a positive amount, and a reason (at least 3 characters).",
+  walletAdjustFailed: "Could not adjust wallet",
 } as const;

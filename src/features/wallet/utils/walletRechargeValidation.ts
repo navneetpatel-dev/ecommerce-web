@@ -2,6 +2,7 @@ export type WalletRechargeLimits = {
   minInr: number;
   maxInr: number;
   maxBalance: number;
+  pointsPerRupee?: number;
 };
 
 export function validateWalletRechargeAmount(
@@ -11,6 +12,8 @@ export function validateWalletRechargeAmount(
 ): string | null {
   if (amountInr < limits.minInr) return "below-min";
   if (amountInr > limits.maxInr) return "above-max";
-  if (currentBalance + amountInr > limits.maxBalance) return "max-balance";
+  const pointsPerRupee = limits.pointsPerRupee ?? 1;
+  const pointsToCredit = amountInr * pointsPerRupee;
+  if (currentBalance + pointsToCredit > limits.maxBalance) return "max-balance";
   return null;
 }

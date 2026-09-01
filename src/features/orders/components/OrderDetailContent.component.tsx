@@ -11,6 +11,7 @@ import { countOrderItems } from "../utils/format";
 import { useOrderDocuments } from "../hooks/useOrderDocuments.hook";
 import { OrderDetailHeader } from "./OrderDetailHeader.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
+import { OrderReturnStatusBanner } from "./OrderReturnStatusBanner.component";
 
 interface OrderDetailContentProps {
   order: Order;
@@ -63,6 +64,9 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
             itemCount={itemCount}
             vendorCount={vendorCount}
           />
+          <div className="mt-4">
+            <OrderReturnStatusBanner order={order} />
+          </div>
         </motion.div>
 
         <div className="mt-6 grid grid-cols-1 gap-8 lg:mt-8 lg:grid-cols-12 lg:gap-10">

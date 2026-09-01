@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/orderFormat";
+import { formatPoints } from "@/shared/utils/formatPoints";
 import { useAdminSettlementReports } from "../hooks/useAdminSettlementReports.hook";
 
 function Metric({ label, value }: { label: string; value: string }) {
@@ -209,6 +210,20 @@ export function AdminSettlementReportsPanel() {
               {LABELS.reconciliationDifference}: {formatInr(recon.difference)}
             </p>
           ) : null}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {recon.walletRechargeInflow != null ? (
+              <Metric
+                label={LABELS.walletRechargeInflow}
+                value={formatInr(recon.walletRechargeInflow)}
+              />
+            ) : null}
+            {recon.walletPointsRedeemedAtCheckout != null ? (
+              <Metric
+                label={LABELS.walletPointsRedeemedAtCheckout}
+                value={formatPoints(recon.walletPointsRedeemedAtCheckout)}
+              />
+            ) : null}
+          </div>
         </div>
       ) : null}
 

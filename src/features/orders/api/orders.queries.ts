@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ROLES } from "@/shared/constants/labels";
 import { ordersApi, subOrdersApi } from "./orders.api";
 
@@ -30,5 +30,16 @@ export function useOrder(id: string) {
     queryKey: ordersKeys.detail(id),
     queryFn: () => ordersApi.detail(id),
     enabled: !!id,
+  });
+}
+
+export function useCancelOrder(orderId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => ordersApi.cancel(orderId),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ordersKeys.detail(orderId) });
+      void queryClient.invalidateQueries({ queryKey: ordersKeys.all });
+    },
   });
 }

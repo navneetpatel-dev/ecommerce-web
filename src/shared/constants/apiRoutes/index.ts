@@ -21,6 +21,7 @@ import {
   couponsRoutes,
   payoutsRoutes,
   walletRoutes,
+  walletAdminRoutes,
 } from "./finance.routes";
 import {
   adminRoutes,
@@ -53,6 +54,7 @@ export const API = {
   shipping: shippingRoutes,
   tax: taxRoutes,
   wallet: walletRoutes,
+  walletAdmin: walletAdminRoutes,
   commissions: commissionsRoutes,
   payouts: payoutsRoutes,
   coupons: couponsRoutes,

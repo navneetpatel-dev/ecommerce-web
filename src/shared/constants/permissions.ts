@@ -29,6 +29,7 @@ export const PERMISSIONS = {
   REVIEW_RESPOND: 'review.respond',
   TICKET_MANAGE: 'ticket.manage',
   BUG_REPORT_MANAGE: 'bug_report.manage',
+  WALLET_ADJUST: 'wallet.adjust',
 } as const
 
 export type PermissionKey = (typeof PERMISSIONS)[keyof typeof PERMISSIONS]

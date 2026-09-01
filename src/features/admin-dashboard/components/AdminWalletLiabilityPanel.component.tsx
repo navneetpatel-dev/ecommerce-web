@@ -121,6 +121,10 @@ export function AdminWalletLiabilityPanel() {
             </div>
           </div>
 
+          <p className="text-[0.75rem] leading-relaxed text-ink-faint">
+            {LABELS.reportLiabilityFifoNote}
+          </p>
+
           {report.rows.length > 0 ? (
             <div className="space-y-3">
               <div className="overflow-x-auto rounded-md border border-line">

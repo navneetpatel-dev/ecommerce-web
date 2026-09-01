@@ -53,4 +53,6 @@ export const returnsApi = {
     downloadPdf(API.returns.creditNote(id), `credit-note_${id.slice(0, 8)}.pdf`),
   downloadDebitNote: (id: string) =>
     downloadPdf(API.returns.debitNote(id), `debit-note_${id.slice(0, 8)}.pdf`),
+  retryRefund: (id: string) =>
+    apiClient.post<ReturnRequest>(API.returns.retryRefund(id)),
 }

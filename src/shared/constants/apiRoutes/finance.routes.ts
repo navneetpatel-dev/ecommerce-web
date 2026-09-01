@@ -7,6 +7,11 @@ export const walletRoutes = {
   recharge: "/api/wallet/recharge",
   rechargeVerify: "/api/wallet/recharge/verify",
   rechargeStatus: (id: string) => `/api/wallet/recharge/${id}`,
+  rechargeInvoice: (id: string) => `/api/wallet/recharge/${id}/invoice`,
+} as const;
+
+export const walletAdminRoutes = {
+  adjust: (userId: string) => `/api/admin/wallet/${userId}/adjust`,
 } as const;
 
 export const commissionsRoutes = {

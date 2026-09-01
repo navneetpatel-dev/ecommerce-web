@@ -84,6 +84,17 @@ export const commerceLabels = {
   shop: "Shop",
   goToMyOrders: "Go to my orders",
   allOrders: "All orders",
+  cancelOrder: "Cancel order",
+  confirmCancelOrderTitle: "Cancel this order?",
+  confirmCancelOrderBody:
+    "We'll restore any points used and refund card/UPI payments for items that haven't shipped yet.",
+  orderCancelledSuccess: "Order cancelled",
+  orderCancelFailed: "Could not cancel this order",
+  orderCancelRefundPending: "Refund processing",
+  orderCancelRefundInitiated: "Bank refund initiated",
+  orderCancelRefundCompleted: "Refund completed",
+  orderCancelRefundFailed: "Refund issue — contact support if needed",
+  orderOpenReturnsBadge: "{count} open return(s) on this order",
 
   // Content
   readArticle: "Read article",

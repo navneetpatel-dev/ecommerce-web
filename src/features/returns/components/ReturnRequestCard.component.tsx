@@ -6,8 +6,9 @@ import { Button } from "@/shared/components/ui/button";
 import { Timeline } from "@/shared/components/Timeline.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
-import { RETURN_STATUS } from "@/shared/constants/statuses";
+import { REFUND_STATUS, RETURN_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate, formatInr } from "@/shared/utils/orderFormat";
+import { formatLabel } from "@/shared/utils/formatLabel";
 import type { ReturnRequest } from "@/shared/api/types";
 import {
   buildLogisticsTimeline,
@@ -54,9 +55,34 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
           </p>
           <p className="mt-1 text-[0.875rem] text-ink-muted">{row.reason}</p>
           {row.refundAmount != null ? (
-            <p className="mt-1 text-body-sm tabular-nums text-ink">
-              {LABELS.returnRefundStatusCompleted} {formatInr(row.refundAmount)}
-            </p>
+            <div className="mt-1 space-y-0.5 text-body-sm tabular-nums text-ink">
+              {row.refundStatus === REFUND_STATUS.COMPLETED ? (
+                <p>
+                  {LABELS.returnRefundStatusCompleted} {formatInr(row.refundAmount)}
+                </p>
+              ) : row.refundStatus === REFUND_STATUS.INITIATED ? (
+                <p className="text-ink-muted">
+                  {LABELS.returnRefundStatusInitiated}
+                  {(row.razorpayRefundAmount ?? 0) > 0
+                    ? formatLabel(LABELS.returnRefundToBank, {
+                        amount: formatInr(row.razorpayRefundAmount ?? 0),
+                      })
+                    : ""}
+                  {(row.walletRefundAmount ?? 0) > 0
+                    ? formatLabel(LABELS.returnRefundToWallet, {
+                        amount: formatInr(row.walletRefundAmount ?? 0),
+                      })
+                    : ""}
+                </p>
+              ) : row.refundStatus === REFUND_STATUS.FAILED ? (
+                <p className="text-danger">{LABELS.returnRefundStatusFailed}</p>
+              ) : (
+                <p className="text-ink-muted">{LABELS.returnRefundStatusPending}</p>
+              )}
+              {row.refundCustomerMessage ? (
+                <p className="text-body-sm text-ink-muted">{row.refundCustomerMessage}</p>
+              ) : null}
+            </div>
           ) : null}
           {row.creditNoteNumber ? (
             <p className="mt-1 text-body-sm text-ink-muted">

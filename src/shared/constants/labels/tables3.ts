@@ -62,6 +62,8 @@ export const tables3Labels = {
   settingsWalletRechargePresets: "Recharge preset amounts (INR)",
   settingsWalletRechargePresetsHint: "Comma-separated values shown as quick picks on the wallet page.",
   settingsPointsPerRupee: "Points per ₹1 paid",
+  settingsPointsPerRupeeHint:
+    "Bonus applies on recharge only. Checkout redemption stays 1 point = ₹1.",
   vendorCodEnabled: "Accept cash on delivery",
   vendorCodEnabledHint:
     "Turn off to disable COD for every product from this shop.",

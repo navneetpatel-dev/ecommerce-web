@@ -24,6 +24,8 @@ export type WalletBalanceResponse = {
   unit: "POINT";
   redemptionRate: number;
   rechargeEnabled: boolean;
+  purchasedBalance?: number;
+  promotionalBalance?: number;
   limits: {
     minInr: number;
     maxInr: number;
@@ -116,6 +118,31 @@ export const walletApi = {
     rechargeId?: string;
   }) => apiClient.post(API.wallet.rechargeVerify, payload),
   getRechargeStatus: (id: string) =>
-    apiClient.get(API.wallet.rechargeStatus(id)),
+    apiClient.get<{
+      id: string;
+      status: string;
+      amountInr: number;
+      pointsCredited: number;
+      paidAt: string | null;
+    }>(API.wallet.rechargeStatus(id)),
+  downloadRechargeInvoice: async (id: string) => {
+    const token = getApiSessionAdapter().getAccessToken();
+    const res = await fetch(
+      `${CLIENT_API_BASE_URL}${API.wallet.rechargeInvoice(id)}`,
+      {
+        credentials: "include",
+        signal: AbortSignal.timeout(API_TIMEOUT_MS),
+        headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
+      },
+    );
+    if (!res.ok) throw new Error("Download failed");
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = resolveDownloadFilename(res, `wallet-recharge_${id.slice(0, 8)}.pdf`);
+    a.click();
+    URL.revokeObjectURL(url);
+  },
   exportStatement,
 };

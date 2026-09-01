@@ -71,12 +71,16 @@ export interface Order {
   paymentMethod?: string | null;
   walletAmountUsed?: number;
   razorpayAmountPaid?: number;
+  cancelRefundStatus?: RefundStatus | null;
+  cancelRazorpayRefundId?: string | null;
   originalTotalAmount?: number;
   pendingCashbackAmount?: number;
   cashbackCreditedAt?: string | null;
   createdAt: string;
   subOrders: SubOrder[];
   shippingAddress?: Address | null;
+  openReturnCount?: number;
+  returnRefundAlerts?: Array<{ id: string; refundStatus: RefundStatus | string }>;
 }
 
 export interface Review {
@@ -106,6 +110,7 @@ export interface ReturnRequest {
   photoUrls?: string[];
   refundMethod?: RefundMethod | null;
   refundStatus?: RefundStatus;
+  refundCustomerMessage?: string | null;
   refundAmount: number | null;
   walletRefundAmount?: number;
   razorpayRefundAmount?: number;

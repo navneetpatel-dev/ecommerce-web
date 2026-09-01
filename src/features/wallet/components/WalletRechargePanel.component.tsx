@@ -9,6 +9,7 @@ import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInr } from "@/shared/utils/orderFormat";
 import { formatPoints } from "@/shared/utils/formatPoints";
 import { useWalletRecharge } from "../hooks/useWalletRecharge.hook";
+import { validateWalletRechargeAmount } from "../utils/walletRechargeValidation";
 import type { WalletBalanceResponse } from "../api/wallet.api";
 
 interface WalletRechargePanelProps {
@@ -42,11 +43,13 @@ export function WalletRechargePanel({
 
   const validateAmount = (amount: number): string | null => {
     if (!limits) return null;
-    if (amount < limits.minInr) return LABELS.walletRechargeBelowMin;
-    if (amount > limits.maxInr) return LABELS.walletRechargeAboveMax;
-    if (projectedBalance > limits.maxBalance) {
-      return LABELS.walletMaxBalanceReached;
-    }
+    const code = validateWalletRechargeAmount(amount, balance?.points ?? 0, {
+      ...limits,
+      pointsPerRupee,
+    });
+    if (code === "below-min") return LABELS.walletRechargeBelowMin;
+    if (code === "above-max") return LABELS.walletRechargeAboveMax;
+    if (code === "max-balance") return LABELS.walletMaxBalanceReached;
     return null;
   };
 
@@ -67,6 +70,13 @@ export function WalletRechargePanel({
       <p className="mt-1 text-[0.875rem] text-ink-muted">
         {LABELS.walletPointsEqualsInr}
       </p>
+      {limits?.maxBalance ? (
+        <p className="mt-2 text-[0.75rem] leading-relaxed text-ink-faint">
+          {formatLabel(LABELS.walletMaxBalanceCapNote, {
+            cap: formatPoints(limits.maxBalance),
+          })}
+        </p>
+      ) : null}
 
       {presets.length > 0 ? (
         <div className="mt-4 flex flex-wrap gap-2">
@@ -79,7 +89,17 @@ export function WalletRechargePanel({
               disabled={isBusy}
               onClick={() => void startRecharge(preset)}
             >
-              {formatInr(preset)}
+              <span className="flex flex-col items-start leading-tight">
+                <span>{formatInr(preset)}</span>
+                {pointsPerRupee > 1 ? (
+                  <span className="text-[0.6875rem] text-ink-muted">
+                    {formatLabel(LABELS.walletRechargeBonusHint, {
+                      amount: formatInr(preset),
+                      points: formatPoints(pointsForAmount(preset)),
+                    })}
+                  </span>
+                ) : null}
+              </span>
             </Button>
           ))}
         </div>

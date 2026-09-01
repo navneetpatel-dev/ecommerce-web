@@ -11,6 +11,9 @@ export const walletLabels = {
     "Points cannot be used with cash on delivery.",
   walletPageDescription:
     "Recharge store points or use credits from returns and cashback at checkout.",
+  walletPurchasedBalance: "Purchased",
+  walletPromotionalBalance: "Promotional",
+  walletDownloadRechargeInvoice: "Download invoice",
   walletTransactionHistory: "Transaction history",
   walletNoTransactions: "No wallet activity yet.",
   walletCredit: "Credit",
@@ -34,6 +37,9 @@ export const walletLabels = {
   walletRechargeBelowMin: "Amount is below the minimum recharge",
   walletRechargeAboveMax: "Amount exceeds the maximum per recharge",
   walletMaxBalanceReached: "This recharge would exceed your maximum points balance",
+  walletMaxBalanceCapNote:
+    "Maximum balance from recharges: {cap}. The balance cap applies to recharges only. Refunds and cashback may increase your balance above the cap.",
+  walletRechargeBonusHint: "Recharge bonus: {points} pts for {amount}",
   walletRechargeSuccess: "Points added to your wallet",
   walletTermsNotice:
     "Store points are non-transferable store credit. They cannot be withdrawn as cash.",
