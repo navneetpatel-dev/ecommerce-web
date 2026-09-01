@@ -1,7 +1,6 @@
 import { getApiSessionAdapter } from "@/shared/api/sessionAdapter";
 import { apiClient } from "@/shared/api/client";
 import {
-  buildDatedExportFilenameFallback,
   buildReportExportFilenameFallback,
   buildTaxInvoiceFilenameFallback,
   resolveDownloadFilename,
@@ -42,11 +41,7 @@ export type ReportRunResult = {
 };
 
 export type ExportStatus =
-  | "PENDING"
-  | "PROCESSING"
-  | "READY"
-  | "FAILED"
-  | "SYNC";
+  "PENDING" | "PROCESSING" | "READY" | "FAILED" | "SYNC";
 
 export type AsyncExportResponse = {
   async?: true;
@@ -76,8 +71,7 @@ export type ExportStatusResult = {
 };
 
 export type ExportStatusPollResult =
-  | { notModified: true; etag: string }
-  | ExportStatusResult;
+  { notModified: true; etag: string } | ExportStatusResult;
 
 export type AdminExportRow = {
   id: string;
@@ -130,7 +124,16 @@ async function downloadBlob(path: string, fallbackName: string) {
     headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
   });
   if (!res.ok) {
-    throw new Error(LABELS.couldNotLoadReport);
+    let message: string = LABELS.couldNotLoadReport;
+    try {
+      const body = (await res.json()) as unknown;
+      message = getApiErrorMessage(body, message);
+    } catch {
+      /* non-JSON error body */
+    }
+    const err = new Error(message);
+    (err as Error & { status?: number }).status = res.status;
+    throw err;
   }
   const blob = await res.blob();
   triggerBlobDownload(blob, resolveDownloadFilename(res, fallbackName));
@@ -155,17 +158,7 @@ function triggerPresignedDownload(url: string, fallbackName?: string) {
 }
 
 async function downloadPresignedUrl(url: string, fallbackName: string) {
-  try {
-    const res = await fetch(url, {
-      cache: "no-store",
-      signal: AbortSignal.timeout(EXPORT_DOWNLOAD_TIMEOUT_MS),
-    });
-    if (!res.ok) throw new Error(LABELS.couldNotLoadReport);
-    const blob = await res.blob();
-    triggerBlobDownload(blob, resolveDownloadFilename(res, fallbackName));
-  } catch {
-    triggerPresignedDownload(url, fallbackName);
-  }
+  triggerPresignedDownload(url, fallbackName);
 }
 
 async function fetchExportStatus(
@@ -174,15 +167,18 @@ async function fetchExportStatus(
   signal?: AbortSignal,
 ): Promise<ExportStatusPollResult> {
   const token = getApiSessionAdapter().getAccessToken();
-  const res = await fetch(`${CLIENT_API_BASE_URL}${API.reports.exportStatus(id)}`, {
-    credentials: "include",
-    cache: "no-store",
-    signal,
-    headers: {
-      ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
-      ...(ifNoneMatch ? { "If-None-Match": ifNoneMatch } : {}),
+  const res = await fetch(
+    `${CLIENT_API_BASE_URL}${API.reports.exportStatus(id)}`,
+    {
+      credentials: "include",
+      cache: "no-store",
+      signal,
+      headers: {
+        ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
+        ...(ifNoneMatch ? { "If-None-Match": ifNoneMatch } : {}),
+      },
     },
-  });
+  );
   if (res.status === 304) {
     const etag = res.headers.get("ETag") ?? ifNoneMatch ?? "";
     return { notModified: true, etag };
@@ -197,7 +193,10 @@ async function fetchExportStatus(
     }
     throw new Error(message);
   }
-  const body = (await res.json()) as { success: boolean; data: ExportStatusResult };
+  const body = (await res.json()) as {
+    success: boolean;
+    data: ExportStatusResult;
+  };
   if (!body.success) {
     throw new Error(getApiErrorMessage(body, LABELS.couldNotLoadReport));
   }
@@ -240,8 +239,7 @@ export const reportsEngineApi = {
     }
     const status = await fetchExportStatus(id);
     if ("notModified" in status) {
-      await downloadBlob(API.reports.exportDownload(id), fallback);
-      return;
+      throw new Error(LABELS.couldNotLoadReport);
     }
     if (status.downloadUrl) {
       await downloadPresignedUrl(status.downloadUrl, fallback);

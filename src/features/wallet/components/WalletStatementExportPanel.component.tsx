@@ -1,29 +1,22 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { FormSection } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
-import { useReportExport } from "@/features/reports/hooks/useReportExport.hook";
-import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
+import { useWalletStatementExport } from "../hooks/useWalletStatementExport.hook";
 
 export function WalletStatementExportPanel() {
-  const initialRange = useMemo(() => defaultRange(), []);
-  const [from, setFrom] = useState(initialRange.from);
-  const [to, setTo] = useState(initialRange.to);
-
-  const buildFilters = useCallback(() => ({ from, to }), [from, to]);
-  const exportHub = useReportExport("customer-wallet-statement", buildFilters);
+  const exportHub = useWalletStatementExport();
 
   return (
     <FormSection title={LABELS.walletStatement} columns={3}>
       <DateRangeFields
-        from={from}
-        to={to}
-        onFromChange={setFrom}
-        onToChange={setTo}
+        from={exportHub.from}
+        to={exportHub.to}
+        onFromChange={exportHub.setFrom}
+        onToChange={exportHub.setTo}
         fromId="wallet-statement-from"
         toId="wallet-statement-to"
       />

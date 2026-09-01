@@ -1,5 +1,7 @@
 import { getApiSessionAdapter } from "@/shared/api/sessionAdapter";
 import { apiClient } from "@/shared/api/client";
+import { initiateAsyncExport } from "@/shared/api/reportDownload";
+import type { AsyncExportResponse } from "@/features/reports";
 import {
   unwrapPaginatedList,
   type PaginatedList,
@@ -39,6 +41,21 @@ export type WalletRechargeCheckout = {
   pointsToCredit: number;
   checkoutConfigId?: string;
 };
+
+export type WalletStatementExportFilters = {
+  from: string;
+  to: string;
+};
+
+function buildStatementQuery(
+  filters: WalletStatementExportFilters & { format: "xlsx" | "csv" | "pdf" },
+) {
+  const params = new URLSearchParams();
+  params.set("from", filters.from);
+  params.set("to", filters.to);
+  params.set("format", filters.format);
+  return params.toString();
+}
 
 export const walletApi = {
   getBalance: () => apiClient.get<WalletBalanceResponse>(API.wallet.balance),
@@ -86,8 +103,18 @@ export const walletApi = {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = resolveDownloadFilename(res, `wallet-recharge_${id.slice(0, 8)}.pdf`);
+    a.download = resolveDownloadFilename(
+      res,
+      `wallet-recharge_${id.slice(0, 8)}.pdf`,
+    );
     a.click();
     URL.revokeObjectURL(url);
   },
+  exportStatement: (
+    filters: WalletStatementExportFilters,
+    format: "xlsx" | "csv" | "pdf" = "xlsx",
+  ): Promise<AsyncExportResponse> =>
+    initiateAsyncExport(
+      API.wallet.statement(buildStatementQuery({ ...filters, format })),
+    ),
 };
