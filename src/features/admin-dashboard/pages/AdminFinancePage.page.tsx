@@ -5,6 +5,7 @@ import { AdminSectionTabs } from "../components/AdminSectionTabs.component";
 import { useAdminFinancePage } from "../hooks/useAdminFinancePage";
 import { AdminSettlementReportsPanel } from "../components/AdminSettlementReportsPanel.component";
 import { AdminWalletLiabilityPanel } from "../components/AdminWalletLiabilityPanel.component";
+import { AdminWalletRechargePanel } from "../components/AdminWalletRechargePanel.component";
 import { AdminCashbackWriteOffPanel } from "../components/AdminCashbackWriteOffPanel.component";
 import { LABELS } from "@/shared/constants/labels";
 
@@ -64,6 +65,7 @@ export function AdminFinancePage() {
             <div className="space-y-10">
               <AdminSettlementReportsPanel />
               <AdminWalletLiabilityPanel />
+              <AdminWalletRechargePanel />
               <AdminCashbackWriteOffPanel />
             </div>
           ),

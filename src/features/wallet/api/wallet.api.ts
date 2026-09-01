@@ -18,6 +18,31 @@ import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { apiClient } from "@/shared/api/client";
 
+export type WalletBalanceResponse = {
+  balance: number;
+  points: number;
+  unit: "POINT";
+  redemptionRate: number;
+  rechargeEnabled: boolean;
+  limits: {
+    minInr: number;
+    maxInr: number;
+    maxBalance: number;
+    presetsInr: number[];
+    pointsPerRupee: number;
+  };
+};
+
+export type WalletRechargeCheckout = {
+  rechargeId: string;
+  razorpayOrderId: string;
+  amount: number;
+  currency: string;
+  keyId: string;
+  pointsToCredit: number;
+  checkoutConfigId?: string;
+};
+
 async function exportStatement(
   from: string,
   to: string,
@@ -69,7 +94,7 @@ async function exportStatement(
 }
 
 export const walletApi = {
-  getBalance: () => apiClient.get<{ balance: number }>(API.wallet.balance),
+  getBalance: () => apiClient.get<WalletBalanceResponse>(API.wallet.balance),
   getTransactions: (params?: { limit?: number; offset?: number }) => {
     const q = new URLSearchParams();
     if (params?.limit != null) q.set("limit", String(params.limit));
@@ -79,5 +104,18 @@ export const walletApi = {
       qs ? `${API.wallet.transactions}?${qs}` : API.wallet.transactions,
     );
   },
+  createRecharge: (amountInr: number, idempotencyKey?: string) =>
+    apiClient.post<WalletRechargeCheckout>(API.wallet.recharge, {
+      amountInr,
+      ...(idempotencyKey ? { idempotencyKey } : {}),
+    }),
+  verifyRecharge: (payload: {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+    rechargeId?: string;
+  }) => apiClient.post(API.wallet.rechargeVerify, payload),
+  getRechargeStatus: (id: string) =>
+    apiClient.get(API.wallet.rechargeStatus(id)),
   exportStatement,
 };

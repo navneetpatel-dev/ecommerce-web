@@ -11,7 +11,7 @@ import {
 import { WalletIcon } from "@/shared/components/WalletIcon.component";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { formatInrCompact } from "@/features/orders";
+import { formatPointsCompact } from "@/shared/utils/formatPoints";
 import { HEADER_ICON_BTN, HEADER_INK_TONE } from "./headerShared";
 
 interface StorefrontActionButtonsProps {
@@ -117,7 +117,7 @@ export function StorefrontActionButtons({
       >
         <Link
           href={PATHS.wallet}
-          aria-label={`${LABELS.walletBalance}, ${formatInrCompact(walletBalance)}`}
+          aria-label={`${LABELS.walletBalance}, ${formatPointsCompact(walletBalance)}`}
         >
           <IconBadgeAnchor className="min-w-5">
             <WalletIcon
@@ -128,7 +128,7 @@ export function StorefrontActionButtons({
             />
             <CartCountBadge
               count={walletBalance}
-              label={formatInrCompact(walletBalance)}
+              label={formatPointsCompact(walletBalance)}
               alwaysShow
               placement="header"
             />

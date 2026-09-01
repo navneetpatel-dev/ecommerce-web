@@ -4,6 +4,9 @@ export const walletRoutes = {
   transactions: "/api/wallet/transactions",
   statement: (query = "") =>
     `/api/wallet/statement${query ? `?${query}` : ""}`,
+  recharge: "/api/wallet/recharge",
+  rechargeVerify: "/api/wallet/recharge/verify",
+  rechargeStatus: (id: string) => `/api/wallet/recharge/${id}`,
 } as const;
 
 export const commissionsRoutes = {

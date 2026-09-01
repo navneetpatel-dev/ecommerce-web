@@ -43,6 +43,12 @@ export function PlatformSettingsPage() {
       onCodEnabledChange={settings.setCodEnabled}
       onCodMinOrderValueChange={settings.setCodMinOrderValue}
       onCodMaxOrderValueChange={settings.setCodMaxOrderValue}
+      onWalletRechargeEnabledChange={settings.setWalletRechargeEnabled}
+      onWalletMinRechargeChange={settings.setWalletMinRechargeInr}
+      onWalletMaxRechargeChange={settings.setWalletMaxRechargeInr}
+      onWalletMaxBalanceChange={settings.setWalletMaxBalancePoints}
+      onWalletRechargePresetsChange={settings.setWalletRechargePresetsInr}
+      onPointsPerRupeeChange={settings.setPointsPerRupee}
       onSave={settings.save}
     />
   );

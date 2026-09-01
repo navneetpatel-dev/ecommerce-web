@@ -52,6 +52,16 @@ export const tables3Labels = {
   settingsCodEnabled: "Enable cash on delivery",
   settingsCodMinOrder: "COD minimum order value",
   settingsCodMaxOrder: "COD maximum order value",
+  settingsWalletPoints: "Wallet points & recharge",
+  settingsWalletPointsHint:
+    "Closed-loop store points customers can buy and spend at checkout (1 point = ₹1 off).",
+  settingsWalletRechargeEnabled: "Enable points recharge",
+  settingsWalletMinRecharge: "Minimum recharge (INR)",
+  settingsWalletMaxRecharge: "Maximum recharge per transaction (INR)",
+  settingsWalletMaxBalance: "Maximum points balance",
+  settingsWalletRechargePresets: "Recharge preset amounts (INR)",
+  settingsWalletRechargePresetsHint: "Comma-separated values shown as quick picks on the wallet page.",
+  settingsPointsPerRupee: "Points per ₹1 paid",
   vendorCodEnabled: "Accept cash on delivery",
   vendorCodEnabledHint:
     "Turn off to disable COD for every product from this shop.",

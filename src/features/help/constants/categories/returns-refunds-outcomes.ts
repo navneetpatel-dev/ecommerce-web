@@ -24,9 +24,9 @@ export const RETURNS_REFUNDS_OUTCOMES_ARTICLES: HelpArticle[] = [
         ],
       },
       {
-        heading: "COD and wallet refunds",
+        heading: "COD and points refunds",
         paragraphs: [
-          "Cash on Delivery returns are credited to your store wallet automatically on approval — no bank account or UPI details are collected. Wallet-paid portions of an order are also credited back to your wallet immediately.",
+          "Cash on Delivery returns are credited as store points automatically on approval — no bank account or UPI details are collected. Points used at checkout are also credited back as points immediately.",
         ],
       },
       {

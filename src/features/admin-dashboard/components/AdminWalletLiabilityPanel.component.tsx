@@ -4,7 +4,7 @@ import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
-import { formatInr } from "@/shared/utils/orderFormat";
+import { formatPoints } from "@/shared/utils/formatPoints";
 import { useWalletLiabilityReport } from "../hooks/useWalletLiabilityReport.hook";
 
 export function AdminWalletLiabilityPanel() {
@@ -86,13 +86,29 @@ export function AdminWalletLiabilityPanel() {
 
       {report ? (
         <>
-          <div className="grid gap-4 rounded-md border border-line bg-surface p-4 sm:grid-cols-2">
+          <div className="grid gap-4 rounded-md border border-line bg-surface p-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-1">
               <p className="text-body-sm text-ink-muted">
                 {LABELS.reportTotalLiability}
               </p>
               <p className="text-[1.125rem] font-semibold tabular-nums text-ink">
-                {formatInr(report.totalLiability)}
+                {formatPoints(report.totalPointsLiability ?? report.totalLiability)}
+              </p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-body-sm text-ink-muted">
+                {LABELS.reportPurchasedPointsLiability}
+              </p>
+              <p className="text-[1.125rem] font-semibold tabular-nums text-ink">
+                {formatPoints(report.purchasedPointsLiability ?? 0)}
+              </p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-body-sm text-ink-muted">
+                {LABELS.reportPromotionalPointsLiability}
+              </p>
+              <p className="text-[1.125rem] font-semibold tabular-nums text-ink">
+                {formatPoints(report.promotionalPointsLiability ?? 0)}
               </p>
             </div>
             <div className="space-y-1">
@@ -118,6 +134,12 @@ export function AdminWalletLiabilityPanel() {
                         {LABELS.reportBalance}
                       </th>
                       <th className="px-3 py-2 font-medium">
+                        {LABELS.reportPurchasedPoints}
+                      </th>
+                      <th className="px-3 py-2 font-medium">
+                        {LABELS.reportPromotionalPoints}
+                      </th>
+                      <th className="px-3 py-2 font-medium">
                         {LABELS.reportAsOf}
                       </th>
                     </tr>
@@ -129,7 +151,13 @@ export function AdminWalletLiabilityPanel() {
                           {row.userId}
                         </td>
                         <td className="px-3 py-2 tabular-nums">
-                          {formatInr(row.balance)}
+                          {formatPoints(row.balance)}
+                        </td>
+                        <td className="px-3 py-2 tabular-nums">
+                          {formatPoints(row.purchasedPoints ?? 0)}
+                        </td>
+                        <td className="px-3 py-2 tabular-nums">
+                          {formatPoints(row.promotionalPoints ?? 0)}
                         </td>
                         <td className="px-3 py-2 text-ink-muted">
                           {new Date(row.asOf).toLocaleDateString("en-IN")}

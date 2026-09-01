@@ -1,0 +1,149 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { Button } from "@/shared/components/ui/button";
+import { NumberInput } from "@/shared/components/NumberInput.component";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { formatInr } from "@/shared/utils/orderFormat";
+import { formatPoints } from "@/shared/utils/formatPoints";
+import { useWalletRecharge } from "../hooks/useWalletRecharge.hook";
+import type { WalletBalanceResponse } from "../api/wallet.api";
+
+interface WalletRechargePanelProps {
+  balance: WalletBalanceResponse | undefined;
+  isLoading?: boolean;
+}
+
+export function WalletRechargePanel({
+  balance,
+  isLoading,
+}: WalletRechargePanelProps) {
+  const { recharge, isBusy, error, successMessage, clearMessages } =
+    useWalletRecharge();
+  const [customAmount, setCustomAmount] = useState<number | undefined>();
+  const [validationError, setValidationError] = useState<string | null>(null);
+
+  const limits = balance?.limits;
+  const presets = limits?.presetsInr ?? [];
+  const rechargeEnabled = balance?.rechargeEnabled !== false;
+  const pointsPerRupee = limits?.pointsPerRupee ?? 1;
+
+  const projectedBalance = useMemo(() => {
+    const current = balance?.points ?? 0;
+    const add = (customAmount ?? 0) * pointsPerRupee;
+    return current + add;
+  }, [balance?.points, customAmount, pointsPerRupee]);
+
+  const pointsForAmount = (amountInr: number) => amountInr * pointsPerRupee;
+
+  if (!rechargeEnabled || isLoading) return null;
+
+  const validateAmount = (amount: number): string | null => {
+    if (!limits) return null;
+    if (amount < limits.minInr) return LABELS.walletRechargeBelowMin;
+    if (amount > limits.maxInr) return LABELS.walletRechargeAboveMax;
+    if (projectedBalance > limits.maxBalance) {
+      return LABELS.walletMaxBalanceReached;
+    }
+    return null;
+  };
+
+  const startRecharge = async (amount: number) => {
+    clearMessages();
+    const message = validateAmount(amount);
+    if (message) {
+      setValidationError(message);
+      return;
+    }
+    setValidationError(null);
+    await recharge(amount);
+  };
+
+  return (
+    <div className="border border-line bg-surface-raised p-5 shadow-elevation-1">
+      <h2 className="text-body font-semibold text-ink">{LABELS.walletRecharge}</h2>
+      <p className="mt-1 text-[0.875rem] text-ink-muted">
+        {LABELS.walletPointsEqualsInr}
+      </p>
+
+      {presets.length > 0 ? (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {presets.map((preset) => (
+            <Button
+              key={preset}
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={isBusy}
+              onClick={() => void startRecharge(preset)}
+            >
+              {formatInr(preset)}
+            </Button>
+          ))}
+        </div>
+      ) : null}
+
+      <div className="mt-4 space-y-3">
+        <FormFieldFrame
+          label={LABELS.walletRechargeCustomAmount}
+          htmlFor="wallet-recharge-amount"
+          hint={
+            limits
+              ? formatLabel(LABELS.walletRechargeLimitsHint, {
+                  min: formatInr(limits.minInr),
+                  max: formatInr(limits.maxInr),
+                })
+              : undefined
+          }
+        >
+          <NumberInput
+            id="wallet-recharge-amount"
+            value={customAmount}
+            min={limits?.minInr ?? 1}
+            max={limits?.maxInr}
+            step={50}
+            prefix="₹"
+            disabled={isBusy}
+            showSteppers={false}
+            onChange={(value) => {
+              setCustomAmount(value);
+              setValidationError(null);
+              clearMessages();
+            }}
+          />
+        </FormFieldFrame>
+
+        <Button
+          type="button"
+          fullWidth="mobile"
+          disabled={isBusy || !customAmount}
+          onClick={() => customAmount && void startRecharge(customAmount)}
+        >
+          {isBusy ? LABELS.loading : LABELS.walletRechargePay}
+        </Button>
+      </div>
+
+      {customAmount && customAmount > 0 ? (
+        <p className="mt-3 text-[0.875rem] text-ink-muted">
+          {formatLabel(LABELS.walletRechargePreview, {
+            points: formatPoints(pointsForAmount(customAmount)),
+          })}
+        </p>
+      ) : null}
+
+      {validationError ? (
+        <p className="mt-3 text-body-sm text-danger">{validationError}</p>
+      ) : null}
+      {error ? <p className="mt-3 text-body-sm text-danger">{error}</p> : null}
+      {successMessage ? (
+        <p className="mt-3 text-body-sm text-success">{successMessage}</p>
+      ) : null}
+
+      <p className="mt-4 text-[0.75rem] leading-relaxed text-ink-faint">
+        {LABELS.walletTermsNotice}
+      </p>
+    </div>
+  );
+}

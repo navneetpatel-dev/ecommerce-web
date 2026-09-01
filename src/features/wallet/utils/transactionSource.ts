@@ -5,6 +5,7 @@ import type { WalletTransaction } from "@/shared/api/types";
 export function transactionSourceLabel(row: WalletTransaction): string {
   const ref = (row.referenceType ?? "").toUpperCase();
   if (ref.includes("CLAWBACK")) return LABELS.walletTransactionSourceClawback;
+  if (ref.includes("TOPUP")) return LABELS.walletTransactionSourceTopup;
   if (ref.includes("CASHBACK")) return LABELS.walletTransactionSourceCashback;
   if (ref.includes("COD_REFUND"))
     return LABELS.walletTransactionSourceCodRefund;

@@ -3,7 +3,8 @@
 import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
-import { formatInr, formatOrderDate } from "@/shared/utils/orderFormat";
+import { formatPoints } from "@/shared/utils/formatPoints";
+import { formatOrderDate } from "@/shared/utils/orderFormat";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import type { WalletTransaction } from "@/shared/api/types";
@@ -28,7 +29,7 @@ function creditAmountClass(isCredit: boolean) {
 
 function renderRow(row: WalletTransaction) {
   const isCredit = row.type === "CREDIT";
-  const signedAmount = `${isCredit ? "+" : "−"}${formatInr(row.amount)}`;
+  const signedAmount = `${isCredit ? "+" : "−"}${formatPoints(row.amount)}`;
   return (
     <li
       key={row.id}
@@ -47,7 +48,7 @@ function renderRow(row: WalletTransaction) {
         <p className={creditAmountClass(isCredit)}>{signedAmount}</p>
         <p className="mt-0.5 text-[0.75rem] tabular-nums text-ink-muted">
           {formatLabel(LABELS.walletBalanceAfter, {
-            amount: formatInr(row.balanceAfter),
+            amount: formatPoints(row.balanceAfter),
           })}
         </p>
       </div>
@@ -138,7 +139,7 @@ export function WalletBalanceCard({
         <Skeleton className="mt-3 h-10 w-40" />
       ) : (
         <p className="mt-2 font-display text-[2rem] leading-none tabular-nums text-brand">
-          {formatInr(balance)}
+          {formatPoints(balance)}
         </p>
       )}
       <p className="mt-3 text-[0.875rem] text-ink-muted">

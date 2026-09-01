@@ -58,12 +58,44 @@ export type WalletLiabilityRow = {
   userId: string
   balance: number
   asOf: string
+  purchasedPoints?: number
+  promotionalPoints?: number
 }
 
 export type WalletLiabilityReport = {
   totalLiability: number
   customerCount: number
+  totalPointsLiability?: number
+  purchasedPointsLiability?: number
+  promotionalPointsLiability?: number
   rows: WalletLiabilityRow[]
+  pagination?: {
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }
+}
+
+export type WalletRechargeRow = {
+  id: string
+  userId: string
+  amountInr: number
+  pointsCredited: number
+  status: string
+  razorpayOrderId: string | null
+  paidAt: string | null
+  createdAt: string
+}
+
+export type WalletRechargeReport = {
+  from: string
+  to: string
+  totalInrCollected: number
+  successCount: number
+  failedCount: number
+  pointsIssued: number
+  rows: WalletRechargeRow[]
   pagination?: {
     total: number
     page: number
@@ -153,6 +185,8 @@ export const reportsApi = {
     apiClient.get<ReconciliationReport>(withRange(API.reports.adminReconciliation, range)),
   adminWalletLiability: (range: ReportRange) =>
     apiClient.get<WalletLiabilityReport>(withRange(API.reports.adminWalletLiability, range)),
+  adminWalletRecharge: (range: ReportRange) =>
+    apiClient.get<WalletRechargeReport>(withRange(API.reports.adminWalletRecharge, range)),
   adminCashbackWriteOffs: (range: WriteOffReportRange) =>
     apiClient.get<CashbackWriteOffReport>(withWriteOffRange(API.reports.adminCashbackWriteOffs, range)),
   vendorSummary: (vendorId: string, range: ReportRange) =>

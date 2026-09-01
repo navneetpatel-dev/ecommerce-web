@@ -13,6 +13,11 @@ export type PublicPlatformSettings = {
   codEnabled: boolean;
   codMinOrderValue: number;
   codMaxOrderValue: number | null;
+  walletRechargeEnabled: boolean;
+  walletMinRechargeInr: number;
+  walletMaxRechargeInr: number;
+  walletMaxBalancePoints: number;
+  walletRechargePresetsInr: number[];
 };
 
 /** App-wide public platform settings — consumed across features via usePublicSettings. */

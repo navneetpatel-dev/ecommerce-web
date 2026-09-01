@@ -16,6 +16,7 @@ export type AdminPlatformSettings = PublicPlatformSettings & {
   autoApproveProducts: boolean;
   payoutCycle: string;
   returnShippingFee: number;
+  pointsPerRupee: number;
 };
 
 export const settingsApi = {

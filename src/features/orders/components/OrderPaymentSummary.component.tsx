@@ -3,6 +3,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInr } from "../utils/format";
+import { formatPoints } from "@/shared/utils/formatPoints";
 import { hasOrderPaymentSummaryContent, resolveOrderRazorpayPaid } from "../utils/orderPaymentSummary.utils";
 import type { Order } from "@/shared/api/types";
 
@@ -43,7 +44,7 @@ export function OrderPaymentSummary({
           {walletUsed > 0 ? (
             <p className="text-ink-muted">
               {formatLabel(LABELS.paymentSplitWallet, {
-                amount: formatInr(walletUsed),
+                amount: formatPoints(walletUsed),
               })}
             </p>
           ) : null}

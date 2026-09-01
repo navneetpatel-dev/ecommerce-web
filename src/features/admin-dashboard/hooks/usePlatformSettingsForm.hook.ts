@@ -26,6 +26,14 @@ export function usePlatformSettingsForm() {
           codEnabled: settings.codEnabled !== false,
           codMinOrderValue: settings.codMinOrderValue ?? 0,
           codMaxOrderValue: settings.codMaxOrderValue ?? null,
+          walletRechargeEnabled: settings.walletRechargeEnabled !== false,
+          walletMinRechargeInr: settings.walletMinRechargeInr ?? 100,
+          walletMaxRechargeInr: settings.walletMaxRechargeInr ?? 10000,
+          walletMaxBalancePoints: settings.walletMaxBalancePoints ?? 50000,
+          walletRechargePresetsInr: settings.walletRechargePresetsInr ?? [
+            500, 1000, 2000, 5000,
+          ],
+          pointsPerRupee: settings.pointsPerRupee ?? 1,
         }),
       )
       .catch(() => setLoadError(LABELS.couldNotLoadSettings))
@@ -167,6 +175,42 @@ export function usePlatformSettingsForm() {
       setMessage(null);
       setForm((current) =>
         current ? { ...current, codMaxOrderValue: value } : current,
+      );
+    },
+    setWalletRechargeEnabled: (value: boolean) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, walletRechargeEnabled: value } : current,
+      );
+    },
+    setWalletMinRechargeInr: (value: number) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, walletMinRechargeInr: value } : current,
+      );
+    },
+    setWalletMaxRechargeInr: (value: number) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, walletMaxRechargeInr: value } : current,
+      );
+    },
+    setWalletMaxBalancePoints: (value: number) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, walletMaxBalancePoints: value } : current,
+      );
+    },
+    setWalletRechargePresetsInr: (value: number[]) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, walletRechargePresetsInr: value } : current,
+      );
+    },
+    setPointsPerRupee: (value: number) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, pointsPerRupee: value } : current,
       );
     },
   };

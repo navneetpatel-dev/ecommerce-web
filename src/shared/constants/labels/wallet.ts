@@ -1,16 +1,16 @@
 /** Wallet, payment split, cashback and checkout payment methods copy. Subset of LABELS; merged in labels/index.ts. */
 export const walletLabels = {
-  wallet: "Wallet",
-  walletBalance: "Wallet balance",
-  walletAmountToApply: "Amount to apply from wallet",
+  wallet: "Wallet Points",
+  walletBalance: "Points balance",
+  walletAmountToApply: "Points to apply",
   walletUseAll: "Use full balance",
   walletRemainderDue: "Amount due today: {amount}",
   walletFullyCoversOrder:
-    "Your wallet covers this order — no online payment needed.",
+    "Your points cover this order — no online payment needed.",
   walletNotAvailableWithCod:
-    "Wallet balance cannot be used with cash on delivery.",
+    "Points cannot be used with cash on delivery.",
   walletPageDescription:
-    "Credits from returns and cashback, and debits from checkout.",
+    "Recharge store points or use credits from returns and cashback at checkout.",
   walletTransactionHistory: "Transaction history",
   walletNoTransactions: "No wallet activity yet.",
   walletCredit: "Credit",
@@ -20,17 +20,32 @@ export const walletLabels = {
   walletTransactionSourceCashback: "Cashback",
   walletTransactionSourceCheckout: "Checkout payment",
   walletTransactionSourceClawback: "Cashback recovery",
+  walletTransactionSourceTopup: "Points recharge",
   walletTransactionSourceOther: "Adjustment",
   walletBalanceAfter: "Balance after {amount}",
+  walletApplyPoints: "Apply points",
+  walletPointsEqualsInr: "1 point = ₹1 off at checkout",
+  walletRecharge: "Recharge points",
+  walletRechargePresets: "Quick amounts",
+  walletRechargeCustomAmount: "Custom amount",
+  walletRechargeLimitsHint: "Between {min} and {max} per recharge",
+  walletRechargePreview: "You will receive {points}",
+  walletRechargePay: "Pay & add points",
+  walletRechargeBelowMin: "Amount is below the minimum recharge",
+  walletRechargeAboveMax: "Amount exceeds the maximum per recharge",
+  walletMaxBalanceReached: "This recharge would exceed your maximum points balance",
+  walletRechargeSuccess: "Points added to your wallet",
+  walletTermsNotice:
+    "Store points are non-transferable store credit. They cannot be withdrawn as cash.",
 
   // Payment split & cashback
   paymentSplitHeading: "Payment",
-  paymentSplitWallet: "{amount} from wallet",
+  paymentSplitWallet: "{amount} from points",
   paymentSplitRazorpay: "{amount} via Razorpay",
   paymentSplitCod: "Cash on delivery",
   cashbackPendingAfterDelivery:
-    "Cashback pending — credited to wallet after delivery",
-  cashbackCreditedToWallet: "{amount} cashback credited to your wallet",
+    "Cashback pending — credited as points after delivery",
+  cashbackCreditedToWallet: "{amount} cashback credited as points",
   cashbackPayNowMessage: "Pay {payNow} now, {cashback} cashback after delivery",
   couponCashbackApplied: "Cashback offer: {code}",
 
@@ -42,7 +57,7 @@ export const walletLabels = {
   selectPaymentMethodToContinue: "Select a payment method to continue.",
   backToShipping: "Back to shipping",
   continueToReview: "Continue to review",
-  walletAppliedAtCheckout: "Wallet applied",
+  walletAppliedAtCheckout: "Points applied",
   amountDueToday: "Due today",
 
   // Return timelines

@@ -124,6 +124,47 @@ export const PAYMENTS_CATEGORY: HelpCategory = {
       ],
     },
     {
+      slug: "wallet-points-and-recharge",
+      title: "Wallet points and recharge",
+      summary:
+        "Store points you can buy and spend at checkout — not withdrawable cash.",
+      sections: [
+        {
+          heading: "What are wallet points?",
+          paragraphs: [
+            "Wallet points are closed-loop store credit for Ink & Brass. One point equals ₹1 off at checkout. Points from returns, cashback, and recharge share the same balance.",
+          ],
+        },
+        {
+          heading: "Recharging points",
+          bullets: [
+            "Open Wallet from your account menu to buy points via Razorpay",
+            "Minimum and maximum recharge amounts are shown on the wallet page",
+            "Points are credited after successful payment — usually within seconds",
+          ],
+        },
+        {
+          heading: "Using points at checkout",
+          paragraphs: [
+            "Apply points on the payment step before you pay the remaining amount online. Points cannot be combined with Cash on Delivery.",
+          ],
+        },
+        {
+          heading: "Important",
+          bullets: [
+            "Points are non-transferable and cannot be withdrawn to a bank account",
+            "They are promotional store credit, not a prepaid payment wallet",
+            "Refunds for eligible returns may be credited back as points",
+          ],
+        },
+      ],
+      relatedSlugs: [
+        "payment-methods-razorpay-cod",
+        "refunds-timelines-and-methods",
+        "contact-support",
+      ],
+    },
+    {
       slug: "promotions-and-pricing",
       title: "Promotions and pricing",
       summary:

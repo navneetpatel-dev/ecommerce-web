@@ -1,8 +1,11 @@
 /** Admin wallet report copy. Subset of LABELS; merged in labels/index.ts. */
 export const walletReportsLabels = {
   reportWalletLiability: "Wallet liability",
+  reportWalletRecharge: "Points recharge",
   reportCashbackWriteOff: "Cashback write-offs",
-  reportTotalLiability: "Total outstanding balance",
+  reportTotalLiability: "Total outstanding points",
+  reportPurchasedPointsLiability: "Purchased points liability",
+  reportPromotionalPointsLiability: "Promotional points liability",
   reportWalletCustomerCount: "Customers with balance",
   reportRecoveredTotal: "Recovered",
   reportWrittenOffTotal: "Written off",
@@ -12,10 +15,20 @@ export const walletReportsLabels = {
   reportBornByVendor: "Vendor",
   reportUserId: "User ID",
   reportBalance: "Balance",
+  reportPurchasedPoints: "Purchased",
+  reportPromotionalPoints: "Promotional",
   reportAsOf: "As of",
   reportOriginalClawback: "Original clawback",
   reportRecoveredAmount: "Recovered amount",
   reportWrittenOffAmount: "Written off amount",
+  reportRechargeInrCollected: "INR collected",
+  reportPointsIssued: "Points issued",
+  reportRechargeSuccessCount: "Successful recharges",
+  reportRechargeFailedCount: "Failed / expired",
+  reportAmountInr: "Amount (INR)",
+  reportPointsCredited: "Points credited",
+  reportStatus: "Status",
+  reportPaidAt: "Paid at",
 
   // Support tickets
 } as const;

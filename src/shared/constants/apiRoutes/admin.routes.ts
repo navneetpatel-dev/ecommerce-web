@@ -32,6 +32,7 @@ export const reportsRoutes = {
   adminVendors: "/api/reports/admin/vendors",
   adminReconciliation: "/api/reports/admin/reconciliation",
   adminWalletLiability: "/api/reports/admin/wallet-liability",
+  adminWalletRecharge: "/api/reports/admin/wallet-recharge",
   adminCashbackWriteOffs: "/api/reports/admin/cashback-write-offs",
   vendor: (vendorId: string) => `/api/reports/vendor/${vendorId}`,
 } as const;

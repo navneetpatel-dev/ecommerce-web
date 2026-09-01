@@ -11,6 +11,7 @@ export interface WalletTransaction {
   referenceType: string | null;
   referenceId: string | null;
   description: string | null;
+  pointSource?: string | null;
   createdAt: string;
 }
 

@@ -5,6 +5,7 @@ import { FormFieldFrame } from "@/shared/components/forms";
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
+import { formatPoints } from "@/shared/utils/formatPoints";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface WalletApplySectionProps {
@@ -17,8 +18,8 @@ interface WalletApplySectionProps {
   onAmountChange: (amount: number) => void;
 }
 
-function formatInr(value: number) {
-  return `₹${formatInrAmount(value)}`;
+function formatPointsValue(value: number) {
+  return formatPoints(value);
 }
 
 export function WalletApplySection({
@@ -37,10 +38,13 @@ export function WalletApplySection({
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-body-sm font-medium text-ink">
-            {LABELS.walletBalance}
+            {LABELS.walletApplyPoints}
           </p>
           <p className="mt-0.5 font-display text-[1.25rem] tabular-nums text-brand">
-            {formatInr(walletBalance)}
+            {formatPointsValue(walletBalance)}
+          </p>
+          <p className="mt-1 text-[0.75rem] text-ink-muted">
+            {LABELS.walletPointsEqualsInr}
           </p>
         </div>
         {!codSelected && maxApplicable > 0 ? (
@@ -66,7 +70,7 @@ export function WalletApplySection({
             label={LABELS.walletAmountToApply}
             htmlFor="wallet-amount"
             hint={formatLabel(LABELS.walletRemainderDue, {
-              amount: formatInr(amountDue),
+              amount: `₹${formatInrAmount(amountDue)}`,
             })}
           >
             <NumberInput

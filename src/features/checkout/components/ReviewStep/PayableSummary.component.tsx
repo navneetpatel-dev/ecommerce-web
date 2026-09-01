@@ -3,6 +3,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
 import { formatInr } from "@/shared/utils/orderFormat";
+import { formatPoints } from "@/shared/utils/formatPoints";
 
 interface PayableSummaryProps {
   quote: CheckoutQuote;
@@ -36,7 +37,7 @@ export function PayableSummary({ quote, payable }: PayableSummaryProps) {
             {LABELS.walletAppliedAtCheckout}
           </span>
           <span className="tabular-nums text-ink">
-            −{formatInr(quote.walletAmountToUse)}
+            −{formatPoints(quote.walletAmountToUse)}
           </span>
         </div>
       ) : null}

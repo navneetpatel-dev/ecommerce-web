@@ -9,6 +9,7 @@ import { CommerceSettingsSection } from "./CommerceSettingsSection.component";
 import { FulfillmentSettingsSection } from "./FulfillmentSettingsSection.component";
 import { SupportSettingsSection } from "./SupportSettingsSection.component";
 import { CodSettingsSection } from "./CodSettingsSection.component";
+import { WalletPointsSettingsSection } from "../WalletPointsSettingsSection.component";
 
 interface PlatformSettingsFormProps {
   form: PlatformSettings;
@@ -33,6 +34,12 @@ interface PlatformSettingsFormProps {
   onCodEnabledChange: (value: boolean) => void;
   onCodMinOrderValueChange: (value: number) => void;
   onCodMaxOrderValueChange: (value: number | null) => void;
+  onWalletRechargeEnabledChange: (value: boolean) => void;
+  onWalletMinRechargeChange: (value: number) => void;
+  onWalletMaxRechargeChange: (value: number) => void;
+  onWalletMaxBalanceChange: (value: number) => void;
+  onWalletRechargePresetsChange: (value: number[]) => void;
+  onPointsPerRupeeChange: (value: number) => void;
   onSave: () => void;
 }
 
@@ -78,6 +85,16 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onCodEnabledChange={props.onCodEnabledChange}
           onCodMinOrderValueChange={props.onCodMinOrderValueChange}
           onCodMaxOrderValueChange={props.onCodMaxOrderValueChange}
+        />
+
+        <WalletPointsSettingsSection
+          form={form}
+          onWalletRechargeEnabledChange={props.onWalletRechargeEnabledChange}
+          onWalletMinRechargeChange={props.onWalletMinRechargeChange}
+          onWalletMaxRechargeChange={props.onWalletMaxRechargeChange}
+          onWalletMaxBalanceChange={props.onWalletMaxBalanceChange}
+          onWalletRechargePresetsChange={props.onWalletRechargePresetsChange}
+          onPointsPerRupeeChange={props.onPointsPerRupeeChange}
         />
 
         <FormActions leading={message}>
