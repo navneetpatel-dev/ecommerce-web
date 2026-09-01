@@ -4,6 +4,7 @@ import { useState, useCallback, type FormEvent, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { taxApi } from "@/features/admin-dashboard/api/tax.api";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import { adminRowLabel } from "../utils/adminRowLabel";
@@ -14,6 +15,7 @@ export type AdminTaxPageModel = AdminListPageModel & {
   form: {
     gstPercentage: string;
     hsnCode: string;
+    createError: string | null;
     onGstChange: (value: string) => void;
     onHsnChange: (value: string) => void;
     onSubmit: (e: FormEvent) => Promise<void>;
@@ -23,18 +25,24 @@ export type AdminTaxPageModel = AdminListPageModel & {
 export function useAdminTaxPage(): AdminTaxPageModel {
   const [gstPercentage, setGstPercentage] = useState("18");
   const [hsnCode, setHsnCode] = useState("");
+  const [createError, setCreateError] = useState<string | null>(null);
   const [listVersion, setListVersion] = useState(0);
 
   const handleCreate = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
-      await taxApi.createRule({
-        gstPercentage: Number(gstPercentage),
-        hsnCode: hsnCode || undefined,
-      });
-      setHsnCode("");
-      setGstPercentage("18");
-      setListVersion((version) => version + 1);
+      setCreateError(null);
+      try {
+        await taxApi.createRule({
+          gstPercentage: Number(gstPercentage),
+          hsnCode: hsnCode || undefined,
+        });
+        setHsnCode("");
+        setGstPercentage("18");
+        setListVersion((version) => version + 1);
+      } catch (err) {
+        setCreateError(getApiErrorMessage(err, LABELS.couldNotCreateTaxRule));
+      }
     },
     [gstPercentage, hsnCode],
   );
@@ -67,6 +75,7 @@ export function useAdminTaxPage(): AdminTaxPageModel {
     form: {
       gstPercentage,
       hsnCode,
+      createError,
       onGstChange: setGstPercentage,
       onHsnChange: setHsnCode,
       onSubmit: handleCreate,

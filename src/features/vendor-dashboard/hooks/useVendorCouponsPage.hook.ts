@@ -22,6 +22,8 @@ import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { QUERY_PARAMS } from "@/shared/constants/queryParams";
 import { couponsApi } from "@/features/coupons";
 import { useRouteQueryDialog } from "@/shared/hooks/useRouteQueryDialog.hook";
+import { useApiFormErrors } from "@/shared/hooks/useApiFormErrors.hook";
+import { LABELS } from "@/shared/constants/labels";
 import type { Coupon } from "@/shared/api/types";
 
 export function useVendorCouponsPage() {
@@ -36,8 +38,6 @@ export function useVendorCouponsPage() {
 
   const { data, isLoading } = useVendorCoupons(page, DEFAULT_PAGE_LIMIT);
   const createMutation = useCreateVendorCoupon(vendorId);
-  const analyticsQuery = useVendorCouponAnalytics(analyticsId);
-  const absorbedQuery = useVendorAbsorbedSummary();
 
   const form = useForm<CouponFormInput>({
     resolver: zodResolver(CouponSchema),
@@ -48,6 +48,14 @@ export function useVendorCouponsPage() {
       applicableScopeIds: vendorId ? [vendorId] : [],
     },
   });
+
+  const { formLevelError } = useApiFormErrors(
+    form,
+    createMutation.error,
+    LABELS.couldNotCreateCoupon,
+  );
+  const analyticsQuery = useVendorCouponAnalytics(analyticsId);
+  const absorbedQuery = useVendorAbsorbedSummary();
 
   useEffect(() => {
     if (!vendorId) return;
@@ -103,6 +111,7 @@ export function useVendorCouponsPage() {
     setOpen: setDialogOpen,
     form,
     isPending: createMutation.isPending,
+    formLevelError,
     onSubmit,
     pagination: {
       page: currentPage,

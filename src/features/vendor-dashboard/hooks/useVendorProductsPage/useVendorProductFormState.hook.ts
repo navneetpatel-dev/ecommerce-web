@@ -12,8 +12,14 @@ import {
   listingValuesFromProduct,
   type ProductListingFormValues,
   type ProductWriteBody,
+  type ProductListingFormField,
 } from "@/features/products";
 import { LABELS } from "@/shared/constants/labels";
+import { useManualFormFieldErrors } from "@/shared/hooks/useManualFormFieldErrors.hook";
+import {
+  applyApiErrorsToManualForm,
+  getFormLevelApiError,
+} from "@/shared/utils/applyApiFormErrors";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 
 export function useVendorProductFormState(options: {
@@ -33,6 +39,11 @@ export function useVendorProductFormState(options: {
     Array<{ id: string; name: string }>
   >([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const {
+    fieldErrors: apiFieldErrors,
+    setErrors: setApiFieldErrors,
+    clearAll: clearApiFieldErrors,
+  } = useManualFormFieldErrors<ProductListingFormField>();
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -60,6 +71,7 @@ export function useVendorProductFormState(options: {
       setImageUrls([]);
       setDraftUploadId(crypto.randomUUID());
       setSubmitError(null);
+      clearApiFieldErrors();
       setLoading(false);
     },
     [categories],
@@ -70,6 +82,7 @@ export function useVendorProductFormState(options: {
       setValues(emptyProductListingValues(categories[0]?.id ?? ""));
       setImageUrls([]);
       setSubmitError(null);
+      clearApiFieldErrors();
       setLoading(true);
       try {
         const product = await productsApi.detail(productId);
@@ -87,6 +100,7 @@ export function useVendorProductFormState(options: {
     async (body: ProductWriteBody) => {
       setSubmitting(true);
       setSubmitError(null);
+      clearApiFieldErrors();
       try {
         if (mode === "edit" && editId) {
           await productsApi.update(editId, body);
@@ -104,7 +118,13 @@ export function useVendorProductFormState(options: {
         resetFormState(categories[0]?.id);
         router.refresh();
       } catch (err: unknown) {
-        setSubmitError(getApiErrorMessage(err, LABELS.couldNotSaveProduct));
+        const mapped = applyApiErrorsToManualForm<ProductListingFormField>(
+          err,
+          setApiFieldErrors,
+        );
+        setSubmitError(
+          mapped ? null : getFormLevelApiError(err, LABELS.couldNotSaveProduct),
+        );
       } finally {
         setSubmitting(false);
       }
@@ -120,6 +140,7 @@ export function useVendorProductFormState(options: {
     draftUploadId,
     categories,
     submitError,
+    apiFieldErrors,
     submitting,
     loading,
     resetFormState,

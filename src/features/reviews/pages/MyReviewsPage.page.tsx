@@ -6,6 +6,8 @@ import { EmptyState } from "@/shared/components/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { Badge } from "@/shared/components/ui/badge";
 import { PATHS } from "@/shared/constants/paths";
+import { LABELS } from "@/shared/constants/labels";
+import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { formatOrderDate } from "@/shared/utils/orderFormat";
 import { useMyReviews } from "../api/reviews.queries";
 
@@ -30,9 +32,12 @@ export function MyReviewsPage() {
           <Skeleton className="h-24 w-full" />
         </div>
       ) : isError ? (
-        <p className="border border-line bg-surface-raised px-5 py-10 text-center text-ink-muted">
-          {(error as Error)?.message || "Could not load reviews."}
-        </p>
+        <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+          <QueryErrorAlert
+            error={error}
+            fallback={LABELS.couldNotLoadReviews}
+          />
+        </div>
       ) : reviews.length === 0 ? (
         <div className="border border-dashed border-line bg-paper/50">
           <EmptyState

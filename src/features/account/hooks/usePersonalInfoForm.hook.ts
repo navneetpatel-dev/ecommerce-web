@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LABELS } from "@/shared/constants/labels";
 import { useAccountProfile, useUpdateProfile } from "../api/account.queries";
+import { useApiFormErrors } from "@/shared/hooks/useApiFormErrors.hook";
 import {
   ProfileSchema,
   type ProfileFormInput,
@@ -42,6 +43,12 @@ export function usePersonalInfoForm() {
       ? LABELS.enterFullName
       : "";
 
+  const { formLevelError } = useApiFormErrors(
+    form,
+    updateProfile.error,
+    LABELS.couldNotSaveProfile,
+  );
+
   const onSubmit = handleSubmit(async (data) => {
     await updateProfile.mutateAsync({
       name: data.name.trim(),
@@ -60,7 +67,7 @@ export function usePersonalInfoForm() {
     disableHint,
     showSaved: updateProfile.isSuccess && !formState.isDirty,
     pending: updateProfile.isPending,
-    submitError: updateProfile.error as Error | null,
+    submitError: formLevelError,
     onSubmit,
   };
 }

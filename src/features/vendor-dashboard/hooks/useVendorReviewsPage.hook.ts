@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { productsApi } from "@/features/products";
 import { reviewsApi } from "@/features/reviews";
 import { useAuthStore } from "@/shared/stores/auth.store";
+import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import type { Review } from "@/shared/api/types";
 
 export function useVendorReviewsPage() {
@@ -34,9 +36,7 @@ export function useVendorReviewsPage() {
       .catch((err) => {
         if (!cancelled) {
           setReviews([]);
-          setLoadError(
-            err instanceof Error ? err.message : "Could not load reviews.",
-          );
+          setLoadError(getApiErrorMessage(err, LABELS.couldNotLoadReviews));
         }
       })
       .finally(() => {

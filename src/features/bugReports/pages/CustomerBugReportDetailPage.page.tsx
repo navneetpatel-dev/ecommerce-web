@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { DetailQuerySkeleton } from "@/shared/components/DetailQuerySkeleton.component";
 import { LABELS } from "@/shared/constants/labels";
+import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { PATHS } from "@/shared/constants/paths";
 import { SupportAuthGate } from "@/features/supportTickets";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
@@ -34,9 +35,12 @@ function CustomerBugReportDetailContent({ id }: { id: string }) {
   if (isEmpty) {
     return (
       <div className="storefront-container py-8">
-        <p className="border border-line bg-surface-raised px-5 py-10 text-center text-ink-muted">
-          {(error as Error | null)?.message || LABELS.bugCouldNotLoadDetail}
-        </p>
+        <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+          <QueryErrorAlert
+            error={error}
+            fallback={LABELS.bugCouldNotLoadDetail}
+          />
+        </div>
       </div>
     );
   }

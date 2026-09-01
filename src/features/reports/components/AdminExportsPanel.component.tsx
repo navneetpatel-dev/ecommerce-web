@@ -10,9 +10,7 @@ import {
   reportsEngineApi,
   type AdminExportRow,
 } from "../api/reportsEngine.api";
-import {
-  normalizeExportFormat,
-} from "../hooks/useReportHubHelpers/index";
+import { normalizeExportFormat } from "../hooks/useReportHubHelpers/index";
 import {
   followAsyncExport,
   isBenignExportError,
@@ -139,7 +137,7 @@ export function AdminExportsPanel() {
       { onError: setError },
     ).catch((err) => {
       if (err instanceof ReportExportLockedError) {
-        setError(err.message);
+        setError(LABELS.reportExportLocked);
         return;
       }
       setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
@@ -182,7 +180,9 @@ export function AdminExportsPanel() {
             {LABELS.refresh}
           </Button>
         </div>
-        {message ? <p className="text-body-sm text-ink-muted">{message}</p> : null}
+        {message ? (
+          <p className="text-body-sm text-ink-muted">{message}</p>
+        ) : null}
         {error ? <p className="text-body-sm text-danger">{error}</p> : null}
         <div className="overflow-x-auto">
           <table className="min-w-full text-body-sm">
@@ -220,7 +220,9 @@ export function AdminExportsPanel() {
                     ) : row.status === "FAILED" ? (
                       <div className="flex flex-col gap-1">
                         {row.errorMessage ? (
-                          <span className="text-danger">{row.errorMessage}</span>
+                          <span className="text-danger">
+                            {row.errorMessage}
+                          </span>
                         ) : null}
                         <Button
                           type="button"

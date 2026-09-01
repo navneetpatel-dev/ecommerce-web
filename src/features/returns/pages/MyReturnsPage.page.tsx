@@ -6,6 +6,7 @@ import { EmptyState } from "@/shared/components/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
+import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { useMyReturns } from "../api/returns.queries";
 import { ReturnRequestCard } from "../components/ReturnRequestCard.component";
 
@@ -30,9 +31,12 @@ export function MyReturnsPage() {
           <Skeleton className="h-20 w-full" />
         </div>
       ) : isError ? (
-        <p className="border border-line bg-surface-raised px-5 py-10 text-center text-ink-muted">
-          {(error as Error)?.message || LABELS.couldNotLoadReturns}
-        </p>
+        <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+          <QueryErrorAlert
+            error={error}
+            fallback={LABELS.couldNotLoadReturns}
+          />
+        </div>
       ) : returns.length === 0 ? (
         <div className="border border-dashed border-line bg-paper/50">
           <EmptyState

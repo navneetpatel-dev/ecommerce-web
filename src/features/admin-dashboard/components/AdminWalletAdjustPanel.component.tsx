@@ -23,21 +23,33 @@ export function AdminWalletAdjustPanel() {
   return (
     <RequirePermission permission={PERMISSIONS.WALLET_ADJUST}>
       <div className="space-y-4 rounded-md border border-line bg-surface p-4">
-        <h3 className="text-body font-semibold text-ink">{LABELS.walletAdjustTitle}</h3>
+        <h3 className="text-body font-semibold text-ink">
+          {LABELS.walletAdjustTitle}
+        </h3>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <FormFieldFrame label={LABELS.walletAdjustUserId} htmlFor="wallet-adjust-user">
+          <FormFieldFrame
+            label={LABELS.walletAdjustUserId}
+            htmlFor="wallet-adjust-user"
+            error={form.fieldError("userId")}
+          >
             <Input
               id="wallet-adjust-user"
               value={form.userId}
               onChange={(e) => form.setUserId(e.target.value)}
+              error={Boolean(form.fieldError("userId"))}
             />
           </FormFieldFrame>
 
-          <FormFieldFrame label={LABELS.walletAdjustDirection} htmlFor="wallet-adjust-direction">
+          <FormFieldFrame
+            label={LABELS.walletAdjustDirection}
+            htmlFor="wallet-adjust-direction"
+          >
             <Select
               value={form.direction}
-              onValueChange={(value) => form.setDirection(value as "CREDIT" | "DEBIT")}
+              onValueChange={(value) =>
+                form.setDirection(value as "CREDIT" | "DEBIT")
+              }
             >
               <SelectTrigger id="wallet-adjust-direction">
                 <SelectValue />
@@ -49,7 +61,11 @@ export function AdminWalletAdjustPanel() {
             </Select>
           </FormFieldFrame>
 
-          <FormFieldFrame label={LABELS.walletAdjustAmount} htmlFor="wallet-adjust-amount">
+          <FormFieldFrame
+            label={LABELS.walletAdjustAmount}
+            htmlFor="wallet-adjust-amount"
+            error={form.fieldError("amount")}
+          >
             <NumberInput
               id="wallet-adjust-amount"
               value={form.amount}
@@ -57,6 +73,7 @@ export function AdminWalletAdjustPanel() {
               step={1}
               showSteppers={false}
               onChange={form.setAmount}
+              error={Boolean(form.fieldError("amount"))}
             />
           </FormFieldFrame>
 
@@ -87,21 +104,34 @@ export function AdminWalletAdjustPanel() {
           ) : null}
         </div>
 
-        <FormFieldFrame label={LABELS.walletAdjustReason} htmlFor="wallet-adjust-reason">
+        <FormFieldFrame
+          label={LABELS.walletAdjustReason}
+          htmlFor="wallet-adjust-reason"
+          error={form.fieldError("reason")}
+        >
           <Textarea
             id="wallet-adjust-reason"
             value={form.reason}
             rows={3}
             onChange={(e) => form.setReason(e.target.value)}
+            error={Boolean(form.fieldError("reason"))}
           />
         </FormFieldFrame>
 
-        <Button type="button" disabled={form.loading} onClick={() => void form.submit()}>
+        <Button
+          type="button"
+          disabled={form.loading}
+          onClick={() => void form.submit()}
+        >
           {form.loading ? LABELS.loading : LABELS.walletAdjustSubmit}
         </Button>
 
-        {form.error ? <p className="text-body-sm text-danger">{form.error}</p> : null}
-        {form.message ? <p className="text-body-sm text-success">{form.message}</p> : null}
+        {form.error ? (
+          <p className="text-body-sm text-danger">{form.error}</p>
+        ) : null}
+        {form.message ? (
+          <p className="text-body-sm text-success">{form.message}</p>
+        ) : null}
       </div>
     </RequirePermission>
   );

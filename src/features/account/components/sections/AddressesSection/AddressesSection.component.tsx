@@ -8,6 +8,7 @@ import { EmptyState } from "@/shared/components/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { AddressFormDialog } from "@/shared/components/AddressFormDialog.component";
 import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import {
   useAccountAddresses,
   useCreateAccountAddress,
@@ -52,11 +53,7 @@ export function AddressesSection() {
     try {
       await setDefault.mutateAsync(addr.id);
     } catch (err) {
-      setListError(
-        err && typeof err === "object" && "message" in err
-          ? String((err as { message: string }).message)
-          : "Could not set default address.",
-      );
+      setListError(getApiErrorMessage(err, LABELS.couldNotSaveAddress));
     } finally {
       setDefaultingId(null);
     }
@@ -70,11 +67,7 @@ export function AddressesSection() {
       setDeleteTarget(null);
     } catch (err) {
       setDeleteTarget(null);
-      setListError(
-        err && typeof err === "object" && "message" in err
-          ? String((err as { message: string }).message)
-          : "Could not delete address.",
-      );
+      setListError(getApiErrorMessage(err, LABELS.couldNotSaveAddress));
     }
   };
 

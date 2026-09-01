@@ -2,14 +2,14 @@
 
 import { useCallback, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { loadRazorpayScript } from "@/features/checkout/utils/loadRazorpayScript";
+import { loadRazorpayScript } from "@/features/checkout";
 import {
   getRazorpayCheckoutConfig,
   getRazorpayCheckoutMethods,
-} from "@/features/checkout/utils/razorpayCheckoutConfig";
-import { getRazorpayCheckoutTheme } from "@/features/checkout/utils/razorpayTheme";
+  getRazorpayCheckoutTheme,
+} from "@/features/checkout";
 import { LABELS } from "@/shared/constants/labels";
-import { ApiError } from "@/shared/types/apiError.types";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { walletApi } from "../api/wallet.api";
 import { walletKeys } from "../api/wallet.queries";
 
@@ -29,7 +29,8 @@ function getOrCreateIdempotencyKey(amountInr: number): string {
 
 function clearRechargeSession(amountInr: number, rechargeId?: string) {
   sessionStorage.removeItem(`${RECHARGE_IDEMPOTENCY_PREFIX}${amountInr}`);
-  if (rechargeId) sessionStorage.removeItem(`${RECHARGE_SESSION_PREFIX}${rechargeId}`);
+  if (rechargeId)
+    sessionStorage.removeItem(`${RECHARGE_SESSION_PREFIX}${rechargeId}`);
 }
 
 async function pollRechargeUntilTerminal(
@@ -65,7 +66,10 @@ export function useWalletRecharge() {
       idempotencyRef.current = idempotencyKey;
 
       try {
-        const checkout = await walletApi.createRecharge(amountInr, idempotencyKey);
+        const checkout = await walletApi.createRecharge(
+          amountInr,
+          idempotencyKey,
+        );
         sessionStorage.setItem(
           `${RECHARGE_SESSION_PREFIX}${checkout.rechargeId}`,
           String(amountInr),
@@ -107,10 +111,14 @@ export function useWalletRecharge() {
               await queryClient.invalidateQueries({ queryKey: walletKeys.all });
               setSuccessMessage(LABELS.walletRechargeSuccess);
             } catch {
-              const polled = await pollRechargeUntilTerminal(checkout.rechargeId);
+              const polled = await pollRechargeUntilTerminal(
+                checkout.rechargeId,
+              );
               if (polled === "PAID") {
                 clearRechargeSession(amountInr, checkout.rechargeId);
-                await queryClient.invalidateQueries({ queryKey: walletKeys.all });
+                await queryClient.invalidateQueries({
+                  queryKey: walletKeys.all,
+                });
                 setSuccessMessage(LABELS.walletRechargeSuccess);
               } else if (polled === "FAILED" || polled === "EXPIRED") {
                 setError(LABELS.paymentFailedBody);
@@ -131,11 +139,7 @@ export function useWalletRecharge() {
         rzp.open();
       } catch (err) {
         setPhase("idle");
-        setError(
-          err instanceof ApiError || err instanceof Error
-            ? err.message
-            : LABELS.paymentFailedBody,
-        );
+        setError(getApiErrorMessage(err, LABELS.paymentFailedBody));
       }
     },
     [queryClient],

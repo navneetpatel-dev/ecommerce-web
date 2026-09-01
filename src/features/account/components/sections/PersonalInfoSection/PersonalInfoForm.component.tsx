@@ -22,7 +22,7 @@ interface PersonalInfoFormProps {
   disableHint: string;
   showSaved: boolean;
   pending: boolean;
-  submitError: Error | null;
+  submitError: string | null;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
 }
 

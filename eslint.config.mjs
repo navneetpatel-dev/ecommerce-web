@@ -134,6 +134,41 @@ const eslintConfig = defineConfig([
   ...featureBoundaryConfigs,
   sharedBoundaryConfig,
   appBoundaryConfig,
+  {
+    files: ["src/features/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "MemberExpression[object.type='TSAsExpression'] > Identifier[name='message']",
+          message:
+            "Use getApiErrorMessage or QueryErrorAlert instead of reading (error as Error)?.message in features.",
+        },
+        {
+          selector:
+            "MemberExpression[object.name='err'][property.name='message']",
+          message:
+            "Use getApiErrorMessage or QueryErrorAlert instead of reading err.message in features.",
+        },
+        {
+          selector:
+            "MemberExpression[object.name='error'][property.name='message']",
+          message:
+            "Use getApiErrorMessage or QueryErrorAlert instead of reading error.message in features.",
+        },
+      ],
+    },
+  },
+  {
+    files: [
+      "src/features/reports/hooks/useReportHubHelpers/index.ts",
+      "src/features/checkout/hooks/usePlaceOrder.hook.ts",
+    ],
+    rules: {
+      "no-restricted-syntax": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

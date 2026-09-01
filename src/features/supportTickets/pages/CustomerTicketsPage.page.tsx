@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { PATHS } from "@/shared/constants/paths";
 import { useMyTicketsInfinite } from "../api/supportTickets.queries";
 import { SupportAuthGate } from "../components/SupportAuthGate.component";
@@ -64,7 +65,11 @@ function CustomerTicketsContent() {
         createHref={PATHS.supportTicketNew}
         isLoading={query.isLoading}
         isError={query.isError}
-        errorMessage={(query.error as Error | null)?.message}
+        errorMessage={
+          query.error
+            ? getApiErrorMessage(query.error, LABELS.ticketCouldNotLoad)
+            : undefined
+        }
         hasNextPage={query.hasNextPage}
         isFetchingNextPage={query.isFetchingNextPage}
         onLoadMore={() => void query.fetchNextPage()}

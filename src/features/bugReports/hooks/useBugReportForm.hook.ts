@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { LABELS } from "@/shared/constants/labels";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { useApiFormErrors } from "@/shared/hooks/useApiFormErrors.hook";
 import { readLastBrowseUrl } from "@/shared/utils/lastBrowseUrl";
 import { BugReportSchema } from "../schemas/bugReport.schema";
 import { useCreateBugReport } from "../api/bugReports.queries";
@@ -29,7 +29,7 @@ export function useBugReportForm(params: UseBugReportFormParams) {
   const { successHref } = params;
   const router = useRouter();
   const create = useCreateBugReport();
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [clientError, setClientError] = useState<string | null>(null);
   const capturedPageUrl = useRef(readLastBrowseUrl());
 
   const [attachments, setAttachmentsState] = useState<
@@ -82,8 +82,15 @@ export function useBugReportForm(params: UseBugReportFormParams) {
     return form.formState.errors[field]?.message as string | undefined;
   };
 
+  const { formLevelError } = useApiFormErrors(
+    form,
+    create.error,
+    LABELS.bugCouldNotCreate,
+  );
+
   const onSubmit = form.handleSubmit(async (values) => {
-    setApiError(null);
+    setClientError(null);
+    create.reset();
     // Full-schema validation incl. attachment classification (Rule 16).
     const parsed = BugReportSchema.safeParse({
       ...values,
@@ -95,7 +102,7 @@ export function useBugReportForm(params: UseBugReportFormParams) {
     });
     if (!parsed.success) {
       const first = parsed.error.issues[0]?.message;
-      if (first) setApiError(first);
+      if (first) setClientError(first);
       return;
     }
     try {
@@ -113,8 +120,8 @@ export function useBugReportForm(params: UseBugReportFormParams) {
         pageUrl: capturedPageUrl.current,
       });
       router.push(successHref(bug.id));
-    } catch (err) {
-      setApiError(getApiErrorMessage(err, LABELS.bugCouldNotCreate));
+    } catch {
+      // Field + form-level errors come from create.error via useApiFormErrors.
     }
   });
 
@@ -130,7 +137,7 @@ export function useBugReportForm(params: UseBugReportFormParams) {
     clearAttachmentErrors,
     errorFor,
     onSubmit,
-    apiError,
+    apiError: clientError ?? formLevelError,
     create,
   };
 }

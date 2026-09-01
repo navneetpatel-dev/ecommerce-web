@@ -25,6 +25,7 @@ export function ReviewFormContainer({
       body={review.body}
       hoverRating={review.hoverRating}
       isPending={review.isPending}
+      formLevelError={review.formLevelError}
       onSetHoverRating={review.setHoverRating}
       onSetRating={review.setRating}
       onSubmit={review.handleSubmit(review.onSubmit)}

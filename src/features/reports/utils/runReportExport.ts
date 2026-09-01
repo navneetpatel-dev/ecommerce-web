@@ -57,15 +57,16 @@ export async function runReportExport(
   } catch (err) {
     if (err instanceof ReportExportPollError) {
       if (err.outcome === "timeout") {
-        handlers?.onMessage?.(err.message);
+        handlers?.onMessage?.(err.displayMessage);
         handlers?.onError?.(null);
       } else {
-        handlers?.onError?.(err.message);
+        handlers?.onError?.(err.displayMessage);
         handlers?.onMessage?.(null);
       }
       throw err;
     }
     handlers?.onError?.(getReportExportErrorMessage(err));
+    handlers?.onMessage?.(null);
     throw err;
   } finally {
     release();

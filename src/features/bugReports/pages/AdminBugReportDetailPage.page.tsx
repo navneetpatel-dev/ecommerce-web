@@ -5,6 +5,7 @@ import { DetailQuerySkeleton } from "@/shared/components/DetailQuerySkeleton.com
 import { RequirePermission } from "@/shared/components/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
+import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useBugReport } from "../api/bugReports.queries";
 import { BugReportDetail } from "../components/BugReportDetail.component";
@@ -28,9 +29,12 @@ function AdminBugReportDetailContent() {
   if (isLoading) return <DetailQuerySkeleton className="space-y-3 py-4" />;
   if (isEmpty) {
     return (
-      <p className="border border-line bg-surface-raised px-5 py-10 text-center text-ink-muted">
-        {(error as Error | null)?.message || LABELS.bugCouldNotLoadDetail}
-      </p>
+      <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+        <QueryErrorAlert
+          error={error}
+          fallback={LABELS.bugCouldNotLoadDetail}
+        />
+      </div>
     );
   }
 

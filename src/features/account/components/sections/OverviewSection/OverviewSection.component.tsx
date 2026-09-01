@@ -14,6 +14,7 @@ import { formatLabel } from "@/shared/utils/formatLabel";
 import { normalizeImageMimeType } from "@/shared/utils/imageProcessing";
 import { formatOrderDate } from "@/shared/utils/orderFormat";
 import { readFileAsDataUrl } from "@/shared/hooks/useUploads.hook";
+import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { useAccountOverview } from "../../../hooks/useAccountOverview.hook";
 import { useUploadAvatar } from "../../../api/account.queries";
@@ -71,10 +72,10 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
   if (profileError || !profile) {
     return (
       <div className="border border-line bg-surface px-5 py-10 text-center">
-        <p className="text-body text-ink-muted">
-          {profileError?.message ||
-            "Could not load your profile. Please try again."}
-        </p>
+        <QueryErrorAlert
+          error={profileError}
+          fallback={LABELS.couldNotLoadProfile}
+        />
       </div>
     );
   }

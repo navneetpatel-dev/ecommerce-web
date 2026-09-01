@@ -9,16 +9,19 @@ import {
 } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { FormError } from "@/shared/components/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
 
 interface AdminShippingZoneFormProps {
   name: string;
+  createError?: string | null;
   onNameChange: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
 }
 
 export function AdminShippingZoneForm({
   name,
+  createError = null,
   onNameChange,
   onSubmit,
 }: AdminShippingZoneFormProps) {
@@ -43,6 +46,10 @@ export function AdminShippingZoneForm({
             onChange={(e) => onNameChange(e.target.value)}
           />
         </FormFieldFrame>
+        <FormError
+          error={createError}
+          fallback={LABELS.couldNotCreateShippingZone}
+        />
         <FormActions>
           <DisabledActionHint
             disabled={!canCreate}

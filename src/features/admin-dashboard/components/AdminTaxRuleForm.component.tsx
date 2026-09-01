@@ -10,11 +10,13 @@ import {
 import { Input } from "@/shared/components/ui/input";
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { FormError } from "@/shared/components/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
 
 interface AdminTaxRuleFormProps {
   gstPercentage: string;
   hsnCode: string;
+  createError?: string | null;
   onGstChange: (value: string) => void;
   onHsnChange: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
@@ -23,6 +25,7 @@ interface AdminTaxRuleFormProps {
 export function AdminTaxRuleForm({
   gstPercentage,
   hsnCode,
+  createError = null,
   onGstChange,
   onHsnChange,
   onSubmit,
@@ -60,6 +63,10 @@ export function AdminTaxRuleForm({
             onChange={(e) => onHsnChange(e.target.value)}
           />
         </FormFieldFrame>
+        <FormError
+          error={createError}
+          fallback={LABELS.couldNotCreateTaxRule}
+        />
         <FormActions className="sm:col-span-2">
           <DisabledActionHint
             disabled={!canCreate}

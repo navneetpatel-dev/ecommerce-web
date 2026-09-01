@@ -20,6 +20,7 @@ export function VendorProductCreateForm({
   imageUrls,
   draftUploadId,
   submitError,
+  apiFieldErrors,
   submitting,
   loading = false,
   onChange,
@@ -31,7 +32,13 @@ export function VendorProductCreateForm({
   const showImages = mode === "create";
 
   const { getError, canSubmit, disableHint, patchValues, handleSubmit } =
-    useProductFormController({ values, loading, onChange, onValidSubmit });
+    useProductFormController({
+      values,
+      loading,
+      apiFieldErrors,
+      onChange,
+      onValidSubmit,
+    });
 
   return (
     <form className="mb-5" onSubmit={handleSubmit}>

@@ -18,6 +18,7 @@ import {
 interface UseProductFormControllerOptions {
   values: ProductListingFormValues;
   loading: boolean;
+  apiFieldErrors?: Partial<Record<ProductListingFormField, string>>;
   onChange: (patch: Partial<ProductListingFormValues>) => void;
   onValidSubmit: (body: ProductWriteBody) => void;
 }
@@ -25,11 +26,19 @@ interface UseProductFormControllerOptions {
 export function useProductFormController({
   values,
   loading,
+  apiFieldErrors = {},
   onChange,
   onValidSubmit,
 }: UseProductFormControllerOptions) {
-  const { clearAll, clearField, setErrors, getError } =
-    useManualFormFieldErrors<ProductListingFormField>();
+  const {
+    clearAll,
+    clearField,
+    setErrors,
+    getError: getLocalError,
+  } = useManualFormFieldErrors<ProductListingFormField>();
+
+  const getError = (field: ProductListingFormField) =>
+    apiFieldErrors[field] ?? getLocalError(field);
 
   const requiredChecks = [
     { ok: Boolean(values.name.trim()), message: LABELS.enterProductName },

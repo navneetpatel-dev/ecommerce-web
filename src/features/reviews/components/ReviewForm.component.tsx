@@ -1,5 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { FormError } from "@/shared/components/FormError.component";
 import {
   FormActions,
   FormFieldFrame,
@@ -22,6 +23,7 @@ interface ReviewFormProps {
   body: string;
   hoverRating: number;
   isPending: boolean;
+  formLevelError?: string | null;
   onSetHoverRating: (value: number) => void;
   onSetRating: (value: number) => void;
   onSubmit: (event: React.FormEvent) => void;
@@ -35,6 +37,7 @@ export function ReviewForm({
   body,
   hoverRating,
   isPending,
+  formLevelError = null,
   onSetHoverRating,
   onSetRating,
   onSubmit,
@@ -102,6 +105,11 @@ export function ReviewForm({
             />
           </FormFieldFrame>
         </FormSection>
+
+        <FormError
+          error={formLevelError}
+          fallback={LABELS.couldNotSubmitReview}
+        />
 
         <FormActions>
           <DisabledActionHint disabled={!canSubmit} message={disableHint}>

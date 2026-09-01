@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LABELS } from "@/shared/constants/labels";
+import { useApiFormErrors } from "@/shared/hooks/useApiFormErrors.hook";
 import {
   ReviewFormSchema,
   type ReviewFormInput,
@@ -13,16 +15,24 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
   const { requireAuth } = useRequireAuth();
   const [hoverRating, setHoverRating] = useState(0);
 
+  const form = useForm<ReviewFormInput>({
+    resolver: zodResolver(ReviewFormSchema),
+    defaultValues: { rating: 0 },
+  });
+
+  const { formLevelError } = useApiFormErrors(
+    form,
+    submitReview.error,
+    LABELS.couldNotSubmitReview,
+  );
+
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors },
-  } = useForm<ReviewFormInput>({
-    resolver: zodResolver(ReviewFormSchema),
-    defaultValues: { rating: 0 },
-  });
+  } = form;
 
   const rating = watch("rating") || 0;
   const body = watch("body") || "";
@@ -51,6 +61,7 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
     register,
     handleSubmit,
     errors,
+    formLevelError,
     rating,
     body,
     hoverRating,

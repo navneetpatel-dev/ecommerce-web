@@ -7,6 +7,7 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 import { RequirePermission } from "@/shared/components/RequirePermission.component";
 import { VENDOR_SUPPORT_ACCESS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { PATHS } from "@/shared/constants/paths";
 import { useMyBugReportsInfinite } from "../api/bugReports.queries";
 import {
@@ -54,7 +55,11 @@ function VendorBugReportsContent() {
         detailHref={PATHS.vendor.bugReport}
         isLoading={query.isLoading}
         isError={query.isError}
-        errorMessage={(query.error as Error | null)?.message}
+        errorMessage={
+          query.error
+            ? getApiErrorMessage(query.error, LABELS.bugCouldNotLoad)
+            : undefined
+        }
         hasNextPage={query.hasNextPage}
         isFetchingNextPage={query.isFetchingNextPage}
         onLoadMore={() => void query.fetchNextPage()}

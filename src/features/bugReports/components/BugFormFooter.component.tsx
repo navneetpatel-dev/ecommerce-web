@@ -17,7 +17,6 @@ interface BugFormFooterProps {
   canSubmit: boolean;
   disableHint: string;
   apiError: string | null;
-  mutationError: Error | null;
 }
 
 /** Attachments section + error/submit footer of the bug report form (Rule 3). */
@@ -31,7 +30,6 @@ export function BugFormFooter(props: BugFormFooterProps) {
     canSubmit,
     disableHint,
     apiError,
-    mutationError,
   } = props;
 
   return (
@@ -54,10 +52,7 @@ export function BugFormFooter(props: BugFormFooterProps) {
         ) : null}
       </FormSection>
 
-      <FormError
-        error={apiError ? new Error(apiError) : mutationError}
-        fallback={LABELS.bugCouldNotCreate}
-      />
+      <FormError error={apiError} fallback={LABELS.bugCouldNotCreate} />
       <FormActions>
         <DisabledActionHint disabled={!canSubmit} message={disableHint}>
           <Button

@@ -1,6 +1,7 @@
 "use client";
 
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { isWorkspaceRole } from "@/shared/utils/roles";
@@ -41,9 +42,7 @@ export function PersonalInfoSection() {
   if (isError || !profile) {
     return (
       <div className="border border-line bg-surface px-5 py-10 text-center">
-        <p className="text-body text-ink-muted">
-          {(error as Error | null)?.message || LABELS.couldNotLoadProfile}
-        </p>
+        <QueryErrorAlert error={error} fallback={LABELS.couldNotLoadProfile} />
       </div>
     );
   }

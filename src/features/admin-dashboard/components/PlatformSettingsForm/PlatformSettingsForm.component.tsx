@@ -1,6 +1,7 @@
 "use client";
 
 import { FormActions, FormStack } from "@/shared/components/forms";
+import { FormError } from "@/shared/components/FormError.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { PlatformSettings } from "../../hooks/usePlatformSettingsForm.hook";
@@ -14,6 +15,7 @@ import { WalletPointsSettingsSection } from "../WalletPointsSettingsSection.comp
 interface PlatformSettingsFormProps {
   form: PlatformSettings;
   message?: string | null;
+  saveError?: string | null;
   onCommissionRateChange: (value: number) => void;
   onTcsRateChange: (value: number) => void;
   onTdsRateChange: (value: number) => void;
@@ -44,7 +46,7 @@ interface PlatformSettingsFormProps {
 }
 
 export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
-  const { form, message, onSave } = props;
+  const { form, message, saveError = null, onSave } = props;
 
   return (
     <div className="w-full min-w-0">
@@ -97,6 +99,7 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onPointsPerRupeeChange={props.onPointsPerRupeeChange}
         />
 
+        <FormError error={saveError} fallback={LABELS.couldNotSaveSettings} />
         <FormActions leading={message}>
           <Button type="button" fullWidth="mobile" onClick={onSave}>
             {LABELS.saveSettings}

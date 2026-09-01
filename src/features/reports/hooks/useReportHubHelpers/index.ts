@@ -3,6 +3,7 @@ import {
   EXPORT_POLL_INITIAL_MS,
   EXPORT_POLL_MAX_DURATION_MS,
   EXPORT_POLL_MAX_MS,
+  EXPORT_POLL_REQUEST_TIMEOUT_MS,
 } from "@/shared/constants/timing";
 import {
   reportsEngineApi,
@@ -61,25 +62,82 @@ function sleep(ms: number, signal?: AbortSignal) {
   });
 }
 
+function pollRequestSignal(parent?: AbortSignal): AbortSignal {
+  const timeout = AbortSignal.timeout(EXPORT_POLL_REQUEST_TIMEOUT_MS);
+  if (!parent) return timeout;
+  if (typeof AbortSignal.any === "function") {
+    return AbortSignal.any([parent, timeout]);
+  }
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  if (parent.aborted) {
+    controller.abort();
+    return controller.signal;
+  }
+  parent.addEventListener("abort", abort, { once: true });
+  timeout.addEventListener("abort", abort, { once: true });
+  return controller.signal;
+}
+
 function filterDatePart(iso: string | null | undefined): string | undefined {
   if (!iso) return undefined;
   return iso.slice(0, 10);
+}
+
+function isExportNotReadyError(err: unknown): boolean {
+  if (!(err instanceof Error)) return false;
+  const status = (err as Error & { status?: number }).status;
+  if (status === 422) return true;
+  // Internal status detection — not shown to users.
+   
+  const message = err.message.toLowerCase();
+  return message.includes("not ready") || message.includes("not ready yet");
 }
 
 async function downloadFromStatus(
   exportId: string,
   status: ExportStatusResult,
   formatHint: ExportFileFormat,
+  options?: { signal?: AbortSignal },
 ) {
   const format = normalizeExportFormat(status.format ?? formatHint);
-  await reportsEngineApi.downloadExport(
-    exportId,
-    status.reportType,
-    filterDatePart(status.filterFrom),
-    filterDatePart(status.filterTo),
-    format,
-    status.downloadUrl,
-  );
+  const maxAttempts = 6;
+  let latestStatus = status;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    try {
+      await reportsEngineApi.downloadExport(
+        exportId,
+        latestStatus.reportType,
+        filterDatePart(latestStatus.filterFrom),
+        filterDatePart(latestStatus.filterTo),
+        format,
+        latestStatus.downloadUrl,
+      );
+      return;
+    } catch (err) {
+      const canRetry = isExportNotReadyError(err) && attempt < maxAttempts - 1;
+      if (!canRetry) throw err;
+      try {
+        await sleep(Math.min(1_000 * (attempt + 1), 4_000), options?.signal);
+      } catch {
+        throw err;
+      }
+      const refreshed = await reportsEngineApi.exportStatus(
+        exportId,
+        undefined,
+        options?.signal,
+      );
+      if ("notModified" in refreshed) continue;
+      latestStatus = refreshed;
+      if (refreshed.status === "FAILED") {
+        throw new Error(
+          refreshed.errorMessage?.trim() || LABELS.reportAsyncFailed,
+        );
+      }
+      if (refreshed.status !== "READY" && refreshed.status !== "SYNC") continue;
+    }
+  }
 }
 
 export type ExportPollOutcome = "ready" | "failed" | "timeout" | "aborted";
@@ -98,7 +156,11 @@ export async function pollExportUntilReady(
       return { outcome: "aborted" };
     }
 
-    const status = await reportsEngineApi.exportStatus(exportId, etag, options?.signal);
+    const status = await reportsEngineApi.exportStatus(
+      exportId,
+      etag,
+      pollRequestSignal(options?.signal),
+    );
     if ("notModified" in status) {
       etag = status.etag;
       try {
@@ -112,7 +174,7 @@ export async function pollExportUntilReady(
     etag = status.etag;
     const format = normalizeExportFormat(status.format ?? formatHint);
     if (status.status === "READY" || status.status === "SYNC") {
-      await downloadFromStatus(exportId, status, format);
+      await downloadFromStatus(exportId, status, format, options);
       return { outcome: "ready" };
     }
     if (status.status === "FAILED") {
@@ -176,12 +238,12 @@ export async function pollAsyncExportResponse(
     const status = await reportsEngineApi.exportStatus(
       response.exportId,
       undefined,
-      options?.signal,
+      pollRequestSignal(options?.signal),
     );
     if ("notModified" in status) {
       return pollExportUntilReady(response.exportId, format, options);
     }
-    await downloadFromStatus(response.exportId, status, format);
+    await downloadFromStatus(response.exportId, status, format, options);
     return { outcome: "ready" };
   }
   return pollExportUntilReady(response.exportId, format, options);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import type { FieldValues, UseFormReturn } from "react-hook-form";
+import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import {
   applyApiErrorsToForm,
   getFormLevelApiError,
@@ -19,7 +19,11 @@ export function useApiFormErrors<T extends FieldValues>(
 ) {
   useEffect(() => {
     if (!apiError) return;
-    applyApiErrorsToForm(form, apiError, fieldMap);
+    applyApiErrorsToForm(
+      form,
+      apiError,
+      fieldMap as Partial<Record<string, Path<T>>> | undefined,
+    );
   }, [apiError, form, fieldMap]);
 
   return {

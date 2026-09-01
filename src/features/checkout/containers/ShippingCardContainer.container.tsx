@@ -1,5 +1,7 @@
 "use client";
 
+import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { ShippingCard } from "../components/ShippingCard.component";
 import { useShippingCard } from "../hooks/useShippingCard.hook";
 import type { ShippingMethod } from "@/shared/constants/statuses";
@@ -25,7 +27,10 @@ export function ShippingCardContainer({
   selected,
   onSelect,
 }: ShippingCardContainerProps) {
-  const { options, isLoading, isError } = useShippingCard(pincode, weightGrams);
+  const { options, isLoading, isError, error } = useShippingCard(
+    pincode,
+    weightGrams,
+  );
 
   return (
     <ShippingCard
@@ -33,6 +38,11 @@ export function ShippingCardContainer({
       options={options}
       isLoading={isLoading}
       isError={isError}
+      errorMessage={
+        error
+          ? getApiErrorMessage(error, LABELS.couldNotLoadShippingRates)
+          : undefined
+      }
       selected={selected}
       onSelect={onSelect}
     />

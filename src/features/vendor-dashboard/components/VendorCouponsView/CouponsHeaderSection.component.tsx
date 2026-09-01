@@ -14,6 +14,7 @@ import {
   type CouponFormInput,
 } from "@/features/admin-dashboard";
 import { LABELS } from "@/shared/constants/labels";
+import { FormError } from "@/shared/components/FormError.component";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import type { UseFormReturn } from "react-hook-form";
@@ -24,6 +25,7 @@ interface CouponsHeaderSectionProps {
   setOpen: (open: boolean) => void;
   form: UseFormReturn<CouponFormInput>;
   isPending: boolean;
+  formLevelError?: string | null;
   onSubmit: (data: CouponFormInput) => void;
   vendorId?: string | null;
 }
@@ -36,6 +38,7 @@ export function CouponsHeaderSection(props: CouponsHeaderSectionProps) {
     setOpen,
     form,
     isPending,
+    formLevelError = null,
     onSubmit,
     vendorId = null,
   } = props;
@@ -78,6 +81,10 @@ export function CouponsHeaderSection(props: CouponsHeaderSectionProps) {
                 isPending={isPending}
                 vendorMode
                 vendorId={vendorId}
+              />
+              <FormError
+                error={formLevelError}
+                fallback={LABELS.couldNotCreateCoupon}
               />
             </form>
           </DialogContent>

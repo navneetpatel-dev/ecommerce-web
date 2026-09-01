@@ -17,6 +17,7 @@ export const adminNavigationLabels = {
   reviewResponseLabel: "Response",
   reviewResponseEmptyHint: "Enter a response to send.",
   noReviewsFound: "No reviews found.",
+  couldNotLoadReviews: "Could not load reviews.",
   tax: "Tax",
   shipping: "Shipping",
   financePayouts: "Finance / Payouts",

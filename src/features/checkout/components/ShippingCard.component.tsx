@@ -15,6 +15,7 @@ interface ShippingCardProps {
   options: ShippingRate[];
   isLoading: boolean;
   isError: boolean;
+  errorMessage?: string;
   selected?: string;
   onSelect: (method: ShippingMethod) => void;
 }
@@ -29,6 +30,7 @@ export function ShippingCard({
   options,
   isLoading,
   isError,
+  errorMessage,
   selected,
   onSelect,
 }: ShippingCardProps) {
@@ -41,11 +43,9 @@ export function ShippingCard({
           Loading shipping rates…
         </p>
       )}
-      {isError && (
-        <p className="mt-4 text-[0.875rem] text-red-600">
-          Could not load shipping rates for this pincode.
-        </p>
-      )}
+      {isError && errorMessage ? (
+        <p className="mt-4 text-[0.875rem] text-red-600">{errorMessage}</p>
+      ) : null}
       {!isLoading && !isError && options.length === 0 && (
         <p className="mt-4 text-[0.875rem] text-ink-muted">
           No shipping rates are configured for this delivery area yet.

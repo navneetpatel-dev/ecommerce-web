@@ -18,7 +18,10 @@ import {
   CATEGORY_STATUS,
   type CategoryStatus,
 } from "@/shared/constants/statuses";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import {
+  applyApiErrorsToForm,
+  getFormLevelApiError,
+} from "@/shared/utils/applyApiFormErrors";
 import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import {
   CategoryFormSchema,
@@ -114,7 +117,12 @@ export function AdminEditCategoryAction({
       setOpen(false);
       onSaved();
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadData));
+      const mapped = applyApiErrorsToForm(form, err);
+      setError(
+        mapped
+          ? null
+          : getFormLevelApiError(err, LABELS.couldNotSaveCategories),
+      );
     } finally {
       setIsPending(false);
     }

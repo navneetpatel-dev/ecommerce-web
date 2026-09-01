@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LABELS } from "@/shared/constants/labels";
+import { useApiFormErrors } from "@/shared/hooks/useApiFormErrors.hook";
 import { adminApi } from "../api/admin.api";
 import { adminKeys } from "../api/admin.queries";
 import {
@@ -32,6 +34,12 @@ export function useCreateCoupon() {
     },
   });
 
+  const { formLevelError } = useApiFormErrors(
+    form,
+    createCoupon.error,
+    LABELS.couldNotCreateCoupon,
+  );
+
   const setDialogOpen = (next: boolean) => {
     setOpen(next);
     if (!next) {
@@ -40,5 +48,5 @@ export function useCreateCoupon() {
     }
   };
 
-  return { open, setOpen: setDialogOpen, createCoupon, form };
+  return { open, setOpen: setDialogOpen, createCoupon, form, formLevelError };
 }

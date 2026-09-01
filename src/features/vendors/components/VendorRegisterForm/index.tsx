@@ -5,6 +5,7 @@ import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormActions, FormStack } from "@/shared/components/forms";
+import { FormError } from "@/shared/components/FormError.component";
 import {
   Card,
   CardHeader,
@@ -30,7 +31,7 @@ import { VendorRegisterIdentitySection } from "./IdentitySection.component";
 interface VendorRegisterFormProps {
   form: UseFormReturn<VendorRegisterInput>;
   onSubmit: (data: VendorRegisterInput) => void;
-  error: boolean;
+  error: string | null;
   isPending: boolean;
 }
 
@@ -150,11 +151,7 @@ export function VendorRegisterForm({
                 showNameWarning={showNameWarning}
               />
 
-              {error ? (
-                <p className="text-body text-danger">
-                  {LABELS.registrationFailed}
-                </p>
-              ) : null}
+              <FormError error={error} fallback={LABELS.registrationFailed} />
 
               <FormActions>
                 <DisabledActionHint

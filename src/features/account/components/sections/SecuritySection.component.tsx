@@ -6,7 +6,9 @@ import { EmptyState } from "@/shared/components/EmptyState.component";
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { FormError } from "@/shared/components/FormError.component";
+import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { LABELS } from "@/shared/constants/labels";
 import { ChangePasswordSection } from "@/features/auth";
 import { useProfilePage } from "@/features/auth";
 import {
@@ -78,9 +80,12 @@ export function SecuritySection() {
             <Skeleton className="h-14 w-full" />
           </div>
         ) : sessions.isError ? (
-          <p className="px-5 py-8 text-center text-body text-ink-muted">
-            {(sessions.error as Error)?.message || "Could not load sessions."}
-          </p>
+          <div className="px-5 py-8 text-center">
+            <QueryErrorAlert
+              error={sessions.error}
+              fallback={LABELS.couldNotLoadSessions}
+            />
+          </div>
         ) : list.length === 0 ? (
           <EmptyState
             icon={Monitor}

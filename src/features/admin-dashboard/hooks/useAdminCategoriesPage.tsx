@@ -6,7 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import {
+  applyApiErrorsToForm,
+  getFormLevelApiError,
+} from "@/shared/utils/applyApiFormErrors";
 import { categoriesApi } from "@/features/categories";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import { AdminEditCategoryAction } from "../components/AdminEditCategoryAction.component";
@@ -55,7 +58,12 @@ export function useAdminCategoriesPage() {
         setOpen(false);
         setListVersion((version) => version + 1);
       } catch (err) {
-        setCreateError(getApiErrorMessage(err, LABELS.couldNotLoadData));
+        const mapped = applyApiErrorsToForm(form, err);
+        setCreateError(
+          mapped
+            ? null
+            : getFormLevelApiError(err, LABELS.couldNotSaveCategories),
+        );
       } finally {
         setIsPending(false);
       }

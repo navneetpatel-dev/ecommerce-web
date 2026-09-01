@@ -88,6 +88,7 @@ export function useVendorProductsPage() {
       imageUrls: form.imageUrls,
       draftUploadId: editId ?? form.draftUploadId,
       submitError: form.submitError,
+      apiFieldErrors: form.apiFieldErrors,
       submitting: form.submitting,
       loading: form.loading,
       onChange: (patch: Partial<ProductListingFormValues>) => {

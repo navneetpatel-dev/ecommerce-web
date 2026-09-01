@@ -1,6 +1,7 @@
 import { UseFormReturn } from "react-hook-form";
 import Link from "next/link";
 import { FormFieldFrame } from "@/shared/components/forms";
+import { FormError } from "@/shared/components/FormError.component";
 import { AuthFormCard } from "./AuthFormCard.component";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -16,6 +17,7 @@ interface ForgotPasswordCardProps {
   onSubmit: (data: ForgotPasswordInput) => void;
   isPending: boolean;
   isSuccess: boolean;
+  formLevelError?: string | null;
 }
 
 export function ForgotPasswordCard({
@@ -23,6 +25,7 @@ export function ForgotPasswordCard({
   onSubmit,
   isPending,
   isSuccess,
+  formLevelError = null,
 }: ForgotPasswordCardProps) {
   const {
     register,
@@ -66,6 +69,10 @@ export function ForgotPasswordCard({
               {...register("email")}
             />
           </FormFieldFrame>
+          <FormError
+            error={formLevelError}
+            fallback={LABELS.resetPasswordFailed}
+          />
           <Button
             type="submit"
             className="w-full"

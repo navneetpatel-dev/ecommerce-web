@@ -20,6 +20,7 @@ export function VendorCouponsPage() {
         setOpen={page.setOpen}
         form={page.form}
         isPending={page.isPending}
+        formLevelError={page.formLevelError}
         onSubmit={page.onSubmit}
         vendorId={page.vendorId}
         analyticsId={page.analyticsId}

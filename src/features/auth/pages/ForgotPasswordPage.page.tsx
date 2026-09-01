@@ -14,6 +14,7 @@ export function ForgotPasswordPage() {
         onSubmit={forgot.onSubmit}
         isPending={forgot.isPending}
         isSuccess={forgot.isSuccess}
+        formLevelError={forgot.formLevelError}
       />
     </AuthPageShell>
   );

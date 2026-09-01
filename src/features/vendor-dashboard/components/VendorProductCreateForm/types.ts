@@ -10,6 +10,9 @@ export interface VendorProductCreateFormProps {
   imageUrls: string[];
   draftUploadId: string;
   submitError: string | null;
+  apiFieldErrors?: Partial<
+    Record<import("@/features/products").ProductListingFormField, string>
+  >;
   submitting: boolean;
   loading?: boolean;
   onChange: (patch: Partial<ProductListingFormValues>) => void;

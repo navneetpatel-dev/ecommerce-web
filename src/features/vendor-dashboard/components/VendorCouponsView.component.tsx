@@ -28,6 +28,7 @@ interface VendorCouponsViewProps {
   setOpen: (open: boolean) => void;
   form: UseFormReturn<CouponFormInput>;
   isPending: boolean;
+  formLevelError?: string | null;
   onSubmit: (data: CouponFormInput) => void;
   vendorId?: string | null;
   analyticsId: string | null;
@@ -51,6 +52,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     setOpen,
     form,
     isPending,
+    formLevelError = null,
     onSubmit,
     vendorId = null,
     analyticsId,
@@ -148,6 +150,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
         setOpen={setOpen}
         form={form}
         isPending={isPending}
+        formLevelError={formLevelError}
         onSubmit={onSubmit}
         vendorId={vendorId}
       />

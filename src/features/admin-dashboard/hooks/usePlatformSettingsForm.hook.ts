@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { settingsApi, type AdminPlatformSettings } from "../api/settings.api";
 import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 
 export type PlatformSettings = AdminPlatformSettings;
 
@@ -11,6 +12,7 @@ export function usePlatformSettingsForm() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     settingsApi
@@ -36,25 +38,32 @@ export function usePlatformSettingsForm() {
           pointsPerRupee: settings.pointsPerRupee ?? 1,
         }),
       )
-      .catch(() => setLoadError(LABELS.couldNotLoadSettings))
+      .catch((err) =>
+        setLoadError(getApiErrorMessage(err, LABELS.couldNotLoadSettings)),
+      )
       .finally(() => setLoading(false));
   }, []);
 
   const save = () => {
     if (!form) return;
+    setSaveError(null);
+    setMessage(null);
     settingsApi
       .update(form)
       .then((saved) => {
         setForm(saved);
         setMessage(LABELS.settingsSaved);
       })
-      .catch(() => setMessage(LABELS.couldNotSaveSettings));
+      .catch((err) =>
+        setSaveError(getApiErrorMessage(err, LABELS.couldNotSaveSettings)),
+      );
   };
 
   return {
     form,
     loading,
     loadError,
+    saveError,
     message,
     save,
     setCommissionRate: (value: number) => {

@@ -23,6 +23,7 @@ export function AdminCouponsPage() {
         form={page.form}
         onSubmit={page.onSubmit}
         isPending={page.isPending}
+        formLevelError={page.formLevelError}
       />
 
       <Tabs

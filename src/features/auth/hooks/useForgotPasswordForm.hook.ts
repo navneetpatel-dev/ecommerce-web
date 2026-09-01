@@ -2,6 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LABELS } from "@/shared/constants/labels";
+import { useApiFormErrors } from "@/shared/hooks/useApiFormErrors.hook";
 import {
   ForgotPasswordSchema,
   type ForgotPasswordInput,
@@ -14,6 +16,12 @@ export function useForgotPasswordForm() {
     resolver: zodResolver(ForgotPasswordSchema),
   });
 
+  const { formLevelError } = useApiFormErrors(
+    form,
+    forgotPassword.error,
+    LABELS.resetPasswordFailed,
+  );
+
   const onSubmit = (data: ForgotPasswordInput) =>
     forgotPassword.mutate(data.email);
 
@@ -21,6 +29,7 @@ export function useForgotPasswordForm() {
     form,
     isPending: forgotPassword.isPending,
     isSuccess: forgotPassword.isSuccess,
+    formLevelError,
     onSubmit,
   };
 }

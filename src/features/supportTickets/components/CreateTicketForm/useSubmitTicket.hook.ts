@@ -4,7 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LABELS } from "@/shared/constants/labels";
 import type { SupportTicketCategory } from "@/shared/constants/statuses";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import {
+  applyApiErrorsToManualForm,
+  getFormLevelApiError,
+} from "@/shared/utils/applyApiFormErrors";
 import type { UploadedMediaAttachment } from "../TicketAttachmentUploader";
 import { useCreateSupportTicket } from "../../api/supportTickets.queries";
 import {
@@ -75,7 +78,10 @@ export function useSubmitTicket(props: SubmitTicketOptions) {
       });
       router.push(successHref(ticket.id));
     } catch (err) {
-      setApiError(getApiErrorMessage(err, LABELS.ticketCouldNotCreate));
+      const mapped = applyApiErrorsToManualForm<TicketField>(err, setErrors);
+      setApiError(
+        mapped ? null : getFormLevelApiError(err, LABELS.ticketCouldNotCreate),
+      );
     }
   };
 

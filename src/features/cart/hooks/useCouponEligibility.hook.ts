@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { couponsApi } from "@/features/coupons";
 import { useAuthStore } from "@/shared/stores/auth.store";
+import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import type { EligibleCoupon } from "@/shared/api/types";
 
 interface UseCouponEligibilityResult {
@@ -39,9 +41,7 @@ export function useCouponEligibility(
     } catch (error) {
       // Offers are supplementary: keep the cart usable on failure.
       setEligible([]);
-      setEligibleError(
-        error instanceof Error ? error.message : "Could not load offers",
-      );
+      setEligibleError(getApiErrorMessage(error, LABELS.couldNotLoadOptions));
       return [];
     } finally {
       setEligibleLoading(false);

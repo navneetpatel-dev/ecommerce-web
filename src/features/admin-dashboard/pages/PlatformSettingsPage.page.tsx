@@ -23,6 +23,7 @@ export function PlatformSettingsPage() {
     <PlatformSettingsForm
       form={settings.form}
       message={settings.message}
+      saveError={settings.saveError}
       onCommissionRateChange={settings.setCommissionRate}
       onTcsRateChange={settings.setTcsRatePercent}
       onTdsRateChange={settings.setTdsRatePercent}

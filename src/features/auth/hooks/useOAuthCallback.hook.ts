@@ -30,7 +30,7 @@ export function useOAuthCallback() {
   const queryClient = useQueryClient();
   const setSession = useAuthStore((s) => s.setSession);
   const started = useRef(false);
-  const [message, setMessage] = useState(LABELS.oauthCompletingSignIn);
+  const [message, setMessage] = useState<string>(LABELS.oauthCompletingSignIn);
 
   useEffect(() => {
     if (started.current) return;
@@ -46,10 +46,7 @@ export function useOAuthCallback() {
         errorCode === "OAUTH_NOT_CONFIGURED"
           ? LABELS.oauthNotConfigured
           : LABELS.oauthSignInFailed;
-      const loginError = sanitizeUserFacingMessage(
-        errorMessage,
-        fallback,
-      );
+      const loginError = sanitizeUserFacingMessage(errorMessage, fallback);
       navigateReplace(
         router,
         `${PATHS.login}?oauthError=${encodeURIComponent(loginError)}`,

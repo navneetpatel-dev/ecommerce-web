@@ -9,6 +9,7 @@ export function useShippingCard(pincode: string, weightGrams: number) {
     data: rates = [],
     isLoading,
     isError,
+    error,
   } = useShippingRates(pincode, weightGrams);
 
   const options = (rates as ShippingRate[]).filter(
@@ -17,5 +18,5 @@ export function useShippingCard(pincode: string, weightGrams: number) {
       rate.method === SHIPPING_METHOD.EXPRESS,
   );
 
-  return { options, isLoading, isError };
+  return { options, isLoading, isError, error };
 }

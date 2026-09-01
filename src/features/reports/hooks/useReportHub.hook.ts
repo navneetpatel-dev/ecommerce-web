@@ -97,7 +97,7 @@ export function useReportHub(options?: { preferAudience?: string }) {
     ).catch((err) => {
       if (!active || isBenignExportError(err)) return;
       if (err instanceof ReportExportLockedError) {
-        setError(err.message);
+        setError(LABELS.reportExportLocked);
         return;
       }
       setError(getReportExportErrorMessage(err, LABELS.reportLoadError));

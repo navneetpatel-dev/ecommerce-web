@@ -18,11 +18,15 @@ interface AddressFormFieldsProps {
   ) => void;
   hasAddresses: boolean;
   isEditing: boolean;
+  fieldErrors?: Partial<Record<keyof AddressFormValues, string>>;
+  getError?: (field: keyof AddressFormValues) => string | undefined;
 }
 
 /** Shared field grid for the address create/edit dialog (Rule 2/3 split). */
 export function AddressFormFields(props: AddressFormFieldsProps) {
-  const { form, setField, hasAddresses, isEditing } = props;
+  const { form, setField, hasAddresses, isEditing, getError } = props;
+
+  const fieldError = (field: keyof AddressFormValues) => getError?.(field);
 
   const updatePincode = (raw: string) => {
     setField("pincode", raw.replace(/\D/g, "").slice(0, PINCODE_LENGTH));
@@ -38,6 +42,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
         htmlFor="shared-addr-line1"
         required
         className="sm:col-span-2"
+        error={fieldError("line1")}
       >
         <Input
           id="shared-addr-line1"
@@ -45,6 +50,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
           onChange={(e) => setField("line1", e.target.value)}
           placeholder={LABELS.addressLine1Placeholder}
           required
+          error={Boolean(fieldError("line1"))}
         />
       </FormFieldFrame>
 
@@ -52,12 +58,14 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
         label={LABELS.addressLine2Optional}
         htmlFor="shared-addr-line2"
         className="sm:col-span-2"
+        error={fieldError("line2")}
       >
         <Input
           id="shared-addr-line2"
           value={form.line2}
           onChange={(e) => setField("line2", e.target.value)}
           placeholder={LABELS.addressLine2Placeholder}
+          error={Boolean(fieldError("line2"))}
         />
       </FormFieldFrame>
 
@@ -65,12 +73,14 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
         label={LABELS.addressCity}
         htmlFor="shared-addr-city"
         required
+        error={fieldError("city")}
       >
         <Input
           id="shared-addr-city"
           value={form.city}
           onChange={(e) => setField("city", e.target.value)}
           required
+          error={Boolean(fieldError("city"))}
         />
       </FormFieldFrame>
 
@@ -78,12 +88,14 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
         label={LABELS.addressState}
         htmlFor="shared-addr-state"
         required
+        error={fieldError("state")}
       >
         <Input
           id="shared-addr-state"
           value={form.state}
           onChange={(e) => setField("state", e.target.value)}
           required
+          error={Boolean(fieldError("state"))}
         />
       </FormFieldFrame>
 
@@ -91,6 +103,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
         label={LABELS.addressPincode}
         htmlFor="shared-addr-pincode"
         required
+        error={fieldError("pincode")}
       >
         <Input
           id="shared-addr-pincode"
@@ -99,17 +112,20 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
           value={form.pincode}
           onChange={(e) => updatePincode(e.target.value)}
           required
+          error={Boolean(fieldError("pincode"))}
         />
       </FormFieldFrame>
 
       <FormFieldFrame
         label={LABELS.addressCountry}
         htmlFor="shared-addr-country"
+        error={fieldError("country")}
       >
         <Input
           id="shared-addr-country"
           value={form.country}
           onChange={(e) => setField("country", e.target.value)}
+          error={Boolean(fieldError("country"))}
         />
       </FormFieldFrame>
 

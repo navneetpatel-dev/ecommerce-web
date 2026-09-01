@@ -7,6 +7,7 @@ export const reports3Labels = {
   selectVendorEntityType: "Select an entity type to continue.",
   selectVendorCategories: "Select at least one category to continue.",
   submitReview: "Submit review",
+  couldNotSubmitReview: "Could not submit your review. Please try again.",
   returnRequestFormSection: "Return details",
   returnRequestFormSectionHint: "Reason, notes, and optional photos.",
   attributeFormSection: "Attribute",
@@ -32,7 +33,8 @@ export const reports3Labels = {
   editShippingZoneTitle: "Edit shipping zone",
   editShippingZoneBody: "Update the zone name, states, and pincode prefixes.",
   zoneStatesHint: "Comma-separated state names. Leave blank if unused.",
-  zonePincodePrefixesHint: "Comma-separated pincode prefixes. Leave blank if unused.",
+  zonePincodePrefixesHint:
+    "Comma-separated pincode prefixes. Leave blank if unused.",
   runCouponAlerts: "Send coupon alerts",
   couponAlertsSent: "Sent {count} coupon expiry and usage alerts.",
   couponAlertsNoneSent: "No coupon alerts needed right now.",

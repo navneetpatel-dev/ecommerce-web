@@ -17,7 +17,8 @@ export function useAdminCouponsPage() {
     DEFAULT_PAGE_LIMIT,
     vendorScoped,
   );
-  const { open, setOpen, createCoupon, form } = useCreateCoupon();
+  const { open, setOpen, createCoupon, form, formLevelError } =
+    useCreateCoupon();
 
   const coupons = data?.items ?? [];
   const limit = data?.limit ?? DEFAULT_PAGE_LIMIT;
@@ -49,6 +50,7 @@ export function useAdminCouponsPage() {
     setOpen,
     form,
     isPending: createCoupon.isPending,
+    formLevelError,
     onSubmit,
   };
 }

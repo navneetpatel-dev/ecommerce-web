@@ -115,7 +115,6 @@ export function BugReportForm(props: Props) {
           canSubmit={form.canSubmit}
           disableHint={form.disableHint}
           apiError={form.apiError}
-          mutationError={(form.create.error as Error | null) ?? null}
         />
       </FormStack>
     </form>

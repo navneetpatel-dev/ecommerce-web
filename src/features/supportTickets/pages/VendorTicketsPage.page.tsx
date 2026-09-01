@@ -1,6 +1,7 @@
 "use client";
 
 import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { PATHS } from "@/shared/constants/paths";
 import { RequirePermission } from "@/shared/components/RequirePermission.component";
 import { VENDOR_SUPPORT_ACCESS } from "@/shared/constants/permissions";
@@ -50,7 +51,11 @@ function VendorTicketsContent() {
         detailHref={PATHS.vendor.supportTicket}
         isLoading={query.isLoading}
         isError={query.isError}
-        errorMessage={(query.error as Error | null)?.message}
+        errorMessage={
+          query.error
+            ? getApiErrorMessage(query.error, LABELS.ticketCouldNotLoad)
+            : undefined
+        }
         hasNextPage={query.hasNextPage}
         isFetchingNextPage={query.isFetchingNextPage}
         onLoadMore={() => void query.fetchNextPage()}

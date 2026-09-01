@@ -25,6 +25,7 @@ import { bugs2Labels } from "./labels/bugs2";
 import { coupons2Labels } from "./labels/coupons2";
 import { reports2Labels } from "./labels/reports2";
 import { reports3Labels } from "./labels/reports3";
+import { apiErrorLabels } from "./labels/apiErrors";
 
 export const LABELS = {
   ...commerceLabels,
@@ -49,6 +50,7 @@ export const LABELS = {
   ...coupons2Labels,
   ...reports2Labels,
   ...reports3Labels,
+  ...apiErrorLabels,
 } as const;
 
 export const ROLES = {

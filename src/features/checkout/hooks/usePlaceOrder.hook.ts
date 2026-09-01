@@ -13,6 +13,7 @@ import { PATHS } from "@/shared/constants/paths";
 import { ERROR_CODES } from "@/shared/constants/errors";
 import { LABELS } from "@/shared/constants/labels";
 import { ApiError } from "@/shared/types/apiError.types";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { cartKeys } from "@/features/cart";
 import { usePaymentNotice, type PaymentNotice } from "./usePaymentNotice/index";
 import { useRestoreCancelledCheckout } from "./useRestoreCancelledCheckout/index";
@@ -66,7 +67,9 @@ export function usePlaceOrderWithRazorpay() {
   }, [queryClient]);
 
   const invalidateCheckoutQuote = useCallback(() => {
-    void queryClient.invalidateQueries({ queryKey: checkoutKeys.quote(quoteInput) });
+    void queryClient.invalidateQueries({
+      queryKey: checkoutKeys.quote(quoteInput),
+    });
   }, [queryClient, quoteInput]);
 
   const clearCartCache = useCallback(() => {
@@ -172,9 +175,7 @@ export function usePlaceOrderWithRazorpay() {
         err instanceof ApiError && err.code === ERROR_CODES.ITEMS_UNAVAILABLE;
       const description = isItemsUnavailable
         ? LABELS.removeUnavailableToCheckout
-        : err && typeof err === "object" && "message" in err
-          ? String((err as { message: string }).message)
-          : LABELS.placeOrderFailedBody;
+        : getApiErrorMessage(err, LABELS.placeOrderFailedBody);
       showNotice({
         variant: isItemsUnavailable ? "warning" : "danger",
         title: isItemsUnavailable
@@ -193,12 +194,9 @@ export function usePlaceOrderWithRazorpay() {
     quote,
     isQuoteLoading,
     isQuoteError,
-    quoteErrorMessage:
-      quoteError instanceof ApiError
-        ? quoteError.message
-        : isQuoteError
-          ? LABELS.summaryLoadFailed
-          : undefined,
+    quoteErrorMessage: isQuoteError
+      ? getApiErrorMessage(quoteError, LABELS.summaryLoadFailed)
+      : undefined,
     isPending: placeOrder.isPending,
     paymentPhase,
     isPaymentOverlayOpen,

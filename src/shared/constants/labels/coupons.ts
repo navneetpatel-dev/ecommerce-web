@@ -163,7 +163,8 @@ export const couponsLabels = {
   includingShippingTaxes: "Including shipping and taxes",
   placeOrder: "Place order",
   placingOrder: "Placing your order…",
-  placingOrderBody: "Hang tight — we're reserving your items and preparing checkout.",
+  placingOrderBody:
+    "Hang tight — we're reserving your items and preparing checkout.",
   confirmingPayment: "Confirming your payment…",
   confirmingPaymentBody:
     "Payment received. We're verifying it with our payment partner.",
@@ -198,6 +199,8 @@ export const couponsLabels = {
   calculatingShippingTaxes: "Calculating shipping and taxes for your order…",
   summaryLoadFailed:
     "We couldn't calculate shipping and taxes. Go back to payment and try again.",
+  couldNotLoadShippingRates:
+    "Could not load shipping rates for this delivery area.",
   couponCodeLabel: "Coupon code",
   yourCart: "Your Cart",
   closeCart: "Close cart",

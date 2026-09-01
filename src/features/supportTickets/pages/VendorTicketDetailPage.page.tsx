@@ -5,6 +5,7 @@ import { DetailQuerySkeleton } from "@/shared/components/DetailQuerySkeleton.com
 import { RequirePermission } from "@/shared/components/RequirePermission.component";
 import { VENDOR_SUPPORT_ACCESS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
+import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useSupportTicket } from "../api/supportTickets.queries";
 import { TicketThread } from "../components/TicketThread.component";
@@ -28,9 +29,12 @@ function VendorTicketDetailContent() {
   if (isLoading) return <DetailQuerySkeleton className="space-y-3 py-4" />;
   if (isEmpty) {
     return (
-      <p className="border border-line bg-surface-raised px-5 py-10 text-center text-ink-muted">
-        {(error as Error | null)?.message || LABELS.ticketCouldNotLoadDetail}
-      </p>
+      <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+        <QueryErrorAlert
+          error={error}
+          fallback={LABELS.ticketCouldNotLoadDetail}
+        />
+      </div>
     );
   }
 

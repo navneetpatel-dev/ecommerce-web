@@ -14,6 +14,7 @@ import {
 import { DataTable } from "@/shared/components/DataTable.component";
 import { Plus, Bell } from "lucide-react";
 import { CreateCouponForm } from "../CreateCouponForm.component";
+import { FormError } from "@/shared/components/FormError.component";
 import type { CouponFormInput } from "../../schemas/coupons.schema";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
@@ -31,10 +32,18 @@ interface CouponsPageHeaderProps {
   form: UseFormReturn<CouponFormInput>;
   onSubmit: (data: CouponFormInput) => void;
   isPending: boolean;
+  formLevelError?: string | null;
 }
 
 export function CouponsPageHeader(props: CouponsPageHeaderProps) {
-  const { open, setOpen, form, onSubmit, isPending } = props;
+  const {
+    open,
+    setOpen,
+    form,
+    onSubmit,
+    isPending,
+    formLevelError = null,
+  } = props;
   const [bulkOpen, setBulkOpen] = useState(false);
   const [batchDetail, setBatchDetail] = useState<CouponBatch | null>(null);
   const batches = useCouponBatches();
@@ -94,6 +103,10 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
                 className={styles.form}
               >
                 <CreateCouponForm form={form} isPending={isPending} />
+                <FormError
+                  error={formLevelError}
+                  fallback={LABELS.couldNotCreateCoupon}
+                />
               </form>
             </DialogContent>
           </Dialog>

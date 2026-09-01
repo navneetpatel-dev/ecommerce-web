@@ -2,6 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LABELS } from "@/shared/constants/labels";
+import { useApiFormErrors } from "@/shared/hooks/useApiFormErrors.hook";
 import {
   VendorRegisterSchema,
   type VendorRegisterInput,
@@ -22,9 +24,15 @@ export function useVendorRegisterPage() {
     },
   });
 
+  const { formLevelError } = useApiFormErrors(
+    form,
+    register.error,
+    LABELS.registrationFailed,
+  );
+
   return {
     form,
-    error: register.isError,
+    error: formLevelError,
     isPending: register.isPending,
     onSubmit: (data: VendorRegisterInput) => register.mutate(data),
   };
