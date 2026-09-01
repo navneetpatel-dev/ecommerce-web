@@ -49,7 +49,7 @@ export function WalletStatementExportPanel() {
   };
 
   return (
-    <FormSection title={LABELS.walletStatement} columns={3}>
+    <FormSection title={LABELS.walletStatement} columns={3} contentClassName="xl:grid-cols-[1fr_1fr_auto]">
       <DateRangeFields
         from={from}
         to={to}
@@ -58,8 +58,8 @@ export function WalletStatementExportPanel() {
         fromId="wallet-statement-from"
         toId="wallet-statement-to"
       />
-      <div className="sm:col-span-2 xl:col-span-3">
-        <ButtonGroup align="start">
+      <div className="sm:col-span-2 xl:col-span-1 xl:flex xl:items-end">
+        <ButtonGroup align="start" className="w-full xl:w-auto">
           <Button
             type="button"
             variant="outline"

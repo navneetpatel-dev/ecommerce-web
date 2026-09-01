@@ -1,6 +1,8 @@
 "use client";
 
+import { Wallet } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { EmptyState } from "@/shared/components/EmptyState.component";
 import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
@@ -8,6 +10,7 @@ import { formatPoints } from "@/shared/utils/formatPoints";
 import { formatOrderDate } from "@/shared/utils/orderFormat";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { cn } from "@/shared/utils/cn";
 import type { WalletTransaction } from "@/shared/api/types";
 
 import { transactionSourceLabel } from "../utils/transactionSource";
@@ -39,7 +42,7 @@ function renderRow(
   return (
     <li
       key={row.id}
-      className="flex flex-wrap items-start justify-between gap-3 px-5 py-4"
+      className="grid gap-3 px-5 py-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-start md:gap-8 lg:px-6"
     >
       <div className="min-w-0">
         <p className="font-medium text-ink">{transactionSourceLabel(row)}</p>
@@ -89,49 +92,53 @@ export function WalletTransactionsList(props: WalletTransactionsListProps) {
 
   if (isLoading) {
     return (
-      <div className="space-y-3">
+      <div className="space-y-3 px-5 py-6 md:px-6">
         <Skeleton className="h-14 w-full" />
         <Skeleton className="h-14 w-full" />
+        <Skeleton className="h-14 w-full max-w-2xl" />
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="border border-line bg-surface-raised px-5 py-10 text-center">
-        <p className="text-body text-ink-muted">{LABELS.errorRetryHint}</p>
-        {onRetry ? (
-          <button
-            type="button"
-            onClick={onRetry}
-            className="mt-2 text-[0.875rem] font-medium text-brand underline-offset-4 hover:underline"
-          >
-            {LABELS.retry}
-          </button>
-        ) : null}
+      <div className="px-5 py-8 md:px-6">
+        <EmptyState
+          icon={Wallet}
+          message={LABELS.errorRetryHint}
+          actionLabel={onRetry ? LABELS.retry : undefined}
+          onAction={onRetry}
+          maxWidth="max-w-md"
+          className="py-6 md:py-8"
+        />
       </div>
     );
   }
 
   if (transactions.length === 0) {
     return (
-      <p className="border border-line bg-surface-raised px-5 py-10 text-center text-body text-ink-muted">
-        {LABELS.walletNoTransactions}
-      </p>
+      <EmptyState
+        icon={Wallet}
+        message={LABELS.walletNoTransactions}
+        maxWidth="max-w-md"
+        className="py-10 md:py-12"
+      />
     );
   }
 
   return (
     <>
-      <ul className="divide-y divide-line border border-line bg-surface-raised">
+      <ul className="divide-y divide-line">
         {transactions.map((row) => renderRow(row, onDownloadInvoice))}
       </ul>
       {hasNextPage ? (
-        <InfiniteLoadMore
-          hasNextPage={hasNextPage}
-          isFetchingNextPage={Boolean(isFetchingNextPage)}
-          onLoadMore={onLoadMore ?? noop}
-        />
+        <div className="border-t border-line px-5 py-4 lg:px-6">
+          <InfiniteLoadMore
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={Boolean(isFetchingNextPage)}
+            onLoadMore={onLoadMore ?? noop}
+          />
+        </div>
       ) : null}
     </>
   );
@@ -142,6 +149,7 @@ interface WalletBalanceCardProps {
   purchasedBalance?: number;
   promotionalBalance?: number;
   isLoading?: boolean;
+  className?: string;
 }
 
 export function WalletBalanceCard({
@@ -149,30 +157,45 @@ export function WalletBalanceCard({
   purchasedBalance,
   promotionalBalance,
   isLoading,
+  className,
 }: WalletBalanceCardProps) {
   return (
-    <div className="relative border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6">
+    <div
+      className={cn(
+        "relative border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6",
+        className,
+      )}
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand via-brand/70 to-transparent"
       />
-      <TextEyebrow brand>{LABELS.wallet}</TextEyebrow>
+      <TextEyebrow brand>{LABELS.walletBalance}</TextEyebrow>
       {isLoading ? (
         <Skeleton className="mt-3 h-10 w-40" />
       ) : (
-        <p className="mt-2 font-display text-[2rem] leading-none tabular-nums text-brand">
+        <p className="mt-2 font-display text-[2rem] leading-none tabular-nums text-brand md:text-[2.25rem]">
           {formatPoints(balance)}
         </p>
       )}
       <p className="mt-3 text-[0.875rem] text-ink-muted">
-        {LABELS.walletPageDescription}
+        {LABELS.walletPointsEqualsInr}
       </p>
       {!isLoading && (purchasedBalance != null || promotionalBalance != null) ? (
-        <p className="mt-2 text-[0.75rem] tabular-nums text-ink-faint">
-          {LABELS.walletPurchasedBalance} {formatPoints(purchasedBalance ?? 0)}
-          {" · "}
-          {LABELS.walletPromotionalBalance} {formatPoints(promotionalBalance ?? 0)}
-        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-md border border-line/80 bg-paper/40 px-3 py-2.5">
+            <p className="text-[0.75rem] text-ink-faint">{LABELS.walletPurchasedBalance}</p>
+            <p className="mt-0.5 text-body font-semibold tabular-nums text-ink">
+              {formatPoints(purchasedBalance ?? 0)}
+            </p>
+          </div>
+          <div className="rounded-md border border-line/80 bg-paper/40 px-3 py-2.5">
+            <p className="text-[0.75rem] text-ink-faint">{LABELS.walletPromotionalBalance}</p>
+            <p className="mt-0.5 text-body font-semibold tabular-nums text-ink">
+              {formatPoints(promotionalBalance ?? 0)}
+            </p>
+          </div>
+        </div>
       ) : null}
     </div>
   );

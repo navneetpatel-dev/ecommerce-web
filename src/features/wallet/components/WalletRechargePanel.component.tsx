@@ -11,15 +11,18 @@ import { formatPoints } from "@/shared/utils/formatPoints";
 import { useWalletRecharge } from "../hooks/useWalletRecharge.hook";
 import { validateWalletRechargeAmount } from "../utils/walletRechargeValidation";
 import type { WalletBalanceResponse } from "../api/wallet.api";
+import { cn } from "@/shared/utils/cn";
 
 interface WalletRechargePanelProps {
   balance: WalletBalanceResponse | undefined;
   isLoading?: boolean;
+  className?: string;
 }
 
 export function WalletRechargePanel({
   balance,
   isLoading,
+  className,
 }: WalletRechargePanelProps) {
   const { recharge, isBusy, error, successMessage, clearMessages } =
     useWalletRecharge();
@@ -65,7 +68,12 @@ export function WalletRechargePanel({
   };
 
   return (
-    <div className="border border-line bg-surface-raised p-5 shadow-elevation-1">
+    <div
+      className={cn(
+        "border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6",
+        className,
+      )}
+    >
       <h2 className="text-body font-semibold text-ink">{LABELS.walletRecharge}</h2>
       <p className="mt-1 text-[0.875rem] text-ink-muted">
         {LABELS.walletPointsEqualsInr}
@@ -79,7 +87,7 @@ export function WalletRechargePanel({
       ) : null}
 
       {presets.length > 0 ? (
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {presets.map((preset) => (
             <Button
               key={preset}
@@ -87,6 +95,7 @@ export function WalletRechargePanel({
               variant="outline"
               size="sm"
               disabled={isBusy}
+              className="h-auto min-h-9 justify-start px-3 py-2"
               onClick={() => void startRecharge(preset)}
             >
               <span className="flex flex-col items-start leading-tight">
@@ -118,31 +127,32 @@ export function WalletRechargePanel({
               : undefined
           }
         >
-          <NumberInput
-            id="wallet-recharge-amount"
-            value={customAmount}
-            min={limits?.minInr ?? 1}
-            max={limits?.maxInr}
-            step={50}
-            prefix="₹"
-            disabled={isBusy}
-            showSteppers={false}
-            onChange={(value) => {
-              setCustomAmount(value);
-              setValidationError(null);
-              clearMessages();
-            }}
-          />
+          <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+            <NumberInput
+              id="wallet-recharge-amount"
+              value={customAmount}
+              min={limits?.minInr ?? 1}
+              max={limits?.maxInr}
+              step={50}
+              prefix="₹"
+              disabled={isBusy}
+              showSteppers={false}
+              onChange={(value) => {
+                setCustomAmount(value);
+                setValidationError(null);
+                clearMessages();
+              }}
+            />
+            <Button
+              type="button"
+              fullWidth="mobile"
+              disabled={isBusy || !customAmount}
+              onClick={() => customAmount && void startRecharge(customAmount)}
+            >
+              {isBusy ? LABELS.loading : LABELS.walletRechargePay}
+            </Button>
+          </div>
         </FormFieldFrame>
-
-        <Button
-          type="button"
-          fullWidth="mobile"
-          disabled={isBusy || !customAmount}
-          onClick={() => customAmount && void startRecharge(customAmount)}
-        >
-          {isBusy ? LABELS.loading : LABELS.walletRechargePay}
-        </Button>
       </div>
 
       {customAmount && customAmount > 0 ? (
