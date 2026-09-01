@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { formatPoints, formatPointsCompact } from "../formatPoints";
+import {
+  formatPoints,
+  formatPointsCompact,
+  formatPointsHeaderBadge,
+} from "../formatPoints";
 
 describe("formatPoints", () => {
   it("formats whole points with pts suffix", () => {
@@ -19,5 +23,13 @@ describe("formatPointsCompact", () => {
 
   it("keeps small values unabbreviated", () => {
     assert.equal(formatPointsCompact(499), "499 pts");
+  });
+});
+
+describe("formatPointsHeaderBadge", () => {
+  it("omits pts suffix for compact header pills", () => {
+    assert.equal(formatPointsHeaderBadge(0), "0");
+    assert.equal(formatPointsHeaderBadge(1200), "1.2K");
+    assert.equal(formatPointsHeaderBadge(499), "499");
   });
 });

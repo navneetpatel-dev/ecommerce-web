@@ -60,7 +60,7 @@ export function CartCountBadge({
   const prevCount = useRef(count);
   const [pulseKey, setPulseKey] = useState(0);
   const visible = alwaysShow || count > 0;
-  const isWide = Boolean(label);
+  const display = label ?? (count > 99 ? "99+" : String(count));
 
   useEffect(() => {
     if (count === prevCount.current) return;
@@ -79,11 +79,7 @@ export function CartCountBadge({
           transition={{ type: "spring", stiffness: 520, damping: 22 }}
           className={cn(
             "pointer-events-none absolute z-[1] leading-none",
-            placement === "tab"
-              ? "right-0 top-0"
-              : isWide
-                ? "-right-3 -top-2"
-                : "-right-2.5 -top-2",
+            placement === "tab" ? "right-0 top-0" : "-right-2.5 -top-2",
             className,
           )}
         >
@@ -94,14 +90,14 @@ export function CartCountBadge({
             transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}
             className={cn(
               "flex items-center justify-center whitespace-nowrap rounded-full bg-brand font-mono font-medium leading-none text-paper tabular-nums",
+              placement === "header" &&
+                "shadow-[0_0_0_1px_rgba(0,0,0,0.28)]",
               size === "sm"
                 ? "h-4 min-w-4 px-0.5 text-[0.5625rem]"
-                : isWide
-                  ? "h-4 min-w-4 px-1 text-[0.5625rem]"
-                  : "h-4 min-w-4 px-1 text-[0.625rem]",
+                : "h-4 min-w-4 px-1 text-[0.625rem]",
             )}
           >
-            {label ?? (count > 99 ? "99+" : count)}
+            {display}
           </motion.span>
         </motion.span>
       )}
