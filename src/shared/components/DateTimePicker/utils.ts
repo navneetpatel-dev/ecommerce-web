@@ -6,6 +6,9 @@ export const MINUTES = Array.from({ length: 12 }, (_, i) =>
   String(i * 5).padStart(2, "0"),
 );
 
+/** Fixed locale — `undefined` differs between Node SSR and the browser and causes hydration mismatches. */
+const DISPLAY_LOCALE = "en-IN";
+
 export function startOfDay(d: Date) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
@@ -48,14 +51,14 @@ export function roundMinute(m: number) {
 
 export function formatDisplay(date: Date, mode: "date" | "datetime") {
   if (mode === "date") {
-    return new Intl.DateTimeFormat(undefined, {
-      day: "2-digit",
+    return new Intl.DateTimeFormat(DISPLAY_LOCALE, {
+      day: "numeric",
       month: "short",
       year: "numeric",
     }).format(date);
   }
-  return new Intl.DateTimeFormat(undefined, {
-    day: "2-digit",
+  return new Intl.DateTimeFormat(DISPLAY_LOCALE, {
+    day: "numeric",
     month: "short",
     year: "numeric",
     hour: "2-digit",
@@ -64,7 +67,7 @@ export function formatDisplay(date: Date, mode: "date" | "datetime") {
 }
 
 export function monthLabel(year: number, month: number) {
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat(DISPLAY_LOCALE, {
     month: "long",
     year: "numeric",
   }).format(new Date(year, month, 1));

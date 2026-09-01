@@ -17,8 +17,10 @@ describe("formatPoints", () => {
 });
 
 describe("formatPointsCompact", () => {
-  it("uses K suffix for thousands", () => {
+  it("uses K suffix with decimals for thousands", () => {
     assert.equal(formatPointsCompact(1200), "1.2K pts");
+    assert.equal(formatPointsCompact(2022), "2.02K pts");
+    assert.equal(formatPointsCompact(10000), "10K pts");
   });
 
   it("keeps small values unabbreviated", () => {
@@ -27,9 +29,11 @@ describe("formatPointsCompact", () => {
 });
 
 describe("formatPointsHeaderBadge", () => {
-  it("omits pts suffix for compact header pills", () => {
+  it("uses K notation with proper decimals", () => {
     assert.equal(formatPointsHeaderBadge(0), "0");
+    assert.equal(formatPointsHeaderBadge(2022), "2.02K");
     assert.equal(formatPointsHeaderBadge(1200), "1.2K");
+    assert.equal(formatPointsHeaderBadge(10000), "10K");
     assert.equal(formatPointsHeaderBadge(499), "499");
   });
 });

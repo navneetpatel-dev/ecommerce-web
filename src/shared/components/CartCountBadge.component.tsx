@@ -14,17 +14,18 @@ interface CartCountBadgeProps {
   /** Keep the pill visible when count is 0 (wallet balance). */
   alwaysShow?: boolean;
   /**
-   * `header` — floats outside the icon corner (desktop/top nav).
+   * `header` — small count pill on the icon corner (cart, wishlist).
+   * `header-wide` — wider labels (wallet K amounts) anchored outside the corner.
    * `tab` — sits in reserved padding inside the tab hit area (no clip).
    */
-  placement?: "header" | "tab";
+  placement?: "header" | "header-wide" | "tab";
 }
 
 interface IconBadgeAnchorProps {
   children: ReactNode;
   className?: string;
   /** Extra inset for tab-bar icons so the pill stays inside the hit area. */
-  variant?: "header" | "tab";
+  variant?: "header" | "header-wide" | "tab";
 }
 
 /**
@@ -40,7 +41,11 @@ export function IconBadgeAnchor({
     <span
       className={cn(
         "relative inline-flex shrink-0 items-center justify-center overflow-visible",
-        variant === "tab" ? "min-h-6 min-w-6 pt-1.5 pr-4" : "size-5",
+        variant === "tab"
+          ? "min-h-6 min-w-6 pt-1.5 pr-4"
+          : variant === "header-wide"
+            ? "size-5 mr-1.5"
+            : "size-5",
         className,
       )}
     >
@@ -79,7 +84,10 @@ export function CartCountBadge({
           transition={{ type: "spring", stiffness: 520, damping: 22 }}
           className={cn(
             "pointer-events-none absolute z-[1] leading-none",
-            placement === "tab" ? "right-0 top-0" : "-right-2.5 -top-2",
+            placement === "tab" && "right-0 top-0",
+            placement === "header" && "-right-2.5 -top-2",
+            placement === "header-wide" &&
+              "right-0 top-0 translate-x-[55%] -translate-y-[45%]",
             className,
           )}
         >
@@ -94,7 +102,9 @@ export function CartCountBadge({
                 "shadow-[0_0_0_1px_rgba(0,0,0,0.28)]",
               size === "sm"
                 ? "h-4 min-w-4 px-0.5 text-[0.5625rem]"
-                : "h-4 min-w-4 px-1 text-[0.625rem]",
+                : placement === "header-wide"
+                  ? "h-[0.9375rem] min-w-[0.9375rem] px-1 text-[0.5625rem]"
+                  : "h-4 min-w-4 px-1 text-[0.625rem]",
             )}
           >
             {display}

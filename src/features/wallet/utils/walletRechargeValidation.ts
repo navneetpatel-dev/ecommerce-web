@@ -5,11 +5,16 @@ export type WalletRechargeLimits = {
   pointsPerRupee?: number;
 };
 
+export type WalletRechargeValidationCode =
+  | "below-min"
+  | "above-max"
+  | "max-balance";
+
 export function validateWalletRechargeAmount(
   amountInr: number,
   currentBalance: number,
   limits: WalletRechargeLimits,
-): string | null {
+): WalletRechargeValidationCode | null {
   if (amountInr < limits.minInr) return "below-min";
   if (amountInr > limits.maxInr) return "above-max";
   const pointsPerRupee = limits.pointsPerRupee ?? 1;

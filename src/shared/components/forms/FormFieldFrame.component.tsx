@@ -46,7 +46,7 @@ export function FormFieldFrame({
           {error}
         </p>
       ) : null}
-      {!error && hint ? (
+      {hint ? (
         <p className="text-body-sm text-ink-muted">{hint}</p>
       ) : null}
     </div>

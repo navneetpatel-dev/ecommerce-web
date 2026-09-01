@@ -27,7 +27,7 @@ export function usePlatformSettingsForm() {
           codMinOrderValue: settings.codMinOrderValue ?? 0,
           codMaxOrderValue: settings.codMaxOrderValue ?? null,
           walletRechargeEnabled: settings.walletRechargeEnabled !== false,
-          walletMinRechargeInr: settings.walletMinRechargeInr ?? 100,
+          walletMinRechargeInr: settings.walletMinRechargeInr ?? 1,
           walletMaxRechargeInr: settings.walletMaxRechargeInr ?? 10000,
           walletMaxBalancePoints: settings.walletMaxBalancePoints ?? 50000,
           walletRechargePresetsInr: settings.walletRechargePresetsInr ?? [

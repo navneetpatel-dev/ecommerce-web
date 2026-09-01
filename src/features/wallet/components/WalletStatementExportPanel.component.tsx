@@ -1,55 +1,24 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { FormSection } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
+import { useReportExport } from "@/features/reports/hooks/useReportExport.hook";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
-import { applyPollOutcome } from "@/features/reports/hooks/useReportHubHelpers/index";
-import { runReportExport } from "@/features/reports/utils/runReportExport";
-import { isBenignExportError } from "@/features/reports/utils/asyncExportFlow";
-import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
-import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
-import { walletApi } from "../api/wallet.api";
 
 export function WalletStatementExportPanel() {
-  const [from, setFrom] = useState(defaultRange().from);
-  const [to, setTo] = useState(defaultRange().to);
-  const [exporting, setExporting] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
-  const abortRef = useRef<AbortController | null>(null);
-  const runRef = useRef<Promise<void> | null>(null);
+  const initialRange = useMemo(() => defaultRange(), []);
+  const [from, setFrom] = useState(initialRange.from);
+  const [to, setTo] = useState(initialRange.to);
 
-  const run = async (format: "xlsx" | "csv" | "pdf") => {
-    abortRef.current?.abort();
-    void runRef.current?.catch(() => undefined);
-    const controller = new AbortController();
-    abortRef.current = controller;
-    setExporting(true);
-    setMessage(null);
-    setError(null);
-    const task = runReportExport(async () => {
-      const result = await walletApi.exportStatement(from, to, format, {
-        signal: controller.signal,
-      });
-      if (result) applyPollOutcome(result, { setMessage, setError });
-    }, { onMessage: setMessage, onError: setError })
-      .catch((err) => {
-        if (!isBenignExportError(err)) {
-          setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
-        }
-      })
-      .finally(() => setExporting(false));
-    runRef.current = task;
-    await task;
-  };
+  const buildFilters = useCallback(() => ({ from, to }), [from, to]);
+  const exportHub = useReportExport("customer-wallet-statement", buildFilters);
 
   return (
-    <FormSection title={LABELS.walletStatement} columns={3} contentClassName="xl:grid-cols-[1fr_1fr_auto]">
+    <FormSection title={LABELS.walletStatement} columns={3}>
       <DateRangeFields
         from={from}
         to={to}
@@ -58,15 +27,15 @@ export function WalletStatementExportPanel() {
         fromId="wallet-statement-from"
         toId="wallet-statement-to"
       />
-      <div className="sm:col-span-2 xl:col-span-1 xl:flex xl:items-end">
-        <ButtonGroup align="start" className="w-full xl:w-auto">
+      <div className="sm:col-span-2 xl:col-span-3">
+        <ButtonGroup align="start">
           <Button
             type="button"
             variant="outline"
             fullWidth="mobile"
-            loading={exporting || globalLocked}
-            disabled={globalLocked}
-            onClick={() => void run("xlsx")}
+            loading={exportHub.exportingFormat === "xlsx"}
+            disabled={exportHub.locked && exportHub.exportingFormat !== "xlsx"}
+            onClick={exportHub.exportExcel}
           >
             {LABELS.exportExcel}
           </Button>
@@ -74,9 +43,9 @@ export function WalletStatementExportPanel() {
             type="button"
             variant="outline"
             fullWidth="mobile"
-            loading={exporting || globalLocked}
-            disabled={globalLocked}
-            onClick={() => void run("csv")}
+            loading={exportHub.exportingFormat === "csv"}
+            disabled={exportHub.locked && exportHub.exportingFormat !== "csv"}
+            onClick={exportHub.exportCsv}
           >
             {LABELS.exportCsv}
           </Button>
@@ -84,18 +53,20 @@ export function WalletStatementExportPanel() {
             type="button"
             variant="outline"
             fullWidth="mobile"
-            loading={exporting || globalLocked}
-            disabled={globalLocked}
-            onClick={() => void run("pdf")}
+            loading={exportHub.exportingFormat === "pdf"}
+            disabled={exportHub.locked && exportHub.exportingFormat !== "pdf"}
+            onClick={exportHub.exportPdf}
           >
             {LABELS.exportPdf}
           </Button>
         </ButtonGroup>
-        {message ? (
-          <p className="mt-2 text-body-sm text-ink-muted">{message}</p>
+        {exportHub.message ? (
+          <p className="mt-2 text-body-sm text-ink-muted" aria-live="polite">
+            {exportHub.message}
+          </p>
         ) : null}
-        {error ? (
-          <p className="mt-2 text-body-sm text-danger">{error}</p>
+        {exportHub.error ? (
+          <p className="mt-2 text-body-sm text-danger">{exportHub.error}</p>
         ) : null}
       </div>
     </FormSection>

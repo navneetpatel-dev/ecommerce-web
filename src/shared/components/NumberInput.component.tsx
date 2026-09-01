@@ -83,10 +83,42 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
       const raw = e.target.value;
       if (raw !== "" && !/^-?\d*\.?\d*$/.test(raw)) return;
-      setDraft(raw);
+
+      if (raw.trim() === "") {
+        setDraft(null);
+        onChange(undefined);
+        return;
+      }
+
       const parsed = parseValue(raw);
-      if (raw.trim() === "") onChange(undefined);
-      else if (parsed !== undefined) onChange(parsed);
+      if (parsed === undefined) {
+        setDraft(raw);
+        return;
+      }
+
+      if (max != null && parsed > max) {
+        setDraft(null);
+        onChange(max);
+        return;
+      }
+
+      if (min != null && parsed < min) {
+        const minDigits = String(Math.floor(min)).length;
+        const couldReachMin =
+          /^\d+$/.test(raw) &&
+          Number(
+            raw +
+              "9".repeat(Math.max(0, minDigits - raw.length)),
+          ) >= min;
+        if (!couldReachMin) {
+          setDraft(null);
+          onChange(min);
+          return;
+        }
+      }
+
+      setDraft(raw);
+      onChange(parsed);
     };
 
     const endDraft = (e: React.FocusEvent<HTMLInputElement>) => {

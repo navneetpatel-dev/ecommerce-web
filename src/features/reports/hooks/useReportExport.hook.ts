@@ -22,7 +22,9 @@ export function useReportExport(
   reportType: string,
   buildFilters: () => ReportFiltersInput,
 ) {
-  const [exporting, setExporting] = useState(false);
+  const [exportingFormat, setExportingFormat] = useState<ExportFormat | null>(
+    null,
+  );
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
@@ -41,7 +43,7 @@ export function useReportExport(
       abortRef.current?.abort();
       void runRef.current?.catch(() => undefined);
 
-      setExporting(true);
+      setExportingFormat(format);
       setMessage(null);
       setError(null);
       const filters = buildFilters();
@@ -71,15 +73,18 @@ export function useReportExport(
           if (isBenignExportError(err)) return;
           setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
         })
-        .finally(() => setExporting(false));
+        .finally(() => setExportingFormat(null));
 
       runRef.current = task;
+      void task;
     },
     [buildFilters, reportType],
   );
 
   return {
-    exporting: exporting || globalLocked,
+    exporting: exportingFormat !== null,
+    exportingFormat,
+    locked: globalLocked,
     message,
     error,
     exportExcel: () => runExport("xlsx"),

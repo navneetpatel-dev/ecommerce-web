@@ -5,7 +5,7 @@ import {
 } from "../walletRechargeValidation";
 
 const limits: WalletRechargeLimits = {
-  minInr: 100,
+  minInr: 1,
   maxInr: 10000,
   maxBalance: 50000,
   pointsPerRupee: 2,
@@ -13,7 +13,7 @@ const limits: WalletRechargeLimits = {
 
 describe("validateWalletRechargeAmount", () => {
   it("rejects amount below minimum", () => {
-    expect(validateWalletRechargeAmount(50, 0, limits)).toBe("below-min");
+    expect(validateWalletRechargeAmount(0, 0, limits)).toBe("below-min");
   });
 
   it("rejects amount above maximum", () => {
@@ -25,10 +25,10 @@ describe("validateWalletRechargeAmount", () => {
   });
 
   it("rejects when bonus points would exceed max balance", () => {
-    expect(validateWalletRechargeAmount(100, 49900, limits)).toBe("max-balance");
+    expect(validateWalletRechargeAmount(1, 49999, limits)).toBe("max-balance");
   });
 
   it("allows recharge when bonus points fit under cap", () => {
-    expect(validateWalletRechargeAmount(100, 49800, limits)).toBeNull();
+    expect(validateWalletRechargeAmount(1, 49998, limits)).toBeNull();
   });
 });

@@ -63,6 +63,7 @@ export function isBenignExportError(err: unknown): boolean {
     err.name === "ReportExportPollError" ||
     err.name === "ReportExportLockedError" ||
     err.name === "AbortError" ||
+    err.name === "TimeoutError" ||
     err.name === "DOMException"
   );
 }

@@ -27,18 +27,42 @@ export function WalletRechargePanel({
   const { recharge, isBusy, error, successMessage, clearMessages } =
     useWalletRecharge();
   const [customAmount, setCustomAmount] = useState<number | undefined>();
-  const [validationError, setValidationError] = useState<string | null>(null);
 
   const limits = balance?.limits;
   const presets = limits?.presetsInr ?? [];
   const rechargeEnabled = balance?.rechargeEnabled !== false;
   const pointsPerRupee = limits?.pointsPerRupee ?? 1;
 
-  const projectedBalance = useMemo(() => {
-    const current = balance?.points ?? 0;
-    const add = (customAmount ?? 0) * pointsPerRupee;
-    return current + add;
-  }, [balance?.points, customAmount, pointsPerRupee]);
+  const amountValidationCode = useMemo(() => {
+    if (customAmount == null || !Number.isFinite(customAmount) || customAmount <= 0) {
+      return null;
+    }
+    if (!limits) return null;
+    return validateWalletRechargeAmount(customAmount, balance?.points ?? 0, {
+      ...limits,
+      pointsPerRupee,
+    });
+  }, [customAmount, limits, balance?.points, pointsPerRupee]);
+
+  const amountError = useMemo(() => {
+    if (!amountValidationCode || !limits) return null;
+    if (amountValidationCode === "below-min") {
+      return formatLabel(LABELS.walletRechargeBelowMin, {
+        min: formatInr(limits.minInr),
+      });
+    }
+    if (amountValidationCode === "above-max") {
+      return formatLabel(LABELS.walletRechargeAboveMax, {
+        max: formatInr(limits.maxInr),
+      });
+    }
+    return formatLabel(LABELS.walletMaxBalanceReached, {
+      cap: formatPoints(limits.maxBalance),
+    });
+  }, [amountValidationCode, limits]);
+
+  const canSubmitCustomAmount =
+    customAmount != null && customAmount > 0 && amountValidationCode == null;
 
   const pointsForAmount = (amountInr: number) => amountInr * pointsPerRupee;
 
@@ -50,20 +74,28 @@ export function WalletRechargePanel({
       ...limits,
       pointsPerRupee,
     });
-    if (code === "below-min") return LABELS.walletRechargeBelowMin;
-    if (code === "above-max") return LABELS.walletRechargeAboveMax;
-    if (code === "max-balance") return LABELS.walletMaxBalanceReached;
+    if (code === "below-min") {
+      return formatLabel(LABELS.walletRechargeBelowMin, {
+        min: formatInr(limits.minInr),
+      });
+    }
+    if (code === "above-max") {
+      return formatLabel(LABELS.walletRechargeAboveMax, {
+        max: formatInr(limits.maxInr),
+      });
+    }
+    if (code === "max-balance") {
+      return formatLabel(LABELS.walletMaxBalanceReached, {
+        cap: formatPoints(limits.maxBalance),
+      });
+    }
     return null;
   };
 
   const startRecharge = async (amount: number) => {
     clearMessages();
     const message = validateAmount(amount);
-    if (message) {
-      setValidationError(message);
-      return;
-    }
-    setValidationError(null);
+    if (message) return;
     await recharge(amount);
   };
 
@@ -118,6 +150,7 @@ export function WalletRechargePanel({
         <FormFieldFrame
           label={LABELS.walletRechargeCustomAmount}
           htmlFor="wallet-recharge-amount"
+          error={amountError ?? undefined}
           hint={
             limits
               ? formatLabel(LABELS.walletRechargeLimitsHint, {
@@ -131,22 +164,22 @@ export function WalletRechargePanel({
             <NumberInput
               id="wallet-recharge-amount"
               value={customAmount}
-              min={limits?.minInr ?? 1}
+              min={limits?.minInr}
               max={limits?.maxInr}
               step={50}
               prefix="₹"
               disabled={isBusy}
               showSteppers={false}
+              error={Boolean(amountError)}
               onChange={(value) => {
                 setCustomAmount(value);
-                setValidationError(null);
                 clearMessages();
               }}
             />
             <Button
               type="button"
               fullWidth="mobile"
-              disabled={isBusy || !customAmount}
+              disabled={isBusy || !canSubmitCustomAmount}
               onClick={() => customAmount && void startRecharge(customAmount)}
             >
               {isBusy ? LABELS.loading : LABELS.walletRechargePay}
@@ -155,7 +188,7 @@ export function WalletRechargePanel({
         </FormFieldFrame>
       </div>
 
-      {customAmount && customAmount > 0 ? (
+      {canSubmitCustomAmount ? (
         <p className="mt-3 text-[0.875rem] text-ink-muted">
           {formatLabel(LABELS.walletRechargePreview, {
             points: formatPoints(pointsForAmount(customAmount)),
@@ -163,9 +196,6 @@ export function WalletRechargePanel({
         </p>
       ) : null}
 
-      {validationError ? (
-        <p className="mt-3 text-body-sm text-danger">{validationError}</p>
-      ) : null}
       {error ? <p className="mt-3 text-body-sm text-danger">{error}</p> : null}
       {successMessage ? (
         <p className="mt-3 text-body-sm text-success">{successMessage}</p>

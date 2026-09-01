@@ -83,6 +83,7 @@ function fetchWithTimeout(
 ): Promise<Response> {
   return fetch(`${BASE_URL}${path}`, {
     ...options,
+    cache: "no-store",
     credentials: "include",
     signal: AbortSignal.timeout(API_TIMEOUT_MS),
   });

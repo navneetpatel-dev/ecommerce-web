@@ -125,6 +125,7 @@ async function downloadBlob(path: string, fallbackName: string) {
   const token = getApiSessionAdapter().getAccessToken();
   const res = await fetch(`${CLIENT_API_BASE_URL}${path}`, {
     credentials: "include",
+    cache: "no-store",
     signal: AbortSignal.timeout(EXPORT_DOWNLOAD_TIMEOUT_MS),
     headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
   });
@@ -132,10 +133,14 @@ async function downloadBlob(path: string, fallbackName: string) {
     throw new Error(LABELS.couldNotLoadReport);
   }
   const blob = await res.blob();
+  triggerBlobDownload(blob, resolveDownloadFilename(res, fallbackName));
+}
+
+function triggerBlobDownload(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = resolveDownloadFilename(res, fallbackName);
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -149,6 +154,20 @@ function triggerPresignedDownload(url: string, fallbackName?: string) {
   a.click();
 }
 
+async function downloadPresignedUrl(url: string, fallbackName: string) {
+  try {
+    const res = await fetch(url, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(EXPORT_DOWNLOAD_TIMEOUT_MS),
+    });
+    if (!res.ok) throw new Error(LABELS.couldNotLoadReport);
+    const blob = await res.blob();
+    triggerBlobDownload(blob, resolveDownloadFilename(res, fallbackName));
+  } catch {
+    triggerPresignedDownload(url, fallbackName);
+  }
+}
+
 async function fetchExportStatus(
   id: string,
   ifNoneMatch?: string,
@@ -157,6 +176,7 @@ async function fetchExportStatus(
   const token = getApiSessionAdapter().getAccessToken();
   const res = await fetch(`${CLIENT_API_BASE_URL}${API.reports.exportStatus(id)}`, {
     credentials: "include",
+    cache: "no-store",
     signal,
     headers: {
       ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
@@ -215,7 +235,7 @@ export const reportsEngineApi = {
         ? buildReportExportFilenameFallback(reportType, from, to, extension)
         : `report-export_${id}.${extension}`;
     if (downloadUrl) {
-      triggerPresignedDownload(downloadUrl, fallback);
+      await downloadPresignedUrl(downloadUrl, fallback);
       return;
     }
     const status = await fetchExportStatus(id);
@@ -224,7 +244,7 @@ export const reportsEngineApi = {
       return;
     }
     if (status.downloadUrl) {
-      triggerPresignedDownload(status.downloadUrl, fallback);
+      await downloadPresignedUrl(status.downloadUrl, fallback);
       return;
     }
     await downloadBlob(API.reports.exportDownload(id), fallback);

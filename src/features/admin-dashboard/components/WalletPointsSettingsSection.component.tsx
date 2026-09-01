@@ -67,7 +67,7 @@ export function WalletPointsSettingsSection({
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.settingsWalletMinRecharge}>
         <NumberInput
-          value={form.walletMinRechargeInr ?? 100}
+          value={form.walletMinRechargeInr ?? 1}
           min={1}
           step={50}
           prefix="₹"

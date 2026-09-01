@@ -9,6 +9,7 @@ import {
 } from "@/features/checkout/utils/razorpayCheckoutConfig";
 import { getRazorpayCheckoutTheme } from "@/features/checkout/utils/razorpayTheme";
 import { LABELS } from "@/shared/constants/labels";
+import { ApiError } from "@/shared/types/apiError.types";
 import { walletApi } from "../api/wallet.api";
 import { walletKeys } from "../api/wallet.queries";
 
@@ -130,7 +131,11 @@ export function useWalletRecharge() {
         rzp.open();
       } catch (err) {
         setPhase("idle");
-        setError(err instanceof Error ? err.message : LABELS.paymentFailedBody);
+        setError(
+          err instanceof ApiError || err instanceof Error
+            ? err.message
+            : LABELS.paymentFailedBody,
+        );
       }
     },
     [queryClient],
