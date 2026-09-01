@@ -31,6 +31,7 @@ export const PATHS = {
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
   verifyEmail: '/verify-email',
+  authCallback: '/auth/callback',
   about: '/about',
   contact: '/contact',
   blog: '/blog',

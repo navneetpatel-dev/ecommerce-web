@@ -7,6 +7,8 @@ import {
   type ChangePasswordInput,
 } from "../schemas/auth.schema";
 import { useChangePassword } from "../api/auth.queries";
+import { useApiFormErrors } from "@/shared/hooks/useApiFormErrors.hook";
+import { LABELS } from "@/shared/constants/labels";
 
 export function useProfilePage() {
   const changePassword = useChangePassword();
@@ -14,12 +16,22 @@ export function useProfilePage() {
     resolver: zodResolver(ChangePasswordSchema),
   });
 
+  const { formLevelError } = useApiFormErrors(
+    form,
+    changePassword.error,
+    LABELS.couldNotChangePassword,
+    { currentPassword: "currentPassword" },
+  );
+
   return {
     form,
-    error: changePassword.error as Error | null,
+    error: formLevelError,
     isPending: changePassword.isPending,
     isSuccess: changePassword.isSuccess,
-    onSubmit: (data: ChangePasswordInput) => changePassword.mutate(data),
+    onSubmit: (data: ChangePasswordInput) => {
+      form.clearErrors();
+      changePassword.mutate(data);
+    },
     resetSuccess: () => {
       changePassword.reset();
       form.reset();

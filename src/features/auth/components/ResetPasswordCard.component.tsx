@@ -16,7 +16,7 @@ interface ResetPasswordInput {
 interface ResetPasswordCardProps {
   form: UseFormReturn<ResetPasswordInput>;
   onSubmit: (data: ResetPasswordInput) => void;
-  error: Error | null;
+  error: string | null;
   isPending: boolean;
 }
 

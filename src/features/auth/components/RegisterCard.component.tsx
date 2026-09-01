@@ -21,7 +21,7 @@ interface RegisterInput {
 interface RegisterCardProps {
   form: UseFormReturn<RegisterInput>;
   onSubmit: (data: RegisterInput) => void;
-  error: Error | null;
+  error: string | null;
   isPending: boolean;
 }
 

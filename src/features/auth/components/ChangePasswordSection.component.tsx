@@ -14,7 +14,7 @@ import type { ChangePasswordInput } from "../schemas/auth.schema";
 interface ChangePasswordSectionProps {
   form: UseFormReturn<ChangePasswordInput>;
   onSubmit: (data: ChangePasswordInput) => void;
-  error: Error | null;
+  error: string | null;
   isPending: boolean;
   isSuccess: boolean;
   onChangeAgain?: () => void;

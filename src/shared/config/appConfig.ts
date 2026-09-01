@@ -19,6 +19,11 @@ export const SITE_URL = (
 export const CLIENT_API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 /** Builds the redirect entry point for an OAuth provider flow. */
-export function oauthEntryPoint(provider: string): string {
-  return `${CLIENT_API_BASE_URL}/api/auth/${provider}`;
+export function oauthEntryPoint(
+  provider: string,
+  redirect?: string | null,
+): string {
+  const base = `${CLIENT_API_BASE_URL}/api/auth/${provider}`;
+  if (!redirect?.startsWith("/")) return base;
+  return `${base}?redirect=${encodeURIComponent(redirect)}`;
 }

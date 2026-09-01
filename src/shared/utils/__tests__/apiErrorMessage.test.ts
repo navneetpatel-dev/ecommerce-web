@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getApiErrorMessage,
   looksLikeInternalErrorMessage,
+  parseApiFieldErrors,
   sanitizeUserFacingMessage,
 } from "../apiErrorMessage";
 import { ApiError } from "@/shared/types/apiError.types";
@@ -42,5 +43,29 @@ describe("getApiErrorMessage", () => {
     expect(
       getApiErrorMessage(new Error("S3 bucket arn:aws:s3:::x"), "fb"),
     ).toBe("fb");
+  });
+
+  it("reads flat field maps from service validation errors", () => {
+    const err = new ApiError("VALIDATION_ERROR", "Validation failed", {
+      email: ["Invalid credentials"],
+    });
+    expect(getApiErrorMessage(err, "fallback")).toBe("Invalid credentials");
+  });
+});
+
+describe("parseApiFieldErrors", () => {
+  it("parses zod flatten fieldErrors", () => {
+    expect(
+      parseApiFieldErrors({
+        fieldErrors: { email: ["Invalid email"] },
+        formErrors: [],
+      }),
+    ).toEqual({ email: "Invalid email" });
+  });
+
+  it("parses flat service field maps", () => {
+    expect(
+      parseApiFieldErrors({ currentPassword: ["Current password is incorrect"] }),
+    ).toEqual({ currentPassword: "Current password is incorrect" });
   });
 });

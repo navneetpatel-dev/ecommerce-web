@@ -2,7 +2,13 @@ import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { oauthEntryPoint } from "@/shared/config/appConfig";
 
-export function OAuthButton({ provider }: { provider: string }) {
+export function OAuthButton({
+  provider,
+  redirect,
+}: {
+  provider: string;
+  redirect?: string | null;
+}) {
   const label =
     provider === "google"
       ? LABELS.continueWithGoogle
@@ -10,7 +16,7 @@ export function OAuthButton({ provider }: { provider: string }) {
 
   return (
     <Button variant="outline" fullWidth asChild>
-      <a href={oauthEntryPoint(provider)}>
+      <a href={oauthEntryPoint(provider, redirect)}>
         {provider === "google" ? (
           <svg aria-hidden viewBox="0 0 24 24" className="h-4 w-4 shrink-0">
             <path

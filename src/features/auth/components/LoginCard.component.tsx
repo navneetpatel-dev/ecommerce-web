@@ -13,8 +13,9 @@ import type { LoginInput } from "../schemas/auth.schema";
 interface LoginCardProps {
   form: UseFormReturn<LoginInput>;
   onSubmit: (data: LoginInput) => void;
-  error: Error | null;
+  error: string | null;
   isPending: boolean;
+  oauthRedirect?: string | null;
 }
 
 export function LoginCard({
@@ -22,6 +23,7 @@ export function LoginCard({
   onSubmit,
   error,
   isPending,
+  oauthRedirect,
 }: LoginCardProps) {
   const {
     register,
@@ -55,7 +57,7 @@ export function LoginCard({
 
       <div className="space-y-3">
         <OAuthDivider />
-        <OAuthButton provider="google" />
+        <OAuthButton provider="google" redirect={oauthRedirect} />
       </div>
     </AuthFormCard>
   );

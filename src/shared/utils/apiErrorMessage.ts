@@ -13,6 +13,7 @@ const API_ERROR_LABEL_KEYS: Partial<Record<string, keyof typeof LABELS>> = {
   UPLOAD_INVALID_DATA_URL: "uploadFailed",
   INTERNAL_ERROR: "unexpectedError",
   CONFIG_ERROR: "unexpectedError",
+  OAUTH_NOT_CONFIGURED: "oauthNotConfigured",
 };
 
 const INTERNAL_ERROR_PATTERNS = [
@@ -54,21 +55,54 @@ function labelForErrorCode(code: string | undefined): string | null {
   return LABELS[key];
 }
 
-function firstFieldError(details: unknown): string | null {
-  if (!details || typeof details !== "object") return null;
-  const fieldErrors = (
-    details as { fieldErrors?: Record<string, string[] | undefined> }
-  ).fieldErrors;
-  if (!fieldErrors || typeof fieldErrors !== "object") return null;
-  for (const messages of Object.values(fieldErrors)) {
+function flattenFieldMap(
+  fieldErrors: Record<string, string[] | undefined>,
+): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [key, messages] of Object.entries(fieldErrors)) {
     if (
       Array.isArray(messages) &&
       typeof messages[0] === "string" &&
       messages[0].trim()
     ) {
-      return sanitizeUserFacingMessage(messages[0], "");
+      out[key] = sanitizeUserFacingMessage(messages[0], messages[0]);
     }
   }
+  return out;
+}
+
+/** Parse API validation details into `{ fieldName: message }` (Zod flatten or flat maps). */
+export function parseApiFieldErrors(details: unknown): Record<string, string> {
+  if (!details || typeof details !== "object") return {};
+
+  const record = details as Record<string, unknown>;
+
+  if (record.fieldErrors && typeof record.fieldErrors === "object") {
+    return flattenFieldMap(
+      record.fieldErrors as Record<string, string[] | undefined>,
+    );
+  }
+
+  const out: Record<string, string> = {};
+  for (const [key, value] of Object.entries(record)) {
+    if (key === "formErrors") continue;
+    if (
+      Array.isArray(value) &&
+      typeof value[0] === "string" &&
+      value[0].trim()
+    ) {
+      out[key] = sanitizeUserFacingMessage(value[0], value[0]);
+    }
+  }
+  return out;
+}
+
+function firstFieldError(details: unknown): string | null {
+  const parsed = parseApiFieldErrors(details);
+  const first = Object.values(parsed)[0];
+  if (first?.trim()) return first;
+
+  if (!details || typeof details !== "object") return null;
   const formErrors = (details as { formErrors?: string[] }).formErrors;
   if (
     Array.isArray(formErrors) &&

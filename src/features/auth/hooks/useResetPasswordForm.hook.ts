@@ -8,6 +8,8 @@ import {
   type ResetPasswordInput,
 } from "../schemas/auth.schema";
 import { useResetPassword } from "../api/auth.queries";
+import { useApiFormErrors } from "@/shared/hooks/useApiFormErrors.hook";
+import { LABELS } from "@/shared/constants/labels";
 
 export function useResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -17,11 +19,21 @@ export function useResetPasswordForm() {
     defaultValues: { token: searchParams.get("token") || "" },
   });
 
-  const onSubmit = (data: ResetPasswordInput) => resetPassword.mutate(data);
+  const { formLevelError } = useApiFormErrors(
+    form,
+    resetPassword.error,
+    LABELS.resetPasswordFailed,
+    { token: "token" },
+  );
+
+  const onSubmit = (data: ResetPasswordInput) => {
+    form.clearErrors();
+    resetPassword.mutate(data);
+  };
 
   return {
     form,
-    error: resetPassword.error as Error | null,
+    error: formLevelError,
     isPending: resetPassword.isPending,
     onSubmit,
   };

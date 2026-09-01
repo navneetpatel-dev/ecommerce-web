@@ -30,6 +30,10 @@ export const authLabels = {
   enterCompleteOtp: "Enter the complete 6-digit code to verify.",
   orContinueWith: "Or continue with",
   continueWithGoogle: "Continue with Google",
+  oauthNotConfigured:
+    "Google sign-in is not set up yet. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET on the server.",
+  oauthSignInFailed: "Google sign-in failed. Please try again.",
+  oauthCompletingSignIn: "Completing sign-in…",
   authBrandHeadline: "Shop with clarity.",
   authBrandBody:
     "Curated finds, trusted sellers, and a checkout experience that stays out of your way.",

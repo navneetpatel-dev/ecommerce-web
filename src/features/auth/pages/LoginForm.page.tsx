@@ -14,6 +14,7 @@ export function LoginForm() {
         onSubmit={login.onSubmit}
         error={login.error}
         isPending={login.isPending}
+        oauthRedirect={login.redirect}
       />
     </AuthPageShell>
   );
