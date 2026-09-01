@@ -13,6 +13,7 @@ export type {
   CategoryBreadcrumbTrail,
 } from "./types/categorySeo.types";
 export { CategoryCard } from "./components/CategoryCard.component";
+export { CategoryMoreCard } from "./components/CategoryMoreCard.component";
 export { CategoriesMegaMenu } from "./components/CategoriesMegaMenu";
 export { CategoriesPage } from "./pages/CategoriesPage.page";
 export { CategoryPlpPage } from "./pages/CategoryPlpPage.page";

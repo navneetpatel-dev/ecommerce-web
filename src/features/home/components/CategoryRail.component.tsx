@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { CategoryCard, getRootCategories } from "@/features/categories";
+import { CategoryCard, CategoryMoreCard, getRootCategories } from "@/features/categories";
 import { CategoryGridSkeleton } from "@/shared/components/Skeletons.component";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
-import { cn } from "@/shared/utils/cn";
 import type { Category } from "@/shared/api/types";
 
 const HOME_CATEGORY_LIMIT = 10;
@@ -75,6 +74,7 @@ export function CategoryRail({
 
   const hasMore = roots.length > HOME_CATEGORY_LIMIT;
   const visible = hasMore ? roots.slice(0, HOME_CATEGORY_LIMIT) : roots;
+  const overflow = hasMore ? roots.slice(HOME_CATEGORY_LIMIT) : [];
 
   return (
     <section>
@@ -86,32 +86,11 @@ export function CategoryRail({
         ))}
 
         {hasMore ? (
-          <Link
+          <CategoryMoreCard
             href={PATHS.categories}
-            className={cn(
-              "group relative flex aspect-[4/3] flex-col items-start justify-between overflow-hidden rounded-md",
-              "border border-dashed border-line-strong bg-paper p-3 md:p-3.5",
-              "dark:bg-surface",
-              "transition-colors duration-200 hover:border-brand hover:bg-brand-subtle",
-              "outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-            )}
-          >
-            <span className="text-[0.75rem] font-medium uppercase tracking-[0.14em] text-ink-muted group-hover:text-brand">
-              {formatLabel(LABELS.moreCategoriesCount, {
-                count: String(roots.length - HOME_CATEGORY_LIMIT),
-              })}
-            </span>
-            <div className="flex w-full items-center justify-between gap-2">
-              <span className="text-body font-medium text-ink group-hover:text-brand">
-                {LABELS.browseCategories}
-              </span>
-              <ArrowUpRight
-                className="h-3.5 w-3.5 shrink-0 text-ink-faint transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand"
-                strokeWidth={1.5}
-                aria-hidden
-              />
-            </div>
-          </Link>
+            moreCount={roots.length - HOME_CATEGORY_LIMIT}
+            overflowCategories={overflow}
+          />
         ) : null}
       </div>
     </section>
