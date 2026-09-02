@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
+import { TableRowAction } from "@/shared/components/TableRowActions.component";
 import {
   DataTable,
   type DataTableColumn,
@@ -30,7 +31,9 @@ function creditAmountClass(isCredit: boolean) {
 }
 
 function rechargeIdFor(row: WalletTransaction): string | null {
-  return row.rechargeId ?? (row.referenceType === "TOPUP" ? row.referenceId : null);
+  return (
+    row.rechargeId ?? (row.referenceType === "TOPUP" ? row.referenceId : null)
+  );
 }
 
 export function WalletTransactionsTable({
@@ -50,12 +53,15 @@ export function WalletTransactionsTable({
     {
       id: "date",
       header: LABELS.walletColumnDate,
-      className: "whitespace-nowrap",
+      headerClassName: "w-[16%]",
+      className: "w-[16%] whitespace-nowrap",
       cell: (row) => formatOrderDate(row.createdAt),
     },
     {
       id: "description",
       header: LABELS.walletColumnDescription,
+      headerClassName: "w-[46%]",
+      className: "w-[46%]",
       truncate: true,
       cell: (row) => {
         const sourceLabel = transactionSourceLabel(row);
@@ -76,19 +82,22 @@ export function WalletTransactionsTable({
     {
       id: "amount",
       header: LABELS.walletColumnAmount,
-      headerClassName: "text-right",
-      className: "text-right whitespace-nowrap",
+      headerClassName: "w-[16%] text-right",
+      className: "w-[16%] whitespace-nowrap text-right",
       cell: (row) => {
         const isCredit = row.type === "CREDIT";
         const signedAmount = `${isCredit ? "+" : "−"}${formatPoints(row.amount)}`;
-        return <span className={creditAmountClass(isCredit)}>{signedAmount}</span>;
+        return (
+          <span className={creditAmountClass(isCredit)}>{signedAmount}</span>
+        );
       },
     },
     {
       id: "balance",
       header: LABELS.walletColumnBalance,
-      headerClassName: "text-right",
-      className: "text-right whitespace-nowrap tabular-nums text-ink-muted",
+      headerClassName: "w-[16%] text-right",
+      className:
+        "w-[16%] whitespace-nowrap text-right tabular-nums text-ink-muted",
       hideOnMobile: true,
       cell: (row) => formatPoints(row.balanceAfter),
     },
@@ -98,11 +107,17 @@ export function WalletTransactionsTable({
     <DataTable
       columns={columns}
       rows={transactions}
+      title={
+        <h2 className="text-body font-semibold text-ink">
+          {LABELS.walletTransactionHistory}
+        </h2>
+      }
       loading={loading}
       error={error}
       emptyMessage={LABELS.walletNoTransactions}
       onRefresh={onRetry}
       rowDetails={false}
+      tableLayout="fixed"
       getRowId={(row) => row.id}
       pagination={{
         page,
@@ -116,14 +131,17 @@ export function WalletTransactionsTable({
         const rechargeId = rechargeIdFor(row);
         if (!rechargeId || !onDownloadInvoice) return null;
         return (
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => onDownloadInvoice(rechargeId)}
-          >
-            {LABELS.walletDownloadRechargeInvoice}
-          </Button>
+          <TableRowAction>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="justify-start"
+              onClick={() => onDownloadInvoice(rechargeId)}
+            >
+              {LABELS.walletDownloadRechargeInvoice}
+            </Button>
+          </TableRowAction>
         );
       }}
       actionsHeader={LABELS.actions}

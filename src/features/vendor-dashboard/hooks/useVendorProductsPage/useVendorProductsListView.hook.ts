@@ -70,6 +70,7 @@ export function useVendorProductsListView(options: {
     products,
     page: table.page,
     totalPages: table.data?.totalPages,
+    total: table.data?.total,
     isDeleting: table.isDeleting,
     isSubmitting: table.isSubmitting,
     actionMessage: table.actionMessage,

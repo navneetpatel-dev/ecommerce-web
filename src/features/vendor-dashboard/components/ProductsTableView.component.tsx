@@ -1,5 +1,7 @@
 import { SkeletonRows } from "@/shared/components/Skeletons.component";
 import { PaginationContainer } from "@/shared/containers/PaginationContainer.container";
+import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
+import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { ProductsTableHeader, ProductsTableContent } from "./ProductsTable";
 
 interface ProductRow {
@@ -19,6 +21,7 @@ interface ProductsTableViewProps {
   products?: ProductRow[];
   page: number;
   totalPages?: number;
+  total?: number;
   isDeleting?: boolean;
   isSubmitting?: boolean;
   actionMessage?: string | null;
@@ -37,6 +40,7 @@ export function ProductsTableView({
   products,
   page,
   totalPages,
+  total,
   isDeleting,
   isSubmitting,
   actionMessage,
@@ -60,6 +64,15 @@ export function ProductsTableView({
         <p className="mb-3 text-body-sm text-ink-muted">{actionMessage}</p>
       ) : null}
 
+      {typeof total === "number" && total > 0 ? (
+        <PaginationResultSummary
+          from={(page - 1) * DEFAULT_PAGE_LIMIT + 1}
+          to={Math.min(page * DEFAULT_PAGE_LIMIT, total)}
+          total={total}
+          className="mb-3 text-body-sm text-ink-muted"
+        />
+      ) : null}
+
       {isLoading ? (
         <SkeletonRows count={5} height="h-10 w-full" />
       ) : (
@@ -74,13 +87,13 @@ export function ProductsTableView({
         />
       )}
 
-      {totalPages && totalPages > 1 && (
+      {totalPages ? (
         <PaginationContainer
           currentPage={page}
           totalPages={totalPages}
           onPageChange={onPageChange}
         />
-      )}
+      ) : null}
     </div>
   );
 }

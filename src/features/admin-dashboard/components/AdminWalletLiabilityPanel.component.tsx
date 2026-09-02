@@ -4,6 +4,8 @@ import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
+import { PaginationContainer } from "@/shared/containers/PaginationContainer.container";
+import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatPoints";
 import {
@@ -107,7 +109,9 @@ export function AdminWalletLiabilityPanel() {
                 {LABELS.reportTotalLiability}
               </p>
               <p className="text-[1.125rem] font-semibold tabular-nums text-ink">
-                {formatPoints(report.totalPointsLiability ?? report.totalLiability)}
+                {formatPoints(
+                  report.totalPointsLiability ?? report.totalLiability,
+                )}
               </p>
             </div>
             <div className="space-y-1">
@@ -139,6 +143,21 @@ export function AdminWalletLiabilityPanel() {
           <p className="text-[0.75rem] leading-relaxed text-ink-faint">
             {LABELS.reportLiabilityFifoNote}
           </p>
+
+          {report.pagination ? (
+            <PaginationResultSummary
+              from={
+                report.pagination.total > 0
+                  ? (page - 1) * report.pagination.limit + 1
+                  : 0
+              }
+              to={Math.min(
+                page * report.pagination.limit,
+                report.pagination.total,
+              )}
+              total={report.pagination.total}
+            />
+          ) : null}
 
           {report.rows.length > 0 ? (
             <div className="space-y-3">
@@ -186,33 +205,22 @@ export function AdminWalletLiabilityPanel() {
                   </tbody>
                 </table>
               </div>
-              {report.pagination && report.pagination.totalPages > 1 ? (
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    disabled={loading || page <= 1}
-                    onClick={() => void load(page - 1)}
-                  >
-                    {LABELS.previousPage}
-                  </Button>
-                  <span className="text-body-sm text-ink-muted">
-                    {page} / {report.pagination.totalPages}
-                  </span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    disabled={loading || page >= report.pagination.totalPages}
-                    onClick={() => void load(page + 1)}
-                  >
-                    {LABELS.nextPage}
-                  </Button>
-                </div>
-              ) : null}
             </div>
           ) : (
             <p className="text-body text-ink-muted">{LABELS.noReportData}</p>
           )}
+
+          {report.pagination ? (
+            <div
+              className={loading ? "pointer-events-none opacity-60" : undefined}
+            >
+              <PaginationContainer
+                currentPage={page}
+                totalPages={Math.max(1, report.pagination.totalPages)}
+                onPageChange={(nextPage) => void load(nextPage)}
+              />
+            </div>
+          ) : null}
         </>
       ) : null}
     </div>

@@ -114,10 +114,7 @@ export function DataTable<T>({
           </>
         )}
 
-        {pagination != null &&
-        (pagination.total == null
-          ? pagination.totalPages >= 1
-          : pagination.total > 0) ? (
+        {pagination != null ? (
           <div className="flex justify-center border-t border-line/70 pt-2">
             <PaginationContainer
               currentPage={pagination.page}

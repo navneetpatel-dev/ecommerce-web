@@ -3,8 +3,8 @@
 import type { ReactNode } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
+import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatLabel";
 
 export type DataTableHeaderProps = {
   title?: ReactNode;
@@ -38,13 +38,7 @@ export function DataTableHeader({
           )
         ) : null}
         {showSummary ? (
-          <p className="text-body-sm text-ink-muted">
-            {formatLabel(LABELS.showingResults, {
-              from: from!,
-              to: to!,
-              total: total!,
-            })}
-          </p>
+          <PaginationResultSummary from={from!} to={to!} total={total!} />
         ) : null}
       </div>
       <ButtonGroup className="sm:shrink-0">

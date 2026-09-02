@@ -61,7 +61,7 @@ export function DataTableDesktopTable<T>({
         )}
       >
         <TableHeader>
-          <TableRow className="border-line bg-paper/70 hover:bg-paper/70">
+          <TableRow className="border-line">
             {columns.map((column) => (
               <TableHead
                 key={column.id}
@@ -96,7 +96,7 @@ export function DataTableDesktopTable<T>({
                 key={rowId}
                 className={cn(
                   rowsInteractive &&
-                    "cursor-pointer hover:bg-brand-subtle/25 focus-visible:bg-brand-subtle/25",
+                    "cursor-pointer focus-visible:bg-[color-mix(in_srgb,var(--brand-subtle)_40%,var(--surface))]",
                 )}
                 tabIndex={rowsInteractive ? 0 : undefined}
                 aria-label={

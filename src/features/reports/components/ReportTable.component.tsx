@@ -43,6 +43,14 @@ export function ReportTable({
         totalPages: result.pagination.totalPages,
         onPageChange,
         total: result.pagination.total,
+        from:
+          result.pagination.total > 0
+            ? (result.pagination.page - 1) * result.pagination.limit + 1
+            : 0,
+        to: Math.min(
+          result.pagination.page * result.pagination.limit,
+          result.pagination.total,
+        ),
       }
     : undefined;
 

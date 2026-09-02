@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@/shared/components/ui/button";
+import { PaginationContainer } from "@/shared/containers/PaginationContainer.container";
+import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/orderFormat";
 
@@ -16,7 +17,12 @@ interface CashbackWriteOffReportTableProps {
       writtenOffAmount: number;
       bornBy: string;
     }>;
-    pagination?: { totalPages: number } | null;
+    pagination?: {
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    } | null;
   };
   loading: boolean;
   page: number;
@@ -49,6 +55,18 @@ export function CashbackWriteOffReportTable({
           </p>
         </div>
       </div>
+
+      {report.pagination ? (
+        <PaginationResultSummary
+          from={
+            report.pagination.total > 0
+              ? (page - 1) * report.pagination.limit + 1
+              : 0
+          }
+          to={Math.min(page * report.pagination.limit, report.pagination.total)}
+          total={report.pagination.total}
+        />
+      ) : null}
 
       {report.rows.length > 0 ? (
         <div className="space-y-3">
@@ -94,33 +112,20 @@ export function CashbackWriteOffReportTable({
               </tbody>
             </table>
           </div>
-          {report.pagination && report.pagination.totalPages > 1 ? (
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                disabled={loading || page <= 1}
-                onClick={() => onLoadPage(page - 1)}
-              >
-                {LABELS.previousPage}
-              </Button>
-              <span className="text-body-sm text-ink-muted">
-                {page} / {report.pagination.totalPages}
-              </span>
-              <Button
-                type="button"
-                variant="outline"
-                disabled={loading || page >= report.pagination.totalPages}
-                onClick={() => onLoadPage(page + 1)}
-              >
-                {LABELS.nextPage}
-              </Button>
-            </div>
-          ) : null}
         </div>
       ) : (
         <p className="text-body text-ink-muted">{LABELS.noReportData}</p>
       )}
+
+      {report.pagination ? (
+        <div className={loading ? "pointer-events-none opacity-60" : undefined}>
+          <PaginationContainer
+            currentPage={page}
+            totalPages={Math.max(1, report.pagination.totalPages)}
+            onPageChange={onLoadPage}
+          />
+        </div>
+      ) : null}
     </>
   );
 }

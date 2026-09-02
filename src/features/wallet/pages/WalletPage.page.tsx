@@ -17,8 +17,7 @@ export function WalletPage() {
   const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
   const balanceQuery = useWalletBalance();
   const transactionsQuery = useWalletTransactions(page, DEFAULT_PAGE_LIMIT);
-  const walletSectionLoading =
-    !authBootstrapped || balanceQuery.isLoading;
+  const walletSectionLoading = !authBootstrapped || balanceQuery.isLoading;
 
   const transactions = transactionsQuery.data?.items ?? [];
   const total = transactionsQuery.data?.total ?? 0;
@@ -66,19 +65,11 @@ export function WalletPage() {
         <WalletStatementExportPanel isLoading={walletSectionLoading} />
       </div>
 
-      <section className="mt-8 lg:mt-10" aria-labelledby="wallet-transaction-history">
-        <h2
-          id="wallet-transaction-history"
-          className="mb-4 text-body font-semibold text-ink"
-        >
-          {LABELS.walletTransactionHistory}
-        </h2>
+      <section className="mt-8 lg:mt-10">
         <WalletTransactionsTable
           transactions={transactions}
           loading={transactionsQuery.isLoading}
-          error={
-            transactionsQuery.isError ? LABELS.errorRetryHint : null
-          }
+          error={transactionsQuery.isError ? LABELS.errorRetryHint : null}
           onRetry={() => void transactionsQuery.refetch()}
           page={page}
           totalPages={totalPages}

@@ -14,7 +14,8 @@ export const TABLE_ACTIONS_HEAD_CLASS = [
   TABLE_ACTIONS_PIN_CLASS,
   "sticky right-0 z-[3]",
   "min-w-[4.5rem] w-[4.5rem]",
-  "bg-paper px-2 text-right",
+  "bg-[color-mix(in_srgb,var(--paper)_70%,var(--surface))] px-2 text-right",
+  "group-hover:bg-[color-mix(in_srgb,var(--paper)_70%,var(--surface))]",
   "text-[0.75rem] uppercase tracking-[0.04em]",
   "shadow-none",
 ].join(" ");
@@ -25,7 +26,9 @@ export const TABLE_ACTIONS_CELL_CLASS = [
   "sticky right-0 z-[2]",
   "min-w-[4.5rem] w-[4.5rem]",
   "bg-surface px-2 text-right align-middle whitespace-nowrap",
-  "group-hover:bg-brand-subtle/25 group-focus-within:bg-brand-subtle/25",
+  "transition-colors",
+  "group-hover:bg-[color-mix(in_srgb,var(--brand-subtle)_40%,var(--surface))]",
+  "group-focus-within:bg-[color-mix(in_srgb,var(--brand-subtle)_40%,var(--surface))]",
   "shadow-none",
 ].join(" ");
 

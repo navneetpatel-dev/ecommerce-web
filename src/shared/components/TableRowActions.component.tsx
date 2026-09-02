@@ -161,15 +161,20 @@ export function TableRowActions({
         <PopoverContent
           align="end"
           className={cn(
-            "z-[80] w-[12.5rem] space-y-1 p-2",
+            "z-[80] w-[12.5rem] overflow-hidden rounded-sm! p-0",
             "[&_[data-table-row-menu-item]]:w-full",
-            "[&_[data-table-row-menu-item]_button]:min-h-8 [&_[data-table-row-menu-item]_button]:w-full",
+            "[&_[data-table-row-menu-item]_button]:h-11 [&_[data-table-row-menu-item]_button]:min-h-11 [&_[data-table-row-menu-item]_button]:max-h-11",
+            "[&_[data-table-row-menu-item]_button]:w-full [&_[data-table-row-menu-item]_button]:rounded-none! [&_[data-table-row-menu-item]_button]:px-4",
+            "[&_[data-table-row-menu-item]_button]:border-transparent [&_[data-table-row-menu-item]_button]:shadow-none",
             menuClassName,
           )}
           onClick={(event) => event.stopPropagation()}
         >
           {menuItems.map((item, index) => (
-            <div key={index} className="min-w-0 w-full">
+            <div
+              key={index}
+              className="w-full min-w-0 overflow-hidden border-t border-line/70 first:rounded-t-sm first:border-t-0 last:rounded-b-sm"
+            >
               {item}
             </div>
           ))}

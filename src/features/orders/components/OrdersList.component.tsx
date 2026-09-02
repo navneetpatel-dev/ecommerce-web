@@ -1,15 +1,19 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { ChevronRight } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import type { Order } from "@/shared/api/types";
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
-import { PaginationContainer } from "@/shared/containers/PaginationContainer.container";
 import { ContinueShoppingLink } from "@/shared/components/ContinueShoppingLink.component";
+import { navigate } from "@/shared/utils/navigate";
 import { OrderStatusGroup } from "./OrderStatusGroup.component";
 import {
   countOrderItems,
@@ -26,6 +30,9 @@ interface OrdersListProps {
   pagination?: {
     currentPage: number;
     totalPages: number;
+    total: number;
+    from: number;
+    to: number;
     onPageChange: (page: number) => void;
   };
 }
@@ -40,7 +47,91 @@ function defaultHistoryRange() {
   };
 }
 
+const ORDER_COLUMNS: DataTableColumn<Order>[] = [
+  {
+    id: "order",
+    header: LABELS.ordersColumnOrder,
+    headerClassName: "w-[10%]",
+    className: "w-[10%] font-mono text-body-sm",
+    truncate: false,
+    cell: (order) => `#${shortOrderId(order.id)}`,
+  },
+  {
+    id: "placed",
+    header: LABELS.ordersColumnPlaced,
+    headerClassName: "w-[12%]",
+    className: "w-[12%] text-ink-muted",
+    cell: (order) => formatOrderDate(order.createdAt),
+  },
+  {
+    id: "items",
+    header: LABELS.ordersColumnItems,
+    headerClassName: "w-[38%]",
+    className: "w-[38%]",
+    truncate: false,
+    cell: (order) => {
+      const itemCount = countOrderItems(order);
+      const vendorCount = order.subOrders?.length ?? 0;
+      return (
+        <div className="min-w-0">
+          <p className="truncate text-body text-ink group-hover:text-brand">
+            {orderItemSummary(order)}
+          </p>
+          <p className="mt-0.5 text-[0.75rem] text-ink-faint">
+            {vendorCount}{" "}
+            {vendorCount === 1 ? LABELS.sellerSingular : LABELS.sellerPlural}
+            {" · "}
+            {itemCount}{" "}
+            {itemCount === 1 ? LABELS.itemSingular : LABELS.itemPlural}
+          </p>
+        </div>
+      );
+    },
+  },
+  {
+    id: "total",
+    header: LABELS.ordersColumnTotal,
+    headerClassName: "w-[14%] text-right",
+    className: "w-[14%] text-right",
+    cell: (order) => (
+      <span className="font-display text-[1.125rem] tabular-nums text-ink">
+        {formatInr(order.totalAmount)}
+      </span>
+    ),
+  },
+  {
+    id: "status",
+    header: LABELS.ordersColumnStatus,
+    headerClassName: "w-[22%]",
+    className: "w-[22%]",
+    truncate: false,
+    cell: (order) => (
+      <OrderStatusGroup
+        orderStatus={order.status}
+        paymentStatus={order.paymentStatus}
+        density="compact"
+      />
+    ),
+  },
+  {
+    id: "open",
+    header: <span className="sr-only">{LABELS.ordersColumnOpen}</span>,
+    headerClassName: "w-[4%]",
+    className: "w-[4%] text-right",
+    hideOnMobile: true,
+    truncate: false,
+    cell: () => (
+      <ChevronRight
+        className="ml-auto h-4 w-4 text-ink-faint transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-brand"
+        strokeWidth={1.5}
+        aria-hidden
+      />
+    ),
+  },
+];
+
 export function OrdersList({ orders, pagination }: OrdersListProps) {
+  const router = useRouter();
   const exportHistory = () => {
     const range = defaultHistoryRange();
     void reportsEngineApi.customerOrderHistoryExport(range);
@@ -79,115 +170,27 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
           </div>
         </motion.header>
 
-        {/* Column labels — desktop ledger header */}
-        <div className="mt-8 hidden border-b border-line pb-2 md:grid md:grid-cols-[7rem_8rem_minmax(0,1fr)_7rem_minmax(9rem,auto)_1.5rem] md:gap-4">
-          <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            {LABELS.ordersColumnOrder}
-          </span>
-          <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            {LABELS.ordersColumnPlaced}
-          </span>
-          <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            {LABELS.ordersColumnItems}
-          </span>
-          <span className="text-right text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            {LABELS.ordersColumnTotal}
-          </span>
-          <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-            {LABELS.ordersColumnStatus}
-          </span>
-          <span className="sr-only">{LABELS.ordersColumnOpen}</span>
-        </div>
-
-        <ul className="divide-y divide-line border-b border-line">
-          {orders.map((order, index) => {
-            const itemCount = countOrderItems(order);
-            const vendorCount = order.subOrders?.length ?? 0;
-
-            return (
-              <motion.li
-                key={order.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.28,
-                  delay: Math.min(index * 0.03, 0.15),
-                  ease: [0.2, 0, 0, 1],
-                }}
-              >
-                <Link
-                  href={PATHS.order(order.id)}
-                  className="group grid grid-cols-1 gap-3 py-4 transition-colors hover:bg-brand-subtle/40 md:grid-cols-[7rem_8rem_minmax(0,1fr)_7rem_minmax(9rem,auto)_1.5rem] md:items-center md:gap-4"
-                >
-                  <div className="flex items-center justify-between gap-2 md:block">
-                    <span className="font-mono text-body-sm text-ink">
-                      #{shortOrderId(order.id)}
-                    </span>
-                    <ChevronRight
-                      className="h-4 w-4 text-ink-faint transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-brand md:hidden"
-                      strokeWidth={1.5}
-                      aria-hidden
-                    />
-                  </div>
-
-                  <div className="text-body-sm text-ink-muted">
-                    {formatOrderDate(order.createdAt)}
-                    <span className="md:hidden">
-                      {" · "}
-                      {vendorCount}{" "}
-                      {vendorCount === 1
-                        ? LABELS.sellerSingular
-                        : LABELS.sellerPlural}
-                    </span>
-                  </div>
-
-                  <div className="min-w-0">
-                    <p className="truncate text-body text-ink group-hover:text-brand">
-                      {orderItemSummary(order)}
-                    </p>
-                    <p className="mt-0.5 hidden text-[0.75rem] text-ink-faint md:block">
-                      {vendorCount}{" "}
-                      {vendorCount === 1
-                        ? LABELS.sellerSingular
-                        : LABELS.sellerPlural}
-                      {" · "}
-                      {itemCount}{" "}
-                      {itemCount === 1
-                        ? LABELS.itemSingular
-                        : LABELS.itemPlural}
-                    </p>
-                  </div>
-
-                  <p className="font-display text-[1.125rem] tabular-nums text-ink md:text-right">
-                    {formatInr(order.totalAmount)}
-                  </p>
-
-                  <OrderStatusGroup
-                    orderStatus={order.status}
-                    paymentStatus={order.paymentStatus}
-                    density="compact"
-                  />
-
-                  <ChevronRight
-                    className="hidden h-4 w-4 justify-self-end text-ink-faint transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-brand md:block"
-                    strokeWidth={1.5}
-                    aria-hidden
-                  />
-                </Link>
-              </motion.li>
-            );
-          })}
-        </ul>
-
-        {pagination && pagination.totalPages > 1 && (
-          <div className="mt-8">
-            <PaginationContainer
-              currentPage={pagination.currentPage}
-              totalPages={pagination.totalPages}
-              onPageChange={pagination.onPageChange}
-            />
-          </div>
-        )}
+        <DataTable
+          className="mt-8"
+          columns={ORDER_COLUMNS}
+          rows={orders}
+          getRowId={(order) => order.id}
+          rowDetails={false}
+          tableLayout="fixed"
+          onRowClick={(order) => navigate(router, PATHS.order(order.id))}
+          pagination={
+            pagination
+              ? {
+                  page: pagination.currentPage,
+                  totalPages: pagination.totalPages,
+                  total: pagination.total,
+                  from: pagination.from,
+                  to: pagination.to,
+                  onPageChange: pagination.onPageChange,
+                }
+              : undefined
+          }
+        />
 
         <CustomerOrderHistoryPanel />
       </div>

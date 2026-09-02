@@ -4,6 +4,8 @@ import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
+import { PaginationContainer } from "@/shared/containers/PaginationContainer.container";
+import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/orderFormat";
 import { formatPoints } from "@/shared/utils/formatPoints";
@@ -21,6 +23,7 @@ export function AdminWalletRechargePanel() {
     setFrom,
     to,
     setTo,
+    page,
     loading,
     controlsDisabled,
     exportingFormat,
@@ -136,16 +139,41 @@ export function AdminWalletRechargePanel() {
             </div>
           </div>
 
+          {report.pagination ? (
+            <PaginationResultSummary
+              from={
+                report.pagination.total > 0
+                  ? (page - 1) * report.pagination.limit + 1
+                  : 0
+              }
+              to={Math.min(
+                page * report.pagination.limit,
+                report.pagination.total,
+              )}
+              total={report.pagination.total}
+            />
+          ) : null}
+
           {report.rows.length > 0 ? (
             <div className="overflow-x-auto rounded-md border border-line">
               <table className="min-w-full text-left text-[0.875rem]">
                 <thead className="border-b border-line bg-paper/60 text-ink-muted">
                   <tr>
-                    <th className="px-3 py-2 font-medium">{LABELS.reportUserId}</th>
-                    <th className="px-3 py-2 font-medium">{LABELS.reportAmountInr}</th>
-                    <th className="px-3 py-2 font-medium">{LABELS.reportPointsCredited}</th>
-                    <th className="px-3 py-2 font-medium">{LABELS.reportStatus}</th>
-                    <th className="px-3 py-2 font-medium">{LABELS.reportPaidAt}</th>
+                    <th className="px-3 py-2 font-medium">
+                      {LABELS.reportUserId}
+                    </th>
+                    <th className="px-3 py-2 font-medium">
+                      {LABELS.reportAmountInr}
+                    </th>
+                    <th className="px-3 py-2 font-medium">
+                      {LABELS.reportPointsCredited}
+                    </th>
+                    <th className="px-3 py-2 font-medium">
+                      {LABELS.reportStatus}
+                    </th>
+                    <th className="px-3 py-2 font-medium">
+                      {LABELS.reportPaidAt}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -174,6 +202,18 @@ export function AdminWalletRechargePanel() {
           ) : (
             <p className="text-body text-ink-muted">{LABELS.noReportData}</p>
           )}
+
+          {report.pagination ? (
+            <div
+              className={loading ? "pointer-events-none opacity-60" : undefined}
+            >
+              <PaginationContainer
+                currentPage={page}
+                totalPages={Math.max(1, report.pagination.totalPages)}
+                onPageChange={(nextPage) => void load(nextPage)}
+              />
+            </div>
+          ) : null}
         </>
       ) : null}
     </div>
