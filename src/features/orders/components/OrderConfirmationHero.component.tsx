@@ -22,11 +22,12 @@ interface OrderConfirmationHeroProps {
 export function OrderConfirmationHero({ orderId }: OrderConfirmationHeroProps) {
   return (
     <div className="flex flex-col gap-6 border-b border-line pb-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-      <div className="flex flex-col items-center gap-5 text-center sm:items-start sm:text-left">
-        <SuccessCheckmarkContainer />
-
-        <div className="min-w-0">
+      <div className="min-w-0 text-center sm:text-left">
+        <div className="flex items-center justify-center gap-2 sm:justify-start">
+          <SuccessCheckmarkContainer className="m-0 h-7 w-7 shrink-0" />
           <TextEyebrow brand>Thank you</TextEyebrow>
+        </div>
+        <div>
           <h1
             className="mt-1.5 font-display leading-[1.1] tracking-tight text-ink"
             style={{ fontSize: "var(--text-display-sm)" }}

@@ -20,10 +20,12 @@ export function OrderConfirmationSkeleton() {
       >
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-6 border-b border-line pb-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-            <div className="flex flex-col items-center gap-5 sm:items-start">
-              <Skeleton className="size-16 shrink-0 rounded-full" />
-              <div className="w-full space-y-2.5">
+            <div className="w-full">
+              <div className="flex items-center justify-center gap-2 sm:justify-start">
+                <Skeleton className="size-7 shrink-0 rounded-full" />
                 <Skeleton className="h-3 w-20" />
+              </div>
+              <div className="mt-2.5 space-y-2.5">
                 <Skeleton className="h-9 w-64 max-w-full" />
                 <Skeleton className="h-3 w-24" />
                 <Skeleton className="h-4 w-full max-w-lg" />
@@ -62,11 +64,14 @@ export function OrderConfirmationSkeleton() {
               </div>
             </div>
 
-            <div className="space-y-3 border border-line bg-surface-raised p-5 shadow-elevation-1 sm:p-6">
+            <div className="min-w-0">
               <Skeleton className="h-3 w-24" />
-              <Skeleton className="h-3 w-full" />
-              <Skeleton className="h-3 w-4/5" />
-              <Skeleton className="mt-4 h-7 w-1/2" />
+              <Skeleton className="mb-4 mt-2 h-7 w-40" />
+              <div className="space-y-3 border border-line bg-surface-raised p-5 shadow-elevation-1 sm:p-6">
+                <Skeleton className="h-3 w-full" />
+                <Skeleton className="h-3 w-4/5" />
+                <Skeleton className="mt-4 h-7 w-1/2" />
+              </div>
             </div>
           </div>
         </div>

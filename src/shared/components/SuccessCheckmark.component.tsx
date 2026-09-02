@@ -1,14 +1,18 @@
+import { cn } from "@/shared/utils/cn";
+
 interface SuccessCheckmarkProps {
   circleRef: React.RefObject<SVGCircleElement | null>;
   checkRef: React.RefObject<SVGPathElement | null>;
+  className?: string;
 }
 
 export function SuccessCheckmark({
   circleRef,
   checkRef,
+  className,
 }: SuccessCheckmarkProps) {
   return (
-    <div className="h-16 w-16 mx-auto mb-6">
+    <div className={cn("mx-auto mb-6 h-16 w-16", className)}>
       <svg viewBox="0 0 52 52" className="w-full h-full">
         <circle
           ref={circleRef}

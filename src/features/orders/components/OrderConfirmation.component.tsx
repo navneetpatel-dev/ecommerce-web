@@ -98,6 +98,11 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
             </div>
 
             <aside className="min-w-0 lg:sticky lg:top-24">
+              <TextEyebrow>{LABELS.orderTotalsHeading}</TextEyebrow>
+              <h2 className="mb-4 mt-1 font-display text-[1.375rem] text-ink">
+                {LABELS.whatYouPaid}
+              </h2>
+
               {orderId && isOrderLoading ? (
                 <div className="space-y-3 border border-line bg-surface-raised p-5 shadow-elevation-1 sm:p-6">
                   <Skeleton className="h-4 w-24" />
@@ -113,9 +118,6 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
                     aria-hidden
                     className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand via-brand/70 to-transparent"
                   />
-                  <TextEyebrow className="mb-4">
-                    {LABELS.orderTotalsHeading}
-                  </TextEyebrow>
                   <OrderMoneyBreakdown
                     order={order as Order}
                     className="space-y-2.5 text-[0.875rem]"
