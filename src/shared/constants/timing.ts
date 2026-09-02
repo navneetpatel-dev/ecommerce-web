@@ -48,3 +48,6 @@ export const SEARCH_DROPDOWN_CLOSE_MS = 200;
 
 /** API request timeout applied by the shared client (Optimization §9). */
 export const API_TIMEOUT_MS = 15_000;
+
+/** Token refresh may wait longer when the API is under load. */
+export const REFRESH_TIMEOUT_MS = 30_000;

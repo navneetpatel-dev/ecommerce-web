@@ -2,9 +2,13 @@ import { getApiSessionAdapter } from "@/shared/api/sessionAdapter";
 import { API } from "@/shared/constants/apiRoutes";
 import { ERROR_CODES, ERROR_MESSAGES } from "@/shared/constants/errors";
 import { BEARER_PREFIX } from "@/shared/constants/http";
-import { API_TIMEOUT_MS } from "@/shared/constants/timing";
+import { API_TIMEOUT_MS, REFRESH_TIMEOUT_MS } from "@/shared/constants/timing";
 import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
 import { ApiError } from "@/shared/types/apiError.types";
+import {
+  isDefinitiveAuthErrorCode,
+  isTransientNetworkError,
+} from "@/shared/utils/authSessionError";
 
 const BASE_URL = CLIENT_API_BASE_URL;
 
@@ -19,8 +23,14 @@ interface ApiFailure {
   error: { code: string; message: string; details?: unknown };
 }
 
+type RequestConfig = {
+  timeoutMs?: number;
+  /** Prevents infinite 401 → refresh → retry loops. */
+  retriedAfter401?: boolean;
+};
+
 let isRefreshing = false;
-let refreshPromise: Promise<boolean> | null = null;
+let refreshPromise: Promise<void> | null = null;
 
 function persistAccessToken(accessToken: string) {
   getApiSessionAdapter().persistAccessToken(accessToken);
@@ -28,6 +38,10 @@ function persistAccessToken(accessToken: string) {
 
 function clearPersistedSession() {
   getApiSessionAdapter().clearSession();
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function parseResponseBody(
@@ -73,10 +87,6 @@ function assertSuccess<T>(
   return body.data as T;
 }
 
-/**
- * Performs `fetch` against the API with the shared timeout (Optimization §9:
- * bounded latency — a hung request must not freeze UI state forever).
- */
 function fetchWithTimeout(
   path: string,
   options: RequestInit,
@@ -90,55 +100,90 @@ function fetchWithTimeout(
   });
 }
 
-/** Refreshes the access token once; throws a typed session-expiry error on failure. */
-async function refreshSessionOrThrow(): Promise<void> {
+async function performRefreshAttempt(): Promise<
+  "ok" | "auth_failure" | "transient_failure"
+> {
+  try {
+    const res = await fetch(`${BASE_URL}${API.auth.refresh}`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      signal: AbortSignal.timeout(REFRESH_TIMEOUT_MS),
+    });
+
+    if (!res.ok) {
+      let code: string | undefined;
+      try {
+        const body = await parseResponseBody(res);
+        if (body && !("success" in body && body.success)) {
+          code = (body as ApiFailure).error?.code;
+        }
+      } catch {
+        /* non-JSON error body */
+      }
+      if (res.status === 401 || isDefinitiveAuthErrorCode(code)) {
+        return "auth_failure";
+      }
+      return "transient_failure";
+    }
+
+    const body = await parseResponseBody(res);
+    if (body && "success" in body && body.success) {
+      persistAccessToken((body.data as { accessToken: string }).accessToken);
+      return "ok";
+    }
+    return "auth_failure";
+  } catch (err) {
+    if (isTransientNetworkError(err)) return "transient_failure";
+    return "auth_failure";
+  }
+}
+
+async function refreshSessionWithRetries(): Promise<void> {
   const throwSessionExpired = () =>
     new ApiError(ERROR_CODES.UNAUTHORIZED, ERROR_MESSAGES.SESSION_EXPIRED);
+  const throwTransient = () =>
+    new ApiError(
+      ERROR_CODES.REQUEST_FAILED,
+      "Could not reach the server. Please try again.",
+    );
 
-  if (isRefreshing && refreshPromise) {
-    // Another in-flight request already started the refresh — share its fate.
-    if (!(await refreshPromise)) {
+  const maxAttempts = 3;
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    const outcome = await performRefreshAttempt();
+    if (outcome === "ok") return;
+    if (outcome === "auth_failure") {
       clearPersistedSession();
       throw throwSessionExpired();
     }
+    if (attempt < maxAttempts - 1) {
+      await sleep(500 * (attempt + 1));
+    }
+  }
+
+  throw throwTransient();
+}
+
+/** Refreshes the access token once; throws on definitive auth failure. */
+async function refreshSessionOrThrow(): Promise<void> {
+  if (isRefreshing && refreshPromise) {
+    await refreshPromise;
     return;
   }
 
   isRefreshing = true;
-  refreshPromise = fetch(`${BASE_URL}${API.auth.refresh}`, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    signal: AbortSignal.timeout(API_TIMEOUT_MS),
-  })
-    .then(async (res) => {
-      if (!res.ok) {
-        clearPersistedSession();
-        return false;
-      }
-      const body = await parseResponseBody(res);
-      if (body && "success" in body && body.success) {
-        persistAccessToken((body.data as { accessToken: string }).accessToken);
-        return true;
-      }
-      return false;
-    })
-    .catch(() => {
-      clearPersistedSession();
-      return false;
-    })
-    .finally(() => {
-      isRefreshing = false;
-      refreshPromise = null;
-    });
+  refreshPromise = refreshSessionWithRetries().finally(() => {
+    isRefreshing = false;
+    refreshPromise = null;
+  });
 
-  if (!(await refreshPromise)) throw throwSessionExpired();
+  await refreshPromise;
 }
 
 async function request<T>(
   path: string,
   options: RequestInit = {},
-  config?: { timeoutMs?: number },
+  config?: RequestConfig,
 ): Promise<T> {
   const token = getApiSessionAdapter().getAccessToken();
 
@@ -156,11 +201,13 @@ async function request<T>(
   );
 
   if (res.status === 401) {
+    if (config?.retriedAfter401) {
+      throw new ApiError(ERROR_CODES.UNAUTHORIZED, ERROR_MESSAGES.SESSION_EXPIRED);
+    }
     await refreshSessionOrThrow();
-    return request<T>(path, options, config);
+    return request<T>(path, options, { ...config, retriedAfter401: true });
   }
 
-  // Soft-delete and similar endpoints return 204 with an empty body.
   if (res.status === 204 || res.status === 205) {
     return undefined as T;
   }
@@ -172,21 +219,29 @@ async function request<T>(
 async function requestWithResponse<T>(
   path: string,
   options: RequestInit = {},
+  config?: RequestConfig,
 ): Promise<ApiSuccess<T>> {
   const token = getApiSessionAdapter().getAccessToken();
 
-  const res = await fetchWithTimeout(path, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
-      ...options.headers,
+  const res = await fetchWithTimeout(
+    path,
+    {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
+        ...options.headers,
+      },
     },
-  });
+    config?.timeoutMs,
+  );
 
   if (res.status === 401) {
+    if (config?.retriedAfter401) {
+      throw new ApiError(ERROR_CODES.UNAUTHORIZED, ERROR_MESSAGES.SESSION_EXPIRED);
+    }
     await refreshSessionOrThrow();
-    return requestWithResponse<T>(path, options);
+    return requestWithResponse<T>(path, options, { ...config, retriedAfter401: true });
   }
 
   const body = await parseResponseBody(res);
@@ -195,8 +250,7 @@ async function requestWithResponse<T>(
 }
 
 export const apiClient = {
-  get: <T>(path: string, config?: { timeoutMs?: number }) =>
-    request<T>(path, {}, config),
+  get: <T>(path: string, config?: RequestConfig) => request<T>(path, {}, config),
   getWithResponse: <T>(path: string) => requestWithResponse<T>(path),
   post: <T>(path: string, body?: unknown, init?: RequestInit) =>
     request<T>(path, {

@@ -7,6 +7,7 @@ import { authApi } from "../api/auth.api";
 import { cartKeys } from "@/features/cart";
 import { registerApiSessionAdapter } from "@/shared/api/sessionAdapter";
 import { STORAGE_KEYS } from "@/shared/constants/storage";
+import { isDefinitiveAuthFailure } from "@/shared/utils/authSessionError";
 
 const storeSessionAdapter = {
   getAccessToken: () => useAuthStore.getState().accessToken,
@@ -61,11 +62,13 @@ export function useAuthBootstrap() {
         setSession(accessToken, fresh);
         localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
         localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(fresh));
-      } catch {
+      } catch (err) {
         if (cancelled) return;
-        clearSession();
-        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-        localStorage.removeItem(STORAGE_KEYS.SESSION);
+        if (isDefinitiveAuthFailure(err)) {
+          clearSession();
+          localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+          localStorage.removeItem(STORAGE_KEYS.SESSION);
+        }
       } finally {
         if (!cancelled) {
           setAuthBootstrapped(true);

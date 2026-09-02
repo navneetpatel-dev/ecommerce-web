@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { ArrowRight, X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS, ROLES } from "@/shared/constants/labels";
 import type { Category, CurrentUser } from "@/shared/api/types";
 import { resolveCategoryIcon, categoryHref } from "@/features/categories";
 import { cn } from "@/shared/utils/cn";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { useIsAuthenticated } from "@/shared/hooks/useRequireAuth.hook";
 
 const navLinks = [
   { href: PATHS.products, label: LABELS.allProducts },
@@ -28,6 +31,9 @@ export function MobileNavDrawer({
   currentUser,
   categories,
 }: MobileNavDrawerProps) {
+  const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
+  const isAuthenticated = useIsAuthenticated();
+
   if (!open) return null;
 
   return (
@@ -139,7 +145,18 @@ export function MobileNavDrawer({
             </ul>
           )}
 
-          {currentUser && currentUser.role === ROLES.CUSTOMER && (
+          {!authBootstrapped ? (
+            <div className="mt-4 space-y-2 px-3">
+              <Skeleton className="h-4 w-16" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          ) : null}
+
+          {authBootstrapped &&
+          isAuthenticated &&
+          currentUser &&
+          currentUser.role === ROLES.CUSTOMER ? (
             <>
               <div className="px-3 py-2 text-body-sm font-medium text-ink-muted mt-4">
                 {LABELS.account}
@@ -180,9 +197,9 @@ export function MobileNavDrawer({
                 {LABELS.profile}
               </Link>
             </>
-          )}
+          ) : null}
 
-          {!currentUser && (
+          {authBootstrapped && !isAuthenticated ? (
             <Link
               href={PATHS.login}
               onClick={onClose}
@@ -190,7 +207,7 @@ export function MobileNavDrawer({
             >
               {LABELS.logIn}
             </Link>
-          )}
+          ) : null}
         </nav>
       </div>
     </div>

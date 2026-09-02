@@ -10,6 +10,9 @@ import {
   isVendorRole,
 } from "@/shared/utils/roles";
 import type { CurrentUser } from "@/shared/api/types";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { useIsAuthenticated } from "@/shared/hooks/useRequireAuth.hook";
 import { AccountMenu } from "./AccountMenu.component";
 
 interface AccountSectionProps {
@@ -23,7 +26,22 @@ export function AccountSection({
   isTransparent,
   showStorefrontChrome,
 }: AccountSectionProps) {
-  if (!currentUser) {
+  const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
+  const isAuthenticated = useIsAuthenticated();
+
+  if (!authBootstrapped) {
+    return (
+      <Skeleton
+        className={cn(
+          "hidden sm:block rounded-full",
+          "h-8 w-8",
+        )}
+        aria-hidden
+      />
+    );
+  }
+
+  if (!isAuthenticated || !currentUser) {
     return (
       <Link
         href={PATHS.login}
