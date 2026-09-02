@@ -8,6 +8,7 @@ import {
   getReportExportErrorMessage,
   isBenignExportError,
   normalizeExportFormat,
+  reportsEngineApi,
   runReportExport,
   useReportExportLockStore,
   type ExportFileFormat,
@@ -15,6 +16,12 @@ import {
 import { walletApi } from "../api/wallet.api";
 
 export { defaultRange };
+
+const WALLET_STATEMENT_REPORT_TYPE = "customer-wallet-statement";
+
+function isInvalidDateRange(from: string, to: string): boolean {
+  return from > to;
+}
 
 export function useWalletStatementExport() {
   const initialRange = defaultRange();
@@ -34,23 +41,41 @@ export function useWalletStatementExport() {
 
   const runExport = useCallback(
     (format: ExportFileFormat) => {
+      if (isInvalidDateRange(from, to)) {
+        setError(LABELS.reportInvalidRange);
+        setMessage(null);
+        return;
+      }
+
       abortRef.current?.abort();
       void runRef.current?.catch(() => undefined);
 
       setExportingFormat(format);
-      setMessage(null);
+      setMessage(LABELS.reportAsyncQueued);
       setError(null);
       const controller = new AbortController();
       abortRef.current = controller;
+      const range = { from, to };
 
       const task = runReportExport(
         async () => {
-          const result = await walletApi.exportStatement(filters(), format);
+          const result = await walletApi.exportStatement(range, format);
           await followAsyncExport(
             result,
             normalizeExportFormat(result.format ?? format),
             { setMessage, setError },
-            { signal: controller.signal },
+            {
+              signal: controller.signal,
+              downloadReady: async (exportId, fmt) => {
+                await reportsEngineApi.downloadExport(
+                  exportId,
+                  WALLET_STATEMENT_REPORT_TYPE,
+                  range.from,
+                  range.to,
+                  fmt,
+                );
+              },
+            },
           );
         },
         { onMessage: setMessage, onError: setError },
@@ -64,7 +89,7 @@ export function useWalletStatementExport() {
       runRef.current = task;
       void task;
     },
-    [filters],
+    [from, to],
   );
 
   return {

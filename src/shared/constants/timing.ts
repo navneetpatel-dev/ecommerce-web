@@ -37,8 +37,8 @@ export const EXPORT_POLL_MAX_MS = 8_000;
 /** Stop polling export status after this duration. */
 export const EXPORT_POLL_MAX_DURATION_MS = 5 * 60_000;
 
-/** Per status poll request — keeps hung workers from blocking the UI indefinitely. */
-export const EXPORT_POLL_REQUEST_TIMEOUT_MS = 25_000;
+/** Per status poll request — status should respond quickly; retry on slow polls. */
+export const EXPORT_POLL_REQUEST_TIMEOUT_MS = 10_000;
 
 /** Blob / presigned download timeout for completed exports. */
 export const EXPORT_DOWNLOAD_TIMEOUT_MS = 120_000;

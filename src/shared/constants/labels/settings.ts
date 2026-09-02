@@ -52,6 +52,7 @@ export const settingsLabels = {
   reportAsyncCached: "Reusing recent export — downloading…",
   reportAsyncDeduped: "Export already in progress — waiting for file…",
   reportAsyncFailed: "Export failed. Try again with a narrower date range.",
+  reportInvalidRange: "The end date must be on or after the start date.",
   reportLoadError: "Could not load report.",
   reportCatalogError: "Could not load report catalog.",
   reportExportsOps: "Export queue (ops)",

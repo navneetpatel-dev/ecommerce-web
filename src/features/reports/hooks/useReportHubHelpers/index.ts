@@ -84,12 +84,23 @@ function filterDatePart(iso: string | null | undefined): string | undefined {
   return iso.slice(0, 10);
 }
 
+function isTransientPollError(err: unknown): boolean {
+  if (!(err instanceof Error)) return true;
+  if (err.name === "TimeoutError" || err.name === "AbortError") return true;
+  const message = err.message.toLowerCase();
+  return (
+    message.includes("timed out") ||
+    message.includes("failed to fetch") ||
+    message.includes("network")
+  );
+}
+
 function isExportNotReadyError(err: unknown): boolean {
   if (!(err instanceof Error)) return false;
   const status = (err as Error & { status?: number }).status;
   if (status === 422) return true;
   // Internal status detection — not shown to users.
-   
+
   const message = err.message.toLowerCase();
   return message.includes("not ready") || message.includes("not ready yet");
 }
@@ -156,11 +167,29 @@ export async function pollExportUntilReady(
       return { outcome: "aborted" };
     }
 
-    const status = await reportsEngineApi.exportStatus(
-      exportId,
-      etag,
-      pollRequestSignal(options?.signal),
-    );
+    let status;
+    try {
+      status = await reportsEngineApi.exportStatus(
+        exportId,
+        etag,
+        pollRequestSignal(options?.signal),
+      );
+    } catch (err) {
+      if (options?.signal?.aborted) {
+        return { outcome: "aborted" };
+      }
+      if (!isTransientPollError(err)) {
+        throw err;
+      }
+      try {
+        await sleep(interval, options?.signal);
+      } catch {
+        return { outcome: "aborted" };
+      }
+      interval = Math.min(interval * 2, EXPORT_POLL_MAX_MS);
+      continue;
+    }
+
     if ("notModified" in status) {
       etag = status.etag;
       try {

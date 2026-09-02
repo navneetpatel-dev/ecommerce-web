@@ -1,5 +1,6 @@
 import { LABELS } from "@/shared/constants/labels";
 import { getReportExportErrorMessage } from "./reportExportErrorMessage";
+import { isBenignExportError } from "./asyncExportFlow";
 import { ReportExportPollError } from "./reportExportPollError";
 import { useReportExportLockStore } from "../stores/reportExportLock.store";
 
@@ -63,6 +64,11 @@ export async function runReportExport(
         handlers?.onError?.(err.displayMessage);
         handlers?.onMessage?.(null);
       }
+      throw err;
+    }
+    if (isBenignExportError(err)) {
+      handlers?.onError?.(null);
+      handlers?.onMessage?.(null);
       throw err;
     }
     handlers?.onError?.(getReportExportErrorMessage(err));

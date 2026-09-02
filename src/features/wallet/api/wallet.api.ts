@@ -10,7 +10,7 @@ import {
 import { API } from "@/shared/constants/apiRoutes";
 import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
 import { BEARER_PREFIX } from "@/shared/constants/http";
-import { API_TIMEOUT_MS } from "@/shared/constants/timing";
+import { API_TIMEOUT_MS, EXPORT_DOWNLOAD_TIMEOUT_MS } from "@/shared/constants/timing";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { resolveDownloadFilename } from "@/shared/utils/downloadFilename";
 import type { WalletTransaction } from "@/shared/api/types";
@@ -116,5 +116,6 @@ export const walletApi = {
   ): Promise<AsyncExportResponse> =>
     initiateAsyncExport(
       API.wallet.statement(buildStatementQuery({ ...filters, format })),
+      { timeoutMs: EXPORT_DOWNLOAD_TIMEOUT_MS },
     ),
 };

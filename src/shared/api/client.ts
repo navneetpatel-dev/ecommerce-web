@@ -80,12 +80,13 @@ function assertSuccess<T>(
 function fetchWithTimeout(
   path: string,
   options: RequestInit,
+  timeoutMs: number = API_TIMEOUT_MS,
 ): Promise<Response> {
   return fetch(`${BASE_URL}${path}`, {
     ...options,
     cache: "no-store",
     credentials: "include",
-    signal: AbortSignal.timeout(API_TIMEOUT_MS),
+    signal: AbortSignal.timeout(timeoutMs),
   });
 }
 
@@ -134,21 +135,29 @@ async function refreshSessionOrThrow(): Promise<void> {
   if (!(await refreshPromise)) throw throwSessionExpired();
 }
 
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+async function request<T>(
+  path: string,
+  options: RequestInit = {},
+  config?: { timeoutMs?: number },
+): Promise<T> {
   const token = getApiSessionAdapter().getAccessToken();
 
-  const res = await fetchWithTimeout(path, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
-      ...options.headers,
+  const res = await fetchWithTimeout(
+    path,
+    {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `${BEARER_PREFIX}${token}` } : {}),
+        ...options.headers,
+      },
     },
-  });
+    config?.timeoutMs,
+  );
 
   if (res.status === 401) {
     await refreshSessionOrThrow();
-    return request<T>(path, options);
+    return request<T>(path, options, config);
   }
 
   // Soft-delete and similar endpoints return 204 with an empty body.
@@ -186,7 +195,8 @@ async function requestWithResponse<T>(
 }
 
 export const apiClient = {
-  get: <T>(path: string) => request<T>(path),
+  get: <T>(path: string, config?: { timeoutMs?: number }) =>
+    request<T>(path, {}, config),
   getWithResponse: <T>(path: string) => requestWithResponse<T>(path),
   post: <T>(path: string, body?: unknown, init?: RequestInit) =>
     request<T>(path, {
