@@ -113,7 +113,7 @@ export function FullCartLine(props: FullCartLineProps) {
               value={item.quantity}
               onChange={handleQuantityChange}
               min={1}
-              max={MAX_CART_LINE_QUANTITY}
+              max={item.maxQuantity ?? MAX_CART_LINE_QUANTITY}
               controlClassName="h-8 w-8 min-h-8 max-h-8 sm:h-9 sm:w-9 sm:min-h-9 sm:max-h-9 lg:h-10 lg:w-10 lg:min-h-10 lg:max-h-10"
               valueClassName="h-4 w-5 text-[0.75rem] sm:h-5 sm:w-6 sm:text-body-sm"
             />

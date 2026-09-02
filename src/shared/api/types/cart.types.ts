@@ -6,6 +6,11 @@ export interface CartItem {
   id: string;
   variantId: string;
   quantity: number;
+  /**
+   * Server-decided cap for this line (stock vs the cart policy cap). The API
+   * silently clamps to it, so never offer more than this in a stepper.
+   */
+  maxQuantity?: number;
   lineSubtotal?: number;
   isAvailable: boolean;
   unavailableReason: UnavailableReason | null;

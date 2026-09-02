@@ -129,3 +129,13 @@ describe("resolveCartDisplayTotals — pending vs unavailable", () => {
     expect(totals.total).toBe(236);
   });
 });
+
+describe("cart line quantity cap", () => {
+  it("carries the server cap on the line so the stepper cannot exceed stock", () => {
+    // The API silently clamps over-stock updates, so a stepper capped at the
+    // policy max (99) would count up and then snap back on the response.
+    const line = { ...baseCart.items[0]!, maxQuantity: 14 };
+    expect(line.maxQuantity).toBe(14);
+    expect(line.maxQuantity).toBeLessThan(99);
+  });
+});

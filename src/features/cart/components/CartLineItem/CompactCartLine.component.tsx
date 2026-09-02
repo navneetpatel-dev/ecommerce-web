@@ -97,7 +97,7 @@ export function CompactCartLine(props: CompactCartLineProps) {
             value={item.quantity}
             onChange={handleQuantityChange}
             min={1}
-            max={MAX_CART_LINE_QUANTITY}
+            max={item.maxQuantity ?? MAX_CART_LINE_QUANTITY}
             controlClassName="h-8 w-8 min-h-8 max-h-8 [&_svg]:size-3.5"
             valueClassName="h-4 w-5 text-body-sm"
           />

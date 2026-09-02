@@ -45,7 +45,18 @@ export function useProductCardQuantity({
   }, [serverQty, optimisticQty]);
 
   const cartQuantity = optimisticQty ?? serverQty;
-  const maxQuantity = cartLineQuantityMax(resolveProductStock(product));
+  /**
+   * Cap by the variant the card actually adds, not the product's summed stock —
+   * a product with plenty in other variants would otherwise let the stepper run
+   * past what this line can supply, and the API would silently clamp it back.
+   * Once the line exists, the server's own cap wins.
+   */
+  const defaultVariantStock = product.variants?.find(
+    (variant) => variant.id === defaultVariantId,
+  )?.stock;
+  const maxQuantity =
+    cartItem?.maxQuantity ??
+    cartLineQuantityMax(defaultVariantStock ?? resolveProductStock(product));
   const isMutating = isAdding || isUpdating || isRemoving;
 
   const setQuantity = (next: number) => {

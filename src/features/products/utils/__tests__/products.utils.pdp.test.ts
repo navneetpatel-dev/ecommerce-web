@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import type { ProductVariant } from "../../../../shared/api/types";
 import {
   findMatchingVariant,
+  findSelectedVariant,
   groupVariantAttributes,
   resolveDefaultVariantSelection,
 } from "../products.utils";
@@ -81,5 +82,41 @@ describe("PDP variant selection utils", () => {
     const variants = [variant({ id: "solo", attributes: {}, stock: 3 })];
     assert.deepEqual(resolveDefaultVariantSelection(variants), {});
     assert.equal(findMatchingVariant(variants, {})?.id, "solo");
+  });
+});
+
+describe("findSelectedVariant — price for a sold-out selection", () => {
+  // Mirrors "Comics Ultra 219": Large sizes are sold out and priced above base.
+  const variants = [
+    variant({
+      id: "std-black",
+      attributes: { Size: "Standard", Color: "Black" },
+      price: 1161.25,
+      stock: 52,
+    }),
+    variant({
+      id: "large-black",
+      attributes: { Size: "Large", Color: "Black" },
+      price: 1261.25,
+      stock: 0,
+    }),
+  ];
+
+  it("resolves a sold-out variant that findMatchingVariant refuses", () => {
+    const selection = { Size: "Large", Color: "Black" };
+
+    // findMatchingVariant guards add-to-cart, so it must stay null here.
+    assert.equal(findMatchingVariant(variants, selection), null);
+    assert.equal(findSelectedVariant(variants, selection)?.price, 1261.25);
+  });
+
+  it("still resolves an in-stock selection", () => {
+    const selection = { Size: "Standard", Color: "Black" };
+    assert.equal(findSelectedVariant(variants, selection)?.id, "std-black");
+  });
+
+  it("returns null until every matrix attribute is chosen", () => {
+    assert.equal(findSelectedVariant(variants, { Size: "Large" }), null);
+    assert.equal(findSelectedVariant(variants, {}), null);
   });
 });

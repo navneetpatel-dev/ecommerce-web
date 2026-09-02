@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import type { ProductVariant } from "@/shared/api/types";
 import {
   findMatchingVariant,
+  findSelectedVariant,
   getMatrixAttributeKeys,
   getMatrixVariants,
   groupVariantAttributes,
@@ -81,7 +82,17 @@ export function useVariantSelection(
     Object.keys(attributeGroups).length === 0 ||
     Object.keys(attributeGroups).every((key) => Boolean(selected[key]));
 
-  const currentPrice = matchedVariant?.price ?? basePrice;
+  /**
+   * Price follows the selection even when that variant is sold out — otherwise a
+   * sold-out option silently shows basePrice, which is a different amount on any
+   * product whose variants are priced differently.
+   */
+  const selectedVariant = useMemo(
+    () => matchedVariant ?? findSelectedVariant(variants, selected),
+    [matchedVariant, variants, selected],
+  );
+
+  const currentPrice = selectedVariant?.price ?? basePrice;
   const currentStock =
     matchedVariant?.stock ?? (variants.length === 1 ? baseStock : 0);
   const variantId = matchedVariant?.id ?? null;
@@ -97,6 +108,7 @@ export function useVariantSelection(
     selectValue,
     hasCompleteSelection,
     hasPriceChange:
-      matchedVariant?.price !== undefined && matchedVariant.price !== basePrice,
+      selectedVariant?.price !== undefined &&
+      selectedVariant.price !== basePrice,
   };
 }
