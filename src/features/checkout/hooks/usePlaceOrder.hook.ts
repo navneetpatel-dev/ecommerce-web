@@ -15,6 +15,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { ApiError } from "@/shared/types/apiError.types";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { cartKeys } from "@/features/cart";
+import { invalidateWalletQueries } from "@/features/wallet";
 import { usePaymentNotice, type PaymentNotice } from "./usePaymentNotice/index";
 import { useRestoreCancelledCheckout } from "./useRestoreCancelledCheckout/index";
 import { launchRazorpayPayment } from "./useRazorpayCheckout/index";
@@ -76,6 +77,10 @@ export function usePlaceOrderWithRazorpay() {
     void queryClient.invalidateQueries({ queryKey: cartKeys.all });
   }, [queryClient]);
 
+  const invalidateWalletCache = useCallback(() => {
+    invalidateWalletQueries(queryClient);
+  }, [queryClient]);
+
   const clearPendingOrder = useCallback((orderId?: string) => {
     if (!orderId || pendingOrderIdRef.current === orderId) {
       pendingOrderIdRef.current = null;
@@ -86,6 +91,7 @@ export function usePlaceOrderWithRazorpay() {
     useRestoreCancelledCheckout({
       showNotice,
       refetchCart,
+      invalidateWalletCache,
       onPhaseChange: setPaymentPhase,
       onRestoreComplete: (orderId) => {
         clearPendingOrder(orderId);
@@ -130,6 +136,10 @@ export function usePlaceOrderWithRazorpay() {
 
       pendingOrderIdRef.current = result.orderId;
 
+      if (apiWalletAmount > 0) {
+        invalidateWalletCache();
+      }
+
       if (apiPaymentMethod === "razorpay" && result.razorpayOrderId) {
         setPaymentPhase("idle");
         await launchRazorpayPayment(result, {
@@ -149,8 +159,8 @@ export function usePlaceOrderWithRazorpay() {
       }
 
       clearPendingOrder(result.orderId);
-      clearCartCache();
       navigate(router, PATHS.orderConfirmation(result.orderId));
+      clearCartCache();
     } catch (err) {
       setPaymentPhase("idle");
 

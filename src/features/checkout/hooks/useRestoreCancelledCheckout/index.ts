@@ -8,6 +8,7 @@ import type { CheckoutPaymentPhase } from "../useCheckoutPaymentPhase.hook";
 interface UseRestoreCancelledCheckoutOptions {
   showNotice: (notice: PaymentNotice) => void;
   refetchCart: () => Promise<void>;
+  invalidateWalletCache?: () => void;
   onPhaseChange?: (phase: CheckoutPaymentPhase) => void;
   onRestoreComplete?: (orderId: string) => void;
 }
@@ -20,6 +21,7 @@ type RestoreOptions = {
 export function useRestoreCancelledCheckout({
   showNotice,
   refetchCart,
+  invalidateWalletCache,
   onPhaseChange,
   onRestoreComplete,
 }: UseRestoreCancelledCheckoutOptions) {
@@ -39,6 +41,7 @@ export function useRestoreCancelledCheckout({
         try {
           await checkoutApi.cancelCheckout({ orderId });
           await refetchCart();
+          invalidateWalletCache?.();
           onRestoreComplete?.(orderId);
           if (notice && !options?.silent) {
             showNotice(notice);
@@ -66,7 +69,7 @@ export function useRestoreCancelledCheckout({
       inFlightRef.current.set(orderId, promise);
       return promise;
     },
-    [showNotice, refetchCart, onPhaseChange, onRestoreComplete],
+    [showNotice, refetchCart, invalidateWalletCache, onPhaseChange, onRestoreComplete],
   );
 
   const awaitPendingRestores = useCallback(async () => {

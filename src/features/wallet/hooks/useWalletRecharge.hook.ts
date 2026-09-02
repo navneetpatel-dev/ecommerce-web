@@ -11,7 +11,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { walletApi } from "../api/wallet.api";
-import { walletKeys } from "../api/wallet.queries";
+import { walletKeys, invalidateWalletQueries } from "../api/wallet.queries";
 
 type RechargePhase = "idle" | "opening" | "verifying";
 

@@ -120,8 +120,8 @@ export async function launchRazorpayPayment(
           razorpay_signature: response.razorpay_signature,
         });
         onCheckoutComplete?.(result.orderId);
-        clearCartCache();
         navigate(router, PATHS.orderConfirmation(result.orderId));
+        clearCartCache();
       } catch {
         onPhaseChange?.("idle");
         onCheckoutComplete?.(result.orderId);

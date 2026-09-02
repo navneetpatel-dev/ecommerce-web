@@ -6,12 +6,21 @@ import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.c
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import { resolveCartLineSubtotal } from "../../utils/checkoutDisplay.utils";
+import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
+import {
+  quoteOrderTotals,
+  quoteTaxLabel,
+} from "../../utils/quoteTotals.utils";
 
 interface OrderSummaryPanelProps {
   groupedByVendor: Record<string, CartItem[]>;
   subtotal: number;
   estimatedTotal: number;
   quote?: CheckoutQuote | null;
+  cartPricingPreview?: {
+    taxTotal: number;
+    shippingTotal: number;
+  };
 }
 
 export function OrderSummaryPanel({
@@ -19,7 +28,11 @@ export function OrderSummaryPanel({
   subtotal,
   estimatedTotal,
   quote,
+  cartPricingPreview,
 }: OrderSummaryPanelProps) {
+  const orderTotals = quote ? quoteOrderTotals(quote) : null;
+  const summarySubtotal =
+    orderTotals?.merchandiseSubtotal ?? subtotal ?? 0;
   const items = Object.values(groupedByVendor).flat();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const walletApplied = (quote?.walletAmountToUse ?? 0) > 0;
@@ -84,7 +97,15 @@ export function OrderSummaryPanel({
                     </p>
                   </div>
                   <p className="shrink-0 text-[0.875rem] tabular-nums text-ink">
-                    ₹{formatInrAmount(resolveCartLineSubtotal(item, quote))}
+                    {(() => {
+                      const lineSubtotal = resolveCartLineSubtotal(item, quote);
+                      if (lineSubtotal == null) {
+                        return (
+                          <span className="text-ink-muted">Updating…</span>
+                        );
+                      }
+                      return <>₹{formatInrAmount(lineSubtotal)}</>;
+                    })()}
                   </p>
                 </li>
               ))}
@@ -97,7 +118,9 @@ export function OrderSummaryPanel({
         <dl className="space-y-2.5 text-[0.875rem]">
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">Subtotal</dt>
-            <dd className="tabular-nums text-ink">₹{formatInrAmount(subtotal)}</dd>
+            <dd className="tabular-nums text-ink">
+              ₹{formatInrAmount(summarySubtotal)}
+            </dd>
           </div>
           {quote?.appliedCoupon && (
             <div className="flex items-center justify-between gap-4 text-success">
@@ -125,12 +148,19 @@ export function OrderSummaryPanel({
               </dd>
             </div>
           ) : null}
-          <div className="flex items-center justify-between gap-4">
-            <dt className="text-ink-muted">Shipping & tax</dt>
-            <dd className="text-right text-ink-muted">
-              {quote ? "Included below" : "Confirmed on review"}
-            </dd>
-          </div>
+          {orderTotals ? (
+            <OrderTaxShippingBreakdown
+              shippingTotal={orderTotals.shippingTotal}
+              taxTotal={orderTotals.taxTotal}
+              taxLabel={quoteTaxLabel(orderTotals.taxDisplayKey)}
+            />
+          ) : (
+            <OrderTaxShippingBreakdown
+              pending={!cartPricingPreview}
+              shippingTotal={cartPricingPreview?.shippingTotal}
+              taxTotal={cartPricingPreview?.taxTotal}
+            />
+          )}
         </dl>
 
         <div className="mt-4 border-t border-line pt-4">

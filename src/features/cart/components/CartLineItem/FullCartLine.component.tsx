@@ -133,11 +133,11 @@ export function FullCartLine(props: FullCartLineProps) {
 
       {available ? (
         <div className="hidden flex-col items-end justify-start gap-1 pt-0.5 sm:flex">
-          {linePending ? (
+          {linePending || lineTotal == null ? (
             <p className="text-[0.875rem] text-ink-muted">Updating…</p>
           ) : (
             <p className="font-display text-[1.125rem] tabular-nums text-ink">
-              ₹{formatInrAmount(lineTotal ?? 0)}
+              ₹{formatInrAmount(lineTotal)}
             </p>
           )}
           <p className="text-[0.75rem] text-ink-muted">{mobileEachPrice}</p>

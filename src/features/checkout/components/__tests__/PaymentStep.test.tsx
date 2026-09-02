@@ -8,6 +8,16 @@ function quote(partial: Partial<CheckoutQuote>): CheckoutQuote {
   return {
     vendorBreakdowns: [],
     grandTotal: 500,
+    orderTotals: {
+      merchandiseSubtotal: 500,
+      shippingTotal: 0,
+      taxTotal: 0,
+      cgst: 0,
+      sgst: 0,
+      igst: 0,
+      discountTotal: 0,
+      taxDisplayKey: "GST",
+    },
     cashbackAmount: 0,
     walletBalance: 100,
     walletAmountToUse: 100,

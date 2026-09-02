@@ -1,16 +1,5 @@
 import type { Cart, CartItem } from "@/shared/api/types";
 
-/** Scale a server-provided line subtotal when qty changes optimistically. */
-export function scaleCartLineSubtotal(
-  lineSubtotal: number | undefined,
-  fromQty: number,
-  toQty: number,
-): number | undefined {
-  if (lineSubtotal == null || fromQty <= 0 || toQty <= 0) return undefined;
-  if (fromQty === toQty) return lineSubtotal;
-  return Math.round((lineSubtotal / fromQty) * toQty * 100) / 100;
-}
-
 export function hasPendingCartLineSubtotal(item: CartItem): boolean {
   return item.lineSubtotal == null;
 }
@@ -19,11 +8,12 @@ export function cartHasPendingLineSubtotals(cart: Cart | undefined): boolean {
   return cart?.items?.some(hasPendingCartLineSubtotal) ?? false;
 }
 
+/** Server-provided line subtotal only — no client-side pricing. */
 export function resolveCartLineDisplaySubtotal(item: CartItem): number | undefined {
   return item.lineSubtotal;
 }
 
-/** Clears aggregate totals while line-level amounts catch up after an optimistic patch. */
+/** Clears aggregate totals while waiting for the server after an optimistic qty patch. */
 function clearCartAggregateTotals(cart: Cart): Cart {
   return {
     ...cart,
@@ -33,7 +23,7 @@ function clearCartAggregateTotals(cart: Cart): Cart {
   };
 }
 
-/** Optimistically update one cart line's qty (scales server lineSubtotal when possible). */
+/** Optimistically update qty; line/aggregate amounts come back from the API. */
 export function patchExistingCartItemQuantity(
   cart: Cart,
   itemId: string,
@@ -46,23 +36,16 @@ export function patchExistingCartItemQuantity(
     return patchRemoveCartItem(cart, itemId);
   }
 
-  const nextLineSubtotal = scaleCartLineSubtotal(
-    existing.lineSubtotal,
-    existing.quantity,
-    quantity,
-  );
-
   return clearCartAggregateTotals({
     ...cart,
     items: cart.items.map((item) =>
       item.id === itemId
-        ? { ...item, quantity, lineSubtotal: nextLineSubtotal }
+        ? { ...item, quantity, lineSubtotal: undefined }
         : item,
     ),
   });
 }
 
-/** Optimistically remove a cart line and clear stale aggregate totals. */
 export function patchRemoveCartItem(cart: Cart, itemId: string): Cart {
   return clearCartAggregateTotals({
     ...cart,
@@ -70,19 +53,19 @@ export function patchRemoveCartItem(cart: Cart, itemId: string): Cart {
   });
 }
 
+/** Read server-computed cart totals only. */
 export function resolveCartDisplayTotals(cart: Cart | undefined) {
+  const items = cart?.items ?? [];
   const pendingLineTotals = cartHasPendingLineSubtotals(cart);
-  const grandTotal =
-    !pendingLineTotals && cart
-      ? (cart.total ?? cart.pricingPreview?.grandTotal)
-      : undefined;
+  const preview =
+    !pendingLineTotals && cart?.pricingPreview ? cart.pricingPreview : undefined;
 
   return {
     pendingLineTotals,
     subtotal: cart?.merchandiseSubtotal,
-    subtotalPending:
-      cart?.merchandiseSubtotal == null && (cart?.items?.length ?? 0) > 0,
-    total: grandTotal ?? cart?.merchandiseSubtotal ?? 0,
-    totalIsEstimated: grandTotal == null,
+    subtotalPending: cart?.merchandiseSubtotal == null && items.length > 0,
+    total: cart?.total ?? preview?.grandTotal,
+    totalIsEstimated: pendingLineTotals || cart?.total == null,
+    pricingPreview: preview,
   };
 }

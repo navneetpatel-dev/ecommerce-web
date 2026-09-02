@@ -17,6 +17,7 @@ export function CartPage() {
       total={cart.total}
       totalIsEstimated={cart.totalIsEstimated}
       pendingLineTotals={cart.pendingLineTotals}
+      pricingPreview={cart.pricingPreview}
       hasUnavailableItems={cart.hasUnavailableItems}
       onUpdateQuantity={cart.updateQuantity}
       onRemoveItem={cart.removeItem}

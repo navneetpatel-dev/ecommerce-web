@@ -16,6 +16,8 @@ export function CartDrawerContainer() {
       total={drawer.total}
       totalIsEstimated={drawer.totalIsEstimated}
       pendingLineTotals={drawer.pendingLineTotals}
+      totalsFetching={drawer.totalsFetching}
+      pricingPreview={drawer.pricingPreview}
       hasUnavailableItems={drawer.hasUnavailableItems}
       onContinueShopping={drawer.continueShopping}
       onUpdateQuantity={drawer.updateQuantity}

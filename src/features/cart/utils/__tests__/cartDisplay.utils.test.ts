@@ -4,7 +4,6 @@ import {
   patchExistingCartItemQuantity,
   patchRemoveCartItem,
   resolveCartDisplayTotals,
-  scaleCartLineSubtotal,
 } from "../cartDisplay.utils";
 
 const baseCart: Cart = {
@@ -44,21 +43,11 @@ const baseCart: Cart = {
   },
 };
 
-describe("scaleCartLineSubtotal", () => {
-  it("scales proportionally from a server line subtotal", () => {
-    expect(scaleCartLineSubtotal(200, 2, 4)).toBe(400);
-  });
-
-  it("returns undefined when the source line subtotal is missing", () => {
-    expect(scaleCartLineSubtotal(undefined, 2, 3)).toBeUndefined();
-  });
-});
-
 describe("patchExistingCartItemQuantity", () => {
-  it("scales lineSubtotal and clears aggregate totals", () => {
+  it("updates qty and clears server amounts until refetch", () => {
     const next = patchExistingCartItemQuantity(baseCart, "line-1", 4);
     expect(next.items[0]?.quantity).toBe(4);
-    expect(next.items[0]?.lineSubtotal).toBe(400);
+    expect(next.items[0]?.lineSubtotal).toBeUndefined();
     expect(next.merchandiseSubtotal).toBeUndefined();
     expect(next.total).toBeUndefined();
     expect(next.pricingPreview).toBeUndefined();
@@ -67,7 +56,6 @@ describe("patchExistingCartItemQuantity", () => {
   it("removes the line when quantity is zero", () => {
     const next = patchExistingCartItemQuantity(baseCart, "line-1", 0);
     expect(next.items).toHaveLength(0);
-    expect(next.merchandiseSubtotal).toBeUndefined();
   });
 });
 
@@ -83,12 +71,14 @@ describe("resolveCartDisplayTotals", () => {
   it("uses backend grand total when no lines are pending", () => {
     expect(resolveCartDisplayTotals(baseCart)).toMatchObject({
       pendingLineTotals: false,
+      subtotal: 200,
       total: 236,
       totalIsEstimated: false,
+      pricingPreview: baseCart.pricingPreview,
     });
   });
 
-  it("marks totals as pending when a line subtotal is missing", () => {
+  it("does not fabricate totals when a line subtotal is missing", () => {
     const pending: Cart = {
       ...baseCart,
       items: [{ ...baseCart.items[0]!, lineSubtotal: undefined }],
@@ -99,6 +89,8 @@ describe("resolveCartDisplayTotals", () => {
     expect(resolveCartDisplayTotals(pending)).toMatchObject({
       pendingLineTotals: true,
       subtotalPending: true,
+      subtotal: undefined,
+      total: undefined,
       totalIsEstimated: true,
     });
   });

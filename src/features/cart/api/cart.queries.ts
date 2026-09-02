@@ -56,6 +56,7 @@ export function useCart() {
     // Wait until localStorage auth is restored so refresh does not GET /cart as a new guest.
     enabled: authBootstrapped,
     staleTime: 1000 * 30,
+    placeholderData: (previousData) => previousData,
   });
 }
 

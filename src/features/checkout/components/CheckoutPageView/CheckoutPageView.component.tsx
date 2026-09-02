@@ -12,8 +12,9 @@ import { OrderSummaryPanel } from "./OrderSummaryPanel.component";
 import { MobileSummaryAccordion } from "./MobileSummaryAccordion.component";
 import { CheckoutStepCard } from "./CheckoutStepCard.component";
 import { PaymentProcessingOverlay } from "../PaymentProcessingOverlay.component";
+import { CheckoutTransitionState } from "./CheckoutTransitionState.component";
+import { checkoutOverlayCopy } from "./checkoutOverlayCopy";
 import type { CheckoutPageViewProps } from "./types";
-import { LABELS } from "@/shared/constants/labels";
 
 export function CheckoutPageView({
   isLoading,
@@ -37,6 +38,7 @@ export function CheckoutPageView({
   groupedByVendor,
   subtotal,
   estimatedTotal,
+  cartPricingPreview,
   shippingReady,
   hasUnavailableItems,
   onStepClick,
@@ -54,24 +56,22 @@ export function CheckoutPageView({
 }: CheckoutPageViewProps) {
   const router = useRouter();
 
+  const isTransitioning = isPaymentOverlayOpen || isPending;
+
   if (isLoading) return <CheckoutPageSkeleton />;
+  if (!hasItems && isTransitioning) {
+    const phase =
+      isPending && paymentPhase === "idle" ? "placing" : paymentPhase;
+    return <CheckoutTransitionState paymentPhase={phase} />;
+  }
   if (!hasItems) return <EmptyCart />;
 
   const noticePrimaryLabel =
     paymentNotice?.variant === "danger" ? "Try again" : "Continue checkout";
 
-  const paymentOverlayTitle =
-    paymentPhase === "verifying"
-      ? LABELS.confirmingPayment
-      : paymentPhase === "restoring"
-        ? LABELS.restoringCart
-        : LABELS.placingOrder;
-  const paymentOverlayDescription =
-    paymentPhase === "verifying"
-      ? LABELS.confirmingPaymentBody
-      : paymentPhase === "restoring"
-        ? LABELS.restoringCartBody
-        : LABELS.placingOrderBody;
+  const paymentOverlayCopy = checkoutOverlayCopy(paymentPhase);
+  const paymentOverlayTitle = paymentOverlayCopy.title;
+  const paymentOverlayDescription = paymentOverlayCopy.description;
 
   const summary = (
     <OrderSummaryPanel
@@ -79,6 +79,7 @@ export function CheckoutPageView({
       subtotal={subtotal}
       estimatedTotal={estimatedTotal}
       quote={quote}
+      cartPricingPreview={cartPricingPreview}
     />
   );
 

@@ -5,4 +5,5 @@ export {
   useWalletBalance,
   useWalletTransactions,
   walletKeys,
+  invalidateWalletQueries,
 } from "./api/wallet.queries";

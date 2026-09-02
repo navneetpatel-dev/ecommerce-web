@@ -19,6 +19,10 @@ export interface CartPageViewProps {
   total: number;
   totalIsEstimated?: boolean;
   pendingLineTotals?: boolean;
+  pricingPreview?: {
+    taxTotal: number;
+    shippingTotal: number;
+  };
   hasUnavailableItems: boolean;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
@@ -53,6 +57,7 @@ export function CartPageView({
   total,
   totalIsEstimated = false,
   pendingLineTotals = false,
+  pricingPreview,
   hasUnavailableItems,
   onUpdateQuantity,
   onRemoveItem,
@@ -118,6 +123,7 @@ export function CartPageView({
             total={total}
             totalIsEstimated={totalIsEstimated}
             pendingLineTotals={pendingLineTotals}
+            pricingPreview={pricingPreview}
             hasUnavailableItems={hasUnavailableItems}
             couponInput={couponInput}
             couponMessage={couponMessage}

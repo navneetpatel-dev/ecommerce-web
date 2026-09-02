@@ -66,11 +66,18 @@ export function CompactCartLine(props: CompactCartLineProps) {
           <Badge variant="destructive" className="w-fit text-[0.6875rem]">
             {unavailableLabel(item.unavailableReason)}
           </Badge>
-        ) : linePending ? (
-          <p className="truncate text-body-sm text-ink-muted">Updating…</p>
         ) : (
-          <p className="truncate text-body-sm font-semibold tabular-nums text-brand">
-            ₹{formatInrAmount(lineTotal ?? 0)}
+          <p
+            className={cn(
+              "truncate text-body-sm font-semibold tabular-nums",
+              linePending ? "text-ink-muted" : "text-brand",
+            )}
+          >
+            {linePending || lineTotal == null ? (
+              "Updating…"
+            ) : (
+              <>₹{formatInrAmount(lineTotal)}</>
+            )}
           </p>
         )}
         {available ? (

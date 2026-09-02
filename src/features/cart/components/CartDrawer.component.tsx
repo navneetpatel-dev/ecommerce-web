@@ -13,6 +13,7 @@ import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock.hook";
 import { CartLineItem } from "./CartLineItem.component";
 import type { CartItem } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -20,9 +21,15 @@ interface CartDrawerProps {
   isLoading?: boolean;
   hasItems: boolean;
   groupedByVendor: Record<string, CartItem[]>;
-  total: number;
+  total: number | undefined;
   totalIsEstimated?: boolean;
   pendingLineTotals?: boolean;
+  totalsFetching?: boolean;
+  pricingPreview?: {
+    merchandiseSubtotal: number;
+    taxTotal: number;
+    shippingTotal: number;
+  };
   hasUnavailableItems?: boolean;
   onContinueShopping: () => void;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
@@ -38,6 +45,8 @@ export function CartDrawer({
   total,
   totalIsEstimated = false,
   pendingLineTotals = false,
+  totalsFetching = false,
+  pricingPreview,
   hasUnavailableItems,
   onContinueShopping,
   onUpdateQuantity,
@@ -119,21 +128,42 @@ export function CartDrawer({
 
             {hasItems ? (
               <div className="shrink-0 space-y-3 border-t border-line p-4">
+                {pricingPreview ? (
+                  <dl className="space-y-1.5 text-body-sm">
+                    <div className="flex justify-between gap-3">
+                      <dt className="text-ink-muted">{LABELS.subtotal}</dt>
+                      <dd className="tabular-nums text-ink">
+                        ₹{formatInrAmount(pricingPreview.merchandiseSubtotal)}
+                      </dd>
+                    </div>
+                    <OrderTaxShippingBreakdown
+                      className="space-y-1.5 text-body-sm"
+                      shippingTotal={pricingPreview.shippingTotal}
+                      taxTotal={pricingPreview.taxTotal}
+                    />
+                  </dl>
+                ) : null}
                 <div className="flex justify-between items-center">
                   <span className="text-body font-medium">
-                    {totalIsEstimated
-                      ? pendingLineTotals
-                        ? "Updating…"
-                        : "Estimated total"
-                      : LABELS.total}
+                    {totalIsEstimated && pendingLineTotals && totalsFetching
+                      ? "Updating…"
+                      : totalIsEstimated
+                        ? "Estimated total"
+                        : LABELS.total}
                   </span>
                   <span className="text-[1.125rem] font-bold text-brand">
-                    {totalIsEstimated && pendingLineTotals ? (
+                    {totalIsEstimated &&
+                    pendingLineTotals &&
+                    totalsFetching ? (
                       <span className="text-body font-medium text-ink-muted">
                         Updating…
                       </span>
-                    ) : (
+                    ) : total != null ? (
                       <>₹{formatInrAmount(total)}</>
+                    ) : (
+                      <span className="text-body font-medium text-ink-muted">
+                        Updating…
+                      </span>
                     )}
                   </span>
                 </div>

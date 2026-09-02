@@ -163,4 +163,14 @@ export interface CheckoutQuote {
     type?: string;
   }>;
   codAvailable?: boolean;
+  orderTotals: {
+    merchandiseSubtotal: number;
+    shippingTotal: number;
+    taxTotal: number;
+    cgst: number;
+    sgst: number;
+    igst: number;
+    discountTotal: number;
+    taxDisplayKey: "IGST" | "CGST_SGST" | "GST";
+  };
 }

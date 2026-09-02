@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { walletApi } from "./wallet.api";
@@ -10,6 +10,10 @@ export const walletKeys = {
   transactionsPage: (page: number, limit: number) =>
     [...walletKeys.transactions(), page, limit] as const,
 };
+
+export function invalidateWalletQueries(queryClient: QueryClient) {
+  void queryClient.invalidateQueries({ queryKey: walletKeys.all });
+}
 
 export function useWalletBalance() {
   const currentUser = useAuthStore((s) => s.currentUser);

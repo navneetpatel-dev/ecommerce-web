@@ -63,6 +63,7 @@ export function useCartPage() {
     total: displayTotals.total,
     totalIsEstimated: displayTotals.totalIsEstimated,
     pendingLineTotals: displayTotals.pendingLineTotals,
+    pricingPreview: displayTotals.pricingPreview,
     vendorDiscountBreakdown,
     updateQuantity,
     removeItem: removeItemById,

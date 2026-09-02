@@ -29,6 +29,7 @@ export function CheckoutPage() {
       groupedByVendor={checkout.groupedByVendor}
       subtotal={checkout.subtotal}
       estimatedTotal={checkout.estimatedTotal}
+      cartPricingPreview={checkout.cartPricingPreview}
       shippingReady={checkout.shippingReady}
       hasUnavailableItems={checkout.hasUnavailableItems}
       onStepClick={checkout.onStepClick}

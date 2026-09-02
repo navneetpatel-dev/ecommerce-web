@@ -19,7 +19,7 @@ export function useCartDrawer() {
   const router = useRouter();
   const isOpen = useCartDrawerStore((s) => s.isOpen);
   const close = useCartDrawerStore((s) => s.close);
-  const { data: cart, isLoading } = useCart();
+  const { data: cart, isLoading, isFetching } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
 
@@ -57,6 +57,8 @@ export function useCartDrawer() {
     total: displayTotals.total,
     totalIsEstimated: displayTotals.totalIsEstimated,
     pendingLineTotals: displayTotals.pendingLineTotals,
+    totalsFetching: isFetching && displayTotals.pendingLineTotals,
+    pricingPreview: displayTotals.pricingPreview,
     updateQuantity,
     removeItem: removeItemById,
     continueShopping,

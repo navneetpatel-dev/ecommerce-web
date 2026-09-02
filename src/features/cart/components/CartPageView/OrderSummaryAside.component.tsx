@@ -8,6 +8,7 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import { CartCouponSection } from "../CartCouponSection.component";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
+import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
 import type { EligibleCoupon } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 
@@ -18,6 +19,10 @@ interface OrderSummaryAsideProps {
   total: number;
   totalIsEstimated?: boolean;
   pendingLineTotals?: boolean;
+  pricingPreview?: {
+    taxTotal: number;
+    shippingTotal: number;
+  };
   hasUnavailableItems: boolean;
   couponInput: string;
   couponMessage: string | null;
@@ -47,6 +52,7 @@ export function OrderSummaryAside({
   total,
   totalIsEstimated = false,
   pendingLineTotals = false,
+  pricingPreview,
   hasUnavailableItems,
   couponInput,
   couponMessage,
@@ -127,12 +133,11 @@ export function OrderSummaryAside({
                 </div>
               ))
             : null}
-          <div className="flex items-center justify-between gap-4">
-            <dt className="text-ink-muted">{LABELS.shipping}</dt>
-            <dd className="text-right text-ink-muted">
-              {LABELS.calculatingShippingTaxes}
-            </dd>
-          </div>
+          <OrderTaxShippingBreakdown
+            pending={!pricingPreview}
+            shippingTotal={pricingPreview?.shippingTotal}
+            taxTotal={pricingPreview?.taxTotal}
+          />
         </dl>
 
         <div className="mt-4 border-t border-line pt-4">

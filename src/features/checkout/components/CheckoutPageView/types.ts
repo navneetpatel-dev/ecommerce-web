@@ -25,6 +25,10 @@ export interface CheckoutPageViewProps {
   groupedByVendor: Record<string, CartItem[]>;
   subtotal: number;
   estimatedTotal: number;
+  cartPricingPreview?: {
+    taxTotal: number;
+    shippingTotal: number;
+  };
   shippingReady: boolean;
   hasUnavailableItems?: boolean;
   onStepClick: (step: number) => void;
