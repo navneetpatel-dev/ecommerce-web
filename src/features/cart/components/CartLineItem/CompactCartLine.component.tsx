@@ -4,6 +4,7 @@ import Link from "next/link";
 import { PATHS } from "@/shared/constants/paths";
 import { QuantitySelector } from "@/shared/components/QuantitySelector.component";
 import { MediaImage } from "@/shared/components/MediaImage.component";
+import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart";
 import { cn } from "@/shared/utils/cn";
@@ -88,7 +89,7 @@ export function CompactCartLine(props: CompactCartLineProps) {
             ) : amountsUnavailable ? (
               LABELS.amountUnavailable
             ) : (
-              "Updating…"
+              <InlineAmountSkeleton className="h-3.5 w-16" />
             )}
           </p>
         )}

@@ -1,4 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
+import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { cn } from "@/shared/utils/cn";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 
@@ -30,9 +31,12 @@ export function MoneyAmount({
   if (!pending && value != null) {
     return <>₹{formatInrAmount(value)}</>;
   }
+  if (!unavailable) {
+    return <InlineAmountSkeleton className={fallbackClassName} />;
+  }
   return (
     <span className={cn("text-ink-muted", fallbackClassName)}>
-      {unavailable ? LABELS.amountUnavailable : LABELS.updatingEllipsis}
+      {LABELS.amountUnavailable}
     </span>
   );
 }

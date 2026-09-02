@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { QuantitySelector } from "@/shared/components/QuantitySelector.component";
+import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { MediaImage } from "@/shared/components/MediaImage.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
@@ -133,7 +134,7 @@ export function FullCartLine(props: FullCartLineProps) {
       {available ? (
         <div className="hidden flex-col items-end justify-start gap-1 pt-0.5 sm:flex">
           {linePending || lineTotal == null ? (
-            <p className="text-[0.875rem] text-ink-muted">Updating…</p>
+            <InlineAmountSkeleton className="h-4 w-20" />
           ) : (
             <p className="font-display text-[1.125rem] tabular-nums text-ink">
               ₹{formatInrAmount(lineTotal)}

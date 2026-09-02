@@ -11,7 +11,7 @@ const couponActions = {
 };
 
 describe("cart authoritative totals", () => {
-  it("shows updating instead of zero when the cart total is absent", () => {
+  it("shows skeletons instead of zero when the cart total is absent", () => {
     render(
       <OrderSummaryAside
         itemCount={1}
@@ -27,7 +27,9 @@ describe("cart authoritative totals", () => {
       />,
     );
 
-    expect(screen.getAllByText("Updating…")).toHaveLength(3);
+    expect(screen.getAllByRole("status", { name: "Updating…" })).toHaveLength(
+      3,
+    );
     expect(screen.queryByText("₹0")).not.toBeInTheDocument();
   });
 
@@ -67,10 +69,12 @@ describe("amounts unavailable vs updating", () => {
     ...couponActions,
   };
 
-  it("says Updating… while the cart is still in flight", () => {
+  it("shows skeletons while the cart is still in flight", () => {
     render(<OrderSummaryAside {...baseProps} />);
 
-    expect(screen.getAllByText("Updating…").length).toBeGreaterThan(0);
+    expect(
+      screen.getAllByRole("status", { name: "Updating…" }).length,
+    ).toBeGreaterThan(0);
     expect(screen.queryByText("Unavailable")).not.toBeInTheDocument();
   });
 
@@ -84,8 +88,9 @@ describe("amounts unavailable vs updating", () => {
       />,
     );
 
-    // The stuck-"Updating…" case from the bug report must not appear.
-    expect(screen.queryByText("Updating…")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("status", { name: "Updating…" }),
+    ).not.toBeInTheDocument();
     expect(screen.getAllByText("Unavailable").length).toBeGreaterThan(0);
     expect(
       screen.getByText("We couldn't load prices just now."),

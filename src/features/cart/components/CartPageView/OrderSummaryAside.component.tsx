@@ -82,9 +82,7 @@ export function OrderSummaryAside({
 }: OrderSummaryAsideProps) {
   const totalPending = total == null || (totalIsEstimated && pendingLineTotals);
   const totalLabel = totalIsEstimated
-    ? totalPending && !amountsUnavailable
-      ? LABELS.updatingEllipsis
-      : LABELS.estimatedTotalLabel
+    ? LABELS.estimatedTotalLabel
     : LABELS.total;
 
   return (

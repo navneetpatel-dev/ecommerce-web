@@ -41,11 +41,9 @@ export function CartDrawerSummary({
 }: CartDrawerSummaryProps) {
   const totalRefreshing =
     totalIsEstimated && pendingLineTotals && totalsFetching;
-  const totalLabel = totalRefreshing
-    ? LABELS.updatingEllipsis
-    : totalIsEstimated
-      ? LABELS.estimatedTotalLabel
-      : LABELS.total;
+  const totalLabel = totalIsEstimated
+    ? LABELS.estimatedTotalLabel
+    : LABELS.total;
 
   return (
     <div className="shrink-0 space-y-3 border-t border-line p-4">
