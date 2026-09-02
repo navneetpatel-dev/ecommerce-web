@@ -17,6 +17,8 @@ export const coupons2Labels = {
   itemPlural: "items",
   orderSummary: "Order summary",
   whatYouPaid: "What you paid",
+  whatYouOrdered: "What you ordered",
+  orderTotalsHeading: "Order total",
   itemsLine: "Items",
   discount: "Discount",
   shippingTo: "Shipping to",

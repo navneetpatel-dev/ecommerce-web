@@ -7,8 +7,7 @@ export const walletLabels = {
   walletRemainderDue: "Amount due today: {amount}",
   walletFullyCoversOrder:
     "Your points cover this order — no online payment needed.",
-  walletNotAvailableWithCod:
-    "Points cannot be used with cash on delivery.",
+  walletNotAvailableWithCod: "Points cannot be used with cash on delivery.",
   walletPageDescription:
     "Recharge store points or use credits from returns and cashback at checkout.",
   walletPurchasedBalance: "Purchased",
@@ -53,6 +52,10 @@ export const walletLabels = {
   paymentSplitHeading: "Payment",
   paymentSplitWallet: "{amount} from points",
   paymentSplitRazorpay: "{amount} via Razorpay",
+  /** Razorpay leg before capture is confirmed — never claim it is settled. */
+  paymentSplitRazorpayDue: "{amount} due via Razorpay",
+  paymentAwaitingConfirmation:
+    "We're still confirming this payment with Razorpay. It usually clears within a few minutes.",
   paymentSplitCod: "Cash on delivery",
   cashbackPendingAfterDelivery:
     "Cashback pending — credited as points after delivery",

@@ -75,6 +75,8 @@ export const commerceLabels = {
   listPrice: "MRP",
   variantPrice: "Price",
   soldBy: "Sold by",
+  sellerFallback: "Seller",
+  shipment: "Shipment",
   visitStore: "Visit store",
   productTags: "Tags",
   approvalQueue: "Approval queue",

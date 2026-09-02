@@ -16,6 +16,11 @@ export interface OrderItem {
   id: string;
   variantId: string;
   productName: string;
+  /** Looked up live from the catalogue, so it can be absent for removed products. */
+  imageUrl?: string | null;
+  productSlug?: string | null;
+  /** Variant options as ordered, e.g. { Size: "XS", Color: "Black" }. */
+  variantAttributes?: Record<string, string> | null;
   quantity: number;
   unitPrice: number;
   lineSubtotal: number;

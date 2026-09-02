@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import type { Order } from "@/shared/api/types";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import { PaginationContainer } from "@/shared/containers/PaginationContainer.container";
+import { ContinueShoppingLink } from "@/shared/components/ContinueShoppingLink.component";
 import { OrderStatusGroup } from "./OrderStatusGroup.component";
 import {
   countOrderItems,
@@ -74,13 +75,7 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
             <Button type="button" variant="outline" onClick={exportHistory}>
               {LABELS.exportOrderHistory}
             </Button>
-            <Link
-              href={PATHS.products}
-              className="inline-flex items-center gap-2 text-[0.875rem] font-medium text-brand transition-colors hover:text-brand-hover"
-            >
-              {LABELS.continueShopping}
-              <ArrowRight size={15} />
-            </Link>
+            <ContinueShoppingLink />
           </div>
         </motion.header>
 
@@ -157,7 +152,9 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
                         : LABELS.sellerPlural}
                       {" · "}
                       {itemCount}{" "}
-                      {itemCount === 1 ? LABELS.itemSingular : LABELS.itemPlural}
+                      {itemCount === 1
+                        ? LABELS.itemSingular
+                        : LABELS.itemPlural}
                     </p>
                   </div>
 

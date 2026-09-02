@@ -5,6 +5,7 @@ import { Timeline } from "@/shared/components/Timeline.component";
 import { buildSubOrderTimeline } from "../../utils/timeline";
 import { ORDER_STATUS } from "@/shared/constants/statuses";
 import type { ReturnReasonCode } from "../../hooks/useSubOrderReturn.hook";
+import { VENDOR_GROUP_CARD } from "@/shared/components/vendorGroupStyles";
 import { SubOrderCardHeader } from "./SubOrderCardHeader.component";
 import { SubOrderCardItems } from "./SubOrderCardItems.component";
 import { SubOrderCardTotals } from "./SubOrderCardTotals.component";
@@ -52,11 +53,13 @@ export function SubOrderCard({
   const canReturn = subOrder.status === ORDER_STATUS.DELIVERED;
 
   return (
-    <section>
+    <section className={VENDOR_GROUP_CARD}>
       <SubOrderCardHeader
         vendorName={vendorName}
+        vendorId={subOrder.vendor?.id}
         itemCount={itemCount}
         status={subOrder.status}
+        className="mb-1"
       />
 
       <SubOrderCardItems

@@ -4,7 +4,11 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInr } from "../utils/format";
 import { formatPoints } from "@/shared/utils/formatPoints";
-import { hasOrderPaymentSummaryContent, resolveOrderRazorpayPaid } from "../utils/orderPaymentSummary.utils";
+import {
+  hasOrderPaymentSummaryContent,
+  resolveOrderRazorpayPaid,
+} from "../utils/orderPaymentSummary.utils";
+import { PAYMENT_STATUS } from "@/shared/constants/statuses";
 import type { Order } from "@/shared/api/types";
 
 interface OrderPaymentSummaryProps {
@@ -18,6 +22,7 @@ interface OrderPaymentSummaryProps {
     | "cashbackCreditedAt"
     | "paymentMethod"
     | "amountDue"
+    | "paymentStatus"
   >;
   className?: string;
 }
@@ -35,6 +40,12 @@ export function OrderPaymentSummary({
   const pendingCashback = Number(order.pendingCashbackAmount ?? 0);
   const isCod = order.paymentMethod === "COD";
   const showSplit = walletUsed > 0 && razorpayPaid > 0;
+  /**
+   * `razorpayAmountPaid` is written at order creation as the amount *to* pay —
+   * only the webhook flips paymentStatus to PAID. Phrasing it as settled before
+   * then made this card contradict the order's own "Awaiting payment" badge.
+   */
+  const isSettled = order.paymentStatus === PAYMENT_STATUS.PAID;
 
   return (
     <div className={className}>
@@ -50,9 +61,17 @@ export function OrderPaymentSummary({
           ) : null}
           {razorpayPaid > 0 ? (
             <p className="text-ink-muted">
-              {formatLabel(LABELS.paymentSplitRazorpay, {
-                amount: formatInr(razorpayPaid),
-              })}
+              {formatLabel(
+                isSettled
+                  ? LABELS.paymentSplitRazorpay
+                  : LABELS.paymentSplitRazorpayDue,
+                { amount: formatInr(razorpayPaid) },
+              )}
+            </p>
+          ) : null}
+          {!isSettled && !isCod && razorpayPaid > 0 ? (
+            <p className="text-body-sm leading-relaxed text-warning-foreground">
+              {LABELS.paymentAwaitingConfirmation}
             </p>
           ) : null}
           {isCod && razorpayPaid <= 0 ? (

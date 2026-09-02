@@ -1,10 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
-import { LABELS } from "@/shared/constants/labels";
-import { PATHS } from "@/shared/constants/paths";
+import { ContinueShoppingLink } from "@/shared/components/ContinueShoppingLink.component";
 import type { Order } from "@/shared/api/types";
 import { SubOrderCardContainer } from "../containers/SubOrderCardContainer.container";
 import { countOrderItems } from "../utils/format";
@@ -71,18 +68,13 @@ export function OrderDetailContent({ order }: OrderDetailContentProps) {
 
         <div className="mt-6 grid grid-cols-1 gap-8 lg:mt-8 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7 xl:col-span-8">
-            <div className="space-y-8">
+            {/* Each seller is its own card now, so the gap can be tighter. */}
+            <div className="space-y-4">
               {(order.subOrders ?? []).map(renderSubOrder)}
             </div>
 
             <div className="mt-6 border-t border-line pt-4">
-              <Link
-                href={PATHS.products}
-                className="inline-flex items-center gap-2 text-[0.875rem] font-medium text-brand transition-colors hover:text-brand-hover"
-              >
-                {LABELS.continueShopping}
-                <ArrowRight size={15} />
-              </Link>
+              <ContinueShoppingLink />
             </div>
           </div>
 
