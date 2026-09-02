@@ -2,10 +2,13 @@
 
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { FormSection } from "@/shared/components/forms";
-import { Button } from "@/shared/components/ui/button";
-import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
+import {
+  exportFilterDisableHint,
+  ReportExportButtons,
+  ReportExportStatus,
+} from "@/features/reports";
 import { useReportExport } from "@/features/reports/hooks/useReportExport.hook";
 import { useCallback, useState } from "react";
 
@@ -19,6 +22,12 @@ export function AdminAuditExportPanel() {
   );
 
   const exportHub = useReportExport("audit-log", buildFilters);
+  const filterHint = exportFilterDisableHint({
+    message: exportHub.message,
+    exportingFormat: exportHub.exportingFormat,
+    controlsDisabled: exportHub.controlsDisabled,
+    locked: exportHub.locked,
+  });
 
   return (
     <FormSection
@@ -33,45 +42,26 @@ export function AdminAuditExportPanel() {
         onToChange={setTo}
         fromId="audit-export-from"
         toId="audit-export-to"
+        disabled={exportHub.controlsDisabled}
+        disabledHint={filterHint}
       />
-      <div className="sm:col-span-2 xl:col-span-3">
-        <ButtonGroup align="start">
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            loading={exportHub.exporting}
-            onClick={exportHub.exportExcel}
-          >
-            {LABELS.exportExcel}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            loading={exportHub.exporting}
-            onClick={exportHub.exportCsv}
-          >
-            {LABELS.exportCsv}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            loading={exportHub.exporting}
-            onClick={exportHub.exportPdf}
-          >
-            {LABELS.exportPdf}
-          </Button>
-        </ButtonGroup>
-        {exportHub.message ? (
-          <p className="mt-2 text-[0.875rem] text-ink-muted" aria-live="polite">
-            {exportHub.message}
-          </p>
-        ) : null}
-        {exportHub.error ? (
-          <p className="mt-2 text-body-sm text-danger">{exportHub.error}</p>
-        ) : null}
+      <div className="sm:col-span-2 xl:col-span-3 space-y-2">
+        <ReportExportButtons
+          controlsDisabled={exportHub.controlsDisabled}
+          exportingFormat={exportHub.exportingFormat}
+          locked={exportHub.locked}
+          statusMessage={exportHub.message}
+          onExportExcel={exportHub.exportExcel}
+          onExportCsv={exportHub.exportCsv}
+          onExportPdf={exportHub.exportPdf}
+        />
+        <ReportExportStatus
+          message={exportHub.message}
+          error={exportHub.error}
+          exportingFormat={exportHub.exportingFormat}
+          controlsDisabled={exportHub.controlsDisabled}
+          locked={exportHub.locked}
+        />
       </div>
     </FormSection>
   );

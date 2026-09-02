@@ -1,11 +1,17 @@
 "use client";
 
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/orderFormat";
 import { formatPoints } from "@/shared/utils/formatPoints";
+import {
+  exportFilterDisableHint,
+  ReportExportButtons,
+  ReportExportStatus,
+} from "@/features/reports";
 import { useAdminSettlementReports } from "../hooks/useAdminSettlementReports.hook";
 
 function Metric({ label, value }: { label: string; value: string }) {
@@ -19,50 +25,6 @@ function Metric({ label, value }: { label: string; value: string }) {
   );
 }
 
-function ExportButtons({
-  disabled,
-  onXlsx,
-  onCsv,
-  onPdf,
-}: {
-  disabled?: boolean;
-  onXlsx: () => void;
-  onCsv: () => void;
-  onPdf: () => void;
-}) {
-  return (
-    <ButtonGroup align="start">
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        disabled={disabled}
-        onClick={onXlsx}
-      >
-        {LABELS.exportExcel}
-      </Button>
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        disabled={disabled}
-        onClick={onCsv}
-      >
-        {LABELS.exportCsv}
-      </Button>
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        disabled={disabled}
-        onClick={onPdf}
-      >
-        {LABELS.exportPdf}
-      </Button>
-    </ButtonGroup>
-  );
-}
-
 export function AdminSettlementReportsPanel() {
   const {
     from,
@@ -70,7 +32,9 @@ export function AdminSettlementReportsPanel() {
     to,
     setTo,
     loading,
-    exporting,
+    controlsDisabled,
+    exportingFormat,
+    locked,
     error,
     message,
     summary,
@@ -82,6 +46,13 @@ export function AdminSettlementReportsPanel() {
     exportReconciliation,
   } = useAdminSettlementReports();
 
+  const filterHint = exportFilterDisableHint({
+    message,
+    exportingFormat,
+    controlsDisabled,
+    locked,
+  });
+
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
@@ -92,51 +63,51 @@ export function AdminSettlementReportsPanel() {
           onToChange={setTo}
           fromId="report-from"
           toId="report-to"
+          disabled={controlsDisabled}
+          disabledHint={filterHint}
         />
         <ButtonGroup
           align="start"
           className="sm:col-span-2 lg:col-span-1 lg:self-end"
         >
-          <Button
-            type="button"
-            fullWidth="mobile"
-            onClick={() => void load()}
-            disabled={loading || exporting}
+          <DisabledActionHint
+            disabled={loading || controlsDisabled}
+            message={controlsDisabled ? filterHint : ""}
+            block
+            className="w-full sm:w-auto"
           >
-            {LABELS.reportLoad}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            disabled={!summary || exporting}
-            onClick={() => void exportSummary("xlsx")}
-          >
-            {LABELS.exportExcel}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            disabled={!summary || exporting}
-            onClick={() => void exportSummary("csv")}
-          >
-            {LABELS.exportCsv}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            disabled={!summary || exporting}
-            onClick={() => void exportSummary("pdf")}
-          >
-            {LABELS.exportPdf}
-          </Button>
+            <Button
+              type="button"
+              fullWidth="mobile"
+              onClick={() => void load()}
+              disabled={loading || controlsDisabled}
+            >
+              {LABELS.reportLoad}
+            </Button>
+          </DisabledActionHint>
+          <ReportExportButtons
+            grouped={false}
+            controlsDisabled={controlsDisabled}
+            exportingFormat={exportingFormat}
+            locked={locked}
+            statusMessage={message}
+            disabled={!summary}
+            blockedHint={LABELS.reportExportLoadReportFirst}
+            onExportExcel={() => void exportSummary("xlsx")}
+            onExportCsv={() => void exportSummary("csv")}
+            onExportPdf={() => void exportSummary("pdf")}
+          />
         </ButtonGroup>
       </div>
 
       {error ? <p className="text-body text-danger">{error}</p> : null}
-      {message ? <p className="text-body-sm text-ink-muted">{message}</p> : null}
+      <ReportExportStatus
+        message={message}
+        error={error}
+        exportingFormat={exportingFormat}
+        controlsDisabled={controlsDisabled}
+        locked={locked}
+      />
       {loading ? (
         <p className="text-body text-ink-muted">{LABELS.loading}</p>
       ) : null}
@@ -189,11 +160,15 @@ export function AdminSettlementReportsPanel() {
             <h3 className="text-body font-semibold text-ink">
               {LABELS.reconciliation}
             </h3>
-            <ExportButtons
-              disabled={exporting}
-              onXlsx={() => void exportReconciliation("xlsx")}
-              onCsv={() => void exportReconciliation("csv")}
-              onPdf={() => void exportReconciliation("pdf")}
+            <ReportExportButtons
+              size="sm"
+              controlsDisabled={controlsDisabled}
+              exportingFormat={exportingFormat}
+              locked={locked}
+              statusMessage={message}
+              onExportExcel={() => void exportReconciliation("xlsx")}
+              onExportCsv={() => void exportReconciliation("csv")}
+              onExportPdf={() => void exportReconciliation("pdf")}
             />
           </div>
           <p
@@ -233,11 +208,15 @@ export function AdminSettlementReportsPanel() {
             <h3 className="text-body font-semibold text-ink">
               {LABELS.vendorSettlements}
             </h3>
-            <ExportButtons
-              disabled={exporting}
-              onXlsx={() => void exportVendors("xlsx")}
-              onCsv={() => void exportVendors("csv")}
-              onPdf={() => void exportVendors("pdf")}
+            <ReportExportButtons
+              size="sm"
+              controlsDisabled={controlsDisabled}
+              exportingFormat={exportingFormat}
+              locked={locked}
+              statusMessage={message}
+              onExportExcel={() => void exportVendors("xlsx")}
+              onExportCsv={() => void exportVendors("csv")}
+              onExportPdf={() => void exportVendors("pdf")}
             />
           </div>
           <div className="overflow-x-auto rounded-md border border-line">

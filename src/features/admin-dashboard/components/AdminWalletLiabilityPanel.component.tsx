@@ -1,10 +1,16 @@
 "use client";
 
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatPoints";
+import {
+  exportFilterDisableHint,
+  ReportExportButtons,
+  ReportExportStatus,
+} from "@/features/reports";
 import { useWalletLiabilityReport } from "../hooks/useWalletLiabilityReport.hook";
 
 export function AdminWalletLiabilityPanel() {
@@ -16,11 +22,24 @@ export function AdminWalletLiabilityPanel() {
     setTo,
     page,
     loading,
+    controlsDisabled,
+    exportingFormat,
+    locked,
     error,
+    message,
     report,
     load,
-    exportFile,
+    exportExcel,
+    exportCsv,
+    exportPdf,
   } = reportPanel;
+
+  const filterHint = exportFilterDisableHint({
+    message,
+    exportingFormat,
+    controlsDisabled,
+    locked,
+  });
 
   return (
     <div className="space-y-6">
@@ -36,50 +55,50 @@ export function AdminWalletLiabilityPanel() {
           onToChange={setTo}
           fromId="wallet-liability-from"
           toId="wallet-liability-to"
+          disabled={controlsDisabled}
+          disabledHint={filterHint}
         />
         <ButtonGroup
           align="start"
           className="sm:col-span-2 lg:col-span-1 lg:self-end"
         >
-          <Button
-            type="button"
-            fullWidth="mobile"
-            onClick={() => void load(1)}
-            disabled={loading}
+          <DisabledActionHint
+            disabled={loading || controlsDisabled}
+            message={controlsDisabled ? filterHint : ""}
+            block
+            className="w-full sm:w-auto"
           >
-            {LABELS.reportLoad}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
+            <Button
+              type="button"
+              fullWidth="mobile"
+              onClick={() => void load(1)}
+              disabled={loading || controlsDisabled}
+            >
+              {LABELS.reportLoad}
+            </Button>
+          </DisabledActionHint>
+          <ReportExportButtons
+            grouped={false}
+            controlsDisabled={controlsDisabled}
+            exportingFormat={exportingFormat}
+            locked={locked}
+            statusMessage={message}
             disabled={!report}
-            onClick={() => void exportFile("xlsx")}
-          >
-            {LABELS.exportExcel}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            disabled={!report}
-            onClick={() => void exportFile("csv")}
-          >
-            {LABELS.exportCsv}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            disabled={!report}
-            onClick={() => void exportFile("pdf")}
-          >
-            {LABELS.exportPdf}
-          </Button>
+            blockedHint={LABELS.reportExportLoadReportFirst}
+            onExportExcel={exportExcel}
+            onExportCsv={exportCsv}
+            onExportPdf={exportPdf}
+          />
         </ButtonGroup>
       </div>
 
-      {error ? <p className="text-body text-danger">{error}</p> : null}
+      <ReportExportStatus
+        message={message}
+        error={error}
+        exportingFormat={exportingFormat}
+        controlsDisabled={controlsDisabled}
+        locked={locked}
+      />
       {loading ? (
         <p className="text-body text-ink-muted">{LABELS.loading}</p>
       ) : null}

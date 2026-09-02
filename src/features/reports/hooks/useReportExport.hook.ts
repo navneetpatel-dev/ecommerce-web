@@ -12,6 +12,7 @@ import {
   type ExportFileFormat,
 } from "./useReportHubHelpers/index";
 import { useReportExportLockStore } from "../stores/reportExportLock.store";
+import { deriveExportControlsState } from "../utils/exportControlsState";
 import { followAsyncExport, isBenignExportError } from "../utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
 import { runReportExport } from "../utils/runReportExport";
@@ -44,7 +45,7 @@ export function useReportExport(
       void runRef.current?.catch(() => undefined);
 
       setExportingFormat(format);
-      setMessage(null);
+      setMessage(LABELS.reportAsyncPreparing);
       setError(null);
       const filters = buildFilters();
       const controller = new AbortController();
@@ -83,8 +84,7 @@ export function useReportExport(
 
   return {
     exporting: exportingFormat !== null,
-    exportingFormat,
-    locked: globalLocked,
+    ...deriveExportControlsState(exportingFormat, globalLocked),
     message,
     error,
     exportExcel: () => runExport("xlsx"),

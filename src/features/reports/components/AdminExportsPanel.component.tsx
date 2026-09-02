@@ -21,6 +21,8 @@ import {
 } from "../utils/runReportExport";
 import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
 import { useReportExportLockStore } from "../stores/reportExportLock.store";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { ReportExportStatus } from "./ReportExportStatus.component";
 
 function filterDatePart(value: unknown): string | undefined {
   if (typeof value !== "string") return undefined;
@@ -149,6 +151,8 @@ export function AdminExportsPanel() {
     .replace("{active}", String(queue.active))
     .replace("{failed}", String(queue.failed));
 
+  const filterHint = globalLocked ? LABELS.reportExportLocked : "";
+
   return (
     <FormSection title={LABELS.reportExportsOps} columns={1}>
       <div className="space-y-3">
@@ -156,34 +160,45 @@ export function AdminExportsPanel() {
         <div className="flex flex-wrap items-end gap-2">
           <label className="flex flex-col gap-1 text-body-sm">
             <span className="text-ink-muted">{LABELS.status}</span>
-            <Input
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              placeholder="PENDING"
-            />
+            <DisabledActionHint disabled={globalLocked} message={filterHint} block>
+              <Input
+                value={statusFilter}
+                disabled={globalLocked}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                placeholder="PENDING"
+              />
+            </DisabledActionHint>
           </label>
           <label className="flex flex-col gap-1 text-body-sm">
             <span className="text-ink-muted">{LABELS.reportType}</span>
-            <Input
-              value={reportTypeFilter}
-              onChange={(e) => setReportTypeFilter(e.target.value)}
-              placeholder="gmv-sales"
-            />
+            <DisabledActionHint disabled={globalLocked} message={filterHint} block>
+              <Input
+                value={reportTypeFilter}
+                disabled={globalLocked}
+                onChange={(e) => setReportTypeFilter(e.target.value)}
+                placeholder="gmv-sales"
+              />
+            </DisabledActionHint>
           </label>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            loading={loading}
-            onClick={() => void load()}
-          >
-            {LABELS.refresh}
-          </Button>
+          <DisabledActionHint disabled={globalLocked} message={filterHint}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              loading={loading}
+              disabled={globalLocked}
+              onClick={() => void load()}
+            >
+              {LABELS.refresh}
+            </Button>
+          </DisabledActionHint>
         </div>
-        {message ? (
-          <p className="text-body-sm text-ink-muted">{message}</p>
-        ) : null}
-        {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+        <ReportExportStatus
+          message={message}
+          error={error}
+          controlsDisabled={globalLocked || retryingId !== null}
+          locked={globalLocked}
+        />
         <div className="overflow-x-auto">
           <table className="min-w-full text-body-sm">
             <thead>
@@ -208,15 +223,20 @@ export function AdminExportsPanel() {
                   <td className="px-2 py-2">{formatRowCount(row)}</td>
                   <td className="px-2 py-2">
                     {row.status === "READY" ? (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
+                      <DisabledActionHint
                         disabled={globalLocked}
-                        onClick={() => downloadReadyExport(row)}
+                        message={filterHint}
                       >
-                        {LABELS.download}
-                      </Button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          disabled={globalLocked}
+                          onClick={() => downloadReadyExport(row)}
+                        >
+                          {LABELS.download}
+                        </Button>
+                      </DisabledActionHint>
                     ) : row.status === "FAILED" ? (
                       <div className="flex flex-col gap-1">
                         {row.errorMessage ? (
@@ -224,16 +244,21 @@ export function AdminExportsPanel() {
                             {row.errorMessage}
                           </span>
                         ) : null}
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          loading={retryingId === row.id}
+                        <DisabledActionHint
                           disabled={globalLocked}
-                          onClick={() => void retryExport(row)}
+                          message={filterHint}
                         >
-                          {LABELS.reportExportRetry}
-                        </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            loading={retryingId === row.id}
+                            disabled={globalLocked}
+                            onClick={() => void retryExport(row)}
+                          >
+                            {LABELS.reportExportRetry}
+                          </Button>
+                        </DisabledActionHint>
                       </div>
                     ) : row.errorMessage ? (
                       <span className="text-danger">{row.errorMessage}</span>

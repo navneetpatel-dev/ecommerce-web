@@ -1,4 +1,3 @@
-import { LABELS } from "@/shared/constants/labels";
 import type { AsyncExportResponse } from "../api/reportsEngine.api";
 import {
   applyPollOutcome,
@@ -8,7 +7,7 @@ import {
   type ExportFileFormat,
 } from "../hooks/useReportHubHelpers/index";
 import type { PollExportResult } from "./reportExportPollError";
-import { initialExportStatusMessage } from "./exportStatusMessage";
+import { initialExportStatusMessage, terminalExportStatusMessage } from "./exportStatusMessage";
 
 export type AsyncExportHandlers = {
   setMessage: (message: string | null) => void;
@@ -61,8 +60,9 @@ export async function followAsyncExport(
   if (response.status === "READY") {
     if (options?.downloadReady) {
       await options.downloadReady(response.exportId, format);
-      handlers.setMessage(LABELS.reportAsyncReady);
-      handlers.setError(null);
+      const terminal = terminalExportStatusMessage("ready");
+      handlers.setMessage(terminal.message);
+      handlers.setError(terminal.error);
       return { outcome: "ready" };
     }
     const result = await pollAsyncExportResponse(response, pollOptions);

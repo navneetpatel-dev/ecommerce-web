@@ -1,6 +1,8 @@
 import { LABELS } from "@/shared/constants/labels";
 import type { ExportStatus } from "../api/reportsEngine.api";
 
+export type TerminalExportOutcome = "ready" | "failed" | "timeout" | "aborted";
+
 export type ExportFileFormat = "csv" | "pdf" | "xlsx";
 
 export type ExportStatusMessageContext = {
@@ -49,6 +51,25 @@ export function exportStatusMessage(ctx: ExportStatusMessageContext): string {
     return LABELS.reportAsyncWaiting;
   }
   return LABELS.reportAsyncPreparing;
+}
+
+export function terminalExportStatusMessage(
+  outcome: TerminalExportOutcome,
+  errorMessage?: string | null,
+): { message: string | null; error: string | null } {
+  if (outcome === "ready") {
+    return { message: LABELS.reportAsyncReady, error: null };
+  }
+  if (outcome === "failed") {
+    return {
+      message: null,
+      error: errorMessage?.trim() || LABELS.reportAsyncFailed,
+    };
+  }
+  if (outcome === "timeout") {
+    return { message: LABELS.reportAsyncTimeout, error: null };
+  }
+  return { message: null, error: null };
 }
 
 export function initialExportStatusMessage(

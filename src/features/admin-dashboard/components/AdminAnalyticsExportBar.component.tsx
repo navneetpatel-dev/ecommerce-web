@@ -1,27 +1,33 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { Download } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
-import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
+import { deriveExportControlsState } from "@/features/reports/utils/exportControlsState";
 import { isBenignExportError } from "@/features/reports/utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { runReportExport } from "@/features/reports/utils/runReportExport";
 import { adminApi } from "../api/admin.api";
 import { followAsyncExport } from "@/features/reports/utils/asyncExportFlow";
+import type { ExportFileFormat } from "@/features/reports/hooks/useReportHubHelpers/index";
+import {
+  ReportExportButtons,
+  ReportExportStatus,
+} from "@/features/reports";
 
 type AdminAnalyticsExportBarProps = {
   range?: { from?: string; to?: string };
 };
 
 export function AdminAnalyticsExportBar({ range }: AdminAnalyticsExportBarProps) {
-  const [exporting, setExporting] = useState(false);
+  const [exportingFormat, setExportingFormat] = useState<ExportFileFormat | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
   const runRef = useRef<Promise<void> | null>(null);
+  const controls = deriveExportControlsState(exportingFormat, globalLocked);
 
   const exportRange = useMemo(
     () => ({
@@ -31,11 +37,11 @@ export function AdminAnalyticsExportBar({ range }: AdminAnalyticsExportBarProps)
     [range?.from, range?.to],
   );
 
-  const run = async (format: "xlsx" | "csv" | "pdf") => {
+  const run = async (format: ExportFileFormat) => {
     void runRef.current?.catch(() => undefined);
-    setExporting(true);
+    setExportingFormat(format);
+    setMessage(LABELS.reportAsyncPreparing);
     setError(null);
-    setMessage(null);
     const task = runReportExport(async () => {
       const payload = await adminApi.exportAnalyticsAsync(format, exportRange);
       await followAsyncExport(payload, format, { setMessage, setError });
@@ -45,48 +51,30 @@ export function AdminAnalyticsExportBar({ range }: AdminAnalyticsExportBarProps)
           setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
         }
       })
-      .finally(() => setExporting(false));
+      .finally(() => setExportingFormat(null));
     runRef.current = task;
     await task;
   };
 
   return (
     <div className="space-y-2">
-      <ButtonGroup align="start">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          loading={exporting || globalLocked}
-          disabled={globalLocked}
-          onClick={() => void run("xlsx")}
-        >
-          <Download className="h-4 w-4" aria-hidden />
-          {LABELS.exportExcel}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          loading={exporting || globalLocked}
-          disabled={globalLocked}
-          onClick={() => void run("csv")}
-        >
-          {LABELS.exportCsv}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          loading={exporting || globalLocked}
-          disabled={globalLocked}
-          onClick={() => void run("pdf")}
-        >
-          {LABELS.exportPdf}
-        </Button>
-      </ButtonGroup>
-      {message ? <p className="text-body-sm text-ink-muted">{message}</p> : null}
-      {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+      <ReportExportButtons
+        size="sm"
+        controlsDisabled={controls.controlsDisabled}
+        exportingFormat={exportingFormat}
+        locked={controls.locked}
+        statusMessage={message}
+        onExportExcel={() => void run("xlsx")}
+        onExportCsv={() => void run("csv")}
+        onExportPdf={() => void run("pdf")}
+      />
+      <ReportExportStatus
+        message={message}
+        error={error}
+        exportingFormat={exportingFormat}
+        controlsDisabled={controls.controlsDisabled}
+        locked={controls.locked}
+      />
     </div>
   );
 }

@@ -69,20 +69,12 @@ export function AdminReportsPage() {
           onExportCsv={hub.exportCsv}
           onExportPdf={hub.exportPdf}
           loading={hub.loading}
-          exporting={hub.exporting}
+          controlsDisabled={hub.controlsDisabled}
+          locked={hub.locked}
+          exportingFormat={hub.exportingFormat}
+          message={hub.message}
+          error={hub.error}
         />
-
-        {hub.message ? (
-          <p className="text-[0.875rem] text-ink-muted" aria-live="polite">
-            {hub.message}
-          </p>
-        ) : null}
-
-        {hub.error ? (
-          <p className="text-[0.875rem] text-danger" aria-live="polite">
-            {hub.error}
-          </p>
-        ) : null}
 
         <ReportTable
           onRetry={() => hub.load()}

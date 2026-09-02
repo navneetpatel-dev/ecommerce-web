@@ -1,6 +1,7 @@
 "use client";
 
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
@@ -13,7 +14,11 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
+import type { ExportFileFormat } from "../hooks/useReportHubHelpers/index";
 import type { ReportCatalogItem } from "../api/reportsEngine.api";
+import { exportFilterDisableHint } from "../utils/exportDisableHint";
+import { ReportExportButtons } from "./ReportExportButtons.component";
+import { ReportExportStatus } from "./ReportExportStatus.component";
 
 interface ReportFilterBarProps {
   catalog: ReportCatalogItem[];
@@ -36,7 +41,11 @@ interface ReportFilterBarProps {
   onExportCsv: () => void;
   onExportPdf: () => void;
   loading: boolean;
-  exporting: boolean;
+  controlsDisabled: boolean;
+  locked?: boolean;
+  exportingFormat?: ExportFileFormat | null;
+  message?: string | null;
+  error?: string | null;
 }
 
 export function ReportFilterBar({
@@ -60,8 +69,19 @@ export function ReportFilterBar({
   onExportCsv,
   onExportPdf,
   loading,
-  exporting,
+  controlsDisabled,
+  locked = false,
+  exportingFormat = null,
+  message,
+  error,
 }: ReportFilterBarProps) {
+  const filterHint = exportFilterDisableHint({
+    message,
+    exportingFormat,
+    controlsDisabled,
+    locked,
+  });
+
   return (
     <FormSection
       title={LABELS.reportFilters}
@@ -73,21 +93,28 @@ export function ReportFilterBar({
         htmlFor="report-type"
         className="sm:col-span-2 xl:col-span-3"
       >
-        <Select
-          value={reportType || undefined}
-          onValueChange={onReportTypeChange}
+        <DisabledActionHint
+          disabled={controlsDisabled}
+          message={filterHint}
+          block
         >
-          <SelectTrigger id="report-type">
-            <SelectValue placeholder={LABELS.reportSelect} />
-          </SelectTrigger>
-          <SelectContent>
-            {catalog.map((item) => (
-              <SelectItem key={item.type} value={item.type}>
-                {labelForKey(item.labelKey)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          <Select
+            value={reportType || undefined}
+            onValueChange={onReportTypeChange}
+            disabled={controlsDisabled}
+          >
+            <SelectTrigger id="report-type" disabled={controlsDisabled}>
+              <SelectValue placeholder={LABELS.reportSelect} />
+            </SelectTrigger>
+            <SelectContent>
+              {catalog.map((item) => (
+                <SelectItem key={item.type} value={item.type}>
+                  {labelForKey(item.labelKey)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </DisabledActionHint>
       </FormFieldFrame>
 
       <DateRangeFields
@@ -97,77 +124,102 @@ export function ReportFilterBar({
         onToChange={onToChange}
         fromId="report-from"
         toId="report-to"
+        disabled={controlsDisabled}
+        disabledHint={filterHint}
       />
 
       {showVendorFilter ? (
         <FormFieldFrame label={LABELS.reportVendor} htmlFor="report-vendor">
-          <Input
-            id="report-vendor"
-            value={vendorId}
-            placeholder={LABELS.uuidPlaceholder}
-            onChange={(e) => onVendorIdChange(e.target.value)}
-          />
+          <DisabledActionHint
+            disabled={controlsDisabled}
+            message={filterHint}
+            block
+          >
+            <Input
+              id="report-vendor"
+              value={vendorId}
+              placeholder={LABELS.uuidPlaceholder}
+              disabled={controlsDisabled}
+              onChange={(e) => onVendorIdChange(e.target.value)}
+            />
+          </DisabledActionHint>
         </FormFieldFrame>
       ) : null}
 
       <FormFieldFrame label={LABELS.reportCategory} htmlFor="report-category">
-        <Input
-          id="report-category"
-          value={categoryId}
-          placeholder={LABELS.uuidPlaceholder}
-          onChange={(e) => onCategoryIdChange(e.target.value)}
-        />
+        <DisabledActionHint
+          disabled={controlsDisabled}
+          message={filterHint}
+          block
+        >
+          <Input
+            id="report-category"
+            value={categoryId}
+            placeholder={LABELS.uuidPlaceholder}
+            disabled={controlsDisabled}
+            onChange={(e) => onCategoryIdChange(e.target.value)}
+          />
+        </DisabledActionHint>
       </FormFieldFrame>
 
       <FormFieldFrame label={LABELS.reportStatus} htmlFor="report-status">
-        <Input
-          id="report-status"
-          value={status}
-          onChange={(e) => onStatusChange(e.target.value)}
-        />
+        <DisabledActionHint
+          disabled={controlsDisabled}
+          message={filterHint}
+          block
+        >
+          <Input
+            id="report-status"
+            value={status}
+            disabled={controlsDisabled}
+            onChange={(e) => onStatusChange(e.target.value)}
+          />
+        </DisabledActionHint>
       </FormFieldFrame>
 
-      <div className="sm:col-span-2 xl:col-span-3">
+      <div className="sm:col-span-2 xl:col-span-3 space-y-2">
         <ButtonGroup align="start">
-          <Button
-            type="button"
-            fullWidth="mobile"
-            onClick={onLoad}
-            disabled={loading || !reportType}
+          <DisabledActionHint
+            disabled={loading || !reportType || controlsDisabled}
+            message={
+              controlsDisabled
+                ? filterHint
+                : !reportType
+                  ? LABELS.reportExportSelectReportFirst
+                  : ""
+            }
+            block
+            className="w-full sm:w-auto"
           >
-            {LABELS.reportLoad}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            loading={exporting}
-            onClick={onExportExcel}
-            disabled={exporting || !reportType}
-          >
-            {LABELS.exportExcel}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            loading={exporting}
-            onClick={onExportCsv}
-            disabled={exporting || !reportType}
-          >
-            {LABELS.exportCsv}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            loading={exporting}
-            onClick={onExportPdf}
-            disabled={exporting || !reportType}
-          >
-            {LABELS.exportPdf}
-          </Button>
+            <Button
+              type="button"
+              fullWidth="mobile"
+              onClick={onLoad}
+              disabled={loading || !reportType || controlsDisabled}
+            >
+              {LABELS.reportLoad}
+            </Button>
+          </DisabledActionHint>
+          <ReportExportButtons
+            grouped={false}
+            controlsDisabled={controlsDisabled}
+            exportingFormat={exportingFormat}
+            locked={locked}
+            statusMessage={message}
+            disabled={!reportType}
+            blockedHint={LABELS.reportExportSelectReportFirst}
+            onExportExcel={onExportExcel}
+            onExportCsv={onExportCsv}
+            onExportPdf={onExportPdf}
+          />
         </ButtonGroup>
+        <ReportExportStatus
+          message={message}
+          error={error}
+          exportingFormat={exportingFormat}
+          controlsDisabled={controlsDisabled}
+          locked={locked}
+        />
       </div>
     </FormSection>
   );

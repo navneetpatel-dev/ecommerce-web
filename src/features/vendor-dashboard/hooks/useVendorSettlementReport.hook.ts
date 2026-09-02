@@ -18,6 +18,8 @@ import {
 } from "@/features/reports/utils/asyncExportFlow";
 import { runReportExport } from "@/features/reports/utils/runReportExport";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
+import type { ExportFileFormat } from "@/features/reports/hooks/useReportHubHelpers/index";
+import { deriveExportControlsState } from "@/features/reports/utils/exportControlsState";
 
 /** Owns the vendor settlement report panel state (Rule 1/12). */
 export function useVendorSettlementReport() {
@@ -26,7 +28,9 @@ export function useVendorSettlementReport() {
   const [from, setFrom] = useState(initial.from);
   const [to, setTo] = useState(initial.to);
   const [loading, setLoading] = useState(false);
-  const [exporting, setExporting] = useState(false);
+  const [exportingFormat, setExportingFormat] = useState<ExportFileFormat | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [summary, setSummary] = useState<VendorReportSummary | null>(null);
@@ -53,12 +57,12 @@ export function useVendorSettlementReport() {
     }
   };
 
-  const exportFile = async (format: "csv" | "pdf" | "xlsx") => {
+  const exportFile = async (format: ExportFileFormat) => {
     if (!vendorId) return;
     void runRef.current?.catch(() => undefined);
-    setExporting(true);
+    setExportingFormat(format);
+    setMessage(LABELS.reportAsyncPreparing);
     setError(null);
-    setMessage(null);
     const path = reportsApi.exportUrl(API.reports.vendor(vendorId), {
       ...buildRange(),
       format,
@@ -72,10 +76,12 @@ export function useVendorSettlementReport() {
           setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
         }
       })
-      .finally(() => setExporting(false));
+      .finally(() => setExportingFormat(null));
     runRef.current = task;
     await task;
   };
+
+  const controls = deriveExportControlsState(exportingFormat, globalLocked);
 
   return {
     vendorId,
@@ -84,11 +90,15 @@ export function useVendorSettlementReport() {
     to,
     setTo,
     loading,
-    exporting: exporting || globalLocked,
+    exporting: exportingFormat !== null || globalLocked,
+    ...controls,
     error,
     message,
     summary,
     load,
     exportFile,
+    exportExcel: () => void exportFile("xlsx"),
+    exportCsv: () => void exportFile("csv"),
+    exportPdf: () => void exportFile("pdf"),
   };
 }

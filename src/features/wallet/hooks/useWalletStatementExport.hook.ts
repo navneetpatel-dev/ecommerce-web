@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import {
   defaultRange,
+  deriveExportControlsState,
   followAsyncExport,
   getReportExportErrorMessage,
   isBenignExportError,
@@ -92,14 +93,15 @@ export function useWalletStatementExport() {
     [from, to],
   );
 
+  const controls = deriveExportControlsState(exportingFormat, globalLocked);
+
   return {
     from,
     setFrom,
     to,
     setTo,
     exporting: exportingFormat !== null,
-    exportingFormat,
-    locked: globalLocked,
+    ...controls,
     message,
     error,
     exportExcel: () => runExport("xlsx"),

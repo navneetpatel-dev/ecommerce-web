@@ -1,6 +1,7 @@
 "use client";
 
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
@@ -12,6 +13,11 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
+import {
+  exportFilterDisableHint,
+  ReportExportButtons,
+  ReportExportStatus,
+} from "@/features/reports";
 import { useCashbackWriteOffReport } from "../../hooks/useCashbackWriteOffReport.hook";
 import { CashbackWriteOffReportTable } from "./CashbackWriteOffReportTable.component";
 
@@ -26,11 +32,24 @@ export function AdminCashbackWriteOffPanel() {
     setBornBy,
     page,
     loading,
+    controlsDisabled,
+    exportingFormat,
+    locked,
     error,
+    message,
     report,
     load,
-    exportFile,
+    exportExcel,
+    exportCsv,
+    exportPdf,
   } = reportPanel;
+
+  const filterHint = exportFilterDisableHint({
+    message,
+    exportingFormat,
+    controlsDisabled,
+    locked,
+  });
 
   return (
     <div className="space-y-6">
@@ -46,15 +65,23 @@ export function AdminCashbackWriteOffPanel() {
           onToChange={setTo}
           fromId="writeoff-from"
           toId="writeoff-to"
+          disabled={controlsDisabled}
+          disabledHint={filterHint}
         />
         <FormFieldFrame label={LABELS.reportBornBy} htmlFor="writeoff-born-by">
-          <Select
-            value={bornBy}
-            onValueChange={(v) => setBornBy(v as typeof bornBy)}
+          <DisabledActionHint
+            disabled={controlsDisabled}
+            message={filterHint}
+            block
           >
-            <SelectTrigger id="writeoff-born-by">
-              <SelectValue />
-            </SelectTrigger>
+            <Select
+              value={bornBy}
+              disabled={controlsDisabled}
+              onValueChange={(v) => setBornBy(v as typeof bornBy)}
+            >
+              <SelectTrigger id="writeoff-born-by" disabled={controlsDisabled}>
+                <SelectValue />
+              </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">{LABELS.reportBornByAll}</SelectItem>
               <SelectItem value="PLATFORM">
@@ -65,47 +92,46 @@ export function AdminCashbackWriteOffPanel() {
               </SelectItem>
             </SelectContent>
           </Select>
+          </DisabledActionHint>
         </FormFieldFrame>
         <ButtonGroup align="start" className="sm:col-span-2 xl:col-span-4">
-          <Button
-            type="button"
-            fullWidth="mobile"
-            onClick={() => void load(1)}
-            disabled={loading}
+          <DisabledActionHint
+            disabled={loading || controlsDisabled}
+            message={controlsDisabled ? filterHint : ""}
+            block
+            className="w-full sm:w-auto"
           >
-            {LABELS.reportLoad}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
+            <Button
+              type="button"
+              fullWidth="mobile"
+              onClick={() => void load(1)}
+              disabled={loading || controlsDisabled}
+            >
+              {LABELS.reportLoad}
+            </Button>
+          </DisabledActionHint>
+          <ReportExportButtons
+            grouped={false}
+            controlsDisabled={controlsDisabled}
+            exportingFormat={exportingFormat}
+            locked={locked}
+            statusMessage={message}
             disabled={!report}
-            onClick={() => void exportFile("xlsx")}
-          >
-            {LABELS.exportExcel}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            disabled={!report}
-            onClick={() => void exportFile("csv")}
-          >
-            {LABELS.exportCsv}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            fullWidth="mobile"
-            disabled={!report}
-            onClick={() => void exportFile("pdf")}
-          >
-            {LABELS.exportPdf}
-          </Button>
+            blockedHint={LABELS.reportExportLoadReportFirst}
+            onExportExcel={exportExcel}
+            onExportCsv={exportCsv}
+            onExportPdf={exportPdf}
+          />
         </ButtonGroup>
       </div>
 
-      {error ? <p className="text-body text-danger">{error}</p> : null}
+      <ReportExportStatus
+        message={message}
+        error={error}
+        exportingFormat={exportingFormat}
+        controlsDisabled={controlsDisabled}
+        locked={locked}
+      />
       {loading ? (
         <p className="text-body text-ink-muted">{LABELS.loading}</p>
       ) : null}

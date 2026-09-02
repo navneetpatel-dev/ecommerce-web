@@ -1,4 +1,5 @@
 import { DateTimePicker } from "@/shared/components/DateTimePicker.component";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
@@ -13,6 +14,8 @@ interface DateRangeFieldsProps {
   className?: string;
   fromClassName?: string;
   toClassName?: string;
+  disabled?: boolean;
+  disabledHint?: string;
 }
 
 /** Shared From/To date filters using `DateTimePicker` date mode (`YYYY-MM-DD`). */
@@ -26,7 +29,11 @@ export function DateRangeFields({
   className,
   fromClassName,
   toClassName,
+  disabled = false,
+  disabledHint = "",
 }: DateRangeFieldsProps) {
+  const hint = disabled ? disabledHint : "";
+
   return (
     <div className={cn("contents", className)}>
       <FormFieldFrame
@@ -34,26 +41,32 @@ export function DateRangeFields({
         htmlFor={fromId}
         className={fromClassName}
       >
-        <DateTimePicker
-          id={fromId}
-          mode="date"
-          value={from}
-          onChange={onFromChange}
-          placeholder={LABELS.pickDate}
-        />
+        <DisabledActionHint disabled={disabled} message={hint} block>
+          <DateTimePicker
+            id={fromId}
+            mode="date"
+            value={from}
+            onChange={onFromChange}
+            placeholder={LABELS.pickDate}
+            disabled={disabled}
+          />
+        </DisabledActionHint>
       </FormFieldFrame>
       <FormFieldFrame
         label={LABELS.reportDateTo}
         htmlFor={toId}
         className={toClassName}
       >
-        <DateTimePicker
-          id={toId}
-          mode="date"
-          value={to}
-          onChange={onToChange}
-          placeholder={LABELS.pickDate}
-        />
+        <DisabledActionHint disabled={disabled} message={hint} block>
+          <DateTimePicker
+            id={toId}
+            mode="date"
+            value={to}
+            onChange={onToChange}
+            placeholder={LABELS.pickDate}
+            disabled={disabled}
+          />
+        </DisabledActionHint>
       </FormFieldFrame>
     </div>
   );

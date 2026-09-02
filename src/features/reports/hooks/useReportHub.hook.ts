@@ -74,7 +74,7 @@ export function useReportHub(options?: { preferAudience?: string }) {
     let active = true;
     const controller = new AbortController();
     const format = normalizeExportFormat(params.get("format"));
-    setMessage(LABELS.reportAsyncPreparing);
+    setMessage(null);
     setError(null);
     void runReportExport(
       async () => {
@@ -159,6 +159,9 @@ export function useReportHub(options?: { preferAudience?: string }) {
     exportCsv: exportHub.exportCsv,
     exportPdf: exportHub.exportPdf,
     exporting: exportHub.exporting,
+    exportingFormat: exportHub.exportingFormat,
+    locked: exportHub.locked,
+    controlsDisabled: exportHub.controlsDisabled,
     labelForKey,
     setPage: (nextPage: number) => load(nextPage),
   };

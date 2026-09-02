@@ -13,6 +13,7 @@ import {
   type ExportFileFormat,
 } from "./useReportHubHelpers/index";
 import { useReportExportLockStore } from "../stores/reportExportLock.store";
+import { deriveExportControlsState } from "../utils/exportControlsState";
 import { followAsyncExport, isBenignExportError } from "../utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
 import { runReportExport } from "../utils/runReportExport";
@@ -28,7 +29,9 @@ export function useCustomerOrderHistory() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [exporting, setExporting] = useState(false);
+  const [exportingFormat, setExportingFormat] = useState<ExportFileFormat | null>(
+    null,
+  );
   const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
   const abortRef = useRef<AbortController | null>(null);
   const runRef = useRef<Promise<void> | null>(null);
@@ -60,8 +63,8 @@ export function useCustomerOrderHistory() {
     void runRef.current?.catch(() => undefined);
     const controller = new AbortController();
     abortRef.current = controller;
-    setExporting(true);
-    setMessage(null);
+    setExportingFormat(format);
+    setMessage(LABELS.reportAsyncPreparing);
     setError(null);
 
     const task = runReportExport(
@@ -80,10 +83,12 @@ export function useCustomerOrderHistory() {
         if (isBenignExportError(err)) return;
         setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
       })
-      .finally(() => setExporting(false));
+      .finally(() => setExportingFormat(null));
 
     runRef.current = task;
   };
+
+  const controls = deriveExportControlsState(exportingFormat, globalLocked);
 
   return {
     from,
@@ -95,7 +100,8 @@ export function useCustomerOrderHistory() {
     loading,
     error,
     message,
-    exporting: exporting || globalLocked,
+    exporting: exportingFormat !== null || globalLocked,
+    ...controls,
     load,
     exportExcel: () => runExport("xlsx"),
     exportCsv: () => runExport("csv"),

@@ -54,15 +54,20 @@ export const settingsLabels = {
   reportAsyncGeneratingSeconds: "Still creating your file… ({seconds}s)",
   reportAsyncEmptyRange:
     "No transactions in this date range — creating an empty statement…",
-  reportAsyncQueued: "Your export is in the queue…",
   reportAsyncTimeout:
     "This is taking longer than expected — try again in a moment or pick a shorter date range.",
   reportExportTooManyPending: "You already have exports in progress. Wait for them to finish.",
   reportExportLocked: "Another export is running — wait for it to finish.",
-  reportAsyncStreaming: "Generating export…",
+  reportExportFiltersLocked:
+    "Filters are locked while your export finishes.",
+  reportExportButtonLocked:
+    "Wait for the current export to finish before starting another.",
+  reportExportOtherFormatLocked:
+    "Wait for the current export to finish before choosing another format.",
+  reportExportSelectReportFirst: "Choose a report before exporting.",
+  reportExportLoadReportFirst: "Load the report before exporting.",
   reportAsyncReady: "Download starting…",
   reportAsyncCached: "Using your recent export — download starting…",
-  reportAsyncDeduped: "Finishing your previous export…",
   reportAsyncFailed: "Export failed. Try again with a narrower date range.",
   reportInvalidRange: "The end date must be on or after the start date.",
   reportLoadError: "Could not load report.",

@@ -11,7 +11,7 @@ import {
   type ExportStatusResult,
 } from "../../api/reportsEngine.api";
 import type { PollExportResult } from "../../utils/reportExportPollError";
-import { exportStatusMessage } from "../../utils/exportStatusMessage";
+import { exportStatusMessage, terminalExportStatusMessage } from "../../utils/exportStatusMessage";
 
 export type ExportFileFormat = "csv" | "pdf" | "xlsx";
 
@@ -254,28 +254,9 @@ export function applyPollOutcome(
     setError: (error: string | null) => void;
   },
 ) {
-  if (result.outcome === "ready") {
-    handlers.setMessage(LABELS.reportAsyncReady);
-    handlers.setError(null);
-    return;
-  }
-  if (result.outcome === "failed") {
-    handlers.setError(result.errorMessage?.trim() || LABELS.reportAsyncFailed);
-    handlers.setMessage(null);
-    return;
-  }
-  if (result.outcome === "timeout") {
-    handlers.setMessage(LABELS.reportAsyncTimeout);
-    handlers.setError(null);
-    return;
-  }
-  if (result.outcome === "aborted") {
-    handlers.setMessage(null);
-    handlers.setError(null);
-    return;
-  }
-  handlers.setMessage(LABELS.reportAsyncPreparing);
-  handlers.setError(null);
+  const terminal = terminalExportStatusMessage(result.outcome, result.errorMessage);
+  handlers.setMessage(terminal.message);
+  handlers.setError(terminal.error);
 }
 
 /** Poll and download for legacy panel exports — no throw on timeout/abort. */

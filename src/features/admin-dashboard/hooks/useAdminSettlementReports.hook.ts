@@ -12,6 +12,8 @@ import {
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { runReportExport } from "@/features/reports/utils/runReportExport";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
+import type { ExportFileFormat } from "@/features/reports/hooks/useReportHubHelpers/index";
+import { deriveExportControlsState } from "@/features/reports/utils/exportControlsState";
 import {
   reportsApi,
   type AdminReportSummary,
@@ -24,7 +26,9 @@ export function useAdminSettlementReports() {
   const [from, setFrom] = useState(initial.from);
   const [to, setTo] = useState(initial.to);
   const [loading, setLoading] = useState(false);
-  const [exporting, setExporting] = useState(false);
+  const [exportingFormat, setExportingFormat] = useState<ExportFileFormat | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [summary, setSummary] = useState<AdminReportSummary | null>(null);
@@ -61,11 +65,11 @@ export function useAdminSettlementReports() {
     }
   };
 
-  const runExport = async (path: string, format: "csv" | "pdf" | "xlsx") => {
+  const runExport = async (path: string, format: ExportFileFormat) => {
     void runRef.current?.catch(() => undefined);
-    setExporting(true);
+    setExportingFormat(format);
+    setMessage(LABELS.reportAsyncPreparing);
     setError(null);
-    setMessage(null);
     const task = runReportExport(async () => {
       const payload = await initiateAsyncExport(
         reportsApi.exportUrl(path, { ...buildRange(), format }),
@@ -77,21 +81,23 @@ export function useAdminSettlementReports() {
           setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
         }
       })
-      .finally(() => setExporting(false));
+      .finally(() => setExportingFormat(null));
     runRef.current = task;
     await task;
   };
 
-  const exportSummary = (format: "csv" | "pdf" | "xlsx") =>
+  const exportSummary = (format: ExportFileFormat) =>
     void runExport(API.reports.adminSummary, format);
 
-  const exportVendors = (format: "csv" | "pdf" | "xlsx") =>
+  const exportVendors = (format: ExportFileFormat) =>
     void runExport(API.reports.adminVendors, format);
 
-  const exportReconciliation = (format: "csv" | "pdf" | "xlsx") => {
+  const exportReconciliation = (format: ExportFileFormat) => {
     if (!recon) return;
     void runExport(API.reports.adminReconciliation, format);
   };
+
+  const controls = deriveExportControlsState(exportingFormat, globalLocked);
 
   return {
     from,
@@ -99,7 +105,8 @@ export function useAdminSettlementReports() {
     to,
     setTo,
     loading,
-    exporting: exporting || globalLocked,
+    exporting: exportingFormat !== null || globalLocked,
+    ...controls,
     error,
     message,
     summary,

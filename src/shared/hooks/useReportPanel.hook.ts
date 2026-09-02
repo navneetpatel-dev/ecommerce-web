@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import type { ExportFileFormat } from "@/features/reports/hooks/useReportHubHelpers/index";
 import { initiateAsyncExport } from "@/shared/api/reportDownload";
 import {
   defaultRange,
@@ -15,6 +16,7 @@ import {
 } from "@/features/reports/utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { runReportExport } from "@/features/reports/utils/runReportExport";
+import { deriveExportControlsState } from "@/features/reports/utils/exportControlsState";
 
 export interface ReportRangeInput {
   from: string;
@@ -34,7 +36,9 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
   const [to, setTo] = useState(initial.to);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [exporting, setExporting] = useState(false);
+  const [exportingFormat, setExportingFormat] = useState<ExportFileFormat | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [report, setReport] = useState<TReport | null>(null);
@@ -55,10 +59,10 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
     }
   };
 
-  const exportFile = async (format: "csv" | "pdf" | "xlsx") => {
-    setExporting(true);
+  const exportFile = async (format: ExportFileFormat) => {
+    setExportingFormat(format);
+    setMessage(LABELS.reportAsyncPreparing);
     setError(null);
-    setMessage(null);
     try {
       await runReportExport(async () => {
         const path = params.exportPath({ from, to, page }, format);
@@ -71,9 +75,11 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
         setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
       }
     } finally {
-      setExporting(false);
+      setExportingFormat(null);
     }
   };
+
+  const controls = deriveExportControlsState(exportingFormat, globalLocked);
 
   return {
     from,
@@ -82,11 +88,15 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
     setTo,
     page,
     loading,
-    exporting: exporting || globalLocked,
+    exporting: exportingFormat !== null || globalLocked,
+    ...controls,
     error,
     message,
     report,
     load,
     exportFile,
+    exportExcel: () => void exportFile("xlsx"),
+    exportCsv: () => void exportFile("csv"),
+    exportPdf: () => void exportFile("pdf"),
   };
 }
