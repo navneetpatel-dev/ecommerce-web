@@ -54,6 +54,8 @@ export function HeaderContainer({
       cartItemCount={header.cartItemCount}
       wishlistItemCount={header.wishlistItemCount}
       walletBalance={header.walletBalance}
+      actionsLoading={header.actionsLoading}
+      navLoading={header.navLoading}
     />
   );
 }

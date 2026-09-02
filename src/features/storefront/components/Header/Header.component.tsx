@@ -14,6 +14,7 @@ import { DesktopPrimaryNav } from "./DesktopPrimaryNav.component";
 import { ThemeToggleButton } from "./ThemeToggleButton.component";
 import { StorefrontActionButtons } from "./StorefrontActionButtons.component";
 import { AccountSection } from "./AccountSection.component";
+import { DesktopPrimaryNavSkeleton } from "./HeaderActionSkeletons.component";
 import { MobileOverlays } from "./MobileOverlays.component";
 
 interface HeaderProps {
@@ -41,6 +42,10 @@ interface HeaderProps {
   cartItemCount?: number;
   wishlistItemCount?: number;
   walletBalance?: number;
+  /** Session or header badge counts still resolving. */
+  actionsLoading?: boolean;
+  /** Session not restored yet, so chrome visibility is unknown. */
+  navLoading?: boolean;
 }
 
 export function Header({
@@ -66,6 +71,8 @@ export function Header({
   cartItemCount = 0,
   wishlistItemCount = 0,
   walletBalance = 0,
+  actionsLoading = false,
+  navLoading = false,
 }: HeaderProps) {
   const pathname = usePathname();
 
@@ -128,7 +135,11 @@ export function Header({
             {LABELS.brandName}
           </Link>
 
-          {showStorefrontChrome ? (
+          {!showStorefrontChrome ? (
+            <div className="hidden flex-1 xl:block" />
+          ) : navLoading ? (
+            <DesktopPrimaryNavSkeleton primaryLinks={primaryLinks} />
+          ) : (
             <DesktopPrimaryNav
               categories={categories}
               primaryLinks={primaryLinks}
@@ -139,8 +150,6 @@ export function Header({
               onScheduleMegaOpen={onScheduleMegaOpen}
               onScheduleMegaClose={onScheduleMegaClose}
             />
-          ) : (
-            <div className="hidden flex-1 xl:block" />
           )}
 
           <nav
@@ -155,6 +164,7 @@ export function Header({
                 cartItemCount={cartItemCount}
                 wishlistItemCount={wishlistItemCount}
                 walletBalance={walletBalance}
+                isLoading={actionsLoading}
                 onOpenCart={onOpenCart}
                 onOpenMobileSearch={onOpenMobileSearch}
               />

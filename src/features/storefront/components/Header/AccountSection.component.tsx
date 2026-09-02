@@ -10,10 +10,13 @@ import {
   isVendorRole,
 } from "@/shared/utils/roles";
 import type { CurrentUser } from "@/shared/api/types";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useIsAuthenticated } from "@/shared/hooks/useRequireAuth.hook";
 import { AccountMenu } from "./AccountMenu.component";
+import {
+  AccountMenuSkeleton,
+  HeaderOrdersLinkSkeleton,
+} from "./HeaderActionSkeletons.component";
 
 interface AccountSectionProps {
   currentUser: CurrentUser | null;
@@ -31,13 +34,10 @@ export function AccountSection({
 
   if (!authBootstrapped) {
     return (
-      <Skeleton
-        className={cn(
-          "hidden sm:block rounded-full",
-          "h-8 w-8",
-        )}
-        aria-hidden
-      />
+      <>
+        {showStorefrontChrome ? <HeaderOrdersLinkSkeleton /> : null}
+        <AccountMenuSkeleton />
+      </>
     );
   }
 

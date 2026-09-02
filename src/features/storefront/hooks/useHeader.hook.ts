@@ -23,10 +23,11 @@ export const HEADER_PRIMARY_LINKS = [
 export function useHeader() {
   const pathname = usePathname();
   const currentUser = useAuthStore((s) => s.currentUser);
+  const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
   const openCart = useCartDrawerStore((s) => s.open);
-  const { data: cart } = useCart();
-  const { data: wishlist } = useWishlist();
-  const { data: wallet } = useWalletBalance();
+  const { data: cart, isLoading: cartLoading } = useCart();
+  const { data: wishlist, isLoading: wishlistLoading } = useWishlist();
+  const { data: wallet, isLoading: walletLoading } = useWalletBalance();
   const { data: categories = [] } = useCategories();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -41,6 +42,14 @@ export function useHeader() {
   );
   const wishlistItemCount = (wishlist?.items ?? []).length;
   const walletBalance = Number(wallet?.points ?? wallet?.balance ?? 0);
+  /**
+   * Header counts are unknown until the session is restored and the badge
+   * queries resolve. Rendering zeroes first makes the badges pop in, so the
+   * icon row and Orders link skeleton the same way the avatar already does.
+   * Disabled queries (guests) report isLoading false, so guests never stick.
+   */
+  const actionsLoading =
+    !authBootstrapped || cartLoading || wishlistLoading || walletLoading;
 
   useEffect(() => {
     return () => {
@@ -95,5 +104,8 @@ export function useHeader() {
     cartItemCount,
     wishlistItemCount,
     walletBalance,
+    actionsLoading,
+    /** Role decides whether storefront chrome belongs here at all. */
+    navLoading: !authBootstrapped,
   };
 }

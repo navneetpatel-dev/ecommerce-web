@@ -12,6 +12,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import type { CurrentUser } from "@/shared/api/types";
 import { useAccountMenu } from "./useAccountMenu.hook";
+import { ACCOUNT_TRIGGER_BOX } from "./headerShared";
 
 interface AccountMenuProps {
   currentUser: CurrentUser;
@@ -44,11 +45,7 @@ export function AccountMenu({ currentUser, isTransparent }: AccountMenuProps) {
         variant="ghost"
         onClick={() => setAccountMenuOpen((open) => !open)}
         className={cn(
-          "shrink-0 overflow-visible rounded-full border",
-          "flex size-8 items-center justify-center p-0",
-          "sm:size-auto sm:gap-0.5 sm:py-0.5 sm:pl-0.5 sm:pr-1.5",
-          "!h-8 !min-h-8 !max-h-8",
-          "sm:!h-auto sm:!min-h-0 sm:!max-h-none sm:!w-auto",
+          ACCOUNT_TRIGGER_BOX,
           "[&_svg]:!size-[0.875rem] sm:[&_svg]:!size-3",
           isTransparent
             ? "border-paper/20 hover:bg-paper/10"

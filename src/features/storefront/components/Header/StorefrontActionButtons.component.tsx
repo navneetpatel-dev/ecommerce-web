@@ -16,12 +16,15 @@ import {
   formatPointsHeaderBadge,
 } from "@/shared/utils/formatPoints";
 import { HEADER_ICON_BTN, HEADER_INK_TONE } from "./headerShared";
+import { StorefrontActionButtonsSkeleton } from "./HeaderActionSkeletons.component";
 
 interface StorefrontActionButtonsProps {
   isTransparent: boolean;
   cartItemCount: number;
   wishlistItemCount: number;
   walletBalance: number;
+  /** Session or badge counts still resolving — show placeholders, not zeroes. */
+  isLoading?: boolean;
   onOpenCart: () => void;
   onOpenMobileSearch: () => void;
 }
@@ -31,6 +34,7 @@ export function StorefrontActionButtons({
   cartItemCount,
   wishlistItemCount,
   walletBalance,
+  isLoading = false,
   onOpenCart,
   onOpenMobileSearch,
 }: StorefrontActionButtonsProps) {
@@ -54,89 +58,99 @@ export function StorefrontActionButtons({
         />
       </Button>
 
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={onOpenCart}
-        className={cn(
-          "hidden lg:inline-flex",
-          HEADER_ICON_BTN,
-          isTransparent ? "hover:bg-paper/10" : undefined,
-        )}
-        aria-label={
-          cartItemCount > 0 ? `${LABELS.cart}, ${cartItemCount}` : LABELS.cart
-        }
-      >
-        <IconBadgeAnchor>
-          <ShoppingCart
-            size={20}
-            className={HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]}
-          />
-          <CartCountBadge count={cartItemCount} placement="header" />
-        </IconBadgeAnchor>
-      </Button>
+      {isLoading ? (
+        <StorefrontActionButtonsSkeleton />
+      ) : (
+        <>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            onClick={onOpenCart}
+            className={cn(
+              "hidden lg:inline-flex",
+              HEADER_ICON_BTN,
+              isTransparent ? "hover:bg-paper/10" : undefined,
+            )}
+            aria-label={
+              cartItemCount > 0
+                ? `${LABELS.cart}, ${cartItemCount}`
+                : LABELS.cart
+            }
+          >
+            <IconBadgeAnchor>
+              <ShoppingCart
+                size={20}
+                className={
+                  HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]
+                }
+              />
+              <CartCountBadge count={cartItemCount} placement="header" />
+            </IconBadgeAnchor>
+          </Button>
 
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        asChild
-        className={cn(
-          HEADER_ICON_BTN,
-          isTransparent ? "hover:bg-paper/10" : undefined,
-        )}
-      >
-        <Link
-          href={PATHS.wishlist}
-          aria-label={
-            wishlistItemCount > 0
-              ? `${LABELS.wishlist}, ${wishlistItemCount}`
-              : LABELS.wishlist
-          }
-        >
-          <IconBadgeAnchor>
-            <Heart
-              size={20}
-              className={
-                HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            asChild
+            className={cn(
+              HEADER_ICON_BTN,
+              isTransparent ? "hover:bg-paper/10" : undefined,
+            )}
+          >
+            <Link
+              href={PATHS.wishlist}
+              aria-label={
+                wishlistItemCount > 0
+                  ? `${LABELS.wishlist}, ${wishlistItemCount}`
+                  : LABELS.wishlist
               }
-            />
-            <CartCountBadge count={wishlistItemCount} placement="header" />
-          </IconBadgeAnchor>
-        </Link>
-      </Button>
+            >
+              <IconBadgeAnchor>
+                <Heart
+                  size={20}
+                  className={
+                    HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]
+                  }
+                />
+                <CartCountBadge count={wishlistItemCount} placement="header" />
+              </IconBadgeAnchor>
+            </Link>
+          </Button>
 
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        asChild
-        className={cn(
-          HEADER_ICON_BTN,
-          isTransparent ? "hover:bg-paper/10" : undefined,
-        )}
-      >
-        <Link
-          href={PATHS.wallet}
-          aria-label={`${LABELS.walletBalance}, ${formatPoints(walletBalance)}`}
-        >
-          <IconBadgeAnchor variant="header-wide">
-            <WalletIcon
-              size={20}
-              className={
-                HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]
-              }
-            />
-            <CartCountBadge
-              count={walletBalance}
-              label={formatPointsHeaderBadge(walletBalance)}
-              alwaysShow
-              placement="header-wide"
-            />
-          </IconBadgeAnchor>
-        </Link>
-      </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            asChild
+            className={cn(
+              HEADER_ICON_BTN,
+              isTransparent ? "hover:bg-paper/10" : undefined,
+            )}
+          >
+            <Link
+              href={PATHS.wallet}
+              aria-label={`${LABELS.walletBalance}, ${formatPoints(walletBalance)}`}
+            >
+              <IconBadgeAnchor variant="header-wide">
+                <WalletIcon
+                  size={20}
+                  className={
+                    HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]
+                  }
+                />
+                <CartCountBadge
+                  count={walletBalance}
+                  label={formatPointsHeaderBadge(walletBalance)}
+                  alwaysShow
+                  placement="header-wide"
+                />
+              </IconBadgeAnchor>
+            </Link>
+          </Button>
+        </>
+      )}
     </>
   );
 }
