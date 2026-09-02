@@ -187,6 +187,9 @@ export async function pollExportUntilReady(
 
   emitProgress("PENDING");
 
+  const tickTimer = setInterval(() => emitProgress(lastStatus), 1_000);
+
+  try {
   while (Date.now() - started < EXPORT_POLL_MAX_DURATION_MS) {
     if (options?.signal?.aborted) {
       return { outcome: "aborted" };
@@ -245,6 +248,9 @@ export async function pollExportUntilReady(
     interval = Math.min(interval * 2, EXPORT_POLL_MAX_MS);
   }
   return { outcome: "timeout" };
+  } finally {
+    clearInterval(tickTimer);
+  }
 }
 
 export function applyPollOutcome(
