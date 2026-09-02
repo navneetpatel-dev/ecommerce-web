@@ -76,4 +76,24 @@ describe("ProductVariantDialog", () => {
 
     expect(onConfirm).toHaveBeenCalledWith("variant-blue");
   });
+
+  it("focuses the title without opening an unavailable-option tooltip", () => {
+    render(
+      <ProductVariantDialog
+        open
+        productName={product.name}
+        productSlug={product.slug}
+        isAddingToCart={false}
+        onOpenChange={vi.fn()}
+        onConfirm={vi.fn()}
+      />,
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Select options" }),
+    ).toHaveFocus();
+    expect(
+      screen.queryByText("Not available with your current selection."),
+    ).not.toBeInTheDocument();
+  });
 });

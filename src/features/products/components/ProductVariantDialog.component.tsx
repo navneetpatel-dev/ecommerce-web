@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
@@ -31,6 +32,7 @@ export function ProductVariantDialog({
   onConfirm,
   isAddingToCart,
 }: ProductVariantDialogProps) {
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const { data: product, isLoading } = useProduct(productSlug, {
     enabled: open,
   });
@@ -46,9 +48,17 @@ export function ProductVariantDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[min(42rem,calc(100dvh-2rem))] sm:max-w-lg">
+      <DialogContent
+        className="max-h-[min(42rem,calc(100dvh-2rem))] sm:max-w-lg"
+        onOpenAutoFocus={(event) => {
+          event.preventDefault();
+          titleRef.current?.focus();
+        }}
+      >
         <DialogHeader>
-          <DialogTitle>{LABELS.selectOptions}</DialogTitle>
+          <DialogTitle ref={titleRef} tabIndex={-1}>
+            {LABELS.selectOptions}
+          </DialogTitle>
           <DialogDescription>{productName}</DialogDescription>
         </DialogHeader>
 
