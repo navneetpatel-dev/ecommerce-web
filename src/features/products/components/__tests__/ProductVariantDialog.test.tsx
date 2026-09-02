@@ -53,7 +53,7 @@ describe("ProductVariantDialog", () => {
     vi.mocked(useProduct).mockReturnValue({
       data: product,
       isLoading: false,
-    } as ReturnType<typeof useProduct>);
+    } as unknown as ReturnType<typeof useProduct>);
   });
 
   it("adds the variant selected in the product option UI", async () => {

@@ -1,7 +1,7 @@
-import { apiClient } from '@/shared/api/client'
-import { API } from '@/shared/constants/apiRoutes'
-import type { Cart } from '@/shared/api/types'
-import { clampCartQuantity } from '@/shared/constants/cart'
+import { apiClient } from "@/shared/api/client";
+import { API } from "@/shared/constants/apiRoutes";
+import type { Cart } from "@/shared/api/types";
+import { clampCartQuantity } from "@/shared/constants/cart";
 
 export const cartApi = {
   get: () => apiClient.get<Cart>(API.cart.root),
@@ -17,5 +17,5 @@ export const cartApi = {
       quantity: clampCartQuantity(quantity),
     }),
   removeItem: (itemId: string) => apiClient.delete<Cart>(API.cart.item(itemId)),
-  clear: () => apiClient.delete<Cart>(API.cart.root),
-}
+  clear: () => apiClient.delete<void>(API.cart.root),
+};

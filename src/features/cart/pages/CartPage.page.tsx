@@ -23,6 +23,8 @@ export function CartPage() {
       hasUnavailableItems={cart.hasUnavailableItems}
       onUpdateQuantity={cart.updateQuantity}
       onRemoveItem={cart.removeItem}
+      onClearCart={cart.clearCart}
+      isClearing={cart.isClearing}
       couponInput={cart.couponInput}
       couponMessage={cart.couponMessage}
       couponError={cart.couponError}

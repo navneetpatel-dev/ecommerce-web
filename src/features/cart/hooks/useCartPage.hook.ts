@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import {
   useCart,
+  useClearCart,
   useUpdateCartItem,
   useRemoveCartItem,
 } from "../api/cart.queries";
@@ -16,9 +17,10 @@ export function useCartPage() {
   const { data: cart, isLoading, isError, refetch } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
+  const clearCart = useClearCart();
   const coupons = useCartCoupons({ cart, enabled: true });
 
-  const items = cart?.items ?? [];
+  const items = useMemo(() => cart?.items ?? [], [cart?.items]);
   const hasItems = items.length > 0;
   const itemCount = items.reduce(
     (sum, item) => sum + Number(item.quantity || 0),
@@ -71,6 +73,8 @@ export function useCartPage() {
     vendorDiscountBreakdown,
     updateQuantity,
     removeItem: removeItemById,
+    clearCart: () => clearCart.mutate(),
+    isClearing: clearCart.isPending,
     couponInput: coupons.couponInput,
     setCouponInput: coupons.setCouponInput,
     couponMessage: coupons.couponMessage,

@@ -125,3 +125,36 @@ export function useRemoveCartItem() {
     onSuccess: (cart) => syncCartCache(queryClient, cart),
   });
 }
+
+export function useClearCart() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => cartApi.clear(),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: cartKeys.all });
+      const previous = queryClient.getQueriesData<Cart>({
+        queryKey: cartKeys.all,
+      });
+      queryClient.setQueriesData<Cart>({ queryKey: cartKeys.all }, (cart) =>
+        cart
+          ? {
+              ...cart,
+              items: [],
+              merchandiseSubtotal: undefined,
+              total: undefined,
+              pricingPreview: undefined,
+              appliedCoupon: null,
+              appliedCoupons: [],
+            }
+          : cart,
+      );
+      return { previous };
+    },
+    onError: (_error, _variables, context) => {
+      context?.previous.forEach(([queryKey, data]) => {
+        queryClient.setQueryData(queryKey, data);
+      });
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.all }),
+  });
+}

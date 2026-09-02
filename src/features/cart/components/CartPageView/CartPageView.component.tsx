@@ -8,6 +8,7 @@ import type { CartItem, EligibleCoupon } from "@/shared/api/types";
 import { EmptyCart } from "./EmptyCart.component";
 import { VendorGroups } from "./VendorGroups.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
+import { ClearCartAction } from "./ClearCartAction.component";
 
 export interface CartPageViewProps {
   isLoading?: boolean;
@@ -30,6 +31,8 @@ export interface CartPageViewProps {
   hasUnavailableItems: boolean;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
+  onClearCart: () => void;
+  isClearing?: boolean;
   couponInput: string;
   couponMessage: string | null;
   couponError: string | null;
@@ -68,6 +71,8 @@ export function CartPageView({
   hasUnavailableItems,
   onUpdateQuantity,
   onRemoveItem,
+  onClearCart,
+  isClearing,
   couponInput,
   couponMessage,
   couponError,
@@ -102,17 +107,21 @@ export function CartPageView({
 
       <div className="storefront-container relative py-6 md:py-8">
         <motion.header
+          className="flex items-end justify-between gap-4"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
         >
-          <TextEyebrow brand>Shopping bag</TextEyebrow>
-          <h1
-            className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
-            style={{ fontSize: "var(--text-display-sm)" }}
-          >
-            {LABELS.yourCart}
-          </h1>
+          <div className="min-w-0">
+            <TextEyebrow brand>Shopping bag</TextEyebrow>
+            <h1
+              className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
+              style={{ fontSize: "var(--text-display-sm)" }}
+            >
+              {LABELS.yourCart}
+            </h1>
+          </div>
+          <ClearCartAction onClear={onClearCart} isClearing={isClearing} />
         </motion.header>
 
         <div className="mt-6 grid grid-cols-1 gap-8 lg:mt-8 lg:grid-cols-12 lg:gap-10">
