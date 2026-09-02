@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 /**
  * Per-field validation errors for forms that do not use react-hook-form.
@@ -11,9 +11,9 @@ export function useManualFormFieldErrors<T extends string>() {
     Partial<Record<T, string>>
   >({});
 
-  const clearAll = () => {
+  const clearAll = useCallback(() => {
     setFieldErrorsState({});
-  };
+  }, []);
 
   const clearField = (name: T) => {
     setFieldErrorsState((prev) => {
