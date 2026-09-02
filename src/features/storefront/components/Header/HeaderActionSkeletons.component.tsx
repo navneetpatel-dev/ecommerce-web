@@ -113,3 +113,26 @@ export function DesktopPrimaryNavSkeleton({
     </>
   );
 }
+
+/**
+ * Placeholder for the hamburger, which only exists for storefront viewers —
+ * a workspace role gets a different button, or none.
+ */
+export function HeaderMenuButtonSkeleton() {
+  return (
+    <Skeleton
+      className="-ml-2 h-11 w-11 shrink-0 rounded-md xl:hidden max-sm:h-9 max-sm:w-9"
+      aria-hidden
+    />
+  );
+}
+
+/** Placeholder for the lg-to-xl search trigger, which the tab bar replaces below lg. */
+export function HeaderSearchButtonSkeleton() {
+  return (
+    <Skeleton
+      className={cn("hidden lg:block xl:hidden", ICON_BUTTON_BOX)}
+      aria-hidden
+    />
+  );
+}

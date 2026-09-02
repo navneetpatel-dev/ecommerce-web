@@ -16,7 +16,10 @@ import {
   formatPointsHeaderBadge,
 } from "@/shared/utils/formatPoints";
 import { HEADER_ICON_BTN, HEADER_INK_TONE } from "./headerShared";
-import { StorefrontActionButtonsSkeleton } from "./HeaderActionSkeletons.component";
+import {
+  HeaderSearchButtonSkeleton,
+  StorefrontActionButtonsSkeleton,
+} from "./HeaderActionSkeletons.component";
 
 interface StorefrontActionButtonsProps {
   isTransparent: boolean;
@@ -25,6 +28,8 @@ interface StorefrontActionButtonsProps {
   walletBalance: number;
   /** Session or badge counts still resolving — show placeholders, not zeroes. */
   isLoading?: boolean;
+  /** Session itself unresolved, so even the count-free search trigger is unknown. */
+  navLoading?: boolean;
   onOpenCart: () => void;
   onOpenMobileSearch: () => void;
 }
@@ -35,28 +40,33 @@ export function StorefrontActionButtons({
   wishlistItemCount,
   walletBalance,
   isLoading = false,
+  navLoading = false,
   onOpenCart,
   onOpenMobileSearch,
 }: StorefrontActionButtonsProps) {
   return (
     <>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={onOpenMobileSearch}
-        className={cn(
-          "hidden lg:inline-flex xl:hidden",
-          HEADER_ICON_BTN,
-          isTransparent ? "hover:bg-paper/10" : undefined,
-        )}
-        aria-label={LABELS.search}
-      >
-        <Search
-          size={20}
-          className={HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]}
-        />
-      </Button>
+      {navLoading ? (
+        <HeaderSearchButtonSkeleton />
+      ) : (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={onOpenMobileSearch}
+          className={cn(
+            "hidden lg:inline-flex xl:hidden",
+            HEADER_ICON_BTN,
+            isTransparent ? "hover:bg-paper/10" : undefined,
+          )}
+          aria-label={LABELS.search}
+        >
+          <Search
+            size={20}
+            className={HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]}
+          />
+        </Button>
+      )}
 
       {isLoading ? (
         <StorefrontActionButtonsSkeleton />

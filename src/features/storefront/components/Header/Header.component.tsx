@@ -3,18 +3,16 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
-import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { homePathForContext } from "@/shared/utils/roleSurface";
 import type { Category, CurrentUser } from "@/shared/api/types";
-import { HEADER_INK_TONE } from "./headerShared";
 import { DesktopPrimaryNav } from "./DesktopPrimaryNav.component";
 import { ThemeToggleButton } from "./ThemeToggleButton.component";
 import { StorefrontActionButtons } from "./StorefrontActionButtons.component";
 import { AccountSection } from "./AccountSection.component";
 import { DesktopPrimaryNavSkeleton } from "./HeaderActionSkeletons.component";
+import { HeaderMenuButton } from "./HeaderMenuButton.component";
 import { MobileOverlays } from "./MobileOverlays.component";
 
 interface HeaderProps {
@@ -93,37 +91,14 @@ export function Header({
         )}
       >
         <div className="storefront-container flex h-full flex-nowrap items-center gap-1.5 sm:gap-3 lg:gap-4 xl:gap-6">
-          {showStorefrontChrome ? (
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              onClick={onOpenMobileNav}
-              className={cn(
-                "xl:hidden -ml-2 max-sm:h-9 max-sm:w-9 max-sm:min-h-9 max-sm:max-h-9",
-                isTransparent ? "hover:bg-paper/10" : undefined,
-              )}
-              aria-label={LABELS.menu}
-            >
-              <Menu
-                size={20}
-                className={
-                  HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]
-                }
-              />
-            </Button>
-          ) : showWorkspaceMenu ? (
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              onClick={onOpenWorkspaceNav}
-              className="lg:hidden -ml-2"
-              aria-label={LABELS.menu}
-            >
-              <Menu size={20} className="text-ink" />
-            </Button>
-          ) : null}
+          <HeaderMenuButton
+            showStorefrontChrome={showStorefrontChrome}
+            showWorkspaceMenu={showWorkspaceMenu}
+            isTransparent={isTransparent}
+            navLoading={navLoading}
+            onOpenMobileNav={onOpenMobileNav}
+            onOpenWorkspaceNav={onOpenWorkspaceNav}
+          />
 
           <Link
             href={homeHref}
@@ -165,6 +140,7 @@ export function Header({
                 wishlistItemCount={wishlistItemCount}
                 walletBalance={walletBalance}
                 isLoading={actionsLoading}
+                navLoading={navLoading}
                 onOpenCart={onOpenCart}
                 onOpenMobileSearch={onOpenMobileSearch}
               />
@@ -186,6 +162,7 @@ export function Header({
           mobileNavOpen={mobileNavOpen}
           mobileSearchOpen={mobileSearchOpen}
           cartItemCount={cartItemCount}
+          isLoading={actionsLoading}
           onCloseMobileNav={onCloseMobileNav}
           onOpenCart={onOpenCart}
           onOpenMobileSearch={onOpenMobileSearch}

@@ -4,7 +4,10 @@ import { StorefrontActionButtons } from "../Header/StorefrontActionButtons.compo
 import {
   AccountMenuSkeleton,
   DesktopPrimaryNavSkeleton,
+  HeaderMenuButtonSkeleton,
+  HeaderSearchButtonSkeleton,
 } from "../Header/HeaderActionSkeletons.component";
+import { MobileTabBar } from "@/shared/components/layout/MobileTabBar.component";
 import { ACCOUNT_TRIGGER_BOX } from "../Header/headerShared";
 
 const baseProps = {
@@ -77,5 +80,58 @@ describe("DesktopPrimaryNavSkeleton", () => {
     const nav = screen.getByTestId("primary-nav-skeleton");
 
     expect(nav).toHaveAttribute("aria-hidden", "true");
+  });
+});
+
+describe("responsive skeleton coverage", () => {
+  it("shows the hamburger placeholder only below xl, like the button it replaces", () => {
+    const { container } = render(<HeaderMenuButtonSkeleton />);
+    const box = container.firstElementChild as HTMLElement;
+
+    expect(box.className).toContain("xl:hidden");
+    expect(box.className).toContain("max-sm:h-9");
+  });
+
+  it("shows the search placeholder only between lg and xl, like its button", () => {
+    const { container } = render(<HeaderSearchButtonSkeleton />);
+    const box = container.firstElementChild as HTMLElement;
+
+    expect(box.className).toContain("lg:block");
+    expect(box.className).toContain("xl:hidden");
+  });
+
+  it("skeletons the search bar itself at xl and up", () => {
+    const { container } = render(
+      <DesktopPrimaryNavSkeleton primaryLinks={[]} />,
+    );
+    const searchSlot = container.querySelector(".max-w-xl");
+
+    expect(searchSlot).not.toBeNull();
+    expect(searchSlot?.querySelector(".rounded-full")).not.toBeNull();
+  });
+});
+
+describe("MobileTabBar loading state", () => {
+  const tabProps = {
+    currentUser: null,
+    onOpenCart: vi.fn(),
+    onOpenSearch: vi.fn(),
+    cartItemCount: 4,
+  };
+
+  it("renders the real tabs once resolved", () => {
+    render(<MobileTabBar {...tabProps} />);
+
+    expect(screen.getByLabelText("Cart, 4")).toBeInTheDocument();
+    expect(screen.getByLabelText("Search")).toBeInTheDocument();
+  });
+
+  it("replaces the session-dependent tabs while loading", () => {
+    render(<MobileTabBar {...tabProps} isLoading />);
+
+    expect(screen.queryByLabelText("Cart, 4")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Search")).not.toBeInTheDocument();
+    // Home is valid for everyone, so it stays usable throughout.
+    expect(screen.getByText("Home")).toBeInTheDocument();
   });
 });

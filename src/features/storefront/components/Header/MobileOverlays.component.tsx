@@ -13,6 +13,8 @@ interface MobileOverlaysProps {
   mobileNavOpen: boolean;
   mobileSearchOpen: boolean;
   cartItemCount: number;
+  /** Session or cart count still resolving. */
+  isLoading?: boolean;
   onCloseMobileNav: () => void;
   onOpenCart: () => void;
   onOpenMobileSearch: () => void;
@@ -25,6 +27,7 @@ export function MobileOverlays({
   mobileNavOpen,
   mobileSearchOpen,
   cartItemCount,
+  isLoading = false,
   onCloseMobileNav,
   onOpenCart,
   onOpenMobileSearch,
@@ -54,6 +57,7 @@ export function MobileOverlays({
         onOpenCart={onOpenCart}
         onOpenSearch={onOpenMobileSearch}
         cartItemCount={cartItemCount}
+        isLoading={isLoading}
       />
     </>
   );
