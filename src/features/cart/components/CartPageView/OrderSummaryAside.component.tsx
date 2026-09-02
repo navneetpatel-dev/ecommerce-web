@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
+import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { PATHS } from "@/shared/constants/paths";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
@@ -59,7 +60,6 @@ export function OrderSummaryAside({
   amountsUnavailable = false,
   onRetryAmounts,
   total,
-  totalIsEstimated = false,
   pendingLineTotals = false,
   pricingPreview,
   hasUnavailableItems,
@@ -80,10 +80,8 @@ export function OrderSummaryAside({
   onRemoveCoupon,
   onApplyEligible,
 }: OrderSummaryAsideProps) {
-  const totalPending = total == null || (totalIsEstimated && pendingLineTotals);
-  const totalLabel = totalIsEstimated
-    ? LABELS.estimatedTotalLabel
-    : LABELS.total;
+  const amountsPending = pendingLineTotals && !amountsUnavailable;
+  const totalPending = total == null || amountsPending;
 
   return (
     <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-[88px] lg:self-start lg:z-10">
@@ -116,7 +114,7 @@ export function OrderSummaryAside({
             <dd className="tabular-nums text-ink">
               <MoneyAmount
                 value={subtotal}
-                pending={subtotalPending}
+                pending={subtotalPending || amountsPending}
                 unavailable={amountsUnavailable}
               />
             </dd>
@@ -125,7 +123,11 @@ export function OrderSummaryAside({
             <div className="flex items-center justify-between gap-4 text-success">
               <dt>{LABELS.couponDiscount}</dt>
               <dd className="tabular-nums">
-                −₹{formatInrAmount(appliedDiscount)}
+                {amountsPending ? (
+                  <InlineAmountSkeleton />
+                ) : (
+                  <>−₹{formatInrAmount(appliedDiscount)}</>
+                )}
               </dd>
             </div>
           ) : null}
@@ -139,13 +141,17 @@ export function OrderSummaryAside({
                     {LABELS.vendorDiscountBreakdown}: {row.name}
                   </dt>
                   <dd className="tabular-nums">
-                    −₹{formatInrAmount(row.amount)}
+                    {amountsPending ? (
+                      <InlineAmountSkeleton />
+                    ) : (
+                      <>−₹{formatInrAmount(row.amount)}</>
+                    )}
                   </dd>
                 </div>
               ))
             : null}
           <OrderTaxShippingBreakdown
-            pending={!pricingPreview}
+            pending={!amountsUnavailable && (amountsPending || !pricingPreview)}
             shippingTotal={pricingPreview?.shippingTotal}
             shippingDisplayKey={pricingPreview?.shippingDisplayKey}
             taxTotal={pricingPreview?.taxTotal}
@@ -174,7 +180,7 @@ export function OrderSummaryAside({
         <div className="mt-4 border-t border-line pt-4">
           <div className="flex items-end justify-between gap-4">
             <span className="text-[0.875rem] font-medium text-ink">
-              {totalLabel}
+              {LABELS.total}
             </span>
             <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
               <MoneyAmount

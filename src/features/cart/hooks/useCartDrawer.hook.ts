@@ -1,11 +1,13 @@
 "use client";
 
 import { useMemo } from "react";
+import { useIsMutating } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import {
   useCart,
   useUpdateCartItem,
   useRemoveCartItem,
+  cartMutationKeys,
 } from "../api/cart.queries";
 import { useCartDrawerStore } from "../store/cart.store";
 import { resolveCartDisplayTotals } from "../utils/cartDisplay.utils";
@@ -22,6 +24,8 @@ export function useCartDrawer() {
   const { data: cart, isLoading, isFetching, isError, refetch } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
+  const isCartMutating =
+    useIsMutating({ mutationKey: cartMutationKeys.all }) > 0;
 
   const groupedByVendor = useMemo(() => {
     if (!cart?.items) return {} as Record<string, CartItem[]>;
@@ -58,6 +62,7 @@ export function useCartDrawer() {
     totalIsEstimated: displayTotals.totalIsEstimated,
     pendingLineTotals: displayTotals.pendingLineTotals,
     totalsFetching: isFetching && displayTotals.pendingLineTotals,
+    isCartMutating,
     pricingPreview: displayTotals.pricingPreview,
     amountsUnavailable: displayTotals.amountsUnavailable,
     retryAmounts: () => {

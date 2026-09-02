@@ -6,7 +6,7 @@ export {
   useRemoveCartItem,
   useClearCart,
 } from "./api/cart.queries";
-export { cartKeys } from "./api/cart.queries";
+export { cartKeys, cartMutationKeys } from "./api/cart.queries";
 export { useCartDrawerStore } from "./store/cart.store";
 export { groupItemsByVendor } from "./utils/cart.utils";
 export { CartDrawer } from "./components/CartDrawer.component";

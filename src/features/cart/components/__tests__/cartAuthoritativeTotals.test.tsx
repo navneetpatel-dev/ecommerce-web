@@ -28,7 +28,7 @@ describe("cart authoritative totals", () => {
     );
 
     expect(screen.getAllByRole("status", { name: "Updating…" })).toHaveLength(
-      3,
+      5,
     );
     expect(screen.queryByText("₹0")).not.toBeInTheDocument();
   });
@@ -98,5 +98,14 @@ describe("amounts unavailable vs updating", () => {
 
     screen.getByRole("button", { name: "Retry" }).click();
     expect(onRetryAmounts).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the Total label while estimated totals are pending", () => {
+    render(
+      <OrderSummaryAside {...baseProps} totalIsEstimated pendingLineTotals />,
+    );
+
+    expect(screen.getByText("Total")).toBeInTheDocument();
+    expect(screen.queryByText("Estimated total")).not.toBeInTheDocument();
   });
 });

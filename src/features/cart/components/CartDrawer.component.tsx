@@ -22,6 +22,7 @@ interface CartDrawerProps {
   totalIsEstimated?: boolean;
   pendingLineTotals?: boolean;
   totalsFetching?: boolean;
+  isCartMutating?: boolean;
   /** Cart request failed — amounts are missing for good, not mid-refresh. */
   amountsUnavailable?: boolean;
   onRetryAmounts?: () => void;
@@ -47,6 +48,7 @@ export function CartDrawer({
   totalIsEstimated = false,
   pendingLineTotals = false,
   totalsFetching = false,
+  isCartMutating = false,
   amountsUnavailable = false,
   onRetryAmounts,
   pricingPreview,
@@ -137,6 +139,7 @@ export function CartDrawer({
                 totalIsEstimated={totalIsEstimated}
                 pendingLineTotals={pendingLineTotals}
                 totalsFetching={totalsFetching}
+                isCartMutating={isCartMutating}
                 amountsUnavailable={amountsUnavailable}
                 onRetryAmounts={onRetryAmounts}
                 hasUnavailableItems={hasUnavailableItems}

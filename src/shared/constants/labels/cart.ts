@@ -4,4 +4,5 @@ export const cartLabels = {
   clearCartTitle: "Clear your cart?",
   clearCartDescription:
     "This will remove every item from your cart. This action cannot be undone.",
+  cartUpdatingActionHint: "Please wait while your cart updates.",
 } as const;

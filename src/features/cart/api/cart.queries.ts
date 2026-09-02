@@ -14,6 +14,14 @@ export const cartKeys = {
     [...cartKeys.all, accessToken ? "user" : "guest"] as const,
 };
 
+export const cartMutationKeys = {
+  all: ["cart-mutation"] as const,
+  add: ["cart-mutation", "add"] as const,
+  update: ["cart-mutation", "update"] as const,
+  remove: ["cart-mutation", "remove"] as const,
+  clear: ["cart-mutation", "clear"] as const,
+};
+
 type AddToCartVars = {
   variantId: string;
   quantity?: number;
@@ -64,6 +72,7 @@ export function useAddToCart() {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: cartMutationKeys.add,
     mutationFn: ({ variantId, quantity = 1 }: AddToCartVars) =>
       cartApi.addItem(variantId, quantity),
     onSuccess: (cart, variables) => {
@@ -80,6 +89,7 @@ export function useAddToCart() {
 export function useUpdateCartItem() {
   const queryClient = useQueryClient();
   return useMutation({
+    mutationKey: cartMutationKeys.update,
     mutationFn: ({ itemId, quantity }: { itemId: string; quantity: number }) =>
       cartApi.updateItem(itemId, quantity),
     onMutate: async ({ itemId, quantity }) => {
@@ -105,6 +115,7 @@ export function useUpdateCartItem() {
 export function useRemoveCartItem() {
   const queryClient = useQueryClient();
   return useMutation({
+    mutationKey: cartMutationKeys.remove,
     mutationFn: (itemId: string) => cartApi.removeItem(itemId),
     onMutate: async (itemId) => {
       await queryClient.cancelQueries({ queryKey: cartKeys.all });
@@ -129,6 +140,7 @@ export function useRemoveCartItem() {
 export function useClearCart() {
   const queryClient = useQueryClient();
   return useMutation({
+    mutationKey: cartMutationKeys.clear,
     mutationFn: () => cartApi.clear(),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: cartKeys.all });

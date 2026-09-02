@@ -7,7 +7,45 @@ import { Button } from "@/shared/components/ui/button";
 import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
 import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailableNotice.component";
 import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
+import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+
+interface CartSummaryLinkProps {
+  href: string;
+  label: string;
+  disabled: boolean;
+  onClose: () => void;
+  variant?: "default" | "outline";
+}
+
+function CartSummaryLink({
+  href,
+  label,
+  disabled,
+  onClose,
+  variant = "default",
+}: CartSummaryLinkProps) {
+  return (
+    <DisabledActionHint
+      disabled={disabled}
+      message={LABELS.cartUpdatingActionHint}
+      block
+    >
+      {disabled ? (
+        <Button type="button" variant={variant} className="w-full" disabled>
+          {label}
+        </Button>
+      ) : (
+        <Button asChild variant={variant} className="w-full">
+          <Link href={href} onClick={onClose}>
+            {label}
+          </Link>
+        </Button>
+      )}
+    </DisabledActionHint>
+  );
+}
 
 interface CartDrawerSummaryProps {
   /** Server-computed preview; the drawer only renders the fields it shows. */
@@ -21,6 +59,7 @@ interface CartDrawerSummaryProps {
   totalIsEstimated?: boolean;
   pendingLineTotals?: boolean;
   totalsFetching?: boolean;
+  isCartMutating?: boolean;
   amountsUnavailable?: boolean;
   onRetryAmounts?: () => void;
   hasUnavailableItems?: boolean;
@@ -31,41 +70,43 @@ interface CartDrawerSummaryProps {
 export function CartDrawerSummary({
   pricingPreview,
   total,
-  totalIsEstimated = false,
   pendingLineTotals = false,
   totalsFetching = false,
+  isCartMutating = false,
   amountsUnavailable = false,
   onRetryAmounts,
   hasUnavailableItems = false,
   onClose,
 }: CartDrawerSummaryProps) {
-  const totalRefreshing =
-    totalIsEstimated && pendingLineTotals && totalsFetching;
-  const totalLabel = totalIsEstimated
-    ? LABELS.estimatedTotalLabel
-    : LABELS.total;
+  const amountsPending = pendingLineTotals && !amountsUnavailable;
+  const totalRefreshing = total == null || amountsPending || totalsFetching;
 
   return (
     <div className="shrink-0 space-y-3 border-t border-line p-4">
-      {pricingPreview ? (
+      {pricingPreview || amountsPending ? (
         <dl className="space-y-1.5 text-body-sm">
           <div className="flex justify-between gap-3">
             <dt className="text-ink-muted">{LABELS.subtotal}</dt>
             <dd className="tabular-nums text-ink">
-              ₹{formatInrAmount(pricingPreview.merchandiseSubtotal)}
+              {amountsPending ? (
+                <InlineAmountSkeleton />
+              ) : (
+                <>₹{formatInrAmount(pricingPreview!.merchandiseSubtotal)}</>
+              )}
             </dd>
           </div>
           <OrderTaxShippingBreakdown
             className="space-y-1.5 text-body-sm"
-            shippingTotal={pricingPreview.shippingTotal}
-            shippingDisplayKey={pricingPreview.shippingDisplayKey}
-            taxTotal={pricingPreview.taxTotal}
+            pending={amountsPending}
+            shippingTotal={pricingPreview?.shippingTotal}
+            shippingDisplayKey={pricingPreview?.shippingDisplayKey}
+            taxTotal={pricingPreview?.taxTotal}
           />
         </dl>
       ) : null}
 
       <div className="flex items-center justify-between">
-        <span className="text-body font-medium">{totalLabel}</span>
+        <span className="text-body font-medium">{LABELS.total}</span>
         <span className="text-[1.125rem] font-bold text-brand">
           <MoneyAmount
             value={total}
@@ -85,18 +126,21 @@ export function CartDrawerSummary({
           {LABELS.removeUnavailableToCheckout}
         </p>
       ) : (
-        <Button asChild size="lg" className="w-full">
-          <Link href={PATHS.checkout} onClick={onClose}>
-            {LABELS.checkout}
-          </Link>
-        </Button>
+        <CartSummaryLink
+          href={PATHS.checkout}
+          label={LABELS.checkout}
+          disabled={isCartMutating}
+          onClose={onClose}
+        />
       )}
 
-      <Button asChild variant="outline" className="w-full">
-        <Link href={PATHS.cart} onClick={onClose}>
-          {LABELS.viewFullCart}
-        </Link>
-      </Button>
+      <CartSummaryLink
+        href={PATHS.cart}
+        label={LABELS.viewFullCart}
+        disabled={isCartMutating}
+        onClose={onClose}
+        variant="outline"
+      />
     </div>
   );
 }

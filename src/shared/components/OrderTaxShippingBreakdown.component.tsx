@@ -1,4 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
+import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface OrderTaxShippingBreakdownProps {
@@ -24,6 +25,25 @@ export function OrderTaxShippingBreakdown({
     shippingTotal != null &&
     taxTotal != null &&
     shippingDisplayKey != null;
+
+  if (pending) {
+    return (
+      <dl className={className}>
+        <div className="flex items-center justify-between gap-4">
+          <dt className="text-ink-muted">{LABELS.shipping}</dt>
+          <dd>
+            <InlineAmountSkeleton />
+          </dd>
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <dt className="text-ink-muted">{taxLabel}</dt>
+          <dd>
+            <InlineAmountSkeleton />
+          </dd>
+        </div>
+      </dl>
+    );
+  }
 
   if (!totalsReady) {
     return (
