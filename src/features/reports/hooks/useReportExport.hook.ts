@@ -8,14 +8,10 @@ import {
 } from "../api/reportsEngine.api";
 import {
   defaultRange,
-  normalizeExportFormat,
   type ExportFileFormat,
 } from "./useReportHubHelpers/index";
-import { useReportExportLockStore } from "../stores/reportExportLock.store";
 import { deriveExportControlsState } from "../utils/exportControlsState";
-import { followAsyncExport, isBenignExportError } from "../utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
-import { runReportExport } from "../utils/runReportExport";
 
 type ExportFormat = ExportFileFormat;
 
@@ -28,28 +24,23 @@ export function useReportExport(
   );
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
-  const abortRef = useRef<AbortController | null>(null);
   const runRef = useRef<Promise<void> | null>(null);
 
   useEffect(() => {
     return () => {
-      abortRef.current?.abort();
+      void runRef.current?.catch(() => undefined);
     };
   }, []);
 
   const runExport = useCallback(
     (format: ExportFormat) => {
       if (!reportType) return;
-      abortRef.current?.abort();
       void runRef.current?.catch(() => undefined);
 
       setExportingFormat(format);
-      setMessage(LABELS.reportAsyncPreparing);
+      setMessage(LABELS.reportExportPreparing);
       setError(null);
       const filters = buildFilters();
-      const controller = new AbortController();
-      abortRef.current = controller;
 
       const request =
         format === "xlsx"
@@ -58,20 +49,9 @@ export function useReportExport(
             ? reportsEngineApi.exportCsv(reportType, filters)
             : reportsEngineApi.exportPdf(reportType, filters);
 
-      const task = runReportExport(
-        async () => {
-          const result = await request;
-          await followAsyncExport(
-            result,
-            normalizeExportFormat(result.format ?? format),
-            { setMessage, setError },
-            { signal: controller.signal },
-          );
-        },
-        { onMessage: setMessage, onError: setError },
-      )
+      const task = request
+        .then(() => setMessage(null))
         .catch((err) => {
-          if (isBenignExportError(err)) return;
           setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
         })
         .finally(() => setExportingFormat(null));
@@ -84,7 +64,7 @@ export function useReportExport(
 
   return {
     exporting: exportingFormat !== null,
-    ...deriveExportControlsState(exportingFormat, globalLocked),
+    ...deriveExportControlsState(exportingFormat),
     message,
     error,
     exportExcel: () => runExport("xlsx"),

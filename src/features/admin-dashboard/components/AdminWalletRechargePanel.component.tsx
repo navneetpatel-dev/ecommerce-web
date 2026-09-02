@@ -24,7 +24,6 @@ export function AdminWalletRechargePanel() {
     loading,
     controlsDisabled,
     exportingFormat,
-    locked,
     error,
     message,
     report,
@@ -38,7 +37,6 @@ export function AdminWalletRechargePanel() {
     message,
     exportingFormat,
     controlsDisabled,
-    locked,
   });
 
   return (
@@ -81,7 +79,6 @@ export function AdminWalletRechargePanel() {
             grouped={false}
             controlsDisabled={controlsDisabled}
             exportingFormat={exportingFormat}
-            locked={locked}
             statusMessage={message}
             disabled={!report}
             blockedHint={LABELS.reportExportLoadReportFirst}
@@ -97,7 +94,6 @@ export function AdminWalletRechargePanel() {
         error={error}
         exportingFormat={exportingFormat}
         controlsDisabled={controlsDisabled}
-        locked={locked}
       />
       {loading ? (
         <p className="text-body text-ink-muted">{LABELS.loading}</p>

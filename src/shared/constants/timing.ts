@@ -28,19 +28,7 @@ export const OTP_SENT_PULSE_MS = 1600;
 /** Grace period before report downloads are considered stalled (UX hint). */
 export const REPORT_DOWNLOAD_TOAST_MS = 1500;
 
-/** Initial export status poll interval (exponential backoff base). */
-export const EXPORT_POLL_INITIAL_MS = 2_000;
-
-/** Maximum export status poll interval (backoff cap). */
-export const EXPORT_POLL_MAX_MS = 8_000;
-
-/** Stop polling export status after this duration. */
-export const EXPORT_POLL_MAX_DURATION_MS = 5 * 60_000;
-
-/** Per status poll request — status should respond quickly; retry on slow polls. */
-export const EXPORT_POLL_REQUEST_TIMEOUT_MS = 10_000;
-
-/** Blob / presigned download timeout for completed exports. */
+/** Direct file download timeout for report exports. */
 export const EXPORT_DOWNLOAD_TIMEOUT_MS = 120_000;
 
 /** Dropdown close delay for search suggestion dismissal. */

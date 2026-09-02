@@ -1,5 +1,11 @@
 import { ApiError } from "@/shared/types/apiError.types";
+import { ERROR_CODES, ERROR_MESSAGES } from "@/shared/constants/errors";
 import { LABELS } from "@/shared/constants/labels";
+
+type ApiFailureBody = {
+  success: false;
+  error: { code?: string; message?: string; details?: unknown };
+};
 
 /** Map API error codes to safe user-facing labels (never expose raw server text). */
 const API_ERROR_LABEL_KEYS: Partial<Record<string, keyof typeof LABELS>> = {
@@ -160,6 +166,33 @@ function firstFieldError(details: unknown): string | null {
     return sanitizeUserFacingMessage(formErrors[0], "");
   }
   return null;
+}
+
+/** Build ApiError from a failed API JSON envelope (blob/download fetch paths). */
+export function apiErrorFromFailureBody(
+  body: unknown,
+  status: number,
+): ApiError {
+  if (
+    body &&
+    typeof body === "object" &&
+    "success" in body &&
+    !(body as ApiFailureBody).success
+  ) {
+    const failure = body as ApiFailureBody;
+    return new ApiError(
+      failure.error?.code ?? ERROR_CODES.REQUEST_FAILED,
+      failure.error?.message ?? `Request failed (${status})`,
+      failure.error?.details,
+    );
+  }
+  if (status === 429) {
+    return new ApiError(ERROR_CODES.RATE_LIMITED, ERROR_MESSAGES.RATE_LIMITED);
+  }
+  return new ApiError(
+    ERROR_CODES.REQUEST_FAILED,
+    `Request failed (${status})`,
+  );
 }
 
 /** Prefer mapped labels and validation field errors; never leak internal infrastructure details. */

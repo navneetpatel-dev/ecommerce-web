@@ -2,20 +2,15 @@
 
 import { useMemo, useState } from "react";
 import type { ExportFileFormat } from "@/features/reports/hooks/useReportHubHelpers/index";
-import { initiateAsyncExport } from "@/shared/api/reportDownload";
 import {
   defaultRange,
   parseFormatFromExportPath,
 } from "@/features/reports/hooks/useReportHubHelpers/index";
+import { downloadReportFile } from "@/features/reports/api/reportsEngine.api";
+import { buildReportExportFilenameFallback } from "@/shared/utils/downloadFilename";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
-import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
-import {
-  followAsyncExport,
-  isBenignExportError,
-} from "@/features/reports/utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
-import { runReportExport } from "@/features/reports/utils/runReportExport";
 import { deriveExportControlsState } from "@/features/reports/utils/exportControlsState";
 
 export interface ReportRangeInput {
@@ -42,7 +37,6 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [report, setReport] = useState<TReport | null>(null);
-  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
 
   const load = async (nextPage = page) => {
     setLoading(true);
@@ -61,25 +55,29 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
 
   const exportFile = async (format: ExportFileFormat) => {
     setExportingFormat(format);
-    setMessage(LABELS.reportAsyncPreparing);
+    setMessage(LABELS.reportExportPreparing);
     setError(null);
     try {
-      await runReportExport(async () => {
-        const path = params.exportPath({ from, to, page }, format);
-        const formatHint = parseFormatFromExportPath(path);
-        const payload = await initiateAsyncExport(path);
-        await followAsyncExport(payload, formatHint, { setMessage, setError });
-      }, { onMessage: setMessage, onError: setError });
+      const path = params.exportPath({ from, to, page }, format);
+      const formatHint = parseFormatFromExportPath(path);
+      await downloadReportFile(
+        path,
+        buildReportExportFilenameFallback(
+          params.documentKey,
+          from,
+          to,
+          formatHint,
+        ),
+      );
+      setMessage(null);
     } catch (err) {
-      if (!isBenignExportError(err)) {
-        setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
-      }
+      setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
     } finally {
       setExportingFormat(null);
     }
   };
 
-  const controls = deriveExportControlsState(exportingFormat, globalLocked);
+  const controls = deriveExportControlsState(exportingFormat);
 
   return {
     from,
@@ -88,7 +86,7 @@ export function useReportPanel<TReport>(params: UseReportPanelParams<TReport>) {
     setTo,
     page,
     loading,
-    exporting: exportingFormat !== null || globalLocked,
+    exporting: exportingFormat !== null,
     ...controls,
     error,
     message,

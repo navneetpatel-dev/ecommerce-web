@@ -20,7 +20,6 @@ export function CustomerOrderHistoryPanel() {
     message: history.message,
     exportingFormat: history.exportingFormat,
     controlsDisabled: history.controlsDisabled,
-    locked: history.locked,
   });
 
   return (
@@ -57,7 +56,6 @@ export function CustomerOrderHistoryPanel() {
               grouped={false}
               controlsDisabled={history.controlsDisabled}
               exportingFormat={history.exportingFormat}
-              locked={history.locked}
               statusMessage={history.message}
               onExportExcel={history.exportExcel}
               onExportCsv={history.exportCsv}
@@ -69,7 +67,6 @@ export function CustomerOrderHistoryPanel() {
             error={history.error}
             exportingFormat={history.exportingFormat}
             controlsDisabled={history.controlsDisabled}
-            locked={history.locked}
           />
         </div>
       </FormSection>

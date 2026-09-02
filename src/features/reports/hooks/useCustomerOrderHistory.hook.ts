@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
@@ -12,11 +12,8 @@ import {
   defaultRange,
   type ExportFileFormat,
 } from "./useReportHubHelpers/index";
-import { useReportExportLockStore } from "../stores/reportExportLock.store";
 import { deriveExportControlsState } from "../utils/exportControlsState";
-import { followAsyncExport, isBenignExportError } from "../utils/asyncExportFlow";
 import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
-import { runReportExport } from "../utils/runReportExport";
 
 export { defaultRange };
 
@@ -32,11 +29,7 @@ export function useCustomerOrderHistory() {
   const [exportingFormat, setExportingFormat] = useState<ExportFileFormat | null>(
     null,
   );
-  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
-  const abortRef = useRef<AbortController | null>(null);
   const runRef = useRef<Promise<void> | null>(null);
-
-  useEffect(() => () => abortRef.current?.abort(), []);
 
   const filters = useCallback(() => ({ from, to }), [from, to]);
 
@@ -59,28 +52,15 @@ export function useCustomerOrderHistory() {
   };
 
   const runExport = (format: ExportFileFormat) => {
-    abortRef.current?.abort();
     void runRef.current?.catch(() => undefined);
-    const controller = new AbortController();
-    abortRef.current = controller;
     setExportingFormat(format);
-    setMessage(LABELS.reportAsyncPreparing);
+    setMessage(LABELS.reportExportPreparing);
     setError(null);
 
-    const task = runReportExport(
-      async () => {
-        const result = await reportsEngineApi.customerOrderHistoryExport(
-          filters(),
-          format,
-        );
-        await followAsyncExport(result, format, { setMessage, setError }, {
-          signal: controller.signal,
-        });
-      },
-      { onMessage: setMessage, onError: setError },
-    )
+    const task = reportsEngineApi
+      .customerOrderHistoryExport(filters(), format)
+      .then(() => setMessage(null))
       .catch((err) => {
-        if (isBenignExportError(err)) return;
         setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
       })
       .finally(() => setExportingFormat(null));
@@ -88,7 +68,7 @@ export function useCustomerOrderHistory() {
     runRef.current = task;
   };
 
-  const controls = deriveExportControlsState(exportingFormat, globalLocked);
+  const controls = deriveExportControlsState(exportingFormat);
 
   return {
     from,
@@ -100,7 +80,7 @@ export function useCustomerOrderHistory() {
     loading,
     error,
     message,
-    exporting: exportingFormat !== null || globalLocked,
+    exporting: exportingFormat !== null,
     ...controls,
     load,
     exportExcel: () => runExport("xlsx"),

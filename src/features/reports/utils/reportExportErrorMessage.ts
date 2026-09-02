@@ -8,16 +8,16 @@ function isExportTimeoutError(err: unknown): boolean {
   return err.name === "TimeoutError" || err.name === "AbortError";
 }
 
-/** User-facing export errors — maps 429 pending cap to a specific label. */
+/** User-facing export errors — maps rate limits and timeouts to specific labels. */
 export function getReportExportErrorMessage(
   err: unknown,
   fallback: string = LABELS.reportLoadError,
 ): string {
   if (isExportTimeoutError(err)) {
-    return LABELS.reportAsyncTimeout;
+    return LABELS.reportExportTimeout;
   }
   if (err instanceof ApiError && err.code === ERROR_CODES.RATE_LIMITED) {
-    return LABELS.reportExportTooManyPending;
+    return LABELS.reportExportRateLimited;
   }
   return getApiErrorMessage(err, fallback);
 }

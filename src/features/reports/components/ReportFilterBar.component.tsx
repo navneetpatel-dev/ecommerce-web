@@ -42,7 +42,6 @@ interface ReportFilterBarProps {
   onExportPdf: () => void;
   loading: boolean;
   controlsDisabled: boolean;
-  locked?: boolean;
   exportingFormat?: ExportFileFormat | null;
   message?: string | null;
   error?: string | null;
@@ -70,7 +69,6 @@ export function ReportFilterBar({
   onExportPdf,
   loading,
   controlsDisabled,
-  locked = false,
   exportingFormat = null,
   message,
   error,
@@ -79,7 +77,6 @@ export function ReportFilterBar({
     message,
     exportingFormat,
     controlsDisabled,
-    locked,
   });
 
   return (
@@ -204,7 +201,6 @@ export function ReportFilterBar({
             grouped={false}
             controlsDisabled={controlsDisabled}
             exportingFormat={exportingFormat}
-            locked={locked}
             statusMessage={message}
             disabled={!reportType}
             blockedHint={LABELS.reportExportSelectReportFirst}
@@ -218,7 +214,6 @@ export function ReportFilterBar({
           error={error}
           exportingFormat={exportingFormat}
           controlsDisabled={controlsDisabled}
-          locked={locked}
         />
       </div>
     </FormSection>

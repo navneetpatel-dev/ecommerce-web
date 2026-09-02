@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
+  apiErrorFromFailureBody,
   getApiErrorMessage,
   looksLikeInternalErrorMessage,
   parseApiFieldErrors,
   sanitizeUserFacingMessage,
 } from "../apiErrorMessage";
 import { ApiError } from "@/shared/types/apiError.types";
+import { ERROR_CODES } from "@/shared/constants/errors";
 import { LABELS } from "@/shared/constants/labels";
 
 describe("looksLikeInternalErrorMessage", () => {
@@ -31,6 +33,31 @@ describe("sanitizeUserFacingMessage", () => {
     expect(sanitizeUserFacingMessage("Expired code", "fallback")).toBe(
       "Expired code",
     );
+  });
+});
+
+describe("apiErrorFromFailureBody", () => {
+  it("parses API failure envelope into ApiError with code", () => {
+    const err = apiErrorFromFailureBody(
+      {
+        success: false,
+        error: { code: "RATE_LIMITED", message: "Too many requests" },
+      },
+      429,
+    );
+    expect(err).toBeInstanceOf(ApiError);
+    expect(err.code).toBe(ERROR_CODES.RATE_LIMITED);
+    expect(err.message).toBe("Too many requests");
+  });
+
+  it("returns RATE_LIMITED for non-JSON 429 responses", () => {
+    const err = apiErrorFromFailureBody(null, 429);
+    expect(err.code).toBe(ERROR_CODES.RATE_LIMITED);
+  });
+
+  it("returns REQUEST_FAILED for unknown non-JSON errors", () => {
+    const err = apiErrorFromFailureBody(null, 500);
+    expect(err.code).toBe(ERROR_CODES.REQUEST_FAILED);
   });
 });
 

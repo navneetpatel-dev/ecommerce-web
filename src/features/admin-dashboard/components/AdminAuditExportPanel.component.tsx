@@ -3,6 +3,7 @@
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
+import { useCallback, useState } from "react";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
 import {
   exportFilterDisableHint,
@@ -10,7 +11,6 @@ import {
   ReportExportStatus,
 } from "@/features/reports";
 import { useReportExport } from "@/features/reports/hooks/useReportExport.hook";
-import { useCallback, useState } from "react";
 
 export function AdminAuditExportPanel() {
   const [from, setFrom] = useState(defaultRange().from);
@@ -26,7 +26,6 @@ export function AdminAuditExportPanel() {
     message: exportHub.message,
     exportingFormat: exportHub.exportingFormat,
     controlsDisabled: exportHub.controlsDisabled,
-    locked: exportHub.locked,
   });
 
   return (
@@ -49,7 +48,6 @@ export function AdminAuditExportPanel() {
         <ReportExportButtons
           controlsDisabled={exportHub.controlsDisabled}
           exportingFormat={exportHub.exportingFormat}
-          locked={exportHub.locked}
           statusMessage={exportHub.message}
           onExportExcel={exportHub.exportExcel}
           onExportCsv={exportHub.exportCsv}
@@ -60,7 +58,6 @@ export function AdminAuditExportPanel() {
           error={exportHub.error}
           exportingFormat={exportHub.exportingFormat}
           controlsDisabled={exportHub.controlsDisabled}
-          locked={exportHub.locked}
         />
       </div>
     </FormSection>

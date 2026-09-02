@@ -1,12 +1,10 @@
 import { LABELS } from "@/shared/constants/labels";
 import type { ExportFileFormat } from "../hooks/useReportHubHelpers/index";
-import { exportStatusMessage } from "./exportStatusMessage";
 
 export type ExportDisableHintContext = {
   message?: string | null;
   exportingFormat?: ExportFileFormat | null;
   controlsDisabled?: boolean;
-  locked?: boolean;
 };
 
 function liveStatusMessage(
@@ -14,12 +12,7 @@ function liveStatusMessage(
   exportingFormat: ExportFileFormat | null | undefined,
 ): string | null {
   if (message?.trim()) return message.trim();
-  if (exportingFormat) {
-    return exportStatusMessage({
-      status: "PROCESSING",
-      format: exportingFormat,
-    });
-  }
+  if (exportingFormat) return LABELS.reportExportPreparing;
   return null;
 }
 
@@ -27,12 +20,7 @@ function liveStatusMessage(
 export function resolveExportStatusDisplay(
   ctx: ExportDisableHintContext,
 ): string | null {
-  const live = liveStatusMessage(ctx.message, ctx.exportingFormat);
-  if (live) return live;
-  if (ctx.controlsDisabled && ctx.locked && !ctx.exportingFormat) {
-    return LABELS.reportExportLocked;
-  }
-  return null;
+  return liveStatusMessage(ctx.message, ctx.exportingFormat);
 }
 
 /** Tooltip for date/filter controls locked during export. */
@@ -40,7 +28,6 @@ export function exportFilterDisableHint(ctx: ExportDisableHintContext): string {
   if (!ctx.controlsDisabled) return "";
   const live = liveStatusMessage(ctx.message, ctx.exportingFormat);
   if (live) return live;
-  if (ctx.locked) return LABELS.reportExportLocked;
   return LABELS.reportExportFiltersLocked;
 }
 
@@ -60,6 +47,5 @@ export function exportButtonDisableHint(
     return LABELS.reportExportOtherFormatLocked;
   }
   if (live) return live;
-  if (ctx.locked) return LABELS.reportExportLocked;
   return LABELS.reportExportButtonLocked;
 }

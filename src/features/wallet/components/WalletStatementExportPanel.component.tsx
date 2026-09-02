@@ -23,7 +23,6 @@ export function WalletStatementExportPanel({
     message: exportHub.message,
     exportingFormat: exportHub.exportingFormat,
     controlsDisabled: exportHub.controlsDisabled,
-    locked: exportHub.locked,
   });
 
   if (isLoading) {
@@ -46,7 +45,6 @@ export function WalletStatementExportPanel({
         <ReportExportButtons
           controlsDisabled={exportHub.controlsDisabled}
           exportingFormat={exportHub.exportingFormat}
-          locked={exportHub.locked}
           statusMessage={exportHub.message}
           onExportExcel={exportHub.exportExcel}
           onExportCsv={exportHub.exportCsv}
@@ -57,7 +55,6 @@ export function WalletStatementExportPanel({
           error={exportHub.error}
           exportingFormat={exportHub.exportingFormat}
           controlsDisabled={exportHub.controlsDisabled}
-          locked={exportHub.locked}
         />
       </div>
     </FormSection>

@@ -65,7 +65,6 @@ export function VendorReportsPage() {
           onExportPdf={hub.exportPdf}
           loading={hub.loading}
           controlsDisabled={hub.controlsDisabled}
-          locked={hub.locked}
           exportingFormat={hub.exportingFormat}
           message={hub.message}
           error={hub.error}

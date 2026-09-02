@@ -8,20 +8,17 @@
 // consumed by the orders feature for order-level reporting.
 export { AdminReportsPage } from "./pages/AdminReportsPage.page";
 export { VendorReportsPage } from "./pages/VendorReportsPage.page";
-export { reportsEngineApi } from "./api/reportsEngine.api";
-export type { AsyncExportResponse } from "./api/reportsEngine.api";
+export {
+  reportsEngineApi,
+  downloadReportFile,
+  buildReportExportFilenameFallback,
+} from "./api/reportsEngine.api";
 export {
   defaultRange,
   normalizeExportFormat,
   type ExportFileFormat,
 } from "./hooks/useReportHubHelpers/index";
-export { useReportExportLockStore } from "./stores/reportExportLock.store";
-export {
-  followAsyncExport,
-  isBenignExportError,
-} from "./utils/asyncExportFlow";
 export { getReportExportErrorMessage } from "./utils/reportExportErrorMessage";
-export { runReportExport } from "./utils/runReportExport";
 export { deriveExportControlsState } from "./utils/exportControlsState";
 export type { ReportExportControlsState } from "./utils/exportControlsState";
 export {

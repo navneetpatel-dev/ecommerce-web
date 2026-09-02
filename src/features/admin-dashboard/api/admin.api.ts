@@ -6,8 +6,8 @@ import {
 } from "@/shared/api/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 import { VENDOR_STATUS, PRODUCT_STATUS } from "@/shared/constants/statuses";
-import { pollAsyncExportResponse } from "@/features/reports/hooks/useReportHubHelpers/index";
-import type { ExportStatus } from "@/features/reports/api/reportsEngine.api";
+import { downloadReportFile } from "@/features/reports/api/reportsEngine.api";
+import { buildReportExportFilenameFallback } from "@/shared/utils/downloadFilename";
 import type {
   AdminAnalytics,
   VendorInfo,
@@ -139,49 +139,18 @@ export const adminApi = {
   notifyCouponAlerts: () =>
     apiClient.post<{ notified: number }>(API.coupons.notifyAlerts),
   analytics: () => apiClient.get<AdminAnalytics>(API.admin.analytics),
-  exportAnalyticsAsync: async (
+  exportAnalytics: (
     format: "xlsx" | "csv" | "pdf" = "xlsx",
     range?: { from?: string; to?: string },
   ) => {
     const params = new URLSearchParams({ format });
     if (range?.from) params.set("from", range.from);
     if (range?.to) params.set("to", range.to);
-    const payload = await apiClient.get<{
-      exportId: string;
-      status: string;
-      format?: string;
-      cached?: boolean;
-      deduped?: boolean;
-    }>(API.admin.analyticsExport(params.toString()));
-    return {
-      async: true as const,
-      exportId: payload.exportId,
-      status: payload.status as "PENDING" | "READY",
-      format: payload.format ?? format,
-      cached: payload.cached,
-      deduped: payload.deduped,
-    };
-  },
-  exportAnalytics: async (
-    format: "xlsx" | "csv" | "pdf" = "xlsx",
-    range?: { from?: string; to?: string },
-  ) => {
-    const params = new URLSearchParams({ format });
-    if (range?.from) params.set("from", range.from);
-    if (range?.to) params.set("to", range.to);
-    const payload = await apiClient.get<{
-      exportId: string;
-      status: string;
-      format?: string;
-      cached?: boolean;
-      deduped?: boolean;
-    }>(API.admin.analyticsExport(params.toString()));
-    await pollAsyncExportResponse({
-      exportId: payload.exportId,
-      status: payload.status as ExportStatus,
-      format: payload.format ?? format,
-      cached: payload.cached,
-      deduped: payload.deduped,
-    });
+    const from = range?.from ?? "";
+    const to = range?.to ?? "";
+    return downloadReportFile(
+      API.admin.analyticsExport(params.toString()),
+      buildReportExportFilenameFallback("platform-analytics", from, to, format),
+    );
   },
 };

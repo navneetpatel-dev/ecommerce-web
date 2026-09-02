@@ -14,7 +14,6 @@ type ButtonFullWidth = boolean | "mobile";
 interface ReportExportButtonsProps {
   controlsDisabled: boolean;
   exportingFormat?: ExportFileFormat | null;
-  locked?: boolean;
   statusMessage?: string | null;
   onExportExcel: () => void;
   onExportCsv: () => void;
@@ -75,7 +74,6 @@ function ExportButton({
 export function ReportExportButtons({
   controlsDisabled,
   exportingFormat = null,
-  locked = false,
   statusMessage = null,
   onExportExcel,
   onExportCsv,
@@ -90,7 +88,6 @@ export function ReportExportButtons({
     message: statusMessage,
     exportingFormat,
     controlsDisabled,
-    locked,
     blocked: disabled,
     blockedHint,
   };

@@ -1,36 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import {
-  applyPollOutcome,
-  defaultRange,
-  labelForKey,
-  normalizeExportFormat,
-  pollExportUntilReady,
-} from "./useReportHubHelpers/index";
+import { defaultRange, labelForKey } from "./useReportHubHelpers/index";
 import {
   reportsEngineApi,
   type ReportRunResult,
 } from "../api/reportsEngine.api";
 import { useReportCatalog } from "./useReportCatalog/index";
 import { useReportExport } from "./useReportExport.hook";
-import { isBenignExportError } from "../utils/asyncExportFlow";
-import {
-  runReportExport,
-  ReportExportLockedError,
-} from "../utils/runReportExport";
-import { getReportExportErrorMessage } from "../utils/reportExportErrorMessage";
-
-function stripResumeQueryParams() {
-  if (typeof window === "undefined") return;
-  const url = new URL(window.location.href);
-  if (!url.searchParams.has("exportId")) return;
-  url.searchParams.delete("exportId");
-  url.searchParams.delete("format");
-  window.history.replaceState({}, "", url.pathname + url.search + url.hash);
-}
 
 export function useReportHub(options?: { preferAudience?: string }) {
   const {
@@ -65,49 +44,6 @@ export function useReportHub(options?: { preferAudience?: string }) {
   );
 
   const exportHub = useReportExport(reportType, buildFilters);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
-    const exportId = params.get("exportId");
-    if (!exportId) return;
-    let active = true;
-    const controller = new AbortController();
-    const format = normalizeExportFormat(params.get("format"));
-    setMessage(null);
-    setError(null);
-    void runReportExport(
-      async () => {
-        const outcome = await pollExportUntilReady(exportId, format, {
-          signal: controller.signal,
-          onProgress: setMessage,
-        });
-        if (!active) return;
-        applyPollOutcome(outcome, { setMessage, setError });
-        if (
-          outcome.outcome === "ready" ||
-          outcome.outcome === "failed" ||
-          outcome.outcome === "timeout" ||
-          outcome.outcome === "aborted"
-        ) {
-          stripResumeQueryParams();
-        }
-      },
-      { onMessage: setMessage, onError: setError },
-      { skipLock: true },
-    ).catch((err) => {
-      if (!active || isBenignExportError(err)) return;
-      if (err instanceof ReportExportLockedError) {
-        setError(LABELS.reportExportLocked);
-        return;
-      }
-      setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
-    });
-    return () => {
-      active = false;
-      controller.abort();
-    };
-  }, []);
 
   const load = (nextPage = page) => {
     if (!reportType) return;
@@ -160,7 +96,6 @@ export function useReportHub(options?: { preferAudience?: string }) {
     exportPdf: exportHub.exportPdf,
     exporting: exportHub.exporting,
     exportingFormat: exportHub.exportingFormat,
-    locked: exportHub.locked,
     controlsDisabled: exportHub.controlsDisabled,
     labelForKey,
     setPage: (nextPage: number) => load(nextPage),

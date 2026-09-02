@@ -34,7 +34,6 @@ export function AdminCashbackWriteOffPanel() {
     loading,
     controlsDisabled,
     exportingFormat,
-    locked,
     error,
     message,
     report,
@@ -48,7 +47,6 @@ export function AdminCashbackWriteOffPanel() {
     message,
     exportingFormat,
     controlsDisabled,
-    locked,
   });
 
   return (
@@ -114,7 +112,6 @@ export function AdminCashbackWriteOffPanel() {
             grouped={false}
             controlsDisabled={controlsDisabled}
             exportingFormat={exportingFormat}
-            locked={locked}
             statusMessage={message}
             disabled={!report}
             blockedHint={LABELS.reportExportLoadReportFirst}
@@ -130,7 +127,6 @@ export function AdminCashbackWriteOffPanel() {
         error={error}
         exportingFormat={exportingFormat}
         controlsDisabled={controlsDisabled}
-        locked={locked}
       />
       {loading ? (
         <p className="text-body text-ink-muted">{LABELS.loading}</p>

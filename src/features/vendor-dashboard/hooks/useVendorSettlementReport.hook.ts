@@ -2,7 +2,6 @@
 
 import { useMemo, useRef, useState } from "react";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { initiateAsyncExport } from "@/shared/api/reportDownload";
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
@@ -11,15 +10,11 @@ import {
   reportsApi,
   type VendorReportSummary,
 } from "@/features/admin-dashboard";
-import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
-import {
-  followAsyncExport,
-  isBenignExportError,
-} from "@/features/reports/utils/asyncExportFlow";
-import { runReportExport } from "@/features/reports/utils/runReportExport";
+import { downloadReportFile } from "@/features/reports/api/reportsEngine.api";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
 import type { ExportFileFormat } from "@/features/reports/hooks/useReportHubHelpers/index";
 import { deriveExportControlsState } from "@/features/reports/utils/exportControlsState";
+import { buildReportExportFilenameFallback } from "@/shared/utils/downloadFilename";
 
 /** Owns the vendor settlement report panel state (Rule 1/12). */
 export function useVendorSettlementReport() {
@@ -34,7 +29,6 @@ export function useVendorSettlementReport() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [summary, setSummary] = useState<VendorReportSummary | null>(null);
-  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
   const runRef = useRef<Promise<void> | null>(null);
 
   const buildRange = () => ({
@@ -61,27 +55,26 @@ export function useVendorSettlementReport() {
     if (!vendorId) return;
     void runRef.current?.catch(() => undefined);
     setExportingFormat(format);
-    setMessage(LABELS.reportAsyncPreparing);
+    setMessage(LABELS.reportExportPreparing);
     setError(null);
     const path = reportsApi.exportUrl(API.reports.vendor(vendorId), {
       ...buildRange(),
       format,
     });
-    const task = runReportExport(async () => {
-      const payload = await initiateAsyncExport(path);
-      await followAsyncExport(payload, format, { setMessage, setError });
-    }, { onMessage: setMessage, onError: setError })
+    const task = downloadReportFile(
+      path,
+      buildReportExportFilenameFallback("vendor-summary", from, to, format),
+    )
+      .then(() => setMessage(null))
       .catch((err) => {
-        if (!isBenignExportError(err)) {
-          setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
-        }
+        setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
       })
       .finally(() => setExportingFormat(null));
     runRef.current = task;
     await task;
   };
 
-  const controls = deriveExportControlsState(exportingFormat, globalLocked);
+  const controls = deriveExportControlsState(exportingFormat);
 
   return {
     vendorId,
@@ -90,7 +83,7 @@ export function useVendorSettlementReport() {
     to,
     setTo,
     loading,
-    exporting: exportingFormat !== null || globalLocked,
+    exporting: exportingFormat !== null,
     ...controls,
     error,
     message,

@@ -1,19 +1,14 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { initiateAsyncExport } from "@/shared/api/reportDownload";
 import { LABELS } from "@/shared/constants/labels";
 import { API } from "@/shared/constants/apiRoutes";
-import { useReportExportLockStore } from "@/features/reports/stores/reportExportLock.store";
-import {
-  followAsyncExport,
-  isBenignExportError,
-} from "@/features/reports/utils/asyncExportFlow";
+import { downloadReportFile } from "@/features/reports/api/reportsEngine.api";
 import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
-import { runReportExport } from "@/features/reports/utils/runReportExport";
 import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
 import type { ExportFileFormat } from "@/features/reports/hooks/useReportHubHelpers/index";
 import { deriveExportControlsState } from "@/features/reports/utils/exportControlsState";
+import { buildReportExportFilenameFallback } from "@/shared/utils/downloadFilename";
 import {
   reportsApi,
   type AdminReportSummary,
@@ -34,7 +29,6 @@ export function useAdminSettlementReports() {
   const [summary, setSummary] = useState<AdminReportSummary | null>(null);
   const [vendors, setVendors] = useState<VendorSettlementRow[]>([]);
   const [recon, setRecon] = useState<ReconciliationReport | null>(null);
-  const globalLocked = useReportExportLockStore((s) => s.inFlight > 0);
   const runRef = useRef<Promise<void> | null>(null);
 
   const buildRange = () => ({
@@ -65,21 +59,23 @@ export function useAdminSettlementReports() {
     }
   };
 
-  const runExport = async (path: string, format: ExportFileFormat) => {
+  const runExport = async (
+    path: string,
+    reportType: string,
+    format: ExportFileFormat,
+  ) => {
     void runRef.current?.catch(() => undefined);
     setExportingFormat(format);
-    setMessage(LABELS.reportAsyncPreparing);
+    setMessage(LABELS.reportExportPreparing);
     setError(null);
-    const task = runReportExport(async () => {
-      const payload = await initiateAsyncExport(
-        reportsApi.exportUrl(path, { ...buildRange(), format }),
-      );
-      await followAsyncExport(payload, format, { setMessage, setError });
-    }, { onMessage: setMessage, onError: setError })
+    const exportPath = reportsApi.exportUrl(path, { ...buildRange(), format });
+    const task = downloadReportFile(
+      exportPath,
+      buildReportExportFilenameFallback(reportType, from, to, format),
+    )
+      .then(() => setMessage(null))
       .catch((err) => {
-        if (!isBenignExportError(err)) {
-          setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
-        }
+        setError(getReportExportErrorMessage(err, LABELS.couldNotLoadReport));
       })
       .finally(() => setExportingFormat(null));
     runRef.current = task;
@@ -87,17 +83,17 @@ export function useAdminSettlementReports() {
   };
 
   const exportSummary = (format: ExportFileFormat) =>
-    void runExport(API.reports.adminSummary, format);
+    void runExport(API.reports.adminSummary, "admin-dashboard-summary", format);
 
   const exportVendors = (format: ExportFileFormat) =>
-    void runExport(API.reports.adminVendors, format);
+    void runExport(API.reports.adminVendors, "vendor-settlement", format);
 
   const exportReconciliation = (format: ExportFileFormat) => {
     if (!recon) return;
-    void runExport(API.reports.adminReconciliation, format);
+    void runExport(API.reports.adminReconciliation, "reconciliation", format);
   };
 
-  const controls = deriveExportControlsState(exportingFormat, globalLocked);
+  const controls = deriveExportControlsState(exportingFormat);
 
   return {
     from,
@@ -105,7 +101,7 @@ export function useAdminSettlementReports() {
     to,
     setTo,
     loading,
-    exporting: exportingFormat !== null || globalLocked,
+    exporting: exportingFormat !== null,
     ...controls,
     error,
     message,

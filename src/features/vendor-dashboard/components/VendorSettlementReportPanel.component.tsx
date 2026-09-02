@@ -23,7 +23,6 @@ export function VendorSettlementReportPanel() {
     loading,
     controlsDisabled,
     exportingFormat,
-    locked,
     error,
     message,
     summary,
@@ -37,7 +36,6 @@ export function VendorSettlementReportPanel() {
     message,
     exportingFormat,
     controlsDisabled,
-    locked,
   });
 
   return (
@@ -85,7 +83,6 @@ export function VendorSettlementReportPanel() {
             grouped={false}
             controlsDisabled={controlsDisabled}
             exportingFormat={exportingFormat}
-            locked={locked}
             statusMessage={message}
             disabled={!vendorId || !summary}
             blockedHint={LABELS.reportExportLoadReportFirst}
@@ -101,7 +98,6 @@ export function VendorSettlementReportPanel() {
         error={error}
         exportingFormat={exportingFormat}
         controlsDisabled={controlsDisabled}
-        locked={locked}
       />
       {loading ? (
         <p className="text-body text-ink-muted">{LABELS.loading}</p>

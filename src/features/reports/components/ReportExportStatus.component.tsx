@@ -9,7 +9,6 @@ interface ReportExportStatusProps {
   error?: string | null;
   exportingFormat?: ExportFileFormat | null;
   controlsDisabled?: boolean;
-  locked?: boolean;
   className?: string;
 }
 
@@ -18,14 +17,12 @@ export function ReportExportStatus({
   error,
   exportingFormat = null,
   controlsDisabled = false,
-  locked = false,
   className,
 }: ReportExportStatusProps) {
   const displayMessage = resolveExportStatusDisplay({
     message,
     exportingFormat,
     controlsDisabled,
-    locked,
   });
 
   if (!displayMessage && !error) return null;

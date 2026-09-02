@@ -34,7 +34,6 @@ export function AdminSettlementReportsPanel() {
     loading,
     controlsDisabled,
     exportingFormat,
-    locked,
     error,
     message,
     summary,
@@ -50,7 +49,6 @@ export function AdminSettlementReportsPanel() {
     message,
     exportingFormat,
     controlsDisabled,
-    locked,
   });
 
   return (
@@ -89,7 +87,6 @@ export function AdminSettlementReportsPanel() {
             grouped={false}
             controlsDisabled={controlsDisabled}
             exportingFormat={exportingFormat}
-            locked={locked}
             statusMessage={message}
             disabled={!summary}
             blockedHint={LABELS.reportExportLoadReportFirst}
@@ -106,7 +103,6 @@ export function AdminSettlementReportsPanel() {
         error={error}
         exportingFormat={exportingFormat}
         controlsDisabled={controlsDisabled}
-        locked={locked}
       />
       {loading ? (
         <p className="text-body text-ink-muted">{LABELS.loading}</p>
@@ -164,7 +160,6 @@ export function AdminSettlementReportsPanel() {
               size="sm"
               controlsDisabled={controlsDisabled}
               exportingFormat={exportingFormat}
-              locked={locked}
               statusMessage={message}
               onExportExcel={() => void exportReconciliation("xlsx")}
               onExportCsv={() => void exportReconciliation("csv")}
@@ -212,7 +207,6 @@ export function AdminSettlementReportsPanel() {
               size="sm"
               controlsDisabled={controlsDisabled}
               exportingFormat={exportingFormat}
-              locked={locked}
               statusMessage={message}
               onExportExcel={() => void exportVendors("xlsx")}
               onExportCsv={() => void exportVendors("csv")}

@@ -1,7 +1,5 @@
 import { getApiSessionAdapter } from "@/shared/api/sessionAdapter";
 import { apiClient } from "@/shared/api/client";
-import { initiateAsyncExport } from "@/shared/api/reportDownload";
-import type { AsyncExportResponse } from "@/features/reports";
 import {
   unwrapPaginatedList,
   type PaginatedList,
@@ -12,7 +10,12 @@ import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
 import { BEARER_PREFIX } from "@/shared/constants/http";
 import { API_TIMEOUT_MS, EXPORT_DOWNLOAD_TIMEOUT_MS } from "@/shared/constants/timing";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
-import { resolveDownloadFilename } from "@/shared/utils/downloadFilename";
+import {
+  buildReportExportFilenameFallback,
+  resolveDownloadFilename,
+} from "@/shared/utils/downloadFilename";
+import { apiErrorFromFailureBody } from "@/shared/utils/apiErrorMessage";
+import { ApiError } from "@/shared/types/apiError.types";
 import type { WalletTransaction } from "@/shared/api/types";
 
 export type WalletBalanceResponse = {
@@ -55,6 +58,34 @@ function buildStatementQuery(
   params.set("to", filters.to);
   params.set("format", filters.format);
   return params.toString();
+}
+
+async function downloadStatementFile(path: string, fallbackName: string) {
+  const token = getApiSessionAdapter().getAccessToken();
+  const res = await fetch(`${CLIENT_API_BASE_URL}${path}`, {
+    credentials: "include",
+    cache: "no-store",
+    signal: AbortSignal.timeout(EXPORT_DOWNLOAD_TIMEOUT_MS),
+    headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
+  });
+  if (!res.ok) {
+    let body: unknown = null;
+    try {
+      body = await res.json();
+    } catch {
+      /* non-JSON error body */
+    }
+    const err = apiErrorFromFailureBody(body, res.status);
+    (err as ApiError & { status?: number }).status = res.status;
+    throw err;
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = resolveDownloadFilename(res, fallbackName);
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 export const walletApi = {
@@ -113,9 +144,14 @@ export const walletApi = {
   exportStatement: (
     filters: WalletStatementExportFilters,
     format: "xlsx" | "csv" | "pdf" = "xlsx",
-  ): Promise<AsyncExportResponse> =>
-    initiateAsyncExport(
+  ) =>
+    downloadStatementFile(
       API.wallet.statement(buildStatementQuery({ ...filters, format })),
-      { timeoutMs: EXPORT_DOWNLOAD_TIMEOUT_MS },
+      buildReportExportFilenameFallback(
+        "customer-wallet-statement",
+        filters.from,
+        filters.to,
+        format,
+      ),
     ),
 };
