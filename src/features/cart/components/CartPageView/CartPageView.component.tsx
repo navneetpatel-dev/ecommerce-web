@@ -128,7 +128,11 @@ export function CartPageView({
               {LABELS.yourCart}
             </h1>
           </div>
-          <ClearCartAction onClear={onClearCart} isClearing={isClearing} />
+          <ClearCartAction
+            onClear={onClearCart}
+            isClearing={isClearing}
+            disabled={isCartMutating && !isClearing}
+          />
         </motion.header>
 
         <CartMutationError

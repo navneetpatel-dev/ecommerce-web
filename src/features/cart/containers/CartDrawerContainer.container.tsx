@@ -27,6 +27,8 @@ export function CartDrawerContainer() {
       onContinueShopping={drawer.continueShopping}
       onUpdateQuantity={drawer.updateQuantity}
       onRemoveItem={drawer.removeItem}
+      onClearCart={drawer.clearCart}
+      isClearing={drawer.isClearing}
     />
   );
 }

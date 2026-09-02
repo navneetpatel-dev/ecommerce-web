@@ -1,57 +1,31 @@
 "use client";
 
-import { useState } from "react";
 import { Trash2 } from "lucide-react";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
-import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { CartConfirmAction } from "../CartConfirmAction.component";
 
 interface ClearCartActionProps {
   onClear: () => void;
   isClearing?: boolean;
+  disabled?: boolean;
 }
 
 export function ClearCartAction({
   onClear,
   isClearing = false,
+  disabled = false,
 }: ClearCartActionProps) {
-  const [open, setOpen] = useState(false);
-
   return (
-    <>
-      <Button
-        type="button"
-        size="sm"
-        variant="ghost"
-        className="shrink-0 text-danger hover:bg-danger-subtle hover:text-danger"
-        disabled={isClearing}
-        onClick={() => setOpen(true)}
-      >
-        <Trash2 size={16} aria-hidden />
-        {LABELS.clearAll}
-      </Button>
-
-      <StatusDialog
-        open={open}
-        onOpenChange={setOpen}
-        title={LABELS.clearCartTitle}
-        description={LABELS.clearCartDescription}
-        variant="danger"
-        secondaryAction={{
-          label: LABELS.cancel,
-          variant: "outline",
-          onClick: () => setOpen(false),
-        }}
-        primaryAction={{
-          label: LABELS.clearAll,
-          variant: "destructive",
-          loading: isClearing,
-          onClick: () => {
-            setOpen(false);
-            onClear();
-          },
-        }}
-      />
-    </>
+    <CartConfirmAction
+      triggerLabel={LABELS.clearAll}
+      title={LABELS.clearCartTitle}
+      description={LABELS.clearCartDescription}
+      confirmLabel={LABELS.clearAll}
+      icon={Trash2}
+      pending={isClearing}
+      disabled={disabled}
+      triggerClassName="shrink-0 text-danger hover:bg-danger-subtle hover:text-danger"
+      onConfirm={onClear}
+    />
   );
 }

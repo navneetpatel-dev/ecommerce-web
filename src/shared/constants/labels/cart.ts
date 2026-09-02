@@ -4,6 +4,9 @@ export const cartLabels = {
   clearCartTitle: "Clear your cart?",
   clearCartDescription:
     "This will remove every item from your cart. This action cannot be undone.",
+  removeCartItemTitle: "Remove this item?",
+  removeCartItemDescription:
+    "Remove “{name}” from your cart? You can add it again later.",
   cartUpdatingActionHint: "Please wait while your cart updates.",
   couldNotAddToCart:
     "We couldn't add this item to your cart. Check your connection and try again.",

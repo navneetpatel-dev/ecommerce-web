@@ -1,14 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Trash2 } from "lucide-react";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { QuantitySelector } from "@/shared/components/QuantitySelector.component";
 import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { MediaImage } from "@/shared/components/MediaImage.component";
 import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart";
 import { cn } from "@/shared/utils/cn";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
@@ -18,11 +16,11 @@ import {
   unavailableLabel,
   variantLabel,
 } from "./cartLineShared.component";
-import { formatLabel } from "@/shared/utils/formatLabel";
 import {
   hasPendingCartLineSubtotal,
   resolveCartLineDisplaySubtotal,
 } from "@/features/cart/utils/cartDisplay.utils";
+import { RemoveCartItemAction } from "../RemoveCartItemAction.component";
 
 interface FullCartLineProps {
   item: CartItem;
@@ -43,14 +41,6 @@ export function FullCartLine(props: FullCartLineProps) {
   const handleQuantityChange = (quantity: number) => {
     onUpdateQuantity(item.id, quantity);
   };
-
-  const handleRemove = () => {
-    onRemoveItem(item.id);
-  };
-
-  const removeAriaLabel = formatLabel(LABELS.removeNamed, {
-    name: item.product.name,
-  });
 
   return (
     <li
@@ -96,17 +86,12 @@ export function FullCartLine(props: FullCartLineProps) {
               </p>
             )}
           </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
+          <RemoveCartItemAction
+            item={item}
             className="h-9 w-9 min-h-9 max-h-9 shrink-0 text-ink-muted hover:bg-danger-subtle hover:text-danger sm:hidden"
-            aria-label={removeAriaLabel}
             disabled={disabled}
-            onClick={handleRemove}
-          >
-            <Trash2 size={15} />
-          </Button>
+            onRemoveItem={onRemoveItem}
+          />
         </div>
 
         <div className="flex min-w-0 flex-wrap items-center gap-3">
@@ -122,17 +107,13 @@ export function FullCartLine(props: FullCartLineProps) {
               valueClassName="h-4 w-5 text-[0.75rem] sm:h-5 sm:w-6 sm:text-body-sm"
             />
           ) : null}
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
+          <RemoveCartItemAction
+            item={item}
+            display="label"
             className="hidden h-auto min-h-0 max-h-none items-center gap-1.5 px-0 py-0 text-body-sm text-ink-muted hover:bg-transparent hover:text-danger sm:inline-flex"
-            onClick={handleRemove}
             disabled={disabled}
-          >
-            <Trash2 size={14} />
-            {LABELS.remove}
-          </Button>
+            onRemoveItem={onRemoveItem}
+          />
         </div>
       </div>
 

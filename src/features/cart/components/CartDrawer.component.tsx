@@ -10,6 +10,7 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock.hook";
 import { CartLineItem } from "./CartLineItem.component";
 import { CartDrawerSummary } from "./CartDrawerSummary.component";
+import { ClearCartAction } from "./CartPageView/ClearCartAction.component";
 import type { CartItem } from "@/shared/api/types";
 
 interface CartDrawerProps {
@@ -38,6 +39,8 @@ interface CartDrawerProps {
   onContinueShopping: () => void;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
+  onClearCart: () => void;
+  isClearing?: boolean;
 }
 
 export function CartDrawer({
@@ -60,6 +63,8 @@ export function CartDrawer({
   onContinueShopping,
   onUpdateQuantity,
   onRemoveItem,
+  onClearCart,
+  isClearing = false,
 }: CartDrawerProps) {
   useBodyScrollLock(isOpen);
 
@@ -86,15 +91,24 @@ export function CartDrawer({
               <h2 className="text-[1.125rem] font-semibold">
                 {LABELS.yourCart}
               </h2>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                onClick={onClose}
-                aria-label={LABELS.closeCart}
-              >
-                <X size={20} />
-              </Button>
+              <div className="flex items-center gap-1">
+                {hasItems ? (
+                  <ClearCartAction
+                    onClear={onClearCart}
+                    isClearing={isClearing}
+                    disabled={isCartMutating && !isClearing}
+                  />
+                ) : null}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={onClose}
+                  aria-label={LABELS.closeCart}
+                >
+                  <X size={20} />
+                </Button>
+              </div>
             </div>
 
             <div className="min-h-0 flex-1 space-y-4 overflow-auto overscroll-contain p-4">

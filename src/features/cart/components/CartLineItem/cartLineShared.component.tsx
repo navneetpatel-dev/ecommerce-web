@@ -1,13 +1,11 @@
-import { Trash2 } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import {
   UNAVAILABLE_REASON,
   type UnavailableReason,
 } from "@/shared/constants/statuses";
-import { Button } from "@/shared/components/ui/button";
-import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import type { CartItem } from "@/shared/api/types";
+import { RemoveCartItemAction } from "../RemoveCartItemAction.component";
 
 /** Maps an unavailability reason to its localized label. */
 export function unavailableLabel(
@@ -51,23 +49,12 @@ export function RemoveLineButton({
   onRemoveItem,
   disabled = false,
 }: RemoveLineButtonProps) {
-  const handleRemove = () => {
-    onRemoveItem(item.id);
-  };
-
   return (
-    <Button
-      type="button"
-      variant="ghost"
-      size="icon-sm"
-      onClick={handleRemove}
+    <RemoveCartItemAction
+      item={item}
       className={className}
-      aria-label={formatLabel(LABELS.removeNamed, {
-        name: item.product.name,
-      })}
+      onRemoveItem={onRemoveItem}
       disabled={disabled}
-    >
-      <Trash2 size={14} />
-    </Button>
+    />
   );
 }

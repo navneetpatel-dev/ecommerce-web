@@ -7,6 +7,7 @@ import {
   useCart,
   useUpdateCartItem,
   useRemoveCartItem,
+  useClearCart,
   cartMutationKeys,
 } from "../api/cart.queries";
 import { useCartDrawerStore } from "../store/cart.store";
@@ -26,6 +27,7 @@ export function useCartDrawer() {
   const { data: cart, isLoading, isFetching, isError, refetch } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
+  const clearCart = useClearCart();
   const isCartMutating =
     useIsMutating({ mutationKey: cartMutationKeys.all }) > 0;
 
@@ -74,6 +76,8 @@ export function useCartDrawer() {
     },
     updateQuantity,
     removeItem: removeItemById,
+    clearCart: () => clearCart.mutate(),
+    isClearing: clearCart.isPending,
     continueShopping,
   };
 }
