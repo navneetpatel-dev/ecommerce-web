@@ -94,13 +94,11 @@ export function CartDrawerSummary({
         </Button>
       )}
 
-      <Link
-        href={PATHS.cart}
-        onClick={onClose}
-        className="block text-center text-body-sm text-brand hover:underline"
-      >
-        {LABELS.viewFullCart}
-      </Link>
+      <Button asChild variant="outline" className="w-full">
+        <Link href={PATHS.cart} onClick={onClose}>
+          {LABELS.viewFullCart}
+        </Link>
+      </Button>
     </div>
   );
 }

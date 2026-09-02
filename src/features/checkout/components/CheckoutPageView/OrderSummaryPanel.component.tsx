@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { LABELS } from "@/shared/constants/labels";
+import { MediaImage } from "@/shared/components/MediaImage.component";
 import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
@@ -95,15 +95,12 @@ export function OrderSummaryPanel({
               {vendorItems.map((item) => (
                 <li key={item.id} className="flex gap-3">
                   <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-sm border border-line bg-paper">
-                    {item.product.imageUrl ? (
-                      <Image
-                        src={item.product.imageUrl}
-                        alt={item.product.name}
-                        fill
-                        className="object-cover"
-                        sizes="56px"
-                      />
-                    ) : null}
+                    <MediaImage
+                      src={item.product.imageUrl}
+                      alt={item.product.name}
+                      imageClassName="object-cover"
+                      sizes="56px"
+                    />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[0.875rem] font-medium text-ink">

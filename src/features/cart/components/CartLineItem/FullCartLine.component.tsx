@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Trash2 } from "lucide-react";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { QuantitySelector } from "@/shared/components/QuantitySelector.component";
+import { MediaImage } from "@/shared/components/MediaImage.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart";
@@ -59,15 +59,14 @@ export function FullCartLine(props: FullCartLineProps) {
     >
       <Link
         href={PATHS.product(item.product.slug)}
-        className="relative aspect-square overflow-hidden bg-paper"
+        className="relative aspect-square self-end overflow-hidden rounded-sm border border-line bg-paper"
         tabIndex={available ? undefined : -1}
       >
-        <Image
+        <MediaImage
           src={item.product.imageUrl}
           alt={item.product.name}
-          fill
           sizes="88px"
-          className="object-cover transition-transform duration-[var(--motion-moderate)] group-hover:scale-[1.03]"
+          imageClassName="object-cover transition-transform duration-[var(--motion-moderate)] group-hover:scale-[1.03]"
         />
       </Link>
 
