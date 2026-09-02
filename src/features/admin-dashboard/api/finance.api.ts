@@ -14,9 +14,9 @@ export type CommissionInvoiceEntry = {
   vendorId: string
   payoutId: string | null
   vendorName: string | null
-  taxablePaise: number
-  gstPaise: number
-  totalPaise: number
+  taxableAmount: number
+  gstAmount: number
+  totalAmount: number
   issuedAt: string
 }
 

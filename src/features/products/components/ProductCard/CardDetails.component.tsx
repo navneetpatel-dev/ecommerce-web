@@ -10,13 +10,13 @@ import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface CardDetailsProps {
   product: ProductListItem;
-  hasDiscount: boolean;
+  showMrp: boolean;
   discountPercent: number;
 }
 
 export function CardDetails({
   product,
-  hasDiscount,
+  showMrp,
   discountPercent,
 }: CardDetailsProps) {
   return (
@@ -31,7 +31,7 @@ export function CardDetails({
         <span className="font-sans text-body font-semibold text-brand">
           ₹{formatInrAmount(product.basePrice)}
         </span>
-        {hasDiscount && (
+        {showMrp && (
           <>
             <span className="font-sans text-body-sm text-ink-faint line-through">
               ₹{product.compareAtPrice!.toLocaleString("en-IN")}

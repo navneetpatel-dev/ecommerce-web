@@ -56,7 +56,7 @@ export function CommissionInvoicesTable({ invoices }: CommissionInvoicesTablePro
                 {new Date(invoice.issuedAt).toLocaleDateString()}
               </p>
               <p className="mt-2 font-mono text-[1rem] text-ink">
-                {formatInr(invoice.totalPaise / 100)}
+                {formatInr(invoice.totalAmount)}
               </p>
               <Button
                 type="button"
@@ -101,7 +101,7 @@ export function CommissionInvoicesTable({ invoices }: CommissionInvoicesTablePro
                     {invoice.number}
                   </TableCell>
                   <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-                    {formatInr(invoice.totalPaise / 100)}
+                    {formatInr(invoice.totalAmount)}
                   </TableCell>
                   <TableCell className={TABLE_DATA_CELL_CLASS}>
                     {new Date(invoice.issuedAt).toLocaleDateString()}

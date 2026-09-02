@@ -28,7 +28,6 @@ export const checkoutApi = {
     usersApi.createAddress(body),
   getShippingRates: (
     pincode: string,
-    weight?: number,
     options?: {
       method?: string;
       productId?: string;
@@ -37,7 +36,6 @@ export const checkoutApi = {
     },
   ) => {
     const params = new URLSearchParams({ pincode });
-    if (weight != null) params.set("weight", String(weight));
     if (options?.method) params.set("method", options.method);
     if (options?.productId) params.set("productId", options.productId);
     if (options?.variantId) params.set("variantId", options.variantId);

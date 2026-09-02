@@ -13,8 +13,8 @@ export type CheckoutQuoteInput = {
 
 export const checkoutKeys = {
   addresses: ["addresses"] as const,
-  shippingRates: (pincode: string, weightGrams: number) =>
-    ["shipping", "rates", pincode, weightGrams] as const,
+  shippingRates: (pincode: string, vendorId: string) =>
+    ["shipping", "rates", pincode, vendorId] as const,
   pdpShippingRates: (
     pincode: string,
     productId: string,
@@ -65,11 +65,11 @@ export function useCreateAddress() {
   });
 }
 
-export function useShippingRates(pincode: string, weightGrams: number) {
+export function useShippingRates(pincode: string, vendorId: string) {
   return useQuery({
-    queryKey: checkoutKeys.shippingRates(pincode, weightGrams),
-    queryFn: () => checkoutApi.getShippingRates(pincode, weightGrams),
-    enabled: PINCODE_PATTERN.test(pincode) && weightGrams > 0,
+    queryKey: checkoutKeys.shippingRates(pincode, vendorId),
+    queryFn: () => checkoutApi.getShippingRates(pincode, { vendorId }),
+    enabled: PINCODE_PATTERN.test(pincode) && Boolean(vendorId),
   });
 }
 

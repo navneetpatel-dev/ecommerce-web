@@ -12,12 +12,9 @@ export type OrderPaymentFields = Pick<
   | "amountDue"
 >;
 
-/** Razorpay portion for display — never treat COD amountDue as Razorpay paid. */
+/** Razorpay portion for display — backend always normalizes this on order responses. */
 export function resolveOrderRazorpayPaid(order: OrderPaymentFields): number {
-  return Number(
-    order.razorpayAmountPaid ??
-      (order.paymentMethod === "COD" ? 0 : order.amountDue ?? 0),
-  );
+  return Number(order.razorpayAmountPaid ?? 0);
 }
 
 /** Whether the confirmation page should show the payment breakdown card. */

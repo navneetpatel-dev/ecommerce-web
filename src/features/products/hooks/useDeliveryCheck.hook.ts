@@ -26,7 +26,7 @@ export function useDeliveryCheck(params: UseDeliveryCheckParams) {
       params.variantId,
     ),
     queryFn: () =>
-      checkoutApi.getShippingRates(submitted, undefined, {
+      checkoutApi.getShippingRates(submitted, {
         productId: params.productId,
         variantId: params.variantId ?? undefined,
         vendorId: params.vendorId ?? undefined,

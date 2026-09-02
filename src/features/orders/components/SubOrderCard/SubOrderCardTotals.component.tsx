@@ -1,5 +1,6 @@
 import type { SubOrder } from "@/shared/api/types";
 import { cn } from "@/shared/utils/cn";
+import { taxDisplayLabel } from "@/shared/utils/taxDisplay";
 import { formatInr } from "../../utils/format";
 
 interface SubOrderCardTotalsProps {
@@ -7,10 +8,11 @@ interface SubOrderCardTotalsProps {
 }
 
 export function SubOrderCardTotals({ subOrder }: SubOrderCardTotalsProps) {
-  const shippingCost = Number(subOrder.shippingCharged ?? subOrder.shippingCost ?? 0);
+  const shippingCost = subOrder.shippingCharged;
   const taxAmount = Number(subOrder.taxAmount ?? 0);
   const sellerTotal = Number(subOrder.customerTotal);
-  const showBreakdown = shippingCost > 0 || taxAmount > 0;
+  const showShipping = subOrder.shippingDisplayKey != null;
+  const showBreakdown = showShipping || taxAmount > 0;
   const subtotalTone = showBreakdown
     ? "text-ink-muted"
     : "font-medium text-ink";
@@ -32,17 +34,23 @@ export function SubOrderCardTotals({ subOrder }: SubOrderCardTotalsProps) {
       </div>
       {showBreakdown && (
         <>
-          {shippingCost > 0 && (
+          {showShipping && (
             <div className="flex justify-between gap-4">
               <dt className="text-ink-muted">Shipping</dt>
               <dd className="tabular-nums text-ink">
-                {formatInr(shippingCost)}
+                {subOrder.shippingDisplayKey === "FREE"
+                  ? "Free"
+                  : shippingCost != null
+                    ? formatInr(shippingCost)
+                    : "—"}
               </dd>
             </div>
           )}
           {taxAmount > 0 && (
             <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">Tax</dt>
+              <dt className="text-ink-muted">
+                {taxDisplayLabel(subOrder.taxDisplayKey)}
+              </dt>
               <dd className="tabular-nums text-ink">{formatInr(taxAmount)}</dd>
             </div>
           )}

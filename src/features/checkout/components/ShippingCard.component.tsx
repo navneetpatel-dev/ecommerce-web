@@ -74,7 +74,7 @@ export function ShippingCard({
               <div className="flex w-full items-baseline justify-between gap-3">
                 <span className="font-medium text-ink">{label}</span>
                 <span className="font-mono text-[0.875rem] tabular-nums text-ink">
-                  {Number(option.cost) === 0
+                  {option.shippingDisplayKey === "FREE"
                     ? "Free"
                     : `₹${Number(option.cost)}`}
                 </span>

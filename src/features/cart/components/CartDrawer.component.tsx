@@ -29,6 +29,7 @@ interface CartDrawerProps {
     merchandiseSubtotal: number;
     taxTotal: number;
     shippingTotal: number;
+    shippingDisplayKey: "FREE" | "PAID";
   };
   hasUnavailableItems?: boolean;
   onContinueShopping: () => void;
@@ -139,6 +140,7 @@ export function CartDrawer({
                     <OrderTaxShippingBreakdown
                       className="space-y-1.5 text-body-sm"
                       shippingTotal={pricingPreview.shippingTotal}
+                      shippingDisplayKey={pricingPreview.shippingDisplayKey}
                       taxTotal={pricingPreview.taxTotal}
                     />
                   </dl>

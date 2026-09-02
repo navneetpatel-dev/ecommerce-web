@@ -14,13 +14,6 @@ interface ShippingStepProps {
   onContinue: () => void;
 }
 
-function estimateWeightGrams(items: CartItem[]) {
-  return items.reduce((sum, item) => {
-    const unitWeight = Number(item.variant?.weightGrams ?? 500);
-    return sum + Number(item.quantity || 1) * unitWeight;
-  }, 0);
-}
-
 export function ShippingStep({
   groupedByVendor,
   selectedMethods,
@@ -51,7 +44,6 @@ export function ShippingStep({
             vendorId={vid}
             vendor={items[0].product.vendor}
             pincode={pincode}
-            weightGrams={estimateWeightGrams(items)}
             selected={selectedMethods[vid]}
             onSelect={(m) => onSelect(vid, m)}
           />

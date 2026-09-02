@@ -15,8 +15,8 @@ interface ProductDeliveryCheckProps {
   productId: string;
   variantId?: string | null;
   vendorId?: string | null;
-  price: number;
   codAvailable?: boolean;
+  codEligibleAtUnitPrice?: boolean;
   codMinOrderValue?: number;
   codMaxOrderValue?: number | null;
   onBlockedChange?: (blocked: boolean) => void;
@@ -26,8 +26,8 @@ export function ProductDeliveryCheck({
   productId,
   variantId,
   vendorId,
-  price,
   codAvailable = false,
+  codEligibleAtUnitPrice = false,
   codMinOrderValue = 0,
   codMaxOrderValue = null,
   onBlockedChange,
@@ -54,13 +54,10 @@ export function ProductDeliveryCheck({
     Boolean(submitted) && !quoteQuery.isFetching && rates.length > 0;
   const notServiceable =
     Boolean(submitted) && !quoteQuery.isFetching && rates.length === 0;
-  const inCodRange =
-    price >= Number(codMinOrderValue ?? 0) &&
-    (codMaxOrderValue == null || price <= Number(codMaxOrderValue));
-  const showCod = Boolean(codAvailable && inCodRange);
+  const showCod = Boolean(codAvailable && codEligibleAtUnitPrice);
   const codConfirmed = showCod && serviceable;
   const codBlockedByPincode = showCod && notServiceable;
-  const belowCodMin = price < Number(codMinOrderValue ?? 0);
+  const belowCodMin = codAvailable && !codEligibleAtUnitPrice;
 
   useEffect(() => {
     onBlockedChange?.(notServiceable);
@@ -118,7 +115,7 @@ export function ProductDeliveryCheck({
       ) : null}
       {fastest ? (
         <p className="text-body-sm leading-snug text-ink-muted">
-          {fastest.cost === 0
+          {fastest.shippingDisplayKey === "FREE"
             ? formatLabel(LABELS.deliveryEtaFree, {
                 days: fastest.estimatedDays,
               })
@@ -136,7 +133,7 @@ export function ProductDeliveryCheck({
         <p className="text-body-sm leading-snug text-ink-muted">
           {LABELS.codUnavailable}
         </p>
-      ) : !inCodRange ? (
+      ) : !codEligibleAtUnitPrice ? (
         <p className="text-body-sm leading-snug text-ink-muted">
           {belowCodMin
             ? formatLabel(LABELS.codMinOrder, {

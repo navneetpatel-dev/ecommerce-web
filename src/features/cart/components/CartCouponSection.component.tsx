@@ -25,7 +25,7 @@ interface CartCouponSectionProps {
   appliedCouponCode: string | null;
   appliedDiscount?: number;
   appliedCashbackAmount?: number;
-  orderTotal?: number;
+  payNowGrandTotal?: number;
   eligible: EligibleCoupon[];
   eligibleLoading?: boolean;
   onCouponInputChange: (value: string) => void;
@@ -43,7 +43,7 @@ export function CartCouponSection({
   appliedCouponCode,
   appliedDiscount = 0,
   appliedCashbackAmount = 0,
-  orderTotal = 0,
+  payNowGrandTotal,
   eligible,
   eligibleLoading,
   onCouponInputChange,
@@ -106,10 +106,10 @@ export function CartCouponSection({
                 ? ` (−₹${formatInrAmount(appliedDiscount)})`
                 : ""}
             </p>
-            {appliedCashbackAmount > 0 ? (
+            {appliedCashbackAmount > 0 && payNowGrandTotal != null ? (
               <CashbackCouponNotice
                 className="mt-1 text-[0.75rem] text-brand"
-                payNow={orderTotal}
+                payNow={payNowGrandTotal}
                 cashbackAmount={appliedCashbackAmount}
               />
             ) : null}

@@ -45,6 +45,17 @@ export type WalletRechargeCheckout = {
   checkoutConfigId?: string;
 };
 
+export type WalletRechargePreviewResponse = {
+  amountInr: number;
+  pointsToCredit: number;
+  validationCode:
+    | "ok"
+    | "below-min"
+    | "above-max"
+    | "max-balance"
+    | "disabled";
+};
+
 export type WalletStatementExportFilters = {
   from: string;
   to: string;
@@ -90,6 +101,10 @@ async function downloadStatementFile(path: string, fallbackName: string) {
 
 export const walletApi = {
   getBalance: () => apiClient.get<WalletBalanceResponse>(API.wallet.balance),
+  previewRecharge: (amountInr: number) =>
+    apiClient.get<WalletRechargePreviewResponse>(
+      API.wallet.rechargePreview(amountInr),
+    ),
   getTransactions: async (
     params: PaginationQuery = {},
   ): Promise<PaginatedList<WalletTransaction>> => {

@@ -5,40 +5,46 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { taxDisplayLabel } from "@/shared/utils/taxDisplay";
 import { resolveCartLineSubtotal } from "../../utils/checkoutDisplay.utils";
 import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
-import {
-  quoteOrderTotals,
-  quoteTaxLabel,
-} from "../../utils/quoteTotals.utils";
+import { quoteOrderTotals } from "../../utils/quoteTotals.utils";
 
 interface OrderSummaryPanelProps {
   groupedByVendor: Record<string, CartItem[]>;
-  subtotal: number;
-  estimatedTotal: number;
+  subtotal?: number;
+  subtotalPending?: boolean;
+  estimatedTotal?: number;
+  estimatedTotalPending?: boolean;
   quote?: CheckoutQuote | null;
   cartPricingPreview?: {
     taxTotal: number;
     shippingTotal: number;
+    shippingDisplayKey: "FREE" | "PAID";
   };
 }
 
 export function OrderSummaryPanel({
   groupedByVendor,
   subtotal,
+  subtotalPending = false,
   estimatedTotal,
+  estimatedTotalPending = false,
   quote,
   cartPricingPreview,
 }: OrderSummaryPanelProps) {
   const orderTotals = quote ? quoteOrderTotals(quote) : null;
-  const summarySubtotal =
-    orderTotals?.merchandiseSubtotal ?? subtotal ?? 0;
+  const summarySubtotal = orderTotals?.merchandiseSubtotal ?? subtotal;
+  const summarySubtotalPending =
+    !orderTotals && (subtotalPending || summarySubtotal == null);
   const items = Object.values(groupedByVendor).flat();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const walletApplied = (quote?.walletAmountToUse ?? 0) > 0;
   const displayTotal = walletApplied
-    ? (quote?.amountDue ?? 0)
+    ? quote?.amountDue
     : (quote?.grandTotal ?? estimatedTotal);
+  const displayTotalPending =
+    displayTotal == null || (!quote && estimatedTotalPending);
   const totalLabel = !quote
     ? LABELS.estimatedTotalLabel
     : walletApplied
@@ -63,7 +69,13 @@ export function OrderSummaryPanel({
           {itemCount} {itemCount === 1 ? "item" : "items"}
           <span className="mx-2 text-line">·</span>
           <span className="font-medium text-ink">
-            ₹{formatInrAmount(displayTotal)}
+            {displayTotalPending ? (
+              <span className="text-ink-muted">Updating…</span>
+            ) : displayTotal != null ? (
+              <>₹{formatInrAmount(displayTotal)}</>
+            ) : (
+              <span className="text-ink-muted">Updating…</span>
+            )}
           </span>
         </p>
         <TextEyebrow className="mt-4">Order summary</TextEyebrow>
@@ -119,7 +131,13 @@ export function OrderSummaryPanel({
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">Subtotal</dt>
             <dd className="tabular-nums text-ink">
-              ₹{formatInrAmount(summarySubtotal)}
+              {summarySubtotalPending ? (
+                <span className="text-ink-muted">Updating…</span>
+              ) : summarySubtotal != null ? (
+                <>₹{formatInrAmount(summarySubtotal)}</>
+              ) : (
+                <span className="text-ink-muted">Updating…</span>
+              )}
             </dd>
           </div>
           {quote?.appliedCoupon && (
@@ -130,9 +148,10 @@ export function OrderSummaryPanel({
               </dd>
             </div>
           )}
-          {(quote?.cashbackAmount ?? 0) > 0 ? (
+          {(quote?.cashbackAmount ?? 0) > 0 &&
+          (quote?.amountDue != null || estimatedTotal != null) ? (
             <CashbackCouponNotice
-              payNow={quote?.amountDue ?? estimatedTotal}
+              payNow={quote?.amountDue ?? estimatedTotal!}
               cashbackAmount={quote?.cashbackAmount ?? 0}
               code={quote?.appliedCoupon?.code}
               className="text-body-sm text-brand"
@@ -144,20 +163,22 @@ export function OrderSummaryPanel({
                 {LABELS.walletAppliedAtCheckout}
               </dt>
               <dd className="tabular-nums text-ink">
-                −₹{quote?.walletAmountToUse ?? formatInrAmount(0)}
+                −₹{formatInrAmount(quote!.walletAmountToUse)}
               </dd>
             </div>
           ) : null}
           {orderTotals ? (
             <OrderTaxShippingBreakdown
               shippingTotal={orderTotals.shippingTotal}
+              shippingDisplayKey={orderTotals.shippingDisplayKey}
               taxTotal={orderTotals.taxTotal}
-              taxLabel={quoteTaxLabel(orderTotals.taxDisplayKey)}
+              taxLabel={taxDisplayLabel(orderTotals.taxDisplayKey)}
             />
           ) : (
             <OrderTaxShippingBreakdown
               pending={!cartPricingPreview}
               shippingTotal={cartPricingPreview?.shippingTotal}
+              shippingDisplayKey={cartPricingPreview?.shippingDisplayKey}
               taxTotal={cartPricingPreview?.taxTotal}
             />
           )}
@@ -169,7 +190,17 @@ export function OrderSummaryPanel({
               {totalLabel}
             </span>
             <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
-              ₹{formatInrAmount(displayTotal)}
+              {displayTotalPending ? (
+                <span className="text-[1.125rem] text-ink-muted">
+                  Updating…
+                </span>
+              ) : displayTotal != null ? (
+                <>₹{formatInrAmount(displayTotal)}</>
+              ) : (
+                <span className="text-[1.125rem] text-ink-muted">
+                  Updating…
+                </span>
+              )}
             </span>
           </div>
           {walletApplied && quote ? (

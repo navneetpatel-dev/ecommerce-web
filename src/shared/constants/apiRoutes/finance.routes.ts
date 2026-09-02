@@ -5,6 +5,8 @@ export const walletRoutes = {
   statement: (query = "") =>
     `/api/wallet/statement${query ? `?${query}` : ""}`,
   recharge: "/api/wallet/recharge",
+  rechargePreview: (amountInr: number) =>
+    `/api/wallet/recharge/preview?amountInr=${encodeURIComponent(String(amountInr))}`,
   rechargeVerify: "/api/wallet/recharge/verify",
   rechargeStatus: (id: string) => `/api/wallet/recharge/${id}`,
   rechargeInvoice: (id: string) => `/api/wallet/recharge/${id}/invoice`,

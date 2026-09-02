@@ -3,6 +3,7 @@ import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface OrderTaxShippingBreakdownProps {
   shippingTotal?: number;
+  shippingDisplayKey?: "FREE" | "PAID";
   taxTotal?: number;
   taxLabel?: string;
   /** Show placeholder when tax/shipping are not yet computed. */
@@ -11,13 +12,20 @@ interface OrderTaxShippingBreakdownProps {
 }
 
 export function OrderTaxShippingBreakdown({
-  shippingTotal = 0,
-  taxTotal = 0,
+  shippingTotal,
+  shippingDisplayKey,
+  taxTotal,
   taxLabel = LABELS.taxGst,
   pending = false,
   className = "space-y-2.5 text-[0.875rem]",
 }: OrderTaxShippingBreakdownProps) {
-  if (pending) {
+  const totalsReady =
+    !pending &&
+    shippingTotal != null &&
+    taxTotal != null &&
+    shippingDisplayKey != null;
+
+  if (!totalsReady) {
     return (
       <div className={className}>
         <div className="flex items-center justify-between gap-4">
@@ -35,7 +43,7 @@ export function OrderTaxShippingBreakdown({
       <div className="flex items-center justify-between gap-4">
         <dt className="text-ink-muted">{LABELS.shipping}</dt>
         <dd className="tabular-nums text-ink">
-          {shippingTotal === 0
+          {shippingDisplayKey === "FREE"
             ? LABELS.freeShipping
             : `₹${formatInrAmount(shippingTotal)}`}
         </dd>

@@ -9,6 +9,8 @@ export interface ProductListItem {
   basePrice: number;
   compareAtPrice?: number | null;
   discountPercent?: number | null;
+  /** BE-derived — show MRP strikethrough when true. */
+  showMrp?: boolean;
   brand?: string | null;
   avgRating: number;
   reviewCount: number;
@@ -29,6 +31,7 @@ export interface ProductVariant {
   stock: number;
   lowStockAt: number;
   weightGrams?: number;
+  codEligibleAtUnitPrice?: boolean;
 }
 
 export interface ProductImage {
@@ -75,6 +78,8 @@ export interface ProductDetail extends ProductListItem {
   taxInclusive?: boolean;
   taxInclusivePrice?: number | null;
   codAvailable?: boolean;
+  /** Unit price meets COD min/max at PDP — checkout `codAvailable` uses cart grand total. */
+  codEligibleAtUnitPrice?: boolean;
   codMinOrderValue?: number;
   codMaxOrderValue?: number | null;
   displayWarrantyMonths?: number | null;

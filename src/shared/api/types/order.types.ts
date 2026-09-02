@@ -45,8 +45,10 @@ export interface SubOrder {
   subtotal: number;
   shippingCost?: number;
   shippingCharged?: number;
+  shippingDisplayKey?: "FREE" | "PAID";
   shippingDiscountAmount?: number;
   taxAmount?: number;
+  taxDisplayKey?: "IGST" | "CGST_SGST" | "GST";
   taxableAmount?: number;
   discountAmount?: number;
   discountTotal?: number;
@@ -65,6 +67,8 @@ export interface Order {
   merchandiseSubtotal?: number;
   taxTotal?: number;
   shippingTotal?: number;
+  shippingDisplayKey?: "FREE" | "PAID";
+  taxDisplayKey?: "IGST" | "CGST_SGST" | "GST";
   amountDue?: number;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
@@ -80,7 +84,10 @@ export interface Order {
   subOrders: SubOrder[];
   shippingAddress?: Address | null;
   openReturnCount?: number;
-  returnRefundAlerts?: Array<{ id: string; refundStatus: RefundStatus | string }>;
+  returnRefundAlerts?: Array<{
+    id: string;
+    refundStatus: RefundStatus | string;
+  }>;
 }
 
 export interface Review {
@@ -128,6 +135,7 @@ export interface ReturnRequest {
 export interface ShippingRate {
   method: ShippingMethod;
   cost: number;
+  shippingDisplayKey: "FREE" | "PAID";
   estimatedDays: number;
 }
 
@@ -137,7 +145,9 @@ export interface VendorBreakdown {
   items: OrderItem[];
   subtotal: number;
   shippingCost: number;
+  shippingDisplayKey: "FREE" | "PAID";
   tax: { cgst: number; sgst: number; igst: number; total: number };
+  taxDisplayKey: "IGST" | "CGST_SGST" | "GST";
   discount: number;
   total: number;
 }
@@ -162,10 +172,12 @@ export interface CheckoutQuote {
     cashbackAmount?: number;
     type?: string;
   }>;
+  /** Cart grand total meets COD min/max — PDP uses `codEligibleAtUnitPrice` for unit price. */
   codAvailable?: boolean;
   orderTotals: {
     merchandiseSubtotal: number;
     shippingTotal: number;
+    shippingDisplayKey: "FREE" | "PAID";
     taxTotal: number;
     cgst: number;
     sgst: number;

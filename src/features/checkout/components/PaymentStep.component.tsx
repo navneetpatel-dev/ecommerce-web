@@ -51,11 +51,11 @@ export function PaymentStep({
   onBack,
 }: PaymentStepProps) {
   const walletBalance = quote?.walletBalance ?? 0;
-  const amountDue = quote?.amountDue ?? 0;
-  const maxApplicable = quote?.maxWalletApplicable ?? walletBalance;
+  const amountDue = quote?.amountDue;
+  const maxApplicable = quote?.maxWalletApplicable ?? 0;
   const walletSelected = selectedMethod === "wallet";
   const canUseCod = quote?.codAvailable === true;
-  const canUseWallet = walletBalance > 0 && maxApplicable > 0;
+  const canUseWallet = Boolean(quote) && walletBalance > 0 && maxApplicable > 0;
   const walletReady = walletSelected && walletAmountToUse > 0;
 
   const canContinue =
@@ -177,7 +177,7 @@ export function PaymentStep({
             disabled={isPending || !quote}
             onAmountChange={onWalletAmountChange}
           />
-          {walletAmountToUse > 0 && amountDue > 0 ? (
+          {walletAmountToUse > 0 && amountDue != null && amountDue > 0 ? (
             <p className="text-body-sm text-ink-muted">
               {formatLabel(LABELS.paymentMethodWalletRemainderDue, {
                 amount: `₹${formatInrAmount(amountDue)}`,

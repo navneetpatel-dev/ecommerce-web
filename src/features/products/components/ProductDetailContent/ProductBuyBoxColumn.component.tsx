@@ -155,10 +155,10 @@ export function ProductBuyBoxColumn({
           variantUnavailable={variantUnavailable}
           canAddToCart={canAddToCart}
           displayStock={displayStock}
-          displayPrice={Number(
-            variantSelection.currentPrice || product.basePrice || 0,
-          )}
           codAvailable={product.codAvailable}
+          codEligibleAtUnitPrice={
+            resolvedVariant?.codEligibleAtUnitPrice ?? product.codEligibleAtUnitPrice
+          }
           codMinOrderValue={product.codMinOrderValue}
           codMaxOrderValue={product.codMaxOrderValue}
           onDeliveryBlockedChange={onDeliveryBlockedChange}

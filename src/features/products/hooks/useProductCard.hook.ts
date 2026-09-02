@@ -11,7 +11,7 @@ export function useProductCard(product: ProductListItem) {
   const prefetch = usePrefetchProduct();
   const { isWishlisted, toggle } = useWishlistToggle(product.id);
 
-  const hasDiscount = Boolean(product.discountPercent && product.discountPercent > 0);
+  const showMrp = product.showMrp === true;
   const discountPercent = product.discountPercent ?? 0;
 
   const defaultVariantId = product.variants?.[0]?.id;
@@ -36,7 +36,7 @@ export function useProductCard(product: ProductListItem) {
         ? isWishlisted
         : Boolean(product.isWishlisted),
     isAddingToCart: isMutating,
-    hasDiscount,
+    showMrp,
     discountPercent,
     cartQuantity,
     maxQuantity,

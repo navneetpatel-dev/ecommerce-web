@@ -28,6 +28,7 @@ export function CartPage() {
       appliedCouponCode={cart.appliedCouponCode}
       appliedDiscount={cart.appliedDiscount}
       appliedCashbackAmount={cart.appliedCashbackAmount}
+      payNowGrandTotal={cart.payNowGrandTotal}
       appliedCouponType={cart.appliedCouponType}
       vendorDiscountBreakdown={cart.vendorDiscountBreakdown}
       eligible={cart.eligible}

@@ -64,7 +64,7 @@ export function useCartCoupons({
       try {
         const result = await couponsApi.apply(code);
         setCouponCode(code, { manual: opts?.manual !== false });
-        setCouponMessage(describeApplyResult(result, cart));
+        setCouponMessage(describeApplyResult(result));
         setCouponInput("");
         refreshCart();
         void loadEligible();

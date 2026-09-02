@@ -22,18 +22,8 @@ export function useAdminFinancePage(): AdminFinancePageModel {
     [],
   );
   const loadCommissionInvoices = useCallback(
-    async ({ page, limit }: { page: number; limit: number }) => {
-      const result = await commissionsApi.listInvoices({ page, limit });
-      return {
-        ...result,
-        items: result.items.map((row) => ({
-          ...row,
-          taxableAmount: row.taxablePaise / 100,
-          gstAmount: row.gstPaise / 100,
-          totalAmount: row.totalPaise / 100,
-        })),
-      };
-    },
+    ({ page, limit }: { page: number; limit: number }) =>
+      commissionsApi.listInvoices({ page, limit }),
     [],
   );
   const loadPayouts = useCallback(

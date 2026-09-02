@@ -82,8 +82,10 @@ export function useCheckoutPage() {
   }, [paymentMethod, quote, setPaymentMethod, setWalletAmountToUse]);
 
   const displayTotals = resolveCartDisplayTotals(cart);
-  const subtotal = displayTotals.subtotal ?? 0;
-  const estimatedTotal = quote?.grandTotal ?? cart?.total ?? displayTotals.total;
+  const subtotal = displayTotals.subtotal;
+  const subtotalPending = displayTotals.subtotalPending;
+  const estimatedTotal = quote?.grandTotal ?? displayTotals.total;
+  const estimatedTotalPending = !quote && displayTotals.totalIsEstimated;
 
   const shippingReady = useMemo(
     () =>
@@ -149,7 +151,9 @@ export function useCheckoutPage() {
     isLoading,
     groupedByVendor,
     subtotal,
+    subtotalPending,
     estimatedTotal,
+    estimatedTotalPending,
     hasItems: Boolean(cart?.items?.length),
     cartPricingPreview: displayTotals.pricingPreview,
     hasUnavailableItems,

@@ -14,14 +14,15 @@ import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface OrderSummaryAsideProps {
   itemCount: number;
-  subtotal: number;
+  subtotal?: number;
   subtotalPending?: boolean;
-  total: number;
+  total?: number;
   totalIsEstimated?: boolean;
   pendingLineTotals?: boolean;
   pricingPreview?: {
     taxTotal: number;
     shippingTotal: number;
+    shippingDisplayKey: "FREE" | "PAID";
   };
   hasUnavailableItems: boolean;
   couponInput: string;
@@ -31,6 +32,7 @@ interface OrderSummaryAsideProps {
   appliedCouponCode: string | null;
   appliedDiscount: number;
   appliedCashbackAmount?: number;
+  payNowGrandTotal?: number;
   appliedCouponType?: string | null;
   vendorDiscountBreakdown?: Array<{
     vendorId: string;
@@ -61,6 +63,7 @@ export function OrderSummaryAside({
   appliedCouponCode,
   appliedDiscount,
   appliedCashbackAmount = 0,
+  payNowGrandTotal,
   appliedCouponType,
   vendorDiscountBreakdown = [],
   eligible,
@@ -70,8 +73,9 @@ export function OrderSummaryAside({
   onRemoveCoupon,
   onApplyEligible,
 }: OrderSummaryAsideProps) {
+  const totalPending = total == null || (totalIsEstimated && pendingLineTotals);
   const totalLabel = totalIsEstimated
-    ? pendingLineTotals
+    ? totalPending
       ? "Updating…"
       : "Estimated total"
     : LABELS.total;
@@ -88,9 +92,7 @@ export function OrderSummaryAside({
           {itemCount} {itemCount === 1 ? "item" : "items"}
           <span className="mx-2 text-line">·</span>
           <span className="font-medium text-ink">
-            {totalIsEstimated && pendingLineTotals
-              ? "Updating…"
-              : `₹${formatInrAmount(total)}`}
+            {totalPending ? "Updating…" : `₹${formatInrAmount(total)}`}
           </span>
         </p>
 
@@ -103,7 +105,7 @@ export function OrderSummaryAside({
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">{LABELS.subtotal}</dt>
             <dd className="tabular-nums text-ink">
-              {subtotalPending ? (
+              {subtotalPending || subtotal == null ? (
                 <span className="text-ink-muted">Updating…</span>
               ) : (
                 <>₹{formatInrAmount(subtotal)}</>
@@ -136,6 +138,7 @@ export function OrderSummaryAside({
           <OrderTaxShippingBreakdown
             pending={!pricingPreview}
             shippingTotal={pricingPreview?.shippingTotal}
+            shippingDisplayKey={pricingPreview?.shippingDisplayKey}
             taxTotal={pricingPreview?.taxTotal}
           />
         </dl>
@@ -149,7 +152,7 @@ export function OrderSummaryAside({
             appliedCouponCode={appliedCouponCode}
             appliedDiscount={appliedDiscount}
             appliedCashbackAmount={appliedCashbackAmount}
-            orderTotal={total}
+            payNowGrandTotal={payNowGrandTotal}
             eligible={eligible}
             eligibleLoading={eligibleLoading}
             onCouponInputChange={onCouponInputChange}
@@ -165,21 +168,22 @@ export function OrderSummaryAside({
               {totalLabel}
             </span>
             <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
-              {totalIsEstimated && pendingLineTotals ? (
+              {totalPending ? (
                 <span className="text-[1rem] text-ink-muted">Updating…</span>
               ) : (
                 <>₹{formatInrAmount(total)}</>
               )}
             </span>
           </div>
-          {(appliedCashbackAmount > 0 || appliedCouponType === "CASHBACK") && (
+          {(appliedCashbackAmount > 0 || appliedCouponType === "CASHBACK") &&
+          payNowGrandTotal != null ? (
             <CashbackCouponNotice
               className="mt-3 text-body-sm text-brand"
-              payNow={total}
+              payNow={payNowGrandTotal}
               cashbackAmount={appliedCashbackAmount}
               code={appliedCouponCode}
             />
-          )}
+          ) : null}
         </div>
 
         {hasUnavailableItems ? (

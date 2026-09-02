@@ -67,7 +67,7 @@ export function ReviewStep(props: ReviewStepProps) {
     );
   }
 
-  const payable = quote.amountDue ?? quote.grandTotal;
+  const payable = quote.amountDue;
   const showsUnavailableWarning = Boolean(hasUnavailableItems);
 
   const renderBreakdown = (

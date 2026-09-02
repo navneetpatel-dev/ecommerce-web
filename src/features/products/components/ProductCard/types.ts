@@ -12,7 +12,7 @@ export interface ProductCardProps {
   isAddingToCart?: boolean;
   cartQuantity?: number;
   maxQuantity?: number;
-  hasDiscount?: boolean;
+  showMrp?: boolean;
   discountPercent?: number;
   onPrefetch?: () => void;
   onToggleWishlist?: () => void;

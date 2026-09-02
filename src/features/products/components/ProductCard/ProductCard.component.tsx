@@ -24,7 +24,7 @@ export function ProductCard({
   isAddingToCart = false,
   cartQuantity = 0,
   maxQuantity = 99,
-  hasDiscount = false,
+  showMrp = false,
   discountPercent = 0,
   onPrefetch,
   onToggleWishlist,
@@ -65,7 +65,7 @@ export function ProductCard({
 
       <CardDetails
         product={product}
-        hasDiscount={hasDiscount}
+        showMrp={showMrp}
         discountPercent={discountPercent}
       />
 

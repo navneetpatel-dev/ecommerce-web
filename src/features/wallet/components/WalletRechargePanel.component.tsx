@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useQueries } from "@tanstack/react-query";
 import { Button } from "@/shared/components/ui/button";
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -9,7 +10,13 @@ import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInr } from "@/shared/utils/orderFormat";
 import { formatPoints } from "@/shared/utils/formatPoints";
 import { useWalletRecharge } from "../hooks/useWalletRecharge.hook";
-import { validateWalletRechargeAmount } from "../utils/walletRechargeValidation";
+import { useWalletRechargePreview } from "../hooks/useWalletRechargePreview.hook";
+import {
+  walletRechargeValidationLabel,
+  type WalletRechargeValidationCode,
+} from "../utils/walletRechargeValidation";
+import { walletApi } from "../api/wallet.api";
+import { walletKeys } from "../api/wallet.queries";
 import type { WalletBalanceResponse } from "../api/wallet.api";
 import { cn } from "@/shared/utils/cn";
 import { WalletRechargePanelSkeleton } from "./WalletSectionSkeletons.component";
@@ -34,38 +41,28 @@ export function WalletRechargePanel({
   const rechargeEnabled = balance?.rechargeEnabled !== false;
   const pointsPerRupee = limits?.pointsPerRupee ?? 1;
 
-  const amountValidationCode = useMemo(() => {
-    if (customAmount == null || !Number.isFinite(customAmount) || customAmount <= 0) {
-      return null;
-    }
-    if (!limits) return null;
-    return validateWalletRechargeAmount(customAmount, balance?.points ?? 0, {
-      ...limits,
-      pointsPerRupee,
-    });
-  }, [customAmount, limits, balance?.points, pointsPerRupee]);
+  const customPreviewQuery = useWalletRechargePreview(customAmount);
+  const presetPreviewQueries = useQueries({
+    queries: presets.map((preset) => ({
+      queryKey: walletKeys.rechargePreview(preset),
+      queryFn: () => walletApi.previewRecharge(preset),
+      enabled: rechargeEnabled && preset > 0,
+      staleTime: 30_000,
+    })),
+  });
 
-  const amountError = useMemo(() => {
-    if (!amountValidationCode || !limits) return null;
-    if (amountValidationCode === "below-min") {
-      return formatLabel(LABELS.walletRechargeBelowMin, {
-        min: formatInr(limits.minInr),
-      });
-    }
-    if (amountValidationCode === "above-max") {
-      return formatLabel(LABELS.walletRechargeAboveMax, {
-        max: formatInr(limits.maxInr),
-      });
-    }
-    return formatLabel(LABELS.walletMaxBalanceReached, {
-      cap: formatPoints(limits.maxBalance),
-    });
-  }, [amountValidationCode, limits]);
+  const customValidationCode = customPreviewQuery.data?.validationCode ?? null;
+
+  const amountError = useMemo(
+    () => walletRechargeValidationLabel(customValidationCode, limits),
+    [customValidationCode, limits],
+  );
 
   const canSubmitCustomAmount =
-    customAmount != null && customAmount > 0 && amountValidationCode == null;
-
-  const pointsForAmount = (amountInr: number) => amountInr * pointsPerRupee;
+    customAmount != null &&
+    customAmount > 0 &&
+    customValidationCode === "ok" &&
+    !customPreviewQuery.isFetching;
 
   if (isLoading) {
     return <WalletRechargePanelSkeleton className={className} />;
@@ -73,33 +70,14 @@ export function WalletRechargePanel({
 
   if (!rechargeEnabled) return null;
 
-  const validateAmount = (amount: number): string | null => {
-    if (!limits) return null;
-    const code = validateWalletRechargeAmount(amount, balance?.points ?? 0, {
-      ...limits,
-      pointsPerRupee,
-    });
-    if (code === "below-min") {
-      return formatLabel(LABELS.walletRechargeBelowMin, {
-        min: formatInr(limits.minInr),
-      });
-    }
-    if (code === "above-max") {
-      return formatLabel(LABELS.walletRechargeAboveMax, {
-        max: formatInr(limits.maxInr),
-      });
-    }
-    if (code === "max-balance") {
-      return formatLabel(LABELS.walletMaxBalanceReached, {
-        cap: formatPoints(limits.maxBalance),
-      });
-    }
-    return null;
-  };
+  const validationMessage = (
+    code: WalletRechargeValidationCode | null | undefined,
+  ): string | null => walletRechargeValidationLabel(code, limits);
 
   const startRecharge = async (amount: number) => {
     clearMessages();
-    const message = validateAmount(amount);
+    const preview = await walletApi.previewRecharge(amount);
+    const message = validationMessage(preview.validationCode);
     if (message) return;
     await recharge(amount);
   };
@@ -125,29 +103,32 @@ export function WalletRechargePanel({
 
       {presets.length > 0 ? (
         <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-          {presets.map((preset) => (
-            <Button
-              key={preset}
-              type="button"
-              variant="outline"
-              size="sm"
-              disabled={isBusy}
-              className="h-auto min-h-9 justify-start px-3 py-2"
-              onClick={() => void startRecharge(preset)}
-            >
-              <span className="flex flex-col items-start leading-tight">
-                <span>{formatInr(preset)}</span>
-                {pointsPerRupee > 1 ? (
-                  <span className="text-[0.6875rem] text-ink-muted">
-                    {formatLabel(LABELS.walletRechargeBonusHint, {
-                      amount: formatInr(preset),
-                      points: formatPoints(pointsForAmount(preset)),
-                    })}
-                  </span>
-                ) : null}
-              </span>
-            </Button>
-          ))}
+          {presets.map((preset, index) => {
+            const preview = presetPreviewQueries[index]?.data;
+            return (
+              <Button
+                key={preset}
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={isBusy}
+                className="h-auto min-h-9 justify-start px-3 py-2"
+                onClick={() => void startRecharge(preset)}
+              >
+                <span className="flex flex-col items-start leading-tight">
+                  <span>{formatInr(preset)}</span>
+                  {pointsPerRupee > 1 && preview?.validationCode === "ok" ? (
+                    <span className="text-[0.6875rem] text-ink-muted">
+                      {formatLabel(LABELS.walletRechargeBonusHint, {
+                        amount: formatInr(preset),
+                        points: formatPoints(preview.pointsToCredit),
+                      })}
+                    </span>
+                  ) : null}
+                </span>
+              </Button>
+            );
+          })}
         </div>
       ) : null}
 
@@ -193,10 +174,10 @@ export function WalletRechargePanel({
         </FormFieldFrame>
       </div>
 
-      {canSubmitCustomAmount ? (
+      {canSubmitCustomAmount && customPreviewQuery.data ? (
         <p className="mt-3 text-[0.875rem] text-ink-muted">
           {formatLabel(LABELS.walletRechargePreview, {
-            points: formatPoints(pointsForAmount(customAmount)),
+            points: formatPoints(customPreviewQuery.data.pointsToCredit),
           })}
         </p>
       ) : null}

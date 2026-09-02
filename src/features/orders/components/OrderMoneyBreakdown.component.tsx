@@ -1,5 +1,6 @@
 import { LABELS } from "@/shared/constants/labels";
 import type { Order } from "@/shared/api/types";
+import { taxDisplayLabel } from "@/shared/utils/taxDisplay";
 import { formatInr } from "../utils/format";
 
 interface OrderMoneyBreakdownProps {
@@ -10,6 +11,8 @@ interface OrderMoneyBreakdownProps {
     | "merchandiseSubtotal"
     | "taxTotal"
     | "shippingTotal"
+    | "shippingDisplayKey"
+    | "taxDisplayKey"
   >;
   className?: string;
 }
@@ -22,9 +25,7 @@ export function OrderMoneyBreakdown({
   const taxTotal = order.taxTotal;
   const shippingTotal = order.shippingTotal;
   const showBreakdown =
-    merchandiseSubtotal != null ||
-    taxTotal != null ||
-    shippingTotal != null;
+    merchandiseSubtotal != null || taxTotal != null || shippingTotal != null;
 
   return (
     <dl className={className ?? "space-y-2.5 text-[0.875rem]"}>
@@ -36,15 +37,23 @@ export function OrderMoneyBreakdown({
           </dd>
         </div>
       ) : null}
-      {showBreakdown && Number(shippingTotal) > 0 ? (
+      {showBreakdown && order.shippingDisplayKey != null ? (
         <div className="flex items-center justify-between gap-4">
           <dt className="text-ink-muted">Shipping</dt>
-          <dd className="tabular-nums text-ink">{formatInr(shippingTotal!)}</dd>
+          <dd className="tabular-nums text-ink">
+            {order.shippingDisplayKey === "FREE"
+              ? "Free"
+              : shippingTotal != null
+                ? formatInr(shippingTotal)
+                : "—"}
+          </dd>
         </div>
       ) : null}
       {showBreakdown && Number(taxTotal) > 0 ? (
         <div className="flex items-center justify-between gap-4">
-          <dt className="text-ink-muted">{LABELS.taxTotal}</dt>
+          <dt className="text-ink-muted">
+            {taxDisplayLabel(order.taxDisplayKey)}
+          </dt>
           <dd className="tabular-nums text-ink">{formatInr(taxTotal!)}</dd>
         </div>
       ) : null}

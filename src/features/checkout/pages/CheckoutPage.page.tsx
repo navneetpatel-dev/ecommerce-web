@@ -28,7 +28,9 @@ export function CheckoutPage() {
       isCreatingAddress={checkout.isCreatingAddress}
       groupedByVendor={checkout.groupedByVendor}
       subtotal={checkout.subtotal}
+      subtotalPending={checkout.subtotalPending}
       estimatedTotal={checkout.estimatedTotal}
+      estimatedTotalPending={checkout.estimatedTotalPending}
       cartPricingPreview={checkout.cartPricingPreview}
       shippingReady={checkout.shippingReady}
       hasUnavailableItems={checkout.hasUnavailableItems}

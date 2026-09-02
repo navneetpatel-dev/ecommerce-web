@@ -14,14 +14,15 @@ export interface CartPageViewProps {
   hasItems: boolean;
   itemCount: number;
   groupedByVendor: Record<string, CartItem[]>;
-  subtotal: number;
+  subtotal?: number;
   subtotalPending?: boolean;
-  total: number;
+  total?: number;
   totalIsEstimated?: boolean;
   pendingLineTotals?: boolean;
   pricingPreview?: {
     taxTotal: number;
     shippingTotal: number;
+    shippingDisplayKey: "FREE" | "PAID";
   };
   hasUnavailableItems: boolean;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
@@ -33,6 +34,7 @@ export interface CartPageViewProps {
   appliedCouponCode: string | null;
   appliedDiscount: number;
   appliedCashbackAmount?: number;
+  payNowGrandTotal?: number;
   appliedCouponType?: string | null;
   vendorDiscountBreakdown?: Array<{
     vendorId: string;
@@ -68,6 +70,7 @@ export function CartPageView({
   appliedCouponCode,
   appliedDiscount,
   appliedCashbackAmount = 0,
+  payNowGrandTotal,
   appliedCouponType,
   vendorDiscountBreakdown = [],
   eligible,
@@ -132,6 +135,7 @@ export function CartPageView({
             appliedCouponCode={appliedCouponCode}
             appliedDiscount={appliedDiscount}
             appliedCashbackAmount={appliedCashbackAmount}
+            payNowGrandTotal={payNowGrandTotal}
             appliedCouponType={appliedCouponType}
             vendorDiscountBreakdown={vendorDiscountBreakdown}
             eligible={eligible}

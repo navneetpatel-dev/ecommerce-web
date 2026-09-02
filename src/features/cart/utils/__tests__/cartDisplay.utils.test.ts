@@ -39,6 +39,7 @@ const baseCart: Cart = {
     discount: 0,
     taxTotal: 36,
     shippingTotal: 0,
+    shippingDisplayKey: "FREE",
     grandTotal: 236,
   },
 };

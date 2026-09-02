@@ -63,7 +63,7 @@ export function ProductDetailContent({
   const avgRating = product.avgRating ?? 0;
   const formattedPrice = formatInrAmount(displayPrice);
   const compareAtPrice = product.compareAtPrice ?? null;
-  const showMrp = compareAtPrice != null && compareAtPrice > displayPrice;
+  const showMrp = product.showMrp ?? false;
   const discountPercent = product.discountPercent ?? null;
   const taxInclusiveEstimate = product.taxInclusivePrice ?? null;
 

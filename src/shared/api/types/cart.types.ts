@@ -34,11 +34,14 @@ export interface Cart {
     discount: number;
     taxTotal: number;
     shippingTotal: number;
+    shippingDisplayKey: "FREE" | "PAID";
     grandTotal: number;
   };
   appliedCoupon?: AppliedCouponSummary | null;
   appliedCoupons?: AppliedCouponSummary[];
   removedCouponReason?: string | null;
+  /** Diagnostic/read-only weights; shipping APIs recompute them server-side. */
+  vendorShippingWeights?: Record<string, number>;
 }
 
 export interface AppliedCouponSummary {
@@ -47,6 +50,8 @@ export interface AppliedCouponSummary {
   cashbackAmount?: number;
   type?: string;
   vendorDiscountShares?: Record<string, number>;
+  /** Authoritative pay-now total after apply (from cart pricing preview). */
+  payNowGrandTotal?: number;
 }
 
 export interface WishlistItem {

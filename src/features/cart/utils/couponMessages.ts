@@ -2,7 +2,6 @@ import { couponsApi } from "@/features/coupons";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
-import type { Cart } from "@/shared/api/types";
 
 /**
  * Builds the confirmation message shown after a coupon apply succeeds
@@ -11,7 +10,6 @@ import type { Cart } from "@/shared/api/types";
  */
 export function describeApplyResult(
   result: Awaited<ReturnType<typeof couponsApi.apply>>,
-  cart?: Cart | null,
 ): string {
   if (result.discount > 0) {
     return formatLabel(LABELS.couponApplied, {
@@ -19,9 +17,11 @@ export function describeApplyResult(
     });
   }
   if ((result.cashbackAmount ?? 0) > 0) {
-    const payNow = cart?.pricingPreview?.grandTotal ?? cart?.total ?? 0;
+    if (result.payNowGrandTotal == null) {
+      return LABELS.couponAppliedCheckout;
+    }
     return formatLabel(LABELS.cashbackPayNowMessage, {
-      payNow: `₹${formatInrAmount(Number(payNow))}`,
+      payNow: `₹${formatInrAmount(Number(result.payNowGrandTotal))}`,
       cashback: `₹${formatInrAmount(Number(result.cashbackAmount))}`,
     });
   }

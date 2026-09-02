@@ -3,13 +3,14 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import { formatInr } from "@/shared/utils/orderFormat";
+import { taxDisplayLabel } from "@/shared/utils/taxDisplay";
 interface VendorBreakdownCardProps {
   breakdown: VendorBreakdown;
 }
 
 /** One vendor's itemized section of the order review (Rule 3 split). */
 export function VendorBreakdownCard({ breakdown }: VendorBreakdownCardProps) {
-  const taxLabel = breakdown.tax.igst > 0 ? LABELS.taxIgst : LABELS.taxCgstSgst;
+  const taxLabel = taxDisplayLabel(breakdown.taxDisplayKey);
 
   const renderItem = (item: VendorBreakdown["items"][number]) => (
     <li
@@ -50,7 +51,7 @@ export function VendorBreakdownCard({ breakdown }: VendorBreakdownCardProps) {
         <div className="flex justify-between gap-4">
           <dt className="text-ink-muted">{LABELS.shipping}</dt>
           <dd className="tabular-nums text-ink">
-            {breakdown.shippingCost === 0
+            {breakdown.shippingDisplayKey === "FREE"
               ? LABELS.freeShipping
               : formatInr(breakdown.shippingCost)}
           </dd>

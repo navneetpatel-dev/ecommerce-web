@@ -10,23 +10,30 @@ import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface MobileSummaryAccordionProps {
   summary: ReactNode;
-  subtotal: number;
-  estimatedTotal: number;
+  subtotal?: number;
+  estimatedTotal?: number;
+  estimatedTotalPending?: boolean;
   quote?: CheckoutQuote | null;
 }
 
 export function MobileSummaryAccordion({
   summary,
-  subtotal,
   estimatedTotal,
+  estimatedTotalPending = false,
   quote,
 }: MobileSummaryAccordionProps) {
+  const headerTotal = quote?.grandTotal ?? estimatedTotal;
   return (
     <div className="mt-6 lg:hidden">
       <Accordion type="single" collapsible>
         <AccordionItem value="summary" className="border-line">
           <AccordionTrigger className="text-body font-medium">
-            Order summary · ₹{formatInrAmount(quote?.grandTotal ?? estimatedTotal)}
+            Order summary ·{" "}
+            {headerTotal == null || estimatedTotalPending ? (
+              <span className="text-ink-muted">Updating…</span>
+            ) : (
+              <>₹{formatInrAmount(headerTotal)}</>
+            )}
           </AccordionTrigger>
           <AccordionContent>{summary}</AccordionContent>
         </AccordionItem>

@@ -12,7 +12,7 @@ interface WalletApplySectionProps {
   walletBalance: number;
   maxApplicable: number;
   walletAmountToUse: number;
-  amountDue: number;
+  amountDue?: number;
   disabled?: boolean;
   onAmountChange: (amount: number) => void;
 }
@@ -62,7 +62,10 @@ export function WalletApplySection({
         label={LABELS.walletAmountToApply}
         htmlFor="wallet-amount"
         hint={formatLabel(LABELS.walletRemainderDue, {
-          amount: `₹${formatInrAmount(amountDue)}`,
+          amount:
+            amountDue != null
+              ? `₹${formatInrAmount(amountDue)}`
+              : "Updating…",
         })}
       >
         <NumberInput
@@ -77,7 +80,7 @@ export function WalletApplySection({
           onChange={(value) => onAmountChange(value ?? 0)}
         />
       </FormFieldFrame>
-      {amountDue <= 0 && walletAmountToUse > 0 ? (
+      {amountDue != null && amountDue <= 0 && walletAmountToUse > 0 ? (
         <p className="text-body-sm font-medium text-success">
           {LABELS.walletFullyCoversOrder}
         </p>

@@ -17,8 +17,8 @@ interface PurchasePanelProps {
   variantUnavailable: boolean;
   canAddToCart: boolean;
   displayStock: number;
-  displayPrice: number;
   codAvailable?: boolean;
+  codEligibleAtUnitPrice?: boolean;
   codMinOrderValue?: number;
   codMaxOrderValue?: number | null;
   onDeliveryBlockedChange: (blocked: boolean) => void;
@@ -46,8 +46,8 @@ export function PurchasePanel({
   variantUnavailable,
   canAddToCart,
   displayStock,
-  displayPrice,
   codAvailable,
+  codEligibleAtUnitPrice,
   codMinOrderValue,
   codMaxOrderValue,
   onDeliveryBlockedChange,
@@ -84,8 +84,8 @@ export function PurchasePanel({
         productId={productId}
         variantId={variantId}
         vendorId={vendorId}
-        price={displayPrice}
         codAvailable={codAvailable}
+        codEligibleAtUnitPrice={codEligibleAtUnitPrice}
         codMinOrderValue={codMinOrderValue}
         codMaxOrderValue={codMaxOrderValue}
         onBlockedChange={onDeliveryBlockedChange}

@@ -23,11 +23,14 @@ export interface CheckoutPageViewProps {
   onClearPaymentNotice?: () => void;
   isCreatingAddress?: boolean;
   groupedByVendor: Record<string, CartItem[]>;
-  subtotal: number;
-  estimatedTotal: number;
+  subtotal?: number;
+  subtotalPending?: boolean;
+  estimatedTotal?: number;
+  estimatedTotalPending?: boolean;
   cartPricingPreview?: {
     taxTotal: number;
     shippingTotal: number;
+    shippingDisplayKey: "FREE" | "PAID";
   };
   shippingReady: boolean;
   hasUnavailableItems?: boolean;

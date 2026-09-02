@@ -15,21 +15,20 @@ interface ShippingCardContainerProps {
     logoUrl: string | null;
   };
   pincode: string;
-  weightGrams: number;
   selected?: string;
   onSelect: (method: ShippingMethod) => void;
 }
 
 export function ShippingCardContainer({
+  vendorId,
   vendor,
   pincode,
-  weightGrams,
   selected,
   onSelect,
 }: ShippingCardContainerProps) {
   const { options, isLoading, isError, error } = useShippingCard(
     pincode,
-    weightGrams,
+    vendorId,
   );
 
   return (

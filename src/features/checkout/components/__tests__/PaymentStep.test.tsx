@@ -11,6 +11,7 @@ function quote(partial: Partial<CheckoutQuote>): CheckoutQuote {
     orderTotals: {
       merchandiseSubtotal: 500,
       shippingTotal: 0,
+      shippingDisplayKey: "FREE",
       taxTotal: 0,
       cgst: 0,
       sgst: 0,
@@ -86,6 +87,25 @@ describe("PaymentStep insufficient wallet", () => {
           walletAmountToUse: 0,
           amountDue: 500,
         })}
+        walletAmountToUse={0}
+        onSelect={vi.fn()}
+        onWalletAmountChange={vi.fn()}
+        onContinue={vi.fn()}
+        onBack={vi.fn()}
+      />,
+    );
+
+    expect(
+      screen.getByRole("button", { name: /wallet points/i }),
+    ).toBeDisabled();
+  });
+
+  it("disables Wallet when quote is not loaded yet", () => {
+    render(
+      <PaymentStep
+        isPending={false}
+        selectedMethod={null}
+        quote={null}
         walletAmountToUse={0}
         onSelect={vi.fn()}
         onWalletAmountChange={vi.fn()}

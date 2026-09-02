@@ -9,6 +9,8 @@ export const walletKeys = {
   transactions: () => [...walletKeys.all, "transactions"] as const,
   transactionsPage: (page: number, limit: number) =>
     [...walletKeys.transactions(), page, limit] as const,
+  rechargePreview: (amountInr: number) =>
+    [...walletKeys.all, "recharge-preview", amountInr] as const,
 };
 
 export function invalidateWalletQueries(queryClient: QueryClient) {

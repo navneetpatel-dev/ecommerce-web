@@ -37,7 +37,9 @@ export function CheckoutPageView({
   isCreatingAddress,
   groupedByVendor,
   subtotal,
+  subtotalPending = false,
   estimatedTotal,
+  estimatedTotalPending = false,
   cartPricingPreview,
   shippingReady,
   hasUnavailableItems,
@@ -77,7 +79,9 @@ export function CheckoutPageView({
     <OrderSummaryPanel
       groupedByVendor={groupedByVendor}
       subtotal={subtotal}
+      subtotalPending={subtotalPending}
       estimatedTotal={estimatedTotal}
+      estimatedTotalPending={estimatedTotalPending}
       quote={quote}
       cartPricingPreview={cartPricingPreview}
     />
@@ -121,8 +125,8 @@ export function CheckoutPageView({
 
             <MobileSummaryAccordion
               summary={summary}
-              subtotal={subtotal}
               estimatedTotal={estimatedTotal}
+              estimatedTotalPending={estimatedTotalPending}
               quote={quote}
             />
 
