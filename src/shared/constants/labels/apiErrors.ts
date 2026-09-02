@@ -24,6 +24,8 @@ export const apiErrorLabels = {
     "This recharge would exceed your wallet balance limit.",
   walletRechargeAlreadyPaid: "This recharge was already completed.",
   codNotAvailable: "Cash on delivery is not available for this order.",
+  orderAmountBelowRazorpayMin:
+    "Online remainder is below the minimum payment amount; apply more points or adjust the cart.",
   pincodeInvalidCheckout: "Enter a valid delivery pincode.",
   shippingWeightRequired: "Shipping weight is required for this order.",
   shippingMethodUnsupported: "That shipping method is not available.",

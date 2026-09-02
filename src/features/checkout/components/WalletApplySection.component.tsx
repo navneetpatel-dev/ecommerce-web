@@ -14,7 +14,6 @@ interface WalletApplySectionProps {
   walletAmountToUse: number;
   amountDue: number;
   disabled?: boolean;
-  codSelected?: boolean;
   onAmountChange: (amount: number) => void;
 }
 
@@ -28,7 +27,6 @@ export function WalletApplySection({
   walletAmountToUse,
   amountDue,
   disabled,
-  codSelected,
   onAmountChange,
 }: WalletApplySectionProps) {
   if (walletBalance <= 0) return null;
@@ -47,7 +45,7 @@ export function WalletApplySection({
             {LABELS.walletPointsEqualsInr}
           </p>
         </div>
-        {!codSelected && maxApplicable > 0 ? (
+        {maxApplicable > 0 ? (
           <Button
             type="button"
             variant="outline"
@@ -60,38 +58,30 @@ export function WalletApplySection({
         ) : null}
       </div>
 
-      {codSelected ? (
-        <p className="text-body-sm text-ink-muted">
-          {LABELS.walletNotAvailableWithCod}
+      <FormFieldFrame
+        label={LABELS.walletAmountToApply}
+        htmlFor="wallet-amount"
+        hint={formatLabel(LABELS.walletRemainderDue, {
+          amount: `₹${formatInrAmount(amountDue)}`,
+        })}
+      >
+        <NumberInput
+          id="wallet-amount"
+          value={walletAmountToUse || undefined}
+          min={0}
+          max={maxApplicable}
+          step={0.01}
+          prefix="₹"
+          disabled={disabled}
+          showSteppers={false}
+          onChange={(value) => onAmountChange(value ?? 0)}
+        />
+      </FormFieldFrame>
+      {amountDue <= 0 && walletAmountToUse > 0 ? (
+        <p className="text-body-sm font-medium text-success">
+          {LABELS.walletFullyCoversOrder}
         </p>
-      ) : (
-        <>
-          <FormFieldFrame
-            label={LABELS.walletAmountToApply}
-            htmlFor="wallet-amount"
-            hint={formatLabel(LABELS.walletRemainderDue, {
-              amount: `₹${formatInrAmount(amountDue)}`,
-            })}
-          >
-            <NumberInput
-              id="wallet-amount"
-              value={walletAmountToUse || undefined}
-              min={0}
-              max={maxApplicable}
-              step={0.01}
-              prefix="₹"
-              disabled={disabled}
-              showSteppers={false}
-              onChange={(value) => onAmountChange(value ?? 0)}
-            />
-          </FormFieldFrame>
-          {amountDue <= 0 && walletAmountToUse > 0 ? (
-            <p className="text-body-sm font-medium text-success">
-              {LABELS.walletFullyCoversOrder}
-            </p>
-          ) : null}
-        </>
-      )}
+      ) : null}
     </div>
   );
 }

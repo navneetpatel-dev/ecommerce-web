@@ -62,7 +62,9 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
   setPaymentMethod: (paymentMethod) =>
     set((s) => ({
       paymentMethod,
-      walletAmountToUse: paymentMethod === "cod" ? 0 : s.walletAmountToUse,
+      // Points apply only when Wallet is the selected payment method.
+      walletAmountToUse:
+        paymentMethod === "wallet" ? s.walletAmountToUse : 0,
     })),
   setWalletAmountToUse: (walletAmountToUse) => set({ walletAmountToUse }),
 }));

@@ -48,6 +48,7 @@ const API_ERROR_LABEL_KEYS: Partial<Record<string, keyof typeof LABELS>> = {
   WALLET_RECHARGE_ALREADY_PAID: "walletRechargeAlreadyPaid",
   WALLET_RECHARGE_RAZORPAY_MIN: "walletRechargeBelowMin",
   COD_NOT_AVAILABLE: "codNotAvailable",
+  ORDER_AMOUNT_BELOW_RAZORPAY_MIN: "orderAmountBelowRazorpayMin",
   PINCODE_INVALID: "pincodeInvalidCheckout",
   SHIPPING_WEIGHT_REQUIRED: "shippingWeightRequired",
   SHIPPING_METHOD_UNSUPPORTED: "shippingMethodUnsupported",

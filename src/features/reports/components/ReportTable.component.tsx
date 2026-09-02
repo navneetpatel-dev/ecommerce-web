@@ -9,6 +9,7 @@ import type {
   ReportColumnMeta,
   ReportRunResult,
 } from "../api/reportsEngine.api";
+import { formatReportCell } from "../utils/formatReportCell";
 
 interface ReportTableProps {
   result: ReportRunResult | null;
@@ -16,24 +17,6 @@ interface ReportTableProps {
   error: string | null;
   onPageChange: (page: number) => void;
   onRetry?: () => void;
-}
-
-function formatCell(value: unknown, format?: string): string {
-  if (value == null) return LABELS.emptyCell;
-  if (format === "currency") {
-    const n = Number(value);
-    return Number.isFinite(n) ? `₹${n.toFixed(2)}` : String(value);
-  }
-  if (format === "points") {
-    const n = Number(value);
-    return Number.isFinite(n) ? `${n.toLocaleString()} pts` : String(value);
-  }
-  if (format === "date") {
-    const d = new Date(String(value));
-    return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleString();
-  }
-  if (typeof value === "object") return JSON.stringify(value);
-  return String(value);
 }
 
 export function ReportTable({
@@ -50,7 +33,7 @@ export function ReportTable({
         id: col.key,
         header: labelMap[col.labelKey] ?? col.labelKey,
         cell: (row: Record<string, unknown>) =>
-          formatCell(row[col.key], col.format),
+          formatReportCell(row[col.key], col.format, col.key),
       };
     }) ?? [];
 

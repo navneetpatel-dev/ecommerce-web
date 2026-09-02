@@ -65,11 +65,19 @@ export const walletLabels = {
   paymentMethodRazorpayDesc: "Pay securely via Razorpay",
   paymentMethodCod: "Cash on Delivery",
   paymentMethodCodDesc: "Pay when your order arrives",
+  paymentMethodWallet: "Wallet points",
+  paymentMethodWalletDesc: "Pay with your store points balance",
+  paymentMethodWalletUnavailable: "No usable points available for this order.",
+  paymentMethodWalletRemainderDue:
+    "Points don’t cover this order — you’ll pay {amount} online.",
   selectPaymentMethodToContinue: "Select a payment method to continue.",
+  selectWalletAmountToContinue: "Apply at least some points to continue.",
   backToShipping: "Back to shipping",
   continueToReview: "Continue to review",
   walletAppliedAtCheckout: "Points applied",
   amountDueToday: "Due today",
+  orderTotalLabel: "Order total",
+  estimatedTotalLabel: "Estimated total",
 
   // Return timelines
 } as const;

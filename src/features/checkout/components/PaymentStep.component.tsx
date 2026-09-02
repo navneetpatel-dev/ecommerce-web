@@ -1,9 +1,11 @@
-import { ArrowRight, CreditCard, Banknote } from "lucide-react";
+import { ArrowRight, CreditCard, Banknote, Wallet } from "lucide-react";
 import type { CheckoutQuote } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { formatLabel } from "@/shared/utils/formatLabel";
+import { formatInrAmount } from "@/shared/utils/orderFormat";
 import { WalletApplySection } from "./WalletApplySection.component";
 
 interface PaymentStepProps {
@@ -30,6 +32,12 @@ const METHODS = [
     description: LABELS.paymentMethodCodDesc,
     icon: Banknote,
   },
+  {
+    id: "wallet",
+    title: LABELS.paymentMethodWallet,
+    description: LABELS.paymentMethodWalletDesc,
+    icon: Wallet,
+  },
 ] as const;
 
 export function PaymentStep({
@@ -42,39 +50,52 @@ export function PaymentStep({
   onContinue,
   onBack,
 }: PaymentStepProps) {
-  const canContinue =
-    Boolean(selectedMethod) &&
-    (selectedMethod !== "cod" || quote?.codAvailable === true);
   const walletBalance = quote?.walletBalance ?? 0;
   const amountDue = quote?.amountDue ?? 0;
   const maxApplicable = quote?.maxWalletApplicable ?? walletBalance;
-  const codSelected = selectedMethod === "cod";
+  const walletSelected = selectedMethod === "wallet";
   const canUseCod = quote?.codAvailable === true;
+  const canUseWallet = walletBalance > 0 && maxApplicable > 0;
+  const walletReady = walletSelected && walletAmountToUse > 0;
+
+  const canContinue =
+    Boolean(selectedMethod) &&
+    (selectedMethod !== "cod" || canUseCod) &&
+    (selectedMethod !== "wallet" || walletReady);
+
+  const continueHint = !selectedMethod
+    ? LABELS.selectPaymentMethodToContinue
+    : selectedMethod === "wallet" && !walletReady
+      ? LABELS.selectWalletAmountToContinue
+      : LABELS.selectPaymentMethodToContinue;
+
+  const handleSelect = (methodId: string) => {
+    onSelect(methodId);
+    if (methodId === "wallet") {
+      onWalletAmountChange(maxApplicable);
+    } else {
+      onWalletAmountChange(0);
+    }
+  };
 
   return (
     <div className="space-y-5">
-      <WalletApplySection
-        walletBalance={walletBalance}
-        maxApplicable={maxApplicable}
-        walletAmountToUse={codSelected ? 0 : walletAmountToUse}
-        amountDue={codSelected ? (quote?.grandTotal ?? amountDue) : amountDue}
-        disabled={isPending || !quote}
-        codSelected={codSelected}
-        onAmountChange={onWalletAmountChange}
-      />
-
       <div className="space-y-3">
         {METHODS.map((method) => {
           const Icon = method.icon;
           const selected = selectedMethod === method.id;
           const isCod = method.id === "cod";
-          const methodDisabled = isPending || (isCod && !canUseCod);
+          const isWallet = method.id === "wallet";
+          const methodDisabled =
+            isPending ||
+            (isCod && !canUseCod) ||
+            (isWallet && !canUseWallet);
           const button = (
             <Button
               type="button"
               variant="outline"
               aria-pressed={selected}
-              onClick={() => onSelect(method.id)}
+              onClick={() => handleSelect(method.id)}
               disabled={methodDisabled}
               className={cn(
                 "h-auto min-h-11 max-h-none w-full items-start gap-4 px-4 py-4 text-left font-normal",
@@ -126,6 +147,18 @@ export function PaymentStep({
               </DisabledActionHint>
             );
           }
+          if (isWallet && !canUseWallet) {
+            return (
+              <DisabledActionHint
+                key={method.id}
+                disabled
+                message={LABELS.paymentMethodWalletUnavailable}
+                className="w-full"
+              >
+                {button}
+              </DisabledActionHint>
+            );
+          }
           return (
             <div key={method.id} className="w-full">
               {button}
@@ -134,13 +167,33 @@ export function PaymentStep({
         })}
       </div>
 
+      {walletSelected ? (
+        <div className="space-y-2">
+          <WalletApplySection
+            walletBalance={walletBalance}
+            maxApplicable={maxApplicable}
+            walletAmountToUse={walletAmountToUse}
+            amountDue={amountDue}
+            disabled={isPending || !quote}
+            onAmountChange={onWalletAmountChange}
+          />
+          {walletAmountToUse > 0 && amountDue > 0 ? (
+            <p className="text-body-sm text-ink-muted">
+              {formatLabel(LABELS.paymentMethodWalletRemainderDue, {
+                amount: `₹${formatInrAmount(amountDue)}`,
+              })}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
         <Button variant="outline" onClick={onBack} fullWidth="mobile">
           {LABELS.backToShipping}
         </Button>
         <DisabledActionHint
           disabled={!canContinue}
-          message={LABELS.selectPaymentMethodToContinue}
+          message={continueHint}
           className="w-full sm:w-auto"
         >
           <Button

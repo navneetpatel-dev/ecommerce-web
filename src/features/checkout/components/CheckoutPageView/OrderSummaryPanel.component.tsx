@@ -22,7 +22,20 @@ export function OrderSummaryPanel({
 }: OrderSummaryPanelProps) {
   const items = Object.values(groupedByVendor).flat();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const displayTotal = quote?.grandTotal ?? estimatedTotal;
+  const walletApplied = (quote?.walletAmountToUse ?? 0) > 0;
+  const displayTotal = walletApplied
+    ? (quote?.amountDue ?? 0)
+    : (quote?.grandTotal ?? estimatedTotal);
+  const totalLabel = !quote
+    ? LABELS.estimatedTotalLabel
+    : walletApplied
+      ? LABELS.amountDueToday
+      : LABELS.orderTotalLabel;
+  const totalHint = !quote
+    ? "Shipping and taxes confirmed before you place the order."
+    : walletApplied
+      ? "Amount left to pay after points."
+      : "Final amount including shipping and taxes.";
   const vendorEntries = Object.entries(groupedByVendor);
 
   return (
@@ -123,17 +136,18 @@ export function OrderSummaryPanel({
         <div className="mt-4 border-t border-line pt-4">
           <div className="flex items-end justify-between gap-4">
             <span className="text-[0.875rem] font-medium text-ink">
-              {quote ? "Order total" : "Estimated total"}
+              {totalLabel}
             </span>
             <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
               ₹{formatInrAmount(displayTotal)}
             </span>
           </div>
-          <p className="mt-1.5 text-[0.75rem] text-ink-muted">
-            {quote
-              ? "Final amount including shipping and taxes."
-              : "Shipping and taxes confirmed before you place the order."}
-          </p>
+          {walletApplied && quote ? (
+            <p className="mt-1.5 text-[0.75rem] text-ink-muted">
+              {LABELS.orderTotalLabel}: ₹{formatInrAmount(quote.grandTotal)}
+            </p>
+          ) : null}
+          <p className="mt-1.5 text-[0.75rem] text-ink-muted">{totalHint}</p>
         </div>
       </div>
     </div>

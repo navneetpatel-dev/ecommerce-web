@@ -68,8 +68,17 @@ export function useCheckoutPage() {
   useEffect(() => {
     if (paymentMethod === "cod" && quote && quote.codAvailable === false) {
       setPaymentMethod(null);
+      return;
     }
-  }, [paymentMethod, quote, setPaymentMethod]);
+    if (paymentMethod === "wallet" && quote) {
+      const max = quote.maxWalletApplicable ?? 0;
+      const balance = quote.walletBalance ?? 0;
+      if (balance <= 0 || max <= 0) {
+        setPaymentMethod(null);
+        setWalletAmountToUse(0);
+      }
+    }
+  }, [paymentMethod, quote, setPaymentMethod, setWalletAmountToUse]);
 
   const subtotal = cart?.merchandiseSubtotal ?? 0;
   const estimatedTotal = quote?.grandTotal ?? cart?.total ?? subtotal;
@@ -82,9 +91,14 @@ export function useCheckoutPage() {
     [groupedByVendor, shippingMethodByVendor],
   );
 
-  const canAdvanceFromPayment = () =>
-    Boolean(paymentMethod) &&
-    !(paymentMethod === "cod" && quote?.codAvailable !== true);
+  const canAdvanceFromPayment = () => {
+    if (!paymentMethod) return false;
+    if (paymentMethod === "cod" && quote?.codAvailable !== true) return false;
+    if (paymentMethod === "wallet") {
+      return walletAmountToUse > 0;
+    }
+    return true;
+  };
 
   const onStepClick = (nextStep: number) => {
     if (nextStep < step) setStep(nextStep as 1 | 2 | 3 | 4);

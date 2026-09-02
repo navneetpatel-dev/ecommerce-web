@@ -116,21 +116,21 @@ export function usePlaceOrderWithRazorpay() {
     setPaymentPhase("placing");
 
     try {
+      // Wallet pays via points on a Razorpay checkout; BE has no WALLET enum.
+      const apiPaymentMethod = method === "wallet" ? "razorpay" : method;
+      const apiWalletAmount = method === "wallet" ? walletAmountToUse : 0;
+
       const result = await placeOrder.mutateAsync({
         addressId,
-        paymentMethod: method,
+        paymentMethod: apiPaymentMethod,
         couponCode: appliedCouponCode || undefined,
         shippingMethodByVendor,
-        walletAmountToUse: method === "cod" ? 0 : walletAmountToUse,
+        walletAmountToUse: apiWalletAmount,
       });
 
       pendingOrderIdRef.current = result.orderId;
 
-      if (
-        method === "razorpay" &&
-        result.razorpayOrderId &&
-        (quote?.amountDue ?? 0) > 0
-      ) {
+      if (apiPaymentMethod === "razorpay" && result.razorpayOrderId) {
         setPaymentPhase("idle");
         await launchRazorpayPayment(result, {
           router,

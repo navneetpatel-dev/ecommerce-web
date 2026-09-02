@@ -1,25 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { WalletApplySection } from "../WalletApplySection.component";
 
 describe("WalletApplySection", () => {
-  it("hides wallet input when COD is selected", () => {
-    render(
-      <WalletApplySection
-        walletBalance={500}
-        maxApplicable={200}
-        walletAmountToUse={0}
-        amountDue={800}
-        codSelected
-        onAmountChange={vi.fn()}
-      />,
-    );
-
-    expect(screen.getByText(/cannot be used with cash on delivery/i)).toBeInTheDocument();
-    expect(screen.queryByLabelText(/points to apply/i)).not.toBeInTheDocument();
-  });
-
-  it("shows amount input for non-COD checkout", () => {
+  it("shows amount input and use-full-balance action", () => {
     render(
       <WalletApplySection
         walletBalance={500}
@@ -31,10 +16,13 @@ describe("WalletApplySection", () => {
     );
 
     expect(screen.getByLabelText(/points to apply/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /use full balance/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /use full balance/i }),
+    ).toBeInTheDocument();
   });
 
-  it("does not call onAmountChange when COD is selected", () => {
+  it("calls onAmountChange with max when use full balance is clicked", async () => {
+    const user = userEvent.setup();
     const onAmountChange = vi.fn();
     render(
       <WalletApplySection
@@ -42,11 +30,24 @@ describe("WalletApplySection", () => {
         maxApplicable={200}
         walletAmountToUse={0}
         amountDue={800}
-        codSelected
         onAmountChange={onAmountChange}
       />,
     );
 
-    expect(onAmountChange).not.toHaveBeenCalled();
+    await user.click(screen.getByRole("button", { name: /use full balance/i }));
+    expect(onAmountChange).toHaveBeenCalledWith(200);
+  });
+
+  it("hides section when wallet balance is zero", () => {
+    const { container } = render(
+      <WalletApplySection
+        walletBalance={0}
+        maxApplicable={0}
+        walletAmountToUse={0}
+        amountDue={800}
+        onAmountChange={vi.fn()}
+      />,
+    );
+    expect(container).toBeEmptyDOMElement();
   });
 });
