@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { useAuthStore } from "@/shared/stores/auth.store";
 import { useWalletBalance, useWalletTransactions } from "../api/wallet.queries";
 import { WalletBalanceCard } from "../components/WalletPageContent.component";
 import { WalletRechargePanel } from "../components/WalletRechargePanel.component";
@@ -13,8 +14,11 @@ import { walletApi } from "../api/wallet.api";
 
 export function WalletPage() {
   const [page, setPage] = useState(1);
+  const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
   const balanceQuery = useWalletBalance();
   const transactionsQuery = useWalletTransactions(page, DEFAULT_PAGE_LIMIT);
+  const walletSectionLoading =
+    !authBootstrapped || balanceQuery.isLoading;
 
   const transactions = transactionsQuery.data?.items ?? [];
   const total = transactionsQuery.data?.total ?? 0;
@@ -48,18 +52,18 @@ export function WalletPage() {
           balance={balanceQuery.data?.points ?? balanceQuery.data?.balance ?? 0}
           purchasedBalance={balanceQuery.data?.purchasedBalance}
           promotionalBalance={balanceQuery.data?.promotionalBalance}
-          isLoading={balanceQuery.isLoading}
+          isLoading={walletSectionLoading}
           className="h-full"
         />
         <WalletRechargePanel
           balance={balanceQuery.data}
-          isLoading={balanceQuery.isLoading}
+          isLoading={walletSectionLoading}
           className="h-full"
         />
       </div>
 
       <div className="mt-6 lg:mt-8">
-        <WalletStatementExportPanel />
+        <WalletStatementExportPanel isLoading={walletSectionLoading} />
       </div>
 
       <section className="mt-8 lg:mt-10" aria-labelledby="wallet-transaction-history">

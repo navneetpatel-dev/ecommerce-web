@@ -1,10 +1,10 @@
 "use client";
 
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatPoints";
 import { cn } from "@/shared/utils/cn";
+import { WalletBalanceCardSkeleton } from "./WalletSectionSkeletons.component";
 
 interface WalletBalanceCardProps {
   balance: number;
@@ -21,6 +21,10 @@ export function WalletBalanceCard({
   isLoading,
   className,
 }: WalletBalanceCardProps) {
+  if (isLoading) {
+    return <WalletBalanceCardSkeleton className={className} />;
+  }
+
   return (
     <div
       className={cn(
@@ -33,17 +37,13 @@ export function WalletBalanceCard({
         className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand via-brand/70 to-transparent"
       />
       <TextEyebrow brand>{LABELS.walletBalance}</TextEyebrow>
-      {isLoading ? (
-        <Skeleton className="mt-3 h-10 w-40" />
-      ) : (
-        <p className="mt-2 font-display text-[2rem] leading-none tabular-nums text-brand md:text-[2.25rem]">
-          {formatPoints(balance)}
-        </p>
-      )}
+      <p className="mt-2 font-display text-[2rem] leading-none tabular-nums text-brand md:text-[2.25rem]">
+        {formatPoints(balance)}
+      </p>
       <p className="mt-3 text-[0.875rem] text-ink-muted">
         {LABELS.walletPointsEqualsInr}
       </p>
-      {!isLoading && (purchasedBalance != null || promotionalBalance != null) ? (
+      {purchasedBalance != null || promotionalBalance != null ? (
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div className="rounded-md border border-line/80 bg-paper/40 px-3 py-2.5">
             <p className="text-[0.75rem] text-ink-faint">{LABELS.walletPurchasedBalance}</p>

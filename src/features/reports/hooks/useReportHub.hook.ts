@@ -74,12 +74,13 @@ export function useReportHub(options?: { preferAudience?: string }) {
     let active = true;
     const controller = new AbortController();
     const format = normalizeExportFormat(params.get("format"));
-    setMessage(LABELS.reportAsyncQueued);
+    setMessage(LABELS.reportAsyncPreparing);
     setError(null);
     void runReportExport(
       async () => {
         const outcome = await pollExportUntilReady(exportId, format, {
           signal: controller.signal,
+          onProgress: setMessage,
         });
         if (!active) return;
         applyPollOutcome(outcome, { setMessage, setError });

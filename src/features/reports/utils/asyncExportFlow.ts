@@ -8,6 +8,7 @@ import {
   type ExportFileFormat,
 } from "../hooks/useReportHubHelpers/index";
 import type { PollExportResult } from "./reportExportPollError";
+import { initialExportStatusMessage } from "./exportStatusMessage";
 
 export type AsyncExportHandlers = {
   setMessage: (message: string | null) => void;
@@ -15,12 +16,15 @@ export type AsyncExportHandlers = {
 };
 
 export function initialAsyncExportMessage(
-  response: Pick<AsyncExportResponse, "cached" | "deduped" | "status">,
+  response: Pick<
+    AsyncExportResponse,
+    "cached" | "deduped" | "status" | "format" | "rowCount" | "rowCountKnown"
+  >,
+  formatHint: ExportFileFormat = "xlsx",
 ): string {
-  if (response.cached) return LABELS.reportAsyncCached;
-  if (response.deduped) return LABELS.reportAsyncDeduped;
-  if (response.status === "READY") return LABELS.reportAsyncReady;
-  return LABELS.reportAsyncQueued;
+  const emptyRange =
+    response.rowCountKnown === true && (response.rowCount ?? 0) === 0;
+  return initialExportStatusMessage(response, formatHint, { emptyRange });
 }
 
 /** Poll (and download when ready) without throwing on timeout/abort. */
@@ -37,8 +41,22 @@ export async function followAsyncExport(
   },
 ): Promise<PollExportResult> {
   const format = normalizeExportFormat(response.format ?? formatHint);
-  handlers.setMessage(initialAsyncExportMessage(response));
+  handlers.setMessage(initialAsyncExportMessage(response, format));
   handlers.setError(null);
+
+  const pollContext = {
+    cached: response.cached,
+    deduped: response.deduped,
+    emptyRange:
+      response.rowCountKnown === true && (response.rowCount ?? 0) === 0,
+  };
+
+  const pollOptions = {
+    ...options,
+    formatHint: format,
+    pollContext,
+    onProgress: (message: string) => handlers.setMessage(message),
+  };
 
   if (response.status === "READY") {
     if (options?.downloadReady) {
@@ -47,12 +65,12 @@ export async function followAsyncExport(
       handlers.setError(null);
       return { outcome: "ready" };
     }
-    const result = await pollAsyncExportResponse(response, options);
+    const result = await pollAsyncExportResponse(response, pollOptions);
     applyPollOutcome(result, handlers);
     return result;
   }
 
-  const result = await pollExportUntilReady(response.exportId, format, options);
+  const result = await pollExportUntilReady(response.exportId, format, pollOptions);
   applyPollOutcome(result, handlers);
   return result;
 }

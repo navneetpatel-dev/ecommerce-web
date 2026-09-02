@@ -6,9 +6,20 @@ import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { useWalletStatementExport } from "../hooks/useWalletStatementExport.hook";
+import { WalletStatementExportPanelSkeleton } from "./WalletSectionSkeletons.component";
 
-export function WalletStatementExportPanel() {
+interface WalletStatementExportPanelProps {
+  isLoading?: boolean;
+}
+
+export function WalletStatementExportPanel({
+  isLoading,
+}: WalletStatementExportPanelProps) {
   const exportHub = useWalletStatementExport();
+
+  if (isLoading) {
+    return <WalletStatementExportPanelSkeleton />;
+  }
 
   return (
     <FormSection title={LABELS.walletStatement} columns={3}>

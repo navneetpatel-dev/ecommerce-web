@@ -11,6 +11,7 @@ import {
   type ExportStatusResult,
 } from "../../api/reportsEngine.api";
 import type { PollExportResult } from "../../utils/reportExportPollError";
+import { exportStatusMessage } from "../../utils/exportStatusMessage";
 
 export type ExportFileFormat = "csv" | "pdf" | "xlsx";
 
@@ -156,11 +157,35 @@ export type ExportPollOutcome = "ready" | "failed" | "timeout" | "aborted";
 export async function pollExportUntilReady(
   exportId: string,
   formatHint: ExportFileFormat = "xlsx",
-  options?: { signal?: AbortSignal },
+  options?: {
+    signal?: AbortSignal;
+    onProgress?: (message: string) => void;
+    pollContext?: {
+      cached?: boolean;
+      deduped?: boolean;
+      emptyRange?: boolean;
+    };
+  },
 ): Promise<PollExportResult> {
   const started = Date.now();
   let interval = EXPORT_POLL_INITIAL_MS;
   let etag: string | undefined;
+  let lastStatus: ExportStatus | undefined;
+
+  const emitProgress = (status?: ExportStatus) => {
+    options?.onProgress?.(
+      exportStatusMessage({
+        status: status ?? lastStatus,
+        format: formatHint,
+        elapsedMs: Date.now() - started,
+        cached: options.pollContext?.cached,
+        deduped: options.pollContext?.deduped,
+        emptyRange: options.pollContext?.emptyRange,
+      }),
+    );
+  };
+
+  emitProgress("PENDING");
 
   while (Date.now() - started < EXPORT_POLL_MAX_DURATION_MS) {
     if (options?.signal?.aborted) {
@@ -192,6 +217,7 @@ export async function pollExportUntilReady(
 
     if ("notModified" in status) {
       etag = status.etag;
+      emitProgress(lastStatus);
       try {
         await sleep(interval, options?.signal);
       } catch {
@@ -201,6 +227,8 @@ export async function pollExportUntilReady(
       continue;
     }
     etag = status.etag;
+    lastStatus = status.status;
+    emitProgress(status.status);
     const format = normalizeExportFormat(status.format ?? formatHint);
     if (status.status === "READY" || status.status === "SYNC") {
       await downloadFromStatus(exportId, status, format, options);
@@ -246,7 +274,7 @@ export function applyPollOutcome(
     handlers.setError(null);
     return;
   }
-  handlers.setMessage(LABELS.reportAsyncQueued);
+  handlers.setMessage(LABELS.reportAsyncPreparing);
   handlers.setError(null);
 }
 
@@ -260,7 +288,15 @@ export async function pollAsyncExportResponse(
     deduped?: boolean;
     cached?: boolean;
   },
-  options?: { signal?: AbortSignal },
+  options?: {
+    signal?: AbortSignal;
+    onProgress?: (message: string) => void;
+    pollContext?: {
+      cached?: boolean;
+      deduped?: boolean;
+      emptyRange?: boolean;
+    };
+  },
 ): Promise<PollExportResult> {
   const format = normalizeExportFormat(response.format);
   if (response.status === "READY") {

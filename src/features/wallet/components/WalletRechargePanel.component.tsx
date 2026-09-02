@@ -12,6 +12,7 @@ import { useWalletRecharge } from "../hooks/useWalletRecharge.hook";
 import { validateWalletRechargeAmount } from "../utils/walletRechargeValidation";
 import type { WalletBalanceResponse } from "../api/wallet.api";
 import { cn } from "@/shared/utils/cn";
+import { WalletRechargePanelSkeleton } from "./WalletSectionSkeletons.component";
 
 interface WalletRechargePanelProps {
   balance: WalletBalanceResponse | undefined;
@@ -66,7 +67,11 @@ export function WalletRechargePanel({
 
   const pointsForAmount = (amountInr: number) => amountInr * pointsPerRupee;
 
-  if (!rechargeEnabled || isLoading) return null;
+  if (isLoading) {
+    return <WalletRechargePanelSkeleton className={className} />;
+  }
+
+  if (!rechargeEnabled) return null;
 
   const validateAmount = (amount: number): string | null => {
     if (!limits) return null;

@@ -51,7 +51,7 @@ export function useWalletStatementExport() {
       void runRef.current?.catch(() => undefined);
 
       setExportingFormat(format);
-      setMessage(LABELS.reportAsyncQueued);
+      setMessage(LABELS.reportAsyncPreparing);
       setError(null);
       const controller = new AbortController();
       abortRef.current = controller;
