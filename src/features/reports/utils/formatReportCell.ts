@@ -1,4 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
+import { formatInrExact } from "@/shared/utils/orderFormat";
 
 const PG_RECON_STATUS_LABELS: Record<string, string> = {
   MATCHED: LABELS.reconStatusMatched,
@@ -22,7 +23,7 @@ export function formatReportCell(
   }
   if (format === "currency") {
     const n = Number(value);
-    return Number.isFinite(n) ? `₹${n.toFixed(2)}` : String(value);
+    return Number.isFinite(n) ? formatInrExact(n) : String(value);
   }
   if (format === "points") {
     const n = Number(value);

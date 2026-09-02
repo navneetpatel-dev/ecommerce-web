@@ -10,6 +10,7 @@ import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
 import { TABLE_DATA_CELL_CLASS } from "@/shared/constants/table";
 import { cn } from "@/shared/utils/cn";
+import { formatInr } from "@/shared/utils/orderFormat";
 
 interface Commission {
   id: string;
@@ -55,7 +56,9 @@ export function CommissionLedgerTable({
                   <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
                     Sale
                   </dt>
-                  <dd className="font-mono text-ink">₹{c.saleAmount}</dd>
+                  <dd className="font-mono text-ink">
+                    {formatInr(c.saleAmount)}
+                  </dd>
                 </div>
                 <div>
                   <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
@@ -67,7 +70,9 @@ export function CommissionLedgerTable({
                   <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
                     Commission
                   </dt>
-                  <dd className="font-mono text-ink">₹{c.commissionAmount}</dd>
+                  <dd className="font-mono text-ink">
+                    {formatInr(c.commissionAmount)}
+                  </dd>
                 </div>
               </dl>
             </li>
@@ -104,13 +109,13 @@ export function CommissionLedgerTable({
                     {new Date(c.createdAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-                    ₹{c.saleAmount}
+                    {formatInr(c.saleAmount)}
                   </TableCell>
                   <TableCell className={TABLE_DATA_CELL_CLASS}>
                     {c.commissionRate}%
                   </TableCell>
                   <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-                    ₹{c.commissionAmount}
+                    {formatInr(c.commissionAmount)}
                   </TableCell>
                   <TableCell className={TABLE_DATA_CELL_CLASS}>
                     <StatusBadge status={c.status} />

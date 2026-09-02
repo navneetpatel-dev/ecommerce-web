@@ -41,6 +41,7 @@ const baseCart: Cart = {
     shippingTotal: 0,
     shippingDisplayKey: "FREE",
     grandTotal: 236,
+    basisKey: "DEFAULT_ADDRESS",
   },
 };
 

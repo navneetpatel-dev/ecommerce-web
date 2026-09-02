@@ -11,6 +11,14 @@ export function formatInrAmount(value: number) {
   return Number(value || 0).toLocaleString("en-IN");
 }
 
+/** Always-2dp INR for finance/report tables where columns must align (₹1,250.50). */
+export function formatInrExact(value: number) {
+  return `₹${Number(value || 0).toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
 /** Short INR for header pills (₹499, ₹12,500, ₹1.2L). */
 export function formatInrCompact(value: number) {
   const amount = Math.round(Number(value) || 0);

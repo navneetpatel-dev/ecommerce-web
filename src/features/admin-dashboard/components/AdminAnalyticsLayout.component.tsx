@@ -196,6 +196,7 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
             id: v.id,
             label: v.businessName,
             revenue: v.revenue,
+            sharePercent: v.sharePercent,
           }))}
         />
         <AnalyticsRankedList
@@ -204,6 +205,7 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
             id: c.id,
             label: c.name,
             revenue: c.revenue,
+            sharePercent: c.sharePercent,
           }))}
         />
       </motion.div>

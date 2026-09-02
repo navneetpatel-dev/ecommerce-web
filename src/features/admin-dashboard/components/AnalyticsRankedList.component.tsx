@@ -14,6 +14,8 @@ interface RankedItem {
   id: string;
   label: string;
   revenue: number;
+  /** Share of platform-wide revenue — computed by the API, never derived here. */
+  sharePercent: number;
 }
 
 interface AnalyticsRankedListProps {
@@ -25,8 +27,8 @@ export function AnalyticsRankedList({
   title,
   items,
 }: AnalyticsRankedListProps) {
-  const max = Math.max(...items.map((item) => item.revenue), 1);
-  const total = items.reduce((sum, item) => sum + item.revenue, 0);
+  // Bar geometry only — relative to the largest server-supplied share in this list.
+  const maxShare = Math.max(...items.map((item) => item.sharePercent), 1);
 
   return (
     <Card className="h-full">
@@ -41,9 +43,7 @@ export function AnalyticsRankedList({
         ) : (
           <ol className="space-y-4">
             {items.map((item, index) => {
-              const width = Math.max((item.revenue / max) * 100, 4);
-              const share =
-                total > 0 ? Math.round((item.revenue / total) * 100) : 0;
+              const width = Math.max((item.sharePercent / maxShare) * 100, 4);
               return (
                 <li key={item.id} className="space-y-1.5">
                   <div className="flex items-baseline justify-between gap-3">
@@ -67,7 +67,7 @@ export function AnalyticsRankedList({
                   </div>
                   <p className="ml-6 text-[0.6875rem] text-ink-faint">
                     {formatLabel(LABELS.analyticsRankShare, {
-                      value: String(share),
+                      value: String(item.sharePercent),
                     })}
                   </p>
                 </li>

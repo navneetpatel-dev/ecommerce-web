@@ -50,7 +50,7 @@ export const adminNavigationLabels = {
   analyticsNoData: "No analytics data available",
   analyticsOrdersSeries: "Orders",
   analyticsRevenueSeries: "Revenue",
-  analyticsRankShare: "{value}% of top total",
+  analyticsRankShare: "{value}% of total",
   analyticsEmptyChart: "Not enough data to chart yet.",
   analyticsStarRating: "{rating}★",
   analyticsVsPriorPeriod: "vs prior 14 days",

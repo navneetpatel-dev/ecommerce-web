@@ -1,8 +1,7 @@
-/** Display helpers for vendor order rows (ids and currency). */
-export function shortOrderId(orderId: string) {
-  return orderId.slice(0, 8);
-}
-
-export function formatInr(value: number) {
-  return `₹${Number(value || 0).toLocaleString("en-IN")}`;
-}
+/**
+ * Display helpers for vendor order rows.
+ *
+ * Money and id formatting live in shared/utils/orderFormat so every surface renders
+ * amounts identically — this module only re-exports them for the folder's barrel.
+ */
+export { formatInr, shortOrderId } from "@/shared/utils/orderFormat";

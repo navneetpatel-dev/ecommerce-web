@@ -36,6 +36,14 @@ export interface Cart {
     shippingTotal: number;
     shippingDisplayKey: "FREE" | "PAID";
     grandTotal: number;
+    /**
+     * What the server based tax and shipping on. The cart has no chosen address or
+     * shipping method, so anything but EXACT is an estimate — checkout re-quotes.
+     *
+     * NO_SHIPPING_RATE means no rate matched the default address, so shipping shows
+     * as zero here but checkout will reject that address.
+     */
+    basisKey: "EXACT" | "DEFAULT_ADDRESS" | "NO_SHIPPING_RATE" | "NO_ADDRESS";
   };
   appliedCoupon?: AppliedCouponSummary | null;
   appliedCoupons?: AppliedCouponSummary[];

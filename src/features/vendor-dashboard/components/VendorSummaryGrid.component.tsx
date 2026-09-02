@@ -1,13 +1,10 @@
 import { SummaryCard } from "./SummaryCard.component";
 import { Package, Truck, Banknote, Clock } from "lucide-react";
 import type { VendorSummary } from "@/shared/api/types";
+import { formatInr } from "@/shared/utils/orderFormat";
 
 interface VendorSummaryGridProps {
   summary?: VendorSummary;
-}
-
-function formatInr(value: number) {
-  return `₹${Number(value || 0).toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
 }
 
 export function VendorSummaryGrid({ summary }: VendorSummaryGridProps) {
