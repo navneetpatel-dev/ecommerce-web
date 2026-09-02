@@ -15,27 +15,34 @@ const allowlist = [
   "src/features/checkout/hooks/usePlaceOrder.hook.ts",
 ];
 
-const pattern = String.raw`\b(err|error)\.message\b`;
+const patterns = [
+  String.raw`\b(err|error)\.message\b`,
+  String.raw`\(err\s+as[^)]*\)\.message`,
+  String.raw`\(error\s+as[^)]*\)\.message`,
+];
 
-let output = "";
-try {
-  output = execFileSync(
-    "rg",
-    ["--no-heading", "--line-number", pattern, featuresDir],
-    { encoding: "utf8", cwd: root },
-  );
-} catch (err) {
-  if (err.status === 1) {
-    process.exit(0);
+function runRipgrep(pattern) {
+  try {
+    return execFileSync(
+      "rg",
+      ["--no-heading", "--line-number", pattern, featuresDir],
+      { encoding: "utf8", cwd: root },
+    );
+  } catch (err) {
+    if (err.status === 1) {
+      return "";
+    }
+    throw err;
   }
-  console.error(err.message ?? err);
-  process.exit(1);
 }
 
-const violations = output
-  .trim()
-  .split("\n")
-  .filter(Boolean)
+const violations = patterns
+  .flatMap((pattern) =>
+    runRipgrep(pattern)
+      .trim()
+      .split("\n")
+      .filter(Boolean),
+  )
   .filter((line) => {
     const file = line.split(":")[0];
     const rel = path.relative(root, path.join(root, file));
@@ -46,7 +53,7 @@ if (violations.length > 0) {
   console.error(
     "Raw err/error.message usage in features/ (use getApiErrorMessage instead):\n",
   );
-  for (const line of violations) {
+  for (const line of [...new Set(violations)]) {
     console.error(`  ${line}`);
   }
   process.exit(1);

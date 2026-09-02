@@ -141,6 +141,12 @@ const eslintConfig = defineConfig([
         "error",
         {
           selector:
+            "MemberExpression[object.type='TSAsExpression'][property.name='message']",
+          message:
+            "Use getApiErrorMessage or QueryErrorAlert instead of reading (err as ...).message in features.",
+        },
+        {
+          selector:
             "MemberExpression[object.type='TSAsExpression'] > Identifier[name='message']",
           message:
             "Use getApiErrorMessage or QueryErrorAlert instead of reading (error as Error)?.message in features.",

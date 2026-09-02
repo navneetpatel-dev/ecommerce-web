@@ -1,4 +1,6 @@
 import { useCallback, useRef } from "react";
+import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { checkoutApi } from "../../api/checkout.api";
 import type { PaymentNotice } from "../usePaymentNotice/index";
 import type { CheckoutPaymentPhase } from "../useCheckoutPaymentPhase.hook";
@@ -44,13 +46,13 @@ export function useRestoreCancelledCheckout({
         } catch (err) {
           await refetchCart();
           if (!options?.silent) {
-            const description =
-              err && typeof err === "object" && "message" in err
-                ? String((err as { message: string }).message)
-                : notice?.description ?? "Could not restore your cart.";
+            const description = getApiErrorMessage(
+              err,
+              notice?.description ?? LABELS.couldNotRestoreCart,
+            );
             showNotice({
               variant: "danger",
-              title: notice?.title ?? "Could not restore cart",
+              title: notice?.title ?? LABELS.couldNotRestoreCartTitle,
               description,
             });
           }

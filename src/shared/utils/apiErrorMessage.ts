@@ -15,6 +15,8 @@ const API_ERROR_LABEL_KEYS: Partial<Record<string, keyof typeof LABELS>> = {
   CONFIG_ERROR: "unexpectedError",
   OAUTH_NOT_CONFIGURED: "oauthNotConfigured",
   RATE_LIMITED: "rateLimited",
+  AUTH_RATE_LIMITED: "authRateLimited",
+  COUPON_APPLY_RATE_LIMITED: "couponApplyRateLimited",
   TOKEN_EXPIRED: "sessionExpired",
   UNAUTHORIZED: "sessionExpired",
   ITEMS_UNAVAILABLE: "removeUnavailableToCheckout",

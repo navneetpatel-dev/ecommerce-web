@@ -2,6 +2,10 @@
 export const apiErrorLabels = {
   sessionExpired: "Session expired. Please log in again.",
   rateLimited: "Too many requests. Please wait and try again.",
+  authRateLimited:
+    "Too many login attempts. Please wait a few minutes and try again.",
+  couponApplyRateLimited:
+    "Too many coupon attempts. Please try again shortly.",
   vendorUnavailableCheckout:
     "This seller is not available for checkout right now.",
   vendorKycIncomplete: "Complete seller verification before continuing.",
@@ -38,4 +42,6 @@ export const apiErrorLabels = {
   returnAlreadyExists: "A return request already exists for this item.",
   returnNotAllowed: "This item cannot be returned.",
   itemMustBeDelivered: "This item must be delivered before you can continue.",
+  couldNotRestoreCart: "Could not restore your cart.",
+  couldNotRestoreCartTitle: "Could not restore cart",
 } as const;
