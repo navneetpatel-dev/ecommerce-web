@@ -34,6 +34,11 @@ describe("sanitizeUserFacingMessage", () => {
       "Expired code",
     );
   });
+  it("uses the actionable fallback for browser network errors", () => {
+    expect(sanitizeUserFacingMessage("Failed to fetch", "Try again")).toBe(
+      "Try again",
+    );
+  });
 });
 
 describe("apiErrorFromFailureBody", () => {
@@ -92,7 +97,9 @@ describe("parseApiFieldErrors", () => {
 
   it("parses flat service field maps", () => {
     expect(
-      parseApiFieldErrors({ currentPassword: ["Current password is incorrect"] }),
+      parseApiFieldErrors({
+        currentPassword: ["Current password is incorrect"],
+      }),
     ).toEqual({ currentPassword: "Current password is incorrect" });
   });
 });

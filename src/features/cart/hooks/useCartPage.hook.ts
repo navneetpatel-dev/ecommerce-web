@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
+import { useIsMutating } from "@tanstack/react-query";
 import {
+  cartMutationKeys,
   useCart,
   useClearCart,
   useUpdateCartItem,
@@ -12,12 +14,19 @@ import { useCartCoupons } from "./useCartCoupons.hook";
 import { resolveCartDisplayTotals } from "../utils/cartDisplay.utils";
 import { clampCartQuantity } from "@/shared/constants/cart";
 import type { CartItem } from "@/shared/api/types";
+import { useCartDrawerStore } from "../store/cart.store";
 
 export function useCartPage() {
   const { data: cart, isLoading, isError, refetch } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
   const clearCart = useClearCart();
+  const mutationError = useCartDrawerStore((state) => state.mutationError);
+  const setMutationError = useCartDrawerStore(
+    (state) => state.setMutationError,
+  );
+  const isCartMutating =
+    useIsMutating({ mutationKey: cartMutationKeys.all }) > 0;
   const coupons = useCartCoupons({ cart, enabled: true });
 
   const items = useMemo(() => cart?.items ?? [], [cart?.items]);
@@ -75,6 +84,9 @@ export function useCartPage() {
     removeItem: removeItemById,
     clearCart: () => clearCart.mutate(),
     isClearing: clearCart.isPending,
+    isCartMutating,
+    mutationError,
+    dismissMutationError: () => setMutationError(null),
     couponInput: coupons.couponInput,
     setCouponInput: coupons.setCouponInput,
     couponMessage: coupons.couponMessage,

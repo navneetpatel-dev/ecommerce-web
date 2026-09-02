@@ -18,6 +18,8 @@ export function CartDrawerContainer() {
       pendingLineTotals={drawer.pendingLineTotals}
       totalsFetching={drawer.totalsFetching}
       isCartMutating={drawer.isCartMutating}
+      mutationError={drawer.mutationError}
+      onDismissMutationError={drawer.dismissMutationError}
       amountsUnavailable={drawer.amountsUnavailable}
       onRetryAmounts={drawer.retryAmounts}
       pricingPreview={drawer.pricingPreview}

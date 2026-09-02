@@ -23,6 +23,7 @@ interface CompactCartLineProps {
   onRemoveItem: (itemId: string) => void;
   /** Cart request failed — the amount is missing for good, not mid-refresh. */
   amountsUnavailable?: boolean;
+  disabled?: boolean;
 }
 
 /** Compact cart row rendered inside the slide-over drawer (Rule 3 split). */
@@ -32,6 +33,7 @@ export function CompactCartLine(props: CompactCartLineProps) {
     onUpdateQuantity,
     onRemoveItem,
     amountsUnavailable = false,
+    disabled = false,
   } = props;
   const available = item.isAvailable !== false;
   const linePending = hasPendingCartLineSubtotal(item);
@@ -70,6 +72,7 @@ export function CompactCartLine(props: CompactCartLineProps) {
           item={item}
           className={removeButtonClassName}
           onRemoveItem={onRemoveItem}
+          disabled={disabled}
         />
         {!available ? (
           <Badge variant="destructive" className="w-fit text-[0.6875rem]">
@@ -99,6 +102,8 @@ export function CompactCartLine(props: CompactCartLineProps) {
             onChange={handleQuantityChange}
             min={1}
             max={item.maxQuantity ?? MAX_CART_LINE_QUANTITY}
+            disabled={disabled}
+            disabledHint={LABELS.cartUpdatingActionHint}
             controlClassName="h-8 w-8 min-h-8 max-h-8 [&_svg]:size-3.5"
             valueClassName="h-4 w-5 text-body-sm"
           />

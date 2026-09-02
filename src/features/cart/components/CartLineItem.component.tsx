@@ -12,6 +12,7 @@ export interface CartLineItemProps {
   compact?: boolean;
   /** Cart request failed — amounts are missing for good, not mid-refresh. */
   amountsUnavailable?: boolean;
+  disabled?: boolean;
 }
 
 /**
@@ -25,6 +26,7 @@ export function CartLineItem(props: CartLineItemProps) {
     onRemoveItem,
     compact = false,
     amountsUnavailable = false,
+    disabled = false,
   } = props;
 
   if (compact) {
@@ -34,6 +36,7 @@ export function CartLineItem(props: CartLineItemProps) {
         onUpdateQuantity={onUpdateQuantity}
         onRemoveItem={onRemoveItem}
         amountsUnavailable={amountsUnavailable}
+        disabled={disabled}
       />
     );
   }
@@ -43,6 +46,7 @@ export function CartLineItem(props: CartLineItemProps) {
       item={item}
       onUpdateQuantity={onUpdateQuantity}
       onRemoveItem={onRemoveItem}
+      disabled={disabled}
     />
   );
 }

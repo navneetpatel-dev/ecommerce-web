@@ -27,4 +27,24 @@ describe("CartDrawerSummary actions", () => {
       }),
     ).toBeInTheDocument();
   });
+
+  it("shows and dismisses the cart mutation message", async () => {
+    const user = userEvent.setup();
+    const onDismissMutationError = vi.fn();
+
+    render(
+      <CartDrawerSummary
+        total={100}
+        mutationError="Only 2 items are available."
+        onDismissMutationError={onDismissMutationError}
+        onClose={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Only 2 items are available.",
+    );
+    await user.click(screen.getByRole("button", { name: "Dismiss" }));
+    expect(onDismissMutationError).toHaveBeenCalledOnce();
+  });
 });

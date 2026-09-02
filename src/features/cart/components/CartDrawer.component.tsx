@@ -23,6 +23,8 @@ interface CartDrawerProps {
   pendingLineTotals?: boolean;
   totalsFetching?: boolean;
   isCartMutating?: boolean;
+  mutationError?: string | null;
+  onDismissMutationError?: () => void;
   /** Cart request failed — amounts are missing for good, not mid-refresh. */
   amountsUnavailable?: boolean;
   onRetryAmounts?: () => void;
@@ -49,6 +51,8 @@ export function CartDrawer({
   pendingLineTotals = false,
   totalsFetching = false,
   isCartMutating = false,
+  mutationError = null,
+  onDismissMutationError,
   amountsUnavailable = false,
   onRetryAmounts,
   pricingPreview,
@@ -124,6 +128,7 @@ export function CartDrawer({
                           onRemoveItem={onRemoveItem}
                           compact
                           amountsUnavailable={amountsUnavailable}
+                          disabled={isCartMutating}
                         />
                       ))}
                     </div>
@@ -140,6 +145,8 @@ export function CartDrawer({
                 pendingLineTotals={pendingLineTotals}
                 totalsFetching={totalsFetching}
                 isCartMutating={isCartMutating}
+                mutationError={mutationError}
+                onDismissMutationError={onDismissMutationError}
                 amountsUnavailable={amountsUnavailable}
                 onRetryAmounts={onRetryAmounts}
                 hasUnavailableItems={hasUnavailableItems}

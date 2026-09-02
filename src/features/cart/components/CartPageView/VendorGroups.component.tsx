@@ -11,12 +11,14 @@ interface VendorGroupsProps {
   groupedByVendor: Record<string, CartItem[]>;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
+  disabled?: boolean;
 }
 
 export function VendorGroups({
   groupedByVendor,
   onUpdateQuantity,
   onRemoveItem,
+  disabled = false,
 }: VendorGroupsProps) {
   const vendorEntries = Object.entries(groupedByVendor);
 
@@ -56,6 +58,7 @@ export function VendorGroups({
                     item={item}
                     onUpdateQuantity={onUpdateQuantity}
                     onRemoveItem={onRemoveItem}
+                    disabled={disabled}
                   />
                 ))}
               </ul>

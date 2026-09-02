@@ -21,6 +21,8 @@ export function useCartDrawer() {
   const router = useRouter();
   const isOpen = useCartDrawerStore((s) => s.isOpen);
   const close = useCartDrawerStore((s) => s.close);
+  const mutationError = useCartDrawerStore((s) => s.mutationError);
+  const setMutationError = useCartDrawerStore((s) => s.setMutationError);
   const { data: cart, isLoading, isFetching, isError, refetch } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
@@ -63,6 +65,8 @@ export function useCartDrawer() {
     pendingLineTotals: displayTotals.pendingLineTotals,
     totalsFetching: isFetching && displayTotals.pendingLineTotals,
     isCartMutating,
+    mutationError,
+    dismissMutationError: () => setMutationError(null),
     pricingPreview: displayTotals.pricingPreview,
     amountsUnavailable: displayTotals.amountsUnavailable,
     retryAmounts: () => {

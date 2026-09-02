@@ -25,6 +25,9 @@ export function CartPage() {
       onRemoveItem={cart.removeItem}
       onClearCart={cart.clearCart}
       isClearing={cart.isClearing}
+      isCartMutating={cart.isCartMutating}
+      mutationError={cart.mutationError}
+      onDismissMutationError={cart.dismissMutationError}
       couponInput={cart.couponInput}
       couponMessage={cart.couponMessage}
       couponError={cart.couponError}

@@ -28,11 +28,12 @@ interface FullCartLineProps {
   item: CartItem;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
+  disabled?: boolean;
 }
 
 /** Full-width cart row rendered on the cart page (Rule 3 split). */
 export function FullCartLine(props: FullCartLineProps) {
-  const { item, onUpdateQuantity, onRemoveItem } = props;
+  const { item, onUpdateQuantity, onRemoveItem, disabled = false } = props;
   const available = item.isAvailable !== false;
   const attrs = variantLabel(item);
   const linePending = hasPendingCartLineSubtotal(item);
@@ -101,6 +102,7 @@ export function FullCartLine(props: FullCartLineProps) {
             size="icon-sm"
             className="h-9 w-9 min-h-9 max-h-9 shrink-0 text-ink-muted hover:bg-danger-subtle hover:text-danger sm:hidden"
             aria-label={removeAriaLabel}
+            disabled={disabled}
             onClick={handleRemove}
           >
             <Trash2 size={15} />
@@ -114,6 +116,8 @@ export function FullCartLine(props: FullCartLineProps) {
               onChange={handleQuantityChange}
               min={1}
               max={item.maxQuantity ?? MAX_CART_LINE_QUANTITY}
+              disabled={disabled}
+              disabledHint={LABELS.cartUpdatingActionHint}
               controlClassName="h-8 w-8 min-h-8 max-h-8 sm:h-9 sm:w-9 sm:min-h-9 sm:max-h-9 lg:h-10 lg:w-10 lg:min-h-10 lg:max-h-10"
               valueClassName="h-4 w-5 text-[0.75rem] sm:h-5 sm:w-6 sm:text-body-sm"
             />
@@ -124,6 +128,7 @@ export function FullCartLine(props: FullCartLineProps) {
             size="sm"
             className="hidden h-auto min-h-0 max-h-none items-center gap-1.5 px-0 py-0 text-body-sm text-ink-muted hover:bg-transparent hover:text-danger sm:inline-flex"
             onClick={handleRemove}
+            disabled={disabled}
           >
             <Trash2 size={14} />
             {LABELS.remove}

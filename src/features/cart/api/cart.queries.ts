@@ -6,6 +6,9 @@ import {
   patchRemoveCartItem,
 } from "../utils/cartDisplay.utils";
 import { cartApi } from "./cart.api";
+import { useCartDrawerStore } from "../store/cart.store";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { LABELS } from "@/shared/constants/labels";
 
 export const cartKeys = {
   all: ["cart"] as const,
@@ -28,6 +31,16 @@ type AddToCartVars = {
   /** Opens the cart drawer after a successful add. Defaults to true. */
   openDrawer?: boolean;
 };
+
+function clearCartMutationError() {
+  useCartDrawerStore.getState().setMutationError(null);
+}
+
+function showCartMutationError(error: unknown, fallback: string) {
+  useCartDrawerStore
+    .getState()
+    .setMutationError(getApiErrorMessage(error, fallback));
+}
 
 function syncCartCache(
   queryClient: ReturnType<typeof useQueryClient>,
@@ -73,9 +86,11 @@ export function useAddToCart() {
 
   return useMutation({
     mutationKey: cartMutationKeys.add,
+    onMutate: clearCartMutationError,
     mutationFn: ({ variantId, quantity = 1 }: AddToCartVars) =>
       cartApi.addItem(variantId, quantity),
     onSuccess: (cart, variables) => {
+      clearCartMutationError();
       syncCartCache(queryClient, cart);
       if (variables.openDrawer !== false) {
         import("../store/cart.store").then((m) =>
@@ -83,6 +98,7 @@ export function useAddToCart() {
         );
       }
     },
+    onError: (error) => showCartMutationError(error, LABELS.couldNotAddToCart),
   });
 }
 
@@ -93,6 +109,7 @@ export function useUpdateCartItem() {
     mutationFn: ({ itemId, quantity }: { itemId: string; quantity: number }) =>
       cartApi.updateItem(itemId, quantity),
     onMutate: async ({ itemId, quantity }) => {
+      clearCartMutationError();
       await queryClient.cancelQueries({ queryKey: cartKeys.all });
       const previous = queryClient.getQueriesData<Cart>({
         queryKey: cartKeys.all,
@@ -107,8 +124,12 @@ export function useUpdateCartItem() {
       context?.previous.forEach(([queryKey, data]) => {
         queryClient.setQueryData(queryKey, data);
       });
+      showCartMutationError(_error, LABELS.couldNotUpdateCart);
     },
-    onSuccess: (cart) => syncCartCache(queryClient, cart),
+    onSuccess: (cart) => {
+      clearCartMutationError();
+      syncCartCache(queryClient, cart);
+    },
   });
 }
 
@@ -118,6 +139,7 @@ export function useRemoveCartItem() {
     mutationKey: cartMutationKeys.remove,
     mutationFn: (itemId: string) => cartApi.removeItem(itemId),
     onMutate: async (itemId) => {
+      clearCartMutationError();
       await queryClient.cancelQueries({ queryKey: cartKeys.all });
       const previous = queryClient.getQueriesData<Cart>({
         queryKey: cartKeys.all,
@@ -132,8 +154,12 @@ export function useRemoveCartItem() {
       context?.previous.forEach(([queryKey, data]) => {
         queryClient.setQueryData(queryKey, data);
       });
+      showCartMutationError(_error, LABELS.couldNotRemoveCartItem);
     },
-    onSuccess: (cart) => syncCartCache(queryClient, cart),
+    onSuccess: (cart) => {
+      clearCartMutationError();
+      syncCartCache(queryClient, cart);
+    },
   });
 }
 
@@ -143,6 +169,7 @@ export function useClearCart() {
     mutationKey: cartMutationKeys.clear,
     mutationFn: () => cartApi.clear(),
     onMutate: async () => {
+      clearCartMutationError();
       await queryClient.cancelQueries({ queryKey: cartKeys.all });
       const previous = queryClient.getQueriesData<Cart>({
         queryKey: cartKeys.all,
@@ -166,7 +193,11 @@ export function useClearCart() {
       context?.previous.forEach(([queryKey, data]) => {
         queryClient.setQueryData(queryKey, data);
       });
+      showCartMutationError(_error, LABELS.couldNotClearCart);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: cartKeys.all }),
+    onSuccess: () => {
+      clearCartMutationError();
+      return queryClient.invalidateQueries({ queryKey: cartKeys.all });
+    },
   });
 }

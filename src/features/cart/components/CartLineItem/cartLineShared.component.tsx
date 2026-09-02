@@ -41,6 +41,7 @@ interface RemoveLineButtonProps {
   item: CartItem;
   className: string;
   onRemoveItem: (itemId: string) => void;
+  disabled?: boolean;
 }
 
 /** Icon button that removes a cart line, with accessible name from copy. */
@@ -48,6 +49,7 @@ export function RemoveLineButton({
   item,
   className,
   onRemoveItem,
+  disabled = false,
 }: RemoveLineButtonProps) {
   const handleRemove = () => {
     onRemoveItem(item.id);
@@ -63,6 +65,7 @@ export function RemoveLineButton({
       aria-label={formatLabel(LABELS.removeNamed, {
         name: item.product.name,
       })}
+      disabled={disabled}
     >
       <Trash2 size={14} />
     </Button>

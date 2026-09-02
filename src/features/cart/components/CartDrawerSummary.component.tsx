@@ -9,6 +9,7 @@ import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailable
 import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
 import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { CartMutationError } from "./CartMutationError.component";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 interface CartSummaryLinkProps {
@@ -60,6 +61,8 @@ interface CartDrawerSummaryProps {
   pendingLineTotals?: boolean;
   totalsFetching?: boolean;
   isCartMutating?: boolean;
+  mutationError?: string | null;
+  onDismissMutationError?: () => void;
   amountsUnavailable?: boolean;
   onRetryAmounts?: () => void;
   hasUnavailableItems?: boolean;
@@ -73,6 +76,8 @@ export function CartDrawerSummary({
   pendingLineTotals = false,
   totalsFetching = false,
   isCartMutating = false,
+  mutationError = null,
+  onDismissMutationError,
   amountsUnavailable = false,
   onRetryAmounts,
   hasUnavailableItems = false,
@@ -83,6 +88,10 @@ export function CartDrawerSummary({
 
   return (
     <div className="shrink-0 space-y-3 border-t border-line p-4">
+      <CartMutationError
+        message={mutationError}
+        onDismiss={onDismissMutationError ?? (() => undefined)}
+      />
       {pricingPreview || amountsPending ? (
         <dl className="space-y-1.5 text-body-sm">
           <div className="flex justify-between gap-3">

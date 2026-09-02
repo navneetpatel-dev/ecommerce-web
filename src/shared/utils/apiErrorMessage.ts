@@ -83,6 +83,9 @@ const INTERNAL_ERROR_PATTERNS = [
   /not authorized to perform/i,
   /Configure\s+[A-Z_]+/,
   /See\s+\S+\/README/i,
+  /^(?:TypeError:\s*)?Failed to fetch$/i,
+  /^(?:NetworkError|Network request failed|Load failed|fetch failed)\b/i,
+  /\bERR_(?:NETWORK|CONNECTION|INTERNET|BLOCKED_BY_CLIENT)\b/i,
 ];
 
 /** Returns true when text looks like an internal/dev error and must not be shown to users. */
@@ -190,10 +193,7 @@ export function apiErrorFromFailureBody(
   if (status === 429) {
     return new ApiError(ERROR_CODES.RATE_LIMITED, ERROR_MESSAGES.RATE_LIMITED);
   }
-  return new ApiError(
-    ERROR_CODES.REQUEST_FAILED,
-    `Request failed (${status})`,
-  );
+  return new ApiError(ERROR_CODES.REQUEST_FAILED, `Request failed (${status})`);
 }
 
 /** Prefer mapped labels and validation field errors; never leak internal infrastructure details. */

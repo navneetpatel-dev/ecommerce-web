@@ -9,6 +9,7 @@ import { EmptyCart } from "./EmptyCart.component";
 import { VendorGroups } from "./VendorGroups.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
 import { ClearCartAction } from "./ClearCartAction.component";
+import { CartMutationError } from "../CartMutationError.component";
 
 export interface CartPageViewProps {
   isLoading?: boolean;
@@ -33,6 +34,9 @@ export interface CartPageViewProps {
   onRemoveItem: (itemId: string) => void;
   onClearCart: () => void;
   isClearing?: boolean;
+  isCartMutating?: boolean;
+  mutationError?: string | null;
+  onDismissMutationError: () => void;
   couponInput: string;
   couponMessage: string | null;
   couponError: string | null;
@@ -73,6 +77,9 @@ export function CartPageView({
   onRemoveItem,
   onClearCart,
   isClearing,
+  isCartMutating = false,
+  mutationError,
+  onDismissMutationError,
   couponInput,
   couponMessage,
   couponError,
@@ -124,12 +131,19 @@ export function CartPageView({
           <ClearCartAction onClear={onClearCart} isClearing={isClearing} />
         </motion.header>
 
+        <CartMutationError
+          message={mutationError ?? null}
+          onDismiss={onDismissMutationError}
+          className="mt-4"
+        />
+
         <div className="mt-6 grid grid-cols-1 gap-8 lg:mt-8 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7 xl:col-span-8">
             <VendorGroups
               groupedByVendor={groupedByVendor}
               onUpdateQuantity={onUpdateQuantity}
               onRemoveItem={onRemoveItem}
+              disabled={isCartMutating}
             />
           </div>
 
