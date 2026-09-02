@@ -16,7 +16,7 @@ import {
   useRevokeSession,
   useRevokeOtherSessions,
 } from "@/features/auth";
-import { formatOrderDate } from "@/shared/utils/orderFormat";
+import { formatSessionDateTime } from "@/shared/utils/formatDate";
 
 function deviceLabel(userAgent: string | null) {
   if (!userAgent) return "Unknown device";
@@ -112,7 +112,9 @@ export function SecuritySection() {
                   </p>
                   <p className="mt-0.5 text-body-sm text-ink-muted">
                     {session.ipAddress || "IP unknown"} · Last active{" "}
-                    {formatOrderDate(session.lastUsedAt)}
+                    <time dateTime={session.lastUsedAt}>
+                      {formatSessionDateTime(session.lastUsedAt)}
+                    </time>
                   </p>
                 </div>
                 {!session.isCurrent ? (
