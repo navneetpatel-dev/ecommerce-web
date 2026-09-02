@@ -8,6 +8,8 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import { CartCouponSection } from "../CartCouponSection.component";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
+import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailableNotice.component";
+import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
 import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
 import type { EligibleCoupon } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
@@ -16,6 +18,9 @@ interface OrderSummaryAsideProps {
   itemCount: number;
   subtotal?: number;
   subtotalPending?: boolean;
+  /** Cart request failed — amounts are missing for good, not mid-refresh. */
+  amountsUnavailable?: boolean;
+  onRetryAmounts?: () => void;
   total?: number;
   totalIsEstimated?: boolean;
   pendingLineTotals?: boolean;
@@ -51,6 +56,8 @@ export function OrderSummaryAside({
   itemCount,
   subtotal,
   subtotalPending = false,
+  amountsUnavailable = false,
+  onRetryAmounts,
   total,
   totalIsEstimated = false,
   pendingLineTotals = false,
@@ -75,9 +82,9 @@ export function OrderSummaryAside({
 }: OrderSummaryAsideProps) {
   const totalPending = total == null || (totalIsEstimated && pendingLineTotals);
   const totalLabel = totalIsEstimated
-    ? totalPending
-      ? "Updating…"
-      : "Estimated total"
+    ? totalPending && !amountsUnavailable
+      ? LABELS.updatingEllipsis
+      : LABELS.estimatedTotalLabel
     : LABELS.total;
 
   return (
@@ -92,7 +99,11 @@ export function OrderSummaryAside({
           {itemCount} {itemCount === 1 ? "item" : "items"}
           <span className="mx-2 text-line">·</span>
           <span className="font-medium text-ink">
-            {totalPending ? "Updating…" : `₹${formatInrAmount(total)}`}
+            <MoneyAmount
+              value={total}
+              pending={totalPending}
+              unavailable={amountsUnavailable}
+            />
           </span>
         </p>
 
@@ -105,11 +116,11 @@ export function OrderSummaryAside({
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">{LABELS.subtotal}</dt>
             <dd className="tabular-nums text-ink">
-              {subtotalPending || subtotal == null ? (
-                <span className="text-ink-muted">Updating…</span>
-              ) : (
-                <>₹{formatInrAmount(subtotal)}</>
-              )}
+              <MoneyAmount
+                value={subtotal}
+                pending={subtotalPending}
+                unavailable={amountsUnavailable}
+              />
             </dd>
           </div>
           {appliedDiscount > 0 ? (
@@ -168,13 +179,20 @@ export function OrderSummaryAside({
               {totalLabel}
             </span>
             <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
-              {totalPending ? (
-                <span className="text-[1rem] text-ink-muted">Updating…</span>
-              ) : (
-                <>₹{formatInrAmount(total)}</>
-              )}
+              <MoneyAmount
+                value={total}
+                pending={totalPending}
+                unavailable={amountsUnavailable}
+                fallbackClassName="text-[1rem]"
+              />
             </span>
           </div>
+          {amountsUnavailable ? (
+            <AmountsUnavailableNotice
+              className="mt-3"
+              onRetry={onRetryAmounts}
+            />
+          ) : null}
           {(appliedCashbackAmount > 0 || appliedCouponType === "CASHBACK") &&
           payNowGrandTotal != null ? (
             <CashbackCouponNotice

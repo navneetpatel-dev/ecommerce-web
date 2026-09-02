@@ -3,6 +3,8 @@ import { LABELS } from "@/shared/constants/labels";
 import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
+import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailableNotice.component";
+import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import { taxDisplayLabel } from "@/shared/utils/taxDisplay";
@@ -14,6 +16,9 @@ interface OrderSummaryPanelProps {
   groupedByVendor: Record<string, CartItem[]>;
   subtotal?: number;
   subtotalPending?: boolean;
+  /** Cart request failed — amounts are missing for good, not mid-refresh. */
+  amountsUnavailable?: boolean;
+  onRetryAmounts?: () => void;
   estimatedTotal?: number;
   estimatedTotalPending?: boolean;
   quote?: CheckoutQuote | null;
@@ -28,6 +33,8 @@ export function OrderSummaryPanel({
   groupedByVendor,
   subtotal,
   subtotalPending = false,
+  amountsUnavailable = false,
+  onRetryAmounts,
   estimatedTotal,
   estimatedTotalPending = false,
   quote,
@@ -69,13 +76,11 @@ export function OrderSummaryPanel({
           {itemCount} {itemCount === 1 ? "item" : "items"}
           <span className="mx-2 text-line">·</span>
           <span className="font-medium text-ink">
-            {displayTotalPending ? (
-              <span className="text-ink-muted">Updating…</span>
-            ) : displayTotal != null ? (
-              <>₹{formatInrAmount(displayTotal)}</>
-            ) : (
-              <span className="text-ink-muted">Updating…</span>
-            )}
+            <MoneyAmount
+              value={displayTotal}
+              pending={displayTotalPending}
+              unavailable={amountsUnavailable}
+            />
           </span>
         </p>
         <TextEyebrow className="mt-4">Order summary</TextEyebrow>
@@ -109,15 +114,10 @@ export function OrderSummaryPanel({
                     </p>
                   </div>
                   <p className="shrink-0 text-[0.875rem] tabular-nums text-ink">
-                    {(() => {
-                      const lineSubtotal = resolveCartLineSubtotal(item, quote);
-                      if (lineSubtotal == null) {
-                        return (
-                          <span className="text-ink-muted">Updating…</span>
-                        );
-                      }
-                      return <>₹{formatInrAmount(lineSubtotal)}</>;
-                    })()}
+                    <MoneyAmount
+                      value={resolveCartLineSubtotal(item, quote)}
+                      unavailable={amountsUnavailable}
+                    />
                   </p>
                 </li>
               ))}
@@ -131,13 +131,11 @@ export function OrderSummaryPanel({
           <div className="flex items-center justify-between gap-4">
             <dt className="text-ink-muted">Subtotal</dt>
             <dd className="tabular-nums text-ink">
-              {summarySubtotalPending ? (
-                <span className="text-ink-muted">Updating…</span>
-              ) : summarySubtotal != null ? (
-                <>₹{formatInrAmount(summarySubtotal)}</>
-              ) : (
-                <span className="text-ink-muted">Updating…</span>
-              )}
+              <MoneyAmount
+                value={summarySubtotal}
+                pending={summarySubtotalPending}
+                unavailable={amountsUnavailable}
+              />
             </dd>
           </div>
           {quote?.appliedCoupon && (
@@ -190,17 +188,12 @@ export function OrderSummaryPanel({
               {totalLabel}
             </span>
             <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
-              {displayTotalPending ? (
-                <span className="text-[1.125rem] text-ink-muted">
-                  Updating…
-                </span>
-              ) : displayTotal != null ? (
-                <>₹{formatInrAmount(displayTotal)}</>
-              ) : (
-                <span className="text-[1.125rem] text-ink-muted">
-                  Updating…
-                </span>
-              )}
+              <MoneyAmount
+                value={displayTotal}
+                pending={displayTotalPending}
+                unavailable={amountsUnavailable}
+                fallbackClassName="text-[1.125rem]"
+              />
             </span>
           </div>
           {walletApplied && quote ? (
@@ -208,7 +201,14 @@ export function OrderSummaryPanel({
               {LABELS.orderTotalLabel}: ₹{formatInrAmount(quote.grandTotal)}
             </p>
           ) : null}
-          <p className="mt-1.5 text-[0.75rem] text-ink-muted">{totalHint}</p>
+          {amountsUnavailable ? (
+            <AmountsUnavailableNotice
+              className="mt-2"
+              onRetry={onRetryAmounts}
+            />
+          ) : (
+            <p className="mt-1.5 text-[0.75rem] text-ink-muted">{totalHint}</p>
+          )}
         </div>
       </div>
     </div>

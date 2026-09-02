@@ -8,6 +8,12 @@ export function checkoutOverlayCopy(phase: CheckoutPaymentPhase) {
       description: LABELS.confirmingPaymentBody,
     };
   }
+  if (phase === "redirecting") {
+    return {
+      title: LABELS.orderPlacedRedirect,
+      description: LABELS.orderPlacedRedirectBody,
+    };
+  }
   if (phase === "restoring") {
     return {
       title: LABELS.restoringCart,

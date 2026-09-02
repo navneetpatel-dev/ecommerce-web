@@ -7,6 +7,7 @@ import { MediaImage } from "@/shared/components/MediaImage.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart";
 import { cn } from "@/shared/utils/cn";
+import { LABELS } from "@/shared/constants/labels";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import type { CartItem } from "@/shared/api/types";
 import {
@@ -19,11 +20,18 @@ interface CompactCartLineProps {
   item: CartItem;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
+  /** Cart request failed — the amount is missing for good, not mid-refresh. */
+  amountsUnavailable?: boolean;
 }
 
 /** Compact cart row rendered inside the slide-over drawer (Rule 3 split). */
 export function CompactCartLine(props: CompactCartLineProps) {
-  const { item, onUpdateQuantity, onRemoveItem } = props;
+  const {
+    item,
+    onUpdateQuantity,
+    onRemoveItem,
+    amountsUnavailable = false,
+  } = props;
   const available = item.isAvailable !== false;
   const linePending = hasPendingCartLineSubtotal(item);
   const lineTotal = resolveCartLineDisplaySubtotal(item);
@@ -70,13 +78,17 @@ export function CompactCartLine(props: CompactCartLineProps) {
           <p
             className={cn(
               "truncate text-body-sm font-semibold tabular-nums",
-              linePending ? "text-ink-muted" : "text-brand",
+              linePending || lineTotal == null
+                ? "text-ink-muted"
+                : "text-brand",
             )}
           >
-            {linePending || lineTotal == null ? (
-              "Updating…"
-            ) : (
+            {lineTotal != null && !linePending ? (
               <>₹{formatInrAmount(lineTotal)}</>
+            ) : amountsUnavailable ? (
+              LABELS.amountUnavailable
+            ) : (
+              "Updating…"
             )}
           </p>
         )}

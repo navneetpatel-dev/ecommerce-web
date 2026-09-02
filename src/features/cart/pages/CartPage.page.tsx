@@ -14,6 +14,8 @@ export function CartPage() {
       groupedByVendor={cart.groupedByVendor}
       subtotal={cart.subtotal}
       subtotalPending={cart.subtotalPending}
+      amountsUnavailable={cart.amountsUnavailable}
+      onRetryAmounts={cart.retryAmounts}
       total={cart.total}
       totalIsEstimated={cart.totalIsEstimated}
       pendingLineTotals={cart.pendingLineTotals}

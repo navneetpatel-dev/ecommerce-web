@@ -25,6 +25,9 @@ export interface CheckoutPageViewProps {
   groupedByVendor: Record<string, CartItem[]>;
   subtotal?: number;
   subtotalPending?: boolean;
+  /** Cart request failed — amounts are missing for good, not mid-refresh. */
+  amountsUnavailable?: boolean;
+  onRetryAmounts?: () => void;
   estimatedTotal?: number;
   estimatedTotalPending?: boolean;
   cartPricingPreview?: {

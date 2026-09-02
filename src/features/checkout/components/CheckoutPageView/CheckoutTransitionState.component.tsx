@@ -9,14 +9,27 @@ interface CheckoutTransitionStateProps {
   paymentPhase: CheckoutPaymentPhase;
 }
 
-/** Skeleton + overlay while order completes and before route change (avoids empty-cart flash). */
+/** Holds the screen steady between a placed order and the confirmation route. */
 export function CheckoutTransitionState({
   paymentPhase,
 }: CheckoutTransitionStateProps) {
   const copy = checkoutOverlayCopy(paymentPhase);
+
+  /**
+   * Once the order is placed the checkout content is gone for good, so a
+   * skeleton behind the translucent overlay just reads as a flash of a page
+   * that will never render. Paint an opaque surface instead and let the
+   * confirmation route's own loading UI take over.
+   */
+  const isRedirecting = paymentPhase === "redirecting";
+
   return (
     <>
-      <CheckoutPageSkeleton />
+      {isRedirecting ? (
+        <div className="fixed inset-0 z-40 bg-surface" aria-hidden />
+      ) : (
+        <CheckoutPageSkeleton />
+      )}
       <PaymentProcessingOverlay
         open
         title={copy.title}

@@ -10,6 +10,8 @@ export interface CartLineItemProps {
   onRemoveItem: (itemId: string) => void;
   /** Compact layout used inside CartDrawer */
   compact?: boolean;
+  /** Cart request failed — amounts are missing for good, not mid-refresh. */
+  amountsUnavailable?: boolean;
 }
 
 /**
@@ -17,7 +19,13 @@ export interface CartLineItemProps {
  * Shared helpers live in CartLineItem/cartLineShared (Rule 2/3).
  */
 export function CartLineItem(props: CartLineItemProps) {
-  const { item, onUpdateQuantity, onRemoveItem, compact = false } = props;
+  const {
+    item,
+    onUpdateQuantity,
+    onRemoveItem,
+    compact = false,
+    amountsUnavailable = false,
+  } = props;
 
   if (compact) {
     return (
@@ -25,6 +33,7 @@ export function CartLineItem(props: CartLineItemProps) {
         item={item}
         onUpdateQuantity={onUpdateQuantity}
         onRemoveItem={onRemoveItem}
+        amountsUnavailable={amountsUnavailable}
       />
     );
   }

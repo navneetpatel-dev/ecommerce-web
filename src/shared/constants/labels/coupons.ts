@@ -172,6 +172,8 @@ export const couponsLabels = {
   confirmingPayment: "Confirming your payment…",
   confirmingPaymentBody:
     "Payment received. We're verifying it with our payment partner.",
+  orderPlacedRedirect: "Order placed",
+  orderPlacedRedirectBody: "Taking you to your order confirmation…",
   restoringCart: "Restoring your cart…",
   restoringCartBody:
     "We're putting your items back in your cart so you can try again.",
@@ -213,4 +215,8 @@ export const couponsLabels = {
   checkout: "Checkout",
   viewFullCart: "View full cart",
   total: "Total",
+  /** Amount slot when the cart request failed — distinct from "Updating…". */
+  amountUnavailable: "Unavailable",
+  amountsLoadFailed: "We couldn't load prices just now.",
+  retryPrices: "Retry",
 } as const;

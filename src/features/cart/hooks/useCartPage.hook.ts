@@ -13,7 +13,7 @@ import { clampCartQuantity } from "@/shared/constants/cart";
 import type { CartItem } from "@/shared/api/types";
 
 export function useCartPage() {
-  const { data: cart, isLoading } = useCart();
+  const { data: cart, isLoading, isError, refetch } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
   const coupons = useCartCoupons({ cart, enabled: true });
@@ -31,7 +31,7 @@ export function useCartPage() {
     [hasItems, items],
   );
 
-  const displayTotals = resolveCartDisplayTotals(cart);
+  const displayTotals = resolveCartDisplayTotals(cart, { isError });
 
   const vendorDiscountBreakdown = useMemo(() => {
     const shares = cart?.appliedCoupon?.vendorDiscountShares;
@@ -64,6 +64,10 @@ export function useCartPage() {
     totalIsEstimated: displayTotals.totalIsEstimated,
     pendingLineTotals: displayTotals.pendingLineTotals,
     pricingPreview: displayTotals.pricingPreview,
+    amountsUnavailable: displayTotals.amountsUnavailable,
+    retryAmounts: () => {
+      void refetch();
+    },
     vendorDiscountBreakdown,
     updateQuantity,
     removeItem: removeItemById,

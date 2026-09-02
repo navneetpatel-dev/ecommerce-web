@@ -19,7 +19,7 @@ export function useCartDrawer() {
   const router = useRouter();
   const isOpen = useCartDrawerStore((s) => s.isOpen);
   const close = useCartDrawerStore((s) => s.close);
-  const { data: cart, isLoading, isFetching } = useCart();
+  const { data: cart, isLoading, isFetching, isError, refetch } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
 
@@ -28,7 +28,7 @@ export function useCartDrawer() {
     return groupItemsByVendor(cart.items);
   }, [cart]);
 
-  const displayTotals = resolveCartDisplayTotals(cart);
+  const displayTotals = resolveCartDisplayTotals(cart, { isError });
 
   const hasUnavailableItems =
     cart?.items?.some((item) => item.isAvailable === false) ?? false;
@@ -59,6 +59,10 @@ export function useCartDrawer() {
     pendingLineTotals: displayTotals.pendingLineTotals,
     totalsFetching: isFetching && displayTotals.pendingLineTotals,
     pricingPreview: displayTotals.pricingPreview,
+    amountsUnavailable: displayTotals.amountsUnavailable,
+    retryAmounts: () => {
+      void refetch();
+    },
     updateQuantity,
     removeItem: removeItemById,
     continueShopping,

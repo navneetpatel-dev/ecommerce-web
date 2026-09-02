@@ -16,6 +16,9 @@ export interface CartPageViewProps {
   groupedByVendor: Record<string, CartItem[]>;
   subtotal?: number;
   subtotalPending?: boolean;
+  /** Cart request failed — amounts are missing for good, not mid-refresh. */
+  amountsUnavailable?: boolean;
+  onRetryAmounts?: () => void;
   total?: number;
   totalIsEstimated?: boolean;
   pendingLineTotals?: boolean;
@@ -56,6 +59,8 @@ export function CartPageView({
   groupedByVendor,
   subtotal,
   subtotalPending = false,
+  amountsUnavailable = false,
+  onRetryAmounts,
   total,
   totalIsEstimated = false,
   pendingLineTotals = false,
@@ -123,6 +128,8 @@ export function CartPageView({
             itemCount={itemCount}
             subtotal={subtotal}
             subtotalPending={subtotalPending}
+            amountsUnavailable={amountsUnavailable}
+            onRetryAmounts={onRetryAmounts}
             total={total}
             totalIsEstimated={totalIsEstimated}
             pendingLineTotals={pendingLineTotals}

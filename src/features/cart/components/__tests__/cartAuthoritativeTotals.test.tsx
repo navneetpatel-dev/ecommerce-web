@@ -52,3 +52,46 @@ describe("cart authoritative totals", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("amounts unavailable vs updating", () => {
+  const baseProps = {
+    itemCount: 1,
+    hasUnavailableItems: false,
+    couponInput: "",
+    couponMessage: null,
+    couponError: null,
+    couponPending: false,
+    appliedCouponCode: null,
+    appliedDiscount: 0,
+    eligible: [],
+    ...couponActions,
+  };
+
+  it("says Updating… while the cart is still in flight", () => {
+    render(<OrderSummaryAside {...baseProps} />);
+
+    expect(screen.getAllByText("Updating…").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Unavailable")).not.toBeInTheDocument();
+  });
+
+  it("says Unavailable with a retry once the request has failed", () => {
+    const onRetryAmounts = vi.fn();
+    render(
+      <OrderSummaryAside
+        {...baseProps}
+        amountsUnavailable
+        onRetryAmounts={onRetryAmounts}
+      />,
+    );
+
+    // The stuck-"Updating…" case from the bug report must not appear.
+    expect(screen.queryByText("Updating…")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Unavailable").length).toBeGreaterThan(0);
+    expect(
+      screen.getByText("We couldn't load prices just now."),
+    ).toBeInTheDocument();
+
+    screen.getByRole("button", { name: "Retry" }).click();
+    expect(onRetryAmounts).toHaveBeenCalledTimes(1);
+  });
+});

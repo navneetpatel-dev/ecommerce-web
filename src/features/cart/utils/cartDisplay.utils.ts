@@ -9,7 +9,9 @@ export function cartHasPendingLineSubtotals(cart: Cart | undefined): boolean {
 }
 
 /** Server-provided line subtotal only — no client-side pricing. */
-export function resolveCartLineDisplaySubtotal(item: CartItem): number | undefined {
+export function resolveCartLineDisplaySubtotal(
+  item: CartItem,
+): number | undefined {
   return item.lineSubtotal;
 }
 
@@ -54,18 +56,32 @@ export function patchRemoveCartItem(cart: Cart, itemId: string): Cart {
 }
 
 /** Read server-computed cart totals only. */
-export function resolveCartDisplayTotals(cart: Cart | undefined) {
+export function resolveCartDisplayTotals(
+  cart: Cart | undefined,
+  /**
+   * Cart query state. Without it a missing amount is indistinguishable from a
+   * failed one, and the UI shows "Updating…" forever after a request fails.
+   */
+  queryState: { isError?: boolean } = {},
+) {
   const items = cart?.items ?? [];
   const pendingLineTotals = cartHasPendingLineSubtotals(cart);
   const preview =
-    !pendingLineTotals && cart?.pricingPreview ? cart.pricingPreview : undefined;
+    !pendingLineTotals && cart?.pricingPreview
+      ? cart.pricingPreview
+      : undefined;
+  const total = cart?.total ?? preview?.grandTotal;
 
   return {
     pendingLineTotals,
     subtotal: cart?.merchandiseSubtotal,
     subtotalPending: cart?.merchandiseSubtotal == null && items.length > 0,
-    total: cart?.total ?? preview?.grandTotal,
+    total,
     totalIsEstimated: pendingLineTotals || cart?.total == null,
     pricingPreview: preview,
+    /** The request failed and left amounts missing — show an error, not a spinner. */
+    amountsUnavailable:
+      Boolean(queryState.isError) &&
+      (total == null || cart?.merchandiseSubtotal == null || pendingLineTotals),
   };
 }

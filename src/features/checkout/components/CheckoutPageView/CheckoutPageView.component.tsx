@@ -38,6 +38,8 @@ export function CheckoutPageView({
   groupedByVendor,
   subtotal,
   subtotalPending = false,
+  amountsUnavailable = false,
+  onRetryAmounts,
   estimatedTotal,
   estimatedTotalPending = false,
   cartPricingPreview,
@@ -59,27 +61,27 @@ export function CheckoutPageView({
   const router = useRouter();
 
   const isTransitioning = isPaymentOverlayOpen || isPending;
+  const transitionPhase =
+    isPending && paymentPhase === "idle" ? "placing" : paymentPhase;
 
+  // Once placed, hold this screen even while the cart still reads as filled.
+  if (paymentPhase === "redirecting" || (!hasItems && isTransitioning))
+    return <CheckoutTransitionState paymentPhase={transitionPhase} />;
   if (isLoading) return <CheckoutPageSkeleton />;
-  if (!hasItems && isTransitioning) {
-    const phase =
-      isPending && paymentPhase === "idle" ? "placing" : paymentPhase;
-    return <CheckoutTransitionState paymentPhase={phase} />;
-  }
   if (!hasItems) return <EmptyCart />;
 
   const noticePrimaryLabel =
     paymentNotice?.variant === "danger" ? "Try again" : "Continue checkout";
 
-  const paymentOverlayCopy = checkoutOverlayCopy(paymentPhase);
-  const paymentOverlayTitle = paymentOverlayCopy.title;
-  const paymentOverlayDescription = paymentOverlayCopy.description;
+  const paymentOverlay = checkoutOverlayCopy(paymentPhase);
 
   const summary = (
     <OrderSummaryPanel
       groupedByVendor={groupedByVendor}
       subtotal={subtotal}
       subtotalPending={subtotalPending}
+      amountsUnavailable={amountsUnavailable}
+      onRetryAmounts={onRetryAmounts}
       estimatedTotal={estimatedTotal}
       estimatedTotalPending={estimatedTotalPending}
       quote={quote}
@@ -190,8 +192,8 @@ export function CheckoutPageView({
 
       <PaymentProcessingOverlay
         open={isPaymentOverlayOpen}
-        title={paymentOverlayTitle}
-        description={paymentOverlayDescription}
+        title={paymentOverlay.title}
+        description={paymentOverlay.description}
       />
     </div>
   );

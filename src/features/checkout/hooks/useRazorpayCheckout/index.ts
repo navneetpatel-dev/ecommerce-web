@@ -23,18 +23,16 @@ type PlaceOrderResult = {
   checkoutConfigId?: string;
 };
 
-type RestoreOptions = {
-  silent?: boolean;
-};
-
 interface LaunchRazorpayPaymentHelpers {
   router: ReturnType<typeof useRouter>;
   showNotice: (notice: PaymentNotice) => void;
   clearCartCache: () => void;
+  /** Post-success cache update: marks the cart stale without refetching it. */
+  onOrderPlaced: () => void;
   restoreCancelledCheckout: (
     orderId: string,
     notice: PaymentNotice | null,
-    options?: RestoreOptions,
+    options?: { silent?: boolean },
   ) => Promise<void>;
   onPhaseChange?: (phase: CheckoutPaymentPhase) => void;
   onCheckoutComplete?: (orderId: string) => void;
@@ -51,6 +49,7 @@ export async function launchRazorpayPayment(
     router,
     showNotice,
     clearCartCache,
+    onOrderPlaced,
     restoreCancelledCheckout,
     onPhaseChange,
     onCheckoutComplete,
@@ -120,8 +119,9 @@ export async function launchRazorpayPayment(
           razorpay_signature: response.razorpay_signature,
         });
         onCheckoutComplete?.(result.orderId);
+        onPhaseChange?.("redirecting");
+        onOrderPlaced();
         navigate(router, PATHS.orderConfirmation(result.orderId));
-        clearCartCache();
       } catch {
         onPhaseChange?.("idle");
         onCheckoutComplete?.(result.orderId);

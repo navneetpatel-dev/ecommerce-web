@@ -4,6 +4,8 @@ export type CheckoutPaymentPhase =
   | "idle"
   | "placing"
   | "verifying"
+  /** Order is placed; waiting for the route change to the confirmation page. */
+  | "redirecting"
   | "restoring";
 
 export function useCheckoutPaymentPhase() {

@@ -29,6 +29,8 @@ export function CheckoutPage() {
       groupedByVendor={checkout.groupedByVendor}
       subtotal={checkout.subtotal}
       subtotalPending={checkout.subtotalPending}
+      amountsUnavailable={checkout.amountsUnavailable}
+      onRetryAmounts={checkout.retryAmounts}
       estimatedTotal={checkout.estimatedTotal}
       estimatedTotalPending={checkout.estimatedTotalPending}
       cartPricingPreview={checkout.cartPricingPreview}

@@ -27,7 +27,12 @@ export function useCheckoutPage() {
     walletAmountToUse,
     setWalletAmountToUse,
   } = useCheckoutStore();
-  const { data: cart, isLoading: cartLoading } = useCart();
+  const {
+    data: cart,
+    isLoading: cartLoading,
+    isError: cartError,
+    refetch: refetchCart,
+  } = useCart();
   const {
     handlePlaceOrder,
     quote,
@@ -81,11 +86,12 @@ export function useCheckoutPage() {
     }
   }, [paymentMethod, quote, setPaymentMethod, setWalletAmountToUse]);
 
-  const displayTotals = resolveCartDisplayTotals(cart);
+  const displayTotals = resolveCartDisplayTotals(cart, { isError: cartError });
   const subtotal = displayTotals.subtotal;
   const subtotalPending = displayTotals.subtotalPending;
   const estimatedTotal = quote?.grandTotal ?? displayTotals.total;
   const estimatedTotalPending = !quote && displayTotals.totalIsEstimated;
+  const amountsUnavailable = displayTotals.amountsUnavailable;
 
   const shippingReady = useMemo(
     () =>
@@ -154,6 +160,10 @@ export function useCheckoutPage() {
     subtotalPending,
     estimatedTotal,
     estimatedTotalPending,
+    amountsUnavailable,
+    retryAmounts: () => {
+      void refetchCart();
+    },
     hasItems: Boolean(cart?.items?.length),
     cartPricingPreview: displayTotals.pricingPreview,
     hasUnavailableItems,

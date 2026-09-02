@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { X, ShoppingBag } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
-import { PATHS } from "@/shared/constants/paths";
 import { motion, AnimatePresence } from "motion/react";
 import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import { Button } from "@/shared/components/ui/button";
@@ -11,9 +9,8 @@ import { EmptyState } from "@/shared/components/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock.hook";
 import { CartLineItem } from "./CartLineItem.component";
+import { CartDrawerSummary } from "./CartDrawerSummary.component";
 import type { CartItem } from "@/shared/api/types";
-import { formatInrAmount } from "@/shared/utils/orderFormat";
-import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -25,6 +22,9 @@ interface CartDrawerProps {
   totalIsEstimated?: boolean;
   pendingLineTotals?: boolean;
   totalsFetching?: boolean;
+  /** Cart request failed — amounts are missing for good, not mid-refresh. */
+  amountsUnavailable?: boolean;
+  onRetryAmounts?: () => void;
   pricingPreview?: {
     merchandiseSubtotal: number;
     taxTotal: number;
@@ -47,6 +47,8 @@ export function CartDrawer({
   totalIsEstimated = false,
   pendingLineTotals = false,
   totalsFetching = false,
+  amountsUnavailable = false,
+  onRetryAmounts,
   pricingPreview,
   hasUnavailableItems,
   onContinueShopping,
@@ -119,6 +121,7 @@ export function CartDrawer({
                           onUpdateQuantity={onUpdateQuantity}
                           onRemoveItem={onRemoveItem}
                           compact
+                          amountsUnavailable={amountsUnavailable}
                         />
                       ))}
                     </div>
@@ -128,66 +131,17 @@ export function CartDrawer({
             </div>
 
             {hasItems ? (
-              <div className="shrink-0 space-y-3 border-t border-line p-4">
-                {pricingPreview ? (
-                  <dl className="space-y-1.5 text-body-sm">
-                    <div className="flex justify-between gap-3">
-                      <dt className="text-ink-muted">{LABELS.subtotal}</dt>
-                      <dd className="tabular-nums text-ink">
-                        ₹{formatInrAmount(pricingPreview.merchandiseSubtotal)}
-                      </dd>
-                    </div>
-                    <OrderTaxShippingBreakdown
-                      className="space-y-1.5 text-body-sm"
-                      shippingTotal={pricingPreview.shippingTotal}
-                      shippingDisplayKey={pricingPreview.shippingDisplayKey}
-                      taxTotal={pricingPreview.taxTotal}
-                    />
-                  </dl>
-                ) : null}
-                <div className="flex justify-between items-center">
-                  <span className="text-body font-medium">
-                    {totalIsEstimated && pendingLineTotals && totalsFetching
-                      ? "Updating…"
-                      : totalIsEstimated
-                        ? "Estimated total"
-                        : LABELS.total}
-                  </span>
-                  <span className="text-[1.125rem] font-bold text-brand">
-                    {totalIsEstimated &&
-                    pendingLineTotals &&
-                    totalsFetching ? (
-                      <span className="text-body font-medium text-ink-muted">
-                        Updating…
-                      </span>
-                    ) : total != null ? (
-                      <>₹{formatInrAmount(total)}</>
-                    ) : (
-                      <span className="text-body font-medium text-ink-muted">
-                        Updating…
-                      </span>
-                    )}
-                  </span>
-                </div>
-                {hasUnavailableItems ? (
-                  <p className="rounded-sm bg-warning-subtle px-3 py-2 text-body-sm text-warning-foreground">
-                    {LABELS.removeUnavailableToCheckout}
-                  </p>
-                ) : (
-                  <Button asChild size="lg" className="w-full">
-                    <Link href={PATHS.checkout} onClick={onClose}>
-                      {LABELS.checkout}
-                    </Link>
-                  </Button>
-                )}
-                <Link
-                  href={PATHS.cart}
-                  onClick={onClose}
-                  className="block text-center text-body-sm text-brand hover:underline"
-                >
-                  {LABELS.viewFullCart}
-                </Link>
-              </div>
+              <CartDrawerSummary
+                pricingPreview={pricingPreview}
+                total={total}
+                totalIsEstimated={totalIsEstimated}
+                pendingLineTotals={pendingLineTotals}
+                totalsFetching={totalsFetching}
+                amountsUnavailable={amountsUnavailable}
+                onRetryAmounts={onRetryAmounts}
+                hasUnavailableItems={hasUnavailableItems}
+                onClose={onClose}
+              />
             ) : null}
           </motion.aside>
         </>
