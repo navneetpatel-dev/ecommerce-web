@@ -21,11 +21,12 @@ export function useProductCard(product: ProductListItem) {
         item.variantId === defaultVariantId || item.product.id === product.id,
     ) ?? null;
   const serverQty = cartItem?.quantity ?? 0;
+  const activeVariantId = cartItem?.variantId ?? defaultVariantId;
 
   const { cartQuantity, maxQuantity, setQuantity, isMutating } =
     useProductCardQuantity({
       product,
-      defaultVariantId,
+      variantId: activeVariantId,
       cartItem,
       serverQty,
     });
@@ -42,7 +43,8 @@ export function useProductCard(product: ProductListItem) {
     maxQuantity,
     prefetch: () => prefetch(product.slug || product.id),
     toggleWishlist: toggle,
-    addToCart: () => setQuantity(Math.max(1, cartQuantity + 1)),
+    addToCart: (variantId?: string) =>
+      setQuantity(Math.max(1, cartQuantity + 1), variantId),
     setQuantity,
   };
 }

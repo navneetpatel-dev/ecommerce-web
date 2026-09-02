@@ -18,14 +18,14 @@ import { useOptimisticCartPatch } from "../useOptimisticCartPatch/index";
 
 interface UseProductCardQuantityOptions {
   product: ProductListItem;
-  defaultVariantId?: string;
+  variantId?: string;
   cartItem: CartItem | null;
   serverQty: number;
 }
 
 export function useProductCardQuantity({
   product,
-  defaultVariantId,
+  variantId,
   cartItem,
   serverQty,
 }: UseProductCardQuantityOptions) {
@@ -51,24 +51,27 @@ export function useProductCardQuantity({
    * past what this line can supply, and the API would silently clamp it back.
    * Once the line exists, the server's own cap wins.
    */
-  const defaultVariantStock = product.variants?.find(
-    (variant) => variant.id === defaultVariantId,
+  const variantStock = product.variants?.find(
+    (variant) => variant.id === variantId,
   )?.stock;
   const maxQuantity =
     cartItem?.maxQuantity ??
-    cartLineQuantityMax(defaultVariantStock ?? resolveProductStock(product));
+    cartLineQuantityMax(variantStock ?? resolveProductStock(product));
   const isMutating = isAdding || isUpdating || isRemoving;
 
-  const setQuantity = (next: number) => {
-    if (!defaultVariantId) return;
+  const setQuantity = (next: number, requestedVariantId = variantId) => {
+    if (!requestedVariantId) return;
+
+    const matchingCartItem =
+      cartItem?.variantId === requestedVariantId ? cartItem : null;
 
     const clamped =
       next <= 0 ? 0 : Math.min(maxQuantity, clampCartQuantity(next));
     setOptimisticQty(clamped);
     const previous = applyOptimisticCart(
-      defaultVariantId,
+      requestedVariantId,
       clamped,
-      cartItem?.id,
+      matchingCartItem?.id,
     );
 
     const rollback = () => {
@@ -78,28 +81,32 @@ export function useProductCardQuantity({
     };
 
     if (clamped <= 0) {
-      if (cartItem && !cartItem.id.startsWith("optimistic-")) {
-        removeCartItem(cartItem.id, { onError: rollback });
-      } else if (!cartItem) {
+      if (matchingCartItem && !matchingCartItem.id.startsWith("optimistic-")) {
+        removeCartItem(matchingCartItem.id, { onError: rollback });
+      } else if (!matchingCartItem) {
         setOptimisticQty(null);
       }
       return;
     }
 
-    if (!cartItem) {
+    if (!matchingCartItem) {
       addToCart(
-        { variantId: defaultVariantId, quantity: clamped, openDrawer: false },
+        {
+          variantId: requestedVariantId,
+          quantity: clamped,
+          openDrawer: false,
+        },
         { onError: rollback },
       );
       return;
     }
 
-    if (cartItem.id.startsWith("optimistic-")) {
+    if (matchingCartItem.id.startsWith("optimistic-")) {
       return;
     }
 
     updateCartItem(
-      { itemId: cartItem.id, quantity: clamped },
+      { itemId: matchingCartItem.id, quantity: clamped },
       { onError: rollback },
     );
   };
