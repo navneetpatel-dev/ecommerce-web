@@ -14,13 +14,13 @@ export function OrderConfirmationSkeleton() {
       />
 
       <div
-        className="storefront-container relative py-10 sm:py-12 lg:py-16"
+        className="storefront-container relative py-6 md:py-8"
         aria-busy="true"
         aria-label={LABELS.orderDetailsLoading}
       >
         <div className="mx-auto max-w-6xl">
-          <div className="flex flex-col gap-6 border-b border-line pb-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-            <div className="flex flex-col items-center gap-5 sm:flex-row">
+          <div className="flex flex-col gap-6 border-b border-line pb-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+            <div className="flex flex-col items-center gap-5 sm:items-start">
               <Skeleton className="size-16 shrink-0 rounded-full" />
               <div className="w-full space-y-2.5">
                 <Skeleton className="h-3 w-20" />

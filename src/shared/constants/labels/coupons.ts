@@ -157,6 +157,7 @@ export const couponsLabels = {
   couponBulkCountInvalid: "Enter a count between 1 and 500",
   couponAppliedReview: "Coupon {code} applied (−{amount})",
   vendorTotal: "Vendor total",
+  sellerTotal: "Seller total",
   subtotal: "Subtotal",
   shipping: "Shipping",
   shippingAndTax: "Shipping & tax",

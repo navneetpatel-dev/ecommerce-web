@@ -21,8 +21,8 @@ interface OrderConfirmationHeroProps {
  */
 export function OrderConfirmationHero({ orderId }: OrderConfirmationHeroProps) {
   return (
-    <div className="flex flex-col gap-6 border-b border-line pb-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-      <div className="flex flex-col items-center gap-5 text-center sm:flex-row sm:items-center sm:text-left">
+    <div className="flex flex-col gap-6 border-b border-line pb-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+      <div className="flex flex-col items-center gap-5 text-center sm:items-start sm:text-left">
         <SuccessCheckmarkContainer />
 
         <div className="min-w-0">
