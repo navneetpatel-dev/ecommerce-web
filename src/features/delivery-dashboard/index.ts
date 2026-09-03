@@ -6,4 +6,9 @@ export { PickupTaskDetailPage } from "./pages/PickupTaskDetailPage.page";
 export { HistoryPage } from "./pages/HistoryPage.page";
 export { DeliveryProfilePage } from "./pages/ProfilePage.page";
 export { deliveryAdminApi, deliveryAgentApi } from "./api/deliveryAgent.api";
-export type { DeliveryAgent, DeliveryPickup, DeliveryShipment } from "./types";
+export type {
+  DeliveryAgent,
+  DeliveryPickup,
+  DeliveryShipment,
+  UnassignedShipment,
+} from "./types";

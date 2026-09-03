@@ -39,6 +39,7 @@ export interface Shipment {
   estimatedDeliveryDate: string | null;
   shippedAt: string | null;
   deliveredAt: string | null;
+  deliveryAgent?: { id: string; fullName: string; phone: string } | null;
 }
 
 export interface SubOrder {

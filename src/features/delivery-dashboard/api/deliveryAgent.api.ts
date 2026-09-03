@@ -5,7 +5,12 @@ import {
   type PaginationQuery,
 } from "@/shared/api/pagination";
 import { API } from "@/shared/constants/apiRoutes";
-import type { DeliveryAgent, DeliveryPickup, DeliveryShipment } from "../types";
+import type {
+  DeliveryAgent,
+  DeliveryPickup,
+  DeliveryShipment,
+  UnassignedShipment,
+} from "../types";
 
 function statusQuery(statuses?: string[]): string {
   return statuses?.length
@@ -82,6 +87,8 @@ export const deliveryAdminApi = {
     );
     return unwrapPaginatedList(response);
   },
+  unassignedShipments: () =>
+    apiClient.get<UnassignedShipment[]>(API.deliveryAgents.unassignedShipments),
   create: (body: {
     email: string;
     password: string;

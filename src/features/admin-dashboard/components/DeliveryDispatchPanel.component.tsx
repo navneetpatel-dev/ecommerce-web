@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PackageCheck, RotateCcw } from "lucide-react";
 import {
   deliveryAdminApi,
   type DeliveryAgent,
+  type UnassignedShipment,
 } from "@/features/delivery-dashboard";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -25,11 +26,24 @@ export function DeliveryDispatchPanel({
   onDispatched: () => void;
 }) {
   const [selectedAgent, setSelectedAgent] = useState("");
+  const [shipments, setShipments] = useState<UnassignedShipment[]>([]);
+  const [loadingShipments, setLoadingShipments] = useState(true);
   const [shipmentId, setShipmentId] = useState("");
   const [returnId, setReturnId] = useState("");
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const loadShipments = () => {
+    setLoadingShipments(true);
+    deliveryAdminApi
+      .unassignedShipments()
+      .then(setShipments)
+      .catch(() => setShipments([]))
+      .finally(() => setLoadingShipments(false));
+  };
+
+  useEffect(loadShipments, []);
 
   const available = agents.filter(
     (agent) => agent.status === "ACTIVE" && agent.availableForAssignment,
@@ -55,6 +69,15 @@ export function DeliveryDispatchPanel({
     }
   };
 
+  const dispatchShipment = () =>
+    run(
+      () => deliveryAdminApi.assignShipment(shipmentId, selectedAgent),
+      "Shipment assigned.",
+    ).then(() => {
+      setShipmentId("");
+      loadShipments();
+    });
+
   return (
     <section className="space-y-4 border-b border-line pb-6">
       <div>
@@ -62,8 +85,8 @@ export function DeliveryDispatchPanel({
           Manual dispatch
         </h2>
         <p className="mt-1 text-body-sm text-ink-muted">
-          Use IDs from the shipment and return records while reviewing
-          operations.
+          Pick a shipment waiting for an agent, or use the Assign agent action
+          on a return record for pickups.
         </p>
       </div>
       <Select value={selectedAgent} onValueChange={setSelectedAgent}>
@@ -82,22 +105,32 @@ export function DeliveryDispatchPanel({
       </Select>
       <div className="grid gap-3 md:grid-cols-2">
         <div className="flex gap-2">
-          <Input
-            placeholder="Shipment UUID"
-            value={shipmentId}
-            onChange={(event) => setShipmentId(event.target.value)}
-          />
+          <Select value={shipmentId} onValueChange={setShipmentId}>
+            <SelectTrigger className="min-w-0 flex-1">
+              <SelectValue
+                placeholder={
+                  loadingShipments
+                    ? "Loading shipments..."
+                    : shipments.length === 0
+                      ? "No unassigned shipments"
+                      : "Select a shipment"
+                }
+              />
+            </SelectTrigger>
+            <SelectContent>
+              {shipments.map((shipment) => (
+                <SelectItem key={shipment.id} value={shipment.id}>
+                  {shipment.trackingNumber}
+                  {shipment.vendorName ? ` · ${shipment.vendorName}` : ""}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button
             aria-label="Assign shipment"
             disabled={!selectedAgent || !shipmentId}
             loading={pending}
-            onClick={() =>
-              void run(
-                () =>
-                  deliveryAdminApi.assignShipment(shipmentId, selectedAgent),
-                "Shipment assigned.",
-              )
-            }
+            onClick={() => void dispatchShipment()}
           >
             <PackageCheck className="size-4" aria-hidden="true" />
             Assign

@@ -34,6 +34,7 @@ export function OrderCard({ order }: OrderCardProps) {
               <div className="flex items-center gap-2">
                 <VendorStrip vendor={so.vendor} size="sm" />
                 <StatusBadge status={so.status} />
+                {so.shipment && <StatusBadge status={so.shipment.status} />}
               </div>
               <Link
                 href={PATHS.order(order.id)}

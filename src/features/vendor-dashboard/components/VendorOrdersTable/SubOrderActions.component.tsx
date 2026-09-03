@@ -20,7 +20,6 @@ import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import {
   SUB_ORDER_STATUS_CONFIRMED,
   SUB_ORDER_STATUS_SHIPPED,
-  SUB_ORDER_STATUS_DELIVERED,
   SUB_ORDER_STATUS_CANCELLED,
 } from "./subOrderStatuses";
 
@@ -127,9 +126,6 @@ export function SubOrderActions(props: SubOrderActionsProps) {
             </SelectItem>
             <SelectItem value={SUB_ORDER_STATUS_SHIPPED}>
               {LABELS.orderActionShip}
-            </SelectItem>
-            <SelectItem value={SUB_ORDER_STATUS_DELIVERED}>
-              {LABELS.orderActionDeliver}
             </SelectItem>
             <SelectItem value={SUB_ORDER_STATUS_CANCELLED}>
               {LABELS.cancel}

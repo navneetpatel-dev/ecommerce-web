@@ -37,6 +37,16 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
       <p className="mt-3 font-mono text-body text-ink">
         {formatInr(row.subOrder.subtotal)}
       </p>
+      {row.subOrder.shipment && (
+        <div className="mt-2 flex items-center gap-2">
+          <StatusBadge status={row.subOrder.shipment.status} />
+          {row.subOrder.shipment.deliveryAgent && (
+            <p className="text-body-sm text-ink-muted">
+              {row.subOrder.shipment.deliveryAgent.fullName}
+            </p>
+          )}
+        </div>
+      )}
       <div className="mt-4 border-t border-line/80 pt-3">
         {renderActions(row.subOrder.id, Boolean(row.subOrder.taxInvoiceNumber))}
       </div>

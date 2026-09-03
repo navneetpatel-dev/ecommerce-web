@@ -18,16 +18,21 @@ export function useDeliveryProfile() {
     queryFn: deliveryAgentApi.profile,
   });
 }
+/** Admin can assign a new task while this is open — poll so it shows up without a manual refresh. */
+const TASK_LIST_REFETCH_INTERVAL_MS = 30_000;
+
 export function useMyDeliveries(statuses?: string[]) {
   return useQuery({
     queryKey: deliveryKeys.deliveries(statuses),
     queryFn: () => deliveryAgentApi.myDeliveries(statuses),
+    refetchInterval: TASK_LIST_REFETCH_INTERVAL_MS,
   });
 }
 export function useMyPickups(statuses?: string[]) {
   return useQuery({
     queryKey: deliveryKeys.pickups(statuses),
     queryFn: () => deliveryAgentApi.myPickups(statuses),
+    refetchInterval: TASK_LIST_REFETCH_INTERVAL_MS,
   });
 }
 function useDeliveryMutation<T>(mutationFn: (value: T) => Promise<unknown>) {

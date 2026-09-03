@@ -36,6 +36,16 @@ export type DeliveryShipment = Shipment & {
   };
 };
 
+/** A shipment with no agent yet — feeds the admin dispatch picker. */
+export type UnassignedShipment = {
+  id: string;
+  trackingNumber: string;
+  status: string;
+  createdAt: string;
+  orderId: string | null;
+  vendorName: string | null;
+};
+
 export type DeliveryPickup = ReturnRequest & {
   type: "REFUND" | "EXCHANGE";
   deliveryAgentId: string | null;

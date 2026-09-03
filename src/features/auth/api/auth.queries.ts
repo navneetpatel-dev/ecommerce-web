@@ -127,21 +127,14 @@ export function useResetPassword() {
   });
 }
 
+/**
+ * Click-only verification (see the auth service) — the person verifying is
+ * essentially never logged in in this browser (registration no longer
+ * grants a session), so there's no local session state to refresh here.
+ */
 export function useVerifyEmail() {
   return useMutation({
     mutationFn: (token: string) => authApi.verifyEmail(token),
-    onSuccess: async () => {
-      const token = useAuthStore.getState().accessToken;
-      const currentUser = useAuthStore.getState().currentUser;
-      if (!token || !currentUser) return;
-      try {
-        const user = await authApi.me();
-        useAuthStore.getState().setSession(token, user);
-        persistSession(token, user);
-      } catch {
-        // Non-fatal: next authenticated load still refreshes emailVerified.
-      }
-    },
   });
 }
 

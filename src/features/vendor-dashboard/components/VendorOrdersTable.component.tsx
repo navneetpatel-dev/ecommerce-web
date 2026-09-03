@@ -76,6 +76,22 @@ export function VendorOrdersTable(props: VendorOrdersTableProps) {
       <TableCell className={TABLE_DATA_CELL_CLASS}>
         <StatusBadge status={row.subOrder.status} />
       </TableCell>
+      <TableCell className={TABLE_DATA_CELL_CLASS}>
+        {row.subOrder.shipment ? (
+          <div className="space-y-1">
+            <StatusBadge status={row.subOrder.shipment.status} />
+            {row.subOrder.shipment.deliveryAgent && (
+              <p className="text-body-sm text-ink-muted">
+                {row.subOrder.shipment.deliveryAgent.fullName}
+              </p>
+            )}
+          </div>
+        ) : (
+          <span className="text-body-sm text-ink-muted">
+            {LABELS.notShippedYet}
+          </span>
+        )}
+      </TableCell>
       <TableCell className={TABLE_ACTIONS_CELL_CLASS}>
         {renderActions(row.subOrder.id, Boolean(row.subOrder.taxInvoiceNumber))}
       </TableCell>
@@ -125,6 +141,9 @@ export function VendorOrdersTable(props: VendorOrdersTableProps) {
                   </TableHead>
                   <TableHead className={TABLE_DATA_CELL_CLASS}>
                     {LABELS.status}
+                  </TableHead>
+                  <TableHead className={TABLE_DATA_CELL_CLASS}>
+                    {LABELS.delivery}
                   </TableHead>
                   <TableHead className={TABLE_ACTIONS_HEAD_CLASS}>
                     {LABELS.actions}

@@ -1,9 +1,11 @@
+import Link from "next/link";
 import { AuthFormCard } from "./AuthFormCard.component";
 import { Button } from "@/shared/components/ui/button";
 import { OtpInput } from "@/shared/components/OtpInput.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { ResendVerificationByEmail } from "./ResendVerificationByEmail.component";
 import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths";
 
 interface OtpCardProps {
   digits: string[];
@@ -48,6 +50,14 @@ export function OtpCard({
       <AuthFormCard
         title={LABELS.verifyOtpTitle}
         description={LABELS.verifyOtpHint}
+        footer={
+          <Link
+            href={PATHS.login}
+            className="block text-center text-body font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
+          >
+            {LABELS.backToLogin}
+          </Link>
+        }
       >
         <div className="space-y-5">
           <p className="text-body-sm text-danger">{error}</p>

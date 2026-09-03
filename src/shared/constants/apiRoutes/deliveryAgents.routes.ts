@@ -1,6 +1,7 @@
 export const deliveryAgentsRoutes = {
   list: "/api/delivery-agents",
   create: "/api/delivery-agents",
+  unassignedShipments: "/api/delivery-agents/unassigned-shipments",
   update: (id: string) => `/api/delivery-agents/${id}`,
   tasks: (id: string) => `/api/delivery-agents/${id}/tasks`,
   assignShipment: (shipmentId: string) =>

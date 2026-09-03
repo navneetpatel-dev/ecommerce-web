@@ -3,7 +3,7 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { Timeline } from "@/shared/components/Timeline.component";
 import { buildSubOrderTimeline } from "../../utils/timeline";
-import { ORDER_STATUS } from "@/shared/constants/statuses";
+import { ORDER_STATUS, SHIPMENT_STATUS } from "@/shared/constants/statuses";
 import type { ReturnReasonCode } from "../../hooks/useSubOrderReturn.hook";
 import { VENDOR_GROUP_CARD } from "@/shared/components/vendorGroupStyles";
 import { SubOrderCardHeader } from "./SubOrderCardHeader.component";
@@ -91,6 +91,17 @@ export function SubOrderCard({
           <div className="mt-2">
             <StatusBadge status={subOrder.shipment.status} />
           </div>
+          {subOrder.shipment.deliveryAgent && (
+            <p className="mt-2 text-body-sm text-ink-muted">
+              Delivery agent: {subOrder.shipment.deliveryAgent.fullName}
+            </p>
+          )}
+          {subOrder.shipment.status === SHIPMENT_STATUS.OUT_FOR_DELIVERY && (
+            <p className="mt-2 rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-ink">
+              Your order is out for delivery. Share the code from your email
+              with the delivery agent to receive it.
+            </p>
+          )}
         </div>
       )}
 

@@ -99,6 +99,8 @@ export const tables2Labels = {
   couldNotUpdateOrderStatus: "Could not update order status.",
   orderManagement: "Order Management",
   vendorColumn: "Vendor",
+  delivery: "Delivery",
+  notShippedYet: "Not shipped yet",
   noOrdersFound: "No orders found",
   errorRetryHint: "Something went wrong while loading this section.",
   retry: "Try again",

@@ -1,4 +1,4 @@
-import type { VendorInfo } from "@/shared/api/types";
+import type { Shipment, VendorInfo } from "@/shared/api/types";
 
 /** Customer order containing one or more vendor sub-orders. */
 export interface VendorOrder {
@@ -12,6 +12,7 @@ export interface VendorSubOrder {
   subtotal: number;
   status: string;
   taxInvoiceNumber?: string | null;
+  shipment?: Shipment | null;
 }
 
 /** A flattened order/sub-order pair for table rows. */
