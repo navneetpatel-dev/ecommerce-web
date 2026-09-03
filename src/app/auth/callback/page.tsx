@@ -1,5 +1,10 @@
-import { OAuthCallbackPage } from "@/features/auth/pages/OAuthCallbackPage.page";
+import { Suspense } from "react";
+import { OAuthCallbackPage } from "@/features/auth";
 
 export default function Page() {
-  return <OAuthCallbackPage />;
+  return (
+    <Suspense fallback={null}>
+      <OAuthCallbackPage />
+    </Suspense>
+  );
 }

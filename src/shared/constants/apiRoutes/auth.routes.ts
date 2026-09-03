@@ -1,6 +1,8 @@
 /** Frontend auth API path builders — must stay aligned with backend mounts under `/api`. */
 export const authRoutes = {
   login: "/api/auth/login",
+  requestOtp: "/api/auth/otp/request",
+  verifyOtp: "/api/auth/otp/verify",
   register: "/api/auth/register",
   me: "/api/auth/me",
   refresh: "/api/auth/refresh",

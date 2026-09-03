@@ -16,6 +16,7 @@ export const navigationLabels = {
   helpCenter: "Help Center",
   becomeSeller: "Become a Seller",
   vendorDashboard: "Vendor Dashboard",
+  deliveryDashboard: "Delivery Dashboard",
 
   // Admin nav
 } as const;

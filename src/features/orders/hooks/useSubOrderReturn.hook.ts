@@ -30,6 +30,7 @@ export function useSubOrderReturn() {
     RETURN_REASON.DAMAGED,
   );
   const [reason, setReason] = useState("");
+  const [type, setType] = useState<"REFUND" | "EXCHANGE">("REFUND");
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [draftUploadId, setDraftUploadId] = useState(() => crypto.randomUUID());
   const createReturn = useCreateReturn();
@@ -38,6 +39,7 @@ export function useSubOrderReturn() {
     setTarget(item);
     setReason("");
     setReasonCode(RETURN_REASON.DAMAGED);
+    setType("REFUND");
     setPhotoUrls([]);
     setDraftUploadId(crypto.randomUUID());
     createReturn.reset();
@@ -51,6 +53,7 @@ export function useSubOrderReturn() {
       orderItemId: target.id,
       reasonCode,
       reason: reason.trim(),
+      type,
       photoUrls,
     });
     setTarget(null);
@@ -61,6 +64,8 @@ export function useSubOrderReturn() {
     reasonCode,
     setReasonCode,
     reason,
+    type,
+    setType,
     setReason,
     photoUrls,
     setPhotoUrls,

@@ -19,6 +19,7 @@ export function SubOrderCardContainer({
       returnTarget={returnDialog.target}
       reasonCode={returnDialog.reasonCode}
       reason={returnDialog.reason}
+      returnType={returnDialog.type}
       photoUrls={returnDialog.photoUrls}
       draftUploadId={returnDialog.draftUploadId}
       isPending={returnDialog.isPending}
@@ -28,6 +29,7 @@ export function SubOrderCardContainer({
       onCloseReturn={returnDialog.closeDialog}
       onReasonCodeChange={returnDialog.setReasonCode}
       onReasonChange={returnDialog.setReason}
+      onReturnTypeChange={returnDialog.setType}
       onPhotoUrlsChange={returnDialog.setPhotoUrls}
       onSubmitReturn={returnDialog.submitReturn}
     />

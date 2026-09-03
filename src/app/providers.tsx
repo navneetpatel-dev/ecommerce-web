@@ -11,6 +11,7 @@ import { RoleSurfaceGuard } from "@/shared/components/RoleSurfaceGuard.component
 import { ThemePaletteProvider } from "@/shared/context/ThemePalette.context";
 import { ErrorReportingProvider } from "@/shared/providers/ErrorReportingProvider";
 import { createQueryPersister } from "@/shared/api/queryPersister";
+import { ServiceWorkerRegistration } from "@/shared/components/ServiceWorkerRegistration.component";
 
 function AuthBootstrap() {
   useAuthBootstrap();
@@ -52,6 +53,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       >
         <ThemePaletteProvider>
           <ErrorReportingProvider />
+          <ServiceWorkerRegistration />
           <AuthBootstrap />
           <RouteScrollResetContainer />
           <BrowseUrlTrackerContainer />

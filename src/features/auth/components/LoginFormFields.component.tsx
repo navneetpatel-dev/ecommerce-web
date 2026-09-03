@@ -1,4 +1,8 @@
-import type { UseFormRegister, FieldErrors } from "react-hook-form";
+import type {
+  UseFormRegister,
+  FieldErrors,
+  UseFormTrigger,
+} from "react-hook-form";
 import type { LoginInput } from "../schemas/auth.schema";
 import Link from "next/link";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -10,9 +14,14 @@ import { PATHS } from "@/shared/constants/paths";
 interface LoginFormFieldsProps {
   register: UseFormRegister<LoginInput>;
   errors: FieldErrors<LoginInput>;
+  trigger?: UseFormTrigger<LoginInput>;
 }
 
-export function LoginFormFields({ register, errors }: LoginFormFieldsProps) {
+export function LoginFormFields({
+  register,
+  errors,
+  trigger,
+}: LoginFormFieldsProps) {
   return (
     <div className="space-y-4">
       <FormFieldFrame
@@ -26,7 +35,13 @@ export function LoginFormFields({ register, errors }: LoginFormFieldsProps) {
           type="email"
           autoComplete="email"
           error={Boolean(errors.email)}
-          {...register("email")}
+          {...register("email", {
+            onChange: () => {
+              if (errors.email && trigger) {
+                void trigger("email");
+              }
+            },
+          })}
         />
       </FormFieldFrame>
 
@@ -35,21 +50,27 @@ export function LoginFormFields({ register, errors }: LoginFormFieldsProps) {
         htmlFor="password"
         required
         error={errors.password?.message}
-      >
-        <PasswordInputContainer
-          id="password"
-          autoComplete="current-password"
-          error={!!errors.password}
-          {...register("password")}
-        />
-        <div className="flex justify-end pt-1">
+        footerAction={
           <Link
             href={PATHS.forgotPassword}
             className="text-body-sm font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
           >
             {LABELS.forgotPassword}
           </Link>
-        </div>
+        }
+      >
+        <PasswordInputContainer
+          id="password"
+          autoComplete="current-password"
+          error={!!errors.password}
+          {...register("password", {
+            onChange: () => {
+              if (errors.password && trigger) {
+                void trigger("password");
+              }
+            },
+          })}
+        />
       </FormFieldFrame>
     </div>
   );

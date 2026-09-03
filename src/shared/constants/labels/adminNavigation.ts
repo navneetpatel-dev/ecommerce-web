@@ -2,6 +2,7 @@
 export const adminNavigationLabels = {
   vendors: "Vendors",
   products: "Products",
+  inventory: "Inventory",
   categories: "Categories",
   orders: "Orders",
   returnsRefunds: "Returns / Refunds",
@@ -57,6 +58,8 @@ export const adminNavigationLabels = {
   percentValue: "{value}%",
   audit: "Audit",
   settings: "Settings",
+  notifications: "Notifications",
+  deliveryAgents: "Delivery agents",
 
   // Vendor / account nav
 } as const;

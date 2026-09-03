@@ -6,6 +6,7 @@ import { PERMISSIONS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { commissionsApi, payoutsApi } from "../api/finance.api";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
+import { AdminMarkPayoutPaidAction } from "../components/AdminMarkPayoutPaidAction.component";
 import type { AdminDataRow } from "./useAdminDataList.hook";
 import type { AdminListPageModel } from "../types/adminListPage.types";
 
@@ -33,16 +34,43 @@ export function useAdminFinancePage(): AdminFinancePageModel {
   );
 
   const payoutActions = useCallback(
-    (_row: AdminDataRow, reload: () => void): ReactNode => (
-      <AdminConfirmAction
-        label={LABELS.processPayouts}
-        dialogVariant="warning"
-        tone="success"
-        title={LABELS.confirmProcessPayoutsTitle}
-        description={LABELS.confirmProcessPayoutsBody}
-        onConfirm={() => payoutsApi.process().then(reload)}
-      />
-    ),
+    (row: AdminDataRow, reload: () => void): ReactNode => {
+      const status = String(row.status);
+      if (status === "PENDING") {
+        return (
+          <div className="flex flex-wrap justify-end gap-2">
+            <AdminMarkPayoutPaidAction
+              payoutId={String(row.id)}
+              onDone={reload}
+            />
+            <AdminConfirmAction
+              label="Mark failed"
+              dialogVariant="danger"
+              tone="danger"
+              title="Mark payout as failed?"
+              description="Record why the external transfer could not be completed."
+              requireReason
+              onConfirm={(reason) =>
+                payoutsApi.markFailed(String(row.id), reason ?? "").then(reload)
+              }
+            />
+          </div>
+        );
+      }
+      if (status === "FAILED" && row.preparedAt) {
+        return (
+          <AdminConfirmAction
+            label="Retry payout"
+            dialogVariant="warning"
+            tone="success"
+            title="Retry this payout?"
+            description="Return this payout to pending after arranging another transfer attempt."
+            onConfirm={() => payoutsApi.retry(String(row.id)).then(reload)}
+          />
+        );
+      }
+      return null;
+    },
     [],
   );
 
@@ -57,6 +85,10 @@ export function useAdminFinancePage(): AdminFinancePageModel {
         "commissionRate",
         "commissionAmount",
         "status",
+        "paymentMethod",
+        "paymentReferenceNumber",
+        "paidAt",
+        "failureReason",
         "createdAt",
       ],
     },

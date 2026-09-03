@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import {
+  type AppSurface,
   deniedAccessRedirect,
   isPathAllowedForRole,
   surfaceForPath,
@@ -12,7 +13,7 @@ import {
 interface UseRoleSurfaceGateResult {
   /** Whether children may render on this pass. */
   shouldRender: boolean;
-  surface: "admin" | "vendor" | "auth" | "storefront" | null;
+  surface: AppSurface | null;
 }
 
 /**
@@ -29,7 +30,6 @@ export function useRoleSurfaceGate(): UseRoleSurfaceGateResult {
   const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
   const accessToken = useAuthStore((s) => s.accessToken);
   const role = useAuthStore((s) => s.currentUser?.role);
-  const [pass, setPass] = useState(false);
 
   const authenticated = Boolean(accessToken && role);
   const surface = useMemo(() => surfaceForPath(pathname), [pathname]);
@@ -39,28 +39,21 @@ export function useRoleSurfaceGate(): UseRoleSurfaceGateResult {
   );
 
   useEffect(() => {
-    if (!authBootstrapped) {
-      setPass(false);
-      return;
-    }
-
-    if (allowed) {
-      setPass(true);
-      return;
-    }
-
-    setPass(false);
+    if (!authBootstrapped || allowed) return;
     router.replace(deniedAccessRedirect(pathname, role, authenticated));
   }, [allowed, authBootstrapped, authenticated, pathname, role, router]);
 
   // Avoid flashing the wrong role's UI while deciding / redirecting.
   if (!authBootstrapped) {
     return {
-      shouldRender: !(surface === "admin" || surface === "vendor"),
+      shouldRender: !(
+        surface === "admin" ||
+        surface === "vendor" ||
+        surface === "delivery"
+      ),
       surface,
     };
   }
   if (!allowed && surface !== "auth") return { shouldRender: false, surface };
-  if (!pass && surface !== "auth") return { shouldRender: false, surface };
   return { shouldRender: true, surface };
 }

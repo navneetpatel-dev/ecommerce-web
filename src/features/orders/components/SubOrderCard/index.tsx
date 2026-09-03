@@ -16,6 +16,7 @@ interface SubOrderCardProps {
   returnTarget: OrderItem | null;
   reasonCode: ReturnReasonCode;
   reason: string;
+  returnType: "REFUND" | "EXCHANGE";
   photoUrls: string[];
   draftUploadId: string;
   isPending: boolean;
@@ -25,6 +26,7 @@ interface SubOrderCardProps {
   onCloseReturn: () => void;
   onReasonCodeChange: (code: ReturnReasonCode) => void;
   onReasonChange: (value: string) => void;
+  onReturnTypeChange: (value: "REFUND" | "EXCHANGE") => void;
   onPhotoUrlsChange: (urls: string[]) => void;
   onSubmitReturn: () => void;
 }
@@ -34,6 +36,7 @@ export function SubOrderCard({
   returnTarget,
   reasonCode,
   reason,
+  returnType,
   photoUrls,
   draftUploadId,
   isPending,
@@ -43,6 +46,7 @@ export function SubOrderCard({
   onCloseReturn,
   onReasonCodeChange,
   onReasonChange,
+  onReturnTypeChange,
   onPhotoUrlsChange,
   onSubmitReturn,
 }: SubOrderCardProps) {
@@ -94,6 +98,7 @@ export function SubOrderCard({
         returnTarget={returnTarget}
         reasonCode={reasonCode}
         reason={reason}
+        returnType={returnType}
         photoUrls={photoUrls}
         draftUploadId={draftUploadId}
         isPending={isPending}
@@ -102,6 +107,7 @@ export function SubOrderCard({
         onCloseReturn={onCloseReturn}
         onReasonCodeChange={onReasonCodeChange}
         onReasonChange={onReasonChange}
+        onReturnTypeChange={onReturnTypeChange}
         onPhotoUrlsChange={onPhotoUrlsChange}
         onSubmitReturn={onSubmitReturn}
       />

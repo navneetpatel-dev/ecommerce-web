@@ -1,3 +1,5 @@
+import { API } from "@/shared/constants/apiRoutes";
+
 /** Minimal shape of a web-vitals metric entry (mirrors the `web-vitals` lib). */
 interface VitalMetric {
   name: string;
@@ -9,6 +11,8 @@ interface VitalMetric {
 /**
  * Sends a Web Vitals metric to the reporting endpoint. Uses sendBeacon when
  * available so reports survive page unload; falls back to keepalive fetch.
+ * The endpoint is unauthenticated and persisted server-side by the backend
+ * (not this app) — same-origin `/api/*` is proxied there by next.config.mjs.
  */
 export function sendBeacon(metric: VitalMetric): void {
   const connection = (
@@ -21,16 +25,18 @@ export function sendBeacon(metric: VitalMetric): void {
       metric.name === "CLS" ? metric.value * 1000 : metric.value,
     ),
     rating: metric.rating,
-    id: metric.id,
     path: window.location.pathname,
     effectiveType: connection?.effectiveType ?? null,
   });
 
   if (typeof navigator.sendBeacon === "function") {
-    navigator.sendBeacon("/api/vitals", payload);
+    // A raw string defaults to a `text/plain` beacon, which the backend's
+    // JSON body parser won't parse — a Blob lets us set the real content type.
+    const blob = new Blob([payload], { type: "application/json" });
+    navigator.sendBeacon(API.webVitals.record, blob);
     return;
   }
-  void fetch("/api/vitals", {
+  void fetch(API.webVitals.record, {
     method: "POST",
     body: payload,
     keepalive: true,

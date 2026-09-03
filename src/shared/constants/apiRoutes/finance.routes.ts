@@ -2,8 +2,7 @@
 export const walletRoutes = {
   balance: "/api/wallet/balance",
   transactions: "/api/wallet/transactions",
-  statement: (query = "") =>
-    `/api/wallet/statement${query ? `?${query}` : ""}`,
+  statement: (query = "") => `/api/wallet/statement${query ? `?${query}` : ""}`,
   recharge: "/api/wallet/recharge",
   rechargePreview: (amountInr: number) =>
     `/api/wallet/recharge/preview?amountInr=${encodeURIComponent(String(amountInr))}`,
@@ -19,7 +18,8 @@ export const walletAdminRoutes = {
 export const commissionsRoutes = {
   list: "/api/commissions",
   invoices: "/api/commissions/invoices",
-  invoicePdf: (invoiceId: string) => `/api/commissions/invoices/${invoiceId}/pdf`,
+  invoicePdf: (invoiceId: string) =>
+    `/api/commissions/invoices/${invoiceId}/pdf`,
   vendor: (vendorId: string) => `/api/commissions/vendor/${vendorId}`,
 } as const;
 
@@ -27,6 +27,9 @@ export const payoutsRoutes = {
   list: "/api/payouts",
   process: "/api/payouts/process",
   vendor: (vendorId: string) => `/api/payouts/vendor/${vendorId}`,
+  markPaid: (id: string) => `/api/payouts/${id}/mark-paid`,
+  markFailed: (id: string) => `/api/payouts/${id}/mark-failed`,
+  retry: (id: string) => `/api/payouts/${id}/retry`,
 } as const;
 
 export const couponsRoutes = {

@@ -48,6 +48,13 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
               <p className="mt-2 font-mono text-[1rem] text-ink">
                 {formatInr(payout.amount)}
               </p>
+              <p className="mt-2 text-body-sm text-ink-muted">
+                {payout.status === "PAID" && payout.paymentReferenceNumber
+                  ? `${payout.paymentMethod ?? "Transfer"} · ${payout.paymentReferenceNumber}`
+                  : payout.status === "FAILED" && payout.failureReason
+                    ? payout.failureReason
+                    : "—"}
+              </p>
             </li>
           ))
         )}
@@ -66,12 +73,15 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
               <TableHead className={TABLE_DATA_CELL_CLASS}>
                 {LABELS.status}
               </TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>
+                Payment details
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {items.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={3} className="text-center text-ink-muted">
+                <TableCell colSpan={4} className="text-center text-ink-muted">
                   {LABELS.noPayoutsYet}
                 </TableCell>
               </TableRow>
@@ -87,6 +97,18 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
                   </TableCell>
                   <TableCell className={TABLE_DATA_CELL_CLASS}>
                     <StatusBadge status={payout.status} />
+                  </TableCell>
+                  <TableCell
+                    className={cn(
+                      TABLE_DATA_CELL_CLASS,
+                      "text-body-sm text-ink-muted",
+                    )}
+                  >
+                    {payout.status === "PAID" && payout.paymentReferenceNumber
+                      ? `${payout.paymentMethod ?? "Transfer"} · ${payout.paymentReferenceNumber}`
+                      : payout.status === "FAILED" && payout.failureReason
+                        ? payout.failureReason
+                        : "—"}
                   </TableCell>
                 </TableRow>
               ))

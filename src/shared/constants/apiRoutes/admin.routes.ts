@@ -45,6 +45,8 @@ export const homepageRoutes = {
 export const notificationsRoutes = {
   logs: "/api/notifications/logs",
   test: "/api/notifications/test",
+  pushPublicKey: "/api/notifications/push/public-key",
+  pushSubscribe: "/api/notifications/push/subscribe",
 } as const;
 
 export const inventoryRoutes = {

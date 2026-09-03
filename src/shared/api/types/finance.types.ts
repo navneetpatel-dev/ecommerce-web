@@ -27,12 +27,22 @@ export interface CommissionLedgerEntry {
   createdAt: string;
 }
 
+export type PayoutPaymentMethod =
+  "NEFT" | "IMPS" | "UPI" | "RTGS" | "CHEQUE" | "CASH" | "OTHER";
+
 export interface PayoutEntry {
   id: string;
   vendorId: string;
+  vendorName?: string | null;
   amount: number;
   periodStart: string;
   periodEnd: string;
   status: PayoutStatus;
   paidAt: string | null;
+  paymentMethod: PayoutPaymentMethod | null;
+  paymentReferenceNumber: string | null;
+  proofOfPaymentUrl: string | null;
+  remarks: string | null;
+  failureReason: string | null;
+  preparedAt: string | null;
 }

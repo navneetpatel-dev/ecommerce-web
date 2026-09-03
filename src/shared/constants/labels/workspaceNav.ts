@@ -7,5 +7,11 @@ export const workspaceNavLabels = {
   addresses: "Addresses",
   privacy: "Privacy",
 
+  // Delivery agent navigation
+  today: "Today",
+  deliveries: "Deliveries",
+  pickups: "Pickups",
+  history: "History",
+
   // Return reasons
 } as const;

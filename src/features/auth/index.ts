@@ -18,6 +18,7 @@ export { ForgotPasswordPage } from "./pages/ForgotPasswordPage.page";
 export { OtpPage } from "./pages/OtpPage.page";
 export { ResetPasswordPage } from "./pages/ResetPasswordPage.page";
 export { VerifyEmailPage } from "./pages/VerifyEmailPage.page";
+export { OAuthCallbackPage } from "./pages/OAuthCallbackPage.page";
 export { AuthPageSkeleton } from "./components/AuthPageSkeleton.component";
 export { ChangePasswordSection } from "./components/ChangePasswordSection.component";
 export { useProfilePage } from "./hooks/useProfilePage.hook";

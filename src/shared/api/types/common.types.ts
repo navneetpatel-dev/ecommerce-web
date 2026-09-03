@@ -11,6 +11,7 @@ export interface CurrentUser {
   status?: string | null;
   permissions?: string[];
   vendorId: string | null;
+  deliveryAgentId?: string | null;
   emailVerified: boolean;
   emailMarketingConsent?: boolean;
   avatarUrl?: string | null;

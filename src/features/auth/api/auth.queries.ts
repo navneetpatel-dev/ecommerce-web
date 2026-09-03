@@ -8,14 +8,17 @@ import {
   defaultRouteForRole,
 } from "@/shared/stores/auth.store";
 import { authApi } from "./auth.api";
-import { cartApi } from "@/features/cart";
-import { cartKeys } from "@/features/cart";
-import { clearClientGuestSessionCookie } from "@/features/cart";
+import {
+  cartApi,
+  cartKeys,
+  clearClientGuestSessionCookie,
+} from "@/features/cart";
 import { navigate, navigateReplace } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";
 import { STORAGE_KEYS } from "@/shared/constants/storage";
 import type { LoginInput, RegisterInput } from "../schemas/auth.schema";
 import type { CurrentUser, RoleName } from "@/shared/api/types";
+import { removeCurrentPushSubscription } from "@/shared/hooks/usePushSubscription.hook";
 
 function persistSession(accessToken: string, user: CurrentUser) {
   if (typeof window === "undefined") return;
@@ -101,7 +104,11 @@ export function useLogout() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: () => authApi.logout(),
+    mutationFn: async () => {
+      // Logout must still complete when browser push cleanup is unavailable.
+      await removeCurrentPushSubscription().catch(() => undefined);
+      return authApi.logout();
+    },
     onSuccess: () => {
       clearSession();
       clearPersistedSession();

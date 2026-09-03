@@ -10,3 +10,7 @@ export const searchRoutes = {
 export const newsletterRoutes = {
   subscribe: "/api/newsletter/subscribe",
 } as const;
+
+export const webVitalsRoutes = {
+  record: "/api/web-vitals",
+} as const;

@@ -33,8 +33,13 @@ import {
   settingsRoutes,
   uploadsRoutes,
 } from "./admin.routes";
-import { newsletterRoutes, searchRoutes } from "./discovery.routes";
+import {
+  newsletterRoutes,
+  searchRoutes,
+  webVitalsRoutes,
+} from "./discovery.routes";
 import { bugReportsRoutes, supportTicketsRoutes } from "./support.routes";
+import { deliveryAgentsRoutes } from "./deliveryAgents.routes";
 
 export const API = {
   auth: authRoutes,
@@ -68,6 +73,8 @@ export const API = {
   uploads: uploadsRoutes,
   search: searchRoutes,
   newsletter: newsletterRoutes,
+  webVitals: webVitalsRoutes,
   supportTickets: supportTicketsRoutes,
   bugReports: bugReportsRoutes,
+  deliveryAgents: deliveryAgentsRoutes,
 } as const;

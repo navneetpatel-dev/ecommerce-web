@@ -1,23 +1,41 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { navigate } from "@/shared/utils/navigate";
+import { useRouter, useSearchParams } from "next/navigation";
+import { navigateReplace } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";
-import {
-  OTP_RESEND_DELAY_MS,
-  OTP_SENT_PULSE_MS,
-} from "@/shared/constants/timing";
+import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { useOtpLogin, useRequestOtp } from "../api/otp.queries";
 
 export function useOtpInput(length = 6) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email")?.trim() ?? "";
+  const redirect = searchParams.get("redirect");
+  const requestOtp = useRequestOtp();
+  const otpLogin = useOtpLogin();
   const [digits, setDigits] = useState(Array.from({ length }, () => ""));
   const [secondsLeft, setSecondsLeft] = useState(30);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const initialRequestStarted = useRef(false);
   const completed = useMemo(() => digits.every(Boolean), [digits]);
+
+  useEffect(() => {
+    if (!email) {
+      navigateReplace(router, PATHS.login);
+      return;
+    }
+    if (initialRequestStarted.current) return;
+    initialRequestStarted.current = true;
+    requestOtp.mutate(email, {
+      onError: (requestError) =>
+        setError(getApiErrorMessage(requestError, LABELS.otpRequestFailed)),
+    });
+  }, [email, requestOtp, router]);
 
   useEffect(() => {
     if (secondsLeft <= 0) return;
@@ -81,24 +99,27 @@ export function useOtpInput(length = 6) {
     if (!completed) return;
     setIsVerifying(true);
     setError(null);
-    // Auth OTP verify endpoint is not exposed yet — avoid a silent dead button.
-    await new Promise((resolve) =>
-      window.setTimeout(resolve, OTP_RESEND_DELAY_MS),
-    );
-    setIsVerifying(false);
-    setError(
-      "OTP verification is not available yet. Please sign in with your password.",
-    );
-    window.setTimeout(() => navigate(router, PATHS.login), OTP_SENT_PULSE_MS);
+    try {
+      await otpLogin.mutateAsync({ email, code: digits.join(""), redirect });
+    } catch (verifyError) {
+      setError(getApiErrorMessage(verifyError, LABELS.otpVerifyFailed));
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
-  const resend = () => {
+  const resend = async () => {
     if (secondsLeft > 0) return;
-    setDigits(Array.from({ length }, () => ""));
-    setSecondsLeft(30);
-    setInfo("A new code has been requested. Check your email.");
     setError(null);
-    inputRefs.current[0]?.focus();
+    try {
+      await requestOtp.mutateAsync(email);
+      setDigits(Array.from({ length }, () => ""));
+      setSecondsLeft(30);
+      setInfo(LABELS.otpSent);
+      inputRefs.current[0]?.focus();
+    } catch (requestError) {
+      setError(getApiErrorMessage(requestError, LABELS.otpRequestFailed));
+    }
   };
 
   const timerLabel =

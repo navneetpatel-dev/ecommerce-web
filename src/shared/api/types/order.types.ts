@@ -119,6 +119,12 @@ export interface ReturnRequest {
   reason: string;
   reasonCode: ReturnReason;
   status: ReturnStatus;
+  type?: "REFUND" | "EXCHANGE";
+  deliveryAgentId?: string | null;
+  pickupOtpVerifiedAt?: string | null;
+  pickupFailureReason?: string | null;
+  replacementDeliveredAt?: string | null;
+  replacementProofUrl?: string | null;
   photoUrls?: string[];
   refundMethod?: RefundMethod | null;
   refundStatus?: RefundStatus;

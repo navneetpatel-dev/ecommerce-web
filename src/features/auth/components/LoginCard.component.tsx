@@ -1,5 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { LoginFormFields } from "./LoginFormFields.component";
 import { AuthFormCard } from "./AuthFormCard.component";
 import { FormError } from "@/shared/components/FormError.component";
@@ -8,6 +9,7 @@ import { OAuthButton } from "./OAuthButton.component";
 import { Button } from "@/shared/components/ui/button";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
+import { navigate } from "@/shared/utils/navigate";
 import type { LoginInput } from "../schemas/auth.schema";
 
 interface LoginCardProps {
@@ -25,11 +27,38 @@ export function LoginCard({
   isPending,
   oauthRedirect,
 }: LoginCardProps) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
+    trigger,
+    getValues,
+    setFocus,
+    setError,
+    clearErrors,
     formState: { errors },
   } = form;
+
+  const handleUseEmailCode = async () => {
+    clearErrors("password");
+    const rawEmail = getValues("email")?.trim() ?? "";
+    if (!rawEmail) {
+      setError("email", {
+        type: "manual",
+        message: LABELS.emailRequired,
+      });
+      setFocus("email");
+      return;
+    }
+
+    const isValid = await trigger("email");
+    if (!isValid) {
+      setFocus("email");
+      return;
+    }
+
+    navigate(router, PATHS.otpForEmail(rawEmail, oauthRedirect));
+  };
 
   return (
     <AuthFormCard
@@ -48,10 +77,23 @@ export function LoginCard({
       }
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        <LoginFormFields register={register} errors={errors} />
+        <LoginFormFields
+          register={register}
+          errors={errors}
+          trigger={trigger}
+        />
         <FormError error={error} fallback={LABELS.loginFailed} />
         <Button type="submit" className="w-full" size="lg" loading={isPending}>
           {LABELS.logIn}
+        </Button>
+        <Button
+          type="button"
+          className="w-full"
+          variant="outline"
+          size="lg"
+          onClick={handleUseEmailCode}
+        >
+          {LABELS.useEmailCode}
         </Button>
       </form>
 

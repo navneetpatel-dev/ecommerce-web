@@ -61,6 +61,7 @@ export const ROLES = {
   ADMIN_CATALOG_MANAGER: "ADMIN_CATALOG_MANAGER",
   VENDOR_OWNER: "VENDOR_OWNER",
   VENDOR_STAFF: "VENDOR_STAFF",
+  DELIVERY_AGENT: "DELIVERY_AGENT",
   CUSTOMER: "CUSTOMER",
 } as const;
 
@@ -73,6 +74,7 @@ export const ROLE_LABELS: Record<RoleName, string> = {
   [ROLES.ADMIN_CATALOG_MANAGER]: "Catalog Manager",
   [ROLES.VENDOR_OWNER]: "Vendor Owner",
   [ROLES.VENDOR_STAFF]: "Vendor Staff",
+  [ROLES.DELIVERY_AGENT]: "Delivery Agent",
   [ROLES.CUSTOMER]: "Customer",
 };
 
@@ -83,3 +85,4 @@ export const ADMIN_ROLES = [
 ] as const;
 
 export const VENDOR_ROLES = [ROLES.VENDOR_OWNER, ROLES.VENDOR_STAFF] as const;
+export const DELIVERY_ROLES = [ROLES.DELIVERY_AGENT] as const;

@@ -31,6 +31,7 @@ interface SubOrderReturnDialogProps {
   returnTarget: OrderItem | null;
   reasonCode: ReturnReasonCode;
   reason: string;
+  returnType: "REFUND" | "EXCHANGE";
   photoUrls: string[];
   draftUploadId: string;
   isPending: boolean;
@@ -39,6 +40,7 @@ interface SubOrderReturnDialogProps {
   onCloseReturn: () => void;
   onReasonCodeChange: (code: ReturnReasonCode) => void;
   onReasonChange: (value: string) => void;
+  onReturnTypeChange: (value: "REFUND" | "EXCHANGE") => void;
   onPhotoUrlsChange: (urls: string[]) => void;
   onSubmitReturn: () => void;
 }
@@ -47,6 +49,7 @@ export function SubOrderReturnDialog({
   returnTarget,
   reasonCode,
   reason,
+  returnType,
   photoUrls,
   draftUploadId,
   isPending,
@@ -55,6 +58,7 @@ export function SubOrderReturnDialog({
   onCloseReturn,
   onReasonCodeChange,
   onReasonChange,
+  onReturnTypeChange,
   onPhotoUrlsChange,
   onSubmitReturn,
 }: SubOrderReturnDialogProps) {
@@ -80,6 +84,22 @@ export function SubOrderReturnDialog({
             hint={LABELS.returnRequestFormSectionHint}
             columns={1}
           >
+            <FormFieldFrame label="Resolution" htmlFor="return-type">
+              <Select
+                value={returnType}
+                onValueChange={(value) =>
+                  onReturnTypeChange(value as "REFUND" | "EXCHANGE")
+                }
+              >
+                <SelectTrigger id="return-type">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="REFUND">Refund</SelectItem>
+                  <SelectItem value="EXCHANGE">Exchange</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormFieldFrame>
             <FormFieldFrame
               label={LABELS.returnReasonLabel}
               htmlFor="return-reason-code"

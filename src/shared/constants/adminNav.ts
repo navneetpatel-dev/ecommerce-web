@@ -1,18 +1,35 @@
-import { PERMISSIONS, type PermissionKey } from '@/shared/constants/permissions'
-import { PATHS } from '@/shared/constants/paths'
-import { LABELS } from '@/shared/constants/labels'
+import {
+  PERMISSIONS,
+  type PermissionKey,
+} from "@/shared/constants/permissions";
+import { PATHS } from "@/shared/constants/paths";
+import { LABELS } from "@/shared/constants/labels";
 
 /** Admin sidebar labels + permission gates — single source for nav copy and route auth. */
 export const ADMIN_NAV = [
   {
     href: PATHS.admin.vendors,
     label: LABELS.vendors,
-    permissions: [PERMISSIONS.VENDOR_MANAGE, PERMISSIONS.VENDOR_APPROVE] as PermissionKey[],
+    permissions: [
+      PERMISSIONS.VENDOR_MANAGE,
+      PERMISSIONS.VENDOR_APPROVE,
+    ] as PermissionKey[],
   },
   {
     href: PATHS.admin.products,
     label: LABELS.products,
-    permissions: [PERMISSIONS.PRODUCT_MANAGE, PERMISSIONS.PRODUCT_APPROVE] as PermissionKey[],
+    permissions: [
+      PERMISSIONS.PRODUCT_MANAGE,
+      PERMISSIONS.PRODUCT_APPROVE,
+    ] as PermissionKey[],
+  },
+  {
+    href: PATHS.admin.inventory,
+    label: LABELS.inventory,
+    permissions: [
+      PERMISSIONS.PRODUCT_MANAGE,
+      PERMISSIONS.PRODUCT_UPDATE,
+    ] as PermissionKey[],
   },
   {
     href: PATHS.admin.categories,
@@ -28,6 +45,11 @@ export const ADMIN_NAV = [
     href: PATHS.admin.orders,
     label: LABELS.orders,
     permissions: [PERMISSIONS.ORDER_MANAGE] as PermissionKey[],
+  },
+  {
+    href: PATHS.admin.deliveryAgents,
+    label: LABELS.deliveryAgents,
+    permissions: [PERMISSIONS.DELIVERY_AGENT_MANAGE] as PermissionKey[],
   },
   {
     href: PATHS.admin.returns,
@@ -68,7 +90,10 @@ export const ADMIN_NAV = [
   {
     href: PATHS.admin.finance,
     label: LABELS.financePayouts,
-    permissions: [PERMISSIONS.PAYOUT_MANAGE, PERMISSIONS.COMMISSION_VIEW] as PermissionKey[],
+    permissions: [
+      PERMISSIONS.PAYOUT_MANAGE,
+      PERMISSIONS.COMMISSION_VIEW,
+    ] as PermissionKey[],
   },
   {
     href: PATHS.admin.reports,
@@ -103,10 +128,21 @@ export const ADMIN_NAV = [
     label: LABELS.settings,
     permissions: [PERMISSIONS.SETTINGS_MANAGE] as PermissionKey[],
   },
-] as const
+  {
+    href: PATHS.admin.notifications,
+    label: LABELS.notifications,
+    permissions: [PERMISSIONS.SETTINGS_MANAGE] as PermissionKey[],
+  },
+] as const;
 
-export function adminPermissionsForPath(pathname: string): PermissionKey | PermissionKey[] {
-  const match = ADMIN_NAV.find((item) => pathname === item.href || pathname.startsWith(`${item.href}/`))
-  if (!match) return PERMISSIONS.ANALYTICS_VIEW
-  return match.permissions.length === 1 ? match.permissions[0]! : [...match.permissions]
+export function adminPermissionsForPath(
+  pathname: string,
+): PermissionKey | PermissionKey[] {
+  const match = ADMIN_NAV.find(
+    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
+  );
+  if (!match) return PERMISSIONS.ANALYTICS_VIEW;
+  return match.permissions.length === 1
+    ? match.permissions[0]!
+    : [...match.permissions];
 }

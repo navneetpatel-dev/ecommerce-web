@@ -19,6 +19,9 @@ import {
   Images,
   LifeBuoy,
   Bug,
+  Boxes,
+  Bell,
+  Bike,
 } from "lucide-react";
 import { usePermissions } from "./usePermissions.hook";
 import { ADMIN_NAV } from "@/shared/constants/adminNav";
@@ -27,9 +30,11 @@ import { PATHS } from "@/shared/constants/paths";
 const ADMIN_NAV_ICONS = {
   [PATHS.admin.vendors]: Users,
   [PATHS.admin.products]: Package,
+  [PATHS.admin.inventory]: Boxes,
   [PATHS.admin.categories]: FolderTree,
   [PATHS.admin.banners]: Images,
   [PATHS.admin.orders]: ShoppingBag,
+  [PATHS.admin.deliveryAgents]: Bike,
   [PATHS.admin.returns]: RotateCcw,
   [PATHS.admin.supportTickets]: LifeBuoy,
   [PATHS.admin.bugReports]: Bug,
@@ -43,6 +48,7 @@ const ADMIN_NAV_ICONS = {
   [PATHS.admin.analytics]: BarChart3,
   [PATHS.admin.audit]: ClipboardList,
   [PATHS.admin.settings]: Settings,
+  [PATHS.admin.notifications]: Bell,
 } as const;
 
 export function useAdminLayout() {

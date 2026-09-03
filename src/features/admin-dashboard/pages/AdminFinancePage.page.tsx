@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { AdminDataPage } from "./AdminDataPage.page";
 import { AdminSectionTabs } from "../components/AdminSectionTabs.component";
 import { useAdminFinancePage } from "../hooks/useAdminFinancePage";
@@ -9,9 +10,12 @@ import { AdminWalletRechargePanel } from "../components/AdminWalletRechargePanel
 import { AdminWalletAdjustPanel } from "../components/AdminWalletAdjustPanel.component";
 import { AdminCashbackWriteOffPanel } from "../components/AdminCashbackWriteOffPanel.component";
 import { LABELS } from "@/shared/constants/labels";
+import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
+import { payoutsApi } from "../api/finance.api";
 
 export function AdminFinancePage() {
   const page = useAdminFinancePage();
+  const [payoutRevision, setPayoutRevision] = useState(0);
 
   return (
     <AdminSectionTabs
@@ -49,14 +53,31 @@ export function AdminFinancePage() {
           value: "payouts",
           label: LABELS.payouts,
           content: (
-            <AdminDataPage
-              title={page.payouts.title}
-              permission={page.payouts.permission}
-              load={page.payouts.load}
-              actions={page.payouts.actions}
-              columnKeys={page.payouts.columnKeys}
-              hideTitle
-            />
+            <div className="space-y-4">
+              <div className="flex justify-end">
+                <AdminConfirmAction
+                  label={LABELS.processPayouts}
+                  dialogVariant="warning"
+                  tone="success"
+                  title={LABELS.confirmProcessPayoutsTitle}
+                  description={LABELS.confirmProcessPayoutsBody}
+                  onConfirm={() =>
+                    payoutsApi
+                      .process()
+                      .then(() => setPayoutRevision((value) => value + 1))
+                  }
+                />
+              </div>
+              <AdminDataPage
+                key={payoutRevision}
+                title={page.payouts.title}
+                permission={page.payouts.permission}
+                load={page.payouts.load}
+                actions={page.payouts.actions}
+                columnKeys={page.payouts.columnKeys}
+                hideTitle
+              />
+            </div>
           ),
         },
         {
