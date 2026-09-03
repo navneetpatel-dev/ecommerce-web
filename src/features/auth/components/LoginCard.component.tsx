@@ -6,6 +6,7 @@ import { AuthFormCard } from "./AuthFormCard.component";
 import { FormError } from "@/shared/components/FormError.component";
 import { OAuthDivider } from "./OAuthDivider.component";
 import { OAuthButton } from "./OAuthButton.component";
+import { ResendVerificationByEmail } from "./ResendVerificationByEmail.component";
 import { Button } from "@/shared/components/ui/button";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
@@ -18,6 +19,8 @@ interface LoginCardProps {
   error: string | null;
   isPending: boolean;
   oauthRedirect?: string | null;
+  needsVerification?: boolean;
+  unverifiedEmail?: string | null;
 }
 
 export function LoginCard({
@@ -26,6 +29,8 @@ export function LoginCard({
   error,
   isPending,
   oauthRedirect,
+  needsVerification,
+  unverifiedEmail,
 }: LoginCardProps) {
   const router = useRouter();
   const {
@@ -81,8 +86,14 @@ export function LoginCard({
           register={register}
           errors={errors}
           trigger={trigger}
+          formError={needsVerification ? null : error}
         />
-        <FormError error={error} fallback={LABELS.loginFailed} />
+        {needsVerification && unverifiedEmail && (
+          <>
+            <FormError error={error} fallback={LABELS.loginFailed} />
+            <ResendVerificationByEmail email={unverifiedEmail} />
+          </>
+        )}
         <Button type="submit" className="w-full" size="lg" loading={isPending}>
           {LABELS.logIn}
         </Button>

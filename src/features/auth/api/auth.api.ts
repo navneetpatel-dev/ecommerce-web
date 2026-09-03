@@ -12,6 +12,11 @@ interface AuthResponse {
   user: CurrentUser;
 }
 
+interface RegisterResponse {
+  user: { id: string; email: string; name: string };
+  requiresVerification: true;
+}
+
 export const authApi = {
   login: (input: LoginInput) =>
     apiClient.post<AuthResponse>(API.auth.login, input),
@@ -20,7 +25,7 @@ export const authApi = {
   verifyOtp: (email: string, code: string) =>
     apiClient.post<AuthResponse>(API.auth.verifyOtp, { email, code }),
   register: (input: RegisterInput) =>
-    apiClient.post<AuthResponse>(API.auth.register, input),
+    apiClient.post<RegisterResponse>(API.auth.register, input),
   me: () => apiClient.get<CurrentUser>(API.auth.me),
   refresh: () => apiClient.post<{ accessToken: string }>(API.auth.refresh),
   logout: () => apiClient.post<{ message: string }>(API.auth.logout),
@@ -36,6 +41,11 @@ export const authApi = {
   resendVerification: () =>
     apiClient.post<{ sent: boolean; alreadyVerified: boolean }>(
       API.auth.resendVerification,
+    ),
+  resendVerificationByEmail: (email: string) =>
+    apiClient.post<{ sent: boolean; alreadyVerified: boolean }>(
+      API.auth.resendVerificationByEmail,
+      { email },
     ),
   changePassword: (input: ChangePasswordInput) =>
     apiClient.post<{ message: string }>(API.auth.changePassword, input),

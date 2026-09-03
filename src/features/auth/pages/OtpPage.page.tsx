@@ -17,6 +17,8 @@ export function OtpPage() {
         isVerifying={otp.isVerifying}
         timerLabel={otp.timerLabel}
         canResend={otp.canResend}
+        needsVerification={otp.needsVerification}
+        email={otp.email}
         onSetInputRef={otp.setInputRef}
         onUpdateDigit={otp.updateDigit}
         onKeyDown={otp.handleKeyDown}

@@ -68,12 +68,19 @@ export const authLabels = {
   verifyEmailMissingToken:
     "This link is missing a verification token. Use the latest email we sent.",
   verifyingEmail: "Verifying your email…",
+  verifyEmailTimeout:
+    "This is taking longer than expected. Check your connection and try again.",
+  tryAgain: "Try again",
   continueToAccount: "Continue to account",
   resendVerificationEmail: "Resend verification email",
   verificationEmailSent: "A new verification email is on its way.",
   emailAlreadyVerified: "This email is already verified.",
   couldNotSendVerificationEmail:
     "Could not send a verification email. Try again shortly.",
+  registrationSuccessTitle: "Check your email",
+  registrationSuccessHint: "We've sent a verification link to:",
+  registrationSuccessNextSteps:
+    "Click the link to verify your account, then log in.",
 
   // Footer sections
 } as const;

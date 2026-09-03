@@ -2,6 +2,7 @@ import { AuthFormCard } from "./AuthFormCard.component";
 import { Button } from "@/shared/components/ui/button";
 import { OtpInput } from "@/shared/components/OtpInput.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { ResendVerificationByEmail } from "./ResendVerificationByEmail.component";
 import { LABELS } from "@/shared/constants/labels";
 
 interface OtpCardProps {
@@ -12,6 +13,8 @@ interface OtpCardProps {
   isVerifying: boolean;
   timerLabel: string;
   canResend: boolean;
+  needsVerification: boolean;
+  email: string;
   onSetInputRef: (index: number, node: HTMLInputElement | null) => void;
   onUpdateDigit: (index: number, value: string) => void;
   onKeyDown: (
@@ -31,6 +34,8 @@ export function OtpCard({
   isVerifying,
   timerLabel,
   canResend,
+  needsVerification,
+  email,
   onSetInputRef,
   onUpdateDigit,
   onKeyDown,
@@ -38,6 +43,20 @@ export function OtpCard({
   onVerify,
   onResend,
 }: OtpCardProps) {
+  if (needsVerification) {
+    return (
+      <AuthFormCard
+        title={LABELS.verifyOtpTitle}
+        description={LABELS.verifyOtpHint}
+      >
+        <div className="space-y-5">
+          <p className="text-body-sm text-danger">{error}</p>
+          <ResendVerificationByEmail email={email} />
+        </div>
+      </AuthFormCard>
+    );
+  }
+
   return (
     <AuthFormCard
       title={LABELS.verifyOtpTitle}

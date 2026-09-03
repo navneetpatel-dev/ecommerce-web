@@ -2,11 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import {
-  useAuthStore,
-  postAuthPath,
-  defaultRouteForRole,
-} from "@/shared/stores/auth.store";
+import { useAuthStore, postAuthPath } from "@/shared/stores/auth.store";
 import { authApi } from "./auth.api";
 import {
   cartApi,
@@ -77,24 +73,14 @@ export function useLogin() {
   });
 }
 
+/**
+ * Registration no longer grants a session — the account can't log in until
+ * the email link is clicked, so there's nothing to persist or navigate to
+ * here. The card shows a "check your email" confirmation off `data` instead.
+ */
 export function useRegister() {
-  const setSession = useAuthStore((s) => s.setSession);
-  const queryClient = useQueryClient();
-  const router = useRouter();
-
   return useMutation({
     mutationFn: (input: RegisterInput) => authApi.register(input),
-    onSuccess: async (data) => {
-      setSession(data.accessToken, data.user);
-      persistSession(data.accessToken, data.user);
-      const cart = await absorbGuestCartAfterAuth(data.accessToken);
-      if (cart) {
-        queryClient.setQueriesData({ queryKey: cartKeys.all }, cart);
-      } else {
-        void queryClient.invalidateQueries({ queryKey: cartKeys.all });
-      }
-      navigateReplace(router, defaultRouteForRole(data.user.role as RoleName));
-    },
   });
 }
 
@@ -162,6 +148,13 @@ export function useVerifyEmail() {
 export function useResendVerification() {
   return useMutation({
     mutationFn: () => authApi.resendVerification(),
+  });
+}
+
+/** Unauthenticated counterpart — for someone blocked at login by an unverified email. */
+export function useResendVerificationByEmail() {
+  return useMutation({
+    mutationFn: (email: string) => authApi.resendVerificationByEmail(email),
   });
 }
 

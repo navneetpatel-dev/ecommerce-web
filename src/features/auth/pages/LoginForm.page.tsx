@@ -15,6 +15,8 @@ export function LoginForm() {
         error={login.error}
         isPending={login.isPending}
         oauthRedirect={login.redirect}
+        needsVerification={login.needsVerification}
+        unverifiedEmail={login.unverifiedEmail}
       />
     </AuthPageShell>
   );

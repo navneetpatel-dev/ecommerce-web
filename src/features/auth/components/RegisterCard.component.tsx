@@ -23,6 +23,8 @@ interface RegisterCardProps {
   onSubmit: (data: RegisterInput) => void;
   error: string | null;
   isPending: boolean;
+  isSuccess: boolean;
+  registeredEmail: string | null;
 }
 
 export function RegisterCard({
@@ -30,12 +32,38 @@ export function RegisterCard({
   onSubmit,
   error,
   isPending,
+  isSuccess,
+  registeredEmail,
 }: RegisterCardProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = form;
+
+  if (isSuccess) {
+    return (
+      <AuthFormCard
+        title={LABELS.registrationSuccessTitle}
+        description={LABELS.registrationSuccessNextSteps}
+        footer={
+          <Link
+            href={PATHS.login}
+            className="block text-center text-body font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
+          >
+            {LABELS.backToLogin}
+          </Link>
+        }
+      >
+        <div className="rounded-md border border-success/25 bg-success-subtle/60 px-4 py-3 text-body text-success">
+          <p>{LABELS.registrationSuccessHint}</p>
+          {registeredEmail && (
+            <p className="mt-1 font-medium">{registeredEmail}</p>
+          )}
+        </div>
+      </AuthFormCard>
+    );
+  }
 
   return (
     <AuthFormCard

@@ -14,6 +14,8 @@ export function RegisterForm() {
         onSubmit={register.onSubmit}
         error={register.error}
         isPending={register.isPending}
+        isSuccess={register.isSuccess}
+        registeredEmail={register.registeredEmail}
       />
     </AuthPageShell>
   );

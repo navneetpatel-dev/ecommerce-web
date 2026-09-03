@@ -10,9 +10,9 @@ export function VerifyEmailPage() {
   return (
     <AuthPageShell>
       <VerifyEmailCard
-        token={page.token}
-        isSuccess={page.isSuccess}
+        status={page.status}
         error={page.error}
+        onRetry={page.retry}
       />
     </AuthPageShell>
   );

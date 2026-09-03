@@ -11,6 +11,7 @@ export const authRoutes = {
   resetPassword: "/api/auth/reset-password",
   verifyEmail: "/api/auth/verify-email",
   resendVerification: "/api/auth/resend-verification",
+  resendVerificationByEmail: "/api/auth/verify-email/resend",
   changePassword: "/api/auth/change-password",
   sessions: "/api/auth/sessions",
   session: (family: string) => `/api/auth/sessions/${family}`,

@@ -23,6 +23,8 @@ export function useRegisterForm() {
     form,
     error: formLevelError,
     isPending: register.isPending,
+    isSuccess: register.isSuccess,
+    registeredEmail: register.data?.user.email ?? null,
     onSubmit: (data: RegisterInput) => {
       form.clearErrors();
       register.mutate(data);

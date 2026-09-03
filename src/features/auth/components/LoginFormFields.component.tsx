@@ -15,12 +15,17 @@ interface LoginFormFieldsProps {
   register: UseFormRegister<LoginInput>;
   errors: FieldErrors<LoginInput>;
   trigger?: UseFormTrigger<LoginInput>;
+  /** Form-level error (e.g. "Invalid credentials") — shown beside "Forgot
+   * password?" rather than in its own block, since field validation already
+   * takes priority in that same slot when present. */
+  formError?: string | null;
 }
 
 export function LoginFormFields({
   register,
   errors,
   trigger,
+  formError,
 }: LoginFormFieldsProps) {
   return (
     <div className="space-y-4">
@@ -49,7 +54,7 @@ export function LoginFormFields({
         label={LABELS.password}
         htmlFor="password"
         required
-        error={errors.password?.message}
+        error={errors.password?.message ?? formError ?? undefined}
         footerAction={
           <Link
             href={PATHS.forgotPassword}

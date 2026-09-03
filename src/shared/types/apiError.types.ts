@@ -22,3 +22,8 @@ export function toApiError(error: unknown): ApiError {
   if (error instanceof ApiError) return error;
   return new ApiError(ERROR_CODES.REQUEST_FAILED, String(error));
 }
+
+/** True when a caught value is an ApiError carrying this specific code. */
+export function isApiErrorCode(error: unknown, code: string): boolean {
+  return error instanceof ApiError && error.code === code;
+}
