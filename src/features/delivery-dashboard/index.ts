@@ -1,6 +1,7 @@
 export { OfflineSyncBanner } from "./components/OfflineSyncBanner.component";
 export { BankDetailsCard } from "./components/BankDetailsCard.component";
 export { EarningsPayoutsCard } from "./components/EarningsPayoutsCard.component";
+export { DeliveryAgentDocumentsCard } from "./components/DeliveryAgentDocumentsCard.component";
 export { TodayPage } from "./pages/TodayPage.page";
 export { DeliveriesPage } from "./pages/DeliveriesPage.page";
 export { DeliveryTaskDetailPage } from "./pages/DeliveryTaskDetailPage.page";
@@ -25,6 +26,8 @@ export {
   useMyPayouts,
   useMyEarningsLedger,
   useUpdateBankDetails,
+  useMyDocuments,
+  useSubmitDocument,
   useUpdateDeliveryStatus,
   useConfirmDelivery,
   useRequestDeliveryCode,
@@ -42,6 +45,9 @@ export type {
   CashDeposit,
   CashDepositStatus,
   DeliveryAgent,
+  DeliveryAgentDocument,
+  DeliveryAgentDocumentType,
+  DeliveryAgentPerformance,
   DeliveryPickup,
   DeliveryShipment,
   ShiftSummary,

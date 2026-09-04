@@ -1,8 +1,10 @@
 "use client";
 
-import { IndianRupee } from "lucide-react";
+import { useState } from "react";
+import { Download, IndianRupee } from "lucide-react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { deliveryAgentApi } from "../api/deliveryAgent.api";
 import {
   useMyEarningsLedger,
   useMyPayouts,
@@ -11,8 +13,18 @@ import {
 export function EarningsPayoutsCard() {
   const earnings = useMyEarningsLedger();
   const payouts = useMyPayouts();
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const pending = (earnings.data ?? []).filter((e) => e.status === "PENDING");
   const pendingTotal = pending.reduce((sum, e) => sum + Number(e.amount), 0);
+
+  const download = async (payoutId: string) => {
+    setDownloadingId(payoutId);
+    try {
+      await deliveryAgentApi.downloadPayoutStatement(payoutId);
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   return (
     <section className="border border-line bg-surface shadow-elevation-1">
@@ -44,6 +56,7 @@ export function EarningsPayoutsCard() {
                   <th className="py-2 pr-3 font-medium">Amount</th>
                   <th className="py-2 pr-3 font-medium">Status</th>
                   <th className="py-2 pr-3 font-medium">Reference</th>
+                  <th className="py-2 pr-3 font-medium">Statement</th>
                 </tr>
               </thead>
               <tbody>
@@ -63,6 +76,17 @@ export function EarningsPayoutsCard() {
                       {payout.status === "FAILED"
                         ? payout.failureReason
                         : (payout.paymentReferenceNumber ?? "—")}
+                    </td>
+                    <td className="py-2 pr-3">
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1 font-medium text-brand hover:underline disabled:opacity-50"
+                        disabled={downloadingId === payout.id}
+                        onClick={() => void download(payout.id)}
+                      >
+                        <Download className="size-3.5" aria-hidden="true" />
+                        PDF
+                      </button>
                     </td>
                   </tr>
                 ))}

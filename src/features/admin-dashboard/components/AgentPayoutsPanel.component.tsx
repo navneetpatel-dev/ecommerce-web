@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PlayCircle, RotateCw, Wallet, XCircle } from "lucide-react";
+import { Download, PlayCircle, RotateCw, Wallet, XCircle } from "lucide-react";
 import {
   deliveryAdminApi,
   type AgentPayout,
@@ -18,8 +18,18 @@ export function AgentPayoutsPanel() {
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const download = async (payoutId: string) => {
+    setDownloadingId(payoutId);
+    try {
+      await deliveryAdminApi.downloadPayoutStatement(payoutId);
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   const load = () => {
     setLoading(true);
@@ -115,6 +125,7 @@ export function AgentPayoutsPanel() {
                 <th className="py-2 pr-3 font-medium">Amount</th>
                 <th className="py-2 pr-3 font-medium">Status</th>
                 <th className="py-2 pr-3 font-medium">Reference / reason</th>
+                <th className="py-2 pr-3 font-medium">Statement</th>
                 <th className="py-2 pr-3 font-medium">Actions</th>
               </tr>
             </thead>
@@ -136,6 +147,17 @@ export function AgentPayoutsPanel() {
                     {payout.status === "FAILED"
                       ? payout.failureReason
                       : (payout.paymentReferenceNumber ?? "—")}
+                  </td>
+                  <td className="py-2 pr-3">
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-1 font-medium text-brand hover:underline disabled:opacity-50"
+                      disabled={downloadingId === payout.id}
+                      onClick={() => void download(payout.id)}
+                    >
+                      <Download className="size-3.5" aria-hidden="true" />
+                      PDF
+                    </button>
                   </td>
                   <td className="py-2 pr-3">
                     {payout.status === "PENDING" ? (

@@ -46,6 +46,13 @@ export interface Shipment {
   codAmount?: number | null;
   codCollected?: boolean;
   preferredRedeliverySlot?: string | null;
+  attempts?: Array<{
+    id: string;
+    attemptNumber: number;
+    note: string;
+    photoUrl: string | null;
+    attemptedAt: string;
+  }>;
 }
 
 export interface SubOrder {
@@ -130,6 +137,7 @@ export interface ReturnRequest {
   deliveryAgentId?: string | null;
   pickupOtpVerifiedAt?: string | null;
   pickupFailureReason?: string | null;
+  preferredRepickupSlot?: string | null;
   replacementDeliveredAt?: string | null;
   replacementProofUrl?: string | null;
   photoUrls?: string[];

@@ -178,6 +178,13 @@ export const reports2Labels = {
     "Flat estimate shown on the agent's shift summary per completed delivery or pickup.",
   addressFormSection: "Address details",
   addressFormSectionHint: "Delivery location used at checkout.",
+  addressLocationRequired: "Location access is required to save an address.",
+  addressLocationFetching: "Fetching your location...",
+  addressLocationDenied:
+    "Location access was denied. Enable it in your browser settings and retry.",
+  addressLocationUnsupported: "Your browser doesn't support location access.",
+  addressLocationError: "Could not fetch your location. Please retry.",
+  addressLocationRetry: "Retry",
   addressDeliveryInstructionsOptional: "Delivery instructions (optional)",
   addressDeliveryInstructionsPlaceholder:
     "E.g. Leave at front desk, gate code, call on arrival",

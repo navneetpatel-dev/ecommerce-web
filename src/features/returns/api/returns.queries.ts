@@ -34,3 +34,17 @@ export function useCreateReturn() {
     },
   });
 }
+
+export function useReschedulePickup() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { id: string; slot: string }) =>
+      returnsApi.reschedulePickup(input.id, input.slot),
+    onSuccess: (_data, variables) => {
+      void queryClient.invalidateQueries({ queryKey: returnsKeys.mine });
+      void queryClient.invalidateQueries({
+        queryKey: returnsKeys.detail(variables.id),
+      });
+    },
+  });
+}

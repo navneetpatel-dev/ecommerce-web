@@ -5,6 +5,7 @@ import {
   type PaginationQuery,
 } from "@/shared/api/pagination";
 import { API } from "@/shared/constants/apiRoutes";
+import { downloadReportFile } from "@/features/reports";
 import type {
   AgentEarning,
   AgentPayout,
@@ -12,6 +13,9 @@ import type {
   BankDetails,
   CashDeposit,
   DeliveryAgent,
+  DeliveryAgentDocument,
+  DeliveryAgentDocumentType,
+  DeliveryAgentPerformance,
   DeliveryPickup,
   DeliveryShipment,
   ShiftSummary,
@@ -97,6 +101,11 @@ export const deliveryAgentApi = {
       },
     ),
   myPayouts: () => apiClient.get<AgentPayout[]>(API.deliveryAgents.mePayouts),
+  downloadPayoutStatement: (payoutId: string) =>
+    downloadReportFile(
+      API.deliveryAgents.mePayoutStatement(payoutId),
+      `payout-statement-${payoutId.slice(0, 8)}.pdf`,
+    ),
   myEarningsLedger: () =>
     apiClient.get<AgentEarning[]>(API.deliveryAgents.meEarnings),
   updateBankDetails: (bankDetails: BankDetails) =>
@@ -107,10 +116,15 @@ export const deliveryAgentApi = {
     ),
   updateDeliveryStatus: async (
     shipmentId: string,
-    body: { status: string; note?: string },
+    body: { status: string; note?: string; photoUrl?: string },
   ) => {
     if (isOffline()) {
-      await enqueueStatusUpdate({ kind: "delivery", shipmentId, ...body });
+      await enqueueStatusUpdate({
+        kind: "delivery",
+        shipmentId,
+        status: body.status,
+        note: body.note,
+      });
       return null;
     }
     return apiClient.patch<DeliveryShipment>(
@@ -156,6 +170,13 @@ export const deliveryAgentApi = {
     apiClient.patch<DeliveryAgent>(API.deliveryAgents.meAvailability, {
       availableForAssignment,
     }),
+  submitDocument: (type: DeliveryAgentDocumentType, url: string) =>
+    apiClient.post<DeliveryAgentDocument>(API.deliveryAgents.meDocuments, {
+      type,
+      url,
+    }),
+  myDocuments: () =>
+    apiClient.get<DeliveryAgentDocument[]>(API.deliveryAgents.meDocuments),
 };
 
 export const deliveryAdminApi = {
@@ -223,6 +244,31 @@ export const deliveryAdminApi = {
     ),
   retryPayout: (payoutId: string) =>
     apiClient.patch<AgentPayout>(API.deliveryAgents.retryPayout(payoutId), {}),
+  downloadPayoutStatement: (payoutId: string) =>
+    downloadReportFile(
+      API.deliveryAgents.payoutStatement(payoutId),
+      `payout-statement-${payoutId.slice(0, 8)}.pdf`,
+    ),
+  documents: () =>
+    apiClient.get<DeliveryAgentDocument[]>(API.deliveryAgents.documents),
+  performanceReport: (from?: string, to?: string) => {
+    const query = new URLSearchParams();
+    if (from) query.set("from", from);
+    if (to) query.set("to", to);
+    const qs = query.toString();
+    return apiClient.get<DeliveryAgentPerformance[]>(
+      `${API.deliveryAgents.performanceReport}${qs ? `?${qs}` : ""}`,
+    );
+  },
+  reviewDocument: (
+    documentId: string,
+    action: "APPROVE" | "REJECT",
+    rejectionReason?: string,
+  ) =>
+    apiClient.patch<DeliveryAgentDocument>(
+      API.deliveryAgents.reviewDocument(documentId),
+      { action, rejectionReason },
+    ),
   create: (body: {
     email: string;
     password: string;

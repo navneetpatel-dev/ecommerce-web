@@ -46,6 +46,7 @@ export function DeliveryTaskDetailPage() {
   const shipment = query.data;
   const [otpCode, setOtpCode] = useState("");
   const [failureNote, setFailureNote] = useState("");
+  const [failurePhoto, setFailurePhoto] = useState<File | null>(null);
   const [proof, setProof] = useState<File | null>(null);
   const [codCollected, setCodCollected] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,7 +67,24 @@ export function DeliveryTaskDetailPage() {
   const runStatus = async (status: string, note?: string) => {
     setError(null);
     try {
-      await update.mutateAsync({ shipmentId, status, note });
+      let photoUrl: string | undefined;
+      if (status === "FAILED" && failurePhoto) {
+        const result = await upload.mutateAsync({
+          entityType: UPLOAD_ENTITY.SHIPMENTS,
+          entityId: shipmentId,
+          purpose: UPLOAD_PURPOSE.PROOF,
+          filename: failurePhoto.name,
+          contentType: failurePhoto.type,
+          contentLength: failurePhoto.size,
+          file: failurePhoto,
+        });
+        photoUrl = result.url;
+      }
+      await update.mutateAsync({ shipmentId, status, note, photoUrl });
+      if (status === "FAILED") {
+        setFailureNote("");
+        setFailurePhoto(null);
+      }
     } catch (err) {
       setError(getApiErrorMessage(err, "Could not update delivery status."));
     }
@@ -216,12 +234,29 @@ export function DeliveryTaskDetailPage() {
             </div>
           ) : null}
 
-          {shipment.failureReason ? (
-            <div className="border border-line bg-surface p-4 text-body-sm text-warning shadow-elevation-1">
-              <span className="font-medium">
-                Attempt {shipment.failedAttemptCount} note:
-              </span>{" "}
-              {shipment.failureReason}
+          {shipment.attempts?.length ? (
+            <div className="space-y-2">
+              {shipment.attempts.map((attempt) => (
+                <div
+                  key={attempt.id}
+                  className="border border-line bg-surface p-4 text-body-sm text-warning shadow-elevation-1"
+                >
+                  <span className="font-medium">
+                    Attempt {attempt.attemptNumber}:
+                  </span>{" "}
+                  {attempt.note}
+                  {attempt.photoUrl ? (
+                    <a
+                      href={attempt.photoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="ml-2 font-medium text-brand hover:underline"
+                    >
+                      View photo
+                    </a>
+                  ) : null}
+                </div>
+              ))}
             </div>
           ) : null}
 
@@ -232,6 +267,8 @@ export function DeliveryTaskDetailPage() {
               onSubmit={() => void runStatus("FAILED", failureNote.trim())}
               placeholder="Required reason for failed attempt (min 3 chars)"
               submitLabel="Mark attempt failed"
+              photo={failurePhoto}
+              onPhotoChange={setFailurePhoto}
             />
           ) : null}
         </div>

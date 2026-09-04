@@ -4,6 +4,7 @@ export const deliveryAgentsRoutes = {
   unassignedShipments: "/api/delivery-agents/unassigned-shipments",
   unassignedPickups: "/api/delivery-agents/unassigned-pickups",
   rtoShipments: "/api/delivery-agents/rto-shipments",
+  performanceReport: "/api/delivery-agents/reports/performance",
   cashDeposits: "/api/delivery-agents/cash-deposits",
   verifyCashDeposit: (depositId: string) =>
     `/api/delivery-agents/cash-deposits/${depositId}`,
@@ -15,6 +16,11 @@ export const deliveryAgentsRoutes = {
     `/api/delivery-agents/payouts/${payoutId}/mark-failed`,
   retryPayout: (payoutId: string) =>
     `/api/delivery-agents/payouts/${payoutId}/retry`,
+  payoutStatement: (payoutId: string) =>
+    `/api/delivery-agents/payouts/${payoutId}/statement.pdf`,
+  documents: "/api/delivery-agents/documents",
+  reviewDocument: (documentId: string) =>
+    `/api/delivery-agents/documents/${documentId}/review`,
   update: (id: string) => `/api/delivery-agents/${id}`,
   tasks: (id: string) => `/api/delivery-agents/${id}/tasks`,
   assignShipment: (shipmentId: string) =>
@@ -32,7 +38,10 @@ export const deliveryAgentsRoutes = {
   meCashDeposits: "/api/delivery-agents/me/cash-deposits",
   mePayouts: "/api/delivery-agents/me/payouts",
   meEarnings: "/api/delivery-agents/me/earnings",
+  mePayoutStatement: (payoutId: string) =>
+    `/api/delivery-agents/me/payouts/${payoutId}/statement.pdf`,
   meBankDetails: "/api/delivery-agents/me/bank-details",
+  meDocuments: "/api/delivery-agents/me/documents",
   meDeliveries: "/api/delivery-agents/me/deliveries",
   meDelivery: (shipmentId: string) =>
     `/api/delivery-agents/me/deliveries/${shipmentId}`,

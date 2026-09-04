@@ -10,6 +10,7 @@ import { SubOrderCardHeader } from "./SubOrderCardHeader.component";
 import { SubOrderCardItems } from "./SubOrderCardItems.component";
 import { SubOrderCardTotals } from "./SubOrderCardTotals.component";
 import { SubOrderReturnDialog } from "./SubOrderReturnDialog.component";
+import { DeliveryRatingPrompt } from "../DeliveryRatingPrompt.component";
 
 interface SubOrderCardProps {
   subOrder: SubOrder;
@@ -110,11 +111,28 @@ export function SubOrderCard({
                 : "(due at doorstep)"}
             </p>
           )}
-          {subOrder.shipment.failureReason && (
-            <p className="mt-2 rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning">
-              Last delivery attempt note: {subOrder.shipment.failureReason}
-            </p>
-          )}
+          {subOrder.shipment.attempts?.length ? (
+            <div className="mt-2 space-y-1.5">
+              {subOrder.shipment.attempts.map((attempt) => (
+                <p
+                  key={attempt.id}
+                  className="rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning"
+                >
+                  Attempt {attempt.attemptNumber} note: {attempt.note}
+                  {attempt.photoUrl ? (
+                    <a
+                      href={attempt.photoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="ml-2 font-medium text-brand hover:underline"
+                    >
+                      View photo
+                    </a>
+                  ) : null}
+                </p>
+              ))}
+            </div>
+          ) : null}
           {subOrder.shipment.status === SHIPMENT_STATUS.RTO_INITIATED && (
             <p className="mt-2 rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning">
               We couldn&apos;t deliver this after multiple attempts — it&apos;s
@@ -130,6 +148,9 @@ export function SubOrderCard({
             >
               View proof of delivery photo
             </a>
+          )}
+          {subOrder.shipment.status === SHIPMENT_STATUS.DELIVERED && (
+            <DeliveryRatingPrompt shipmentId={subOrder.shipment.id} />
           )}
         </div>
       )}

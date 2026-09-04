@@ -1,30 +1,20 @@
 "use client";
 
-import { useState } from "react";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardContent,
 } from "@/shared/components/ui/card";
-import { Button } from "@/shared/components/ui/button";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
+import { RedeliverySlotPicker } from "@/shared/components/RedeliverySlotPicker.component";
 import type { TrackingLookupResult } from "../api/shipping.api";
 import { useShipmentLocationSocket } from "../hooks/useShipmentLocationSocket.hook";
 import { LiveDeliveryMap } from "./LiveDeliveryMap.component";
+import { haversineDistanceKm, timeSince } from "@/shared/utils/geo";
 
-const REDELIVERY_SLOTS = [
-  "Tomorrow morning (9am - 12pm)",
-  "Tomorrow afternoon (12pm - 4pm)",
-  "Tomorrow evening (4pm - 8pm)",
-];
+/** Rough urban delivery-bike pace, used only for the "approx." ETA label. */
+const ASSUMED_SPEED_KMH = 18;
 
 export function TrackingResult({
   result,
@@ -35,7 +25,6 @@ export function TrackingResult({
   onReschedule: (slot: string) => void;
   isRescheduling?: boolean;
 }) {
-  const [slot, setSlot] = useState("");
   const canReschedule = ["FAILED", "RTO_INITIATED"].includes(result.status);
   const agent = result.deliveryAgent;
   const isOutForDelivery = result.status === "OUT_FOR_DELIVERY";
@@ -46,6 +35,23 @@ export function TrackingResult({
   const mapLat = liveLocation?.lat ?? agent?.lastLat ?? null;
   const mapLng = liveLocation?.lng ?? agent?.lastLng ?? null;
   const hasLiveLocation = isOutForDelivery && mapLat != null && mapLng != null;
+  const lastPingAt =
+    liveLocation?.updatedAt ?? agent?.locationUpdatedAt ?? null;
+  const destination = result.destination;
+  const etaText =
+    hasLiveLocation && destination
+      ? (() => {
+          const km = haversineDistanceKm(
+            { lat: mapLat!, lng: mapLng! },
+            destination,
+          );
+          const minutes = Math.max(
+            1,
+            Math.round((km / ASSUMED_SPEED_KMH) * 60),
+          );
+          return `~${minutes} min away (${km.toFixed(1)} km, approx.)`;
+        })()
+      : null;
 
   return (
     <Card>
@@ -97,9 +103,17 @@ export function TrackingResult({
 
         {hasLiveLocation ? (
           <div className="space-y-1">
-            <p className="text-body-sm font-medium text-ink">
-              {agent?.fullName ?? "Your delivery agent"} is on the way
-            </p>
+            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+              <p className="text-body-sm font-medium text-ink">
+                {agent?.fullName ?? "Your delivery agent"} is on the way
+                {etaText ? ` — ${etaText}` : ""}
+              </p>
+              {lastPingAt ? (
+                <span className="text-caption text-ink-muted">
+                  Updated {timeSince(lastPingAt)}
+                </span>
+              ) : null}
+            </div>
             <LiveDeliveryMap
               lat={mapLat!}
               lng={mapLng!}
@@ -109,34 +123,12 @@ export function TrackingResult({
         ) : null}
 
         {canReschedule ? (
-          <div className="space-y-2 rounded-md border border-line bg-surface-muted p-3">
-            <p className="text-body-sm font-medium text-ink">
-              {result.preferredRedeliverySlot
-                ? `Redelivery requested: ${result.preferredRedeliverySlot}`
-                : "Delivery didn't go through — pick a redelivery window:"}
-            </p>
-            <div className="flex gap-2">
-              <Select value={slot} onValueChange={setSlot}>
-                <SelectTrigger className="min-w-0 flex-1">
-                  <SelectValue placeholder="Choose a time window" />
-                </SelectTrigger>
-                <SelectContent>
-                  {REDELIVERY_SLOTS.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button
-                disabled={!slot}
-                loading={isRescheduling}
-                onClick={() => onReschedule(slot)}
-              >
-                Confirm
-              </Button>
-            </div>
-          </div>
+          <RedeliverySlotPicker
+            currentSlot={result.preferredRedeliverySlot}
+            onSubmit={onReschedule}
+            isPending={isRescheduling}
+            prompt="Delivery didn't go through — pick a redelivery window:"
+          />
         ) : null}
       </CardContent>
     </Card>

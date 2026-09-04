@@ -39,6 +39,9 @@ export interface Address {
   pincode: string;
   isDefault: boolean;
   deliveryInstructions?: string | null;
+  /** Device-captured GPS fix at save time — powers the delivery live-ETA distance. */
+  lat?: number | null;
+  lng?: number | null;
 }
 
 /** Writable address payload (create/update) — shared because AddressFormDialog is generic. */

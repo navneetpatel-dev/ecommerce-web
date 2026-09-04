@@ -5,16 +5,19 @@ import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Timeline } from "@/shared/components/Timeline.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { RedeliverySlotPicker } from "@/shared/components/RedeliverySlotPicker.component";
 import { LABELS } from "@/shared/constants/labels";
 import { REFUND_STATUS, RETURN_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate, formatInr } from "@/shared/utils/orderFormat";
 import { formatLabel } from "@/shared/utils/formatLabel";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import type { ReturnRequest } from "@/shared/api/types";
 import {
   buildLogisticsTimeline,
   buildRefundTimeline,
 } from "../utils/returnTimeline";
 import { returnsApi } from "../api/returns.api";
+import { useReschedulePickup } from "../api/returns.queries";
 
 const STATUS_LABEL: Record<string, string> = {
   [RETURN_STATUS.REQUESTED]: LABELS.returnLogisticsRequested,
@@ -32,6 +35,8 @@ interface ReturnRequestCardProps {
 
 export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
   const [pending, setPending] = useState(false);
+  const [rescheduleError, setRescheduleError] = useState<string | null>(null);
+  const reschedulePickup = useReschedulePickup();
 
   const downloadCredit = async () => {
     setPending(true);
@@ -39,6 +44,21 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
       await returnsApi.downloadCreditNote(row.id);
     } finally {
       setPending(false);
+    }
+  };
+
+  const canReschedulePickup =
+    row.status === RETURN_STATUS.PICKUP_SCHEDULED &&
+    Boolean(row.pickupFailureReason);
+
+  const submitReschedule = async (slot: string) => {
+    setRescheduleError(null);
+    try {
+      await reschedulePickup.mutateAsync({ id: row.id, slot });
+    } catch (error) {
+      setRescheduleError(
+        getApiErrorMessage(error, "Could not reschedule pickup."),
+      );
     }
   };
 
@@ -58,7 +78,8 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
             <div className="mt-1 space-y-0.5 text-body-sm tabular-nums text-ink">
               {row.refundStatus === REFUND_STATUS.COMPLETED ? (
                 <p>
-                  {LABELS.returnRefundStatusCompleted} {formatInr(row.refundAmount)}
+                  {LABELS.returnRefundStatusCompleted}{" "}
+                  {formatInr(row.refundAmount)}
                 </p>
               ) : row.refundStatus === REFUND_STATUS.INITIATED ? (
                 <p className="text-ink-muted">
@@ -77,10 +98,14 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
               ) : row.refundStatus === REFUND_STATUS.FAILED ? (
                 <p className="text-danger">{LABELS.returnRefundStatusFailed}</p>
               ) : (
-                <p className="text-ink-muted">{LABELS.returnRefundStatusPending}</p>
+                <p className="text-ink-muted">
+                  {LABELS.returnRefundStatusPending}
+                </p>
               )}
               {row.refundCustomerMessage ? (
-                <p className="text-body-sm text-ink-muted">{row.refundCustomerMessage}</p>
+                <p className="text-body-sm text-ink-muted">
+                  {row.refundCustomerMessage}
+                </p>
               ) : null}
             </div>
           ) : null}
@@ -93,7 +118,9 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
             </p>
           ) : null}
         </div>
-        <Badge variant="outline">{STATUS_LABEL[row.status] ?? row.status}</Badge>
+        <Badge variant="outline">
+          {STATUS_LABEL[row.status] ?? row.status}
+        </Badge>
       </div>
 
       {row.creditNoteNumber ? (
@@ -124,6 +151,25 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
           <Timeline steps={buildLogisticsTimeline(row)} />
         </div>
       </div>
+
+      {row.pickupFailureReason ? (
+        <div className="mt-5 space-y-3 border-t border-line pt-5">
+          <p className="rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning">
+            Last pickup attempt note: {row.pickupFailureReason}
+          </p>
+          {canReschedulePickup ? (
+            <RedeliverySlotPicker
+              currentSlot={row.preferredRepickupSlot}
+              onSubmit={(slot) => void submitReschedule(slot)}
+              isPending={reschedulePickup.isPending}
+              prompt="Pickup didn't go through — pick a new time window:"
+            />
+          ) : null}
+          {rescheduleError ? (
+            <p className="text-body-sm text-danger">{rescheduleError}</p>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

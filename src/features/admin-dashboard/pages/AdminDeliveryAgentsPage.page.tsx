@@ -8,6 +8,8 @@ import { DeliveryDispatchPanel } from "../components/DeliveryDispatchPanel.compo
 import { RtoQueuePanel } from "../components/RtoQueuePanel.component";
 import { CashDepositsPanel } from "../components/CashDepositsPanel.component";
 import { AgentPayoutsPanel } from "../components/AgentPayoutsPanel.component";
+import { AgentDocumentsPanel } from "../components/AgentDocumentsPanel.component";
+import { AdminDeliveryPerformancePanel } from "../components/AdminDeliveryPerformancePanel.component";
 import {
   deliveryAdminApi,
   type DeliveryAgent,
@@ -45,6 +47,8 @@ export function AdminDeliveryAgentsPage() {
       <RtoQueuePanel />
       <CashDepositsPanel />
       <AgentPayoutsPanel />
+      <AgentDocumentsPanel />
+      <AdminDeliveryPerformancePanel />
       <AdminDataPage
         key={revision}
         title="Delivery agents"
@@ -58,6 +62,7 @@ export function AdminDeliveryAgentsPage() {
           "availableForAssignment",
           "activeDeliveries",
           "activePickups",
+          "averageRating",
         ]}
         actions={(row, reload) => (
           <AdminConfirmAction

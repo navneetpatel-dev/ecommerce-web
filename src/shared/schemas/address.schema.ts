@@ -16,6 +16,10 @@ export const addressFormSchema = z.object({
   pincode: z.string().trim().regex(PINCODE_PATTERN, LABELS.invalidPincode),
   isDefault: z.boolean(),
   deliveryInstructions: z.string().max(500),
+  // Device-captured GPS fix, not a geocode of the typed address — required to
+  // save so the delivery-tracking page can show a live-ETA distance.
+  lat: z.number().nullable(),
+  lng: z.number().nullable(),
 });
 
 export type AddressFormValues = z.infer<typeof addressFormSchema>;
@@ -40,6 +44,10 @@ export function addressFieldChecks(
       ok: PINCODE_PATTERN.test(values.pincode.trim()),
       message: LABELS.invalidPincode,
     },
+    {
+      ok: values.lat != null && values.lng != null,
+      message: LABELS.addressLocationRequired,
+    },
   ];
 }
 
@@ -55,6 +63,8 @@ export function toAddressFormState(
     pincode: address?.pincode ?? "",
     isDefault: address?.isDefault ?? false,
     deliveryInstructions: address?.deliveryInstructions ?? "",
+    lat: address?.lat ?? null,
+    lng: address?.lng ?? null,
   };
 }
 
@@ -71,6 +81,8 @@ export function toAddressInput(
     pincode: values.pincode.trim(),
     isDefault: values.isDefault || !hasAddresses,
     deliveryInstructions: values.deliveryInstructions.trim() || null,
+    lat: values.lat,
+    lng: values.lng,
   };
 }
 

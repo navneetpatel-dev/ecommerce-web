@@ -13,8 +13,10 @@ import {
   useSetAvailability,
   BankDetailsCard,
   EarningsPayoutsCard,
+  DeliveryAgentDocumentsCard,
 } from "@/features/delivery-dashboard";
 import { usePushSubscription } from "@/shared/hooks/usePushSubscription.hook";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 
 export function DeliveryOperationsSection() {
   const profile = useDeliveryProfile();
@@ -94,8 +96,19 @@ export function DeliveryOperationsSection() {
                   />
                 </div>
               </div>
+              {availability.isError ? (
+                <p className="mt-3 text-body-sm text-danger">
+                  {getApiErrorMessage(
+                    availability.error,
+                    "Could not update availability.",
+                  )}
+                </p>
+              ) : null}
             </div>
           </section>
+
+          {/* Section 1b: Verification documents (required before going on duty) */}
+          <DeliveryAgentDocumentsCard />
 
           {/* Section 2: Task Notifications */}
           <section className="border border-line bg-surface shadow-elevation-1">

@@ -1,5 +1,6 @@
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Upload } from "lucide-react";
 import { Textarea } from "@/shared/components/ui/textarea";
+import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 
@@ -12,6 +13,8 @@ export function FailedAttemptSection({
   submitLabel,
   title = "Report Delivery Issue",
   description = "If the customer is unavailable, the address cannot be reached, or this task cannot be completed, record the reason below:",
+  photo,
+  onPhotoChange,
 }: {
   value: string;
   onChange: (value: string) => void;
@@ -22,6 +25,9 @@ export function FailedAttemptSection({
   bordered?: boolean;
   title?: string;
   description?: string;
+  /** When provided, shows an optional evidence-photo upload (e.g. locked gate, wrong address). */
+  photo?: File | null;
+  onPhotoChange?: (file: File | null) => void;
 }) {
   return (
     <div className="border border-line bg-surface shadow-elevation-1">
@@ -46,6 +52,25 @@ export function FailedAttemptSection({
           className="resize-none"
           onChange={(event) => onChange(event.target.value)}
         />
+        {onPhotoChange ? (
+          <div className="rounded-lg border border-dashed border-line bg-paper/20 p-4 transition-colors hover:border-brand/40">
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 text-center">
+              <div className="flex size-8 items-center justify-center rounded-full border border-line bg-surface text-brand">
+                <Upload className="size-4" aria-hidden="true" />
+              </div>
+              <span className="text-body-sm font-medium text-ink">
+                {photo ? photo.name : "Add evidence photo (optional)"}
+              </span>
+              <Input
+                className="sr-only"
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={(e) => onPhotoChange(e.target.files?.[0] ?? null)}
+              />
+            </label>
+          </div>
+        ) : null}
         <Button
           className="w-full"
           variant="outline"

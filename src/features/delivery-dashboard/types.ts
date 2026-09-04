@@ -16,6 +16,8 @@ export type DeliveryAgent = {
   availableForAssignment: boolean;
   activeDeliveries?: number;
   activePickups?: number;
+  averageRating?: number | null;
+  ratingCount?: number;
   bankDetails?: BankDetails | null;
   user?: { email: string; status: string };
 };
@@ -37,6 +39,13 @@ export type DeliveryShipment = Shipment & {
   codAmount: number | null;
   codCollected: boolean;
   preferredRedeliverySlot: string | null;
+  attempts?: Array<{
+    id: string;
+    attemptNumber: number;
+    note: string;
+    photoUrl: string | null;
+    attemptedAt: string;
+  }>;
   subOrder?: {
     items?: Pick<OrderItem, "id" | "productName" | "quantity">[];
     order?: {
@@ -133,6 +142,34 @@ export type CashDeposit = {
   verifiedAt: string | null;
   createdAt: string;
   deliveryAgent?: { id: string; fullName: string; hubOrZone: string };
+};
+
+export type DeliveryAgentDocumentType =
+  "ID_PROOF" | "DRIVING_LICENSE" | "VEHICLE_RC" | "ADDRESS_PROOF";
+
+export type DeliveryAgentDocument = {
+  id: string;
+  deliveryAgentId: string;
+  type: DeliveryAgentDocumentType;
+  url: string;
+  verified: boolean;
+  rejectionReason: string | null;
+  rejectedAt: string | null;
+  createdAt: string;
+  deliveryAgent?: { id: string; fullName: string; hubOrZone: string };
+};
+
+export type DeliveryAgentPerformance = {
+  deliveryAgentId: string;
+  fullName: string;
+  hubOrZone: string;
+  delivered: number;
+  rto: number;
+  rtoRatePercent: number;
+  failedAttempts: number;
+  avgFulfillmentHours: number | null;
+  averageRating: number | null;
+  ratingCount: number;
 };
 
 export type DeliveryPickup = ReturnRequest & {

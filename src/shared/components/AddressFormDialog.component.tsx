@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { useCaptureLocation } from "@/shared/hooks/useCaptureLocation.hook";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormError } from "@/shared/components/FormError.component";
@@ -66,9 +67,25 @@ function AddressFormBody({
   const [formError, setFormError] = useState<string | null>(null);
   const { fieldErrors, clearAll, setErrors, getError } =
     useManualFormFieldErrors<AddressField>();
+  const location = useCaptureLocation(
+    address?.lat != null && address?.lng != null,
+  );
   const requiredChecks = addressFieldChecks(form);
-  const canSubmit = allRequiredFieldsMet(requiredChecks);
-  const disableHint = firstMissingRequiredHint(requiredChecks) ?? "";
+  const canSubmit =
+    allRequiredFieldsMet(requiredChecks) && location.status !== "pending";
+  const disableHint =
+    firstMissingRequiredHint(requiredChecks) ??
+    (location.status === "pending" ? LABELS.addressLocationFetching : "");
+
+  useEffect(() => {
+    if (location.coords) {
+      setForm((current) => ({
+        ...current,
+        lat: location.coords!.lat,
+        lng: location.coords!.lng,
+      }));
+    }
+  }, [location.coords]);
 
   const setField = <K extends keyof AddressFormValues>(
     field: K,
@@ -105,6 +122,8 @@ function AddressFormBody({
           isEditing={Boolean(address)}
           fieldErrors={fieldErrors}
           getError={getError}
+          locationStatus={location.status}
+          onRetryLocation={location.retry}
         />
         <FormError error={formError} fallback={LABELS.couldNotSaveAddress} />
         <FormActions>

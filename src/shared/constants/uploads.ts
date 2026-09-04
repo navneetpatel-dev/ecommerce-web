@@ -10,6 +10,7 @@ export const UPLOAD_ENTITY = {
   BUG_REPORTS: "bug-reports",
   PAYOUTS: "payouts",
   SHIPMENTS: "shipments",
+  DELIVERY_AGENT_DOCUMENTS: "delivery-agent-documents",
 } as const;
 
 export type UploadEntityType =

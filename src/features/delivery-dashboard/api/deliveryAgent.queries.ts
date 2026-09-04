@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deliveryAgentApi } from "./deliveryAgent.api";
-import type { BankDetails } from "../types";
+import type { BankDetails, DeliveryAgentDocumentType } from "../types";
 
 export const deliveryKeys = {
   all: ["delivery"] as const,
@@ -18,6 +18,7 @@ export const deliveryKeys = {
   cashDeposits: ["delivery", "cash-deposits"] as const,
   payouts: ["delivery", "payouts"] as const,
   earnings: ["delivery", "earnings"] as const,
+  documents: ["delivery", "documents"] as const,
 };
 
 export function useDeliveryProfile() {
@@ -132,10 +133,16 @@ function useDeliveryMutation<T>(mutationFn: (value: T) => Promise<unknown>) {
 }
 export function useUpdateDeliveryStatus() {
   return useDeliveryMutation(
-    (input: { shipmentId: string; status: string; note?: string }) =>
+    (input: {
+      shipmentId: string;
+      status: string;
+      note?: string;
+      photoUrl?: string;
+    }) =>
       deliveryAgentApi.updateDeliveryStatus(input.shipmentId, {
         status: input.status,
         note: input.note,
+        photoUrl: input.photoUrl,
       }),
   );
 }
@@ -185,4 +192,19 @@ export function useSetAvailability() {
   return useDeliveryMutation((available: boolean) =>
     deliveryAgentApi.setAvailability(available),
   );
+}
+export function useMyDocuments() {
+  return useQuery({
+    queryKey: deliveryKeys.documents,
+    queryFn: () => deliveryAgentApi.myDocuments(),
+  });
+}
+export function useSubmitDocument() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { type: DeliveryAgentDocumentType; url: string }) =>
+      deliveryAgentApi.submitDocument(input.type, input.url),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: deliveryKeys.documents }),
+  });
 }
