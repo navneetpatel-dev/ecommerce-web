@@ -5,6 +5,8 @@ export const deliveryAgentsRoutes = {
   unassignedPickups: "/api/delivery-agents/unassigned-pickups",
   rtoShipments: "/api/delivery-agents/rto-shipments",
   performanceReport: "/api/delivery-agents/reports/performance",
+  staleTasks: "/api/delivery-agents/reports/stale",
+  bulkCreate: "/api/delivery-agents/bulk",
   cashDeposits: "/api/delivery-agents/cash-deposits",
   verifyCashDeposit: (depositId: string) =>
     `/api/delivery-agents/cash-deposits/${depositId}`,

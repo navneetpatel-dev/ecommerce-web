@@ -1,3 +1,4 @@
+import { Phone } from "lucide-react";
 import type { OrderItem, SubOrder } from "@/shared/api/types";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
@@ -93,9 +94,27 @@ export function SubOrderCard({
             <StatusBadge status={subOrder.shipment.status} />
           </div>
           {subOrder.shipment.deliveryAgent && (
-            <p className="mt-2 text-body-sm text-ink-muted">
-              Delivery agent: {subOrder.shipment.deliveryAgent.fullName}
-            </p>
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <p className="text-body-sm text-ink-muted">
+                Delivery agent: {subOrder.shipment.deliveryAgent.fullName}
+              </p>
+              {subOrder.shipment.deliveryAgent.phone &&
+              (
+                [
+                  SHIPMENT_STATUS.PICKED_UP,
+                  SHIPMENT_STATUS.IN_TRANSIT,
+                  SHIPMENT_STATUS.OUT_FOR_DELIVERY,
+                ] as string[]
+              ).includes(subOrder.shipment.status) ? (
+                <a
+                  href={`tel:${subOrder.shipment.deliveryAgent.phone}`}
+                  className="inline-flex items-center gap-1 text-body-sm font-medium text-brand hover:underline"
+                >
+                  <Phone className="size-3.5" aria-hidden="true" />
+                  Call agent
+                </a>
+              ) : null}
+            </div>
           )}
           {subOrder.shipment.status === SHIPMENT_STATUS.OUT_FOR_DELIVERY && (
             <p className="mt-2 rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-ink">

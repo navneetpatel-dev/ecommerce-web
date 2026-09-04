@@ -106,7 +106,19 @@ export function AdminDeliveryPerformancePanel() {
                     key={row.deliveryAgentId}
                     className="border-b border-line/60"
                   >
-                    <td className="py-2 pr-3">{row.fullName}</td>
+                    <td className="py-2 pr-3">
+                      <div className="flex items-center gap-1.5">
+                        {row.fullName}
+                        {row.flagged ? (
+                          <span
+                            title={row.flagReason ?? undefined}
+                            className="rounded-full border border-danger/30 bg-danger/10 px-1.5 py-0.5 text-caption font-medium text-danger"
+                          >
+                            Flagged
+                          </span>
+                        ) : null}
+                      </div>
+                    </td>
                     <td className="py-2 pr-3 text-ink-muted">
                       {row.hubOrZone}
                     </td>

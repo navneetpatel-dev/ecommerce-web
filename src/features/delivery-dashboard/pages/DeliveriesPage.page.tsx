@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ExternalLink } from "lucide-react";
 import { TaskCard } from "../components/TaskCard.component";
 import { BarcodeScanButton } from "../components/BarcodeScanButton.component";
 import {
   useMyDeliveries,
   useUpdateDeliveryStatus,
 } from "../api/deliveryAgent.queries";
+import { groupShipmentsByStop } from "../utils/groupByStop";
 import { PATHS } from "@/shared/constants/paths";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
@@ -92,15 +94,52 @@ export function DeliveriesPage() {
         <p className="text-ink-muted">Loading deliveries...</p>
       ) : count > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {query.data?.map((shipment) => (
-            <TaskCard
-              key={shipment.id}
-              href={PATHS.delivery.delivery(shipment.id)}
-              title={shipment.trackingNumber}
-              subtitle={shipment.subOrder?.order?.shippingAddress?.city}
-              status={shipment.status}
-            />
-          ))}
+          {groupShipmentsByStop(query.data ?? []).map((stop) =>
+            stop.shipments.length > 1 ? (
+              <div
+                key={stop.key}
+                className="space-y-2 rounded-md border border-brand/30 bg-brand/5 p-3"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-body-sm font-medium text-ink">
+                    {stop.shipments.length} packages to this address
+                  </p>
+                  {stop.addressText ? (
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stop.addressText)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex shrink-0 items-center gap-1 text-body-sm font-medium text-brand hover:underline"
+                    >
+                      <ExternalLink className="size-3.5" aria-hidden="true" />
+                      Open in Maps
+                    </a>
+                  ) : null}
+                </div>
+                <div className="space-y-2">
+                  {stop.shipments.map((shipment) => (
+                    <TaskCard
+                      key={shipment.id}
+                      href={PATHS.delivery.delivery(shipment.id)}
+                      title={shipment.trackingNumber}
+                      subtitle={shipment.subOrder?.order?.shippingAddress?.city}
+                      status={shipment.status}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <TaskCard
+                key={stop.shipments[0].id}
+                href={PATHS.delivery.delivery(stop.shipments[0].id)}
+                title={stop.shipments[0].trackingNumber}
+                subtitle={
+                  stop.shipments[0].subOrder?.order?.shippingAddress?.city
+                }
+                status={stop.shipments[0].status}
+              />
+            ),
+          )}
         </div>
       ) : (
         <p className="border-l-2 border-brand/30 pl-3 text-body text-ink-muted py-2">

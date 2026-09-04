@@ -69,6 +69,32 @@ function DocumentStatusBadge({
   );
 }
 
+function daysUntil(dateString: string): number {
+  return Math.ceil(
+    (new Date(dateString).getTime() - Date.now()) / (24 * 60 * 60 * 1000),
+  );
+}
+
+function ExpiryBadge({ expiryDate }: { expiryDate: string | null }) {
+  if (!expiryDate) return null;
+  const daysLeft = daysUntil(expiryDate);
+  if (daysLeft < 0) {
+    return (
+      <span className="text-body-sm text-danger">Expired {expiryDate}</span>
+    );
+  }
+  if (daysLeft <= 7) {
+    return (
+      <span className="text-body-sm text-warning">
+        Expires in {daysLeft} day{daysLeft === 1 ? "" : "s"} ({expiryDate})
+      </span>
+    );
+  }
+  return (
+    <span className="text-body-sm text-ink-muted">Expires {expiryDate}</span>
+  );
+}
+
 /** KYC/verification documents — required before an agent can go on duty. */
 export function DeliveryAgentDocumentsCard() {
   const profile = useDeliveryProfile();
@@ -78,6 +104,9 @@ export function DeliveryAgentDocumentsCard() {
   const [pendingType, setPendingType] =
     useState<DeliveryAgentDocumentType | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [expiryInputs, setExpiryInputs] = useState<
+    Partial<Record<DeliveryAgentDocumentType, string>>
+  >({});
 
   const agentId = profile.data?.id;
 
@@ -98,7 +127,11 @@ export function DeliveryAgentDocumentsCard() {
         contentLength: file.size,
         file,
       });
-      await submit.mutateAsync({ type, url: result.url });
+      await submit.mutateAsync({
+        type,
+        url: result.url,
+        expiryDate: expiryInputs[type],
+      });
     } catch (submitError) {
       setError(
         getApiErrorMessage(submitError, "Could not submit this document."),
@@ -135,24 +168,42 @@ export function DeliveryAgentDocumentsCard() {
               <div className="space-y-0.5">
                 <p className="font-medium text-ink">{label}</p>
                 <DocumentStatusBadge document={document} />
+                {document?.verified ? (
+                  <ExpiryBadge expiryDate={document.expiryDate} />
+                ) : null}
               </div>
               {canReplace ? (
-                <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-line px-3 py-1.5 text-body-sm font-medium text-brand hover:bg-paper/60">
-                  {pendingType === type
-                    ? "Uploading..."
-                    : document
-                      ? "Re-upload"
-                      : "Upload"}
+                <div className="flex flex-wrap items-center gap-2">
                   <Input
-                    className="sr-only"
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp,application/pdf"
-                    disabled={pendingType === type}
+                    type="date"
+                    aria-label={`${label} expiry date`}
+                    placeholder="Expiry date (optional)"
+                    className="w-40"
+                    value={expiryInputs[type] ?? ""}
                     onChange={(e) =>
-                      void handleFile(type, e.target.files?.[0] ?? null)
+                      setExpiryInputs((prev) => ({
+                        ...prev,
+                        [type]: e.target.value,
+                      }))
                     }
                   />
-                </label>
+                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-line px-3 py-1.5 text-body-sm font-medium text-brand hover:bg-paper/60">
+                    {pendingType === type
+                      ? "Uploading..."
+                      : document
+                        ? "Re-upload"
+                        : "Upload"}
+                    <Input
+                      className="sr-only"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,application/pdf"
+                      disabled={pendingType === type}
+                      onChange={(e) =>
+                        void handleFile(type, e.target.files?.[0] ?? null)
+                      }
+                    />
+                  </label>
+                </div>
               ) : null}
             </div>
           );

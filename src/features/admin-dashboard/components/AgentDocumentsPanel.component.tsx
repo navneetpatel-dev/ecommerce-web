@@ -17,16 +17,22 @@ export function AgentDocumentsPanel() {
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const load = () => {
-    setLoading(true);
-    deliveryAdminApi
+  function fetchDocuments() {
+    return deliveryAdminApi
       .documents()
       .then(setDocuments)
       .catch(() => setDocuments([]))
       .finally(() => setLoading(false));
-  };
+  }
 
-  useEffect(load, []);
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
+
+  const load = () => {
+    setLoading(true);
+    fetchDocuments();
+  };
 
   const act = async (documentId: string, action: "APPROVE" | "REJECT") => {
     setError(null);
@@ -84,6 +90,7 @@ export function AgentDocumentsPanel() {
                 <th className="py-2 pr-3 font-medium">Type</th>
                 <th className="py-2 pr-3 font-medium">Document</th>
                 <th className="py-2 pr-3 font-medium">Status</th>
+                <th className="py-2 pr-3 font-medium">Expiry</th>
                 <th className="py-2 pr-3 font-medium">Actions</th>
               </tr>
             </thead>
@@ -110,6 +117,9 @@ export function AgentDocumentsPanel() {
                       : doc.rejectedAt
                         ? `Rejected: ${doc.rejectionReason ?? ""}`
                         : "Pending review"}
+                  </td>
+                  <td className="py-2 pr-3 text-ink-muted">
+                    {doc.expiryDate ?? "—"}
                   </td>
                   <td className="py-2 pr-3">
                     {!doc.verified ? (

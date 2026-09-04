@@ -51,6 +51,10 @@ export type {
   DeliveryPickup,
   DeliveryShipment,
   ShiftSummary,
+  StaleShipment,
+  StalePickup,
+  StaleTasksReport,
+  BulkCreateAgentResult,
   UnassignedPickup,
   UnassignedShipment,
 } from "./types";

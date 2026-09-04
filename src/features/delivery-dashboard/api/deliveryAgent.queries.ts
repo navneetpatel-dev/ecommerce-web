@@ -202,8 +202,12 @@ export function useMyDocuments() {
 export function useSubmitDocument() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: { type: DeliveryAgentDocumentType; url: string }) =>
-      deliveryAgentApi.submitDocument(input.type, input.url),
+    mutationFn: (input: {
+      type: DeliveryAgentDocumentType;
+      url: string;
+      expiryDate?: string;
+    }) =>
+      deliveryAgentApi.submitDocument(input.type, input.url, input.expiryDate),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: deliveryKeys.documents }),
   });

@@ -13,12 +13,14 @@ import type {
   BankDetails,
   CashDeposit,
   DeliveryAgent,
+  BulkCreateAgentResult,
   DeliveryAgentDocument,
   DeliveryAgentDocumentType,
   DeliveryAgentPerformance,
   DeliveryPickup,
   DeliveryShipment,
   ShiftSummary,
+  StaleTasksReport,
   UnassignedPickup,
   UnassignedShipment,
 } from "../types";
@@ -170,10 +172,15 @@ export const deliveryAgentApi = {
     apiClient.patch<DeliveryAgent>(API.deliveryAgents.meAvailability, {
       availableForAssignment,
     }),
-  submitDocument: (type: DeliveryAgentDocumentType, url: string) =>
+  submitDocument: (
+    type: DeliveryAgentDocumentType,
+    url: string,
+    expiryDate?: string,
+  ) =>
     apiClient.post<DeliveryAgentDocument>(API.deliveryAgents.meDocuments, {
       type,
       url,
+      expiryDate: expiryDate || undefined,
     }),
   myDocuments: () =>
     apiClient.get<DeliveryAgentDocument[]>(API.deliveryAgents.meDocuments),
@@ -269,6 +276,8 @@ export const deliveryAdminApi = {
       API.deliveryAgents.reviewDocument(documentId),
       { action, rejectionReason },
     ),
+  staleTasks: () =>
+    apiClient.get<StaleTasksReport>(API.deliveryAgents.staleTasks),
   create: (body: {
     email: string;
     password: string;
@@ -277,6 +286,19 @@ export const deliveryAdminApi = {
     vehicleType: string;
     hubOrZone: string;
   }) => apiClient.post<DeliveryAgent>(API.deliveryAgents.create, body),
+  bulkCreate: (
+    rows: Array<{
+      email: string;
+      password: string;
+      fullName: string;
+      phone: string;
+      vehicleType: string;
+      hubOrZone: string;
+    }>,
+  ) =>
+    apiClient.post<BulkCreateAgentResult[]>(API.deliveryAgents.bulkCreate, {
+      rows,
+    }),
   update: (
     id: string,
     body: Partial<

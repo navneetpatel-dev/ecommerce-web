@@ -10,6 +10,8 @@ import { CashDepositsPanel } from "../components/CashDepositsPanel.component";
 import { AgentPayoutsPanel } from "../components/AgentPayoutsPanel.component";
 import { AgentDocumentsPanel } from "../components/AgentDocumentsPanel.component";
 import { AdminDeliveryPerformancePanel } from "../components/AdminDeliveryPerformancePanel.component";
+import { StaleTasksPanel } from "../components/StaleTasksPanel.component";
+import { BulkImportAgentsDialog } from "../components/BulkImportAgentsDialog.component";
 import {
   deliveryAdminApi,
   type DeliveryAgent,
@@ -43,7 +45,11 @@ export function AdminDeliveryAgentsPage() {
         </p>
       </header>
       <CreateDeliveryAgentForm onCreated={refresh} />
+      <div className="flex justify-end">
+        <BulkImportAgentsDialog onImported={refresh} />
+      </div>
       <DeliveryDispatchPanel agents={agents} onDispatched={refresh} />
+      <StaleTasksPanel />
       <RtoQueuePanel />
       <CashDepositsPanel />
       <AgentPayoutsPanel />
