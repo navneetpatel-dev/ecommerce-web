@@ -13,7 +13,7 @@ export function AdminPromoBannersPage() {
 
   return (
     <RequirePermission permission={PERMISSIONS.BANNER_MANAGE}>
-      <div className="mx-auto w-full max-w-4xl space-y-6">
+      <div className="w-full min-w-0 space-y-6">
         <div className="space-y-1">
           <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
             {LABELS.promoBanners}

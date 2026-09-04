@@ -15,6 +15,7 @@ import {
   DEFAULT_ACCOUNT_SECTION,
   DEFAULT_WORKSPACE_ACCOUNT_SECTION,
   accountSectionsForRole,
+  deliveryAccountSections,
   isAccountSectionId,
   workspaceAccountSections,
 } from "../constants";
@@ -38,10 +39,15 @@ export function useAccountPage() {
 
   const sections = useMemo(() => {
     if (isWorkspaceRole(role)) return accountSectionsForRole(role);
-    if (onWorkspaceProfileSurface) return workspaceAccountSections();
+    if (onWorkspaceProfileSurface) {
+      if (pathname.startsWith(PATHS.delivery.root)) {
+        return deliveryAccountSections();
+      }
+      return workspaceAccountSections();
+    }
     if (!authBootstrapped) return [];
     return accountSectionsForRole(role);
-  }, [authBootstrapped, onWorkspaceProfileSurface, role]);
+  }, [authBootstrapped, onWorkspaceProfileSurface, pathname, role]);
 
   const defaultSection =
     isCustomerRole(role) || (!role && !onWorkspaceProfileSurface)

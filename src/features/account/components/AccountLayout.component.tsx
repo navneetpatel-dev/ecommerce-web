@@ -38,7 +38,7 @@ export function AccountLayout({
       <div
         className={cn(
           "relative",
-          isWorkspace ? "max-w-5xl" : "storefront-container py-6 md:py-8",
+          isWorkspace ? "w-full min-w-0" : "storefront-container py-6 md:py-8",
         )}
       >
         <motion.header

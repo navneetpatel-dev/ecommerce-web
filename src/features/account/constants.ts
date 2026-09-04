@@ -1,6 +1,14 @@
-import { Lock, MapPin, Package, Shield, User, UserRound } from "lucide-react";
+import {
+  Bike,
+  Lock,
+  MapPin,
+  Package,
+  Shield,
+  User,
+  UserRound,
+} from "lucide-react";
 import { LABELS, type RoleName } from "@/shared/constants/labels";
-import { isWorkspaceRole } from "@/shared/utils/roles";
+import { isDeliveryRole, isWorkspaceRole } from "@/shared/utils/roles";
 import type { AccountNavItem, AccountSectionId } from "./types";
 
 export const ACCOUNT_SECTIONS: AccountNavItem[] = [
@@ -15,6 +23,12 @@ export const ACCOUNT_SECTIONS: AccountNavItem[] = [
     label: LABELS.personalInfo,
     description: "Name, phone, and email",
     icon: User,
+  },
+  {
+    id: "operations",
+    label: "Field operations",
+    description: "Availability, vehicle, and device alerts",
+    icon: Bike,
   },
   {
     id: "security",
@@ -49,9 +63,27 @@ const WORKSPACE_ACCOUNT_SECTION_IDS: AccountSectionId[] = [
   "privacy",
 ];
 
+const DELIVERY_ACCOUNT_SECTION_IDS: AccountSectionId[] = [
+  "personal",
+  "operations",
+  "security",
+  "privacy",
+];
+
+export function deliveryAccountSections(): AccountNavItem[] {
+  return ACCOUNT_SECTIONS.filter((section) =>
+    DELIVERY_ACCOUNT_SECTION_IDS.includes(section.id),
+  ).map((section) =>
+    section.id === "privacy"
+      ? { ...section, description: LABELS.privacySectionDescWorkspace }
+      : section,
+  );
+}
+
 export function accountSectionsForRole(
   role: RoleName | null | undefined,
 ): AccountNavItem[] {
+  if (isDeliveryRole(role)) return deliveryAccountSections();
   if (isWorkspaceRole(role)) return workspaceAccountSections();
   return ACCOUNT_SECTIONS;
 }

@@ -6,6 +6,19 @@ export { PickupTaskDetailPage } from "./pages/PickupTaskDetailPage.page";
 export { HistoryPage } from "./pages/HistoryPage.page";
 export { DeliveryProfilePage } from "./pages/ProfilePage.page";
 export { deliveryAdminApi, deliveryAgentApi } from "./api/deliveryAgent.api";
+export {
+  deliveryKeys,
+  useDeliveryProfile,
+  useMyDeliveries,
+  useMyPickups,
+  useUpdateDeliveryStatus,
+  useConfirmDelivery,
+  useRequestDeliveryCode,
+  useUpdatePickupStatus,
+  useRequestPickupCode,
+  useConfirmPickup,
+  useSetAvailability,
+} from "./api/deliveryAgent.queries";
 export type {
   DeliveryAgent,
   DeliveryPickup,

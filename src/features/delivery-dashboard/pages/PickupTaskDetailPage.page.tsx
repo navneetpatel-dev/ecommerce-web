@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Upload } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import {
   useConfirmPickup,
   useMyPickups,
@@ -14,6 +14,8 @@ import {
 } from "../api/deliveryAgent.queries";
 import { TaskContactCard } from "../components/TaskContactCard.component";
 import { FailedAttemptSection } from "../components/FailedAttemptSection.component";
+import { PickupChecklistCard } from "../components/PickupChecklistCard.component";
+import { PickupOverviewCard } from "../components/PickupOverviewCard.component";
 import { formatAddress } from "../utils/formatAddress";
 import { usePresignUpload } from "@/shared/hooks/useUploads.hook";
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
@@ -54,6 +56,7 @@ export function PickupTaskDetailPage() {
         file,
       })
     ).url;
+
   const complete = async () => {
     setError(null);
     try {
@@ -74,6 +77,7 @@ export function PickupTaskDetailPage() {
       setError(getApiErrorMessage(completeError, "Could not confirm pickup."));
     }
   };
+
   const recordFailure = async () => {
     try {
       await failed.mutateAsync({ returnId, note: failureNote.trim() });
@@ -86,109 +90,98 @@ export function PickupTaskDetailPage() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <header className="flex flex-wrap items-start justify-between gap-3">
+    <div className="w-full min-w-0 space-y-6">
+      <div className="flex items-center gap-2">
+        <Link
+          href={PATHS.delivery.pickups}
+          className="inline-flex items-center gap-1.5 text-body-sm font-medium text-ink-muted hover:text-ink transition-colors"
+        >
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          Back to pickups
+        </Link>
+      </div>
+
+      <header className="flex flex-col gap-3 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-body-sm text-brand">{pickup.type}</p>
-          <h1 className="font-display text-[1.5rem] text-ink">
+          <TextEyebrow brand>RETURN PICKUP TASK</TextEyebrow>
+          <h1 className="mt-1 font-display text-[1.5rem] sm:text-[1.75rem] font-bold text-ink">
             {pickup.productName ?? "Return pickup"}
           </h1>
+          <p className="mt-1 text-body-sm text-ink-muted">
+            {pickup.type} pickup · Return #{pickup.id.slice(0, 8)}
+          </p>
         </div>
         <StatusBadge status={pickup.status} />
       </header>
-      <TaskContactCard
-        name={pickup.user?.name ?? "Customer"}
-        phone={pickup.user?.phone}
-        addressText={addressText}
-      />
-      <section className="space-y-4">
-        <h2 className="font-display text-[1.125rem] text-ink">
-          Pickup checklist
-        </h2>
-        <Button
-          variant="outline"
-          loading={requestCode.isPending}
-          onClick={() => requestCode.mutate(returnId)}
-        >
-          Send pickup code to customer
-        </Button>
-        {requestCode.isSuccess ? (
-          <p className="text-body-sm text-success">
-            Code sent. It expires in {requestCode.data.expiresInMinutes}{" "}
-            minutes.
-          </p>
-        ) : null}
-        <label className="flex cursor-pointer items-center gap-2 border-b border-line pb-3 text-body font-medium text-brand">
-          <Upload className="size-4" aria-hidden="true" />
-          {conditionFiles.length
-            ? `${conditionFiles.length} condition photo(s)`
-            : `Add condition photos${exchange ? " (required)" : ""}`}
-          <Input
-            className="sr-only"
-            type="file"
-            multiple
-            accept="image/*"
-            capture="environment"
-            onChange={(event) =>
-              setConditionFiles(Array.from(event.target.files ?? []))
-            }
-          />
-        </label>
-        {exchange ? (
-          <label className="flex cursor-pointer items-center gap-2 border-b border-line pb-3 text-body font-medium text-brand">
-            <Upload className="size-4" aria-hidden="true" />
-            {replacementFile?.name ??
-              "Add replacement handover proof (required)"}
-            <Input
-              className="sr-only"
-              type="file"
-              accept="image/*"
-              capture="environment"
-              onChange={(event) =>
-                setReplacementFile(event.target.files?.[0] ?? null)
-              }
-            />
-          </label>
-        ) : null}
-        <Input
-          inputMode="numeric"
-          maxLength={6}
-          value={otpCode}
-          placeholder="Customer pickup code"
-          onChange={(event) =>
-            setOtpCode(event.target.value.replace(/\D/g, "").slice(0, 6))
-          }
-        />
-        <Button
-          className="w-full"
-          size="lg"
-          disabled={
-            otpCode.length !== 6 ||
-            (exchange && (!conditionFiles.length || !replacementFile))
-          }
-          loading={confirm.isPending || upload.isPending}
-          onClick={() => void complete()}
-        >
-          Confirm collected{exchange ? " and exchanged" : ""}
-        </Button>
-      </section>
-      {pickup.status === "PICKUP_SCHEDULED" ? (
-        <FailedAttemptSection
-          value={failureNote}
-          onChange={setFailureNote}
-          onSubmit={() => void recordFailure()}
-          pending={failed.isPending}
-          placeholder="Required reason for failed pickup attempt"
-          submitLabel="Record failed attempt"
-          bordered
-        />
-      ) : null}
-      {pickup.pickupFailureReason ? (
-        <p className="text-body-sm text-warning">
-          Last attempt: {pickup.pickupFailureReason}
-        </p>
-      ) : null}
+
       {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8">
+        <div className="space-y-6 lg:col-span-7 xl:col-span-8">
+          {pickup.status === "PICKUP_SCHEDULED" ? (
+            <PickupChecklistCard
+              exchange={exchange}
+              otpCode={otpCode}
+              onOtpCodeChange={setOtpCode}
+              conditionFiles={conditionFiles}
+              onConditionFilesChange={setConditionFiles}
+              replacementFile={replacementFile}
+              onReplacementFileChange={setReplacementFile}
+              onConfirm={() => void complete()}
+              confirmPending={confirm.isPending || upload.isPending}
+              requestCodePending={requestCode.isPending}
+              requestCodeSuccess={requestCode.isSuccess}
+              expiresInMinutes={requestCode.data?.expiresInMinutes}
+              onRequestCode={() => requestCode.mutate(returnId)}
+            />
+          ) : (
+            <div className="flex items-center gap-3 border border-line bg-surface p-5 shadow-elevation-1 text-success">
+              <CheckCircle2 className="size-5 shrink-0" aria-hidden="true" />
+              <div>
+                <p className="font-medium">Pickup Processed</p>
+                <p className="text-body-sm text-ink-muted">
+                  Return collection status: {pickup.status}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {pickup.pickupFailureReason ? (
+            <div className="border border-line bg-surface p-4 text-body-sm text-warning shadow-elevation-1">
+              <span className="font-medium">Previous attempt note:</span>{" "}
+              {pickup.pickupFailureReason}
+            </div>
+          ) : null}
+
+          {pickup.status === "PICKUP_SCHEDULED" ? (
+            <FailedAttemptSection
+              value={failureNote}
+              onChange={setFailureNote}
+              onSubmit={() => void recordFailure()}
+              pending={failed.isPending}
+              title="Report Pickup Issue"
+              description="If the customer is unavailable, the item is damaged or missing, or the pickup cannot proceed, record the reason below:"
+              placeholder="Required reason for failed pickup attempt (min 3 chars)"
+              submitLabel="Record failed attempt"
+            />
+          ) : null}
+        </div>
+
+        <aside className="space-y-6 lg:col-span-5 xl:col-span-4">
+          <TaskContactCard
+            name={pickup.user?.name ?? "Customer"}
+            phone={pickup.user?.phone}
+            addressText={addressText}
+          />
+          <PickupOverviewCard
+            returnId={pickup.id}
+            type={pickup.type}
+            status={pickup.status}
+            orderId={pickup.subOrder?.orderId}
+            productName={pickup.productName}
+          />
+        </aside>
+      </div>
     </div>
   );
 }

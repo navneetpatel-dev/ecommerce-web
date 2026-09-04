@@ -7,34 +7,48 @@ import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 
 export function PickupsPage() {
   const query = useMyPickups(["PICKUP_SCHEDULED"]);
+  const count = query.data?.length ?? 0;
+
   return (
-    <div className="mx-auto max-w-3xl space-y-5">
-      <header>
-        <h1 className="font-display text-[1.75rem] text-ink">Pickups</h1>
-        <p className="mt-1 text-body text-ink-muted">
-          Scheduled refund and exchange collections.
-        </p>
+    <div className="w-full min-w-0 space-y-6">
+      <header className="flex flex-col gap-2 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="font-display text-[1.75rem] text-ink">Pickups</h1>
+          <p className="mt-1 text-body text-ink-muted">
+            Scheduled refund and exchange collections from customers.
+          </p>
+        </div>
+        <span className="text-body-sm text-ink-muted">
+          {count} scheduled pickup{count === 1 ? "" : "s"}
+        </span>
       </header>
+
       {query.isError ? (
         <QueryErrorAlert
           error={query.error}
           fallback="Could not load pickups."
         />
       ) : null}
-      <div className="space-y-3">
-        {query.data?.map((pickup) => (
-          <TaskCard
-            key={pickup.id}
-            href={PATHS.delivery.pickup(pickup.id)}
-            title={pickup.productName ?? `Return ${pickup.id.slice(0, 8)}`}
-            subtitle={`${pickup.type} · ${pickup.user?.name ?? "Customer"}`}
-            status={pickup.status}
-          />
-        ))}
-      </div>
-      {!query.isLoading && !query.data?.length ? (
-        <p className="text-ink-muted">No scheduled pickups.</p>
-      ) : null}
+
+      {query.isLoading ? (
+        <p className="text-ink-muted">Loading pickups...</p>
+      ) : count > 0 ? (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {query.data?.map((pickup) => (
+            <TaskCard
+              key={pickup.id}
+              href={PATHS.delivery.pickup(pickup.id)}
+              title={pickup.productName ?? `Return ${pickup.id.slice(0, 8)}`}
+              subtitle={`${pickup.type} · ${pickup.user?.name ?? "Customer"}`}
+              status={pickup.status}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className="border-l-2 border-brand/30 pl-3 text-body text-ink-muted py-2">
+          No scheduled pickups.
+        </p>
+      )}
     </div>
   );
 }

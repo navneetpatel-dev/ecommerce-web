@@ -1,8 +1,11 @@
 "use client";
 
-import { Mail, UserRound } from "lucide-react";
+import { Bike, Mail, UserRound } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { isDeliveryRole } from "@/shared/utils/roles";
+import { useDeliveryProfile } from "@/features/delivery-dashboard";
 import type { AccountProfile } from "../../../types";
 import { EmailVerificationStatus } from "../../EmailVerificationStatus.component";
 
@@ -11,7 +14,34 @@ interface ProfileAsideProps {
   isWorkspace: boolean;
 }
 
+function DeliveryProfileAsideDetail() {
+  const profile = useDeliveryProfile();
+  const agent = profile.data;
+  if (!agent) return null;
+  return (
+    <div className="flex items-start gap-3 border-t border-line/60 pt-4">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-brand">
+        <Bike size={18} strokeWidth={1.5} />
+      </span>
+      <div className="min-w-0">
+        <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
+          Operating Unit
+        </p>
+        <p className="mt-1 text-body font-medium text-ink">
+          {agent.vehicleType} · {agent.hubOrZone}
+        </p>
+        <p className="mt-0.5 text-body-sm text-ink-muted">
+          {agent.availableForAssignment ? "Available for duty" : "Off duty"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function ProfileAside({ profile, isWorkspace }: ProfileAsideProps) {
+  const role = useAuthStore((s) => s.currentUser?.role);
+  const isDelivery = isDeliveryRole(role);
+
   return (
     <aside className="border border-line bg-surface shadow-elevation-1">
       <div className="border-b border-line bg-paper/55 px-5 py-4 md:px-6">
@@ -61,6 +91,8 @@ export function ProfileAside({ profile, isWorkspace }: ProfileAsideProps) {
             </div>
           </div>
         </div>
+
+        {isDelivery ? <DeliveryProfileAsideDetail /> : null}
 
         <div className="border-t border-line pt-4">
           <p className="text-body-sm leading-6 text-ink-muted">
