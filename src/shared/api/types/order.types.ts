@@ -40,6 +40,12 @@ export interface Shipment {
   shippedAt: string | null;
   deliveredAt: string | null;
   deliveryAgent?: { id: string; fullName: string; phone: string } | null;
+  proofOfDeliveryUrl?: string | null;
+  failureReason?: string | null;
+  failedAttemptCount?: number;
+  codAmount?: number | null;
+  codCollected?: boolean;
+  preferredRedeliverySlot?: string | null;
 }
 
 export interface SubOrder {

@@ -2,6 +2,7 @@
 
 import { DeliveryLayout } from "@/shared/components/layout/DeliveryLayout.component";
 import { HeaderContainer } from "@/features/storefront";
+import { OfflineSyncBanner } from "@/features/delivery-dashboard";
 
 export default function DeliveryDashboardLayout({
   children,
@@ -18,6 +19,7 @@ export default function DeliveryDashboardLayout({
         />
       )}
     >
+      <OfflineSyncBanner />
       {children}
     </DeliveryLayout>
   );

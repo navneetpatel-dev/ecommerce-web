@@ -5,7 +5,7 @@ import { useMyDeliveries, useMyPickups } from "../api/deliveryAgent.queries";
 import { PATHS } from "@/shared/constants/paths";
 
 export function HistoryPage() {
-  const deliveries = useMyDeliveries(["DELIVERED"]);
+  const deliveries = useMyDeliveries(["DELIVERED", "RTO_DELIVERED"]);
   const pickups = useMyPickups(["RECEIVED", "CLOSED"]);
   const deliveryCount = deliveries.data?.length ?? 0;
   const pickupCount = pickups.data?.length ?? 0;
@@ -74,7 +74,9 @@ export function HistoryPage() {
                   key={pickup.id}
                   href={PATHS.delivery.pickup(pickup.id)}
                   title={
-                    pickup.productName ?? `Return ${pickup.id.slice(0, 8)}`
+                    pickup.orderItem?.productName ??
+                    pickup.productName ??
+                    `Return ${pickup.id.slice(0, 8)}`
                   }
                   subtitle={pickup.type}
                   status={pickup.status}

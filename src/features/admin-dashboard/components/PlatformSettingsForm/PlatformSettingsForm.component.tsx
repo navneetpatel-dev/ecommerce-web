@@ -28,6 +28,7 @@ interface PlatformSettingsFormProps {
   onPayoutCycleChange: (value: string) => void;
   onFreeShippingThresholdChange: (value: number) => void;
   onReturnShippingFeeChange: (value: number) => void;
+  onDeliveryAgentPerTaskEarningChange: (value: number) => void;
   onSupportEmailChange: (value: string) => void;
   onSupportHoursChange: (value: string) => void;
   onTicketReopenWindowDaysChange: (value: number) => void;
@@ -71,6 +72,9 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onPayoutCycleChange={props.onPayoutCycleChange}
           onFreeShippingThresholdChange={props.onFreeShippingThresholdChange}
           onReturnShippingFeeChange={props.onReturnShippingFeeChange}
+          onDeliveryAgentPerTaskEarningChange={
+            props.onDeliveryAgentPerTaskEarningChange
+          }
         />
 
         <SupportSettingsSection

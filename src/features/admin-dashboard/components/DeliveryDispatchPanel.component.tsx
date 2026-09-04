@@ -5,10 +5,11 @@ import { PackageCheck, RotateCcw } from "lucide-react";
 import {
   deliveryAdminApi,
   type DeliveryAgent,
+  type UnassignedPickup,
   type UnassignedShipment,
 } from "@/features/delivery-dashboard";
 import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
+import { Checkbox } from "@/shared/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -28,7 +29,9 @@ export function DeliveryDispatchPanel({
   const [selectedAgent, setSelectedAgent] = useState("");
   const [shipments, setShipments] = useState<UnassignedShipment[]>([]);
   const [loadingShipments, setLoadingShipments] = useState(true);
-  const [shipmentId, setShipmentId] = useState("");
+  const [selectedShipmentIds, setSelectedShipmentIds] = useState<string[]>([]);
+  const [pickups, setPickups] = useState<UnassignedPickup[]>([]);
+  const [loadingPickups, setLoadingPickups] = useState(true);
   const [returnId, setReturnId] = useState("");
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -38,12 +41,29 @@ export function DeliveryDispatchPanel({
     setLoadingShipments(true);
     deliveryAdminApi
       .unassignedShipments()
-      .then(setShipments)
+      .then((rows) => {
+        setShipments(rows);
+        setSelectedShipmentIds((current) =>
+          current.filter((id) => rows.some((row) => row.id === id)),
+        );
+      })
       .catch(() => setShipments([]))
       .finally(() => setLoadingShipments(false));
   };
 
-  useEffect(loadShipments, []);
+  const loadPickups = () => {
+    setLoadingPickups(true);
+    deliveryAdminApi
+      .unassignedPickups()
+      .then(setPickups)
+      .catch(() => setPickups([]))
+      .finally(() => setLoadingPickups(false));
+  };
+
+  useEffect(() => {
+    loadShipments();
+    loadPickups();
+  }, []);
 
   const available = agents.filter(
     (agent) => agent.status === "ACTIVE" && agent.availableForAssignment,
@@ -69,14 +89,32 @@ export function DeliveryDispatchPanel({
     }
   };
 
-  const dispatchShipment = () =>
+  const toggleShipment = (id: string, checked: boolean) => {
+    setSelectedShipmentIds((current) =>
+      checked ? [...current, id] : current.filter((rowId) => rowId !== id),
+    );
+  };
+
+  const dispatchSelectedShipments = () =>
     run(
-      () => deliveryAdminApi.assignShipment(shipmentId, selectedAgent),
-      "Shipment assigned.",
+      () =>
+        deliveryAdminApi.bulkAssignShipments(
+          selectedShipmentIds,
+          selectedAgent,
+        ),
+      `${selectedShipmentIds.length} shipment(s) assigned.`,
     ).then(() => {
-      setShipmentId("");
+      setSelectedShipmentIds([]);
       loadShipments();
     });
+
+  const allShipmentIds = shipments.map((s) => s.id);
+  const allSelected =
+    allShipmentIds.length > 0 &&
+    allShipmentIds.every((id) => selectedShipmentIds.includes(id));
+  const toggleSelectAll = (checked: boolean) => {
+    setSelectedShipmentIds(checked ? allShipmentIds : []);
+  };
 
   return (
     <section className="space-y-4 border-b border-line pb-6">
@@ -85,8 +123,8 @@ export function DeliveryDispatchPanel({
           Manual dispatch
         </h2>
         <p className="mt-1 text-body-sm text-ink-muted">
-          Pick a shipment waiting for an agent, or use the Assign agent action
-          on a return record for pickups.
+          Select an agent, then check one or more waiting shipments (or pick a
+          pending return pickup) to assign.
         </p>
       </div>
       <Select value={selectedAgent} onValueChange={setSelectedAgent}>
@@ -103,61 +141,116 @@ export function DeliveryDispatchPanel({
           ))}
         </SelectContent>
       </Select>
-      <div className="grid gap-3 md:grid-cols-2">
-        <div className="flex gap-2">
-          <Select value={shipmentId} onValueChange={setShipmentId}>
-            <SelectTrigger className="min-w-0 flex-1">
-              <SelectValue
-                placeholder={
-                  loadingShipments
-                    ? "Loading shipments..."
-                    : shipments.length === 0
-                      ? "No unassigned shipments"
-                      : "Select a shipment"
-                }
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {shipments.map((shipment) => (
-                <SelectItem key={shipment.id} value={shipment.id}>
-                  {shipment.trackingNumber}
-                  {shipment.vendorName ? ` · ${shipment.vendorName}` : ""}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button
-            aria-label="Assign shipment"
-            disabled={!selectedAgent || !shipmentId}
-            loading={pending}
-            onClick={() => void dispatchShipment()}
-          >
-            <PackageCheck className="size-4" aria-hidden="true" />
-            Assign
-          </Button>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-2 rounded-md border border-line p-3">
+          <div className="flex items-center justify-between">
+            <p className="text-body-sm font-medium text-ink">
+              Unassigned shipments
+            </p>
+            <Button
+              size="sm"
+              disabled={!selectedAgent || selectedShipmentIds.length === 0}
+              loading={pending}
+              onClick={() => void dispatchSelectedShipments()}
+            >
+              <PackageCheck className="size-4" aria-hidden="true" />
+              Assign {selectedShipmentIds.length || ""}
+            </Button>
+          </div>
+          <div className="max-h-64 space-y-1 overflow-y-auto">
+            {loadingShipments ? (
+              <p className="text-body-sm text-ink-muted">
+                Loading shipments...
+              </p>
+            ) : shipments.length === 0 ? (
+              <p className="text-body-sm text-ink-muted">
+                No unassigned shipments.
+              </p>
+            ) : (
+              <>
+                <label className="flex items-center gap-2 rounded-sm border-b border-line/60 px-1 pb-1.5 text-body-sm">
+                  <Checkbox
+                    checked={allSelected}
+                    onCheckedChange={(checked) =>
+                      toggleSelectAll(Boolean(checked))
+                    }
+                  />
+                  <span className="font-medium text-ink-muted">Select all</span>
+                </label>
+                {shipments.map((shipment) => (
+                  <label
+                    key={shipment.id}
+                    className="flex items-center gap-2 rounded-sm px-1 py-1.5 text-body-sm hover:bg-paper/60"
+                  >
+                    <Checkbox
+                      checked={selectedShipmentIds.includes(shipment.id)}
+                      onCheckedChange={(checked) =>
+                        toggleShipment(shipment.id, Boolean(checked))
+                      }
+                    />
+                    <span className="min-w-0 flex-1 truncate font-mono">
+                      {shipment.trackingNumber}
+                    </span>
+                    {shipment.vendorName ? (
+                      <span className="shrink-0 text-ink-muted">
+                        {shipment.vendorName}
+                      </span>
+                    ) : null}
+                  </label>
+                ))}
+              </>
+            )}
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Input
-            placeholder="Return UUID"
-            value={returnId}
-            onChange={(event) => setReturnId(event.target.value)}
-          />
-          <Button
-            aria-label="Assign return pickup"
-            disabled={!selectedAgent || !returnId}
-            loading={pending}
-            onClick={() =>
-              void run(
-                () => deliveryAdminApi.assignPickup(returnId, selectedAgent),
-                "Return pickup assigned.",
-              )
-            }
-          >
-            <RotateCcw className="size-4" aria-hidden="true" />
-            Assign
-          </Button>
+
+        <div className="space-y-2 rounded-md border border-line p-3">
+          <p className="text-body-sm font-medium text-ink">
+            Unassigned return pickups
+          </p>
+          <div className="flex gap-2">
+            <Select value={returnId} onValueChange={setReturnId}>
+              <SelectTrigger className="min-w-0 flex-1">
+                <SelectValue
+                  placeholder={
+                    loadingPickups
+                      ? "Loading pickups..."
+                      : pickups.length === 0
+                        ? "No unassigned pickups"
+                        : "Select a return pickup"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {pickups.map((pickup) => (
+                  <SelectItem key={pickup.id} value={pickup.id}>
+                    {pickup.productName ?? `Return ${pickup.id.slice(0, 8)}`}
+                    {pickup.customerName ? ` · ${pickup.customerName}` : ""}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button
+              aria-label="Assign return pickup"
+              disabled={!selectedAgent || !returnId}
+              loading={pending}
+              onClick={() =>
+                void run(
+                  () => deliveryAdminApi.assignPickup(returnId, selectedAgent),
+                  "Return pickup assigned.",
+                ).then(() => {
+                  setReturnId("");
+                  loadPickups();
+                })
+              }
+            >
+              <RotateCcw className="size-4" aria-hidden="true" />
+              Assign
+            </Button>
+          </div>
         </div>
       </div>
+
       {message ? <p className="text-body-sm text-success">{message}</p> : null}
       {error ? <p className="text-body-sm text-danger">{error}</p> : null}
     </section>

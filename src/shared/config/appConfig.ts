@@ -18,6 +18,15 @@ export const SITE_URL = (
  */
 export const CLIENT_API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
+/**
+ * Socket.IO connects directly to the backend origin — WebSocket upgrades
+ * aren't proxied through the Next.js `/api/*` rewrite the same way plain HTTP
+ * is, so this always resolves to a real origin (never empty like
+ * `CLIENT_API_BASE_URL` is in dev).
+ */
+export const SOCKET_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:9000";
+
 /** Builds the redirect entry point for an OAuth provider flow. */
 export function oauthEntryPoint(
   provider: string,

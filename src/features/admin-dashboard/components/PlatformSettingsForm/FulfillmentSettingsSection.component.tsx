@@ -18,6 +18,7 @@ interface FulfillmentSettingsSectionProps {
   onPayoutCycleChange: (value: string) => void;
   onFreeShippingThresholdChange: (value: number) => void;
   onReturnShippingFeeChange: (value: number) => void;
+  onDeliveryAgentPerTaskEarningChange: (value: number) => void;
 }
 
 export function FulfillmentSettingsSection({
@@ -26,6 +27,7 @@ export function FulfillmentSettingsSection({
   onPayoutCycleChange,
   onFreeShippingThresholdChange,
   onReturnShippingFeeChange,
+  onDeliveryAgentPerTaskEarningChange,
 }: FulfillmentSettingsSectionProps) {
   return (
     <FormSection
@@ -62,6 +64,18 @@ export function FulfillmentSettingsSection({
           step={10}
           prefix="₹"
           onChange={(value) => onReturnShippingFeeChange(value ?? 0)}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        label={LABELS.deliveryAgentPerTaskEarning}
+        hint={LABELS.deliveryAgentPerTaskEarningHint}
+      >
+        <NumberInput
+          value={form.deliveryAgentPerTaskEarning}
+          min={0}
+          step={5}
+          prefix="₹"
+          onChange={(value) => onDeliveryAgentPerTaskEarningChange(value ?? 0)}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.payoutCycle}>

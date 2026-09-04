@@ -36,6 +36,8 @@ export function usePlatformSettingsForm() {
             500, 1000, 2000, 5000,
           ],
           pointsPerRupee: settings.pointsPerRupee ?? 1,
+          deliveryAgentPerTaskEarning:
+            settings.deliveryAgentPerTaskEarning ?? 20,
         }),
       )
       .catch((err) =>
@@ -220,6 +222,12 @@ export function usePlatformSettingsForm() {
       setMessage(null);
       setForm((current) =>
         current ? { ...current, pointsPerRupee: value } : current,
+      );
+    },
+    setDeliveryAgentPerTaskEarning: (value: number) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, deliveryAgentPerTaskEarning: value } : current,
       );
     },
   };

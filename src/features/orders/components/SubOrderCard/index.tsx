@@ -102,6 +102,35 @@ export function SubOrderCard({
               with the delivery agent to receive it.
             </p>
           )}
+          {subOrder.shipment.codAmount != null && (
+            <p className="mt-2 text-body-sm text-ink-muted">
+              Cash on delivery: ₹{subOrder.shipment.codAmount.toFixed(2)}{" "}
+              {subOrder.shipment.codCollected
+                ? "(collected)"
+                : "(due at doorstep)"}
+            </p>
+          )}
+          {subOrder.shipment.failureReason && (
+            <p className="mt-2 rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning">
+              Last delivery attempt note: {subOrder.shipment.failureReason}
+            </p>
+          )}
+          {subOrder.shipment.status === SHIPMENT_STATUS.RTO_INITIATED && (
+            <p className="mt-2 rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning">
+              We couldn&apos;t deliver this after multiple attempts — it&apos;s
+              being routed back to the seller.
+            </p>
+          )}
+          {subOrder.shipment.proofOfDeliveryUrl && (
+            <a
+              href={subOrder.shipment.proofOfDeliveryUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 inline-block text-body-sm font-medium text-brand hover:underline"
+            >
+              View proof of delivery photo
+            </a>
+          )}
         </div>
       )}
 

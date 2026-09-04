@@ -8,7 +8,7 @@ import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import {
   useConfirmPickup,
-  useMyPickups,
+  usePickup,
   useRequestPickupCode,
   useUpdatePickupStatus,
 } from "../api/deliveryAgent.queries";
@@ -25,12 +25,13 @@ import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 export function PickupTaskDetailPage() {
   const { returnId } = useParams<{ returnId: string }>();
   const router = useRouter();
-  const query = useMyPickups();
+  const query = usePickup(returnId);
   const confirm = useConfirmPickup();
   const failed = useUpdatePickupStatus();
   const requestCode = useRequestPickupCode();
   const upload = usePresignUpload();
-  const pickup = query.data?.find((item) => item.id === returnId);
+  const pickup = query.data;
+  const productName = pickup?.orderItem?.productName ?? pickup?.productName;
   const [otpCode, setOtpCode] = useState("");
   const [conditionFiles, setConditionFiles] = useState<File[]>([]);
   const [replacementFile, setReplacementFile] = useState<File | null>(null);
@@ -105,7 +106,7 @@ export function PickupTaskDetailPage() {
         <div>
           <TextEyebrow brand>RETURN PICKUP TASK</TextEyebrow>
           <h1 className="mt-1 font-display text-[1.5rem] sm:text-[1.75rem] font-bold text-ink">
-            {pickup.productName ?? "Return pickup"}
+            {productName ?? "Return pickup"}
           </h1>
           <p className="mt-1 text-body-sm text-ink-muted">
             {pickup.type} pickup · Return #{pickup.id.slice(0, 8)}
@@ -172,13 +173,16 @@ export function PickupTaskDetailPage() {
             name={pickup.user?.name ?? "Customer"}
             phone={pickup.user?.phone}
             addressText={addressText}
+            deliveryInstructions={
+              pickup.subOrder?.order?.shippingAddress?.deliveryInstructions
+            }
           />
           <PickupOverviewCard
             returnId={pickup.id}
             type={pickup.type}
             status={pickup.status}
             orderId={pickup.subOrder?.orderId}
-            productName={pickup.productName}
+            productName={productName}
           />
         </aside>
       </div>

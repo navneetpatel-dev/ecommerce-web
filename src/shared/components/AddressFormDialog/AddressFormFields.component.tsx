@@ -3,6 +3,7 @@
 import { CheckboxField } from "@/shared/components/CheckboxField.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
+import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
 import {
   PINCODE_LENGTH,
@@ -126,6 +127,23 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
           value={form.country}
           onChange={(e) => setField("country", e.target.value)}
           error={Boolean(fieldError("country"))}
+        />
+      </FormFieldFrame>
+
+      <FormFieldFrame
+        label={LABELS.addressDeliveryInstructionsOptional}
+        htmlFor="shared-addr-delivery-instructions"
+        className="sm:col-span-2"
+        error={fieldError("deliveryInstructions")}
+      >
+        <Textarea
+          id="shared-addr-delivery-instructions"
+          value={form.deliveryInstructions}
+          onChange={(e) => setField("deliveryInstructions", e.target.value)}
+          placeholder={LABELS.addressDeliveryInstructionsPlaceholder}
+          rows={2}
+          maxLength={500}
+          error={Boolean(fieldError("deliveryInstructions"))}
         />
       </FormFieldFrame>
 

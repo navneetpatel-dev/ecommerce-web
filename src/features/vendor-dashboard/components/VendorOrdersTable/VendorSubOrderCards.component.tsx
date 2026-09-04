@@ -45,6 +45,16 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
               {row.subOrder.shipment.deliveryAgent.fullName}
             </p>
           )}
+          {row.subOrder.shipment.proofOfDeliveryUrl && (
+            <a
+              href={row.subOrder.shipment.proofOfDeliveryUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-body-sm font-medium text-brand hover:underline"
+            >
+              View proof photo
+            </a>
+          )}
         </div>
       )}
       <div className="mt-4 border-t border-line/80 pt-3">

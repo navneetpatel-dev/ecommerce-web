@@ -1,4 +1,4 @@
-import { ExternalLink, MapPin, Phone, User } from "lucide-react";
+import { ExternalLink, MapPin, MessageSquare, Phone, User } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 
@@ -6,10 +6,12 @@ export function TaskContactCard({
   name,
   phone,
   addressText,
+  deliveryInstructions,
 }: {
   name: string;
   phone?: string | null;
   addressText: string;
+  deliveryInstructions?: string | null;
 }) {
   return (
     <div className="border border-line bg-surface shadow-elevation-1">
@@ -42,6 +44,18 @@ export function TaskContactCard({
             {addressText}
           </p>
         </div>
+
+        {deliveryInstructions ? (
+          <div className="flex items-start gap-2 rounded-md border border-line bg-warning/10 p-3">
+            <MessageSquare
+              className="mt-0.5 size-4 shrink-0 text-warning"
+              aria-hidden="true"
+            />
+            <p className="text-body-sm leading-relaxed text-ink">
+              {deliveryInstructions}
+            </p>
+          </div>
+        ) : null}
 
         <div className="grid grid-cols-1 gap-2 pt-2 sm:grid-cols-2">
           {phone ? (

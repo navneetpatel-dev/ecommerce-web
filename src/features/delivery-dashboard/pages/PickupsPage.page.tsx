@@ -38,7 +38,11 @@ export function PickupsPage() {
             <TaskCard
               key={pickup.id}
               href={PATHS.delivery.pickup(pickup.id)}
-              title={pickup.productName ?? `Return ${pickup.id.slice(0, 8)}`}
+              title={
+                pickup.orderItem?.productName ??
+                pickup.productName ??
+                `Return ${pickup.id.slice(0, 8)}`
+              }
               subtitle={`${pickup.type} · ${pickup.user?.name ?? "Customer"}`}
               status={pickup.status}
             />

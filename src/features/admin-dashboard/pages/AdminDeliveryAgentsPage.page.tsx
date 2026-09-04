@@ -5,6 +5,9 @@ import { AdminDataPage } from "./AdminDataPage.page";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import { CreateDeliveryAgentForm } from "../components/CreateDeliveryAgentForm.component";
 import { DeliveryDispatchPanel } from "../components/DeliveryDispatchPanel.component";
+import { RtoQueuePanel } from "../components/RtoQueuePanel.component";
+import { CashDepositsPanel } from "../components/CashDepositsPanel.component";
+import { AgentPayoutsPanel } from "../components/AgentPayoutsPanel.component";
 import {
   deliveryAdminApi,
   type DeliveryAgent,
@@ -39,6 +42,9 @@ export function AdminDeliveryAgentsPage() {
       </header>
       <CreateDeliveryAgentForm onCreated={refresh} />
       <DeliveryDispatchPanel agents={agents} onDispatched={refresh} />
+      <RtoQueuePanel />
+      <CashDepositsPanel />
+      <AgentPayoutsPanel />
       <AdminDataPage
         key={revision}
         title="Delivery agents"

@@ -17,6 +17,7 @@ export type AdminPlatformSettings = PublicPlatformSettings & {
   payoutCycle: string;
   returnShippingFee: number;
   pointsPerRupee: number;
+  deliveryAgentPerTaskEarning: number;
 };
 
 export const settingsApi = {

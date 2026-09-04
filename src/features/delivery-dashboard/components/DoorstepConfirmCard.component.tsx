@@ -1,6 +1,7 @@
-import { ShieldCheck, Upload } from "lucide-react";
+import { IndianRupee, ShieldCheck, Upload } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
+import { CheckboxField } from "@/shared/components/CheckboxField.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 
 interface DoorstepConfirmCardProps {
@@ -14,6 +15,9 @@ interface DoorstepConfirmCardProps {
   requestCodeSuccess: boolean;
   expiresInMinutes?: number;
   onRequestCode: () => void;
+  codAmount?: number | null;
+  codCollected?: boolean;
+  onCodCollectedChange?: (collected: boolean) => void;
 }
 
 export function DoorstepConfirmCard({
@@ -27,7 +31,12 @@ export function DoorstepConfirmCard({
   requestCodeSuccess,
   expiresInMinutes,
   onRequestCode,
+  codAmount,
+  codCollected = false,
+  onCodCollectedChange,
 }: DoorstepConfirmCardProps) {
+  const isCod = codAmount != null;
+  const canSubmit = otpCode.length === 6 && (!isCod || codCollected);
   return (
     <div className="border border-line bg-surface shadow-elevation-1">
       <div className="flex items-center justify-between border-b border-line bg-paper/55 px-5 py-3.5">
@@ -105,10 +114,25 @@ export function DoorstepConfirmCard({
           </label>
         </div>
 
+        {isCod ? (
+          <div className="rounded-lg border border-line bg-warning/10 p-4 space-y-2">
+            <div className="flex items-center gap-2 text-body-sm font-medium text-ink">
+              <IndianRupee className="size-4 text-warning" aria-hidden="true" />
+              Cash on delivery: collect ₹{codAmount.toFixed(2)}
+            </div>
+            <CheckboxField
+              id="doorstep-cod-collected"
+              checked={codCollected}
+              onCheckedChange={(checked) => onCodCollectedChange?.(checked)}
+              label={`I have collected ₹${codAmount.toFixed(2)} in cash from the customer`}
+            />
+          </div>
+        ) : null}
+
         <Button
           className="w-full"
           size="lg"
-          disabled={otpCode.length !== 6}
+          disabled={!canSubmit}
           loading={confirmPending}
           onClick={onConfirm}
         >

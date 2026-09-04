@@ -2,14 +2,22 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deliveryAgentApi } from "./deliveryAgent.api";
+import type { BankDetails } from "../types";
 
 export const deliveryKeys = {
   all: ["delivery"] as const,
   profile: ["delivery", "profile"] as const,
   deliveries: (statuses?: string[]) =>
     ["delivery", "deliveries", statuses ?? []] as const,
+  delivery: (shipmentId: string) =>
+    ["delivery", "delivery", shipmentId] as const,
   pickups: (statuses?: string[]) =>
     ["delivery", "pickups", statuses ?? []] as const,
+  pickup: (returnId: string) => ["delivery", "pickup", returnId] as const,
+  shiftSummary: ["delivery", "shift-summary"] as const,
+  cashDeposits: ["delivery", "cash-deposits"] as const,
+  payouts: ["delivery", "payouts"] as const,
+  earnings: ["delivery", "earnings"] as const,
 };
 
 export function useDeliveryProfile() {
@@ -35,6 +43,85 @@ export function useMyPickups(statuses?: string[]) {
     refetchInterval: TASK_LIST_REFETCH_INTERVAL_MS,
   });
 }
+/** Backs the task detail pages directly — no more loading the whole list to find one. */
+export function useDelivery(shipmentId: string) {
+  return useQuery({
+    queryKey: deliveryKeys.delivery(shipmentId),
+    queryFn: () => deliveryAgentApi.delivery(shipmentId),
+    enabled: Boolean(shipmentId),
+    refetchInterval: TASK_LIST_REFETCH_INTERVAL_MS,
+  });
+}
+export function usePickup(returnId: string) {
+  return useQuery({
+    queryKey: deliveryKeys.pickup(returnId),
+    queryFn: () => deliveryAgentApi.pickup(returnId),
+    enabled: Boolean(returnId),
+    refetchInterval: TASK_LIST_REFETCH_INTERVAL_MS,
+  });
+}
+export function useShiftSummary() {
+  return useQuery({
+    queryKey: deliveryKeys.shiftSummary,
+    queryFn: () => deliveryAgentApi.shiftSummary(),
+    refetchInterval: TASK_LIST_REFETCH_INTERVAL_MS,
+  });
+}
+export function useUpdateLocation() {
+  return useMutation({
+    mutationFn: (input: { lat: number; lng: number }) =>
+      deliveryAgentApi.updateLocation(input.lat, input.lng),
+  });
+}
+export function useMyCashDeposits() {
+  return useQuery({
+    queryKey: deliveryKeys.cashDeposits,
+    queryFn: () => deliveryAgentApi.myCashDeposits(),
+  });
+}
+export function useCloseCashShift() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { amount: number; note?: string }) =>
+      deliveryAgentApi.closeCashShift(input.amount, input.note),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: deliveryKeys.shiftSummary });
+      queryClient.invalidateQueries({ queryKey: deliveryKeys.cashDeposits });
+    },
+  });
+}
+export function useRequestRtoHandoverCode() {
+  return useMutation({
+    mutationFn: (shipmentId: string) =>
+      deliveryAgentApi.requestRtoHandoverCode(shipmentId),
+  });
+}
+export function useConfirmRtoHandover() {
+  return useDeliveryMutation((input: { shipmentId: string; otpCode: string }) =>
+    deliveryAgentApi.confirmRtoHandover(input.shipmentId, input.otpCode),
+  );
+}
+export function useMyPayouts() {
+  return useQuery({
+    queryKey: deliveryKeys.payouts,
+    queryFn: () => deliveryAgentApi.myPayouts(),
+  });
+}
+export function useMyEarningsLedger() {
+  return useQuery({
+    queryKey: deliveryKeys.earnings,
+    queryFn: () => deliveryAgentApi.myEarningsLedger(),
+  });
+}
+export function useUpdateBankDetails() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (bankDetails: BankDetails) =>
+      deliveryAgentApi.updateBankDetails(bankDetails),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: deliveryKeys.profile }),
+  });
+}
 function useDeliveryMutation<T>(mutationFn: (value: T) => Promise<unknown>) {
   const queryClient = useQueryClient();
   return useMutation({
@@ -54,10 +141,16 @@ export function useUpdateDeliveryStatus() {
 }
 export function useConfirmDelivery() {
   return useDeliveryMutation(
-    (input: { shipmentId: string; otpCode: string; proofPhotoUrl?: string }) =>
+    (input: {
+      shipmentId: string;
+      otpCode: string;
+      proofPhotoUrl?: string;
+      codCollected?: boolean;
+    }) =>
       deliveryAgentApi.confirmDelivery(input.shipmentId, {
         otpCode: input.otpCode,
         proofPhotoUrl: input.proofPhotoUrl,
+        codCollected: input.codCollected,
       }),
   );
 }

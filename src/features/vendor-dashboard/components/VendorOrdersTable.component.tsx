@@ -85,6 +85,16 @@ export function VendorOrdersTable(props: VendorOrdersTableProps) {
                 {row.subOrder.shipment.deliveryAgent.fullName}
               </p>
             )}
+            {row.subOrder.shipment.proofOfDeliveryUrl && (
+              <a
+                href={row.subOrder.shipment.proofOfDeliveryUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-body-sm font-medium text-brand hover:underline"
+              >
+                View proof photo
+              </a>
+            )}
           </div>
         ) : (
           <span className="text-body-sm text-ink-muted">

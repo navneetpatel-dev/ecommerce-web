@@ -15,6 +15,7 @@ export const addressFormSchema = z.object({
   country: z.string(),
   pincode: z.string().trim().regex(PINCODE_PATTERN, LABELS.invalidPincode),
   isDefault: z.boolean(),
+  deliveryInstructions: z.string().max(500),
 });
 
 export type AddressFormValues = z.infer<typeof addressFormSchema>;
@@ -53,6 +54,7 @@ export function toAddressFormState(
     country: address?.country ?? LABELS.defaultCountry,
     pincode: address?.pincode ?? "",
     isDefault: address?.isDefault ?? false,
+    deliveryInstructions: address?.deliveryInstructions ?? "",
   };
 }
 
@@ -68,6 +70,7 @@ export function toAddressInput(
     country: values.country.trim() || LABELS.defaultCountry,
     pincode: values.pincode.trim(),
     isDefault: values.isDefault || !hasAddresses,
+    deliveryInstructions: values.deliveryInstructions.trim() || null,
   };
 }
 

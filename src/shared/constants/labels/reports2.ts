@@ -173,8 +173,14 @@ export const reports2Labels = {
   enterAddressPincode: "Enter a pincode to continue.",
   saveAddress: "Save address",
   couldNotSaveAddress: "Could not save address.",
+  deliveryAgentPerTaskEarning: "Delivery agent earning per task",
+  deliveryAgentPerTaskEarningHint:
+    "Flat estimate shown on the agent's shift summary per completed delivery or pickup.",
   addressFormSection: "Address details",
   addressFormSectionHint: "Delivery location used at checkout.",
+  addressDeliveryInstructionsOptional: "Delivery instructions (optional)",
+  addressDeliveryInstructionsPlaceholder:
+    "E.g. Leave at front desk, gate code, call on arrival",
   defaultCountry: "India",
   helpContactSection: "Contact details",
   helpContactSectionHint:

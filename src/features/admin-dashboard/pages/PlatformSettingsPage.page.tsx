@@ -36,6 +36,9 @@ export function PlatformSettingsPage() {
       onPayoutCycleChange={settings.setPayoutCycle}
       onFreeShippingThresholdChange={settings.setFreeShippingThreshold}
       onReturnShippingFeeChange={settings.setReturnShippingFee}
+      onDeliveryAgentPerTaskEarningChange={
+        settings.setDeliveryAgentPerTaskEarning
+      }
       onSupportEmailChange={settings.setSupportEmail}
       onSupportHoursChange={settings.setSupportHours}
       onTicketReopenWindowDaysChange={settings.setTicketReopenWindowDays}

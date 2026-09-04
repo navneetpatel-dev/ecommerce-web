@@ -6,4 +6,6 @@ export const NEXT_DELIVERY_STATUS: Record<
   PICKED_UP: { status: "IN_TRANSIT", label: "Start transit" },
   IN_TRANSIT: { status: "OUT_FOR_DELIVERY", label: "Start final delivery" },
   FAILED: { status: "IN_TRANSIT", label: "Resume transit" },
+  // RTO_INITIATED has no plain-status next step — RTO_DELIVERED is only
+  // reachable through the vendor-handover OTP flow (RtoHandoverCard).
 };

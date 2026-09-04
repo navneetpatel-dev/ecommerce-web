@@ -38,6 +38,7 @@ export interface Address {
   country: string;
   pincode: string;
   isDefault: boolean;
+  deliveryInstructions?: string | null;
 }
 
 /** Writable address payload (create/update) — shared because AddressFormDialog is generic. */

@@ -42,6 +42,8 @@ export const shippingRoutes = {
   createRate: "/api/shipping/rates",
   tracking: (trackingNumber: string) =>
     `/api/shipping/tracking/${trackingNumber}`,
+  reschedule: (trackingNumber: string) =>
+    `/api/shipping/tracking/${trackingNumber}/reschedule`,
 } as const;
 
 export const taxRoutes = {

@@ -1,7 +1,12 @@
 "use client";
 
 import { TaskCard } from "../components/TaskCard.component";
-import { useMyDeliveries, useMyPickups } from "../api/deliveryAgent.queries";
+import { ShiftSummaryCard } from "../components/ShiftSummaryCard.component";
+import {
+  useMyDeliveries,
+  useMyPickups,
+  useShiftSummary,
+} from "../api/deliveryAgent.queries";
 import { PATHS } from "@/shared/constants/paths";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 
@@ -11,11 +16,13 @@ const ACTIVE_DELIVERIES = [
   "IN_TRANSIT",
   "OUT_FOR_DELIVERY",
   "FAILED",
+  "RTO_INITIATED",
 ];
 
 export function TodayPage() {
   const deliveries = useMyDeliveries(ACTIVE_DELIVERIES);
   const pickups = useMyPickups(["PICKUP_SCHEDULED"]);
+  const shiftSummary = useShiftSummary();
   const deliveryCount = deliveries.data?.length ?? 0;
   const pickupCount = pickups.data?.length ?? 0;
   const count = deliveryCount + pickupCount;
@@ -38,6 +45,10 @@ export function TodayPage() {
           error={deliveries.error ?? pickups.error}
           fallback="Could not load assigned tasks."
         />
+      ) : null}
+
+      {shiftSummary.data ? (
+        <ShiftSummaryCard summary={shiftSummary.data} />
       ) : null}
 
       <div className="grid gap-8 lg:grid-cols-2">
@@ -89,7 +100,9 @@ export function TodayPage() {
                   key={pickup.id}
                   href={PATHS.delivery.pickup(pickup.id)}
                   title={
-                    pickup.productName ?? `Return ${pickup.id.slice(0, 8)}`
+                    pickup.orderItem?.productName ??
+                    pickup.productName ??
+                    `Return ${pickup.id.slice(0, 8)}`
                   }
                   subtitle={`${pickup.type} · ${pickup.subOrder?.order?.shippingAddress?.city ?? "Address unavailable"}`}
                   status={pickup.status}

@@ -11,6 +11,8 @@ import { PATHS } from "@/shared/constants/paths";
 import {
   useDeliveryProfile,
   useSetAvailability,
+  BankDetailsCard,
+  EarningsPayoutsCard,
 } from "@/features/delivery-dashboard";
 import { usePushSubscription } from "@/shared/hooks/usePushSubscription.hook";
 
@@ -190,6 +192,12 @@ export function DeliveryOperationsSection() {
               </p>
             </div>
           </section>
+
+          {/* Section 4: Payout Destination */}
+          <BankDetailsCard bankDetails={agent?.bankDetails} />
+
+          {/* Section 5: Earnings & Payout History */}
+          <EarningsPayoutsCard />
         </div>
 
         {/* Aside Column */}

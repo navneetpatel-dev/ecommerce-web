@@ -15,10 +15,14 @@ export function TrackingLookupPage() {
         onTrackingNumberChange={tracking.setTrackingNumber}
         onSubmit={tracking.lookup}
       />
+      {tracking.error ? (
+        <p className="text-body-sm text-danger">{tracking.error}</p>
+      ) : null}
       {tracking.result && (
         <TrackingResult
-          status={tracking.result.status}
-          lastUpdate={tracking.result.lastUpdate}
+          result={tracking.result}
+          onReschedule={tracking.reschedule}
+          isRescheduling={tracking.isRescheduling}
         />
       )}
     </div>
