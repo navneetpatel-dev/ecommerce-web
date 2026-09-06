@@ -1,16 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { PATHS } from "@/shared/constants/paths";
 import { motion } from "motion/react";
 import { EmptyCart } from "../EmptyCart.component";
 import { CheckoutStepIndicator } from "../../containers/CheckoutStepIndicator.container";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { CheckoutPageSkeleton } from "@/shared/components/Skeletons.component";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { OrderSummaryPanel } from "./OrderSummaryPanel.component";
 import { MobileSummaryAccordion } from "./MobileSummaryAccordion.component";
 import { CheckoutStepCard } from "./CheckoutStepCard.component";
+import { CheckoutPaymentNoticeDialog } from "./CheckoutPaymentNoticeDialog.component";
 import { PaymentProcessingOverlay } from "../PaymentProcessingOverlay.component";
 import { CheckoutTransitionState } from "./CheckoutTransitionState.component";
 import { checkoutOverlayCopy } from "./checkoutOverlayCopy";
@@ -25,6 +23,8 @@ export function CheckoutPageView({
   addresses,
   paymentMethod,
   walletAmountToUse = 0,
+  giftWrap = false,
+  giftMessage = "",
   quote,
   isQuoteLoading,
   isQuoteError,
@@ -54,12 +54,12 @@ export function CheckoutPageView({
   onBackToPayment,
   onSelectPayment,
   onWalletAmountChange,
+  onGiftWrapChange,
+  onGiftMessageChange,
   onContinueToReview,
   onPlaceOrder,
   onCreateAddress,
 }: CheckoutPageViewProps) {
-  const router = useRouter();
-
   const isTransitioning = isPaymentOverlayOpen || isPending;
   const transitionPhase =
     isPending && paymentPhase === "idle" ? "placing" : paymentPhase;
@@ -69,9 +69,6 @@ export function CheckoutPageView({
     return <CheckoutTransitionState paymentPhase={transitionPhase} />;
   if (isLoading) return <CheckoutPageSkeleton />;
   if (!hasItems) return <EmptyCart />;
-
-  const noticePrimaryLabel =
-    paymentNotice?.variant === "danger" ? "Try again" : "Continue checkout";
 
   const paymentOverlay = checkoutOverlayCopy(paymentPhase);
 
@@ -139,6 +136,8 @@ export function CheckoutPageView({
               addresses={addresses}
               paymentMethod={paymentMethod}
               walletAmountToUse={walletAmountToUse}
+              giftWrap={giftWrap}
+              giftMessage={giftMessage}
               quote={quote}
               isQuoteLoading={isQuoteLoading}
               isQuoteError={isQuoteError}
@@ -156,6 +155,8 @@ export function CheckoutPageView({
               onBackToPayment={onBackToPayment}
               onSelectPayment={onSelectPayment}
               onWalletAmountChange={onWalletAmountChange}
+              onGiftWrapChange={onGiftWrapChange}
+              onGiftMessageChange={onGiftMessageChange}
               onContinueToReview={onContinueToReview}
               onPlaceOrder={onPlaceOrder}
               onCreateAddress={onCreateAddress}
@@ -168,26 +169,9 @@ export function CheckoutPageView({
         </div>
       </div>
 
-      <StatusDialog
-        open={Boolean(paymentNotice)}
-        onOpenChange={(open) => {
-          if (!open) onClearPaymentNotice?.();
-        }}
-        variant={paymentNotice?.variant ?? "info"}
-        title={paymentNotice?.title ?? ""}
-        description={paymentNotice?.description ?? ""}
-        primaryAction={{
-          label: noticePrimaryLabel,
-          onClick: () => onClearPaymentNotice?.(),
-        }}
-        secondaryAction={{
-          label: "View cart",
-          variant: "outline",
-          onClick: () => {
-            onClearPaymentNotice?.();
-            router.push(PATHS.cart);
-          },
-        }}
+      <CheckoutPaymentNoticeDialog
+        paymentNotice={paymentNotice}
+        onClearPaymentNotice={onClearPaymentNotice}
       />
 
       <PaymentProcessingOverlay

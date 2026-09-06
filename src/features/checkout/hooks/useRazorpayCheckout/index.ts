@@ -1,4 +1,3 @@
-import { useRouter } from "next/navigation";
 import { checkoutApi } from "../../api/checkout.api";
 import { loadRazorpayScript } from "../../utils/loadRazorpayScript";
 import { getRazorpayCheckoutTheme } from "../../utils/razorpayTheme";
@@ -9,39 +8,11 @@ import {
 import { navigate } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
-import type { PaymentNotice } from "../usePaymentNotice/index";
 import type { CheckoutPaymentPhase } from "../useCheckoutPaymentPhase.hook";
+import type { PlaceOrderResult, LaunchRazorpayPaymentHelpers } from "./types";
 
 export type { CheckoutPaymentPhase };
-
-type PlaceOrderResult = {
-  orderId: string;
-  razorpayOrderId?: string;
-  amount?: number;
-  currency?: string;
-  keyId?: string;
-  checkoutConfigId?: string;
-};
-
-interface LaunchRazorpayPaymentHelpers {
-  router: ReturnType<typeof useRouter>;
-  showNotice: (notice: PaymentNotice) => void;
-  clearCartCache: () => void;
-  /** Post-success cache update: marks the cart stale without refetching it. */
-  onOrderPlaced: () => void;
-  restoreCancelledCheckout: (
-    orderId: string,
-    notice: PaymentNotice | null,
-    options?: { silent?: boolean },
-  ) => Promise<void>;
-  onPhaseChange?: (phase: CheckoutPaymentPhase) => void;
-  onCheckoutComplete?: (orderId: string) => void;
-  prefill?: {
-    name?: string;
-    email?: string;
-    contact?: string;
-  };
-}
+export type { PlaceOrderResult, LaunchRazorpayPaymentHelpers } from "./types";
 
 export async function launchRazorpayPayment(
   result: PlaceOrderResult,
@@ -87,6 +58,11 @@ export async function launchRazorpayPayment(
     theme,
     method: getRazorpayCheckoutMethods(),
     config: getRazorpayCheckoutConfig(),
+    // Lets Razorpay Checkout's own UI offer this shopper's saved cards/UPI
+    // and the "save this instrument" toggle — Checkout-side behavior only.
+    ...(result.razorpayCustomerId
+      ? { customer_id: result.razorpayCustomerId }
+      : {}),
     ...(result.checkoutConfigId ||
     process.env.NEXT_PUBLIC_RAZORPAY_CHECKOUT_CONFIG_ID
       ? {

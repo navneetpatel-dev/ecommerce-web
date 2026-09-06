@@ -14,15 +14,23 @@ import { LABELS } from "@/shared/constants/labels";
 
 interface AdminShippingZoneFormProps {
   name: string;
+  states: string;
+  pincodePrefixes: string;
   createError?: string | null;
   onNameChange: (value: string) => void;
+  onStatesChange: (value: string) => void;
+  onPincodePrefixesChange: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
 }
 
 export function AdminShippingZoneForm({
   name,
+  states,
+  pincodePrefixes,
   createError = null,
   onNameChange,
+  onStatesChange,
+  onPincodePrefixesChange,
   onSubmit,
 }: AdminShippingZoneFormProps) {
   const canCreate = Boolean(name.trim());
@@ -44,6 +52,30 @@ export function AdminShippingZoneForm({
             placeholder={LABELS.zoneName}
             value={name}
             onChange={(e) => onNameChange(e.target.value)}
+          />
+        </FormFieldFrame>
+        <FormFieldFrame
+          label={LABELS.states}
+          htmlFor="shipping-zone-states"
+          hint={LABELS.zoneStatesHint}
+        >
+          <Input
+            id="shipping-zone-states"
+            placeholder={LABELS.states}
+            value={states}
+            onChange={(e) => onStatesChange(e.target.value)}
+          />
+        </FormFieldFrame>
+        <FormFieldFrame
+          label={LABELS.pincodePrefixes}
+          htmlFor="shipping-zone-prefixes"
+          hint={LABELS.zonePincodePrefixesHint}
+        >
+          <Input
+            id="shipping-zone-prefixes"
+            placeholder={LABELS.pincodePrefixes}
+            value={pincodePrefixes}
+            onChange={(e) => onPincodePrefixesChange(e.target.value)}
           />
         </FormFieldFrame>
         <FormError

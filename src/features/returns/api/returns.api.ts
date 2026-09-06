@@ -54,9 +54,14 @@ export const returnsApi = {
   create: (body: CreateReturnBody) =>
     apiClient.post<ReturnRequest>(API.returns.create, body),
   get: (id: string) => apiClient.get<ReturnRequest>(API.returns.detail(id)),
-  transition: (id: string, status: ReturnRequest["status"]) =>
+  transition: (
+    id: string,
+    status: ReturnRequest["status"],
+    rejectionReason?: string,
+  ) =>
     apiClient.patch<{ message: string }>(API.returns.transition(id), {
       status,
+      rejectionReason,
     }),
   delete: (id: string) => apiClient.delete(API.returns.delete(id)),
   downloadCreditNote: (id: string) =>

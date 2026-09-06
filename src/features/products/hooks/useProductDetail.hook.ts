@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import { useAuthStore } from "@/shared/stores/auth.store";
+import { productsApi } from "../api/products.api";
 import { trackRecentlyViewed } from "../utils/recently-viewed";
 import { useWishlistToggle } from "./useWishlistToggle.hook";
 import { useProductDetailData } from "./useProductDetailData/index";
@@ -25,6 +27,7 @@ export function useProductDetail() {
     canAddToCart,
   } = useProductDetailData();
   const { isWishlisted, toggle } = useWishlistToggle(product?.id);
+  const isAuthenticated = useAuthStore((s) => Boolean(s.accessToken));
   const gallery = useProductDetailGallery(resolvedVariantId, maxQuantity);
   const { isAddingToCart, handleAddToCart } = useProductDetailActions({
     resolvedVariantId,
@@ -35,8 +38,13 @@ export function useProductDetail() {
 
   useEffect(() => {
     if (!product) return;
+    // Guest history stays localStorage-only; logged-in shoppers additionally
+    // sync server-side so it follows them across devices/browsers.
     trackRecentlyViewed(product);
-  }, [product]);
+    if (isAuthenticated) {
+      void productsApi.trackRecentlyViewed(product.id).catch(() => {});
+    }
+  }, [product, isAuthenticated]);
 
   const breadcrumbItems = useProductDetailBreadcrumbs(product, categories);
 

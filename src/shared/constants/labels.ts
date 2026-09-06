@@ -27,6 +27,28 @@ import { reports2Labels } from "./labels/reports2";
 import { reports3Labels } from "./labels/reports3";
 import { apiErrorLabels } from "./labels/apiErrors";
 import { cartLabels } from "./labels/cart";
+import { deliveryForceConfirmLabels } from "./labels/deliveryForceConfirm";
+import { webVitalsReportLabels } from "./labels/webVitalsReport";
+import { shippingRatesLabels } from "./labels/shippingRates";
+import { auditFiltersLabels } from "./labels/auditFilters";
+import { vendorDashboardWidgetsLabels } from "./labels/vendorDashboardWidgets";
+import { adminEntityDetailLabels } from "./labels/adminEntityDetail";
+import { wishlistPriceDropLabels } from "./labels/wishlistPriceDrop";
+import { returnRefundBreakdownLabels } from "./labels/returnRefundBreakdown";
+import { notificationsAdminLabels } from "./labels/notificationsAdmin";
+import { adminUsersFiltersLabels } from "./labels/adminUsersFilters";
+import { deliveryDispatchZoneLabels } from "./labels/deliveryDispatchZones";
+import { vendorPayoutFrequencyLabels } from "./labels/vendorPayoutFrequency";
+import { vendorBulkImportLabels } from "./labels/vendorBulkImport";
+import { buyAgainLabels } from "./labels/buyAgain";
+import { giftWrapLabels } from "./labels/giftWrap";
+import { frequentlyBoughtTogetherLabels } from "./labels/frequentlyBoughtTogether";
+import { stockAlertsLabels } from "./labels/stockAlerts";
+import { productQnaLabels } from "./labels/productQna";
+import { paymentMethodsLabels } from "./labels/paymentMethods";
+import { giftCardsLabels } from "./labels/giftCards";
+import { adminRolesLabels } from "./labels/adminRoles";
+import { impersonationLabels } from "./labels/impersonation";
 
 export const LABELS = {
   ...commerceLabels,
@@ -53,6 +75,28 @@ export const LABELS = {
   ...reports3Labels,
   ...apiErrorLabels,
   ...cartLabels,
+  ...deliveryForceConfirmLabels,
+  ...webVitalsReportLabels,
+  ...shippingRatesLabels,
+  ...auditFiltersLabels,
+  ...vendorDashboardWidgetsLabels,
+  ...adminEntityDetailLabels,
+  ...wishlistPriceDropLabels,
+  ...returnRefundBreakdownLabels,
+  ...notificationsAdminLabels,
+  ...adminUsersFiltersLabels,
+  ...deliveryDispatchZoneLabels,
+  ...vendorPayoutFrequencyLabels,
+  ...vendorBulkImportLabels,
+  ...buyAgainLabels,
+  ...giftWrapLabels,
+  ...frequentlyBoughtTogetherLabels,
+  ...stockAlertsLabels,
+  ...productQnaLabels,
+  ...paymentMethodsLabels,
+  ...giftCardsLabels,
+  ...adminRolesLabels,
+  ...impersonationLabels,
 } as const;
 
 export const ROLES = {

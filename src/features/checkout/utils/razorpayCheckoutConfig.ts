@@ -6,7 +6,8 @@ export function getRazorpayCheckoutMethods() {
     netbanking: true,
     wallet: true,
     emi: true,
-    paylater: true,
+    // Razorpay-native EMI only, no third-party BNPL — no PayLater partner contract exists.
+    paylater: false,
   };
 }
 

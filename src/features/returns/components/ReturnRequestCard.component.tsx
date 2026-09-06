@@ -12,6 +12,7 @@ import { formatOrderDate, formatInr } from "@/shared/utils/orderFormat";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import type { ReturnRequest } from "@/shared/api/types";
+import { RefundBreakdown } from "./RefundBreakdown.component";
 import {
   buildLogisticsTimeline,
   buildRefundTimeline,
@@ -107,6 +108,7 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
                   {row.refundCustomerMessage}
                 </p>
               ) : null}
+              <RefundBreakdown row={row} />
             </div>
           ) : null}
           {row.creditNoteNumber ? (
@@ -151,6 +153,14 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
           <Timeline steps={buildLogisticsTimeline(row)} />
         </div>
       </div>
+
+      {row.status === RETURN_STATUS.REJECTED && row.rejectionReason ? (
+        <div className="mt-5 border-t border-line pt-5">
+          <p className="rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-danger">
+            {LABELS.returnRejectionReasonPrefix} {row.rejectionReason}
+          </p>
+        </div>
+      ) : null}
 
       {row.pickupFailureReason ? (
         <div className="mt-5 space-y-3 border-t border-line pt-5">

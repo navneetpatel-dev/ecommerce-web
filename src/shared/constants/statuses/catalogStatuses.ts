@@ -17,6 +17,23 @@ export const REVIEW_STATUS = {
 } as const;
 export type ReviewStatus = (typeof REVIEW_STATUS)[keyof typeof REVIEW_STATUS];
 
+/** Product Q&A moderation gate — mirrors REVIEW_STATUS (PUBLISHED instead of APPROVED). */
+export const PRODUCT_QUESTION_STATUS = {
+  PENDING: "PENDING",
+  PUBLISHED: "PUBLISHED",
+  REJECTED: "REJECTED",
+} as const;
+export type ProductQuestionStatus =
+  (typeof PRODUCT_QUESTION_STATUS)[keyof typeof PRODUCT_QUESTION_STATUS];
+
+/** Who wrote a product-question answer. */
+export const PRODUCT_ANSWER_AUTHOR_TYPE = {
+  VENDOR: "VENDOR",
+  CUSTOMER: "CUSTOMER",
+} as const;
+export type ProductAnswerAuthorType =
+  (typeof PRODUCT_ANSWER_AUTHOR_TYPE)[keyof typeof PRODUCT_ANSWER_AUTHOR_TYPE];
+
 export const WARRANTY_TYPE = {
   MANUFACTURER: "MANUFACTURER",
   SELLER: "SELLER",

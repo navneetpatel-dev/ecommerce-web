@@ -35,9 +35,13 @@ export function useVendorOrderManagement() {
       queryClient.invalidateQueries({ queryKey: vendorKeys.suborders.all }),
   });
 
-  const handleStatusChange = (id: string, status: string) => {
+  const handleStatusChange = (
+    id: string,
+    status: string,
+    trackingId?: string,
+  ) => {
     updateStatus.mutate(
-      { id, status },
+      { id, status, trackingId },
       {
         onSettled: () => setUpdatingId(null),
       },

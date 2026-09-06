@@ -6,6 +6,7 @@ import { AddressStep } from "../AddressStep.component";
 import { ShippingStep } from "../ShippingStep.component";
 import { PaymentStep } from "../PaymentStep.component";
 import { ReviewStep } from "../ReviewStep.component";
+import { CheckoutStepTransition } from "./CheckoutStepTransition.component";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { Address, CartItem, CheckoutQuote } from "@/shared/api/types";
 
@@ -42,6 +43,8 @@ interface CheckoutStepCardProps {
   addresses?: Address[];
   paymentMethod?: string | null;
   walletAmountToUse: number;
+  giftWrap?: boolean;
+  giftMessage?: string;
   quote?: CheckoutQuote | null;
   isQuoteLoading?: boolean;
   isQuoteError?: boolean;
@@ -59,6 +62,8 @@ interface CheckoutStepCardProps {
   onBackToPayment: () => void;
   onSelectPayment: (method: string) => void;
   onWalletAmountChange: (amount: number) => void;
+  onGiftWrapChange?: (giftWrap: boolean) => void;
+  onGiftMessageChange?: (giftMessage: string) => void;
   onContinueToReview: () => void;
   onPlaceOrder: () => void;
   onCreateAddress: (body: Omit<Address, "id" | "userId">) => Promise<void>;
@@ -71,6 +76,8 @@ export function CheckoutStepCard({
   addresses,
   paymentMethod,
   walletAmountToUse,
+  giftWrap = false,
+  giftMessage = "",
   quote,
   isQuoteLoading,
   isQuoteError,
@@ -88,6 +95,8 @@ export function CheckoutStepCard({
   onBackToPayment,
   onSelectPayment,
   onWalletAmountChange,
+  onGiftWrapChange,
+  onGiftMessageChange,
   onContinueToReview,
   onPlaceOrder,
   onCreateAddress,
@@ -113,13 +122,7 @@ export function CheckoutStepCard({
         <div className="mt-6 border-t border-line pt-6 md:mt-8 md:pt-8">
           <AnimatePresence mode="wait" initial={false}>
             {step === 1 && (
-              <motion.div
-                key="address"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
-              >
+              <CheckoutStepTransition stepKey="address">
                 <AddressStep
                   addresses={addresses}
                   selectedId={addressId}
@@ -128,16 +131,10 @@ export function CheckoutStepCard({
                   onContinue={onContinueToShipping}
                   onCreateAddress={onCreateAddress}
                 />
-              </motion.div>
+              </CheckoutStepTransition>
             )}
             {step === 2 && (
-              <motion.div
-                key="shipping"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
-              >
+              <CheckoutStepTransition stepKey="shipping">
                 <ShippingStep
                   groupedByVendor={groupedByVendor}
                   selectedMethods={shippingMethodByVendor}
@@ -149,16 +146,10 @@ export function CheckoutStepCard({
                   onSelect={onSelectShipping}
                   onContinue={onContinueToPayment}
                 />
-              </motion.div>
+              </CheckoutStepTransition>
             )}
             {step === 3 && (
-              <motion.div
-                key="payment"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
-              >
+              <CheckoutStepTransition stepKey="payment">
                 <PaymentStep
                   isPending={isPending}
                   selectedMethod={paymentMethod}
@@ -169,16 +160,10 @@ export function CheckoutStepCard({
                   onContinue={onContinueToReview}
                   onBack={onBackToShipping}
                 />
-              </motion.div>
+              </CheckoutStepTransition>
             )}
             {step === 4 && (
-              <motion.div
-                key="review"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.22, ease: [0.2, 0, 0, 1] }}
-              >
+              <CheckoutStepTransition stepKey="review">
                 <ReviewStep
                   quote={quote ?? null}
                   isQuoteLoading={isQuoteLoading}
@@ -186,10 +171,14 @@ export function CheckoutStepCard({
                   quoteErrorMessage={quoteErrorMessage}
                   isPending={isPending}
                   hasUnavailableItems={hasUnavailableItems}
+                  giftWrap={giftWrap}
+                  giftMessage={giftMessage}
+                  onGiftWrapChange={onGiftWrapChange}
+                  onGiftMessageChange={onGiftMessageChange}
                   onPlaceOrder={onPlaceOrder}
                   onBack={onBackToPayment}
                 />
-              </motion.div>
+              </CheckoutStepTransition>
             )}
           </AnimatePresence>
         </div>

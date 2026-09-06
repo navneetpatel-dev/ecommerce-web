@@ -12,10 +12,12 @@ export {
   reportsEngineApi,
   downloadReportFile,
   buildReportExportFilenameFallback,
+  type ReportCatalogItem,
 } from "./api/reportsEngine.api";
 export {
   defaultRange,
   normalizeExportFormat,
+  labelForKey,
   type ExportFileFormat,
 } from "./hooks/useReportHubHelpers/index";
 export { getReportExportErrorMessage } from "./utils/reportExportErrorMessage";

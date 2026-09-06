@@ -1,6 +1,8 @@
 import type { CheckoutQuote } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { Button } from "@/shared/components/ui/button";
+import { CheckboxField } from "@/shared/components/CheckboxField.component";
+import { Textarea } from "@/shared/components/ui/textarea";
 import { ArrowRight, AlertTriangle } from "lucide-react";
 import { VendorBreakdownCard } from "./ReviewStep/VendorBreakdownCard.component";
 import { PayableSummary } from "./ReviewStep/PayableSummary.component";
@@ -12,6 +14,10 @@ interface ReviewStepProps {
   quoteErrorMessage?: string;
   isPending: boolean;
   hasUnavailableItems?: boolean;
+  giftWrap?: boolean;
+  giftMessage?: string;
+  onGiftWrapChange?: (giftWrap: boolean) => void;
+  onGiftMessageChange?: (giftMessage: string) => void;
   onPlaceOrder: () => void;
   onBack: () => void;
 }
@@ -20,11 +26,14 @@ interface ReviewStepProps {
 export function ReviewStep(props: ReviewStepProps) {
   const {
     quote,
-    isQuoteLoading,
     isQuoteError,
     quoteErrorMessage,
     isPending,
     hasUnavailableItems,
+    giftWrap = false,
+    giftMessage = "",
+    onGiftWrapChange,
+    onGiftMessageChange,
     onPlaceOrder,
     onBack,
   } = props;
@@ -78,6 +87,28 @@ export function ReviewStep(props: ReviewStepProps) {
     <div className="space-y-5">
       <div className="space-y-4">
         {quote.vendorBreakdowns.map(renderBreakdown)}
+      </div>
+
+      <div className="space-y-2 border border-line bg-surface-raised p-4">
+        <CheckboxField
+          id="checkout-gift-wrap"
+          checked={giftWrap}
+          onCheckedChange={(checked) => onGiftWrapChange?.(checked)}
+          label={LABELS.giftWrapOption}
+        />
+        <p className="text-body-sm text-ink-muted">
+          {LABELS.giftWrapOptionHint}
+        </p>
+        {giftWrap ? (
+          <Textarea
+            value={giftMessage}
+            onChange={(e) => onGiftMessageChange?.(e.target.value)}
+            placeholder={LABELS.giftWrapMessagePlaceholder}
+            rows={3}
+            maxLength={500}
+            className="mt-2"
+          />
+        ) : null}
       </div>
 
       <PayableSummary quote={quote} payable={payable} />

@@ -6,7 +6,7 @@ import {
 } from "@/shared/api/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 import { VENDOR_STATUS, PRODUCT_STATUS } from "@/shared/constants/statuses";
-import { downloadReportFile } from "@/features/reports/api/reportsEngine.api";
+import { downloadReportFile } from "@/features/reports";
 import { buildReportExportFilenameFallback } from "@/shared/utils/downloadFilename";
 import type {
   AdminAnalytics,
@@ -55,7 +55,11 @@ export const adminApi = {
     return unwrapPaginatedList(res);
   },
 
-  approveVendor: (id: string) => apiClient.patch(API.vendors.approve(id), {}),
+  approveVendor: (id: string, commissionRate?: number) =>
+    apiClient.patch(
+      API.vendors.approve(id),
+      commissionRate != null ? { commissionRate } : {},
+    ),
   rejectVendor: (id: string, reason: string) =>
     apiClient.patch(API.vendors.reject(id), { reason }),
   suspendVendor: (id: string, reason: string) =>

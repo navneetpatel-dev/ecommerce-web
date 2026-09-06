@@ -22,13 +22,14 @@ import {
   SUB_ORDER_STATUS_SHIPPED,
   SUB_ORDER_STATUS_CANCELLED,
 } from "./subOrderStatuses";
+import { ShipTrackingNumberFields } from "./ShipTrackingNumberFields.component";
 
 interface SubOrderActionsProps {
   subOrderId: string;
   canDownloadInvoice?: boolean;
   updatingId: string | null;
   onSetUpdatingId: (id: string | null) => void;
-  onStatusChange: (id: string, status: string) => void;
+  onStatusChange: (id: string, status: string, trackingId?: string) => void;
 }
 
 const DEFAULT_NEXT_STATUS = SUB_ORDER_STATUS_SHIPPED;
@@ -45,9 +46,21 @@ export function SubOrderActions(props: SubOrderActionsProps) {
   const isEditing = updatingId === subOrderId;
   const [invoicePending, setInvoicePending] = useState(false);
   const [invoiceError, setInvoiceError] = useState<string | null>(null);
+  const [pendingShipment, setPendingShipment] = useState(false);
+  const [trackingId, setTrackingId] = useState("");
 
   const handleStatusSelect = (value: string) => {
+    if (value === SUB_ORDER_STATUS_SHIPPED) {
+      setPendingShipment(true);
+      return;
+    }
     onStatusChange(subOrderId, value);
+  };
+
+  const confirmShipment = () => {
+    const trimmed = trackingId.trim();
+    if (!trimmed) return;
+    onStatusChange(subOrderId, SUB_ORDER_STATUS_SHIPPED, trimmed);
   };
 
   const startEditing = () => {
@@ -55,6 +68,8 @@ export function SubOrderActions(props: SubOrderActionsProps) {
   };
 
   const cancelEditing = () => {
+    setPendingShipment(false);
+    setTrackingId("");
     onSetUpdatingId(null);
   };
 
@@ -104,6 +119,17 @@ export function SubOrderActions(props: SubOrderActionsProps) {
           </p>
         ) : null}
       </div>
+    );
+  }
+
+  if (pendingShipment) {
+    return (
+      <ShipTrackingNumberFields
+        trackingId={trackingId}
+        onTrackingIdChange={setTrackingId}
+        onConfirm={confirmShipment}
+        onCancel={cancelEditing}
+      />
     );
   }
 

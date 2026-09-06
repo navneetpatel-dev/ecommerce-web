@@ -13,6 +13,7 @@ export const returnsTimelinesLabels = {
   returnLogisticsReceived: "Item received",
   returnLogisticsClosed: "Closed",
   returnLogisticsRejected: "Rejected",
+  returnRejectionReasonPrefix: "Reason for rejection:",
   returnSchedulePickup: "Schedule pickup",
   returnMarkReceived: "Mark received",
   returnClose: "Close return",

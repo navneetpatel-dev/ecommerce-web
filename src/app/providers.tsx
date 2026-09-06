@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useState } from "react";
-import { useAuthBootstrap } from "@/features/auth";
+import { useAuthBootstrap, ImpersonationBanner } from "@/features/auth";
 import { LoginRequiredDialogContainer } from "@/shared/containers/LoginRequiredDialogContainer.container";
 import { RouteScrollResetContainer } from "@/shared/containers/RouteScrollResetContainer.container";
 import { BrowseUrlTrackerContainer } from "@/shared/containers/BrowseUrlTrackerContainer.container";
@@ -58,6 +58,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <RouteScrollResetContainer />
           <BrowseUrlTrackerContainer />
           <LoginRequiredDialogContainer />
+          <ImpersonationBanner />
           <RoleSurfaceGuard>{children}</RoleSurfaceGuard>
         </ThemePaletteProvider>
       </PersistQueryClientProvider>

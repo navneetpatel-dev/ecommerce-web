@@ -4,7 +4,11 @@ import { LABELS } from "@/shared/constants/labels";
 import { motion } from "motion/react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { CartPageSkeleton } from "@/shared/components/Skeletons.component";
-import type { CartItem, EligibleCoupon } from "@/shared/api/types";
+import type {
+  AppliedCouponSummary,
+  CartItem,
+  EligibleCoupon,
+} from "@/shared/api/types";
 import { EmptyCart } from "./EmptyCart.component";
 import { VendorGroups } from "./VendorGroups.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
@@ -43,6 +47,7 @@ export interface CartPageViewProps {
   couponPending: boolean;
   appliedCouponCode: string | null;
   appliedDiscount: number;
+  appliedCoupons?: AppliedCouponSummary[];
   appliedCashbackAmount?: number;
   payNowGrandTotal?: number;
   appliedCouponType?: string | null;
@@ -55,7 +60,7 @@ export interface CartPageViewProps {
   eligibleLoading?: boolean;
   onCouponInputChange: (value: string) => void;
   onApplyCoupon: () => void;
-  onRemoveCoupon: () => void;
+  onRemoveCoupon: (code?: string) => void;
   onApplyEligible: (code: string) => void;
 }
 
@@ -86,6 +91,7 @@ export function CartPageView({
   couponPending,
   appliedCouponCode,
   appliedDiscount,
+  appliedCoupons = [],
   appliedCashbackAmount = 0,
   payNowGrandTotal,
   appliedCouponType,
@@ -168,6 +174,7 @@ export function CartPageView({
             couponPending={couponPending}
             appliedCouponCode={appliedCouponCode}
             appliedDiscount={appliedDiscount}
+            appliedCoupons={appliedCoupons}
             appliedCashbackAmount={appliedCashbackAmount}
             payNowGrandTotal={payNowGrandTotal}
             appliedCouponType={appliedCouponType}

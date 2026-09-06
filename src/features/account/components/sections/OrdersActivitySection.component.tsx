@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   ChevronRight,
+  Gift,
   Heart,
   LifeBuoy,
   Package,
@@ -12,8 +13,10 @@ import {
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
+import { giftCardsLabels } from "@/shared/constants/labels/giftCards";
 import { PATHS } from "@/shared/constants/paths";
 import { useAccountOverview } from "../../hooks/useAccountOverview.hook";
+import { SummaryRow } from "./SummaryRow.component";
 import {
   countOrderItems,
   formatInr,
@@ -138,6 +141,12 @@ export function OrdersActivitySection() {
           href={PATHS.wallet}
         />
         <SummaryRow
+          icon={Gift}
+          label={giftCardsLabels.giftCards}
+          value={LABELS.view}
+          href="/gift-cards"
+        />
+        <SummaryRow
           icon={Package}
           label={LABELS.allOrders}
           value={isLoadingStats ? "—" : String(ordersCount)}
@@ -145,56 +154,5 @@ export function OrdersActivitySection() {
         />
       </ul>
     </div>
-  );
-}
-
-function SummaryRow({
-  icon: Icon,
-  label,
-  value,
-  href,
-}: {
-  icon: typeof Heart;
-  label: string;
-  value: string;
-  href?: string;
-}) {
-  const inner = (
-    <>
-      <span className="flex min-w-0 items-center gap-3">
-        <Icon
-          size={16}
-          strokeWidth={1.5}
-          className="shrink-0 text-ink-muted"
-          aria-hidden
-        />
-        <span className="block text-body text-ink">{label}</span>
-      </span>
-      <span className="flex items-center gap-2">
-        <span className="text-[0.875rem] font-medium tabular-nums text-ink">
-          {value}
-        </span>
-        {href ? <ChevronRight size={14} className="text-ink-muted" /> : null}
-      </span>
-    </>
-  );
-
-  if (href) {
-    return (
-      <li>
-        <Link
-          href={href}
-          className="flex items-center justify-between gap-3 px-5 py-4 transition-colors hover:bg-paper md:px-6"
-        >
-          {inner}
-        </Link>
-      </li>
-    );
-  }
-
-  return (
-    <li className="flex items-center justify-between gap-3 px-5 py-4 md:px-6">
-      {inner}
-    </li>
   );
 }

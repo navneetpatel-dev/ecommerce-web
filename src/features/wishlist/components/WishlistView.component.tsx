@@ -4,13 +4,17 @@ import { Trash2 } from "lucide-react";
 import { EmptyWishlistState } from "./EmptyWishlistState.component";
 import { SkeletonGrid } from "@/shared/components/Skeletons.component";
 import { ProductCardContainer } from "@/features/products";
+import { NotifyMeButton } from "@/features/stockAlerts";
 import { PaginationContainer } from "@/shared/containers/PaginationContainer.container";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { wishlistPriceDropLabels } from "@/shared/constants/labels/wishlistPriceDrop";
 import { UNAVAILABLE_REASON } from "@/shared/constants/statuses";
 import { cn } from "@/shared/utils/cn";
 import { formatLabel } from "@/shared/utils/formatLabel";
+import { formatInr } from "@/shared/utils/orderFormat";
+import { priceDropAmount } from "../utils/priceDrop.utils";
 import type { WishlistPageItem } from "../hooks/useWishlistPage.hook";
 import type { UnavailableReason } from "@/shared/constants/statuses";
 
@@ -79,13 +83,20 @@ export function WishlistView(props: WishlistViewProps) {
                 )}
               >
                 <ProductCardContainer product={product} showWishlist={false} />
-                <div className="absolute inset-0 flex flex-col items-start justify-start p-3 bg-transparent pointer-events-none">
+                <div className="absolute inset-0 flex flex-col items-start justify-start gap-2 p-3 bg-transparent pointer-events-none">
                   <Badge
                     variant="destructive"
                     className="text-[0.6875rem] pointer-events-none"
                   >
                     {unavailableLabel(wishlistItem.unavailableReason)}
                   </Badge>
+                  {wishlistItem.unavailableReason ===
+                    UNAVAILABLE_REASON.OUT_OF_STOCK &&
+                  product.variants?.[0]?.id ? (
+                    <div className="pointer-events-auto">
+                      <NotifyMeButton variantId={product.variants[0].id} />
+                    </div>
+                  ) : null}
                 </div>
                 <Button
                   type="button"
@@ -103,13 +114,35 @@ export function WishlistView(props: WishlistViewProps) {
             );
           }
 
+          const dropAmount = priceDropAmount(
+            wishlistItem.priceAtAdd,
+            product.basePrice,
+          );
+
           return (
-            <ProductCardContainer
-              key={product.id}
-              product={product}
-              quickAddLabel={LABELS.moveToCart}
-              showWishlist
-            />
+            <div key={product.id} className="relative">
+              <ProductCardContainer
+                product={product}
+                quickAddLabel={LABELS.moveToCart}
+                showWishlist
+              />
+              {dropAmount != null ? (
+                <div className="absolute left-2 top-2 z-10 pointer-events-none">
+                  <Badge
+                    variant="success"
+                    className="text-[0.6875rem] pointer-events-none"
+                  >
+                    {wishlistPriceDropLabels.wishlistPriceDropped} ·{" "}
+                    {formatLabel(
+                      wishlistPriceDropLabels.wishlistPriceDropSaved,
+                      {
+                        amount: formatInr(dropAmount),
+                      },
+                    )}
+                  </Badge>
+                </div>
+              ) : null}
+            </div>
           );
         })}
       </div>

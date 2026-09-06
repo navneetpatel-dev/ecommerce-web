@@ -9,6 +9,7 @@ import { TableRowAction } from "@/shared/components/TableRowActions.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { AdminConfirmAction } from "./AdminConfirmAction.component";
+import { AdminApproveVendorAction } from "./AdminApproveVendorAction.component";
 import { VendorKycDocumentsMenuAction } from "./VendorKycDocumentsMenuAction.component";
 
 interface Vendor {
@@ -20,7 +21,7 @@ interface Vendor {
 
 interface VendorApprovalTableProps {
   vendors: Vendor[];
-  onApprove: (id: string) => void | Promise<unknown>;
+  onApprove: (id: string, commissionRate?: number) => void | Promise<unknown>;
   onReject: (id: string, reason: string) => void | Promise<unknown>;
   isApproving?: boolean;
   isRejecting?: boolean;
@@ -82,16 +83,11 @@ export function VendorApprovalTable({
             />
           </TableRowAction>
           <TableRowAction>
-            <AdminConfirmAction
-              label={LABELS.approve}
-              tone="success"
-              dialogVariant="success"
-              title={LABELS.confirmApproveVendorTitle}
-              description={formatLabel(LABELS.confirmApproveVendorBody, {
+            <AdminApproveVendorAction
+              vendorName={formatLabel(LABELS.confirmApproveVendorBody, {
                 name: v.businessName,
               })}
-              confirmLabel={LABELS.approve}
-              onConfirm={() => onApprove(v.id)}
+              onApprove={(commissionRate) => onApprove(v.id, commissionRate)}
               disabled={!v.kycComplete || rowBusy}
               disabledHint={
                 !v.kycComplete ? LABELS.kycApproveBlocked : undefined

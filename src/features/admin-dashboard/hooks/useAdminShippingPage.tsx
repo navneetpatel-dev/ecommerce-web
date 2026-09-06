@@ -9,20 +9,27 @@ import { adminShippingApi } from "@/features/admin-dashboard/api/shipping.api";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import { AdminEditShippingZoneAction } from "../components/AdminEditShippingZoneAction.component";
 import { adminRowLabel } from "../utils/adminRowLabel";
+import { parseCsv } from "../utils/csvField";
 import type { AdminDataRow } from "./useAdminDataList.hook";
 import type { AdminListPageModel } from "../types/adminListPage.types";
 
 export type AdminShippingPageModel = AdminListPageModel & {
   form: {
     name: string;
+    states: string;
+    pincodePrefixes: string;
     createError: string | null;
     onNameChange: (value: string) => void;
+    onStatesChange: (value: string) => void;
+    onPincodePrefixesChange: (value: string) => void;
     onSubmit: (e: FormEvent) => Promise<void>;
   };
 };
 
 export function useAdminShippingPage(): AdminShippingPageModel {
   const [name, setName] = useState("");
+  const [states, setStates] = useState("");
+  const [pincodePrefixes, setPincodePrefixes] = useState("");
   const [createError, setCreateError] = useState<string | null>(null);
   const [listVersion, setListVersion] = useState(0);
 
@@ -34,10 +41,12 @@ export function useAdminShippingPage(): AdminShippingPageModel {
       try {
         await adminShippingApi.createZone({
           name: name.trim(),
-          states: [],
-          pincodePrefixes: [],
+          states: parseCsv(states),
+          pincodePrefixes: parseCsv(pincodePrefixes),
         });
         setName("");
+        setStates("");
+        setPincodePrefixes("");
         setListVersion((version) => version + 1);
       } catch (err) {
         setCreateError(
@@ -45,7 +54,7 @@ export function useAdminShippingPage(): AdminShippingPageModel {
         );
       }
     },
-    [name],
+    [name, states, pincodePrefixes],
   );
 
   const load = useCallback(
@@ -82,8 +91,12 @@ export function useAdminShippingPage(): AdminShippingPageModel {
   return {
     form: {
       name,
+      states,
+      pincodePrefixes,
       createError,
       onNameChange: setName,
+      onStatesChange: setStates,
+      onPincodePrefixesChange: setPincodePrefixes,
       onSubmit: handleCreate,
     },
     title: LABELS.shipping,

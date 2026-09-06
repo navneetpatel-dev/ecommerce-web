@@ -39,6 +39,7 @@ export function PlatformSettingsPage() {
       onDeliveryAgentPerTaskEarningChange={
         settings.setDeliveryAgentPerTaskEarning
       }
+      onRefundSlaBusinessDaysChange={settings.setRefundSlaBusinessDays}
       onSupportEmailChange={settings.setSupportEmail}
       onSupportHoursChange={settings.setSupportHours}
       onTicketReopenWindowDaysChange={settings.setTicketReopenWindowDays}
@@ -53,6 +54,14 @@ export function PlatformSettingsPage() {
       onWalletMaxBalanceChange={settings.setWalletMaxBalancePoints}
       onWalletRechargePresetsChange={settings.setWalletRechargePresetsInr}
       onPointsPerRupeeChange={settings.setPointsPerRupee}
+      onPromotionalPointsTtlDaysChange={settings.setPromotionalPointsTtlDays}
+      onScheduledReportsEnabledChange={settings.setScheduledReportsEnabled}
+      onScheduledReportsTypesChange={settings.setScheduledReportsTypes}
+      onScheduledReportsRecipientsChange={
+        settings.setScheduledReportsRecipients
+      }
+      onScheduledReportsDayOfWeekChange={settings.setScheduledReportsDayOfWeek}
+      onScheduledReportsHourUtcChange={settings.setScheduledReportsHourUtc}
       onSave={settings.save}
     />
   );

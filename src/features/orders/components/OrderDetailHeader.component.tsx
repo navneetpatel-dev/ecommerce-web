@@ -63,6 +63,18 @@ export function OrderDetailHeader({
             orderStatus={order.status}
             paymentStatus={order.paymentStatus}
           />
+          {order.giftWrap ? (
+            <div className="mt-3 rounded-md border border-line bg-surface-muted px-3 py-2">
+              <p className="text-body-sm font-medium text-ink">
+                🎁 {LABELS.giftWrappedBadge}
+              </p>
+              {order.giftMessage ? (
+                <p className="mt-1 text-body-sm text-ink-muted">
+                  {order.giftMessage}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </div>
     </header>

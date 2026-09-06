@@ -38,6 +38,13 @@ export function usePlatformSettingsForm() {
           pointsPerRupee: settings.pointsPerRupee ?? 1,
           deliveryAgentPerTaskEarning:
             settings.deliveryAgentPerTaskEarning ?? 20,
+          promotionalPointsTtlDays: settings.promotionalPointsTtlDays ?? 0,
+          refundSlaBusinessDays: settings.refundSlaBusinessDays ?? 7,
+          scheduledReportsEnabled: settings.scheduledReportsEnabled ?? false,
+          scheduledReportsTypes: settings.scheduledReportsTypes ?? [],
+          scheduledReportsRecipients: settings.scheduledReportsRecipients ?? [],
+          scheduledReportsDayOfWeek: settings.scheduledReportsDayOfWeek ?? 1,
+          scheduledReportsHourUtc: settings.scheduledReportsHourUtc ?? 6,
         }),
       )
       .catch((err) =>
@@ -61,6 +68,16 @@ export function usePlatformSettingsForm() {
       );
   };
 
+  /** Every field setter follows the same shape: clear the save message, patch one field. */
+  const setField =
+    <K extends keyof PlatformSettings>(field: K) =>
+    (value: PlatformSettings[K]) => {
+      setMessage(null);
+      setForm((current) =>
+        current ? { ...current, [field]: value } : current,
+      );
+    };
+
   return {
     form,
     loading,
@@ -68,167 +85,39 @@ export function usePlatformSettingsForm() {
     saveError,
     message,
     save,
-    setCommissionRate: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, defaultCommissionRate: value } : current,
-      );
-    },
-    setTcsRatePercent: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, tcsRatePercent: value } : current,
-      );
-    },
-    setTdsRatePercent: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, tdsRatePercent: value } : current,
-      );
-    },
-    setCommissionGstRatePercent: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, commissionGstRatePercent: value } : current,
-      );
-    },
-    setPlatformGstin: (value: string) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, platformGstin: value } : current,
-      );
-    },
-    setPlatformLegalName: (value: string) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, platformLegalName: value } : current,
-      );
-    },
-    setPlatformState: (value: string) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, platformState: value } : current,
-      );
-    },
-    setAutoApproveProducts: (value: boolean) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, autoApproveProducts: value } : current,
-      );
-    },
-    setReturnWindow: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, defaultReturnWindow: value } : current,
-      );
-    },
-    setPayoutCycle: (value: string) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, payoutCycle: value } : current,
-      );
-    },
-    setFreeShippingThreshold: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, freeShippingThreshold: value } : current,
-      );
-    },
-    setReturnShippingFee: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, returnShippingFee: value } : current,
-      );
-    },
-    setSupportEmail: (value: string) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, supportEmail: value } : current,
-      );
-    },
-    setSupportHours: (value: string) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, supportHours: value } : current,
-      );
-    },
-    setTicketReopenWindowDays: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, ticketReopenWindowDays: value } : current,
-      );
-    },
-    setBugVerifyWindowDays: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, bugVerifyWindowDays: value } : current,
-      );
-    },
-    setBugCloseWindowDays: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, bugCloseWindowDays: value } : current,
-      );
-    },
-    setCodEnabled: (value: boolean) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, codEnabled: value } : current,
-      );
-    },
-    setCodMinOrderValue: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, codMinOrderValue: value } : current,
-      );
-    },
-    setCodMaxOrderValue: (value: number | null) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, codMaxOrderValue: value } : current,
-      );
-    },
-    setWalletRechargeEnabled: (value: boolean) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, walletRechargeEnabled: value } : current,
-      );
-    },
-    setWalletMinRechargeInr: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, walletMinRechargeInr: value } : current,
-      );
-    },
-    setWalletMaxRechargeInr: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, walletMaxRechargeInr: value } : current,
-      );
-    },
-    setWalletMaxBalancePoints: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, walletMaxBalancePoints: value } : current,
-      );
-    },
-    setWalletRechargePresetsInr: (value: number[]) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, walletRechargePresetsInr: value } : current,
-      );
-    },
-    setPointsPerRupee: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, pointsPerRupee: value } : current,
-      );
-    },
-    setDeliveryAgentPerTaskEarning: (value: number) => {
-      setMessage(null);
-      setForm((current) =>
-        current ? { ...current, deliveryAgentPerTaskEarning: value } : current,
-      );
-    },
+    setCommissionRate: setField("defaultCommissionRate"),
+    setTcsRatePercent: setField("tcsRatePercent"),
+    setTdsRatePercent: setField("tdsRatePercent"),
+    setCommissionGstRatePercent: setField("commissionGstRatePercent"),
+    setPlatformGstin: setField("platformGstin"),
+    setPlatformLegalName: setField("platformLegalName"),
+    setPlatformState: setField("platformState"),
+    setAutoApproveProducts: setField("autoApproveProducts"),
+    setReturnWindow: setField("defaultReturnWindow"),
+    setPayoutCycle: setField("payoutCycle"),
+    setFreeShippingThreshold: setField("freeShippingThreshold"),
+    setReturnShippingFee: setField("returnShippingFee"),
+    setSupportEmail: setField("supportEmail"),
+    setSupportHours: setField("supportHours"),
+    setTicketReopenWindowDays: setField("ticketReopenWindowDays"),
+    setBugVerifyWindowDays: setField("bugVerifyWindowDays"),
+    setBugCloseWindowDays: setField("bugCloseWindowDays"),
+    setCodEnabled: setField("codEnabled"),
+    setCodMinOrderValue: setField("codMinOrderValue"),
+    setCodMaxOrderValue: setField("codMaxOrderValue"),
+    setWalletRechargeEnabled: setField("walletRechargeEnabled"),
+    setWalletMinRechargeInr: setField("walletMinRechargeInr"),
+    setWalletMaxRechargeInr: setField("walletMaxRechargeInr"),
+    setWalletMaxBalancePoints: setField("walletMaxBalancePoints"),
+    setWalletRechargePresetsInr: setField("walletRechargePresetsInr"),
+    setPointsPerRupee: setField("pointsPerRupee"),
+    setDeliveryAgentPerTaskEarning: setField("deliveryAgentPerTaskEarning"),
+    setPromotionalPointsTtlDays: setField("promotionalPointsTtlDays"),
+    setRefundSlaBusinessDays: setField("refundSlaBusinessDays"),
+    setScheduledReportsEnabled: setField("scheduledReportsEnabled"),
+    setScheduledReportsTypes: setField("scheduledReportsTypes"),
+    setScheduledReportsRecipients: setField("scheduledReportsRecipients"),
+    setScheduledReportsDayOfWeek: setField("scheduledReportsDayOfWeek"),
+    setScheduledReportsHourUtc: setField("scheduledReportsHourUtc"),
   };
 }

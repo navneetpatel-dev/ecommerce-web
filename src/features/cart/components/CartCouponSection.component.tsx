@@ -13,9 +13,9 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { cn } from "@/shared/utils/cn";
-import type { EligibleCoupon } from "@/shared/api/types";
-import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
+import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { AppliedCouponChips } from "./AppliedCouponChips.component";
 
 interface CartCouponSectionProps {
   couponInput: string;
@@ -24,13 +24,14 @@ interface CartCouponSectionProps {
   couponPending: boolean;
   appliedCouponCode: string | null;
   appliedDiscount?: number;
+  appliedCoupons?: AppliedCouponSummary[];
   appliedCashbackAmount?: number;
   payNowGrandTotal?: number;
   eligible: EligibleCoupon[];
   eligibleLoading?: boolean;
   onCouponInputChange: (value: string) => void;
   onApplyCoupon: () => void;
-  onRemoveCoupon: () => void;
+  onRemoveCoupon: (code?: string) => void;
   onApplyEligible: (code: string) => void;
   compact?: boolean;
 }
@@ -42,6 +43,7 @@ export function CartCouponSection({
   couponPending,
   appliedCouponCode,
   appliedDiscount = 0,
+  appliedCoupons = [],
   appliedCashbackAmount = 0,
   payNowGrandTotal,
   eligible,
@@ -52,8 +54,16 @@ export function CartCouponSection({
   onApplyEligible,
   compact,
 }: CartCouponSectionProps) {
+  // Fall back to the singular field so older cart responses still render.
+  const chips: AppliedCouponSummary[] =
+    appliedCoupons.length > 0
+      ? appliedCoupons
+      : appliedCouponCode
+        ? [{ code: appliedCouponCode, discount: appliedDiscount }]
+        : [];
+  const appliedCodes = new Set(chips.map((c) => c.code.toUpperCase()));
   const unusedOffers = eligible.filter(
-    (offer) => offer.code.toUpperCase() !== appliedCouponCode?.toUpperCase(),
+    (offer) => !appliedCodes.has(offer.code.toUpperCase()),
   );
   const offersLabel =
     unusedOffers.length > 0
@@ -95,42 +105,18 @@ export function CartCouponSection({
         </div>
       </FormFieldFrame>
 
-      {appliedCouponCode ? (
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-sm bg-success-subtle/40 px-3 py-2">
-          <div className="min-w-0">
-            <p className="text-body-sm text-success">
-              {formatLabel(LABELS.couponAppliedLabel, {
-                code: appliedCouponCode,
-              })}
-              {appliedDiscount > 0
-                ? ` (−₹${formatInrAmount(appliedDiscount)})`
-                : ""}
-            </p>
-            {appliedCashbackAmount > 0 && payNowGrandTotal != null ? (
-              <CashbackCouponNotice
-                className="mt-1 text-[0.75rem] text-brand"
-                payNow={payNowGrandTotal}
-                cashbackAmount={appliedCashbackAmount}
-              />
-            ) : null}
-          </div>
-          <Button
-            type="button"
-            size="sm"
-            variant="ghost"
-            className="text-ink-muted"
-            onClick={onRemoveCoupon}
-            disabled={couponPending}
-          >
-            {LABELS.removeCoupon}
-          </Button>
-        </div>
-      ) : null}
+      <AppliedCouponChips
+        chips={chips}
+        couponPending={couponPending}
+        appliedCashbackAmount={appliedCashbackAmount}
+        payNowGrandTotal={payNowGrandTotal}
+        onRemoveCoupon={onRemoveCoupon}
+      />
 
-      {couponMessage && !appliedCouponCode ? (
+      {couponMessage && chips.length === 0 ? (
         <p className="text-body-sm text-success">{couponMessage}</p>
       ) : null}
-      {couponMessage && appliedCouponCode ? (
+      {couponMessage && chips.length > 0 ? (
         <p className="text-body-sm text-ink-muted">{couponMessage}</p>
       ) : null}
       {couponError ? (

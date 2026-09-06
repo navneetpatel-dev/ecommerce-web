@@ -21,6 +21,7 @@ interface WalletPointsSettingsSectionProps {
   onWalletMaxBalanceChange: (value: number) => void;
   onWalletRechargePresetsChange: (value: number[]) => void;
   onPointsPerRupeeChange: (value: number) => void;
+  onPromotionalPointsTtlDaysChange: (value: number) => void;
 }
 
 export function WalletPointsSettingsSection({
@@ -31,6 +32,7 @@ export function WalletPointsSettingsSection({
   onWalletMaxBalanceChange,
   onWalletRechargePresetsChange,
   onPointsPerRupeeChange,
+  onPromotionalPointsTtlDaysChange,
 }: WalletPointsSettingsSectionProps) {
   const presetsText = (form.walletRechargePresetsInr ?? []).join(", ");
 
@@ -43,7 +45,9 @@ export function WalletPointsSettingsSection({
       <FormFieldFrame label={LABELS.settingsWalletRechargeEnabled}>
         <Select
           value={form.walletRechargeEnabled === false ? "false" : "true"}
-          onValueChange={(value) => onWalletRechargeEnabledChange(value === "true")}
+          onValueChange={(value) =>
+            onWalletRechargeEnabledChange(value === "true")
+          }
         >
           <SelectTrigger>
             <SelectValue />
@@ -104,6 +108,18 @@ export function WalletPointsSettingsSection({
               .filter((n) => Number.isFinite(n) && n > 0);
             onWalletRechargePresetsChange(parsed);
           }}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        label={LABELS.promotionalPointsTtlDays}
+        hint={LABELS.promotionalPointsTtlDaysHint}
+      >
+        <NumberInput
+          value={form.promotionalPointsTtlDays ?? 0}
+          min={0}
+          step={1}
+          suffix={LABELS.daysShort}
+          onChange={(value) => onPromotionalPointsTtlDaysChange(value ?? 0)}
         />
       </FormFieldFrame>
     </FormSection>

@@ -65,6 +65,8 @@ export type UnassignedShipment = {
   createdAt: string;
   orderId: string | null;
   vendorName: string | null;
+  /** Destination pincode (from the order's shipping address) — powers zone grouping in the dispatch picker. */
+  pincode: string | null;
 };
 
 /** A return pickup with no agent yet — feeds the admin dispatch picker. */
@@ -76,6 +78,8 @@ export type UnassignedPickup = {
   orderId: string | null;
   productName: string | null;
   customerName: string | null;
+  /** Pickup pincode (from the order's shipping address) — powers zone grouping in the dispatch picker. */
+  pincode: string | null;
 };
 
 export type ShiftSummary = {

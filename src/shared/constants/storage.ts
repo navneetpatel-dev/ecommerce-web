@@ -2,6 +2,8 @@
 export const STORAGE_KEYS = {
   ACCESS_TOKEN: "accessToken",
   SESSION: "session",
+  /** The acting admin's own session, stashed while impersonating another user. */
+  IMPERSONATION_ORIGINAL_SESSION: "impersonationOriginalSession",
   KYC_NAME_MISMATCH_WARNING: "kycNameMismatchWarning",
   /** Preferred color mode: 'light' | 'dark' (Rule 29 runtime theming). */
   THEME_MODE: "theme",

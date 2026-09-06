@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { vendorApi } from "../../api/vendor.api";
+import { vendorApi, type VendorPayoutFrequency } from "../../api/vendor.api";
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorEntityType } from "@/shared/constants/statuses";
 
@@ -13,6 +13,8 @@ export function useVendorShopSettingsData() {
     null,
   );
   const [codEnabled, setCodEnabled] = useState(true);
+  const [payoutFrequency, setPayoutFrequency] =
+    useState<VendorPayoutFrequency | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [bannerUrl, setBannerUrl] = useState<string | null>(null);
   const [businessName, setBusinessName] = useState("");
@@ -26,6 +28,7 @@ export function useVendorShopSettingsData() {
       shop.returnShippingFee == null ? null : Number(shop.returnShippingFee),
     );
     setCodEnabled(shop.codEnabled !== false);
+    setPayoutFrequency(shop.payoutFrequency ?? null);
     setLogoUrl(shop.logoUrl ?? null);
     setBannerUrl(shop.bannerUrl ?? null);
     setEntityType((shop.entityType as VendorEntityType | null) ?? null);
@@ -49,6 +52,7 @@ export function useVendorShopSettingsData() {
     businessName,
     returnShippingFee,
     codEnabled,
+    payoutFrequency,
     logoUrl,
     bannerUrl,
     entityType,
@@ -58,6 +62,7 @@ export function useVendorShopSettingsData() {
     applyShop,
     setReturnShippingFee,
     setCodEnabled,
+    setPayoutFrequency,
     setLogoUrl,
     setBannerUrl,
     setEntityType,

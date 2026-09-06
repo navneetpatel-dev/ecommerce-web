@@ -6,7 +6,13 @@ export function useVendorApproval() {
   const queryClient = useQueryClient();
 
   const approve = useMutation({
-    mutationFn: (id: string) => adminApi.approveVendor(id),
+    mutationFn: ({
+      id,
+      commissionRate,
+    }: {
+      id: string;
+      commissionRate?: number;
+    }) => adminApi.approveVendor(id, commissionRate),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: adminKeys.vendors.all }),
   });

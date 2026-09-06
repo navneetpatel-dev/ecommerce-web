@@ -2,8 +2,10 @@
 export const usersRoutes = {
   list: (query = "") => `/api/users${query ? `?${query}` : ""}`,
   assignees: (query = "") => `/api/users/assignees${query ? `?${query}` : ""}`,
+  roles: "/api/users/roles",
   detail: (id: string) => `/api/users/${id}`,
   status: (id: string) => `/api/users/${id}/status`,
+  addresses: (id: string) => `/api/users/${id}/addresses`,
 } as const;
 
 export const usersMeRoutes = {

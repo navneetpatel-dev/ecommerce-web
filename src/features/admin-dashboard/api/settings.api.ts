@@ -18,6 +18,13 @@ export type AdminPlatformSettings = PublicPlatformSettings & {
   returnShippingFee: number;
   pointsPerRupee: number;
   deliveryAgentPerTaskEarning: number;
+  promotionalPointsTtlDays: number;
+  refundSlaBusinessDays: number;
+  scheduledReportsEnabled: boolean;
+  scheduledReportsTypes: string[];
+  scheduledReportsRecipients: string[];
+  scheduledReportsDayOfWeek: number;
+  scheduledReportsHourUtc: number;
 };
 
 export const settingsApi = {

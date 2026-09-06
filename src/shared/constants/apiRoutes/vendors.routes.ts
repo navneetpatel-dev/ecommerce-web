@@ -13,6 +13,7 @@ export const vendorsRoutes = {
   suspend: (id: string) => `/api/vendors/${id}/suspend`,
   delete: (id: string) => `/api/vendors/${id}`,
   dashboardSummary: "/api/vendors/dashboard/summary",
+  dashboardAnalytics: "/api/vendors/dashboard/analytics",
   register: "/api/vendors/register",
   documentRequirements: (query = "") =>
     `/api/vendors/document-requirements${query ? `?${query}` : ""}`,

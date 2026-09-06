@@ -32,6 +32,9 @@ const allowlist = [
   "src/shared/api/pagination.ts",
   "src/features/admin-dashboard/components/AnalyticsStatusChart.component.tsx",
   "src/features/admin-dashboard/hooks/useAdminDataList.hook.ts",
+  // Single pure helper: wishlist price-at-add vs. live product price, used
+  // only to decide whether to show the "Price dropped" badge.
+  "src/features/wishlist/utils/priceDrop.utils.ts",
 ];
 
 /** constants/ holds display strings and route paths — no logic, only false positives. */

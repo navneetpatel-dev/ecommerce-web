@@ -8,7 +8,11 @@ export type CheckoutQuoteInput = {
   addressId: string | null;
   shippingMethodByVendor: Record<string, string>;
   couponCode: string | null;
+  /** Full stacked-coupon set on the cart — drives multi-coupon quotes. */
+  couponCodes?: string[];
   walletAmountToUse?: number;
+  /** In the query key so toggling gift wrap live-refetches the fee. */
+  giftWrap?: boolean;
 };
 
 export const checkoutKeys = {

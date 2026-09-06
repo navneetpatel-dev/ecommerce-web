@@ -278,6 +278,11 @@ export const deliveryAdminApi = {
     ),
   staleTasks: () =>
     apiClient.get<StaleTasksReport>(API.deliveryAgents.staleTasks),
+  forceConfirmDelivery: (shipmentId: string, reason: string) =>
+    apiClient.post<DeliveryShipment>(
+      API.deliveryAgents.forceConfirmDelivery(shipmentId),
+      { reason },
+    ),
   create: (body: {
     email: string;
     password: string;

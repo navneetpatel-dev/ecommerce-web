@@ -1,25 +1,21 @@
 "use client";
 
-import { NumberInput } from "@/shared/components/NumberInput.component";
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
-import {
-  FormActions,
-  FormFieldFrame,
-  FormSection,
-  FormStack,
-} from "@/shared/components/forms";
+import { FormActions, FormStack } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorEntityType } from "@/shared/constants/statuses";
+import type { VendorPayoutFrequency } from "../../api/vendor.api";
 import { CategoriesSection } from "./CategoriesSection.component";
 import { UploadsSection } from "./UploadsSection.component";
 import { KycChecklistSection } from "./KycChecklistSection.component";
+import { FulfillmentSection } from "./FulfillmentSection.component";
 
 interface VendorShopSettingsFormProps {
   vendorId: string;
   businessName: string;
   returnShippingFee: number | null;
   codEnabled: boolean;
+  payoutFrequency: VendorPayoutFrequency | null;
   logoUrl: string | null;
   bannerUrl: string | null;
   entityType: VendorEntityType | null;
@@ -29,6 +25,7 @@ interface VendorShopSettingsFormProps {
   saving: boolean;
   onReturnShippingFeeChange: (value: number | null) => void;
   onCodEnabledChange: (value: boolean) => void;
+  onPayoutFrequencyChange: (value: VendorPayoutFrequency | null) => void;
   onLogoUploaded: (url: string) => void;
   onBannerUploaded: (url: string) => void;
   onEntityTypeChange: (value: VendorEntityType) => void;
@@ -43,6 +40,7 @@ export function VendorShopSettingsForm({
   businessName,
   returnShippingFee,
   codEnabled,
+  payoutFrequency,
   logoUrl,
   bannerUrl,
   entityType,
@@ -52,6 +50,7 @@ export function VendorShopSettingsForm({
   saving,
   onReturnShippingFeeChange,
   onCodEnabledChange,
+  onPayoutFrequencyChange,
   onLogoUploaded,
   onBannerUploaded,
   onEntityTypeChange,
@@ -109,37 +108,14 @@ export function VendorShopSettingsForm({
           checklistKey={checklistKey}
         />
 
-        <FormSection
-          title={LABELS.settingsFulfillment}
-          hint={LABELS.settingsFulfillmentHint}
-          columns={3}
-        >
-          <FormFieldFrame
-            label={LABELS.returnShippingFee}
-            hint={LABELS.returnShippingFeeHint}
-          >
-            <NumberInput
-              value={returnShippingFee ?? undefined}
-              min={0}
-              step={10}
-              prefix="₹"
-              onChange={(value) =>
-                onReturnShippingFeeChange(value == null ? null : value)
-              }
-            />
-          </FormFieldFrame>
-          <FormFieldFrame
-            label={LABELS.vendorCodEnabled}
-            hint={LABELS.vendorCodEnabledHint}
-          >
-            <CheckboxField
-              id="vendor-shop-cod"
-              checked={codEnabled}
-              onCheckedChange={onCodEnabledChange}
-              label={LABELS.vendorCodEnabled}
-            />
-          </FormFieldFrame>
-        </FormSection>
+        <FulfillmentSection
+          returnShippingFee={returnShippingFee}
+          codEnabled={codEnabled}
+          payoutFrequency={payoutFrequency}
+          onReturnShippingFeeChange={onReturnShippingFeeChange}
+          onCodEnabledChange={onCodEnabledChange}
+          onPayoutFrequencyChange={onPayoutFrequencyChange}
+        />
 
         <FormActions leading={message}>
           <Button

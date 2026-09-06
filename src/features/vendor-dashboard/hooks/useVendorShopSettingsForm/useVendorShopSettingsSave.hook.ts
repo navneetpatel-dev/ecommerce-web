@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { vendorApi } from "../../api/vendor.api";
+import { vendorApi, type VendorPayoutFrequency } from "../../api/vendor.api";
 import { LABELS } from "@/shared/constants/labels";
 import { STORAGE_KEYS } from "@/shared/constants/storage";
 import type { VendorEntityType } from "@/shared/constants/statuses";
@@ -14,6 +14,7 @@ export interface ShopSettingsSaveOverride {
   entityType?: VendorEntityType | null;
   categoryIds?: string[];
   codEnabled?: boolean;
+  payoutFrequency?: VendorPayoutFrequency | null;
 }
 
 interface UseVendorShopSettingsSaveOptions {
@@ -21,6 +22,7 @@ interface UseVendorShopSettingsSaveOptions {
   categoryIds: string[];
   returnShippingFee: number | null;
   codEnabled: boolean;
+  payoutFrequency: VendorPayoutFrequency | null;
   logoUrl: string | null;
   bannerUrl: string | null;
   applyShop: (shop: Awaited<ReturnType<typeof vendorApi.getMyShop>>) => void;
@@ -68,6 +70,10 @@ export function useVendorShopSettingsSave(
           override && "codEnabled" in override
             ? override.codEnabled
             : options.codEnabled,
+        payoutFrequency:
+          override && "payoutFrequency" in override
+            ? override.payoutFrequency
+            : options.payoutFrequency,
         logoUrl:
           override && "logoUrl" in override
             ? override.logoUrl

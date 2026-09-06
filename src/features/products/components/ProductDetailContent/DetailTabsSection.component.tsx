@@ -4,6 +4,7 @@ import { ProductInfo } from "../ProductInfo.component";
 import { ProductHighlights } from "../ProductHighlights.component";
 import { ProductSpecifications } from "../ProductSpecifications.component";
 import { ProductReviewsContainer } from "@/features/reviews";
+import { ProductQnaContainer } from "@/features/productQna";
 import {
   Tabs,
   TabsList,
@@ -55,6 +56,12 @@ export function DetailTabsSection({
           >
             {formatLabel(LABELS.reviewsWithCount, { count: reviewCount })}
           </TabsTrigger>
+          <TabsTrigger
+            value="qna"
+            className="rounded-none border-b-2 border-transparent px-3 pb-3 pt-1 data-[state=active]:border-brand data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+          >
+            {LABELS.questionsAndAnswers}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="description" className="py-6 md:py-8">
           <div className="max-w-3xl space-y-8">
@@ -90,6 +97,12 @@ export function DetailTabsSection({
           <ProductReviewsContainer
             productId={product.id}
             enabled={detailTab === "reviews"}
+          />
+        </TabsContent>
+        <TabsContent value="qna" className="py-6 md:py-8" id="qna">
+          <ProductQnaContainer
+            productId={product.id}
+            enabled={detailTab === "qna"}
           />
         </TabsContent>
       </Tabs>

@@ -56,6 +56,9 @@ export const tablesLabels = {
   newsletterCouldNotSubscribe:
     "Could not subscribe right now. Try again or contact support.",
   trackingNumber: "Tracking number",
+  trackingNumberPlaceholder: "Enter carrier tracking number",
+  trackingNumberRequiredToShip:
+    "A tracking number is required to mark this order shipped.",
   track: "Track",
   role: "Role",
   createdAt: "Created",
@@ -73,6 +76,8 @@ export const tablesLabels = {
   amount: "Amount",
   periodStart: "Period start",
   periodEnd: "Period end",
+  paymentReferenceNumber: "Payment reference",
+  failureReason: "Failure reason",
   action: "Action",
   entityType: "Business entity type",
   hsnCode: "HSN",

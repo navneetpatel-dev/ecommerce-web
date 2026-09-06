@@ -1,5 +1,6 @@
 import {
   Bike,
+  CreditCard,
   Lock,
   MapPin,
   Package,
@@ -8,6 +9,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { LABELS, type RoleName } from "@/shared/constants/labels";
+import { paymentMethodsLabels } from "@/shared/constants/labels/paymentMethods";
 import { isDeliveryRole, isWorkspaceRole } from "@/shared/utils/roles";
 import type { AccountNavItem, AccountSectionId } from "./types";
 
@@ -41,6 +43,12 @@ export const ACCOUNT_SECTIONS: AccountNavItem[] = [
     label: LABELS.addresses,
     description: "Delivery addresses",
     icon: MapPin,
+  },
+  {
+    id: "paymentMethods",
+    label: paymentMethodsLabels.paymentMethodsNavLabel,
+    description: paymentMethodsLabels.paymentMethodsNavDescription,
+    icon: CreditCard,
   },
   {
     id: "orders",

@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { useCart } from "@/features/cart";
-import { groupItemsByVendor } from "@/features/cart";
-import { resolveCartDisplayTotals } from "@/features/cart/utils/cartDisplay.utils";
+import {
+  useCart,
+  groupItemsByVendor,
+  resolveCartDisplayTotals,
+} from "@/features/cart";
 import { useCheckoutStore } from "@/shared/stores/checkout.store";
 import { usePlaceOrderWithRazorpay } from "./usePlaceOrder.hook";
 import { useRequireAuth } from "@/shared/hooks/useRequireAuth.hook";
@@ -26,6 +28,10 @@ export function useCheckoutPage() {
     setPaymentMethod,
     walletAmountToUse,
     setWalletAmountToUse,
+    giftWrap,
+    giftMessage,
+    setGiftWrap,
+    setGiftMessage,
   } = useCheckoutStore();
   const {
     data: cart,
@@ -144,6 +150,8 @@ export function useCheckoutPage() {
     shippingMethodByVendor,
     paymentMethod,
     walletAmountToUse,
+    giftWrap,
+    giftMessage,
     addresses: addressesState.addresses,
     quote,
     isQuoteLoading,
@@ -178,6 +186,8 @@ export function useCheckoutPage() {
     onBackToPayment,
     onSelectPayment: setPaymentMethod,
     onWalletAmountChange: setWalletAmountToUse,
+    onGiftWrapChange: setGiftWrap,
+    onGiftMessageChange: setGiftMessage,
     onContinueToReview,
     onPlaceOrder,
     onCreateAddress: addressesState.onCreateAddress,

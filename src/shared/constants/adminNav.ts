@@ -114,8 +114,18 @@ export const ADMIN_NAV = [
     permissions: [PERMISSIONS.USER_MANAGE] as PermissionKey[],
   },
   {
+    href: PATHS.admin.roles,
+    label: LABELS.roles,
+    permissions: [PERMISSIONS.ROLE_MANAGE] as PermissionKey[],
+  },
+  {
     href: PATHS.admin.analytics,
     label: LABELS.analytics,
+    permissions: [PERMISSIONS.ANALYTICS_VIEW] as PermissionKey[],
+  },
+  {
+    href: PATHS.admin.webVitals,
+    label: LABELS.webVitals,
     permissions: [PERMISSIONS.ANALYTICS_VIEW] as PermissionKey[],
   },
   {

@@ -15,4 +15,5 @@ export const authRoutes = {
   changePassword: "/api/auth/change-password",
   sessions: "/api/auth/sessions",
   session: (family: string) => `/api/auth/sessions/${family}`,
+  impersonate: (userId: string) => `/api/auth/impersonate/${userId}`,
 } as const;

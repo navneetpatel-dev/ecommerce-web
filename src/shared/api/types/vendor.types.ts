@@ -10,6 +10,12 @@ export interface VendorInfo {
   performanceScore?: number | null;
   returnShippingFee?: number | null;
   codEnabled?: boolean;
+  /** Per-vendor commission override (%). Used when the vendor's category has no rate of its own. */
+  commissionRate?: number | null;
+  gstNumber?: string | null;
+  state?: string | null;
+  /** Vendor's preferred payout cadence — reference only; payout batches are still admin-triggered manually. */
+  payoutFrequency?: "WEEKLY" | "BIWEEKLY" | "MONTHLY" | null;
 }
 
 export interface VendorDetail extends VendorInfo {

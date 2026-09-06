@@ -30,7 +30,8 @@ export const settingsLabels = {
     "GST charged on marketplace commission invoices issued to vendors (SAC 9985).",
   platformLegalName: "Platform legal name",
   platformGstin: "Platform GSTIN",
-  platformGstinHint: "Ecommerce operator GSTIN used on commission invoices and GSTR-8.",
+  platformGstinHint:
+    "Ecommerce operator GSTIN used on commission invoices and GSTR-8.",
   platformState: "Platform state",
   reports: "Reports",
   reportsHubHint:
@@ -47,8 +48,7 @@ export const settingsLabels = {
   reportExportTimeout:
     "This is taking longer than expected — try again in a moment or pick a shorter date range.",
   reportExportRateLimited: "Too many exports — try again in a minute.",
-  reportExportFiltersLocked:
-    "Filters are locked while your export finishes.",
+  reportExportFiltersLocked: "Filters are locked while your export finishes.",
   reportExportButtonLocked:
     "Wait for the current export to finish before starting another.",
   reportExportOtherFormatLocked:
@@ -67,5 +67,30 @@ export const settingsLabels = {
   approvedCount: "Approved",
   pendingCount: "Pending",
   rejectedCount: "Rejected",
+  promotionalPointsTtlDays: "Promotional points expiry",
+  promotionalPointsTtlDaysHint:
+    "Days a promotional wallet credit stays usable before it expires and is debited back. Set 0 to disable expiry.",
+  refundSlaBusinessDays: "Refund SLA (business days)",
+  refundSlaBusinessDaysHint:
+    "Business days shown to customers as the expected bank posting time after a refund is initiated.",
+  settingsScheduledReports: "Scheduled reports",
+  settingsScheduledReportsHint:
+    "Automated report email digest sent to admins on a weekly cadence.",
+  scheduledReportsEnabled: "Send scheduled report emails",
+  scheduledReportsTypes: "Report types",
+  scheduledReportsTypesHint: "Reports included in each digest email.",
+  scheduledReportsRecipients: "Recipients",
+  scheduledReportsRecipientsHint:
+    "Comma-separated email addresses. Leave blank to email every Super Admin.",
+  scheduledReportsRecipientsPlaceholder: "ops@example.com, finance@example.com",
+  scheduledReportsDayOfWeek: "Day of week",
+  scheduledReportsHourUtc: "Hour (UTC)",
+  scheduledReportsSunday: "Sunday",
+  scheduledReportsMonday: "Monday",
+  scheduledReportsTuesday: "Tuesday",
+  scheduledReportsWednesday: "Wednesday",
+  scheduledReportsThursday: "Thursday",
+  scheduledReportsFriday: "Friday",
+  scheduledReportsSaturday: "Saturday",
   // Report column headers not already covered above (must match BE REPORT_COLUMN_LABELS keys)
 } as const;

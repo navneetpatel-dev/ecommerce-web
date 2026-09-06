@@ -30,6 +30,9 @@ export const tables2Labels = {
   confirmApproveReturnTitle: "Approve this return?",
   confirmApproveReturnBody:
     'Approve return request "{name}" and continue the refund flow?',
+  confirmRejectReturnTitle: "Reject this return?",
+  confirmRejectReturnBody:
+    'Reject return request "{name}"? Your reason will be shown to the customer on their return.',
   confirmApproveReviewTitle: "Approve this review?",
   confirmApproveReviewBody: 'Publish review "{name}" for shoppers to see?',
   confirmRejectReviewTitle: "Reject this review?",

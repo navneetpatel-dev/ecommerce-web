@@ -12,6 +12,8 @@ export interface CheckoutPageViewProps {
   addresses?: Address[];
   paymentMethod?: string | null;
   walletAmountToUse?: number;
+  giftWrap?: boolean;
+  giftMessage?: string;
   quote?: CheckoutQuote | null;
   isQuoteLoading?: boolean;
   isQuoteError?: boolean;
@@ -46,6 +48,8 @@ export interface CheckoutPageViewProps {
   onBackToPayment: () => void;
   onSelectPayment: (method: string) => void;
   onWalletAmountChange: (amount: number) => void;
+  onGiftWrapChange?: (giftWrap: boolean) => void;
+  onGiftMessageChange?: (giftMessage: string) => void;
   onContinueToReview: () => void;
   onPlaceOrder: () => void;
   onCreateAddress: (body: Omit<Address, "id" | "userId">) => Promise<void>;

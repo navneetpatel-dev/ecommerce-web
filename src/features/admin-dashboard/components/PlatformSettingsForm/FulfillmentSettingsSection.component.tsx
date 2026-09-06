@@ -19,6 +19,7 @@ interface FulfillmentSettingsSectionProps {
   onFreeShippingThresholdChange: (value: number) => void;
   onReturnShippingFeeChange: (value: number) => void;
   onDeliveryAgentPerTaskEarningChange: (value: number) => void;
+  onRefundSlaBusinessDaysChange: (value: number) => void;
 }
 
 export function FulfillmentSettingsSection({
@@ -28,6 +29,7 @@ export function FulfillmentSettingsSection({
   onFreeShippingThresholdChange,
   onReturnShippingFeeChange,
   onDeliveryAgentPerTaskEarningChange,
+  onRefundSlaBusinessDaysChange,
 }: FulfillmentSettingsSectionProps) {
   return (
     <FormSection
@@ -76,6 +78,19 @@ export function FulfillmentSettingsSection({
           step={5}
           prefix="₹"
           onChange={(value) => onDeliveryAgentPerTaskEarningChange(value ?? 0)}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        label={LABELS.refundSlaBusinessDays}
+        hint={LABELS.refundSlaBusinessDaysHint}
+      >
+        <NumberInput
+          value={form.refundSlaBusinessDays ?? 7}
+          min={1}
+          max={30}
+          step={1}
+          suffix={LABELS.daysShort}
+          onChange={(value) => onRefundSlaBusinessDaysChange(value ?? 7)}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.payoutCycle}>

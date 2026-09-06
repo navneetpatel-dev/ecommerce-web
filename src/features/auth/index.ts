@@ -22,6 +22,8 @@ export { OAuthCallbackPage } from "./pages/OAuthCallbackPage.page";
 export { AuthPageSkeleton } from "./components/AuthPageSkeleton.component";
 export { ChangePasswordSection } from "./components/ChangePasswordSection.component";
 export { useProfilePage } from "./hooks/useProfilePage.hook";
+export { useImpersonation } from "./hooks/useImpersonation.hook";
+export { ImpersonationBanner } from "./components/ImpersonationBanner.component";
 export {
   useSessions,
   useRevokeSession,

@@ -1,5 +1,10 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { productsApi, type ProductFilters } from "./products.api";
+import { searchApi } from "@/features/search";
+import {
+  productsApi,
+  type ProductFilters,
+  type ProductListResponse,
+} from "./products.api";
 
 export const productKeys = {
   all: ["products"] as const,
@@ -7,6 +12,11 @@ export const productKeys = {
     [...productKeys.all, "list", filters] as const,
   detail: (idOrSlug: string) =>
     [...productKeys.all, "detail", idOrSlug] as const,
+  /** Authenticated caller's server-backed recently-viewed history. */
+  recentlyViewed: () => [...productKeys.all, "recently-viewed"] as const,
+  /** Precomputed "frequently bought together" rail for one product. */
+  frequentlyBoughtTogether: (productId: string) =>
+    [...productKeys.all, "frequently-bought-together", productId] as const,
 };
 
 const UUID_RE =
@@ -16,6 +26,31 @@ function fetchProduct(idOrSlug: string) {
   return UUID_RE.test(idOrSlug)
     ? productsApi.detail(idOrSlug)
     : productsApi.detailBySlug(idOrSlug);
+}
+
+/**
+ * A search term routes to the ranked full-text `GET /api/search` endpoint instead of the
+ * weak `ILIKE` filter on `GET /api/products` — same `ProductFilters` in, same paginated
+ * `ProductListResponse` shape out, so the listing page and grid don't need to branch.
+ * `sort`/`rating`/`attrs` aren't supported by the search endpoint (relevance-ranked) and are
+ * dropped in that path.
+ */
+function fetchProductList(
+  filters: ProductFilters,
+): Promise<ProductListResponse> {
+  const term = filters.search?.trim();
+  if (term) {
+    return searchApi.search({
+      q: term,
+      page: filters.page,
+      limit: filters.limit,
+      categoryId: filters.categoryId,
+      vendorId: filters.vendorId,
+      minPrice: filters.minPrice,
+      maxPrice: filters.maxPrice,
+    });
+  }
+  return productsApi.list(filters);
 }
 
 export function useProduct(
@@ -36,10 +71,33 @@ export function useProductList(
 ) {
   return useQuery({
     queryKey: productKeys.list(filters),
-    queryFn: () => productsApi.list(filters),
+    queryFn: () => fetchProductList(filters),
     placeholderData: (prev) => prev,
     enabled: options.enabled ?? true,
     staleTime: 1000 * 30,
+  });
+}
+
+/** Authenticated-only. Server-backed recently-viewed history — the guest fallback is localStorage. */
+export function useRecentlyViewedQuery(enabled: boolean) {
+  return useQuery({
+    queryKey: productKeys.recentlyViewed(),
+    queryFn: () => productsApi.recentlyViewed(),
+    enabled,
+    staleTime: 1000 * 60,
+  });
+}
+
+/** Public. Precomputed "frequently bought together" products for the PDP rail. */
+export function useFrequentlyBoughtTogether(
+  productId: string,
+  options: { enabled?: boolean } = {},
+) {
+  return useQuery({
+    queryKey: productKeys.frequentlyBoughtTogether(productId),
+    queryFn: () => productsApi.frequentlyBoughtTogether(productId),
+    enabled: !!productId && (options.enabled ?? true),
+    staleTime: 1000 * 60,
   });
 }
 

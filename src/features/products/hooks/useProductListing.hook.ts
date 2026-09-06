@@ -8,6 +8,7 @@ import { MAX_COMPARED_PRODUCTS } from "../constants/compare";
 
 export const SORT_OPTIONS = [
   { value: "trending", label: "Trending" },
+  { value: "popular", label: "Popular" },
   { value: "newest", label: "Newest" },
   { value: "price_asc", label: "Price Low to High" },
   { value: "price_desc", label: "Price High to Low" },

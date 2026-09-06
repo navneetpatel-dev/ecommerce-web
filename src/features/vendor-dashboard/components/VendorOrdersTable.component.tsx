@@ -30,7 +30,7 @@ interface VendorOrdersTableProps {
   orders: VendorOrder[];
   updatingId: string | null;
   onSetUpdatingId: (id: string | null) => void;
-  onStatusChange: (id: string, status: string) => void;
+  onStatusChange: (id: string, status: string, trackingId?: string) => void;
 }
 
 function flattenSubOrders(orders: VendorOrder[]): SubOrderRow[] {

@@ -32,6 +32,8 @@ export const coupons2Labels = {
   noVendorCoupons: "No vendor coupons",
   couponVendorScopeLocked: "Scope is locked to your vendor catalog.",
   usageUnlimited: "∞",
+  appliedCouponsHeading: "Applied coupons",
+  removeCouponCode: "Remove {code}",
 
   // Tables / pagination
 } as const;

@@ -25,6 +25,16 @@ export interface CommissionLedgerEntry {
   commissionAmount: number;
   status: CommissionStatus;
   createdAt: string;
+  /** From TdsLedger (joined by subOrderId) — null when no TDS entry exists yet. */
+  tdsAmount: number | null;
+  tdsRatePercent: number | null;
+  tdsSection: string | null;
+  /** GST breakdown aggregated from OrderItem rows for this sub-order — null when unavailable. */
+  gstTaxableAmount: number | null;
+  gstAmount: number | null;
+  gstCgst: number | null;
+  gstSgst: number | null;
+  gstIgst: number | null;
 }
 
 export type PayoutPaymentMethod =

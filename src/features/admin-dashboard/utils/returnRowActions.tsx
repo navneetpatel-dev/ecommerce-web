@@ -60,6 +60,25 @@ export function buildReturnRowActions(
     );
   }
 
+  if (status === RETURN_STATUS.REQUESTED || status === RETURN_STATUS.APPROVED) {
+    buttons.push(
+      <AdminConfirmAction
+        key="reject"
+        label={LABELS.reject}
+        dialogVariant="danger"
+        tone="danger"
+        title={LABELS.confirmRejectReturnTitle}
+        description={formatLabel(LABELS.confirmRejectReturnBody, { name })}
+        requireReason
+        onConfirm={(reason) =>
+          returnsApi
+            .transition(String(row.id), RETURN_STATUS.REJECTED, reason)
+            .then(reload)
+        }
+      />,
+    );
+  }
+
   if (status === RETURN_STATUS.REQUESTED) {
     buttons.push(
       <AdminConfirmAction

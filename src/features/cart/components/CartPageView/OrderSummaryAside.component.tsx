@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
-import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { PATHS } from "@/shared/constants/paths";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
@@ -11,9 +10,8 @@ import { CartCouponSection } from "../CartCouponSection.component";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
 import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailableNotice.component";
 import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
-import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
-import type { EligibleCoupon } from "@/shared/api/types";
-import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { OrderSummaryTotalsList } from "./OrderSummaryTotalsList.component";
+import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
 
 interface OrderSummaryAsideProps {
   itemCount: number;
@@ -37,6 +35,7 @@ interface OrderSummaryAsideProps {
   couponPending: boolean;
   appliedCouponCode: string | null;
   appliedDiscount: number;
+  appliedCoupons?: AppliedCouponSummary[];
   appliedCashbackAmount?: number;
   payNowGrandTotal?: number;
   appliedCouponType?: string | null;
@@ -49,7 +48,7 @@ interface OrderSummaryAsideProps {
   eligibleLoading?: boolean;
   onCouponInputChange: (value: string) => void;
   onApplyCoupon: () => void;
-  onRemoveCoupon: () => void;
+  onRemoveCoupon: (code?: string) => void;
   onApplyEligible: (code: string) => void;
 }
 
@@ -69,6 +68,7 @@ export function OrderSummaryAside({
   couponPending,
   appliedCouponCode,
   appliedDiscount,
+  appliedCoupons = [],
   appliedCashbackAmount = 0,
   payNowGrandTotal,
   appliedCouponType,
@@ -108,55 +108,15 @@ export function OrderSummaryAside({
           Ready to checkout
         </h2>
 
-        <dl className="mt-5 space-y-2.5 text-[0.875rem]">
-          <div className="flex items-center justify-between gap-4">
-            <dt className="text-ink-muted">{LABELS.subtotal}</dt>
-            <dd className="tabular-nums text-ink">
-              <MoneyAmount
-                value={subtotal}
-                pending={subtotalPending || amountsPending}
-                unavailable={amountsUnavailable}
-              />
-            </dd>
-          </div>
-          {appliedDiscount > 0 ? (
-            <div className="flex items-center justify-between gap-4 text-success">
-              <dt>{LABELS.couponDiscount}</dt>
-              <dd className="tabular-nums">
-                {amountsPending ? (
-                  <InlineAmountSkeleton />
-                ) : (
-                  <>−₹{formatInrAmount(appliedDiscount)}</>
-                )}
-              </dd>
-            </div>
-          ) : null}
-          {vendorDiscountBreakdown.length > 1
-            ? vendorDiscountBreakdown.map((row) => (
-                <div
-                  key={row.vendorId}
-                  className="flex items-center justify-between gap-4 pl-2 text-body-sm text-success"
-                >
-                  <dt className="text-ink-muted">
-                    {LABELS.vendorDiscountBreakdown}: {row.name}
-                  </dt>
-                  <dd className="tabular-nums">
-                    {amountsPending ? (
-                      <InlineAmountSkeleton />
-                    ) : (
-                      <>−₹{formatInrAmount(row.amount)}</>
-                    )}
-                  </dd>
-                </div>
-              ))
-            : null}
-          <OrderTaxShippingBreakdown
-            pending={!amountsUnavailable && (amountsPending || !pricingPreview)}
-            shippingTotal={pricingPreview?.shippingTotal}
-            shippingDisplayKey={pricingPreview?.shippingDisplayKey}
-            taxTotal={pricingPreview?.taxTotal}
-          />
-        </dl>
+        <OrderSummaryTotalsList
+          subtotal={subtotal}
+          subtotalPending={subtotalPending}
+          amountsUnavailable={amountsUnavailable}
+          amountsPending={amountsPending}
+          appliedDiscount={appliedDiscount}
+          vendorDiscountBreakdown={vendorDiscountBreakdown}
+          pricingPreview={pricingPreview}
+        />
 
         <div className="mt-4 border-t border-line pt-4">
           <CartCouponSection
@@ -166,6 +126,7 @@ export function OrderSummaryAside({
             couponPending={couponPending}
             appliedCouponCode={appliedCouponCode}
             appliedDiscount={appliedDiscount}
+            appliedCoupons={appliedCoupons}
             appliedCashbackAmount={appliedCashbackAmount}
             payNowGrandTotal={payNowGrandTotal}
             eligible={eligible}

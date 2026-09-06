@@ -10,6 +10,8 @@ export type PlaceOrderResponse = {
   currency?: string;
   keyId?: string;
   checkoutConfigId?: string;
+  /** Seeds Razorpay Checkout's own saved-methods UI for returning shoppers. */
+  razorpayCustomerId?: string;
 };
 
 export type CancelCheckoutPayload = {
@@ -48,14 +50,21 @@ export const checkoutApi = {
     addressId: string;
     shippingMethodByVendor: Record<string, string>;
     couponCode?: string | null;
+    /** Full stacked-coupon set — sent alongside `couponCode` for back-compat. */
+    couponCodes?: string[];
     walletAmountToUse?: number;
+    /** Drives the gift-wrap fee line in the live quote. */
+    giftWrap?: boolean;
   }) => apiClient.post<CheckoutQuote>(API.checkout.quote, body),
   placeOrder: (body: {
     addressId: string;
     paymentMethod: string;
     couponCode?: string | null;
+    couponCodes?: string[];
     shippingMethodByVendor: Record<string, string>;
     walletAmountToUse?: number;
+    giftWrap?: boolean;
+    giftMessage?: string;
   }) => apiClient.post<PlaceOrderResponse>(API.checkout.create, body),
   /** UX confirmation only — webhook is the source of truth for PAID. */
   verifyPayment: (payload: VerifyPaymentPayload) =>

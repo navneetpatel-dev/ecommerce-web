@@ -16,6 +16,7 @@ import { formatInrAmount } from "@/shared/utils/orderFormat";
 
 const SORT_OPTIONS = [
   { value: "trending", labelKey: "sortTrending" as const },
+  { value: "popular", labelKey: "sortPopular" as const },
   { value: "newest", labelKey: "sortNewest" as const },
   { value: "price_asc", labelKey: "sortPriceLowHigh" as const },
   { value: "price_desc", labelKey: "sortPriceHighLow" as const },

@@ -7,6 +7,8 @@ export type VendorProductFilters = { status?: string; search?: string };
 export const vendorKeys = {
   all: ["vendor"] as const,
   summary: () => [...vendorKeys.all, "summary"] as const,
+  analytics: () => [...vendorKeys.all, "analytics"] as const,
+  lowStock: () => [...vendorKeys.all, "low-stock"] as const,
   products: {
     all: ["vendor", "products"] as const,
     page: (page: number, filters?: VendorProductFilters) =>
@@ -18,7 +20,8 @@ export const vendorKeys = {
   },
   payouts: {
     all: ["vendor", "payouts"] as const,
-    vendor: (vendorId: string) => [...vendorKeys.payouts.all, vendorId] as const,
+    vendor: (vendorId: string) =>
+      [...vendorKeys.payouts.all, vendorId] as const,
   },
   suborders: {
     all: ["vendor", "suborders"] as const,
@@ -30,6 +33,20 @@ export function useVendorSummary() {
   return useQuery({
     queryKey: vendorKeys.summary(),
     queryFn: () => vendorApi.summary(),
+  });
+}
+
+export function useVendorAnalytics() {
+  return useQuery({
+    queryKey: vendorKeys.analytics(),
+    queryFn: () => vendorApi.analytics(),
+  });
+}
+
+export function useVendorLowStock() {
+  return useQuery({
+    queryKey: vendorKeys.lowStock(),
+    queryFn: () => vendorApi.lowStock(),
   });
 }
 

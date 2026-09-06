@@ -1,6 +1,7 @@
 "use client";
 
 import type { VendorEntityType } from "@/shared/constants/statuses";
+import type { VendorPayoutFrequency } from "../../api/vendor.api";
 import { useVendorShopSettingsData } from "./useVendorShopSettingsData.hook";
 import { useVendorShopSettingsSave } from "./useVendorShopSettingsSave.hook";
 
@@ -11,6 +12,7 @@ export function useVendorShopSettingsForm() {
     categoryIds: data.categoryIds,
     returnShippingFee: data.returnShippingFee,
     codEnabled: data.codEnabled,
+    payoutFrequency: data.payoutFrequency,
     logoUrl: data.logoUrl,
     bannerUrl: data.bannerUrl,
     applyShop: data.applyShop,
@@ -22,6 +24,7 @@ export function useVendorShopSettingsForm() {
     businessName: data.businessName,
     returnShippingFee: data.returnShippingFee,
     codEnabled: data.codEnabled,
+    payoutFrequency: data.payoutFrequency,
     logoUrl: data.logoUrl,
     bannerUrl: data.bannerUrl,
     entityType: data.entityType,
@@ -40,6 +43,10 @@ export function useVendorShopSettingsForm() {
     setCodEnabled: (value: boolean) => {
       saveApi.setMessage(null);
       data.setCodEnabled(value);
+    },
+    setPayoutFrequency: (value: VendorPayoutFrequency | null) => {
+      saveApi.setMessage(null);
+      data.setPayoutFrequency(value);
     },
     setLogoUrl: (url: string) => {
       saveApi.setMessage(null);

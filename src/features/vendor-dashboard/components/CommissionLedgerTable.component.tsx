@@ -19,10 +19,21 @@ interface Commission {
   commissionRate: number;
   commissionAmount: number;
   status: string;
+  tdsAmount?: number | null;
+  tdsRatePercent?: number | null;
+  gstAmount?: number | null;
 }
 
 interface CommissionLedgerTableProps {
   commissions?: { items?: Commission[] };
+}
+
+function formatTdsRate(rate?: number | null) {
+  return rate == null ? "—" : `${rate}%`;
+}
+
+function formatOrDash(amount?: number | null) {
+  return amount == null ? "—" : formatInr(amount);
 }
 
 export function CommissionLedgerTable({
@@ -74,6 +85,25 @@ export function CommissionLedgerTable({
                     {formatInr(c.commissionAmount)}
                   </dd>
                 </div>
+                <div>
+                  <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
+                    GST
+                  </dt>
+                  <dd className="font-mono text-ink">
+                    {formatOrDash(c.gstAmount)}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
+                    TDS
+                  </dt>
+                  <dd className="font-mono text-ink">
+                    {formatOrDash(c.tdsAmount)}{" "}
+                    <span className="text-ink-muted">
+                      ({formatTdsRate(c.tdsRatePercent)})
+                    </span>
+                  </dd>
+                </div>
               </dl>
             </li>
           ))
@@ -92,13 +122,20 @@ export function CommissionLedgerTable({
               <TableHead className={TABLE_DATA_CELL_CLASS}>
                 Commission
               </TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>
+                GST Amount
+              </TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>
+                TDS Amount
+              </TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>TDS Rate</TableHead>
               <TableHead className={TABLE_DATA_CELL_CLASS}>Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {commissions?.items?.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-ink-muted">
+                <TableCell colSpan={8} className="text-center text-ink-muted">
                   No entries yet
                 </TableCell>
               </TableRow>
@@ -116,6 +153,15 @@ export function CommissionLedgerTable({
                   </TableCell>
                   <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
                     {formatInr(c.commissionAmount)}
+                  </TableCell>
+                  <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
+                    {formatOrDash(c.gstAmount)}
+                  </TableCell>
+                  <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
+                    {formatOrDash(c.tdsAmount)}
+                  </TableCell>
+                  <TableCell className={TABLE_DATA_CELL_CLASS}>
+                    {formatTdsRate(c.tdsRatePercent)}
                   </TableCell>
                   <TableCell className={TABLE_DATA_CELL_CLASS}>
                     <StatusBadge status={c.status} />

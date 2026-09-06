@@ -16,6 +16,8 @@ export interface CurrentUser {
   emailMarketingConsent?: boolean;
   avatarUrl?: string | null;
   createdAt?: string;
+  /** Set only when this session is an admin impersonating this user (their id). */
+  impersonatedBy?: string | null;
 }
 
 export interface AuthSession {

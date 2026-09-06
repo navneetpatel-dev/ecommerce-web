@@ -1,6 +1,9 @@
-import { PERMISSIONS, type PermissionKey } from '@/shared/constants/permissions'
-import { PATHS } from '@/shared/constants/paths'
-import { LABELS } from '@/shared/constants/labels'
+import {
+  PERMISSIONS,
+  type PermissionKey,
+} from "@/shared/constants/permissions";
+import { PATHS } from "@/shared/constants/paths";
+import { LABELS } from "@/shared/constants/labels";
 
 /** Vendor sidebar labels + permission gates. */
 export const VENDOR_NAV = [
@@ -37,6 +40,11 @@ export const VENDOR_NAV = [
     permissions: [PERMISSIONS.PAYOUT_VIEW] as PermissionKey[],
   },
   {
+    href: PATHS.vendor.analytics,
+    label: LABELS.vendorAnalyticsTitle,
+    permissions: [PERMISSIONS.PAYOUT_VIEW] as PermissionKey[],
+  },
+  {
     href: PATHS.vendor.reports,
     label: LABELS.reports,
     permissions: [
@@ -56,6 +64,11 @@ export const VENDOR_NAV = [
   {
     href: PATHS.vendor.reviews,
     label: LABELS.reviews,
+    permissions: [PERMISSIONS.REVIEW_RESPOND] as PermissionKey[],
+  },
+  {
+    href: PATHS.vendor.productQna,
+    label: LABELS.questionsAndAnswers,
     permissions: [PERMISSIONS.REVIEW_RESPOND] as PermissionKey[],
   },
   {
@@ -86,4 +99,4 @@ export const VENDOR_NAV = [
       PERMISSIONS.PAYOUT_VIEW,
     ] as PermissionKey[],
   },
-] as const
+] as const;

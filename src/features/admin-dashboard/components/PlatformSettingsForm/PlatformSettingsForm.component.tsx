@@ -11,6 +11,7 @@ import { FulfillmentSettingsSection } from "./FulfillmentSettingsSection.compone
 import { SupportSettingsSection } from "./SupportSettingsSection.component";
 import { CodSettingsSection } from "./CodSettingsSection.component";
 import { WalletPointsSettingsSection } from "../WalletPointsSettingsSection.component";
+import { ScheduledReportsSettingsSection } from "./ScheduledReportsSettingsSection.component";
 
 interface PlatformSettingsFormProps {
   form: PlatformSettings;
@@ -29,6 +30,7 @@ interface PlatformSettingsFormProps {
   onFreeShippingThresholdChange: (value: number) => void;
   onReturnShippingFeeChange: (value: number) => void;
   onDeliveryAgentPerTaskEarningChange: (value: number) => void;
+  onRefundSlaBusinessDaysChange: (value: number) => void;
   onSupportEmailChange: (value: string) => void;
   onSupportHoursChange: (value: string) => void;
   onTicketReopenWindowDaysChange: (value: number) => void;
@@ -43,6 +45,12 @@ interface PlatformSettingsFormProps {
   onWalletMaxBalanceChange: (value: number) => void;
   onWalletRechargePresetsChange: (value: number[]) => void;
   onPointsPerRupeeChange: (value: number) => void;
+  onPromotionalPointsTtlDaysChange: (value: number) => void;
+  onScheduledReportsEnabledChange: (value: boolean) => void;
+  onScheduledReportsTypesChange: (value: string[]) => void;
+  onScheduledReportsRecipientsChange: (value: string[]) => void;
+  onScheduledReportsDayOfWeekChange: (value: number) => void;
+  onScheduledReportsHourUtcChange: (value: number) => void;
   onSave: () => void;
 }
 
@@ -75,6 +83,7 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onDeliveryAgentPerTaskEarningChange={
             props.onDeliveryAgentPerTaskEarningChange
           }
+          onRefundSlaBusinessDaysChange={props.onRefundSlaBusinessDaysChange}
         />
 
         <SupportSettingsSection
@@ -101,6 +110,26 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onWalletMaxBalanceChange={props.onWalletMaxBalanceChange}
           onWalletRechargePresetsChange={props.onWalletRechargePresetsChange}
           onPointsPerRupeeChange={props.onPointsPerRupeeChange}
+          onPromotionalPointsTtlDaysChange={
+            props.onPromotionalPointsTtlDaysChange
+          }
+        />
+
+        <ScheduledReportsSettingsSection
+          form={form}
+          onScheduledReportsEnabledChange={
+            props.onScheduledReportsEnabledChange
+          }
+          onScheduledReportsTypesChange={props.onScheduledReportsTypesChange}
+          onScheduledReportsRecipientsChange={
+            props.onScheduledReportsRecipientsChange
+          }
+          onScheduledReportsDayOfWeekChange={
+            props.onScheduledReportsDayOfWeekChange
+          }
+          onScheduledReportsHourUtcChange={
+            props.onScheduledReportsHourUtcChange
+          }
         />
 
         <FormError error={saveError} fallback={LABELS.couldNotSaveSettings} />

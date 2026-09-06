@@ -53,4 +53,7 @@ export const authApi = {
   revokeSession: (family: string) =>
     apiClient.delete<void>(API.auth.session(family)),
   revokeOtherSessions: () => apiClient.delete<void>(API.auth.sessions),
+  /** Support-only: issues a short-lived token impersonating the target user. */
+  impersonate: (userId: string) =>
+    apiClient.post<AuthResponse>(API.auth.impersonate(userId), {}),
 };

@@ -6,4 +6,5 @@ export * from "./coupon.types";
 export * from "./finance.types";
 export * from "./order.types";
 export * from "./product.types";
+export * from "./productQna.types";
 export * from "./vendor.types";

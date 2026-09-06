@@ -60,7 +60,8 @@ export const tables3Labels = {
   settingsWalletMaxRecharge: "Maximum recharge per transaction (INR)",
   settingsWalletMaxBalance: "Maximum points balance",
   settingsWalletRechargePresets: "Recharge preset amounts (INR)",
-  settingsWalletRechargePresetsHint: "Comma-separated values shown as quick picks on the wallet page.",
+  settingsWalletRechargePresetsHint:
+    "Comma-separated values shown as quick picks on the wallet page.",
   settingsPointsPerRupee: "Points per ₹1 paid",
   settingsPointsPerRupeeHint:
     "Bonus applies on recharge only. Checkout redemption stays 1 point = ₹1.",
@@ -195,6 +196,7 @@ export const tables3Labels = {
   compareMaxReached:
     "Maximum of {max} products reached. Remove one to add another.",
   sortTrending: "Trending",
+  sortPopular: "Popular",
   sortNewest: "Newest",
   sortPriceLowHigh: "Price: Low to High",
   sortPriceHighLow: "Price: High to Low",

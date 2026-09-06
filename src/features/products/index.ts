@@ -26,7 +26,11 @@ export {
   type ProductWriteBody,
 } from "./schemas/products.schema";
 export { SORT_OPTIONS } from "./hooks/useProductListing.hook";
-export type { ProductFilters, ProductListResponse } from "./api/products.api";
+export type {
+  ProductFilters,
+  ProductListResponse,
+  BulkImportRowResult,
+} from "./api/products.api";
 export { FilterSidebar } from "./components/FilterSidebar.component";
 export { SortBar } from "./components/SortBar.component";
 export { RecentlyViewedSection } from "./components/RecentlyViewedSection.component";

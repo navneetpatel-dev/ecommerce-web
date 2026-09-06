@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Send } from "lucide-react";
 import { AdminDataPage } from "./AdminDataPage.page";
-import { notificationsApi } from "../api/notifications.api";
+import {
+  notificationsApi,
+  type NotificationLogFilters,
+} from "../api/notifications.api";
+import { NotificationLogFiltersBar } from "../components/NotificationLogFiltersBar.component";
+import { BroadcastNotificationForm } from "../components/BroadcastNotificationForm.component";
+import { notificationsAdminLabels } from "@/shared/constants/labels/notificationsAdmin";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { Button } from "@/shared/components/ui/button";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
@@ -12,6 +18,9 @@ export function AdminNotificationsPage() {
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<NotificationLogFilters>({});
+
+  const loadLogs = useCallback(() => notificationsApi.logs(filters), [filters]);
 
   const sendTest = async () => {
     setPending(true);
@@ -48,11 +57,21 @@ export function AdminNotificationsPage() {
       </div>
       {message ? <p className="text-body-sm text-success">{message}</p> : null}
       {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+
+      <BroadcastNotificationForm />
+
+      <div>
+        <h2 className="mb-2 text-body-sm font-medium text-ink">
+          {notificationsAdminLabels.notificationLogFilters}
+        </h2>
+        <NotificationLogFiltersBar filters={filters} onChange={setFilters} />
+      </div>
+
       <AdminDataPage
         title="Notification logs"
         hideTitle
         permission={PERMISSIONS.SETTINGS_MANAGE}
-        load={() => notificationsApi.logs()}
+        load={loadLogs}
         columnKeys={[
           "type",
           "channel",

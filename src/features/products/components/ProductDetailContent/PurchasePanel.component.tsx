@@ -8,6 +8,7 @@ import { ProductDeliveryCheck } from "../ProductDeliveryCheck.component";
 import { Heart } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
 import { LABELS } from "@/shared/constants/labels";
+import { NotifyMeButton } from "@/features/stockAlerts";
 
 interface PurchasePanelProps {
   productId: string;
@@ -77,7 +78,10 @@ export function PurchasePanel({
           {LABELS.variantUnavailableHint}
         </p>
       ) : !canAddToCart && displayStock === 0 ? (
-        <p className="text-body-sm text-ink-muted">{LABELS.outOfStockHint}</p>
+        <div className="space-y-2">
+          <p className="text-body-sm text-ink-muted">{LABELS.outOfStockHint}</p>
+          <NotifyMeButton variantId={variantId ?? null} />
+        </div>
       ) : null}
 
       <ProductDeliveryCheck

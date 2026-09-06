@@ -11,23 +11,11 @@ import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { adminShippingApi } from "@/features/admin-dashboard/api/shipping.api";
 import type { AdminDataRow } from "../hooks/useAdminDataList.hook";
+import { asCsv, parseCsv } from "../utils/csvField";
 
 interface AdminEditShippingZoneActionProps {
   row: AdminDataRow;
   onSaved: () => void;
-}
-
-function asCsv(value: unknown): string {
-  if (Array.isArray(value)) return value.map(String).filter(Boolean).join(", ");
-  if (typeof value === "string") return value;
-  return "";
-}
-
-function parseCsv(value: string): string[] {
-  return value
-    .split(",")
-    .map((part) => part.trim())
-    .filter(Boolean);
 }
 
 export function AdminEditShippingZoneAction({

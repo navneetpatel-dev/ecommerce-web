@@ -1,13 +1,32 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { TaskCard } from "../components/TaskCard.component";
+import { BarcodeScanButton } from "../components/BarcodeScanButton.component";
 import { useMyPickups } from "../api/deliveryAgent.queries";
 import { PATHS } from "@/shared/constants/paths";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 
 export function PickupsPage() {
+  const router = useRouter();
+  const [scanError, setScanError] = useState<string | null>(null);
   const query = useMyPickups(["PICKUP_SCHEDULED"]);
   const count = query.data?.length ?? 0;
+
+  // Return pickups have no tracking number of their own — match the scanned
+  // code against the pickup's id, same field the list already routes on.
+  const handleScanned = (text: string) => {
+    const match = query.data?.find(
+      (pickup) => pickup.id.toUpperCase() === text.toUpperCase(),
+    );
+    if (!match) {
+      setScanError(`No scheduled pickup matches "${text}".`);
+      return;
+    }
+    setScanError(null);
+    router.push(PATHS.delivery.pickup(match.id));
+  };
 
   return (
     <div className="w-full min-w-0 space-y-6">
@@ -18,10 +37,17 @@ export function PickupsPage() {
             Scheduled refund and exchange collections from customers.
           </p>
         </div>
-        <span className="text-body-sm text-ink-muted">
-          {count} scheduled pickup{count === 1 ? "" : "s"}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="text-body-sm text-ink-muted">
+            {count} scheduled pickup{count === 1 ? "" : "s"}
+          </span>
+          <BarcodeScanButton onDecoded={handleScanned} />
+        </div>
       </header>
+
+      {scanError ? (
+        <p className="text-body-sm text-danger">{scanError}</p>
+      ) : null}
 
       {query.isError ? (
         <QueryErrorAlert

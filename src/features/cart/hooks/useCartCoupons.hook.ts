@@ -41,6 +41,12 @@ export function useCartCoupons({
   const displayCode = cartApplied?.code ?? appliedCouponCode;
   const displayDiscount = cartApplied?.discount ?? 0;
   const removedReason = cart?.removedCouponReason ?? null;
+  // Stacked codes — fall back to the singular field for older cart responses.
+  const appliedCoupons = cart?.appliedCoupons?.length
+    ? cart.appliedCoupons
+    : cartApplied
+      ? [cartApplied]
+      : [];
 
   const refreshCart = useCallback(() => {
     void queryClient.invalidateQueries({ queryKey: cartKeys.all });
@@ -80,29 +86,35 @@ export function useCartCoupons({
     [couponInput, cart, loadEligible, refreshCart, requireAuth, setCouponCode],
   );
 
-  const removeCoupon = useCallback(async () => {
-    if (
-      !requireAuth({
-        title: LABELS.removeCoupon,
-        message: LABELS.signInToApplyCoupon,
-      })
-    ) {
-      return;
-    }
-    setCouponPending(true);
-    setCouponError(null);
-    setCouponMessage(null);
-    try {
-      await couponsApi.remove();
-      setCouponCode(null, { manual: true });
-      refreshCart();
-      void loadEligible();
-    } catch (error) {
-      setCouponError(getApiErrorMessage(error, LABELS.couponInvalid));
-    } finally {
-      setCouponPending(false);
-    }
-  }, [loadEligible, refreshCart, requireAuth, setCouponCode]);
+  /** Omit `code` to clear every stacked coupon (legacy "Remove" behavior). */
+  const removeCoupon = useCallback(
+    async (code?: string) => {
+      if (
+        !requireAuth({
+          title: LABELS.removeCoupon,
+          message: LABELS.signInToApplyCoupon,
+        })
+      ) {
+        return;
+      }
+      setCouponPending(true);
+      setCouponError(null);
+      setCouponMessage(null);
+      try {
+        const result = await couponsApi.remove(code);
+        if (!code || result.cleared) {
+          setCouponCode(null, { manual: true });
+        }
+        refreshCart();
+        void loadEligible();
+      } catch (error) {
+        setCouponError(getApiErrorMessage(error, LABELS.couponInvalid));
+      } finally {
+        setCouponPending(false);
+      }
+    },
+    [loadEligible, refreshCart, requireAuth, setCouponCode],
+  );
 
   // Sync store from cart revalidation
   useEffect(() => {
@@ -126,6 +138,7 @@ export function useCartCoupons({
     couponPending,
     appliedCouponCode: displayCode,
     appliedDiscount: displayDiscount,
+    appliedCoupons,
     eligible,
     eligibleLoading,
     eligibleError,

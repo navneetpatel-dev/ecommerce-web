@@ -4,6 +4,7 @@ import { EmptyState } from "@/shared/components/EmptyState.component";
 import { Button } from "@/shared/components/ui/button";
 import { ReviewListSkeleton } from "@/shared/components/Skeletons.component";
 import { REVIEW_STATUS } from "@/shared/constants/statuses";
+import { formatOrderDate } from "@/shared/utils/orderFormat";
 import type { Review } from "@/shared/api/types";
 
 interface ProductReviewsProps {
@@ -62,6 +63,22 @@ export function ProductReviews({
           <p className="mt-2 text-body leading-relaxed text-ink-muted whitespace-pre-wrap">
             {review.body}
           </p>
+
+          {review.vendorResponse ? (
+            <div className="mt-4 ml-4 border-l-2 border-line pl-4">
+              <p className="text-body-sm font-medium text-ink">
+                Seller response
+                {review.vendorRespondedAt ? (
+                  <span className="ml-2 font-normal text-ink-muted">
+                    {formatOrderDate(review.vendorRespondedAt)}
+                  </span>
+                ) : null}
+              </p>
+              <p className="mt-1 text-body-sm leading-relaxed text-ink-muted whitespace-pre-wrap">
+                {review.vendorResponse}
+              </p>
+            </div>
+          ) : null}
 
           <div className="mt-4 flex items-center gap-2">
             <Button

@@ -40,6 +40,10 @@ import {
 } from "./discovery.routes";
 import { bugReportsRoutes, supportTicketsRoutes } from "./support.routes";
 import { deliveryAgentsRoutes } from "./deliveryAgents.routes";
+import { paymentsRoutes } from "./payments.routes";
+import { productQnaRoutes } from "./productQna.routes";
+import { giftCardsRoutes } from "./giftCards.routes";
+import { rolesRoutes } from "./roles.routes";
 
 export const API = {
   auth: authRoutes,
@@ -51,6 +55,7 @@ export const API = {
   vendorDocs: vendorDocsRoutes,
   cart: cartRoutes,
   checkout: checkoutRoutes,
+  payments: paymentsRoutes,
   wishlist: wishlistRoutes,
   orders: ordersRoutes,
   suborders: subordersRoutes,
@@ -77,4 +82,7 @@ export const API = {
   supportTickets: supportTicketsRoutes,
   bugReports: bugReportsRoutes,
   deliveryAgents: deliveryAgentsRoutes,
+  productQna: productQnaRoutes,
+  giftCards: giftCardsRoutes,
+  roles: rolesRoutes,
 } as const;

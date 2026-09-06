@@ -11,6 +11,8 @@ interface CheckoutState {
   manualCouponOverride: boolean;
   paymentMethod: string | null;
   walletAmountToUse: number;
+  giftWrap: boolean;
+  giftMessage: string;
   setStep: (step: CheckoutState["step"]) => void;
   setAddress: (id: string) => void;
   setShippingMethod: (vendorId: string, method: ShippingMethod) => void;
@@ -18,6 +20,8 @@ interface CheckoutState {
   setCouponCode: (code: string | null, opts?: { manual?: boolean }) => void;
   setPaymentMethod: (method: string | null) => void;
   setWalletAmountToUse: (amount: number) => void;
+  setGiftWrap: (giftWrap: boolean) => void;
+  setGiftMessage: (giftMessage: string) => void;
 }
 
 export const useCheckoutStore = create<CheckoutState>((set) => ({
@@ -28,6 +32,8 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
   manualCouponOverride: false,
   paymentMethod: null,
   walletAmountToUse: 0,
+  giftWrap: false,
+  giftMessage: "",
   setStep: (step) => set({ step }),
   setAddress: (addressId) => set({ addressId }),
   setShippingMethod: (vendorId, method) =>
@@ -63,8 +69,10 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
     set((s) => ({
       paymentMethod,
       // Points apply only when Wallet is the selected payment method.
-      walletAmountToUse:
-        paymentMethod === "wallet" ? s.walletAmountToUse : 0,
+      walletAmountToUse: paymentMethod === "wallet" ? s.walletAmountToUse : 0,
     })),
   setWalletAmountToUse: (walletAmountToUse) => set({ walletAmountToUse }),
+  setGiftWrap: (giftWrap) =>
+    set((s) => ({ giftWrap, giftMessage: giftWrap ? s.giftMessage : "" })),
+  setGiftMessage: (giftMessage) => set({ giftMessage }),
 }));

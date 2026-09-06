@@ -45,6 +45,7 @@ export const homepageRoutes = {
 export const notificationsRoutes = {
   logs: "/api/notifications/logs",
   test: "/api/notifications/test",
+  broadcast: "/api/notifications/broadcast",
   pushPublicKey: "/api/notifications/push/public-key",
   pushSubscribe: "/api/notifications/push/subscribe",
 } as const;
@@ -53,6 +54,8 @@ export const inventoryRoutes = {
   lowStock: "/api/inventory/low-stock",
   variantStock: (variantId: string) =>
     `/api/inventory/variants/${variantId}/stock`,
+  stockAlerts: "/api/inventory/stock-alerts",
+  stockAlert: (id: string) => `/api/inventory/stock-alerts/${id}`,
 } as const;
 
 export const uploadsRoutes = {

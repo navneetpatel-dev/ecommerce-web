@@ -89,6 +89,9 @@ export interface Order {
   shippingDisplayKey?: "FREE" | "PAID";
   taxDisplayKey?: "IGST" | "CGST_SGST" | "GST";
   amountDue?: number;
+  giftWrap?: boolean;
+  giftMessage?: string | null;
+  giftWrapFeeAmount?: number | null;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
   paymentMethod?: string | null;
@@ -121,6 +124,8 @@ export interface Review {
   helpfulCount: number;
   unhelpfulCount: number;
   createdAt: string;
+  vendorResponse?: string | null;
+  vendorRespondedAt?: string | null;
   user?: { name: string };
   product?: { id: string; name: string; slug: string };
 }
@@ -137,6 +142,7 @@ export interface ReturnRequest {
   deliveryAgentId?: string | null;
   pickupOtpVerifiedAt?: string | null;
   pickupFailureReason?: string | null;
+  rejectionReason?: string | null;
   preferredRepickupSlot?: string | null;
   replacementDeliveredAt?: string | null;
   replacementProofUrl?: string | null;
@@ -145,6 +151,8 @@ export interface ReturnRequest {
   refundStatus?: RefundStatus;
   refundCustomerMessage?: string | null;
   refundAmount: number | null;
+  refundTaxAmount?: number | null;
+  shippingRefundAmount?: number;
   walletRefundAmount?: number;
   razorpayRefundAmount?: number;
   receivedAt?: string | null;
@@ -181,6 +189,7 @@ export interface VendorBreakdown {
 export interface CheckoutQuote {
   vendorBreakdowns: VendorBreakdown[];
   grandTotal: number;
+  giftWrapFeeAmount?: number;
   cashbackAmount: number;
   walletBalance: number;
   walletAmountToUse: number;
@@ -210,5 +219,6 @@ export interface CheckoutQuote {
     igst: number;
     discountTotal: number;
     taxDisplayKey: "IGST" | "CGST_SGST" | "GST";
+    giftWrapFeeAmount?: number;
   };
 }

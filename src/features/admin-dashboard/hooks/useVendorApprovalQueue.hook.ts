@@ -16,8 +16,8 @@ export function useVendorApprovalQueue() {
   const { approve, reject } = useVendorApproval();
 
   const onApprove = useCallback(
-    async (id: string) => {
-      await approve.mutateAsync(id);
+    async (id: string, commissionRate?: number) => {
+      await approve.mutateAsync({ id, commissionRate });
       list.reload();
     },
     [approve, list],

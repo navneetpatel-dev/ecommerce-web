@@ -1,6 +1,4 @@
 import { LABELS } from "@/shared/constants/labels";
-import { MediaImage } from "@/shared/components/MediaImage.component";
-import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
 import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailableNotice.component";
@@ -8,9 +6,9 @@ import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import { taxDisplayLabel } from "@/shared/utils/taxDisplay";
-import { resolveCartLineSubtotal } from "../../utils/checkoutDisplay.utils";
 import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
 import { quoteOrderTotals } from "../../utils/quoteTotals.utils";
+import { OrderSummaryItemsList } from "./OrderSummaryItemsList.component";
 
 interface OrderSummaryPanelProps {
   groupedByVendor: Record<string, CartItem[]>;
@@ -41,6 +39,12 @@ export function OrderSummaryPanel({
   cartPricingPreview,
 }: OrderSummaryPanelProps) {
   const orderTotals = quote ? quoteOrderTotals(quote) : null;
+  // Fall back to the singular field so older quote responses still render.
+  const appliedCoupons = quote?.appliedCoupons?.length
+    ? quote.appliedCoupons
+    : quote?.appliedCoupon
+      ? [quote.appliedCoupon]
+      : [];
   const summarySubtotal = orderTotals?.merchandiseSubtotal ?? subtotal;
   const summarySubtotalPending =
     !orderTotals && (subtotalPending || summarySubtotal == null);
@@ -62,8 +66,6 @@ export function OrderSummaryPanel({
     : walletApplied
       ? "Amount left to pay after points."
       : "Final amount including shipping and taxes.";
-  const vendorEntries = Object.entries(groupedByVendor);
-
   return (
     <div className="relative flex max-h-[calc(100vh-7rem)] flex-col border border-line bg-surface-raised shadow-elevation-1">
       <div
@@ -87,41 +89,11 @@ export function OrderSummaryPanel({
         <h2 className="mt-1 font-display text-[1.25rem] text-ink">Your bag</h2>
       </div>
 
-      <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain px-5 py-4 md:px-6">
-        {vendorEntries.map(([vendorId, vendorItems]) => (
-          <div key={vendorId}>
-            <VendorStrip vendor={vendorItems[0]?.product?.vendor} size="sm" />
-            <ul className="mt-3 space-y-3">
-              {vendorItems.map((item) => (
-                <li key={item.id} className="flex gap-3">
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-sm border border-line bg-paper">
-                    <MediaImage
-                      src={item.product.imageUrl}
-                      alt={item.product.name}
-                      imageClassName="object-cover"
-                      sizes="56px"
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[0.875rem] font-medium text-ink">
-                      {item.product.name}
-                    </p>
-                    <p className="mt-0.5 text-[0.75rem] text-ink-muted">
-                      Qty {item.quantity}
-                    </p>
-                  </div>
-                  <p className="shrink-0 text-[0.875rem] tabular-nums text-ink">
-                    <MoneyAmount
-                      value={resolveCartLineSubtotal(item, quote)}
-                      unavailable={amountsUnavailable}
-                    />
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+      <OrderSummaryItemsList
+        groupedByVendor={groupedByVendor}
+        quote={quote}
+        amountsUnavailable={amountsUnavailable}
+      />
 
       <div className="shrink-0 border-t border-line bg-surface-raised px-5 py-4 md:px-6 md:py-5">
         <dl className="space-y-2.5 text-[0.875rem]">
@@ -135,14 +107,17 @@ export function OrderSummaryPanel({
               />
             </dd>
           </div>
-          {quote?.appliedCoupon && (
-            <div className="flex items-center justify-between gap-4 text-success">
-              <dt>Coupon · {quote.appliedCoupon.code}</dt>
+          {appliedCoupons.map((coupon) => (
+            <div
+              key={coupon.code}
+              className="flex items-center justify-between gap-4 text-success"
+            >
+              <dt>Coupon · {coupon.code}</dt>
               <dd className="tabular-nums">
-                −₹{formatInrAmount(quote.appliedCoupon.discount)}
+                −₹{formatInrAmount(coupon.discount)}
               </dd>
             </div>
-          )}
+          ))}
           {(quote?.cashbackAmount ?? 0) > 0 &&
           (quote?.amountDue != null || estimatedTotal != null) ? (
             <CashbackCouponNotice

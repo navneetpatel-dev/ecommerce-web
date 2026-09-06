@@ -6,7 +6,7 @@ import {
 } from "@/shared/api/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 import type { UserStatus } from "@/shared/constants/statuses";
-import type { CurrentUser } from "@/shared/api/types";
+import type { Address, CurrentUser } from "@/shared/api/types";
 import { assigneesApi } from "@/shared/api/assignees.api";
 
 // Assignee lookup is shared infrastructure (consumed by shared/AssigneeSelect);
@@ -36,7 +36,11 @@ export const adminUsersApi = {
     return unwrapPaginatedList(res);
   },
   listAssignees: assigneesApi.listAssignees,
+  listRoles: () =>
+    apiClient.get<{ id: string; name: string }[]>(API.users.roles),
   getById: (id: string) => apiClient.get<CurrentUser>(API.users.detail(id)),
+  getAddresses: (id: string) =>
+    apiClient.get<Address[]>(API.users.addresses(id)),
   updateStatus: (id: string, status: UserStatus) =>
     apiClient.patch<{ message: string }>(API.users.status(id), { status }),
   delete: (id: string) => apiClient.delete(API.users.detail(id)),

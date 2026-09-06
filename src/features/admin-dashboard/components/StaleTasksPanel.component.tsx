@@ -8,6 +8,8 @@ import {
 } from "@/features/delivery-dashboard";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { AdminConfirmAction } from "./AdminConfirmAction.component";
+import { deliveryForceConfirmLabels } from "@/shared/constants/labels/deliveryForceConfirm";
 
 function hoursSince(dateString: string): number {
   return Math.floor(
@@ -23,12 +25,16 @@ export function StaleTasksPanel() {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    deliveryAdminApi
+  function loadReport() {
+    return deliveryAdminApi
       .staleTasks()
       .then(setReport)
       .catch(() => setReport({ shipments: [], pickups: [] }))
       .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    loadReport();
   }, []);
 
   const total = report.shipments.length + report.pickups.length;
@@ -60,6 +66,7 @@ export function StaleTasksPanel() {
                     <th className="py-2 pr-3 font-medium">Status</th>
                     <th className="py-2 pr-3 font-medium">Agent</th>
                     <th className="py-2 pr-3 font-medium">Stuck for</th>
+                    <th className="py-2 pr-3 font-medium" />
                   </tr>
                 </thead>
                 <tbody>
@@ -76,6 +83,35 @@ export function StaleTasksPanel() {
                       </td>
                       <td className="py-2 pr-3 text-warning">
                         {hoursSince(shipment.updatedAt)}h
+                      </td>
+                      <td className="py-2 pr-3">
+                        {shipment.status === "OUT_FOR_DELIVERY" ? (
+                          <AdminConfirmAction
+                            label={
+                              deliveryForceConfirmLabels.forceConfirmDelivery
+                            }
+                            title={
+                              deliveryForceConfirmLabels.forceConfirmDeliveryTitle
+                            }
+                            description={
+                              deliveryForceConfirmLabels.forceConfirmDeliveryBody
+                            }
+                            dialogVariant="warning"
+                            tone="archive"
+                            requireReason
+                            reasonLabel={
+                              deliveryForceConfirmLabels.forceConfirmDeliveryReasonLabel
+                            }
+                            reasonHint={
+                              deliveryForceConfirmLabels.forceConfirmDeliveryReasonHint
+                            }
+                            onConfirm={(reason) =>
+                              deliveryAdminApi
+                                .forceConfirmDelivery(shipment.id, reason ?? "")
+                                .then(() => loadReport())
+                            }
+                          />
+                        ) : null}
                       </td>
                     </tr>
                   ))}

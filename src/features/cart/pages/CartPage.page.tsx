@@ -34,6 +34,7 @@ export function CartPage() {
       couponPending={cart.couponPending}
       appliedCouponCode={cart.appliedCouponCode}
       appliedDiscount={cart.appliedDiscount}
+      appliedCoupons={cart.appliedCoupons}
       appliedCashbackAmount={cart.appliedCashbackAmount}
       payNowGrandTotal={cart.payNowGrandTotal}
       appliedCouponType={cart.appliedCouponType}
@@ -42,7 +43,7 @@ export function CartPage() {
       eligibleLoading={cart.eligibleLoading}
       onCouponInputChange={cart.setCouponInput}
       onApplyCoupon={() => void cart.applyCoupon()}
-      onRemoveCoupon={() => void cart.removeCoupon()}
+      onRemoveCoupon={(code) => void cart.removeCoupon(code)}
       onApplyEligible={(code) => void cart.applyEligible(code)}
     />
   );

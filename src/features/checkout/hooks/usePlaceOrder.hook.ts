@@ -1,38 +1,22 @@
 import { useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 import { useCheckoutStore } from "@/shared/stores/checkout.store";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import {
-  usePlaceOrder,
-  useCheckoutQuote,
-  checkoutKeys,
-} from "../api/checkout.queries";
+import { usePlaceOrder, useCheckoutQuote } from "../api/checkout.queries";
 import { navigate } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";
-import { ERROR_CODES } from "@/shared/constants/errors";
 import { LABELS } from "@/shared/constants/labels";
-import { ApiError } from "@/shared/types/apiError.types";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import { cartKeys } from "@/features/cart";
-import { ordersKeys } from "@/features/orders";
-import { invalidateWalletQueries } from "@/features/wallet";
+import { useCart } from "@/features/cart";
+import { resolveCheckoutCouponCodes } from "../utils/checkoutCouponCodes.utils";
 import { usePaymentNotice, type PaymentNotice } from "./usePaymentNotice/index";
 import { useRestoreCancelledCheckout } from "./useRestoreCancelledCheckout/index";
 import { launchRazorpayPayment } from "./useRazorpayCheckout/index";
 import { useCheckoutPaymentPhase } from "./useCheckoutPaymentPhase.hook";
+import { useCheckoutCacheActions } from "./useCheckoutCacheActions.hook";
+import { useOrderPlacementErrorHandler } from "./useOrderPlacementErrorHandler.hook";
 
 export type { PaymentNotice };
-
-const CART_EMPTY_MESSAGE = "Cart is empty";
-
-function isCartEmptyError(err: unknown): boolean {
-  return (
-    err instanceof ApiError &&
-    err.code === ERROR_CODES.VALIDATION_ERROR &&
-    err.message === CART_EMPTY_MESSAGE
-  );
-}
 
 export function usePlaceOrderWithRazorpay() {
   const {
@@ -40,11 +24,15 @@ export function usePlaceOrderWithRazorpay() {
     shippingMethodByVendor,
     appliedCouponCode,
     walletAmountToUse,
+    giftWrap,
+    giftMessage,
   } = useCheckoutStore();
   const placeOrder = usePlaceOrder();
+  const { data: cart } = useCart();
+  // Stacked codes on the cart — falls back to the single manually-typed code.
+  const couponCodes = resolveCheckoutCouponCodes(cart, appliedCouponCode);
   const router = useRouter();
   const currentUser = useAuthStore((s) => s.currentUser);
-  const queryClient = useQueryClient();
   const { paymentNotice, showNotice, resetNotice, clearPaymentNotice } =
     usePaymentNotice();
   const { paymentPhase, setPaymentPhase, isPaymentOverlayOpen } =
@@ -55,7 +43,9 @@ export function usePlaceOrderWithRazorpay() {
     addressId,
     shippingMethodByVendor,
     couponCode: appliedCouponCode,
+    couponCodes,
     walletAmountToUse,
+    giftWrap,
   };
   const {
     data: quote,
@@ -64,38 +54,13 @@ export function usePlaceOrderWithRazorpay() {
     error: quoteError,
   } = useCheckoutQuote(quoteInput);
 
-  const refetchCart = useCallback(async () => {
-    await queryClient.refetchQueries({ queryKey: cartKeys.all });
-  }, [queryClient]);
-
-  const invalidateCheckoutQuote = useCallback(() => {
-    void queryClient.invalidateQueries({
-      queryKey: checkoutKeys.quote(quoteInput),
-    });
-  }, [queryClient, quoteInput]);
-
-  const clearCartCache = useCallback(() => {
-    void queryClient.invalidateQueries({ queryKey: cartKeys.all });
-  }, [queryClient]);
-
-  /**
-   * Order placed — the cart is empty server-side, but this page is mid-navigation.
-   * Refetching now would empty the mounted cart query and swap the whole checkout
-   * for a skeleton for one frame. Mark it stale instead; the cart refetches the
-   * next time it mounts. Orders are invalidated so the new order shows up in the
-   * list and detail views.
-   */
-  const onOrderPlaced = useCallback(() => {
-    void queryClient.invalidateQueries({
-      queryKey: cartKeys.all,
-      refetchType: "none",
-    });
-    void queryClient.invalidateQueries({ queryKey: ordersKeys.all });
-  }, [queryClient]);
-
-  const invalidateWalletCache = useCallback(() => {
-    invalidateWalletQueries(queryClient);
-  }, [queryClient]);
+  const {
+    refetchCart,
+    invalidateCheckoutQuote,
+    clearCartCache,
+    onOrderPlaced,
+    invalidateWalletCache,
+  } = useCheckoutCacheActions(quoteInput);
 
   const clearPendingOrder = useCallback((orderId?: string) => {
     if (!orderId || pendingOrderIdRef.current === orderId) {
@@ -124,6 +89,12 @@ export function usePlaceOrderWithRazorpay() {
     [restoreCancelledCheckout],
   );
 
+  const handlePlaceOrderError = useOrderPlacementErrorHandler({
+    showNotice,
+    restoreCancelledCheckout,
+    clearCartCache,
+  });
+
   const handlePlaceOrder = async (method: string) => {
     if (!addressId) return;
     resetNotice();
@@ -146,8 +117,11 @@ export function usePlaceOrderWithRazorpay() {
         addressId,
         paymentMethod: apiPaymentMethod,
         couponCode: appliedCouponCode || undefined,
+        couponCodes,
         shippingMethodByVendor,
         walletAmountToUse: apiWalletAmount,
+        giftWrap,
+        giftMessage: giftWrap ? giftMessage.trim() || undefined : undefined,
       });
 
       pendingOrderIdRef.current = result.orderId;
@@ -181,39 +155,7 @@ export function usePlaceOrderWithRazorpay() {
       navigate(router, PATHS.orderConfirmation(result.orderId));
     } catch (err) {
       setPaymentPhase("idle");
-
-      if (isCartEmptyError(err) && pendingOrderIdRef.current) {
-        try {
-          await restoreCancelledCheckout(pendingOrderIdRef.current, {
-            variant: "info",
-            title: LABELS.cartEmptyCheckoutTitle,
-            description: LABELS.cartEmptyCheckoutBody,
-          });
-        } catch {
-          showNotice({
-            variant: "danger",
-            title: LABELS.placeOrderFailedTitle,
-            description: LABELS.placeOrderFailedBody,
-          });
-        }
-        return;
-      }
-
-      const isItemsUnavailable =
-        err instanceof ApiError && err.code === ERROR_CODES.ITEMS_UNAVAILABLE;
-      const description = isItemsUnavailable
-        ? LABELS.removeUnavailableToCheckout
-        : getApiErrorMessage(err, LABELS.placeOrderFailedBody);
-      showNotice({
-        variant: isItemsUnavailable ? "warning" : "danger",
-        title: isItemsUnavailable
-          ? LABELS.itemsUnavailableTitle
-          : LABELS.placeOrderFailedTitle,
-        description,
-      });
-      if (isItemsUnavailable) {
-        clearCartCache();
-      }
+      await handlePlaceOrderError(err, pendingOrderIdRef.current);
     }
   };
 
