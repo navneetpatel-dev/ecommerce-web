@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bike, Bell, MapPin, ArrowRight, Truck } from "lucide-react";
+import { Bike, Bell, MapPin, ArrowRight, Star, Truck } from "lucide-react";
 import { Switch } from "@/shared/components/ui/switch";
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
@@ -12,6 +12,7 @@ import {
   useDeliveryProfile,
   useSetAvailability,
   BankDetailsCard,
+  CashDepositsCard,
   EarningsPayoutsCard,
   DeliveryAgentDocumentsCard,
 } from "@/features/delivery-dashboard";
@@ -209,7 +210,10 @@ export function DeliveryOperationsSection() {
           {/* Section 4: Payout Destination */}
           <BankDetailsCard bankDetails={agent?.bankDetails} />
 
-          {/* Section 5: Earnings & Payout History */}
+          {/* Section 5: Cash deposit reconciliation history */}
+          <CashDepositsCard />
+
+          {/* Section 6: Earnings & Payout History */}
           <EarningsPayoutsCard />
         </div>
 
@@ -236,6 +240,25 @@ export function DeliveryOperationsSection() {
                     {agent?.fullName ?? "Delivery Partner"}
                   </p>
                   <p className="text-body-sm text-ink-muted">{agent?.phone}</p>
+                  <p className="mt-1 flex items-center gap-1 text-body-sm">
+                    {agent?.ratingCount ? (
+                      <>
+                        <Star
+                          className="size-3.5 fill-warning text-warning"
+                          aria-hidden="true"
+                        />
+                        <span className="font-medium text-ink">
+                          {agent.averageRating?.toFixed(1)}
+                        </span>
+                        <span className="text-ink-muted">
+                          ({agent.ratingCount} rating
+                          {agent.ratingCount === 1 ? "" : "s"})
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-ink-muted">No ratings yet</span>
+                    )}
+                  </p>
                 </div>
               </div>
 

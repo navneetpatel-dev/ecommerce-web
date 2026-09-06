@@ -38,11 +38,17 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
         {formatInr(row.subOrder.subtotal)}
       </p>
       {row.subOrder.shipment && (
-        <div className="mt-2 flex items-center gap-2">
+        <div className="mt-2 flex flex-wrap items-center gap-2">
           <StatusBadge status={row.subOrder.shipment.status} />
           {row.subOrder.shipment.deliveryAgent && (
             <p className="text-body-sm text-ink-muted">
               {row.subOrder.shipment.deliveryAgent.fullName}
+            </p>
+          )}
+          {row.subOrder.shipment.codAmount != null && (
+            <p className="text-body-sm text-ink-muted">
+              COD: {formatInr(row.subOrder.shipment.codAmount)}{" "}
+              {row.subOrder.shipment.codCollected ? "(collected)" : "(due)"}
             </p>
           )}
           {row.subOrder.shipment.proofOfDeliveryUrl && (
@@ -57,6 +63,20 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
           )}
         </div>
       )}
+      {row.subOrder.returnRequests?.length ? (
+        <div className="mt-2 space-y-1">
+          {row.subOrder.returnRequests.map((returnRequest) => (
+            <div key={returnRequest.id} className="flex items-center gap-2">
+              <StatusBadge status={returnRequest.status} />
+              {returnRequest.deliveryAgent && (
+                <p className="text-body-sm text-ink-muted">
+                  {returnRequest.deliveryAgent.fullName}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : null}
       <div className="mt-4 border-t border-line/80 pt-3">
         {renderActions(row.subOrder.id, Boolean(row.subOrder.taxInvoiceNumber))}
       </div>

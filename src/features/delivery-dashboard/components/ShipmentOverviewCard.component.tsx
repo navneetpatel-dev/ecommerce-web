@@ -11,6 +11,8 @@ interface ShipmentOverviewCardProps {
   codAmount?: number | null;
   codCollected?: boolean;
   proofOfDeliveryUrl?: string | null;
+  failureReason?: string | null;
+  preferredRedeliverySlot?: string | null;
 }
 
 export function ShipmentOverviewCard({
@@ -22,6 +24,8 @@ export function ShipmentOverviewCard({
   codAmount,
   codCollected,
   proofOfDeliveryUrl,
+  failureReason,
+  preferredRedeliverySlot,
 }: ShipmentOverviewCardProps) {
   return (
     <div className="border border-line bg-surface shadow-elevation-1">
@@ -74,6 +78,22 @@ export function ShipmentOverviewCard({
             </div>
           ) : null}
         </dl>
+
+        {failureReason || preferredRedeliverySlot ? (
+          <div className="mt-4 border-t border-line/60 pt-3">
+            {failureReason ? (
+              <p className="text-body-sm text-ink">
+                <span className="text-ink-muted">Last attempt failed: </span>
+                {failureReason}
+              </p>
+            ) : null}
+            {preferredRedeliverySlot ? (
+              <p className="mt-1 text-body-sm font-medium text-brand">
+                Customer requested redelivery: {preferredRedeliverySlot}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
 
         {items?.length ? (
           <div className="mt-4 border-t border-line/60 pt-3">

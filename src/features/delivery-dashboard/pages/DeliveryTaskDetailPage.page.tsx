@@ -289,6 +289,8 @@ export function DeliveryTaskDetailPage() {
             codAmount={shipment.codAmount}
             codCollected={shipment.codCollected}
             proofOfDeliveryUrl={shipment.proofOfDeliveryUrl}
+            failureReason={shipment.failureReason}
+            preferredRedeliverySlot={shipment.preferredRedeliverySlot}
           />
         </aside>
       </div>

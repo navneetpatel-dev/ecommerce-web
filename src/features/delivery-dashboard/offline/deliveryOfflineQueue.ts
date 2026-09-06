@@ -1,5 +1,6 @@
 import { get, set } from "idb-keyval";
 import { deliveryAgentApi } from "../api/deliveryAgent.api";
+import { isTransientNetworkError } from "@/shared/utils/authSessionError";
 
 const QUEUE_KEY = "delivery-offline-queue:status-updates";
 
@@ -80,9 +81,13 @@ export async function flushOfflineQueue(): Promise<number> {
         await deliveryAgentApi.updatePickupStatus(action.returnId, action.note);
       }
       flushed += 1;
-    } catch {
-      // Stale/invalid transition (e.g. status already advanced by then) — drop it
-      // rather than retrying forever; a fresh manual update covers the gap.
+    } catch (err) {
+      if (isTransientNetworkError(err)) {
+        // Connectivity dropped again mid-flush — keep it queued for the next retry.
+        remaining.push(action);
+      }
+      // Otherwise the server definitively rejected it (e.g. status already advanced
+      // by then) — drop it rather than retrying forever; a fresh manual update covers the gap.
     }
   }
   await writeQueue(remaining);

@@ -1,18 +1,52 @@
+"use client";
+
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Phone } from "lucide-react";
 import type { Shipment } from "@/shared/api/types";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { RedeliverySlotPicker } from "@/shared/components/RedeliverySlotPicker.component";
 import { SHIPMENT_STATUS } from "@/shared/constants/statuses";
+import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { DeliveryRatingPrompt } from "../DeliveryRatingPrompt.component";
+import { shippingApi } from "../../api/shipping.api";
+import { ordersKeys } from "../../api/orders.queries";
 
 interface SubOrderShipmentTrackingProps {
   shipment: Shipment;
+  orderId: string;
 }
 
 /** Tracking/carrier/delivery-agent block for a suborder's shipment (Rule 3 split). */
 export function SubOrderShipmentTracking({
   shipment,
+  orderId,
 }: SubOrderShipmentTrackingProps) {
+  const queryClient = useQueryClient();
+  const [rescheduleError, setRescheduleError] = useState<string | null>(null);
+
+  const reschedule = useMutation({
+    mutationFn: (slot: string) =>
+      shippingApi.reschedule(shipment.trackingNumber, slot),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ordersKeys.detail(orderId),
+      });
+    },
+  });
+
+  const submitReschedule = async (slot: string) => {
+    setRescheduleError(null);
+    try {
+      await reschedule.mutateAsync(slot);
+    } catch (error) {
+      setRescheduleError(
+        getApiErrorMessage(error, "Could not reschedule delivery."),
+      );
+    }
+  };
+
   const canCallAgent =
     Boolean(shipment.deliveryAgent?.phone) &&
     (
@@ -83,6 +117,24 @@ export function SubOrderShipmentTracking({
           ))}
         </div>
       ) : null}
+      {shipment.status === SHIPMENT_STATUS.FAILED && (
+        <div className="mt-2 space-y-2">
+          <p className="rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning">
+            {shipment.failureReason
+              ? `Delivery attempt failed: ${shipment.failureReason}`
+              : "We couldn't deliver this — pick a new time to try again."}
+          </p>
+          <RedeliverySlotPicker
+            currentSlot={shipment.preferredRedeliverySlot}
+            onSubmit={(slot) => void submitReschedule(slot)}
+            isPending={reschedule.isPending}
+            prompt="Delivery didn't go through — pick a redelivery window:"
+          />
+          {rescheduleError ? (
+            <p className="text-body-sm text-danger">{rescheduleError}</p>
+          ) : null}
+        </div>
+      )}
       {shipment.status === SHIPMENT_STATUS.RTO_INITIATED && (
         <p className="mt-2 rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning">
           We couldn&apos;t deliver this after multiple attempts — it&apos;s

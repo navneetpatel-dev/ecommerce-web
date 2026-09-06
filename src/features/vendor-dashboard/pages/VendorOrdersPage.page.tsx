@@ -5,7 +5,7 @@ import { SkeletonRows } from "@/shared/components/Skeletons.component";
 import { EmptyState } from "@/shared/components/EmptyState.component";
 import {
   VendorOrdersTable,
-  type VendorOrder,
+  type VendorSubOrder,
 } from "../components/VendorOrdersTable.component";
 import { RequirePermission } from "@/shared/components/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions";
@@ -26,7 +26,7 @@ export function VendorOrdersPage() {
         </p>
       ) : null}
       <VendorOrdersTable
-        orders={orders.data.items as VendorOrder[]}
+        orders={orders.data.items as unknown as VendorSubOrder[]}
         updatingId={orders.updatingId}
         onSetUpdatingId={orders.setUpdatingId}
         onStatusChange={orders.handleStatusChange}

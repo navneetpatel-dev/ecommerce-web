@@ -19,28 +19,24 @@ import {
   TABLE_PINNED_LAYOUT_CLASS,
 } from "@/shared/constants/table";
 import { cn } from "@/shared/utils/cn";
-import type { SubOrderRow, VendorOrder } from "../types/vendorOrders.types";
+import type { SubOrderRow, VendorSubOrder } from "../types/vendorOrders.types";
 import { formatInr, shortOrderId } from "./VendorOrdersTable/vendorOrderFormat";
 import { SubOrderActions } from "./VendorOrdersTable/SubOrderActions.component";
 import { VendorSubOrderCards } from "./VendorOrdersTable/VendorSubOrderCards.component";
 
-export type { VendorOrder } from "../types/vendorOrders.types";
+export type { VendorSubOrder } from "../types/vendorOrders.types";
 
 interface VendorOrdersTableProps {
-  orders: VendorOrder[];
+  orders: VendorSubOrder[];
   updatingId: string | null;
   onSetUpdatingId: (id: string | null) => void;
   onStatusChange: (id: string, status: string, trackingId?: string) => void;
 }
 
-function flattenSubOrders(orders: VendorOrder[]): SubOrderRow[] {
-  const rows: SubOrderRow[] = [];
-  for (const order of orders) {
-    for (const subOrder of order.subOrders ?? []) {
-      rows.push({ orderId: order.id, subOrder });
-    }
-  }
-  return rows;
+// The backend returns a flat list of sub-orders (each carrying its own
+// orderId), not orders grouped with nested sub-orders — one row per sub-order.
+function flattenSubOrders(orders: VendorSubOrder[]): SubOrderRow[] {
+  return orders.map((subOrder) => ({ orderId: subOrder.orderId, subOrder }));
 }
 
 const CARD_SHADOW_CLASS = "rounded-md border border-line bg-surface p-4";
@@ -85,6 +81,12 @@ export function VendorOrdersTable(props: VendorOrdersTableProps) {
                 {row.subOrder.shipment.deliveryAgent.fullName}
               </p>
             )}
+            {row.subOrder.shipment.codAmount != null && (
+              <p className="text-body-sm text-ink-muted">
+                COD: {formatInr(row.subOrder.shipment.codAmount)}{" "}
+                {row.subOrder.shipment.codCollected ? "(collected)" : "(due)"}
+              </p>
+            )}
             {row.subOrder.shipment.proofOfDeliveryUrl && (
               <a
                 href={row.subOrder.shipment.proofOfDeliveryUrl}
@@ -99,6 +101,26 @@ export function VendorOrdersTable(props: VendorOrdersTableProps) {
         ) : (
           <span className="text-body-sm text-ink-muted">
             {LABELS.notShippedYet}
+          </span>
+        )}
+      </TableCell>
+      <TableCell className={TABLE_DATA_CELL_CLASS}>
+        {row.subOrder.returnRequests?.length ? (
+          <div className="space-y-1">
+            {row.subOrder.returnRequests.map((returnRequest) => (
+              <div key={returnRequest.id} className="flex items-center gap-2">
+                <StatusBadge status={returnRequest.status} />
+                {returnRequest.deliveryAgent && (
+                  <p className="text-body-sm text-ink-muted">
+                    {returnRequest.deliveryAgent.fullName}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <span className="text-body-sm text-ink-muted">
+            {LABELS.noReturnOrExchange}
           </span>
         )}
       </TableCell>
@@ -154,6 +176,9 @@ export function VendorOrdersTable(props: VendorOrdersTableProps) {
                   </TableHead>
                   <TableHead className={TABLE_DATA_CELL_CLASS}>
                     {LABELS.delivery}
+                  </TableHead>
+                  <TableHead className={TABLE_DATA_CELL_CLASS}>
+                    {LABELS.returnPickup}
                   </TableHead>
                   <TableHead className={TABLE_ACTIONS_HEAD_CLASS}>
                     {LABELS.actions}

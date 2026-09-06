@@ -87,7 +87,10 @@ export function SubOrderCard({
       )}
 
       {subOrder.shipment && (
-        <SubOrderShipmentTracking shipment={subOrder.shipment} />
+        <SubOrderShipmentTracking
+          shipment={subOrder.shipment}
+          orderId={subOrder.orderId}
+        />
       )}
 
       <SubOrderReturnDialog

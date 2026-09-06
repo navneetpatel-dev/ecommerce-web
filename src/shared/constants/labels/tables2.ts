@@ -104,6 +104,8 @@ export const tables2Labels = {
   vendorColumn: "Vendor",
   delivery: "Delivery",
   notShippedYet: "Not shipped yet",
+  returnPickup: "Return/Pickup",
+  noReturnOrExchange: "No return or exchange",
   noOrdersFound: "No orders found",
   errorRetryHint: "Something went wrong while loading this section.",
   retry: "Try again",
