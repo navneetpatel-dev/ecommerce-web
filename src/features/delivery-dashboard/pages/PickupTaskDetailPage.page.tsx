@@ -16,6 +16,8 @@ import { TaskContactCard } from "../components/TaskContactCard.component";
 import { FailedAttemptSection } from "../components/FailedAttemptSection.component";
 import { PickupChecklistCard } from "../components/PickupChecklistCard.component";
 import { PickupOverviewCard } from "../components/PickupOverviewCard.component";
+import { LocationBeacon } from "../components/LocationBeacon.component";
+import { isOffline } from "../offline/deliveryOfflineQueue";
 import { formatAddress } from "../utils/formatAddress";
 import { usePresignUpload } from "@/shared/hooks/useUploads.hook";
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
@@ -60,6 +62,12 @@ export function PickupTaskDetailPage() {
 
   const complete = async () => {
     setError(null);
+    if (isOffline()) {
+      setError(
+        "Doorstep pickup confirmation requires active internet connectivity to verify the customer passcode.",
+      );
+      return;
+    }
     try {
       const itemConditionPhotoUrls = await Promise.all(
         conditionFiles.map(uploadFile),
@@ -112,7 +120,10 @@ export function PickupTaskDetailPage() {
             {pickup.type} pickup · Return #{pickup.id.slice(0, 8)}
           </p>
         </div>
-        <StatusBadge status={pickup.status} />
+        <div className="flex flex-col items-end gap-2">
+          <StatusBadge status={pickup.status} />
+          <LocationBeacon active={pickup.status === "PICKUP_SCHEDULED"} />
+        </div>
       </header>
 
       {error ? <p className="text-body-sm text-danger">{error}</p> : null}

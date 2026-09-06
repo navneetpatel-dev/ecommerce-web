@@ -73,12 +73,20 @@ export async function flushOfflineQueue(): Promise<number> {
   for (const action of queue) {
     try {
       if (action.kind === "delivery") {
-        await deliveryAgentApi.updateDeliveryStatus(action.shipmentId, {
-          status: action.status,
-          note: action.note,
-        });
+        await deliveryAgentApi.updateDeliveryStatus(
+          action.shipmentId,
+          {
+            status: action.status,
+            note: action.note,
+          },
+          { bypassOfflineQueue: true },
+        );
       } else {
-        await deliveryAgentApi.updatePickupStatus(action.returnId, action.note);
+        await deliveryAgentApi.updatePickupStatus(
+          action.returnId,
+          action.note,
+          { bypassOfflineQueue: true },
+        );
       }
       flushed += 1;
     } catch (err) {

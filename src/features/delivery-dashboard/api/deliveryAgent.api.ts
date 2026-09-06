@@ -27,6 +27,8 @@ import type {
 import {
   cacheDeliverySnapshot,
   getCachedDeliverySnapshot,
+  updateCachedDeliveryStatus,
+  updateCachedPickupStatus,
 } from "../offline/deliveryOfflineCache";
 import {
   enqueueStatusUpdate,
@@ -76,7 +78,9 @@ export const deliveryAgentApi = {
       ),
     ),
   pickup: (returnId: string) =>
-    apiClient.get<DeliveryPickup>(API.deliveryAgents.mePickup(returnId)),
+    withOfflineCache(`pickup:${returnId}`, () =>
+      apiClient.get<DeliveryPickup>(API.deliveryAgents.mePickup(returnId)),
+    ),
   updateLocation: (lat: number, lng: number) =>
     apiClient.patch<{ lat: number; lng: number; updatedAt: string }>(
       API.deliveryAgents.meLocation,
@@ -119,8 +123,10 @@ export const deliveryAgentApi = {
   updateDeliveryStatus: async (
     shipmentId: string,
     body: { status: string; note?: string; photoUrl?: string },
+    options?: { bypassOfflineQueue?: boolean },
   ) => {
-    if (isOffline()) {
+    if (!options?.bypassOfflineQueue && isOffline()) {
+      await updateCachedDeliveryStatus(shipmentId, body.status, body.note);
       await enqueueStatusUpdate({
         kind: "delivery",
         shipmentId,
@@ -146,8 +152,13 @@ export const deliveryAgentApi = {
       API.deliveryAgents.meDeliveryConfirm(shipmentId),
       body,
     ),
-  updatePickupStatus: async (returnId: string, note: string) => {
-    if (isOffline()) {
+  updatePickupStatus: async (
+    returnId: string,
+    note: string,
+    options?: { bypassOfflineQueue?: boolean },
+  ) => {
+    if (!options?.bypassOfflineQueue && isOffline()) {
+      await updateCachedPickupStatus(returnId, note);
       await enqueueStatusUpdate({ kind: "pickup", returnId, note });
       return null;
     }

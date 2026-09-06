@@ -28,6 +28,8 @@ import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
 import { PATHS } from "@/shared/constants/paths";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 
+import { isOffline } from "../offline/deliveryOfflineQueue";
+
 const TERMINAL_STATUSES = [
   "DELIVERED",
   "FAILED",
@@ -69,6 +71,12 @@ export function DeliveryTaskDetailPage() {
     try {
       let photoUrl: string | undefined;
       if (status === "FAILED" && failurePhoto) {
+        if (isOffline()) {
+          setError(
+            "Proof photos require active internet connectivity. Remove the photo to record this attempt offline, or try again when back online.",
+          );
+          return;
+        }
         const result = await upload.mutateAsync({
           entityType: UPLOAD_ENTITY.SHIPMENTS,
           entityId: shipmentId,
@@ -92,6 +100,12 @@ export function DeliveryTaskDetailPage() {
 
   const complete = async () => {
     setError(null);
+    if (isOffline()) {
+      setError(
+        "Doorstep confirmation requires internet connectivity to verify the customer passcode.",
+      );
+      return;
+    }
     try {
       let proofPhotoUrl: string | undefined;
       if (proof) {
