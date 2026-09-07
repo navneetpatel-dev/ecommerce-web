@@ -39,7 +39,7 @@ export function DateRangeFields({
       <FormFieldFrame
         label={LABELS.reportDateFrom}
         htmlFor={fromId}
-        className={fromClassName}
+        className={cn("w-40 sm:w-44", fromClassName)}
       >
         <DisabledActionHint disabled={disabled} message={hint} block>
           <DateTimePicker
@@ -55,7 +55,7 @@ export function DateRangeFields({
       <FormFieldFrame
         label={LABELS.reportDateTo}
         htmlFor={toId}
-        className={toClassName}
+        className={cn("w-40 sm:w-44", toClassName)}
       >
         <DisabledActionHint disabled={disabled} message={hint} block>
           <DateTimePicker

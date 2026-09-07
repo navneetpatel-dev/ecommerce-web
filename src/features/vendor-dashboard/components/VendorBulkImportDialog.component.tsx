@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
+import { FilePicker } from "@/shared/components/FilePicker.component";
 import {
   Table,
   TableHeader,
@@ -32,7 +32,6 @@ export function VendorBulkImportDialog({
   const [importing, setImporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<BulkImportRowResult[] | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const close = () => {
     if (importing) return;
@@ -40,7 +39,6 @@ export function VendorBulkImportDialog({
     setFile(null);
     setError(null);
     setResults(null);
-    if (inputRef.current) inputRef.current.value = "";
   };
 
   const submit = async () => {
@@ -101,12 +99,21 @@ export function VendorBulkImportDialog({
         }
       >
         {!results ? (
-          <Input
-            ref={inputRef}
-            type="file"
-            accept=".csv,text/csv"
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          />
+          <div className="space-y-3">
+            <FilePicker
+              accept=".csv,text/csv"
+              maxBytes={2 * 1024 * 1024}
+              maxRows={500}
+              value={file}
+              onChange={(f) => {
+                setFile(f);
+                setError(null);
+              }}
+              disabled={importing}
+              hint="CSV format • Max 2 MB • Up to 500 rows"
+            />
+            {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+          </div>
         ) : (
           <div className="space-y-3">
             <p className="text-body-sm text-ink">

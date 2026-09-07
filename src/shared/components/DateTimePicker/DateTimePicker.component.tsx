@@ -100,7 +100,7 @@ export function DateTimePicker({
           id={id}
           disabled={disabled}
           className={cn(
-            "flex h-11 w-full cursor-pointer items-center justify-between rounded-sm border bg-surface-raised px-4 text-left text-body outline-none",
+            "flex h-11 w-full min-w-[10rem] cursor-pointer items-center justify-between gap-3 rounded-sm border bg-surface-raised px-3.5 text-left text-body outline-none",
             "hover:bg-paper/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
             "disabled:cursor-not-allowed disabled:opacity-50",
             error ? "border-danger" : "border-line-strong",
@@ -114,7 +114,7 @@ export function DateTimePicker({
           </span>
           <CalendarDays
             size={16}
-            className="shrink-0 text-ink-muted"
+            className="shrink-0 ml-1 text-ink-muted"
             aria-hidden
           />
         </button>

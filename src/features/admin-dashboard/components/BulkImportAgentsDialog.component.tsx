@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Upload } from "lucide-react";
 import {
   deliveryAdminApi,
@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
+import { FilePicker } from "@/shared/components/FilePicker.component";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 
 const EXPECTED_COLUMNS = [
@@ -24,6 +25,9 @@ const EXPECTED_COLUMNS = [
   "vehicleType",
   "hubOrZone",
 ] as const;
+
+const MAX_ROWS = 200;
+const MAX_FILE_BYTES = 2 * 1024 * 1024; // 2MB
 
 interface ParsedRow {
   email: string;
@@ -48,6 +52,12 @@ function parseAgentsCsv(text: string): {
     return {
       rows: [],
       error: "CSV must have a header row and at least one data row.",
+    };
+  }
+  if (lines.length - 1 > MAX_ROWS) {
+    return {
+      rows: [],
+      error: `CSV file exceeds the ${MAX_ROWS}-row limit (found ${lines.length - 1} rows).`,
     };
   }
   const header = lines[0].split(",").map((cell) => cell.trim());
@@ -81,23 +91,34 @@ export function BulkImportAgentsDialog({
   onImported: () => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<BulkCreateAgentResult[] | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFile = async (file: File | null) => {
-    if (!file) return;
+  const reset = () => {
+    setFile(null);
     setError(null);
     setResults(null);
-    const text = await file.text();
-    const { rows, error: parseError } = parseAgentsCsv(text);
-    if (parseError) {
-      setError(parseError);
+  };
+
+  const handleImport = async () => {
+    if (!file) {
+      setError("Please choose a CSV file to import.");
       return;
     }
+    setError(null);
+    setResults(null);
     setPending(true);
+
     try {
+      const text = await file.text();
+      const { rows, error: parseError } = parseAgentsCsv(text);
+      if (parseError) {
+        setError(parseError);
+        setPending(false);
+        return;
+      }
       const rowResults = await deliveryAdminApi.bulkCreate(rows);
       setResults(rowResults);
       if (rowResults.some((row) => row.success)) onImported();
@@ -105,19 +126,17 @@ export function BulkImportAgentsDialog({
       setError(getApiErrorMessage(importError, "Could not import agents."));
     } finally {
       setPending(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
+
+  const successCount = results?.filter((r) => r.success).length ?? 0;
 
   return (
     <Dialog
       open={open}
       onOpenChange={(next) => {
         setOpen(next);
-        if (!next) {
-          setResults(null);
-          setError(null);
-        }
+        if (!next) reset();
       }}
     >
       <DialogTrigger asChild>
@@ -130,33 +149,99 @@ export function BulkImportAgentsDialog({
         <DialogHeader>
           <DialogTitle>Bulk import agents</DialogTitle>
         </DialogHeader>
-        <div className="space-y-3">
-          <p className="text-body-sm text-ink-muted">
-            CSV columns: <code>{EXPECTED_COLUMNS.join(",")}</code>. First row
-            must be the header. Up to 200 rows per file.
-          </p>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".csv,text/csv"
-            disabled={pending}
-            onChange={(e) => void handleFile(e.target.files?.[0] ?? null)}
-            className="block w-full text-body-sm"
-          />
-          {error ? <p className="text-body-sm text-danger">{error}</p> : null}
-          {results ? (
-            <div className="max-h-64 space-y-1 overflow-y-auto rounded-md border border-line p-2 text-body-sm">
-              {results.map((row) => (
-                <p
-                  key={row.row}
-                  className={row.success ? "text-success" : "text-danger"}
+
+        <div className="space-y-4">
+          <div className="rounded-md border border-line bg-paper/30 p-3 space-y-1.5 text-body-sm">
+            <p className="font-medium text-ink">Required CSV Columns:</p>
+            <code className="block rounded bg-surface px-2 py-1 font-mono text-caption text-ink break-all border border-line/60">
+              {EXPECTED_COLUMNS.join(", ")}
+            </code>
+            <p className="text-caption text-ink-muted">
+              First row must be the header. Maximum 200 agents per upload.
+            </p>
+          </div>
+
+          {!results ? (
+            <>
+              <FilePicker
+                accept=".csv,text/csv"
+                maxBytes={MAX_FILE_BYTES}
+                maxRows={MAX_ROWS}
+                value={file}
+                onChange={(f) => {
+                  setFile(f);
+                  setError(null);
+                }}
+                disabled={pending}
+                hint="CSV format • Max 2 MB • Up to 200 rows"
+              />
+
+              {error ? (
+                <p className="text-body-sm text-danger">{error}</p>
+              ) : null}
+
+              <div className="flex justify-end gap-2 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={pending}
+                  onClick={() => setOpen(false)}
                 >
-                  Row {row.row} ({row.email}):{" "}
-                  {row.success ? "created" : row.error}
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  disabled={!file || pending}
+                  loading={pending}
+                  onClick={() => void handleImport()}
+                >
+                  Import agents
+                </Button>
+              </div>
+            </>
+          ) : (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-body-sm">
+                <p className="font-medium text-ink">
+                  Import Summary: {successCount} of {results.length} succeeded
                 </p>
-              ))}
+              </div>
+              <div className="max-h-64 space-y-1.5 overflow-y-auto rounded-md border border-line p-3 text-body-sm">
+                {results.map((row) => (
+                  <div
+                    key={row.row}
+                    className="flex items-center justify-between gap-2 text-caption font-mono"
+                  >
+                    <span className="text-ink">
+                      Row {row.row} ({row.email})
+                    </span>
+                    <span
+                      className={
+                        row.success ? "text-success font-medium" : "text-danger"
+                      }
+                    >
+                      {row.success ? "Created" : row.error}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={reset}
+                >
+                  Upload another file
+                </Button>
+                <Button type="button" size="sm" onClick={() => setOpen(false)}>
+                  Done
+                </Button>
+              </div>
             </div>
-          ) : null}
+          )}
         </div>
       </DialogContent>
     </Dialog>

@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { FormFieldFrame } from "@/shared/components/forms";
+import { FilePicker } from "@/shared/components/FilePicker.component";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { usePresignUpload } from "@/shared/hooks/useUploads.hook";
@@ -166,11 +167,14 @@ export function AgentMarkPayoutPaidAction({
           label="Proof of payment (optional)"
           htmlFor={`agent-payout-proof-${payoutId}`}
         >
-          <Input
+          <FilePicker
             id={`agent-payout-proof-${payoutId}`}
-            type="file"
             accept="image/jpeg,image/png,image/webp,application/pdf"
-            onChange={(event) => setProof(event.target.files?.[0] ?? null)}
+            maxBytes={5 * 1024 * 1024}
+            value={proof}
+            onChange={setProof}
+            disabled={pending}
+            hint="PNG, JPEG, WebP, or PDF • Max 5 MB"
           />
         </FormFieldFrame>
         <FormFieldFrame
