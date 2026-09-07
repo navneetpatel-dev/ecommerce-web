@@ -2,11 +2,13 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { Eye } from "lucide-react";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { USER_STATUS } from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { Button } from "@/shared/components/ui/button";
+import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import { useDebouncedValue } from "@/shared/hooks/use-debounce.hook";
 import { adminUsersApi } from "../api/users.api.hook";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
@@ -58,8 +60,16 @@ export function useAdminUsersPage(): AdminUsersPageModel {
 
       return (
         <>
-          <Button size="sm" variant="outline" asChild>
-            <Link href={`/admin/users/${row.id}`}>{LABELS.view}</Link>
+          <Button
+            size="sm"
+            variant="outline"
+            className={tableMenuButtonClass("neutral")}
+            asChild
+          >
+            <Link href={`/admin/users/${row.id}`}>
+              <Eye strokeWidth={2.25} aria-hidden />
+              <span>{LABELS.view}</span>
+            </Link>
           </Button>
           <AdminConfirmAction
             label={isBlocked ? LABELS.activate : LABELS.block}

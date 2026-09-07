@@ -2,9 +2,11 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { Eye } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { Button } from "@/shared/components/ui/button";
+import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import { AdminConfirmAction } from "./AdminConfirmAction.component";
 import { VendorKycDocumentsMenuAction } from "./VendorKycDocumentsMenuAction.component";
 import { adminApi } from "../api/admin.api";
@@ -29,8 +31,16 @@ export function renderVendorRowActions({
 
   return (
     <>
-      <Button size="sm" variant="outline" asChild>
-        <Link href={`/admin/vendors/${vendorId}`}>{LABELS.view}</Link>
+      <Button
+        size="sm"
+        variant="outline"
+        className={tableMenuButtonClass("neutral")}
+        asChild
+      >
+        <Link href={`/admin/vendors/${vendorId}`}>
+          <Eye strokeWidth={2.25} aria-hidden />
+          <span>{LABELS.view}</span>
+        </Link>
       </Button>
       <VendorKycDocumentsMenuAction vendorId={vendorId} vendorName={name} />
       {row.status === "SUSPENDED" ? (

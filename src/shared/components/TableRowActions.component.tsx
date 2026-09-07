@@ -162,10 +162,8 @@ export function TableRowActions({
           align="end"
           className={cn(
             "z-[80] w-[12.5rem] overflow-hidden rounded-sm! p-0",
-            "[&_[data-table-row-menu-item]]:w-full",
-            "[&_[data-table-row-menu-item]_button]:h-11 [&_[data-table-row-menu-item]_button]:min-h-11 [&_[data-table-row-menu-item]_button]:max-h-11",
-            "[&_[data-table-row-menu-item]_button]:w-full [&_[data-table-row-menu-item]_button]:rounded-none! [&_[data-table-row-menu-item]_button]:px-4",
-            "[&_[data-table-row-menu-item]_button]:border-transparent [&_[data-table-row-menu-item]_button]:shadow-none",
+            "[&_button]:w-full [&_button]:min-w-0 [&_button]:justify-start [&_button]:rounded-none! [&_button]:border-transparent [&_button]:shadow-none",
+            "[&_a]:w-full [&_a]:min-w-0 [&_a]:justify-start [&_a]:rounded-none! [&_a]:border-transparent [&_a]:shadow-none [&_a]:inline-flex [&_a]:items-center",
             menuClassName,
           )}
           onClick={(event) => event.stopPropagation()}

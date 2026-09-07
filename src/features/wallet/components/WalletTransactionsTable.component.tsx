@@ -1,7 +1,9 @@
 "use client";
 
+import { Download } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { TableRowAction } from "@/shared/components/TableRowActions.component";
+import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import {
   DataTable,
   type DataTableColumn,
@@ -134,12 +136,13 @@ export function WalletTransactionsTable({
           <TableRowAction>
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               size="sm"
-              className="justify-start"
+              className={tableMenuButtonClass("neutral")}
               onClick={() => onDownloadInvoice(rechargeId)}
             >
-              {LABELS.walletDownloadRechargeInvoice}
+              <Download strokeWidth={2.25} aria-hidden />
+              <span>{LABELS.walletDownloadRechargeInvoice}</span>
             </Button>
           </TableRowAction>
         );

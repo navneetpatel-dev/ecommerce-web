@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, type ReactNode } from "react";
+import { Download } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { commissionsApi, payoutsApi } from "../api/finance.api";
@@ -97,9 +99,11 @@ export function useAdminFinancePage(): AdminFinancePageModel {
           type="button"
           variant="outline"
           size="sm"
+          className={tableMenuButtonClass("neutral")}
           onClick={() => void commissionsApi.downloadInvoice(String(row.id))}
         >
-          {LABELS.downloadCommissionInvoice}
+          <Download strokeWidth={2.25} aria-hidden />
+          <span>{LABELS.downloadCommissionInvoice}</span>
         </Button>
       ),
       columnKeys: [

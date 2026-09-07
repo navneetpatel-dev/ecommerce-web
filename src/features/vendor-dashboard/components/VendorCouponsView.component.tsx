@@ -1,6 +1,8 @@
 "use client";
 
+import { BarChart2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import {
   DataTable,
   type DataTableColumn,
@@ -100,9 +102,11 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
         type="button"
         size="sm"
         variant="outline"
+        className={tableMenuButtonClass("neutral")}
         onClick={() => setAnalyticsId(row.id)}
       >
-        {LABELS.viewAnalytics}
+        <BarChart2 strokeWidth={2.25} aria-hidden />
+        <span>{LABELS.viewAnalytics}</span>
       </Button>
       {row.status === COUPON_STATUS.ACTIVE ? (
         <AdminConfirmAction

@@ -1,10 +1,12 @@
 "use client";
 
+import { BarChart2 } from "lucide-react";
 import {
   DataTable,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable.component";
 import { Button } from "@/shared/components/ui/button";
+import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
 import { COUPON_STATUS } from "@/shared/constants/statuses";
 import { formatLabel } from "@/shared/utils/formatLabel";
@@ -43,9 +45,11 @@ export function CouponsTable({
         type="button"
         size="sm"
         variant="outline"
+        className={tableMenuButtonClass("neutral")}
         onClick={() => setAnalyticsCouponId(row.id)}
       >
-        {LABELS.viewAnalytics}
+        <BarChart2 strokeWidth={2.25} aria-hidden />
+        <span>{LABELS.viewAnalytics}</span>
       </Button>
       {!readOnly && row.status === COUPON_STATUS.ACTIVE ? (
         <AdminConfirmAction
