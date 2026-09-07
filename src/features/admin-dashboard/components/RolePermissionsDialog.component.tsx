@@ -97,9 +97,9 @@ export function RolePermissionsDialog({
         if (!next) onClose();
       }}
     >
-      <DialogContent className="w-full sm:max-w-3xl max-h-[min(90vh,46rem)] h-[min(90vh,46rem)] p-0 flex flex-col overflow-hidden gap-0">
+      <DialogContent className="w-full sm:max-w-3xl max-h-[min(90vh,46rem)] h-[min(90vh,46rem)] p-0 sm:p-0 flex flex-col overflow-hidden gap-0">
         {/* Header with Title, Badges, and Live Counter */}
-        <div className="border-b border-line px-6 py-5 bg-paper/50 pr-12">
+        <div className="border-b border-line px-6 py-4 bg-paper/50">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <ShieldCheck className="size-5 text-brand shrink-0" aria-hidden />

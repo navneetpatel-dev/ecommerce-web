@@ -63,10 +63,10 @@ const DialogContent = React.forwardRef<
           <DialogPrimitive.Content
             ref={ref}
             className={cn(
-              "pointer-events-auto overscroll-contain outline-none animate-scale-in",
+              "pointer-events-auto overscroll-contain outline-none animate-scale-in flex flex-col",
               isFullscreen
                 ? "fixed inset-0 flex h-[100dvh] w-full max-h-none max-w-none flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none rounded-none"
-                : "relative grid w-full max-w-[480px] max-h-full gap-5 overflow-y-auto border border-line bg-surface-raised p-5 shadow-elevation-3 rounded-lg sm:gap-6 sm:p-6",
+                : "relative w-full max-w-[480px] max-h-[calc(100dvh-2rem)] overflow-hidden border border-line bg-surface-raised shadow-elevation-3 rounded-lg",
               className,
             )}
             style={{ animationDuration: "var(--motion-moderate)" }}
@@ -88,26 +88,43 @@ const DialogContent = React.forwardRef<
             }}
             {...props}
           >
-            {children}
             {!hideCloseButton && (
-              <DialogPrimitive.Close
-                type="button"
+              <div
                 className={cn(
-                  "absolute right-3 top-3 z-50 inline-flex size-8 items-center justify-center rounded-sm text-ink-muted opacity-70 transition-all hover:bg-surface hover:text-ink hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-                  isFullscreen &&
-                    "fixed right-3 top-3 z-[60] rounded-full border border-line bg-surface/90 p-2 opacity-100 shadow-elevation-1 backdrop-blur-sm",
-                  closeButtonClassName,
+                  "flex shrink-0 items-center justify-end",
+                  isFullscreen
+                    ? "fixed right-3 top-3 z-[60]"
+                    : "px-3 pt-2.5 pb-0.5",
                 )}
-                onPointerDown={(event) => {
-                  // Keep focus in the dialog until close so field blur doesn't flash validation.
-                  event.preventDefault();
-                  closedByPointerRef.current = true;
-                }}
               >
-                <X size={18} />
-                <span className="sr-only">{LABELS.close}</span>
-              </DialogPrimitive.Close>
+                <DialogPrimitive.Close
+                  type="button"
+                  className={cn(
+                    "inline-flex size-7 items-center justify-center rounded-sm text-ink-muted opacity-70 transition-all hover:bg-surface hover:text-ink hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                    isFullscreen &&
+                      "rounded-full border border-line bg-surface/90 p-2 opacity-100 shadow-elevation-1 backdrop-blur-sm",
+                    closeButtonClassName,
+                  )}
+                  onPointerDown={(event) => {
+                    // Keep focus in the dialog until close so field blur doesn't flash validation.
+                    event.preventDefault();
+                    closedByPointerRef.current = true;
+                  }}
+                >
+                  <X size={18} />
+                  <span className="sr-only">{LABELS.close}</span>
+                </DialogPrimitive.Close>
+              </div>
             )}
+            <div
+              className={cn(
+                "min-h-0 flex-1 flex flex-col overflow-y-auto",
+                !className?.includes("p-0") &&
+                  "px-5 pb-5 sm:px-6 sm:pb-6 gap-5 sm:gap-6",
+              )}
+            >
+              {children}
+            </div>
           </DialogPrimitive.Content>
         </div>
       </DialogPortal>
@@ -122,7 +139,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left pr-8 sm:pr-10",
+      "flex flex-col space-y-1.5 text-center sm:text-left",
       className,
     )}
     {...props}
