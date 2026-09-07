@@ -92,5 +92,14 @@ export const settingsLabels = {
   scheduledReportsThursday: "Thursday",
   scheduledReportsFriday: "Friday",
   scheduledReportsSaturday: "Saturday",
+  scheduledReportsSearchPlaceholder: "Search report types...",
+  scheduledReportsSelectAll: "Select all",
+  scheduledReportsClearAll: "Clear all",
+  scheduledReportsCategoryAll: "All reports",
+  scheduledReportsCategoryFinance: "Finance & Tax",
+  scheduledReportsCategoryOps: "Operations",
+  scheduledReportsCategoryCatalog: "Catalog & Growth",
+  scheduledReportsNoMatches: "No report types match your search",
+  scheduledReportsSelectedCount: "selected",
   // Report column headers not already covered above (must match BE REPORT_COLUMN_LABELS keys)
 } as const;

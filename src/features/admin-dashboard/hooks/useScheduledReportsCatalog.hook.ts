@@ -7,7 +7,12 @@ import {
   type ReportCatalogItem,
 } from "@/features/reports";
 
-export type ScheduledReportTypeOption = { type: string; label: string };
+export type ScheduledReportTypeOption = {
+  type: string;
+  label: string;
+  audience?: string;
+  financial?: boolean;
+};
 
 const ADMIN_DIGEST_AUDIENCES = ["admin_finance", "admin_ops", "admin_catalog"];
 
@@ -29,6 +34,8 @@ export function useScheduledReportsCatalog() {
           .map((item) => ({
             type: item.type,
             label: labelForKey(item.labelKey),
+            audience: item.audience,
+            financial: item.financial,
           }));
         setOptions(schedulable);
       })

@@ -1,7 +1,6 @@
 "use client";
 
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
-import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Input } from "@/shared/components/ui/input";
 import {
   Select,
@@ -13,6 +12,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { useScheduledReportsCatalog } from "../../hooks/useScheduledReportsCatalog.hook";
 import type { PlatformSettings } from "../../hooks/usePlatformSettingsForm.hook";
+import { ScheduledReportsTypeSelector } from "./ScheduledReportsTypeSelector.component";
 
 interface ScheduledReportsSettingsSectionProps {
   form: PlatformSettings;
@@ -46,13 +46,6 @@ export function ScheduledReportsSettingsSection({
   const catalog = useScheduledReportsCatalog();
   const selectedTypes = form.scheduledReportsTypes ?? [];
   const recipientsText = (form.scheduledReportsRecipients ?? []).join(", ");
-
-  const toggleType = (type: string, checked: boolean) => {
-    const next = checked
-      ? [...selectedTypes, type]
-      : selectedTypes.filter((t) => t !== type);
-    onScheduledReportsTypesChange(next);
-  };
 
   return (
     <FormSection
@@ -130,27 +123,13 @@ export function ScheduledReportsSettingsSection({
           }}
         />
       </FormFieldFrame>
-      <FormFieldFrame
-        label={LABELS.scheduledReportsTypes}
-        hint={LABELS.scheduledReportsTypesHint}
-      >
-        <div className="flex flex-col gap-1.5">
-          {catalog.map((option) => (
-            <label
-              key={option.type}
-              className="flex items-center gap-2 text-body-sm"
-            >
-              <Checkbox
-                checked={selectedTypes.includes(option.type)}
-                onCheckedChange={(checked) =>
-                  toggleType(option.type, Boolean(checked))
-                }
-              />
-              {option.label}
-            </label>
-          ))}
-        </div>
-      </FormFieldFrame>
+      <div className="col-span-full border-t border-line/70 pt-6">
+        <ScheduledReportsTypeSelector
+          catalog={catalog}
+          selectedTypes={selectedTypes}
+          onChange={onScheduledReportsTypesChange}
+        />
+      </div>
     </FormSection>
   );
 }
