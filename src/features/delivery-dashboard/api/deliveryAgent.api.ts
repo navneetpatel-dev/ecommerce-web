@@ -1,4 +1,5 @@
 import { apiClient } from "@/shared/api/client";
+import { postFile } from "@/shared/api/postFile";
 import {
   unwrapPaginatedList,
   type PaginatedList,
@@ -318,6 +319,15 @@ export const deliveryAdminApi = {
     apiClient.post<BulkCreateAgentResult[]>(API.deliveryAgents.bulkCreate, {
       rows,
     }),
+  downloadBulkTemplate: async (format: "xlsx" | "csv" = "xlsx") => {
+    const filename = `delivery_agents_template.${format}`;
+    await downloadReportFile(
+      `${API.deliveryAgents.bulkTemplate}?format=${format}`,
+      filename,
+    );
+  },
+  bulkImportFile: (file: File) =>
+    postFile<BulkCreateAgentResult[]>(API.deliveryAgents.bulkImportFile, file),
   update: (
     id: string,
     body: Partial<

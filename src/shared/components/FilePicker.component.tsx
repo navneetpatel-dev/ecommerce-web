@@ -60,7 +60,10 @@ export function FilePicker({
 
   const resolvedVariant =
     iconVariant ??
-    (accept?.includes(".csv") || accept?.includes("text/csv")
+    (accept?.includes(".csv") ||
+    accept?.includes("text/csv") ||
+    accept?.includes(".xlsx") ||
+    accept?.includes("spreadsheet")
       ? "csv"
       : accept?.includes("image")
         ? "image"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Upload } from "lucide-react";
+import { Download, FileSpreadsheet, Upload } from "lucide-react";
 import {
   deliveryAdminApi,
   type BulkCreateAgentResult,
@@ -60,7 +60,8 @@ function parseAgentsCsv(text: string): {
       error: `CSV file exceeds the ${MAX_ROWS}-row limit (found ${lines.length - 1} rows).`,
     };
   }
-  const header = lines[0].split(",").map((cell) => cell.trim());
+  const firstLine = lines[0] ?? "";
+  const header = firstLine.split(",").map((cell) => cell.trim());
   const missing = EXPECTED_COLUMNS.filter((col) => !header.includes(col));
   if (missing.length > 0) {
     return { rows: [], error: `Missing column(s): ${missing.join(", ")}` };
@@ -73,12 +74,12 @@ function parseAgentsCsv(text: string): {
       record[col] = cells[index] ?? "";
     });
     return {
-      email: record.email,
-      password: record.password,
-      fullName: record.fullName,
-      phone: record.phone,
+      email: record.email || "",
+      password: record.password || "",
+      fullName: record.fullName || "",
+      phone: record.phone || "",
       vehicleType: record.vehicleType || "BIKE",
-      hubOrZone: record.hubOrZone,
+      hubOrZone: record.hubOrZone || "",
     };
   });
 
@@ -93,6 +94,9 @@ export function BulkImportAgentsDialog({
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [pending, setPending] = useState(false);
+  const [downloadingFormat, setDownloadingFormat] = useState<
+    "xlsx" | "csv" | null
+  >(null);
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<BulkCreateAgentResult[] | null>(null);
 
@@ -100,11 +104,23 @@ export function BulkImportAgentsDialog({
     setFile(null);
     setError(null);
     setResults(null);
+    setDownloadingFormat(null);
+  };
+
+  const handleDownloadTemplate = async (format: "xlsx" | "csv") => {
+    setDownloadingFormat(format);
+    try {
+      await deliveryAdminApi.downloadBulkTemplate(format);
+    } catch (err) {
+      setError(getApiErrorMessage(err, "Could not download sample template."));
+    } finally {
+      setDownloadingFormat(null);
+    }
   };
 
   const handleImport = async () => {
     if (!file) {
-      setError("Please choose a CSV file to import.");
+      setError("Please choose an Excel or CSV file to import.");
       return;
     }
     setError(null);
@@ -112,16 +128,29 @@ export function BulkImportAgentsDialog({
     setPending(true);
 
     try {
-      const text = await file.text();
-      const { rows, error: parseError } = parseAgentsCsv(text);
-      if (parseError) {
-        setError(parseError);
-        setPending(false);
-        return;
+      const isXlsx =
+        file.name.endsWith(".xlsx") ||
+        file.type ===
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+      if (isXlsx) {
+        // Upload Excel file directly to backend parser
+        const rowResults = await deliveryAdminApi.bulkImportFile(file);
+        setResults(rowResults);
+        if (rowResults.some((row) => row.success)) onImported();
+      } else {
+        // Parse CSV client-side with fast feedback, then bulkCreate
+        const text = await file.text();
+        const { rows, error: parseError } = parseAgentsCsv(text);
+        if (parseError) {
+          setError(parseError);
+          setPending(false);
+          return;
+        }
+        const rowResults = await deliveryAdminApi.bulkCreate(rows);
+        setResults(rowResults);
+        if (rowResults.some((row) => row.success)) onImported();
       }
-      const rowResults = await deliveryAdminApi.bulkCreate(rows);
-      setResults(rowResults);
-      if (rowResults.some((row) => row.success)) onImported();
     } catch (importError) {
       setError(getApiErrorMessage(importError, "Could not import agents."));
     } finally {
@@ -142,7 +171,7 @@ export function BulkImportAgentsDialog({
       <DialogTrigger asChild>
         <Button type="button" variant="outline" size="sm">
           <Upload className="size-3.5" aria-hidden="true" />
-          Bulk import (CSV)
+          Bulk import
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-lg">
@@ -151,20 +180,58 @@ export function BulkImportAgentsDialog({
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="rounded-md border border-line bg-paper/30 p-3 space-y-1.5 text-body-sm">
-            <p className="font-medium text-ink">Required CSV Columns:</p>
+          <div className="rounded-md border border-line bg-paper/30 p-3.5 space-y-2 text-body-sm">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="font-medium text-ink">Required Columns:</p>
+              <div className="flex items-center gap-1.5">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 gap-1 px-2 text-caption font-medium"
+                  disabled={Boolean(downloadingFormat)}
+                  onClick={() => void handleDownloadTemplate("xlsx")}
+                >
+                  <FileSpreadsheet
+                    className="size-3.5 text-emerald-500"
+                    aria-hidden="true"
+                  />
+                  {downloadingFormat === "xlsx"
+                    ? "Downloading..."
+                    : "Sample Excel (.xlsx)"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 gap-1 px-2 text-caption font-medium"
+                  disabled={Boolean(downloadingFormat)}
+                  onClick={() => void handleDownloadTemplate("csv")}
+                >
+                  <Download
+                    className="size-3.5 text-ink-muted"
+                    aria-hidden="true"
+                  />
+                  {downloadingFormat === "csv"
+                    ? "Downloading..."
+                    : "Sample CSV"}
+                </Button>
+              </div>
+            </div>
             <code className="block rounded bg-surface px-2 py-1 font-mono text-caption text-ink break-all border border-line/60">
               {EXPECTED_COLUMNS.join(", ")}
             </code>
             <p className="text-caption text-ink-muted">
-              First row must be the header. Maximum 200 agents per upload.
+              Download the sample template above to fill in your agents, or
+              upload your own file. First row must be the header. Max 200 agents
+              per upload.
             </p>
           </div>
 
           {!results ? (
             <>
               <FilePicker
-                accept=".csv,text/csv"
+                accept=".csv,text/csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
                 maxBytes={MAX_FILE_BYTES}
                 maxRows={MAX_ROWS}
                 value={file}
@@ -173,7 +240,7 @@ export function BulkImportAgentsDialog({
                   setError(null);
                 }}
                 disabled={pending}
-                hint="CSV format • Max 2 MB • Up to 200 rows"
+                hint="Excel (.xlsx) or CSV format • Max 2 MB • Up to 200 rows"
               />
 
               {error ? (

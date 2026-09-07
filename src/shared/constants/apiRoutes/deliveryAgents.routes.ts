@@ -7,6 +7,8 @@ export const deliveryAgentsRoutes = {
   performanceReport: "/api/delivery-agents/reports/performance",
   staleTasks: "/api/delivery-agents/reports/stale",
   bulkCreate: "/api/delivery-agents/bulk",
+  bulkTemplate: "/api/delivery-agents/bulk-template",
+  bulkImportFile: "/api/delivery-agents/bulk-import-file",
   cashDeposits: "/api/delivery-agents/cash-deposits",
   verifyCashDeposit: (depositId: string) =>
     `/api/delivery-agents/cash-deposits/${depositId}`,
