@@ -6,6 +6,11 @@ import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
+import type { WebVitalSummaryRow } from "../api/webVitals.api";
 import { webVitalsReportLabels as LABELS } from "@/shared/constants/labels/webVitalsReport";
 
 /** CLS is ingested scaled by 1000 (see web/src/shared/utils/webVitals.ts); undo that for display. */
@@ -16,7 +21,34 @@ function displayValue(name: string, value: number): string {
 
 export function AdminWebVitalsPage() {
   const page = useAdminWebVitalsPage();
-  const hasRows = page.rows.length > 0;
+
+  const columns: DataTableColumn<WebVitalSummaryRow>[] = [
+    {
+      id: "metric",
+      header: LABELS.webVitalsColMetric,
+      className: "font-mono font-medium text-ink",
+      cell: (row) => row.name,
+    },
+    {
+      id: "page",
+      header: LABELS.webVitalsColPage,
+      className: "text-ink-muted",
+      truncate: false,
+      cell: (row) => row.path,
+    },
+    {
+      id: "p75",
+      header: LABELS.webVitalsColP75,
+      className: "font-medium text-ink",
+      cell: (row) => displayValue(row.name, row.p75),
+    },
+    {
+      id: "samples",
+      header: LABELS.webVitalsColSamples,
+      className: "text-ink-muted",
+      cell: (row) => row.sampleCount,
+    },
+  ];
 
   return (
     <div className="space-y-6">
@@ -69,53 +101,15 @@ export function AdminWebVitalsPage() {
         </div>
       </div>
 
-      {page.loading ? (
-        <p className="text-body-sm text-ink-muted">{LABELS.webVitalsLoading}</p>
-      ) : page.error ? (
-        <p className="text-body-sm text-danger">{page.error}</p>
-      ) : !hasRows ? (
-        <p className="text-body-sm text-ink-muted">{LABELS.webVitalsEmpty}</p>
-      ) : (
-        <div className="overflow-x-auto rounded-md border border-line bg-surface">
-          <table className="w-full min-w-[640px] text-body-sm">
-            <thead>
-              <tr className="border-b border-line bg-paper/60 text-left text-ink-muted">
-                <th className="py-3 px-4 font-medium">
-                  {LABELS.webVitalsColMetric}
-                </th>
-                <th className="py-3 px-4 font-medium">
-                  {LABELS.webVitalsColPage}
-                </th>
-                <th className="py-3 px-4 font-medium">
-                  {LABELS.webVitalsColP75}
-                </th>
-                <th className="py-3 px-4 font-medium">
-                  {LABELS.webVitalsColSamples}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-line/60">
-              {page.rows.map((row) => (
-                <tr
-                  key={`${row.name}:${row.path}`}
-                  className="hover:bg-paper/40 transition-colors"
-                >
-                  <td className="py-3 px-4 font-mono font-medium text-ink">
-                    {row.name}
-                  </td>
-                  <td className="py-3 px-4 text-ink-muted">{row.path}</td>
-                  <td className="py-3 px-4 font-medium text-ink">
-                    {displayValue(row.name, row.p75)}
-                  </td>
-                  <td className="py-3 px-4 text-ink-muted">
-                    {row.sampleCount}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <DataTable
+        columns={columns}
+        rows={page.rows}
+        loading={page.loading}
+        error={page.error}
+        emptyMessage={LABELS.webVitalsEmpty}
+        getRowId={(row) => `${row.name}:${row.path}`}
+        rowDetails={false}
+      />
     </div>
   );
 }

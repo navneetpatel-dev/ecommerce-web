@@ -120,20 +120,20 @@ export function ScheduledReportsTypeSelector({
             variant="outline"
             size="sm"
             onClick={selectVisible}
-            className="h-8 gap-1.5 text-xs font-medium border-line"
+            className="gap-1.5"
           >
-            <CheckSquare className="h-3.5 w-3.5 text-brand" />
+            <CheckSquare className="size-4 text-brand" />
             {LABELS.scheduledReportsSelectAll}
           </Button>
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={clearVisible}
             disabled={selectedTypes.length === 0}
-            className="h-8 gap-1.5 text-xs font-medium text-ink-muted hover:text-ink"
+            className="gap-1.5 text-ink-muted hover:text-ink"
           >
-            <Square className="h-3.5 w-3.5" />
+            <Square className="size-4 text-ink-muted" />
             {LABELS.scheduledReportsClearAll}
           </Button>
         </div>
@@ -161,23 +161,23 @@ export function ScheduledReportsTypeSelector({
           </TabsList>
         </Tabs>
 
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-faint pointer-events-none" />
+        <div className="relative w-full sm:w-72">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-ink-faint pointer-events-none" />
           <Input
             id={searchInputId}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={LABELS.scheduledReportsSearchPlaceholder}
-            className="h-9 pl-9 pr-8 text-body-sm bg-surface border-line"
+            className="pl-10 pr-10"
           />
           {search ? (
             <button
               type="button"
               onClick={() => setSearch("")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink"
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-sm p-1 text-ink-muted transition-colors hover:bg-paper hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               aria-label="Clear search"
             >
-              <X className="h-3.5 w-3.5" />
+              <X className="size-4" />
             </button>
           ) : null}
         </div>

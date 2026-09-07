@@ -41,6 +41,7 @@ interface AdminConfirmActionProps {
   /** Shown when the trigger is disabled (e.g. KYC incomplete). */
   disabledHint?: string;
   showIcon?: boolean;
+  inline?: boolean;
 }
 
 function toneIcon(tone: AdminActionTone) {
@@ -84,6 +85,7 @@ export function AdminConfirmAction({
   disabled = false,
   disabledHint,
   showIcon = true,
+  inline = false,
 }: AdminConfirmActionProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -123,7 +125,9 @@ export function AdminConfirmAction({
       size="sm"
       variant={triggerVariant}
       className={cn(
-        tableMenuButtonClass(resolvedTone as TableActionTone),
+        inline
+          ? "gap-1.5"
+          : tableMenuButtonClass(resolvedTone as TableActionTone),
         triggerClassName,
       )}
       disabled={disabled || loading}

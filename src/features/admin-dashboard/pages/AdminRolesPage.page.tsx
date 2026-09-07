@@ -86,7 +86,7 @@ function AdminRolesContent() {
                   })}
                 </TableCell>
                 <TableCell>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
                     <Button
                       size="sm"
                       variant="outline"
@@ -96,9 +96,12 @@ function AdminRolesContent() {
                     </Button>
                     {!role.isSystemRole ? (
                       <AdminConfirmAction
+                        inline
                         label={LABELS.delete}
                         dialogVariant="danger"
                         tone="danger"
+                        triggerVariant="outline"
+                        triggerClassName="text-danger hover:bg-danger/10 hover:border-danger/60 border-line"
                         title={LABELS.confirmDeleteRoleTitle}
                         description={formatLabel(LABELS.confirmDeleteRoleBody, {
                           name: role.name,
