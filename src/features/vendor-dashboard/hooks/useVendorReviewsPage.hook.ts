@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { productsApi } from "@/features/products";
 import { reviewsApi } from "@/features/reviews";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { LABELS } from "@/shared/constants/labels";
@@ -25,13 +24,10 @@ export function useVendorReviewsPage() {
     setIsLoading(true);
     setLoadError(null);
 
-    void productsApi
-      .list({ vendorId, limit: 100 })
-      .then(async ({ items }) => {
-        const grouped = await Promise.all(
-          items.map((product) => reviewsApi.forProduct(product.id)),
-        );
-        if (!cancelled) setReviews(grouped.flat());
+    void reviewsApi
+      .forVendorMe()
+      .then((items) => {
+        if (!cancelled) setReviews(items);
       })
       .catch((err) => {
         if (!cancelled) {

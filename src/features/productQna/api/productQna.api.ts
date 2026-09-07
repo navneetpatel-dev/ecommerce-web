@@ -22,6 +22,7 @@ export const productQnaApi = {
     );
     return unwrapPaginatedList(res);
   },
+  forVendorMe: () => apiClient.get<ProductQuestion[]>(API.productQna.vendorMe),
   ask: (body: { productId: string; question: string }) =>
     apiClient.post<ProductQuestion>(API.productQna.ask, body),
   answer: (questionId: string, body: { answer: string }) =>

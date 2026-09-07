@@ -33,6 +33,7 @@ export const reviewsRoutes = {
   reject: (id: string) => `/api/reviews/${id}/reject`,
   moderation: "/api/reviews/moderation",
   respond: (id: string) => `/api/reviews/${id}/respond`,
+  vendorMe: "/api/reviews/vendor/me",
 } as const;
 
 export const shippingRoutes = {

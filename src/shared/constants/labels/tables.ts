@@ -23,6 +23,7 @@ export const tablesLabels = {
   reject: "Reject",
   cancel: "Cancel",
   suspend: "Suspend",
+  unsuspend: "Unsuspend",
   archive: "Archive",
   activate: "Activate",
   block: "Block",
@@ -117,6 +118,9 @@ export const tablesLabels = {
   confirmSuspendVendorTitle: "Suspend this vendor?",
   confirmSuspendVendorBody:
     '"{name}" will be suspended and hidden from customers. Provide a reason.',
+  confirmUnsuspendVendorTitle: "Unsuspend this vendor?",
+  confirmUnsuspendVendorBody:
+    '"{name}" will be restored to active approved status.',
   confirmArchiveProductTitle: "Archive this product?",
   confirmArchiveProductBody:
     '"{name}" will be archived and removed from the live catalog.',

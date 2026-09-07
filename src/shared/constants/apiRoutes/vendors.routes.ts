@@ -11,6 +11,7 @@ export const vendorsRoutes = {
   approve: (id: string) => `/api/vendors/${id}/approve`,
   reject: (id: string) => `/api/vendors/${id}/reject`,
   suspend: (id: string) => `/api/vendors/${id}/suspend`,
+  unsuspend: (id: string) => `/api/vendors/${id}/unsuspend`,
   delete: (id: string) => `/api/vendors/${id}`,
   dashboardSummary: "/api/vendors/dashboard/summary",
   dashboardAnalytics: "/api/vendors/dashboard/analytics",

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { productsApi } from "@/features/products";
 import { productQnaApi } from "@/features/productQna";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { LABELS } from "@/shared/constants/labels";
@@ -25,15 +24,10 @@ export function useVendorQnaPage() {
     setIsLoading(true);
     setLoadError(null);
 
-    void productsApi
-      .list({ vendorId, limit: 100 })
-      .then(async ({ items }) => {
-        const grouped = await Promise.all(
-          items.map((product) =>
-            productQnaApi.forProduct(product.id).then((res) => res.items),
-          ),
-        );
-        if (!cancelled) setQuestions(grouped.flat());
+    void productQnaApi
+      .forVendorMe()
+      .then((items) => {
+        if (!cancelled) setQuestions(items);
       })
       .catch((err) => {
         if (!cancelled) {

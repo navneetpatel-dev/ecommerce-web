@@ -64,6 +64,7 @@ export const adminApi = {
     apiClient.patch(API.vendors.reject(id), { reason }),
   suspendVendor: (id: string, reason: string) =>
     apiClient.patch(API.vendors.suspend(id), { reason }),
+  unsuspendVendor: (id: string) => apiClient.patch(API.vendors.unsuspend(id)),
   deleteVendor: (id: string) => apiClient.delete(API.vendors.delete(id)),
 
   getVendorDocuments: (vendorId: string) =>

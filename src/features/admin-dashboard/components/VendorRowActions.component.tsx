@@ -33,18 +33,29 @@ export function renderVendorRowActions({
         <Link href={`/admin/vendors/${vendorId}`}>{LABELS.view}</Link>
       </Button>
       <VendorKycDocumentsMenuAction vendorId={vendorId} vendorName={name} />
-      <AdminConfirmAction
-        label={LABELS.suspend}
-        dialogVariant="warning"
-        tone="neutral"
-        title={LABELS.confirmSuspendVendorTitle}
-        description={formatLabel(LABELS.confirmSuspendVendorBody, { name })}
-        requireReason
-        reasonHint={LABELS.enterSuspendReason}
-        onConfirm={(reason) =>
-          adminApi.suspendVendor(vendorId, reason ?? "").then(onReload)
-        }
-      />
+      {row.status === "SUSPENDED" ? (
+        <AdminConfirmAction
+          label={LABELS.unsuspend}
+          dialogVariant="info"
+          tone="neutral"
+          title={LABELS.confirmUnsuspendVendorTitle}
+          description={formatLabel(LABELS.confirmUnsuspendVendorBody, { name })}
+          onConfirm={() => adminApi.unsuspendVendor(vendorId).then(onReload)}
+        />
+      ) : row.status === "APPROVED" ? (
+        <AdminConfirmAction
+          label={LABELS.suspend}
+          dialogVariant="warning"
+          tone="neutral"
+          title={LABELS.confirmSuspendVendorTitle}
+          description={formatLabel(LABELS.confirmSuspendVendorBody, { name })}
+          requireReason
+          reasonHint={LABELS.enterSuspendReason}
+          onConfirm={(reason) =>
+            adminApi.suspendVendor(vendorId, reason ?? "").then(onReload)
+          }
+        />
+      ) : null}
       <AdminConfirmAction
         label={LABELS.delete}
         dialogVariant="danger"
