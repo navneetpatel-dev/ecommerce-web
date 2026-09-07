@@ -43,18 +43,47 @@ export function DeliveryDispatchPickupList({
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  useEffect(() => {
+    deliveryAdminApi
+      .unassignedPickups()
+      .then(setPickups)
+      .catch(() => setPickups([]))
+      .finally(() => setLoading(false));
+  }, []);
 
   const groups = groupByPincodeZone(pickups);
 
   return (
-    <div className="space-y-2 rounded-md border border-line p-3">
-      <p className="text-body-sm font-medium text-ink">
-        Unassigned return pickups
-      </p>
-      <div className="flex gap-2">
+    <div className="rounded-lg border border-line bg-surface p-4 shadow-elevation-1 space-y-3">
+      <div className="flex items-center justify-between gap-2 border-b border-line/60 pb-3">
+        <p className="text-body font-medium text-ink">
+          Unassigned return pickups
+        </p>
+        <Button
+          size="sm"
+          aria-label="Assign return pickup"
+          disabled={!selectedAgent || !returnId}
+          loading={pending}
+          onClick={() =>
+            void run(
+              () => deliveryAdminApi.assignPickup(returnId, selectedAgent),
+              "Return pickup assigned.",
+            ).then(() => {
+              setReturnId("");
+              load();
+            })
+          }
+        >
+          <RotateCcw className="size-4" aria-hidden="true" />
+          Assign
+        </Button>
+      </div>
+      <div className="space-y-2 pt-1">
+        <label className="text-caption font-medium text-ink-muted">
+          Select unassigned pickup
+        </label>
         <Select value={returnId} onValueChange={setReturnId}>
-          <SelectTrigger className="min-w-0 flex-1">
+          <SelectTrigger className="w-full">
             <SelectValue
               placeholder={
                 loading
@@ -84,23 +113,11 @@ export function DeliveryDispatchPickupList({
             ))}
           </SelectContent>
         </Select>
-        <Button
-          aria-label="Assign return pickup"
-          disabled={!selectedAgent || !returnId}
-          loading={pending}
-          onClick={() =>
-            void run(
-              () => deliveryAdminApi.assignPickup(returnId, selectedAgent),
-              "Return pickup assigned.",
-            ).then(() => {
-              setReturnId("");
-              load();
-            })
-          }
-        >
-          <RotateCcw className="size-4" aria-hidden="true" />
-          Assign
-        </Button>
+        {pickups.length === 0 && !loading ? (
+          <p className="py-4 text-center text-body-sm text-ink-muted">
+            No unassigned pickups waiting.
+          </p>
+        ) : null}
       </div>
     </div>
   );

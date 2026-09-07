@@ -16,7 +16,6 @@ import {
   type DeliveryAgentPerformance,
 } from "@/features/delivery-dashboard";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import { useChartThemeColors } from "../utils/chartTheme";
 
@@ -56,24 +55,34 @@ export function AdminDeliveryPerformancePanel() {
   const hasRows = rows.length > 0;
 
   return (
-    <section className="space-y-3 border-b border-line pb-6">
-      <div className="flex items-center gap-2">
-        <BarChart3 className="size-4 text-brand" aria-hidden="true" />
-        <TextEyebrow className="!mb-0">Delivery performance</TextEyebrow>
-      </div>
+    <section className="rounded-lg border border-line bg-surface p-5 md:p-6 shadow-elevation-1 space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-line/60 pb-4">
+        <div className="flex items-center gap-2.5">
+          <BarChart3 className="size-5 text-brand" aria-hidden="true" />
+          <div>
+            <h2 className="font-display text-[1.125rem] font-semibold text-ink">
+              Agent delivery performance & metrics
+            </h2>
+            <p className="text-body-sm text-ink-muted">
+              Rollup of fulfillment speed, RTO rates, failed attempts, and
+              customer satisfaction.
+            </p>
+          </div>
+        </div>
 
-      <div className="flex flex-wrap items-end gap-3">
-        <DateRangeFields
-          from={from}
-          to={to}
-          onFromChange={setFrom}
-          onToChange={setTo}
-          fromId="performance-from"
-          toId="performance-to"
-        />
-        <Button type="button" size="sm" loading={loading} onClick={load}>
-          Load
-        </Button>
+        <div className="flex flex-wrap items-end gap-3">
+          <DateRangeFields
+            from={from}
+            to={to}
+            onFromChange={setFrom}
+            onToChange={setTo}
+            fromId="performance-from"
+            toId="performance-to"
+          />
+          <Button type="button" size="sm" loading={loading} onClick={load}>
+            Apply filter
+          </Button>
+        </div>
       </div>
 
       {loading ? (
@@ -81,8 +90,8 @@ export function AdminDeliveryPerformancePanel() {
           Loading performance report...
         </p>
       ) : !hasRows ? (
-        <p className="text-body-sm text-ink-muted">
-          No delivery activity in this date range.
+        <p className="py-8 text-center text-body-sm text-ink-muted">
+          No delivery activity recorded in this date range.
         </p>
       ) : (
         <>

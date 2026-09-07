@@ -40,7 +40,7 @@ export function StaleTasksPanel() {
   const total = report.shipments.length + report.pickups.length;
 
   return (
-    <section className="space-y-3 border-b border-line pb-6">
+    <section className="rounded-lg border border-warning/30 bg-surface p-5 md:p-6 shadow-elevation-1 space-y-4">
       <div className="flex items-center gap-2">
         <AlertTriangle className="size-4 text-warning" aria-hidden="true" />
         <TextEyebrow className="!mb-0">
@@ -66,27 +66,28 @@ export function StaleTasksPanel() {
                     <th className="py-2 pr-3 font-medium">Status</th>
                     <th className="py-2 pr-3 font-medium">Agent</th>
                     <th className="py-2 pr-3 font-medium">Stuck for</th>
-                    <th className="py-2 pr-3 font-medium" />
+                    <th className="py-2 pr-3 font-medium text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {report.shipments.map((shipment) => (
                     <tr key={shipment.id} className="border-b border-line/60">
-                      <td className="py-2 pr-3 font-mono">
+                      <td className="py-2.5 pr-3 font-mono">
                         {shipment.trackingNumber}
                       </td>
-                      <td className="py-2 pr-3">
+                      <td className="py-2.5 pr-3">
                         <StatusBadge status={shipment.status} />
                       </td>
-                      <td className="py-2 pr-3">
+                      <td className="py-2.5 pr-3">
                         {shipment.deliveryAgent?.fullName ?? "—"}
                       </td>
-                      <td className="py-2 pr-3 text-warning">
+                      <td className="py-2.5 pr-3 text-warning font-medium">
                         {hoursSince(shipment.updatedAt)}h
                       </td>
-                      <td className="py-2 pr-3">
+                      <td className="py-2.5 pr-3 text-right">
                         {shipment.status === "OUT_FOR_DELIVERY" ? (
                           <AdminConfirmAction
+                            inline
                             label={
                               deliveryForceConfirmLabels.forceConfirmDelivery
                             }
@@ -98,6 +99,8 @@ export function StaleTasksPanel() {
                             }
                             dialogVariant="warning"
                             tone="archive"
+                            triggerVariant="outline"
+                            triggerClassName="h-8 w-auto px-3 text-caption font-medium border-warning/50 text-warning hover:bg-warning hover:text-paper transition-colors rounded-md shadow-xs inline-flex"
                             requireReason
                             reasonLabel={
                               deliveryForceConfirmLabels.forceConfirmDeliveryReasonLabel

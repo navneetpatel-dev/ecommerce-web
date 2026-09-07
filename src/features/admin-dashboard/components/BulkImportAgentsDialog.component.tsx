@@ -86,10 +86,16 @@ function parseAgentsCsv(text: string): {
   return { rows, error: null };
 }
 
+import { cn } from "@/shared/utils/cn";
+
 export function BulkImportAgentsDialog({
   onImported,
+  triggerVariant = "outline",
+  triggerClassName,
 }: {
   onImported: () => void;
+  triggerVariant?: "default" | "outline" | "secondary" | "ghost";
+  triggerClassName?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -169,85 +175,164 @@ export function BulkImportAgentsDialog({
       }}
     >
       <DialogTrigger asChild>
-        <Button type="button" variant="outline" size="sm">
-          <Upload className="size-3.5" aria-hidden="true" />
-          Bulk import
+        <Button
+          type="button"
+          variant={triggerVariant}
+          size="sm"
+          className={cn("gap-1.5 select-none", triggerClassName)}
+        >
+          <FileSpreadsheet
+            className="size-4 text-emerald-600 dark:text-emerald-400"
+            aria-hidden="true"
+          />
+          <span>Bulk import</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle>Bulk import agents</DialogTitle>
+        <DialogHeader className="text-left">
+          <div className="flex items-start gap-3.5">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-brand/25 bg-brand/10 text-brand shadow-xs">
+              <FileSpreadsheet className="size-5" aria-hidden="true" />
+            </div>
+            <div className="space-y-0.5">
+              <DialogTitle className="font-display text-lg font-semibold text-ink">
+                Bulk import delivery agents
+              </DialogTitle>
+              <p className="text-body-sm text-ink-muted">
+                Quickly onboard multiple field agents at once using an Excel or
+                CSV template.
+              </p>
+            </div>
+          </div>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="rounded-md border border-line bg-paper/30 p-3.5 space-y-2 text-body-sm">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="font-medium text-ink">Required Columns:</p>
-              <div className="flex items-center gap-1.5">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="h-7 gap-1 px-2 text-caption font-medium"
-                  disabled={Boolean(downloadingFormat)}
-                  onClick={() => void handleDownloadTemplate("xlsx")}
-                >
-                  <FileSpreadsheet
-                    className="size-3.5 text-emerald-500"
-                    aria-hidden="true"
-                  />
-                  {downloadingFormat === "xlsx"
-                    ? "Downloading..."
-                    : "Sample Excel (.xlsx)"}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="h-7 gap-1 px-2 text-caption font-medium"
-                  disabled={Boolean(downloadingFormat)}
-                  onClick={() => void handleDownloadTemplate("csv")}
-                >
-                  <Download
-                    className="size-3.5 text-ink-muted"
-                    aria-hidden="true"
-                  />
-                  {downloadingFormat === "csv"
-                    ? "Downloading..."
-                    : "Sample CSV"}
-                </Button>
-              </div>
-            </div>
-            <code className="block rounded bg-surface px-2 py-1 font-mono text-caption text-ink break-all border border-line/60">
-              {EXPECTED_COLUMNS.join(", ")}
-            </code>
-            <p className="text-caption text-ink-muted">
-              Download the sample template above to fill in your agents, or
-              upload your own file. First row must be the header. Max 200 agents
-              per upload.
-            </p>
-          </div>
-
+        <div className="space-y-5 pt-1">
           {!results ? (
             <>
-              <FilePicker
-                accept=".csv,text/csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
-                maxBytes={MAX_FILE_BYTES}
-                maxRows={MAX_ROWS}
-                value={file}
-                onChange={(f) => {
-                  setFile(f);
-                  setError(null);
-                }}
-                disabled={pending}
-                hint="Excel (.xlsx) or CSV format • Max 2 MB • Up to 200 rows"
-              />
+              {/* Step 1: Download template */}
+              <div className="space-y-2">
+                <span className="text-caption font-semibold uppercase tracking-wider text-ink-muted block">
+                  Step 1: Download sample template
+                </span>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <button
+                    type="button"
+                    disabled={Boolean(downloadingFormat)}
+                    onClick={() => void handleDownloadTemplate("xlsx")}
+                    className="flex items-center justify-between gap-2.5 rounded-lg border border-line bg-paper/40 p-3 text-left transition-all hover:border-brand/40 hover:bg-paper/70 disabled:opacity-50 group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
+                        <FileSpreadsheet
+                          className="size-4"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-body-sm font-medium text-ink group-hover:text-brand transition-colors">
+                          Excel Sheet
+                        </p>
+                        <p className="text-caption text-ink-muted">
+                          .xlsx format
+                        </p>
+                      </div>
+                    </div>
+                    <span className="shrink-0 text-caption font-semibold rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5">
+                      {downloadingFormat === "xlsx" ? "..." : "Download"}
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={Boolean(downloadingFormat)}
+                    onClick={() => void handleDownloadTemplate("csv")}
+                    className="flex items-center justify-between gap-2.5 rounded-lg border border-line bg-paper/40 p-3 text-left transition-all hover:border-brand/40 hover:bg-paper/70 disabled:opacity-50 group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-paper text-ink-muted border border-line">
+                        <Download className="size-4" aria-hidden="true" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-body-sm font-medium text-ink group-hover:text-brand transition-colors">
+                          CSV Table
+                        </p>
+                        <p className="text-caption text-ink-muted">
+                          Plain text
+                        </p>
+                      </div>
+                    </div>
+                    <span className="shrink-0 text-caption font-semibold rounded bg-paper text-ink-muted border border-line/60 px-1.5 py-0.5">
+                      {downloadingFormat === "csv" ? "..." : "Download"}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Step 2: Schema info */}
+              <div className="rounded-lg border border-line/70 bg-paper/25 p-3.5 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-caption font-semibold text-ink">
+                    Required spreadsheet columns
+                  </span>
+                  <span className="text-caption text-ink-muted">
+                    * required field
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink border border-line/60">
+                    email<span className="text-danger font-bold ml-0.5">*</span>
+                  </span>
+                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink border border-line/60">
+                    password
+                    <span className="text-danger font-bold ml-0.5">*</span>
+                  </span>
+                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink border border-line/60">
+                    fullName
+                    <span className="text-danger font-bold ml-0.5">*</span>
+                  </span>
+                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink border border-line/60">
+                    phone<span className="text-danger font-bold ml-0.5">*</span>
+                  </span>
+                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink border border-line/60">
+                    hubOrZone
+                    <span className="text-danger font-bold ml-0.5">*</span>
+                  </span>
+                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink-muted border border-line/60">
+                    vehicleType
+                  </span>
+                </div>
+                <p className="text-caption text-ink-muted">
+                  First row must contain column headers. Up to 200 agents per
+                  upload.
+                </p>
+              </div>
+
+              {/* Step 3: Upload dropzone */}
+              <div className="space-y-1.5">
+                <span className="text-caption font-semibold uppercase tracking-wider text-ink-muted block">
+                  Step 2: Choose or drop your file
+                </span>
+                <FilePicker
+                  accept=".csv,text/csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                  maxBytes={MAX_FILE_BYTES}
+                  maxRows={MAX_ROWS}
+                  value={file}
+                  onChange={(f) => {
+                    setFile(f);
+                    setError(null);
+                  }}
+                  disabled={pending}
+                  hint="Excel (.xlsx) or CSV format • Max 2 MB • Up to 200 rows"
+                />
+              </div>
 
               {error ? (
-                <p className="text-body-sm text-danger">{error}</p>
+                <div className="rounded-md border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-body-sm font-medium text-danger">
+                  {error}
+                </div>
               ) : null}
 
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex items-center justify-end gap-2.5 border-t border-line/60 pt-4">
                 <Button
                   type="button"
                   variant="outline"
@@ -263,38 +348,56 @@ export function BulkImportAgentsDialog({
                   disabled={!file || pending}
                   loading={pending}
                   onClick={() => void handleImport()}
+                  className="gap-1.5"
                 >
+                  <Upload className="size-3.5" aria-hidden="true" />
                   Import agents
                 </Button>
               </div>
             </>
           ) : (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-body-sm">
-                <p className="font-medium text-ink">
-                  Import Summary: {successCount} of {results.length} succeeded
+            <div className="space-y-4">
+              <div
+                className={cn(
+                  "rounded-lg border p-4 space-y-1",
+                  successCount > 0
+                    ? "border-success/30 bg-success/10 text-success"
+                    : "border-danger/30 bg-danger/10 text-danger",
+                )}
+              >
+                <p className="text-body font-semibold">
+                  {successCount > 0 ? "Import completed" : "Import failed"}
+                </p>
+                <p className="text-body-sm opacity-90">
+                  {successCount} of {results.length} agent(s) were successfully
+                  created.
                 </p>
               </div>
-              <div className="max-h-64 space-y-1.5 overflow-y-auto rounded-md border border-line p-3 text-body-sm">
+
+              <div className="max-h-60 space-y-1.5 overflow-y-auto rounded-lg border border-line bg-paper/20 p-3 text-body-sm">
                 {results.map((row) => (
                   <div
                     key={row.row}
-                    className="flex items-center justify-between gap-2 text-caption font-mono"
+                    className="flex items-center justify-between gap-3 rounded-md bg-surface p-2.5 text-caption font-mono border border-line/50"
                   >
-                    <span className="text-ink">
-                      Row {row.row} ({row.email})
+                    <span className="truncate text-ink font-medium">
+                      Row {row.row}: {row.email}
                     </span>
                     <span
-                      className={
-                        row.success ? "text-success font-medium" : "text-danger"
-                      }
+                      className={cn(
+                        "shrink-0 rounded px-1.5 py-0.5 font-sans font-semibold text-[0.6875rem]",
+                        row.success
+                          ? "bg-success/15 text-success"
+                          : "bg-danger/15 text-danger",
+                      )}
                     >
-                      {row.success ? "Created" : row.error}
+                      {row.success ? "Created" : (row.error ?? "Failed")}
                     </span>
                   </div>
                 ))}
               </div>
-              <div className="flex justify-end gap-2 pt-2">
+
+              <div className="flex items-center justify-end gap-2.5 border-t border-line/60 pt-4">
                 <Button
                   type="button"
                   variant="outline"

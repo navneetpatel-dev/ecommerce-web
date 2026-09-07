@@ -7,7 +7,6 @@ import {
   type DeliveryAgentDocument,
 } from "@/features/delivery-dashboard";
 import { Button } from "@/shared/components/ui/button";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 
 /** Admin review queue for delivery-agent KYC documents. */
@@ -66,19 +65,29 @@ export function AgentDocumentsPanel() {
   );
 
   return (
-    <section className="space-y-3 border-b border-line pb-6">
-      <div className="flex items-center gap-2">
-        <FileText className="size-4 text-brand" aria-hidden="true" />
-        <TextEyebrow className="!mb-0">
-          Agent documents{" "}
-          {pendingReview.length > 0 ? `(${pendingReview.length} pending)` : ""}
-        </TextEyebrow>
+    <section className="rounded-lg border border-line bg-surface p-5 md:p-6 shadow-elevation-1 space-y-4">
+      <div className="flex items-center justify-between border-b border-line/60 pb-3">
+        <div className="flex items-center gap-2.5">
+          <FileText className="size-5 text-brand" aria-hidden="true" />
+          <h2 className="font-display text-[1.125rem] font-semibold text-ink">
+            Agent verification documents (KYC)
+          </h2>
+        </div>
+        {pendingReview.length > 0 ? (
+          <span className="inline-flex items-center rounded-full bg-warning/15 px-2.5 py-0.5 text-caption font-semibold text-warning">
+            {pendingReview.length} pending review
+          </span>
+        ) : null}
       </div>
-      {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+      {error ? (
+        <div className="rounded-md border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-body-sm font-medium text-danger">
+          {error}
+        </div>
+      ) : null}
       {loading ? (
         <p className="text-body-sm text-ink-muted">Loading documents...</p>
       ) : documents.length === 0 ? (
-        <p className="text-body-sm text-ink-muted">
+        <p className="py-6 text-center text-body-sm text-ink-muted">
           No documents submitted yet.
         </p>
       ) : (
@@ -86,47 +95,63 @@ export function AgentDocumentsPanel() {
           <table className="w-full min-w-[640px] text-body-sm">
             <thead>
               <tr className="border-b border-line text-left text-ink-muted">
-                <th className="py-2 pr-3 font-medium">Agent</th>
-                <th className="py-2 pr-3 font-medium">Type</th>
-                <th className="py-2 pr-3 font-medium">Document</th>
-                <th className="py-2 pr-3 font-medium">Status</th>
-                <th className="py-2 pr-3 font-medium">Expiry</th>
-                <th className="py-2 pr-3 font-medium">Actions</th>
+                <th className="py-2.5 pr-3 font-medium">Agent</th>
+                <th className="py-2.5 pr-3 font-medium">Type</th>
+                <th className="py-2.5 pr-3 font-medium">Document</th>
+                <th className="py-2.5 pr-3 font-medium">Status</th>
+                <th className="py-2.5 pr-3 font-medium">Expiry</th>
+                <th className="py-2.5 pr-3 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
               {documents.map((doc) => (
-                <tr key={doc.id} className="border-b border-line/60">
-                  <td className="py-2 pr-3">
+                <tr
+                  key={doc.id}
+                  className="border-b border-line/60 hover:bg-paper/40 transition-colors"
+                >
+                  <td className="py-2.5 pr-3 font-medium">
                     {doc.deliveryAgent?.fullName ?? "—"}
                   </td>
-                  <td className="py-2 pr-3">{doc.type.replace(/_/g, " ")}</td>
-                  <td className="py-2 pr-3">
+                  <td className="py-2.5 pr-3 capitalize">
+                    {doc.type.replace(/_/g, " ").toLowerCase()}
+                  </td>
+                  <td className="py-2.5 pr-3">
                     <a
                       href={doc.url}
                       target="_blank"
                       rel="noreferrer"
                       className="font-medium text-brand hover:underline"
                     >
-                      View
+                      View document
                     </a>
                   </td>
-                  <td className="py-2 pr-3 text-ink-muted">
-                    {doc.verified
-                      ? "Approved"
-                      : doc.rejectedAt
-                        ? `Rejected: ${doc.rejectionReason ?? ""}`
-                        : "Pending review"}
+                  <td className="py-2.5 pr-3">
+                    <span
+                      className={`inline-flex items-center rounded px-2 py-0.5 text-caption font-semibold ${
+                        doc.verified
+                          ? "bg-success/15 text-success"
+                          : doc.rejectedAt
+                            ? "bg-danger/15 text-danger"
+                            : "bg-warning/15 text-warning"
+                      }`}
+                    >
+                      {doc.verified
+                        ? "Approved"
+                        : doc.rejectedAt
+                          ? `Rejected: ${doc.rejectionReason ?? ""}`
+                          : "Pending review"}
+                    </span>
                   </td>
-                  <td className="py-2 pr-3 text-ink-muted">
+                  <td className="py-2.5 pr-3 text-ink-muted">
                     {doc.expiryDate ?? "—"}
                   </td>
-                  <td className="py-2 pr-3">
+                  <td className="py-2.5 pr-3">
                     {!doc.verified ? (
                       <div className="flex gap-2">
                         <Button
                           size="sm"
                           variant="outline"
+                          className="h-8 border-success/40 text-success hover:bg-success hover:text-paper"
                           loading={pendingId === doc.id}
                           onClick={() => void act(doc.id, "APPROVE")}
                         >
@@ -139,6 +164,7 @@ export function AgentDocumentsPanel() {
                         <Button
                           size="sm"
                           variant="outline"
+                          className="h-8 border-danger/40 text-danger hover:bg-danger hover:text-paper"
                           loading={pendingId === doc.id}
                           onClick={() => void act(doc.id, "REJECT")}
                         >

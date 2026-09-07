@@ -44,18 +44,18 @@ interface AdminConfirmActionProps {
   inline?: boolean;
 }
 
-function toneIcon(tone: AdminActionTone) {
+function renderToneIcon(tone: AdminActionTone) {
   switch (tone) {
     case "archive":
-      return Archive;
+      return <Archive strokeWidth={2.25} aria-hidden />;
     case "danger":
-      return Trash2;
+      return <Trash2 strokeWidth={2.25} aria-hidden />;
     case "success":
-      return Check;
+      return <Check strokeWidth={2.25} aria-hidden />;
     case "neutral":
-      return Ban;
+      return <Ban strokeWidth={2.25} aria-hidden />;
     default:
-      return Play;
+      return <Play strokeWidth={2.25} aria-hidden />;
   }
 }
 
@@ -93,7 +93,6 @@ export function AdminConfirmAction({
   const [actionError, setActionError] = useState<string | null>(null);
 
   const resolvedTone = tone ?? toneFromDialog(dialogVariant);
-  const Icon = toneIcon(resolvedTone);
 
   const close = () => {
     if (loading) return;
@@ -125,8 +124,9 @@ export function AdminConfirmAction({
       size="sm"
       variant={triggerVariant}
       className={cn(
+        "select-none cursor-pointer",
         inline
-          ? "gap-1.5"
+          ? "w-auto gap-1.5"
           : tableMenuButtonClass(resolvedTone as TableActionTone),
         triggerClassName,
       )}
@@ -137,7 +137,7 @@ export function AdminConfirmAction({
         setOpen(true);
       }}
     >
-      {showIcon ? <Icon strokeWidth={2.25} aria-hidden /> : null}
+      {showIcon ? renderToneIcon(resolvedTone) : null}
       <span>{label}</span>
     </Button>
   );
