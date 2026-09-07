@@ -32,35 +32,41 @@ export function AdminWebVitalsPage() {
         </p>
       </header>
 
-      <div className="flex flex-wrap items-end gap-3">
-        <DateRangeFields
-          from={page.from}
-          to={page.to}
-          onFromChange={page.setFrom}
-          onToChange={page.setTo}
-          fromId="web-vitals-from"
-          toId="web-vitals-to"
-        />
-        <FormFieldFrame
-          label={LABELS.webVitalsPathFilterLabel}
-          htmlFor="web-vitals-path"
-        >
-          <Input
-            id="web-vitals-path"
-            value={page.path}
-            onChange={(e) => page.setPath(e.target.value)}
-            placeholder={LABELS.webVitalsPathFilterPlaceholder}
-            className="min-w-[16rem]"
+      <div className="rounded-md border border-line bg-surface p-4 sm:p-5">
+        <div className="flex flex-wrap items-end gap-4">
+          <DateRangeFields
+            from={page.from}
+            to={page.to}
+            onFromChange={page.setFrom}
+            onToChange={page.setTo}
+            fromId="web-vitals-from"
+            toId="web-vitals-to"
+            fromClassName="w-full sm:w-44 lg:w-48"
+            toClassName="w-full sm:w-44 lg:w-48"
           />
-        </FormFieldFrame>
-        <Button
-          type="button"
-          size="sm"
-          loading={page.loading}
-          onClick={page.reload}
-        >
-          {LABELS.webVitalsLoad}
-        </Button>
+          <FormFieldFrame
+            label={LABELS.webVitalsPathFilterLabel}
+            htmlFor="web-vitals-path"
+            className="flex-1 min-w-[16rem]"
+          >
+            <Input
+              id="web-vitals-path"
+              value={page.path}
+              onChange={(e) => page.setPath(e.target.value)}
+              placeholder={LABELS.webVitalsPathFilterPlaceholder}
+            />
+          </FormFieldFrame>
+          <div className="w-full sm:w-auto">
+            <Button
+              type="button"
+              loading={page.loading}
+              onClick={page.reload}
+              className="w-full sm:w-auto h-11 px-6 font-medium"
+            >
+              {LABELS.webVitalsLoad}
+            </Button>
+          </div>
+        </div>
       </div>
 
       {page.loading ? (
@@ -70,36 +76,40 @@ export function AdminWebVitalsPage() {
       ) : !hasRows ? (
         <p className="text-body-sm text-ink-muted">{LABELS.webVitalsEmpty}</p>
       ) : (
-        <div className="overflow-x-auto rounded-md border border-line">
+        <div className="overflow-x-auto rounded-md border border-line bg-surface">
           <table className="w-full min-w-[640px] text-body-sm">
             <thead>
-              <tr className="border-b border-line bg-surface text-left text-ink-muted">
-                <th className="py-2 pl-3 pr-3 font-medium">
+              <tr className="border-b border-line bg-paper/60 text-left text-ink-muted">
+                <th className="py-3 px-4 font-medium">
                   {LABELS.webVitalsColMetric}
                 </th>
-                <th className="py-2 pr-3 font-medium">
+                <th className="py-3 px-4 font-medium">
                   {LABELS.webVitalsColPage}
                 </th>
-                <th className="py-2 pr-3 font-medium">
+                <th className="py-3 px-4 font-medium">
                   {LABELS.webVitalsColP75}
                 </th>
-                <th className="py-2 pr-3 font-medium">
+                <th className="py-3 px-4 font-medium">
                   {LABELS.webVitalsColSamples}
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-line/60">
               {page.rows.map((row) => (
                 <tr
                   key={`${row.name}:${row.path}`}
-                  className="border-b border-line/60"
+                  className="hover:bg-paper/40 transition-colors"
                 >
-                  <td className="py-2 pl-3 pr-3 font-mono">{row.name}</td>
-                  <td className="py-2 pr-3 text-ink-muted">{row.path}</td>
-                  <td className="py-2 pr-3">
+                  <td className="py-3 px-4 font-mono font-medium text-ink">
+                    {row.name}
+                  </td>
+                  <td className="py-3 px-4 text-ink-muted">{row.path}</td>
+                  <td className="py-3 px-4 font-medium text-ink">
                     {displayValue(row.name, row.p75)}
                   </td>
-                  <td className="py-2 pr-3">{row.sampleCount}</td>
+                  <td className="py-3 px-4 text-ink-muted">
+                    {row.sampleCount}
+                  </td>
                 </tr>
               ))}
             </tbody>
