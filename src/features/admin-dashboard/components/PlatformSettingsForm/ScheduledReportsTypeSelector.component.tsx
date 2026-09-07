@@ -5,6 +5,12 @@ import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/shared/components/ui/tooltip";
 import { Search, X, CheckSquare, Square } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
@@ -204,46 +210,54 @@ export function ScheduledReportsTypeSelector({
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 pt-1">
-          {filteredReports.map((option) => {
-            const isChecked = selectedTypes.includes(option.type);
-            const category = getCategoryLabel(
-              option.audience,
-              option.financial,
-            );
-            return (
-              <label
-                key={option.type}
-                className={cn(
-                  "group flex items-center justify-between gap-3 rounded-md border px-3.5 py-2.5 text-body-sm transition-colors cursor-pointer select-none",
-                  isChecked
-                    ? "border-brand bg-brand-subtle/30 text-ink shadow-xs ring-1 ring-brand/20"
-                    : "border-line bg-surface text-ink hover:border-line-strong hover:bg-surface-raised",
-                )}
-              >
-                <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                  <Checkbox
-                    checked={isChecked}
-                    onCheckedChange={() => toggleType(option.type)}
-                  />
-                  <span
-                    className={cn(
-                      "truncate text-body-sm",
-                      isChecked
-                        ? "font-semibold text-ink"
-                        : "font-normal text-ink",
-                    )}
-                  >
+        <TooltipProvider delayDuration={150}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 pt-1">
+            {filteredReports.map((option) => {
+              const isChecked = selectedTypes.includes(option.type);
+              const category = getCategoryLabel(
+                option.audience,
+                option.financial,
+              );
+              return (
+                <Tooltip key={option.type}>
+                  <TooltipTrigger asChild>
+                    <label
+                      className={cn(
+                        "group flex items-center justify-between gap-3 rounded-md border px-3.5 py-2.5 text-body-sm transition-colors cursor-pointer select-none",
+                        isChecked
+                          ? "border-brand bg-brand-subtle/30 text-ink shadow-xs ring-1 ring-brand/20"
+                          : "border-line bg-surface text-ink hover:border-line-strong hover:bg-surface-raised",
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                        <Checkbox
+                          checked={isChecked}
+                          onCheckedChange={() => toggleType(option.type)}
+                        />
+                        <span
+                          className={cn(
+                            "truncate text-body-sm",
+                            isChecked
+                              ? "font-semibold text-ink"
+                              : "font-normal text-ink",
+                          )}
+                        >
+                          {option.label}
+                        </span>
+                      </div>
+                      <span className="shrink-0 text-[10px] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted">
+                        {category}
+                      </span>
+                    </label>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-xs">
                     {option.label}
-                  </span>
-                </div>
-                <span className="shrink-0 text-[10px] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted">
-                  {category}
-                </span>
-              </label>
-            );
-          })}
-        </div>
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
+          </div>
+        </TooltipProvider>
       )}
     </div>
   );

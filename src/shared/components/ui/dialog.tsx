@@ -28,6 +28,8 @@ const DialogContent = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     presentation?: "default" | "fullscreen";
+    hideCloseButton?: boolean;
+    closeButtonClassName?: string;
   }
 >(
   (
@@ -35,6 +37,8 @@ const DialogContent = React.forwardRef<
       className,
       children,
       presentation = "default",
+      hideCloseButton = false,
+      closeButtonClassName,
       onCloseAutoFocus,
       onPointerDownOutside,
       onEscapeKeyDown,
@@ -85,23 +89,25 @@ const DialogContent = React.forwardRef<
             {...props}
           >
             {children}
-            <DialogPrimitive.Close
-              type="button"
-              className={cn(
-                "rounded-sm opacity-70 outline-none hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-                isFullscreen
-                  ? "fixed right-3 top-3 z-[60] rounded-full border border-line bg-surface/90 p-2 opacity-100 shadow-elevation-1 backdrop-blur-sm"
-                  : "absolute right-4 top-4",
-              )}
-              onPointerDown={(event) => {
-                // Keep focus in the dialog until close so field blur doesn't flash validation.
-                event.preventDefault();
-                closedByPointerRef.current = true;
-              }}
-            >
-              <X size={20} />
-              <span className="sr-only">{LABELS.close}</span>
-            </DialogPrimitive.Close>
+            {!hideCloseButton && (
+              <DialogPrimitive.Close
+                type="button"
+                className={cn(
+                  "absolute right-3 top-3 z-50 inline-flex size-8 items-center justify-center rounded-sm text-ink-muted opacity-70 transition-all hover:bg-surface hover:text-ink hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                  isFullscreen &&
+                    "fixed right-3 top-3 z-[60] rounded-full border border-line bg-surface/90 p-2 opacity-100 shadow-elevation-1 backdrop-blur-sm",
+                  closeButtonClassName,
+                )}
+                onPointerDown={(event) => {
+                  // Keep focus in the dialog until close so field blur doesn't flash validation.
+                  event.preventDefault();
+                  closedByPointerRef.current = true;
+                }}
+              >
+                <X size={18} />
+                <span className="sr-only">{LABELS.close}</span>
+              </DialogPrimitive.Close>
+            )}
           </DialogPrimitive.Content>
         </div>
       </DialogPortal>
@@ -116,7 +122,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left",
+      "flex flex-col space-y-1.5 text-center sm:text-left pr-8 sm:pr-10",
       className,
     )}
     {...props}

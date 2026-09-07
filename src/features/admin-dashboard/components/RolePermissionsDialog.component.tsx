@@ -7,6 +7,12 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Badge } from "@/shared/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/shared/components/ui/tooltip";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { cn } from "@/shared/utils/cn";
@@ -93,7 +99,7 @@ export function RolePermissionsDialog({
     >
       <DialogContent className="w-full sm:max-w-3xl max-h-[min(90vh,46rem)] h-[min(90vh,46rem)] p-0 flex flex-col overflow-hidden gap-0">
         {/* Header with Title, Badges, and Live Counter */}
-        <div className="border-b border-line px-6 py-5 bg-paper/50 pr-14">
+        <div className="border-b border-line px-6 py-5 bg-paper/50 pr-12">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <ShieldCheck className="size-5 text-brand shrink-0" aria-hidden />
@@ -190,39 +196,56 @@ export function RolePermissionsDialog({
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {filteredPermissions.map((permission) => {
-                const isChecked = selected.has(permission.key);
+            <TooltipProvider delayDuration={150}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {filteredPermissions.map((permission) => {
+                  const isChecked = selected.has(permission.key);
+                  const moduleName =
+                    permission.key.split(".")[0]?.replace(/_/g, " ") ?? "other";
 
-                return (
-                  <label
-                    key={permission.id}
-                    className={cn(
-                      "group flex items-center gap-3 rounded-md border px-3.5 py-2.5 text-body-sm transition-colors cursor-pointer select-none",
-                      isChecked
-                        ? "border-brand bg-brand-subtle/30 text-ink shadow-xs ring-1 ring-brand/20"
-                        : "border-line bg-surface text-ink hover:border-line-strong hover:bg-surface-raised",
-                    )}
-                  >
-                    <Checkbox
-                      checked={isChecked}
-                      onCheckedChange={() => toggle(permission.key)}
-                      className="shrink-0"
-                    />
-                    <span
-                      className={cn(
-                        "text-xs font-mono select-none break-all",
-                        isChecked
-                          ? "font-semibold text-ink"
-                          : "font-medium text-ink-muted group-hover:text-ink",
-                      )}
-                    >
-                      {permission.key}
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
+                  return (
+                    <Tooltip key={permission.id}>
+                      <TooltipTrigger asChild>
+                        <label
+                          className={cn(
+                            "group flex items-center justify-between gap-3 rounded-md border px-3.5 py-2.5 text-body-sm transition-colors cursor-pointer select-none",
+                            isChecked
+                              ? "border-brand bg-brand-subtle/30 text-ink shadow-xs ring-1 ring-brand/20"
+                              : "border-line bg-surface text-ink hover:border-line-strong hover:bg-surface-raised",
+                          )}
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                            <Checkbox
+                              checked={isChecked}
+                              onCheckedChange={() => toggle(permission.key)}
+                            />
+                            <span
+                              className={cn(
+                                "truncate text-body-sm font-mono",
+                                isChecked
+                                  ? "font-semibold text-ink"
+                                  : "font-normal text-ink",
+                              )}
+                            >
+                              {permission.key}
+                            </span>
+                          </div>
+                          <span className="shrink-0 text-[10px] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted">
+                            {moduleName}
+                          </span>
+                        </label>
+                      </TooltipTrigger>
+                      <TooltipContent
+                        side="top"
+                        className="font-mono text-xs max-w-xs break-all"
+                      >
+                        {permission.key}
+                      </TooltipContent>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+            </TooltipProvider>
           )}
         </div>
 
