@@ -82,6 +82,7 @@ function AdminUserDetailContent() {
           userId={user.id}
           userName={user.name}
           currentRoleName={user.role}
+          currentVendorId={user.vendorId}
         />
       </div>
 
@@ -98,6 +99,7 @@ function AdminUserDetailContent() {
                 userId={user.id}
                 userName={user.name}
                 currentRoleName={user.role}
+                currentVendorId={user.vendorId}
                 trigger={
                   <button
                     type="button"

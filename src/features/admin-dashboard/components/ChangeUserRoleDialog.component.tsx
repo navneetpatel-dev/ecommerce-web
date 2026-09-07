@@ -15,11 +15,13 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { vendorsApi } from "@/features/vendors";
 
 interface ChangeUserRoleDialogProps {
   userId: string;
   userName: string;
   currentRoleName: string;
+  currentVendorId?: string | null;
   trigger?: React.ReactNode;
 }
 
@@ -27,10 +29,14 @@ export function ChangeUserRoleDialog({
   userId,
   userName,
   currentRoleName,
+  currentVendorId,
   trigger,
 }: ChangeUserRoleDialogProps) {
   const [open, setOpen] = useState(false);
   const [selectedRoleId, setSelectedRoleId] = useState("");
+  const [selectedVendorId, setSelectedVendorId] = useState(
+    currentVendorId ?? "",
+  );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const queryClient = useQueryClient();
@@ -41,8 +47,20 @@ export function ChangeUserRoleDialog({
     enabled: open,
   });
 
+  const selectedRole = rolesQuery.data?.find((r) => r.id === selectedRoleId);
+  const isVendorRole =
+    selectedRole?.name === "VENDOR_OWNER" ||
+    selectedRole?.name === "VENDOR_STAFF";
+
+  const vendorsQuery = useQuery({
+    queryKey: ["admin", "vendors", "directory"],
+    queryFn: () => vendorsApi.directory({ limit: 100 }),
+    enabled: open && isVendorRole,
+  });
+
   const mutation = useMutation({
-    mutationFn: (roleId: string) => adminUsersApi.updateRole(userId, roleId),
+    mutationFn: (body: { roleId: string; vendorId?: string | null }) =>
+      adminUsersApi.updateRole(userId, body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adminUserKeys.all });
       setOpen(false);
@@ -58,12 +76,20 @@ export function ChangeUserRoleDialog({
     if (!nextOpen) {
       setErrorMsg(null);
       setSelectedRoleId("");
+      setSelectedVendorId(currentVendorId ?? "");
     }
   };
 
   const handleSave = () => {
     if (!selectedRoleId) return;
-    mutation.mutate(selectedRoleId);
+    if (isVendorRole && !selectedVendorId) {
+      setErrorMsg("Please select a vendor store for this role");
+      return;
+    }
+    mutation.mutate({
+      roleId: selectedRoleId,
+      vendorId: isVendorRole ? selectedVendorId : null,
+    });
   };
 
   return (
@@ -120,6 +146,32 @@ export function ChangeUserRoleDialog({
                 ))}
               </select>
             )}
+
+            {isVendorRole && (
+              <div className="space-y-1.5 pt-2">
+                <label className="text-body-xs font-semibold text-ink-muted">
+                  Select Associated Vendor Store
+                </label>
+                {vendorsQuery.isLoading ? (
+                  <p className="text-body-sm text-ink-muted">
+                    Loading vendor stores...
+                  </p>
+                ) : (
+                  <select
+                    value={selectedVendorId}
+                    onChange={(e) => setSelectedVendorId(e.target.value)}
+                    className="w-full rounded border border-line bg-surface p-2 text-body-sm text-ink outline-none focus:border-brand"
+                  >
+                    <option value="">-- Select a vendor store --</option>
+                    {vendorsQuery.data?.items?.map((v) => (
+                      <option key={v.id} value={v.id}>
+                        {v.businessName}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            )}
           </div>
 
           <DialogFooter className="gap-2 sm:gap-0">
@@ -134,7 +186,11 @@ export function ChangeUserRoleDialog({
             <Button
               size="sm"
               onClick={handleSave}
-              disabled={!selectedRoleId || mutation.isPending}
+              disabled={
+                !selectedRoleId ||
+                (isVendorRole && !selectedVendorId) ||
+                mutation.isPending
+              }
             >
               {mutation.isPending ? "Updating..." : "Save Role"}
             </Button>
