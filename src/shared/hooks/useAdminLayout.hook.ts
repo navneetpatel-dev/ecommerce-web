@@ -63,7 +63,8 @@ export function useAdminLayout() {
   ).map((item) => ({
     href: item.href,
     label: item.label,
-    icon: ADMIN_NAV_ICONS[item.href as keyof typeof ADMIN_NAV_ICONS],
+    icon: (ADMIN_NAV_ICONS[item.href as keyof typeof ADMIN_NAV_ICONS] ??
+      Shield) as typeof Shield,
     permissions: item.permissions,
   }));
   return { pathname, navItems };

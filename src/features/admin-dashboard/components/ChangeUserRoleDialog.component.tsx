@@ -16,6 +16,7 @@ import { Button } from "@/shared/components/ui/button";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { vendorsApi } from "@/features/vendors";
+import { ROLES } from "@/shared/constants/labels";
 
 interface ChangeUserRoleDialogProps {
   userId: string;
@@ -49,8 +50,8 @@ export function ChangeUserRoleDialog({
 
   const selectedRole = rolesQuery.data?.find((r) => r.id === selectedRoleId);
   const isVendorRole =
-    selectedRole?.name === "VENDOR_OWNER" ||
-    selectedRole?.name === "VENDOR_STAFF";
+    selectedRole?.name === ROLES.VENDOR_OWNER ||
+    selectedRole?.name === ROLES.VENDOR_STAFF;
 
   const vendorsQuery = useQuery({
     queryKey: ["admin", "vendors", "directory"],

@@ -4,6 +4,9 @@ import { useState } from "react";
 import { SidebarNav } from "@/shared/components/layout/SidebarNav.component";
 import { WorkspaceNavDrawer } from "@/shared/components/layout/WorkspaceNavDrawer.component";
 import { useDeliveryLayout } from "@/shared/hooks/useDeliveryLayout.hook";
+import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { deliveryPermissionsForPath } from "@/shared/constants/deliveryNav";
+import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 
 export function DeliveryLayoutContainer({
@@ -35,7 +38,16 @@ export function DeliveryLayoutContainer({
           title={LABELS.deliveryDashboard}
         />
         <main className="min-w-0 flex-1 overflow-x-hidden bg-surface p-4 pb-20 sm:p-6 sm:pb-8 lg:p-8">
-          {children}
+          {pathname === PATHS.delivery.root ||
+          pathname === PATHS.delivery.profile ? (
+            children
+          ) : (
+            <RequirePermission
+              permission={deliveryPermissionsForPath(pathname)}
+            >
+              {children}
+            </RequirePermission>
+          )}
         </main>
       </div>
     </div>

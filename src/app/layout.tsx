@@ -4,6 +4,7 @@ import { SITE } from "@/shared/seo/constants";
 import { STORAGE_KEYS } from "@/shared/constants/storage";
 import { generateRootMetadata, ROOT_VIEWPORT } from "@/shared/seo/rootMetadata";
 import "@/shared/styles/globals.css";
+import Script from "next/script";
 import { Providers } from "./providers";
 import { WebVitalsReporter } from "@/shared/components/WebVitalsReporter.component";
 
@@ -62,10 +63,12 @@ export default function RootLayout({
       className={`${inter.variable} ${fraunces.variable} ${ibmPlexMono.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }} />
-      </head>
       <body className="antialiased">
+        <Script
+          id="theme-bootstrap"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+        />
         <Providers>{children}</Providers>
         <WebVitalsReporter />
       </body>

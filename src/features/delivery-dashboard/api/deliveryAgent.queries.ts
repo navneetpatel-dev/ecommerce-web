@@ -24,12 +24,20 @@ export const deliveryKeys = {
   payouts: ["delivery", "payouts"] as const,
   earnings: ["delivery", "earnings"] as const,
   documents: ["delivery", "documents"] as const,
+  ratings: ["delivery", "ratings"] as const,
 };
 
 export function useDeliveryProfile() {
   return useQuery({
     queryKey: deliveryKeys.profile,
     queryFn: deliveryAgentApi.profile,
+  });
+}
+
+export function useMyRatingsQuery() {
+  return useQuery({
+    queryKey: deliveryKeys.ratings,
+    queryFn: deliveryAgentApi.myRatings,
   });
 }
 /** Admin can assign a new task while this is open — poll so it shows up without a manual refresh. */

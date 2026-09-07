@@ -36,6 +36,7 @@ export {
   useRequestPickupCode,
   useConfirmPickup,
   useSetAvailability,
+  useMyRatingsQuery,
 } from "./api/deliveryAgent.queries";
 export type {
   AgentEarning,
@@ -46,6 +47,8 @@ export type {
   CashDeposit,
   CashDepositStatus,
   DeliveryAgent,
+  DeliveryAgentRatings,
+  DeliveryAgentRatingItem,
   DeliveryAgentDocument,
   DeliveryAgentDocumentType,
   DeliveryAgentPerformance,

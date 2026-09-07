@@ -221,3 +221,16 @@ export type DeliveryPickup = ReturnRequest & {
     order?: { id: string; shippingAddress?: Address | null };
   };
 };
+
+export type DeliveryAgentRatingItem = {
+  id: string;
+  rating: number;
+  comment?: string | null;
+  createdAt: string;
+};
+
+export type DeliveryAgentRatings = {
+  averageRating: number;
+  ratingCount: number;
+  ratings: DeliveryAgentRatingItem[];
+};

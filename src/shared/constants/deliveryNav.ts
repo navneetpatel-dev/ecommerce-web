@@ -41,3 +41,15 @@ export const DELIVERY_NAV = [
     ] as PermissionKey[],
   },
 ] as const;
+
+export function deliveryPermissionsForPath(
+  pathname: string,
+): PermissionKey | PermissionKey[] {
+  const match = DELIVERY_NAV.find(
+    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
+  );
+  if (!match) return PERMISSIONS.SHIPMENT_DELIVERY_UPDATE;
+  return match.permissions.length === 1
+    ? match.permissions[0]!
+    : [...match.permissions];
+}

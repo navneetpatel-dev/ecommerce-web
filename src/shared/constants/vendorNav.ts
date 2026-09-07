@@ -100,3 +100,15 @@ export const VENDOR_NAV = [
     ] as PermissionKey[],
   },
 ] as const;
+
+export function vendorPermissionsForPath(
+  pathname: string,
+): PermissionKey | PermissionKey[] {
+  const match = VENDOR_NAV.find(
+    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
+  );
+  if (!match) return PERMISSIONS.VENDOR_MANAGE;
+  return match.permissions.length === 1
+    ? match.permissions[0]!
+    : [...match.permissions];
+}

@@ -13,6 +13,7 @@ import type {
   BankDetails,
   CashDeposit,
   DeliveryAgent,
+  DeliveryAgentRatings,
   BulkCreateAgentResult,
   DeliveryAgentDocument,
   DeliveryAgentDocumentType,
@@ -59,6 +60,8 @@ async function withOfflineCache<T>(
 
 export const deliveryAgentApi = {
   profile: () => apiClient.get<DeliveryAgent>(API.deliveryAgents.meProfile),
+  myRatings: () =>
+    apiClient.get<DeliveryAgentRatings>(API.deliveryAgents.meRatings),
   myDeliveries: (statuses?: string[]) =>
     withOfflineCache(`deliveries:${(statuses ?? []).join(",")}`, () =>
       apiClient.get<DeliveryShipment[]>(

@@ -21,7 +21,7 @@ export function useDeliveryLayout() {
     hasAnyPermission(...item.permissions),
   ).map((item) => ({
     ...item,
-    icon: ICONS[item.href],
+    icon: (ICONS[item.href as keyof typeof ICONS] ?? Truck) as typeof Truck,
   }));
   return { pathname, navItems };
 }

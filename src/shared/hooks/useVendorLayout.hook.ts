@@ -38,7 +38,8 @@ export function useVendorLayout() {
   ).map((item) => ({
     href: item.href,
     label: item.label,
-    icon: VENDOR_NAV_ICONS[item.href as keyof typeof VENDOR_NAV_ICONS],
+    icon: (VENDOR_NAV_ICONS[item.href as keyof typeof VENDOR_NAV_ICONS] ??
+      Package) as typeof Package,
     permissions: item.permissions,
   }));
   return { pathname, navItems };

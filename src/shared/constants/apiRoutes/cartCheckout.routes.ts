@@ -4,7 +4,7 @@ export const cartRoutes = {
   items: "/api/cart/items",
   item: (id: string) => `/api/cart/items/${id}`,
   merge: "/api/cart/merge",
-  clear: "/api/cart/clear",
+  clear: "/api/cart",
 } as const;
 
 export const checkoutRoutes = {

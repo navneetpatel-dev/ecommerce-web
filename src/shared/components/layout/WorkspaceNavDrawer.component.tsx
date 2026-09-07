@@ -67,7 +67,7 @@ export function WorkspaceNavDrawer({
                     : "border-l-transparent text-ink-muted hover:bg-paper hover:text-ink",
                 )}
               >
-                <Icon size={16} />
+                {Icon ? <Icon size={16} /> : null}
                 {label}
               </Link>
             );

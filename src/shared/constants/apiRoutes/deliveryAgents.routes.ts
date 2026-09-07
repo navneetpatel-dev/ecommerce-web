@@ -33,6 +33,7 @@ export const deliveryAgentsRoutes = {
   forceConfirmDelivery: (shipmentId: string) =>
     `/api/delivery-agents/shipments/${shipmentId}/force-confirm`,
   meProfile: "/api/delivery-agents/me/profile",
+  meRatings: "/api/delivery-agents/me/ratings",
   meAvailability: "/api/delivery-agents/me/availability",
   meLocation: "/api/delivery-agents/me/location",
   meShiftSummary: "/api/delivery-agents/me/shift-summary",

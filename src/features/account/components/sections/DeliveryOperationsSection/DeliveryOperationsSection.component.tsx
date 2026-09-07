@@ -15,12 +15,14 @@ import {
   CashDepositsCard,
   EarningsPayoutsCard,
   DeliveryAgentDocumentsCard,
+  useMyRatingsQuery,
 } from "@/features/delivery-dashboard";
 import { usePushSubscription } from "@/shared/hooks/usePushSubscription.hook";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 
 export function DeliveryOperationsSection() {
   const profile = useDeliveryProfile();
+  const ratings = useMyRatingsQuery();
   const availability = useSetAvailability();
   const push = usePushSubscription();
   const agent = profile.data;
@@ -241,18 +243,27 @@ export function DeliveryOperationsSection() {
                   </p>
                   <p className="text-body-sm text-ink-muted">{agent?.phone}</p>
                   <p className="mt-1 flex items-center gap-1 text-body-sm">
-                    {agent?.ratingCount ? (
+                    {(ratings.data?.ratingCount ?? agent?.ratingCount) ? (
                       <>
                         <Star
                           className="size-3.5 fill-warning text-warning"
                           aria-hidden="true"
                         />
                         <span className="font-medium text-ink">
-                          {agent.averageRating?.toFixed(1)}
+                          {(
+                            ratings.data?.averageRating ??
+                            agent?.averageRating ??
+                            0
+                          ).toFixed(1)}
                         </span>
                         <span className="text-ink-muted">
-                          ({agent.ratingCount} rating
-                          {agent.ratingCount === 1 ? "" : "s"})
+                          ({ratings.data?.ratingCount ?? agent?.ratingCount}{" "}
+                          rating
+                          {(ratings.data?.ratingCount ?? agent?.ratingCount) ===
+                          1
+                            ? ""
+                            : "s"}
+                          )
                         </span>
                       </>
                     ) : (
