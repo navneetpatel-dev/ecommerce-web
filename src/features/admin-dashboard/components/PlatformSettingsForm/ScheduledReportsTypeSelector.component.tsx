@@ -144,6 +144,7 @@ export function ScheduledReportsTypeSelector({
         <Tabs
           value={activeCategory}
           onValueChange={(val) => setActiveCategory(val as CategoryKey)}
+          className="shrink-0"
         >
           <TabsList className="h-auto flex-wrap justify-start gap-1 rounded-md border border-line-strong bg-paper p-1">
             {CATEGORIES.map(({ key, label }) => (
@@ -161,7 +162,7 @@ export function ScheduledReportsTypeSelector({
           </TabsList>
         </Tabs>
 
-        <div className="relative w-full sm:w-72">
+        <div className="relative w-full sm:w-64 sm:max-w-64 shrink-0">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-ink-faint pointer-events-none" />
           <Input
             id={searchInputId}
