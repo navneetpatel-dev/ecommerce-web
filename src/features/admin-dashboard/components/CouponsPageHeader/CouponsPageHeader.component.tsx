@@ -12,7 +12,9 @@ import {
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
 import { DataTable } from "@/shared/components/DataTable.component";
-import { Plus, Bell } from "lucide-react";
+import { TableRowAction } from "@/shared/components/TableRowActions.component";
+import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
+import { Plus, Bell, Eye } from "lucide-react";
 import { CreateCouponForm } from "../CreateCouponForm.component";
 import { FormError } from "@/shared/components/FormError.component";
 import type { CouponFormInput } from "../../schemas/coupons.schema";
@@ -59,10 +61,20 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
     void form.trigger();
   };
 
-  const openBatchDetail = (row: CouponBatch) => {
-    setBatchDetail(row);
-    return null;
-  };
+  const renderBatchActions = (row: CouponBatch) => (
+    <TableRowAction>
+      <Button
+        type="button"
+        size="sm"
+        variant="outline"
+        className={tableMenuButtonClass("neutral")}
+        onClick={() => setBatchDetail(row)}
+      >
+        <Eye strokeWidth={2.25} aria-hidden />
+        <span>{LABELS.view}</span>
+      </Button>
+    </TableRowAction>
+  );
 
   const closeBatchDetail = () => {
     setBatchDetail(null);
@@ -138,7 +150,7 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
           onRefresh={batches.onRetry}
           emptyMessage={LABELS.noCouponBatches}
           getRowId={(row: CouponBatch) => row.id}
-          actions={openBatchDetail}
+          actions={renderBatchActions}
         />
       </section>
 
