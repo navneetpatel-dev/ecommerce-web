@@ -44,4 +44,7 @@ export const adminShippingApi = {
     apiClient.get<Record<string, unknown>[]>(API.shipping.adminRates),
   createRate: (body: CreateShippingRateBody) =>
     apiClient.post<Record<string, unknown>>(API.shipping.createRate, body),
+  updateRate: (id: string, body: Partial<CreateShippingRateBody>) =>
+    apiClient.patch<Record<string, unknown>>(API.shipping.rate(id), body),
+  deleteRate: (id: string) => apiClient.delete(API.shipping.rate(id)),
 };

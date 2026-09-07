@@ -5,6 +5,7 @@ export const usersRoutes = {
   roles: "/api/users/roles",
   detail: (id: string) => `/api/users/${id}`,
   status: (id: string) => `/api/users/${id}/status`,
+  role: (id: string) => `/api/users/${id}/role`,
   addresses: (id: string) => `/api/users/${id}/addresses`,
 } as const;
 

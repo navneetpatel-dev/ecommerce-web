@@ -42,6 +42,7 @@ export const shippingRoutes = {
   zone: (id: string) => `/api/shipping/zones/${id}`,
   adminRates: "/api/shipping/rates/admin",
   createRate: "/api/shipping/rates",
+  rate: (id: string) => `/api/shipping/rates/${id}`,
   tracking: (trackingNumber: string) =>
     `/api/shipping/tracking/${trackingNumber}`,
   reschedule: (trackingNumber: string) =>

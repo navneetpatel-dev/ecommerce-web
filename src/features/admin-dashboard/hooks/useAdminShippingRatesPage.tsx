@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { shippingRatesLabels } from "@/shared/constants/labels/shippingRates";
 import { adminShippingApi } from "@/features/admin-dashboard/api/shipping.api";
+import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import type { AdminListPageModel } from "../types/adminListPage.types";
 import { useShippingRateForm } from "./useShippingRateForm.hook";
 
@@ -69,6 +70,23 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
     [zones, listVersion],
   );
 
+  const actions = useCallback(
+    (row: { id?: string | number }, reload: () => void) => (
+      <AdminConfirmAction
+        label="Delete"
+        dialogVariant="danger"
+        confirmVariant="destructive"
+        tone="danger"
+        title="Delete Shipping Rate"
+        description="Are you sure you want to delete this shipping rate? This action cannot be undone."
+        onConfirm={() =>
+          adminShippingApi.deleteRate(String(row.id)).then(reload)
+        }
+      />
+    ),
+    [],
+  );
+
   return {
     form: {
       ...formState,
@@ -77,6 +95,7 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
     title: shippingRatesLabels.shippingRates,
     permission: PERMISSIONS.SHIPPING_MANAGE,
     load,
+    actions,
     columnKeys: [
       "zoneName",
       "method",

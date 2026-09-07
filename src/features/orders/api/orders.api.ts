@@ -7,12 +7,19 @@ import type { OrderStatus } from "@/shared/constants/statuses";
 
 export const ordersApi = {
   /** `userId` is admin-only — the backend ignores it for non-admin callers, scoping to their own orders instead. */
-  myOrders: async (page = 1, limit = DEFAULT_PAGE_LIMIT, userId?: string) => {
+  myOrders: async (
+    page = 1,
+    limit = DEFAULT_PAGE_LIMIT,
+    userId?: string,
+    options?: { status?: string; search?: string },
+  ) => {
     const query = new URLSearchParams({
       page: String(page),
       limit: String(limit),
     });
     if (userId) query.set("userId", userId);
+    if (options?.status) query.set("status", options.status);
+    if (options?.search) query.set("search", options.search);
     const res = await apiClient.getWithResponse<Order[]>(
       API.orders.list(query.toString()),
     );

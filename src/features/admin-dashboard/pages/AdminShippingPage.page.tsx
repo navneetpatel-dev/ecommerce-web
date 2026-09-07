@@ -25,6 +25,7 @@ export function AdminShippingPage() {
         title={ratesPage.title}
         permission={ratesPage.permission}
         load={ratesPage.load}
+        actions={ratesPage.actions}
         columnKeys={ratesPage.columnKeys}
       />
     </div>

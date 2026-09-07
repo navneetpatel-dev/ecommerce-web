@@ -108,6 +108,8 @@ export const adminApi = {
     }),
   archiveProduct: (id: string) =>
     apiClient.post<{ message: string }>(API.products.archive(id), {}),
+  unarchiveProduct: (id: string) =>
+    apiClient.post<{ message: string }>(API.products.unarchive(id), {}),
 
   coupons: async (
     params: PaginationQuery & {

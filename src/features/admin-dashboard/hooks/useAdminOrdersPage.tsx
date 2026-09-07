@@ -1,39 +1,78 @@
 "use client";
 
-import { useCallback, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { ORDER_STATUS } from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { ordersApi } from "@/features/orders";
+import { useDebouncedValue } from "@/shared/hooks/use-debounce.hook";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import { adminRowLabel } from "../utils/adminRowLabel";
 import type { AdminDataRow } from "./useAdminDataList.hook";
 import type { AdminListPageModel } from "../types/adminListPage.types";
+import type { AdminOrdersFiltersProps } from "../components/AdminOrdersFilters.component";
 
-export function useAdminOrdersPage(): AdminListPageModel {
+export type AdminOrdersPageModel = AdminListPageModel & {
+  filters: AdminOrdersFiltersProps;
+};
+
+export function useAdminOrdersPage(): AdminOrdersPageModel {
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
+
   const load = useCallback(
     ({ page, limit }: { page: number; limit: number }) =>
-      ordersApi.myOrders(page, limit),
-    [],
+      ordersApi.myOrders(page, limit, undefined, {
+        status: status || undefined,
+        search: debouncedSearch || undefined,
+      }),
+    [debouncedSearch, status],
   );
+
+  const onClear = useCallback(() => {
+    setSearch("");
+    setStatus("");
+  }, []);
 
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
       const name = adminRowLabel(row);
+      const isPending = row.status === ORDER_STATUS.PENDING;
+      const canCancel =
+        row.status !== ORDER_STATUS.CANCELLED &&
+        row.status !== ORDER_STATUS.DELIVERED &&
+        row.status !== ORDER_STATUS.RETURNED;
+
       return (
-        <AdminConfirmAction
-          label={LABELS.confirm}
-          dialogVariant="info"
-          tone="success"
-          title={LABELS.confirmOrderTitle}
-          description={formatLabel(LABELS.confirmOrderBody, { name })}
-          onConfirm={() =>
-            ordersApi
-              .updateStatus(String(row.id), ORDER_STATUS.CONFIRMED)
-              .then(reload)
-          }
-        />
+        <div className="flex items-center gap-1.5">
+          {isPending && (
+            <AdminConfirmAction
+              label={LABELS.confirm}
+              dialogVariant="info"
+              tone="success"
+              title={LABELS.confirmOrderTitle}
+              description={formatLabel(LABELS.confirmOrderBody, { name })}
+              onConfirm={() =>
+                ordersApi
+                  .updateStatus(String(row.id), ORDER_STATUS.CONFIRMED)
+                  .then(reload)
+              }
+            />
+          )}
+          {canCancel && (
+            <AdminConfirmAction
+              label="Cancel"
+              dialogVariant="danger"
+              confirmVariant="destructive"
+              tone="danger"
+              title="Cancel Order"
+              description={`Are you sure you want to cancel order ${name || row.id}? This will restock items, void ledgers, and trigger refund if already paid.`}
+              onConfirm={() => ordersApi.cancel(String(row.id)).then(reload)}
+            />
+          )}
+        </div>
       );
     },
     [],
@@ -44,6 +83,13 @@ export function useAdminOrdersPage(): AdminListPageModel {
     permission: PERMISSIONS.ORDER_MANAGE,
     load,
     actions,
-    columnKeys: ["customerName", "status", "totalAmount", "createdAt"],
+    columnKeys: ["id", "customerName", "status", "totalAmount", "createdAt"],
+    filters: {
+      search,
+      status,
+      onSearchChange: setSearch,
+      onStatusChange: setStatus,
+      onClear,
+    },
   };
 }

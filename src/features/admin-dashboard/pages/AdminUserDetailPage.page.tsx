@@ -19,6 +19,7 @@ import {
   useAdminUserOrders,
 } from "../api/users.queries";
 import { ImpersonateUserButton } from "../components/ImpersonateUserButton.component";
+import { ChangeUserRoleDialog } from "../components/ChangeUserRoleDialog.component";
 
 export function AdminUserDetailPage() {
   return (
@@ -75,7 +76,14 @@ function AdminUserDetailContent() {
         {user.status ? <StatusBadge status={user.status} /> : null}
       </div>
 
-      <ImpersonateUserButton userId={user.id} />
+      <div className="flex flex-wrap items-center gap-3">
+        <ImpersonateUserButton userId={user.id} />
+        <ChangeUserRoleDialog
+          userId={user.id}
+          userName={user.name}
+          currentRoleName={user.role}
+        />
+      </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         <section className="space-y-3 border border-line bg-surface-raised p-4">
@@ -84,7 +92,22 @@ function AdminUserDetailContent() {
           </h2>
           <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-body-sm">
             <dt className="text-ink-muted">{LABELS.role}</dt>
-            <dd className="text-ink">{user.role}</dd>
+            <dd className="flex items-center gap-2 text-ink">
+              <span>{user.role}</span>
+              <ChangeUserRoleDialog
+                userId={user.id}
+                userName={user.name}
+                currentRoleName={user.role}
+                trigger={
+                  <button
+                    type="button"
+                    className="text-xs text-brand underline underline-offset-2 hover:text-brand-hover"
+                  >
+                    Edit
+                  </button>
+                }
+              />
+            </dd>
             <dt className="text-ink-muted">{LABELS.phone}</dt>
             <dd className="text-ink">{user.phone ?? "—"}</dd>
             {user.createdAt ? (

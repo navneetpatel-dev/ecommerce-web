@@ -35,6 +35,23 @@ export function useAdminProductsPage(): AdminProductsPageModel {
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
       const name = adminRowLabel(row);
+      const isArchived = row.status === "ARCHIVED";
+
+      if (isArchived) {
+        return (
+          <AdminConfirmAction
+            label="Reactivate"
+            dialogVariant="info"
+            tone="success"
+            title="Reactivate Product"
+            description={`Are you sure you want to restore "${name || "this product"}" to active status?`}
+            onConfirm={() =>
+              adminApi.unarchiveProduct(String(row.id)).then(reload)
+            }
+          />
+        );
+      }
+
       return (
         <AdminConfirmAction
           label={LABELS.archive}

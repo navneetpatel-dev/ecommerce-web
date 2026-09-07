@@ -10,6 +10,7 @@ export const productsRoutes = {
   approve: (id: string) => `/api/products/${id}/approve`,
   reject: (id: string) => `/api/products/${id}/reject`,
   archive: (id: string) => `/api/products/${id}/archive`,
+  unarchive: (id: string) => `/api/products/${id}/unarchive`,
   submit: (id: string) => `/api/products/${id}/submit`,
   variants: (productId: string) => `/api/products/${productId}/variants`,
   variant: (variantId: string) => `/api/products/variants/${variantId}`,
