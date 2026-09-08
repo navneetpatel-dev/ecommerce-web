@@ -202,13 +202,13 @@ export function FilePicker({
       />
 
       {value ? (
-        <div className="flex items-center justify-between gap-3 rounded-lg border border-line bg-surface-raised p-3 shadow-elevation-1 transition-colors">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-md border border-line bg-paper/60">
+        <div className="flex items-center justify-between gap-4 rounded-xl border border-line bg-surface p-3.5 shadow-elevation-1 transition-colors">
+          <div className="flex items-center gap-3.5 min-w-0">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-line/70 bg-paper/60">
               {renderIcon()}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-body-sm font-medium text-ink">
+              <p className="truncate text-body-sm font-semibold text-ink">
                 {value.name}
               </p>
               <p className="text-caption text-ink-muted">
@@ -221,7 +221,7 @@ export function FilePicker({
             disabled={disabled}
             onClick={handleRemove}
             aria-label="Remove selected file"
-            className="flex size-7 shrink-0 items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-paper hover:text-ink disabled:opacity-50"
+            className="flex size-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-paper hover:text-ink disabled:opacity-50"
           >
             <X className="size-4" aria-hidden="true" />
           </button>
@@ -237,26 +237,26 @@ export function FilePicker({
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           className={cn(
-            "relative flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-5 text-center transition-all cursor-pointer select-none",
+            "relative flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed p-7 text-center transition-all cursor-pointer select-none",
             isDragOver
-              ? "border-brand bg-brand/5 shadow-xs"
-              : "border-line bg-paper/20 hover:border-brand/50 hover:bg-paper/40",
+              ? "border-brand bg-brand/10 shadow-xs"
+              : "border-line-strong/70 bg-paper/20 hover:border-brand/60 hover:bg-paper/40",
             disabled &&
               "cursor-not-allowed opacity-50 hover:border-line hover:bg-paper/20",
           )}
         >
-          <div className="flex size-9 items-center justify-center rounded-full border border-line bg-surface shadow-elevation-1">
+          <div className="flex size-11 items-center justify-center rounded-xl border border-line/80 bg-surface shadow-xs">
             {renderIcon()}
           </div>
-          <div className="space-y-0.5">
+          <div className="space-y-1">
             <p className="text-body-sm text-ink">
-              <span className="font-medium text-brand underline underline-offset-2">
+              <span className="font-semibold text-brand underline underline-offset-4 decoration-brand/40 hover:decoration-brand">
                 Click to choose file
               </span>{" "}
               or drag and drop
             </p>
             {hint ? (
-              <p className="text-caption text-ink-muted leading-snug">{hint}</p>
+              <p className="text-caption text-ink-muted">{hint}</p>
             ) : null}
           </div>
         </div>

@@ -188,56 +188,68 @@ export function BulkImportAgentsDialog({
           <span>Bulk import</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg">
-        <DialogHeader className="text-left">
+      <DialogContent className="max-w-2xl sm:max-w-2xl w-full">
+        <DialogHeader className="text-left border-b border-line/60 pb-4">
           <div className="flex items-start gap-3.5">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-brand/25 bg-brand/10 text-brand shadow-xs">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-brand/25 bg-brand/10 text-brand shadow-xs">
               <FileSpreadsheet className="size-5" aria-hidden="true" />
             </div>
-            <div className="space-y-0.5">
-              <DialogTitle className="font-display text-lg font-semibold text-ink">
+            <div className="space-y-1">
+              <DialogTitle className="font-display text-xl font-semibold text-ink">
                 Bulk import delivery agents
               </DialogTitle>
               <p className="text-body-sm text-ink-muted">
-                Quickly onboard multiple field agents at once using an Excel or
-                CSV template.
+                Quickly onboard multiple field agents at once using an Excel
+                (.xlsx) or CSV template.
               </p>
             </div>
           </div>
         </DialogHeader>
 
-        <div className="space-y-5 pt-1">
+        <div className="space-y-6 pt-2">
           {!results ? (
             <>
               {/* Step 1: Download template */}
-              <div className="space-y-2">
-                <span className="text-caption font-semibold uppercase tracking-wider text-ink-muted block">
-                  Step 1: Download sample template
-                </span>
-                <div className="grid grid-cols-2 gap-2.5">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand/15 text-caption font-bold text-brand">
+                    1
+                  </span>
+                  <h4 className="text-body-sm font-semibold text-ink tracking-normal">
+                    Download sample template
+                  </h4>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     type="button"
                     disabled={Boolean(downloadingFormat)}
                     onClick={() => void handleDownloadTemplate("xlsx")}
-                    className="flex items-center justify-between gap-2.5 rounded-lg border border-line bg-paper/40 p-3 text-left transition-all hover:border-brand/40 hover:bg-paper/70 disabled:opacity-50 group cursor-pointer"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface p-4 text-left transition-all hover:border-brand/60 hover:bg-surface-raised hover:shadow-xs disabled:opacity-50 group cursor-pointer"
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
                         <FileSpreadsheet
-                          className="size-4"
+                          className="size-5"
                           aria-hidden="true"
                         />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-body-sm font-medium text-ink group-hover:text-brand transition-colors">
-                          Excel Sheet
-                        </p>
-                        <p className="text-caption text-ink-muted">
-                          .xlsx format
+                        <div className="flex items-center gap-1.5">
+                          <p className="text-body-sm font-semibold text-ink group-hover:text-brand transition-colors">
+                            Excel Sheet
+                          </p>
+                          <span className="rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.2 text-[0.6875rem] font-bold">
+                            .xlsx
+                          </span>
+                        </div>
+                        <p className="text-caption text-ink-muted mt-0.5">
+                          Formatted spreadsheet
                         </p>
                       </div>
                     </div>
-                    <span className="shrink-0 text-caption font-semibold rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5">
+                    <span className="shrink-0 inline-flex items-center gap-1 text-caption font-semibold text-brand group-hover:underline">
+                      <Download className="size-3.5" aria-hidden="true" />
                       {downloadingFormat === "xlsx" ? "..." : "Download"}
                     </span>
                   </button>
@@ -246,72 +258,87 @@ export function BulkImportAgentsDialog({
                     type="button"
                     disabled={Boolean(downloadingFormat)}
                     onClick={() => void handleDownloadTemplate("csv")}
-                    className="flex items-center justify-between gap-2.5 rounded-lg border border-line bg-paper/40 p-3 text-left transition-all hover:border-brand/40 hover:bg-paper/70 disabled:opacity-50 group cursor-pointer"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface p-4 text-left transition-all hover:border-brand/60 hover:bg-surface-raised hover:shadow-xs disabled:opacity-50 group cursor-pointer"
                   >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-paper text-ink-muted border border-line">
-                        <Download className="size-4" aria-hidden="true" />
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-paper text-ink-muted border border-line">
+                        <Download className="size-5" aria-hidden="true" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-body-sm font-medium text-ink group-hover:text-brand transition-colors">
-                          CSV Table
-                        </p>
-                        <p className="text-caption text-ink-muted">
-                          Plain text
+                        <div className="flex items-center gap-1.5">
+                          <p className="text-body-sm font-semibold text-ink group-hover:text-brand transition-colors">
+                            CSV Table
+                          </p>
+                          <span className="rounded bg-paper text-ink-muted border border-line/70 px-1.5 py-0.2 text-[0.6875rem] font-semibold">
+                            .csv
+                          </span>
+                        </div>
+                        <p className="text-caption text-ink-muted mt-0.5">
+                          Plain text table
                         </p>
                       </div>
                     </div>
-                    <span className="shrink-0 text-caption font-semibold rounded bg-paper text-ink-muted border border-line/60 px-1.5 py-0.5">
+                    <span className="shrink-0 inline-flex items-center gap-1 text-caption font-semibold text-ink-muted group-hover:text-ink group-hover:underline">
+                      <Download className="size-3.5" aria-hidden="true" />
                       {downloadingFormat === "csv" ? "..." : "Download"}
                     </span>
                   </button>
                 </div>
               </div>
 
-              {/* Step 2: Schema info */}
-              <div className="rounded-lg border border-line/70 bg-paper/25 p-3.5 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-caption font-semibold text-ink">
+              {/* Schema info */}
+              <div className="rounded-xl border border-line/70 bg-paper/25 p-4 sm:p-5 space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-body-sm font-semibold text-ink">
                     Required spreadsheet columns
                   </span>
-                  <span className="text-caption text-ink-muted">
-                    * required field
+                  <span className="text-caption font-medium text-ink-muted">
+                    <span className="text-danger font-bold">*</span> required
+                    field
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
-                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink border border-line/60">
-                    email<span className="text-danger font-bold ml-0.5">*</span>
+                <div className="flex flex-wrap gap-2">
+                  <span className="inline-flex items-center rounded-lg bg-surface px-2.5 py-1 font-mono text-caption text-ink border border-line/70 shadow-xs">
+                    email<span className="text-danger font-bold ml-1">*</span>
                   </span>
-                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink border border-line/60">
+                  <span className="inline-flex items-center rounded-lg bg-surface px-2.5 py-1 font-mono text-caption text-ink border border-line/70 shadow-xs">
                     password
-                    <span className="text-danger font-bold ml-0.5">*</span>
+                    <span className="text-danger font-bold ml-1">*</span>
                   </span>
-                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink border border-line/60">
+                  <span className="inline-flex items-center rounded-lg bg-surface px-2.5 py-1 font-mono text-caption text-ink border border-line/70 shadow-xs">
                     fullName
-                    <span className="text-danger font-bold ml-0.5">*</span>
+                    <span className="text-danger font-bold ml-1">*</span>
                   </span>
-                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink border border-line/60">
-                    phone<span className="text-danger font-bold ml-0.5">*</span>
+                  <span className="inline-flex items-center rounded-lg bg-surface px-2.5 py-1 font-mono text-caption text-ink border border-line/70 shadow-xs">
+                    phone<span className="text-danger font-bold ml-1">*</span>
                   </span>
-                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink border border-line/60">
+                  <span className="inline-flex items-center rounded-lg bg-surface px-2.5 py-1 font-mono text-caption text-ink border border-line/70 shadow-xs">
                     hubOrZone
-                    <span className="text-danger font-bold ml-0.5">*</span>
+                    <span className="text-danger font-bold ml-1">*</span>
                   </span>
-                  <span className="inline-flex items-center rounded bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-ink-muted border border-line/60">
-                    vehicleType
+                  <span className="inline-flex items-center rounded-lg bg-surface px-2.5 py-1 font-mono text-caption text-ink-muted border border-line/70 shadow-xs">
+                    vehicleType{" "}
+                    <span className="ml-1 text-[0.6875rem] text-ink-muted font-sans">
+                      (BIKE, SCOOTER, VAN)
+                    </span>
                   </span>
                 </div>
-                <p className="text-caption text-ink-muted">
-                  First row must contain column headers. Up to 200 agents per
-                  upload.
+                <p className="text-caption text-ink-muted leading-relaxed">
+                  The first row must contain column headers. Up to 200 agents
+                  per upload batch.
                 </p>
               </div>
 
-              {/* Step 3: Upload dropzone */}
-              <div className="space-y-1.5">
-                <span className="text-caption font-semibold uppercase tracking-wider text-ink-muted block">
-                  Step 2: Choose or drop your file
-                </span>
+              {/* Step 2: Upload dropzone */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand/15 text-caption font-bold text-brand">
+                    2
+                  </span>
+                  <h4 className="text-body-sm font-semibold text-ink tracking-normal">
+                    Choose or drop your file
+                  </h4>
+                </div>
                 <FilePicker
                   accept=".csv,text/csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
                   maxBytes={MAX_FILE_BYTES}
@@ -327,12 +354,12 @@ export function BulkImportAgentsDialog({
               </div>
 
               {error ? (
-                <div className="rounded-md border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-body-sm font-medium text-danger">
+                <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-body-sm font-medium text-danger">
                   {error}
                 </div>
               ) : null}
 
-              <div className="flex items-center justify-end gap-2.5 border-t border-line/60 pt-4">
+              <div className="flex items-center justify-end gap-3 border-t border-line/60 pt-4">
                 <Button
                   type="button"
                   variant="outline"
@@ -348,7 +375,7 @@ export function BulkImportAgentsDialog({
                   disabled={!file || pending}
                   loading={pending}
                   onClick={() => void handleImport()}
-                  className="gap-1.5"
+                  className="gap-1.5 px-4"
                 >
                   <Upload className="size-3.5" aria-hidden="true" />
                   Import agents
@@ -356,10 +383,10 @@ export function BulkImportAgentsDialog({
               </div>
             </>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div
                 className={cn(
-                  "rounded-lg border p-4 space-y-1",
+                  "rounded-xl border p-4 space-y-1",
                   successCount > 0
                     ? "border-success/30 bg-success/10 text-success"
                     : "border-danger/30 bg-danger/10 text-danger",
@@ -374,18 +401,18 @@ export function BulkImportAgentsDialog({
                 </p>
               </div>
 
-              <div className="max-h-60 space-y-1.5 overflow-y-auto rounded-lg border border-line bg-paper/20 p-3 text-body-sm">
+              <div className="max-h-64 space-y-2 overflow-y-auto rounded-xl border border-line bg-paper/20 p-3 text-body-sm">
                 {results.map((row) => (
                   <div
                     key={row.row}
-                    className="flex items-center justify-between gap-3 rounded-md bg-surface p-2.5 text-caption font-mono border border-line/50"
+                    className="flex items-center justify-between gap-3 rounded-lg bg-surface p-3 text-caption font-mono border border-line/50"
                   >
                     <span className="truncate text-ink font-medium">
                       Row {row.row}: {row.email}
                     </span>
                     <span
                       className={cn(
-                        "shrink-0 rounded px-1.5 py-0.5 font-sans font-semibold text-[0.6875rem]",
+                        "shrink-0 rounded-md px-2 py-0.5 font-sans font-semibold text-[0.6875rem]",
                         row.success
                           ? "bg-success/15 text-success"
                           : "bg-danger/15 text-danger",
@@ -397,7 +424,7 @@ export function BulkImportAgentsDialog({
                 ))}
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 border-t border-line/60 pt-4">
+              <div className="flex items-center justify-end gap-3 border-t border-line/60 pt-4">
                 <Button
                   type="button"
                   variant="outline"
