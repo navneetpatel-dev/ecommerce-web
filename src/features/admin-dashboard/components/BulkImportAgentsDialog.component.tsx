@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Download, FileSpreadsheet, Upload } from "lucide-react";
+import { Download, FileSpreadsheet, FileText, Upload } from "lucide-react";
 import {
   deliveryAdminApi,
   type BulkCreateAgentResult,
@@ -220,69 +220,85 @@ export function BulkImportAgentsDialog({
                   </h4>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    disabled={Boolean(downloadingFormat)}
-                    onClick={() => void handleDownloadTemplate("xlsx")}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface p-4 text-left transition-all hover:border-brand/60 hover:bg-surface-raised hover:shadow-xs disabled:opacity-50 group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
-                        <FileSpreadsheet
-                          className="size-5"
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <p className="text-body-sm font-semibold text-ink group-hover:text-brand transition-colors">
-                            Excel Sheet
-                          </p>
-                          <span className="rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.2 text-[0.6875rem] font-bold">
-                            .xlsx
-                          </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  {/* Excel Template Card */}
+                  <div className="flex flex-col justify-between rounded-xl border border-line bg-surface p-4 transition-all hover:border-emerald-500/50 hover:shadow-xs">
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
+                          <FileSpreadsheet
+                            className="size-5"
+                            aria-hidden="true"
+                          />
                         </div>
-                        <p className="text-caption text-ink-muted mt-0.5">
-                          Formatted spreadsheet
+                        <span className="rounded-md bg-emerald-500/15 px-2 py-0.5 text-caption font-bold text-emerald-600 dark:text-emerald-400">
+                          .xlsx
+                        </span>
+                      </div>
+                      <div className="mt-3 mb-4 space-y-1">
+                        <p className="text-body-sm font-semibold text-ink">
+                          Excel spreadsheet
+                        </p>
+                        <p className="text-caption text-ink-muted">
+                          Pre-formatted with columns & sample rows
                         </p>
                       </div>
                     </div>
-                    <span className="shrink-0 inline-flex items-center gap-1 text-caption font-semibold text-brand group-hover:underline">
-                      <Download className="size-3.5" aria-hidden="true" />
-                      {downloadingFormat === "xlsx" ? "..." : "Download"}
-                    </span>
-                  </button>
 
-                  <button
-                    type="button"
-                    disabled={Boolean(downloadingFormat)}
-                    onClick={() => void handleDownloadTemplate("csv")}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface p-4 text-left transition-all hover:border-brand/60 hover:bg-surface-raised hover:shadow-xs disabled:opacity-50 group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-paper text-ink-muted border border-line">
-                        <Download className="size-5" aria-hidden="true" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <p className="text-body-sm font-semibold text-ink group-hover:text-brand transition-colors">
-                            CSV Table
-                          </p>
-                          <span className="rounded bg-paper text-ink-muted border border-line/70 px-1.5 py-0.2 text-[0.6875rem] font-semibold">
-                            .csv
-                          </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={Boolean(downloadingFormat)}
+                      onClick={() => void handleDownloadTemplate("xlsx")}
+                      className="w-full gap-2 border-emerald-500/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white"
+                    >
+                      <Download className="size-3.5" aria-hidden="true" />
+                      <span>
+                        {downloadingFormat === "xlsx"
+                          ? "Downloading..."
+                          : "Download .xlsx sample"}
+                      </span>
+                    </Button>
+                  </div>
+
+                  {/* CSV Template Card */}
+                  <div className="flex flex-col justify-between rounded-xl border border-line bg-surface p-4 transition-all hover:border-brand/50 hover:shadow-xs">
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex size-10 items-center justify-center rounded-lg bg-paper text-ink-muted border border-line">
+                          <FileText className="size-5" aria-hidden="true" />
                         </div>
-                        <p className="text-caption text-ink-muted mt-0.5">
-                          Plain text table
+                        <span className="rounded-md bg-paper px-2 py-0.5 text-caption font-semibold text-ink-muted border border-line/70">
+                          .csv
+                        </span>
+                      </div>
+                      <div className="mt-3 mb-4 space-y-1">
+                        <p className="text-body-sm font-semibold text-ink">
+                          CSV table
+                        </p>
+                        <p className="text-caption text-ink-muted">
+                          Plain-text comma-separated table
                         </p>
                       </div>
                     </div>
-                    <span className="shrink-0 inline-flex items-center gap-1 text-caption font-semibold text-ink-muted group-hover:text-ink group-hover:underline">
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={Boolean(downloadingFormat)}
+                      onClick={() => void handleDownloadTemplate("csv")}
+                      className="w-full gap-2"
+                    >
                       <Download className="size-3.5" aria-hidden="true" />
-                      {downloadingFormat === "csv" ? "..." : "Download"}
-                    </span>
-                  </button>
+                      <span>
+                        {downloadingFormat === "csv"
+                          ? "Downloading..."
+                          : "Download .csv sample"}
+                      </span>
+                    </Button>
+                  </div>
                 </div>
               </div>
 
