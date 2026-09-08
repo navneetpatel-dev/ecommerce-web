@@ -1,5 +1,6 @@
 "use client";
 
+import { Wallet } from "lucide-react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { Button } from "@/shared/components/ui/button";
@@ -8,12 +9,44 @@ import { PaginationContainer } from "@/shared/containers/PaginationContainer.con
 import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatPoints";
+import { cn } from "@/shared/utils/cn";
 import {
   exportFilterDisableHint,
   ReportExportButtons,
   ReportExportStatus,
 } from "@/features/reports";
 import { useWalletLiabilityReport } from "../hooks/useWalletLiabilityReport.hook";
+
+function MetricCard({
+  label,
+  value,
+  highlight = false,
+}: {
+  label: string;
+  value: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-lg border border-line bg-paper/50 p-4 transition-all duration-200 hover:border-line-strong hover:bg-paper/70",
+        highlight && "border-brand/30 bg-brand/[0.04]",
+      )}
+    >
+      <p className="text-body-xs font-medium uppercase tracking-wider text-ink-muted">
+        {label}
+      </p>
+      <p
+        className={cn(
+          "mt-1.5 text-xl font-bold tabular-nums tracking-tight text-ink",
+          highlight && "text-brand",
+        )}
+      >
+        {value}
+      </p>
+    </div>
+  );
+}
 
 export function AdminWalletLiabilityPanel() {
   const reportPanel = useWalletLiabilityReport();
@@ -42,53 +75,67 @@ export function AdminWalletLiabilityPanel() {
   });
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-body font-semibold text-ink">
-        {LABELS.reportWalletLiability}
-      </h3>
+    <div className="rounded-lg border border-line bg-surface p-5 md:p-6 shadow-elevation-1 space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-line pb-4">
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 items-center justify-center rounded-lg border border-brand/20 bg-brand/10 text-brand shadow-elevation-1">
+            <Wallet className="size-5" />
+          </div>
+          <div>
+            <h2 className="font-display text-[1.125rem] font-semibold text-ink">
+              {LABELS.reportWalletLiability}
+            </h2>
+            <p className="text-body-sm text-ink-muted">
+              Outstanding customer wallet points liability, split by purchased
+              and promotional balances
+            </p>
+          </div>
+        </div>
+      </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
-        <DateRangeFields
-          from={from}
-          to={to}
-          onFromChange={setFrom}
-          onToChange={setTo}
-          fromId="wallet-liability-from"
-          toId="wallet-liability-to"
-          disabled={controlsDisabled}
-          disabledHint={filterHint}
-        />
-        <ButtonGroup
-          align="start"
-          className="sm:col-span-2 lg:col-span-1 lg:self-end"
-        >
-          <DisabledActionHint
-            disabled={loading || controlsDisabled}
-            message={controlsDisabled ? filterHint : ""}
-            block
-            className="w-full sm:w-auto"
-          >
-            <Button
-              type="button"
-              fullWidth="mobile"
-              onClick={() => void load(1)}
-              disabled={loading || controlsDisabled}
-            >
-              {LABELS.reportLoad}
-            </Button>
-          </DisabledActionHint>
-          <ReportExportButtons
-            grouped={false}
-            controlsDisabled={controlsDisabled}
-            exportingFormat={exportingFormat}
-            statusMessage={message}
-            disabled={!report}
-            blockedHint={LABELS.reportExportLoadReportFirst}
-            onExportExcel={exportExcel}
-            onExportCsv={exportCsv}
-            onExportPdf={exportPdf}
+      {/* Filter Bar */}
+      <div className="rounded-lg border border-line bg-paper/40 p-4">
+        <div className="flex flex-col lg:flex-row lg:items-end gap-4 justify-between">
+          <DateRangeFields
+            from={from}
+            to={to}
+            onFromChange={setFrom}
+            onToChange={setTo}
+            fromId="wallet-liability-from"
+            toId="wallet-liability-to"
+            disabled={controlsDisabled}
+            disabledHint={filterHint}
           />
-        </ButtonGroup>
+          <ButtonGroup align="start" className="flex-wrap items-center gap-2">
+            <DisabledActionHint
+              disabled={loading || controlsDisabled}
+              message={controlsDisabled ? filterHint : ""}
+              block
+              className="w-full sm:w-auto"
+            >
+              <Button
+                type="button"
+                fullWidth="mobile"
+                onClick={() => void load(1)}
+                disabled={loading || controlsDisabled}
+              >
+                {LABELS.reportLoad}
+              </Button>
+            </DisabledActionHint>
+            <ReportExportButtons
+              grouped={false}
+              controlsDisabled={controlsDisabled}
+              exportingFormat={exportingFormat}
+              statusMessage={message}
+              disabled={!report}
+              blockedHint={LABELS.reportExportLoadReportFirst}
+              onExportExcel={exportExcel}
+              onExportCsv={exportCsv}
+              onExportPdf={exportPdf}
+            />
+          </ButtonGroup>
+        </div>
       </div>
 
       <ReportExportStatus
@@ -97,51 +144,59 @@ export function AdminWalletLiabilityPanel() {
         exportingFormat={exportingFormat}
         controlsDisabled={controlsDisabled}
       />
+
       {loading ? (
-        <p className="text-body text-ink-muted">{LABELS.loading}</p>
+        <div className="flex items-center justify-center py-10">
+          <p className="text-body text-ink-muted">{LABELS.loading}</p>
+        </div>
+      ) : null}
+
+      {!loading && !error && !report ? (
+        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line bg-paper/30 py-12 px-4 text-center">
+          <div className="mb-3 flex size-12 items-center justify-center rounded-full border border-line bg-surface text-ink-muted shadow-elevation-1">
+            <Wallet className="size-6" strokeWidth={1.5} />
+          </div>
+          <p className="font-display text-body font-medium text-ink">
+            {LABELS.noReportData}
+          </p>
+          <p className="text-body-sm text-ink-muted mt-1 max-w-sm">
+            Select a date range and click &quot;{LABELS.reportLoad}&quot; to
+            calculate outstanding wallet liability.
+          </p>
+        </div>
       ) : null}
 
       {report ? (
         <>
-          <div className="grid gap-4 rounded-md border border-line bg-surface p-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="space-y-1">
-              <p className="text-body-sm text-ink-muted">
-                {LABELS.reportTotalLiability}
-              </p>
-              <p className="text-[1.125rem] font-semibold tabular-nums text-ink">
-                {formatPoints(
+          <div className="space-y-4">
+            <h3 className="font-display text-body font-semibold text-ink">
+              Liability summary
+            </h3>
+            <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+              <MetricCard
+                label={LABELS.reportTotalLiability}
+                value={formatPoints(
                   report.totalPointsLiability ?? report.totalLiability,
                 )}
-              </p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-body-sm text-ink-muted">
-                {LABELS.reportPurchasedPointsLiability}
-              </p>
-              <p className="text-[1.125rem] font-semibold tabular-nums text-ink">
-                {formatPoints(report.purchasedPointsLiability ?? 0)}
-              </p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-body-sm text-ink-muted">
-                {LABELS.reportPromotionalPointsLiability}
-              </p>
-              <p className="text-[1.125rem] font-semibold tabular-nums text-ink">
-                {formatPoints(report.promotionalPointsLiability ?? 0)}
-              </p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-body-sm text-ink-muted">
-                {LABELS.reportWalletCustomerCount}
-              </p>
-              <p className="text-[1.125rem] font-semibold tabular-nums text-ink">
-                {report.customerCount}
-              </p>
+                highlight
+              />
+              <MetricCard
+                label={LABELS.reportPurchasedPointsLiability}
+                value={formatPoints(report.purchasedPointsLiability ?? 0)}
+              />
+              <MetricCard
+                label={LABELS.reportPromotionalPointsLiability}
+                value={formatPoints(report.promotionalPointsLiability ?? 0)}
+              />
+              <MetricCard
+                label={LABELS.reportWalletCustomerCount}
+                value={String(report.customerCount)}
+              />
             </div>
           </div>
 
-          <p className="text-[0.75rem] leading-relaxed text-ink-faint">
-            {LABELS.reportLiabilityFifoNote}
+          <p className="text-[0.8125rem] leading-relaxed text-ink-faint">
+            ℹ️ {LABELS.reportLiabilityFifoNote}
           </p>
 
           {report.pagination ? (
@@ -161,43 +216,46 @@ export function AdminWalletLiabilityPanel() {
 
           {report.rows.length > 0 ? (
             <div className="space-y-3">
-              <div className="overflow-x-auto rounded-md border border-line">
+              <div className="overflow-x-auto rounded-lg border border-line bg-surface">
                 <table className="min-w-full text-left text-[0.875rem]">
-                  <thead className="border-b border-line bg-paper/60 text-ink-muted">
+                  <thead className="border-b border-line bg-paper/70 text-ink-muted">
                     <tr>
-                      <th className="px-3 py-2 font-medium">
+                      <th className="px-4 py-3 font-medium">
                         {LABELS.reportUserId}
                       </th>
-                      <th className="px-3 py-2 font-medium">
+                      <th className="px-4 py-3 font-medium">
                         {LABELS.reportBalance}
                       </th>
-                      <th className="px-3 py-2 font-medium">
+                      <th className="px-4 py-3 font-medium">
                         {LABELS.reportPurchasedPoints}
                       </th>
-                      <th className="px-3 py-2 font-medium">
+                      <th className="px-4 py-3 font-medium">
                         {LABELS.reportPromotionalPoints}
                       </th>
-                      <th className="px-3 py-2 font-medium">
+                      <th className="px-4 py-3 font-medium">
                         {LABELS.reportAsOf}
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-line/60">
                     {report.rows.map((row) => (
-                      <tr key={row.userId} className="border-b border-line/70">
-                        <td className="px-3 py-2 font-mono text-body-sm text-ink">
+                      <tr
+                        key={row.userId}
+                        className="transition-colors hover:bg-paper/40"
+                      >
+                        <td className="px-4 py-3 font-mono text-body-sm text-ink">
                           {row.userId}
                         </td>
-                        <td className="px-3 py-2 tabular-nums">
+                        <td className="px-4 py-3 tabular-nums font-medium text-ink">
                           {formatPoints(row.balance)}
                         </td>
-                        <td className="px-3 py-2 tabular-nums">
+                        <td className="px-4 py-3 tabular-nums text-ink">
                           {formatPoints(row.purchasedPoints ?? 0)}
                         </td>
-                        <td className="px-3 py-2 tabular-nums">
+                        <td className="px-4 py-3 tabular-nums text-ink">
                           {formatPoints(row.promotionalPoints ?? 0)}
                         </td>
-                        <td className="px-3 py-2 text-ink-muted">
+                        <td className="px-4 py-3 text-ink-muted">
                           {new Date(row.asOf).toLocaleDateString("en-IN")}
                         </td>
                       </tr>
@@ -207,7 +265,9 @@ export function AdminWalletLiabilityPanel() {
               </div>
             </div>
           ) : (
-            <p className="text-body text-ink-muted">{LABELS.noReportData}</p>
+            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line bg-paper/30 py-8 px-4 text-center">
+              <p className="text-body text-ink-muted">{LABELS.noReportData}</p>
+            </div>
           )}
 
           {report.pagination ? (

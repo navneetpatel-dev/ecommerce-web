@@ -1,5 +1,6 @@
 "use client";
 
+import { Percent } from "lucide-react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -50,76 +51,102 @@ export function AdminCashbackWriteOffPanel() {
   });
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-body font-semibold text-ink">
-        {LABELS.reportCashbackWriteOff}
-      </h3>
+    <div className="rounded-lg border border-line bg-surface p-5 md:p-6 shadow-elevation-1 space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-line pb-4">
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 items-center justify-center rounded-lg border border-brand/20 bg-brand/10 text-brand shadow-elevation-1">
+            <Percent className="size-5" />
+          </div>
+          <div>
+            <h2 className="font-display text-[1.125rem] font-semibold text-ink">
+              {LABELS.reportCashbackWriteOff}
+            </h2>
+            <p className="text-body-sm text-ink-muted">
+              Audit trail of unrecovered cashback write-offs and platform vs
+              vendor loss allocation
+            </p>
+          </div>
+        </div>
+      </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <DateRangeFields
-          from={from}
-          to={to}
-          onFromChange={setFrom}
-          onToChange={setTo}
-          fromId="writeoff-from"
-          toId="writeoff-to"
-          disabled={controlsDisabled}
-          disabledHint={filterHint}
-        />
-        <FormFieldFrame label={LABELS.reportBornBy} htmlFor="writeoff-born-by">
-          <DisabledActionHint
+      {/* Filter Bar */}
+      <div className="rounded-lg border border-line bg-paper/40 p-4">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 items-end">
+          <DateRangeFields
+            from={from}
+            to={to}
+            onFromChange={setFrom}
+            onToChange={setTo}
+            fromId="writeoff-from"
+            toId="writeoff-to"
             disabled={controlsDisabled}
-            message={filterHint}
-            block
-          >
-            <Select
-              value={bornBy}
-              disabled={controlsDisabled}
-              onValueChange={(v) => setBornBy(v as typeof bornBy)}
-            >
-              <SelectTrigger id="writeoff-born-by" disabled={controlsDisabled}>
-                <SelectValue />
-              </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ALL">{LABELS.reportBornByAll}</SelectItem>
-              <SelectItem value="PLATFORM">
-                {LABELS.reportBornByPlatform}
-              </SelectItem>
-              <SelectItem value="VENDOR">
-                {LABELS.reportBornByVendor}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-          </DisabledActionHint>
-        </FormFieldFrame>
-        <ButtonGroup align="start" className="sm:col-span-2 xl:col-span-4">
-          <DisabledActionHint
-            disabled={loading || controlsDisabled}
-            message={controlsDisabled ? filterHint : ""}
-            block
-            className="w-full sm:w-auto"
-          >
-            <Button
-              type="button"
-              fullWidth="mobile"
-              onClick={() => void load(1)}
-              disabled={loading || controlsDisabled}
-            >
-              {LABELS.reportLoad}
-            </Button>
-          </DisabledActionHint>
-          <ReportExportButtons
-            grouped={false}
-            controlsDisabled={controlsDisabled}
-            exportingFormat={exportingFormat}
-            statusMessage={message}
-            disabled={!report}
-            blockedHint={LABELS.reportExportLoadReportFirst}
-            onExportExcel={exportExcel}
-            onExportCsv={exportCsv}
-            onExportPdf={exportPdf}
+            disabledHint={filterHint}
           />
-        </ButtonGroup>
+          <FormFieldFrame
+            label={LABELS.reportBornBy}
+            htmlFor="writeoff-born-by"
+          >
+            <DisabledActionHint
+              disabled={controlsDisabled}
+              message={filterHint}
+              block
+            >
+              <Select
+                value={bornBy}
+                disabled={controlsDisabled}
+                onValueChange={(v) => setBornBy(v as typeof bornBy)}
+              >
+                <SelectTrigger
+                  id="writeoff-born-by"
+                  disabled={controlsDisabled}
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">{LABELS.reportBornByAll}</SelectItem>
+                  <SelectItem value="PLATFORM">
+                    {LABELS.reportBornByPlatform}
+                  </SelectItem>
+                  <SelectItem value="VENDOR">
+                    {LABELS.reportBornByVendor}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </DisabledActionHint>
+          </FormFieldFrame>
+          <ButtonGroup
+            align="start"
+            className="sm:col-span-2 xl:col-span-4 flex-wrap items-center gap-2 pt-1"
+          >
+            <DisabledActionHint
+              disabled={loading || controlsDisabled}
+              message={controlsDisabled ? filterHint : ""}
+              block
+              className="w-full sm:w-auto"
+            >
+              <Button
+                type="button"
+                fullWidth="mobile"
+                onClick={() => void load(1)}
+                disabled={loading || controlsDisabled}
+              >
+                {LABELS.reportLoad}
+              </Button>
+            </DisabledActionHint>
+            <ReportExportButtons
+              grouped={false}
+              controlsDisabled={controlsDisabled}
+              exportingFormat={exportingFormat}
+              statusMessage={message}
+              disabled={!report}
+              blockedHint={LABELS.reportExportLoadReportFirst}
+              onExportExcel={exportExcel}
+              onExportCsv={exportCsv}
+              onExportPdf={exportPdf}
+            />
+          </ButtonGroup>
+        </div>
       </div>
 
       <ReportExportStatus
@@ -128,8 +155,26 @@ export function AdminCashbackWriteOffPanel() {
         exportingFormat={exportingFormat}
         controlsDisabled={controlsDisabled}
       />
+
       {loading ? (
-        <p className="text-body text-ink-muted">{LABELS.loading}</p>
+        <div className="flex items-center justify-center py-10">
+          <p className="text-body text-ink-muted">{LABELS.loading}</p>
+        </div>
+      ) : null}
+
+      {!loading && !error && !report ? (
+        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line bg-paper/30 py-12 px-4 text-center">
+          <div className="mb-3 flex size-12 items-center justify-center rounded-full border border-line bg-surface text-ink-muted shadow-elevation-1">
+            <Percent className="size-6" strokeWidth={1.5} />
+          </div>
+          <p className="font-display text-body font-medium text-ink">
+            {LABELS.noReportData}
+          </p>
+          <p className="text-body-sm text-ink-muted mt-1 max-w-sm">
+            Select a date range and click &quot;{LABELS.reportLoad}&quot; to
+            view cashback write-off records.
+          </p>
+        </div>
       ) : null}
 
       {report ? (
