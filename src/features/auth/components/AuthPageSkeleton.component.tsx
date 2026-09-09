@@ -1,33 +1,34 @@
 import { AuthPageShell } from "@/features/auth/components/AuthPageShell.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { authPageSkeletonStyles as styles } from "./authPageSkeleton.styles";
 
 /** Form-slot skeleton for login/register/password/OTP route transitions. */
 export function AuthFormSkeleton() {
   return (
-    <div className="relative overflow-hidden rounded-xl border border-line/90 bg-surface/95 shadow-elevation-3 ring-1 ring-inset ring-white/[0.04] backdrop-blur-sm">
-      <header className="space-y-3 border-b border-line/80 bg-gradient-to-b from-paper/55 to-paper/25 px-5 py-5 sm:px-8 sm:py-8">
-        <Skeleton className="h-8 w-48 sm:h-9 sm:w-56" />
-        <Skeleton className="h-4 w-full max-w-[16rem]" />
+    <div className={styles.card}>
+      <header className={styles.header}>
+        <Skeleton className={styles.headerTitle} />
+        <Skeleton className={styles.headerSubtitle} />
       </header>
-      <div className="space-y-5 px-5 py-5 sm:px-8 sm:py-8">
-        <div className="space-y-2">
-          <Skeleton className="h-3.5 w-16" />
-          <Skeleton className="h-11 w-full" />
+      <div className={styles.body}>
+        <div className={styles.fieldGroup}>
+          <Skeleton className={styles.label} />
+          <Skeleton className={styles.input} />
         </div>
-        <div className="space-y-2">
-          <Skeleton className="h-3.5 w-20" />
-          <Skeleton className="h-11 w-full" />
+        <div className={styles.fieldGroup}>
+          <Skeleton className={styles.labelWide} />
+          <Skeleton className={styles.input} />
         </div>
-        <Skeleton className="h-11 w-full" />
-        <div className="flex items-center gap-3 pt-1">
-          <Skeleton className="h-px flex-1" />
-          <Skeleton className="h-3 w-24" />
-          <Skeleton className="h-px flex-1" />
+        <Skeleton className={styles.input} />
+        <div className={styles.dividerRow}>
+          <Skeleton className={styles.dividerLine} />
+          <Skeleton className={styles.dividerText} />
+          <Skeleton className={styles.dividerLine} />
         </div>
-        <Skeleton className="h-11 w-full" />
+        <Skeleton className={styles.input} />
       </div>
-      <footer className="border-t border-line/80 bg-paper/30 px-5 py-4 sm:px-8 sm:py-5">
-        <Skeleton className="mx-auto h-4 w-48" />
+      <footer className={styles.footer}>
+        <Skeleton className={styles.footerText} />
       </footer>
     </div>
   );

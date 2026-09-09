@@ -1,15 +1,20 @@
 import { TABLE_DATA_CELL_CLASS } from "@/shared/constants/table";
+import {
+  TABLE_TITLE,
+  TABLE_CARD_MOBILE_LIST,
+  TABLE_CARD_MOBILE_EMPTY,
+  TABLE_CARD_MOBILE,
+  TABLE_CELL_EMPTY,
+} from "@/shared/styles/table.styles";
 import { cn } from "@/shared/utils/cn";
 
 export const commissionInvoicesTableStyles = {
   container: "w-full",
-  heading: "mb-4 text-[1.375rem] font-semibold text-ink",
-  mobileList: "space-y-3 lg:hidden",
-  emptyMobileCard:
-    "rounded-md border border-line bg-surface px-4 py-10 text-center text-ink-muted",
-  emptyTableRowCell: "text-center text-ink-muted",
-  mobileCard:
-    "rounded-md border border-line bg-surface p-4 shadow-card-hairline",
+  heading: TABLE_TITLE,
+  mobileList: TABLE_CARD_MOBILE_LIST,
+  emptyMobileCard: TABLE_CARD_MOBILE_EMPTY,
+  emptyTableRowCell: TABLE_CELL_EMPTY,
+  mobileCard: TABLE_CARD_MOBILE,
   mobileCardNumber: "font-mono text-[0.875rem] text-ink",
   mobileCardDate: "mt-1 text-[0.875rem] text-ink-muted",
   mobileCardAmount: "mt-2 font-mono text-[1rem] text-ink",

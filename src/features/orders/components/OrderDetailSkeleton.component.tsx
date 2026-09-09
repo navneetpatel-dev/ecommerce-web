@@ -1,38 +1,36 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { orderDetailSkeletonStyles as styles } from "./orderDetailSkeleton.styles";
 
 export function OrderDetailSkeleton() {
   return (
-    <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[280px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
-      />
+    <div className={styles.root}>
+      <div aria-hidden className={styles.radialBg} />
 
-      <div className="storefront-container relative py-6 md:py-8">
-        <div className="space-y-3">
+      <div className={styles.container}>
+        <div className={styles.headerSpace}>
           <Skeleton className="h-4 w-28" />
           <Skeleton className="h-9 w-56 max-w-full" />
           <Skeleton className="h-4 w-72 max-w-full" />
-          <div className="flex flex-wrap gap-2 pt-2">
-            <Skeleton className="h-6 w-24 rounded-full" />
-            <Skeleton className="h-6 w-28 rounded-full" />
+          <div className={styles.badgeRow}>
+            <Skeleton className={`${styles.badgePill} w-24`} />
+            <Skeleton className={`${styles.badgePill} w-28`} />
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-8 lg:mt-8 lg:grid-cols-12 lg:gap-10">
-          <div className="space-y-6 lg:col-span-7 xl:col-span-8">
-            <Skeleton className="h-44 w-full rounded-md" />
-            <Skeleton className="h-44 w-full rounded-md" />
-            <Skeleton className="h-44 w-full rounded-md" />
+        <div className={styles.layoutGrid}>
+          <div className={styles.mainCol}>
+            <Skeleton className={styles.mainCard} />
+            <Skeleton className={styles.mainCard} />
+            <Skeleton className={styles.mainCard} />
           </div>
-          <aside className="lg:col-span-5 xl:col-span-4">
-            <div className="space-y-4 border border-line bg-surface-raised p-5 shadow-elevation-1">
+          <aside className={styles.aside}>
+            <div className={styles.asideCard}>
               <Skeleton className="h-4 w-32" />
               <Skeleton className="h-8 w-40" />
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-5/6" />
-              <Skeleton className="mt-4 h-11 w-full" />
-              <Skeleton className="h-11 w-full" />
+              <Skeleton className={`mt-4 ${styles.asideButton}`} />
+              <Skeleton className={styles.asideButton} />
             </div>
           </aside>
         </div>

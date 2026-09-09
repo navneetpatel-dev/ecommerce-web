@@ -1,6 +1,7 @@
 import { ExternalLink, MapPin, MessageSquare, Phone, User } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { taskContactCardStyles as styles } from "./taskContactCard.styles";
 
 export function TaskContactCard({
   name,
@@ -13,64 +14,60 @@ export function TaskContactCard({
   addressText: string;
   deliveryInstructions?: string | null;
 }) {
-  const phoneLine = phone ? (
-    <p className="text-body-sm text-ink-muted">{phone}</p>
-  ) : null;
+  const phoneLine = phone ? <p className={styles.phoneLine}>{phone}</p> : null;
   const deliveryInstructionsNotice = deliveryInstructions ? (
-    <div className="flex items-start gap-2 rounded-md border border-line bg-warning/10 p-3">
-      <MessageSquare
-        className="mt-0.5 size-4 shrink-0 text-warning"
-        aria-hidden="true"
-      />
-      <p className="text-body-sm leading-relaxed text-ink">
-        {deliveryInstructions}
-      </p>
+    <div className={styles.instructionsNotice}>
+      <MessageSquare className={styles.instructionsIcon} aria-hidden="true" />
+      <p className={styles.instructionsText}>{deliveryInstructions}</p>
     </div>
   ) : null;
   const callButton = phone ? (
-    <Button asChild size="sm" variant="outline" className="w-full">
+    <Button
+      asChild
+      size="sm"
+      variant="outline"
+      className={styles.fullWidthButton}
+    >
       <a href={`tel:${phone}`}>
-        <Phone className="size-3.5" aria-hidden="true" />
+        <Phone className={styles.buttonIcon} aria-hidden="true" />
         Call customer
       </a>
     </Button>
   ) : null;
-  const mapsButtonClassName = phone ? "w-full" : "col-span-full w-full";
+  const mapsButtonClassName = phone
+    ? styles.fullWidthButton
+    : styles.spanButton;
   const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}`;
 
   return (
-    <div className="border border-line bg-surface shadow-elevation-1">
-      <div className="flex items-center gap-2 border-b border-line bg-paper/55 px-5 py-3.5">
-        <MapPin className="size-4 text-brand" aria-hidden="true" />
-        <TextEyebrow className="!mb-0">Recipient & Destination</TextEyebrow>
+    <div className={styles.card}>
+      <div className={styles.header}>
+        <MapPin className={styles.headerIcon} aria-hidden="true" />
+        <TextEyebrow className={styles.eyebrow}>
+          Recipient & Destination
+        </TextEyebrow>
       </div>
 
-      <div className="space-y-4 p-5">
-        <div className="flex items-start gap-3">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-line bg-paper/60 text-ink-muted">
-            <User className="size-4" aria-hidden="true" />
+      <div className={styles.body}>
+        <div className={styles.customerRow}>
+          <div className={styles.avatarCircle}>
+            <User className={styles.avatarIcon} aria-hidden="true" />
           </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-caption font-semibold uppercase tracking-wider text-ink-muted">
-              Customer
-            </p>
-            <p className="mt-0.5 truncate font-medium text-ink">{name}</p>
+          <div className={styles.customerContent}>
+            <p className={styles.captionLabel}>Customer</p>
+            <p className={styles.customerName}>{name}</p>
             {phoneLine}
           </div>
         </div>
 
-        <div className="border-t border-line/60 pt-3">
-          <p className="text-caption font-semibold uppercase tracking-wider text-ink-muted">
-            Delivery Address
-          </p>
-          <p className="mt-1 text-body-sm leading-relaxed text-ink">
-            {addressText}
-          </p>
+        <div className={styles.addressSection}>
+          <p className={styles.captionLabel}>Delivery Address</p>
+          <p className={styles.addressText}>{addressText}</p>
         </div>
 
         {deliveryInstructionsNotice}
 
-        <div className="grid grid-cols-1 gap-2 pt-2 sm:grid-cols-2">
+        <div className={styles.actionsGrid}>
           {callButton}
           <Button
             asChild
@@ -79,7 +76,7 @@ export function TaskContactCard({
             className={mapsButtonClassName}
           >
             <a href={mapsHref} target="_blank" rel="noreferrer">
-              <ExternalLink className="size-3.5" aria-hidden="true" />
+              <ExternalLink className={styles.buttonIcon} aria-hidden="true" />
               Open in Maps
             </a>
           </Button>

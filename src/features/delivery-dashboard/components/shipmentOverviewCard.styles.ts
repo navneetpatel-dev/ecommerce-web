@@ -1,0 +1,36 @@
+import {
+  PANEL_ELEVATED,
+  PANEL_HEADER_COMPACT,
+  FLEX_BETWEEN_GAP_2,
+  FLEX_CENTER_GAP_2,
+  TEXT_INK_MEDIUM,
+} from "@/shared/styles/common.styles";
+
+export const shipmentOverviewCardStyles = {
+  card: PANEL_ELEVATED,
+  header: PANEL_HEADER_COMPACT,
+  headerIcon: "size-4 text-brand",
+  eyebrow: "!mb-0",
+  body: "p-5",
+  dlList: "grid gap-3 text-body-sm",
+  row: FLEX_BETWEEN_GAP_2,
+  borderRow: `${FLEX_BETWEEN_GAP_2} border-t border-line/60 pt-3`,
+  dt: "text-ink-muted",
+  ddMono: "truncate font-mono font-medium text-ink",
+  ddOrderRef: "font-mono text-[0.8125rem] text-ink",
+  ddTime: "text-caption text-ink-muted",
+  ddInkMedium: TEXT_INK_MEDIUM,
+  codStatusSpan: "text-caption text-ink-muted",
+  noticeSection: "mt-4 border-t border-line/60 pt-3",
+  failureNotice: "text-body-sm text-ink",
+  failureNoticeMuted: "text-ink-muted",
+  redeliveryNotice: "mt-1 text-body-sm font-medium text-brand",
+  itemsSection: "mt-4 border-t border-line/60 pt-3",
+  itemsSectionHeading:
+    "text-caption font-semibold uppercase tracking-wider text-ink-muted",
+  itemsList: "mt-2 space-y-1",
+  itemRow: "text-body-sm text-ink",
+  itemQuantity: "text-ink-muted",
+  proofLink: `${FLEX_CENTER_GAP_2} mt-4 border-t border-line/60 pt-3 text-body-sm font-medium text-brand hover:underline`,
+  proofIcon: "size-4",
+} as const;

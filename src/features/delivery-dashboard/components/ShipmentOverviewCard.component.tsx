@@ -1,6 +1,7 @@
 import { ImageIcon, Package } from "lucide-react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { shipmentOverviewCardStyles as styles } from "./shipmentOverviewCard.styles";
 
 interface ShipmentOverviewCardProps {
   trackingNumber: string;
@@ -28,11 +29,9 @@ export function ShipmentOverviewCard({
   preferredRedeliverySlot,
 }: ShipmentOverviewCardProps) {
   const orderRefSection = orderId ? (
-    <div className="flex items-center justify-between gap-2 border-t border-line/60 pt-3">
-      <dt className="text-ink-muted">Order Ref</dt>
-      <dd className="font-mono text-[0.8125rem] text-ink">
-        #{orderId.slice(0, 8)}
-      </dd>
+    <div className={styles.borderRow}>
+      <dt className={styles.dt}>Order Ref</dt>
+      <dd className={styles.ddOrderRef}>#{orderId.slice(0, 8)}</dd>
     </div>
   ) : null;
 
@@ -43,34 +42,32 @@ export function ShipmentOverviewCard({
       })
     : null;
   const assignedAtSection = assignedAt ? (
-    <div className="flex items-center justify-between gap-2 border-t border-line/60 pt-3">
-      <dt className="text-ink-muted">Assigned</dt>
-      <dd className="text-caption text-ink-muted">{assignedAtTime}</dd>
+    <div className={styles.borderRow}>
+      <dt className={styles.dt}>Assigned</dt>
+      <dd className={styles.ddTime}>{assignedAtTime}</dd>
     </div>
   ) : null;
 
   const codStatusLabel = codCollected ? "collected" : "due";
   const codSection =
     codAmount != null ? (
-      <div className="flex items-center justify-between gap-2 border-t border-line/60 pt-3">
-        <dt className="text-ink-muted">Cash on delivery</dt>
-        <dd className="font-medium text-ink">
+      <div className={styles.borderRow}>
+        <dt className={styles.dt}>Cash on delivery</dt>
+        <dd className={styles.ddInkMedium}>
           ₹{codAmount.toFixed(2)}{" "}
-          <span className="text-caption text-ink-muted">
-            ({codStatusLabel})
-          </span>
+          <span className={styles.codStatusSpan}>({codStatusLabel})</span>
         </dd>
       </div>
     ) : null;
 
   const failureNotice = failureReason ? (
-    <p className="text-body-sm text-ink">
-      <span className="text-ink-muted">Last attempt failed: </span>
+    <p className={styles.failureNotice}>
+      <span className={styles.failureNoticeMuted}>Last attempt failed: </span>
       {failureReason}
     </p>
   ) : null;
   const redeliveryNotice = preferredRedeliverySlot ? (
-    <p className="mt-1 text-body-sm font-medium text-brand">
+    <p className={styles.redeliveryNotice}>
       Customer requested redelivery: {preferredRedeliverySlot}
     </p>
   ) : null;
@@ -78,24 +75,22 @@ export function ShipmentOverviewCard({
     failureReason || preferredRedeliverySlot,
   );
   const failureOrRedeliverySection = hasFailureOrRedeliveryNotice ? (
-    <div className="mt-4 border-t border-line/60 pt-3">
+    <div className={styles.noticeSection}>
       {failureNotice}
       {redeliveryNotice}
     </div>
   ) : null;
 
   const itemRows = (items ?? []).map((item) => (
-    <li key={item.id} className="text-body-sm text-ink">
+    <li key={item.id} className={styles.itemRow}>
       {item.productName}{" "}
-      <span className="text-ink-muted">× {item.quantity}</span>
+      <span className={styles.itemQuantity}>× {item.quantity}</span>
     </li>
   ));
   const itemsSection = items?.length ? (
-    <div className="mt-4 border-t border-line/60 pt-3">
-      <p className="text-caption font-semibold uppercase tracking-wider text-ink-muted">
-        Package contents
-      </p>
-      <ul className="mt-2 space-y-1">{itemRows}</ul>
+    <div className={styles.itemsSection}>
+      <p className={styles.itemsSectionHeading}>Package contents</p>
+      <ul className={styles.itemsList}>{itemRows}</ul>
     </div>
   ) : null;
 
@@ -104,29 +99,27 @@ export function ShipmentOverviewCard({
       href={proofOfDeliveryUrl}
       target="_blank"
       rel="noreferrer"
-      className="mt-4 flex items-center gap-2 border-t border-line/60 pt-3 text-body-sm font-medium text-brand hover:underline"
+      className={styles.proofLink}
     >
-      <ImageIcon className="size-4" aria-hidden="true" />
+      <ImageIcon className={styles.proofIcon} aria-hidden="true" />
       View proof of delivery photo
     </a>
   ) : null;
 
   return (
-    <div className="border border-line bg-surface shadow-elevation-1">
-      <div className="flex items-center gap-2 border-b border-line bg-paper/55 px-5 py-3.5">
-        <Package className="size-4 text-brand" aria-hidden="true" />
-        <TextEyebrow className="!mb-0">Shipment Details</TextEyebrow>
+    <div className={styles.card}>
+      <div className={styles.header}>
+        <Package className={styles.headerIcon} aria-hidden="true" />
+        <TextEyebrow className={styles.eyebrow}>Shipment Details</TextEyebrow>
       </div>
-      <div className="p-5">
-        <dl className="grid gap-3 text-body-sm">
-          <div className="flex items-center justify-between gap-2">
-            <dt className="text-ink-muted">Tracking #</dt>
-            <dd className="truncate font-mono font-medium text-ink">
-              {trackingNumber}
-            </dd>
+      <div className={styles.body}>
+        <dl className={styles.dlList}>
+          <div className={styles.row}>
+            <dt className={styles.dt}>Tracking #</dt>
+            <dd className={styles.ddMono}>{trackingNumber}</dd>
           </div>
-          <div className="flex items-center justify-between gap-2">
-            <dt className="text-ink-muted">Status</dt>
+          <div className={styles.row}>
+            <dt className={styles.dt}>Status</dt>
             <dd>
               <StatusBadge status={status} />
             </dd>

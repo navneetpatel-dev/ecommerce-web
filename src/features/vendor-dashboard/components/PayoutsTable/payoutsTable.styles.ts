@@ -1,14 +1,20 @@
 import { cn } from "@/shared/utils/cn";
 import { TABLE_DATA_CELL_CLASS } from "@/shared/constants/table";
+import {
+  TABLE_TITLE,
+  TABLE_CARD_MOBILE_LIST,
+  TABLE_CARD_MOBILE_EMPTY,
+  TABLE_CARD_MOBILE,
+  TABLE_CARD_MOBILE_HEADER,
+  TABLE_CELL_EMPTY,
+} from "@/shared/styles/table.styles";
 
 export const payoutsTableStyles = {
-  title: "mb-4 text-[1.375rem] font-semibold text-ink",
-  mobileList: "space-y-3 lg:hidden",
-  mobileEmpty:
-    "rounded-md border border-line bg-surface px-4 py-10 text-center text-ink-muted",
-  mobileCard:
-    "rounded-md border border-line bg-surface p-4 shadow-card-hairline",
-  mobileCardHeader: "flex items-start justify-between gap-3",
+  title: TABLE_TITLE,
+  mobileList: TABLE_CARD_MOBILE_LIST,
+  mobileEmpty: TABLE_CARD_MOBILE_EMPTY,
+  mobileCard: TABLE_CARD_MOBILE,
+  mobileCardHeader: TABLE_CARD_MOBILE_HEADER,
   mobileCardPeriod: "text-[0.875rem] text-ink",
   mobileCardAmount: "mt-2 font-mono text-[1rem] text-ink",
   mobileCardDetails: "mt-2 text-body-sm text-ink-muted",
@@ -16,5 +22,5 @@ export const payoutsTableStyles = {
   desktopCellBody: cn(TABLE_DATA_CELL_CLASS, "text-body"),
   desktopCellMono: cn(TABLE_DATA_CELL_CLASS, "font-mono"),
   desktopCellMuted: cn(TABLE_DATA_CELL_CLASS, "text-body-sm text-ink-muted"),
-  desktopEmptyCell: "text-center text-ink-muted",
+  desktopEmptyCell: TABLE_CELL_EMPTY,
 } as const;

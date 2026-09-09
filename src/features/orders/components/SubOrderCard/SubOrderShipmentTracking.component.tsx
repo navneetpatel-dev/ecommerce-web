@@ -12,6 +12,7 @@ import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { DeliveryRatingPrompt } from "../DeliveryRatingPrompt.component";
 import { shippingApi } from "../../api/shipping.api";
 import { ordersKeys } from "../../api/orders.queries";
+import { subOrderShipmentTrackingStyles as styles } from "./subOrderShipmentTracking.styles";
 
 interface SubOrderShipmentTrackingProps {
   shipment: Shipment;
@@ -58,57 +59,52 @@ export function SubOrderShipmentTracking({
     ).includes(shipment.status);
 
   return (
-    <div className="mt-4 border-t border-dashed border-line pt-4">
-      <TextEyebrow className="mb-2">Tracking</TextEyebrow>
-      <p className="text-body text-ink">{shipment.carrier}</p>
-      <p className="mt-0.5 font-mono text-body-sm text-ink-muted">
-        {shipment.trackingNumber}
-      </p>
-      <div className="mt-2">
+    <div className={styles.root}>
+      <TextEyebrow className={styles.eyebrow}>Tracking</TextEyebrow>
+      <p className={styles.carrier}>{shipment.carrier}</p>
+      <p className={styles.trackingNumber}>{shipment.trackingNumber}</p>
+      <div className={styles.statusWrapper}>
         <StatusBadge status={shipment.status} />
       </div>
       {shipment.deliveryAgent && (
-        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
-          <p className="text-body-sm text-ink-muted">
+        <div className={styles.agentRow}>
+          <p className={styles.agentLabel}>
             Delivery agent: {shipment.deliveryAgent.fullName}
           </p>
           {canCallAgent ? (
             <a
               href={`tel:${shipment.deliveryAgent.phone}`}
-              className="inline-flex items-center gap-1 text-body-sm font-medium text-brand hover:underline"
+              className={styles.callAgentLink}
             >
-              <Phone className="size-3.5" aria-hidden="true" />
+              <Phone className={styles.phoneIcon} aria-hidden="true" />
               Call agent
             </a>
           ) : null}
         </div>
       )}
       {shipment.status === SHIPMENT_STATUS.OUT_FOR_DELIVERY && (
-        <p className="mt-2 rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-ink">
+        <p className={styles.bannerNotice}>
           Your order is out for delivery. Share the code from your email with
           the delivery agent to receive it.
         </p>
       )}
       {shipment.codAmount != null && (
-        <p className="mt-2 text-body-sm text-ink-muted">
+        <p className={styles.codAmount}>
           Cash on delivery: ₹{shipment.codAmount.toFixed(2)}{" "}
           {shipment.codCollected ? "(collected)" : "(due at doorstep)"}
         </p>
       )}
       {shipment.attempts?.length ? (
-        <div className="mt-2 space-y-1.5">
+        <div className={styles.attemptsList}>
           {shipment.attempts.map((attempt) => (
-            <p
-              key={attempt.id}
-              className="rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning"
-            >
+            <p key={attempt.id} className={styles.warningNotice}>
               Attempt {attempt.attemptNumber} note: {attempt.note}
               {attempt.photoUrl ? (
                 <a
                   href={attempt.photoUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="ml-2 font-medium text-brand hover:underline"
+                  className={styles.viewPhotoLink}
                 >
                   View photo
                 </a>
@@ -118,8 +114,8 @@ export function SubOrderShipmentTracking({
         </div>
       ) : null}
       {shipment.status === SHIPMENT_STATUS.FAILED && (
-        <div className="mt-2 space-y-2">
-          <p className="rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning">
+        <div className={styles.failedContainer}>
+          <p className={styles.warningNotice}>
             {shipment.failureReason
               ? `Delivery attempt failed: ${shipment.failureReason}`
               : "We couldn't deliver this — pick a new time to try again."}
@@ -131,12 +127,12 @@ export function SubOrderShipmentTracking({
             prompt="Delivery didn't go through — pick a redelivery window:"
           />
           {rescheduleError ? (
-            <p className="text-body-sm text-danger">{rescheduleError}</p>
+            <p className={styles.errorMessage}>{rescheduleError}</p>
           ) : null}
         </div>
       )}
       {shipment.status === SHIPMENT_STATUS.RTO_INITIATED && (
-        <p className="mt-2 rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning">
+        <p className={styles.warningNoticeWithMargin}>
           We couldn&apos;t deliver this after multiple attempts — it&apos;s
           being routed back to the seller.
         </p>
@@ -146,7 +142,7 @@ export function SubOrderShipmentTracking({
           href={shipment.proofOfDeliveryUrl}
           target="_blank"
           rel="noreferrer"
-          className="mt-2 inline-block text-body-sm font-medium text-brand hover:underline"
+          className={styles.proofOfDeliveryLink}
         >
           View proof of delivery photo
         </a>

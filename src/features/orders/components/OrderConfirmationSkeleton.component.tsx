@@ -1,5 +1,6 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
+import { orderConfirmationSkeletonStyles as styles } from "./orderConfirmationSkeleton.styles";
 
 /**
  * Mirrors OrderConfirmation's hero band plus items/totals split, so arriving
@@ -7,53 +8,47 @@ import { LABELS } from "@/shared/constants/labels";
  */
 export function OrderConfirmationSkeleton() {
   return (
-    <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(ellipse_at_top,_color-mix(in_srgb,var(--brand)_14%,transparent),transparent_60%)]"
-      />
+    <div className={styles.root}>
+      <div aria-hidden className={styles.radialBg} />
 
       <div
-        className="storefront-container relative py-6 md:py-8"
+        className={styles.container}
         aria-busy="true"
         aria-label={LABELS.orderDetailsLoading}
       >
-        <div className="mx-auto max-w-6xl">
-          <div className="flex flex-col gap-6 border-b border-line pb-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-            <div className="w-full">
-              <div className="flex items-center justify-center gap-2 sm:justify-start">
-                <Skeleton className="size-7 shrink-0 rounded-full" />
-                <Skeleton className="h-3 w-20" />
+        <div className={styles.contentWrapper}>
+          <div className={styles.heroRow}>
+            <div className={styles.heroLeft}>
+              <div className={styles.heroBadgeRow}>
+                <Skeleton className={styles.heroBadgeIcon} />
+                <Skeleton className={styles.heroBadgeText} />
               </div>
-              <div className="mt-2.5 space-y-2.5">
+              <div className={styles.heroTitles}>
                 <Skeleton className="h-9 w-64 max-w-full" />
                 <Skeleton className="h-3 w-24" />
                 <Skeleton className="h-4 w-full max-w-lg" />
               </div>
             </div>
-            <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-              <Skeleton className="h-11 w-full sm:w-32" />
-              <Skeleton className="h-11 w-full sm:w-40" />
+            <div className={styles.heroActions}>
+              <Skeleton className={styles.heroButtonLeft} />
+              <Skeleton className={styles.heroButtonRight} />
             </div>
           </div>
 
-          <div className="mt-8 grid items-start gap-6 lg:mt-10 lg:grid-cols-[minmax(0,1.55fr)_minmax(19rem,1fr)] lg:gap-10">
-            <div className="min-w-0">
-              <Skeleton className="h-3 w-24" />
-              <Skeleton className="mb-4 mt-2 h-7 w-52" />
-              <div className="space-y-4">
+          <div className={styles.grid}>
+            <div className={styles.column}>
+              <Skeleton className={styles.sectionEyebrow} />
+              <Skeleton className={styles.sectionTitle} />
+              <div className={styles.itemsList}>
                 {[0, 1].map((group) => (
-                  <div
-                    key={group}
-                    className="border border-line bg-surface-raised px-4 py-3.5 shadow-elevation-1 sm:px-5"
-                  >
-                    <div className="flex items-baseline justify-between gap-3 border-b border-line pb-2">
+                  <div key={group} className={styles.itemCard}>
+                    <div className={styles.itemCardHeader}>
                       <Skeleton className="h-4 w-40" />
                       <Skeleton className="h-3 w-14" />
                     </div>
-                    <div className="flex items-start gap-3 py-3 sm:gap-4">
-                      <Skeleton className="size-14 rounded-sm sm:size-16" />
-                      <div className="flex-1 space-y-2 pt-0.5">
+                    <div className={styles.itemCardBody}>
+                      <Skeleton className={styles.itemImage} />
+                      <div className={styles.itemContent}>
                         <Skeleton className="h-4 w-2/3" />
                         <Skeleton className="h-3 w-1/4" />
                       </div>
@@ -64,10 +59,10 @@ export function OrderConfirmationSkeleton() {
               </div>
             </div>
 
-            <div className="min-w-0">
-              <Skeleton className="h-3 w-24" />
-              <Skeleton className="mb-4 mt-2 h-7 w-40" />
-              <div className="space-y-3 border border-line bg-surface-raised p-5 shadow-elevation-1 sm:p-6">
+            <div className={styles.column}>
+              <Skeleton className={styles.sectionEyebrow} />
+              <Skeleton className={styles.sectionTitleAside} />
+              <div className={styles.asideCard}>
                 <Skeleton className="h-3 w-full" />
                 <Skeleton className="h-3 w-4/5" />
                 <Skeleton className="mt-4 h-7 w-1/2" />
