@@ -1,31 +1,10 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { deliveryAgentApi } from "./deliveryAgent.api";
-import type {
-  BankDetails,
-  DeliveryAgentDocumentType,
-  DeliveryPickup,
-  DeliveryShipment,
-} from "../types";
+import { deliveryKeys, useDeliveryMutation } from "./deliveryAgent.keys";
 
-export const deliveryKeys = {
-  all: ["delivery"] as const,
-  profile: ["delivery", "profile"] as const,
-  deliveries: (statuses?: string[]) =>
-    ["delivery", "deliveries", statuses ?? []] as const,
-  delivery: (shipmentId: string) =>
-    ["delivery", "delivery", shipmentId] as const,
-  pickups: (statuses?: string[]) =>
-    ["delivery", "pickups", statuses ?? []] as const,
-  pickup: (returnId: string) => ["delivery", "pickup", returnId] as const,
-  shiftSummary: ["delivery", "shift-summary"] as const,
-  cashDeposits: ["delivery", "cash-deposits"] as const,
-  payouts: ["delivery", "payouts"] as const,
-  earnings: ["delivery", "earnings"] as const,
-  documents: ["delivery", "documents"] as const,
-  ratings: ["delivery", "ratings"] as const,
-};
+export { deliveryKeys, useDeliveryMutation } from "./deliveryAgent.keys";
 
 export function useDeliveryProfile() {
   return useQuery({
@@ -87,23 +66,6 @@ export function useUpdateLocation() {
       deliveryAgentApi.updateLocation(input.lat, input.lng),
   });
 }
-export function useMyCashDeposits() {
-  return useQuery({
-    queryKey: deliveryKeys.cashDeposits,
-    queryFn: () => deliveryAgentApi.myCashDeposits(),
-  });
-}
-export function useCloseCashShift() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: { amount: number; note?: string }) =>
-      deliveryAgentApi.closeCashShift(input.amount, input.note),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: deliveryKeys.shiftSummary });
-      queryClient.invalidateQueries({ queryKey: deliveryKeys.cashDeposits });
-    },
-  });
-}
 export function useRequestRtoHandoverCode() {
   return useMutation({
     mutationFn: (shipmentId: string) =>
@@ -115,183 +77,27 @@ export function useConfirmRtoHandover() {
     deliveryAgentApi.confirmRtoHandover(input.shipmentId, input.otpCode),
   );
 }
-export function useMyPayouts() {
-  return useQuery({
-    queryKey: deliveryKeys.payouts,
-    queryFn: () => deliveryAgentApi.myPayouts(),
-  });
-}
-export function useMyEarningsLedger() {
-  return useQuery({
-    queryKey: deliveryKeys.earnings,
-    queryFn: () => deliveryAgentApi.myEarningsLedger(),
-  });
-}
-export function useUpdateBankDetails() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (bankDetails: BankDetails) =>
-      deliveryAgentApi.updateBankDetails(bankDetails),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: deliveryKeys.profile }),
-  });
-}
-function useDeliveryMutation<T>(mutationFn: (value: T) => Promise<unknown>) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: deliveryKeys.all }),
-  });
-}
-export function useUpdateDeliveryStatus() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: {
-      shipmentId: string;
-      status: string;
-      note?: string;
-      photoUrl?: string;
-    }) =>
-      deliveryAgentApi.updateDeliveryStatus(input.shipmentId, {
-        status: input.status,
-        note: input.note,
-        photoUrl: input.photoUrl,
-      }),
-    onMutate: async (input) => {
-      queryClient.setQueryData<DeliveryShipment | undefined>(
-        deliveryKeys.delivery(input.shipmentId),
-        (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            status: input.status as DeliveryShipment["status"],
-            failureReason:
-              input.status === "FAILED"
-                ? (input.note ?? old.failureReason)
-                : old.failureReason,
-          };
-        },
-      );
-      queryClient.setQueriesData<DeliveryShipment[]>(
-        { queryKey: ["delivery", "deliveries"] },
-        (old) => {
-          if (!old || !Array.isArray(old)) return old;
-          return old.map((shipment) =>
-            shipment.id === input.shipmentId
-              ? {
-                  ...shipment,
-                  status: input.status as DeliveryShipment["status"],
-                  failureReason:
-                    input.status === "FAILED"
-                      ? (input.note ?? shipment.failureReason)
-                      : shipment.failureReason,
-                }
-              : shipment,
-          );
-        },
-      );
-    },
-    onSettled: () => {
-      if (typeof navigator === "undefined" || navigator.onLine) {
-        queryClient.invalidateQueries({ queryKey: deliveryKeys.all });
-      }
-    },
-  });
-}
-export function useConfirmDelivery() {
-  return useDeliveryMutation(
-    (input: {
-      shipmentId: string;
-      otpCode: string;
-      proofPhotoUrl?: string;
-      codCollected?: boolean;
-    }) =>
-      deliveryAgentApi.confirmDelivery(input.shipmentId, {
-        otpCode: input.otpCode,
-        proofPhotoUrl: input.proofPhotoUrl,
-        codCollected: input.codCollected,
-      }),
-  );
-}
-export function useRequestDeliveryCode() {
-  return useMutation({
-    mutationFn: (shipmentId: string) =>
-      deliveryAgentApi.requestDeliveryCode(shipmentId),
-  });
-}
-export function useUpdatePickupStatus() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: { returnId: string; note: string }) =>
-      deliveryAgentApi.updatePickupStatus(input.returnId, input.note),
-    onMutate: async (input) => {
-      queryClient.setQueryData<DeliveryPickup | undefined>(
-        deliveryKeys.pickup(input.returnId),
-        (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            pickupFailureReason: input.note,
-          };
-        },
-      );
-      queryClient.setQueriesData<DeliveryPickup[]>(
-        { queryKey: ["delivery", "pickups"] },
-        (old) => {
-          if (!old || !Array.isArray(old)) return old;
-          return old.map((pickup) =>
-            pickup.id === input.returnId
-              ? { ...pickup, pickupFailureReason: input.note }
-              : pickup,
-          );
-        },
-      );
-    },
-    onSettled: () => {
-      if (typeof navigator === "undefined" || navigator.onLine) {
-        queryClient.invalidateQueries({ queryKey: deliveryKeys.all });
-      }
-    },
-  });
-}
-export function useRequestPickupCode() {
-  return useMutation({
-    mutationFn: (returnId: string) =>
-      deliveryAgentApi.requestPickupCode(returnId),
-  });
-}
-export function useConfirmPickup() {
-  return useDeliveryMutation(
-    (input: {
-      returnId: string;
-      otpCode: string;
-      itemConditionPhotoUrls?: string[];
-      replacementProofUrl?: string;
-    }) => deliveryAgentApi.confirmPickup(input.returnId, input),
-  );
-}
-export function useSetAvailability() {
-  return useDeliveryMutation((available: boolean) =>
-    deliveryAgentApi.setAvailability(available),
-  );
-}
-export function useMyDocuments() {
-  return useQuery({
-    queryKey: deliveryKeys.documents,
-    queryFn: () => deliveryAgentApi.myDocuments(),
-  });
-}
-export function useSubmitDocument() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: {
-      type: DeliveryAgentDocumentType;
-      url: string;
-      expiryDate?: string;
-    }) =>
-      deliveryAgentApi.submitDocument(input.type, input.url, input.expiryDate),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: deliveryKeys.documents }),
-  });
-}
+// Payout/earnings/cash-deposit, document, and task-action (status
+// update/confirm/request-code) hooks live in sibling files, split out to
+// stay under the per-file line ceiling and re-exported below so existing
+// "../api/deliveryAgent.queries" import sites keep working unchanged.
+export {
+  useMyCashDeposits,
+  useCloseCashShift,
+  useMyPayouts,
+  useMyEarningsLedger,
+  useUpdateBankDetails,
+} from "./deliveryAgentPayouts.queries";
+export {
+  useMyDocuments,
+  useSubmitDocument,
+} from "./deliveryAgentDocuments.queries";
+export {
+  useUpdateDeliveryStatus,
+  useConfirmDelivery,
+  useRequestDeliveryCode,
+  useUpdatePickupStatus,
+  useRequestPickupCode,
+  useConfirmPickup,
+  useSetAvailability,
+} from "./deliveryAgentTasks.queries";

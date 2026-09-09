@@ -17,7 +17,7 @@ import {
 } from "@/shared/components/ui/card";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
-import { useChartThemeColors } from "../utils/chartTheme";
+import { useChartThemeColors } from "@/shared/hooks/useChartThemeColors.hook";
 
 interface RatingRow {
   rating: number;

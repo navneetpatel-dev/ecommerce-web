@@ -1,31 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { Bike } from "lucide-react";
-import { deliveryAdminApi } from "@/features/delivery-dashboard";
 import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-
-import { BulkImportAgentsDialog } from "./BulkImportAgentsDialog.component";
-
-const VEHICLE_TYPES = ["BIKE", "SCOOTER", "VAN", "BICYCLE"];
-
-const emptyAgent = {
-  email: "",
-  password: "",
-  fullName: "",
-  phone: "",
-  vehicleType: "BIKE",
-  hubOrZone: "",
-};
+import { useCreateDeliveryAgentForm } from "../hooks/useCreateDeliveryAgentForm.hook";
+import { CreateDeliveryAgentFormFields } from "./CreateDeliveryAgentFormFields.component";
+import { BulkImportAgentsDialog } from "./BulkImportAgentsDialog";
 
 export function CreateDeliveryAgentForm({
   onCreated,
@@ -34,28 +13,8 @@ export function CreateDeliveryAgentForm({
   onCreated: () => void;
   onCancel?: () => void;
 }) {
-  const [form, setForm] = useState(emptyAgent);
-  const [pending, setPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const submit = async () => {
-    setPending(true);
-    setError(null);
-    try {
-      await deliveryAdminApi.create(form);
-      setForm(emptyAgent);
-      onCreated();
-    } catch (createError) {
-      setError(
-        getApiErrorMessage(
-          createError,
-          "Could not create this delivery agent.",
-        ),
-      );
-    } finally {
-      setPending(false);
-    }
-  };
+  const { form, setForm, pending, error, submit, canSubmit } =
+    useCreateDeliveryAgentForm(onCreated);
 
   return (
     <section className="rounded-lg border border-line bg-surface p-5 md:p-6 shadow-elevation-1 space-y-5">
@@ -79,107 +38,13 @@ export function CreateDeliveryAgentForm({
         ) : null}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="space-y-1.5">
-          <label className="text-caption font-medium text-ink-muted">
-            Full name *
-          </label>
-          <Input
-            placeholder="e.g. John Doe"
-            value={form.fullName}
-            onChange={(event) =>
-              setForm({ ...form, fullName: event.target.value })
-            }
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label className="text-caption font-medium text-ink-muted">
-            Email address *
-          </label>
-          <Input
-            type="email"
-            placeholder="e.g. agent@example.com"
-            value={form.email}
-            onChange={(event) =>
-              setForm({ ...form, email: event.target.value })
-            }
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label className="text-caption font-medium text-ink-muted">
-            Temporary password (min 8 chars) *
-          </label>
-          <Input
-            type="password"
-            placeholder="••••••••"
-            value={form.password}
-            onChange={(event) =>
-              setForm({ ...form, password: event.target.value })
-            }
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label className="text-caption font-medium text-ink-muted">
-            Phone number *
-          </label>
-          <Input
-            placeholder="e.g. +91 9876543210"
-            value={form.phone}
-            onChange={(event) =>
-              setForm({ ...form, phone: event.target.value })
-            }
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label className="text-caption font-medium text-ink-muted">
-            Hub or zone *
-          </label>
-          <Input
-            placeholder="e.g. South Hub / Zone 110"
-            value={form.hubOrZone}
-            onChange={(event) =>
-              setForm({ ...form, hubOrZone: event.target.value })
-            }
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <label className="text-caption font-medium text-ink-muted">
-            Vehicle type
-          </label>
-          <Select
-            value={form.vehicleType}
-            onValueChange={(value) => setForm({ ...form, vehicleType: value })}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {VEHICLE_TYPES.map((value) => (
-                <SelectItem key={value} value={value}>
-                  {value}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      <CreateDeliveryAgentFormFields form={form} onChange={setForm} />
 
       <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line/60 pt-3">
         <div className="flex items-center gap-3">
           <Button
             loading={pending}
-            disabled={
-              !form.email ||
-              form.password.length < 8 ||
-              !form.fullName ||
-              !form.phone ||
-              !form.hubOrZone
-            }
+            disabled={!canSubmit}
             onClick={() => void submit()}
           >
             Create agent

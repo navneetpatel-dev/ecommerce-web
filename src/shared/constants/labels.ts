@@ -13,6 +13,7 @@ import { couponsLabels } from "./labels/coupons";
 import { tablesLabels } from "./labels/tables";
 import { tables2Labels } from "./labels/tables2";
 import { tables3Labels } from "./labels/tables3";
+import { tables4Labels } from "./labels/tables4";
 import { settingsLabels } from "./labels/settings";
 import { reportsLabels } from "./labels/reports";
 import { walletLabels } from "./labels/wallet";
@@ -62,6 +63,7 @@ export const LABELS = {
   ...tablesLabels,
   ...tables2Labels,
   ...tables3Labels,
+  ...tables4Labels,
   ...settingsLabels,
   ...reportsLabels,
   ...walletLabels,

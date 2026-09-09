@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { SkeletonGrid } from "@/shared/components/Skeletons.component";
-import { useChartThemeColors } from "../utils/chartTheme";
+import { useChartThemeColors } from "@/shared/hooks/useChartThemeColors.hook";
 import { useVendorAnalytics } from "../hooks/useVendorAnalytics.hook";
 import { VendorRevenueChartCard } from "./VendorRevenueChartCard.component";
 import { VendorTopProductsCard } from "./VendorTopProductsCard.component";

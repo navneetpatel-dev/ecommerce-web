@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { EmptyCart } from "../EmptyCart.component";
+import { EmptyCartState } from "@/shared/components/EmptyCartState.component";
 import { CheckoutStepIndicator } from "../../containers/CheckoutStepIndicator.container";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { CheckoutPageSkeleton } from "@/shared/components/Skeletons.component";
@@ -68,7 +68,13 @@ export function CheckoutPageView({
   if (paymentPhase === "redirecting" || (!hasItems && isTransitioning))
     return <CheckoutTransitionState paymentPhase={transitionPhase} />;
   if (isLoading) return <CheckoutPageSkeleton />;
-  if (!hasItems) return <EmptyCart />;
+  if (!hasItems)
+    return (
+      <EmptyCartState
+        heading="Nothing to check out"
+        message="Your bag is empty — add a few pieces, then return here to complete your order."
+      />
+    );
 
   const paymentOverlay = checkoutOverlayCopy(paymentPhase);
 

@@ -1,92 +1,15 @@
 import { ApiError } from "@/shared/types/apiError.types";
 import { ERROR_CODES, ERROR_MESSAGES } from "@/shared/constants/errors";
 import { LABELS } from "@/shared/constants/labels";
+import {
+  API_ERROR_LABEL_KEYS,
+  INTERNAL_ERROR_PATTERNS,
+} from "./apiErrorMessageData";
 
 type ApiFailureBody = {
   success: false;
   error: { code?: string; message?: string; details?: unknown };
 };
-
-/** Map API error codes to safe user-facing labels (never expose raw server text). */
-const API_ERROR_LABEL_KEYS: Partial<Record<string, keyof typeof LABELS>> = {
-  S3_ACCESS_DENIED: "uploadStorageUnavailable",
-  S3_NOT_CONFIGURED: "uploadStorageUnavailable",
-  UPLOAD_FAILED: "uploadFailed",
-  UPLOAD_FORBIDDEN: "uploadForbidden",
-  UPLOAD_TOO_LARGE: "uploadTooLargeGeneric",
-  UPLOAD_INVALID_CONTENT_TYPE: "uploadInvalidImageType",
-  UPLOAD_INVALID_PURPOSE: "uploadFailed",
-  UPLOAD_INVALID_DATA_URL: "uploadFailed",
-  INTERNAL_ERROR: "unexpectedError",
-  CONFIG_ERROR: "unexpectedError",
-  OAUTH_NOT_CONFIGURED: "oauthNotConfigured",
-  RATE_LIMITED: "rateLimited",
-  AUTH_RATE_LIMITED: "authRateLimited",
-  COUPON_APPLY_RATE_LIMITED: "couponApplyRateLimited",
-  TOKEN_EXPIRED: "sessionExpired",
-  UNAUTHORIZED: "sessionExpired",
-  ITEMS_UNAVAILABLE: "removeUnavailableToCheckout",
-  VENDOR_UNAVAILABLE: "vendorUnavailableCheckout",
-  VENDOR_KYC_INCOMPLETE: "vendorKycIncomplete",
-  VENDOR_KYC_BLOCKS_PRODUCT: "vendorKycBlocksProduct",
-  COUPON_INACTIVE: "couponInvalid",
-  COUPON_INVALID: "couponInvalid",
-  COUPON_NOT_APPLICABLE: "couponNotApplicable",
-  COUPON_SCOPE: "couponNotApplicable",
-  COUPON_RESTRICTION: "couponNotApplicable",
-  COUPON_MIN_ORDER: "couponMinOrder",
-  COUPON_STACK: "couponStackConflict",
-  COUPON_PRIORITY: "couponPriorityConflict",
-  COUPON_CONFIG_INVALID: "couponInvalid",
-  COUPON_DUPLICATE_SCOPE: "couponDuplicateScope",
-  WALLET_INSUFFICIENT_BALANCE: "walletInsufficientBalance",
-  WALLET_INVALID_AMOUNT: "walletInvalidAmount",
-  WALLET_RECHARGE_DISABLED: "walletRechargeDisabled",
-  WALLET_RECHARGE_BELOW_MIN: "walletRechargeBelowMin",
-  WALLET_RECHARGE_ABOVE_MAX: "walletRechargeAboveMax",
-  WALLET_MAX_BALANCE_EXCEEDED: "walletMaxBalanceExceeded",
-  WALLET_RECHARGE_ALREADY_PAID: "walletRechargeAlreadyPaid",
-  WALLET_RECHARGE_RAZORPAY_MIN: "walletRechargeBelowMin",
-  COD_NOT_AVAILABLE: "codNotAvailable",
-  ORDER_AMOUNT_BELOW_RAZORPAY_MIN: "orderAmountBelowRazorpayMin",
-  PINCODE_INVALID: "pincodeInvalidCheckout",
-  SHIPPING_WEIGHT_REQUIRED: "shippingWeightRequired",
-  SHIPPING_METHOD_UNSUPPORTED: "shippingMethodUnsupported",
-  SHIPPING_RATE_UNAVAILABLE: "couldNotLoadShippingRates",
-  ORDER_CANCEL_PAID_ONLY: "orderCancelPaidOnly",
-  ORDER_CANCEL_SHIPPED: "orderCancelShipped",
-  ORDER_CANCEL_ITEMS_SHIPPED: "orderCancelItemsShipped",
-  ORDER_USE_CHECKOUT: "orderUseCheckout",
-  CHECKOUT_PAID_CANNOT_CANCEL: "checkoutPaidCannotCancel",
-  NOT_YOUR_ORDER: "notYourOrder",
-  NOT_YOUR_PRODUCT_REVIEW: "notYourProductReview",
-  REVIEW_ITEM_NOT_DELIVERED: "reviewItemNotDelivered",
-  REVIEW_ALREADY_EXISTS: "reviewAlreadyExists",
-  WISHLIST_ALREADY_HAS_PRODUCT: "wishlistAlreadyHasProduct",
-  WISHLIST_NO_VARIANTS: "wishlistNoVariants",
-  RETURN_ALREADY_EXISTS: "returnAlreadyExists",
-  RETURN_NOT_ALLOWED: "returnNotAllowed",
-  ITEM_MUST_BE_DELIVERED: "itemMustBeDelivered",
-  INVALID_SIGNATURE: "paymentFailedBody",
-  RAZORPAY_NOT_CONFIGURED: "paymentUnavailableLoadScript",
-};
-
-const INTERNAL_ERROR_PATTERNS = [
-  /\b(?:backend|frontend|infra|src|node_modules)\//i,
-  /\b(?:README|\.md|\.ts|\.tsx|\.json)\b/i,
-  /\barn:aws:[a-z0-9-]*:[a-z0-9-]*:/i,
-  /\bs3:[A-Z][a-zA-Z]+/,
-  /\bAWS_[A-Z0-9_]+\b/,
-  /\bIAM\b/i,
-  /\bat\s+[\w./<>-]+\(\d+:\d+\)/,
-  /AccessDenied/i,
-  /not authorized to perform/i,
-  /Configure\s+[A-Z_]+/,
-  /See\s+\S+\/README/i,
-  /^(?:TypeError:\s*)?Failed to fetch$/i,
-  /^(?:NetworkError|Network request failed|Load failed|fetch failed)\b/i,
-  /\bERR_(?:NETWORK|CONNECTION|INTERNET|BLOCKED_BY_CLIENT)\b/i,
-];
 
 /** Returns true when text looks like an internal/dev error and must not be shown to users. */
 export function looksLikeInternalErrorMessage(message: string): boolean {

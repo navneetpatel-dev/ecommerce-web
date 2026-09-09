@@ -1,47 +1,19 @@
 import { z } from "zod";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatLabel";
 import { PRODUCT_FIELD_LIMITS } from "../../constants/productFields";
 import { WARRANTY_TYPE_VALUES } from "@/shared/constants/statuses";
 import {
   sanitizeProductListingValues,
-  splitCommaList,
   type ProductListingFormValues,
 } from "../../types/productListingForm.types";
-
-const tooLong = (max: number) =>
-  formatLabel(LABELS.productFieldTooLong, { max });
-const listTooLong = (max: number) =>
-  formatLabel(LABELS.productListTooLong, { max });
-
-const optionalNote = z
-  .string()
-  .trim()
-  .max(PRODUCT_FIELD_LIMITS.NOTE_MAX, tooLong(PRODUCT_FIELD_LIMITS.NOTE_MAX))
-  .transform((value) => (value ? value : undefined));
-
-const optionalUrl = z
-  .string()
-  .trim()
-  .max(2048, tooLong(2048))
-  .refine((value) => !value || z.string().url().safeParse(value).success, {
-    message: LABELS.productMediaUrlInvalid,
-  })
-  .transform((value) => (value ? value : undefined));
-
-const optionalWarrantyMonths = z
-  .string()
-  .trim()
-  .refine(
-    (value) =>
-      !value ||
-      (/^\d+$/.test(value) &&
-        Number(value) >= 0 &&
-        Number(value) <= PRODUCT_FIELD_LIMITS.WARRANTY_MONTHS_MAX),
-    formatLabel(LABELS.enterWarrantyMonths, {
-      max: PRODUCT_FIELD_LIMITS.WARRANTY_MONTHS_MAX,
-    }),
-  );
+import {
+  listTooLong,
+  optionalNote,
+  optionalUrl,
+  optionalWarrantyMonths,
+  tooLong,
+} from "./fieldSchemas";
+import { validateProductListingCrossFields } from "./crossFieldValidation";
 
 export const ProductListingFormSchema = z
   .object({
@@ -177,35 +149,7 @@ export const ProductListingFormSchema = z
     sizeChartUrl: optionalUrl,
     codMode: z.enum(["inherit", "on", "off"]),
   })
-  .superRefine((values, ctx) => {
-    const tags = splitCommaList(values.tagsInput);
-    if (tags.length > PRODUCT_FIELD_LIMITS.TAGS_MAX) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["tagsInput"],
-        message: listTooLong(PRODUCT_FIELD_LIMITS.TAGS_MAX),
-      });
-    }
-    const tooLongTag = tags.find(
-      (tag) => tag.length > PRODUCT_FIELD_LIMITS.TAG_MAX,
-    );
-    if (tooLongTag) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["tagsInput"],
-        message: tooLong(PRODUCT_FIELD_LIMITS.TAG_MAX),
-      });
-    }
-
-    if (!values.compareAtPrice) return;
-    if (Number(values.compareAtPrice) < Number(values.price)) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["compareAtPrice"],
-        message: LABELS.productCompareAtBelowPrice,
-      });
-    }
-  });
+  .superRefine(validateProductListingCrossFields);
 
 export type ProductListingFormInput = z.infer<typeof ProductListingFormSchema>;
 

@@ -196,7 +196,4 @@ export const tablesLabels = {
     "Homepage hero banners. Upload the image first, then save the banner.",
   promoBannerTitle: "Title",
   promoBannerImage: "Banner image",
-  promoBannerLinkType: "Link type",
-  promoBannerLinkTargetId: "Link target ID",
-  promoBannerLinkUrl: "Link URL",
 } as const;

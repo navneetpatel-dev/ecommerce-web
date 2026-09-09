@@ -10,6 +10,7 @@ import {
   SEARCH_AUTOCOMPLETE_MIN_CHARS,
 } from "../constants";
 import { suggestionHref } from "../utils/suggestionHref";
+import { useSuggestionKeyboardNav } from "./useSuggestionKeyboardNav.hook";
 import type { SearchSuggestion } from "../types";
 
 export function useSearchNavigation(onAfterSubmit?: () => void) {
@@ -98,55 +99,16 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
     window.setTimeout(() => closeDropdown(), SEARCH_DROPDOWN_CLOSE_MS);
   }, [closeDropdown]);
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (!open || !canSuggest) {
-        if (event.key === "Escape") closeDropdown();
-        return;
-      }
-
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        if (!suggestions.length) return;
-        setActiveIndex((index) => (index + 1) % suggestions.length);
-        return;
-      }
-
-      if (event.key === "ArrowUp") {
-        event.preventDefault();
-        if (!suggestions.length) return;
-        setActiveIndex((index) =>
-          index <= 0 ? suggestions.length - 1 : index - 1,
-        );
-        return;
-      }
-
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closeDropdown();
-        onAfterSubmit?.();
-        return;
-      }
-
-      if (
-        event.key === "Enter" &&
-        activeIndex >= 0 &&
-        suggestions[activeIndex]
-      ) {
-        event.preventDefault();
-        handleSelect(suggestions[activeIndex]);
-      }
-    },
-    [
-      activeIndex,
-      canSuggest,
-      closeDropdown,
-      handleSelect,
-      onAfterSubmit,
-      open,
-      suggestions,
-    ],
-  );
+  const handleKeyDown = useSuggestionKeyboardNav({
+    open,
+    canSuggest,
+    suggestions,
+    activeIndex,
+    setActiveIndex,
+    closeDropdown,
+    handleSelect,
+    onAfterSubmit,
+  });
 
   const showPanel =
     open &&

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { BarChart3 } from "lucide-react";
 import {
   Bar,
@@ -11,46 +10,16 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import {
-  deliveryAdminApi,
-  type DeliveryAgentPerformance,
-} from "@/features/delivery-dashboard";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { Button } from "@/shared/components/ui/button";
-import { useChartThemeColors } from "../utils/chartTheme";
-
-function isoDate(date: Date): string {
-  return date.toISOString().slice(0, 10);
-}
-
-const DEFAULT_TO = new Date();
-const DEFAULT_FROM = new Date(DEFAULT_TO.getTime() - 30 * 24 * 60 * 60 * 1000);
+import { useChartThemeColors } from "@/shared/hooks/useChartThemeColors.hook";
+import { useAdminDeliveryPerformancePanel } from "../hooks/useAdminDeliveryPerformancePanel.hook";
 
 /** Admin-only rollup of delivered/RTO/failed-attempt/rating stats per agent over a date range. */
 export function AdminDeliveryPerformancePanel() {
   const colors = useChartThemeColors();
-  const [from, setFrom] = useState(isoDate(DEFAULT_FROM));
-  const [to, setTo] = useState(isoDate(DEFAULT_TO));
-  const [rows, setRows] = useState<DeliveryAgentPerformance[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  function fetchReport(rangeFrom: string, rangeTo: string) {
-    return deliveryAdminApi
-      .performanceReport(rangeFrom, rangeTo)
-      .then(setRows)
-      .catch(() => setRows([]))
-      .finally(() => setLoading(false));
-  }
-
-  useEffect(() => {
-    fetchReport(from, to);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const load = () => {
-    setLoading(true);
-    fetchReport(from, to);
-  };
+  const { from, setFrom, to, setTo, rows, loading, load } =
+    useAdminDeliveryPerformancePanel();
 
   const hasRows = rows.length > 0;
 

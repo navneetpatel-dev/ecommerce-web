@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
+import { useQuery, type QueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { walletApi } from "./wallet.api";

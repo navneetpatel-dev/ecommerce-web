@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,13 +8,9 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import { vendorsApi, type KycChecklistItem } from "@/features/vendors";
-import { adminApi } from "../../api/admin.api";
+import { useVendorKycDocumentsDialog } from "../../hooks/useVendorKycDocumentsDialog.hook";
 import { KycChecklistItems } from "./KycChecklistItems.component";
 import { KycConfirmDialogs } from "./KycConfirmDialogs.component";
-
-type ConfirmMode = "verify" | "reject" | null;
 
 interface VendorKycDocumentsDialogProps {
   vendorId: string;
@@ -30,87 +25,25 @@ export function VendorKycDocumentsDialog({
   open,
   onOpenChange,
 }: VendorKycDocumentsDialogProps) {
-  const [items, setItems] = useState<KycChecklistItem[]>([]);
-  const [isComplete, setIsComplete] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [mode, setMode] = useState<ConfirmMode>(null);
-  const [activeItem, setActiveItem] = useState<KycChecklistItem | null>(null);
-  const [reason, setReason] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-
-  const [actionError, setActionError] = useState<string | null>(null);
-  const [openingDocId, setOpeningDocId] = useState<string | null>(null);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const checklist = await vendorsApi.getKycChecklist(vendorId);
-      setItems(checklist.items);
-      setIsComplete(checklist.isComplete);
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist));
-      setItems([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [vendorId]);
-
-  useEffect(() => {
-    if (!open) return;
-    void load();
-  }, [open, load]);
-
-  const openDocument = async (documentId: string) => {
-    setOpeningDocId(documentId);
-    setActionError(null);
-    try {
-      const { url } = await vendorsApi.getDocumentViewUrl(documentId);
-      window.open(url, "_blank", "noopener,noreferrer");
-    } catch (err) {
-      setActionError(getApiErrorMessage(err, LABELS.couldNotOpenDocument));
-    } finally {
-      setOpeningDocId(null);
-    }
-  };
-
-  const closeConfirm = () => {
-    if (submitting) return;
-    setMode(null);
-    setActiveItem(null);
-    setReason("");
-  };
-
-  const runVerify = async () => {
-    if (!activeItem?.documentId) return;
-    setSubmitting(true);
-    setActionError(null);
-    try {
-      await adminApi.verifyVendorDocument(activeItem.documentId);
-      closeConfirm();
-      await load();
-    } catch (err) {
-      setActionError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist));
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const runReject = async () => {
-    if (!activeItem?.documentId || !reason.trim()) return;
-    setSubmitting(true);
-    setActionError(null);
-    try {
-      await adminApi.rejectVendorDocument(activeItem.documentId, reason.trim());
-      closeConfirm();
-      await load();
-    } catch (err) {
-      setActionError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist));
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  const {
+    items,
+    isComplete,
+    loading,
+    error,
+    mode,
+    setMode,
+    activeItem,
+    setActiveItem,
+    reason,
+    setReason,
+    submitting,
+    actionError,
+    openingDocId,
+    openDocument,
+    closeConfirm,
+    runVerify,
+    runReject,
+  } = useVendorKycDocumentsDialog(vendorId, open);
 
   return (
     <>

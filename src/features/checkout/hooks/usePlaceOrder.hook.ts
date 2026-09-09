@@ -2,18 +2,17 @@ import { useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useCheckoutStore } from "@/shared/stores/checkout.store";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { usePlaceOrder, useCheckoutQuote } from "../api/checkout.queries";
+import { usePlaceOrder } from "../api/checkout.queries";
 import { navigate } from "@/shared/utils/navigate";
 import { PATHS } from "@/shared/constants/paths";
-import { LABELS } from "@/shared/constants/labels";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { useCart } from "@/features/cart";
 import { resolveCheckoutCouponCodes } from "../utils/checkoutCouponCodes.utils";
+import { buildPlaceOrderPayload } from "../utils/placeOrderPayload.utils";
 import { usePaymentNotice, type PaymentNotice } from "./usePaymentNotice/index";
 import { useRestoreCancelledCheckout } from "./useRestoreCancelledCheckout/index";
 import { launchRazorpayPayment } from "./useRazorpayCheckout/index";
 import { useCheckoutPaymentPhase } from "./useCheckoutPaymentPhase.hook";
-import { useCheckoutCacheActions } from "./useCheckoutCacheActions.hook";
+import { useCheckoutQuoteState } from "./useCheckoutQuoteState.hook";
 import { useOrderPlacementErrorHandler } from "./useOrderPlacementErrorHandler.hook";
 
 export type { PaymentNotice };
@@ -39,28 +38,24 @@ export function usePlaceOrderWithRazorpay() {
     useCheckoutPaymentPhase();
   const pendingOrderIdRef = useRef<string | null>(null);
 
-  const quoteInput = {
-    addressId,
-    shippingMethodByVendor,
-    couponCode: appliedCouponCode,
-    couponCodes,
-    walletAmountToUse,
-    giftWrap,
-  };
   const {
-    data: quote,
-    isLoading: isQuoteLoading,
-    isError: isQuoteError,
-    error: quoteError,
-  } = useCheckoutQuote(quoteInput);
-
-  const {
+    quote,
+    isQuoteLoading,
+    isQuoteError,
+    quoteErrorMessage,
     refetchCart,
     invalidateCheckoutQuote,
     clearCartCache,
     onOrderPlaced,
     invalidateWalletCache,
-  } = useCheckoutCacheActions(quoteInput);
+  } = useCheckoutQuoteState({
+    addressId,
+    shippingMethodByVendor,
+    appliedCouponCode,
+    couponCodes,
+    walletAmountToUse,
+    giftWrap,
+  });
 
   const clearPendingOrder = useCallback((orderId?: string) => {
     if (!orderId || pendingOrderIdRef.current === orderId) {
@@ -109,20 +104,19 @@ export function usePlaceOrderWithRazorpay() {
     setPaymentPhase("placing");
 
     try {
-      // Wallet pays via points on a Razorpay checkout; BE has no WALLET enum.
-      const apiPaymentMethod = method === "wallet" ? "razorpay" : method;
-      const apiWalletAmount = method === "wallet" ? walletAmountToUse : 0;
+      const { apiPaymentMethod, apiWalletAmount, payload } =
+        buildPlaceOrderPayload({
+          method,
+          addressId,
+          appliedCouponCode,
+          couponCodes,
+          shippingMethodByVendor,
+          walletAmountToUse,
+          giftWrap,
+          giftMessage,
+        });
 
-      const result = await placeOrder.mutateAsync({
-        addressId,
-        paymentMethod: apiPaymentMethod,
-        couponCode: appliedCouponCode || undefined,
-        couponCodes,
-        shippingMethodByVendor,
-        walletAmountToUse: apiWalletAmount,
-        giftWrap,
-        giftMessage: giftWrap ? giftMessage.trim() || undefined : undefined,
-      });
+      const result = await placeOrder.mutateAsync(payload);
 
       pendingOrderIdRef.current = result.orderId;
 
@@ -164,9 +158,7 @@ export function usePlaceOrderWithRazorpay() {
     quote,
     isQuoteLoading,
     isQuoteError,
-    quoteErrorMessage: isQuoteError
-      ? getApiErrorMessage(quoteError, LABELS.summaryLoadFailed)
-      : undefined,
+    quoteErrorMessage,
     isPending: placeOrder.isPending,
     paymentPhase,
     isPaymentOverlayOpen,

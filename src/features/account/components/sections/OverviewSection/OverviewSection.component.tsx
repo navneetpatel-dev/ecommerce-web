@@ -1,23 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Heart, LifeBuoy, Package } from "lucide-react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
-import type { ImageMimeType } from "@/shared/constants/imageSpecs";
-import { getImageUploadSpec } from "@/shared/constants/imageSpecs";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
-import { formatLabel } from "@/shared/utils/formatLabel";
-import { normalizeImageMimeType } from "@/shared/utils/imageProcessing";
 import { formatOrderDate } from "@/shared/utils/orderFormat";
-import { readFileAsDataUrl } from "@/shared/hooks/useUploads.hook";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { useAccountOverview } from "../../../hooks/useAccountOverview.hook";
-import { useUploadAvatar } from "../../../api/account.queries";
+import { useAvatarUpload } from "../../../hooks/useAvatarUpload.hook";
 import type { AccountSectionId } from "../../../types";
 import { GlanceRow } from "./GlanceRow.component";
 import { ProfileCard } from "./ProfileCard.component";
@@ -44,16 +36,19 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
     wishlistCount,
     isLoadingStats,
   } = useAccountOverview();
-  const uploadAvatar = useUploadAvatar();
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [localError, setLocalError] = useState<string | null>(null);
-  const [cropSrc, setCropSrc] = useState<string | null>(null);
-  const [cropFilename, setCropFilename] = useState("avatar.jpg");
-  const [cropMimeType, setCropMimeType] = useState<ImageMimeType>("image/jpeg");
-  const avatarSpec = getImageUploadSpec(
-    UPLOAD_ENTITY.USERS,
-    UPLOAD_PURPOSE.AVATAR,
-  );
+  const {
+    fileRef,
+    localError,
+    cropSrc,
+    cropFilename,
+    cropMimeType,
+    avatarSpec,
+    uploadPending,
+    uploadError,
+    onPickFile,
+    onAvatarCropped,
+    onAvatarCropCancelled,
+  } = useAvatarUpload(profile?.id ?? "");
 
   if (isLoadingProfile) {
     return (
@@ -85,53 +80,14 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
     : null;
   const avatarSrc = profile.avatarUrl || undefined;
 
-  const onPickFile = (file: File | null) => {
-    if (!file || !avatarSpec) return;
-    if (!file.type.startsWith("image/")) {
-      setLocalError(LABELS.uploadInvalidImageType);
-      return;
-    }
-    if (file.size > avatarSpec.maxBytes) {
-      setLocalError(formatLabel(LABELS.uploadTooLargeMb, { mb: "1.5" }));
-      return;
-    }
-    setLocalError(null);
-    setCropFilename(file.name);
-    setCropMimeType(normalizeImageMimeType(file));
-    setCropSrc(URL.createObjectURL(file));
-    if (fileRef.current) fileRef.current.value = "";
-  };
-
-  const onAvatarCropped = async (file: File) => {
-    setLocalError(null);
-    try {
-      const dataUrl = await readFileAsDataUrl(file);
-      await uploadAvatar.mutateAsync({
-        userId: profile.id,
-        dataUrl,
-        filename: file.name,
-      });
-    } catch (err) {
-      setLocalError(getApiErrorMessage(err, LABELS.uploadFailed));
-    } finally {
-      if (cropSrc) URL.revokeObjectURL(cropSrc);
-      setCropSrc(null);
-    }
-  };
-
-  const onAvatarCropCancelled = () => {
-    if (cropSrc) URL.revokeObjectURL(cropSrc);
-    setCropSrc(null);
-  };
-
   return (
     <div className="space-y-8">
       <ProfileCard
         profile={profile}
         memberSince={memberSince}
         avatarSrc={avatarSrc}
-        uploadPending={uploadAvatar.isPending}
-        uploadError={uploadAvatar.error as Error | null}
+        uploadPending={uploadPending}
+        uploadError={uploadError}
         localError={localError}
         fileInputRef={fileRef}
         onFileSelected={onPickFile}

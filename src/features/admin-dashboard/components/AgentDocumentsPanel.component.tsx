@@ -1,68 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { CheckCircle2, FileText, XCircle } from "lucide-react";
-import {
-  deliveryAdminApi,
-  type DeliveryAgentDocument,
-} from "@/features/delivery-dashboard";
 import { Button } from "@/shared/components/ui/button";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { useAgentDocumentsPanel } from "../hooks/useAgentDocumentsPanel.hook";
 
 /** Admin review queue for delivery-agent KYC documents. */
 export function AgentDocumentsPanel() {
-  const [documents, setDocuments] = useState<DeliveryAgentDocument[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [pendingId, setPendingId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  function fetchDocuments() {
-    return deliveryAdminApi
-      .documents()
-      .then(setDocuments)
-      .catch(() => setDocuments([]))
-      .finally(() => setLoading(false));
-  }
-
-  useEffect(() => {
-    fetchDocuments();
-  }, []);
-
-  const load = () => {
-    setLoading(true);
-    fetchDocuments();
-  };
-
-  const act = async (documentId: string, action: "APPROVE" | "REJECT") => {
-    setError(null);
-    setPendingId(documentId);
-    try {
-      const rejectionReason =
-        action === "REJECT"
-          ? (window.prompt("Reason for rejecting this document?") ?? "")
-          : undefined;
-      if (action === "REJECT" && !rejectionReason) {
-        setPendingId(null);
-        return;
-      }
-      await deliveryAdminApi.reviewDocument(
-        documentId,
-        action,
-        rejectionReason,
-      );
-      load();
-    } catch (actionError) {
-      setError(
-        getApiErrorMessage(actionError, "Could not update this document."),
-      );
-    } finally {
-      setPendingId(null);
-    }
-  };
-
-  const pendingReview = documents.filter(
-    (doc) => !doc.verified && !doc.rejectedAt,
-  );
+  const { documents, loading, pendingId, error, act, pendingReview } =
+    useAgentDocumentsPanel();
 
   return (
     <section className="rounded-lg border border-line bg-surface p-5 md:p-6 shadow-elevation-1 space-y-4">

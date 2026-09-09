@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
-import { LABELS } from "@/shared/constants/labels";
+import { NumberInputSteppers } from "./NumberInputSteppers.component";
+import { clamp, parseValue } from "@/shared/utils/numberInputMath";
 
 export interface NumberInputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -21,19 +21,6 @@ export interface NumberInputProps extends Omit<
   /** Soft up/down steppers (default true). */
   showSteppers?: boolean;
   error?: boolean;
-}
-
-function parseValue(raw: string): number | undefined {
-  if (raw.trim() === "") return undefined;
-  const n = Number(raw);
-  return Number.isFinite(n) ? n : undefined;
-}
-
-function clamp(n: number, min?: number, max?: number) {
-  let next = n;
-  if (min != null && next < min) next = min;
-  if (max != null && next > max) next = max;
-  return next;
 }
 
 /**
@@ -106,10 +93,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         const minDigits = String(Math.floor(min)).length;
         const couldReachMin =
           /^\d+$/.test(raw) &&
-          Number(
-            raw +
-              "9".repeat(Math.max(0, minDigits - raw.length)),
-          ) >= min;
+          Number(raw + "9".repeat(Math.max(0, minDigits - raw.length))) >= min;
         if (!couldReachMin) {
           setDraft(null);
           onChange(min);
@@ -199,34 +183,12 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         ) : null}
 
         {showSteppers ? (
-          <div className="flex w-9 shrink-0 flex-col border-l border-line-strong">
-            <button
-              type="button"
-              tabIndex={-1}
-              disabled={disabled || atMax}
-              aria-label={LABELS.increaseValue}
-              className={cn(
-                "flex flex-1 items-center justify-center text-ink-muted transition-colors",
-                "hover:bg-paper hover:text-ink disabled:pointer-events-none disabled:opacity-40",
-              )}
-              onClick={() => bump(1)}
-            >
-              <ChevronUp size={14} strokeWidth={2.25} aria-hidden />
-            </button>
-            <button
-              type="button"
-              tabIndex={-1}
-              disabled={disabled || atMin}
-              aria-label={LABELS.decreaseValue}
-              className={cn(
-                "flex flex-1 items-center justify-center border-t border-line-strong text-ink-muted transition-colors",
-                "hover:bg-paper hover:text-ink disabled:pointer-events-none disabled:opacity-40",
-              )}
-              onClick={() => bump(-1)}
-            >
-              <ChevronDown size={14} strokeWidth={2.25} aria-hidden />
-            </button>
-          </div>
+          <NumberInputSteppers
+            disabled={disabled}
+            atMin={atMin}
+            atMax={atMax}
+            onBump={bump}
+          />
         ) : null}
       </div>
     );

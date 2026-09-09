@@ -8,11 +8,11 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { STATUS_CHART_PALETTE } from "../utils/chartTheme";
 import {
-  STATUS_CHART_PALETTE,
   useChartThemeColors,
   type ChartThemeColors,
-} from "../utils/chartTheme";
+} from "@/shared/hooks/useChartThemeColors.hook";
 import { LABELS } from "@/shared/constants/labels";
 
 interface StatusSlice {

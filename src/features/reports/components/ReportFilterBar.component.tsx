@@ -2,23 +2,17 @@
 
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
-import { FormFieldFrame, FormSection } from "@/shared/components/forms";
+import { FormSection } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
-import { Input } from "@/shared/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import type { ExportFileFormat } from "../hooks/useReportHubHelpers/index";
 import type { ReportCatalogItem } from "../api/reportsEngine.api";
 import { exportFilterDisableHint } from "../utils/exportDisableHint";
 import { ReportExportButtons } from "./ReportExportButtons.component";
 import { ReportExportStatus } from "./ReportExportStatus.component";
+import { ReportFilterTextField } from "./ReportFilterTextField.component";
+import { ReportTypeSelect } from "./ReportTypeSelect.component";
 
 interface ReportFilterBarProps {
   catalog: ReportCatalogItem[];
@@ -85,34 +79,14 @@ export function ReportFilterBar({
       hint={LABELS.reportFiltersHint}
       columns={3}
     >
-      <FormFieldFrame
-        label={LABELS.reportSelect}
-        htmlFor="report-type"
-        className="sm:col-span-2 xl:col-span-3"
-      >
-        <DisabledActionHint
-          disabled={controlsDisabled}
-          message={filterHint}
-          block
-        >
-          <Select
-            value={reportType || undefined}
-            onValueChange={onReportTypeChange}
-            disabled={controlsDisabled}
-          >
-            <SelectTrigger id="report-type" disabled={controlsDisabled}>
-              <SelectValue placeholder={LABELS.reportSelect} />
-            </SelectTrigger>
-            <SelectContent>
-              {catalog.map((item) => (
-                <SelectItem key={item.type} value={item.type}>
-                  {labelForKey(item.labelKey)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </DisabledActionHint>
-      </FormFieldFrame>
+      <ReportTypeSelect
+        catalog={catalog}
+        reportType={reportType}
+        onReportTypeChange={onReportTypeChange}
+        labelForKey={labelForKey}
+        disabled={controlsDisabled}
+        disabledHint={filterHint}
+      />
 
       <DateRangeFields
         from={from}
@@ -126,53 +100,35 @@ export function ReportFilterBar({
       />
 
       {showVendorFilter ? (
-        <FormFieldFrame label={LABELS.reportVendor} htmlFor="report-vendor">
-          <DisabledActionHint
-            disabled={controlsDisabled}
-            message={filterHint}
-            block
-          >
-            <Input
-              id="report-vendor"
-              value={vendorId}
-              placeholder={LABELS.uuidPlaceholder}
-              disabled={controlsDisabled}
-              onChange={(e) => onVendorIdChange(e.target.value)}
-            />
-          </DisabledActionHint>
-        </FormFieldFrame>
+        <ReportFilterTextField
+          id="report-vendor"
+          label={LABELS.reportVendor}
+          value={vendorId}
+          placeholder={LABELS.uuidPlaceholder}
+          disabled={controlsDisabled}
+          disabledHint={filterHint}
+          onChange={onVendorIdChange}
+        />
       ) : null}
 
-      <FormFieldFrame label={LABELS.reportCategory} htmlFor="report-category">
-        <DisabledActionHint
-          disabled={controlsDisabled}
-          message={filterHint}
-          block
-        >
-          <Input
-            id="report-category"
-            value={categoryId}
-            placeholder={LABELS.uuidPlaceholder}
-            disabled={controlsDisabled}
-            onChange={(e) => onCategoryIdChange(e.target.value)}
-          />
-        </DisabledActionHint>
-      </FormFieldFrame>
+      <ReportFilterTextField
+        id="report-category"
+        label={LABELS.reportCategory}
+        value={categoryId}
+        placeholder={LABELS.uuidPlaceholder}
+        disabled={controlsDisabled}
+        disabledHint={filterHint}
+        onChange={onCategoryIdChange}
+      />
 
-      <FormFieldFrame label={LABELS.reportStatus} htmlFor="report-status">
-        <DisabledActionHint
-          disabled={controlsDisabled}
-          message={filterHint}
-          block
-        >
-          <Input
-            id="report-status"
-            value={status}
-            disabled={controlsDisabled}
-            onChange={(e) => onStatusChange(e.target.value)}
-          />
-        </DisabledActionHint>
-      </FormFieldFrame>
+      <ReportFilterTextField
+        id="report-status"
+        label={LABELS.reportStatus}
+        value={status}
+        disabled={controlsDisabled}
+        disabledHint={filterHint}
+        onChange={onStatusChange}
+      />
 
       <div className="sm:col-span-2 xl:col-span-3 space-y-2">
         <ButtonGroup align="start">

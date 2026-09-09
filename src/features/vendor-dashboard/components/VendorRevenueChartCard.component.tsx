@@ -18,7 +18,7 @@ import {
 } from "@/shared/components/ui/card";
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
 import { formatInr } from "@/shared/utils/orderFormat";
-import type { useChartThemeColors } from "../utils/chartTheme";
+import type { useChartThemeColors } from "@/shared/hooks/useChartThemeColors.hook";
 
 interface RevenuePoint {
   label: string;

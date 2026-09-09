@@ -1,1 +1,14 @@
-{}
+{
+  "src/features/checkout/hooks/useCheckoutPage.hook.ts": {
+    "lines": 175,
+    "ceiling": 150
+  },
+  "src/features/checkout/hooks/usePlaceOrder.hook.ts": {
+    "lines": 168,
+    "ceiling": 150
+  },
+  "src/shared/hooks/useImageGalleryZoom.hook.ts": {
+    "lines": 152,
+    "ceiling": 150
+  }
+}

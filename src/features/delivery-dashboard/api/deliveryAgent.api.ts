@@ -1,34 +1,18 @@
 import { apiClient } from "@/shared/api/client";
-import { postFile } from "@/shared/api/postFile";
 import {
   unwrapPaginatedList,
   type PaginatedList,
   type PaginationQuery,
 } from "@/shared/api/pagination";
 import { API } from "@/shared/constants/apiRoutes";
-import { downloadReportFile } from "@/features/reports";
 import type {
-  AgentEarning,
-  AgentPayout,
-  AgentPayoutPaymentMethod,
-  BankDetails,
-  CashDeposit,
   DeliveryAgent,
   DeliveryAgentRatings,
-  BulkCreateAgentResult,
-  DeliveryAgentDocument,
-  DeliveryAgentDocumentType,
-  DeliveryAgentPerformance,
   DeliveryPickup,
   DeliveryShipment,
   ShiftSummary,
-  StaleTasksReport,
-  UnassignedPickup,
-  UnassignedShipment,
 } from "../types";
 import {
-  cacheDeliverySnapshot,
-  getCachedDeliverySnapshot,
   updateCachedDeliveryStatus,
   updateCachedPickupStatus,
 } from "../offline/deliveryOfflineCache";
@@ -36,30 +20,18 @@ import {
   enqueueStatusUpdate,
   isOffline,
 } from "../offline/deliveryOfflineQueue";
+import {
+  deliveryAgentPayoutsApi,
+  deliveryAdminPayoutsApi,
+} from "./deliveryAgentPayouts.api";
+import {
+  deliveryAgentDocumentsApi,
+  deliveryAdminDocumentsApi,
+} from "./deliveryAgentDocuments.api";
+import { deliveryAdminDispatchApi } from "./deliveryAgentDispatch.api";
+import { statusQuery, withOfflineCache } from "./deliveryAgentOfflineFetch";
 
-function statusQuery(statuses?: string[]): string {
-  return statuses?.length
-    ? `?status=${encodeURIComponent(statuses.join(","))}`
-    : "";
-}
-
-/** Read-through IndexedDB cache so today's task list still renders with no connectivity. */
-async function withOfflineCache<T>(
-  cacheKey: string,
-  fetcher: () => Promise<T>,
-): Promise<T> {
-  try {
-    const fresh = await fetcher();
-    void cacheDeliverySnapshot(cacheKey, fresh);
-    return fresh;
-  } catch (error) {
-    const cached = await getCachedDeliverySnapshot<T>(cacheKey);
-    if (cached !== null) return cached;
-    throw error;
-  }
-}
-
-export const deliveryAgentApi = {
+const deliveryAgentCoreApi = {
   profile: () => apiClient.get<DeliveryAgent>(API.deliveryAgents.meProfile),
   myRatings: () =>
     apiClient.get<DeliveryAgentRatings>(API.deliveryAgents.meRatings),
@@ -92,13 +64,6 @@ export const deliveryAgentApi = {
     ),
   shiftSummary: () =>
     apiClient.get<ShiftSummary>(API.deliveryAgents.meShiftSummary),
-  closeCashShift: (amount: number, note?: string) =>
-    apiClient.post<CashDeposit>(API.deliveryAgents.meCashShiftClose, {
-      amount,
-      note,
-    }),
-  myCashDeposits: () =>
-    apiClient.get<CashDeposit[]>(API.deliveryAgents.meCashDeposits),
   requestRtoHandoverCode: (shipmentId: string) =>
     apiClient.post<{ sent: boolean; expiresInMinutes: number }>(
       API.deliveryAgents.meRtoHandoverRequestCode(shipmentId),
@@ -110,16 +75,6 @@ export const deliveryAgentApi = {
         otpCode,
       },
     ),
-  myPayouts: () => apiClient.get<AgentPayout[]>(API.deliveryAgents.mePayouts),
-  downloadPayoutStatement: (payoutId: string) =>
-    downloadReportFile(
-      API.deliveryAgents.mePayoutStatement(payoutId),
-      `payout-statement-${payoutId.slice(0, 8)}.pdf`,
-    ),
-  myEarningsLedger: () =>
-    apiClient.get<AgentEarning[]>(API.deliveryAgents.meEarnings),
-  updateBankDetails: (bankDetails: BankDetails) =>
-    apiClient.patch<BankDetails>(API.deliveryAgents.meBankDetails, bankDetails),
   requestPickupCode: (returnId: string) =>
     apiClient.post<{ sent: boolean; expiresInMinutes: number }>(
       API.deliveryAgents.mePickupRequestCode(returnId),
@@ -187,21 +142,15 @@ export const deliveryAgentApi = {
     apiClient.patch<DeliveryAgent>(API.deliveryAgents.meAvailability, {
       availableForAssignment,
     }),
-  submitDocument: (
-    type: DeliveryAgentDocumentType,
-    url: string,
-    expiryDate?: string,
-  ) =>
-    apiClient.post<DeliveryAgentDocument>(API.deliveryAgents.meDocuments, {
-      type,
-      url,
-      expiryDate: expiryDate || undefined,
-    }),
-  myDocuments: () =>
-    apiClient.get<DeliveryAgentDocument[]>(API.deliveryAgents.meDocuments),
 };
 
-export const deliveryAdminApi = {
+export const deliveryAgentApi = {
+  ...deliveryAgentCoreApi,
+  ...deliveryAgentPayoutsApi,
+  ...deliveryAgentDocumentsApi,
+};
+
+const deliveryAdminCoreApi = {
   list: async (
     params: PaginationQuery = {},
   ): Promise<PaginatedList<DeliveryAgent>> => {
@@ -213,91 +162,6 @@ export const deliveryAdminApi = {
     );
     return unwrapPaginatedList(response);
   },
-  unassignedShipments: () =>
-    apiClient.get<UnassignedShipment[]>(API.deliveryAgents.unassignedShipments),
-  unassignedPickups: () =>
-    apiClient.get<UnassignedPickup[]>(API.deliveryAgents.unassignedPickups),
-  bulkAssignShipments: (shipmentIds: string[], deliveryAgentId: string) =>
-    apiClient.post<{ assigned: number }>(
-      API.deliveryAgents.bulkAssignShipments,
-      {
-        shipmentIds,
-        deliveryAgentId,
-      },
-    ),
-  rtoShipments: () =>
-    apiClient.get<DeliveryShipment[]>(API.deliveryAgents.rtoShipments),
-  cashDeposits: () =>
-    apiClient.get<CashDeposit[]>(API.deliveryAgents.cashDeposits),
-  verifyCashDeposit: (
-    depositId: string,
-    action: "VERIFY" | "REJECT",
-    rejectionReason?: string,
-  ) =>
-    apiClient.patch<CashDeposit>(
-      API.deliveryAgents.verifyCashDeposit(depositId),
-      {
-        action,
-        rejectionReason,
-      },
-    ),
-  payouts: () =>
-    apiClient.get<AgentPayout[]>(`${API.deliveryAgents.payouts}?limit=100`),
-  processPayouts: () =>
-    apiClient.post<AgentPayout[]>(API.deliveryAgents.processPayouts, {}),
-  markPayoutPaid: (
-    payoutId: string,
-    body: {
-      paymentMethod: AgentPayoutPaymentMethod;
-      paymentReferenceNumber: string;
-      paidAt?: string;
-      proofOfPaymentUrl?: string;
-      remarks?: string;
-    },
-  ) =>
-    apiClient.patch<AgentPayout>(
-      API.deliveryAgents.markPayoutPaid(payoutId),
-      body,
-    ),
-  markPayoutFailed: (payoutId: string, reason: string) =>
-    apiClient.patch<AgentPayout>(
-      API.deliveryAgents.markPayoutFailed(payoutId),
-      { reason },
-    ),
-  retryPayout: (payoutId: string) =>
-    apiClient.patch<AgentPayout>(API.deliveryAgents.retryPayout(payoutId), {}),
-  downloadPayoutStatement: (payoutId: string) =>
-    downloadReportFile(
-      API.deliveryAgents.payoutStatement(payoutId),
-      `payout-statement-${payoutId.slice(0, 8)}.pdf`,
-    ),
-  documents: () =>
-    apiClient.get<DeliveryAgentDocument[]>(API.deliveryAgents.documents),
-  performanceReport: (from?: string, to?: string) => {
-    const query = new URLSearchParams();
-    if (from) query.set("from", from);
-    if (to) query.set("to", to);
-    const qs = query.toString();
-    return apiClient.get<DeliveryAgentPerformance[]>(
-      `${API.deliveryAgents.performanceReport}${qs ? `?${qs}` : ""}`,
-    );
-  },
-  reviewDocument: (
-    documentId: string,
-    action: "APPROVE" | "REJECT",
-    rejectionReason?: string,
-  ) =>
-    apiClient.patch<DeliveryAgentDocument>(
-      API.deliveryAgents.reviewDocument(documentId),
-      { action, rejectionReason },
-    ),
-  staleTasks: () =>
-    apiClient.get<StaleTasksReport>(API.deliveryAgents.staleTasks),
-  forceConfirmDelivery: (shipmentId: string, reason: string) =>
-    apiClient.post<DeliveryShipment>(
-      API.deliveryAgents.forceConfirmDelivery(shipmentId),
-      { reason },
-    ),
   create: (body: {
     email: string;
     password: string;
@@ -306,28 +170,6 @@ export const deliveryAdminApi = {
     vehicleType: string;
     hubOrZone: string;
   }) => apiClient.post<DeliveryAgent>(API.deliveryAgents.create, body),
-  bulkCreate: (
-    rows: Array<{
-      email: string;
-      password: string;
-      fullName: string;
-      phone: string;
-      vehicleType: string;
-      hubOrZone: string;
-    }>,
-  ) =>
-    apiClient.post<BulkCreateAgentResult[]>(API.deliveryAgents.bulkCreate, {
-      rows,
-    }),
-  downloadBulkTemplate: async (format: "xlsx" | "csv" = "xlsx") => {
-    const filename = `delivery_agents_template.${format}`;
-    await downloadReportFile(
-      `${API.deliveryAgents.bulkTemplate}?format=${format}`,
-      filename,
-    );
-  },
-  bulkImportFile: (file: File) =>
-    postFile<BulkCreateAgentResult[]>(API.deliveryAgents.bulkImportFile, file),
   update: (
     id: string,
     body: Partial<
@@ -337,13 +179,11 @@ export const deliveryAdminApi = {
       >
     >,
   ) => apiClient.patch<DeliveryAgent>(API.deliveryAgents.update(id), body),
-  assignShipment: (shipmentId: string, deliveryAgentId: string) =>
-    apiClient.post<DeliveryShipment>(
-      API.deliveryAgents.assignShipment(shipmentId),
-      { deliveryAgentId },
-    ),
-  assignPickup: (returnId: string, deliveryAgentId: string) =>
-    apiClient.post<DeliveryPickup>(API.deliveryAgents.assignPickup(returnId), {
-      deliveryAgentId,
-    }),
+};
+
+export const deliveryAdminApi = {
+  ...deliveryAdminCoreApi,
+  ...deliveryAdminDispatchApi,
+  ...deliveryAdminPayoutsApi,
+  ...deliveryAdminDocumentsApi,
 };

@@ -1,16 +1,10 @@
-import { getApiSessionAdapter } from "@/shared/api/sessionAdapter";
 import { apiClient } from "@/shared/api/client";
+import { downloadFile } from "@/shared/api/downloadFile";
 import {
   buildReportExportFilenameFallback,
   buildTaxInvoiceFilenameFallback,
-  resolveDownloadFilename,
 } from "@/shared/utils/downloadFilename";
-import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
 import { API } from "@/shared/constants/apiRoutes";
-import { BEARER_PREFIX } from "@/shared/constants/http";
-import { EXPORT_DOWNLOAD_TIMEOUT_MS } from "@/shared/constants/timing";
-import { apiErrorFromFailureBody } from "@/shared/utils/apiErrorMessage";
-import { ApiError } from "@/shared/types/apiError.types";
 
 export type ReportColumnMeta = {
   key: string;
@@ -63,40 +57,8 @@ function buildQuery(filters: ReportFiltersInput & { format?: string }) {
   return params.toString();
 }
 
-async function downloadBlob(path: string, fallbackName: string) {
-  const token = getApiSessionAdapter().getAccessToken();
-  const res = await fetch(`${CLIENT_API_BASE_URL}${path}`, {
-    credentials: "include",
-    cache: "no-store",
-    signal: AbortSignal.timeout(EXPORT_DOWNLOAD_TIMEOUT_MS),
-    headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
-  });
-  if (!res.ok) {
-    let body: unknown = null;
-    try {
-      body = await res.json();
-    } catch {
-      /* non-JSON error body */
-    }
-    const err = apiErrorFromFailureBody(body, res.status);
-    (err as ApiError & { status?: number }).status = res.status;
-    throw err;
-  }
-  const blob = await res.blob();
-  triggerBlobDownload(blob, resolveDownloadFilename(res, fallbackName));
-}
-
-function triggerBlobDownload(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
 export async function downloadReportFile(path: string, fallbackName: string) {
-  await downloadBlob(path, fallbackName);
+  await downloadFile(path, fallbackName);
 }
 
 export { buildReportExportFilenameFallback };
@@ -108,17 +70,17 @@ export const reportsEngineApi = {
       API.reports.run(type, buildQuery({ ...filters, format: "json" })),
     ),
   exportExcel: (type: string, filters: ReportFiltersInput) =>
-    downloadBlob(
+    downloadFile(
       API.reports.run(type, buildQuery({ ...filters, format: "xlsx" })),
       buildReportExportFilenameFallback(type, filters.from, filters.to, "xlsx"),
     ),
   exportCsv: (type: string, filters: ReportFiltersInput) =>
-    downloadBlob(
+    downloadFile(
       API.reports.run(type, buildQuery({ ...filters, format: "csv" })),
       buildReportExportFilenameFallback(type, filters.from, filters.to, "csv"),
     ),
   exportPdf: (type: string, filters: ReportFiltersInput) =>
-    downloadBlob(
+    downloadFile(
       API.reports.run(type, buildQuery({ ...filters, format: "pdf" })),
       buildReportExportFilenameFallback(type, filters.from, filters.to, "pdf"),
     ),
@@ -126,7 +88,7 @@ export const reportsEngineApi = {
     filters: ReportFiltersInput,
     format: "xlsx" | "csv" | "pdf" = "xlsx",
   ) =>
-    downloadBlob(
+    downloadFile(
       API.reports.customerOrderHistory(buildQuery({ ...filters, format })),
       buildReportExportFilenameFallback(
         "customer-order-history",
@@ -142,17 +104,17 @@ export const reportsEngineApi = {
       ),
     ),
   customerOrderInvoice: (orderId: string) =>
-    downloadBlob(
+    downloadFile(
       API.reports.customerOrderInvoice(orderId),
       buildTaxInvoiceFilenameFallback(orderId),
     ),
   customerOrderSubInvoice: (orderId: string, subOrderId: string) =>
-    downloadBlob(
+    downloadFile(
       API.reports.customerOrderSubInvoice(orderId, subOrderId),
       buildTaxInvoiceFilenameFallback(orderId),
     ),
   vendorSubOrderInvoice: (subOrderId: string) =>
-    downloadBlob(
+    downloadFile(
       API.reports.vendorSubOrderInvoice(subOrderId),
       `gst-tax-invoice_suborder-${subOrderId.slice(0, 8)}.pdf`,
     ),

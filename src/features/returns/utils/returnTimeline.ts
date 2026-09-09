@@ -1,7 +1,11 @@
 import { RETURN_STATUS, REFUND_STATUS } from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
 import type { ReturnRequest } from "@/shared/api/types";
-import type { OrderTimelineStep } from "@/shared/utils/orderTimeline";
+import {
+  formatShortDate,
+  stepStatus,
+  type OrderTimelineStep,
+} from "@/shared/utils/orderTimeline";
 
 const REFUND_FLOW = [
   REFUND_STATUS.NONE,
@@ -36,15 +40,6 @@ const LOGISTICS_LABELS: Record<string, string> = {
   [RETURN_STATUS.REFUNDED]: LABELS.returnRefundStatusCompleted,
 };
 
-function stepStatus(
-  index: number,
-  currentIndex: number,
-): OrderTimelineStep["status"] {
-  if (index < currentIndex) return "completed";
-  if (index === currentIndex) return "current";
-  return "upcoming";
-}
-
 export function buildRefundTimeline(row: ReturnRequest): OrderTimelineStep[] {
   const refundStatus = row.refundStatus ?? REFUND_STATUS.NONE;
 
@@ -70,10 +65,7 @@ export function buildRefundTimeline(row: ReturnRequest): OrderTimelineStep[] {
     status: stepStatus(i, currentIdx),
     timestamp:
       key === REFUND_STATUS.COMPLETED && row.resolvedAt
-        ? new Date(row.resolvedAt).toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short",
-          })
+        ? formatShortDate(row.resolvedAt)
         : undefined,
   }));
 }
@@ -102,10 +94,7 @@ export function buildLogisticsTimeline(
     status: stepStatus(i, currentIdx),
     timestamp:
       key === RETURN_STATUS.RECEIVED && row.receivedAt
-        ? new Date(row.receivedAt).toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short",
-          })
+        ? formatShortDate(row.receivedAt)
         : undefined,
   }));
 }

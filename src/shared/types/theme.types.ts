@@ -39,6 +39,21 @@ export interface ColorModeTokens {
   overlay: string;
 }
 
+/** Subset of color tokens Recharts SVG needs as concrete color strings. */
+export type ChartThemeColors = Pick<
+  ColorModeTokens,
+  | "brand"
+  | "brandSubtle"
+  | "ink"
+  | "inkMuted"
+  | "inkFaint"
+  | "line"
+  | "success"
+  | "warning"
+  | "danger"
+  | "surface"
+>;
+
 /** Corner radius scale, shared across palettes. */
 export interface RadiusTokens {
   sm: string;

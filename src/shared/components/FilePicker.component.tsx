@@ -13,9 +13,16 @@ import {
   FileText,
   ImageIcon,
   Upload,
-  X,
 } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
+import { FilePickerSelectedFile } from "./FilePickerSelectedFile.component";
+import { FilePickerDropzone } from "./FilePickerDropzone.component";
+import {
+  formatFileSize,
+  validateFilePickerFile,
+} from "@/shared/utils/filePickerValidation";
+
+export { formatFileSize };
 
 export interface FilePickerProps {
   id?: string;
@@ -31,12 +38,6 @@ export interface FilePickerProps {
   className?: string;
   iconVariant?: "csv" | "document" | "image" | "generic";
   validate?: (file: File) => string | null | Promise<string | null>;
-}
-
-export function formatFileSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 export function FilePicker({
@@ -87,43 +88,14 @@ export function FilePicker({
         return;
       }
 
-      // 1. File size limit check
-      if (maxBytes && file.size > maxBytes) {
-        reportError(
-          `File size exceeds the ${formatFileSize(maxBytes)} limit (chosen: ${formatFileSize(file.size)}).`,
-        );
+      const error = await validateFilePickerFile(file, {
+        maxBytes,
+        maxRows,
+        validate,
+      });
+      if (error) {
+        reportError(error);
         return;
-      }
-
-      // 2. CSV row count check
-      if (
-        maxRows &&
-        (file.name.endsWith(".csv") || file.type.includes("csv"))
-      ) {
-        try {
-          const text = await file.text();
-          const lines = text
-            .split(/\r?\n/)
-            .filter((line) => line.trim().length > 0);
-          const rowCount = Math.max(0, lines.length - 1); // exclude header row
-          if (rowCount > maxRows) {
-            reportError(
-              `CSV file exceeds the ${maxRows}-row limit (found ${rowCount} rows).`,
-            );
-            return;
-          }
-        } catch {
-          // If reading text fails, let the parent component handle parsing errors
-        }
-      }
-
-      // 3. Custom validator check
-      if (validate) {
-        const customErr = await validate(file);
-        if (customErr) {
-          reportError(customErr);
-          return;
-        }
       }
 
       reportError(null);
@@ -165,20 +137,14 @@ export function FilePicker({
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  const renderIcon = () => {
-    switch (resolvedVariant) {
-      case "csv":
-        return (
-          <FileSpreadsheet className="size-5 text-brand" aria-hidden="true" />
-        );
-      case "document":
-        return <FileText className="size-5 text-brand" aria-hidden="true" />;
-      case "image":
-        return <ImageIcon className="size-5 text-brand" aria-hidden="true" />;
-      default:
-        return <Upload className="size-5 text-brand" aria-hidden="true" />;
-    }
-  };
+  const resolvedIcon =
+    resolvedVariant === "csv"
+      ? FileSpreadsheet
+      : resolvedVariant === "document"
+        ? FileText
+        : resolvedVariant === "image"
+          ? ImageIcon
+          : Upload;
 
   return (
     <div className={cn("space-y-2", className)}>
@@ -202,64 +168,25 @@ export function FilePicker({
       />
 
       {value ? (
-        <div className="flex items-center justify-between gap-4 rounded-xl border border-line bg-surface p-3.5 shadow-elevation-1 transition-colors">
-          <div className="flex items-center gap-3.5 min-w-0">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-line/70 bg-paper/60">
-              {renderIcon()}
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-body-sm font-semibold text-ink">
-                {value.name}
-              </p>
-              <p className="text-caption text-ink-muted">
-                {formatFileSize(value.size)}
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            disabled={disabled}
-            onClick={handleRemove}
-            aria-label="Remove selected file"
-            className="flex size-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-paper hover:text-ink disabled:opacity-50"
-          >
-            <X className="size-4" aria-hidden="true" />
-          </button>
-        </div>
+        <FilePickerSelectedFile
+          file={value}
+          formattedSize={formatFileSize(value.size)}
+          icon={resolvedIcon}
+          disabled={disabled}
+          onRemove={handleRemove}
+        />
       ) : (
-        <div
-          role="button"
-          tabIndex={disabled ? -1 : 0}
-          aria-disabled={disabled}
-          onClick={() => !disabled && inputRef.current?.click()}
+        <FilePickerDropzone
+          icon={resolvedIcon}
+          disabled={disabled}
+          hint={hint}
+          isDragOver={isDragOver}
+          onActivate={() => inputRef.current?.click()}
           onKeyDown={handleKeyDown}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className={cn(
-            "relative flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed p-7 text-center transition-all cursor-pointer select-none",
-            isDragOver
-              ? "border-brand bg-brand/10 shadow-xs"
-              : "border-line-strong/70 bg-paper/20 hover:border-brand/60 hover:bg-paper/40",
-            disabled &&
-              "cursor-not-allowed opacity-50 hover:border-line hover:bg-paper/20",
-          )}
-        >
-          <div className="flex size-11 items-center justify-center rounded-xl border border-line/80 bg-surface shadow-xs">
-            {renderIcon()}
-          </div>
-          <div className="space-y-1">
-            <p className="text-body-sm text-ink">
-              <span className="font-semibold text-brand underline underline-offset-4 decoration-brand/40 hover:decoration-brand">
-                Click to choose file
-              </span>{" "}
-              or drag and drop
-            </p>
-            {hint ? (
-              <p className="text-caption text-ink-muted">{hint}</p>
-            ) : null}
-          </div>
-        </div>
+        />
       )}
 
       {localError ? (

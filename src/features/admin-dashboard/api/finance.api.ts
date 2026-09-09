@@ -1,4 +1,5 @@
 import { apiClient } from "@/shared/api/client";
+import { downloadFile } from "@/shared/api/downloadFile";
 import {
   unwrapPaginatedList,
   type PaginatedList,
@@ -6,11 +7,6 @@ import {
 } from "@/shared/api/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 import type { CommissionLedgerEntry, PayoutEntry } from "@/shared/api/types";
-import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
-import { BEARER_PREFIX } from "@/shared/constants/http";
-import { API_TIMEOUT_MS } from "@/shared/constants/timing";
-import { useAuthStore } from "@/shared/stores/auth.store";
-import { resolveDownloadFilename } from "@/shared/utils/downloadFilename";
 
 export type CommissionInvoiceEntry = {
   id: string;
@@ -23,23 +19,6 @@ export type CommissionInvoiceEntry = {
   totalAmount: number;
   issuedAt: string;
 };
-
-async function downloadPdf(path: string, fallbackName: string) {
-  const token = useAuthStore.getState().accessToken;
-  const res = await fetch(`${CLIENT_API_BASE_URL}${path}`, {
-    credentials: "include",
-    signal: AbortSignal.timeout(API_TIMEOUT_MS),
-    headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : {},
-  });
-  if (!res.ok) throw new Error("Download failed");
-  const blob = await res.blob();
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = resolveDownloadFilename(res, fallbackName);
-  a.click();
-  URL.revokeObjectURL(url);
-}
 
 export const commissionsApi = {
   list: async (
@@ -71,7 +50,7 @@ export const commissionsApi = {
     return unwrapPaginatedList(res);
   },
   downloadInvoice: (invoiceId: string) =>
-    downloadPdf(
+    downloadFile(
       API.commissions.invoicePdf(invoiceId),
       `commission-invoice_${invoiceId.slice(0, 8)}.pdf`,
     ),

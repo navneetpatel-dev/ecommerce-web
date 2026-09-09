@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import {
   useCart,
   groupItemsByVendor,
@@ -12,6 +12,12 @@ import { useRequireAuth } from "@/shared/hooks/useRequireAuth.hook";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { useCheckoutAddresses } from "./useCheckoutAddresses.hook";
+import {
+  canAdvanceFromPayment,
+  hasUnavailableCartItems,
+  isShippingReadyForAllVendors,
+} from "../utils/checkoutDerivedState";
+import { useCheckoutStepGuards } from "./useCheckoutStepGuards.hook";
 
 /**
  * Checkout flow orchestration (Rule 3: address concern lives in
@@ -62,35 +68,18 @@ export function useCheckoutPage() {
   }, [cart]);
 
   const hasUnavailableItems = useMemo(
-    () => (cart?.items ?? []).some((item) => item.isAvailable === false),
+    () => hasUnavailableCartItems(cart?.items),
     [cart],
   );
 
-  // Default every vendor to Standard (Free) when shipping methods are missing
-  const defaultShippingMethods = () => {
-    const vendorIds = Object.keys(groupedByVendor);
-    if (!vendorIds.length) return;
-    ensureDefaultShippingMethods(vendorIds);
-  };
-  useEffect(defaultShippingMethods, [
+  useCheckoutStepGuards({
     groupedByVendor,
     ensureDefaultShippingMethods,
-  ]);
-
-  useEffect(() => {
-    if (paymentMethod === "cod" && quote && quote.codAvailable === false) {
-      setPaymentMethod(null);
-      return;
-    }
-    if (paymentMethod === "wallet" && quote) {
-      const max = quote.maxWalletApplicable ?? 0;
-      const balance = quote.walletBalance ?? 0;
-      if (balance <= 0 || max <= 0) {
-        setPaymentMethod(null);
-        setWalletAmountToUse(0);
-      }
-    }
-  }, [paymentMethod, quote, setPaymentMethod, setWalletAmountToUse]);
+    paymentMethod,
+    quote,
+    setPaymentMethod,
+    setWalletAmountToUse,
+  });
 
   const displayTotals = resolveCartDisplayTotals(cart, { isError: cartError });
   const subtotal = displayTotals.subtotal;
@@ -100,21 +89,12 @@ export function useCheckoutPage() {
   const amountsUnavailable = displayTotals.amountsUnavailable;
 
   const shippingReady = useMemo(
-    () =>
-      Object.keys(groupedByVendor).every((vendorId) =>
-        Boolean(shippingMethodByVendor[vendorId]),
-      ),
+    () => isShippingReadyForAllVendors(groupedByVendor, shippingMethodByVendor),
     [groupedByVendor, shippingMethodByVendor],
   );
 
-  const canAdvanceFromPayment = () => {
-    if (!paymentMethod) return false;
-    if (paymentMethod === "cod" && quote?.codAvailable !== true) return false;
-    if (paymentMethod === "wallet") {
-      return walletAmountToUse > 0;
-    }
-    return true;
-  };
+  const canAdvance = () =>
+    canAdvanceFromPayment(paymentMethod, quote, walletAmountToUse);
 
   const onStepClick = (nextStep: number) => {
     if (nextStep < step) setStep(nextStep as 1 | 2 | 3 | 4);
@@ -126,12 +106,12 @@ export function useCheckoutPage() {
   const onBackToPayment = () => setStep(3);
 
   const onContinueToReview = () => {
-    if (!canAdvanceFromPayment()) return;
+    if (!canAdvance()) return;
     setStep(4);
   };
 
   const onPlaceOrder = () => {
-    if (!canAdvanceFromPayment()) return;
+    if (!canAdvance()) return;
     if (
       !requireAuth({
         title: LABELS.completeYourOrderTitle,

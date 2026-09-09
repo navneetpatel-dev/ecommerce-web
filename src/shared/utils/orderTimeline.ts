@@ -25,11 +25,20 @@ export const STEP_LABELS: Record<string, string> = {
   [ORDER_STATUS.RETURNED]: "Returned",
 };
 
-function formatShortDate(value: string) {
+export function formatShortDate(value: string) {
   return new Date(value).toLocaleDateString("en-IN", {
     day: "numeric",
     month: "short",
   });
+}
+
+export function stepStatus(
+  index: number,
+  currentIndex: number,
+): TimelineStatus {
+  if (index < currentIndex) return "completed";
+  if (index === currentIndex) return "current";
+  return "upcoming";
 }
 
 export function buildSubOrderTimeline(subOrder: SubOrder): OrderTimelineStep[] {
@@ -46,10 +55,6 @@ export function buildSubOrderTimeline(subOrder: SubOrder): OrderTimelineStep[] {
   const currentIdx = idx < 0 ? 0 : idx;
 
   return FLOW.map((key, i) => {
-    let stepStatus: TimelineStatus = "upcoming";
-    if (i < currentIdx) stepStatus = "completed";
-    else if (i === currentIdx) stepStatus = "current";
-
     let timestamp: string | undefined;
     if (key === ORDER_STATUS.SHIPPED && subOrder.shipment?.shippedAt) {
       timestamp = formatShortDate(subOrder.shipment.shippedAt);
@@ -60,7 +65,7 @@ export function buildSubOrderTimeline(subOrder: SubOrder): OrderTimelineStep[] {
 
     return {
       label: STEP_LABELS[key] ?? key,
-      status: stepStatus,
+      status: stepStatus(i, currentIdx),
       timestamp,
     };
   });

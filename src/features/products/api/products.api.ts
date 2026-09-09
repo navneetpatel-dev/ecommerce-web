@@ -1,11 +1,7 @@
 import { apiClient } from "@/shared/api/client";
+import { postFile } from "@/shared/api/postFile";
 import { unwrapPaginatedList } from "@/shared/api/pagination";
 import { API } from "@/shared/constants/apiRoutes";
-import { getApiSessionAdapter } from "@/shared/api/sessionAdapter";
-import { BEARER_PREFIX } from "@/shared/constants/http";
-import { CLIENT_API_BASE_URL } from "@/shared/config/appConfig";
-import { ApiError } from "@/shared/types/apiError.types";
-import { ERROR_CODES } from "@/shared/constants/errors";
 import type {
   ProductListItem,
   ProductDetail,
@@ -19,31 +15,6 @@ export interface BulkImportRowResult {
   success: boolean;
   productId?: string;
   error?: string;
-}
-
-/**
- * Multipart file upload — `apiClient` always sends `Content-Type: application/json`,
- * which breaks a multipart boundary, so this bypasses it for the one file-upload
- * endpoint this feature needs.
- */
-async function postFile<T>(path: string, file: File): Promise<T> {
-  const token = getApiSessionAdapter().getAccessToken();
-  const formData = new FormData();
-  formData.append("file", file);
-  const res = await fetch(`${CLIENT_API_BASE_URL}${path}`, {
-    method: "POST",
-    headers: token ? { Authorization: `${BEARER_PREFIX}${token}` } : undefined,
-    body: formData,
-  });
-  const text = await res.text();
-  const body = text ? JSON.parse(text) : null;
-  if (!body?.success) {
-    throw new ApiError(
-      body?.error?.code ?? ERROR_CODES.INVALID_RESPONSE,
-      body?.error?.message ?? `Unexpected response (${res.status})`,
-    );
-  }
-  return body.data as T;
 }
 
 export interface ProductFilters {

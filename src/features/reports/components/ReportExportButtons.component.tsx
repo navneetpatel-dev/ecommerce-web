@@ -28,7 +28,6 @@ interface ReportExportButtonsProps {
 }
 
 function ExportButton({
-  format,
   label,
   loading,
   exportDisabled,
@@ -37,7 +36,6 @@ function ExportButton({
   fullWidth,
   onClick,
 }: {
-  format: ExportFileFormat;
   label: string;
   loading: boolean;
   exportDisabled: boolean;
@@ -95,7 +93,6 @@ export function ReportExportButtons({
   const buttons = (
     <>
       <ExportButton
-        format="xlsx"
         label={LABELS.exportExcel}
         loading={exportingFormat === "xlsx"}
         exportDisabled={controlsDisabled || disabled}
@@ -105,7 +102,6 @@ export function ReportExportButtons({
         onClick={onExportExcel}
       />
       <ExportButton
-        format="csv"
         label={LABELS.exportCsv}
         loading={exportingFormat === "csv"}
         exportDisabled={controlsDisabled || disabled}
@@ -115,7 +111,6 @@ export function ReportExportButtons({
         onClick={onExportCsv}
       />
       <ExportButton
-        format="pdf"
         label={LABELS.exportPdf}
         loading={exportingFormat === "pdf"}
         exportDisabled={controlsDisabled || disabled}

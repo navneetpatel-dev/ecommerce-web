@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Truck } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -10,6 +10,7 @@ import { formatLabel } from "@/shared/utils/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { useDeliveryCheck } from "../hooks/useDeliveryCheck.hook";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { computeDeliveryEligibility } from "../utils/productDeliveryEligibility";
 
 interface ProductDeliveryCheckProps {
   productId: string;
@@ -45,19 +46,30 @@ export function ProductDeliveryCheck({
     pincode.length > 0 && !isValidPincode(pincode)
       ? LABELS.invalidPincode
       : null;
-  const rates = quoteQuery.data ?? [];
-  const fastest = rates.reduce<(typeof rates)[number] | null>((best, rate) => {
-    if (!best || rate.estimatedDays < best.estimatedDays) return rate;
-    return best;
-  }, null);
-  const serviceable =
-    Boolean(submitted) && !quoteQuery.isFetching && rates.length > 0;
-  const notServiceable =
-    Boolean(submitted) && !quoteQuery.isFetching && rates.length === 0;
-  const showCod = Boolean(codAvailable && codEligibleAtUnitPrice);
-  const codConfirmed = showCod && serviceable;
-  const codBlockedByPincode = showCod && notServiceable;
-  const belowCodMin = codAvailable && !codEligibleAtUnitPrice;
+  const rates = useMemo(() => quoteQuery.data ?? [], [quoteQuery.data]);
+  const {
+    fastest,
+    notServiceable,
+    codConfirmed,
+    codBlockedByPincode,
+    belowCodMin,
+  } = useMemo(
+    () =>
+      computeDeliveryEligibility({
+        rates,
+        submitted: Boolean(submitted),
+        isFetching: quoteQuery.isFetching,
+        codAvailable,
+        codEligibleAtUnitPrice,
+      }),
+    [
+      rates,
+      submitted,
+      quoteQuery.isFetching,
+      codAvailable,
+      codEligibleAtUnitPrice,
+    ],
+  );
 
   useEffect(() => {
     onBlockedChange?.(notServiceable);

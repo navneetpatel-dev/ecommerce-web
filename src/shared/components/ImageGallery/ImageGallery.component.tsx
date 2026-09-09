@@ -2,21 +2,12 @@
 
 import dynamic from "next/dynamic";
 import type { ProductImage } from "@/shared/api/types";
-import { MediaImage } from "@/shared/components/MediaImage.component";
 import { ImageGalleryThumbnailStrip } from "@/shared/components/ImageGalleryThumbnailStrip.component";
-import { LABELS } from "@/shared/constants/labels";
-import {
-  IMAGE_GALLERY_STAGE_HEIGHT_CLASS,
-  IMAGE_GALLERY_STAGE_OBJECT_FIT_CLASS,
-  IMAGE_GALLERY_STAGE_QUALITY,
-  IMAGE_GALLERY_STAGE_SIZES,
-  IMAGE_GALLERY_THUMB_COLUMN_HEIGHT_CLASS,
-} from "@/shared/constants/imageGallery";
+import { IMAGE_GALLERY_THUMB_COLUMN_HEIGHT_CLASS } from "@/shared/constants/imageGallery";
 import { cn } from "@/shared/utils/cn";
-import { formatLabel } from "@/shared/utils/formatLabel";
 import { useGalleryStage } from "./useGalleryStage.hook";
 import { imageGalleryStyles as styles } from "./imageGallery.styles";
-import { ImageStageControls } from "./ImageStageControls.component";
+import { ImageGalleryStage } from "./ImageGalleryStage.component";
 
 interface ImageGalleryProps {
   mainImageUrl: string;
@@ -93,10 +84,6 @@ export function ImageGallery(props: ImageGalleryProps) {
     onSelect((safeIndex + 1) % gallery.length);
   };
 
-  const stopStageClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-  };
-
   const handleLightboxOpenChange = (open: boolean) => {
     if (open) onOpenLightbox();
     else onCloseLightbox();
@@ -120,72 +107,22 @@ export function ImageGallery(props: ImageGalleryProps) {
           />
         ) : null}
 
-        <div className="group relative order-1 min-w-0 flex-1 lg:order-2">
-          <div
-            onClick={onOpenLightbox}
-            {...zoomHandlers}
-            className={cn(
-              styles.stageBase,
-              "shadow-elevation-1",
-              IMAGE_GALLERY_STAGE_HEIGHT_CLASS,
-            )}
-          >
-            <div className="pointer-events-none absolute inset-0">
-              <div className="relative h-full w-full">
-                <MediaImage
-                  src={currentUrl}
-                  alt={showZoom ? LABELS.imageZoomPreview : productName}
-                  unavailableLabel={LABELS.imageNotAvailable}
-                  sizes={IMAGE_GALLERY_STAGE_SIZES}
-                  quality={IMAGE_GALLERY_STAGE_QUALITY}
-                  priority
-                  imageClassName={cn(
-                    IMAGE_GALLERY_STAGE_OBJECT_FIT_CLASS,
-                    transitioning ? "opacity-0" : "opacity-100",
-                    currentTransitionClass,
-                  )}
-                />
-                {transitioning ? (
-                  <div className="absolute inset-0">
-                    <MediaImage
-                      src={prevUrl}
-                      alt={productName}
-                      unavailableLabel={LABELS.imageNotAvailable}
-                      sizes={IMAGE_GALLERY_STAGE_SIZES}
-                      quality={IMAGE_GALLERY_STAGE_QUALITY}
-                      imageClassName={IMAGE_GALLERY_STAGE_OBJECT_FIT_CLASS}
-                    />
-                  </div>
-                ) : null}
-              </div>
-            </div>
-
-            {showZoom ? (
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 z-[1]"
-                style={stage.zoomOverlayStyle}
-              />
-            ) : null}
-
-            {hasMultiple ? (
-              <p className={styles.positionBadge}>
-                {formatLabel(LABELS.imagePosition, {
-                  current: safeIndex + 1,
-                  total: gallery.length,
-                })}
-              </p>
-            ) : null}
-
-            <ImageStageControls
-              hasMultiple={hasMultiple}
-              onOpenLightbox={onOpenLightbox}
-              onPrev={goPrev}
-              onNext={goNext}
-              stopStageClick={stopStageClick}
-            />
-          </div>
-        </div>
+        <ImageGalleryStage
+          currentUrl={currentUrl}
+          prevUrl={prevUrl}
+          transitioning={transitioning}
+          currentTransitionClass={currentTransitionClass}
+          productName={productName}
+          showZoom={showZoom}
+          zoomOverlayStyle={stage.zoomOverlayStyle}
+          zoomHandlers={zoomHandlers}
+          hasMultiple={hasMultiple}
+          safeIndex={safeIndex}
+          galleryLength={gallery.length}
+          onOpenLightbox={onOpenLightbox}
+          onPrev={goPrev}
+          onNext={goNext}
+        />
       </div>
 
       <ImageGalleryLightbox

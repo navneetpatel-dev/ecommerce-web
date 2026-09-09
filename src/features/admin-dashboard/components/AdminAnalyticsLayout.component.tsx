@@ -1,28 +1,15 @@
 "use client";
 
-import {
-  Banknote,
-  Package,
-  Percent,
-  RotateCcw,
-  ShoppingBag,
-  Store,
-  Users,
-  Wallet,
-} from "lucide-react";
+import { Package } from "lucide-react";
 import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 import type { AdminAnalytics } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { SkeletonChartCard } from "@/shared/components/Skeletons.component";
-import { AnalyticsMetricCard } from "./AnalyticsMetricCard.component";
+import { AnalyticsMetricsGrid } from "./AnalyticsMetricsGrid.component";
 import { AnalyticsRankedList } from "./AnalyticsRankedList.component";
 import { AnalyticsOpsQueues } from "./AnalyticsOpsQueues.component";
 import { AdminAnalyticsExportBar } from "./AdminAnalyticsExportBar.component";
-import {
-  formatAnalyticsInr,
-  formatAnalyticsPercent,
-} from "../utils/analyticsFormat";
 
 const AnalyticsTrendChart = dynamic(
   () =>
@@ -88,64 +75,7 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
         </div>
       </motion.header>
 
-      <motion.div
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
-        {...fadeUp}
-        transition={{ duration: 0.35, delay: 0.05 }}
-      >
-        <AnalyticsMetricCard
-          title={LABELS.analyticsGmv}
-          value={formatAnalyticsInr(data.gmv)}
-          icon={Banknote}
-          tone="brand"
-          trend={data.revenueGrowthPct}
-        />
-        <AnalyticsMetricCard
-          title={LABELS.analyticsPaidGmv}
-          value={formatAnalyticsInr(data.paidGmv)}
-          icon={Wallet}
-        />
-        <AnalyticsMetricCard
-          title={LABELS.analyticsAov}
-          value={formatAnalyticsInr(data.aov)}
-          icon={Package}
-        />
-        <AnalyticsMetricCard
-          title={LABELS.analyticsTotalOrders}
-          value={String(data.totalOrders)}
-          icon={ShoppingBag}
-          trend={data.ordersGrowthPct}
-        />
-      </motion.div>
-
-      <motion.div
-        className="grid grid-cols-2 gap-3 lg:grid-cols-4"
-        {...fadeUp}
-        transition={{ duration: 0.35, delay: 0.08 }}
-      >
-        <AnalyticsMetricCard
-          title={LABELS.analyticsCustomers}
-          value={String(data.totalCustomers)}
-          icon={Users}
-        />
-        <AnalyticsMetricCard
-          title={LABELS.analyticsVendors}
-          value={String(data.totalVendors)}
-          icon={Store}
-        />
-        <AnalyticsMetricCard
-          title={LABELS.analyticsCancellationRate}
-          value={formatAnalyticsPercent(data.cancellationRate)}
-          icon={Percent}
-          tone={data.cancellationRate > 15 ? "warning" : "default"}
-        />
-        <AnalyticsMetricCard
-          title={LABELS.analyticsReturnRate}
-          value={formatAnalyticsPercent(data.returnRate)}
-          icon={RotateCcw}
-          tone={data.returnRate > 10 ? "warning" : "default"}
-        />
-      </motion.div>
+      <AnalyticsMetricsGrid data={data} />
 
       <motion.div {...fadeUp} transition={{ duration: 0.35, delay: 0.1 }}>
         <AnalyticsOpsQueues

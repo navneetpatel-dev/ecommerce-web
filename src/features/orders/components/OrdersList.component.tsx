@@ -24,6 +24,7 @@ import {
 } from "../utils/format";
 import { reportsEngineApi } from "@/features/reports";
 import { CustomerOrderHistoryPanel } from "@/features/reports";
+import { defaultHistoryRange } from "../utils/orderHistoryRange";
 
 interface OrdersListProps {
   orders: Order[];
@@ -34,16 +35,6 @@ interface OrdersListProps {
     from: number;
     to: number;
     onPageChange: (page: number) => void;
-  };
-}
-
-function defaultHistoryRange() {
-  const to = new Date();
-  const from = new Date();
-  from.setFullYear(to.getFullYear() - 2);
-  return {
-    from: from.toISOString().slice(0, 10),
-    to: to.toISOString().slice(0, 10),
   };
 }
 

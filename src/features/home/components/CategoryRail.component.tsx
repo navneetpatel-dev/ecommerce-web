@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { CategoryCard, CategoryMoreCard, getRootCategories } from "@/features/categories";
+import {
+  CategoryCard,
+  CategoryMoreCard,
+  getRootCategories,
+} from "@/features/categories";
 import { CategoryGridSkeleton } from "@/shared/components/Skeletons.component";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatLabel";
 import type { Category } from "@/shared/api/types";
 
 const HOME_CATEGORY_LIMIT = 10;

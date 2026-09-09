@@ -1,44 +1,43 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import {
-  useConfirmPickup,
-  usePickup,
-  useRequestPickupCode,
-  useUpdatePickupStatus,
-} from "../api/deliveryAgent.queries";
+import { usePickup } from "../api/deliveryAgent.queries";
 import { TaskContactCard } from "../components/TaskContactCard.component";
 import { FailedAttemptSection } from "../components/FailedAttemptSection.component";
 import { PickupChecklistCard } from "../components/PickupChecklistCard.component";
 import { PickupOverviewCard } from "../components/PickupOverviewCard.component";
 import { LocationBeacon } from "../components/LocationBeacon.component";
-import { isOffline } from "../offline/deliveryOfflineQueue";
 import { formatAddress } from "../utils/formatAddress";
-import { usePresignUpload } from "@/shared/hooks/useUploads.hook";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
 import { PATHS } from "@/shared/constants/paths";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { usePickupTaskActions } from "../hooks/usePickupTaskActions.hook";
 
 export function PickupTaskDetailPage() {
   const { returnId } = useParams<{ returnId: string }>();
   const router = useRouter();
   const query = usePickup(returnId);
-  const confirm = useConfirmPickup();
-  const failed = useUpdatePickupStatus();
-  const requestCode = useRequestPickupCode();
-  const upload = usePresignUpload();
   const pickup = query.data;
   const productName = pickup?.orderItem?.productName ?? pickup?.productName;
-  const [otpCode, setOtpCode] = useState("");
-  const [conditionFiles, setConditionFiles] = useState<File[]>([]);
-  const [replacementFile, setReplacementFile] = useState<File | null>(null);
-  const [failureNote, setFailureNote] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const {
+    otpCode,
+    setOtpCode,
+    conditionFiles,
+    setConditionFiles,
+    replacementFile,
+    setReplacementFile,
+    failureNote,
+    setFailureNote,
+    error,
+    confirm,
+    failed,
+    requestCode,
+    upload,
+    complete,
+    recordFailure,
+  } = usePickupTaskActions(returnId);
 
   if (query.isLoading)
     return <p className="text-ink-muted">Loading pickup...</p>;
@@ -47,55 +46,8 @@ export function PickupTaskDetailPage() {
   const addressText = formatAddress(pickup.subOrder?.order?.shippingAddress);
   const exchange = pickup.type === "EXCHANGE";
 
-  const uploadFile = async (file: File) =>
-    (
-      await upload.mutateAsync({
-        entityType: UPLOAD_ENTITY.RETURNS,
-        entityId: returnId,
-        purpose: UPLOAD_PURPOSE.PHOTOS,
-        filename: file.name,
-        contentType: file.type,
-        contentLength: file.size,
-        file,
-      })
-    ).url;
-
-  const complete = async () => {
-    setError(null);
-    if (isOffline()) {
-      setError(
-        "Doorstep pickup confirmation requires active internet connectivity to verify the customer passcode.",
-      );
-      return;
-    }
-    try {
-      const itemConditionPhotoUrls = await Promise.all(
-        conditionFiles.map(uploadFile),
-      );
-      const replacementProofUrl = replacementFile
-        ? await uploadFile(replacementFile)
-        : undefined;
-      await confirm.mutateAsync({
-        returnId,
-        otpCode,
-        itemConditionPhotoUrls,
-        replacementProofUrl,
-      });
-      router.push(PATHS.delivery.today);
-    } catch (completeError) {
-      setError(getApiErrorMessage(completeError, "Could not confirm pickup."));
-    }
-  };
-
-  const recordFailure = async () => {
-    try {
-      await failed.mutateAsync({ returnId, note: failureNote.trim() });
-      setFailureNote("");
-    } catch (failureError) {
-      setError(
-        getApiErrorMessage(failureError, "Could not record the failed pickup."),
-      );
-    }
+  const onConfirm = async () => {
+    if (await complete()) router.push(PATHS.delivery.today);
   };
 
   return (
@@ -139,7 +91,7 @@ export function PickupTaskDetailPage() {
               onConditionFilesChange={setConditionFiles}
               replacementFile={replacementFile}
               onReplacementFileChange={setReplacementFile}
-              onConfirm={() => void complete()}
+              onConfirm={() => void onConfirm()}
               confirmPending={confirm.isPending || upload.isPending}
               requestCodePending={requestCode.isPending}
               requestCodeSuccess={requestCode.isSuccess}

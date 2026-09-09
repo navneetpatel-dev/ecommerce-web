@@ -2,7 +2,7 @@ export { OfflineSyncBanner } from "./components/OfflineSyncBanner.component";
 export { BankDetailsCard } from "./components/BankDetailsCard.component";
 export { EarningsPayoutsCard } from "./components/EarningsPayoutsCard.component";
 export { CashDepositsCard } from "./components/CashDepositsCard.component";
-export { DeliveryAgentDocumentsCard } from "./components/DeliveryAgentDocumentsCard.component";
+export { DeliveryAgentDocumentsCard } from "./components/DeliveryAgentDocumentsCard/DeliveryAgentDocumentsCard.component";
 export { TodayPage } from "./pages/TodayPage.page";
 export { DeliveriesPage } from "./pages/DeliveriesPage.page";
 export { DeliveryTaskDetailPage } from "./pages/DeliveryTaskDetailPage.page";

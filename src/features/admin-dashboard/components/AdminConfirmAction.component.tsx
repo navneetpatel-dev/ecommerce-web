@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Archive, Check, Trash2, Ban, Play } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -18,6 +17,10 @@ import {
 import { cn } from "@/shared/utils/cn";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import type { AdminActionTone } from "../utils/adminActionTone";
+import {
+  renderToneIcon,
+  toneFromDialog,
+} from "../utils/adminConfirmActionIcon";
 
 type ButtonVariant =
   "default" | "outline" | "ghost" | "secondary" | "destructive";
@@ -42,29 +45,6 @@ interface AdminConfirmActionProps {
   disabledHint?: string;
   showIcon?: boolean;
   inline?: boolean;
-}
-
-function renderToneIcon(tone: AdminActionTone) {
-  switch (tone) {
-    case "archive":
-      return <Archive strokeWidth={2.25} aria-hidden />;
-    case "danger":
-      return <Trash2 strokeWidth={2.25} aria-hidden />;
-    case "success":
-      return <Check strokeWidth={2.25} aria-hidden />;
-    case "neutral":
-      return <Ban strokeWidth={2.25} aria-hidden />;
-    default:
-      return <Play strokeWidth={2.25} aria-hidden />;
-  }
-}
-
-function toneFromDialog(variant: StatusDialogVariant): AdminActionTone {
-  if (variant === "danger") return "danger";
-  if (variant === "success") return "success";
-  /** Warning is used for archive, suspend, block — callers should pass `tone` when not archive. */
-  if (variant === "warning") return "archive";
-  return "neutral";
 }
 
 /** Button + StatusDialog confirmation for admin list actions. */

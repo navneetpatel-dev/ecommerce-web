@@ -15,7 +15,7 @@ import {
 import { TableRowAction } from "@/shared/components/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
-import { RolePermissionsDialog } from "../components/RolePermissionsDialog.component";
+import { RolePermissionsDialog } from "../components/RolePermissionsDialog";
 import { useAdminRolesPage } from "../hooks/useAdminRolesPage.hook";
 import type { AdminRole } from "../api/roles.api";
 

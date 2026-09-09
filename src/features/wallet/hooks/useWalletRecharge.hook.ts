@@ -11,43 +11,15 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { walletApi } from "../api/wallet.api";
-import { walletKeys, invalidateWalletQueries } from "../api/wallet.queries";
+import { walletKeys } from "../api/wallet.queries";
+import {
+  clearRechargeSession,
+  getOrCreateIdempotencyKey,
+  markRechargeSessionStarted,
+  pollRechargeUntilTerminal,
+} from "../utils/walletRechargeSession";
 
 type RechargePhase = "idle" | "opening" | "verifying";
-
-const RECHARGE_IDEMPOTENCY_PREFIX = "wallet-recharge-idempotency:";
-const RECHARGE_SESSION_PREFIX = "wallet-recharge-session:";
-
-function getOrCreateIdempotencyKey(amountInr: number): string {
-  const storageKey = `${RECHARGE_IDEMPOTENCY_PREFIX}${amountInr}`;
-  const existing = sessionStorage.getItem(storageKey);
-  if (existing) return existing;
-  const key = crypto.randomUUID();
-  sessionStorage.setItem(storageKey, key);
-  return key;
-}
-
-function clearRechargeSession(amountInr: number, rechargeId?: string) {
-  sessionStorage.removeItem(`${RECHARGE_IDEMPOTENCY_PREFIX}${amountInr}`);
-  if (rechargeId)
-    sessionStorage.removeItem(`${RECHARGE_SESSION_PREFIX}${rechargeId}`);
-}
-
-async function pollRechargeUntilTerminal(
-  rechargeId: string,
-  maxAttempts = 12,
-  intervalMs = 2500,
-): Promise<"PAID" | "FAILED" | "EXPIRED" | "PENDING"> {
-  for (let i = 0; i < maxAttempts; i += 1) {
-    const row = await walletApi.getRechargeStatus(rechargeId);
-    const status = String(row.status ?? "").toUpperCase();
-    if (status === "PAID" || status === "FAILED" || status === "EXPIRED") {
-      return status as "PAID" | "FAILED" | "EXPIRED";
-    }
-    await new Promise((resolve) => setTimeout(resolve, intervalMs));
-  }
-  return "PENDING";
-}
 
 export function useWalletRecharge() {
   const queryClient = useQueryClient();
@@ -70,10 +42,7 @@ export function useWalletRecharge() {
           amountInr,
           idempotencyKey,
         );
-        sessionStorage.setItem(
-          `${RECHARGE_SESSION_PREFIX}${checkout.rechargeId}`,
-          String(amountInr),
-        );
+        markRechargeSessionStarted(checkout.rechargeId, amountInr);
         await loadRazorpayScript();
         if (!window.Razorpay) {
           throw new Error(LABELS.paymentUnavailableLoadScript);

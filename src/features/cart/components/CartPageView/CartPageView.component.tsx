@@ -9,7 +9,7 @@ import type {
   CartItem,
   EligibleCoupon,
 } from "@/shared/api/types";
-import { EmptyCart } from "./EmptyCart.component";
+import { EmptyCartState } from "@/shared/components/EmptyCartState.component";
 import { VendorGroups } from "./VendorGroups.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
 import { ClearCartAction } from "./ClearCartAction.component";
@@ -108,7 +108,12 @@ export function CartPageView({
   }
 
   if (!hasItems) {
-    return <EmptyCart />;
+    return (
+      <EmptyCartState
+        heading={LABELS.cartEmptyHeading}
+        message={LABELS.cartEmptyMessage}
+      />
+    );
   }
 
   return (

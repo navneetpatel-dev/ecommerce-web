@@ -131,25 +131,11 @@ export function useImageLightboxGestures({
     [enabled, onSwipe, transform.scale],
   );
 
-  const onPointerUp = useCallback(
-    (event: ReactPointerEvent<HTMLElement>) => {
-      finishPointer(event);
-    },
-    [finishPointer],
-  );
-
-  const onPointerCancel = useCallback(
-    (event: ReactPointerEvent<HTMLElement>) => {
-      finishPointer(event);
-    },
-    [finishPointer],
-  );
-
   const viewportHandlers = {
     onPointerDown,
     onPointerMove,
-    onPointerUp,
-    onPointerCancel,
+    onPointerUp: finishPointer,
+    onPointerCancel: finishPointer,
   };
 
   return {

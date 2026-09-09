@@ -13,7 +13,7 @@ import { AgentPayoutsPanel } from "../components/AgentPayoutsPanel.component";
 import { AgentDocumentsPanel } from "../components/AgentDocumentsPanel.component";
 import { AdminDeliveryPerformancePanel } from "../components/AdminDeliveryPerformancePanel.component";
 import { StaleTasksPanel } from "../components/StaleTasksPanel.component";
-import { BulkImportAgentsDialog } from "../components/BulkImportAgentsDialog.component";
+import { BulkImportAgentsDialog } from "../components/BulkImportAgentsDialog";
 import { Button } from "@/shared/components/ui/button";
 import {
   deliveryAdminApi,

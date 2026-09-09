@@ -2,7 +2,6 @@
 
 import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import {
   Accordion,
@@ -17,6 +16,7 @@ import { cn } from "@/shared/utils/cn";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { CategoryFacet } from "@/shared/api/types";
+import { FilterSidebarFacetGroup } from "./FilterSidebarFacetGroup.component";
 
 interface FilterSidebarProps {
   minPrice: number | undefined;
@@ -115,49 +115,15 @@ export function FilterSidebar({
             </AccordionContent>
           </AccordionItem>
 
-          {facets.map((facet) => {
-            const selected = new Set(facetSelections[facet.filterKey] ?? []);
-            return (
-              <AccordionItem key={facet.id} value={facet.filterKey}>
-                <AccordionTrigger>{facet.name}</AccordionTrigger>
-                <AccordionContent>
-                  <ul className="space-y-2">
-                    {facet.options.map((option) => {
-                      const id = `${idPrefix}-${facet.filterKey}-${option.value}`;
-                      const checked = selected.has(option.value);
-                      return (
-                        <li key={option.value}>
-                          <CheckboxField
-                            id={id}
-                            checked={checked}
-                            disabled={option.disabled && !checked}
-                            onCheckedChange={() =>
-                              onToggleFacet?.(facet.filterKey, option.value)
-                            }
-                            className={cn(
-                              "w-full gap-2.5 text-body-sm",
-                              option.disabled && !checked && "text-ink-faint",
-                            )}
-                            labelClassName="flex items-center justify-between gap-2"
-                            label={
-                              <>
-                                <span className="min-w-0 truncate capitalize">
-                                  {option.value}
-                                </span>
-                                <span className="shrink-0 tabular-nums text-ink-faint">
-                                  {option.count}
-                                </span>
-                              </>
-                            }
-                          />
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
+          {facets.map((facet) => (
+            <FilterSidebarFacetGroup
+              key={facet.id}
+              facet={facet}
+              idPrefix={idPrefix}
+              selectedValues={facetSelections[facet.filterKey] ?? []}
+              onToggle={onToggleFacet}
+            />
+          ))}
 
           <AccordionItem value="rating">
             <AccordionTrigger>{LABELS.rating}</AccordionTrigger>

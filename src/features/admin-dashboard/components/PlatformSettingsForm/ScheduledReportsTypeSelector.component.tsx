@@ -1,20 +1,17 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
-import { Checkbox } from "@/shared/components/ui/checkbox";
+import { useId } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/shared/components/ui/tooltip";
 import { Search, X, CheckSquare, Square } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
 import type { ScheduledReportTypeOption } from "../../hooks/useScheduledReportsCatalog.hook";
+import {
+  useScheduledReportsFilter,
+  type ScheduledReportsCategoryKey,
+} from "../../hooks/useScheduledReportsFilter.hook";
+import { ReportTypeCheckboxGroup } from "./ReportTypeCheckboxGroup.component";
 
 interface ScheduledReportsTypeSelectorProps {
   catalog: ScheduledReportTypeOption[];
@@ -22,84 +19,31 @@ interface ScheduledReportsTypeSelectorProps {
   onChange: (nextTypes: string[]) => void;
 }
 
-type CategoryKey = "all" | "admin_finance" | "admin_ops" | "admin_catalog";
-
-const CATEGORIES: { key: CategoryKey; label: string }[] = [
+const CATEGORIES: { key: ScheduledReportsCategoryKey; label: string }[] = [
   { key: "all", label: LABELS.scheduledReportsCategoryAll },
   { key: "admin_finance", label: LABELS.scheduledReportsCategoryFinance },
   { key: "admin_ops", label: LABELS.scheduledReportsCategoryOps },
   { key: "admin_catalog", label: LABELS.scheduledReportsCategoryCatalog },
 ];
 
-function getCategoryLabel(audience?: string, financial?: boolean): string {
-  if (audience === "admin_finance" || financial) return "Finance";
-  if (audience === "admin_ops") return "Operations";
-  return "Catalog";
-}
-
 export function ScheduledReportsTypeSelector({
   catalog,
   selectedTypes,
   onChange,
 }: ScheduledReportsTypeSelectorProps) {
-  const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState<CategoryKey>("all");
   const searchInputId = useId();
-
-  const counts = useMemo(
-    () => ({
-      all: catalog.length,
-      admin_finance: catalog.filter(
-        (r) => r.audience === "admin_finance" || r.financial,
-      ).length,
-      admin_ops: catalog.filter((r) => r.audience === "admin_ops").length,
-      admin_catalog: catalog.filter(
-        (r) => r.audience === "admin_catalog" && !r.financial,
-      ).length,
-    }),
-    [catalog],
-  );
-
-  const filteredReports = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return catalog.filter((item) => {
-      const isFin = item.audience === "admin_finance" || item.financial;
-      const isOps = item.audience === "admin_ops";
-      const isCat = item.audience === "admin_catalog" && !item.financial;
-      const matchesCat =
-        activeCategory === "all" ||
-        (activeCategory === "admin_finance" && isFin) ||
-        (activeCategory === "admin_ops" && isOps) ||
-        (activeCategory === "admin_catalog" && isCat);
-      return (
-        matchesCat &&
-        (!q ||
-          item.label.toLowerCase().includes(q) ||
-          item.type.toLowerCase().includes(q))
-      );
-    });
-  }, [catalog, activeCategory, search]);
-
-  const toggleType = (type: string) => {
-    onChange(
-      selectedTypes.includes(type)
-        ? selectedTypes.filter((t) => t !== type)
-        : [...selectedTypes, type],
-    );
-  };
-
-  const selectVisible = () => {
-    onChange(
-      Array.from(
-        new Set([...selectedTypes, ...filteredReports.map((r) => r.type)]),
-      ),
-    );
-  };
-
-  const clearVisible = () => {
-    const visible = new Set(filteredReports.map((r) => r.type));
-    onChange(selectedTypes.filter((t) => !visible.has(t)));
-  };
+  const {
+    search,
+    setSearch,
+    activeCategory,
+    setActiveCategory,
+    counts,
+    filteredReports,
+    toggleType,
+    selectVisible,
+    clearVisible,
+    resetFilters,
+  } = useScheduledReportsFilter(catalog, selectedTypes, onChange);
 
   return (
     <div className="space-y-4">
@@ -149,7 +93,9 @@ export function ScheduledReportsTypeSelector({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Tabs
           value={activeCategory}
-          onValueChange={(val) => setActiveCategory(val as CategoryKey)}
+          onValueChange={(val) =>
+            setActiveCategory(val as ScheduledReportsCategoryKey)
+          }
           className="shrink-0"
         >
           <TabsList className="h-auto flex-wrap justify-start gap-1 rounded-md border border-line-strong bg-paper p-1">
@@ -191,74 +137,12 @@ export function ScheduledReportsTypeSelector({
       </div>
 
       {/* Reports Grid */}
-      {filteredReports.length === 0 ? (
-        <div className="py-10 text-center rounded-md border border-dashed border-line bg-surface/40">
-          <p className="text-body font-medium text-ink-muted">
-            {LABELS.scheduledReportsNoMatches}
-          </p>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setSearch("");
-              setActiveCategory("all");
-            }}
-            className="mt-2 text-brand text-xs"
-          >
-            Reset search
-          </Button>
-        </div>
-      ) : (
-        <TooltipProvider delayDuration={150}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 pt-1">
-            {filteredReports.map((option) => {
-              const isChecked = selectedTypes.includes(option.type);
-              const category = getCategoryLabel(
-                option.audience,
-                option.financial,
-              );
-              return (
-                <Tooltip key={option.type}>
-                  <TooltipTrigger asChild>
-                    <label
-                      className={cn(
-                        "group flex items-center justify-between gap-3 rounded-md border px-3.5 py-2.5 text-body-sm transition-colors cursor-pointer select-none",
-                        isChecked
-                          ? "border-brand bg-brand-subtle/30 text-ink shadow-xs ring-1 ring-brand/20"
-                          : "border-line bg-surface text-ink hover:border-line-strong hover:bg-surface-raised",
-                      )}
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                        <Checkbox
-                          checked={isChecked}
-                          onCheckedChange={() => toggleType(option.type)}
-                        />
-                        <span
-                          className={cn(
-                            "truncate text-body-sm",
-                            isChecked
-                              ? "font-semibold text-ink"
-                              : "font-normal text-ink",
-                          )}
-                        >
-                          {option.label}
-                        </span>
-                      </div>
-                      <span className="shrink-0 text-[10px] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted">
-                        {category}
-                      </span>
-                    </label>
-                  </TooltipTrigger>
-                  <TooltipContent side="top" className="max-w-xs">
-                    {option.label}
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
-          </div>
-        </TooltipProvider>
-      )}
+      <ReportTypeCheckboxGroup
+        reports={filteredReports}
+        selectedTypes={selectedTypes}
+        onToggle={toggleType}
+        onResetFilters={resetFilters}
+      />
     </div>
   );
 }

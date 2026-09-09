@@ -1,12 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { isPaginatedList, type PaginatedList } from "@/shared/api/pagination";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { useClientPagination } from "@/shared/hooks/useClientPagination.hook";
-import { shouldInferAdminColumn } from "../utils/adminTableCells";
+import { normalizeResult } from "../utils/adminDataListNormalize";
 
 export type AdminDataRow = Record<string, unknown>;
 
@@ -14,34 +13,6 @@ export type AdminListLoadFn = (params: {
   page: number;
   limit: number;
 }) => Promise<unknown>;
-
-function normalizeResult(
-  data: unknown,
-): PaginatedList<AdminDataRow> | AdminDataRow[] {
-  if (Array.isArray(data)) return data as AdminDataRow[];
-  if (isPaginatedList<AdminDataRow>(data)) return data;
-  if (
-    data &&
-    typeof data === "object" &&
-    Array.isArray((data as { items?: unknown }).items)
-  ) {
-    const value = data as {
-      items: AdminDataRow[];
-      total?: number;
-      totalPages?: number;
-      page?: number;
-      limit?: number;
-    };
-    return {
-      items: value.items,
-      total: value.total ?? value.items.length,
-      page: value.page ?? 1,
-      limit: value.limit ?? (value.items.length || 1),
-      totalPages: value.totalPages ?? 1,
-    };
-  }
-  return [];
-}
 
 export function useAdminDataList(
   load: AdminListLoadFn,
@@ -169,10 +140,7 @@ export function useAdminDataList(
   );
 }
 
-/** Infer readable columns from the first row (skips IDs and bulky nested payloads). */
-export function inferAdminColumns(rows: AdminDataRow[], max = 5): string[] {
-  if (!rows[0]) return [];
-  return Object.keys(rows[0])
-    .filter((key) => shouldInferAdminColumn(key))
-    .slice(0, max);
-}
+// Re-exported for existing "../hooks/useAdminDataList.hook" import sites —
+// the implementation lives in ./adminDataListNormalize, split out to stay
+// under the per-file line ceiling.
+export { inferAdminColumns } from "../utils/adminDataListNormalize";
