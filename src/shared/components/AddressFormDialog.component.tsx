@@ -1,11 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import { useCaptureLocation } from "@/shared/hooks/useCaptureLocation.hook";
-import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
-import { FormError } from "@/shared/components/FormError.component";
-import { FormActions, FormStack } from "@/shared/components/forms";
+import { useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,27 +9,10 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
-import { useManualFormFieldErrors } from "@/shared/hooks/useManualFormFieldErrors.hook";
-import {
-  applyApiErrorsToManualForm,
-  getFormLevelApiError,
-} from "@/shared/utils/applyApiFormErrors";
-import {
-  allRequiredFieldsMet,
-  firstMissingRequiredHint,
-} from "@/shared/utils/firstMissingRequiredHint";
-import {
-  addressFieldChecks,
-  toAddressFormState as toFormState,
-  toAddressInput as toInput,
-  type AddressFormValues,
-} from "@/shared/schemas/address.schema";
 import type { Address, AddressInput } from "@/shared/api/types";
-import { AddressFormFields } from "./AddressFormDialog/AddressFormFields.component";
+import { AddressFormBody, addressFormDialogStyles } from "./AddressFormDialog";
 
-type AddressField = keyof AddressFormValues;
-
-interface AddressFormDialogProps {
+export interface AddressFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (body: AddressInput) => Promise<void>;
@@ -44,105 +22,6 @@ interface AddressFormDialogProps {
   title?: string;
   description?: string;
   submitLabel?: string;
-}
-
-interface AddressFormBodyProps {
-  address?: Address | null;
-  hasAddresses: boolean;
-  isPending: boolean;
-  submitLabel: string;
-  onSubmit: (body: AddressInput) => Promise<void>;
-  onClose: () => void;
-}
-
-function AddressFormBody({
-  address,
-  hasAddresses,
-  isPending,
-  submitLabel,
-  onSubmit,
-  onClose,
-}: AddressFormBodyProps) {
-  const [form, setForm] = useState<AddressFormValues>(toFormState(address));
-  const [formError, setFormError] = useState<string | null>(null);
-  const { fieldErrors, clearAll, setErrors, getError } =
-    useManualFormFieldErrors<AddressField>();
-  const location = useCaptureLocation(
-    address?.lat != null && address?.lng != null,
-  );
-  const requiredChecks = addressFieldChecks(form);
-  const canSubmit =
-    allRequiredFieldsMet(requiredChecks) && location.status !== "pending";
-  const disableHint =
-    firstMissingRequiredHint(requiredChecks) ??
-    (location.status === "pending" ? LABELS.addressLocationFetching : "");
-
-  useEffect(() => {
-    if (location.coords) {
-      setForm((current) => ({
-        ...current,
-        lat: location.coords!.lat,
-        lng: location.coords!.lng,
-      }));
-    }
-  }, [location.coords]);
-
-  const setField = <K extends keyof AddressFormValues>(
-    field: K,
-    value: AddressFormValues[K],
-  ) => setForm((previous) => ({ ...previous, [field]: value }));
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!canSubmit) {
-      setFormError(LABELS.addressRequiredFields);
-      return;
-    }
-
-    setFormError(null);
-    clearAll();
-    try {
-      await onSubmit(toInput(form, hasAddresses));
-      onClose();
-    } catch (error) {
-      const mapped = applyApiErrorsToManualForm<AddressField>(error, setErrors);
-      setFormError(
-        mapped ? null : getFormLevelApiError(error, LABELS.couldNotSaveAddress),
-      );
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <FormStack>
-        <AddressFormFields
-          form={form}
-          setField={setField}
-          hasAddresses={hasAddresses}
-          isEditing={Boolean(address)}
-          fieldErrors={fieldErrors}
-          getError={getError}
-          locationStatus={location.status}
-          onRetryLocation={location.retry}
-        />
-        <FormError error={formError} fallback={LABELS.couldNotSaveAddress} />
-        <FormActions>
-          <Button type="button" variant="outline" onClick={onClose}>
-            {LABELS.cancel}
-          </Button>
-          <DisabledActionHint disabled={!canSubmit} message={disableHint}>
-            <Button
-              type="submit"
-              loading={isPending}
-              disabled={!canSubmit || isPending}
-            >
-              {submitLabel}
-            </Button>
-          </DisabledActionHint>
-        </FormActions>
-      </FormStack>
-    </form>
-  );
 }
 
 /** Create/edit address dialog used by checkout and account addresses. */
@@ -159,9 +38,13 @@ export function AddressFormDialog({
 }: AddressFormDialogProps) {
   const heading = title ?? (address ? LABELS.editAddress : LABELS.newAddress);
 
+  const handleClose = useCallback(() => {
+    onOpenChange(false);
+  }, [onOpenChange]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
+      <DialogContent className={addressFormDialogStyles.dialogContent}>
         <DialogHeader>
           <DialogTitle>{heading}</DialogTitle>
           <DialogDescription>
@@ -175,7 +58,7 @@ export function AddressFormDialog({
           isPending={isPending}
           submitLabel={submitLabel}
           onSubmit={onSubmit}
-          onClose={() => onOpenChange(false)}
+          onClose={handleClose}
         />
       </DialogContent>
     </Dialog>

@@ -38,8 +38,10 @@ const allowlist = [
   // Cash deposit discrepancy threshold check (amount vs expectedAmount)
   "src/features/admin-dashboard/components/CashDepositsPanel/CashDepositTableRow.component.tsx",
   "src/features/delivery-dashboard/components/CashDepositsCard.component.tsx",
+  "src/features/delivery-dashboard/components/CashDepositsCard/useCashDepositsCardPresentation.hook.ts",
   // Client-side summation of pending payout items for summary display
   "src/features/delivery-dashboard/components/EarningsPayoutsCard.component.tsx",
+  "src/features/delivery-dashboard/components/EarningsPayoutsCard/useEarningsPayoutsCardPresentation.hook.ts",
   // `total` here is pagination item count, not money
   "src/features/vendor-dashboard/components/ProductsTableView.component.tsx",
 ];
