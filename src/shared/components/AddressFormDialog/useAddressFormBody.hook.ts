@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { useCaptureLocation } from "@/shared/hooks/useCaptureLocation.hook";
+import { useCaptureLocation } from "./useCaptureLocation.hook";
 import { LABELS } from "@/shared/constants/labels";
 import { useManualFormFieldErrors } from "@/shared/hooks/useManualFormFieldErrors.hook";
 import {

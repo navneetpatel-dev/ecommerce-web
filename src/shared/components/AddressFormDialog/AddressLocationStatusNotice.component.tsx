@@ -1,7 +1,7 @@
 import { MapPin } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import type { LocationCaptureStatus } from "@/shared/hooks/useCaptureLocation.hook";
+import type { LocationCaptureStatus } from "./useCaptureLocation.hook";
 import { addressFormDialogStyles } from "./addressFormDialog.styles";
 
 const LOCATION_STATUS_MESSAGE: Record<

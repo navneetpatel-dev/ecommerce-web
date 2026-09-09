@@ -160,28 +160,24 @@ export function AdminFinancePage() {
           >
             <AdminSettlementReportsPanel />
           </TabsContent>
-
           <TabsContent
             value="liability"
             className={adminFinancePageStyles.reportsSingleContent}
           >
             <AdminWalletLiabilityPanel />
           </TabsContent>
-
           <TabsContent
             value="recharge"
             className={adminFinancePageStyles.reportsSingleContent}
           >
             <AdminWalletRechargePanel />
           </TabsContent>
-
           <TabsContent
             value="cashback"
             className={adminFinancePageStyles.reportsSingleContent}
           >
             <AdminCashbackWriteOffPanel />
           </TabsContent>
-
           <TabsContent
             value="adjust"
             className={adminFinancePageStyles.reportsSingleContent}

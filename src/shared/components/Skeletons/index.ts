@@ -14,3 +14,5 @@ export { SkeletonCard } from "./primitives.component";
 export { SkeletonChartCard } from "./primitives.component";
 export { SkeletonGrid } from "./primitives.component";
 export { SkeletonRows } from "./primitives.component";
+export { DetailQuerySkeleton } from "./DetailQuerySkeleton.component";
+export { InlineAmountSkeleton } from "./InlineAmountSkeleton.component";

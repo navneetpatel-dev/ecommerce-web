@@ -9,7 +9,9 @@ export {
   CategoryGridSkeleton,
   SkeletonChartCard,
   ReviewListSkeleton,
-} from "./Skeletons/primitives.component";
+  DetailQuerySkeleton,
+  InlineAmountSkeleton,
+} from "./Skeletons";
 
 export {
   StorefrontPageSkeleton,
