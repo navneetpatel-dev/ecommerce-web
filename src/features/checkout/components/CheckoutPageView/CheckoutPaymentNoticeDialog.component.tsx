@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { PATHS } from "@/shared/constants/paths";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
@@ -19,26 +20,37 @@ export function CheckoutPaymentNoticeDialog({
   const noticePrimaryLabel =
     paymentNotice?.variant === "danger" ? "Try again" : "Continue checkout";
 
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) onClearPaymentNotice?.();
+    },
+    [onClearPaymentNotice],
+  );
+
+  const handlePrimaryClick = useCallback(() => {
+    onClearPaymentNotice?.();
+  }, [onClearPaymentNotice]);
+
+  const handleSecondaryClick = useCallback(() => {
+    onClearPaymentNotice?.();
+    router.push(PATHS.cart);
+  }, [onClearPaymentNotice, router]);
+
   return (
     <StatusDialog
       open={Boolean(paymentNotice)}
-      onOpenChange={(open) => {
-        if (!open) onClearPaymentNotice?.();
-      }}
+      onOpenChange={handleOpenChange}
       variant={paymentNotice?.variant ?? "info"}
       title={paymentNotice?.title ?? ""}
       description={paymentNotice?.description ?? ""}
       primaryAction={{
         label: noticePrimaryLabel,
-        onClick: () => onClearPaymentNotice?.(),
+        onClick: handlePrimaryClick,
       }}
       secondaryAction={{
         label: "View cart",
         variant: "outline",
-        onClick: () => {
-          onClearPaymentNotice?.();
-          router.push(PATHS.cart);
-        },
+        onClick: handleSecondaryClick,
       }}
     />
   );

@@ -14,4 +14,8 @@ export { CartDrawerContainer } from "./containers/CartDrawerContainer.container"
 export { CartPage } from "./pages/CartPage.page";
 export { cartApi } from "./api/cart.api";
 export { clearClientGuestSessionCookie } from "./utils/guest-session";
-export { resolveCartDisplayTotals } from "./utils/cartDisplay.utils";
+export {
+  resolveCartDisplayTotals,
+  patchExistingCartItemQuantity,
+  patchRemoveCartItem,
+} from "./utils/cartDisplay.utils";

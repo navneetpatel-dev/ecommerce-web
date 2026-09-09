@@ -1,0 +1,32 @@
+export const ORDER_SUMMARY_PANEL_STYLES = {
+  root: "relative flex max-h-[calc(100vh-7rem)] flex-col border border-line bg-surface-raised shadow-elevation-1",
+  accentBorder:
+    "pointer-events-none absolute inset-x-0 top-0 z-10 h-0.5 bg-gradient-to-r from-brand via-brand/70 to-transparent",
+  header: "shrink-0 border-b border-line px-5 pb-4 pt-5 md:px-6 md:pt-6",
+  itemCountText: "text-[0.875rem] text-ink-muted",
+  dotSeparator: "mx-2 text-line",
+  headerTotal: "font-medium text-ink",
+  eyebrow: "mt-4",
+  title: "mt-1 font-display text-[1.25rem] text-ink",
+  footer:
+    "shrink-0 border-t border-line bg-surface-raised px-5 py-4 md:px-6 md:py-5",
+  totalsList: "space-y-2.5 text-[0.875rem]",
+  totalsRow: "flex items-center justify-between gap-4",
+  totalsLabel: "text-ink-muted",
+  totalsValue: "tabular-nums text-ink",
+  couponsList: "contents",
+  couponRow: "flex items-center justify-between gap-4 text-success",
+  couponDiscount: "tabular-nums",
+  cashbackNotice: "text-body-sm text-brand",
+  walletRow: "flex items-center justify-between gap-4 text-body-sm",
+  walletLabel: "text-ink-muted",
+  walletValue: "tabular-nums text-ink",
+  finalTotalContainer: "mt-4 border-t border-line pt-4",
+  finalTotalRow: "flex items-end justify-between gap-4",
+  finalTotalLabel: "text-[0.875rem] font-medium text-ink",
+  finalTotalValue:
+    "font-display text-[1.5rem] leading-none tabular-nums text-brand",
+  grandTotalReference: "mt-1.5 text-[0.75rem] text-ink-muted",
+  amountsUnavailableNotice: "mt-2",
+  totalHint: "mt-1.5 text-[0.75rem] text-ink-muted",
+} as const;

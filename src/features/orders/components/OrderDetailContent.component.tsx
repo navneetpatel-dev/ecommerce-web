@@ -1,14 +1,16 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion } from "motion/react";
 import { ContinueShoppingLink } from "@/shared/components/ContinueShoppingLink.component";
 import type { Order } from "@/shared/api/types";
-import { SubOrderCardContainer } from "../containers/SubOrderCardContainer.container";
 import { countOrderItems } from "../utils/format";
 import { useOrderDocuments } from "../hooks/useOrderDocuments.hook";
 import { OrderDetailHeader } from "./OrderDetailHeader.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
 import { OrderReturnStatusBanner } from "./OrderReturnStatusBanner.component";
+import { SubOrdersList } from "./SubOrdersList.component";
+import { ORDER_DETAIL_CONTENT_STYLES } from "./orderDetailContent.styles";
 
 interface OrderDetailContentProps {
   order: Order;
@@ -20,65 +22,44 @@ const HEADER_ENTRANCE = {
   transition: { duration: 0.28, ease: [0.2, 0, 0, 1] as const },
 };
 
-function subOrderEntrance(index: number) {
-  return {
-    initial: { opacity: 0, y: 8 },
-    animate: { opacity: 1, y: 0 },
-    transition: {
-      duration: 0.28,
-      delay: Math.min(0.04 * index, 0.16),
-      ease: [0.2, 0, 0, 1] as const,
-    },
-  };
-}
-
 /** Order detail screen composition: header, sub-orders, summary aside. */
 export function OrderDetailContent({ order }: OrderDetailContentProps) {
   const itemCount = countOrderItems(order);
   const vendorCount = order.subOrders?.length ?? 0;
   const documents = useOrderDocuments(order);
-
-  const renderSubOrder = (
-    subOrder: NonNullable<Order["subOrders"]>[number],
-    index: number,
-  ) => (
-    <motion.div key={subOrder.id} {...subOrderEntrance(index)}>
-      <SubOrderCardContainer subOrder={subOrder} />
-    </motion.div>
-  );
+  const subOrders = useMemo(() => order.subOrders ?? [], [order.subOrders]);
 
   return (
-    <div className="relative">
+    <div className={ORDER_DETAIL_CONTENT_STYLES.root}>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[280px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
+        className={ORDER_DETAIL_CONTENT_STYLES.radialBackground}
       />
 
-      <div className="storefront-container relative py-6 md:py-8">
+      <div className={ORDER_DETAIL_CONTENT_STYLES.container}>
         <motion.div {...HEADER_ENTRANCE}>
           <OrderDetailHeader
             order={order}
             itemCount={itemCount}
             vendorCount={vendorCount}
           />
-          <div className="mt-4">
+          <div className={ORDER_DETAIL_CONTENT_STYLES.bannerWrapper}>
             <OrderReturnStatusBanner order={order} />
           </div>
         </motion.div>
 
-        <div className="mt-6 grid grid-cols-1 gap-8 lg:mt-8 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-7 xl:col-span-8">
-            {/* Each seller is its own card now, so the gap can be tighter. */}
-            <div className="space-y-4">
-              {(order.subOrders ?? []).map(renderSubOrder)}
-            </div>
+        <div className={ORDER_DETAIL_CONTENT_STYLES.layoutGrid}>
+          <div className={ORDER_DETAIL_CONTENT_STYLES.mainCol}>
+            <SubOrdersList subOrders={subOrders} />
 
-            <div className="mt-6 border-t border-line pt-4">
+            <div
+              className={ORDER_DETAIL_CONTENT_STYLES.continueShoppingContainer}
+            >
               <ContinueShoppingLink />
             </div>
           </div>
 
-          <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-[88px] lg:z-10 lg:self-start">
+          <aside className={ORDER_DETAIL_CONTENT_STYLES.aside}>
             <OrderSummaryAside
               order={order}
               itemCount={itemCount}

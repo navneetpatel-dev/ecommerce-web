@@ -9,32 +9,8 @@ import { ReviewStep } from "../ReviewStep.component";
 import { CheckoutStepTransition } from "./CheckoutStepTransition.component";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { Address, CartItem, CheckoutQuote } from "@/shared/api/types";
-
-const STEP_COPY: Record<
-  number,
-  { eyebrow: string; title: string; blurb: string }
-> = {
-  1: {
-    eyebrow: "Step 1 · Address",
-    title: "Where should we send it?",
-    blurb: "Choose a saved address or add a new one for delivery.",
-  },
-  2: {
-    eyebrow: "Step 2 · Shipping",
-    title: "How should it arrive?",
-    blurb: "Pick a shipping speed for each vendor in your bag.",
-  },
-  3: {
-    eyebrow: "Step 3 · Payment",
-    title: "How will you pay?",
-    blurb: "Select a payment method, then review your order.",
-  },
-  4: {
-    eyebrow: "Step 4 · Review",
-    title: "Confirm your order",
-    blurb: "One last look — totals, shipping, and taxes included.",
-  },
-};
+import { useCheckoutStepCard } from "./useCheckoutStepCard.hook";
+import { CHECKOUT_STEP_CARD_STYLES } from "./checkoutStepCard.styles";
 
 interface CheckoutStepCardProps {
   step: number;
@@ -101,10 +77,14 @@ export function CheckoutStepCard({
   onPlaceOrder,
   onCreateAddress,
 }: CheckoutStepCardProps) {
-  const copy = STEP_COPY[step] ?? STEP_COPY[1];
+  const { copy, pincode } = useCheckoutStepCard({
+    step,
+    addressId,
+    addresses,
+  });
 
   return (
-    <section className="mt-8 border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-7 lg:mt-10 lg:p-8">
+    <section className={CHECKOUT_STEP_CARD_STYLES.card}>
       <motion.div
         key={step}
         initial={{ opacity: 0, y: 10 }}
@@ -112,14 +92,10 @@ export function CheckoutStepCard({
         transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
       >
         <TextEyebrow>{copy.eyebrow}</TextEyebrow>
-        <h2 className="mt-1.5 font-display text-[1.5rem] leading-tight text-ink md:text-[1.75rem]">
-          {copy.title}
-        </h2>
-        <p className="mt-2 max-w-[42ch] text-body text-ink-muted">
-          {copy.blurb}
-        </p>
+        <h2 className={CHECKOUT_STEP_CARD_STYLES.title}>{copy.title}</h2>
+        <p className={CHECKOUT_STEP_CARD_STYLES.blurb}>{copy.blurb}</p>
 
-        <div className="mt-6 border-t border-line pt-6 md:mt-8 md:pt-8">
+        <div className={CHECKOUT_STEP_CARD_STYLES.stepContentContainer}>
           <AnimatePresence mode="wait" initial={false}>
             {step === 1 && (
               <CheckoutStepTransition stepKey="address">
@@ -138,10 +114,7 @@ export function CheckoutStepCard({
                 <ShippingStep
                   groupedByVendor={groupedByVendor}
                   selectedMethods={shippingMethodByVendor}
-                  pincode={
-                    addresses?.find((address) => address.id === addressId)
-                      ?.pincode ?? ""
-                  }
+                  pincode={pincode}
                   canContinue={shippingReady}
                   onSelect={onSelectShipping}
                   onContinue={onContinueToPayment}

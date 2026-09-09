@@ -4,9 +4,8 @@ import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatLabel";
-import { formatPoints } from "@/shared/utils/formatPoints";
-import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { useWalletApplySection } from "./useWalletApplySection.hook";
+import { WALLET_APPLY_SECTION_STYLES } from "./walletApplySection.styles";
 
 interface WalletApplySectionProps {
   walletBalance: number;
@@ -17,10 +16,6 @@ interface WalletApplySectionProps {
   onAmountChange: (amount: number) => void;
 }
 
-function formatPointsValue(value: number) {
-  return formatPoints(value);
-}
-
 export function WalletApplySection({
   walletBalance,
   maxApplicable,
@@ -29,19 +24,33 @@ export function WalletApplySection({
   disabled,
   onAmountChange,
 }: WalletApplySectionProps) {
+  const {
+    formattedPoints,
+    remainderHint,
+    handleUseAll,
+    handleNumberChange,
+    showFullyCovers,
+  } = useWalletApplySection({
+    walletBalance,
+    maxApplicable,
+    walletAmountToUse,
+    amountDue,
+    onAmountChange,
+  });
+
   if (walletBalance <= 0) return null;
 
   return (
-    <div className="space-y-3 border border-line bg-paper/40 p-4">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+    <div className={WALLET_APPLY_SECTION_STYLES.root}>
+      <div className={WALLET_APPLY_SECTION_STYLES.headerRow}>
         <div>
-          <p className="text-body-sm font-medium text-ink">
+          <p className={WALLET_APPLY_SECTION_STYLES.title}>
             {LABELS.walletApplyPoints}
           </p>
-          <p className="mt-0.5 font-display text-[1.25rem] tabular-nums text-brand">
-            {formatPointsValue(walletBalance)}
+          <p className={WALLET_APPLY_SECTION_STYLES.pointsValue}>
+            {formattedPoints}
           </p>
-          <p className="mt-1 text-[0.75rem] text-ink-muted">
+          <p className={WALLET_APPLY_SECTION_STYLES.subtitle}>
             {LABELS.walletPointsEqualsInr}
           </p>
         </div>
@@ -51,7 +60,7 @@ export function WalletApplySection({
             variant="outline"
             size="sm"
             disabled={disabled}
-            onClick={() => onAmountChange(maxApplicable)}
+            onClick={handleUseAll}
           >
             {LABELS.walletUseAll}
           </Button>
@@ -61,12 +70,7 @@ export function WalletApplySection({
       <FormFieldFrame
         label={LABELS.walletAmountToApply}
         htmlFor="wallet-amount"
-        hint={formatLabel(LABELS.walletRemainderDue, {
-          amount:
-            amountDue != null
-              ? `₹${formatInrAmount(amountDue)}`
-              : "Updating…",
-        })}
+        hint={remainderHint}
       >
         <NumberInput
           id="wallet-amount"
@@ -77,11 +81,12 @@ export function WalletApplySection({
           prefix="₹"
           disabled={disabled}
           showSteppers={false}
-          onChange={(value) => onAmountChange(value ?? 0)}
+          onChange={handleNumberChange}
         />
       </FormFieldFrame>
-      {amountDue != null && amountDue <= 0 && walletAmountToUse > 0 ? (
-        <p className="text-body-sm font-medium text-success">
+
+      {showFullyCovers ? (
+        <p className={WALLET_APPLY_SECTION_STYLES.fullyCoversText}>
           {LABELS.walletFullyCoversOrder}
         </p>
       ) : null}

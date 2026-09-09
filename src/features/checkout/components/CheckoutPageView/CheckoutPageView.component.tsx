@@ -11,7 +11,8 @@ import { CheckoutStepCard } from "./CheckoutStepCard.component";
 import { CheckoutPaymentNoticeDialog } from "./CheckoutPaymentNoticeDialog.component";
 import { PaymentProcessingOverlay } from "../PaymentProcessingOverlay.component";
 import { CheckoutTransitionState } from "./CheckoutTransitionState.component";
-import { checkoutOverlayCopy } from "./checkoutOverlayCopy";
+import { useCheckoutPageView } from "./useCheckoutPageView.hook";
+import { CHECKOUT_PAGE_VIEW_STYLES } from "./checkoutPageView.styles";
 import type { CheckoutPageViewProps } from "./types";
 
 export function CheckoutPageView({
@@ -60,23 +61,28 @@ export function CheckoutPageView({
   onPlaceOrder,
   onCreateAddress,
 }: CheckoutPageViewProps) {
-  const isTransitioning = isPaymentOverlayOpen || isPending;
-  const transitionPhase =
-    isPending && paymentPhase === "idle" ? "placing" : paymentPhase;
+  const { transitionPhase, showTransitionScreen, paymentOverlay } =
+    useCheckoutPageView({
+      isPaymentOverlayOpen,
+      isPending,
+      paymentPhase,
+      hasItems,
+    });
 
-  // Once placed, hold this screen even while the cart still reads as filled.
-  if (paymentPhase === "redirecting" || (!hasItems && isTransitioning))
+  if (showTransitionScreen) {
     return <CheckoutTransitionState paymentPhase={transitionPhase} />;
+  }
+
   if (isLoading) return <CheckoutPageSkeleton />;
-  if (!hasItems)
+
+  if (!hasItems) {
     return (
       <EmptyCartState
         heading="Nothing to check out"
         message="Your bag is empty — add a few pieces, then return here to complete your order."
       />
     );
-
-  const paymentOverlay = checkoutOverlayCopy(paymentPhase);
+  }
 
   const summary = (
     <OrderSummaryPanel
@@ -93,20 +99,12 @@ export function CheckoutPageView({
   );
 
   return (
-    <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[280px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
-      />
+    <div className={CHECKOUT_PAGE_VIEW_STYLES.root}>
+      <div aria-hidden className={CHECKOUT_PAGE_VIEW_STYLES.radialBackground} />
 
-      <div className="storefront-container relative py-6 md:py-8">
-        {/*
-          Two-column layout from the top so the summary can stick:
-          left column (title + steps + form) defines row height;
-          right column stretches and hosts a sticky panel.
-        */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
-          <div className="min-w-0 lg:col-span-7 xl:col-span-8">
+      <div className={CHECKOUT_PAGE_VIEW_STYLES.container}>
+        <div className={CHECKOUT_PAGE_VIEW_STYLES.layoutGrid}>
+          <div className={CHECKOUT_PAGE_VIEW_STYLES.mainCol}>
             <motion.header
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -114,14 +112,14 @@ export function CheckoutPageView({
             >
               <TextEyebrow brand>Checkout</TextEyebrow>
               <h1
-                className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
-                style={{ fontSize: "var(--text-display-sm)" }}
+                className={CHECKOUT_PAGE_VIEW_STYLES.heading}
+                style={CHECKOUT_PAGE_VIEW_STYLES.headingStyle}
               >
                 Complete your order
               </h1>
             </motion.header>
 
-            <div className="mt-6 md:mt-8">
+            <div className={CHECKOUT_PAGE_VIEW_STYLES.stepIndicatorContainer}>
               <CheckoutStepIndicator
                 currentStep={step}
                 onStepClick={onStepClick}
@@ -169,8 +167,10 @@ export function CheckoutPageView({
             />
           </div>
 
-          <aside className="relative hidden lg:col-span-5 lg:block xl:col-span-4">
-            <div className="sticky top-[88px] z-10">{summary}</div>
+          <aside className={CHECKOUT_PAGE_VIEW_STYLES.aside}>
+            <div className={CHECKOUT_PAGE_VIEW_STYLES.stickyAsideContent}>
+              {summary}
+            </div>
           </aside>
         </div>
       </div>

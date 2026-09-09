@@ -1,15 +1,13 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatLabel";
-import { MAX_COMPARED_PRODUCTS } from "../../constants/compare";
-import { resolveProductStock } from "../../utils/productListItem";
 import { CardControls } from "./CardControls.component";
 import { CardDetails } from "./CardDetails.component";
 import { CardMedia } from "./CardMedia.component";
+import { useProductCard } from "./useProductCard.hook";
+import { PRODUCT_CARD_STYLES } from "./productCard.styles";
 import type { ProductCardProps } from "./types";
 
 export function ProductCard({
@@ -32,19 +30,24 @@ export function ProductCard({
   onQuantityChange,
   onToggleCompare,
 }: ProductCardProps) {
-  const [imageUnavailable, setImageUnavailable] = useState(!product.imageUrl);
-  const handleUnavailableChange = useCallback((unavailable: boolean) => {
-    setImageUnavailable(unavailable);
-  }, []);
-
-  const inCart = cartQuantity > 0;
-  const canQuickAdd =
-    showQuickAdd &&
-    Boolean(product.variants?.[0]?.id) &&
-    resolveProductStock(product) > 0;
+  const {
+    imageUnavailable,
+    handleUnavailableChange,
+    inCart,
+    canQuickAdd,
+    handleCompareCheckedChange,
+    compareMaxHint,
+  } = useProductCard({
+    product,
+    showQuickAdd,
+    cartQuantity,
+    compareAtLimit,
+    isCompared,
+    onToggleCompare,
+  });
 
   return (
-    <div className="group relative">
+    <div className={PRODUCT_CARD_STYLES.root}>
       <CardMedia
         product={product}
         imageUnavailable={imageUnavailable}
@@ -70,7 +73,7 @@ export function ProductCard({
       />
 
       {canQuickAdd && (
-        <div className="mt-2 md:hidden">
+        <div className={PRODUCT_CARD_STYLES.mobileControlsWrapper}>
           <CardControls
             variant="mobile"
             inCart={inCart}
@@ -87,20 +90,15 @@ export function ProductCard({
       {compareMode && (
         <DisabledActionHint
           disabled={compareAtLimit && !isCompared}
-          message={formatLabel(LABELS.compareMaxReached, {
-            max: String(MAX_COMPARED_PRODUCTS),
-          })}
-          className="mt-2"
+          message={compareMaxHint}
+          className={PRODUCT_CARD_STYLES.compareHint}
           block
         >
-          <label className="flex items-center gap-2 text-body-sm text-ink-muted">
+          <label className={PRODUCT_CARD_STYLES.compareLabel}>
             <Checkbox
               checked={isCompared}
               disabled={compareAtLimit && !isCompared}
-              onCheckedChange={() => {
-                if (compareAtLimit && !isCompared) return;
-                onToggleCompare?.(product);
-              }}
+              onCheckedChange={handleCompareCheckedChange}
               aria-label={`Compare ${product.name}`}
             />
             {LABELS.compare}

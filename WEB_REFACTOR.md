@@ -1,4 +1,4 @@
-Perform a **complete frontend architecture and code-quality refactoring** of the entire web project to make it highly modular, reusable, maintainable, and industry-standard.
+Perform a **complete frontend architecture and code-quality refactoring** of the entire web project to make it highly modular, reusable, maintainable, scalable, and industry-standard.
 
 ### Requirements
 
@@ -10,15 +10,15 @@ Perform a **complete frontend architecture and code-quality refactoring** of the
 2. **Clean & Modular Components**
 
    - Refactor all components, pages, containers, JSX files, hooks, and TypeScript utilities so they remain small, focused, and reusable.
-   - Extract large or repeated logic into appropriate components/hooks/utils/files.
+   - Extract large or repeated logic into appropriate components, hooks, or utilities.
    - Maximize reuse of existing components, hooks, utilities, types, and functionality across the project.
 
 3. **Extremely Clean JSX**
 
    - JSX-returning components must contain **presentation/composition only**.
-   - No state/business logic, inline functions, complex conditions, transformations, hardcoded data, or `.map()` logic inside JSX.
-   - Move repeated/complex rendering logic into dedicated components or appropriate files.
-   - JSX should be clean, readable, and easy to understand at a glance.
+   - No state logic, business logic, inline functions, complex conditions, transformations, hardcoded data, or `.map()` logic inside JSX.
+   - Move rendering logic into dedicated components or appropriate files.
+   - JSX should be clean, minimal, and readable at a glance.
 
 4. **Centralized Styling**
 
@@ -36,10 +36,17 @@ Perform a **complete frontend architecture and code-quality refactoring** of the
    - Audit the entire project for duplicate functionality and consolidate it into shared components, hooks, utilities, constants, types, schemas, and services wherever appropriate.
    - Before creating anything new, check whether an existing implementation can be reused or extended.
 
-7. **Industry-Standard Structure**
+7. **Industry-Standard Architecture**
 
    - Establish clear separation of concerns, predictable file organization, clean dependency boundaries, consistent naming, and scalable module structure.
-   - Apply any additional architectural or code-quality improvements you identify as necessary.
+   - Identify and implement any additional architectural or code-quality improvements required for a professional, maintainable frontend.
+
+8. **Proper Folder & Module Structure**
+
+   - Create a clean, logical, and scalable folder structure for **components, hooks, styles, APIs, schemas, utilities, types, constants, and other frontend files**.
+   - For modules containing many files, properly segregate related components, hooks, styles, API logic, schemas, and supporting files into dedicated subfolders.
+   - Keep module-specific code close to its module while placing genuinely shared code in appropriate common/shared directories.
+   - Ensure the structure remains easy to navigate and scalable as the project grows.
 
 ### Critical Constraints
 
@@ -47,4 +54,4 @@ Perform a **complete frontend architecture and code-quality refactoring** of the
 
 First analyze the **entire frontend codebase and its existing patterns**, then refactor systematically. Do not blindly over-abstract or introduce unnecessary layers.
 
-After completion, verify the project builds successfully and run available linting/tests/type-checks. Provide a concise summary of the major refactoring, reused/shared code, structural improvements, and verification performed.
+After completion, verify the project builds successfully and run available **linting, type-checks, and tests**. Provide a concise summary of the major refactoring, shared/reused code, folder-structure improvements, architectural changes, and verification performed.

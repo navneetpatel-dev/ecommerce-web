@@ -4,11 +4,11 @@ import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.c
 import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailableNotice.component";
 import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
-import { formatInrAmount } from "@/shared/utils/orderFormat";
-import { taxDisplayLabel } from "@/shared/utils/taxDisplay";
 import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
-import { quoteOrderTotals } from "../../utils/quoteTotals.utils";
 import { OrderSummaryItemsList } from "./OrderSummaryItemsList.component";
+import { AppliedCouponsSummaryList } from "./AppliedCouponsSummaryList.component";
+import { useOrderSummaryPanel } from "./useOrderSummaryPanel.hook";
+import { ORDER_SUMMARY_PANEL_STYLES } from "./orderSummaryPanel.styles";
 
 interface OrderSummaryPanelProps {
   groupedByVendor: Record<string, CartItem[]>;
@@ -38,46 +38,42 @@ export function OrderSummaryPanel({
   quote,
   cartPricingPreview,
 }: OrderSummaryPanelProps) {
-  const orderTotals = quote ? quoteOrderTotals(quote) : null;
-  // Fall back to the singular field so older quote responses still render.
-  const appliedCoupons = quote?.appliedCoupons?.length
-    ? quote.appliedCoupons
-    : quote?.appliedCoupon
-      ? [quote.appliedCoupon]
-      : [];
-  const summarySubtotal = orderTotals?.merchandiseSubtotal ?? subtotal;
-  const summarySubtotalPending =
-    !orderTotals && (subtotalPending || summarySubtotal == null);
-  const items = Object.values(groupedByVendor).flat();
-  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const walletApplied = (quote?.walletAmountToUse ?? 0) > 0;
-  const displayTotal = walletApplied
-    ? quote?.amountDue
-    : (quote?.grandTotal ?? estimatedTotal);
-  const displayTotalPending =
-    displayTotal == null || (!quote && estimatedTotalPending);
-  const totalLabel = !quote
-    ? LABELS.estimatedTotalLabel
-    : walletApplied
-      ? LABELS.amountDueToday
-      : LABELS.orderTotalLabel;
-  const totalHint = !quote
-    ? "Shipping and taxes confirmed before you place the order."
-    : walletApplied
-      ? "Amount left to pay after points."
-      : "Final amount including shipping and taxes.";
-  return (
-    <div className="relative flex max-h-[calc(100vh-7rem)] flex-col border border-line bg-surface-raised shadow-elevation-1">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-0.5 bg-gradient-to-r from-brand via-brand/70 to-transparent"
-      />
+  const {
+    orderTotals,
+    appliedCoupons,
+    summarySubtotal,
+    summarySubtotalPending,
+    itemCountText,
+    walletApplied,
+    displayTotal,
+    displayTotalPending,
+    totalLabel,
+    totalHint,
+    walletAmountFormatted,
+    grandTotalFormatted,
+    taxLabel,
+  } = useOrderSummaryPanel({
+    groupedByVendor,
+    subtotal,
+    subtotalPending,
+    estimatedTotal,
+    estimatedTotalPending,
+    quote,
+  });
 
-      <div className="shrink-0 border-b border-line px-5 pb-4 pt-5 md:px-6 md:pt-6">
-        <p className="text-[0.875rem] text-ink-muted">
-          {itemCount} {itemCount === 1 ? "item" : "items"}
-          <span className="mx-2 text-line">·</span>
-          <span className="font-medium text-ink">
+  const showCashbackNotice =
+    (quote?.cashbackAmount ?? 0) > 0 &&
+    (quote?.amountDue != null || estimatedTotal != null);
+
+  return (
+    <div className={ORDER_SUMMARY_PANEL_STYLES.root}>
+      <div aria-hidden className={ORDER_SUMMARY_PANEL_STYLES.accentBorder} />
+
+      <div className={ORDER_SUMMARY_PANEL_STYLES.header}>
+        <p className={ORDER_SUMMARY_PANEL_STYLES.itemCountText}>
+          {itemCountText}
+          <span className={ORDER_SUMMARY_PANEL_STYLES.dotSeparator}>·</span>
+          <span className={ORDER_SUMMARY_PANEL_STYLES.headerTotal}>
             <MoneyAmount
               value={displayTotal}
               pending={displayTotalPending}
@@ -85,8 +81,10 @@ export function OrderSummaryPanel({
             />
           </span>
         </p>
-        <TextEyebrow className="mt-4">Order summary</TextEyebrow>
-        <h2 className="mt-1 font-display text-[1.25rem] text-ink">Your bag</h2>
+        <TextEyebrow className={ORDER_SUMMARY_PANEL_STYLES.eyebrow}>
+          Order summary
+        </TextEyebrow>
+        <h2 className={ORDER_SUMMARY_PANEL_STYLES.title}>Your bag</h2>
       </div>
 
       <OrderSummaryItemsList
@@ -95,11 +93,11 @@ export function OrderSummaryPanel({
         amountsUnavailable={amountsUnavailable}
       />
 
-      <div className="shrink-0 border-t border-line bg-surface-raised px-5 py-4 md:px-6 md:py-5">
-        <dl className="space-y-2.5 text-[0.875rem]">
-          <div className="flex items-center justify-between gap-4">
-            <dt className="text-ink-muted">Subtotal</dt>
-            <dd className="tabular-nums text-ink">
+      <div className={ORDER_SUMMARY_PANEL_STYLES.footer}>
+        <dl className={ORDER_SUMMARY_PANEL_STYLES.totalsList}>
+          <div className={ORDER_SUMMARY_PANEL_STYLES.totalsRow}>
+            <dt className={ORDER_SUMMARY_PANEL_STYLES.totalsLabel}>Subtotal</dt>
+            <dd className={ORDER_SUMMARY_PANEL_STYLES.totalsValue}>
               <MoneyAmount
                 value={summarySubtotal}
                 pending={summarySubtotalPending}
@@ -107,42 +105,35 @@ export function OrderSummaryPanel({
               />
             </dd>
           </div>
-          {appliedCoupons.map((coupon) => (
-            <div
-              key={coupon.code}
-              className="flex items-center justify-between gap-4 text-success"
-            >
-              <dt>Coupon · {coupon.code}</dt>
-              <dd className="tabular-nums">
-                −₹{formatInrAmount(coupon.discount)}
-              </dd>
-            </div>
-          ))}
-          {(quote?.cashbackAmount ?? 0) > 0 &&
-          (quote?.amountDue != null || estimatedTotal != null) ? (
+
+          <AppliedCouponsSummaryList coupons={appliedCoupons} />
+
+          {showCashbackNotice ? (
             <CashbackCouponNotice
               payNow={quote?.amountDue ?? estimatedTotal!}
               cashbackAmount={quote?.cashbackAmount ?? 0}
               code={quote?.appliedCoupon?.code}
-              className="text-body-sm text-brand"
+              className={ORDER_SUMMARY_PANEL_STYLES.cashbackNotice}
             />
           ) : null}
-          {(quote?.walletAmountToUse ?? 0) > 0 ? (
-            <div className="flex items-center justify-between gap-4 text-body-sm">
-              <dt className="text-ink-muted">
+
+          {walletApplied && walletAmountFormatted ? (
+            <div className={ORDER_SUMMARY_PANEL_STYLES.walletRow}>
+              <dt className={ORDER_SUMMARY_PANEL_STYLES.walletLabel}>
                 {LABELS.walletAppliedAtCheckout}
               </dt>
-              <dd className="tabular-nums text-ink">
-                −₹{formatInrAmount(quote!.walletAmountToUse)}
+              <dd className={ORDER_SUMMARY_PANEL_STYLES.walletValue}>
+                −₹{walletAmountFormatted}
               </dd>
             </div>
           ) : null}
+
           {orderTotals ? (
             <OrderTaxShippingBreakdown
               shippingTotal={orderTotals.shippingTotal}
               shippingDisplayKey={orderTotals.shippingDisplayKey}
               taxTotal={orderTotals.taxTotal}
-              taxLabel={taxDisplayLabel(orderTotals.taxDisplayKey)}
+              taxLabel={taxLabel}
             />
           ) : (
             <OrderTaxShippingBreakdown
@@ -154,12 +145,12 @@ export function OrderSummaryPanel({
           )}
         </dl>
 
-        <div className="mt-4 border-t border-line pt-4">
-          <div className="flex items-end justify-between gap-4">
-            <span className="text-[0.875rem] font-medium text-ink">
+        <div className={ORDER_SUMMARY_PANEL_STYLES.finalTotalContainer}>
+          <div className={ORDER_SUMMARY_PANEL_STYLES.finalTotalRow}>
+            <span className={ORDER_SUMMARY_PANEL_STYLES.finalTotalLabel}>
               {totalLabel}
             </span>
-            <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
+            <span className={ORDER_SUMMARY_PANEL_STYLES.finalTotalValue}>
               <MoneyAmount
                 value={displayTotal}
                 pending={displayTotalPending}
@@ -168,18 +159,20 @@ export function OrderSummaryPanel({
               />
             </span>
           </div>
-          {walletApplied && quote ? (
-            <p className="mt-1.5 text-[0.75rem] text-ink-muted">
-              {LABELS.orderTotalLabel}: ₹{formatInrAmount(quote.grandTotal)}
+
+          {walletApplied && grandTotalFormatted ? (
+            <p className={ORDER_SUMMARY_PANEL_STYLES.grandTotalReference}>
+              {LABELS.orderTotalLabel}: ₹{grandTotalFormatted}
             </p>
           ) : null}
+
           {amountsUnavailable ? (
             <AmountsUnavailableNotice
-              className="mt-2"
+              className={ORDER_SUMMARY_PANEL_STYLES.amountsUnavailableNotice}
               onRetry={onRetryAmounts}
             />
           ) : (
-            <p className="mt-1.5 text-[0.75rem] text-ink-muted">{totalHint}</p>
+            <p className={ORDER_SUMMARY_PANEL_STYLES.totalHint}>{totalHint}</p>
           )}
         </div>
       </div>

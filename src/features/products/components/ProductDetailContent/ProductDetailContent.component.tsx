@@ -1,23 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { Breadcrumbs } from "@/shared/components/Breadcrumbs.component";
 import { ProductRelatedRails } from "../ProductRelatedRails.component";
 import { ProductGallery } from "./ProductGallery.component";
 import { ProductBuyBoxColumn } from "./ProductBuyBoxColumn.component";
 import { DetailTabsSection } from "./DetailTabsSection.component";
 import { StickyAddToCartBar } from "./StickyAddToCartBar.component";
-import { LABELS } from "@/shared/constants/labels";
-import { cartLineQuantityMax } from "@/shared/constants/cart";
-import { WARRANTY_TYPE } from "@/shared/constants/statuses";
-import { VARIANT_LOW_STOCK_DEFAULT } from "../../constants/productFields";
-import { formatInrAmount } from "@/shared/utils/orderFormat";
-import {
-  getAddToCartHint,
-  getAddToCartLabel,
-  getQuantityDisabledHint,
-  getStickyAddLabel,
-} from "./labels";
+import { useProductDetailContent } from "./useProductDetailContent.hook";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
 import type { ProductDetailContentProps } from "./types";
 
 export function ProductDetailContent({
@@ -25,7 +15,7 @@ export function ProductDetailContent({
   isWishlisted,
   onToggleWishlist,
   onAddToCart,
-  isAddingToCart,
+  isAddingToCart = false,
   canAddToCart = true,
   needsOptionSelection = false,
   variantUnavailable = false,
@@ -34,7 +24,7 @@ export function ProductDetailContent({
   quantity,
   onQuantityChange,
   maxQuantity,
-  showStickyBar,
+  showStickyBar = false,
   addSectionRef,
   breadcrumbItems,
   variantSelection,
@@ -42,72 +32,51 @@ export function ProductDetailContent({
   returnWindowDays,
   returnsAllowed,
 }: ProductDetailContentProps) {
-  const [deliveryBlocked, setDeliveryBlocked] = useState(false);
-  const [detailTab, setDetailTab] = useState("description");
-  const displayPrice = Number(
-    variantSelection.currentPrice || product.basePrice || 0,
-  );
-  const displayStock = Number(
-    variantSelection.currentStock || product.stock || 0,
-  );
-  const quantityMax = maxQuantity ?? cartLineQuantityMax(displayStock);
-  const purchaseBlocked = Boolean(!canAddToCart || deliveryBlocked);
-  const addDisabled = Boolean(purchaseBlocked || isAddingToCart);
-  const quantityDisabled = purchaseBlocked;
-  const quantityDisabledHint = getQuantityDisabledHint({
-    needsOptionSelection,
-    variantUnavailable,
-    canAddToCart,
-  });
-  const reviewCount = product.reviewCount ?? 0;
-  const avgRating = product.avgRating ?? 0;
-  const formattedPrice = formatInrAmount(displayPrice);
-  const compareAtPrice = product.compareAtPrice ?? null;
-  const showMrp = product.showMrp ?? false;
-  const discountPercent = product.discountPercent ?? null;
-  const taxInclusiveEstimate = product.taxInclusivePrice ?? null;
-
-  const resolvedVariant =
-    variantSelection.matchedVariant ??
-    (product.variants?.length === 1 ? product.variants[0] : null);
-
-  const lowStockAt = Number(
-    resolvedVariant?.lowStockAt ?? VARIANT_LOW_STOCK_DEFAULT,
-  );
-  const warrantyTypeLabel =
-    product.displayWarrantyType === WARRANTY_TYPE.SELLER
-      ? LABELS.warrantySeller
-      : LABELS.warrantyManufacturer;
-  const sellerScore =
-    product.vendorPerformanceScore ?? product.vendor?.performanceScore ?? null;
-
-  const categoryName = product.category?.name ?? product.categoryName ?? null;
-
-  const addToCartLabel = getAddToCartLabel({
-    needsOptionSelection,
-    variantUnavailable,
+  const {
+    setDeliveryBlocked,
+    detailTab,
+    setDetailTab,
     displayStock,
-  });
-
-  const stickyAddLabel = getStickyAddLabel(
-    needsOptionSelection,
-    variantUnavailable,
+    quantityMax,
+    addDisabled,
+    quantityDisabled,
+    quantityDisabledHint,
+    reviewCount,
+    avgRating,
     formattedPrice,
-  );
-
-  const addToCartHint = getAddToCartHint({
+    compareAtPrice,
+    showMrp,
+    discountPercent,
+    taxInclusiveEstimate,
+    resolvedVariant,
+    lowStockAt,
+    warrantyTypeLabel,
+    sellerScore,
+    categoryName,
+    addToCartLabel,
+    stickyAddLabel,
+    addToCartHint,
+    isStickyBarVisible,
+    handleReviewsClick,
+  } = useProductDetailContent({
+    product,
+    variantSelection,
+    maxQuantity,
+    canAddToCart,
     needsOptionSelection,
     variantUnavailable,
-    displayStock,
-    deliveryBlocked,
     isAddingToCart,
+    showStickyBar,
   });
 
   return (
-    <div className="storefront-container pb-10 pt-4 sm:pt-6 md:pb-14 md:pt-8">
-      <Breadcrumbs items={breadcrumbItems} className="mb-5 sm:mb-6" />
+    <div className={PRODUCT_DETAIL_CONTENT_STYLES.container}>
+      <Breadcrumbs
+        items={breadcrumbItems}
+        className={PRODUCT_DETAIL_CONTENT_STYLES.breadcrumbs}
+      />
 
-      <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-12 lg:gap-10 xl:gap-14">
+      <div className={PRODUCT_DETAIL_CONTENT_STYLES.layoutGrid}>
         <ProductGallery
           product={product}
           resolvedVariant={resolvedVariant}
@@ -122,7 +91,7 @@ export function ProductDetailContent({
           sellerScore={sellerScore}
           avgRating={avgRating}
           reviewCount={reviewCount}
-          onReviewsClick={() => setDetailTab("reviews")}
+          onReviewsClick={handleReviewsClick}
           formattedPrice={formattedPrice}
           compareAtPrice={compareAtPrice}
           showMrp={showMrp}
@@ -172,10 +141,7 @@ export function ProductDetailContent({
       />
 
       <StickyAddToCartBar
-        visible={
-          showStickyBar &&
-          (displayStock > 0 || needsOptionSelection || variantUnavailable)
-        }
+        visible={isStickyBarVisible}
         productName={product.name}
         formattedPrice={formattedPrice}
         addDisabled={addDisabled}

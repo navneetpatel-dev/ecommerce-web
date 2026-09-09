@@ -1,8 +1,8 @@
 import { Package } from "lucide-react";
 import type { ProductListItem } from "@/shared/api/types";
-import { ProductCardContainer } from "../containers/ProductCardContainer.container";
 import { SkeletonGrid } from "@/shared/components/Skeletons.component";
 import { EmptyState } from "@/shared/components/EmptyState.component";
+import { ProductGridList } from "./ProductGridList.component";
 
 interface ProductGridProps {
   products?: ProductListItem[];
@@ -46,17 +46,12 @@ export function ProductGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 pb-4">
-      {products.map((product) => (
-        <ProductCardContainer
-          key={product.id}
-          product={product}
-          compareMode={compareMode}
-          isCompared={comparedIds.includes(product.id)}
-          compareAtLimit={compareAtLimit}
-          onToggleCompare={onToggleCompare}
-        />
-      ))}
-    </div>
+    <ProductGridList
+      products={products}
+      compareMode={compareMode}
+      comparedIds={comparedIds}
+      compareAtLimit={compareAtLimit}
+      onToggleCompare={onToggleCompare}
+    />
   );
 }

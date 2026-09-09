@@ -4,6 +4,7 @@ import { CheckoutPageSkeleton } from "@/shared/components/Skeletons.component";
 import { PaymentProcessingOverlay } from "../PaymentProcessingOverlay.component";
 import type { CheckoutPaymentPhase } from "../../hooks/useCheckoutPaymentPhase.hook";
 import { checkoutOverlayCopy } from "./checkoutOverlayCopy";
+import { CHECKOUT_TRANSITION_STATE_STYLES } from "./checkoutTransitionState.styles";
 
 interface CheckoutTransitionStateProps {
   paymentPhase: CheckoutPaymentPhase;
@@ -26,7 +27,10 @@ export function CheckoutTransitionState({
   return (
     <>
       {isRedirecting ? (
-        <div className="fixed inset-0 z-40 bg-surface" aria-hidden />
+        <div
+          className={CHECKOUT_TRANSITION_STATE_STYLES.redirectingBackdrop}
+          aria-hidden
+        />
       ) : (
         <CheckoutPageSkeleton />
       )}

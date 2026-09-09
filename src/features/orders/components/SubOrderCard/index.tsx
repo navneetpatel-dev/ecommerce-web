@@ -1,8 +1,6 @@
 import type { OrderItem, SubOrder } from "@/shared/api/types";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Timeline } from "@/shared/components/Timeline.component";
-import { buildSubOrderTimeline } from "../../utils/timeline";
-import { ORDER_STATUS } from "@/shared/constants/statuses";
 import type { ReturnReasonCode } from "../../hooks/useSubOrderReturn.hook";
 import { VENDOR_GROUP_CARD } from "@/shared/components/vendorGroupStyles";
 import { SubOrderCardHeader } from "./SubOrderCardHeader.component";
@@ -11,6 +9,8 @@ import { SubOrderCardTotals } from "./SubOrderCardTotals.component";
 import { SubOrderReturnDialog } from "./SubOrderReturnDialog.component";
 import { SubOrderShipmentTracking } from "./SubOrderShipmentTracking.component";
 import { BuyAgainButton } from "../BuyAgainButton.component";
+import { useSubOrderCard } from "./useSubOrderCard.hook";
+import { SUB_ORDER_CARD_STYLES } from "./subOrderCard.styles";
 
 interface SubOrderCardProps {
   subOrder: SubOrder;
@@ -51,11 +51,8 @@ export function SubOrderCard({
   onPhotoUrlsChange,
   onSubmitReturn,
 }: SubOrderCardProps) {
-  const timeline = buildSubOrderTimeline(subOrder);
-  const showTimeline = subOrder.status !== ORDER_STATUS.PENDING;
-  const vendorName = subOrder.vendor?.businessName || "Seller";
-  const itemCount = subOrder.items?.length ?? 0;
-  const canReturn = subOrder.status === ORDER_STATUS.DELIVERED;
+  const { timeline, showTimeline, vendorName, itemCount, canReturn, items } =
+    useSubOrderCard({ subOrder });
 
   return (
     <section className={VENDOR_GROUP_CARD}>
@@ -64,7 +61,7 @@ export function SubOrderCard({
         vendorId={subOrder.vendor?.id}
         itemCount={itemCount}
         status={subOrder.status}
-        className="mb-1"
+        className={SUB_ORDER_CARD_STYLES.headerMargin}
       />
 
       <SubOrderCardItems
@@ -75,13 +72,15 @@ export function SubOrderCard({
 
       <SubOrderCardTotals subOrder={subOrder} />
 
-      <div className="mt-4">
-        <BuyAgainButton items={subOrder.items ?? []} />
+      <div className={SUB_ORDER_CARD_STYLES.buyAgainWrapper}>
+        <BuyAgainButton items={items} />
       </div>
 
       {showTimeline && (
-        <div className="mt-5 border-t border-line pt-5">
-          <TextEyebrow className="mb-3">Progress</TextEyebrow>
+        <div className={SUB_ORDER_CARD_STYLES.timelineContainer}>
+          <TextEyebrow className={SUB_ORDER_CARD_STYLES.timelineEyebrow}>
+            Progress
+          </TextEyebrow>
           <Timeline steps={timeline} />
         </div>
       )}

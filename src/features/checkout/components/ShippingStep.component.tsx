@@ -1,9 +1,13 @@
+"use client";
+
 import { ArrowRight } from "lucide-react";
 import type { CartItem } from "@/shared/api/types";
 import type { ShippingMethod } from "@/shared/constants/statuses";
-import { ShippingCardContainer } from "../containers/ShippingCardContainer.container";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { useShippingStep } from "./useShippingStep.hook";
+import { ShippingCardsList } from "./ShippingCardsList.component";
+import { SHIPPING_STEP_STYLES } from "./shippingStep.styles";
 
 interface ShippingStepProps {
   groupedByVendor: Record<string, CartItem[]>;
@@ -22,45 +26,39 @@ export function ShippingStep({
   onSelect,
   onContinue,
 }: ShippingStepProps) {
-  const vendors = Object.entries(groupedByVendor);
+  const { vendors, vendorCountText, hasPincode } = useShippingStep({
+    groupedByVendor,
+    pincode,
+  });
 
   return (
-    <div className="space-y-5">
-      <p className="text-[0.875rem] text-ink-muted">
-        {vendors.length} {vendors.length === 1 ? "vendor" : "vendors"} in this
-        order
-      </p>
+    <div className={SHIPPING_STEP_STYLES.root}>
+      <p className={SHIPPING_STEP_STYLES.vendorCount}>{vendorCountText}</p>
 
-      {!pincode && (
-        <p className="text-[0.875rem] text-ink-muted">
+      {!hasPincode && (
+        <p className={SHIPPING_STEP_STYLES.pincodePrompt}>
           Select a delivery address to load shipping rates.
         </p>
       )}
 
-      <div className="space-y-4">
-        {vendors.map(([vid, items]) => (
-          <ShippingCardContainer
-            key={vid}
-            vendorId={vid}
-            vendor={items[0].product.vendor}
-            pincode={pincode}
-            selected={selectedMethods[vid]}
-            onSelect={(m) => onSelect(vid, m)}
-          />
-        ))}
-      </div>
+      <ShippingCardsList
+        vendors={vendors}
+        selectedMethods={selectedMethods}
+        pincode={pincode}
+        onSelect={onSelect}
+      />
 
       <DisabledActionHint
         disabled={!canContinue}
         message="Select a shipping method for each vendor to continue."
-        className="w-full sm:w-auto"
+        className={SHIPPING_STEP_STYLES.actionHint}
       >
         <Button
           size="lg"
           onClick={onContinue}
           disabled={!canContinue}
           fullWidth="mobile"
-          className="gap-2"
+          className={SHIPPING_STEP_STYLES.continueButton}
         >
           Continue to payment
           <ArrowRight size={16} />

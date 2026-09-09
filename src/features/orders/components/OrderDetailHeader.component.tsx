@@ -2,11 +2,11 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
-import { formatLabel } from "@/shared/utils/formatLabel";
 import type { Order } from "@/shared/api/types";
 import { OrderStatusGroup } from "./OrderStatusGroup.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { formatOrderDate, shortOrderId } from "../utils/format";
+import { useOrderDetailHeader } from "./useOrderDetailHeader.hook";
+import { ORDER_DETAIL_HEADER_STYLES } from "./orderDetailHeader.styles";
 
 interface OrderDetailHeaderProps {
   order: Order;
@@ -20,56 +20,44 @@ export function OrderDetailHeader({
   itemCount,
   vendorCount,
 }: OrderDetailHeaderProps) {
-  const placedCopy = formatLabel(LABELS.placedOn, {
-    date: formatOrderDate(order.createdAt),
+  const { orderIdShort, metaText } = useOrderDetailHeader({
+    order,
+    itemCount,
+    vendorCount,
   });
 
   return (
     <header>
-      <Link
-        href={PATHS.orders}
-        className="mb-4 inline-flex items-center gap-1.5 text-[0.875rem] text-ink-muted transition-colors hover:text-brand"
-      >
-        <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
+      <Link href={PATHS.orders} className={ORDER_DETAIL_HEADER_STYLES.backLink}>
+        <ArrowLeft
+          className={ORDER_DETAIL_HEADER_STYLES.backIcon}
+          strokeWidth={1.5}
+        />
         {LABELS.backToOrders}
       </Link>
 
       <TextEyebrow brand>{LABELS.orderDetails}</TextEyebrow>
-      <div className="mt-1.5 flex flex-wrap items-end justify-between gap-4">
+      <div className={ORDER_DETAIL_HEADER_STYLES.headerGrid}>
         <div>
           <h1
-            className="font-display text-ink leading-[1.1] tracking-tight"
-            style={{ fontSize: "var(--text-display-sm)" }}
+            className={ORDER_DETAIL_HEADER_STYLES.heading}
+            style={ORDER_DETAIL_HEADER_STYLES.headingStyle}
           >
-            Order #{shortOrderId(order.id)}
+            Order #{orderIdShort}
           </h1>
-          <p className="mt-2 text-[0.875rem] text-ink-muted">
-            {placedCopy}
-            {vendorCount > 0 && (
-              <>
-                {" · "}
-                {vendorCount}{" "}
-                {vendorCount === 1
-                  ? LABELS.sellerSingular
-                  : LABELS.sellerPlural}
-                {" · "}
-                {itemCount}{" "}
-                {itemCount === 1 ? LABELS.itemSingular : LABELS.itemPlural}
-              </>
-            )}
-          </p>
+          <p className={ORDER_DETAIL_HEADER_STYLES.metaText}>{metaText}</p>
           <OrderStatusGroup
-            className="mt-4"
+            className={ORDER_DETAIL_HEADER_STYLES.statusGroupMargin}
             orderStatus={order.status}
             paymentStatus={order.paymentStatus}
           />
           {order.giftWrap ? (
-            <div className="mt-3 rounded-md border border-line bg-surface-muted px-3 py-2">
-              <p className="text-body-sm font-medium text-ink">
+            <div className={ORDER_DETAIL_HEADER_STYLES.giftWrapBox}>
+              <p className={ORDER_DETAIL_HEADER_STYLES.giftWrapBadge}>
                 🎁 {LABELS.giftWrappedBadge}
               </p>
               {order.giftMessage ? (
-                <p className="mt-1 text-body-sm text-ink-muted">
+                <p className={ORDER_DETAIL_HEADER_STYLES.giftWrapMessage}>
                   {order.giftMessage}
                 </p>
               ) : null}

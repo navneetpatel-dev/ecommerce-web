@@ -2,11 +2,11 @@
 
 import { useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { cartKeys } from "@/features/cart";
 import {
+  cartKeys,
   patchExistingCartItemQuantity,
   patchRemoveCartItem,
-} from "@/features/cart/utils/cartDisplay.utils";
+} from "@/features/cart";
 import type { Cart, ProductListItem } from "@/shared/api/types";
 
 export function patchCartQuantity(

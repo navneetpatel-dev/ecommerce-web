@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
+import { PAYMENT_PROCESSING_OVERLAY_STYLES } from "./paymentProcessingOverlay.styles";
 
 interface PaymentProcessingOverlayProps {
   open: boolean;
@@ -17,20 +18,20 @@ export function PaymentProcessingOverlay({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/55 px-4 backdrop-blur-[2px]"
+      className={PAYMENT_PROCESSING_OVERLAY_STYLES.backdrop}
       role="status"
       aria-live="polite"
       aria-busy="true"
     >
-      <div className="w-full max-w-sm border border-line bg-surface-raised px-6 py-8 text-center shadow-elevation-2">
+      <div className={PAYMENT_PROCESSING_OVERLAY_STYLES.card}>
         <Loader2
           size={32}
-          className="mx-auto animate-spin text-brand"
+          className={PAYMENT_PROCESSING_OVERLAY_STYLES.spinner}
           aria-hidden
         />
-        <p className="mt-4 font-medium text-ink">{title}</p>
+        <p className={PAYMENT_PROCESSING_OVERLAY_STYLES.title}>{title}</p>
         {description ? (
-          <p className="mt-2 text-body-sm leading-relaxed text-ink-muted">
+          <p className={PAYMENT_PROCESSING_OVERLAY_STYLES.description}>
             {description}
           </p>
         ) : null}

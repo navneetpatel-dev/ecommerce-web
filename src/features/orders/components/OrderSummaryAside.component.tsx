@@ -1,14 +1,16 @@
 import Link from "next/link";
-import { MapPin } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import type { Order } from "@/shared/api/types";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
-import { formatInr } from "../utils/format";
 import { OrderPaymentSummary } from "./OrderPaymentSummary.component";
 import { OrderMoneyBreakdown } from "./OrderMoneyBreakdown.component";
 import { OrderCancelAction } from "./OrderCancelAction.component";
+import { ShippingAddressBlock } from "./ShippingAddressBlock.component";
+import { SubOrderInvoicesList } from "./SubOrderInvoicesList.component";
+import { useOrderSummaryAside } from "./useOrderSummaryAside.hook";
+import { ORDER_SUMMARY_ASIDE_STYLES } from "./orderSummaryAside.styles";
 
 interface OrderSummaryAsideProps {
   order: Order;
@@ -31,79 +33,74 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
     onDownloadAllInvoices,
     onDownloadSubOrderInvoice,
   } = props;
-  const address = order.shippingAddress;
-  const subOrders = order.subOrders ?? [];
-  const hasMultipleSellers = subOrders.length > 1;
 
-  const itemCopy = `${itemCount} ${
-    itemCount === 1 ? LABELS.itemSingular : LABELS.itemPlural
-  }`;
+  const {
+    address,
+    subOrders,
+    hasMultipleSellers,
+    itemCopy,
+    formattedTotalAmount,
+    allInvoicesDisabled,
+    singleInvoiceDisabled,
+  } = useOrderSummaryAside({
+    order,
+    itemCount,
+    invoicePending,
+  });
 
   return (
-    <div className="relative border border-line bg-surface-raised p-5 shadow-elevation-1">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand via-brand/70 to-transparent"
-      />
+    <div className={ORDER_SUMMARY_ASIDE_STYLES.root}>
+      <div aria-hidden className={ORDER_SUMMARY_ASIDE_STYLES.accentBorder} />
 
-      <p className="text-[0.875rem] text-ink-muted">
+      <p className={ORDER_SUMMARY_ASIDE_STYLES.itemCountText}>
         {itemCopy}
-        <span className="mx-2 text-line">·</span>
-        <span className="font-medium text-ink">
-          {formatInr(order.totalAmount)}
+        <span className={ORDER_SUMMARY_ASIDE_STYLES.dotSeparator}>·</span>
+        <span className={ORDER_SUMMARY_ASIDE_STYLES.totalAmount}>
+          {formattedTotalAmount}
         </span>
       </p>
 
-      <TextEyebrow className="mt-4">{LABELS.orderSummary}</TextEyebrow>
-      <h2 className="mt-1 font-display text-[1.25rem] text-ink">
-        {LABELS.whatYouPaid}
-      </h2>
+      <TextEyebrow className={ORDER_SUMMARY_ASIDE_STYLES.eyebrow}>
+        {LABELS.orderSummary}
+      </TextEyebrow>
+      <h2 className={ORDER_SUMMARY_ASIDE_STYLES.title}>{LABELS.whatYouPaid}</h2>
 
-      <div className="mt-5 space-y-2.5 text-[0.875rem]">
-        <dl className="flex items-center justify-between gap-4">
-          <dt className="text-ink-muted">{LABELS.itemsLine}</dt>
-          <dd className="tabular-nums text-ink">{itemCount}</dd>
+      <div className={ORDER_SUMMARY_ASIDE_STYLES.itemsRow}>
+        <dl className={ORDER_SUMMARY_ASIDE_STYLES.itemsDl}>
+          <dt className={ORDER_SUMMARY_ASIDE_STYLES.itemsLabel}>
+            {LABELS.itemsLine}
+          </dt>
+          <dd className={ORDER_SUMMARY_ASIDE_STYLES.itemsValue}>{itemCount}</dd>
         </dl>
         <OrderMoneyBreakdown order={order} />
       </div>
 
       <OrderPaymentSummary
         order={order}
-        className="mt-5 border-t border-line pt-5"
+        className={ORDER_SUMMARY_ASIDE_STYLES.paymentSummary}
       />
 
       {address ? <ShippingAddressBlock address={address} /> : null}
 
-      <div className="mt-5 border-t border-line pt-5 space-y-2">
+      <div className={ORDER_SUMMARY_ASIDE_STYLES.actionsContainer}>
         {hasMultipleSellers ? (
-          <div className="space-y-2">
-            <p className="text-body-sm font-medium text-ink">
+          <div className={ORDER_SUMMARY_ASIDE_STYLES.multiSellersContainer}>
+            <p className={ORDER_SUMMARY_ASIDE_STYLES.downloadTitle}>
               {LABELS.downloadTaxInvoice}
             </p>
-            {subOrders.map((sub) => (
-              <Button
-                key={sub.id}
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={() => onDownloadSubOrderInvoice(sub.id)}
-                loading={invoicePending && pendingSubOrderId === sub.id}
-                disabled={!sub.taxInvoiceNumber || invoicePending}
-              >
-                {sub.vendor?.businessName ?? LABELS.sellerFallback}
-                {sub.taxInvoiceNumber ? ` · ${sub.taxInvoiceNumber}` : ""}
-              </Button>
-            ))}
+            <SubOrderInvoicesList
+              subOrders={subOrders}
+              invoicePending={invoicePending}
+              pendingSubOrderId={pendingSubOrderId}
+              onDownloadSubOrderInvoice={onDownloadSubOrderInvoice}
+            />
             <Button
               type="button"
               variant="secondary"
-              className="w-full"
+              className={ORDER_SUMMARY_ASIDE_STYLES.fullWidthButton}
               onClick={onDownloadAllInvoices}
               loading={invoicePending && pendingSubOrderId == null}
-              disabled={
-                invoicePending ||
-                subOrders.every((sub) => !sub.taxInvoiceNumber)
-              }
+              disabled={allInvoicesDisabled}
             >
               {LABELS.downloadAllTaxInvoices}
             </Button>
@@ -112,47 +109,27 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
           <Button
             type="button"
             variant="outline"
-            className="w-full"
+            className={ORDER_SUMMARY_ASIDE_STYLES.fullWidthButton}
             onClick={onDownloadAllInvoices}
             loading={invoicePending}
-            disabled={!subOrders[0]?.taxInvoiceNumber}
+            disabled={singleInvoiceDisabled}
           >
             {LABELS.downloadTaxInvoice}
           </Button>
         )}
+
         {invoiceError ? (
-          <p role="alert" className="text-body-sm text-danger">
+          <p role="alert" className={ORDER_SUMMARY_ASIDE_STYLES.invoiceError}>
             {invoiceError}
           </p>
         ) : null}
+
         <OrderCancelAction order={order} />
-        <Button className="w-full" asChild>
+
+        <Button className={ORDER_SUMMARY_ASIDE_STYLES.fullWidthButton} asChild>
           <Link href={PATHS.orders}>{LABELS.allOrders}</Link>
         </Button>
       </div>
-    </div>
-  );
-}
-
-interface ShippingAddressBlockProps {
-  address: NonNullable<Order["shippingAddress"]>;
-}
-
-function ShippingAddressBlock({ address }: ShippingAddressBlockProps) {
-  return (
-    <div className="mt-5 border-t border-line pt-5">
-      <div className="flex items-center gap-2">
-        <MapPin className="h-3.5 w-3.5 text-ink-muted" strokeWidth={1.5} />
-        <TextEyebrow className="!mb-0">{LABELS.shippingTo}</TextEyebrow>
-      </div>
-      <address className="mt-2 not-italic text-[0.875rem] leading-relaxed text-ink">
-        <span className="block">{address.line1}</span>
-        {address.line2 ? <span className="block">{address.line2}</span> : null}
-        <span className="block text-ink-muted">
-          {address.city}, {address.state} {address.pincode}
-        </span>
-        <span className="block text-ink-muted">{address.country}</span>
-      </address>
     </div>
   );
 }

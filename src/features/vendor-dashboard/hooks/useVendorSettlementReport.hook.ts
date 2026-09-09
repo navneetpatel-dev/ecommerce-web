@@ -2,7 +2,13 @@
 
 import { useMemo, useRef, useState } from "react";
 import { useAuthStore } from "@/shared/stores/auth.store";
-import { getReportExportErrorMessage } from "@/features/reports/utils/reportExportErrorMessage";
+import {
+  getReportExportErrorMessage,
+  downloadReportFile,
+  defaultRange,
+  type ExportFileFormat,
+  deriveExportControlsState,
+} from "@/features/reports";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
 import { API } from "@/shared/constants/apiRoutes";
@@ -10,10 +16,6 @@ import {
   reportsApi,
   type VendorReportSummary,
 } from "@/features/admin-dashboard";
-import { downloadReportFile } from "@/features/reports/api/reportsEngine.api";
-import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
-import type { ExportFileFormat } from "@/features/reports/hooks/useReportHubHelpers/index";
-import { deriveExportControlsState } from "@/features/reports/utils/exportControlsState";
 import { buildReportExportFilenameFallback } from "@/shared/utils/downloadFilename";
 
 /** Owns the vendor settlement report panel state (Rule 1/12). */
@@ -23,9 +25,8 @@ export function useVendorSettlementReport() {
   const [from, setFrom] = useState(initial.from);
   const [to, setTo] = useState(initial.to);
   const [loading, setLoading] = useState(false);
-  const [exportingFormat, setExportingFormat] = useState<ExportFileFormat | null>(
-    null,
-  );
+  const [exportingFormat, setExportingFormat] =
+    useState<ExportFileFormat | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [summary, setSummary] = useState<VendorReportSummary | null>(null);

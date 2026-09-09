@@ -7,6 +7,7 @@ import {
 import type { ReactNode } from "react";
 import type { CheckoutQuote } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { MOBILE_SUMMARY_ACCORDION_STYLES } from "./mobileSummaryAccordion.styles";
 
 interface MobileSummaryAccordionProps {
   summary: ReactNode;
@@ -23,14 +24,21 @@ export function MobileSummaryAccordion({
   quote,
 }: MobileSummaryAccordionProps) {
   const headerTotal = quote?.grandTotal ?? estimatedTotal;
+  const isUpdating = headerTotal == null || estimatedTotalPending;
+
   return (
-    <div className="mt-6 lg:hidden">
+    <div className={MOBILE_SUMMARY_ACCORDION_STYLES.root}>
       <Accordion type="single" collapsible>
-        <AccordionItem value="summary" className="border-line">
-          <AccordionTrigger className="text-body font-medium">
+        <AccordionItem
+          value="summary"
+          className={MOBILE_SUMMARY_ACCORDION_STYLES.item}
+        >
+          <AccordionTrigger className={MOBILE_SUMMARY_ACCORDION_STYLES.trigger}>
             Order summary ·{" "}
-            {headerTotal == null || estimatedTotalPending ? (
-              <span className="text-ink-muted">Updating…</span>
+            {isUpdating ? (
+              <span className={MOBILE_SUMMARY_ACCORDION_STYLES.pendingText}>
+                Updating…
+              </span>
             ) : (
               <>₹{formatInrAmount(headerTotal)}</>
             )}

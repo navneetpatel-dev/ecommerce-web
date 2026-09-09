@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowRight, MapPin, Plus } from "lucide-react";
+import { ArrowRight, Plus } from "lucide-react";
 import type { Address } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { AddressFormDialog } from "@/shared/components/AddressFormDialog.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
+import { useAddressStep } from "./useAddressStep.hook";
+import { AddressEmptyState } from "./AddressEmptyState.component";
+import { AddressList } from "./AddressList.component";
+import { ADDRESS_STEP_STYLES } from "./addressStep.styles";
 
 interface AddressStepProps {
   addresses?: Address[];
@@ -26,24 +28,31 @@ export function AddressStep({
   onContinue,
   onCreateAddress,
 }: AddressStepProps) {
-  const [showDialog, setShowDialog] = useState(false);
-  const hasAddresses = Boolean(addresses?.length);
+  const {
+    showDialog,
+    setShowDialog,
+    openDialog,
+    hasAddresses,
+    addressCountText,
+    emptyHintMessage,
+    handleSelect,
+    canContinue,
+  } = useAddressStep({
+    addresses,
+    selectedId,
+    onSelect,
+  });
 
   return (
-    <div className="space-y-5">
+    <div className={ADDRESS_STEP_STYLES.root}>
       {hasAddresses && (
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-[0.875rem] text-ink-muted">
-            {addresses!.length} saved{" "}
-            {addresses!.length === 1 ? "address" : "addresses"}
-          </p>
+        <div className={ADDRESS_STEP_STYLES.headerRow}>
+          <p className={ADDRESS_STEP_STYLES.countText}>{addressCountText}</p>
           <Button
             type="button"
             variant="outline"
-            onClick={() => {
-              setShowDialog(true);
-            }}
-            className="gap-2"
+            onClick={openDialog}
+            className={ADDRESS_STEP_STYLES.addAddressBtn}
           >
             <Plus size={16} />
             {LABELS.addAddress}
@@ -52,29 +61,7 @@ export function AddressStep({
       )}
 
       {!hasAddresses && !showDialog && (
-        <div className="flex flex-col items-start gap-5 border border-dashed border-line bg-paper/50 px-6 py-10 md:px-8 md:py-12">
-          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-line bg-surface text-brand">
-            <MapPin size={22} />
-          </span>
-          <div>
-            <p className="font-display text-[1.25rem] text-ink">
-              Add a delivery address
-            </p>
-            <p className="mt-2 max-w-[40ch] text-body leading-relaxed text-ink-muted">
-              Save where your order should arrive so checkout stays quick next
-              time.
-            </p>
-          </div>
-          <Button
-            type="button"
-            size="lg"
-            onClick={() => setShowDialog(true)}
-            className="gap-2"
-          >
-            <Plus size={16} />
-            {LABELS.addAddress}
-          </Button>
-        </div>
+        <AddressEmptyState onAddClick={openDialog} />
       )}
 
       <AddressFormDialog
@@ -86,78 +73,25 @@ export function AddressStep({
         onSubmit={onCreateAddress}
       />
 
-      {hasAddresses && (
-        <ul className="space-y-3">
-          {addresses!.map((addr) => {
-            const selected = selectedId === addr.id;
-            return (
-              <li key={addr.id}>
-                <Button
-                  type="button"
-                  variant="outline"
-                  aria-pressed={selected}
-                  onClick={() => onSelect(addr.id)}
-                  className={cn(
-                    "h-auto min-h-11 max-h-none w-full px-4 py-4 text-left font-normal",
-                    selected
-                      ? "border-brand bg-brand-subtle shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-brand-subtle hover:text-ink"
-                      : "border-line hover:border-ink/25",
-                  )}
-                >
-                  <div className="flex w-full items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="font-medium text-ink">
-                        {addr.line1}
-                        {addr.line2 ? `, ${addr.line2}` : ""}
-                      </p>
-                      <p className="mt-1 text-[0.875rem] text-ink-muted">
-                        {addr.city}, {addr.state} {addr.pincode}
-                      </p>
-                      <p className="mt-0.5 text-body-sm text-ink-muted">
-                        {addr.country}
-                      </p>
-                    </div>
-                    <span
-                      className={cn(
-                        "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border",
-                        selected
-                          ? "border-brand bg-brand"
-                          : "border-line bg-surface",
-                      )}
-                      aria-hidden
-                    >
-                      {selected && (
-                        <span className="h-1.5 w-1.5 rounded-full bg-paper" />
-                      )}
-                    </span>
-                  </div>
-                  {addr.isDefault && (
-                    <span className="mt-3 inline-block text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-brand">
-                      {LABELS.addressDefault}
-                    </span>
-                  )}
-                </Button>
-              </li>
-            );
-          })}
-        </ul>
+      {hasAddresses && addresses && (
+        <AddressList
+          addresses={addresses}
+          selectedId={selectedId}
+          onSelect={handleSelect}
+        />
       )}
 
       <DisabledActionHint
-        disabled={!selectedId}
-        message={
-          !hasAddresses
-            ? "Add a delivery address to continue."
-            : "Select a delivery address to continue."
-        }
-        className="w-full sm:w-auto"
+        disabled={!canContinue}
+        message={emptyHintMessage}
+        className={ADDRESS_STEP_STYLES.actionHint}
       >
         <Button
           size="lg"
           onClick={onContinue}
-          disabled={!selectedId}
+          disabled={!canContinue}
           fullWidth="mobile"
-          className="gap-2"
+          className={ADDRESS_STEP_STYLES.continueButton}
         >
           Continue to shipping
           <ArrowRight size={16} />
