@@ -1,0 +1,7 @@
+import { SHIPMENT_STATUS } from "@/shared/constants/statuses";
+
+export const CALLABLE_SHIPMENT_STATUSES: string[] = [
+  SHIPMENT_STATUS.PICKED_UP,
+  SHIPMENT_STATUS.IN_TRANSIT,
+  SHIPMENT_STATUS.OUT_FOR_DELIVERY,
+];

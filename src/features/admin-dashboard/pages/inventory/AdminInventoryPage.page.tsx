@@ -1,76 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { Save } from "lucide-react";
 import { AdminDataPage } from "../shared/AdminDataPage.page";
-import { inventoryApi, type LowStockInventoryRow } from "../../api/inventory/inventory.api";
+import {
+  inventoryApi,
+  type LowStockInventoryRow,
+} from "../../api/inventory/inventory.api";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
-import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
-import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
-import { adminPagesStyles } from "../shared/adminPages.styles";
-
-function StockEditor({
-  row,
-  reload,
-}: {
-  row: LowStockInventoryRow;
-  reload: () => void;
-}) {
-  const [stock, setStock] = useState(String(row.stock));
-  const [pending, setPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const save = async () => {
-    const nextStock = Number(stock);
-    if (!Number.isInteger(nextStock) || nextStock < 0) {
-      setError("Enter a whole number of zero or more.");
-      return;
-    }
-    setPending(true);
-    setError(null);
-    try {
-      await inventoryApi.updateStock(row.id, nextStock);
-      reload();
-    } catch (saveError) {
-      setError(getApiErrorMessage(saveError, "Could not update stock."));
-    } finally {
-      setPending(false);
-    }
-  };
-
-  const errorElement = error ? (
-    <span className={adminPagesStyles.stockEditorError}>{error}</span>
-  ) : null;
-
-  return (
-    <div className={adminPagesStyles.stockEditorRow}>
-      <Input
-        aria-label={`Stock for ${row.sku}`}
-        className={adminPagesStyles.stockEditorInput}
-        min={0}
-        step={1}
-        type="number"
-        value={stock}
-        onChange={(event) => setStock(event.target.value)}
-      />
-      <Button
-        size="sm"
-        variant="outline"
-        loading={pending}
-        onClick={() => void save()}
-      >
-        <Save className={adminPagesStyles.iconSm} aria-hidden="true" />
-        Save
-      </Button>
-      {errorElement}
-    </div>
-  );
-}
+import { InventoryStockEditor } from "../../components/inventory/InventoryStockEditor.component";
 
 function renderStockEditorAction(row: AdminDataRow, reload: () => void) {
-  return <StockEditor row={row as LowStockInventoryRow} reload={reload} />;
+  return (
+    <InventoryStockEditor row={row as LowStockInventoryRow} reload={reload} />
+  );
 }
 
 export function AdminInventoryPage() {

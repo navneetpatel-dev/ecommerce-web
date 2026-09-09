@@ -1,40 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { Star, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { shippingApi } from "../../api/tracking/shipping.api";
 import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
+import { useDeliveryRatingPrompt } from "../../hooks/actions/useDeliveryRatingPrompt.hook";
+import { DeliveryRatingStars } from "./DeliveryRatingStars.component";
 
 /** Optional, dismissible "rate your delivery" prompt — never blocks anything. */
 export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {
-  const queryClient = useQueryClient();
-  const [dismissed, setDismissed] = useState(false);
-  const [selected, setSelected] = useState(0);
-  const [comment, setComment] = useState("");
+  const {
+    shouldRender,
+    selected,
+    setSelected,
+    comment,
+    setComment,
+    showCommentForm,
+    isSubmitting,
+    dismiss,
+    submitRating,
+  } = useDeliveryRatingPrompt(shipmentId);
 
-  const existing = useQuery({
-    queryKey: ["delivery-rating", shipmentId],
-    queryFn: () => shippingApi.getRating(shipmentId),
-  });
-
-  const submit = useMutation({
-    mutationFn: () =>
-      shippingApi.submitRating(
-        shipmentId,
-        selected,
-        comment.trim() || undefined,
-      ),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: ["delivery-rating", shipmentId],
-      });
-    },
-  });
-
-  if (dismissed || existing.isLoading || existing.data) return null;
+  if (!shouldRender) return null;
 
   return (
     <div className={ordersComponentsStyles.promptRoot}>
@@ -46,7 +33,7 @@ export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {
           type="button"
           aria-label="Dismiss"
           className={ordersComponentsStyles.promptDismissButton}
-          onClick={() => setDismissed(true)}
+          onClick={dismiss}
         >
           <X
             className={ordersComponentsStyles.promptDismissIcon}
@@ -54,26 +41,8 @@ export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {
           />
         </button>
       </div>
-      <div className={ordersComponentsStyles.promptStarsRow}>
-        {[1, 2, 3, 4, 5].map((value) => (
-          <button
-            key={value}
-            type="button"
-            aria-label={`${value} star${value === 1 ? "" : "s"}`}
-            onClick={() => setSelected(value)}
-          >
-            <Star
-              className={
-                value <= selected
-                  ? ordersComponentsStyles.starSelected
-                  : ordersComponentsStyles.starUnselected
-              }
-              aria-hidden="true"
-            />
-          </button>
-        ))}
-      </div>
-      {selected > 0 ? (
+      <DeliveryRatingStars selected={selected} onSelect={setSelected} />
+      {showCommentForm ? (
         <>
           <Textarea
             value={comment}
@@ -85,8 +54,8 @@ export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {
           <Button
             size="sm"
             className={ordersComponentsStyles.promptSubmitButton}
-            loading={submit.isPending}
-            onClick={() => submit.mutate()}
+            loading={isSubmitting}
+            onClick={submitRating}
           >
             Submit rating
           </Button>

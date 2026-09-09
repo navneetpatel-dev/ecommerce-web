@@ -1,7 +1,5 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useQueries } from "@tanstack/react-query";
 import { Button } from "@/shared/components/ui/button";
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -9,18 +7,12 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
-import { useWalletRecharge } from "../../hooks/recharge/useWalletRecharge.hook";
-import { useWalletRechargePreview } from "../../hooks/recharge/useWalletRechargePreview.hook";
-import {
-  walletRechargeValidationLabel,
-  type WalletRechargeValidationCode,
-} from "../../utils/recharge/walletRechargeValidation";
-import { walletApi } from "../../api/wallet/wallet.api";
-import { walletKeys } from "../../api/wallet/wallet.queries";
 import type { WalletBalanceResponse } from "../../api/wallet/wallet.api";
 import { cn } from "@/shared/utils/dom/cn";
 import { WalletRechargePanelSkeleton } from "../overview/WalletSectionSkeletons.component";
 import { walletRechargePanelStyles as styles } from "../../styles/recharge/walletRechargePanel.styles";
+import { useWalletRechargePanel } from "../../hooks/recharge/useWalletRechargePanel.hook";
+import { WalletRechargePresetButtons } from "./WalletRechargePresetButtons.component";
 
 interface WalletRechargePanelProps {
   balance: WalletBalanceResponse | undefined;
@@ -33,152 +25,86 @@ export function WalletRechargePanel({
   isLoading,
   className,
 }: WalletRechargePanelProps) {
-  const { recharge, isBusy, error, successMessage, clearMessages } =
-    useWalletRecharge();
-  const [customAmount, setCustomAmount] = useState<number | undefined>();
-
-  const limits = balance?.limits;
-  const presets = limits?.presetsInr ?? [];
-  const rechargeEnabled = balance?.rechargeEnabled !== false;
-  const pointsPerRupee = limits?.pointsPerRupee ?? 1;
-
-  const customPreviewQuery = useWalletRechargePreview(customAmount);
-  const presetPreviewQueries = useQueries({
-    queries: presets.map((preset) => ({
-      queryKey: walletKeys.rechargePreview(preset),
-      queryFn: () => walletApi.previewRecharge(preset),
-      enabled: rechargeEnabled && preset > 0,
-      staleTime: 30_000,
-    })),
-  });
-
-  const customValidationCode = customPreviewQuery.data?.validationCode ?? null;
-
-  const amountError = useMemo(
-    () => walletRechargeValidationLabel(customValidationCode, limits),
-    [customValidationCode, limits],
-  );
-
-  const canSubmitCustomAmount =
-    customAmount != null &&
-    customAmount > 0 &&
-    customValidationCode === "ok" &&
-    !customPreviewQuery.isFetching;
+  const panel = useWalletRechargePanel(balance);
 
   if (isLoading) {
     return <WalletRechargePanelSkeleton className={className} />;
   }
 
-  if (!rechargeEnabled) return null;
+  if (!panel.rechargeEnabled) return null;
 
-  const validationMessage = (
-    code: WalletRechargeValidationCode | null | undefined,
-  ): string | null => walletRechargeValidationLabel(code, limits);
-
-  const startRecharge = async (amount: number) => {
-    clearMessages();
-    const preview = await walletApi.previewRecharge(amount);
-    const message = validationMessage(preview.validationCode);
-    if (message) return;
-    await recharge(amount);
-  };
+  const limitsHint = panel.limits
+    ? formatLabel(LABELS.walletRechargeLimitsHint, {
+        min: formatInr(panel.limits.minInr),
+        max: formatInr(panel.limits.maxInr),
+      })
+    : undefined;
 
   return (
     <div className={cn(styles.container, className)}>
       <h2 className={styles.heading}>{LABELS.walletRecharge}</h2>
       <p className={styles.subheading}>{LABELS.walletPointsEqualsInr}</p>
-      {limits?.maxBalance ? (
+      {panel.limits?.maxBalance ? (
         <p className={styles.maxBalanceNote}>
           {formatLabel(LABELS.walletMaxBalanceCapNote, {
-            cap: formatPoints(limits.maxBalance),
+            cap: formatPoints(panel.limits.maxBalance),
           })}
         </p>
       ) : null}
 
-      {presets.length > 0 ? (
-        <div className={styles.presetsGrid}>
-          {presets.map((preset, index) => {
-            const preview = presetPreviewQueries[index]?.data;
-            return (
-              <Button
-                key={preset}
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={isBusy}
-                className={styles.presetButton}
-                onClick={() => void startRecharge(preset)}
-              >
-                <span className={styles.presetContent}>
-                  <span>{formatInr(preset)}</span>
-                  {pointsPerRupee > 1 && preview?.validationCode === "ok" ? (
-                    <span className={styles.presetBonusHint}>
-                      {formatLabel(LABELS.walletRechargeBonusHint, {
-                        amount: formatInr(preset),
-                        points: formatPoints(preview.pointsToCredit),
-                      })}
-                    </span>
-                  ) : null}
-                </span>
-              </Button>
-            );
-          })}
-        </div>
+      {panel.presets.length > 0 ? (
+        <WalletRechargePresetButtons
+          presets={panel.presets}
+          previews={panel.presetPreviewQueries}
+          pointsPerRupee={panel.pointsPerRupee}
+          disabled={panel.isBusy}
+          onSelect={(amount) => void panel.startRecharge(amount)}
+        />
       ) : null}
 
       <div className={styles.customAmountWrapper}>
         <FormFieldFrame
           label={LABELS.walletRechargeCustomAmount}
           htmlFor="wallet-recharge-amount"
-          error={amountError ?? undefined}
-          hint={
-            limits
-              ? formatLabel(LABELS.walletRechargeLimitsHint, {
-                  min: formatInr(limits.minInr),
-                  max: formatInr(limits.maxInr),
-                })
-              : undefined
-          }
+          error={panel.amountError ?? undefined}
+          hint={limitsHint}
         >
           <div className={styles.customAmountRow}>
             <NumberInput
               id="wallet-recharge-amount"
-              value={customAmount}
-              min={limits?.minInr}
-              max={limits?.maxInr}
+              value={panel.customAmount}
+              min={panel.limits?.minInr}
+              max={panel.limits?.maxInr}
               step={50}
               prefix="₹"
-              disabled={isBusy}
+              disabled={panel.isBusy}
               showSteppers={false}
-              error={Boolean(amountError)}
-              onChange={(value) => {
-                setCustomAmount(value);
-                clearMessages();
-              }}
+              error={Boolean(panel.amountError)}
+              onChange={panel.onCustomAmountChange}
             />
             <Button
               type="button"
               fullWidth="mobile"
-              disabled={isBusy || !canSubmitCustomAmount}
-              onClick={() => customAmount && void startRecharge(customAmount)}
+              disabled={panel.isBusy || !panel.canSubmitCustomAmount}
+              onClick={panel.submitCustomAmount}
             >
-              {isBusy ? LABELS.loading : LABELS.walletRechargePay}
+              {panel.isBusy ? LABELS.loading : LABELS.walletRechargePay}
             </Button>
           </div>
         </FormFieldFrame>
       </div>
 
-      {canSubmitCustomAmount && customPreviewQuery.data ? (
+      {panel.canSubmitCustomAmount && panel.customPreviewQuery.data ? (
         <p className={styles.previewText}>
           {formatLabel(LABELS.walletRechargePreview, {
-            points: formatPoints(customPreviewQuery.data.pointsToCredit),
+            points: formatPoints(panel.customPreviewQuery.data.pointsToCredit),
           })}
         </p>
       ) : null}
 
-      {error ? <p className={styles.errorText}>{error}</p> : null}
-      {successMessage ? (
-        <p className={styles.successText}>{successMessage}</p>
+      {panel.error ? <p className={styles.errorText}>{panel.error}</p> : null}
+      {panel.successMessage ? (
+        <p className={styles.successText}>{panel.successMessage}</p>
       ) : null}
 
       <p className={styles.termsNotice}>{LABELS.walletTermsNotice}</p>

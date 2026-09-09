@@ -4,15 +4,14 @@ import { motion } from "motion/react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
-import { hasOrderPaymentSummaryContent } from "../../utils/detail/orderPaymentSummary.utils";
 import { OrderPaymentSummary } from "../detail/OrderPaymentSummary.component";
 import { OrderMoneyBreakdown } from "../detail/OrderMoneyBreakdown.component";
 import { OrderConfirmationItems } from "./OrderConfirmationItems.component";
 import { OrderConfirmationHero } from "./OrderConfirmationHero.component";
-import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
-import { useOrder } from "../../api/orders/orders.queries";
-import type { Order } from "@/shared/api/types";
+import { useOrderConfirmation } from "../../hooks/confirmation/useOrderConfirmation.hook";
 import { orderConfirmationStyles as styles } from "../../styles/confirmation/orderConfirmation.styles";
+
+const SKELETON_GROUPS = [0, 1];
 
 interface OrderConfirmationProps {
   orderId: string | undefined;
@@ -25,7 +24,7 @@ function OrderItemsSkeleton() {
       aria-busy="true"
       aria-label={LABELS.orderDetailsLoading}
     >
-      {[0, 1].map((group) => (
+      {SKELETON_GROUPS.map((group) => (
         <div key={group} className={styles.skeletonCard}>
           <div className={styles.skeletonCardHeader}>
             <Skeleton className={styles.itemHeaderTitle} />
@@ -46,16 +45,8 @@ function OrderItemsSkeleton() {
 }
 
 export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
-  const {
-    data: order,
-    isLoading: isOrderLoading,
-    isError: isOrderError,
-  } = resolveQueryDetailState(useOrder(orderId ?? ""), {
-    enabled: Boolean(orderId),
-  });
-
-  const showPaymentSummary =
-    order != null && hasOrderPaymentSummaryContent(order as Order);
+  const { order, showPaymentSummary, showItemsSkeleton, showLoadError } =
+    useOrderConfirmation(orderId);
 
   return (
     <div className={styles.root}>
@@ -75,10 +66,10 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
               <TextEyebrow>{LABELS.orderSummary}</TextEyebrow>
               <h2 className={styles.sectionHeading}>{LABELS.whatYouOrdered}</h2>
 
-              {orderId && isOrderLoading ? <OrderItemsSkeleton /> : null}
-              {order ? <OrderConfirmationItems order={order as Order} /> : null}
+              {showItemsSkeleton ? <OrderItemsSkeleton /> : null}
+              {order ? <OrderConfirmationItems order={order} /> : null}
 
-              {orderId && isOrderError && !isOrderLoading ? (
+              {showLoadError ? (
                 <p className={styles.errorNotice}>
                   {LABELS.orderDetailsLoadFailed}
                 </p>
@@ -94,7 +85,7 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
               <TextEyebrow>{LABELS.orderTotalsHeading}</TextEyebrow>
               <h2 className={styles.sectionHeading}>{LABELS.whatYouPaid}</h2>
 
-              {orderId && isOrderLoading ? (
+              {showItemsSkeleton ? (
                 <div className={styles.asideLoadingCard}>
                   <Skeleton className={styles.asideLabel} />
                   <Skeleton className={styles.asideLine1} />
@@ -107,12 +98,12 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
                 <div className={styles.asidePaidCard}>
                   <div aria-hidden className={styles.accentStripe} />
                   <OrderMoneyBreakdown
-                    order={order as Order}
+                    order={order}
                     className={styles.moneyBreakdown}
                   />
                   {showPaymentSummary ? (
                     <OrderPaymentSummary
-                      order={order as Order}
+                      order={order}
                       className={styles.paymentSummary}
                     />
                   ) : null}

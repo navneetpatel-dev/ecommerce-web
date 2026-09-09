@@ -49,13 +49,11 @@ export function useProductDetailContent({
   const addDisabled = Boolean(purchaseBlocked || isAddingToCart);
   const quantityDisabled = purchaseBlocked;
 
-  const quantityDisabledHint = useMemo(() => {
-    return getQuantityDisabledHint({
-      needsOptionSelection,
-      variantUnavailable,
-      canAddToCart,
-    });
-  }, [needsOptionSelection, variantUnavailable, canAddToCart]);
+  const quantityDisabledHint = getQuantityDisabledHint({
+    needsOptionSelection,
+    variantUnavailable,
+    canAddToCart,
+  });
 
   const reviewCount = product.reviewCount ?? 0;
   const avgRating = product.avgRating ?? 0;
@@ -86,37 +84,25 @@ export function useProductDetailContent({
 
   const categoryName = product.category?.name ?? product.categoryName ?? null;
 
-  const addToCartLabel = useMemo(() => {
-    return getAddToCartLabel({
-      needsOptionSelection,
-      variantUnavailable,
-      displayStock,
-    });
-  }, [needsOptionSelection, variantUnavailable, displayStock]);
+  const addToCartLabel = getAddToCartLabel({
+    needsOptionSelection,
+    variantUnavailable,
+    displayStock,
+  });
 
-  const stickyAddLabel = useMemo(() => {
-    return getStickyAddLabel(
-      needsOptionSelection,
-      variantUnavailable,
-      formattedPrice,
-    );
-  }, [needsOptionSelection, variantUnavailable, formattedPrice]);
+  const stickyAddLabel = getStickyAddLabel(
+    needsOptionSelection,
+    variantUnavailable,
+    formattedPrice,
+  );
 
-  const addToCartHint = useMemo(() => {
-    return getAddToCartHint({
-      needsOptionSelection,
-      variantUnavailable,
-      displayStock,
-      deliveryBlocked,
-      isAddingToCart,
-    });
-  }, [
+  const addToCartHint = getAddToCartHint({
     needsOptionSelection,
     variantUnavailable,
     displayStock,
     deliveryBlocked,
     isAddingToCart,
-  ]);
+  });
 
   const isStickyBarVisible =
     showStickyBar &&

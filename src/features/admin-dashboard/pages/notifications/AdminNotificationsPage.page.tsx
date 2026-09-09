@@ -1,50 +1,18 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import { Send } from "lucide-react";
 import { AdminDataPage } from "../shared/AdminDataPage.page";
-import {
-  notificationsApi,
-  type NotificationLogFilters,
-} from "../../api/notifications/notifications.api";
 import { NotificationLogFiltersBar } from "../../components/notifications/NotificationLogFiltersBar.component";
 import { BroadcastNotificationForm } from "../../components/notifications/BroadcastNotificationForm.component";
 import { notificationsAdminLabels } from "@/shared/constants/labels/notificationsAdmin";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { Button } from "@/shared/components/ui/button";
-import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { adminPagesStyles } from "../shared/adminPages.styles";
+import { useAdminNotificationsPage } from "../../hooks/notifications/useAdminNotificationsPage.hook";
 
 export function AdminNotificationsPage() {
-  const [pending, setPending] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<NotificationLogFilters>({});
-
-  const loadLogs = useCallback(() => notificationsApi.logs(filters), [filters]);
-
-  const sendTest = async () => {
-    setPending(true);
-    setMessage(null);
-    setError(null);
-    try {
-      await notificationsApi.sendTest();
-      setMessage("Test notification queued for your account.");
-    } catch (sendError) {
-      setError(
-        getApiErrorMessage(sendError, "Could not queue the test notification."),
-      );
-    } finally {
-      setPending(false);
-    }
-  };
-
-  const messageElement = message ? (
-    <p className={adminPagesStyles.successSmText}>{message}</p>
-  ) : null;
-  const errorElement = error ? (
-    <p className={adminPagesStyles.errorSmText}>{error}</p>
-  ) : null;
+  const { pending, message, error, filters, setFilters, loadLogs, sendTest } =
+    useAdminNotificationsPage();
 
   return (
     <div className={adminPagesStyles.stack5}>
@@ -63,8 +31,10 @@ export function AdminNotificationsPage() {
           Send test
         </Button>
       </div>
-      {messageElement}
-      {errorElement}
+      {message ? (
+        <p className={adminPagesStyles.successSmText}>{message}</p>
+      ) : null}
+      {error ? <p className={adminPagesStyles.errorSmText}>{error}</p> : null}
 
       <BroadcastNotificationForm />
 

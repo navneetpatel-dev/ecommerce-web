@@ -1,44 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { usePickup } from "../../api/agent/deliveryAgent.queries";
 import { TaskContactCard } from "../../components/today/TaskContactCard.component";
 import { FailedAttemptSection } from "../../components/deliveries/FailedAttemptSection.component";
 import { PickupChecklistCard } from "../../components/pickups/PickupChecklistCard.component";
 import { PickupOverviewCard } from "../../components/pickups/PickupOverviewCard.component";
 import { LocationBeacon } from "../../components/location/LocationBeacon.component";
-import { formatAddress } from "../../utils/deliveries/formatAddress";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { usePickupTaskActions } from "../../hooks/pickups/usePickupTaskActions.hook";
+import { usePickupTaskDetailPage } from "../../hooks/pickups/usePickupTaskDetailPage.hook";
 import { deliveryDetailPageStyles as styles } from "../deliveries/deliveryDetailPage.styles";
 
 export function PickupTaskDetailPage() {
-  const { returnId } = useParams<{ returnId: string }>();
-  const router = useRouter();
-  const query = usePickup(returnId);
-  const pickup = query.data;
-  const productName = pickup?.orderItem?.productName ?? pickup?.productName;
-  const {
-    otpCode,
-    setOtpCode,
-    conditionFiles,
-    setConditionFiles,
-    replacementFile,
-    setReplacementFile,
-    failureNote,
-    setFailureNote,
-    error,
-    confirm,
-    failed,
-    requestCode,
-    upload,
-    complete,
-    recordFailure,
-  } = usePickupTaskActions(returnId);
+  const page = usePickupTaskDetailPage();
+  const { query, pickup, actions } = page;
 
   if (query.isLoading)
     return <p className={styles.loadingText}>Loading pickup...</p>;
@@ -46,12 +23,6 @@ export function PickupTaskDetailPage() {
     return (
       <p className={styles.notFoundText}>This assigned pickup was not found.</p>
     );
-  const addressText = formatAddress(pickup.subOrder?.order?.shippingAddress);
-  const exchange = pickup.type === "EXCHANGE";
-
-  const onConfirm = async () => {
-    if (await complete()) router.push(PATHS.delivery.today);
-  };
 
   return (
     <div className={styles.container}>
@@ -66,37 +37,41 @@ export function PickupTaskDetailPage() {
         <div>
           <TextEyebrow brand>RETURN PICKUP TASK</TextEyebrow>
           <h1 className={styles.titleDisplay}>
-            {productName ?? "Return pickup"}
+            {page.productName ?? "Return pickup"}
           </h1>
           <p className={styles.subtitle}>
-            {pickup.type} pickup · Return #{pickup.id.slice(0, 8)}
+            {pickup.type} pickup · Return #{page.returnShortId}
           </p>
         </div>
         <div className={styles.headerActions}>
           <StatusBadge status={pickup.status} />
-          <LocationBeacon active={pickup.status === "PICKUP_SCHEDULED"} />
+          <LocationBeacon active={page.isScheduled} />
         </div>
       </header>
 
-      {error ? <p className={styles.errorText}>{error}</p> : null}
+      {actions.error ? (
+        <p className={styles.errorText}>{actions.error}</p>
+      ) : null}
 
       <div className={styles.grid}>
         <div className={styles.mainColumn}>
-          {pickup.status === "PICKUP_SCHEDULED" ? (
+          {page.isScheduled ? (
             <PickupChecklistCard
-              exchange={exchange}
-              otpCode={otpCode}
-              onOtpCodeChange={setOtpCode}
-              conditionFiles={conditionFiles}
-              onConditionFilesChange={setConditionFiles}
-              replacementFile={replacementFile}
-              onReplacementFileChange={setReplacementFile}
-              onConfirm={() => void onConfirm()}
-              confirmPending={confirm.isPending || upload.isPending}
-              requestCodePending={requestCode.isPending}
-              requestCodeSuccess={requestCode.isSuccess}
-              expiresInMinutes={requestCode.data?.expiresInMinutes}
-              onRequestCode={() => requestCode.mutate(returnId)}
+              exchange={page.isExchange}
+              otpCode={actions.otpCode}
+              onOtpCodeChange={actions.setOtpCode}
+              conditionFiles={actions.conditionFiles}
+              onConditionFilesChange={actions.setConditionFiles}
+              replacementFile={actions.replacementFile}
+              onReplacementFileChange={actions.setReplacementFile}
+              onConfirm={() => void page.onConfirm()}
+              confirmPending={
+                actions.confirm.isPending || actions.upload.isPending
+              }
+              requestCodePending={actions.requestCode.isPending}
+              requestCodeSuccess={actions.requestCode.isSuccess}
+              expiresInMinutes={actions.requestCode.data?.expiresInMinutes}
+              onRequestCode={() => actions.requestCode.mutate(page.returnId)}
             />
           ) : (
             <div className={styles.processedBanner}>
@@ -113,7 +88,7 @@ export function PickupTaskDetailPage() {
             </div>
           )}
 
-          {pickup.pickupFailureReason ? (
+          {page.hasFailureReason ? (
             <div className={styles.failureNoteBanner}>
               <span className={styles.failureNoteLabel}>
                 Previous attempt note:
@@ -122,12 +97,12 @@ export function PickupTaskDetailPage() {
             </div>
           ) : null}
 
-          {pickup.status === "PICKUP_SCHEDULED" ? (
+          {page.isScheduled ? (
             <FailedAttemptSection
-              value={failureNote}
-              onChange={setFailureNote}
-              onSubmit={() => void recordFailure()}
-              pending={failed.isPending}
+              value={actions.failureNote}
+              onChange={actions.setFailureNote}
+              onSubmit={() => void actions.recordFailure()}
+              pending={actions.failed.isPending}
               title="Report Pickup Issue"
               description="If the customer is unavailable, the item is damaged or missing, or the pickup cannot proceed, record the reason below:"
               placeholder="Required reason for failed pickup attempt (min 3 chars)"
@@ -140,7 +115,7 @@ export function PickupTaskDetailPage() {
           <TaskContactCard
             name={pickup.user?.name ?? "Customer"}
             phone={pickup.user?.phone}
-            addressText={addressText}
+            addressText={page.addressText}
             deliveryInstructions={
               pickup.subOrder?.order?.shippingAddress?.deliveryInstructions
             }
@@ -150,7 +125,7 @@ export function PickupTaskDetailPage() {
             type={pickup.type}
             status={pickup.status}
             orderId={pickup.subOrder?.orderId}
-            productName={productName}
+            productName={page.productName}
           />
         </aside>
       </div>

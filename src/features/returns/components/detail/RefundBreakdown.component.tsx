@@ -1,12 +1,7 @@
-import { returnRefundBreakdownLabels } from "@/shared/constants/labels/returnRefundBreakdown";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { ReturnRequest } from "@/shared/api/types";
 import { returnRequestCardStyles as styles } from "../../styles/list/returnRequestCard.styles";
-
-interface RefundLine {
-  label: string;
-  amount: number | null | undefined;
-}
+import { buildRefundBreakdownLines } from "../../utils/list/refundBreakdown";
 
 /**
  * Line-item refund detail for the customer-facing return card. Every amount
@@ -15,28 +10,7 @@ interface RefundLine {
  * subtracts them.
  */
 export function RefundBreakdown({ row }: { row: ReturnRequest }) {
-  const lines: RefundLine[] = [
-    {
-      label: returnRefundBreakdownLabels.returnRefundBreakdownItem,
-      amount: row.refundAmount,
-    },
-    {
-      label: returnRefundBreakdownLabels.returnRefundBreakdownTax,
-      amount: row.refundTaxAmount,
-    },
-    {
-      label: returnRefundBreakdownLabels.returnRefundBreakdownShipping,
-      amount: row.shippingRefundAmount,
-    },
-    {
-      label: returnRefundBreakdownLabels.returnRefundBreakdownWallet,
-      amount: row.walletRefundAmount,
-    },
-    {
-      label: returnRefundBreakdownLabels.returnRefundBreakdownBank,
-      amount: row.razorpayRefundAmount,
-    },
-  ].filter((line) => line.amount != null && line.amount > 0);
+  const lines = buildRefundBreakdownLines(row);
 
   if (lines.length === 0) return null;
 
@@ -45,9 +19,7 @@ export function RefundBreakdown({ row }: { row: ReturnRequest }) {
       {lines.map((line) => (
         <div key={line.label} className={styles.breakdownRow}>
           <dt>{line.label}</dt>
-          <dd className={styles.breakdownValue}>
-            {formatInr(line.amount as number)}
-          </dd>
+          <dd className={styles.breakdownValue}>{formatInr(line.amount)}</dd>
         </div>
       ))}
     </dl>

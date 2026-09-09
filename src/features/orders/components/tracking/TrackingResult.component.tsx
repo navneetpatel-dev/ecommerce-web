@@ -9,13 +9,10 @@ import {
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { RedeliverySlotPicker } from "@/shared/components/RedeliverySlotPicker.component";
 import type { TrackingLookupResult } from "../../api/tracking/shipping.api";
-import { useShipmentLocationSocket } from "../../hooks/delivery-map/useShipmentLocationSocket.hook";
 import { LiveDeliveryMap } from "../delivery-map/LiveDeliveryMap.component";
-import { haversineDistanceKm, timeSince } from "@/shared/utils/geo/geo";
+import { timeSince } from "@/shared/utils/geo/geo";
 import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
-
-/** Rough urban delivery-bike pace, used only for the "approx." ETA label. */
-const ASSUMED_SPEED_KMH = 18;
+import { useTrackingResult } from "../../hooks/tracking/useTrackingResult.hook";
 
 export function TrackingResult({
   result,
@@ -26,33 +23,16 @@ export function TrackingResult({
   onReschedule: (slot: string) => void;
   isRescheduling?: boolean;
 }) {
-  const canReschedule = ["FAILED", "RTO_INITIATED"].includes(result.status);
-  const agent = result.deliveryAgent;
-  const isOutForDelivery = result.status === "OUT_FOR_DELIVERY";
-  const { location: liveLocation } = useShipmentLocationSocket(
-    result.trackingNumber ?? null,
-    isOutForDelivery,
-  );
-  const mapLat = liveLocation?.lat ?? agent?.lastLat ?? null;
-  const mapLng = liveLocation?.lng ?? agent?.lastLng ?? null;
-  const hasLiveLocation = isOutForDelivery && mapLat != null && mapLng != null;
-  const lastPingAt =
-    liveLocation?.updatedAt ?? agent?.locationUpdatedAt ?? null;
-  const destination = result.destination;
-  const etaText =
-    hasLiveLocation && destination
-      ? (() => {
-          const km = haversineDistanceKm(
-            { lat: mapLat!, lng: mapLng! },
-            destination,
-          );
-          const minutes = Math.max(
-            1,
-            Math.round((km / ASSUMED_SPEED_KMH) * 60),
-          );
-          return `~${minutes} min away (${km.toFixed(1)} km, approx.)`;
-        })()
-      : null;
+  const {
+    canReschedule,
+    hasLiveLocation,
+    mapLat,
+    mapLng,
+    lastPingAt,
+    liveLocationTitle,
+    mapLabel,
+    codLabel,
+  } = useTrackingResult(result);
 
   return (
     <Card>
@@ -78,11 +58,8 @@ export function TrackingResult({
           </p>
         ) : null}
 
-        {result.codAmount != null ? (
-          <p className={ordersComponentsStyles.codText}>
-            Cash on delivery: ₹{result.codAmount.toFixed(2)}{" "}
-            {result.codCollected ? "(collected)" : "(due at doorstep)"}
-          </p>
+        {codLabel ? (
+          <p className={ordersComponentsStyles.codText}>{codLabel}</p>
         ) : null}
 
         {result.failureReason ? (
@@ -102,12 +79,11 @@ export function TrackingResult({
           </a>
         ) : null}
 
-        {hasLiveLocation ? (
+        {hasLiveLocation && mapLat != null && mapLng != null ? (
           <div className={ordersComponentsStyles.liveLocationStack}>
             <div className={ordersComponentsStyles.liveLocationHeader}>
               <p className={ordersComponentsStyles.liveLocationTitle}>
-                {agent?.fullName ?? "Your delivery agent"} is on the way
-                {etaText ? ` — ${etaText}` : ""}
+                {liveLocationTitle}
               </p>
               {lastPingAt ? (
                 <span className={ordersComponentsStyles.liveLocationTime}>
@@ -115,11 +91,7 @@ export function TrackingResult({
                 </span>
               ) : null}
             </div>
-            <LiveDeliveryMap
-              lat={mapLat!}
-              lng={mapLng!}
-              label={agent?.fullName ?? "Delivery agent"}
-            />
+            <LiveDeliveryMap lat={mapLat} lng={mapLng} label={mapLabel} />
           </div>
         ) : null}
 

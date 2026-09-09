@@ -1,32 +1,14 @@
 "use client";
 
-import { TaskCard } from "../../components/today/TaskCard.component";
 import { ShiftSummaryCard } from "../../components/today/ShiftSummaryCard.component";
-import {
-  useMyDeliveries,
-  useMyPickups,
-  useShiftSummary,
-} from "../../api/agent/deliveryAgent.queries";
-import { PATHS } from "@/shared/constants/paths/paths";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { todayPageStyles } from "./todayPage.styles";
-
-const ACTIVE_DELIVERIES = [
-  "PENDING",
-  "PICKED_UP",
-  "IN_TRANSIT",
-  "OUT_FOR_DELIVERY",
-  "FAILED",
-  "RTO_INITIATED",
-];
+import { useTodayPage } from "../../hooks/today/useTodayPage.hook";
+import { TodayDeliveriesList } from "../../components/today/TodayDeliveriesList.component";
+import { TodayPickupsList } from "../../components/today/TodayPickupsList.component";
 
 export function TodayPage() {
-  const deliveries = useMyDeliveries(ACTIVE_DELIVERIES);
-  const pickups = useMyPickups(["PICKUP_SCHEDULED"]);
-  const shiftSummary = useShiftSummary();
-  const deliveryCount = deliveries.data?.length ?? 0;
-  const pickupCount = pickups.data?.length ?? 0;
-  const count = deliveryCount + pickupCount;
+  const page = useTodayPage();
 
   return (
     <div className={todayPageStyles.container}>
@@ -34,22 +16,19 @@ export function TodayPage() {
         <div>
           <p className={todayPageStyles.queueBadge}>FIELD QUEUE</p>
           <h1 className={todayPageStyles.title}>Today</h1>
-          <p className={todayPageStyles.subtitle}>
-            {count} active task{count === 1 ? "" : "s"} in your current
-            assignment queue.
-          </p>
+          <p className={todayPageStyles.subtitle}>{page.taskCountLabel}</p>
         </div>
       </header>
 
-      {deliveries.isError || pickups.isError ? (
+      {page.hasQueryError ? (
         <QueryErrorAlert
-          error={deliveries.error ?? pickups.error}
+          error={page.queryError}
           fallback="Could not load assigned tasks."
         />
       ) : null}
 
-      {shiftSummary.data ? (
-        <ShiftSummaryCard summary={shiftSummary.data} />
+      {page.shiftSummary.data ? (
+        <ShiftSummaryCard summary={page.shiftSummary.data} />
       ) : null}
 
       <div className={todayPageStyles.grid}>
@@ -57,23 +36,13 @@ export function TodayPage() {
           <div className={todayPageStyles.sectionHeader}>
             <h2 className={todayPageStyles.sectionTitle}>Deliveries</h2>
             <span className={todayPageStyles.sectionCount}>
-              {deliveryCount} active
+              {page.deliveryCount} active
             </span>
           </div>
-          {deliveries.isLoading ? (
+          {page.deliveries.isLoading ? (
             <p className={todayPageStyles.loadingText}>Loading deliveries...</p>
-          ) : deliveryCount > 0 ? (
-            <div className={todayPageStyles.taskList}>
-              {deliveries.data?.map((shipment) => (
-                <TaskCard
-                  key={shipment.id}
-                  href={PATHS.delivery.delivery(shipment.id)}
-                  title={shipment.trackingNumber}
-                  subtitle={shipment.subOrder?.order?.shippingAddress?.city}
-                  status={shipment.status}
-                />
-              ))}
-            </div>
+          ) : page.deliveryCount > 0 && page.deliveries.data ? (
+            <TodayDeliveriesList shipments={page.deliveries.data} />
           ) : (
             <p className={todayPageStyles.emptyText}>No active deliveries.</p>
           )}
@@ -83,27 +52,13 @@ export function TodayPage() {
           <div className={todayPageStyles.sectionHeader}>
             <h2 className={todayPageStyles.sectionTitle}>Return pickups</h2>
             <span className={todayPageStyles.sectionCount}>
-              {pickupCount} scheduled
+              {page.pickupCount} scheduled
             </span>
           </div>
-          {pickups.isLoading ? (
+          {page.pickups.isLoading ? (
             <p className={todayPageStyles.loadingText}>Loading pickups...</p>
-          ) : pickupCount > 0 ? (
-            <div className={todayPageStyles.taskList}>
-              {pickups.data?.map((pickup) => (
-                <TaskCard
-                  key={pickup.id}
-                  href={PATHS.delivery.pickup(pickup.id)}
-                  title={
-                    pickup.orderItem?.productName ??
-                    pickup.productName ??
-                    `Return ${pickup.id.slice(0, 8)}`
-                  }
-                  subtitle={`${pickup.type} · ${pickup.subOrder?.order?.shippingAddress?.city ?? "Address unavailable"}`}
-                  status={pickup.status}
-                />
-              ))}
-            </div>
+          ) : page.pickupCount > 0 && page.pickups.data ? (
+            <TodayPickupsList pickups={page.pickups.data} />
           ) : (
             <p className={todayPageStyles.emptyText}>No scheduled pickups.</p>
           )}

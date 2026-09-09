@@ -1,0 +1,17 @@
+export const ACTIVE_DELIVERY_STATUSES = [
+  "PENDING",
+  "PICKED_UP",
+  "IN_TRANSIT",
+  "OUT_FOR_DELIVERY",
+  "FAILED",
+  "RTO_INITIATED",
+] as const;
+
+export const TERMINAL_DELIVERY_STATUSES = [
+  "DELIVERED",
+  "FAILED",
+  "RTO_INITIATED",
+  "RTO_DELIVERED",
+];
+
+export const SCHEDULED_PICKUP_STATUSES = ["PICKUP_SCHEDULED"] as const;

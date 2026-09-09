@@ -2,6 +2,7 @@ import { ExternalLink, MapPin, MessageSquare, Phone, User } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { taskContactCardStyles as styles } from "../../styles/today/taskContactCard.styles";
+import { googleMapsSearchUrl } from "../../utils/deliveries/mapsUrl";
 
 export function TaskContactCard({
   name,
@@ -37,7 +38,7 @@ export function TaskContactCard({
   const mapsButtonClassName = phone
     ? styles.fullWidthButton
     : styles.spanButton;
-  const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}`;
+  const mapsHref = googleMapsSearchUrl(addressText);
 
   return (
     <div className={styles.card}>

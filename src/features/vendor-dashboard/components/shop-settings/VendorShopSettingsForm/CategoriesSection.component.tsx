@@ -1,25 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import {
   Select,
   SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
-import {
-  VENDOR_ENTITY_TYPE_VALUES,
-  type VendorEntityType,
-} from "@/shared/constants/statuses";
-import { categoriesApi } from "@/features/categories";
-import { vendorEntityTypeLabel } from "@/shared/utils/formatting/vendorEntityTypeLabel";
-import type { Category } from "@/shared/api/types";
+import type { VendorEntityType } from "@/shared/constants/statuses";
 import { vendorShopSettingsFormStyles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
+import { useVendorShopCategories } from "../../../hooks/shop-settings/useVendorShopCategories.hook";
+import { VendorCategoryCheckboxList } from "./VendorCategoryCheckboxList.component";
+import { VendorEntityTypeOptions } from "./VendorEntityTypeOptions.component";
 
 interface CategoriesSectionProps {
   entityType: VendorEntityType | null;
@@ -38,23 +32,8 @@ export function CategoriesSection({
   onCategoryIdsChange,
   onSaveCategories,
 }: CategoriesSectionProps) {
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  const selectedSet = useMemo(() => new Set(categoryIds), [categoryIds]);
-
-  useEffect(() => {
-    void categoriesApi
-      .list()
-      .then(setCategories)
-      .catch(() => setCategories([]));
-  }, []);
-
-  const toggleCategory = (id: string) => {
-    const next = selectedSet.has(id)
-      ? categoryIds.filter((value) => value !== id)
-      : [...categoryIds, id];
-    onCategoryIdsChange(next);
-  };
+  const { categories, selectedSet, toggleCategory, canSave } =
+    useVendorShopCategories(categoryIds, onCategoryIdsChange);
 
   return (
     <FormSection
@@ -75,29 +54,19 @@ export function CategoriesSection({
             <SelectValue placeholder={LABELS.entityType} />
           </SelectTrigger>
           <SelectContent>
-            {VENDOR_ENTITY_TYPE_VALUES.map((value) => (
-              <SelectItem key={value} value={value}>
-                {vendorEntityTypeLabel(value)}
-              </SelectItem>
-            ))}
+            <VendorEntityTypeOptions />
           </SelectContent>
         </Select>
       </FormFieldFrame>
-      <div className={vendorShopSettingsFormStyles.categoriesScrollBox}>
-        {categories.map((category) => (
-          <CheckboxField
-            key={category.id}
-            id={`vendor-shop-category-${category.id}`}
-            checked={selectedSet.has(category.id)}
-            onCheckedChange={() => toggleCategory(category.id)}
-            label={category.name}
-          />
-        ))}
-      </div>
+      <VendorCategoryCheckboxList
+        categories={categories}
+        selectedSet={selectedSet}
+        onToggle={toggleCategory}
+      />
       <div className={vendorShopSettingsFormStyles.fullWidthCol}>
         <Button
           type="button"
-          disabled={saving || !entityType || categoryIds.length === 0}
+          disabled={saving || !entityType || !canSave}
           onClick={onSaveCategories}
         >
           {LABELS.saveCategories}

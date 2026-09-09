@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import { Plus } from "lucide-react";
 import { AdminDataPage } from "../shared/AdminDataPage.page";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
@@ -15,54 +14,19 @@ import { AdminDeliveryPerformancePanel } from "../../components/delivery-agents/
 import { StaleTasksPanel } from "../../components/delivery-agents/StaleTasksPanel.component";
 import { BulkImportAgentsDialog } from "../../components/delivery-agents/BulkImportAgentsDialog/index";
 import { Button } from "@/shared/components/ui/button";
-import {
-  deliveryAdminApi,
-  type DeliveryAgent,
-} from "@/features/delivery-dashboard";
-import type {
-  AdminDataRow,
-  AdminListLoadFn,
-} from "../../hooks/shared/useAdminDataList.hook";
+import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { adminPagesStyles } from "../shared/adminPages.styles";
+import {
+  nextAgentStatus,
+  useAdminDeliveryAgentsPage,
+} from "../../hooks/delivery-agents/useAdminDeliveryAgentsPage.hook";
 
 export function AdminDeliveryAgentsPage() {
-  const [agents, setAgents] = useState<DeliveryAgent[]>([]);
-  const [revision, setRevision] = useState(0);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-
-  const loadAgents = useCallback<AdminListLoadFn>(async (params) => {
-    const result = await deliveryAdminApi.list({
-      page: params.page,
-      limit: params.limit,
-    });
-    setAgents(result.items);
-    return result;
-  }, []);
-
-  const refresh = () => setRevision((value) => value + 1);
-
-  const createAgentButtonVariant = showCreateForm ? "outline" : "default";
-  const createAgentButtonLabel = showCreateForm ? "Close form" : "Create agent";
-
-  const createFormElement = showCreateForm ? (
-    <CreateDeliveryAgentForm
-      onCreated={() => {
-        setShowCreateForm(false);
-        refresh();
-      }}
-      onCancel={() => setShowCreateForm(false)}
-    />
-  ) : null;
+  const page = useAdminDeliveryAgentsPage();
 
   const renderAgentRowActions = (row: AdminDataRow, reload: () => void) => {
-    const isSuspended = String(row.status) === "SUSPENDED";
-    const actionLabel = isSuspended ? "Reactivate" : "Suspend";
-    const actionTitle = isSuspended
-      ? "Reactivate this agent?"
-      : "Suspend this agent?";
-    const nextStatus = isSuspended ? "ACTIVE" : "SUSPENDED";
-
+    const { actionLabel, actionTitle } = nextAgentStatus(String(row.status));
     return (
       <AdminConfirmAction
         inline
@@ -70,17 +34,17 @@ export function AdminDeliveryAgentsPage() {
         title={actionTitle}
         description="This updates both field availability and sign-in access."
         dialogVariant="warning"
-        onConfirm={() =>
-          deliveryAdminApi
-            .update(String(row.id), { status: nextStatus })
-            .then(() => {
-              reload();
-              refresh();
-            })
-        }
+        onConfirm={() => page.handleAgentStatusConfirm(row, reload)}
       />
     );
   };
+
+  const createFormElement = page.showCreateForm ? (
+    <CreateDeliveryAgentForm
+      onCreated={page.handleCreated}
+      onCancel={page.closeCreateForm}
+    />
+  ) : null;
 
   const agentsTabContent = (
     <div className={adminPagesStyles.stack6}>
@@ -92,25 +56,25 @@ export function AdminDeliveryAgentsPage() {
         <div className={adminPagesStyles.flexGap2_5}>
           <Button
             size="sm"
-            variant={createAgentButtonVariant}
-            onClick={() => setShowCreateForm((prev) => !prev)}
+            variant={page.createAgentButtonVariant}
+            onClick={page.toggleCreateForm}
             className={adminPagesStyles.buttonGap1_5}
           >
             <Plus className={adminPagesStyles.iconSm} aria-hidden="true" />
-            {createAgentButtonLabel}
+            {page.createAgentButtonLabel}
           </Button>
           <span className={adminPagesStyles.captionMediumMuted}>or</span>
-          <BulkImportAgentsDialog onImported={refresh} />
+          <BulkImportAgentsDialog onImported={page.refresh} />
         </div>
       </div>
 
       {createFormElement}
 
       <AdminDataPage
-        key={revision}
+        key={page.revision}
         title="Delivery agents"
         permission={PERMISSIONS.DELIVERY_AGENT_MANAGE}
-        load={loadAgents}
+        load={page.loadAgents}
         columnKeys={[
           "fullName",
           "hubOrZone",
@@ -127,45 +91,47 @@ export function AdminDeliveryAgentsPage() {
     </div>
   );
 
-  const dispatchTabContent = (
-    <DeliveryDispatchPanel agents={agents} onDispatched={refresh} />
-  );
-
-  const exceptionsTabContent = (
-    <div className={adminPagesStyles.stack6}>
-      <StaleTasksPanel />
-      <RtoQueuePanel />
-    </div>
-  );
-
-  const verificationTabContent = (
-    <div className={adminPagesStyles.stack6}>
-      <AgentDocumentsPanel />
-      <CashDepositsPanel />
-    </div>
-  );
-
-  const payoutsTabContent = <AgentPayoutsPanel />;
-  const performanceTabContent = <AdminDeliveryPerformancePanel />;
-
   const tabs = [
     { value: "agents", label: "Delivery agents", content: agentsTabContent },
-    { value: "dispatch", label: "Live dispatch", content: dispatchTabContent },
+    {
+      value: "dispatch",
+      label: "Live dispatch",
+      content: (
+        <DeliveryDispatchPanel
+          agents={page.agents}
+          onDispatched={page.refresh}
+        />
+      ),
+    },
     {
       value: "exceptions",
       label: "Exceptions & RTO",
-      content: exceptionsTabContent,
+      content: (
+        <div className={adminPagesStyles.stack6}>
+          <StaleTasksPanel />
+          <RtoQueuePanel />
+        </div>
+      ),
     },
     {
       value: "verification",
       label: "Verification & Cash",
-      content: verificationTabContent,
+      content: (
+        <div className={adminPagesStyles.stack6}>
+          <AgentDocumentsPanel />
+          <CashDepositsPanel />
+        </div>
+      ),
     },
-    { value: "payouts", label: "Agent payouts", content: payoutsTabContent },
+    {
+      value: "payouts",
+      label: "Agent payouts",
+      content: <AgentPayoutsPanel />,
+    },
     {
       value: "performance",
       label: "Performance",
-      content: performanceTabContent,
+      content: <AdminDeliveryPerformancePanel />,
     },
   ];
 

@@ -1,193 +1,82 @@
 "use client";
 
-import { useCallback, useId, useMemo, useState } from "react";
 import { FormStack } from "@/shared/components/forms";
-import { LABELS } from "@/shared/constants/labels";
-import {
-  SUPPORT_TICKET_CATEGORY,
-  type SupportTicketCategory,
-} from "@/shared/constants/statuses";
-import { useManualFormFieldErrors } from "@/shared/hooks/forms/useManualFormFieldErrors.hook";
-import {
-  allRequiredFieldsMet,
-  firstMissingRequiredHint,
-} from "@/shared/utils/validation/firstMissingRequiredHint";
-import {
-  TICKET_DESCRIPTION_MAX,
-  TICKET_SUBJECT_MAX,
-} from "../../../constants/form/fieldLimits";
-import type { UploadedMediaAttachment } from "../TicketAttachmentUploader/index";
 import { FormHeader } from "./FormHeader.component";
 import { createTicketFormStyles } from "../../../styles/form/createTicketForm.styles";
-import { useOrderVendors } from "../../../hooks/form/useOrderVendors.hook";
-import {
-  useFetchOrdersPage,
-  useFetchVendorsPage,
-} from "../../../hooks/form/useTicketPickerPages.hook";
-import { useSubmitTicket } from "../../../hooks/form/useSubmitTicket.hook";
+import { useCreateTicketForm } from "../../../hooks/form/useCreateTicketForm.hook";
 import { SubmitArea, TicketAttachmentsSection } from "./SubmitArea.component";
 import { TicketBasicsSection } from "./TicketBasicsSection.component";
 import { TicketDescriptionSection } from "./TicketDescriptionSection.component";
 import { TicketOrderSection } from "./TicketOrderSection.component";
 import { TicketVendorSection } from "./TicketVendorSection.component";
-import type { TicketField } from "../../../types/form/types";
 
 type Props = {
   successHref: (id: string) => string;
 };
 
 export function CreateTicketForm({ successHref }: Props) {
-  const draftId = useMemo(() => crypto.randomUUID(), []);
-
-  const subjectId = useId();
-  const descId = useId();
-
-  const [subject, setSubject] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState<SupportTicketCategory>(
-    SUPPORT_TICKET_CATEGORY.OTHER,
-  );
-  const [relatedOrderId, setRelatedOrderId] = useState("");
-  const [relatedVendorId, setRelatedVendorId] = useState("");
-  const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>([]);
-  const { clearAll, clearField, setErrors, getError, hasError } =
-    useManualFormFieldErrors<TicketField>();
-
-  const hasOrder = Boolean(relatedOrderId.trim());
-  const orderVendors = useOrderVendors(
-    relatedOrderId,
-    category,
-    hasOrder,
-    setRelatedVendorId,
-  );
-  const fetchOrdersPage = useFetchOrdersPage();
-  const fetchVendorsPage = useFetchVendorsPage();
-
-  const showDirectoryVendorPicker =
-    !hasOrder && category === SUPPORT_TICKET_CATEGORY.VENDOR;
-  const showOrderVendorPicker = hasOrder && orderVendors.length > 1;
-  const showVendorSection =
-    showDirectoryVendorPicker ||
-    showOrderVendorPicker ||
-    (hasOrder && orderVendors.length === 1);
-
-  const vendorRequired =
-    category === SUPPORT_TICKET_CATEGORY.VENDOR || orderVendors.length > 1;
-
-  const requiredChecks = useMemo(
-    () => [
-      { ok: Boolean(subject.trim()), message: LABELS.enterTicketSubject },
-      {
-        ok: Boolean(description.trim()),
-        message: LABELS.enterTicketDescription,
-      },
-      {
-        ok: !vendorRequired || Boolean(relatedVendorId.trim()),
-        message: LABELS.selectTicketVendor,
-      },
-    ],
-    [subject, description, vendorRequired, relatedVendorId],
-  );
-  const canSubmit = allRequiredFieldsMet(requiredChecks);
-  const disableHint = firstMissingRequiredHint(requiredChecks) ?? "";
-
-  const handleSubjectChange = useCallback(
-    (value: string) => {
-      clearField("subject");
-      setSubject(value.slice(0, TICKET_SUBJECT_MAX));
-    },
-    [clearField],
-  );
-
-  const handleDescriptionChange = useCallback(
-    (value: string) => {
-      clearField("description");
-      setDescription(value.slice(0, TICKET_DESCRIPTION_MAX));
-    },
-    [clearField],
-  );
-
-  const handleRelatedVendorIdChange = useCallback(
-    (value: string) => {
-      clearField("relatedVendorId");
-      setRelatedVendorId(value);
-    },
-    [clearField],
-  );
-
-  const { onSubmit, apiError, create } = useSubmitTicket({
-    subject,
-    description,
-    category,
-    relatedOrderId,
-    relatedVendorId,
-    attachments,
-    vendorRequired,
-    clearAll,
-    setErrors,
-    successHref,
-  });
+  const form = useCreateTicketForm({ successHref });
 
   return (
-    <form onSubmit={onSubmit} className={createTicketFormStyles.form}>
+    <form onSubmit={form.onSubmit} className={createTicketFormStyles.form}>
       <FormStack className={createTicketFormStyles.stack}>
         <FormHeader
-          canSubmit={canSubmit}
-          disableHint={disableHint}
-          isPending={create.isPending}
+          canSubmit={form.canSubmit}
+          disableHint={form.disableHint}
+          isPending={form.create.isPending}
         />
 
         <TicketBasicsSection
-          subjectId={subjectId}
-          subject={subject}
-          onSubjectChange={handleSubjectChange}
-          subjectError={getError("subject")}
-          hasSubjectError={hasError("subject")}
-          category={category}
-          onCategoryChange={setCategory}
+          subjectId={form.subjectId}
+          subject={form.subject}
+          onSubjectChange={form.handleSubjectChange}
+          subjectError={form.getError("subject")}
+          hasSubjectError={form.hasError("subject")}
+          category={form.category}
+          onCategoryChange={form.setCategory}
         />
 
         <TicketDescriptionSection
-          descId={descId}
-          description={description}
-          onDescriptionChange={handleDescriptionChange}
-          descriptionError={getError("description")}
-          hasDescriptionError={hasError("description")}
+          descId={form.descId}
+          description={form.description}
+          onDescriptionChange={form.handleDescriptionChange}
+          descriptionError={form.getError("description")}
+          hasDescriptionError={form.hasError("description")}
         />
 
         <TicketOrderSection
-          relatedOrderId={relatedOrderId}
-          onRelatedOrderIdChange={setRelatedOrderId}
-          fetchOrdersPage={fetchOrdersPage}
+          relatedOrderId={form.relatedOrderId}
+          onRelatedOrderIdChange={form.setRelatedOrderId}
+          fetchOrdersPage={form.fetchOrdersPage}
         />
 
-        {showVendorSection ? (
+        {form.showVendorSection ? (
           <TicketVendorSection
-            showDirectoryVendorPicker={showDirectoryVendorPicker}
-            showOrderVendorPicker={showOrderVendorPicker}
-            hasSingleOrderVendor={hasOrder && orderVendors.length === 1}
-            orderVendors={orderVendors}
-            relatedVendorId={relatedVendorId}
-            onRelatedVendorIdChange={handleRelatedVendorIdChange}
-            getError={getError}
-            hasError={hasError}
-            fetchVendorsPage={fetchVendorsPage}
+            showDirectoryVendorPicker={form.showDirectoryVendorPicker}
+            showOrderVendorPicker={form.showOrderVendorPicker}
+            hasSingleOrderVendor={form.hasSingleOrderVendor}
+            orderVendors={form.orderVendors}
+            relatedVendorId={form.relatedVendorId}
+            onRelatedVendorIdChange={form.handleRelatedVendorIdChange}
+            getError={form.getError}
+            hasError={form.hasError}
+            fetchVendorsPage={form.fetchVendorsPage}
           />
         ) : null}
 
         <TicketAttachmentsSection
-          entityId={draftId}
-          value={attachments}
-          onChange={setAttachments}
-          disabled={create.isPending}
+          entityId={form.draftId}
+          value={form.attachments}
+          onChange={form.setAttachments}
+          disabled={form.create.isPending}
         />
 
         <SubmitArea
-          apiError={apiError}
-          createError={create.error}
-          canSubmit={canSubmit}
-          disableHint={disableHint}
-          isPending={create.isPending}
+          apiError={form.apiError}
+          createError={form.create.error}
+          canSubmit={form.canSubmit}
+          disableHint={form.disableHint}
+          isPending={form.create.isPending}
         />
       </FormStack>
     </form>

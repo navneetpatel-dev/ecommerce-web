@@ -1,36 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import {
-  LayoutGrid,
-  Receipt,
-  Wallet,
-  Coins,
-  Percent,
-  SlidersHorizontal,
-} from "lucide-react";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "@/shared/components/ui/tabs";
 import { AdminDataPage } from "../shared/AdminDataPage.page";
 import { AdminSectionTabs } from "../../components/shared/AdminSectionTabs.component";
 import { useAdminFinancePage } from "../../hooks/finance/useAdminFinancePage";
-import { AdminSettlementReportsPanel } from "../../components/finance/AdminSettlementReportsPanel/index";
-import { AdminWalletLiabilityPanel } from "../../components/wallet/AdminWalletLiabilityPanel/index";
-import { AdminWalletRechargePanel } from "../../components/wallet/AdminWalletRechargePanel/index";
-import { AdminWalletAdjustPanel } from "../../components/wallet/AdminWalletAdjustPanel.component";
-import { AdminCashbackWriteOffPanel } from "../../components/wallet/AdminCashbackWriteOffPanel.component";
+import { AdminFinanceReportsTabs } from "../../components/finance/AdminFinanceReportsTabs.component";
+import { AdminFinancePayoutsPanel } from "../../components/finance/AdminFinancePayoutsPanel.component";
 import { LABELS } from "@/shared/constants/labels";
-import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
-import { payoutsApi } from "../../api/finance/finance.api";
-import { adminFinancePageStyles } from "./adminFinancePage.styles";
 
 export function AdminFinancePage() {
   const page = useAdminFinancePage();
-  const [payoutRevision, setPayoutRevision] = useState(0);
 
   const tabs = [
     {
@@ -64,128 +42,17 @@ export function AdminFinancePage() {
       value: "payouts",
       label: LABELS.payouts,
       content: (
-        <div className={adminFinancePageStyles.payoutsStack}>
-          <div className={adminFinancePageStyles.payoutsActionRow}>
-            <AdminConfirmAction
-              label={LABELS.processPayouts}
-              dialogVariant="warning"
-              tone="success"
-              title={LABELS.confirmProcessPayoutsTitle}
-              description={LABELS.confirmProcessPayoutsBody}
-              onConfirm={() =>
-                payoutsApi
-                  .process()
-                  .then(() => setPayoutRevision((value) => value + 1))
-              }
-            />
-          </div>
-          <AdminDataPage
-            key={payoutRevision}
-            title={page.payouts.title}
-            permission={page.payouts.permission}
-            load={page.payouts.load}
-            actions={page.payouts.actions}
-            columnKeys={page.payouts.columnKeys}
-            hideTitle
-          />
-        </div>
+        <AdminFinancePayoutsPanel
+          payouts={page.payouts}
+          payoutRevision={page.payoutRevision}
+          onProcessPayouts={page.processPayouts}
+        />
       ),
     },
     {
       value: "reports",
       label: LABELS.reports,
-      content: (
-        <Tabs defaultValue="all" className={adminFinancePageStyles.reportsTabs}>
-          <div className={adminFinancePageStyles.reportsHeaderRow}>
-            <TabsList className={adminFinancePageStyles.reportsTabsList}>
-              <TabsTrigger
-                value="all"
-                className={adminFinancePageStyles.reportsTabTrigger}
-              >
-                <LayoutGrid className={adminFinancePageStyles.tabIcon} />
-                All reports
-              </TabsTrigger>
-              <TabsTrigger
-                value="settlement"
-                className={adminFinancePageStyles.reportsTabTrigger}
-              >
-                <Receipt className={adminFinancePageStyles.tabIcon} />
-                {LABELS.settlementReports}
-              </TabsTrigger>
-              <TabsTrigger
-                value="liability"
-                className={adminFinancePageStyles.reportsTabTrigger}
-              >
-                <Wallet className={adminFinancePageStyles.tabIcon} />
-                {LABELS.reportWalletLiability}
-              </TabsTrigger>
-              <TabsTrigger
-                value="recharge"
-                className={adminFinancePageStyles.reportsTabTrigger}
-              >
-                <Coins className={adminFinancePageStyles.tabIcon} />
-                {LABELS.reportWalletRecharge}
-              </TabsTrigger>
-              <TabsTrigger
-                value="cashback"
-                className={adminFinancePageStyles.reportsTabTrigger}
-              >
-                <Percent className={adminFinancePageStyles.tabIcon} />
-                {LABELS.reportCashbackWriteOff}
-              </TabsTrigger>
-              <TabsTrigger
-                value="adjust"
-                className={adminFinancePageStyles.reportsTabTrigger}
-              >
-                <SlidersHorizontal className={adminFinancePageStyles.tabIcon} />
-                {LABELS.walletAdjustTitle}
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
-          <TabsContent
-            value="all"
-            className={adminFinancePageStyles.reportsAllContent}
-          >
-            <AdminSettlementReportsPanel />
-            <AdminWalletLiabilityPanel />
-            <AdminWalletRechargePanel />
-            <AdminWalletAdjustPanel />
-            <AdminCashbackWriteOffPanel />
-          </TabsContent>
-
-          <TabsContent
-            value="settlement"
-            className={adminFinancePageStyles.reportsSingleContent}
-          >
-            <AdminSettlementReportsPanel />
-          </TabsContent>
-          <TabsContent
-            value="liability"
-            className={adminFinancePageStyles.reportsSingleContent}
-          >
-            <AdminWalletLiabilityPanel />
-          </TabsContent>
-          <TabsContent
-            value="recharge"
-            className={adminFinancePageStyles.reportsSingleContent}
-          >
-            <AdminWalletRechargePanel />
-          </TabsContent>
-          <TabsContent
-            value="cashback"
-            className={adminFinancePageStyles.reportsSingleContent}
-          >
-            <AdminCashbackWriteOffPanel />
-          </TabsContent>
-          <TabsContent
-            value="adjust"
-            className={adminFinancePageStyles.reportsSingleContent}
-          >
-            <AdminWalletAdjustPanel />
-          </TabsContent>
-        </Tabs>
-      ),
+      content: <AdminFinanceReportsTabs />,
     },
   ];
 

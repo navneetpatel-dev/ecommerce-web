@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import { Download } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
@@ -17,9 +17,12 @@ export type AdminFinancePageModel = {
   commissions: AdminListPageModel;
   commissionInvoices: AdminListPageModel;
   payouts: AdminListPageModel;
+  payoutRevision: number;
+  processPayouts: () => Promise<unknown>;
 };
 
 export function useAdminFinancePage(): AdminFinancePageModel {
+  const [payoutRevision, setPayoutRevision] = useState(0);
   const loadCommissions = useCallback(
     ({ page, limit }: { page: number; limit: number }) =>
       commissionsApi.list({ page, limit }),
@@ -74,6 +77,12 @@ export function useAdminFinancePage(): AdminFinancePageModel {
       }
       return null;
     },
+    [],
+  );
+
+  const processPayouts = useCallback(
+    () =>
+      payoutsApi.process().then(() => setPayoutRevision((value) => value + 1)),
     [],
   );
 
@@ -134,5 +143,7 @@ export function useAdminFinancePage(): AdminFinancePageModel {
         "createdAt",
       ],
     },
+    payoutRevision,
+    processPayouts,
   };
 }
