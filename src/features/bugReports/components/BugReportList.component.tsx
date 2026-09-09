@@ -1,19 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { type DataTableColumn } from "@/shared/components/DataTable.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
-import { formatOrderDate } from "@/shared/utils/orderFormat";
-import {
-  BUG_MODULE_LABEL,
-  BUG_SEVERITY_LABEL,
-  BUG_STATUS_LABEL,
-} from "../utils/labels";
 import { KeysetDataTable } from "@/shared/components/KeysetDataTable.component";
 import type { BugReport } from "../api/bugReports.api";
+import { useBugReportTableColumns } from "./useBugReportTableColumns.hook";
+import { useBugReportListHandlers } from "./useBugReportListHandlers.hook";
 
-type Props = {
+interface BugReportListProps {
   reports: BugReport[];
   detailHref: (id: string) => string;
   isLoading?: boolean;
@@ -29,7 +22,7 @@ type Props = {
   showSeverity?: boolean;
   showReporter?: boolean;
   showModule?: boolean;
-};
+}
 
 export function BugReportList({
   reports,
@@ -47,77 +40,13 @@ export function BugReportList({
   showSeverity,
   showReporter,
   showModule,
-}: Props) {
-  const router = useRouter();
-
-  const columns: DataTableColumn<BugReport>[] = [
-    {
-      id: "reportNumber",
-      header: LABELS.bugReportNumber,
-      cell: (row) => (
-        <span className="font-mono text-body-sm tabular-nums text-ink">
-          {row.reportNumber}
-        </span>
-      ),
-      className: "whitespace-nowrap",
-    },
-    {
-      id: "title",
-      header: LABELS.bugTitle,
-      cell: (row) => <span className="font-medium text-ink">{row.title}</span>,
-    },
-    ...(showReporter
-      ? [
-          {
-            id: "reporterName",
-            header: LABELS.bugReporter,
-            cell: (row: BugReport) => row.reporterName || LABELS.emptyCell,
-            hideOnMobile: true,
-          } satisfies DataTableColumn<BugReport>,
-        ]
-      : []),
-    ...(showModule
-      ? [
-          {
-            id: "affectedModule",
-            header: LABELS.bugAffectedModule,
-            cell: (row: BugReport) => BUG_MODULE_LABEL[row.affectedModule],
-            hideOnMobile: true,
-          } satisfies DataTableColumn<BugReport>,
-        ]
-      : []),
-    ...(showSeverity
-      ? [
-          {
-            id: "severity",
-            header: LABELS.bugSeverity,
-            cell: (row: BugReport) => (
-              <StatusBadge
-                status={row.severity ?? "NONE"}
-                label={
-                  row.severity
-                    ? BUG_SEVERITY_LABEL[row.severity]
-                    : LABELS.bugSeverityNone
-                }
-              />
-            ),
-          } satisfies DataTableColumn<BugReport>,
-        ]
-      : []),
-    {
-      id: "status",
-      header: LABELS.status,
-      cell: (row) => (
-        <StatusBadge status={row.status} label={BUG_STATUS_LABEL[row.status]} />
-      ),
-    },
-    {
-      id: "createdAt",
-      header: LABELS.createdAt,
-      cell: (row) => formatOrderDate(row.createdAt),
-      hideOnMobile: true,
-    },
-  ];
+}: BugReportListProps) {
+  const columns = useBugReportTableColumns({
+    showReporter,
+    showModule,
+    showSeverity,
+  });
+  const { handleRowClick, getRowId } = useBugReportListHandlers(detailHref);
 
   return (
     <KeysetDataTable
@@ -125,7 +54,7 @@ export function BugReportList({
       toolbar={toolbar}
       columns={columns}
       rows={reports}
-      getRowId={(row) => row.id}
+      getRowId={getRowId}
       loading={isLoading}
       error={isError ? errorMessage || LABELS.bugCouldNotLoad : null}
       emptyMessage={emptyMessage}
@@ -133,7 +62,7 @@ export function BugReportList({
       hasNextPage={hasNextPage}
       isFetchingNextPage={isFetchingNextPage}
       onLoadMore={onLoadMore}
-      onRowClick={(row) => router.push(detailHref(row.id))}
+      onRowClick={handleRowClick}
     />
   );
 }

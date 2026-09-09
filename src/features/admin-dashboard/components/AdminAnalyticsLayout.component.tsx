@@ -10,6 +10,8 @@ import { AnalyticsMetricsGrid } from "./AnalyticsMetricsGrid.component";
 import { AnalyticsRankedList } from "./AnalyticsRankedList.component";
 import { AnalyticsOpsQueues } from "./AnalyticsOpsQueues.component";
 import { AdminAnalyticsExportBar } from "./AdminAnalyticsExportBar.component";
+import { useAdminAnalyticsLayout } from "./AdminAnalyticsLayout/useAdminAnalyticsLayout.hook";
+import { adminAnalyticsLayoutStyles as styles } from "./AdminAnalyticsLayout/adminAnalyticsLayout.styles";
 
 const AnalyticsTrendChart = dynamic(
   () =>
@@ -43,46 +45,21 @@ const fadeUp = {
 };
 
 export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
-  const exportRange =
-    data.orderVolume.length > 0
-      ? {
-          from: data.orderVolume[0]!.date,
-          to: data.orderVolume[data.orderVolume.length - 1]!.date,
-        }
-      : undefined;
-
-  const topVendorItems = data.topVendors.map((v) => ({
-    id: v.id,
-    label: v.businessName,
-    revenue: v.revenue,
-    sharePercent: v.sharePercent,
-  }));
-  const topCategoryItems = data.topCategories.map((c) => ({
-    id: c.id,
-    label: c.name,
-    revenue: c.revenue,
-    sharePercent: c.sharePercent,
-  }));
+  const { exportRange, topVendorItems, topCategoryItems } =
+    useAdminAnalyticsLayout(data);
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className={styles.container}>
       <motion.header
-        className="relative overflow-hidden rounded-md border border-line bg-gradient-to-br from-brand-subtle/70 via-surface to-paper px-5 py-6 sm:px-7 sm:py-8"
+        className={styles.header}
         {...fadeUp}
         transition={{ duration: 0.35 }}
       >
-        <div
-          className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-brand/10 blur-3xl"
-          aria-hidden
-        />
-        <div className="relative flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-2">
-            <h1 className="font-display text-[1.75rem] leading-tight tracking-tight text-ink sm:text-[2rem]">
-              {LABELS.analytics}
-            </h1>
-            <p className="max-w-2xl text-body text-ink-muted">
-              {LABELS.analyticsHint}
-            </p>
+        <div className={styles.ambientGlow} aria-hidden />
+        <div className={styles.headerContent}>
+          <div className={styles.headerTitles}>
+            <h1 className={styles.title}>{LABELS.analytics}</h1>
+            <p className={styles.subtitle}>{LABELS.analyticsHint}</p>
           </div>
           <AdminAnalyticsExportBar range={exportRange} />
         </div>
@@ -99,14 +76,14 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-1 gap-4 xl:grid-cols-5"
+        className={styles.gridVolumeStatus}
         {...fadeUp}
         transition={{ duration: 0.35, delay: 0.12 }}
       >
-        <div className="xl:col-span-3">
+        <div className={styles.colVolume}>
           <AnalyticsTrendChart data={data.orderVolume} />
         </div>
-        <div className="xl:col-span-2">
+        <div className={styles.colStatus}>
           <AnalyticsStatusChart
             title={LABELS.analyticsOrdersByStatus}
             data={data.ordersByStatus}
@@ -116,7 +93,7 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-1 gap-4 lg:grid-cols-2"
+        className={styles.gridTwoCol}
         {...fadeUp}
         transition={{ duration: 0.35, delay: 0.14 }}
       >
@@ -129,7 +106,7 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-1 gap-4 lg:grid-cols-2"
+        className={styles.gridTwoCol}
         {...fadeUp}
         transition={{ duration: 0.35, delay: 0.16 }}
       >
@@ -143,8 +120,8 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
         />
       </motion.div>
 
-      <p className="flex items-center gap-2 text-[0.75rem] text-ink-faint">
-        <Package className="h-3.5 w-3.5" aria-hidden />
+      <p className={styles.footerText}>
+        <Package className={styles.footerIcon} aria-hidden />
         {LABELS.analyticsVsPriorPeriod}
       </p>
     </div>

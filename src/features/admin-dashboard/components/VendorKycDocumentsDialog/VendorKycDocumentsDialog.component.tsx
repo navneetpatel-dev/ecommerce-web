@@ -8,9 +8,10 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
-import { useVendorKycDocumentsDialog } from "../../hooks/useVendorKycDocumentsDialog.hook";
 import { KycChecklistItems } from "./KycChecklistItems.component";
 import { KycConfirmDialogs } from "./KycConfirmDialogs.component";
+import { useVendorKycDialogHandlers } from "./useVendorKycDialogHandlers.hook";
+import { vendorKycDocumentsDialogStyles as styles } from "./vendorKycDocumentsDialog.styles";
 
 interface VendorKycDocumentsDialogProps {
   vendorId: string;
@@ -31,89 +32,78 @@ export function VendorKycDocumentsDialog({
     loading,
     error,
     mode,
-    setMode,
     activeItem,
-    setActiveItem,
     reason,
     setReason,
     submitting,
     actionError,
     openingDocId,
-    openDocument,
     closeConfirm,
     runVerify,
     runReject,
-  } = useVendorKycDocumentsDialog(vendorId, open);
+    handleOpenDoc,
+    handleVerify,
+    handleReject,
+  } = useVendorKycDialogHandlers(vendorId, open);
+
+  const dialogSubtitle = `${vendorName} · ${
+    isComplete ? LABELS.kycChecklistComplete : LABELS.kycChecklistIncomplete
+  }`;
+
+  const loadingText = loading ? (
+    <p className={styles.loadingText}>{LABELS.loading}</p>
+  ) : null;
+
+  const errorText =
+    !loading && error ? <p className={styles.errorText}>{error}</p> : null;
+
+  const actionErrorText = actionError ? (
+    <p className={styles.actionErrorText}>{actionError}</p>
+  ) : null;
+
+  const emptyText =
+    !loading && !error && items.length === 0 ? (
+      <p className={styles.emptyText}>{LABELS.noKycDocuments}</p>
+    ) : null;
+
+  const checklistContent =
+    !loading && !error && items.length > 0 ? (
+      <KycChecklistItems
+        items={items}
+        openingDocId={openingDocId}
+        onOpenDocument={handleOpenDoc}
+        onVerify={handleVerify}
+        onReject={handleReject}
+      />
+    ) : null;
 
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className={styles.dialogContent}>
           <DialogHeader>
             <DialogTitle>{LABELS.kycChecklist}</DialogTitle>
-            <DialogDescription>
-              {vendorName}
-              {" · "}
-              {isComplete
-                ? LABELS.kycChecklistComplete
-                : LABELS.kycChecklistIncomplete}
-            </DialogDescription>
+            <DialogDescription>{dialogSubtitle}</DialogDescription>
           </DialogHeader>
 
-          {loading ? (
-            <p className="py-6 text-center text-body text-ink-muted">
-              {LABELS.loading}
-            </p>
-          ) : null}
-
-          {!loading && error ? (
-            <p className="py-6 text-center text-body text-danger">{error}</p>
-          ) : null}
-
-          {actionError ? (
-            <p className="text-center text-body-sm text-danger">
-              {actionError}
-            </p>
-          ) : null}
-
-          {!loading && !error && items.length === 0 ? (
-            <p className="py-6 text-center text-body text-ink-muted">
-              {LABELS.noKycDocuments}
-            </p>
-          ) : null}
-
-          {!loading && !error && items.length > 0 ? (
-            <KycChecklistItems
-              items={items}
-              openingDocId={openingDocId}
-              onOpenDocument={(documentId) => void openDocument(documentId)}
-              onVerify={(item) => {
-                setActiveItem(item);
-                setMode("verify");
-              }}
-              onReject={(item) => {
-                setActiveItem(item);
-                setMode("reject");
-              }}
-            />
-          ) : null}
+          {loadingText}
+          {errorText}
+          {actionErrorText}
+          {emptyText}
+          {checklistContent}
         </DialogContent>
       </Dialog>
 
       <KycConfirmDialogs
+        vendorName={vendorName}
         mode={mode}
         activeItem={activeItem}
-        vendorName={vendorName}
-        submitting={submitting}
         reason={reason}
         onReasonChange={setReason}
+        submitting={submitting}
         onClose={closeConfirm}
-        onVerify={() => {
-          void runVerify();
-        }}
-        onReject={() => {
-          void runReject();
-        }}
+        onVerify={runVerify}
+        onReject={runReject}
       />
     </>
   );

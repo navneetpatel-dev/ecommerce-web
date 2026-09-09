@@ -27,3 +27,22 @@ export function canAdvanceFromPayment(
   }
   return true;
 }
+
+export function resolveCheckoutPageTotals(
+  displayTotals: {
+    subtotal?: number;
+    subtotalPending: boolean;
+    total?: number;
+    totalIsEstimated: boolean;
+    amountsUnavailable: boolean;
+  },
+  quote: CheckoutQuote | undefined,
+) {
+  return {
+    subtotal: displayTotals.subtotal,
+    subtotalPending: displayTotals.subtotalPending,
+    estimatedTotal: quote?.grandTotal ?? displayTotals.total,
+    estimatedTotalPending: !quote && displayTotals.totalIsEstimated,
+    amountsUnavailable: displayTotals.amountsUnavailable,
+  };
+}

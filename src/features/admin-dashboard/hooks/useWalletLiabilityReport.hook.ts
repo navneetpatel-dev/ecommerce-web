@@ -1,7 +1,7 @@
 "use client";
 
 import { API } from "@/shared/constants/apiRoutes";
-import { useReportPanel } from "@/shared/hooks/useReportPanel.hook";
+import { useReportPanel } from "@/features/reports";
 import { reportsApi, type WalletLiabilityReport } from "../api/reports.api";
 
 /** Owns the wallet liability report panel state (Rule 1/12). */

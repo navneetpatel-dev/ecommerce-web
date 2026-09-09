@@ -1,0 +1,21 @@
+export const staleTasksPanelStyles = {
+  root: "rounded-lg border border-warning/30 bg-surface p-5 md:p-6 shadow-elevation-1 space-y-4",
+  header: "flex items-center gap-2",
+  headerIcon: "size-4 text-warning",
+  loadingText: "text-body-sm text-ink-muted",
+  emptyText: "text-body-sm text-ink-muted",
+  tablesWrapper: "space-y-4",
+  tableWrapper: "overflow-x-auto",
+  table: "w-full min-w-[560px] text-body-sm",
+  tableHeaderRow: "border-b border-line text-left text-ink-muted",
+  tableHeaderCell: "py-2 pr-3 font-medium",
+  tableHeaderCellRight: "py-2 pr-3 font-medium text-right",
+  tableRow: "border-b border-line/60",
+  tableCellMono: "py-2.5 pr-3 font-mono",
+  tableCell: "py-2.5 pr-3",
+  tableCellMuted: "py-2.5 pr-3 text-ink-muted",
+  tableCellWarning: "py-2.5 pr-3 text-warning font-medium",
+  tableCellRight: "py-2.5 pr-3 text-right",
+  confirmTrigger:
+    "h-8 w-auto px-3 text-caption font-medium border-warning/50 text-warning hover:bg-warning hover:text-paper transition-colors rounded-md shadow-xs inline-flex",
+} as const;

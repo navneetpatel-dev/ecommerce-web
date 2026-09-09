@@ -9,19 +9,20 @@ import {
 import { useCheckoutStore } from "@/shared/stores/checkout.store";
 import { usePlaceOrderWithRazorpay } from "./usePlaceOrder.hook";
 import { useRequireAuth } from "@/shared/hooks/useRequireAuth.hook";
-import { PATHS } from "@/shared/constants/paths";
-import { LABELS } from "@/shared/constants/labels";
 import { useCheckoutAddresses } from "./useCheckoutAddresses.hook";
 import {
   canAdvanceFromPayment,
   hasUnavailableCartItems,
   isShippingReadyForAllVendors,
+  resolveCheckoutPageTotals,
 } from "../utils/checkoutDerivedState";
 import { useCheckoutStepGuards } from "./useCheckoutStepGuards.hook";
+import { useCheckoutStepNavigation } from "./useCheckoutStepNavigation.hook";
 
 /**
  * Checkout flow orchestration (Rule 3: address concern lives in
- * `useCheckoutAddresses`, order placement in `usePlaceOrderWithRazorpay`).
+ * `useCheckoutAddresses`, step navigation in `useCheckoutStepNavigation`,
+ * order placement in `usePlaceOrderWithRazorpay`).
  */
 export function useCheckoutPage() {
   const {
@@ -45,18 +46,7 @@ export function useCheckoutPage() {
     isError: cartError,
     refetch: refetchCart,
   } = useCart();
-  const {
-    handlePlaceOrder,
-    quote,
-    isQuoteLoading,
-    isQuoteError,
-    quoteErrorMessage,
-    isPending,
-    paymentPhase,
-    isPaymentOverlayOpen,
-    paymentNotice,
-    clearPaymentNotice,
-  } = usePlaceOrderWithRazorpay();
+  const orderPlacement = usePlaceOrderWithRazorpay();
   const { requireAuth } = useRequireAuth();
   const addressesState = useCheckoutAddresses();
 
@@ -76,17 +66,13 @@ export function useCheckoutPage() {
     groupedByVendor,
     ensureDefaultShippingMethods,
     paymentMethod,
-    quote,
+    quote: orderPlacement.quote,
     setPaymentMethod,
     setWalletAmountToUse,
   });
 
   const displayTotals = resolveCartDisplayTotals(cart, { isError: cartError });
-  const subtotal = displayTotals.subtotal;
-  const subtotalPending = displayTotals.subtotalPending;
-  const estimatedTotal = quote?.grandTotal ?? displayTotals.total;
-  const estimatedTotalPending = !quote && displayTotals.totalIsEstimated;
-  const amountsUnavailable = displayTotals.amountsUnavailable;
+  const totals = resolveCheckoutPageTotals(displayTotals, orderPlacement.quote);
 
   const shippingReady = useMemo(
     () => isShippingReadyForAllVendors(groupedByVendor, shippingMethodByVendor),
@@ -94,35 +80,20 @@ export function useCheckoutPage() {
   );
 
   const canAdvance = () =>
-    canAdvanceFromPayment(paymentMethod, quote, walletAmountToUse);
+    canAdvanceFromPayment(
+      paymentMethod,
+      orderPlacement.quote,
+      walletAmountToUse,
+    );
 
-  const onStepClick = (nextStep: number) => {
-    if (nextStep < step) setStep(nextStep as 1 | 2 | 3 | 4);
-  };
-
-  const onContinueToShipping = () => setStep(2);
-  const onContinueToPayment = () => setStep(3);
-  const onBackToShipping = () => setStep(2);
-  const onBackToPayment = () => setStep(3);
-
-  const onContinueToReview = () => {
-    if (!canAdvance()) return;
-    setStep(4);
-  };
-
-  const onPlaceOrder = () => {
-    if (!canAdvance()) return;
-    if (
-      !requireAuth({
-        title: LABELS.completeYourOrderTitle,
-        message: LABELS.completeYourOrderMessage,
-        redirectTo: PATHS.checkout,
-      })
-    ) {
-      return;
-    }
-    void handlePlaceOrder(paymentMethod!);
-  };
+  const navigation = useCheckoutStepNavigation({
+    step,
+    setStep,
+    canAdvance,
+    paymentMethod,
+    requireAuth,
+    handlePlaceOrder: orderPlacement.handlePlaceOrder,
+  });
 
   return {
     step,
@@ -133,22 +104,22 @@ export function useCheckoutPage() {
     giftWrap,
     giftMessage,
     addresses: addressesState.addresses,
-    quote,
-    isQuoteLoading,
-    isQuoteError,
-    quoteErrorMessage,
-    isPending,
-    paymentPhase,
-    isPaymentOverlayOpen,
-    paymentNotice,
-    clearPaymentNotice,
+    quote: orderPlacement.quote,
+    isQuoteLoading: orderPlacement.isQuoteLoading,
+    isQuoteError: orderPlacement.isQuoteError,
+    quoteErrorMessage: orderPlacement.quoteErrorMessage,
+    isPending: orderPlacement.isPending,
+    paymentPhase: orderPlacement.paymentPhase,
+    isPaymentOverlayOpen: orderPlacement.isPaymentOverlayOpen,
+    paymentNotice: orderPlacement.paymentNotice,
+    clearPaymentNotice: orderPlacement.clearPaymentNotice,
     isLoading,
     groupedByVendor,
-    subtotal,
-    subtotalPending,
-    estimatedTotal,
-    estimatedTotalPending,
-    amountsUnavailable,
+    subtotal: totals.subtotal,
+    subtotalPending: totals.subtotalPending,
+    estimatedTotal: totals.estimatedTotal,
+    estimatedTotalPending: totals.estimatedTotalPending,
+    amountsUnavailable: totals.amountsUnavailable,
     retryAmounts: () => {
       void refetchCart();
     },
@@ -157,19 +128,19 @@ export function useCheckoutPage() {
     hasUnavailableItems,
     shippingReady,
     isCreatingAddress: addressesState.isCreatingAddress,
-    onStepClick,
+    onStepClick: navigation.onStepClick,
     onSelectAddress: addressesState.onSelectAddress,
     onSelectShipping: setShippingMethod,
-    onContinueToShipping,
-    onContinueToPayment,
-    onBackToShipping,
-    onBackToPayment,
+    onContinueToShipping: navigation.onContinueToShipping,
+    onContinueToPayment: navigation.onContinueToPayment,
+    onBackToShipping: navigation.onBackToShipping,
+    onBackToPayment: navigation.onBackToPayment,
     onSelectPayment: setPaymentMethod,
     onWalletAmountChange: setWalletAmountToUse,
     onGiftWrapChange: setGiftWrap,
     onGiftMessageChange: setGiftMessage,
-    onContinueToReview,
-    onPlaceOrder,
+    onContinueToReview: navigation.onContinueToReview,
+    onPlaceOrder: navigation.onPlaceOrder,
     onCreateAddress: addressesState.onCreateAddress,
   };
 }

@@ -14,7 +14,8 @@ import {
 } from "@dnd-kit/sortable";
 import { LABELS } from "@/shared/constants/labels";
 import type { CategoryAttribute } from "@/shared/api/types";
-import { SortableAttributeRow } from "./SortableAttributeRow.component";
+import { AttributesSortableRows } from "./AttributesSortableRows.component";
+import { adminCategoryAttributesActionStyles as styles } from "./adminCategoryAttributesAction.styles";
 
 interface AttributesSortableListProps {
   rows: CategoryAttribute[];
@@ -36,19 +37,19 @@ export function AttributesSortableList({
   );
   const ids = rows.map((row) => row.id);
   const isEmpty = rows.length === 0;
-  const rowElements = rows.map((row) => (
-    <SortableAttributeRow
-      key={row.id}
-      row={row}
+
+  const emptyRow = <li className={styles.emptyRow}>{LABELS.noRecordsFound}</li>;
+
+  const listContent = isEmpty ? (
+    emptyRow
+  ) : (
+    <AttributesSortableRows
+      rows={rows}
       disabled={loading}
-      onEdit={() => onEdit(row)}
-      onDelete={() => onDelete(row.id)}
+      onEdit={onEdit}
+      onDelete={onDelete}
     />
-  ));
-  const emptyRow = (
-    <li className="text-[0.875rem] text-ink-muted">{LABELS.noRecordsFound}</li>
   );
-  const listContent = isEmpty ? emptyRow : rowElements;
 
   return (
     <DndContext
@@ -57,9 +58,7 @@ export function AttributesSortableList({
       onDragEnd={onDragEnd}
     >
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
-        <ul className="max-h-48 space-y-2 overflow-y-auto rounded-md border border-line p-3">
-          {listContent}
-        </ul>
+        <ul className={styles.listContainer}>{listContent}</ul>
       </SortableContext>
     </DndContext>
   );

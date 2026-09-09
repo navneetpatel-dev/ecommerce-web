@@ -14,23 +14,18 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
-import {
-  exportFilterDisableHint,
-  ReportExportButtons,
-  ReportExportStatus,
-} from "@/features/reports";
-import { useCashbackWriteOffReport } from "../../hooks/useCashbackWriteOffReport.hook";
+import { ReportExportButtons, ReportExportStatus } from "@/features/reports";
 import { CashbackWriteOffReportTable } from "./CashbackWriteOffReportTable.component";
+import { useAdminCashbackWriteOffPanel } from "./useAdminCashbackWriteOffPanel.hook";
+import { adminCashbackWriteOffPanelStyles as styles } from "./adminCashbackWriteOffPanel.styles";
 
 export function AdminCashbackWriteOffPanel() {
-  const reportPanel = useCashbackWriteOffReport();
   const {
     from,
     setFrom,
     to,
     setTo,
     bornBy,
-    setBornBy,
     page,
     loading,
     controlsDisabled,
@@ -38,31 +33,54 @@ export function AdminCashbackWriteOffPanel() {
     error,
     message,
     report,
-    load,
+    filterHint,
+    handleBornByChange,
+    handleLoadFirstPage,
+    handleLoadPage,
     exportExcel,
     exportCsv,
     exportPdf,
-  } = reportPanel;
+  } = useAdminCashbackWriteOffPanel();
 
-  const filterHint = exportFilterDisableHint({
-    message,
-    exportingFormat,
-    controlsDisabled,
-  });
+  const emptyState =
+    !loading && !error && !report ? (
+      <div className={styles.emptyState}>
+        <div className={styles.emptyIconWrapper}>
+          <Percent className={styles.emptyIcon} strokeWidth={1.5} />
+        </div>
+        <p className={styles.emptyTitle}>{LABELS.noReportData}</p>
+        <p className={styles.emptySubtitle}>
+          Select a date range and click &quot;{LABELS.reportLoad}&quot; to view
+          cashback write-off records.
+        </p>
+      </div>
+    ) : null;
+
+  const loadingIndicator = loading ? (
+    <div className={styles.loadingWrapper}>
+      <p className={styles.loadingText}>{LABELS.loading}</p>
+    </div>
+  ) : null;
+
+  const tableElement = report ? (
+    <CashbackWriteOffReportTable
+      report={report}
+      loading={loading}
+      page={page}
+      onLoadPage={handleLoadPage}
+    />
+  ) : null;
 
   return (
-    <div className="rounded-lg border border-line bg-surface p-5 md:p-6 shadow-elevation-1 space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-line pb-4">
-        <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-lg border border-brand/20 bg-brand/10 text-brand shadow-elevation-1">
-            <Percent className="size-5" />
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.headerLeft}>
+          <div className={styles.iconWrapper}>
+            <Percent className={styles.icon} />
           </div>
           <div>
-            <h2 className="font-display text-[1.125rem] font-semibold text-ink">
-              {LABELS.reportCashbackWriteOff}
-            </h2>
-            <p className="text-body-sm text-ink-muted">
+            <h2 className={styles.title}>{LABELS.reportCashbackWriteOff}</h2>
+            <p className={styles.subtitle}>
               Audit trail of unrecovered cashback write-offs and platform vs
               vendor loss allocation
             </p>
@@ -70,9 +88,8 @@ export function AdminCashbackWriteOffPanel() {
         </div>
       </div>
 
-      {/* Filter Bar */}
-      <div className="rounded-lg border border-line bg-paper/40 p-4">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 items-end">
+      <div className={styles.filterCard}>
+        <div className={styles.filterGrid}>
           <DateRangeFields
             from={from}
             to={to}
@@ -95,7 +112,7 @@ export function AdminCashbackWriteOffPanel() {
               <Select
                 value={bornBy}
                 disabled={controlsDisabled}
-                onValueChange={(v) => setBornBy(v as typeof bornBy)}
+                onValueChange={handleBornByChange}
               >
                 <SelectTrigger
                   id="writeoff-born-by"
@@ -115,20 +132,17 @@ export function AdminCashbackWriteOffPanel() {
               </Select>
             </DisabledActionHint>
           </FormFieldFrame>
-          <ButtonGroup
-            align="start"
-            className="sm:col-span-2 xl:col-span-4 flex-wrap items-center gap-2 pt-1"
-          >
+          <ButtonGroup align="start" className={styles.buttonGroup}>
             <DisabledActionHint
               disabled={loading || controlsDisabled}
               message={controlsDisabled ? filterHint : ""}
               block
-              className="w-full sm:w-auto"
+              className={styles.buttonHintWrapper}
             >
               <Button
                 type="button"
                 fullWidth="mobile"
-                onClick={() => void load(1)}
+                onClick={handleLoadFirstPage}
                 disabled={loading || controlsDisabled}
               >
                 {LABELS.reportLoad}
@@ -156,35 +170,9 @@ export function AdminCashbackWriteOffPanel() {
         controlsDisabled={controlsDisabled}
       />
 
-      {loading ? (
-        <div className="flex items-center justify-center py-10">
-          <p className="text-body text-ink-muted">{LABELS.loading}</p>
-        </div>
-      ) : null}
-
-      {!loading && !error && !report ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line bg-paper/30 py-12 px-4 text-center">
-          <div className="mb-3 flex size-12 items-center justify-center rounded-full border border-line bg-surface text-ink-muted shadow-elevation-1">
-            <Percent className="size-6" strokeWidth={1.5} />
-          </div>
-          <p className="font-display text-body font-medium text-ink">
-            {LABELS.noReportData}
-          </p>
-          <p className="text-body-sm text-ink-muted mt-1 max-w-sm">
-            Select a date range and click &quot;{LABELS.reportLoad}&quot; to
-            view cashback write-off records.
-          </p>
-        </div>
-      ) : null}
-
-      {report ? (
-        <CashbackWriteOffReportTable
-          report={report}
-          loading={loading}
-          page={page}
-          onLoadPage={(next) => void load(next)}
-        />
-      ) : null}
+      {loadingIndicator}
+      {emptyState}
+      {tableElement}
     </div>
   );
 }

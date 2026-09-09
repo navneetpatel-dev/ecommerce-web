@@ -41,3 +41,4 @@ export {
 } from "./utils/productListItem";
 export { ProductCompareBar } from "./components/ProductCompareBar.component";
 export { ProductCompareSection } from "./components/ProductCompareSection.component";
+export { MAX_COMPARED_PRODUCTS } from "./constants/compare";

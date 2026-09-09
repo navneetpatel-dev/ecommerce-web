@@ -1,0 +1,16 @@
+export const ticketCardListStyles = {
+  grid: "grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3",
+  skeleton: "h-36 w-full",
+  emptyWrapper: "border border-dashed border-line bg-paper/50",
+  emptyState: "py-14",
+  container: "space-y-4",
+  itemWrapper: "min-w-0",
+  card: "group flex h-full flex-col border border-line bg-surface-raised px-4 py-4 transition-colors hover:border-brand/40 hover:bg-brand-subtle/30 sm:px-5",
+  cardContent: "min-w-0 flex-1 space-y-2",
+  badgesRow: "flex flex-wrap items-center gap-x-2 gap-y-1",
+  unreadDot: "inline-block h-1.5 w-1.5 rounded-full bg-brand",
+  ticketNumber: "font-mono text-[0.75rem] tabular-nums text-ink-muted",
+  subject: "line-clamp-2 font-medium text-ink group-hover:text-brand",
+  preview: "line-clamp-2 text-[0.875rem] text-ink-muted",
+  meta: "text-body-sm text-ink-faint",
+} as const;

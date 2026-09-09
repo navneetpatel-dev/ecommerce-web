@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { Check } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";
+import { useAdminApproveVendorAction } from "./AdminApproveVendorAction/useAdminApproveVendorAction.hook";
+import { adminApproveVendorActionStyles as styles } from "./AdminApproveVendorAction/adminApproveVendorAction.styles";
 
 interface AdminApproveVendorActionProps {
   vendorName: string;
@@ -19,45 +19,23 @@ interface AdminApproveVendorActionProps {
   disabledHint?: string;
 }
 
-/**
- * Approve-vendor confirmation with an optional commission-rate override field.
- * `AdminConfirmAction` only supports a free-text reason, not a numeric input,
- * so approval gets its own small dialog (pattern mirrors
- * AdminAssignDeliveryAgentAction: plain useState, no form library).
- */
 export function AdminApproveVendorAction({
   vendorName,
   onApprove,
   disabled = false,
   disabledHint,
 }: AdminApproveVendorActionProps) {
-  const [open, setOpen] = useState(false);
-  const [commissionRate, setCommissionRate] = useState<number | undefined>(
-    undefined,
-  );
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const close = () => {
-    if (loading) return;
-    setOpen(false);
-    setCommissionRate(undefined);
-    setError(null);
-  };
-
-  const submit = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      await onApprove(commissionRate);
-      setOpen(false);
-      setCommissionRate(undefined);
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadData));
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    open,
+    commissionRate,
+    setCommissionRate,
+    loading,
+    error,
+    handleOpen,
+    handleClose,
+    handleOpenChange,
+    handleSubmit,
+  } = useAdminApproveVendorAction({ onApprove });
 
   const triggerButton = (
     <Button
@@ -65,12 +43,13 @@ export function AdminApproveVendorAction({
       variant="outline"
       className={tableMenuButtonClass("success")}
       disabled={disabled || loading}
-      onClick={() => setOpen(true)}
+      onClick={handleOpen}
     >
       <Check strokeWidth={2.25} aria-hidden />
       <span>{LABELS.approve}</span>
     </Button>
   );
+
   const showDisabledHint = disabled && Boolean(disabledHint);
   const triggerElement = showDisabledHint ? (
     <DisabledActionHint disabled message={disabledHint!} block>
@@ -79,8 +58,9 @@ export function AdminApproveVendorAction({
   ) : (
     triggerButton
   );
+
   const errorMessage = error ? (
-    <p className="text-body-sm text-danger">{error}</p>
+    <p className={styles.errorMessage}>{error}</p>
   ) : null;
 
   return (
@@ -89,21 +69,19 @@ export function AdminApproveVendorAction({
 
       <StatusDialog
         open={open}
-        onOpenChange={(next) => {
-          if (!next) close();
-        }}
+        onOpenChange={handleOpenChange}
         variant="success"
         title={LABELS.confirmApproveVendorTitle}
         description={vendorName}
         secondaryAction={{
           label: LABELS.cancel,
           disabled: loading,
-          onClick: close,
+          onClick: handleClose,
         }}
         primaryAction={{
           label: LABELS.approve,
           loading,
-          onClick: () => void submit(),
+          onClick: handleSubmit,
         }}
       >
         <FormFieldFrame

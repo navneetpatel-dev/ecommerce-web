@@ -35,6 +35,13 @@ const allowlist = [
   // Single pure helper: wishlist price-at-add vs. live product price, used
   // only to decide whether to show the "Price dropped" badge.
   "src/features/wishlist/utils/priceDrop.utils.ts",
+  // Cash deposit discrepancy threshold check (amount vs expectedAmount)
+  "src/features/admin-dashboard/components/CashDepositsPanel/CashDepositTableRow.component.tsx",
+  "src/features/delivery-dashboard/components/CashDepositsCard.component.tsx",
+  // Client-side summation of pending payout items for summary display
+  "src/features/delivery-dashboard/components/EarningsPayoutsCard.component.tsx",
+  // `total` here is pagination item count, not money
+  "src/features/vendor-dashboard/components/ProductsTableView.component.tsx",
 ];
 
 /** constants/ holds display strings and route paths — no logic, only false positives. */

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Pencil } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -8,6 +7,7 @@ import { Input } from "@/shared/components/ui/input";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
+import { useAdminEditNameAction } from "./AdminEditNameAction/useAdminEditNameAction.hook";
 
 interface AdminEditNameActionProps {
   currentName: string;
@@ -27,28 +27,17 @@ export function AdminEditNameAction({
   emptyHint,
   onSave,
 }: AdminEditNameActionProps) {
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [name, setName] = useState(currentName);
-
-  const close = () => {
-    if (loading) return;
-    setOpen(false);
-  };
-
-  const run = async () => {
-    const next = name.trim();
-    if (!next || next === currentName.trim()) return;
-    setLoading(true);
-    try {
-      await onSave(next);
-      setOpen(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const canSave = Boolean(name.trim()) && name.trim() !== currentName.trim();
+  const {
+    open,
+    loading,
+    name,
+    canSave,
+    openDialog,
+    close,
+    handleOpenChange,
+    handleNameChange,
+    run,
+  } = useAdminEditNameAction({ currentName, onSave });
 
   return (
     <>
@@ -57,10 +46,7 @@ export function AdminEditNameAction({
         variant="outline"
         className={tableMenuButtonClass("edit")}
         disabled={loading}
-        onClick={() => {
-          setName(currentName);
-          setOpen(true);
-        }}
+        onClick={openDialog}
       >
         <Pencil strokeWidth={2.25} aria-hidden />
         <span>{LABELS.edit}</span>
@@ -68,9 +54,7 @@ export function AdminEditNameAction({
 
       <StatusDialog
         open={open}
-        onOpenChange={(next) => {
-          if (!next) close();
-        }}
+        onOpenChange={handleOpenChange}
         variant="info"
         title={title}
         description={description}
@@ -84,9 +68,7 @@ export function AdminEditNameAction({
           loading,
           disabled: !canSave,
           disabledHint: !name.trim() ? emptyHint : undefined,
-          onClick: () => {
-            void run();
-          },
+          onClick: run,
         }}
       >
         <FormFieldFrame
@@ -97,7 +79,7 @@ export function AdminEditNameAction({
           <Input
             id="admin-edit-name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleNameChange}
             autoFocus
             placeholder={fieldLabel}
           />

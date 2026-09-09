@@ -31,3 +31,9 @@ export {
 export { ReportExportButtons } from "./components/ReportExportButtons.component";
 export { ReportExportStatus } from "./components/ReportExportStatus.component";
 export { CustomerOrderHistoryPanel } from "./components/CustomerOrderHistoryPanel.component";
+export {
+  useReportPanel,
+  type ReportRangeInput,
+  type UseReportPanelParams,
+} from "./hooks/useReportPanel.hook";
+export { useReportExport } from "./hooks/useReportExport.hook";

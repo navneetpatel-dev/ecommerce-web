@@ -1,8 +1,7 @@
 import { memo } from "react";
-import Link from "next/link";
 import { LABELS } from "@/shared/constants/labels";
-import { PATHS } from "@/shared/constants/paths";
 import { PRODUCT_SPECIFICATIONS_STYLES } from "./productSpecifications.styles";
+import { SecondaryCategoryChip } from "./SecondaryCategoryChip.component";
 
 interface SecondaryCategory {
   id: string;
@@ -26,13 +25,7 @@ export const SecondaryCategoriesList = memo(function SecondaryCategoriesList({
       </p>
       <div className={PRODUCT_SPECIFICATIONS_STYLES.categoriesList}>
         {categories.map((category) => (
-          <Link
-            key={category.id}
-            href={PATHS.category(category.slug)}
-            className={PRODUCT_SPECIFICATIONS_STYLES.categoryChip}
-          >
-            {category.name}
-          </Link>
+          <SecondaryCategoryChip key={category.id} category={category} />
         ))}
       </div>
     </div>

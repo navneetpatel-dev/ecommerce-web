@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Pencil } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -8,10 +7,9 @@ import { Input } from "@/shared/components/ui/input";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import { adminShippingApi } from "@/features/admin-dashboard/api/shipping.api";
 import type { AdminDataRow } from "../hooks/useAdminDataList.hook";
-import { asCsv, parseCsv } from "../utils/csvField";
+import { useAdminEditShippingZoneAction } from "./AdminEditShippingZoneAction/useAdminEditShippingZoneAction.hook";
+import { adminEditShippingZoneActionStyles as styles } from "./AdminEditShippingZoneAction/adminEditShippingZoneAction.styles";
 
 interface AdminEditShippingZoneActionProps {
   row: AdminDataRow;
@@ -22,43 +20,26 @@ export function AdminEditShippingZoneAction({
   row,
   onSaved,
 }: AdminEditShippingZoneActionProps) {
-  const currentName = typeof row.name === "string" ? row.name : "";
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [name, setName] = useState(currentName);
-  const [states, setStates] = useState(asCsv(row.states));
-  const [pincodePrefixes, setPincodePrefixes] = useState(
-    asCsv(row.pincodePrefixes),
-  );
-  const [actionError, setActionError] = useState<string | null>(null);
+  const {
+    open,
+    loading,
+    name,
+    states,
+    pincodePrefixes,
+    actionError,
+    canSave,
+    openDialog,
+    close,
+    handleOpenChange,
+    handleNameChange,
+    handleStatesChange,
+    handlePincodePrefixesChange,
+    run,
+  } = useAdminEditShippingZoneAction({ row, onSaved });
 
-  const close = () => {
-    if (loading) return;
-    setOpen(false);
-    setActionError(null);
-  };
-
-  const canSave = Boolean(name.trim());
-
-  const run = async () => {
-    const nextName = name.trim();
-    if (!nextName) return;
-    setLoading(true);
-    setActionError(null);
-    try {
-      await adminShippingApi.updateZone(String(row.id), {
-        name: nextName,
-        states: parseCsv(states),
-        pincodePrefixes: parseCsv(pincodePrefixes),
-      });
-      setOpen(false);
-      onSaved();
-    } catch (err) {
-      setActionError(getApiErrorMessage(err, LABELS.couldNotLoadData));
-    } finally {
-      setLoading(false);
-    }
-  };
+  const errorMessage = actionError ? (
+    <p className={styles.errorMessage}>{actionError}</p>
+  ) : null;
 
   return (
     <>
@@ -67,13 +48,7 @@ export function AdminEditShippingZoneAction({
         variant="outline"
         className={tableMenuButtonClass("edit")}
         disabled={loading}
-        onClick={() => {
-          setName(currentName);
-          setStates(asCsv(row.states));
-          setPincodePrefixes(asCsv(row.pincodePrefixes));
-          setActionError(null);
-          setOpen(true);
-        }}
+        onClick={openDialog}
       >
         <Pencil strokeWidth={2.25} aria-hidden />
         <span>{LABELS.edit}</span>
@@ -81,9 +56,7 @@ export function AdminEditShippingZoneAction({
 
       <StatusDialog
         open={open}
-        onOpenChange={(next) => {
-          if (!next) close();
-        }}
+        onOpenChange={handleOpenChange}
         variant="info"
         title={LABELS.editShippingZoneTitle}
         description={LABELS.editShippingZoneBody}
@@ -97,12 +70,10 @@ export function AdminEditShippingZoneAction({
           loading,
           disabled: !canSave,
           disabledHint: !name.trim() ? LABELS.enterZoneName : undefined,
-          onClick: () => {
-            void run();
-          },
+          onClick: run,
         }}
       >
-        <div className="space-y-3">
+        <div className={styles.container}>
           <FormFieldFrame
             label={LABELS.zoneName}
             htmlFor="shipping-zone-edit-name"
@@ -111,7 +82,7 @@ export function AdminEditShippingZoneAction({
             <Input
               id="shipping-zone-edit-name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleNameChange}
               autoFocus
               placeholder={LABELS.zoneName}
             />
@@ -124,7 +95,7 @@ export function AdminEditShippingZoneAction({
             <Input
               id="shipping-zone-edit-states"
               value={states}
-              onChange={(e) => setStates(e.target.value)}
+              onChange={handleStatesChange}
               placeholder={LABELS.states}
             />
           </FormFieldFrame>
@@ -136,13 +107,11 @@ export function AdminEditShippingZoneAction({
             <Input
               id="shipping-zone-edit-prefixes"
               value={pincodePrefixes}
-              onChange={(e) => setPincodePrefixes(e.target.value)}
+              onChange={handlePincodePrefixesChange}
               placeholder={LABELS.pincodePrefixes}
             />
           </FormFieldFrame>
-          {actionError ? (
-            <p className="text-body-sm text-danger">{actionError}</p>
-          ) : null}
+          {errorMessage}
         </div>
       </StatusDialog>
     </>

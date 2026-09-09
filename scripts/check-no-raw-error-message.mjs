@@ -12,7 +12,7 @@ const featuresDir = path.join(root, "src", "features");
 
 const allowlist = [
   "src/features/reports/hooks/useReportHubHelpers/index.ts",
-  "src/features/checkout/hooks/usePlaceOrder.hook.ts",
+  "src/features/checkout/hooks/useOrderPlacementErrorHandler.hook.ts",
 ];
 
 const patterns = [
@@ -37,12 +37,7 @@ function runRipgrep(pattern) {
 }
 
 const violations = patterns
-  .flatMap((pattern) =>
-    runRipgrep(pattern)
-      .trim()
-      .split("\n")
-      .filter(Boolean),
-  )
+  .flatMap((pattern) => runRipgrep(pattern).trim().split("\n").filter(Boolean))
   .filter((line) => {
     const file = line.split(":")[0];
     const rel = path.relative(root, path.join(root, file));

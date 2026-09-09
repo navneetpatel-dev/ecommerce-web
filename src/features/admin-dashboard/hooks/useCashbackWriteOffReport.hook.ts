@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { API } from "@/shared/constants/apiRoutes";
-import { useReportPanel } from "@/shared/hooks/useReportPanel.hook";
+import { useReportPanel } from "@/features/reports";
 import { reportsApi, type CashbackWriteOffReport } from "../api/reports.api";
 
 export type WriteOffBornBy = "ALL" | "PLATFORM" | "VENDOR";

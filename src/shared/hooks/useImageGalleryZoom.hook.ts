@@ -12,11 +12,11 @@ import {
 } from "@/shared/constants/imageGallery";
 import {
   originFromPointer,
-  resolveStageGesture,
   type GalleryPoint,
 } from "@/shared/utils/imageGalleryGeometry";
 import { useSwallowNextClick } from "./useSwallowNextClick.hook";
 import { useLongPressAction } from "./useLongPressAction.hook";
+import { dispatchStageGesture } from "@/shared/utils/imageGalleryZoomGesture.utils";
 
 export interface UseImageGalleryZoomOptions {
   enabled?: boolean;
@@ -117,20 +117,17 @@ export function useImageGalleryZoom({
 
       if (!start || event.pointerType === "mouse") return;
 
-      const action = resolveStageGesture({
+      dispatchStageGesture({
         dx: event.clientX - start.x,
         dy: event.clientY - start.y,
         wasZooming,
         moved: movedRef.current,
+        onSwipe,
+        onTap,
+        armSwallow: swallow.arm,
       });
-      if (action === "none") return;
-
-      swallow.arm();
-      if (action === "swipe-next") onSwipe?.(1);
-      else if (action === "swipe-prev") onSwipe?.(-1);
-      else onTap?.();
     },
-    [cancelLongPress, onSwipe, onTap, stopZoom, swallow],
+    [cancelLongPress, onSwipe, onTap, stopZoom, swallow.arm],
   );
 
   const onPointerCancel = useCallback(() => {

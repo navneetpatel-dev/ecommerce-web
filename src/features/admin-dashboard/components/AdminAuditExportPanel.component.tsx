@@ -3,30 +3,13 @@
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
-import { useCallback, useState } from "react";
-import { defaultRange } from "@/features/reports/hooks/useReportHubHelpers/index";
-import {
-  exportFilterDisableHint,
-  ReportExportButtons,
-  ReportExportStatus,
-} from "@/features/reports";
-import { useReportExport } from "@/features/reports/hooks/useReportExport.hook";
+import { ReportExportButtons, ReportExportStatus } from "@/features/reports";
+import { useAdminAuditExportPanel } from "./AdminAuditExportPanel/useAdminAuditExportPanel.hook";
+import { adminAuditExportPanelStyles as styles } from "./AdminAuditExportPanel/adminAuditExportPanel.styles";
 
 export function AdminAuditExportPanel() {
-  const [from, setFrom] = useState(defaultRange().from);
-  const [to, setTo] = useState(defaultRange().to);
-
-  const buildFilters = useCallback(
-    () => ({ from, to }),
-    [from, to],
-  );
-
-  const exportHub = useReportExport("audit-log", buildFilters);
-  const filterHint = exportFilterDisableHint({
-    message: exportHub.message,
-    exportingFormat: exportHub.exportingFormat,
-    controlsDisabled: exportHub.controlsDisabled,
-  });
+  const { from, to, setFrom, setTo, filterHint, exportHub } =
+    useAdminAuditExportPanel();
 
   return (
     <FormSection
@@ -44,7 +27,7 @@ export function AdminAuditExportPanel() {
         disabled={exportHub.controlsDisabled}
         disabledHint={filterHint}
       />
-      <div className="sm:col-span-2 xl:col-span-3 space-y-2">
+      <div className={styles.buttonGroupWrapper}>
         <ReportExportButtons
           controlsDisabled={exportHub.controlsDisabled}
           exportingFormat={exportHub.exportingFormat}

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
   FormActions,
@@ -16,6 +17,7 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import { CATEGORY_ATTRIBUTE_TYPE } from "@/shared/constants/statuses";
+import { adminCategoryAttributesActionStyles as styles } from "./adminCategoryAttributesAction.styles";
 
 interface AttributeFormFieldsProps {
   name: string;
@@ -52,17 +54,24 @@ export function AttributeFormFields({
     ? LABELS.saveCategoryAttribute
     : LABELS.addCategoryAttribute;
 
+  const handleNameInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onNameChange(e.target.value);
+  };
+
+  const handleOptionsInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onOptionsChange(e.target.value);
+  };
+
   const optionsField = isBooleanType ? null : (
     <FormFieldFrame label={LABELS.attributeOptions}>
-      <Input
-        value={options}
-        onChange={(e) => onOptionsChange(e.target.value)}
-      />
+      <Input value={options} onChange={handleOptionsInputChange} />
     </FormFieldFrame>
   );
+
   const errorMessage = error ? (
-    <p className="text-body-sm text-danger">{error}</p>
+    <p className={styles.errorMessage}>{error}</p>
   ) : null;
+
   const cancelButton = isEditing ? (
     <Button variant="secondary" disabled={loading} onClick={onReset}>
       {LABELS.cancelEditAttribute}
@@ -74,10 +83,10 @@ export function AttributeFormFields({
       title={LABELS.attributeFormSection}
       hint={LABELS.attributeFormSectionHint}
       columns={1}
-      className="mt-4"
+      className={styles.formSection}
     >
       <FormFieldFrame label={LABELS.attributeName}>
-        <Input value={name} onChange={(e) => onNameChange(e.target.value)} />
+        <Input value={name} onChange={handleNameInputChange} />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.attributeType}>
         <Select value={type} onValueChange={onTypeChange} disabled={isEditing}>

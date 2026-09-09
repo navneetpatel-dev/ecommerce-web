@@ -1,19 +1,17 @@
-import { useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useCheckoutStore } from "@/shared/stores/checkout.store";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { usePlaceOrder } from "../api/checkout.queries";
-import { navigate } from "@/shared/utils/navigate";
-import { PATHS } from "@/shared/constants/paths";
 import { useCart } from "@/features/cart";
 import { resolveCheckoutCouponCodes } from "../utils/checkoutCouponCodes.utils";
 import { buildPlaceOrderPayload } from "../utils/placeOrderPayload.utils";
 import { usePaymentNotice, type PaymentNotice } from "./usePaymentNotice/index";
 import { useRestoreCancelledCheckout } from "./useRestoreCancelledCheckout/index";
-import { launchRazorpayPayment } from "./useRazorpayCheckout/index";
 import { useCheckoutPaymentPhase } from "./useCheckoutPaymentPhase.hook";
 import { useCheckoutQuoteState } from "./useCheckoutQuoteState.hook";
 import { useOrderPlacementErrorHandler } from "./useOrderPlacementErrorHandler.hook";
+import { usePendingOrderRecovery } from "./usePendingOrderRecovery.hook";
+import { handleOrderPlacementSuccess } from "../utils/orderPlacementSuccess.utils";
 
 export type { PaymentNotice };
 
@@ -28,7 +26,6 @@ export function usePlaceOrderWithRazorpay() {
   } = useCheckoutStore();
   const placeOrder = usePlaceOrder();
   const { data: cart } = useCart();
-  // Stacked codes on the cart — falls back to the single manually-typed code.
   const couponCodes = resolveCheckoutCouponCodes(cart, appliedCouponCode);
   const router = useRouter();
   const currentUser = useAuthStore((s) => s.currentUser);
@@ -36,7 +33,6 @@ export function usePlaceOrderWithRazorpay() {
     usePaymentNotice();
   const { paymentPhase, setPaymentPhase, isPaymentOverlayOpen } =
     useCheckoutPaymentPhase();
-  const pendingOrderIdRef = useRef<string | null>(null);
 
   const {
     quote,
@@ -57,12 +53,6 @@ export function usePlaceOrderWithRazorpay() {
     giftWrap,
   });
 
-  const clearPendingOrder = useCallback((orderId?: string) => {
-    if (!orderId || pendingOrderIdRef.current === orderId) {
-      pendingOrderIdRef.current = null;
-    }
-  }, []);
-
   const { restoreCancelledCheckout, awaitPendingRestores } =
     useRestoreCancelledCheckout({
       showNotice,
@@ -75,14 +65,8 @@ export function usePlaceOrderWithRazorpay() {
       },
     });
 
-  const recoverPendingCheckout = useCallback(
-    async (options?: { silent?: boolean }) => {
-      const orderId = pendingOrderIdRef.current;
-      if (!orderId) return;
-      await restoreCancelledCheckout(orderId, null, options);
-    },
-    [restoreCancelledCheckout],
-  );
+  const { pendingOrderIdRef, clearPendingOrder, recoverPendingCheckout } =
+    usePendingOrderRecovery(restoreCancelledCheckout);
 
   const handlePlaceOrderError = useOrderPlacementErrorHandler({
     showNotice,
@@ -117,36 +101,24 @@ export function usePlaceOrderWithRazorpay() {
         });
 
       const result = await placeOrder.mutateAsync(payload);
-
       pendingOrderIdRef.current = result.orderId;
 
       if (apiWalletAmount > 0) {
         invalidateWalletCache();
       }
 
-      if (apiPaymentMethod === "razorpay" && result.razorpayOrderId) {
-        setPaymentPhase("idle");
-        await launchRazorpayPayment(result, {
-          router,
-          showNotice,
-          clearCartCache,
-          onOrderPlaced,
-          restoreCancelledCheckout,
-          onPhaseChange: setPaymentPhase,
-          onCheckoutComplete: clearPendingOrder,
-          prefill: {
-            name: currentUser?.name,
-            email: currentUser?.email,
-            contact: currentUser?.phone ?? undefined,
-          },
-        });
-        return;
-      }
-
-      clearPendingOrder(result.orderId);
-      setPaymentPhase("redirecting");
-      onOrderPlaced();
-      navigate(router, PATHS.orderConfirmation(result.orderId));
+      await handleOrderPlacementSuccess({
+        result,
+        apiPaymentMethod,
+        router,
+        currentUser,
+        showNotice,
+        clearCartCache,
+        onOrderPlaced,
+        restoreCancelledCheckout,
+        setPaymentPhase,
+        clearPendingOrder,
+      });
     } catch (err) {
       setPaymentPhase("idle");
       await handlePlaceOrderError(err, pendingOrderIdRef.current);

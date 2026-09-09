@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { AlertTriangle, ClipboardList, Store, Star } from "lucide-react";
 import {
   Card,
@@ -10,7 +9,9 @@ import {
 } from "@/shared/components/ui/card";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
-import { cn } from "@/shared/utils/cn";
+import { OpsQueueList } from "./AnalyticsOpsQueues/OpsQueueList.component";
+import type { QueueDef } from "./AnalyticsOpsQueues/OpsQueueItem.component";
+import { analyticsOpsQueuesStyles as styles } from "./AnalyticsOpsQueues/analyticsOpsQueues.styles";
 
 interface AnalyticsOpsQueuesProps {
   pendingProducts: number;
@@ -18,21 +19,21 @@ interface AnalyticsOpsQueuesProps {
   pendingReviews: number;
 }
 
-const queues = [
+const QUEUES: QueueDef[] = [
   {
-    key: "products" as const,
+    key: "products",
     label: LABELS.analyticsPendingProducts,
     href: PATHS.admin.products,
     icon: ClipboardList,
   },
   {
-    key: "vendors" as const,
+    key: "vendors",
     label: LABELS.analyticsPendingVendors,
     href: PATHS.admin.vendors,
     icon: Store,
   },
   {
-    key: "reviews" as const,
+    key: "reviews",
     label: LABELS.analyticsPendingReviews,
     href: PATHS.admin.reviews,
     icon: Star,
@@ -44,59 +45,29 @@ export function AnalyticsOpsQueues({
   pendingVendors,
   pendingReviews,
 }: AnalyticsOpsQueuesProps) {
-  const counts = {
+  const counts: Record<string, number> = {
     products: pendingProducts,
     vendors: pendingVendors,
     reviews: pendingReviews,
   };
   const total = pendingProducts + pendingVendors + pendingReviews;
-
   const hasAttention = total > 0;
-  const attentionCardClass = cn(
-    hasAttention &&
-      "border-warning/30 bg-gradient-to-r from-warning-subtle/40 to-surface",
-  );
-  const attentionIconClass = cn(
-    "h-4 w-4",
-    hasAttention ? "text-warning" : "text-ink-faint",
-  );
 
   return (
-    <Card className={cn("overflow-hidden", attentionCardClass)}>
-      <CardHeader className="flex-row items-center justify-between gap-3 space-y-0 pb-3">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className={attentionIconClass} aria-hidden />
-          <CardTitle className="text-body-lg">
+    <Card className={styles.card(hasAttention)}>
+      <CardHeader className={styles.header}>
+        <div className={styles.titleGroup}>
+          <AlertTriangle
+            className={styles.attentionIcon(hasAttention)}
+            aria-hidden
+          />
+          <CardTitle className={styles.title}>
             {LABELS.analyticsOpsQueues}
           </CardTitle>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {queues.map((queue) => {
-            const Icon = queue.icon;
-            const count = counts[queue.key];
-            return (
-              <Link
-                key={queue.key}
-                href={queue.href}
-                className="group flex items-center justify-between gap-3 rounded-md border border-line bg-surface/80 px-4 py-3 transition-colors hover:border-brand/35 hover:bg-brand-subtle/40"
-              >
-                <div className="flex min-w-0 items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-md bg-paper text-ink-muted group-hover:text-brand">
-                    <Icon className="h-4 w-4" aria-hidden />
-                  </span>
-                  <span className="truncate text-[0.875rem] text-ink-muted">
-                    {queue.label}
-                  </span>
-                </div>
-                <span className="font-mono text-[1.125rem] font-semibold text-ink">
-                  {count}
-                </span>
-              </Link>
-            );
-          })}
-        </div>
+        <OpsQueueList queues={QUEUES} counts={counts} />
       </CardContent>
     </Card>
   );

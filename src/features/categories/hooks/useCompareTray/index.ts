@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { ProductListItem } from "@/shared/api/types";
-import { MAX_COMPARED_PRODUCTS } from "@/features/products/constants/compare";
+import { MAX_COMPARED_PRODUCTS } from "@/features/products";
 
 export function useCompareTray() {
   const [compareMode, setCompareMode] = useState(false);

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { ArrowRightLeft } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -17,12 +16,13 @@ import {
 import {
   Select,
   SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
-import { useReassignProducts } from "../hooks/useReassignProducts.hook";
+import { CategoryOptionsList } from "./AdminReassignProductsAction/CategoryOptionsList.component";
+import { useAdminReassignProductsAction } from "./AdminReassignProductsAction/useAdminReassignProductsAction.hook";
+import { adminReassignProductsActionStyles as styles } from "./AdminReassignProductsAction/adminReassignProductsAction.styles";
 
 interface AdminReassignProductsActionProps {
   onDone: () => void;
@@ -31,9 +31,8 @@ interface AdminReassignProductsActionProps {
 export function AdminReassignProductsAction({
   onDone,
 }: AdminReassignProductsActionProps) {
-  const [open, setOpen] = useState(false);
-  const reassign = useReassignProducts(open, onDone);
   const {
+    open,
     categories,
     fromId,
     setFromId,
@@ -42,14 +41,19 @@ export function AdminReassignProductsAction({
     error,
     message,
     loading,
-    onSubmit,
-    clearFeedback,
-  } = reassign;
+    canSubmit,
+    beginReassign,
+    handleOpenChange,
+    handleSubmit,
+  } = useAdminReassignProductsAction({ onDone });
 
-  const beginReassign = () => {
-    setOpen(true);
-    clearFeedback();
-  };
+  const errorMessage = error ? (
+    <p className={styles.errorMessage}>{error}</p>
+  ) : null;
+
+  const successMessage = message ? (
+    <p className={styles.successMessage}>{message}</p>
+  ) : null;
 
   return (
     <>
@@ -64,18 +68,18 @@ export function AdminReassignProductsAction({
         {LABELS.reassignProducts}
       </Button>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md">
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogContent className={styles.dialogContent}>
           <DialogHeader>
             <DialogTitle>{LABELS.reassignProductsTitle}</DialogTitle>
           </DialogHeader>
-          <p className="text-[0.875rem] text-ink-muted">
+          <p className={styles.dialogDescription}>
             {LABELS.reassignProductsBody}
           </p>
           <FormSection
             title={LABELS.reassignProducts}
             columns={1}
-            className="mt-2"
+            className={styles.formSection}
           >
             <FormFieldFrame label={LABELS.reassignFrom}>
               <Select value={fromId} onValueChange={setFromId}>
@@ -83,11 +87,7 @@ export function AdminReassignProductsAction({
                   <SelectValue placeholder={LABELS.selectCategory} />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
+                  <CategoryOptionsList categories={categories} />
                 </SelectContent>
               </Select>
             </FormFieldFrame>
@@ -97,23 +97,14 @@ export function AdminReassignProductsAction({
                   <SelectValue placeholder={LABELS.selectCategory} />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
+                  <CategoryOptionsList categories={categories} />
                 </SelectContent>
               </Select>
             </FormFieldFrame>
-            {error ? <p className="text-body-sm text-danger">{error}</p> : null}
-            {message ? (
-              <p className="text-body-sm text-success">{message}</p>
-            ) : null}
+            {errorMessage}
+            {successMessage}
             <FormActions>
-              <Button
-                disabled={loading || !fromId || !toId || fromId === toId}
-                onClick={() => void onSubmit()}
-              >
+              <Button disabled={!canSubmit || loading} onClick={handleSubmit}>
                 {LABELS.reassignConfirm}
               </Button>
             </FormActions>
