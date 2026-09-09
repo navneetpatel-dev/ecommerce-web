@@ -9,17 +9,10 @@ import type {
 } from "@/shared/api/types";
 import {
   unwrapPaginatedList,
+  withQuery,
   type PaginatedList,
   type PaginationQuery,
 } from "@/shared/api/client/pagination";
-
-function withPaginationQuery(base: string, params: PaginationQuery = {}) {
-  const q = new URLSearchParams();
-  if (params.page) q.set("page", String(params.page));
-  if (params.limit) q.set("limit", String(params.limit));
-  const qs = q.toString();
-  return qs ? `${base}?${qs}` : base;
-}
 
 export type RemoveCouponResult = {
   cleared: boolean;
@@ -39,36 +32,31 @@ export const couponsApi = {
         ? `${API.coupons.remove}?code=${encodeURIComponent(code)}`
         : API.coupons.remove,
     ),
-  eligible: (params: { productId?: string; limit?: number } = {}) => {
-    const q = new URLSearchParams();
-    if (params.productId) q.set("productId", params.productId);
-    if (params.limit) q.set("limit", String(params.limit));
-    const qs = q.toString();
-    return apiClient.get<EligibleCoupon[]>(
-      qs ? `${API.coupons.eligible}?${qs}` : API.coupons.eligible,
-    );
-  },
-  eligiblePublic: (params: { productId: string; limit?: number }) => {
-    const q = new URLSearchParams();
-    q.set("productId", params.productId);
-    if (params.limit) q.set("limit", String(params.limit));
-    return apiClient.get<EligibleCoupon[]>(
-      `${API.coupons.eligiblePublic}?${q.toString()}`,
-    );
-  },
+  eligible: (params: { productId?: string; limit?: number } = {}) =>
+    apiClient.get<EligibleCoupon[]>(
+      withQuery(API.coupons.eligible, {
+        productId: params.productId,
+        limit: params.limit,
+      }),
+    ),
+  eligiblePublic: (params: { productId: string; limit?: number }) =>
+    apiClient.get<EligibleCoupon[]>(
+      withQuery(API.coupons.eligiblePublic, {
+        productId: params.productId,
+        limit: params.limit,
+      }),
+    ),
 
   vendorList: async (
     params: PaginationQuery = {},
   ): Promise<PaginatedList<Coupon>> => {
     const res = await apiClient.getWithResponse<Coupon[]>(
-      withPaginationQuery(API.coupons.vendor.list, params),
+      withQuery(API.coupons.vendor.list, params),
     );
     return unwrapPaginatedList(res);
   },
   vendorCreate: (body: unknown) =>
     apiClient.post<Coupon>(API.coupons.vendor.create, body),
-  vendorUpdate: (id: string, body: unknown) =>
-    apiClient.patch<Coupon>(API.coupons.vendor.detail(id), body),
   vendorUpdateStatus: (id: string, status: CouponStatus) =>
     apiClient.patch<Coupon>(API.coupons.vendor.status(id), { status }),
   vendorAnalytics: (id: string) =>

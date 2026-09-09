@@ -1,34 +1,24 @@
 import { apiClient } from "@/shared/api/client/client";
+import { API } from "@/shared/constants/apiRoutes";
+import {
+  inventoryApi,
+  type LowStockInventoryRow,
+} from "@/shared/api/inventory.api";
 import {
   asClientPaginatedList,
-  unwrapPaginatedList,
   type PaginatedList,
 } from "@/shared/api/client/pagination";
-import { API } from "@/shared/constants/apiRoutes";
 import type {
   VendorSummary,
   VendorAnalytics,
   CommissionLedgerEntry,
   PayoutEntry,
-  ProductListItem,
 } from "@/shared/api/types";
 import type { VendorEntityType } from "@/shared/constants/statuses";
+import { productsApi } from "@/features/products";
+import { commissionsApi } from "@/features/admin-dashboard";
 
-type LowStockVariantResponse = {
-  id: string;
-  sku: string;
-  stock: number;
-  lowStockAt: number;
-  product?: { name?: string | null } | null;
-};
-
-export type LowStockInventoryRow = {
-  id: string;
-  productName: string;
-  sku: string;
-  stock: number;
-  lowStockAt: number;
-};
+export type { LowStockInventoryRow };
 
 export type VendorPayoutFrequency = "WEEKLY" | "BIWEEKLY" | "MONTHLY";
 
@@ -49,18 +39,7 @@ export const vendorApi = {
   summary: () => apiClient.get<VendorSummary>(API.vendors.dashboardSummary),
   analytics: () =>
     apiClient.get<VendorAnalytics>(API.vendors.dashboardAnalytics),
-  lowStock: async (): Promise<LowStockInventoryRow[]> => {
-    const rows = await apiClient.get<LowStockVariantResponse[]>(
-      API.inventory.lowStock,
-    );
-    return rows.map((row) => ({
-      id: row.id,
-      productName: row.product?.name ?? "Unknown product",
-      sku: row.sku,
-      stock: Number(row.stock),
-      lowStockAt: Number(row.lowStockAt),
-    }));
-  },
+  lowStock: inventoryApi.lowStock,
   getMyShop: () => apiClient.get<VendorShop>(API.vendors.me),
   updateMyShop: (body: {
     returnShippingFee?: number | null;
@@ -71,24 +50,14 @@ export const vendorApi = {
     codEnabled?: boolean;
     payoutFrequency?: VendorPayoutFrequency | null;
   }) => apiClient.patch<VendorShop>(API.vendors.me, body),
-  products: (page = 1, filters?: { status?: string; search?: string }) => {
-    const params = new URLSearchParams({ page: String(page) });
-    if (filters?.status) params.set("status", filters.status);
-    if (filters?.search) params.set("search", filters.search);
-    return apiClient.get<{
-      items: ProductListItem[];
-      total: number;
-      totalPages: number;
-    }>(API.products.list(params.toString()));
-  },
-  commissions: async (
-    page = 1,
-  ): Promise<PaginatedList<CommissionLedgerEntry>> => {
-    const res = await apiClient.getWithResponse<CommissionLedgerEntry[]>(
-      `${API.commissions.list}?page=${page}`,
-    );
-    return unwrapPaginatedList(res);
-  },
+  products: (page = 1, filters?: { status?: string; search?: string }) =>
+    productsApi.list({
+      page,
+      status: filters?.status,
+      search: filters?.search,
+    }),
+  commissions: (page = 1): Promise<PaginatedList<CommissionLedgerEntry>> =>
+    commissionsApi.list({ page }),
   payouts: async (vendorId: string): Promise<PaginatedList<PayoutEntry>> => {
     const res = await apiClient.getWithResponse<PayoutEntry[]>(
       API.payouts.vendor(vendorId),

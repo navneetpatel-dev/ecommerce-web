@@ -1,5 +1,10 @@
 import { apiClient } from '@/shared/api/client/client'
 import { API } from '@/shared/constants/apiRoutes'
+import {
+  fetchCursorPage,
+  type CursorPage,
+} from '@/shared/api/client/cursorPagination'
+import { buildSearchParams } from '@/shared/api/client/pagination'
 import type {
   SupportTicketCategory,
   SupportTicketPriority,
@@ -78,25 +83,10 @@ export type ReplySupportTicketBody = {
   attachmentUrls?: TicketAttachmentInput[]
 }
 
-export type CursorPage<T> = {
-  items: T[]
-  nextCursor: string | null
-}
-
-async function fetchCursorPage<T>(path: string): Promise<CursorPage<T>> {
-  const res = await apiClient.getWithResponse<T[]>(path)
-  const nextCursor =
-    typeof res.meta?.nextCursor === 'string' ? res.meta.nextCursor : null
-  return { items: res.data ?? [], nextCursor }
-}
+export type { CursorPage }
 
 function buildQuery(params: Record<string, string | number | undefined | null>): string {
-  const q = new URLSearchParams()
-  for (const [key, value] of Object.entries(params)) {
-    if (value == null || value === '') continue
-    q.set(key, String(value))
-  }
-  return q.toString()
+  return buildSearchParams(params).toString()
 }
 
 export type TicketListParams = {

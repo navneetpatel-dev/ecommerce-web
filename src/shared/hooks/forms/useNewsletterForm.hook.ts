@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { apiClient } from "@/shared/api/client/client";
-import { API } from "@/shared/constants/apiRoutes";
+import { newsletterApi } from "@/shared/api/newsletter.api";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
@@ -33,10 +32,7 @@ export function useNewsletterForm() {
     setError(null);
     setMessage(null);
     try {
-      const result = await apiClient.post<{
-        subscribed: boolean;
-        alreadySubscribed: boolean;
-      }>(API.newsletter.subscribe, { email: trimmed });
+      const result = await newsletterApi.subscribe(trimmed);
       try {
         localStorage.setItem(NEWSLETTER_KEY, trimmed);
       } catch {

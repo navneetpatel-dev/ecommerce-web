@@ -1,6 +1,7 @@
 import { apiClient } from "@/shared/api/client/client";
 import {
   unwrapPaginatedList,
+  buildSearchParams,
   type PaginatedList,
 } from "@/shared/api/client/pagination";
 import { API } from "@/shared/constants/apiRoutes";
@@ -24,14 +25,16 @@ export const assigneesApi = {
     search?: string;
     vendorId?: string;
   }): Promise<PaginatedList<AssigneeCandidate>> => {
-    const q = new URLSearchParams();
-    q.set("permission", params.permission);
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
-    if (params.search) q.set("search", params.search);
-    if (params.vendorId) q.set("vendorId", params.vendorId);
     const res = await apiClient.getWithResponse<AssigneeCandidate[]>(
-      API.users.assignees(q.toString()),
+      API.users.assignees(
+        buildSearchParams({
+          permission: params.permission,
+          page: params.page,
+          limit: params.limit,
+          search: params.search,
+          vendorId: params.vendorId,
+        }).toString(),
+      ),
     );
     return unwrapPaginatedList(res);
   },

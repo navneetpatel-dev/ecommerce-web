@@ -1,6 +1,12 @@
 import { apiClient } from "@/shared/api/client/client";
+import { buildSearchParams } from "@/shared/api/client/pagination";
 import { API } from "@/shared/constants/apiRoutes";
-import type { Address, ShippingRate, CheckoutQuote } from "@/shared/api/types";
+import type {
+  AddressInput,
+  ShippingRate,
+  CheckoutQuote,
+  RazorpaySignaturePayload,
+} from "@/shared/api/types";
 import { usersApi } from "@/features/users";
 
 export type PlaceOrderResponse = {
@@ -18,16 +24,11 @@ export type CancelCheckoutPayload = {
   orderId: string;
 };
 
-export type VerifyPaymentPayload = {
-  razorpay_order_id: string;
-  razorpay_payment_id: string;
-  razorpay_signature: string;
-};
+export type VerifyPaymentPayload = RazorpaySignaturePayload;
 
 export const checkoutApi = {
   getAddresses: () => usersApi.getAddresses(),
-  createAddress: (body: Omit<Address, "id" | "userId">) =>
-    usersApi.createAddress(body),
+  createAddress: (body: AddressInput) => usersApi.createAddress(body),
   getShippingRates: (
     pincode: string,
     options?: {
@@ -36,16 +37,16 @@ export const checkoutApi = {
       variantId?: string;
       vendorId?: string;
     },
-  ) => {
-    const params = new URLSearchParams({ pincode });
-    if (options?.method) params.set("method", options.method);
-    if (options?.productId) params.set("productId", options.productId);
-    if (options?.variantId) params.set("variantId", options.variantId);
-    if (options?.vendorId) params.set("vendorId", options.vendorId);
-    return apiClient.get<ShippingRate[]>(
-      `${API.shipping.rates}?${params.toString()}`,
-    );
-  },
+  ) =>
+    apiClient.get<ShippingRate[]>(
+      `${API.shipping.rates}?${buildSearchParams({
+        pincode,
+        method: options?.method,
+        productId: options?.productId,
+        variantId: options?.variantId,
+        vendorId: options?.vendorId,
+      }).toString()}`,
+    ),
   getCheckoutQuote: (body: {
     addressId: string;
     shippingMethodByVendor: Record<string, string>;

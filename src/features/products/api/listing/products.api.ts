@@ -1,6 +1,6 @@
 import { apiClient } from "@/shared/api/client/client";
 import { postFile } from "@/shared/api/client/postFile";
-import { unwrapPaginatedList } from "@/shared/api/client/pagination";
+import { unwrapPaginatedList, buildSearchParams, type PaginatedList } from "@/shared/api/client/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 import type {
   ProductListItem,
@@ -34,32 +34,24 @@ export interface ProductFilters {
   attrs?: Record<string, string[]>;
 }
 
-export interface ProductListResponse {
-  items: ProductListItem[];
-  total: number;
-  totalPages: number;
-  page: number;
-  limit: number;
-}
+export type ProductListResponse = PaginatedList<ProductListItem>;
 
 export const productsApi = {
   list: async (filters: ProductFilters): Promise<ProductListResponse> => {
-    const params = new URLSearchParams();
-    if (filters.categoryId) params.set("categoryId", filters.categoryId);
-    if (filters.vendorId) params.set("vendorId", filters.vendorId);
-    if (filters.search) params.set("search", filters.search);
-    if (filters.minPrice != null)
-      params.set("minPrice", String(filters.minPrice));
-    if (filters.maxPrice != null)
-      params.set("maxPrice", String(filters.maxPrice));
-    if (filters.rating != null) params.set("rating", String(filters.rating));
-    if (filters.sort) params.set("sort", filters.sort);
-    if (filters.page) params.set("page", String(filters.page));
-    if (filters.limit) params.set("limit", String(filters.limit));
-    if (filters.status) params.set("status", filters.status);
-    if (filters.includeDescendants) params.set("includeDescendants", "true");
-    if (filters.excludeProductId)
-      params.set("excludeProductId", filters.excludeProductId);
+    const params = buildSearchParams({
+      categoryId: filters.categoryId,
+      vendorId: filters.vendorId,
+      search: filters.search,
+      minPrice: filters.minPrice,
+      maxPrice: filters.maxPrice,
+      rating: filters.rating,
+      sort: filters.sort,
+      page: filters.page,
+      limit: filters.limit,
+      status: filters.status,
+      includeDescendants: filters.includeDescendants ? true : undefined,
+      excludeProductId: filters.excludeProductId,
+    });
     if (filters.attrs) {
       for (const [key, values] of Object.entries(filters.attrs)) {
         if (values.length) params.set(key, values.join(","));

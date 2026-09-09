@@ -1,6 +1,7 @@
 import { apiClient } from "@/shared/api/client/client";
 import {
   unwrapPaginatedList,
+  withQuery,
   type PaginatedList,
   type PaginationQuery,
 } from "@/shared/api/client/pagination";
@@ -12,13 +13,8 @@ export const productQnaApi = {
     productId: string,
     params: PaginationQuery = {},
   ): Promise<PaginatedList<ProductQuestion>> => {
-    const q = new URLSearchParams();
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
-    const qs = q.toString();
-    const base = API.productQna.forProduct(productId);
     const res = await apiClient.getWithResponse<ProductQuestion[]>(
-      qs ? `${base}?${qs}` : base,
+      withQuery(API.productQna.forProduct(productId), params),
     );
     return unwrapPaginatedList(res);
   },
@@ -32,12 +28,8 @@ export const productQnaApi = {
   pending: async (
     params: PaginationQuery = {},
   ): Promise<PaginatedList<ProductQuestion>> => {
-    const q = new URLSearchParams();
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
-    const qs = q.toString();
     const res = await apiClient.getWithResponse<ProductQuestion[]>(
-      qs ? `${API.productQna.moderation}?${qs}` : API.productQna.moderation,
+      withQuery(API.productQna.moderation, params),
     );
     return unwrapPaginatedList(res);
   },

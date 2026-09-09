@@ -24,6 +24,30 @@ export type PaginationQuery = {
   limit?: number
 }
 
+export type SearchParamValue = string | number | boolean | undefined | null
+
+/** Shared query-string builder for API list/filter params. */
+export function buildSearchParams(
+  params: Record<string, SearchParamValue>,
+): URLSearchParams {
+  const q = new URLSearchParams()
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined || value === null || value === "") continue
+    q.set(key, String(value))
+  }
+  return q
+}
+
+/** Append query params to a path that may or may not already include `?`. */
+export function withQuery(
+  path: string,
+  params: Record<string, SearchParamValue> = {},
+): string {
+  const qs = buildSearchParams(params).toString()
+  if (!qs) return path
+  return path.includes("?") ? `${path}&${qs}` : `${path}?${qs}`
+}
+
 function asPaginationMeta(value: unknown): Partial<PaginationMeta> | undefined {
   if (!value || typeof value !== 'object') return undefined
   return value as Partial<PaginationMeta>

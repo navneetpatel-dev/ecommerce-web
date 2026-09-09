@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { vendorsApi, type KycChecklistItem } from "@/features/vendors";
-import { adminApi } from "../../api/analytics/admin.api";
 
 export type VendorKycConfirmMode = "verify" | "reject" | null;
 
@@ -67,7 +66,7 @@ export function useVendorKycDocumentsDialog(vendorId: string, open: boolean) {
     setSubmitting(true);
     setActionError(null);
     try {
-      await adminApi.verifyVendorDocument(activeItem.documentId);
+      await vendorsApi.verifyDocument(activeItem.documentId);
       closeConfirm();
       await load();
     } catch (err) {
@@ -82,7 +81,7 @@ export function useVendorKycDocumentsDialog(vendorId: string, open: boolean) {
     setSubmitting(true);
     setActionError(null);
     try {
-      await adminApi.rejectVendorDocument(activeItem.documentId, reason.trim());
+      await vendorsApi.rejectDocument(activeItem.documentId, reason.trim());
       closeConfirm();
       await load();
     } catch (err) {

@@ -2,13 +2,15 @@ import { apiClient } from "@/shared/api/client/client";
 import { downloadFile } from "@/shared/api/client/downloadFile";
 import {
   unwrapPaginatedList,
+  withQuery,
+  buildSearchParams,
   type PaginatedList,
   type PaginationQuery,
 } from "@/shared/api/client/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import { buildReportExportFilenameFallback } from "@/shared/utils/files/downloadFilename";
-import type { WalletTransaction } from "@/shared/api/types";
+import type { WalletTransaction, RazorpaySignaturePayload } from "@/shared/api/types";
 
 export type WalletBalanceResponse = {
   balance: number;
@@ -51,11 +53,11 @@ export type WalletStatementExportFilters = {
 function buildStatementQuery(
   filters: WalletStatementExportFilters & { format: "xlsx" | "csv" | "pdf" },
 ) {
-  const params = new URLSearchParams();
-  params.set("from", filters.from);
-  params.set("to", filters.to);
-  params.set("format", filters.format);
-  return params.toString();
+  return buildSearchParams({
+    from: filters.from,
+    to: filters.to,
+    format: filters.format,
+  }).toString();
 }
 
 export const walletApi = {
@@ -70,7 +72,7 @@ export const walletApi = {
     const page = params.page ?? 1;
     const limit = params.limit ?? DEFAULT_PAGE_LIMIT;
     const res = await apiClient.getWithResponse<WalletTransaction[]>(
-      `${API.wallet.transactions}?page=${page}&limit=${limit}`,
+      withQuery(API.wallet.transactions, { page, limit }),
     );
     return unwrapPaginatedList(res);
   },
@@ -79,12 +81,7 @@ export const walletApi = {
       amountInr,
       ...(idempotencyKey ? { idempotencyKey } : {}),
     }),
-  verifyRecharge: (payload: {
-    razorpay_order_id: string;
-    razorpay_payment_id: string;
-    razorpay_signature: string;
-    rechargeId?: string;
-  }) => apiClient.post(API.wallet.rechargeVerify, payload),
+  verifyRecharge: (payload: RazorpaySignaturePayload & { rechargeId?: string }) => apiClient.post(API.wallet.rechargeVerify, payload),
   getRechargeStatus: (id: string) =>
     apiClient.get<{
       id: string;

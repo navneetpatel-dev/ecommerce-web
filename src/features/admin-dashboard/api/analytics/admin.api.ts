@@ -1,6 +1,8 @@
 import { apiClient } from "@/shared/api/client/client";
 import {
   unwrapPaginatedList,
+  buildSearchParams,
+  withQuery,
   type PaginatedList,
   type PaginationQuery,
 } from "@/shared/api/client/pagination";
@@ -32,11 +34,14 @@ export const adminApi = {
   pendingVendors: async (
     params: PaginationQuery = {},
   ): Promise<PaginatedList<VendorInfo>> => {
-    const q = new URLSearchParams({ status: VENDOR_STATUS.PENDING });
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
     const res = await apiClient.getWithResponse<VendorInfo[]>(
-      API.vendors.list(q.toString()),
+      API.vendors.list(
+        buildSearchParams({
+          status: VENDOR_STATUS.PENDING,
+          page: params.page,
+          limit: params.limit,
+        }).toString(),
+      ),
     );
     return unwrapPaginatedList(res);
   },
@@ -44,13 +49,15 @@ export const adminApi = {
   vendors: async (
     params: PaginationQuery & { search?: string; status?: string } = {},
   ): Promise<PaginatedList<VendorInfo>> => {
-    const q = new URLSearchParams();
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
-    if (params.search) q.set("search", params.search);
-    if (params.status) q.set("status", params.status);
     const res = await apiClient.getWithResponse<VendorInfo[]>(
-      API.vendors.list(q.toString()),
+      API.vendors.list(
+        buildSearchParams({
+          page: params.page,
+          limit: params.limit,
+          search: params.search,
+          status: params.status,
+        }).toString(),
+      ),
     );
     return unwrapPaginatedList(res);
   },
@@ -67,35 +74,17 @@ export const adminApi = {
   unsuspendVendor: (id: string) => apiClient.patch(API.vendors.unsuspend(id)),
   deleteVendor: (id: string) => apiClient.delete(API.vendors.delete(id)),
 
-  getVendorDocuments: (vendorId: string) =>
-    apiClient.get<
-      Array<{
-        id: string;
-        vendorId: string;
-        type: import("@/shared/constants/statuses").VendorDocumentType;
-        url: string;
-        verified: boolean;
-        createdAt?: string;
-      }>
-    >(API.vendorDocs.list(vendorId)),
-  verifyVendorDocument: (documentId: string) =>
-    apiClient.patch(API.vendorDocs.verify(documentId), {}),
-  rejectVendorDocument: (documentId: string, reason: string) =>
-    apiClient.patch<{ id: string; rejected: boolean; rejectionReason: string }>(
-      API.vendorDocs.reject(documentId),
-      {
-        reason,
-      },
-    ),
-
   pendingProducts: async (
     params: PaginationQuery = {},
   ): Promise<PaginatedList<ProductDetail>> => {
-    const q = new URLSearchParams({ status: PRODUCT_STATUS.PENDING_APPROVAL });
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
     const res = await apiClient.getWithResponse<ProductDetail[]>(
-      API.products.list(q.toString()),
+      API.products.list(
+        buildSearchParams({
+          status: PRODUCT_STATUS.PENDING_APPROVAL,
+          page: params.page,
+          limit: params.limit,
+        }).toString(),
+      ),
     );
     return unwrapPaginatedList(res);
   },
@@ -118,24 +107,20 @@ export const adminApi = {
       vendorScoped?: boolean;
     } = {},
   ): Promise<PaginatedList<Coupon>> => {
-    const q = new URLSearchParams();
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
-    if (params.vendorId) q.set("vendorId", params.vendorId);
-    if (params.status) q.set("status", params.status);
-    if (params.vendorScoped !== undefined)
-      q.set("vendorScoped", String(params.vendorScoped));
-    const qs = q.toString();
     const res = await apiClient.getWithResponse<Coupon[]>(
-      qs ? `${API.coupons.list}?${qs}` : API.coupons.list,
+      withQuery(API.coupons.list, {
+        page: params.page,
+        limit: params.limit,
+        vendorId: params.vendorId,
+        status: params.status,
+        vendorScoped: params.vendorScoped,
+      }),
     );
     return unwrapPaginatedList(res);
   },
 
   createCoupon: (body: unknown) =>
     apiClient.post<Coupon>(API.coupons.create, body),
-  updateCoupon: (id: string, body: unknown) =>
-    apiClient.patch<Coupon>(API.coupons.detail(id), body),
   updateCouponStatus: (id: string, status: CouponStatus) =>
     apiClient.patch<Coupon>(API.coupons.status(id), { status }),
   couponAnalytics: (id: string) =>
@@ -150,9 +135,11 @@ export const adminApi = {
     format: "xlsx" | "csv" | "pdf" = "xlsx",
     range?: { from?: string; to?: string },
   ) => {
-    const params = new URLSearchParams({ format });
-    if (range?.from) params.set("from", range.from);
-    if (range?.to) params.set("to", range.to);
+    const params = buildSearchParams({
+      format,
+      from: range?.from,
+      to: range?.to,
+    });
     const from = range?.from ?? "";
     const to = range?.to ?? "";
     return downloadReportFile(

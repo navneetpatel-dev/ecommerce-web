@@ -1,6 +1,7 @@
 import { apiClient } from "@/shared/api/client/client";
 import {
   unwrapPaginatedList,
+  buildSearchParams,
   type PaginatedList,
   type PaginationQuery,
 } from "@/shared/api/client/pagination";
@@ -74,24 +75,28 @@ export const vendorsApi = {
   directory: async (
     params: PaginationQuery & { search?: string } = {},
   ): Promise<PaginatedList<VendorDirectoryItem>> => {
-    const q = new URLSearchParams();
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
-    if (params.search) q.set("search", params.search);
     const res = await apiClient.getWithResponse<VendorDirectoryItem[]>(
-      API.vendors.directory(q.toString()),
+      API.vendors.directory(
+        buildSearchParams({
+          page: params.page,
+          limit: params.limit,
+          search: params.search,
+        }).toString(),
+      ),
     );
     return unwrapPaginatedList(res);
   },
   listStorefront: async (
     params: PaginationQuery & { search?: string } = {},
   ): Promise<PaginatedList<StorefrontVendor>> => {
-    const q = new URLSearchParams();
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
-    if (params.search) q.set("search", params.search);
     const res = await apiClient.getWithResponse<StorefrontVendor[]>(
-      API.vendors.storefront(q.toString()),
+      API.vendors.storefront(
+        buildSearchParams({
+          page: params.page,
+          limit: params.limit,
+          search: params.search,
+        }).toString(),
+      ),
     );
     return unwrapPaginatedList(res);
   },

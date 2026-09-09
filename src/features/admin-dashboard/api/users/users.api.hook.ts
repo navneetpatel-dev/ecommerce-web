@@ -1,6 +1,7 @@
 import { apiClient } from "@/shared/api/client/client";
 import {
   unwrapPaginatedList,
+  buildSearchParams,
   type PaginatedList,
   type PaginationQuery,
 } from "@/shared/api/client/pagination";
@@ -24,14 +25,16 @@ export const adminUsersApi = {
       search?: string;
     } = {},
   ): Promise<PaginatedList<CurrentUser>> => {
-    const q = new URLSearchParams();
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
-    if (params.status) q.set("status", params.status);
-    if (params.roleId) q.set("roleId", params.roleId);
-    if (params.search) q.set("search", params.search);
     const res = await apiClient.getWithResponse<CurrentUser[]>(
-      API.users.list(q.toString()),
+      API.users.list(
+        buildSearchParams({
+          page: params.page,
+          limit: params.limit,
+          status: params.status,
+          roleId: params.roleId,
+          search: params.search,
+        }).toString(),
+      ),
     );
     return unwrapPaginatedList(res);
   },

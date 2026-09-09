@@ -2,6 +2,7 @@ import { apiClient } from "@/shared/api/client/client";
 import { downloadFile } from "@/shared/api/client/downloadFile";
 import {
   unwrapPaginatedList,
+  withQuery,
   type PaginatedList,
   type PaginationQuery,
 } from "@/shared/api/client/pagination";
@@ -21,12 +22,8 @@ export const returnsApi = {
   listAdmin: async (
     params: PaginationQuery = {},
   ): Promise<PaginatedList<ReturnRequest>> => {
-    const q = new URLSearchParams();
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
-    const qs = q.toString();
     const res = await apiClient.getWithResponse<ReturnRequest[]>(
-      qs ? `${API.returns.admin}?${qs}` : API.returns.admin,
+      withQuery(API.returns.admin, params),
     );
     return unwrapPaginatedList(res);
   },

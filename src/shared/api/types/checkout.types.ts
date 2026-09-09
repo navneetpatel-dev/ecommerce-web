@@ -2,6 +2,13 @@ import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { VendorInfo } from "./vendor.types";
 import type { OrderItem } from "./order.types";
 
+/** Razorpay checkout signature payload — shared by order, wallet, and gift-card verify. */
+export type RazorpaySignaturePayload = {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+};
+
 export interface ShippingRate {
   method: ShippingMethod;
   cost: number;

@@ -1,6 +1,7 @@
 import { apiClient } from "@/shared/api/client/client";
 import {
   unwrapPaginatedList,
+  withQuery,
   type PaginatedList,
   type PaginationQuery,
 } from "@/shared/api/client/pagination";
@@ -26,12 +27,8 @@ export const reviewsApi = {
   pending: async (
     params: PaginationQuery = {},
   ): Promise<PaginatedList<Review>> => {
-    const q = new URLSearchParams();
-    if (params.page) q.set("page", String(params.page));
-    if (params.limit) q.set("limit", String(params.limit));
-    const qs = q.toString();
     const res = await apiClient.getWithResponse<Review[]>(
-      qs ? `${API.reviews.moderation}?${qs}` : API.reviews.moderation,
+      withQuery(API.reviews.moderation, params),
     );
     return unwrapPaginatedList(res);
   },

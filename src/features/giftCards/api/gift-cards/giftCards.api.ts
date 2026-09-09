@@ -1,5 +1,6 @@
 import { apiClient } from "@/shared/api/client/client";
 import { API } from "@/shared/constants/apiRoutes";
+import type { RazorpaySignaturePayload } from "@/shared/api/types";
 
 export type GiftCardCheckout = {
   giftCardId: string;
@@ -40,12 +41,7 @@ export type PurchaseGiftCardPayload = {
 export const giftCardsApi = {
   purchase: (payload: PurchaseGiftCardPayload) =>
     apiClient.post<GiftCardCheckout>(API.giftCards.purchase, payload),
-  verify: (payload: {
-    razorpay_order_id: string;
-    razorpay_payment_id: string;
-    razorpay_signature: string;
-    giftCardId?: string;
-  }) => apiClient.post<GiftCardVerifyResult>(API.giftCards.verify, payload),
+  verify: (payload: RazorpaySignaturePayload & { giftCardId?: string }) => apiClient.post<GiftCardVerifyResult>(API.giftCards.verify, payload),
   redeem: (code: string) =>
     apiClient.post<GiftCardRedeemResult>(API.giftCards.redeem, { code }),
   getByCode: (code: string) =>
