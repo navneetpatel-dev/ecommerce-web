@@ -13,27 +13,29 @@ import {
   TableBody,
   TableRow,
   TableHead,
-  TableCell,
 } from "@/shared/components/ui/table";
 import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { TABLE_DATA_CELL_CLASS } from "@/shared/constants/table";
 import { LABELS } from "@/shared/constants/labels";
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
-import { cn } from "@/shared/utils/cn";
-import { useVendorLowStock } from "../hooks/useVendorLowStock.hook";
-
-const MAX_VISIBLE_ROWS = 6;
+import { useVendorLowStockWidget } from "./VendorLowStockWidget/useVendorLowStockWidget.hook";
+import { LowStockRows } from "./VendorLowStockWidget/LowStockRows.component";
+import {
+  LOW_STOCK_CONTENT,
+  LOW_STOCK_EMPTY,
+  LOW_STOCK_HEADER,
+  LOW_STOCK_LOADING_STACK,
+  LOW_STOCK_REMAINING_NOTICE,
+  LOW_STOCK_TITLE,
+} from "./VendorLowStockWidget/vendorLowStockWidget.styles";
 
 export function VendorLowStockWidget() {
-  const { rows, isLoading } = useVendorLowStock();
-  const visible = rows.slice(0, MAX_VISIBLE_ROWS);
-  const remaining = rows.length - visible.length;
-  const isEmpty = visible.length === 0;
-  const hasRemaining = remaining > 0;
+  const { visible, remaining, isEmpty, hasRemaining, isLoading } =
+    useVendorLowStockWidget();
 
   const loadingState = (
-    <div className="space-y-2">
+    <div className={LOW_STOCK_LOADING_STACK}>
       <Skeleton className="h-8 w-full" />
       <Skeleton className="h-8 w-full" />
       <Skeleton className="h-8 w-full" />
@@ -41,42 +43,13 @@ export function VendorLowStockWidget() {
   );
 
   const emptyState = (
-    <p className="py-6 text-center text-body-sm text-ink-muted">
+    <p className={LOW_STOCK_EMPTY}>
       {vendorDashboardWidgetsLabels.vendorLowStockEmpty}
     </p>
   );
 
-  const tableRows = visible.map((row) => {
-    const stockClassName = row.stock <= 0 ? "text-danger" : "text-warning";
-    return (
-      <TableRow key={row.id}>
-        <TableCell className={cn(TABLE_DATA_CELL_CLASS, "text-body")}>
-          {row.productName}
-        </TableCell>
-        <TableCell
-          className={cn(
-            TABLE_DATA_CELL_CLASS,
-            "font-mono text-body-sm text-ink-muted",
-          )}
-        >
-          {row.sku}
-        </TableCell>
-        <TableCell
-          className={cn(TABLE_DATA_CELL_CLASS, "font-mono", stockClassName)}
-        >
-          {row.stock}
-        </TableCell>
-        <TableCell
-          className={cn(TABLE_DATA_CELL_CLASS, "font-mono text-ink-muted")}
-        >
-          {row.lowStockAt}
-        </TableCell>
-      </TableRow>
-    );
-  });
-
   const remainingNotice = hasRemaining ? (
-    <p className="mt-3 text-body-sm text-ink-muted">
+    <p className={LOW_STOCK_REMAINING_NOTICE}>
       +{remaining} {vendorDashboardWidgetsLabels.vendorLowStockMoreItemsSuffix}
     </p>
   ) : null;
@@ -101,7 +74,9 @@ export function VendorLowStockWidget() {
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>{tableRows}</TableBody>
+          <TableBody>
+            <LowStockRows rows={visible} />
+          </TableBody>
         </Table>
       </TableScrollShell>
       {remainingNotice}
@@ -112,13 +87,13 @@ export function VendorLowStockWidget() {
 
   return (
     <Card>
-      <CardHeader className="flex-row items-center justify-between pb-2">
-        <CardTitle className="flex items-center gap-2 text-body-lg">
+      <CardHeader className={LOW_STOCK_HEADER}>
+        <CardTitle className={LOW_STOCK_TITLE}>
           <AlertTriangle className="h-4 w-4 text-warning" aria-hidden="true" />
           {vendorDashboardWidgetsLabels.vendorLowStockTitle}
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0">{content}</CardContent>
+      <CardContent className={LOW_STOCK_CONTENT}>{content}</CardContent>
     </Card>
   );
 }

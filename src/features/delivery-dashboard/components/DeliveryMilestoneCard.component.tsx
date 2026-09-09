@@ -1,5 +1,12 @@
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import {
+  MILESTONE_CARD_BODY,
+  MILESTONE_CARD_DESC,
+  MILESTONE_CARD_HEADER,
+  MILESTONE_CARD_ROOT,
+  MILESTONE_CARD_TITLE,
+} from "./DeliveryMilestoneCard/deliveryMilestoneCard.styles";
 
 interface DeliveryMilestoneCardProps {
   label: string;
@@ -14,16 +21,14 @@ export function DeliveryMilestoneCard({
   onAdvance,
 }: DeliveryMilestoneCardProps) {
   return (
-    <div className="border border-line bg-surface shadow-elevation-1">
-      <div className="border-b border-line bg-paper/55 px-5 py-3.5">
+    <div className={MILESTONE_CARD_ROOT}>
+      <div className={MILESTONE_CARD_HEADER}>
         <TextEyebrow className="!mb-0">Milestone Progress</TextEyebrow>
       </div>
-      <div className="space-y-4 p-5 md:p-6">
+      <div className={MILESTONE_CARD_BODY}>
         <div>
-          <h2 className="font-display text-[1.125rem] font-medium text-ink">
-            {label}
-          </h2>
-          <p className="mt-1 text-body-sm text-ink-muted">
+          <h2 className={MILESTONE_CARD_TITLE}>{label}</h2>
+          <p className={MILESTONE_CARD_DESC}>
             Update the task status to proceed with the fulfillment schedule.
           </p>
         </div>

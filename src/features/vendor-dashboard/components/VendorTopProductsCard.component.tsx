@@ -13,23 +13,26 @@ import {
   TableBody,
   TableRow,
   TableHead,
-  TableCell,
 } from "@/shared/components/ui/table";
 import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
 import { TABLE_DATA_CELL_CLASS } from "@/shared/constants/table";
 import { LABELS } from "@/shared/constants/labels";
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
-import { formatInr } from "@/shared/utils/orderFormat";
-import { cn } from "@/shared/utils/cn";
+import {
+  TopProductsRows,
+  type TopProduct,
+} from "./VendorAnalyticsPanel/TopProductsRows.component";
+import {
+  TOP_PRODUCTS_CARD,
+  TOP_PRODUCTS_CONTENT,
+  TOP_PRODUCTS_EMPTY,
+  TOP_PRODUCTS_HEADER,
+  TOP_PRODUCTS_TITLE,
+} from "./VendorAnalyticsPanel/vendorAnalyticsPanel.styles";
 
-interface TopProduct {
-  id: string;
-  name: string;
-  unitsSold: number;
-  revenue: number;
-}
+export type { TopProduct };
 
-interface VendorTopProductsCardProps {
+export interface VendorTopProductsCardProps {
   topProducts: TopProduct[];
 }
 
@@ -37,19 +40,21 @@ interface VendorTopProductsCardProps {
 export function VendorTopProductsCard({
   topProducts,
 }: VendorTopProductsCardProps) {
+  const isEmpty = topProducts.length === 0;
+
   return (
-    <Card className="lg:col-span-2">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-body-lg">
+    <Card className={TOP_PRODUCTS_CARD}>
+      <CardHeader className={TOP_PRODUCTS_HEADER}>
+        <CardTitle className={TOP_PRODUCTS_TITLE}>
           {vendorDashboardWidgetsLabels.vendorAnalyticsTopProducts}
         </CardTitle>
         <CardDescription>
           {vendorDashboardWidgetsLabels.vendorAnalyticsTopProductsHint}
         </CardDescription>
       </CardHeader>
-      <CardContent className="pt-0">
-        {topProducts.length === 0 ? (
-          <p className="py-10 text-center text-body-sm text-ink-muted">
+      <CardContent className={TOP_PRODUCTS_CONTENT}>
+        {isEmpty ? (
+          <p className={TOP_PRODUCTS_EMPTY}>
             {vendorDashboardWidgetsLabels.vendorAnalyticsEmptyProducts}
           </p>
         ) : (
@@ -69,25 +74,7 @@ export function VendorTopProductsCard({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {topProducts.map((product) => (
-                  <TableRow key={product.id}>
-                    <TableCell
-                      className={cn(TABLE_DATA_CELL_CLASS, "text-body")}
-                    >
-                      {product.name}
-                    </TableCell>
-                    <TableCell
-                      className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}
-                    >
-                      {product.unitsSold}
-                    </TableCell>
-                    <TableCell
-                      className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}
-                    >
-                      {formatInr(product.revenue)}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                <TopProductsRows topProducts={topProducts} />
               </TableBody>
             </Table>
           </TableScrollShell>

@@ -1,4 +1,6 @@
 import type { DeliveryShipment } from "../types";
+import { DeliveryAttemptItem } from "./DeliveryAttemptsList/DeliveryAttemptItem.component";
+import { ATTEMPTS_LIST_CONTAINER } from "./DeliveryAttemptsList/deliveryAttemptsList.styles";
 
 interface DeliveryAttemptsListProps {
   attempts: NonNullable<DeliveryShipment["attempts"]>;
@@ -7,25 +9,9 @@ interface DeliveryAttemptsListProps {
 /** Prior failed-delivery attempts logged against this shipment. */
 export function DeliveryAttemptsList({ attempts }: DeliveryAttemptsListProps) {
   return (
-    <div className="space-y-2">
+    <div className={ATTEMPTS_LIST_CONTAINER}>
       {attempts.map((attempt) => (
-        <div
-          key={attempt.id}
-          className="border border-line bg-surface p-4 text-body-sm text-warning shadow-elevation-1"
-        >
-          <span className="font-medium">Attempt {attempt.attemptNumber}:</span>{" "}
-          {attempt.note}
-          {attempt.photoUrl ? (
-            <a
-              href={attempt.photoUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="ml-2 font-medium text-brand hover:underline"
-            >
-              View photo
-            </a>
-          ) : null}
-        </div>
+        <DeliveryAttemptItem key={attempt.id} attempt={attempt} />
       ))}
     </div>
   );

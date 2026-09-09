@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   Accordion,
   AccordionItem,
@@ -9,37 +8,43 @@ import {
 } from "@/shared/components/ui/accordion";
 import { NewsletterFormContainer } from "@/shared/containers/NewsletterFormContainer.container";
 import { FOOTER_SECTIONS } from "@/shared/constants/footer";
+import { FooterLinksList } from "./Footer/FooterLinksList.component";
+import {
+  FOOTER_BOTTOM_BAR,
+  FOOTER_BOTTOM_ROW,
+  FOOTER_COPYRIGHT,
+  FOOTER_DESKTOP_GRID,
+  FOOTER_DESKTOP_LIST,
+  FOOTER_MOBILE_CONTAINER,
+  FOOTER_MOBILE_LIST,
+  FOOTER_MOBILE_NEWSLETTER_BOX,
+  FOOTER_MOBILE_NEWSLETTER_TITLE,
+  FOOTER_NEWSLETTER_DESC,
+  FOOTER_PAYMENT_METHODS,
+  FOOTER_ROOT,
+  FOOTER_SECTION_TITLE,
+} from "./Footer/footer.styles";
 
 export function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="mt-16 lg:mt-24 border-t border-line bg-surface">
-      <div className="storefront-container hidden grid-cols-4 gap-8 py-16 lg:grid">
+    <footer className={FOOTER_ROOT}>
+      <div className={FOOTER_DESKTOP_GRID}>
         {FOOTER_SECTIONS.map((section) => (
           <div key={section.title}>
             {!("isNewsletter" in section && section.isNewsletter) ? (
               <>
-                <h4 className="text-body-sm font-semibold text-ink mb-4">
-                  {section.title}
-                </h4>
-                <ul className="space-y-3">
-                  {section.links.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-body-sm text-ink-muted hover:text-ink transition-colors"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                <h4 className={FOOTER_SECTION_TITLE}>{section.title}</h4>
+                <FooterLinksList
+                  links={section.links}
+                  className={FOOTER_DESKTOP_LIST}
+                />
               </>
             ) : (
               <div>
-                <h4 className="text-body-sm font-semibold text-ink mb-4">
-                  Newsletter
-                </h4>
-                <p className="text-body-sm text-ink-muted mb-3">
+                <h4 className={FOOTER_SECTION_TITLE}>Newsletter</h4>
+                <p className={FOOTER_NEWSLETTER_DESC}>
                   Get the latest deals and new arrivals.
                 </p>
                 <NewsletterFormContainer idPrefix="desktop" />
@@ -49,44 +54,32 @@ export function Footer() {
         ))}
       </div>
 
-      <div className="storefront-container py-8 lg:hidden">
+      <div className={FOOTER_MOBILE_CONTAINER}>
         <Accordion type="single" collapsible>
           {FOOTER_SECTIONS.map((section) =>
             !("isNewsletter" in section && section.isNewsletter) ? (
               <AccordionItem key={section.title} value={section.title}>
                 <AccordionTrigger>{section.title}</AccordionTrigger>
                 <AccordionContent>
-                  <ul className="space-y-2">
-                    {section.links.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className="text-body-sm text-ink-muted hover:text-ink transition-colors"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  <FooterLinksList
+                    links={section.links}
+                    className={FOOTER_MOBILE_LIST}
+                  />
                 </AccordionContent>
               </AccordionItem>
             ) : null,
           )}
         </Accordion>
-        <div className="mt-6">
-          <h4 className="text-body-sm font-semibold text-ink mb-2">
-            Newsletter
-          </h4>
+        <div className={FOOTER_MOBILE_NEWSLETTER_BOX}>
+          <h4 className={FOOTER_MOBILE_NEWSLETTER_TITLE}>Newsletter</h4>
           <NewsletterFormContainer idPrefix="mobile" />
         </div>
       </div>
 
-      <div className="border-t border-line py-6">
-        <div className="storefront-container flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-body-sm text-ink-muted">
-            Marketplace &copy; {new Date().getFullYear()}
-          </p>
-          <div className="flex items-center gap-4 text-body-sm text-ink-muted">
+      <div className={FOOTER_BOTTOM_BAR}>
+        <div className={FOOTER_BOTTOM_ROW}>
+          <p className={FOOTER_COPYRIGHT}>Marketplace &copy; {currentYear}</p>
+          <div className={FOOTER_PAYMENT_METHODS}>
             <span>Visa</span>
             <span>Mastercard</span>
             <span>UPI</span>

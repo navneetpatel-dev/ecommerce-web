@@ -1,6 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { LoginFormFields } from "./LoginFormFields.component";
 import { AuthFormCard } from "./AuthFormCard.component";
 import { FormError } from "@/shared/components/FormError.component";
@@ -10,8 +9,15 @@ import { ResendVerificationByEmail } from "./ResendVerificationByEmail.component
 import { Button } from "@/shared/components/ui/button";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { navigate } from "@/shared/utils/navigate";
 import type { LoginInput } from "../schemas/auth.schema";
+import { useLoginCard } from "./LoginCard/useLoginCard.hook";
+import {
+  AUTH_FOOTER_TEXT,
+  AUTH_FORM_ROOT,
+  AUTH_LINK,
+  AUTH_OAUTH_CONTAINER,
+  AUTH_SUBMIT_BUTTON,
+} from "./LoginCard/loginCard.styles";
 
 interface LoginCardProps {
   form: UseFormReturn<LoginInput>;
@@ -32,56 +38,27 @@ export function LoginCard({
   needsVerification,
   unverifiedEmail,
 }: LoginCardProps) {
-  const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    trigger,
-    getValues,
-    setFocus,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = form;
-
-  const handleUseEmailCode = async () => {
-    clearErrors("password");
-    const rawEmail = getValues("email")?.trim() ?? "";
-    if (!rawEmail) {
-      setError("email", {
-        type: "manual",
-        message: LABELS.emailRequired,
-      });
-      setFocus("email");
-      return;
-    }
-
-    const isValid = await trigger("email");
-    if (!isValid) {
-      setFocus("email");
-      return;
-    }
-
-    navigate(router, PATHS.otpForEmail(rawEmail, oauthRedirect));
-  };
+  const { register, trigger } = form;
+  const { errors, handleUseEmailCode, onFormSubmit } = useLoginCard({
+    form,
+    onSubmit,
+    oauthRedirect,
+  });
 
   return (
     <AuthFormCard
       title={LABELS.welcomeBack}
       description={LABELS.logInToAccount}
       footer={
-        <p className="text-center text-body text-ink-muted">
+        <p className={AUTH_FOOTER_TEXT}>
           {LABELS.dontHaveAccount}{" "}
-          <Link
-            href={PATHS.register}
-            className="font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
-          >
+          <Link href={PATHS.register} className={AUTH_LINK}>
             {LABELS.register}
           </Link>
         </p>
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={onFormSubmit} className={AUTH_FORM_ROOT}>
         <LoginFormFields
           register={register}
           errors={errors}
@@ -94,12 +71,17 @@ export function LoginCard({
             <ResendVerificationByEmail email={unverifiedEmail} />
           </>
         )}
-        <Button type="submit" className="w-full" size="lg" loading={isPending}>
+        <Button
+          type="submit"
+          className={AUTH_SUBMIT_BUTTON}
+          size="lg"
+          loading={isPending}
+        >
           {LABELS.logIn}
         </Button>
         <Button
           type="button"
-          className="w-full"
+          className={AUTH_SUBMIT_BUTTON}
           variant="outline"
           size="lg"
           onClick={handleUseEmailCode}
@@ -108,7 +90,7 @@ export function LoginCard({
         </Button>
       </form>
 
-      <div className="space-y-3">
+      <div className={AUTH_OAUTH_CONTAINER}>
         <OAuthDivider />
         <OAuthButton provider="google" redirect={oauthRedirect} />
       </div>

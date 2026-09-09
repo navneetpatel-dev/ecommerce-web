@@ -5,13 +5,17 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
-import { formatInr } from "@/shared/utils/orderFormat";
+import { ReportExportButtons, ReportExportStatus } from "@/features/reports";
+import { useVendorSettlementReportPanel } from "./VendorSettlementReportPanel/useVendorSettlementReportPanel.hook";
+import { SettlementSummaryDl } from "./VendorSettlementReportPanel/SettlementSummaryDl.component";
 import {
-  exportFilterDisableHint,
-  ReportExportButtons,
-  ReportExportStatus,
-} from "@/features/reports";
-import { useVendorSettlementReport } from "../hooks/useVendorSettlementReport.hook";
+  SETTLEMENT_BUTTON_GROUP,
+  SETTLEMENT_CONTROLS_GRID,
+  SETTLEMENT_HINT_CONTAINER,
+  SETTLEMENT_MESSAGE_MUTED,
+  SETTLEMENT_PANEL_SECTION,
+  SETTLEMENT_PANEL_TITLE,
+} from "./VendorSettlementReportPanel/vendorSettlementReportPanel.styles";
 
 export function VendorSettlementReportPanel() {
   const {
@@ -26,24 +30,24 @@ export function VendorSettlementReportPanel() {
     error,
     message,
     summary,
-    load,
+    filterHint,
+    handleLoadClick,
     exportExcel,
     exportCsv,
     exportPdf,
-  } = useVendorSettlementReport();
+  } = useVendorSettlementReportPanel();
 
-  const filterHint = exportFilterDisableHint({
-    message,
-    exportingFormat,
-    controlsDisabled,
-  });
+  const isLoadDisabled = loading || !vendorId || controlsDisabled;
+  const loadButtonHint = controlsDisabled
+    ? filterHint
+    : !vendorId
+      ? LABELS.reportExportLoadReportFirst
+      : "";
 
   return (
-    <section className="space-y-4 rounded-md border border-line bg-surface p-4">
-      <h2 className="text-[1rem] font-semibold text-ink">
-        {LABELS.settlementReports}
-      </h2>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+    <section className={SETTLEMENT_PANEL_SECTION}>
+      <h2 className={SETTLEMENT_PANEL_TITLE}>{LABELS.settlementReports}</h2>
+      <div className={SETTLEMENT_CONTROLS_GRID}>
         <DateRangeFields
           from={from}
           to={to}
@@ -54,27 +58,18 @@ export function VendorSettlementReportPanel() {
           disabled={controlsDisabled}
           disabledHint={filterHint}
         />
-        <ButtonGroup
-          align="start"
-          className="sm:col-span-2 lg:col-span-1 lg:self-end"
-        >
+        <ButtonGroup align="start" className={SETTLEMENT_BUTTON_GROUP}>
           <DisabledActionHint
-            disabled={loading || !vendorId || controlsDisabled}
-            message={
-              controlsDisabled
-                ? filterHint
-                : !vendorId
-                  ? LABELS.reportExportLoadReportFirst
-                  : ""
-            }
+            disabled={isLoadDisabled}
+            message={loadButtonHint}
             block
-            className="w-full sm:w-auto"
+            className={SETTLEMENT_HINT_CONTAINER}
           >
             <Button
               type="button"
               fullWidth="mobile"
-              onClick={() => void load()}
-              disabled={loading || !vendorId || controlsDisabled}
+              onClick={handleLoadClick}
+              disabled={isLoadDisabled}
             >
               {LABELS.reportLoad}
             </Button>
@@ -100,72 +95,13 @@ export function VendorSettlementReportPanel() {
         controlsDisabled={controlsDisabled}
       />
       {loading ? (
-        <p className="text-body text-ink-muted">{LABELS.loading}</p>
+        <p className={SETTLEMENT_MESSAGE_MUTED}>{LABELS.loading}</p>
       ) : null}
       {!loading && !error && !summary ? (
-        <p className="text-body text-ink-muted">{LABELS.noReportData}</p>
+        <p className={SETTLEMENT_MESSAGE_MUTED}>{LABELS.noReportData}</p>
       ) : null}
 
-      {summary ? (
-        <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <dt className="text-body-sm text-ink-muted">
-              {LABELS.grossSales}
-            </dt>
-            <dd className="font-semibold tabular-nums">
-              {formatInr(summary.sales)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-body-sm text-ink-muted">
-              {LABELS.commissionCharged}
-            </dt>
-            <dd className="font-semibold tabular-nums">
-              {formatInr(summary.commissionDeducted)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-body-sm text-ink-muted">
-              {LABELS.tcsCollected}
-            </dt>
-            <dd className="font-semibold tabular-nums">
-              {formatInr(summary.tcsDeducted)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-body-sm text-ink-muted">
-              {LABELS.ownCouponDiscounts}
-            </dt>
-            <dd className="font-semibold tabular-nums">
-              {formatInr(summary.discountAbsorbed.ownCoupons)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-body-sm text-ink-muted">
-              {LABELS.platformCouponDiscounts}
-            </dt>
-            <dd className="font-semibold tabular-nums">
-              {formatInr(summary.discountAbsorbed.platformCouponsOnMyItems)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-body-sm text-ink-muted">
-              {LABELS.upcomingPayout}
-            </dt>
-            <dd className="font-semibold tabular-nums">
-              {formatInr(summary.upcomingPayout)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-body-sm text-ink-muted">
-              {LABELS.historicalPayout}
-            </dt>
-            <dd className="font-semibold tabular-nums">
-              {formatInr(summary.historicalPayout)}
-            </dd>
-          </div>
-        </dl>
-      ) : null}
+      {summary ? <SettlementSummaryDl summary={summary} /> : null}
     </section>
   );
 }

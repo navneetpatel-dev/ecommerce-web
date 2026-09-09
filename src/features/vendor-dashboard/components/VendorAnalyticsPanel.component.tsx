@@ -1,46 +1,36 @@
 "use client";
 
-import { useMemo } from "react";
 import { SkeletonGrid } from "@/shared/components/Skeletons.component";
-import { useChartThemeColors } from "@/shared/hooks/useChartThemeColors.hook";
-import { useVendorAnalytics } from "../hooks/useVendorAnalytics.hook";
 import { VendorRevenueChartCard } from "./VendorRevenueChartCard.component";
 import { VendorTopProductsCard } from "./VendorTopProductsCard.component";
 import { VendorFulfillmentSlaCard } from "./VendorFulfillmentSlaCard.component";
-
-function formatShortDate(iso: string): string {
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return iso;
-  return date.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
-}
+import { useVendorAnalyticsPanel } from "./VendorAnalyticsPanel/useVendorAnalyticsPanel.hook";
+import {
+  VENDOR_ANALYTICS_GRID,
+  VENDOR_ANALYTICS_PANEL_ROOT,
+} from "./VendorAnalyticsPanel/vendorAnalyticsPanel.styles";
 
 export function VendorAnalyticsPanel() {
-  const { analytics, isLoading } = useVendorAnalytics();
-  const colors = useChartThemeColors();
-
-  const chartData = useMemo(
-    () =>
-      (analytics?.revenue ?? []).map((point) => ({
-        label: formatShortDate(point.date),
-        amount: point.amount,
-      })),
-    [analytics?.revenue],
-  );
+  const {
+    chartData,
+    colors,
+    isLoading,
+    topProducts,
+    onTimePercent,
+    latePercent,
+  } = useVendorAnalyticsPanel();
 
   if (isLoading) return <SkeletonGrid count={3} aspect="h-40" />;
 
-  const topProducts = analytics?.topProducts ?? [];
-  const sla = analytics?.fulfillmentSLA;
-
   return (
-    <div className="space-y-6">
+    <div className={VENDOR_ANALYTICS_PANEL_ROOT}>
       <VendorRevenueChartCard chartData={chartData} colors={colors} />
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className={VENDOR_ANALYTICS_GRID}>
         <VendorTopProductsCard topProducts={topProducts} />
         <VendorFulfillmentSlaCard
-          onTimePercent={sla?.onTimePercent ?? 0}
-          latePercent={sla?.latePercent ?? 0}
+          onTimePercent={onTimePercent}
+          latePercent={latePercent}
         />
       </div>
     </div>
