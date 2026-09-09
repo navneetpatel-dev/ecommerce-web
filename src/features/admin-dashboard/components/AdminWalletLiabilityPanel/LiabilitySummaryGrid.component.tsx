@@ -2,6 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatPoints";
 import type { WalletLiabilityReport } from "../../api/reports.api";
 import { MetricCard } from "../MetricCard.component";
+import { adminWalletLiabilityPanelStyles } from "./adminWalletLiabilityPanel.styles";
 
 interface LiabilitySummaryGridProps {
   report: WalletLiabilityReport;
@@ -9,11 +10,11 @@ interface LiabilitySummaryGridProps {
 
 export function LiabilitySummaryGrid({ report }: LiabilitySummaryGridProps) {
   return (
-    <div className="space-y-4">
-      <h3 className="font-display text-body font-semibold text-ink">
+    <div className={adminWalletLiabilityPanelStyles.summaryContainer}>
+      <h3 className={adminWalletLiabilityPanelStyles.summaryTitle}>
         Liability summary
       </h3>
-      <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className={adminWalletLiabilityPanelStyles.summaryGrid}>
         <MetricCard
           label={LABELS.reportTotalLiability}
           value={formatPoints(

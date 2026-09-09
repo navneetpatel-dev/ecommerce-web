@@ -4,6 +4,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { DISCOUNT_BEARER } from "@/shared/constants/statuses";
 import { formatDateTime } from "@/shared/utils/formatDate";
 import type { Coupon } from "@/shared/api/types";
+import { couponsTableStyles as styles } from "./couponsTable.styles";
 
 function bearerLabel(bearer: Coupon["discountBearer"]) {
   return bearer === DISCOUNT_BEARER.VENDOR
@@ -16,7 +17,7 @@ export function buildCouponColumns(): DataTableColumn<Coupon>[] {
     {
       id: "code",
       header: LABELS.couponCode,
-      className: "font-mono",
+      className: styles.columnMono,
       cell: (row) => row.code,
     },
     {
@@ -32,13 +33,13 @@ export function buildCouponColumns(): DataTableColumn<Coupon>[] {
     {
       id: "vendor",
       header: LABELS.vendorId,
-      className: "font-mono text-body-sm",
+      className: styles.columnMonoSm,
       cell: (row) => row.vendorId ?? "—",
     },
     {
       id: "usage",
       header: LABELS.couponUsage,
-      className: "font-mono text-body-sm",
+      className: styles.columnMonoSm,
       truncate: false,
       cell: (row) =>
         `${row.usedCount}/${row.usageLimitTotal ?? LABELS.usageUnlimited}`,

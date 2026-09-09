@@ -2,6 +2,7 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { platformSettingsFormStyles as styles } from "./platformSettingsForm.styles";
 
 interface PlatformSettingsHeaderProps {
   onSave: () => void;
@@ -11,18 +12,14 @@ export function PlatformSettingsHeader({
   onSave,
 }: PlatformSettingsHeaderProps) {
   return (
-    <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-      <div className="min-w-0 space-y-1.5">
-        <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-          {LABELS.platformSettings}
-        </h2>
-        <p className="max-w-3xl text-body leading-relaxed text-ink-muted">
-          {LABELS.platformSettingsHint}
-        </p>
+    <div className={styles.header}>
+      <div className={styles.headerTextGroup}>
+        <h2 className={styles.headerTitle}>{LABELS.platformSettings}</h2>
+        <p className={styles.headerSubtitle}>{LABELS.platformSettingsHint}</p>
       </div>
       <Button
         type="button"
-        className="hidden shrink-0 sm:inline-flex"
+        className={styles.headerSaveButton}
         onClick={onSave}
       >
         {LABELS.saveSettings}

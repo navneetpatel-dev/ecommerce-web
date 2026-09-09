@@ -12,6 +12,8 @@ import {
   ReportExportStatus,
 } from "@/features/reports";
 import { useWalletLiabilityReport } from "../../hooks/useWalletLiabilityReport.hook";
+import { reportPanelStyles } from "../reportPanel.styles";
+import { adminWalletLiabilityPanelStyles } from "./adminWalletLiabilityPanel.styles";
 import { LiabilitySummaryGrid } from "./LiabilitySummaryGrid.component";
 import { LiabilityRowsTable } from "./LiabilityRowsTable.component";
 
@@ -42,18 +44,18 @@ export function AdminWalletLiabilityPanel() {
   });
 
   return (
-    <div className="rounded-lg border border-line bg-surface p-5 md:p-6 shadow-elevation-1 space-y-6">
+    <div className={reportPanelStyles.container}>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-line pb-4">
-        <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-lg border border-brand/20 bg-brand/10 text-brand shadow-elevation-1">
-            <Wallet className="size-5" />
+      <div className={reportPanelStyles.header}>
+        <div className={reportPanelStyles.headerLeft}>
+          <div className={reportPanelStyles.iconWrapper}>
+            <Wallet className={reportPanelStyles.icon} />
           </div>
           <div>
-            <h2 className="font-display text-[1.125rem] font-semibold text-ink">
+            <h2 className={reportPanelStyles.title}>
               {LABELS.reportWalletLiability}
             </h2>
-            <p className="text-body-sm text-ink-muted">
+            <p className={reportPanelStyles.subtitle}>
               Outstanding customer wallet points liability, split by purchased
               and promotional balances
             </p>
@@ -62,8 +64,8 @@ export function AdminWalletLiabilityPanel() {
       </div>
 
       {/* Filter Bar */}
-      <div className="rounded-lg border border-line bg-paper/40 p-4">
-        <div className="flex flex-col lg:flex-row lg:items-end gap-4 justify-between">
+      <div className={reportPanelStyles.filterCard}>
+        <div className={reportPanelStyles.filterFlex}>
           <DateRangeFields
             from={from}
             to={to}
@@ -74,12 +76,12 @@ export function AdminWalletLiabilityPanel() {
             disabled={controlsDisabled}
             disabledHint={filterHint}
           />
-          <ButtonGroup align="start" className="flex-wrap items-center gap-2">
+          <ButtonGroup align="start" className={reportPanelStyles.buttonGroup}>
             <DisabledActionHint
               disabled={loading || controlsDisabled}
               message={controlsDisabled ? filterHint : ""}
               block
-              className="w-full sm:w-auto"
+              className={reportPanelStyles.buttonHintWrapper}
             >
               <Button
                 type="button"
@@ -113,20 +115,18 @@ export function AdminWalletLiabilityPanel() {
       />
 
       {loading ? (
-        <div className="flex items-center justify-center py-10">
-          <p className="text-body text-ink-muted">{LABELS.loading}</p>
+        <div className={reportPanelStyles.loadingWrapper}>
+          <p className={reportPanelStyles.loadingText}>{LABELS.loading}</p>
         </div>
       ) : null}
 
       {!loading && !error && !report ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line bg-paper/30 py-12 px-4 text-center">
-          <div className="mb-3 flex size-12 items-center justify-center rounded-full border border-line bg-surface text-ink-muted shadow-elevation-1">
-            <Wallet className="size-6" strokeWidth={1.5} />
+        <div className={reportPanelStyles.emptyState}>
+          <div className={reportPanelStyles.emptyIconWrapper}>
+            <Wallet className={reportPanelStyles.emptyIcon} strokeWidth={1.5} />
           </div>
-          <p className="font-display text-body font-medium text-ink">
-            {LABELS.noReportData}
-          </p>
-          <p className="text-body-sm text-ink-muted mt-1 max-w-sm">
+          <p className={reportPanelStyles.emptyTitle}>{LABELS.noReportData}</p>
+          <p className={reportPanelStyles.emptySubtitle}>
             Select a date range and click &quot;{LABELS.reportLoad}&quot; to
             calculate outstanding wallet liability.
           </p>
@@ -137,7 +137,7 @@ export function AdminWalletLiabilityPanel() {
         <>
           <LiabilitySummaryGrid report={report} />
 
-          <p className="text-[0.8125rem] leading-relaxed text-ink-faint">
+          <p className={adminWalletLiabilityPanelStyles.fifoNote}>
             ℹ️ {LABELS.reportLiabilityFifoNote}
           </p>
 

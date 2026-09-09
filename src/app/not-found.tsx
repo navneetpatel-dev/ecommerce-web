@@ -6,6 +6,8 @@ import { StorefrontLayout } from "@/features/storefront";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 
+import { notFoundStyles as styles } from "@/shared/styles/notFound.styles";
+
 export const metadata: Metadata = {
   title: LABELS.pageNotFound,
   robots: { index: false, follow: false },
@@ -15,17 +17,15 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <StorefrontLayout>
-      <div className="flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center gap-6 bg-paper p-8 lg:min-h-[calc(100vh-72px)]">
-        <PackageSearch size={160} className="text-ink-faint" strokeWidth={1} />
+      <div className={styles.container}>
+        <PackageSearch size={160} className={styles.icon} strokeWidth={1} />
         <h1
-          className="font-display text-ink"
+          className={styles.heading}
           style={{ fontSize: "var(--text-display-sm)" }}
         >
           {LABELS.pageNotFound}
         </h1>
-        <p className="max-w-sm text-center text-body text-ink-muted">
-          {LABELS.pageNotFoundBody}
-        </p>
+        <p className={styles.body}>{LABELS.pageNotFoundBody}</p>
         <Button asChild>
           <Link href={PATHS.home}>{LABELS.goToHomepage}</Link>
         </Button>

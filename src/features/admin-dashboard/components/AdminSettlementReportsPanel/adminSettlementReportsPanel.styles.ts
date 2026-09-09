@@ -1,0 +1,35 @@
+export const adminSettlementReportsPanelStyles = {
+  summaryContainer: "space-y-4",
+  summaryTitle: "font-display text-body font-semibold text-ink",
+  summaryGrid: "grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3",
+  errorText: "text-body text-danger",
+  reconCard: "rounded-lg border border-line bg-paper/40 p-4 md:p-5 space-y-4",
+  reconHeader:
+    "flex flex-wrap items-center justify-between gap-3 border-b border-line/60 pb-3",
+  reconHeaderLeft: "flex items-center gap-2.5",
+  reconIcon: "size-4 text-brand",
+  reconTitle: "font-display text-body font-semibold text-ink",
+  reconBadgeBase:
+    "inline-flex items-center rounded-full px-2.5 py-0.5 text-body-xs font-medium",
+  reconBadgeBalanced: "bg-success/10 text-success border border-success/20",
+  reconBadgeMismatch: "bg-danger/10 text-danger border border-danger/20",
+  reconDiffText: "text-body-sm font-medium text-danger",
+  reconGrid: "grid gap-3 sm:grid-cols-2 lg:grid-cols-3",
+  vendorsContainer: "space-y-3",
+  vendorsHeader: "flex flex-wrap items-center justify-between gap-3",
+  vendorsHeaderLeft: "flex items-center gap-2",
+  vendorsTitle: "font-display text-body font-semibold text-ink",
+  vendorsCountBadge:
+    "rounded-full bg-paper px-2 py-0.5 text-body-xs text-ink-muted border border-line",
+  tableScroll: "overflow-x-auto rounded-lg border border-line bg-surface",
+  table: "min-w-full text-left text-[0.875rem]",
+  thead: "border-b border-line bg-paper/70 text-ink-muted",
+  th: "px-4 py-3 font-medium",
+  tbody: "divide-y divide-line/60",
+  tr: "transition-colors hover:bg-paper/40",
+  cellName: "px-4 py-3 font-medium text-ink",
+  cellNum: "px-4 py-3 tabular-nums text-ink",
+  cellBadge: "px-4 py-3",
+  badge:
+    "inline-flex items-center rounded-full bg-paper px-2 py-0.5 text-body-xs font-medium text-ink border border-line",
+} as const;

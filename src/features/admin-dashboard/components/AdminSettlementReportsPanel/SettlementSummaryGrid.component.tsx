@@ -2,6 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/orderFormat";
 import type { AdminReportSummary } from "../../api/reports.api";
 import { MetricCard } from "../MetricCard.component";
+import { adminSettlementReportsPanelStyles } from "./adminSettlementReportsPanel.styles";
 
 interface SettlementSummaryGridProps {
   summary: AdminReportSummary;
@@ -9,11 +10,11 @@ interface SettlementSummaryGridProps {
 
 export function SettlementSummaryGrid({ summary }: SettlementSummaryGridProps) {
   return (
-    <div className="space-y-4">
-      <h3 className="font-display text-body font-semibold text-ink">
+    <div className={adminSettlementReportsPanelStyles.summaryContainer}>
+      <h3 className={adminSettlementReportsPanelStyles.summaryTitle}>
         Platform settlement summary
       </h3>
-      <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={adminSettlementReportsPanelStyles.summaryGrid}>
         <MetricCard
           label={LABELS.platformGmv}
           value={formatInr(summary.gmv)}

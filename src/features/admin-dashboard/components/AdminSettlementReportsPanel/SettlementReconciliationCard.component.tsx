@@ -6,6 +6,7 @@ import { cn } from "@/shared/utils/cn";
 import { ReportExportButtons, type ExportFileFormat } from "@/features/reports";
 import type { ReconciliationReport } from "../../api/reports.api";
 import { MetricCard } from "../MetricCard.component";
+import { adminSettlementReportsPanelStyles } from "./adminSettlementReportsPanel.styles";
 
 interface SettlementReconciliationCardProps {
   recon: ReconciliationReport;
@@ -23,19 +24,19 @@ export function SettlementReconciliationCard({
   onExport,
 }: SettlementReconciliationCardProps) {
   return (
-    <div className="rounded-lg border border-line bg-paper/40 p-4 md:p-5 space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line/60 pb-3">
-        <div className="flex items-center gap-2.5">
-          <Scale className="size-4 text-brand" />
-          <h3 className="font-display text-body font-semibold text-ink">
+    <div className={adminSettlementReportsPanelStyles.reconCard}>
+      <div className={adminSettlementReportsPanelStyles.reconHeader}>
+        <div className={adminSettlementReportsPanelStyles.reconHeaderLeft}>
+          <Scale className={adminSettlementReportsPanelStyles.reconIcon} />
+          <h3 className={adminSettlementReportsPanelStyles.reconTitle}>
             {LABELS.reconciliation}
           </h3>
           <span
             className={cn(
-              "inline-flex items-center rounded-full px-2.5 py-0.5 text-body-xs font-medium",
+              adminSettlementReportsPanelStyles.reconBadgeBase,
               recon.balanced
-                ? "bg-success/10 text-success border border-success/20"
-                : "bg-danger/10 text-danger border border-danger/20",
+                ? adminSettlementReportsPanelStyles.reconBadgeBalanced
+                : adminSettlementReportsPanelStyles.reconBadgeMismatch,
             )}
           >
             {recon.balanced
@@ -54,11 +55,11 @@ export function SettlementReconciliationCard({
         />
       </div>
       {!recon.balanced ? (
-        <p className="text-body-sm font-medium text-danger">
+        <p className={adminSettlementReportsPanelStyles.reconDiffText}>
           {LABELS.reconciliationDifference}: {formatInr(recon.difference)}
         </p>
       ) : null}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className={adminSettlementReportsPanelStyles.reconGrid}>
         {recon.walletRechargeInflow != null ? (
           <MetricCard
             label={LABELS.walletRechargeInflow}

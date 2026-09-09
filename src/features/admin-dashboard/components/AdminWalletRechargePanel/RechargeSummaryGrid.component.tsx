@@ -3,6 +3,7 @@ import { formatInr } from "@/shared/utils/orderFormat";
 import { formatPoints } from "@/shared/utils/formatPoints";
 import type { WalletRechargeReport } from "../../api/reports.api";
 import { MetricCard } from "../MetricCard.component";
+import { adminWalletRechargePanelStyles } from "./adminWalletRechargePanel.styles";
 
 interface RechargeSummaryGridProps {
   report: WalletRechargeReport;
@@ -10,11 +11,11 @@ interface RechargeSummaryGridProps {
 
 export function RechargeSummaryGrid({ report }: RechargeSummaryGridProps) {
   return (
-    <div className="space-y-4">
-      <h3 className="font-display text-body font-semibold text-ink">
+    <div className={adminWalletRechargePanelStyles.summaryContainer}>
+      <h3 className={adminWalletRechargePanelStyles.summaryTitle}>
         Recharge summary
       </h3>
-      <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className={adminWalletRechargePanelStyles.summaryGrid}>
         <MetricCard
           label={LABELS.reportRechargeInrCollected}
           value={formatInr(report.totalInrCollected)}

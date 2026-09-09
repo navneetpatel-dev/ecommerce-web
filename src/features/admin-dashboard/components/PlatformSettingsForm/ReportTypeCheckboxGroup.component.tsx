@@ -9,6 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
 import type { ScheduledReportTypeOption } from "../../hooks/useScheduledReportsCatalog.hook";
+import { platformSettingsFormStyles as styles } from "./platformSettingsForm.styles";
 
 function getCategoryLabel(audience?: string, financial?: boolean): string {
   if (audience === "admin_finance" || financial) return "Finance";
@@ -32,16 +33,14 @@ export function ReportTypeCheckboxGroup({
 }: ReportTypeCheckboxGroupProps) {
   if (reports.length === 0) {
     return (
-      <div className="py-10 text-center rounded-md border border-dashed border-line bg-surface/40">
-        <p className="text-body font-medium text-ink-muted">
-          {LABELS.scheduledReportsNoMatches}
-        </p>
+      <div className={styles.emptyContainer}>
+        <p className={styles.emptyText}>{LABELS.scheduledReportsNoMatches}</p>
         <Button
           type="button"
           variant="ghost"
           size="sm"
           onClick={onResetFilters}
-          className="mt-2 text-brand text-xs"
+          className={styles.emptyResetButton}
         >
           Reset search
         </Button>
@@ -51,7 +50,7 @@ export function ReportTypeCheckboxGroup({
 
   return (
     <TooltipProvider delayDuration={150}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2 pt-1">
+      <div className={styles.grid}>
         {reports.map((option) => {
           const isChecked = selectedTypes.includes(option.type);
           const category = getCategoryLabel(option.audience, option.financial);
@@ -60,34 +59,30 @@ export function ReportTypeCheckboxGroup({
               <TooltipTrigger asChild>
                 <label
                   className={cn(
-                    "group flex items-center justify-between gap-3 rounded-md border px-3.5 py-2.5 text-body-sm transition-colors cursor-pointer select-none",
-                    isChecked
-                      ? "border-brand bg-brand-subtle/30 text-ink shadow-xs ring-1 ring-brand/20"
-                      : "border-line bg-surface text-ink hover:border-line-strong hover:bg-surface-raised",
+                    styles.itemCardBase,
+                    isChecked ? styles.itemCardActive : styles.itemCardInactive,
                   )}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                  <div className={styles.itemLeft}>
                     <Checkbox
                       checked={isChecked}
                       onCheckedChange={() => onToggle(option.type)}
                     />
                     <span
                       className={cn(
-                        "truncate text-body-sm",
+                        styles.itemLabelBase,
                         isChecked
-                          ? "font-semibold text-ink"
-                          : "font-normal text-ink",
+                          ? styles.itemLabelActive
+                          : styles.itemLabelInactive,
                       )}
                     >
                       {option.label}
                     </span>
                   </div>
-                  <span className="shrink-0 text-[10px] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted">
-                    {category}
-                  </span>
+                  <span className={styles.itemCategory}>{category}</span>
                 </label>
               </TooltipTrigger>
-              <TooltipContent side="top" className="max-w-xs">
+              <TooltipContent side="top" className={styles.tooltipContent}>
                 {option.label}
               </TooltipContent>
             </Tooltip>

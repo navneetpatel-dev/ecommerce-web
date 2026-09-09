@@ -21,7 +21,7 @@ export default function StorefrontError({
   }, [error]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-paper p-8">
+    <div className={styles.screenCenterCol}>
       <h2 className={styles.heading}>{LABELS.unexpectedErrorHeading}</h2>
       <ErrorFallbackActions onReset={reset} />
     </div>

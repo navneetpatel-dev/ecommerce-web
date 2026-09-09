@@ -2,6 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/orderFormat";
 import { ReportExportButtons, type ExportFileFormat } from "@/features/reports";
 import type { VendorSettlementRow } from "../../api/reports.api";
+import { adminSettlementReportsPanelStyles } from "./adminSettlementReportsPanel.styles";
 
 interface VendorSettlementsTableProps {
   vendors: VendorSettlementRow[];
@@ -19,13 +20,13 @@ export function VendorSettlementsTable({
   onExport,
 }: VendorSettlementsTableProps) {
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <h3 className="font-display text-body font-semibold text-ink">
+    <div className={adminSettlementReportsPanelStyles.vendorsContainer}>
+      <div className={adminSettlementReportsPanelStyles.vendorsHeader}>
+        <div className={adminSettlementReportsPanelStyles.vendorsHeaderLeft}>
+          <h3 className={adminSettlementReportsPanelStyles.vendorsTitle}>
             {LABELS.vendorSettlements}
           </h3>
-          <span className="rounded-full bg-paper px-2 py-0.5 text-body-xs text-ink-muted border border-line">
+          <span className={adminSettlementReportsPanelStyles.vendorsCountBadge}>
             {vendors.length}
           </span>
         </div>
@@ -39,41 +40,53 @@ export function VendorSettlementsTable({
           onExportPdf={() => onExport("pdf")}
         />
       </div>
-      <div className="overflow-x-auto rounded-lg border border-line bg-surface">
-        <table className="min-w-full text-left text-[0.875rem]">
-          <thead className="border-b border-line bg-paper/70 text-ink-muted">
+      <div className={adminSettlementReportsPanelStyles.tableScroll}>
+        <table className={adminSettlementReportsPanelStyles.table}>
+          <thead className={adminSettlementReportsPanelStyles.thead}>
             <tr>
-              <th className="px-4 py-3 font-medium">{LABELS.vendorName}</th>
-              <th className="px-4 py-3 font-medium">{LABELS.pendingNet}</th>
-              <th className="px-4 py-3 font-medium">{LABELS.settledNet}</th>
-              <th className="px-4 py-3 font-medium">{LABELS.payoutAmount}</th>
-              <th className="px-4 py-3 font-medium">{LABELS.payoutPaid}</th>
-              <th className="px-4 py-3 font-medium">{LABELS.payoutStatus}</th>
+              <th className={adminSettlementReportsPanelStyles.th}>
+                {LABELS.vendorName}
+              </th>
+              <th className={adminSettlementReportsPanelStyles.th}>
+                {LABELS.pendingNet}
+              </th>
+              <th className={adminSettlementReportsPanelStyles.th}>
+                {LABELS.settledNet}
+              </th>
+              <th className={adminSettlementReportsPanelStyles.th}>
+                {LABELS.payoutAmount}
+              </th>
+              <th className={adminSettlementReportsPanelStyles.th}>
+                {LABELS.payoutPaid}
+              </th>
+              <th className={adminSettlementReportsPanelStyles.th}>
+                {LABELS.payoutStatus}
+              </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-line/60">
+          <tbody className={adminSettlementReportsPanelStyles.tbody}>
             {vendors.map((row) => (
               <tr
                 key={row.vendorId}
-                className="transition-colors hover:bg-paper/40"
+                className={adminSettlementReportsPanelStyles.tr}
               >
-                <td className="px-4 py-3 font-medium text-ink">
+                <td className={adminSettlementReportsPanelStyles.cellName}>
                   {row.vendorName}
                 </td>
-                <td className="px-4 py-3 tabular-nums text-ink">
+                <td className={adminSettlementReportsPanelStyles.cellNum}>
                   {formatInr(row.pendingNet)}
                 </td>
-                <td className="px-4 py-3 tabular-nums text-ink">
+                <td className={adminSettlementReportsPanelStyles.cellNum}>
                   {formatInr(row.settledNet)}
                 </td>
-                <td className="px-4 py-3 tabular-nums text-ink">
+                <td className={adminSettlementReportsPanelStyles.cellNum}>
                   {formatInr(row.payoutAmount)}
                 </td>
-                <td className="px-4 py-3 tabular-nums text-ink">
+                <td className={adminSettlementReportsPanelStyles.cellNum}>
                   {formatInr(row.payoutPaid)}
                 </td>
-                <td className="px-4 py-3">
-                  <span className="inline-flex items-center rounded-full bg-paper px-2 py-0.5 text-body-xs font-medium text-ink border border-line">
+                <td className={adminSettlementReportsPanelStyles.cellBadge}>
+                  <span className={adminSettlementReportsPanelStyles.badge}>
                     {row.payoutStatus}
                   </span>
                 </td>

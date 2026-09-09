@@ -7,6 +7,7 @@ import "@/shared/styles/globals.css";
 import Script from "next/script";
 import { Providers } from "./providers";
 import { WebVitalsReporter } from "@/shared/components/WebVitalsReporter.component";
+import { rootLayoutStyles } from "./rootLayout.styles";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -66,7 +67,7 @@ export default function RootLayout({
       className={rootFontVariables}
       suppressHydrationWarning
     >
-      <body className="antialiased">
+      <body className={rootLayoutStyles.body}>
         <Script
           id="theme-bootstrap"
           strategy="beforeInteractive"

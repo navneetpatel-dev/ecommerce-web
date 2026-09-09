@@ -9,6 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { couponsTableStyles as styles } from "./couponsTable.styles";
 
 interface CouponsAnalyticsDialogProps {
   analyticsCoupon: Coupon | null;
@@ -28,7 +29,7 @@ export function CouponsAnalyticsDialog({
       open={Boolean(analyticsCoupon)}
       onOpenChange={(open) => !open && onClose()}
     >
-      <DialogContent className="max-w-md">
+      <DialogContent className={styles.dialogContent}>
         <DialogHeader>
           <DialogTitle>
             {LABELS.couponAnalytics}
@@ -36,47 +37,45 @@ export function CouponsAnalyticsDialog({
           </DialogTitle>
         </DialogHeader>
         {loading ? (
-          <p className="text-[0.875rem] text-ink-muted">{LABELS.loading}</p>
+          <p className={styles.dialogTextMuted}>{LABELS.loading}</p>
         ) : analytics ? (
-          <dl className="space-y-3 text-[0.875rem]">
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{LABELS.redemptionCount}</dt>
-              <dd className="tabular-nums font-medium">
-                {analytics.usedCount}
-              </dd>
+          <dl className={styles.analyticsList}>
+            <div className={styles.analyticsRow}>
+              <dt className={styles.analyticsDt}>{LABELS.redemptionCount}</dt>
+              <dd className={styles.analyticsDd}>{analytics.usedCount}</dd>
             </div>
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{LABELS.discountCostImpact}</dt>
-              <dd className="tabular-nums font-medium">
+            <div className={styles.analyticsRow}>
+              <dt className={styles.analyticsDt}>
+                {LABELS.discountCostImpact}
+              </dt>
+              <dd className={styles.analyticsDd}>
                 ₹{formatInrAmount(Number(analytics.totalDiscount))}
               </dd>
             </div>
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{LABELS.revenueImpact}</dt>
-              <dd className="tabular-nums font-medium">
+            <div className={styles.analyticsRow}>
+              <dt className={styles.analyticsDt}>{LABELS.revenueImpact}</dt>
+              <dd className={styles.analyticsDd}>
                 ₹{formatInrAmount(Number(analytics.revenueImpact ?? 0))}
               </dd>
             </div>
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{LABELS.conversionRate}</dt>
-              <dd className="tabular-nums font-medium">
+            <div className={styles.analyticsRow}>
+              <dt className={styles.analyticsDt}>{LABELS.conversionRate}</dt>
+              <dd className={styles.analyticsDd}>
                 {analytics.conversionRate == null
                   ? "—"
                   : `${Math.round(Number(analytics.conversionRate) * 100)}%`}
               </dd>
             </div>
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{LABELS.couponUsage}</dt>
-              <dd className="tabular-nums font-medium">
+            <div className={styles.analyticsRow}>
+              <dt className={styles.analyticsDt}>{LABELS.couponUsage}</dt>
+              <dd className={styles.analyticsDd}>
                 {analytics.usedCountCached}/
                 {analytics.usageLimitTotal ?? LABELS.usageUnlimited}
               </dd>
             </div>
           </dl>
         ) : (
-          <p className="text-[0.875rem] text-ink-muted">
-            {LABELS.couldNotLoadData}
-          </p>
+          <p className={styles.dialogTextMuted}>{LABELS.couldNotLoadData}</p>
         )}
       </DialogContent>
     </Dialog>

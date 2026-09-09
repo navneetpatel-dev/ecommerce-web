@@ -3,6 +3,7 @@ import { formatPoints } from "@/shared/utils/formatPoints";
 import { PaginationContainer } from "@/shared/containers/PaginationContainer.container";
 import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import type { WalletLiabilityReport } from "../../api/reports.api";
+import { adminWalletLiabilityPanelStyles } from "./adminWalletLiabilityPanel.styles";
 
 interface LiabilityRowsTableProps {
   report: WalletLiabilityReport;
@@ -32,45 +33,47 @@ export function LiabilityRowsTable({
       ) : null}
 
       {report.rows.length > 0 ? (
-        <div className="space-y-3">
-          <div className="overflow-x-auto rounded-lg border border-line bg-surface">
-            <table className="min-w-full text-left text-[0.875rem]">
-              <thead className="border-b border-line bg-paper/70 text-ink-muted">
+        <div className={adminWalletLiabilityPanelStyles.tableContainer}>
+          <div className={adminWalletLiabilityPanelStyles.tableScroll}>
+            <table className={adminWalletLiabilityPanelStyles.table}>
+              <thead className={adminWalletLiabilityPanelStyles.thead}>
                 <tr>
-                  <th className="px-4 py-3 font-medium">
+                  <th className={adminWalletLiabilityPanelStyles.th}>
                     {LABELS.reportUserId}
                   </th>
-                  <th className="px-4 py-3 font-medium">
+                  <th className={adminWalletLiabilityPanelStyles.th}>
                     {LABELS.reportBalance}
                   </th>
-                  <th className="px-4 py-3 font-medium">
+                  <th className={adminWalletLiabilityPanelStyles.th}>
                     {LABELS.reportPurchasedPoints}
                   </th>
-                  <th className="px-4 py-3 font-medium">
+                  <th className={adminWalletLiabilityPanelStyles.th}>
                     {LABELS.reportPromotionalPoints}
                   </th>
-                  <th className="px-4 py-3 font-medium">{LABELS.reportAsOf}</th>
+                  <th className={adminWalletLiabilityPanelStyles.th}>
+                    {LABELS.reportAsOf}
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-line/60">
+              <tbody className={adminWalletLiabilityPanelStyles.tbody}>
                 {report.rows.map((row) => (
                   <tr
                     key={row.userId}
-                    className="transition-colors hover:bg-paper/40"
+                    className={adminWalletLiabilityPanelStyles.tr}
                   >
-                    <td className="px-4 py-3 font-mono text-body-sm text-ink">
+                    <td className={adminWalletLiabilityPanelStyles.cellMono}>
                       {row.userId}
                     </td>
-                    <td className="px-4 py-3 tabular-nums font-medium text-ink">
+                    <td className={adminWalletLiabilityPanelStyles.cellNumBold}>
                       {formatPoints(row.balance)}
                     </td>
-                    <td className="px-4 py-3 tabular-nums text-ink">
+                    <td className={adminWalletLiabilityPanelStyles.cellNum}>
                       {formatPoints(row.purchasedPoints ?? 0)}
                     </td>
-                    <td className="px-4 py-3 tabular-nums text-ink">
+                    <td className={adminWalletLiabilityPanelStyles.cellNum}>
                       {formatPoints(row.promotionalPoints ?? 0)}
                     </td>
-                    <td className="px-4 py-3 text-ink-muted">
+                    <td className={adminWalletLiabilityPanelStyles.cellMuted}>
                       {new Date(row.asOf).toLocaleDateString("en-IN")}
                     </td>
                   </tr>
@@ -80,13 +83,21 @@ export function LiabilityRowsTable({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line bg-paper/30 py-8 px-4 text-center">
-          <p className="text-body text-ink-muted">{LABELS.noReportData}</p>
+        <div className={adminWalletLiabilityPanelStyles.tableEmpty}>
+          <p className={adminWalletLiabilityPanelStyles.tableEmptyText}>
+            {LABELS.noReportData}
+          </p>
         </div>
       )}
 
       {report.pagination ? (
-        <div className={loading ? "pointer-events-none opacity-60" : undefined}>
+        <div
+          className={
+            loading
+              ? adminWalletLiabilityPanelStyles.paginationLoading
+              : undefined
+          }
+        >
           <PaginationContainer
             currentPage={page}
             totalPages={Math.max(1, report.pagination.totalPages)}

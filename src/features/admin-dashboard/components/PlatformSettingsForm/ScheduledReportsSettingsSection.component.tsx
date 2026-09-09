@@ -13,6 +13,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { useScheduledReportsCatalog } from "../../hooks/useScheduledReportsCatalog.hook";
 import type { PlatformSettings } from "../../hooks/usePlatformSettingsForm.hook";
 import { ScheduledReportsTypeSelector } from "./ScheduledReportsTypeSelector.component";
+import { platformSettingsFormStyles as styles } from "./platformSettingsForm.styles";
 
 interface ScheduledReportsSettingsSectionProps {
   form: PlatformSettings;
@@ -123,7 +124,7 @@ export function ScheduledReportsSettingsSection({
           }}
         />
       </FormFieldFrame>
-      <div className="col-span-full border-t border-line/70 pt-6">
+      <div className={styles.typeSelectorWrapper}>
         <ScheduledReportsTypeSelector
           catalog={catalog}
           selectedTypes={selectedTypes}

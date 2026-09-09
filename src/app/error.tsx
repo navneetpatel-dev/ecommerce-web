@@ -22,7 +22,7 @@ export default function RootError({ error, reset }: RootErrorProps) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-paper p-8">
+    <div className={styles.screenCenter}>
       <div className={styles.root}>
         <h2 className={styles.heading}>{LABELS.unexpectedErrorHeading}</h2>
         <ErrorFallbackActions onReset={reset} />

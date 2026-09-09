@@ -1,6 +1,7 @@
 import type { BulkCreateAgentResult } from "@/features/delivery-dashboard";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/cn";
+import { bulkImportAgentsDialogStyles as styles } from "./bulkImportAgentsDialog.styles";
 
 interface ImportResultsPanelProps {
   results: BulkCreateAgentResult[];
@@ -17,38 +18,35 @@ export function ImportResultsPanel({
   const successCount = results.filter((r) => r.success).length;
 
   return (
-    <div className="space-y-5">
+    <div className={styles.resultsContainer}>
       <div
         className={cn(
-          "rounded-xl border p-4 space-y-1",
+          styles.resultsBannerBase,
           successCount > 0
-            ? "border-success/30 bg-success/10 text-success"
-            : "border-danger/30 bg-danger/10 text-danger",
+            ? styles.resultsBannerSuccess
+            : styles.resultsBannerDanger,
         )}
       >
-        <p className="text-body font-semibold">
+        <p className={styles.resultsBannerTitle}>
           {successCount > 0 ? "Import completed" : "Import failed"}
         </p>
-        <p className="text-body-sm opacity-90">
+        <p className={styles.resultsBannerSubtitle}>
           {successCount} of {results.length} agent(s) were successfully created.
         </p>
       </div>
 
-      <div className="max-h-64 space-y-2 overflow-y-auto rounded-xl border border-line bg-paper/20 p-3 text-body-sm">
+      <div className={styles.resultsScrollBox}>
         {results.map((row) => (
-          <div
-            key={row.row}
-            className="flex items-center justify-between gap-3 rounded-lg bg-surface p-3 text-caption font-mono border border-line/50"
-          >
-            <span className="truncate text-ink font-medium">
+          <div key={row.row} className={styles.resultsRow}>
+            <span className={styles.resultsRowEmail}>
               Row {row.row}: {row.email}
             </span>
             <span
               className={cn(
-                "shrink-0 rounded-md px-2 py-0.5 font-sans font-semibold text-[0.6875rem]",
+                styles.resultsRowBadgeBase,
                 row.success
-                  ? "bg-success/15 text-success"
-                  : "bg-danger/15 text-danger",
+                  ? styles.resultsRowBadgeSuccess
+                  : styles.resultsRowBadgeDanger,
               )}
             >
               {row.success ? "Created" : (row.error ?? "Failed")}
@@ -57,7 +55,7 @@ export function ImportResultsPanel({
         ))}
       </div>
 
-      <div className="flex items-center justify-end gap-3 border-t border-line/60 pt-4">
+      <div className={styles.resultsFooter}>
         <Button
           type="button"
           variant="outline"
