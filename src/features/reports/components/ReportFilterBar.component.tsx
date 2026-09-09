@@ -72,6 +72,23 @@ export function ReportFilterBar({
     exportingFormat,
     controlsDisabled,
   });
+  const vendorFilterField = showVendorFilter ? (
+    <ReportFilterTextField
+      id="report-vendor"
+      label={LABELS.reportVendor}
+      value={vendorId}
+      placeholder={LABELS.uuidPlaceholder}
+      disabled={controlsDisabled}
+      disabledHint={filterHint}
+      onChange={onVendorIdChange}
+    />
+  ) : null;
+  const loadButtonDisabled = loading || !reportType || controlsDisabled;
+  const loadButtonHint = controlsDisabled
+    ? filterHint
+    : !reportType
+      ? LABELS.reportExportSelectReportFirst
+      : "";
 
   return (
     <FormSection
@@ -99,17 +116,7 @@ export function ReportFilterBar({
         disabledHint={filterHint}
       />
 
-      {showVendorFilter ? (
-        <ReportFilterTextField
-          id="report-vendor"
-          label={LABELS.reportVendor}
-          value={vendorId}
-          placeholder={LABELS.uuidPlaceholder}
-          disabled={controlsDisabled}
-          disabledHint={filterHint}
-          onChange={onVendorIdChange}
-        />
-      ) : null}
+      {vendorFilterField}
 
       <ReportFilterTextField
         id="report-category"
@@ -133,14 +140,8 @@ export function ReportFilterBar({
       <div className="sm:col-span-2 xl:col-span-3 space-y-2">
         <ButtonGroup align="start">
           <DisabledActionHint
-            disabled={loading || !reportType || controlsDisabled}
-            message={
-              controlsDisabled
-                ? filterHint
-                : !reportType
-                  ? LABELS.reportExportSelectReportFirst
-                  : ""
-            }
+            disabled={loadButtonDisabled}
+            message={loadButtonHint}
             block
             className="w-full sm:w-auto"
           >
@@ -148,7 +149,7 @@ export function ReportFilterBar({
               type="button"
               fullWidth="mobile"
               onClick={onLoad}
-              disabled={loading || !reportType || controlsDisabled}
+              disabled={loadButtonDisabled}
             >
               {LABELS.reportLoad}
             </Button>

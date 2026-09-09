@@ -69,6 +69,23 @@ function formatDetailValue(key: string, value: unknown, label: string) {
 }
 
 /** Presentational modal listing every safe field on a table row. */
+function RecordDetailField({
+  field,
+}: {
+  field: { key: string; value: unknown; label: string };
+}) {
+  const formattedValue = formatDetailValue(field.key, field.value, field.label);
+
+  return (
+    <div className="grid gap-1 px-4 py-3 sm:grid-cols-[minmax(7rem,11rem)_minmax(0,1fr)] sm:gap-4">
+      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
+        {field.label}
+      </dt>
+      <dd className="min-w-0 text-body text-ink">{formattedValue}</dd>
+    </div>
+  );
+}
+
 export function RecordDetailDialog({
   open,
   onOpenChange,
@@ -76,6 +93,17 @@ export function RecordDetailDialog({
 }: RecordDetailDialogProps) {
   const fields = record ? buildRecordDetailFields(record) : [];
   const title = record ? getRecordDetailTitle(record) : LABELS.recordDetails;
+  const isEmpty = fields.length === 0;
+  const fieldRows = fields.map((field) => (
+    <RecordDetailField key={field.key} field={field} />
+  ));
+  const detailContent = isEmpty ? (
+    <p className="text-body text-ink-muted">{LABELS.noDetailFields}</p>
+  ) : (
+    <dl className="max-h-[min(60dvh,32rem)] divide-y divide-line overflow-y-auto rounded-md border border-line">
+      {fieldRows}
+    </dl>
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -85,25 +113,7 @@ export function RecordDetailDialog({
           <DialogDescription>{LABELS.recordDetailsHint}</DialogDescription>
         </DialogHeader>
 
-        {fields.length === 0 ? (
-          <p className="text-body text-ink-muted">{LABELS.noDetailFields}</p>
-        ) : (
-          <dl className="max-h-[min(60dvh,32rem)] divide-y divide-line overflow-y-auto rounded-md border border-line">
-            {fields.map((field) => (
-              <div
-                key={field.key}
-                className="grid gap-1 px-4 py-3 sm:grid-cols-[minmax(7rem,11rem)_minmax(0,1fr)] sm:gap-4"
-              >
-                <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
-                  {field.label}
-                </dt>
-                <dd className="min-w-0 text-body text-ink">
-                  {formatDetailValue(field.key, field.value, field.label)}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        )}
+        {detailContent}
       </DialogContent>
     </Dialog>
   );

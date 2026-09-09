@@ -7,6 +7,7 @@ export {
   useAdminAnalytics,
 } from "./api/admin.queries";
 export { adminApi } from "./api/admin.api";
+export { commissionsApi, type CommissionInvoiceEntry } from "./api/finance.api";
 export { reportsApi, type VendorReportSummary } from "./api/reports.api";
 export {
   CouponSchema,

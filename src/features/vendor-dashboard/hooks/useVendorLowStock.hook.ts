@@ -4,5 +4,6 @@ import { useVendorLowStock as useVendorLowStockQuery } from "../api/vendor.queri
 
 export function useVendorLowStock() {
   const { data: rows, isLoading, isError } = useVendorLowStockQuery();
-  return { rows: rows ?? [], isLoading, isError };
+  const safeRows = rows ?? [];
+  return { rows: safeRows, isLoading, isError };
 }

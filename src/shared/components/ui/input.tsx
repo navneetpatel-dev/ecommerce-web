@@ -10,6 +10,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, error, ...props }, ref) => {
+    const ariaInvalid = error ? true : undefined;
+
     return (
       <input
         type={type}
@@ -23,7 +25,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className,
         )}
         ref={ref}
-        aria-invalid={error ? true : undefined}
+        aria-invalid={ariaInvalid}
         {...props}
       />
     );
@@ -42,29 +44,33 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   (
     { className, visible, inputType, showLabel, onVisibilityToggle, ...props },
     ref,
-  ) => (
-    <div className="relative">
-      <Input
-        ref={ref}
-        type={inputType}
-        className={cn("pr-11", className)}
-        {...props}
-      />
-      <button
-        type="button"
-        onClick={onVisibilityToggle}
-        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1.5 text-ink-muted transition-colors hover:bg-paper hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-        aria-label={showLabel}
-        aria-pressed={visible}
-      >
-        {visible ? (
-          <EyeOff size={18} strokeWidth={1.5} aria-hidden />
-        ) : (
-          <Eye size={18} strokeWidth={1.5} aria-hidden />
-        )}
-      </button>
-    </div>
-  ),
+  ) => {
+    const visibilityIcon = visible ? (
+      <EyeOff size={18} strokeWidth={1.5} aria-hidden />
+    ) : (
+      <Eye size={18} strokeWidth={1.5} aria-hidden />
+    );
+
+    return (
+      <div className="relative">
+        <Input
+          ref={ref}
+          type={inputType}
+          className={cn("pr-11", className)}
+          {...props}
+        />
+        <button
+          type="button"
+          onClick={onVisibilityToggle}
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1.5 text-ink-muted transition-colors hover:bg-paper hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          aria-label={showLabel}
+          aria-pressed={visible}
+        >
+          {visibilityIcon}
+        </button>
+      </div>
+    );
+  },
 );
 PasswordInput.displayName = "PasswordInput";
 

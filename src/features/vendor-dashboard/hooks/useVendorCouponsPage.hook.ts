@@ -83,6 +83,10 @@ export function useVendorCouponsPage() {
   const currentPage = data?.page ?? page;
   const from = total === 0 ? 0 : (currentPage - 1) * limit + 1;
   const to = Math.min(currentPage * limit, total);
+  const totalPages = data?.totalPages ?? 1;
+  const absorbedDiscountTotal = Number(
+    absorbedQuery.data?.absorbedDiscountTotal ?? 0,
+  );
 
   const setDialogOpen = (next: boolean) => {
     if (next) {
@@ -115,7 +119,7 @@ export function useVendorCouponsPage() {
     onSubmit,
     pagination: {
       page: currentPage,
-      totalPages: data?.totalPages ?? 1,
+      totalPages,
       total,
       from,
       to,
@@ -127,9 +131,7 @@ export function useVendorCouponsPage() {
     },
     analytics: analyticsQuery.data,
     analyticsLoading: analyticsQuery.isLoading,
-    absorbedDiscountTotal: Number(
-      absorbedQuery.data?.absorbedDiscountTotal ?? 0,
-    ),
+    absorbedDiscountTotal,
     updateStatus,
   };
 }

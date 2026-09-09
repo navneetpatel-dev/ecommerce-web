@@ -6,14 +6,14 @@ import { HELP_CATEGORIES } from "../../constants/helpContent";
 import { CategoryCard } from "./CategoryCard.component";
 
 export function BrowseTopicsSection() {
+  const categoryElements = HELP_CATEGORIES.map((category) => (
+    <CategoryCard key={category.id} category={category} />
+  ));
+
   return (
     <section className="mt-12">
       <TextEyebrow>{LABELS.helpBrowseTopicsEyebrow}</TextEyebrow>
-      <ul className="mt-3 grid gap-3 sm:grid-cols-2">
-        {HELP_CATEGORIES.map((category) => (
-          <CategoryCard key={category.id} category={category} />
-        ))}
-      </ul>
+      <ul className="mt-3 grid gap-3 sm:grid-cols-2">{categoryElements}</ul>
     </section>
   );
 }

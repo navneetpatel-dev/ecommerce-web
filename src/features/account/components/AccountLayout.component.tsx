@@ -26,26 +26,104 @@ export function AccountLayout({
   const isWorkspace = isWorkspaceRole(role);
   const active = sections.find((s) => s.id === activeSection) ?? sections[0]!;
 
-  return (
-    <div className={cn("relative", isWorkspace ? "min-w-0" : undefined)}>
-      {!isWorkspace ? (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[200px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_8%,transparent),transparent_60%)]"
-        />
-      ) : null}
+  const rootClassName = cn("relative", isWorkspace ? "min-w-0" : undefined);
+  const showAmbientGradient = !isWorkspace;
+  const ambientGradient = showAmbientGradient ? (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-x-0 top-0 h-[200px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_8%,transparent),transparent_60%)]"
+    />
+  ) : null;
+  const contentClassName = cn(
+    "relative",
+    isWorkspace ? "w-full min-w-0" : "storefront-container py-6 md:py-8",
+  );
+  const headerClassName = cn(isWorkspace ? "mb-6" : "mb-8");
+  const settingsHint = isWorkspace
+    ? LABELS.accountSettingsHintWorkspace
+    : LABELS.accountSettingsHintCustomer;
 
-      <div
-        className={cn(
-          "relative",
-          isWorkspace ? "w-full min-w-0" : "storefront-container py-6 md:py-8",
-        )}
-      >
+  const mobileNavItems = sections.map((section) => {
+    const selected = section.id === activeSection;
+    const Icon = section.icon;
+    const ariaCurrent = selected ? "page" : undefined;
+    const buttonClassName = cn(
+      "h-auto min-h-0 max-h-none gap-2 px-3.5 py-2 text-body-sm",
+      selected
+        ? "border-line-strong bg-paper text-brand shadow-[inset_0_-2px_0_0_var(--brand)] hover:bg-paper hover:text-brand"
+        : "border-line text-ink-muted hover:border-ink/25 hover:text-ink",
+    );
+    return (
+      <li key={section.id}>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => onSectionChange(section.id)}
+          aria-current={ariaCurrent}
+          className={buttonClassName}
+        >
+          <Icon size={15} strokeWidth={1.5} aria-hidden />
+          {section.label}
+        </Button>
+      </li>
+    );
+  });
+
+  const desktopNavItems = sections.map((section) => {
+    const selected = section.id === activeSection;
+    const Icon = section.icon;
+    const ariaCurrent = selected ? "page" : undefined;
+    const buttonClassName = cn(
+      "h-auto min-h-0 max-h-none w-full items-start gap-3 rounded-none px-4 py-3.5 text-left font-normal",
+      selected
+        ? "bg-paper shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-paper"
+        : "hover:bg-paper/70",
+    );
+    const iconClassName = cn(
+      "mt-0.5 shrink-0",
+      selected ? "text-brand" : "text-ink-muted",
+    );
+    const labelClassName = cn(
+      "block text-[0.875rem] font-medium",
+      selected ? "text-ink" : "text-ink-muted",
+    );
+    return (
+      <li key={section.id}>
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => onSectionChange(section.id)}
+          aria-current={ariaCurrent}
+          className={buttonClassName}
+        >
+          <Icon
+            size={16}
+            strokeWidth={1.5}
+            className={iconClassName}
+            aria-hidden
+          />
+          <span className="min-w-0">
+            <span className={labelClassName}>{section.label}</span>
+            <span className="mt-0.5 block text-[0.75rem] leading-snug text-ink-faint">
+              {section.description}
+            </span>
+          </span>
+        </Button>
+      </li>
+    );
+  });
+
+  return (
+    <div className={rootClassName}>
+      {ambientGradient}
+
+      <div className={contentClassName}>
         <motion.header
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
-          className={cn(isWorkspace ? "mb-6" : "mb-8")}
+          className={headerClassName}
         >
           <TextEyebrow brand>{LABELS.account}</TextEyebrow>
           <h1
@@ -55,9 +133,7 @@ export function AccountLayout({
             {LABELS.settings}
           </h1>
           <p className="mt-2 max-w-xl text-body text-ink-muted">
-            {isWorkspace
-              ? LABELS.accountSettingsHintWorkspace
-              : LABELS.accountSettingsHintCustomer}
+            {settingsHint}
           </p>
         </motion.header>
 
@@ -65,32 +141,7 @@ export function AccountLayout({
           aria-label="Account sections"
           className="scrollbar-none mb-6 -mx-1 overflow-x-auto overscroll-x-contain pb-1 lg:hidden"
         >
-          <ul className="flex min-w-max gap-1 px-1">
-            {sections.map((section) => {
-              const selected = section.id === activeSection;
-              const Icon = section.icon;
-              return (
-                <li key={section.id}>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onSectionChange(section.id)}
-                    aria-current={selected ? "page" : undefined}
-                    className={cn(
-                      "h-auto min-h-0 max-h-none gap-2 px-3.5 py-2 text-body-sm",
-                      selected
-                        ? "border-line-strong bg-paper text-brand shadow-[inset_0_-2px_0_0_var(--brand)] hover:bg-paper hover:text-brand"
-                        : "border-line text-ink-muted hover:border-ink/25 hover:text-ink",
-                    )}
-                  >
-                    <Icon size={15} strokeWidth={1.5} aria-hidden />
-                    {section.label}
-                  </Button>
-                </li>
-              );
-            })}
-          </ul>
+          <ul className="flex min-w-max gap-1 px-1">{mobileNavItems}</ul>
         </nav>
 
         <div className="grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10">
@@ -99,51 +150,7 @@ export function AccountLayout({
               aria-label="Account sections"
               className="sticky top-24 isolate border border-line bg-paper shadow-elevation-1"
             >
-              <ul className="divide-y divide-line">
-                {sections.map((section) => {
-                  const selected = section.id === activeSection;
-                  const Icon = section.icon;
-                  return (
-                    <li key={section.id}>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={() => onSectionChange(section.id)}
-                        aria-current={selected ? "page" : undefined}
-                        className={cn(
-                          "h-auto min-h-0 max-h-none w-full items-start gap-3 rounded-none px-4 py-3.5 text-left font-normal",
-                          selected
-                            ? "bg-paper shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-paper"
-                            : "hover:bg-paper/70",
-                        )}
-                      >
-                        <Icon
-                          size={16}
-                          strokeWidth={1.5}
-                          className={cn(
-                            "mt-0.5 shrink-0",
-                            selected ? "text-brand" : "text-ink-muted",
-                          )}
-                          aria-hidden
-                        />
-                        <span className="min-w-0">
-                          <span
-                            className={cn(
-                              "block text-[0.875rem] font-medium",
-                              selected ? "text-ink" : "text-ink-muted",
-                            )}
-                          >
-                            {section.label}
-                          </span>
-                          <span className="mt-0.5 block text-[0.75rem] leading-snug text-ink-faint">
-                            {section.description}
-                          </span>
-                        </span>
-                      </Button>
-                    </li>
-                  );
-                })}
-              </ul>
+              <ul className="divide-y divide-line">{desktopNavItems}</ul>
             </nav>
           </aside>
 

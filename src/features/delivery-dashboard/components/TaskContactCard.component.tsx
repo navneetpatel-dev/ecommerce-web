@@ -13,6 +13,31 @@ export function TaskContactCard({
   addressText: string;
   deliveryInstructions?: string | null;
 }) {
+  const phoneLine = phone ? (
+    <p className="text-body-sm text-ink-muted">{phone}</p>
+  ) : null;
+  const deliveryInstructionsNotice = deliveryInstructions ? (
+    <div className="flex items-start gap-2 rounded-md border border-line bg-warning/10 p-3">
+      <MessageSquare
+        className="mt-0.5 size-4 shrink-0 text-warning"
+        aria-hidden="true"
+      />
+      <p className="text-body-sm leading-relaxed text-ink">
+        {deliveryInstructions}
+      </p>
+    </div>
+  ) : null;
+  const callButton = phone ? (
+    <Button asChild size="sm" variant="outline" className="w-full">
+      <a href={`tel:${phone}`}>
+        <Phone className="size-3.5" aria-hidden="true" />
+        Call customer
+      </a>
+    </Button>
+  ) : null;
+  const mapsButtonClassName = phone ? "w-full" : "col-span-full w-full";
+  const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}`;
+
   return (
     <div className="border border-line bg-surface shadow-elevation-1">
       <div className="flex items-center gap-2 border-b border-line bg-paper/55 px-5 py-3.5">
@@ -30,9 +55,7 @@ export function TaskContactCard({
               Customer
             </p>
             <p className="mt-0.5 truncate font-medium text-ink">{name}</p>
-            {phone ? (
-              <p className="text-body-sm text-ink-muted">{phone}</p>
-            ) : null}
+            {phoneLine}
           </div>
         </div>
 
@@ -45,38 +68,17 @@ export function TaskContactCard({
           </p>
         </div>
 
-        {deliveryInstructions ? (
-          <div className="flex items-start gap-2 rounded-md border border-line bg-warning/10 p-3">
-            <MessageSquare
-              className="mt-0.5 size-4 shrink-0 text-warning"
-              aria-hidden="true"
-            />
-            <p className="text-body-sm leading-relaxed text-ink">
-              {deliveryInstructions}
-            </p>
-          </div>
-        ) : null}
+        {deliveryInstructionsNotice}
 
         <div className="grid grid-cols-1 gap-2 pt-2 sm:grid-cols-2">
-          {phone ? (
-            <Button asChild size="sm" variant="outline" className="w-full">
-              <a href={`tel:${phone}`}>
-                <Phone className="size-3.5" aria-hidden="true" />
-                Call customer
-              </a>
-            </Button>
-          ) : null}
+          {callButton}
           <Button
             asChild
             size="sm"
             variant="outline"
-            className={phone ? "w-full" : "col-span-full w-full"}
+            className={mapsButtonClassName}
           >
-            <a
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}`}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href={mapsHref} target="_blank" rel="noreferrer">
               <ExternalLink className="size-3.5" aria-hidden="true" />
               Open in Maps
             </a>

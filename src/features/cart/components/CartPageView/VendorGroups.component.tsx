@@ -27,41 +27,44 @@ export function VendorGroups({
       <div className="space-y-4">
         {vendorEntries.map(([vendorId, items], vendorIndex) => {
           const vendor = items[0]?.product?.vendor;
+          const vendorItemCount = items.reduce(
+            (sum, item) => sum + Number(item.quantity || 0),
+            0,
+          );
+          const vendorHeaderElement = vendor ? (
+            <VendorGroupHeader
+              className="mb-1"
+              vendorName={vendor.businessName}
+              vendorId={vendor.id}
+              count={vendorItemCount}
+            />
+          ) : null;
+          const lineItemElements = items.map((item) => (
+            <CartLineItem
+              key={item.id}
+              item={item}
+              onUpdateQuantity={onUpdateQuantity}
+              onRemoveItem={onRemoveItem}
+              disabled={disabled}
+            />
+          ));
+          const sectionTransition = {
+            duration: 0.3,
+            delay: 0.04 * vendorIndex,
+            ease: [0.2, 0, 0, 1] as const,
+          };
+
           return (
             <motion.section
               key={vendorId}
               className={VENDOR_GROUP_CARD}
               initial={false}
               animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.3,
-                delay: 0.04 * vendorIndex,
-                ease: [0.2, 0, 0, 1],
-              }}
+              transition={sectionTransition}
             >
-              {vendor && (
-                <VendorGroupHeader
-                  className="mb-1"
-                  vendorName={vendor.businessName}
-                  vendorId={vendor.id}
-                  count={items.reduce(
-                    (sum, item) => sum + Number(item.quantity || 0),
-                    0,
-                  )}
-                />
-              )}
+              {vendorHeaderElement}
 
-              <ul className="divide-y divide-line">
-                {items.map((item) => (
-                  <CartLineItem
-                    key={item.id}
-                    item={item}
-                    onUpdateQuantity={onUpdateQuantity}
-                    onRemoveItem={onRemoveItem}
-                    disabled={disabled}
-                  />
-                ))}
-              </ul>
+              <ul className="divide-y divide-line">{lineItemElements}</ul>
             </motion.section>
           );
         })}

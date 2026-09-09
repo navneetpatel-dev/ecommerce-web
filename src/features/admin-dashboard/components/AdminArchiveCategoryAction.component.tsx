@@ -40,35 +40,33 @@ export function AdminArchiveCategoryAction({
   onDone,
 }: AdminArchiveCategoryActionProps) {
   const isArchived = category.status === CATEGORY_STATUS.ARCHIVED;
+  const label = isArchived ? LABELS.reactivateCategory : LABELS.archiveCategory;
+  const dialogVariant = isArchived ? "success" : "warning";
+  const tone = isArchived ? "success" : "archive";
+  const title = isArchived
+    ? LABELS.confirmReactivateCategoryTitle
+    : LABELS.confirmArchiveCategoryTitle;
+  const description = isArchived ? (
+    formatLabel(LABELS.confirmReactivateCategoryBody, {
+      name: category.name,
+    })
+  ) : (
+    <ArchiveDescription categoryId={category.id} name={category.name} />
+  );
+  const nextStatus = isArchived
+    ? CATEGORY_STATUS.ACTIVE
+    : CATEGORY_STATUS.ARCHIVED;
+  const handleConfirm = () =>
+    categoriesApi.update(category.id, { status: nextStatus }).then(onDone);
 
   return (
     <AdminConfirmAction
-      label={isArchived ? LABELS.reactivateCategory : LABELS.archiveCategory}
-      dialogVariant={isArchived ? "success" : "warning"}
-      tone={isArchived ? "success" : "archive"}
-      title={
-        isArchived
-          ? LABELS.confirmReactivateCategoryTitle
-          : LABELS.confirmArchiveCategoryTitle
-      }
-      description={
-        isArchived ? (
-          formatLabel(LABELS.confirmReactivateCategoryBody, {
-            name: category.name,
-          })
-        ) : (
-          <ArchiveDescription categoryId={category.id} name={category.name} />
-        )
-      }
-      onConfirm={() =>
-        categoriesApi
-          .update(category.id, {
-            status: isArchived
-              ? CATEGORY_STATUS.ACTIVE
-              : CATEGORY_STATUS.ARCHIVED,
-          })
-          .then(onDone)
-      }
+      label={label}
+      dialogVariant={dialogVariant}
+      tone={tone}
+      title={title}
+      description={description}
+      onConfirm={handleConfirm}
     />
   );
 }

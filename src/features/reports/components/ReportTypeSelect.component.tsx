@@ -28,6 +28,13 @@ export function ReportTypeSelect({
   disabled,
   disabledHint,
 }: ReportTypeSelectProps) {
+  const reportTypeItems = catalog.map((item) => (
+    <SelectItem key={item.type} value={item.type}>
+      {labelForKey(item.labelKey)}
+    </SelectItem>
+  ));
+  const selectedValue = reportType || undefined;
+
   return (
     <FormFieldFrame
       label={LABELS.reportSelect}
@@ -36,20 +43,14 @@ export function ReportTypeSelect({
     >
       <DisabledActionHint disabled={disabled} message={disabledHint} block>
         <Select
-          value={reportType || undefined}
+          value={selectedValue}
           onValueChange={onReportTypeChange}
           disabled={disabled}
         >
           <SelectTrigger id="report-type" disabled={disabled}>
             <SelectValue placeholder={LABELS.reportSelect} />
           </SelectTrigger>
-          <SelectContent>
-            {catalog.map((item) => (
-              <SelectItem key={item.type} value={item.type}>
-                {labelForKey(item.labelKey)}
-              </SelectItem>
-            ))}
-          </SelectContent>
+          <SelectContent>{reportTypeItems}</SelectContent>
         </Select>
       </DisabledActionHint>
     </FormFieldFrame>

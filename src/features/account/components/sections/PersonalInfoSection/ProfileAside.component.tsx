@@ -18,6 +18,9 @@ function DeliveryProfileAsideDetail() {
   const profile = useDeliveryProfile();
   const agent = profile.data;
   if (!agent) return null;
+  const dutyStatusLabel = agent.availableForAssignment
+    ? "Available for duty"
+    : "Off duty";
   return (
     <div className="flex items-start gap-3 border-t border-line/60 pt-4">
       <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-brand">
@@ -30,9 +33,7 @@ function DeliveryProfileAsideDetail() {
         <p className="mt-1 text-body font-medium text-ink">
           {agent.vehicleType} · {agent.hubOrZone}
         </p>
-        <p className="mt-0.5 text-body-sm text-ink-muted">
-          {agent.availableForAssignment ? "Available for duty" : "Off duty"}
-        </p>
+        <p className="mt-0.5 text-body-sm text-ink-muted">{dutyStatusLabel}</p>
       </div>
     </div>
   );
@@ -41,6 +42,17 @@ function DeliveryProfileAsideDetail() {
 export function ProfileAside({ profile, isWorkspace }: ProfileAsideProps) {
   const role = useAuthStore((s) => s.currentUser?.role);
   const isDelivery = isDeliveryRole(role);
+  const phoneDisplay = profile.phone ? (
+    <p className="mt-0.5 text-body-sm text-ink-muted">{profile.phone}</p>
+  ) : (
+    <p className="mt-0.5 text-body-sm text-ink-faint">
+      {LABELS.personalInfoNoPhone}
+    </p>
+  );
+  const deliveryDetail = isDelivery ? <DeliveryProfileAsideDetail /> : null;
+  const emailFixedHint = isWorkspace
+    ? LABELS.emailFixedWorkspace
+    : LABELS.emailFixedStorefront;
 
   return (
     <aside className="border border-line bg-surface shadow-elevation-1">
@@ -63,15 +75,7 @@ export function ProfileAside({ profile, isWorkspace }: ProfileAsideProps) {
             <p className="mt-1 text-body font-medium text-ink">
               {profile.name}
             </p>
-            {profile.phone ? (
-              <p className="mt-0.5 text-body-sm text-ink-muted">
-                {profile.phone}
-              </p>
-            ) : (
-              <p className="mt-0.5 text-body-sm text-ink-faint">
-                {LABELS.personalInfoNoPhone}
-              </p>
-            )}
+            {phoneDisplay}
           </div>
         </div>
 
@@ -92,13 +96,11 @@ export function ProfileAside({ profile, isWorkspace }: ProfileAsideProps) {
           </div>
         </div>
 
-        {isDelivery ? <DeliveryProfileAsideDetail /> : null}
+        {deliveryDetail}
 
         <div className="border-t border-line pt-4">
           <p className="text-body-sm leading-6 text-ink-muted">
-            {isWorkspace
-              ? LABELS.emailFixedWorkspace
-              : LABELS.emailFixedStorefront}
+            {emailFixedHint}
           </p>
         </div>
       </div>

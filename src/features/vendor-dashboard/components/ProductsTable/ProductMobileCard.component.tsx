@@ -18,6 +18,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
     isSubmitting,
   } = props;
   const lowStock = product.stock <= product.lowStockAt;
+  const stockValueClassName = lowStock ? styles.metaValueLow : styles.metaValue;
 
   return (
     <li className={styles.card}>
@@ -31,9 +32,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
       <dl className={styles.metaGrid}>
         <div>
           <dt className={styles.metaLabel}>{LABELS.stock}</dt>
-          <dd className={lowStock ? styles.metaValueLow : styles.metaValue}>
-            {product.stock}
-          </dd>
+          <dd className={stockValueClassName}>{product.stock}</dd>
         </div>
         <div>
           <dt className={styles.metaLabel}>{LABELS.price}</dt>

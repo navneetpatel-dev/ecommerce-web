@@ -40,6 +40,13 @@ export function AdminAuditFilters({
   onToChange,
   onClear,
 }: AdminAuditFiltersProps) {
+  const entitySelectValue = entityType || ALL_ENTITY_TYPES_VALUE;
+  const entityTypeOptions = entityTypes.map((value) => (
+    <SelectItem key={value} value={value}>
+      {value}
+    </SelectItem>
+  ));
+
   return (
     <FormSection title={auditFiltersLabels.auditFilters} columns={3}>
       <FormFieldFrame
@@ -47,7 +54,7 @@ export function AdminAuditFilters({
         htmlFor="audit-filter-entity-type"
       >
         <Select
-          value={entityType || ALL_ENTITY_TYPES_VALUE}
+          value={entitySelectValue}
           onValueChange={(value) =>
             onEntityTypeChange(value === ALL_ENTITY_TYPES_VALUE ? "" : value)
           }
@@ -59,11 +66,7 @@ export function AdminAuditFilters({
             <SelectItem value={ALL_ENTITY_TYPES_VALUE}>
               {auditFiltersLabels.auditAllEntityTypes}
             </SelectItem>
-            {entityTypes.map((value) => (
-              <SelectItem key={value} value={value}>
-                {value}
-              </SelectItem>
-            ))}
+            {entityTypeOptions}
           </SelectContent>
         </Select>
       </FormFieldFrame>

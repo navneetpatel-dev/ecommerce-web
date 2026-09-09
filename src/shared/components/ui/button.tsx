@@ -107,6 +107,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       </svg>
     );
 
+    const isDisabled = disabled || loading;
+    const ariaBusy = loading ? true : undefined;
+    const dataSize = size ?? "default";
+    const spinnerOrNull = loading ? spinner : null;
+    const content = asChild ? (
+      children
+    ) : (
+      <>
+        {spinnerOrNull}
+        {children}
+      </>
+    );
+
     return (
       <Comp
         className={cn(
@@ -114,19 +127,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className,
         )}
         ref={ref}
-        disabled={disabled || loading}
-        aria-busy={loading ? true : undefined}
-        data-size={size ?? "default"}
+        disabled={isDisabled}
+        aria-busy={ariaBusy}
+        data-size={dataSize}
         {...props}
       >
-        {asChild ? (
-          children
-        ) : (
-          <>
-            {loading ? spinner : null}
-            {children}
-          </>
-        )}
+        {content}
       </Comp>
     );
   },

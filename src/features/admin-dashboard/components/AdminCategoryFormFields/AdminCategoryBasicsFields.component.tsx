@@ -31,6 +31,13 @@ export function AdminCategoryBasicsFields({
   idPrefix,
 }: AdminCategoryBasicsFieldsProps) {
   const { register, control } = form;
+  const nameError = showError("name");
+  const nameHasError = Boolean(nameError);
+  const parentOptionItems = parentOptions.map((category) => (
+    <SelectItem key={category.id} value={category.id}>
+      {category.name}
+    </SelectItem>
+  ));
 
   return (
     <FormSection
@@ -41,12 +48,12 @@ export function AdminCategoryBasicsFields({
         label={LABELS.categoryName}
         htmlFor={`${idPrefix}-name`}
         required
-        error={showError("name")}
+        error={nameError}
         className="sm:col-span-2"
       >
         <Input
           id={`${idPrefix}-name`}
-          error={Boolean(showError("name"))}
+          error={nameHasError}
           placeholder={LABELS.categoryName}
           {...register("name")}
         />
@@ -56,28 +63,24 @@ export function AdminCategoryBasicsFields({
         <Controller
           name="parentId"
           control={control}
-          render={({ field }) => (
-            <Select
-              value={field.value ? field.value : NONE_PARENT}
-              onValueChange={(value) =>
-                field.onChange(value === NONE_PARENT ? "" : value)
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder={LABELS.selectParentCategory} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={NONE_PARENT}>
-                  {LABELS.parentCategoryNone}
-                </SelectItem>
-                {parentOptions.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.name}
+          render={({ field }) => {
+            const selectValue = field.value ? field.value : NONE_PARENT;
+            const onSelectValueChange = (value: string) =>
+              field.onChange(value === NONE_PARENT ? "" : value);
+            return (
+              <Select value={selectValue} onValueChange={onSelectValueChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder={LABELS.selectParentCategory} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={NONE_PARENT}>
+                    {LABELS.parentCategoryNone}
                   </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
+                  {parentOptionItems}
+                </SelectContent>
+              </Select>
+            );
+          }}
         />
       </FormFieldFrame>
 

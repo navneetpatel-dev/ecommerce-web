@@ -7,6 +7,18 @@ import type { HelpCategory } from "../../constants/helpContent";
 import { CategoryIcon } from "./CategoryIcon.component";
 
 export function CategoryCard({ category }: { category: HelpCategory }) {
+  const articleElements = category.articles.map((article) => (
+    <li key={article.slug}>
+      <Link
+        href={`${PATHS.help}/${article.slug}`}
+        className="flex items-center justify-between gap-3 py-3 text-[0.875rem] text-ink transition-colors hover:text-brand"
+      >
+        <span className="min-w-0 truncate">{article.title}</span>
+        <ChevronRight size={14} className="shrink-0 text-ink-muted" />
+      </Link>
+    </li>
+  ));
+
   return (
     <li className="border border-line bg-surface-raised p-5 shadow-elevation-1">
       <div className="flex items-start gap-3">
@@ -23,17 +35,7 @@ export function CategoryCard({ category }: { category: HelpCategory }) {
         </div>
       </div>
       <ul className="mt-4 divide-y divide-line border-t border-line">
-        {category.articles.map((article) => (
-          <li key={article.slug}>
-            <Link
-              href={`${PATHS.help}/${article.slug}`}
-              className="flex items-center justify-between gap-3 py-3 text-[0.875rem] text-ink transition-colors hover:text-brand"
-            >
-              <span className="min-w-0 truncate">{article.title}</span>
-              <ChevronRight size={14} className="shrink-0 text-ink-muted" />
-            </Link>
-          </li>
-        ))}
+        {articleElements}
       </ul>
     </li>
   );

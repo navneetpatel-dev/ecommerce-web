@@ -21,6 +21,20 @@ export function CustomerOrderHistoryPanel() {
     exportingFormat: history.exportingFormat,
     controlsDisabled: history.controlsDisabled,
   });
+  const loadButtonDisabled = history.loading || history.controlsDisabled;
+  const loadButtonHint = history.controlsDisabled ? filterHint : "";
+  const hasHistoryContent = Boolean(
+    history.result || history.loading || history.error,
+  );
+  const historyTable = hasHistoryContent ? (
+    <ReportTable
+      result={history.result}
+      loading={history.loading}
+      error={history.error}
+      onPageChange={history.setPage}
+      onRetry={() => history.load()}
+    />
+  ) : null;
 
   return (
     <div className="mt-10 space-y-5">
@@ -38,8 +52,8 @@ export function CustomerOrderHistoryPanel() {
         <div className="sm:col-span-2 xl:col-span-3 space-y-2">
           <ButtonGroup align="start">
             <DisabledActionHint
-              disabled={history.loading || history.controlsDisabled}
-              message={history.controlsDisabled ? filterHint : ""}
+              disabled={loadButtonDisabled}
+              message={loadButtonHint}
               block
               className="w-full sm:w-auto"
             >
@@ -47,7 +61,7 @@ export function CustomerOrderHistoryPanel() {
                 type="button"
                 fullWidth="mobile"
                 onClick={() => history.load(1)}
-                disabled={history.loading || history.controlsDisabled}
+                disabled={loadButtonDisabled}
               >
                 {LABELS.loadOrderHistory}
               </Button>
@@ -71,15 +85,7 @@ export function CustomerOrderHistoryPanel() {
         </div>
       </FormSection>
 
-      {history.result || history.loading || history.error ? (
-        <ReportTable
-          result={history.result}
-          loading={history.loading}
-          error={history.error}
-          onPageChange={history.setPage}
-          onRetry={() => history.load()}
-        />
-      ) : null}
+      {historyTable}
     </div>
   );
 }

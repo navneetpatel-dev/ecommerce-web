@@ -29,28 +29,22 @@ export function StatCard({
 
   const headerLayout = cn(Icon && "flex-row items-center justify-between pb-2");
   const titleTone = cn(Icon ? "text-body-sm font-normal text-ink-muted" : "");
+  const iconElement = Icon && <Icon className="h-4 w-4 text-ink-faint" />;
+  const valueElement = isLoading ? (
+    <Skeleton className="h-10 w-32" />
+  ) : (
+    <p className={cn("font-mono font-bold", sizeClasses[size], valueClassName)}>
+      {value}
+    </p>
+  );
 
   return (
     <Card>
       <CardHeader className={headerLayout}>
         <CardTitle className={titleTone}>{title}</CardTitle>
-        {Icon && <Icon className="h-4 w-4 text-ink-faint" />}
+        {iconElement}
       </CardHeader>
-      <CardContent>
-        {isLoading ? (
-          <Skeleton className="h-10 w-32" />
-        ) : (
-          <p
-            className={cn(
-              "font-mono font-bold",
-              sizeClasses[size],
-              valueClassName,
-            )}
-          >
-            {value}
-          </p>
-        )}
-      </CardContent>
+      <CardContent>{valueElement}</CardContent>
     </Card>
   );
 }

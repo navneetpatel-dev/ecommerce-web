@@ -72,6 +72,24 @@ export function AdminAssignDeliveryAgentAction({
     }
   };
 
+  const agentSelectPlaceholder = loadingAgents
+    ? "Loading agents..."
+    : "Select an agent";
+  const agentOptions = agents.map((agent) => (
+    <SelectItem key={agent.id} value={agent.id}>
+      {agent.fullName} · {agent.hubOrZone}
+    </SelectItem>
+  ));
+  const showNoAgentsHint = !loadingAgents && agents.length === 0;
+  const noAgentsHint = showNoAgentsHint ? (
+    <p className="text-body-sm text-ink-muted">
+      No active, available agents right now.
+    </p>
+  ) : null;
+  const errorMessage = error ? (
+    <p className="text-body-sm text-danger">{error}</p>
+  ) : null;
+
   return (
     <>
       <Button size="sm" variant="outline" onClick={openDialog}>
@@ -100,27 +118,13 @@ export function AdminAssignDeliveryAgentAction({
         >
           <Select value={selectedAgentId} onValueChange={setSelectedAgentId}>
             <SelectTrigger id={`assign-agent-${returnId}`}>
-              <SelectValue
-                placeholder={
-                  loadingAgents ? "Loading agents..." : "Select an agent"
-                }
-              />
+              <SelectValue placeholder={agentSelectPlaceholder} />
             </SelectTrigger>
-            <SelectContent>
-              {agents.map((agent) => (
-                <SelectItem key={agent.id} value={agent.id}>
-                  {agent.fullName} · {agent.hubOrZone}
-                </SelectItem>
-              ))}
-            </SelectContent>
+            <SelectContent>{agentOptions}</SelectContent>
           </Select>
         </FormFieldFrame>
-        {!loadingAgents && agents.length === 0 ? (
-          <p className="text-body-sm text-ink-muted">
-            No active, available agents right now.
-          </p>
-        ) : null}
-        {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+        {noAgentsHint}
+        {errorMessage}
       </StatusDialog>
     </>
   );

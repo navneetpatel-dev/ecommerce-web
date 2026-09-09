@@ -106,6 +106,47 @@ export function QuantitySelector({
     cellClass,
   );
 
+  const decrementHintDisabled = !disabled && atMin;
+  const incrementHintDisabled = !disabled && atMax;
+  const isEditingUnlocked = editing && !disabled;
+  const editQuantityLabel = formatLabel(LABELS.editQuantity, { value });
+  const valueDigitClassName = cn(
+    "font-mono font-medium tabular-nums text-ink",
+    valueSizeClass,
+  );
+
+  const valueCell = isEditingUnlocked ? (
+    <input
+      type="number"
+      inputMode="numeric"
+      autoFocus
+      value={draft}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={commitDraft}
+      onKeyDown={onEditorKeyDown}
+      onClick={stopBubble}
+      className={cn(
+        "relative z-[1] shrink-0 border-x border-line bg-transparent text-center font-mono font-medium tabular-nums text-ink outline-none [appearance:textfield] focus-visible:shadow-[inset_0_0_0_1px_var(--brand)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
+        cellClass,
+      )}
+      aria-label={LABELS.quantityField}
+    />
+  ) : (
+    <button
+      type="button"
+      onClick={beginEdit}
+      disabled={disabled}
+      className={cn(controlBtnClass, "border-x border-line")}
+      aria-label={editQuantityLabel}
+    >
+      <AnimatedQuantityValue
+        value={value}
+        className={valueSizeClass}
+        digitClassName={valueDigitClassName}
+      />
+    </button>
+  );
+
   const control = (
     <div
       className={cn(
@@ -115,7 +156,7 @@ export function QuantitySelector({
       onClick={stopBubble}
     >
       <DisabledActionHint
-        disabled={!disabled && atMin}
+        disabled={decrementHintDisabled}
         message={minHint}
         className="relative z-[1] max-w-none shrink-0"
       >
@@ -130,43 +171,10 @@ export function QuantitySelector({
         </button>
       </DisabledActionHint>
 
-      {editing && !disabled ? (
-        <input
-          type="number"
-          inputMode="numeric"
-          autoFocus
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onBlur={commitDraft}
-          onKeyDown={onEditorKeyDown}
-          onClick={stopBubble}
-          className={cn(
-            "relative z-[1] shrink-0 border-x border-line bg-transparent text-center font-mono font-medium tabular-nums text-ink outline-none [appearance:textfield] focus-visible:shadow-[inset_0_0_0_1px_var(--brand)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
-            cellClass,
-          )}
-          aria-label={LABELS.quantityField}
-        />
-      ) : (
-        <button
-          type="button"
-          onClick={beginEdit}
-          disabled={disabled}
-          className={cn(controlBtnClass, "border-x border-line")}
-          aria-label={formatLabel(LABELS.editQuantity, { value })}
-        >
-          <AnimatedQuantityValue
-            value={value}
-            className={valueSizeClass}
-            digitClassName={cn(
-              "font-mono font-medium tabular-nums text-ink",
-              valueSizeClass,
-            )}
-          />
-        </button>
-      )}
+      {valueCell}
 
       <DisabledActionHint
-        disabled={!disabled && atMax}
+        disabled={incrementHintDisabled}
         message={maxHint}
         className="relative z-[1] max-w-none shrink-0"
       >

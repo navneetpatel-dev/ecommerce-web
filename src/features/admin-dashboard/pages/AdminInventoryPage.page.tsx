@@ -8,6 +8,7 @@ import { PERMISSIONS } from "@/shared/constants/permissions";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import type { AdminDataRow } from "../hooks/useAdminDataList.hook";
 
 function StockEditor({
   row,
@@ -38,6 +39,10 @@ function StockEditor({
     }
   };
 
+  const errorElement = error ? (
+    <span className="max-w-40 text-body-sm text-danger">{error}</span>
+  ) : null;
+
   return (
     <div className="flex min-w-56 items-center justify-end gap-2">
       <Input
@@ -58,11 +63,13 @@ function StockEditor({
         <Save className="size-4" aria-hidden="true" />
         Save
       </Button>
-      {error ? (
-        <span className="max-w-40 text-body-sm text-danger">{error}</span>
-      ) : null}
+      {errorElement}
     </div>
   );
+}
+
+function renderStockEditorAction(row: AdminDataRow, reload: () => void) {
+  return <StockEditor row={row as LowStockInventoryRow} reload={reload} />;
 }
 
 export function AdminInventoryPage() {
@@ -72,9 +79,7 @@ export function AdminInventoryPage() {
       permission={[PERMISSIONS.PRODUCT_MANAGE, PERMISSIONS.PRODUCT_UPDATE]}
       load={() => inventoryApi.lowStock()}
       columnKeys={["productName", "sku", "stock", "lowStockAt"]}
-      actions={(row, reload) => (
-        <StockEditor row={row as LowStockInventoryRow} reload={reload} />
-      )}
+      actions={renderStockEditorAction}
     />
   );
 }

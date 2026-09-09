@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { motion } from "motion/react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { EmptyState } from "@/shared/components/EmptyState.component";
@@ -13,6 +13,9 @@ import {
   getArticleBySlug,
   HELP_CATEGORIES,
 } from "../constants/helpContent";
+import type { HelpArticle } from "../types/help.types";
+import { HelpArticleSection } from "./HelpArticleSection.component";
+import { HelpRelatedArticles } from "./HelpRelatedArticles.component";
 
 export function HelpArticleView({ slug }: { slug: string }) {
   const article = getArticleBySlug(slug);
@@ -42,7 +45,18 @@ export function HelpArticleView({ slug }: { slug: string }) {
   );
   const related = article.relatedSlugs
     .map((s) => getAllArticles().find((a) => a.slug === s))
-    .filter(Boolean);
+    .filter((a): a is HelpArticle => Boolean(a));
+
+  const categoryEyebrow = category ? (
+    <TextEyebrow brand>{category.title}</TextEyebrow>
+  ) : null;
+  const sectionElements = article.sections.map((section) => (
+    <HelpArticleSection key={section.heading} section={section} />
+  ));
+  const hasRelated = related.length > 0;
+  const relatedSection = hasRelated ? (
+    <HelpRelatedArticles related={related} />
+  ) : null;
 
   return (
     <div className="relative">
@@ -65,7 +79,7 @@ export function HelpArticleView({ slug }: { slug: string }) {
             <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
             {LABELS.helpCenter}
           </Link>
-          {category ? <TextEyebrow brand>{category.title}</TextEyebrow> : null}
+          {categoryEyebrow}
           <h1
             className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
             style={{ fontSize: "var(--text-display-sm)" }}
@@ -76,50 +90,10 @@ export function HelpArticleView({ slug }: { slug: string }) {
         </motion.header>
 
         <div className="mt-8 max-w-2xl space-y-8 border-t border-line pt-8">
-          {article.sections.map((section) => (
-            <section key={section.heading}>
-              <h2 className="text-body-lg font-semibold tracking-tight text-ink">
-                {section.heading}
-              </h2>
-              {section.paragraphs?.map((p) => (
-                <p
-                  key={p.slice(0, 48)}
-                  className="mt-3 text-body leading-relaxed text-ink-muted"
-                >
-                  {p}
-                </p>
-              ))}
-              {section.bullets?.length ? (
-                <ul className="mt-3 list-disc space-y-2 pl-5 text-body leading-relaxed text-ink-muted">
-                  {section.bullets.map((b) => (
-                    <li key={b.slice(0, 48)}>{b}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </section>
-          ))}
+          {sectionElements}
         </div>
 
-        {related.length > 0 ? (
-          <aside className="mt-12 max-w-2xl border border-line bg-surface-raised p-5 shadow-elevation-1">
-            <TextEyebrow>{LABELS.helpRelatedEyebrow}</TextEyebrow>
-            <ul className="mt-3 divide-y divide-line">
-              {related.map((item) =>
-                item ? (
-                  <li key={item.slug}>
-                    <Link
-                      href={`${PATHS.help}/${item.slug}`}
-                      className="flex items-center justify-between gap-3 py-3 text-[0.875rem] font-medium text-ink hover:text-brand"
-                    >
-                      {item.title}
-                      <ChevronRight size={14} className="text-ink-muted" />
-                    </Link>
-                  </li>
-                ) : null,
-              )}
-            </ul>
-          </aside>
-        ) : null}
+        {relatedSection}
 
         <p className="mt-10 max-w-2xl text-[0.875rem] text-ink-muted">
           {LABELS.helpStillNeedHelp}{" "}

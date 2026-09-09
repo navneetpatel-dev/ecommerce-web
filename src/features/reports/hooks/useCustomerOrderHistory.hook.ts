@@ -26,9 +26,8 @@ export function useCustomerOrderHistory() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [exportingFormat, setExportingFormat] = useState<ExportFileFormat | null>(
-    null,
-  );
+  const [exportingFormat, setExportingFormat] =
+    useState<ExportFileFormat | null>(null);
   const runRef = useRef<Promise<void> | null>(null);
 
   const filters = useCallback(() => ({ from, to }), [from, to]);
@@ -69,6 +68,7 @@ export function useCustomerOrderHistory() {
   };
 
   const controls = deriveExportControlsState(exportingFormat);
+  const exporting = exportingFormat !== null;
 
   return {
     from,
@@ -80,7 +80,7 @@ export function useCustomerOrderHistory() {
     loading,
     error,
     message,
-    exporting: exportingFormat !== null,
+    exporting,
     ...controls,
     load,
     exportExcel: () => runExport("xlsx"),

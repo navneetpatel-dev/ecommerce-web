@@ -98,45 +98,79 @@ export function AdminConfirmAction({
 
   const primaryVariant =
     confirmVariant ?? (dialogVariant === "danger" ? "destructive" : "default");
+  const reasonTrimmed = reason.trim();
+  const reasonMissing = requireReason && !reasonTrimmed;
+  const triggerButtonClassName = cn(
+    "select-none cursor-pointer",
+    inline
+      ? "w-auto gap-1.5"
+      : tableMenuButtonClass(resolvedTone as TableActionTone),
+    triggerClassName,
+  );
+  const triggerDisabled = disabled || loading;
+  const toneIcon = showIcon ? renderToneIcon(resolvedTone) : null;
+  const showDisabledHint = disabled && Boolean(disabledHint);
+  const confirmButtonLabel = confirmLabel ?? label;
+  const reasonFieldHint = reasonTrimmed ? undefined : reasonHint;
+  const primaryDisabledHint = reasonMissing ? reasonHint : undefined;
+  const openTriggerDialog = () => {
+    setReason("");
+    setActionError(null);
+    setOpen(true);
+  };
+  const onDialogOpenChange = (next: boolean) => {
+    if (!next) close();
+  };
+  const onPrimaryClick = () => {
+    void run();
+  };
 
   const triggerButton = (
     <Button
       size="sm"
       variant={triggerVariant}
-      className={cn(
-        "select-none cursor-pointer",
-        inline
-          ? "w-auto gap-1.5"
-          : tableMenuButtonClass(resolvedTone as TableActionTone),
-        triggerClassName,
-      )}
-      disabled={disabled || loading}
-      onClick={() => {
-        setReason("");
-        setActionError(null);
-        setOpen(true);
-      }}
+      className={triggerButtonClassName}
+      disabled={triggerDisabled}
+      onClick={openTriggerDialog}
     >
-      {showIcon ? renderToneIcon(resolvedTone) : null}
+      {toneIcon}
       <span>{label}</span>
     </Button>
   );
+  const triggerElement = showDisabledHint ? (
+    <DisabledActionHint disabled message={disabledHint!} block>
+      {triggerButton}
+    </DisabledActionHint>
+  ) : (
+    triggerButton
+  );
+  const reasonField = requireReason ? (
+    <FormFieldFrame
+      label={reasonLabel}
+      htmlFor="admin-confirm-reason"
+      hint={reasonFieldHint}
+    >
+      <Textarea
+        id="admin-confirm-reason"
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        rows={3}
+        placeholder={reasonLabel}
+        className="min-h-[6.5rem] resize-none"
+      />
+    </FormFieldFrame>
+  ) : null;
+  const actionErrorMessage = actionError ? (
+    <p className="text-body-sm text-danger">{actionError}</p>
+  ) : null;
 
   return (
     <>
-      {disabled && disabledHint ? (
-        <DisabledActionHint disabled message={disabledHint} block>
-          {triggerButton}
-        </DisabledActionHint>
-      ) : (
-        triggerButton
-      )}
+      {triggerElement}
 
       <StatusDialog
         open={open}
-        onOpenChange={(next) => {
-          if (!next) close();
-        }}
+        onOpenChange={onDialogOpenChange}
         variant={dialogVariant}
         title={title}
         description={description}
@@ -146,36 +180,16 @@ export function AdminConfirmAction({
           onClick: close,
         }}
         primaryAction={{
-          label: confirmLabel ?? label,
+          label: confirmButtonLabel,
           variant: primaryVariant,
           loading,
-          disabled: requireReason && !reason.trim(),
-          disabledHint:
-            requireReason && !reason.trim() ? reasonHint : undefined,
-          onClick: () => {
-            void run();
-          },
+          disabled: reasonMissing,
+          disabledHint: primaryDisabledHint,
+          onClick: onPrimaryClick,
         }}
       >
-        {requireReason ? (
-          <FormFieldFrame
-            label={reasonLabel}
-            htmlFor="admin-confirm-reason"
-            hint={!reason.trim() ? reasonHint : undefined}
-          >
-            <Textarea
-              id="admin-confirm-reason"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              rows={3}
-              placeholder={reasonLabel}
-              className="min-h-[6.5rem] resize-none"
-            />
-          </FormFieldFrame>
-        ) : null}
-        {actionError ? (
-          <p className="text-body-sm text-danger">{actionError}</p>
-        ) : null}
+        {reasonField}
+        {actionErrorMessage}
       </StatusDialog>
     </>
   );

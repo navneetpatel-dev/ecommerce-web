@@ -44,15 +44,17 @@ function ExportButton({
   fullWidth?: ButtonFullWidth;
   onClick: () => void;
 }) {
+  const hintClassName = cn(
+    fullWidth === true && "w-full",
+    fullWidth === "mobile" && "w-full sm:w-auto",
+  );
+
   return (
     <DisabledActionHint
       disabled={exportDisabled}
       message={hint}
       block
-      className={cn(
-        fullWidth === true && "w-full",
-        fullWidth === "mobile" && "w-full sm:w-auto",
-      )}
+      className={hintClassName}
     >
       <Button
         type="button"

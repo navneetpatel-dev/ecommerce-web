@@ -48,6 +48,10 @@ export function useVendorOrderManagement() {
     );
   };
 
+  const statusError = updateStatus.isError
+    ? getApiErrorMessage(updateStatus.error, LABELS.couldNotUpdateOrderStatus)
+    : null;
+
   return {
     data,
     isLoading,
@@ -55,8 +59,6 @@ export function useVendorOrderManagement() {
     setUpdatingId,
     handleStatusChange,
     isPending: updateStatus.isPending,
-    statusError: updateStatus.isError
-      ? getApiErrorMessage(updateStatus.error, LABELS.couldNotUpdateOrderStatus)
-      : null,
+    statusError,
   };
 }

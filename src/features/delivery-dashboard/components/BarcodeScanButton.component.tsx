@@ -62,6 +62,10 @@ export function BarcodeScanButton({
     };
   }, [open, onDecoded]);
 
+  const errorNotice = error ? (
+    <p className="text-body-sm text-danger">{error}</p>
+  ) : null;
+
   return (
     <>
       <Button
@@ -84,7 +88,7 @@ export function BarcodeScanButton({
             id={SCANNER_ELEMENT_ID}
             className="w-full overflow-hidden rounded-md"
           />
-          {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+          {errorNotice}
         </DialogContent>
       </Dialog>
     </>

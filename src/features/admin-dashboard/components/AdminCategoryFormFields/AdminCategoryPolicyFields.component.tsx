@@ -28,6 +28,10 @@ export function AdminCategoryPolicyFields({
   idPrefix,
 }: AdminCategoryPolicyFieldsProps) {
   const { register, control } = form;
+  const returnWindowError = showError("returnWindowDays");
+  const returnWindowHasError = Boolean(returnWindowError);
+  const warrantyMonthsError = showError("defaultWarrantyMonths");
+  const warrantyMonthsHasError = Boolean(warrantyMonthsError);
 
   return (
     <FormSection
@@ -38,12 +42,12 @@ export function AdminCategoryPolicyFields({
         label={LABELS.categoryReturnWindowDays}
         htmlFor={`${idPrefix}-return-window`}
         hint={LABELS.categoryReturnWindowHint}
-        error={showError("returnWindowDays")}
+        error={returnWindowError}
       >
         <Input
           id={`${idPrefix}-return-window`}
           inputMode="numeric"
-          error={Boolean(showError("returnWindowDays"))}
+          error={returnWindowHasError}
           {...register("returnWindowDays")}
         />
       </FormFieldFrame>
@@ -66,12 +70,12 @@ export function AdminCategoryPolicyFields({
       <FormFieldFrame
         label={LABELS.categoryDefaultWarrantyMonths}
         htmlFor={`${idPrefix}-warranty-months`}
-        error={showError("defaultWarrantyMonths")}
+        error={warrantyMonthsError}
       >
         <Input
           id={`${idPrefix}-warranty-months`}
           inputMode="numeric"
-          error={Boolean(showError("defaultWarrantyMonths"))}
+          error={warrantyMonthsHasError}
           {...register("defaultWarrantyMonths")}
         />
       </FormFieldFrame>
@@ -80,29 +84,29 @@ export function AdminCategoryPolicyFields({
         <Controller
           name="defaultWarrantyType"
           control={control}
-          render={({ field }) => (
-            <Select
-              value={field.value ? field.value : "__inherit__"}
-              onValueChange={(value) =>
-                field.onChange(value === "__inherit__" ? "" : value)
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder={LABELS.inheritDefault} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="__inherit__">
-                  {LABELS.inheritDefault}
-                </SelectItem>
-                <SelectItem value={WARRANTY_TYPE.MANUFACTURER}>
-                  {LABELS.warrantyManufacturer}
-                </SelectItem>
-                <SelectItem value={WARRANTY_TYPE.SELLER}>
-                  {LABELS.warrantySeller}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          )}
+          render={({ field }) => {
+            const selectValue = field.value ? field.value : "__inherit__";
+            const onSelectValueChange = (value: string) =>
+              field.onChange(value === "__inherit__" ? "" : value);
+            return (
+              <Select value={selectValue} onValueChange={onSelectValueChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder={LABELS.inheritDefault} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__inherit__">
+                    {LABELS.inheritDefault}
+                  </SelectItem>
+                  <SelectItem value={WARRANTY_TYPE.MANUFACTURER}>
+                    {LABELS.warrantyManufacturer}
+                  </SelectItem>
+                  <SelectItem value={WARRANTY_TYPE.SELLER}>
+                    {LABELS.warrantySeller}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            );
+          }}
         />
       </FormFieldFrame>
     </FormSection>

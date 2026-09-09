@@ -9,10 +9,13 @@ import { HomePage } from "@/features/home";
 export const metadata = generateHomeMetadata();
 
 export default function Home() {
+  const organizationSchema = generateOrganizationSchema();
+  const webSiteSchema = generateWebSiteSchema();
+
   return (
     <>
-      <JsonLd data={generateOrganizationSchema()} />
-      <JsonLd data={generateWebSiteSchema()} />
+      <JsonLd data={organizationSchema} />
+      <JsonLd data={webSiteSchema} />
       <HomePage />
     </>
   );

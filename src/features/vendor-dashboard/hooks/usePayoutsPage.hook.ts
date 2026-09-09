@@ -1,8 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useVendorCommissions, useVendorPayouts, vendorKeys } from "../api/vendor.queries";
-import { commissionsApi } from "@/features/admin-dashboard/api/finance.api";
+import {
+  useVendorCommissions,
+  useVendorPayouts,
+  vendorKeys,
+} from "../api/vendor.queries";
+import { commissionsApi } from "@/features/admin-dashboard";
 
 export function usePayoutsPage() {
   const { data: commissions, isLoading: loadingComm } = useVendorCommissions();
@@ -12,10 +16,12 @@ export function usePayoutsPage() {
     queryFn: () => commissionsApi.listInvoices({ page: 1, limit: 50 }),
   });
 
+  const invoices = invoicesPage?.items ?? [];
+
   return {
     commissions,
     payouts,
-    invoices: invoicesPage?.items ?? [],
+    invoices,
     loadingComm,
     loadingPay,
     loadingInv,

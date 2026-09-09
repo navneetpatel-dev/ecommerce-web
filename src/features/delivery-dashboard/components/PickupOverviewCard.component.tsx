@@ -17,6 +17,21 @@ export function PickupOverviewCard({
   orderId,
   productName,
 }: PickupOverviewCardProps) {
+  const itemSection = productName ? (
+    <div className="border-t border-line/60 pt-3">
+      <dt className="text-ink-muted">Item</dt>
+      <dd className="mt-0.5 truncate font-medium text-ink">{productName}</dd>
+    </div>
+  ) : null;
+  const orderRefSection = orderId ? (
+    <div className="flex items-center justify-between gap-2 border-t border-line/60 pt-3">
+      <dt className="text-ink-muted">Order Ref</dt>
+      <dd className="font-mono text-[0.8125rem] text-ink">
+        #{orderId.slice(0, 8)}
+      </dd>
+    </div>
+  ) : null;
+
   return (
     <div className="border border-line bg-surface shadow-elevation-1">
       <div className="flex items-center gap-2 border-b border-line bg-paper/55 px-5 py-3.5">
@@ -41,22 +56,8 @@ export function PickupOverviewCard({
               <StatusBadge status={status} />
             </dd>
           </div>
-          {productName ? (
-            <div className="border-t border-line/60 pt-3">
-              <dt className="text-ink-muted">Item</dt>
-              <dd className="mt-0.5 truncate font-medium text-ink">
-                {productName}
-              </dd>
-            </div>
-          ) : null}
-          {orderId ? (
-            <div className="flex items-center justify-between gap-2 border-t border-line/60 pt-3">
-              <dt className="text-ink-muted">Order Ref</dt>
-              <dd className="font-mono text-[0.8125rem] text-ink">
-                #{orderId.slice(0, 8)}
-              </dd>
-            </div>
-          ) : null}
+          {itemSection}
+          {orderRefSection}
         </dl>
       </div>
     </div>

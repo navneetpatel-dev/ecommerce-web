@@ -41,6 +41,8 @@ export function CartConfirmAction({
   triggerClassName,
 }: CartConfirmActionProps) {
   const [open, setOpen] = useState(false);
+  const triggerDisabled = disabled || pending;
+  const triggerContent = iconOnly ? null : triggerLabel;
 
   return (
     <>
@@ -50,11 +52,11 @@ export function CartConfirmAction({
         size={triggerSize}
         className={triggerClassName}
         aria-label={triggerAriaLabel}
-        disabled={disabled || pending}
+        disabled={triggerDisabled}
         onClick={() => setOpen(true)}
       >
         <Icon aria-hidden />
-        {iconOnly ? null : triggerLabel}
+        {triggerContent}
       </Button>
 
       <StatusDialog

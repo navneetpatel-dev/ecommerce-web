@@ -23,6 +23,16 @@ export function AdminCategoryImageSeoFields({
 }: AdminCategoryImageSeoFieldsProps) {
   const { setValue, watch } = form;
   const watchedImageUrl = watch("imageUrl");
+  const trimmedImageUrl = watchedImageUrl?.trim();
+  const imageUrlValue = trimmedImageUrl ? trimmedImageUrl : null;
+  const imageUrlError = showError("imageUrl");
+  const commissionRateError = showError("commissionRate");
+  const commissionRateHasError = Boolean(commissionRateError);
+  const onImageUploaded = (url: string) =>
+    setValue("imageUrl", url, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
 
   return (
     <>
@@ -33,20 +43,15 @@ export function AdminCategoryImageSeoFields({
       >
         <FormFieldFrame
           label={LABELS.categoryImageUpload}
-          error={showError("imageUrl")}
+          error={imageUrlError}
         >
           <FileUpload
             entityType={UPLOAD_ENTITY.CATEGORIES}
             entityId={uploadEntityId}
             purpose={UPLOAD_PURPOSE.IMAGE}
             accept="image/png,image/jpeg,image/webp"
-            valueUrl={watchedImageUrl?.trim() ? watchedImageUrl.trim() : null}
-            onUploaded={(url) =>
-              setValue("imageUrl", url, {
-                shouldDirty: true,
-                shouldValidate: true,
-              })
-            }
+            valueUrl={imageUrlValue}
+            onUploaded={onImageUploaded}
           />
         </FormFieldFrame>
       </FormSection>
@@ -76,14 +81,14 @@ export function AdminCategoryImageSeoFields({
           label={LABELS.categoryCommissionRate}
           htmlFor={`${idPrefix}-commission`}
           hint={LABELS.categoryCommissionRateHint}
-          error={showError("commissionRate")}
+          error={commissionRateError}
           className="sm:col-span-2 sm:max-w-md"
         >
           <Input
             id={`${idPrefix}-commission`}
             inputMode="decimal"
             placeholder={LABELS.categoryCommissionPlaceholder}
-            error={Boolean(showError("commissionRate"))}
+            error={commissionRateHasError}
             {...form.register("commissionRate")}
           />
         </FormFieldFrame>

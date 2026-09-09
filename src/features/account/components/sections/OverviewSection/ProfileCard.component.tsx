@@ -47,6 +47,17 @@ export function ProfileCard({
   fileInputRef,
   onFileSelected,
 }: ProfileCardProps) {
+  const avatarImage = avatarSrc ? <AvatarImage src={avatarSrc} alt="" /> : null;
+  const avatarInitials = initials(profile.name);
+  const memberSinceLabel = formatLabel(LABELS.memberSince, {
+    date: memberSince ?? "",
+  });
+  const memberSinceNotice = memberSince ? (
+    <p className="mt-2 text-body-sm text-ink-faint">{memberSinceLabel}</p>
+  ) : null;
+  const localErrorAsError = localError ? new Error(localError) : null;
+  const uploadFormError = uploadError ?? localErrorAsError;
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 8 }}
@@ -69,9 +80,9 @@ export function ProfileCard({
             aria-label={LABELS.uploadProfilePhoto}
           >
             <Avatar className="h-24 w-24 border border-line text-[1.25rem] font-semibold text-ink">
-              {avatarSrc ? <AvatarImage src={avatarSrc} alt="" /> : null}
+              {avatarImage}
               <AvatarFallback className="bg-brand-subtle text-ink">
-                {initials(profile.name)}
+                {avatarInitials}
               </AvatarFallback>
             </Avatar>
             <span className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center border border-line bg-surface text-ink-muted transition-colors group-hover:text-brand">
@@ -99,18 +110,11 @@ export function ProfileCard({
             <p className="text-body text-ink-muted">{profile.email}</p>
             <EmailVerificationStatus emailVerified={profile.emailVerified} />
           </div>
-          {memberSince ? (
-            <p className="mt-2 text-body-sm text-ink-faint">
-              {formatLabel(LABELS.memberSince, { date: memberSince })}
-            </p>
-          ) : null}
+          {memberSinceNotice}
           <p className="mt-3 text-body-sm text-ink-muted">
             {LABELS.uploadProfilePhotoHint}
           </p>
-          <FormError
-            error={uploadError ?? (localError ? new Error(localError) : null)}
-            fallback={LABELS.uploadFailed}
-          />
+          <FormError error={uploadFormError} fallback={LABELS.uploadFailed} />
         </div>
       </div>
     </motion.section>

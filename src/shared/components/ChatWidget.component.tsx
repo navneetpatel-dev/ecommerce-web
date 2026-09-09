@@ -9,27 +9,29 @@ interface ChatWidgetProps {
 }
 
 export function ChatWidget({ open, onToggle, onClose }: ChatWidgetProps) {
+  const panelElement = open && (
+    <div className="mb-4 w-80 rounded-lg border border-line bg-surface-raised p-4 shadow-elevation-3">
+      <h3 className="text-[1.125rem] font-semibold text-ink">
+        {LABELS.chatNeedHelpTitle}
+      </h3>
+      <p className="mt-2 text-body text-ink-muted">
+        {LABELS.chatSupportMessage}
+      </p>
+      <Button
+        type="button"
+        variant="link"
+        size="sm"
+        className="mt-4 h-auto min-h-0 max-h-none px-0 py-0 text-body-sm font-medium text-brand"
+        onClick={onClose}
+      >
+        {LABELS.close}
+      </Button>
+    </div>
+  );
+
   return (
     <div className="fixed bottom-6 right-6 z-40">
-      {open && (
-        <div className="mb-4 w-80 rounded-lg border border-line bg-surface-raised p-4 shadow-elevation-3">
-          <h3 className="text-[1.125rem] font-semibold text-ink">
-            {LABELS.chatNeedHelpTitle}
-          </h3>
-          <p className="mt-2 text-body text-ink-muted">
-            {LABELS.chatSupportMessage}
-          </p>
-          <Button
-            type="button"
-            variant="link"
-            size="sm"
-            className="mt-4 h-auto min-h-0 max-h-none px-0 py-0 text-body-sm font-medium text-brand"
-            onClick={onClose}
-          >
-            {LABELS.close}
-          </Button>
-        </div>
-      )}
+      {panelElement}
       <Button
         type="button"
         variant="secondary"

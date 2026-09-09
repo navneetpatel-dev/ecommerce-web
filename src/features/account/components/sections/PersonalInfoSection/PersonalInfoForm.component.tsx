@@ -37,6 +37,20 @@ export function PersonalInfoForm({
   submitError,
   onSubmit,
 }: PersonalInfoFormProps) {
+  const nameHasError = Boolean(errors.name?.message);
+  const phoneHasError = Boolean(errors.phone?.message);
+  const phoneHint = isWorkspace
+    ? LABELS.phoneOptionalContact
+    : LABELS.phoneOptionalDelivery;
+  const savedNotice = showSaved ? (
+    <p className="text-[0.875rem] text-success">{LABELS.personalInfoSaved}</p>
+  ) : null;
+  const footerLeading = isWorkspace
+    ? LABELS.personalInfoFooterWorkspace
+    : LABELS.personalInfoFooterCustomer;
+  const submitDisabled = !canSubmit;
+  const submitButtonDisabled = !canSubmit || pending;
+
   return (
     <form onSubmit={onSubmit}>
       <FormStack>
@@ -52,7 +66,7 @@ export function PersonalInfoForm({
           >
             <Input
               id="account-name"
-              error={Boolean(errors.name?.message)}
+              error={nameHasError}
               {...register("name")}
             />
           </FormFieldFrame>
@@ -60,18 +74,14 @@ export function PersonalInfoForm({
           <FormFieldFrame
             label={LABELS.phone}
             htmlFor="account-phone"
-            hint={
-              isWorkspace
-                ? LABELS.phoneOptionalContact
-                : LABELS.phoneOptionalDelivery
-            }
+            hint={phoneHint}
             error={errors.phone?.message}
           >
             <Input
               id="account-phone"
               type="tel"
               placeholder={LABELS.phonePlaceholder}
-              error={Boolean(errors.phone?.message)}
+              error={phoneHasError}
               {...register("phone")}
             />
           </FormFieldFrame>
@@ -81,26 +91,16 @@ export function PersonalInfoForm({
               error={submitError}
               fallback={LABELS.couldNotSaveProfile}
             />
-            {showSaved ? (
-              <p className="text-[0.875rem] text-success">
-                {LABELS.personalInfoSaved}
-              </p>
-            ) : null}
+            {savedNotice}
           </div>
         </FormSection>
 
-        <FormActions
-          leading={
-            isWorkspace
-              ? LABELS.personalInfoFooterWorkspace
-              : LABELS.personalInfoFooterCustomer
-          }
-        >
-          <DisabledActionHint disabled={!canSubmit} message={disableHint}>
+        <FormActions leading={footerLeading}>
+          <DisabledActionHint disabled={submitDisabled} message={disableHint}>
             <Button
               type="submit"
               loading={pending}
-              disabled={!canSubmit || pending}
+              disabled={submitButtonDisabled}
             >
               {LABELS.saveChanges}
             </Button>

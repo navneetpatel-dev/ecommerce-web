@@ -23,6 +23,26 @@ export function OperatingStatusAside({
 }: OperatingStatusAsideProps) {
   const ratingCount = ratingsData?.ratingCount ?? agent?.ratingCount;
   const averageRating = ratingsData?.averageRating ?? agent?.averageRating ?? 0;
+  const formattedAverageRating = averageRating.toFixed(1);
+  const ratingSuffix = ratingCount === 1 ? "" : "s";
+  const ratingSummary = ratingCount ? (
+    <>
+      <Star className="size-3.5 fill-warning text-warning" aria-hidden="true" />
+      <span className="font-medium text-ink">{formattedAverageRating}</span>
+      <span className="text-ink-muted">
+        ({ratingCount} rating{ratingSuffix})
+      </span>
+    </>
+  ) : (
+    <span className="text-ink-muted">No ratings yet</span>
+  );
+
+  const partnerName = agent?.fullName ?? "Delivery Partner";
+  const dutyStatusLabel = agent?.availableForAssignment
+    ? "Available"
+    : "Unavailable";
+  const stationLabel = agent?.hubOrZone ?? "—";
+  const systemStatus = agent?.status ?? "ACTIVE";
 
   return (
     <aside className="space-y-6">
@@ -43,27 +63,10 @@ export function OperatingStatusAside({
               <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
                 Partner Name
               </p>
-              <p className="mt-0.5 font-medium text-ink">
-                {agent?.fullName ?? "Delivery Partner"}
-              </p>
+              <p className="mt-0.5 font-medium text-ink">{partnerName}</p>
               <p className="text-body-sm text-ink-muted">{agent?.phone}</p>
               <p className="mt-1 flex items-center gap-1 text-body-sm">
-                {ratingCount ? (
-                  <>
-                    <Star
-                      className="size-3.5 fill-warning text-warning"
-                      aria-hidden="true"
-                    />
-                    <span className="font-medium text-ink">
-                      {averageRating.toFixed(1)}
-                    </span>
-                    <span className="text-ink-muted">
-                      ({ratingCount} rating{ratingCount === 1 ? "" : "s"})
-                    </span>
-                  </>
-                ) : (
-                  <span className="text-ink-muted">No ratings yet</span>
-                )}
+                {ratingSummary}
               </p>
             </div>
           </div>
@@ -71,19 +74,17 @@ export function OperatingStatusAside({
           <div className="border-t border-line/60 pt-4 space-y-2">
             <div className="flex items-center justify-between text-body-sm">
               <span className="text-ink-muted">Duty status:</span>
-              <span className="font-medium text-ink">
-                {agent?.availableForAssignment ? "Available" : "Unavailable"}
-              </span>
+              <span className="font-medium text-ink">{dutyStatusLabel}</span>
             </div>
             <div className="flex items-center justify-between text-body-sm">
               <span className="text-ink-muted">Station / Hub:</span>
               <span className="font-mono text-ink text-body-sm">
-                {agent?.hubOrZone ?? "—"}
+                {stationLabel}
               </span>
             </div>
             <div className="flex items-center justify-between text-body-sm">
               <span className="text-ink-muted">System status:</span>
-              <StatusBadge status={agent?.status ?? "ACTIVE"} />
+              <StatusBadge status={systemStatus} />
             </div>
           </div>
 

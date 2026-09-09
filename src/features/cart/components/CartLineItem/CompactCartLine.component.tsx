@@ -45,14 +45,49 @@ export function CompactCartLine(props: CompactCartLineProps) {
 
   const removeButtonClassName =
     "h-8 w-8 min-h-8 max-h-8 shrink-0 justify-self-end p-0 text-ink-muted hover:bg-danger-subtle hover:text-danger";
+  const rootClassName = cn(
+    "flex items-center gap-3 py-2",
+    !available && "opacity-50 grayscale",
+  );
+  const amountClassName = cn(
+    "truncate text-body-sm font-semibold tabular-nums",
+    linePending || lineTotal == null ? "text-ink-muted" : "text-brand",
+  );
+
+  let amountContent;
+  if (lineTotal != null && !linePending) {
+    amountContent = <>₹{formatInrAmount(lineTotal)}</>;
+  } else if (amountsUnavailable) {
+    amountContent = LABELS.amountUnavailable;
+  } else {
+    amountContent = <InlineAmountSkeleton className="h-3.5 w-16" />;
+  }
+
+  const availabilityElement = available ? (
+    <p className={amountClassName}>{amountContent}</p>
+  ) : (
+    <Badge variant="destructive" className="w-fit text-[0.6875rem]">
+      {unavailableLabel(item.unavailableReason)}
+    </Badge>
+  );
+
+  const quantityElement = available ? (
+    <QuantitySelector
+      value={item.quantity}
+      onChange={handleQuantityChange}
+      min={1}
+      max={item.maxQuantity ?? MAX_CART_LINE_QUANTITY}
+      disabled={disabled}
+      disabledHint={LABELS.cartUpdatingActionHint}
+      controlClassName="h-8 w-8 min-h-8 max-h-8 [&_svg]:size-3.5"
+      valueClassName="h-4 w-5 text-body-sm"
+    />
+  ) : (
+    <span />
+  );
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-3 py-2",
-        !available && "opacity-50 grayscale",
-      )}
-    >
+    <div className={rootClassName}>
       <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-sm">
         <MediaImage
           src={item.product.imageUrl}
@@ -74,42 +109,8 @@ export function CompactCartLine(props: CompactCartLineProps) {
           onRemoveItem={onRemoveItem}
           disabled={disabled}
         />
-        {!available ? (
-          <Badge variant="destructive" className="w-fit text-[0.6875rem]">
-            {unavailableLabel(item.unavailableReason)}
-          </Badge>
-        ) : (
-          <p
-            className={cn(
-              "truncate text-body-sm font-semibold tabular-nums",
-              linePending || lineTotal == null
-                ? "text-ink-muted"
-                : "text-brand",
-            )}
-          >
-            {lineTotal != null && !linePending ? (
-              <>₹{formatInrAmount(lineTotal)}</>
-            ) : amountsUnavailable ? (
-              LABELS.amountUnavailable
-            ) : (
-              <InlineAmountSkeleton className="h-3.5 w-16" />
-            )}
-          </p>
-        )}
-        {available ? (
-          <QuantitySelector
-            value={item.quantity}
-            onChange={handleQuantityChange}
-            min={1}
-            max={item.maxQuantity ?? MAX_CART_LINE_QUANTITY}
-            disabled={disabled}
-            disabledHint={LABELS.cartUpdatingActionHint}
-            controlClassName="h-8 w-8 min-h-8 max-h-8 [&_svg]:size-3.5"
-            valueClassName="h-4 w-5 text-body-sm"
-          />
-        ) : (
-          <span />
-        )}
+        {availabilityElement}
+        {quantityElement}
       </div>
     </div>
   );

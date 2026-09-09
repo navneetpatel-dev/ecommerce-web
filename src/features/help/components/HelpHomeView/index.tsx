@@ -14,9 +14,18 @@ import { SearchResultsSection } from "./SearchResultsSection.component";
 
 export function HelpHomeView() {
   const [query, setQuery] = useState("");
+  const isSearching = query.trim().length >= 2;
   const results = useMemo(
-    () => (query.trim().length >= 2 ? searchHelp(query) : []),
-    [query],
+    () => (isSearching ? searchHelp(query) : []),
+    [isSearching, query],
+  );
+  const mainSection = isSearching ? (
+    <SearchResultsSection query={query} results={results} />
+  ) : (
+    <>
+      <QuickLinksSection />
+      <BrowseTopicsSection />
+    </>
   );
 
   return (
@@ -60,14 +69,7 @@ export function HelpHomeView() {
           />
         </div>
 
-        {query.trim().length >= 2 ? (
-          <SearchResultsSection query={query} results={results} />
-        ) : (
-          <>
-            <QuickLinksSection />
-            <BrowseTopicsSection />
-          </>
-        )}
+        {mainSection}
 
         <ContactSection />
       </div>

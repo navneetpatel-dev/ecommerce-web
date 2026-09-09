@@ -9,6 +9,12 @@ import { productsTableHeaderStyles as styles } from "./productsTable.styles";
 
 export function ProductsTableHeader(props: ProductsTableHeaderProps) {
   const { search, onSearchChange, onAddProduct } = props;
+  const addProductButton = onAddProduct ? (
+    <Button size="sm" type="button" fullWidth="mobile" onClick={onAddProduct}>
+      <Plus aria-hidden /> {LABELS.addProduct}
+    </Button>
+  ) : null;
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.topRow}>
@@ -21,16 +27,7 @@ export function ProductsTableHeader(props: ProductsTableHeaderProps) {
             onChange={(e) => onSearchChange(e.target.value)}
           />
         </div>
-        {onAddProduct && (
-          <Button
-            size="sm"
-            type="button"
-            fullWidth="mobile"
-            onClick={onAddProduct}
-          >
-            <Plus aria-hidden /> {LABELS.addProduct}
-          </Button>
-        )}
+        {addProductButton}
       </div>
       <p className={styles.hint}>{LABELS.vendorProductsHint}</p>
     </div>

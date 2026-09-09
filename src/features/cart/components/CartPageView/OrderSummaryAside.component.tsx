@@ -82,6 +82,38 @@ export function OrderSummaryAside({
 }: OrderSummaryAsideProps) {
   const amountsPending = pendingLineTotals && !amountsUnavailable;
   const totalPending = total == null || amountsPending;
+  const itemCountLabel = itemCount === 1 ? "item" : "items";
+
+  const unavailableNoticeElement = amountsUnavailable ? (
+    <AmountsUnavailableNotice className="mt-3" onRetry={onRetryAmounts} />
+  ) : null;
+
+  const cashbackNoticeElement =
+    (appliedCashbackAmount > 0 || appliedCouponType === "CASHBACK") &&
+    payNowGrandTotal != null ? (
+      <CashbackCouponNotice
+        className="mt-3 text-body-sm text-brand"
+        payNow={payNowGrandTotal}
+        cashbackAmount={appliedCashbackAmount}
+        code={appliedCouponCode}
+      />
+    ) : null;
+
+  const checkoutActionElement = hasUnavailableItems ? (
+    <p className="mt-4 rounded-sm bg-warning-subtle px-3 py-2 text-body-sm text-warning-foreground">
+      {LABELS.removeUnavailableToCheckout}
+    </p>
+  ) : (
+    <Button asChild className="mt-5 w-full" size="lg">
+      <Link
+        href={PATHS.checkout}
+        className="inline-flex items-center justify-center gap-2"
+      >
+        {LABELS.checkout}
+        <ArrowRight size={16} />
+      </Link>
+    </Button>
+  );
 
   return (
     <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-[88px] lg:self-start lg:z-10">
@@ -92,7 +124,7 @@ export function OrderSummaryAside({
         />
 
         <p className="text-[0.875rem] text-ink-muted">
-          {itemCount} {itemCount === 1 ? "item" : "items"}
+          {itemCount} {itemCountLabel}
           <span className="mx-2 text-line">·</span>
           <span className="font-medium text-ink">
             <MoneyAmount
@@ -152,38 +184,11 @@ export function OrderSummaryAside({
               />
             </span>
           </div>
-          {amountsUnavailable ? (
-            <AmountsUnavailableNotice
-              className="mt-3"
-              onRetry={onRetryAmounts}
-            />
-          ) : null}
-          {(appliedCashbackAmount > 0 || appliedCouponType === "CASHBACK") &&
-          payNowGrandTotal != null ? (
-            <CashbackCouponNotice
-              className="mt-3 text-body-sm text-brand"
-              payNow={payNowGrandTotal}
-              cashbackAmount={appliedCashbackAmount}
-              code={appliedCouponCode}
-            />
-          ) : null}
+          {unavailableNoticeElement}
+          {cashbackNoticeElement}
         </div>
 
-        {hasUnavailableItems ? (
-          <p className="mt-4 rounded-sm bg-warning-subtle px-3 py-2 text-body-sm text-warning-foreground">
-            {LABELS.removeUnavailableToCheckout}
-          </p>
-        ) : (
-          <Button asChild className="mt-5 w-full" size="lg">
-            <Link
-              href={PATHS.checkout}
-              className="inline-flex items-center justify-center gap-2"
-            >
-              {LABELS.checkout}
-              <ArrowRight size={16} />
-            </Link>
-          </Button>
-        )}
+        {checkoutActionElement}
 
         <p className="mt-3 text-center text-[0.75rem] text-ink-muted">
           Secure checkout · Easy returns

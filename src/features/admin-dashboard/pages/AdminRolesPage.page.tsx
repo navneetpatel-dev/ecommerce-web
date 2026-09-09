@@ -34,14 +34,17 @@ function AdminRolesContent() {
     {
       id: "name",
       header: LABELS.name,
-      cell: (role) => (
-        <div className="flex items-center gap-2">
-          <span className="font-mono">{role.name}</span>
-          {role.isSystemRole ? (
-            <Badge variant="secondary">{LABELS.builtInRoleBadge}</Badge>
-          ) : null}
-        </div>
-      ),
+      cell: (role) => {
+        const builtInBadge = role.isSystemRole ? (
+          <Badge variant="secondary">{LABELS.builtInRoleBadge}</Badge>
+        ) : null;
+        return (
+          <div className="flex items-center gap-2">
+            <span className="font-mono">{role.name}</span>
+            {builtInBadge}
+          </div>
+        );
+      },
     },
     {
       id: "permissions",
@@ -53,6 +56,41 @@ function AdminRolesContent() {
         }),
     },
   ];
+
+  const renderRoleActions = (role: AdminRole) => {
+    const deleteAction = !role.isSystemRole ? (
+      <TableRowAction destructive>
+        <AdminConfirmAction
+          label={LABELS.delete}
+          dialogVariant="danger"
+          tone="danger"
+          title={LABELS.confirmDeleteRoleTitle}
+          description={formatLabel(LABELS.confirmDeleteRoleBody, {
+            name: role.name,
+          })}
+          onConfirm={() => page.deleteRole(role.id)}
+        />
+      </TableRowAction>
+    ) : null;
+
+    return (
+      <>
+        <TableRowAction>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            className={tableMenuButtonClass("edit")}
+            onClick={() => page.setEditingRoleId(role.id)}
+          >
+            <ShieldCheck strokeWidth={2.25} aria-hidden />
+            <span>{LABELS.managePermissions}</span>
+          </Button>
+        </TableRowAction>
+        {deleteAction}
+      </>
+    );
+  };
 
   return (
     <div className="space-y-5">
@@ -87,36 +125,7 @@ function AdminRolesContent() {
         emptyMessage={LABELS.noRecordsFound}
         getRowId={(role) => role.id}
         rowDetails={false}
-        actions={(role) => (
-          <>
-            <TableRowAction>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                className={tableMenuButtonClass("edit")}
-                onClick={() => page.setEditingRoleId(role.id)}
-              >
-                <ShieldCheck strokeWidth={2.25} aria-hidden />
-                <span>{LABELS.managePermissions}</span>
-              </Button>
-            </TableRowAction>
-            {!role.isSystemRole ? (
-              <TableRowAction destructive>
-                <AdminConfirmAction
-                  label={LABELS.delete}
-                  dialogVariant="danger"
-                  tone="danger"
-                  title={LABELS.confirmDeleteRoleTitle}
-                  description={formatLabel(LABELS.confirmDeleteRoleBody, {
-                    name: role.name,
-                  })}
-                  onConfirm={() => page.deleteRole(role.id)}
-                />
-              </TableRowAction>
-            ) : null}
-          </>
-        )}
+        actions={renderRoleActions}
       />
 
       <RolePermissionsDialog

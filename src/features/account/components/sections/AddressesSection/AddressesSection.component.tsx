@@ -71,23 +71,80 @@ export function AddressesSection() {
     }
   };
 
-  if (isLoading) {
+  const addressCountLabel = list.length === 1 ? "address" : "addresses";
+  const summaryText = hasAddresses
+    ? `${list.length} saved ${addressCountLabel}`
+    : "No addresses yet";
+
+  const addressListItems = list.map((addr) => {
+    const defaulting = defaultingId === addr.id && setDefault.isPending;
     return (
-      <div className="space-y-3">
-        <Skeleton className="h-28 w-full" />
-        <Skeleton className="h-28 w-full" />
-      </div>
+      <AddressCard
+        key={addr.id}
+        addr={addr}
+        defaulting={defaulting}
+        onEdit={openEdit}
+        onSetDefault={handleSetDefault}
+        onDelete={setDeleteTarget}
+      />
     );
+  });
+
+  const emptyState = (
+    <div className="border border-dashed border-line bg-paper/50">
+      <EmptyState
+        icon={MapPin}
+        heading="Add a delivery address"
+        message="Save where orders should arrive so checkout stays quick."
+        actionLabel="Add address"
+        onAction={openCreate}
+        className="py-12 md:py-14"
+      />
+    </div>
+  );
+
+  const addressList = (
+    <ul className="grid gap-3 sm:grid-cols-2">
+      {addressListItems}
+      <li>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={openCreate}
+          className="h-full min-h-[10rem] max-h-none w-full flex-col gap-2 border-dashed border-line bg-paper/40 p-4 text-ink-muted hover:border-ink/30 hover:bg-paper hover:text-ink"
+        >
+          <Plus size={20} strokeWidth={1.5} />
+          <span className="text-[0.875rem] font-medium">
+            {LABELS.addAddress}
+          </span>
+        </Button>
+      </li>
+    </ul>
+  );
+
+  const addressesBody = hasAddresses ? addressList : emptyState;
+
+  const listErrorNotice = listError ? (
+    <p role="alert" className="text-[0.875rem] text-danger">
+      {listError}
+    </p>
+  ) : null;
+
+  const loadingSkeleton = (
+    <div className="space-y-3">
+      <Skeleton className="h-28 w-full" />
+      <Skeleton className="h-28 w-full" />
+    </div>
+  );
+
+  if (isLoading) {
+    return loadingSkeleton;
   }
 
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-[0.875rem] text-ink-muted">
-          {hasAddresses
-            ? `${list.length} saved ${list.length === 1 ? "address" : "addresses"}`
-            : "No addresses yet"}
-        </p>
+        <p className="text-[0.875rem] text-ink-muted">{summaryText}</p>
         <Button
           type="button"
           variant="outline"
@@ -99,50 +156,9 @@ export function AddressesSection() {
         </Button>
       </div>
 
-      {!hasAddresses ? (
-        <div className="border border-dashed border-line bg-paper/50">
-          <EmptyState
-            icon={MapPin}
-            heading="Add a delivery address"
-            message="Save where orders should arrive so checkout stays quick."
-            actionLabel="Add address"
-            onAction={openCreate}
-            className="py-12 md:py-14"
-          />
-        </div>
-      ) : (
-        <ul className="grid gap-3 sm:grid-cols-2">
-          {list.map((addr) => (
-            <AddressCard
-              key={addr.id}
-              addr={addr}
-              defaulting={defaultingId === addr.id && setDefault.isPending}
-              onEdit={openEdit}
-              onSetDefault={handleSetDefault}
-              onDelete={setDeleteTarget}
-            />
-          ))}
-          <li>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={openCreate}
-              className="h-full min-h-[10rem] max-h-none w-full flex-col gap-2 border-dashed border-line bg-paper/40 p-4 text-ink-muted hover:border-ink/30 hover:bg-paper hover:text-ink"
-            >
-              <Plus size={20} strokeWidth={1.5} />
-              <span className="text-[0.875rem] font-medium">
-                {LABELS.addAddress}
-              </span>
-            </Button>
-          </li>
-        </ul>
-      )}
+      {addressesBody}
 
-      {listError ? (
-        <p role="alert" className="text-[0.875rem] text-danger">
-          {listError}
-        </p>
-      ) : null}
+      {listErrorNotice}
 
       <AddressFormDialog
         open={dialogOpen}

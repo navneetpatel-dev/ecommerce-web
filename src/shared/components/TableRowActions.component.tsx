@@ -143,6 +143,15 @@ export function TableRowActions({
 
   if (menuItems.length === 0) return null;
 
+  const menuItemElements = menuItems.map((item, index) => (
+    <div
+      key={index}
+      className="w-full min-w-0 overflow-hidden border-t border-line/70 first:rounded-t-sm first:border-t-0 last:rounded-b-sm"
+    >
+      {item}
+    </div>
+  ));
+
   return (
     <div className={cn("flex shrink-0 items-center justify-end", className)}>
       <Popover>
@@ -168,14 +177,7 @@ export function TableRowActions({
           )}
           onClick={(event) => event.stopPropagation()}
         >
-          {menuItems.map((item, index) => (
-            <div
-              key={index}
-              className="w-full min-w-0 overflow-hidden border-t border-line/70 first:rounded-t-sm first:border-t-0 last:rounded-b-sm"
-            >
-              {item}
-            </div>
-          ))}
+          {menuItemElements}
         </PopoverContent>
       </Popover>
     </div>

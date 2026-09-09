@@ -17,11 +17,10 @@ export function CartMutationError({
 }: CartMutationErrorProps) {
   if (!message) return null;
 
+  const rootClassName = `flex items-start gap-2 border border-danger/30 bg-danger-subtle px-3 py-2.5 text-body-sm text-danger ${className ?? ""}`;
+
   return (
-    <div
-      role="alert"
-      className={`flex items-start gap-2 border border-danger/30 bg-danger-subtle px-3 py-2.5 text-body-sm text-danger ${className ?? ""}`}
-    >
+    <div role="alert" className={rootClassName}>
       <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
       <p className="min-w-0 flex-1 leading-relaxed">{message}</p>
       <Button

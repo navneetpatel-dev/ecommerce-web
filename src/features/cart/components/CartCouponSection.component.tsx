@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
@@ -70,8 +71,74 @@ export function CartCouponSection({
       ? formatLabel(LABELS.availableOffersCount, { count: unusedOffers.length })
       : LABELS.availableOffers;
 
+  const rootClassName = compact ? "space-y-2" : "space-y-3";
+  const applyDisabled = !couponInput.trim();
+
+  const successMessageElement =
+    couponMessage && chips.length === 0 ? (
+      <p className="text-body-sm text-success">{couponMessage}</p>
+    ) : null;
+  const infoMessageElement =
+    couponMessage && chips.length > 0 ? (
+      <p className="text-body-sm text-ink-muted">{couponMessage}</p>
+    ) : null;
+  const errorMessageElement = couponError ? (
+    <p className="text-body-sm text-danger">{couponError}</p>
+  ) : null;
+
+  const triggerClassName = cn(
+    "py-2 text-[0.75rem] font-medium uppercase tracking-[0.06em] text-ink-muted hover:text-ink",
+    compact && "py-1.5",
+  );
+  const offersListClassName = cn(
+    "space-y-1.5 overflow-y-auto overscroll-contain pr-1",
+    compact ? "max-h-36" : "max-h-48",
+  );
+
+  const offerItems = unusedOffers.map((offer) => {
+    const offerDiscountText =
+      offer.discount > 0
+        ? ` · ₹${formatInrAmount(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`
+        : "";
+
+    return (
+      <li
+        key={offer.code}
+        className="flex items-center justify-between gap-2 text-body-sm"
+      >
+        <span className="min-w-0 truncate font-mono text-ink">
+          {offer.code}
+          {offerDiscountText}
+        </span>
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="shrink-0"
+          onClick={() => onApplyEligible(offer.code)}
+          disabled={couponPending}
+        >
+          {LABELS.applyOffer}
+        </Button>
+      </li>
+    );
+  });
+
+  let offersContent: ReactNode;
+  if (eligibleLoading) {
+    offersContent = (
+      <p className="text-body-sm text-ink-muted">{LABELS.loading}</p>
+    );
+  } else if (unusedOffers.length === 0) {
+    offersContent = (
+      <p className="text-body-sm text-ink-muted">{LABELS.noAvailableOffers}</p>
+    );
+  } else {
+    offersContent = <ul className={offersListClassName}>{offerItems}</ul>;
+  }
+
   return (
-    <div className={compact ? "space-y-2" : "space-y-3"}>
+    <div className={rootClassName}>
       <FormFieldFrame label={LABELS.couponCodeLabel} htmlFor="cart-coupon-code">
         <div className="flex w-full items-stretch gap-2">
           <Input
@@ -88,7 +155,7 @@ export function CartCouponSection({
             }}
           />
           <DisabledActionHint
-            disabled={!couponInput.trim()}
+            disabled={applyDisabled}
             message={LABELS.enterCouponCodeToApply}
             className="shrink-0"
           >
@@ -97,7 +164,7 @@ export function CartCouponSection({
               className="shrink-0 px-4"
               onClick={onApplyCoupon}
               loading={couponPending}
-              disabled={!couponInput.trim()}
+              disabled={applyDisabled}
             >
               {LABELS.applyCoupon}
             </Button>
@@ -113,66 +180,16 @@ export function CartCouponSection({
         onRemoveCoupon={onRemoveCoupon}
       />
 
-      {couponMessage && chips.length === 0 ? (
-        <p className="text-body-sm text-success">{couponMessage}</p>
-      ) : null}
-      {couponMessage && chips.length > 0 ? (
-        <p className="text-body-sm text-ink-muted">{couponMessage}</p>
-      ) : null}
-      {couponError ? (
-        <p className="text-body-sm text-danger">{couponError}</p>
-      ) : null}
+      {successMessageElement}
+      {infoMessageElement}
+      {errorMessageElement}
 
       <Accordion type="single" collapsible>
         <AccordionItem value="offers" className="border-0">
-          <AccordionTrigger
-            className={cn(
-              "py-2 text-[0.75rem] font-medium uppercase tracking-[0.06em] text-ink-muted hover:text-ink",
-              compact && "py-1.5",
-            )}
-          >
+          <AccordionTrigger className={triggerClassName}>
             {offersLabel}
           </AccordionTrigger>
-          <AccordionContent className="pb-0">
-            {eligibleLoading ? (
-              <p className="text-body-sm text-ink-muted">{LABELS.loading}</p>
-            ) : unusedOffers.length === 0 ? (
-              <p className="text-body-sm text-ink-muted">
-                {LABELS.noAvailableOffers}
-              </p>
-            ) : (
-              <ul
-                className={cn(
-                  "space-y-1.5 overflow-y-auto overscroll-contain pr-1",
-                  compact ? "max-h-36" : "max-h-48",
-                )}
-              >
-                {unusedOffers.map((offer) => (
-                  <li
-                    key={offer.code}
-                    className="flex items-center justify-between gap-2 text-body-sm"
-                  >
-                    <span className="min-w-0 truncate font-mono text-ink">
-                      {offer.code}
-                      {offer.discount > 0
-                        ? ` · ₹${formatInrAmount(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`
-                        : ""}
-                    </span>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      className="shrink-0"
-                      onClick={() => onApplyEligible(offer.code)}
-                      disabled={couponPending}
-                    >
-                      {LABELS.applyOffer}
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </AccordionContent>
+          <AccordionContent className="pb-0">{offersContent}</AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>

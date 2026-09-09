@@ -20,6 +20,9 @@ export function ShareButton({
   onCopyLink,
   label = LABELS.shareThisProduct,
 }: ShareButtonProps) {
+  const mobileShareLabel = copied ? LABELS.linkCopied : LABELS.share;
+  const copyLinkLabel = copied ? LABELS.linkCopied : LABELS.copyLink;
+
   return (
     <>
       <Button
@@ -28,7 +31,7 @@ export function ShareButton({
         size="lg"
         className="h-11 w-11 shrink-0 rounded-full border-line px-0 md:hidden"
         onClick={onShareNative}
-        aria-label={copied ? LABELS.linkCopied : LABELS.share}
+        aria-label={mobileShareLabel}
       >
         <Share2 size={18} />
       </Button>
@@ -55,7 +58,7 @@ export function ShareButton({
               className="w-full justify-start gap-2 font-normal"
             >
               <LinkIcon className="h-4 w-4" />
-              {copied ? LABELS.linkCopied : LABELS.copyLink}
+              {copyLinkLabel}
             </Button>
           </div>
         </PopoverContent>

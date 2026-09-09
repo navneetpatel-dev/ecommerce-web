@@ -18,6 +18,19 @@ function AuthBootstrap() {
   return null;
 }
 
+const PERSISTED_QUERY_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+const DEHYDRATED_QUERY_KEYS = ["products", "categories", "home", "settings"];
+
+function shouldDehydrateQuery(query: {
+  state: { status: string };
+  queryKey: readonly unknown[];
+}) {
+  return (
+    query.state.status === "success" &&
+    DEHYDRATED_QUERY_KEYS.includes(String(query.queryKey[0]))
+  );
+}
+
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
     () =>
@@ -34,22 +47,18 @@ export function Providers({ children }: { children: React.ReactNode }) {
   );
   const [persister] = useState(() => createQueryPersister());
 
+  const persistOptions = {
+    persister,
+    maxAge: PERSISTED_QUERY_CACHE_MAX_AGE_MS,
+    buster: QUERY_CACHE_BUSTER,
+    dehydrateOptions: { shouldDehydrateQuery },
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <PersistQueryClientProvider
         client={queryClient}
-        persistOptions={{
-          persister,
-          maxAge: 24 * 60 * 60 * 1000,
-          buster: QUERY_CACHE_BUSTER,
-          dehydrateOptions: {
-            shouldDehydrateQuery: (query) =>
-              query.state.status === "success" &&
-              ["products", "categories", "home", "settings"].includes(
-                String(query.queryKey[0]),
-              ),
-          },
-        }}
+        persistOptions={persistOptions}
       >
         <ThemePaletteProvider>
           <ErrorReportingProvider />

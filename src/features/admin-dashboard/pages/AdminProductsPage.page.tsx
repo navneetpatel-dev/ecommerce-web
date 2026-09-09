@@ -25,27 +25,31 @@ export function AdminProductsPage() {
     return catalog;
   }
 
+  const defaultTab = page.pendingCount > 0 ? "pending" : "all";
+  const pendingTabContent = (
+    <RequirePermission permission={page.approvePermission}>
+      <ProductModerationQueue />
+    </RequirePermission>
+  );
+  const tabs = [
+    {
+      value: "pending",
+      label: LABELS.pendingReview,
+      count: page.pendingCount,
+      content: pendingTabContent,
+    },
+    {
+      value: "all",
+      label: LABELS.allProducts,
+      content: catalog,
+    },
+  ];
+
   return (
     <AdminSectionTabs
       title={page.title}
-      defaultValue={page.pendingCount > 0 ? "pending" : "all"}
-      tabs={[
-        {
-          value: "pending",
-          label: LABELS.pendingReview,
-          count: page.pendingCount,
-          content: (
-            <RequirePermission permission={page.approvePermission}>
-              <ProductModerationQueue />
-            </RequirePermission>
-          ),
-        },
-        {
-          value: "all",
-          label: LABELS.allProducts,
-          content: catalog,
-        },
-      ]}
+      defaultValue={defaultTab}
+      tabs={tabs}
     />
   );
 }

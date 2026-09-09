@@ -51,6 +51,19 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
         }
       : undefined;
 
+  const topVendorItems = data.topVendors.map((v) => ({
+    id: v.id,
+    label: v.businessName,
+    revenue: v.revenue,
+    sharePercent: v.sharePercent,
+  }));
+  const topCategoryItems = data.topCategories.map((c) => ({
+    id: c.id,
+    label: c.name,
+    revenue: c.revenue,
+    sharePercent: c.sharePercent,
+  }));
+
   return (
     <div className="space-y-6 sm:space-y-8">
       <motion.header
@@ -122,21 +135,11 @@ export function AdminAnalyticsLayout({ data }: AdminAnalyticsLayoutProps) {
       >
         <AnalyticsRankedList
           title={LABELS.analyticsTopVendors}
-          items={data.topVendors.map((v) => ({
-            id: v.id,
-            label: v.businessName,
-            revenue: v.revenue,
-            sharePercent: v.sharePercent,
-          }))}
+          items={topVendorItems}
         />
         <AnalyticsRankedList
           title={LABELS.analyticsTopCategories}
-          items={data.topCategories.map((c) => ({
-            id: c.id,
-            label: c.name,
-            revenue: c.revenue,
-            sharePercent: c.sharePercent,
-          }))}
+          items={topCategoryItems}
         />
       </motion.div>
 

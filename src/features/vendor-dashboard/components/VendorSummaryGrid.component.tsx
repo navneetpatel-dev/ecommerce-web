@@ -8,27 +8,28 @@ interface VendorSummaryGridProps {
 }
 
 export function VendorSummaryGrid({ summary }: VendorSummaryGridProps) {
+  const todayOrders = summary?.todayOrders ?? 0;
+  const pendingShipments = summary?.pendingShipments ?? 0;
+  const monthRevenue = formatInr(summary?.monthRevenue ?? 0);
+  const pendingPayouts = formatInr(summary?.pendingPayouts ?? 0);
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <SummaryCard
-        title="Today's Orders"
-        value={summary?.todayOrders ?? 0}
-        icon={Package}
-      />
+      <SummaryCard title="Today's Orders" value={todayOrders} icon={Package} />
       <SummaryCard
         title="Pending Shipments"
-        value={summary?.pendingShipments ?? 0}
+        value={pendingShipments}
         icon={Truck}
       />
       <SummaryCard
         title="Month Revenue"
-        value={formatInr(summary?.monthRevenue ?? 0)}
+        value={monthRevenue}
         icon={Banknote}
         valueClassName="text-success"
       />
       <SummaryCard
         title="Pending Payouts"
-        value={formatInr(summary?.pendingPayouts ?? 0)}
+        value={pendingPayouts}
         icon={Clock}
       />
     </div>

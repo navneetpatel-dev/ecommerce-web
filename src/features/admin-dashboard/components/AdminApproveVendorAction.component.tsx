@@ -71,16 +71,21 @@ export function AdminApproveVendorAction({
       <span>{LABELS.approve}</span>
     </Button>
   );
+  const showDisabledHint = disabled && Boolean(disabledHint);
+  const triggerElement = showDisabledHint ? (
+    <DisabledActionHint disabled message={disabledHint!} block>
+      {triggerButton}
+    </DisabledActionHint>
+  ) : (
+    triggerButton
+  );
+  const errorMessage = error ? (
+    <p className="text-body-sm text-danger">{error}</p>
+  ) : null;
 
   return (
     <>
-      {disabled && disabledHint ? (
-        <DisabledActionHint disabled message={disabledHint} block>
-          {triggerButton}
-        </DisabledActionHint>
-      ) : (
-        triggerButton
-      )}
+      {triggerElement}
 
       <StatusDialog
         open={open}
@@ -116,7 +121,7 @@ export function AdminApproveVendorAction({
             onChange={setCommissionRate}
           />
         </FormFieldFrame>
-        {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+        {errorMessage}
       </StatusDialog>
     </>
   );

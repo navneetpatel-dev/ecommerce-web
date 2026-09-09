@@ -7,6 +7,8 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, error, ...props }, ref) => {
+    const ariaInvalid = error ? true : undefined;
+
     return (
       <textarea
         className={cn(
@@ -15,7 +17,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           className,
         )}
         ref={ref}
-        aria-invalid={error ? true : undefined}
+        aria-invalid={ariaInvalid}
         {...props}
       />
     );

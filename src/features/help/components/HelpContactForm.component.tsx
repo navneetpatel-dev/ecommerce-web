@@ -10,6 +10,12 @@ import { useAuthStore } from "@/shared/stores/auth.store";
 export function HelpContactForm() {
   const currentUser = useAuthStore((s) => s.currentUser);
   const isLoggedIn = Boolean(currentUser);
+  const contactMessage = isLoggedIn
+    ? LABELS.helpContactUseSupport
+    : LABELS.helpContactSignIn;
+  const contactHref = isLoggedIn
+    ? PATHS.supportTicketNew
+    : PATHS.loginWithRedirect(PATHS.supportTicketNew);
 
   return (
     <div className="max-w-2xl">
@@ -20,20 +26,10 @@ export function HelpContactForm() {
         >
           <div className="space-y-4 sm:col-span-2">
             <p className="text-body leading-relaxed text-ink-muted">
-              {isLoggedIn
-                ? LABELS.helpContactUseSupport
-                : LABELS.helpContactSignIn}
+              {contactMessage}
             </p>
             <Button asChild>
-              <Link
-                href={
-                  isLoggedIn
-                    ? PATHS.supportTicketNew
-                    : PATHS.loginWithRedirect(PATHS.supportTicketNew)
-                }
-              >
-                {LABELS.helpOpenSupportTicket}
-              </Link>
+              <Link href={contactHref}>{LABELS.helpOpenSupportTicket}</Link>
             </Button>
           </div>
         </FormSection>

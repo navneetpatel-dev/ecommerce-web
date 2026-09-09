@@ -38,6 +38,13 @@ export function AdminNotificationsPage() {
     }
   };
 
+  const messageElement = message ? (
+    <p className="text-body-sm text-success">{message}</p>
+  ) : null;
+  const errorElement = error ? (
+    <p className="text-body-sm text-danger">{error}</p>
+  ) : null;
+
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -55,8 +62,8 @@ export function AdminNotificationsPage() {
           Send test
         </Button>
       </div>
-      {message ? <p className="text-body-sm text-success">{message}</p> : null}
-      {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+      {messageElement}
+      {errorElement}
 
       <BroadcastNotificationForm />
 

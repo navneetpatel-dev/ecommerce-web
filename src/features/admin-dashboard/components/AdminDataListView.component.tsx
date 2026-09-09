@@ -94,6 +94,12 @@ export function AdminDataListView({
       key !== "status" && !key.endsWith(".status") && !isImageFieldKey(key),
     cell: (row) => renderAdminCell(row, key),
   }));
+  const getRowId = (row: AdminDataRow, index: number) =>
+    String(row.id ?? index);
+  const renderActions = actions
+    ? (row: AdminDataRow) => actions(row, onRefresh)
+    : undefined;
+  const paginationConfig = { page, totalPages, total, from, to, onPageChange };
 
   return (
     <DataTable
@@ -104,16 +110,9 @@ export function AdminDataListView({
       error={error}
       emptyMessage={LABELS.noRecordsFound}
       onRefresh={onRefresh}
-      getRowId={(row, index) => String(row.id ?? index)}
-      pagination={{
-        page,
-        totalPages,
-        total,
-        from,
-        to,
-        onPageChange,
-      }}
-      actions={actions ? (row) => actions(row, onRefresh) : undefined}
+      getRowId={getRowId}
+      pagination={paginationConfig}
+      actions={renderActions}
     />
   );
 }

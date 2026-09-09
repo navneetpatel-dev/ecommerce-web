@@ -39,76 +39,120 @@ function formatOrDash(amount?: number | null) {
 export function CommissionLedgerTable({
   commissions,
 }: CommissionLedgerTableProps) {
+  const items = commissions?.items ?? [];
+  const isEmpty = items.length === 0;
+
+  const rows = items.map((c) => ({
+    id: c.id,
+    status: c.status,
+    dateLabel: new Date(c.createdAt).toLocaleDateString(),
+    saleAmountLabel: formatInr(c.saleAmount),
+    rateLabel: `${c.commissionRate}%`,
+    commissionAmountLabel: formatInr(c.commissionAmount),
+    gstAmountLabel: formatOrDash(c.gstAmount),
+    tdsAmountLabel: formatOrDash(c.tdsAmount),
+    tdsRateLabel: formatTdsRate(c.tdsRatePercent),
+  }));
+
+  const mobileEmptyState = (
+    <li className="rounded-md border border-line bg-surface px-4 py-10 text-center text-ink-muted">
+      No entries yet
+    </li>
+  );
+
+  const mobileRows = rows.map((row) => (
+    <li
+      key={row.id}
+      className="rounded-md border border-line bg-surface p-4 shadow-card-hairline"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-[0.875rem] text-ink">{row.dateLabel}</p>
+        <StatusBadge status={row.status} />
+      </div>
+      <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-[0.875rem]">
+        <div>
+          <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
+            Sale
+          </dt>
+          <dd className="font-mono text-ink">{row.saleAmountLabel}</dd>
+        </div>
+        <div>
+          <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
+            Rate
+          </dt>
+          <dd className="text-ink">{row.rateLabel}</dd>
+        </div>
+        <div className="col-span-2">
+          <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
+            Commission
+          </dt>
+          <dd className="font-mono text-ink">{row.commissionAmountLabel}</dd>
+        </div>
+        <div>
+          <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
+            GST
+          </dt>
+          <dd className="font-mono text-ink">{row.gstAmountLabel}</dd>
+        </div>
+        <div>
+          <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
+            TDS
+          </dt>
+          <dd className="font-mono text-ink">
+            {row.tdsAmountLabel}{" "}
+            <span className="text-ink-muted">({row.tdsRateLabel})</span>
+          </dd>
+        </div>
+      </dl>
+    </li>
+  ));
+
+  const mobileContent = isEmpty ? mobileEmptyState : mobileRows;
+
+  const desktopEmptyState = (
+    <TableRow>
+      <TableCell colSpan={8} className="text-center text-ink-muted">
+        No entries yet
+      </TableCell>
+    </TableRow>
+  );
+
+  const desktopRows = rows.map((row) => (
+    <TableRow key={row.id}>
+      <TableCell className={cn(TABLE_DATA_CELL_CLASS, "text-body")}>
+        {row.dateLabel}
+      </TableCell>
+      <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
+        {row.saleAmountLabel}
+      </TableCell>
+      <TableCell className={TABLE_DATA_CELL_CLASS}>{row.rateLabel}</TableCell>
+      <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
+        {row.commissionAmountLabel}
+      </TableCell>
+      <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
+        {row.gstAmountLabel}
+      </TableCell>
+      <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
+        {row.tdsAmountLabel}
+      </TableCell>
+      <TableCell className={TABLE_DATA_CELL_CLASS}>
+        {row.tdsRateLabel}
+      </TableCell>
+      <TableCell className={TABLE_DATA_CELL_CLASS}>
+        <StatusBadge status={row.status} />
+      </TableCell>
+    </TableRow>
+  ));
+
+  const desktopContent = isEmpty ? desktopEmptyState : desktopRows;
+
   return (
     <div>
       <h2 className="mb-4 text-[1.375rem] font-semibold text-ink">
         Commission Ledger
       </h2>
 
-      <ul className="space-y-3 lg:hidden">
-        {commissions?.items?.length === 0 ? (
-          <li className="rounded-md border border-line bg-surface px-4 py-10 text-center text-ink-muted">
-            No entries yet
-          </li>
-        ) : (
-          commissions?.items?.map((c) => (
-            <li
-              key={c.id}
-              className="rounded-md border border-line bg-surface p-4 shadow-card-hairline"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <p className="text-[0.875rem] text-ink">
-                  {new Date(c.createdAt).toLocaleDateString()}
-                </p>
-                <StatusBadge status={c.status} />
-              </div>
-              <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-[0.875rem]">
-                <div>
-                  <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
-                    Sale
-                  </dt>
-                  <dd className="font-mono text-ink">
-                    {formatInr(c.saleAmount)}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
-                    Rate
-                  </dt>
-                  <dd className="text-ink">{c.commissionRate}%</dd>
-                </div>
-                <div className="col-span-2">
-                  <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
-                    Commission
-                  </dt>
-                  <dd className="font-mono text-ink">
-                    {formatInr(c.commissionAmount)}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
-                    GST
-                  </dt>
-                  <dd className="font-mono text-ink">
-                    {formatOrDash(c.gstAmount)}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
-                    TDS
-                  </dt>
-                  <dd className="font-mono text-ink">
-                    {formatOrDash(c.tdsAmount)}{" "}
-                    <span className="text-ink-muted">
-                      ({formatTdsRate(c.tdsRatePercent)})
-                    </span>
-                  </dd>
-                </div>
-              </dl>
-            </li>
-          ))
-        )}
-      </ul>
+      <ul className="space-y-3 lg:hidden">{mobileContent}</ul>
 
       <TableScrollShell desktopOnly>
         <Table scrollContainer={false}>
@@ -132,44 +176,7 @@ export function CommissionLedgerTable({
               <TableHead className={TABLE_DATA_CELL_CLASS}>Status</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {commissions?.items?.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={8} className="text-center text-ink-muted">
-                  No entries yet
-                </TableCell>
-              </TableRow>
-            ) : (
-              commissions?.items?.map((c) => (
-                <TableRow key={c.id}>
-                  <TableCell className={cn(TABLE_DATA_CELL_CLASS, "text-body")}>
-                    {new Date(c.createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-                    {formatInr(c.saleAmount)}
-                  </TableCell>
-                  <TableCell className={TABLE_DATA_CELL_CLASS}>
-                    {c.commissionRate}%
-                  </TableCell>
-                  <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-                    {formatInr(c.commissionAmount)}
-                  </TableCell>
-                  <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-                    {formatOrDash(c.gstAmount)}
-                  </TableCell>
-                  <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-                    {formatOrDash(c.tdsAmount)}
-                  </TableCell>
-                  <TableCell className={TABLE_DATA_CELL_CLASS}>
-                    {formatTdsRate(c.tdsRatePercent)}
-                  </TableCell>
-                  <TableCell className={TABLE_DATA_CELL_CLASS}>
-                    <StatusBadge status={c.status} />
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
+          <TableBody>{desktopContent}</TableBody>
         </Table>
       </TableScrollShell>
     </div>

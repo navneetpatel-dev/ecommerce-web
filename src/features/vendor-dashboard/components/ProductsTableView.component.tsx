@@ -52,6 +52,45 @@ export function ProductsTableView({
   onSubmitForApproval,
   onManageImages,
 }: ProductsTableViewProps) {
+  const hasTotal = typeof total === "number" && total > 0;
+  const resultFrom = (page - 1) * DEFAULT_PAGE_LIMIT + 1;
+  const resultTo = hasTotal ? Math.min(page * DEFAULT_PAGE_LIMIT, total) : 0;
+
+  const actionMessageNotice = actionMessage ? (
+    <p className="mb-3 text-body-sm text-ink-muted">{actionMessage}</p>
+  ) : null;
+
+  const resultSummary = hasTotal ? (
+    <PaginationResultSummary
+      from={resultFrom}
+      to={resultTo}
+      total={total}
+      className="mb-3 text-body-sm text-ink-muted"
+    />
+  ) : null;
+
+  const tableContent = isLoading ? (
+    <SkeletonRows count={5} height="h-10 w-full" />
+  ) : (
+    <ProductsTableContent
+      products={products}
+      onEdit={onEditProduct}
+      onDelete={onDeleteProduct}
+      onSubmitForApproval={onSubmitForApproval}
+      onManageImages={onManageImages}
+      isDeleting={isDeleting}
+      isSubmitting={isSubmitting}
+    />
+  );
+
+  const pagination = totalPages ? (
+    <PaginationContainer
+      currentPage={page}
+      totalPages={totalPages}
+      onPageChange={onPageChange}
+    />
+  ) : null;
+
   return (
     <div>
       <ProductsTableHeader
@@ -59,41 +98,10 @@ export function ProductsTableView({
         onSearchChange={onSearchChange}
         onAddProduct={onAddProduct}
       />
-
-      {actionMessage ? (
-        <p className="mb-3 text-body-sm text-ink-muted">{actionMessage}</p>
-      ) : null}
-
-      {typeof total === "number" && total > 0 ? (
-        <PaginationResultSummary
-          from={(page - 1) * DEFAULT_PAGE_LIMIT + 1}
-          to={Math.min(page * DEFAULT_PAGE_LIMIT, total)}
-          total={total}
-          className="mb-3 text-body-sm text-ink-muted"
-        />
-      ) : null}
-
-      {isLoading ? (
-        <SkeletonRows count={5} height="h-10 w-full" />
-      ) : (
-        <ProductsTableContent
-          products={products}
-          onEdit={onEditProduct}
-          onDelete={onDeleteProduct}
-          onSubmitForApproval={onSubmitForApproval}
-          onManageImages={onManageImages}
-          isDeleting={isDeleting}
-          isSubmitting={isSubmitting}
-        />
-      )}
-
-      {totalPages ? (
-        <PaginationContainer
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-        />
-      ) : null}
+      {actionMessageNotice}
+      {resultSummary}
+      {tableContent}
+      {pagination}
     </div>
   );
 }

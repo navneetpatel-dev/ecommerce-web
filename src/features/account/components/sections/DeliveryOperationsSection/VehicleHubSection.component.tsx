@@ -13,6 +13,9 @@ export function VehicleHubSection({
   vehicleType,
   hubOrZone,
 }: VehicleHubSectionProps) {
+  const vehicleTypeLabel = vehicleType ?? "Not registered";
+  const hubOrZoneLabel = hubOrZone ?? "Unassigned";
+
   return (
     <section className="border border-line bg-surface shadow-elevation-1">
       <div className="border-b border-line bg-paper/55 px-5 py-4 md:px-6">
@@ -35,9 +38,7 @@ export function VehicleHubSection({
               <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
                 Vehicle Class
               </p>
-              <p className="font-medium text-ink">
-                {vehicleType ?? "Not registered"}
-              </p>
+              <p className="font-medium text-ink">{vehicleTypeLabel}</p>
             </div>
           </div>
 
@@ -49,9 +50,7 @@ export function VehicleHubSection({
               <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
                 Operating Hub / Zone
               </p>
-              <p className="font-medium text-ink">
-                {hubOrZone ?? "Unassigned"}
-              </p>
+              <p className="font-medium text-ink">{hubOrZoneLabel}</p>
             </div>
           </div>
         </div>

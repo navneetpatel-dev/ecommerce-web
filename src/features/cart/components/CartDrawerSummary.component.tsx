@@ -27,23 +27,25 @@ function CartSummaryLink({
   onClose,
   variant = "default",
 }: CartSummaryLinkProps) {
+  const linkButton = disabled ? (
+    <Button type="button" variant={variant} className="w-full" disabled>
+      {label}
+    </Button>
+  ) : (
+    <Button asChild variant={variant} className="w-full">
+      <Link href={href} onClick={onClose}>
+        {label}
+      </Link>
+    </Button>
+  );
+
   return (
     <DisabledActionHint
       disabled={disabled}
       message={LABELS.cartUpdatingActionHint}
       block
     >
-      {disabled ? (
-        <Button type="button" variant={variant} className="w-full" disabled>
-          {label}
-        </Button>
-      ) : (
-        <Button asChild variant={variant} className="w-full">
-          <Link href={href} onClick={onClose}>
-            {label}
-          </Link>
-        </Button>
-      )}
+      {linkButton}
     </DisabledActionHint>
   );
 }
@@ -85,34 +87,55 @@ export function CartDrawerSummary({
 }: CartDrawerSummaryProps) {
   const amountsPending = pendingLineTotals && !amountsUnavailable;
   const totalRefreshing = total == null || amountsPending || totalsFetching;
+  const dismissMutationError = onDismissMutationError ?? (() => undefined);
+
+  const previewElement =
+    pricingPreview || amountsPending ? (
+      <dl className="space-y-1.5 text-body-sm">
+        <div className="flex justify-between gap-3">
+          <dt className="text-ink-muted">{LABELS.subtotal}</dt>
+          <dd className="tabular-nums text-ink">
+            {amountsPending ? (
+              <InlineAmountSkeleton />
+            ) : (
+              <>₹{formatInrAmount(pricingPreview!.merchandiseSubtotal)}</>
+            )}
+          </dd>
+        </div>
+        <OrderTaxShippingBreakdown
+          className="space-y-1.5 text-body-sm"
+          pending={amountsPending}
+          shippingTotal={pricingPreview?.shippingTotal}
+          shippingDisplayKey={pricingPreview?.shippingDisplayKey}
+          taxTotal={pricingPreview?.taxTotal}
+        />
+      </dl>
+    ) : null;
+
+  const unavailableNoticeElement = amountsUnavailable ? (
+    <AmountsUnavailableNotice onRetry={onRetryAmounts} />
+  ) : null;
+
+  const checkoutActionElement = hasUnavailableItems ? (
+    <p className="rounded-sm bg-warning-subtle px-3 py-2 text-body-sm text-warning-foreground">
+      {LABELS.removeUnavailableToCheckout}
+    </p>
+  ) : (
+    <CartSummaryLink
+      href={PATHS.checkout}
+      label={LABELS.checkout}
+      disabled={isCartMutating}
+      onClose={onClose}
+    />
+  );
 
   return (
     <div className="shrink-0 space-y-3 border-t border-line p-4">
       <CartMutationError
         message={mutationError}
-        onDismiss={onDismissMutationError ?? (() => undefined)}
+        onDismiss={dismissMutationError}
       />
-      {pricingPreview || amountsPending ? (
-        <dl className="space-y-1.5 text-body-sm">
-          <div className="flex justify-between gap-3">
-            <dt className="text-ink-muted">{LABELS.subtotal}</dt>
-            <dd className="tabular-nums text-ink">
-              {amountsPending ? (
-                <InlineAmountSkeleton />
-              ) : (
-                <>₹{formatInrAmount(pricingPreview!.merchandiseSubtotal)}</>
-              )}
-            </dd>
-          </div>
-          <OrderTaxShippingBreakdown
-            className="space-y-1.5 text-body-sm"
-            pending={amountsPending}
-            shippingTotal={pricingPreview?.shippingTotal}
-            shippingDisplayKey={pricingPreview?.shippingDisplayKey}
-            taxTotal={pricingPreview?.taxTotal}
-          />
-        </dl>
-      ) : null}
+      {previewElement}
 
       <div className="flex items-center justify-between">
         <span className="text-body font-medium">{LABELS.total}</span>
@@ -126,22 +149,8 @@ export function CartDrawerSummary({
         </span>
       </div>
 
-      {amountsUnavailable ? (
-        <AmountsUnavailableNotice onRetry={onRetryAmounts} />
-      ) : null}
-
-      {hasUnavailableItems ? (
-        <p className="rounded-sm bg-warning-subtle px-3 py-2 text-body-sm text-warning-foreground">
-          {LABELS.removeUnavailableToCheckout}
-        </p>
-      ) : (
-        <CartSummaryLink
-          href={PATHS.checkout}
-          label={LABELS.checkout}
-          disabled={isCartMutating}
-          onClose={onClose}
-        />
-      )}
+      {unavailableNoticeElement}
+      {checkoutActionElement}
 
       <CartSummaryLink
         href={PATHS.cart}

@@ -79,6 +79,24 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
     ? formatOrderDate(profile.createdAt)
     : null;
   const avatarSrc = profile.avatarUrl || undefined;
+  const showCropDialog = Boolean(avatarSpec && cropSrc);
+  const cropDialog = showCropDialog ? (
+    <ImageCropDialog
+      open
+      imageSrc={cropSrc!}
+      aspectRatio={avatarSpec!.aspectRatio}
+      outputWidth={avatarSpec!.outputWidth}
+      outputHeight={avatarSpec!.outputHeight}
+      sourceFilename={cropFilename}
+      mimeType={cropMimeType}
+      onOpenChange={(open) => {
+        if (!open) onAvatarCropCancelled();
+      }}
+      onConfirm={onAvatarCropped}
+    />
+  ) : null;
+  const ordersCountLabel = isLoadingStats ? "—" : String(ordersCount);
+  const wishlistCountLabel = isLoadingStats ? "—" : String(wishlistCount);
 
   return (
     <div className="space-y-8">
@@ -93,21 +111,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
         onFileSelected={onPickFile}
       />
 
-      {avatarSpec && cropSrc ? (
-        <ImageCropDialog
-          open
-          imageSrc={cropSrc}
-          aspectRatio={avatarSpec.aspectRatio}
-          outputWidth={avatarSpec.outputWidth}
-          outputHeight={avatarSpec.outputHeight}
-          sourceFilename={cropFilename}
-          mimeType={cropMimeType}
-          onOpenChange={(open) => {
-            if (!open) onAvatarCropCancelled();
-          }}
-          onConfirm={onAvatarCropped}
-        />
-      ) : null}
+      {cropDialog}
 
       <section className="border border-line bg-surface shadow-elevation-1">
         <div className="border-b border-line px-5 py-4 md:px-6">
@@ -120,13 +124,13 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
           <GlanceRow
             icon={Package}
             label="Orders"
-            value={isLoadingStats ? "—" : String(ordersCount)}
+            value={ordersCountLabel}
             onDetails={() => onNavigate("orders")}
           />
           <GlanceRow
             icon={Heart}
             label="Wishlist"
-            value={isLoadingStats ? "—" : String(wishlistCount)}
+            value={wishlistCountLabel}
             href={PATHS.wishlist}
           />
           <GlanceRow

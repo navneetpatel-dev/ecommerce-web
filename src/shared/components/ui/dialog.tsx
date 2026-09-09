@@ -49,6 +49,33 @@ const DialogContent = React.forwardRef<
     const closedByPointerRef = React.useRef(false);
     const isFullscreen = presentation === "fullscreen";
 
+    const closeButtonElement = !hideCloseButton && (
+      <div
+        className={cn(
+          "flex shrink-0 items-center justify-end",
+          isFullscreen ? "fixed right-3 top-3 z-[60]" : "px-3 pt-2.5 pb-0.5",
+        )}
+      >
+        <DialogPrimitive.Close
+          type="button"
+          className={cn(
+            "inline-flex size-7 items-center justify-center rounded-sm text-ink-muted opacity-70 transition-all hover:bg-surface hover:text-ink hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+            isFullscreen &&
+              "rounded-full border border-line bg-surface/90 p-2 opacity-100 shadow-elevation-1 backdrop-blur-sm",
+            closeButtonClassName,
+          )}
+          onPointerDown={(event) => {
+            // Keep focus in the dialog until close so field blur doesn't flash validation.
+            event.preventDefault();
+            closedByPointerRef.current = true;
+          }}
+        >
+          <X size={18} />
+          <span className="sr-only">{LABELS.close}</span>
+        </DialogPrimitive.Close>
+      </div>
+    );
+
     return (
       <DialogPortal>
         <DialogOverlay />
@@ -88,34 +115,7 @@ const DialogContent = React.forwardRef<
             }}
             {...props}
           >
-            {!hideCloseButton && (
-              <div
-                className={cn(
-                  "flex shrink-0 items-center justify-end",
-                  isFullscreen
-                    ? "fixed right-3 top-3 z-[60]"
-                    : "px-3 pt-2.5 pb-0.5",
-                )}
-              >
-                <DialogPrimitive.Close
-                  type="button"
-                  className={cn(
-                    "inline-flex size-7 items-center justify-center rounded-sm text-ink-muted opacity-70 transition-all hover:bg-surface hover:text-ink hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-                    isFullscreen &&
-                      "rounded-full border border-line bg-surface/90 p-2 opacity-100 shadow-elevation-1 backdrop-blur-sm",
-                    closeButtonClassName,
-                  )}
-                  onPointerDown={(event) => {
-                    // Keep focus in the dialog until close so field blur doesn't flash validation.
-                    event.preventDefault();
-                    closedByPointerRef.current = true;
-                  }}
-                >
-                  <X size={18} />
-                  <span className="sr-only">{LABELS.close}</span>
-                </DialogPrimitive.Close>
-              </div>
-            )}
+            {closeButtonElement}
             <div
               className={cn(
                 "min-h-0 flex-1 flex flex-col overflow-y-auto",

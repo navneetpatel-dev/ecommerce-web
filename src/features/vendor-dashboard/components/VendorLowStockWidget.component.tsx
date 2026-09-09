@@ -29,6 +29,86 @@ export function VendorLowStockWidget() {
   const { rows, isLoading } = useVendorLowStock();
   const visible = rows.slice(0, MAX_VISIBLE_ROWS);
   const remaining = rows.length - visible.length;
+  const isEmpty = visible.length === 0;
+  const hasRemaining = remaining > 0;
+
+  const loadingState = (
+    <div className="space-y-2">
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-full" />
+    </div>
+  );
+
+  const emptyState = (
+    <p className="py-6 text-center text-body-sm text-ink-muted">
+      {vendorDashboardWidgetsLabels.vendorLowStockEmpty}
+    </p>
+  );
+
+  const tableRows = visible.map((row) => {
+    const stockClassName = row.stock <= 0 ? "text-danger" : "text-warning";
+    return (
+      <TableRow key={row.id}>
+        <TableCell className={cn(TABLE_DATA_CELL_CLASS, "text-body")}>
+          {row.productName}
+        </TableCell>
+        <TableCell
+          className={cn(
+            TABLE_DATA_CELL_CLASS,
+            "font-mono text-body-sm text-ink-muted",
+          )}
+        >
+          {row.sku}
+        </TableCell>
+        <TableCell
+          className={cn(TABLE_DATA_CELL_CLASS, "font-mono", stockClassName)}
+        >
+          {row.stock}
+        </TableCell>
+        <TableCell
+          className={cn(TABLE_DATA_CELL_CLASS, "font-mono text-ink-muted")}
+        >
+          {row.lowStockAt}
+        </TableCell>
+      </TableRow>
+    );
+  });
+
+  const remainingNotice = hasRemaining ? (
+    <p className="mt-3 text-body-sm text-ink-muted">
+      +{remaining} {vendorDashboardWidgetsLabels.vendorLowStockMoreItemsSuffix}
+    </p>
+  ) : null;
+
+  const tableState = (
+    <>
+      <TableScrollShell>
+        <Table scrollContainer={false}>
+          <TableHeader>
+            <TableRow>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>
+                {LABELS.productName}
+              </TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>
+                {LABELS.sku}
+              </TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>
+                {LABELS.stock}
+              </TableHead>
+              <TableHead className={TABLE_DATA_CELL_CLASS}>
+                {LABELS.lowStockAt}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>{tableRows}</TableBody>
+        </Table>
+      </TableScrollShell>
+      {remainingNotice}
+    </>
+  );
+
+  const content = isLoading ? loadingState : isEmpty ? emptyState : tableState;
 
   return (
     <Card>
@@ -38,84 +118,7 @@ export function VendorLowStockWidget() {
           {vendorDashboardWidgetsLabels.vendorLowStockTitle}
         </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0">
-        {isLoading ? (
-          <div className="space-y-2">
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full" />
-          </div>
-        ) : visible.length === 0 ? (
-          <p className="py-6 text-center text-body-sm text-ink-muted">
-            {vendorDashboardWidgetsLabels.vendorLowStockEmpty}
-          </p>
-        ) : (
-          <>
-            <TableScrollShell>
-              <Table scrollContainer={false}>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className={TABLE_DATA_CELL_CLASS}>
-                      {LABELS.productName}
-                    </TableHead>
-                    <TableHead className={TABLE_DATA_CELL_CLASS}>
-                      {LABELS.sku}
-                    </TableHead>
-                    <TableHead className={TABLE_DATA_CELL_CLASS}>
-                      {LABELS.stock}
-                    </TableHead>
-                    <TableHead className={TABLE_DATA_CELL_CLASS}>
-                      {LABELS.lowStockAt}
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {visible.map((row) => (
-                    <TableRow key={row.id}>
-                      <TableCell
-                        className={cn(TABLE_DATA_CELL_CLASS, "text-body")}
-                      >
-                        {row.productName}
-                      </TableCell>
-                      <TableCell
-                        className={cn(
-                          TABLE_DATA_CELL_CLASS,
-                          "font-mono text-body-sm text-ink-muted",
-                        )}
-                      >
-                        {row.sku}
-                      </TableCell>
-                      <TableCell
-                        className={cn(
-                          TABLE_DATA_CELL_CLASS,
-                          "font-mono",
-                          row.stock <= 0 ? "text-danger" : "text-warning",
-                        )}
-                      >
-                        {row.stock}
-                      </TableCell>
-                      <TableCell
-                        className={cn(
-                          TABLE_DATA_CELL_CLASS,
-                          "font-mono text-ink-muted",
-                        )}
-                      >
-                        {row.lowStockAt}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableScrollShell>
-            {remaining > 0 && (
-              <p className="mt-3 text-body-sm text-ink-muted">
-                +{remaining}{" "}
-                {vendorDashboardWidgetsLabels.vendorLowStockMoreItemsSuffix}
-              </p>
-            )}
-          </>
-        )}
-      </CardContent>
+      <CardContent className="pt-0">{content}</CardContent>
     </Card>
   );
 }

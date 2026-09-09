@@ -29,23 +29,25 @@ export function EmailVerificationStatus({
     ? LABELS.emailAlreadyVerified
     : LABELS.verificationEmailSent;
 
+  const resendControl = resend.isSuccess ? (
+    <p className="text-body-sm text-ink-muted">{message}</p>
+  ) : (
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      fullWidth="mobile"
+      loading={resend.isPending}
+      onClick={() => resend.mutate()}
+    >
+      {LABELS.resendVerificationEmail}
+    </Button>
+  );
+
   return (
     <div className="flex flex-col items-start gap-2">
       <Badge variant="outline">{LABELS.personalInfoUnverified}</Badge>
-      {resend.isSuccess ? (
-        <p className="text-body-sm text-ink-muted">{message}</p>
-      ) : (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          fullWidth="mobile"
-          loading={resend.isPending}
-          onClick={() => resend.mutate()}
-        >
-          {LABELS.resendVerificationEmail}
-        </Button>
-      )}
+      {resendControl}
       <FormError
         error={resend.error as Error | null}
         fallback={LABELS.couldNotSendVerificationEmail}

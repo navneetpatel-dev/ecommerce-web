@@ -21,6 +21,23 @@ export function AddressCard({
   onSetDefault,
   onDelete,
 }: AddressCardProps) {
+  const line2Suffix = addr.line2 ? `, ${addr.line2}` : "";
+  const defaultBadge = addr.isDefault ? (
+    <span className="mt-3 inline-block text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-brand">
+      {LABELS.addressDefault}
+    </span>
+  ) : null;
+  const setDefaultDisabled = addr.isDefault || defaulting;
+  const setDefaultButtonClassName = cn(
+    "w-full justify-center gap-1.5 transition-colors",
+    addr.isDefault
+      ? "text-brand hover:text-brand disabled:opacity-100"
+      : "text-ink-muted hover:text-brand",
+  );
+  const setDefaultLabel = addr.isDefault
+    ? LABELS.addressDefault
+    : LABELS.setDefaultShort;
+
   return (
     <li
       key={addr.id}
@@ -29,17 +46,13 @@ export function AddressCard({
       <div className="min-w-0 flex-1">
         <p className="font-medium text-ink">
           {addr.line1}
-          {addr.line2 ? `, ${addr.line2}` : ""}
+          {line2Suffix}
         </p>
         <p className="mt-1 text-[0.875rem] text-ink-muted">
           {addr.city}, {addr.state} {addr.pincode}
         </p>
         <p className="mt-0.5 text-body-sm text-ink-muted">{addr.country}</p>
-        {addr.isDefault ? (
-          <span className="mt-3 inline-block text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-brand">
-            {LABELS.addressDefault}
-          </span>
-        ) : null}
+        {defaultBadge}
       </div>
       <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-3">
         <Button
@@ -56,18 +69,13 @@ export function AddressCard({
           type="button"
           variant="ghost"
           size="sm"
-          disabled={addr.isDefault || defaulting}
-          className={cn(
-            "w-full justify-center gap-1.5 transition-colors",
-            addr.isDefault
-              ? "text-brand hover:text-brand disabled:opacity-100"
-              : "text-ink-muted hover:text-brand",
-          )}
+          disabled={setDefaultDisabled}
+          className={setDefaultButtonClassName}
           loading={defaulting}
           onClick={() => onSetDefault(addr)}
         >
           <Star size={14} />
-          {addr.isDefault ? LABELS.addressDefault : LABELS.setDefaultShort}
+          {setDefaultLabel}
         </Button>
         <Button
           type="button"

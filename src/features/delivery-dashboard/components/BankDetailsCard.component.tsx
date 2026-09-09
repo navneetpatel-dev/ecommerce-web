@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Landmark } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -23,14 +23,18 @@ export function BankDetailsCard({
 }: {
   bankDetails?: BankDetails | null;
 }) {
+  const [prevBankDetails, setPrevBankDetails] = useState(bankDetails);
   const [form, setForm] = useState<BankDetails>(bankDetails ?? EMPTY);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const update = useUpdateBankDetails();
 
-  useEffect(() => {
-    if (bankDetails) setForm(bankDetails);
-  }, [bankDetails]);
+  if (bankDetails !== prevBankDetails) {
+    setPrevBankDetails(bankDetails);
+    if (bankDetails) {
+      setForm(bankDetails);
+    }
+  }
 
   const setField = <K extends keyof BankDetails>(
     field: K,
@@ -44,6 +48,8 @@ export function BankDetailsCard({
     form.accountHolderName.trim().length > 0 &&
     form.accountNumber.trim().length >= 4 &&
     /^[A-Za-z]{4}0[A-Za-z0-9]{6}$/.test(form.ifscCode.trim());
+  const saveDisabled = !canSave;
+  const upiIdValue = form.upiId ?? "";
 
   const save = async () => {
     setError(null);
@@ -103,7 +109,7 @@ export function BankDetailsCard({
           </FormFieldFrame>
           <FormFieldFrame label="UPI ID (optional)">
             <Input
-              value={form.upiId ?? ""}
+              value={upiIdValue}
               onChange={(e) => setField("upiId", e.target.value)}
               placeholder="name@bank"
               maxLength={120}
@@ -118,7 +124,7 @@ export function BankDetailsCard({
         ) : null}
         <Button
           className="mt-4"
-          disabled={!canSave}
+          disabled={saveDisabled}
           loading={update.isPending}
           onClick={() => void save()}
         >

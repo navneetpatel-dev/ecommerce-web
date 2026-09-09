@@ -44,6 +44,31 @@ export function AttributeFormFields({
   onReset,
   onSave,
 }: AttributeFormFieldsProps) {
+  const isEditing = Boolean(editingId);
+  const isBooleanType = type === CATEGORY_ATTRIBUTE_TYPE.BOOLEAN;
+  const nameIsBlank = !name.trim();
+  const saveDisabled = loading || nameIsBlank;
+  const saveLabel = isEditing
+    ? LABELS.saveCategoryAttribute
+    : LABELS.addCategoryAttribute;
+
+  const optionsField = isBooleanType ? null : (
+    <FormFieldFrame label={LABELS.attributeOptions}>
+      <Input
+        value={options}
+        onChange={(e) => onOptionsChange(e.target.value)}
+      />
+    </FormFieldFrame>
+  );
+  const errorMessage = error ? (
+    <p className="text-body-sm text-danger">{error}</p>
+  ) : null;
+  const cancelButton = isEditing ? (
+    <Button variant="secondary" disabled={loading} onClick={onReset}>
+      {LABELS.cancelEditAttribute}
+    </Button>
+  ) : null;
+
   return (
     <FormSection
       title={LABELS.attributeFormSection}
@@ -55,11 +80,7 @@ export function AttributeFormFields({
         <Input value={name} onChange={(e) => onNameChange(e.target.value)} />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.attributeType}>
-        <Select
-          value={type}
-          onValueChange={onTypeChange}
-          disabled={Boolean(editingId)}
-        >
+        <Select value={type} onValueChange={onTypeChange} disabled={isEditing}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -76,25 +97,12 @@ export function AttributeFormFields({
           </SelectContent>
         </Select>
       </FormFieldFrame>
-      {type !== CATEGORY_ATTRIBUTE_TYPE.BOOLEAN ? (
-        <FormFieldFrame label={LABELS.attributeOptions}>
-          <Input
-            value={options}
-            onChange={(e) => onOptionsChange(e.target.value)}
-          />
-        </FormFieldFrame>
-      ) : null}
-      {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+      {optionsField}
+      {errorMessage}
       <FormActions>
-        {editingId ? (
-          <Button variant="secondary" disabled={loading} onClick={onReset}>
-            {LABELS.cancelEditAttribute}
-          </Button>
-        ) : null}
-        <Button disabled={loading || !name.trim()} onClick={onSave}>
-          {editingId
-            ? LABELS.saveCategoryAttribute
-            : LABELS.addCategoryAttribute}
+        {cancelButton}
+        <Button disabled={saveDisabled} onClick={onSave}>
+          {saveLabel}
         </Button>
       </FormActions>
     </FormSection>

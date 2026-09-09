@@ -35,11 +35,12 @@ export default async function CategoryPlpRoute({ params }: Props) {
   const category = await resolveCategoryBySlugServer(slug);
   if (!category) notFound();
 
+  const breadcrumbTrail = buildCategoryBreadcrumbTrail(category);
+  const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbTrail);
+
   return (
     <>
-      <JsonLd
-        data={generateBreadcrumbSchema(buildCategoryBreadcrumbTrail(category))}
-      />
+      <JsonLd data={breadcrumbSchema} />
       <CategoryPlpPage slugPath={slug} />
     </>
   );

@@ -62,9 +62,12 @@ export function useReportExport(
     [buildFilters, reportType],
   );
 
+  const exporting = exportingFormat !== null;
+  const controls = deriveExportControlsState(exportingFormat);
+
   return {
-    exporting: exportingFormat !== null,
-    ...deriveExportControlsState(exportingFormat),
+    exporting,
+    ...controls,
     message,
     error,
     exportExcel: () => runExport("xlsx"),

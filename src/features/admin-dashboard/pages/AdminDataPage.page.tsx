@@ -34,11 +34,12 @@ export function AdminDataPage({
     [load],
   );
   const list = useAdminDataList(stableLoad);
+  const displayTitle = hideTitle ? "" : title;
 
   return (
     <RequirePermission permission={permission}>
       <AdminDataListView
-        title={hideTitle ? "" : title}
+        title={displayTitle}
         rows={list.rows}
         loading={list.loading}
         error={list.error}

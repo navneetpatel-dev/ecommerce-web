@@ -15,14 +15,18 @@ import { TABLE_DATA_CELL_CLASS } from "@/shared/constants/table";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
 import { formatInr } from "@/shared/utils/orderFormat";
-import type { CommissionInvoiceEntry } from "@/features/admin-dashboard/api/finance.api";
-import { commissionsApi } from "@/features/admin-dashboard/api/finance.api";
+import {
+  commissionsApi,
+  type CommissionInvoiceEntry,
+} from "@/features/admin-dashboard";
 
 interface CommissionInvoicesTableProps {
   invoices: CommissionInvoiceEntry[];
 }
 
-export function CommissionInvoicesTable({ invoices }: CommissionInvoicesTableProps) {
+export function CommissionInvoicesTable({
+  invoices,
+}: CommissionInvoicesTableProps) {
   const [pendingId, setPendingId] = useState<string | null>(null);
 
   const download = async (id: string) => {
@@ -51,7 +55,9 @@ export function CommissionInvoicesTable({ invoices }: CommissionInvoicesTablePro
               key={invoice.id}
               className="rounded-md border border-line bg-surface p-4 shadow-card-hairline"
             >
-              <p className="font-mono text-[0.875rem] text-ink">{invoice.number}</p>
+              <p className="font-mono text-[0.875rem] text-ink">
+                {invoice.number}
+              </p>
               <p className="mt-1 text-[0.875rem] text-ink-muted">
                 {new Date(invoice.issuedAt).toLocaleDateString()}
               </p>

@@ -22,6 +22,7 @@ export function ProductRow(props: ProductRowActionsProps) {
     isSubmitting,
   } = props;
   const lowStock = product.stock <= product.lowStockAt;
+  const stockClassName = lowStock ? "text-danger font-medium" : "";
 
   return (
     <TableRow>
@@ -34,9 +35,7 @@ export function ProductRow(props: ProductRowActionsProps) {
         {product.sku}
       </TableCell>
       <TableCell className={TABLE_DATA_CELL_CLASS}>
-        <span className={lowStock ? "text-danger font-medium" : ""}>
-          {product.stock}
-        </span>
+        <span className={stockClassName}>{product.stock}</span>
       </TableCell>
       <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
         ₹{product.basePrice}

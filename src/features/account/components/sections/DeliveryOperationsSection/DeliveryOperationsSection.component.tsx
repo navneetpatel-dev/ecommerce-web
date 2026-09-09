@@ -39,6 +39,7 @@ export function DeliveryOperationsSection() {
   const isBike =
     agent?.vehicleType === "BIKE" || agent?.vehicleType === "SCOOTER";
   const VehicleIcon = isBike ? Bike : Truck;
+  const hasAgent = Boolean(agent);
 
   return (
     <div className="space-y-6">
@@ -47,7 +48,7 @@ export function DeliveryOperationsSection() {
         <div className="space-y-6">
           <AvailabilityToggleSection
             availableForAssignment={agent?.availableForAssignment}
-            hasAgent={Boolean(agent)}
+            hasAgent={hasAgent}
             availability={availability}
           />
 

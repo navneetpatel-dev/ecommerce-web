@@ -39,6 +39,10 @@ export function InfiniteLoadMore({
 
   if (!hasNextPage) return null;
 
+  const loadMoreLabel = isFetchingNextPage
+    ? LABELS.loadingMore
+    : LABELS.loadMore;
+
   return (
     <div className="flex flex-col items-center gap-3 border-t border-line/70 pt-4">
       <div ref={sentinelRef} className="h-1 w-full" aria-hidden />
@@ -48,7 +52,7 @@ export function InfiniteLoadMore({
         loading={isFetchingNextPage}
         onClick={onLoadMore}
       >
-        {isFetchingNextPage ? LABELS.loadingMore : LABELS.loadMore}
+        {loadMoreLabel}
       </Button>
     </div>
   );

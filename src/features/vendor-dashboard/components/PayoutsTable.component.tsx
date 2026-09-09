@@ -18,8 +18,85 @@ interface PayoutsTableProps {
   payouts?: { items?: PayoutEntry[] };
 }
 
+function formatPayoutPeriod(payout: PayoutEntry): string {
+  const start = new Date(payout.periodStart).toLocaleDateString();
+  const end = new Date(payout.periodEnd).toLocaleDateString();
+  return `${start} – ${end}`;
+}
+
+function formatPayoutDetails(payout: PayoutEntry): string {
+  if (payout.status === "PAID" && payout.paymentReferenceNumber) {
+    const method = payout.paymentMethod ?? "Transfer";
+    return `${method} · ${payout.paymentReferenceNumber}`;
+  }
+  if (payout.status === "FAILED" && payout.failureReason) {
+    return payout.failureReason;
+  }
+  return "—";
+}
+
 export function PayoutsTable({ payouts }: PayoutsTableProps) {
   const items = payouts?.items ?? [];
+  const isEmpty = items.length === 0;
+
+  const rows = items.map((payout) => ({
+    id: payout.id,
+    status: payout.status,
+    periodLabel: formatPayoutPeriod(payout),
+    amountLabel: formatInr(payout.amount),
+    detailsLabel: formatPayoutDetails(payout),
+  }));
+
+  const mobileEmptyState = (
+    <li className="rounded-md border border-line bg-surface px-4 py-10 text-center text-ink-muted">
+      {LABELS.noPayoutsYet}
+    </li>
+  );
+
+  const mobileRows = rows.map((row) => (
+    <li
+      key={row.id}
+      className="rounded-md border border-line bg-surface p-4 shadow-card-hairline"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-[0.875rem] text-ink">{row.periodLabel}</p>
+        <StatusBadge status={row.status} />
+      </div>
+      <p className="mt-2 font-mono text-[1rem] text-ink">{row.amountLabel}</p>
+      <p className="mt-2 text-body-sm text-ink-muted">{row.detailsLabel}</p>
+    </li>
+  ));
+
+  const mobileContent = isEmpty ? mobileEmptyState : mobileRows;
+
+  const desktopEmptyState = (
+    <TableRow>
+      <TableCell colSpan={4} className="text-center text-ink-muted">
+        {LABELS.noPayoutsYet}
+      </TableCell>
+    </TableRow>
+  );
+
+  const desktopRows = rows.map((row) => (
+    <TableRow key={row.id}>
+      <TableCell className={cn(TABLE_DATA_CELL_CLASS, "text-body")}>
+        {row.periodLabel}
+      </TableCell>
+      <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
+        {row.amountLabel}
+      </TableCell>
+      <TableCell className={TABLE_DATA_CELL_CLASS}>
+        <StatusBadge status={row.status} />
+      </TableCell>
+      <TableCell
+        className={cn(TABLE_DATA_CELL_CLASS, "text-body-sm text-ink-muted")}
+      >
+        {row.detailsLabel}
+      </TableCell>
+    </TableRow>
+  ));
+
+  const desktopContent = isEmpty ? desktopEmptyState : desktopRows;
 
   return (
     <div>
@@ -27,38 +104,7 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
         {LABELS.payouts}
       </h2>
 
-      <ul className="space-y-3 lg:hidden">
-        {items.length === 0 ? (
-          <li className="rounded-md border border-line bg-surface px-4 py-10 text-center text-ink-muted">
-            {LABELS.noPayoutsYet}
-          </li>
-        ) : (
-          items.map((payout) => (
-            <li
-              key={payout.id}
-              className="rounded-md border border-line bg-surface p-4 shadow-card-hairline"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <p className="text-[0.875rem] text-ink">
-                  {new Date(payout.periodStart).toLocaleDateString()} –{" "}
-                  {new Date(payout.periodEnd).toLocaleDateString()}
-                </p>
-                <StatusBadge status={payout.status} />
-              </div>
-              <p className="mt-2 font-mono text-[1rem] text-ink">
-                {formatInr(payout.amount)}
-              </p>
-              <p className="mt-2 text-body-sm text-ink-muted">
-                {payout.status === "PAID" && payout.paymentReferenceNumber
-                  ? `${payout.paymentMethod ?? "Transfer"} · ${payout.paymentReferenceNumber}`
-                  : payout.status === "FAILED" && payout.failureReason
-                    ? payout.failureReason
-                    : "—"}
-              </p>
-            </li>
-          ))
-        )}
-      </ul>
+      <ul className="space-y-3 lg:hidden">{mobileContent}</ul>
 
       <TableScrollShell desktopOnly>
         <Table scrollContainer={false}>
@@ -78,42 +124,7 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
               </TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {items.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4} className="text-center text-ink-muted">
-                  {LABELS.noPayoutsYet}
-                </TableCell>
-              </TableRow>
-            ) : (
-              items.map((payout) => (
-                <TableRow key={payout.id}>
-                  <TableCell className={cn(TABLE_DATA_CELL_CLASS, "text-body")}>
-                    {new Date(payout.periodStart).toLocaleDateString()} –{" "}
-                    {new Date(payout.periodEnd).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-                    {formatInr(payout.amount)}
-                  </TableCell>
-                  <TableCell className={TABLE_DATA_CELL_CLASS}>
-                    <StatusBadge status={payout.status} />
-                  </TableCell>
-                  <TableCell
-                    className={cn(
-                      TABLE_DATA_CELL_CLASS,
-                      "text-body-sm text-ink-muted",
-                    )}
-                  >
-                    {payout.status === "PAID" && payout.paymentReferenceNumber
-                      ? `${payout.paymentMethod ?? "Transfer"} · ${payout.paymentReferenceNumber}`
-                      : payout.status === "FAILED" && payout.failureReason
-                        ? payout.failureReason
-                        : "—"}
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
+          <TableBody>{desktopContent}</TableBody>
         </Table>
       </TableScrollShell>
     </div>

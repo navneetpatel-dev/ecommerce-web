@@ -10,6 +10,11 @@ interface PushNotificationsSectionProps {
 export function PushNotificationsSection({
   push,
 }: PushNotificationsSectionProps) {
+  const errorNotice = push.error ? (
+    <p className="mt-1 text-body-sm text-danger">{push.error}</p>
+  ) : null;
+  const switchDisabled = !push.supported || push.pending;
+
   return (
     <section className="border border-line bg-surface shadow-elevation-1">
       <div className="border-b border-line bg-paper/55 px-5 py-4 md:px-6">
@@ -37,16 +42,14 @@ export function PushNotificationsSection({
                 Receive audible alerts and task updates directly in your browser
                 or device lockscreen.
               </p>
-              {push.error ? (
-                <p className="mt-1 text-body-sm text-danger">{push.error}</p>
-              ) : null}
+              {errorNotice}
             </div>
           </div>
 
           <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
             <Switch
               checked={push.enabled}
-              disabled={!push.supported || push.pending}
+              disabled={switchDisabled}
               onCheckedChange={(checked) => void push.toggle(checked)}
             />
           </div>

@@ -35,6 +35,20 @@ export function AttributesSortableList({
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
   );
   const ids = rows.map((row) => row.id);
+  const isEmpty = rows.length === 0;
+  const rowElements = rows.map((row) => (
+    <SortableAttributeRow
+      key={row.id}
+      row={row}
+      disabled={loading}
+      onEdit={() => onEdit(row)}
+      onDelete={() => onDelete(row.id)}
+    />
+  ));
+  const emptyRow = (
+    <li className="text-[0.875rem] text-ink-muted">{LABELS.noRecordsFound}</li>
+  );
+  const listContent = isEmpty ? emptyRow : rowElements;
 
   return (
     <DndContext
@@ -44,21 +58,7 @@ export function AttributesSortableList({
     >
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
         <ul className="max-h-48 space-y-2 overflow-y-auto rounded-md border border-line p-3">
-          {rows.length === 0 ? (
-            <li className="text-[0.875rem] text-ink-muted">
-              {LABELS.noRecordsFound}
-            </li>
-          ) : (
-            rows.map((row) => (
-              <SortableAttributeRow
-                key={row.id}
-                row={row}
-                disabled={loading}
-                onEdit={() => onEdit(row)}
-                onDelete={() => onDelete(row.id)}
-              />
-            ))
-          )}
+          {listContent}
         </ul>
       </SortableContext>
     </DndContext>

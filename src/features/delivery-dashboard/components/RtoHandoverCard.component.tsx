@@ -25,6 +25,15 @@ export function RtoHandoverCard({
   expiresInMinutes,
   onRequestCode,
 }: RtoHandoverCardProps) {
+  const codeSentNotice =
+    requestCodeSuccess && expiresInMinutes ? (
+      <p className="text-body-sm text-success">
+        Code sent to the vendor. Expires in {expiresInMinutes} minutes.
+      </p>
+    ) : null;
+  const otpDigitCount = otpCode.length;
+  const confirmDisabled = otpCode.length !== 6;
+
   return (
     <div className="border border-line bg-surface shadow-elevation-1">
       <div className="flex items-center justify-between border-b border-line bg-paper/55 px-5 py-3.5">
@@ -63,11 +72,7 @@ export function RtoHandoverCard({
               Send handover code
             </Button>
           </div>
-          {requestCodeSuccess && expiresInMinutes ? (
-            <p className="text-body-sm text-success">
-              Code sent to the vendor. Expires in {expiresInMinutes} minutes.
-            </p>
-          ) : null}
+          {codeSentNotice}
           <div className="flex items-center gap-3">
             <Input
               inputMode="numeric"
@@ -80,7 +85,7 @@ export function RtoHandoverCard({
               }
             />
             <span className="text-caption text-ink-muted">
-              {otpCode.length}/6 digits
+              {otpDigitCount}/6 digits
             </span>
           </div>
         </div>
@@ -88,7 +93,7 @@ export function RtoHandoverCard({
         <Button
           className="w-full"
           size="lg"
-          disabled={otpCode.length !== 6}
+          disabled={confirmDisabled}
           loading={confirmPending}
           onClick={onConfirm}
         >

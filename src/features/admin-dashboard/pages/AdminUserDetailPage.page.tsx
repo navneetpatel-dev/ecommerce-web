@@ -11,7 +11,6 @@ import { Button } from "@/shared/components/ui/button";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";
-import { formatInr } from "@/shared/utils/orderFormat";
 import { formatOrderDate } from "@/shared/utils/orderFormat";
 import {
   useAdminUser,
@@ -20,6 +19,8 @@ import {
 } from "../api/users.queries";
 import { ImpersonateUserButton } from "../components/ImpersonateUserButton.component";
 import { ChangeUserRoleDialog } from "../components/ChangeUserRoleDialog.component";
+import { UserAddressesCard } from "./UserAddressesCard.component";
+import { UserRecentOrdersCard } from "./UserRecentOrdersCard.component";
 
 export function AdminUserDetailPage() {
   return (
@@ -56,6 +57,31 @@ function AdminUserDetailContent() {
   const addresses = addressesQuery.data ?? [];
   const orders = ordersQuery.data?.items ?? [];
 
+  const userPhoneDisplay = user.phone ?? "—";
+  const statusBadgeElement = user.status ? (
+    <StatusBadge status={user.status} />
+  ) : null;
+
+  const createdAtRow = user.createdAt ? (
+    <>
+      <dt className="text-ink-muted">{LABELS.createdAt}</dt>
+      <dd className="text-ink">{formatOrderDate(user.createdAt)}</dd>
+    </>
+  ) : null;
+
+  const linkedVendorRow = user.vendorId ? (
+    <>
+      <dt className="text-ink-muted">{adminEntityDetailLabels.linkedVendor}</dt>
+      <dd>
+        <Button size="sm" variant="outline" asChild>
+          <Link href={`/admin/vendors/${user.vendorId}`}>
+            {adminEntityDetailLabels.viewVendor}
+          </Link>
+        </Button>
+      </dd>
+    </>
+  ) : null;
+
   return (
     <div className="w-full min-w-0 space-y-5">
       <Link
@@ -73,7 +99,7 @@ function AdminUserDetailContent() {
           </h1>
           <p className="text-body-sm text-ink-muted">{user.email}</p>
         </div>
-        {user.status ? <StatusBadge status={user.status} /> : null}
+        {statusBadgeElement}
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
@@ -111,86 +137,16 @@ function AdminUserDetailContent() {
               />
             </dd>
             <dt className="text-ink-muted">{LABELS.phone}</dt>
-            <dd className="text-ink">{user.phone ?? "—"}</dd>
-            {user.createdAt ? (
-              <>
-                <dt className="text-ink-muted">{LABELS.createdAt}</dt>
-                <dd className="text-ink">{formatOrderDate(user.createdAt)}</dd>
-              </>
-            ) : null}
-            {user.vendorId ? (
-              <>
-                <dt className="text-ink-muted">
-                  {adminEntityDetailLabels.linkedVendor}
-                </dt>
-                <dd>
-                  <Button size="sm" variant="outline" asChild>
-                    <Link href={`/admin/vendors/${user.vendorId}`}>
-                      {adminEntityDetailLabels.viewVendor}
-                    </Link>
-                  </Button>
-                </dd>
-              </>
-            ) : null}
+            <dd className="text-ink">{userPhoneDisplay}</dd>
+            {createdAtRow}
+            {linkedVendorRow}
           </dl>
         </section>
 
-        <section className="space-y-3 border border-line bg-surface-raised p-4">
-          <h2 className="text-body-sm font-semibold uppercase tracking-wide text-ink-muted">
-            {adminEntityDetailLabels.addressesOnFile}
-          </h2>
-          {addresses.length === 0 ? (
-            <p className="text-body-sm text-ink-muted">
-              {adminEntityDetailLabels.noAddressesOnFile}
-            </p>
-          ) : (
-            <ul className="space-y-3">
-              {addresses.map((address) => (
-                <li key={address.id} className="text-body-sm text-ink">
-                  <p>{address.line1}</p>
-                  {address.line2 ? <p>{address.line2}</p> : null}
-                  <p className="text-ink-muted">
-                    {address.city}, {address.state} {address.pincode}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+        <UserAddressesCard addresses={addresses} />
       </div>
 
-      <section className="space-y-3 border border-line bg-surface-raised p-4">
-        <h2 className="text-body-sm font-semibold uppercase tracking-wide text-ink-muted">
-          {adminEntityDetailLabels.recentOrders}
-        </h2>
-        {orders.length === 0 ? (
-          <p className="text-body-sm text-ink-muted">
-            {adminEntityDetailLabels.noOrdersYet}
-          </p>
-        ) : (
-          <ul className="divide-y divide-line">
-            {orders.map((order) => (
-              <li
-                key={order.id}
-                className="flex flex-wrap items-center justify-between gap-3 py-3 text-body-sm"
-              >
-                <div className="min-w-0">
-                  <p className="font-medium text-ink">
-                    {order.id.slice(0, 8).toUpperCase()}
-                  </p>
-                  <p className="text-ink-muted">
-                    {formatOrderDate(order.createdAt)}
-                  </p>
-                </div>
-                <p className="tabular-nums text-ink">
-                  {formatInr(order.totalAmount)}
-                </p>
-                <StatusBadge status={order.status} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      <UserRecentOrdersCard orders={orders} />
     </div>
   );
 }

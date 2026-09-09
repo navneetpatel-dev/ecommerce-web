@@ -116,6 +116,9 @@ export function CartPageView({
     );
   }
 
+  const clearCartDisabled = isCartMutating && !isClearing;
+  const mutationErrorMessage = mutationError ?? null;
+
   return (
     <div className="relative">
       <div
@@ -142,12 +145,12 @@ export function CartPageView({
           <ClearCartAction
             onClear={onClearCart}
             isClearing={isClearing}
-            disabled={isCartMutating && !isClearing}
+            disabled={clearCartDisabled}
           />
         </motion.header>
 
         <CartMutationError
-          message={mutationError ?? null}
+          message={mutationErrorMessage}
           onDismiss={onDismissMutationError}
           className="mt-4"
         />

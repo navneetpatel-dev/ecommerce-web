@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/shared/utils/cn";
 
@@ -62,55 +62,56 @@ export function CartCountBadge({
   alwaysShow = false,
   placement = "header",
 }: CartCountBadgeProps) {
-  const prevCount = useRef(count);
+  const [prevCount, setPrevCount] = useState(count);
   const [pulseKey, setPulseKey] = useState(0);
   const visible = alwaysShow || count > 0;
   const display = label ?? (count > 99 ? "99+" : String(count));
 
-  useEffect(() => {
-    if (count === prevCount.current) return;
-    prevCount.current = count;
-    if (visible) setPulseKey((k) => k + 1);
-  }, [count, visible]);
+  if (count !== prevCount) {
+    setPrevCount(count);
+    if (visible) {
+      setPulseKey((k) => k + 1);
+    }
+  }
+
+  const pulseAnimate = pulseKey === 0 ? { scale: 1 } : { scale: [1, 1.28, 1] };
+  const badgeElement = visible && (
+    <motion.span
+      key="cart-badge"
+      initial={{ scale: 0.5, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.5, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 520, damping: 22 }}
+      className={cn(
+        "pointer-events-none absolute z-[1] leading-none",
+        placement === "tab" && "right-0 top-0",
+        placement === "header" && "-right-2.5 -top-2",
+        placement === "header-wide" &&
+          "right-0 top-0 translate-x-[55%] -translate-y-[45%]",
+        className,
+      )}
+    >
+      <motion.span
+        key={pulseKey}
+        initial={{ scale: 1 }}
+        animate={pulseAnimate}
+        transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}
+        className={cn(
+          "flex items-center justify-center whitespace-nowrap rounded-full bg-brand font-mono font-medium leading-none text-paper tabular-nums",
+          placement === "header" && "shadow-[0_0_0_1px_rgba(0,0,0,0.28)]",
+          size === "sm"
+            ? "h-4 min-w-4 px-0.5 text-[0.5625rem]"
+            : placement === "header-wide"
+              ? "h-[0.9375rem] min-w-[0.9375rem] px-1 text-[0.5625rem]"
+              : "h-4 min-w-4 px-1 text-[0.625rem]",
+        )}
+      >
+        {display}
+      </motion.span>
+    </motion.span>
+  );
 
   return (
-    <AnimatePresence initial={!alwaysShow}>
-      {visible && (
-        <motion.span
-          key="cart-badge"
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.5, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 520, damping: 22 }}
-          className={cn(
-            "pointer-events-none absolute z-[1] leading-none",
-            placement === "tab" && "right-0 top-0",
-            placement === "header" && "-right-2.5 -top-2",
-            placement === "header-wide" &&
-              "right-0 top-0 translate-x-[55%] -translate-y-[45%]",
-            className,
-          )}
-        >
-          <motion.span
-            key={pulseKey}
-            initial={{ scale: 1 }}
-            animate={pulseKey === 0 ? { scale: 1 } : { scale: [1, 1.28, 1] }}
-            transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}
-            className={cn(
-              "flex items-center justify-center whitespace-nowrap rounded-full bg-brand font-mono font-medium leading-none text-paper tabular-nums",
-              placement === "header" &&
-                "shadow-[0_0_0_1px_rgba(0,0,0,0.28)]",
-              size === "sm"
-                ? "h-4 min-w-4 px-0.5 text-[0.5625rem]"
-                : placement === "header-wide"
-                  ? "h-[0.9375rem] min-w-[0.9375rem] px-1 text-[0.5625rem]"
-                  : "h-4 min-w-4 px-1 text-[0.625rem]",
-            )}
-          >
-            {display}
-          </motion.span>
-        </motion.span>
-      )}
-    </AnimatePresence>
+    <AnimatePresence initial={!alwaysShow}>{badgeElement}</AnimatePresence>
   );
 }

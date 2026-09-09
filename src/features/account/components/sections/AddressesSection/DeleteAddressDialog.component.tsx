@@ -17,9 +17,11 @@ export function DeleteAddressDialog({
   onClose,
   onConfirm,
 }: DeleteAddressDialogProps) {
+  const open = Boolean(target);
+
   return (
     <StatusDialog
-      open={Boolean(target)}
+      open={open}
       onOpenChange={(open) => {
         if (!open) onClose();
       }}

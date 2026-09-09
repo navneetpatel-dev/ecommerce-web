@@ -37,22 +37,70 @@ export function FullCartLine(props: FullCartLineProps) {
   const linePending = hasPendingCartLineSubtotal(item);
   const lineTotal = resolveCartLineDisplaySubtotal(item);
   const mobileEachPrice = `${eachPriceCopy(item)}`;
+  const imageLinkTabIndex = available ? undefined : -1;
 
   const handleQuantityChange = (quantity: number) => {
     onUpdateQuantity(item.id, quantity);
   };
 
+  const rootClassName = cn(
+    "group grid grid-cols-[4.5rem_1fr] gap-3 py-3.5 sm:grid-cols-[5.5rem_1fr_auto] sm:gap-4",
+    !available && "opacity-50 grayscale",
+  );
+
+  const attrsElement = attrs ? (
+    <p className="mt-0.5 font-mono text-[0.6875rem] tracking-wide text-ink-muted">
+      {attrs}
+    </p>
+  ) : null;
+
+  const availabilityElement = available ? (
+    <p className="mt-1 text-body-sm text-ink-muted sm:hidden">
+      ₹{formatInrAmount(Number(item.product.price))} {LABELS.each}
+    </p>
+  ) : (
+    <Badge variant="destructive" className="mt-1 text-[0.6875rem]">
+      {unavailableLabel(item.unavailableReason)}
+    </Badge>
+  );
+
+  const quantityElement = available ? (
+    <QuantitySelector
+      value={item.quantity}
+      onChange={handleQuantityChange}
+      min={1}
+      max={item.maxQuantity ?? MAX_CART_LINE_QUANTITY}
+      disabled={disabled}
+      disabledHint={LABELS.cartUpdatingActionHint}
+      controlClassName="h-8 w-8 min-h-8 max-h-8 sm:h-9 sm:w-9 sm:min-h-9 sm:max-h-9 lg:h-10 lg:w-10 lg:min-h-10 lg:max-h-10"
+      valueClassName="h-4 w-5 text-[0.75rem] sm:h-5 sm:w-6 sm:text-body-sm"
+    />
+  ) : null;
+
+  const lineAmountElement =
+    linePending || lineTotal == null ? (
+      <InlineAmountSkeleton className="h-4 w-20" />
+    ) : (
+      <p className="font-display text-[1.125rem] tabular-nums text-ink">
+        ₹{formatInrAmount(lineTotal)}
+      </p>
+    );
+
+  const amountSectionElement = available ? (
+    <div className="hidden flex-col items-end justify-start gap-1 pt-0.5 sm:flex">
+      {lineAmountElement}
+      <p className="text-[0.75rem] text-ink-muted">{mobileEachPrice}</p>
+    </div>
+  ) : (
+    <div className="hidden sm:block" />
+  );
+
   return (
-    <li
-      className={cn(
-        "group grid grid-cols-[4.5rem_1fr] gap-3 py-3.5 sm:grid-cols-[5.5rem_1fr_auto] sm:gap-4",
-        !available && "opacity-50 grayscale",
-      )}
-    >
+    <li className={rootClassName}>
       <Link
         href={PATHS.product(item.product.slug)}
         className="relative aspect-square self-end overflow-hidden rounded-sm border border-line bg-paper"
-        tabIndex={available ? undefined : -1}
+        tabIndex={imageLinkTabIndex}
       >
         <MediaImage
           src={item.product.imageUrl}
@@ -71,20 +119,8 @@ export function FullCartLine(props: FullCartLineProps) {
             >
               {item.product.name}
             </Link>
-            {attrs ? (
-              <p className="mt-0.5 font-mono text-[0.6875rem] tracking-wide text-ink-muted">
-                {attrs}
-              </p>
-            ) : null}
-            {!available ? (
-              <Badge variant="destructive" className="mt-1 text-[0.6875rem]">
-                {unavailableLabel(item.unavailableReason)}
-              </Badge>
-            ) : (
-              <p className="mt-1 text-body-sm text-ink-muted sm:hidden">
-                ₹{formatInrAmount(Number(item.product.price))} {LABELS.each}
-              </p>
-            )}
+            {attrsElement}
+            {availabilityElement}
           </div>
           <RemoveCartItemAction
             item={item}
@@ -95,18 +131,7 @@ export function FullCartLine(props: FullCartLineProps) {
         </div>
 
         <div className="flex min-w-0 flex-wrap items-center gap-3">
-          {available ? (
-            <QuantitySelector
-              value={item.quantity}
-              onChange={handleQuantityChange}
-              min={1}
-              max={item.maxQuantity ?? MAX_CART_LINE_QUANTITY}
-              disabled={disabled}
-              disabledHint={LABELS.cartUpdatingActionHint}
-              controlClassName="h-8 w-8 min-h-8 max-h-8 sm:h-9 sm:w-9 sm:min-h-9 sm:max-h-9 lg:h-10 lg:w-10 lg:min-h-10 lg:max-h-10"
-              valueClassName="h-4 w-5 text-[0.75rem] sm:h-5 sm:w-6 sm:text-body-sm"
-            />
-          ) : null}
+          {quantityElement}
           <RemoveCartItemAction
             item={item}
             display="label"
@@ -117,20 +142,7 @@ export function FullCartLine(props: FullCartLineProps) {
         </div>
       </div>
 
-      {available ? (
-        <div className="hidden flex-col items-end justify-start gap-1 pt-0.5 sm:flex">
-          {linePending || lineTotal == null ? (
-            <InlineAmountSkeleton className="h-4 w-20" />
-          ) : (
-            <p className="font-display text-[1.125rem] tabular-nums text-ink">
-              ₹{formatInrAmount(lineTotal)}
-            </p>
-          )}
-          <p className="text-[0.75rem] text-ink-muted">{mobileEachPrice}</p>
-        </div>
-      ) : (
-        <div className="hidden sm:block" />
-      )}
+      {amountSectionElement}
     </li>
   );
 }

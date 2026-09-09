@@ -52,6 +52,9 @@ const THEME_BOOTSTRAP_SCRIPT = `
   })();
 `;
 
+const rootLocale = SITE.locale.split("_")[0];
+const rootFontVariables = `${inter.variable} ${fraunces.variable} ${ibmPlexMono.variable}`;
+
 export default function RootLayout({
   children,
 }: {
@@ -59,8 +62,8 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang={SITE.locale.split("_")[0]}
-      className={`${inter.variable} ${fraunces.variable} ${ibmPlexMono.variable}`}
+      lang={rootLocale}
+      className={rootFontVariables}
       suppressHydrationWarning
     >
       <body className="antialiased">

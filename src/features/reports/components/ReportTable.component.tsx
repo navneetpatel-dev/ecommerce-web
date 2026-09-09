@@ -58,24 +58,29 @@ export function ReportTable({
     result?.meta && typeof result.meta.error === "string"
       ? result.meta.error
       : null;
-  const metaMismatch =
+  const metaMismatch = Boolean(
     result?.meta &&
     (result.meta.balanced === false ||
-      String(result.meta.status ?? "") === "MISMATCH");
+      String(result.meta.status ?? "") === "MISMATCH"),
+  );
+  const mismatchMessage = metaError || LABELS.reconciliationMismatch;
+  const mismatchNotice = metaMismatch ? (
+    <p className="rounded-md border border-danger/40 bg-danger/5 px-3 py-2 text-[0.875rem] text-danger">
+      {mismatchMessage}
+    </p>
+  ) : null;
+  const rows = result?.rows ?? [];
+  const onRefresh = error ? onRetry : undefined;
 
   return (
     <div className="space-y-3">
-      {metaMismatch ? (
-        <p className="rounded-md border border-danger/40 bg-danger/5 px-3 py-2 text-[0.875rem] text-danger">
-          {metaError || LABELS.reconciliationMismatch}
-        </p>
-      ) : null}
+      {mismatchNotice}
       <DataTable
         columns={columns}
-        rows={result?.rows ?? []}
+        rows={rows}
         loading={loading}
         error={error}
-        onRefresh={error ? onRetry : undefined}
+        onRefresh={onRefresh}
         emptyMessage={LABELS.noResults}
         pagination={pagination}
         rowDetails={false}

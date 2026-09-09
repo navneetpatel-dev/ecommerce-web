@@ -60,6 +60,11 @@ function AdminVendorDetailContent() {
     );
   }
 
+  const statusBadgeElement = vendor.status ? (
+    <StatusBadge status={vendor.status} />
+  ) : null;
+  const formLeadingMessage = message ?? error;
+
   return (
     <div className="w-full min-w-0 space-y-5">
       <Link
@@ -77,7 +82,7 @@ function AdminVendorDetailContent() {
           </h1>
           <p className="text-body-sm text-ink-muted">{vendor.slug}</p>
         </div>
-        {vendor.status ? <StatusBadge status={vendor.status} /> : null}
+        {statusBadgeElement}
       </div>
 
       <FormStack className="space-y-8">
@@ -147,7 +152,7 @@ function AdminVendorDetailContent() {
           </FormFieldFrame>
         </FormSection>
 
-        <FormActions leading={message ?? error}>
+        <FormActions leading={formLeadingMessage}>
           <Button
             type="button"
             fullWidth="mobile"

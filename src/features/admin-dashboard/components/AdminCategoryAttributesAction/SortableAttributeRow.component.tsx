@@ -30,16 +30,18 @@ export function SortableAttributeRow({
   } = useSortable({
     id: row.id,
   });
+  const rowOpacity = isDragging ? 0.6 : 1;
+  const rowStyle = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: rowOpacity,
+  };
 
   return (
     <li
       ref={setNodeRef}
       className="flex items-center justify-between gap-2 text-[0.875rem]"
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition,
-        opacity: isDragging ? 0.6 : 1,
-      }}
+      style={rowStyle}
     >
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <Button

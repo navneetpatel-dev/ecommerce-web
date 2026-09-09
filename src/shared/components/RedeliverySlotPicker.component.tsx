@@ -29,27 +29,26 @@ export function RedeliverySlotPicker({
   prompt?: string;
 }) {
   const [slot, setSlot] = useState("");
+  const promptText = currentSlot ? `Requested: ${currentSlot}` : prompt;
+  const confirmDisabled = !slot;
+  const slotOptions = REDELIVERY_SLOTS.map((option) => (
+    <SelectItem key={option} value={option}>
+      {option}
+    </SelectItem>
+  ));
 
   return (
     <div className="space-y-2 rounded-md border border-line bg-surface-muted p-3">
-      <p className="text-body-sm font-medium text-ink">
-        {currentSlot ? `Requested: ${currentSlot}` : prompt}
-      </p>
+      <p className="text-body-sm font-medium text-ink">{promptText}</p>
       <div className="flex gap-2">
         <Select value={slot} onValueChange={setSlot}>
           <SelectTrigger className="min-w-0 flex-1">
             <SelectValue placeholder="Choose a time window" />
           </SelectTrigger>
-          <SelectContent>
-            {REDELIVERY_SLOTS.map((option) => (
-              <SelectItem key={option} value={option}>
-                {option}
-              </SelectItem>
-            ))}
-          </SelectContent>
+          <SelectContent>{slotOptions}</SelectContent>
         </Select>
         <Button
-          disabled={!slot}
+          disabled={confirmDisabled}
           loading={isPending}
           onClick={() => onSubmit(slot)}
         >

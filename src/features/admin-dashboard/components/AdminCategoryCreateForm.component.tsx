@@ -24,21 +24,21 @@ export function AdminCategoryCreateForm({
 }: AdminCategoryCreateFormProps) {
   const values = form.watch();
   const canSubmit = CategoryFormSchema.safeParse(values).success;
+  const submitDisabled = !canSubmit || isPending;
+  const errorMessage = error ? (
+    <p className="text-body-sm text-danger">{error}</p>
+  ) : null;
 
   return (
     <div className="space-y-6">
       <AdminCategoryFormFields form={form} idPrefix="category-create" />
-      {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+      {errorMessage}
       <FormActions>
         <DisabledActionHint
-          disabled={!canSubmit || isPending}
+          disabled={submitDisabled}
           message={LABELS.enterCategoryName}
         >
-          <Button
-            type="submit"
-            fullWidth="mobile"
-            disabled={!canSubmit || isPending}
-          >
+          <Button type="submit" fullWidth="mobile" disabled={submitDisabled}>
             {LABELS.createCategory}
           </Button>
         </DisabledActionHint>
