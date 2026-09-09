@@ -1,6 +1,6 @@
 import type { AppliedCouponSummary } from "@/shared/api/types";
 import { AppliedCouponChipItem } from "./AppliedCouponChipItem.component";
-import { appliedCouponChipsStyles as styles } from "./appliedCouponChips.styles";
+import { appliedCouponChipsStyles as styles } from "../../styles/coupons/appliedCouponChips.styles";
 
 interface AppliedCouponChipsListProps {
   chips: AppliedCouponSummary[];

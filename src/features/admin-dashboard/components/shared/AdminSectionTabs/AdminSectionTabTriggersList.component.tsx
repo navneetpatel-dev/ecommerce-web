@@ -1,7 +1,7 @@
 import { TabsList } from "@/shared/components/ui/tabs";
-import { adminSectionTabsStyles } from "./adminSectionTabs.styles";
+import { adminSectionTabsStyles } from "../../../styles/shared/adminSectionTabs.styles";
 import { AdminSectionTabTrigger } from "./AdminSectionTabTrigger.component";
-import type { AdminSectionTabItem } from "./adminSectionTabs.types";
+import type { AdminSectionTabItem } from "../../../types/shared/adminSectionTabs.types";
 
 interface AdminSectionTabTriggersListProps {
   tabs: AdminSectionTabItem[];

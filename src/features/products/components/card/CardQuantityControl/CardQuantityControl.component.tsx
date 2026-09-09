@@ -5,8 +5,8 @@ import { AnimatedQuantityValue } from "@/shared/components/AnimatedQuantityValue
 import { Button } from "@/shared/components/ui/button";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart/cart";
 import { LABELS } from "@/shared/constants/labels";
-import { cardQuantityControlStyles } from "./cardQuantityControl.styles";
-import { useCardQuantityControlHandlers } from "./useCardQuantityControlHandlers.hook";
+import { cardQuantityControlStyles } from "../../../styles/card/cardQuantityControl.styles";
+import { useCardQuantityControlHandlers } from "../../../hooks/card/useCardQuantityControlHandlers.hook";
 
 export interface CardQuantityControlProps {
   value: number;

@@ -11,8 +11,8 @@ import {
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import { VariantSelector } from "../VariantSelector.component";
-import { productVariantDialogStyles } from "./productVariantDialog.styles";
-import { useProductVariantDialogPresentation } from "./useProductVariantDialogPresentation.hook";
+import { productVariantDialogStyles } from "../../../styles/variants/productVariantDialog.styles";
+import { useProductVariantDialogPresentation } from "../../../hooks/variants/useProductVariantDialogPresentation.hook";
 
 export interface ProductVariantDialogProps {
   open: boolean;

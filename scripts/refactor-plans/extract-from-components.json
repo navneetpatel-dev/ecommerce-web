@@ -1,0 +1,1712 @@
+{
+  "moves": [
+    {
+      "from": "src/features/home/components/vendor-spotlight/vendorSpotlightSection.styles.ts",
+      "to": "src/features/home/styles/vendor-spotlight/vendorSpotlightSection.styles.ts"
+    },
+    {
+      "from": "src/features/home/components/category-rail/categoryRail.styles.ts",
+      "to": "src/features/home/styles/category-rail/categoryRail.styles.ts"
+    },
+    {
+      "from": "src/features/home/components/trending/trendingSection.styles.ts",
+      "to": "src/features/home/styles/trending/trendingSection.styles.ts"
+    },
+    {
+      "from": "src/features/home/components/hero/HeroSection/heroSection.styles.ts",
+      "to": "src/features/home/styles/hero/heroSection.styles.ts"
+    },
+    {
+      "from": "src/features/vendors/components/register/VendorRegisterForm/vendorRegisterForm.styles.ts",
+      "to": "src/features/vendors/styles/register/vendorRegisterForm.styles.ts"
+    },
+    {
+      "from": "src/features/vendors/components/index/vendorsIndexView.styles.ts",
+      "to": "src/features/vendors/styles/index/vendorsIndexView.styles.ts"
+    },
+    {
+      "from": "src/features/storefront/components/layout/storefrontLayout.styles.ts",
+      "to": "src/features/storefront/styles/layout/storefrontLayout.styles.ts"
+    },
+    {
+      "from": "src/features/storefront/components/mobile-nav/mobileNavDrawer.styles.ts",
+      "to": "src/features/storefront/styles/mobile-nav/mobileNavDrawer.styles.ts"
+    },
+    {
+      "from": "src/features/storefront/components/header/themeToggleButton.styles.ts",
+      "to": "src/features/storefront/styles/header/themeToggleButton.styles.ts"
+    },
+    {
+      "from": "src/features/storefront/components/header/header.styles.ts",
+      "to": "src/features/storefront/styles/header/header.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/filters/FilterSidebar/filterSidebar.styles.ts",
+      "to": "src/features/products/styles/filters/filterSidebar.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/offers/ProductEligibleOffers/productEligibleOffers.styles.ts",
+      "to": "src/features/products/styles/offers/productEligibleOffers.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/variants/VariantSelector/variantSelector.styles.ts",
+      "to": "src/features/products/styles/variants/variantSelector.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/variants/ProductVariantDialog/productVariantDialog.styles.ts",
+      "to": "src/features/products/styles/variants/productVariantDialog.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/card/CardQuantityControl/cardQuantityControl.styles.ts",
+      "to": "src/features/products/styles/card/cardQuantityControl.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/card/ProductCard/cardDetails.styles.ts",
+      "to": "src/features/products/styles/card/cardDetails.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/card/ProductCard/cardMedia.styles.ts",
+      "to": "src/features/products/styles/card/cardMedia.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/card/ProductCard/productCard.styles.ts",
+      "to": "src/features/products/styles/card/productCard.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/sort/SortBar/sortBar.styles.ts",
+      "to": "src/features/products/styles/sort/sortBar.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/specs/productSpecifications.styles.ts",
+      "to": "src/features/products/styles/specs/productSpecifications.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/related/productRelatedRails.styles.ts",
+      "to": "src/features/products/styles/related/productRelatedRails.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/detail/productDetailSkeleton.styles.ts",
+      "to": "src/features/products/styles/detail/productDetailSkeleton.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/detail/productDetailsMisc.styles.ts",
+      "to": "src/features/products/styles/detail/productDetailsMisc.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/detail/ProductDetailContent/productDetailContent.styles.ts",
+      "to": "src/features/products/styles/detail/productDetailContent.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/compare/ProductCompareBar/productCompareBar.styles.ts",
+      "to": "src/features/products/styles/compare/productCompareBar.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/compare/ProductCompareSection/productCompareSection.styles.ts",
+      "to": "src/features/products/styles/compare/productCompareSection.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/delivery-check/ProductDeliveryCheck/productDeliveryCheck.styles.ts",
+      "to": "src/features/products/styles/delivery-check/productDeliveryCheck.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/listing/productGrid.styles.ts",
+      "to": "src/features/products/styles/listing/productGrid.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/filters/TicketFilters/ticketFilters.styles.ts",
+      "to": "src/features/supportTickets/styles/filters/ticketFilters.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/CreateTicketForm/createTicketForm.styles.ts",
+      "to": "src/features/supportTickets/styles/form/createTicketForm.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/TicketAttachmentUploader/ticketAttachmentUploader.styles.ts",
+      "to": "src/features/supportTickets/styles/form/ticketAttachmentUploader.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/detail/TicketThread/ticketThread.styles.ts",
+      "to": "src/features/supportTickets/styles/detail/ticketThread.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/detail/TicketThread/ticketDetailsPanel.styles.ts",
+      "to": "src/features/supportTickets/styles/detail/ticketDetailsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/list/ticketCardList.styles.ts",
+      "to": "src/features/supportTickets/styles/list/ticketCardList.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/list/ticketList.styles.ts",
+      "to": "src/features/supportTickets/styles/list/ticketList.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/list/supportAuthGate.styles.ts",
+      "to": "src/features/supportTickets/styles/list/supportAuthGate.styles.ts"
+    },
+    {
+      "from": "src/features/auth/components/shell/authPageSkeleton.styles.ts",
+      "to": "src/features/auth/styles/shell/authPageSkeleton.styles.ts"
+    },
+    {
+      "from": "src/features/auth/components/shell/authForms.styles.ts",
+      "to": "src/features/auth/styles/shell/authForms.styles.ts"
+    },
+    {
+      "from": "src/features/auth/components/shell/authPageShell.styles.ts",
+      "to": "src/features/auth/styles/shell/authPageShell.styles.ts"
+    },
+    {
+      "from": "src/features/auth/components/shell/authBrandVisual.styles.ts",
+      "to": "src/features/auth/styles/shell/authBrandVisual.styles.ts"
+    },
+    {
+      "from": "src/features/auth/components/login/LoginCard/loginCard.styles.ts",
+      "to": "src/features/auth/styles/login/loginCard.styles.ts"
+    },
+    {
+      "from": "src/features/stockAlerts/components/notify-me/notifyMeButton.styles.ts",
+      "to": "src/features/stockAlerts/styles/notify-me/notifyMeButton.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/platformSettingsForm.styles.ts",
+      "to": "src/features/admin-dashboard/styles/settings/platformSettingsForm.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsDialog/vendorKycDocumentsDialog.styles.ts",
+      "to": "src/features/admin-dashboard/styles/vendors/vendorKycDocumentsDialog.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/vendors/ProductModerationTable/productModerationTable.styles.ts",
+      "to": "src/features/admin-dashboard/styles/vendors/productModerationTable.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/vendors/AdminApproveVendorAction/adminApproveVendorAction.styles.ts",
+      "to": "src/features/admin-dashboard/styles/vendors/adminApproveVendorAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/roles/RolePermissionsDialog/rolePermissionsDialog.styles.ts",
+      "to": "src/features/admin-dashboard/styles/roles/rolePermissionsDialog.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shared/adminFormWidgets.styles.ts",
+      "to": "src/features/admin-dashboard/styles/shared/adminFormWidgets.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shared/reportPanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/shared/reportPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shared/AdminConfirmAction/adminConfirmAction.styles.ts",
+      "to": "src/features/admin-dashboard/styles/shared/adminConfirmAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shared/AdminSectionTabs/adminSectionTabs.styles.ts",
+      "to": "src/features/admin-dashboard/styles/shared/adminSectionTabs.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shared/AdminDataListView/adminDataListView.styles.ts",
+      "to": "src/features/admin-dashboard/styles/shared/adminDataListView.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shipping/RtoQueuePanel/rtoQueuePanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/shipping/rtoQueuePanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shipping/AdminEditShippingZoneAction/adminEditShippingZoneAction.styles.ts",
+      "to": "src/features/admin-dashboard/styles/shipping/adminEditShippingZoneAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/bulkGenerateDialog.styles.ts",
+      "to": "src/features/admin-dashboard/styles/coupons/bulkGenerateDialog.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/couponsPageHeader.styles.ts",
+      "to": "src/features/admin-dashboard/styles/coupons/couponsPageHeader.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/coupons/CouponsTable/couponsTable.styles.ts",
+      "to": "src/features/admin-dashboard/styles/coupons/couponsTable.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/coupons/CreateCouponForm/createCouponForm.styles.ts",
+      "to": "src/features/admin-dashboard/styles/coupons/createCouponForm.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/audit/AdminAuditFilters/adminAuditFilters.styles.ts",
+      "to": "src/features/admin-dashboard/styles/audit/adminAuditFilters.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/audit/AdminAuditExportPanel/adminAuditExportPanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/audit/adminAuditExportPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/cashDepositsPanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/cashDepositsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/AgentDocumentsPanel/agentDocumentsPanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/agentDocumentsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/deliveryDispatchShipmentList.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/deliveryDispatchShipmentList.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/deliveryDispatchPickupList.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/deliveryDispatchPickupList.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/deliveryDispatchPanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/deliveryDispatchPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/AgentMarkPayoutPaidAction/agentMarkPayoutPaidAction.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/agentMarkPayoutPaidAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/AgentPayoutsPanel/agentPayoutsPanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/agentPayoutsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/AdminAssignDeliveryAgentAction/adminAssignDeliveryAgentAction.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/adminAssignDeliveryAgentAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/AdminDeliveryPerformancePanel/adminDeliveryPerformancePanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/adminDeliveryPerformancePanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/staleTasksPanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/staleTasksPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/createDeliveryAgentForm.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/createDeliveryAgentForm.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/bulkImportAgentsDialog.styles.ts",
+      "to": "src/features/admin-dashboard/styles/delivery-agents/bulkImportAgentsDialog.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/users/ImpersonateUserButton/impersonateUserButton.styles.ts",
+      "to": "src/features/admin-dashboard/styles/users/impersonateUserButton.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/users/ChangeUserRoleDialog/changeUserRoleDialog.styles.ts",
+      "to": "src/features/admin-dashboard/styles/users/changeUserRoleDialog.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/users/AdminUsersFilters/adminUsersFilters.styles.ts",
+      "to": "src/features/admin-dashboard/styles/users/adminUsersFilters.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/adminCashbackWriteOffPanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/wallet/adminCashbackWriteOffPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/cashbackWriteOffReportTable.styles.ts",
+      "to": "src/features/admin-dashboard/styles/wallet/cashbackWriteOffReportTable.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/wallet/AdminWalletRechargePanel/adminWalletRechargePanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/wallet/adminWalletRechargePanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/wallet/AdminWalletLiabilityPanel/adminWalletLiabilityPanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/wallet/adminWalletLiabilityPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/finance/AdminSettlementReportsPanel/adminSettlementReportsPanel.styles.ts",
+      "to": "src/features/admin-dashboard/styles/finance/adminSettlementReportsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/finance/AdminMarkPayoutPaidAction/adminMarkPayoutPaidAction.styles.ts",
+      "to": "src/features/admin-dashboard/styles/finance/adminMarkPayoutPaidAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/orders/AdminOrdersFilters/adminOrdersFilters.styles.ts",
+      "to": "src/features/admin-dashboard/styles/orders/adminOrdersFilters.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/adminCategory.styles.ts",
+      "to": "src/features/admin-dashboard/styles/categories/adminCategory.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/AdminEditCategoryAction/adminEditCategoryAction.styles.ts",
+      "to": "src/features/admin-dashboard/styles/categories/adminEditCategoryAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/CategoriesPageHeader/categoriesPageHeader.styles.ts",
+      "to": "src/features/admin-dashboard/styles/categories/categoriesPageHeader.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/adminCategoryAttributesAction.styles.ts",
+      "to": "src/features/admin-dashboard/styles/categories/adminCategoryAttributesAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/CategoriesTable/categoriesTable.styles.ts",
+      "to": "src/features/admin-dashboard/styles/categories/categoriesTable.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/AdminReassignProductsAction/adminReassignProductsAction.styles.ts",
+      "to": "src/features/admin-dashboard/styles/categories/adminReassignProductsAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/notifications/NotificationLogFiltersBar/notificationLogFiltersBar.styles.ts",
+      "to": "src/features/admin-dashboard/styles/notifications/notificationLogFiltersBar.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/analytics/analyticsComponents.styles.ts",
+      "to": "src/features/admin-dashboard/styles/analytics/analyticsComponents.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/analytics/AnalyticsOpsQueues/analyticsOpsQueues.styles.ts",
+      "to": "src/features/admin-dashboard/styles/analytics/analyticsOpsQueues.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/analytics/AdminAnalyticsExportBar/adminAnalyticsExportBar.styles.ts",
+      "to": "src/features/admin-dashboard/styles/analytics/adminAnalyticsExportBar.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/analytics/AdminAnalyticsLayout/adminAnalyticsLayout.styles.ts",
+      "to": "src/features/admin-dashboard/styles/analytics/adminAnalyticsLayout.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/analytics/AnalyticsRankedList/analyticsRankedList.styles.ts",
+      "to": "src/features/admin-dashboard/styles/analytics/analyticsRankedList.styles.ts"
+    },
+    {
+      "from": "src/features/content/components/contact/contactView.styles.ts",
+      "to": "src/features/content/styles/contact/contactView.styles.ts"
+    },
+    {
+      "from": "src/features/content/components/faq/faqView.styles.ts",
+      "to": "src/features/content/styles/faq/faqView.styles.ts"
+    },
+    {
+      "from": "src/features/content/components/blog/blogListView.styles.ts",
+      "to": "src/features/content/styles/blog/blogListView.styles.ts"
+    },
+    {
+      "from": "src/features/content/components/maintenance/maintenanceView.styles.ts",
+      "to": "src/features/content/styles/maintenance/maintenanceView.styles.ts"
+    },
+    {
+      "from": "src/features/content/components/legal/contentDoc.styles.ts",
+      "to": "src/features/content/styles/legal/contentDoc.styles.ts"
+    },
+    {
+      "from": "src/features/productQna/components/list/productQna.styles.ts",
+      "to": "src/features/productQna/styles/list/productQna.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/payment/paymentProcessingOverlay.styles.ts",
+      "to": "src/features/checkout/styles/payment/paymentProcessingOverlay.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/payment/paymentMethodOption.styles.ts",
+      "to": "src/features/checkout/styles/payment/paymentMethodOption.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/payment/paymentStep.styles.ts",
+      "to": "src/features/checkout/styles/payment/paymentStep.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/shipping/shippingStep.styles.ts",
+      "to": "src/features/checkout/styles/shipping/shippingStep.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/shipping/shippingCard.styles.ts",
+      "to": "src/features/checkout/styles/shipping/shippingCard.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/review/reviewStep.styles.ts",
+      "to": "src/features/checkout/styles/review/reviewStep.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/review/ReviewStep/payableSummary.styles.ts",
+      "to": "src/features/checkout/styles/review/payableSummary.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/review/ReviewStep/vendorBreakdownCard.styles.ts",
+      "to": "src/features/checkout/styles/review/vendorBreakdownCard.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/address/addressStep.styles.ts",
+      "to": "src/features/checkout/styles/address/addressStep.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/wallet/walletApplySection.styles.ts",
+      "to": "src/features/checkout/styles/wallet/walletApplySection.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/orderSummaryPanel.styles.ts",
+      "to": "src/features/checkout/styles/page-view/orderSummaryPanel.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/checkoutStepCard.styles.ts",
+      "to": "src/features/checkout/styles/page-view/checkoutStepCard.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/mobileSummaryAccordion.styles.ts",
+      "to": "src/features/checkout/styles/page-view/mobileSummaryAccordion.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/checkoutTransitionState.styles.ts",
+      "to": "src/features/checkout/styles/page-view/checkoutTransitionState.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/checkoutPageView.styles.ts",
+      "to": "src/features/checkout/styles/page-view/checkoutPageView.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/orderSummaryItemsList.styles.ts",
+      "to": "src/features/checkout/styles/page-view/orderSummaryItemsList.styles.ts"
+    },
+    {
+      "from": "src/features/giftCards/components/redeem/giftCardRedeemContent.styles.ts",
+      "to": "src/features/giftCards/styles/redeem/giftCardRedeemContent.styles.ts"
+    },
+    {
+      "from": "src/features/giftCards/components/purchase/giftCardPurchaseForm.styles.ts",
+      "to": "src/features/giftCards/styles/purchase/giftCardPurchaseForm.styles.ts"
+    },
+    {
+      "from": "src/features/search/components/search-bar/SearchBar/searchBar.styles.ts",
+      "to": "src/features/search/styles/search-bar/searchBar.styles.ts"
+    },
+    {
+      "from": "src/features/search/components/suggestions/searchSuggestionRow.styles.ts",
+      "to": "src/features/search/styles/suggestions/searchSuggestionRow.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/filters/BugReportFilters/bugReportFilters.styles.ts",
+      "to": "src/features/bugReports/styles/filters/bugReportFilters.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/form/bugReportForm.styles.ts",
+      "to": "src/features/bugReports/styles/form/bugReportForm.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/detail/BugReportDetail/bugReportPanels.styles.ts",
+      "to": "src/features/bugReports/styles/detail/bugReportPanels.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/detail/BugReportDetail/bugReportDetail.styles.ts",
+      "to": "src/features/bugReports/styles/detail/bugReportDetail.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/list/bugReportCardList.styles.ts",
+      "to": "src/features/bugReports/styles/list/bugReportCardList.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/list/bugReportList.styles.ts",
+      "to": "src/features/bugReports/styles/list/bugReportList.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/components/transactions/walletTransactionsTable.styles.ts",
+      "to": "src/features/wallet/styles/transactions/walletTransactionsTable.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/components/recharge/walletRechargePanel.styles.ts",
+      "to": "src/features/wallet/styles/recharge/walletRechargePanel.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/components/statement-export/walletStatementExportPanel.styles.ts",
+      "to": "src/features/wallet/styles/statement-export/walletStatementExportPanel.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/components/overview/walletPageContent.styles.ts",
+      "to": "src/features/wallet/styles/overview/walletPageContent.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/components/overview/walletSectionSkeletons.styles.ts",
+      "to": "src/features/wallet/styles/overview/walletSectionSkeletons.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/drawer/cartDrawer.styles.ts",
+      "to": "src/features/cart/styles/drawer/cartDrawer.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/drawer/cartMutationError.styles.ts",
+      "to": "src/features/cart/styles/drawer/cartMutationError.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/page/CartPageView/vendorGroups.styles.ts",
+      "to": "src/features/cart/styles/page/vendorGroups.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/page/CartPageView/cartPageView.styles.ts",
+      "to": "src/features/cart/styles/page/cartPageView.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/line-item/CartLineItem/cartLine.styles.ts",
+      "to": "src/features/cart/styles/line-item/cartLine.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/coupons/appliedCouponChips.styles.ts",
+      "to": "src/features/cart/styles/coupons/appliedCouponChips.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/coupons/cartCouponSection.styles.ts",
+      "to": "src/features/cart/styles/coupons/cartCouponSection.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable/commissionLedgerTable.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/commission/commissionLedgerTable.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/commissionInvoicesTable.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/commission/commissionInvoicesTable.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/products/vendorDialogs.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/products/vendorDialogs.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/vendorProductCreateForm.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/products/vendorProductCreateForm.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/products/VendorLowStockWidget/vendorLowStockWidget.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/products/vendorLowStockWidget.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/products/ProductsTable/productsTable.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/products/productsTable.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/products/VendorProductImagesDialog/vendorProductImagesDialog.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/products/vendorProductImagesDialog.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/coupons/VendorCouponsView/vendorCouponsView.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/coupons/vendorCouponsView.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/shop-settings/VendorShopSettingsForm/vendorShopSettingsForm.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/shop-settings/vendorShopSettingsForm.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/vendorOrdersTable.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/orders/vendorOrdersTable.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/payouts/VendorSettlementReportPanel/vendorSettlementReportPanel.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/payouts/vendorSettlementReportPanel.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/payouts/PayoutsTable/payoutsTable.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/payouts/payoutsTable.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/analytics/vendorAnalyticsWidgets.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/analytics/vendorAnalyticsWidgets.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/analytics/VendorAnalyticsPanel/vendorAnalyticsPanel.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/analytics/vendorAnalyticsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/reviews/vendorFeedbackViews.styles.ts",
+      "to": "src/features/vendor-dashboard/styles/reviews/vendorFeedbackViews.styles.ts"
+    },
+    {
+      "from": "src/features/returns/components/list/returnRequestCard.styles.ts",
+      "to": "src/features/returns/styles/list/returnRequestCard.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/confirmation/orderConfirmation.styles.ts",
+      "to": "src/features/orders/styles/confirmation/orderConfirmation.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/confirmation/orderConfirmationSkeleton.styles.ts",
+      "to": "src/features/orders/styles/confirmation/orderConfirmationSkeleton.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/sub-order/SubOrderCard/subOrderCard.styles.ts",
+      "to": "src/features/orders/styles/sub-order/subOrderCard.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/sub-order/SubOrderCard/subOrderShipmentTracking.styles.ts",
+      "to": "src/features/orders/styles/sub-order/subOrderShipmentTracking.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/sub-order/SubOrderCard/subOrderCardItems.styles.ts",
+      "to": "src/features/orders/styles/sub-order/subOrderCardItems.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/detail/orderDetailSkeleton.styles.ts",
+      "to": "src/features/orders/styles/detail/orderDetailSkeleton.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/detail/orderSummaryAside.styles.ts",
+      "to": "src/features/orders/styles/detail/orderSummaryAside.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/detail/orderDetailHeader.styles.ts",
+      "to": "src/features/orders/styles/detail/orderDetailHeader.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/detail/orderDetailContent.styles.ts",
+      "to": "src/features/orders/styles/detail/orderDetailContent.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/list/orderStatusGroup.styles.ts",
+      "to": "src/features/orders/styles/list/orderStatusGroup.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/list/emptyOrdersState.styles.ts",
+      "to": "src/features/orders/styles/list/emptyOrdersState.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/list/orderCard.styles.ts",
+      "to": "src/features/orders/styles/list/orderCard.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/list/ordersList.styles.ts",
+      "to": "src/features/orders/styles/list/ordersList.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/actions/ordersComponents.styles.ts",
+      "to": "src/features/orders/styles/actions/ordersComponents.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/privacy/PrivacySection/privacySection.styles.ts",
+      "to": "src/features/account/styles/privacy/privacySection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/security/securitySection.styles.ts",
+      "to": "src/features/account/styles/security/securitySection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/layout/accountLayout.styles.ts",
+      "to": "src/features/account/styles/layout/accountLayout.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/orders-activity/ordersActivitySection.styles.ts",
+      "to": "src/features/account/styles/orders-activity/ordersActivitySection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/orders-activity/summaryRow.styles.ts",
+      "to": "src/features/account/styles/orders-activity/summaryRow.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/addresses/AddressesSection/addressCard.styles.ts",
+      "to": "src/features/account/styles/addresses/addressCard.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/addresses/AddressesSection/addressesSection.styles.ts",
+      "to": "src/features/account/styles/addresses/addressesSection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/savedPaymentMethodsSection.styles.ts",
+      "to": "src/features/account/styles/payment-methods/savedPaymentMethodsSection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/personal-info/emailVerificationStatus.styles.ts",
+      "to": "src/features/account/styles/personal-info/emailVerificationStatus.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/personal-info/PersonalInfoSection/personalInfoSection.styles.ts",
+      "to": "src/features/account/styles/personal-info/personalInfoSection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/overview/OverviewSection/profileCard.styles.ts",
+      "to": "src/features/account/styles/overview/profileCard.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/overview/OverviewSection/overviewSection.styles.ts",
+      "to": "src/features/account/styles/overview/overviewSection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/overview/OverviewSection/glanceRow.styles.ts",
+      "to": "src/features/account/styles/overview/glanceRow.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/overview/OverviewSection/glanceList.styles.ts",
+      "to": "src/features/account/styles/overview/glanceList.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/notifications/browserNotificationsSetting.styles.ts",
+      "to": "src/features/account/styles/notifications/browserNotificationsSetting.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/delivery-operations/DeliveryOperationsSection/deliveryOperationsSection.styles.ts",
+      "to": "src/features/account/styles/delivery-operations/deliveryOperationsSection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/delivery-operations/DeliveryOperationsSection/operatingStatusAside.styles.ts",
+      "to": "src/features/account/styles/delivery-operations/operatingStatusAside.styles.ts"
+    },
+    {
+      "from": "src/features/categories/components/mega-menu/CategoriesMegaMenu/categoryMegaMenu.styles.ts",
+      "to": "src/features/categories/styles/mega-menu/categoryMegaMenu.styles.ts"
+    },
+    {
+      "from": "src/features/categories/components/browse/categoriesView.styles.ts",
+      "to": "src/features/categories/styles/browse/categoriesView.styles.ts"
+    },
+    {
+      "from": "src/features/categories/components/browse/categoryCard.styles.ts",
+      "to": "src/features/categories/styles/browse/categoryCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/rto/rtoHandoverCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/rto/rtoHandoverCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/today/taskCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/today/taskCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/today/taskContactCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/today/taskContactCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/today/ShiftSummaryCard/shiftSummaryCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/today/shiftSummaryCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/bank/BankDetailsCard/bankDetailsCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/bank/bankDetailsCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/location/LocationBeacon/locationBeacon.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/location/locationBeacon.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/cash/CashDepositsCard/cashDepositsCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/cash/cashDepositsCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/doorstepConfirmCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/doorstep/doorstepConfirmCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/earningsPayoutsCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/earnings/earningsPayoutsCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/documents/DeliveryAgentDocumentsCard/deliveryAgentDocumentsCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/documents/deliveryAgentDocumentsCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/offline/OfflineSyncBanner/offlineSyncBanner.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/offline/offlineSyncBanner.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/pickups/pickupChecklistCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/pickups/pickupChecklistCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/pickups/barcodeScanButton.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/pickups/barcodeScanButton.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/pickups/pickupOverviewCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/pickups/pickupOverviewCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/deliveries/failedAttemptSection.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/deliveries/failedAttemptSection.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/deliveries/deliveryTerminalStatusBanner.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/deliveries/deliveryTerminalStatusBanner.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/deliveries/shipmentOverviewCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/deliveries/shipmentOverviewCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/deliveries/DeliveryAttemptsList/deliveryAttemptsList.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/deliveries/deliveryAttemptsList.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/deliveries/DeliveryMilestoneCard/deliveryMilestoneCard.styles.ts",
+      "to": "src/features/delivery-dashboard/styles/deliveries/deliveryMilestoneCard.styles.ts"
+    },
+    {
+      "from": "src/features/help/components/home/HelpHomeView/helpHomeView.styles.ts",
+      "to": "src/features/help/styles/home/helpHomeView.styles.ts"
+    },
+    {
+      "from": "src/features/help/components/contact/helpContactForm.styles.ts",
+      "to": "src/features/help/styles/contact/helpContactForm.styles.ts"
+    },
+    {
+      "from": "src/features/help/components/article/helpArticleView.styles.ts",
+      "to": "src/features/help/styles/article/helpArticleView.styles.ts"
+    },
+    {
+      "from": "src/features/wishlist/components/view/wishlistView.styles.ts",
+      "to": "src/features/wishlist/styles/view/wishlistView.styles.ts"
+    },
+    {
+      "from": "src/features/reports/components/filters/reportFilterBar.styles.ts",
+      "to": "src/features/reports/styles/filters/reportFilterBar.styles.ts"
+    },
+    {
+      "from": "src/features/reports/components/filters/reportTypeSelect.styles.ts",
+      "to": "src/features/reports/styles/filters/reportTypeSelect.styles.ts"
+    },
+    {
+      "from": "src/features/reports/components/customer-order-history/customerOrderHistoryPanel.styles.ts",
+      "to": "src/features/reports/styles/customer-order-history/customerOrderHistoryPanel.styles.ts"
+    },
+    {
+      "from": "src/features/reports/components/table/reportTable.styles.ts",
+      "to": "src/features/reports/styles/table/reportTable.styles.ts"
+    },
+    {
+      "from": "src/features/reports/components/export/reportExportStatus.styles.ts",
+      "to": "src/features/reports/styles/export/reportExportStatus.styles.ts"
+    },
+    {
+      "from": "src/features/reviews/components/product-reviews/productReviews.styles.ts",
+      "to": "src/features/reviews/styles/product-reviews/productReviews.styles.ts"
+    },
+    {
+      "from": "src/features/reviews/components/review-form/reviewForm.styles.ts",
+      "to": "src/features/reviews/styles/review-form/reviewForm.styles.ts"
+    },
+    {
+      "from": "src/shared/components/InfiniteSingleSelect/infiniteSingleSelect.styles.ts",
+      "to": "src/shared/styles/infinite-single-select/infiniteSingleSelect.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/badge.styles.ts",
+      "to": "src/shared/styles/ui/badge.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/checkbox.styles.ts",
+      "to": "src/shared/styles/ui/checkbox.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/select.styles.ts",
+      "to": "src/shared/styles/ui/select.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/dialog.styles.ts",
+      "to": "src/shared/styles/ui/dialog.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/radio-group.styles.ts",
+      "to": "src/shared/styles/ui/radio-group.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/slider.styles.ts",
+      "to": "src/shared/styles/ui/slider.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/table.styles.ts",
+      "to": "src/shared/styles/ui/table.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/input.styles.ts",
+      "to": "src/shared/styles/ui/input.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/accordion.styles.ts",
+      "to": "src/shared/styles/ui/accordion.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/button.styles.ts",
+      "to": "src/shared/styles/ui/button.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ui/switch.styles.ts",
+      "to": "src/shared/styles/ui/switch.styles.ts"
+    },
+    {
+      "from": "src/shared/components/FileUpload/fileUploadComponents.styles.ts",
+      "to": "src/shared/styles/file-upload/fileUploadComponents.styles.ts"
+    },
+    {
+      "from": "src/shared/components/forms/forms.styles.ts",
+      "to": "src/shared/styles/forms/forms.styles.ts"
+    },
+    {
+      "from": "src/shared/components/forms/numberInput.styles.ts",
+      "to": "src/shared/styles/forms/numberInput.styles.ts"
+    },
+    {
+      "from": "src/shared/components/forms/formError.styles.ts",
+      "to": "src/shared/styles/forms/formError.styles.ts"
+    },
+    {
+      "from": "src/shared/components/forms/disabledActionHint.styles.ts",
+      "to": "src/shared/styles/forms/disabledActionHint.styles.ts"
+    },
+    {
+      "from": "src/shared/components/forms/otpInput.styles.ts",
+      "to": "src/shared/styles/forms/otpInput.styles.ts"
+    },
+    {
+      "from": "src/shared/components/layout/layout.styles.ts",
+      "to": "src/shared/styles/layout/layout.styles.ts"
+    },
+    {
+      "from": "src/shared/components/layout/Footer/footer.styles.ts",
+      "to": "src/shared/styles/layout/footer.styles.ts"
+    },
+    {
+      "from": "src/shared/components/navigation/navigationComponents.styles.ts",
+      "to": "src/shared/styles/navigation/navigationComponents.styles.ts"
+    },
+    {
+      "from": "src/shared/components/InfiniteMultiSelect/infiniteMultiSelect.styles.ts",
+      "to": "src/shared/styles/infinite-multi-select/infiniteMultiSelect.styles.ts"
+    },
+    {
+      "from": "src/shared/components/notices/noticeComponents.styles.ts",
+      "to": "src/shared/styles/notices/noticeComponents.styles.ts"
+    },
+    {
+      "from": "src/shared/components/Skeletons/primitives.styles.ts",
+      "to": "src/shared/styles/skeletons/primitives.styles.ts"
+    },
+    {
+      "from": "src/shared/components/Skeletons/pageSkeletons.styles.ts",
+      "to": "src/shared/styles/skeletons/pageSkeletons.styles.ts"
+    },
+    {
+      "from": "src/shared/components/system/errorBoundary.styles.ts",
+      "to": "src/shared/styles/system/errorBoundary.styles.ts"
+    },
+    {
+      "from": "src/shared/components/QuantitySelector/quantitySelector.styles.ts",
+      "to": "src/shared/styles/quantity-selector/quantitySelector.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ImageCropDialog/cropDialog.styles.ts",
+      "to": "src/shared/styles/image-crop-dialog/cropDialog.styles.ts"
+    },
+    {
+      "from": "src/shared/components/DateTimePicker/dateTimePicker.styles.ts",
+      "to": "src/shared/styles/date-time-picker/dateTimePicker.styles.ts"
+    },
+    {
+      "from": "src/shared/components/dialogs/dialogComponents.styles.ts",
+      "to": "src/shared/styles/dialogs/dialogComponents.styles.ts"
+    },
+    {
+      "from": "src/shared/components/dialogs/cookieComponents.styles.ts",
+      "to": "src/shared/styles/dialogs/cookieComponents.styles.ts"
+    },
+    {
+      "from": "src/shared/components/display/stepIndicator.styles.ts",
+      "to": "src/shared/styles/display/stepIndicator.styles.ts"
+    },
+    {
+      "from": "src/shared/components/display/displayComponents.styles.ts",
+      "to": "src/shared/styles/display/displayComponents.styles.ts"
+    },
+    {
+      "from": "src/shared/components/orders/vendorGroupStyles.ts",
+      "to": "src/shared/styles/orders/vendorGroupStyles.ts"
+    },
+    {
+      "from": "src/shared/components/orders/vendorOrderComponents.styles.ts",
+      "to": "src/shared/styles/orders/vendorOrderComponents.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ImageGallery/imageGallery.styles.ts",
+      "to": "src/shared/styles/image-gallery/imageGallery.styles.ts"
+    },
+    {
+      "from": "src/shared/components/ImageGallery/imageLightbox.styles.ts",
+      "to": "src/shared/styles/image-gallery/imageLightbox.styles.ts"
+    },
+    {
+      "from": "src/shared/components/badges/badgeComponents.styles.ts",
+      "to": "src/shared/styles/badges/badgeComponents.styles.ts"
+    },
+    {
+      "from": "src/shared/components/DataTable/dataTableComponents.styles.ts",
+      "to": "src/shared/styles/data-table/dataTableComponents.styles.ts"
+    },
+    {
+      "from": "src/shared/components/DataTable/dataTable.styles.ts",
+      "to": "src/shared/styles/data-table/dataTable.styles.ts"
+    },
+    {
+      "from": "src/shared/components/AddressFormDialog/addressFormDialog.styles.ts",
+      "to": "src/shared/styles/address-form-dialog/addressFormDialog.styles.ts"
+    },
+    {
+      "from": "src/features/home/components/hero/HeroSection/useHeroCarousel.hook.ts",
+      "to": "src/features/home/hooks/hero/useHeroCarousel.hook.ts"
+    },
+    {
+      "from": "src/features/storefront/components/header/useAccountMenu.hook.ts",
+      "to": "src/features/storefront/hooks/header/useAccountMenu.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/filters/FilterSidebar/useFilterSidebarPresentation.hook.ts",
+      "to": "src/features/products/hooks/filters/useFilterSidebarPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/offers/ProductEligibleOffers/useProductEligibleOffers.hook.ts",
+      "to": "src/features/products/hooks/offers/useProductEligibleOffers.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/variants/ProductVariantDialog/useProductVariantDialogPresentation.hook.ts",
+      "to": "src/features/products/hooks/variants/useProductVariantDialogPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/card/CardQuantityControl/useCardQuantityControlHandlers.hook.ts",
+      "to": "src/features/products/hooks/card/useCardQuantityControlHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/card/ProductCard/useProductCard.hook.ts",
+      "to": "src/features/products/hooks/card/useProductCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/specs/useProductSpecifications.hook.ts",
+      "to": "src/features/products/hooks/specs/useProductSpecifications.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/related/useProductRelatedRails.hook.ts",
+      "to": "src/features/products/hooks/related/useProductRelatedRails.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/detail/ProductDetailContent/useProductDetailContent.hook.ts",
+      "to": "src/features/products/hooks/detail/useProductDetailContent.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/delivery-check/ProductDeliveryCheck/useProductDeliveryCheckPresentation.hook.ts",
+      "to": "src/features/products/hooks/delivery-check/useProductDeliveryCheckPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/filters/TicketFilters/useTicketFiltersHandlers.hook.ts",
+      "to": "src/features/supportTickets/hooks/filters/useTicketFiltersHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/CreateTicketForm/useSubmitTicket.hook.ts",
+      "to": "src/features/supportTickets/hooks/form/useSubmitTicket.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/CreateTicketForm/useOrderVendors.hook.ts",
+      "to": "src/features/supportTickets/hooks/form/useOrderVendors.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/CreateTicketForm/useTicketPickerPages.hook.ts",
+      "to": "src/features/supportTickets/hooks/form/useTicketPickerPages.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/TicketAttachmentUploader/useFileProcessor.hook.ts",
+      "to": "src/features/supportTickets/hooks/form/useFileProcessor.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/detail/TicketThread/useTicketActions.hook.ts",
+      "to": "src/features/supportTickets/hooks/detail/useTicketActions.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/detail/TicketThread/useTicketMessages.hook.ts",
+      "to": "src/features/supportTickets/hooks/detail/useTicketMessages.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/detail/TicketThread/useTicketThreadState.hook.ts",
+      "to": "src/features/supportTickets/hooks/detail/useTicketThreadState.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/list/useTicketTableColumns.hook.tsx",
+      "to": "src/features/supportTickets/hooks/list/useTicketTableColumns.hook.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/list/useTicketListHandlers.hook.ts",
+      "to": "src/features/supportTickets/hooks/list/useTicketListHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/auth/components/login/LoginCard/useLoginCard.hook.ts",
+      "to": "src/features/auth/hooks/login/useLoginCard.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/settings/WalletPointsSettingsSection/useWalletPointsSettingsHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/settings/useWalletPointsSettingsHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/vendors/VendorRowActions/useVendorRowActionsHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/vendors/useVendorRowActionsHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/vendors/VendorApprovalTable/useVendorApprovalTableColumns.hook.tsx",
+      "to": "src/features/admin-dashboard/hooks/vendors/useVendorApprovalTableColumns.hook.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsDialog/useVendorKycDialogHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/vendors/useVendorKycDialogHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/vendors/ProductModerationTable/useProductModerationTableColumns.hook.tsx",
+      "to": "src/features/admin-dashboard/hooks/vendors/useProductModerationTableColumns.hook.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/vendors/AdminApproveVendorAction/useAdminApproveVendorAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/vendors/useAdminApproveVendorAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/roles/RolePermissionsDialog/useRolePermissionsDialog.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/roles/useRolePermissionsDialog.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shared/AdminConfirmAction/useAdminConfirmAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/shared/useAdminConfirmAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shared/AdminEditNameAction/useAdminEditNameAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/shared/useAdminEditNameAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shared/AdminDataListView/useAdminDataListView.hook.tsx",
+      "to": "src/features/admin-dashboard/hooks/shared/useAdminDataListView.hook.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shipping/RtoQueuePanel/useRtoQueuePanel.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/shipping/useRtoQueuePanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shipping/AdminEditShippingZoneAction/useAdminEditShippingZoneAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/shipping/useAdminEditShippingZoneAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/audit/AdminAuditFilters/useAdminAuditFiltersHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/audit/useAdminAuditFiltersHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/audit/AdminAuditExportPanel/useAdminAuditExportPanel.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/audit/useAdminAuditExportPanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/useDeliveryDispatchPanel.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useDeliveryDispatchPanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/useDeliveryDispatchShipmentList.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useDeliveryDispatchShipmentList.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/useDeliveryDispatchPickupList.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useDeliveryDispatchPickupList.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/AgentMarkPayoutPaidAction/useAgentMarkPayoutPaidAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useAgentMarkPayoutPaidAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/AdminAssignDeliveryAgentAction/useAdminAssignDeliveryAgentAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useAdminAssignDeliveryAgentAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/useStaleTasksReport.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useStaleTasksReport.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/useCreateDeliveryAgentFormFieldsHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useCreateDeliveryAgentFormFieldsHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/useBulkImportAgentsDialog.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useBulkImportAgentsDialog.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/users/ImpersonateUserButton/useImpersonateUserButton.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/users/useImpersonateUserButton.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/users/ChangeUserRoleDialog/useChangeUserRoleDialogPresentation.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/users/useChangeUserRoleDialogPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/users/AdminUsersFilters/useAdminUsersFiltersHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/users/useAdminUsersFiltersHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/useCashbackWriteOffReportTable.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/wallet/useCashbackWriteOffReportTable.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/useAdminCashbackWriteOffPanel.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/wallet/useAdminCashbackWriteOffPanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/finance/AdminMarkPayoutPaidAction/useAdminMarkPayoutPaidAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/finance/useAdminMarkPayoutPaidAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/orders/AdminOrdersFilters/useAdminOrdersFiltersHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/orders/useAdminOrdersFiltersHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/AdminEditCategoryAction/useAdminEditCategoryAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/categories/useAdminEditCategoryAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/CategoriesPageHeader/useCategoriesPageHeader.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/categories/useCategoriesPageHeader.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/useAdminCategoryAttributesAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/categories/useAdminCategoryAttributesAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/AdminCategoryFormFields/useCategoryParentOptions.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/categories/useCategoryParentOptions.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/CategoriesTable/useCategoriesTableColumns.hook.tsx",
+      "to": "src/features/admin-dashboard/hooks/categories/useCategoriesTableColumns.hook.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/AdminArchiveCategoryAction/useArchiveCategoryDescription.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/categories/useArchiveCategoryDescription.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/AdminArchiveCategoryAction/useAdminArchiveCategoryAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/categories/useAdminArchiveCategoryAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/AdminReassignProductsAction/useAdminReassignProductsAction.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/categories/useAdminReassignProductsAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/notifications/NotificationLogFiltersBar/useNotificationLogFiltersBar.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/notifications/useNotificationLogFiltersBar.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/analytics/AdminAnalyticsExportBar/useAdminAnalyticsExportBar.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/analytics/useAdminAnalyticsExportBar.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/analytics/AdminAnalyticsLayout/useAdminAnalyticsLayout.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/analytics/useAdminAnalyticsLayout.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/payment/usePaymentStep.hook.ts",
+      "to": "src/features/checkout/hooks/payment/usePaymentStep.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/shipping/useShippingStep.hook.ts",
+      "to": "src/features/checkout/hooks/shipping/useShippingStep.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/review/useReviewStep.hook.ts",
+      "to": "src/features/checkout/hooks/review/useReviewStep.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/review/ReviewStep/usePayableSummary.hook.ts",
+      "to": "src/features/checkout/hooks/review/usePayableSummary.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/address/useAddressStep.hook.ts",
+      "to": "src/features/checkout/hooks/address/useAddressStep.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/wallet/useWalletApplySection.hook.ts",
+      "to": "src/features/checkout/hooks/wallet/useWalletApplySection.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/useCheckoutPageView.hook.ts",
+      "to": "src/features/checkout/hooks/page-view/useCheckoutPageView.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/useOrderSummaryPanel.hook.ts",
+      "to": "src/features/checkout/hooks/page-view/useOrderSummaryPanel.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/useCheckoutStepCard.hook.ts",
+      "to": "src/features/checkout/hooks/page-view/useCheckoutStepCard.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/filters/BugReportFilters/useBugReportFiltersHandlers.hook.ts",
+      "to": "src/features/bugReports/hooks/filters/useBugReportFiltersHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/detail/BugReportDetail/useBugComments.hook.ts",
+      "to": "src/features/bugReports/hooks/detail/useBugComments.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/detail/BugReportDetail/useBugTriageForm.hook.ts",
+      "to": "src/features/bugReports/hooks/detail/useBugTriageForm.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/detail/BugReportDetail/useBugReportActions.hook.ts",
+      "to": "src/features/bugReports/hooks/detail/useBugReportActions.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/list/useBugReportListHandlers.hook.ts",
+      "to": "src/features/bugReports/hooks/list/useBugReportListHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/list/useBugReportTableColumns.hook.tsx",
+      "to": "src/features/bugReports/hooks/list/useBugReportTableColumns.hook.tsx"
+    },
+    {
+      "from": "src/features/cart/components/line-item/CartLineItem/useCartLineViewModel.hook.ts",
+      "to": "src/features/cart/hooks/line-item/useCartLineViewModel.hook.ts"
+    },
+    {
+      "from": "src/features/cart/components/coupons/useCartCouponSection.hook.ts",
+      "to": "src/features/cart/hooks/coupons/useCartCouponSection.hook.ts"
+    },
+    {
+      "from": "src/features/cart/components/actions/useCartConfirmAction.hook.ts",
+      "to": "src/features/cart/hooks/actions/useCartConfirmAction.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable/useCommissionLedgerPresentation.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/commission/useCommissionLedgerPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/useCommissionInvoices.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/commission/useCommissionInvoices.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/useProductFormController.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/products/useProductFormController.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/products/VendorLowStockWidget/useVendorLowStockWidget.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/products/useVendorLowStockWidget.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/useVendorOrdersTable.hook.tsx",
+      "to": "src/features/vendor-dashboard/hooks/orders/useVendorOrdersTable.hook.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/payouts/VendorSettlementReportPanel/useVendorSettlementReportPanel.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/payouts/useVendorSettlementReportPanel.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/payouts/PayoutsTable/usePayoutsTablePresentation.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/payouts/usePayoutsTablePresentation.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/analytics/VendorAnalyticsPanel/useVendorAnalyticsPanel.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/analytics/useVendorAnalyticsPanel.hook.ts"
+    },
+    {
+      "from": "src/features/orders/components/sub-order/SubOrderCard/useSubOrderCard.hook.ts",
+      "to": "src/features/orders/hooks/sub-order/useSubOrderCard.hook.ts"
+    },
+    {
+      "from": "src/features/orders/components/detail/useOrderDetailHeader.hook.ts",
+      "to": "src/features/orders/hooks/detail/useOrderDetailHeader.hook.ts"
+    },
+    {
+      "from": "src/features/orders/components/detail/useOrderSummaryAside.hook.ts",
+      "to": "src/features/orders/hooks/detail/useOrderSummaryAside.hook.ts"
+    },
+    {
+      "from": "src/features/orders/components/list/useOrdersList.hook.ts",
+      "to": "src/features/orders/hooks/list/useOrdersList.hook.ts"
+    },
+    {
+      "from": "src/features/orders/components/list/useOrderCard.hook.ts",
+      "to": "src/features/orders/hooks/list/useOrderCard.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/privacy/PrivacySection/usePrivacySection.hook.ts",
+      "to": "src/features/account/hooks/privacy/usePrivacySection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/security/useSecuritySection.hook.ts",
+      "to": "src/features/account/hooks/security/useSecuritySection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/layout/useAccountLayout.hook.ts",
+      "to": "src/features/account/hooks/layout/useAccountLayout.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/orders-activity/useOrdersActivitySection.hook.ts",
+      "to": "src/features/account/hooks/orders-activity/useOrdersActivitySection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/addresses/AddressesSection/useAddressesSection.hook.ts",
+      "to": "src/features/account/hooks/addresses/useAddressesSection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/useSavedPaymentMethodsSection.hook.ts",
+      "to": "src/features/account/hooks/payment-methods/useSavedPaymentMethodsSection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/personal-info/useEmailVerificationStatus.hook.ts",
+      "to": "src/features/account/hooks/personal-info/useEmailVerificationStatus.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/personal-info/PersonalInfoSection/usePersonalInfoSection.hook.ts",
+      "to": "src/features/account/hooks/personal-info/usePersonalInfoSection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/overview/OverviewSection/useProfileCard.hook.ts",
+      "to": "src/features/account/hooks/overview/useProfileCard.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/overview/OverviewSection/useOverviewSection.hook.ts",
+      "to": "src/features/account/hooks/overview/useOverviewSection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/notifications/useBrowserNotificationsSetting.hook.ts",
+      "to": "src/features/account/hooks/notifications/useBrowserNotificationsSetting.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/delivery-operations/DeliveryOperationsSection/useDeliveryOperationsSection.hook.ts",
+      "to": "src/features/account/hooks/delivery-operations/useDeliveryOperationsSection.hook.ts"
+    },
+    {
+      "from": "src/features/categories/components/browse/useCategoryMoreCardPresentation.hook.ts",
+      "to": "src/features/categories/hooks/browse/useCategoryMoreCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/categories/components/browse/useCategoryCardPresentation.hook.ts",
+      "to": "src/features/categories/hooks/browse/useCategoryCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/today/ShiftSummaryCard/useShiftSummaryCard.hook.ts",
+      "to": "src/features/delivery-dashboard/hooks/today/useShiftSummaryCard.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/bank/BankDetailsCard/useBankDetailsCardPresentation.hook.ts",
+      "to": "src/features/delivery-dashboard/hooks/bank/useBankDetailsCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/location/LocationBeacon/useLocationBeacon.hook.ts",
+      "to": "src/features/delivery-dashboard/hooks/location/useLocationBeacon.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/cash/CashDepositsCard/useCashDepositsCardPresentation.hook.ts",
+      "to": "src/features/delivery-dashboard/hooks/cash/useCashDepositsCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/useDoorstepConfirmHandlers.hook.ts",
+      "to": "src/features/delivery-dashboard/hooks/doorstep/useDoorstepConfirmHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/useEarningsPayoutsCardPresentation.hook.ts",
+      "to": "src/features/delivery-dashboard/hooks/earnings/useEarningsPayoutsCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/offline/OfflineSyncBanner/useOfflineSyncBanner.hook.ts",
+      "to": "src/features/delivery-dashboard/hooks/offline/useOfflineSyncBanner.hook.ts"
+    },
+    {
+      "from": "src/shared/components/InfiniteSingleSelect/useInfiniteSelectOptions.hook.ts",
+      "to": "src/shared/hooks/infinite-single-select/useInfiniteSelectOptions.hook.ts"
+    },
+    {
+      "from": "src/shared/components/FileUpload/useFileCropSession.hook.ts",
+      "to": "src/shared/hooks/file-upload/useFileCropSession.hook.ts"
+    },
+    {
+      "from": "src/shared/components/FileUpload/useFilePreviews.hook.ts",
+      "to": "src/shared/hooks/file-upload/useFilePreviews.hook.ts"
+    },
+    {
+      "from": "src/shared/components/FileUpload/useFileUploadController.hook.ts",
+      "to": "src/shared/hooks/file-upload/useFileUploadController.hook.ts"
+    },
+    {
+      "from": "src/shared/components/FileUpload/useFileUploads.hook.ts",
+      "to": "src/shared/hooks/file-upload/useFileUploads.hook.ts"
+    },
+    {
+      "from": "src/shared/components/layout/useDeliveryLayout.hook.ts",
+      "to": "src/shared/hooks/layout/useDeliveryLayout.hook.ts"
+    },
+    {
+      "from": "src/shared/components/layout/useAdminLayout.hook.ts",
+      "to": "src/shared/hooks/layout/useAdminLayout.hook.ts"
+    },
+    {
+      "from": "src/shared/components/layout/useVendorLayout.hook.ts",
+      "to": "src/shared/hooks/layout/useVendorLayout.hook.ts"
+    },
+    {
+      "from": "src/shared/components/InfiniteMultiSelect/useInfiniteSelectOptions.hook.ts",
+      "to": "src/shared/hooks/infinite-multi-select/useInfiniteSelectOptions.hook.ts"
+    },
+    {
+      "from": "src/shared/components/QuantitySelector/useQuantitySelector.hook.ts",
+      "to": "src/shared/hooks/quantity-selector/useQuantitySelector.hook.ts"
+    },
+    {
+      "from": "src/shared/components/ImageCropDialog/useCropControls.hook.ts",
+      "to": "src/shared/hooks/image-crop-dialog/useCropControls.hook.ts"
+    },
+    {
+      "from": "src/shared/components/ImageGallery/useImageGalleryZoom.hook.ts",
+      "to": "src/shared/hooks/image-gallery/useImageGalleryZoom.hook.ts"
+    },
+    {
+      "from": "src/shared/components/ImageGallery/useImageLightboxGestures.hook.ts",
+      "to": "src/shared/hooks/image-gallery/useImageLightboxGestures.hook.ts"
+    },
+    {
+      "from": "src/shared/components/ImageGallery/useGalleryStage.hook.ts",
+      "to": "src/shared/hooks/image-gallery/useGalleryStage.hook.ts"
+    },
+    {
+      "from": "src/shared/components/ImageGallery/useImageGalleryTransition.hook.ts",
+      "to": "src/shared/hooks/image-gallery/useImageGalleryTransition.hook.ts"
+    },
+    {
+      "from": "src/shared/components/ImageGallery/useLightboxTransform.hook.ts",
+      "to": "src/shared/hooks/image-gallery/useLightboxTransform.hook.ts"
+    },
+    {
+      "from": "src/shared/components/AddressFormDialog/useCaptureLocation.hook.ts",
+      "to": "src/shared/hooks/address-form-dialog/useCaptureLocation.hook.ts"
+    },
+    {
+      "from": "src/shared/components/AddressFormDialog/useAddressFormBody.hook.ts",
+      "to": "src/shared/hooks/address-form-dialog/useAddressFormBody.hook.ts"
+    },
+    {
+      "from": "src/features/home/components/hero/HeroSection/types.ts",
+      "to": "src/features/home/types/hero/types.ts"
+    },
+    {
+      "from": "src/features/home/components/hero/HeroSection/constants.ts",
+      "to": "src/features/home/constants/hero/constants.ts"
+    },
+    {
+      "from": "src/features/storefront/components/header/headerShared.ts",
+      "to": "src/features/storefront/utils/header/headerShared.ts"
+    },
+    {
+      "from": "src/features/products/components/card/ProductCard/types.ts",
+      "to": "src/features/products/types/card/types.ts"
+    },
+    {
+      "from": "src/features/products/components/detail/ProductDetailContent/types.ts",
+      "to": "src/features/products/types/detail/types.ts"
+    },
+    {
+      "from": "src/features/products/components/detail/ProductDetailContent/labels.ts",
+      "to": "src/features/products/constants/detail/labels.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/CreateTicketForm/utils.ts",
+      "to": "src/features/supportTickets/utils/form/utils.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/CreateTicketForm/types.ts",
+      "to": "src/features/supportTickets/types/form/types.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/TicketAttachmentUploader/utils.ts",
+      "to": "src/features/supportTickets/utils/form/TicketAttachmentUploader-utils.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/TicketAttachmentUploader/types.ts",
+      "to": "src/features/supportTickets/types/form/TicketAttachmentUploader-types.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/form/TicketAttachmentUploader/prepareUpload.ts",
+      "to": "src/features/supportTickets/utils/form/prepareUpload.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/detail/TicketThread/ticketThreadShared.ts",
+      "to": "src/features/supportTickets/utils/detail/ticketThreadShared.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/shared/AdminSectionTabs/adminSectionTabs.types.ts",
+      "to": "src/features/admin-dashboard/types/shared/adminSectionTabs.types.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/bulkCouponForm.schema.ts",
+      "to": "src/features/admin-dashboard/schemas/coupons/bulkCouponForm.schema.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/couponBatchColumns.ts",
+      "to": "src/features/admin-dashboard/constants/coupons/couponBatchColumns.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/coupons/CreateCouponForm/couponDisableHint.ts",
+      "to": "src/features/admin-dashboard/utils/coupons/couponDisableHint.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/coupons/CreateCouponForm/constants.ts",
+      "to": "src/features/admin-dashboard/constants/coupons/constants.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/createDeliveryAgentForm.types.ts",
+      "to": "src/features/admin-dashboard/types/delivery-agents/createDeliveryAgentForm.types.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/attributeOptionUtils.ts",
+      "to": "src/features/admin-dashboard/utils/categories/attributeOptionUtils.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/types.ts",
+      "to": "src/features/checkout/types/page-view/types.ts"
+    },
+    {
+      "from": "src/features/checkout/components/page-view/CheckoutPageView/checkoutOverlayCopy.ts",
+      "to": "src/features/checkout/utils/page-view/checkoutOverlayCopy.ts"
+    },
+    {
+      "from": "src/features/search/components/search-bar/SearchBar/constants.ts",
+      "to": "src/features/search/constants/search-bar/constants.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/detail/BugReportDetail/bugReportDetailShared.ts",
+      "to": "src/features/bugReports/utils/detail/bugReportDetailShared.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/types.ts",
+      "to": "src/features/vendor-dashboard/types/products/types.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/products/ProductsTable/types.ts",
+      "to": "src/features/vendor-dashboard/types/products/ProductsTable-types.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/subOrderStatuses.ts",
+      "to": "src/features/vendor-dashboard/constants/orders/subOrderStatuses.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/vendorOrderFormat.ts",
+      "to": "src/features/vendor-dashboard/utils/orders/vendorOrderFormat.ts"
+    },
+    {
+      "from": "src/features/orders/components/list/ordersTableColumns.tsx",
+      "to": "src/features/orders/constants/list/ordersTableColumns.tsx"
+    },
+    {
+      "from": "src/shared/components/InfiniteSingleSelect/types.ts",
+      "to": "src/shared/types/infinite-single-select/types.ts"
+    },
+    {
+      "from": "src/shared/components/InfiniteSingleSelect/infiniteSelectOptions.utils.ts",
+      "to": "src/shared/utils/infinite-single-select/infiniteSelectOptions.utils.ts"
+    },
+    {
+      "from": "src/shared/components/FileUpload/utils.ts",
+      "to": "src/shared/utils/file-upload/utils.ts"
+    },
+    {
+      "from": "src/shared/components/FileUpload/types.ts",
+      "to": "src/shared/types/file-upload/types.ts"
+    },
+    {
+      "from": "src/shared/components/InfiniteMultiSelect/types.ts",
+      "to": "src/shared/types/infinite-multi-select/types.ts"
+    },
+    {
+      "from": "src/shared/components/ImageCropDialog/types.ts",
+      "to": "src/shared/types/image-crop-dialog/types.ts"
+    },
+    {
+      "from": "src/shared/components/DateTimePicker/utils.ts",
+      "to": "src/shared/utils/date-time-picker/utils.ts"
+    },
+    {
+      "from": "src/shared/components/DataTable/types.ts",
+      "to": "src/shared/types/data-table/types.ts"
+    }
+  ]
+}

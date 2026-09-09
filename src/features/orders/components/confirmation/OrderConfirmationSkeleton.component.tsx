@@ -1,6 +1,6 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
-import { orderConfirmationSkeletonStyles as styles } from "./orderConfirmationSkeleton.styles";
+import { orderConfirmationSkeletonStyles as styles } from "../../styles/confirmation/orderConfirmationSkeleton.styles";
 
 /**
  * Mirrors OrderConfirmation's hero band plus items/totals split, so arriving

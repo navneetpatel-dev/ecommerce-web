@@ -1,5 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { personalInfoSectionStyles as styles } from "./personalInfoSection.styles";
+import { personalInfoSectionStyles as styles } from "../../../styles/personal-info/personalInfoSection.styles";
 
 export function PersonalInfoSectionLoadingSkeleton() {
   return (

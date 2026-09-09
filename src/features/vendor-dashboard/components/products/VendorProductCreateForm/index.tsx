@@ -10,9 +10,9 @@ import { ProductImagesSection } from "./ProductImagesSection.component";
 import { ProductMediaSection } from "./ProductMediaSection.component";
 import { ProductPoliciesSection } from "./ProductPoliciesSection.component";
 import { ProductSeoSection } from "./ProductSeoSection.component";
-import { useProductFormController } from "./useProductFormController.hook";
-import { vendorProductCreateFormStyles } from "./vendorProductCreateForm.styles";
-import type { VendorProductCreateFormProps } from "./types";
+import { useProductFormController } from "../../../hooks/products/useProductFormController.hook";
+import { vendorProductCreateFormStyles } from "../../../styles/products/vendorProductCreateForm.styles";
+import type { VendorProductCreateFormProps } from "../../../types/products/types";
 
 export function VendorProductCreateForm({
   mode,

@@ -8,7 +8,7 @@ import { isDeliveryRole } from "@/shared/utils/roles/roles";
 import { useDeliveryProfile } from "@/features/delivery-dashboard";
 import type { AccountProfile } from "../../../types/layout/types";
 import { EmailVerificationStatus } from "../EmailVerificationStatus.component";
-import { personalInfoSectionStyles as styles } from "./personalInfoSection.styles";
+import { personalInfoSectionStyles as styles } from "../../../styles/personal-info/personalInfoSection.styles";
 
 interface ProfileAsideProps {
   profile: Pick<AccountProfile, "name" | "phone" | "email" | "emailVerified">;

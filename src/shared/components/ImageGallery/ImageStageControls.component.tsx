@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { MouseEvent } from "react";
-import { imageStageControlsStyles } from "./imageGallery.styles";
+import { imageStageControlsStyles } from "../../styles/image-gallery/imageGallery.styles";
 
 interface ImageStageControlsProps {
   hasMultiple: boolean;

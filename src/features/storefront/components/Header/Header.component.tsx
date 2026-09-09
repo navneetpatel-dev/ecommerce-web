@@ -14,7 +14,7 @@ import { AccountSection } from "./AccountSection.component";
 import { DesktopPrimaryNavSkeleton } from "./HeaderActionSkeletons.component";
 import { HeaderMenuButton } from "./HeaderMenuButton.component";
 import { MobileOverlays } from "./MobileOverlays.component";
-import { headerStyles as styles } from "./header.styles";
+import { headerStyles as styles } from "../../styles/header/header.styles";
 
 interface HeaderProps {
   currentUser: CurrentUser | null;

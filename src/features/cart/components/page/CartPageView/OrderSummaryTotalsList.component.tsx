@@ -4,7 +4,7 @@ import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.c
 import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
 import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { cartPageViewStyles as styles } from "./cartPageView.styles";
+import { cartPageViewStyles as styles } from "../../../styles/page/cartPageView.styles";
 
 interface OrderSummaryTotalsListProps {
   subtotal?: number;

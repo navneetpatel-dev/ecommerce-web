@@ -9,8 +9,8 @@ import { ReviewStep } from "../../review/ReviewStep.component";
 import { CheckoutStepTransition } from "./CheckoutStepTransition.component";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { Address, CartItem, CheckoutQuote } from "@/shared/api/types";
-import { useCheckoutStepCard } from "./useCheckoutStepCard.hook";
-import { CHECKOUT_STEP_CARD_STYLES } from "./checkoutStepCard.styles";
+import { useCheckoutStepCard } from "../../../hooks/page-view/useCheckoutStepCard.hook";
+import { CHECKOUT_STEP_CARD_STYLES } from "../../../styles/page-view/checkoutStepCard.styles";
 
 interface CheckoutStepCardProps {
   step: number;

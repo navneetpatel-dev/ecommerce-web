@@ -1,6 +1,6 @@
 import { IndianRupee } from "lucide-react";
 import { CheckboxField } from "@/shared/components/CheckboxField.component";
-import { doorstepConfirmCardStyles } from "./doorstepConfirmCard.styles";
+import { doorstepConfirmCardStyles } from "../../../styles/doorstep/doorstepConfirmCard.styles";
 
 interface DoorstepCodSectionProps {
   codAmount: number;

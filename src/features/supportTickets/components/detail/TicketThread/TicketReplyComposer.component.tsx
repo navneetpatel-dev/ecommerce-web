@@ -9,7 +9,7 @@ import { Send } from "lucide-react";
 import { TICKET_REPLY_MAX } from "../../../constants/form/fieldLimits";
 import { TicketAttachmentUploader } from "../../form/TicketAttachmentUploader/index";
 import type { UploadedMediaAttachment } from "../../form/TicketAttachmentUploader/index";
-import { ticketThreadStyles } from "./ticketThread.styles";
+import { ticketThreadStyles } from "../../../styles/detail/ticketThread.styles";
 
 interface TicketReplyComposerProps {
   ticketId: string;

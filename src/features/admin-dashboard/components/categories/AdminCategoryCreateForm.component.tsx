@@ -10,7 +10,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { FormActions } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { AdminCategoryFormFields } from "./AdminCategoryFormFields.component";
-import { adminCategoryStyles } from "./adminCategory.styles";
+import { adminCategoryStyles } from "../../styles/categories/adminCategory.styles";
 
 interface AdminCategoryCreateFormProps {
   form: UseFormReturn<CategoryFormInput>;

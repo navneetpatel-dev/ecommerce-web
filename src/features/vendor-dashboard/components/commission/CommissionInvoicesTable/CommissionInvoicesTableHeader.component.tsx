@@ -1,6 +1,6 @@
 import { TableHeader, TableRow, TableHead } from "@/shared/components/ui/table";
 import { LABELS } from "@/shared/constants/labels";
-import { commissionInvoicesTableStyles as styles } from "./commissionInvoicesTable.styles";
+import { commissionInvoicesTableStyles as styles } from "../../../styles/commission/commissionInvoicesTable.styles";
 
 export function CommissionInvoicesTableHeader() {
   return (

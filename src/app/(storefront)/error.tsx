@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { reportError } from "@/shared/lib/errorReporting";
 import { ErrorFallbackActions } from "@/shared/components/ErrorFallbackActions.component";
-import { errorBoundaryStyles as styles } from "@/shared/components/errorBoundary.styles";
+import { errorBoundaryStyles as styles } from "@/shared/styles/system/errorBoundary.styles";
 
 interface StorefrontErrorProps {
   error: Error & { digest?: string };

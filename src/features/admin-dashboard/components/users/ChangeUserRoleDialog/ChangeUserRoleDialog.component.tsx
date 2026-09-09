@@ -11,10 +11,10 @@ import {
 } from "@/shared/components/ui/dialog";
 import { Button } from "@/shared/components/ui/button";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
-import { changeUserRoleDialogStyles } from "./changeUserRoleDialog.styles";
+import { changeUserRoleDialogStyles } from "../../../styles/users/changeUserRoleDialog.styles";
 import { RoleOptionsList } from "./RoleOptionsList.component";
 import { VendorOptionsList } from "./VendorOptionsList.component";
-import { useChangeUserRoleDialogPresentation } from "./useChangeUserRoleDialogPresentation.hook";
+import { useChangeUserRoleDialogPresentation } from "../../../hooks/users/useChangeUserRoleDialogPresentation.hook";
 
 export interface ChangeUserRoleDialogProps {
   userId: string;

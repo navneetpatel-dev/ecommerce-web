@@ -1,5 +1,5 @@
 import { daysUntil } from "../../../utils/documents/deliveryDocumentStatus";
-import { deliveryAgentDocumentsCardStyles as styles } from "./deliveryAgentDocumentsCard.styles";
+import { deliveryAgentDocumentsCardStyles as styles } from "../../../styles/documents/deliveryAgentDocumentsCard.styles";
 
 export function ExpiryBadge({ expiryDate }: { expiryDate: string | null }) {
   if (!expiryDate) return null;

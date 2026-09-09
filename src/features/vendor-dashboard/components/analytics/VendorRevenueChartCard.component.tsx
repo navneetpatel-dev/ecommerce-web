@@ -19,7 +19,7 @@ import {
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { useChartThemeColors } from "@/shared/hooks/theme/useChartThemeColors.hook";
-import { vendorRevenueChartStyles } from "./vendorAnalyticsWidgets.styles";
+import { vendorRevenueChartStyles } from "../../styles/analytics/vendorAnalyticsWidgets.styles";
 
 interface RevenuePoint {
   label: string;

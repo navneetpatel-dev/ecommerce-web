@@ -1,7 +1,7 @@
 import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import type { CartItem } from "@/shared/api/types";
 import { CartLineItem } from "../line-item/CartLineItem.component";
-import { cartDrawerStyles as styles } from "./cartDrawer.styles";
+import { cartDrawerStyles as styles } from "../../styles/drawer/cartDrawer.styles";
 
 interface CartDrawerVendorGroupProps {
   items: CartItem[];

@@ -1,5 +1,5 @@
 import type { DeliveryAgentPerformance } from "@/features/delivery-dashboard";
-import { adminDeliveryPerformancePanelStyles } from "./adminDeliveryPerformancePanel.styles";
+import { adminDeliveryPerformancePanelStyles } from "../../../styles/delivery-agents/adminDeliveryPerformancePanel.styles";
 
 interface PerformanceTableRowProps {
   row: DeliveryAgentPerformance;

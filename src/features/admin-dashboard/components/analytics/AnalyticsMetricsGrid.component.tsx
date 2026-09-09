@@ -16,7 +16,7 @@ import {
   formatAnalyticsInr,
   formatAnalyticsPercent,
 } from "../../utils/analytics/analyticsFormat";
-import { analyticsStyles } from "./analyticsComponents.styles";
+import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styles";
 
 const fadeUp = {
   initial: { opacity: 0, y: 12 },

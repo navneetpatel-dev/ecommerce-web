@@ -2,7 +2,7 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
-import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "../../../styles/detail/productDetailContent.styles";
 
 interface StickyAddToCartBarProps {
   visible: boolean;

@@ -7,7 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { PasswordInputContainer } from "@/shared/containers/forms/PasswordInputContainer.container";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { authFormsStyles } from "../shell/authForms.styles";
+import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 interface ResetPasswordInput {
   token: string;

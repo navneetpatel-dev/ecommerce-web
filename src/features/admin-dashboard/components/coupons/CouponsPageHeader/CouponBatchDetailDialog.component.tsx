@@ -9,7 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import type { CouponBatch } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { couponsPageHeaderStyles } from "./couponsPageHeader.styles";
+import { couponsPageHeaderStyles } from "../../../styles/coupons/couponsPageHeader.styles";
 
 interface CouponBatchDetailDialogProps {
   batchDetail: CouponBatch | null;

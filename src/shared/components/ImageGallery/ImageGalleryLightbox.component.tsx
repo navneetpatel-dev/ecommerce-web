@@ -17,7 +17,7 @@ import {
 } from "@/shared/constants/media/imageGallery";
 import { useImageLightboxGestures } from "@/shared/hooks/media/useImageLightboxGestures.hook";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { imageLightboxStyles } from "./imageLightbox.styles";
+import { imageLightboxStyles } from "../../styles/image-gallery/imageLightbox.styles";
 import type { ProductImage } from "@/shared/api/types";
 
 interface ImageGalleryLightboxProps {

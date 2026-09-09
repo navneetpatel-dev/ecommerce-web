@@ -3,8 +3,8 @@
 import { useMemo } from "react";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type { BugReport } from "../../../api/list/bugReports.api";
-import { useBugReportActions } from "./useBugReportActions.hook";
-import { bugListHref } from "./bugReportDetailShared";
+import { useBugReportActions } from "../../../hooks/detail/useBugReportActions.hook";
+import { bugListHref } from "../../../utils/detail/bugReportDetailShared";
 import { BugCommentsSection } from "./BugCommentsSection.component";
 import { BugContextPanel } from "./BugContextPanel.component";
 import { BugDescriptionSection } from "./BugDescriptionSection.component";
@@ -12,7 +12,7 @@ import { BugProgressPanel } from "./BugProgressPanel.component";
 import { BugReportHeader } from "./BugReportHeader.component";
 import { BugStatusUpdatePanel } from "./BugStatusUpdatePanel.component";
 import { BugTriagePanel } from "./BugTriagePanel.component";
-import { bugReportDetailStyles } from "./bugReportDetail.styles";
+import { bugReportDetailStyles } from "../../../styles/detail/bugReportDetail.styles";
 
 export function BugReportDetail({
   report,

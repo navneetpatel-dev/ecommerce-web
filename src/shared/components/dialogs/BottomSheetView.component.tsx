@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { bottomSheetViewStyles } from "./dialogComponents.styles";
+import { bottomSheetViewStyles } from "../../styles/dialogs/dialogComponents.styles";
 
 interface BottomSheetProps {
   open: boolean;

@@ -14,8 +14,8 @@ import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { AccountProfile } from "../../../types/layout/types";
 import { EmailVerificationStatus } from "../../personal-info/EmailVerificationStatus.component";
-import { useProfileCard } from "./useProfileCard.hook";
-import { profileCardStyles as styles } from "./profileCard.styles";
+import { useProfileCard } from "../../../hooks/overview/useProfileCard.hook";
+import { profileCardStyles as styles } from "../../../styles/overview/profileCard.styles";
 
 interface ProfileCardProps {
   profile: Pick<

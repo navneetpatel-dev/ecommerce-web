@@ -1,4 +1,4 @@
-import { variantSelectorStyles } from "./variantSelector.styles";
+import { variantSelectorStyles } from "../../../styles/variants/variantSelector.styles";
 import { VariantAttributeGroup } from "./VariantAttributeGroup.component";
 
 interface VariantAttributeGroupsListProps {

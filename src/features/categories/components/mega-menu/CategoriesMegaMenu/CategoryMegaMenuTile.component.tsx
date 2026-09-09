@@ -11,7 +11,7 @@ import {
   resolveCategoryImageUrl,
 } from "../../../utils/browse/categoryHelpers";
 import type { Category } from "@/shared/api/types";
-import { categoryMegaMenuStyles as styles } from "./categoryMegaMenu.styles";
+import { categoryMegaMenuStyles as styles } from "../../../styles/mega-menu/categoryMegaMenu.styles";
 
 const MAX_VISIBLE_CHILDREN = 5;
 

@@ -9,8 +9,8 @@ import {
   TICKET_PRIORITY_LABEL,
   TICKET_STATUS_LABEL,
 } from "../../../utils/detail/labels";
-import { listHref, type RoleMode } from "./ticketThreadShared";
-import { ticketThreadStyles } from "./ticketThread.styles";
+import { listHref, type RoleMode } from "../../../utils/detail/ticketThreadShared";
+import { ticketThreadStyles } from "../../../styles/detail/ticketThread.styles";
 
 /** Back link, subject and status/priority badges. */
 export function TicketThreadHeader({

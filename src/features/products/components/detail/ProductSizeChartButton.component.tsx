@@ -11,7 +11,7 @@ import {
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { productDetailsMiscStyles } from "./productDetailsMisc.styles";
+import { productDetailsMiscStyles } from "../../styles/detail/productDetailsMisc.styles";
 
 interface ProductSizeChartButtonProps {
   url: string;

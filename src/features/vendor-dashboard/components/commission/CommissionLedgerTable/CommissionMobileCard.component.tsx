@@ -1,6 +1,6 @@
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { commissionLedgerTableStyles } from "./commissionLedgerTable.styles";
-import type { CommissionRowViewModel } from "./useCommissionLedgerPresentation.hook";
+import { commissionLedgerTableStyles } from "../../../styles/commission/commissionLedgerTable.styles";
+import type { CommissionRowViewModel } from "../../../hooks/commission/useCommissionLedgerPresentation.hook";
 
 interface CommissionMobileCardProps {
   row: CommissionRowViewModel;

@@ -6,9 +6,9 @@ import { ProductGallery } from "../../gallery/ProductGallery.component";
 import { ProductBuyBoxColumn } from "./ProductBuyBoxColumn.component";
 import { DetailTabsSection } from "./DetailTabsSection.component";
 import { StickyAddToCartBar } from "./StickyAddToCartBar.component";
-import { useProductDetailContent } from "./useProductDetailContent.hook";
-import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
-import type { ProductDetailContentProps } from "./types";
+import { useProductDetailContent } from "../../../hooks/detail/useProductDetailContent.hook";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "../../../styles/detail/productDetailContent.styles";
+import type { ProductDetailContentProps } from "../../../types/detail/types";
 
 export function ProductDetailContent({
   product,

@@ -1,6 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
-import { deliveryTerminalStatusBannerStyles } from "./deliveryTerminalStatusBanner.styles";
+import { deliveryTerminalStatusBannerStyles } from "../../styles/deliveries/deliveryTerminalStatusBanner.styles";
 
 interface DeliveryTerminalStatusBannerProps {
   variant: "DELIVERED" | "RTO_DELIVERED";

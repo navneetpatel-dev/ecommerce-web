@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { useCartConfirmAction } from "./useCartConfirmAction.hook";
+import { useCartConfirmAction } from "../../hooks/actions/useCartConfirmAction.hook";
 
 type TriggerVariant = "ghost" | "outline" | "destructive";
 type TriggerSize = "sm" | "icon-sm";

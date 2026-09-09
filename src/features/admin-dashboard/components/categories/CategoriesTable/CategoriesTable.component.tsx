@@ -13,8 +13,8 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { useCategoriesReorder } from "../../../hooks/categories/useCategoriesReorder.hook";
 import type { Category } from "@/shared/api/types";
-import { categoriesTableStyles } from "./categoriesTable.styles";
-import { useCategoriesTableColumns } from "./useCategoriesTableColumns.hook";
+import { categoriesTableStyles } from "../../../styles/categories/categoriesTable.styles";
+import { useCategoriesTableColumns } from "../../../hooks/categories/useCategoriesTableColumns.hook";
 
 export interface CategoriesTableProps {
   categories: Category[];

@@ -1,8 +1,8 @@
 "use client";
 
 import { ReportExportButtons, ReportExportStatus } from "@/features/reports";
-import { useAdminAnalyticsExportBar } from "./AdminAnalyticsExportBar/useAdminAnalyticsExportBar.hook";
-import { adminAnalyticsExportBarStyles as styles } from "./AdminAnalyticsExportBar/adminAnalyticsExportBar.styles";
+import { useAdminAnalyticsExportBar } from "../../hooks/analytics/useAdminAnalyticsExportBar.hook";
+import { adminAnalyticsExportBarStyles as styles } from "../../styles/analytics/adminAnalyticsExportBar.styles";
 
 interface AdminAnalyticsExportBarProps {
   range?: { from?: string; to?: string };

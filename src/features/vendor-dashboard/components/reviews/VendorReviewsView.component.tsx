@@ -7,7 +7,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { Review } from "@/shared/api/types";
 import { VendorReviewRespondDialog } from "./VendorReviewRespondDialog.component";
-import { vendorFeedbackViewsStyles } from "./vendorFeedbackViews.styles";
+import { vendorFeedbackViewsStyles } from "../../styles/reviews/vendorFeedbackViews.styles";
 
 interface VendorReviewsViewProps {
   reviews: Review[];

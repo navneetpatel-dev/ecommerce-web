@@ -9,8 +9,8 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";
-import { useAdminApproveVendorAction } from "./AdminApproveVendorAction/useAdminApproveVendorAction.hook";
-import { adminApproveVendorActionStyles as styles } from "./AdminApproveVendorAction/adminApproveVendorAction.styles";
+import { useAdminApproveVendorAction } from "../../hooks/vendors/useAdminApproveVendorAction.hook";
+import { adminApproveVendorActionStyles as styles } from "../../styles/vendors/adminApproveVendorAction.styles";
 
 interface AdminApproveVendorActionProps {
   vendorName: string;

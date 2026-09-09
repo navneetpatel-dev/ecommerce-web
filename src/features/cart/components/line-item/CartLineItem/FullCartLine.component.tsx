@@ -11,8 +11,8 @@ import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart/cart";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import type { CartItem } from "@/shared/api/types";
 import { RemoveCartItemAction } from "../../actions/RemoveCartItemAction.component";
-import { useCartLineViewModel } from "./useCartLineViewModel.hook";
-import { cartLineStyles as styles } from "./cartLine.styles";
+import { useCartLineViewModel } from "../../../hooks/line-item/useCartLineViewModel.hook";
+import { cartLineStyles as styles } from "../../../styles/line-item/cartLine.styles";
 
 interface FullCartLineProps {
   item: CartItem;

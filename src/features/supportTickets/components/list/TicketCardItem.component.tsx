@@ -8,7 +8,7 @@ import {
   TICKET_PRIORITY_LABEL,
   TICKET_STATUS_LABEL,
 } from "../../utils/detail/labels";
-import { ticketCardListStyles } from "./ticketCardList.styles";
+import { ticketCardListStyles } from "../../styles/list/ticketCardList.styles";
 
 interface TicketCardItemProps {
   ticket: SupportTicket;

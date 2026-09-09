@@ -9,7 +9,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { commissionsApi, payoutsApi } from "../../api/finance/finance.api";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { AdminMarkPayoutPaidAction } from "../../components/finance/AdminMarkPayoutPaidAction.component";
-import { adminDataListViewStyles } from "../../components/shared/AdminDataListView/adminDataListView.styles";
+import { adminDataListViewStyles } from "../../styles/shared/adminDataListView.styles";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 

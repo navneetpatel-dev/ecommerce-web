@@ -3,8 +3,8 @@
 import { LABELS } from "@/shared/constants/labels";
 import { KeysetDataTable } from "@/shared/components/KeysetDataTable.component";
 import type { BugReport } from "../../api/list/bugReports.api";
-import { useBugReportTableColumns } from "./useBugReportTableColumns.hook";
-import { useBugReportListHandlers } from "./useBugReportListHandlers.hook";
+import { useBugReportTableColumns } from "../../hooks/list/useBugReportTableColumns.hook";
+import { useBugReportListHandlers } from "../../hooks/list/useBugReportListHandlers.hook";
 
 interface BugReportListProps {
   reports: BugReport[];

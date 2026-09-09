@@ -10,7 +10,7 @@ import {
 } from "@/shared/components/ui/popover";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { dateTimePickerStyles } from "./dateTimePicker.styles";
+import { dateTimePickerStyles } from "../../styles/date-time-picker/dateTimePicker.styles";
 import { CalendarGrid } from "./CalendarGrid.component";
 import { TimeSelectors } from "./TimeSelectors.component";
 import {
@@ -21,7 +21,7 @@ import {
   startOfDay,
   toDateOnly,
   toIso,
-} from "./utils";
+} from "../../utils/date-time-picker/utils";
 
 interface DateTimePickerProps {
   value?: string;

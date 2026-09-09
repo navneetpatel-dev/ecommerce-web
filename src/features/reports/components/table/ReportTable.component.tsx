@@ -10,7 +10,7 @@ import type {
   ReportRunResult,
 } from "../../api/table/reportsEngine.api";
 import { formatReportCell } from "../../utils/table/formatReportCell";
-import { reportTableStyles as styles } from "./reportTable.styles";
+import { reportTableStyles as styles } from "../../styles/table/reportTable.styles";
 
 interface ReportTableProps {
   result: ReportRunResult | null;

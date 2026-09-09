@@ -15,7 +15,7 @@ import {
   Upload,
 } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
-import { filePickerStyles } from "./fileUploadComponents.styles";
+import { filePickerStyles } from "../../styles/file-upload/fileUploadComponents.styles";
 import { FilePickerSelectedFile } from "./FilePickerSelectedFile.component";
 import { FilePickerDropzone } from "./FilePickerDropzone.component";
 import {

@@ -9,12 +9,12 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
-import { adminOrdersFiltersStyles } from "./adminOrdersFilters.styles";
+import { adminOrdersFiltersStyles } from "../../../styles/orders/adminOrdersFilters.styles";
 import {
   OrderStatusOptionsList,
   ALL_STATUSES_VALUE,
 } from "./OrderStatusOptionsList.component";
-import { useAdminOrdersFiltersHandlers } from "./useAdminOrdersFiltersHandlers.hook";
+import { useAdminOrdersFiltersHandlers } from "../../../hooks/orders/useAdminOrdersFiltersHandlers.hook";
 
 export type AdminOrdersFiltersProps = {
   search: string;

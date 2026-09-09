@@ -11,7 +11,7 @@ import {
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import type { ShiftSummary } from "../../types/agent/types";
-import { useShiftSummaryCard } from "./ShiftSummaryCard/useShiftSummaryCard.hook";
+import { useShiftSummaryCard } from "../../hooks/today/useShiftSummaryCard.hook";
 import { CashDepositDialog } from "./ShiftSummaryCard/CashDepositDialog.component";
 import {
   SHIFT_CARD_EYEBROW,
@@ -26,7 +26,7 @@ import {
   SHIFT_STAT_ITEM,
   SHIFT_STAT_NUMBER,
   SHIFT_STATS_GRID,
-} from "./ShiftSummaryCard/shiftSummaryCard.styles";
+} from "../../styles/today/shiftSummaryCard.styles";
 
 export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
   const {

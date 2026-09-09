@@ -7,7 +7,7 @@ import { SuccessCheckmarkContainer } from "@/shared/containers/display/SuccessCh
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { shortOrderId } from "../../utils/detail/format";
-import { orderConfirmationStyles as styles } from "./orderConfirmation.styles";
+import { orderConfirmationStyles as styles } from "../../styles/confirmation/orderConfirmation.styles";
 
 interface OrderConfirmationHeroProps {
   orderId: string | undefined;

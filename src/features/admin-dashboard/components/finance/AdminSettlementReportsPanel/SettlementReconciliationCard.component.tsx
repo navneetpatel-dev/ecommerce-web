@@ -6,7 +6,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import { ReportExportButtons, type ExportFileFormat } from "@/features/reports";
 import type { ReconciliationReport } from "../../../api/finance/reports.api";
 import { MetricCard } from "../../shared/MetricCard.component";
-import { adminSettlementReportsPanelStyles } from "./adminSettlementReportsPanel.styles";
+import { adminSettlementReportsPanelStyles } from "../../../styles/finance/adminSettlementReportsPanel.styles";
 
 interface SettlementReconciliationCardProps {
   recon: ReconciliationReport;

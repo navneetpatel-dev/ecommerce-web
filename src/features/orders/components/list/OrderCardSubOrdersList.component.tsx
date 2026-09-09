@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { SubOrder } from "@/shared/api/types";
 import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { ORDER_CARD_STYLES } from "./orderCard.styles";
+import { ORDER_CARD_STYLES } from "../../styles/list/orderCard.styles";
 
 interface OrderCardSubOrdersListProps {
   subOrders: SubOrder[];

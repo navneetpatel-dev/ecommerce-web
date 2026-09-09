@@ -7,7 +7,7 @@ import {
   BugAttachmentUploader,
   type UploadedMediaAttachment,
 } from "@/features/supportTickets";
-import { bugReportFormStyles } from "./bugReportForm.styles";
+import { bugReportFormStyles } from "../../styles/form/bugReportForm.styles";
 
 interface BugFormFooterProps {
   draftId: string;

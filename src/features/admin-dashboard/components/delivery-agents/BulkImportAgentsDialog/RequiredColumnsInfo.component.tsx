@@ -1,6 +1,6 @@
 "use client";
 
-import { bulkImportAgentsDialogStyles as styles } from "./bulkImportAgentsDialog.styles";
+import { bulkImportAgentsDialogStyles as styles } from "../../../styles/delivery-agents/bulkImportAgentsDialog.styles";
 
 export function RequiredColumnsInfo() {
   return (

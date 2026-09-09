@@ -4,4 +4,4 @@ export type {
   InfiniteMultiSelectOption,
   InfiniteMultiSelectPageQuery,
   InfiniteMultiSelectPageResult,
-} from "./types";
+} from "../../types/infinite-multi-select/types";

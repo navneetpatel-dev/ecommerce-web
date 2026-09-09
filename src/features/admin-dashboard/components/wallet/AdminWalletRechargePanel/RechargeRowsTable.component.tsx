@@ -4,7 +4,7 @@ import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import type { WalletRechargeReport } from "../../../api/finance/reports.api";
-import { adminWalletRechargePanelStyles } from "./adminWalletRechargePanel.styles";
+import { adminWalletRechargePanelStyles } from "../../../styles/wallet/adminWalletRechargePanel.styles";
 
 interface RechargeRowsTableProps {
   report: WalletRechargeReport;

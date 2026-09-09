@@ -1,7 +1,7 @@
 import { ChevronUp } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { scrollToTopStyles } from "./navigationComponents.styles";
+import { scrollToTopStyles } from "../../styles/navigation/navigationComponents.styles";
 
 interface ScrollToTopProps {
   visible: boolean;

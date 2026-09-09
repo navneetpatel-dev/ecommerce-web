@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { Download } from "lucide-react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { earningsPayoutsCardStyles } from "./earningsPayoutsCard.styles";
-import type { PayoutTableRowViewModel } from "./useEarningsPayoutsCardPresentation.hook";
+import { earningsPayoutsCardStyles } from "../../../styles/earnings/earningsPayoutsCard.styles";
+import type { PayoutTableRowViewModel } from "../../../hooks/earnings/useEarningsPayoutsCardPresentation.hook";
 
 interface EarningsPayoutTableRowProps {
   row: PayoutTableRowViewModel;

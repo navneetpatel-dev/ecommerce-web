@@ -11,7 +11,7 @@ import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { sortBarStyles } from "./sortBar.styles";
+import { sortBarStyles } from "../../../styles/sort/sortBar.styles";
 import { SortOptionsList } from "./SortOptionsList.component";
 
 export interface SortBarProps {

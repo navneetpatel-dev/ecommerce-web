@@ -1,7 +1,7 @@
 import { Shield, Sparkles, Truck } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { authBrandVisualStyles as styles } from "./authBrandVisual.styles";
+import { authBrandVisualStyles as styles } from "../../styles/shell/authBrandVisual.styles";
 
 const FEATURES = [
   {

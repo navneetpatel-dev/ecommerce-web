@@ -9,7 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { BUG_AFFECTED_MODULE_VALUES } from "@/shared/constants/statuses";
 import { BUG_MODULE_LABEL } from "../../../utils/detail/labels";
-import { ALL } from "./useBugReportFiltersHandlers.hook";
+import { ALL } from "../../../hooks/filters/useBugReportFiltersHandlers.hook";
 
 interface BugModuleFilterSelectProps {
   value: string;

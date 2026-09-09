@@ -3,7 +3,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import type { AppliedCouponSummary } from "@/shared/api/types";
-import { appliedCouponChipsStyles as styles } from "./appliedCouponChips.styles";
+import { appliedCouponChipsStyles as styles } from "../../styles/coupons/appliedCouponChips.styles";
 
 interface AppliedCouponChipItemProps {
   coupon: AppliedCouponSummary;

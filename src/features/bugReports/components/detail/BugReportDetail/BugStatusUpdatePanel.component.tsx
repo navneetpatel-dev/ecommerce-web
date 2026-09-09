@@ -16,7 +16,7 @@ import type { BugReportStatus } from "@/shared/constants/statuses";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { BUG_WONT_FIX_REASON_MAX } from "../../../constants/form/fieldLimits";
 import { BUG_STATUS_LABEL } from "../../../utils/detail/labels";
-import { bugReportPanelsStyles } from "./bugReportPanels.styles";
+import { bugReportPanelsStyles } from "../../../styles/detail/bugReportPanels.styles";
 
 interface BugStatusUpdatePanelProps {
   statusOptions: BugReportStatus[];

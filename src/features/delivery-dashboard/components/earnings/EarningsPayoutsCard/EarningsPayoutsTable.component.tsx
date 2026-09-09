@@ -1,6 +1,6 @@
-import { earningsPayoutsCardStyles } from "./earningsPayoutsCard.styles";
+import { earningsPayoutsCardStyles } from "../../../styles/earnings/earningsPayoutsCard.styles";
 import { EarningsPayoutTableRow } from "./EarningsPayoutTableRow.component";
-import type { PayoutTableRowViewModel } from "./useEarningsPayoutsCardPresentation.hook";
+import type { PayoutTableRowViewModel } from "../../../hooks/earnings/useEarningsPayoutsCardPresentation.hook";
 
 interface EarningsPayoutsTableProps {
   rows: PayoutTableRowViewModel[];

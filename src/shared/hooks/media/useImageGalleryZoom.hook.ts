@@ -1,1 +1,1 @@
-export * from "@/shared/components/ImageGallery/useImageGalleryZoom.hook";
+export * from "@/shared/hooks/image-gallery/useImageGalleryZoom.hook";

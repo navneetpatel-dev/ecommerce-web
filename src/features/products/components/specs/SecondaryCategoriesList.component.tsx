@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { LABELS } from "@/shared/constants/labels";
-import { PRODUCT_SPECIFICATIONS_STYLES } from "./productSpecifications.styles";
+import { PRODUCT_SPECIFICATIONS_STYLES } from "../../styles/specs/productSpecifications.styles";
 import { SecondaryCategoryChip } from "./SecondaryCategoryChip.component";
 
 interface SecondaryCategory {

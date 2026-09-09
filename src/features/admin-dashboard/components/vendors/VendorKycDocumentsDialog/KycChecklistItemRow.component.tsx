@@ -11,7 +11,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { VENDOR_DOCUMENT_CHECKLIST_STATUS } from "@/shared/constants/statuses";
 import { vendorDocumentTypeLabel } from "@/shared/utils/formatting/vendorDocumentTypeLabel";
 import type { KycChecklistItem } from "@/features/vendors";
-import { vendorKycDocumentsDialogStyles as styles } from "./vendorKycDocumentsDialog.styles";
+import { vendorKycDocumentsDialogStyles as styles } from "../../../styles/vendors/vendorKycDocumentsDialog.styles";
 
 interface KycChecklistItemRowProps {
   item: KycChecklistItem;

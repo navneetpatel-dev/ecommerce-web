@@ -2,8 +2,8 @@
 
 import { Wallet } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { cashDepositsCardStyles } from "./cashDepositsCard.styles";
-import { useCashDepositsCardPresentation } from "./useCashDepositsCardPresentation.hook";
+import { cashDepositsCardStyles } from "../../../styles/cash/cashDepositsCard.styles";
+import { useCashDepositsCardPresentation } from "../../../hooks/cash/useCashDepositsCardPresentation.hook";
 import { CashDepositsTable } from "./CashDepositsTable.component";
 
 export function CashDepositsCard() {

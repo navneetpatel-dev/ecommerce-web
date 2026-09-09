@@ -4,8 +4,8 @@ import { ChevronDown } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { infiniteSingleSelectStyles } from "./infiniteSingleSelect.styles";
-import type { InfiniteSingleSelectOption } from "./types";
+import { infiniteSingleSelectStyles } from "../../styles/infinite-single-select/infiniteSingleSelect.styles";
+import type { InfiniteSingleSelectOption } from "../../types/infinite-single-select/types";
 import { OptionRow } from "./OptionRow.component";
 
 interface SingleSelectListboxProps {

@@ -19,7 +19,7 @@ import {
   type ProductListingFormField,
   type ProductListingFormValues,
 } from "@/features/products";
-import { vendorProductCreateFormStyles } from "./vendorProductCreateForm.styles";
+import { vendorProductCreateFormStyles } from "../../../styles/products/vendorProductCreateForm.styles";
 
 interface ProductPoliciesSectionProps {
   values: ProductListingFormValues;

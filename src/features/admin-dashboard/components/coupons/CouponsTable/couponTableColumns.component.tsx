@@ -4,7 +4,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { DISCOUNT_BEARER } from "@/shared/constants/statuses";
 import { formatDateTime } from "@/shared/utils/formatting/formatDate";
 import type { Coupon } from "@/shared/api/types";
-import { couponsTableStyles as styles } from "./couponsTable.styles";
+import { couponsTableStyles as styles } from "../../../styles/coupons/couponsTable.styles";
 
 function bearerLabel(bearer: Coupon["discountBearer"]) {
   return bearer === DISCOUNT_BEARER.VENDOR

@@ -1,7 +1,7 @@
 "use client";
 
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
-import { cashbackWriteOffReportTableStyles as styles } from "./cashbackWriteOffReportTable.styles";
+import { cashbackWriteOffReportTableStyles as styles } from "../../../styles/wallet/cashbackWriteOffReportTable.styles";
 
 export interface CashbackWriteOffRowData {
   id: string;

@@ -5,9 +5,9 @@ import { MediaImage } from "@/shared/components/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { useMediaQuery } from "@/shared/hooks/responsive/use-media-query.hook";
-import { EASE, imageVariants } from "./constants";
-import type { HeroSlide } from "./types";
-import { heroSectionStyles as styles } from "./heroSection.styles";
+import { EASE, imageVariants } from "../../../constants/hero/constants";
+import type { HeroSlide } from "../../../types/hero/types";
+import { heroSectionStyles as styles } from "../../../styles/hero/heroSection.styles";
 
 interface SlideImageProps {
   slide: HeroSlide;

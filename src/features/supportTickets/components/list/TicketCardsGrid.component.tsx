@@ -1,5 +1,5 @@
 import type { SupportTicket } from "../../api/list/supportTickets.api";
-import { ticketCardListStyles } from "./ticketCardList.styles";
+import { ticketCardListStyles } from "../../styles/list/ticketCardList.styles";
 import { TicketCardItem } from "./TicketCardItem.component";
 
 interface TicketCardsGridProps {

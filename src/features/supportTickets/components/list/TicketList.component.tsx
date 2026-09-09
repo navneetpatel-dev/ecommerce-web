@@ -3,8 +3,8 @@
 import { LABELS } from "@/shared/constants/labels";
 import { KeysetDataTable } from "@/shared/components/KeysetDataTable.component";
 import type { SupportTicket } from "../../api/list/supportTickets.api";
-import { useTicketTableColumns } from "./useTicketTableColumns.hook";
-import { useTicketListHandlers } from "./useTicketListHandlers.hook";
+import { useTicketTableColumns } from "../../hooks/list/useTicketTableColumns.hook";
+import { useTicketListHandlers } from "../../hooks/list/useTicketListHandlers.hook";
 
 interface TicketListProps {
   tickets: SupportTicket[];

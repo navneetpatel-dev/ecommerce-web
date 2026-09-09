@@ -9,7 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { SUPPORT_TICKET_STATUS_VALUES } from "@/shared/constants/statuses";
 import { TICKET_STATUS_LABEL } from "../../../utils/detail/labels";
-import { ALL } from "./useTicketFiltersHandlers.hook";
+import { ALL } from "../../../hooks/filters/useTicketFiltersHandlers.hook";
 
 interface TicketStatusFilterSelectProps {
   value: string;

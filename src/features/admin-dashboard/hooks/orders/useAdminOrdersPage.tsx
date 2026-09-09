@@ -9,7 +9,7 @@ import { ordersApi } from "@/features/orders";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
-import { adminDataListViewStyles } from "../../components/shared/AdminDataListView/adminDataListView.styles";
+import { adminDataListViewStyles } from "../../styles/shared/adminDataListView.styles";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 import type { AdminOrdersFiltersProps } from "../../components/orders/AdminOrdersFilters.component";

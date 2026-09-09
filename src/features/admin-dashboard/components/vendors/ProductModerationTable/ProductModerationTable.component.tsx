@@ -5,7 +5,7 @@ import {
   DataTable,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable.component";
-import { useProductModerationTableColumns } from "./useProductModerationTableColumns.hook";
+import { useProductModerationTableColumns } from "../../../hooks/vendors/useProductModerationTableColumns.hook";
 import { ProductModerationRowActions } from "./ProductModerationRowActions.component";
 
 interface Product {

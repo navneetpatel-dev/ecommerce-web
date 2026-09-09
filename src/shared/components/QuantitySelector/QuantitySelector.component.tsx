@@ -5,11 +5,11 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { AnimatedQuantityValue } from "./AnimatedQuantityValue.component";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { useQuantitySelector } from "./useQuantitySelector.hook";
+import { useQuantitySelector } from "../../hooks/quantity-selector/useQuantitySelector.hook";
 import {
   QUANTITY_SELECTOR_CONTAINER,
   QUANTITY_SELECTOR_EXTRA,
-} from "./quantitySelector.styles";
+} from "../../styles/quantity-selector/quantitySelector.styles";
 
 export interface QuantitySelectorProps {
   value: number;

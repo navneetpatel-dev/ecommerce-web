@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { PlayCircle, Wallet } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { useAgentPayoutsPanel } from "../../../hooks/delivery-agents/useAgentPayoutsPanel.hook";
-import { agentPayoutsPanelStyles } from "./agentPayoutsPanel.styles";
+import { agentPayoutsPanelStyles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
 import { AgentPayoutTableBody } from "./AgentPayoutTableBody.component";
 
 /** Admin batch-processes settled agent earnings into payouts, then marks each paid/failed. */

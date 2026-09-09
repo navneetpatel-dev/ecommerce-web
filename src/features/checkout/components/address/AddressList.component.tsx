@@ -1,7 +1,7 @@
 import { memo } from "react";
 import type { Address } from "@/shared/api/types";
 import { AddressItem } from "./AddressItem.component";
-import { ADDRESS_STEP_STYLES } from "./addressStep.styles";
+import { ADDRESS_STEP_STYLES } from "../../styles/address/addressStep.styles";
 
 interface AddressListProps {
   addresses: Address[];

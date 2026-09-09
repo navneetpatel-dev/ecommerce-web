@@ -17,7 +17,7 @@ import {
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { TICKET_SUBJECT_MAX } from "../../../constants/form/fieldLimits";
 import { TICKET_CATEGORY_LABEL } from "../../../utils/detail/labels";
-import { createTicketFormStyles } from "./createTicketForm.styles";
+import { createTicketFormStyles } from "../../../styles/form/createTicketForm.styles";
 
 type Props = {
   subjectId: string;

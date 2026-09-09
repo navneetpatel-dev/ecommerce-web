@@ -14,7 +14,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { ProductDetail, ProductVariant } from "@/shared/api/types";
-import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "../../../styles/detail/productDetailContent.styles";
 
 interface DetailTabsSectionProps {
   product: ProductDetail;

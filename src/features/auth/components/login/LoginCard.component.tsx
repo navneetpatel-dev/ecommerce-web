@@ -10,14 +10,14 @@ import { Button } from "@/shared/components/ui/button";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { LoginInput } from "../../schemas/auth/auth.schema";
-import { useLoginCard } from "./LoginCard/useLoginCard.hook";
+import { useLoginCard } from "../../hooks/login/useLoginCard.hook";
 import {
   AUTH_FOOTER_TEXT,
   AUTH_FORM_ROOT,
   AUTH_LINK,
   AUTH_OAUTH_CONTAINER,
   AUTH_SUBMIT_BUTTON,
-} from "./LoginCard/loginCard.styles";
+} from "../../styles/login/loginCard.styles";
 
 interface LoginCardProps {
   form: UseFormReturn<LoginInput>;

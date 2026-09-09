@@ -11,7 +11,7 @@ import { CartDrawerSummary } from "./CartDrawerSummary.component";
 import { CartDrawerVendorGroupsList } from "./CartDrawerVendorGroupsList.component";
 import { ClearCartAction } from "../page/CartPageView/ClearCartAction.component";
 import type { CartItem } from "@/shared/api/types";
-import { cartDrawerStyles as styles } from "./cartDrawer.styles";
+import { cartDrawerStyles as styles } from "../../styles/drawer/cartDrawer.styles";
 
 interface CartDrawerProps {
   isOpen: boolean;

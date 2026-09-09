@@ -11,9 +11,9 @@ import { CheckoutStepCard } from "./CheckoutStepCard.component";
 import { CheckoutPaymentNoticeDialog } from "./CheckoutPaymentNoticeDialog.component";
 import { PaymentProcessingOverlay } from "../../payment/PaymentProcessingOverlay.component";
 import { CheckoutTransitionState } from "./CheckoutTransitionState.component";
-import { useCheckoutPageView } from "./useCheckoutPageView.hook";
-import { CHECKOUT_PAGE_VIEW_STYLES } from "./checkoutPageView.styles";
-import type { CheckoutPageViewProps } from "./types";
+import { useCheckoutPageView } from "../../../hooks/page-view/useCheckoutPageView.hook";
+import { CHECKOUT_PAGE_VIEW_STYLES } from "../../../styles/page-view/checkoutPageView.styles";
+import type { CheckoutPageViewProps } from "../../../types/page-view/types";
 
 export function CheckoutPageView({
   isLoading,

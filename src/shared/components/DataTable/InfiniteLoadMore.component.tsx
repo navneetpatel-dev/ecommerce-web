@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { infiniteLoadMoreStyles } from "./dataTableComponents.styles";
+import { infiniteLoadMoreStyles } from "../../styles/data-table/dataTableComponents.styles";
 
 type Props = {
   hasNextPage?: boolean;

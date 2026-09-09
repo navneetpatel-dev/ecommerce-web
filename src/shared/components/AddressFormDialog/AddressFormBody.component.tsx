@@ -5,7 +5,7 @@ import { FormActions, FormStack } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import type { Address, AddressInput } from "@/shared/api/types";
 import { AddressFormFields } from "./AddressFormFields.component";
-import { useAddressFormBody } from "./useAddressFormBody.hook";
+import { useAddressFormBody } from "../../hooks/address-form-dialog/useAddressFormBody.hook";
 
 export interface AddressFormBodyProps {
   address?: Address | null;

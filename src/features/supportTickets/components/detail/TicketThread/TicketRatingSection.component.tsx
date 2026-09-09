@@ -7,7 +7,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { cn } from "@/shared/utils/dom/cn";
 import { Star } from "lucide-react";
-import { ticketThreadStyles } from "./ticketThread.styles";
+import { ticketThreadStyles } from "../../../styles/detail/ticketThread.styles";
 
 interface TicketRatingSectionProps {
   rating: string;

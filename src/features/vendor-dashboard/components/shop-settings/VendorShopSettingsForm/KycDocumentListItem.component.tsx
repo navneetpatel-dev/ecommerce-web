@@ -13,7 +13,7 @@ import type { KycChecklistItem } from "@/features/vendors";
 import { vendorDocumentTypeLabel } from "@/shared/utils/formatting/vendorDocumentTypeLabel";
 import { cn } from "@/shared/utils/dom/cn";
 
-import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
+import { vendorShopSettingsFormStyles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
 
 interface KycDocumentListItemProps {
   item: KycChecklistItem;

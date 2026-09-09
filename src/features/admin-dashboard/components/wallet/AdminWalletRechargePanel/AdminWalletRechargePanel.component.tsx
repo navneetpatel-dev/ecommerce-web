@@ -12,7 +12,7 @@ import {
   ReportExportStatus,
 } from "@/features/reports";
 import { useWalletRechargeReport } from "../../../hooks/wallet/useWalletRechargeReport.hook";
-import { reportPanelStyles } from "../../shared/reportPanel.styles";
+import { reportPanelStyles } from "../../../styles/shared/reportPanel.styles";
 import { RechargeSummaryGrid } from "./RechargeSummaryGrid.component";
 import { RechargeRowsTable } from "./RechargeRowsTable.component";
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ChevronRight, type Heart } from "lucide-react";
-import { summaryRowStyles as styles } from "./summaryRow.styles";
+import { summaryRowStyles as styles } from "../../styles/orders-activity/summaryRow.styles";
 
 interface SummaryRowProps {
   icon: typeof Heart;

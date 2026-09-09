@@ -2,11 +2,11 @@
 
 import { Truck } from "lucide-react";
 import type { DeliveryAgent } from "@/features/delivery-dashboard";
-import { deliveryDispatchPanelStyles } from "./deliveryDispatchPanel.styles";
+import { deliveryDispatchPanelStyles } from "../../../styles/delivery-agents/deliveryDispatchPanel.styles";
 import { DeliveryDispatchAgentSelect } from "./DeliveryDispatchAgentSelect.component";
 import { DeliveryDispatchShipmentList } from "./DeliveryDispatchShipmentList.component";
 import { DeliveryDispatchPickupList } from "./DeliveryDispatchPickupList.component";
-import { useDeliveryDispatchPanel } from "./useDeliveryDispatchPanel.hook";
+import { useDeliveryDispatchPanel } from "../../../hooks/delivery-agents/useDeliveryDispatchPanel.hook";
 
 export interface DeliveryDispatchPanelProps {
   agents: DeliveryAgent[];

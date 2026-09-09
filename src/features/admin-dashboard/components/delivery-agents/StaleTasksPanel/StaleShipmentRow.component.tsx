@@ -3,7 +3,7 @@ import type { StaleShipment } from "@/features/delivery-dashboard";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { deliveryForceConfirmLabels } from "@/shared/constants/labels/deliveryForceConfirm";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
-import { staleTasksPanelStyles } from "./staleTasksPanel.styles";
+import { staleTasksPanelStyles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
 
 function hoursSince(dateString: string): number {
   return Math.floor(

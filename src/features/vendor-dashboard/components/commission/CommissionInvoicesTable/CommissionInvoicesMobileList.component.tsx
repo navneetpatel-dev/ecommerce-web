@@ -1,7 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
-import type { CommissionInvoiceViewModel } from "./useCommissionInvoices.hook";
+import type { CommissionInvoiceViewModel } from "../../../hooks/commission/useCommissionInvoices.hook";
 import { CommissionInvoiceMobileCard } from "./CommissionInvoiceMobileCard.component";
-import { commissionInvoicesTableStyles as styles } from "./commissionInvoicesTable.styles";
+import { commissionInvoicesTableStyles as styles } from "../../../styles/commission/commissionInvoicesTable.styles";
 
 interface CommissionInvoicesMobileListProps {
   invoices: CommissionInvoiceViewModel[];

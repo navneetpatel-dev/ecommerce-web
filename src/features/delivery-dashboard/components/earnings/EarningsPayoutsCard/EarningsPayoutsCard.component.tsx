@@ -2,8 +2,8 @@
 
 import { IndianRupee } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { earningsPayoutsCardStyles } from "./earningsPayoutsCard.styles";
-import { useEarningsPayoutsCardPresentation } from "./useEarningsPayoutsCardPresentation.hook";
+import { earningsPayoutsCardStyles } from "../../../styles/earnings/earningsPayoutsCard.styles";
+import { useEarningsPayoutsCardPresentation } from "../../../hooks/earnings/useEarningsPayoutsCardPresentation.hook";
 import { EarningsPayoutsTable } from "./EarningsPayoutsTable.component";
 import { RecentCompletedTasksList } from "./RecentCompletedTasksList.component";
 

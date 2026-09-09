@@ -4,7 +4,7 @@ import {
   RankedListItem,
   type RankedItemData,
 } from "./RankedListItem.component";
-import { analyticsRankedListStyles as styles } from "./analyticsRankedList.styles";
+import { analyticsRankedListStyles as styles } from "../../../styles/analytics/analyticsRankedList.styles";
 
 interface RankedListItemsProps {
   items: RankedItemData[];

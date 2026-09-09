@@ -1,6 +1,6 @@
-import { earningsPayoutsCardStyles } from "./earningsPayoutsCard.styles";
+import { earningsPayoutsCardStyles } from "../../../styles/earnings/earningsPayoutsCard.styles";
 import { RecentCompletedTaskItem } from "./RecentCompletedTaskItem.component";
-import type { RecentTaskRowViewModel } from "./useEarningsPayoutsCardPresentation.hook";
+import type { RecentTaskRowViewModel } from "../../../hooks/earnings/useEarningsPayoutsCardPresentation.hook";
 
 interface RecentCompletedTasksListProps {
   tasks: RecentTaskRowViewModel[];

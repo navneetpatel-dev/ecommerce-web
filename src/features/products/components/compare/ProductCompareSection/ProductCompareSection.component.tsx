@@ -2,7 +2,7 @@
 
 import { forwardRef } from "react";
 import type { ProductListItem } from "@/shared/api/types";
-import { productCompareSectionStyles } from "./productCompareSection.styles";
+import { productCompareSectionStyles } from "../../../styles/compare/productCompareSection.styles";
 import { ProductCompareGrid } from "./ProductCompareGrid.component";
 
 export interface ProductCompareSectionProps {

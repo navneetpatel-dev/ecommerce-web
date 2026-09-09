@@ -1,7 +1,7 @@
 import { Package } from "lucide-react";
 import { EmptyState } from "@/shared/components/EmptyState.component";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { EMPTY_ORDERS_STATE_STYLES } from "./emptyOrdersState.styles";
+import { EMPTY_ORDERS_STATE_STYLES } from "../../styles/list/emptyOrdersState.styles";
 
 export function EmptyOrdersState() {
   return (

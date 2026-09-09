@@ -5,7 +5,7 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { TICKET_DESCRIPTION_MAX } from "../../../constants/form/fieldLimits";
-import { createTicketFormStyles } from "./createTicketForm.styles";
+import { createTicketFormStyles } from "../../../styles/form/createTicketForm.styles";
 
 type Props = {
   descId: string;

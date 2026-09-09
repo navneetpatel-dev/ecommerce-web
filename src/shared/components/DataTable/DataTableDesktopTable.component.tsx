@@ -19,8 +19,8 @@ import {
   TABLE_PINNED_LAYOUT_CLASS,
 } from "@/shared/constants/table/table";
 import { cn } from "@/shared/utils/dom/cn";
-import { dataTableDesktopStyles } from "./dataTable.styles";
-import type { DataTableColumn } from "./types";
+import { dataTableDesktopStyles } from "../../styles/data-table/dataTable.styles";
+import type { DataTableColumn } from "../../types/data-table/types";
 import { renderCellContent, resolveCell } from "./utils.component";
 
 export type DataTableDesktopTableProps<T> = {

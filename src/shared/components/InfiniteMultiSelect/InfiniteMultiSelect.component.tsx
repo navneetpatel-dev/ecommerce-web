@@ -6,10 +6,10 @@ import { LABELS } from "@/shared/constants/labels";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import { cn } from "@/shared/utils/dom/cn";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { infiniteMultiSelectStyles } from "./infiniteMultiSelect.styles";
+import { infiniteMultiSelectStyles } from "../../styles/infinite-multi-select/infiniteMultiSelect.styles";
 import { OptionRow } from "./OptionRow.component";
-import type { InfiniteMultiSelectProps } from "./types";
-import { useInfiniteSelectOptions } from "./useInfiniteSelectOptions.hook";
+import type { InfiniteMultiSelectProps } from "../../types/infinite-multi-select/types";
+import { useInfiniteSelectOptions } from "../../hooks/infinite-multi-select/useInfiniteSelectOptions.hook";
 
 export function InfiniteMultiSelect({
   value,

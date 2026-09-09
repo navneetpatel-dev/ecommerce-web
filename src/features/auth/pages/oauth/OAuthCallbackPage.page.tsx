@@ -3,7 +3,7 @@
 import { AuthPageShell } from "../../components/shell/AuthPageShell.component";
 import { useOAuthCallback } from "../../hooks/oauth/useOAuthCallback.hook";
 import { LABELS } from "@/shared/constants/labels";
-import { authFormsStyles } from "../../components/shell/authForms.styles";
+import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 export function OAuthCallbackPage() {
   const { message } = useOAuthCallback();

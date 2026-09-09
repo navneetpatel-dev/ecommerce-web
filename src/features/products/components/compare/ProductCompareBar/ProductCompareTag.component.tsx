@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import type { ProductListItem } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
-import { productCompareBarStyles } from "./productCompareBar.styles";
+import { productCompareBarStyles } from "../../../styles/compare/productCompareBar.styles";
 
 interface ProductCompareTagProps {
   product: ProductListItem;

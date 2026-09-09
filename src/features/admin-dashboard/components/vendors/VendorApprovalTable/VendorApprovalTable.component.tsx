@@ -5,7 +5,7 @@ import {
   DataTable,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable.component";
-import { useVendorApprovalTableColumns } from "./useVendorApprovalTableColumns.hook";
+import { useVendorApprovalTableColumns } from "../../../hooks/vendors/useVendorApprovalTableColumns.hook";
 import { VendorApprovalRowActions } from "./VendorApprovalRowActions.component";
 
 interface Vendor {

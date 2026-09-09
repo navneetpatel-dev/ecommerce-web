@@ -14,7 +14,7 @@ import {
 } from "@/shared/components/ui/dialog";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { cn } from "@/shared/utils/dom/cn";
-import { statusDialogStyles } from "./dialogComponents.styles";
+import { statusDialogStyles } from "../../styles/dialogs/dialogComponents.styles";
 
 export type StatusDialogVariant = "info" | "success" | "warning" | "danger";
 

@@ -4,12 +4,12 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { useOrdersActivitySection } from "./useOrdersActivitySection.hook";
+import { useOrdersActivitySection } from "../../hooks/orders-activity/useOrdersActivitySection.hook";
 import { RecentOrdersList } from "./RecentOrdersList.component";
 import { RecentOrdersEmptyState } from "./RecentOrdersEmptyState.component";
 import { RecentOrdersLoadingSkeleton } from "./RecentOrdersLoadingSkeleton.component";
 import { ActivitySummaryList } from "./ActivitySummaryList.component";
-import { ordersActivitySectionStyles as styles } from "./ordersActivitySection.styles";
+import { ordersActivitySectionStyles as styles } from "../../styles/orders-activity/ordersActivitySection.styles";
 
 export function OrdersActivitySection() {
   const { orderViewModels, isLoadingStats, ordersSubtitle, summaryItems } =

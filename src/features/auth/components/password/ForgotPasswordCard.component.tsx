@@ -7,7 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { authFormsStyles } from "../shell/authForms.styles";
+import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 interface ForgotPasswordInput {
   email: string;

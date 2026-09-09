@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { RotateCw, XCircle } from "lucide-react";
 import { AgentMarkPayoutPaidAction } from "../AgentMarkPayoutPaidAction.component";
-import { agentPayoutsPanelStyles } from "./agentPayoutsPanel.styles";
+import { agentPayoutsPanelStyles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
 
 interface AgentPayoutActionsProps {
   payoutId: string;

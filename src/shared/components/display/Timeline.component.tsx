@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
-import { timelineStyles } from "./displayComponents.styles";
+import { timelineStyles } from "../../styles/display/displayComponents.styles";
 
 interface TimelineStep {
   label: string;

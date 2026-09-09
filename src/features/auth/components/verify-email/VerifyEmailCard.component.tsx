@@ -6,7 +6,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import type { VerifyEmailStatus } from "../../hooks/verify-email/useVerifyEmailPage.hook";
-import { authFormsStyles } from "../shell/authForms.styles";
+import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 interface VerifyEmailCardProps {
   status: VerifyEmailStatus;

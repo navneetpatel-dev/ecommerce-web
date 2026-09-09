@@ -2,7 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import type { Order } from "@/shared/api/types";
 import { taxDisplayLabel } from "@/shared/utils/formatting/taxDisplay";
 import { formatInr } from "../../utils/detail/format";
-import { ordersComponentsStyles } from "../actions/ordersComponents.styles";
+import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
 
 interface OrderMoneyBreakdownProps {
   order: Pick<

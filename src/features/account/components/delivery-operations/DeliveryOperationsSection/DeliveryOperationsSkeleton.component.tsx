@@ -1,5 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { deliveryOperationsSectionStyles as styles } from "./deliveryOperationsSection.styles";
+import { deliveryOperationsSectionStyles as styles } from "../../../styles/delivery-operations/deliveryOperationsSection.styles";
 
 export function DeliveryOperationsSkeleton() {
   return (

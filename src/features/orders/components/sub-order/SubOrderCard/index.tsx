@@ -2,15 +2,15 @@ import type { OrderItem, SubOrder } from "@/shared/api/types";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Timeline } from "@/shared/components/Timeline.component";
 import type { ReturnReasonCode } from "../../../hooks/sub-order/useSubOrderReturn.hook";
-import { VENDOR_GROUP_CARD } from "@/shared/components/vendorGroupStyles";
+import { VENDOR_GROUP_CARD } from "@/shared/styles/orders/vendorGroupStyles";
 import { SubOrderCardHeader } from "./SubOrderCardHeader.component";
 import { SubOrderCardItems } from "./SubOrderCardItems.component";
 import { SubOrderCardTotals } from "./SubOrderCardTotals.component";
 import { SubOrderReturnDialog } from "./SubOrderReturnDialog.component";
 import { SubOrderShipmentTracking } from "./SubOrderShipmentTracking.component";
 import { BuyAgainButton } from "../../actions/BuyAgainButton.component";
-import { useSubOrderCard } from "./useSubOrderCard.hook";
-import { SUB_ORDER_CARD_STYLES } from "./subOrderCard.styles";
+import { useSubOrderCard } from "../../../hooks/sub-order/useSubOrderCard.hook";
+import { SUB_ORDER_CARD_STYLES } from "../../../styles/sub-order/subOrderCard.styles";
 
 interface SubOrderCardProps {
   subOrder: SubOrder;

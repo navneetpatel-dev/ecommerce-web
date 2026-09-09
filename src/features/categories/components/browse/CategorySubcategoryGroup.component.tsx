@@ -3,7 +3,7 @@ import type { Category } from "@/shared/api/types";
 import type { CategoryRootWithChildren } from "../../hooks/browse/useCategoriesPage.hook";
 import { categoryHref } from "../../utils/browse/categoryHelpers";
 import { LABELS } from "@/shared/constants/labels";
-import { categoriesViewStyles } from "./categoriesView.styles";
+import { categoriesViewStyles } from "../../styles/browse/categoriesView.styles";
 import { CategorySubcategoriesList } from "./CategorySubcategoriesList.component";
 
 interface CategorySubcategoryGroupProps {

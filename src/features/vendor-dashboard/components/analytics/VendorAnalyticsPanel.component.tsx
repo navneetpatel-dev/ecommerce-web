@@ -4,11 +4,11 @@ import { SkeletonGrid } from "@/shared/components/Skeletons.component";
 import { VendorRevenueChartCard } from "./VendorRevenueChartCard.component";
 import { VendorTopProductsCard } from "./VendorTopProductsCard.component";
 import { VendorFulfillmentSlaCard } from "./VendorFulfillmentSlaCard.component";
-import { useVendorAnalyticsPanel } from "./VendorAnalyticsPanel/useVendorAnalyticsPanel.hook";
+import { useVendorAnalyticsPanel } from "../../hooks/analytics/useVendorAnalyticsPanel.hook";
 import {
   VENDOR_ANALYTICS_GRID,
   VENDOR_ANALYTICS_PANEL_ROOT,
-} from "./VendorAnalyticsPanel/vendorAnalyticsPanel.styles";
+} from "../../styles/analytics/vendorAnalyticsPanel.styles";
 
 export function VendorAnalyticsPanel() {
   const {

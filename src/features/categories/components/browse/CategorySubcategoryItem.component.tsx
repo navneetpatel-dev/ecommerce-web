@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Category } from "@/shared/api/types";
 import { categoryHref } from "../../utils/browse/categoryHelpers";
-import { categoriesViewStyles } from "./categoriesView.styles";
+import { categoriesViewStyles } from "../../styles/browse/categoriesView.styles";
 import { CategorySubcategoryIcon } from "./CategorySubcategoryIcon.component";
 
 interface CategorySubcategoryItemProps {

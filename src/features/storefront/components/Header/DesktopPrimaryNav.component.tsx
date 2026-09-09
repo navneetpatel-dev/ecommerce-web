@@ -8,7 +8,7 @@ import { SearchBarContainer } from "@/features/search";
 import { CategoriesMegaMenu } from "@/features/categories";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category } from "@/shared/api/types";
-import { headerStyles as styles } from "./header.styles";
+import { headerStyles as styles } from "../../styles/header/header.styles";
 
 interface DesktopPrimaryNavProps {
   categories: Category[];

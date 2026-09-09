@@ -12,7 +12,7 @@ import { OrderConfirmationHero } from "./OrderConfirmationHero.component";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useOrder } from "../../api/orders/orders.queries";
 import type { Order } from "@/shared/api/types";
-import { orderConfirmationStyles as styles } from "./orderConfirmation.styles";
+import { orderConfirmationStyles as styles } from "../../styles/confirmation/orderConfirmation.styles";
 
 interface OrderConfirmationProps {
   orderId: string | undefined;

@@ -2,7 +2,7 @@ import { ClipboardCheck, Upload } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { pickupChecklistCardStyles as styles } from "./pickupChecklistCard.styles";
+import { pickupChecklistCardStyles as styles } from "../../styles/pickups/pickupChecklistCard.styles";
 
 interface PickupChecklistCardProps {
   exchange: boolean;

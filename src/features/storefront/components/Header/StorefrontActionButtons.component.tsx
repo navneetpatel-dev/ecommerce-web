@@ -15,7 +15,7 @@ import {
   formatPoints,
   formatPointsHeaderBadge,
 } from "@/shared/utils/formatting/formatPoints";
-import { HEADER_ICON_BTN, HEADER_INK_TONE } from "./headerShared";
+import { HEADER_ICON_BTN, HEADER_INK_TONE } from "../../utils/header/headerShared";
 import {
   HeaderSearchButtonSkeleton,
   StorefrontActionButtonsSkeleton,

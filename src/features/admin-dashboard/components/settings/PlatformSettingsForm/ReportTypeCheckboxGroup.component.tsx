@@ -9,7 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import type { ScheduledReportTypeOption } from "../../../hooks/settings/useScheduledReportsCatalog.hook";
-import { platformSettingsFormStyles as styles } from "./platformSettingsForm.styles";
+import { platformSettingsFormStyles as styles } from "../../../styles/settings/platformSettingsForm.styles";
 
 function getCategoryLabel(audience?: string, financial?: boolean): string {
   if (audience === "admin_finance" || financial) return "Finance";

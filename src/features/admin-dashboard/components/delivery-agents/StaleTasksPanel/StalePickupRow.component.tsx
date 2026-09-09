@@ -1,5 +1,5 @@
 import type { StalePickup } from "@/features/delivery-dashboard";
-import { staleTasksPanelStyles } from "./staleTasksPanel.styles";
+import { staleTasksPanelStyles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
 
 function hoursSince(dateString: string): number {
   return Math.floor(

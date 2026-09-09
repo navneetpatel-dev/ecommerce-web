@@ -1,7 +1,7 @@
 "use client";
 
 import { LABELS } from "@/shared/constants/labels";
-import { cashbackWriteOffReportTableStyles as styles } from "./cashbackWriteOffReportTable.styles";
+import { cashbackWriteOffReportTableStyles as styles } from "../../../styles/wallet/cashbackWriteOffReportTable.styles";
 
 interface MetricCardProps {
   label: string;

@@ -4,8 +4,8 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { MediaImage } from "@/shared/components/MediaImage.component";
 import type { Category } from "@/shared/api/types";
-import { categoryCardStyles } from "./categoryCard.styles";
-import { useCategoryCardPresentation } from "./useCategoryCardPresentation.hook";
+import { categoryCardStyles } from "../../styles/browse/categoryCard.styles";
+import { useCategoryCardPresentation } from "../../hooks/browse/useCategoryCardPresentation.hook";
 
 interface CategoryCardProps {
   category: Category;

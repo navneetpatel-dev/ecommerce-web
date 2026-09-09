@@ -17,7 +17,7 @@ import {
 } from "@/shared/constants/statuses";
 import type { SupportTicket } from "../../../api/list/supportTickets.api";
 import { TICKET_PRIORITY_LABEL } from "../../../utils/detail/labels";
-import { ticketThreadStyles } from "./ticketThread.styles";
+import { ticketThreadStyles } from "../../../styles/detail/ticketThread.styles";
 
 interface TicketManageControlsProps {
   ticket: SupportTicket;

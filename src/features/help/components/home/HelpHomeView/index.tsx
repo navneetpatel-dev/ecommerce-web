@@ -11,7 +11,7 @@ import { BrowseTopicsSection } from "./BrowseTopicsSection.component";
 import { ContactSection } from "./ContactSection.component";
 import { QuickLinksSection } from "./QuickLinksSection.component";
 import { SearchResultsSection } from "./SearchResultsSection.component";
-import { helpHomeViewStyles as styles } from "./helpHomeView.styles";
+import { helpHomeViewStyles as styles } from "../../../styles/home/helpHomeView.styles";
 
 export function HelpHomeView() {
   const [query, setQuery] = useState("");

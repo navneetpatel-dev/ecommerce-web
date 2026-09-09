@@ -18,7 +18,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { productsApi, type BulkImportRowResult } from "@/features/products";
-import { vendorBulkImportDialogStyles } from "./vendorDialogs.styles";
+import { vendorBulkImportDialogStyles } from "../../styles/products/vendorDialogs.styles";
 
 interface VendorBulkImportDialogProps {
   onImported?: () => void;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { PAYMENT_PROCESSING_OVERLAY_STYLES } from "./paymentProcessingOverlay.styles";
+import { PAYMENT_PROCESSING_OVERLAY_STYLES } from "../../styles/payment/paymentProcessingOverlay.styles";
 
 interface PaymentProcessingOverlayProps {
   open: boolean;

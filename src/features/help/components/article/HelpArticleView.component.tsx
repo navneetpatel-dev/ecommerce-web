@@ -16,7 +16,7 @@ import {
 import type { HelpArticle } from "../../types/help/help.types";
 import { HelpArticleSection } from "./HelpArticleSection.component";
 import { HelpRelatedArticles } from "./HelpRelatedArticles.component";
-import { helpArticleViewStyles as styles } from "./helpArticleView.styles";
+import { helpArticleViewStyles as styles } from "../../styles/article/helpArticleView.styles";
 
 export function HelpArticleView({ slug }: { slug: string }) {
   const article = getArticleBySlug(slug);

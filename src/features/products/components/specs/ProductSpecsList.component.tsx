@@ -1,6 +1,6 @@
 import { memo } from "react";
-import type { SpecRow } from "./useProductSpecifications.hook";
-import { PRODUCT_SPECIFICATIONS_STYLES } from "./productSpecifications.styles";
+import type { SpecRow } from "../../hooks/specs/useProductSpecifications.hook";
+import { PRODUCT_SPECIFICATIONS_STYLES } from "../../styles/specs/productSpecifications.styles";
 
 interface ProductSpecsListProps {
   rows: SpecRow[];

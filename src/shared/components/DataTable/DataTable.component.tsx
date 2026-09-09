@@ -7,11 +7,11 @@ import { TooltipProvider } from "@/shared/components/ui/tooltip";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { dataTableStyles } from "./dataTable.styles";
+import { dataTableStyles } from "../../styles/data-table/dataTable.styles";
 import { DataTableDesktopTable } from "./DataTableDesktopTable.component";
 import { DataTableHeader } from "./DataTableHeader.component";
 import { DataTableMobileCards } from "./DataTableMobileCards.component";
-import type { DataTableProps } from "./types";
+import type { DataTableProps } from "../../types/data-table/types";
 import { toDetailRecord } from "./utils.component";
 
 export function DataTable<T>({

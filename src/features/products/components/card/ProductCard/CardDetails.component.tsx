@@ -7,7 +7,7 @@ import { DiscountBadge } from "@/shared/components/DiscountBadge.component";
 import { RatingStars } from "@/shared/components/RatingStars.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { CARD_DETAILS_STYLES } from "./cardDetails.styles";
+import { CARD_DETAILS_STYLES } from "../../../styles/card/cardDetails.styles";
 
 interface CardDetailsProps {
   product: ProductListItem;

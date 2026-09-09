@@ -5,7 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/FormError.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
-import { privacySectionStyles as styles } from "./privacySection.styles";
+import { privacySectionStyles as styles } from "../../../styles/privacy/privacySection.styles";
 
 interface PreferencesSectionProps {
   theme: string;

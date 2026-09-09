@@ -9,7 +9,7 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import type { ReportCatalogItem } from "../../api/table/reportsEngine.api";
-import { reportTypeSelectStyles as styles } from "./reportTypeSelect.styles";
+import { reportTypeSelectStyles as styles } from "../../styles/filters/reportTypeSelect.styles";
 
 interface ReportTypeSelectProps {
   catalog: ReportCatalogItem[];

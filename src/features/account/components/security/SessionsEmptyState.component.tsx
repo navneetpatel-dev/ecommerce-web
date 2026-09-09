@@ -1,6 +1,6 @@
 import { Monitor } from "lucide-react";
 import { EmptyState } from "@/shared/components/EmptyState.component";
-import { securitySectionStyles as styles } from "./securitySection.styles";
+import { securitySectionStyles as styles } from "../../styles/security/securitySection.styles";
 
 export function SessionsEmptyState() {
   return (

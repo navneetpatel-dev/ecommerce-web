@@ -2,7 +2,7 @@
 
 import { Check } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
-import { infiniteSingleSelectStyles } from "./infiniteSingleSelect.styles";
+import { infiniteSingleSelectStyles } from "../../styles/infinite-single-select/infiniteSingleSelect.styles";
 
 export function OptionRow({
   selected,

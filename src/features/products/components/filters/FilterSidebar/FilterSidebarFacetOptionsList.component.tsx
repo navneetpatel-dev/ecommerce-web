@@ -1,5 +1,5 @@
 import type { CategoryFacet } from "@/shared/api/types";
-import { filterSidebarStyles } from "./filterSidebar.styles";
+import { filterSidebarStyles } from "../../../styles/filters/filterSidebar.styles";
 import { FilterSidebarFacetOption } from "./FilterSidebarFacetOption.component";
 
 interface FilterSidebarFacetOptionsListProps {

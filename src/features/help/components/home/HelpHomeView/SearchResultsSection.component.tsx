@@ -6,7 +6,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { HelpArticle } from "../../../types/help/help.types";
-import { helpHomeViewStyles as styles } from "./helpHomeView.styles";
+import { helpHomeViewStyles as styles } from "../../../styles/home/helpHomeView.styles";
 
 type Props = {
   query: string;

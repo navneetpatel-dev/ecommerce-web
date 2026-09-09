@@ -3,7 +3,7 @@ export type {
   ProductRowActionsProps,
   ProductsTableHeaderProps,
   ProductsTableContentProps,
-} from "./types";
+} from "../../../types/products/ProductsTable-types";
 
 export { ProductsTableHeader } from "./ProductsTableHeader.component";
 export { ProductRow } from "./ProductRow.component";

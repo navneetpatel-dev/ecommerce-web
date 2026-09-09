@@ -1,7 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
-import { bugReportFormStyles } from "./bugReportForm.styles";
+import { bugReportFormStyles } from "../../styles/form/bugReportForm.styles";
 
 interface BugFormHeaderProps {
   canSubmit: boolean;

@@ -15,8 +15,8 @@ import { LABELS } from "@/shared/constants/labels";
 import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
 import { AppliedCouponChips } from "./AppliedCouponChips.component";
 import { EligibleOffersList } from "../offers/EligibleOffersList.component";
-import { useCartCouponSection } from "./useCartCouponSection.hook";
-import { cartCouponSectionStyles as styles } from "./cartCouponSection.styles";
+import { useCartCouponSection } from "../../hooks/coupons/useCartCouponSection.hook";
+import { cartCouponSectionStyles as styles } from "../../styles/coupons/cartCouponSection.styles";
 
 interface CartCouponSectionProps {
   couponInput: string;

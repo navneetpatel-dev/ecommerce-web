@@ -1,1 +1,1 @@
-export * from "@/shared/components/ImageGallery/useImageLightboxGestures.hook";
+export * from "@/shared/hooks/image-gallery/useImageLightboxGestures.hook";

@@ -10,7 +10,7 @@ import {
 } from "../../utils/detail/orderPaymentSummary.utils";
 import { PAYMENT_STATUS } from "@/shared/constants/statuses";
 import type { Order } from "@/shared/api/types";
-import { ordersComponentsStyles } from "../actions/ordersComponents.styles";
+import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
 
 interface OrderPaymentSummaryProps {
   order: Pick<

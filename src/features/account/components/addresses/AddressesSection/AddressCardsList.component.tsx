@@ -3,7 +3,7 @@ import type { Address } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { AddressCard } from "./AddressCard.component";
-import { addressesSectionStyles as styles } from "./addressesSection.styles";
+import { addressesSectionStyles as styles } from "../../../styles/addresses/addressesSection.styles";
 
 interface AddressCardsListProps {
   addresses: Address[];

@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import type { CookiePreferences } from "@/shared/hooks/cookies/useCookieBanner.hook";
-import { cookiePreferencesDialogStyles } from "./cookieComponents.styles";
+import { cookiePreferencesDialogStyles } from "../../styles/dialogs/cookieComponents.styles";
 
 interface CookiePreferencesDialogProps {
   open: boolean;

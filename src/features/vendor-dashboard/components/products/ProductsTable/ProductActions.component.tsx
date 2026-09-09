@@ -10,7 +10,7 @@ import { Pencil, Trash2, Send, Images } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
-import type { ProductRowActionsProps } from "./types";
+import type { ProductRowActionsProps } from "../../../types/products/ProductsTable-types";
 
 /** Row/card kebab actions: submit, manage images, edit, delete. */
 export function ProductActions(props: ProductRowActionsProps) {

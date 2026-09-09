@@ -11,8 +11,8 @@ import { LABELS } from "@/shared/constants/labels";
 import type { VendorSubOrder } from "../../types/orders/vendorOrders.types";
 import { VendorSubOrderCards } from "./VendorOrdersTable/VendorSubOrderCards.component";
 import { VendorOrdersTableBody } from "./VendorOrdersTable/VendorOrdersTableBody.component";
-import { useVendorOrdersTable } from "./VendorOrdersTable/useVendorOrdersTable.hook";
-import { VENDOR_ORDERS_TABLE_STYLES } from "./VendorOrdersTable/vendorOrdersTable.styles";
+import { useVendorOrdersTable } from "../../hooks/orders/useVendorOrdersTable.hook";
+import { VENDOR_ORDERS_TABLE_STYLES } from "../../styles/orders/vendorOrdersTable.styles";
 
 export type { VendorSubOrder } from "../../types/orders/vendorOrders.types";
 

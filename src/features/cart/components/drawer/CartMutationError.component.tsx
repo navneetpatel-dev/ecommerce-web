@@ -3,7 +3,7 @@
 import { AlertCircle, X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { cartMutationErrorStyles as styles } from "./cartMutationError.styles";
+import { cartMutationErrorStyles as styles } from "../../styles/drawer/cartMutationError.styles";
 
 interface CartMutationErrorProps {
   message: string | null;

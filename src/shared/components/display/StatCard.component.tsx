@@ -9,7 +9,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import type { LucideIcon } from "lucide-react";
 import { ReactNode } from "react";
 
-import { statCardStyles } from "./displayComponents.styles";
+import { statCardStyles } from "../../styles/display/displayComponents.styles";
 
 interface StatCardProps {
   title: string;

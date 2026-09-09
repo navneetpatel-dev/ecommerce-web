@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { categoriesTableStyles } from "./categoriesTable.styles";
+import { categoriesTableStyles } from "../../../styles/categories/categoriesTable.styles";
 
 interface CategorySortableHandleProps {
   id: string;

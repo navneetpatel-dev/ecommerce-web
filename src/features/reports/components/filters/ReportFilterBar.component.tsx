@@ -13,7 +13,7 @@ import { ReportExportButtons } from "../export/ReportExportButtons.component";
 import { ReportExportStatus } from "../export/ReportExportStatus.component";
 import { ReportFilterTextField } from "./ReportFilterTextField.component";
 import { ReportTypeSelect } from "./ReportTypeSelect.component";
-import { reportFilterBarStyles as styles } from "./reportFilterBar.styles";
+import { reportFilterBarStyles as styles } from "../../styles/filters/reportFilterBar.styles";
 
 interface ReportFilterBarProps {
   catalog: ReportCatalogItem[];

@@ -3,7 +3,7 @@ import { AuthBrandFeatures } from "@/features/auth/components/shell/AuthBrandFea
 import { AuthBrandVisual } from "@/features/auth/components/shell/AuthBrandVisual.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { authPageShellStyles as styles } from "./authPageShell.styles";
+import { authPageShellStyles as styles } from "../../styles/shell/authPageShell.styles";
 
 export function AuthPageShell({ children }: { children: React.ReactNode }) {
   return (

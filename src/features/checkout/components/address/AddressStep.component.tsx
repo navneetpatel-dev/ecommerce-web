@@ -6,10 +6,10 @@ import { Button } from "@/shared/components/ui/button";
 import { AddressFormDialog } from "@/shared/components/AddressFormDialog.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
-import { useAddressStep } from "./useAddressStep.hook";
+import { useAddressStep } from "../../hooks/address/useAddressStep.hook";
 import { AddressEmptyState } from "./AddressEmptyState.component";
 import { AddressList } from "./AddressList.component";
-import { ADDRESS_STEP_STYLES } from "./addressStep.styles";
+import { ADDRESS_STEP_STYLES } from "../../styles/address/addressStep.styles";
 
 interface AddressStepProps {
   addresses?: Address[];

@@ -1,7 +1,7 @@
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { categoriesViewStyles } from "./categoriesView.styles";
+import { categoriesViewStyles } from "../../styles/browse/categoriesView.styles";
 
 export function CategoriesViewHeader() {
   return (

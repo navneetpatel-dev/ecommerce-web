@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import type { AccountNavItem, AccountSectionId } from "../../types/layout/types";
-import { accountLayoutStyles as styles } from "./accountLayout.styles";
+import { accountLayoutStyles as styles } from "../../styles/layout/accountLayout.styles";
 
 interface AccountDesktopNavProps {
   sections: AccountNavItem[];

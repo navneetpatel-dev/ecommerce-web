@@ -6,7 +6,7 @@ import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/dom/cn";
 import { LABELS } from "@/shared/constants/labels";
 import type { SidebarNavItem } from "./SidebarNav.component";
-import { workspaceNavDrawerStyles, sidebarNavStyles } from "./layout.styles";
+import { workspaceNavDrawerStyles, sidebarNavStyles } from "../../styles/layout/layout.styles";
 
 interface WorkspaceNavDrawerProps {
   open: boolean;

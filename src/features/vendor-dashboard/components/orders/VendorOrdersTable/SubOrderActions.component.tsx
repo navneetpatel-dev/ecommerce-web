@@ -21,9 +21,9 @@ import {
   SUB_ORDER_STATUS_CONFIRMED,
   SUB_ORDER_STATUS_SHIPPED,
   SUB_ORDER_STATUS_CANCELLED,
-} from "./subOrderStatuses";
+} from "../../../constants/orders/subOrderStatuses";
 import { ShipTrackingNumberFields } from "./ShipTrackingNumberFields.component";
-import { VENDOR_ORDERS_TABLE_STYLES } from "./vendorOrdersTable.styles";
+import { VENDOR_ORDERS_TABLE_STYLES } from "../../../styles/orders/vendorOrdersTable.styles";
 
 interface SubOrderActionsProps {
   subOrderId: string;

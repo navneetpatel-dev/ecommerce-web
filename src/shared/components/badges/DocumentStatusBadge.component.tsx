@@ -1,7 +1,7 @@
 import { FileText, CheckCircle2, Clock, AlertCircle } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { VENDOR_DOCUMENT_CHECKLIST_STATUS } from "@/shared/constants/statuses";
-import { documentStatusStyles } from "./badgeComponents.styles";
+import { documentStatusStyles } from "../../styles/badges/badgeComponents.styles";
 
 interface DocumentStatusProps {
   status: string;

@@ -4,8 +4,8 @@ import { DangerZoneSection } from "./DangerZoneSection.component";
 import { DeleteAccountDialog } from "./DeleteAccountDialog.component";
 import { LogoutDialog } from "./LogoutDialog.component";
 import { PreferencesSection } from "./PreferencesSection.component";
-import { usePrivacySection } from "./usePrivacySection.hook";
-import { privacySectionStyles as styles } from "./privacySection.styles";
+import { usePrivacySection } from "../../../hooks/privacy/usePrivacySection.hook";
+import { privacySectionStyles as styles } from "../../../styles/privacy/privacySection.styles";
 
 export function PrivacySection() {
   const {

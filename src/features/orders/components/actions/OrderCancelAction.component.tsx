@@ -8,7 +8,7 @@ import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { useCancelOrder } from "../../api/orders/orders.queries";
 import { canCancelOrder } from "../../utils/actions/orderCancel.utils";
 import type { Order } from "@/shared/api/types";
-import { ordersComponentsStyles } from "./ordersComponents.styles";
+import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
 
 interface OrderCancelActionProps {
   order: Order;

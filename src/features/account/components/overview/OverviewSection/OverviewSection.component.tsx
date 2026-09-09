@@ -8,8 +8,8 @@ import type { AccountSectionId } from "../../../types/layout/types";
 import { GlanceList } from "./GlanceList.component";
 import { ProfileCard } from "./ProfileCard.component";
 import { OverviewSectionLoadingSkeleton } from "./OverviewSectionLoadingSkeleton.component";
-import { useOverviewSection } from "./useOverviewSection.hook";
-import { overviewSectionStyles as styles } from "./overviewSection.styles";
+import { useOverviewSection } from "../../../hooks/overview/useOverviewSection.hook";
+import { overviewSectionStyles as styles } from "../../../styles/overview/overviewSection.styles";
 
 /** Rendered only while a crop is active (overlay/dialog), so no skeleton fallback is needed. */
 const ImageCropDialog = dynamic(

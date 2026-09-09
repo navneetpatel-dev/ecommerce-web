@@ -1,7 +1,7 @@
 import { memo } from "react";
 import Link from "next/link";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { PRODUCT_SPECIFICATIONS_STYLES } from "./productSpecifications.styles";
+import { PRODUCT_SPECIFICATIONS_STYLES } from "../../styles/specs/productSpecifications.styles";
 
 interface SecondaryCategory {
   id: string;

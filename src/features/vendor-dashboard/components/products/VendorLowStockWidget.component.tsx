@@ -19,7 +19,7 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 import { TABLE_DATA_CELL_CLASS } from "@/shared/constants/table/table";
 import { LABELS } from "@/shared/constants/labels";
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
-import { useVendorLowStockWidget } from "./VendorLowStockWidget/useVendorLowStockWidget.hook";
+import { useVendorLowStockWidget } from "../../hooks/products/useVendorLowStockWidget.hook";
 import { LowStockRows } from "./VendorLowStockWidget/LowStockRows.component";
 import {
   LOW_STOCK_CONTENT,
@@ -30,7 +30,7 @@ import {
   LOW_STOCK_REMAINING_NOTICE,
   LOW_STOCK_SKELETON,
   LOW_STOCK_TITLE,
-} from "./VendorLowStockWidget/vendorLowStockWidget.styles";
+} from "../../styles/products/vendorLowStockWidget.styles";
 
 export function VendorLowStockWidget() {
   const { visible, remaining, isEmpty, hasRemaining, isLoading } =

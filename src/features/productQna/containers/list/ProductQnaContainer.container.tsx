@@ -4,7 +4,7 @@ import { useProductQnaView } from "../../hooks/list/useProductQnaView.hook";
 import { useAskQuestionForm } from "../../hooks/ask-form/useAskQuestionForm.hook";
 import { ProductQuestions } from "../../components/list/ProductQuestions.component";
 import { AskQuestionForm } from "../../components/ask-form/AskQuestionForm.component";
-import { productQnaStyles } from "../../components/list/productQna.styles";
+import { productQnaStyles } from "../../styles/list/productQna.styles";
 
 interface ProductQnaContainerProps {
   productId: string;

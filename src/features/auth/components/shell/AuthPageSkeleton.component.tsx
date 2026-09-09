@@ -1,6 +1,6 @@
 import { AuthPageShell } from "@/features/auth/components/shell/AuthPageShell.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { authPageSkeletonStyles as styles } from "./authPageSkeleton.styles";
+import { authPageSkeletonStyles as styles } from "../../styles/shell/authPageSkeleton.styles";
 
 /** Form-slot skeleton for login/register/password/OTP route transitions. */
 export function AuthFormSkeleton() {

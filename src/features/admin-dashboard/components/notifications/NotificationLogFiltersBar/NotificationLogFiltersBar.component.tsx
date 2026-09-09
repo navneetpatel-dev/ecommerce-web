@@ -3,9 +3,9 @@
 import { notificationsAdminLabels as LABELS } from "@/shared/constants/labels/notificationsAdmin";
 import type { NotificationLogFilters } from "../../../api/notifications/notifications.api";
 import { NOTIFICATION_TYPE_OPTIONS } from "../../../constants/notifications/notificationTypes";
-import { notificationLogFiltersBarStyles } from "./notificationLogFiltersBar.styles";
+import { notificationLogFiltersBarStyles } from "../../../styles/notifications/notificationLogFiltersBar.styles";
 import { NotificationFilterSelect } from "./NotificationFilterSelect.component";
-import { useNotificationLogFiltersBar } from "./useNotificationLogFiltersBar.hook";
+import { useNotificationLogFiltersBar } from "../../../hooks/notifications/useNotificationLogFiltersBar.hook";
 
 const CHANNEL_OPTIONS = ["EMAIL", "SMS", "PUSH"] as const;
 const STATUS_OPTIONS = [

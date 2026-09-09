@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { documentViewerStyles } from "./badgeComponents.styles";
+import { documentViewerStyles } from "../../styles/badges/badgeComponents.styles";
 
 export type DocumentFormatType = "pdf" | "docx" | "image" | "generic";
 

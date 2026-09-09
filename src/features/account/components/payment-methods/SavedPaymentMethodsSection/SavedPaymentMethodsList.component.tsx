@@ -1,7 +1,7 @@
 import type { SavedPaymentMethod } from "../../../types/layout/types";
-import type { SavedPaymentMethodViewModel } from "./useSavedPaymentMethodsSection.hook";
+import type { SavedPaymentMethodViewModel } from "../../../hooks/payment-methods/useSavedPaymentMethodsSection.hook";
 import { SavedPaymentMethodCard } from "./SavedPaymentMethodCard.component";
-import { savedPaymentMethodsSectionStyles as styles } from "./savedPaymentMethodsSection.styles";
+import { savedPaymentMethodsSectionStyles as styles } from "../../../styles/payment-methods/savedPaymentMethodsSection.styles";
 
 interface SavedPaymentMethodsListProps {
   methods: SavedPaymentMethodViewModel[];

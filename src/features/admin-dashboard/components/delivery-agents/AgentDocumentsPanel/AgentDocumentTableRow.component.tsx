@@ -1,5 +1,5 @@
 import type { DeliveryAgentDocument } from "@/features/delivery-dashboard";
-import { agentDocumentsPanelStyles } from "./agentDocumentsPanel.styles";
+import { agentDocumentsPanelStyles } from "../../../styles/delivery-agents/agentDocumentsPanel.styles";
 import { AgentDocumentStatusBadge } from "./AgentDocumentStatusBadge.component";
 import { AgentDocumentActionButtons } from "./AgentDocumentActionButtons.component";
 

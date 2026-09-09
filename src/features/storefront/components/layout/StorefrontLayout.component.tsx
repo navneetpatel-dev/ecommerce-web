@@ -6,7 +6,7 @@ import { CartDrawerContainer } from "@/features/cart";
 import { ScrollToTopContainer } from "@/shared/containers/navigation/ScrollToTopContainer.container";
 import { CookieBannerContainer } from "@/shared/containers/dialogs/CookieBannerContainer.container";
 import { ChatWidgetMount } from "@/shared/containers/system/ChatWidgetMount.container";
-import { storefrontLayoutStyles as styles } from "./storefrontLayout.styles";
+import { storefrontLayoutStyles as styles } from "../../styles/layout/storefrontLayout.styles";
 
 export function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (

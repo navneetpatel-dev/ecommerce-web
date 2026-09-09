@@ -12,7 +12,7 @@ import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { DeliveryRatingPrompt } from "../../actions/DeliveryRatingPrompt.component";
 import { shippingApi } from "../../../api/tracking/shipping.api";
 import { ordersKeys } from "../../../api/orders/orders.queries";
-import { subOrderShipmentTrackingStyles as styles } from "./subOrderShipmentTracking.styles";
+import { subOrderShipmentTrackingStyles as styles } from "../../../styles/sub-order/subOrderShipmentTracking.styles";
 
 interface SubOrderShipmentTrackingProps {
   shipment: Shipment;

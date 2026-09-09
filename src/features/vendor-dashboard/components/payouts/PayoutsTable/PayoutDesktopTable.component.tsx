@@ -8,9 +8,9 @@ import {
 } from "@/shared/components/ui/table";
 import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
 import { LABELS } from "@/shared/constants/labels";
-import { payoutsTableStyles } from "./payoutsTable.styles";
+import { payoutsTableStyles } from "../../../styles/payouts/payoutsTable.styles";
 import { PayoutDesktopRow } from "./PayoutDesktopRow.component";
-import type { PayoutRowViewModel } from "./usePayoutsTablePresentation.hook";
+import type { PayoutRowViewModel } from "../../../hooks/payouts/usePayoutsTablePresentation.hook";
 
 interface PayoutDesktopTableProps {
   rows: PayoutRowViewModel[];

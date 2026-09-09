@@ -17,7 +17,7 @@ import {
   AccountMenuSkeleton,
   HeaderOrdersLinkSkeleton,
 } from "./HeaderActionSkeletons.component";
-import { headerStyles as styles } from "./header.styles";
+import { headerStyles as styles } from "../../styles/header/header.styles";
 
 interface AccountSectionProps {
   currentUser: CurrentUser | null;

@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
-import type { SessionViewModel } from "./useSecuritySection.hook";
-import { securitySectionStyles as styles } from "./securitySection.styles";
+import type { SessionViewModel } from "../../hooks/security/useSecuritySection.hook";
+import { securitySectionStyles as styles } from "../../styles/security/securitySection.styles";
 
 interface SessionRowProps {
   session: SessionViewModel;

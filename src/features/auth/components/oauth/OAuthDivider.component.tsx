@@ -1,5 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
-import { authFormsStyles } from "../shell/authForms.styles";
+import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 export function OAuthDivider() {
   return (

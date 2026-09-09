@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { cn } from "@/shared/utils/dom/cn";
-import { walletSectionSkeletonsStyles as styles } from "./walletSectionSkeletons.styles";
+import { walletSectionSkeletonsStyles as styles } from "../../styles/overview/walletSectionSkeletons.styles";
 
 function CardShell({
   children,

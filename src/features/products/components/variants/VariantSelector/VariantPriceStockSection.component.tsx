@@ -5,7 +5,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { variantSelectorStyles } from "./variantSelector.styles";
+import { variantSelectorStyles } from "../../../styles/variants/variantSelector.styles";
 
 interface VariantPriceStockSectionProps {
   currentPrice: number;

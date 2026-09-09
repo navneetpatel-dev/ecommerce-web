@@ -6,7 +6,7 @@ import { GripVertical, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { CategoryAttribute } from "@/shared/api/types";
-import { adminCategoryAttributesActionStyles } from "./adminCategoryAttributesAction.styles";
+import { adminCategoryAttributesActionStyles } from "../../../styles/categories/adminCategoryAttributesAction.styles";
 
 interface SortableAttributeRowProps {
   row: CategoryAttribute;

@@ -9,7 +9,7 @@ import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { CardControls } from "./CardControls.component";
-import { CARD_MEDIA_STYLES } from "./cardMedia.styles";
+import { CARD_MEDIA_STYLES } from "../../../styles/card/cardMedia.styles";
 
 interface CardMediaProps {
   product: ProductListItem;

@@ -2,8 +2,8 @@
 
 import { Bell } from "lucide-react";
 import { Switch } from "@/shared/components/ui/switch";
-import { useBrowserNotificationsSetting } from "./useBrowserNotificationsSetting.hook";
-import { browserNotificationsSettingStyles as styles } from "./browserNotificationsSetting.styles";
+import { useBrowserNotificationsSetting } from "../../hooks/notifications/useBrowserNotificationsSetting.hook";
+import { browserNotificationsSettingStyles as styles } from "../../styles/notifications/browserNotificationsSetting.styles";
 
 export function BrowserNotificationsSetting() {
   const {

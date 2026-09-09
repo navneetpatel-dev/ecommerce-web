@@ -11,8 +11,8 @@ import { PurchasePanel } from "./PurchasePanel.component";
 import { SellerPerksBlock } from "./SellerPerksBlock.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type { ProductDetail, ProductVariant } from "@/shared/api/types";
-import type { VariantSelectionProps } from "./types";
-import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
+import type { VariantSelectionProps } from "../../../types/detail/types";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "../../../styles/detail/productDetailContent.styles";
 
 interface ProductBuyBoxColumnProps {
   product: ProductDetail;

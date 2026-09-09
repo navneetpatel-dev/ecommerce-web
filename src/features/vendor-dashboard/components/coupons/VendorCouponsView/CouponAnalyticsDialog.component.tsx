@@ -11,7 +11,7 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import type { CouponAnalytics } from "@/shared/api/types";
 import { formatPercent } from "../../../utils/coupons/formatPercent";
-import { couponAnalyticsDialogStyles } from "./vendorCouponsView.styles";
+import { couponAnalyticsDialogStyles } from "../../../styles/coupons/vendorCouponsView.styles";
 
 interface CouponAnalyticsDialogProps {
   analyticsId: string | null;

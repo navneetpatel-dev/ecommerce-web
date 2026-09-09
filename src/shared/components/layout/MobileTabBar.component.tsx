@@ -10,7 +10,7 @@ import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { CurrentUser } from "@/shared/api/types";
 
-import { mobileTabBarStyles } from "./layout.styles";
+import { mobileTabBarStyles } from "../../styles/layout/layout.styles";
 
 interface MobileTabBarProps {
   currentUser: CurrentUser | null;

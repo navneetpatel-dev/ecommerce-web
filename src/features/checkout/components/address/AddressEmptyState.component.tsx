@@ -1,7 +1,7 @@
 import { MapPin, Plus } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { ADDRESS_STEP_STYLES } from "./addressStep.styles";
+import { ADDRESS_STEP_STYLES } from "../../styles/address/addressStep.styles";
 
 interface AddressEmptyStateProps {
   onAddClick: () => void;

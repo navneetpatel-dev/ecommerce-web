@@ -19,7 +19,7 @@ import {
 import { categoriesApi } from "@/features/categories";
 import { vendorEntityTypeLabel } from "@/shared/utils/formatting/vendorEntityTypeLabel";
 import type { Category } from "@/shared/api/types";
-import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
+import { vendorShopSettingsFormStyles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
 
 interface CategoriesSectionProps {
   entityType: VendorEntityType | null;

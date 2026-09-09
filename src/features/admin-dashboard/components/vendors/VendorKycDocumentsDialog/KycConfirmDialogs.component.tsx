@@ -7,7 +7,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { vendorDocumentTypeLabel } from "@/shared/utils/formatting/vendorDocumentTypeLabel";
 import type { KycChecklistItem } from "@/features/vendors";
-import { vendorKycDocumentsDialogStyles } from "./vendorKycDocumentsDialog.styles";
+import { vendorKycDocumentsDialogStyles } from "../../../styles/vendors/vendorKycDocumentsDialog.styles";
 
 interface KycConfirmDialogsProps {
   mode: "verify" | "reject" | null;

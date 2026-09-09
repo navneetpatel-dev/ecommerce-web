@@ -1,6 +1,6 @@
 import type { CSSProperties, MouseEvent } from "react";
 import { MediaImage } from "@/shared/components/MediaImage.component";
-import type { useGalleryStage } from "./useGalleryStage.hook";
+import type { useGalleryStage } from "../../hooks/image-gallery/useGalleryStage.hook";
 import { LABELS } from "@/shared/constants/labels";
 import {
   IMAGE_GALLERY_STAGE_HEIGHT_CLASS,
@@ -10,7 +10,7 @@ import {
 } from "@/shared/constants/media/imageGallery";
 import { cn } from "@/shared/utils/dom/cn";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { imageGalleryStyles as styles } from "./imageGallery.styles";
+import { imageGalleryStyles as styles } from "../../styles/image-gallery/imageGallery.styles";
 import { ImageStageControls } from "./ImageStageControls.component";
 
 interface ImageGalleryStageProps {

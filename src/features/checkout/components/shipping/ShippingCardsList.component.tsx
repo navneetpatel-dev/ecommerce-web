@@ -2,7 +2,7 @@ import { memo, useCallback } from "react";
 import type { CartItem } from "@/shared/api/types";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import { ShippingCardContainer } from "../../containers/shipping/ShippingCardContainer.container";
-import { SHIPPING_STEP_STYLES } from "./shippingStep.styles";
+import { SHIPPING_STEP_STYLES } from "../../styles/shipping/shippingStep.styles";
 
 interface ShippingCardsListProps {
   vendors: [string, CartItem[]][];

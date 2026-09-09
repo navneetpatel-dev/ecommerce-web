@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { cashDepositsPanelStyles } from "./cashDepositsPanel.styles";
+import { cashDepositsPanelStyles } from "../../../styles/delivery-agents/cashDepositsPanel.styles";
 
 interface CashDepositActionButtonsProps {
   depositId: string;

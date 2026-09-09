@@ -10,8 +10,8 @@ import { AnalyticsMetricsGrid } from "./AnalyticsMetricsGrid.component";
 import { AnalyticsRankedList } from "./AnalyticsRankedList.component";
 import { AnalyticsOpsQueues } from "./AnalyticsOpsQueues.component";
 import { AdminAnalyticsExportBar } from "./AdminAnalyticsExportBar.component";
-import { useAdminAnalyticsLayout } from "./AdminAnalyticsLayout/useAdminAnalyticsLayout.hook";
-import { adminAnalyticsLayoutStyles as styles } from "./AdminAnalyticsLayout/adminAnalyticsLayout.styles";
+import { useAdminAnalyticsLayout } from "../../hooks/analytics/useAdminAnalyticsLayout.hook";
+import { adminAnalyticsLayoutStyles as styles } from "../../styles/analytics/adminAnalyticsLayout.styles";
 
 const AnalyticsTrendChart = dynamic(
   () =>

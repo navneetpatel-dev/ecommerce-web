@@ -1,1 +1,1 @@
-export * from "@/shared/components/AddressFormDialog/useCaptureLocation.hook";
+export * from "@/shared/hooks/address-form-dialog/useCaptureLocation.hook";

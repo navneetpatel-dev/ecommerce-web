@@ -6,7 +6,7 @@ import {
   type DataTableColumn,
 } from "@/shared/components/DataTable.component";
 import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore.component";
-import { keysetDataTableStyles } from "./dataTableComponents.styles";
+import { keysetDataTableStyles } from "../../styles/data-table/dataTableComponents.styles";
 
 type Props<T> = {
   columns: DataTableColumn<T>[];

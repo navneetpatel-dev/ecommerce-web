@@ -7,7 +7,7 @@ import { FormStack } from "@/shared/components/forms";
 import { AdminCategoryBasicsFields } from "./AdminCategoryBasicsFields.component";
 import { AdminCategoryImageSeoFields } from "./AdminCategoryImageSeoFields.component";
 import { AdminCategoryPolicyFields } from "./AdminCategoryPolicyFields.component";
-import { useCategoryParentOptions } from "./useCategoryParentOptions.hook";
+import { useCategoryParentOptions } from "../../../hooks/categories/useCategoryParentOptions.hook";
 
 interface AdminCategoryFormFieldsProps {
   form: UseFormReturn<CategoryFormInput>;

@@ -1,8 +1,8 @@
 "use client";
 
 import { Undo2 } from "lucide-react";
-import { rtoQueuePanelStyles } from "./rtoQueuePanel.styles";
-import { useRtoQueuePanel } from "./useRtoQueuePanel.hook";
+import { rtoQueuePanelStyles } from "../../../styles/shipping/rtoQueuePanel.styles";
+import { useRtoQueuePanel } from "../../../hooks/shipping/useRtoQueuePanel.hook";
 import { RtoQueueTableBody } from "./RtoQueueTableBody.component";
 
 /** Admin/hub visibility into every shipment currently mid-RTO or already handed back. */

@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { CardQuantityControl } from "../CardQuantityControl.component";
 import { cn } from "@/shared/utils/dom/cn";
-import { PRODUCT_CARD_STYLES } from "./productCard.styles";
+import { PRODUCT_CARD_STYLES } from "../../../styles/card/productCard.styles";
 
 const controlMotion = {
   initial: { opacity: 0, y: 6 },

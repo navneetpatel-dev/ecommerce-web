@@ -11,7 +11,7 @@ import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.c
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { CartMutationError } from "./CartMutationError.component";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { cartDrawerStyles as styles } from "./cartDrawer.styles";
+import { cartDrawerStyles as styles } from "../../styles/drawer/cartDrawer.styles";
 
 interface CartSummaryLinkProps {
   href: string;

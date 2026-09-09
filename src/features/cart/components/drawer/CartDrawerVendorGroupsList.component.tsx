@@ -1,6 +1,6 @@
 import type { CartItem } from "@/shared/api/types";
 import { CartDrawerVendorGroup } from "./CartDrawerVendorGroup.component";
-import { cartDrawerStyles as styles } from "./cartDrawer.styles";
+import { cartDrawerStyles as styles } from "../../styles/drawer/cartDrawer.styles";
 
 interface CartDrawerVendorGroupsListProps {
   groupedByVendor: Record<string, CartItem[]>;

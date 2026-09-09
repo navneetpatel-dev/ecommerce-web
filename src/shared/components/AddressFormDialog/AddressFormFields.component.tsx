@@ -5,13 +5,13 @@ import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
-import type { LocationCaptureStatus } from "./useCaptureLocation.hook";
+import type { LocationCaptureStatus } from "../../hooks/address-form-dialog/useCaptureLocation.hook";
 import {
   PINCODE_LENGTH,
   type AddressFormValues,
 } from "@/shared/schemas/address.schema";
 import { AddressLocationStatusNotice } from "./AddressLocationStatusNotice.component";
-import { addressFormDialogStyles } from "./addressFormDialog.styles";
+import { addressFormDialogStyles } from "../../styles/address-form-dialog/addressFormDialog.styles";
 
 interface AddressFormFieldsProps {
   form: AddressFormValues;

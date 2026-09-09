@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import type { UnassignedShipment } from "@/features/delivery-dashboard";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { deliveryDispatchShipmentListStyles } from "./deliveryDispatchShipmentList.styles";
+import { deliveryDispatchShipmentListStyles } from "../../../styles/delivery-agents/deliveryDispatchShipmentList.styles";
 
 interface DeliveryDispatchShipmentRowProps {
   shipment: UnassignedShipment;

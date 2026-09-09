@@ -21,8 +21,8 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import { CategoryOptionsList } from "./AdminReassignProductsAction/CategoryOptionsList.component";
-import { useAdminReassignProductsAction } from "./AdminReassignProductsAction/useAdminReassignProductsAction.hook";
-import { adminReassignProductsActionStyles as styles } from "./AdminReassignProductsAction/adminReassignProductsAction.styles";
+import { useAdminReassignProductsAction } from "../../hooks/categories/useAdminReassignProductsAction.hook";
+import { adminReassignProductsActionStyles as styles } from "../../styles/categories/adminReassignProductsAction.styles";
 
 interface AdminReassignProductsActionProps {
   onDone: () => void;

@@ -1,5 +1,5 @@
 import { ORDER_STATUS, PAYMENT_STATUS } from "@/shared/constants/statuses";
-import type { Tone } from "../../components/list/orderStatusGroup.styles";
+import type { Tone } from "../../styles/list/orderStatusGroup.styles";
 
 export type Density = "compact" | "comfortable";
 

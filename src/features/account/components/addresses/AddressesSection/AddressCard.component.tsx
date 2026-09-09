@@ -4,7 +4,7 @@ import { Pencil, Star, Trash2 } from "lucide-react";
 import type { Address } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { addressCardStyles as styles } from "./addressCard.styles";
+import { addressCardStyles as styles } from "../../../styles/addresses/addressCard.styles";
 
 interface AddressCardProps {
   addr: Address;

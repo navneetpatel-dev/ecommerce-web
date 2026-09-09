@@ -6,7 +6,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { ResendVerificationByEmail } from "../verify-email/ResendVerificationByEmail.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { authFormsStyles } from "../shell/authForms.styles";
+import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 interface OtpCardProps {
   digits: string[];

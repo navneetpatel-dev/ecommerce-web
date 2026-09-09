@@ -2,8 +2,8 @@
 
 import { AlertTriangle } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { staleTasksPanelStyles } from "./staleTasksPanel.styles";
-import { useStaleTasksReport } from "./useStaleTasksReport.hook";
+import { staleTasksPanelStyles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
+import { useStaleTasksReport } from "../../../hooks/delivery-agents/useStaleTasksReport.hook";
 import { StaleShipmentsTable } from "./StaleShipmentsTable.component";
 import { StalePickupsTable } from "./StalePickupsTable.component";
 

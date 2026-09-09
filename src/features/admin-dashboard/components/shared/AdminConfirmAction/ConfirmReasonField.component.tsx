@@ -3,7 +3,7 @@
 import type { ChangeEvent } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { adminConfirmActionStyles as styles } from "./adminConfirmAction.styles";
+import { adminConfirmActionStyles as styles } from "../../../styles/shared/adminConfirmAction.styles";
 
 interface ConfirmReasonFieldProps {
   label: string;

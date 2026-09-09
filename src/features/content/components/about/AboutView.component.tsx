@@ -1,4 +1,4 @@
-import { contentDocStyles as styles } from "../legal/contentDoc.styles";
+import { contentDocStyles as styles } from "../../styles/legal/contentDoc.styles";
 
 export function AboutView() {
   return (

@@ -4,9 +4,9 @@ import { useCallback } from "react";
 import { PackageCheck } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { deliveryDispatchShipmentListStyles } from "./deliveryDispatchShipmentList.styles";
+import { deliveryDispatchShipmentListStyles } from "../../../styles/delivery-agents/deliveryDispatchShipmentList.styles";
 import { DeliveryDispatchShipmentGroupsList } from "./DeliveryDispatchShipmentGroupsList.component";
-import { useDeliveryDispatchShipmentList } from "./useDeliveryDispatchShipmentList.hook";
+import { useDeliveryDispatchShipmentList } from "../../../hooks/delivery-agents/useDeliveryDispatchShipmentList.hook";
 
 type RunFn = (action: () => Promise<unknown>, success: string) => Promise<void>;
 

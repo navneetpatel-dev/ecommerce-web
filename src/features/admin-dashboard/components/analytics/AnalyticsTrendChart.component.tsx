@@ -26,7 +26,7 @@ import {
 } from "../../utils/analytics/analyticsFormat";
 import { useChartThemeColors } from "@/shared/hooks/theme/useChartThemeColors.hook";
 import { AnalyticsTrendTooltip } from "./AnalyticsTrendTooltip.component";
-import { analyticsStyles } from "./analyticsComponents.styles";
+import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styles";
 
 interface Point {
   date: string;

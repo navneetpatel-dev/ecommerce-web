@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { MediaImage } from "@/shared/components/MediaImage.component";
 import { VendorGroupHeader } from "@/shared/components/VendorGroupHeader.component";
-import { VENDOR_GROUP_CARD } from "@/shared/components/vendorGroupStyles";
+import { VENDOR_GROUP_CARD } from "@/shared/styles/orders/vendorGroupStyles";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInr } from "../../utils/detail/format";
 import { orderLineVariantLabel } from "../../utils/sub-order/orderLine.utils";
 import type { Order, OrderItem } from "@/shared/api/types";
-import { orderConfirmationStyles as styles } from "./orderConfirmation.styles";
+import { orderConfirmationStyles as styles } from "../../styles/confirmation/orderConfirmation.styles";
 
 interface OrderConfirmationItemsProps {
   order: Pick<Order, "subOrders">;

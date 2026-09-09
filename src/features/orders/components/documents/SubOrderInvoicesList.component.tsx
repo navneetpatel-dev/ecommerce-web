@@ -2,7 +2,7 @@ import { memo } from "react";
 import type { SubOrder } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { Button } from "@/shared/components/ui/button";
-import { ORDER_SUMMARY_ASIDE_STYLES } from "../detail/orderSummaryAside.styles";
+import { ORDER_SUMMARY_ASIDE_STYLES } from "../../styles/detail/orderSummaryAside.styles";
 
 interface SubOrderInvoicesListProps {
   subOrders: SubOrder[];

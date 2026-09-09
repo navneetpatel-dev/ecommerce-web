@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { OrderConfirmationItems } from "../OrderConfirmationItems.component";
-import { VENDOR_GROUP_CARD } from "@/shared/components/vendorGroupStyles";
+import { VENDOR_GROUP_CARD } from "@/shared/styles/orders/vendorGroupStyles";
 import type { Order, OrderItem, SubOrder } from "@/shared/api/types";
 
 function item(partial: Partial<OrderItem> & Pick<OrderItem, "id">): OrderItem {

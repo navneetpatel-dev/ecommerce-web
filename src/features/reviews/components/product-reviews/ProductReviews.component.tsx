@@ -6,7 +6,7 @@ import { ReviewListSkeleton } from "@/shared/components/Skeletons.component";
 import { REVIEW_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import type { Review } from "@/shared/api/types";
-import { productReviewsStyles as styles } from "./productReviews.styles";
+import { productReviewsStyles as styles } from "../../styles/product-reviews/productReviews.styles";
 
 interface ProductReviewsProps {
   reviews: Review[];

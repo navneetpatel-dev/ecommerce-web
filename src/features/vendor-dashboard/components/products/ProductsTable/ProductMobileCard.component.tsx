@@ -3,8 +3,8 @@
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { ProductActions } from "./ProductActions.component";
-import { productMobileCardStyles as styles } from "./productsTable.styles";
-import type { ProductRowActionsProps } from "./types";
+import { productMobileCardStyles as styles } from "../../../styles/products/productsTable.styles";
+import type { ProductRowActionsProps } from "../../../types/products/ProductsTable-types";
 
 /** Below-lg card treatment for a vendor product (mirrors the desktop row). */
 export function ProductMobileCard(props: ProductRowActionsProps) {

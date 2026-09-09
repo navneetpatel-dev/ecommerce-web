@@ -5,9 +5,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { createDeliveryAgentFormStyles } from "./createDeliveryAgentForm.styles";
-import type { CreateDeliveryAgentFormValues } from "./createDeliveryAgentForm.types";
-import { useCreateDeliveryAgentFormFieldsHandlers } from "./useCreateDeliveryAgentFormFieldsHandlers.hook";
+import { createDeliveryAgentFormStyles } from "../../../styles/delivery-agents/createDeliveryAgentForm.styles";
+import type { CreateDeliveryAgentFormValues } from "../../../types/delivery-agents/createDeliveryAgentForm.types";
+import { useCreateDeliveryAgentFormFieldsHandlers } from "../../../hooks/delivery-agents/useCreateDeliveryAgentFormFieldsHandlers.hook";
 import { VehicleTypeOptionsList } from "./VehicleTypeOptionsList.component";
 
 export type { CreateDeliveryAgentFormValues };

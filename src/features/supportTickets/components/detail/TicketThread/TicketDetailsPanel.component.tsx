@@ -12,7 +12,7 @@ import {
 } from "../../../utils/detail/labels";
 import { AttachmentThumbs } from "./TicketAttachmentThumbs.component";
 import { TicketManageControls } from "./TicketManageControls.component";
-import { ticketDetailsPanelStyles as styles } from "./ticketDetailsPanel.styles";
+import { ticketDetailsPanelStyles as styles } from "../../../styles/detail/ticketDetailsPanel.styles";
 
 interface TicketDetailsPanelProps {
   ticket: SupportTicket;

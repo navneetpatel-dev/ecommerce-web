@@ -23,7 +23,7 @@ import {
   FOOTER_PAYMENT_METHODS,
   FOOTER_ROOT,
   FOOTER_SECTION_TITLE,
-} from "./Footer/footer.styles";
+} from "../../styles/layout/footer.styles";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();

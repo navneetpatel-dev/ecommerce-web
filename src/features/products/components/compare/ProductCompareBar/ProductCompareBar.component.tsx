@@ -6,7 +6,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { MAX_COMPARED_PRODUCTS } from "../../../constants/compare/compare";
-import { productCompareBarStyles } from "./productCompareBar.styles";
+import { productCompareBarStyles } from "../../../styles/compare/productCompareBar.styles";
 import { ProductCompareTagsList } from "./ProductCompareTagsList.component";
 
 export interface ProductCompareBarProps {

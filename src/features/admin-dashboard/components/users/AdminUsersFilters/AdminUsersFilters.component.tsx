@@ -10,7 +10,7 @@ import {
 } from "@/shared/components/ui/select";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { adminUsersFiltersLabels } from "@/shared/constants/labels/adminUsersFilters";
-import { adminUsersFiltersStyles } from "./adminUsersFilters.styles";
+import { adminUsersFiltersStyles } from "../../../styles/users/adminUsersFilters.styles";
 import {
   UserStatusOptionsList,
   ALL_STATUSES_VALUE,
@@ -19,7 +19,7 @@ import {
   UserRoleOptionsList,
   ALL_ROLES_VALUE,
 } from "./UserRoleOptionsList.component";
-import { useAdminUsersFiltersHandlers } from "./useAdminUsersFiltersHandlers.hook";
+import { useAdminUsersFiltersHandlers } from "../../../hooks/users/useAdminUsersFiltersHandlers.hook";
 
 export type AdminUsersFiltersProps = {
   search: string;

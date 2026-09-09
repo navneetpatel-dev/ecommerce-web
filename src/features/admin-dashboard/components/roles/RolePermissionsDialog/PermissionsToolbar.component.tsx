@@ -1,7 +1,7 @@
 import { CheckSquare, Search, Square, X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { rolePermissionsDialogStyles } from "./rolePermissionsDialog.styles";
+import { rolePermissionsDialogStyles } from "../../../styles/roles/rolePermissionsDialog.styles";
 
 interface PermissionsToolbarProps {
   search: string;

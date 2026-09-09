@@ -6,5 +6,5 @@ export { AnimatedQuantityValue } from "./AnimatedQuantityValue.component";
 export {
   useQuantitySelector,
   type UseQuantitySelectorParams,
-} from "./useQuantitySelector.hook";
-export * from "./quantitySelector.styles";
+} from "../../hooks/quantity-selector/useQuantitySelector.hook";
+export * from "../../styles/quantity-selector/quantitySelector.styles";

@@ -8,7 +8,7 @@ import type { RefObject } from "react";
 import type { Virtualizer } from "@tanstack/react-virtual";
 import type { TicketMessage } from "../../../api/list/supportTickets.api";
 import { MessageBubble } from "./TicketMessageBubble.component";
-import { ticketThreadStyles } from "./ticketThread.styles";
+import { ticketThreadStyles } from "../../../styles/detail/ticketThread.styles";
 
 interface TicketConversationProps {
   messages: TicketMessage[];

@@ -2,7 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import type { DeliveryEligibility } from "../../../utils/delivery-check/productDeliveryEligibility";
-import { productDeliveryCheckStyles } from "./productDeliveryCheck.styles";
+import { productDeliveryCheckStyles } from "../../../styles/delivery-check/productDeliveryCheck.styles";
 
 interface ProductDeliveryEligibilityNoticeProps {
   eligibility: DeliveryEligibility;

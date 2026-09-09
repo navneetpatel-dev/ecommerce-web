@@ -9,8 +9,8 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { AdminRole, AdminPermission } from "../../../api/roles/roles.api";
 import { PermissionsList } from "./PermissionsList.component";
 import { PermissionsToolbar } from "./PermissionsToolbar.component";
-import { useRolePermissionsDialog } from "./useRolePermissionsDialog.hook";
-import { rolePermissionsDialogStyles as styles } from "./rolePermissionsDialog.styles";
+import { useRolePermissionsDialog } from "../../../hooks/roles/useRolePermissionsDialog.hook";
+import { rolePermissionsDialogStyles as styles } from "../../../styles/roles/rolePermissionsDialog.styles";
 
 interface RolePermissionsDialogProps {
   role: AdminRole | null;

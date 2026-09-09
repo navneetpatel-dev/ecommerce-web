@@ -3,8 +3,8 @@
 // imports subparts from this barrel (would be a circular module).
 export { SubOrderActions } from "./SubOrderActions.component";
 export { VendorSubOrderCards } from "./VendorSubOrderCards.component";
-export { SUB_ORDER_STATUS_CANCELLED } from "./subOrderStatuses";
-export { SUB_ORDER_STATUS_CONFIRMED } from "./subOrderStatuses";
-export { SUB_ORDER_STATUS_SHIPPED } from "./subOrderStatuses";
-export { formatInr } from "./vendorOrderFormat";
-export { shortOrderId } from "./vendorOrderFormat";
+export { SUB_ORDER_STATUS_CANCELLED } from "../../../constants/orders/subOrderStatuses";
+export { SUB_ORDER_STATUS_CONFIRMED } from "../../../constants/orders/subOrderStatuses";
+export { SUB_ORDER_STATUS_SHIPPED } from "../../../constants/orders/subOrderStatuses";
+export { formatInr } from "../../../utils/orders/vendorOrderFormat";
+export { shortOrderId } from "../../../utils/orders/vendorOrderFormat";

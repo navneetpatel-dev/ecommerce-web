@@ -3,7 +3,7 @@ import { HelpContactForm } from "@/features/help";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { contactViewStyles as styles } from "./contactView.styles";
+import { contactViewStyles as styles } from "../../styles/contact/contactView.styles";
 
 interface ContactViewProps {
   supportEmail: string | null;

@@ -5,7 +5,7 @@ import {
   SETTLEMENT_SUMMARY_DD,
   SETTLEMENT_SUMMARY_DL,
   SETTLEMENT_SUMMARY_DT,
-} from "./vendorSettlementReportPanel.styles";
+} from "../../../styles/payouts/vendorSettlementReportPanel.styles";
 
 interface SettlementSummaryDlProps {
   summary: VendorReportSummary;

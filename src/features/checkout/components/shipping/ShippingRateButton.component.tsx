@@ -3,7 +3,7 @@ import { Button } from "@/shared/components/ui/button";
 import { SHIPPING_METHOD } from "@/shared/constants/statuses";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { ShippingRate } from "@/shared/api/types";
-import { SHIPPING_CARD_STYLES } from "./shippingCard.styles";
+import { SHIPPING_CARD_STYLES } from "../../styles/shipping/shippingCard.styles";
 
 interface ShippingRateButtonProps {
   option: ShippingRate;

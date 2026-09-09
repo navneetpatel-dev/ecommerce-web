@@ -14,7 +14,7 @@ import {
   GIFT_CARD_MIN_AMOUNT_INR,
   GIFT_CARD_MAX_AMOUNT_INR,
 } from "../../constants/gift-cards/giftCards.constants";
-import { giftCardPurchaseFormStyles as styles } from "./giftCardPurchaseForm.styles";
+import { giftCardPurchaseFormStyles as styles } from "../../styles/purchase/giftCardPurchaseForm.styles";
 
 export function GiftCardPurchaseForm() {
   const { purchase, isBusy, error, successAmount, successEmail, reset } =

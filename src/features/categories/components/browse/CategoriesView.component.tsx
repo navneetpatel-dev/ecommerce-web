@@ -3,7 +3,7 @@
 import { CategoriesPageSkeleton } from "@/shared/components/Skeletons.component";
 import type { Category } from "@/shared/api/types";
 import type { CategoryRootWithChildren } from "../../hooks/browse/useCategoriesPage.hook";
-import { categoriesViewStyles } from "./categoriesView.styles";
+import { categoriesViewStyles } from "../../styles/browse/categoriesView.styles";
 import { CategoriesViewHeader } from "./CategoriesViewHeader.component";
 import { CategoriesEmptyState } from "./CategoriesEmptyState.component";
 import { CategoryRootsGrid } from "./CategoryRootsGrid.component";

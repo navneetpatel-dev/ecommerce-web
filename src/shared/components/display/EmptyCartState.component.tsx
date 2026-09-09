@@ -2,7 +2,7 @@ import { ShoppingBag } from "lucide-react";
 import { EmptyState } from "./EmptyState.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { emptyCartStateStyles } from "./displayComponents.styles";
+import { emptyCartStateStyles } from "../../styles/display/displayComponents.styles";
 
 interface EmptyCartStateProps {
   heading: string;

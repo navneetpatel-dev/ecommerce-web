@@ -5,7 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import { cn } from "@/shared/utils/dom/cn";
 import { WalletBalanceCardSkeleton } from "./WalletSectionSkeletons.component";
-import { walletPageContentStyles as styles } from "./walletPageContent.styles";
+import { walletPageContentStyles as styles } from "../../styles/overview/walletPageContent.styles";
 
 interface WalletBalanceCardProps {
   balance: number;

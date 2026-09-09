@@ -4,8 +4,8 @@ import { Search } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { SEARCH_LIST_ID } from "./constants";
-import { searchBarStyles as styles } from "./searchBar.styles";
+import { SEARCH_LIST_ID } from "../../../constants/search-bar/constants";
+import { searchBarStyles as styles } from "../../../styles/search-bar/searchBar.styles";
 
 interface SearchInputProps {
   size: "lg" | "sm";

@@ -1,6 +1,6 @@
 import type { DeliveryShipment } from "../../types/agent/types";
 import { DeliveryAttemptItem } from "./DeliveryAttemptsList/DeliveryAttemptItem.component";
-import { ATTEMPTS_LIST_CONTAINER } from "./DeliveryAttemptsList/deliveryAttemptsList.styles";
+import { ATTEMPTS_LIST_CONTAINER } from "../../styles/deliveries/deliveryAttemptsList.styles";
 
 interface DeliveryAttemptsListProps {
   attempts: NonNullable<DeliveryShipment["attempts"]>;

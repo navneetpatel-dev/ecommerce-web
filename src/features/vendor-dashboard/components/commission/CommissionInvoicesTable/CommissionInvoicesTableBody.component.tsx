@@ -1,8 +1,8 @@
 import { TableBody, TableRow, TableCell } from "@/shared/components/ui/table";
 import { LABELS } from "@/shared/constants/labels";
-import type { CommissionInvoiceViewModel } from "./useCommissionInvoices.hook";
+import type { CommissionInvoiceViewModel } from "../../../hooks/commission/useCommissionInvoices.hook";
 import { CommissionInvoiceTableRow } from "./CommissionInvoiceTableRow.component";
-import { commissionInvoicesTableStyles as styles } from "./commissionInvoicesTable.styles";
+import { commissionInvoicesTableStyles as styles } from "../../../styles/commission/commissionInvoicesTable.styles";
 
 interface CommissionInvoicesTableBodyProps {
   invoices: CommissionInvoiceViewModel[];

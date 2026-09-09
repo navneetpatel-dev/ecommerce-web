@@ -4,7 +4,7 @@ import { Check } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/dom/cn";
 
-import { stepIndicatorStyles } from "./stepIndicator.styles";
+import { stepIndicatorStyles } from "../../styles/display/stepIndicator.styles";
 
 interface StepIndicatorProps {
   currentStep: number;

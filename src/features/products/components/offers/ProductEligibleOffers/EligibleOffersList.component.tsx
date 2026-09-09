@@ -1,5 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
-import { productEligibleOffersStyles } from "./productEligibleOffers.styles";
+import { productEligibleOffersStyles } from "../../../styles/offers/productEligibleOffers.styles";
 import { EligibleOfferItem } from "./EligibleOfferItem.component";
 
 interface Offer {

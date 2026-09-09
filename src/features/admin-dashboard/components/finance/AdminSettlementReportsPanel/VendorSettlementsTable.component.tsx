@@ -2,7 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { ReportExportButtons, type ExportFileFormat } from "@/features/reports";
 import type { VendorSettlementRow } from "../../../api/finance/reports.api";
-import { adminSettlementReportsPanelStyles } from "./adminSettlementReportsPanel.styles";
+import { adminSettlementReportsPanelStyles } from "../../../styles/finance/adminSettlementReportsPanel.styles";
 
 interface VendorSettlementsTableProps {
   vendors: VendorSettlementRow[];

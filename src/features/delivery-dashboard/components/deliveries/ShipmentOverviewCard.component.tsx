@@ -1,7 +1,7 @@
 import { ImageIcon, Package } from "lucide-react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { shipmentOverviewCardStyles as styles } from "./shipmentOverviewCard.styles";
+import { shipmentOverviewCardStyles as styles } from "../../styles/deliveries/shipmentOverviewCard.styles";
 
 interface ShipmentOverviewCardProps {
   trackingNumber: string;

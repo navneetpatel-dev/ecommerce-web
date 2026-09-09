@@ -1,6 +1,6 @@
 import { Download, FileSpreadsheet, FileText } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { bulkImportAgentsDialogStyles as styles } from "./bulkImportAgentsDialog.styles";
+import { bulkImportAgentsDialogStyles as styles } from "../../../styles/delivery-agents/bulkImportAgentsDialog.styles";
 
 interface TemplateDownloadCardsProps {
   downloadingFormat: "xlsx" | "csv" | null;

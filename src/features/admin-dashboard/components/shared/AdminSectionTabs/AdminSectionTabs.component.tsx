@@ -1,10 +1,10 @@
 "use client";
 
 import { Tabs } from "@/shared/components/ui/tabs";
-import { adminSectionTabsStyles } from "./adminSectionTabs.styles";
+import { adminSectionTabsStyles } from "../../../styles/shared/adminSectionTabs.styles";
 import { AdminSectionTabTriggersList } from "./AdminSectionTabTriggersList.component";
 import { AdminSectionTabPanelsList } from "./AdminSectionTabPanelsList.component";
-import type { AdminSectionTabItem } from "./adminSectionTabs.types";
+import type { AdminSectionTabItem } from "../../../types/shared/adminSectionTabs.types";
 
 export type { AdminSectionTabItem };
 

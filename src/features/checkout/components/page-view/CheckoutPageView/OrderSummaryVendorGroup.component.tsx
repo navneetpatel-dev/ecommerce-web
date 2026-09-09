@@ -2,7 +2,7 @@ import { memo } from "react";
 import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { OrderSummaryItemRow } from "./OrderSummaryItemRow.component";
-import { ORDER_SUMMARY_ITEMS_LIST_STYLES } from "./orderSummaryItemsList.styles";
+import { ORDER_SUMMARY_ITEMS_LIST_STYLES } from "../../../styles/page-view/orderSummaryItemsList.styles";
 
 interface OrderSummaryVendorGroupProps {
   vendorItems: CartItem[];

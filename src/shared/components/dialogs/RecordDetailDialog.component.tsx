@@ -16,7 +16,7 @@ import {
   buildRecordDetailFields,
   getRecordDetailTitle,
 } from "@/shared/utils/formatting/recordDetails";
-import { recordDetailDialogStyles } from "./dialogComponents.styles";
+import { recordDetailDialogStyles } from "../../styles/dialogs/dialogComponents.styles";
 
 interface RecordDetailDialogProps {
   open: boolean;

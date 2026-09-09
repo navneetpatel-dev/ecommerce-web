@@ -5,7 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { OrderItem } from "@/shared/api/types";
 import { useBuyAgain } from "../../hooks/actions/useBuyAgain.hook";
-import { ordersComponentsStyles } from "./ordersComponents.styles";
+import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
 
 interface BuyAgainButtonProps {
   items: OrderItem[];

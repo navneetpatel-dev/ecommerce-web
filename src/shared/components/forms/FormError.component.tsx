@@ -1,7 +1,7 @@
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { getFormLevelApiError } from "@/shared/utils/api-errors/applyApiFormErrors";
 
-import { formErrorStyles } from "./formError.styles";
+import { formErrorStyles } from "../../styles/forms/formError.styles";
 
 interface FormErrorProps {
   error: Error | string | null;

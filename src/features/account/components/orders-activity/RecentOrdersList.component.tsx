@@ -1,6 +1,6 @@
-import type { RecentOrderViewModel } from "./useOrdersActivitySection.hook";
+import type { RecentOrderViewModel } from "../../hooks/orders-activity/useOrdersActivitySection.hook";
 import { RecentOrderCard } from "./RecentOrderCard.component";
-import { ordersActivitySectionStyles as styles } from "./ordersActivitySection.styles";
+import { ordersActivitySectionStyles as styles } from "../../styles/orders-activity/ordersActivitySection.styles";
 
 interface RecentOrdersListProps {
   orders: RecentOrderViewModel[];

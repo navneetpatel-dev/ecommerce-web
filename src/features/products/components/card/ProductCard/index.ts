@@ -1,2 +1,2 @@
 export { ProductCard } from "./ProductCard.component";
-export type { ProductCardProps } from "./types";
+export type { ProductCardProps } from "../../../types/card/types";

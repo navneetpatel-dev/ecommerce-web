@@ -7,7 +7,7 @@ import type { SearchSuggestion } from "../../../types/search/index";
 import { SearchInput } from "./SearchInput.component";
 import { SearchPanel } from "./SearchPanel.component";
 
-import { searchBarStyles as styles } from "./searchBar.styles";
+import { searchBarStyles as styles } from "../../../styles/search-bar/searchBar.styles";
 
 interface SearchBarProps {
   size?: "lg" | "sm";

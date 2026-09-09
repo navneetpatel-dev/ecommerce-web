@@ -2,7 +2,7 @@
 
 import { FileText } from "lucide-react";
 import { useAgentDocumentsPanel } from "../../../hooks/delivery-agents/useAgentDocumentsPanel.hook";
-import { agentDocumentsPanelStyles } from "./agentDocumentsPanel.styles";
+import { agentDocumentsPanelStyles } from "../../../styles/delivery-agents/agentDocumentsPanel.styles";
 import { AgentDocumentTableBody } from "./AgentDocumentTableBody.component";
 
 /** Admin review queue for delivery-agent KYC documents. */

@@ -8,7 +8,7 @@ import {
   LOW_STOCK_COUNT_WARNING,
   LOW_STOCK_NAME_CELL,
   LOW_STOCK_SKU_CELL,
-} from "./vendorLowStockWidget.styles";
+} from "../../../styles/products/vendorLowStockWidget.styles";
 
 interface LowStockRowsProps {
   rows: LowStockInventoryRow[];

@@ -2,8 +2,8 @@
 
 import { LABELS } from "@/shared/constants/labels";
 import type { PayoutEntry } from "@/shared/api/types";
-import { payoutsTableStyles } from "./payoutsTable.styles";
-import { usePayoutsTablePresentation } from "./usePayoutsTablePresentation.hook";
+import { payoutsTableStyles } from "../../../styles/payouts/payoutsTable.styles";
+import { usePayoutsTablePresentation } from "../../../hooks/payouts/usePayoutsTablePresentation.hook";
 import { PayoutMobileList } from "./PayoutMobileList.component";
 import { PayoutDesktopTable } from "./PayoutDesktopTable.component";
 

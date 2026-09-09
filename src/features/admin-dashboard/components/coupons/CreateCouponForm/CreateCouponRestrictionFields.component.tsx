@@ -18,7 +18,7 @@ import type {
   InfiniteMultiSelectPageResult,
 } from "@/shared/components/InfiniteMultiSelect.component";
 import { InfiniteMultiSelect } from "@/shared/components/InfiniteMultiSelect.component";
-import { USER_RESTRICTIONS } from "./constants";
+import { USER_RESTRICTIONS } from "../../../constants/coupons/constants";
 
 interface CreateCouponRestrictionFieldsProps {
   form: UseFormReturn<CouponFormInput>;

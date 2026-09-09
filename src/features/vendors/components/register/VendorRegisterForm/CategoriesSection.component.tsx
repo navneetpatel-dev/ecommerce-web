@@ -5,7 +5,7 @@ import type { VendorDocumentType } from "@/shared/constants/statuses";
 import { vendorDocumentTypeLabel } from "@/shared/utils/formatting/vendorDocumentTypeLabel";
 import { cn } from "@/shared/utils/dom/cn";
 import type { Category } from "@/shared/api/types";
-import { vendorRegisterFormStyles as styles } from "./vendorRegisterForm.styles";
+import { vendorRegisterFormStyles as styles } from "../../../styles/register/vendorRegisterForm.styles";
 
 interface VendorRegisterCategoriesSectionProps {
   categories: Category[];

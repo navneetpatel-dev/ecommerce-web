@@ -1,7 +1,7 @@
 "use client";
 
-import { ticketFiltersStyles } from "./ticketFilters.styles";
-import { useTicketFiltersHandlers } from "./useTicketFiltersHandlers.hook";
+import { ticketFiltersStyles } from "../../../styles/filters/ticketFilters.styles";
+import { useTicketFiltersHandlers } from "../../../hooks/filters/useTicketFiltersHandlers.hook";
 import { TicketStatusFilterSelect } from "./TicketStatusFilterSelect.component";
 import { TicketPriorityFilterSelect } from "./TicketPriorityFilterSelect.component";
 import { TicketCategoryFilterSelect } from "./TicketCategoryFilterSelect.component";

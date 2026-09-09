@@ -7,7 +7,7 @@ import { useKycChecklist } from "../../../hooks/shop-settings/useKycChecklist.ho
 import { KycProgressBanner } from "./KycProgressBanner.component";
 import { KycDocumentListItem } from "./KycDocumentListItem.component";
 
-import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
+import { vendorShopSettingsFormStyles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
 
 interface KycChecklistSectionProps {
   vendorId: string;

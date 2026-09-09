@@ -5,7 +5,7 @@ import { Bike } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { useCreateDeliveryAgentForm } from "../../../hooks/delivery-agents/useCreateDeliveryAgentForm.hook";
 import { BulkImportAgentsDialog } from "../BulkImportAgentsDialog/index";
-import { createDeliveryAgentFormStyles } from "./createDeliveryAgentForm.styles";
+import { createDeliveryAgentFormStyles } from "../../../styles/delivery-agents/createDeliveryAgentForm.styles";
 import { CreateDeliveryAgentFormFields } from "./CreateDeliveryAgentFormFields.component";
 
 export interface CreateDeliveryAgentFormProps {

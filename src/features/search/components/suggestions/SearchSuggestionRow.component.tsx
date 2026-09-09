@@ -9,7 +9,7 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { cn } from "@/shared/utils/dom/cn";
 import { SEARCH_SUGGESTION_TYPE } from "../../constants/search/index";
 import type { SearchSuggestion } from "../../types/search/index";
-import { searchSuggestionRowStyles as styles } from "./searchSuggestionRow.styles";
+import { searchSuggestionRowStyles as styles } from "../../styles/suggestions/searchSuggestionRow.styles";
 
 interface SearchSuggestionRowProps {
   suggestion: SearchSuggestion;

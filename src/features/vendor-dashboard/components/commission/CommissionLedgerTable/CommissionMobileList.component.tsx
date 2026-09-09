@@ -1,6 +1,6 @@
-import { commissionLedgerTableStyles } from "./commissionLedgerTable.styles";
+import { commissionLedgerTableStyles } from "../../../styles/commission/commissionLedgerTable.styles";
 import { CommissionMobileCard } from "./CommissionMobileCard.component";
-import type { CommissionRowViewModel } from "./useCommissionLedgerPresentation.hook";
+import type { CommissionRowViewModel } from "../../../hooks/commission/useCommissionLedgerPresentation.hook";
 
 interface CommissionMobileListProps {
   rows: CommissionRowViewModel[];

@@ -11,7 +11,7 @@ import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { VendorKycDocumentsMenuAction } from "../VendorKycDocumentsMenuAction.component";
 import { adminRowLabel } from "../../../utils/shared/adminRowLabel";
 import type { AdminDataRow } from "../../../hooks/shared/useAdminDataList.hook";
-import { useVendorRowActionsHandlers } from "./useVendorRowActionsHandlers.hook";
+import { useVendorRowActionsHandlers } from "../../../hooks/vendors/useVendorRowActionsHandlers.hook";
 
 export interface VendorRowActionsProps {
   row: AdminDataRow;

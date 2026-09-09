@@ -2,7 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import type { WalletLiabilityReport } from "../../../api/finance/reports.api";
 import { MetricCard } from "../../shared/MetricCard.component";
-import { adminWalletLiabilityPanelStyles } from "./adminWalletLiabilityPanel.styles";
+import { adminWalletLiabilityPanelStyles } from "../../../styles/wallet/adminWalletLiabilityPanel.styles";
 
 interface LiabilitySummaryGridProps {
   report: WalletLiabilityReport;

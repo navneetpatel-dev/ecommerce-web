@@ -9,8 +9,8 @@ import {
   BUG_SEVERITY_LABEL,
   BUG_STATUS_LABEL,
 } from "../../../utils/detail/labels";
-import { bugListHref } from "./bugReportDetailShared";
-import { bugReportDetailStyles } from "./bugReportDetail.styles";
+import { bugListHref } from "../../../utils/detail/bugReportDetailShared";
+import { bugReportDetailStyles } from "../../../styles/detail/bugReportDetail.styles";
 
 /** Back link, title, reporter meta and status/severity/module badges. */
 export function BugReportHeader({

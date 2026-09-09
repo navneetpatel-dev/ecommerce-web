@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { deliveryDispatchPanelStyles } from "./deliveryDispatchPanel.styles";
+import { deliveryDispatchPanelStyles } from "../../../styles/delivery-agents/deliveryDispatchPanel.styles";
 
 interface DeliveryDispatchAgentSelectProps {
   available: DeliveryAgent[];

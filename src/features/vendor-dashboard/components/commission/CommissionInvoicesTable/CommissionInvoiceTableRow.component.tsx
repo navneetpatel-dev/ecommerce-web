@@ -1,8 +1,8 @@
 import { TableRow, TableCell } from "@/shared/components/ui/table";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import type { CommissionInvoiceViewModel } from "./useCommissionInvoices.hook";
-import { commissionInvoicesTableStyles as styles } from "./commissionInvoicesTable.styles";
+import type { CommissionInvoiceViewModel } from "../../../hooks/commission/useCommissionInvoices.hook";
+import { commissionInvoicesTableStyles as styles } from "../../../styles/commission/commissionInvoicesTable.styles";
 
 interface CommissionInvoiceTableRowProps {
   invoice: CommissionInvoiceViewModel;

@@ -1,1 +1,1 @@
-export * from "@/shared/components/layout/useAdminLayout.hook";
+export * from "@/shared/hooks/layout/useAdminLayout.hook";

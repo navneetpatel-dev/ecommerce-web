@@ -3,7 +3,7 @@ import { PaginationContainer } from "@/shared/containers/navigation/PaginationCo
 import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import { ProductsTableHeader, ProductsTableContent } from "./ProductsTable/index";
-import { productsTableViewStyles } from "./ProductsTable/productsTable.styles";
+import { productsTableViewStyles } from "../../styles/products/productsTable.styles";
 
 interface ProductRow {
   id: string;

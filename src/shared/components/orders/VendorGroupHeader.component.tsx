@@ -3,7 +3,7 @@ import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { vendorGroupHeaderStyles } from "./vendorOrderComponents.styles";
+import { vendorGroupHeaderStyles } from "../../styles/orders/vendorOrderComponents.styles";
 
 interface VendorGroupHeaderProps {
   vendorName: string;

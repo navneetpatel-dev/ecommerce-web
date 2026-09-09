@@ -1,8 +1,8 @@
 import { Trash2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import type { SavedPaymentMethod } from "../../../types/layout/types";
-import type { SavedPaymentMethodViewModel } from "./useSavedPaymentMethodsSection.hook";
-import { savedPaymentMethodsSectionStyles as styles } from "./savedPaymentMethodsSection.styles";
+import type { SavedPaymentMethodViewModel } from "../../../hooks/payment-methods/useSavedPaymentMethodsSection.hook";
+import { savedPaymentMethodsSectionStyles as styles } from "../../../styles/payment-methods/savedPaymentMethodsSection.styles";
 
 interface SavedPaymentMethodCardProps {
   method: SavedPaymentMethodViewModel;

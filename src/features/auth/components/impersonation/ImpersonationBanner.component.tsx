@@ -5,7 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { Button } from "@/shared/components/ui/button";
 import { useImpersonation } from "../../hooks/impersonation/useImpersonation.hook";
-import { authFormsStyles } from "../shell/authForms.styles";
+import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 /** Persistent, high-visibility bar shown for the duration of a support impersonation session. */
 export function ImpersonationBanner() {

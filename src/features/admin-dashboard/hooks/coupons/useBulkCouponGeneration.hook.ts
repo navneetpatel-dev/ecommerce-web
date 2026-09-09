@@ -13,7 +13,7 @@ import {
   BulkFormSchema,
   BULK_FORM_DEFAULTS,
   type BulkMetaInput,
-} from "../../components/coupons/CouponsPageHeader/bulkCouponForm.schema";
+} from "../../schemas/coupons/bulkCouponForm.schema";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 

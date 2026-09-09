@@ -1,7 +1,7 @@
 import { memo } from "react";
 import type { CheckoutQuote } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { ORDER_SUMMARY_PANEL_STYLES } from "./orderSummaryPanel.styles";
+import { ORDER_SUMMARY_PANEL_STYLES } from "../../../styles/page-view/orderSummaryPanel.styles";
 
 type AppliedCoupon = NonNullable<CheckoutQuote["appliedCoupons"]>[number];
 

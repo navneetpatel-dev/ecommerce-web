@@ -3,7 +3,7 @@ import {
   formatAnalyticsInr,
   fullAnalyticsDate,
 } from "../../utils/analytics/analyticsFormat";
-import { analyticsStyles } from "./analyticsComponents.styles";
+import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styles";
 
 type TooltipPayloadItem = {
   dataKey?: string | number;

@@ -15,8 +15,8 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { CATEGORY_STATUS } from "@/shared/constants/statuses";
 import type { Category } from "@/shared/api/types";
-import { NONE_PARENT } from "./useCategoryParentOptions.hook";
-import { adminCategoryStyles } from "../adminCategory.styles";
+import { NONE_PARENT } from "../../../hooks/categories/useCategoryParentOptions.hook";
+import { adminCategoryStyles } from "../../../styles/categories/adminCategory.styles";
 
 interface AdminCategoryBasicsFieldsProps {
   form: UseFormReturn<CategoryFormInput>;

@@ -1,7 +1,7 @@
 "use client";
 
-import { bugReportFiltersStyles } from "./bugReportFilters.styles";
-import { useBugReportFiltersHandlers } from "./useBugReportFiltersHandlers.hook";
+import { bugReportFiltersStyles } from "../../../styles/filters/bugReportFilters.styles";
+import { useBugReportFiltersHandlers } from "../../../hooks/filters/useBugReportFiltersHandlers.hook";
 import { BugStatusFilterSelect } from "./BugStatusFilterSelect.component";
 import { BugSeverityFilterSelect } from "./BugSeverityFilterSelect.component";
 import { BugModuleFilterSelect } from "./BugModuleFilterSelect.component";

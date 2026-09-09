@@ -8,7 +8,7 @@ import {
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import { VendorProductCreateForm } from "./VendorProductCreateForm/index";
-import { vendorProductFormDialogStyles } from "./vendorDialogs.styles";
+import { vendorProductFormDialogStyles } from "../../styles/products/vendorDialogs.styles";
 import type { ComponentProps } from "react";
 
 type VendorProductCreateFormProps = ComponentProps<

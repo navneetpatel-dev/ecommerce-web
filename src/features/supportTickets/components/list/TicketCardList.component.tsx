@@ -7,7 +7,7 @@ import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore.component
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import type { SupportTicket } from "../../api/list/supportTickets.api";
-import { ticketCardListStyles } from "./ticketCardList.styles";
+import { ticketCardListStyles } from "../../styles/list/ticketCardList.styles";
 import { TicketCardsGrid } from "./TicketCardsGrid.component";
 
 interface TicketCardListProps {

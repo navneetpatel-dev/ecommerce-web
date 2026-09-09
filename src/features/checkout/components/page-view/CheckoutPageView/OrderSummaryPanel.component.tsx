@@ -7,8 +7,8 @@ import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
 import { OrderSummaryItemsList } from "./OrderSummaryItemsList.component";
 import { AppliedCouponsSummaryList } from "./AppliedCouponsSummaryList.component";
-import { useOrderSummaryPanel } from "./useOrderSummaryPanel.hook";
-import { ORDER_SUMMARY_PANEL_STYLES } from "./orderSummaryPanel.styles";
+import { useOrderSummaryPanel } from "../../../hooks/page-view/useOrderSummaryPanel.hook";
+import { ORDER_SUMMARY_PANEL_STYLES } from "../../../styles/page-view/orderSummaryPanel.styles";
 
 interface OrderSummaryPanelProps {
   groupedByVendor: Record<string, CartItem[]>;

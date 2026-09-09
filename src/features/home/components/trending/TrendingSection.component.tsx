@@ -4,7 +4,7 @@ import { ProductGrid } from "@/features/products";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type { ProductListItem } from "@/shared/api/types";
-import { trendingSectionStyles as styles } from "./trendingSection.styles";
+import { trendingSectionStyles as styles } from "../../styles/trending/trendingSection.styles";
 
 interface TrendingSectionProps {
   products?: ProductListItem[];

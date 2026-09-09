@@ -1,12 +1,12 @@
 "use client";
 
-import { AUTOPLAY_MS, DEFAULT_SLIDES } from "./constants";
+import { AUTOPLAY_MS, DEFAULT_SLIDES } from "../../../constants/hero/constants";
 import { SlideControls } from "./SlideControls.component";
 import { SlideCopy } from "./SlideCopy.component";
 import { SlideImage } from "./SlideImage.component";
-import { useHeroCarousel } from "./useHeroCarousel.hook";
-import type { HeroSlide } from "./types";
-import { heroSectionStyles as styles } from "./heroSection.styles";
+import { useHeroCarousel } from "../../../hooks/hero/useHeroCarousel.hook";
+import type { HeroSlide } from "../../../types/hero/types";
+import { heroSectionStyles as styles } from "../../../styles/hero/heroSection.styles";
 
 interface HeroSectionProps {
   slides?: HeroSlide[];

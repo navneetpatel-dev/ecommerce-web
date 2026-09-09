@@ -1,7 +1,7 @@
 import { memo } from "react";
 import type { OrderItem } from "@/shared/api/types";
 import { SubOrderCardItemRow } from "./SubOrderCardItemRow.component";
-import { SUB_ORDER_CARD_ITEMS_STYLES } from "./subOrderCardItems.styles";
+import { SUB_ORDER_CARD_ITEMS_STYLES } from "../../../styles/sub-order/subOrderCardItems.styles";
 
 interface SubOrderCardItemsProps {
   items: OrderItem[] | undefined;

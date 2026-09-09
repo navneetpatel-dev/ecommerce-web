@@ -7,7 +7,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { Category } from "@/shared/api/types";
 import { CategoryMegaMenuTile } from "./CategoryMegaMenuTile.component";
-import { categoryMegaMenuStyles as styles } from "./categoryMegaMenu.styles";
+import { categoryMegaMenuStyles as styles } from "../../../styles/mega-menu/categoryMegaMenu.styles";
 
 interface CategoriesMegaMenuProps {
   categories: Category[];

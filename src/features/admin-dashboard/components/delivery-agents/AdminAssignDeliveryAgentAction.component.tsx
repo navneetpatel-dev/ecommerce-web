@@ -11,8 +11,8 @@ import {
 import { FormFieldFrame } from "@/shared/components/forms";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { DeliveryAgentOptionsList } from "./AdminAssignDeliveryAgentAction/DeliveryAgentOptionsList.component";
-import { useAdminAssignDeliveryAgentAction } from "./AdminAssignDeliveryAgentAction/useAdminAssignDeliveryAgentAction.hook";
-import { adminAssignDeliveryAgentActionStyles as styles } from "./AdminAssignDeliveryAgentAction/adminAssignDeliveryAgentAction.styles";
+import { useAdminAssignDeliveryAgentAction } from "../../hooks/delivery-agents/useAdminAssignDeliveryAgentAction.hook";
+import { adminAssignDeliveryAgentActionStyles as styles } from "../../styles/delivery-agents/adminAssignDeliveryAgentAction.styles";
 
 interface AdminAssignDeliveryAgentActionProps {
   returnId: string;

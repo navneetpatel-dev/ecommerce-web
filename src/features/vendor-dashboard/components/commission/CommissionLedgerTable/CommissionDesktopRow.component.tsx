@@ -1,7 +1,7 @@
 import { TableRow, TableCell } from "@/shared/components/ui/table";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { commissionLedgerTableStyles } from "./commissionLedgerTable.styles";
-import type { CommissionRowViewModel } from "./useCommissionLedgerPresentation.hook";
+import { commissionLedgerTableStyles } from "../../../styles/commission/commissionLedgerTable.styles";
+import type { CommissionRowViewModel } from "../../../hooks/commission/useCommissionLedgerPresentation.hook";
 
 interface CommissionDesktopRowProps {
   row: CommissionRowViewModel;

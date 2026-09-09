@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { cn } from "@/shared/utils/dom/cn";
-import { authBrandVisualStyles as styles } from "./authBrandVisual.styles";
+import { authBrandVisualStyles as styles } from "../../styles/shell/authBrandVisual.styles";
 
 const COLLAGE_IMAGES = [
   {

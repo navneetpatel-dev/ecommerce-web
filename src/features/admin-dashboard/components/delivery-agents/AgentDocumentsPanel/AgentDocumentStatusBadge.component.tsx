@@ -1,4 +1,4 @@
-import { agentDocumentsPanelStyles } from "./agentDocumentsPanel.styles";
+import { agentDocumentsPanelStyles } from "../../../styles/delivery-agents/agentDocumentsPanel.styles";
 
 interface AgentDocumentStatusBadgeProps {
   verified?: boolean;

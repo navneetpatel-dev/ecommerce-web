@@ -20,7 +20,7 @@ import {
 } from "@/shared/constants/statuses";
 import type { BugReport } from "../../../api/list/bugReports.api";
 import { BUG_MODULE_LABEL, BUG_SEVERITY_LABEL } from "../../../utils/detail/labels";
-import { bugReportPanelsStyles } from "./bugReportPanels.styles";
+import { bugReportPanelsStyles } from "../../../styles/detail/bugReportPanels.styles";
 
 interface BugTriagePanelProps {
   report: BugReport;

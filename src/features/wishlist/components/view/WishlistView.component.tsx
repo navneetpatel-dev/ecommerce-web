@@ -16,7 +16,7 @@ import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { priceDropAmount } from "../../utils/price-drop/priceDrop.utils";
 import type { WishlistPageItem } from "../../hooks/view/useWishlistPage.hook";
 import type { UnavailableReason } from "@/shared/constants/statuses";
-import { wishlistViewStyles as styles } from "./wishlistView.styles";
+import { wishlistViewStyles as styles } from "../../styles/view/wishlistView.styles";
 
 function unavailableLabel(
   reason: UnavailableReason | null | undefined,

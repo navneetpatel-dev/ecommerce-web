@@ -1,7 +1,7 @@
 import type { DragEvent, KeyboardEvent } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
-import { filePickerDropzoneStyles } from "./fileUploadComponents.styles";
+import { filePickerDropzoneStyles } from "../../styles/file-upload/fileUploadComponents.styles";
 
 interface FilePickerDropzoneProps {
   icon: LucideIcon;

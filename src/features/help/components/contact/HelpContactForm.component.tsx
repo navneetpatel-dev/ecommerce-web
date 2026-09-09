@@ -6,7 +6,7 @@ import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
-import { helpContactFormStyles as styles } from "./helpContactForm.styles";
+import { helpContactFormStyles as styles } from "../../styles/contact/helpContactForm.styles";
 
 export function HelpContactForm() {
   const currentUser = useAuthStore((s) => s.currentUser);

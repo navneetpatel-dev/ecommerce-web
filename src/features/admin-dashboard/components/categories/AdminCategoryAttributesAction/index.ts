@@ -4,5 +4,5 @@
 export { AttributeFormFields } from "./AttributeFormFields.component";
 export { AttributesSortableList } from "./AttributesSortableList.component";
 export { SortableAttributeRow } from "./SortableAttributeRow.component";
-export { optionsToInput } from "./attributeOptionUtils";
-export { parseOptions } from "./attributeOptionUtils";
+export { optionsToInput } from "../../../utils/categories/attributeOptionUtils";
+export { parseOptions } from "../../../utils/categories/attributeOptionUtils";

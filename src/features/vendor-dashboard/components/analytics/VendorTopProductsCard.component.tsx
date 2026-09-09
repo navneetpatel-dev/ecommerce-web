@@ -28,7 +28,7 @@ import {
   TOP_PRODUCTS_EMPTY,
   TOP_PRODUCTS_HEADER,
   TOP_PRODUCTS_TITLE,
-} from "./VendorAnalyticsPanel/vendorAnalyticsPanel.styles";
+} from "../../styles/analytics/vendorAnalyticsPanel.styles";
 
 export type { TopProduct };
 

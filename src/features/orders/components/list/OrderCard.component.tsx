@@ -1,9 +1,9 @@
 import type { Order } from "@/shared/api/types";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { Card, CardHeader, CardContent } from "@/shared/components/ui/card";
-import { useOrderCard } from "./useOrderCard.hook";
+import { useOrderCard } from "../../hooks/list/useOrderCard.hook";
 import { OrderCardSubOrdersList } from "./OrderCardSubOrdersList.component";
-import { ORDER_CARD_STYLES } from "./orderCard.styles";
+import { ORDER_CARD_STYLES } from "../../styles/list/orderCard.styles";
 
 interface OrderCardProps {
   order: Order;

@@ -1,1 +1,1 @@
-export * from "@/shared/components/ImageGallery/useImageGalleryTransition.hook";
+export * from "@/shared/hooks/image-gallery/useImageGalleryTransition.hook";

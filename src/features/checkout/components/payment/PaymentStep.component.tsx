@@ -7,8 +7,8 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { LABELS } from "@/shared/constants/labels";
 import { WalletApplySection } from "../wallet/WalletApplySection.component";
 import { PaymentOptionsList } from "./PaymentOptionsList.component";
-import { usePaymentStep } from "./usePaymentStep.hook";
-import { PAYMENT_STEP_STYLES } from "./paymentStep.styles";
+import { usePaymentStep } from "../../hooks/payment/usePaymentStep.hook";
+import { PAYMENT_STEP_STYLES } from "../../styles/payment/paymentStep.styles";
 
 interface PaymentStepProps {
   isPending: boolean;

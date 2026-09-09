@@ -17,7 +17,7 @@ import {
 import { vendorEntityTypeLabel } from "@/shared/utils/formatting/vendorEntityTypeLabel";
 import { cn } from "@/shared/utils/dom/cn";
 import type { VendorRegisterInput } from "../../../schemas/register/vendor.schema";
-import { vendorRegisterFormStyles as styles } from "./vendorRegisterForm.styles";
+import { vendorRegisterFormStyles as styles } from "../../../styles/register/vendorRegisterForm.styles";
 
 type VendorRegisterFormInstance = UseFormReturn<VendorRegisterInput>;
 

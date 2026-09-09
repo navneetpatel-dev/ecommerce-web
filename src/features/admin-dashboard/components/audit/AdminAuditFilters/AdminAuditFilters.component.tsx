@@ -11,12 +11,12 @@ import {
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { auditFiltersLabels } from "@/shared/constants/labels/auditFilters";
-import { adminAuditFiltersStyles } from "./adminAuditFilters.styles";
+import { adminAuditFiltersStyles } from "../../../styles/audit/adminAuditFilters.styles";
 import {
   EntityTypeOptionsList,
   ALL_ENTITY_TYPES_VALUE,
 } from "./EntityTypeOptionsList.component";
-import { useAdminAuditFiltersHandlers } from "./useAdminAuditFiltersHandlers.hook";
+import { useAdminAuditFiltersHandlers } from "../../../hooks/audit/useAdminAuditFiltersHandlers.hook";
 
 export interface AdminAuditFiltersProps {
   entityType: string;

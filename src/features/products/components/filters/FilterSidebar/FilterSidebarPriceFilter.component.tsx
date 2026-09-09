@@ -6,7 +6,7 @@ import {
   AccordionContent,
 } from "@/shared/components/ui/accordion";
 import { LABELS } from "@/shared/constants/labels";
-import { filterSidebarStyles } from "./filterSidebar.styles";
+import { filterSidebarStyles } from "../../../styles/filters/filterSidebar.styles";
 
 interface FilterSidebarPriceFilterProps {
   minPrice: number | undefined;

@@ -1,8 +1,8 @@
 "use client";
 
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { infiniteMultiSelectStyles } from "./infiniteMultiSelect.styles";
-import type { InfiniteMultiSelectOption } from "./types";
+import { infiniteMultiSelectStyles } from "../../styles/infinite-multi-select/infiniteMultiSelect.styles";
+import type { InfiniteMultiSelectOption } from "../../types/infinite-multi-select/types";
 
 interface OptionRowProps {
   option: InfiniteMultiSelectOption;

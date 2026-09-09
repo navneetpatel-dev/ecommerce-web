@@ -1,7 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { oauthEntryPoint } from "@/shared/config/appConfig";
-import { authFormsStyles } from "../shell/authForms.styles";
+import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 export function OAuthButton({
   provider,

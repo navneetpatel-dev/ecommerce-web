@@ -6,9 +6,9 @@ import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { PINCODE_LENGTH } from "@/shared/constants/geo/pincode";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
-import { productDeliveryCheckStyles } from "./productDeliveryCheck.styles";
+import { productDeliveryCheckStyles } from "../../../styles/delivery-check/productDeliveryCheck.styles";
 import { ProductDeliveryEligibilityNotice } from "./ProductDeliveryEligibilityNotice.component";
-import { useProductDeliveryCheckPresentation } from "./useProductDeliveryCheckPresentation.hook";
+import { useProductDeliveryCheckPresentation } from "../../../hooks/delivery-check/useProductDeliveryCheckPresentation.hook";
 
 export interface ProductDeliveryCheckProps {
   productId: string;

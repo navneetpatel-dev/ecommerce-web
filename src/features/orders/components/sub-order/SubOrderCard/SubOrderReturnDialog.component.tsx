@@ -26,7 +26,7 @@ import {
   REASON_CODES,
   type ReturnReasonCode,
 } from "../../../hooks/sub-order/useSubOrderReturn.hook";
-import { SUB_ORDER_CARD_STYLES } from "./subOrderCard.styles";
+import { SUB_ORDER_CARD_STYLES } from "../../../styles/sub-order/subOrderCard.styles";
 
 interface SubOrderReturnDialogProps {
   returnTarget: OrderItem | null;

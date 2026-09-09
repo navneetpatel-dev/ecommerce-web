@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { VendorGroups } from "../CartPageView/VendorGroups.component";
-import { VENDOR_GROUP_CARD } from "@/shared/components/vendorGroupStyles";
+import { VENDOR_GROUP_CARD } from "@/shared/styles/orders/vendorGroupStyles";
 import type { CartItem } from "@/shared/api/types";
 
 function cartItem(id: string): CartItem {

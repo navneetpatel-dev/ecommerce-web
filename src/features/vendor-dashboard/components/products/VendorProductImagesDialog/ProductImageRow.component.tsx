@@ -7,7 +7,7 @@ import { MediaImage } from "@/shared/components/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
 import type { ProductImage, ProductVariant } from "@/shared/api/types";
-import { productImageRowStyles } from "./vendorProductImagesDialog.styles";
+import { productImageRowStyles } from "../../../styles/products/vendorProductImagesDialog.styles";
 
 interface ProductImageRowProps {
   image: ProductImage;

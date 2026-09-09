@@ -16,8 +16,8 @@ import {
 import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
 import { ProductRow } from "./ProductRow.component";
 import { ProductMobileCard } from "./ProductMobileCard.component";
-import { productsTableContentStyles as styles } from "./productsTable.styles";
-import type { ProductsTableContentProps } from "./types";
+import { productsTableContentStyles as styles } from "../../../styles/products/productsTable.styles";
+import type { ProductsTableContentProps } from "../../../types/products/ProductsTable-types";
 
 /** Empty / mobile cards / desktop pinned-actions table for vendor products. */
 export function ProductsTableContent(props: ProductsTableContentProps) {

@@ -1,10 +1,10 @@
 "use client";
 
-import { commissionLedgerTableStyles } from "./commissionLedgerTable.styles";
+import { commissionLedgerTableStyles } from "../../../styles/commission/commissionLedgerTable.styles";
 import {
   useCommissionLedgerPresentation,
   type Commission,
-} from "./useCommissionLedgerPresentation.hook";
+} from "../../../hooks/commission/useCommissionLedgerPresentation.hook";
 import { CommissionMobileList } from "./CommissionMobileList.component";
 import { CommissionDesktopTable } from "./CommissionDesktopTable.component";
 

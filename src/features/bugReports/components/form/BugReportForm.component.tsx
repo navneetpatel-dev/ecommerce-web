@@ -13,7 +13,7 @@ import { useBugReportForm } from "../../hooks/form/useBugReportForm.hook";
 import { BugFormHeader } from "./BugFormHeader.component";
 import { CharCountedField } from "./BugFormFields.component";
 import { BugFormFooter } from "./BugFormFooter.component";
-import { bugReportFormStyles } from "./bugReportForm.styles";
+import { bugReportFormStyles } from "../../styles/form/bugReportForm.styles";
 
 type Props = {
   successHref: (id: string) => string;

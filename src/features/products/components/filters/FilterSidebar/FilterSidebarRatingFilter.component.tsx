@@ -7,7 +7,7 @@ import {
 import { RadioGroup } from "@/shared/components/ui/radio-group";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { filterSidebarStyles } from "./filterSidebar.styles";
+import { filterSidebarStyles } from "../../../styles/filters/filterSidebar.styles";
 import { FilterSidebarRatingOptionsList } from "./FilterSidebarRatingOptionsList.component";
 
 interface FilterSidebarRatingFilterProps {

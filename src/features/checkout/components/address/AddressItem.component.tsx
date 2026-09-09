@@ -2,7 +2,7 @@ import { memo } from "react";
 import type { Address } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { ADDRESS_STEP_STYLES } from "./addressStep.styles";
+import { ADDRESS_STEP_STYLES } from "../../styles/address/addressStep.styles";
 
 interface AddressItemProps {
   address: Address;

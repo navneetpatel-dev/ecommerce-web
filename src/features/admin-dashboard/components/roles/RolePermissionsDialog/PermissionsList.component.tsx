@@ -8,7 +8,7 @@ import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/dom/cn";
 import type { AdminPermission } from "../../../api/roles/roles.api";
-import { rolePermissionsDialogStyles } from "./rolePermissionsDialog.styles";
+import { rolePermissionsDialogStyles } from "../../../styles/roles/rolePermissionsDialog.styles";
 
 interface PermissionsListProps {
   permissions: AdminPermission[];

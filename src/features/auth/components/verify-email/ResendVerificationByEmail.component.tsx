@@ -4,7 +4,7 @@ import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useResendVerificationByEmail } from "../../api/auth/auth.queries";
-import { authFormsStyles } from "../shell/authForms.styles";
+import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 interface ResendVerificationByEmailProps {
   email: string;

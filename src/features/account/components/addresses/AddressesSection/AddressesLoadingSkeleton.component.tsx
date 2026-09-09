@@ -1,5 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { addressesSectionStyles as styles } from "./addressesSection.styles";
+import { addressesSectionStyles as styles } from "../../../styles/addresses/addressesSection.styles";
 
 export function AddressesLoadingSkeleton() {
   return (

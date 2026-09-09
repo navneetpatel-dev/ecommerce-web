@@ -21,8 +21,8 @@ import { CreateCouponValueFields } from "./CreateCouponValueFields.component";
 import { CreateCouponScopeFields } from "./CreateCouponScopeFields.component";
 import { CreateCouponConstraintFields } from "./CreateCouponConstraintFields.component";
 import { CreateCouponRestrictionFields } from "./CreateCouponRestrictionFields.component";
-import { couponDisableHint } from "./couponDisableHint";
-import { createCouponFormStyles } from "./createCouponForm.styles";
+import { couponDisableHint } from "../../../utils/coupons/couponDisableHint";
+import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
 
 interface CreateCouponFormProps {
   form: UseFormReturn<CouponFormInput>;

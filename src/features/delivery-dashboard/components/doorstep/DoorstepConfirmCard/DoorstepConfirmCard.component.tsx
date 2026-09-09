@@ -3,8 +3,8 @@
 import { ShieldCheck } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { doorstepConfirmCardStyles } from "./doorstepConfirmCard.styles";
-import { useDoorstepConfirmHandlers } from "./useDoorstepConfirmHandlers.hook";
+import { doorstepConfirmCardStyles } from "../../../styles/doorstep/doorstepConfirmCard.styles";
+import { useDoorstepConfirmHandlers } from "../../../hooks/doorstep/useDoorstepConfirmHandlers.hook";
 import { DoorstepPasscodeSection } from "./DoorstepPasscodeSection.component";
 import { DoorstepProofSection } from "./DoorstepProofSection.component";
 import { DoorstepCodSection } from "./DoorstepCodSection.component";

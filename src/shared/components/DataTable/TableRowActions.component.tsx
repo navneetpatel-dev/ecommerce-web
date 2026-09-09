@@ -16,7 +16,7 @@ import {
 } from "@/shared/components/ui/popover";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { tableRowActionsStyles } from "./dataTableComponents.styles";
+import { tableRowActionsStyles } from "../../styles/data-table/dataTableComponents.styles";
 
 interface TableRowActionProps {
   children: ReactNode;

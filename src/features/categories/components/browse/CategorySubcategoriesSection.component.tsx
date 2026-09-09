@@ -2,7 +2,7 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category } from "@/shared/api/types";
 import type { CategoryRootWithChildren } from "../../hooks/browse/useCategoriesPage.hook";
-import { categoriesViewStyles } from "./categoriesView.styles";
+import { categoriesViewStyles } from "../../styles/browse/categoriesView.styles";
 import { CategorySubcategoryGroup } from "./CategorySubcategoryGroup.component";
 
 interface CategorySubcategoriesSectionProps {

@@ -14,8 +14,8 @@ import {
   SHIFT_DIALOG_ERROR,
   SHIFT_DIALOG_HINT,
   SHIFT_DIALOG_SUBMIT,
-} from "./shiftSummaryCard.styles";
-import type { useShiftSummaryCard } from "./useShiftSummaryCard.hook";
+} from "../../../styles/today/shiftSummaryCard.styles";
+import type { useShiftSummaryCard } from "../../../hooks/today/useShiftSummaryCard.hook";
 
 interface CashDepositDialogProps {
   open: boolean;

@@ -2,7 +2,7 @@ import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { ordersComponentsStyles } from "../actions/ordersComponents.styles";
+import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
 
 interface TrackingFormProps {
   trackingNumber: string;

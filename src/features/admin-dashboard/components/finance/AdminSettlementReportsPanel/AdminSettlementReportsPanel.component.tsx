@@ -12,8 +12,8 @@ import {
   ReportExportStatus,
 } from "@/features/reports";
 import { useAdminSettlementReports } from "../../../hooks/finance/useAdminSettlementReports.hook";
-import { reportPanelStyles } from "../../shared/reportPanel.styles";
-import { adminSettlementReportsPanelStyles } from "./adminSettlementReportsPanel.styles";
+import { reportPanelStyles } from "../../../styles/shared/reportPanel.styles";
+import { adminSettlementReportsPanelStyles } from "../../../styles/finance/adminSettlementReportsPanel.styles";
 import { SettlementSummaryGrid } from "./SettlementSummaryGrid.component";
 import { SettlementReconciliationCard } from "./SettlementReconciliationCard.component";
 import { VendorSettlementsTable } from "./VendorSettlementsTable.component";

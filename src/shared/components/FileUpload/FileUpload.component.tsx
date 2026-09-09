@@ -3,10 +3,10 @@ import { MediaImage } from "@/shared/components/MediaImage.component";
 import { Button } from "@/shared/components/ui/button";
 import dynamic from "next/dynamic";
 import { LABELS } from "@/shared/constants/labels";
-import { fileUploadStyles } from "@/shared/components/fileUploadComponents.styles";
-import { useFileUploadController } from "./useFileUploadController.hook";
-import type { FileUploadProps } from "./types";
-import { isPdfUrl, isVideoUrl } from "./utils";
+import { fileUploadStyles } from "@/shared/styles/file-upload/fileUploadComponents.styles";
+import { useFileUploadController } from "../../hooks/file-upload/useFileUploadController.hook";
+import type { FileUploadProps } from "../../types/file-upload/types";
+import { isPdfUrl, isVideoUrl } from "../../utils/file-upload/utils";
 
 /** Rendered only while a crop session is active (overlay/dialog), so no skeleton fallback is needed. */
 const ImageCropDialog = dynamic(

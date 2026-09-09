@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
-import { numberInputStyles } from "./numberInput.styles";
+import { numberInputStyles } from "../../styles/forms/numberInput.styles";
 
 interface NumberInputSteppersProps {
   disabled?: boolean;

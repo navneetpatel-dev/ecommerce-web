@@ -14,7 +14,7 @@ import { VendorGroups } from "./VendorGroups.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
 import { ClearCartAction } from "./ClearCartAction.component";
 import { CartMutationError } from "../../drawer/CartMutationError.component";
-import { cartPageViewStyles as styles } from "./cartPageView.styles";
+import { cartPageViewStyles as styles } from "../../../styles/page/cartPageView.styles";
 
 export interface CartPageViewProps {
   isLoading?: boolean;

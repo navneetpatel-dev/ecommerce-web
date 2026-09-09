@@ -13,7 +13,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { useScheduledReportsCatalog } from "../../../hooks/settings/useScheduledReportsCatalog.hook";
 import type { PlatformSettings } from "../../../hooks/settings/usePlatformSettingsForm.hook";
 import { ScheduledReportsTypeSelector } from "./ScheduledReportsTypeSelector.component";
-import { platformSettingsFormStyles as styles } from "./platformSettingsForm.styles";
+import { platformSettingsFormStyles as styles } from "../../../styles/settings/platformSettingsForm.styles";
 
 interface ScheduledReportsSettingsSectionProps {
   form: PlatformSettings;

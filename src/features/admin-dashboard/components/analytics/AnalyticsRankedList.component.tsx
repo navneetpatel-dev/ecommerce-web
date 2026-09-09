@@ -9,7 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { RankedListItems } from "./AnalyticsRankedList/RankedListItems.component";
 import type { RankedItemData } from "./AnalyticsRankedList/RankedListItem.component";
-import { analyticsRankedListStyles as styles } from "./AnalyticsRankedList/analyticsRankedList.styles";
+import { analyticsRankedListStyles as styles } from "../../styles/analytics/analyticsRankedList.styles";
 
 interface AnalyticsRankedListProps {
   title: string;

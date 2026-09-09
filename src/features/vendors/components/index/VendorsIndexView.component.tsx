@@ -8,7 +8,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { StorefrontVendor } from "../../api/directory/vendors.api";
-import { vendorsIndexViewStyles as styles } from "./vendorsIndexView.styles";
+import { vendorsIndexViewStyles as styles } from "../../styles/index/vendorsIndexView.styles";
 
 interface VendorsIndexViewProps {
   vendors: StorefrontVendor[];

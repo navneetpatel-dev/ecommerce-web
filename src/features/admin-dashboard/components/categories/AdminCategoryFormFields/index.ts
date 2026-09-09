@@ -4,5 +4,5 @@
 export { AdminCategoryBasicsFields } from "./AdminCategoryBasicsFields.component";
 export { AdminCategoryImageSeoFields } from "./AdminCategoryImageSeoFields.component";
 export { AdminCategoryPolicyFields } from "./AdminCategoryPolicyFields.component";
-export { NONE_PARENT } from "./useCategoryParentOptions.hook";
-export { useCategoryParentOptions } from "./useCategoryParentOptions.hook";
+export { NONE_PARENT } from "../../../hooks/categories/useCategoryParentOptions.hook";
+export { useCategoryParentOptions } from "../../../hooks/categories/useCategoryParentOptions.hook";

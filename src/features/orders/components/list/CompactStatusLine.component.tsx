@@ -3,7 +3,7 @@ import {
   ORDER_STATUS_GROUP_STYLES,
   TONE_CLASS,
   DOT_CLASS,
-} from "./orderStatusGroup.styles";
+} from "../../styles/list/orderStatusGroup.styles";
 import { orderTone, paymentTone } from "../../utils/list/orderStatusDisplay.utils";
 
 interface CompactStatusLineProps {

@@ -5,7 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_ANSWER_AUTHOR_TYPE } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import type { ProductQuestion } from "@/shared/api/types";
-import { productQnaStyles as styles } from "./productQna.styles";
+import { productQnaStyles as styles } from "../../styles/list/productQna.styles";
 
 interface ProductQuestionsProps {
   questions: ProductQuestion[];

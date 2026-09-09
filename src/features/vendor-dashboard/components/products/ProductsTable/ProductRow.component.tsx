@@ -8,7 +8,7 @@ import {
 } from "@/shared/constants/table/table";
 import { cn } from "@/shared/utils/dom/cn";
 import { ProductActions } from "./ProductActions.component";
-import type { ProductRowActionsProps } from "./types";
+import type { ProductRowActionsProps } from "../../../types/products/ProductsTable-types";
 
 /** Desktop table row for a vendor product. */
 export function ProductRow(props: ProductRowActionsProps) {

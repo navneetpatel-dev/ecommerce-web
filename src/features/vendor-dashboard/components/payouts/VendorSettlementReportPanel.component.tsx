@@ -6,7 +6,7 @@ import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { ReportExportButtons, ReportExportStatus } from "@/features/reports";
-import { useVendorSettlementReportPanel } from "./VendorSettlementReportPanel/useVendorSettlementReportPanel.hook";
+import { useVendorSettlementReportPanel } from "../../hooks/payouts/useVendorSettlementReportPanel.hook";
 import { SettlementSummaryDl } from "./VendorSettlementReportPanel/SettlementSummaryDl.component";
 import {
   SETTLEMENT_BUTTON_GROUP,
@@ -15,7 +15,7 @@ import {
   SETTLEMENT_MESSAGE_MUTED,
   SETTLEMENT_PANEL_SECTION,
   SETTLEMENT_PANEL_TITLE,
-} from "./VendorSettlementReportPanel/vendorSettlementReportPanel.styles";
+} from "../../styles/payouts/vendorSettlementReportPanel.styles";
 
 export function VendorSettlementReportPanel() {
   const {

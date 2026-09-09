@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { ProductImageRow } from "./VendorProductImagesDialog/ProductImageRow.component";
-import { vendorProductImagesDialogStyles } from "./VendorProductImagesDialog/vendorProductImagesDialog.styles";
+import { vendorProductImagesDialogStyles } from "../../styles/products/vendorProductImagesDialog.styles";
 import {
   useVendorProductImages,
   ALL_VARIANTS_VALUE,

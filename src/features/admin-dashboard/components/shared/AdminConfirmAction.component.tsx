@@ -10,9 +10,9 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { LABELS } from "@/shared/constants/labels";
 import type { AdminActionTone } from "../../utils/shared/adminActionTone";
 import { renderToneIcon } from "../../utils/shared/adminConfirmActionIcon";
-import { useAdminConfirmAction } from "./AdminConfirmAction/useAdminConfirmAction.hook";
+import { useAdminConfirmAction } from "../../hooks/shared/useAdminConfirmAction.hook";
 import { ConfirmReasonField } from "./AdminConfirmAction/ConfirmReasonField.component";
-import { adminConfirmActionStyles as styles } from "./AdminConfirmAction/adminConfirmAction.styles";
+import { adminConfirmActionStyles as styles } from "../../styles/shared/adminConfirmAction.styles";
 
 type ButtonVariant =
   "default" | "outline" | "ghost" | "secondary" | "destructive";

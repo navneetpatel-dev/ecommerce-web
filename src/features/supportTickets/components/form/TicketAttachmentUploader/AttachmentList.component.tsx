@@ -2,9 +2,9 @@
 
 import { MediaImage } from "@/shared/components/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
-import type { UploadedMediaAttachment } from "./types";
-import { isVideoAttachment } from "./utils";
-import { ticketAttachmentUploaderStyles } from "./ticketAttachmentUploader.styles";
+import type { UploadedMediaAttachment } from "../../../types/form/TicketAttachmentUploader-types";
+import { isVideoAttachment } from "../../../utils/form/TicketAttachmentUploader-utils";
+import { ticketAttachmentUploaderStyles } from "../../../styles/form/ticketAttachmentUploader.styles";
 
 type Props = {
   items: UploadedMediaAttachment[];

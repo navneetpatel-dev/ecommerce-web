@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { loginRequiredDialogStyles } from "./dialogComponents.styles";
+import { loginRequiredDialogStyles } from "../../styles/dialogs/dialogComponents.styles";
 
 interface LoginRequiredDialogProps {
   open: boolean;

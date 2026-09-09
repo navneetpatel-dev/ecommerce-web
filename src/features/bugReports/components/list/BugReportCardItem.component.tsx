@@ -5,7 +5,7 @@ import { BUG_REPORT_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { BUG_SEVERITY_LABEL, BUG_STATUS_LABEL } from "../../utils/detail/labels";
 import type { BugReport } from "../../api/list/bugReports.api";
-import { bugReportCardListStyles } from "./bugReportCardList.styles";
+import { bugReportCardListStyles } from "../../styles/list/bugReportCardList.styles";
 
 interface BugReportCardItemProps {
   report: BugReport;

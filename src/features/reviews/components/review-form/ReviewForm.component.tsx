@@ -15,7 +15,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import { Star } from "lucide-react";
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import type { ReviewFormInput } from "../../schemas/review-form/reviews.schema";
-import { reviewFormStyles as styles } from "./reviewForm.styles";
+import { reviewFormStyles as styles } from "../../styles/review-form/reviewForm.styles";
 
 interface ReviewFormProps {
   productName: string;

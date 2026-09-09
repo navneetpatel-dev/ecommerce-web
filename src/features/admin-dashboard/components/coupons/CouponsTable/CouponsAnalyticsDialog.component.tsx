@@ -9,7 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { couponsTableStyles as styles } from "./couponsTable.styles";
+import { couponsTableStyles as styles } from "../../../styles/coupons/couponsTable.styles";
 
 interface CouponsAnalyticsDialogProps {
   analyticsCoupon: Coupon | null;

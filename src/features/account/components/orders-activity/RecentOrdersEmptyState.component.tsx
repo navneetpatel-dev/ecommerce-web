@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { ordersActivitySectionStyles as styles } from "./ordersActivitySection.styles";
+import { ordersActivitySectionStyles as styles } from "../../styles/orders-activity/ordersActivitySection.styles";
 
 export function RecentOrdersEmptyState() {
   return (

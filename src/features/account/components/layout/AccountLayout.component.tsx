@@ -4,10 +4,10 @@ import { motion } from "motion/react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { AccountNavItem, AccountSectionId } from "../../types/layout/types";
-import { useAccountLayout } from "./useAccountLayout.hook";
+import { useAccountLayout } from "../../hooks/layout/useAccountLayout.hook";
 import { AccountMobileNav } from "./AccountMobileNav.component";
 import { AccountDesktopNav } from "./AccountDesktopNav.component";
-import { accountLayoutStyles as styles } from "./accountLayout.styles";
+import { accountLayoutStyles as styles } from "../../styles/layout/accountLayout.styles";
 
 interface AccountLayoutProps {
   sections: AccountNavItem[];

@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { VendorGroupHeader } from "@/shared/components/VendorGroupHeader.component";
 import type { CartItem } from "@/shared/api/types";
 import { CartLineItem } from "../../line-item/CartLineItem.component";
-import { vendorGroupsStyles as styles } from "./vendorGroups.styles";
+import { vendorGroupsStyles as styles } from "../../../styles/page/vendorGroups.styles";
 
 interface VendorGroupCardProps {
   vendorId: string;

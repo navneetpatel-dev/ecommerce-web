@@ -14,7 +14,7 @@ import {
   type ChartThemeColors,
 } from "@/shared/hooks/theme/useChartThemeColors.hook";
 import { LABELS } from "@/shared/constants/labels";
-import { analyticsStyles } from "./analyticsComponents.styles";
+import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styles";
 
 interface StatusSlice {
   status: string;

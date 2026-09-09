@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { ElementType } from "react";
-import { analyticsOpsQueuesStyles as styles } from "./analyticsOpsQueues.styles";
+import { analyticsOpsQueuesStyles as styles } from "../../../styles/analytics/analyticsOpsQueues.styles";
 
 export interface QueueDef {
   key: string;

@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type { HelpCategory } from "../../../constants/helpContent";
 import { CategoryIcon } from "./CategoryIcon.component";
-import { helpHomeViewStyles as styles } from "./helpHomeView.styles";
+import { helpHomeViewStyles as styles } from "../../../styles/home/helpHomeView.styles";
 
 export function CategoryCard({ category }: { category: HelpCategory }) {
   const articleElements = category.articles.map((article) => (

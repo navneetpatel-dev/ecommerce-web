@@ -4,8 +4,8 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Plus } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
-import type { ProductsTableHeaderProps } from "./types";
-import { productsTableHeaderStyles as styles } from "./productsTable.styles";
+import type { ProductsTableHeaderProps } from "../../../types/products/ProductsTable-types";
+import { productsTableHeaderStyles as styles } from "../../../styles/products/productsTable.styles";
 
 export function ProductsTableHeader(props: ProductsTableHeaderProps) {
   const { search, onSearchChange, onAddProduct } = props;

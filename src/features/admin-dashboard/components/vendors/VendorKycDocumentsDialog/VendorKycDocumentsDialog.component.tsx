@@ -10,8 +10,8 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { KycChecklistItems } from "./KycChecklistItems.component";
 import { KycConfirmDialogs } from "./KycConfirmDialogs.component";
-import { useVendorKycDialogHandlers } from "./useVendorKycDialogHandlers.hook";
-import { vendorKycDocumentsDialogStyles as styles } from "./vendorKycDocumentsDialog.styles";
+import { useVendorKycDialogHandlers } from "../../../hooks/vendors/useVendorKycDialogHandlers.hook";
+import { vendorKycDocumentsDialogStyles as styles } from "../../../styles/vendors/vendorKycDocumentsDialog.styles";
 
 interface VendorKycDocumentsDialogProps {
   vendorId: string;

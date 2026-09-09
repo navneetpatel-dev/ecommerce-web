@@ -13,7 +13,7 @@ import {
   Truck,
   type LucideIcon,
 } from "lucide-react";
-import { helpHomeViewStyles as styles } from "./helpHomeView.styles";
+import { helpHomeViewStyles as styles } from "../../../styles/home/helpHomeView.styles";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   BookOpen,

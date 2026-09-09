@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/shared/utils/dom/cn";
-import { authFormsStyles as styles } from "./authForms.styles";
+import { authFormsStyles as styles } from "../../styles/shell/authForms.styles";
 
 interface AuthFormCardProps {
   title: string;

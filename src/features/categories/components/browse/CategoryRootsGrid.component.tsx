@@ -1,7 +1,7 @@
 import type { Category } from "@/shared/api/types";
 import { categoryHref } from "../../utils/browse/categoryHelpers";
 import { CategoryCard } from "./CategoryCard.component";
-import { categoriesViewStyles } from "./categoriesView.styles";
+import { categoriesViewStyles } from "../../styles/browse/categoriesView.styles";
 
 interface CategoryRootsGridProps {
   roots: Category[];

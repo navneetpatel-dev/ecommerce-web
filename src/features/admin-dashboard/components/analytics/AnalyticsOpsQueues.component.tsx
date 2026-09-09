@@ -11,7 +11,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { OpsQueueList } from "./AnalyticsOpsQueues/OpsQueueList.component";
 import type { QueueDef } from "./AnalyticsOpsQueues/OpsQueueItem.component";
-import { analyticsOpsQueuesStyles as styles } from "./AnalyticsOpsQueues/analyticsOpsQueues.styles";
+import { analyticsOpsQueuesStyles as styles } from "../../styles/analytics/analyticsOpsQueues.styles";
 
 interface AnalyticsOpsQueuesProps {
   pendingProducts: number;

@@ -9,7 +9,7 @@ import type {
   DeliveryAgent,
   DeliveryAgentRatings,
 } from "@/features/delivery-dashboard";
-import { operatingStatusAsideStyles as styles } from "./operatingStatusAside.styles";
+import { operatingStatusAsideStyles as styles } from "../../../styles/delivery-operations/operatingStatusAside.styles";
 
 interface OperatingStatusAsideProps {
   vehicleIcon: LucideIcon;

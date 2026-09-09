@@ -5,7 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { REFUND_STATUS } from "@/shared/constants/statuses";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { Order } from "@/shared/api/types";
-import { ordersComponentsStyles } from "../actions/ordersComponents.styles";
+import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
 
 interface OrderReturnStatusBannerProps {
   order: Order;

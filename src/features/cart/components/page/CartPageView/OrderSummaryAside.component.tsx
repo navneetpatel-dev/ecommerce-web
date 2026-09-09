@@ -12,7 +12,7 @@ import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailable
 import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
 import { OrderSummaryTotalsList } from "./OrderSummaryTotalsList.component";
 import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
-import { cartPageViewStyles as styles } from "./cartPageView.styles";
+import { cartPageViewStyles as styles } from "../../../styles/page/cartPageView.styles";
 
 interface OrderSummaryAsideProps {
   itemCount: number;

@@ -1,5 +1,5 @@
 import { VARIANT_LOW_STOCK_DEFAULT } from "../../../constants/listing-form/productFields";
-import { variantSelectorStyles } from "./variantSelector.styles";
+import { variantSelectorStyles } from "../../../styles/variants/variantSelector.styles";
 import { VariantAttributeGroupsList } from "./VariantAttributeGroupsList.component";
 import { VariantPriceStockSection } from "./VariantPriceStockSection.component";
 

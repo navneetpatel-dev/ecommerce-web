@@ -1,7 +1,7 @@
 import { ExternalLink, MapPin, MessageSquare, Phone, User } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { taskContactCardStyles as styles } from "./taskContactCard.styles";
+import { taskContactCardStyles as styles } from "../../styles/today/taskContactCard.styles";
 
 export function TaskContactCard({
   name,

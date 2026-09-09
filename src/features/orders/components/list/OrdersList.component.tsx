@@ -8,9 +8,9 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import { ContinueShoppingLink } from "@/shared/components/ContinueShoppingLink.component";
 import { CustomerOrderHistoryPanel } from "@/features/reports";
-import { ORDER_COLUMNS } from "./ordersTableColumns";
-import { useOrdersList } from "./useOrdersList.hook";
-import { ORDERS_LIST_STYLES } from "./ordersList.styles";
+import { ORDER_COLUMNS } from "../../constants/list/ordersTableColumns";
+import { useOrdersList } from "../../hooks/list/useOrdersList.hook";
+import { ORDERS_LIST_STYLES } from "../../styles/list/ordersList.styles";
 
 interface OrdersListProps {
   orders: Order[];

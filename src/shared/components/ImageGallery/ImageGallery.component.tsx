@@ -5,8 +5,8 @@ import type { ProductImage } from "@/shared/api/types";
 import { ImageGalleryThumbnailStrip } from "@/shared/components/ImageGalleryThumbnailStrip.component";
 import { IMAGE_GALLERY_THUMB_COLUMN_HEIGHT_CLASS } from "@/shared/constants/media/imageGallery";
 import { cn } from "@/shared/utils/dom/cn";
-import { useGalleryStage } from "./useGalleryStage.hook";
-import { imageGalleryStyles as styles } from "./imageGallery.styles";
+import { useGalleryStage } from "../../hooks/image-gallery/useGalleryStage.hook";
+import { imageGalleryStyles as styles } from "../../styles/image-gallery/imageGallery.styles";
 import { ImageGalleryStage } from "./ImageGalleryStage.component";
 
 interface ImageGalleryProps {

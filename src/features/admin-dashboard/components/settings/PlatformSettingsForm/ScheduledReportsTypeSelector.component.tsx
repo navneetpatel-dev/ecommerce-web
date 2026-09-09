@@ -12,7 +12,7 @@ import {
   type ScheduledReportsCategoryKey,
 } from "../../../hooks/settings/useScheduledReportsFilter.hook";
 import { ReportTypeCheckboxGroup } from "./ReportTypeCheckboxGroup.component";
-import { platformSettingsFormStyles as styles } from "./platformSettingsForm.styles";
+import { platformSettingsFormStyles as styles } from "../../../styles/settings/platformSettingsForm.styles";
 
 interface ScheduledReportsTypeSelectorProps {
   catalog: ScheduledReportTypeOption[];

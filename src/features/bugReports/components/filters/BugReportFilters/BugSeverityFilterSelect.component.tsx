@@ -9,7 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { BUG_REPORT_SEVERITY_VALUES } from "@/shared/constants/statuses";
 import { BUG_SEVERITY_LABEL } from "../../../utils/detail/labels";
-import { ALL } from "./useBugReportFiltersHandlers.hook";
+import { ALL } from "../../../hooks/filters/useBugReportFiltersHandlers.hook";
 
 interface BugSeverityFilterSelectProps {
   value: string;

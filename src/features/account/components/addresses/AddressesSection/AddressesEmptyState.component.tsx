@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 import { EmptyState } from "@/shared/components/EmptyState.component";
-import { addressesSectionStyles as styles } from "./addressesSection.styles";
+import { addressesSectionStyles as styles } from "../../../styles/addresses/addressesSection.styles";
 
 interface AddressesEmptyStateProps {
   onAddAddress: () => void;

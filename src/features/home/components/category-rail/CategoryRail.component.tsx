@@ -13,7 +13,7 @@ import { CategoryGridSkeleton } from "@/shared/components/Skeletons.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category } from "@/shared/api/types";
-import { categoryRailStyles as styles } from "./categoryRail.styles";
+import { categoryRailStyles as styles } from "../../styles/category-rail/categoryRail.styles";
 
 const HOME_CATEGORY_LIMIT = 10;
 

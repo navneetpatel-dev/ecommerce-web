@@ -2,9 +2,9 @@
 
 import { LABELS } from "@/shared/constants/labels";
 import { RecentlyViewedSection } from "./RecentlyViewedSection.component";
-import { useProductRelatedRails } from "./useProductRelatedRails.hook";
+import { useProductRelatedRails } from "../../hooks/related/useProductRelatedRails.hook";
 import { ProductRelatedRailSection } from "./ProductRelatedRailSection.component";
-import { productRelatedRailsStyles } from "./productRelatedRails.styles";
+import { productRelatedRailsStyles } from "../../styles/related/productRelatedRails.styles";
 
 interface ProductRelatedRailsProps {
   productId: string;

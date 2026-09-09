@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
-import { filterSidebarStyles } from "./filterSidebar.styles";
+import { filterSidebarStyles } from "../../../styles/filters/filterSidebar.styles";
 
 interface FilterSidebarHeaderProps {
   hasFilters: boolean;

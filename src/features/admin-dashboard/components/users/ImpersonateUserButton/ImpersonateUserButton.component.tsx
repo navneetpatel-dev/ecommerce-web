@@ -2,8 +2,8 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { impersonateUserButtonStyles } from "./impersonateUserButton.styles";
-import { useImpersonateUserButton } from "./useImpersonateUserButton.hook";
+import { impersonateUserButtonStyles } from "../../../styles/users/impersonateUserButton.styles";
+import { useImpersonateUserButton } from "../../../hooks/users/useImpersonateUserButton.hook";
 
 export interface ImpersonateUserButtonProps {
   userId: string;

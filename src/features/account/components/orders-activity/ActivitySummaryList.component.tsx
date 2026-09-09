@@ -1,6 +1,6 @@
-import type { ActivitySummaryItem } from "./useOrdersActivitySection.hook";
+import type { ActivitySummaryItem } from "../../hooks/orders-activity/useOrdersActivitySection.hook";
 import { SummaryRow } from "./SummaryRow.component";
-import { ordersActivitySectionStyles as styles } from "./ordersActivitySection.styles";
+import { ordersActivitySectionStyles as styles } from "../../styles/orders-activity/ordersActivitySection.styles";
 
 interface ActivitySummaryListProps {
   items: ActivitySummaryItem[];

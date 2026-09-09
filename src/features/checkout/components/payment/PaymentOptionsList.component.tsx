@@ -2,7 +2,7 @@ import { memo } from "react";
 import { CreditCard, Banknote, Wallet } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PaymentMethodOption } from "./PaymentMethodOption.component";
-import { PAYMENT_STEP_STYLES } from "./paymentStep.styles";
+import { PAYMENT_STEP_STYLES } from "../../styles/payment/paymentStep.styles";
 
 interface PaymentOptionsListProps {
   selectedMethod?: string | null;

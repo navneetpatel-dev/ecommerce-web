@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { contentDocStyles as styles } from "./contentDoc.styles";
+import { contentDocStyles as styles } from "../../styles/legal/contentDoc.styles";
 
 /** Educational returns overview — real requests go through order history. */
 export function ReturnsView() {

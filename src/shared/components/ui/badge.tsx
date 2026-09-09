@@ -4,7 +4,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { badgeStyles } from "./badge.styles";
+import { badgeStyles } from "../../styles/ui/badge.styles";
 
 const badgeVariants = cva(
   "inline-flex items-center rounded-sm px-2 py-1 text-body-sm font-medium transition-colors outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",

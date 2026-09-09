@@ -9,5 +9,5 @@ export { EmptyState } from "./EmptyState.component";
 export { EmptyCartState } from "./EmptyCartState.component";
 export { MoneyAmount } from "./MoneyAmount.component";
 export { WalletIcon } from "./WalletIcon.component";
-export * from "./stepIndicator.styles";
-export * from "./displayComponents.styles";
+export * from "../../styles/display/stepIndicator.styles";
+export * from "../../styles/display/displayComponents.styles";

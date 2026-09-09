@@ -5,8 +5,8 @@ import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
-import { useEmailVerificationStatus } from "./useEmailVerificationStatus.hook";
-import { emailVerificationStatusStyles as styles } from "./emailVerificationStatus.styles";
+import { useEmailVerificationStatus } from "../../hooks/personal-info/useEmailVerificationStatus.hook";
+import { emailVerificationStatusStyles as styles } from "../../styles/personal-info/emailVerificationStatus.styles";
 
 interface EmailVerificationStatusProps {
   emailVerified: boolean;

@@ -8,7 +8,7 @@ import {
 } from "@/shared/components/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
-import { VENDOR_ORDERS_TABLE_STYLES } from "./vendorOrdersTable.styles";
+import { VENDOR_ORDERS_TABLE_STYLES } from "../../../styles/orders/vendorOrdersTable.styles";
 
 interface ShipTrackingNumberFieldsProps {
   trackingId: string;

@@ -4,8 +4,8 @@ import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { cn } from "@/shared/utils/dom/cn";
 import type { TicketMessage } from "../../../api/list/supportTickets.api";
 import { AttachmentThumbs } from "./TicketAttachmentThumbs.component";
-import { initials, isStaffRole } from "./ticketThreadShared";
-import { ticketThreadStyles } from "./ticketThread.styles";
+import { initials, isStaffRole } from "../../../utils/detail/ticketThreadShared";
+import { ticketThreadStyles } from "../../../styles/detail/ticketThread.styles";
 
 export function MessageBubble({
   message,

@@ -3,7 +3,7 @@ import { MediaImage } from "@/shared/components/MediaImage.component";
 import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { resolveCartLineSubtotal } from "../../../utils/checkout/checkoutDisplay.utils";
-import { ORDER_SUMMARY_ITEMS_LIST_STYLES } from "./orderSummaryItemsList.styles";
+import { ORDER_SUMMARY_ITEMS_LIST_STYLES } from "../../../styles/page-view/orderSummaryItemsList.styles";
 
 interface OrderSummaryItemRowProps {
   item: CartItem;

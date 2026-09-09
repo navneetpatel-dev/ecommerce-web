@@ -17,8 +17,8 @@ import { PaymentMethodsList } from "./AdminMarkPayoutPaidAction/PaymentMethodsLi
 import {
   PAYOUT_PAYMENT_METHODS,
   useAdminMarkPayoutPaidAction,
-} from "./AdminMarkPayoutPaidAction/useAdminMarkPayoutPaidAction.hook";
-import { adminMarkPayoutPaidActionStyles as styles } from "./AdminMarkPayoutPaidAction/adminMarkPayoutPaidAction.styles";
+} from "../../hooks/finance/useAdminMarkPayoutPaidAction.hook";
+import { adminMarkPayoutPaidActionStyles as styles } from "../../styles/finance/adminMarkPayoutPaidAction.styles";
 
 interface AdminMarkPayoutPaidActionProps {
   payoutId: string;

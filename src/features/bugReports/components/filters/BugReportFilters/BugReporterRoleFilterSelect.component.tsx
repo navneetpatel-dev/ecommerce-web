@@ -9,7 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { BUG_REPORTER_ROLE_VALUES } from "@/shared/constants/statuses";
 import { BUG_REPORTER_ROLE_LABEL } from "../../../utils/detail/labels";
-import { ALL } from "./useBugReportFiltersHandlers.hook";
+import { ALL } from "../../../hooks/filters/useBugReportFiltersHandlers.hook";
 
 interface BugReporterRoleFilterSelectProps {
   value: string;

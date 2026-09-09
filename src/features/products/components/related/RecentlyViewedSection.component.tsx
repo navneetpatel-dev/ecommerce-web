@@ -2,7 +2,7 @@ import { ProductGrid } from "../listing/ProductGrid.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { ProductListItem } from "@/shared/api/types";
-import { productDetailsMiscStyles } from "../detail/productDetailsMisc.styles";
+import { productDetailsMiscStyles } from "../../styles/detail/productDetailsMisc.styles";
 
 interface RecentlyViewedSectionProps {
   products: ProductListItem[];

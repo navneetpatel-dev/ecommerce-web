@@ -2,7 +2,7 @@
 
 import type { KycChecklistItem } from "@/features/vendors";
 import { KycChecklistItemRow } from "./KycChecklistItemRow.component";
-import { vendorKycDocumentsDialogStyles as styles } from "./vendorKycDocumentsDialog.styles";
+import { vendorKycDocumentsDialogStyles as styles } from "../../../styles/vendors/vendorKycDocumentsDialog.styles";
 
 interface KycChecklistItemsProps {
   items: KycChecklistItem[];

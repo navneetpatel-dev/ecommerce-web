@@ -4,7 +4,7 @@ import {
   CashbackWriteOffTableRow,
   type CashbackWriteOffRowData,
 } from "./CashbackWriteOffTableRow.component";
-import { cashbackWriteOffReportTableStyles as styles } from "./cashbackWriteOffReportTable.styles";
+import { cashbackWriteOffReportTableStyles as styles } from "../../../styles/wallet/cashbackWriteOffReportTable.styles";
 
 interface CashbackWriteOffTableBodyProps {
   rows: CashbackWriteOffRowData[];

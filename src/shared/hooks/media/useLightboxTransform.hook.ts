@@ -1,1 +1,1 @@
-export * from "@/shared/components/ImageGallery/useLightboxTransform.hook";
+export * from "@/shared/hooks/image-gallery/useLightboxTransform.hook";

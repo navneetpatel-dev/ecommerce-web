@@ -8,7 +8,7 @@ import { PATHS } from "@/shared/constants/paths/paths";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInr } from "../../../utils/detail/format";
 import { orderLineVariantLabel } from "../../../utils/sub-order/orderLine.utils";
-import { SUB_ORDER_CARD_ITEMS_STYLES } from "./subOrderCardItems.styles";
+import { SUB_ORDER_CARD_ITEMS_STYLES } from "../../../styles/sub-order/subOrderCardItems.styles";
 
 interface SubOrderCardItemRowProps {
   item: OrderItem;

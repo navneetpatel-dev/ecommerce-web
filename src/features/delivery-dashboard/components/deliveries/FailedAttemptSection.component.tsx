@@ -3,7 +3,7 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { failedAttemptSectionStyles as styles } from "./failedAttemptSection.styles";
+import { failedAttemptSectionStyles as styles } from "../../styles/deliveries/failedAttemptSection.styles";
 
 export function FailedAttemptSection({
   value,

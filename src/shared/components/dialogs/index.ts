@@ -8,5 +8,5 @@ export {
 export { BottomSheetView } from "./BottomSheetView.component";
 export { CookiePreferencesDialog } from "./CookiePreferencesDialog.component";
 export { CookieBanner } from "./CookieBanner.component";
-export * from "./dialogComponents.styles";
-export * from "./cookieComponents.styles";
+export * from "../../styles/dialogs/dialogComponents.styles";
+export * from "../../styles/dialogs/cookieComponents.styles";

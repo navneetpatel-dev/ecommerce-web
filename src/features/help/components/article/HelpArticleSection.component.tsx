@@ -1,5 +1,5 @@
 import type { HelpArticle } from "../../types/help/help.types";
-import { helpArticleViewStyles as styles } from "./helpArticleView.styles";
+import { helpArticleViewStyles as styles } from "../../styles/article/helpArticleView.styles";
 
 interface HelpArticleSectionProps {
   section: HelpArticle["sections"][number];

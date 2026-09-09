@@ -13,7 +13,7 @@ import {
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
-import { createCouponFormStyles } from "./createCouponForm.styles";
+import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
 
 interface CreateCouponConstraintFieldsProps {
   form: UseFormReturn<CouponFormInput>;

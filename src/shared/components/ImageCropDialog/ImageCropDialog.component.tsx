@@ -11,10 +11,10 @@ import {
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import type { ImageMimeType } from "@/shared/constants/imageSpecs";
-import { useCropControls } from "./useCropControls.hook";
+import { useCropControls } from "../../hooks/image-crop-dialog/useCropControls.hook";
 import { CropControlSliders } from "./CropControlSliders.component";
-import { cropDialogStyles as styles } from "./cropDialog.styles";
-import type { ImageCropDialogProps } from "./types";
+import { cropDialogStyles as styles } from "../../styles/image-crop-dialog/cropDialog.styles";
+import type { ImageCropDialogProps } from "../../types/image-crop-dialog/types";
 
 export function ImageCropDialog(props: ImageCropDialogProps) {
   const {
@@ -110,4 +110,4 @@ export function ImageCropDialog(props: ImageCropDialogProps) {
   );
 }
 
-export type { ImageCropDialogProps } from "./types";
+export type { ImageCropDialogProps } from "../../types/image-crop-dialog/types";

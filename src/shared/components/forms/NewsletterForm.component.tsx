@@ -3,7 +3,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
-import { newsletterFormStyles } from "@/shared/components/display/displayComponents.styles";
+import { newsletterFormStyles } from "@/shared/styles/display/displayComponents.styles";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

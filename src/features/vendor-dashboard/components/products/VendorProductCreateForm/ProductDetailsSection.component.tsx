@@ -18,7 +18,7 @@ import type {
   ProductListingFormField,
   ProductListingFormValues,
 } from "@/features/products";
-import { vendorProductCreateFormStyles } from "./vendorProductCreateForm.styles";
+import { vendorProductCreateFormStyles } from "../../../styles/products/vendorProductCreateForm.styles";
 
 interface ProductDetailsSectionProps {
   values: ProductListingFormValues;

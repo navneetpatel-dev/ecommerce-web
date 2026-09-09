@@ -4,8 +4,8 @@ import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { ReportExportButtons, ReportExportStatus } from "@/features/reports";
-import { useAdminAuditExportPanel } from "./AdminAuditExportPanel/useAdminAuditExportPanel.hook";
-import { adminAuditExportPanelStyles as styles } from "./AdminAuditExportPanel/adminAuditExportPanel.styles";
+import { useAdminAuditExportPanel } from "../../hooks/audit/useAdminAuditExportPanel.hook";
+import { adminAuditExportPanelStyles as styles } from "../../styles/audit/adminAuditExportPanel.styles";
 
 export function AdminAuditExportPanel() {
   const { from, to, setFrom, setTo, filterHint, exportHub } =

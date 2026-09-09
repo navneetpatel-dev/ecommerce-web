@@ -1,9 +1,9 @@
 import type { CheckoutQuote } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
-import { usePayableSummary } from "./usePayableSummary.hook";
+import { usePayableSummary } from "../../../hooks/review/usePayableSummary.hook";
 import { AppliedCouponLinesList } from "./AppliedCouponLinesList.component";
-import { PAYABLE_SUMMARY_STYLES } from "./payableSummary.styles";
+import { PAYABLE_SUMMARY_STYLES } from "../../../styles/review/payableSummary.styles";
 
 interface PayableSummaryProps {
   quote: CheckoutQuote;

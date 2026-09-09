@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ChevronRight, Package } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { glanceRowStyles as styles } from "./glanceRow.styles";
+import { glanceRowStyles as styles } from "../../../styles/overview/glanceRow.styles";
 
 export interface GlanceRowProps {
   icon: typeof Package;

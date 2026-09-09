@@ -4,7 +4,7 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type { HelpArticle } from "../../types/help/help.types";
-import { helpArticleViewStyles as styles } from "./helpArticleView.styles";
+import { helpArticleViewStyles as styles } from "../../styles/article/helpArticleView.styles";
 
 interface HelpRelatedArticlesProps {
   related: HelpArticle[];

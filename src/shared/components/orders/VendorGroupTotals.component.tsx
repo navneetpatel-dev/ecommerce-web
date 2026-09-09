@@ -1,7 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
-import { vendorGroupTotalsStyles } from "./vendorOrderComponents.styles";
+import { vendorGroupTotalsStyles } from "../../styles/orders/vendorOrderComponents.styles";
 
 interface VendorGroupTotalsProps {
   subtotal: number;

@@ -3,7 +3,7 @@
 import { ContinueShoppingLink } from "@/shared/components/ContinueShoppingLink.component";
 import type { CartItem } from "@/shared/api/types";
 import { VendorGroupCard } from "./VendorGroupCard.component";
-import { vendorGroupsStyles as styles } from "./vendorGroups.styles";
+import { vendorGroupsStyles as styles } from "../../../styles/page/vendorGroups.styles";
 
 interface VendorGroupsProps {
   groupedByVendor: Record<string, CartItem[]>;

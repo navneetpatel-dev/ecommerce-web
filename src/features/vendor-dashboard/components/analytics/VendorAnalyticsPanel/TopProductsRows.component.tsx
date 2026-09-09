@@ -5,7 +5,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import {
   TOP_PRODUCTS_NAME_CELL,
   TOP_PRODUCTS_NUMERIC_CELL,
-} from "./vendorAnalyticsPanel.styles";
+} from "../../../styles/analytics/vendorAnalyticsPanel.styles";
 
 export interface TopProduct {
   id: string;

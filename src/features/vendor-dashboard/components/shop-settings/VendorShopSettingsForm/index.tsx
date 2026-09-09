@@ -9,7 +9,7 @@ import { CategoriesSection } from "./CategoriesSection.component";
 import { UploadsSection } from "./UploadsSection.component";
 import { KycChecklistSection } from "./KycChecklistSection.component";
 import { FulfillmentSection } from "./FulfillmentSection.component";
-import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
+import { vendorShopSettingsFormStyles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
 
 interface VendorShopSettingsFormProps {
   vendorId: string;

@@ -1,5 +1,5 @@
-import { earningsPayoutsCardStyles } from "./earningsPayoutsCard.styles";
-import type { RecentTaskRowViewModel } from "./useEarningsPayoutsCardPresentation.hook";
+import { earningsPayoutsCardStyles } from "../../../styles/earnings/earningsPayoutsCard.styles";
+import type { RecentTaskRowViewModel } from "../../../hooks/earnings/useEarningsPayoutsCardPresentation.hook";
 
 interface RecentCompletedTaskItemProps {
   task: RecentTaskRowViewModel;

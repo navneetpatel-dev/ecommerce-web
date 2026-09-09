@@ -1,12 +1,12 @@
 "use client";
 
 import { paymentMethodsLabels as LABELS } from "@/shared/constants/labels/paymentMethods";
-import { useSavedPaymentMethodsSection } from "./useSavedPaymentMethodsSection.hook";
+import { useSavedPaymentMethodsSection } from "../../../hooks/payment-methods/useSavedPaymentMethodsSection.hook";
 import { SavedPaymentMethodsList } from "./SavedPaymentMethodsList.component";
 import { SavedPaymentMethodsEmptyState } from "./SavedPaymentMethodsEmptyState.component";
 import { SavedPaymentMethodsLoadingSkeleton } from "./SavedPaymentMethodsLoadingSkeleton.component";
 import { DeleteSavedPaymentMethodDialog } from "./DeleteSavedPaymentMethodDialog.component";
-import { savedPaymentMethodsSectionStyles as styles } from "./savedPaymentMethodsSection.styles";
+import { savedPaymentMethodsSectionStyles as styles } from "../../../styles/payment-methods/savedPaymentMethodsSection.styles";
 
 export function SavedPaymentMethodsSection() {
   const {

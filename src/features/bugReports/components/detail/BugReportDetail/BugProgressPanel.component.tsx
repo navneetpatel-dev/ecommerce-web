@@ -8,8 +8,8 @@ import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import type { BugReport } from "../../../api/list/bugReports.api";
 import { BUG_STATUS_LABEL } from "../../../utils/detail/labels";
 import { ProgressTrack } from "./BugProgressTrack.component";
-import type { ProgressStep } from "./bugReportDetailShared";
-import { bugReportPanelsStyles } from "./bugReportPanels.styles";
+import type { ProgressStep } from "../../../utils/detail/bugReportDetailShared";
+import { bugReportPanelsStyles } from "../../../styles/detail/bugReportPanels.styles";
 
 interface BugProgressPanelProps {
   report: BugReport;

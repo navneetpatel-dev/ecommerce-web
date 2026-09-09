@@ -8,8 +8,8 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
-import { dateTimePickerStyles } from "./dateTimePicker.styles";
-import { HOURS, MINUTES } from "./utils";
+import { dateTimePickerStyles } from "../../styles/date-time-picker/dateTimePicker.styles";
+import { HOURS, MINUTES } from "../../utils/date-time-picker/utils";
 
 interface TimeSelectorsProps {
   hour: string;

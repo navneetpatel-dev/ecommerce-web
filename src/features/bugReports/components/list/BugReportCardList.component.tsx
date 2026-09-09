@@ -7,7 +7,7 @@ import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore.component
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import type { BugReport } from "../../api/list/bugReports.api";
-import { bugReportCardListStyles } from "./bugReportCardList.styles";
+import { bugReportCardListStyles } from "../../styles/list/bugReportCardList.styles";
 import { BugReportCardsGrid } from "./BugReportCardsGrid.component";
 
 interface BugReportCardListProps {

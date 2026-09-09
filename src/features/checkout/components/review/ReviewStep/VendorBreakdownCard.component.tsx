@@ -2,10 +2,10 @@ import type { VendorBreakdown } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { VendorGroupHeader } from "@/shared/components/VendorGroupHeader.component";
 import { VendorGroupTotals } from "@/shared/components/VendorGroupTotals.component";
-import { VENDOR_GROUP_CARD } from "@/shared/components/vendorGroupStyles";
+import { VENDOR_GROUP_CARD } from "@/shared/styles/orders/vendorGroupStyles";
 import { taxDisplayLabel } from "@/shared/utils/formatting/taxDisplay";
 import { VendorBreakdownItemsList } from "./VendorBreakdownItemsList.component";
-import { VENDOR_BREAKDOWN_CARD_STYLES } from "./vendorBreakdownCard.styles";
+import { VENDOR_BREAKDOWN_CARD_STYLES } from "../../../styles/review/vendorBreakdownCard.styles";
 
 interface VendorBreakdownCardProps {
   breakdown: VendorBreakdown;

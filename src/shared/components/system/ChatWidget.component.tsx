@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { chatWidgetStyles } from "@/shared/components/display/displayComponents.styles";
+import { chatWidgetStyles } from "@/shared/styles/display/displayComponents.styles";
 
 interface ChatWidgetProps {
   open: boolean;

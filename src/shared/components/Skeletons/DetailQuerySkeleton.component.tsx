@@ -1,5 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { detailQuerySkeletonStyles } from "@/shared/components/display/displayComponents.styles";
+import { detailQuerySkeletonStyles } from "@/shared/styles/display/displayComponents.styles";
 
 interface DetailQuerySkeletonProps {
   className?: string;

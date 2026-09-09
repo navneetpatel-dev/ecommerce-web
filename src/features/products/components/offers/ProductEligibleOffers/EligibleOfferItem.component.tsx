@@ -1,6 +1,6 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { productEligibleOffersStyles } from "./productEligibleOffers.styles";
+import { productEligibleOffersStyles } from "../../../styles/offers/productEligibleOffers.styles";
 
 interface Offer {
   code: string;

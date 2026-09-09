@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
 import { LABELS } from "@/shared/constants/labels";
-import { breadcrumbStyles } from "./navigationComponents.styles";
+import { breadcrumbStyles } from "../../styles/navigation/navigationComponents.styles";
 
 interface BreadcrumbItem {
   label: string;

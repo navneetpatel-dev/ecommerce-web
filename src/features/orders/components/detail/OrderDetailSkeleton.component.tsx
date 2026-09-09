@@ -1,5 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { orderDetailSkeletonStyles as styles } from "./orderDetailSkeleton.styles";
+import { orderDetailSkeletonStyles as styles } from "../../styles/detail/orderDetailSkeleton.styles";
 
 export function OrderDetailSkeleton() {
   return (

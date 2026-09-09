@@ -1,7 +1,7 @@
 import { memo } from "react";
 import type { VendorBreakdown } from "@/shared/api/types";
 import { VendorBreakdownItemRow } from "./VendorBreakdownItemRow.component";
-import { VENDOR_BREAKDOWN_CARD_STYLES } from "./vendorBreakdownCard.styles";
+import { VENDOR_BREAKDOWN_CARD_STYLES } from "../../../styles/review/vendorBreakdownCard.styles";
 
 interface VendorBreakdownItemsListProps {
   items: VendorBreakdown["items"];

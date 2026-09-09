@@ -1,7 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { orderTaxShippingBreakdownStyles } from "./vendorOrderComponents.styles";
+import { orderTaxShippingBreakdownStyles } from "../../styles/orders/vendorOrderComponents.styles";
 
 interface OrderTaxShippingBreakdownProps {
   shippingTotal?: number;

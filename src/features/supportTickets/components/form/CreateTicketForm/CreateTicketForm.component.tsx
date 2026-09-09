@@ -18,19 +18,19 @@ import {
 } from "../../../constants/form/fieldLimits";
 import type { UploadedMediaAttachment } from "../TicketAttachmentUploader/index";
 import { FormHeader } from "./FormHeader.component";
-import { createTicketFormStyles } from "./createTicketForm.styles";
-import { useOrderVendors } from "./useOrderVendors.hook";
+import { createTicketFormStyles } from "../../../styles/form/createTicketForm.styles";
+import { useOrderVendors } from "../../../hooks/form/useOrderVendors.hook";
 import {
   useFetchOrdersPage,
   useFetchVendorsPage,
-} from "./useTicketPickerPages.hook";
-import { useSubmitTicket } from "./useSubmitTicket.hook";
+} from "../../../hooks/form/useTicketPickerPages.hook";
+import { useSubmitTicket } from "../../../hooks/form/useSubmitTicket.hook";
 import { SubmitArea, TicketAttachmentsSection } from "./SubmitArea.component";
 import { TicketBasicsSection } from "./TicketBasicsSection.component";
 import { TicketDescriptionSection } from "./TicketDescriptionSection.component";
 import { TicketOrderSection } from "./TicketOrderSection.component";
 import { TicketVendorSection } from "./TicketVendorSection.component";
-import type { TicketField } from "./types";
+import type { TicketField } from "../../../types/form/types";
 
 type Props = {
   successHref: (id: string) => string;

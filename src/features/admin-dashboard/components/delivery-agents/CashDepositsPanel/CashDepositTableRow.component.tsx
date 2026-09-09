@@ -1,5 +1,5 @@
 import type { CashDeposit } from "@/features/delivery-dashboard";
-import { cashDepositsPanelStyles } from "./cashDepositsPanel.styles";
+import { cashDepositsPanelStyles } from "../../../styles/delivery-agents/cashDepositsPanel.styles";
 import { CashDepositStatusBadge } from "./CashDepositStatusBadge.component";
 import { CashDepositActionButtons } from "./CashDepositActionButtons.component";
 

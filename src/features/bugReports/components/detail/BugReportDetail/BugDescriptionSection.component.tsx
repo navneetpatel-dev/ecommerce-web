@@ -4,7 +4,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { BUG_REPORT_STATUS } from "@/shared/constants/statuses";
 import type { BugReport } from "../../../api/list/bugReports.api";
 import { AttachmentGrid } from "./BugAttachmentGrid.component";
-import { bugReportDetailStyles } from "./bugReportDetail.styles";
+import { bugReportDetailStyles } from "../../../styles/detail/bugReportDetail.styles";
 
 /** Description card: description, steps, attachments, wont-fix/duplicate notes. */
 export function BugDescriptionSection({

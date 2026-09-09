@@ -12,7 +12,7 @@ import { useDeliveryAgentDocumentUpload } from "../../../hooks/documents/useDeli
 import type { DeliveryAgentDocumentType } from "../../../types/agent/types";
 import { DocumentStatusBadge } from "./DocumentStatusBadge.component";
 import { ExpiryBadge } from "./ExpiryBadge.component";
-import { deliveryAgentDocumentsCardStyles as styles } from "./deliveryAgentDocumentsCard.styles";
+import { deliveryAgentDocumentsCardStyles as styles } from "../../../styles/documents/deliveryAgentDocumentsCard.styles";
 
 const DOCUMENT_TYPES: { type: DeliveryAgentDocumentType; label: string }[] = [
   { type: "ID_PROOF", label: "Government ID proof" },

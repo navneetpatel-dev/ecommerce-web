@@ -3,8 +3,8 @@
 import { CheckoutPageSkeleton } from "@/shared/components/Skeletons.component";
 import { PaymentProcessingOverlay } from "../../payment/PaymentProcessingOverlay.component";
 import type { CheckoutPaymentPhase } from "../../../hooks/payment/useCheckoutPaymentPhase.hook";
-import { checkoutOverlayCopy } from "./checkoutOverlayCopy";
-import { CHECKOUT_TRANSITION_STATE_STYLES } from "./checkoutTransitionState.styles";
+import { checkoutOverlayCopy } from "../../../utils/page-view/checkoutOverlayCopy";
+import { CHECKOUT_TRANSITION_STATE_STYLES } from "../../../styles/page-view/checkoutTransitionState.styles";
 
 interface CheckoutTransitionStateProps {
   paymentPhase: CheckoutPaymentPhase;

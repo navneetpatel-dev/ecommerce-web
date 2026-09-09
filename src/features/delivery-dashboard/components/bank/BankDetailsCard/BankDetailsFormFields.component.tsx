@@ -1,6 +1,6 @@
 import { Input } from "@/shared/components/ui/input";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { bankDetailsCardStyles } from "./bankDetailsCard.styles";
+import { bankDetailsCardStyles } from "../../../styles/bank/bankDetailsCard.styles";
 import type { BankDetails } from "../../../types/agent/types";
 
 interface BankDetailsFormFieldsProps {

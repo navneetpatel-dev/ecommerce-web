@@ -2,7 +2,7 @@ import { RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Label } from "@/shared/components/ui/label";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { filterSidebarStyles } from "./filterSidebar.styles";
+import { filterSidebarStyles } from "../../../styles/filters/filterSidebar.styles";
 
 interface FilterSidebarRatingOptionProps {
   rating: number;

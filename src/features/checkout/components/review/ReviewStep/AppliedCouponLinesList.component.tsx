@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { PAYABLE_SUMMARY_STYLES } from "./payableSummary.styles";
+import { PAYABLE_SUMMARY_STYLES } from "../../../styles/review/payableSummary.styles";
 
 interface AppliedCouponLinesListProps {
   lines: string[];

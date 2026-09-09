@@ -9,7 +9,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useIsAuthenticated } from "@/shared/hooks/auth/useRequireAuth.hook";
-import { supportAuthGateStyles } from "./supportAuthGate.styles";
+import { supportAuthGateStyles } from "../../styles/list/supportAuthGate.styles";
 
 type Props = {
   message: string;

@@ -4,8 +4,8 @@ import type { KeyboardEvent, ReactNode } from "react";
 import { TableRowActions } from "@/shared/components/TableRowActions.component";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { dataTableMobileStyles } from "./dataTable.styles";
-import type { DataTableColumn } from "./types";
+import { dataTableMobileStyles } from "../../styles/data-table/dataTable.styles";
+import type { DataTableColumn } from "../../types/data-table/types";
 import { columnLabel, renderCellContent, resolveCell } from "./utils.component";
 
 export type DataTableMobileCardsProps<T> = {

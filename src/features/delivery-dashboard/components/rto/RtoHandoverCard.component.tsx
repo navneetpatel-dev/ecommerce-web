@@ -2,7 +2,7 @@ import { Undo2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { rtoHandoverCardStyles as styles } from "./rtoHandoverCard.styles";
+import { rtoHandoverCardStyles as styles } from "../../styles/rto/rtoHandoverCard.styles";
 
 interface RtoHandoverCardProps {
   otpCode: string;

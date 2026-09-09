@@ -7,7 +7,7 @@ import {
   MILESTONE_CARD_HEADER,
   MILESTONE_CARD_ROOT,
   MILESTONE_CARD_TITLE,
-} from "./DeliveryMilestoneCard/deliveryMilestoneCard.styles";
+} from "../../styles/deliveries/deliveryMilestoneCard.styles";
 
 interface DeliveryMilestoneCardProps {
   label: string;

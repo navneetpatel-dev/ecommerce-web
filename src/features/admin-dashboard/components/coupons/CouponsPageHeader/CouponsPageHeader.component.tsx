@@ -25,8 +25,8 @@ import { useCouponBatches } from "../../../hooks/coupons/useCouponBatches.hook";
 import { useNotifyCouponAlerts } from "../../../hooks/coupons/useNotifyCouponAlerts.hook";
 import { BulkGenerateDialog } from "./BulkGenerateDialog.component";
 import { CouponBatchDetailDialog } from "./CouponBatchDetailDialog.component";
-import { buildCouponBatchColumns } from "./couponBatchColumns";
-import { couponsPageHeaderStyles as styles } from "./couponsPageHeader.styles";
+import { buildCouponBatchColumns } from "../../../constants/coupons/couponBatchColumns";
+import { couponsPageHeaderStyles as styles } from "../../../styles/coupons/couponsPageHeader.styles";
 
 interface CouponsPageHeaderProps {
   open: boolean;

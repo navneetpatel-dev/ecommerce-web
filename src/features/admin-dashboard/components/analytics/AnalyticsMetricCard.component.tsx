@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { cn } from "@/shared/utils/dom/cn";
 import { LABELS } from "@/shared/constants/labels";
-import { analyticsStyles } from "./analyticsComponents.styles";
+import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styles";
 
 interface AnalyticsMetricCardProps {
   title: string;

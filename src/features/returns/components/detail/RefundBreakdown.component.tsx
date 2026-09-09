@@ -1,7 +1,7 @@
 import { returnRefundBreakdownLabels } from "@/shared/constants/labels/returnRefundBreakdown";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { ReturnRequest } from "@/shared/api/types";
-import { returnRequestCardStyles as styles } from "../list/returnRequestCard.styles";
+import { returnRequestCardStyles as styles } from "../../styles/list/returnRequestCard.styles";
 
 interface RefundLine {
   label: string;

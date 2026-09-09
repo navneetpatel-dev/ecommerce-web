@@ -7,7 +7,7 @@ import { Input } from "@/shared/components/ui/input";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
-import { useAdminEditNameAction } from "./AdminEditNameAction/useAdminEditNameAction.hook";
+import { useAdminEditNameAction } from "../../hooks/shared/useAdminEditNameAction.hook";
 
 interface AdminEditNameActionProps {
   currentName: string;

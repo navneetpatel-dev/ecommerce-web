@@ -5,7 +5,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import { NumberInputSteppers } from "./NumberInputSteppers.component";
 import { clamp, parseValue } from "@/shared/utils/validation/numberInputMath";
 
-import { numberInputStyles } from "./numberInput.styles";
+import { numberInputStyles } from "../../styles/forms/numberInput.styles";
 
 export interface NumberInputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,

@@ -8,7 +8,7 @@ import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { SpotlightVendor } from "../../hooks/vendor-spotlight/useVendorSpotlight.hook";
-import { vendorSpotlightSectionStyles as styles } from "./vendorSpotlightSection.styles";
+import { vendorSpotlightSectionStyles as styles } from "../../styles/vendor-spotlight/vendorSpotlightSection.styles";
 
 interface VendorSpotlightSectionProps {
   vendors: SpotlightVendor[];

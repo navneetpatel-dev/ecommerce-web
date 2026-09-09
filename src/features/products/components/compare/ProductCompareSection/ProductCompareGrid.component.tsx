@@ -1,5 +1,5 @@
 import type { ProductListItem } from "@/shared/api/types";
-import { productCompareSectionStyles } from "./productCompareSection.styles";
+import { productCompareSectionStyles } from "../../../styles/compare/productCompareSection.styles";
 import { ProductCompareCard } from "./ProductCompareCard.component";
 
 interface ProductCompareGridProps {

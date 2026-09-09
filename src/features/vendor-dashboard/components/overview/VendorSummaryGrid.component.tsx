@@ -2,7 +2,7 @@ import { SummaryCard } from "./SummaryCard.component";
 import { Package, Truck, Banknote, Clock } from "lucide-react";
 import type { VendorSummary } from "@/shared/api/types";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
-import { vendorSummaryGridStyles } from "../analytics/vendorAnalyticsWidgets.styles";
+import { vendorSummaryGridStyles } from "../../styles/analytics/vendorAnalyticsWidgets.styles";
 
 interface VendorSummaryGridProps {
   summary?: VendorSummary;

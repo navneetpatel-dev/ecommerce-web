@@ -27,7 +27,7 @@ import type { Category } from "@/shared/api/types";
 import { VendorRegisterBasicsSection } from "./BasicsSection.component";
 import { VendorRegisterCategoriesSection } from "./CategoriesSection.component";
 import { VendorRegisterIdentitySection } from "./IdentitySection.component";
-import { vendorRegisterFormStyles as styles } from "./vendorRegisterForm.styles";
+import { vendorRegisterFormStyles as styles } from "../../../styles/register/vendorRegisterForm.styles";
 
 interface VendorRegisterFormProps {
   form: UseFormReturn<VendorRegisterInput>;

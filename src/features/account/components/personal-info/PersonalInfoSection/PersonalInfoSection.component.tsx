@@ -2,11 +2,11 @@
 
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { LABELS } from "@/shared/constants/labels";
-import { usePersonalInfoSection } from "./usePersonalInfoSection.hook";
+import { usePersonalInfoSection } from "../../../hooks/personal-info/usePersonalInfoSection.hook";
 import { PersonalInfoForm } from "./PersonalInfoForm.component";
 import { ProfileAside } from "./ProfileAside.component";
 import { PersonalInfoSectionLoadingSkeleton } from "./PersonalInfoSectionLoadingSkeleton.component";
-import { personalInfoSectionStyles as styles } from "./personalInfoSection.styles";
+import { personalInfoSectionStyles as styles } from "../../../styles/personal-info/personalInfoSection.styles";
 
 /** Personal-info section: renders the form hook's prepared state with pure JSX layout. */
 export function PersonalInfoSection() {

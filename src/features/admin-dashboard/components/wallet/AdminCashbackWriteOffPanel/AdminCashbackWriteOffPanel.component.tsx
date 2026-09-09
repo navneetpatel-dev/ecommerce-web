@@ -16,8 +16,8 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { ReportExportButtons, ReportExportStatus } from "@/features/reports";
 import { CashbackWriteOffReportTable } from "./CashbackWriteOffReportTable.component";
-import { useAdminCashbackWriteOffPanel } from "./useAdminCashbackWriteOffPanel.hook";
-import { adminCashbackWriteOffPanelStyles as styles } from "./adminCashbackWriteOffPanel.styles";
+import { useAdminCashbackWriteOffPanel } from "../../../hooks/wallet/useAdminCashbackWriteOffPanel.hook";
+import { adminCashbackWriteOffPanelStyles as styles } from "../../../styles/wallet/adminCashbackWriteOffPanel.styles";
 
 export function AdminCashbackWriteOffPanel() {
   const {

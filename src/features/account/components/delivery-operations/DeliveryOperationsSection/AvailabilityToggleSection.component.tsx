@@ -3,7 +3,7 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type { useSetAvailability } from "@/features/delivery-dashboard";
 
-import { deliveryOperationsSectionStyles as styles } from "./deliveryOperationsSection.styles";
+import { deliveryOperationsSectionStyles as styles } from "../../../styles/delivery-operations/deliveryOperationsSection.styles";
 
 interface AvailabilityToggleSectionProps {
   availableForAssignment: boolean | undefined;

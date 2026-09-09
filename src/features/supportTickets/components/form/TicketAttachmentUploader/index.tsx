@@ -19,12 +19,12 @@ import {
   TICKET_MAX_VIDEOS,
 } from "@/shared/constants/media/mediaLimits";
 import { AttachmentList } from "./AttachmentList.component";
-import { isVideoAttachment } from "./utils";
-import { useFileProcessor } from "./useFileProcessor.hook";
-import { ticketAttachmentUploaderStyles } from "./ticketAttachmentUploader.styles";
-import type { Props } from "./types";
+import { isVideoAttachment } from "../../../utils/form/TicketAttachmentUploader-utils";
+import { useFileProcessor } from "../../../hooks/form/useFileProcessor.hook";
+import { ticketAttachmentUploaderStyles } from "../../../styles/form/ticketAttachmentUploader.styles";
+import type { Props } from "../../../types/form/TicketAttachmentUploader-types";
 
-export type { UploadedMediaAttachment } from "./types";
+export type { UploadedMediaAttachment } from "../../../types/form/TicketAttachmentUploader-types";
 
 export function TicketAttachmentUploader({
   mode = "ticket",

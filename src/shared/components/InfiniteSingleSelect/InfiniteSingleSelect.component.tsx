@@ -9,9 +9,9 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import { cn } from "@/shared/utils/dom/cn";
-import { infiniteSingleSelectStyles } from "./infiniteSingleSelect.styles";
-import type { InfiniteSingleSelectProps } from "./types";
-import { useInfiniteSelectOptions } from "./useInfiniteSelectOptions.hook";
+import { infiniteSingleSelectStyles } from "../../styles/infinite-single-select/infiniteSingleSelect.styles";
+import type { InfiniteSingleSelectProps } from "../../types/infinite-single-select/types";
+import { useInfiniteSelectOptions } from "../../hooks/infinite-single-select/useInfiniteSelectOptions.hook";
 import {
   SearchField,
   SingleSelectListbox,

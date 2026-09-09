@@ -18,7 +18,7 @@ import { FormError } from "@/shared/components/FormError.component";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import type { UseFormReturn } from "react-hook-form";
-import { couponsHeaderSectionStyles } from "./vendorCouponsView.styles";
+import { couponsHeaderSectionStyles } from "../../../styles/coupons/vendorCouponsView.styles";
 
 interface CouponsHeaderSectionProps {
   absorbedDiscountTotal: number;

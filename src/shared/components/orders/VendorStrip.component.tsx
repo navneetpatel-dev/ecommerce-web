@@ -4,7 +4,7 @@ import { Star } from "lucide-react";
 import type { VendorInfo } from "@/shared/api/types";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { cn } from "@/shared/utils/dom/cn";
-import { vendorStripStyles } from "./vendorOrderComponents.styles";
+import { vendorStripStyles } from "../../styles/orders/vendorOrderComponents.styles";
 
 interface VendorStripProps {
   vendor: VendorInfo;

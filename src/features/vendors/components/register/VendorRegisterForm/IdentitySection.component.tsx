@@ -3,7 +3,7 @@ import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorRegisterInput } from "../../../schemas/register/vendor.schema";
-import { vendorRegisterFormStyles as styles } from "./vendorRegisterForm.styles";
+import { vendorRegisterFormStyles as styles } from "../../../styles/register/vendorRegisterForm.styles";
 
 type VendorRegisterFormInstance = UseFormReturn<VendorRegisterInput>;
 

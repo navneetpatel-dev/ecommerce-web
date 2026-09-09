@@ -17,7 +17,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import { cn } from "@/shared/utils/dom/cn";
-import type { OrderVendorOption, TicketField } from "./types";
+import type { OrderVendorOption, TicketField } from "../../../types/form/types";
 
 type Props = {
   showDirectoryVendorPicker: boolean;

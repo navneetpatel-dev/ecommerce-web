@@ -1,6 +1,6 @@
-import type { UnusedOfferViewModel } from "../coupons/useCartCouponSection.hook";
+import type { UnusedOfferViewModel } from "../../hooks/coupons/useCartCouponSection.hook";
 import { EligibleOfferItem } from "./EligibleOfferItem.component";
-import { cartCouponSectionStyles as styles } from "../coupons/cartCouponSection.styles";
+import { cartCouponSectionStyles as styles } from "../../styles/coupons/cartCouponSection.styles";
 
 interface EligibleOffersListProps {
   offers: UnusedOfferViewModel[];

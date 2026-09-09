@@ -6,7 +6,7 @@ import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
-import { createCouponFormStyles } from "./createCouponForm.styles";
+import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
 
 interface CreateCouponValueFieldsProps {
   form: UseFormReturn<CouponFormInput>;

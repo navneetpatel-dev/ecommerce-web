@@ -1,7 +1,7 @@
 "use client";
 
 import { OpsQueueItem, type QueueDef } from "./OpsQueueItem.component";
-import { analyticsOpsQueuesStyles as styles } from "./analyticsOpsQueues.styles";
+import { analyticsOpsQueuesStyles as styles } from "../../../styles/analytics/analyticsOpsQueues.styles";
 
 interface OpsQueueListProps {
   queues: QueueDef[];

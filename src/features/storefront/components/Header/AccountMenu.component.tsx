@@ -11,9 +11,9 @@ import {
 } from "@/shared/components/ui/avatar";
 import { LABELS } from "@/shared/constants/labels";
 import type { CurrentUser } from "@/shared/api/types";
-import { useAccountMenu } from "./useAccountMenu.hook";
-import { ACCOUNT_TRIGGER_BOX } from "./headerShared";
-import { headerStyles as styles } from "./header.styles";
+import { useAccountMenu } from "../../hooks/header/useAccountMenu.hook";
+import { ACCOUNT_TRIGGER_BOX } from "../../utils/header/headerShared";
+import { headerStyles as styles } from "../../styles/header/header.styles";
 
 interface AccountMenuProps {
   currentUser: CurrentUser;

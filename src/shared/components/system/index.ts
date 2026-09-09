@@ -7,4 +7,4 @@ export { RoleSurfaceGuard } from "./RoleSurfaceGuard.component";
 export { ServiceWorkerRegistration } from "./ServiceWorkerRegistration.component";
 export { ShareButton } from "./ShareButton.component";
 export { WebVitalsReporter } from "./WebVitalsReporter.component";
-export * from "./errorBoundary.styles";
+export * from "../../styles/system/errorBoundary.styles";

@@ -4,7 +4,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { PaginationItem } from "@/shared/utils/pagination/pagination";
-import { paginationStyles } from "./navigationComponents.styles";
+import { paginationStyles } from "../../styles/navigation/navigationComponents.styles";
 
 interface PaginationProps {
   currentPage: number;

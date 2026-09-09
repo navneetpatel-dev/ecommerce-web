@@ -12,8 +12,8 @@ import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { AttributesSortableList } from "./AttributesSortableList.component";
 import { AttributeFormFields } from "./AttributeFormFields.component";
-import { useAdminCategoryAttributesAction } from "./useAdminCategoryAttributesAction.hook";
-import { adminCategoryAttributesActionStyles as styles } from "./adminCategoryAttributesAction.styles";
+import { useAdminCategoryAttributesAction } from "../../../hooks/categories/useAdminCategoryAttributesAction.hook";
+import { adminCategoryAttributesActionStyles as styles } from "../../../styles/categories/adminCategoryAttributesAction.styles";
 
 interface AdminCategoryAttributesActionProps {
   categoryId: string;

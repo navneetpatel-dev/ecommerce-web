@@ -1,7 +1,7 @@
 import { CreditCard } from "lucide-react";
 import { EmptyState } from "@/shared/components/EmptyState.component";
 import { paymentMethodsLabels as LABELS } from "@/shared/constants/labels/paymentMethods";
-import { savedPaymentMethodsSectionStyles as styles } from "./savedPaymentMethodsSection.styles";
+import { savedPaymentMethodsSectionStyles as styles } from "../../../styles/payment-methods/savedPaymentMethodsSection.styles";
 
 export function SavedPaymentMethodsEmptyState() {
   return (

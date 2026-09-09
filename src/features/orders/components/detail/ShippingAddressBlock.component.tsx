@@ -3,7 +3,7 @@ import { MapPin } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import type { Order } from "@/shared/api/types";
-import { ORDER_SUMMARY_ASIDE_STYLES } from "./orderSummaryAside.styles";
+import { ORDER_SUMMARY_ASIDE_STYLES } from "../../styles/detail/orderSummaryAside.styles";
 
 interface ShippingAddressBlockProps {
   address: NonNullable<Order["shippingAddress"]>;

@@ -2,7 +2,7 @@ import { memo } from "react";
 import { motion } from "motion/react";
 import type { SubOrder } from "@/shared/api/types";
 import { SubOrderCardContainer } from "../../containers/sub-order/SubOrderCardContainer.container";
-import { ORDER_DETAIL_CONTENT_STYLES } from "../detail/orderDetailContent.styles";
+import { ORDER_DETAIL_CONTENT_STYLES } from "../../styles/detail/orderDetailContent.styles";
 
 interface SubOrdersListProps {
   subOrders: SubOrder[];

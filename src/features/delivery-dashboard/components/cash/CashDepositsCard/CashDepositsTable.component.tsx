@@ -1,6 +1,6 @@
-import { cashDepositsCardStyles } from "./cashDepositsCard.styles";
+import { cashDepositsCardStyles } from "../../../styles/cash/cashDepositsCard.styles";
 import { CashDepositTableRow } from "./CashDepositTableRow.component";
-import type { CashDepositRowViewModel } from "./useCashDepositsCardPresentation.hook";
+import type { CashDepositRowViewModel } from "../../../hooks/cash/useCashDepositsCardPresentation.hook";
 
 interface CashDepositsTableProps {
   rows: CashDepositRowViewModel[];

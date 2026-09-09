@@ -6,7 +6,7 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import type { ProductQuestion } from "@/shared/api/types";
 import { VendorQnaAnswerDialog } from "./VendorQnaAnswerDialog.component";
-import { vendorFeedbackViewsStyles } from "../reviews/vendorFeedbackViews.styles";
+import { vendorFeedbackViewsStyles } from "../../styles/reviews/vendorFeedbackViews.styles";
 
 interface VendorQnaViewProps {
   questions: ProductQuestion[];

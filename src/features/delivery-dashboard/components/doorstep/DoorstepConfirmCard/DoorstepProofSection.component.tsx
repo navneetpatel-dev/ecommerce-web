@@ -1,6 +1,6 @@
 import { Upload } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
-import { doorstepConfirmCardStyles } from "./doorstepConfirmCard.styles";
+import { doorstepConfirmCardStyles } from "../../../styles/doorstep/doorstepConfirmCard.styles";
 
 interface DoorstepProofSectionProps {
   proof: File | null;

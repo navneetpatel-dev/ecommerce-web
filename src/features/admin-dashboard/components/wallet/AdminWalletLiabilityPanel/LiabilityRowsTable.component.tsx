@@ -3,7 +3,7 @@ import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import type { WalletLiabilityReport } from "../../../api/finance/reports.api";
-import { adminWalletLiabilityPanelStyles } from "./adminWalletLiabilityPanel.styles";
+import { adminWalletLiabilityPanelStyles } from "../../../styles/wallet/adminWalletLiabilityPanel.styles";
 
 interface LiabilityRowsTableProps {
   report: WalletLiabilityReport;

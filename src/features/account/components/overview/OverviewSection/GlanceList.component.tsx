@@ -1,5 +1,5 @@
 import { GlanceRow, type GlanceRowProps } from "./GlanceRow.component";
-import { glanceListStyles as styles } from "./glanceList.styles";
+import { glanceListStyles as styles } from "../../../styles/overview/glanceList.styles";
 
 export interface GlanceItem extends GlanceRowProps {
   id: string;

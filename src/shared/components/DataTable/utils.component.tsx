@@ -6,8 +6,8 @@ import { TruncatedText } from "@/shared/components/TruncatedText.component";
 import { TABLE_CELL_MAX_CHARS } from "@/shared/constants/table/table";
 import { extractImageUrls, isImageFieldKey } from "@/shared/utils/media/imageField";
 import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
-import { dataTableUtilsStyles } from "./dataTable.styles";
-import type { DataTableColumn } from "./types";
+import { dataTableUtilsStyles } from "../../styles/data-table/dataTable.styles";
+import type { DataTableColumn } from "../../types/data-table/types";
 
 export function columnFieldKey<T>(column: DataTableColumn<T>): string {
   return column.accessor != null ? String(column.accessor) : column.id;

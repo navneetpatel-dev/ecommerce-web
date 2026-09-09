@@ -17,7 +17,7 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import { CATEGORY_ATTRIBUTE_TYPE } from "@/shared/constants/statuses";
-import { adminCategoryAttributesActionStyles as styles } from "./adminCategoryAttributesAction.styles";
+import { adminCategoryAttributesActionStyles as styles } from "../../../styles/categories/adminCategoryAttributesAction.styles";
 
 interface AttributeFormFieldsProps {
   name: string;

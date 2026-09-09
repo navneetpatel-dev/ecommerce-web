@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { redeliverySlotPickerStyles } from "./vendorOrderComponents.styles";
+import { redeliverySlotPickerStyles } from "../../styles/orders/vendorOrderComponents.styles";
 
 export const REDELIVERY_SLOTS = [
   "Tomorrow morning (9am - 12pm)",

@@ -2,7 +2,7 @@ import { memo } from "react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { SubOrderRow } from "../../../types/orders/vendorOrders.types";
-import { VENDOR_ORDERS_TABLE_STYLES } from "./vendorOrdersTable.styles";
+import { VENDOR_ORDERS_TABLE_STYLES } from "../../../styles/orders/vendorOrdersTable.styles";
 
 interface ReturnsCellProps {
   row: SubOrderRow;

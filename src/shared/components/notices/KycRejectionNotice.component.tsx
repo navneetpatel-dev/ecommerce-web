@@ -1,7 +1,7 @@
 import { AlertTriangle } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { kycRejectionNoticeStyles } from "./noticeComponents.styles";
+import { kycRejectionNoticeStyles } from "../../styles/notices/noticeComponents.styles";
 
 interface KycRejectionNoticeProps {
   reason: string;

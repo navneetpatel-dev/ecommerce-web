@@ -4,7 +4,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/shared/components/ui/accordion";
-import { faqViewStyles as styles } from "./faqView.styles";
+import { faqViewStyles as styles } from "../../styles/faq/faqView.styles";
 
 interface FaqItem {
   q: string;

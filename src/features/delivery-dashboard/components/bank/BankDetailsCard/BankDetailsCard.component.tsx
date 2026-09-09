@@ -4,8 +4,8 @@ import { Landmark } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import type { BankDetails } from "../../../types/agent/types";
-import { bankDetailsCardStyles } from "./bankDetailsCard.styles";
-import { useBankDetailsCardPresentation } from "./useBankDetailsCardPresentation.hook";
+import { bankDetailsCardStyles } from "../../../styles/bank/bankDetailsCard.styles";
+import { useBankDetailsCardPresentation } from "../../../hooks/bank/useBankDetailsCardPresentation.hook";
 import { BankDetailsFormFields } from "./BankDetailsFormFields.component";
 
 interface BankDetailsCardProps {

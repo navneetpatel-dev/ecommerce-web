@@ -1,6 +1,6 @@
 import { TabsContent } from "@/shared/components/ui/tabs";
-import { adminSectionTabsStyles } from "./adminSectionTabs.styles";
-import type { AdminSectionTabItem } from "./adminSectionTabs.types";
+import { adminSectionTabsStyles } from "../../../styles/shared/adminSectionTabs.styles";
+import type { AdminSectionTabItem } from "../../../types/shared/adminSectionTabs.types";
 
 interface AdminSectionTabPanelsListProps {
   tabs: AdminSectionTabItem[];

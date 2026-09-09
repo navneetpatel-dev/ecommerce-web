@@ -16,8 +16,8 @@ import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { DISCOUNT_BEARER } from "@/shared/constants/statuses";
 import { cn } from "@/shared/utils/dom/cn";
-import { COUPON_TYPES } from "./constants";
-import { createCouponFormStyles } from "./createCouponForm.styles";
+import { COUPON_TYPES } from "../../../constants/coupons/constants";
+import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
 
 interface CreateCouponBasicsFieldsProps {
   form: UseFormReturn<CouponFormInput>;

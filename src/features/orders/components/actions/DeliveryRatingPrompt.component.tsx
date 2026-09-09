@@ -6,7 +6,7 @@ import { Star, X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { shippingApi } from "../../api/tracking/shipping.api";
-import { ordersComponentsStyles } from "./ordersComponents.styles";
+import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
 
 /** Optional, dismissible "rate your delivery" prompt — never blocks anything. */
 export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {

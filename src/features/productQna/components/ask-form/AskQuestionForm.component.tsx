@@ -11,7 +11,7 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import type { AskQuestionFormInput } from "../../schemas/ask-form/productQna.schema";
-import { productQnaStyles as styles } from "../list/productQna.styles";
+import { productQnaStyles as styles } from "../../styles/list/productQna.styles";
 
 interface AskQuestionFormProps {
   register: UseFormRegister<AskQuestionFormInput>;

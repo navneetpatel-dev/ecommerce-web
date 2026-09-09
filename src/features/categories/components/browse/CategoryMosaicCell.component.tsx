@@ -1,5 +1,5 @@
 import { MediaImage } from "@/shared/components/MediaImage.component";
-import { categoryCardStyles } from "./categoryCard.styles";
+import { categoryCardStyles } from "../../styles/browse/categoryCard.styles";
 
 interface CategoryMosaicCellProps {
   url: string;

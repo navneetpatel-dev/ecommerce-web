@@ -9,8 +9,8 @@ import { OrderMoneyBreakdown } from "./OrderMoneyBreakdown.component";
 import { OrderCancelAction } from "../actions/OrderCancelAction.component";
 import { ShippingAddressBlock } from "./ShippingAddressBlock.component";
 import { SubOrderInvoicesList } from "../documents/SubOrderInvoicesList.component";
-import { useOrderSummaryAside } from "./useOrderSummaryAside.hook";
-import { ORDER_SUMMARY_ASIDE_STYLES } from "./orderSummaryAside.styles";
+import { useOrderSummaryAside } from "../../hooks/detail/useOrderSummaryAside.hook";
+import { ORDER_SUMMARY_ASIDE_STYLES } from "../../styles/detail/orderSummaryAside.styles";
 
 interface OrderSummaryAsideProps {
   order: Order;

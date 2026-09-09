@@ -1,5 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { ordersActivitySectionStyles as styles } from "./ordersActivitySection.styles";
+import { ordersActivitySectionStyles as styles } from "../../styles/orders-activity/ordersActivitySection.styles";
 
 export function RecentOrdersLoadingSkeleton() {
   return (

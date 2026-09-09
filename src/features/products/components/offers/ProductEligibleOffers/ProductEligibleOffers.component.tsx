@@ -4,9 +4,9 @@ import { ChevronDown, Tag } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { productEligibleOffersStyles } from "./productEligibleOffers.styles";
+import { productEligibleOffersStyles } from "../../../styles/offers/productEligibleOffers.styles";
 import { EligibleOffersList } from "./EligibleOffersList.component";
-import { useProductEligibleOffers } from "./useProductEligibleOffers.hook";
+import { useProductEligibleOffers } from "../../../hooks/offers/useProductEligibleOffers.hook";
 
 export interface ProductEligibleOffersProps {
   productId: string;

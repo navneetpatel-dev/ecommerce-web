@@ -1,6 +1,6 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { CategoryGridSkeleton, SkeletonGrid } from "./primitives.component";
-import { pageSkeletonsStyles as styles } from "./pageSkeletons.styles";
+import { pageSkeletonsStyles as styles } from "../../styles/skeletons/pageSkeletons.styles";
 
 /** Home / generic storefront content while a soft navigation settles. */
 export function StorefrontPageSkeleton() {

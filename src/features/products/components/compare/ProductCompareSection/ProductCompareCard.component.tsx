@@ -1,7 +1,7 @@
 import type { ProductListItem } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { productCompareSectionStyles } from "./productCompareSection.styles";
+import { productCompareSectionStyles } from "../../../styles/compare/productCompareSection.styles";
 
 interface ProductCompareCardProps {
   product: ProductListItem;

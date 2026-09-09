@@ -3,9 +3,9 @@
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { copyContainer, copyItem } from "./constants";
-import type { HeroSlide } from "./types";
-import { heroSectionStyles as styles } from "./heroSection.styles";
+import { copyContainer, copyItem } from "../../../constants/hero/constants";
+import type { HeroSlide } from "../../../types/hero/types";
+import { heroSectionStyles as styles } from "../../../styles/hero/heroSection.styles";
 
 interface SlideCopyProps {
   slide: HeroSlide;

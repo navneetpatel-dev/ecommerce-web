@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import type { DeliveryAgentPerformance } from "@/features/delivery-dashboard";
 import { useChartThemeColors } from "@/shared/hooks/theme/useChartThemeColors.hook";
-import { adminDeliveryPerformancePanelStyles } from "./adminDeliveryPerformancePanel.styles";
+import { adminDeliveryPerformancePanelStyles } from "../../../styles/delivery-agents/adminDeliveryPerformancePanel.styles";
 
 interface PerformanceChartProps {
   rows: DeliveryAgentPerformance[];

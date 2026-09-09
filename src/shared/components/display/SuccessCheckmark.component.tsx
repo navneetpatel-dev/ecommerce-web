@@ -1,5 +1,5 @@
 import { cn } from "@/shared/utils/dom/cn";
-import { successCheckmarkStyles } from "./displayComponents.styles";
+import { successCheckmarkStyles } from "../../styles/display/displayComponents.styles";
 
 interface SuccessCheckmarkProps {
   circleRef: React.RefObject<SVGCircleElement | null>;

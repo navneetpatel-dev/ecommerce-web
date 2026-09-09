@@ -15,7 +15,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import type { CategoryAttribute } from "@/shared/api/types";
 import { AttributesSortableRows } from "./AttributesSortableRows.component";
-import { adminCategoryAttributesActionStyles as styles } from "./adminCategoryAttributesAction.styles";
+import { adminCategoryAttributesActionStyles as styles } from "../../../styles/categories/adminCategoryAttributesAction.styles";
 
 interface AttributesSortableListProps {
   rows: CategoryAttribute[];

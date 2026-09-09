@@ -13,8 +13,8 @@ import { FormActions } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { AdminCategoryFormFields } from "./AdminCategoryFormFields.component";
-import { useAdminEditCategoryAction } from "./AdminEditCategoryAction/useAdminEditCategoryAction.hook";
-import { adminEditCategoryActionStyles as styles } from "./AdminEditCategoryAction/adminEditCategoryAction.styles";
+import { useAdminEditCategoryAction } from "../../hooks/categories/useAdminEditCategoryAction.hook";
+import { adminEditCategoryActionStyles as styles } from "../../styles/categories/adminEditCategoryAction.styles";
 
 interface AdminEditCategoryActionProps {
   category: {

@@ -1,6 +1,6 @@
 import { CheckCircle2, Clock, XCircle } from "lucide-react";
 import type { DeliveryAgentDocument } from "../../../types/agent/types";
-import { deliveryAgentDocumentsCardStyles as styles } from "./deliveryAgentDocumentsCard.styles";
+import { deliveryAgentDocumentsCardStyles as styles } from "../../../styles/documents/deliveryAgentDocumentsCard.styles";
 
 export function DocumentStatusBadge({
   document,

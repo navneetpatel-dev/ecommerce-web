@@ -1,5 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
-import { maintenanceViewStyles as styles } from "./maintenanceView.styles";
+import { maintenanceViewStyles as styles } from "../../styles/maintenance/maintenanceView.styles";
 
 export function MaintenanceView() {
   return (

@@ -2,8 +2,8 @@ import { Check } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { cn } from "@/shared/utils/dom/cn";
-import type { ProgressStep } from "./bugReportDetailShared";
-import { bugReportPanelsStyles } from "./bugReportPanels.styles";
+import type { ProgressStep } from "../../../utils/detail/bugReportDetailShared";
+import { bugReportPanelsStyles } from "../../../styles/detail/bugReportPanels.styles";
 
 export function ProgressTrack({ steps }: { steps: ProgressStep[] }) {
   return (

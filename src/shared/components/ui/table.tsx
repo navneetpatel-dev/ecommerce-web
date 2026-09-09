@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/shared/utils/dom/cn";
 
-import { tableStyles } from "./table.styles";
+import { tableStyles } from "../../styles/ui/table.styles";
 
 export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
   /** When false, renders only `<table>` — scroll must live in a parent `TableScrollShell`. */

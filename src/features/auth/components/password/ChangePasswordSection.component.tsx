@@ -10,7 +10,7 @@ import { Button } from "@/shared/components/ui/button";
 import { PasswordInputContainer } from "@/shared/containers/forms/PasswordInputContainer.container";
 import { LABELS } from "@/shared/constants/labels";
 import type { ChangePasswordInput } from "../../schemas/auth/auth.schema";
-import { authFormsStyles } from "../shell/authForms.styles";
+import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 interface ChangePasswordSectionProps {
   form: UseFormReturn<ChangePasswordInput>;

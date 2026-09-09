@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { notificationLogFiltersBarStyles } from "./notificationLogFiltersBar.styles";
+import { notificationLogFiltersBarStyles } from "../../../styles/notifications/notificationLogFiltersBar.styles";
 import {
   NotificationFilterOptionsList,
   ALL,

@@ -1,7 +1,7 @@
 import type { BulkCreateAgentResult } from "@/features/delivery-dashboard";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/dom/cn";
-import { bulkImportAgentsDialogStyles as styles } from "./bulkImportAgentsDialog.styles";
+import { bulkImportAgentsDialogStyles as styles } from "../../../styles/delivery-agents/bulkImportAgentsDialog.styles";
 
 interface ImportResultsPanelProps {
   results: BulkCreateAgentResult[];

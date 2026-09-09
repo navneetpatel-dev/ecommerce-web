@@ -9,7 +9,7 @@ import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { BUG_COMMENT_MAX } from "../../../constants/form/fieldLimits";
 import type { BugComment } from "../../../api/list/bugReports.api";
-import { bugReportPanelsStyles } from "./bugReportPanels.styles";
+import { bugReportPanelsStyles } from "../../../styles/detail/bugReportPanels.styles";
 
 function commentInitials(name: string): string {
   const parts = name.trim().split(/\s+/);

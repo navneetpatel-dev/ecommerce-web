@@ -3,8 +3,8 @@
 import { Button } from "@/shared/components/ui/button";
 import { Slider } from "@/shared/components/ui/slider";
 import { LABELS } from "@/shared/constants/labels";
-import { cropDialogStyles as styles } from "./cropDialog.styles";
-import type { CropControlSlidersProps } from "./types";
+import { cropDialogStyles as styles } from "../../styles/image-crop-dialog/cropDialog.styles";
+import type { CropControlSlidersProps } from "../../types/image-crop-dialog/types";
 
 /** Zoom + rotation sliders with quick-rotate/reset actions. */
 export function CropControlSliders(props: CropControlSlidersProps) {

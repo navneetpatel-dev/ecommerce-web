@@ -4,7 +4,7 @@ import { BarChart3 } from "lucide-react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { Button } from "@/shared/components/ui/button";
 import { useAdminDeliveryPerformancePanel } from "../../../hooks/delivery-agents/useAdminDeliveryPerformancePanel.hook";
-import { adminDeliveryPerformancePanelStyles } from "./adminDeliveryPerformancePanel.styles";
+import { adminDeliveryPerformancePanelStyles } from "../../../styles/delivery-agents/adminDeliveryPerformancePanel.styles";
 import { PerformanceTableBody } from "./PerformanceTableBody.component";
 import { PerformanceChart } from "./PerformanceChart.component";
 

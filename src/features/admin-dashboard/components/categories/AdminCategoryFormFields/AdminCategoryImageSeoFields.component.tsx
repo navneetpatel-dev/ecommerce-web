@@ -7,7 +7,7 @@ import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
-import { adminCategoryStyles } from "../adminCategory.styles";
+import { adminCategoryStyles } from "../../../styles/categories/adminCategory.styles";
 
 interface AdminCategoryImageSeoFieldsProps {
   form: UseFormReturn<CategoryFormInput>;

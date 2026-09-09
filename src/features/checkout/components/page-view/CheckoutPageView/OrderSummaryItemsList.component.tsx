@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { OrderSummaryVendorGroup } from "./OrderSummaryVendorGroup.component";
-import { ORDER_SUMMARY_ITEMS_LIST_STYLES } from "./orderSummaryItemsList.styles";
+import { ORDER_SUMMARY_ITEMS_LIST_STYLES } from "../../../styles/page-view/orderSummaryItemsList.styles";
 
 interface OrderSummaryItemsListProps {
   groupedByVendor: Record<string, CartItem[]>;

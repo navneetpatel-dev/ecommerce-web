@@ -7,7 +7,7 @@ import {
 import type { ReactNode } from "react";
 import type { CheckoutQuote } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { MOBILE_SUMMARY_ACCORDION_STYLES } from "./mobileSummaryAccordion.styles";
+import { MOBILE_SUMMARY_ACCORDION_STYLES } from "../../../styles/page-view/mobileSummaryAccordion.styles";
 
 interface MobileSummaryAccordionProps {
   summary: ReactNode;

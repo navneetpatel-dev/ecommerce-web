@@ -13,7 +13,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import type { ProfileFormInput as PersonalForm } from "../../../schemas/personal-info/profile.schema";
-import { personalInfoSectionStyles as styles } from "./personalInfoSection.styles";
+import { personalInfoSectionStyles as styles } from "../../../styles/personal-info/personalInfoSection.styles";
 
 interface PersonalInfoFormProps {
   register: UseFormRegister<PersonalForm>;

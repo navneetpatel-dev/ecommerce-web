@@ -7,7 +7,7 @@ import { Label } from "@/shared/components/ui/label";
 import { FormError } from "@/shared/components/FormError.component";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
-import { privacySectionStyles as styles } from "./privacySection.styles";
+import { privacySectionStyles as styles } from "../../../styles/privacy/privacySection.styles";
 
 interface DeleteAccountDialogProps {
   open: boolean;

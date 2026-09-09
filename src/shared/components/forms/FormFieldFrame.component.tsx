@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/utils/dom/cn";
-import { formFieldFrameStyles } from "./forms.styles";
+import { formFieldFrameStyles } from "../../styles/forms/forms.styles";
 
 interface FormFieldFrameProps {
   label: string;

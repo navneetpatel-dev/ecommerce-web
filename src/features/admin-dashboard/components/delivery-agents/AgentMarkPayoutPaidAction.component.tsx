@@ -17,8 +17,8 @@ import { AgentPaymentMethodsList } from "./AgentMarkPayoutPaidAction/AgentPaymen
 import {
   AGENT_PAYMENT_METHODS,
   useAgentMarkPayoutPaidAction,
-} from "./AgentMarkPayoutPaidAction/useAgentMarkPayoutPaidAction.hook";
-import { agentMarkPayoutPaidActionStyles as styles } from "./AgentMarkPayoutPaidAction/agentMarkPayoutPaidAction.styles";
+} from "../../hooks/delivery-agents/useAgentMarkPayoutPaidAction.hook";
+import { agentMarkPayoutPaidActionStyles as styles } from "../../styles/delivery-agents/agentMarkPayoutPaidAction.styles";
 
 interface AgentMarkPayoutPaidActionProps {
   payoutId: string;

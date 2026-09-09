@@ -3,7 +3,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { heroSectionStyles as styles } from "./heroSection.styles";
+import { heroSectionStyles as styles } from "../../../styles/hero/heroSection.styles";
 
 function CarouselIconButton({
   label,

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { agentDocumentsPanelStyles } from "./agentDocumentsPanel.styles";
+import { agentDocumentsPanelStyles } from "../../../styles/delivery-agents/agentDocumentsPanel.styles";
 
 interface AgentDocumentActionButtonsProps {
   documentId: string;

@@ -2,7 +2,7 @@ import { MapPin } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 
-import { deliveryOperationsSectionStyles as styles } from "./deliveryOperationsSection.styles";
+import { deliveryOperationsSectionStyles as styles } from "../../../styles/delivery-operations/deliveryOperationsSection.styles";
 
 interface VehicleHubSectionProps {
   vehicleIcon: LucideIcon;

@@ -17,7 +17,7 @@ import { RequirePermission } from "@/shared/components/RequirePermission.compone
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { useAdminWalletAdjust } from "../../hooks/wallet/useAdminWalletAdjust.hook";
-import { adminFormWidgetsStyles } from "../shared/adminFormWidgets.styles";
+import { adminFormWidgetsStyles } from "../../styles/shared/adminFormWidgets.styles";
 
 export function AdminWalletAdjustPanel() {
   const form = useAdminWalletAdjust();

@@ -1,5 +1,5 @@
 import { TableCellImage } from "@/shared/components/TableCellImage.component";
-import { adminDataListViewStyles } from "./adminDataListView.styles";
+import { adminDataListViewStyles } from "../../../styles/shared/adminDataListView.styles";
 
 interface TableCellImagesListProps {
   urls: string[];

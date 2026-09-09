@@ -8,7 +8,7 @@ import {
   CardDescription,
 } from "@/shared/components/ui/card";
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
-import { vendorFulfillmentSlaStyles } from "./vendorAnalyticsWidgets.styles";
+import { vendorFulfillmentSlaStyles } from "../../styles/analytics/vendorAnalyticsWidgets.styles";
 
 interface VendorFulfillmentSlaCardProps {
   onTimePercent: number;

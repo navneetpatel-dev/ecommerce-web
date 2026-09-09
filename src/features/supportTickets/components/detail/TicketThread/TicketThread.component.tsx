@@ -14,9 +14,9 @@ import {
   TicketReplyComposer,
 } from "./TicketReplyComposer.component";
 import { TicketThreadHeader } from "./TicketThreadHeader.component";
-import { useTicketThreadState } from "./useTicketThreadState.hook";
-import { ticketThreadStyles } from "./ticketThread.styles";
-import type { RoleMode } from "./ticketThreadShared";
+import { useTicketThreadState } from "../../../hooks/detail/useTicketThreadState.hook";
+import { ticketThreadStyles } from "../../../styles/detail/ticketThread.styles";
+import type { RoleMode } from "../../../utils/detail/ticketThreadShared";
 
 type Props = {
   ticket: SupportTicket;

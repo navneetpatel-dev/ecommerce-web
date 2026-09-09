@@ -4,9 +4,9 @@ import { Menu } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { HEADER_INK_TONE } from "./headerShared";
+import { HEADER_INK_TONE } from "../../utils/header/headerShared";
 import { HeaderMenuButtonSkeleton } from "./HeaderActionSkeletons.component";
-import { headerStyles as styles } from "./header.styles";
+import { headerStyles as styles } from "../../styles/header/header.styles";
 
 interface HeaderMenuButtonProps {
   showStorefrontChrome: boolean;

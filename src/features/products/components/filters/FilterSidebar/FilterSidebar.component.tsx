@@ -2,8 +2,8 @@
 
 import { Accordion } from "@/shared/components/ui/accordion";
 import type { CategoryFacet } from "@/shared/api/types";
-import { filterSidebarStyles } from "./filterSidebar.styles";
-import { useFilterSidebarPresentation } from "./useFilterSidebarPresentation.hook";
+import { filterSidebarStyles } from "../../../styles/filters/filterSidebar.styles";
+import { useFilterSidebarPresentation } from "../../../hooks/filters/useFilterSidebarPresentation.hook";
 import { FilterSidebarHeader } from "./FilterSidebarHeader.component";
 import { FilterSidebarPriceFilter } from "./FilterSidebarPriceFilter.component";
 import { FilterSidebarFacetsList } from "./FilterSidebarFacetsList.component";

@@ -14,8 +14,8 @@ import { MAX_FILE_BYTES, MAX_ROWS } from "../../../utils/delivery-agents/parseAg
 import { TemplateDownloadCards } from "./TemplateDownloadCards.component";
 import { ImportResultsPanel } from "./ImportResultsPanel.component";
 import { RequiredColumnsInfo } from "./RequiredColumnsInfo.component";
-import { useBulkImportAgentsDialog } from "./useBulkImportAgentsDialog.hook";
-import { bulkImportAgentsDialogStyles as styles } from "./bulkImportAgentsDialog.styles";
+import { useBulkImportAgentsDialog } from "../../../hooks/delivery-agents/useBulkImportAgentsDialog.hook";
+import { bulkImportAgentsDialogStyles as styles } from "../../../styles/delivery-agents/bulkImportAgentsDialog.styles";
 
 interface BulkImportAgentsDialogProps {
   onImported: () => void;

@@ -12,7 +12,7 @@ import { NumberInput } from "@/shared/components/NumberInput.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormError } from "@/shared/components/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
-import { adminFormWidgetsStyles } from "../shared/adminFormWidgets.styles";
+import { adminFormWidgetsStyles } from "../../styles/shared/adminFormWidgets.styles";
 
 interface AdminTaxRuleFormProps {
   gstPercentage: string;

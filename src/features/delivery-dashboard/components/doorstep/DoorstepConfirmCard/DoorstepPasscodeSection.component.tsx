@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { doorstepConfirmCardStyles } from "./doorstepConfirmCard.styles";
+import { doorstepConfirmCardStyles } from "../../../styles/doorstep/doorstepConfirmCard.styles";
 
 interface DoorstepPasscodeSectionProps {
   otpCode: string;

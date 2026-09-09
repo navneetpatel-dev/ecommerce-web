@@ -1,7 +1,7 @@
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import type { ProductListItem } from "@/shared/api/types";
 import { ProductGrid } from "../listing/ProductGrid.component";
-import { productRelatedRailsStyles } from "./productRelatedRails.styles";
+import { productRelatedRailsStyles } from "../../styles/related/productRelatedRails.styles";
 
 interface ProductRelatedRailSectionProps {
   eyebrow: string;

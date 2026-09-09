@@ -4,8 +4,8 @@ import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { LABELS } from "@/shared/constants/labels";
-import { useWalletApplySection } from "./useWalletApplySection.hook";
-import { WALLET_APPLY_SECTION_STYLES } from "./walletApplySection.styles";
+import { useWalletApplySection } from "../../hooks/wallet/useWalletApplySection.hook";
+import { WALLET_APPLY_SECTION_STYLES } from "../../styles/wallet/walletApplySection.styles";
 
 interface WalletApplySectionProps {
   walletBalance: number;

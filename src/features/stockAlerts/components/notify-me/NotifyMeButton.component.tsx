@@ -6,7 +6,7 @@ import { Input } from "@/shared/components/ui/input";
 import { stockAlertsLabels } from "@/shared/constants/labels/stockAlerts";
 import { cn } from "@/shared/utils/dom/cn";
 import { useNotifyMe } from "../../hooks/notify-me/useNotifyMe.hook";
-import { notifyMeButtonStyles as styles } from "./notifyMeButton.styles";
+import { notifyMeButtonStyles as styles } from "../../styles/notify-me/notifyMeButton.styles";
 
 interface NotifyMeButtonProps {
   variantId: string | null | undefined;

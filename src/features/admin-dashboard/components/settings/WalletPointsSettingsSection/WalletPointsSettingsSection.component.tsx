@@ -12,7 +12,7 @@ import {
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import type { PlatformSettings } from "../../../hooks/settings/usePlatformSettingsForm.hook";
-import { useWalletPointsSettingsHandlers } from "./useWalletPointsSettingsHandlers.hook";
+import { useWalletPointsSettingsHandlers } from "../../../hooks/settings/useWalletPointsSettingsHandlers.hook";
 
 export interface WalletPointsSettingsSectionProps {
   form: PlatformSettings;

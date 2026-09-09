@@ -4,7 +4,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 
-import { createTicketFormStyles } from "./createTicketForm.styles";
+import { createTicketFormStyles } from "../../../styles/form/createTicketForm.styles";
 
 type Props = {
   canSubmit: boolean;

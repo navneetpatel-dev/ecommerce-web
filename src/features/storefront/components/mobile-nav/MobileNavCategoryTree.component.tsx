@@ -4,7 +4,7 @@ import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category } from "@/shared/api/types";
 import { resolveCategoryIcon, categoryHref } from "@/features/categories";
-import { mobileNavDrawerStyles as styles } from "./mobileNavDrawer.styles";
+import { mobileNavDrawerStyles as styles } from "../../styles/mobile-nav/mobileNavDrawer.styles";
 
 interface MobileNavCategoryTreeProps {
   categories: Category[];

@@ -12,8 +12,8 @@ import {
   ReportExportStatus,
 } from "@/features/reports";
 import { useWalletLiabilityReport } from "../../../hooks/wallet/useWalletLiabilityReport.hook";
-import { reportPanelStyles } from "../../shared/reportPanel.styles";
-import { adminWalletLiabilityPanelStyles } from "./adminWalletLiabilityPanel.styles";
+import { reportPanelStyles } from "../../../styles/shared/reportPanel.styles";
+import { adminWalletLiabilityPanelStyles } from "../../../styles/wallet/adminWalletLiabilityPanel.styles";
 import { LiabilitySummaryGrid } from "./LiabilitySummaryGrid.component";
 import { LiabilityRowsTable } from "./LiabilityRowsTable.component";
 

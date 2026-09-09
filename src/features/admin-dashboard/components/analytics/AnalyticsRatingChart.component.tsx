@@ -18,7 +18,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { useChartThemeColors } from "@/shared/hooks/theme/useChartThemeColors.hook";
-import { analyticsStyles } from "./analyticsComponents.styles";
+import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styles";
 
 interface RatingRow {
   rating: number;

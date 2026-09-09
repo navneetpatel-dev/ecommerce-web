@@ -1,7 +1,7 @@
 import { memo } from "react";
 import type { ProductListItem } from "@/shared/api/types";
 import { ProductCardContainer } from "../../containers/card/ProductCardContainer.container";
-import { PRODUCT_GRID_STYLES } from "./productGrid.styles";
+import { PRODUCT_GRID_STYLES } from "../../styles/listing/productGrid.styles";
 
 interface ProductGridListProps {
   products: ProductListItem[];

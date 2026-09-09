@@ -8,8 +8,8 @@ import { cn } from "@/shared/utils/dom/cn";
 import { SEARCH_SUGGESTION_TYPE } from "../../../constants/search/index";
 import type { SearchSuggestion } from "../../../types/search/index";
 import { SearchSuggestionRow } from "../../suggestions/SearchSuggestionRow.component";
-import { SECTION_ORDER, SEARCH_LIST_ID, panelTransition } from "./constants";
-import { searchBarStyles as styles } from "./searchBar.styles";
+import { SECTION_ORDER, SEARCH_LIST_ID, panelTransition } from "../../../constants/search-bar/constants";
+import { searchBarStyles as styles } from "../../../styles/search-bar/searchBar.styles";
 
 interface SearchPanelProps {
   showPanel: boolean;

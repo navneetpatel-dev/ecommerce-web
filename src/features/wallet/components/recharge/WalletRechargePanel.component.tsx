@@ -20,7 +20,7 @@ import { walletKeys } from "../../api/wallet/wallet.queries";
 import type { WalletBalanceResponse } from "../../api/wallet/wallet.api";
 import { cn } from "@/shared/utils/dom/cn";
 import { WalletRechargePanelSkeleton } from "../overview/WalletSectionSkeletons.component";
-import { walletRechargePanelStyles as styles } from "./walletRechargePanel.styles";
+import { walletRechargePanelStyles as styles } from "../../styles/recharge/walletRechargePanel.styles";
 
 interface WalletRechargePanelProps {
   balance: WalletBalanceResponse | undefined;

@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
-import { variantSelectorStyles } from "./variantSelector.styles";
+import { variantSelectorStyles } from "../../../styles/variants/variantSelector.styles";
 
 interface VariantOptionButtonProps {
   groupKey: string;

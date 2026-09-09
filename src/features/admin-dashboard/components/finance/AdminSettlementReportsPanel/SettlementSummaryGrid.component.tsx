@@ -2,7 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { AdminReportSummary } from "../../../api/finance/reports.api";
 import { MetricCard } from "../../shared/MetricCard.component";
-import { adminSettlementReportsPanelStyles } from "./adminSettlementReportsPanel.styles";
+import { adminSettlementReportsPanelStyles } from "../../../styles/finance/adminSettlementReportsPanel.styles";
 
 interface SettlementSummaryGridProps {
   summary: AdminReportSummary;

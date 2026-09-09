@@ -9,8 +9,8 @@ import { ArrowRight } from "lucide-react";
 import { PayableSummary } from "./ReviewStep/PayableSummary.component";
 import { VendorBreakdownsList } from "./VendorBreakdownsList.component";
 import { UnavailableItemsWarning } from "./UnavailableItemsWarning.component";
-import { useReviewStep } from "./useReviewStep.hook";
-import { REVIEW_STEP_STYLES } from "./reviewStep.styles";
+import { useReviewStep } from "../../hooks/review/useReviewStep.hook";
+import { REVIEW_STEP_STYLES } from "../../styles/review/reviewStep.styles";
 
 interface ReviewStepProps {
   quote: CheckoutQuote | null;

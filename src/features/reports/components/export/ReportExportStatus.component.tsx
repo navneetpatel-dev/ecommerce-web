@@ -3,7 +3,7 @@
 import { cn } from "@/shared/utils/dom/cn";
 import type { ExportFileFormat } from "../../hooks/table/useReportHubHelpers/index";
 import { resolveExportStatusDisplay } from "../../utils/export/exportDisableHint";
-import { reportExportStatusStyles as styles } from "./reportExportStatus.styles";
+import { reportExportStatusStyles as styles } from "../../styles/export/reportExportStatus.styles";
 
 interface ReportExportStatusProps {
   message?: string | null;

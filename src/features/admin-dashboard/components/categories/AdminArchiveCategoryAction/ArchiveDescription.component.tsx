@@ -2,7 +2,7 @@
 
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { useArchiveCategoryDescription } from "./useArchiveCategoryDescription.hook";
+import { useArchiveCategoryDescription } from "../../../hooks/categories/useArchiveCategoryDescription.hook";
 
 interface ArchiveDescriptionProps {
   categoryId: string;

@@ -10,7 +10,7 @@ import { OrderDetailHeader } from "./OrderDetailHeader.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
 import { OrderReturnStatusBanner } from "./OrderReturnStatusBanner.component";
 import { SubOrdersList } from "../sub-order/SubOrdersList.component";
-import { ORDER_DETAIL_CONTENT_STYLES } from "./orderDetailContent.styles";
+import { ORDER_DETAIL_CONTENT_STYLES } from "../../styles/detail/orderDetailContent.styles";
 
 interface OrderDetailContentProps {
   order: Order;

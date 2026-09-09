@@ -1,1 +1,1 @@
-export * from "@/shared/components/layout/useVendorLayout.hook";
+export * from "@/shared/hooks/layout/useVendorLayout.hook";

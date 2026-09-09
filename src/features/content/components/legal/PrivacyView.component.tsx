@@ -1,4 +1,4 @@
-import { contentDocStyles as styles } from "./contentDoc.styles";
+import { contentDocStyles as styles } from "../../styles/legal/contentDoc.styles";
 
 export function PrivacyView() {
   return (

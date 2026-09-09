@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { RecentOrderViewModel } from "./useOrdersActivitySection.hook";
-import { ordersActivitySectionStyles as styles } from "./ordersActivitySection.styles";
+import type { RecentOrderViewModel } from "../../hooks/orders-activity/useOrdersActivitySection.hook";
+import { ordersActivitySectionStyles as styles } from "../../styles/orders-activity/ordersActivitySection.styles";
 
 interface RecentOrderCardProps {
   order: RecentOrderViewModel;

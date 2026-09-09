@@ -7,9 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { deliveryDispatchPickupListStyles } from "./deliveryDispatchPickupList.styles";
+import { deliveryDispatchPickupListStyles } from "../../../styles/delivery-agents/deliveryDispatchPickupList.styles";
 import { DeliveryDispatchPickupGroupsList } from "./DeliveryDispatchPickupGroupsList.component";
-import { useDeliveryDispatchPickupList } from "./useDeliveryDispatchPickupList.hook";
+import { useDeliveryDispatchPickupList } from "../../../hooks/delivery-agents/useDeliveryDispatchPickupList.hook";
 
 type RunFn = (action: () => Promise<unknown>, success: string) => Promise<void>;
 

@@ -2,7 +2,7 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { platformSettingsFormStyles as styles } from "./platformSettingsForm.styles";
+import { platformSettingsFormStyles as styles } from "../../../styles/settings/platformSettingsForm.styles";
 
 interface PlatformSettingsHeaderProps {
   onSave: () => void;

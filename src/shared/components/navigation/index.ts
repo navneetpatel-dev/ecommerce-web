@@ -9,4 +9,4 @@ export {
   paginationStyles,
   scrollToTopStyles,
   continueShoppingStyles,
-} from "./navigationComponents.styles";
+} from "../../styles/navigation/navigationComponents.styles";

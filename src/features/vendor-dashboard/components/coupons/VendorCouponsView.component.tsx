@@ -21,7 +21,7 @@ import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { CouponAnalyticsDialog } from "./VendorCouponsView/CouponAnalyticsDialog.component";
 import { CouponsHeaderSection } from "./VendorCouponsView/CouponsHeaderSection.component";
-import { vendorCouponsViewStyles } from "./VendorCouponsView/vendorCouponsView.styles";
+import { vendorCouponsViewStyles } from "../../styles/coupons/vendorCouponsView.styles";
 
 interface VendorCouponsViewProps {
   coupons: Coupon[];

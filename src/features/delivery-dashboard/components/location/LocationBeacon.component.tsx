@@ -1,11 +1,11 @@
 "use client";
 
 import { Navigation } from "lucide-react";
-import { useLocationBeacon } from "./LocationBeacon/useLocationBeacon.hook";
+import { useLocationBeacon } from "../../hooks/location/useLocationBeacon.hook";
 import {
   LOCATION_BEACON_ICON,
   LOCATION_BEACON_TEXT,
-} from "./LocationBeacon/locationBeacon.styles";
+} from "../../styles/location/locationBeacon.styles";
 
 /**
  * Posts the agent's live GPS fix while a doorstep task is in progress, so the

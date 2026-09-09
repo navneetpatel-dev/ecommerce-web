@@ -6,13 +6,13 @@ import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { LABELS } from "@/shared/constants/labels";
 import { ChangePasswordSection } from "@/features/auth";
 import { BrowserNotificationsSetting } from "../notifications/BrowserNotificationsSetting.component";
-import { useSecuritySection } from "./useSecuritySection.hook";
+import { useSecuritySection } from "../../hooks/security/useSecuritySection.hook";
 import { SessionsList } from "./SessionsList.component";
 import { SessionsLoadingSkeleton } from "./SessionsLoadingSkeleton.component";
 import { SessionsEmptyState } from "./SessionsEmptyState.component";
 import { RevokeOtherSessionsDialog } from "./RevokeOtherSessionsDialog.component";
 import { RevokeSessionDialog } from "./RevokeSessionDialog.component";
-import { securitySectionStyles as styles } from "./securitySection.styles";
+import { securitySectionStyles as styles } from "../../styles/security/securitySection.styles";
 
 export function SecuritySection() {
   const {

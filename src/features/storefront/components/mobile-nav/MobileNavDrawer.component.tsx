@@ -8,7 +8,7 @@ import type { Category, CurrentUser } from "@/shared/api/types";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useIsAuthenticated } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { MobileNavCategoryTree } from "./MobileNavCategoryTree.component";
-import { mobileNavDrawerStyles as styles } from "./mobileNavDrawer.styles";
+import { mobileNavDrawerStyles as styles } from "../../styles/mobile-nav/mobileNavDrawer.styles";
 
 const navLinks = [
   { href: PATHS.products, label: LABELS.allProducts },

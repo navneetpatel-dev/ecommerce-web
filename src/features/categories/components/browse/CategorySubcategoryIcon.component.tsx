@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { Category } from "@/shared/api/types";
 import { resolveCategoryIconName } from "../../utils/browse/categoryHelpers";
-import { categoriesViewStyles } from "./categoriesView.styles";
+import { categoriesViewStyles } from "../../styles/browse/categoriesView.styles";
 
 interface CategorySubcategoryIconProps {
   category: Category;

@@ -1,7 +1,7 @@
 import type { UnassignedShipment } from "@/features/delivery-dashboard";
 import { deliveryDispatchZoneLabels } from "@/shared/constants/labels/deliveryDispatchZones";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { deliveryDispatchShipmentListStyles } from "./deliveryDispatchShipmentList.styles";
+import { deliveryDispatchShipmentListStyles } from "../../../styles/delivery-agents/deliveryDispatchShipmentList.styles";
 import { DeliveryDispatchShipmentRow } from "./DeliveryDispatchShipmentRow.component";
 
 interface ZoneGroup<T> {

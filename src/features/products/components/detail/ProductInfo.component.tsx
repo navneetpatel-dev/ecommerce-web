@@ -1,4 +1,4 @@
-import { productDetailsMiscStyles } from "./productDetailsMisc.styles";
+import { productDetailsMiscStyles } from "../../styles/detail/productDetailsMisc.styles";
 
 interface ProductInfoProps {
   product: { description?: string | null };

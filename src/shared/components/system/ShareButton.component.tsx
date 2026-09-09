@@ -6,7 +6,7 @@ import {
   PopoverContent,
 } from "@/shared/components/ui/popover";
 import { LABELS } from "@/shared/constants/labels";
-import { shareButtonStyles } from "@/shared/components/display/displayComponents.styles";
+import { shareButtonStyles } from "@/shared/styles/display/displayComponents.styles";
 
 interface ShareButtonProps {
   copied: boolean;

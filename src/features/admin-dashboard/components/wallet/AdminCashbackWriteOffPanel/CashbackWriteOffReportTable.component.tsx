@@ -6,8 +6,8 @@ import { LABELS } from "@/shared/constants/labels";
 import { CashbackWriteOffMetrics } from "./CashbackWriteOffMetrics.component";
 import { CashbackWriteOffTableBody } from "./CashbackWriteOffTableBody.component";
 import type { CashbackWriteOffRowData } from "./CashbackWriteOffTableRow.component";
-import { useCashbackWriteOffReportTable } from "./useCashbackWriteOffReportTable.hook";
-import { cashbackWriteOffReportTableStyles as styles } from "./cashbackWriteOffReportTable.styles";
+import { useCashbackWriteOffReportTable } from "../../../hooks/wallet/useCashbackWriteOffReportTable.hook";
+import { cashbackWriteOffReportTableStyles as styles } from "../../../styles/wallet/cashbackWriteOffReportTable.styles";
 
 interface CashbackWriteOffReportTableProps {
   report: {

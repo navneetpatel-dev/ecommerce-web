@@ -8,8 +8,8 @@ import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
-import { useAdminEditShippingZoneAction } from "./AdminEditShippingZoneAction/useAdminEditShippingZoneAction.hook";
-import { adminEditShippingZoneActionStyles as styles } from "./AdminEditShippingZoneAction/adminEditShippingZoneAction.styles";
+import { useAdminEditShippingZoneAction } from "../../hooks/shipping/useAdminEditShippingZoneAction.hook";
+import { adminEditShippingZoneActionStyles as styles } from "../../styles/shipping/adminEditShippingZoneAction.styles";
 
 interface AdminEditShippingZoneActionProps {
   row: AdminDataRow;

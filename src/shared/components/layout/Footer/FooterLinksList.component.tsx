@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FOOTER_LINK } from "./footer.styles";
+import { FOOTER_LINK } from "../../../styles/layout/footer.styles";
 
 export interface FooterLinkItem {
   href: string;

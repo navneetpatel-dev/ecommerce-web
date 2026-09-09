@@ -8,7 +8,7 @@ import { ProductDeliveryCheck } from "../../delivery-check/ProductDeliveryCheck.
 import { Heart } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { NotifyMeButton } from "@/features/stockAlerts";
-import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "../../../styles/detail/productDetailContent.styles";
 
 interface PurchasePanelProps {
   productId: string;

@@ -11,8 +11,8 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import type { CartItem } from "@/shared/api/types";
 import { RemoveLineButton } from "./cartLineShared.component";
-import { useCartLineViewModel } from "./useCartLineViewModel.hook";
-import { cartLineStyles as styles } from "./cartLine.styles";
+import { useCartLineViewModel } from "../../../hooks/line-item/useCartLineViewModel.hook";
+import { cartLineStyles as styles } from "../../../styles/line-item/cartLine.styles";
 
 interface CompactCartLineProps {
   item: CartItem;

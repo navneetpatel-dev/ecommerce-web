@@ -1,5 +1,5 @@
 import { X, type LucideIcon } from "lucide-react";
-import { filePickerSelectedFileStyles } from "./fileUploadComponents.styles";
+import { filePickerSelectedFileStyles } from "../../styles/file-upload/fileUploadComponents.styles";
 
 interface FilePickerSelectedFileProps {
   file: File;

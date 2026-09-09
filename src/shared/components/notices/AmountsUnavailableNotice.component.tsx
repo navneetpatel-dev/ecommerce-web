@@ -2,7 +2,7 @@
 
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { amountsUnavailableNoticeStyles } from "./noticeComponents.styles";
+import { amountsUnavailableNoticeStyles } from "../../styles/notices/noticeComponents.styles";
 
 interface AmountsUnavailableNoticeProps {
   onRetry?: () => void;

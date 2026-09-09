@@ -1,6 +1,6 @@
 import type { DeliveryShipment } from "@/features/delivery-dashboard";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { rtoQueuePanelStyles } from "./rtoQueuePanel.styles";
+import { rtoQueuePanelStyles } from "../../../styles/shipping/rtoQueuePanel.styles";
 
 interface RtoQueueTableRowProps {
   shipment: DeliveryShipment;

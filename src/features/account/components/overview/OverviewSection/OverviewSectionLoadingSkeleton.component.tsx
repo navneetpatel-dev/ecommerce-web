@@ -1,5 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { overviewSectionStyles as styles } from "./overviewSection.styles";
+import { overviewSectionStyles as styles } from "../../../styles/overview/overviewSection.styles";
 
 export function OverviewSectionLoadingSkeleton() {
   return (

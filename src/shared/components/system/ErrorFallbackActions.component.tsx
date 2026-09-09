@@ -3,7 +3,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { errorBoundaryStyles as styles } from "./errorBoundary.styles";
+import { errorBoundaryStyles as styles } from "../../styles/system/errorBoundary.styles";
 
 interface ErrorFallbackActionsProps {
   /** Re-render the failing segment (App Router `reset`). */

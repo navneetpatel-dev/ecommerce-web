@@ -15,8 +15,8 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { AdminCategoryCreateForm } from "../AdminCategoryCreateForm.component";
 import type { CategoryFormInput } from "../../../schemas/categories/categories.schema";
-import { categoriesPageHeaderStyles } from "./categoriesPageHeader.styles";
-import { useCategoriesPageHeader } from "./useCategoriesPageHeader.hook";
+import { categoriesPageHeaderStyles } from "../../../styles/categories/categoriesPageHeader.styles";
+import { useCategoriesPageHeader } from "../../../hooks/categories/useCategoriesPageHeader.hook";
 
 export interface CategoriesPageHeaderProps {
   open: boolean;

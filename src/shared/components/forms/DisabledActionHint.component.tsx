@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
 import { cn } from "@/shared/utils/dom/cn";
-import { disabledActionHintStyles } from "./disabledActionHint.styles";
+import { disabledActionHintStyles } from "../../styles/forms/disabledActionHint.styles";
 
 interface DisabledActionHintProps {
   disabled: boolean;

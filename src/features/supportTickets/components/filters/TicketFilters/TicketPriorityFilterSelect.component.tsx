@@ -9,7 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { SUPPORT_TICKET_PRIORITY_VALUES } from "@/shared/constants/statuses";
 import { TICKET_PRIORITY_LABEL } from "../../../utils/detail/labels";
-import { ALL } from "./useTicketFiltersHandlers.hook";
+import { ALL } from "../../../hooks/filters/useTicketFiltersHandlers.hook";
 
 interface TicketPriorityFilterSelectProps {
   value: string;

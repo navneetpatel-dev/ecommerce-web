@@ -4,7 +4,7 @@ import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { BUG_REPORTER_ROLE_LABEL } from "../../../utils/detail/labels";
 import type { BugReport } from "../../../api/list/bugReports.api";
 import { ContextRow } from "./BugAttachmentGrid.component";
-import { bugReportPanelsStyles } from "./bugReportPanels.styles";
+import { bugReportPanelsStyles } from "../../../styles/detail/bugReportPanels.styles";
 
 /** Device/browser context panel — full set for admins, short set for reporters. */
 export function BugContextPanel({

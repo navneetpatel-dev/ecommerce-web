@@ -4,7 +4,7 @@ import { CookiePreferencesDialog } from "./CookiePreferencesDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { CookiePreferences } from "@/shared/hooks/cookies/useCookieBanner.hook";
 
-import { cookieBannerStyles } from "./cookieComponents.styles";
+import { cookieBannerStyles } from "../../styles/dialogs/cookieComponents.styles";
 
 interface CookieBannerProps {
   visible: boolean;

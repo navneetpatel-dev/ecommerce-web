@@ -1,7 +1,7 @@
 import { ShieldCheck } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
-import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
+import { vendorShopSettingsFormStyles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
 
 interface KycProgressBannerProps {
   isComplete: boolean;

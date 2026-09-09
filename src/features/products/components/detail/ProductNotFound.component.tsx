@@ -5,8 +5,8 @@ import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { ErrorFallbackActions } from "@/shared/components/ErrorFallbackActions.component";
-import { errorBoundaryStyles as styles } from "@/shared/components/errorBoundary.styles";
-import { productDetailsMiscStyles } from "./productDetailsMisc.styles";
+import { errorBoundaryStyles as styles } from "@/shared/styles/system/errorBoundary.styles";
+import { productDetailsMiscStyles } from "../../styles/detail/productDetailsMisc.styles";
 
 /**
  * Distinguishes a genuine 404 from a failed load (Rule 13):

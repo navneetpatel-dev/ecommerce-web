@@ -1,5 +1,5 @@
 import type { BugReport } from "../../api/list/bugReports.api";
-import { bugReportCardListStyles } from "./bugReportCardList.styles";
+import { bugReportCardListStyles } from "../../styles/list/bugReportCardList.styles";
 import { BugReportCardItem } from "./BugReportCardItem.component";
 
 interface BugReportCardsGridProps {

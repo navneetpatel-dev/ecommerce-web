@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 
-import { barcodeScanButtonStyles } from "./barcodeScanButton.styles";
+import { barcodeScanButtonStyles } from "../../styles/pickups/barcodeScanButton.styles";
 
 const SCANNER_ELEMENT_ID = "delivery-barcode-scanner";
 

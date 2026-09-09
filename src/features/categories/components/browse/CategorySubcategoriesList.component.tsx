@@ -1,5 +1,5 @@
 import type { Category } from "@/shared/api/types";
-import { categoriesViewStyles } from "./categoriesView.styles";
+import { categoriesViewStyles } from "../../styles/browse/categoriesView.styles";
 import { CategorySubcategoryItem } from "./CategorySubcategoryItem.component";
 
 interface CategorySubcategoriesListProps {

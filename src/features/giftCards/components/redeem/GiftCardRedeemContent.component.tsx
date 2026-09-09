@@ -14,7 +14,7 @@ import { useIsAuthenticated } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useGiftCardRedeemPage } from "../../hooks/redeem/useGiftCardRedeemPage.hook";
 import { useGiftCardRedeem } from "../../hooks/redeem/useGiftCardRedeem.hook";
-import { giftCardRedeemContentStyles as styles } from "./giftCardRedeemContent.styles";
+import { giftCardRedeemContentStyles as styles } from "../../styles/redeem/giftCardRedeemContent.styles";
 
 function statusBadgeLabel(status: string): string | null {
   if (status === "EXPIRED") return giftCardsLabels.giftCardExpiredBadge;

@@ -1,7 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import type { UnusedOfferViewModel } from "../coupons/useCartCouponSection.hook";
-import { cartCouponSectionStyles as styles } from "../coupons/cartCouponSection.styles";
+import type { UnusedOfferViewModel } from "../../hooks/coupons/useCartCouponSection.hook";
+import { cartCouponSectionStyles as styles } from "../../styles/coupons/cartCouponSection.styles";
 
 interface EligibleOfferItemProps {
   offer: UnusedOfferViewModel;

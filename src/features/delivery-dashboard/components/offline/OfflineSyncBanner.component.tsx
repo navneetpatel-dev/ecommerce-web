@@ -1,11 +1,11 @@
 "use client";
 
 import { WifiOff } from "lucide-react";
-import { useOfflineSyncBanner } from "./OfflineSyncBanner/useOfflineSyncBanner.hook";
+import { useOfflineSyncBanner } from "../../hooks/offline/useOfflineSyncBanner.hook";
 import {
   OFFLINE_BANNER_ICON,
   OFFLINE_BANNER_ROOT,
-} from "./OfflineSyncBanner/offlineSyncBanner.styles";
+} from "../../styles/offline/offlineSyncBanner.styles";
 
 /** Mounted once in the delivery dashboard layout — surfaces offline state and queued work. */
 export function OfflineSyncBanner() {

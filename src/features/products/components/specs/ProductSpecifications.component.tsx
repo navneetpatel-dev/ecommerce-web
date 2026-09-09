@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import type { ProductVariant } from "@/shared/api/types";
-import { useProductSpecifications } from "./useProductSpecifications.hook";
+import { useProductSpecifications } from "../../hooks/specs/useProductSpecifications.hook";
 import { ProductSpecsList } from "./ProductSpecsList.component";
 import { SecondaryCategoriesList } from "./SecondaryCategoriesList.component";
-import { PRODUCT_SPECIFICATIONS_STYLES } from "./productSpecifications.styles";
+import { PRODUCT_SPECIFICATIONS_STYLES } from "../../styles/specs/productSpecifications.styles";
 
 interface ProductSpecificationsProps {
   specs?: Record<string, string> | null;

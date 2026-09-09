@@ -1,4 +1,4 @@
-import { cashDepositsPanelStyles } from "./cashDepositsPanel.styles";
+import { cashDepositsPanelStyles } from "../../../styles/delivery-agents/cashDepositsPanel.styles";
 
 interface CashDepositStatusBadgeProps {
   status: string;

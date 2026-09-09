@@ -11,8 +11,8 @@ import { PushNotificationsSection } from "./PushNotificationsSection.component";
 import { VehicleHubSection } from "./VehicleHubSection.component";
 import { OperatingStatusAside } from "./OperatingStatusAside.component";
 import { DeliveryOperationsSkeleton } from "./DeliveryOperationsSkeleton.component";
-import { useDeliveryOperationsSection } from "./useDeliveryOperationsSection.hook";
-import { deliveryOperationsSectionStyles as styles } from "./deliveryOperationsSection.styles";
+import { useDeliveryOperationsSection } from "../../../hooks/delivery-operations/useDeliveryOperationsSection.hook";
+import { deliveryOperationsSectionStyles as styles } from "../../../styles/delivery-operations/deliveryOperationsSection.styles";
 
 export function DeliveryOperationsSection() {
   const {

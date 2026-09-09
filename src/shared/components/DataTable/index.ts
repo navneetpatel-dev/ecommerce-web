@@ -8,4 +8,4 @@ export type {
   DataTableColumn,
   DataTablePaginationProps,
   DataTableProps,
-} from "./types";
+} from "../../types/data-table/types";

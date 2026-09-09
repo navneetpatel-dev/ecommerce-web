@@ -1,7 +1,7 @@
 import { TableRow, TableCell } from "@/shared/components/ui/table";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { payoutsTableStyles } from "./payoutsTable.styles";
-import type { PayoutRowViewModel } from "./usePayoutsTablePresentation.hook";
+import { payoutsTableStyles } from "../../../styles/payouts/payoutsTable.styles";
+import type { PayoutRowViewModel } from "../../../hooks/payouts/usePayoutsTablePresentation.hook";
 
 interface PayoutDesktopRowProps {
   row: PayoutRowViewModel;

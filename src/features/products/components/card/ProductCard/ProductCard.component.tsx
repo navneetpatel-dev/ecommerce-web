@@ -6,9 +6,9 @@ import { LABELS } from "@/shared/constants/labels";
 import { CardControls } from "./CardControls.component";
 import { CardDetails } from "./CardDetails.component";
 import { CardMedia } from "./CardMedia.component";
-import { useProductCard } from "./useProductCard.hook";
-import { PRODUCT_CARD_STYLES } from "./productCard.styles";
-import type { ProductCardProps } from "./types";
+import { useProductCard } from "../../../hooks/card/useProductCardPresentation.hook";
+import { PRODUCT_CARD_STYLES } from "../../../styles/card/productCard.styles";
+import type { ProductCardProps } from "../../../types/card/types";
 
 export function ProductCard({
   product,

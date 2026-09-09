@@ -10,7 +10,7 @@ import {
 } from "@/features/reports";
 import { useWalletStatementExport } from "../../hooks/statement-export/useWalletStatementExport.hook";
 import { WalletStatementExportPanelSkeleton } from "../overview/WalletSectionSkeletons.component";
-import { walletStatementExportPanelStyles as styles } from "./walletStatementExportPanel.styles";
+import { walletStatementExportPanelStyles as styles } from "../../styles/statement-export/walletStatementExportPanel.styles";
 
 interface WalletStatementExportPanelProps {
   isLoading?: boolean;

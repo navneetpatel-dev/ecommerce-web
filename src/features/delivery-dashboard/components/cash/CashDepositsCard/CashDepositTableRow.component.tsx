@@ -1,6 +1,6 @@
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { cashDepositsCardStyles } from "./cashDepositsCard.styles";
-import type { CashDepositRowViewModel } from "./useCashDepositsCardPresentation.hook";
+import { cashDepositsCardStyles } from "../../../styles/cash/cashDepositsCard.styles";
+import type { CashDepositRowViewModel } from "../../../hooks/cash/useCashDepositsCardPresentation.hook";
 
 interface CashDepositTableRowProps {
   row: CashDepositRowViewModel;

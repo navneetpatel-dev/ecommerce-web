@@ -1,5 +1,5 @@
 import type { ProductListItem } from "@/shared/api/types";
-import { productCompareBarStyles } from "./productCompareBar.styles";
+import { productCompareBarStyles } from "../../../styles/compare/productCompareBar.styles";
 import { ProductCompareTag } from "./ProductCompareTag.component";
 
 interface ProductCompareTagsListProps {

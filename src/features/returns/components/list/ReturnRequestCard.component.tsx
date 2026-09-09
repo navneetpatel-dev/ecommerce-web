@@ -19,7 +19,7 @@ import {
 } from "../../utils/timeline/returnTimeline";
 import { returnsApi } from "../../api/returns/returns.api";
 import { useReschedulePickup } from "../../api/returns/returns.queries";
-import { returnRequestCardStyles as styles } from "./returnRequestCard.styles";
+import { returnRequestCardStyles as styles } from "../../styles/list/returnRequestCard.styles";
 
 const STATUS_LABEL: Record<string, string> = {
   [RETURN_STATUS.REQUESTED]: LABELS.returnLogisticsRequested,

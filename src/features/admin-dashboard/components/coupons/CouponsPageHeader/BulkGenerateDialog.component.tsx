@@ -20,7 +20,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { CreateCouponForm } from "../CreateCouponForm.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useBulkCouponGeneration } from "../../../hooks/coupons/useBulkCouponGeneration.hook";
-import { bulkGenerateDialogStyles as styles } from "./bulkGenerateDialog.styles";
+import { bulkGenerateDialogStyles as styles } from "../../../styles/coupons/bulkGenerateDialog.styles";
 
 interface BulkGenerateDialogProps {
   open: boolean;

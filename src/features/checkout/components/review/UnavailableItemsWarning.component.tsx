@@ -1,6 +1,6 @@
 import { AlertTriangle } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
-import { REVIEW_STEP_STYLES } from "./reviewStep.styles";
+import { REVIEW_STEP_STYLES } from "../../styles/review/reviewStep.styles";
 
 export function UnavailableItemsWarning() {
   return (

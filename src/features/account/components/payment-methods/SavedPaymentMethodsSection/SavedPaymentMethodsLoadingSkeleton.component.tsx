@@ -1,5 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { savedPaymentMethodsSectionStyles as styles } from "./savedPaymentMethodsSection.styles";
+import { savedPaymentMethodsSectionStyles as styles } from "../../../styles/payment-methods/savedPaymentMethodsSection.styles";
 
 export function SavedPaymentMethodsLoadingSkeleton() {
   return (

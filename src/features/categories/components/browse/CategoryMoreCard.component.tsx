@@ -5,9 +5,9 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category } from "@/shared/api/types";
-import { categoryCardStyles } from "./categoryCard.styles";
+import { categoryCardStyles } from "../../styles/browse/categoryCard.styles";
 import { CategoryMosaic } from "./CategoryMosaic.component";
-import { useCategoryMoreCardPresentation } from "./useCategoryMoreCardPresentation.hook";
+import { useCategoryMoreCardPresentation } from "../../hooks/browse/useCategoryMoreCardPresentation.hook";
 
 /** Fallback when overflow categories have no cover images. */
 const BROWSE_MORE_FALLBACK = "/images/category-browse-more.jpg";

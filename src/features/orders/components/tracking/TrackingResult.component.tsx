@@ -12,7 +12,7 @@ import type { TrackingLookupResult } from "../../api/tracking/shipping.api";
 import { useShipmentLocationSocket } from "../../hooks/delivery-map/useShipmentLocationSocket.hook";
 import { LiveDeliveryMap } from "../delivery-map/LiveDeliveryMap.component";
 import { haversineDistanceKm, timeSince } from "@/shared/utils/geo/geo";
-import { ordersComponentsStyles } from "../actions/ordersComponents.styles";
+import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
 
 /** Rough urban delivery-bike pace, used only for the "approx." ETA label. */
 const ASSUMED_SPEED_KMH = 18;

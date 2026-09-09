@@ -3,7 +3,7 @@ import {
   ATTEMPT_CARD,
   ATTEMPT_NUMBER_LABEL,
   ATTEMPT_PHOTO_LINK,
-} from "./deliveryAttemptsList.styles";
+} from "../../../styles/deliveries/deliveryAttemptsList.styles";
 
 type AttemptItemData = NonNullable<DeliveryShipment["attempts"]>[number];
 

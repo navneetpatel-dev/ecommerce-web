@@ -12,7 +12,7 @@ import { SupportSettingsSection } from "./SupportSettingsSection.component";
 import { CodSettingsSection } from "./CodSettingsSection.component";
 import { WalletPointsSettingsSection } from "../WalletPointsSettingsSection.component";
 import { ScheduledReportsSettingsSection } from "./ScheduledReportsSettingsSection.component";
-import { platformSettingsFormStyles } from "./platformSettingsForm.styles";
+import { platformSettingsFormStyles } from "../../../styles/settings/platformSettingsForm.styles";
 
 interface PlatformSettingsFormProps {
   form: PlatformSettings;

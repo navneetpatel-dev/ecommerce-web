@@ -13,7 +13,7 @@ import {
 } from "@/features/reports";
 import { ReportTable } from "../table/ReportTable.component";
 import { useCustomerOrderHistory } from "../../hooks/customer-order-history/useCustomerOrderHistory.hook";
-import { customerOrderHistoryPanelStyles as styles } from "./customerOrderHistoryPanel.styles";
+import { customerOrderHistoryPanelStyles as styles } from "../../styles/customer-order-history/customerOrderHistoryPanel.styles";
 
 export function CustomerOrderHistoryPanel() {
   const history = useCustomerOrderHistory();

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, LayoutGrid } from "lucide-react";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { categoriesViewStyles } from "./categoriesView.styles";
+import { categoriesViewStyles } from "../../styles/browse/categoriesView.styles";
 
 export function CategoriesEmptyState() {
   return (

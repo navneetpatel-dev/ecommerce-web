@@ -2,7 +2,7 @@
 
 import { AdminConfirmAction } from "../shared/AdminConfirmAction.component";
 import { ArchiveDescription } from "./AdminArchiveCategoryAction/ArchiveDescription.component";
-import { useAdminArchiveCategoryAction } from "./AdminArchiveCategoryAction/useAdminArchiveCategoryAction.hook";
+import { useAdminArchiveCategoryAction } from "../../hooks/categories/useAdminArchiveCategoryAction.hook";
 
 interface AdminArchiveCategoryActionProps {
   category: { id: string; name: string; status?: string | null };

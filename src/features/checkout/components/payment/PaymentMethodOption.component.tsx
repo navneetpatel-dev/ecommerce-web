@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
-import { PAYMENT_METHOD_OPTION_STYLES } from "./paymentMethodOption.styles";
+import { PAYMENT_METHOD_OPTION_STYLES } from "../../styles/payment/paymentMethodOption.styles";
 
 interface PaymentMethodOptionProps {
   id: string;

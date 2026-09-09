@@ -1,5 +1,5 @@
 import type { StaleShipment } from "@/features/delivery-dashboard";
-import { staleTasksPanelStyles } from "./staleTasksPanel.styles";
+import { staleTasksPanelStyles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
 import { StaleShipmentRow } from "./StaleShipmentRow.component";
 
 interface StaleShipmentsTableProps {

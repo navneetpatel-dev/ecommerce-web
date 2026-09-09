@@ -2,7 +2,7 @@ import { memo } from "react";
 import type { Order } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { countOrderItems, orderItemSummary } from "../../utils/detail/format";
-import { ORDERS_LIST_STYLES } from "./ordersList.styles";
+import { ORDERS_LIST_STYLES } from "../../styles/list/ordersList.styles";
 
 interface OrderItemsTableCellProps {
   order: Order;

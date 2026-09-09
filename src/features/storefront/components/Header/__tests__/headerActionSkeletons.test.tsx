@@ -8,7 +8,7 @@ import {
   HeaderSearchButtonSkeleton,
 } from "../HeaderActionSkeletons.component";
 import { MobileTabBar } from "@/shared/components/layout/MobileTabBar.component";
-import { ACCOUNT_TRIGGER_BOX } from "../headerShared";
+import { ACCOUNT_TRIGGER_BOX } from "../../../utils/header/headerShared";
 
 const baseProps = {
   isTransparent: false,

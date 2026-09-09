@@ -2,7 +2,7 @@ import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { ShippingRate } from "@/shared/api/types";
 import { ShippingRatesList } from "./ShippingRatesList.component";
-import { SHIPPING_CARD_STYLES } from "./shippingCard.styles";
+import { SHIPPING_CARD_STYLES } from "../../styles/shipping/shippingCard.styles";
 
 interface ShippingCardProps {
   vendor: {

@@ -5,7 +5,7 @@ import { PATHS } from "@/shared/constants/paths/paths";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import type { ProductDetail } from "@/shared/api/types";
-import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "../../../styles/detail/productDetailContent.styles";
 
 interface SellerPerksBlockProps {
   product: ProductDetail;

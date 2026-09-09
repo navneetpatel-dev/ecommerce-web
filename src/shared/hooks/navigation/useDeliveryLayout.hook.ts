@@ -1,1 +1,1 @@
-export * from "@/shared/components/layout/useDeliveryLayout.hook";
+export * from "@/shared/hooks/layout/useDeliveryLayout.hook";

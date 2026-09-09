@@ -3,7 +3,7 @@ import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import type { WalletRechargeReport } from "../../../api/finance/reports.api";
 import { MetricCard } from "../../shared/MetricCard.component";
-import { adminWalletRechargePanelStyles } from "./adminWalletRechargePanel.styles";
+import { adminWalletRechargePanelStyles } from "../../../styles/wallet/adminWalletRechargePanel.styles";
 
 interface RechargeSummaryGridProps {
   report: WalletRechargeReport;

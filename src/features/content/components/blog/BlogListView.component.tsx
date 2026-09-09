@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { blogListViewStyles as styles } from "./blogListView.styles";
+import { blogListViewStyles as styles } from "../../styles/blog/blogListView.styles";
 
 interface BlogPost {
   slug: string;

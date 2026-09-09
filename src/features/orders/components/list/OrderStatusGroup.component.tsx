@@ -1,5 +1,5 @@
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { ORDER_STATUS_GROUP_STYLES } from "./orderStatusGroup.styles";
+import { ORDER_STATUS_GROUP_STYLES } from "../../styles/list/orderStatusGroup.styles";
 import { displayLabel, type Density } from "../../utils/list/orderStatusDisplay.utils";
 import { CompactStatusLine } from "./CompactStatusLine.component";
 

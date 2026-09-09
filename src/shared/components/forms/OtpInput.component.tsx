@@ -1,4 +1,4 @@
-import { otpInputStyles } from "./otpInput.styles";
+import { otpInputStyles } from "../../styles/forms/otpInput.styles";
 
 interface OtpInputProps {
   digits: string[];

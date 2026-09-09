@@ -7,8 +7,8 @@ import { AddressCardsList } from "./AddressCardsList.component";
 import { AddressesEmptyState } from "./AddressesEmptyState.component";
 import { AddressesLoadingSkeleton } from "./AddressesLoadingSkeleton.component";
 import { DeleteAddressDialog } from "./DeleteAddressDialog.component";
-import { useAddressesSection } from "./useAddressesSection.hook";
-import { addressesSectionStyles as styles } from "./addressesSection.styles";
+import { useAddressesSection } from "../../../hooks/addresses/useAddressesSection.hook";
+import { addressesSectionStyles as styles } from "../../../styles/addresses/addressesSection.styles";
 
 export function AddressesSection() {
   const {

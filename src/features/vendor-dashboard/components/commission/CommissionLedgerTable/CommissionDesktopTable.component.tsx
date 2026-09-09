@@ -7,9 +7,9 @@ import {
   TableCell,
 } from "@/shared/components/ui/table";
 import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
-import { commissionLedgerTableStyles } from "./commissionLedgerTable.styles";
+import { commissionLedgerTableStyles } from "../../../styles/commission/commissionLedgerTable.styles";
 import { CommissionDesktopRow } from "./CommissionDesktopRow.component";
-import type { CommissionRowViewModel } from "./useCommissionLedgerPresentation.hook";
+import type { CommissionRowViewModel } from "../../../hooks/commission/useCommissionLedgerPresentation.hook";
 
 interface CommissionDesktopTableProps {
   rows: CommissionRowViewModel[];

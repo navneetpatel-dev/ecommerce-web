@@ -21,7 +21,7 @@ import {
 import { notificationsAdminLabels as LABELS } from "@/shared/constants/labels/notificationsAdmin";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { notificationsApi } from "../../api/notifications/notifications.api";
-import { adminFormWidgetsStyles } from "../shared/adminFormWidgets.styles";
+import { adminFormWidgetsStyles } from "../../styles/shared/adminFormWidgets.styles";
 
 export function BroadcastNotificationForm() {
   const [role, setRole] = useState<RoleName>(ROLE_VALUES[0]);

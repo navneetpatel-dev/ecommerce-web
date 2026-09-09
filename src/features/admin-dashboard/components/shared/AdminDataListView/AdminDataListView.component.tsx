@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { DataTable } from "@/shared/components/DataTable.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { AdminDataRow } from "../../../hooks/shared/useAdminDataList.hook";
-import { useAdminDataListView } from "./useAdminDataListView.hook";
+import { useAdminDataListView } from "../../../hooks/shared/useAdminDataListView.hook";
 
 export interface AdminDataListViewProps {
   title: string;

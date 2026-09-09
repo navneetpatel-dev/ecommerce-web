@@ -1,8 +1,8 @@
 import { cn } from "@/shared/utils/dom/cn";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
-import { ACCOUNT_TRIGGER_BOX } from "./headerShared";
-import { headerStyles as styles } from "./header.styles";
+import { ACCOUNT_TRIGGER_BOX } from "../../utils/header/headerShared";
+import { headerStyles as styles } from "../../styles/header/header.styles";
 
 /**
  * Placeholders for the cart / wishlist / wallet buttons.

@@ -1,5 +1,5 @@
 import { cn } from "@/shared/utils/dom/cn";
-import { analyticsStyles } from "../analytics/analyticsComponents.styles";
+import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styles";
 
 interface MetricCardProps {
   label: string;

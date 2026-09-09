@@ -2,7 +2,7 @@
 
 import { Wallet } from "lucide-react";
 import { useCashDepositsPanel } from "../../../hooks/delivery-agents/useCashDepositsPanel.hook";
-import { cashDepositsPanelStyles } from "./cashDepositsPanel.styles";
+import { cashDepositsPanelStyles } from "../../../styles/delivery-agents/cashDepositsPanel.styles";
 import { CashDepositTableBody } from "./CashDepositTableBody.component";
 
 /** Hub manager reconciliation queue for agent COD cash-deposit submissions. */

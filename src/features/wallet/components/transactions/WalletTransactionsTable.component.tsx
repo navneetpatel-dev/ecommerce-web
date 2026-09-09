@@ -13,7 +13,7 @@ import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import type { WalletTransaction } from "@/shared/api/types";
 import { transactionSourceLabel } from "../../utils/transactions/transactionSource";
-import { walletTransactionsTableStyles as styles } from "./walletTransactionsTable.styles";
+import { walletTransactionsTableStyles as styles } from "../../styles/transactions/walletTransactionsTable.styles";
 
 interface WalletTransactionsTableProps {
   transactions: WalletTransaction[];

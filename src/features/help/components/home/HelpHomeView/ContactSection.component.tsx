@@ -5,7 +5,7 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { HelpContactForm } from "../../contact/HelpContactForm.component";
-import { helpHomeViewStyles as styles } from "./helpHomeView.styles";
+import { helpHomeViewStyles as styles } from "../../../styles/home/helpHomeView.styles";
 
 export function ContactSection() {
   return (

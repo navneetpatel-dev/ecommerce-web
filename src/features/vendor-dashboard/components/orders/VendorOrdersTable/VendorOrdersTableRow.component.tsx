@@ -3,11 +3,11 @@ import { TableRow, TableCell } from "@/shared/components/ui/table";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import type { SubOrderRow } from "../../../types/orders/vendorOrders.types";
-import { formatInr, shortOrderId } from "./vendorOrderFormat";
+import { formatInr, shortOrderId } from "../../../utils/orders/vendorOrderFormat";
 import { SubOrderActions } from "./SubOrderActions.component";
 import { ShipmentCell } from "./ShipmentCell.component";
 import { ReturnsCell } from "./ReturnsCell.component";
-import { VENDOR_ORDERS_TABLE_STYLES } from "./vendorOrdersTable.styles";
+import { VENDOR_ORDERS_TABLE_STYLES } from "../../../styles/orders/vendorOrdersTable.styles";
 
 interface VendorOrdersTableRowProps {
   row: SubOrderRow;
