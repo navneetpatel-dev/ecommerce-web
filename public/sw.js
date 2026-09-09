@@ -1,7 +1,7 @@
 // App-shell caching for the delivery agent dashboard (offline PWA support):
 // precache the shell routes on install, then serve navigations cache-first
 // with a network refresh, so today's task list still opens with no signal.
-const DELIVERY_CACHE = "delivery-app-shell-v1";
+const DELIVERY_CACHE = "delivery-app-shell-v2";
 const DELIVERY_SHELL_PATHS = [
   "/delivery/dashboard/today",
   "/delivery/dashboard/deliveries",
@@ -56,22 +56,18 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Static build assets referenced by those shell pages: stale-while-revalidate,
-  // so a visit while online seeds the cache and the same chunk hashes serve
-  // instantly (and offline) afterward. Never touched pre-online — no build
-  // manifest to precache against, so this fills in on first real use.
+  // Static build assets: network-first so a new deploy (or Turbopack rebuild)
+  // is never blocked by a stale chunk. Cache is only used when offline.
   if (url.pathname.startsWith("/_next/static/")) {
     event.respondWith(
-      caches.open(DELIVERY_CACHE).then(async (cache) => {
-        const cached = await cache.match(request);
-        const network = fetch(request)
+      caches.open(DELIVERY_CACHE).then((cache) =>
+        fetch(request)
           .then((response) => {
             void cache.put(request, response.clone());
             return response;
           })
-          .catch(() => cached);
-        return cached ?? network;
-      }),
+          .catch(() => cache.match(request)),
+      ),
     );
   }
 });
