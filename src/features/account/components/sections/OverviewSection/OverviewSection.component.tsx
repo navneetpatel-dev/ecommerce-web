@@ -1,18 +1,15 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Heart, LifeBuoy, Package } from "lucide-react";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { formatOrderDate } from "@/shared/utils/orderFormat";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
-import { useAccountOverview } from "../../../hooks/useAccountOverview.hook";
-import { useAvatarUpload } from "../../../hooks/useAvatarUpload.hook";
 import type { AccountSectionId } from "../../../types";
-import { GlanceRow } from "./GlanceRow.component";
+import { GlanceList } from "./GlanceList.component";
 import { ProfileCard } from "./ProfileCard.component";
+import { OverviewSectionLoadingSkeleton } from "./OverviewSectionLoadingSkeleton.component";
+import { useOverviewSection } from "./useOverviewSection.hook";
+import { overviewSectionStyles as styles } from "./overviewSection.styles";
 
 /** Rendered only while a crop is active (overlay/dialog), so no skeleton fallback is needed. */
 const ImageCropDialog = dynamic(
@@ -32,41 +29,30 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
     profile,
     isLoadingProfile,
     profileError,
-    ordersCount,
-    wishlistCount,
-    isLoadingStats,
-  } = useAccountOverview();
-  const {
-    fileRef,
-    localError,
-    cropSrc,
-    cropFilename,
-    cropMimeType,
-    avatarSpec,
+    memberSince,
+    avatarSrc,
     uploadPending,
     uploadError,
+    localError,
+    fileRef,
     onPickFile,
+    showCropDialog,
+    cropSrc,
+    avatarSpec,
+    cropFilename,
+    cropMimeType,
+    handleCropOpenChange,
     onAvatarCropped,
-    onAvatarCropCancelled,
-  } = useAvatarUpload(profile?.id ?? "");
+    glanceItems,
+  } = useOverviewSection({ onNavigate });
 
   if (isLoadingProfile) {
-    return (
-      <div className="space-y-4 border border-line bg-surface p-6">
-        <div className="flex items-center gap-4">
-          <Skeleton className="h-24 w-24 rounded-full" />
-          <div className="space-y-2">
-            <Skeleton className="h-6 w-40" />
-            <Skeleton className="h-4 w-56" />
-          </div>
-        </div>
-      </div>
-    );
+    return <OverviewSectionLoadingSkeleton />;
   }
 
   if (profileError || !profile) {
     return (
-      <div className="border border-line bg-surface px-5 py-10 text-center">
+      <div className={styles.errorContainer}>
         <QueryErrorAlert
           error={profileError}
           fallback={LABELS.couldNotLoadProfile}
@@ -75,31 +61,8 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
     );
   }
 
-  const memberSince = profile.createdAt
-    ? formatOrderDate(profile.createdAt)
-    : null;
-  const avatarSrc = profile.avatarUrl || undefined;
-  const showCropDialog = Boolean(avatarSpec && cropSrc);
-  const cropDialog = showCropDialog ? (
-    <ImageCropDialog
-      open
-      imageSrc={cropSrc!}
-      aspectRatio={avatarSpec!.aspectRatio}
-      outputWidth={avatarSpec!.outputWidth}
-      outputHeight={avatarSpec!.outputHeight}
-      sourceFilename={cropFilename}
-      mimeType={cropMimeType}
-      onOpenChange={(open) => {
-        if (!open) onAvatarCropCancelled();
-      }}
-      onConfirm={onAvatarCropped}
-    />
-  ) : null;
-  const ordersCountLabel = isLoadingStats ? "—" : String(ordersCount);
-  const wishlistCountLabel = isLoadingStats ? "—" : String(wishlistCount);
-
   return (
-    <div className="space-y-8">
+    <div className={styles.container}>
       <ProfileCard
         profile={profile}
         memberSince={memberSince}
@@ -111,41 +74,26 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
         onFileSelected={onPickFile}
       />
 
-      {cropDialog}
+      {showCropDialog && cropSrc && avatarSpec && (
+        <ImageCropDialog
+          open
+          imageSrc={cropSrc}
+          aspectRatio={avatarSpec.aspectRatio}
+          outputWidth={avatarSpec.outputWidth}
+          outputHeight={avatarSpec.outputHeight}
+          sourceFilename={cropFilename}
+          mimeType={cropMimeType}
+          onOpenChange={handleCropOpenChange}
+          onConfirm={onAvatarCropped}
+        />
+      )}
 
-      <section className="border border-line bg-surface shadow-elevation-1">
-        <div className="border-b border-line px-5 py-4 md:px-6">
+      <section className={styles.cardSection}>
+        <div className={styles.cardHeader}>
           <TextEyebrow>At a glance</TextEyebrow>
-          <p className="mt-1 text-[0.875rem] text-ink-muted">
-            Jump into what matters most.
-          </p>
+          <p className={styles.cardSubtitle}>Jump into what matters most.</p>
         </div>
-        <ul className="divide-y divide-line">
-          <GlanceRow
-            icon={Package}
-            label="Orders"
-            value={ordersCountLabel}
-            onDetails={() => onNavigate("orders")}
-          />
-          <GlanceRow
-            icon={Heart}
-            label="Wishlist"
-            value={wishlistCountLabel}
-            href={PATHS.wishlist}
-          />
-          <GlanceRow
-            icon={LifeBuoy}
-            label={LABELS.overviewSupportTickets}
-            value={LABELS.view}
-            href={PATHS.supportTickets}
-          />
-          <GlanceRow
-            icon={LifeBuoy}
-            label={LABELS.overviewBugReports}
-            value={LABELS.reportABug}
-            href={PATHS.bugReports}
-          />
-        </ul>
+        <GlanceList items={glanceItems} />
       </section>
     </div>
   );
