@@ -1,0 +1,428 @@
+{
+  "moves": [
+    {
+      "from": "src/features/account/api/account.api.ts",
+      "to": "src/features/account/api/addresses/account.api.ts"
+    },
+    {
+      "from": "src/features/account/api/account.queries.ts",
+      "to": "src/features/account/api/addresses/account.queries.ts"
+    },
+    {
+      "from": "src/features/account/api/savedPaymentMethods.api.ts",
+      "to": "src/features/account/api/payment-methods/savedPaymentMethods.api.ts"
+    },
+    {
+      "from": "src/features/account/api/savedPaymentMethods.queries.ts",
+      "to": "src/features/account/api/payment-methods/savedPaymentMethods.queries.ts"
+    },
+    {
+      "from": "src/features/account/components/AccountDesktopNav.component.tsx",
+      "to": "src/features/account/components/layout/AccountDesktopNav.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/AccountLayout.component.tsx",
+      "to": "src/features/account/components/layout/AccountLayout.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/AccountMobileNav.component.tsx",
+      "to": "src/features/account/components/layout/AccountMobileNav.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/accountLayout.styles.ts",
+      "to": "src/features/account/components/layout/accountLayout.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/useAccountLayout.hook.ts",
+      "to": "src/features/account/components/layout/useAccountLayout.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/BrowserNotificationsSetting.component.tsx",
+      "to": "src/features/account/components/notifications/BrowserNotificationsSetting.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/browserNotificationsSetting.styles.ts",
+      "to": "src/features/account/components/notifications/browserNotificationsSetting.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/useBrowserNotificationsSetting.hook.ts",
+      "to": "src/features/account/components/notifications/useBrowserNotificationsSetting.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/EmailVerificationStatus.component.tsx",
+      "to": "src/features/account/components/personal-info/EmailVerificationStatus.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/emailVerificationStatus.styles.ts",
+      "to": "src/features/account/components/personal-info/emailVerificationStatus.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/useEmailVerificationStatus.hook.ts",
+      "to": "src/features/account/components/personal-info/useEmailVerificationStatus.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection.component.tsx",
+      "to": "src/features/account/components/addresses/AddressesSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection/AddressCard.component.tsx",
+      "to": "src/features/account/components/addresses/AddressesSection/AddressCard.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection/AddressCardsList.component.tsx",
+      "to": "src/features/account/components/addresses/AddressesSection/AddressCardsList.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection/AddressesEmptyState.component.tsx",
+      "to": "src/features/account/components/addresses/AddressesSection/AddressesEmptyState.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection/AddressesLoadingSkeleton.component.tsx",
+      "to": "src/features/account/components/addresses/AddressesSection/AddressesLoadingSkeleton.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection/AddressesSection.component.tsx",
+      "to": "src/features/account/components/addresses/AddressesSection/AddressesSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection/DeleteAddressDialog.component.tsx",
+      "to": "src/features/account/components/addresses/AddressesSection/DeleteAddressDialog.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection/addressCard.styles.ts",
+      "to": "src/features/account/components/addresses/AddressesSection/addressCard.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection/addressesSection.styles.ts",
+      "to": "src/features/account/components/addresses/AddressesSection/addressesSection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection/index.ts",
+      "to": "src/features/account/components/addresses/AddressesSection/index.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/AddressesSection/useAddressesSection.hook.ts",
+      "to": "src/features/account/components/addresses/AddressesSection/useAddressesSection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/DeliveryOperationsSection/AvailabilityToggleSection.component.tsx",
+      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/AvailabilityToggleSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/DeliveryOperationsSection/DeliveryOperationsSection.component.tsx",
+      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/DeliveryOperationsSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/DeliveryOperationsSection/DeliveryOperationsSkeleton.component.tsx",
+      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/DeliveryOperationsSkeleton.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/DeliveryOperationsSection/OperatingStatusAside.component.tsx",
+      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/OperatingStatusAside.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/DeliveryOperationsSection/PushNotificationsSection.component.tsx",
+      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/PushNotificationsSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/DeliveryOperationsSection/VehicleHubSection.component.tsx",
+      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/VehicleHubSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/DeliveryOperationsSection/deliveryOperationsSection.styles.ts",
+      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/deliveryOperationsSection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/DeliveryOperationsSection/index.ts",
+      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/index.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/DeliveryOperationsSection/operatingStatusAside.styles.ts",
+      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/operatingStatusAside.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/DeliveryOperationsSection/useDeliveryOperationsSection.hook.ts",
+      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/useDeliveryOperationsSection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/ActivitySummaryList.component.tsx",
+      "to": "src/features/account/components/orders-activity/ActivitySummaryList.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SummaryRow.component.tsx",
+      "to": "src/features/account/components/orders-activity/SummaryRow.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/summaryRow.styles.ts",
+      "to": "src/features/account/components/orders-activity/summaryRow.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/OrdersActivitySection.component.tsx",
+      "to": "src/features/account/components/orders-activity/OrdersActivitySection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/ordersActivitySection.styles.ts",
+      "to": "src/features/account/components/orders-activity/ordersActivitySection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/useOrdersActivitySection.hook.ts",
+      "to": "src/features/account/components/orders-activity/useOrdersActivitySection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/RecentOrderCard.component.tsx",
+      "to": "src/features/account/components/orders-activity/RecentOrderCard.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/RecentOrdersEmptyState.component.tsx",
+      "to": "src/features/account/components/orders-activity/RecentOrdersEmptyState.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/RecentOrdersList.component.tsx",
+      "to": "src/features/account/components/orders-activity/RecentOrdersList.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/RecentOrdersLoadingSkeleton.component.tsx",
+      "to": "src/features/account/components/orders-activity/RecentOrdersLoadingSkeleton.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection.component.tsx",
+      "to": "src/features/account/components/overview/OverviewSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/GlanceList.component.tsx",
+      "to": "src/features/account/components/overview/OverviewSection/GlanceList.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/GlanceRow.component.tsx",
+      "to": "src/features/account/components/overview/OverviewSection/GlanceRow.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/OverviewSection.component.tsx",
+      "to": "src/features/account/components/overview/OverviewSection/OverviewSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/OverviewSectionLoadingSkeleton.component.tsx",
+      "to": "src/features/account/components/overview/OverviewSection/OverviewSectionLoadingSkeleton.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/ProfileCard.component.tsx",
+      "to": "src/features/account/components/overview/OverviewSection/ProfileCard.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/glanceList.styles.ts",
+      "to": "src/features/account/components/overview/OverviewSection/glanceList.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/glanceRow.styles.ts",
+      "to": "src/features/account/components/overview/OverviewSection/glanceRow.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/index.ts",
+      "to": "src/features/account/components/overview/OverviewSection/index.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/overviewSection.styles.ts",
+      "to": "src/features/account/components/overview/OverviewSection/overviewSection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/profileCard.styles.ts",
+      "to": "src/features/account/components/overview/OverviewSection/profileCard.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/useOverviewSection.hook.ts",
+      "to": "src/features/account/components/overview/OverviewSection/useOverviewSection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/OverviewSection/useProfileCard.hook.ts",
+      "to": "src/features/account/components/overview/OverviewSection/useProfileCard.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/PersonalInfoSection.component.tsx",
+      "to": "src/features/account/components/personal-info/PersonalInfoSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PersonalInfoSection/PersonalInfoForm.component.tsx",
+      "to": "src/features/account/components/personal-info/PersonalInfoSection/PersonalInfoForm.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PersonalInfoSection/PersonalInfoSection.component.tsx",
+      "to": "src/features/account/components/personal-info/PersonalInfoSection/PersonalInfoSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PersonalInfoSection/PersonalInfoSectionLoadingSkeleton.component.tsx",
+      "to": "src/features/account/components/personal-info/PersonalInfoSection/PersonalInfoSectionLoadingSkeleton.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PersonalInfoSection/ProfileAside.component.tsx",
+      "to": "src/features/account/components/personal-info/PersonalInfoSection/ProfileAside.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PersonalInfoSection/index.ts",
+      "to": "src/features/account/components/personal-info/PersonalInfoSection/index.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/PersonalInfoSection/personalInfoSection.styles.ts",
+      "to": "src/features/account/components/personal-info/PersonalInfoSection/personalInfoSection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/PersonalInfoSection/usePersonalInfoSection.hook.ts",
+      "to": "src/features/account/components/personal-info/PersonalInfoSection/usePersonalInfoSection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/PrivacySection.component.tsx",
+      "to": "src/features/account/components/privacy/PrivacySection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PrivacySection/DangerZoneSection.component.tsx",
+      "to": "src/features/account/components/privacy/PrivacySection/DangerZoneSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PrivacySection/DeleteAccountDialog.component.tsx",
+      "to": "src/features/account/components/privacy/PrivacySection/DeleteAccountDialog.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PrivacySection/LogoutDialog.component.tsx",
+      "to": "src/features/account/components/privacy/PrivacySection/LogoutDialog.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PrivacySection/PreferencesSection.component.tsx",
+      "to": "src/features/account/components/privacy/PrivacySection/PreferencesSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PrivacySection/PrivacySection.component.tsx",
+      "to": "src/features/account/components/privacy/PrivacySection/PrivacySection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/PrivacySection/index.ts",
+      "to": "src/features/account/components/privacy/PrivacySection/index.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/PrivacySection/privacySection.styles.ts",
+      "to": "src/features/account/components/privacy/PrivacySection/privacySection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/PrivacySection/usePrivacySection.hook.ts",
+      "to": "src/features/account/components/privacy/PrivacySection/usePrivacySection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/RevokeOtherSessionsDialog.component.tsx",
+      "to": "src/features/account/components/security/RevokeOtherSessionsDialog.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/RevokeSessionDialog.component.tsx",
+      "to": "src/features/account/components/security/RevokeSessionDialog.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SecuritySection.component.tsx",
+      "to": "src/features/account/components/security/SecuritySection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/securitySection.styles.ts",
+      "to": "src/features/account/components/security/securitySection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/SessionRow.component.tsx",
+      "to": "src/features/account/components/security/SessionRow.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SessionsEmptyState.component.tsx",
+      "to": "src/features/account/components/security/SessionsEmptyState.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SessionsList.component.tsx",
+      "to": "src/features/account/components/security/SessionsList.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SessionsLoadingSkeleton.component.tsx",
+      "to": "src/features/account/components/security/SessionsLoadingSkeleton.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/useSecuritySection.hook.ts",
+      "to": "src/features/account/components/security/useSecuritySection.hook.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/SavedPaymentMethodsSection/DeleteSavedPaymentMethodDialog.component.tsx",
+      "to": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/DeleteSavedPaymentMethodDialog.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SavedPaymentMethodsSection/SavedPaymentMethodCard.component.tsx",
+      "to": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/SavedPaymentMethodCard.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SavedPaymentMethodsSection/SavedPaymentMethodsEmptyState.component.tsx",
+      "to": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/SavedPaymentMethodsEmptyState.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SavedPaymentMethodsSection/SavedPaymentMethodsList.component.tsx",
+      "to": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/SavedPaymentMethodsList.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SavedPaymentMethodsSection/SavedPaymentMethodsLoadingSkeleton.component.tsx",
+      "to": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/SavedPaymentMethodsLoadingSkeleton.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SavedPaymentMethodsSection/SavedPaymentMethodsSection.component.tsx",
+      "to": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/SavedPaymentMethodsSection.component.tsx"
+    },
+    {
+      "from": "src/features/account/components/sections/SavedPaymentMethodsSection/index.ts",
+      "to": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/index.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/SavedPaymentMethodsSection/savedPaymentMethodsSection.styles.ts",
+      "to": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/savedPaymentMethodsSection.styles.ts"
+    },
+    {
+      "from": "src/features/account/components/sections/SavedPaymentMethodsSection/useSavedPaymentMethodsSection.hook.ts",
+      "to": "src/features/account/components/payment-methods/SavedPaymentMethodsSection/useSavedPaymentMethodsSection.hook.ts"
+    },
+    {
+      "from": "src/features/account/constants.ts",
+      "to": "src/features/account/constants/layout/constants.ts"
+    },
+    {
+      "from": "src/features/account/constants/index.ts",
+      "to": "src/features/account/constants/layout/index.ts"
+    },
+    {
+      "from": "src/features/account/hooks/useAccountOverview.hook.ts",
+      "to": "src/features/account/hooks/overview/useAccountOverview.hook.ts"
+    },
+    {
+      "from": "src/features/account/hooks/useAvatarUpload.hook.ts",
+      "to": "src/features/account/hooks/overview/useAvatarUpload.hook.ts"
+    },
+    {
+      "from": "src/features/account/hooks/useAccountPage.hook.ts",
+      "to": "src/features/account/hooks/layout/useAccountPage.hook.ts"
+    },
+    {
+      "from": "src/features/account/hooks/usePersonalInfoForm.hook.ts",
+      "to": "src/features/account/hooks/personal-info/usePersonalInfoForm.hook.ts"
+    },
+    {
+      "from": "src/features/account/pages/AccountPage.page.tsx",
+      "to": "src/features/account/pages/layout/AccountPage.page.tsx"
+    },
+    {
+      "from": "src/features/account/pages/accountPage.styles.ts",
+      "to": "src/features/account/pages/layout/accountPage.styles.ts"
+    },
+    {
+      "from": "src/features/account/schemas/profile.schema.ts",
+      "to": "src/features/account/schemas/personal-info/profile.schema.ts"
+    },
+    {
+      "from": "src/features/account/schemas/__tests__/profile.schema.test.ts",
+      "to": "src/features/account/schemas/personal-info/__tests__/profile.schema.test.ts"
+    },
+    {
+      "from": "src/features/account/types.ts",
+      "to": "src/features/account/types/layout/types.ts"
+    },
+    {
+      "from": "src/features/account/types/index.ts",
+      "to": "src/features/account/types/layout/index.ts"
+    }
+  ]
+}

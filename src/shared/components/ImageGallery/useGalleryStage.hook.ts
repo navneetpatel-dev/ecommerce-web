@@ -3,8 +3,8 @@
 import { useEffect, type CSSProperties } from "react";
 import { useReducedMotion } from "motion/react";
 import type { ProductImage } from "@/shared/api/types";
-import { IMAGE_GALLERY_ZOOM_SCALE } from "@/shared/constants/imageGallery";
-import type { useImageGalleryZoom } from "@/shared/hooks/useImageGalleryZoom.hook";
+import { IMAGE_GALLERY_ZOOM_SCALE } from "@/shared/constants/media/imageGallery";
+import type { useImageGalleryZoom } from "@/shared/hooks/media/useImageGalleryZoom.hook";
 
 type ZoomHandlers = ReturnType<typeof useImageGalleryZoom>["stageHandlers"];
 

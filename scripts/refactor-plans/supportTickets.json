@@ -1,0 +1,300 @@
+{
+  "moves": [
+    {
+      "from": "src/features/supportTickets/api/supportTickets.api.ts",
+      "to": "src/features/supportTickets/api/list/supportTickets.api.ts"
+    },
+    {
+      "from": "src/features/supportTickets/api/supportTickets.keys.ts",
+      "to": "src/features/supportTickets/api/list/supportTickets.keys.ts"
+    },
+    {
+      "from": "src/features/supportTickets/api/supportTickets.list.queries.ts",
+      "to": "src/features/supportTickets/api/list/supportTickets.list.queries.ts"
+    },
+    {
+      "from": "src/features/supportTickets/api/supportTickets.queries.ts",
+      "to": "src/features/supportTickets/api/list/supportTickets.queries.ts"
+    },
+    {
+      "from": "src/features/supportTickets/api/supportTickets.mutations.ts",
+      "to": "src/features/supportTickets/api/detail/supportTickets.mutations.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm.component.tsx",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/CreateTicketForm.component.tsx",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/CreateTicketForm.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/FormHeader.component.tsx",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/FormHeader.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/SubmitArea.component.tsx",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/SubmitArea.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/TicketBasicsSection.component.tsx",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/TicketBasicsSection.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/TicketDescriptionSection.component.tsx",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/TicketDescriptionSection.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/TicketOrderSection.component.tsx",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/TicketOrderSection.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/TicketVendorSection.component.tsx",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/TicketVendorSection.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/createTicketForm.styles.ts",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/createTicketForm.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/index.ts",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/index.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/types.ts",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/types.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/useOrderVendors.hook.ts",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/useOrderVendors.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/useSubmitTicket.hook.ts",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/useSubmitTicket.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/useTicketPickerPages.hook.ts",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/useTicketPickerPages.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/CreateTicketForm/utils.ts",
+      "to": "src/features/supportTickets/components/form/CreateTicketForm/utils.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketAttachmentUploader/AttachmentList.component.tsx",
+      "to": "src/features/supportTickets/components/form/TicketAttachmentUploader/AttachmentList.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketAttachmentUploader/index.tsx",
+      "to": "src/features/supportTickets/components/form/TicketAttachmentUploader/index.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketAttachmentUploader/prepareUpload.ts",
+      "to": "src/features/supportTickets/components/form/TicketAttachmentUploader/prepareUpload.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketAttachmentUploader/ticketAttachmentUploader.styles.ts",
+      "to": "src/features/supportTickets/components/form/TicketAttachmentUploader/ticketAttachmentUploader.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketAttachmentUploader/types.ts",
+      "to": "src/features/supportTickets/components/form/TicketAttachmentUploader/types.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketAttachmentUploader/useFileProcessor.hook.ts",
+      "to": "src/features/supportTickets/components/form/TicketAttachmentUploader/useFileProcessor.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketAttachmentUploader/utils.ts",
+      "to": "src/features/supportTickets/components/form/TicketAttachmentUploader/utils.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/SupportAuthGate.component.tsx",
+      "to": "src/features/supportTickets/components/list/SupportAuthGate.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/supportAuthGate.styles.ts",
+      "to": "src/features/supportTickets/components/list/supportAuthGate.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketCardItem.component.tsx",
+      "to": "src/features/supportTickets/components/list/TicketCardItem.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketCardList.component.tsx",
+      "to": "src/features/supportTickets/components/list/TicketCardList.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/ticketCardList.styles.ts",
+      "to": "src/features/supportTickets/components/list/ticketCardList.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketCardsGrid.component.tsx",
+      "to": "src/features/supportTickets/components/list/TicketCardsGrid.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketList.component.tsx",
+      "to": "src/features/supportTickets/components/list/TicketList.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/ticketList.styles.ts",
+      "to": "src/features/supportTickets/components/list/ticketList.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/useTicketListHandlers.hook.ts",
+      "to": "src/features/supportTickets/components/list/useTicketListHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/useTicketTableColumns.hook.tsx",
+      "to": "src/features/supportTickets/components/list/useTicketTableColumns.hook.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketFilters.component.tsx",
+      "to": "src/features/supportTickets/components/filters/TicketFilters.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketFilters/TicketCategoryFilterSelect.component.tsx",
+      "to": "src/features/supportTickets/components/filters/TicketFilters/TicketCategoryFilterSelect.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketFilters/TicketFilters.component.tsx",
+      "to": "src/features/supportTickets/components/filters/TicketFilters/TicketFilters.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketFilters/TicketPriorityFilterSelect.component.tsx",
+      "to": "src/features/supportTickets/components/filters/TicketFilters/TicketPriorityFilterSelect.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketFilters/TicketStatusFilterSelect.component.tsx",
+      "to": "src/features/supportTickets/components/filters/TicketFilters/TicketStatusFilterSelect.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketFilters/TicketVendorFilterSelect.component.tsx",
+      "to": "src/features/supportTickets/components/filters/TicketFilters/TicketVendorFilterSelect.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketFilters/index.ts",
+      "to": "src/features/supportTickets/components/filters/TicketFilters/index.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketFilters/ticketFilters.styles.ts",
+      "to": "src/features/supportTickets/components/filters/TicketFilters/ticketFilters.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketFilters/useTicketFiltersHandlers.hook.ts",
+      "to": "src/features/supportTickets/components/filters/TicketFilters/useTicketFiltersHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread.component.tsx",
+      "to": "src/features/supportTickets/components/detail/TicketThread.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/TicketAttachmentThumbs.component.tsx",
+      "to": "src/features/supportTickets/components/detail/TicketThread/TicketAttachmentThumbs.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/TicketConversation.component.tsx",
+      "to": "src/features/supportTickets/components/detail/TicketThread/TicketConversation.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/TicketDetailsPanel.component.tsx",
+      "to": "src/features/supportTickets/components/detail/TicketThread/TicketDetailsPanel.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/TicketManageControls.component.tsx",
+      "to": "src/features/supportTickets/components/detail/TicketThread/TicketManageControls.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/TicketMessageBubble.component.tsx",
+      "to": "src/features/supportTickets/components/detail/TicketThread/TicketMessageBubble.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/TicketRatingSection.component.tsx",
+      "to": "src/features/supportTickets/components/detail/TicketThread/TicketRatingSection.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/TicketReplyComposer.component.tsx",
+      "to": "src/features/supportTickets/components/detail/TicketThread/TicketReplyComposer.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/TicketThread.component.tsx",
+      "to": "src/features/supportTickets/components/detail/TicketThread/TicketThread.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/TicketThreadHeader.component.tsx",
+      "to": "src/features/supportTickets/components/detail/TicketThread/TicketThreadHeader.component.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/index.ts",
+      "to": "src/features/supportTickets/components/detail/TicketThread/index.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/ticketDetailsPanel.styles.ts",
+      "to": "src/features/supportTickets/components/detail/TicketThread/ticketDetailsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/ticketThread.styles.ts",
+      "to": "src/features/supportTickets/components/detail/TicketThread/ticketThread.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/ticketThreadShared.ts",
+      "to": "src/features/supportTickets/components/detail/TicketThread/ticketThreadShared.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/useTicketActions.hook.ts",
+      "to": "src/features/supportTickets/components/detail/TicketThread/useTicketActions.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/useTicketMessages.hook.ts",
+      "to": "src/features/supportTickets/components/detail/TicketThread/useTicketMessages.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/components/TicketThread/useTicketThreadState.hook.ts",
+      "to": "src/features/supportTickets/components/detail/TicketThread/useTicketThreadState.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/constants/fieldLimits.ts",
+      "to": "src/features/supportTickets/constants/form/fieldLimits.ts"
+    },
+    {
+      "from": "src/features/supportTickets/hooks/useTicketFiltersFromUrl.hook.ts",
+      "to": "src/features/supportTickets/hooks/filters/useTicketFiltersFromUrl.hook.ts"
+    },
+    {
+      "from": "src/features/supportTickets/pages/AdminTicketDetailPage.page.tsx",
+      "to": "src/features/supportTickets/pages/admin/AdminTicketDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/pages/AdminTicketsPage.page.tsx",
+      "to": "src/features/supportTickets/pages/admin/AdminTicketsPage.page.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/pages/CustomerNewTicketPage.page.tsx",
+      "to": "src/features/supportTickets/pages/customer/CustomerNewTicketPage.page.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/pages/CustomerTicketDetailPage.page.tsx",
+      "to": "src/features/supportTickets/pages/customer/CustomerTicketDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/pages/CustomerTicketsPage.page.tsx",
+      "to": "src/features/supportTickets/pages/customer/CustomerTicketsPage.page.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/pages/supportTicketsPages.styles.ts",
+      "to": "src/features/supportTickets/pages/customer/supportTicketsPages.styles.ts"
+    },
+    {
+      "from": "src/features/supportTickets/pages/VendorTicketDetailPage.page.tsx",
+      "to": "src/features/supportTickets/pages/vendor/VendorTicketDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/pages/VendorTicketsPage.page.tsx",
+      "to": "src/features/supportTickets/pages/vendor/VendorTicketsPage.page.tsx"
+    },
+    {
+      "from": "src/features/supportTickets/utils/labels.ts",
+      "to": "src/features/supportTickets/utils/detail/labels.ts"
+    }
+  ]
+}

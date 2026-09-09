@@ -1,6 +1,6 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { SkeletonRows } from "@/shared/components/Skeletons.component";
-import { loadingPagesStyles as styles } from "@/app/loadingPages.styles";
+import { loadingPagesStyles as styles } from "@/app/_styles/loading-pages.styles";
 
 const METRIC_SKELETON_COUNT = 4;
 const metricSkeletons = Array.from({ length: METRIC_SKELETON_COUNT }).map(

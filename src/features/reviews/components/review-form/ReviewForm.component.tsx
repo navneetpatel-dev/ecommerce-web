@@ -1,0 +1,131 @@
+import { Button } from "@/shared/components/ui/button";
+import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { FormError } from "@/shared/components/FormError.component";
+import {
+  FormActions,
+  FormFieldFrame,
+  FormSection,
+  FormStack,
+} from "@/shared/components/forms";
+import { Input } from "@/shared/components/ui/input";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { cn } from "@/shared/utils/dom/cn";
+import { Star } from "lucide-react";
+import type { UseFormRegister, FieldErrors } from "react-hook-form";
+import type { ReviewFormInput } from "../../schemas/review-form/reviews.schema";
+import { reviewFormStyles as styles } from "./reviewForm.styles";
+
+interface ReviewFormProps {
+  productName: string;
+  register: UseFormRegister<ReviewFormInput>;
+  errors: FieldErrors<ReviewFormInput>;
+  rating: number;
+  body: string;
+  hoverRating: number;
+  isPending: boolean;
+  formLevelError?: string | null;
+  onSetHoverRating: (value: number) => void;
+  onSetRating: (value: number) => void;
+  onSubmit: (event: React.FormEvent) => void;
+}
+
+export function ReviewForm({
+  productName,
+  register,
+  errors,
+  rating,
+  body,
+  hoverRating,
+  isPending,
+  formLevelError = null,
+  onSetHoverRating,
+  onSetRating,
+  onSubmit,
+}: ReviewFormProps) {
+  const canSubmit = rating >= 1 && body.trim().length >= 10;
+  const disableHint =
+    rating < 1 ? LABELS.selectReviewRating : LABELS.enterReviewBody;
+
+  return (
+    <form onSubmit={onSubmit} className={styles.form}>
+      <FormStack>
+        <p className={styles.reviewingText}>
+          {formatLabel(LABELS.reviewingProduct, { name: productName })}
+        </p>
+
+        <FormSection
+          title={LABELS.reviewFormSection}
+          hint={LABELS.reviewFormSectionHint}
+          columns={1}
+        >
+          <FormFieldFrame label={LABELS.rating} error={errors.rating?.message}>
+            <div className={styles.starsContainer}>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Button
+                  key={i}
+                  type="button"
+                  size="icon-sm"
+                  variant="ghost"
+                  onClick={() => onSetRating(i)}
+                  onMouseEnter={() => onSetHoverRating(i)}
+                  onMouseLeave={() => onSetHoverRating(0)}
+                  className={styles.starButton}
+                >
+                  <Star
+                    className={cn(
+                      styles.starIcon,
+                      i <= (hoverRating || rating)
+                        ? styles.starActive
+                        : styles.starInactive,
+                    )}
+                  />
+                </Button>
+              ))}
+            </div>
+          </FormFieldFrame>
+
+          <FormFieldFrame label={LABELS.reviewTitleOptional} htmlFor="title">
+            <Input
+              id="title"
+              {...register("title")}
+              placeholder={LABELS.reviewTitlePlaceholder}
+            />
+          </FormFieldFrame>
+
+          <FormFieldFrame
+            label={LABELS.reviewBody}
+            htmlFor="body"
+            error={errors.body?.message}
+          >
+            <Textarea
+              id="body"
+              error={Boolean(errors.body?.message)}
+              {...register("body")}
+              placeholder={LABELS.reviewBodyPlaceholder}
+              rows={4}
+            />
+          </FormFieldFrame>
+        </FormSection>
+
+        <FormError
+          error={formLevelError}
+          fallback={LABELS.couldNotSubmitReview}
+        />
+
+        <FormActions>
+          <DisabledActionHint disabled={!canSubmit} message={disableHint}>
+            <Button
+              type="submit"
+              loading={isPending}
+              disabled={!canSubmit || isPending}
+            >
+              {LABELS.submitReview}
+            </Button>
+          </DisabledActionHint>
+        </FormActions>
+      </FormStack>
+    </form>
+  );
+}

@@ -1,1 +1,6 @@
-{}
+{
+  "src/shared/components/FileUpload/FilePicker.component.tsx": {
+    "lines": 207,
+    "ceiling": 200
+  }
+}

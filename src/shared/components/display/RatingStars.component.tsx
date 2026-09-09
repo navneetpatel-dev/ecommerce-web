@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { ratingStarsStyles } from "./displayComponents.styles";
 
 interface RatingStarsProps {

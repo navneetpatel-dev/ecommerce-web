@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
-import { PATHS } from "@/shared/constants/paths";
-import { cn } from "@/shared/utils/cn";
+import { PATHS } from "@/shared/constants/paths/paths";
+import { cn } from "@/shared/utils/dom/cn";
 import { continueShoppingStyles } from "./navigationComponents.styles";
 
 interface ContinueShoppingLinkProps {

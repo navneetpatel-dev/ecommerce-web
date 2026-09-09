@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { inputStyles } from "./input.styles";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {

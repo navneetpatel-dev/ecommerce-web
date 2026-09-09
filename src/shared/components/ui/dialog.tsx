@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { LABELS } from "@/shared/constants/labels";
 import { dialogStyles } from "./dialog.styles";
 

@@ -1,0 +1,172 @@
+{
+  "moves": [
+    {
+      "from": "src/features/categories/api/categories.api.ts",
+      "to": "src/features/categories/api/browse/categories.api.ts"
+    },
+    {
+      "from": "src/features/categories/api/categories.queries.ts",
+      "to": "src/features/categories/api/browse/categories.queries.ts"
+    },
+    {
+      "from": "src/features/categories/api/categoryResolve.server.ts",
+      "to": "src/features/categories/api/plp/categoryResolve.server.ts"
+    },
+    {
+      "from": "src/features/categories/components/CategoriesEmptyState.component.tsx",
+      "to": "src/features/categories/components/browse/CategoriesEmptyState.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategoriesView.component.tsx",
+      "to": "src/features/categories/components/browse/CategoriesView.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategoriesViewHeader.component.tsx",
+      "to": "src/features/categories/components/browse/CategoriesViewHeader.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/categoriesView.styles.ts",
+      "to": "src/features/categories/components/browse/categoriesView.styles.ts"
+    },
+    {
+      "from": "src/features/categories/components/CategoryCard.component.tsx",
+      "to": "src/features/categories/components/browse/CategoryCard.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/categoryCard.styles.ts",
+      "to": "src/features/categories/components/browse/categoryCard.styles.ts"
+    },
+    {
+      "from": "src/features/categories/components/CategoryMoreCard.component.tsx",
+      "to": "src/features/categories/components/browse/CategoryMoreCard.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategoryMosaic.component.tsx",
+      "to": "src/features/categories/components/browse/CategoryMosaic.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategoryMosaicCell.component.tsx",
+      "to": "src/features/categories/components/browse/CategoryMosaicCell.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategoryRootsGrid.component.tsx",
+      "to": "src/features/categories/components/browse/CategoryRootsGrid.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategorySubcategoriesList.component.tsx",
+      "to": "src/features/categories/components/browse/CategorySubcategoriesList.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategorySubcategoriesSection.component.tsx",
+      "to": "src/features/categories/components/browse/CategorySubcategoriesSection.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategorySubcategoryGroup.component.tsx",
+      "to": "src/features/categories/components/browse/CategorySubcategoryGroup.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategorySubcategoryIcon.component.tsx",
+      "to": "src/features/categories/components/browse/CategorySubcategoryIcon.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategorySubcategoryItem.component.tsx",
+      "to": "src/features/categories/components/browse/CategorySubcategoryItem.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/useCategoryCardPresentation.hook.ts",
+      "to": "src/features/categories/components/browse/useCategoryCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/categories/components/useCategoryMoreCardPresentation.hook.ts",
+      "to": "src/features/categories/components/browse/useCategoryMoreCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/categories/components/CategoriesMegaMenu/CategoryMegaMenuTile.component.tsx",
+      "to": "src/features/categories/components/mega-menu/CategoriesMegaMenu/CategoryMegaMenuTile.component.tsx"
+    },
+    {
+      "from": "src/features/categories/components/CategoriesMegaMenu/categoryMegaMenu.styles.ts",
+      "to": "src/features/categories/components/mega-menu/CategoriesMegaMenu/categoryMegaMenu.styles.ts"
+    },
+    {
+      "from": "src/features/categories/components/CategoriesMegaMenu/index.tsx",
+      "to": "src/features/categories/components/mega-menu/CategoriesMegaMenu/index.tsx"
+    },
+    {
+      "from": "src/features/categories/hooks/useCategoriesPage.hook.ts",
+      "to": "src/features/categories/hooks/browse/useCategoriesPage.hook.ts"
+    },
+    {
+      "from": "src/features/categories/hooks/useCategoryBreadcrumbs/index.ts",
+      "to": "src/features/categories/hooks/plp/useCategoryBreadcrumbs/index.ts"
+    },
+    {
+      "from": "src/features/categories/hooks/useCategoryPlp.hook.ts",
+      "to": "src/features/categories/hooks/plp/useCategoryPlp.hook.ts"
+    },
+    {
+      "from": "src/features/categories/hooks/useCategoryPlpData/index.ts",
+      "to": "src/features/categories/hooks/plp/useCategoryPlpData/index.ts"
+    },
+    {
+      "from": "src/features/categories/hooks/useCategoryPlpParams/index.ts",
+      "to": "src/features/categories/hooks/plp/useCategoryPlpParams/index.ts"
+    },
+    {
+      "from": "src/features/categories/hooks/useCompareTray/index.ts",
+      "to": "src/features/categories/hooks/compare/useCompareTray/index.ts"
+    },
+    {
+      "from": "src/features/categories/pages/CategoriesPage.page.tsx",
+      "to": "src/features/categories/pages/browse/CategoriesPage.page.tsx"
+    },
+    {
+      "from": "src/features/categories/pages/CategoryPlpPage.page.tsx",
+      "to": "src/features/categories/pages/plp/CategoryPlpPage.page.tsx"
+    },
+    {
+      "from": "src/features/categories/pages/CategoryPlpPage/CategoryHeader.component.tsx",
+      "to": "src/features/categories/pages/plp/CategoryPlpPage/CategoryHeader.component.tsx"
+    },
+    {
+      "from": "src/features/categories/pages/CategoryPlpPage/CategoryPlpPage.page.tsx",
+      "to": "src/features/categories/pages/plp/CategoryPlpPage/CategoryPlpPage.page.tsx"
+    },
+    {
+      "from": "src/features/categories/pages/CategoryPlpPage/CompareTray.component.tsx",
+      "to": "src/features/categories/pages/plp/CategoryPlpPage/CompareTray.component.tsx"
+    },
+    {
+      "from": "src/features/categories/pages/CategoryPlpPage/FilterSheet.component.tsx",
+      "to": "src/features/categories/pages/plp/CategoryPlpPage/FilterSheet.component.tsx"
+    },
+    {
+      "from": "src/features/categories/pages/CategoryPlpPage/MobileActionBar.component.tsx",
+      "to": "src/features/categories/pages/plp/CategoryPlpPage/MobileActionBar.component.tsx"
+    },
+    {
+      "from": "src/features/categories/pages/CategoryPlpPage/ProductResults.component.tsx",
+      "to": "src/features/categories/pages/plp/CategoryPlpPage/ProductResults.component.tsx"
+    },
+    {
+      "from": "src/features/categories/pages/CategoryPlpPage/SortSheet.component.tsx",
+      "to": "src/features/categories/pages/plp/CategoryPlpPage/SortSheet.component.tsx"
+    },
+    {
+      "from": "src/features/categories/pages/CategoryPlpPage/categoryPlpPage.styles.ts",
+      "to": "src/features/categories/pages/plp/CategoryPlpPage/categoryPlpPage.styles.ts"
+    },
+    {
+      "from": "src/features/categories/pages/CategoryPlpPage/index.ts",
+      "to": "src/features/categories/pages/plp/CategoryPlpPage/index.ts"
+    },
+    {
+      "from": "src/features/categories/types/categorySeo.types.ts",
+      "to": "src/features/categories/types/plp/categorySeo.types.ts"
+    },
+    {
+      "from": "src/features/categories/utils/categoryHelpers.ts",
+      "to": "src/features/categories/utils/browse/categoryHelpers.ts"
+    }
+  ]
+}

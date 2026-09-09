@@ -17,8 +17,8 @@ import {
   TABLE_ACTIONS_HEAD_CLASS,
   TABLE_DATA_CELL_CLASS,
   TABLE_PINNED_LAYOUT_CLASS,
-} from "@/shared/constants/table";
-import { cn } from "@/shared/utils/cn";
+} from "@/shared/constants/table/table";
+import { cn } from "@/shared/utils/dom/cn";
 import { dataTableDesktopStyles } from "./dataTable.styles";
 import type { DataTableColumn } from "./types";
 import { renderCellContent, resolveCell } from "./utils.component";

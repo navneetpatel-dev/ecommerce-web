@@ -4,13 +4,13 @@ import { useCallback, useState, type RefObject } from "react";
 import {
   IMAGE_GALLERY_LIGHTBOX_PINCH_MAX_SCALE,
   IMAGE_GALLERY_LIGHTBOX_PINCH_MIN_SCALE,
-} from "@/shared/constants/imageGallery";
+} from "@/shared/constants/media/imageGallery";
 import {
   applyPinchScale,
   clampPan,
   maxPanOffset,
   type PinchTransform,
-} from "@/shared/utils/imageGalleryGestures";
+} from "@/shared/utils/media/imageGalleryGestures";
 
 const INITIAL_TRANSFORM: PinchTransform = { scale: 1, x: 0, y: 0 };
 

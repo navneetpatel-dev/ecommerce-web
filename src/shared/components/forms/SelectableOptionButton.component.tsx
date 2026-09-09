@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Button } from "@/shared/components/ui/button";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 
 interface SelectableOptionButtonProps {
   selected?: boolean;

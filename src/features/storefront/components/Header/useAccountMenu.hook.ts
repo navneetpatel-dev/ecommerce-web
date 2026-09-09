@@ -5,13 +5,13 @@ import {
   accountSectionsForRole,
   workspaceAccountSections,
 } from "@/features/account";
-import { profilePathForRole } from "@/shared/utils/profilePaths";
+import { profilePathForRole } from "@/shared/utils/navigation/profilePaths";
 import {
   isVendorWorkspacePath,
   isWorkspacePath,
-} from "@/shared/utils/roleSurface";
-import { isWorkspaceRole } from "@/shared/utils/roles";
-import { PATHS } from "@/shared/constants/paths";
+} from "@/shared/utils/roles/roleSurface";
+import { isWorkspaceRole } from "@/shared/utils/roles/roles";
+import { PATHS } from "@/shared/constants/paths/paths";
 import type { CurrentUser } from "@/shared/api/types";
 
 export function useAccountMenu(currentUser: CurrentUser | null) {

@@ -1,4 +1,4 @@
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 
 /**
  * Shared, reusable Tailwind class groups (Rule 5). Patterns that repeat across

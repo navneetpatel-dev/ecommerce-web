@@ -1,0 +1,384 @@
+{
+  "moves": [
+    {
+      "from": "src/features/checkout/api/checkout.api.ts",
+      "to": "src/features/checkout/api/checkout/checkout.api.ts"
+    },
+    {
+      "from": "src/features/checkout/api/checkout.queries.ts",
+      "to": "src/features/checkout/api/checkout/checkout.queries.ts"
+    },
+    {
+      "from": "src/features/checkout/components/AddressEmptyState.component.tsx",
+      "to": "src/features/checkout/components/address/AddressEmptyState.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/AddressItem.component.tsx",
+      "to": "src/features/checkout/components/address/AddressItem.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/AddressList.component.tsx",
+      "to": "src/features/checkout/components/address/AddressList.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/AddressStep.component.tsx",
+      "to": "src/features/checkout/components/address/AddressStep.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/addressStep.styles.ts",
+      "to": "src/features/checkout/components/address/addressStep.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/useAddressStep.hook.ts",
+      "to": "src/features/checkout/components/address/useAddressStep.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/AppliedCouponsSummaryList.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/AppliedCouponsSummaryList.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/CheckoutPageView.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/CheckoutPageView.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/CheckoutPaymentNoticeDialog.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/CheckoutPaymentNoticeDialog.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/CheckoutStepCard.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/CheckoutStepCard.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/CheckoutStepTransition.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/CheckoutStepTransition.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/CheckoutTransitionState.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/CheckoutTransitionState.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/MobileSummaryAccordion.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/MobileSummaryAccordion.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/OrderSummaryItemRow.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/OrderSummaryItemRow.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/OrderSummaryItemsList.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/OrderSummaryItemsList.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/OrderSummaryPanel.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/OrderSummaryPanel.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/OrderSummaryVendorGroup.component.tsx",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/OrderSummaryVendorGroup.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/checkoutOverlayCopy.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/checkoutOverlayCopy.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/checkoutPageView.styles.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/checkoutPageView.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/checkoutStepCard.styles.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/checkoutStepCard.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/checkoutTransitionState.styles.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/checkoutTransitionState.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/index.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/index.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/mobileSummaryAccordion.styles.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/mobileSummaryAccordion.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/orderSummaryItemsList.styles.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/orderSummaryItemsList.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/orderSummaryPanel.styles.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/orderSummaryPanel.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/types.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/types.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/useCheckoutPageView.hook.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/useCheckoutPageView.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/useCheckoutStepCard.hook.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/useCheckoutStepCard.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/CheckoutPageView/useOrderSummaryPanel.hook.ts",
+      "to": "src/features/checkout/components/page-view/CheckoutPageView/useOrderSummaryPanel.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/PaymentMethodOption.component.tsx",
+      "to": "src/features/checkout/components/payment/PaymentMethodOption.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/PaymentOptionsList.component.tsx",
+      "to": "src/features/checkout/components/payment/PaymentOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/PaymentProcessingOverlay.component.tsx",
+      "to": "src/features/checkout/components/payment/PaymentProcessingOverlay.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/PaymentStep.component.tsx",
+      "to": "src/features/checkout/components/payment/PaymentStep.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/paymentMethodOption.styles.ts",
+      "to": "src/features/checkout/components/payment/paymentMethodOption.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/paymentProcessingOverlay.styles.ts",
+      "to": "src/features/checkout/components/payment/paymentProcessingOverlay.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/paymentStep.styles.ts",
+      "to": "src/features/checkout/components/payment/paymentStep.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/usePaymentStep.hook.ts",
+      "to": "src/features/checkout/components/payment/usePaymentStep.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/__tests__/PaymentStep.test.tsx",
+      "to": "src/features/checkout/components/payment/__tests__/PaymentStep.test.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ReviewStep.component.tsx",
+      "to": "src/features/checkout/components/review/ReviewStep.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ReviewStep/AppliedCouponLinesList.component.tsx",
+      "to": "src/features/checkout/components/review/ReviewStep/AppliedCouponLinesList.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ReviewStep/PayableSummary.component.tsx",
+      "to": "src/features/checkout/components/review/ReviewStep/PayableSummary.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ReviewStep/VendorBreakdownCard.component.tsx",
+      "to": "src/features/checkout/components/review/ReviewStep/VendorBreakdownCard.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ReviewStep/VendorBreakdownItemRow.component.tsx",
+      "to": "src/features/checkout/components/review/ReviewStep/VendorBreakdownItemRow.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ReviewStep/VendorBreakdownItemsList.component.tsx",
+      "to": "src/features/checkout/components/review/ReviewStep/VendorBreakdownItemsList.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ReviewStep/index.ts",
+      "to": "src/features/checkout/components/review/ReviewStep/index.ts"
+    },
+    {
+      "from": "src/features/checkout/components/ReviewStep/payableSummary.styles.ts",
+      "to": "src/features/checkout/components/review/ReviewStep/payableSummary.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/ReviewStep/usePayableSummary.hook.ts",
+      "to": "src/features/checkout/components/review/ReviewStep/usePayableSummary.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/ReviewStep/vendorBreakdownCard.styles.ts",
+      "to": "src/features/checkout/components/review/ReviewStep/vendorBreakdownCard.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/reviewStep.styles.ts",
+      "to": "src/features/checkout/components/review/reviewStep.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/useReviewStep.hook.ts",
+      "to": "src/features/checkout/components/review/useReviewStep.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/UnavailableItemsWarning.component.tsx",
+      "to": "src/features/checkout/components/review/UnavailableItemsWarning.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/VendorBreakdownsList.component.tsx",
+      "to": "src/features/checkout/components/review/VendorBreakdownsList.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ShippingCard.component.tsx",
+      "to": "src/features/checkout/components/shipping/ShippingCard.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ShippingCardsList.component.tsx",
+      "to": "src/features/checkout/components/shipping/ShippingCardsList.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ShippingRateButton.component.tsx",
+      "to": "src/features/checkout/components/shipping/ShippingRateButton.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ShippingRatesList.component.tsx",
+      "to": "src/features/checkout/components/shipping/ShippingRatesList.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/ShippingStep.component.tsx",
+      "to": "src/features/checkout/components/shipping/ShippingStep.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/shippingCard.styles.ts",
+      "to": "src/features/checkout/components/shipping/shippingCard.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/shippingStep.styles.ts",
+      "to": "src/features/checkout/components/shipping/shippingStep.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/useShippingStep.hook.ts",
+      "to": "src/features/checkout/components/shipping/useShippingStep.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/__tests__/ShippingCard.test.tsx",
+      "to": "src/features/checkout/components/shipping/__tests__/ShippingCard.test.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/WalletApplySection.component.tsx",
+      "to": "src/features/checkout/components/wallet/WalletApplySection.component.tsx"
+    },
+    {
+      "from": "src/features/checkout/components/walletApplySection.styles.ts",
+      "to": "src/features/checkout/components/wallet/walletApplySection.styles.ts"
+    },
+    {
+      "from": "src/features/checkout/components/useWalletApplySection.hook.ts",
+      "to": "src/features/checkout/components/wallet/useWalletApplySection.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/components/__tests__/WalletApplySection.test.tsx",
+      "to": "src/features/checkout/components/wallet/__tests__/WalletApplySection.test.tsx"
+    },
+    {
+      "from": "src/features/checkout/containers/CheckoutStepIndicator.container.tsx",
+      "to": "src/features/checkout/containers/page-view/CheckoutStepIndicator.container.tsx"
+    },
+    {
+      "from": "src/features/checkout/containers/ShippingCardContainer.container.tsx",
+      "to": "src/features/checkout/containers/shipping/ShippingCardContainer.container.tsx"
+    },
+    {
+      "from": "src/features/checkout/hooks/useCheckoutAddresses.hook.ts",
+      "to": "src/features/checkout/hooks/address/useCheckoutAddresses.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useCheckoutCacheActions.hook.ts",
+      "to": "src/features/checkout/hooks/checkout/useCheckoutCacheActions.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useCheckoutQuoteState.hook.ts",
+      "to": "src/features/checkout/hooks/checkout/useCheckoutQuoteState.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useOrderPlacementErrorHandler.hook.ts",
+      "to": "src/features/checkout/hooks/checkout/useOrderPlacementErrorHandler.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/usePendingOrderRecovery.hook.ts",
+      "to": "src/features/checkout/hooks/checkout/usePendingOrderRecovery.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/usePlaceOrder.hook.ts",
+      "to": "src/features/checkout/hooks/checkout/usePlaceOrder.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useRestoreCancelledCheckout/index.ts",
+      "to": "src/features/checkout/hooks/checkout/useRestoreCancelledCheckout/index.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useCheckoutPage.hook.ts",
+      "to": "src/features/checkout/hooks/page-view/useCheckoutPage.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useCheckoutStepGuards.hook.ts",
+      "to": "src/features/checkout/hooks/page-view/useCheckoutStepGuards.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useCheckoutStepNavigation.hook.ts",
+      "to": "src/features/checkout/hooks/page-view/useCheckoutStepNavigation.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useCheckoutPaymentPhase.hook.ts",
+      "to": "src/features/checkout/hooks/payment/useCheckoutPaymentPhase.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/usePaymentNotice/index.ts",
+      "to": "src/features/checkout/hooks/payment/usePaymentNotice/index.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useRazorpayCheckout/index.ts",
+      "to": "src/features/checkout/hooks/payment/useRazorpayCheckout/index.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useRazorpayCheckout/types.ts",
+      "to": "src/features/checkout/hooks/payment/useRazorpayCheckout/types.ts"
+    },
+    {
+      "from": "src/features/checkout/hooks/useShippingCard.hook.ts",
+      "to": "src/features/checkout/hooks/shipping/useShippingCard.hook.ts"
+    },
+    {
+      "from": "src/features/checkout/pages/CheckoutPage.page.tsx",
+      "to": "src/features/checkout/pages/page-view/CheckoutPage.page.tsx"
+    },
+    {
+      "from": "src/features/checkout/utils/__tests__/quoteTotals.utils.test.ts",
+      "to": "src/features/checkout/utils/checkout/__tests__/quoteTotals.utils.test.ts"
+    },
+    {
+      "from": "src/features/checkout/utils/checkoutCouponCodes.utils.ts",
+      "to": "src/features/checkout/utils/checkout/checkoutCouponCodes.utils.ts"
+    },
+    {
+      "from": "src/features/checkout/utils/checkoutDerivedState.ts",
+      "to": "src/features/checkout/utils/checkout/checkoutDerivedState.ts"
+    },
+    {
+      "from": "src/features/checkout/utils/checkoutDisplay.utils.ts",
+      "to": "src/features/checkout/utils/checkout/checkoutDisplay.utils.ts"
+    },
+    {
+      "from": "src/features/checkout/utils/orderPlacementSuccess.utils.ts",
+      "to": "src/features/checkout/utils/checkout/orderPlacementSuccess.utils.ts"
+    },
+    {
+      "from": "src/features/checkout/utils/placeOrderPayload.utils.ts",
+      "to": "src/features/checkout/utils/checkout/placeOrderPayload.utils.ts"
+    },
+    {
+      "from": "src/features/checkout/utils/quoteTotals.utils.ts",
+      "to": "src/features/checkout/utils/checkout/quoteTotals.utils.ts"
+    },
+    {
+      "from": "src/features/checkout/utils/loadRazorpayScript.ts",
+      "to": "src/features/checkout/utils/payment/loadRazorpayScript.ts"
+    },
+    {
+      "from": "src/features/checkout/utils/razorpayCheckoutConfig.ts",
+      "to": "src/features/checkout/utils/payment/razorpayCheckoutConfig.ts"
+    },
+    {
+      "from": "src/features/checkout/utils/razorpayTheme.ts",
+      "to": "src/features/checkout/utils/payment/razorpayTheme.ts"
+    }
+  ]
+}

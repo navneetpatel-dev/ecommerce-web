@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import type { LucideIcon } from "lucide-react";
 import { sidebarNavStyles } from "./layout.styles";
 

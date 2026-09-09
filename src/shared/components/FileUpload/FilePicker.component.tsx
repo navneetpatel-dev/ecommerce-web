@@ -14,14 +14,14 @@ import {
   ImageIcon,
   Upload,
 } from "lucide-react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { filePickerStyles } from "./fileUploadComponents.styles";
 import { FilePickerSelectedFile } from "./FilePickerSelectedFile.component";
 import { FilePickerDropzone } from "./FilePickerDropzone.component";
 import {
   formatFileSize,
   validateFilePickerFile,
-} from "@/shared/utils/filePickerValidation";
+} from "@/shared/utils/uploads/filePickerValidation";
 
 export { formatFileSize };
 

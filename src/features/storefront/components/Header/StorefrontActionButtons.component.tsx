@@ -2,19 +2,19 @@
 
 import Link from "next/link";
 import { Heart, Search, ShoppingCart } from "lucide-react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { Button } from "@/shared/components/ui/button";
 import {
   CartCountBadge,
   IconBadgeAnchor,
 } from "@/shared/components/CartCountBadge.component";
 import { WalletIcon } from "@/shared/components/WalletIcon.component";
-import { PATHS } from "@/shared/constants/paths";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import {
   formatPoints,
   formatPointsHeaderBadge,
-} from "@/shared/utils/formatPoints";
+} from "@/shared/utils/formatting/formatPoints";
 import { HEADER_ICON_BTN, HEADER_INK_TONE } from "./headerShared";
 import {
   HeaderSearchButtonSkeleton,

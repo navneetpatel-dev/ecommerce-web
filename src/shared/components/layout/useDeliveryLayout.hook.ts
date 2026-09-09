@@ -2,9 +2,9 @@
 
 import { usePathname } from "next/navigation";
 import { History, ListChecks, PackageSearch, Truck, User } from "lucide-react";
-import { usePermissions } from "@/shared/hooks/usePermissions.hook";
-import { DELIVERY_NAV } from "@/shared/constants/deliveryNav";
-import { PATHS } from "@/shared/constants/paths";
+import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
+import { DELIVERY_NAV } from "@/shared/constants/navigation/deliveryNav";
+import { PATHS } from "@/shared/constants/paths/paths";
 
 const ICONS = {
   [PATHS.delivery.today]: ListChecks,

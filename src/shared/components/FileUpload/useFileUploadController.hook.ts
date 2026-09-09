@@ -9,8 +9,8 @@ import {
   isAllowedUploadMime,
   maxBytesForUpload,
 } from "@/shared/constants/imageSpecs";
-import { formatLabel } from "@/shared/utils/formatLabel";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type { FileUploadProps, PreviewEntry } from "./types";
 import { isPdfFile, isVideoFile, mbLabel } from "./utils";
 import { useFileUploads } from "./useFileUploads.hook";

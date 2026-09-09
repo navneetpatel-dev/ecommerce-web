@@ -1,0 +1,12 @@
+{
+  "moves": [
+    {
+      "from": "src/features/uploads/api/uploads.api.ts",
+      "to": "src/features/uploads/api/uploads/uploads.api.ts"
+    },
+    {
+      "from": "src/features/uploads/api/uploads.queries.ts",
+      "to": "src/features/uploads/api/uploads/uploads.queries.ts"
+    }
+  ]
+}

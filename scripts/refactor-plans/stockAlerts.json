@@ -1,0 +1,24 @@
+{
+  "moves": [
+    {
+      "from": "src/features/stockAlerts/api/stockAlerts.api.ts",
+      "to": "src/features/stockAlerts/api/notify-me/stockAlerts.api.ts"
+    },
+    {
+      "from": "src/features/stockAlerts/api/stockAlerts.queries.ts",
+      "to": "src/features/stockAlerts/api/notify-me/stockAlerts.queries.ts"
+    },
+    {
+      "from": "src/features/stockAlerts/components/NotifyMeButton.component.tsx",
+      "to": "src/features/stockAlerts/components/notify-me/NotifyMeButton.component.tsx"
+    },
+    {
+      "from": "src/features/stockAlerts/components/notifyMeButton.styles.ts",
+      "to": "src/features/stockAlerts/components/notify-me/notifyMeButton.styles.ts"
+    },
+    {
+      "from": "src/features/stockAlerts/hooks/useNotifyMe.hook.ts",
+      "to": "src/features/stockAlerts/hooks/notify-me/useNotifyMe.hook.ts"
+    }
+  ]
+}

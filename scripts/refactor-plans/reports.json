@@ -1,0 +1,112 @@
+{
+  "moves": [
+    {
+      "from": "src/features/reports/api/reportsEngine.api.ts",
+      "to": "src/features/reports/api/table/reportsEngine.api.ts"
+    },
+    {
+      "from": "src/features/reports/components/CustomerOrderHistoryPanel.component.tsx",
+      "to": "src/features/reports/components/customer-order-history/CustomerOrderHistoryPanel.component.tsx"
+    },
+    {
+      "from": "src/features/reports/components/customerOrderHistoryPanel.styles.ts",
+      "to": "src/features/reports/components/customer-order-history/customerOrderHistoryPanel.styles.ts"
+    },
+    {
+      "from": "src/features/reports/components/ReportExportButtons.component.tsx",
+      "to": "src/features/reports/components/export/ReportExportButtons.component.tsx"
+    },
+    {
+      "from": "src/features/reports/components/ReportExportStatus.component.tsx",
+      "to": "src/features/reports/components/export/ReportExportStatus.component.tsx"
+    },
+    {
+      "from": "src/features/reports/components/reportExportStatus.styles.ts",
+      "to": "src/features/reports/components/export/reportExportStatus.styles.ts"
+    },
+    {
+      "from": "src/features/reports/components/ReportFilterBar.component.tsx",
+      "to": "src/features/reports/components/filters/ReportFilterBar.component.tsx"
+    },
+    {
+      "from": "src/features/reports/components/reportFilterBar.styles.ts",
+      "to": "src/features/reports/components/filters/reportFilterBar.styles.ts"
+    },
+    {
+      "from": "src/features/reports/components/ReportFilterTextField.component.tsx",
+      "to": "src/features/reports/components/filters/ReportFilterTextField.component.tsx"
+    },
+    {
+      "from": "src/features/reports/components/ReportTypeSelect.component.tsx",
+      "to": "src/features/reports/components/filters/ReportTypeSelect.component.tsx"
+    },
+    {
+      "from": "src/features/reports/components/reportTypeSelect.styles.ts",
+      "to": "src/features/reports/components/filters/reportTypeSelect.styles.ts"
+    },
+    {
+      "from": "src/features/reports/components/ReportTable.component.tsx",
+      "to": "src/features/reports/components/table/ReportTable.component.tsx"
+    },
+    {
+      "from": "src/features/reports/components/reportTable.styles.ts",
+      "to": "src/features/reports/components/table/reportTable.styles.ts"
+    },
+    {
+      "from": "src/features/reports/hooks/useCustomerOrderHistory.hook.ts",
+      "to": "src/features/reports/hooks/customer-order-history/useCustomerOrderHistory.hook.ts"
+    },
+    {
+      "from": "src/features/reports/hooks/useReportCatalog/index.ts",
+      "to": "src/features/reports/hooks/filters/useReportCatalog/index.ts"
+    },
+    {
+      "from": "src/features/reports/hooks/useReportExport.hook.ts",
+      "to": "src/features/reports/hooks/export/useReportExport.hook.ts"
+    },
+    {
+      "from": "src/features/reports/hooks/useReportPanel.hook.ts",
+      "to": "src/features/reports/hooks/export/useReportPanel.hook.ts"
+    },
+    {
+      "from": "src/features/reports/hooks/useReportHub.hook.ts",
+      "to": "src/features/reports/hooks/table/useReportHub.hook.ts"
+    },
+    {
+      "from": "src/features/reports/hooks/useReportHubHelpers/index.ts",
+      "to": "src/features/reports/hooks/table/useReportHubHelpers/index.ts"
+    },
+    {
+      "from": "src/features/reports/pages/AdminReportsPage.page.tsx",
+      "to": "src/features/reports/pages/admin/AdminReportsPage.page.tsx"
+    },
+    {
+      "from": "src/features/reports/pages/reportsPage.styles.ts",
+      "to": "src/features/reports/pages/admin/reportsPage.styles.ts"
+    },
+    {
+      "from": "src/features/reports/pages/VendorReportsPage.page.tsx",
+      "to": "src/features/reports/pages/vendor/VendorReportsPage.page.tsx"
+    },
+    {
+      "from": "src/features/reports/utils/__tests__/reportExportErrorMessage.test.ts",
+      "to": "src/features/reports/utils/export/__tests__/reportExportErrorMessage.test.ts"
+    },
+    {
+      "from": "src/features/reports/utils/exportControlsState.ts",
+      "to": "src/features/reports/utils/export/exportControlsState.ts"
+    },
+    {
+      "from": "src/features/reports/utils/exportDisableHint.ts",
+      "to": "src/features/reports/utils/export/exportDisableHint.ts"
+    },
+    {
+      "from": "src/features/reports/utils/reportExportErrorMessage.ts",
+      "to": "src/features/reports/utils/export/reportExportErrorMessage.ts"
+    },
+    {
+      "from": "src/features/reports/utils/formatReportCell.ts",
+      "to": "src/features/reports/utils/table/formatReportCell.ts"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { ERROR_CODES } from "@/shared/constants/errors";
+import { ERROR_CODES } from "@/shared/constants/http/errors";
 
 /**
  * Typed error shape produced by the API layer before it reaches hooks or

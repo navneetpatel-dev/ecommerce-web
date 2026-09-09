@@ -1,8 +1,8 @@
 "use client";
 
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatLabel";
-import { formatInr } from "@/shared/utils/orderFormat";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 interface CashbackCouponNoticeProps {
   payNow: number;

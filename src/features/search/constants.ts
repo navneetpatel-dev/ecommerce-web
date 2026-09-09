@@ -1,1 +1,1 @@
-export * from "./constants/index";
+export * from "./constants/search/index";

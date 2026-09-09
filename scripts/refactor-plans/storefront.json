@@ -1,0 +1,96 @@
+{
+  "moves": [
+    {
+      "from": "src/features/storefront/components/Header.component.tsx",
+      "to": "src/features/storefront/components/header/Header.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/Header/AccountMenu.component.tsx",
+      "to": "src/features/storefront/components/header/Header/AccountMenu.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/Header/AccountSection.component.tsx",
+      "to": "src/features/storefront/components/header/Header/AccountSection.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/Header/DesktopPrimaryNav.component.tsx",
+      "to": "src/features/storefront/components/header/Header/DesktopPrimaryNav.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/Header/Header.component.tsx",
+      "to": "src/features/storefront/components/header/Header/Header.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/Header/HeaderActionSkeletons.component.tsx",
+      "to": "src/features/storefront/components/header/Header/HeaderActionSkeletons.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/Header/HeaderMenuButton.component.tsx",
+      "to": "src/features/storefront/components/header/Header/HeaderMenuButton.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/Header/MobileOverlays.component.tsx",
+      "to": "src/features/storefront/components/header/Header/MobileOverlays.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/Header/StorefrontActionButtons.component.tsx",
+      "to": "src/features/storefront/components/header/Header/StorefrontActionButtons.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/Header/ThemeToggleButton.component.tsx",
+      "to": "src/features/storefront/components/header/Header/ThemeToggleButton.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/Header/header.styles.ts",
+      "to": "src/features/storefront/components/header/Header/header.styles.ts"
+    },
+    {
+      "from": "src/features/storefront/components/Header/headerShared.ts",
+      "to": "src/features/storefront/components/header/Header/headerShared.ts"
+    },
+    {
+      "from": "src/features/storefront/components/Header/index.ts",
+      "to": "src/features/storefront/components/header/Header/index.ts"
+    },
+    {
+      "from": "src/features/storefront/components/Header/themeToggleButton.styles.ts",
+      "to": "src/features/storefront/components/header/Header/themeToggleButton.styles.ts"
+    },
+    {
+      "from": "src/features/storefront/components/Header/useAccountMenu.hook.ts",
+      "to": "src/features/storefront/components/header/Header/useAccountMenu.hook.ts"
+    },
+    {
+      "from": "src/features/storefront/components/__tests__/headerActionSkeletons.test.tsx",
+      "to": "src/features/storefront/components/header/__tests__/headerActionSkeletons.test.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/MobileNavCategoryTree.component.tsx",
+      "to": "src/features/storefront/components/mobile-nav/MobileNavCategoryTree.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/MobileNavDrawer.component.tsx",
+      "to": "src/features/storefront/components/mobile-nav/MobileNavDrawer.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/mobileNavDrawer.styles.ts",
+      "to": "src/features/storefront/components/mobile-nav/mobileNavDrawer.styles.ts"
+    },
+    {
+      "from": "src/features/storefront/components/StorefrontLayout.component.tsx",
+      "to": "src/features/storefront/components/layout/StorefrontLayout.component.tsx"
+    },
+    {
+      "from": "src/features/storefront/components/storefrontLayout.styles.ts",
+      "to": "src/features/storefront/components/layout/storefrontLayout.styles.ts"
+    },
+    {
+      "from": "src/features/storefront/containers/HeaderContainer.container.tsx",
+      "to": "src/features/storefront/containers/header/HeaderContainer.container.tsx"
+    },
+    {
+      "from": "src/features/storefront/hooks/useHeader.hook.ts",
+      "to": "src/features/storefront/hooks/header/useHeader.hook.ts"
+    }
+  ]
+}

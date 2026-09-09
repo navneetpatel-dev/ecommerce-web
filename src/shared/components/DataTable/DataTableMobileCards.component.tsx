@@ -3,7 +3,7 @@
 import type { KeyboardEvent, ReactNode } from "react";
 import { TableRowActions } from "@/shared/components/TableRowActions.component";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { dataTableMobileStyles } from "./dataTable.styles";
 import type { DataTableColumn } from "./types";
 import { columnLabel, renderCellContent, resolveCell } from "./utils.component";

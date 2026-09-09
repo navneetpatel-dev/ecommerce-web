@@ -1,16 +1,16 @@
-export { OfflineSyncBanner } from "./components/OfflineSyncBanner.component";
-export { BankDetailsCard } from "./components/BankDetailsCard.component";
-export { EarningsPayoutsCard } from "./components/EarningsPayoutsCard.component";
-export { CashDepositsCard } from "./components/CashDepositsCard.component";
-export { DeliveryAgentDocumentsCard } from "./components/DeliveryAgentDocumentsCard/DeliveryAgentDocumentsCard.component";
-export { TodayPage } from "./pages/TodayPage.page";
-export { DeliveriesPage } from "./pages/DeliveriesPage.page";
-export { DeliveryTaskDetailPage } from "./pages/DeliveryTaskDetailPage.page";
-export { PickupsPage } from "./pages/PickupsPage.page";
-export { PickupTaskDetailPage } from "./pages/PickupTaskDetailPage.page";
-export { HistoryPage } from "./pages/HistoryPage.page";
-export { DeliveryProfilePage } from "./pages/ProfilePage.page";
-export { deliveryAdminApi, deliveryAgentApi } from "./api/deliveryAgent.api";
+export { OfflineSyncBanner } from "./components/offline/OfflineSyncBanner.component";
+export { BankDetailsCard } from "./components/bank/BankDetailsCard.component";
+export { EarningsPayoutsCard } from "./components/earnings/EarningsPayoutsCard.component";
+export { CashDepositsCard } from "./components/cash/CashDepositsCard.component";
+export { DeliveryAgentDocumentsCard } from "./components/documents/DeliveryAgentDocumentsCard/DeliveryAgentDocumentsCard.component";
+export { TodayPage } from "./pages/today/TodayPage.page";
+export { DeliveriesPage } from "./pages/deliveries/DeliveriesPage.page";
+export { DeliveryTaskDetailPage } from "./pages/deliveries/DeliveryTaskDetailPage.page";
+export { PickupsPage } from "./pages/pickups/PickupsPage.page";
+export { PickupTaskDetailPage } from "./pages/pickups/PickupTaskDetailPage.page";
+export { HistoryPage } from "./pages/today/HistoryPage.page";
+export { DeliveryProfilePage } from "./pages/profile/ProfilePage.page";
+export { deliveryAdminApi, deliveryAgentApi } from "./api/agent/deliveryAgent.api";
 export {
   deliveryKeys,
   useDeliveryProfile,
@@ -37,7 +37,7 @@ export {
   useConfirmPickup,
   useSetAvailability,
   useMyRatingsQuery,
-} from "./api/deliveryAgent.queries";
+} from "./api/agent/deliveryAgent.queries";
 export type {
   AgentEarning,
   AgentPayout,
@@ -61,4 +61,4 @@ export type {
   BulkCreateAgentResult,
   UnassignedPickup,
   UnassignedShipment,
-} from "./types";
+} from "./types/agent/types";

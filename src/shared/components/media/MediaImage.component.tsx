@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ProductImagePlaceholder } from "./ProductImagePlaceholder.component";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 
 interface MediaImageProps {
   src?: string | null;

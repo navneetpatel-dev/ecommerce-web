@@ -4,5 +4,5 @@ export {
   useAddToWishlist,
   useRemoveFromWishlist,
   useMoveToCart,
-} from "./api/wishlist.queries";
-export { WishlistPage } from "./pages/WishlistPage.page";
+} from "./api/wishlist/wishlist.queries";
+export { WishlistPage } from "./pages/view/WishlistPage.page";

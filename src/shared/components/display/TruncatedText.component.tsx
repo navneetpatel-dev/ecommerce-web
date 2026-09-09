@@ -5,9 +5,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
-import { TABLE_CELL_MAX_CHARS } from "@/shared/constants/table";
-import { cn } from "@/shared/utils/cn";
-import { truncateText } from "@/shared/utils/truncateText";
+import { TABLE_CELL_MAX_CHARS } from "@/shared/constants/table/table";
+import { cn } from "@/shared/utils/dom/cn";
+import { truncateText } from "@/shared/utils/formatting/truncateText";
 import { truncatedTextStyles } from "./displayComponents.styles";
 
 interface TruncatedTextProps {

@@ -1,0 +1,76 @@
+{
+  "moves": [
+    {
+      "from": "src/features/help/components/HelpHomeView/BrowseTopicsSection.component.tsx",
+      "to": "src/features/help/components/home/HelpHomeView/BrowseTopicsSection.component.tsx"
+    },
+    {
+      "from": "src/features/help/components/HelpHomeView/CategoryCard.component.tsx",
+      "to": "src/features/help/components/home/HelpHomeView/CategoryCard.component.tsx"
+    },
+    {
+      "from": "src/features/help/components/HelpHomeView/CategoryIcon.component.tsx",
+      "to": "src/features/help/components/home/HelpHomeView/CategoryIcon.component.tsx"
+    },
+    {
+      "from": "src/features/help/components/HelpHomeView/ContactSection.component.tsx",
+      "to": "src/features/help/components/home/HelpHomeView/ContactSection.component.tsx"
+    },
+    {
+      "from": "src/features/help/components/HelpHomeView/QuickLinksSection.component.tsx",
+      "to": "src/features/help/components/home/HelpHomeView/QuickLinksSection.component.tsx"
+    },
+    {
+      "from": "src/features/help/components/HelpHomeView/SearchResultsSection.component.tsx",
+      "to": "src/features/help/components/home/HelpHomeView/SearchResultsSection.component.tsx"
+    },
+    {
+      "from": "src/features/help/components/HelpHomeView/helpHomeView.styles.ts",
+      "to": "src/features/help/components/home/HelpHomeView/helpHomeView.styles.ts"
+    },
+    {
+      "from": "src/features/help/components/HelpHomeView/index.tsx",
+      "to": "src/features/help/components/home/HelpHomeView/index.tsx"
+    },
+    {
+      "from": "src/features/help/components/HelpArticleSection.component.tsx",
+      "to": "src/features/help/components/article/HelpArticleSection.component.tsx"
+    },
+    {
+      "from": "src/features/help/components/HelpArticleView.component.tsx",
+      "to": "src/features/help/components/article/HelpArticleView.component.tsx"
+    },
+    {
+      "from": "src/features/help/components/HelpRelatedArticles.component.tsx",
+      "to": "src/features/help/components/article/HelpRelatedArticles.component.tsx"
+    },
+    {
+      "from": "src/features/help/components/helpArticleView.styles.ts",
+      "to": "src/features/help/components/article/helpArticleView.styles.ts"
+    },
+    {
+      "from": "src/features/help/components/HelpContactForm.component.tsx",
+      "to": "src/features/help/components/contact/HelpContactForm.component.tsx"
+    },
+    {
+      "from": "src/features/help/components/helpContactForm.styles.ts",
+      "to": "src/features/help/components/contact/helpContactForm.styles.ts"
+    },
+    {
+      "from": "src/features/help/pages/HelpPage.page.tsx",
+      "to": "src/features/help/pages/home/HelpPage.page.tsx"
+    },
+    {
+      "from": "src/features/help/pages/HelpArticlePage.page.tsx",
+      "to": "src/features/help/pages/article/HelpArticlePage.page.tsx"
+    },
+    {
+      "from": "src/features/help/utils/helpSearch.utils.ts",
+      "to": "src/features/help/utils/search/helpSearch.utils.ts"
+    },
+    {
+      "from": "src/features/help/types/help.types.ts",
+      "to": "src/features/help/types/help/help.types.ts"
+    }
+  ]
+}

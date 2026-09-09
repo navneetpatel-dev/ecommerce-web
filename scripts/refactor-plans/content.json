@@ -1,0 +1,104 @@
+{
+  "moves": [
+    {
+      "from": "src/features/content/components/AboutView.component.tsx",
+      "to": "src/features/content/components/about/AboutView.component.tsx"
+    },
+    {
+      "from": "src/features/content/components/BlogListView.component.tsx",
+      "to": "src/features/content/components/blog/BlogListView.component.tsx"
+    },
+    {
+      "from": "src/features/content/components/BlogDetailView.component.tsx",
+      "to": "src/features/content/components/blog/BlogDetailView.component.tsx"
+    },
+    {
+      "from": "src/features/content/components/blogListView.styles.ts",
+      "to": "src/features/content/components/blog/blogListView.styles.ts"
+    },
+    {
+      "from": "src/features/content/components/ContactView.component.tsx",
+      "to": "src/features/content/components/contact/ContactView.component.tsx"
+    },
+    {
+      "from": "src/features/content/components/contactView.styles.ts",
+      "to": "src/features/content/components/contact/contactView.styles.ts"
+    },
+    {
+      "from": "src/features/content/components/FaqView.component.tsx",
+      "to": "src/features/content/components/faq/FaqView.component.tsx"
+    },
+    {
+      "from": "src/features/content/components/faqView.styles.ts",
+      "to": "src/features/content/components/faq/faqView.styles.ts"
+    },
+    {
+      "from": "src/features/content/components/MaintenanceView.component.tsx",
+      "to": "src/features/content/components/maintenance/MaintenanceView.component.tsx"
+    },
+    {
+      "from": "src/features/content/components/maintenanceView.styles.ts",
+      "to": "src/features/content/components/maintenance/maintenanceView.styles.ts"
+    },
+    {
+      "from": "src/features/content/components/PrivacyView.component.tsx",
+      "to": "src/features/content/components/legal/PrivacyView.component.tsx"
+    },
+    {
+      "from": "src/features/content/components/TermsView.component.tsx",
+      "to": "src/features/content/components/legal/TermsView.component.tsx"
+    },
+    {
+      "from": "src/features/content/components/ReturnsView.component.tsx",
+      "to": "src/features/content/components/legal/ReturnsView.component.tsx"
+    },
+    {
+      "from": "src/features/content/components/contentDoc.styles.ts",
+      "to": "src/features/content/components/legal/contentDoc.styles.ts"
+    },
+    {
+      "from": "src/features/content/pages/AboutPage.page.tsx",
+      "to": "src/features/content/pages/about/AboutPage.page.tsx"
+    },
+    {
+      "from": "src/features/content/pages/BlogPage.page.tsx",
+      "to": "src/features/content/pages/blog/BlogPage.page.tsx"
+    },
+    {
+      "from": "src/features/content/pages/BlogDetailPage.page.tsx",
+      "to": "src/features/content/pages/blog/BlogDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/content/pages/ContactPage.page.tsx",
+      "to": "src/features/content/pages/contact/ContactPage.page.tsx"
+    },
+    {
+      "from": "src/features/content/pages/FaqPage.page.tsx",
+      "to": "src/features/content/pages/faq/FaqPage.page.tsx"
+    },
+    {
+      "from": "src/features/content/pages/MaintenancePage.page.tsx",
+      "to": "src/features/content/pages/maintenance/MaintenancePage.page.tsx"
+    },
+    {
+      "from": "src/features/content/pages/PrivacyPage.page.tsx",
+      "to": "src/features/content/pages/legal/PrivacyPage.page.tsx"
+    },
+    {
+      "from": "src/features/content/pages/TermsPage.page.tsx",
+      "to": "src/features/content/pages/legal/TermsPage.page.tsx"
+    },
+    {
+      "from": "src/features/content/pages/ReturnsPage.page.tsx",
+      "to": "src/features/content/pages/legal/ReturnsPage.page.tsx"
+    },
+    {
+      "from": "src/features/content/hooks/useContactPage.hook.ts",
+      "to": "src/features/content/hooks/contact/useContactPage.hook.ts"
+    },
+    {
+      "from": "src/features/content/constants/siteContent.ts",
+      "to": "src/features/content/constants/site/siteContent.ts"
+    }
+  ]
+}

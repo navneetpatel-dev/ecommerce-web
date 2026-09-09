@@ -2,7 +2,7 @@
 
 import { Check } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 
 import { stepIndicatorStyles } from "./stepIndicator.styles";
 

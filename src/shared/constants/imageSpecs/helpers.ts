@@ -1,8 +1,8 @@
-import { MAX_UPLOAD_BYTES } from "@/shared/constants/uploads";
+import { MAX_UPLOAD_BYTES } from "@/shared/constants/uploads/uploads";
 import type {
   UploadEntityType,
   UploadPurpose,
-} from "@/shared/constants/uploads";
+} from "@/shared/constants/uploads/uploads";
 import {
   IMAGE_MIME_TYPES,
   IMAGE_UPLOAD_HINT_KEYS,

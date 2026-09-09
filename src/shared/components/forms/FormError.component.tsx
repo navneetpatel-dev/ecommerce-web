@@ -1,5 +1,5 @@
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import { getFormLevelApiError } from "@/shared/utils/applyApiFormErrors";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { getFormLevelApiError } from "@/shared/utils/api-errors/applyApiFormErrors";
 
 import { formErrorStyles } from "./formError.styles";
 

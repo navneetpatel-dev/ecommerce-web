@@ -1,0 +1,340 @@
+{
+  "moves": [
+    {
+      "from": "src/features/orders/api/__tests__/orders.queries.keys.test.ts",
+      "to": "src/features/orders/api/orders/__tests__/orders.queries.keys.test.ts"
+    },
+    {
+      "from": "src/features/orders/api/orders.api.ts",
+      "to": "src/features/orders/api/orders/orders.api.ts"
+    },
+    {
+      "from": "src/features/orders/api/orders.queries.ts",
+      "to": "src/features/orders/api/orders/orders.queries.ts"
+    },
+    {
+      "from": "src/features/orders/api/shipping.api.ts",
+      "to": "src/features/orders/api/tracking/shipping.api.ts"
+    },
+    {
+      "from": "src/features/orders/components/CompactStatusLine.component.tsx",
+      "to": "src/features/orders/components/list/CompactStatusLine.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/EmptyOrdersState.component.tsx",
+      "to": "src/features/orders/components/list/EmptyOrdersState.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/emptyOrdersState.styles.ts",
+      "to": "src/features/orders/components/list/emptyOrdersState.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/OrderCard.component.tsx",
+      "to": "src/features/orders/components/list/OrderCard.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/orderCard.styles.ts",
+      "to": "src/features/orders/components/list/orderCard.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/OrderCardSubOrdersList.component.tsx",
+      "to": "src/features/orders/components/list/OrderCardSubOrdersList.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/OrderItemsTableCell.component.tsx",
+      "to": "src/features/orders/components/list/OrderItemsTableCell.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/OrderStatusGroup.component.tsx",
+      "to": "src/features/orders/components/list/OrderStatusGroup.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/orderStatusGroup.styles.ts",
+      "to": "src/features/orders/components/list/orderStatusGroup.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/OrdersList.component.tsx",
+      "to": "src/features/orders/components/list/OrdersList.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/ordersList.styles.ts",
+      "to": "src/features/orders/components/list/ordersList.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/ordersTableColumns.tsx",
+      "to": "src/features/orders/components/list/ordersTableColumns.tsx"
+    },
+    {
+      "from": "src/features/orders/components/useOrderCard.hook.ts",
+      "to": "src/features/orders/components/list/useOrderCard.hook.ts"
+    },
+    {
+      "from": "src/features/orders/components/useOrdersList.hook.ts",
+      "to": "src/features/orders/components/list/useOrdersList.hook.ts"
+    },
+    {
+      "from": "src/features/orders/components/__tests__/OrdersList.pagination.test.tsx",
+      "to": "src/features/orders/components/list/__tests__/OrdersList.pagination.test.tsx"
+    },
+    {
+      "from": "src/features/orders/components/BuyAgainButton.component.tsx",
+      "to": "src/features/orders/components/actions/BuyAgainButton.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/DeliveryRatingPrompt.component.tsx",
+      "to": "src/features/orders/components/actions/DeliveryRatingPrompt.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/OrderCancelAction.component.tsx",
+      "to": "src/features/orders/components/actions/OrderCancelAction.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/ordersComponents.styles.ts",
+      "to": "src/features/orders/components/actions/ordersComponents.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/LiveDeliveryMap.component.tsx",
+      "to": "src/features/orders/components/delivery-map/LiveDeliveryMap.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/OrderConfirmation.component.tsx",
+      "to": "src/features/orders/components/confirmation/OrderConfirmation.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/orderConfirmation.styles.ts",
+      "to": "src/features/orders/components/confirmation/orderConfirmation.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/OrderConfirmationHero.component.tsx",
+      "to": "src/features/orders/components/confirmation/OrderConfirmationHero.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/OrderConfirmationItems.component.tsx",
+      "to": "src/features/orders/components/confirmation/OrderConfirmationItems.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/OrderConfirmationSkeleton.component.tsx",
+      "to": "src/features/orders/components/confirmation/OrderConfirmationSkeleton.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/orderConfirmationSkeleton.styles.ts",
+      "to": "src/features/orders/components/confirmation/orderConfirmationSkeleton.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/__tests__/orderConfirmationItems.test.tsx",
+      "to": "src/features/orders/components/confirmation/__tests__/orderConfirmationItems.test.tsx"
+    },
+    {
+      "from": "src/features/orders/components/OrderDetailContent.component.tsx",
+      "to": "src/features/orders/components/detail/OrderDetailContent.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/orderDetailContent.styles.ts",
+      "to": "src/features/orders/components/detail/orderDetailContent.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/OrderDetailHeader.component.tsx",
+      "to": "src/features/orders/components/detail/OrderDetailHeader.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/orderDetailHeader.styles.ts",
+      "to": "src/features/orders/components/detail/orderDetailHeader.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/OrderDetailSkeleton.component.tsx",
+      "to": "src/features/orders/components/detail/OrderDetailSkeleton.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/orderDetailSkeleton.styles.ts",
+      "to": "src/features/orders/components/detail/orderDetailSkeleton.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/OrderMoneyBreakdown.component.tsx",
+      "to": "src/features/orders/components/detail/OrderMoneyBreakdown.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/OrderPaymentSummary.component.tsx",
+      "to": "src/features/orders/components/detail/OrderPaymentSummary.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/OrderReturnStatusBanner.component.tsx",
+      "to": "src/features/orders/components/detail/OrderReturnStatusBanner.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/OrderSummaryAside.component.tsx",
+      "to": "src/features/orders/components/detail/OrderSummaryAside.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/orderSummaryAside.styles.ts",
+      "to": "src/features/orders/components/detail/orderSummaryAside.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/ShippingAddressBlock.component.tsx",
+      "to": "src/features/orders/components/detail/ShippingAddressBlock.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/useOrderDetailHeader.hook.ts",
+      "to": "src/features/orders/components/detail/useOrderDetailHeader.hook.ts"
+    },
+    {
+      "from": "src/features/orders/components/useOrderSummaryAside.hook.ts",
+      "to": "src/features/orders/components/detail/useOrderSummaryAside.hook.ts"
+    },
+    {
+      "from": "src/features/orders/components/__tests__/orderDisplayContracts.test.tsx",
+      "to": "src/features/orders/components/detail/__tests__/orderDisplayContracts.test.tsx"
+    },
+    {
+      "from": "src/features/orders/components/__tests__/orderPaymentSummary.test.tsx",
+      "to": "src/features/orders/components/detail/__tests__/orderPaymentSummary.test.tsx"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/SubOrderCardHeader.component.tsx",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/SubOrderCardHeader.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/SubOrderCardItemRow.component.tsx",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/SubOrderCardItemRow.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/SubOrderCardItems.component.tsx",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/SubOrderCardItems.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/SubOrderCardTotals.component.tsx",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/SubOrderCardTotals.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/SubOrderReturnDialog.component.tsx",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/SubOrderReturnDialog.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/SubOrderShipmentTracking.component.tsx",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/SubOrderShipmentTracking.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/index.tsx",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/index.tsx"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/subOrderCard.styles.ts",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/subOrderCard.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/subOrderCardItems.styles.ts",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/subOrderCardItems.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/subOrderShipmentTracking.styles.ts",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/subOrderShipmentTracking.styles.ts"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderCard/useSubOrderCard.hook.ts",
+      "to": "src/features/orders/components/sub-order/SubOrderCard/useSubOrderCard.hook.ts"
+    },
+    {
+      "from": "src/features/orders/components/SubOrderInvoicesList.component.tsx",
+      "to": "src/features/orders/components/documents/SubOrderInvoicesList.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/SubOrdersList.component.tsx",
+      "to": "src/features/orders/components/sub-order/SubOrdersList.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/TrackingForm.component.tsx",
+      "to": "src/features/orders/components/tracking/TrackingForm.component.tsx"
+    },
+    {
+      "from": "src/features/orders/components/TrackingResult.component.tsx",
+      "to": "src/features/orders/components/tracking/TrackingResult.component.tsx"
+    },
+    {
+      "from": "src/features/orders/containers/SubOrderCardContainer.container.tsx",
+      "to": "src/features/orders/containers/sub-order/SubOrderCardContainer.container.tsx"
+    },
+    {
+      "from": "src/features/orders/hooks/useBuyAgain.hook.ts",
+      "to": "src/features/orders/hooks/actions/useBuyAgain.hook.ts"
+    },
+    {
+      "from": "src/features/orders/hooks/useOrderConfirmationPage.hook.ts",
+      "to": "src/features/orders/hooks/confirmation/useOrderConfirmationPage.hook.ts"
+    },
+    {
+      "from": "src/features/orders/hooks/useOrderDetailPage.hook.ts",
+      "to": "src/features/orders/hooks/detail/useOrderDetailPage.hook.ts"
+    },
+    {
+      "from": "src/features/orders/hooks/useOrderDocuments.hook.ts",
+      "to": "src/features/orders/hooks/documents/useOrderDocuments.hook.ts"
+    },
+    {
+      "from": "src/features/orders/hooks/useOrderHistoryPage.hook.ts",
+      "to": "src/features/orders/hooks/list/useOrderHistoryPage.hook.ts"
+    },
+    {
+      "from": "src/features/orders/hooks/useShipmentLocationSocket.hook.ts",
+      "to": "src/features/orders/hooks/delivery-map/useShipmentLocationSocket.hook.ts"
+    },
+    {
+      "from": "src/features/orders/hooks/useSubOrderReturn.hook.ts",
+      "to": "src/features/orders/hooks/sub-order/useSubOrderReturn.hook.ts"
+    },
+    {
+      "from": "src/features/orders/hooks/useTrackingLookup.hook.ts",
+      "to": "src/features/orders/hooks/tracking/useTrackingLookup.hook.ts"
+    },
+    {
+      "from": "src/features/orders/pages/OrderConfirmationPage.page.tsx",
+      "to": "src/features/orders/pages/confirmation/OrderConfirmationPage.page.tsx"
+    },
+    {
+      "from": "src/features/orders/pages/OrderDetailPage.page.tsx",
+      "to": "src/features/orders/pages/detail/OrderDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/orders/pages/OrderHistoryPage.page.tsx",
+      "to": "src/features/orders/pages/list/OrderHistoryPage.page.tsx"
+    },
+    {
+      "from": "src/features/orders/pages/ordersPages.styles.ts",
+      "to": "src/features/orders/pages/list/ordersPages.styles.ts"
+    },
+    {
+      "from": "src/features/orders/pages/TrackingLookupPage.page.tsx",
+      "to": "src/features/orders/pages/tracking/TrackingLookupPage.page.tsx"
+    },
+    {
+      "from": "src/features/orders/utils/__tests__/orderPaymentSummary.utils.test.ts",
+      "to": "src/features/orders/utils/detail/__tests__/orderPaymentSummary.utils.test.ts"
+    },
+    {
+      "from": "src/features/orders/utils/format.ts",
+      "to": "src/features/orders/utils/detail/format.ts"
+    },
+    {
+      "from": "src/features/orders/utils/orderPaymentSummary.utils.ts",
+      "to": "src/features/orders/utils/detail/orderPaymentSummary.utils.ts"
+    },
+    {
+      "from": "src/features/orders/utils/orderCancel.utils.ts",
+      "to": "src/features/orders/utils/actions/orderCancel.utils.ts"
+    },
+    {
+      "from": "src/features/orders/utils/orderHistoryRange.ts",
+      "to": "src/features/orders/utils/list/orderHistoryRange.ts"
+    },
+    {
+      "from": "src/features/orders/utils/orderStatusDisplay.utils.ts",
+      "to": "src/features/orders/utils/list/orderStatusDisplay.utils.ts"
+    },
+    {
+      "from": "src/features/orders/utils/orderLine.utils.ts",
+      "to": "src/features/orders/utils/sub-order/orderLine.utils.ts"
+    },
+    {
+      "from": "src/features/orders/utils/timeline.ts",
+      "to": "src/features/orders/utils/sub-order/timeline.ts"
+    }
+  ]
+}

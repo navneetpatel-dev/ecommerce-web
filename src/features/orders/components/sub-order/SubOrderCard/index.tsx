@@ -1,0 +1,114 @@
+import type { OrderItem, SubOrder } from "@/shared/api/types";
+import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { Timeline } from "@/shared/components/Timeline.component";
+import type { ReturnReasonCode } from "../../../hooks/sub-order/useSubOrderReturn.hook";
+import { VENDOR_GROUP_CARD } from "@/shared/components/vendorGroupStyles";
+import { SubOrderCardHeader } from "./SubOrderCardHeader.component";
+import { SubOrderCardItems } from "./SubOrderCardItems.component";
+import { SubOrderCardTotals } from "./SubOrderCardTotals.component";
+import { SubOrderReturnDialog } from "./SubOrderReturnDialog.component";
+import { SubOrderShipmentTracking } from "./SubOrderShipmentTracking.component";
+import { BuyAgainButton } from "../../actions/BuyAgainButton.component";
+import { useSubOrderCard } from "./useSubOrderCard.hook";
+import { SUB_ORDER_CARD_STYLES } from "./subOrderCard.styles";
+
+interface SubOrderCardProps {
+  subOrder: SubOrder;
+  returnTarget: OrderItem | null;
+  reasonCode: ReturnReasonCode;
+  reason: string;
+  returnType: "REFUND" | "EXCHANGE";
+  photoUrls: string[];
+  draftUploadId: string;
+  isPending: boolean;
+  isSuccess: boolean;
+  error: Error | null;
+  onOpenReturn: (item: OrderItem) => void;
+  onCloseReturn: () => void;
+  onReasonCodeChange: (code: ReturnReasonCode) => void;
+  onReasonChange: (value: string) => void;
+  onReturnTypeChange: (value: "REFUND" | "EXCHANGE") => void;
+  onPhotoUrlsChange: (urls: string[]) => void;
+  onSubmitReturn: () => void;
+}
+
+export function SubOrderCard({
+  subOrder,
+  returnTarget,
+  reasonCode,
+  reason,
+  returnType,
+  photoUrls,
+  draftUploadId,
+  isPending,
+  isSuccess,
+  error,
+  onOpenReturn,
+  onCloseReturn,
+  onReasonCodeChange,
+  onReasonChange,
+  onReturnTypeChange,
+  onPhotoUrlsChange,
+  onSubmitReturn,
+}: SubOrderCardProps) {
+  const { timeline, showTimeline, vendorName, itemCount, canReturn, items } =
+    useSubOrderCard({ subOrder });
+
+  return (
+    <section className={VENDOR_GROUP_CARD}>
+      <SubOrderCardHeader
+        vendorName={vendorName}
+        vendorId={subOrder.vendor?.id}
+        itemCount={itemCount}
+        status={subOrder.status}
+        className={SUB_ORDER_CARD_STYLES.headerMargin}
+      />
+
+      <SubOrderCardItems
+        items={subOrder.items}
+        canReturn={canReturn}
+        onOpenReturn={onOpenReturn}
+      />
+
+      <SubOrderCardTotals subOrder={subOrder} />
+
+      <div className={SUB_ORDER_CARD_STYLES.buyAgainWrapper}>
+        <BuyAgainButton items={items} />
+      </div>
+
+      {showTimeline && (
+        <div className={SUB_ORDER_CARD_STYLES.timelineContainer}>
+          <TextEyebrow className={SUB_ORDER_CARD_STYLES.timelineEyebrow}>
+            Progress
+          </TextEyebrow>
+          <Timeline steps={timeline} />
+        </div>
+      )}
+
+      {subOrder.shipment && (
+        <SubOrderShipmentTracking
+          shipment={subOrder.shipment}
+          orderId={subOrder.orderId}
+        />
+      )}
+
+      <SubOrderReturnDialog
+        returnTarget={returnTarget}
+        reasonCode={reasonCode}
+        reason={reason}
+        returnType={returnType}
+        photoUrls={photoUrls}
+        draftUploadId={draftUploadId}
+        isPending={isPending}
+        isSuccess={isSuccess}
+        error={error}
+        onCloseReturn={onCloseReturn}
+        onReasonCodeChange={onReasonCodeChange}
+        onReasonChange={onReasonChange}
+        onReturnTypeChange={onReturnTypeChange}
+        onPhotoUrlsChange={onPhotoUrlsChange}
+        onSubmitReturn={onSubmitReturn}
+      />
+    </section>
+  );
+}

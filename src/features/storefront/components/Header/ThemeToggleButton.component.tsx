@@ -1,10 +1,10 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { useThemePalette } from "@/shared/hooks/useThemePalette.hook";
+import { useThemePalette } from "@/shared/hooks/theme/useThemePalette.hook";
 import { themeToggleButtonStyles as styles } from "./themeToggleButton.styles";
 
 export function ThemeToggleButton(props: { isTransparent: boolean }) {

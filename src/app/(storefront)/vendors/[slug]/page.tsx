@@ -5,7 +5,7 @@ import {
 } from "@/features/vendors";
 import { SITE } from "@/shared/seo/constants";
 import { canonicalUrl } from "@/shared/seo/canonical";
-import { PATHS } from "@/shared/constants/paths";
+import { PATHS } from "@/shared/constants/paths/paths";
 
 const SEO_VENDOR_FALLBACK_TITLE = "Vendor";
 

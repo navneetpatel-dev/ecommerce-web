@@ -1,0 +1,72 @@
+{
+  "moves": [
+    {
+      "from": "src/features/search/api/search.api.ts",
+      "to": "src/features/search/api/search/search.api.ts"
+    },
+    {
+      "from": "src/features/search/api/search.queries.ts",
+      "to": "src/features/search/api/search/search.queries.ts"
+    },
+    {
+      "from": "src/features/search/components/SearchBar.component.tsx",
+      "to": "src/features/search/components/search-bar/SearchBar.component.tsx"
+    },
+    {
+      "from": "src/features/search/components/SearchBar/SearchBar.component.tsx",
+      "to": "src/features/search/components/search-bar/SearchBar/SearchBar.component.tsx"
+    },
+    {
+      "from": "src/features/search/components/SearchBar/SearchInput.component.tsx",
+      "to": "src/features/search/components/search-bar/SearchBar/SearchInput.component.tsx"
+    },
+    {
+      "from": "src/features/search/components/SearchBar/SearchPanel.component.tsx",
+      "to": "src/features/search/components/search-bar/SearchBar/SearchPanel.component.tsx"
+    },
+    {
+      "from": "src/features/search/components/SearchBar/constants.ts",
+      "to": "src/features/search/components/search-bar/SearchBar/constants.ts"
+    },
+    {
+      "from": "src/features/search/components/SearchBar/index.ts",
+      "to": "src/features/search/components/search-bar/SearchBar/index.ts"
+    },
+    {
+      "from": "src/features/search/components/SearchBar/searchBar.styles.ts",
+      "to": "src/features/search/components/search-bar/SearchBar/searchBar.styles.ts"
+    },
+    {
+      "from": "src/features/search/components/SearchSuggestionRow.component.tsx",
+      "to": "src/features/search/components/suggestions/SearchSuggestionRow.component.tsx"
+    },
+    {
+      "from": "src/features/search/components/searchSuggestionRow.styles.ts",
+      "to": "src/features/search/components/suggestions/searchSuggestionRow.styles.ts"
+    },
+    {
+      "from": "src/features/search/containers/SearchBarContainer.container.tsx",
+      "to": "src/features/search/containers/search-bar/SearchBarContainer.container.tsx"
+    },
+    {
+      "from": "src/features/search/hooks/useSearchNavigation.hook.ts",
+      "to": "src/features/search/hooks/navigation/useSearchNavigation.hook.ts"
+    },
+    {
+      "from": "src/features/search/hooks/useSuggestionKeyboardNav.hook.ts",
+      "to": "src/features/search/hooks/keyboard/useSuggestionKeyboardNav.hook.ts"
+    },
+    {
+      "from": "src/features/search/utils/suggestionHref.ts",
+      "to": "src/features/search/utils/suggestions/suggestionHref.ts"
+    },
+    {
+      "from": "src/features/search/constants/index.ts",
+      "to": "src/features/search/constants/search/index.ts"
+    },
+    {
+      "from": "src/features/search/types/index.ts",
+      "to": "src/features/search/types/search/index.ts"
+    }
+  ]
+}

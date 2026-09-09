@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { formSectionStyles } from "./forms.styles";
 
 interface FormSectionProps {

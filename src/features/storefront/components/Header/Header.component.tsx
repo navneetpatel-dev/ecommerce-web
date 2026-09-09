@@ -3,9 +3,9 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { LABELS } from "@/shared/constants/labels";
-import { homePathForContext } from "@/shared/utils/roleSurface";
+import { homePathForContext } from "@/shared/utils/roles/roleSurface";
 import type { Category, CurrentUser } from "@/shared/api/types";
 import { DesktopPrimaryNav } from "./DesktopPrimaryNav.component";
 import { ThemeToggleButton } from "./ThemeToggleButton.component";

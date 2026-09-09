@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { useCaptureLocation } from "./useCaptureLocation.hook";
 import { LABELS } from "@/shared/constants/labels";
-import { useManualFormFieldErrors } from "@/shared/hooks/useManualFormFieldErrors.hook";
+import { useManualFormFieldErrors } from "@/shared/hooks/forms/useManualFormFieldErrors.hook";
 import {
   applyApiErrorsToManualForm,
   getFormLevelApiError,
-} from "@/shared/utils/applyApiFormErrors";
+} from "@/shared/utils/api-errors/applyApiFormErrors";
 import {
   allRequiredFieldsMet,
   firstMissingRequiredHint,
-} from "@/shared/utils/firstMissingRequiredHint";
+} from "@/shared/utils/validation/firstMissingRequiredHint";
 import {
   addressFieldChecks,
   toAddressFormState as toFormState,

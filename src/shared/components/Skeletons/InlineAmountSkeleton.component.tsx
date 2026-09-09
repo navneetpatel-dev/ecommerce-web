@@ -1,5 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 
 interface InlineAmountSkeletonProps {
   className?: string;

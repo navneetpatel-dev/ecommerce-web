@@ -1,1 +1,1 @@
-export { BottomSheetContainer as BottomSheet } from "@/shared/containers/BottomSheetContainer.container";
+export { BottomSheetContainer as BottomSheet } from "@/shared/containers/dialogs/BottomSheetContainer.container";

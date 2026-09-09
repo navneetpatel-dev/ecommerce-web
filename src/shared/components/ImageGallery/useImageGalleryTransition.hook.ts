@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GALLERY_TRANSITION_MS } from "@/shared/constants/timing";
+import { GALLERY_TRANSITION_MS } from "@/shared/constants/timing/timing";
 
 export function useImageGalleryTransition(
   selectedIndex: number,

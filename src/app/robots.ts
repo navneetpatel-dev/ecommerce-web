@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { SITE } from '@/shared/seo/constants'
-import { PATHS } from '@/shared/constants/paths'
+import { PATHS } from '@/shared/constants/paths/paths'
 
 export default function robots(): MetadataRoute.Robots {
   const isProduction = process.env.NODE_ENV === 'production'

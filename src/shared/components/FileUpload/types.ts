@@ -2,7 +2,7 @@ import type { ImageMimeType } from "@/shared/constants/imageSpecs";
 import type {
   UploadEntityType,
   UploadPurpose,
-} from "@/shared/constants/uploads";
+} from "@/shared/constants/uploads/uploads";
 
 export type PreviewEntry = { storedUrl: string; displayUrl: string };
 

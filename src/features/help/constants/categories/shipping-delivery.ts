@@ -1,4 +1,4 @@
-import type { HelpCategory } from "../../types/help.types";
+import type { HelpCategory } from "../../types/help/help.types";
 import { SHIPPING_DELIVERY_RATES_ARTICLES } from "./shipping-delivery-rates";
 import { SHIPPING_DELIVERY_ISSUES_ARTICLES } from "./shipping-delivery-issues";
 

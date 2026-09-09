@@ -13,9 +13,9 @@ import {
   LifeBuoy,
   Bug,
 } from "lucide-react";
-import { usePermissions } from "@/shared/hooks/usePermissions.hook";
-import { VENDOR_NAV } from "@/shared/constants/vendorNav";
-import { PATHS } from "@/shared/constants/paths";
+import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
+import { VENDOR_NAV } from "@/shared/constants/navigation/vendorNav";
+import { PATHS } from "@/shared/constants/paths/paths";
 
 const VENDOR_NAV_ICONS = {
   [PATHS.vendor.overview]: BarChart3,

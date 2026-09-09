@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { statusDialogStyles } from "./dialogComponents.styles";
 
 export type StatusDialogVariant = "info" | "success" | "warning" | "danger";

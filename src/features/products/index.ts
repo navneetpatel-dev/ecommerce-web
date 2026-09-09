@@ -3,16 +3,16 @@ export {
   useProduct,
   useProductList,
   usePrefetchProduct,
-} from "./api/products.queries";
-export { ProductCard } from "./components/ProductCard.component";
-export { ProductSeoJsonLd } from "./components/ProductSeoJsonLd.component";
-export { ProductGrid } from "./components/ProductGrid.component";
-export { ProductCardContainer } from "./containers/ProductCardContainer.container";
-export { VariantSelector } from "./components/VariantSelector.component";
-export { ProductListingPage } from "./pages/ProductListingPage.page";
-export { ProductDetailPage } from "./pages/ProductDetailPage.page";
-export { productsApi } from "./api/products.api";
-export { PRODUCT_FIELD_LIMITS } from "./constants/productFields";
+} from "./api/listing/products.queries";
+export { ProductCard } from "./components/card/ProductCard.component";
+export { ProductSeoJsonLd } from "./components/detail/ProductSeoJsonLd.component";
+export { ProductGrid } from "./components/listing/ProductGrid.component";
+export { ProductCardContainer } from "./containers/card/ProductCardContainer.container";
+export { VariantSelector } from "./components/variants/VariantSelector.component";
+export { ProductListingPage } from "./pages/listing/ProductListingPage.page";
+export { ProductDetailPage } from "./pages/detail/ProductDetailPage.page";
+export { productsApi } from "./api/listing/products.api";
+export { PRODUCT_FIELD_LIMITS } from "./constants/listing-form/productFields";
 export {
   emptySpecRow,
   emptyProductListingValues,
@@ -24,21 +24,21 @@ export {
   type ProductListingFormField,
   type ProductListingFormValues,
   type ProductWriteBody,
-} from "./schemas/products.schema";
-export { SORT_OPTIONS } from "./hooks/useProductListing.hook";
+} from "./schemas/listing-form/products.schema";
+export { SORT_OPTIONS } from "./hooks/listing/useProductListing.hook";
 export type {
   ProductFilters,
   ProductListResponse,
   BulkImportRowResult,
-} from "./api/products.api";
-export { FilterSidebar } from "./components/FilterSidebar.component";
-export { SortBar } from "./components/SortBar.component";
-export { RecentlyViewedSection } from "./components/RecentlyViewedSection.component";
-export { useRecentlyViewed } from "./hooks/useRecentlyViewed.hook";
+} from "./api/listing/products.api";
+export { FilterSidebar } from "./components/filters/FilterSidebar.component";
+export { SortBar } from "./components/sort/SortBar.component";
+export { RecentlyViewedSection } from "./components/related/RecentlyViewedSection.component";
+export { useRecentlyViewed } from "./hooks/related/useRecentlyViewed.hook";
 export {
   productDetailToListItem,
   productNeedsVariantHydration,
-} from "./utils/productListItem";
-export { ProductCompareBar } from "./components/ProductCompareBar.component";
-export { ProductCompareSection } from "./components/ProductCompareSection.component";
-export { MAX_COMPARED_PRODUCTS } from "./constants/compare";
+} from "./utils/card/productListItem";
+export { ProductCompareBar } from "./components/compare/ProductCompareBar.component";
+export { ProductCompareSection } from "./components/compare/ProductCompareSection.component";
+export { MAX_COMPARED_PRODUCTS } from "./constants/compare/compare";

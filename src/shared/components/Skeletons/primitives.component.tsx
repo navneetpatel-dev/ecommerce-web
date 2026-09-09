@@ -1,5 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { skeletonPrimitivesStyles } from "./primitives.styles";
 
 interface SkeletonRowsProps {

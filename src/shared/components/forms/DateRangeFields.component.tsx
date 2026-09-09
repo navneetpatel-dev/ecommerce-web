@@ -2,7 +2,7 @@ import { DateTimePicker } from "@/shared/components/DateTimePicker.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 
 interface DateRangeFieldsProps {
   from: string;

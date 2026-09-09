@@ -1,8 +1,8 @@
 "use client";
 
 import { EmptyState } from "@/shared/components/EmptyState.component";
-import { usePermissions } from "@/shared/hooks/usePermissions.hook";
-import type { PermissionKey } from "@/shared/constants/permissions";
+import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
+import type { PermissionKey } from "@/shared/constants/permissions/permissions";
 
 export function RequirePermission({
   permission,

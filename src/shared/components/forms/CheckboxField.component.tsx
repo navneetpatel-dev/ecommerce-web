@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 
 interface CheckboxFieldProps {
   id: string;

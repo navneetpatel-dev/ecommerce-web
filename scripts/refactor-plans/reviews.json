@@ -1,0 +1,56 @@
+{
+  "moves": [
+    {
+      "from": "src/features/reviews/api/reviews.api.ts",
+      "to": "src/features/reviews/api/reviews/reviews.api.ts"
+    },
+    {
+      "from": "src/features/reviews/api/reviews.queries.ts",
+      "to": "src/features/reviews/api/reviews/reviews.queries.ts"
+    },
+    {
+      "from": "src/features/reviews/components/ProductReviews.component.tsx",
+      "to": "src/features/reviews/components/product-reviews/ProductReviews.component.tsx"
+    },
+    {
+      "from": "src/features/reviews/components/productReviews.styles.ts",
+      "to": "src/features/reviews/components/product-reviews/productReviews.styles.ts"
+    },
+    {
+      "from": "src/features/reviews/components/ReviewForm.component.tsx",
+      "to": "src/features/reviews/components/review-form/ReviewForm.component.tsx"
+    },
+    {
+      "from": "src/features/reviews/components/reviewForm.styles.ts",
+      "to": "src/features/reviews/components/review-form/reviewForm.styles.ts"
+    },
+    {
+      "from": "src/features/reviews/containers/ProductReviewsContainer.container.tsx",
+      "to": "src/features/reviews/containers/product-reviews/ProductReviewsContainer.container.tsx"
+    },
+    {
+      "from": "src/features/reviews/containers/ReviewFormContainer.container.tsx",
+      "to": "src/features/reviews/containers/review-form/ReviewFormContainer.container.tsx"
+    },
+    {
+      "from": "src/features/reviews/hooks/useProductReviewsView.hook.ts",
+      "to": "src/features/reviews/hooks/product-reviews/useProductReviewsView.hook.ts"
+    },
+    {
+      "from": "src/features/reviews/hooks/useReviewSubmission.hook.ts",
+      "to": "src/features/reviews/hooks/review-form/useReviewSubmission.hook.ts"
+    },
+    {
+      "from": "src/features/reviews/pages/MyReviewsPage.page.tsx",
+      "to": "src/features/reviews/pages/my-reviews/MyReviewsPage.page.tsx"
+    },
+    {
+      "from": "src/features/reviews/pages/myReviewsPage.styles.ts",
+      "to": "src/features/reviews/pages/my-reviews/myReviewsPage.styles.ts"
+    },
+    {
+      "from": "src/features/reviews/schemas/reviews.schema.ts",
+      "to": "src/features/reviews/schemas/review-form/reviews.schema.ts"
+    }
+  ]
+}

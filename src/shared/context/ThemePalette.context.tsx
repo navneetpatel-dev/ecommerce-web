@@ -13,7 +13,7 @@ import type {
   ActiveThemeSelection,
   ThemeMode,
 } from "@/shared/types/theme.types";
-import { STORAGE_KEYS } from "@/shared/constants/storage";
+import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
 import {
   activeThemeConfig,
   getThemePalette,

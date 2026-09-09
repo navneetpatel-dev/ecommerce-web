@@ -1,0 +1,568 @@
+{
+  "moves": [
+    {
+      "from": "src/features/vendor-dashboard/api/vendor-coupons.queries.ts",
+      "to": "src/features/vendor-dashboard/api/coupons/vendor-coupons.queries.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/api/vendor.api.ts",
+      "to": "src/features/vendor-dashboard/api/overview/vendor.api.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/api/vendor.queries.ts",
+      "to": "src/features/vendor-dashboard/api/overview/vendor.queries.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionInvoicesTable.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionInvoicesTable/CommissionInvoiceMobileCard.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/CommissionInvoiceMobileCard.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionInvoicesTable/CommissionInvoiceTableRow.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/CommissionInvoiceTableRow.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionInvoicesTable/CommissionInvoicesMobileList.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/CommissionInvoicesMobileList.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionInvoicesTable/CommissionInvoicesTable.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/CommissionInvoicesTable.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionInvoicesTable/CommissionInvoicesTableBody.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/CommissionInvoicesTableBody.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionInvoicesTable/CommissionInvoicesTableHeader.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/CommissionInvoicesTableHeader.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionInvoicesTable/commissionInvoicesTable.styles.ts",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/commissionInvoicesTable.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionInvoicesTable/index.ts",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/index.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionInvoicesTable/useCommissionInvoices.hook.ts",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionInvoicesTable/useCommissionInvoices.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionLedgerTable.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionLedgerTable/CommissionDesktopRow.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable/CommissionDesktopRow.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionLedgerTable/CommissionDesktopTable.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable/CommissionDesktopTable.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionLedgerTable/CommissionLedgerTable.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable/CommissionLedgerTable.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionLedgerTable/CommissionMobileCard.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable/CommissionMobileCard.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionLedgerTable/CommissionMobileList.component.tsx",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable/CommissionMobileList.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionLedgerTable/commissionLedgerTable.styles.ts",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable/commissionLedgerTable.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionLedgerTable/index.ts",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable/index.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/CommissionLedgerTable/useCommissionLedgerPresentation.hook.ts",
+      "to": "src/features/vendor-dashboard/components/commission/CommissionLedgerTable/useCommissionLedgerPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/PayoutsTable.component.tsx",
+      "to": "src/features/vendor-dashboard/components/payouts/PayoutsTable.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/PayoutsTable/PayoutDesktopRow.component.tsx",
+      "to": "src/features/vendor-dashboard/components/payouts/PayoutsTable/PayoutDesktopRow.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/PayoutsTable/PayoutDesktopTable.component.tsx",
+      "to": "src/features/vendor-dashboard/components/payouts/PayoutsTable/PayoutDesktopTable.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/PayoutsTable/PayoutMobileCard.component.tsx",
+      "to": "src/features/vendor-dashboard/components/payouts/PayoutsTable/PayoutMobileCard.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/PayoutsTable/PayoutMobileList.component.tsx",
+      "to": "src/features/vendor-dashboard/components/payouts/PayoutsTable/PayoutMobileList.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/PayoutsTable/PayoutsTable.component.tsx",
+      "to": "src/features/vendor-dashboard/components/payouts/PayoutsTable/PayoutsTable.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/PayoutsTable/index.ts",
+      "to": "src/features/vendor-dashboard/components/payouts/PayoutsTable/index.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/PayoutsTable/payoutsTable.styles.ts",
+      "to": "src/features/vendor-dashboard/components/payouts/PayoutsTable/payoutsTable.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/PayoutsTable/usePayoutsTablePresentation.hook.ts",
+      "to": "src/features/vendor-dashboard/components/payouts/PayoutsTable/usePayoutsTablePresentation.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorSettlementReportPanel.component.tsx",
+      "to": "src/features/vendor-dashboard/components/payouts/VendorSettlementReportPanel.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorSettlementReportPanel/SettlementSummaryDl.component.tsx",
+      "to": "src/features/vendor-dashboard/components/payouts/VendorSettlementReportPanel/SettlementSummaryDl.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorSettlementReportPanel/useVendorSettlementReportPanel.hook.ts",
+      "to": "src/features/vendor-dashboard/components/payouts/VendorSettlementReportPanel/useVendorSettlementReportPanel.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorSettlementReportPanel/vendorSettlementReportPanel.styles.ts",
+      "to": "src/features/vendor-dashboard/components/payouts/VendorSettlementReportPanel/vendorSettlementReportPanel.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/ProductsTable/ProductActions.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/ProductsTable/ProductActions.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/ProductsTable/ProductMobileCard.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/ProductsTable/ProductMobileCard.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/ProductsTable/ProductRow.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/ProductsTable/ProductRow.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/ProductsTable/ProductsTableContent.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/ProductsTable/ProductsTableContent.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/ProductsTable/ProductsTableHeader.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/ProductsTable/ProductsTableHeader.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/ProductsTable/index.ts",
+      "to": "src/features/vendor-dashboard/components/products/ProductsTable/index.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/ProductsTable/productsTable.styles.ts",
+      "to": "src/features/vendor-dashboard/components/products/ProductsTable/productsTable.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/ProductsTable/types.ts",
+      "to": "src/features/vendor-dashboard/components/products/ProductsTable/types.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/ProductsTableView.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/ProductsTableView.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorBulkImportDialog.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorBulkImportDialog.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorLowStockWidget.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorLowStockWidget.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorLowStockWidget/LowStockRows.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorLowStockWidget/LowStockRows.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorLowStockWidget/useVendorLowStockWidget.hook.ts",
+      "to": "src/features/vendor-dashboard/components/products/VendorLowStockWidget/useVendorLowStockWidget.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorLowStockWidget/vendorLowStockWidget.styles.ts",
+      "to": "src/features/vendor-dashboard/components/products/VendorLowStockWidget/vendorLowStockWidget.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductCreateForm/ProductCatalogSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/ProductCatalogSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductCreateForm/ProductDetailsSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/ProductDetailsSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductCreateForm/ProductImagesSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/ProductImagesSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductCreateForm/ProductMediaSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/ProductMediaSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductCreateForm/ProductPoliciesSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/ProductPoliciesSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductCreateForm/ProductSeoSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/ProductSeoSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductCreateForm/index.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/index.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductCreateForm/types.ts",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/types.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductCreateForm/useProductFormController.hook.ts",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/useProductFormController.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductCreateForm/vendorProductCreateForm.styles.ts",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductCreateForm/vendorProductCreateForm.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductFormDialog.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductFormDialog.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductImagesDialog.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductImagesDialog.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductImagesDialog/ProductImageRow.component.tsx",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductImagesDialog/ProductImageRow.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductImagesDialog/index.ts",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductImagesDialog/index.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorProductImagesDialog/vendorProductImagesDialog.styles.ts",
+      "to": "src/features/vendor-dashboard/components/products/VendorProductImagesDialog/vendorProductImagesDialog.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/vendorDialogs.styles.ts",
+      "to": "src/features/vendor-dashboard/components/products/vendorDialogs.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/SummaryCard.component.tsx",
+      "to": "src/features/vendor-dashboard/components/overview/SummaryCard.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorSummaryGrid.component.tsx",
+      "to": "src/features/vendor-dashboard/components/overview/VendorSummaryGrid.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorAnalyticsPanel.component.tsx",
+      "to": "src/features/vendor-dashboard/components/analytics/VendorAnalyticsPanel.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorAnalyticsPanel/TopProductsRows.component.tsx",
+      "to": "src/features/vendor-dashboard/components/analytics/VendorAnalyticsPanel/TopProductsRows.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorAnalyticsPanel/useVendorAnalyticsPanel.hook.ts",
+      "to": "src/features/vendor-dashboard/components/analytics/VendorAnalyticsPanel/useVendorAnalyticsPanel.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorAnalyticsPanel/vendorAnalyticsPanel.styles.ts",
+      "to": "src/features/vendor-dashboard/components/analytics/VendorAnalyticsPanel/vendorAnalyticsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorFulfillmentSlaCard.component.tsx",
+      "to": "src/features/vendor-dashboard/components/analytics/VendorFulfillmentSlaCard.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorRevenueChartCard.component.tsx",
+      "to": "src/features/vendor-dashboard/components/analytics/VendorRevenueChartCard.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorTopProductsCard.component.tsx",
+      "to": "src/features/vendor-dashboard/components/analytics/VendorTopProductsCard.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/vendorAnalyticsWidgets.styles.ts",
+      "to": "src/features/vendor-dashboard/components/analytics/vendorAnalyticsWidgets.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorCouponsView.component.tsx",
+      "to": "src/features/vendor-dashboard/components/coupons/VendorCouponsView.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorCouponsView/CouponAnalyticsDialog.component.tsx",
+      "to": "src/features/vendor-dashboard/components/coupons/VendorCouponsView/CouponAnalyticsDialog.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorCouponsView/CouponsHeaderSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/coupons/VendorCouponsView/CouponsHeaderSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorCouponsView/index.ts",
+      "to": "src/features/vendor-dashboard/components/coupons/VendorCouponsView/index.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorCouponsView/vendorCouponsView.styles.ts",
+      "to": "src/features/vendor-dashboard/components/coupons/VendorCouponsView/vendorCouponsView.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable.component.tsx",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/ReturnsCell.component.tsx",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/ReturnsCell.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/ShipTrackingNumberFields.component.tsx",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/ShipTrackingNumberFields.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/ShipmentCell.component.tsx",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/ShipmentCell.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/SubOrderActions.component.tsx",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/SubOrderActions.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/VendorOrdersTableBody.component.tsx",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/VendorOrdersTableBody.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/VendorOrdersTableRow.component.tsx",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/VendorOrdersTableRow.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/VendorSubOrderCards.component.tsx",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/VendorSubOrderCards.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/index.ts",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/index.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/subOrderStatuses.ts",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/subOrderStatuses.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/useVendorOrdersTable.hook.tsx",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/useVendorOrdersTable.hook.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/vendorOrderFormat.ts",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/vendorOrderFormat.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorOrdersTable/vendorOrdersTable.styles.ts",
+      "to": "src/features/vendor-dashboard/components/orders/VendorOrdersTable/vendorOrdersTable.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorQnaAnswerDialog.component.tsx",
+      "to": "src/features/vendor-dashboard/components/qna/VendorQnaAnswerDialog.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorQnaView.component.tsx",
+      "to": "src/features/vendor-dashboard/components/qna/VendorQnaView.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorReviewRespondDialog.component.tsx",
+      "to": "src/features/vendor-dashboard/components/reviews/VendorReviewRespondDialog.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorReviewsView.component.tsx",
+      "to": "src/features/vendor-dashboard/components/reviews/VendorReviewsView.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/vendorFeedbackViews.styles.ts",
+      "to": "src/features/vendor-dashboard/components/reviews/vendorFeedbackViews.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorShopSettingsForm/CategoriesSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/shop-settings/VendorShopSettingsForm/CategoriesSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorShopSettingsForm/FulfillmentSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/shop-settings/VendorShopSettingsForm/FulfillmentSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorShopSettingsForm/KycChecklistSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/shop-settings/VendorShopSettingsForm/KycChecklistSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorShopSettingsForm/KycDocumentListItem.component.tsx",
+      "to": "src/features/vendor-dashboard/components/shop-settings/VendorShopSettingsForm/KycDocumentListItem.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorShopSettingsForm/KycProgressBanner.component.tsx",
+      "to": "src/features/vendor-dashboard/components/shop-settings/VendorShopSettingsForm/KycProgressBanner.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorShopSettingsForm/UploadsSection.component.tsx",
+      "to": "src/features/vendor-dashboard/components/shop-settings/VendorShopSettingsForm/UploadsSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorShopSettingsForm/index.tsx",
+      "to": "src/features/vendor-dashboard/components/shop-settings/VendorShopSettingsForm/index.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/components/VendorShopSettingsForm/vendorShopSettingsForm.styles.ts",
+      "to": "src/features/vendor-dashboard/components/shop-settings/VendorShopSettingsForm/vendorShopSettingsForm.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useKycChecklist.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/shop-settings/useKycChecklist.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorShopSettingsForm.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/shop-settings/useVendorShopSettingsForm.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorShopSettingsForm/index.ts",
+      "to": "src/features/vendor-dashboard/hooks/shop-settings/useVendorShopSettingsForm/index.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorShopSettingsForm/useVendorShopSettingsData.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/shop-settings/useVendorShopSettingsForm/useVendorShopSettingsData.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorShopSettingsForm/useVendorShopSettingsSave.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/shop-settings/useVendorShopSettingsForm/useVendorShopSettingsSave.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/usePayoutsPage.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/payouts/usePayoutsPage.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorSettlementReport.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/payouts/useVendorSettlementReport.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorAnalytics.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/analytics/useVendorAnalytics.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorCouponsPage.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/coupons/useVendorCouponsPage.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorHomeRedirect.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/overview/useVendorHomeRedirect.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorOverview.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/overview/useVendorOverview.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorLowStock.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/products/useVendorLowStock.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorProductImages.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/products/useVendorProductImages.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorProductsPage.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/products/useVendorProductsPage.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorProductsPage/index.ts",
+      "to": "src/features/vendor-dashboard/hooks/products/useVendorProductsPage/index.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorProductsPage/useVendorProductFormState.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/products/useVendorProductsPage/useVendorProductFormState.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorProductsPage/useVendorProductsListView.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/products/useVendorProductsPage/useVendorProductsListView.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorProductsTable.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/products/useVendorProductsTable.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorOrderManagement.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/orders/useVendorOrderManagement.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorQnaPage.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/qna/useVendorQnaPage.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/hooks/useVendorReviewsPage.hook.ts",
+      "to": "src/features/vendor-dashboard/hooks/reviews/useVendorReviewsPage.hook.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/PayoutsPage.page.tsx",
+      "to": "src/features/vendor-dashboard/pages/payouts/PayoutsPage.page.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/ProductsTable.page.tsx",
+      "to": "src/features/vendor-dashboard/pages/products/ProductsTable.page.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/VendorAnalyticsPage.page.tsx",
+      "to": "src/features/vendor-dashboard/pages/analytics/VendorAnalyticsPage.page.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/VendorCouponsPage.page.tsx",
+      "to": "src/features/vendor-dashboard/pages/coupons/VendorCouponsPage.page.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/VendorHomePage.page.tsx",
+      "to": "src/features/vendor-dashboard/pages/overview/VendorHomePage.page.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/VendorOverview.page.tsx",
+      "to": "src/features/vendor-dashboard/pages/overview/VendorOverview.page.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/vendorPages.styles.ts",
+      "to": "src/features/vendor-dashboard/pages/overview/vendorPages.styles.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/VendorOrdersPage.page.tsx",
+      "to": "src/features/vendor-dashboard/pages/orders/VendorOrdersPage.page.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/VendorQnaPage.page.tsx",
+      "to": "src/features/vendor-dashboard/pages/qna/VendorQnaPage.page.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/VendorReviewsPage.page.tsx",
+      "to": "src/features/vendor-dashboard/pages/reviews/VendorReviewsPage.page.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/pages/VendorShopSettingsPage.page.tsx",
+      "to": "src/features/vendor-dashboard/pages/shop-settings/VendorShopSettingsPage.page.tsx"
+    },
+    {
+      "from": "src/features/vendor-dashboard/types/vendorOrders.types.ts",
+      "to": "src/features/vendor-dashboard/types/orders/vendorOrders.types.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/utils/__tests__/formatPercent.test.ts",
+      "to": "src/features/vendor-dashboard/utils/coupons/__tests__/formatPercent.test.ts"
+    },
+    {
+      "from": "src/features/vendor-dashboard/utils/formatPercent.ts",
+      "to": "src/features/vendor-dashboard/utils/coupons/formatPercent.ts"
+    }
+  ]
+}

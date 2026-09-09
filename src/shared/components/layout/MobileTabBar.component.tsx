@@ -6,7 +6,7 @@ import {
   IconBadgeAnchor,
 } from "@/shared/components/CartCountBadge.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { PATHS } from "@/shared/constants/paths";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { CurrentUser } from "@/shared/api/types";
 

@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { NumberInputSteppers } from "./NumberInputSteppers.component";
-import { clamp, parseValue } from "@/shared/utils/numberInputMath";
+import { clamp, parseValue } from "@/shared/utils/validation/numberInputMath";
 
 import { numberInputStyles } from "./numberInput.styles";
 

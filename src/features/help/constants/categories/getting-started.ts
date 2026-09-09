@@ -1,4 +1,4 @@
-import type { HelpCategory } from "../../types/help.types";
+import type { HelpCategory } from "../../types/help/help.types";
 import { GETTING_STARTED_ONBOARDING_ARTICLES } from "./getting-started-onboarding";
 import { GETTING_STARTED_SHOPPING_ARTICLES } from "./getting-started-shopping";
 

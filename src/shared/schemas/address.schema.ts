@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PINCODE_LENGTH, PINCODE_PATTERN } from "@/shared/constants/pincode";
+import { PINCODE_LENGTH, PINCODE_PATTERN } from "@/shared/constants/geo/pincode";
 import { LABELS } from "@/shared/constants/labels";
 import type { Address, AddressInput } from "@/shared/api/types";
 

@@ -6,11 +6,11 @@ import {
   type PointerEvent as ReactPointerEvent,
   type RefObject,
 } from "react";
-import { IMAGE_GALLERY_SWIPE_PX } from "@/shared/constants/imageGallery";
+import { IMAGE_GALLERY_SWIPE_PX } from "@/shared/constants/media/imageGallery";
 import {
   detectHorizontalSwipe,
   distanceBetween,
-} from "@/shared/utils/imageGalleryGestures";
+} from "@/shared/utils/media/imageGalleryGestures";
 import { useLightboxTransform } from "./useLightboxTransform.hook";
 
 export interface UseImageLightboxGesturesOptions {

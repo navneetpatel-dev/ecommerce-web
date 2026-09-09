@@ -2,9 +2,9 @@
 
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuthStore } from "@/shared/stores/auth.store";
-import { useAuthPromptStore } from "@/shared/stores/authPrompt.store";
-import { PATHS } from "@/shared/constants/paths";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
+import { useAuthPromptStore } from "@/shared/stores/auth/authPrompt.store";
+import { PATHS } from "@/shared/constants/paths/paths";
 
 interface AuthGateProps {
   children: React.ReactNode;

@@ -1,0 +1,36 @@
+{
+  "moves": [
+    {
+      "from": "src/features/wishlist/api/wishlist.api.ts",
+      "to": "src/features/wishlist/api/wishlist/wishlist.api.ts"
+    },
+    {
+      "from": "src/features/wishlist/api/wishlist.queries.ts",
+      "to": "src/features/wishlist/api/wishlist/wishlist.queries.ts"
+    },
+    {
+      "from": "src/features/wishlist/components/WishlistView.component.tsx",
+      "to": "src/features/wishlist/components/view/WishlistView.component.tsx"
+    },
+    {
+      "from": "src/features/wishlist/components/EmptyWishlistState.component.tsx",
+      "to": "src/features/wishlist/components/view/EmptyWishlistState.component.tsx"
+    },
+    {
+      "from": "src/features/wishlist/components/wishlistView.styles.ts",
+      "to": "src/features/wishlist/components/view/wishlistView.styles.ts"
+    },
+    {
+      "from": "src/features/wishlist/hooks/useWishlistPage.hook.ts",
+      "to": "src/features/wishlist/hooks/view/useWishlistPage.hook.ts"
+    },
+    {
+      "from": "src/features/wishlist/pages/WishlistPage.page.tsx",
+      "to": "src/features/wishlist/pages/view/WishlistPage.page.tsx"
+    },
+    {
+      "from": "src/features/wishlist/utils/priceDrop.utils.ts",
+      "to": "src/features/wishlist/utils/price-drop/priceDrop.utils.ts"
+    }
+  ]
+}

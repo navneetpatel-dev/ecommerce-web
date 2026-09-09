@@ -1,0 +1,56 @@
+import { apiClient } from "@/shared/api/client/client";
+import { unwrapPaginatedList } from "@/shared/api/client/pagination";
+import { API } from "@/shared/constants/apiRoutes";
+import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
+import type { Order, ReturnRequest } from "@/shared/api/types";
+import type { OrderStatus } from "@/shared/constants/statuses";
+
+export const ordersApi = {
+  /** `userId` is admin-only — the backend ignores it for non-admin callers, scoping to their own orders instead. */
+  myOrders: async (
+    page = 1,
+    limit = DEFAULT_PAGE_LIMIT,
+    userId?: string,
+    options?: { status?: string; search?: string },
+  ) => {
+    const query = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+    if (userId) query.set("userId", userId);
+    if (options?.status) query.set("status", options.status);
+    if (options?.search) query.set("search", options.search);
+    const res = await apiClient.getWithResponse<Order[]>(
+      API.orders.list(query.toString()),
+    );
+    return unwrapPaginatedList(res);
+  },
+  detail: (id: string) => apiClient.get<Order>(API.orders.detail(id)),
+  cancel: (id: string) =>
+    apiClient.post<{ orderId: string; cancelled: boolean }>(
+      API.orders.cancel(id),
+    ),
+  create: (body: { shippingAddressId: string; couponId?: string }) =>
+    apiClient.post<Order>(API.orders.list(), body),
+  updateStatus: (id: string, status: OrderStatus) =>
+    apiClient.patch<{ message: string }>(API.orders.status(id), { status }),
+};
+
+export const subOrdersApi = {
+  vendorSubOrders: async (page = 1, limit = DEFAULT_PAGE_LIMIT) => {
+    const res = await apiClient.getWithResponse<Order[]>(
+      API.suborders.list(`page=${page}&limit=${limit}`),
+    );
+    return unwrapPaginatedList(res);
+  },
+  updateStatus: (id: string, body: { status: string; trackingId?: string }) =>
+    apiClient.patch<{ message: string }>(API.suborders.status(id), body),
+};
+
+export const returnApi = {
+  create: (body: { orderItemId: string; reasonCode: string; reason: string }) =>
+    apiClient.post<ReturnRequest>(API.returns.create, body),
+  list: () => apiClient.get<ReturnRequest[]>(API.returns.list),
+  transition: (id: string, body: { status: string }) =>
+    apiClient.patch<{ message: string }>(API.returns.transition(id), body),
+};

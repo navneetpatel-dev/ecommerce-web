@@ -1,0 +1,40 @@
+{
+  "moves": [
+    {
+      "from": "src/features/productQna/api/productQna.api.ts",
+      "to": "src/features/productQna/api/qna/productQna.api.ts"
+    },
+    {
+      "from": "src/features/productQna/api/productQna.queries.ts",
+      "to": "src/features/productQna/api/qna/productQna.queries.ts"
+    },
+    {
+      "from": "src/features/productQna/components/ProductQuestions.component.tsx",
+      "to": "src/features/productQna/components/list/ProductQuestions.component.tsx"
+    },
+    {
+      "from": "src/features/productQna/components/AskQuestionForm.component.tsx",
+      "to": "src/features/productQna/components/ask-form/AskQuestionForm.component.tsx"
+    },
+    {
+      "from": "src/features/productQna/components/productQna.styles.ts",
+      "to": "src/features/productQna/components/list/productQna.styles.ts"
+    },
+    {
+      "from": "src/features/productQna/containers/ProductQnaContainer.container.tsx",
+      "to": "src/features/productQna/containers/list/ProductQnaContainer.container.tsx"
+    },
+    {
+      "from": "src/features/productQna/hooks/useProductQnaView.hook.ts",
+      "to": "src/features/productQna/hooks/list/useProductQnaView.hook.ts"
+    },
+    {
+      "from": "src/features/productQna/hooks/useAskQuestionForm.hook.ts",
+      "to": "src/features/productQna/hooks/ask-form/useAskQuestionForm.hook.ts"
+    },
+    {
+      "from": "src/features/productQna/schemas/productQna.schema.ts",
+      "to": "src/features/productQna/schemas/ask-form/productQna.schema.ts"
+    }
+  ]
+}

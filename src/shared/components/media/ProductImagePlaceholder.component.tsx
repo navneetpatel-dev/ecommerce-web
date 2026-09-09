@@ -1,4 +1,4 @@
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { productImagePlaceholderStyles } from "@/shared/components/ImageGallery/imageLightbox.styles";
 
 interface ProductImagePlaceholderProps {

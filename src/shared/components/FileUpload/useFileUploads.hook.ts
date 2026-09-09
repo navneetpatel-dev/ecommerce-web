@@ -5,9 +5,9 @@ import { LABELS } from "@/shared/constants/labels";
 import {
   usePresignUpload,
   usePresignUploadBulk,
-} from "@/shared/hooks/useUploads.hook";
-import { formatLabel } from "@/shared/utils/formatLabel";
-import { sanitizeUserFacingMessage } from "@/shared/utils/apiErrorMessage";
+} from "@/shared/hooks/uploads/useUploads.hook";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { sanitizeUserFacingMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type {
   FileUploadProps,
   MultiProps,

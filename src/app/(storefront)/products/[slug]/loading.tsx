@@ -1,5 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { loadingPagesStyles as styles } from "@/app/loadingPages.styles";
+import { loadingPagesStyles as styles } from "@/app/_styles/loading-pages.styles";
 
 export default function ProductDetailLoading() {
   return (

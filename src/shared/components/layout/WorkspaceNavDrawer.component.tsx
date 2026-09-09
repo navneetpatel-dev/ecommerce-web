@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { LABELS } from "@/shared/constants/labels";
 import type { SidebarNavItem } from "./SidebarNav.component";
 import { workspaceNavDrawerStyles, sidebarNavStyles } from "./layout.styles";

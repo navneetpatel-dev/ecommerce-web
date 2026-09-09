@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDebouncedValue } from "@/shared/hooks/use-debounce.hook";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import type { InfiniteSingleSelectOption } from "./types";
 import { mergePageOptions } from "./infiniteSelectOptions.utils";
 import type { UseInfiniteSelectOptionsArgs } from "./types";

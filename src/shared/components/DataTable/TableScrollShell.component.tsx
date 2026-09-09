@@ -1,9 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { TABLE_SCROLL_SHELL_CLASS } from "@/shared/constants/table";
-import { useScrollShadow } from "@/shared/hooks/useScrollShadow.hook";
-import { cn } from "@/shared/utils/cn";
+import { TABLE_SCROLL_SHELL_CLASS } from "@/shared/constants/table/table";
+import { useScrollShadow } from "@/shared/hooks/scroll/useScrollShadow.hook";
+import { cn } from "@/shared/utils/dom/cn";
 
 interface TableScrollShellProps {
   children: ReactNode;

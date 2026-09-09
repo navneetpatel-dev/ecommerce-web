@@ -2,7 +2,7 @@
  * Ink & Brass Help Centre — category registry.
  */
 
-import type { HelpCategory } from "../types/help.types";
+import type { HelpCategory } from "../types/help/help.types";
 import { GETTING_STARTED_CATEGORY } from "./categories/getting-started";
 import { ACCOUNT_SECURITY_CATEGORY } from "./categories/account-security";
 import { ORDERS_TRACKING_CATEGORY } from "./categories/orders-tracking";

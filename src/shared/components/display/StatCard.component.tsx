@@ -5,7 +5,7 @@ import {
   CardContent,
 } from "@/shared/components/ui/card";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import type { LucideIcon } from "lucide-react";
 import { ReactNode } from "react";
 

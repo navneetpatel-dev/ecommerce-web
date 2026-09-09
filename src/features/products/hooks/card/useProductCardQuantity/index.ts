@@ -1,0 +1,115 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  cartKeys,
+  useAddToCart,
+  useRemoveCartItem,
+  useUpdateCartItem,
+} from "@/features/cart";
+import type { CartItem, ProductListItem } from "@/shared/api/types";
+import {
+  cartLineQuantityMax,
+  clampCartQuantity,
+} from "@/shared/constants/cart/cart";
+import { resolveProductStock } from "../../../utils/card/productListItem";
+import { useOptimisticCartPatch } from "../useOptimisticCartPatch/index";
+
+interface UseProductCardQuantityOptions {
+  product: ProductListItem;
+  variantId?: string;
+  cartItem: CartItem | null;
+  serverQty: number;
+}
+
+export function useProductCardQuantity({
+  product,
+  variantId,
+  cartItem,
+  serverQty,
+}: UseProductCardQuantityOptions) {
+  const queryClient = useQueryClient();
+  const { mutate: addToCart, isPending: isAdding } = useAddToCart();
+  const { mutate: updateCartItem, isPending: isUpdating } = useUpdateCartItem();
+  const { mutate: removeCartItem, isPending: isRemoving } = useRemoveCartItem();
+  const applyOptimisticCart = useOptimisticCartPatch(product);
+
+  const [optimisticQty, setOptimisticQty] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (optimisticQty === null) return;
+    if (serverQty === optimisticQty) {
+      setOptimisticQty(null);
+    }
+  }, [serverQty, optimisticQty]);
+
+  const cartQuantity = optimisticQty ?? serverQty;
+  /**
+   * Cap by the variant the card actually adds, not the product's summed stock —
+   * a product with plenty in other variants would otherwise let the stepper run
+   * past what this line can supply, and the API would silently clamp it back.
+   * Once the line exists, the server's own cap wins.
+   */
+  const variantStock = product.variants?.find(
+    (variant) => variant.id === variantId,
+  )?.stock;
+  const maxQuantity =
+    cartItem?.maxQuantity ??
+    cartLineQuantityMax(variantStock ?? resolveProductStock(product));
+  const isMutating = isAdding || isUpdating || isRemoving;
+
+  const setQuantity = (next: number, requestedVariantId = variantId) => {
+    if (!requestedVariantId) return;
+
+    const matchingCartItem =
+      cartItem?.variantId === requestedVariantId ? cartItem : null;
+
+    const clamped =
+      next <= 0 ? 0 : Math.min(maxQuantity, clampCartQuantity(next));
+    setOptimisticQty(clamped);
+    const previous = applyOptimisticCart(
+      requestedVariantId,
+      clamped,
+      matchingCartItem?.id,
+    );
+
+    const rollback = () => {
+      setOptimisticQty(null);
+      if (previous)
+        queryClient.setQueriesData({ queryKey: cartKeys.all }, previous);
+    };
+
+    if (clamped <= 0) {
+      if (matchingCartItem && !matchingCartItem.id.startsWith("optimistic-")) {
+        removeCartItem(matchingCartItem.id, { onError: rollback });
+      } else if (!matchingCartItem) {
+        setOptimisticQty(null);
+      }
+      return;
+    }
+
+    if (!matchingCartItem) {
+      addToCart(
+        {
+          variantId: requestedVariantId,
+          quantity: clamped,
+          openDrawer: false,
+        },
+        { onError: rollback },
+      );
+      return;
+    }
+
+    if (matchingCartItem.id.startsWith("optimistic-")) {
+      return;
+    }
+
+    updateCartItem(
+      { itemId: matchingCartItem.id, quantity: clamped },
+      { onError: rollback },
+    );
+  };
+
+  return { cartQuantity, maxQuantity, setQuantity, isMutating };
+}

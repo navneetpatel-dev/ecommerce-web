@@ -7,9 +7,9 @@ import {
   IMAGE_GALLERY_STAGE_OBJECT_FIT_CLASS,
   IMAGE_GALLERY_STAGE_QUALITY,
   IMAGE_GALLERY_STAGE_SIZES,
-} from "@/shared/constants/imageGallery";
-import { cn } from "@/shared/utils/cn";
-import { formatLabel } from "@/shared/utils/formatLabel";
+} from "@/shared/constants/media/imageGallery";
+import { cn } from "@/shared/utils/dom/cn";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { imageGalleryStyles as styles } from "./imageGallery.styles";
 import { ImageStageControls } from "./ImageStageControls.component";
 

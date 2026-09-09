@@ -1,1 +1,1 @@
-export { DeliveryLayoutContainer as DeliveryLayout } from "@/shared/containers/DeliveryLayoutContainer.container";
+export { DeliveryLayoutContainer as DeliveryLayout } from "@/shared/containers/layout/DeliveryLayoutContainer.container";

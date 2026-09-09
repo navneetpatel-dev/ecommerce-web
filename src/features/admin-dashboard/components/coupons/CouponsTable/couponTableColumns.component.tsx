@@ -1,0 +1,59 @@
+import type { DataTableColumn } from "@/shared/components/DataTable.component";
+import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { LABELS } from "@/shared/constants/labels";
+import { DISCOUNT_BEARER } from "@/shared/constants/statuses";
+import { formatDateTime } from "@/shared/utils/formatting/formatDate";
+import type { Coupon } from "@/shared/api/types";
+import { couponsTableStyles as styles } from "./couponsTable.styles";
+
+function bearerLabel(bearer: Coupon["discountBearer"]) {
+  return bearer === DISCOUNT_BEARER.VENDOR
+    ? LABELS.discountBearerVendor
+    : LABELS.discountBearerPlatform;
+}
+
+export function buildCouponColumns(): DataTableColumn<Coupon>[] {
+  return [
+    {
+      id: "code",
+      header: LABELS.couponCode,
+      className: styles.columnMono,
+      cell: (row) => row.code,
+    },
+    {
+      id: "type",
+      header: LABELS.couponType,
+      accessor: "type",
+    },
+    {
+      id: "bearer",
+      header: LABELS.discountBearer,
+      cell: (row) => bearerLabel(row.discountBearer),
+    },
+    {
+      id: "vendor",
+      header: LABELS.vendorId,
+      className: styles.columnMonoSm,
+      cell: (row) => row.vendorId ?? "—",
+    },
+    {
+      id: "usage",
+      header: LABELS.couponUsage,
+      className: styles.columnMonoSm,
+      truncate: false,
+      cell: (row) =>
+        `${row.usedCount}/${row.usageLimitTotal ?? LABELS.usageUnlimited}`,
+    },
+    {
+      id: "status",
+      header: LABELS.status,
+      truncate: false,
+      cell: (row) => <StatusBadge status={row.status} />,
+    },
+    {
+      id: "expires",
+      header: LABELS.expires,
+      cell: (row) => formatDateTime(row.endDate),
+    },
+  ];
+}

@@ -5,8 +5,8 @@ import type { ProductImage } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { MediaImage } from "@/shared/components/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
-import { formatLabel } from "@/shared/utils/formatLabel";
+import { cn } from "@/shared/utils/dom/cn";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 
 interface ImageGalleryThumbnailStripProps {
   images: ProductImage[];

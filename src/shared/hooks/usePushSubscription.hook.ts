@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { pushSubscriptionApi } from "@/shared/api/pushSubscription.api";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
 function applicationServerKey(value: string): Uint8Array<ArrayBuffer> {
   const padding = "=".repeat((4 - (value.length % 4)) % 4);

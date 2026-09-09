@@ -2,7 +2,7 @@ import {
   MAX_AVATAR_UPLOAD_BYTES,
   MAX_UPLOAD_BYTES,
   MAX_VIDEO_UPLOAD_BYTES,
-} from "@/shared/constants/uploads";
+} from "@/shared/constants/uploads/uploads";
 
 export const IMAGE_MIME_TYPES = [
   "image/jpeg",

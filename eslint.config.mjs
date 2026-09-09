@@ -172,9 +172,9 @@ const eslintConfig = defineConfig([
   },
   {
     files: [
-      "src/features/reports/hooks/useReportHubHelpers/index.ts",
-      "src/features/checkout/hooks/usePlaceOrder.hook.ts",
-      "src/features/checkout/hooks/useOrderPlacementErrorHandler.hook.ts",
+      "src/features/reports/hooks/table/useReportHubHelpers/index.ts",
+      "src/features/checkout/hooks/checkout/usePlaceOrder.hook.ts",
+      "src/features/checkout/hooks/checkout/useOrderPlacementErrorHandler.hook.ts",
     ],
     rules: {
       "no-restricted-syntax": "off",

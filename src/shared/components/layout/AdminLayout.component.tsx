@@ -1,1 +1,1 @@
-export { AdminLayoutContainer as AdminLayout } from "@/shared/containers/AdminLayoutContainer.container";
+export { AdminLayoutContainer as AdminLayout } from "@/shared/containers/layout/AdminLayoutContainer.container";

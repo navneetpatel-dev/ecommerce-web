@@ -25,9 +25,9 @@ import {
   Shield,
   Activity,
 } from "lucide-react";
-import { usePermissions } from "@/shared/hooks/usePermissions.hook";
-import { ADMIN_NAV } from "@/shared/constants/adminNav";
-import { PATHS } from "@/shared/constants/paths";
+import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
+import { ADMIN_NAV } from "@/shared/constants/navigation/adminNav";
+import { PATHS } from "@/shared/constants/paths/paths";
 
 const ADMIN_NAV_ICONS = {
   [PATHS.admin.vendors]: Users,

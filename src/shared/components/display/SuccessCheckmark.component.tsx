@@ -1,4 +1,4 @@
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { successCheckmarkStyles } from "./displayComponents.styles";
 
 interface SuccessCheckmarkProps {

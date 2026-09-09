@@ -5,7 +5,7 @@ import { MobileTabBar } from "@/shared/components/layout/MobileTabBar.component"
 import { BottomSheet } from "@/shared/components/BottomSheet.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category, CurrentUser } from "@/shared/api/types";
-import { MobileNavDrawer } from "../MobileNavDrawer.component";
+import { MobileNavDrawer } from "../mobile-nav/MobileNavDrawer.component";
 
 interface MobileOverlaysProps {
   currentUser: CurrentUser | null;

@@ -1,9 +1,9 @@
 import type { BreadcrumbItem, ProductSeoData, CategorySeoData } from "./types";
 import { canonicalUrl } from "./canonical";
 import { API } from "@/shared/constants/apiRoutes";
-import { PATHS } from "@/shared/constants/paths";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
-import { getServerApiOrigin } from "@/shared/api/serverOrigin";
+import { getServerApiOrigin } from "@/shared/api/client/serverOrigin";
 import { LABELS } from "@/shared/constants/labels";
 
 async function fetchApi<T>(path: string): Promise<T | null> {

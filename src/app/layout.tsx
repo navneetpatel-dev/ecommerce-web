@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Fraunces, IBM_Plex_Mono } from "next/font/google";
 import { SITE } from "@/shared/seo/constants";
-import { STORAGE_KEYS } from "@/shared/constants/storage";
+import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
 import { generateRootMetadata, ROOT_VIEWPORT } from "@/shared/seo/rootMetadata";
 import "@/shared/styles/globals.css";
 import Script from "next/script";
-import { Providers } from "./providers";
+import { Providers } from "./_providers/app-providers";
 import { WebVitalsReporter } from "@/shared/components/WebVitalsReporter.component";
-import { rootLayoutStyles } from "./rootLayout.styles";
+import { rootLayoutStyles } from "./_styles/root-layout.styles";
 
 const inter = Inter({
   subsets: ["latin"],

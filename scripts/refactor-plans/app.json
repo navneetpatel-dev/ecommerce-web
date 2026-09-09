@@ -1,0 +1,16 @@
+{
+  "moves": [
+    {
+      "from": "src/app/providers.tsx",
+      "to": "src/app/_providers/app-providers.tsx"
+    },
+    {
+      "from": "src/app/rootLayout.styles.ts",
+      "to": "src/app/_styles/root-layout.styles.ts"
+    },
+    {
+      "from": "src/app/loadingPages.styles.ts",
+      "to": "src/app/_styles/loading-pages.styles.ts"
+    }
+  ]
+}

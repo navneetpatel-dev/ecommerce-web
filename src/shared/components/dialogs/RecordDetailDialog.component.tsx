@@ -10,12 +10,12 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
-import { tryFormatDateTime } from "@/shared/utils/formatDate";
-import { isImageDetailValue } from "@/shared/utils/imageField";
+import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
+import { isImageDetailValue } from "@/shared/utils/media/imageField";
 import {
   buildRecordDetailFields,
   getRecordDetailTitle,
-} from "@/shared/utils/recordDetails";
+} from "@/shared/utils/formatting/recordDetails";
 import { recordDetailDialogStyles } from "./dialogComponents.styles";
 
 interface RecordDetailDialogProps {

@@ -1,6 +1,6 @@
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
-import { formatInr } from "@/shared/utils/orderFormat";
+import { cn } from "@/shared/utils/dom/cn";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { vendorGroupTotalsStyles } from "./vendorOrderComponents.styles";
 
 interface VendorGroupTotalsProps {

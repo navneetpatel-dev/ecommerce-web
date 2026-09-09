@@ -2,7 +2,7 @@
 
 import { MediaImage } from "@/shared/components/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
-import { extractImageUrls } from "@/shared/utils/imageField";
+import { extractImageUrls } from "@/shared/utils/media/imageField";
 import { recordDetailImageStyles } from "./dialogComponents.styles";
 
 interface RecordDetailImageProps {

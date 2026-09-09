@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { generateNoIndexMetadata } from '@/shared/seo/metadata'
-import { PATHS } from '@/shared/constants/paths'
+import { PATHS } from '@/shared/constants/paths/paths'
 
 export const metadata = generateNoIndexMetadata('Order Confirmation')
 

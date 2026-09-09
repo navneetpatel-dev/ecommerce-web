@@ -1,8 +1,8 @@
 import { useState, type KeyboardEvent, type MouseEvent } from "react";
-import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart";
+import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart/cart";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatLabel";
-import { cn } from "@/shared/utils/cn";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { cn } from "@/shared/utils/dom/cn";
 import {
   DEFAULT_CELL,
   DEFAULT_VALUE,

@@ -1,0 +1,40 @@
+{
+  "moves": [
+    {
+      "from": "src/features/returns/api/returns.api.ts",
+      "to": "src/features/returns/api/returns/returns.api.ts"
+    },
+    {
+      "from": "src/features/returns/api/returns.queries.ts",
+      "to": "src/features/returns/api/returns/returns.queries.ts"
+    },
+    {
+      "from": "src/features/returns/components/ReturnRequestCard.component.tsx",
+      "to": "src/features/returns/components/list/ReturnRequestCard.component.tsx"
+    },
+    {
+      "from": "src/features/returns/components/returnRequestCard.styles.ts",
+      "to": "src/features/returns/components/list/returnRequestCard.styles.ts"
+    },
+    {
+      "from": "src/features/returns/components/RefundBreakdown.component.tsx",
+      "to": "src/features/returns/components/detail/RefundBreakdown.component.tsx"
+    },
+    {
+      "from": "src/features/returns/pages/MyReturnsPage.page.tsx",
+      "to": "src/features/returns/pages/list/MyReturnsPage.page.tsx"
+    },
+    {
+      "from": "src/features/returns/pages/MyReturnDetailPage.page.tsx",
+      "to": "src/features/returns/pages/detail/MyReturnDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/returns/pages/returnsPage.styles.ts",
+      "to": "src/features/returns/pages/list/returnsPage.styles.ts"
+    },
+    {
+      "from": "src/features/returns/utils/returnTimeline.ts",
+      "to": "src/features/returns/utils/timeline/returnTimeline.ts"
+    }
+  ]
+}

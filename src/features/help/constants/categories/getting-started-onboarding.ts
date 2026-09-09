@@ -1,4 +1,4 @@
-import type { HelpArticle } from "../../types/help.types";
+import type { HelpArticle } from "../../types/help/help.types";
 
 export const GETTING_STARTED_ONBOARDING_ARTICLES: HelpArticle[] = [
   {

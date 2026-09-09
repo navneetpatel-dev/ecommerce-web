@@ -1,4 +1,4 @@
-import { apiClient } from "@/shared/api/client";
+import { apiClient } from "@/shared/api/client/client";
 import { API } from "@/shared/constants/apiRoutes";
 
 export type PushSubscriptionKeys = {

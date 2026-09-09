@@ -3,7 +3,7 @@
 import { ChevronDown } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { infiniteSingleSelectStyles } from "./infiniteSingleSelect.styles";
 import type { InfiniteSingleSelectOption } from "./types";
 import { OptionRow } from "./OptionRow.component";

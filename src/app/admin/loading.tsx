@@ -1,6 +1,6 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { SkeletonRows } from "@/shared/components/Skeletons.component";
-import { loadingPagesStyles as styles } from "@/app/loadingPages.styles";
+import { loadingPagesStyles as styles } from "@/app/_styles/loading-pages.styles";
 
 /** Content-only — admin layout already keeps header + sidebar. */
 export default function AdminLoading() {

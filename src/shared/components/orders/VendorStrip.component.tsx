@@ -2,8 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Star } from "lucide-react";
 import type { VendorInfo } from "@/shared/api/types";
-import { PATHS } from "@/shared/constants/paths";
-import { cn } from "@/shared/utils/cn";
+import { PATHS } from "@/shared/constants/paths/paths";
+import { cn } from "@/shared/utils/dom/cn";
 import { vendorStripStyles } from "./vendorOrderComponents.styles";
 
 interface VendorStripProps {

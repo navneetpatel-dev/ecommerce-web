@@ -1,4 +1,4 @@
-import { STORAGE_KEYS } from "@/shared/constants/storage";
+import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
 
 /**
  * Crash/error reporting (Rule 20). A single pluggable transport is

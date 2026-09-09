@@ -1,4 +1,4 @@
-import type { HelpCategory } from "../../types/help.types";
+import type { HelpCategory } from "../../types/help/help.types";
 import { PAYMENTS_CHECKOUT_ARTICLES } from "./payments-checkout";
 import { PAYMENTS_BILLING_ARTICLES } from "./payments-billing";
 

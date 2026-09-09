@@ -1,8 +1,8 @@
 // Vendors feature — public API
-export { vendorsApi } from "./api/vendors.api";
-export type { KycChecklistItem } from "./api/vendors.api";
-export { useVendorById, useUpdateVendor } from "./api/vendors.queries";
-export { resolveVendorBySlugServer } from "./api/vendorSeo.server";
-export { VendorRegisterPage } from "./pages/VendorRegisterPage.page";
-export { VendorsIndexPage } from "./pages/VendorsIndexPage.page";
-export { VendorStorefrontPage } from "./pages/VendorStorefrontPage.page";
+export { vendorsApi } from "./api/directory/vendors.api";
+export type { KycChecklistItem } from "./api/directory/vendors.api";
+export { useVendorById, useUpdateVendor } from "./api/directory/vendors.queries";
+export { resolveVendorBySlugServer } from "./api/seo/vendorSeo.server";
+export { VendorRegisterPage } from "./pages/register/VendorRegisterPage.page";
+export { VendorsIndexPage } from "./pages/index/VendorsIndexPage.page";
+export { VendorStorefrontPage } from "./pages/storefront/VendorStorefrontPage.page";

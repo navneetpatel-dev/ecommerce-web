@@ -1,0 +1,8 @@
+{
+  "moves": [
+    {
+      "from": "src/features/coupons/api/coupons.api.ts",
+      "to": "src/features/coupons/api/coupons/coupons.api.ts"
+    }
+  ]
+}

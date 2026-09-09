@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { Button, type ButtonProps } from "@/shared/components/ui/button";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { emptyStateStyles } from "./displayComponents.styles";
 
 interface EmptyStateAction {

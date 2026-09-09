@@ -5,17 +5,17 @@ export {
   useUpdateCartItem,
   useRemoveCartItem,
   useClearCart,
-} from "./api/cart.queries";
-export { cartKeys, cartMutationKeys } from "./api/cart.queries";
-export { useCartDrawerStore } from "./store/cart.store";
-export { groupItemsByVendor } from "./utils/cart.utils";
-export { CartDrawer } from "./components/CartDrawer.component";
-export { CartDrawerContainer } from "./containers/CartDrawerContainer.container";
-export { CartPage } from "./pages/CartPage.page";
-export { cartApi } from "./api/cart.api";
-export { clearClientGuestSessionCookie } from "./utils/guest-session";
+} from "./api/cart/cart.queries";
+export { cartKeys, cartMutationKeys } from "./api/cart/cart.queries";
+export { useCartDrawerStore } from "./store/drawer/cart.store";
+export { groupItemsByVendor } from "./utils/cart/cart.utils";
+export { CartDrawer } from "./components/drawer/CartDrawer.component";
+export { CartDrawerContainer } from "./containers/drawer/CartDrawerContainer.container";
+export { CartPage } from "./pages/page/CartPage.page";
+export { cartApi } from "./api/cart/cart.api";
+export { clearClientGuestSessionCookie } from "./utils/cart/guest-session";
 export {
   resolveCartDisplayTotals,
   patchExistingCartItemQuantity,
   patchRemoveCartItem,
-} from "./utils/cartDisplay.utils";
+} from "./utils/line-item/cartDisplay.utils";

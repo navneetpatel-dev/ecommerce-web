@@ -7,8 +7,8 @@ import {
   PopoverTrigger,
 } from "@/shared/components/ui/popover";
 import { LABELS } from "@/shared/constants/labels";
-import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
-import { cn } from "@/shared/utils/cn";
+import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
+import { cn } from "@/shared/utils/dom/cn";
 import { infiniteSingleSelectStyles } from "./infiniteSingleSelect.styles";
 import type { InfiniteSingleSelectProps } from "./types";
 import { useInfiniteSelectOptions } from "./useInfiniteSelectOptions.hook";

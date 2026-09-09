@@ -1,5 +1,5 @@
 import { FormError } from "@/shared/components/FormError.component";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
 interface QueryErrorAlertProps {
   error: unknown;

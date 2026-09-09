@@ -24,26 +24,26 @@ const searchDirs = [
  */
 const allowlist = [
   // Pure display formatters: grouping and compact notation over a final amount.
-  "src/shared/utils/orderFormat.ts",
-  "src/shared/utils/formatPoints.ts",
+  "src/shared/utils/formatting/orderFormat.ts",
+  "src/shared/utils/formatting/formatPoints.ts",
   // Chart geometry: axis domain padding and tick labels over an already-final series.
-  "src/features/admin-dashboard/components/AnalyticsTrendChart.component.tsx",
+  "src/features/admin-dashboard/components/analytics/AnalyticsTrendChart.component.tsx",
   // `total` here is a page/row count, not money.
-  "src/shared/api/pagination.ts",
-  "src/features/admin-dashboard/components/AnalyticsStatusChart.component.tsx",
-  "src/features/admin-dashboard/hooks/useAdminDataList.hook.ts",
+  "src/shared/api/client/pagination.ts",
+  "src/features/admin-dashboard/components/analytics/AnalyticsStatusChart.component.tsx",
+  "src/features/admin-dashboard/hooks/shared/useAdminDataList.hook.ts",
   // Single pure helper: wishlist price-at-add vs. live product price, used
   // only to decide whether to show the "Price dropped" badge.
-  "src/features/wishlist/utils/priceDrop.utils.ts",
+  "src/features/wishlist/utils/price-drop/priceDrop.utils.ts",
   // Cash deposit discrepancy threshold check (amount vs expectedAmount)
-  "src/features/admin-dashboard/components/CashDepositsPanel/CashDepositTableRow.component.tsx",
-  "src/features/delivery-dashboard/components/CashDepositsCard.component.tsx",
-  "src/features/delivery-dashboard/components/CashDepositsCard/useCashDepositsCardPresentation.hook.ts",
+  "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/CashDepositTableRow.component.tsx",
+  "src/features/delivery-dashboard/components/cash/CashDepositsCard.component.tsx",
+  "src/features/delivery-dashboard/components/cash/CashDepositsCard/useCashDepositsCardPresentation.hook.ts",
   // Client-side summation of pending payout items for summary display
-  "src/features/delivery-dashboard/components/EarningsPayoutsCard.component.tsx",
-  "src/features/delivery-dashboard/components/EarningsPayoutsCard/useEarningsPayoutsCardPresentation.hook.ts",
+  "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard.component.tsx",
+  "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/useEarningsPayoutsCardPresentation.hook.ts",
   // `total` here is pagination item count, not money
-  "src/features/vendor-dashboard/components/ProductsTableView.component.tsx",
+  "src/features/vendor-dashboard/components/products/ProductsTableView.component.tsx",
 ];
 
 /** constants/ holds display strings and route paths — no logic, only false positives. */

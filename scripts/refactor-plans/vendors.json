@@ -1,0 +1,80 @@
+{
+  "moves": [
+    {
+      "from": "src/features/vendors/api/vendors.api.ts",
+      "to": "src/features/vendors/api/directory/vendors.api.ts"
+    },
+    {
+      "from": "src/features/vendors/api/vendors.queries.ts",
+      "to": "src/features/vendors/api/directory/vendors.queries.ts"
+    },
+    {
+      "from": "src/features/vendors/api/vendorSeo.server.ts",
+      "to": "src/features/vendors/api/seo/vendorSeo.server.ts"
+    },
+    {
+      "from": "src/features/vendors/components/VendorsIndexView.component.tsx",
+      "to": "src/features/vendors/components/index/VendorsIndexView.component.tsx"
+    },
+    {
+      "from": "src/features/vendors/components/vendorsIndexView.styles.ts",
+      "to": "src/features/vendors/components/index/vendorsIndexView.styles.ts"
+    },
+    {
+      "from": "src/features/vendors/components/VendorRegisterForm/BasicsSection.component.tsx",
+      "to": "src/features/vendors/components/register/VendorRegisterForm/BasicsSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendors/components/VendorRegisterForm/CategoriesSection.component.tsx",
+      "to": "src/features/vendors/components/register/VendorRegisterForm/CategoriesSection.component.tsx"
+    },
+    {
+      "from": "src/features/vendors/components/VendorRegisterForm/IdentitySection.component.tsx",
+      "to": "src/features/vendors/components/register/VendorRegisterForm/IdentitySection.component.tsx"
+    },
+    {
+      "from": "src/features/vendors/components/VendorRegisterForm/index.tsx",
+      "to": "src/features/vendors/components/register/VendorRegisterForm/index.tsx"
+    },
+    {
+      "from": "src/features/vendors/components/VendorRegisterForm/vendorRegisterForm.styles.ts",
+      "to": "src/features/vendors/components/register/VendorRegisterForm/vendorRegisterForm.styles.ts"
+    },
+    {
+      "from": "src/features/vendors/hooks/useVendorsIndexPage.hook.ts",
+      "to": "src/features/vendors/hooks/index/useVendorsIndexPage.hook.ts"
+    },
+    {
+      "from": "src/features/vendors/hooks/useVendorStorefrontPage.hook.ts",
+      "to": "src/features/vendors/hooks/storefront/useVendorStorefrontPage.hook.ts"
+    },
+    {
+      "from": "src/features/vendors/hooks/useVendorRegisterPage.hook.ts",
+      "to": "src/features/vendors/hooks/register/useVendorRegisterPage.hook.ts"
+    },
+    {
+      "from": "src/features/vendors/hooks/useVendorRegistration.hook.ts",
+      "to": "src/features/vendors/hooks/register/useVendorRegistration.hook.ts"
+    },
+    {
+      "from": "src/features/vendors/pages/VendorsIndexPage.page.tsx",
+      "to": "src/features/vendors/pages/index/VendorsIndexPage.page.tsx"
+    },
+    {
+      "from": "src/features/vendors/pages/VendorStorefrontPage.page.tsx",
+      "to": "src/features/vendors/pages/storefront/VendorStorefrontPage.page.tsx"
+    },
+    {
+      "from": "src/features/vendors/pages/vendorStorefrontPage.styles.ts",
+      "to": "src/features/vendors/pages/storefront/vendorStorefrontPage.styles.ts"
+    },
+    {
+      "from": "src/features/vendors/pages/VendorRegisterPage.page.tsx",
+      "to": "src/features/vendors/pages/register/VendorRegisterPage.page.tsx"
+    },
+    {
+      "from": "src/features/vendors/schemas/vendor.schema.ts",
+      "to": "src/features/vendors/schemas/register/vendor.schema.ts"
+    }
+  ]
+}

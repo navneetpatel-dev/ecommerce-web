@@ -1,7 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
-import { cn } from "@/shared/utils/cn";
-import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { cn } from "@/shared/utils/dom/cn";
+import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 
 interface MoneyAmountProps {
   /** Server-computed amount. Absent means the client has nothing to show. */

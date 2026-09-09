@@ -1,6 +1,6 @@
 "use client";
 
-import { useRoleSurfaceGate } from "@/shared/hooks/useRoleSurfaceGate.hook";
+import { useRoleSurfaceGate } from "@/shared/hooks/auth/useRoleSurfaceGate.hook";
 
 /**
  * Enforces role surfaces for every route (see `useRoleSurfaceGate`).

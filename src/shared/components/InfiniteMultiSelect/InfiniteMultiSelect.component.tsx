@@ -3,9 +3,9 @@
 import { useMemo } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
-import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
-import { cn } from "@/shared/utils/cn";
-import { formatLabel } from "@/shared/utils/formatLabel";
+import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
+import { cn } from "@/shared/utils/dom/cn";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { infiniteMultiSelectStyles } from "./infiniteMultiSelect.styles";
 import { OptionRow } from "./OptionRow.component";
 import type { InfiniteMultiSelectProps } from "./types";

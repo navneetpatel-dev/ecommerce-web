@@ -4,7 +4,7 @@ import { Minus, Plus } from "lucide-react";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { AnimatedQuantityValue } from "./AnimatedQuantityValue.component";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { useQuantitySelector } from "./useQuantitySelector.hook";
 import {
   QUANTITY_SELECTOR_CONTAINER,

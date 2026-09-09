@@ -2,7 +2,7 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { PATHS } from "@/shared/constants/paths";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { errorBoundaryStyles as styles } from "./errorBoundary.styles";
 
 interface ErrorFallbackActionsProps {

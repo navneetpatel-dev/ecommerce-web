@@ -5,14 +5,14 @@ export {
   useShippingRates,
   useCheckoutQuote,
   usePlaceOrder,
-} from "./api/checkout.queries";
-export { useCheckoutStore } from "@/shared/stores/checkout.store";
-export { checkoutKeys } from "./api/checkout.queries";
-export { CheckoutPage } from "./pages/CheckoutPage.page";
-export { checkoutApi } from "./api/checkout.api";
-export { loadRazorpayScript } from "./utils/loadRazorpayScript";
+} from "./api/checkout/checkout.queries";
+export { useCheckoutStore } from "@/features/checkout/store/checkout.store";
+export { checkoutKeys } from "./api/checkout/checkout.queries";
+export { CheckoutPage } from "./pages/page-view/CheckoutPage.page";
+export { checkoutApi } from "./api/checkout/checkout.api";
+export { loadRazorpayScript } from "./utils/payment/loadRazorpayScript";
 export {
   getRazorpayCheckoutConfig,
   getRazorpayCheckoutMethods,
-} from "./utils/razorpayCheckoutConfig";
-export { getRazorpayCheckoutTheme } from "./utils/razorpayTheme";
+} from "./utils/payment/razorpayCheckoutConfig";
+export { getRazorpayCheckoutTheme } from "./utils/payment/razorpayTheme";

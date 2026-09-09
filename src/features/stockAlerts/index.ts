@@ -1,1 +1,1 @@
-export { NotifyMeButton } from "./components/NotifyMeButton.component";
+export { NotifyMeButton } from "./components/notify-me/NotifyMeButton.component";

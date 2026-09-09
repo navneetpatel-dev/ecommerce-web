@@ -1,4 +1,4 @@
-import type { HelpCategory } from "../../types/help.types";
+import type { HelpCategory } from "../../types/help/help.types";
 import { RETURNS_REFUNDS_REQUESTS_ARTICLES } from "./returns-refunds-requests";
 import { RETURNS_REFUNDS_OUTCOMES_ARTICLES } from "./returns-refunds-outcomes";
 

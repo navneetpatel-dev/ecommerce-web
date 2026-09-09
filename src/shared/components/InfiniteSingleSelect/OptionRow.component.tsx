@@ -1,7 +1,7 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { infiniteSingleSelectStyles } from "./infiniteSingleSelect.styles";
 
 export function OptionRow({

@@ -1,5 +1,5 @@
 import { SkeletonCard } from "@/shared/components/Skeletons.component";
-import { loadingPagesStyles as styles } from "@/app/loadingPages.styles";
+import { loadingPagesStyles as styles } from "@/app/_styles/loading-pages.styles";
 
 export default function OrdersLoading() {
   return (

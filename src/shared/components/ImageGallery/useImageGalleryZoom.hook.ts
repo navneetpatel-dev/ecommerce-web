@@ -9,14 +9,14 @@ import {
 import {
   IMAGE_GALLERY_LONG_PRESS_MS,
   IMAGE_GALLERY_MOVE_PX,
-} from "@/shared/constants/imageGallery";
+} from "@/shared/constants/media/imageGallery";
 import {
   originFromPointer,
   type GalleryPoint,
-} from "@/shared/utils/imageGalleryGeometry";
-import { useSwallowNextClick } from "@/shared/hooks/useSwallowNextClick.hook";
-import { useLongPressAction } from "@/shared/hooks/useLongPressAction.hook";
-import { dispatchStageGesture } from "@/shared/utils/imageGalleryZoomGesture.utils";
+} from "@/shared/utils/media/imageGalleryGeometry";
+import { useSwallowNextClick } from "@/shared/hooks/ui/useSwallowNextClick.hook";
+import { useLongPressAction } from "@/shared/hooks/ui/useLongPressAction.hook";
+import { dispatchStageGesture } from "@/shared/utils/media/imageGalleryZoomGesture.utils";
 
 export interface UseImageGalleryZoomOptions {
   enabled?: boolean;

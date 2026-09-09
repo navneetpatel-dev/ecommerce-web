@@ -1,0 +1,60 @@
+{
+  "moves": [
+    {
+      "from": "src/features/giftCards/api/giftCards.api.ts",
+      "to": "src/features/giftCards/api/gift-cards/giftCards.api.ts"
+    },
+    {
+      "from": "src/features/giftCards/api/giftCards.queries.ts",
+      "to": "src/features/giftCards/api/gift-cards/giftCards.queries.ts"
+    },
+    {
+      "from": "src/features/giftCards/components/GiftCardPurchaseForm.component.tsx",
+      "to": "src/features/giftCards/components/purchase/GiftCardPurchaseForm.component.tsx"
+    },
+    {
+      "from": "src/features/giftCards/components/giftCardPurchaseForm.styles.ts",
+      "to": "src/features/giftCards/components/purchase/giftCardPurchaseForm.styles.ts"
+    },
+    {
+      "from": "src/features/giftCards/components/GiftCardRedeemContent.component.tsx",
+      "to": "src/features/giftCards/components/redeem/GiftCardRedeemContent.component.tsx"
+    },
+    {
+      "from": "src/features/giftCards/components/giftCardRedeemContent.styles.ts",
+      "to": "src/features/giftCards/components/redeem/giftCardRedeemContent.styles.ts"
+    },
+    {
+      "from": "src/features/giftCards/hooks/useGiftCardPurchase.hook.ts",
+      "to": "src/features/giftCards/hooks/purchase/useGiftCardPurchase.hook.ts"
+    },
+    {
+      "from": "src/features/giftCards/hooks/useGiftCardRedeem.hook.ts",
+      "to": "src/features/giftCards/hooks/redeem/useGiftCardRedeem.hook.ts"
+    },
+    {
+      "from": "src/features/giftCards/hooks/useGiftCardRedeemPage.hook.ts",
+      "to": "src/features/giftCards/hooks/redeem/useGiftCardRedeemPage.hook.ts"
+    },
+    {
+      "from": "src/features/giftCards/pages/GiftCardPurchasePage.page.tsx",
+      "to": "src/features/giftCards/pages/purchase/GiftCardPurchasePage.page.tsx"
+    },
+    {
+      "from": "src/features/giftCards/pages/giftCardPurchasePage.styles.ts",
+      "to": "src/features/giftCards/pages/purchase/giftCardPurchasePage.styles.ts"
+    },
+    {
+      "from": "src/features/giftCards/pages/GiftCardRedeemPage.page.tsx",
+      "to": "src/features/giftCards/pages/redeem/GiftCardRedeemPage.page.tsx"
+    },
+    {
+      "from": "src/features/giftCards/constants/giftCards.constants.ts",
+      "to": "src/features/giftCards/constants/gift-cards/giftCards.constants.ts"
+    },
+    {
+      "from": "src/features/giftCards/constants/index.ts",
+      "to": "src/features/giftCards/constants/gift-cards/index.ts"
+    }
+  ]
+}

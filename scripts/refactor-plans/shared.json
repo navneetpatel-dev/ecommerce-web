@@ -1,0 +1,532 @@
+{
+  "moves": [
+    {
+      "from": "src/shared/hooks/use-debounce.hook.ts",
+      "to": "src/shared/hooks/ui/use-debounce.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/use-media-query.hook.ts",
+      "to": "src/shared/hooks/responsive/use-media-query.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useAdminLayout.hook.ts",
+      "to": "src/shared/hooks/navigation/useAdminLayout.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useApiFormErrors.hook.ts",
+      "to": "src/shared/hooks/forms/useApiFormErrors.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useBodyScrollLock.hook.ts",
+      "to": "src/shared/hooks/scroll/useBodyScrollLock.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useCaptureLocation.hook.ts",
+      "to": "src/shared/hooks/forms/useCaptureLocation.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useChartThemeColors.hook.ts",
+      "to": "src/shared/hooks/theme/useChartThemeColors.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useChatWidget.hook.ts",
+      "to": "src/shared/hooks/chat/useChatWidget.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useClientPagination.hook.ts",
+      "to": "src/shared/hooks/pagination/useClientPagination.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useCookieBanner.hook.ts",
+      "to": "src/shared/hooks/cookies/useCookieBanner.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useDeliveryLayout.hook.ts",
+      "to": "src/shared/hooks/navigation/useDeliveryLayout.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useImageGalleryTransition.hook.ts",
+      "to": "src/shared/hooks/media/useImageGalleryTransition.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useImageGalleryZoom.hook.ts",
+      "to": "src/shared/hooks/media/useImageGalleryZoom.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useImageLightboxGestures.hook.ts",
+      "to": "src/shared/hooks/media/useImageLightboxGestures.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useInView.hook.ts",
+      "to": "src/shared/hooks/scroll/useInView.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useLastBrowseUrlTracker.hook.ts",
+      "to": "src/shared/hooks/navigation/useLastBrowseUrlTracker.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useLightboxTransform.hook.ts",
+      "to": "src/shared/hooks/media/useLightboxTransform.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useLongPressAction.hook.ts",
+      "to": "src/shared/hooks/ui/useLongPressAction.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useManualFormFieldErrors.hook.ts",
+      "to": "src/shared/hooks/forms/useManualFormFieldErrors.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useNewsletterForm.hook.ts",
+      "to": "src/shared/hooks/forms/useNewsletterForm.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/usePasswordVisibility.hook.ts",
+      "to": "src/shared/hooks/forms/usePasswordVisibility.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/usePermissions.hook.ts",
+      "to": "src/shared/hooks/auth/usePermissions.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useRequireAuth.hook.ts",
+      "to": "src/shared/hooks/auth/useRequireAuth.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useRoleSurfaceGate.hook.ts",
+      "to": "src/shared/hooks/auth/useRoleSurfaceGate.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useRouteQueryDialog.hook.ts",
+      "to": "src/shared/hooks/navigation/useRouteQueryDialog.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useScrollShadow.hook.ts",
+      "to": "src/shared/hooks/scroll/useScrollShadow.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useScrollToTop.hook.ts",
+      "to": "src/shared/hooks/scroll/useScrollToTop.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useServerPagination.hook.ts",
+      "to": "src/shared/hooks/pagination/useServerPagination.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useShare.hook.ts",
+      "to": "src/shared/hooks/ui/useShare.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useSuccessCheckmark.hook.ts",
+      "to": "src/shared/hooks/ui/useSuccessCheckmark.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useSwallowNextClick.hook.ts",
+      "to": "src/shared/hooks/ui/useSwallowNextClick.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useThemePalette.hook.ts",
+      "to": "src/shared/hooks/theme/useThemePalette.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useUploads.hook.ts",
+      "to": "src/shared/hooks/uploads/useUploads.hook.ts"
+    },
+    {
+      "from": "src/shared/hooks/useVendorLayout.hook.ts",
+      "to": "src/shared/hooks/navigation/useVendorLayout.hook.ts"
+    },
+    {
+      "from": "src/shared/utils/apiErrorMessage.ts",
+      "to": "src/shared/utils/api-errors/apiErrorMessage.ts"
+    },
+    {
+      "from": "src/shared/utils/apiErrorMessageData.ts",
+      "to": "src/shared/utils/api-errors/apiErrorMessageData.ts"
+    },
+    {
+      "from": "src/shared/utils/applyApiFormErrors.ts",
+      "to": "src/shared/utils/api-errors/applyApiFormErrors.ts"
+    },
+    {
+      "from": "src/shared/utils/authSessionError.ts",
+      "to": "src/shared/utils/auth/authSessionError.ts"
+    },
+    {
+      "from": "src/shared/utils/cn.ts",
+      "to": "src/shared/utils/dom/cn.ts"
+    },
+    {
+      "from": "src/shared/utils/downloadFilename.ts",
+      "to": "src/shared/utils/files/downloadFilename.ts"
+    },
+    {
+      "from": "src/shared/utils/fileDownload.ts",
+      "to": "src/shared/utils/files/fileDownload.ts"
+    },
+    {
+      "from": "src/shared/utils/filePickerValidation.ts",
+      "to": "src/shared/utils/uploads/filePickerValidation.ts"
+    },
+    {
+      "from": "src/shared/utils/firstMissingRequiredHint.ts",
+      "to": "src/shared/utils/validation/firstMissingRequiredHint.ts"
+    },
+    {
+      "from": "src/shared/utils/formatDate.ts",
+      "to": "src/shared/utils/formatting/formatDate.ts"
+    },
+    {
+      "from": "src/shared/utils/formatLabel.ts",
+      "to": "src/shared/utils/formatting/formatLabel.ts"
+    },
+    {
+      "from": "src/shared/utils/formatPoints.ts",
+      "to": "src/shared/utils/formatting/formatPoints.ts"
+    },
+    {
+      "from": "src/shared/utils/geo.ts",
+      "to": "src/shared/utils/geo/geo.ts"
+    },
+    {
+      "from": "src/shared/utils/imageField.ts",
+      "to": "src/shared/utils/media/imageField.ts"
+    },
+    {
+      "from": "src/shared/utils/imageGalleryFit.ts",
+      "to": "src/shared/utils/media/imageGalleryFit.ts"
+    },
+    {
+      "from": "src/shared/utils/imageGalleryGeometry.ts",
+      "to": "src/shared/utils/media/imageGalleryGeometry.ts"
+    },
+    {
+      "from": "src/shared/utils/imageGalleryGestures.ts",
+      "to": "src/shared/utils/media/imageGalleryGestures.ts"
+    },
+    {
+      "from": "src/shared/utils/imageGalleryZoomGesture.utils.ts",
+      "to": "src/shared/utils/media/imageGalleryZoomGesture.utils.ts"
+    },
+    {
+      "from": "src/shared/utils/imageProcessing.ts",
+      "to": "src/shared/utils/media/imageProcessing.ts"
+    },
+    {
+      "from": "src/shared/utils/lastBrowseUrl.ts",
+      "to": "src/shared/utils/navigation/lastBrowseUrl.ts"
+    },
+    {
+      "from": "src/shared/utils/navigate.ts",
+      "to": "src/shared/utils/navigation/navigate.ts"
+    },
+    {
+      "from": "src/shared/utils/numberInputMath.ts",
+      "to": "src/shared/utils/validation/numberInputMath.ts"
+    },
+    {
+      "from": "src/shared/utils/orderFormat.ts",
+      "to": "src/shared/utils/formatting/orderFormat.ts"
+    },
+    {
+      "from": "src/shared/utils/orderTimeline.ts",
+      "to": "src/shared/utils/formatting/orderTimeline.ts"
+    },
+    {
+      "from": "src/shared/utils/pagination.ts",
+      "to": "src/shared/utils/pagination/pagination.ts"
+    },
+    {
+      "from": "src/shared/utils/profilePaths.ts",
+      "to": "src/shared/utils/navigation/profilePaths.ts"
+    },
+    {
+      "from": "src/shared/utils/recordDetails.ts",
+      "to": "src/shared/utils/formatting/recordDetails.ts"
+    },
+    {
+      "from": "src/shared/utils/roleSurface.ts",
+      "to": "src/shared/utils/roles/roleSurface.ts"
+    },
+    {
+      "from": "src/shared/utils/roles.ts",
+      "to": "src/shared/utils/roles/roles.ts"
+    },
+    {
+      "from": "src/shared/utils/routeQuery.ts",
+      "to": "src/shared/utils/navigation/routeQuery.ts"
+    },
+    {
+      "from": "src/shared/utils/taxDisplay.ts",
+      "to": "src/shared/utils/formatting/taxDisplay.ts"
+    },
+    {
+      "from": "src/shared/utils/truncateText.ts",
+      "to": "src/shared/utils/formatting/truncateText.ts"
+    },
+    {
+      "from": "src/shared/utils/vendorDocumentChecklistStatusLabel.ts",
+      "to": "src/shared/utils/formatting/vendorDocumentChecklistStatusLabel.ts"
+    },
+    {
+      "from": "src/shared/utils/vendorDocumentTypeLabel.ts",
+      "to": "src/shared/utils/formatting/vendorDocumentTypeLabel.ts"
+    },
+    {
+      "from": "src/shared/utils/vendorEntityTypeLabel.ts",
+      "to": "src/shared/utils/formatting/vendorEntityTypeLabel.ts"
+    },
+    {
+      "from": "src/shared/utils/__tests__/apiErrorMessage.test.ts",
+      "to": "src/shared/utils/api-errors/__tests__/apiErrorMessage.test.ts"
+    },
+    {
+      "from": "src/shared/utils/__tests__/applyApiFormErrors.test.ts",
+      "to": "src/shared/utils/api-errors/__tests__/applyApiFormErrors.test.ts"
+    },
+    {
+      "from": "src/shared/utils/__tests__/downloadFilename.test.ts",
+      "to": "src/shared/utils/files/__tests__/downloadFilename.test.ts"
+    },
+    {
+      "from": "src/shared/utils/__tests__/formatDate.test.ts",
+      "to": "src/shared/utils/formatting/__tests__/formatDate.test.ts"
+    },
+    {
+      "from": "src/shared/utils/__tests__/formatPoints.test.ts",
+      "to": "src/shared/utils/formatting/__tests__/formatPoints.test.ts"
+    },
+    {
+      "from": "src/shared/utils/__tests__/imageGalleryFit.test.ts",
+      "to": "src/shared/utils/media/__tests__/imageGalleryFit.test.ts"
+    },
+    {
+      "from": "src/shared/utils/__tests__/imageGalleryGeometry.test.ts",
+      "to": "src/shared/utils/media/__tests__/imageGalleryGeometry.test.ts"
+    },
+    {
+      "from": "src/shared/utils/__tests__/imageGalleryGestures.test.ts",
+      "to": "src/shared/utils/media/__tests__/imageGalleryGestures.test.ts"
+    },
+    {
+      "from": "src/shared/utils/videoMedia/compress.ts",
+      "to": "src/shared/utils/media/videoMedia/compress.ts"
+    },
+    {
+      "from": "src/shared/utils/videoMedia/index.ts",
+      "to": "src/shared/utils/media/videoMedia/index.ts"
+    },
+    {
+      "from": "src/shared/utils/videoMedia/prepare.ts",
+      "to": "src/shared/utils/media/videoMedia/prepare.ts"
+    },
+    {
+      "from": "src/shared/constants/adminNav.ts",
+      "to": "src/shared/constants/navigation/adminNav.ts"
+    },
+    {
+      "from": "src/shared/constants/cart.ts",
+      "to": "src/shared/constants/cart/cart.ts"
+    },
+    {
+      "from": "src/shared/constants/deliveryNav.ts",
+      "to": "src/shared/constants/navigation/deliveryNav.ts"
+    },
+    {
+      "from": "src/shared/constants/errors.ts",
+      "to": "src/shared/constants/http/errors.ts"
+    },
+    {
+      "from": "src/shared/constants/footer.ts",
+      "to": "src/shared/constants/navigation/footer.ts"
+    },
+    {
+      "from": "src/shared/constants/http.ts",
+      "to": "src/shared/constants/http/http.ts"
+    },
+    {
+      "from": "src/shared/constants/imageGallery.ts",
+      "to": "src/shared/constants/media/imageGallery.ts"
+    },
+    {
+      "from": "src/shared/constants/mediaLimits.ts",
+      "to": "src/shared/constants/media/mediaLimits.ts"
+    },
+    {
+      "from": "src/shared/constants/pagination.ts",
+      "to": "src/shared/constants/pagination/pagination.ts"
+    },
+    {
+      "from": "src/shared/constants/paths.ts",
+      "to": "src/shared/constants/paths/paths.ts"
+    },
+    {
+      "from": "src/shared/constants/permissions.ts",
+      "to": "src/shared/constants/permissions/permissions.ts"
+    },
+    {
+      "from": "src/shared/constants/pincode.ts",
+      "to": "src/shared/constants/geo/pincode.ts"
+    },
+    {
+      "from": "src/shared/constants/profileSections.ts",
+      "to": "src/shared/constants/navigation/profileSections.ts"
+    },
+    {
+      "from": "src/shared/constants/queryParams.ts",
+      "to": "src/shared/constants/navigation/queryParams.ts"
+    },
+    {
+      "from": "src/shared/constants/storage.ts",
+      "to": "src/shared/constants/storage/storage.ts"
+    },
+    {
+      "from": "src/shared/constants/table.ts",
+      "to": "src/shared/constants/table/table.ts"
+    },
+    {
+      "from": "src/shared/constants/tableActionTone.ts",
+      "to": "src/shared/constants/table/tableActionTone.ts"
+    },
+    {
+      "from": "src/shared/constants/timing.ts",
+      "to": "src/shared/constants/timing/timing.ts"
+    },
+    {
+      "from": "src/shared/constants/uploads.ts",
+      "to": "src/shared/constants/uploads/uploads.ts"
+    },
+    {
+      "from": "src/shared/constants/vendorNav.ts",
+      "to": "src/shared/constants/navigation/vendorNav.ts"
+    },
+    {
+      "from": "src/shared/containers/AdminLayoutContainer.container.tsx",
+      "to": "src/shared/containers/layout/AdminLayoutContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/BottomSheetContainer.container.tsx",
+      "to": "src/shared/containers/dialogs/BottomSheetContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/BrowseUrlTrackerContainer.container.tsx",
+      "to": "src/shared/containers/system/BrowseUrlTrackerContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/ChatWidgetContainer.container.tsx",
+      "to": "src/shared/containers/system/ChatWidgetContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/ChatWidgetMount.container.tsx",
+      "to": "src/shared/containers/system/ChatWidgetMount.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/CookieBannerContainer.container.tsx",
+      "to": "src/shared/containers/dialogs/CookieBannerContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/DeliveryLayoutContainer.container.tsx",
+      "to": "src/shared/containers/layout/DeliveryLayoutContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/ImageGalleryContainer.container.tsx",
+      "to": "src/shared/containers/media/ImageGalleryContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/LoginRequiredDialogContainer.container.tsx",
+      "to": "src/shared/containers/dialogs/LoginRequiredDialogContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/NewsletterFormContainer.container.tsx",
+      "to": "src/shared/containers/forms/NewsletterFormContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/PaginationContainer.container.tsx",
+      "to": "src/shared/containers/navigation/PaginationContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/PasswordInputContainer.container.tsx",
+      "to": "src/shared/containers/forms/PasswordInputContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/RouteScrollResetContainer.container.tsx",
+      "to": "src/shared/containers/navigation/RouteScrollResetContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/ScrollToTopContainer.container.tsx",
+      "to": "src/shared/containers/navigation/ScrollToTopContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/ShareButtonContainer.container.tsx",
+      "to": "src/shared/containers/system/ShareButtonContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/SuccessCheckmarkContainer.container.tsx",
+      "to": "src/shared/containers/display/SuccessCheckmarkContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/VendorLayoutContainer.container.tsx",
+      "to": "src/shared/containers/layout/VendorLayoutContainer.container.tsx"
+    },
+    {
+      "from": "src/shared/containers/workspaceLayout.styles.ts",
+      "to": "src/shared/containers/layout/workspaceLayout.styles.ts"
+    },
+    {
+      "from": "src/shared/stores/auth.store.ts",
+      "to": "src/shared/stores/auth/auth.store.ts"
+    },
+    {
+      "from": "src/shared/stores/authPrompt.store.ts",
+      "to": "src/shared/stores/auth/authPrompt.store.ts"
+    },
+    {
+      "from": "src/shared/stores/checkout.store.ts",
+      "to": "src/features/checkout/store/checkout.store.ts"
+    },
+    {
+      "from": "src/shared/api/client.ts",
+      "to": "src/shared/api/client/client.ts"
+    },
+    {
+      "from": "src/shared/api/downloadFile.ts",
+      "to": "src/shared/api/client/downloadFile.ts"
+    },
+    {
+      "from": "src/shared/api/postFile.ts",
+      "to": "src/shared/api/client/postFile.ts"
+    },
+    {
+      "from": "src/shared/api/queryPersister.ts",
+      "to": "src/shared/api/client/queryPersister.ts"
+    },
+    {
+      "from": "src/shared/api/serverOrigin.ts",
+      "to": "src/shared/api/client/serverOrigin.ts"
+    },
+    {
+      "from": "src/shared/api/sessionAdapter.ts",
+      "to": "src/shared/api/client/sessionAdapter.ts"
+    },
+    {
+      "from": "src/shared/api/pagination.ts",
+      "to": "src/shared/api/client/pagination.ts"
+    },
+    {
+      "from": "src/shared/api/internal/envelope.ts",
+      "to": "src/shared/api/client/internal/envelope.ts"
+    },
+    {
+      "from": "src/shared/api/internal/httpRequest.ts",
+      "to": "src/shared/api/client/internal/httpRequest.ts"
+    },
+    {
+      "from": "src/shared/api/internal/sessionRefresh.ts",
+      "to": "src/shared/api/client/internal/sessionRefresh.ts"
+    },
+    {
+      "from": "src/shared/api/internal/__tests__/sessionRefresh.test.ts",
+      "to": "src/shared/api/client/internal/__tests__/sessionRefresh.test.ts"
+    }
+  ]
+}

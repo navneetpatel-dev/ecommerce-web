@@ -1,4 +1,4 @@
-import type { HelpCategory } from "../../types/help.types";
+import type { HelpCategory } from "../../types/help/help.types";
 
 export const PRODUCTS_REVIEWS_CATEGORY: HelpCategory = {
   id: "products-reviews",

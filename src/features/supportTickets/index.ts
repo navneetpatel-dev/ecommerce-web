@@ -6,14 +6,14 @@
 // support surfaces, field limits and label helpers, and the role-specific
 // pages (customer list/new/detail, vendor list/detail, admin list/detail)
 // rendered by the storefront support and workspace dashboard ticket routes.
-export { CustomerTicketsPage } from "./pages/CustomerTicketsPage.page";
-export { CustomerNewTicketPage } from "./pages/CustomerNewTicketPage.page";
-export { CustomerTicketDetailPage } from "./pages/CustomerTicketDetailPage.page";
-export { VendorTicketsPage } from "./pages/VendorTicketsPage.page";
-export { VendorTicketDetailPage } from "./pages/VendorTicketDetailPage.page";
-export { AdminTicketsPage } from "./pages/AdminTicketsPage.page";
-export { AdminTicketDetailPage } from "./pages/AdminTicketDetailPage.page";
-export { SupportAuthGate } from "./components/SupportAuthGate.component";
-export { TicketAttachmentUploader } from "./components/TicketAttachmentUploader";
-export { BugAttachmentUploader } from "./components/TicketAttachmentUploader";
-export type { UploadedMediaAttachment } from "./components/TicketAttachmentUploader";
+export { CustomerTicketsPage } from "./pages/customer/CustomerTicketsPage.page";
+export { CustomerNewTicketPage } from "./pages/customer/CustomerNewTicketPage.page";
+export { CustomerTicketDetailPage } from "./pages/customer/CustomerTicketDetailPage.page";
+export { VendorTicketsPage } from "./pages/vendor/VendorTicketsPage.page";
+export { VendorTicketDetailPage } from "./pages/vendor/VendorTicketDetailPage.page";
+export { AdminTicketsPage } from "./pages/admin/AdminTicketsPage.page";
+export { AdminTicketDetailPage } from "./pages/admin/AdminTicketDetailPage.page";
+export { SupportAuthGate } from "./components/list/SupportAuthGate.component";
+export { TicketAttachmentUploader } from "./components/form/TicketAttachmentUploader/index";
+export { BugAttachmentUploader } from "./components/form/TicketAttachmentUploader/index";
+export type { UploadedMediaAttachment } from "./components/form/TicketAttachmentUploader/index";

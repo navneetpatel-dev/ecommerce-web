@@ -6,34 +6,34 @@
 // useReportHub hook, and the AdminReportsPage/VendorReportsPage rendered by
 // the workspace dashboard report routes. The reports engine API is also
 // consumed by the orders feature for order-level reporting.
-export { AdminReportsPage } from "./pages/AdminReportsPage.page";
-export { VendorReportsPage } from "./pages/VendorReportsPage.page";
+export { AdminReportsPage } from "./pages/admin/AdminReportsPage.page";
+export { VendorReportsPage } from "./pages/vendor/VendorReportsPage.page";
 export {
   reportsEngineApi,
   downloadReportFile,
   buildReportExportFilenameFallback,
   type ReportCatalogItem,
-} from "./api/reportsEngine.api";
+} from "./api/table/reportsEngine.api";
 export {
   defaultRange,
   normalizeExportFormat,
   labelForKey,
   type ExportFileFormat,
-} from "./hooks/useReportHubHelpers/index";
-export { getReportExportErrorMessage } from "./utils/reportExportErrorMessage";
-export { deriveExportControlsState } from "./utils/exportControlsState";
-export type { ReportExportControlsState } from "./utils/exportControlsState";
+} from "./hooks/table/useReportHubHelpers/index";
+export { getReportExportErrorMessage } from "./utils/export/reportExportErrorMessage";
+export { deriveExportControlsState } from "./utils/export/exportControlsState";
+export type { ReportExportControlsState } from "./utils/export/exportControlsState";
 export {
   exportFilterDisableHint,
   exportButtonDisableHint,
   resolveExportStatusDisplay,
-} from "./utils/exportDisableHint";
-export { ReportExportButtons } from "./components/ReportExportButtons.component";
-export { ReportExportStatus } from "./components/ReportExportStatus.component";
-export { CustomerOrderHistoryPanel } from "./components/CustomerOrderHistoryPanel.component";
+} from "./utils/export/exportDisableHint";
+export { ReportExportButtons } from "./components/export/ReportExportButtons.component";
+export { ReportExportStatus } from "./components/export/ReportExportStatus.component";
+export { CustomerOrderHistoryPanel } from "./components/customer-order-history/CustomerOrderHistoryPanel.component";
 export {
   useReportPanel,
   type ReportRangeInput,
   type UseReportPanelParams,
-} from "./hooks/useReportPanel.hook";
-export { useReportExport } from "./hooks/useReportExport.hook";
+} from "./hooks/export/useReportPanel.hook";
+export { useReportExport } from "./hooks/export/useReportExport.hook";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { dateTimePickerStyles } from "./dateTimePicker.styles";
 import { WEEKDAYS, sameDay, startOfDay } from "./utils";
 

@@ -11,7 +11,7 @@ import {
   type AssigneePermission,
 } from "@/shared/api/assignees.api";
 import { LABELS } from "@/shared/constants/labels";
-import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
+import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 
 type Props = {
   permission: AssigneePermission;

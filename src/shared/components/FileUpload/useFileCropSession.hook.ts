@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
-import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
-import { normalizeImageMimeType } from "@/shared/utils/imageProcessing";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { normalizeImageMimeType } from "@/shared/utils/media/imageProcessing";
 import type { CropSession } from "./types";
 
 export function useFileCropSession(options: {

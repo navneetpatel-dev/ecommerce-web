@@ -1,0 +1,244 @@
+{
+  "moves": [
+    {
+      "from": "src/features/cart/api/__tests__/cartMutationRollback.test.tsx",
+      "to": "src/features/cart/api/cart/__tests__/cartMutationRollback.test.tsx"
+    },
+    {
+      "from": "src/features/cart/api/cart.api.ts",
+      "to": "src/features/cart/api/cart/cart.api.ts"
+    },
+    {
+      "from": "src/features/cart/api/cart.mutations.ts",
+      "to": "src/features/cart/api/cart/cart.mutations.ts"
+    },
+    {
+      "from": "src/features/cart/api/cart.queries.ts",
+      "to": "src/features/cart/api/cart/cart.queries.ts"
+    },
+    {
+      "from": "src/features/cart/components/AppliedCouponChipItem.component.tsx",
+      "to": "src/features/cart/components/coupons/AppliedCouponChipItem.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/AppliedCouponChips.component.tsx",
+      "to": "src/features/cart/components/coupons/AppliedCouponChips.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/AppliedCouponChipsList.component.tsx",
+      "to": "src/features/cart/components/coupons/AppliedCouponChipsList.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/appliedCouponChips.styles.ts",
+      "to": "src/features/cart/components/coupons/appliedCouponChips.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/CartCouponSection.component.tsx",
+      "to": "src/features/cart/components/coupons/CartCouponSection.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/cartCouponSection.styles.ts",
+      "to": "src/features/cart/components/coupons/cartCouponSection.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/useCartCouponSection.hook.ts",
+      "to": "src/features/cart/components/coupons/useCartCouponSection.hook.ts"
+    },
+    {
+      "from": "src/features/cart/components/CartConfirmAction.component.tsx",
+      "to": "src/features/cart/components/actions/CartConfirmAction.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/useCartConfirmAction.hook.ts",
+      "to": "src/features/cart/components/actions/useCartConfirmAction.hook.ts"
+    },
+    {
+      "from": "src/features/cart/components/RemoveCartItemAction.component.tsx",
+      "to": "src/features/cart/components/actions/RemoveCartItemAction.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/__tests__/RemoveCartItemAction.test.tsx",
+      "to": "src/features/cart/components/actions/__tests__/RemoveCartItemAction.test.tsx"
+    },
+    {
+      "from": "src/features/cart/components/EligibleOfferItem.component.tsx",
+      "to": "src/features/cart/components/offers/EligibleOfferItem.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/EligibleOffersList.component.tsx",
+      "to": "src/features/cart/components/offers/EligibleOffersList.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartDrawer.component.tsx",
+      "to": "src/features/cart/components/drawer/CartDrawer.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartDrawerSummary.component.tsx",
+      "to": "src/features/cart/components/drawer/CartDrawerSummary.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartDrawerVendorGroup.component.tsx",
+      "to": "src/features/cart/components/drawer/CartDrawerVendorGroup.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartDrawerVendorGroupsList.component.tsx",
+      "to": "src/features/cart/components/drawer/CartDrawerVendorGroupsList.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/cartDrawer.styles.ts",
+      "to": "src/features/cart/components/drawer/cartDrawer.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/CartMutationError.component.tsx",
+      "to": "src/features/cart/components/drawer/CartMutationError.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/cartMutationError.styles.ts",
+      "to": "src/features/cart/components/drawer/cartMutationError.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/__tests__/CartDrawerSummary.actions.test.tsx",
+      "to": "src/features/cart/components/drawer/__tests__/CartDrawerSummary.actions.test.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartLineItem.component.tsx",
+      "to": "src/features/cart/components/line-item/CartLineItem.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartLineItem/CompactCartLine.component.tsx",
+      "to": "src/features/cart/components/line-item/CartLineItem/CompactCartLine.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartLineItem/FullCartLine.component.tsx",
+      "to": "src/features/cart/components/line-item/CartLineItem/FullCartLine.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartLineItem/cartLine.styles.ts",
+      "to": "src/features/cart/components/line-item/CartLineItem/cartLine.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/CartLineItem/cartLineShared.component.tsx",
+      "to": "src/features/cart/components/line-item/CartLineItem/cartLineShared.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartLineItem/index.ts",
+      "to": "src/features/cart/components/line-item/CartLineItem/index.ts"
+    },
+    {
+      "from": "src/features/cart/components/CartLineItem/useCartLineViewModel.hook.ts",
+      "to": "src/features/cart/components/line-item/CartLineItem/useCartLineViewModel.hook.ts"
+    },
+    {
+      "from": "src/features/cart/components/__tests__/FullCartLine.test.tsx",
+      "to": "src/features/cart/components/line-item/__tests__/FullCartLine.test.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartPageView.component.tsx",
+      "to": "src/features/cart/components/page/CartPageView.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartPageView/CartPageView.component.tsx",
+      "to": "src/features/cart/components/page/CartPageView/CartPageView.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartPageView/ClearCartAction.component.tsx",
+      "to": "src/features/cart/components/page/CartPageView/ClearCartAction.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartPageView/OrderSummaryAside.component.tsx",
+      "to": "src/features/cart/components/page/CartPageView/OrderSummaryAside.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartPageView/OrderSummaryTotalsList.component.tsx",
+      "to": "src/features/cart/components/page/CartPageView/OrderSummaryTotalsList.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartPageView/VendorGroupCard.component.tsx",
+      "to": "src/features/cart/components/page/CartPageView/VendorGroupCard.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartPageView/VendorGroups.component.tsx",
+      "to": "src/features/cart/components/page/CartPageView/VendorGroups.component.tsx"
+    },
+    {
+      "from": "src/features/cart/components/CartPageView/cartPageView.styles.ts",
+      "to": "src/features/cart/components/page/CartPageView/cartPageView.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/CartPageView/index.ts",
+      "to": "src/features/cart/components/page/CartPageView/index.ts"
+    },
+    {
+      "from": "src/features/cart/components/CartPageView/vendorGroups.styles.ts",
+      "to": "src/features/cart/components/page/CartPageView/vendorGroups.styles.ts"
+    },
+    {
+      "from": "src/features/cart/components/__tests__/ClearCartAction.test.tsx",
+      "to": "src/features/cart/components/page/__tests__/ClearCartAction.test.tsx"
+    },
+    {
+      "from": "src/features/cart/components/__tests__/cartAuthoritativeTotals.test.tsx",
+      "to": "src/features/cart/components/page/__tests__/cartAuthoritativeTotals.test.tsx"
+    },
+    {
+      "from": "src/features/cart/components/__tests__/cartVendorGroups.test.tsx",
+      "to": "src/features/cart/components/page/__tests__/cartVendorGroups.test.tsx"
+    },
+    {
+      "from": "src/features/cart/containers/CartDrawerContainer.container.tsx",
+      "to": "src/features/cart/containers/drawer/CartDrawerContainer.container.tsx"
+    },
+    {
+      "from": "src/features/cart/hooks/useCartCoupons.hook.ts",
+      "to": "src/features/cart/hooks/coupons/useCartCoupons.hook.ts"
+    },
+    {
+      "from": "src/features/cart/hooks/useCouponEligibility.hook.ts",
+      "to": "src/features/cart/hooks/coupons/useCouponEligibility.hook.ts"
+    },
+    {
+      "from": "src/features/cart/hooks/useEligibleCoupons/index.ts",
+      "to": "src/features/cart/hooks/coupons/useEligibleCoupons/index.ts"
+    },
+    {
+      "from": "src/features/cart/hooks/useCartDrawer.hook.ts",
+      "to": "src/features/cart/hooks/drawer/useCartDrawer.hook.ts"
+    },
+    {
+      "from": "src/features/cart/hooks/useCartPage.hook.ts",
+      "to": "src/features/cart/hooks/page/useCartPage.hook.ts"
+    },
+    {
+      "from": "src/features/cart/pages/CartPage.page.tsx",
+      "to": "src/features/cart/pages/page/CartPage.page.tsx"
+    },
+    {
+      "from": "src/features/cart/store/cart.store.ts",
+      "to": "src/features/cart/store/drawer/cart.store.ts"
+    },
+    {
+      "from": "src/features/cart/utils/cart.utils.ts",
+      "to": "src/features/cart/utils/cart/cart.utils.ts"
+    },
+    {
+      "from": "src/features/cart/utils/guest-session.ts",
+      "to": "src/features/cart/utils/cart/guest-session.ts"
+    },
+    {
+      "from": "src/features/cart/utils/cartDisplay.utils.ts",
+      "to": "src/features/cart/utils/line-item/cartDisplay.utils.ts"
+    },
+    {
+      "from": "src/features/cart/utils/__tests__/cartDisplay.utils.test.ts",
+      "to": "src/features/cart/utils/line-item/__tests__/cartDisplay.utils.test.ts"
+    },
+    {
+      "from": "src/features/cart/utils/couponMessages.ts",
+      "to": "src/features/cart/utils/coupons/couponMessages.ts"
+    },
+    {
+      "from": "src/features/cart/utils/__tests__/couponMessages.test.ts",
+      "to": "src/features/cart/utils/coupons/__tests__/couponMessages.test.ts"
+    }
+  ]
+}

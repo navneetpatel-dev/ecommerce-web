@@ -1,6 +1,6 @@
 "use client";
 
-import { useLastBrowseUrlTracker } from "@/shared/hooks/useLastBrowseUrlTracker.hook";
+import { useLastBrowseUrlTracker } from "@/shared/hooks/navigation/useLastBrowseUrlTracker.hook";
 
 /**
  * Mount-only component that keeps the "last browsed URL" up to date.

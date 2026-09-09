@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PackageSearch } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { StorefrontLayout } from "@/features/storefront";
-import { PATHS } from "@/shared/constants/paths";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 
 import { notFoundStyles as styles } from "@/shared/styles/notFound.styles";

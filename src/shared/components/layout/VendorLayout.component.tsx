@@ -1,1 +1,1 @@
-export { VendorLayoutContainer as VendorLayout } from "@/shared/containers/VendorLayoutContainer.container";
+export { VendorLayoutContainer as VendorLayout } from "@/shared/containers/layout/VendorLayoutContainer.container";

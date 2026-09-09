@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import { X } from "lucide-react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 
 const ToastProvider = ToastPrimitive.Provider;
 

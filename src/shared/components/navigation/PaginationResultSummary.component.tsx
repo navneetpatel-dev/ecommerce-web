@@ -1,5 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatLabel";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 
 interface PaginationResultSummaryProps {
   from: number;

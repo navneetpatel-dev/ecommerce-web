@@ -1,10 +1,10 @@
-import { apiClient } from "@/shared/api/client";
+import { apiClient } from "@/shared/api/client/client";
 import {
   unwrapPaginatedList,
   type PaginatedList,
-} from "@/shared/api/pagination";
+} from "@/shared/api/client/pagination";
 import { API } from "@/shared/constants/apiRoutes";
-import { PERMISSIONS } from "@/shared/constants/permissions";
+import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 
 export type AssigneeCandidate = {
   id: string;

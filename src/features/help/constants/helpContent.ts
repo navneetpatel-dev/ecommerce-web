@@ -9,7 +9,7 @@ export type {
   HelpArticle,
   HelpCategory,
   HelpQuickLink,
-} from "../types/help.types";
+} from "../types/help/help.types";
 
 export { HELP_CATEGORIES } from "./helpCategories";
 export { HELP_QUICK_LINKS } from "./helpQuickLinks";
@@ -18,4 +18,4 @@ export {
   getArticleBySlug,
   getCategoryById,
   searchHelp,
-} from "../utils/helpSearch.utils";
+} from "../utils/search/helpSearch.utils";

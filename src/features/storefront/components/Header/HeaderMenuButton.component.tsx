@@ -1,7 +1,7 @@
 "use client";
 
 import { Menu } from "lucide-react";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { HEADER_INK_TONE } from "./headerShared";

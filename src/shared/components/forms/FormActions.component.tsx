@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { formActionsStyles } from "./forms.styles";
 
 interface FormActionsProps {

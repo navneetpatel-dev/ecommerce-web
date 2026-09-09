@@ -2,8 +2,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatLabel";
-import type { PaginationItem } from "@/shared/utils/pagination";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import type { PaginationItem } from "@/shared/utils/pagination/pagination";
 import { paginationStyles } from "./navigationComponents.styles";
 
 interface PaginationProps {

@@ -1,6 +1,6 @@
 import { generateStaticPageMetadata } from "@/shared/seo/metadata";
 import { SEO_PAGE_COPY } from "@/shared/seo/constants";
-import { PATHS } from "@/shared/constants/paths";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { ProductListingPage } from "@/features/products";
 
 export const metadata = generateStaticPageMetadata(

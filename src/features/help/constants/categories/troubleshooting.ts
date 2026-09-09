@@ -1,4 +1,4 @@
-import type { HelpCategory } from "../../types/help.types";
+import type { HelpCategory } from "../../types/help/help.types";
 import { TROUBLESHOOTING_CHECKOUT_ARTICLES } from "./troubleshooting-checkout";
 import { TROUBLESHOOTING_SUPPORT_ARTICLES } from "./troubleshooting-support";
 

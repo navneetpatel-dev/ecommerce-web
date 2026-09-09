@@ -4,14 +4,14 @@ export {
   useVendorProducts,
   useVendorCommissions,
   useVendorPayouts,
-} from "./api/vendor.queries";
-export { VendorHomePage } from "./pages/VendorHomePage.page";
-export { VendorOverview } from "./pages/VendorOverview.page";
-export { VendorOrdersPage } from "./pages/VendorOrdersPage.page";
-export { VendorCouponsPage } from "./pages/VendorCouponsPage.page";
-export { VendorReviewsPage } from "./pages/VendorReviewsPage.page";
-export { VendorQnaPage } from "./pages/VendorQnaPage.page";
-export { VendorShopSettingsPage } from "./pages/VendorShopSettingsPage.page";
-export { PayoutsPage } from "./pages/PayoutsPage.page";
-export { ProductsTable } from "./pages/ProductsTable.page";
-export { VendorAnalyticsPage } from "./pages/VendorAnalyticsPage.page";
+} from "./api/overview/vendor.queries";
+export { VendorHomePage } from "./pages/overview/VendorHomePage.page";
+export { VendorOverview } from "./pages/overview/VendorOverview.page";
+export { VendorOrdersPage } from "./pages/orders/VendorOrdersPage.page";
+export { VendorCouponsPage } from "./pages/coupons/VendorCouponsPage.page";
+export { VendorReviewsPage } from "./pages/reviews/VendorReviewsPage.page";
+export { VendorQnaPage } from "./pages/qna/VendorQnaPage.page";
+export { VendorShopSettingsPage } from "./pages/shop-settings/VendorShopSettingsPage.page";
+export { PayoutsPage } from "./pages/payouts/PayoutsPage.page";
+export { ProductsTable } from "./pages/products/ProductsTable.page";
+export { VendorAnalyticsPage } from "./pages/analytics/VendorAnalyticsPage.page";

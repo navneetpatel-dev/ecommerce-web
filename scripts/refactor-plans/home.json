@@ -1,0 +1,100 @@
+{
+  "moves": [
+    {
+      "from": "src/features/home/api/home.api.ts",
+      "to": "src/features/home/api/home/home.api.ts"
+    },
+    {
+      "from": "src/features/home/api/home.queries.ts",
+      "to": "src/features/home/api/home/home.queries.ts"
+    },
+    {
+      "from": "src/features/home/components/HeroSection.component.tsx",
+      "to": "src/features/home/components/hero/HeroSection.component.tsx"
+    },
+    {
+      "from": "src/features/home/components/HeroSection/HeroSection.component.tsx",
+      "to": "src/features/home/components/hero/HeroSection/HeroSection.component.tsx"
+    },
+    {
+      "from": "src/features/home/components/HeroSection/SlideControls.component.tsx",
+      "to": "src/features/home/components/hero/HeroSection/SlideControls.component.tsx"
+    },
+    {
+      "from": "src/features/home/components/HeroSection/SlideCopy.component.tsx",
+      "to": "src/features/home/components/hero/HeroSection/SlideCopy.component.tsx"
+    },
+    {
+      "from": "src/features/home/components/HeroSection/SlideImage.component.tsx",
+      "to": "src/features/home/components/hero/HeroSection/SlideImage.component.tsx"
+    },
+    {
+      "from": "src/features/home/components/HeroSection/constants.ts",
+      "to": "src/features/home/components/hero/HeroSection/constants.ts"
+    },
+    {
+      "from": "src/features/home/components/HeroSection/heroSection.styles.ts",
+      "to": "src/features/home/components/hero/HeroSection/heroSection.styles.ts"
+    },
+    {
+      "from": "src/features/home/components/HeroSection/index.ts",
+      "to": "src/features/home/components/hero/HeroSection/index.ts"
+    },
+    {
+      "from": "src/features/home/components/HeroSection/types.ts",
+      "to": "src/features/home/components/hero/HeroSection/types.ts"
+    },
+    {
+      "from": "src/features/home/components/HeroSection/useHeroCarousel.hook.ts",
+      "to": "src/features/home/components/hero/HeroSection/useHeroCarousel.hook.ts"
+    },
+    {
+      "from": "src/features/home/components/CategoryRail.component.tsx",
+      "to": "src/features/home/components/category-rail/CategoryRail.component.tsx"
+    },
+    {
+      "from": "src/features/home/components/categoryRail.styles.ts",
+      "to": "src/features/home/components/category-rail/categoryRail.styles.ts"
+    },
+    {
+      "from": "src/features/home/components/TrendingSection.component.tsx",
+      "to": "src/features/home/components/trending/TrendingSection.component.tsx"
+    },
+    {
+      "from": "src/features/home/components/trendingSection.styles.ts",
+      "to": "src/features/home/components/trending/trendingSection.styles.ts"
+    },
+    {
+      "from": "src/features/home/components/VendorSpotlightSection.component.tsx",
+      "to": "src/features/home/components/vendor-spotlight/VendorSpotlightSection.component.tsx"
+    },
+    {
+      "from": "src/features/home/components/vendorSpotlightSection.styles.ts",
+      "to": "src/features/home/components/vendor-spotlight/vendorSpotlightSection.styles.ts"
+    },
+    {
+      "from": "src/features/home/hooks/useHomePage.hook.ts",
+      "to": "src/features/home/hooks/page/useHomePage.hook.ts"
+    },
+    {
+      "from": "src/features/home/hooks/useTrendingProducts.hook.ts",
+      "to": "src/features/home/hooks/trending/useTrendingProducts.hook.ts"
+    },
+    {
+      "from": "src/features/home/hooks/useVendorSpotlight.hook.ts",
+      "to": "src/features/home/hooks/vendor-spotlight/useVendorSpotlight.hook.ts"
+    },
+    {
+      "from": "src/features/home/pages/HomePage.page.tsx",
+      "to": "src/features/home/pages/home/HomePage.page.tsx"
+    },
+    {
+      "from": "src/features/home/pages/homePage.styles.ts",
+      "to": "src/features/home/pages/home/homePage.styles.ts"
+    },
+    {
+      "from": "src/features/home/utils/promoBanner.ts",
+      "to": "src/features/home/utils/promo-banners/promoBanner.ts"
+    }
+  ]
+}

@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { cn } from "@/shared/utils/cn";
-import { PATHS } from "@/shared/constants/paths";
+import { cn } from "@/shared/utils/dom/cn";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import {
   isAdminRole,
   isCustomerRole,
   isVendorRole,
-} from "@/shared/utils/roles";
+} from "@/shared/utils/roles/roles";
 import type { CurrentUser } from "@/shared/api/types";
-import { useAuthStore } from "@/shared/stores/auth.store";
-import { useIsAuthenticated } from "@/shared/hooks/useRequireAuth.hook";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
+import { useIsAuthenticated } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { AccountMenu } from "./AccountMenu.component";
 import {
   AccountMenuSkeleton,

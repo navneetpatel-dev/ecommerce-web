@@ -1,4 +1,4 @@
-import type { HelpCategory } from "../../types/help.types";
+import type { HelpCategory } from "../../types/help/help.types";
 
 export const ACCOUNT_SECURITY_CATEGORY: HelpCategory = {
   id: "account-security",

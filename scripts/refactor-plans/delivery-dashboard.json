@@ -1,0 +1,420 @@
+{
+  "moves": [
+    {
+      "from": "src/features/delivery-dashboard/api/deliveryAgent.api.ts",
+      "to": "src/features/delivery-dashboard/api/agent/deliveryAgent.api.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/api/deliveryAgent.keys.ts",
+      "to": "src/features/delivery-dashboard/api/agent/deliveryAgent.keys.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/api/deliveryAgent.queries.ts",
+      "to": "src/features/delivery-dashboard/api/agent/deliveryAgent.queries.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/api/deliveryAgentDispatch.api.ts",
+      "to": "src/features/delivery-dashboard/api/agent/deliveryAgentDispatch.api.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/api/deliveryAgentTasks.queries.ts",
+      "to": "src/features/delivery-dashboard/api/deliveries/deliveryAgentTasks.queries.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/api/deliveryAgentDocuments.api.ts",
+      "to": "src/features/delivery-dashboard/api/documents/deliveryAgentDocuments.api.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/api/deliveryAgentDocuments.queries.ts",
+      "to": "src/features/delivery-dashboard/api/documents/deliveryAgentDocuments.queries.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/api/deliveryAgentOfflineFetch.ts",
+      "to": "src/features/delivery-dashboard/api/offline/deliveryAgentOfflineFetch.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/api/deliveryAgentPayouts.api.ts",
+      "to": "src/features/delivery-dashboard/api/earnings/deliveryAgentPayouts.api.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/api/deliveryAgentPayouts.queries.ts",
+      "to": "src/features/delivery-dashboard/api/earnings/deliveryAgentPayouts.queries.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/BankDetailsCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/bank/BankDetailsCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/BankDetailsCard/BankDetailsCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/bank/BankDetailsCard/BankDetailsCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/BankDetailsCard/BankDetailsFormFields.component.tsx",
+      "to": "src/features/delivery-dashboard/components/bank/BankDetailsCard/BankDetailsFormFields.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/BankDetailsCard/bankDetailsCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/bank/BankDetailsCard/bankDetailsCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/BankDetailsCard/index.ts",
+      "to": "src/features/delivery-dashboard/components/bank/BankDetailsCard/index.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/BankDetailsCard/useBankDetailsCardPresentation.hook.ts",
+      "to": "src/features/delivery-dashboard/components/bank/BankDetailsCard/useBankDetailsCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/BarcodeScanButton.component.tsx",
+      "to": "src/features/delivery-dashboard/components/pickups/BarcodeScanButton.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/barcodeScanButton.styles.ts",
+      "to": "src/features/delivery-dashboard/components/pickups/barcodeScanButton.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/PickupChecklistCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/pickups/PickupChecklistCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/pickupChecklistCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/pickups/pickupChecklistCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/PickupOverviewCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/pickups/PickupOverviewCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/pickupOverviewCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/pickups/pickupOverviewCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/CashDepositsCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/cash/CashDepositsCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/CashDepositsCard/CashDepositTableRow.component.tsx",
+      "to": "src/features/delivery-dashboard/components/cash/CashDepositsCard/CashDepositTableRow.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/CashDepositsCard/CashDepositsCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/cash/CashDepositsCard/CashDepositsCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/CashDepositsCard/CashDepositsTable.component.tsx",
+      "to": "src/features/delivery-dashboard/components/cash/CashDepositsCard/CashDepositsTable.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/CashDepositsCard/cashDepositsCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/cash/CashDepositsCard/cashDepositsCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/CashDepositsCard/index.ts",
+      "to": "src/features/delivery-dashboard/components/cash/CashDepositsCard/index.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/CashDepositsCard/useCashDepositsCardPresentation.hook.ts",
+      "to": "src/features/delivery-dashboard/components/cash/CashDepositsCard/useCashDepositsCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryAgentDocumentsCard/DeliveryAgentDocumentsCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/documents/DeliveryAgentDocumentsCard/DeliveryAgentDocumentsCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryAgentDocumentsCard/DocumentStatusBadge.component.tsx",
+      "to": "src/features/delivery-dashboard/components/documents/DeliveryAgentDocumentsCard/DocumentStatusBadge.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryAgentDocumentsCard/ExpiryBadge.component.tsx",
+      "to": "src/features/delivery-dashboard/components/documents/DeliveryAgentDocumentsCard/ExpiryBadge.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryAgentDocumentsCard/deliveryAgentDocumentsCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/documents/DeliveryAgentDocumentsCard/deliveryAgentDocumentsCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryAgentDocumentsCard/index.ts",
+      "to": "src/features/delivery-dashboard/components/documents/DeliveryAgentDocumentsCard/index.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryAttemptsList.component.tsx",
+      "to": "src/features/delivery-dashboard/components/deliveries/DeliveryAttemptsList.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryAttemptsList/DeliveryAttemptItem.component.tsx",
+      "to": "src/features/delivery-dashboard/components/deliveries/DeliveryAttemptsList/DeliveryAttemptItem.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryAttemptsList/deliveryAttemptsList.styles.ts",
+      "to": "src/features/delivery-dashboard/components/deliveries/DeliveryAttemptsList/deliveryAttemptsList.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryMilestoneCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/deliveries/DeliveryMilestoneCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryMilestoneCard/deliveryMilestoneCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/deliveries/DeliveryMilestoneCard/deliveryMilestoneCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DeliveryTerminalStatusBanner.component.tsx",
+      "to": "src/features/delivery-dashboard/components/deliveries/DeliveryTerminalStatusBanner.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/deliveryTerminalStatusBanner.styles.ts",
+      "to": "src/features/delivery-dashboard/components/deliveries/deliveryTerminalStatusBanner.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/FailedAttemptSection.component.tsx",
+      "to": "src/features/delivery-dashboard/components/deliveries/FailedAttemptSection.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/failedAttemptSection.styles.ts",
+      "to": "src/features/delivery-dashboard/components/deliveries/failedAttemptSection.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/ShipmentOverviewCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/deliveries/ShipmentOverviewCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/shipmentOverviewCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/deliveries/shipmentOverviewCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DoorstepConfirmCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DoorstepConfirmCard/DoorstepCodSection.component.tsx",
+      "to": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/DoorstepCodSection.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DoorstepConfirmCard/DoorstepConfirmCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/DoorstepConfirmCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DoorstepConfirmCard/DoorstepPasscodeSection.component.tsx",
+      "to": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/DoorstepPasscodeSection.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DoorstepConfirmCard/DoorstepProofSection.component.tsx",
+      "to": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/DoorstepProofSection.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DoorstepConfirmCard/doorstepConfirmCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/doorstepConfirmCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DoorstepConfirmCard/index.ts",
+      "to": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/index.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/DoorstepConfirmCard/useDoorstepConfirmHandlers.hook.ts",
+      "to": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/useDoorstepConfirmHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/EarningsPayoutsCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/EarningsPayoutsCard/EarningsPayoutTableRow.component.tsx",
+      "to": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/EarningsPayoutTableRow.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/EarningsPayoutsCard/EarningsPayoutsCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/EarningsPayoutsCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/EarningsPayoutsCard/EarningsPayoutsTable.component.tsx",
+      "to": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/EarningsPayoutsTable.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/EarningsPayoutsCard/RecentCompletedTaskItem.component.tsx",
+      "to": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/RecentCompletedTaskItem.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/EarningsPayoutsCard/RecentCompletedTasksList.component.tsx",
+      "to": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/RecentCompletedTasksList.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/EarningsPayoutsCard/earningsPayoutsCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/earningsPayoutsCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/EarningsPayoutsCard/index.ts",
+      "to": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/index.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/EarningsPayoutsCard/useEarningsPayoutsCardPresentation.hook.ts",
+      "to": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/useEarningsPayoutsCardPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/LocationBeacon.component.tsx",
+      "to": "src/features/delivery-dashboard/components/location/LocationBeacon.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/LocationBeacon/locationBeacon.styles.ts",
+      "to": "src/features/delivery-dashboard/components/location/LocationBeacon/locationBeacon.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/LocationBeacon/useLocationBeacon.hook.ts",
+      "to": "src/features/delivery-dashboard/components/location/LocationBeacon/useLocationBeacon.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/OfflineSyncBanner.component.tsx",
+      "to": "src/features/delivery-dashboard/components/offline/OfflineSyncBanner.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/OfflineSyncBanner/offlineSyncBanner.styles.ts",
+      "to": "src/features/delivery-dashboard/components/offline/OfflineSyncBanner/offlineSyncBanner.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/OfflineSyncBanner/useOfflineSyncBanner.hook.ts",
+      "to": "src/features/delivery-dashboard/components/offline/OfflineSyncBanner/useOfflineSyncBanner.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/RtoHandoverCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/rto/RtoHandoverCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/rtoHandoverCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/rto/rtoHandoverCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/ShiftSummaryCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/today/ShiftSummaryCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/ShiftSummaryCard/CashDepositDialog.component.tsx",
+      "to": "src/features/delivery-dashboard/components/today/ShiftSummaryCard/CashDepositDialog.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/ShiftSummaryCard/shiftSummaryCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/today/ShiftSummaryCard/shiftSummaryCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/ShiftSummaryCard/useShiftSummaryCard.hook.ts",
+      "to": "src/features/delivery-dashboard/components/today/ShiftSummaryCard/useShiftSummaryCard.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/TaskCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/today/TaskCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/taskCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/today/taskCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/TaskContactCard.component.tsx",
+      "to": "src/features/delivery-dashboard/components/today/TaskContactCard.component.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/components/taskContactCard.styles.ts",
+      "to": "src/features/delivery-dashboard/components/today/taskContactCard.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/hooks/useDeliveryAgentDocumentUpload.hook.ts",
+      "to": "src/features/delivery-dashboard/hooks/documents/useDeliveryAgentDocumentUpload.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/hooks/useDeliveryTaskActions.hook.ts",
+      "to": "src/features/delivery-dashboard/hooks/deliveries/useDeliveryTaskActions.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/hooks/usePickupTaskActions.hook.ts",
+      "to": "src/features/delivery-dashboard/hooks/pickups/usePickupTaskActions.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/offline/deliveryOfflineCache.ts",
+      "to": "src/features/delivery-dashboard/offline/offline/deliveryOfflineCache.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/offline/deliveryOfflineQueue.ts",
+      "to": "src/features/delivery-dashboard/offline/offline/deliveryOfflineQueue.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/offline/useOfflineQueueSync.hook.ts",
+      "to": "src/features/delivery-dashboard/offline/offline/useOfflineQueueSync.hook.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/pages/DeliveriesPage.page.tsx",
+      "to": "src/features/delivery-dashboard/pages/deliveries/DeliveriesPage.page.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/pages/DeliveryTaskDetailPage.page.tsx",
+      "to": "src/features/delivery-dashboard/pages/deliveries/DeliveryTaskDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/pages/deliveryDetailPage.styles.ts",
+      "to": "src/features/delivery-dashboard/pages/deliveries/deliveryDetailPage.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/pages/deliveryListPage.styles.ts",
+      "to": "src/features/delivery-dashboard/pages/deliveries/deliveryListPage.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/pages/HistoryPage.page.tsx",
+      "to": "src/features/delivery-dashboard/pages/today/HistoryPage.page.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/pages/TodayPage.page.tsx",
+      "to": "src/features/delivery-dashboard/pages/today/TodayPage.page.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/pages/todayPage.styles.ts",
+      "to": "src/features/delivery-dashboard/pages/today/todayPage.styles.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/pages/PickupTaskDetailPage.page.tsx",
+      "to": "src/features/delivery-dashboard/pages/pickups/PickupTaskDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/pages/PickupsPage.page.tsx",
+      "to": "src/features/delivery-dashboard/pages/pickups/PickupsPage.page.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/pages/ProfilePage.page.tsx",
+      "to": "src/features/delivery-dashboard/pages/profile/ProfilePage.page.tsx"
+    },
+    {
+      "from": "src/features/delivery-dashboard/types.ts",
+      "to": "src/features/delivery-dashboard/types/agent/types.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/types/index.ts",
+      "to": "src/features/delivery-dashboard/types/agent/index.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/types/deliveryAgent.types.ts",
+      "to": "src/features/delivery-dashboard/types/agent/deliveryAgent.types.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/types/deliveryAgentDocuments.types.ts",
+      "to": "src/features/delivery-dashboard/types/documents/deliveryAgentDocuments.types.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/types/deliveryAgentPayouts.types.ts",
+      "to": "src/features/delivery-dashboard/types/earnings/deliveryAgentPayouts.types.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/utils/deliveryDocumentStatus.ts",
+      "to": "src/features/delivery-dashboard/utils/documents/deliveryDocumentStatus.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/utils/deliveryProofUpload.ts",
+      "to": "src/features/delivery-dashboard/utils/doorstep/deliveryProofUpload.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/utils/deliveryStatus.ts",
+      "to": "src/features/delivery-dashboard/utils/deliveries/deliveryStatus.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/utils/formatAddress.ts",
+      "to": "src/features/delivery-dashboard/utils/deliveries/formatAddress.ts"
+    },
+    {
+      "from": "src/features/delivery-dashboard/utils/groupByStop.ts",
+      "to": "src/features/delivery-dashboard/utils/deliveries/groupByStop.ts"
+    }
+  ]
+}

@@ -1,9 +1,9 @@
-import { apiClient } from "@/shared/api/client";
+import { apiClient } from "@/shared/api/client/client";
 import { API } from "@/shared/constants/apiRoutes";
 import type {
   UploadEntityType,
   UploadPurpose,
-} from "@/shared/constants/uploads";
+} from "@/shared/constants/uploads/uploads";
 
 export type UploadFilePayload = {
   dataUrl: string;

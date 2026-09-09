@@ -1,0 +1,648 @@
+{
+  "moves": [
+    {
+      "from": "src/features/products/__tests__/pdp.constants.test.ts",
+      "to": "src/features/products/__tests__/detail/pdp.constants.test.ts"
+    },
+    {
+      "from": "src/features/products/api/products.api.ts",
+      "to": "src/features/products/api/listing/products.api.ts"
+    },
+    {
+      "from": "src/features/products/api/products.queries.ts",
+      "to": "src/features/products/api/listing/products.queries.ts"
+    },
+    {
+      "from": "src/features/products/components/CardQuantityControl.component.tsx",
+      "to": "src/features/products/components/card/CardQuantityControl.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/CardQuantityControl/CardQuantityControl.component.tsx",
+      "to": "src/features/products/components/card/CardQuantityControl/CardQuantityControl.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/CardQuantityControl/cardQuantityControl.styles.ts",
+      "to": "src/features/products/components/card/CardQuantityControl/cardQuantityControl.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/CardQuantityControl/index.ts",
+      "to": "src/features/products/components/card/CardQuantityControl/index.ts"
+    },
+    {
+      "from": "src/features/products/components/CardQuantityControl/useCardQuantityControlHandlers.hook.ts",
+      "to": "src/features/products/components/card/CardQuantityControl/useCardQuantityControlHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductCard.component.tsx",
+      "to": "src/features/products/components/card/ProductCard.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/CardControls.component.tsx",
+      "to": "src/features/products/components/card/ProductCard/CardControls.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/CardDetails.component.tsx",
+      "to": "src/features/products/components/card/ProductCard/CardDetails.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/CardMedia.component.tsx",
+      "to": "src/features/products/components/card/ProductCard/CardMedia.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/ProductCard.component.tsx",
+      "to": "src/features/products/components/card/ProductCard/ProductCard.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/__tests__/CardDetails.test.tsx",
+      "to": "src/features/products/components/card/ProductCard/__tests__/CardDetails.test.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/cardDetails.styles.ts",
+      "to": "src/features/products/components/card/ProductCard/cardDetails.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/cardMedia.styles.ts",
+      "to": "src/features/products/components/card/ProductCard/cardMedia.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/index.ts",
+      "to": "src/features/products/components/card/ProductCard/index.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/productCard.styles.ts",
+      "to": "src/features/products/components/card/ProductCard/productCard.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/types.ts",
+      "to": "src/features/products/components/card/ProductCard/types.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductCard/useProductCard.hook.ts",
+      "to": "src/features/products/components/card/ProductCard/useProductCard.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/FilterSidebar.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar/FilterSidebar.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/FilterSidebarFacetGroup.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar/FilterSidebarFacetGroup.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/FilterSidebarFacetOption.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar/FilterSidebarFacetOption.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/FilterSidebarFacetOptionsList.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar/FilterSidebarFacetOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/FilterSidebarFacetsList.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar/FilterSidebarFacetsList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/FilterSidebarHeader.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar/FilterSidebarHeader.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/FilterSidebarPriceFilter.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar/FilterSidebarPriceFilter.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/FilterSidebarRatingFilter.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar/FilterSidebarRatingFilter.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/FilterSidebarRatingOption.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar/FilterSidebarRatingOption.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/FilterSidebarRatingOptionsList.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebar/FilterSidebarRatingOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/filterSidebar.styles.ts",
+      "to": "src/features/products/components/filters/FilterSidebar/filterSidebar.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/index.ts",
+      "to": "src/features/products/components/filters/FilterSidebar/index.ts"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebar/useFilterSidebarPresentation.hook.ts",
+      "to": "src/features/products/components/filters/FilterSidebar/useFilterSidebarPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/FilterSidebarFacetGroup.component.tsx",
+      "to": "src/features/products/components/filters/FilterSidebarFacetGroup.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareBar.component.tsx",
+      "to": "src/features/products/components/compare/ProductCompareBar.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareBar/ProductCompareBar.component.tsx",
+      "to": "src/features/products/components/compare/ProductCompareBar/ProductCompareBar.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareBar/ProductCompareTag.component.tsx",
+      "to": "src/features/products/components/compare/ProductCompareBar/ProductCompareTag.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareBar/ProductCompareTagsList.component.tsx",
+      "to": "src/features/products/components/compare/ProductCompareBar/ProductCompareTagsList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareBar/index.ts",
+      "to": "src/features/products/components/compare/ProductCompareBar/index.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareBar/productCompareBar.styles.ts",
+      "to": "src/features/products/components/compare/ProductCompareBar/productCompareBar.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareSection.component.tsx",
+      "to": "src/features/products/components/compare/ProductCompareSection.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareSection/ProductCompareCard.component.tsx",
+      "to": "src/features/products/components/compare/ProductCompareSection/ProductCompareCard.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareSection/ProductCompareGrid.component.tsx",
+      "to": "src/features/products/components/compare/ProductCompareSection/ProductCompareGrid.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareSection/ProductCompareSection.component.tsx",
+      "to": "src/features/products/components/compare/ProductCompareSection/ProductCompareSection.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareSection/index.ts",
+      "to": "src/features/products/components/compare/ProductCompareSection/index.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductCompareSection/productCompareSection.styles.ts",
+      "to": "src/features/products/components/compare/ProductCompareSection/productCompareSection.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductDeliveryCheck.component.tsx",
+      "to": "src/features/products/components/delivery-check/ProductDeliveryCheck.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDeliveryCheck/ProductDeliveryCheck.component.tsx",
+      "to": "src/features/products/components/delivery-check/ProductDeliveryCheck/ProductDeliveryCheck.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDeliveryCheck/ProductDeliveryEligibilityNotice.component.tsx",
+      "to": "src/features/products/components/delivery-check/ProductDeliveryCheck/ProductDeliveryEligibilityNotice.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDeliveryCheck/index.ts",
+      "to": "src/features/products/components/delivery-check/ProductDeliveryCheck/index.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductDeliveryCheck/productDeliveryCheck.styles.ts",
+      "to": "src/features/products/components/delivery-check/ProductDeliveryCheck/productDeliveryCheck.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductDeliveryCheck/useProductDeliveryCheckPresentation.hook.ts",
+      "to": "src/features/products/components/delivery-check/ProductDeliveryCheck/useProductDeliveryCheckPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/DetailTabsSection.component.tsx",
+      "to": "src/features/products/components/detail/ProductDetailContent/DetailTabsSection.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/PriceAvailabilityBlock.component.tsx",
+      "to": "src/features/products/components/detail/ProductDetailContent/PriceAvailabilityBlock.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/ProductBuyBoxColumn.component.tsx",
+      "to": "src/features/products/components/detail/ProductDetailContent/ProductBuyBoxColumn.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/ProductDetailContent.component.tsx",
+      "to": "src/features/products/components/detail/ProductDetailContent/ProductDetailContent.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/ProductHeadingBlock.component.tsx",
+      "to": "src/features/products/components/detail/ProductDetailContent/ProductHeadingBlock.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/PurchasePanel.component.tsx",
+      "to": "src/features/products/components/detail/ProductDetailContent/PurchasePanel.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/SellerPerksBlock.component.tsx",
+      "to": "src/features/products/components/detail/ProductDetailContent/SellerPerksBlock.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/StickyAddToCartBar.component.tsx",
+      "to": "src/features/products/components/detail/ProductDetailContent/StickyAddToCartBar.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/index.ts",
+      "to": "src/features/products/components/detail/ProductDetailContent/index.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/labels.ts",
+      "to": "src/features/products/components/detail/ProductDetailContent/labels.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/productDetailContent.styles.ts",
+      "to": "src/features/products/components/detail/ProductDetailContent/productDetailContent.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/types.ts",
+      "to": "src/features/products/components/detail/ProductDetailContent/types.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/useProductDetailContent.hook.ts",
+      "to": "src/features/products/components/detail/ProductDetailContent/useProductDetailContent.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailContent/ProductGallery.component.tsx",
+      "to": "src/features/products/components/gallery/ProductGallery.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductDetailSkeleton.component.tsx",
+      "to": "src/features/products/components/detail/ProductDetailSkeleton.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/productDetailSkeleton.styles.ts",
+      "to": "src/features/products/components/detail/productDetailSkeleton.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/productDetailsMisc.styles.ts",
+      "to": "src/features/products/components/detail/productDetailsMisc.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductHighlights.component.tsx",
+      "to": "src/features/products/components/detail/ProductHighlights.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductInfo.component.tsx",
+      "to": "src/features/products/components/detail/ProductInfo.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductNotFound.component.tsx",
+      "to": "src/features/products/components/detail/ProductNotFound.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductSeoJsonLd.component.tsx",
+      "to": "src/features/products/components/detail/ProductSeoJsonLd.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductSizeChartButton.component.tsx",
+      "to": "src/features/products/components/detail/ProductSizeChartButton.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductEligibleOffers.component.tsx",
+      "to": "src/features/products/components/offers/ProductEligibleOffers.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductEligibleOffers/EligibleOfferItem.component.tsx",
+      "to": "src/features/products/components/offers/ProductEligibleOffers/EligibleOfferItem.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductEligibleOffers/EligibleOffersList.component.tsx",
+      "to": "src/features/products/components/offers/ProductEligibleOffers/EligibleOffersList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductEligibleOffers/ProductEligibleOffers.component.tsx",
+      "to": "src/features/products/components/offers/ProductEligibleOffers/ProductEligibleOffers.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductEligibleOffers/index.ts",
+      "to": "src/features/products/components/offers/ProductEligibleOffers/index.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductEligibleOffers/productEligibleOffers.styles.ts",
+      "to": "src/features/products/components/offers/ProductEligibleOffers/productEligibleOffers.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductEligibleOffers/useProductEligibleOffers.hook.ts",
+      "to": "src/features/products/components/offers/ProductEligibleOffers/useProductEligibleOffers.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductGrid.component.tsx",
+      "to": "src/features/products/components/listing/ProductGrid.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductGridList.component.tsx",
+      "to": "src/features/products/components/listing/ProductGridList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/productGrid.styles.ts",
+      "to": "src/features/products/components/listing/productGrid.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductRelatedRailSection.component.tsx",
+      "to": "src/features/products/components/related/ProductRelatedRailSection.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductRelatedRails.component.tsx",
+      "to": "src/features/products/components/related/ProductRelatedRails.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/productRelatedRails.styles.ts",
+      "to": "src/features/products/components/related/productRelatedRails.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/useProductRelatedRails.hook.ts",
+      "to": "src/features/products/components/related/useProductRelatedRails.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/RecentlyViewedSection.component.tsx",
+      "to": "src/features/products/components/related/RecentlyViewedSection.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductSpecifications.component.tsx",
+      "to": "src/features/products/components/specs/ProductSpecifications.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/productSpecifications.styles.ts",
+      "to": "src/features/products/components/specs/productSpecifications.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductSpecsList.component.tsx",
+      "to": "src/features/products/components/specs/ProductSpecsList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/useProductSpecifications.hook.ts",
+      "to": "src/features/products/components/specs/useProductSpecifications.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/SecondaryCategoriesList.component.tsx",
+      "to": "src/features/products/components/specs/SecondaryCategoriesList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/SecondaryCategoryChip.component.tsx",
+      "to": "src/features/products/components/specs/SecondaryCategoryChip.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductVariantDialog.component.tsx",
+      "to": "src/features/products/components/variants/ProductVariantDialog.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductVariantDialog/ProductVariantDialog.component.tsx",
+      "to": "src/features/products/components/variants/ProductVariantDialog/ProductVariantDialog.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/ProductVariantDialog/index.ts",
+      "to": "src/features/products/components/variants/ProductVariantDialog/index.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductVariantDialog/productVariantDialog.styles.ts",
+      "to": "src/features/products/components/variants/ProductVariantDialog/productVariantDialog.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/ProductVariantDialog/useProductVariantDialogPresentation.hook.ts",
+      "to": "src/features/products/components/variants/ProductVariantDialog/useProductVariantDialogPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/products/components/VariantSelector.component.tsx",
+      "to": "src/features/products/components/variants/VariantSelector.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/VariantSelector/VariantAttributeGroup.component.tsx",
+      "to": "src/features/products/components/variants/VariantSelector/VariantAttributeGroup.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/VariantSelector/VariantAttributeGroupsList.component.tsx",
+      "to": "src/features/products/components/variants/VariantSelector/VariantAttributeGroupsList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/VariantSelector/VariantAttributeValuesList.component.tsx",
+      "to": "src/features/products/components/variants/VariantSelector/VariantAttributeValuesList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/VariantSelector/VariantOptionButton.component.tsx",
+      "to": "src/features/products/components/variants/VariantSelector/VariantOptionButton.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/VariantSelector/VariantPriceStockSection.component.tsx",
+      "to": "src/features/products/components/variants/VariantSelector/VariantPriceStockSection.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/VariantSelector/VariantSelector.component.tsx",
+      "to": "src/features/products/components/variants/VariantSelector/VariantSelector.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/VariantSelector/index.ts",
+      "to": "src/features/products/components/variants/VariantSelector/index.ts"
+    },
+    {
+      "from": "src/features/products/components/VariantSelector/variantSelector.styles.ts",
+      "to": "src/features/products/components/variants/VariantSelector/variantSelector.styles.ts"
+    },
+    {
+      "from": "src/features/products/components/__tests__/ProductVariantDialog.test.tsx",
+      "to": "src/features/products/components/variants/__tests__/ProductVariantDialog.test.tsx"
+    },
+    {
+      "from": "src/features/products/components/SortBar.component.tsx",
+      "to": "src/features/products/components/sort/SortBar.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/SortBar/SortBar.component.tsx",
+      "to": "src/features/products/components/sort/SortBar/SortBar.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/SortBar/SortOptionsList.component.tsx",
+      "to": "src/features/products/components/sort/SortBar/SortOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/products/components/SortBar/index.ts",
+      "to": "src/features/products/components/sort/SortBar/index.ts"
+    },
+    {
+      "from": "src/features/products/components/SortBar/sortBar.styles.ts",
+      "to": "src/features/products/components/sort/SortBar/sortBar.styles.ts"
+    },
+    {
+      "from": "src/features/products/constants/compare.ts",
+      "to": "src/features/products/constants/compare/compare.ts"
+    },
+    {
+      "from": "src/features/products/constants/filterTiming.ts",
+      "to": "src/features/products/constants/filters/filterTiming.ts"
+    },
+    {
+      "from": "src/features/products/constants/pdpOffers.ts",
+      "to": "src/features/products/constants/offers/pdpOffers.ts"
+    },
+    {
+      "from": "src/features/products/constants/productFields.ts",
+      "to": "src/features/products/constants/listing-form/productFields.ts"
+    },
+    {
+      "from": "src/features/products/containers/ProductCardContainer.container.tsx",
+      "to": "src/features/products/containers/card/ProductCardContainer.container.tsx"
+    },
+    {
+      "from": "src/features/products/containers/VariantSelectorContainer.container.tsx",
+      "to": "src/features/products/containers/variants/VariantSelectorContainer.container.tsx"
+    },
+    {
+      "from": "src/features/products/hooks/useDeliveryCheck.hook.ts",
+      "to": "src/features/products/hooks/delivery-check/useDeliveryCheck.hook.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useEligibleOffers.hook.ts",
+      "to": "src/features/products/hooks/offers/useEligibleOffers.hook.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useFilters.hook.ts",
+      "to": "src/features/products/hooks/filters/useFilters.hook.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useOptimisticCartPatch/index.ts",
+      "to": "src/features/products/hooks/card/useOptimisticCartPatch/index.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useProductCard.hook.ts",
+      "to": "src/features/products/hooks/card/useProductCard.hook.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useProductCardQuantity/index.ts",
+      "to": "src/features/products/hooks/card/useProductCardQuantity/index.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useWishlistToggle.hook.ts",
+      "to": "src/features/products/hooks/card/useWishlistToggle.hook.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useProductDetail.hook.ts",
+      "to": "src/features/products/hooks/detail/useProductDetail.hook.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useProductDetailActions/index.ts",
+      "to": "src/features/products/hooks/detail/useProductDetailActions/index.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useProductDetailBreadcrumbs/index.ts",
+      "to": "src/features/products/hooks/detail/useProductDetailBreadcrumbs/index.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useProductDetailData/index.ts",
+      "to": "src/features/products/hooks/detail/useProductDetailData/index.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useProductDetailGallery/index.ts",
+      "to": "src/features/products/hooks/gallery/useProductDetailGallery/index.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useProductListing.hook.ts",
+      "to": "src/features/products/hooks/listing/useProductListing.hook.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useRecentlyViewed.hook.ts",
+      "to": "src/features/products/hooks/related/useRecentlyViewed.hook.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useVariantSelection.hook.ts",
+      "to": "src/features/products/hooks/variants/useVariantSelection.hook.ts"
+    },
+    {
+      "from": "src/features/products/hooks/useVariantSelector.hook.ts",
+      "to": "src/features/products/hooks/variants/useVariantSelector.hook.ts"
+    },
+    {
+      "from": "src/features/products/pages/ProductDetailPage.page.tsx",
+      "to": "src/features/products/pages/detail/ProductDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/products/pages/ProductListingPage.page.tsx",
+      "to": "src/features/products/pages/listing/ProductListingPage.page.tsx"
+    },
+    {
+      "from": "src/features/products/pages/ProductListingPage/FiltersBottomSheet.component.tsx",
+      "to": "src/features/products/pages/listing/ProductListingPage/FiltersBottomSheet.component.tsx"
+    },
+    {
+      "from": "src/features/products/pages/ProductListingPage/ListingResults.component.tsx",
+      "to": "src/features/products/pages/listing/ProductListingPage/ListingResults.component.tsx"
+    },
+    {
+      "from": "src/features/products/pages/ProductListingPage/MobileActionBar.component.tsx",
+      "to": "src/features/products/pages/listing/ProductListingPage/MobileActionBar.component.tsx"
+    },
+    {
+      "from": "src/features/products/pages/ProductListingPage/ProductListingPage.page.tsx",
+      "to": "src/features/products/pages/listing/ProductListingPage/ProductListingPage.page.tsx"
+    },
+    {
+      "from": "src/features/products/pages/ProductListingPage/SortBottomSheet.component.tsx",
+      "to": "src/features/products/pages/listing/ProductListingPage/SortBottomSheet.component.tsx"
+    },
+    {
+      "from": "src/features/products/pages/ProductListingPage/emptyState.ts",
+      "to": "src/features/products/pages/listing/ProductListingPage/emptyState.ts"
+    },
+    {
+      "from": "src/features/products/pages/ProductListingPage/index.ts",
+      "to": "src/features/products/pages/listing/ProductListingPage/index.ts"
+    },
+    {
+      "from": "src/features/products/pages/ProductListingPage/productListingPage.styles.ts",
+      "to": "src/features/products/pages/listing/ProductListingPage/productListingPage.styles.ts"
+    },
+    {
+      "from": "src/features/products/schemas/listingFormSchema/crossFieldValidation.ts",
+      "to": "src/features/products/schemas/listing-form/listingFormSchema/crossFieldValidation.ts"
+    },
+    {
+      "from": "src/features/products/schemas/listingFormSchema/fieldSchemas.ts",
+      "to": "src/features/products/schemas/listing-form/listingFormSchema/fieldSchemas.ts"
+    },
+    {
+      "from": "src/features/products/schemas/listingFormSchema/index.ts",
+      "to": "src/features/products/schemas/listing-form/listingFormSchema/index.ts"
+    },
+    {
+      "from": "src/features/products/schemas/productWriteMapping.schema.ts",
+      "to": "src/features/products/schemas/listing-form/productWriteMapping.schema.ts"
+    },
+    {
+      "from": "src/features/products/schemas/products.schema.ts",
+      "to": "src/features/products/schemas/listing-form/products.schema.ts"
+    },
+    {
+      "from": "src/features/products/types/productListingForm.types.ts",
+      "to": "src/features/products/types/listing-form/productListingForm.types.ts"
+    },
+    {
+      "from": "src/features/products/utils/__tests__/products.utils.pdp.test.ts",
+      "to": "src/features/products/utils/detail/__tests__/products.utils.pdp.test.ts"
+    },
+    {
+      "from": "src/features/products/utils/productDeliveryEligibility.ts",
+      "to": "src/features/products/utils/delivery-check/productDeliveryEligibility.ts"
+    },
+    {
+      "from": "src/features/products/utils/productFilters/index.ts",
+      "to": "src/features/products/utils/filters/productFilters/index.ts"
+    },
+    {
+      "from": "src/features/products/utils/productListItem.ts",
+      "to": "src/features/products/utils/card/productListItem.ts"
+    },
+    {
+      "from": "src/features/products/utils/products.utils.ts",
+      "to": "src/features/products/utils/variants/products.utils.ts"
+    },
+    {
+      "from": "src/features/products/utils/recently-viewed.ts",
+      "to": "src/features/products/utils/related/recently-viewed.ts"
+    },
+    {
+      "from": "src/features/products/utils/variantSelection/index.ts",
+      "to": "src/features/products/utils/variants/variantSelection/index.ts"
+    }
+  ]
+}

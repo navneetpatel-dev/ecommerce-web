@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@/shared/components/ui/popover";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
+import { cn } from "@/shared/utils/dom/cn";
 import { dateTimePickerStyles } from "./dateTimePicker.styles";
 import { CalendarGrid } from "./CalendarGrid.component";
 import { TimeSelectors } from "./TimeSelectors.component";

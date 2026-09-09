@@ -1,0 +1,244 @@
+{
+  "moves": [
+    {
+      "from": "src/features/bugReports/api/bugReports.api.ts",
+      "to": "src/features/bugReports/api/list/bugReports.api.ts"
+    },
+    {
+      "from": "src/features/bugReports/api/bugReports.keys.ts",
+      "to": "src/features/bugReports/api/list/bugReports.keys.ts"
+    },
+    {
+      "from": "src/features/bugReports/api/bugReports.list.queries.ts",
+      "to": "src/features/bugReports/api/list/bugReports.list.queries.ts"
+    },
+    {
+      "from": "src/features/bugReports/api/bugReports.queries.ts",
+      "to": "src/features/bugReports/api/list/bugReports.queries.ts"
+    },
+    {
+      "from": "src/features/bugReports/api/bugReports.mutations.ts",
+      "to": "src/features/bugReports/api/detail/bugReports.mutations.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugFormFields.component.tsx",
+      "to": "src/features/bugReports/components/form/BugFormFields.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugFormFooter.component.tsx",
+      "to": "src/features/bugReports/components/form/BugFormFooter.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugFormHeader.component.tsx",
+      "to": "src/features/bugReports/components/form/BugFormHeader.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportForm.component.tsx",
+      "to": "src/features/bugReports/components/form/BugReportForm.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/bugReportForm.styles.ts",
+      "to": "src/features/bugReports/components/form/bugReportForm.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportCardItem.component.tsx",
+      "to": "src/features/bugReports/components/list/BugReportCardItem.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportCardList.component.tsx",
+      "to": "src/features/bugReports/components/list/BugReportCardList.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/bugReportCardList.styles.ts",
+      "to": "src/features/bugReports/components/list/bugReportCardList.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportCardsGrid.component.tsx",
+      "to": "src/features/bugReports/components/list/BugReportCardsGrid.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportList.component.tsx",
+      "to": "src/features/bugReports/components/list/BugReportList.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/bugReportList.styles.ts",
+      "to": "src/features/bugReports/components/list/bugReportList.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/useBugReportListHandlers.hook.ts",
+      "to": "src/features/bugReports/components/list/useBugReportListHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/useBugReportTableColumns.hook.tsx",
+      "to": "src/features/bugReports/components/list/useBugReportTableColumns.hook.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/BugAttachmentGrid.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/BugAttachmentGrid.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/BugCommentsSection.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/BugCommentsSection.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/BugContextPanel.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/BugContextPanel.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/BugDescriptionSection.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/BugDescriptionSection.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/BugProgressPanel.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/BugProgressPanel.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/BugProgressTrack.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/BugProgressTrack.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/BugReportDetail.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/BugReportDetail.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/BugReportHeader.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/BugReportHeader.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/BugStatusUpdatePanel.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/BugStatusUpdatePanel.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/BugTriagePanel.component.tsx",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/BugTriagePanel.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/bugReportDetail.styles.ts",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/bugReportDetail.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/bugReportDetailShared.ts",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/bugReportDetailShared.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/bugReportPanels.styles.ts",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/bugReportPanels.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/index.ts",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/index.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/useBugComments.hook.ts",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/useBugComments.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/useBugReportActions.hook.ts",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/useBugReportActions.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportDetail/useBugTriageForm.hook.ts",
+      "to": "src/features/bugReports/components/detail/BugReportDetail/useBugTriageForm.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportFilters.component.tsx",
+      "to": "src/features/bugReports/components/filters/BugReportFilters.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportFilters/BugModuleFilterSelect.component.tsx",
+      "to": "src/features/bugReports/components/filters/BugReportFilters/BugModuleFilterSelect.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportFilters/BugReportFilters.component.tsx",
+      "to": "src/features/bugReports/components/filters/BugReportFilters/BugReportFilters.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportFilters/BugReporterRoleFilterSelect.component.tsx",
+      "to": "src/features/bugReports/components/filters/BugReportFilters/BugReporterRoleFilterSelect.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportFilters/BugSeverityFilterSelect.component.tsx",
+      "to": "src/features/bugReports/components/filters/BugReportFilters/BugSeverityFilterSelect.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportFilters/BugStatusFilterSelect.component.tsx",
+      "to": "src/features/bugReports/components/filters/BugReportFilters/BugStatusFilterSelect.component.tsx"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportFilters/bugReportFilters.styles.ts",
+      "to": "src/features/bugReports/components/filters/BugReportFilters/bugReportFilters.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportFilters/index.ts",
+      "to": "src/features/bugReports/components/filters/BugReportFilters/index.ts"
+    },
+    {
+      "from": "src/features/bugReports/components/BugReportFilters/useBugReportFiltersHandlers.hook.ts",
+      "to": "src/features/bugReports/components/filters/BugReportFilters/useBugReportFiltersHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/constants/fieldLimits.ts",
+      "to": "src/features/bugReports/constants/form/fieldLimits.ts"
+    },
+    {
+      "from": "src/features/bugReports/hooks/useBugFiltersFromUrl.hook.ts",
+      "to": "src/features/bugReports/hooks/filters/useBugFiltersFromUrl.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/hooks/useBugReportForm.hook.ts",
+      "to": "src/features/bugReports/hooks/form/useBugReportForm.hook.ts"
+    },
+    {
+      "from": "src/features/bugReports/pages/AdminBugReportDetailPage.page.tsx",
+      "to": "src/features/bugReports/pages/admin/AdminBugReportDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/bugReports/pages/AdminBugReportsPage.page.tsx",
+      "to": "src/features/bugReports/pages/admin/AdminBugReportsPage.page.tsx"
+    },
+    {
+      "from": "src/features/bugReports/pages/CustomerBugReportDetailPage.page.tsx",
+      "to": "src/features/bugReports/pages/customer/CustomerBugReportDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/bugReports/pages/CustomerBugReportsPage.page.tsx",
+      "to": "src/features/bugReports/pages/customer/CustomerBugReportsPage.page.tsx"
+    },
+    {
+      "from": "src/features/bugReports/pages/CustomerNewBugReportPage.page.tsx",
+      "to": "src/features/bugReports/pages/customer/CustomerNewBugReportPage.page.tsx"
+    },
+    {
+      "from": "src/features/bugReports/pages/bugReportsPages.styles.ts",
+      "to": "src/features/bugReports/pages/customer/bugReportsPages.styles.ts"
+    },
+    {
+      "from": "src/features/bugReports/pages/VendorBugReportDetailPage.page.tsx",
+      "to": "src/features/bugReports/pages/vendor/VendorBugReportDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/bugReports/pages/VendorBugReportsPage.page.tsx",
+      "to": "src/features/bugReports/pages/vendor/VendorBugReportsPage.page.tsx"
+    },
+    {
+      "from": "src/features/bugReports/pages/VendorNewBugReportPage.page.tsx",
+      "to": "src/features/bugReports/pages/vendor/VendorNewBugReportPage.page.tsx"
+    },
+    {
+      "from": "src/features/bugReports/schemas/bugReport.schema.ts",
+      "to": "src/features/bugReports/schemas/form/bugReport.schema.ts"
+    },
+    {
+      "from": "src/features/bugReports/schemas/__tests__/bugReport.schema.test.ts",
+      "to": "src/features/bugReports/schemas/form/__tests__/bugReport.schema.test.ts"
+    },
+    {
+      "from": "src/features/bugReports/utils/labels.ts",
+      "to": "src/features/bugReports/utils/detail/labels.ts"
+    }
+  ]
+}

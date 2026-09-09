@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Area } from "react-easy-crop";
 import type { ImageMimeType } from "@/shared/constants/imageSpecs";
-import { getCroppedImageBlob } from "@/shared/utils/imageProcessing";
+import { getCroppedImageBlob } from "@/shared/utils/media/imageProcessing";
 
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;

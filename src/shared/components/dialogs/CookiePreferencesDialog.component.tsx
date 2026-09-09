@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import type { CookiePreferences } from "@/shared/hooks/useCookieBanner.hook";
+import type { CookiePreferences } from "@/shared/hooks/cookies/useCookieBanner.hook";
 import { cookiePreferencesDialogStyles } from "./cookieComponents.styles";
 
 interface CookiePreferencesDialogProps {

@@ -11,8 +11,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const featuresDir = path.join(root, "src", "features");
 
 const allowlist = [
-  "src/features/reports/hooks/useReportHubHelpers/index.ts",
-  "src/features/checkout/hooks/useOrderPlacementErrorHandler.hook.ts",
+  "src/features/reports/hooks/table/useReportHubHelpers/index.ts",
+  "src/features/checkout/hooks/checkout/useOrderPlacementErrorHandler.hook.ts",
 ];
 
 const patterns = [

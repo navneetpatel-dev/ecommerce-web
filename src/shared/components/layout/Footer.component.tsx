@@ -6,8 +6,8 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/shared/components/ui/accordion";
-import { NewsletterFormContainer } from "@/shared/containers/NewsletterFormContainer.container";
-import { FOOTER_SECTIONS } from "@/shared/constants/footer";
+import { NewsletterFormContainer } from "@/shared/containers/forms/NewsletterFormContainer.container";
+import { FOOTER_SECTIONS } from "@/shared/constants/navigation/footer";
 import { FooterLinksList } from "./Footer/FooterLinksList.component";
 import {
   FOOTER_BOTTOM_BAR,

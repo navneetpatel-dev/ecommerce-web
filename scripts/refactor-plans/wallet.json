@@ -1,0 +1,88 @@
+{
+  "moves": [
+    {
+      "from": "src/features/wallet/api/wallet.api.ts",
+      "to": "src/features/wallet/api/wallet/wallet.api.ts"
+    },
+    {
+      "from": "src/features/wallet/api/wallet.queries.ts",
+      "to": "src/features/wallet/api/wallet/wallet.queries.ts"
+    },
+    {
+      "from": "src/features/wallet/components/WalletPageContent.component.tsx",
+      "to": "src/features/wallet/components/overview/WalletPageContent.component.tsx"
+    },
+    {
+      "from": "src/features/wallet/components/walletPageContent.styles.ts",
+      "to": "src/features/wallet/components/overview/walletPageContent.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/components/WalletSectionSkeletons.component.tsx",
+      "to": "src/features/wallet/components/overview/WalletSectionSkeletons.component.tsx"
+    },
+    {
+      "from": "src/features/wallet/components/walletSectionSkeletons.styles.ts",
+      "to": "src/features/wallet/components/overview/walletSectionSkeletons.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/components/WalletRechargePanel.component.tsx",
+      "to": "src/features/wallet/components/recharge/WalletRechargePanel.component.tsx"
+    },
+    {
+      "from": "src/features/wallet/components/walletRechargePanel.styles.ts",
+      "to": "src/features/wallet/components/recharge/walletRechargePanel.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/components/WalletTransactionsTable.component.tsx",
+      "to": "src/features/wallet/components/transactions/WalletTransactionsTable.component.tsx"
+    },
+    {
+      "from": "src/features/wallet/components/walletTransactionsTable.styles.ts",
+      "to": "src/features/wallet/components/transactions/walletTransactionsTable.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/components/WalletStatementExportPanel.component.tsx",
+      "to": "src/features/wallet/components/statement-export/WalletStatementExportPanel.component.tsx"
+    },
+    {
+      "from": "src/features/wallet/components/walletStatementExportPanel.styles.ts",
+      "to": "src/features/wallet/components/statement-export/walletStatementExportPanel.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/hooks/useWalletRecharge.hook.ts",
+      "to": "src/features/wallet/hooks/recharge/useWalletRecharge.hook.ts"
+    },
+    {
+      "from": "src/features/wallet/hooks/useWalletRechargePreview.hook.ts",
+      "to": "src/features/wallet/hooks/recharge/useWalletRechargePreview.hook.ts"
+    },
+    {
+      "from": "src/features/wallet/hooks/useWalletStatementExport.hook.ts",
+      "to": "src/features/wallet/hooks/statement-export/useWalletStatementExport.hook.ts"
+    },
+    {
+      "from": "src/features/wallet/pages/WalletPage.page.tsx",
+      "to": "src/features/wallet/pages/wallet/WalletPage.page.tsx"
+    },
+    {
+      "from": "src/features/wallet/pages/walletPage.styles.ts",
+      "to": "src/features/wallet/pages/wallet/walletPage.styles.ts"
+    },
+    {
+      "from": "src/features/wallet/utils/transactionSource.ts",
+      "to": "src/features/wallet/utils/transactions/transactionSource.ts"
+    },
+    {
+      "from": "src/features/wallet/utils/walletRechargeSession.ts",
+      "to": "src/features/wallet/utils/recharge/walletRechargeSession.ts"
+    },
+    {
+      "from": "src/features/wallet/utils/walletRechargeValidation.ts",
+      "to": "src/features/wallet/utils/recharge/walletRechargeValidation.ts"
+    },
+    {
+      "from": "src/features/wallet/utils/__tests__/walletRechargeValidation.test.ts",
+      "to": "src/features/wallet/utils/recharge/__tests__/walletRechargeValidation.test.ts"
+    }
+  ]
+}

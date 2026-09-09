@@ -14,9 +14,9 @@ import { LABELS } from "@/shared/constants/labels";
 import {
   IMAGE_GALLERY_LIGHTBOX_QUALITY,
   IMAGE_GALLERY_LIGHTBOX_SIZES,
-} from "@/shared/constants/imageGallery";
-import { useImageLightboxGestures } from "@/shared/hooks/useImageLightboxGestures.hook";
-import { formatLabel } from "@/shared/utils/formatLabel";
+} from "@/shared/constants/media/imageGallery";
+import { useImageLightboxGestures } from "@/shared/hooks/media/useImageLightboxGestures.hook";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { imageLightboxStyles } from "./imageLightbox.styles";
 import type { ProductImage } from "@/shared/api/types";
 

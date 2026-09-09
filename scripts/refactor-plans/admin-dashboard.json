@@ -1,0 +1,1832 @@
+{
+  "moves": [
+    {
+      "from": "src/features/admin-dashboard/api/admin.api.ts",
+      "to": "src/features/admin-dashboard/api/analytics/admin.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/admin.queries.ts",
+      "to": "src/features/admin-dashboard/api/analytics/admin.queries.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/audit.api.ts",
+      "to": "src/features/admin-dashboard/api/audit/audit.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/finance.api.ts",
+      "to": "src/features/admin-dashboard/api/finance/finance.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/homepage.api.ts",
+      "to": "src/features/admin-dashboard/api/promo-banners/homepage.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/inventory.api.ts",
+      "to": "src/features/admin-dashboard/api/inventory/inventory.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/notifications.api.ts",
+      "to": "src/features/admin-dashboard/api/notifications/notifications.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/reports.api.ts",
+      "to": "src/features/admin-dashboard/api/finance/reports.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/roles.api.ts",
+      "to": "src/features/admin-dashboard/api/roles/roles.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/settings.api.ts",
+      "to": "src/features/admin-dashboard/api/settings/settings.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/shipping.api.ts",
+      "to": "src/features/admin-dashboard/api/shipping/shipping.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/tax.api.ts",
+      "to": "src/features/admin-dashboard/api/tax/tax.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/users.api.hook.ts",
+      "to": "src/features/admin-dashboard/api/users/users.api.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/users.queries.ts",
+      "to": "src/features/admin-dashboard/api/users/users.queries.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/walletAdmin.api.ts",
+      "to": "src/features/admin-dashboard/api/wallet/walletAdmin.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/api/webVitals.api.ts",
+      "to": "src/features/admin-dashboard/api/web-vitals/webVitals.api.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAnalyticsExportBar.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AdminAnalyticsExportBar.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAnalyticsExportBar/adminAnalyticsExportBar.styles.ts",
+      "to": "src/features/admin-dashboard/components/analytics/AdminAnalyticsExportBar/adminAnalyticsExportBar.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAnalyticsExportBar/useAdminAnalyticsExportBar.hook.ts",
+      "to": "src/features/admin-dashboard/components/analytics/AdminAnalyticsExportBar/useAdminAnalyticsExportBar.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAnalyticsLayout.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AdminAnalyticsLayout.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAnalyticsLayout/adminAnalyticsLayout.styles.ts",
+      "to": "src/features/admin-dashboard/components/analytics/AdminAnalyticsLayout/adminAnalyticsLayout.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAnalyticsLayout/useAdminAnalyticsLayout.hook.ts",
+      "to": "src/features/admin-dashboard/components/analytics/AdminAnalyticsLayout/useAdminAnalyticsLayout.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminApproveVendorAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/AdminApproveVendorAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminApproveVendorAction/adminApproveVendorAction.styles.ts",
+      "to": "src/features/admin-dashboard/components/vendors/AdminApproveVendorAction/adminApproveVendorAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminApproveVendorAction/useAdminApproveVendorAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/vendors/AdminApproveVendorAction/useAdminApproveVendorAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminArchiveCategoryAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminArchiveCategoryAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminArchiveCategoryAction/ArchiveDescription.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminArchiveCategoryAction/ArchiveDescription.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminArchiveCategoryAction/useAdminArchiveCategoryAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminArchiveCategoryAction/useAdminArchiveCategoryAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminArchiveCategoryAction/useArchiveCategoryDescription.hook.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminArchiveCategoryAction/useArchiveCategoryDescription.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAssignDeliveryAgentAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminAssignDeliveryAgentAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAssignDeliveryAgentAction/DeliveryAgentOptionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminAssignDeliveryAgentAction/DeliveryAgentOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAssignDeliveryAgentAction/adminAssignDeliveryAgentAction.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminAssignDeliveryAgentAction/adminAssignDeliveryAgentAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAssignDeliveryAgentAction/useAdminAssignDeliveryAgentAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminAssignDeliveryAgentAction/useAdminAssignDeliveryAgentAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAuditExportPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/audit/AdminAuditExportPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAuditExportPanel/adminAuditExportPanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/audit/AdminAuditExportPanel/adminAuditExportPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAuditExportPanel/useAdminAuditExportPanel.hook.ts",
+      "to": "src/features/admin-dashboard/components/audit/AdminAuditExportPanel/useAdminAuditExportPanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAuditFilters.component.tsx",
+      "to": "src/features/admin-dashboard/components/audit/AdminAuditFilters.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAuditFilters/AdminAuditFilters.component.tsx",
+      "to": "src/features/admin-dashboard/components/audit/AdminAuditFilters/AdminAuditFilters.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAuditFilters/EntityTypeOptionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/audit/AdminAuditFilters/EntityTypeOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAuditFilters/adminAuditFilters.styles.ts",
+      "to": "src/features/admin-dashboard/components/audit/AdminAuditFilters/adminAuditFilters.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAuditFilters/index.ts",
+      "to": "src/features/admin-dashboard/components/audit/AdminAuditFilters/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminAuditFilters/useAdminAuditFiltersHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/components/audit/AdminAuditFilters/useAdminAuditFiltersHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel/AdminCashbackWriteOffPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/AdminCashbackWriteOffPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel/CashbackWriteOffMetrics.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/CashbackWriteOffMetrics.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel/CashbackWriteOffReportTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/CashbackWriteOffReportTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel/CashbackWriteOffTableBody.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/CashbackWriteOffTableBody.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel/CashbackWriteOffTableRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/CashbackWriteOffTableRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel/adminCashbackWriteOffPanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/adminCashbackWriteOffPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel/cashbackWriteOffReportTable.styles.ts",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/cashbackWriteOffReportTable.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel/index.ts",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel/useAdminCashbackWriteOffPanel.hook.ts",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/useAdminCashbackWriteOffPanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCashbackWriteOffPanel/useCashbackWriteOffReportTable.hook.ts",
+      "to": "src/features/admin-dashboard/components/wallet/AdminCashbackWriteOffPanel/useCashbackWriteOffReportTable.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryAttributesAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryAttributesAction/AdminCategoryAttributesAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/AdminCategoryAttributesAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryAttributesAction/AttributeFormFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/AttributeFormFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryAttributesAction/AttributesSortableList.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/AttributesSortableList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryAttributesAction/AttributesSortableRows.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/AttributesSortableRows.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryAttributesAction/SortableAttributeRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/SortableAttributeRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryAttributesAction/adminCategoryAttributesAction.styles.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/adminCategoryAttributesAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryAttributesAction/attributeOptionUtils.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/attributeOptionUtils.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryAttributesAction/index.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryAttributesAction/useAdminCategoryAttributesAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/useAdminCategoryAttributesAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryCreateForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryCreateForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryFormFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryFormFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryFormFields/AdminCategoryBasicsFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryFormFields/AdminCategoryBasicsFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryFormFields/AdminCategoryFormFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryFormFields/AdminCategoryFormFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryFormFields/AdminCategoryImageSeoFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryFormFields/AdminCategoryImageSeoFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryFormFields/AdminCategoryPolicyFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryFormFields/AdminCategoryPolicyFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryFormFields/index.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryFormFields/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminCategoryFormFields/useCategoryParentOptions.hook.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminCategoryFormFields/useCategoryParentOptions.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminConfirmAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminConfirmAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminConfirmAction/ConfirmReasonField.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminConfirmAction/ConfirmReasonField.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminConfirmAction/adminConfirmAction.styles.ts",
+      "to": "src/features/admin-dashboard/components/shared/AdminConfirmAction/adminConfirmAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminConfirmAction/useAdminConfirmAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/shared/AdminConfirmAction/useAdminConfirmAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDataListView.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminDataListView.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDataListView/AdminDataCell.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminDataListView/AdminDataCell.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDataListView/AdminDataListView.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminDataListView/AdminDataListView.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDataListView/TableCellImagesList.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminDataListView/TableCellImagesList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDataListView/adminDataListView.styles.ts",
+      "to": "src/features/admin-dashboard/components/shared/AdminDataListView/adminDataListView.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDataListView/index.ts",
+      "to": "src/features/admin-dashboard/components/shared/AdminDataListView/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDataListView/useAdminDataListView.hook.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminDataListView/useAdminDataListView.hook.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDeliveryPerformancePanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminDeliveryPerformancePanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDeliveryPerformancePanel/AdminDeliveryPerformancePanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminDeliveryPerformancePanel/AdminDeliveryPerformancePanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDeliveryPerformancePanel/PerformanceChart.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminDeliveryPerformancePanel/PerformanceChart.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDeliveryPerformancePanel/PerformanceTableBody.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminDeliveryPerformancePanel/PerformanceTableBody.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDeliveryPerformancePanel/PerformanceTableRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminDeliveryPerformancePanel/PerformanceTableRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDeliveryPerformancePanel/adminDeliveryPerformancePanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminDeliveryPerformancePanel/adminDeliveryPerformancePanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminDeliveryPerformancePanel/index.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AdminDeliveryPerformancePanel/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminEditCategoryAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminEditCategoryAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminEditCategoryAction/adminEditCategoryAction.styles.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminEditCategoryAction/adminEditCategoryAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminEditCategoryAction/useAdminEditCategoryAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminEditCategoryAction/useAdminEditCategoryAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminEditNameAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminEditNameAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminEditNameAction/useAdminEditNameAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/shared/AdminEditNameAction/useAdminEditNameAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminEditShippingZoneAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/shipping/AdminEditShippingZoneAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminEditShippingZoneAction/adminEditShippingZoneAction.styles.ts",
+      "to": "src/features/admin-dashboard/components/shipping/AdminEditShippingZoneAction/adminEditShippingZoneAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminEditShippingZoneAction/useAdminEditShippingZoneAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/shipping/AdminEditShippingZoneAction/useAdminEditShippingZoneAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminMarkPayoutPaidAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/finance/AdminMarkPayoutPaidAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminMarkPayoutPaidAction/PaymentMethodsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/finance/AdminMarkPayoutPaidAction/PaymentMethodsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminMarkPayoutPaidAction/adminMarkPayoutPaidAction.styles.ts",
+      "to": "src/features/admin-dashboard/components/finance/AdminMarkPayoutPaidAction/adminMarkPayoutPaidAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminMarkPayoutPaidAction/useAdminMarkPayoutPaidAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/finance/AdminMarkPayoutPaidAction/useAdminMarkPayoutPaidAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminOrdersFilters.component.tsx",
+      "to": "src/features/admin-dashboard/components/orders/AdminOrdersFilters.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminOrdersFilters/AdminOrdersFilters.component.tsx",
+      "to": "src/features/admin-dashboard/components/orders/AdminOrdersFilters/AdminOrdersFilters.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminOrdersFilters/OrderStatusOptionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/orders/AdminOrdersFilters/OrderStatusOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminOrdersFilters/adminOrdersFilters.styles.ts",
+      "to": "src/features/admin-dashboard/components/orders/AdminOrdersFilters/adminOrdersFilters.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminOrdersFilters/index.ts",
+      "to": "src/features/admin-dashboard/components/orders/AdminOrdersFilters/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminOrdersFilters/useAdminOrdersFiltersHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/components/orders/AdminOrdersFilters/useAdminOrdersFiltersHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminReassignProductsAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminReassignProductsAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminReassignProductsAction/CategoryOptionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/AdminReassignProductsAction/CategoryOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminReassignProductsAction/adminReassignProductsAction.styles.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminReassignProductsAction/adminReassignProductsAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminReassignProductsAction/useAdminReassignProductsAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/categories/AdminReassignProductsAction/useAdminReassignProductsAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSectionTabs.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminSectionTabs.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSectionTabs/AdminSectionTabPanelsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminSectionTabs/AdminSectionTabPanelsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSectionTabs/AdminSectionTabTrigger.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminSectionTabs/AdminSectionTabTrigger.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSectionTabs/AdminSectionTabTriggersList.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminSectionTabs/AdminSectionTabTriggersList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSectionTabs/AdminSectionTabs.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/AdminSectionTabs/AdminSectionTabs.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSectionTabs/adminSectionTabs.styles.ts",
+      "to": "src/features/admin-dashboard/components/shared/AdminSectionTabs/adminSectionTabs.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSectionTabs/adminSectionTabs.types.ts",
+      "to": "src/features/admin-dashboard/components/shared/AdminSectionTabs/adminSectionTabs.types.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSectionTabs/index.ts",
+      "to": "src/features/admin-dashboard/components/shared/AdminSectionTabs/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSettlementReportsPanel/AdminSettlementReportsPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/finance/AdminSettlementReportsPanel/AdminSettlementReportsPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSettlementReportsPanel/SettlementReconciliationCard.component.tsx",
+      "to": "src/features/admin-dashboard/components/finance/AdminSettlementReportsPanel/SettlementReconciliationCard.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSettlementReportsPanel/SettlementSummaryGrid.component.tsx",
+      "to": "src/features/admin-dashboard/components/finance/AdminSettlementReportsPanel/SettlementSummaryGrid.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSettlementReportsPanel/VendorSettlementsTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/finance/AdminSettlementReportsPanel/VendorSettlementsTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSettlementReportsPanel/adminSettlementReportsPanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/finance/AdminSettlementReportsPanel/adminSettlementReportsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminSettlementReportsPanel/index.ts",
+      "to": "src/features/admin-dashboard/components/finance/AdminSettlementReportsPanel/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminShippingRateForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/shipping/AdminShippingRateForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminShippingZoneForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/shipping/AdminShippingZoneForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminTaxRuleForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/tax/AdminTaxRuleForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminUsersFilters.component.tsx",
+      "to": "src/features/admin-dashboard/components/users/AdminUsersFilters.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminUsersFilters/AdminUsersFilters.component.tsx",
+      "to": "src/features/admin-dashboard/components/users/AdminUsersFilters/AdminUsersFilters.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminUsersFilters/UserRoleOptionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/users/AdminUsersFilters/UserRoleOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminUsersFilters/UserStatusOptionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/users/AdminUsersFilters/UserStatusOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminUsersFilters/adminUsersFilters.styles.ts",
+      "to": "src/features/admin-dashboard/components/users/AdminUsersFilters/adminUsersFilters.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminUsersFilters/index.ts",
+      "to": "src/features/admin-dashboard/components/users/AdminUsersFilters/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminUsersFilters/useAdminUsersFiltersHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/components/users/AdminUsersFilters/useAdminUsersFiltersHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletAdjustPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletAdjustPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletLiabilityPanel/AdminWalletLiabilityPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletLiabilityPanel/AdminWalletLiabilityPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletLiabilityPanel/LiabilityRowsTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletLiabilityPanel/LiabilityRowsTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletLiabilityPanel/LiabilitySummaryGrid.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletLiabilityPanel/LiabilitySummaryGrid.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletLiabilityPanel/adminWalletLiabilityPanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletLiabilityPanel/adminWalletLiabilityPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletLiabilityPanel/index.ts",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletLiabilityPanel/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletRechargePanel/AdminWalletRechargePanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletRechargePanel/AdminWalletRechargePanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletRechargePanel/RechargeRowsTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletRechargePanel/RechargeRowsTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletRechargePanel/RechargeSummaryGrid.component.tsx",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletRechargePanel/RechargeSummaryGrid.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletRechargePanel/adminWalletRechargePanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletRechargePanel/adminWalletRechargePanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AdminWalletRechargePanel/index.ts",
+      "to": "src/features/admin-dashboard/components/wallet/AdminWalletRechargePanel/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentDocumentsPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentDocumentsPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentDocumentsPanel/AgentDocumentActionButtons.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentDocumentsPanel/AgentDocumentActionButtons.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentDocumentsPanel/AgentDocumentStatusBadge.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentDocumentsPanel/AgentDocumentStatusBadge.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentDocumentsPanel/AgentDocumentTableBody.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentDocumentsPanel/AgentDocumentTableBody.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentDocumentsPanel/AgentDocumentTableRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentDocumentsPanel/AgentDocumentTableRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentDocumentsPanel/AgentDocumentsPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentDocumentsPanel/AgentDocumentsPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentDocumentsPanel/agentDocumentsPanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentDocumentsPanel/agentDocumentsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentDocumentsPanel/index.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentDocumentsPanel/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentMarkPayoutPaidAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentMarkPayoutPaidAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentMarkPayoutPaidAction/AgentPaymentMethodsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentMarkPayoutPaidAction/AgentPaymentMethodsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentMarkPayoutPaidAction/agentMarkPayoutPaidAction.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentMarkPayoutPaidAction/agentMarkPayoutPaidAction.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentMarkPayoutPaidAction/useAgentMarkPayoutPaidAction.hook.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentMarkPayoutPaidAction/useAgentMarkPayoutPaidAction.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentPayoutsPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentPayoutsPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentPayoutsPanel/AgentPayoutActions.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentPayoutsPanel/AgentPayoutActions.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentPayoutsPanel/AgentPayoutTableBody.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentPayoutsPanel/AgentPayoutTableBody.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentPayoutsPanel/AgentPayoutTableRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentPayoutsPanel/AgentPayoutTableRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentPayoutsPanel/AgentPayoutsPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentPayoutsPanel/AgentPayoutsPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentPayoutsPanel/agentPayoutsPanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentPayoutsPanel/agentPayoutsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AgentPayoutsPanel/index.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/AgentPayoutsPanel/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsMetricCard.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsMetricCard.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsMetricsGrid.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsMetricsGrid.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsOpsQueues.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsOpsQueues.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsOpsQueues/OpsQueueItem.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsOpsQueues/OpsQueueItem.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsOpsQueues/OpsQueueList.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsOpsQueues/OpsQueueList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsOpsQueues/analyticsOpsQueues.styles.ts",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsOpsQueues/analyticsOpsQueues.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsRankedList.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsRankedList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsRankedList/RankedListItem.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsRankedList/RankedListItem.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsRankedList/RankedListItems.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsRankedList/RankedListItems.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsRankedList/analyticsRankedList.styles.ts",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsRankedList/analyticsRankedList.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsRatingChart.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsRatingChart.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsStatusChart.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsStatusChart.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsTrendChart.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsTrendChart.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/AnalyticsTrendTooltip.component.tsx",
+      "to": "src/features/admin-dashboard/components/analytics/AnalyticsTrendTooltip.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/BroadcastNotificationForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/notifications/BroadcastNotificationForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/BulkImportAgentsDialog/BulkImportAgentsDialog.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/BulkImportAgentsDialog.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/BulkImportAgentsDialog/ImportResultsPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/ImportResultsPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/BulkImportAgentsDialog/RequiredColumnsInfo.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/RequiredColumnsInfo.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/BulkImportAgentsDialog/TemplateDownloadCards.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/TemplateDownloadCards.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/BulkImportAgentsDialog/bulkImportAgentsDialog.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/bulkImportAgentsDialog.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/BulkImportAgentsDialog/index.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/BulkImportAgentsDialog/useBulkImportAgentsDialog.hook.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/useBulkImportAgentsDialog.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CashDepositsPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CashDepositsPanel/CashDepositActionButtons.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/CashDepositActionButtons.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CashDepositsPanel/CashDepositStatusBadge.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/CashDepositStatusBadge.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CashDepositsPanel/CashDepositTableBody.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/CashDepositTableBody.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CashDepositsPanel/CashDepositTableRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/CashDepositTableRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CashDepositsPanel/CashDepositsPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/CashDepositsPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CashDepositsPanel/cashDepositsPanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/cashDepositsPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CashDepositsPanel/index.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesPageHeader.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesPageHeader.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesPageHeader/CategoriesPageHeader.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesPageHeader/CategoriesPageHeader.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesPageHeader/categoriesPageHeader.styles.ts",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesPageHeader/categoriesPageHeader.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesPageHeader/index.ts",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesPageHeader/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesPageHeader/useCategoriesPageHeader.hook.ts",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesPageHeader/useCategoriesPageHeader.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesTable/CategoriesTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesTable/CategoriesTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesTable/CategorySortableHandle.component.tsx",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesTable/CategorySortableHandle.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesTable/categoriesTable.styles.ts",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesTable/categoriesTable.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesTable/index.ts",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesTable/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CategoriesTable/useCategoriesTableColumns.hook.tsx",
+      "to": "src/features/admin-dashboard/components/categories/CategoriesTable/useCategoriesTableColumns.hook.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ChangeUserRoleDialog.component.tsx",
+      "to": "src/features/admin-dashboard/components/users/ChangeUserRoleDialog.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ChangeUserRoleDialog/ChangeUserRoleDialog.component.tsx",
+      "to": "src/features/admin-dashboard/components/users/ChangeUserRoleDialog/ChangeUserRoleDialog.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ChangeUserRoleDialog/RoleOptionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/users/ChangeUserRoleDialog/RoleOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ChangeUserRoleDialog/VendorOptionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/users/ChangeUserRoleDialog/VendorOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ChangeUserRoleDialog/changeUserRoleDialog.styles.ts",
+      "to": "src/features/admin-dashboard/components/users/ChangeUserRoleDialog/changeUserRoleDialog.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ChangeUserRoleDialog/index.ts",
+      "to": "src/features/admin-dashboard/components/users/ChangeUserRoleDialog/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ChangeUserRoleDialog/useChangeUserRoleDialogPresentation.hook.ts",
+      "to": "src/features/admin-dashboard/components/users/ChangeUserRoleDialog/useChangeUserRoleDialogPresentation.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponScopeMultiSelect.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CouponScopeMultiSelect.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsPageHeader.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsPageHeader.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsPageHeader/BulkGenerateDialog.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/BulkGenerateDialog.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsPageHeader/CouponBatchDetailDialog.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/CouponBatchDetailDialog.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsPageHeader/CouponsPageHeader.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/CouponsPageHeader.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsPageHeader/bulkCouponForm.schema.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/bulkCouponForm.schema.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsPageHeader/bulkGenerateDialog.styles.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/bulkGenerateDialog.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsPageHeader/couponBatchColumns.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/couponBatchColumns.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsPageHeader/couponsPageHeader.styles.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/couponsPageHeader.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsPageHeader/index.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsPageHeader/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsTable/CouponsAnalyticsDialog.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsTable/CouponsAnalyticsDialog.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsTable/CouponsTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsTable/CouponsTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsTable/couponTableColumns.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsTable/couponTableColumns.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsTable/couponsTable.styles.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsTable/couponsTable.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CouponsTable/index.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CouponsTable/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm/CreateCouponBasicsFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm/CreateCouponBasicsFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm/CreateCouponConstraintFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm/CreateCouponConstraintFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm/CreateCouponForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm/CreateCouponForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm/CreateCouponRestrictionFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm/CreateCouponRestrictionFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm/CreateCouponScopeFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm/CreateCouponScopeFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm/CreateCouponValueFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm/CreateCouponValueFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm/constants.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm/constants.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm/couponDisableHint.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm/couponDisableHint.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm/createCouponForm.styles.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm/createCouponForm.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateCouponForm/index.ts",
+      "to": "src/features/admin-dashboard/components/coupons/CreateCouponForm/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateDeliveryAgentForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateDeliveryAgentForm/CreateDeliveryAgentForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/CreateDeliveryAgentForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateDeliveryAgentForm/CreateDeliveryAgentFormFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/CreateDeliveryAgentFormFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateDeliveryAgentForm/VehicleTypeOptionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/VehicleTypeOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateDeliveryAgentForm/createDeliveryAgentForm.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/createDeliveryAgentForm.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateDeliveryAgentForm/createDeliveryAgentForm.types.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/createDeliveryAgentForm.types.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateDeliveryAgentForm/index.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateDeliveryAgentForm/useCreateDeliveryAgentFormFieldsHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/useCreateDeliveryAgentFormFieldsHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/CreateDeliveryAgentFormFields.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentFormFields.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/DeliveryDispatchAgentSelect.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/DeliveryDispatchAgentSelect.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/DeliveryDispatchPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/DeliveryDispatchPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/DeliveryDispatchPickupGroup.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/DeliveryDispatchPickupGroup.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/DeliveryDispatchPickupGroupsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/DeliveryDispatchPickupGroupsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/DeliveryDispatchPickupList.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/DeliveryDispatchPickupList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/DeliveryDispatchShipmentGroup.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/DeliveryDispatchShipmentGroup.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/DeliveryDispatchShipmentGroupsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/DeliveryDispatchShipmentGroupsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/DeliveryDispatchShipmentList.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/DeliveryDispatchShipmentList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/DeliveryDispatchShipmentRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/DeliveryDispatchShipmentRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/deliveryDispatchPanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/deliveryDispatchPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/deliveryDispatchPickupList.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/deliveryDispatchPickupList.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/deliveryDispatchShipmentList.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/deliveryDispatchShipmentList.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/index.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/useDeliveryDispatchPanel.hook.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/useDeliveryDispatchPanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/useDeliveryDispatchPickupList.hook.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/useDeliveryDispatchPickupList.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatch/useDeliveryDispatchShipmentList.hook.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/useDeliveryDispatchShipmentList.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatchPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatchPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatchPickupList.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatchPickupList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/DeliveryDispatchShipmentList.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatchShipmentList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ImpersonateUserButton.component.tsx",
+      "to": "src/features/admin-dashboard/components/users/ImpersonateUserButton.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ImpersonateUserButton/ImpersonateUserButton.component.tsx",
+      "to": "src/features/admin-dashboard/components/users/ImpersonateUserButton/ImpersonateUserButton.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ImpersonateUserButton/impersonateUserButton.styles.ts",
+      "to": "src/features/admin-dashboard/components/users/ImpersonateUserButton/impersonateUserButton.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ImpersonateUserButton/index.ts",
+      "to": "src/features/admin-dashboard/components/users/ImpersonateUserButton/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ImpersonateUserButton/useImpersonateUserButton.hook.ts",
+      "to": "src/features/admin-dashboard/components/users/ImpersonateUserButton/useImpersonateUserButton.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/MetricCard.component.tsx",
+      "to": "src/features/admin-dashboard/components/shared/MetricCard.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/NotificationLogFiltersBar.component.tsx",
+      "to": "src/features/admin-dashboard/components/notifications/NotificationLogFiltersBar.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/NotificationLogFiltersBar/NotificationFilterOptionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/notifications/NotificationLogFiltersBar/NotificationFilterOptionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/NotificationLogFiltersBar/NotificationFilterSelect.component.tsx",
+      "to": "src/features/admin-dashboard/components/notifications/NotificationLogFiltersBar/NotificationFilterSelect.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/NotificationLogFiltersBar/NotificationLogFiltersBar.component.tsx",
+      "to": "src/features/admin-dashboard/components/notifications/NotificationLogFiltersBar/NotificationLogFiltersBar.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/NotificationLogFiltersBar/index.ts",
+      "to": "src/features/admin-dashboard/components/notifications/NotificationLogFiltersBar/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/NotificationLogFiltersBar/notificationLogFiltersBar.styles.ts",
+      "to": "src/features/admin-dashboard/components/notifications/NotificationLogFiltersBar/notificationLogFiltersBar.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/NotificationLogFiltersBar/useNotificationLogFiltersBar.hook.ts",
+      "to": "src/features/admin-dashboard/components/notifications/NotificationLogFiltersBar/useNotificationLogFiltersBar.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/CodSettingsSection.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/CodSettingsSection.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/CommerceSettingsSection.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/CommerceSettingsSection.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/FulfillmentSettingsSection.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/FulfillmentSettingsSection.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/PlatformSettingsForm.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/PlatformSettingsForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/PlatformSettingsHeader.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/PlatformSettingsHeader.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/ReportTypeCheckboxGroup.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/ReportTypeCheckboxGroup.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/ScheduledReportsSettingsSection.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/ScheduledReportsSettingsSection.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/ScheduledReportsTypeSelector.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/ScheduledReportsTypeSelector.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/SupportSettingsSection.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/SupportSettingsSection.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/index.ts",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/PlatformSettingsForm/platformSettingsForm.styles.ts",
+      "to": "src/features/admin-dashboard/components/settings/PlatformSettingsForm/platformSettingsForm.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ProductModerationTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/ProductModerationTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ProductModerationTable/ProductModerationRowActions.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/ProductModerationTable/ProductModerationRowActions.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ProductModerationTable/ProductModerationTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/ProductModerationTable/ProductModerationTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ProductModerationTable/index.ts",
+      "to": "src/features/admin-dashboard/components/vendors/ProductModerationTable/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ProductModerationTable/productModerationTable.styles.ts",
+      "to": "src/features/admin-dashboard/components/vendors/ProductModerationTable/productModerationTable.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ProductModerationTable/useProductModerationTableColumns.hook.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/ProductModerationTable/useProductModerationTableColumns.hook.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RolePermissionsDialog/PermissionsList.component.tsx",
+      "to": "src/features/admin-dashboard/components/roles/RolePermissionsDialog/PermissionsList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RolePermissionsDialog/PermissionsToolbar.component.tsx",
+      "to": "src/features/admin-dashboard/components/roles/RolePermissionsDialog/PermissionsToolbar.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RolePermissionsDialog/RolePermissionsDialog.component.tsx",
+      "to": "src/features/admin-dashboard/components/roles/RolePermissionsDialog/RolePermissionsDialog.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RolePermissionsDialog/index.ts",
+      "to": "src/features/admin-dashboard/components/roles/RolePermissionsDialog/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RolePermissionsDialog/rolePermissionsDialog.styles.ts",
+      "to": "src/features/admin-dashboard/components/roles/RolePermissionsDialog/rolePermissionsDialog.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RolePermissionsDialog/useRolePermissionsDialog.hook.ts",
+      "to": "src/features/admin-dashboard/components/roles/RolePermissionsDialog/useRolePermissionsDialog.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RtoQueuePanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/shipping/RtoQueuePanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RtoQueuePanel/RtoQueuePanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/shipping/RtoQueuePanel/RtoQueuePanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RtoQueuePanel/RtoQueueTableBody.component.tsx",
+      "to": "src/features/admin-dashboard/components/shipping/RtoQueuePanel/RtoQueueTableBody.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RtoQueuePanel/RtoQueueTableRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/shipping/RtoQueuePanel/RtoQueueTableRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RtoQueuePanel/index.ts",
+      "to": "src/features/admin-dashboard/components/shipping/RtoQueuePanel/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RtoQueuePanel/rtoQueuePanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/shipping/RtoQueuePanel/rtoQueuePanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/RtoQueuePanel/useRtoQueuePanel.hook.ts",
+      "to": "src/features/admin-dashboard/components/shipping/RtoQueuePanel/useRtoQueuePanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/ShippingRateNumberField.component.tsx",
+      "to": "src/features/admin-dashboard/components/shipping/ShippingRateNumberField.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/StaleTasksPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/StaleTasksPanel/StalePickupRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/StalePickupRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/StaleTasksPanel/StalePickupsTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/StalePickupsTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/StaleTasksPanel/StaleShipmentRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/StaleShipmentRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/StaleTasksPanel/StaleShipmentsTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/StaleShipmentsTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/StaleTasksPanel/StaleTasksPanel.component.tsx",
+      "to": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/StaleTasksPanel.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/StaleTasksPanel/index.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/StaleTasksPanel/staleTasksPanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/staleTasksPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/StaleTasksPanel/useStaleTasksReport.hook.ts",
+      "to": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/useStaleTasksReport.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorApprovalTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorApprovalTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorApprovalTable/VendorApprovalRowActions.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorApprovalTable/VendorApprovalRowActions.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorApprovalTable/VendorApprovalTable.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorApprovalTable/VendorApprovalTable.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorApprovalTable/index.ts",
+      "to": "src/features/admin-dashboard/components/vendors/VendorApprovalTable/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorApprovalTable/useVendorApprovalTableColumns.hook.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorApprovalTable/useVendorApprovalTableColumns.hook.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorKycDocumentsDialog.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsDialog.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorKycDocumentsDialog/KycChecklistItemRow.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsDialog/KycChecklistItemRow.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorKycDocumentsDialog/KycChecklistItems.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsDialog/KycChecklistItems.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorKycDocumentsDialog/KycConfirmDialogs.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsDialog/KycConfirmDialogs.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorKycDocumentsDialog/VendorKycDocumentsDialog.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsDialog/VendorKycDocumentsDialog.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorKycDocumentsDialog/index.ts",
+      "to": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsDialog/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorKycDocumentsDialog/useVendorKycDialogHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsDialog/useVendorKycDialogHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorKycDocumentsDialog/vendorKycDocumentsDialog.styles.ts",
+      "to": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsDialog/vendorKycDocumentsDialog.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorKycDocumentsMenuAction.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorKycDocumentsMenuAction.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorRowActions.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorRowActions.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorRowActions/VendorRowActions.component.tsx",
+      "to": "src/features/admin-dashboard/components/vendors/VendorRowActions/VendorRowActions.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorRowActions/index.ts",
+      "to": "src/features/admin-dashboard/components/vendors/VendorRowActions/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/VendorRowActions/useVendorRowActionsHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/components/vendors/VendorRowActions/useVendorRowActionsHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/WalletPointsSettingsSection.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/WalletPointsSettingsSection.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/WalletPointsSettingsSection/WalletPointsSettingsSection.component.tsx",
+      "to": "src/features/admin-dashboard/components/settings/WalletPointsSettingsSection/WalletPointsSettingsSection.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/WalletPointsSettingsSection/index.ts",
+      "to": "src/features/admin-dashboard/components/settings/WalletPointsSettingsSection/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/WalletPointsSettingsSection/useWalletPointsSettingsHandlers.hook.ts",
+      "to": "src/features/admin-dashboard/components/settings/WalletPointsSettingsSection/useWalletPointsSettingsHandlers.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/adminCategory.styles.ts",
+      "to": "src/features/admin-dashboard/components/categories/adminCategory.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/adminFormWidgets.styles.ts",
+      "to": "src/features/admin-dashboard/components/shared/adminFormWidgets.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/analyticsComponents.styles.ts",
+      "to": "src/features/admin-dashboard/components/analytics/analyticsComponents.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/components/reportPanel.styles.ts",
+      "to": "src/features/admin-dashboard/components/shared/reportPanel.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/constants/notificationTypes.ts",
+      "to": "src/features/admin-dashboard/constants/notifications/notificationTypes.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminAnalyticsPage.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/analytics/useAdminAnalyticsPage.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminAuditPage.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/audit/useAdminAuditPage.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminCategoriesPage.tsx",
+      "to": "src/features/admin-dashboard/hooks/categories/useAdminCategoriesPage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminCouponsPage.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/coupons/useAdminCouponsPage.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminDataList.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/shared/useAdminDataList.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminDeliveryPerformancePanel.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useAdminDeliveryPerformancePanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminFinancePage.tsx",
+      "to": "src/features/admin-dashboard/hooks/finance/useAdminFinancePage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminHomeRedirect.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/analytics/useAdminHomeRedirect.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminOrdersPage.tsx",
+      "to": "src/features/admin-dashboard/hooks/orders/useAdminOrdersPage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminProductsPage.tsx",
+      "to": "src/features/admin-dashboard/hooks/vendors/useAdminProductsPage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminReturnsPage.tsx",
+      "to": "src/features/admin-dashboard/hooks/returns/useAdminReturnsPage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminReviewsPage.tsx",
+      "to": "src/features/admin-dashboard/hooks/reviews/useAdminReviewsPage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminRolesPage.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/roles/useAdminRolesPage.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminSettlementReports.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/finance/useAdminSettlementReports.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminShippingPage.tsx",
+      "to": "src/features/admin-dashboard/hooks/shipping/useAdminShippingPage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminShippingRatesPage.tsx",
+      "to": "src/features/admin-dashboard/hooks/shipping/useAdminShippingRatesPage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminTaxPage.tsx",
+      "to": "src/features/admin-dashboard/hooks/tax/useAdminTaxPage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminUsersPage.tsx",
+      "to": "src/features/admin-dashboard/hooks/users/useAdminUsersPage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminVendorDetail.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/vendors/useAdminVendorDetail.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminVendorsPage.tsx",
+      "to": "src/features/admin-dashboard/hooks/vendors/useAdminVendorsPage.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminWalletAdjust.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/wallet/useAdminWalletAdjust.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAdminWebVitalsPage.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/web-vitals/useAdminWebVitalsPage.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAgentDocumentsPanel.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useAgentDocumentsPanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useAgentPayoutsPanel.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useAgentPayoutsPanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useBulkCouponGeneration.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/coupons/useBulkCouponGeneration.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useBulkImportAgents.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useBulkImportAgents.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useCashDepositsPanel.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useCashDepositsPanel.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useCashbackWriteOffReport.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/wallet/useCashbackWriteOffReport.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useCategoriesReorder.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/categories/useCategoriesReorder.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useChangeUserRoleDialog.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/users/useChangeUserRoleDialog.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useCouponBatches.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/coupons/useCouponBatches.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useCouponRowActions.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/coupons/useCouponRowActions.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useCreateCoupon.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/coupons/useCreateCoupon.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useCreateDeliveryAgentForm.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/delivery-agents/useCreateDeliveryAgentForm.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useNotifyCouponAlerts.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/coupons/useNotifyCouponAlerts.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/usePlatformSettingsForm.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/settings/usePlatformSettingsForm.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useProductModeration.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/vendors/useProductModeration.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useProductModerationQueue.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/vendors/useProductModerationQueue.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useReassignProducts.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/categories/useReassignProducts.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useScheduledReportsCatalog.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/settings/useScheduledReportsCatalog.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useScheduledReportsFilter.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/settings/useScheduledReportsFilter.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useShippingRateForm.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/shipping/useShippingRateForm.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useVendorApproval.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/vendors/useVendorApproval.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useVendorApprovalQueue.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/vendors/useVendorApprovalQueue.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useVendorKycDocumentsDialog.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/vendors/useVendorKycDocumentsDialog.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useWalletLiabilityReport.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/wallet/useWalletLiabilityReport.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/hooks/useWalletRechargeReport.hook.ts",
+      "to": "src/features/admin-dashboard/hooks/wallet/useWalletRechargeReport.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminAnalyticsPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/analytics/AdminAnalyticsPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminAuditPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/audit/AdminAuditPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminCategoriesPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/categories/AdminCategoriesPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminCouponsPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/coupons/AdminCouponsPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminDataPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/shared/AdminDataPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminDeliveryAgentsPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/delivery-agents/AdminDeliveryAgentsPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminFinancePage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/finance/AdminFinancePage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminHomePage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/analytics/AdminHomePage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminInventoryPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/inventory/AdminInventoryPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminNotificationsPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/notifications/AdminNotificationsPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminOrdersPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/orders/AdminOrdersPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminProductsPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/vendors/AdminProductsPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminPromoBannersPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/promo-banners/AdminPromoBannersPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminPromoBannersPage/AdminPromoBannersPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/promo-banners/AdminPromoBannersPage/AdminPromoBannersPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminPromoBannersPage/PromoBannerCreateSection.component.tsx",
+      "to": "src/features/admin-dashboard/pages/promo-banners/AdminPromoBannersPage/PromoBannerCreateSection.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminPromoBannersPage/PromoBannerEditForm.component.tsx",
+      "to": "src/features/admin-dashboard/pages/promo-banners/AdminPromoBannersPage/PromoBannerEditForm.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminPromoBannersPage/PromoBannersList.component.tsx",
+      "to": "src/features/admin-dashboard/pages/promo-banners/AdminPromoBannersPage/PromoBannersList.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminPromoBannersPage/adminPromoBanners.styles.ts",
+      "to": "src/features/admin-dashboard/pages/promo-banners/AdminPromoBannersPage/adminPromoBanners.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminPromoBannersPage/index.ts",
+      "to": "src/features/admin-dashboard/pages/promo-banners/AdminPromoBannersPage/index.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminPromoBannersPage/usePromoBannerCreateForm.hook.ts",
+      "to": "src/features/admin-dashboard/pages/promo-banners/AdminPromoBannersPage/usePromoBannerCreateForm.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminPromoBannersPage/usePromoBannerEdit.hook.ts",
+      "to": "src/features/admin-dashboard/pages/promo-banners/AdminPromoBannersPage/usePromoBannerEdit.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminPromoBannersPage/usePromoBanners.hook.ts",
+      "to": "src/features/admin-dashboard/pages/promo-banners/AdminPromoBannersPage/usePromoBanners.hook.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminReturnsPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/returns/AdminReturnsPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminReviewsPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/reviews/AdminReviewsPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminRolesPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/roles/AdminRolesPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminShippingPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/shipping/AdminShippingPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminTaxPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/tax/AdminTaxPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminUserDetailPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/users/AdminUserDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminUsersPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/users/AdminUsersPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminVendorDetailPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/vendors/AdminVendorDetailPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminVendorsPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/vendors/AdminVendorsPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/AdminWebVitalsPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/web-vitals/AdminWebVitalsPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/PlatformSettingsPage.page.tsx",
+      "to": "src/features/admin-dashboard/pages/settings/PlatformSettingsPage.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/ProductModerationQueue.page.tsx",
+      "to": "src/features/admin-dashboard/pages/vendors/ProductModerationQueue.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/UserAddressesCard.component.tsx",
+      "to": "src/features/admin-dashboard/pages/users/UserAddressesCard.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/UserRecentOrdersCard.component.tsx",
+      "to": "src/features/admin-dashboard/pages/users/UserRecentOrdersCard.component.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/VendorApprovalQueue.page.tsx",
+      "to": "src/features/admin-dashboard/pages/vendors/VendorApprovalQueue.page.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/adminFinancePage.styles.ts",
+      "to": "src/features/admin-dashboard/pages/finance/adminFinancePage.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/adminPages.styles.ts",
+      "to": "src/features/admin-dashboard/pages/shared/adminPages.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/pages/adminUserDetail.styles.ts",
+      "to": "src/features/admin-dashboard/pages/users/adminUserDetail.styles.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/schemas/categories.schema.ts",
+      "to": "src/features/admin-dashboard/schemas/categories/categories.schema.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/schemas/couponBatch.schema.ts",
+      "to": "src/features/admin-dashboard/schemas/coupons/couponBatch.schema.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/schemas/couponMapping.schema.ts",
+      "to": "src/features/admin-dashboard/schemas/coupons/couponMapping.schema.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/schemas/couponShape.schema.ts",
+      "to": "src/features/admin-dashboard/schemas/coupons/couponShape.schema.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/schemas/couponShape/couponShape.constants.ts",
+      "to": "src/features/admin-dashboard/schemas/coupons/couponShape/couponShape.constants.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/schemas/couponShape/couponShape.object.ts",
+      "to": "src/features/admin-dashboard/schemas/coupons/couponShape/couponShape.object.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/schemas/couponShape/couponShape.refinements.ts",
+      "to": "src/features/admin-dashboard/schemas/coupons/couponShape/couponShape.refinements.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/schemas/coupons.schema.ts",
+      "to": "src/features/admin-dashboard/schemas/coupons/coupons.schema.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/types/adminListPage.types.ts",
+      "to": "src/features/admin-dashboard/types/shared/adminListPage.types.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/__tests__/parseAgentsCsv.test.ts",
+      "to": "src/features/admin-dashboard/utils/delivery-agents/__tests__/parseAgentsCsv.test.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/adminActionTone.ts",
+      "to": "src/features/admin-dashboard/utils/shared/adminActionTone.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/adminConfirmActionIcon.tsx",
+      "to": "src/features/admin-dashboard/utils/shared/adminConfirmActionIcon.tsx"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/adminDataListNormalize.ts",
+      "to": "src/features/admin-dashboard/utils/shared/adminDataListNormalize.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/adminRowLabel.ts",
+      "to": "src/features/admin-dashboard/utils/shared/adminRowLabel.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/adminTableCells.ts",
+      "to": "src/features/admin-dashboard/utils/shared/adminTableCells.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/analyticsFormat.ts",
+      "to": "src/features/admin-dashboard/utils/analytics/analyticsFormat.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/chartTheme.ts",
+      "to": "src/features/admin-dashboard/utils/analytics/chartTheme.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/csvField.ts",
+      "to": "src/features/admin-dashboard/utils/shipping/csvField.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/parseAgentsCsv.ts",
+      "to": "src/features/admin-dashboard/utils/delivery-agents/parseAgentsCsv.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/pincodeZoneGrouping.ts",
+      "to": "src/features/admin-dashboard/utils/delivery-agents/pincodeZoneGrouping.ts"
+    },
+    {
+      "from": "src/features/admin-dashboard/utils/returnRowActions.tsx",
+      "to": "src/features/admin-dashboard/utils/returns/returnRowActions.tsx"
+    }
+  ]
+}

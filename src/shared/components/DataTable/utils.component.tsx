@@ -3,9 +3,9 @@
 import type { ReactNode } from "react";
 import { TableCellImage } from "@/shared/components/TableCellImage.component";
 import { TruncatedText } from "@/shared/components/TruncatedText.component";
-import { TABLE_CELL_MAX_CHARS } from "@/shared/constants/table";
-import { extractImageUrls, isImageFieldKey } from "@/shared/utils/imageField";
-import { tryFormatDateTime } from "@/shared/utils/formatDate";
+import { TABLE_CELL_MAX_CHARS } from "@/shared/constants/table/table";
+import { extractImageUrls, isImageFieldKey } from "@/shared/utils/media/imageField";
+import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
 import { dataTableUtilsStyles } from "./dataTable.styles";
 import type { DataTableColumn } from "./types";
 

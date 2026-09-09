@@ -1,5 +1,5 @@
 // Product Q&A feature — public API
-export { productQnaApi } from "./api/productQna.api";
+export { productQnaApi } from "./api/qna/productQna.api";
 export {
   productQnaKeys,
   useProductQuestions,
@@ -7,5 +7,5 @@ export {
   useAskQuestion,
   useAnswerQuestion,
   useModerateQuestion,
-} from "./api/productQna.queries";
-export { ProductQnaContainer } from "./containers/ProductQnaContainer.container";
+} from "./api/qna/productQna.queries";
+export { ProductQnaContainer } from "./containers/list/ProductQnaContainer.container";
