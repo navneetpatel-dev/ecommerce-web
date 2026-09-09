@@ -7,15 +7,12 @@ import { MediaImage } from "@/shared/components/MediaImage.component";
 import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart";
-import { cn } from "@/shared/utils/cn";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import type { CartItem } from "@/shared/api/types";
-import {
-  hasPendingCartLineSubtotal,
-  resolveCartLineDisplaySubtotal,
-} from "@/features/cart/utils/cartDisplay.utils";
-import { RemoveLineButton, unavailableLabel } from "./cartLineShared.component";
+import { RemoveLineButton } from "./cartLineShared.component";
+import { useCartLineViewModel } from "./useCartLineViewModel.hook";
+import { cartLineStyles as styles } from "./cartLine.styles";
 
 interface CompactCartLineProps {
   item: CartItem;
@@ -26,7 +23,6 @@ interface CompactCartLineProps {
   disabled?: boolean;
 }
 
-/** Compact cart row rendered inside the slide-over drawer (Rule 3 split). */
 export function CompactCartLine(props: CompactCartLineProps) {
   const {
     item,
@@ -35,60 +31,20 @@ export function CompactCartLine(props: CompactCartLineProps) {
     amountsUnavailable = false,
     disabled = false,
   } = props;
-  const available = item.isAvailable !== false;
-  const linePending = hasPendingCartLineSubtotal(item);
-  const lineTotal = resolveCartLineDisplaySubtotal(item);
 
-  const handleQuantityChange = (quantity: number) => {
-    onUpdateQuantity(item.id, quantity);
-  };
+  const {
+    available,
+    linePending,
+    lineTotal,
+    unavailableReasonText,
+    handleQuantityChange,
+  } = useCartLineViewModel({ item, onUpdateQuantity });
 
-  const removeButtonClassName =
-    "h-8 w-8 min-h-8 max-h-8 shrink-0 justify-self-end p-0 text-ink-muted hover:bg-danger-subtle hover:text-danger";
-  const rootClassName = cn(
-    "flex items-center gap-3 py-2",
-    !available && "opacity-50 grayscale",
-  );
-  const amountClassName = cn(
-    "truncate text-body-sm font-semibold tabular-nums",
-    linePending || lineTotal == null ? "text-ink-muted" : "text-brand",
-  );
-
-  let amountContent;
-  if (lineTotal != null && !linePending) {
-    amountContent = <>₹{formatInrAmount(lineTotal)}</>;
-  } else if (amountsUnavailable) {
-    amountContent = LABELS.amountUnavailable;
-  } else {
-    amountContent = <InlineAmountSkeleton className="h-3.5 w-16" />;
-  }
-
-  const availabilityElement = available ? (
-    <p className={amountClassName}>{amountContent}</p>
-  ) : (
-    <Badge variant="destructive" className="w-fit text-[0.6875rem]">
-      {unavailableLabel(item.unavailableReason)}
-    </Badge>
-  );
-
-  const quantityElement = available ? (
-    <QuantitySelector
-      value={item.quantity}
-      onChange={handleQuantityChange}
-      min={1}
-      max={item.maxQuantity ?? MAX_CART_LINE_QUANTITY}
-      disabled={disabled}
-      disabledHint={LABELS.cartUpdatingActionHint}
-      controlClassName="h-8 w-8 min-h-8 max-h-8 [&_svg]:size-3.5"
-      valueClassName="h-4 w-5 text-body-sm"
-    />
-  ) : (
-    <span />
-  );
+  const isPendingOrNull = linePending || lineTotal == null;
 
   return (
-    <div className={rootClassName}>
-      <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-sm">
+    <div className={styles.compactRoot(available)}>
+      <div className={styles.compactImageWrapper}>
         <MediaImage
           src={item.product.imageUrl}
           alt={item.product.name}
@@ -96,21 +52,52 @@ export function CompactCartLine(props: CompactCartLineProps) {
           imageClassName="object-cover"
         />
       </div>
-      <div className="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1">
+
+      <div className={styles.compactGrid}>
         <Link
           href={PATHS.product(item.product.slug)}
-          className="truncate text-body-sm font-medium leading-snug text-ink hover:text-brand"
+          className={styles.compactTitle}
         >
           {item.product.name}
         </Link>
+
         <RemoveLineButton
           item={item}
-          className={removeButtonClassName}
+          className={styles.compactRemoveButton}
           onRemoveItem={onRemoveItem}
           disabled={disabled}
         />
-        {availabilityElement}
-        {quantityElement}
+
+        {available ? (
+          <p className={styles.compactAmount(isPendingOrNull)}>
+            {lineTotal != null && !linePending ? (
+              <>₹{formatInrAmount(lineTotal)}</>
+            ) : amountsUnavailable ? (
+              LABELS.amountUnavailable
+            ) : (
+              <InlineAmountSkeleton className={styles.compactSkeleton} />
+            )}
+          </p>
+        ) : (
+          <Badge variant="destructive" className={styles.compactBadge}>
+            {unavailableReasonText}
+          </Badge>
+        )}
+
+        {available ? (
+          <QuantitySelector
+            value={item.quantity}
+            onChange={handleQuantityChange}
+            min={1}
+            max={item.maxQuantity ?? MAX_CART_LINE_QUANTITY}
+            disabled={disabled}
+            disabledHint={LABELS.cartUpdatingActionHint}
+            controlClassName={styles.compactQuantityControl}
+            valueClassName={styles.compactQuantityValue}
+          />
+        ) : (
+          <span />
+        )}
       </div>
     </div>
   );

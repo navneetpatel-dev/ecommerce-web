@@ -18,12 +18,14 @@ export function DeleteSavedPaymentMethodDialog({
   onClose,
   onConfirm,
 }: DeleteSavedPaymentMethodDialogProps) {
+  const handleOpenChange = (open: boolean) => {
+    if (!open) onClose();
+  };
+
   return (
     <StatusDialog
       open={Boolean(target)}
-      onOpenChange={(open) => {
-        if (!open) onClose();
-      }}
+      onOpenChange={handleOpenChange}
       variant="danger"
       icon={Trash2}
       title={LABELS.deleteSavedPaymentMethodTitle}

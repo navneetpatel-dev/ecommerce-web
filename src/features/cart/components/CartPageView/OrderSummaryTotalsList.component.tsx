@@ -4,6 +4,7 @@ import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.c
 import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
 import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { cartPageViewStyles as styles } from "./cartPageView.styles";
 
 interface OrderSummaryTotalsListProps {
   subtotal?: number;
@@ -37,9 +38,9 @@ export function OrderSummaryTotalsList({
 
   const discountRowElement =
     appliedDiscount > 0 ? (
-      <div className="flex items-center justify-between gap-4 text-success">
+      <div className={styles.discountRow}>
         <dt>{LABELS.couponDiscount}</dt>
-        <dd className="tabular-nums">
+        <dd className={styles.totalsValue}>
           {amountsPending ? (
             <InlineAmountSkeleton />
           ) : (
@@ -53,14 +54,11 @@ export function OrderSummaryTotalsList({
   let vendorBreakdownElements: ReactNode = null;
   if (showVendorBreakdown) {
     vendorBreakdownElements = vendorDiscountBreakdown.map((row) => (
-      <div
-        key={row.vendorId}
-        className="flex items-center justify-between gap-4 pl-2 text-body-sm text-success"
-      >
-        <dt className="text-ink-muted">
+      <div key={row.vendorId} className={styles.vendorBreakdownRow}>
+        <dt className={styles.totalsLabel}>
           {LABELS.vendorDiscountBreakdown}: {row.name}
         </dt>
-        <dd className="tabular-nums">
+        <dd className={styles.totalsValue}>
           {amountsPending ? (
             <InlineAmountSkeleton />
           ) : (
@@ -75,10 +73,10 @@ export function OrderSummaryTotalsList({
     !amountsUnavailable && (amountsPending || !pricingPreview);
 
   return (
-    <dl className="mt-5 space-y-2.5 text-[0.875rem]">
-      <div className="flex items-center justify-between gap-4">
-        <dt className="text-ink-muted">{LABELS.subtotal}</dt>
-        <dd className="tabular-nums text-ink">
+    <dl className={styles.totalsList}>
+      <div className={styles.totalsRow}>
+        <dt className={styles.totalsLabel}>{LABELS.subtotal}</dt>
+        <dd className={styles.totalsValue}>
           <MoneyAmount
             value={subtotal}
             pending={subtotalPendingState}

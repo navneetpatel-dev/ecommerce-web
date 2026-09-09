@@ -5,7 +5,8 @@ import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
-import { useResendVerification } from "@/features/auth";
+import { useEmailVerificationStatus } from "./useEmailVerificationStatus.hook";
+import { emailVerificationStatusStyles as styles } from "./emailVerificationStatus.styles";
 
 interface EmailVerificationStatusProps {
   emailVerified: boolean;
@@ -14,42 +15,37 @@ interface EmailVerificationStatusProps {
 export function EmailVerificationStatus({
   emailVerified,
 }: EmailVerificationStatusProps) {
-  const resend = useResendVerification();
+  const { handleResend, isPending, isSuccess, successMessage, error } =
+    useEmailVerificationStatus();
 
   if (emailVerified) {
     return (
-      <Badge variant="success" className="gap-1">
+      <Badge variant="success" className={styles.verifiedBadge}>
         <CheckCircle2 size={12} />
         {LABELS.personalInfoVerified}
       </Badge>
     );
   }
 
-  const message = resend.data?.alreadyVerified
-    ? LABELS.emailAlreadyVerified
-    : LABELS.verificationEmailSent;
-
-  const resendControl = resend.isSuccess ? (
-    <p className="text-body-sm text-ink-muted">{message}</p>
-  ) : (
-    <Button
-      type="button"
-      variant="outline"
-      size="sm"
-      fullWidth="mobile"
-      loading={resend.isPending}
-      onClick={() => resend.mutate()}
-    >
-      {LABELS.resendVerificationEmail}
-    </Button>
-  );
-
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div className={styles.container}>
       <Badge variant="outline">{LABELS.personalInfoUnverified}</Badge>
-      {resendControl}
+      {isSuccess ? (
+        <p className={styles.successMessage}>{successMessage}</p>
+      ) : (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          fullWidth="mobile"
+          loading={isPending}
+          onClick={handleResend}
+        >
+          {LABELS.resendVerificationEmail}
+        </Button>
+      )}
       <FormError
-        error={resend.error as Error | null}
+        error={error}
         fallback={LABELS.couldNotSendVerificationEmail}
       />
     </div>

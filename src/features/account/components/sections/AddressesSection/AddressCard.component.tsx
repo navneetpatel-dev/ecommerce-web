@@ -4,7 +4,7 @@ import { Pencil, Star, Trash2 } from "lucide-react";
 import type { Address } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
+import { addressCardStyles as styles } from "./addressCard.styles";
 
 interface AddressCardProps {
   addr: Address;
@@ -21,46 +21,46 @@ export function AddressCard({
   onSetDefault,
   onDelete,
 }: AddressCardProps) {
+  const handleEditClick = () => {
+    onEdit(addr);
+  };
+
+  const handleSetDefaultClick = () => {
+    onSetDefault(addr);
+  };
+
+  const handleDeleteClick = () => {
+    onDelete(addr);
+  };
+
   const line2Suffix = addr.line2 ? `, ${addr.line2}` : "";
-  const defaultBadge = addr.isDefault ? (
-    <span className="mt-3 inline-block text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-brand">
-      {LABELS.addressDefault}
-    </span>
-  ) : null;
   const setDefaultDisabled = addr.isDefault || defaulting;
-  const setDefaultButtonClassName = cn(
-    "w-full justify-center gap-1.5 transition-colors",
-    addr.isDefault
-      ? "text-brand hover:text-brand disabled:opacity-100"
-      : "text-ink-muted hover:text-brand",
-  );
   const setDefaultLabel = addr.isDefault
     ? LABELS.addressDefault
     : LABELS.setDefaultShort;
 
   return (
-    <li
-      key={addr.id}
-      className="flex flex-col border border-line bg-surface p-4 shadow-elevation-1"
-    >
-      <div className="min-w-0 flex-1">
-        <p className="font-medium text-ink">
+    <li className={styles.card}>
+      <div className={styles.details}>
+        <p className={styles.line1}>
           {addr.line1}
           {line2Suffix}
         </p>
-        <p className="mt-1 text-[0.875rem] text-ink-muted">
+        <p className={styles.line2}>
           {addr.city}, {addr.state} {addr.pincode}
         </p>
-        <p className="mt-0.5 text-body-sm text-ink-muted">{addr.country}</p>
-        {defaultBadge}
+        <p className={styles.country}>{addr.country}</p>
+        {addr.isDefault && (
+          <span className={styles.defaultBadge}>{LABELS.addressDefault}</span>
+        )}
       </div>
-      <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-3">
+      <div className={styles.actionsRow}>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          className="w-full justify-center gap-1.5"
-          onClick={() => onEdit(addr)}
+          className={styles.actionButton}
+          onClick={handleEditClick}
         >
           <Pencil size={14} />
           {LABELS.edit}
@@ -70,9 +70,9 @@ export function AddressCard({
           variant="ghost"
           size="sm"
           disabled={setDefaultDisabled}
-          className={setDefaultButtonClassName}
+          className={styles.setDefaultButton(addr.isDefault)}
           loading={defaulting}
-          onClick={() => onSetDefault(addr)}
+          onClick={handleSetDefaultClick}
         >
           <Star size={14} />
           {setDefaultLabel}
@@ -81,8 +81,8 @@ export function AddressCard({
           type="button"
           variant="ghost"
           size="sm"
-          className="w-full justify-center gap-1.5 text-danger hover:text-danger"
-          onClick={() => onDelete(addr)}
+          className={styles.deleteButton}
+          onClick={handleDeleteClick}
         >
           <Trash2 size={14} />
           {LABELS.delete}

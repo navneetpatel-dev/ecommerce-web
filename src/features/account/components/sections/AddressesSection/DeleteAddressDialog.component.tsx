@@ -17,14 +17,14 @@ export function DeleteAddressDialog({
   onClose,
   onConfirm,
 }: DeleteAddressDialogProps) {
-  const open = Boolean(target);
+  const handleOpenChange = (open: boolean) => {
+    if (!open) onClose();
+  };
 
   return (
     <StatusDialog
-      open={open}
-      onOpenChange={(open) => {
-        if (!open) onClose();
-      }}
+      open={Boolean(target)}
+      onOpenChange={handleOpenChange}
       variant="danger"
       icon={Trash2}
       title="Delete address?"

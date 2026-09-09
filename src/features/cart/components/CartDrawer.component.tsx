@@ -3,15 +3,15 @@
 import { X, ShoppingBag } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { motion, AnimatePresence } from "motion/react";
-import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import { Button } from "@/shared/components/ui/button";
 import { EmptyState } from "@/shared/components/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useBodyScrollLock } from "@/shared/hooks/useBodyScrollLock.hook";
-import { CartLineItem } from "./CartLineItem.component";
 import { CartDrawerSummary } from "./CartDrawerSummary.component";
+import { CartDrawerVendorGroupsList } from "./CartDrawerVendorGroupsList.component";
 import { ClearCartAction } from "./CartPageView/ClearCartAction.component";
 import type { CartItem } from "@/shared/api/types";
+import { cartDrawerStyles as styles } from "./cartDrawer.styles";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -76,36 +76,13 @@ export function CartDrawer({
     />
   ) : null;
 
-  const vendorGroupElements = Object.entries(groupedByVendor).map(
-    ([vendorId, items]) => {
-      const lineItemElements = items.map((item) => (
-        <CartLineItem
-          key={item.id}
-          item={item}
-          onUpdateQuantity={onUpdateQuantity}
-          onRemoveItem={onRemoveItem}
-          compact
-          amountsUnavailable={amountsUnavailable}
-          disabled={isCartMutating}
-        />
-      ));
-
-      return (
-        <div key={vendorId} className="space-y-1 py-3 first:pt-0 last:pb-0">
-          <VendorStrip vendor={items[0].product.vendor} size="sm" />
-          {lineItemElements}
-        </div>
-      );
-    },
-  );
-
   let bodyContent;
   if (isLoading) {
     bodyContent = (
-      <div className="space-y-3">
-        <Skeleton className="h-20 w-full rounded-md" />
-        <Skeleton className="h-20 w-full rounded-md" />
-        <Skeleton className="h-20 w-full rounded-md" />
+      <div className={styles.skeletonContainer}>
+        <Skeleton className={styles.skeletonItem} />
+        <Skeleton className={styles.skeletonItem} />
+        <Skeleton className={styles.skeletonItem} />
       </div>
     );
   } else if (!hasItems) {
@@ -120,7 +97,13 @@ export function CartDrawer({
     );
   } else {
     bodyContent = (
-      <div className="divide-y divide-line">{vendorGroupElements}</div>
+      <CartDrawerVendorGroupsList
+        groupedByVendor={groupedByVendor}
+        amountsUnavailable={amountsUnavailable}
+        disabled={isCartMutating}
+        onUpdateQuantity={onUpdateQuantity}
+        onRemoveItem={onRemoveItem}
+      />
     );
   }
 
@@ -148,7 +131,7 @@ export function CartDrawer({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
-        className="fixed inset-0 bg-overlay z-50"
+        className={styles.backdrop}
         onClick={onClose}
       />
       <motion.aside
@@ -156,11 +139,11 @@ export function CartDrawer({
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
         transition={{ type: "spring", damping: 28, stiffness: 280 }}
-        className="fixed right-0 top-0 z-50 flex h-full w-[min(100vw,24rem)] flex-col overflow-hidden border-l border-line bg-surface-raised shadow-elevation-4 overscroll-contain"
+        className={styles.drawer}
       >
-        <div className="flex items-center justify-between px-4 h-14 border-b border-line shrink-0">
-          <h2 className="text-[1.125rem] font-semibold">{LABELS.yourCart}</h2>
-          <div className="flex items-center gap-1">
+        <div className={styles.header}>
+          <h2 className={styles.title}>{LABELS.yourCart}</h2>
+          <div className={styles.headerActions}>
             {clearCartActionElement}
             <Button
               type="button"
@@ -174,9 +157,7 @@ export function CartDrawer({
           </div>
         </div>
 
-        <div className="min-h-0 flex-1 space-y-4 overflow-auto overscroll-contain p-4">
-          {bodyContent}
-        </div>
+        <div className={styles.scrollArea}>{bodyContent}</div>
 
         {summaryElement}
       </motion.aside>

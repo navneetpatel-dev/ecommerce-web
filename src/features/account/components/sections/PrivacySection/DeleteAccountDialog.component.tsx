@@ -1,11 +1,13 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { Trash2 } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { FormError } from "@/shared/components/FormError.component";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
+import { privacySectionStyles as styles } from "./privacySection.styles";
 
 interface DeleteAccountDialogProps {
   open: boolean;
@@ -28,6 +30,14 @@ export function DeleteAccountDialog({
   onConfirmTextChange,
   onConfirm,
 }: DeleteAccountDialogProps) {
+  const handleCancel = () => {
+    onOpenChange(false);
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onConfirmTextChange(e.target.value);
+  };
+
   return (
     <StatusDialog
       open={open}
@@ -38,7 +48,7 @@ export function DeleteAccountDialog({
       description={LABELS.deleteAccountConfirmBody}
       secondaryAction={{
         label: LABELS.cancel,
-        onClick: () => onOpenChange(false),
+        onClick: handleCancel,
       }}
       primaryAction={{
         label: LABELS.deleteAccount,
@@ -48,12 +58,12 @@ export function DeleteAccountDialog({
         onClick: onConfirm,
       }}
     >
-      <div className="space-y-2">
+      <div className={styles.inputGroup}>
         <Label htmlFor="delete-confirm">{LABELS.confirmation}</Label>
         <Input
           id="delete-confirm"
           value={confirmText}
-          onChange={(e) => onConfirmTextChange(e.target.value)}
+          onChange={handleInputChange}
           placeholder="DELETE"
           autoComplete="off"
         />

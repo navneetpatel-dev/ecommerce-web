@@ -17,6 +17,10 @@ export function LogoutDialog({
   pending,
   onConfirm,
 }: LogoutDialogProps) {
+  const handleCancel = () => {
+    onOpenChange(false);
+  };
+
   return (
     <StatusDialog
       open={open}
@@ -27,7 +31,7 @@ export function LogoutDialog({
       description={LABELS.signOutConfirmBody}
       secondaryAction={{
         label: LABELS.cancel,
-        onClick: () => onOpenChange(false),
+        onClick: handleCancel,
       }}
       primaryAction={{
         label: LABELS.signOut,

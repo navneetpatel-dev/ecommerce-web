@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/FormError.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
+import { privacySectionStyles as styles } from "./privacySection.styles";
 
 interface PreferencesSectionProps {
   theme: string;
@@ -13,7 +14,8 @@ interface PreferencesSectionProps {
   isCustomer: boolean;
   exportPending: boolean;
   exportError: Error | null;
-  onSetTheme: (theme: "light" | "dark") => void;
+  onSetThemeLight: () => void;
+  onSetThemeDark: () => void;
   onExport: () => void;
   onSignOutClick: () => void;
 }
@@ -25,63 +27,61 @@ export function PreferencesSection({
   isCustomer,
   exportPending,
   exportError,
-  onSetTheme,
+  onSetThemeLight,
+  onSetThemeDark,
   onExport,
   onSignOutClick,
 }: PreferencesSectionProps) {
+  const lightVariant = mounted && theme === "light" ? "default" : "outline";
+  const darkVariant = mounted && theme === "dark" ? "default" : "outline";
+
   return (
-    <section className="border border-line bg-surface shadow-elevation-1">
-      <div className="border-b border-line bg-paper/65 px-5 py-4 md:px-6">
+    <section className={styles.section}>
+      <div className={styles.header}>
         <TextEyebrow>{LABELS.privacyPreferences}</TextEyebrow>
-        <h2 className="mt-1 font-display text-[1.1875rem] tracking-tight text-ink">
-          {LABELS.privacyAndData}
-        </h2>
-        <p className="mt-1 text-[0.875rem] text-ink-muted">
+        <h2 className={styles.title}>{LABELS.privacyAndData}</h2>
+        <p className={styles.subtitle}>
           {isWorkspace
             ? LABELS.privacyAndDataHintWorkspace
             : LABELS.privacyAndDataHintCustomer}
         </p>
       </div>
 
-      <ul className="divide-y divide-line">
-        <li className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
-          <div className="min-w-0">
-            <p className="text-body font-medium text-ink">
-              {LABELS.appearance}
-            </p>
-            <p className="mt-0.5 text-body-sm text-ink-muted">
+      <ul className={styles.list}>
+        <li className={styles.row}>
+          <div className={styles.rowContent}>
+            <p className={styles.rowTitle}>{LABELS.appearance}</p>
+            <p className={styles.rowSubtitle}>
               {isWorkspace
                 ? LABELS.appearanceHintWorkspace
                 : LABELS.appearanceHintCustomer}
             </p>
           </div>
-          <div className="flex shrink-0 gap-2">
+          <div className={styles.themeButtonsGroup}>
             <Button
               type="button"
-              variant={mounted && theme === "light" ? "default" : "outline"}
+              variant={lightVariant}
               size="sm"
-              onClick={() => onSetTheme("light")}
+              onClick={onSetThemeLight}
             >
               {LABELS.themeLight}
             </Button>
             <Button
               type="button"
-              variant={mounted && theme === "dark" ? "default" : "outline"}
+              variant={darkVariant}
               size="sm"
-              onClick={() => onSetTheme("dark")}
+              onClick={onSetThemeDark}
             >
               {LABELS.themeDark}
             </Button>
           </div>
         </li>
 
-        {isCustomer ? (
-          <li className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
-            <div className="min-w-0">
-              <p className="text-body font-medium text-ink">
-                {LABELS.downloadMyData}
-              </p>
-              <p className="mt-0.5 text-body-sm text-ink-muted">
+        {isCustomer && (
+          <li className={styles.row}>
+            <div className={styles.rowContent}>
+              <p className={styles.rowTitle}>{LABELS.downloadMyData}</p>
+              <p className={styles.rowSubtitle}>
                 {LABELS.downloadMyDataHintCustomer}
               </p>
               <FormError
@@ -93,7 +93,7 @@ export function PreferencesSection({
               type="button"
               variant="outline"
               size="sm"
-              className="shrink-0 gap-2"
+              className={styles.actionButton}
               loading={exportPending}
               onClick={onExport}
             >
@@ -101,20 +101,18 @@ export function PreferencesSection({
               {LABELS.download}
             </Button>
           </li>
-        ) : null}
+        )}
 
-        <li className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
-          <div className="min-w-0">
-            <p className="text-body font-medium text-ink">{LABELS.signOut}</p>
-            <p className="mt-0.5 text-body-sm text-ink-muted">
-              {LABELS.signOutHint}
-            </p>
+        <li className={styles.row}>
+          <div className={styles.rowContent}>
+            <p className={styles.rowTitle}>{LABELS.signOut}</p>
+            <p className={styles.rowSubtitle}>{LABELS.signOutHint}</p>
           </div>
           <Button
             type="button"
             variant="outline"
             size="sm"
-            className="shrink-0 gap-2"
+            className={styles.actionButton}
             onClick={onSignOutClick}
           >
             <LogOut size={14} strokeWidth={1.5} />

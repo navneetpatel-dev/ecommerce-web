@@ -8,6 +8,7 @@ import { isDeliveryRole } from "@/shared/utils/roles";
 import { useDeliveryProfile } from "@/features/delivery-dashboard";
 import type { AccountProfile } from "../../../types";
 import { EmailVerificationStatus } from "../../EmailVerificationStatus.component";
+import { personalInfoSectionStyles as styles } from "./personalInfoSection.styles";
 
 interface ProfileAsideProps {
   profile: Pick<AccountProfile, "name" | "phone" | "email" | "emailVerified">;
@@ -21,19 +22,18 @@ function DeliveryProfileAsideDetail() {
   const dutyStatusLabel = agent.availableForAssignment
     ? "Available for duty"
     : "Off duty";
+
   return (
-    <div className="flex items-start gap-3 border-t border-line/60 pt-4">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-brand">
+    <div className={styles.deliveryDetailRow}>
+      <span className={styles.asideIconBoxBrand}>
         <Bike size={18} strokeWidth={1.5} />
       </span>
-      <div className="min-w-0">
-        <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
-          Operating Unit
-        </p>
-        <p className="mt-1 text-body font-medium text-ink">
+      <div className={styles.asideDetails}>
+        <p className={styles.asideLabel}>Operating Unit</p>
+        <p className={styles.asideValue}>
           {agent.vehicleType} · {agent.hubOrZone}
         </p>
-        <p className="mt-0.5 text-body-sm text-ink-muted">{dutyStatusLabel}</p>
+        <p className={styles.asideTextMuted}>{dutyStatusLabel}</p>
       </div>
     </div>
   );
@@ -42,66 +42,56 @@ function DeliveryProfileAsideDetail() {
 export function ProfileAside({ profile, isWorkspace }: ProfileAsideProps) {
   const role = useAuthStore((s) => s.currentUser?.role);
   const isDelivery = isDeliveryRole(role);
-  const phoneDisplay = profile.phone ? (
-    <p className="mt-0.5 text-body-sm text-ink-muted">{profile.phone}</p>
-  ) : (
-    <p className="mt-0.5 text-body-sm text-ink-faint">
-      {LABELS.personalInfoNoPhone}
-    </p>
-  );
-  const deliveryDetail = isDelivery ? <DeliveryProfileAsideDetail /> : null;
   const emailFixedHint = isWorkspace
     ? LABELS.emailFixedWorkspace
     : LABELS.emailFixedStorefront;
 
   return (
-    <aside className="border border-line bg-surface shadow-elevation-1">
-      <div className="border-b border-line bg-paper/55 px-5 py-4 md:px-6">
+    <aside className={styles.aside}>
+      <div className={styles.asideHeader}>
         <TextEyebrow>{LABELS.personalInfoProfileEyebrow}</TextEyebrow>
-        <p className="mt-1 text-[0.875rem] text-ink-muted">
-          {LABELS.personalInfoProfileHint}
-        </p>
+        <p className={styles.asideHint}>{LABELS.personalInfoProfileHint}</p>
       </div>
 
-      <div className="space-y-4 px-5 py-5 md:px-6">
-        <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted">
+      <div className={styles.asideBody}>
+        <div className={styles.asideRow}>
+          <span className={styles.asideIconBox}>
             <UserRound size={18} strokeWidth={1.5} />
           </span>
-          <div className="min-w-0">
-            <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
+          <div className={styles.asideDetails}>
+            <p className={styles.asideLabel}>
               {LABELS.personalInfoAccountHolder}
             </p>
-            <p className="mt-1 text-body font-medium text-ink">
-              {profile.name}
-            </p>
-            {phoneDisplay}
+            <p className={styles.asideValue}>{profile.name}</p>
+            {profile.phone ? (
+              <p className={styles.asideTextMuted}>{profile.phone}</p>
+            ) : (
+              <p className={styles.asideTextFaint}>
+                {LABELS.personalInfoNoPhone}
+              </p>
+            )}
           </div>
         </div>
 
-        <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted">
+        <div className={styles.asideRow}>
+          <span className={styles.asideIconBox}>
             <Mail size={18} strokeWidth={1.5} />
           </span>
-          <div className="min-w-0">
-            <p className="text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
+          <div className={styles.asideDetails}>
+            <p className={styles.asideLabel}>
               {LABELS.personalInfoEmailStatus}
             </p>
-            <p className="mt-1 break-all text-body font-medium text-ink">
-              {profile.email}
-            </p>
-            <div className="mt-2">
+            <p className={styles.asideValueBreak}>{profile.email}</p>
+            <div className={styles.verificationWrapper}>
               <EmailVerificationStatus emailVerified={profile.emailVerified} />
             </div>
           </div>
         </div>
 
-        {deliveryDetail}
+        {isDelivery && <DeliveryProfileAsideDetail />}
 
-        <div className="border-t border-line pt-4">
-          <p className="text-body-sm leading-6 text-ink-muted">
-            {emailFixedHint}
-          </p>
+        <div className={styles.asideFooter}>
+          <p className={styles.asideFooterText}>{emailFixedHint}</p>
         </div>
       </div>
     </aside>

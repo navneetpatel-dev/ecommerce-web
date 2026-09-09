@@ -1,18 +1,15 @@
 "use client";
 
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { LABELS } from "@/shared/constants/labels";
-import { useAuthStore } from "@/shared/stores/auth.store";
-import { isWorkspaceRole } from "@/shared/utils/roles";
-import { usePersonalInfoForm } from "../../../hooks/usePersonalInfoForm.hook";
+import { usePersonalInfoSection } from "./usePersonalInfoSection.hook";
 import { PersonalInfoForm } from "./PersonalInfoForm.component";
 import { ProfileAside } from "./ProfileAside.component";
+import { PersonalInfoSectionLoadingSkeleton } from "./PersonalInfoSectionLoadingSkeleton.component";
+import { personalInfoSectionStyles as styles } from "./personalInfoSection.styles";
 
-/** Personal-info section: renders the form hook's prepared state (Rule 1). */
+/** Personal-info section: renders the form hook's prepared state with pure JSX layout. */
 export function PersonalInfoSection() {
-  const currentUser = useAuthStore((s) => s.currentUser);
-  const isWorkspace = isWorkspaceRole(currentUser?.role);
   const {
     profile,
     isLoading,
@@ -20,36 +17,30 @@ export function PersonalInfoSection() {
     error,
     form,
     errors,
+    isWorkspace,
     canSubmit,
     disableHint,
     showSaved,
     pending,
     submitError,
     onSubmit,
-  } = usePersonalInfoForm();
+  } = usePersonalInfoSection();
 
   if (isLoading) {
-    return (
-      <div className="space-y-4 border border-line bg-surface p-6 shadow-elevation-1">
-        <Skeleton className="h-5 w-32" />
-        <Skeleton className="h-11 w-full" />
-        <Skeleton className="h-11 w-full" />
-        <Skeleton className="h-11 w-full" />
-      </div>
-    );
+    return <PersonalInfoSectionLoadingSkeleton />;
   }
 
   if (isError || !profile) {
     return (
-      <div className="border border-line bg-surface px-5 py-10 text-center">
+      <div className={styles.errorContainer}>
         <QueryErrorAlert error={error} fallback={LABELS.couldNotLoadProfile} />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.8fr)]">
+    <div className={styles.container}>
+      <div className={styles.grid}>
         <PersonalInfoForm
           register={form.register}
           errors={errors}

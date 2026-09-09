@@ -12,6 +12,7 @@ import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailable
 import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
 import { OrderSummaryTotalsList } from "./OrderSummaryTotalsList.component";
 import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
+import { cartPageViewStyles as styles } from "./cartPageView.styles";
 
 interface OrderSummaryAsideProps {
   itemCount: number;
@@ -85,14 +86,17 @@ export function OrderSummaryAside({
   const itemCountLabel = itemCount === 1 ? "item" : "items";
 
   const unavailableNoticeElement = amountsUnavailable ? (
-    <AmountsUnavailableNotice className="mt-3" onRetry={onRetryAmounts} />
+    <AmountsUnavailableNotice
+      className={styles.asideUnavailableNotice}
+      onRetry={onRetryAmounts}
+    />
   ) : null;
 
   const cashbackNoticeElement =
     (appliedCashbackAmount > 0 || appliedCouponType === "CASHBACK") &&
     payNowGrandTotal != null ? (
       <CashbackCouponNotice
-        className="mt-3 text-body-sm text-brand"
+        className={styles.asideCashbackNotice}
         payNow={payNowGrandTotal}
         cashbackAmount={appliedCashbackAmount}
         code={appliedCouponCode}
@@ -100,15 +104,12 @@ export function OrderSummaryAside({
     ) : null;
 
   const checkoutActionElement = hasUnavailableItems ? (
-    <p className="mt-4 rounded-sm bg-warning-subtle px-3 py-2 text-body-sm text-warning-foreground">
+    <p className={styles.asideWarningBanner}>
       {LABELS.removeUnavailableToCheckout}
     </p>
   ) : (
-    <Button asChild className="mt-5 w-full" size="lg">
-      <Link
-        href={PATHS.checkout}
-        className="inline-flex items-center justify-center gap-2"
-      >
+    <Button asChild className={styles.asideCheckoutButton} size="lg">
+      <Link href={PATHS.checkout} className={styles.asideCheckoutLink}>
         {LABELS.checkout}
         <ArrowRight size={16} />
       </Link>
@@ -116,17 +117,14 @@ export function OrderSummaryAside({
   );
 
   return (
-    <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-[88px] lg:self-start lg:z-10">
-      <div className="relative border border-line bg-surface-raised p-5 shadow-elevation-1">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand via-brand/70 to-transparent"
-        />
+    <aside className={styles.aside}>
+      <div className={styles.asideCard}>
+        <div aria-hidden className={styles.asideAccentBar} />
 
-        <p className="text-[0.875rem] text-ink-muted">
+        <p className={styles.asideItemCountRow}>
           {itemCount} {itemCountLabel}
-          <span className="mx-2 text-line">·</span>
-          <span className="font-medium text-ink">
+          <span className={styles.asideItemCountDot}>·</span>
+          <span className={styles.asideItemTotalBold}>
             <MoneyAmount
               value={total}
               pending={totalPending}
@@ -135,10 +133,8 @@ export function OrderSummaryAside({
           </span>
         </p>
 
-        <TextEyebrow className="mt-4">Order summary</TextEyebrow>
-        <h2 className="mt-1 font-display text-[1.25rem] text-ink">
-          Ready to checkout
-        </h2>
+        <TextEyebrow className={styles.asideEyebrow}>Order summary</TextEyebrow>
+        <h2 className={styles.asideTitle}>Ready to checkout</h2>
 
         <OrderSummaryTotalsList
           subtotal={subtotal}
@@ -150,7 +146,7 @@ export function OrderSummaryAside({
           pricingPreview={pricingPreview}
         />
 
-        <div className="mt-4 border-t border-line pt-4">
+        <div className={styles.asideDivider}>
           <CartCouponSection
             couponInput={couponInput}
             couponMessage={couponMessage}
@@ -170,17 +166,15 @@ export function OrderSummaryAside({
           />
         </div>
 
-        <div className="mt-4 border-t border-line pt-4">
-          <div className="flex items-end justify-between gap-4">
-            <span className="text-[0.875rem] font-medium text-ink">
-              {LABELS.total}
-            </span>
-            <span className="font-display text-[1.5rem] leading-none tabular-nums text-brand">
+        <div className={styles.asideDivider}>
+          <div className={styles.asideTotalRow}>
+            <span className={styles.asideTotalLabel}>{LABELS.total}</span>
+            <span className={styles.asideTotalAmount}>
               <MoneyAmount
                 value={total}
                 pending={totalPending}
                 unavailable={amountsUnavailable}
-                fallbackClassName="text-[1rem]"
+                fallbackClassName={styles.asideTotalFallback}
               />
             </span>
           </div>
@@ -190,9 +184,7 @@ export function OrderSummaryAside({
 
         {checkoutActionElement}
 
-        <p className="mt-3 text-center text-[0.75rem] text-ink-muted">
-          Secure checkout · Easy returns
-        </p>
+        <p className={styles.asideFooterNote}>Secure checkout · Easy returns</p>
       </div>
     </aside>
   );

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { StatusDialog } from "@/shared/components/StatusDialog.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { useCartConfirmAction } from "./useCartConfirmAction.hook";
 
 type TriggerVariant = "ghost" | "outline" | "destructive";
 type TriggerSize = "sm" | "icon-sm";
@@ -40,7 +40,9 @@ export function CartConfirmAction({
   triggerSize = "sm",
   triggerClassName,
 }: CartConfirmActionProps) {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, handleOpen, handleClose, handleConfirm } =
+    useCartConfirmAction(onConfirm);
+
   const triggerDisabled = disabled || pending;
   const triggerContent = iconOnly ? null : triggerLabel;
 
@@ -53,7 +55,7 @@ export function CartConfirmAction({
         className={triggerClassName}
         aria-label={triggerAriaLabel}
         disabled={triggerDisabled}
-        onClick={() => setOpen(true)}
+        onClick={handleOpen}
       >
         <Icon aria-hidden />
         {triggerContent}
@@ -69,16 +71,13 @@ export function CartConfirmAction({
           label: LABELS.cancel,
           variant: "outline",
           disabled: pending,
-          onClick: () => setOpen(false),
+          onClick: handleClose,
         }}
         primaryAction={{
           label: confirmLabel,
           variant: "destructive",
           loading: pending,
-          onClick: () => {
-            setOpen(false);
-            onConfirm();
-          },
+          onClick: handleConfirm,
         }}
       />
     </>

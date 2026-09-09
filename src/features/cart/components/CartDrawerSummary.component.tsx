@@ -11,6 +11,7 @@ import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.c
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { CartMutationError } from "./CartMutationError.component";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { cartDrawerStyles as styles } from "./cartDrawer.styles";
 
 interface CartSummaryLinkProps {
   href: string;
@@ -28,11 +29,16 @@ function CartSummaryLink({
   variant = "default",
 }: CartSummaryLinkProps) {
   const linkButton = disabled ? (
-    <Button type="button" variant={variant} className="w-full" disabled>
+    <Button
+      type="button"
+      variant={variant}
+      className={styles.fullWidthButton}
+      disabled
+    >
       {label}
     </Button>
   ) : (
-    <Button asChild variant={variant} className="w-full">
+    <Button asChild variant={variant} className={styles.fullWidthButton}>
       <Link href={href} onClick={onClose}>
         {label}
       </Link>
@@ -91,10 +97,10 @@ export function CartDrawerSummary({
 
   const previewElement =
     pricingPreview || amountsPending ? (
-      <dl className="space-y-1.5 text-body-sm">
-        <div className="flex justify-between gap-3">
-          <dt className="text-ink-muted">{LABELS.subtotal}</dt>
-          <dd className="tabular-nums text-ink">
+      <dl className={styles.pricingList}>
+        <div className={styles.subtotalRow}>
+          <dt className={styles.subtotalLabel}>{LABELS.subtotal}</dt>
+          <dd className={styles.subtotalValue}>
             {amountsPending ? (
               <InlineAmountSkeleton />
             ) : (
@@ -103,7 +109,7 @@ export function CartDrawerSummary({
           </dd>
         </div>
         <OrderTaxShippingBreakdown
-          className="space-y-1.5 text-body-sm"
+          className={styles.taxShippingBreakdown}
           pending={amountsPending}
           shippingTotal={pricingPreview?.shippingTotal}
           shippingDisplayKey={pricingPreview?.shippingDisplayKey}
@@ -117,7 +123,7 @@ export function CartDrawerSummary({
   ) : null;
 
   const checkoutActionElement = hasUnavailableItems ? (
-    <p className="rounded-sm bg-warning-subtle px-3 py-2 text-body-sm text-warning-foreground">
+    <p className={styles.unavailableWarning}>
       {LABELS.removeUnavailableToCheckout}
     </p>
   ) : (
@@ -130,21 +136,21 @@ export function CartDrawerSummary({
   );
 
   return (
-    <div className="shrink-0 space-y-3 border-t border-line p-4">
+    <div className={styles.summaryContainer}>
       <CartMutationError
         message={mutationError}
         onDismiss={dismissMutationError}
       />
       {previewElement}
 
-      <div className="flex items-center justify-between">
-        <span className="text-body font-medium">{LABELS.total}</span>
-        <span className="text-[1.125rem] font-bold text-brand">
+      <div className={styles.totalRow}>
+        <span className={styles.totalLabel}>{LABELS.total}</span>
+        <span className={styles.totalValue}>
           <MoneyAmount
             value={total}
             pending={totalRefreshing}
             unavailable={amountsUnavailable}
-            fallbackClassName="text-body font-medium"
+            fallbackClassName={styles.totalFallback}
           />
         </span>
       </div>

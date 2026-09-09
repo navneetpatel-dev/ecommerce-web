@@ -1,0 +1,17 @@
+export const privacySectionStyles = {
+  container: "space-y-6",
+  section: "border border-line bg-surface shadow-elevation-1",
+  header: "border-b border-line bg-paper/65 px-5 py-4 md:px-6",
+  dangerHeader: "border-b border-line px-5 py-4 md:px-6",
+  title: "mt-1 font-display text-[1.1875rem] tracking-tight text-ink",
+  subtitle: "mt-1 text-[0.875rem] text-ink-muted",
+  list: "divide-y divide-line",
+  row: "flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6",
+  rowContent: "min-w-0",
+  rowTitle: "text-body font-medium text-ink",
+  rowSubtitle: "mt-0.5 text-body-sm text-ink-muted",
+  themeButtonsGroup: "flex shrink-0 gap-2",
+  actionButton: "shrink-0 gap-2",
+  dangerBody: "text-body-sm leading-6 text-ink-muted",
+  inputGroup: "space-y-2",
+} as const;

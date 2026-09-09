@@ -13,6 +13,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import type { ProfileFormInput as PersonalForm } from "../../../schemas/profile.schema";
+import { personalInfoSectionStyles as styles } from "./personalInfoSection.styles";
 
 interface PersonalInfoFormProps {
   register: UseFormRegister<PersonalForm>;
@@ -42,9 +43,6 @@ export function PersonalInfoForm({
   const phoneHint = isWorkspace
     ? LABELS.phoneOptionalContact
     : LABELS.phoneOptionalDelivery;
-  const savedNotice = showSaved ? (
-    <p className="text-[0.875rem] text-success">{LABELS.personalInfoSaved}</p>
-  ) : null;
   const footerLeading = isWorkspace
     ? LABELS.personalInfoFooterWorkspace
     : LABELS.personalInfoFooterCustomer;
@@ -86,12 +84,14 @@ export function PersonalInfoForm({
             />
           </FormFieldFrame>
 
-          <div className="sm:col-span-2 space-y-3">
+          <div className={styles.formNoticeWrapper}>
             <FormError
               error={submitError}
               fallback={LABELS.couldNotSaveProfile}
             />
-            {savedNotice}
+            {showSaved && (
+              <p className={styles.savedNotice}>{LABELS.personalInfoSaved}</p>
+            )}
           </div>
         </FormSection>
 

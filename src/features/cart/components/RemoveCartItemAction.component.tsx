@@ -21,6 +21,10 @@ export function RemoveCartItemAction({
   display = "icon",
   className,
 }: RemoveCartItemActionProps) {
+  const handleConfirm = () => {
+    onRemoveItem(item.id);
+  };
+
   const accessibleLabel = formatLabel(LABELS.removeNamed, {
     name: item.product.name,
   });
@@ -39,7 +43,7 @@ export function RemoveCartItemAction({
       triggerSize={display === "icon" ? "icon-sm" : "sm"}
       triggerClassName={className}
       disabled={disabled}
-      onConfirm={() => onRemoveItem(item.id)}
+      onConfirm={handleConfirm}
     />
   );
 }

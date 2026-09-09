@@ -14,6 +14,7 @@ import { VendorGroups } from "./VendorGroups.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
 import { ClearCartAction } from "./ClearCartAction.component";
 import { CartMutationError } from "../CartMutationError.component";
+import { cartPageViewStyles as styles } from "./cartPageView.styles";
 
 export interface CartPageViewProps {
   isLoading?: boolean;
@@ -63,6 +64,12 @@ export interface CartPageViewProps {
   onRemoveCoupon: (code?: string) => void;
   onApplyEligible: (code: string) => void;
 }
+
+const MOTION_CONFIG = {
+  initial: { opacity: 0, y: 8 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.28, ease: [0.2, 0, 0, 1] },
+} as const;
 
 export function CartPageView({
   isLoading,
@@ -117,30 +124,21 @@ export function CartPageView({
   }
 
   const clearCartDisabled = isCartMutating && !isClearing;
-  const mutationErrorMessage = mutationError ?? null;
 
   return (
-    <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[280px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
-      />
+    <div className={styles.root}>
+      <div aria-hidden className={styles.ambientGradient} />
 
-      <div className="storefront-container relative py-6 md:py-8">
+      <div className={styles.container}>
         <motion.header
-          className="flex items-end justify-between gap-4"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
+          className={styles.header}
+          initial={MOTION_CONFIG.initial}
+          animate={MOTION_CONFIG.animate}
+          transition={MOTION_CONFIG.transition}
         >
-          <div className="min-w-0">
+          <div className={styles.headerDetails}>
             <TextEyebrow brand>Shopping bag</TextEyebrow>
-            <h1
-              className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
-              style={{ fontSize: "var(--text-display-sm)" }}
-            >
-              {LABELS.yourCart}
-            </h1>
+            <h1 className={styles.title}>{LABELS.yourCart}</h1>
           </div>
           <ClearCartAction
             onClear={onClearCart}
@@ -150,13 +148,13 @@ export function CartPageView({
         </motion.header>
 
         <CartMutationError
-          message={mutationErrorMessage}
+          message={mutationError ?? null}
           onDismiss={onDismissMutationError}
-          className="mt-4"
+          className={styles.mutationErrorMargin}
         />
 
-        <div className="mt-6 grid grid-cols-1 gap-8 lg:mt-8 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-7 xl:col-span-8">
+        <div className={styles.layoutGrid}>
+          <div className={styles.mainItemsColumn}>
             <VendorGroups
               groupedByVendor={groupedByVendor}
               onUpdateQuantity={onUpdateQuantity}
