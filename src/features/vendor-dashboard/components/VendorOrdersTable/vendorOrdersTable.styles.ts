@@ -22,4 +22,23 @@ export const VENDOR_ORDERS_TABLE_STYLES = {
   returnRow: "flex items-center gap-2",
   proofLink: "text-body-sm font-medium text-brand hover:underline",
   mutedText: "text-body-sm text-ink-muted",
+
+  trackingRoot: "space-y-1",
+  trackingInput: "w-full min-w-[10rem] text-body-sm",
+  trackingText: "text-body-sm text-ink-muted",
+
+  actionsRoot: "space-y-2",
+  actionsError: "text-body-sm text-danger",
+  actionsSelect: "w-full min-w-[8.5rem] rounded-sm px-2 text-body-sm",
+
+  cardList: "space-y-3 lg:hidden",
+  cardItem: "rounded-md border border-line bg-surface p-4 shadow-card-hairline",
+  cardHeader: "flex items-start justify-between gap-3",
+  cardHeaderLeft: "min-w-0",
+  cardOrderNum: "font-mono text-body-sm text-ink",
+  cardBadgeWrap: "mt-2",
+  cardSubtotal: "mt-3 font-mono text-body text-ink",
+  cardShipmentWrap: "mt-2 flex flex-wrap items-center gap-2",
+  cardReturnsWrap: "mt-2 space-y-1",
+  cardActionsWrap: "mt-4 border-t border-line/80 pt-3",
 } as const;

@@ -108,7 +108,7 @@ export function PickupChecklistCard({
                   : `Add condition photos${exchange ? " (required)" : " (optional)"}`}
               </span>
               <Input
-                className="sr-only"
+                className={styles.fileInput}
                 type="file"
                 multiple
                 accept="image/*"
@@ -131,7 +131,7 @@ export function PickupChecklistCard({
                     "Add replacement handover proof (required)"}
                 </span>
                 <Input
-                  className="sr-only"
+                  className={styles.fileInput}
                   type="file"
                   accept="image/*"
                   capture="environment"

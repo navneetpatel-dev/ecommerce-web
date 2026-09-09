@@ -18,6 +18,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { useChartThemeColors } from "@/shared/hooks/useChartThemeColors.hook";
+import { analyticsStyles } from "./analyticsComponents.styles";
 
 interface RatingRow {
   rating: number;
@@ -39,19 +40,19 @@ export function AnalyticsRatingChart({ data }: AnalyticsRatingChartProps) {
   const hasData = data.some((row) => row.count > 0);
 
   return (
-    <Card className="h-full">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-body-lg">
+    <Card className={analyticsStyles.fullHeightCard}>
+      <CardHeader className={analyticsStyles.cardHeaderPb2}>
+        <CardTitle className={analyticsStyles.cardTitleLg}>
           {LABELS.analyticsRatingDistribution}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {!hasData ? (
-          <p className="py-12 text-center text-body text-ink-muted">
+          <p className={analyticsStyles.emptyRatingNotice}>
             {LABELS.analyticsEmptyChart}
           </p>
         ) : (
-          <div className="h-56 w-full sm:h-64">
+          <div className={analyticsStyles.ratingChartContainer}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={chartData}

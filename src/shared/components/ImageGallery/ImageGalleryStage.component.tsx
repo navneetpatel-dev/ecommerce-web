@@ -52,18 +52,18 @@ export function ImageGalleryStage({
   };
 
   return (
-    <div className="group relative order-1 min-w-0 flex-1 lg:order-2">
+    <div className={styles.stageWrapper}>
       <div
         onClick={onOpenLightbox}
         {...zoomHandlers}
         className={cn(
           styles.stageBase,
-          "shadow-elevation-1",
+          styles.stageShadow,
           IMAGE_GALLERY_STAGE_HEIGHT_CLASS,
         )}
       >
-        <div className="pointer-events-none absolute inset-0">
-          <div className="relative h-full w-full">
+        <div className={styles.mediaWrapper}>
+          <div className={styles.mediaInner}>
             <MediaImage
               src={currentUrl}
               alt={showZoom ? LABELS.imageZoomPreview : productName}
@@ -78,7 +78,7 @@ export function ImageGalleryStage({
               )}
             />
             {transitioning ? (
-              <div className="absolute inset-0">
+              <div className={styles.transitionPrevWrapper}>
                 <MediaImage
                   src={prevUrl}
                   alt={productName}
@@ -95,7 +95,7 @@ export function ImageGalleryStage({
         {showZoom ? (
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 z-[1]"
+            className={styles.zoomOverlay}
             style={zoomOverlayStyle}
           />
         ) : null}

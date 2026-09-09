@@ -18,6 +18,7 @@ import {
 } from "../../constants/fieldLimits";
 import type { UploadedMediaAttachment } from "../TicketAttachmentUploader";
 import { FormHeader } from "./FormHeader.component";
+import { createTicketFormStyles } from "./createTicketForm.styles";
 import { useOrderVendors } from "./useOrderVendors.hook";
 import {
   useFetchOrdersPage,
@@ -128,8 +129,8 @@ export function CreateTicketForm({ successHref }: Props) {
   });
 
   return (
-    <form onSubmit={onSubmit} className="w-full min-w-0">
-      <FormStack className="space-y-8">
+    <form onSubmit={onSubmit} className={createTicketFormStyles.form}>
+      <FormStack className={createTicketFormStyles.stack}>
         <FormHeader
           canSubmit={canSubmit}
           disableHint={disableHint}

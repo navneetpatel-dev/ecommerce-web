@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { cn } from "@/shared/utils/cn";
+import { formActionsStyles } from "./forms.styles";
 
 interface FormActionsProps {
   children: ReactNode;
@@ -16,21 +17,13 @@ export function FormActions({
   className,
 }: FormActionsProps) {
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
-        className,
-      )}
-    >
+    <div className={cn(formActionsStyles.container, className)}>
       {leading != null ? (
-        <div
-          className="min-h-[1.25rem] text-body-sm text-ink-muted"
-          aria-live="polite"
-        >
+        <div className={formActionsStyles.leading} aria-live="polite">
           {leading}
         </div>
       ) : (
-        <span className="hidden sm:block" />
+        <span className={formActionsStyles.spacer} />
       )}
       <ButtonGroup align="end">{children}</ButtonGroup>
     </div>

@@ -49,8 +49,8 @@ export function VendorsIndexView({
               <div className={styles.skeletonRow}>
                 <Skeleton className={styles.skeletonAvatar} />
                 <div className={styles.skeletonContent}>
-                  <Skeleton className="h-4 w-32" />
-                  <Skeleton className="h-3 w-full" />
+                  <Skeleton className={styles.skeletonTitle} />
+                  <Skeleton className={styles.skeletonSubtitle} />
                 </div>
               </div>
             </div>

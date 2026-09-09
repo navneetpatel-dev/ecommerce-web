@@ -1,8 +1,9 @@
 import { ContentPageSkeleton } from "@/shared/components/Skeletons.component";
+import { loadingPagesStyles as styles } from "@/app/loadingPages.styles";
 
 export default function VendorRegisterLoading() {
   return (
-    <div className="min-h-screen bg-paper">
+    <div className={styles.screenBgPaper}>
       <ContentPageSkeleton />
     </div>
   );

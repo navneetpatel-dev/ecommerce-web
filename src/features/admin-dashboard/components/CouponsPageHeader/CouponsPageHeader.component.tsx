@@ -126,7 +126,7 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
       </div>
 
       {notifyAlerts.isSuccess ? (
-        <p className="text-body-sm text-ink-muted" aria-live="polite">
+        <p className={styles.statusMuted} aria-live="polite">
           {(notifyAlerts.data?.notified ?? 0) > 0
             ? formatLabel(LABELS.couponAlertsSent, {
                 count: String(notifyAlerts.data?.notified ?? 0),
@@ -135,7 +135,7 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
         </p>
       ) : null}
       {notifyAlerts.isError ? (
-        <p className="text-body-sm text-danger" role="alert">
+        <p className={styles.statusError} role="alert">
           {LABELS.couponAlertsFailed}
         </p>
       ) : null}

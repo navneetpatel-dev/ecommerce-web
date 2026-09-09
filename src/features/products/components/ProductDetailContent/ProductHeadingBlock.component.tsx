@@ -5,6 +5,7 @@ import { Badge } from "@/shared/components/ui/badge";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { ProductDetail } from "@/shared/api/types";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
 
 interface ProductHeadingBlockProps {
   product: ProductDetail;
@@ -31,8 +32,8 @@ export function ProductHeadingBlock({
         />
       ) : null}
 
-      <div className="space-y-3">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className={PRODUCT_DETAIL_CONTENT_STYLES.headingStack}>
+        <div className={PRODUCT_DETAIL_CONTENT_STYLES.eyebrowsRow}>
           {product.brand ? <TextEyebrow>{product.brand}</TextEyebrow> : null}
           {product.category?.name || product.categoryName ? (
             <TextEyebrow>
@@ -42,18 +43,18 @@ export function ProductHeadingBlock({
         </div>
 
         <h1
-          className="font-display font-semibold leading-[1.15] tracking-tight text-ink"
+          className={PRODUCT_DETAIL_CONTENT_STYLES.headingTitle}
           style={{ fontSize: "var(--text-display-sm)" }}
         >
           {product.name}
         </h1>
 
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <div className={PRODUCT_DETAIL_CONTENT_STYLES.ratingRow}>
           <RatingStars value={avgRating} count={reviewCount} size="md" />
           {reviewCount > 0 ? (
             <a
               href="#reviews"
-              className="text-body-sm text-ink-muted underline-offset-2 hover:text-brand hover:underline"
+              className={PRODUCT_DETAIL_CONTENT_STYLES.reviewsLink}
               onClick={onReviewsClick}
             >
               {formatLabel(LABELS.reviewsWithCount, {
@@ -64,12 +65,12 @@ export function ProductHeadingBlock({
         </div>
 
         {product.tags?.length ? (
-          <div className="flex flex-wrap gap-1.5 pt-1">
+          <div className={PRODUCT_DETAIL_CONTENT_STYLES.tagsRow}>
             {product.tags.slice(0, 4).map((tag) => (
               <Badge
                 key={tag}
                 variant="secondary"
-                className="rounded-full font-normal"
+                className={PRODUCT_DETAIL_CONTENT_STYLES.tagBadge}
               >
                 {tag}
               </Badge>

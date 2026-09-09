@@ -1,8 +1,9 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import * as SliderPrimitive from '@radix-ui/react-slider'
-import { cn } from '@/shared/utils/cn'
+import * as React from "react";
+import * as SliderPrimitive from "@radix-ui/react-slider";
+import { cn } from "@/shared/utils/cn";
+import { sliderStyles } from "./slider.styles";
 
 const Slider = React.forwardRef<
   React.ComponentRef<typeof SliderPrimitive.Root>,
@@ -10,15 +11,15 @@ const Slider = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SliderPrimitive.Root
     ref={ref}
-    className={cn("relative flex w-full touch-none select-none items-center", className)}
+    className={cn(sliderStyles.root, className)}
     {...props}
   >
-    <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-line">
-      <SliderPrimitive.Range className="absolute h-full bg-brand" />
+    <SliderPrimitive.Track className={sliderStyles.track}>
+      <SliderPrimitive.Range className={sliderStyles.range} />
     </SliderPrimitive.Track>
-    <SliderPrimitive.Thumb className="block h-5 w-5 cursor-pointer rounded-full border-2 border-brand bg-surface outline-none ring-offset-background transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:pointer-events-none disabled:opacity-50" />
+    <SliderPrimitive.Thumb className={sliderStyles.thumb} />
   </SliderPrimitive.Root>
-))
-Slider.displayName = "Slider"
+));
+Slider.displayName = "Slider";
 
-export { Slider }
+export { Slider };

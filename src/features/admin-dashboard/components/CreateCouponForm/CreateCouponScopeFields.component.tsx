@@ -14,6 +14,7 @@ import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { CouponScopeMultiSelect } from "../CouponScopeMultiSelect.component";
 import { SCOPE_TYPES, scopePickerLabel } from "./constants";
+import { createCouponFormStyles } from "./createCouponForm.styles";
 
 interface CreateCouponScopeFieldsProps {
   form: UseFormReturn<CouponFormInput>;
@@ -45,7 +46,7 @@ export function CreateCouponScopeFields({
   return (
     <FormSection title={LABELS.couponSectionScope} columns={1}>
       {vendorMode ? (
-        <p className="text-body-sm text-ink-muted">
+        <p className={createCouponFormStyles.hintMuted}>
           {LABELS.couponVendorScopeLocked}
         </p>
       ) : null}

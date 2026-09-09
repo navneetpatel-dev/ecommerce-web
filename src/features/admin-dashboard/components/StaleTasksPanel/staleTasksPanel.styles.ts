@@ -2,6 +2,7 @@ export const staleTasksPanelStyles = {
   root: "rounded-lg border border-warning/30 bg-surface p-5 md:p-6 shadow-elevation-1 space-y-4",
   header: "flex items-center gap-2",
   headerIcon: "size-4 text-warning",
+  eyebrowNoMargin: "!mb-0",
   loadingText: "text-body-sm text-ink-muted",
   emptyText: "text-body-sm text-ink-muted",
   tablesWrapper: "space-y-4",

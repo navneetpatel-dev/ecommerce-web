@@ -7,18 +7,19 @@ import type { PromoBannerStatus } from "@/shared/constants/statuses";
 import { usePromoBanners } from "./usePromoBanners.hook";
 import { PromoBannerCreateSection } from "./PromoBannerCreateSection.component";
 import { PromoBannersList } from "./PromoBannersList.component";
+import { adminPromoBannersPageStyles } from "./adminPromoBanners.styles";
 
 export function AdminPromoBannersPage() {
   const promo = usePromoBanners();
 
   return (
     <RequirePermission permission={PERMISSIONS.BANNER_MANAGE}>
-      <div className="w-full min-w-0 space-y-6">
-        <div className="space-y-1">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+      <div className={adminPromoBannersPageStyles.container}>
+        <div className={adminPromoBannersPageStyles.headerGroup}>
+          <h2 className={adminPromoBannersPageStyles.heading}>
             {LABELS.promoBanners}
           </h2>
-          <p className="max-w-2xl text-body text-ink-muted">
+          <p className={adminPromoBannersPageStyles.subheading}>
             {LABELS.promoBannersHint}
           </p>
         </div>
@@ -47,11 +48,17 @@ export function AdminPromoBannersPage() {
         />
 
         {promo.loading ? (
-          <p className="text-ink-muted">{LABELS.loading}</p>
+          <p className={adminPromoBannersPageStyles.loadingText}>
+            {LABELS.loading}
+          </p>
         ) : null}
-        {promo.error ? <p className="text-danger">{promo.error}</p> : null}
+        {promo.error ? (
+          <p className={adminPromoBannersPageStyles.errorText}>{promo.error}</p>
+        ) : null}
         {!promo.loading && !promo.error && promo.banners.length === 0 ? (
-          <p className="text-ink-muted">{LABELS.noPromoBanners}</p>
+          <p className={adminPromoBannersPageStyles.emptyText}>
+            {LABELS.noPromoBanners}
+          </p>
         ) : null}
 
         {!promo.loading && promo.banners.length > 0 ? (

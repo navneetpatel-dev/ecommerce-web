@@ -3,12 +3,13 @@
 import { AdminDataPage } from "./AdminDataPage.page";
 import { AdminUsersFilters } from "../components/AdminUsersFilters.component";
 import { useAdminUsersPage } from "../hooks/useAdminUsersPage";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function AdminUsersPage() {
   const page = useAdminUsersPage();
 
   return (
-    <div className="space-y-6">
+    <div className={adminPagesStyles.stack6}>
       <AdminUsersFilters {...page.filters} />
       <AdminDataPage
         title={page.title}

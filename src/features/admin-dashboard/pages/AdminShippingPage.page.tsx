@@ -5,13 +5,14 @@ import { AdminShippingZoneForm } from "../components/AdminShippingZoneForm.compo
 import { AdminShippingRateForm } from "../components/AdminShippingRateForm.component";
 import { useAdminShippingPage } from "../hooks/useAdminShippingPage";
 import { useAdminShippingRatesPage } from "../hooks/useAdminShippingRatesPage";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function AdminShippingPage() {
   const page = useAdminShippingPage();
   const ratesPage = useAdminShippingRatesPage();
 
   return (
-    <div className="space-y-5">
+    <div className={adminPagesStyles.stack5}>
       <AdminShippingZoneForm {...page.form} />
       <AdminDataPage
         title={page.title}

@@ -9,6 +9,7 @@ import {
   type ProductListingFormField,
   type ProductListingFormValues,
 } from "@/features/products";
+import { vendorProductCreateFormStyles } from "./vendorProductCreateForm.styles";
 
 interface ProductSeoSectionProps {
   values: ProductListingFormValues;
@@ -52,7 +53,7 @@ export function ProductSeoSection({
           onChange={(event) =>
             patchValues({ seoDescription: event.target.value })
           }
-          className="min-h-[5.5rem]"
+          className={vendorProductCreateFormStyles.seoDescriptionTextarea}
         />
       </FormFieldFrame>
     </FormSection>

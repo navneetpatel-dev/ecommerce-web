@@ -4,7 +4,7 @@ import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category } from "@/shared/api/types";
 import { resolveCategoryIcon, categoryHref } from "@/features/categories";
-import { cn } from "@/shared/utils/cn";
+import { mobileNavDrawerStyles as styles } from "./mobileNavDrawer.styles";
 
 interface MobileNavCategoryTreeProps {
   categories: Category[];
@@ -18,27 +18,23 @@ export function MobileNavCategoryTree({
 }: MobileNavCategoryTreeProps) {
   return (
     <>
-      <div className="mt-4 px-3 py-2 flex items-center justify-between">
-        <span className="text-body-sm font-medium text-ink-muted">
-          {LABELS.categories}
-        </span>
+      <div className={styles.categoryHeaderRow}>
+        <span className={styles.categoryHeaderTitle}>{LABELS.categories}</span>
         {categories.length > 0 ? (
           <Link
             href={PATHS.categories}
             onClick={onNavigate}
-            className="inline-flex items-center gap-0.5 text-[0.75rem] font-medium text-brand"
+            className={styles.viewAllLink}
           >
-            {LABELS.viewAll} <ArrowRight className="h-3 w-3" />
+            {LABELS.viewAll} <ArrowRight className={styles.arrowIcon} />
           </Link>
         ) : null}
       </div>
 
       {categories.length === 0 ? (
-        <p className="px-3 py-2 text-body-sm text-ink-faint">
-          {LABELS.noCategoriesYet}
-        </p>
+        <p className={styles.emptyText}>{LABELS.noCategoriesYet}</p>
       ) : (
-        <ul className="space-y-1">
+        <ul className={styles.departmentList}>
           {categories.map((department) => {
             const Icon = resolveCategoryIcon(department);
             return (
@@ -46,35 +42,30 @@ export function MobileNavCategoryTree({
                 <Link
                   href={categoryHref(department, categories)}
                   onClick={onNavigate}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-md text-body font-medium hover:bg-paper transition-colors"
+                  className={styles.departmentLink}
                 >
-                  <Icon
-                    className="h-4 w-4 shrink-0 text-ink-muted"
-                    strokeWidth={1.5}
-                  />
-                  <span className="truncate">{department.name}</span>
+                  <Icon className={styles.departmentIcon} strokeWidth={1.5} />
+                  <span className={styles.truncateText}>{department.name}</span>
                 </Link>
                 {department.children?.length ? (
-                  <ul className="ml-4 space-y-0.5 border-l border-line pl-2">
+                  <ul className={styles.childrenList}>
                     {department.children.map((child) => (
                       <li key={child.id}>
                         <Link
                           href={categoryHref(child, categories)}
                           onClick={onNavigate}
-                          className="block truncate rounded-md px-2 py-1.5 text-body-sm font-medium text-ink-muted hover:bg-paper hover:text-ink"
+                          className={styles.childLink}
                         >
                           {child.name}
                         </Link>
                         {child.children?.length ? (
-                          <ul className="ml-2 space-y-0.5">
+                          <ul className={styles.leafList}>
                             {child.children.map((leaf) => (
                               <li key={leaf.id}>
                                 <Link
                                   href={categoryHref(leaf, categories)}
                                   onClick={onNavigate}
-                                  className={cn(
-                                    "block truncate rounded-md px-2 py-1 text-[0.75rem] text-ink-faint hover:bg-paper hover:text-ink",
-                                  )}
+                                  className={styles.leafLink}
                                 >
                                   {leaf.name}
                                 </Link>

@@ -14,6 +14,7 @@ import {
 } from "./ui/dialog";
 import { DisabledActionHint } from "./DisabledActionHint.component";
 import { cn } from "@/shared/utils/cn";
+import { statusDialogStyles } from "./dialogComponents.styles";
 
 export type StatusDialogVariant = "info" | "success" | "warning" | "danger";
 
@@ -39,30 +40,11 @@ interface StatusDialogProps {
   children?: ReactNode;
 }
 
-const VARIANT_STYLES: Record<
-  StatusDialogVariant,
-  { iconWrap: string; icon: string; Icon: LucideIcon }
-> = {
-  info: {
-    iconWrap: "border-line bg-paper text-ink-muted",
-    icon: "text-ink-muted",
-    Icon: Info,
-  },
-  success: {
-    iconWrap: "border-success/25 bg-success-subtle text-success",
-    icon: "text-success",
-    Icon: CheckCircle2,
-  },
-  warning: {
-    iconWrap: "border-warning/25 bg-warning-subtle text-warning",
-    icon: "text-warning",
-    Icon: AlertCircle,
-  },
-  danger: {
-    iconWrap: "border-danger/25 bg-danger-subtle text-danger",
-    icon: "text-danger",
-    Icon: XCircle,
-  },
+const VARIANT_ICONS: Record<StatusDialogVariant, LucideIcon> = {
+  info: Info,
+  success: CheckCircle2,
+  warning: AlertCircle,
+  danger: XCircle,
 };
 
 export function StatusDialog({
@@ -76,40 +58,39 @@ export function StatusDialog({
   secondaryAction,
   children,
 }: StatusDialogProps) {
-  const styles = VARIANT_STYLES[variant];
-  const Icon = icon ?? styles.Icon;
+  const variantStyle = statusDialogStyles.variants[variant];
+  const Icon = icon ?? VARIANT_ICONS[variant];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[420px] gap-5 sm:text-left">
-        <DialogHeader className="space-y-4 sm:text-left">
+      <DialogContent className={statusDialogStyles.content}>
+        <DialogHeader className={statusDialogStyles.header}>
           <div
-            className={cn(
-              "mx-auto flex h-12 w-12 items-center justify-center rounded-full border sm:mx-0",
-              styles.iconWrap,
-            )}
+            className={cn(statusDialogStyles.iconWrap, variantStyle.iconWrap)}
           >
             <Icon
               size={22}
               strokeWidth={1.5}
-              className={styles.icon}
+              className={variantStyle.icon}
               aria-hidden
             />
           </div>
-          <div className="space-y-1.5">
-            <DialogTitle className="font-display text-[1.25rem] tracking-tight text-ink">
+          <div className={statusDialogStyles.titleGroup}>
+            <DialogTitle className={statusDialogStyles.title}>
               {title}
             </DialogTitle>
-            <DialogDescription className="text-body leading-relaxed text-ink-muted">
+            <DialogDescription className={statusDialogStyles.description}>
               {description}
             </DialogDescription>
           </div>
         </DialogHeader>
 
-        {children ? <div className="space-y-3">{children}</div> : null}
+        {children ? (
+          <div className={statusDialogStyles.childrenWrapper}>{children}</div>
+        ) : null}
 
         {(primaryAction || secondaryAction) && (
-          <DialogFooter className="dialog-footer-start">
+          <DialogFooter className={statusDialogStyles.footer}>
             {secondaryAction ? (
               <Button
                 type="button"
@@ -124,7 +105,7 @@ export function StatusDialog({
             ) : null}
             {primaryAction ? (
               <DisabledActionHint
-                className="flex w-full sm:inline-flex sm:w-auto"
+                className={statusDialogStyles.actionHint}
                 disabled={Boolean(
                   primaryAction.disabled && primaryAction.disabledHint,
                 )}

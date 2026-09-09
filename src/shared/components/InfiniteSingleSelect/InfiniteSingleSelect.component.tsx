@@ -9,6 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { cn } from "@/shared/utils/cn";
+import { infiniteSingleSelectStyles } from "./infiniteSingleSelect.styles";
 import type { InfiniteSingleSelectProps } from "./types";
 import { useInfiniteSelectOptions } from "./useInfiniteSelectOptions.hook";
 import {
@@ -110,7 +111,7 @@ export function InfiniteSingleSelect(props: InfiniteSingleSelectProps) {
   };
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn(infiniteSingleSelectStyles.root, className)}>
       <Popover open={open} onOpenChange={handlePopoverChange}>
         <PopoverTrigger asChild>
           <TriggerButton
@@ -124,7 +125,7 @@ export function InfiniteSingleSelect(props: InfiniteSingleSelectProps) {
         </PopoverTrigger>
         <PopoverContent
           align="start"
-          className="w-[var(--radix-popover-trigger-width)] space-y-2 p-1"
+          className={infiniteSingleSelectStyles.popoverContent}
           onOpenAutoFocus={preventAutoFocusWhenNotSearchable}
         >
           {showSearchField ? (

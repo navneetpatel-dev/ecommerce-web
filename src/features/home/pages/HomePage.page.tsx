@@ -9,6 +9,7 @@ import { VendorSpotlightSection } from "../components/VendorSpotlightSection.com
 import { RecentlyViewedSection } from "@/features/products";
 import type { HeroSlide } from "../components/HeroSection.component";
 import { promoBannerToHeroSlide } from "../utils/promoBanner";
+import { homePageStyles as styles } from "./homePage.styles";
 
 export function HomePage() {
   const home = useHomePage();
@@ -19,9 +20,9 @@ export function HomePage() {
   }, [home.banners]);
 
   return (
-    <div className="space-y-12 md:space-y-20">
+    <div className={styles.container}>
       <HeroSection slides={heroSlides} />
-      <div className="storefront-container space-y-12 md:space-y-20">
+      <div className={styles.contentWrapper}>
         <CategoryRail
           categories={home.categories}
           isLoading={home.categoriesLoading}

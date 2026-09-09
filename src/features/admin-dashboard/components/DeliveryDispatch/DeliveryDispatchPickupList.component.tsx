@@ -60,7 +60,9 @@ export function DeliveryDispatchPickupList({
           Select unassigned pickup
         </label>
         <Select value={returnId} onValueChange={setReturnId}>
-          <SelectTrigger className="w-full">
+          <SelectTrigger
+            className={deliveryDispatchPickupListStyles.selectTrigger}
+          >
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
           <DeliveryDispatchPickupGroupsList groups={groups} />

@@ -17,6 +17,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { DISCOUNT_BEARER } from "@/shared/constants/statuses";
 import { cn } from "@/shared/utils/cn";
 import { COUPON_TYPES } from "./constants";
+import { createCouponFormStyles } from "./createCouponForm.styles";
 
 interface CreateCouponBasicsFieldsProps {
   form: UseFormReturn<CouponFormInput>;
@@ -64,7 +65,9 @@ export function CreateCouponBasicsFields({
           render={({ field }) => (
             <Select value={field.value} onValueChange={field.onChange}>
               <SelectTrigger
-                className={cn(hasError("type") && "border-danger")}
+                className={cn(
+                  hasError("type") && createCouponFormStyles.borderDanger,
+                )}
               >
                 <SelectValue placeholder={LABELS.couponType} />
               </SelectTrigger>
@@ -94,7 +97,10 @@ export function CreateCouponBasicsFields({
             render={({ field }) => (
               <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger
-                  className={cn(hasError("discountBearer") && "border-danger")}
+                  className={cn(
+                    hasError("discountBearer") &&
+                      createCouponFormStyles.borderDanger,
+                  )}
                 >
                   <SelectValue placeholder={LABELS.discountBearer} />
                 </SelectTrigger>
@@ -112,7 +118,7 @@ export function CreateCouponBasicsFields({
         )}
       </FormFieldFrame>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className={createCouponFormStyles.gridSm2}>
         <FormFieldFrame
           label={LABELS.startDate}
           required

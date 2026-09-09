@@ -4,6 +4,7 @@ import type { KeyboardEvent, ReactNode } from "react";
 import { TableRowActions } from "@/shared/components/TableRowActions.component";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { dataTableMobileStyles } from "./dataTable.styles";
 import type { DataTableColumn } from "./types";
 import { columnLabel, renderCellContent, resolveCell } from "./utils.component";
 
@@ -33,7 +34,7 @@ export function DataTableMobileCards<T>({
   const mobileColumns = columns.filter((column) => !column.hideOnMobile);
 
   return (
-    <ul className="space-y-3 lg:hidden">
+    <ul className={dataTableMobileStyles.list}>
       {rows.map((row, index) => {
         const rowId =
           getRowId?.(row, index) ??
@@ -47,9 +48,8 @@ export function DataTableMobileCards<T>({
           <li
             key={rowId}
             className={cn(
-              "rounded-md border border-line bg-surface p-4 shadow-card-hairline",
-              rowsInteractive &&
-                "cursor-pointer transition-colors hover:border-brand/30 hover:bg-brand-subtle/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+              dataTableMobileStyles.card,
+              rowsInteractive && dataTableMobileStyles.cardInteractive,
             )}
             role={rowsInteractive ? "button" : undefined}
             tabIndex={rowsInteractive ? 0 : undefined}
@@ -59,7 +59,10 @@ export function DataTableMobileCards<T>({
           >
             {primary ? (
               <div
-                className={cn("min-w-0 text-body text-ink", primary.className)}
+                className={cn(
+                  dataTableMobileStyles.primaryCell,
+                  primary.className,
+                )}
               >
                 {renderCellContent(primary, primaryContent, row)}
               </div>
@@ -68,8 +71,8 @@ export function DataTableMobileCards<T>({
             {rest.length > 0 ? (
               <dl
                 className={cn(
-                  "space-y-2.5",
-                  primary ? "mt-3 border-t border-line/80 pt-3" : undefined,
+                  dataTableMobileStyles.dl,
+                  primary ? dataTableMobileStyles.dlWithPrimary : undefined,
                 )}
               >
                 {rest.map((column) => {
@@ -77,14 +80,14 @@ export function DataTableMobileCards<T>({
                   return (
                     <div
                       key={column.id}
-                      className="grid grid-cols-[minmax(0,6.5rem)_minmax(0,1fr)] gap-x-3 gap-y-1"
+                      className={dataTableMobileStyles.rowItem}
                     >
-                      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
+                      <dt className={dataTableMobileStyles.dt}>
                         {columnLabel(column)}
                       </dt>
                       <dd
                         className={cn(
-                          "min-w-0 break-words text-[0.875rem] text-ink",
+                          dataTableMobileStyles.dd,
                           column.className,
                         )}
                       >
@@ -100,13 +103,13 @@ export function DataTableMobileCards<T>({
               <div
                 className={cn(
                   primary || rest.length > 0
-                    ? "mt-4 border-t border-line/80 pt-3"
+                    ? dataTableMobileStyles.actionsWrapper
                     : undefined,
                 )}
                 onClick={(event) => event.stopPropagation()}
                 onKeyDown={(event) => event.stopPropagation()}
               >
-                <TableRowActions className="justify-end">
+                <TableRowActions className={dataTableMobileStyles.actionsAlign}>
                   {actions(row, index)}
                 </TableRowActions>
               </div>

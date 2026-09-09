@@ -13,6 +13,7 @@ import { CategoryGridSkeleton } from "@/shared/components/Skeletons.component";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category } from "@/shared/api/types";
+import { categoryRailStyles as styles } from "./categoryRail.styles";
 
 const HOME_CATEGORY_LIMIT = 10;
 
@@ -25,29 +26,23 @@ function CategoryRailHeader({ totalCount }: { totalCount?: number }) {
   const hasMore = totalCount != null && totalCount > HOME_CATEGORY_LIMIT;
 
   return (
-    <div className="mb-8 flex items-end justify-between gap-4">
+    <div className={styles.headerWrapper}>
       <div>
-        <TextEyebrow className="mb-2">{LABELS.browse}</TextEyebrow>
-        <h2 className="text-[1.375rem] font-semibold text-ink">
-          {LABELS.shopByCategory}
-        </h2>
+        <TextEyebrow className={styles.headerEyebrow}>
+          {LABELS.browse}
+        </TextEyebrow>
+        <h2 className={styles.headerTitle}>{LABELS.shopByCategory}</h2>
       </div>
       {hasMore ? (
-        <Link
-          href={PATHS.categories}
-          className="inline-flex shrink-0 items-center gap-1 text-body font-medium text-brand transition-colors hover:text-brand-hover"
-        >
+        <Link href={PATHS.categories} className={styles.viewAllLink}>
           {LABELS.viewAll}
-          <span className="tabular-nums text-ink-muted">({totalCount})</span>
-          <ArrowRight className="h-3.5 w-3.5" />
+          <span className={styles.totalCountSpan}>({totalCount})</span>
+          <ArrowRight className={styles.arrowIcon} />
         </Link>
       ) : (
-        <span
-          className="invisible inline-flex shrink-0 items-center gap-1 text-body font-medium"
-          aria-hidden
-        >
+        <span className={styles.viewAllPlaceholder} aria-hidden>
           {LABELS.viewAll}
-          <ArrowRight className="h-3.5 w-3.5" />
+          <ArrowRight className={styles.arrowIcon} />
         </span>
       )}
     </div>
@@ -83,7 +78,7 @@ export function CategoryRail({
     <section>
       <CategoryRailHeader totalCount={mounted ? roots.length : undefined} />
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-4">
+      <div className={styles.grid}>
         {visible.map((cat) => (
           <CategoryCard key={cat.id} category={cat} />
         ))}

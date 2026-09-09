@@ -19,7 +19,7 @@ export function StaleTasksPanel() {
           className={staleTasksPanelStyles.headerIcon}
           aria-hidden="true"
         />
-        <TextEyebrow className="!mb-0">
+        <TextEyebrow className={staleTasksPanelStyles.eyebrowNoMargin}>
           Stuck tasks {total > 0 ? `(${total})` : ""}
         </TextEyebrow>
       </div>

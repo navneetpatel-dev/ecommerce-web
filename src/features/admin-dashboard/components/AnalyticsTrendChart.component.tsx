@@ -26,6 +26,7 @@ import {
 } from "../utils/analyticsFormat";
 import { useChartThemeColors } from "@/shared/hooks/useChartThemeColors.hook";
 import { AnalyticsTrendTooltip } from "./AnalyticsTrendTooltip.component";
+import { analyticsStyles } from "./analyticsComponents.styles";
 
 interface Point {
   date: string;
@@ -59,22 +60,22 @@ export function AnalyticsTrendChart({ data }: AnalyticsTrendChartProps) {
   const ordersDomainMax = Math.max(4, Math.ceil(maxOrders * 1.25));
 
   return (
-    <Card className="h-full">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-body-lg">
+    <Card className={analyticsStyles.fullHeightCard}>
+      <CardHeader className={analyticsStyles.cardHeaderPb2}>
+        <CardTitle className={analyticsStyles.cardTitleLg}>
           {LABELS.analyticsOrderTrend}
         </CardTitle>
         <CardDescription>{LABELS.analyticsOrderTrendHint}</CardDescription>
       </CardHeader>
-      <CardContent className="pt-2">
+      <CardContent className={analyticsStyles.trendCardContent}>
         {chartData.every(
           (point) => point.count === 0 && point.revenue === 0,
         ) ? (
-          <p className="py-16 text-center text-body text-ink-muted">
+          <p className={analyticsStyles.trendEmpty}>
             {LABELS.analyticsEmptyChart}
           </p>
         ) : (
-          <div className="h-72 w-full min-w-0 sm:h-80">
+          <div className={analyticsStyles.trendChartContainer}>
             <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <ComposedChart
                 data={chartData}

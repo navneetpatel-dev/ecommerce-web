@@ -16,6 +16,7 @@ import type { BugReportStatus } from "@/shared/constants/statuses";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { BUG_WONT_FIX_REASON_MAX } from "../../constants/fieldLimits";
 import { BUG_STATUS_LABEL } from "../../utils/labels";
+import { bugReportPanelsStyles } from "./bugReportPanels.styles";
 
 interface BugStatusUpdatePanelProps {
   statusOptions: BugReportStatus[];
@@ -46,11 +47,11 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
   if (!showPanel) return null;
 
   return (
-    <section className="overflow-hidden border border-line bg-surface shadow-elevation-1">
-      <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+    <section className={bugReportPanelsStyles.panelRoot}>
+      <div className={bugReportPanelsStyles.panelHeader}>
         <TextEyebrow>{LABELS.bugUpdateStatus}</TextEyebrow>
       </div>
-      <div className="space-y-3 px-4 py-4 sm:px-5">
+      <div className={bugReportPanelsStyles.panelBodyTight}>
         {props.statusOptions.length > 0 ? (
           <>
             <FormFieldFrame label={LABELS.status}>
@@ -75,7 +76,7 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
             <Button
               type="button"
               variant="outline"
-              className="w-full"
+              className={bugReportPanelsStyles.panelFullWidth}
               loading={props.updatePending}
               onClick={props.onChangeStatus}
             >
@@ -85,21 +86,21 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
         ) : null}
 
         {props.canMarkDuplicate ? (
-          <div className="border-t border-line/60 pt-3">
+          <div className={bugReportPanelsStyles.panelSectionDivider}>
             <FormFieldFrame label={LABELS.bugDuplicateOfId}>
               <Input
                 value={props.duplicateOf}
                 onChange={(e) => props.onDuplicateOfChange(e.target.value)}
                 placeholder={LABELS.bugDuplicateOfPlaceholder}
               />
-              <p className="mt-1 text-[0.75rem] text-ink-muted">
+              <p className={bugReportPanelsStyles.panelHint}>
                 {LABELS.bugDuplicateOfHint}
               </p>
             </FormFieldFrame>
             <Button
               type="button"
               variant="outline"
-              className="mt-3 w-full"
+              className={bugReportPanelsStyles.panelButtonMargin}
               loading={props.duplicatePending}
               disabled={!props.duplicateOf.trim()}
               onClick={props.onMarkDuplicate}
@@ -110,7 +111,7 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
         ) : null}
 
         {props.canWontFix ? (
-          <div className="border-t border-line/60 pt-3">
+          <div className={bugReportPanelsStyles.panelSectionDivider}>
             <FormFieldFrame label={LABELS.bugWontFixReason}>
               <Textarea
                 value={props.wontFixReason}
@@ -122,7 +123,7 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
                 rows={3}
                 maxLength={BUG_WONT_FIX_REASON_MAX}
               />
-              <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
+              <p className={bugReportPanelsStyles.panelHintTabular}>
                 {formatLabel(LABELS.ticketCharCounter, {
                   count: props.wontFixReason.length,
                   max: BUG_WONT_FIX_REASON_MAX,
@@ -132,7 +133,7 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
             <Button
               type="button"
               variant="outline"
-              className="mt-3 w-full"
+              className={bugReportPanelsStyles.panelButtonMargin}
               loading={props.wontFixPending}
               disabled={!props.wontFixReason.trim()}
               onClick={props.onWontFix}

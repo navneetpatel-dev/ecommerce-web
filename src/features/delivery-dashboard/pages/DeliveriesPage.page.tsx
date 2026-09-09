@@ -13,6 +13,7 @@ import { groupShipmentsByStop } from "../utils/groupByStop";
 import { PATHS } from "@/shared/constants/paths";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { deliveryListPageStyles as styles } from "./deliveryListPage.styles";
 
 export function DeliveriesPage() {
   const router = useRouter();
@@ -60,27 +61,25 @@ export function DeliveriesPage() {
   };
 
   return (
-    <div className="w-full min-w-0 space-y-6">
-      <header className="flex flex-col gap-2 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between">
+    <div className={styles.container}>
+      <header className={styles.header}>
         <div>
-          <h1 className="font-display text-[1.75rem] text-ink">Deliveries</h1>
-          <p className="mt-1 text-body text-ink-muted">
+          <h1 className={styles.title}>Deliveries</h1>
+          <p className={styles.subtitle}>
             Assigned delivery route and current fulfillment progress.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-body-sm text-ink-muted">
+        <div className={styles.headerActions}>
+          <span className={styles.headerCount}>
             {count} active shipment{count === 1 ? "" : "s"}
           </span>
           <BarcodeScanButton onDecoded={(text) => void handleScanned(text)} />
         </div>
       </header>
 
-      {scanError ? (
-        <p className="text-body-sm text-danger">{scanError}</p>
-      ) : null}
+      {scanError ? <p className={styles.errorNotice}>{scanError}</p> : null}
       {scanMessage ? (
-        <p className="text-body-sm text-success">{scanMessage}</p>
+        <p className={styles.successNotice}>{scanMessage}</p>
       ) : null}
 
       {query.isError ? (
@@ -91,17 +90,14 @@ export function DeliveriesPage() {
       ) : null}
 
       {query.isLoading ? (
-        <p className="text-ink-muted">Loading deliveries...</p>
+        <p className={styles.loadingText}>Loading deliveries...</p>
       ) : count > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className={styles.grid}>
           {groupShipmentsByStop(query.data ?? []).map((stop) =>
             stop.shipments.length > 1 ? (
-              <div
-                key={stop.key}
-                className="space-y-2 rounded-md border border-brand/30 bg-brand/5 p-3"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-body-sm font-medium text-ink">
+              <div key={stop.key} className={styles.stopCard}>
+                <div className={styles.stopHeader}>
+                  <p className={styles.stopTitle}>
                     {stop.shipments.length} packages to this address
                   </p>
                   {stop.addressText ? (
@@ -109,14 +105,17 @@ export function DeliveriesPage() {
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stop.addressText)}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex shrink-0 items-center gap-1 text-body-sm font-medium text-brand hover:underline"
+                      className={styles.mapLink}
                     >
-                      <ExternalLink className="size-3.5" aria-hidden="true" />
+                      <ExternalLink
+                        className={styles.mapIcon}
+                        aria-hidden="true"
+                      />
                       Open in Maps
                     </a>
                   ) : null}
                 </div>
-                <div className="space-y-2">
+                <div className={styles.stopList}>
                   {stop.shipments.map((shipment) => (
                     <TaskCard
                       key={shipment.id}
@@ -142,9 +141,7 @@ export function DeliveriesPage() {
           )}
         </div>
       ) : (
-        <p className="border-l-2 border-brand/30 pl-3 text-body text-ink-muted py-2">
-          No assigned deliveries.
-        </p>
+        <p className={styles.emptyNotice}>No assigned deliveries.</p>
       )}
     </div>
   );

@@ -14,10 +14,15 @@ import type { ShiftSummary } from "../types";
 import { useShiftSummaryCard } from "./ShiftSummaryCard/useShiftSummaryCard.hook";
 import { CashDepositDialog } from "./ShiftSummaryCard/CashDepositDialog.component";
 import {
+  SHIFT_CARD_EYEBROW,
   SHIFT_CARD_HEADER,
   SHIFT_CARD_ROOT,
+  SHIFT_HEADER_ICON,
   SHIFT_PENDING_BANNER,
   SHIFT_STAT_CAPTION,
+  SHIFT_STAT_ICON_BRAND,
+  SHIFT_STAT_ICON_SUCCESS,
+  SHIFT_STAT_ICON_WARNING,
   SHIFT_STAT_ITEM,
   SHIFT_STAT_NUMBER,
   SHIFT_STATS_GRID,
@@ -41,38 +46,40 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
   return (
     <section className={SHIFT_CARD_ROOT}>
       <div className={SHIFT_CARD_HEADER}>
-        <TextEyebrow className="!mb-0">Today&apos;s shift</TextEyebrow>
+        <TextEyebrow className={SHIFT_CARD_EYEBROW}>
+          Today&apos;s shift
+        </TextEyebrow>
         {summary.codCashInHand > 0 ? (
           <Button size="sm" variant="outline" onClick={openDialog}>
-            <Wallet className="size-4" aria-hidden="true" />
+            <Wallet className={SHIFT_HEADER_ICON} aria-hidden="true" />
             Deposit cash
           </Button>
         ) : null}
       </div>
       <div className={SHIFT_STATS_GRID}>
         <div className={SHIFT_STAT_ITEM}>
-          <PackageCheck className="size-4 text-brand" aria-hidden="true" />
+          <PackageCheck className={SHIFT_STAT_ICON_BRAND} aria-hidden="true" />
           <div>
             <p className={SHIFT_STAT_NUMBER}>{summary.deliveredToday}</p>
             <p className={SHIFT_STAT_CAPTION}>Delivered</p>
           </div>
         </div>
         <div className={SHIFT_STAT_ITEM}>
-          <RotateCcw className="size-4 text-brand" aria-hidden="true" />
+          <RotateCcw className={SHIFT_STAT_ICON_BRAND} aria-hidden="true" />
           <div>
             <p className={SHIFT_STAT_NUMBER}>{summary.pickupsToday}</p>
             <p className={SHIFT_STAT_CAPTION}>Pickups</p>
           </div>
         </div>
         <div className={SHIFT_STAT_ITEM}>
-          <Timer className="size-4 text-brand" aria-hidden="true" />
+          <Timer className={SHIFT_STAT_ICON_BRAND} aria-hidden="true" />
           <div>
             <p className={SHIFT_STAT_NUMBER}>{summary.onTimePercent}%</p>
             <p className={SHIFT_STAT_CAPTION}>On-time</p>
           </div>
         </div>
         <div className={SHIFT_STAT_ITEM}>
-          <IndianRupee className="size-4 text-success" aria-hidden="true" />
+          <IndianRupee className={SHIFT_STAT_ICON_SUCCESS} aria-hidden="true" />
           <div>
             <p className={SHIFT_STAT_NUMBER}>
               ₹{summary.earningsToday.toFixed(0)}
@@ -83,7 +90,7 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
           </div>
         </div>
         <div className={SHIFT_STAT_ITEM}>
-          <IndianRupee className="size-4 text-warning" aria-hidden="true" />
+          <IndianRupee className={SHIFT_STAT_ICON_WARNING} aria-hidden="true" />
           <div>
             <p className={SHIFT_STAT_NUMBER}>
               ₹{summary.codCashInHand.toFixed(0)}
@@ -94,7 +101,7 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
       </div>
       {summary.pendingDeposits > 0 ? (
         <div className={SHIFT_PENDING_BANNER}>
-          <AlertCircle className="size-4 text-warning" aria-hidden="true" />
+          <AlertCircle className={SHIFT_STAT_ICON_WARNING} aria-hidden="true" />
           {summary.pendingDeposits} cash deposit
           {summary.pendingDeposits === 1 ? "" : "s"} awaiting hub verification.
         </div>

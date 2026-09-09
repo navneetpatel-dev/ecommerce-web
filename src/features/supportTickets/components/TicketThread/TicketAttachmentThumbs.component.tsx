@@ -2,6 +2,7 @@ import { MediaImage } from "@/shared/components/MediaImage.component";
 import { TICKET_ATTACHMENT_TYPE } from "@/shared/constants/statuses";
 import { cn } from "@/shared/utils/cn";
 import type { TicketAttachment } from "../../api/supportTickets.api";
+import { ticketThreadStyles } from "./ticketThread.styles";
 
 export function AttachmentThumbs({
   attachments,
@@ -11,21 +12,21 @@ export function AttachmentThumbs({
   size?: "sm" | "md";
 }) {
   if (!attachments.length) return null;
-  const box = size === "sm" ? "h-14 w-14" : "h-20 w-20";
+  const box =
+    size === "sm"
+      ? ticketThreadStyles.thumbBoxSm
+      : ticketThreadStyles.thumbBoxMd;
   return (
-    <ul className="mt-3 flex flex-wrap gap-2">
+    <ul className={ticketThreadStyles.thumbsList}>
       {attachments.map((item) => (
         <li
           key={item.id ?? item.url}
-          className={cn(
-            "relative overflow-hidden rounded-md border border-line bg-paper",
-            box,
-          )}
+          className={cn(ticketThreadStyles.thumbBoxBase, box)}
         >
           {item.type === TICKET_ATTACHMENT_TYPE.VIDEO ? (
             <video
               src={item.url}
-              className="h-full w-full object-cover"
+              className={ticketThreadStyles.thumbImg}
               muted
               playsInline
               preload="metadata"
@@ -35,7 +36,7 @@ export function AttachmentThumbs({
               src={item.url}
               alt=""
               sizes={size === "sm" ? "56px" : "80px"}
-              imageClassName="object-cover"
+              imageClassName={ticketThreadStyles.thumbObjectCover}
             />
           )}
         </li>

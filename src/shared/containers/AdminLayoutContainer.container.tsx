@@ -9,6 +9,7 @@ import { RequirePermission } from "@/shared/components/RequirePermission.compone
 import { adminPermissionsForPath } from "@/shared/constants/adminNav";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
+import { workspaceLayoutStyles as styles } from "./workspaceLayout.styles";
 
 export function AdminLayoutContainer({
   children,
@@ -26,18 +27,16 @@ export function AdminLayoutContainer({
   }, [pathname]);
 
   const sidebarHeader = (
-    <div className="mb-4 flex items-center gap-2 px-3 py-2">
-      <ShieldCheck className="h-5 w-5 text-brand" />
-      <span className="text-[1.125rem] font-semibold text-brand">
-        {LABELS.adminPanel}
-      </span>
+    <div className={styles.adminSidebarHeader}>
+      <ShieldCheck className={styles.adminSidebarIcon} />
+      <span className={styles.adminSidebarTitle}>{LABELS.adminPanel}</span>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-paper">
+    <div className={styles.root}>
       {renderHeader(() => setNavOpen(true))}
-      <div className="flex min-w-0">
+      <div className={styles.bodyFlex}>
         <SidebarNav
           items={navItems}
           currentPath={pathname}
@@ -50,7 +49,7 @@ export function AdminLayoutContainer({
           currentPath={pathname}
           title={LABELS.adminPanel}
         />
-        <main className="min-w-0 flex-1 overflow-x-hidden bg-surface p-4 sm:p-6 lg:p-8">
+        <main className={styles.main}>
           {pathname === PATHS.admin.root || pathname === PATHS.admin.profile ? (
             children
           ) : (

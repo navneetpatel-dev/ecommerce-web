@@ -10,6 +10,7 @@ import { Input } from "@/shared/components/ui/input";
 import { PasswordInputContainer } from "@/shared/containers/PasswordInputContainer.container";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
+import { authFormsStyles } from "./authForms.styles";
 
 interface LoginFormFieldsProps {
   register: UseFormRegister<LoginInput>;
@@ -28,7 +29,7 @@ export function LoginFormFields({
   formError,
 }: LoginFormFieldsProps) {
   return (
-    <div className="space-y-4">
+    <div className={authFormsStyles.formSpace4}>
       <FormFieldFrame
         label={LABELS.email}
         htmlFor="email"
@@ -58,7 +59,7 @@ export function LoginFormFields({
         footerAction={
           <Link
             href={PATHS.forgotPassword}
-            className="text-body-sm font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
+            className={authFormsStyles.forgotPasswordLink}
           >
             {LABELS.forgotPassword}
           </Link>

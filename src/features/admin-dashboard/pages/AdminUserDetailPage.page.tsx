@@ -21,6 +21,7 @@ import { ImpersonateUserButton } from "../components/ImpersonateUserButton.compo
 import { ChangeUserRoleDialog } from "../components/ChangeUserRoleDialog.component";
 import { UserAddressesCard } from "./UserAddressesCard.component";
 import { UserRecentOrdersCard } from "./UserRecentOrdersCard.component";
+import { adminUserDetailStyles } from "./adminUserDetail.styles";
 
 export function AdminUserDetailPage() {
   return (
@@ -39,13 +40,13 @@ function AdminUserDetailContent() {
   const ordersQuery = useAdminUserOrders(userId);
 
   if (userQuery.isPending) {
-    return <DetailQuerySkeleton className="space-y-3 py-4" />;
+    return <DetailQuerySkeleton className={adminUserDetailStyles.skeleton} />;
   }
 
   const user = userQuery.data;
   if (userQuery.isError || !user) {
     return (
-      <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+      <div className={adminUserDetailStyles.emptyBox}>
         <QueryErrorAlert
           error={userQuery.error}
           fallback={adminEntityDetailLabels.userCouldNotLoadDetail}
@@ -64,14 +65,18 @@ function AdminUserDetailContent() {
 
   const createdAtRow = user.createdAt ? (
     <>
-      <dt className="text-ink-muted">{LABELS.createdAt}</dt>
-      <dd className="text-ink">{formatOrderDate(user.createdAt)}</dd>
+      <dt className={adminUserDetailStyles.dt}>{LABELS.createdAt}</dt>
+      <dd className={adminUserDetailStyles.dd}>
+        {formatOrderDate(user.createdAt)}
+      </dd>
     </>
   ) : null;
 
   const linkedVendorRow = user.vendorId ? (
     <>
-      <dt className="text-ink-muted">{adminEntityDetailLabels.linkedVendor}</dt>
+      <dt className={adminUserDetailStyles.dt}>
+        {adminEntityDetailLabels.linkedVendor}
+      </dt>
       <dd>
         <Button size="sm" variant="outline" asChild>
           <Link href={`/admin/vendors/${user.vendorId}`}>
@@ -83,26 +88,21 @@ function AdminUserDetailContent() {
   ) : null;
 
   return (
-    <div className="w-full min-w-0 space-y-5">
-      <Link
-        href="/admin/users"
-        className="inline-flex items-center gap-1.5 text-body-sm font-medium text-ink-muted hover:text-ink"
-      >
+    <div className={adminUserDetailStyles.pageRoot}>
+      <Link href="/admin/users" className={adminUserDetailStyles.backLink}>
         <ArrowLeft size={14} aria-hidden />
         {adminEntityDetailLabels.backToUsers}
       </Link>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
-        <div className="min-w-0 space-y-1">
-          <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-            {user.name}
-          </h1>
-          <p className="text-body-sm text-ink-muted">{user.email}</p>
+      <div className={adminUserDetailStyles.headerRow}>
+        <div className={adminUserDetailStyles.headerInfo}>
+          <h1 className={adminUserDetailStyles.title}>{user.name}</h1>
+          <p className={adminUserDetailStyles.emailText}>{user.email}</p>
         </div>
         {statusBadgeElement}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className={adminUserDetailStyles.actionsRow}>
         <ImpersonateUserButton userId={user.id} />
         <ChangeUserRoleDialog
           userId={user.id}
@@ -112,14 +112,14 @@ function AdminUserDetailContent() {
         />
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <section className="space-y-3 border border-line bg-surface-raised p-4">
-          <h2 className="text-body-sm font-semibold uppercase tracking-wide text-ink-muted">
+      <div className={adminUserDetailStyles.gridTwoCols}>
+        <section className={adminUserDetailStyles.cardSection}>
+          <h2 className={adminUserDetailStyles.cardSectionTitle}>
             {adminEntityDetailLabels.profileDetails}
           </h2>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-body-sm">
-            <dt className="text-ink-muted">{LABELS.role}</dt>
-            <dd className="flex items-center gap-2 text-ink">
+          <dl className={adminUserDetailStyles.dlGrid}>
+            <dt className={adminUserDetailStyles.dt}>{LABELS.role}</dt>
+            <dd className={adminUserDetailStyles.ddFlex}>
               <span>{user.role}</span>
               <ChangeUserRoleDialog
                 userId={user.id}
@@ -129,15 +129,15 @@ function AdminUserDetailContent() {
                 trigger={
                   <button
                     type="button"
-                    className="text-xs text-brand underline underline-offset-2 hover:text-brand-hover"
+                    className={adminUserDetailStyles.manageRoleLink}
                   >
                     Edit
                   </button>
                 }
               />
             </dd>
-            <dt className="text-ink-muted">{LABELS.phone}</dt>
-            <dd className="text-ink">{userPhoneDisplay}</dd>
+            <dt className={adminUserDetailStyles.dt}>{LABELS.phone}</dt>
+            <dd className={adminUserDetailStyles.dd}>{userPhoneDisplay}</dd>
             {createdAtRow}
             {linkedVendorRow}
           </dl>

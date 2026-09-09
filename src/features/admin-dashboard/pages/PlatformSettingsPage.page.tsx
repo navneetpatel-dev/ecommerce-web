@@ -3,17 +3,22 @@
 import { PlatformSettingsForm } from "../components/PlatformSettingsForm.component";
 import { usePlatformSettingsForm } from "../hooks/usePlatformSettingsForm.hook";
 import { LABELS } from "@/shared/constants/labels";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function PlatformSettingsPage() {
   const settings = usePlatformSettingsForm();
 
   if (settings.loading) {
-    return <p className="text-ink-muted">{LABELS.loadingPlatformSettings}</p>;
+    return (
+      <p className={adminPagesStyles.emptyText}>
+        {LABELS.loadingPlatformSettings}
+      </p>
+    );
   }
 
   if (settings.loadError || !settings.form) {
     return (
-      <p className="text-danger">
+      <p className={adminPagesStyles.errorText}>
         {settings.loadError ?? LABELS.settingsUnavailable}
       </p>
     );

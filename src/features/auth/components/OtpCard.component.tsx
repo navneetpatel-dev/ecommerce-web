@@ -6,6 +6,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { ResendVerificationByEmail } from "./ResendVerificationByEmail.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
+import { authFormsStyles } from "./authForms.styles";
 
 interface OtpCardProps {
   digits: string[];
@@ -51,16 +52,13 @@ export function OtpCard({
         title={LABELS.verifyOtpTitle}
         description={LABELS.verifyOtpHint}
         footer={
-          <Link
-            href={PATHS.login}
-            className="block text-center text-body font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
-          >
+          <Link href={PATHS.login} className={authFormsStyles.footerLink}>
             {LABELS.backToLogin}
           </Link>
         }
       >
-        <div className="space-y-5">
-          <p className="text-body-sm text-danger">{error}</p>
+        <div className={authFormsStyles.formSpace5}>
+          <p className={authFormsStyles.dangerBodySm}>{error}</p>
           <ResendVerificationByEmail email={email} />
         </div>
       </AuthFormCard>
@@ -72,7 +70,7 @@ export function OtpCard({
       title={LABELS.verifyOtpTitle}
       description={LABELS.verifyOtpHint}
     >
-      <div className="space-y-5">
+      <div className={authFormsStyles.formSpace5}>
         <OtpInput
           digits={digits}
           onSetInputRef={onSetInputRef}
@@ -80,8 +78,8 @@ export function OtpCard({
           onKeyDown={onKeyDown}
           onPaste={onPaste}
         />
-        <div className="flex items-center justify-between gap-3">
-          <span className="text-body-sm text-ink-muted">{timerLabel}</span>
+        <div className={authFormsStyles.otpTimerRow}>
+          <span className={authFormsStyles.mutedBodySm}>{timerLabel}</span>
           <DisabledActionHint
             disabled={!canResend}
             message={LABELS.resendCodeWait}
@@ -90,7 +88,7 @@ export function OtpCard({
               type="button"
               variant="link"
               size="sm"
-              className="h-auto min-h-0 max-h-none px-0 py-0 text-body-sm font-medium text-brand hover:text-brand-hover"
+              className={authFormsStyles.resendLinkButton}
               disabled={!canResend}
               onClick={onResend}
             >
@@ -98,15 +96,15 @@ export function OtpCard({
             </Button>
           </DisabledActionHint>
         </div>
-        {info ? <p className="text-body-sm text-ink-muted">{info}</p> : null}
-        {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+        {info ? <p className={authFormsStyles.mutedBodySm}>{info}</p> : null}
+        {error ? <p className={authFormsStyles.dangerBodySm}>{error}</p> : null}
         <DisabledActionHint
           disabled={!completed}
           message={LABELS.enterCompleteOtp}
-          className="w-full"
+          className={authFormsStyles.fullWidth}
         >
           <Button
-            className="w-full"
+            className={authFormsStyles.fullWidth}
             size="lg"
             disabled={!completed}
             loading={isVerifying}

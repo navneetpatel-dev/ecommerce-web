@@ -21,6 +21,7 @@ import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { CouponAnalyticsDialog } from "./VendorCouponsView/CouponAnalyticsDialog.component";
 import { CouponsHeaderSection } from "./VendorCouponsView/CouponsHeaderSection.component";
+import { vendorCouponsViewStyles } from "./VendorCouponsView/vendorCouponsView.styles";
 
 interface VendorCouponsViewProps {
   coupons: Coupon[];
@@ -69,7 +70,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     {
       id: "code",
       header: LABELS.couponCode,
-      className: "font-mono",
+      className: vendorCouponsViewStyles.colMono,
       cell: (row) => row.code,
     },
     {
@@ -80,7 +81,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     {
       id: "usage",
       header: LABELS.couponUsage,
-      className: "font-mono text-body-sm",
+      className: vendorCouponsViewStyles.colMonoSm,
       cell: usageCell,
     },
     {
@@ -147,7 +148,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
   );
 
   return (
-    <div className="space-y-6">
+    <div className={vendorCouponsViewStyles.stack}>
       <CouponsHeaderSection
         absorbedDiscountTotal={absorbedDiscountTotal}
         open={open}

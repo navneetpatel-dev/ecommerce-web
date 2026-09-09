@@ -98,7 +98,9 @@ export function CreateDeliveryAgentFormFields({
           value={form.vehicleType}
           onValueChange={handleVehicleTypeChange}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger
+            className={createDeliveryAgentFormStyles.selectTrigger}
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

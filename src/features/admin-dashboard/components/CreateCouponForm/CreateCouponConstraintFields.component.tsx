@@ -13,6 +13,7 @@ import {
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
+import { createCouponFormStyles } from "./createCouponForm.styles";
 
 interface CreateCouponConstraintFieldsProps {
   form: UseFormReturn<CouponFormInput>;
@@ -29,7 +30,7 @@ export function CreateCouponConstraintFields({
 
   return (
     <FormSection title={LABELS.couponSectionConstraints} columns={1}>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className={createCouponFormStyles.gridSm2}>
         <FormFieldFrame
           label={LABELS.minOrderValue}
           error={showError("minOrderValue")}
@@ -70,7 +71,7 @@ export function CreateCouponConstraintFields({
           />
         </FormFieldFrame>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className={createCouponFormStyles.gridSm2}>
         <FormFieldFrame
           label={LABELS.usageLimitTotal}
           error={showError("usageLimitTotal")}
@@ -110,7 +111,7 @@ export function CreateCouponConstraintFields({
           />
         </FormFieldFrame>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className={createCouponFormStyles.gridSm2}>
         <FormFieldFrame label={LABELS.priority} error={showError("priority")}>
           <Controller
             name="priority"

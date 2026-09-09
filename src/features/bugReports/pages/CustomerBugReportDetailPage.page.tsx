@@ -9,6 +9,7 @@ import { SupportAuthGate } from "@/features/supportTickets";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useBugReport } from "../api/bugReports.queries";
 import { BugReportDetail } from "../components/BugReportDetail.component";
+import { bugReportsPagesStyles } from "./bugReportsPages.styles";
 
 export function CustomerBugReportDetailPage() {
   const params = useParams<{ id: string }>();
@@ -29,13 +30,17 @@ function CustomerBugReportDetailContent({ id }: { id: string }) {
   });
 
   if (isLoading) {
-    return <DetailQuerySkeleton className="space-y-3 py-4" />;
+    return (
+      <DetailQuerySkeleton
+        className={bugReportsPagesStyles.detailSkeletonMargin}
+      />
+    );
   }
 
   if (isEmpty) {
     return (
-      <div className="storefront-container py-8">
-        <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+      <div className={bugReportsPagesStyles.customerDetailErrorContainer}>
+        <div className={bugReportsPagesStyles.errorBox}>
           <QueryErrorAlert
             error={error}
             fallback={LABELS.bugCouldNotLoadDetail}
@@ -46,12 +51,9 @@ function CustomerBugReportDetailContent({ id }: { id: string }) {
   }
 
   return (
-    <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_10%,transparent),transparent_60%)]"
-      />
-      <div className="storefront-container relative py-4 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:py-5 lg:pb-8">
+    <div className={bugReportsPagesStyles.customerDetailRoot}>
+      <div aria-hidden className={bugReportsPagesStyles.customerDetailGlow} />
+      <div className={bugReportsPagesStyles.customerDetailContainer}>
         <BugReportDetail
           report={data!}
           mode="reporter"

@@ -5,6 +5,7 @@ export const filterSidebarStyles = {
     cn(className ?? "hidden w-64 shrink-0 xl:block"),
   container: "sticky top-[88px] space-y-5",
   header: "flex items-end justify-between gap-3 border-b border-line pb-3",
+  headerEyebrow: "mb-1",
   headerTitle: "text-body-lg font-semibold text-ink",
   clearAllButton:
     "h-auto min-h-0 max-h-none gap-1 px-2 py-1 text-[0.75rem] font-medium text-brand hover:bg-transparent hover:text-brand-hover",

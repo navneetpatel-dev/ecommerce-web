@@ -4,6 +4,7 @@ import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import type { SubOrderRow } from "../../types/vendorOrders.types";
 import { formatInr, shortOrderId } from "./vendorOrderFormat";
+import { VENDOR_ORDERS_TABLE_STYLES } from "./vendorOrdersTable.styles";
 
 interface VendorSubOrderCardsProps {
   rows: SubOrderRow[];
@@ -19,34 +20,31 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
   const { rows, renderActions } = props;
 
   const renderCard = (row: SubOrderRow) => (
-    <li
-      key={row.subOrder.id}
-      className="rounded-md border border-line bg-surface p-4 shadow-card-hairline"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="font-mono text-body-sm text-ink">
+    <li key={row.subOrder.id} className={VENDOR_ORDERS_TABLE_STYLES.cardItem}>
+      <div className={VENDOR_ORDERS_TABLE_STYLES.cardHeader}>
+        <div className={VENDOR_ORDERS_TABLE_STYLES.cardHeaderLeft}>
+          <p className={VENDOR_ORDERS_TABLE_STYLES.cardOrderNum}>
             #{shortOrderId(row.orderId)}
           </p>
-          <div className="mt-2">
+          <div className={VENDOR_ORDERS_TABLE_STYLES.cardBadgeWrap}>
             <VendorStrip vendor={row.subOrder.vendor} size="sm" />
           </div>
         </div>
         <StatusBadge status={row.subOrder.status} />
       </div>
-      <p className="mt-3 font-mono text-body text-ink">
+      <p className={VENDOR_ORDERS_TABLE_STYLES.cardSubtotal}>
         {formatInr(row.subOrder.subtotal)}
       </p>
       {row.subOrder.shipment && (
-        <div className="mt-2 flex flex-wrap items-center gap-2">
+        <div className={VENDOR_ORDERS_TABLE_STYLES.cardShipmentWrap}>
           <StatusBadge status={row.subOrder.shipment.status} />
           {row.subOrder.shipment.deliveryAgent && (
-            <p className="text-body-sm text-ink-muted">
+            <p className={VENDOR_ORDERS_TABLE_STYLES.mutedText}>
               {row.subOrder.shipment.deliveryAgent.fullName}
             </p>
           )}
           {row.subOrder.shipment.codAmount != null && (
-            <p className="text-body-sm text-ink-muted">
+            <p className={VENDOR_ORDERS_TABLE_STYLES.mutedText}>
               COD: {formatInr(row.subOrder.shipment.codAmount)}{" "}
               {row.subOrder.shipment.codCollected ? "(collected)" : "(due)"}
             </p>
@@ -56,7 +54,7 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
               href={row.subOrder.shipment.proofOfDeliveryUrl}
               target="_blank"
               rel="noreferrer"
-              className="text-body-sm font-medium text-brand hover:underline"
+              className={VENDOR_ORDERS_TABLE_STYLES.proofLink}
             >
               View proof photo
             </a>
@@ -64,12 +62,15 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
         </div>
       )}
       {row.subOrder.returnRequests?.length ? (
-        <div className="mt-2 space-y-1">
+        <div className={VENDOR_ORDERS_TABLE_STYLES.cardReturnsWrap}>
           {row.subOrder.returnRequests.map((returnRequest) => (
-            <div key={returnRequest.id} className="flex items-center gap-2">
+            <div
+              key={returnRequest.id}
+              className={VENDOR_ORDERS_TABLE_STYLES.returnRow}
+            >
               <StatusBadge status={returnRequest.status} />
               {returnRequest.deliveryAgent && (
-                <p className="text-body-sm text-ink-muted">
+                <p className={VENDOR_ORDERS_TABLE_STYLES.mutedText}>
                   {returnRequest.deliveryAgent.fullName}
                 </p>
               )}
@@ -77,11 +78,15 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
           ))}
         </div>
       ) : null}
-      <div className="mt-4 border-t border-line/80 pt-3">
+      <div className={VENDOR_ORDERS_TABLE_STYLES.cardActionsWrap}>
         {renderActions(row.subOrder.id, Boolean(row.subOrder.taxInvoiceNumber))}
       </div>
     </li>
   );
 
-  return <ul className="space-y-3 lg:hidden">{rows.map(renderCard)}</ul>;
+  return (
+    <ul className={VENDOR_ORDERS_TABLE_STYLES.cardList}>
+      {rows.map(renderCard)}
+    </ul>
+  );
 }

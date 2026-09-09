@@ -10,6 +10,7 @@ import { PATHS } from "@/shared/constants/paths";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useBugReport } from "../api/bugReports.queries";
 import { BugReportDetail } from "../components/BugReportDetail.component";
+import { bugReportsPagesStyles } from "./bugReportsPages.styles";
 
 export function VendorBugReportDetailPage() {
   return (
@@ -27,10 +28,15 @@ function VendorBugReportDetailContent() {
     enabled: Boolean(reportId),
   });
 
-  if (isLoading) return <DetailQuerySkeleton className="space-y-3 py-4" />;
+  if (isLoading)
+    return (
+      <DetailQuerySkeleton
+        className={bugReportsPagesStyles.detailSkeletonMargin}
+      />
+    );
   if (isEmpty) {
     return (
-      <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+      <div className={bugReportsPagesStyles.errorBox}>
         <QueryErrorAlert
           error={error}
           fallback={LABELS.bugCouldNotLoadDetail}

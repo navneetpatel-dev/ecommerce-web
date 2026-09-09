@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/shared/components/ui/tooltip";
 import { PaginationContainer } from "@/shared/containers/PaginationContainer.container";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { dataTableStyles } from "./dataTable.styles";
 import { DataTableDesktopTable } from "./DataTableDesktopTable.component";
 import { DataTableHeader } from "./DataTableHeader.component";
 import { DataTableMobileCards } from "./DataTableMobileCards.component";
@@ -65,7 +66,7 @@ export function DataTable<T>({
 
   return (
     <TooltipProvider delayDuration={250}>
-      <section className={cn("min-w-0 space-y-5", className)}>
+      <section className={cn(dataTableStyles.section, className)}>
         {(title || onRefresh || toolbar || showSummary) && (
           <DataTableHeader
             title={title}
@@ -77,14 +78,12 @@ export function DataTable<T>({
           />
         )}
 
-        {error ? <p className="text-body text-danger">{error}</p> : null}
+        {error ? <p className={dataTableStyles.error}>{error}</p> : null}
 
         {loading ? (
-          <SkeletonRows count={6} height="h-12 w-full" />
+          <SkeletonRows count={6} height={dataTableStyles.skeletonHeight} />
         ) : rows.length === 0 ? (
-          <div className="rounded-md border border-line bg-surface px-4 py-14 text-center text-ink-muted">
-            {emptyMessage}
-          </div>
+          <div className={dataTableStyles.emptyContainer}>{emptyMessage}</div>
         ) : (
           <>
             {/* Below lg: stacked cards — row actions collapse to kebab */}
@@ -115,7 +114,7 @@ export function DataTable<T>({
         )}
 
         {pagination != null ? (
-          <div className="flex justify-center border-t border-line/70 pt-2">
+          <div className={dataTableStyles.paginationWrapper}>
             <PaginationContainer
               currentPage={pagination.page}
               totalPages={Math.max(1, pagination.totalPages)}

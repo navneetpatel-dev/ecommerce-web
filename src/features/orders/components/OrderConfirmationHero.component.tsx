@@ -7,6 +7,7 @@ import { SuccessCheckmarkContainer } from "@/shared/containers/SuccessCheckmarkC
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { shortOrderId } from "../utils/format";
+import { orderConfirmationStyles as styles } from "./orderConfirmation.styles";
 
 interface OrderConfirmationHeroProps {
   orderId: string | undefined;
@@ -21,32 +22,30 @@ interface OrderConfirmationHeroProps {
  */
 export function OrderConfirmationHero({ orderId }: OrderConfirmationHeroProps) {
   return (
-    <div className="flex flex-col gap-6 border-b border-line pb-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-      <div className="min-w-0 text-center sm:text-left">
-        <div className="flex items-center justify-center gap-2 sm:justify-start">
-          <SuccessCheckmarkContainer className="m-0 h-7 w-7 shrink-0" />
+    <div className={styles.heroRoot}>
+      <div className={styles.heroInfo}>
+        <div className={styles.heroBadgeRow}>
+          <SuccessCheckmarkContainer className={styles.heroCheckmark} />
           <TextEyebrow brand>Thank you</TextEyebrow>
         </div>
         <div>
           <h1
-            className="mt-1.5 font-display leading-[1.1] tracking-tight text-ink"
+            className={styles.heroHeading}
             style={{ fontSize: "var(--text-display-sm)" }}
           >
             Order confirmed
           </h1>
           {orderId ? (
-            <p className="mt-2 font-mono text-body-sm text-ink-muted">
-              #{shortOrderId(orderId)}
-            </p>
+            <p className={styles.heroOrderId}>#{shortOrderId(orderId)}</p>
           ) : null}
-          <p className="mt-3 max-w-lg text-body leading-relaxed text-ink-muted">
+          <p className={styles.heroSubtitle}>
             You&apos;ll get a shipping update by email for each seller&apos;s
             package separately.
           </p>
         </div>
       </div>
 
-      <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:justify-center lg:justify-end">
+      <div className={styles.heroActions}>
         <Button asChild>
           <Link href={orderId ? PATHS.order(orderId) : PATHS.orders}>
             View order

@@ -20,6 +20,7 @@ import { walletKeys } from "../api/wallet.queries";
 import type { WalletBalanceResponse } from "../api/wallet.api";
 import { cn } from "@/shared/utils/cn";
 import { WalletRechargePanelSkeleton } from "./WalletSectionSkeletons.component";
+import { walletRechargePanelStyles as styles } from "./walletRechargePanel.styles";
 
 interface WalletRechargePanelProps {
   balance: WalletBalanceResponse | undefined;
@@ -83,18 +84,11 @@ export function WalletRechargePanel({
   };
 
   return (
-    <div
-      className={cn(
-        "border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-6",
-        className,
-      )}
-    >
-      <h2 className="text-body font-semibold text-ink">{LABELS.walletRecharge}</h2>
-      <p className="mt-1 text-[0.875rem] text-ink-muted">
-        {LABELS.walletPointsEqualsInr}
-      </p>
+    <div className={cn(styles.container, className)}>
+      <h2 className={styles.heading}>{LABELS.walletRecharge}</h2>
+      <p className={styles.subheading}>{LABELS.walletPointsEqualsInr}</p>
       {limits?.maxBalance ? (
-        <p className="mt-2 text-[0.75rem] leading-relaxed text-ink-faint">
+        <p className={styles.maxBalanceNote}>
           {formatLabel(LABELS.walletMaxBalanceCapNote, {
             cap: formatPoints(limits.maxBalance),
           })}
@@ -102,7 +96,7 @@ export function WalletRechargePanel({
       ) : null}
 
       {presets.length > 0 ? (
-        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className={styles.presetsGrid}>
           {presets.map((preset, index) => {
             const preview = presetPreviewQueries[index]?.data;
             return (
@@ -112,13 +106,13 @@ export function WalletRechargePanel({
                 variant="outline"
                 size="sm"
                 disabled={isBusy}
-                className="h-auto min-h-9 justify-start px-3 py-2"
+                className={styles.presetButton}
                 onClick={() => void startRecharge(preset)}
               >
-                <span className="flex flex-col items-start leading-tight">
+                <span className={styles.presetContent}>
                   <span>{formatInr(preset)}</span>
                   {pointsPerRupee > 1 && preview?.validationCode === "ok" ? (
-                    <span className="text-[0.6875rem] text-ink-muted">
+                    <span className={styles.presetBonusHint}>
                       {formatLabel(LABELS.walletRechargeBonusHint, {
                         amount: formatInr(preset),
                         points: formatPoints(preview.pointsToCredit),
@@ -132,7 +126,7 @@ export function WalletRechargePanel({
         </div>
       ) : null}
 
-      <div className="mt-4 space-y-3">
+      <div className={styles.customAmountWrapper}>
         <FormFieldFrame
           label={LABELS.walletRechargeCustomAmount}
           htmlFor="wallet-recharge-amount"
@@ -146,7 +140,7 @@ export function WalletRechargePanel({
               : undefined
           }
         >
-          <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+          <div className={styles.customAmountRow}>
             <NumberInput
               id="wallet-recharge-amount"
               value={customAmount}
@@ -175,21 +169,19 @@ export function WalletRechargePanel({
       </div>
 
       {canSubmitCustomAmount && customPreviewQuery.data ? (
-        <p className="mt-3 text-[0.875rem] text-ink-muted">
+        <p className={styles.previewText}>
           {formatLabel(LABELS.walletRechargePreview, {
             points: formatPoints(customPreviewQuery.data.pointsToCredit),
           })}
         </p>
       ) : null}
 
-      {error ? <p className="mt-3 text-body-sm text-danger">{error}</p> : null}
+      {error ? <p className={styles.errorText}>{error}</p> : null}
       {successMessage ? (
-        <p className="mt-3 text-body-sm text-success">{successMessage}</p>
+        <p className={styles.successText}>{successMessage}</p>
       ) : null}
 
-      <p className="mt-4 text-[0.75rem] leading-relaxed text-ink-faint">
-        {LABELS.walletTermsNotice}
-      </p>
+      <p className={styles.termsNotice}>{LABELS.walletTermsNotice}</p>
     </div>
   );
 }

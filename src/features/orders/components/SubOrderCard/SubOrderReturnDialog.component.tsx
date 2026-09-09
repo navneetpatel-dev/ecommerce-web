@@ -26,6 +26,7 @@ import {
   REASON_CODES,
   type ReturnReasonCode,
 } from "../../hooks/useSubOrderReturn.hook";
+import { SUB_ORDER_CARD_STYLES } from "./subOrderCard.styles";
 
 interface SubOrderReturnDialogProps {
   returnTarget: OrderItem | null;
@@ -78,7 +79,7 @@ export function SubOrderReturnDialog({
               : LABELS.requestReturnDescription}
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4">
+        <div className={SUB_ORDER_CARD_STYLES.returnDialogBody}>
           <FormSection
             title={LABELS.returnRequestFormSection}
             hint={LABELS.returnRequestFormSectionHint}
@@ -146,7 +147,7 @@ export function SubOrderReturnDialog({
           </FormSection>
           <FormError error={error} fallback={LABELS.couldNotSubmitReturn} />
           {isSuccess ? (
-            <p className="text-[0.875rem] text-success">
+            <p className={SUB_ORDER_CARD_STYLES.returnSuccessText}>
               {LABELS.returnRequestedSuccess}
             </p>
           ) : null}

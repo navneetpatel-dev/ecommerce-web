@@ -33,4 +33,15 @@ export const orderConfirmationSkeletonStyles = {
   itemContent: "flex-1 space-y-2 pt-0.5",
   asideCard:
     "space-y-3 border border-line bg-surface-raised p-5 shadow-elevation-1 sm:p-6",
+  heroHeading: "h-9 w-64 max-w-full",
+  heroMeta: "h-3 w-24",
+  heroDescription: "h-4 w-full max-w-lg",
+  itemHeaderTitle: "h-4 w-40",
+  itemHeaderMeta: "h-3 w-14",
+  itemName: "h-4 w-2/3",
+  itemQty: "h-3 w-1/4",
+  itemPrice: "h-5 w-20",
+  asideLine1: "h-3 w-full",
+  asideLine2: "h-3 w-4/5",
+  asideTotal: "mt-4 h-7 w-1/2",
 } as const;

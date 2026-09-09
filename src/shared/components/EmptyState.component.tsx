@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { Button, type ButtonProps } from "./ui/button";
 import { cn } from "@/shared/utils/cn";
+import { emptyStateStyles } from "./displayComponents.styles";
 
 interface EmptyStateAction {
   label: string;
@@ -38,7 +39,7 @@ export function EmptyState({
   onAction,
   secondaryAction,
   className,
-  maxWidth = "max-w-md",
+  maxWidth = emptyStateStyles.defaultMaxWidth,
 }: EmptyStateProps) {
   const hasPrimary = Boolean(actionLabel && (actionTo || onAction));
   const hasSecondary = Boolean(
@@ -46,28 +47,22 @@ export function EmptyState({
   );
 
   return (
-    <div
-      className={cn(
-        "mx-auto flex flex-col items-center px-4 py-12 text-center md:py-16",
-        maxWidth,
-        className,
-      )}
-    >
+    <div className={cn(emptyStateStyles.container, maxWidth, className)}>
       {Icon ? (
-        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-line bg-surface shadow-elevation-1">
+        <div className={emptyStateStyles.iconWrap}>
           <Icon
-            className={cn("h-5 w-5 text-ink-muted", iconClassName)}
+            className={cn(emptyStateStyles.icon, iconClassName)}
             strokeWidth={1.25}
             aria-hidden
           />
         </div>
       ) : null}
 
-      {eyebrow ? <p className="text-eyebrow mb-2">{eyebrow}</p> : null}
+      {eyebrow ? <p className={emptyStateStyles.eyebrow}>{eyebrow}</p> : null}
 
       {heading ? (
         <h3
-          className="font-display font-semibold tracking-tight text-ink"
+          className={emptyStateStyles.heading}
           style={{ fontSize: "var(--text-h3)", lineHeight: 1.25 }}
         >
           {heading}
@@ -76,8 +71,8 @@ export function EmptyState({
 
       <p
         className={cn(
-          "max-w-[36ch] text-ink-muted",
-          heading ? "mt-2" : undefined,
+          emptyStateStyles.message,
+          heading ? emptyStateStyles.messageWithHeading : undefined,
         )}
         style={{ fontSize: "var(--text-body)", lineHeight: 1.55 }}
       >
@@ -85,11 +80,11 @@ export function EmptyState({
       </p>
 
       {hasPrimary || hasSecondary ? (
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5">
+        <div className={emptyStateStyles.actions}>
           {hasPrimary ? (
             <Button
               variant="default"
-              className="min-w-[9.5rem]"
+              className={emptyStateStyles.button}
               asChild={Boolean(actionTo)}
               onClick={onAction}
             >
@@ -103,7 +98,7 @@ export function EmptyState({
           {hasSecondary ? (
             <Button
               variant={secondaryAction!.variant ?? "secondary"}
-              className="min-w-[9.5rem]"
+              className={emptyStateStyles.button}
               asChild={Boolean(secondaryAction!.href)}
               onClick={secondaryAction!.onClick}
             >

@@ -48,7 +48,7 @@ export function ImageCropDialog(props: ImageCropDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleDialogOpenChange}>
-      <DialogContent className="max-h-[min(92vh,44rem)] max-w-2xl gap-4 overflow-y-auto sm:max-w-2xl">
+      <DialogContent className={styles.dialogContent}>
         <DialogHeader>
           <DialogTitle>{LABELS.imageCropTitle}</DialogTitle>
           <DialogDescription>{LABELS.imageCropHint}</DialogDescription>
@@ -86,7 +86,7 @@ export function ImageCropDialog(props: ImageCropDialogProps) {
           onReset={controls.resetControls}
         />
 
-        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+        <div className={styles.dialogFooter}>
           <Button
             type="button"
             variant="secondary"

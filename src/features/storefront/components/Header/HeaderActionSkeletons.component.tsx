@@ -2,9 +2,7 @@ import { cn } from "@/shared/utils/cn";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import { ACCOUNT_TRIGGER_BOX } from "./headerShared";
-
-/** Matches the icon button box so swapping in the real icon shifts nothing. */
-const ICON_BUTTON_BOX = "h-11 w-11 shrink-0 rounded-md max-sm:h-9 max-sm:w-9";
+import { headerStyles as styles } from "./header.styles";
 
 /**
  * Placeholders for the cart / wishlist / wallet buttons.
@@ -17,11 +15,11 @@ export function StorefrontActionButtonsSkeleton() {
   return (
     <>
       <Skeleton
-        className={cn("hidden lg:block", ICON_BUTTON_BOX)}
+        className={cn("hidden lg:block", styles.iconButtonBox)}
         aria-hidden
       />
-      <Skeleton className={ICON_BUTTON_BOX} aria-hidden />
-      <Skeleton className={ICON_BUTTON_BOX} aria-hidden />
+      <Skeleton className={styles.iconButtonBox} aria-hidden />
+      <Skeleton className={styles.iconButtonBox} aria-hidden />
     </>
   );
 }
@@ -29,8 +27,8 @@ export function StorefrontActionButtonsSkeleton() {
 /** Placeholder for the "Orders" link, which only appears once the role is known. */
 export function HeaderOrdersLinkSkeleton() {
   return (
-    <div className="hidden xl:flex items-center gap-1">
-      <Skeleton className="h-8 w-[4.25rem] rounded-md" aria-hidden />
+    <div className={styles.ordersSkeleton}>
+      <Skeleton className={styles.ordersSkeletonBox} aria-hidden />
     </div>
   );
 }
@@ -44,9 +42,9 @@ export function HeaderOrdersLinkSkeleton() {
  */
 export function AccountMenuSkeleton() {
   return (
-    <div className={cn(ACCOUNT_TRIGGER_BOX, "border-line bg-surface")}>
-      <Skeleton className="size-7 rounded-full sm:size-8" aria-hidden />
-      <span className="hidden size-3 shrink-0 sm:block" aria-hidden />
+    <div className={cn(ACCOUNT_TRIGGER_BOX, styles.accountSkeletonPill)}>
+      <Skeleton className={styles.avatarSkeleton} aria-hidden />
+      <span className={styles.chevronSlot} aria-hidden />
     </div>
   );
 }
@@ -68,7 +66,7 @@ function TextSkeleton({
   radius?: string;
 }) {
   return (
-    <span className="relative inline-flex">
+    <span className={styles.textSkeletonWrapper}>
       <span className={cn("invisible", className)}>{children}</span>
       <Skeleton className={cn("absolute inset-0", radius)} aria-hidden />
     </span>
@@ -90,25 +88,22 @@ export function DesktopPrimaryNavSkeleton({
     <>
       <nav
         aria-hidden
-        className="hidden xl:flex items-center gap-1"
+        className={styles.primaryNavSkeleton}
         data-testid="primary-nav-skeleton"
       >
-        <TextSkeleton className="inline-flex h-11 items-center gap-1 px-4 text-[0.875rem] sm:px-5 sm:text-body">
+        <TextSkeleton className={styles.navCategoriesText}>
           {LABELS.categories}
-          <span className="size-4" />
+          <span className={styles.navCategoriesIconSlot} />
         </TextSkeleton>
         {primaryLinks.map((link) => (
-          <TextSkeleton
-            key={link.href}
-            className="inline-block px-3 py-2 text-body-sm font-medium"
-          >
+          <TextSkeleton key={link.href} className={styles.navLinkText}>
             {link.label}
           </TextSkeleton>
         ))}
       </nav>
 
-      <div className="mx-auto hidden max-w-xl flex-1 xl:flex">
-        <Skeleton className="h-11 w-full rounded-full" aria-hidden />
+      <div className={styles.searchSkeletonWrapper}>
+        <Skeleton className={styles.searchSkeletonInput} aria-hidden />
       </div>
     </>
   );
@@ -119,19 +114,14 @@ export function DesktopPrimaryNavSkeleton({
  * a workspace role gets a different button, or none.
  */
 export function HeaderMenuButtonSkeleton() {
-  return (
-    <Skeleton
-      className="-ml-2 h-11 w-11 shrink-0 rounded-md xl:hidden max-sm:h-9 max-sm:w-9"
-      aria-hidden
-    />
-  );
+  return <Skeleton className={styles.menuButtonSkeleton} aria-hidden />;
 }
 
 /** Placeholder for the lg-to-xl search trigger, which the tab bar replaces below lg. */
 export function HeaderSearchButtonSkeleton() {
   return (
     <Skeleton
-      className={cn("hidden lg:block xl:hidden", ICON_BUTTON_BOX)}
+      className={cn(styles.searchButtonSkeleton, styles.iconButtonBox)}
       aria-hidden
     />
   );

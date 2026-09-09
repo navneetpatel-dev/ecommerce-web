@@ -1,4 +1,5 @@
 import { cn } from "@/shared/utils/cn";
+import { analyticsStyles } from "./analyticsComponents.styles";
 
 interface MetricCardProps {
   label: string;
@@ -14,17 +15,15 @@ export function MetricCard({
   return (
     <div
       className={cn(
-        "rounded-lg border border-line bg-paper/50 p-4 transition-all duration-200 hover:border-line-strong hover:bg-paper/70",
-        highlight && "border-brand/30 bg-brand/[0.04]",
+        analyticsStyles.metricCardBase,
+        highlight && analyticsStyles.metricCardHighlight,
       )}
     >
-      <p className="text-body-xs font-medium uppercase tracking-wider text-ink-muted">
-        {label}
-      </p>
+      <p className={analyticsStyles.metricCardTitle}>{label}</p>
       <p
         className={cn(
-          "mt-1.5 text-xl font-bold tabular-nums tracking-tight text-ink",
-          highlight && "text-brand",
+          analyticsStyles.metricCardValue,
+          highlight && analyticsStyles.metricCardValueHighlight,
         )}
       >
         {value}

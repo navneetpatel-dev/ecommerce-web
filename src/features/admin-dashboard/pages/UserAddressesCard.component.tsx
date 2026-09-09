@@ -1,5 +1,6 @@
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";
 import type { Address } from "@/shared/api/types";
+import { userAddressesCardStyles } from "./adminUserDetail.styles";
 
 interface UserAddressesCardProps {
   addresses: Address[];
@@ -8,10 +9,10 @@ interface UserAddressesCardProps {
 function renderAddressItem(address: Address) {
   const line2Element = address.line2 ? <p>{address.line2}</p> : null;
   return (
-    <li key={address.id} className="text-body-sm text-ink">
+    <li key={address.id} className={userAddressesCardStyles.addressItem}>
       <p>{address.line1}</p>
       {line2Element}
-      <p className="text-ink-muted">
+      <p className={userAddressesCardStyles.addressMeta}>
         {address.city}, {address.state} {address.pincode}
       </p>
     </li>
@@ -23,16 +24,16 @@ export function UserAddressesCard({ addresses }: UserAddressesCardProps) {
   const addressItems = addresses.map(renderAddressItem);
   const hasAddresses = addresses.length > 0;
   const addressesSection = hasAddresses ? (
-    <ul className="space-y-3">{addressItems}</ul>
+    <ul className={userAddressesCardStyles.list}>{addressItems}</ul>
   ) : (
-    <p className="text-body-sm text-ink-muted">
+    <p className={userAddressesCardStyles.empty}>
       {adminEntityDetailLabels.noAddressesOnFile}
     </p>
   );
 
   return (
-    <section className="space-y-3 border border-line bg-surface-raised p-4">
-      <h2 className="text-body-sm font-semibold uppercase tracking-wide text-ink-muted">
+    <section className={userAddressesCardStyles.section}>
+      <h2 className={userAddressesCardStyles.title}>
         {adminEntityDetailLabels.addressesOnFile}
       </h2>
       {addressesSection}

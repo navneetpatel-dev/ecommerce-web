@@ -6,6 +6,7 @@ import { GripVertical, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { CategoryAttribute } from "@/shared/api/types";
+import { adminCategoryAttributesActionStyles } from "./adminCategoryAttributesAction.styles";
 
 interface SortableAttributeRowProps {
   row: CategoryAttribute;
@@ -40,26 +41,31 @@ export function SortableAttributeRow({
   return (
     <li
       ref={setNodeRef}
-      className="flex items-center justify-between gap-2 text-[0.875rem]"
+      className={adminCategoryAttributesActionStyles.rowContainer}
       style={rowStyle}
     >
-      <div className="flex min-w-0 flex-1 items-center gap-2">
+      <div className={adminCategoryAttributesActionStyles.rowLeft}>
         <Button
           type="button"
           variant="ghost"
           size="icon-sm"
-          className="h-auto min-h-0 max-h-none w-auto cursor-grab touch-none px-0 text-ink-faint hover:bg-transparent hover:text-ink active:cursor-grabbing"
+          className={adminCategoryAttributesActionStyles.dragHandle}
           aria-label={LABELS.dragToReorder}
           {...attributes}
           {...listeners}
         >
-          <GripVertical className="h-4 w-4" />
+          <GripVertical
+            className={adminCategoryAttributesActionStyles.iconSize}
+          />
         </Button>
-        <span className="truncate">
-          {row.name} <span className="text-ink-muted">({row.type})</span>
+        <span className={adminCategoryAttributesActionStyles.rowLabel}>
+          {row.name}{" "}
+          <span className={adminCategoryAttributesActionStyles.rowType}>
+            ({row.type})
+          </span>
         </span>
       </div>
-      <div className="flex shrink-0 items-center gap-1">
+      <div className={adminCategoryAttributesActionStyles.rowActions}>
         <Button
           size="sm"
           variant="ghost"
@@ -67,17 +73,23 @@ export function SortableAttributeRow({
           onClick={onEdit}
           aria-label={LABELS.editCategoryAttribute}
         >
-          <Pencil className="h-4 w-4" aria-hidden />
+          <Pencil
+            className={adminCategoryAttributesActionStyles.iconSize}
+            aria-hidden
+          />
         </Button>
         <Button
           size="sm"
           variant="ghost"
-          className="text-danger"
+          className={adminCategoryAttributesActionStyles.btnDanger}
           disabled={disabled}
           onClick={onDelete}
           aria-label={LABELS.deleteCategoryAttribute}
         >
-          <Trash2 className="h-4 w-4" aria-hidden />
+          <Trash2
+            className={adminCategoryAttributesActionStyles.iconSize}
+            aria-hidden
+          />
         </Button>
       </div>
     </li>

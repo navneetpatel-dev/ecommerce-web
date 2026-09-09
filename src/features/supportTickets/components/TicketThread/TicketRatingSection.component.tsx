@@ -7,6 +7,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { cn } from "@/shared/utils/cn";
 import { Star } from "lucide-react";
+import { ticketThreadStyles } from "./ticketThread.styles";
 
 interface TicketRatingSectionProps {
   rating: string;
@@ -26,14 +27,12 @@ export function TicketRatingSection(props: TicketRatingSectionProps) {
   };
 
   return (
-    <section className="border border-line bg-surface p-3 shadow-elevation-1 sm:p-4">
+    <section className={ticketThreadStyles.ratingCard}>
       <TextEyebrow>{LABELS.ticketRate}</TextEyebrow>
-      <p className="mt-1 text-[0.75rem] text-ink-muted">
-        {LABELS.ticketRateHint}
-      </p>
-      <div className="mt-3 flex flex-wrap items-center gap-3">
+      <p className={ticketThreadStyles.ratingHint}>{LABELS.ticketRateHint}</p>
+      <div className={ticketThreadStyles.ratingRow}>
         <div
-          className="flex gap-0.5"
+          className={ticketThreadStyles.ratingStars}
           role="radiogroup"
           aria-label={LABELS.ticketRate}
         >
@@ -43,16 +42,16 @@ export function TicketRatingSection(props: TicketRatingSectionProps) {
               type="button"
               role="radio"
               aria-checked={Number(props.rating) >= n}
-              className="rounded-sm p-0.5 transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50"
+              className={ticketThreadStyles.starBtn}
               onClick={() => props.onRatingChange(String(n))}
             >
               <Star
                 size={22}
                 className={cn(
-                  "transition-colors",
+                  ticketThreadStyles.starTransition,
                   Number(props.rating) >= n
-                    ? "fill-brand text-brand"
-                    : "fill-transparent text-ink-muted/50",
+                    ? ticketThreadStyles.starActive
+                    : ticketThreadStyles.starInactive,
                 )}
               />
             </button>
@@ -73,17 +72,19 @@ export function TicketRatingSection(props: TicketRatingSectionProps) {
 
 export function TicketRatedBanner({ rating }: { rating: number }) {
   return (
-    <div className="flex items-center gap-2 border border-brand/25 bg-brand-subtle/50 px-3 py-2">
-      <span className="text-body-sm text-ink">{LABELS.ticketRatedThanks}</span>
-      <span className="flex gap-0.5">
+    <div className={ticketThreadStyles.ratedBanner}>
+      <span className={ticketThreadStyles.ratedText}>
+        {LABELS.ticketRatedThanks}
+      </span>
+      <span className={ticketThreadStyles.ratingStars}>
         {[1, 2, 3, 4, 5].map((n) => (
           <Star
             key={n}
             size={14}
             className={cn(
               n <= rating
-                ? "fill-brand text-brand"
-                : "fill-transparent text-ink-muted/40",
+                ? ticketThreadStyles.starActive
+                : ticketThreadStyles.starBannerInactive,
             )}
           />
         ))}

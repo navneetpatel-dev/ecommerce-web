@@ -11,31 +11,31 @@ export const ORDER_COLUMNS: DataTableColumn<Order>[] = [
   {
     id: "order",
     header: LABELS.ordersColumnOrder,
-    headerClassName: "w-[10%]",
-    className: "w-[10%] font-mono text-body-sm",
+    headerClassName: ORDERS_LIST_STYLES.colOrderHeader,
+    className: ORDERS_LIST_STYLES.colOrderCell,
     truncate: false,
     cell: (order) => `#${shortOrderId(order.id)}`,
   },
   {
     id: "placed",
     header: LABELS.ordersColumnPlaced,
-    headerClassName: "w-[12%]",
-    className: "w-[12%] text-ink-muted",
+    headerClassName: ORDERS_LIST_STYLES.colPlacedHeader,
+    className: ORDERS_LIST_STYLES.colPlacedCell,
     cell: (order) => formatOrderDate(order.createdAt),
   },
   {
     id: "items",
     header: LABELS.ordersColumnItems,
-    headerClassName: "w-[38%]",
-    className: "w-[38%]",
+    headerClassName: ORDERS_LIST_STYLES.colItemsHeader,
+    className: ORDERS_LIST_STYLES.colItemsCell,
     truncate: false,
     cell: (order) => <OrderItemsTableCell order={order} />,
   },
   {
     id: "total",
     header: LABELS.ordersColumnTotal,
-    headerClassName: "w-[14%] text-right",
-    className: "w-[14%] text-right",
+    headerClassName: ORDERS_LIST_STYLES.colTotalHeader,
+    className: ORDERS_LIST_STYLES.colTotalCell,
     cell: (order) => (
       <span className={ORDERS_LIST_STYLES.totalAmount}>
         {formatInr(order.totalAmount)}
@@ -45,8 +45,8 @@ export const ORDER_COLUMNS: DataTableColumn<Order>[] = [
   {
     id: "status",
     header: LABELS.ordersColumnStatus,
-    headerClassName: "w-[22%]",
-    className: "w-[22%]",
+    headerClassName: ORDERS_LIST_STYLES.colStatusHeader,
+    className: ORDERS_LIST_STYLES.colStatusCell,
     truncate: false,
     cell: (order) => (
       <OrderStatusGroup
@@ -58,9 +58,13 @@ export const ORDER_COLUMNS: DataTableColumn<Order>[] = [
   },
   {
     id: "open",
-    header: <span className="sr-only">{LABELS.ordersColumnOpen}</span>,
-    headerClassName: "w-[4%]",
-    className: "w-[4%] text-right",
+    header: (
+      <span className={ORDERS_LIST_STYLES.srOnly}>
+        {LABELS.ordersColumnOpen}
+      </span>
+    ),
+    headerClassName: ORDERS_LIST_STYLES.colOpenHeader,
+    className: ORDERS_LIST_STYLES.colOpenCell,
     hideOnMobile: true,
     truncate: false,
     cell: () => (

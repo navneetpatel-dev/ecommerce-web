@@ -4,8 +4,8 @@ import { Breadcrumbs } from "@/shared/components/Breadcrumbs.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import { formatLabel } from "@/shared/utils/formatLabel";
-import { cn } from "@/shared/utils/cn";
 import type { Category } from "@/shared/api/types";
+import { categoryPlpPageStyles as styles } from "./categoryPlpPage.styles";
 
 interface CategoryHeaderProps {
   category: Category;
@@ -21,20 +21,20 @@ export function CategoryHeader({
   const childLinks = category.children ?? [];
 
   return (
-    <header className="mb-3 sm:mb-4 md:mb-5">
-      <Breadcrumbs items={breadcrumbItems} className="mb-1.5 sm:mb-2" />
+    <header className={styles.header}>
+      <Breadcrumbs items={breadcrumbItems} className={styles.breadcrumbs} />
 
-      <div className="flex flex-col gap-2.5 lg:flex-row lg:items-end lg:gap-6 xl:gap-8">
-        <div className="min-w-0 shrink-0 lg:max-w-[min(100%,22rem)] xl:max-w-[min(100%,28rem)]">
+      <div className={styles.titleRow}>
+        <div className={styles.titleBlock}>
           <h1
-            className="font-display font-semibold tracking-tight text-ink"
+            className={styles.title}
             style={{ fontSize: "var(--text-h1)", lineHeight: 1.15 }}
           >
             {category.name}
           </h1>
           {category.seoDescription ? (
             <p
-              className="mt-1 line-clamp-2 max-w-2xl text-ink-muted sm:line-clamp-none"
+              className={styles.seoDescription}
               style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.4 }}
             >
               {category.seoDescription}
@@ -43,16 +43,11 @@ export function CategoryHeader({
         </div>
 
         {childLinks.length > 0 ? (
-          <nav
-            aria-label={LABELS.shopInCategory}
-            className="min-w-0 flex-1 lg:pt-0.5"
-          >
-            <p className="mb-1.5 text-eyebrow leading-none lg:text-right">
-              {LABELS.shopInCategory}
-            </p>
-            <ul className="-mx-4 flex flex-nowrap gap-2 overflow-x-auto overscroll-x-contain px-4 pb-0.5 [scrollbar-width:none] touch-pan-x sm:mx-0 sm:px-0 lg:justify-end [&::-webkit-scrollbar]:hidden">
+          <nav aria-label={LABELS.shopInCategory} className={styles.nav}>
+            <p className={styles.navEyebrow}>{LABELS.shopInCategory}</p>
+            <ul className={styles.navList}>
               {childLinks.map((child) => (
-                <li key={child.id} className="shrink-0">
+                <li key={child.id} className={styles.navItem}>
                   <Link
                     href={PATHS.category(...slugPath, child.slug)}
                     title={formatLabel(LABELS.shopCategory, {
@@ -61,16 +56,11 @@ export function CategoryHeader({
                     aria-label={formatLabel(LABELS.shopCategory, {
                       name: child.name,
                     })}
-                    className={cn(
-                      "group inline-flex h-8 items-center gap-0.5 rounded-md border border-line bg-surface px-2.5",
-                      "text-body-sm font-medium text-ink shadow-card-hairline-strong",
-                      "transition-colors hover:border-brand hover:bg-brand-subtle hover:text-brand",
-                      "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-                    )}
+                    className={styles.childLink}
                   >
                     <span>{child.name}</span>
                     <ChevronRight
-                      className="h-3.5 w-3.5 text-ink-faint transition-colors group-hover:text-brand"
+                      className={styles.chevronIcon}
                       strokeWidth={1.75}
                       aria-hidden
                     />

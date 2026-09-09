@@ -23,7 +23,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
   return (
     <li className={styles.card}>
       <div className={styles.topRow}>
-        <div className="min-w-0 space-y-1">
+        <div className={styles.titleGroup}>
           <p className={styles.name}>{product.name}</p>
           <p className={styles.sku}>{product.sku}</p>
         </div>
@@ -39,7 +39,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
           <dd className={styles.metaValueMono}>₹{product.basePrice}</dd>
         </div>
       </dl>
-      <div className="mt-4 border-t border-line/80 pt-3">
+      <div className={styles.actionsWrapper}>
         <ProductActions
           product={product}
           onEdit={onEdit}

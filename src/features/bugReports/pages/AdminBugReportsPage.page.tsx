@@ -13,11 +13,16 @@ import {
   useBugFiltersFromUrl,
 } from "../components/BugReportFilters.component";
 import { BugReportList } from "../components/BugReportList.component";
+import { bugReportsPagesStyles } from "./bugReportsPages.styles";
 
 export function AdminBugReportsPage() {
   return (
     <RequirePermission permission={PERMISSIONS.BUG_REPORT_MANAGE}>
-      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+      <Suspense
+        fallback={
+          <Skeleton className={bugReportsPagesStyles.skeletonFallback} />
+        }
+      >
         <AdminBugReportsContent />
       </Suspense>
     </RequirePermission>
@@ -30,15 +35,15 @@ function AdminBugReportsContent() {
   const reports = query.data?.pages.flatMap((p) => p.items) ?? [];
 
   return (
-    <div className="w-full min-w-0 space-y-5">
+    <div className={bugReportsPagesStyles.adminPageStack}>
       <BugReportFilters />
       <BugReportList
         title={
-          <div className="min-w-0 space-y-1">
-            <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+          <div className={bugReportsPagesStyles.adminTitleStack}>
+            <h1 className={bugReportsPagesStyles.titleHeading}>
               {LABELS.bugReports}
             </h1>
-            <p className="text-body-sm text-ink-muted">
+            <p className={bugReportsPagesStyles.adminTitleDescription}>
               {LABELS.bugAdminQueueDescription}
             </p>
           </div>

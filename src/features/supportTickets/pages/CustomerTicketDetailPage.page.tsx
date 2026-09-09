@@ -9,6 +9,7 @@ import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState"
 import { useSupportTicket } from "../api/supportTickets.queries";
 import { SupportAuthGate } from "../components/SupportAuthGate.component";
 import { TicketThread } from "../components/TicketThread.component";
+import { supportTicketsPagesStyles } from "./supportTicketsPages.styles";
 
 export function CustomerTicketDetailPage() {
   const params = useParams<{ id: string }>();
@@ -36,8 +37,8 @@ function CustomerTicketDetailContent({ id }: { id: string }) {
 
   if (isEmpty) {
     return (
-      <div className="storefront-container py-8">
-        <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+      <div className={supportTicketsPagesStyles.customerDetailErrorContainer}>
+        <div className={supportTicketsPagesStyles.errorBox}>
           <QueryErrorAlert
             error={error}
             fallback={LABELS.ticketCouldNotLoadDetail}
@@ -48,12 +49,12 @@ function CustomerTicketDetailContent({ id }: { id: string }) {
   }
 
   return (
-    <div className="relative">
+    <div className={supportTicketsPagesStyles.customerDetailRoot}>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_10%,transparent),transparent_60%)]"
+        className={supportTicketsPagesStyles.customerDetailGlow}
       />
-      <div className="storefront-container relative py-6 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:py-8 lg:pb-10">
+      <div className={supportTicketsPagesStyles.customerDetailContainer}>
         <TicketThread ticket={data!} mode="customer" />
       </div>
     </div>

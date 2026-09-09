@@ -1,0 +1,14 @@
+export const giftCardRedeemContentStyles = {
+  loadingContainer: "storefront-container space-y-3 py-12",
+  skelH8W48: "h-8 w-48",
+  skelH32MaxMd: "h-32 w-full max-w-md",
+  container: "storefront-container py-16 md:py-20",
+  card: "mx-auto max-w-md border border-line bg-surface-raised p-6 text-center shadow-elevation-1",
+  heading: "font-display text-[1.25rem] text-ink",
+  subtitle: "mt-2 text-body text-ink-muted",
+  amount: "mt-4 text-[2rem] font-semibold tabular-nums text-ink",
+  badgeError: "mt-2 text-body-sm font-medium text-danger",
+  promptText: "mt-4 text-body text-ink-muted",
+  errorMessage: "mt-4 text-body-sm text-danger",
+  button: "mt-5",
+} as const;

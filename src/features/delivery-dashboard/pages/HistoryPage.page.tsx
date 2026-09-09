@@ -3,6 +3,7 @@
 import { TaskCard } from "../components/TaskCard.component";
 import { useMyDeliveries, useMyPickups } from "../api/deliveryAgent.queries";
 import { PATHS } from "@/shared/constants/paths";
+import { todayPageStyles as styles } from "./todayPage.styles";
 
 export function HistoryPage() {
   const deliveries = useMyDeliveries(["DELIVERED", "RTO_DELIVERED"]);
@@ -11,30 +12,28 @@ export function HistoryPage() {
   const pickupCount = pickups.data?.length ?? 0;
 
   return (
-    <div className="w-full min-w-0 space-y-8">
-      <header className="flex flex-col gap-2 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between">
+    <div className={styles.container}>
+      <header className={styles.header}>
         <div>
-          <h1 className="font-display text-[1.75rem] text-ink">History</h1>
-          <p className="mt-1 text-body text-ink-muted">
+          <h1 className={styles.title}>History</h1>
+          <p className={styles.subtitle}>
             Completed delivery and return pickup assignments.
           </p>
         </div>
       </header>
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        <section className="space-y-4">
-          <div className="flex items-center justify-between border-b border-line pb-2">
-            <h2 className="font-display text-[1.125rem] text-ink">
-              Delivered shipments
-            </h2>
-            <span className="text-body-sm text-ink-muted">
+      <div className={styles.grid}>
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Delivered shipments</h2>
+            <span className={styles.sectionCount}>
               {deliveryCount} completed
             </span>
           </div>
           {deliveries.isLoading ? (
-            <p className="text-ink-muted">Loading history...</p>
+            <p className={styles.loadingText}>Loading history...</p>
           ) : deliveryCount > 0 ? (
-            <div className="space-y-3">
+            <div className={styles.taskList}>
               {deliveries.data?.map((shipment) => (
                 <TaskCard
                   key={shipment.id}
@@ -50,25 +49,19 @@ export function HistoryPage() {
               ))}
             </div>
           ) : (
-            <p className="border-l-2 border-brand/30 pl-3 text-body text-ink-muted py-2">
-              No completed deliveries yet.
-            </p>
+            <p className={styles.emptyText}>No completed deliveries yet.</p>
           )}
         </section>
 
-        <section className="space-y-4">
-          <div className="flex items-center justify-between border-b border-line pb-2">
-            <h2 className="font-display text-[1.125rem] text-ink">
-              Collected returns
-            </h2>
-            <span className="text-body-sm text-ink-muted">
-              {pickupCount} completed
-            </span>
+        <section className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Collected returns</h2>
+            <span className={styles.sectionCount}>{pickupCount} completed</span>
           </div>
           {pickups.isLoading ? (
-            <p className="text-ink-muted">Loading history...</p>
+            <p className={styles.loadingText}>Loading history...</p>
           ) : pickupCount > 0 ? (
-            <div className="space-y-3">
+            <div className={styles.taskList}>
               {pickups.data?.map((pickup) => (
                 <TaskCard
                   key={pickup.id}
@@ -84,9 +77,7 @@ export function HistoryPage() {
               ))}
             </div>
           ) : (
-            <p className="border-l-2 border-brand/30 pl-3 text-body text-ink-muted py-2">
-              No completed pickups yet.
-            </p>
+            <p className={styles.emptyText}>No completed pickups yet.</p>
           )}
         </section>
       </div>

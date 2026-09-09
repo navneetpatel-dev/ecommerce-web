@@ -9,6 +9,7 @@ import type { BugReport } from "../../api/bugReports.api";
 import { BUG_STATUS_LABEL } from "../../utils/labels";
 import { ProgressTrack } from "./BugProgressTrack.component";
 import type { ProgressStep } from "./bugReportDetailShared";
+import { bugReportPanelsStyles } from "./bugReportPanels.styles";
 
 interface BugProgressPanelProps {
   report: BugReport;
@@ -24,22 +25,19 @@ export function BugProgressPanel(props: BugProgressPanelProps) {
   const { report, mode, progress } = props;
 
   return (
-    <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/70 via-brand/30 to-transparent"
-      />
-      <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+    <section className={bugReportPanelsStyles.panelRootWithBar}>
+      <div aria-hidden className={bugReportPanelsStyles.panelAccentBar} />
+      <div className={bugReportPanelsStyles.panelHeader}>
         <TextEyebrow brand>{LABELS.bugProgress}</TextEyebrow>
-        <p className="mt-1 text-[0.75rem] text-ink-muted sm:text-body-sm">
+        <p className={bugReportPanelsStyles.panelSubtitleSmall}>
           {LABELS.bugProgressHint}
         </p>
       </div>
-      <div className="px-4 py-4 sm:px-5 sm:py-5">
+      <div className={bugReportPanelsStyles.panelBodyRelaxed}>
         <ProgressTrack steps={progress} />
-        <div className="mt-5 border-t border-line/60 pt-4">
+        <div className={bugReportPanelsStyles.panelSectionDividerLarge}>
           <TextEyebrow>{LABELS.bugTimeline}</TextEyebrow>
-          <dl className="mt-3 space-y-2.5 text-body-sm">
+          <dl className={bugReportPanelsStyles.timelineList}>
             <TimelineRow
               label={LABELS.bugTimelineFiled}
               date={report.createdAt}
@@ -62,8 +60,10 @@ export function BugProgressPanel(props: BugProgressPanelProps) {
                 date={report.resolvedAt}
               />
             ) : null}
-            <div className="flex items-center justify-between gap-3">
-              <dt className="text-ink-muted">{LABELS.bugTimelineCurrent}</dt>
+            <div className={bugReportPanelsStyles.timelineRow}>
+              <dt className={bugReportPanelsStyles.timelineLabel}>
+                {LABELS.bugTimelineCurrent}
+              </dt>
               <dd>
                 <StatusBadge
                   status={report.status}
@@ -74,11 +74,13 @@ export function BugProgressPanel(props: BugProgressPanelProps) {
           </dl>
         </div>
         {mode === "reporter" && report.status === BUG_REPORT_STATUS.FIXED ? (
-          <div className="mt-4 border border-brand/30 bg-brand-subtle/50 px-3 py-3 sm:px-4 sm:py-4">
-            <p className="text-[0.875rem] text-ink">{LABELS.bugVerifyHint}</p>
+          <div className={bugReportPanelsStyles.panelVerifyBox}>
+            <p className={bugReportPanelsStyles.panelVerifyText}>
+              {LABELS.bugVerifyHint}
+            </p>
             <Button
               type="button"
-              className="mt-3"
+              className={bugReportPanelsStyles.panelVerifyBtn}
               loading={props.verifyPending}
               onClick={props.onVerify}
             >
@@ -99,9 +101,11 @@ export function BugProgressPanel(props: BugProgressPanelProps) {
 
 function TimelineRow({ label, date }: { label: string; date: string }) {
   return (
-    <div className="flex items-center justify-between gap-3">
-      <dt className="text-ink-muted">{label}</dt>
-      <dd className="text-ink">{formatOrderDate(date)}</dd>
+    <div className={bugReportPanelsStyles.timelineRow}>
+      <dt className={bugReportPanelsStyles.timelineLabel}>{label}</dt>
+      <dd className={bugReportPanelsStyles.timelineValue}>
+        {formatOrderDate(date)}
+      </dd>
     </div>
   );
 }

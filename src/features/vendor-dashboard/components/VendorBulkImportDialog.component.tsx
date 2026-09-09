@@ -18,6 +18,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { productsApi, type BulkImportRowResult } from "@/features/products";
+import { vendorBulkImportDialogStyles } from "./vendorDialogs.styles";
 
 interface VendorBulkImportDialogProps {
   onImported?: () => void;
@@ -99,7 +100,7 @@ export function VendorBulkImportDialog({
         }
       >
         {!results ? (
-          <div className="space-y-3">
+          <div className={vendorBulkImportDialogStyles.stack}>
             <FilePicker
               accept=".csv,text/csv"
               maxBytes={2 * 1024 * 1024}
@@ -112,11 +113,15 @@ export function VendorBulkImportDialog({
               disabled={importing}
               hint="CSV format • Max 2 MB • Up to 500 rows"
             />
-            {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+            {error ? (
+              <p className={vendorBulkImportDialogStyles.errorMessage}>
+                {error}
+              </p>
+            ) : null}
           </div>
         ) : (
-          <div className="space-y-3">
-            <p className="text-body-sm text-ink">
+          <div className={vendorBulkImportDialogStyles.stack}>
+            <p className={vendorBulkImportDialogStyles.summaryText}>
               {formatLabel(LABELS.bulkImportSummary, {
                 success: successCount,
                 total: results.length,
@@ -134,7 +139,11 @@ export function VendorBulkImportDialog({
                 <TableBody>
                   {results.map((row) => (
                     <TableRow key={row.row}>
-                      <TableCell className="font-mono">{row.row}</TableCell>
+                      <TableCell
+                        className={vendorBulkImportDialogStyles.rowCell}
+                      >
+                        {row.row}
+                      </TableCell>
                       <TableCell>
                         <Badge
                           variant={row.success ? "success" : "destructive"}
@@ -144,7 +153,9 @@ export function VendorBulkImportDialog({
                             : LABELS.bulkImportRowFailed}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-body-sm text-ink-muted">
+                      <TableCell
+                        className={vendorBulkImportDialogStyles.detailCell}
+                      >
                         {row.success ? row.productId : row.error}
                       </TableCell>
                     </TableRow>
@@ -154,7 +165,9 @@ export function VendorBulkImportDialog({
             </TableScrollShell>
           </div>
         )}
-        {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+        {error ? (
+          <p className={vendorBulkImportDialogStyles.errorMessage}>{error}</p>
+        ) : null}
       </StatusDialog>
     </>
   );

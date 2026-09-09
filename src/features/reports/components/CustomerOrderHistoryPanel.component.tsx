@@ -13,6 +13,7 @@ import {
 } from "@/features/reports";
 import { ReportTable } from "./ReportTable.component";
 import { useCustomerOrderHistory } from "../hooks/useCustomerOrderHistory.hook";
+import { customerOrderHistoryPanelStyles as styles } from "./customerOrderHistoryPanel.styles";
 
 export function CustomerOrderHistoryPanel() {
   const history = useCustomerOrderHistory();
@@ -37,7 +38,7 @@ export function CustomerOrderHistoryPanel() {
   ) : null;
 
   return (
-    <div className="mt-10 space-y-5">
+    <div className={styles.container}>
       <FormSection title={LABELS.orderHistoryStatement} columns={3}>
         <DateRangeFields
           from={history.from}
@@ -49,13 +50,13 @@ export function CustomerOrderHistoryPanel() {
           disabled={history.controlsDisabled}
           disabledHint={filterHint}
         />
-        <div className="sm:col-span-2 xl:col-span-3 space-y-2">
+        <div className={styles.actionsWrapper}>
           <ButtonGroup align="start">
             <DisabledActionHint
               disabled={loadButtonDisabled}
               message={loadButtonHint}
               block
-              className="w-full sm:w-auto"
+              className={styles.buttonHint}
             >
               <Button
                 type="button"

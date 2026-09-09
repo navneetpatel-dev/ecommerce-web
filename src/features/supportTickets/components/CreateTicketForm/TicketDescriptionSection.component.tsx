@@ -5,6 +5,7 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { TICKET_DESCRIPTION_MAX } from "../../constants/fieldLimits";
+import { createTicketFormStyles } from "./createTicketForm.styles";
 
 type Props = {
   descId: string;
@@ -42,7 +43,7 @@ export function TicketDescriptionSection({
           maxLength={TICKET_DESCRIPTION_MAX}
           error={hasDescriptionError}
         />
-        <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
+        <p className={createTicketFormStyles.counterText}>
           {formatLabel(LABELS.ticketCharCounter, {
             count: description.length,
             max: TICKET_DESCRIPTION_MAX,

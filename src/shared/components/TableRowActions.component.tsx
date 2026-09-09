@@ -16,6 +16,7 @@ import {
 } from "@/shared/components/ui/popover";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { tableRowActionsStyles } from "./dataTableComponents.styles";
 
 interface TableRowActionProps {
   children: ReactNode;
@@ -27,7 +28,7 @@ interface TableRowActionProps {
 export function TableRowAction({ destructive, children }: TableRowActionProps) {
   return (
     <span
-      className="block w-full min-w-0"
+      className={tableRowActionsStyles.itemSpan}
       data-table-row-menu-item
       data-table-action-destructive={destructive ? true : undefined}
     >
@@ -144,23 +145,20 @@ export function TableRowActions({
   if (menuItems.length === 0) return null;
 
   const menuItemElements = menuItems.map((item, index) => (
-    <div
-      key={index}
-      className="w-full min-w-0 overflow-hidden border-t border-line/70 first:rounded-t-sm first:border-t-0 last:rounded-b-sm"
-    >
+    <div key={index} className={tableRowActionsStyles.menuItemDiv}>
       {item}
     </div>
   ));
 
   return (
-    <div className={cn("flex shrink-0 items-center justify-end", className)}>
+    <div className={cn(tableRowActionsStyles.container, className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             type="button"
             size="sm"
             variant="ghost"
-            className="h-8 w-8 shrink-0 p-0 text-ink-muted hover:text-ink [&_svg]:size-4"
+            className={tableRowActionsStyles.triggerBtn}
             aria-label={LABELS.moreActions}
             onClick={(event) => event.stopPropagation()}
           >
@@ -169,12 +167,7 @@ export function TableRowActions({
         </PopoverTrigger>
         <PopoverContent
           align="end"
-          className={cn(
-            "z-[80] w-[12.5rem] overflow-hidden rounded-sm! p-0",
-            "[&_button]:w-full [&_button]:min-w-0 [&_button]:justify-start [&_button]:rounded-none! [&_button]:border-transparent [&_button]:shadow-none",
-            "[&_a]:w-full [&_a]:min-w-0 [&_a]:justify-start [&_a]:rounded-none! [&_a]:border-transparent [&_a]:shadow-none [&_a]:inline-flex [&_a]:items-center",
-            menuClassName,
-          )}
+          className={cn(tableRowActionsStyles.popoverContent, menuClassName)}
           onClick={(event) => event.stopPropagation()}
         >
           {menuItemElements}

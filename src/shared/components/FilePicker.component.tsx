@@ -15,6 +15,7 @@ import {
   Upload,
 } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
+import { filePickerStyles } from "./fileUploadComponents.styles";
 import { FilePickerSelectedFile } from "./FilePickerSelectedFile.component";
 import { FilePickerDropzone } from "./FilePickerDropzone.component";
 import {
@@ -59,12 +60,14 @@ export function FilePicker({
   const [isDragOver, setIsDragOver] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
-  const resolvedVariant =
-    iconVariant ??
-    (accept?.includes(".csv") ||
+  const isSheet =
+    accept?.includes(".csv") ||
     accept?.includes("text/csv") ||
     accept?.includes(".xlsx") ||
-    accept?.includes("spreadsheet")
+    accept?.includes("spreadsheet");
+  const resolvedVariant =
+    iconVariant ??
+    (isSheet
       ? "csv"
       : accept?.includes("image")
         ? "image"
@@ -147,9 +150,9 @@ export function FilePicker({
           : Upload;
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn(filePickerStyles.root, className)}>
       {label ? (
-        <label htmlFor={id} className="text-body-sm font-medium text-ink block">
+        <label htmlFor={id} className={filePickerStyles.label}>
           {label}
         </label>
       ) : null}
@@ -160,7 +163,7 @@ export function FilePicker({
         type="file"
         accept={accept}
         disabled={disabled}
-        className="sr-only"
+        className={filePickerStyles.hiddenInput}
         onChange={(e) => {
           const picked = e.target.files?.[0] ?? null;
           void validateAndSelectFile(picked);
@@ -190,8 +193,11 @@ export function FilePicker({
       )}
 
       {localError ? (
-        <p className="flex items-center gap-1.5 text-body-sm text-danger">
-          <AlertCircle className="size-3.5 shrink-0" aria-hidden="true" />
+        <p className={filePickerStyles.errorText}>
+          <AlertCircle
+            className={filePickerStyles.errorIcon}
+            aria-hidden="true"
+          />
           <span>{localError}</span>
         </p>
       ) : null}

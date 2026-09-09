@@ -19,6 +19,7 @@ import { formatAddress } from "../utils/formatAddress";
 import { NEXT_DELIVERY_STATUS } from "../utils/deliveryStatus";
 import { PATHS } from "@/shared/constants/paths";
 import { useDeliveryTaskActions } from "../hooks/useDeliveryTaskActions.hook";
+import { deliveryDetailPageStyles as styles } from "./deliveryDetailPage.styles";
 
 const TERMINAL_STATUSES = [
   "DELIVERED",
@@ -58,9 +59,13 @@ export function DeliveryTaskDetailPage() {
   } = useDeliveryTaskActions(shipmentId, shipment?.codAmount);
 
   if (query.isLoading)
-    return <p className="text-ink-muted">Loading delivery...</p>;
+    return <p className={styles.loadingText}>Loading delivery...</p>;
   if (!shipment)
-    return <p className="text-danger">This assigned delivery was not found.</p>;
+    return (
+      <p className={styles.notFoundText}>
+        This assigned delivery was not found.
+      </p>
+    );
 
   const order = shipment.subOrder?.order;
   const customer = order?.user;
@@ -76,24 +81,19 @@ export function DeliveryTaskDetailPage() {
   };
 
   return (
-    <div className="w-full min-w-0 space-y-6">
-      <div className="flex items-center gap-2">
-        <Link
-          href={PATHS.delivery.deliveries}
-          className="inline-flex items-center gap-1.5 text-body-sm font-medium text-ink-muted hover:text-ink transition-colors"
-        >
-          <ArrowLeft className="size-4" aria-hidden="true" />
+    <div className={styles.container}>
+      <div className={styles.backNav}>
+        <Link href={PATHS.delivery.deliveries} className={styles.backLink}>
+          <ArrowLeft className={styles.backIcon} aria-hidden="true" />
           Back to deliveries
         </Link>
       </div>
 
-      <header className="flex flex-col gap-3 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <header className={styles.header}>
         <div>
           <TextEyebrow brand>DELIVERY TASK</TextEyebrow>
-          <h1 className="mt-1 font-mono text-[1.5rem] sm:text-[1.75rem] font-bold tracking-tight text-ink">
-            {shipment.trackingNumber}
-          </h1>
-          <p className="mt-1 text-body-sm text-ink-muted">
+          <h1 className={styles.titleMono}>{shipment.trackingNumber}</h1>
+          <p className={styles.subtitle}>
             Assigned fulfillment task{" "}
             {order?.id ? `· Order #${order.id.slice(0, 8)}` : ""}
           </p>
@@ -101,10 +101,10 @@ export function DeliveryTaskDetailPage() {
         <StatusBadge status={shipment.status} />
       </header>
 
-      {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+      {error ? <p className={styles.errorText}>{error}</p> : null}
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8">
-        <div className="space-y-6 lg:col-span-7 xl:col-span-8">
+      <div className={styles.grid}>
+        <div className={styles.mainColumn}>
           {shipment.status === "OUT_FOR_DELIVERY" ? (
             <>
               <LocationBeacon active />
@@ -164,7 +164,7 @@ export function DeliveryTaskDetailPage() {
           ) : null}
         </div>
 
-        <aside className="space-y-6 lg:col-span-5 xl:col-span-4">
+        <aside className={styles.asideColumn}>
           <TaskContactCard
             name={customer?.name ?? "Customer"}
             phone={customer?.phone}

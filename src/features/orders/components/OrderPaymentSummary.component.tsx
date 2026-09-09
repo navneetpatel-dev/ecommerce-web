@@ -10,6 +10,7 @@ import {
 } from "../utils/orderPaymentSummary.utils";
 import { PAYMENT_STATUS } from "@/shared/constants/statuses";
 import type { Order } from "@/shared/api/types";
+import { ordersComponentsStyles } from "./ordersComponents.styles";
 
 interface OrderPaymentSummaryProps {
   order: Pick<
@@ -50,17 +51,19 @@ export function OrderPaymentSummary({
   return (
     <div className={className}>
       {showSplit || walletUsed > 0 || (isCod && walletUsed <= 0) ? (
-        <div className="space-y-2 text-[0.875rem]">
-          <p className="font-medium text-ink">{LABELS.paymentSplitHeading}</p>
+        <div className={ordersComponentsStyles.paymentWrapper}>
+          <p className={ordersComponentsStyles.paymentTitle}>
+            {LABELS.paymentSplitHeading}
+          </p>
           {walletUsed > 0 ? (
-            <p className="text-ink-muted">
+            <p className={ordersComponentsStyles.paymentMuted}>
               {formatLabel(LABELS.paymentSplitWallet, {
                 amount: formatPoints(walletUsed),
               })}
             </p>
           ) : null}
           {razorpayPaid > 0 ? (
-            <p className="text-ink-muted">
+            <p className={ordersComponentsStyles.paymentMuted}>
               {formatLabel(
                 isSettled
                   ? LABELS.paymentSplitRazorpay
@@ -70,24 +73,26 @@ export function OrderPaymentSummary({
             </p>
           ) : null}
           {!isSettled && !isCod && razorpayPaid > 0 ? (
-            <p className="text-body-sm leading-relaxed text-warning-foreground">
+            <p className={ordersComponentsStyles.paymentWarning}>
               {LABELS.paymentAwaitingConfirmation}
             </p>
           ) : null}
           {isCod && razorpayPaid <= 0 ? (
-            <p className="text-ink-muted">{LABELS.paymentSplitCod}</p>
+            <p className={ordersComponentsStyles.paymentMuted}>
+              {LABELS.paymentSplitCod}
+            </p>
           ) : null}
         </div>
       ) : null}
 
       {pendingCashback > 0 && !order.cashbackCreditedAt ? (
-        <p className="mt-3 text-body-sm text-brand">
+        <p className={ordersComponentsStyles.cashbackPending}>
           {LABELS.cashbackPendingAfterDelivery}
         </p>
       ) : null}
 
       {order.cashbackCreditedAt && pendingCashback > 0 ? (
-        <p className="mt-3 text-body-sm text-success">
+        <p className={ordersComponentsStyles.cashbackCredited}>
           {formatLabel(LABELS.cashbackCreditedToWallet, {
             amount: formatInr(pendingCashback),
           })}

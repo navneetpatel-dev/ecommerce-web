@@ -2,6 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import type { Order } from "@/shared/api/types";
 import { taxDisplayLabel } from "@/shared/utils/taxDisplay";
 import { formatInr } from "../utils/format";
+import { ordersComponentsStyles } from "./ordersComponents.styles";
 
 interface OrderMoneyBreakdownProps {
   order: Pick<
@@ -28,19 +29,19 @@ export function OrderMoneyBreakdown({
     merchandiseSubtotal != null || taxTotal != null || shippingTotal != null;
 
   return (
-    <dl className={className ?? "space-y-2.5 text-[0.875rem]"}>
+    <dl className={className ?? ordersComponentsStyles.defaultDl}>
       {showBreakdown && merchandiseSubtotal != null ? (
-        <div className="flex items-center justify-between gap-4">
-          <dt className="text-ink-muted">{LABELS.subtotal}</dt>
-          <dd className="tabular-nums text-ink">
+        <div className={ordersComponentsStyles.row}>
+          <dt className={ordersComponentsStyles.label}>{LABELS.subtotal}</dt>
+          <dd className={ordersComponentsStyles.value}>
             {formatInr(merchandiseSubtotal)}
           </dd>
         </div>
       ) : null}
       {showBreakdown && order.shippingDisplayKey != null ? (
-        <div className="flex items-center justify-between gap-4">
-          <dt className="text-ink-muted">Shipping</dt>
-          <dd className="tabular-nums text-ink">
+        <div className={ordersComponentsStyles.row}>
+          <dt className={ordersComponentsStyles.label}>Shipping</dt>
+          <dd className={ordersComponentsStyles.value}>
             {order.shippingDisplayKey === "FREE"
               ? "Free"
               : shippingTotal != null
@@ -50,24 +51,26 @@ export function OrderMoneyBreakdown({
         </div>
       ) : null}
       {showBreakdown && Number(taxTotal) > 0 ? (
-        <div className="flex items-center justify-between gap-4">
-          <dt className="text-ink-muted">
+        <div className={ordersComponentsStyles.row}>
+          <dt className={ordersComponentsStyles.label}>
             {taxDisplayLabel(order.taxDisplayKey)}
           </dt>
-          <dd className="tabular-nums text-ink">{formatInr(taxTotal!)}</dd>
+          <dd className={ordersComponentsStyles.value}>
+            {formatInr(taxTotal!)}
+          </dd>
         </div>
       ) : null}
       {Number(order.discountTotal) > 0 ? (
-        <div className="flex items-center justify-between gap-4 text-success">
+        <div className={ordersComponentsStyles.rowSuccess}>
           <dt>{LABELS.discount}</dt>
-          <dd className="tabular-nums">−{formatInr(order.discountTotal)}</dd>
+          <dd className={ordersComponentsStyles.valueTabular}>
+            −{formatInr(order.discountTotal)}
+          </dd>
         </div>
       ) : null}
-      <div className="flex items-end justify-between gap-4 border-t border-line pt-3">
-        <dt className="text-body-sm font-semibold uppercase tracking-[0.08em] text-brand">
-          {LABELS.total}
-        </dt>
-        <dd className="font-display text-[1.25rem] leading-none tabular-nums text-brand">
+      <div className={ordersComponentsStyles.rowTotal}>
+        <dt className={ordersComponentsStyles.totalLabel}>{LABELS.total}</dt>
+        <dd className={ordersComponentsStyles.totalValue}>
           {formatInr(order.totalAmount)}
         </dd>
       </div>

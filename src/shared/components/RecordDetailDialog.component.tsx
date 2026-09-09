@@ -16,6 +16,7 @@ import {
   buildRecordDetailFields,
   getRecordDetailTitle,
 } from "@/shared/utils/recordDetails";
+import { recordDetailDialogStyles } from "./dialogComponents.styles";
 
 interface RecordDetailDialogProps {
   open: boolean;
@@ -29,7 +30,7 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 
 function formatDetailValue(key: string, value: unknown, label: string) {
   if (value == null || value === "") {
-    return <span className="text-ink-faint">—</span>;
+    return <span className={recordDetailDialogStyles.dash}>—</span>;
   }
 
   if (isImageDetailValue(key, value)) {
@@ -50,16 +51,16 @@ function formatDetailValue(key: string, value: unknown, label: string) {
   if (asDate) return asDate;
 
   if (typeof value === "string") {
-    return <span className="break-words whitespace-pre-wrap">{value}</span>;
+    return <span className={recordDetailDialogStyles.stringVal}>{value}</span>;
   }
 
   if (typeof value === "number") {
-    return <span className="font-mono tabular-nums">{value}</span>;
+    return <span className={recordDetailDialogStyles.numVal}>{value}</span>;
   }
 
   if (Array.isArray(value) || isPlainObject(value)) {
     return (
-      <pre className="max-h-48 overflow-auto rounded-md border border-line bg-paper px-3 py-2 font-mono text-[0.75rem] leading-relaxed text-ink whitespace-pre-wrap break-words">
+      <pre className={recordDetailDialogStyles.pre}>
         {JSON.stringify(value, null, 2)}
       </pre>
     );
@@ -77,11 +78,9 @@ function RecordDetailField({
   const formattedValue = formatDetailValue(field.key, field.value, field.label);
 
   return (
-    <div className="grid gap-1 px-4 py-3 sm:grid-cols-[minmax(7rem,11rem)_minmax(0,1fr)] sm:gap-4">
-      <dt className="text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted">
-        {field.label}
-      </dt>
-      <dd className="min-w-0 text-body text-ink">{formattedValue}</dd>
+    <div className={recordDetailDialogStyles.fieldRow}>
+      <dt className={recordDetailDialogStyles.fieldLabel}>{field.label}</dt>
+      <dd className={recordDetailDialogStyles.fieldValue}>{formattedValue}</dd>
     </div>
   );
 }
@@ -98,18 +97,20 @@ export function RecordDetailDialog({
     <RecordDetailField key={field.key} field={field} />
   ));
   const detailContent = isEmpty ? (
-    <p className="text-body text-ink-muted">{LABELS.noDetailFields}</p>
+    <p className={recordDetailDialogStyles.emptyText}>
+      {LABELS.noDetailFields}
+    </p>
   ) : (
-    <dl className="max-h-[min(60dvh,32rem)] divide-y divide-line overflow-y-auto rounded-md border border-line">
-      {fieldRows}
-    </dl>
+    <dl className={recordDetailDialogStyles.list}>{fieldRows}</dl>
   );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl gap-4 sm:gap-5">
+      <DialogContent className={recordDetailDialogStyles.content}>
         <DialogHeader>
-          <DialogTitle className="pr-8">{title}</DialogTitle>
+          <DialogTitle className={recordDetailDialogStyles.title}>
+            {title}
+          </DialogTitle>
           <DialogDescription>{LABELS.recordDetailsHint}</DialogDescription>
         </DialogHeader>
 

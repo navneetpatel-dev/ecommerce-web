@@ -56,7 +56,7 @@ export function DoorstepConfirmCard({
   return (
     <div className={doorstepConfirmCardStyles.container}>
       <div className={doorstepConfirmCardStyles.header}>
-        <div className="flex items-center gap-2">
+        <div className={doorstepConfirmCardStyles.headerLeft}>
           <ShieldCheck
             className={doorstepConfirmCardStyles.headerIcon}
             aria-hidden="true"

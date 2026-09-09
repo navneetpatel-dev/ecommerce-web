@@ -4,6 +4,7 @@ import { BottomSheet } from "@/shared/components/BottomSheet.component";
 import { SelectableOptionButton } from "@/shared/components/SelectableOptionButton.component";
 import { SORT_OPTIONS } from "../../hooks/useProductListing.hook";
 import { LABELS } from "@/shared/constants/labels";
+import { productListingPageStyles } from "./productListingPage.styles";
 
 interface SortBottomSheetProps {
   open: boolean;
@@ -20,7 +21,7 @@ export function SortBottomSheet({
 }: SortBottomSheetProps) {
   return (
     <BottomSheet open={open} onClose={onClose} title={LABELS.sort}>
-      <div className="space-y-2">
+      <div className={productListingPageStyles.sortOptionsList}>
         {SORT_OPTIONS.map((option) => (
           <SelectableOptionButton
             key={option.value}

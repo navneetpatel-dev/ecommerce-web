@@ -12,6 +12,7 @@ import { SupportSettingsSection } from "./SupportSettingsSection.component";
 import { CodSettingsSection } from "./CodSettingsSection.component";
 import { WalletPointsSettingsSection } from "../WalletPointsSettingsSection.component";
 import { ScheduledReportsSettingsSection } from "./ScheduledReportsSettingsSection.component";
+import { platformSettingsFormStyles } from "./platformSettingsForm.styles";
 
 interface PlatformSettingsFormProps {
   form: PlatformSettings;
@@ -58,8 +59,8 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
   const { form, message, saveError = null, onSave } = props;
 
   return (
-    <div className="w-full min-w-0">
-      <FormStack className="space-y-8">
+    <div className={platformSettingsFormStyles.root}>
+      <FormStack className={platformSettingsFormStyles.formStack}>
         <PlatformSettingsHeader onSave={onSave} />
 
         <CommerceSettingsSection

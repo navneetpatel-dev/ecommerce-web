@@ -10,6 +10,7 @@ import type {
   ReportRunResult,
 } from "../api/reportsEngine.api";
 import { formatReportCell } from "../utils/formatReportCell";
+import { reportTableStyles as styles } from "./reportTable.styles";
 
 interface ReportTableProps {
   result: ReportRunResult | null;
@@ -65,15 +66,13 @@ export function ReportTable({
   );
   const mismatchMessage = metaError || LABELS.reconciliationMismatch;
   const mismatchNotice = metaMismatch ? (
-    <p className="rounded-md border border-danger/40 bg-danger/5 px-3 py-2 text-[0.875rem] text-danger">
-      {mismatchMessage}
-    </p>
+    <p className={styles.mismatchNotice}>{mismatchMessage}</p>
   ) : null;
   const rows = result?.rows ?? [];
   const onRefresh = error ? onRetry : undefined;
 
   return (
-    <div className="space-y-3">
+    <div className={styles.container}>
       {mismatchNotice}
       <DataTable
         columns={columns}

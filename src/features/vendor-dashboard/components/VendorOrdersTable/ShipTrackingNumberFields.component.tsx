@@ -8,6 +8,7 @@ import {
 } from "@/shared/components/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
+import { VENDOR_ORDERS_TABLE_STYLES } from "./vendorOrdersTable.styles";
 
 interface ShipTrackingNumberFieldsProps {
   trackingId: string;
@@ -26,7 +27,7 @@ export function ShipTrackingNumberFields({
   const trimmed = trackingId.trim();
 
   return (
-    <div className="space-y-1">
+    <div className={VENDOR_ORDERS_TABLE_STYLES.trackingRoot}>
       <TableRowActions>
         <TableRowAction>
           <Input
@@ -35,7 +36,7 @@ export function ShipTrackingNumberFields({
             onChange={(e) => onTrackingIdChange(e.target.value)}
             placeholder={LABELS.trackingNumberPlaceholder}
             aria-label={LABELS.trackingNumber}
-            className="w-full min-w-[10rem] text-body-sm"
+            className={VENDOR_ORDERS_TABLE_STYLES.trackingInput}
           />
         </TableRowAction>
         <TableRowAction>
@@ -61,7 +62,7 @@ export function ShipTrackingNumberFields({
         </TableRowAction>
       </TableRowActions>
       {!trimmed ? (
-        <p className="text-body-sm text-ink-muted">
+        <p className={VENDOR_ORDERS_TABLE_STYLES.trackingText}>
           {LABELS.trackingNumberRequiredToShip}
         </p>
       ) : null}

@@ -1,0 +1,20 @@
+export const productQnaStyles = {
+  container: "space-y-10",
+  form: "max-w-lg",
+  successMessage: "text-body-sm text-success",
+  emptyState: "px-0 py-8",
+  questionsList: "max-w-[65ch] divide-y divide-line",
+  questionArticle: "py-6 first:pt-0",
+  questionHeader: "flex items-start gap-2",
+  userIcon: "mt-0.5 h-4 w-4 shrink-0 text-ink-muted",
+  questionText: "text-body leading-relaxed text-ink whitespace-pre-wrap",
+  questionMeta: "mt-1 text-body-sm text-ink-muted",
+  answersList: "mt-4 space-y-3",
+  answerItem: "ml-6 border-l-2 border-line pl-4",
+  answerAuthor: "flex items-center gap-1.5 text-body-sm font-medium text-ink",
+  authorIcon: "h-3.5 w-3.5",
+  answerDate: "font-normal text-ink-muted",
+  answerBody:
+    "mt-1 text-body-sm leading-relaxed text-ink-muted whitespace-pre-wrap",
+  noAnswersText: "ml-6 mt-3 text-body-sm text-ink-muted",
+} as const;

@@ -9,6 +9,7 @@ import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useSupportTicket } from "../api/supportTickets.queries";
 import { TicketThread } from "../components/TicketThread.component";
+import { supportTicketsPagesStyles } from "./supportTicketsPages.styles";
 
 export function AdminTicketDetailPage() {
   return (
@@ -26,10 +27,15 @@ function AdminTicketDetailContent() {
     enabled: Boolean(ticketId),
   });
 
-  if (isLoading) return <DetailQuerySkeleton className="space-y-3 py-4" />;
+  if (isLoading)
+    return (
+      <DetailQuerySkeleton
+        className={supportTicketsPagesStyles.detailSkeletonMargin}
+      />
+    );
   if (isEmpty) {
     return (
-      <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+      <div className={supportTicketsPagesStyles.errorBox}>
         <QueryErrorAlert
           error={error}
           fallback={LABELS.ticketCouldNotLoadDetail}

@@ -21,6 +21,7 @@ import {
 import { notificationsAdminLabels as LABELS } from "@/shared/constants/labels/notificationsAdmin";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { notificationsApi } from "../api/notifications.api";
+import { adminFormWidgetsStyles } from "./adminFormWidgets.styles";
 
 export function BroadcastNotificationForm() {
   const [role, setRole] = useState<RoleName>(ROLE_VALUES[0]);
@@ -57,16 +58,16 @@ export function BroadcastNotificationForm() {
   };
 
   return (
-    <div className="space-y-4 rounded-md border border-line-strong bg-surface-raised p-4">
+    <div className={adminFormWidgetsStyles.broadcastCard}>
       <div>
-        <h2 className="text-body font-medium text-ink">
+        <h2 className={adminFormWidgetsStyles.broadcastTitle}>
           {LABELS.broadcastTitle}
         </h2>
-        <p className="mt-1 text-body-sm text-ink-muted">
+        <p className={adminFormWidgetsStyles.broadcastHint}>
           {LABELS.broadcastHint}
         </p>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className={adminFormWidgetsStyles.gridSm2}>
         <FormFieldFrame label={LABELS.broadcastTargetRole}>
           <Select
             value={role}
@@ -101,10 +102,12 @@ export function BroadcastNotificationForm() {
           maxLength={5000}
         />
       </FormFieldFrame>
-      {error ? <p className="text-body-sm text-danger">{error}</p> : null}
-      {result ? <p className="text-body-sm text-success">{result}</p> : null}
+      {error ? <p className={adminFormWidgetsStyles.errorSm}>{error}</p> : null}
+      {result ? (
+        <p className={adminFormWidgetsStyles.successSm}>{result}</p>
+      ) : null}
       <Button loading={pending} onClick={() => void submit()}>
-        <Send className="size-4" aria-hidden="true" />
+        <Send className={adminFormWidgetsStyles.iconSm} aria-hidden="true" />
         {LABELS.broadcastSubmit}
       </Button>
     </div>

@@ -9,6 +9,7 @@ import {
 } from "../api/deliveryAgent.queries";
 import { PATHS } from "@/shared/constants/paths";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { todayPageStyles } from "./todayPage.styles";
 
 const ACTIVE_DELIVERIES = [
   "PENDING",
@@ -28,12 +29,12 @@ export function TodayPage() {
   const count = deliveryCount + pickupCount;
 
   return (
-    <div className="w-full min-w-0 space-y-8">
-      <header className="flex flex-col gap-2 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between">
+    <div className={todayPageStyles.container}>
+      <header className={todayPageStyles.header}>
         <div>
-          <p className="text-body-sm font-medium text-brand">FIELD QUEUE</p>
-          <h1 className="mt-1 font-display text-[1.75rem] text-ink">Today</h1>
-          <p className="mt-1 text-body text-ink-muted">
+          <p className={todayPageStyles.queueBadge}>FIELD QUEUE</p>
+          <h1 className={todayPageStyles.title}>Today</h1>
+          <p className={todayPageStyles.subtitle}>
             {count} active task{count === 1 ? "" : "s"} in your current
             assignment queue.
           </p>
@@ -51,20 +52,18 @@ export function TodayPage() {
         <ShiftSummaryCard summary={shiftSummary.data} />
       ) : null}
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        <section className="space-y-4">
-          <div className="flex items-center justify-between border-b border-line pb-2">
-            <h2 className="font-display text-[1.125rem] text-ink">
-              Deliveries
-            </h2>
-            <span className="text-body-sm text-ink-muted">
+      <div className={todayPageStyles.grid}>
+        <section className={todayPageStyles.section}>
+          <div className={todayPageStyles.sectionHeader}>
+            <h2 className={todayPageStyles.sectionTitle}>Deliveries</h2>
+            <span className={todayPageStyles.sectionCount}>
               {deliveryCount} active
             </span>
           </div>
           {deliveries.isLoading ? (
-            <p className="text-ink-muted">Loading deliveries...</p>
+            <p className={todayPageStyles.loadingText}>Loading deliveries...</p>
           ) : deliveryCount > 0 ? (
-            <div className="space-y-3">
+            <div className={todayPageStyles.taskList}>
               {deliveries.data?.map((shipment) => (
                 <TaskCard
                   key={shipment.id}
@@ -76,25 +75,21 @@ export function TodayPage() {
               ))}
             </div>
           ) : (
-            <p className="border-l-2 border-brand/30 pl-3 text-body text-ink-muted py-2">
-              No active deliveries.
-            </p>
+            <p className={todayPageStyles.emptyText}>No active deliveries.</p>
           )}
         </section>
 
-        <section className="space-y-4">
-          <div className="flex items-center justify-between border-b border-line pb-2">
-            <h2 className="font-display text-[1.125rem] text-ink">
-              Return pickups
-            </h2>
-            <span className="text-body-sm text-ink-muted">
+        <section className={todayPageStyles.section}>
+          <div className={todayPageStyles.sectionHeader}>
+            <h2 className={todayPageStyles.sectionTitle}>Return pickups</h2>
+            <span className={todayPageStyles.sectionCount}>
               {pickupCount} scheduled
             </span>
           </div>
           {pickups.isLoading ? (
-            <p className="text-ink-muted">Loading pickups...</p>
+            <p className={todayPageStyles.loadingText}>Loading pickups...</p>
           ) : pickupCount > 0 ? (
-            <div className="space-y-3">
+            <div className={todayPageStyles.taskList}>
               {pickups.data?.map((pickup) => (
                 <TaskCard
                   key={pickup.id}
@@ -110,9 +105,7 @@ export function TodayPage() {
               ))}
             </div>
           ) : (
-            <p className="border-l-2 border-brand/30 pl-3 text-body text-ink-muted py-2">
-              No scheduled pickups.
-            </p>
+            <p className={todayPageStyles.emptyText}>No scheduled pickups.</p>
           )}
         </section>
       </div>

@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import type { CookiePreferences } from "@/shared/hooks/useCookieBanner.hook";
+import { cookiePreferencesDialogStyles } from "./cookieComponents.styles";
 
 interface CookiePreferencesDialogProps {
   open: boolean;
@@ -42,11 +43,11 @@ export function CookiePreferencesDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="flex items-start justify-between gap-4 rounded-md border border-line bg-surface p-4">
+        <div className={cookiePreferencesDialogStyles.stack}>
+          <div className={cookiePreferencesDialogStyles.itemRow}>
             <div>
-              <p className="text-body font-medium text-ink">Necessary</p>
-              <p className="mt-1 text-body-sm text-ink-muted">
+              <p className={cookiePreferencesDialogStyles.title}>Necessary</p>
+              <p className={cookiePreferencesDialogStyles.description}>
                 Required for login, cart, checkout, and security.
               </p>
             </div>
@@ -57,10 +58,10 @@ export function CookiePreferencesDialog({
             />
           </div>
 
-          <div className="flex items-start justify-between gap-4 rounded-md border border-line bg-surface p-4">
+          <div className={cookiePreferencesDialogStyles.itemRow}>
             <div>
-              <p className="text-body font-medium text-ink">Analytics</p>
-              <p className="mt-1 text-body-sm text-ink-muted">
+              <p className={cookiePreferencesDialogStyles.title}>Analytics</p>
+              <p className={cookiePreferencesDialogStyles.description}>
                 Helps us understand traffic and improve product discovery.
               </p>
             </div>
@@ -71,10 +72,10 @@ export function CookiePreferencesDialog({
             />
           </div>
 
-          <div className="flex items-start justify-between gap-4 rounded-md border border-line bg-surface p-4">
+          <div className={cookiePreferencesDialogStyles.itemRow}>
             <div>
-              <p className="text-body font-medium text-ink">Marketing</p>
-              <p className="mt-1 text-body-sm text-ink-muted">
+              <p className={cookiePreferencesDialogStyles.title}>Marketing</p>
+              <p className={cookiePreferencesDialogStyles.description}>
                 Used for personalized offers and campaign measurement.
               </p>
             </div>

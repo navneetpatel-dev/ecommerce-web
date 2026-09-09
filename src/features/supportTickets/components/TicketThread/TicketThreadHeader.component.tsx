@@ -10,6 +10,7 @@ import {
   TICKET_STATUS_LABEL,
 } from "../../utils/labels";
 import { listHref, type RoleMode } from "./ticketThreadShared";
+import { ticketThreadStyles } from "./ticketThread.styles";
 
 /** Back link, subject and status/priority badges. */
 export function TicketThreadHeader({
@@ -20,25 +21,23 @@ export function TicketThreadHeader({
   mode: RoleMode;
 }) {
   return (
-    <header className="space-y-2">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <Link
-          href={listHref(mode)}
-          className="inline-flex items-center gap-1 text-body-sm text-ink-muted transition-colors hover:text-brand"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.5} />
+    <header className={ticketThreadStyles.header}>
+      <div className={ticketThreadStyles.navRow}>
+        <Link href={listHref(mode)} className={ticketThreadStyles.backLink}>
+          <ArrowLeft
+            className={ticketThreadStyles.backIcon}
+            strokeWidth={1.5}
+          />
           {LABELS.ticketBackToList}
         </Link>
-        <span className="font-mono text-[0.6875rem] tabular-nums text-ink-faint">
+        <span className={ticketThreadStyles.ticketId}>
           {ticket.ticketNumber}
         </span>
       </div>
 
-      <div className="min-w-0">
-        <h1 className="font-display text-[1.25rem] font-semibold leading-tight tracking-tight text-ink sm:text-[1.375rem]">
-          {ticket.subject}
-        </h1>
-        <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+      <div className={ticketThreadStyles.titleWrap}>
+        <h1 className={ticketThreadStyles.title}>{ticket.subject}</h1>
+        <div className={ticketThreadStyles.metaRow}>
           <StatusBadge
             status={ticket.status}
             label={TICKET_STATUS_LABEL[ticket.status]}
@@ -47,7 +46,7 @@ export function TicketThreadHeader({
             status={ticket.priority}
             label={TICKET_PRIORITY_LABEL[ticket.priority]}
           />
-          <span className="text-[0.75rem] text-ink-muted">
+          <span className={ticketThreadStyles.metaText}>
             {TICKET_CATEGORY_LABEL[ticket.category]}
             {" · "}
             {formatOrderDate(ticket.createdAt)}

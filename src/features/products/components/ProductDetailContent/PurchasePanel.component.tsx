@@ -6,9 +6,9 @@ import { ShareButtonContainer } from "@/shared/containers/ShareButtonContainer.c
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { ProductDeliveryCheck } from "../ProductDeliveryCheck.component";
 import { Heart } from "lucide-react";
-import { cn } from "@/shared/utils/cn";
 import { LABELS } from "@/shared/constants/labels";
 import { NotifyMeButton } from "@/features/stockAlerts";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
 
 interface PurchasePanelProps {
   productId: string;
@@ -68,18 +68,20 @@ export function PurchasePanel({
   productUrl,
 }: PurchasePanelProps) {
   return (
-    <div className="space-y-3 rounded-xl border border-line bg-paper/50 p-3 sm:p-4">
+    <div className={PRODUCT_DETAIL_CONTENT_STYLES.purchasePanelRoot}>
       {needsOptionSelection ? (
-        <p className="text-body-sm text-ink-muted">
+        <p className={PRODUCT_DETAIL_CONTENT_STYLES.helperText}>
           {LABELS.selectAllOptionsHint}
         </p>
       ) : variantUnavailable ? (
-        <p className="text-body-sm text-ink-muted">
+        <p className={PRODUCT_DETAIL_CONTENT_STYLES.helperText}>
           {LABELS.variantUnavailableHint}
         </p>
       ) : !canAddToCart && displayStock === 0 ? (
-        <div className="space-y-2">
-          <p className="text-body-sm text-ink-muted">{LABELS.outOfStockHint}</p>
+        <div className={PRODUCT_DETAIL_CONTENT_STYLES.outOfStockStack}>
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.helperText}>
+            {LABELS.outOfStockHint}
+          </p>
           <NotifyMeButton variantId={variantId ?? null} />
         </div>
       ) : null}
@@ -95,25 +97,25 @@ export function PurchasePanel({
         onBlockedChange={onDeliveryBlockedChange}
       />
 
-      <div className="flex flex-wrap items-center gap-2 border-t border-line pt-3 sm:gap-2.5">
+      <div className={PRODUCT_DETAIL_CONTENT_STYLES.actionRow}>
         <QuantitySelector
           value={quantity}
           onChange={onQuantityChange}
           max={Math.max(quantityMax, 1)}
           disabled={quantityDisabled}
           disabledHint={quantityDisabledHint}
-          className="shrink-0"
-          controlClassName="h-9 w-9 min-h-9 max-h-9 [&_svg]:size-3.5"
-          valueClassName="h-5 w-6 text-body-sm"
+          className={PRODUCT_DETAIL_CONTENT_STYLES.quantitySelector}
+          controlClassName={PRODUCT_DETAIL_CONTENT_STYLES.quantityControl}
+          valueClassName={PRODUCT_DETAIL_CONTENT_STYLES.quantityValue}
         />
 
         <DisabledActionHint
           disabled={addDisabled}
           message={addToCartHint}
-          className="min-w-0 flex-1"
+          className={PRODUCT_DETAIL_CONTENT_STYLES.addToCartWrapper}
         >
           <Button
-            className="w-full rounded-md sm:min-w-[10rem]"
+            className={PRODUCT_DETAIL_CONTENT_STYLES.addToCartButton}
             disabled={addDisabled}
             onClick={() => {
               if (addDisabled) return;
@@ -128,7 +130,7 @@ export function PurchasePanel({
         <Button
           variant="outline"
           size="icon"
-          className="shrink-0 rounded-md border-line"
+          className={PRODUCT_DETAIL_CONTENT_STYLES.wishlistButton}
           onClick={onToggleWishlist}
           aria-label={
             isWishlisted ? LABELS.removeFromWishlist : LABELS.addToWishlist
@@ -136,10 +138,11 @@ export function PurchasePanel({
         >
           <Heart
             size={16}
-            className={cn(
-              isWishlisted ? "fill-danger text-danger" : "text-ink-muted",
-              isWishlisted && "animate-pulse-scale",
-            )}
+            className={
+              isWishlisted
+                ? PRODUCT_DETAIL_CONTENT_STYLES.heartWishlisted
+                : PRODUCT_DETAIL_CONTENT_STYLES.heartUnwishlisted
+            }
           />
         </Button>
         <ShareButtonContainer title={productName} url={productUrl} />

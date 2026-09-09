@@ -8,6 +8,7 @@ import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInr } from "../utils/format";
 import { orderLineVariantLabel } from "../utils/orderLine.utils";
 import type { Order, OrderItem } from "@/shared/api/types";
+import { orderConfirmationStyles as styles } from "./orderConfirmation.styles";
 
 interface OrderConfirmationItemsProps {
   order: Pick<Order, "subOrders">;
@@ -19,55 +20,45 @@ interface OrderConfirmationItemsProps {
  */
 function OrderLine({ item }: { item: OrderItem }) {
   const attrs = orderLineVariantLabel(item);
-  const nameClassName =
-    "block text-body font-medium leading-snug text-ink transition-colors";
 
   return (
-    <li className="grid grid-cols-[3.5rem_1fr] items-start gap-3 py-3 sm:grid-cols-[4rem_1fr_auto] sm:gap-4">
+    <li className={styles.lineRoot}>
       {/* MediaImage renders <Image fill>, which is absolutely positioned —
           this wrapper must stay `relative` or the thumbnail escapes it. */}
-      <div className="relative aspect-square self-start overflow-hidden rounded-sm border border-line bg-paper">
+      <div className={styles.lineMediaWrapper}>
         <MediaImage
           src={item.imageUrl}
           alt={item.productName}
           sizes="88px"
-          imageClassName="object-cover"
+          imageClassName={styles.lineMediaImage}
         />
       </div>
 
-      <div className="flex min-w-0 flex-col gap-0.5">
+      <div className={styles.lineContent}>
         {item.productSlug ? (
           <Link
             href={PATHS.product(item.productSlug)}
-            className={`${nameClassName} hover:text-brand`}
+            className={styles.lineNameLink}
           >
             {item.productName}
           </Link>
         ) : (
-          <p className={nameClassName}>{item.productName}</p>
+          <p className={styles.lineName}>{item.productName}</p>
         )}
 
-        {attrs ? (
-          <p className="font-mono text-[0.6875rem] tracking-wide text-ink-muted">
-            {attrs}
-          </p>
-        ) : null}
+        {attrs ? <p className={styles.lineAttrs}>{attrs}</p> : null}
 
-        <p className="mt-1 text-body-sm text-ink-muted">
+        <p className={styles.lineQty}>
           {formatLabel(LABELS.qtyLabel, { count: String(item.quantity) })}
         </p>
 
-        <p className="mt-1 font-display text-[1.125rem] tabular-nums text-ink sm:hidden">
-          {formatInr(item.lineTotal)}
-        </p>
+        <p className={styles.lineTotalMobile}>{formatInr(item.lineTotal)}</p>
       </div>
 
-      <div className="hidden flex-col items-end gap-1 sm:flex">
-        <p className="font-display text-[1.125rem] tabular-nums text-ink">
-          {formatInr(item.lineTotal)}
-        </p>
+      <div className={styles.lineTotalDesktopCol}>
+        <p className={styles.lineTotalDesktop}>{formatInr(item.lineTotal)}</p>
         {item.quantity > 1 ? (
-          <p className="text-[0.75rem] tabular-nums text-ink-muted">
+          <p className={styles.lineUnitPrice}>
             {formatInr(item.unitPrice)} {LABELS.each}
           </p>
         ) : null}
@@ -87,7 +78,7 @@ export function OrderConfirmationItems({ order }: OrderConfirmationItemsProps) {
   if (subOrders.length === 0) return null;
 
   return (
-    <div className="space-y-4">
+    <div className={styles.itemsWrapper}>
       {subOrders.map((subOrder) => {
         const items = subOrder.items ?? [];
         return (
@@ -99,9 +90,9 @@ export function OrderConfirmationItems({ order }: OrderConfirmationItemsProps) {
               vendorId={subOrder.vendor?.id}
               count={items.length}
               as="h3"
-              className="mb-1"
+              className={styles.vendorHeaderMargin}
             />
-            <ul className="divide-y divide-line">
+            <ul className={styles.itemsList}>
               {items.map((item) => (
                 <OrderLine key={item.id} item={item} />
               ))}

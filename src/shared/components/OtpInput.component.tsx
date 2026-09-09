@@ -1,3 +1,5 @@
+import { otpInputStyles } from "./otpInput.styles";
+
 interface OtpInputProps {
   digits: string[];
   onSetInputRef: (index: number, node: HTMLInputElement | null) => void;
@@ -17,7 +19,7 @@ export function OtpInput({
   onPaste,
 }: OtpInputProps) {
   return (
-    <div className="flex items-center gap-2">
+    <div className={otpInputStyles.container}>
       {digits.map((digit, index) => (
         <input
           key={index}
@@ -29,7 +31,7 @@ export function OtpInput({
           onChange={(e) => onUpdateDigit(index, e.target.value)}
           onKeyDown={(event) => onKeyDown(index, event)}
           onPaste={onPaste}
-          className="h-11 w-11 rounded-sm border border-line bg-surface text-center text-body font-semibold text-ink outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className={otpInputStyles.input}
           aria-label={`OTP digit ${index + 1}`}
         />
       ))}

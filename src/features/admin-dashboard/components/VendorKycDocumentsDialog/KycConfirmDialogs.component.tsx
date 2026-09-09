@@ -7,6 +7,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { vendorDocumentTypeLabel } from "@/shared/utils/vendorDocumentTypeLabel";
 import type { KycChecklistItem } from "@/features/vendors";
+import { vendorKycDocumentsDialogStyles } from "./vendorKycDocumentsDialog.styles";
 
 interface KycConfirmDialogsProps {
   mode: "verify" | "reject" | null;
@@ -95,7 +96,7 @@ export function KycConfirmDialogs({
             id="kyc-reject-reason"
             value={reason}
             onChange={(e) => onReasonChange(e.target.value)}
-            className="min-h-24 resize-y"
+            className={vendorKycDocumentsDialogStyles.rejectTextarea}
           />
         </FormFieldFrame>
       </StatusDialog>

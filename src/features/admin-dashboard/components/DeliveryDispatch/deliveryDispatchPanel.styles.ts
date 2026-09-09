@@ -13,4 +13,5 @@ export const deliveryDispatchPanelStyles = {
     "rounded-md border border-success/30 bg-success/10 px-3.5 py-2.5 text-body-sm font-medium text-success",
   errorAlert:
     "rounded-md border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-body-sm font-medium text-danger",
+  selectTrigger: "w-full",
 } as const;

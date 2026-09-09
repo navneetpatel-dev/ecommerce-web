@@ -8,6 +8,7 @@ import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/cn";
 import type { AdminPermission } from "../../api/roles.api";
+import { rolePermissionsDialogStyles } from "./rolePermissionsDialog.styles";
 
 interface PermissionsListProps {
   permissions: AdminPermission[];
@@ -25,8 +26,8 @@ export function PermissionsList({
 }: PermissionsListProps) {
   if (permissions.length === 0) {
     return (
-      <div className="py-12 text-center rounded-md border border-dashed border-line bg-surface/40">
-        <p className="text-body font-medium text-ink-muted">
+      <div className={rolePermissionsDialogStyles.emptyContainer}>
+        <p className={rolePermissionsDialogStyles.emptyText}>
           No permissions match your search
         </p>
         <Button
@@ -34,7 +35,7 @@ export function PermissionsList({
           variant="ghost"
           size="sm"
           onClick={onResetSearch}
-          className="mt-2 text-brand text-xs"
+          className={rolePermissionsDialogStyles.clearSearchBtn}
         >
           Reset search
         </Button>
@@ -44,7 +45,7 @@ export function PermissionsList({
 
   return (
     <TooltipProvider delayDuration={150}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+      <div className={rolePermissionsDialogStyles.gridSm2}>
         {permissions.map((permission) => {
           const isChecked = selected.has(permission.key);
           const moduleName =
@@ -55,36 +56,36 @@ export function PermissionsList({
               <TooltipTrigger asChild>
                 <label
                   className={cn(
-                    "group flex items-center justify-between gap-3 rounded-md border px-3.5 py-2.5 text-body-sm transition-colors cursor-pointer select-none",
+                    rolePermissionsDialogStyles.itemLabelBase,
                     isChecked
-                      ? "border-brand bg-brand-subtle/30 text-ink shadow-xs ring-1 ring-brand/20"
-                      : "border-line bg-surface text-ink hover:border-line-strong hover:bg-surface-raised",
+                      ? rolePermissionsDialogStyles.itemLabelChecked
+                      : rolePermissionsDialogStyles.itemLabelUnchecked,
                   )}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                  <div className={rolePermissionsDialogStyles.itemLabelRow}>
                     <Checkbox
                       checked={isChecked}
                       onCheckedChange={() => onToggle(permission.key)}
                     />
                     <span
                       className={cn(
-                        "truncate text-body-sm font-mono",
+                        rolePermissionsDialogStyles.itemKeyText,
                         isChecked
-                          ? "font-semibold text-ink"
-                          : "font-normal text-ink",
+                          ? rolePermissionsDialogStyles.itemKeyChecked
+                          : rolePermissionsDialogStyles.itemKeyUnchecked,
                       )}
                     >
                       {permission.key}
                     </span>
                   </div>
-                  <span className="shrink-0 text-[10px] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted">
+                  <span className={rolePermissionsDialogStyles.itemScopeText}>
                     {moduleName}
                   </span>
                 </label>
               </TooltipTrigger>
               <TooltipContent
                 side="top"
-                className="font-mono text-xs max-w-xs break-all"
+                className={rolePermissionsDialogStyles.tooltipContent}
               >
                 {permission.key}
               </TooltipContent>

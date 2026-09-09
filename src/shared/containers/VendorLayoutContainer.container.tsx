@@ -8,6 +8,7 @@ import { RequirePermission } from "@/shared/components/RequirePermission.compone
 import { vendorPermissionsForPath } from "@/shared/constants/vendorNav";
 import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
+import { workspaceLayoutStyles as styles } from "./workspaceLayout.styles";
 
 export function VendorLayoutContainer({
   children,
@@ -25,9 +26,9 @@ export function VendorLayoutContainer({
   }, [pathname]);
 
   return (
-    <div className="min-h-screen bg-paper">
+    <div className={styles.root}>
       {renderHeader(() => setNavOpen(true))}
-      <div className="flex min-w-0">
+      <div className={styles.bodyFlex}>
         <SidebarNav items={navItems} currentPath={pathname} />
         <WorkspaceNavDrawer
           open={navOpen}
@@ -36,7 +37,7 @@ export function VendorLayoutContainer({
           currentPath={pathname}
           title={LABELS.vendorDashboard}
         />
-        <main className="min-w-0 flex-1 overflow-x-hidden bg-surface p-4 sm:p-6 lg:p-8">
+        <main className={styles.main}>
           {pathname === PATHS.vendor.root ||
           pathname === PATHS.vendor.profile ? (
             children

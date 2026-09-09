@@ -12,6 +12,7 @@ import { NumberInput } from "@/shared/components/NumberInput.component";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { FormError } from "@/shared/components/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
+import { adminFormWidgetsStyles } from "./adminFormWidgets.styles";
 
 interface AdminTaxRuleFormProps {
   gstPercentage: string;
@@ -67,7 +68,7 @@ export function AdminTaxRuleForm({
           error={createError}
           fallback={LABELS.couldNotCreateTaxRule}
         />
-        <FormActions className="sm:col-span-2">
+        <FormActions className={adminFormWidgetsStyles.colSpan2}>
           <DisabledActionHint
             disabled={!canCreate}
             message={LABELS.enterGstPercentage}

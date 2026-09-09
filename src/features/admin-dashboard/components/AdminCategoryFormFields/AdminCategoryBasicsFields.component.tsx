@@ -16,6 +16,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { CATEGORY_STATUS } from "@/shared/constants/statuses";
 import type { Category } from "@/shared/api/types";
 import { NONE_PARENT } from "./useCategoryParentOptions.hook";
+import { adminCategoryStyles } from "../adminCategory.styles";
 
 interface AdminCategoryBasicsFieldsProps {
   form: UseFormReturn<CategoryFormInput>;
@@ -49,7 +50,7 @@ export function AdminCategoryBasicsFields({
         htmlFor={`${idPrefix}-name`}
         required
         error={nameError}
-        className="sm:col-span-2"
+        className={adminCategoryStyles.colSpan2}
       >
         <Input
           id={`${idPrefix}-name`}

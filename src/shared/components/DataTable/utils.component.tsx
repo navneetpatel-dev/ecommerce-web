@@ -6,6 +6,7 @@ import { TruncatedText } from "@/shared/components/TruncatedText.component";
 import { TABLE_CELL_MAX_CHARS } from "@/shared/constants/table";
 import { extractImageUrls, isImageFieldKey } from "@/shared/utils/imageField";
 import { tryFormatDateTime } from "@/shared/utils/formatDate";
+import { dataTableUtilsStyles } from "./dataTable.styles";
 import type { DataTableColumn } from "./types";
 
 export function columnFieldKey<T>(column: DataTableColumn<T>): string {
@@ -74,7 +75,7 @@ export function renderCellContent<T>(
     }
     if (urls.length > 1) {
       return (
-        <div className="flex flex-nowrap items-center gap-2">
+        <div className={dataTableUtilsStyles.imagesWrap}>
           {urls.slice(0, 4).map((url) => (
             <TableCellImage
               key={url}
@@ -83,7 +84,7 @@ export function renderCellContent<T>(
             />
           ))}
           {urls.length > 4 ? (
-            <span className="text-[0.75rem] text-ink-muted">
+            <span className={dataTableUtilsStyles.imagesOverflow}>
               +{urls.length - 4}
             </span>
           ) : null}

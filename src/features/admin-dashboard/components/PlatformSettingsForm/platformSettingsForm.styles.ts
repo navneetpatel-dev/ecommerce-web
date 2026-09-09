@@ -62,4 +62,6 @@ export const platformSettingsFormStyles = {
   itemCategory:
     "shrink-0 text-[10px] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted",
   tooltipContent: "max-w-xs",
+  root: "w-full min-w-0",
+  formStack: "space-y-8",
 } as const;

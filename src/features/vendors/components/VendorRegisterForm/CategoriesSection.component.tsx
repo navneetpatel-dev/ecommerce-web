@@ -5,6 +5,7 @@ import type { VendorDocumentType } from "@/shared/constants/statuses";
 import { vendorDocumentTypeLabel } from "@/shared/utils/vendorDocumentTypeLabel";
 import { cn } from "@/shared/utils/cn";
 import type { Category } from "@/shared/api/types";
+import { vendorRegisterFormStyles as styles } from "./vendorRegisterForm.styles";
 
 interface VendorRegisterCategoriesSectionProps {
   categories: Category[];
@@ -34,8 +35,8 @@ export function VendorRegisterCategoriesSection({
       >
         <div
           className={cn(
-            "max-h-48 space-y-2 overflow-y-auto rounded-md border p-3",
-            errorMessage ? "border-danger" : "border-line",
+            styles.categoryList,
+            errorMessage ? styles.borderDanger : styles.borderLine,
           )}
         >
           {categories.map((category) => (
@@ -51,11 +52,9 @@ export function VendorRegisterCategoriesSection({
       </FormFieldFrame>
 
       {requiredDocs.length > 0 ? (
-        <div className="space-y-2 rounded-md border border-line bg-paper/40 p-3">
-          <p className="text-[0.875rem] font-medium text-ink">
-            {LABELS.requiredDocuments}
-          </p>
-          <ul className="list-disc space-y-1 pl-5 text-body-sm text-ink-muted">
+        <div className={styles.requiredDocsCard}>
+          <p className={styles.requiredDocsTitle}>{LABELS.requiredDocuments}</p>
+          <ul className={styles.requiredDocsList}>
             {requiredDocs.map((type) => (
               <li key={type}>{vendorDocumentTypeLabel(type)}</li>
             ))}

@@ -22,7 +22,7 @@ export function ProductsTableHeader(props: ProductsTableHeaderProps) {
           <h2 className={styles.heading}>{LABELS.products}</h2>
           <Input
             placeholder={LABELS.searchProducts}
-            className="w-full text-body sm:w-64"
+            className={styles.searchInput}
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
           />

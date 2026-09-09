@@ -8,6 +8,7 @@ import {
   CardDescription,
 } from "@/shared/components/ui/card";
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
+import { vendorFulfillmentSlaStyles } from "./vendorAnalyticsWidgets.styles";
 
 interface VendorFulfillmentSlaCardProps {
   onTimePercent: number;
@@ -21,34 +22,34 @@ export function VendorFulfillmentSlaCard({
 }: VendorFulfillmentSlaCardProps) {
   return (
     <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-body-lg">
+      <CardHeader className={vendorFulfillmentSlaStyles.cardHeader}>
+        <CardTitle className={vendorFulfillmentSlaStyles.cardTitle}>
           {vendorDashboardWidgetsLabels.vendorAnalyticsFulfillmentSla}
         </CardTitle>
         <CardDescription>
           {vendorDashboardWidgetsLabels.vendorAnalyticsFulfillmentSlaHint}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4 pt-0">
-        <div className="flex items-center justify-between">
-          <span className="text-body-sm text-ink-muted">
+      <CardContent className={vendorFulfillmentSlaStyles.cardContent}>
+        <div className={vendorFulfillmentSlaStyles.row}>
+          <span className={vendorFulfillmentSlaStyles.metricLabel}>
             {vendorDashboardWidgetsLabels.vendorAnalyticsOnTime}
           </span>
-          <span className="font-mono text-[1.375rem] font-bold text-success">
+          <span className={vendorFulfillmentSlaStyles.onTimeValue}>
             {onTimePercent.toFixed(1)}%
           </span>
         </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-line">
+        <div className={vendorFulfillmentSlaStyles.progressBarWrapper}>
           <div
-            className="h-full rounded-full bg-success"
+            className={vendorFulfillmentSlaStyles.progressBarFill}
             style={{ width: `${Math.min(100, onTimePercent)}%` }}
           />
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-body-sm text-ink-muted">
+        <div className={vendorFulfillmentSlaStyles.row}>
+          <span className={vendorFulfillmentSlaStyles.metricLabel}>
             {vendorDashboardWidgetsLabels.vendorAnalyticsLate}
           </span>
-          <span className="font-mono text-body font-medium text-danger">
+          <span className={vendorFulfillmentSlaStyles.lateValue}>
             {latePercent.toFixed(1)}%
           </span>
         </div>

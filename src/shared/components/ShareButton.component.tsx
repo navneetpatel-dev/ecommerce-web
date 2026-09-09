@@ -6,6 +6,7 @@ import {
   PopoverContent,
 } from "@/shared/components/ui/popover";
 import { LABELS } from "@/shared/constants/labels";
+import { shareButtonStyles } from "./displayComponents.styles";
 
 interface ShareButtonProps {
   copied: boolean;
@@ -29,7 +30,7 @@ export function ShareButton({
         type="button"
         variant="outline"
         size="lg"
-        className="h-11 w-11 shrink-0 rounded-full border-line px-0 md:hidden"
+        className={shareButtonStyles.mobileBtn}
         onClick={onShareNative}
         aria-label={mobileShareLabel}
       >
@@ -42,22 +43,22 @@ export function ShareButton({
             type="button"
             variant="outline"
             size="lg"
-            className="hidden h-11 w-11 shrink-0 rounded-full border-line px-0 md:inline-flex"
+            className={shareButtonStyles.desktopBtn}
             aria-label={LABELS.share}
           >
             <Share2 size={20} />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-64">
-          <div className="space-y-3">
-            <h3 className="text-body font-medium text-ink">{label}</h3>
+        <PopoverContent className={shareButtonStyles.popoverContent}>
+          <div className={shareButtonStyles.popoverBody}>
+            <h3 className={shareButtonStyles.popoverTitle}>{label}</h3>
             <Button
               type="button"
               variant="outline"
               onClick={onCopyLink}
-              className="w-full justify-start gap-2 font-normal"
+              className={shareButtonStyles.copyLinkBtn}
             >
-              <LinkIcon className="h-4 w-4" />
+              <LinkIcon className={shareButtonStyles.linkIcon} />
               {copyLinkLabel}
             </Button>
           </div>

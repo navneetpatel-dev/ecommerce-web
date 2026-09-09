@@ -11,6 +11,7 @@ import {
   type AddressFormValues,
 } from "@/shared/schemas/address.schema";
 import { AddressLocationStatusNotice } from "./AddressLocationStatusNotice.component";
+import { addressFormDialogStyles } from "./addressFormDialog.styles";
 
 interface AddressFormFieldsProps {
   form: AddressFormValues;
@@ -54,7 +55,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
         label={LABELS.addressLine1}
         htmlFor="shared-addr-line1"
         required
-        className="sm:col-span-2"
+        className={addressFormDialogStyles.colSpan2}
         error={fieldError("line1")}
       >
         <Input
@@ -77,7 +78,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       <FormFieldFrame
         label={LABELS.addressLine2Optional}
         htmlFor="shared-addr-line2"
-        className="sm:col-span-2"
+        className={addressFormDialogStyles.colSpan2}
         error={fieldError("line2")}
       >
         <Input
@@ -152,7 +153,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       <FormFieldFrame
         label={LABELS.addressDeliveryInstructionsOptional}
         htmlFor="shared-addr-delivery-instructions"
-        className="sm:col-span-2"
+        className={addressFormDialogStyles.colSpan2}
         error={fieldError("deliveryInstructions")}
       >
         <Textarea
@@ -169,7 +170,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       {hasAddresses || isEditing ? (
         <CheckboxField
           id="shared-addr-default"
-          className="sm:col-span-2"
+          className={addressFormDialogStyles.colSpan2}
           checked={form.isDefault}
           onCheckedChange={(checked) => setField("isDefault", checked)}
           label={LABELS.addressSetDefault}

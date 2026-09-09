@@ -8,26 +8,27 @@ import { VendorSettlementReportPanel } from "../components/VendorSettlementRepor
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { RequirePermission } from "@/shared/components/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions";
+import { vendorPagesStyles } from "./vendorPages.styles";
 
 export function PayoutsPage() {
   const page = usePayoutsPage();
 
   return (
     <RequirePermission permission={PERMISSIONS.PAYOUT_VIEW}>
-      <div className="space-y-8">
+      <div className={vendorPagesStyles.stackLg}>
         <VendorSettlementReportPanel />
         {page.loadingComm ? (
-          <Skeleton className="h-40 w-full" />
+          <Skeleton className={vendorPagesStyles.skeletonCard} />
         ) : (
           <CommissionLedgerTable commissions={page.commissions} />
         )}
         {page.loadingInv ? (
-          <Skeleton className="h-40 w-full" />
+          <Skeleton className={vendorPagesStyles.skeletonCard} />
         ) : (
           <CommissionInvoicesTable invoices={page.invoices} />
         )}
         {page.loadingPay ? (
-          <Skeleton className="h-40 w-full" />
+          <Skeleton className={vendorPagesStyles.skeletonCard} />
         ) : (
           <PayoutsTable payouts={page.payouts} />
         )}

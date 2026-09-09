@@ -4,12 +4,13 @@ import { RequirePermission } from "@/shared/components/RequirePermission.compone
 import { CategoriesPageHeader } from "../components/CategoriesPageHeader.component";
 import { CategoriesTable } from "../components/CategoriesTable.component";
 import { useAdminCategoriesPage } from "../hooks/useAdminCategoriesPage";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function AdminCategoriesPage() {
   const page = useAdminCategoriesPage();
 
   return (
-    <div className="space-y-6">
+    <div className={adminPagesStyles.stack6}>
       <CategoriesPageHeader
         open={page.open}
         setOpen={page.setOpen}

@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import { LABELS } from "@/shared/constants/labels";
+import { dataTableHeaderStyles } from "./dataTable.styles";
 
 export type DataTableHeaderProps = {
   title?: ReactNode;
@@ -26,13 +27,11 @@ export function DataTableHeader({
   const showSummary = total != null && from != null && to != null && total > 0;
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3">
-      <div className="min-w-0 space-y-1">
+    <div className={dataTableHeaderStyles.container}>
+      <div className={dataTableHeaderStyles.titleGroup}>
         {title ? (
           typeof title === "string" ? (
-            <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-              {title}
-            </h1>
+            <h1 className={dataTableHeaderStyles.title}>{title}</h1>
           ) : (
             title
           )
@@ -41,7 +40,7 @@ export function DataTableHeader({
           <PaginationResultSummary from={from!} to={to!} total={total!} />
         ) : null}
       </div>
-      <ButtonGroup className="sm:shrink-0">
+      <ButtonGroup className={dataTableHeaderStyles.buttonGroup}>
         {toolbar}
         {onRefresh ? (
           <Button

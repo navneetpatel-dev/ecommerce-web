@@ -10,6 +10,7 @@ import { Input } from "@/shared/components/ui/input";
 import { PasswordInputContainer } from "@/shared/containers/PasswordInputContainer.container";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
+import { authFormsStyles } from "./authForms.styles";
 
 interface RegisterInput {
   name: string;
@@ -47,18 +48,17 @@ export function RegisterCard({
         title={LABELS.registrationSuccessTitle}
         description={LABELS.registrationSuccessNextSteps}
         footer={
-          <Link
-            href={PATHS.login}
-            className="block text-center text-body font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
-          >
+          <Link href={PATHS.login} className={authFormsStyles.footerLink}>
             {LABELS.backToLogin}
           </Link>
         }
       >
-        <div className="rounded-md border border-success/25 bg-success-subtle/60 px-4 py-3 text-body text-success">
+        <div className={authFormsStyles.successBanner}>
           <p>{LABELS.registrationSuccessHint}</p>
           {registeredEmail && (
-            <p className="mt-1 font-medium">{registeredEmail}</p>
+            <p className={authFormsStyles.registeredEmailText}>
+              {registeredEmail}
+            </p>
           )}
         </div>
       </AuthFormCard>
@@ -70,18 +70,18 @@ export function RegisterCard({
       title={LABELS.createAccount}
       description={LABELS.createAccountHint}
       footer={
-        <p className="text-center text-body text-ink-muted">
+        <p className={authFormsStyles.footerText}>
           {LABELS.alreadyHaveAccount}{" "}
-          <Link
-            href={PATHS.login}
-            className="font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
-          >
+          <Link href={PATHS.login} className={authFormsStyles.footerLinkInline}>
             {LABELS.logIn}
           </Link>
         </p>
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={authFormsStyles.formSpace4}
+      >
         <FormFieldFrame
           label={LABELS.name}
           htmlFor="name"
@@ -136,12 +136,17 @@ export function RegisterCard({
           />
         </FormFieldFrame>
         <FormError error={error} fallback={LABELS.registrationFailed} />
-        <Button type="submit" className="w-full" size="lg" loading={isPending}>
+        <Button
+          type="submit"
+          className={authFormsStyles.fullWidth}
+          size="lg"
+          loading={isPending}
+        >
           {LABELS.register}
         </Button>
       </form>
 
-      <div className="space-y-3">
+      <div className={authFormsStyles.oauthGroup}>
         <OAuthDivider />
         <OAuthButton provider="google" />
       </div>

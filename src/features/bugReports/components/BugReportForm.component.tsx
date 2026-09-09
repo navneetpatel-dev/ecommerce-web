@@ -13,6 +13,7 @@ import { useBugReportForm } from "../hooks/useBugReportForm.hook";
 import { BugFormHeader } from "./BugFormHeader.component";
 import { CharCountedField } from "./BugFormFields.component";
 import { BugFormFooter } from "./BugFormFooter.component";
+import { bugReportFormStyles } from "./bugReportForm.styles";
 
 type Props = {
   successHref: (id: string) => string;
@@ -33,14 +34,14 @@ export function BugReportForm(props: Props) {
   const attachments = form.attachments;
 
   const renderCharCounter = (count: number, max: number) => (
-    <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
+    <p className={bugReportFormStyles.counterText}>
       {formatLabel(LABELS.ticketCharCounter, { count, max })}
     </p>
   );
 
   return (
-    <form onSubmit={form.onSubmit} className="w-full min-w-0">
-      <FormStack className="space-y-8">
+    <form onSubmit={form.onSubmit} className={bugReportFormStyles.form}>
+      <FormStack className={bugReportFormStyles.stack}>
         {hideTitle ? null : (
           <BugFormHeader
             canSubmit={form.canSubmit}

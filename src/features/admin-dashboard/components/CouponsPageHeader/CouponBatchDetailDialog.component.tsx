@@ -9,6 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import type { CouponBatch } from "@/shared/api/types";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { couponsPageHeaderStyles } from "./couponsPageHeader.styles";
 
 interface CouponBatchDetailDialogProps {
   batchDetail: CouponBatch | null;
@@ -24,41 +25,52 @@ export function CouponBatchDetailDialog({
       open={Boolean(batchDetail)}
       onOpenChange={(next) => !next && onClose()}
     >
-      <DialogContent className="max-w-md">
+      <DialogContent className={couponsPageHeaderStyles.batchDialog}>
         <DialogHeader>
           <DialogTitle>{batchDetail?.name ?? LABELS.couponBatches}</DialogTitle>
         </DialogHeader>
         {batchDetail ? (
-          <div className="space-y-3">
-            <dl className="space-y-2 text-[0.875rem]">
-              <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{LABELS.batchGeneratedCount}</dt>
-                <dd className="tabular-nums font-medium">
+          <div className={couponsPageHeaderStyles.batchStack3}>
+            <dl className={couponsPageHeaderStyles.batchDl}>
+              <div className={couponsPageHeaderStyles.batchRow}>
+                <dt className={couponsPageHeaderStyles.batchDt}>
+                  {LABELS.batchGeneratedCount}
+                </dt>
+                <dd className={couponsPageHeaderStyles.batchDd}>
                   {batchDetail.generatedCount}
                 </dd>
               </div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{LABELS.batchRedemptions}</dt>
-                <dd className="tabular-nums font-medium">
+              <div className={couponsPageHeaderStyles.batchRow}>
+                <dt className={couponsPageHeaderStyles.batchDt}>
+                  {LABELS.batchRedemptions}
+                </dt>
+                <dd className={couponsPageHeaderStyles.batchDd}>
                   {batchDetail.redemptionCount ?? 0}
                 </dd>
               </div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{LABELS.batchDiscountImpact}</dt>
-                <dd className="tabular-nums font-medium">
+              <div className={couponsPageHeaderStyles.batchRow}>
+                <dt className={couponsPageHeaderStyles.batchDt}>
+                  {LABELS.batchDiscountImpact}
+                </dt>
+                <dd className={couponsPageHeaderStyles.batchDd}>
                   ₹{formatInrAmount(Number(batchDetail.discountTotal ?? 0))}
                 </dd>
               </div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-ink-muted">{LABELS.batchRevenueImpact}</dt>
-                <dd className="tabular-nums font-medium">
+              <div className={couponsPageHeaderStyles.batchRow}>
+                <dt className={couponsPageHeaderStyles.batchDt}>
+                  {LABELS.batchRevenueImpact}
+                </dt>
+                <dd className={couponsPageHeaderStyles.batchDd}>
                   ₹{formatInrAmount(Number(batchDetail.revenueImpact ?? 0))}
                 </dd>
               </div>
             </dl>
-            <ul className="max-h-56 space-y-1 overflow-y-auto rounded-md border border-line p-2 font-mono text-body-sm">
+            <ul className={couponsPageHeaderStyles.batchCodesList}>
               {(batchDetail.codes ?? []).map((code) => (
-                <li key={code} className="px-1 py-0.5 text-ink">
+                <li
+                  key={code}
+                  className={couponsPageHeaderStyles.batchCodeItem}
+                >
                   {code}
                 </li>
               ))}

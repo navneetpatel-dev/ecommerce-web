@@ -3,6 +3,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
+import { newsletterFormStyles } from "./displayComponents.styles";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -29,18 +30,18 @@ export function NewsletterForm({
   const canSubmit = EMAIL_RE.test(email.trim());
 
   return (
-    <form onSubmit={onSubmit} className="space-y-2">
+    <form onSubmit={onSubmit} className={newsletterFormStyles.form}>
       <FormFieldFrame
         label={LABELS.email}
         htmlFor={fieldId}
         error={error ?? undefined}
       >
-        <div className="flex items-stretch gap-2">
+        <div className={newsletterFormStyles.row}>
           <Input
             id={fieldId}
             type="email"
             placeholder={LABELS.newsletterEmailPlaceholder}
-            className="min-w-0 flex-1"
+            className={newsletterFormStyles.input}
             value={email}
             onChange={(e) => onEmailChange(e.target.value)}
             error={Boolean(error)}
@@ -52,7 +53,7 @@ export function NewsletterForm({
           >
             <Button
               type="submit"
-              className="shrink-0"
+              className={newsletterFormStyles.submitBtn}
               loading={pending}
               disabled={!canSubmit || pending}
             >
@@ -61,7 +62,9 @@ export function NewsletterForm({
           </DisabledActionHint>
         </div>
       </FormFieldFrame>
-      {message ? <p className="text-body-sm text-success">{message}</p> : null}
+      {message ? (
+        <p className={newsletterFormStyles.successMessage}>{message}</p>
+      ) : null}
     </form>
   );
 }

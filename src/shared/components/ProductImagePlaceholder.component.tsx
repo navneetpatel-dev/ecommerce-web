@@ -1,4 +1,5 @@
 import { cn } from "@/shared/utils/cn";
+import { productImagePlaceholderStyles } from "./imageLightbox.styles";
 
 interface ProductImagePlaceholderProps {
   className?: string;
@@ -12,23 +13,19 @@ export function ProductImagePlaceholder({
 }: ProductImagePlaceholderProps) {
   return (
     <div
-      className={cn(
-        "absolute inset-0 flex items-center justify-center",
-        "bg-brand-subtle/80 text-ink-faint",
-        className,
-      )}
+      className={cn(productImagePlaceholderStyles.root, className)}
       role="img"
       aria-label={label}
       data-image-state="unavailable"
       title={label}
     >
-      <div className="flex h-[28%] w-[28%] max-h-14 max-w-14 min-h-9 min-w-9 items-center justify-center opacity-80">
+      <div className={productImagePlaceholderStyles.iconBox}>
         <svg
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden
-          className="h-full w-full"
+          className={productImagePlaceholderStyles.svg}
         >
           <rect
             x="2.75"

@@ -7,6 +7,7 @@ import { VendorLowStockWidget } from "../components/VendorLowStockWidget.compone
 import { SkeletonGrid } from "@/shared/components/Skeletons.component";
 import { RequirePermission } from "@/shared/components/RequirePermission.component";
 import { VENDOR_NAV } from "@/shared/constants/vendorNav";
+import { vendorPagesStyles } from "./vendorPages.styles";
 
 export function VendorOverview() {
   const overview = useVendorOverview();
@@ -15,7 +16,7 @@ export function VendorOverview() {
 
   return (
     <RequirePermission permission={VENDOR_NAV[0].permissions}>
-      <div className="space-y-8">
+      <div className={vendorPagesStyles.stackLg}>
         <VendorSummaryGrid summary={overview.summary} />
         <VendorLowStockWidget />
         <ProductsTable />

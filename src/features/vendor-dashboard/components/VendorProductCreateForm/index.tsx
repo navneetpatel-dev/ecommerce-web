@@ -11,6 +11,7 @@ import { ProductMediaSection } from "./ProductMediaSection.component";
 import { ProductPoliciesSection } from "./ProductPoliciesSection.component";
 import { ProductSeoSection } from "./ProductSeoSection.component";
 import { useProductFormController } from "./useProductFormController.hook";
+import { vendorProductCreateFormStyles } from "./vendorProductCreateForm.styles";
 import type { VendorProductCreateFormProps } from "./types";
 
 export function VendorProductCreateForm({
@@ -41,7 +42,10 @@ export function VendorProductCreateForm({
     });
 
   return (
-    <form className="mb-5" onSubmit={handleSubmit}>
+    <form
+      className={vendorProductCreateFormStyles.form}
+      onSubmit={handleSubmit}
+    >
       <FormStack>
         <ProductDetailsSection
           values={values}
@@ -90,7 +94,9 @@ export function VendorProductCreateForm({
         ) : null}
 
         {submitError ? (
-          <p className="text-sm text-danger">{submitError}</p>
+          <p className={vendorProductCreateFormStyles.submitError}>
+            {submitError}
+          </p>
         ) : null}
 
         <FormActions>

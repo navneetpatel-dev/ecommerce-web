@@ -9,6 +9,7 @@ import { Send } from "lucide-react";
 import { TICKET_REPLY_MAX } from "../../constants/fieldLimits";
 import { TicketAttachmentUploader } from "../TicketAttachmentUploader";
 import type { UploadedMediaAttachment } from "../TicketAttachmentUploader";
+import { ticketThreadStyles } from "./ticketThread.styles";
 
 interface TicketReplyComposerProps {
   ticketId: string;
@@ -25,8 +26,8 @@ interface TicketReplyComposerProps {
 
 export function TicketReplyBlockedNotice({ message }: { message: string }) {
   return (
-    <div className="border-t border-line bg-paper/40 px-3 py-3 sm:px-4">
-      <p className="text-body-sm text-ink-muted">{message}</p>
+    <div className={ticketThreadStyles.composerBlockedBox}>
+      <p className={ticketThreadStyles.composerBlockedText}>{message}</p>
     </div>
   );
 }
@@ -34,7 +35,7 @@ export function TicketReplyBlockedNotice({ message }: { message: string }) {
 /** Reply textarea, attachment uploader and send button. */
 export function TicketReplyComposer(props: TicketReplyComposerProps) {
   return (
-    <div className="space-y-2 border-t border-line bg-paper/30 px-3 py-3 sm:px-4">
+    <div className={ticketThreadStyles.composerBox}>
       <Textarea
         value={props.body}
         onChange={(e) =>
@@ -42,11 +43,11 @@ export function TicketReplyComposer(props: TicketReplyComposerProps) {
         }
         placeholder={LABELS.ticketReplyPlaceholder}
         rows={3}
-        className="min-h-[4.5rem] resize-y"
+        className={ticketThreadStyles.composerTextarea}
         maxLength={TICKET_REPLY_MAX}
         aria-label={LABELS.ticketSendReply}
       />
-      <p className="text-[0.75rem] tabular-nums text-ink-muted">
+      <p className={ticketThreadStyles.composerCounterText}>
         {formatLabel(LABELS.ticketCharCounter, {
           count: props.body.length,
           max: TICKET_REPLY_MAX,
@@ -64,7 +65,7 @@ export function TicketReplyComposer(props: TicketReplyComposerProps) {
         error={props.error ? new Error(props.error) : null}
         fallback={LABELS.ticketCouldNotReply}
       />
-      <div className="flex justify-end">
+      <div className={ticketThreadStyles.composerActionsRow}>
         <Button
           type="button"
           size="sm"
@@ -72,7 +73,11 @@ export function TicketReplyComposer(props: TicketReplyComposerProps) {
           disabled={!props.body.trim()}
           onClick={props.onSend}
         >
-          <Send size={14} className="mr-1.5" aria-hidden />
+          <Send
+            size={14}
+            className={ticketThreadStyles.composerSendIcon}
+            aria-hidden
+          />
           {LABELS.ticketSendReply}
         </Button>
       </div>

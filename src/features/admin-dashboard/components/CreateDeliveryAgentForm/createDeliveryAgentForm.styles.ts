@@ -14,4 +14,5 @@ export const createDeliveryAgentFormStyles = {
   grid: "grid gap-4 sm:grid-cols-2 lg:grid-cols-3",
   fieldWrapper: "space-y-1.5",
   fieldLabel: "text-caption font-medium text-ink-muted",
+  selectTrigger: "w-full",
 } as const;

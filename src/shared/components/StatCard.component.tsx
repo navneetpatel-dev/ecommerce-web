@@ -4,6 +4,8 @@ import { cn } from "@/shared/utils/cn";
 import type { LucideIcon } from "lucide-react";
 import { ReactNode } from "react";
 
+import { statCardStyles } from "./displayComponents.styles";
+
 interface StatCardProps {
   title: string;
   value: number | string | ReactNode;
@@ -21,19 +23,19 @@ export function StatCard({
   isLoading,
   size = "md",
 }: StatCardProps) {
-  const sizeClasses = {
-    sm: "text-[1.375rem]",
-    md: "text-[1.75rem]",
-    lg: "text-[1.75rem]",
-  };
-
-  const headerLayout = cn(Icon && "flex-row items-center justify-between pb-2");
-  const titleTone = cn(Icon ? "text-body-sm font-normal text-ink-muted" : "");
-  const iconElement = Icon && <Icon className="h-4 w-4 text-ink-faint" />;
+  const headerLayout = cn(Icon && statCardStyles.headerLayout);
+  const titleTone = cn(Icon ? statCardStyles.titleTone : "");
+  const iconElement = Icon && <Icon className={statCardStyles.icon} />;
   const valueElement = isLoading ? (
-    <Skeleton className="h-10 w-32" />
+    <Skeleton className={statCardStyles.skeleton} />
   ) : (
-    <p className={cn("font-mono font-bold", sizeClasses[size], valueClassName)}>
+    <p
+      className={cn(
+        statCardStyles.value,
+        statCardStyles.sizes[size],
+        valueClassName,
+      )}
+    >
       {value}
     </p>
   );

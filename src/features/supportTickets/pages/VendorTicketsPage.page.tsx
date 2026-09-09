@@ -13,11 +13,16 @@ import {
   useTicketFiltersFromUrl,
 } from "../components/TicketFilters.component";
 import { TicketList } from "../components/TicketList.component";
+import { supportTicketsPagesStyles } from "./supportTicketsPages.styles";
 
 export function VendorTicketsPage() {
   return (
     <RequirePermission permission={VENDOR_SUPPORT_ACCESS}>
-      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+      <Suspense
+        fallback={
+          <Skeleton className={supportTicketsPagesStyles.skeletonFallback} />
+        }
+      >
         <VendorTicketsContent />
       </Suspense>
     </RequirePermission>
@@ -34,15 +39,15 @@ function VendorTicketsContent() {
   const tickets = query.data?.pages.flatMap((p) => p.items) ?? [];
 
   return (
-    <div className="w-full min-w-0 space-y-8">
+    <div className={supportTicketsPagesStyles.vendorPageStack}>
       <TicketFilters showVendorId={false} />
       <TicketList
         title={
-          <div className="min-w-0 space-y-1.5">
-            <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+          <div className={supportTicketsPagesStyles.vendorTitleStack}>
+            <h1 className={supportTicketsPagesStyles.titleHeading}>
               {LABELS.supportTickets}
             </h1>
-            <p className="max-w-3xl text-body leading-relaxed text-ink-muted">
+            <p className={supportTicketsPagesStyles.vendorTitleDescription}>
               {LABELS.ticketVendorQueueDescription}
             </p>
           </div>

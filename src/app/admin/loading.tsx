@@ -1,15 +1,16 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { SkeletonRows } from "@/shared/components/Skeletons.component";
+import { loadingPagesStyles as styles } from "@/app/loadingPages.styles";
 
 /** Content-only — admin layout already keeps header + sidebar. */
 export default function AdminLoading() {
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-4 w-72" />
+    <div className={styles.adminContainer}>
+      <div className={styles.titleStack}>
+        <Skeleton className={styles.skelH8W48} />
+        <Skeleton className={styles.skelH4W72} />
       </div>
-      <Skeleton className="h-40 w-full rounded-md" />
+      <Skeleton className={styles.skelH40Rounded} />
       <SkeletonRows count={6} height="h-12 w-full" />
     </div>
   );

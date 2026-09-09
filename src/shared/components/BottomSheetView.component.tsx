@@ -2,6 +2,7 @@ import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { bottomSheetViewStyles } from "./dialogComponents.styles";
 
 interface BottomSheetProps {
   open: boolean;
@@ -24,39 +25,34 @@ export function BottomSheetView({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50",
-        hideFrom === "md" && "md:hidden",
-        hideFrom === "lg" && "lg:hidden",
-        hideFrom === "xl" && "xl:hidden",
+        bottomSheetViewStyles.base,
+        hideFrom === "md" && bottomSheetViewStyles.hideMd,
+        hideFrom === "lg" && bottomSheetViewStyles.hideLg,
+        hideFrom === "xl" && bottomSheetViewStyles.hideXl,
       )}
     >
+      <div className={bottomSheetViewStyles.backdrop} onClick={onClose} />
       <div
-        className="absolute inset-0 bg-overlay animate-fade-in"
-        onClick={onClose}
-      />
-      <div
-        className="absolute bottom-0 left-0 right-0 flex max-h-[85vh] flex-col rounded-t-lg bg-surface shadow-elevation-4 animate-slide-in-bottom"
+        className={bottomSheetViewStyles.sheet}
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
-        <div className="flex items-center justify-center pt-3 pb-1">
-          <div className="h-1 w-10 rounded-full bg-line" />
+        <div className={bottomSheetViewStyles.handleWrap}>
+          <div className={bottomSheetViewStyles.handle} />
         </div>
-        <div className="flex items-center justify-between border-b border-line px-4 py-3">
-          {title && (
-            <h2 className="text-[1.125rem] font-semibold text-ink">{title}</h2>
-          )}
+        <div className={bottomSheetViewStyles.header}>
+          {title && <h2 className={bottomSheetViewStyles.title}>{title}</h2>}
           <Button
             type="button"
             variant="ghost"
             size="icon-sm"
             onClick={onClose}
-            className="ml-auto rounded-full text-ink-muted hover:text-ink"
+            className={bottomSheetViewStyles.closeButton}
             aria-label={LABELS.close}
           >
             <X size={20} />
           </Button>
         </div>
-        <div className="flex-1 overflow-y-auto px-4 py-4">{children}</div>
+        <div className={bottomSheetViewStyles.content}>{children}</div>
       </div>
     </div>
   );

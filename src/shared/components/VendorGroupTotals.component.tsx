@@ -1,6 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
 import { formatInr } from "@/shared/utils/orderFormat";
+import { vendorGroupTotalsStyles } from "./vendorOrderComponents.styles";
 
 interface VendorGroupTotalsProps {
   subtotal: number;
@@ -37,23 +38,22 @@ export function VendorGroupTotals({
   const showBreakdown = showShipping || taxAmount > 0 || discount > 0;
 
   return (
-    <dl
-      className={cn(
-        "mt-1 space-y-2 border-t border-line pt-3.5 text-[0.875rem]",
-        className,
-      )}
-    >
+    <dl className={cn(vendorGroupTotalsStyles.container, className)}>
       {showBreakdown ? (
         <>
-          <div className="flex justify-between gap-4">
-            <dt className="text-ink-muted">{LABELS.subtotal}</dt>
-            <dd className="tabular-nums text-ink">{formatInr(subtotal)}</dd>
+          <div className={vendorGroupTotalsStyles.row}>
+            <dt className={vendorGroupTotalsStyles.label}>{LABELS.subtotal}</dt>
+            <dd className={vendorGroupTotalsStyles.value}>
+              {formatInr(subtotal)}
+            </dd>
           </div>
 
           {showShipping ? (
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{LABELS.shipping}</dt>
-              <dd className="tabular-nums text-ink">
+            <div className={vendorGroupTotalsStyles.row}>
+              <dt className={vendorGroupTotalsStyles.label}>
+                {LABELS.shipping}
+              </dt>
+              <dd className={vendorGroupTotalsStyles.value}>
                 {shippingDisplayKey === "FREE"
                   ? LABELS.freeShipping
                   : shippingCost != null
@@ -64,24 +64,28 @@ export function VendorGroupTotals({
           ) : null}
 
           {taxAmount > 0 ? (
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{taxLabel}</dt>
-              <dd className="tabular-nums text-ink">{formatInr(taxAmount)}</dd>
+            <div className={vendorGroupTotalsStyles.row}>
+              <dt className={vendorGroupTotalsStyles.label}>{taxLabel}</dt>
+              <dd className={vendorGroupTotalsStyles.value}>
+                {formatInr(taxAmount)}
+              </dd>
             </div>
           ) : null}
 
           {discount > 0 ? (
-            <div className="flex justify-between gap-4 text-success">
+            <div className={vendorGroupTotalsStyles.discountRow}>
               <dt>{LABELS.couponDiscount}</dt>
-              <dd className="tabular-nums">−{formatInr(discount)}</dd>
+              <dd className={vendorGroupTotalsStyles.discountValue}>
+                −{formatInr(discount)}
+              </dd>
             </div>
           ) : null}
         </>
       ) : null}
 
-      <div className="flex items-baseline justify-between gap-4 pt-1">
-        <dt className="text-body-sm font-medium text-ink">{totalLabel}</dt>
-        <dd className="font-display text-[1.125rem] tabular-nums text-brand">
+      <div className={vendorGroupTotalsStyles.totalRow}>
+        <dt className={vendorGroupTotalsStyles.totalLabel}>{totalLabel}</dt>
+        <dd className={vendorGroupTotalsStyles.totalValue}>
           {formatInr(total)}
         </dd>
       </div>

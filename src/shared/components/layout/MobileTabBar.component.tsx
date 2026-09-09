@@ -10,6 +10,8 @@ import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { CurrentUser } from "@/shared/api/types";
 
+import { mobileTabBarStyles } from "./layout.styles";
+
 interface MobileTabBarProps {
   currentUser: CurrentUser | null;
   onOpenCart: () => void;
@@ -18,9 +20,6 @@ interface MobileTabBarProps {
   /** Session or cart count still resolving — placeholders instead of a 0 badge. */
   isLoading?: boolean;
 }
-
-const TAB_ITEM =
-  "flex min-h-11 min-w-[3.25rem] flex-col items-center justify-center gap-0.5 overflow-visible px-2 py-1 text-ink-muted";
 
 export function MobileTabBar({
   currentUser,
@@ -31,41 +30,43 @@ export function MobileTabBar({
 }: MobileTabBarProps) {
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 flex min-h-14 items-stretch justify-around overflow-visible border-t border-line bg-surface lg:hidden"
+      className={mobileTabBarStyles.nav}
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
-      <Link href={PATHS.home} className={TAB_ITEM}>
+      <Link href={PATHS.home} className={mobileTabBarStyles.tabItem}>
         <Home size={20} />
-        <span className="text-[0.625rem]">{LABELS.home}</span>
+        <span className={mobileTabBarStyles.textLabel}>{LABELS.home}</span>
       </Link>
       {isLoading ? (
-        <div className={TAB_ITEM} aria-hidden>
-          <Skeleton className="size-5 rounded-md" />
-          <Skeleton className="h-2 w-8 rounded-sm" />
+        <div className={mobileTabBarStyles.tabItem} aria-hidden>
+          <Skeleton className={mobileTabBarStyles.skeletonIcon} />
+          <Skeleton className={mobileTabBarStyles.skeletonLabelW8} />
         </div>
       ) : (
         <Button
           type="button"
           variant="ghost"
           onClick={onOpenSearch}
-          className={`${TAB_ITEM} h-auto max-h-none w-auto hover:bg-transparent hover:text-ink-muted`}
+          className={mobileTabBarStyles.searchButton}
           aria-label={LABELS.search}
         >
           <Search size={20} />
-          <span className="text-[0.625rem] font-normal">{LABELS.search}</span>
+          <span className={mobileTabBarStyles.textLabelNormal}>
+            {LABELS.search}
+          </span>
         </Button>
       )}
       {isLoading ? (
-        <div className={TAB_ITEM} aria-hidden>
-          <Skeleton className="size-5 rounded-md" />
-          <Skeleton className="h-2 w-6 rounded-sm" />
+        <div className={mobileTabBarStyles.tabItem} aria-hidden>
+          <Skeleton className={mobileTabBarStyles.skeletonIcon} />
+          <Skeleton className={mobileTabBarStyles.skeletonLabelW6} />
         </div>
       ) : (
         <Button
           type="button"
           variant="ghost"
           onClick={onOpenCart}
-          className={`${TAB_ITEM} h-auto max-h-none w-auto !overflow-visible hover:bg-transparent hover:text-ink-muted`}
+          className={mobileTabBarStyles.cartButton}
           aria-label={
             cartItemCount > 0 ? `${LABELS.cart}, ${cartItemCount}` : LABELS.cart
           }
@@ -74,21 +75,23 @@ export function MobileTabBar({
             <ShoppingCart size={20} />
             <CartCountBadge count={cartItemCount} size="sm" placement="tab" />
           </IconBadgeAnchor>
-          <span className="text-[0.625rem] font-normal">{LABELS.cart}</span>
+          <span className={mobileTabBarStyles.textLabelNormal}>
+            {LABELS.cart}
+          </span>
         </Button>
       )}
       {isLoading ? (
-        <div className={TAB_ITEM} aria-hidden>
-          <Skeleton className="size-5 rounded-md" />
-          <Skeleton className="h-2 w-8 rounded-sm" />
+        <div className={mobileTabBarStyles.tabItem} aria-hidden>
+          <Skeleton className={mobileTabBarStyles.skeletonIcon} />
+          <Skeleton className={mobileTabBarStyles.skeletonLabelW8} />
         </div>
       ) : (
         <Link
           href={currentUser ? PATHS.profile : PATHS.login}
-          className={TAB_ITEM}
+          className={mobileTabBarStyles.tabItem}
         >
           <User size={20} />
-          <span className="text-[0.625rem]">
+          <span className={mobileTabBarStyles.textLabel}>
             {currentUser ? LABELS.account : LABELS.logIn}
           </span>
         </Link>

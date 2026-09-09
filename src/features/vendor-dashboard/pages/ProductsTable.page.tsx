@@ -7,6 +7,7 @@ import { ProductsTableView } from "../components/ProductsTableView.component";
 import { VendorProductFormDialog } from "../components/VendorProductFormDialog.component";
 import { VendorBulkImportDialog } from "../components/VendorBulkImportDialog.component";
 import { useVendorProductsPage } from "../hooks/useVendorProductsPage.hook";
+import { vendorPagesStyles } from "./vendorPages.styles";
 
 export function ProductsTable() {
   const page = useVendorProductsPage();
@@ -16,7 +17,7 @@ export function ProductsTable() {
   return (
     <RequirePermission permission={[...page.permission]}>
       <>
-        <div className="mb-3 flex justify-end">
+        <div className={vendorPagesStyles.headerActions}>
           <VendorBulkImportDialog onImported={() => router.refresh()} />
         </div>
         <ProductsTableView {...page.tableViewProps} />

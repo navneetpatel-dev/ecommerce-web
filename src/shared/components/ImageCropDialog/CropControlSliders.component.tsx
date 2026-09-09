@@ -23,7 +23,7 @@ export function CropControlSliders(props: CropControlSlidersProps) {
 
   return (
     <div className={styles.controlsStack}>
-      <div className="space-y-2">
+      <div className={styles.sliderGroup}>
         <p className={styles.controlLabel}>{LABELS.imageCropZoom}</p>
         <Slider
           value={[zoom]}
@@ -35,7 +35,7 @@ export function CropControlSliders(props: CropControlSlidersProps) {
         />
       </div>
 
-      <div className="space-y-2">
+      <div className={styles.sliderGroup}>
         <p className={styles.controlLabel}>{LABELS.imageCropRotation}</p>
         <Slider
           value={[rotation]}
@@ -45,7 +45,7 @@ export function CropControlSliders(props: CropControlSlidersProps) {
           onValueChange={onRotationChange}
           aria-label={LABELS.imageCropRotation}
         />
-        <div className="flex flex-wrap gap-2">
+        <div className={styles.buttonRow}>
           <Button
             type="button"
             variant="outline"

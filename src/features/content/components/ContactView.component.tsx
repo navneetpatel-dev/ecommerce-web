@@ -3,6 +3,7 @@ import { HelpContactForm } from "@/features/help";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import { formatLabel } from "@/shared/utils/formatLabel";
+import { contactViewStyles as styles } from "./contactView.styles";
 
 interface ContactViewProps {
   supportEmail: string | null;
@@ -16,43 +17,34 @@ export function ContactView({
   isLoading,
 }: ContactViewProps) {
   return (
-    <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-8 px-4 py-10 lg:grid-cols-2">
-      <section className="space-y-4">
-        <h1 className="text-[1.75rem] font-semibold text-ink">
-          {LABELS.contactUsHeading}
-        </h1>
-        <p className="text-body text-ink-muted">{LABELS.contactUsIntro}</p>
+    <div className={styles.container}>
+      <section className={styles.formSection}>
+        <h1 className={styles.heading}>{LABELS.contactUsHeading}</h1>
+        <p className={styles.intro}>{LABELS.contactUsIntro}</p>
         <HelpContactForm />
       </section>
-      <aside className="space-y-3 rounded-md border border-line bg-surface p-5">
-        <h2 className="text-[1.125rem] font-semibold text-ink">
-          {LABELS.contactSupportDetails}
-        </h2>
+      <aside className={styles.detailsCard}>
+        <h2 className={styles.cardTitle}>{LABELS.contactSupportDetails}</h2>
         {isLoading && (
-          <p className="text-body text-ink-muted">
-            {LABELS.contactLoadingDetails}
-          </p>
+          <p className={styles.detailText}>{LABELS.contactLoadingDetails}</p>
         )}
         {!isLoading && (
           <>
-            <p className="text-body text-ink-muted">
+            <p className={styles.detailText}>
               {formatLabel(LABELS.contactEmailLabel, {
                 email: supportEmail ?? LABELS.contactNotConfigured,
               })}
             </p>
-            <p className="text-body text-ink-muted">
+            <p className={styles.detailText}>
               {formatLabel(LABELS.contactHoursLabel, {
                 hours: supportHours ?? LABELS.contactNotConfigured,
               })}
             </p>
           </>
         )}
-        <p className="text-body-sm text-ink-muted">
+        <p className={styles.selfServeNotice}>
           {LABELS.contactPreferSelfServe}{" "}
-          <Link
-            href={PATHS.help}
-            className="text-brand underline-offset-2 hover:underline"
-          >
+          <Link href={PATHS.help} className={styles.helpLink}>
             {LABELS.helpCenter}
           </Link>
           .

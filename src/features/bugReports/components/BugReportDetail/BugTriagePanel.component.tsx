@@ -20,6 +20,7 @@ import {
 } from "@/shared/constants/statuses";
 import type { BugReport } from "../../api/bugReports.api";
 import { BUG_MODULE_LABEL, BUG_SEVERITY_LABEL } from "../../utils/labels";
+import { bugReportPanelsStyles } from "./bugReportPanels.styles";
 
 interface BugTriagePanelProps {
   report: BugReport;
@@ -41,15 +42,12 @@ export function BugTriagePanel(props: BugTriagePanelProps) {
   const { report } = props;
 
   return (
-    <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/70 via-brand/30 to-transparent"
-      />
-      <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+    <section className={bugReportPanelsStyles.panelRootWithBar}>
+      <div aria-hidden className={bugReportPanelsStyles.panelAccentBar} />
+      <div className={bugReportPanelsStyles.panelHeader}>
         <TextEyebrow brand>{LABELS.bugTriage}</TextEyebrow>
       </div>
-      <div className="space-y-3 px-4 py-4 sm:px-5">
+      <div className={bugReportPanelsStyles.panelBodyTight}>
         <FormFieldFrame label={LABELS.bugSeverity}>
           <Select
             value={props.severity}
@@ -111,7 +109,7 @@ export function BugTriagePanel(props: BugTriagePanelProps) {
         />
         <Button
           type="button"
-          className="w-full"
+          className={bugReportPanelsStyles.panelFullWidth}
           loading={props.savePending}
           disabled={!props.canEditAssignment}
           onClick={props.onSave}

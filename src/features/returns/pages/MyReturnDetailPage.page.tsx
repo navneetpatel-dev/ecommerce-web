@@ -9,6 +9,7 @@ import { PATHS } from "@/shared/constants/paths";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useReturn } from "../api/returns.queries";
 import { ReturnRequestCard } from "../components/ReturnRequestCard.component";
+import { returnsPageStyles as styles } from "./returnsPage.styles";
 
 export function MyReturnDetailPage() {
   const params = useParams<{ id: string }>();
@@ -19,19 +20,16 @@ export function MyReturnDetailPage() {
   });
 
   return (
-    <div className="storefront-container py-8 md:py-10">
-      <Link
-        href={PATHS.myReturns}
-        className="text-body-sm font-medium text-brand underline-offset-4 hover:underline"
-      >
+    <div className={styles.container}>
+      <Link href={PATHS.myReturns} className={styles.backLink}>
         {LABELS.backToReturns}
       </Link>
 
       {isLoading ? (
-        <DetailQuerySkeleton className="mt-6 space-y-3" />
+        <DetailQuerySkeleton className={styles.detailSkeleton} />
       ) : isEmpty ? (
-        <div className="mt-8">
-          <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+        <div className={styles.detailEmptyWrapper}>
+          <div className={styles.errorBox}>
             <QueryErrorAlert
               error={error}
               fallback={LABELS.couldNotLoadReturn}
@@ -39,7 +37,7 @@ export function MyReturnDetailPage() {
           </div>
         </div>
       ) : (
-        <div className="mt-6">
+        <div className={styles.detailCardWrapper}>
           <ReturnRequestCard row={data!} />
         </div>
       )}

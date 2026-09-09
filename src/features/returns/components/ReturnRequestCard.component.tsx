@@ -19,6 +19,7 @@ import {
 } from "../utils/returnTimeline";
 import { returnsApi } from "../api/returns.api";
 import { useReschedulePickup } from "../api/returns.queries";
+import { returnRequestCardStyles as styles } from "./returnRequestCard.styles";
 
 const STATUS_LABEL: Record<string, string> = {
   [RETURN_STATUS.REQUESTED]: LABELS.returnLogisticsRequested,
@@ -64,26 +65,26 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
   };
 
   return (
-    <div className="border border-line bg-surface-raised px-5 py-4">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="font-medium text-ink">
+    <div className={styles.card}>
+      <div className={styles.header}>
+        <div className={styles.contentCol}>
+          <p className={styles.title}>
             {row.productName || LABELS.orderItemFallback}
           </p>
-          <p className="mt-1 text-body-sm text-ink-muted">
+          <p className={styles.subMeta}>
             {row.reasonCode.replaceAll("_", " ")} ·{" "}
             {formatOrderDate(row.createdAt)}
           </p>
-          <p className="mt-1 text-[0.875rem] text-ink-muted">{row.reason}</p>
+          <p className={styles.reason}>{row.reason}</p>
           {row.refundAmount != null ? (
-            <div className="mt-1 space-y-0.5 text-body-sm tabular-nums text-ink">
+            <div className={styles.refundBox}>
               {row.refundStatus === REFUND_STATUS.COMPLETED ? (
                 <p>
                   {LABELS.returnRefundStatusCompleted}{" "}
                   {formatInr(row.refundAmount)}
                 </p>
               ) : row.refundStatus === REFUND_STATUS.INITIATED ? (
-                <p className="text-ink-muted">
+                <p className={styles.refundMuted}>
                   {LABELS.returnRefundStatusInitiated}
                   {(row.razorpayRefundAmount ?? 0) > 0
                     ? formatLabel(LABELS.returnRefundToBank, {
@@ -97,14 +98,16 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
                     : ""}
                 </p>
               ) : row.refundStatus === REFUND_STATUS.FAILED ? (
-                <p className="text-danger">{LABELS.returnRefundStatusFailed}</p>
+                <p className={styles.refundDanger}>
+                  {LABELS.returnRefundStatusFailed}
+                </p>
               ) : (
-                <p className="text-ink-muted">
+                <p className={styles.refundMuted}>
                   {LABELS.returnRefundStatusPending}
                 </p>
               )}
               {row.refundCustomerMessage ? (
-                <p className="text-body-sm text-ink-muted">
+                <p className={styles.refundMuted}>
                   {row.refundCustomerMessage}
                 </p>
               ) : null}
@@ -112,7 +115,7 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
             </div>
           ) : null}
           {row.creditNoteNumber ? (
-            <p className="mt-1 text-body-sm text-ink-muted">
+            <p className={styles.creditNote}>
               CN: {row.creditNoteNumber}
               {row.againstInvoiceNumber
                 ? ` · ${LABELS.againstInvoiceNumber}: ${row.againstInvoiceNumber}`
@@ -126,7 +129,7 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
       </div>
 
       {row.creditNoteNumber ? (
-        <div className="mt-3">
+        <div className={styles.creditNoteAction}>
           <Button
             type="button"
             variant="outline"
@@ -139,15 +142,15 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
         </div>
       ) : null}
 
-      <div className="mt-5 grid gap-6 border-t border-line pt-5 md:grid-cols-2">
+      <div className={styles.timelineGrid}>
         <div>
-          <TextEyebrow className="mb-3">
+          <TextEyebrow className={styles.eyebrowMargin}>
             {LABELS.returnTimelineRefundTrack}
           </TextEyebrow>
           <Timeline steps={buildRefundTimeline(row)} />
         </div>
         <div>
-          <TextEyebrow className="mb-3">
+          <TextEyebrow className={styles.eyebrowMargin}>
             {LABELS.returnTimelineLogisticsTrack}
           </TextEyebrow>
           <Timeline steps={buildLogisticsTimeline(row)} />
@@ -155,16 +158,16 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
       </div>
 
       {row.status === RETURN_STATUS.REJECTED && row.rejectionReason ? (
-        <div className="mt-5 border-t border-line pt-5">
-          <p className="rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-danger">
+        <div className={styles.sectionDivided}>
+          <p className={styles.rejectionBanner}>
             {LABELS.returnRejectionReasonPrefix} {row.rejectionReason}
           </p>
         </div>
       ) : null}
 
       {row.pickupFailureReason ? (
-        <div className="mt-5 space-y-3 border-t border-line pt-5">
-          <p className="rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning">
+        <div className={styles.pickupFailSection}>
+          <p className={styles.pickupFailBanner}>
             Last pickup attempt note: {row.pickupFailureReason}
           </p>
           {canReschedulePickup ? (
@@ -176,7 +179,7 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
             />
           ) : null}
           {rescheduleError ? (
-            <p className="text-body-sm text-danger">{rescheduleError}</p>
+            <p className={styles.errorText}>{rescheduleError}</p>
           ) : null}
         </div>
       ) : null}

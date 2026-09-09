@@ -13,6 +13,7 @@ import {
   Truck,
   type LucideIcon,
 } from "lucide-react";
+import { helpHomeViewStyles as styles } from "./helpHomeView.styles";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   BookOpen,
@@ -30,6 +31,11 @@ const ICON_MAP: Record<string, LucideIcon> = {
 export function CategoryIcon({ name }: { name: string }) {
   const Icon = ICON_MAP[name] ?? LifeBuoy;
   return (
-    <Icon size={18} strokeWidth={1.5} className="text-brand" aria-hidden />
+    <Icon
+      size={18}
+      strokeWidth={1.5}
+      className={styles.categoryIcon}
+      aria-hidden
+    />
   );
 }

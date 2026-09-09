@@ -17,6 +17,7 @@ import {
 } from "@/shared/constants/statuses";
 import type { SupportTicket } from "../../api/supportTickets.api";
 import { TICKET_PRIORITY_LABEL } from "../../utils/labels";
+import { ticketThreadStyles } from "./ticketThread.styles";
 
 interface TicketManageControlsProps {
   ticket: SupportTicket;
@@ -38,7 +39,7 @@ export function TicketManageControls(props: TicketManageControlsProps) {
 
   return (
     <>
-      <div className="space-y-3 border-t border-line/60 pt-4">
+      <div className={ticketThreadStyles.controlsSection}>
         <FormFieldFrame label={LABELS.ticketUpdatePriority}>
           <Select
             value={props.priority}
@@ -58,7 +59,7 @@ export function TicketManageControls(props: TicketManageControlsProps) {
             </SelectContent>
           </Select>
         </FormFieldFrame>
-        <div className="flex flex-wrap gap-2">
+        <div className={ticketThreadStyles.controlsBtnRow}>
           <Button
             type="button"
             variant="outline"
@@ -82,7 +83,7 @@ export function TicketManageControls(props: TicketManageControlsProps) {
         </div>
       </div>
 
-      <div className="space-y-3 border-t border-line/60 pt-4">
+      <div className={ticketThreadStyles.controlsSection}>
         <FormFieldFrame label={LABELS.ticketAssignee}>
           <AssigneeSelect
             permission={PERMISSIONS.TICKET_MANAGE}
@@ -103,7 +104,7 @@ export function TicketManageControls(props: TicketManageControlsProps) {
           type="button"
           variant="outline"
           size="sm"
-          className="w-full sm:w-auto"
+          className={ticketThreadStyles.controlsFullSmBtn}
           loading={props.reassignPending}
           disabled={
             !props.assigneeId.trim() ||

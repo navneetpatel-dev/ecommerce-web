@@ -19,6 +19,7 @@ import {
   TABLE_PINNED_LAYOUT_CLASS,
 } from "@/shared/constants/table";
 import { cn } from "@/shared/utils/cn";
+import { dataTableDesktopStyles } from "./dataTable.styles";
 import type { DataTableColumn } from "./types";
 import { renderCellContent, resolveCell } from "./utils.component";
 
@@ -57,11 +58,11 @@ export function DataTableDesktopTable<T>({
         scrollContainer={false}
         className={cn(
           actions && TABLE_PINNED_LAYOUT_CLASS,
-          tableLayout === "fixed" && "table-fixed w-full min-w-0",
+          tableLayout === "fixed" && dataTableDesktopStyles.tableFixed,
         )}
       >
         <TableHeader>
-          <TableRow className="border-line">
+          <TableRow className={dataTableDesktopStyles.headerRow}>
             {columns.map((column) => (
               <TableHead
                 key={column.id}
@@ -69,8 +70,8 @@ export function DataTableDesktopTable<T>({
                   TABLE_DATA_CELL_CLASS,
                   tableLayout === "auto" &&
                     column.truncate !== false &&
-                    "max-w-[14rem]",
-                  "text-[0.75rem] uppercase tracking-[0.04em]",
+                    dataTableDesktopStyles.headAutoTruncate,
+                  dataTableDesktopStyles.headText,
                   column.headerClassName,
                 )}
               >
@@ -95,8 +96,7 @@ export function DataTableDesktopTable<T>({
               <TableRow
                 key={rowId}
                 className={cn(
-                  rowsInteractive &&
-                    "cursor-pointer focus-visible:bg-[color-mix(in_srgb,var(--brand-subtle)_40%,var(--surface))]",
+                  rowsInteractive && dataTableDesktopStyles.rowInteractive,
                 )}
                 tabIndex={rowsInteractive ? 0 : undefined}
                 aria-label={
@@ -112,10 +112,11 @@ export function DataTableDesktopTable<T>({
                       key={column.id}
                       className={cn(
                         TABLE_DATA_CELL_CLASS,
-                        tableLayout === "fixed" && "max-w-0",
+                        tableLayout === "fixed" &&
+                          dataTableDesktopStyles.cellFixed,
                         tableLayout === "auto" &&
                           column.truncate !== false &&
-                          "max-w-[14rem]",
+                          dataTableDesktopStyles.cellAutoTruncate,
                         column.className,
                       )}
                     >

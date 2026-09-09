@@ -1,4 +1,5 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { detailQuerySkeletonStyles } from "./displayComponents.styles";
 
 interface DetailQuerySkeletonProps {
   className?: string;
@@ -6,13 +7,12 @@ interface DetailQuerySkeletonProps {
 
 /** Lightweight skeleton for admin / support detail routes while queries resolve. */
 export function DetailQuerySkeleton({ className }: DetailQuerySkeletonProps) {
-  const containerClassName =
-    className ?? "storefront-container space-y-3 py-6 md:py-8";
+  const containerClassName = className ?? detailQuerySkeletonStyles.container;
 
   return (
     <div className={containerClassName}>
-      <Skeleton className="h-14 w-full max-w-xl" />
-      <Skeleton className="h-64 w-full rounded-md" />
+      <Skeleton className={detailQuerySkeletonStyles.hero} />
+      <Skeleton className={detailQuerySkeletonStyles.body} />
     </div>
   );
 }

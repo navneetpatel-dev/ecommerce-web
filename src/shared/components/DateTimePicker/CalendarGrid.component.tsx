@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { cn } from "@/shared/utils/cn";
+import { dateTimePickerStyles } from "./dateTimePicker.styles";
 import { WEEKDAYS, sameDay, startOfDay } from "./utils";
 
 interface CalendarGridProps {
@@ -32,17 +33,20 @@ export function CalendarGrid({
   const today = startOfDay(new Date());
 
   return (
-    <div className="grid grid-cols-7 gap-1">
+    <div className={dateTimePickerStyles.calendar.grid}>
       {WEEKDAYS.map((d) => (
-        <div
-          key={d}
-          className="flex h-8 items-center justify-center text-[0.6875rem] font-medium uppercase tracking-wide text-ink-faint"
-        >
+        <div key={d} className={dateTimePickerStyles.calendar.weekdayHeader}>
           {d}
         </div>
       ))}
       {days.map((day, i) => {
-        if (!day) return <div key={`pad-${i}`} className="h-8" />;
+        if (!day)
+          return (
+            <div
+              key={`pad-${i}`}
+              className={dateTimePickerStyles.calendar.emptyCell}
+            />
+          );
         const isSelected = sameDay(day, draftDay);
         const isToday = sameDay(day, today);
         return (
@@ -50,11 +54,13 @@ export function CalendarGrid({
             key={day.toISOString()}
             type="button"
             className={cn(
-              "flex h-8 items-center justify-center rounded-sm text-body-sm tabular-nums transition-colors",
+              dateTimePickerStyles.calendar.dayButtonBase,
               isSelected
-                ? "bg-brand font-semibold text-paper"
-                : "text-ink hover:bg-brand-subtle",
-              !isSelected && isToday && "ring-1 ring-brand/50",
+                ? dateTimePickerStyles.calendar.dayButtonSelected
+                : dateTimePickerStyles.calendar.dayButtonDefault,
+              !isSelected &&
+                isToday &&
+                dateTimePickerStyles.calendar.dayButtonToday,
             )}
             onClick={() => onSelectDay(day)}
           >

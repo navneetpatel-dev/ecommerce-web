@@ -10,6 +10,7 @@ import {
 } from "@/shared/components/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/tableActionTone";
 import { PromoBannerEditForm } from "./PromoBannerEditForm.component";
+import { promoBannersListStyles } from "./adminPromoBanners.styles";
 
 interface PromoBannersListProps {
   banners: PromoBanner[];
@@ -49,12 +50,9 @@ export function PromoBannersList({
   onDelete,
 }: PromoBannersListProps) {
   return (
-    <ul className="divide-y divide-line rounded-md border border-line bg-surface">
+    <ul className={promoBannersListStyles.list}>
       {banners.map((banner) => (
-        <li
-          key={banner.id}
-          className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
-        >
+        <li key={banner.id} className={promoBannersListStyles.item}>
           {editingId === banner.id ? (
             <PromoBannerEditForm
               bannerId={banner.id}
@@ -72,16 +70,16 @@ export function PromoBannersList({
             />
           ) : (
             <>
-              <div className="min-w-0 space-y-1">
-                <p className="truncate text-body font-medium text-ink">
+              <div className={promoBannersListStyles.itemInfo}>
+                <p className={promoBannersListStyles.itemTitle}>
                   {banner.title}
                 </p>
-                <p className="text-body-sm text-ink-muted">
+                <p className={promoBannersListStyles.itemSubtitle}>
                   {banner.status} · {banner.linkType} ·{" "}
                   {LABELS.promoBannerPriority} {banner.priority}
                 </p>
               </div>
-              <TableRowActions className="shrink-0">
+              <TableRowActions className={promoBannersListStyles.actions}>
                 <TableRowAction>
                   <Button
                     size="sm"

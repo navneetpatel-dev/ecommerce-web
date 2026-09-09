@@ -14,3 +14,5 @@ export const LOW_STOCK_SKU_CELL =
 export const LOW_STOCK_AT_CELL = "font-mono text-ink-muted" as const;
 export const LOW_STOCK_COUNT_DANGER = "font-mono text-danger" as const;
 export const LOW_STOCK_COUNT_WARNING = "font-mono text-warning" as const;
+export const LOW_STOCK_SKELETON = "h-8 w-full" as const;
+export const LOW_STOCK_ICON = "h-4 w-4 text-warning" as const;

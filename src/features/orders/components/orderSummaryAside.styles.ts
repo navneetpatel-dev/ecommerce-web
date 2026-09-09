@@ -22,5 +22,6 @@ export const ORDER_SUMMARY_ASIDE_STYLES = {
   shippingIcon: "h-3.5 w-3.5 text-ink-muted",
   shippingEyebrow: "!mb-0",
   address: "mt-2 not-italic text-[0.875rem] leading-relaxed text-ink",
+  addressLineBlock: "block",
   addressLineMuted: "block text-ink-muted",
 } as const;

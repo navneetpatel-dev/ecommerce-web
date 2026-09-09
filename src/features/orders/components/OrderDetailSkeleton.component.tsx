@@ -8,12 +8,12 @@ export function OrderDetailSkeleton() {
 
       <div className={styles.container}>
         <div className={styles.headerSpace}>
-          <Skeleton className="h-4 w-28" />
-          <Skeleton className="h-9 w-56 max-w-full" />
-          <Skeleton className="h-4 w-72 max-w-full" />
+          <Skeleton className={styles.headerCrumb} />
+          <Skeleton className={styles.headerTitle} />
+          <Skeleton className={styles.headerMeta} />
           <div className={styles.badgeRow}>
-            <Skeleton className={`${styles.badgePill} w-24`} />
-            <Skeleton className={`${styles.badgePill} w-28`} />
+            <Skeleton className={styles.badgePill1} />
+            <Skeleton className={styles.badgePill2} />
           </div>
         </div>
 
@@ -25,11 +25,11 @@ export function OrderDetailSkeleton() {
           </div>
           <aside className={styles.aside}>
             <div className={styles.asideCard}>
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-8 w-40" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-5/6" />
-              <Skeleton className={`mt-4 ${styles.asideButton}`} />
+              <Skeleton className={styles.asideHeading} />
+              <Skeleton className={styles.asideTotal} />
+              <Skeleton className={styles.asideLine1} />
+              <Skeleton className={styles.asideLine2} />
+              <Skeleton className={styles.asideButtonTop} />
               <Skeleton className={styles.asideButton} />
             </div>
           </aside>

@@ -2,6 +2,7 @@ import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { ordersComponentsStyles } from "./ordersComponents.styles";
 
 interface TrackingFormProps {
   trackingNumber: string;
@@ -16,15 +17,19 @@ export function TrackingForm({
 }: TrackingFormProps) {
   return (
     <FormFieldFrame label={LABELS.trackingNumber} htmlFor="tracking-number">
-      <div className="flex gap-2">
+      <div className={ordersComponentsStyles.formRow}>
         <Input
           id="tracking-number"
           placeholder={LABELS.trackingNumber}
-          className="min-w-0 flex-1"
+          className={ordersComponentsStyles.inputFlex}
           value={trackingNumber}
           onChange={(e) => onTrackingNumberChange(e.target.value)}
         />
-        <Button type="button" className="shrink-0" onClick={onSubmit}>
+        <Button
+          type="button"
+          className={ordersComponentsStyles.buttonShrink}
+          onClick={onSubmit}
+        >
           {LABELS.track}
         </Button>
       </div>

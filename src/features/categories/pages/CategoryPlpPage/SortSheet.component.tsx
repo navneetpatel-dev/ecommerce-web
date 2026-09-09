@@ -1,6 +1,7 @@
 import { BottomSheet } from "@/shared/components/BottomSheet.component";
 import { SelectableOptionButton } from "@/shared/components/SelectableOptionButton.component";
 import { LABELS } from "@/shared/constants/labels";
+import { categoryPlpPageStyles as styles } from "./categoryPlpPage.styles";
 
 interface SortSheetProps {
   open: boolean;
@@ -19,7 +20,7 @@ export function SortSheet({
 }: SortSheetProps) {
   return (
     <BottomSheet open={open} onClose={onClose} title={LABELS.sort}>
-      <div className="space-y-2">
+      <div className={styles.optionsContainer}>
         {sortOptions.map((option) => (
           <SelectableOptionButton
             key={option.value}

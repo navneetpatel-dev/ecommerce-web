@@ -6,6 +6,7 @@ import { SlideCopy } from "./SlideCopy.component";
 import { SlideImage } from "./SlideImage.component";
 import { useHeroCarousel } from "./useHeroCarousel.hook";
 import type { HeroSlide } from "./types";
+import { heroSectionStyles as styles } from "./heroSection.styles";
 
 interface HeroSectionProps {
   slides?: HeroSlide[];
@@ -40,13 +41,13 @@ export function HeroSection({
       onKeyDown={onKeyDown}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
-      className="relative w-full overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset"
+      className={styles.section}
     >
-      <h2 id={labelId} className="sr-only">
+      <h2 id={labelId} className={styles.srOnly}>
         Featured collections
       </h2>
 
-      <div className="relative min-h-[min(78vh,640px)] md:min-h-[min(82vh,720px)]">
+      <div className={styles.slideWrapper}>
         <SlideImage
           slide={active}
           index={index}
@@ -55,7 +56,7 @@ export function HeroSection({
           reduceMotion={Boolean(reduceMotion)}
         />
 
-        <div className="storefront-container relative z-10 flex h-full min-h-[min(78vh,640px)] flex-col justify-end pb-24 pt-16 md:min-h-[min(82vh,720px)] md:justify-center md:pb-24 md:pt-20">
+        <div className={styles.contentContainer}>
           <SlideCopy
             slide={active}
             direction={direction}

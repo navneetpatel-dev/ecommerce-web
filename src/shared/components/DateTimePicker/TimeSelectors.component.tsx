@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
+import { dateTimePickerStyles } from "./dateTimePicker.styles";
 import { HOURS, MINUTES } from "./utils";
 
 interface TimeSelectorsProps {
@@ -24,9 +25,9 @@ export function TimeSelectors({
   onMinuteChange,
 }: TimeSelectorsProps) {
   return (
-    <div className="grid grid-cols-2 gap-2 border-t border-line pt-3">
-      <div className="space-y-1.5">
-        <p className="text-[0.6875rem] font-medium uppercase tracking-wide text-ink-faint">
+    <div className={dateTimePickerStyles.timeSelectors.container}>
+      <div className={dateTimePickerStyles.timeSelectors.fieldGroup}>
+        <p className={dateTimePickerStyles.timeSelectors.label}>
           {LABELS.hour}
         </p>
         <Select value={hour} onValueChange={onHourChange}>
@@ -42,8 +43,8 @@ export function TimeSelectors({
           </SelectContent>
         </Select>
       </div>
-      <div className="space-y-1.5">
-        <p className="text-[0.6875rem] font-medium uppercase tracking-wide text-ink-faint">
+      <div className={dateTimePickerStyles.timeSelectors.fieldGroup}>
+        <p className={dateTimePickerStyles.timeSelectors.label}>
           {LABELS.minute}
         </p>
         <Select value={minute} onValueChange={onMinuteChange}>

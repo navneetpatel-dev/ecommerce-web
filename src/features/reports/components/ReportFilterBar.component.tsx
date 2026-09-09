@@ -13,6 +13,7 @@ import { ReportExportButtons } from "./ReportExportButtons.component";
 import { ReportExportStatus } from "./ReportExportStatus.component";
 import { ReportFilterTextField } from "./ReportFilterTextField.component";
 import { ReportTypeSelect } from "./ReportTypeSelect.component";
+import { reportFilterBarStyles as styles } from "./reportFilterBar.styles";
 
 interface ReportFilterBarProps {
   catalog: ReportCatalogItem[];
@@ -137,13 +138,13 @@ export function ReportFilterBar({
         onChange={onStatusChange}
       />
 
-      <div className="sm:col-span-2 xl:col-span-3 space-y-2">
+      <div className={styles.actionsWrapper}>
         <ButtonGroup align="start">
           <DisabledActionHint
             disabled={loadButtonDisabled}
             message={loadButtonHint}
             block
-            className="w-full sm:w-auto"
+            className={styles.buttonHint}
           >
             <Button
               type="button"

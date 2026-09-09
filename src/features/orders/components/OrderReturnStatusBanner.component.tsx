@@ -5,12 +5,15 @@ import { LABELS } from "@/shared/constants/labels";
 import { REFUND_STATUS } from "@/shared/constants/statuses";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { Order } from "@/shared/api/types";
+import { ordersComponentsStyles } from "./ordersComponents.styles";
 
 interface OrderReturnStatusBannerProps {
   order: Order;
 }
 
-export function OrderReturnStatusBanner({ order }: OrderReturnStatusBannerProps) {
+export function OrderReturnStatusBanner({
+  order,
+}: OrderReturnStatusBannerProps) {
   const openReturns = order.openReturnCount ?? 0;
   const alerts = order.returnRefundAlerts ?? [];
   const cancelRefundStatus = order.cancelRefundStatus;
@@ -30,7 +33,7 @@ export function OrderReturnStatusBanner({ order }: OrderReturnStatusBannerProps)
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className={ordersComponentsStyles.bannerWrapper}>
       {openReturns > 0 ? (
         <Badge variant="secondary">
           {formatLabel(LABELS.orderOpenReturnsBadge, {
@@ -41,7 +44,11 @@ export function OrderReturnStatusBanner({ order }: OrderReturnStatusBannerProps)
       {alerts.map((row) => (
         <Badge
           key={row.id}
-          variant={row.refundStatus === REFUND_STATUS.FAILED ? "destructive" : "secondary"}
+          variant={
+            row.refundStatus === REFUND_STATUS.FAILED
+              ? "destructive"
+              : "secondary"
+          }
         >
           {row.refundStatus === REFUND_STATUS.FAILED
             ? LABELS.returnRefundStatusFailed
@@ -51,7 +58,9 @@ export function OrderReturnStatusBanner({ order }: OrderReturnStatusBannerProps)
       {cancelRefundLabel ? (
         <Badge
           variant={
-            cancelRefundStatus === REFUND_STATUS.FAILED ? "destructive" : "secondary"
+            cancelRefundStatus === REFUND_STATUS.FAILED
+              ? "destructive"
+              : "secondary"
           }
         >
           {cancelRefundLabel}

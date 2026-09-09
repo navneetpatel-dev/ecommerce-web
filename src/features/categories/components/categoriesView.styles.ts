@@ -12,6 +12,7 @@ export const categoriesViewStyles = {
   emptyIcon: "mx-auto h-8 w-8 text-ink-faint",
   emptyTitle: "mt-4 text-body-lg font-medium text-ink",
   emptyLink: "mt-3 inline-flex items-center gap-1 text-body text-brand",
+  emptyArrowIcon: "h-3.5 w-3.5",
   contentWrapper: "space-y-12",
   rootsGrid:
     "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-4",

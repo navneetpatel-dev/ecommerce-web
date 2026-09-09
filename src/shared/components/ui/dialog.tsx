@@ -5,6 +5,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
 import { LABELS } from "@/shared/constants/labels";
+import { dialogStyles } from "./dialog.styles";
 
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
@@ -17,7 +18,7 @@ const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={cn("fixed inset-0 z-50 animate-fade-in bg-overlay", className)}
+    className={cn(dialogStyles.overlay, className)}
     style={{ animationDuration: "var(--motion-moderate)" }}
     {...props}
   />
@@ -52,16 +53,17 @@ const DialogContent = React.forwardRef<
     const closeButtonElement = !hideCloseButton && (
       <div
         className={cn(
-          "flex shrink-0 items-center justify-end",
-          isFullscreen ? "fixed right-3 top-3 z-[60]" : "px-3 pt-2.5 pb-0.5",
+          dialogStyles.closeButtonWrap,
+          isFullscreen
+            ? dialogStyles.closeButtonWrapFullscreen
+            : dialogStyles.closeButtonWrapDefault,
         )}
       >
         <DialogPrimitive.Close
           type="button"
           className={cn(
-            "inline-flex size-7 items-center justify-center rounded-sm text-ink-muted opacity-70 transition-all hover:bg-surface hover:text-ink hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-            isFullscreen &&
-              "rounded-full border border-line bg-surface/90 p-2 opacity-100 shadow-elevation-1 backdrop-blur-sm",
+            dialogStyles.closeButtonBase,
+            isFullscreen && dialogStyles.closeButtonFullscreen,
             closeButtonClassName,
           )}
           onPointerDown={(event) => {
@@ -71,7 +73,7 @@ const DialogContent = React.forwardRef<
           }}
         >
           <X size={18} />
-          <span className="sr-only">{LABELS.close}</span>
+          <span className={dialogStyles.srOnly}>{LABELS.close}</span>
         </DialogPrimitive.Close>
       </div>
     );
@@ -83,17 +85,19 @@ const DialogContent = React.forwardRef<
             enlarge document overflow and leave a page scrollbar beside the modal. */}
         <div
           className={cn(
-            "fixed inset-0 z-50 pointer-events-none",
-            isFullscreen ? "p-0" : "flex items-center justify-center p-4",
+            dialogStyles.portalWrap,
+            isFullscreen
+              ? dialogStyles.portalWrapFullscreen
+              : dialogStyles.portalWrapDefault,
           )}
         >
           <DialogPrimitive.Content
             ref={ref}
             className={cn(
-              "pointer-events-auto overscroll-contain outline-none animate-scale-in flex flex-col",
+              dialogStyles.contentBase,
               isFullscreen
-                ? "fixed inset-0 flex h-[100dvh] w-full max-h-none max-w-none flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none rounded-none"
-                : "relative w-full max-w-[480px] max-h-[calc(100dvh-2rem)] overflow-hidden border border-line bg-surface-raised shadow-elevation-3 rounded-lg",
+                ? dialogStyles.contentFullscreen
+                : dialogStyles.contentDefault,
               className,
             )}
             style={{ animationDuration: "var(--motion-moderate)" }}
@@ -118,9 +122,8 @@ const DialogContent = React.forwardRef<
             {closeButtonElement}
             <div
               className={cn(
-                "min-h-0 flex-1 flex flex-col overflow-y-auto",
-                !className?.includes("p-0") &&
-                  "px-5 pb-5 sm:px-6 sm:pb-6 gap-5 sm:gap-6",
+                dialogStyles.bodyBase,
+                !className?.includes("p-0") && dialogStyles.bodyPadding,
               )}
             >
               {children}
@@ -137,13 +140,7 @@ const DialogHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left",
-      className,
-    )}
-    {...props}
-  />
+  <div className={cn(dialogStyles.header, className)} {...props} />
 );
 
 const DialogFooter = ({
@@ -152,7 +149,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     data-slot="dialog-footer"
-    className={cn("dialog-footer", className)}
+    className={cn(dialogStyles.footer, className)}
     {...props}
   />
 );
@@ -163,10 +160,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn(
-      "text-[1.375rem] font-semibold leading-tight tracking-tight",
-      className,
-    )}
+    className={cn(dialogStyles.title, className)}
     {...props}
   />
 ));
@@ -178,7 +172,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-body-sm text-ink-muted", className)}
+    className={cn(dialogStyles.description, className)}
     {...props}
   />
 ));

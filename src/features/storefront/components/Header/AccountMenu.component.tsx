@@ -13,6 +13,7 @@ import { LABELS } from "@/shared/constants/labels";
 import type { CurrentUser } from "@/shared/api/types";
 import { useAccountMenu } from "./useAccountMenu.hook";
 import { ACCOUNT_TRIGGER_BOX } from "./headerShared";
+import { headerStyles as styles } from "./header.styles";
 
 interface AccountMenuProps {
   currentUser: CurrentUser;
@@ -32,7 +33,7 @@ export function AccountMenu({ currentUser, isTransparent }: AccountMenuProps) {
   return (
     <div
       ref={accountMenuRef}
-      className="relative"
+      className={styles.relativeWrapper}
       onMouseEnter={() => {
         if (canHoverAccountMenu) setAccountMenuOpen(true);
       }}
@@ -46,28 +47,26 @@ export function AccountMenu({ currentUser, isTransparent }: AccountMenuProps) {
         onClick={() => setAccountMenuOpen((open) => !open)}
         className={cn(
           ACCOUNT_TRIGGER_BOX,
-          "[&_svg]:!size-[0.875rem] sm:[&_svg]:!size-3",
-          isTransparent
-            ? "border-paper/20 hover:bg-paper/10"
-            : "border-line bg-surface hover:bg-paper",
+          styles.triggerSvgSize,
+          isTransparent ? styles.triggerTransparent : styles.triggerSolid,
         )}
         title={currentUser.name}
         aria-haspopup="menu"
         aria-expanded={accountMenuOpen}
         aria-label={LABELS.openAccountMenu}
       >
-        <Avatar className="size-7 border-0 sm:size-8 sm:border sm:border-line/70">
+        <Avatar className={styles.avatar}>
           {currentUser.avatarUrl ? (
             <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
           ) : null}
-          <AvatarFallback className="flex items-center justify-center bg-brand-subtle text-[0.6875rem] font-semibold leading-none text-ink sm:text-[0.75rem]">
+          <AvatarFallback className={styles.avatarFallback}>
             {currentUser.avatarUrl ? (
               fallbackLabel
             ) : (
               <UserRound
                 size={14}
                 strokeWidth={1.8}
-                className="block shrink-0"
+                className={styles.userRoundIcon}
                 aria-hidden
               />
             )}
@@ -77,39 +76,31 @@ export function AccountMenu({ currentUser, isTransparent }: AccountMenuProps) {
           size={12}
           strokeWidth={2}
           className={cn(
-            "hidden shrink-0 sm:block transition-transform",
-            isTransparent ? "text-paper" : "text-ink-muted",
-            accountMenuOpen && "rotate-180",
+            styles.accountChevron,
+            isTransparent
+              ? styles.accountChevronTransparent
+              : styles.accountChevronSolid,
+            accountMenuOpen && styles.accountChevronOpen,
           )}
         />
       </Button>
 
       {accountMenuOpen ? (
-        <div
-          className="absolute right-0 top-full z-50 w-60 pt-2.5"
-          role="presentation"
-        >
-          <div
-            role="menu"
-            className="overflow-hidden border border-line bg-surface shadow-elevation-4"
-          >
-            <div className="border-b border-line bg-paper/60 px-4 py-3">
-              <p className="truncate text-[0.875rem] font-medium text-ink">
-                {currentUser.name}
-              </p>
-              <p className="truncate text-[0.75rem] text-ink-muted">
-                {currentUser.email}
-              </p>
+        <div className={styles.dropdown} role="presentation">
+          <div role="menu" className={styles.dropdownMenu}>
+            <div className={styles.userHeader}>
+              <p className={styles.userName}>{currentUser.name}</p>
+              <p className={styles.userEmail}>{currentUser.email}</p>
             </div>
 
-            <div className="py-1.5">
+            <div className={styles.linksList}>
               {accountLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   role="menuitem"
                   onClick={() => setAccountMenuOpen(false)}
-                  className="block px-4 py-2.5 text-[0.875rem] text-ink-muted transition-colors hover:bg-paper hover:text-ink"
+                  className={styles.menuItem}
                 >
                   {link.label}
                 </Link>

@@ -1,6 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { oauthEntryPoint } from "@/shared/config/appConfig";
+import { authFormsStyles } from "./authForms.styles";
 
 export function OAuthButton({
   provider,
@@ -18,7 +19,11 @@ export function OAuthButton({
     <Button variant="outline" fullWidth asChild>
       <a href={oauthEntryPoint(provider, redirect)}>
         {provider === "google" ? (
-          <svg aria-hidden viewBox="0 0 24 24" className="h-4 w-4 shrink-0">
+          <svg
+            aria-hidden
+            viewBox="0 0 24 24"
+            className={authFormsStyles.googleIcon}
+          >
             <path
               fill="#EA4335"
               d="M12 10.2v3.6h5.1c-.2 1.2-.9 2.2-1.9 2.9l3.1 2.4c1.8-1.7 2.9-4.1 2.9-7 0-.7-.1-1.3-.2-1.9H12z"

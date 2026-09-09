@@ -8,6 +8,7 @@ import {
 import { TABLE_CELL_MAX_CHARS } from "@/shared/constants/table";
 import { cn } from "@/shared/utils/cn";
 import { truncateText } from "@/shared/utils/truncateText";
+import { truncatedTextStyles } from "./displayComponents.styles";
 
 interface TruncatedTextProps {
   children: string | number;
@@ -25,21 +26,18 @@ export function TruncatedText({
 
   if (!truncated) {
     return (
-      <span className={cn("block min-w-0 truncate", className)}>{text}</span>
+      <span className={cn(truncatedTextStyles.span, className)}>{text}</span>
     );
   }
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className={cn("block min-w-0 max-w-full truncate", className)}>
+        <span className={cn(truncatedTextStyles.tooltipSpan, className)}>
           {text}
         </span>
       </TooltipTrigger>
-      <TooltipContent
-        side="top"
-        className="max-w-xs whitespace-pre-wrap break-words text-left font-normal normal-case tracking-normal"
-      >
+      <TooltipContent side="top" className={truncatedTextStyles.tooltipContent}>
         {full}
       </TooltipContent>
     </Tooltip>

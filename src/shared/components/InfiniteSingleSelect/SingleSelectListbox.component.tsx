@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { infiniteSingleSelectStyles } from "./infiniteSingleSelect.styles";
 import type { InfiniteSingleSelectOption } from "./types";
 import { OptionRow } from "./OptionRow.component";
 
@@ -64,8 +65,8 @@ export function SingleSelectListbox(props: SingleSelectListboxProps) {
       id={listboxId}
       role="listbox"
       className={cn(
-        "max-h-56 overflow-y-auto overscroll-contain p-1",
-        disabled && "pointer-events-none opacity-60",
+        infiniteSingleSelectStyles.listbox.container,
+        disabled && infiniteSingleSelectStyles.listbox.disabled,
         listClassName,
       )}
       aria-busy={initialLoading || loadingMore}
@@ -86,9 +87,13 @@ export function SingleSelectListbox(props: SingleSelectListboxProps) {
           ) : null}
           {options.map(renderOption)}
           {options.length === 0 ? <ListHint>{emptyCopy}</ListHint> : null}
-          <div ref={sentinelRef} className="h-1 w-full" aria-hidden />
+          <div
+            ref={sentinelRef}
+            className={infiniteSingleSelectStyles.listbox.sentinel}
+            aria-hidden
+          />
           {loadingMore ? (
-            <p className="px-4 py-1 text-body-sm text-ink-muted">
+            <p className={infiniteSingleSelectStyles.listbox.loadingMore}>
               {LABELS.loadingMore}
             </p>
           ) : null}
@@ -99,7 +104,7 @@ export function SingleSelectListbox(props: SingleSelectListboxProps) {
 }
 
 function ListHint({ children }: { children: React.ReactNode }) {
-  return <p className="px-4 py-2 text-body-sm text-ink-muted">{children}</p>;
+  return <p className={infiniteSingleSelectStyles.listbox.hint}>{children}</p>;
 }
 
 export function SearchField(props: {
@@ -109,7 +114,7 @@ export function SearchField(props: {
   onQueryChange: (query: string) => void;
 }) {
   return (
-    <div className="px-1 pt-1">
+    <div className={infiniteSingleSelectStyles.listbox.searchFieldContainer}>
       <Input
         value={props.query}
         onChange={(event) => props.onQueryChange(event.target.value)}
@@ -138,13 +143,18 @@ export function TriggerButton(props: {
       aria-expanded={props.open}
       aria-controls={props.listboxId}
       className={cn(
-        "flex h-11 w-full cursor-pointer items-center justify-between rounded-sm border border-line-strong bg-surface-raised px-4 text-left text-body outline-none hover:bg-paper/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50",
-        props.error && "border-danger",
-        props.muted && "text-ink-muted",
+        infiniteSingleSelectStyles.listbox.triggerButton,
+        props.error && infiniteSingleSelectStyles.listbox.triggerButtonError,
+        props.muted && infiniteSingleSelectStyles.listbox.triggerButtonMuted,
       )}
     >
-      <span className="line-clamp-1 min-w-0 flex-1">{props.label}</span>
-      <ChevronDown size={16} className="shrink-0 text-ink-muted" />
+      <span className={infiniteSingleSelectStyles.listbox.triggerButtonLabel}>
+        {props.label}
+      </span>
+      <ChevronDown
+        size={16}
+        className={infiniteSingleSelectStyles.listbox.triggerButtonIcon}
+      />
     </button>
   );
 }

@@ -1,4 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
+import { productDetailsMiscStyles } from "./productDetailsMisc.styles";
 
 interface ProductHighlightsProps {
   highlights?: string[] | null;
@@ -8,18 +9,15 @@ export function ProductHighlights({ highlights }: ProductHighlightsProps) {
   if (!highlights?.length) return null;
 
   return (
-    <section className="space-y-3">
-      <h3 className="text-body-sm font-semibold uppercase tracking-[0.08em] text-ink-muted">
+    <section className={productDetailsMiscStyles.highlightsSection}>
+      <h3 className={productDetailsMiscStyles.highlightsHeading}>
         {LABELS.productHighlights}
       </h3>
-      <ul className="grid gap-2 sm:grid-cols-2">
+      <ul className={productDetailsMiscStyles.highlightsGrid}>
         {highlights.map((item) => (
-          <li
-            key={item}
-            className="flex items-start gap-2.5 rounded-lg border border-line bg-paper/60 px-3 py-2.5 text-body leading-snug text-ink-muted"
-          >
+          <li key={item} className={productDetailsMiscStyles.highlightsItem}>
             <span
-              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+              className={productDetailsMiscStyles.highlightsBullet}
               aria-hidden
             />
             <span>{item}</span>

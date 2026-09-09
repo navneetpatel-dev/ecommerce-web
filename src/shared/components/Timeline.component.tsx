@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
+import { timelineStyles } from "./displayComponents.styles";
 
 interface TimelineStep {
   label: string;
@@ -14,36 +15,38 @@ interface TimelineProps {
 
 export function Timeline({ steps, className }: TimelineProps) {
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn(timelineStyles.container, className)}>
       {steps.map((step, i) => (
-        <div key={i} className="flex gap-4 pb-4 relative">
-          {i < steps.length - 1 && (
-            <div className="absolute left-[5px] top-3 w-[2px] h-[calc(100%+12px)] bg-line" />
-          )}
-          <div className="relative z-10 mt-0.5">
+        <div key={i} className={timelineStyles.stepRow}>
+          {i < steps.length - 1 && <div className={timelineStyles.connector} />}
+          <div className={timelineStyles.markerWrapper}>
             {step.status === "completed" ? (
-              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-brand">
-                <Check size={8} className="text-paper" strokeWidth={3} />
+              <span className={timelineStyles.dotCompleted}>
+                <Check
+                  size={8}
+                  className={timelineStyles.checkIcon}
+                  strokeWidth={3}
+                />
               </span>
             ) : step.status === "current" ? (
-              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-brand animate-pulse-ring" />
+              <span className={timelineStyles.dotCurrent} />
             ) : (
-              <span className="flex h-3 w-3 items-center justify-center rounded-full bg-line" />
+              <span className={timelineStyles.dotUpcoming} />
             )}
           </div>
-          <div className="flex-1 min-w-0">
+          <div className={timelineStyles.content}>
             <p
               className={cn(
-                "text-body",
-                step.status === "upcoming" ? "text-ink-muted" : "text-ink",
+                timelineStyles.label,
+                step.status === "upcoming"
+                  ? timelineStyles.labelUpcoming
+                  : timelineStyles.labelActive,
               )}
             >
               {step.label}
             </p>
             {step.timestamp && (
-              <p className="text-body-sm text-ink-muted mt-0.5">
-                {step.timestamp}
-              </p>
+              <p className={timelineStyles.timestamp}>{step.timestamp}</p>
             )}
           </div>
         </div>

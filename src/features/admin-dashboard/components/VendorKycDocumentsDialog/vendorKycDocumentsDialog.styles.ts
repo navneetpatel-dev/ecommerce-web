@@ -16,4 +16,5 @@ export const vendorKycDocumentsDialogStyles = {
     "h-7 text-xs font-semibold text-success hover:bg-success/10 hover:text-success",
   rejectButton:
     "h-7 text-xs font-semibold text-danger hover:bg-danger/10 hover:text-danger",
+  rejectTextarea: "min-h-24 resize-y",
 } as const;

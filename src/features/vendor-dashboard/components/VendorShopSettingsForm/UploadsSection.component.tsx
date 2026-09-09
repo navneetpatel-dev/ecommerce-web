@@ -4,6 +4,7 @@ import { FileUpload } from "@/shared/components/FileUpload.component";
 import { FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
+import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
 
 interface UploadsSectionProps {
   vendorId: string;
@@ -27,7 +28,7 @@ export function UploadsSection({
       title={LABELS.vendorLogoUpload}
       hint={LABELS.uploadProfilePhotoHint}
     >
-      <div className="sm:col-span-2">
+      <div className={vendorShopSettingsFormStyles.fullWidthCol}>
         <FileUpload
           entityType={UPLOAD_ENTITY.VENDORS}
           entityId={vendorId}
@@ -39,7 +40,7 @@ export function UploadsSection({
           label={LABELS.vendorLogoUpload}
         />
       </div>
-      <div className="sm:col-span-2">
+      <div className={vendorShopSettingsFormStyles.fullWidthCol}>
         <FileUpload
           entityType={UPLOAD_ENTITY.VENDORS}
           entityId={vendorId}

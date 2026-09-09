@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
+import { inputStyles } from "./input.styles";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
@@ -16,12 +17,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          "flex h-11 w-full rounded-sm border bg-surface-raised px-4 text-body text-ink transition-colors file:border-0 file:bg-transparent file:text-body-sm file:font-medium placeholder:text-ink-faint outline-none focus-visible:border-brand disabled:cursor-not-allowed disabled:opacity-50",
-          type === "number" &&
-            "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
+          inputStyles.base,
+          type === "number" && inputStyles.number,
           (type === "date" || type === "datetime-local" || type === "time") &&
-            "[&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:ml-2 [&::-webkit-calendar-picker-indicator]:opacity-70 hover:[&::-webkit-calendar-picker-indicator]:opacity-100",
-          error ? "border-danger" : "border-line-strong",
+            inputStyles.dateTime,
+          error ? inputStyles.error : inputStyles.normal,
           className,
         )}
         ref={ref}
@@ -52,17 +52,17 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
     );
 
     return (
-      <div className="relative">
+      <div className={inputStyles.passwordWrapper}>
         <Input
           ref={ref}
           type={inputType}
-          className={cn("pr-11", className)}
+          className={cn(inputStyles.passwordInput, className)}
           {...props}
         />
         <button
           type="button"
           onClick={onVisibilityToggle}
-          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1.5 text-ink-muted transition-colors hover:bg-paper hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          className={inputStyles.passwordToggle}
           aria-label={showLabel}
           aria-pressed={visible}
         >

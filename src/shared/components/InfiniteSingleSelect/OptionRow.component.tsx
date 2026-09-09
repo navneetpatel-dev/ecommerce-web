@@ -2,6 +2,7 @@
 
 import { Check } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
+import { infiniteSingleSelectStyles } from "./infiniteSingleSelect.styles";
 
 export function OptionRow({
   selected,
@@ -22,14 +23,19 @@ export function OptionRow({
       disabled={disabled}
       onClick={onSelect}
       className={cn(
-        "relative flex h-10 w-full cursor-pointer select-none items-center rounded-sm px-4 pr-10 text-left text-body outline-none hover:bg-brand-subtle focus-visible:bg-brand-subtle disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-        selected && "bg-brand-subtle/60",
+        infiniteSingleSelectStyles.optionRow.base,
+        selected && infiniteSingleSelectStyles.optionRow.selected,
       )}
     >
-      <span className="line-clamp-1 min-w-0 flex-1 text-ink">{label}</span>
+      <span className={infiniteSingleSelectStyles.optionRow.label}>
+        {label}
+      </span>
       {selected ? (
-        <span className="absolute right-2 flex items-center justify-center">
-          <Check size={16} className="text-brand" />
+        <span className={infiniteSingleSelectStyles.optionRow.checkWrapper}>
+          <Check
+            size={16}
+            className={infiniteSingleSelectStyles.optionRow.checkIcon}
+          />
         </span>
       ) : null}
     </button>

@@ -10,6 +10,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { FormActions } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { AdminCategoryFormFields } from "./AdminCategoryFormFields.component";
+import { adminCategoryStyles } from "./adminCategory.styles";
 
 interface AdminCategoryCreateFormProps {
   form: UseFormReturn<CategoryFormInput>;
@@ -26,11 +27,11 @@ export function AdminCategoryCreateForm({
   const canSubmit = CategoryFormSchema.safeParse(values).success;
   const submitDisabled = !canSubmit || isPending;
   const errorMessage = error ? (
-    <p className="text-body-sm text-danger">{error}</p>
+    <p className={adminCategoryStyles.errorSm}>{error}</p>
   ) : null;
 
   return (
-    <div className="space-y-6">
+    <div className={adminCategoryStyles.stack6}>
       <AdminCategoryFormFields form={form} idPrefix="category-create" />
       {errorMessage}
       <FormActions>

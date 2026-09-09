@@ -7,6 +7,8 @@ import type { SearchSuggestion } from "../../types";
 import { SearchInput } from "./SearchInput.component";
 import { SearchPanel } from "./SearchPanel.component";
 
+import { searchBarStyles as styles } from "./searchBar.styles";
+
 interface SearchBarProps {
   size?: "lg" | "sm";
   className?: string;
@@ -55,17 +57,16 @@ export function SearchBar({
   }, [showPanel]);
 
   return (
-    <div className={cn("relative w-full", className)}>
+    <div className={cn(styles.root, className)}>
       {shellExpanded && overlayDropdown ? (
-        <div className="h-11 shrink-0" aria-hidden />
+        <div className={styles.placeholderSpacer} aria-hidden />
       ) : null}
 
       <div
         className={cn(
-          "w-full",
-          shellExpanded && overlayDropdown && "absolute inset-x-0 top-0 z-50",
-          shellExpanded &&
-            "overflow-hidden rounded-2xl border border-line bg-surface-raised shadow-elevation-2",
+          styles.shellContainer,
+          shellExpanded && overlayDropdown && styles.shellOverlay,
+          shellExpanded && styles.shellExpanded,
         )}
       >
         <SearchInput

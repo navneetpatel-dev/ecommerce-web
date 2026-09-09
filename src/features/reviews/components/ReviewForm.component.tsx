@@ -11,9 +11,11 @@ import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
+import { cn } from "@/shared/utils/cn";
 import { Star } from "lucide-react";
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import type { ReviewFormInput } from "../schemas/reviews.schema";
+import { reviewFormStyles as styles } from "./reviewForm.styles";
 
 interface ReviewFormProps {
   productName: string;
@@ -47,9 +49,9 @@ export function ReviewForm({
     rating < 1 ? LABELS.selectReviewRating : LABELS.enterReviewBody;
 
   return (
-    <form onSubmit={onSubmit} className="max-w-lg">
+    <form onSubmit={onSubmit} className={styles.form}>
       <FormStack>
-        <p className="text-body text-ink-muted">
+        <p className={styles.reviewingText}>
           {formatLabel(LABELS.reviewingProduct, { name: productName })}
         </p>
 
@@ -59,7 +61,7 @@ export function ReviewForm({
           columns={1}
         >
           <FormFieldFrame label={LABELS.rating} error={errors.rating?.message}>
-            <div className="mt-1 flex gap-1">
+            <div className={styles.starsContainer}>
               {[1, 2, 3, 4, 5].map((i) => (
                 <Button
                   key={i}
@@ -69,14 +71,15 @@ export function ReviewForm({
                   onClick={() => onSetRating(i)}
                   onMouseEnter={() => onSetHoverRating(i)}
                   onMouseLeave={() => onSetHoverRating(0)}
-                  className="h-auto min-h-0 max-h-none w-auto px-0"
+                  className={styles.starButton}
                 >
                   <Star
-                    className={`h-6 w-6 ${
+                    className={cn(
+                      styles.starIcon,
                       i <= (hoverRating || rating)
-                        ? "fill-warning text-warning"
-                        : "text-line"
-                    }`}
+                        ? styles.starActive
+                        : styles.starInactive,
+                    )}
                   />
                 </Button>
               ))}

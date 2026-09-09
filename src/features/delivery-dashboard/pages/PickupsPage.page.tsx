@@ -7,6 +7,7 @@ import { BarcodeScanButton } from "../components/BarcodeScanButton.component";
 import { useMyPickups } from "../api/deliveryAgent.queries";
 import { PATHS } from "@/shared/constants/paths";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { deliveryListPageStyles as styles } from "./deliveryListPage.styles";
 
 export function PickupsPage() {
   const router = useRouter();
@@ -29,25 +30,23 @@ export function PickupsPage() {
   };
 
   return (
-    <div className="w-full min-w-0 space-y-6">
-      <header className="flex flex-col gap-2 border-b border-line pb-5 sm:flex-row sm:items-end sm:justify-between">
+    <div className={styles.container}>
+      <header className={styles.header}>
         <div>
-          <h1 className="font-display text-[1.75rem] text-ink">Pickups</h1>
-          <p className="mt-1 text-body text-ink-muted">
+          <h1 className={styles.title}>Pickups</h1>
+          <p className={styles.subtitle}>
             Scheduled refund and exchange collections from customers.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-body-sm text-ink-muted">
+        <div className={styles.headerActions}>
+          <span className={styles.headerCount}>
             {count} scheduled pickup{count === 1 ? "" : "s"}
           </span>
           <BarcodeScanButton onDecoded={handleScanned} />
         </div>
       </header>
 
-      {scanError ? (
-        <p className="text-body-sm text-danger">{scanError}</p>
-      ) : null}
+      {scanError ? <p className={styles.errorNotice}>{scanError}</p> : null}
 
       {query.isError ? (
         <QueryErrorAlert
@@ -57,9 +56,9 @@ export function PickupsPage() {
       ) : null}
 
       {query.isLoading ? (
-        <p className="text-ink-muted">Loading pickups...</p>
+        <p className={styles.loadingText}>Loading pickups...</p>
       ) : count > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className={styles.grid}>
           {query.data?.map((pickup) => (
             <TaskCard
               key={pickup.id}
@@ -75,9 +74,7 @@ export function PickupsPage() {
           ))}
         </div>
       ) : (
-        <p className="border-l-2 border-brand/30 pl-3 text-body text-ink-muted py-2">
-          No scheduled pickups.
-        </p>
+        <p className={styles.emptyNotice}>No scheduled pickups.</p>
       )}
     </div>
   );

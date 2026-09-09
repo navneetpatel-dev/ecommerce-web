@@ -13,6 +13,8 @@ import type { KycChecklistItem } from "@/features/vendors";
 import { vendorDocumentTypeLabel } from "@/shared/utils/vendorDocumentTypeLabel";
 import { cn } from "@/shared/utils/cn";
 
+import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
+
 interface KycDocumentListItemProps {
   item: KycChecklistItem;
   vendorId: string;
@@ -39,10 +41,10 @@ export function KycDocumentListItem({
   return (
     <li
       className={cn(
-        "group overflow-hidden rounded-lg border transition-all",
+        vendorShopSettingsFormStyles.itemRoot,
         isExpanded
-          ? "border-brand/80 bg-brand-subtle/15 shadow-xs ring-1 ring-brand/40"
-          : "border-line bg-surface hover:border-line-strong hover:bg-surface-raised",
+          ? vendorShopSettingsFormStyles.itemExpanded
+          : vendorShopSettingsFormStyles.itemCollapsed,
       )}
     >
       {/* Clickable Card Header */}
@@ -57,30 +59,31 @@ export function KycDocumentListItem({
             onToggle();
           }
         }}
-        className="flex flex-col gap-2.5 p-3.5 sm:p-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset"
+        className={vendorShopSettingsFormStyles.headerButton}
       >
         {/* Primary Row: Desktop = 1 horizontal row; Mobile = Title on top, Badges below */}
-        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+        <div className={vendorShopSettingsFormStyles.headerRow}>
           {/* Left Info: Icon & Title */}
-          <div className="flex min-w-0 items-center justify-between gap-3 sm:justify-start">
-            <div className="flex min-w-0 items-center gap-3">
+          <div className={vendorShopSettingsFormStyles.headerLeftCol}>
+            <div className={vendorShopSettingsFormStyles.headerGroup}>
               <DocumentStatusIcon status={item.status} />
-              <div className="flex min-w-0 items-center gap-2">
-                <span className="text-body font-semibold text-ink group-hover:text-brand transition-colors">
+              <div className={vendorShopSettingsFormStyles.titleGroup}>
+                <span className={vendorShopSettingsFormStyles.docTitle}>
                   {vendorDocumentTypeLabel(item.documentType)}
                 </span>
                 {isExpanded ? (
-                  <span className="size-1.5 shrink-0 rounded-full bg-brand" />
+                  <span className={vendorShopSettingsFormStyles.reqDot} />
                 ) : null}
               </div>
             </div>
 
             {/* Mobile Chevron toggle on top row */}
-            <div className="flex sm:hidden size-7 shrink-0 items-center justify-center rounded-md text-ink-muted group-hover:text-ink">
+            <div className={vendorShopSettingsFormStyles.chevronMobile}>
               <ChevronDown
                 className={cn(
-                  "size-4 transition-transform duration-300 ease-out",
-                  isExpanded && "rotate-180 text-brand",
+                  vendorShopSettingsFormStyles.chevronIcon,
+                  isExpanded &&
+                    vendorShopSettingsFormStyles.chevronIconExpanded,
                 )}
                 aria-hidden
               />
@@ -88,7 +91,7 @@ export function KycDocumentListItem({
           </div>
 
           {/* Badges & Actions Strip: Below title on mobile, Right-aligned on desktop */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 sm:shrink-0">
+          <div className={vendorShopSettingsFormStyles.badgesGroup}>
             <DocumentStatusBadge status={item.status} />
 
             {hasDocument ? (
@@ -99,11 +102,12 @@ export function KycDocumentListItem({
             ) : null}
 
             {/* Desktop Chevron Indicator */}
-            <div className="hidden sm:flex size-7 shrink-0 items-center justify-center rounded-md text-ink-muted group-hover:text-ink">
+            <div className={vendorShopSettingsFormStyles.chevronDesktop}>
               <ChevronDown
                 className={cn(
-                  "size-4 transition-transform duration-300 ease-out",
-                  isExpanded && "rotate-180 text-brand",
+                  vendorShopSettingsFormStyles.chevronIcon,
+                  isExpanded &&
+                    vendorShopSettingsFormStyles.chevronIconExpanded,
                 )}
                 aria-hidden
               />
@@ -113,7 +117,7 @@ export function KycDocumentListItem({
 
         {/* Rejection Notice Component: Spans full width cleanly beneath the header row */}
         {item.rejectionReason ? (
-          <div className="w-full pt-0.5">
+          <div className={vendorShopSettingsFormStyles.remarksRow}>
             <KycRejectionNotice reason={item.rejectionReason} />
           </div>
         ) : null}
@@ -122,24 +126,27 @@ export function KycDocumentListItem({
       {/* Animated Accordion Drawer: Expands directly underneath the row */}
       <div
         className={cn(
-          "grid transition-all duration-300 ease-out",
+          vendorShopSettingsFormStyles.drawer,
           isExpanded
-            ? "grid-rows-[1fr] opacity-100 border-t border-line/60 bg-surface/90"
-            : "grid-rows-[0fr] opacity-0 border-t-0 pointer-events-none",
+            ? vendorShopSettingsFormStyles.drawerExpanded
+            : vendorShopSettingsFormStyles.drawerCollapsed,
         )}
       >
-        <div className="overflow-hidden">
-          <div className="p-4 sm:p-5 space-y-3.5">
-            <div className="flex items-start gap-3 border-b border-line/70 pb-3">
-              <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-subtle text-brand ring-1 ring-brand/30">
-                <UploadCloud className="size-4.5" aria-hidden />
+        <div className={vendorShopSettingsFormStyles.collapseBody}>
+          <div className={vendorShopSettingsFormStyles.collapseContent}>
+            <div className={vendorShopSettingsFormStyles.uploadHeadingRow}>
+              <div className={vendorShopSettingsFormStyles.uploadIconBox}>
+                <UploadCloud
+                  className={vendorShopSettingsFormStyles.uploadIcon}
+                  aria-hidden
+                />
               </div>
               <div>
-                <h4 className="text-body font-semibold text-ink">
+                <h4 className={vendorShopSettingsFormStyles.uploadTitle}>
                   {LABELS.uploadKycDocument}:{" "}
                   {vendorDocumentTypeLabel(item.documentType)}
                 </h4>
-                <p className="text-body-sm text-ink-muted">
+                <p className={vendorShopSettingsFormStyles.uploadSubtitle}>
                   {hasDocument
                     ? LABELS.kycReplaceDocumentNotice
                     : LABELS.uploadKycDocumentHint}

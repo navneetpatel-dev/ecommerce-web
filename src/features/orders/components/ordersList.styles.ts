@@ -15,4 +15,17 @@ export const ORDERS_LIST_STYLES = {
   totalAmount: "font-display text-[1.125rem] tabular-nums text-ink",
   openIcon:
     "ml-auto h-4 w-4 text-ink-faint transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-brand",
+  srOnly: "sr-only",
+  colOrderHeader: "w-[10%]",
+  colOrderCell: "w-[10%] font-mono text-body-sm",
+  colPlacedHeader: "w-[12%]",
+  colPlacedCell: "w-[12%] text-ink-muted",
+  colItemsHeader: "w-[38%]",
+  colItemsCell: "w-[38%]",
+  colTotalHeader: "w-[14%] text-right",
+  colTotalCell: "w-[14%] text-right",
+  colStatusHeader: "w-[22%]",
+  colStatusCell: "w-[22%]",
+  colOpenHeader: "w-[4%]",
+  colOpenCell: "w-[4%] text-right",
 } as const;

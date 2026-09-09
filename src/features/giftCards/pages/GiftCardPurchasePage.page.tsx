@@ -4,19 +4,20 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { giftCardsLabels } from "@/shared/constants/labels/giftCards";
 import { GiftCardPurchaseForm } from "../components/GiftCardPurchaseForm.component";
+import { giftCardPurchasePageStyles as styles } from "./giftCardPurchasePage.styles";
 
 export function GiftCardPurchasePage() {
   return (
-    <div className="storefront-container max-w-xl py-8 md:py-10">
-      <header className="mb-8">
+    <div className={styles.container}>
+      <header className={styles.header}>
         <TextEyebrow brand>{LABELS.account}</TextEyebrow>
         <h1
-          className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
+          className={styles.title}
           style={{ fontSize: "var(--text-display-sm)" }}
         >
           {giftCardsLabels.giftCardsPageTitle}
         </h1>
-        <p className="mt-2 text-body text-ink-muted">
+        <p className={styles.subtitle}>
           {giftCardsLabels.giftCardsPageDescription}
         </p>
       </header>

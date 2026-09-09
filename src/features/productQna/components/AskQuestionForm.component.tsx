@@ -11,6 +11,7 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import type { AskQuestionFormInput } from "../schemas/productQna.schema";
+import { productQnaStyles as styles } from "./productQna.styles";
 
 interface AskQuestionFormProps {
   register: UseFormRegister<AskQuestionFormInput>;
@@ -34,7 +35,7 @@ export function AskQuestionForm({
   const canSubmit = question.trim().length >= 3;
 
   return (
-    <form onSubmit={onSubmit} className="max-w-lg">
+    <form onSubmit={onSubmit} className={styles.form}>
       <FormStack>
         <FormSection
           title={LABELS.askAQuestion}
@@ -62,7 +63,7 @@ export function AskQuestionForm({
         />
 
         {isSuccess ? (
-          <p className="text-body-sm text-success">
+          <p className={styles.successMessage}>
             {LABELS.questionSubmittedForReview}
           </p>
         ) : null}

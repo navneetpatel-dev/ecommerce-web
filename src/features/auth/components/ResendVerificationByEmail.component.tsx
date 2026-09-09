@@ -4,6 +4,7 @@ import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useResendVerificationByEmail } from "../api/auth.queries";
+import { authFormsStyles } from "./authForms.styles";
 
 interface ResendVerificationByEmailProps {
   email: string;
@@ -21,9 +22,9 @@ export function ResendVerificationByEmail({
     : LABELS.verificationEmailSent;
 
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div className={authFormsStyles.resendWrapper}>
       {resend.isSuccess ? (
-        <p className="text-body-sm text-ink-muted">{message}</p>
+        <p className={authFormsStyles.mutedBodySm}>{message}</p>
       ) : (
         <Button
           type="button"

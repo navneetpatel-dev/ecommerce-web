@@ -2,6 +2,7 @@ export const doorstepConfirmCardStyles = {
   container: "border border-line bg-surface shadow-elevation-1",
   header:
     "flex items-center justify-between border-b border-line bg-paper/55 px-5 py-3.5",
+  headerLeft: "flex items-center gap-2",
   headerIcon: "size-4 text-brand",
   headerEyebrow: "!mb-0",
   headerBadge: "text-caption font-medium uppercase tracking-wider text-brand",

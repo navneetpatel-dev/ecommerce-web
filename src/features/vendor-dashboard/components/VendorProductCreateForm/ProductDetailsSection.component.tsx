@@ -18,6 +18,7 @@ import type {
   ProductListingFormField,
   ProductListingFormValues,
 } from "@/features/products";
+import { vendorProductCreateFormStyles } from "./vendorProductCreateForm.styles";
 
 interface ProductDetailsSectionProps {
   values: ProductListingFormValues;
@@ -109,7 +110,7 @@ export function ProductDetailsSection({
         label={LABELS.selectCategory}
         required
         error={getError("categoryId")}
-        className="sm:col-span-2"
+        className={vendorProductCreateFormStyles.colSpan2}
       >
         <Select
           value={values.categoryId || undefined}
@@ -117,7 +118,10 @@ export function ProductDetailsSection({
           disabled={disabled}
         >
           <SelectTrigger
-            className={cn(getError("categoryId") && "border-danger")}
+            className={cn(
+              getError("categoryId") &&
+                vendorProductCreateFormStyles.selectCategoryTriggerError,
+            )}
           >
             <SelectValue placeholder={LABELS.selectCategory} />
           </SelectTrigger>
@@ -134,7 +138,7 @@ export function ProductDetailsSection({
         label={LABELS.shortDescription}
         required
         error={getError("description")}
-        className="sm:col-span-2"
+        className={vendorProductCreateFormStyles.colSpan2}
       >
         <Textarea
           placeholder={LABELS.shortDescription}
@@ -143,7 +147,7 @@ export function ProductDetailsSection({
           error={Boolean(getError("description"))}
           disabled={disabled}
           onChange={(event) => patchValues({ description: event.target.value })}
-          className="min-h-[6.5rem]"
+          className={vendorProductCreateFormStyles.descriptionTextarea}
         />
       </FormFieldFrame>
     </FormSection>

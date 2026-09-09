@@ -3,6 +3,7 @@ import { PaginationContainer } from "@/shared/containers/PaginationContainer.con
 import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination";
 import { ProductsTableHeader, ProductsTableContent } from "./ProductsTable";
+import { productsTableViewStyles } from "./ProductsTable/productsTable.styles";
 
 interface ProductRow {
   id: string;
@@ -57,7 +58,7 @@ export function ProductsTableView({
   const resultTo = hasTotal ? Math.min(page * DEFAULT_PAGE_LIMIT, total) : 0;
 
   const actionMessageNotice = actionMessage ? (
-    <p className="mb-3 text-body-sm text-ink-muted">{actionMessage}</p>
+    <p className={productsTableViewStyles.notice}>{actionMessage}</p>
   ) : null;
 
   const resultSummary = hasTotal ? (
@@ -65,7 +66,7 @@ export function ProductsTableView({
       from={resultFrom}
       to={resultTo}
       total={total}
-      className="mb-3 text-body-sm text-ink-muted"
+      className={productsTableViewStyles.notice}
     />
   ) : null;
 

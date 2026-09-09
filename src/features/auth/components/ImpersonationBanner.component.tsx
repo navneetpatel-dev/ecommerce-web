@@ -5,6 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { Button } from "@/shared/components/ui/button";
 import { useImpersonation } from "../hooks/useImpersonation.hook";
+import { authFormsStyles } from "./authForms.styles";
 
 /** Persistent, high-visibility bar shown for the duration of a support impersonation session. */
 export function ImpersonationBanner() {
@@ -14,7 +15,7 @@ export function ImpersonationBanner() {
   if (!isImpersonating || !currentUser) return null;
 
   return (
-    <div className="sticky top-0 z-50 flex items-center justify-between gap-3 bg-warning px-4 py-2 text-body-sm font-medium text-ink">
+    <div className={authFormsStyles.impersonationBanner}>
       <span>
         {formatLabel(LABELS.viewingAsBanner, { name: currentUser.name })}
       </span>
@@ -22,7 +23,7 @@ export function ImpersonationBanner() {
         type="button"
         size="sm"
         variant="outline"
-        className="border-ink/30 bg-transparent text-ink hover:bg-ink/10"
+        className={authFormsStyles.impersonationButton}
         onClick={exitImpersonation}
       >
         {LABELS.exitImpersonation}

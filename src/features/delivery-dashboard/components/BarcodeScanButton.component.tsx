@@ -10,6 +10,8 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 
+import { barcodeScanButtonStyles } from "./barcodeScanButton.styles";
+
 const SCANNER_ELEMENT_ID = "delivery-barcode-scanner";
 
 /**
@@ -63,7 +65,7 @@ export function BarcodeScanButton({
   }, [open, onDecoded]);
 
   const errorNotice = error ? (
-    <p className="text-body-sm text-danger">{error}</p>
+    <p className={barcodeScanButtonStyles.errorNotice}>{error}</p>
   ) : null;
 
   return (
@@ -76,17 +78,20 @@ export function BarcodeScanButton({
           setOpen(true);
         }}
       >
-        <ScanLine className="size-4" aria-hidden="true" />
+        <ScanLine
+          className={barcodeScanButtonStyles.buttonIcon}
+          aria-hidden="true"
+        />
         Scan barcode
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className={barcodeScanButtonStyles.dialogContent}>
           <DialogHeader>
             <DialogTitle>Scan package barcode</DialogTitle>
           </DialogHeader>
           <div
             id={SCANNER_ELEMENT_ID}
-            className="w-full overflow-hidden rounded-md"
+            className={barcodeScanButtonStyles.scannerViewport}
           />
           {errorNotice}
         </DialogContent>

@@ -6,6 +6,7 @@ import { ReviewListSkeleton } from "@/shared/components/Skeletons.component";
 import { REVIEW_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/orderFormat";
 import type { Review } from "@/shared/api/types";
+import { productReviewsStyles as styles } from "./productReviews.styles";
 
 interface ProductReviewsProps {
   reviews: Review[];
@@ -31,63 +32,55 @@ export function ProductReviews({
         message="Be the first to review this product after purchase."
         icon={MessageSquare}
         maxWidth="max-w-[65ch]"
-        className="px-0 py-8"
+        className={styles.emptyClass}
       />
     );
   }
 
   return (
-    <div className="max-w-[65ch] divide-y divide-line">
+    <div className={styles.list}>
       {reviews.map((review) => (
-        <article key={review.id} className="py-6 first:pt-0">
-          <div className="flex items-center justify-between gap-4">
-            <div className="space-y-1">
-              <p className="text-body font-medium text-ink">
+        <article key={review.id} className={styles.article}>
+          <div className={styles.header}>
+            <div className={styles.userGroup}>
+              <p className={styles.userName}>
                 {review.user?.name ?? "Verified buyer"}
               </p>
               <RatingStars value={review.rating} size="sm" />
             </div>
             {review.status === REVIEW_STATUS.APPROVED && (
-              <span className="rounded-sm bg-success-subtle px-2 py-1 text-body-sm font-medium text-success">
-                Verified Purchase
-              </span>
+              <span className={styles.verifiedBadge}>Verified Purchase</span>
             )}
           </div>
 
           {review.title && (
-            <h3 className="mt-4 text-[1.125rem] font-semibold text-ink">
-              {review.title}
-            </h3>
+            <h3 className={styles.reviewTitle}>{review.title}</h3>
           )}
 
-          <p className="mt-2 text-body leading-relaxed text-ink-muted whitespace-pre-wrap">
-            {review.body}
-          </p>
+          <p className={styles.reviewBody}>{review.body}</p>
 
           {review.vendorResponse ? (
-            <div className="mt-4 ml-4 border-l-2 border-line pl-4">
-              <p className="text-body-sm font-medium text-ink">
+            <div className={styles.sellerResponse}>
+              <p className={styles.sellerTitle}>
                 Seller response
                 {review.vendorRespondedAt ? (
-                  <span className="ml-2 font-normal text-ink-muted">
+                  <span className={styles.sellerDate}>
                     {formatOrderDate(review.vendorRespondedAt)}
                   </span>
                 ) : null}
               </p>
-              <p className="mt-1 text-body-sm leading-relaxed text-ink-muted whitespace-pre-wrap">
-                {review.vendorResponse}
-              </p>
+              <p className={styles.sellerBody}>{review.vendorResponse}</p>
             </div>
           ) : null}
 
-          <div className="mt-4 flex items-center gap-2">
+          <div className={styles.voteRow}>
             <Button
               type="button"
               variant="ghost"
               size="sm"
               onClick={() => onVoteHelpful(review.id)}
             >
-              <ThumbsUp className="h-4 w-4" /> {review.helpfulCount}
+              <ThumbsUp className={styles.voteIcon} /> {review.helpfulCount}
             </Button>
             <Button
               type="button"
@@ -95,7 +88,7 @@ export function ProductReviews({
               size="sm"
               onClick={() => onVoteUnhelpful(review.id)}
             >
-              <ThumbsDown className="h-4 w-4" /> {review.unhelpfulCount}
+              <ThumbsDown className={styles.voteIcon} /> {review.unhelpfulCount}
             </Button>
           </div>
         </article>

@@ -4,4 +4,8 @@ export const notFoundStyles = {
   icon: "text-ink-faint",
   heading: "font-display text-ink",
   body: "max-w-sm text-center text-body text-ink-muted",
+  workspaceContainer:
+    "flex min-h-[60vh] flex-col items-center justify-center gap-4 p-8",
+  workspaceHeading: "text-[1.375rem] font-semibold text-ink",
+  workspaceBody: "max-w-md text-center text-body text-ink-muted",
 } as const;

@@ -3,12 +3,13 @@
 import { AdminDataPage } from "./AdminDataPage.page";
 import { AdminTaxRuleForm } from "../components/AdminTaxRuleForm.component";
 import { useAdminTaxPage } from "../hooks/useAdminTaxPage";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function AdminTaxPage() {
   const page = useAdminTaxPage();
 
   return (
-    <div className="space-y-5">
+    <div className={adminPagesStyles.stack5}>
       <AdminTaxRuleForm {...page.form} />
       <AdminDataPage
         title={page.title}

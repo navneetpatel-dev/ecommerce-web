@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { cn } from "@/shared/utils/cn";
 import type { LucideIcon } from "lucide-react";
+import { sidebarNavStyles } from "./layout.styles";
 
 export interface SidebarNavItem {
   href: string;
@@ -28,17 +29,22 @@ export function SidebarNav({
   return (
     <aside
       className={cn(
-        "sticky top-14 z-20 hidden h-[calc(100dvh-3.5rem)] w-60 shrink-0 self-start lg:top-[72px] lg:flex lg:h-[calc(100dvh-72px)] lg:flex-col",
-        "border-r border-line",
-        variant === "dashboard" ? "bg-paper" : "bg-surface",
+        sidebarNavStyles.aside,
+        variant === "dashboard"
+          ? sidebarNavStyles.asideDashboard
+          : sidebarNavStyles.asideSurface,
         className,
       )}
     >
-      {header ? <div className="shrink-0 px-4 pt-4 pb-0">{header}</div> : null}
+      {header ? (
+        <div className={sidebarNavStyles.headerWrapper}>{header}</div>
+      ) : null}
       <nav
         className={cn(
-          "min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-contain px-4 pb-4",
-          header ? "pt-1" : "pt-4",
+          sidebarNavStyles.nav,
+          header
+            ? sidebarNavStyles.navWithHeader
+            : sidebarNavStyles.navWithoutHeader,
         )}
       >
         {items.map(({ href, icon: Icon, label }) => {
@@ -49,10 +55,10 @@ export function SidebarNav({
               key={href}
               href={href}
               className={cn(
-                "flex h-11 items-center gap-3 rounded-md border-l-[3px] px-3 text-body-sm font-medium transition-colors",
+                sidebarNavStyles.linkBase,
                 isActive
-                  ? "border-l-brand bg-brand-subtle text-brand"
-                  : "border-l-transparent text-ink-muted hover:bg-paper hover:text-ink",
+                  ? sidebarNavStyles.linkActive
+                  : sidebarNavStyles.linkInactive,
               )}
             >
               {Icon ? <Icon size={16} /> : null}

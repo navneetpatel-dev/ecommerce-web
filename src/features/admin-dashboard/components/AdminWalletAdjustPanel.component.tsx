@@ -17,24 +17,25 @@ import { RequirePermission } from "@/shared/components/RequirePermission.compone
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { useAdminWalletAdjust } from "../hooks/useAdminWalletAdjust.hook";
+import { adminFormWidgetsStyles } from "./adminFormWidgets.styles";
 
 export function AdminWalletAdjustPanel() {
   const form = useAdminWalletAdjust();
 
   return (
     <RequirePermission permission={PERMISSIONS.WALLET_ADJUST}>
-      <div className="rounded-lg border border-line bg-surface p-5 md:p-6 shadow-elevation-1 space-y-6">
+      <div className={adminFormWidgetsStyles.walletPanelRoot}>
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-line pb-4">
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-lg border border-brand/20 bg-brand/10 text-brand shadow-elevation-1">
-              <SlidersHorizontal className="size-5" />
+        <div className={adminFormWidgetsStyles.walletHeader}>
+          <div className={adminFormWidgetsStyles.walletHeaderLeft}>
+            <div className={adminFormWidgetsStyles.walletIconBadge}>
+              <SlidersHorizontal className={adminFormWidgetsStyles.iconMd} />
             </div>
             <div>
-              <h2 className="font-display text-[1.125rem] font-semibold text-ink">
+              <h2 className={adminFormWidgetsStyles.walletTitle}>
                 {LABELS.walletAdjustTitle}
               </h2>
-              <p className="text-body-sm text-ink-muted">
+              <p className={adminFormWidgetsStyles.walletSubtitle}>
                 Manually credit or debit customer wallet points with audit
                 logging and reason tracking
               </p>
@@ -43,8 +44,8 @@ export function AdminWalletAdjustPanel() {
         </div>
 
         {/* Form Container */}
-        <div className="space-y-5 rounded-lg border border-line bg-paper/40 p-4 md:p-5">
-          <div className="grid gap-4 sm:grid-cols-2">
+        <div className={adminFormWidgetsStyles.walletFormContainer}>
+          <div className={adminFormWidgetsStyles.gridSm2}>
             <FormFieldFrame
               label={LABELS.walletAdjustUserId}
               htmlFor="wallet-adjust-user"
@@ -137,7 +138,7 @@ export function AdminWalletAdjustPanel() {
             />
           </FormFieldFrame>
 
-          <div className="flex flex-wrap items-center gap-3 pt-1">
+          <div className={adminFormWidgetsStyles.walletActionRow}>
             <Button
               type="button"
               disabled={form.loading}
@@ -148,15 +149,15 @@ export function AdminWalletAdjustPanel() {
           </div>
 
           {form.error ? (
-            <div className="flex items-center gap-2.5 rounded-lg border border-danger/20 bg-danger/10 p-3 text-body-sm text-danger">
-              <AlertCircle className="size-4 shrink-0" />
+            <div className={adminFormWidgetsStyles.walletErrorAlert}>
+              <AlertCircle className={adminFormWidgetsStyles.iconSmShrink0} />
               <span>{form.error}</span>
             </div>
           ) : null}
 
           {form.message ? (
-            <div className="flex items-center gap-2.5 rounded-lg border border-success/20 bg-success/10 p-3 text-body-sm text-success">
-              <CheckCircle2 className="size-4 shrink-0" />
+            <div className={adminFormWidgetsStyles.walletSuccessAlert}>
+              <CheckCircle2 className={adminFormWidgetsStyles.iconSmShrink0} />
               <span>{form.message}</span>
             </div>
           ) : null}

@@ -1,4 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
+import { cn } from "@/shared/utils/cn";
+import { deliveryTerminalStatusBannerStyles } from "./deliveryTerminalStatusBanner.styles";
 
 interface DeliveryTerminalStatusBannerProps {
   variant: "DELIVERED" | "RTO_DELIVERED";
@@ -6,12 +8,12 @@ interface DeliveryTerminalStatusBannerProps {
 
 const COPY = {
   DELIVERED: {
-    className: "text-success",
+    className: deliveryTerminalStatusBannerStyles.deliveredVariant,
     title: "Delivery Completed",
     body: "Package successfully handed over.",
   },
   RTO_DELIVERED: {
-    className: "text-ink",
+    className: deliveryTerminalStatusBannerStyles.rtoDeliveredVariant,
     title: "Returned to vendor hub",
     body: "Undelivered parcel handed back after 3 failed attempts.",
   },
@@ -24,12 +26,17 @@ export function DeliveryTerminalStatusBanner({
   const copy = COPY[variant];
   return (
     <div
-      className={`flex items-center gap-3 border border-line bg-surface p-5 shadow-elevation-1 ${copy.className}`}
+      className={cn(deliveryTerminalStatusBannerStyles.banner, copy.className)}
     >
-      <CheckCircle2 className="size-5 shrink-0" aria-hidden="true" />
+      <CheckCircle2
+        className={deliveryTerminalStatusBannerStyles.icon}
+        aria-hidden="true"
+      />
       <div>
-        <p className="font-medium">{copy.title}</p>
-        <p className="text-body-sm text-ink-muted">{copy.body}</p>
+        <p className={deliveryTerminalStatusBannerStyles.title}>{copy.title}</p>
+        <p className={deliveryTerminalStatusBannerStyles.subtitle}>
+          {copy.body}
+        </p>
       </div>
     </div>
   );

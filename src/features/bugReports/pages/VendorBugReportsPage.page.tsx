@@ -15,11 +15,16 @@ import {
   useBugFiltersFromUrl,
 } from "../components/BugReportFilters.component";
 import { BugReportList } from "../components/BugReportList.component";
+import { bugReportsPagesStyles } from "./bugReportsPages.styles";
 
 export function VendorBugReportsPage() {
   return (
     <RequirePermission permission={VENDOR_SUPPORT_ACCESS}>
-      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+      <Suspense
+        fallback={
+          <Skeleton className={bugReportsPagesStyles.skeletonFallback} />
+        }
+      >
         <VendorBugReportsContent />
       </Suspense>
     </RequirePermission>
@@ -35,17 +40,21 @@ function VendorBugReportsContent() {
   const reports = query.data?.pages.flatMap((p) => p.items) ?? [];
 
   return (
-    <div className="w-full min-w-0 space-y-8">
-      <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-        <div className="min-w-0 space-y-1.5">
-          <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+    <div className={bugReportsPagesStyles.vendorPageStack}>
+      <div className={bugReportsPagesStyles.vendorTitleRow}>
+        <div className={bugReportsPagesStyles.vendorTitleStack}>
+          <h1 className={bugReportsPagesStyles.titleHeading}>
             {LABELS.bugReports}
           </h1>
-          <p className="max-w-3xl text-body leading-relaxed text-ink-muted">
+          <p className={bugReportsPagesStyles.vendorTitleDescription}>
             {LABELS.bugReportsPageDescription}
           </p>
         </div>
-        <Button asChild className="shrink-0" fullWidth="mobile">
+        <Button
+          asChild
+          className={bugReportsPagesStyles.vendorCreateButton}
+          fullWidth="mobile"
+        >
           <Link href={PATHS.vendor.bugReportNew}>{LABELS.reportABug}</Link>
         </Button>
       </div>

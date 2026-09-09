@@ -11,6 +11,7 @@ import { BrowseTopicsSection } from "./BrowseTopicsSection.component";
 import { ContactSection } from "./ContactSection.component";
 import { QuickLinksSection } from "./QuickLinksSection.component";
 import { SearchResultsSection } from "./SearchResultsSection.component";
+import { helpHomeViewStyles as styles } from "./helpHomeView.styles";
 
 export function HelpHomeView() {
   const [query, setQuery] = useState("");
@@ -29,42 +30,33 @@ export function HelpHomeView() {
   );
 
   return (
-    <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[320px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
-      />
+    <div className={styles.root}>
+      <div aria-hidden className={styles.heroGlow} />
 
-      <div className="storefront-container relative py-6 md:py-8">
+      <div className={styles.container}>
         <motion.header
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
-          className="max-w-2xl"
+          className={styles.header}
         >
           <TextEyebrow brand>{LABELS.helpSupportEyebrow}</TextEyebrow>
           <h1
-            className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
+            className={styles.title}
             style={{ fontSize: "var(--text-display-sm)" }}
           >
             {LABELS.helpCenter}
           </h1>
-          <p className="mt-2 text-body text-ink-muted">
-            {LABELS.helpCenterIntro}
-          </p>
+          <p className={styles.subtitle}>{LABELS.helpCenterIntro}</p>
         </motion.header>
 
-        <div className="relative mt-8 max-w-xl">
-          <Search
-            size={16}
-            strokeWidth={1.5}
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted"
-          />
+        <div className={styles.searchWrapper}>
+          <Search size={16} strokeWidth={1.5} className={styles.searchIcon} />
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={LABELS.helpSearchPlaceholder}
-            className="pl-10"
+            className={styles.searchInput}
             aria-label={LABELS.helpSearchAriaLabel}
           />
         </div>

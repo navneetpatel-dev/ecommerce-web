@@ -27,7 +27,7 @@ export const AddressItem = memo(function AddressItem({
         className={ADDRESS_STEP_STYLES.addressButton(isSelected)}
       >
         <div className={ADDRESS_STEP_STYLES.addressContent}>
-          <div className="min-w-0">
+          <div className={ADDRESS_STEP_STYLES.addressDetails}>
             <p className={ADDRESS_STEP_STYLES.addressLine1}>
               {address.line1}
               {address.line2 ? `, ${address.line2}` : ""}

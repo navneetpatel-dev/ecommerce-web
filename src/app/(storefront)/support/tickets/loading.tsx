@@ -1,8 +1,9 @@
 import { SkeletonCard } from "@/shared/components/Skeletons.component";
+import { loadingPagesStyles as styles } from "@/app/loadingPages.styles";
 
 export default function SupportTicketsLoading() {
   return (
-    <div className="space-y-4 p-6">
+    <div className={styles.paddedCardStack}>
       <SkeletonCard count={4} />
     </div>
   );

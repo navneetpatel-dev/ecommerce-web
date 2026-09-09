@@ -11,6 +11,7 @@ import { ListingResults } from "./ListingResults.component";
 import { FiltersBottomSheet } from "./FiltersBottomSheet.component";
 import { SortBottomSheet } from "./SortBottomSheet.component";
 import { getListingEmptyState } from "./emptyState";
+import { productListingPageStyles } from "./productListingPage.styles";
 
 export function ProductListingPage() {
   const listing = useProductListing();
@@ -21,8 +22,8 @@ export function ProductListingPage() {
   const empty = getListingEmptyState(listing.filters, categoryName);
 
   return (
-    <div className="storefront-container pb-8 pt-6 md:pt-8">
-      <h1 className="sr-only">{LABELS.allProducts}</h1>
+    <div className={productListingPageStyles.container}>
+      <h1 className={productListingPageStyles.srOnly}>{LABELS.allProducts}</h1>
 
       <MobileActionBar
         compareMode={listing.compareMode}
@@ -31,7 +32,7 @@ export function ProductListingPage() {
         onToggleCompareMode={listing.toggleCompareMode}
       />
 
-      <div className="mb-20 flex gap-10 xl:mb-28 xl:gap-12">
+      <div className={productListingPageStyles.mainLayout}>
         <FilterSidebar
           idPrefix="desktop"
           minPrice={listing.filters.minPrice}
@@ -41,7 +42,7 @@ export function ProductListingPage() {
           onClear={listing.clearFilters}
         />
 
-        <div className="min-w-0 flex-1">
+        <div className={productListingPageStyles.resultsWrapper}>
           <ListingResults
             sort={listing.filters.sort}
             totalProducts={listing.data?.total}

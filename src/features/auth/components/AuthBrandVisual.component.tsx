@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { cn } from "@/shared/utils/cn";
+import { authBrandVisualStyles as styles } from "./authBrandVisual.styles";
 
 const COLLAGE_IMAGES = [
   {
@@ -22,36 +23,24 @@ const COLLAGE_IMAGES = [
 /** Decorative product collage for the auth brand panel (desktop). */
 export function AuthBrandVisual({ className }: { className?: string }) {
   return (
-    <div
-      aria-hidden
-      className={cn(
-        "pointer-events-none absolute inset-0 overflow-hidden",
-        className,
-      )}
-    >
-      <div className="absolute inset-y-0 right-0 w-[58%]">
+    <div aria-hidden className={cn(styles.visualRoot, className)}>
+      <div className={styles.visualColumn}>
         {COLLAGE_IMAGES.map(({ src, alt, className: frameClassName }) => (
-          <div
-            key={src}
-            className={cn(
-              "absolute aspect-[4/5] overflow-hidden rounded-2xl border border-line/50 shadow-elevation-3",
-              frameClassName,
-            )}
-          >
+          <div key={src} className={cn(styles.visualCard, frameClassName)}>
             <Image
               src={src}
               alt={alt}
               fill
               sizes="(min-width: 1024px) 240px, 0px"
-              className="object-cover"
+              className={styles.visualImage}
               priority={false}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-paper/55 via-transparent to-paper/10" />
+            <div className={styles.visualGlowTop} />
           </div>
         ))}
 
         {/* Fade collage into page bg — scoped to collage column only (no full-height seam). */}
-        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-paper/20 to-paper/75" />
+        <div className={styles.visualGlowLeft} />
       </div>
     </div>
   );

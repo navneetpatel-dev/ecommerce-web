@@ -4,6 +4,7 @@ import { FilterSidebar } from "@/features/products";
 import type { ProductFilters } from "@/features/products";
 import type { CategoryFacet } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
+import { categoryPlpPageStyles as styles } from "./categoryPlpPage.styles";
 
 interface FilterSheetProps {
   open: boolean;
@@ -30,7 +31,7 @@ export function FilterSheet({
     <BottomSheet open={open} onClose={onClose} title={LABELS.filters}>
       <FilterSidebar
         idPrefix="cat-mobile"
-        className="w-full"
+        className={styles.filterSidebar}
         minPrice={filters.minPrice}
         maxPrice={filters.maxPrice}
         rating={filters.rating}
@@ -43,7 +44,7 @@ export function FilterSheet({
           onClose();
         }}
       />
-      <Button className="mt-4 w-full" onClick={onClose}>
+      <Button className={styles.showResultsButton} onClick={onClose}>
         {LABELS.showResults}
       </Button>
     </BottomSheet>

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/shared/utils/cn";
+import { formSectionStyles } from "./forms.styles";
 
 interface FormSectionProps {
   title: string;
@@ -23,26 +24,17 @@ export function FormSection({
   contentClassName,
 }: FormSectionProps) {
   return (
-    <section
-      className={cn(
-        "overflow-hidden rounded-md border border-line bg-surface shadow-card-hairline",
-        className,
-      )}
-    >
-      <header className="border-b border-line/80 bg-paper/50 px-4 py-4 sm:px-6 sm:py-5">
-        <h3 className="text-body font-semibold tracking-tight text-ink">
-          {title}
-        </h3>
-        {hint ? (
-          <p className="mt-1 max-w-3xl text-body-sm text-ink-muted">{hint}</p>
-        ) : null}
+    <section className={cn(formSectionStyles.section, className)}>
+      <header className={formSectionStyles.header}>
+        <h3 className={formSectionStyles.title}>{title}</h3>
+        {hint ? <p className={formSectionStyles.hint}>{hint}</p> : null}
       </header>
       <div
         className={cn(
-          "grid gap-5 p-4 sm:gap-x-6 sm:gap-y-6 sm:p-6 lg:gap-x-8 lg:p-8",
-          columns === 3 && "sm:grid-cols-2 xl:grid-cols-3",
-          columns === 2 && "sm:grid-cols-2",
-          columns === 1 && "grid-cols-1",
+          formSectionStyles.content,
+          columns === 3 && formSectionStyles.col3,
+          columns === 2 && formSectionStyles.col2,
+          columns === 1 && formSectionStyles.col1,
           contentClassName,
         )}
       >

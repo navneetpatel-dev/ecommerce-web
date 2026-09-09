@@ -28,16 +28,16 @@ function OrderItemsSkeleton() {
       {[0, 1].map((group) => (
         <div key={group} className={styles.skeletonCard}>
           <div className={styles.skeletonCardHeader}>
-            <Skeleton className="h-4 w-40" />
-            <Skeleton className="h-3 w-14" />
+            <Skeleton className={styles.itemHeaderTitle} />
+            <Skeleton className={styles.itemHeaderMeta} />
           </div>
           <div className={styles.skeletonCardBody}>
             <Skeleton className={styles.skeletonImage} />
             <div className={styles.skeletonContent}>
-              <Skeleton className="h-4 w-2/3" />
-              <Skeleton className="h-3 w-1/4" />
+              <Skeleton className={styles.itemName} />
+              <Skeleton className={styles.itemQty} />
             </div>
-            <Skeleton className="h-5 w-20" />
+            <Skeleton className={styles.itemPrice} />
           </div>
         </div>
       ))}
@@ -96,10 +96,10 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
 
               {orderId && isOrderLoading ? (
                 <div className={styles.asideLoadingCard}>
-                  <Skeleton className="h-4 w-24" />
-                  <Skeleton className="h-3 w-full" />
-                  <Skeleton className="h-3 w-4/5" />
-                  <Skeleton className="mt-4 h-7 w-1/2" />
+                  <Skeleton className={styles.asideLabel} />
+                  <Skeleton className={styles.asideLine1} />
+                  <Skeleton className={styles.asideLine2} />
+                  <Skeleton className={styles.asideTotal} />
                 </div>
               ) : null}
 

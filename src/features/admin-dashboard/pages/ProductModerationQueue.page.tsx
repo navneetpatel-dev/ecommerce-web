@@ -3,13 +3,14 @@
 import { useProductModerationQueue } from "../hooks/useProductModerationQueue.hook";
 import { ProductModerationTable } from "../components/ProductModerationTable.component";
 import { LABELS } from "@/shared/constants/labels";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function ProductModerationQueue() {
   const queue = useProductModerationQueue();
 
   if (!queue.isLoading && queue.pagination.total === 0) {
     return (
-      <p className="py-8 text-center text-body text-ink-muted">
+      <p className={adminPagesStyles.emptyCenteredNotice}>
         {LABELS.noPendingProductApprovals}
       </p>
     );

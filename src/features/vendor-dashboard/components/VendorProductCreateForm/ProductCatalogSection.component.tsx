@@ -12,6 +12,7 @@ import {
   type ProductListingFormField,
   type ProductListingFormValues,
 } from "@/features/products";
+import { vendorProductCreateFormStyles } from "./vendorProductCreateForm.styles";
 
 interface ProductCatalogSectionProps {
   values: ProductListingFormValues;
@@ -54,9 +55,12 @@ export function ProductCatalogSection({
         label={LABELS.productHighlights}
         error={getError("highlights")}
       >
-        <div className="space-y-2">
+        <div className={vendorProductCreateFormStyles.listStack}>
           {values.highlights.map((item, index) => (
-            <div key={`highlight-${index}`} className="flex gap-2">
+            <div
+              key={`highlight-${index}`}
+              className={vendorProductCreateFormStyles.highlightRow}
+            >
               <Input
                 value={item}
                 maxLength={PRODUCT_FIELD_LIMITS.HIGHLIGHT_MAX}
@@ -103,11 +107,11 @@ export function ProductCatalogSection({
       </FormFieldFrame>
 
       <FormFieldFrame label={LABELS.specifications} error={getError("specs")}>
-        <div className="space-y-2">
+        <div className={vendorProductCreateFormStyles.listStack}>
           {values.specs.map((row, index) => (
             <div
               key={`spec-${index}`}
-              className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto]"
+              className={vendorProductCreateFormStyles.specRow}
             >
               <Input
                 placeholder={LABELS.productSpecKey}

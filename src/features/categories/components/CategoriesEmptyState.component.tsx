@@ -15,7 +15,8 @@ export function CategoriesEmptyState() {
         {LABELS.noCategoriesYet}
       </p>
       <Link href={PATHS.products} className={categoriesViewStyles.emptyLink}>
-        {LABELS.browseProducts} <ArrowRight className="h-3.5 w-3.5" />
+        {LABELS.browseProducts}{" "}
+        <ArrowRight className={categoriesViewStyles.emptyArrowIcon} />
       </Link>
     </div>
   );

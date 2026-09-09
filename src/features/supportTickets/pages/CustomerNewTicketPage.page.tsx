@@ -4,6 +4,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import { CreateTicketForm } from "../components/CreateTicketForm.component";
 import { SupportAuthGate } from "../components/SupportAuthGate.component";
+import { supportTicketsPagesStyles } from "./supportTicketsPages.styles";
 
 export function CustomerNewTicketPage() {
   return (
@@ -11,7 +12,7 @@ export function CustomerNewTicketPage() {
       message={LABELS.ticketSignInRequired}
       loginNext={PATHS.supportTicketNew}
     >
-      <div className="storefront-container py-8 md:py-10">
+      <div className={supportTicketsPagesStyles.customerNewTicketContainer}>
         <CreateTicketForm successHref={PATHS.supportTicket} />
       </div>
     </SupportAuthGate>

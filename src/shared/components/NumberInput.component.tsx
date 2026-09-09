@@ -5,6 +5,8 @@ import { cn } from "@/shared/utils/cn";
 import { NumberInputSteppers } from "./NumberInputSteppers.component";
 import { clamp, parseValue } from "@/shared/utils/numberInputMath";
 
+import { numberInputStyles } from "./numberInput.styles";
+
 export interface NumberInputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "type" | "value" | "onChange" | "size"
@@ -143,17 +145,16 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     return (
       <div
         className={cn(
-          "flex h-11 w-full items-stretch overflow-hidden rounded-sm border bg-surface-raised transition-colors",
-          "focus-within:border-brand",
-          error ? "border-danger" : "border-line-strong",
-          disabled && "cursor-not-allowed opacity-50",
+          numberInputStyles.container,
+          error
+            ? numberInputStyles.borderError
+            : numberInputStyles.borderDefault,
+          disabled && numberInputStyles.disabled,
           className,
         )}
       >
         {prefix ? (
-          <span className="flex shrink-0 items-center border-r border-line-strong bg-paper/60 px-3 text-body-sm font-medium text-ink-muted">
-            {prefix}
-          </span>
+          <span className={numberInputStyles.prefix}>{prefix}</span>
         ) : null}
 
         <input
@@ -165,11 +166,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           disabled={disabled}
           value={display}
           aria-invalid={error ? true : undefined}
-          className={cn(
-            "min-w-0 flex-1 bg-transparent px-4 text-body tabular-nums text-ink outline-none",
-            "placeholder:text-ink-faint",
-            "[appearance:textfield]",
-          )}
+          className={numberInputStyles.input}
           onFocus={beginDraft}
           onChange={handleInput}
           onBlur={endDraft}
@@ -177,9 +174,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         />
 
         {suffix ? (
-          <span className="flex shrink-0 items-center px-3 text-body-sm font-medium text-ink-muted">
-            {suffix}
-          </span>
+          <span className={numberInputStyles.suffix}>{suffix}</span>
         ) : null}
 
         {showSteppers ? (

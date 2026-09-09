@@ -9,6 +9,7 @@ import { SEARCH_SUGGESTION_TYPE } from "../../constants";
 import type { SearchSuggestion } from "../../types";
 import { SearchSuggestionRow } from "../SearchSuggestionRow.component";
 import { SECTION_ORDER, SEARCH_LIST_ID, panelTransition } from "./constants";
+import { searchBarStyles as styles } from "./searchBar.styles";
 
 interface SearchPanelProps {
   showPanel: boolean;
@@ -54,16 +55,13 @@ export function SearchPanel({
   const renderBody = () => {
     if (isFetching && !suggestions?.length) {
       return (
-        <div className="space-y-2 p-3">
+        <div className={styles.skeletonStack}>
           {Array.from({ length: 3 }).map((_, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-3 rounded-lg px-1 py-1"
-            >
-              <div className="h-11 w-11 shrink-0 animate-pulse rounded-lg bg-line/60" />
-              <div className="min-w-0 flex-1 space-y-2">
-                <div className="h-3.5 w-2/3 animate-pulse rounded bg-line/60" />
-                <div className="h-3 w-1/3 animate-pulse rounded bg-line/50" />
+            <div key={index} className={styles.skeletonItem}>
+              <div className={styles.skeletonThumb} />
+              <div className={styles.skeletonTextCol}>
+                <div className={styles.skeletonTitle} />
+                <div className={styles.skeletonSubtitle} />
               </div>
             </div>
           ))}
@@ -73,14 +71,16 @@ export function SearchPanel({
 
     if (!suggestions?.length) {
       return (
-        <div className="flex flex-col items-center px-5 py-8 text-center">
-          <span className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-paper text-ink-faint">
-            <Search className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+        <div className={styles.emptyContainer}>
+          <span className={styles.emptyIconWrapper}>
+            <Search
+              className={styles.emptyIcon}
+              strokeWidth={1.5}
+              aria-hidden
+            />
           </span>
-          <p className="text-body font-medium text-ink">
-            {LABELS.searchAutocompleteEmpty}
-          </p>
-          <p className="mt-1 max-w-xs text-body-sm leading-relaxed text-ink-muted">
+          <p className={styles.emptyTitle}>{LABELS.searchAutocompleteEmpty}</p>
+          <p className={styles.emptySubtitle}>
             {LABELS.searchAutocompleteEmptyHint}
           </p>
         </div>
@@ -88,18 +88,14 @@ export function SearchPanel({
     }
 
     return (
-      <div className="py-1.5">
+      <div className={styles.suggestionsWrapper}>
         {grouped.map((section, sectionIndex) => (
           <div
             key={section.type}
-            className={cn(
-              sectionIndex > 0 && "mt-1 border-t border-line/70 pt-1",
-            )}
+            className={cn(sectionIndex > 0 && styles.sectionDivider)}
           >
-            <p className="px-4 pb-1 pt-2 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-faint">
-              {sectionLabel(section.type)}
-            </p>
-            <ul className="px-1.5">
+            <p className={styles.sectionHeader}>{sectionLabel(section.type)}</p>
+            <ul className={styles.sectionList}>
               {section.items.map(({ suggestion, index }) => (
                 <li key={`${suggestion.type}-${suggestion.id}`}>
                   <SearchSuggestionRow
@@ -126,17 +122,15 @@ export function SearchPanel({
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={panelTransition}
-          className="overflow-hidden"
+          className={styles.panelMotionWrapper}
         >
           <div
             id={SEARCH_LIST_ID}
             role="listbox"
             aria-label={LABELS.searchSuggestions}
             className={cn(
-              "border-t border-line",
-              isInline
-                ? "max-h-[min(24rem,calc(85vh-12rem))] overflow-auto"
-                : "max-h-80 overflow-auto",
+              styles.panelListbox,
+              isInline ? styles.panelInline : styles.panelDropdown,
             )}
           >
             {renderBody()}

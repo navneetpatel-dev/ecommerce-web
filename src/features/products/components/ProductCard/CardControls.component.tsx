@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { CardQuantityControl } from "../CardQuantityControl.component";
 import { cn } from "@/shared/utils/cn";
+import { PRODUCT_CARD_STYLES } from "./productCard.styles";
 
 const controlMotion = {
   initial: { opacity: 0, y: 6 },
@@ -37,7 +38,11 @@ export function CardControls({
   return (
     <AnimatePresence mode="wait" initial={false}>
       {inCart ? (
-        <motion.div key="qty" className="w-full" {...controlMotion}>
+        <motion.div
+          key="qty"
+          className={PRODUCT_CARD_STYLES.controlMotionDiv}
+          {...controlMotion}
+        >
           <CardQuantityControl
             value={cartQuantity}
             max={maxQuantity}
@@ -45,14 +50,17 @@ export function CardControls({
           />
         </motion.div>
       ) : (
-        <motion.div key="add" className="w-full" {...controlMotion}>
+        <motion.div
+          key="add"
+          className={PRODUCT_CARD_STYLES.controlMotionDiv}
+          {...controlMotion}
+        >
           <Button
             size="sm"
             variant={variant === "mobile" ? "secondary" : "default"}
             className={cn(
-              "w-full",
-              variant === "overlay" &&
-                "rounded-full bg-surface/90 hover:bg-surface backdrop-blur-xs text-ink border border-line",
+              PRODUCT_CARD_STYLES.controlButtonBase,
+              variant === "overlay" && PRODUCT_CARD_STYLES.controlButtonOverlay,
             )}
             disabled={isAddingToCart}
             onClick={(e) => {
@@ -62,7 +70,7 @@ export function CardControls({
             }}
           >
             {isAddingToCart && !inCart ? (
-              <span className="animate-spin h-4 w-4 border-2 border-ink border-t-transparent rounded-full" />
+              <span className={PRODUCT_CARD_STYLES.spinner} />
             ) : (
               <>
                 <Plus size={16} />

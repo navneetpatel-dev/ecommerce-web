@@ -7,6 +7,7 @@ import { formatLabel } from "@/shared/utils/formatLabel";
 import { useMediaQuery } from "@/shared/hooks/use-media-query.hook";
 import { EASE, imageVariants } from "./constants";
 import type { HeroSlide } from "./types";
+import { heroSectionStyles as styles } from "./heroSection.styles";
 
 interface SlideImageProps {
   slide: HeroSlide;
@@ -41,11 +42,11 @@ export function SlideImage(props: SlideImageProps) {
         animate={reduceMotion ? { opacity: 1 } : "center"}
         exit={reduceMotion ? { opacity: 0 } : "exit"}
         transition={{ duration: reduceMotion ? 0.25 : 0.9, ease: EASE }}
-        className="absolute inset-0 will-change-transform"
+        className={styles.motionContainer}
       >
-        <div className="absolute inset-0 overflow-hidden">
+        <div className={styles.innerOverflow}>
           <motion.div
-            className="absolute inset-0"
+            className={styles.motionImage}
             initial={reduceMotion ? false : { scale: 1.08 }}
             animate={{ scale: 1 }}
             transition={{
@@ -58,21 +59,15 @@ export function SlideImage(props: SlideImageProps) {
               alt={slide.imageAlt}
               unavailableLabel={unavailableCopy}
               priority={index === 0}
-              imageClassName="object-cover"
+              imageClassName={styles.mediaCover}
               sizes="100vw"
-              className="absolute inset-0"
+              className={styles.mediaInset}
             />
           </motion.div>
         </div>
 
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-black/25"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20"
-          aria-hidden
-        />
+        <div className={styles.gradientHorizontal} aria-hidden />
+        <div className={styles.gradientVertical} aria-hidden />
       </motion.div>
     </AnimatePresence>
   );

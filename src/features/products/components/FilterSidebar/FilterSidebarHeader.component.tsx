@@ -16,7 +16,9 @@ export function FilterSidebarHeader({
   return (
     <div className={filterSidebarStyles.header}>
       <div>
-        <TextEyebrow className="mb-1">{LABELS.refine}</TextEyebrow>
+        <TextEyebrow className={filterSidebarStyles.headerEyebrow}>
+          {LABELS.refine}
+        </TextEyebrow>
         <h2 className={filterSidebarStyles.headerTitle}>{LABELS.filters}</h2>
       </div>
       {hasFilters ? (

@@ -1,6 +1,7 @@
 import { AlertTriangle } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { kycRejectionNoticeStyles } from "./noticeComponents.styles";
 
 interface KycRejectionNoticeProps {
   reason: string;
@@ -14,24 +15,17 @@ export function KycRejectionNotice({
   showActionHint = true,
 }: KycRejectionNoticeProps) {
   return (
-    <div
-      className={cn(
-        "flex items-start gap-2.5 rounded-lg border border-danger/30 bg-danger-subtle p-3.5 text-xs transition-colors",
-        className,
-      )}
-    >
-      <div className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-danger/15 text-danger">
-        <AlertTriangle className="size-3.5" aria-hidden />
+    <div className={cn(kycRejectionNoticeStyles.container, className)}>
+      <div className={kycRejectionNoticeStyles.iconWrapper}>
+        <AlertTriangle className={kycRejectionNoticeStyles.icon} aria-hidden />
       </div>
-      <div className="min-w-0 flex-1 space-y-0.5">
-        <p className="font-bold text-danger">
+      <div className={kycRejectionNoticeStyles.content}>
+        <p className={kycRejectionNoticeStyles.title}>
           {LABELS.documentRejectionReason}
         </p>
-        <p className="font-medium text-ink leading-relaxed break-words">
-          {reason}
-        </p>
+        <p className={kycRejectionNoticeStyles.reason}>{reason}</p>
         {showActionHint ? (
-          <p className="pt-1 text-[11px] font-semibold text-danger/90">
+          <p className={kycRejectionNoticeStyles.actionHint}>
             {LABELS.rejectionActionHint}
           </p>
         ) : null}

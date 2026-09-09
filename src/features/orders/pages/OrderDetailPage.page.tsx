@@ -7,6 +7,7 @@ import { OrderDetailContent } from "../components/OrderDetailContent.component";
 import { OrderDetailSkeleton } from "../components/OrderDetailSkeleton.component";
 import { EmptyState } from "@/shared/components/EmptyState.component";
 import { PATHS } from "@/shared/constants/paths";
+import { ordersPagesStyles } from "./ordersPages.styles";
 
 export function OrderDetailPage() {
   const detail = useOrderDetailPage();
@@ -17,12 +18,9 @@ export function OrderDetailPage() {
 
   if (detail.notFound || !detail.order) {
     return (
-      <div className="relative">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
-        />
-        <div className="storefront-container relative py-16 md:py-20">
+      <div className={ordersPagesStyles.detailNotFoundWrapper}>
+        <div aria-hidden className={ordersPagesStyles.detailNotFoundGlow} />
+        <div className={ordersPagesStyles.detailNotFoundContainer}>
           <EmptyState
             icon={PackageX}
             eyebrow="Orders"
@@ -31,11 +29,11 @@ export function OrderDetailPage() {
             actionLabel="Back to orders"
             actionTo={PATHS.orders}
           />
-          <p className="mt-4 text-center text-body-sm text-ink-faint">
+          <p className={ordersPagesStyles.detailNotFoundFooter}>
             Or{" "}
             <Link
               href={PATHS.products}
-              className="text-brand underline-offset-2 hover:underline"
+              className={ordersPagesStyles.detailContinueShoppingLink}
             >
               continue shopping
             </Link>

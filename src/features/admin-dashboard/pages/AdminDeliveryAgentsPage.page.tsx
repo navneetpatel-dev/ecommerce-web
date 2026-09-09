@@ -24,6 +24,7 @@ import type {
   AdminListLoadFn,
 } from "../hooks/useAdminDataList.hook";
 import { PERMISSIONS } from "@/shared/constants/permissions";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function AdminDeliveryAgentsPage() {
   const [agents, setAgents] = useState<DeliveryAgent[]>([]);
@@ -82,23 +83,23 @@ export function AdminDeliveryAgentsPage() {
   };
 
   const agentsTabContent = (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-body-sm text-ink-muted">
+    <div className={adminPagesStyles.stack6}>
+      <div className={adminPagesStyles.headerRow}>
+        <p className={adminPagesStyles.hint}>
           View and manage all registered delivery agents, field availability,
           and vehicle assignments.
         </p>
-        <div className="flex items-center gap-2.5">
+        <div className={adminPagesStyles.flexGap2_5}>
           <Button
             size="sm"
             variant={createAgentButtonVariant}
             onClick={() => setShowCreateForm((prev) => !prev)}
-            className="gap-1.5"
+            className={adminPagesStyles.buttonGap1_5}
           >
-            <Plus className="size-4" aria-hidden="true" />
+            <Plus className={adminPagesStyles.iconSm} aria-hidden="true" />
             {createAgentButtonLabel}
           </Button>
-          <span className="text-caption font-medium text-ink-muted">or</span>
+          <span className={adminPagesStyles.captionMediumMuted}>or</span>
           <BulkImportAgentsDialog onImported={refresh} />
         </div>
       </div>
@@ -131,14 +132,14 @@ export function AdminDeliveryAgentsPage() {
   );
 
   const exceptionsTabContent = (
-    <div className="space-y-6">
+    <div className={adminPagesStyles.stack6}>
       <StaleTasksPanel />
       <RtoQueuePanel />
     </div>
   );
 
   const verificationTabContent = (
-    <div className="space-y-6">
+    <div className={adminPagesStyles.stack6}>
       <AgentDocumentsPanel />
       <CashDepositsPanel />
     </div>

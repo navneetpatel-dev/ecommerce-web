@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { infiniteLoadMoreStyles } from "./dataTableComponents.styles";
 
 type Props = {
   hasNextPage?: boolean;
@@ -44,8 +45,12 @@ export function InfiniteLoadMore({
     : LABELS.loadMore;
 
   return (
-    <div className="flex flex-col items-center gap-3 border-t border-line/70 pt-4">
-      <div ref={sentinelRef} className="h-1 w-full" aria-hidden />
+    <div className={infiniteLoadMoreStyles.container}>
+      <div
+        ref={sentinelRef}
+        className={infiniteLoadMoreStyles.sentinel}
+        aria-hidden
+      />
       <Button
         type="button"
         variant="outline"

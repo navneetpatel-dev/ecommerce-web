@@ -2,6 +2,7 @@
 
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { amountsUnavailableNoticeStyles } from "./noticeComponents.styles";
 
 interface AmountsUnavailableNoticeProps {
   onRetry?: () => void;
@@ -21,17 +22,14 @@ export function AmountsUnavailableNotice({
   return (
     <div
       role="status"
-      className={cn(
-        "flex items-center justify-between gap-3 rounded-sm bg-warning-subtle px-3 py-2 text-body-sm text-warning-foreground",
-        className,
-      )}
+      className={cn(amountsUnavailableNoticeStyles.container, className)}
     >
       <span>{LABELS.amountsLoadFailed}</span>
       {onRetry ? (
         <button
           type="button"
           onClick={onRetry}
-          className="shrink-0 font-medium underline underline-offset-2"
+          className={amountsUnavailableNoticeStyles.retryButton}
         >
           {LABELS.retryPrices}
         </button>

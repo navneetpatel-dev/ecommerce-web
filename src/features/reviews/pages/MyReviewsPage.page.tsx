@@ -10,65 +10,64 @@ import { LABELS } from "@/shared/constants/labels";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { formatOrderDate } from "@/shared/utils/orderFormat";
 import { useMyReviews } from "../api/reviews.queries";
+import { myReviewsPageStyles as styles } from "./myReviewsPage.styles";
 
 export function MyReviewsPage() {
   const { data, isLoading, isError, error } = useMyReviews();
   const reviews = data ?? [];
 
   return (
-    <div className="storefront-container py-8 md:py-10">
-      <header className="mb-8 max-w-2xl">
-        <h1 className="font-display text-[1.75rem] text-ink md:text-[2rem]">
-          Your reviews
-        </h1>
-        <p className="mt-2 text-body text-ink-muted">
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Your reviews</h1>
+        <p className={styles.subtitle}>
           Feedback you&apos;ve left on products after delivery.
         </p>
       </header>
 
       {isLoading ? (
-        <div className="space-y-3">
-          <Skeleton className="h-24 w-full" />
-          <Skeleton className="h-24 w-full" />
+        <div className={styles.loadingSkeletonStack}>
+          <Skeleton className={styles.skeleton} />
+          <Skeleton className={styles.skeleton} />
         </div>
       ) : isError ? (
-        <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+        <div className={styles.errorContainer}>
           <QueryErrorAlert
             error={error}
             fallback={LABELS.couldNotLoadReviews}
           />
         </div>
       ) : reviews.length === 0 ? (
-        <div className="border border-dashed border-line bg-paper/50">
+        <div className={styles.emptyContainer}>
           <EmptyState
             icon={Star}
             heading="No reviews yet"
             message="After an order is delivered, you can leave a review from the order page."
             actionLabel="View orders"
             actionTo={PATHS.orders}
-            className="py-14"
+            className={styles.emptyState}
           />
         </div>
       ) : (
-        <ul className="divide-y divide-line border border-line bg-surface-raised">
+        <ul className={styles.reviewsList}>
           {reviews.map((review) => (
-            <li key={review.id} className="px-5 py-5">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="min-w-0">
+            <li key={review.id} className={styles.reviewItem}>
+              <div className={styles.reviewHeader}>
+                <div className={styles.productInfo}>
                   {review.product ? (
                     <Link
                       href={PATHS.product(review.product.slug)}
-                      className="font-medium text-ink hover:text-brand"
+                      className={styles.productLink}
                     >
                       {review.product.name}
                     </Link>
                   ) : (
-                    <p className="font-medium text-ink">Product</p>
+                    <p className={styles.productFallback}>Product</p>
                   )}
-                  <p className="mt-1 flex items-center gap-1 text-body-sm text-ink-muted">
-                    <Star size={12} className="fill-brand text-brand" />
+                  <p className={styles.ratingRow}>
+                    <Star size={12} className={styles.starIcon} />
                     {review.rating}/5
-                    <span className="text-ink-faint">
+                    <span className={styles.dateText}>
                       · {formatOrderDate(review.createdAt)}
                     </span>
                   </p>
@@ -76,11 +75,9 @@ export function MyReviewsPage() {
                 <Badge variant="outline">{review.status}</Badge>
               </div>
               {review.title ? (
-                <p className="mt-3 font-medium text-ink">{review.title}</p>
+                <p className={styles.reviewTitle}>{review.title}</p>
               ) : null}
-              <p className="mt-1 text-body text-ink-muted whitespace-pre-wrap">
-                {review.body}
-              </p>
+              <p className={styles.reviewBody}>{review.body}</p>
             </li>
           ))}
         </ul>

@@ -26,6 +26,7 @@ import {
   type PromoBannerLinkType,
   type PromoBannerStatus,
 } from "@/shared/constants/statuses";
+import { promoBannerSectionStyles } from "./adminPromoBanners.styles";
 
 interface PromoBannerCreateSectionProps {
   draftId: string;
@@ -77,10 +78,16 @@ export function PromoBannerCreateSection({
       title={LABELS.promoBannerFormSection}
       hint={LABELS.promoBannerFormSectionHint}
     >
-      <FormFieldFrame label={LABELS.promoBannerTitle} className="sm:col-span-2">
+      <FormFieldFrame
+        label={LABELS.promoBannerTitle}
+        className={promoBannerSectionStyles.colSpan2}
+      >
         <Input value={title} onChange={(e) => onTitleChange(e.target.value)} />
       </FormFieldFrame>
-      <FormFieldFrame label={LABELS.promoBannerImage} className="sm:col-span-2">
+      <FormFieldFrame
+        label={LABELS.promoBannerImage}
+        className={promoBannerSectionStyles.colSpan2}
+      >
         <FileUpload
           entityType={UPLOAD_ENTITY.BANNERS}
           entityId={draftId}
@@ -131,7 +138,7 @@ export function PromoBannerCreateSection({
       {linkType === PROMO_BANNER_LINK_TYPE.URL ? (
         <FormFieldFrame
           label={LABELS.promoBannerLinkUrl}
-          className="sm:col-span-2"
+          className={promoBannerSectionStyles.colSpan2}
         >
           <Input
             value={linkUrl}
@@ -141,7 +148,7 @@ export function PromoBannerCreateSection({
       ) : (
         <FormFieldFrame
           label={LABELS.promoBannerLinkTargetId}
-          className="sm:col-span-2"
+          className={promoBannerSectionStyles.colSpan2}
         >
           <Input
             value={linkTargetId}
@@ -158,7 +165,10 @@ export function PromoBannerCreateSection({
           }
         />
       </FormFieldFrame>
-      <FormActions className="sm:col-span-2" leading={message}>
+      <FormActions
+        className={promoBannerSectionStyles.colSpan2}
+        leading={message}
+      >
         <DisabledActionHint disabled={!canSubmit} message={disableHint}>
           <Button
             type="button"

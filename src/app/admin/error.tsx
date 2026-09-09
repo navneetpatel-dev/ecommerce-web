@@ -18,11 +18,11 @@ export default function AdminError({ error, reset }: AdminErrorProps) {
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-paper">
-      <header className="h-14 border-b border-line" />
-      <div className="flex">
-        <aside className="w-56 shrink-0 border-r border-line min-h-[calc(100vh-3.5rem)]" />
-        <main className="flex-1 p-6 flex flex-col items-center justify-center gap-4">
+    <div className={styles.workspaceShell}>
+      <header className={styles.workspaceHeader} />
+      <div className={styles.workspaceBody}>
+        <aside className={styles.workspaceSidebar} />
+        <main className={styles.workspaceMain}>
           <h2 className={styles.heading}>{LABELS.unexpectedErrorHeading}</h2>
           <ErrorFallbackActions onReset={reset} />
         </main>

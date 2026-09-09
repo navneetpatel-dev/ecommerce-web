@@ -7,6 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { PasswordInputContainer } from "@/shared/containers/PasswordInputContainer.container";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
+import { authFormsStyles } from "./authForms.styles";
 
 interface ResetPasswordInput {
   token: string;
@@ -37,15 +38,15 @@ export function ResetPasswordCard({
       title={LABELS.resetPasswordTitle}
       description={LABELS.resetPasswordHint}
       footer={
-        <Link
-          href={PATHS.login}
-          className="block text-center text-body font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
-        >
+        <Link href={PATHS.login} className={authFormsStyles.footerLink}>
           {LABELS.backToLogin}
         </Link>
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={authFormsStyles.formSpace5}
+      >
         <input type="hidden" {...register("token")} />
         <FormFieldFrame
           label={LABELS.newPassword}
@@ -61,7 +62,12 @@ export function ResetPasswordCard({
           />
         </FormFieldFrame>
         <FormError error={error} fallback={LABELS.resetPasswordFailed} />
-        <Button type="submit" className="w-full" size="lg" loading={isPending}>
+        <Button
+          type="submit"
+          className={authFormsStyles.fullWidth}
+          size="lg"
+          loading={isPending}
+        >
           {LABELS.resetPassword}
         </Button>
       </form>

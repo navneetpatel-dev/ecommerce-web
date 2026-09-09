@@ -4,6 +4,7 @@ import { cn } from "@/shared/utils/cn";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { badgeStyles } from "./badge.styles";
 
 const badgeVariants = cva(
   "inline-flex items-center rounded-sm px-2 py-1 text-body-sm font-medium transition-colors outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
@@ -55,7 +56,7 @@ function Badge({
             e.stopPropagation();
             onRemove();
           }}
-          className="ml-0.5 h-auto min-h-0 max-h-none w-auto rounded-full p-0.5 hover:bg-brand/20"
+          className={badgeStyles.removeButton}
           aria-label={LABELS.remove}
         >
           <X size={12} />

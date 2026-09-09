@@ -3,6 +3,8 @@ import { Switch } from "@/shared/components/ui/switch";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import type { usePushSubscription } from "@/shared/hooks/usePushSubscription.hook";
 
+import { deliveryOperationsSectionStyles as styles } from "./deliveryOperationsSection.styles";
+
 interface PushNotificationsSectionProps {
   push: ReturnType<typeof usePushSubscription>;
 }
@@ -11,34 +13,32 @@ export function PushNotificationsSection({
   push,
 }: PushNotificationsSectionProps) {
   const errorNotice = push.error ? (
-    <p className="mt-1 text-body-sm text-danger">{push.error}</p>
+    <p className={styles.errorNotice}>{push.error}</p>
   ) : null;
   const switchDisabled = !push.supported || push.pending;
 
   return (
-    <section className="border border-line bg-surface shadow-elevation-1">
-      <div className="border-b border-line bg-paper/55 px-5 py-4 md:px-6">
+    <section className={styles.sectionCard}>
+      <div className={styles.sectionHeader}>
         <TextEyebrow>DEVICE ALERTS</TextEyebrow>
-        <h2 className="mt-1 font-display text-[1.125rem] font-medium text-ink">
-          Task push notifications
-        </h2>
-        <p className="mt-1 text-[0.875rem] text-ink-muted">
+        <h2 className={styles.sectionTitle}>Task push notifications</h2>
+        <p className={styles.sectionSubtitle}>
           Receive instant alerts on this device whenever tasks are assigned or
           updated.
         </p>
       </div>
 
-      <div className="p-5 md:p-6">
-        <div className="flex flex-col gap-4 rounded-lg border border-line bg-paper/40 p-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded border border-line bg-surface text-brand">
+      <div className={styles.sectionBody}>
+        <div className={styles.innerCard}>
+          <div className={styles.innerCardLeft}>
+            <span className={styles.iconBox}>
               <Bell size={18} strokeWidth={1.5} />
             </span>
-            <div className="space-y-1">
-              <span className="block font-medium text-ink">
+            <div className={styles.textCol}>
+              <span className={styles.titleText}>
                 Real-time device notifications
               </span>
-              <p className="text-body-sm text-ink-muted">
+              <p className={styles.bodyText}>
                 Receive audible alerts and task updates directly in your browser
                 or device lockscreen.
               </p>
@@ -46,7 +46,7 @@ export function PushNotificationsSection({
             </div>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
+          <div className={styles.switchCol}>
             <Switch
               checked={push.enabled}
               disabled={switchDisabled}

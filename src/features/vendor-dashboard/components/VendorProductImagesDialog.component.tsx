@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { ProductImageRow } from "./VendorProductImagesDialog/ProductImageRow.component";
+import { vendorProductImagesDialogStyles } from "./VendorProductImagesDialog/vendorProductImagesDialog.styles";
 import {
   useVendorProductImages,
   ALL_VARIANTS_VALUE,
@@ -70,16 +71,24 @@ export function VendorProductImagesDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className={vendorProductImagesDialogStyles.dialogContent}>
         <DialogHeader>
           <DialogTitle>{LABELS.manageProductImages}</DialogTitle>
           <DialogDescription>{productName}</DialogDescription>
         </DialogHeader>
 
-        {loading ? <p className="text-ink-muted">{LABELS.loading}</p> : null}
-        {error ? <p className="text-danger text-body-sm">{error}</p> : null}
+        {loading ? (
+          <p className={vendorProductImagesDialogStyles.loadingText}>
+            {LABELS.loading}
+          </p>
+        ) : null}
+        {error ? (
+          <p className={vendorProductImagesDialogStyles.errorText}>{error}</p>
+        ) : null}
 
-        <ul className="space-y-3">{images.map(renderImageRow)}</ul>
+        <ul className={vendorProductImagesDialogStyles.imageList}>
+          {images.map(renderImageRow)}
+        </ul>
 
         <FormSection
           title={LABELS.productFormSectionImages}

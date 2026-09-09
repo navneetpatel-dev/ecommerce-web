@@ -3,6 +3,7 @@ import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import {
   MILESTONE_CARD_BODY,
   MILESTONE_CARD_DESC,
+  MILESTONE_CARD_EYEBROW,
   MILESTONE_CARD_HEADER,
   MILESTONE_CARD_ROOT,
   MILESTONE_CARD_TITLE,
@@ -23,7 +24,9 @@ export function DeliveryMilestoneCard({
   return (
     <div className={MILESTONE_CARD_ROOT}>
       <div className={MILESTONE_CARD_HEADER}>
-        <TextEyebrow className="!mb-0">Milestone Progress</TextEyebrow>
+        <TextEyebrow className={MILESTONE_CARD_EYEBROW}>
+          Milestone Progress
+        </TextEyebrow>
       </div>
       <div className={MILESTONE_CARD_BODY}>
         <div>

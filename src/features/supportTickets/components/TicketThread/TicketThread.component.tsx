@@ -15,6 +15,7 @@ import {
 } from "./TicketReplyComposer.component";
 import { TicketThreadHeader } from "./TicketThreadHeader.component";
 import { useTicketThreadState } from "./useTicketThreadState.hook";
+import { ticketThreadStyles } from "./ticketThread.styles";
 import type { RoleMode } from "./ticketThreadShared";
 
 type Props = {
@@ -73,11 +74,11 @@ export function TicketThread({ ticket, mode }: Props) {
       : LABELS.ticketMustReopenToReplyStaff;
 
   return (
-    <div className="w-full min-w-0 space-y-5 md:space-y-6">
+    <div className={ticketThreadStyles.root}>
       <TicketThreadHeader ticket={ticket} mode={mode} />
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:gap-6">
-        <div className="min-w-0 space-y-4 lg:col-span-8">
+      <div className={ticketThreadStyles.grid}>
+        <div className={ticketThreadStyles.mainCol}>
           <TicketConversation
             messages={messages}
             currentUserId={currentUserId}
@@ -123,12 +124,9 @@ export function TicketThread({ ticket, mode }: Props) {
           ) : null}
         </div>
 
-        <aside className="min-w-0 space-y-4 lg:col-span-4">
-          <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1 lg:sticky lg:top-24">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/70 via-brand/30 to-transparent"
-            />
+        <aside className={ticketThreadStyles.aside}>
+          <section className={ticketThreadStyles.panelCard}>
+            <div aria-hidden className={ticketThreadStyles.accentBar} />
             <TicketDetailsPanel
               ticket={ticket}
               showResolve={showResolve}

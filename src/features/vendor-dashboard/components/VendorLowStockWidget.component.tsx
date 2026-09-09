@@ -25,8 +25,10 @@ import {
   LOW_STOCK_CONTENT,
   LOW_STOCK_EMPTY,
   LOW_STOCK_HEADER,
+  LOW_STOCK_ICON,
   LOW_STOCK_LOADING_STACK,
   LOW_STOCK_REMAINING_NOTICE,
+  LOW_STOCK_SKELETON,
   LOW_STOCK_TITLE,
 } from "./VendorLowStockWidget/vendorLowStockWidget.styles";
 
@@ -36,9 +38,9 @@ export function VendorLowStockWidget() {
 
   const loadingState = (
     <div className={LOW_STOCK_LOADING_STACK}>
-      <Skeleton className="h-8 w-full" />
-      <Skeleton className="h-8 w-full" />
-      <Skeleton className="h-8 w-full" />
+      <Skeleton className={LOW_STOCK_SKELETON} />
+      <Skeleton className={LOW_STOCK_SKELETON} />
+      <Skeleton className={LOW_STOCK_SKELETON} />
     </div>
   );
 
@@ -89,7 +91,7 @@ export function VendorLowStockWidget() {
     <Card>
       <CardHeader className={LOW_STOCK_HEADER}>
         <CardTitle className={LOW_STOCK_TITLE}>
-          <AlertTriangle className="h-4 w-4 text-warning" aria-hidden="true" />
+          <AlertTriangle className={LOW_STOCK_ICON} aria-hidden="true" />
           {vendorDashboardWidgetsLabels.vendorLowStockTitle}
         </CardTitle>
       </CardHeader>

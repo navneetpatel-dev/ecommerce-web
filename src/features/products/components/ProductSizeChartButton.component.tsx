@@ -11,6 +11,7 @@ import {
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
+import { productDetailsMiscStyles } from "./productDetailsMisc.styles";
 
 interface ProductSizeChartButtonProps {
   url: string;
@@ -28,12 +29,14 @@ export function ProductSizeChartButton({
           type="button"
           variant="outline"
           size="sm"
-          className="rounded-full"
+          className={productDetailsMiscStyles.sizeChartButton}
         >
           {LABELS.sizeChart}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent
+        className={productDetailsMiscStyles.sizeChartDialogContent}
+      >
         <DialogHeader>
           <DialogTitle>{LABELS.sizeChart}</DialogTitle>
         </DialogHeader>
@@ -43,7 +46,7 @@ export function ProductSizeChartButton({
           width={1200}
           height={1600}
           sizes="(min-width: 48rem) 42rem, 100vw"
-          className="h-auto w-full"
+          className={productDetailsMiscStyles.sizeChartImage}
         />
       </DialogContent>
     </Dialog>

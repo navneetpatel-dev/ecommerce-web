@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
+import { ordersComponentsStyles } from "./ordersComponents.styles";
 
 interface LiveDeliveryMapProps {
   lat: number;
@@ -69,7 +70,7 @@ export function LiveDeliveryMap({ lat, lng, label }: LiveDeliveryMapProps) {
   return (
     <div
       ref={containerRef}
-      className="h-56 w-full rounded-md border border-line"
+      className={ordersComponentsStyles.mapContainer}
       role="img"
       aria-label={label ?? "Delivery agent live location"}
     />

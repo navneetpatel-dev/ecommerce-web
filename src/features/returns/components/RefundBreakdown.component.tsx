@@ -1,6 +1,7 @@
 import { returnRefundBreakdownLabels } from "@/shared/constants/labels/returnRefundBreakdown";
 import { formatInr } from "@/shared/utils/orderFormat";
 import type { ReturnRequest } from "@/shared/api/types";
+import { returnRequestCardStyles as styles } from "./returnRequestCard.styles";
 
 interface RefundLine {
   label: string;
@@ -40,11 +41,11 @@ export function RefundBreakdown({ row }: { row: ReturnRequest }) {
   if (lines.length === 0) return null;
 
   return (
-    <dl className="mt-2 space-y-0.5 border-t border-line pt-2 text-body-sm text-ink-muted">
+    <dl className={styles.breakdownList}>
       {lines.map((line) => (
-        <div key={line.label} className="flex justify-between gap-4">
+        <div key={line.label} className={styles.breakdownRow}>
           <dt>{line.label}</dt>
-          <dd className="tabular-nums text-ink">
+          <dd className={styles.breakdownValue}>
             {formatInr(line.amount as number)}
           </dd>
         </div>

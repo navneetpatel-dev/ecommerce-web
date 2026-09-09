@@ -1,6 +1,8 @@
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { getFormLevelApiError } from "@/shared/utils/applyApiFormErrors";
 
+import { formErrorStyles } from "./formError.styles";
+
 interface FormErrorProps {
   error: Error | string | null;
   fallback: string;
@@ -13,13 +15,13 @@ export function FormError({ error, fallback }: FormErrorProps) {
   const message =
     typeof error === "string"
       ? error
-      : getFormLevelApiError(error, fallback) ??
-        getApiErrorMessage(error, fallback);
+      : (getFormLevelApiError(error, fallback) ??
+        getApiErrorMessage(error, fallback));
 
   if (!message) return null;
 
   return (
-    <p role="alert" className="text-body-sm text-danger">
+    <p role="alert" className={formErrorStyles.message}>
       {message}
     </p>
   );

@@ -8,6 +8,7 @@ import {
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import { VendorProductCreateForm } from "./VendorProductCreateForm";
+import { vendorProductFormDialogStyles } from "./vendorDialogs.styles";
 import type { ComponentProps } from "react";
 
 type VendorProductCreateFormProps = ComponentProps<
@@ -32,13 +33,13 @@ export function VendorProductFormDialog({
 }: VendorProductFormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[min(92vh,48rem)] max-w-3xl overflow-y-auto">
+      <DialogContent className={vendorProductFormDialogStyles.dialogContent}>
         <DialogHeader>
           <DialogTitle>
             {mode === "edit" ? LABELS.editProductTitle : LABELS.createProduct}
           </DialogTitle>
         </DialogHeader>
-        <p className="text-[0.875rem] text-ink-muted">
+        <p className={vendorProductFormDialogStyles.description}>
           {mode === "edit" ? LABELS.editProductBody : LABELS.createProductBody}
         </p>
         <VendorProductCreateForm

@@ -1,6 +1,7 @@
 import { ShieldCheck } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
 
 interface KycProgressBannerProps {
   isComplete: boolean;
@@ -16,48 +17,51 @@ export function KycProgressBanner({
   progressPercent,
 }: KycProgressBannerProps) {
   return (
-    <div className="sm:col-span-2 overflow-hidden rounded-lg border border-line bg-paper/60 p-4 transition-colors">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
+    <div className={vendorShopSettingsFormStyles.bannerRoot}>
+      <div className={vendorShopSettingsFormStyles.bannerRow}>
+        <div className={vendorShopSettingsFormStyles.bannerLeft}>
           <div
             className={cn(
-              "flex size-10 shrink-0 items-center justify-center rounded-full",
+              vendorShopSettingsFormStyles.bannerIconCircle,
               isComplete
-                ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 ring-2 ring-emerald-500/30"
-                : "bg-brand-subtle text-brand ring-2 ring-brand/30",
+                ? vendorShopSettingsFormStyles.bannerIconComplete
+                : vendorShopSettingsFormStyles.bannerIconPending,
             )}
           >
-            <ShieldCheck className="size-5" aria-hidden />
+            <ShieldCheck
+              className={vendorShopSettingsFormStyles.bannerIcon}
+              aria-hidden
+            />
           </div>
           <div>
-            <p className="text-body font-semibold tracking-tight text-ink">
+            <p className={vendorShopSettingsFormStyles.bannerHeading}>
               {isComplete
                 ? LABELS.kycAllDocumentsVerified
                 : LABELS.kycVerificationProgress}
             </p>
-            <p className="text-body-sm text-ink-muted">
+            <p className={vendorShopSettingsFormStyles.bannerSubtitle}>
               {isComplete
                 ? LABELS.kycChecklistComplete
                 : LABELS.kycChecklistIncomplete}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3 self-end sm:self-auto">
-          <span className="text-body-sm font-semibold text-ink">
+        <div className={vendorShopSettingsFormStyles.bannerRight}>
+          <span className={vendorShopSettingsFormStyles.bannerPercent}>
             {LABELS.kycDocumentsVerifiedCount
               .replace("{verified}", String(verifiedCount))
               .replace("{total}", String(totalCount))}
           </span>
-          <span className="text-body-sm text-ink-faint">
+          <span className={vendorShopSettingsFormStyles.bannerFraction}>
             ({progressPercent}%)
           </span>
         </div>
       </div>
 
       {totalCount > 0 && !isComplete ? (
-        <div className="mt-3.5 h-1.5 w-full overflow-hidden rounded-full bg-line/60">
+        <div className={vendorShopSettingsFormStyles.progressBar}>
           <div
-            className="h-full rounded-full bg-brand transition-all duration-500 ease-out"
+            className={vendorShopSettingsFormStyles.progressIndicator}
             style={{ width: `${progressPercent}%` }}
           />
         </div>

@@ -6,6 +6,7 @@ import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import { useAuthStore } from "@/shared/stores/auth.store";
+import { helpContactFormStyles as styles } from "./helpContactForm.styles";
 
 export function HelpContactForm() {
   const currentUser = useAuthStore((s) => s.currentUser);
@@ -18,16 +19,14 @@ export function HelpContactForm() {
     : PATHS.loginWithRedirect(PATHS.supportTicketNew);
 
   return (
-    <div className="max-w-2xl">
+    <div className={styles.container}>
       <FormStack>
         <FormSection
           title={LABELS.helpContactSection}
           hint={LABELS.helpContactSectionHint}
         >
-          <div className="space-y-4 sm:col-span-2">
-            <p className="text-body leading-relaxed text-ink-muted">
-              {contactMessage}
-            </p>
+          <div className={styles.sectionContent}>
+            <p className={styles.contactMessage}>{contactMessage}</p>
             <Button asChild>
               <Link href={contactHref}>{LABELS.helpOpenSupportTicket}</Link>
             </Button>

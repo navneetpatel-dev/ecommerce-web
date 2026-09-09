@@ -8,6 +8,7 @@ import { SearchBarContainer } from "@/features/search";
 import { CategoriesMegaMenu } from "@/features/categories";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category } from "@/shared/api/types";
+import { headerStyles as styles } from "./header.styles";
 
 interface DesktopPrimaryNavProps {
   categories: Category[];
@@ -32,12 +33,9 @@ export function DesktopPrimaryNav({
 }: DesktopPrimaryNavProps) {
   return (
     <>
-      <nav
-        aria-label="Primary navigation"
-        className="hidden xl:flex items-center gap-1"
-      >
+      <nav aria-label="Primary navigation" className={styles.desktopNav}>
         <div
-          className="relative"
+          className={styles.relativeWrapper}
           onMouseEnter={onScheduleMegaOpen}
           onMouseLeave={onScheduleMegaClose}
         >
@@ -46,10 +44,8 @@ export function DesktopPrimaryNav({
             variant="ghost"
             size="sm"
             className={cn(
-              "gap-1",
-              isTransparent
-                ? "text-paper hover:bg-paper/10 hover:text-paper"
-                : undefined,
+              styles.categoriesButtonBase,
+              isTransparent ? styles.categoriesButtonTransparent : undefined,
             )}
             aria-expanded={megaMenuOpen}
             aria-label={LABELS.browseCategories}
@@ -59,8 +55,8 @@ export function DesktopPrimaryNav({
             <ChevronDown
               size={16}
               className={cn(
-                "transition-transform",
-                megaMenuOpen && "rotate-180",
+                styles.categoriesChevron,
+                megaMenuOpen && styles.categoriesChevronOpen,
               )}
             />
           </Button>
@@ -80,10 +76,10 @@ export function DesktopPrimaryNav({
             key={link.href}
             href={link.href}
             className={cn(
-              "px-3 py-2 rounded-md text-body-sm font-medium transition-colors",
+              styles.primaryLink,
               isTransparent
-                ? "text-paper hover:bg-paper/10"
-                : "text-ink hover:bg-paper",
+                ? styles.primaryLinkTransparent
+                : styles.primaryLinkSolid,
             )}
           >
             {link.label}
@@ -91,7 +87,7 @@ export function DesktopPrimaryNav({
         ))}
       </nav>
 
-      <div className="hidden xl:flex flex-1 max-w-xl mx-auto">
+      <div className={styles.searchWrapper}>
         <SearchBarContainer onDark={isTransparent} panelLayout="dropdown" />
       </div>
     </>

@@ -10,6 +10,7 @@ import {
 } from "@/features/reports";
 import { useWalletStatementExport } from "../hooks/useWalletStatementExport.hook";
 import { WalletStatementExportPanelSkeleton } from "./WalletSectionSkeletons.component";
+import { walletStatementExportPanelStyles as styles } from "./walletStatementExportPanel.styles";
 
 interface WalletStatementExportPanelProps {
   isLoading?: boolean;
@@ -41,7 +42,7 @@ export function WalletStatementExportPanel({
         disabled={exportHub.controlsDisabled}
         disabledHint={filterHint}
       />
-      <div className="sm:col-span-2 xl:col-span-3 space-y-2">
+      <div className={styles.exportContent}>
         <ReportExportButtons
           controlsDisabled={exportHub.controlsDisabled}
           exportingFormat={exportHub.exportingFormat}

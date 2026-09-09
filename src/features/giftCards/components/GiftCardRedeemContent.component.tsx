@@ -14,6 +14,7 @@ import { useIsAuthenticated } from "@/shared/hooks/useRequireAuth.hook";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useGiftCardRedeemPage } from "../hooks/useGiftCardRedeemPage.hook";
 import { useGiftCardRedeem } from "../hooks/useGiftCardRedeem.hook";
+import { giftCardRedeemContentStyles as styles } from "./giftCardRedeemContent.styles";
 
 function statusBadgeLabel(status: string): string | null {
   if (status === "EXPIRED") return giftCardsLabels.giftCardExpiredBadge;
@@ -31,16 +32,16 @@ export function GiftCardRedeemContent() {
 
   if (isLoading || !authBootstrapped) {
     return (
-      <div className="storefront-container space-y-3 py-12">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-32 w-full max-w-md" />
+      <div className={styles.loadingContainer}>
+        <Skeleton className={styles.skelH8W48} />
+        <Skeleton className={styles.skelH32MaxMd} />
       </div>
     );
   }
 
   if (notFound || !giftCard) {
     return (
-      <div className="storefront-container py-16 md:py-20">
+      <div className={styles.container}>
         <EmptyState
           icon={Gift}
           heading={giftCardsLabels.giftCardNotFoundTitle}
@@ -54,17 +55,17 @@ export function GiftCardRedeemContent() {
 
   if (result) {
     return (
-      <div className="storefront-container py-16 md:py-20">
-        <div className="mx-auto max-w-md border border-line bg-surface-raised p-6 text-center shadow-elevation-1">
-          <h1 className="font-display text-[1.25rem] text-ink">
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <h1 className={styles.heading}>
             {giftCardsLabels.giftCardRedeemSuccessTitle}
           </h1>
-          <p className="mt-2 text-body text-ink-muted">
+          <p className={styles.subtitle}>
             {formatLabel(giftCardsLabels.giftCardRedeemSuccessBody, {
               amount: result.amount,
             })}
           </p>
-          <Button className="mt-5" asChild>
+          <Button className={styles.button} asChild>
             <Link href={PATHS.wallet}>
               {giftCardsLabels.giftCardRedeemViewWallet}
             </Link>
@@ -77,25 +78,21 @@ export function GiftCardRedeemContent() {
   const badge = statusBadgeLabel(giftCard.status);
 
   return (
-    <div className="storefront-container py-16 md:py-20">
-      <div className="mx-auto max-w-md border border-line bg-surface-raised p-6 text-center shadow-elevation-1">
-        <h1 className="font-display text-[1.25rem] text-ink">
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <h1 className={styles.heading}>
           {giftCardsLabels.giftCardRedeemTitle}
         </h1>
-        <p className="mt-4 text-[2rem] font-semibold tabular-nums text-ink">
-          {formatInr(giftCard.amount)}
-        </p>
+        <p className={styles.amount}>{formatInr(giftCard.amount)}</p>
 
-        {badge ? (
-          <p className="mt-2 text-body-sm font-medium text-danger">{badge}</p>
-        ) : null}
+        {badge ? <p className={styles.badgeError}>{badge}</p> : null}
 
         {!badge && !isAuthenticated ? (
           <>
-            <p className="mt-4 text-body text-ink-muted">
+            <p className={styles.promptText}>
               {giftCardsLabels.giftCardRedeemLoginPrompt}
             </p>
-            <Button className="mt-5" asChild>
+            <Button className={styles.button} asChild>
               <Link
                 href={PATHS.loginWithRedirect(`/gift-cards/redeem/${code}`)}
               >
@@ -108,12 +105,12 @@ export function GiftCardRedeemContent() {
         {!badge && isAuthenticated ? (
           <>
             {error ? (
-              <p role="alert" className="mt-4 text-body-sm text-danger">
+              <p role="alert" className={styles.errorMessage}>
                 {error}
               </p>
             ) : null}
             <Button
-              className="mt-5"
+              className={styles.button}
               disabled={isRedeeming}
               onClick={() => void redeem(code)}
             >

@@ -5,6 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_ANSWER_AUTHOR_TYPE } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/orderFormat";
 import type { ProductQuestion } from "@/shared/api/types";
+import { productQnaStyles as styles } from "./productQna.styles";
 
 interface ProductQuestionsProps {
   questions: ProductQuestion[];
@@ -26,22 +27,20 @@ export function ProductQuestions({
         message={LABELS.beFirstToAskQuestion}
         icon={MessageCircleQuestion}
         maxWidth="max-w-[65ch]"
-        className="px-0 py-8"
+        className={styles.emptyState}
       />
     );
   }
 
   return (
-    <div className="max-w-[65ch] divide-y divide-line">
+    <div className={styles.questionsList}>
       {questions.map((q) => (
-        <article key={q.id} className="py-6 first:pt-0">
-          <div className="flex items-start gap-2">
-            <User className="mt-0.5 h-4 w-4 shrink-0 text-ink-muted" />
+        <article key={q.id} className={styles.questionArticle}>
+          <div className={styles.questionHeader}>
+            <User className={styles.userIcon} />
             <div>
-              <p className="text-body leading-relaxed text-ink whitespace-pre-wrap">
-                {q.question}
-              </p>
-              <p className="mt-1 text-body-sm text-ink-muted">
+              <p className={styles.questionText}>{q.question}</p>
+              <p className={styles.questionMeta}>
                 {q.customerName ?? LABELS.verifiedCustomer} ·{" "}
                 {formatOrderDate(q.createdAt)}
               </p>
@@ -49,32 +48,28 @@ export function ProductQuestions({
           </div>
 
           {q.answers.length > 0 ? (
-            <div className="mt-4 space-y-3">
+            <div className={styles.answersList}>
               {q.answers.map((a) => (
-                <div key={a.id} className="ml-6 border-l-2 border-line pl-4">
-                  <p className="flex items-center gap-1.5 text-body-sm font-medium text-ink">
+                <div key={a.id} className={styles.answerItem}>
+                  <p className={styles.answerAuthor}>
                     {a.authorType === PRODUCT_ANSWER_AUTHOR_TYPE.VENDOR ? (
-                      <Store className="h-3.5 w-3.5" />
+                      <Store className={styles.authorIcon} />
                     ) : (
-                      <User className="h-3.5 w-3.5" />
+                      <User className={styles.authorIcon} />
                     )}
                     {a.authorType === PRODUCT_ANSWER_AUTHOR_TYPE.VENDOR
                       ? LABELS.sellerAnswer
                       : (a.authorName ?? LABELS.verifiedCustomer)}
-                    <span className="font-normal text-ink-muted">
+                    <span className={styles.answerDate}>
                       {formatOrderDate(a.createdAt)}
                     </span>
                   </p>
-                  <p className="mt-1 text-body-sm leading-relaxed text-ink-muted whitespace-pre-wrap">
-                    {a.answer}
-                  </p>
+                  <p className={styles.answerBody}>{a.answer}</p>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="ml-6 mt-3 text-body-sm text-ink-muted">
-              {LABELS.noAnswersYet}
-            </p>
+            <p className={styles.noAnswersText}>{LABELS.noAnswersYet}</p>
           )}
         </article>
       ))}

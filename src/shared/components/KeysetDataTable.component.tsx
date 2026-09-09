@@ -6,6 +6,7 @@ import {
   type DataTableColumn,
 } from "@/shared/components/DataTable.component";
 import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore.component";
+import { keysetDataTableStyles } from "./dataTableComponents.styles";
 
 type Props<T> = {
   columns: DataTableColumn<T>[];
@@ -41,7 +42,7 @@ export function KeysetDataTable<T>({
   rowDetails = false,
 }: Props<T>) {
   return (
-    <div className="space-y-4">
+    <div className={keysetDataTableStyles.container}>
       <DataTable
         title={title}
         toolbar={toolbar}

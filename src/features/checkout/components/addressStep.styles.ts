@@ -22,6 +22,7 @@ export const ADDRESS_STEP_STYLES = {
         : "border-line hover:border-ink/25",
     ),
   addressContent: "flex w-full items-start justify-between gap-3",
+  addressDetails: "min-w-0",
   addressLine1: "font-medium text-ink",
   addressLine2: "mt-1 text-[0.875rem] text-ink-muted",
   addressCountry: "mt-0.5 text-body-sm text-ink-muted",

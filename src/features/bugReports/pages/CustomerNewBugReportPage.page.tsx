@@ -4,6 +4,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import { SupportAuthGate } from "@/features/supportTickets";
 import { BugReportForm } from "../components/BugReportForm.component";
+import { bugReportsPagesStyles } from "./bugReportsPages.styles";
 
 export function CustomerNewBugReportPage() {
   return (
@@ -11,7 +12,7 @@ export function CustomerNewBugReportPage() {
       message={LABELS.bugSignInRequired}
       loginNext={PATHS.bugReportNew}
     >
-      <div className="storefront-container py-8 md:py-10">
+      <div className={bugReportsPagesStyles.customerNewBugContainer}>
         <BugReportForm successHref={PATHS.bugReport} />
       </div>
     </SupportAuthGate>

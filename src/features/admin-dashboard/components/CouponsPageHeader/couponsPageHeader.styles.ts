@@ -10,4 +10,15 @@ export const couponsPageHeaderStyles = {
   form: "space-y-1",
   batchesSection: "space-y-3",
   batchesHeading: "text-[1rem] font-semibold text-ink",
+  statusMuted: "text-body-sm text-ink-muted",
+  statusError: "text-body-sm text-danger",
+  batchDialog: "max-w-md",
+  batchStack3: "space-y-3",
+  batchDl: "space-y-2 text-[0.875rem]",
+  batchRow: "flex justify-between gap-4",
+  batchDt: "text-ink-muted",
+  batchDd: "tabular-nums font-medium",
+  batchCodesList:
+    "max-h-56 space-y-1 overflow-y-auto rounded-md border border-line p-2 font-mono text-body-sm",
+  batchCodeItem: "px-1 py-0.5 text-ink",
 } as const;

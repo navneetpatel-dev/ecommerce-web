@@ -9,6 +9,7 @@ import {
   BUG_STATUS_LABEL,
 } from "../utils/labels";
 import type { BugReport } from "../api/bugReports.api";
+import { bugReportListStyles } from "./bugReportList.styles";
 
 interface UseBugReportTableColumnsParams {
   showReporter?: boolean;
@@ -27,17 +28,17 @@ export function useBugReportTableColumns({
         id: "reportNumber",
         header: LABELS.bugReportNumber,
         cell: (row) => (
-          <span className="font-mono text-body-sm tabular-nums text-ink">
+          <span className={bugReportListStyles.reportNumberCell}>
             {row.reportNumber}
           </span>
         ),
-        className: "whitespace-nowrap",
+        className: bugReportListStyles.reportNumberCol,
       },
       {
         id: "title",
         header: LABELS.bugTitle,
         cell: (row) => (
-          <span className="font-medium text-ink">{row.title}</span>
+          <span className={bugReportListStyles.titleCell}>{row.title}</span>
         ),
       },
     ];

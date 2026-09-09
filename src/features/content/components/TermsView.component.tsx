@@ -1,24 +1,20 @@
+import { contentDocStyles as styles } from "./contentDoc.styles";
+
 export function TermsView() {
   return (
-    <div className="max-w-[65ch] mx-auto px-4 py-10 space-y-5">
-      <h1 className="text-[1.75rem] font-semibold text-ink">
-        Terms of Service
-      </h1>
-      <p className="text-body text-ink-muted">
+    <div className={styles.proseContainer}>
+      <h1 className={styles.h1}>Terms of Service</h1>
+      <p className={styles.bodyText}>
         By using Marketplace, you agree to follow platform policies for account
         usage, order behavior, and vendor interactions.
       </p>
-      <h2 className="text-[1.125rem] font-semibold text-ink">
-        Orders and payments
-      </h2>
-      <p className="text-body text-ink-muted">
+      <h2 className={styles.h2}>Orders and payments</h2>
+      <p className={styles.bodyText}>
         Orders may be split by vendor. Payment and refund timelines follow the
         selected payment method and applicable policy.
       </p>
-      <h2 className="text-[1.125rem] font-semibold text-ink">
-        Returns and disputes
-      </h2>
-      <p className="text-body text-ink-muted">
+      <h2 className={styles.h2}>Returns and disputes</h2>
+      <p className={styles.bodyText}>
         Return eligibility depends on item type, vendor policy, and order state.
         Disputes are handled through support review.
       </p>

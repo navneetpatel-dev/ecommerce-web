@@ -12,6 +12,7 @@ import { SellerPerksBlock } from "./SellerPerksBlock.component";
 import { PATHS } from "@/shared/constants/paths";
 import type { ProductDetail, ProductVariant } from "@/shared/api/types";
 import type { VariantSelectionProps } from "./types";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
 
 interface ProductBuyBoxColumnProps {
   product: ProductDetail;
@@ -91,8 +92,11 @@ export function ProductBuyBoxColumn({
   warrantyTypeLabel,
 }: ProductBuyBoxColumnProps) {
   return (
-    <div className="min-w-0 md:col-span-6 lg:col-span-5" ref={addSectionRef}>
-      <div className="space-y-5 lg:space-y-6">
+    <div
+      className={PRODUCT_DETAIL_CONTENT_STYLES.buyBoxColumn}
+      ref={addSectionRef}
+    >
+      <div className={PRODUCT_DETAIL_CONTENT_STYLES.buyBoxStack}>
         <ProductHeadingBlock
           product={product}
           sellerScore={sellerScore}
@@ -157,7 +161,8 @@ export function ProductBuyBoxColumn({
           displayStock={displayStock}
           codAvailable={product.codAvailable}
           codEligibleAtUnitPrice={
-            resolvedVariant?.codEligibleAtUnitPrice ?? product.codEligibleAtUnitPrice
+            resolvedVariant?.codEligibleAtUnitPrice ??
+            product.codEligibleAtUnitPrice
           }
           codMinOrderValue={product.codMinOrderValue}
           codMaxOrderValue={product.codMaxOrderValue}

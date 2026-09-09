@@ -7,4 +7,5 @@ export const deliveryDispatchPickupListStyles = {
   body: "space-y-2 pt-1",
   label: "text-caption font-medium text-ink-muted",
   emptyText: "py-4 text-center text-body-sm text-ink-muted",
+  selectTrigger: "w-full",
 } as const;

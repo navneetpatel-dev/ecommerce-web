@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 import type { VendorInfo } from "@/shared/api/types";
 import { PATHS } from "@/shared/constants/paths";
 import { cn } from "@/shared/utils/cn";
+import { vendorStripStyles } from "./vendorOrderComponents.styles";
 
 interface VendorStripProps {
   vendor: VendorInfo;
@@ -26,8 +27,8 @@ export function VendorStrip({
     <Link
       href={`${PATHS.products}?vendorId=${vendor.id}`}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-0.5 text-brand hover:bg-brand-subtle transition-colors",
-        size === "md" && "px-3 py-1",
+        vendorStripStyles.link,
+        size === "md" && vendorStripStyles.sizeMd,
         className,
       )}
     >
@@ -37,21 +38,22 @@ export function VendorStrip({
           alt={`${businessName} logo`}
           width={20}
           height={20}
-          className="rounded-full object-cover"
+          className={vendorStripStyles.logo}
         />
       ) : (
-        <div className="h-5 w-5 rounded-full bg-brand-subtle flex items-center justify-center text-[0.6875rem] font-medium text-brand">
-          {businessName.charAt(0)}
-        </div>
+        <div className={vendorStripStyles.avatar}>{businessName.charAt(0)}</div>
       )}
       <span
-        className={cn("text-body-sm font-medium", size === "md" && "text-body")}
+        className={cn(
+          vendorStripStyles.name,
+          size === "md" && vendorStripStyles.nameMd,
+        )}
       >
         {businessName}
       </span>
       {rating !== undefined && (
-        <span className="flex items-center gap-0.5 text-body-sm text-ink-muted">
-          <Star className="h-3.5 w-3.5 fill-warning text-warning" />
+        <span className={vendorStripStyles.ratingWrap}>
+          <Star className={vendorStripStyles.star} />
           {rating.toFixed(1)}
         </span>
       )}

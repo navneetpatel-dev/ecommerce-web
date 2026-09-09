@@ -9,6 +9,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import { useIsAuthenticated } from "@/shared/hooks/useRequireAuth.hook";
+import { supportAuthGateStyles } from "./supportAuthGate.styles";
 
 type Props = {
   message: string;
@@ -22,16 +23,16 @@ export function SupportAuthGate({ message, loginNext, children }: Props) {
 
   if (!authBootstrapped) {
     return (
-      <div className="storefront-container space-y-3 py-8">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-20 w-full" />
+      <div className={supportAuthGateStyles.loadingContainer}>
+        <Skeleton className={supportAuthGateStyles.skeletonHeading} />
+        <Skeleton className={supportAuthGateStyles.skeletonCard} />
       </div>
     );
   }
 
   if (!isAuthenticated) {
     return (
-      <div className="storefront-container py-16 md:py-20">
+      <div className={supportAuthGateStyles.gateContainer}>
         <EmptyState
           icon={UserRound}
           heading={LABELS.logIn}
@@ -39,7 +40,7 @@ export function SupportAuthGate({ message, loginNext, children }: Props) {
           actionLabel={LABELS.logIn}
           actionTo={PATHS.loginWithRedirect(loginNext)}
         />
-        <div className="mt-4 flex justify-center">
+        <div className={supportAuthGateStyles.buttonRow}>
           <Button variant="ghost" asChild>
             <Link href={PATHS.register}>{LABELS.createAccount}</Link>
           </Button>

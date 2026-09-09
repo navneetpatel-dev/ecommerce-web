@@ -2,6 +2,7 @@ import { Badge } from "@/shared/components/ui/badge";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
 
 interface PriceAvailabilityBlockProps {
   formattedPrice: string;
@@ -37,14 +38,20 @@ export function PriceAvailabilityBlock({
   lowStockAt,
 }: PriceAvailabilityBlockProps) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-3 border-y border-line py-4">
-      <div aria-live="polite" className="space-y-1.5">
-        <div className="flex flex-wrap items-center gap-2">
-          <p className="font-sans text-[1.875rem] font-semibold leading-none text-brand">
+    <div className={PRODUCT_DETAIL_CONTENT_STYLES.priceRow}>
+      <div
+        aria-live="polite"
+        className={PRODUCT_DETAIL_CONTENT_STYLES.priceStack}
+      >
+        <div className={PRODUCT_DETAIL_CONTENT_STYLES.priceLine}>
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.priceText}>
             ₹{formattedPrice}
           </p>
           {discountPercent != null && discountPercent > 0 ? (
-            <Badge variant="destructive" className="rounded-full">
+            <Badge
+              variant="destructive"
+              className={PRODUCT_DETAIL_CONTENT_STYLES.discountBadge}
+            >
               {formatLabel(LABELS.discountPercentOff, {
                 percent: discountPercent,
               })}
@@ -52,40 +59,42 @@ export function PriceAvailabilityBlock({
           ) : null}
         </div>
         {showMrp && compareAtPrice != null ? (
-          <p className="text-body text-ink-faint">
-            <span className="mr-1.5">{LABELS.listPrice}:</span>
-            <span className="line-through">
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.listPriceText}>
+            <span className={PRODUCT_DETAIL_CONTENT_STYLES.listPriceLabel}>
+              {LABELS.listPrice}:
+            </span>
+            <span className={PRODUCT_DETAIL_CONTENT_STYLES.strikeThrough}>
               ₹{formatInrAmount(compareAtPrice)}
             </span>
           </p>
         ) : hasPriceChange ? (
-          <p className="text-body text-ink-faint line-through">
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.listPriceStrike}>
             ₹{formatInrAmount(basePrice)}
           </p>
         ) : null}
         {gstPercentage > 0 ? (
-          <p className="text-body-sm text-ink-muted">
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.gstText}>
             {formatLabel(LABELS.taxExclusiveGst, {
               percent: gstPercentage,
             })}
           </p>
         ) : null}
         {hsnCode ? (
-          <p className="text-body-sm text-ink-muted">
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.hsnText}>
             {formatLabel(LABELS.hsnCodeLabel, {
               code: hsnCode,
             })}
           </p>
         ) : null}
         {taxInclusiveEstimate != null ? (
-          <p className="text-body-sm text-ink-faint">
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.taxEstimateText}>
             {formatLabel(LABELS.taxInclusiveEstimate, {
               amount: formatInrAmount(taxInclusiveEstimate),
             })}
           </p>
         ) : null}
         {sku ? (
-          <p className="text-body-sm text-ink-muted">
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.skuText}>
             {LABELS.sku}: {sku}
           </p>
         ) : null}

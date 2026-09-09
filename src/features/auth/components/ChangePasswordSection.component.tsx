@@ -10,6 +10,7 @@ import { Button } from "@/shared/components/ui/button";
 import { PasswordInputContainer } from "@/shared/containers/PasswordInputContainer.container";
 import { LABELS } from "@/shared/constants/labels";
 import type { ChangePasswordInput } from "../schemas/auth.schema";
+import { authFormsStyles } from "./authForms.styles";
 
 interface ChangePasswordSectionProps {
   form: UseFormReturn<ChangePasswordInput>;
@@ -42,8 +43,8 @@ export function ChangePasswordSection({
         columns={1}
       >
         {isSuccess ? (
-          <div className="space-y-3">
-            <p className="text-body text-success">
+          <div className={authFormsStyles.changePasswordSuccessWrapper}>
+            <p className={authFormsStyles.changePasswordSuccessText}>
               {LABELS.changePasswordSuccess}
             </p>
             {onChangeAgain ? (
@@ -55,7 +56,7 @@ export function ChangePasswordSection({
         ) : (
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-4 sm:col-span-2"
+            className={authFormsStyles.changePasswordForm}
           >
             <FormFieldFrame
               label={LABELS.currentPassword}

@@ -15,3 +15,9 @@ export const QUANTITY_INPUT_BASE =
 
 export const QUANTITY_VALUE_DIGIT =
   "font-mono font-medium tabular-nums text-ink" as const;
+
+export const QUANTITY_SELECTOR_EXTRA = {
+  borderX: "border-x border-line",
+  hintContainer: "relative z-[1] max-w-none shrink-0",
+  disabledShrink: "shrink-0",
+} as const;

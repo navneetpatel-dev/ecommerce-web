@@ -1,6 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
+import { bugReportFormStyles } from "./bugReportForm.styles";
 
 interface BugFormHeaderProps {
   canSubmit: boolean;
@@ -15,19 +16,19 @@ export function BugFormHeader({
   isPending,
 }: BugFormHeaderProps) {
   return (
-    <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-      <div className="min-w-0 space-y-1.5">
-        <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+    <div className={bugReportFormStyles.header}>
+      <div className={bugReportFormStyles.headerTitleWrap}>
+        <h1 className={bugReportFormStyles.headerTitle}>
           {LABELS.newBugReport}
         </h1>
-        <p className="max-w-3xl text-body leading-relaxed text-ink-muted">
+        <p className={bugReportFormStyles.headerDesc}>
           {LABELS.newBugReportDescription}
         </p>
       </div>
       <DisabledActionHint disabled={!canSubmit} message={disableHint}>
         <Button
           type="submit"
-          className="hidden shrink-0 sm:inline-flex"
+          className={bugReportFormStyles.headerSubmitBtn}
           loading={isPending}
           disabled={!canSubmit || isPending}
         >

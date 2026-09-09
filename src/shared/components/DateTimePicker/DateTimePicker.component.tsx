@@ -10,6 +10,7 @@ import {
 } from "@/shared/components/ui/popover";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { dateTimePickerStyles } from "./dateTimePicker.styles";
 import { CalendarGrid } from "./CalendarGrid.component";
 import { TimeSelectors } from "./TimeSelectors.component";
 import {
@@ -100,21 +101,26 @@ export function DateTimePicker({
           id={id}
           disabled={disabled}
           className={cn(
-            "flex h-11 w-full min-w-[10rem] cursor-pointer items-center justify-between gap-3 rounded-sm border bg-surface-raised px-3.5 text-left text-body outline-none",
-            "hover:bg-paper/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-            "disabled:cursor-not-allowed disabled:opacity-50",
-            error ? "border-danger" : "border-line-strong",
+            dateTimePickerStyles.trigger.base,
+            error
+              ? dateTimePickerStyles.trigger.error
+              : dateTimePickerStyles.trigger.defaultBorder,
             className,
           )}
         >
           <span
-            className={cn("truncate", selected ? "text-ink" : "text-ink-faint")}
+            className={cn(
+              dateTimePickerStyles.trigger.labelBase,
+              selected
+                ? dateTimePickerStyles.trigger.labelSelected
+                : dateTimePickerStyles.trigger.labelPlaceholder,
+            )}
           >
             {selected ? formatDisplay(selected, mode) : resolvedPlaceholder}
           </span>
           <CalendarDays
             size={16}
-            className="shrink-0 ml-1 text-ink-muted"
+            className={dateTimePickerStyles.trigger.icon}
             aria-hidden
           />
         </button>
@@ -122,24 +128,24 @@ export function DateTimePicker({
 
       <PopoverContent
         align="start"
-        className="w-[min(100vw-2rem,20rem)] space-y-4 p-3"
+        className={dateTimePickerStyles.popoverContent}
       >
-        <div className="flex items-center justify-between gap-2">
+        <div className={dateTimePickerStyles.header}>
           <button
             type="button"
             aria-label={LABELS.previousMonth}
-            className="flex h-8 w-8 items-center justify-center rounded-sm text-ink-muted transition-colors hover:bg-paper hover:text-ink"
+            className={dateTimePickerStyles.navButton}
             onClick={() => shiftMonth(-1)}
           >
             <ChevronLeft size={16} aria-hidden />
           </button>
-          <p className="text-[0.875rem] font-semibold tracking-tight text-ink">
+          <p className={dateTimePickerStyles.monthLabel}>
             {monthLabel(viewYear, viewMonth)}
           </p>
           <button
             type="button"
             aria-label={LABELS.nextMonth}
-            className="flex h-8 w-8 items-center justify-center rounded-sm text-ink-muted transition-colors hover:bg-paper hover:text-ink"
+            className={dateTimePickerStyles.navButton}
             onClick={() => shiftMonth(1)}
           >
             <ChevronRight size={16} aria-hidden />
@@ -171,7 +177,7 @@ export function DateTimePicker({
           />
         ) : null}
 
-        <div className="flex justify-end gap-2">
+        <div className={dateTimePickerStyles.footer}>
           <Button
             type="button"
             size="sm"

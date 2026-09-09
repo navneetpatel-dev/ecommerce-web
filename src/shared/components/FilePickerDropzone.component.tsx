@@ -1,6 +1,7 @@
 import type { DragEvent, KeyboardEvent } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
+import { filePickerDropzoneStyles } from "./fileUploadComponents.styles";
 
 interface FilePickerDropzoneProps {
   icon: LucideIcon;
@@ -37,25 +38,26 @@ export function FilePickerDropzone({
       onDragLeave={onDragLeave}
       onDrop={onDrop}
       className={cn(
-        "relative flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed p-7 text-center transition-all cursor-pointer select-none",
+        filePickerDropzoneStyles.dropzoneBase,
         isDragOver
-          ? "border-brand bg-brand/10 shadow-xs"
-          : "border-line-strong/70 bg-paper/20 hover:border-brand/60 hover:bg-paper/40",
-        disabled &&
-          "cursor-not-allowed opacity-50 hover:border-line hover:bg-paper/20",
+          ? filePickerDropzoneStyles.dropzoneActive
+          : filePickerDropzoneStyles.dropzoneIdle,
+        disabled && filePickerDropzoneStyles.dropzoneDisabled,
       )}
     >
-      <div className="flex size-11 items-center justify-center rounded-xl border border-line/80 bg-surface shadow-xs">
-        <Icon className="size-5 text-brand" aria-hidden="true" />
+      <div className={filePickerDropzoneStyles.iconWrapper}>
+        <Icon className={filePickerDropzoneStyles.icon} aria-hidden="true" />
       </div>
-      <div className="space-y-1">
-        <p className="text-body-sm text-ink">
-          <span className="font-semibold text-brand underline underline-offset-4 decoration-brand/40 hover:decoration-brand">
+      <div className={filePickerDropzoneStyles.textGroup}>
+        <p className={filePickerDropzoneStyles.primaryText}>
+          <span className={filePickerDropzoneStyles.actionText}>
             Click to choose file
           </span>{" "}
           or drag and drop
         </p>
-        {hint ? <p className="text-caption text-ink-muted">{hint}</p> : null}
+        {hint ? (
+          <p className={filePickerDropzoneStyles.hintText}>{hint}</p>
+        ) : null}
       </div>
     </div>
   );

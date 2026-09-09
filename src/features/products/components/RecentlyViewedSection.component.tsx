@@ -2,6 +2,7 @@ import { ProductGrid } from "./ProductGrid.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { ProductListItem } from "@/shared/api/types";
+import { productDetailsMiscStyles } from "./productDetailsMisc.styles";
 
 interface RecentlyViewedSectionProps {
   products: ProductListItem[];
@@ -14,8 +15,10 @@ export function RecentlyViewedSection({
 
   return (
     <section>
-      <TextEyebrow className="mb-2">{LABELS.homeYourBrowsing}</TextEyebrow>
-      <h2 className="text-[1.375rem] font-semibold text-ink mb-6">
+      <TextEyebrow className={productDetailsMiscStyles.recentEyebrow}>
+        {LABELS.homeYourBrowsing}
+      </TextEyebrow>
+      <h2 className={productDetailsMiscStyles.recentTitle}>
         {LABELS.homeRecentlyViewed}
       </h2>
       <ProductGrid products={products} skeletonCount={8} />

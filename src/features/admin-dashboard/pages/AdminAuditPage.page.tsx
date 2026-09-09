@@ -6,12 +6,13 @@ import { AdminDataPage } from "./AdminDataPage.page";
 import { AdminAuditExportPanel } from "../components/AdminAuditExportPanel.component";
 import { AdminAuditFilters } from "../components/AdminAuditFilters.component";
 import { useAdminAuditPage } from "../hooks/useAdminAuditPage.hook";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function AdminAuditPage() {
   const page = useAdminAuditPage();
   return (
     <RequirePermission permission={PERMISSIONS.AUDIT_VIEW}>
-      <div className="space-y-6">
+      <div className={adminPagesStyles.stack6}>
         <AdminAuditFilters {...page.filters} />
         <AdminAuditExportPanel />
         <AdminDataPage

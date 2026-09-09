@@ -7,6 +7,7 @@ import {
   BugAttachmentUploader,
   type UploadedMediaAttachment,
 } from "@/features/supportTickets";
+import { bugReportFormStyles } from "./bugReportForm.styles";
 
 interface BugFormFooterProps {
   draftId: string;
@@ -46,7 +47,7 @@ export function BugFormFooter(props: BugFormFooterProps) {
           disabled={isPending}
         />
         {attachmentError ? (
-          <p role="alert" className="text-body-sm text-danger">
+          <p role="alert" className={bugReportFormStyles.footerAttachmentError}>
             {attachmentError}
           </p>
         ) : null}

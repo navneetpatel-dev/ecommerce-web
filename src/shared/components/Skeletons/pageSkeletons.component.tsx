@@ -9,13 +9,13 @@ export function StorefrontPageSkeleton() {
       <Skeleton className={styles.storefrontHero} />
       <div className={styles.storefrontContainer}>
         <div className={styles.headingStack}>
-          <Skeleton className="h-3 w-16" />
-          <Skeleton className="h-7 w-48" />
+          <Skeleton className={styles.h3w16} />
+          <Skeleton className={styles.h7w48} />
         </div>
         <CategoryGridSkeleton count={10} />
         <div className={styles.headingStackPadded}>
-          <Skeleton className="h-3 w-28" />
-          <Skeleton className="h-8 w-40" />
+          <Skeleton className={styles.h3w28} />
+          <Skeleton className={styles.h8w40} />
         </div>
         <SkeletonGrid count={8} />
       </div>
@@ -28,8 +28,8 @@ export function CartPageSkeleton() {
     <div className={styles.pageRoot}>
       <div className={styles.cartContainer}>
         <div className={styles.cartTitleStack}>
-          <Skeleton className="h-3 w-24" />
-          <Skeleton className="h-8 w-48" />
+          <Skeleton className={styles.h3w24} />
+          <Skeleton className={styles.h8w48} />
         </div>
         <div className={styles.cartGrid}>
           <div className={styles.cartMainCol}>
@@ -51,15 +51,15 @@ export function CheckoutPageSkeleton() {
     <div className={styles.pageRoot}>
       <div className={styles.checkoutContainer}>
         <div className={styles.checkoutTitleStack}>
-          <Skeleton className="h-3 w-20" />
-          <Skeleton className="h-9 w-64" />
+          <Skeleton className={styles.h3w20} />
+          <Skeleton className={styles.h9w64} />
         </div>
         <Skeleton className={styles.checkoutProgress} />
         <div className={styles.checkoutGrid}>
           <div className={styles.checkoutMainCol}>
-            <Skeleton className="h-3 w-28" />
-            <Skeleton className="h-8 w-72" />
-            <Skeleton className="h-4 w-80" />
+            <Skeleton className={styles.h3w28} />
+            <Skeleton className={styles.h8w72} />
+            <Skeleton className={styles.h4w80} />
             <Skeleton className={styles.checkoutCardLg} />
             <Skeleton className={styles.checkoutCardSm} />
           </div>
@@ -76,9 +76,9 @@ export function CategoriesPageSkeleton() {
   return (
     <div className={styles.categoriesContainer}>
       <div className={styles.categoriesHeader}>
-        <Skeleton className="h-3 w-16" />
-        <Skeleton className="h-10 w-64" />
-        <Skeleton className="h-4 w-full max-w-md" />
+        <Skeleton className={styles.h3w16} />
+        <Skeleton className={styles.h10w64} />
+        <Skeleton className={styles.h4wFullMaxMd} />
       </div>
       <CategoryGridSkeleton count={10} />
     </div>
@@ -88,8 +88,8 @@ export function CategoriesPageSkeleton() {
 export function ProfilePageSkeleton() {
   return (
     <div className={styles.profileContainer}>
-      <Skeleton className="h-4 w-24" />
-      <Skeleton className="h-10 w-48" />
+      <Skeleton className={styles.h4w24} />
+      <Skeleton className={styles.h10w48} />
       <div className={styles.profileGrid}>
         <Skeleton className={styles.profileAside} />
         <Skeleton className={styles.profileMain} />
@@ -101,7 +101,7 @@ export function ProfilePageSkeleton() {
 export function WishlistPageSkeleton() {
   return (
     <div className={styles.wishlistContainer}>
-      <Skeleton className="h-8 w-36" />
+      <Skeleton className={styles.h8w36} />
       <SkeletonGrid count={8} />
     </div>
   );
@@ -110,11 +110,11 @@ export function WishlistPageSkeleton() {
 export function ContentPageSkeleton() {
   return (
     <div className={styles.contentContainer}>
-      <Skeleton className="h-3 w-20" />
-      <Skeleton className="h-10 w-2/3" />
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-4 w-4/5" />
+      <Skeleton className={styles.h3w20} />
+      <Skeleton className={styles.h10w2_3} />
+      <Skeleton className={styles.h4wFull} />
+      <Skeleton className={styles.h4wFull} />
+      <Skeleton className={styles.h4w4_5} />
       <Skeleton className={styles.contentImage} />
     </div>
   );

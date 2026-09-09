@@ -5,6 +5,7 @@ import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
 import { SEARCH_LIST_ID } from "./constants";
+import { searchBarStyles as styles } from "./searchBar.styles";
 
 interface SearchInputProps {
   size: "lg" | "sm";
@@ -36,12 +37,14 @@ export function SearchInput({
   onSubmit,
 }: SearchInputProps) {
   return (
-    <form onSubmit={onSubmit} className="relative">
+    <form onSubmit={onSubmit} className={styles.form}>
       <Search
         size={size === "sm" ? 16 : 20}
         className={cn(
-          "pointer-events-none absolute left-4 top-1/2 z-[1] -translate-y-1/2",
-          shellExpanded || !onDark ? "text-ink-muted" : "text-paper/70",
+          styles.searchIcon,
+          shellExpanded || !onDark
+            ? styles.searchIconMuted
+            : styles.searchIconDark,
         )}
         aria-hidden
       />
@@ -64,16 +67,11 @@ export function SearchInput({
         onKeyDown={onKeyDown}
         placeholder={LABELS.searchProductsVendors}
         className={cn(
-          "h-11",
-          "[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none",
-          size === "sm" ? "pl-9 text-body-sm" : "pl-11",
+          styles.inputBase,
+          size === "sm" ? styles.inputSm : styles.inputLg,
           shellExpanded
-            ? "rounded-none border-0 bg-transparent text-ink shadow-none placeholder:text-ink-faint focus-visible:border-transparent"
-            : cn(
-                "rounded-full",
-                onDark &&
-                  "border-paper/25 bg-paper/10 text-paper placeholder:text-paper/55 focus-visible:border-paper/50",
-              ),
+            ? styles.inputExpanded
+            : cn(styles.inputCollapsed, onDark && styles.inputOnDark),
         )}
       />
     </form>

@@ -4,6 +4,7 @@ import { formatOrderDate } from "@/shared/utils/orderFormat";
 import { BUG_REPORTER_ROLE_LABEL } from "../../utils/labels";
 import type { BugReport } from "../../api/bugReports.api";
 import { ContextRow } from "./BugAttachmentGrid.component";
+import { bugReportPanelsStyles } from "./bugReportPanels.styles";
 
 /** Device/browser context panel — full set for admins, short set for reporters. */
 export function BugContextPanel({
@@ -17,9 +18,9 @@ export function BugContextPanel({
 
   if (mode === "admin") {
     return (
-      <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1">
+      <section className={bugReportPanelsStyles.panelRootWithBar}>
         <PanelHeader label={LABELS.bugContextPanel} />
-        <dl className="grid gap-3.5 px-4 py-4 sm:px-5">
+        <dl className={bugReportPanelsStyles.contextList}>
           <ContextRow
             label={LABELS.bugPageUrl}
             value={report.pageUrl || LABELS.emptyCell}
@@ -74,11 +75,11 @@ export function BugContextPanel({
   }
 
   return (
-    <section className="overflow-hidden border border-line bg-surface shadow-elevation-1">
-      <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+    <section className={bugReportPanelsStyles.panelRoot}>
+      <div className={bugReportPanelsStyles.panelHeader}>
         <TextEyebrow brand>{LABELS.bugContextPanel}</TextEyebrow>
       </div>
-      <dl className="grid gap-3.5 px-4 py-4 sm:px-5">
+      <dl className={bugReportPanelsStyles.contextList}>
         <ContextRow
           label={LABELS.bugPageUrl}
           value={report.pageUrl || LABELS.emptyCell}
@@ -104,7 +105,7 @@ export function BugContextPanel({
 
 function PanelHeader({ label }: { label: string }) {
   return (
-    <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+    <div className={bugReportPanelsStyles.panelHeader}>
       <TextEyebrow brand>{label}</TextEyebrow>
     </div>
   );

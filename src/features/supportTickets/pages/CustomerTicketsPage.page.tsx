@@ -14,6 +14,7 @@ import {
   TicketFilters,
   useTicketFiltersFromUrl,
 } from "../components/TicketFilters.component";
+import { supportTicketsPagesStyles } from "./supportTicketsPages.styles";
 
 export function CustomerTicketsPage() {
   return (
@@ -21,7 +22,11 @@ export function CustomerTicketsPage() {
       message={LABELS.ticketSignInRequired}
       loginNext={PATHS.supportTickets}
     >
-      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+      <Suspense
+        fallback={
+          <Skeleton className={supportTicketsPagesStyles.skeletonFallback} />
+        }
+      >
         <CustomerTicketsContent />
       </Suspense>
     </SupportAuthGate>
@@ -38,24 +43,27 @@ function CustomerTicketsContent() {
   const tickets = query.data?.pages.flatMap((p) => p.items) ?? [];
 
   return (
-    <div className="storefront-container py-8 md:py-10">
-      <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <div className="min-w-0 max-w-2xl space-y-1">
-          <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+    <div className={supportTicketsPagesStyles.customerPageContainer}>
+      <header className={supportTicketsPagesStyles.customerHeaderRow}>
+        <div className={supportTicketsPagesStyles.customerHeaderInfo}>
+          <h1 className={supportTicketsPagesStyles.titleHeading}>
             {LABELS.mySupportTickets}
           </h1>
-          <p className="text-body text-ink-muted">
+          <p className={supportTicketsPagesStyles.customerHeaderSubtitle}>
             {LABELS.supportTicketsPageDescription}
           </p>
         </div>
-        <Button asChild className="shrink-0">
+        <Button
+          asChild
+          className={supportTicketsPagesStyles.customerCreateButton}
+        >
           <Link href={PATHS.supportTicketNew}>
             {LABELS.createSupportTicket}
           </Link>
         </Button>
       </header>
 
-      <div className="mb-5">
+      <div className={supportTicketsPagesStyles.customerFiltersMargin}>
         <TicketFilters showVendorId={false} />
       </div>
 

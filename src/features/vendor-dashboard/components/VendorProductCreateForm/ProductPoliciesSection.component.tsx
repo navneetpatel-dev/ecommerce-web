@@ -19,6 +19,7 @@ import {
   type ProductListingFormField,
   type ProductListingFormValues,
 } from "@/features/products";
+import { vendorProductCreateFormStyles } from "./vendorProductCreateForm.styles";
 
 interface ProductPoliciesSectionProps {
   values: ProductListingFormValues;
@@ -51,7 +52,7 @@ export function ProductPoliciesSection({
           onChange={(event) =>
             patchValues({ deliveryNote: event.target.value })
           }
-          className="min-h-[5.5rem]"
+          className={vendorProductCreateFormStyles.policyTextarea}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -65,7 +66,7 @@ export function ProductPoliciesSection({
           error={Boolean(getError("returnNote"))}
           disabled={disabled}
           onChange={(event) => patchValues({ returnNote: event.target.value })}
-          className="min-h-[5.5rem]"
+          className={vendorProductCreateFormStyles.policyTextarea}
         />
       </FormFieldFrame>
       <FormFieldFrame

@@ -12,6 +12,7 @@ import {
 } from "@/shared/components/DataTable.component";
 import type { WebVitalSummaryRow } from "../api/webVitals.api";
 import { webVitalsReportLabels as LABELS } from "@/shared/constants/labels/webVitalsReport";
+import { adminPagesStyles } from "./adminPages.styles";
 
 /** CLS is ingested scaled by 1000 (see web/src/shared/utils/webVitals.ts); undo that for display. */
 function displayValue(name: string, value: number): string {
@@ -26,46 +27,42 @@ export function AdminWebVitalsPage() {
     {
       id: "metric",
       header: LABELS.webVitalsColMetric,
-      className: "font-mono font-medium text-ink",
+      className: adminPagesStyles.colMetric,
       cell: (row) => row.name,
     },
     {
       id: "page",
       header: LABELS.webVitalsColPage,
-      className: "text-ink-muted",
+      className: adminPagesStyles.colMuted,
       truncate: false,
       cell: (row) => row.path,
     },
     {
       id: "p75",
       header: LABELS.webVitalsColP75,
-      className: "font-medium text-ink",
+      className: adminPagesStyles.colInkMedium,
       cell: (row) => displayValue(row.name, row.p75),
     },
     {
       id: "samples",
       header: LABELS.webVitalsColSamples,
-      className: "text-ink-muted",
+      className: adminPagesStyles.colMuted,
       cell: (row) => row.sampleCount,
     },
   ];
 
   return (
-    <div className="space-y-6">
-      <header className="space-y-1">
-        <div className="flex items-center gap-2">
-          <Gauge className="size-5 text-brand" aria-hidden="true" />
-          <h1 className="font-display text-[1.5rem] tracking-tight text-ink">
-            {LABELS.webVitals}
-          </h1>
+    <div className={adminPagesStyles.stack6}>
+      <header className={adminPagesStyles.stack1}>
+        <div className={adminPagesStyles.flexGap2}>
+          <Gauge className={adminPagesStyles.iconBrandMd} aria-hidden="true" />
+          <h1 className={adminPagesStyles.pageHeadingLg}>{LABELS.webVitals}</h1>
         </div>
-        <p className="max-w-2xl text-body-sm text-ink-muted">
-          {LABELS.webVitalsHint}
-        </p>
+        <p className={adminPagesStyles.hintMax2xl}>{LABELS.webVitalsHint}</p>
       </header>
 
-      <div className="rounded-md border border-line bg-surface p-4 sm:p-5">
-        <div className="flex flex-wrap items-end gap-4">
+      <div className={adminPagesStyles.cardSurface}>
+        <div className={adminPagesStyles.filterRow}>
           <DateRangeFields
             from={page.from}
             to={page.to}
@@ -73,13 +70,13 @@ export function AdminWebVitalsPage() {
             onToChange={page.setTo}
             fromId="web-vitals-from"
             toId="web-vitals-to"
-            fromClassName="w-full sm:w-44 lg:w-48"
-            toClassName="w-full sm:w-44 lg:w-48"
+            fromClassName={adminPagesStyles.dateRangeInput}
+            toClassName={adminPagesStyles.dateRangeInput}
           />
           <FormFieldFrame
             label={LABELS.webVitalsPathFilterLabel}
             htmlFor="web-vitals-path"
-            className="flex-1 min-w-[16rem]"
+            className={adminPagesStyles.fieldFlex1MinW}
           >
             <Input
               id="web-vitals-path"
@@ -88,12 +85,12 @@ export function AdminWebVitalsPage() {
               placeholder={LABELS.webVitalsPathFilterPlaceholder}
             />
           </FormFieldFrame>
-          <div className="w-full sm:w-auto">
+          <div className={adminPagesStyles.wFullSmAuto}>
             <Button
               type="button"
               loading={page.loading}
               onClick={page.reload}
-              className="w-full sm:w-auto h-11 px-6 font-medium"
+              className={adminPagesStyles.actionButtonH11}
             >
               {LABELS.webVitalsLoad}
             </Button>

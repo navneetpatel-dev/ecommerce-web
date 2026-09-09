@@ -7,6 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
+import { authFormsStyles } from "./authForms.styles";
 
 interface ForgotPasswordInput {
   email: string;
@@ -38,22 +39,17 @@ export function ForgotPasswordCard({
       title={LABELS.forgotPasswordTitle}
       description={LABELS.forgotPasswordHint}
       footer={
-        <Link
-          href={PATHS.login}
-          className="block text-center text-body font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
-        >
+        <Link href={PATHS.login} className={authFormsStyles.footerLink}>
           {LABELS.backToLogin}
         </Link>
       }
     >
       {isSuccess ? (
-        <p className="rounded-md border border-success/25 bg-success-subtle/60 px-4 py-3 text-body text-success">
-          {LABELS.resetLinkSent}
-        </p>
+        <p className={authFormsStyles.successBanner}>{LABELS.resetLinkSent}</p>
       ) : (
         <form
           onSubmit={handleSubmit((data) => onSubmit(data))}
-          className="space-y-5"
+          className={authFormsStyles.formSpace5}
         >
           <FormFieldFrame
             label={LABELS.email}
@@ -75,7 +71,7 @@ export function ForgotPasswordCard({
           />
           <Button
             type="submit"
-            className="w-full"
+            className={authFormsStyles.fullWidth}
             size="lg"
             loading={isPending}
           >

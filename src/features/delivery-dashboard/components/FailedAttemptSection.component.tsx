@@ -3,6 +3,7 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { failedAttemptSectionStyles as styles } from "./failedAttemptSection.styles";
 
 export function FailedAttemptSection({
   value,
@@ -30,39 +31,35 @@ export function FailedAttemptSection({
   onPhotoChange?: (file: File | null) => void;
 }) {
   return (
-    <div className="border border-line bg-surface shadow-elevation-1">
-      <div className="flex items-center justify-between border-b border-line bg-paper/55 px-5 py-3.5">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="size-4 text-warning" aria-hidden="true" />
-          <TextEyebrow className="!mb-0">{title}</TextEyebrow>
+    <div className={styles.card}>
+      <div className={styles.header}>
+        <div className={styles.headerLeft}>
+          <AlertTriangle className={styles.icon} aria-hidden="true" />
+          <TextEyebrow className={styles.eyebrow}>{title}</TextEyebrow>
         </div>
-        <span className="text-caption font-medium uppercase tracking-wider text-warning">
-          Exception
-        </span>
+        <span className={styles.badge}>Exception</span>
       </div>
 
-      <div className="space-y-4 p-5">
-        <p className="text-body-sm text-ink-muted leading-relaxed">
-          {description}
-        </p>
+      <div className={styles.body}>
+        <p className={styles.description}>{description}</p>
         <Textarea
           value={value}
           placeholder={placeholder}
           rows={3}
-          className="resize-none"
+          className={styles.textarea}
           onChange={(event) => onChange(event.target.value)}
         />
         {onPhotoChange ? (
-          <div className="rounded-lg border border-dashed border-line bg-paper/20 p-4 transition-colors hover:border-brand/40">
-            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 text-center">
-              <div className="flex size-8 items-center justify-center rounded-full border border-line bg-surface text-brand">
-                <Upload className="size-4" aria-hidden="true" />
+          <div className={styles.dropzone}>
+            <label className={styles.dropzoneLabel}>
+              <div className={styles.uploadIconWrapper}>
+                <Upload className={styles.uploadIcon} aria-hidden="true" />
               </div>
-              <span className="text-body-sm font-medium text-ink">
+              <span className={styles.uploadText}>
                 {photo ? photo.name : "Add evidence photo (optional)"}
               </span>
               <Input
-                className="sr-only"
+                className={styles.fileInput}
                 type="file"
                 accept="image/*"
                 capture="environment"
@@ -72,7 +69,7 @@ export function FailedAttemptSection({
           </div>
         ) : null}
         <Button
-          className="w-full"
+          className={styles.submitButton}
           variant="outline"
           disabled={value.trim().length < 3}
           loading={pending}

@@ -22,6 +22,7 @@ import { CreateCouponScopeFields } from "./CreateCouponScopeFields.component";
 import { CreateCouponConstraintFields } from "./CreateCouponConstraintFields.component";
 import { CreateCouponRestrictionFields } from "./CreateCouponRestrictionFields.component";
 import { couponDisableHint } from "./couponDisableHint";
+import { createCouponFormStyles } from "./createCouponForm.styles";
 
 interface CreateCouponFormProps {
   form: UseFormReturn<CouponFormInput>;
@@ -148,11 +149,11 @@ export function CreateCouponForm({
           <DisabledActionHint
             disabled={!canSubmit}
             message={disableHint}
-            className="w-full"
+            className={createCouponFormStyles.wFull}
           >
             <Button
               type="submit"
-              className="w-full"
+              className={createCouponFormStyles.wFull}
               loading={isPending}
               disabled={!canSubmit || isPending}
             >

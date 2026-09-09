@@ -6,6 +6,7 @@ import { Star, X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { shippingApi } from "../api/shipping.api";
+import { ordersComponentsStyles } from "./ordersComponents.styles";
 
 /** Optional, dismissible "rate your delivery" prompt — never blocks anything. */
 export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {
@@ -36,21 +37,24 @@ export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {
   if (dismissed || existing.isLoading || existing.data) return null;
 
   return (
-    <div className="mt-2 flex flex-col gap-2 rounded-md border border-line bg-surface-muted p-3">
-      <div className="flex items-center justify-between gap-2">
-        <p className="text-body-sm font-medium text-ink">
+    <div className={ordersComponentsStyles.promptRoot}>
+      <div className={ordersComponentsStyles.promptHeader}>
+        <p className={ordersComponentsStyles.promptTitle}>
           How was your delivery?
         </p>
         <button
           type="button"
           aria-label="Dismiss"
-          className="text-ink-muted hover:text-ink"
+          className={ordersComponentsStyles.promptDismissButton}
           onClick={() => setDismissed(true)}
         >
-          <X className="size-4" aria-hidden="true" />
+          <X
+            className={ordersComponentsStyles.promptDismissIcon}
+            aria-hidden="true"
+          />
         </button>
       </div>
-      <div className="flex items-center gap-1">
+      <div className={ordersComponentsStyles.promptStarsRow}>
         {[1, 2, 3, 4, 5].map((value) => (
           <button
             key={value}
@@ -59,7 +63,11 @@ export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {
             onClick={() => setSelected(value)}
           >
             <Star
-              className={`size-5 ${value <= selected ? "fill-warning text-warning" : "text-ink-muted"}`}
+              className={
+                value <= selected
+                  ? ordersComponentsStyles.starSelected
+                  : ordersComponentsStyles.starUnselected
+              }
               aria-hidden="true"
             />
           </button>
@@ -76,7 +84,7 @@ export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {
           />
           <Button
             size="sm"
-            className="self-start"
+            className={ordersComponentsStyles.promptSubmitButton}
             loading={submit.isPending}
             onClick={() => submit.mutate()}
           >

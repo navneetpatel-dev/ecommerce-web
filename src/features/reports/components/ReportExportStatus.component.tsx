@@ -3,6 +3,7 @@
 import { cn } from "@/shared/utils/cn";
 import type { ExportFileFormat } from "../hooks/useReportHubHelpers/index";
 import { resolveExportStatusDisplay } from "../utils/exportDisableHint";
+import { reportExportStatusStyles as styles } from "./reportExportStatus.styles";
 
 interface ReportExportStatusProps {
   message?: string | null;
@@ -28,18 +29,18 @@ export function ReportExportStatus({
   if (!displayMessage && !error) return null;
 
   const messageNotice = displayMessage ? (
-    <p className="text-body-sm text-ink-muted" aria-live="polite">
+    <p className={styles.messageNotice} aria-live="polite">
       {displayMessage}
     </p>
   ) : null;
   const errorNotice = error ? (
-    <p className="text-body-sm text-danger" role="alert">
+    <p className={styles.errorNotice} role="alert">
       {error}
     </p>
   ) : null;
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn(styles.container, className)}>
       {messageNotice}
       {errorNotice}
     </div>

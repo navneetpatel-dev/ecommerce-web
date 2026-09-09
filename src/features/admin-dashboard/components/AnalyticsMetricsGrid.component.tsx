@@ -16,6 +16,7 @@ import {
   formatAnalyticsInr,
   formatAnalyticsPercent,
 } from "../utils/analyticsFormat";
+import { analyticsStyles } from "./analyticsComponents.styles";
 
 const fadeUp = {
   initial: { opacity: 0, y: 12 },
@@ -31,7 +32,7 @@ export function AnalyticsMetricsGrid({ data }: AnalyticsMetricsGridProps) {
   return (
     <>
       <motion.div
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
+        className={analyticsStyles.grid4Cols}
         {...fadeUp}
         transition={{ duration: 0.35, delay: 0.05 }}
       >
@@ -61,7 +62,7 @@ export function AnalyticsMetricsGrid({ data }: AnalyticsMetricsGridProps) {
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-2 gap-3 lg:grid-cols-4"
+        className={analyticsStyles.grid2Cols}
         {...fadeUp}
         transition={{ duration: 0.35, delay: 0.08 }}
       >

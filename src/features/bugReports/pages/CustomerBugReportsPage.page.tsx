@@ -14,6 +14,7 @@ import {
   BugReportFilters,
   useBugFiltersFromUrl,
 } from "../components/BugReportFilters.component";
+import { bugReportsPagesStyles } from "./bugReportsPages.styles";
 
 export function CustomerBugReportsPage() {
   return (
@@ -21,7 +22,11 @@ export function CustomerBugReportsPage() {
       message={LABELS.bugSignInRequired}
       loginNext={PATHS.bugReports}
     >
-      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+      <Suspense
+        fallback={
+          <Skeleton className={bugReportsPagesStyles.skeletonFallback} />
+        }
+      >
         <CustomerBugReportsContent />
       </Suspense>
     </SupportAuthGate>
@@ -37,22 +42,22 @@ function CustomerBugReportsContent() {
   const reports = query.data?.pages.flatMap((p) => p.items) ?? [];
 
   return (
-    <div className="storefront-container py-8 md:py-10">
-      <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <div className="min-w-0 max-w-2xl space-y-1">
-          <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+    <div className={bugReportsPagesStyles.customerPageContainer}>
+      <header className={bugReportsPagesStyles.customerHeaderRow}>
+        <div className={bugReportsPagesStyles.customerHeaderInfo}>
+          <h1 className={bugReportsPagesStyles.titleHeading}>
             {LABELS.myBugReports}
           </h1>
-          <p className="text-body text-ink-muted">
+          <p className={bugReportsPagesStyles.customerHeaderSubtitle}>
             {LABELS.bugReportsPageDescription}
           </p>
         </div>
-        <Button asChild className="shrink-0">
+        <Button asChild className={bugReportsPagesStyles.customerCreateButton}>
           <Link href={PATHS.bugReportNew}>{LABELS.reportABug}</Link>
         </Button>
       </header>
 
-      <div className="mb-5">
+      <div className={bugReportsPagesStyles.customerFiltersMargin}>
         <BugReportFilters variant="reporter" />
       </div>
 

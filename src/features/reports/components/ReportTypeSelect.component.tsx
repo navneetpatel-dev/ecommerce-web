@@ -9,6 +9,7 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import type { ReportCatalogItem } from "../api/reportsEngine.api";
+import { reportTypeSelectStyles as styles } from "./reportTypeSelect.styles";
 
 interface ReportTypeSelectProps {
   catalog: ReportCatalogItem[];
@@ -39,7 +40,7 @@ export function ReportTypeSelect({
     <FormFieldFrame
       label={LABELS.reportSelect}
       htmlFor="report-type"
-      className="sm:col-span-2 xl:col-span-3"
+      className={styles.frame}
     >
       <DisabledActionHint disabled={disabled} message={disabledHint} block>
         <Select

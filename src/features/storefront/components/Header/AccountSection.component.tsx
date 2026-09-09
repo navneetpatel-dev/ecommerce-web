@@ -17,6 +17,7 @@ import {
   AccountMenuSkeleton,
   HeaderOrdersLinkSkeleton,
 } from "./HeaderActionSkeletons.component";
+import { headerStyles as styles } from "./header.styles";
 
 interface AccountSectionProps {
   currentUser: CurrentUser | null;
@@ -46,10 +47,8 @@ export function AccountSection({
       <Link
         href={PATHS.login}
         className={cn(
-          "hidden sm:inline-flex items-center px-3 py-1.5 text-body-sm font-medium rounded-md transition-colors",
-          isTransparent
-            ? "text-paper hover:bg-paper/10"
-            : "text-ink hover:bg-paper",
+          styles.loginLink,
+          isTransparent ? styles.loginLinkTransparent : styles.loginLinkSolid,
         )}
       >
         {LABELS.logIn}
@@ -60,12 +59,14 @@ export function AccountSection({
   return (
     <>
       {isCustomerRole(currentUser.role) && showStorefrontChrome ? (
-        <div className="hidden xl:flex items-center gap-1">
+        <div className={styles.ordersLinkWrapper}>
           <Link
             href={PATHS.orders}
             className={cn(
-              "px-3 py-1.5 text-body-sm font-medium rounded-md transition-colors",
-              isTransparent ? "text-paper hover:bg-paper/10" : "hover:bg-paper",
+              styles.ordersLink,
+              isTransparent
+                ? styles.ordersLinkTransparent
+                : styles.ordersLinkSolid,
             )}
           >
             {LABELS.orders}
@@ -77,10 +78,10 @@ export function AccountSection({
         <Link
           href={PATHS.vendor.overview}
           className={cn(
-            "hidden xl:inline-flex items-center px-3 py-1.5 text-body-sm font-medium rounded-md transition-colors",
+            styles.dashboardLink,
             isTransparent
-              ? "text-paper hover:bg-paper/10"
-              : "text-brand hover:bg-brand-subtle",
+              ? styles.dashboardLinkTransparent
+              : styles.dashboardLinkSolid,
           )}
         >
           {LABELS.vendorDashboard}
@@ -91,10 +92,10 @@ export function AccountSection({
         <Link
           href={PATHS.admin.vendors}
           className={cn(
-            "hidden xl:inline-flex items-center px-3 py-1.5 text-body-sm font-medium rounded-md transition-colors",
+            styles.dashboardLink,
             isTransparent
-              ? "text-paper hover:bg-paper/10"
-              : "text-brand hover:bg-brand-subtle",
+              ? styles.dashboardLinkTransparent
+              : styles.dashboardLinkSolid,
           )}
         >
           {LABELS.adminPanel}

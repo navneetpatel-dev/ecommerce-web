@@ -6,6 +6,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import { useAuthStore } from "@/shared/stores/auth.store";
 import type { VerifyEmailStatus } from "../hooks/useVerifyEmailPage.hook";
+import { authFormsStyles } from "./authForms.styles";
 
 interface VerifyEmailCardProps {
   status: VerifyEmailStatus;
@@ -26,23 +27,20 @@ export function VerifyEmailCard({
       title={LABELS.verifyEmailTitle}
       description={LABELS.verifyEmailHint}
       footer={
-        <Link
-          href={PATHS.login}
-          className="block text-center text-body font-medium text-brand transition-colors hover:text-brand-hover hover:underline"
-        >
+        <Link href={PATHS.login} className={authFormsStyles.footerLink}>
           {LABELS.backToLogin}
         </Link>
       }
     >
-      <div className="space-y-5">
+      <div className={authFormsStyles.formSpace5}>
         {status === "missing-token" && (
-          <p className="rounded-md border border-danger/25 bg-danger-subtle/60 px-4 py-3 text-body text-danger">
+          <p className={authFormsStyles.dangerBanner}>
             {LABELS.verifyEmailMissingToken}
           </p>
         )}
 
         {status === "verifying" && (
-          <p className="text-body text-ink-muted">{LABELS.verifyingEmail}</p>
+          <p className={authFormsStyles.mutedBody}>{LABELS.verifyingEmail}</p>
         )}
 
         {status === "timeout" && (
@@ -53,7 +51,7 @@ export function VerifyEmailCard({
             />
             <Button
               type="button"
-              className="w-full"
+              className={authFormsStyles.fullWidth}
               size="lg"
               onClick={onRetry}
             >
@@ -64,10 +62,10 @@ export function VerifyEmailCard({
 
         {status === "success" && (
           <>
-            <p className="rounded-md border border-success/25 bg-success-subtle/60 px-4 py-3 text-body text-success">
+            <p className={authFormsStyles.successBanner}>
               {LABELS.verifyEmailSuccess}
             </p>
-            <Button asChild className="w-full" size="lg">
+            <Button asChild className={authFormsStyles.fullWidth} size="lg">
               <Link href={continueHref}>{LABELS.continueToAccount}</Link>
             </Button>
           </>
@@ -78,7 +76,7 @@ export function VerifyEmailCard({
             <FormError error={error} fallback={LABELS.verifyEmailFailed} />
             <Button
               type="button"
-              className="w-full"
+              className={authFormsStyles.fullWidth}
               size="lg"
               onClick={onRetry}
             >

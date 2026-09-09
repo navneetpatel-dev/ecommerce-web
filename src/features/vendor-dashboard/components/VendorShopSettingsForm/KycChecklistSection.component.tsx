@@ -7,6 +7,8 @@ import { useKycChecklist } from "../../hooks/useKycChecklist.hook";
 import { KycProgressBanner } from "./KycProgressBanner.component";
 import { KycDocumentListItem } from "./KycDocumentListItem.component";
 
+import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
+
 interface KycChecklistSectionProps {
   vendorId: string;
   saving: boolean;
@@ -43,25 +45,28 @@ export function KycChecklistSection({
       />
 
       {checklistError ? (
-        <div className="sm:col-span-2 flex items-center gap-2 rounded-md border border-danger/30 bg-danger-subtle/50 px-3.5 py-2.5 text-body-sm text-danger">
-          <AlertCircle className="size-4 shrink-0" aria-hidden />
+        <div className={vendorShopSettingsFormStyles.alertBox}>
+          <AlertCircle
+            className={vendorShopSettingsFormStyles.alertIcon}
+            aria-hidden
+          />
           <span>{checklistError}</span>
         </div>
       ) : null}
 
       {items.length === 0 && !checklistError ? (
-        <p className="sm:col-span-2 text-body-sm text-ink-muted">
+        <p className={vendorShopSettingsFormStyles.emptyText}>
           {LABELS.noKycDocuments}
         </p>
       ) : null}
 
       {/* Document List */}
-      <div className="sm:col-span-2 space-y-2.5">
-        <p className="text-body-sm font-medium text-ink-muted">
+      <div className={vendorShopSettingsFormStyles.checklistStack}>
+        <p className={vendorShopSettingsFormStyles.checklistSubtitle}>
           {LABELS.kycSelectToUpload}
         </p>
 
-        <ul className="grid gap-2.5 sm:grid-cols-1">
+        <ul className={vendorShopSettingsFormStyles.checklistGrid}>
           {items.map((item) => (
             <KycDocumentListItem
               key={item.documentType}
@@ -82,7 +87,7 @@ export function KycChecklistSection({
 
       {kycMessage ? (
         <p
-          className="sm:col-span-2 text-body-sm text-ink-muted"
+          className={vendorShopSettingsFormStyles.overrideNote}
           aria-live="polite"
         >
           {kycMessage}

@@ -22,6 +22,7 @@ import {
   PROMO_BANNER_STATUS_VALUES,
   type PromoBannerStatus,
 } from "@/shared/constants/statuses";
+import { promoBannerSectionStyles } from "./adminPromoBanners.styles";
 
 interface PromoBannerEditFormProps {
   bannerId: string;
@@ -56,15 +57,21 @@ export function PromoBannerEditForm({
     <FormSection
       title={LABELS.promoBannerEditSection}
       hint={LABELS.promoBannerEditSectionHint}
-      className="w-full border-0 shadow-none"
+      className={promoBannerSectionStyles.editSection}
     >
-      <FormFieldFrame label={LABELS.promoBannerTitle} className="sm:col-span-2">
+      <FormFieldFrame
+        label={LABELS.promoBannerTitle}
+        className={promoBannerSectionStyles.colSpan2}
+      >
         <Input
           value={editTitle}
           onChange={(e) => onEditTitleChange(e.target.value)}
         />
       </FormFieldFrame>
-      <FormFieldFrame label={LABELS.promoBannerImage} className="sm:col-span-2">
+      <FormFieldFrame
+        label={LABELS.promoBannerImage}
+        className={promoBannerSectionStyles.colSpan2}
+      >
         <FileUpload
           entityType={UPLOAD_ENTITY.BANNERS}
           entityId={bannerId}
@@ -104,7 +111,7 @@ export function PromoBannerEditForm({
           }
         />
       </FormFieldFrame>
-      <FormActions className="sm:col-span-2">
+      <FormActions className={promoBannerSectionStyles.colSpan2}>
         <Button
           size="sm"
           variant="outline"

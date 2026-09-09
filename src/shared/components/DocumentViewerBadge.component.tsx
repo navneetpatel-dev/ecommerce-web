@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
+import { documentViewerStyles } from "./badgeComponents.styles";
 
 export type DocumentFormatType = "pdf" | "docx" | "image" | "generic";
 
@@ -37,25 +38,25 @@ export function DocumentViewerBadge({
       label: LABELS.previewPdf,
       tag: "PDF",
       icon: FileText,
-      badgeStyle: "bg-danger-subtle text-danger border-danger/30",
+      badgeStyle: documentViewerStyles.variants.pdf,
     },
     docx: {
       label: LABELS.previewDocx,
       tag: "DOCX",
       icon: FileCode2,
-      badgeStyle: "bg-brand-subtle text-brand border-brand/30",
+      badgeStyle: documentViewerStyles.variants.docx,
     },
     image: {
       label: LABELS.previewImage,
       tag: "IMG",
       icon: ImageIcon,
-      badgeStyle: "bg-accent-subtle text-accent border-accent/30",
+      badgeStyle: documentViewerStyles.variants.image,
     },
     generic: {
       label: LABELS.previewDocument,
       tag: "DOC",
       icon: FileText,
-      badgeStyle: "bg-line/40 text-ink-muted border-line-strong",
+      badgeStyle: documentViewerStyles.variants.generic,
     },
   }[format];
 
@@ -70,26 +71,13 @@ export function DocumentViewerBadge({
         onOpen();
       }}
       title={LABELS.openInNewTab}
-      className={cn(
-        "group/viewer inline-flex h-7.5 items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 text-xs font-semibold text-ink transition-all hover:border-brand/70 hover:bg-surface-raised hover:shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:pointer-events-none disabled:opacity-50",
-        className,
-      )}
+      className={cn(documentViewerStyles.button, className)}
     >
-      <span
-        className={cn(
-          "flex size-4.5 items-center justify-center rounded-full border text-[8px] font-bold tracking-tight",
-          config.badgeStyle,
-        )}
-      >
-        <Icon className="size-2.5 shrink-0" aria-hidden />
+      <span className={cn(documentViewerStyles.badgeTag, config.badgeStyle)}>
+        <Icon className={documentViewerStyles.icon} aria-hidden />
       </span>
-      <span className="font-semibold text-ink group-hover/viewer:text-brand transition-colors whitespace-nowrap">
-        {config.label}
-      </span>
-      <ExternalLink
-        className="size-3 text-ink-muted group-hover/viewer:text-brand transition-colors shrink-0 ml-0.5"
-        aria-hidden
-      />
+      <span className={documentViewerStyles.labelText}>{config.label}</span>
+      <ExternalLink className={documentViewerStyles.externalIcon} aria-hidden />
     </button>
   );
 }

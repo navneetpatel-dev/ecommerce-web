@@ -4,6 +4,7 @@ import { useProductQnaView } from "../hooks/useProductQnaView.hook";
 import { useAskQuestionForm } from "../hooks/useAskQuestionForm.hook";
 import { ProductQuestions } from "../components/ProductQuestions.component";
 import { AskQuestionForm } from "../components/AskQuestionForm.component";
+import { productQnaStyles } from "../components/productQna.styles";
 
 interface ProductQnaContainerProps {
   productId: string;
@@ -18,7 +19,7 @@ export function ProductQnaContainer({
   const askForm = useAskQuestionForm(productId);
 
   return (
-    <div className="space-y-10">
+    <div className={productQnaStyles.container}>
       <AskQuestionForm
         register={askForm.register}
         errors={askForm.errors}

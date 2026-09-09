@@ -10,6 +10,7 @@ import {
 import { RequirePermission } from "@/shared/components/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { LABELS } from "@/shared/constants/labels";
+import { vendorPagesStyles } from "./vendorPages.styles";
 
 export function VendorOrdersPage() {
   const orders = useVendorOrderManagement();
@@ -21,7 +22,7 @@ export function VendorOrdersPage() {
   return (
     <RequirePermission permission={PERMISSIONS.SUBORDER_MANAGE}>
       {orders.statusError ? (
-        <p role="alert" className="mb-3 text-body-sm text-danger">
+        <p role="alert" className={vendorPagesStyles.errorAlert}>
           {orders.statusError}
         </p>
       ) : null}

@@ -3,6 +3,7 @@ import { PATHS } from "@/shared/constants/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { vendorGroupHeaderStyles } from "./vendorOrderComponents.styles";
 
 interface VendorGroupHeaderProps {
   vendorName: string;
@@ -31,22 +32,19 @@ export function VendorGroupHeader({
   trailing,
   className,
 }: VendorGroupHeaderProps) {
-  const nameClassName = "font-display text-[1.125rem] text-ink";
+  const nameClassName = vendorGroupHeaderStyles.name;
 
   return (
-    <div
-      className={cn(
-        "mb-3 flex flex-wrap items-baseline justify-between gap-3 border-b border-line pb-2",
-        className,
-      )}
-    >
-      <div className="flex flex-wrap items-baseline gap-2">
-        <TextEyebrow className="!mb-0">{LABELS.soldBy}</TextEyebrow>
+    <div className={cn(vendorGroupHeaderStyles.header, className)}>
+      <div className={vendorGroupHeaderStyles.leadingGroup}>
+        <TextEyebrow className={vendorGroupHeaderStyles.eyebrow}>
+          {LABELS.soldBy}
+        </TextEyebrow>
         {vendorId ? (
           <NameTag className={nameClassName}>
             <Link
               href={`${PATHS.products}?vendorId=${vendorId}`}
-              className="transition-colors hover:text-brand"
+              className={vendorGroupHeaderStyles.vendorLink}
             >
               {vendorName}
             </Link>
@@ -56,8 +54,8 @@ export function VendorGroupHeader({
         )}
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="font-mono text-[0.6875rem] uppercase tracking-wider text-ink-faint">
+      <div className={vendorGroupHeaderStyles.trailingGroup}>
+        <span className={vendorGroupHeaderStyles.countText}>
           {count} {count === 1 ? LABELS.itemSingular : LABELS.itemPlural}
         </span>
         {trailing}

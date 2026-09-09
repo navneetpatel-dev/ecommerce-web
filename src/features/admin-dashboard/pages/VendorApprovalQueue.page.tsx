@@ -3,13 +3,14 @@
 import { useVendorApprovalQueue } from "../hooks/useVendorApprovalQueue.hook";
 import { VendorApprovalTable } from "../components/VendorApprovalTable.component";
 import { LABELS } from "@/shared/constants/labels";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function VendorApprovalQueue() {
   const queue = useVendorApprovalQueue();
 
   if (!queue.isLoading && queue.pagination.total === 0) {
     return (
-      <p className="py-8 text-center text-body text-ink-muted">
+      <p className={adminPagesStyles.emptyCenteredNotice}>
         {LABELS.noPendingVendorApprovals}
       </p>
     );

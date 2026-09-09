@@ -9,6 +9,7 @@ import { CategoriesSection } from "./CategoriesSection.component";
 import { UploadsSection } from "./UploadsSection.component";
 import { KycChecklistSection } from "./KycChecklistSection.component";
 import { FulfillmentSection } from "./FulfillmentSection.component";
+import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
 
 interface VendorShopSettingsFormProps {
   vendorId: string;
@@ -60,23 +61,25 @@ export function VendorShopSettingsForm({
   onClearOverride,
 }: VendorShopSettingsFormProps) {
   return (
-    <div className="w-full min-w-0">
-      <FormStack className="space-y-8">
-        <div className="flex flex-col gap-4 border-b border-line/70 pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-          <div className="min-w-0 space-y-1.5">
-            <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+    <div className={vendorShopSettingsFormStyles.root}>
+      <FormStack className={vendorShopSettingsFormStyles.stack}>
+        <div className={vendorShopSettingsFormStyles.header}>
+          <div className={vendorShopSettingsFormStyles.headerLeft}>
+            <h2 className={vendorShopSettingsFormStyles.headerHeading}>
               {LABELS.vendorShopSettings}
             </h2>
-            <p className="max-w-3xl text-body leading-relaxed text-ink-muted">
+            <p className={vendorShopSettingsFormStyles.headerDescription}>
               {LABELS.vendorShopSettingsHint}
             </p>
             {businessName ? (
-              <p className="text-body-sm text-ink-faint">{businessName}</p>
+              <p className={vendorShopSettingsFormStyles.headerBusinessName}>
+                {businessName}
+              </p>
             ) : null}
           </div>
           <Button
             type="button"
-            className="hidden shrink-0 sm:inline-flex"
+            className={vendorShopSettingsFormStyles.headerSubmitBtn}
             disabled={saving}
             onClick={onSave}
           >

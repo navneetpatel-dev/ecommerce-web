@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/utils/cn";
+import { formFieldFrameStyles } from "./forms.styles";
 
 interface FormFieldFrameProps {
   label: string;
@@ -16,7 +17,7 @@ interface FormFieldFrameProps {
 
 function RequiredMark() {
   return (
-    <span className="text-danger" aria-hidden>
+    <span className={formFieldFrameStyles.requiredMark} aria-hidden>
       {" "}
       *
     </span>
@@ -39,9 +40,9 @@ export function FormFieldFrame({
   footerAction,
 }: FormFieldFrameProps) {
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn(formFieldFrameStyles.container, className)}>
       {labelAction ? (
-        <div className="flex items-center justify-between">
+        <div className={formFieldFrameStyles.labelRow}>
           <Label htmlFor={htmlFor}>
             {label}
             {required ? <RequiredMark /> : null}
@@ -56,26 +57,28 @@ export function FormFieldFrame({
       )}
       {children}
       {footerAction ? (
-        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+        <div className={formFieldFrameStyles.footerRow}>
           {error ? (
-            <p role="alert" className="text-body-sm text-danger">
+            <p role="alert" className={formFieldFrameStyles.error}>
               {error}
             </p>
           ) : hint ? (
-            <p className="text-body-sm text-ink-muted">{hint}</p>
+            <p className={formFieldFrameStyles.hint}>{hint}</p>
           ) : (
             <span />
           )}
-          <div className="ml-auto">{footerAction}</div>
+          <div className={formFieldFrameStyles.footerActionWrapper}>
+            {footerAction}
+          </div>
         </div>
       ) : (
         <>
           {error ? (
-            <p role="alert" className="text-body-sm text-danger">
+            <p role="alert" className={formFieldFrameStyles.error}>
               {error}
             </p>
           ) : null}
-          {hint ? <p className="text-body-sm text-ink-muted">{hint}</p> : null}
+          {hint ? <p className={formFieldFrameStyles.hint}>{hint}</p> : null}
         </>
       )}
     </div>

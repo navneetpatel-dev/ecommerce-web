@@ -5,6 +5,7 @@ import { cn } from "@/shared/utils/cn";
 import type { TicketMessage } from "../../api/supportTickets.api";
 import { AttachmentThumbs } from "./TicketAttachmentThumbs.component";
 import { initials, isStaffRole } from "./ticketThreadShared";
+import { ticketThreadStyles } from "./ticketThread.styles";
 
 export function MessageBubble({
   message,
@@ -23,45 +24,49 @@ export function MessageBubble({
   return (
     <div
       className={cn(
-        "flex gap-2.5 sm:gap-3",
-        isOwn ? "flex-row-reverse" : "flex-row",
+        ticketThreadStyles.bubbleRow,
+        isOwn
+          ? ticketThreadStyles.bubbleRowOwn
+          : ticketThreadStyles.bubbleRowOther,
       )}
     >
-      <Avatar className="mt-1 h-8 w-8 shrink-0 border border-line sm:h-9 sm:w-9">
+      <Avatar className={ticketThreadStyles.bubbleAvatar}>
         <AvatarFallback
           className={cn(
-            "text-[0.7rem] font-semibold sm:text-[0.75rem]",
-            isOwn ? "bg-brand-subtle text-brand" : "bg-paper text-ink-muted",
+            ticketThreadStyles.bubbleFallback,
+            isOwn
+              ? ticketThreadStyles.bubbleFallbackOwn
+              : ticketThreadStyles.bubbleFallbackOther,
           )}
         >
           {initials(isOwn ? displayName : message.senderName || displayName)}
         </AvatarFallback>
       </Avatar>
-      <div className="max-w-[min(100%,32rem)] min-w-0">
+      <div className={ticketThreadStyles.bubbleBodyWrap}>
         <div
           className={cn(
-            "px-3.5 py-2.5 sm:px-4 sm:py-3",
+            ticketThreadStyles.bubbleContent,
             isOwn
-              ? "rounded-[1.15rem] rounded-tr-md border border-brand/30 bg-brand-subtle shadow-elevation-1"
-              : "rounded-[1.15rem] rounded-tl-md border border-line bg-surface shadow-card-hairline-strong",
+              ? ticketThreadStyles.bubbleContentOwn
+              : ticketThreadStyles.bubbleContentOther,
           )}
         >
           <div
             className={cn(
-              "mb-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5",
-              isOwn ? "justify-end" : "justify-start",
+              ticketThreadStyles.bubbleMeta,
+              isOwn
+                ? ticketThreadStyles.bubbleMetaOwn
+                : ticketThreadStyles.bubbleMetaOther,
             )}
           >
-            <span className="text-[0.75rem] font-semibold text-ink sm:text-body-sm">
+            <span className={ticketThreadStyles.bubbleSenderName}>
               {displayName}
             </span>
-            <span className="text-[0.6875rem] text-ink-muted">
+            <span className={ticketThreadStyles.bubbleTimestamp}>
               {formatOrderDate(message.createdAt)}
             </span>
           </div>
-          <p className="whitespace-pre-wrap text-body leading-relaxed text-ink">
-            {message.body}
-          </p>
+          <p className={ticketThreadStyles.bubbleText}>{message.body}</p>
           <AttachmentThumbs attachments={message.attachments ?? []} size="sm" />
         </div>
       </div>

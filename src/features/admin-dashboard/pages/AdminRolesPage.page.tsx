@@ -18,6 +18,7 @@ import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import { RolePermissionsDialog } from "../components/RolePermissionsDialog";
 import { useAdminRolesPage } from "../hooks/useAdminRolesPage.hook";
 import type { AdminRole } from "../api/roles.api";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function AdminRolesPage() {
   return (
@@ -39,8 +40,8 @@ function AdminRolesContent() {
           <Badge variant="secondary">{LABELS.builtInRoleBadge}</Badge>
         ) : null;
         return (
-          <div className="flex items-center gap-2">
-            <span className="font-mono">{role.name}</span>
+          <div className={adminPagesStyles.flexGap2}>
+            <span className={adminPagesStyles.fontMono}>{role.name}</span>
             {builtInBadge}
           </div>
         );
@@ -49,7 +50,7 @@ function AdminRolesContent() {
     {
       id: "permissions",
       header: LABELS.permissions,
-      className: "text-body-sm text-ink-muted",
+      className: adminPagesStyles.hint,
       cell: (role) =>
         formatLabel(LABELS.permissionCount, {
           count: role.permissionKeys.length,
@@ -93,20 +94,18 @@ function AdminRolesContent() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className={adminPagesStyles.stack5}>
       <div>
-        <h1 className="font-display text-xl font-semibold text-ink">
-          {LABELS.roles}
-        </h1>
-        <p className="mt-1 text-body-sm text-ink-muted">{LABELS.rolesHint}</p>
+        <h1 className={adminPagesStyles.pageHeading}>{LABELS.roles}</h1>
+        <p className={adminPagesStyles.hintMuted}>{LABELS.rolesHint}</p>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className={adminPagesStyles.flexWrapGap2}>
         <Input
           value={page.newRoleName}
           onChange={(e) => page.setNewRoleName(e.target.value)}
           placeholder={LABELS.newRoleNamePlaceholder}
-          className="max-w-xs"
+          className={adminPagesStyles.inputMaxXs}
         />
         <Button
           type="button"

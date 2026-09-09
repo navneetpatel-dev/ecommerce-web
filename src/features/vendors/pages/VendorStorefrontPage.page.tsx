@@ -9,6 +9,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import Image from "next/image";
+import { vendorStorefrontPageStyles as styles } from "./vendorStorefrontPage.styles";
 
 interface VendorStorefrontPageProps {
   slug: string;
@@ -20,13 +21,13 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
 
   if (vendorLoading) {
     return (
-      <div className="storefront-container py-10 space-y-4">
-        <Skeleton className="aspect-[16/5] w-full rounded-md" />
-        <Skeleton className="h-10 w-64" />
-        <Skeleton className="h-5 w-96" />
-        <div className="mt-8 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className={styles.loadingContainer}>
+        <Skeleton className={styles.loadingBanner} />
+        <Skeleton className={styles.loadingTitle} />
+        <Skeleton className={styles.loadingSubtitle} />
+        <div className={styles.loadingGrid}>
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="aspect-square rounded-sm" />
+            <Skeleton key={i} className={styles.loadingProductCard} />
           ))}
         </div>
       </div>
@@ -35,7 +36,7 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
 
   if (vendorNotFound || !vendor) {
     return (
-      <div className="storefront-container py-20">
+      <div className={styles.emptyContainer}>
         <EmptyState
           icon={Store}
           heading={LABELS.shopUnavailableHeading}
@@ -48,54 +49,49 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
   }
 
   return (
-    <div className="relative">
+    <div className={styles.pageRoot}>
       {vendor.bannerUrl ? (
-        <div className="relative aspect-[16/5] w-full overflow-hidden border-b border-line bg-paper">
+        <div className={styles.bannerContainer}>
           <MediaImage
             src={vendor.bannerUrl}
             alt={vendor.businessName}
             unavailableLabel={LABELS.imageNotAvailable}
             sizes="100vw"
-            className="absolute inset-0"
-            imageClassName="object-cover"
+            className={styles.bannerMedia}
+            imageClassName={styles.bannerMediaImage}
             priority
           />
         </div>
       ) : (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[200px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_10%,transparent),transparent_55%)]"
-        />
+        <div aria-hidden className={styles.bannerFallbackGlow} />
       )}
 
-      <div className="storefront-container relative py-8">
-        <header className="mb-8 flex items-center gap-4">
+      <div className={styles.contentContainer}>
+        <header className={styles.header}>
           {vendor.logoUrl ? (
-            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-line bg-surface">
+            <div className={styles.logoContainer}>
               <Image
                 src={vendor.logoUrl}
                 alt={vendor.businessName}
                 fill
-                className="object-cover"
+                className={styles.logoImage}
                 sizes="64px"
               />
             </div>
           ) : (
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-line bg-surface">
-              <Store size={24} className="text-ink-muted" strokeWidth={1.25} />
+            <div className={styles.logoFallback}>
+              <Store
+                size={24}
+                className={styles.storeIcon}
+                strokeWidth={1.25}
+              />
             </div>
           )}
           <div>
-            <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-ink-muted">
-              Shop
-            </p>
-            <h1 className="font-display text-[1.75rem] leading-tight text-ink">
-              {vendor.businessName}
-            </h1>
+            <p className={styles.shopEyebrow}>Shop</p>
+            <h1 className={styles.vendorHeading}>{vendor.businessName}</h1>
             {vendor.description ? (
-              <p className="mt-1 max-w-prose text-body text-ink-muted">
-                {vendor.description}
-              </p>
+              <p className={styles.vendorDescription}>{vendor.description}</p>
             ) : null}
           </div>
         </header>

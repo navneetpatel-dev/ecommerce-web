@@ -1,4 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
+import { notFoundStyles as styles } from "@/shared/styles/notFound.styles";
 
 /**
  * Vendor-workspace not-found: keeps the vendor layout context instead of
@@ -6,13 +7,9 @@ import { LABELS } from "@/shared/constants/labels";
  */
 export default function VendorDashboardNotFound() {
   return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 p-8">
-      <h2 className="text-[1.375rem] font-semibold text-ink">
-        {LABELS.notFoundHeading}
-      </h2>
-      <p className="max-w-md text-center text-body text-ink-muted">
-        {LABELS.notFoundVendorBody}
-      </p>
+    <div className={styles.workspaceContainer}>
+      <h2 className={styles.workspaceHeading}>{LABELS.notFoundHeading}</h2>
+      <p className={styles.workspaceBody}>{LABELS.notFoundVendorBody}</p>
     </div>
   );
 }

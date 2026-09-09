@@ -19,6 +19,7 @@ import {
 import { categoriesApi } from "@/features/categories";
 import { vendorEntityTypeLabel } from "@/shared/utils/vendorEntityTypeLabel";
 import type { Category } from "@/shared/api/types";
+import { vendorShopSettingsFormStyles } from "./vendorShopSettingsForm.styles";
 
 interface CategoriesSectionProps {
   entityType: VendorEntityType | null;
@@ -62,7 +63,7 @@ export function CategoriesSection({
     >
       <FormFieldFrame
         label={LABELS.entityType}
-        className="sm:col-span-2 sm:max-w-md"
+        className={vendorShopSettingsFormStyles.inputCol}
       >
         <Select
           value={entityType ?? undefined}
@@ -82,7 +83,7 @@ export function CategoriesSection({
           </SelectContent>
         </Select>
       </FormFieldFrame>
-      <div className="sm:col-span-2 max-h-48 space-y-2 overflow-y-auto rounded-md border border-line p-3">
+      <div className={vendorShopSettingsFormStyles.categoriesScrollBox}>
         {categories.map((category) => (
           <CheckboxField
             key={category.id}
@@ -93,7 +94,7 @@ export function CategoriesSection({
           />
         ))}
       </div>
-      <div className="sm:col-span-2">
+      <div className={vendorShopSettingsFormStyles.fullWidthCol}>
         <Button
           type="button"
           disabled={saving || !entityType || categoryIds.length === 0}

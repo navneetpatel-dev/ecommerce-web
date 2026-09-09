@@ -1,0 +1,15 @@
+export const contentDocStyles = {
+  proseContainer: "max-w-[65ch] mx-auto px-4 py-10 space-y-5",
+  proseContainerSpaced: "max-w-[65ch] mx-auto px-4 py-10 space-y-6",
+  returnsContainer: "mx-auto max-w-[720px] space-y-6 px-4 py-10",
+  blogArticleContainer: "mx-auto max-w-[65ch] px-4 py-10",
+  h1: "text-[1.75rem] font-semibold text-ink",
+  h1Display: "font-display text-[1.75rem] font-semibold text-ink",
+  h2: "text-[1.125rem] font-semibold text-ink",
+  bodyText: "text-body text-ink-muted",
+  orderedList: "list-decimal space-y-2 pl-5 text-body text-ink-muted",
+  actionsRow: "flex flex-wrap gap-3",
+  blogMeta: "mt-2 text-body-sm text-ink-muted",
+  blogExcerpt: "mt-4 text-body text-ink-muted",
+  blogBody: "mt-6 text-body leading-relaxed text-ink",
+} as const;

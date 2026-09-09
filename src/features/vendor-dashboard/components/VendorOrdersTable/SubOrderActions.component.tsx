@@ -23,6 +23,7 @@ import {
   SUB_ORDER_STATUS_CANCELLED,
 } from "./subOrderStatuses";
 import { ShipTrackingNumberFields } from "./ShipTrackingNumberFields.component";
+import { VENDOR_ORDERS_TABLE_STYLES } from "./vendorOrdersTable.styles";
 
 interface SubOrderActionsProps {
   subOrderId: string;
@@ -87,7 +88,7 @@ export function SubOrderActions(props: SubOrderActionsProps) {
 
   if (!isEditing) {
     return (
-      <div className="space-y-2">
+      <div className={VENDOR_ORDERS_TABLE_STYLES.actionsRoot}>
         <TableRowActions>
           {canDownloadInvoice ? (
             <TableRowAction>
@@ -114,7 +115,7 @@ export function SubOrderActions(props: SubOrderActionsProps) {
           </TableRowAction>
         </TableRowActions>
         {invoiceError ? (
-          <p role="alert" className="text-body-sm text-danger">
+          <p role="alert" className={VENDOR_ORDERS_TABLE_STYLES.actionsError}>
             {invoiceError}
           </p>
         ) : null}
@@ -142,7 +143,7 @@ export function SubOrderActions(props: SubOrderActionsProps) {
         >
           <SelectTrigger
             aria-label={LABELS.selectStatus}
-            className="w-full min-w-[8.5rem] rounded-sm px-2 text-body-sm"
+            className={VENDOR_ORDERS_TABLE_STYLES.actionsSelect}
           >
             <SelectValue placeholder={LABELS.selectStatus} />
           </SelectTrigger>

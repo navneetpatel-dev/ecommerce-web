@@ -10,13 +10,13 @@ import {
   TabsTrigger,
 } from "@/shared/components/ui/tabs";
 import { LABELS } from "@/shared/constants/labels";
-import { cn } from "@/shared/utils/cn";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function AdminCouponsPage() {
   const page = useAdminCouponsPage();
 
   return (
-    <div className="space-y-6">
+    <div className={adminPagesStyles.stack6}>
       <CouponsPageHeader
         open={page.open}
         setOpen={page.setOpen}
@@ -29,48 +29,31 @@ export function AdminCouponsPage() {
       <Tabs
         value={page.tab}
         onValueChange={(value) => page.setTab(value as "platform" | "vendor")}
-        className="min-w-0"
+        className={adminPagesStyles.minW0}
       >
-        <TabsList
-          className={cn(
-            "flex h-auto w-full flex-wrap justify-start gap-1 rounded-md border border-line-strong",
-            "bg-paper p-1",
-          )}
-        >
+        <TabsList className={adminPagesStyles.tabsListStrong}>
           <TabsTrigger
             value="platform"
-            className={cn(
-              "rounded-sm px-4 py-2.5 text-body-sm text-ink-muted hover:text-ink",
-              "data-[state=active]:bg-brand data-[state=active]:text-paper data-[state=active]:shadow-none",
-            )}
+            className={adminPagesStyles.tabTriggerBrand}
           >
             {LABELS.platformCoupons}
           </TabsTrigger>
           <TabsTrigger
             value="vendor"
-            className={cn(
-              "rounded-sm px-4 py-2.5 text-body-sm text-ink-muted hover:text-ink",
-              "data-[state=active]:bg-brand data-[state=active]:text-paper data-[state=active]:shadow-none",
-            )}
+            className={adminPagesStyles.tabTriggerBrand}
           >
             {LABELS.vendorCoupons}
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent
-          value="platform"
-          className="mt-6 min-w-0 focus-visible:outline-none"
-        >
+        <TabsContent value="platform" className={adminPagesStyles.tabContent}>
           <CouponsTable
             coupons={page.coupons}
             loading={page.isLoading}
             pagination={page.pagination}
           />
         </TabsContent>
-        <TabsContent
-          value="vendor"
-          className="mt-6 min-w-0 focus-visible:outline-none"
-        >
+        <TabsContent value="vendor" className={adminPagesStyles.tabContent}>
           <CouponsTable
             coupons={page.coupons}
             loading={page.isLoading}

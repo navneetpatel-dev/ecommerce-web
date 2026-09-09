@@ -4,6 +4,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/shared/utils/cn";
+import { buttonStyles } from "./button.styles";
 
 const buttonVariants = cva(
   [
@@ -85,13 +86,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       fullWidth === true ? true : fullWidth === "mobile" ? "mobile" : undefined;
 
     const spinner = (
-      <svg
-        className="h-4 w-4 shrink-0 animate-spin"
-        viewBox="0 0 24 24"
-        aria-hidden
-      >
+      <svg className={buttonStyles.spinnerSvg} viewBox="0 0 24 24" aria-hidden>
         <circle
-          className="opacity-25"
+          className={buttonStyles.spinnerCircle}
           cx="12"
           cy="12"
           r="10"
@@ -100,7 +97,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           fill="none"
         />
         <path
-          className="opacity-75"
+          className={buttonStyles.spinnerPath}
           fill="currentColor"
           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
         />

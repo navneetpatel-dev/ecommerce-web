@@ -20,4 +20,14 @@ export const orderDetailSkeletonStyles = {
   asideCard:
     "space-y-4 border border-line bg-surface-raised p-5 shadow-elevation-1",
   asideButton: "h-11 w-full",
+  headerCrumb: "h-4 w-28",
+  headerTitle: "h-9 w-56 max-w-full",
+  headerMeta: "h-4 w-72 max-w-full",
+  badgePill1: "h-6 w-24 rounded-full",
+  badgePill2: "h-6 w-28 rounded-full",
+  asideHeading: "h-4 w-32",
+  asideTotal: "h-8 w-40",
+  asideLine1: "h-4 w-full",
+  asideLine2: "h-4 w-5/6",
+  asideButtonTop: "mt-4 h-11 w-full",
 } as const;

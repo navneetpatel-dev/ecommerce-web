@@ -12,6 +12,7 @@ import { BugProgressPanel } from "./BugProgressPanel.component";
 import { BugReportHeader } from "./BugReportHeader.component";
 import { BugStatusUpdatePanel } from "./BugStatusUpdatePanel.component";
 import { BugTriagePanel } from "./BugTriagePanel.component";
+import { bugReportDetailStyles } from "./bugReportDetail.styles";
 
 export function BugReportDetail({
   report,
@@ -38,11 +39,11 @@ export function BugReportDetail({
   );
 
   return (
-    <div className="w-full min-w-0 space-y-5 sm:space-y-6">
+    <div className={bugReportDetailStyles.root}>
       <BugReportHeader report={report} mode={mode} backHref={backHref} />
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:gap-6">
-        <div className="min-w-0 space-y-5 lg:col-span-7 xl:col-span-8">
+      <div className={bugReportDetailStyles.grid}>
+        <div className={bugReportDetailStyles.mainCol}>
           <BugDescriptionSection
             report={report}
             mode={mode}
@@ -65,8 +66,8 @@ export function BugReportDetail({
           ) : null}
         </div>
 
-        <aside className="min-w-0 space-y-4 lg:col-span-5 xl:col-span-4">
-          <div className="space-y-4 lg:sticky lg:top-24">
+        <aside className={bugReportDetailStyles.asideCol}>
+          <div className={bugReportDetailStyles.stickyAside}>
             {mode === "admin" ? (
               <BugContextPanel report={report} mode={mode} />
             ) : null}

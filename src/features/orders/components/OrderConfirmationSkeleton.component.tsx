@@ -24,9 +24,9 @@ export function OrderConfirmationSkeleton() {
                 <Skeleton className={styles.heroBadgeText} />
               </div>
               <div className={styles.heroTitles}>
-                <Skeleton className="h-9 w-64 max-w-full" />
-                <Skeleton className="h-3 w-24" />
-                <Skeleton className="h-4 w-full max-w-lg" />
+                <Skeleton className={styles.heroHeading} />
+                <Skeleton className={styles.heroMeta} />
+                <Skeleton className={styles.heroDescription} />
               </div>
             </div>
             <div className={styles.heroActions}>
@@ -43,16 +43,16 @@ export function OrderConfirmationSkeleton() {
                 {[0, 1].map((group) => (
                   <div key={group} className={styles.itemCard}>
                     <div className={styles.itemCardHeader}>
-                      <Skeleton className="h-4 w-40" />
-                      <Skeleton className="h-3 w-14" />
+                      <Skeleton className={styles.itemHeaderTitle} />
+                      <Skeleton className={styles.itemHeaderMeta} />
                     </div>
                     <div className={styles.itemCardBody}>
                       <Skeleton className={styles.itemImage} />
                       <div className={styles.itemContent}>
-                        <Skeleton className="h-4 w-2/3" />
-                        <Skeleton className="h-3 w-1/4" />
+                        <Skeleton className={styles.itemName} />
+                        <Skeleton className={styles.itemQty} />
                       </div>
-                      <Skeleton className="h-5 w-20" />
+                      <Skeleton className={styles.itemPrice} />
                     </div>
                   </div>
                 ))}
@@ -63,9 +63,9 @@ export function OrderConfirmationSkeleton() {
               <Skeleton className={styles.sectionEyebrow} />
               <Skeleton className={styles.sectionTitleAside} />
               <div className={styles.asideCard}>
-                <Skeleton className="h-3 w-full" />
-                <Skeleton className="h-3 w-4/5" />
-                <Skeleton className="mt-4 h-7 w-1/2" />
+                <Skeleton className={styles.asideLine1} />
+                <Skeleton className={styles.asideLine2} />
+                <Skeleton className={styles.asideTotal} />
               </div>
             </div>
           </div>

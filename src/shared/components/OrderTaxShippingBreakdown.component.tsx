@@ -1,6 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
+import { orderTaxShippingBreakdownStyles } from "./vendorOrderComponents.styles";
 
 interface OrderTaxShippingBreakdownProps {
   shippingTotal?: number;
@@ -18,7 +19,7 @@ export function OrderTaxShippingBreakdown({
   taxTotal,
   taxLabel = LABELS.taxGst,
   pending = false,
-  className = "space-y-2.5 text-[0.875rem]",
+  className = orderTaxShippingBreakdownStyles.defaultDl,
 }: OrderTaxShippingBreakdownProps) {
   const totalsReady =
     !pending &&
@@ -29,14 +30,16 @@ export function OrderTaxShippingBreakdown({
   if (pending) {
     return (
       <dl className={className}>
-        <div className="flex items-center justify-between gap-4">
-          <dt className="text-ink-muted">{LABELS.shipping}</dt>
+        <div className={orderTaxShippingBreakdownStyles.row}>
+          <dt className={orderTaxShippingBreakdownStyles.label}>
+            {LABELS.shipping}
+          </dt>
           <dd>
             <InlineAmountSkeleton />
           </dd>
         </div>
-        <div className="flex items-center justify-between gap-4">
-          <dt className="text-ink-muted">{taxLabel}</dt>
+        <div className={orderTaxShippingBreakdownStyles.row}>
+          <dt className={orderTaxShippingBreakdownStyles.label}>{taxLabel}</dt>
           <dd>
             <InlineAmountSkeleton />
           </dd>
@@ -48,9 +51,11 @@ export function OrderTaxShippingBreakdown({
   if (!totalsReady) {
     return (
       <div className={className}>
-        <div className="flex items-center justify-between gap-4">
-          <span className="text-ink-muted">{LABELS.shippingAndTax}</span>
-          <span className="text-right text-ink-muted">
+        <div className={orderTaxShippingBreakdownStyles.row}>
+          <span className={orderTaxShippingBreakdownStyles.label}>
+            {LABELS.shippingAndTax}
+          </span>
+          <span className={orderTaxShippingBreakdownStyles.unreadyTextRight}>
             {LABELS.taxesAtCheckout}
           </span>
         </div>
@@ -60,17 +65,21 @@ export function OrderTaxShippingBreakdown({
 
   return (
     <dl className={className}>
-      <div className="flex items-center justify-between gap-4">
-        <dt className="text-ink-muted">{LABELS.shipping}</dt>
-        <dd className="tabular-nums text-ink">
+      <div className={orderTaxShippingBreakdownStyles.row}>
+        <dt className={orderTaxShippingBreakdownStyles.label}>
+          {LABELS.shipping}
+        </dt>
+        <dd className={orderTaxShippingBreakdownStyles.value}>
           {shippingDisplayKey === "FREE"
             ? LABELS.freeShipping
             : `₹${formatInrAmount(shippingTotal)}`}
         </dd>
       </div>
-      <div className="flex items-center justify-between gap-4">
-        <dt className="text-ink-muted">{taxLabel}</dt>
-        <dd className="tabular-nums text-ink">₹{formatInrAmount(taxTotal)}</dd>
+      <div className={orderTaxShippingBreakdownStyles.row}>
+        <dt className={orderTaxShippingBreakdownStyles.label}>{taxLabel}</dt>
+        <dd className={orderTaxShippingBreakdownStyles.value}>
+          ₹{formatInrAmount(taxTotal)}
+        </dd>
       </div>
     </dl>
   );

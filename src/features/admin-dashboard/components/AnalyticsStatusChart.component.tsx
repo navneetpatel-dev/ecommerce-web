@@ -14,6 +14,7 @@ import {
   type ChartThemeColors,
 } from "@/shared/hooks/useChartThemeColors.hook";
 import { LABELS } from "@/shared/constants/labels";
+import { analyticsStyles } from "./analyticsComponents.styles";
 
 interface StatusSlice {
   status: string;
@@ -40,18 +41,18 @@ export function AnalyticsStatusChart({
   const total = data.reduce((sum, row) => sum + row.count, 0);
 
   return (
-    <Card className="h-full">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-body-lg">{title}</CardTitle>
+    <Card className={analyticsStyles.fullHeightCard}>
+      <CardHeader className={analyticsStyles.cardHeaderPb2}>
+        <CardTitle className={analyticsStyles.cardTitleLg}>{title}</CardTitle>
       </CardHeader>
       <CardContent>
         {data.length === 0 || total === 0 ? (
-          <p className="py-12 text-center text-body text-ink-muted">
+          <p className={analyticsStyles.emptyRatingNotice}>
             {LABELS.analyticsEmptyChart}
           </p>
         ) : (
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-stretch">
-            <div className="relative h-44 w-full max-w-[11.5rem] shrink-0 sm:h-48">
+          <div className={analyticsStyles.statusChartFlex}>
+            <div className={analyticsStyles.donutWrapper}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -84,42 +85,31 @@ export function AnalyticsStatusChart({
                   />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                <p className="font-mono text-[1.25rem] font-semibold text-ink">
-                  {total}
-                </p>
-                <p className="text-[0.6875rem] uppercase tracking-wide text-ink-faint">
-                  {centerLabel}
-                </p>
+              <div className={analyticsStyles.donutCenter}>
+                <p className={analyticsStyles.donutTotal}>{total}</p>
+                <p className={analyticsStyles.donutLabel}>{centerLabel}</p>
               </div>
             </div>
-            <ul className="flex w-full flex-1 flex-col justify-center gap-2.5">
+            <ul className={analyticsStyles.legendList}>
               {data.map((row, index) => {
                 const share =
                   total > 0 ? Math.round((row.count / total) * 100) : 0;
                 return (
-                  <li
-                    key={row.status}
-                    className="flex items-center justify-between gap-3"
-                  >
-                    <div className="flex min-w-0 items-center gap-2">
+                  <li key={row.status} className={analyticsStyles.legendItem}>
+                    <div className={analyticsStyles.legendLabelGroup}>
                       <span
-                        className="h-2.5 w-2.5 shrink-0 rounded-full"
+                        className={analyticsStyles.legendDot}
                         style={{ background: sliceColor(colors, index) }}
                         aria-hidden
                       />
                       <StatusBadge
                         status={row.status}
-                        className="max-w-full truncate"
+                        className={analyticsStyles.legendLabelText}
                       />
                     </div>
-                    <div className="shrink-0 text-right">
-                      <p className="font-mono text-[0.875rem] font-medium text-ink">
-                        {row.count}
-                      </p>
-                      <p className="text-[0.6875rem] text-ink-faint">
-                        {share}%
-                      </p>
+                    <div className={analyticsStyles.legendValueGroup}>
+                      <p className={analyticsStyles.legendValue}>{row.count}</p>
+                      <p className={analyticsStyles.legendPercent}>{share}%</p>
                     </div>
                   </li>
                 );

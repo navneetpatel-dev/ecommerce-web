@@ -12,6 +12,8 @@ export const vendorsIndexViewStyles = {
   skeletonRow: "flex items-start gap-3",
   skeletonAvatar: "h-12 w-12 shrink-0 rounded-lg",
   skeletonContent: "min-w-0 flex-1 space-y-2 pt-1",
+  skeletonTitle: "h-4 w-32",
+  skeletonSubtitle: "h-3 w-full",
   gridList: "grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3",
   gridItem: "min-w-0",
   tileLink: cn(

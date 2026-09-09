@@ -11,12 +11,12 @@ import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { wishlistPriceDropLabels } from "@/shared/constants/labels/wishlistPriceDrop";
 import { UNAVAILABLE_REASON } from "@/shared/constants/statuses";
-import { cn } from "@/shared/utils/cn";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInr } from "@/shared/utils/orderFormat";
 import { priceDropAmount } from "../utils/priceDrop.utils";
 import type { WishlistPageItem } from "../hooks/useWishlistPage.hook";
 import type { UnavailableReason } from "@/shared/constants/statuses";
+import { wishlistViewStyles as styles } from "./wishlistView.styles";
 
 function unavailableLabel(
   reason: UnavailableReason | null | undefined,
@@ -53,7 +53,7 @@ export function WishlistView(props: WishlistViewProps) {
     props;
   if (isLoading) {
     return (
-      <div className="storefront-container py-8">
+      <div className={styles.loadingContainer}>
         <SkeletonGrid count={4} />
       </div>
     );
@@ -62,38 +62,27 @@ export function WishlistView(props: WishlistViewProps) {
   if (isEmpty) return <EmptyWishlistState />;
 
   return (
-    <div className="storefront-container py-8">
-      <h1 className="text-[1.75rem] font-semibold text-ink mb-6">
-        {LABELS.myWishlist}
-      </h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>{LABELS.myWishlist}</h1>
       {removeError ? (
-        <p role="alert" className="mb-4 text-[0.875rem] text-danger">
+        <p role="alert" className={styles.errorText}>
           {removeError}
         </p>
       ) : null}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+      <div className={styles.grid}>
         {items.map(({ wishlistItem, product, isAvailable }) => {
           if (!isAvailable) {
             return (
-              <div
-                key={wishlistItem.id}
-                className={cn(
-                  "relative rounded-sm border border-line bg-surface",
-                  "opacity-60 grayscale",
-                )}
-              >
+              <div key={wishlistItem.id} className={styles.unavailableCard}>
                 <ProductCardContainer product={product} showWishlist={false} />
-                <div className="absolute inset-0 flex flex-col items-start justify-start gap-2 p-3 bg-transparent pointer-events-none">
-                  <Badge
-                    variant="destructive"
-                    className="text-[0.6875rem] pointer-events-none"
-                  >
+                <div className={styles.overlay}>
+                  <Badge variant="destructive" className={styles.badge}>
                     {unavailableLabel(wishlistItem.unavailableReason)}
                   </Badge>
                   {wishlistItem.unavailableReason ===
                     UNAVAILABLE_REASON.OUT_OF_STOCK &&
                   product.variants?.[0]?.id ? (
-                    <div className="pointer-events-auto">
+                    <div className={styles.notifyWrapper}>
                       <NotifyMeButton variantId={product.variants[0].id} />
                     </div>
                   ) : null}
@@ -102,7 +91,7 @@ export function WishlistView(props: WishlistViewProps) {
                   type="button"
                   variant="secondary"
                   size="icon-sm"
-                  className="absolute right-2 top-2 z-10 h-8 w-8 min-h-8 max-h-8 rounded-full text-ink-muted hover:bg-danger-subtle hover:text-danger"
+                  className={styles.removeButton}
                   aria-label={formatLabel(LABELS.removeNamedFromWishlist, {
                     name: product.name,
                   })}
@@ -120,18 +109,15 @@ export function WishlistView(props: WishlistViewProps) {
           );
 
           return (
-            <div key={product.id} className="relative">
+            <div key={product.id} className={styles.availableCard}>
               <ProductCardContainer
                 product={product}
                 quickAddLabel={LABELS.moveToCart}
                 showWishlist
               />
               {dropAmount != null ? (
-                <div className="absolute left-2 top-2 z-10 pointer-events-none">
-                  <Badge
-                    variant="success"
-                    className="text-[0.6875rem] pointer-events-none"
-                  >
+                <div className={styles.priceDropBadgeWrapper}>
+                  <Badge variant="success" className={styles.badge}>
                     {wishlistPriceDropLabels.wishlistPriceDropped} ·{" "}
                     {formatLabel(
                       wishlistPriceDropLabels.wishlistPriceDropSaved,
@@ -147,7 +133,7 @@ export function WishlistView(props: WishlistViewProps) {
         })}
       </div>
       {pagination.totalPages > 1 && (
-        <div className="mt-8">
+        <div className={styles.paginationWrapper}>
           <PaginationContainer
             currentPage={pagination.page}
             totalPages={pagination.totalPages}

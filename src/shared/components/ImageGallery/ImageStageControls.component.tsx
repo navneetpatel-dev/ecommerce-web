@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { MouseEvent } from "react";
+import { imageStageControlsStyles } from "./imageGallery.styles";
 
 interface ImageStageControlsProps {
   hasMultiple: boolean;
@@ -33,11 +34,6 @@ export function ImageStageControls(props: ImageStageControlsProps) {
     onNext();
   };
 
-  const prevButtonClass =
-    "absolute left-2.5 top-1/2 z-[2] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:left-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11 opacity-100 lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100";
-  const nextButtonClass =
-    "absolute right-2.5 top-1/2 z-[2] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11 opacity-100 lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100";
-
   return (
     <>
       <Button
@@ -46,9 +42,12 @@ export function ImageStageControls(props: ImageStageControlsProps) {
         size="icon-sm"
         onClick={handleZoom}
         aria-label={LABELS.viewLargerImage}
-        className="absolute right-2.5 top-2.5 z-[2] h-10 w-10 min-h-10 max-h-10 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:top-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11"
+        className={imageStageControlsStyles.zoomButton}
       >
-        <Maximize2 className="h-4 w-4" strokeWidth={1.75} />
+        <Maximize2
+          className={imageStageControlsStyles.icon}
+          strokeWidth={1.75}
+        />
       </Button>
 
       {hasMultiple ? (
@@ -59,9 +58,12 @@ export function ImageStageControls(props: ImageStageControlsProps) {
             size="icon-sm"
             onClick={handlePrev}
             aria-label={LABELS.previousImage}
-            className={prevButtonClass}
+            className={imageStageControlsStyles.prevButton}
           >
-            <ChevronLeft className="h-4 w-4" strokeWidth={1.75} />
+            <ChevronLeft
+              className={imageStageControlsStyles.icon}
+              strokeWidth={1.75}
+            />
           </Button>
           <Button
             type="button"
@@ -69,9 +71,12 @@ export function ImageStageControls(props: ImageStageControlsProps) {
             size="icon-sm"
             onClick={handleNext}
             aria-label={LABELS.nextImage}
-            className={nextButtonClass}
+            className={imageStageControlsStyles.nextButton}
           >
-            <ChevronRight className="h-4 w-4" strokeWidth={1.75} />
+            <ChevronRight
+              className={imageStageControlsStyles.icon}
+              strokeWidth={1.75}
+            />
           </Button>
         </>
       ) : null}

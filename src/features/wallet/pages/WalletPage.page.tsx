@@ -11,6 +11,7 @@ import { WalletRechargePanel } from "../components/WalletRechargePanel.component
 import { WalletStatementExportPanel } from "../components/WalletStatementExportPanel.component";
 import { WalletTransactionsTable } from "../components/WalletTransactionsTable.component";
 import { walletApi } from "../api/wallet.api";
+import { walletPageStyles as styles } from "./walletPage.styles";
 
 export function WalletPage() {
   const [page, setPage] = useState(1);
@@ -32,40 +33,38 @@ export function WalletPage() {
       : Math.min((page - 1) * DEFAULT_PAGE_LIMIT + transactions.length, total);
 
   return (
-    <div className="storefront-container py-8 md:py-10">
-      <header className="mb-8">
+    <div className={styles.container}>
+      <header className={styles.header}>
         <TextEyebrow brand>{LABELS.account}</TextEyebrow>
         <h1
-          className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
+          className={styles.title}
           style={{ fontSize: "var(--text-display-sm)" }}
         >
           {LABELS.wallet}
         </h1>
-        <p className="mt-2 max-w-2xl text-body text-ink-muted">
-          {LABELS.walletPageDescription}
-        </p>
+        <p className={styles.description}>{LABELS.walletPageDescription}</p>
       </header>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
+      <div className={styles.cardsGrid}>
         <WalletBalanceCard
           balance={balanceQuery.data?.points ?? balanceQuery.data?.balance ?? 0}
           purchasedBalance={balanceQuery.data?.purchasedBalance}
           promotionalBalance={balanceQuery.data?.promotionalBalance}
           isLoading={walletSectionLoading}
-          className="h-full"
+          className={styles.fullHeight}
         />
         <WalletRechargePanel
           balance={balanceQuery.data}
           isLoading={walletSectionLoading}
-          className="h-full"
+          className={styles.fullHeight}
         />
       </div>
 
-      <div className="mt-6 lg:mt-8">
+      <div className={styles.statementWrapper}>
         <WalletStatementExportPanel isLoading={walletSectionLoading} />
       </div>
 
-      <section className="mt-8 lg:mt-10">
+      <section className={styles.transactionsSection}>
         <WalletTransactionsTable
           transactions={transactions}
           loading={transactionsQuery.isLoading}

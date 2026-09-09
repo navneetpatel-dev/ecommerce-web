@@ -9,6 +9,7 @@ import { ordersApi } from "@/features/orders";
 import { useDebouncedValue } from "@/shared/hooks/use-debounce.hook";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import { adminRowLabel } from "../utils/adminRowLabel";
+import { adminDataListViewStyles } from "../components/AdminDataListView/adminDataListView.styles";
 import type { AdminDataRow } from "./useAdminDataList.hook";
 import type { AdminListPageModel } from "../types/adminListPage.types";
 import type { AdminOrdersFiltersProps } from "../components/AdminOrdersFilters.component";
@@ -17,9 +18,17 @@ export type AdminOrdersPageModel = AdminListPageModel & {
   filters: AdminOrdersFiltersProps;
 };
 
-export function useAdminOrdersPage(): AdminOrdersPageModel {
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
+interface UseAdminOrdersPageProps {
+  initialSearch?: string;
+  initialStatus?: string;
+}
+
+export function useAdminOrdersPage(
+  props: UseAdminOrdersPageProps = {},
+): AdminOrdersPageModel {
+  const { initialSearch = "", initialStatus = "" } = props;
+  const [search, setSearch] = useState(initialSearch);
+  const [status, setStatus] = useState(initialStatus);
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(
@@ -46,7 +55,7 @@ export function useAdminOrdersPage(): AdminOrdersPageModel {
         row.status !== ORDER_STATUS.RETURNED;
 
       return (
-        <div className="flex items-center gap-1.5">
+        <div className={adminDataListViewStyles.rowActionsInline}>
           {isPending && (
             <AdminConfirmAction
               label={LABELS.confirm}

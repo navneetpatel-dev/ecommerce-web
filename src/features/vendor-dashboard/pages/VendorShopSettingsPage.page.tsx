@@ -5,16 +5,17 @@ import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { VendorShopSettingsForm } from "../components/VendorShopSettingsForm";
 import { useVendorShopSettingsForm } from "../hooks/useVendorShopSettingsForm.hook";
+import { vendorPagesStyles } from "./vendorPages.styles";
 
 export function VendorShopSettingsPage() {
   const settings = useVendorShopSettingsForm();
 
   if (settings.loading) {
-    return <p className="text-ink-muted">{LABELS.loading}</p>;
+    return <p className={vendorPagesStyles.loadingText}>{LABELS.loading}</p>;
   }
 
   if (settings.loadError) {
-    return <p className="text-danger">{settings.loadError}</p>;
+    return <p className={vendorPagesStyles.errorText}>{settings.loadError}</p>;
   }
 
   return (

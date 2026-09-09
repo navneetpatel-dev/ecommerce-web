@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
+import { loginRequiredDialogStyles } from "./dialogComponents.styles";
 
 interface LoginRequiredDialogProps {
   open: boolean;
@@ -29,7 +30,7 @@ export function LoginRequiredDialog({
 }: LoginRequiredDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[400px]">
+      <DialogContent className={loginRequiredDialogStyles.content}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{message}</DialogDescription>

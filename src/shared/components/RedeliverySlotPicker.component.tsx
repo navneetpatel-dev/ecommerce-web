@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { redeliverySlotPickerStyles } from "./vendorOrderComponents.styles";
 
 export const REDELIVERY_SLOTS = [
   "Tomorrow morning (9am - 12pm)",
@@ -38,11 +39,11 @@ export function RedeliverySlotPicker({
   ));
 
   return (
-    <div className="space-y-2 rounded-md border border-line bg-surface-muted p-3">
-      <p className="text-body-sm font-medium text-ink">{promptText}</p>
-      <div className="flex gap-2">
+    <div className={redeliverySlotPickerStyles.container}>
+      <p className={redeliverySlotPickerStyles.prompt}>{promptText}</p>
+      <div className={redeliverySlotPickerStyles.controlsRow}>
         <Select value={slot} onValueChange={setSlot}>
-          <SelectTrigger className="min-w-0 flex-1">
+          <SelectTrigger className={redeliverySlotPickerStyles.selectTrigger}>
             <SelectValue placeholder="Choose a time window" />
           </SelectTrigger>
           <SelectContent>{slotOptions}</SelectContent>

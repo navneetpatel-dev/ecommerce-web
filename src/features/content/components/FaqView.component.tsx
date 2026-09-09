@@ -4,6 +4,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/shared/components/ui/accordion";
+import { faqViewStyles as styles } from "./faqView.styles";
 
 interface FaqItem {
   q: string;
@@ -16,16 +17,14 @@ interface FaqViewProps {
 
 export function FaqView({ items }: FaqViewProps) {
   return (
-    <div className="max-w-[900px] mx-auto px-4 py-10">
-      <h1 className="text-[1.75rem] font-semibold text-ink mb-6">
-        Frequently Asked Questions
-      </h1>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Frequently Asked Questions</h1>
       <Accordion type="single" collapsible>
         {items.map((item) => (
           <AccordionItem key={item.q} value={item.q}>
             <AccordionTrigger>{item.q}</AccordionTrigger>
             <AccordionContent>
-              <p className="text-body text-ink-muted">{item.a}</p>
+              <p className={styles.answer}>{item.a}</p>
             </AccordionContent>
           </AccordionItem>
         ))}

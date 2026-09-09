@@ -29,9 +29,9 @@ export function WalletBalanceCardSkeleton({
 }) {
   return (
     <CardShell className={className}>
-      <Skeleton className="h-3 w-24" />
-      <Skeleton className="mt-3 h-10 w-44" />
-      <Skeleton className="mt-3 h-4 w-52 max-w-full" />
+      <Skeleton className={styles.skeletonEyebrow} />
+      <Skeleton className={styles.skeletonTitle} />
+      <Skeleton className={styles.skeletonSubtitle} />
       <div className={styles.balanceTwoColGrid}>
         <Skeleton className={styles.balanceColCard} />
         <Skeleton className={styles.balanceColCard} />
@@ -47,22 +47,22 @@ export function WalletRechargePanelSkeleton({
 }) {
   return (
     <CardShell className={className}>
-      <Skeleton className="h-5 w-36" />
-      <Skeleton className="mt-2 h-4 w-full max-w-md" />
-      <Skeleton className="mt-2 h-3 w-full max-w-lg" />
+      <Skeleton className={styles.skeletonHeading} />
+      <Skeleton className={styles.skeletonTextMd} />
+      <Skeleton className={styles.skeletonTextLg} />
       <div className={styles.rechargePillGrid}>
         {Array.from({ length: 4 }, (_, index) => (
           <Skeleton key={index} className={styles.rechargePill} />
         ))}
       </div>
       <div className={styles.rechargeInputRow}>
-        <Skeleton className="h-4 w-28" />
+        <Skeleton className={styles.skeletonLabel} />
         <div className={styles.rechargeInputGrid}>
           <Skeleton className={styles.rechargeInput} />
           <Skeleton className={styles.rechargeButton} />
         </div>
       </div>
-      <Skeleton className="mt-4 h-3 w-full max-w-xl" />
+      <Skeleton className={styles.skeletonTerms} />
     </CardShell>
   );
 }
@@ -71,15 +71,15 @@ export function WalletStatementExportPanelSkeleton() {
   return (
     <section className={styles.statementSection} aria-busy="true" aria-hidden>
       <header className={styles.statementHeader}>
-        <Skeleton className="h-5 w-40" />
+        <Skeleton className={styles.skeletonStatementHeading} />
       </header>
       <div className={styles.statementGrid}>
         <div className={styles.statementField}>
-          <Skeleton className="h-4 w-12" />
+          <Skeleton className={styles.skeletonFieldLabelSm} />
           <Skeleton className={styles.statementFieldControl} />
         </div>
         <div className={styles.statementField}>
-          <Skeleton className="h-4 w-8" />
+          <Skeleton className={styles.skeletonFieldLabelXs} />
           <Skeleton className={styles.statementFieldControl} />
         </div>
         <div className={styles.statementActionsRow}>

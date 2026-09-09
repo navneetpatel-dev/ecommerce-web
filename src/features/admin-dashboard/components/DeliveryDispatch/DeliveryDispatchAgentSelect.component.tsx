@@ -28,7 +28,7 @@ export function DeliveryDispatchAgentSelect({
         Dispatch target agent *
       </label>
       <Select value={selectedAgent} onValueChange={onSelectedAgentChange}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className={deliveryDispatchPanelStyles.selectTrigger}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

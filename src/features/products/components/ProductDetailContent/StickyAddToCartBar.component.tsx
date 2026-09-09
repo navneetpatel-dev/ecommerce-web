@@ -2,6 +2,7 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
 
 interface StickyAddToCartBarProps {
   visible: boolean;
@@ -29,24 +30,24 @@ export function StickyAddToCartBar({
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-14 left-0 right-0 z-30 border-t border-line bg-surface/95 p-3 shadow-elevation-3 backdrop-blur-sm md:hidden">
-      <div className="flex items-center gap-3">
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-body-sm font-medium text-ink">
+    <div className={PRODUCT_DETAIL_CONTENT_STYLES.stickyBarRoot}>
+      <div className={PRODUCT_DETAIL_CONTENT_STYLES.stickyBarRow}>
+        <div className={PRODUCT_DETAIL_CONTENT_STYLES.stickyBarInfo}>
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.stickyBarTitle}>
             {productName}
           </p>
-          <p className="text-body font-semibold text-brand">
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.stickyBarPrice}>
             ₹{formattedPrice}
           </p>
         </div>
         <DisabledActionHint
           disabled={addDisabled}
           message={addToCartHint}
-          className="shrink-0"
+          className={PRODUCT_DETAIL_CONTENT_STYLES.stickyBarActionWrapper}
         >
           <Button
             size="lg"
-            className="rounded-full px-5"
+            className={PRODUCT_DETAIL_CONTENT_STYLES.stickyBarButton}
             disabled={addDisabled}
             onClick={() => {
               if (addDisabled) return;

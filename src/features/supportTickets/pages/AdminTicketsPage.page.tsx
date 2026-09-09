@@ -13,11 +13,16 @@ import {
   useTicketFiltersFromUrl,
 } from "../components/TicketFilters.component";
 import { TicketList } from "../components/TicketList.component";
+import { supportTicketsPagesStyles } from "./supportTicketsPages.styles";
 
 export function AdminTicketsPage() {
   return (
     <RequirePermission permission={PERMISSIONS.TICKET_MANAGE}>
-      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+      <Suspense
+        fallback={
+          <Skeleton className={supportTicketsPagesStyles.skeletonFallback} />
+        }
+      >
         <AdminTicketsContent />
       </Suspense>
     </RequirePermission>
@@ -30,15 +35,15 @@ function AdminTicketsContent() {
   const tickets = query.data?.pages.flatMap((p) => p.items) ?? [];
 
   return (
-    <div className="w-full min-w-0 space-y-5">
+    <div className={supportTicketsPagesStyles.adminPageStack}>
       <TicketFilters />
       <TicketList
         title={
-          <div className="min-w-0 space-y-1">
-            <h1 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+          <div className={supportTicketsPagesStyles.adminTitleStack}>
+            <h1 className={supportTicketsPagesStyles.titleHeading}>
               {LABELS.supportTickets}
             </h1>
-            <p className="text-body-sm text-ink-muted">
+            <p className={supportTicketsPagesStyles.adminTitleDescription}>
               {LABELS.ticketAdminQueueDescription}
             </p>
           </div>

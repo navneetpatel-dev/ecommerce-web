@@ -5,6 +5,7 @@ import { PATHS } from "@/shared/constants/paths";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import type { ProductDetail } from "@/shared/api/types";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
 
 interface SellerPerksBlockProps {
   product: ProductDetail;
@@ -24,12 +25,12 @@ export function SellerPerksBlock({
   return (
     <>
       {product.vendor?.slug ? (
-        <div className="rounded-lg border border-line bg-surface px-3 py-3">
-          <p className="text-body-sm text-ink-muted">
+        <div className={PRODUCT_DETAIL_CONTENT_STYLES.soldByCard}>
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.soldByText}>
             {LABELS.soldBy}{" "}
             <Link
               href={PATHS.vendorPage(product.vendor.slug)}
-              className="font-medium text-brand underline-offset-2 hover:underline"
+              className={PRODUCT_DETAIL_CONTENT_STYLES.soldByLink}
             >
               {product.vendor.businessName}
             </Link>
@@ -37,14 +38,14 @@ export function SellerPerksBlock({
         </div>
       ) : null}
 
-      <div className="grid gap-2.5 sm:grid-cols-2">
-        <div className="flex items-start gap-2.5 rounded-lg border border-line bg-surface px-3 py-3">
+      <div className={PRODUCT_DETAIL_CONTENT_STYLES.perksGrid}>
+        <div className={PRODUCT_DETAIL_CONTENT_STYLES.perkCard}>
           <Truck
-            className="mt-0.5 h-4 w-4 shrink-0 text-brand"
+            className={PRODUCT_DETAIL_CONTENT_STYLES.perkIcon}
             strokeWidth={1.75}
           />
-          <div className="space-y-1">
-            <p className="text-body-sm leading-snug text-ink-muted">
+          <div className={PRODUCT_DETAIL_CONTENT_STYLES.perkTextStack}>
+            <p className={PRODUCT_DETAIL_CONTENT_STYLES.perkText}>
               {typeof freeShippingThreshold === "number"
                 ? formatLabel(LABELS.freeDeliveryAbove, {
                     amount: formatInrAmount(freeShippingThreshold),
@@ -52,19 +53,19 @@ export function SellerPerksBlock({
                 : LABELS.deliveryAtCheckout}
             </p>
             {product.deliveryNote ? (
-              <p className="text-body-sm leading-snug text-ink-muted">
+              <p className={PRODUCT_DETAIL_CONTENT_STYLES.perkText}>
                 {product.deliveryNote}
               </p>
             ) : null}
           </div>
         </div>
-        <div className="flex items-start gap-2.5 rounded-lg border border-line bg-surface px-3 py-3">
+        <div className={PRODUCT_DETAIL_CONTENT_STYLES.perkCard}>
           <RotateCcw
-            className="mt-0.5 h-4 w-4 shrink-0 text-brand"
+            className={PRODUCT_DETAIL_CONTENT_STYLES.perkIcon}
             strokeWidth={1.75}
           />
-          <div className="space-y-1">
-            <p className="text-body-sm leading-snug text-ink-muted">
+          <div className={PRODUCT_DETAIL_CONTENT_STYLES.perkTextStack}>
+            <p className={PRODUCT_DETAIL_CONTENT_STYLES.perkText}>
               {returnsAllowed === false
                 ? LABELS.notReturnable
                 : typeof returnWindowDays === "number"
@@ -75,7 +76,7 @@ export function SellerPerksBlock({
             </p>
             {typeof product.returnShippingFee === "number" &&
             returnsAllowed !== false ? (
-              <p className="text-body-sm leading-snug text-ink-muted">
+              <p className={PRODUCT_DETAIL_CONTENT_STYLES.perkText}>
                 {product.returnShippingFee > 0
                   ? formatLabel(LABELS.returnShippingFeeAmount, {
                       amount: formatInrAmount(product.returnShippingFee),
@@ -84,7 +85,7 @@ export function SellerPerksBlock({
               </p>
             ) : null}
             {product.returnNote ? (
-              <p className="text-body-sm leading-snug text-ink-muted">
+              <p className={PRODUCT_DETAIL_CONTENT_STYLES.perkText}>
                 {product.returnNote}
               </p>
             ) : null}
@@ -93,12 +94,12 @@ export function SellerPerksBlock({
       </div>
 
       {product.displayWarrantyMonths ? (
-        <div className="flex items-start gap-2.5 rounded-lg border border-line bg-surface px-3 py-3">
+        <div className={PRODUCT_DETAIL_CONTENT_STYLES.perkCard}>
           <Shield
-            className="mt-0.5 h-4 w-4 shrink-0 text-brand"
+            className={PRODUCT_DETAIL_CONTENT_STYLES.perkIcon}
             strokeWidth={1.75}
           />
-          <p className="text-body-sm leading-snug text-ink-muted">
+          <p className={PRODUCT_DETAIL_CONTENT_STYLES.perkText}>
             {formatLabel(LABELS.warrantyMonthsLabel, {
               months: product.displayWarrantyMonths,
               type: warrantyTypeLabel,

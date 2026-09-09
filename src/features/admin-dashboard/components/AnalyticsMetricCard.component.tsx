@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { cn } from "@/shared/utils/cn";
 import { LABELS } from "@/shared/constants/labels";
+import { analyticsStyles } from "./analyticsComponents.styles";
 
 interface AnalyticsMetricCardProps {
   title: string;
@@ -28,47 +29,48 @@ export function AnalyticsMetricCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden transition-shadow hover:shadow-elevation-2",
-        tone === "brand" &&
-          "border-brand/25 bg-gradient-to-br from-brand-subtle/80 to-surface",
-        tone === "warning" && "border-warning/20",
+        analyticsStyles.metricCardOverflow,
+        tone === "brand" && analyticsStyles.metricCardToneBrand,
+        tone === "warning" && analyticsStyles.metricCardToneWarning,
       )}
     >
-      <CardContent className="flex flex-col gap-3 p-5">
-        <div className="flex items-start justify-between gap-3">
-          <p className="text-body-sm font-medium text-ink-muted">{title}</p>
+      <CardContent className={analyticsStyles.metricCardContent}>
+        <div className={analyticsStyles.metricHeader}>
+          <p className={analyticsStyles.metricTitle}>{title}</p>
           <span
             className={cn(
-              "flex h-9 w-9 shrink-0 items-center justify-center rounded-md",
+              analyticsStyles.metricIconWrap,
               tone === "brand"
-                ? "bg-brand/15 text-brand"
-                : "bg-paper text-ink-muted",
+                ? analyticsStyles.metricIconToneBrand
+                : analyticsStyles.metricIconToneDefault,
             )}
           >
-            <Icon className="h-4 w-4" aria-hidden />
+            <Icon className={analyticsStyles.metricIcon} aria-hidden />
           </span>
         </div>
-        <p className="font-mono text-[1.5rem] font-semibold tracking-tight text-ink sm:text-[1.625rem]">
-          {value}
-        </p>
+        <p className={analyticsStyles.metricValue}>{value}</p>
         {(hint || trend != null) && (
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.75rem]">
+          <div className={analyticsStyles.metricFooter}>
             {trend != null && (
               <span
                 className={cn(
-                  "font-medium tabular-nums",
-                  trendPositive && "text-success",
-                  trendNegative && "text-danger",
-                  !trendPositive && !trendNegative && "text-ink-muted",
+                  analyticsStyles.metricTrendBase,
+                  trendPositive && analyticsStyles.trendSuccess,
+                  trendNegative && analyticsStyles.trendDanger,
+                  !trendPositive &&
+                    !trendNegative &&
+                    analyticsStyles.trendMuted,
                 )}
               >
                 {trend > 0 ? "+" : ""}
                 {trend}%
               </span>
             )}
-            {hint && <span className="text-ink-faint">{hint}</span>}
+            {hint && (
+              <span className={analyticsStyles.metricFaint}>{hint}</span>
+            )}
             {trend != null && !hint && (
-              <span className="text-ink-faint">
+              <span className={analyticsStyles.metricFaint}>
                 {LABELS.analyticsVsPriorPeriod}
               </span>
             )}

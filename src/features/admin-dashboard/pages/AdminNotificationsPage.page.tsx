@@ -13,6 +13,7 @@ import { notificationsAdminLabels } from "@/shared/constants/labels/notification
 import { PERMISSIONS } from "@/shared/constants/permissions";
 import { Button } from "@/shared/components/ui/button";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
+import { adminPagesStyles } from "./adminPages.styles";
 
 export function AdminNotificationsPage() {
   const [pending, setPending] = useState(false);
@@ -39,26 +40,26 @@ export function AdminNotificationsPage() {
   };
 
   const messageElement = message ? (
-    <p className="text-body-sm text-success">{message}</p>
+    <p className={adminPagesStyles.successSmText}>{message}</p>
   ) : null;
   const errorElement = error ? (
-    <p className="text-body-sm text-danger">{error}</p>
+    <p className={adminPagesStyles.errorSmText}>{error}</p>
   ) : null;
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className={adminPagesStyles.stack5}>
+      <div className={adminPagesStyles.headerRow}>
         <div>
-          <h1 className="font-display text-[1.5rem] text-ink">
+          <h1 className={adminPagesStyles.pageHeadingLgNormal}>
             Notification delivery
           </h1>
-          <p className="mt-1 text-body-sm text-ink-muted">
+          <p className={adminPagesStyles.hintMuted}>
             Recent transactional delivery attempts across email and browser
             push.
           </p>
         </div>
         <Button loading={pending} onClick={() => void sendTest()}>
-          <Send className="size-4" aria-hidden="true" />
+          <Send className={adminPagesStyles.iconSm} aria-hidden="true" />
           Send test
         </Button>
       </div>
@@ -68,7 +69,7 @@ export function AdminNotificationsPage() {
       <BroadcastNotificationForm />
 
       <div>
-        <h2 className="mb-2 text-body-sm font-medium text-ink">
+        <h2 className={adminPagesStyles.subheadingMedium}>
           {notificationsAdminLabels.notificationLogFilters}
         </h2>
         <NotificationLogFiltersBar filters={filters} onChange={setFilters} />

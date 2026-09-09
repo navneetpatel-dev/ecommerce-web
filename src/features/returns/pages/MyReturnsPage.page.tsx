@@ -9,53 +9,47 @@ import { LABELS } from "@/shared/constants/labels";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { useMyReturns } from "../api/returns.queries";
 import { ReturnRequestCard } from "../components/ReturnRequestCard.component";
+import { returnsPageStyles as styles } from "./returnsPage.styles";
 
 export function MyReturnsPage() {
   const { data, isLoading, isError, error } = useMyReturns();
   const returns = data ?? [];
 
   return (
-    <div className="storefront-container py-8 md:py-10">
-      <header className="mb-8 max-w-2xl">
-        <h1 className="font-display text-[1.75rem] text-ink md:text-[2rem]">
-          {LABELS.returnsPageTitle}
-        </h1>
-        <p className="mt-2 text-body text-ink-muted">
-          {LABELS.returnsPageDescription}
-        </p>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>{LABELS.returnsPageTitle}</h1>
+        <p className={styles.subtitle}>{LABELS.returnsPageDescription}</p>
       </header>
 
       {isLoading ? (
-        <div className="space-y-3">
-          <Skeleton className="h-20 w-full" />
-          <Skeleton className="h-20 w-full" />
+        <div className={styles.skeletonStack}>
+          <Skeleton className={styles.skeleton} />
+          <Skeleton className={styles.skeleton} />
         </div>
       ) : isError ? (
-        <div className="border border-line bg-surface-raised px-5 py-10 text-center">
+        <div className={styles.errorBox}>
           <QueryErrorAlert
             error={error}
             fallback={LABELS.couldNotLoadReturns}
           />
         </div>
       ) : returns.length === 0 ? (
-        <div className="border border-dashed border-line bg-paper/50">
+        <div className={styles.emptyBox}>
           <EmptyState
             icon={RotateCcw}
             heading={LABELS.noReturnsYet}
             message={LABELS.noReturnsYetMessage}
             actionLabel={LABELS.viewOrders}
             actionTo={PATHS.orders}
-            className="py-14"
+            className={styles.emptyState}
           />
         </div>
       ) : (
-        <ul className="space-y-4">
+        <ul className={styles.returnsList}>
           {returns.map((row) => (
             <li key={row.id}>
-              <Link
-                href={PATHS.myReturn(row.id)}
-                className="block transition-colors hover:border-brand/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-              >
+              <Link href={PATHS.myReturn(row.id)} className={styles.returnLink}>
                 <ReturnRequestCard row={row} />
               </Link>
             </li>

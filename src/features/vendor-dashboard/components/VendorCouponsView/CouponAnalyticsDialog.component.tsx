@@ -11,6 +11,7 @@ import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import type { CouponAnalytics } from "@/shared/api/types";
 import { formatPercent } from "../../utils/formatPercent";
+import { couponAnalyticsDialogStyles } from "./vendorCouponsView.styles";
 
 interface CouponAnalyticsDialogProps {
   analyticsId: string | null;
@@ -38,44 +39,56 @@ export function CouponAnalyticsDialog(props: CouponAnalyticsDialogProps) {
       open={Boolean(analyticsId)}
       onOpenChange={(next) => !next && close()}
     >
-      <DialogContent className="max-w-md">
+      <DialogContent className={couponAnalyticsDialogStyles.dialogContent}>
         <DialogHeader>
           <DialogTitle>{LABELS.couponAnalytics}</DialogTitle>
         </DialogHeader>
         {analyticsLoading ? (
-          <p className="text-[0.875rem] text-ink-muted">{LABELS.loading}</p>
+          <p className={couponAnalyticsDialogStyles.loadingText}>
+            {LABELS.loading}
+          </p>
         ) : analytics ? (
-          <dl className="space-y-3 text-[0.875rem]">
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{LABELS.redemptionCount}</dt>
-              <dd className="tabular-nums font-medium">
+          <dl className={couponAnalyticsDialogStyles.statsList}>
+            <div className={couponAnalyticsDialogStyles.statRow}>
+              <dt className={couponAnalyticsDialogStyles.statLabel}>
+                {LABELS.redemptionCount}
+              </dt>
+              <dd className={couponAnalyticsDialogStyles.statValue}>
                 {analytics.usedCount}
               </dd>
             </div>
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{LABELS.absorbedDiscounts}</dt>
-              <dd className="tabular-nums font-medium">
+            <div className={couponAnalyticsDialogStyles.statRow}>
+              <dt className={couponAnalyticsDialogStyles.statLabel}>
+                {LABELS.absorbedDiscounts}
+              </dt>
+              <dd className={couponAnalyticsDialogStyles.statValue}>
                 {CURRENCY_PREFIX}
                 {formatInrAmount(Number(analytics.totalDiscount))}
               </dd>
             </div>
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{LABELS.revenueImpact}</dt>
-              <dd className="tabular-nums font-medium">
+            <div className={couponAnalyticsDialogStyles.statRow}>
+              <dt className={couponAnalyticsDialogStyles.statLabel}>
+                {LABELS.revenueImpact}
+              </dt>
+              <dd className={couponAnalyticsDialogStyles.statValue}>
                 {CURRENCY_PREFIX}
                 {formatInrAmount(Number(analytics.revenueImpact ?? 0))}
               </dd>
             </div>
-            <div className="flex justify-between gap-4">
-              <dt className="text-ink-muted">{LABELS.conversionRate}</dt>
-              <dd className="tabular-nums font-medium">
+            <div className={couponAnalyticsDialogStyles.statRow}>
+              <dt className={couponAnalyticsDialogStyles.statLabel}>
+                {LABELS.conversionRate}
+              </dt>
+              <dd className={couponAnalyticsDialogStyles.statValue}>
                 {formatPercent(analytics.conversionRate)}
               </dd>
             </div>
-            <p className="text-body-sm text-ink-muted">{absorbedCopy}</p>
+            <p className={couponAnalyticsDialogStyles.absorbedText}>
+              {absorbedCopy}
+            </p>
           </dl>
         ) : (
-          <p className="text-[0.875rem] text-ink-muted">
+          <p className={couponAnalyticsDialogStyles.errorText}>
             {LABELS.couldNotLoadData}
           </p>
         )}

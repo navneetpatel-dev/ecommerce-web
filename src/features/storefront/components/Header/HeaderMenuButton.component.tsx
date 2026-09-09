@@ -6,6 +6,7 @@ import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { HEADER_INK_TONE } from "./headerShared";
 import { HeaderMenuButtonSkeleton } from "./HeaderActionSkeletons.component";
+import { headerStyles as styles } from "./header.styles";
 
 interface HeaderMenuButtonProps {
   showStorefrontChrome: boolean;
@@ -38,8 +39,8 @@ export function HeaderMenuButton({
         size="icon-sm"
         onClick={onOpenMobileNav}
         className={cn(
-          "xl:hidden -ml-2 max-sm:h-9 max-sm:w-9 max-sm:min-h-9 max-sm:max-h-9",
-          isTransparent ? "hover:bg-paper/10" : undefined,
+          styles.storefrontMenuButton,
+          isTransparent ? styles.storefrontHoverTransparent : undefined,
         )}
         aria-label={LABELS.menu}
       >
@@ -58,10 +59,10 @@ export function HeaderMenuButton({
         variant="ghost"
         size="icon-sm"
         onClick={onOpenWorkspaceNav}
-        className="lg:hidden -ml-2"
+        className={styles.workspaceMenuButton}
         aria-label={LABELS.menu}
       >
-        <Menu size={20} className="text-ink" />
+        <Menu size={20} className={styles.workspaceMenuIcon} />
       </Button>
     );
   }

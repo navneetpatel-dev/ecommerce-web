@@ -7,6 +7,7 @@ import { EmptyState } from "@/shared/components/EmptyState.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths";
 import { formatLabel } from "@/shared/utils/formatLabel";
+import { categoryPlpPageStyles as styles } from "./categoryPlpPage.styles";
 
 interface ProductResultsProps {
   filters: ProductFilters;
@@ -44,7 +45,7 @@ export function ProductResults({
   const emptyIcon = hasActiveFacets ? SlidersHorizontal : Package;
 
   return (
-    <div className="min-w-0 flex-1">
+    <div className={styles.resultsContainer}>
       <SortBar
         sort={filters.sort}
         totalProducts={data?.total}
@@ -53,7 +54,7 @@ export function ProductResults({
         compareMode={compareMode}
         onToggleCompare={onToggleCompareMode}
         hideSortOnMobile
-        className="mb-4 border-b-0 pb-0 xl:mb-6 xl:border-b xl:pb-4"
+        className={styles.sortBar}
       />
 
       {!data && isFetching ? (
@@ -103,7 +104,7 @@ export function ProductResults({
                     variant: "secondary",
                   }
           }
-          className="py-14 md:py-16"
+          className={styles.emptyState}
         />
       ) : (
         <>

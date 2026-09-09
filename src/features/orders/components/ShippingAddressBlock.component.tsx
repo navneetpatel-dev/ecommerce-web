@@ -24,8 +24,14 @@ export const ShippingAddressBlock = memo(function ShippingAddressBlock({
         </TextEyebrow>
       </div>
       <address className={ORDER_SUMMARY_ASIDE_STYLES.address}>
-        <span className="block">{address.line1}</span>
-        {address.line2 ? <span className="block">{address.line2}</span> : null}
+        <span className={ORDER_SUMMARY_ASIDE_STYLES.addressLineBlock}>
+          {address.line1}
+        </span>
+        {address.line2 ? (
+          <span className={ORDER_SUMMARY_ASIDE_STYLES.addressLineBlock}>
+            {address.line2}
+          </span>
+        ) : null}
         <span className={ORDER_SUMMARY_ASIDE_STYLES.addressLineMuted}>
           {address.city}, {address.state} {address.pincode}
         </span>

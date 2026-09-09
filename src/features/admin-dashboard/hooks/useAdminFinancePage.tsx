@@ -9,6 +9,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { commissionsApi, payoutsApi } from "../api/finance.api";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import { AdminMarkPayoutPaidAction } from "../components/AdminMarkPayoutPaidAction.component";
+import { adminDataListViewStyles } from "../components/AdminDataListView/adminDataListView.styles";
 import type { AdminDataRow } from "./useAdminDataList.hook";
 import type { AdminListPageModel } from "../types/adminListPage.types";
 
@@ -40,7 +41,7 @@ export function useAdminFinancePage(): AdminFinancePageModel {
       const status = String(row.status);
       if (status === "PENDING") {
         return (
-          <div className="flex flex-wrap justify-end gap-2">
+          <div className={adminDataListViewStyles.rowActionsEndWrap}>
             <AdminMarkPayoutPaidAction
               payoutId={String(row.id)}
               onDone={reload}

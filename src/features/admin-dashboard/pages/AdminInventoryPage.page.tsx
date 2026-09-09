@@ -9,6 +9,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import type { AdminDataRow } from "../hooks/useAdminDataList.hook";
+import { adminPagesStyles } from "./adminPages.styles";
 
 function StockEditor({
   row,
@@ -40,14 +41,14 @@ function StockEditor({
   };
 
   const errorElement = error ? (
-    <span className="max-w-40 text-body-sm text-danger">{error}</span>
+    <span className={adminPagesStyles.stockEditorError}>{error}</span>
   ) : null;
 
   return (
-    <div className="flex min-w-56 items-center justify-end gap-2">
+    <div className={adminPagesStyles.stockEditorRow}>
       <Input
         aria-label={`Stock for ${row.sku}`}
-        className="w-24"
+        className={adminPagesStyles.stockEditorInput}
         min={0}
         step={1}
         type="number"
@@ -60,7 +61,7 @@ function StockEditor({
         loading={pending}
         onClick={() => void save()}
       >
-        <Save className="size-4" aria-hidden="true" />
+        <Save className={adminPagesStyles.iconSm} aria-hidden="true" />
         Save
       </Button>
       {errorElement}

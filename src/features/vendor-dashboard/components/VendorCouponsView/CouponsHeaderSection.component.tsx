@@ -18,6 +18,7 @@ import { FormError } from "@/shared/components/FormError.component";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { formatInrAmount } from "@/shared/utils/orderFormat";
 import type { UseFormReturn } from "react-hook-form";
+import { couponsHeaderSectionStyles } from "./vendorCouponsView.styles";
 
 interface CouponsHeaderSectionProps {
   absorbedDiscountTotal: number;
@@ -52,12 +53,10 @@ export function CouponsHeaderSection(props: CouponsHeaderSectionProps) {
   };
 
   return (
-    <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-      <div className="min-w-0 space-y-1">
-        <h2 className="text-[1.25rem] font-semibold text-ink sm:text-[1.375rem]">
-          {LABELS.coupons}
-        </h2>
-        <p className="text-[0.875rem] text-ink-muted">
+    <div className={couponsHeaderSectionStyles.header}>
+      <div className={couponsHeaderSectionStyles.titleGroup}>
+        <h2 className={couponsHeaderSectionStyles.heading}>{LABELS.coupons}</h2>
+        <p className={couponsHeaderSectionStyles.summary}>
           {summaryCopy} ({LABELS.absorbedThisPeriod})
         </p>
       </div>
@@ -71,7 +70,7 @@ export function CouponsHeaderSection(props: CouponsHeaderSectionProps) {
           >
             <Plus aria-hidden /> {LABELS.createVendorCoupon}
           </Button>
-          <DialogContent className="max-h-[min(92vh,48rem)] max-w-2xl overflow-y-auto">
+          <DialogContent className={couponsHeaderSectionStyles.dialogContent}>
             <DialogHeader>
               <DialogTitle>{LABELS.createVendorCoupon}</DialogTitle>
             </DialogHeader>

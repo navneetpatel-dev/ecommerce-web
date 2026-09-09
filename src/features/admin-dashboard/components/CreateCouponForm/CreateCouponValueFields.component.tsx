@@ -6,6 +6,7 @@ import type { CouponFormInput } from "../../schemas/coupons.schema";
 import { NumberInput } from "@/shared/components/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
+import { createCouponFormStyles } from "./createCouponForm.styles";
 
 interface CreateCouponValueFieldsProps {
   form: UseFormReturn<CouponFormInput>;
@@ -28,7 +29,7 @@ export function CreateCouponValueFields({
 
   return (
     <FormSection title={LABELS.couponSectionValue} columns={1}>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className={createCouponFormStyles.gridSm2}>
         <FormFieldFrame
           label={LABELS.couponValue}
           required={needsValue}
@@ -82,9 +83,11 @@ export function CreateCouponValueFields({
         </FormFieldFrame>
       </div>
       {isTiered ? (
-        <div className="space-y-3">
-          <p className="text-body-sm text-ink-muted">{LABELS.couponTierHint}</p>
-          <div className="grid gap-4 sm:grid-cols-2">
+        <div className={createCouponFormStyles.stack3}>
+          <p className={createCouponFormStyles.hintMuted}>
+            {LABELS.couponTierHint}
+          </p>
+          <div className={createCouponFormStyles.gridSm2}>
             <FormFieldFrame label={LABELS.couponTier2Min}>
               <Controller
                 name="tier2MinSubtotal"

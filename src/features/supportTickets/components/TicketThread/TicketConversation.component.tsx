@@ -8,6 +8,7 @@ import type { RefObject } from "react";
 import type { Virtualizer } from "@tanstack/react-virtual";
 import type { TicketMessage } from "../../api/supportTickets.api";
 import { MessageBubble } from "./TicketMessageBubble.component";
+import { ticketThreadStyles } from "./ticketThread.styles";
 
 interface TicketConversationProps {
   messages: TicketMessage[];
@@ -26,23 +27,20 @@ export function TicketConversation(props: TicketConversationProps) {
   const { messages } = props;
 
   return (
-    <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/70 via-brand/30 to-transparent"
-      />
-      <div className="flex items-center justify-between gap-3 border-b border-line/80 px-3 py-2.5 sm:px-4">
+    <section className={ticketThreadStyles.convSection}>
+      <div aria-hidden className={ticketThreadStyles.convBar} />
+      <div className={ticketThreadStyles.convHeader}>
         <TextEyebrow>{LABELS.ticketConversation}</TextEyebrow>
         {messages.length > 0 && !props.hasNextPage ? (
-          <span className="text-[0.75rem] tabular-nums text-ink-muted">
+          <span className={ticketThreadStyles.convCount}>
             {messages.length}
           </span>
         ) : null}
       </div>
 
-      <div className="space-y-3 bg-[radial-gradient(ellipse_at_top,_color-mix(in_srgb,var(--brand)_6%,transparent),transparent_55%)] px-3 py-4 sm:px-4">
+      <div className={ticketThreadStyles.convBody}>
         {props.hasNextPage ? (
-          <div className="flex justify-center">
+          <div className={ticketThreadStyles.convLoadMoreWrap}>
             <Button
               type="button"
               variant="outline"
@@ -56,12 +54,12 @@ export function TicketConversation(props: TicketConversationProps) {
         ) : null}
 
         {props.isLoading ? (
-          <div className="space-y-3">
-            <Skeleton className="h-14 w-3/4 rounded-[1.15rem]" />
-            <Skeleton className="ml-auto h-14 w-2/3 rounded-[1.15rem]" />
+          <div className={ticketThreadStyles.convSkeletonList}>
+            <Skeleton className={ticketThreadStyles.convSkeletonLeft} />
+            <Skeleton className={ticketThreadStyles.convSkeletonRight} />
           </div>
         ) : messages.length === 0 ? (
-          <p className="border border-dashed border-line bg-paper/40 px-4 py-8 text-center text-[0.875rem] text-ink-muted">
+          <p className={ticketThreadStyles.convEmpty}>
             {LABELS.ticketNoMessages}
           </p>
         ) : props.useVirtual ? (
@@ -72,7 +70,7 @@ export function TicketConversation(props: TicketConversationProps) {
             parentRef={props.messagesParentRef}
           />
         ) : (
-          <ul className="space-y-3">
+          <ul className={ticketThreadStyles.convList}>
             {messages.map((message) => (
               <li key={message.id}>
                 <MessageBubble
@@ -103,12 +101,9 @@ function TicketVirtualizedMessages({
   parentRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <div
-      ref={parentRef}
-      className="max-h-[min(70vh,36rem)] overflow-y-auto overscroll-contain"
-    >
+    <div ref={parentRef} className={ticketThreadStyles.convContainer}>
       <ul
-        className="relative w-full"
+        className={ticketThreadStyles.convViewport}
         style={{ height: `${virtualizer.getTotalSize()}px` }}
       >
         {virtualizer.getVirtualItems().map((item) => {
@@ -118,7 +113,7 @@ function TicketVirtualizedMessages({
               key={message.id}
               data-index={item.index}
               ref={virtualizer.measureElement}
-              className="absolute left-0 top-0 w-full pb-3"
+              className={ticketThreadStyles.convItemWrapper}
               style={{
                 transform: `translateY(${item.start}px)`,
               }}

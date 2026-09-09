@@ -9,4 +9,10 @@ export const errorBoundaryStyles = {
   screenCenter: "flex min-h-screen items-center justify-center bg-paper p-8",
   screenCenterCol:
     "flex min-h-screen flex-col items-center justify-center gap-4 bg-paper p-8",
+  workspaceShell: "min-h-screen bg-paper",
+  workspaceHeader: "h-14 border-b border-line",
+  workspaceBody: "flex",
+  workspaceSidebar:
+    "w-56 shrink-0 border-r border-line min-h-[calc(100vh-3.5rem)]",
+  workspaceMain: "flex-1 p-6 flex flex-col items-center justify-center gap-4",
 } as const;

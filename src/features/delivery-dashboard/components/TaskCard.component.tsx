@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight, MapPin } from "lucide-react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { taskCardStyles } from "./taskCard.styles";
 
 export function TaskCard({
   href,
@@ -14,24 +15,16 @@ export function TaskCard({
   status: string;
 }) {
   return (
-    <Link
-      href={href}
-      className="flex min-h-20 items-center gap-3 rounded-md border border-line bg-surface p-4 shadow-card-hairline transition-colors hover:border-brand/40"
-    >
-      <MapPin className="size-5 shrink-0 text-brand" aria-hidden="true" />
-      <div className="min-w-0 flex-1">
-        <p className="truncate font-medium text-ink">{title}</p>
+    <Link href={href} className={taskCardStyles.card}>
+      <MapPin className={taskCardStyles.icon} aria-hidden="true" />
+      <div className={taskCardStyles.content}>
+        <p className={taskCardStyles.title}>{title}</p>
         {subtitle ? (
-          <p className="mt-1 truncate text-body-sm text-ink-muted">
-            {subtitle}
-          </p>
+          <p className={taskCardStyles.subtitle}>{subtitle}</p>
         ) : null}
       </div>
       <StatusBadge status={status} />
-      <ChevronRight
-        className="size-4 shrink-0 text-ink-muted"
-        aria-hidden="true"
-      />
+      <ChevronRight className={taskCardStyles.chevron} aria-hidden="true" />
     </Link>
   );
 }

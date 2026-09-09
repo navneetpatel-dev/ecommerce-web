@@ -21,6 +21,7 @@ import { OrdersActivitySection } from "../components/sections/OrdersActivitySect
 import { PrivacySection } from "../components/sections/PrivacySection.component";
 import { useAccountPage } from "../hooks/useAccountPage.hook";
 import type { AccountSectionId } from "../types";
+import { accountPageStyles as styles } from "./accountPage.styles";
 
 function AccountSectionBody({
   section,
@@ -70,12 +71,9 @@ function AccountPageInner() {
       ? pathname
       : PATHS.profile;
     return (
-      <div className="relative">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
-        />
-        <div className="storefront-container relative py-16 md:py-20">
+      <div className={styles.signInRoot}>
+        <div aria-hidden className={styles.signInGlow} />
+        <div className={styles.signInContainer}>
           <EmptyState
             icon={UserRound}
             heading="Sign in to manage your account"
@@ -83,7 +81,7 @@ function AccountPageInner() {
             actionLabel={LABELS.logIn}
             actionTo={PATHS.loginWithRedirect(loginNext)}
           />
-          <div className="mt-4 flex justify-center">
+          <div className={styles.registerRow}>
             <Button variant="ghost" asChild>
               <Link href={PATHS.register}>Create an account</Link>
             </Button>
@@ -110,10 +108,10 @@ function AccountPageInner() {
 
 function AccountPageFallback() {
   return (
-    <div className="storefront-container space-y-4 py-8">
-      <Skeleton className="h-4 w-24" />
-      <Skeleton className="h-10 w-48" />
-      <Skeleton className="mt-6 h-64 w-full" />
+    <div className={styles.fallbackContainer}>
+      <Skeleton className={styles.fallbackSkeletonSmall} />
+      <Skeleton className={styles.fallbackSkeletonMedium} />
+      <Skeleton className={styles.fallbackSkeletonLarge} />
     </div>
   );
 }

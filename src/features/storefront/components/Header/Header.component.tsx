@@ -14,6 +14,7 @@ import { AccountSection } from "./AccountSection.component";
 import { DesktopPrimaryNavSkeleton } from "./HeaderActionSkeletons.component";
 import { HeaderMenuButton } from "./HeaderMenuButton.component";
 import { MobileOverlays } from "./MobileOverlays.component";
+import { headerStyles as styles } from "./header.styles";
 
 interface HeaderProps {
   currentUser: CurrentUser | null;
@@ -83,14 +84,11 @@ export function Header({
     <>
       <header
         className={cn(
-          "sticky top-0 z-40 overflow-visible transition-all duration-200",
-          "h-14 lg:h-[72px]",
-          isTransparent
-            ? "bg-transparent border-transparent"
-            : "bg-surface border-b border-line shadow-elevation-1",
+          styles.headerBase,
+          isTransparent ? styles.headerTransparent : styles.headerSolid,
         )}
       >
-        <div className="storefront-container flex h-full flex-nowrap items-center gap-1.5 sm:gap-3 lg:gap-4 xl:gap-6">
+        <div className={styles.container}>
           <HeaderMenuButton
             showStorefrontChrome={showStorefrontChrome}
             showWorkspaceMenu={showWorkspaceMenu}
@@ -103,15 +101,17 @@ export function Header({
           <Link
             href={homeHref}
             className={cn(
-              "min-w-0 shrink truncate text-[1.25rem] font-display font-semibold leading-none sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]",
-              isTransparent ? "text-paper" : "text-brand",
+              styles.brandName,
+              isTransparent
+                ? styles.brandNameTransparent
+                : styles.brandNameSolid,
             )}
           >
             {LABELS.brandName}
           </Link>
 
           {!showStorefrontChrome ? (
-            <div className="hidden flex-1 xl:block" />
+            <div className={styles.spacer} />
           ) : navLoading ? (
             <DesktopPrimaryNavSkeleton primaryLinks={primaryLinks} />
           ) : (
@@ -127,10 +127,7 @@ export function Header({
             />
           )}
 
-          <nav
-            aria-label="Header actions"
-            className="ml-auto flex shrink-0 items-center gap-1.5 overflow-visible sm:gap-2"
-          >
+          <nav aria-label="Header actions" className={styles.actionsNav}>
             <ThemeToggleButton isTransparent={isTransparent} />
 
             {showStorefrontChrome ? (

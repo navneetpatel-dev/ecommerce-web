@@ -4,6 +4,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { BUG_REPORT_STATUS } from "@/shared/constants/statuses";
 import type { BugReport } from "../../api/bugReports.api";
 import { AttachmentGrid } from "./BugAttachmentGrid.component";
+import { bugReportDetailStyles } from "./bugReportDetail.styles";
 
 /** Description card: description, steps, attachments, wont-fix/duplicate notes. */
 export function BugDescriptionSection({
@@ -16,38 +17,33 @@ export function BugDescriptionSection({
   duplicateOfHref: string | null;
 }) {
   return (
-    <section className="relative overflow-hidden border border-line bg-surface shadow-elevation-1">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand/70 via-brand/30 to-transparent"
-      />
-      <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+    <section className={bugReportDetailStyles.panelRootWithBar}>
+      <div aria-hidden className={bugReportDetailStyles.panelAccentBar} />
+      <div className={bugReportDetailStyles.descHeader}>
         <TextEyebrow brand>{LABELS.bugDescription}</TextEyebrow>
       </div>
-      <div className="space-y-5 px-4 py-4 sm:px-5 sm:py-5">
-        <p className="whitespace-pre-wrap text-body leading-relaxed text-ink">
-          {report.description}
-        </p>
+      <div className={bugReportDetailStyles.descContent}>
+        <p className={bugReportDetailStyles.descText}>{report.description}</p>
 
         {report.stepsToReproduce ? (
-          <div className="border-t border-line/60 pt-4">
+          <div className={bugReportDetailStyles.descSectionDivider}>
             <TextEyebrow>{LABELS.bugStepsToReproduce}</TextEyebrow>
-            <p className="mt-2 whitespace-pre-wrap text-[0.875rem] leading-relaxed text-ink-muted">
+            <p className={bugReportDetailStyles.descStepsText}>
               {report.stepsToReproduce}
             </p>
           </div>
         ) : null}
 
         {report.attachments?.length ? (
-          <div className="border-t border-line/60 pt-4">
+          <div className={bugReportDetailStyles.descSectionDivider}>
             <TextEyebrow>{LABELS.bugAttachmentsHeading}</TextEyebrow>
             <AttachmentGrid attachments={report.attachments} />
           </div>
         ) : null}
 
         {report.wontFixReason ? (
-          <p className="border border-line bg-paper/50 px-3 py-2.5 text-[0.875rem] text-ink-muted sm:px-4 sm:py-3">
-            <span className="font-medium text-ink">
+          <p className={bugReportDetailStyles.descInfoBox}>
+            <span className={bugReportDetailStyles.descInfoLabel}>
               {LABELS.bugWontFixReason}:{" "}
             </span>
             {report.wontFixReason}
@@ -56,21 +52,21 @@ export function BugDescriptionSection({
 
         {report.status === BUG_REPORT_STATUS.DUPLICATE &&
         report.duplicateOfId ? (
-          <p className="border border-line bg-paper/50 px-3 py-2.5 text-[0.875rem] text-ink-muted sm:px-4 sm:py-3">
-            <span className="font-medium text-ink">
+          <p className={bugReportDetailStyles.descInfoBox}>
+            <span className={bugReportDetailStyles.descInfoLabel}>
               {LABELS.bugDuplicateOf}:{" "}
             </span>
             {mode === "admin" && duplicateOfHref ? (
               <Link
                 href={duplicateOfHref}
-                className="font-mono text-body-sm text-brand hover:underline"
+                className={bugReportDetailStyles.descLinkMono}
               >
                 #
                 {report.duplicateOfReportNumber ??
                   report.duplicateOfId.slice(0, 8)}
               </Link>
             ) : (
-              <span className="font-mono text-body-sm text-ink">
+              <span className={bugReportDetailStyles.descTextMono}>
                 #
                 {report.duplicateOfReportNumber ??
                   report.duplicateOfId.slice(0, 8)}

@@ -21,6 +21,7 @@ import {
 import { AttachmentList } from "./AttachmentList.component";
 import { isVideoAttachment } from "./utils";
 import { useFileProcessor } from "./useFileProcessor.hook";
+import { ticketAttachmentUploaderStyles } from "./ticketAttachmentUploader.styles";
 import type { Props } from "./types";
 
 export type { UploadedMediaAttachment } from "./types";
@@ -80,14 +81,14 @@ export function TicketAttachmentUploader({
   };
 
   return (
-    <div className="space-y-2">
+    <div className={ticketAttachmentUploaderStyles.root}>
       {label ? (
-        <p className="text-body-sm font-medium text-ink">{label}</p>
+        <p className={ticketAttachmentUploaderStyles.label}>{label}</p>
       ) : null}
       {hintText ? (
-        <p className="text-body-sm leading-snug text-ink-muted">{hintText}</p>
+        <p className={ticketAttachmentUploaderStyles.hint}>{hintText}</p>
       ) : null}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className={ticketAttachmentUploaderStyles.btnRow}>
         <Button
           type="button"
           variant="outline"
@@ -101,13 +102,13 @@ export function TicketAttachmentUploader({
           id={inputId}
           ref={fileRef}
           type="file"
-          className="sr-only"
+          className={ticketAttachmentUploaderStyles.fileInput}
           accept={accept}
           disabled={disabled || pending}
           onChange={(e) => onPick(e.target.files)}
         />
       </div>
-      <p className="text-[0.75rem] tabular-nums text-ink-muted">
+      <p className={ticketAttachmentUploaderStyles.counterText}>
         {formatLabel(LABELS.attachmentCounter, {
           count: imageCount,
           max: maxImages,
@@ -115,7 +116,9 @@ export function TicketAttachmentUploader({
           videoMax: maxVideos,
         })}
       </p>
-      {status ? <p className="text-body-sm text-ink-muted">{status}</p> : null}
+      {status ? (
+        <p className={ticketAttachmentUploaderStyles.statusText}>{status}</p>
+      ) : null}
       <AttachmentList items={value} onRemove={removeAt} />
       <FormError
         error={error ? new Error(error) : null}

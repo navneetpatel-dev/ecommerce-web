@@ -7,6 +7,7 @@ import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
+import { adminCategoryStyles } from "../adminCategory.styles";
 
 interface AdminCategoryImageSeoFieldsProps {
   form: UseFormReturn<CategoryFormInput>;
@@ -82,7 +83,7 @@ export function AdminCategoryImageSeoFields({
           htmlFor={`${idPrefix}-commission`}
           hint={LABELS.categoryCommissionRateHint}
           error={commissionRateError}
-          className="sm:col-span-2 sm:max-w-md"
+          className={adminCategoryStyles.colSpan2MaxMd}
         >
           <Input
             id={`${idPrefix}-commission`}

@@ -12,6 +12,7 @@ import { ProductResults } from "./ProductResults.component";
 import { FilterSheet } from "./FilterSheet.component";
 import { SortSheet } from "./SortSheet.component";
 import { CompareTray } from "./CompareTray.component";
+import { categoryPlpPageStyles as styles } from "./categoryPlpPage.styles";
 
 interface CategoryPlpPageProps {
   slugPath: string[];
@@ -22,17 +23,17 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
 
   if (plp.categoryLoading) {
     return (
-      <div className="storefront-container py-4 md:py-5">
-        <div className="h-4 w-40 animate-pulse rounded bg-paper" />
-        <div className="mt-3 h-7 w-56 animate-pulse rounded bg-paper" />
-        <div className="mt-6 h-64 animate-pulse rounded-md bg-paper" />
+      <div className={styles.loadingContainer}>
+        <div className={styles.loadingLine1} />
+        <div className={styles.loadingLine2} />
+        <div className={styles.loadingBox} />
       </div>
     );
   }
 
   if (plp.categoryError || !plp.category) {
     return (
-      <div className="storefront-container py-10 md:py-14">
+      <div className={styles.emptyContainer}>
         <EmptyState
           icon={Package}
           eyebrow={LABELS.shop}
@@ -50,7 +51,7 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
     LABELS.categories;
 
   return (
-    <div className="storefront-container pb-8 pt-3 sm:pt-4 md:pt-5">
+    <div className={styles.pageContainer}>
       <CategoryHeader
         category={plp.category}
         breadcrumbItems={plp.breadcrumbItems}
@@ -64,7 +65,7 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
         onToggleCompareMode={plp.toggleCompareMode}
       />
 
-      <div className="mb-12 flex gap-6 sm:mb-16 xl:mb-24 xl:gap-10">
+      <div className={styles.layoutRow}>
         <FilterSidebar
           idPrefix="cat-desktop"
           minPrice={plp.filters.minPrice}

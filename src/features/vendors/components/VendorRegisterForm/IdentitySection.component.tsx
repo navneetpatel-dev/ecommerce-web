@@ -3,6 +3,7 @@ import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorRegisterInput } from "../../schemas/vendor.schema";
+import { vendorRegisterFormStyles as styles } from "./vendorRegisterForm.styles";
 
 type VendorRegisterFormInstance = UseFormReturn<VendorRegisterInput>;
 
@@ -33,9 +34,7 @@ export function VendorRegisterIdentitySection({
         />
       </FormFieldFrame>
       {showNameWarning ? (
-        <p className="rounded-sm bg-warning-subtle px-3 py-2 text-body-sm text-warning sm:col-span-2">
-          {LABELS.kycNameMismatchWarning}
-        </p>
+        <p className={styles.nameWarning}>{LABELS.kycNameMismatchWarning}</p>
       ) : null}
     </FormSection>
   );

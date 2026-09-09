@@ -27,6 +27,7 @@ import type { Category } from "@/shared/api/types";
 import { VendorRegisterBasicsSection } from "./BasicsSection.component";
 import { VendorRegisterCategoriesSection } from "./CategoriesSection.component";
 import { VendorRegisterIdentitySection } from "./IdentitySection.component";
+import { vendorRegisterFormStyles as styles } from "./vendorRegisterForm.styles";
 
 interface VendorRegisterFormProps {
   form: UseFormReturn<VendorRegisterInput>;
@@ -114,10 +115,10 @@ export function VendorRegisterForm({
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
+    <div className={styles.container}>
       <Card>
         <CardHeader>
-          <CardTitle className="font-display text-[1.75rem]">
+          <CardTitle className={styles.cardTitle}>
             {LABELS.registerAsVendor}
           </CardTitle>
           <CardDescription>{LABELS.registerAsVendorHint}</CardDescription>
@@ -126,7 +127,7 @@ export function VendorRegisterForm({
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormStack>
               {auxError ? (
-                <p role="alert" className="text-body-sm text-danger">
+                <p role="alert" className={styles.auxError}>
                   {auxError}
                 </p>
               ) : null}
@@ -157,7 +158,7 @@ export function VendorRegisterForm({
                 <DisabledActionHint
                   disabled={!canSubmit}
                   message={disableHint}
-                  className="w-full"
+                  className={styles.submitHint}
                 >
                   <Button
                     type="submit"

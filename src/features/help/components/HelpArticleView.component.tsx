@@ -16,18 +16,16 @@ import {
 import type { HelpArticle } from "../types/help.types";
 import { HelpArticleSection } from "./HelpArticleSection.component";
 import { HelpRelatedArticles } from "./HelpRelatedArticles.component";
+import { helpArticleViewStyles as styles } from "./helpArticleView.styles";
 
 export function HelpArticleView({ slug }: { slug: string }) {
   const article = getArticleBySlug(slug);
 
   if (!article) {
     return (
-      <div className="relative">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
-        />
-        <div className="storefront-container relative py-16 md:py-20">
+      <div className={styles.notFoundRoot}>
+        <div aria-hidden className={styles.notFoundGlow} />
+        <div className={styles.notFoundContainer}>
           <EmptyState
             icon={LifeBuoy}
             heading={LABELS.helpArticleNotFound}
@@ -59,48 +57,37 @@ export function HelpArticleView({ slug }: { slug: string }) {
   ) : null;
 
   return (
-    <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[280px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]"
-      />
+    <div className={styles.root}>
+      <div aria-hidden className={styles.heroGlow} />
 
-      <article className="storefront-container relative py-6 md:py-8">
+      <article className={styles.articleContainer}>
         <motion.header
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
-          className="max-w-2xl"
+          className={styles.header}
         >
-          <Link
-            href={PATHS.help}
-            className="mb-4 inline-flex items-center gap-1.5 text-[0.875rem] text-ink-muted transition-colors hover:text-brand"
-          >
-            <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
+          <Link href={PATHS.help} className={styles.backLink}>
+            <ArrowLeft className={styles.backArrow} strokeWidth={1.5} />
             {LABELS.helpCenter}
           </Link>
           {categoryEyebrow}
           <h1
-            className="mt-1.5 font-display text-ink leading-[1.1] tracking-tight"
+            className={styles.title}
             style={{ fontSize: "var(--text-display-sm)" }}
           >
             {article.title}
           </h1>
-          <p className="mt-3 text-body text-ink-muted">{article.summary}</p>
+          <p className={styles.summary}>{article.summary}</p>
         </motion.header>
 
-        <div className="mt-8 max-w-2xl space-y-8 border-t border-line pt-8">
-          {sectionElements}
-        </div>
+        <div className={styles.sectionsWrapper}>{sectionElements}</div>
 
         {relatedSection}
 
-        <p className="mt-10 max-w-2xl text-[0.875rem] text-ink-muted">
+        <p className={styles.supportNotice}>
           {LABELS.helpStillNeedHelp}{" "}
-          <Link
-            href={`${PATHS.help}#contact`}
-            className="font-medium text-brand hover:text-brand-hover"
-          >
+          <Link href={`${PATHS.help}#contact`} className={styles.supportLink}>
             {LABELS.helpContactSupportLink}
           </Link>
           .

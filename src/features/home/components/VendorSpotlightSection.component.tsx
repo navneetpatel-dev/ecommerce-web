@@ -46,9 +46,9 @@ export function VendorSpotlightSection({
             <div key={i} className={styles.skeletonCard}>
               <Skeleton className={styles.skeletonMedia} />
               <div className={styles.skeletonBody}>
-                <Skeleton className="h-5 w-2/3" />
-                <Skeleton className="h-3 w-full" />
-                <Skeleton className="h-3 w-24" />
+                <Skeleton className={styles.skeletonTitle} />
+                <Skeleton className={styles.skeletonText} />
+                <Skeleton className={styles.skeletonMeta} />
               </div>
             </div>
           ))}

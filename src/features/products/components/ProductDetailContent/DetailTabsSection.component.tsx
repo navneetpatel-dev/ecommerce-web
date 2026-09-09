@@ -14,6 +14,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { ProductDetail, ProductVariant } from "@/shared/api/types";
+import { PRODUCT_DETAIL_CONTENT_STYLES } from "./productDetailContent.styles";
 
 interface DetailTabsSectionProps {
   product: ProductDetail;
@@ -35,46 +36,49 @@ export function DetailTabsSection({
   reviewCount,
 }: DetailTabsSectionProps) {
   return (
-    <div className="mt-12 border-t border-line pt-8 md:mt-16 md:pt-10">
+    <div className={PRODUCT_DETAIL_CONTENT_STYLES.tabsContainer}>
       <Tabs value={detailTab} onValueChange={onTabChange}>
-        <TabsList className="w-full justify-start gap-1 overflow-x-auto rounded-none border-b border-line bg-transparent p-0">
+        <TabsList className={PRODUCT_DETAIL_CONTENT_STYLES.tabsList}>
           <TabsTrigger
             value="description"
-            className="rounded-none border-b-2 border-transparent px-3 pb-3 pt-1 data-[state=active]:border-brand data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            className={PRODUCT_DETAIL_CONTENT_STYLES.tabTrigger}
           >
             {LABELS.description}
           </TabsTrigger>
           <TabsTrigger
             value="specifications"
-            className="rounded-none border-b-2 border-transparent px-3 pb-3 pt-1 data-[state=active]:border-brand data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            className={PRODUCT_DETAIL_CONTENT_STYLES.tabTrigger}
           >
             {LABELS.specifications}
           </TabsTrigger>
           <TabsTrigger
             value="reviews"
-            className="rounded-none border-b-2 border-transparent px-3 pb-3 pt-1 data-[state=active]:border-brand data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            className={PRODUCT_DETAIL_CONTENT_STYLES.tabTrigger}
           >
             {formatLabel(LABELS.reviewsWithCount, { count: reviewCount })}
           </TabsTrigger>
           <TabsTrigger
             value="qna"
-            className="rounded-none border-b-2 border-transparent px-3 pb-3 pt-1 data-[state=active]:border-brand data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+            className={PRODUCT_DETAIL_CONTENT_STYLES.tabTrigger}
           >
             {LABELS.questionsAndAnswers}
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="description" className="py-6 md:py-8">
-          <div className="max-w-3xl space-y-8">
+        <TabsContent
+          value="description"
+          className={PRODUCT_DETAIL_CONTENT_STYLES.tabContent}
+        >
+          <div className={PRODUCT_DETAIL_CONTENT_STYLES.descriptionWrapper}>
             <ProductInfo product={product} />
             {product.videoUrl ? (
-              <div className="space-y-2">
-                <p className="text-body-sm font-semibold uppercase tracking-[0.08em] text-ink-muted">
+              <div className={PRODUCT_DETAIL_CONTENT_STYLES.videoSection}>
+                <p className={PRODUCT_DETAIL_CONTENT_STYLES.videoLabel}>
                   {LABELS.productVideo}
                 </p>
                 <video
                   src={product.videoUrl}
                   controls
-                  className="w-full rounded-xl border border-line bg-paper"
+                  className={PRODUCT_DETAIL_CONTENT_STYLES.videoElement}
                   aria-label={LABELS.productVideo}
                 />
               </div>
@@ -84,7 +88,10 @@ export function DetailTabsSection({
             ) : null}
           </div>
         </TabsContent>
-        <TabsContent value="specifications" className="py-6 md:py-8">
+        <TabsContent
+          value="specifications"
+          className={PRODUCT_DETAIL_CONTENT_STYLES.tabContent}
+        >
           <ProductSpecifications
             specs={product.specs}
             matchedVariant={resolvedVariant}
@@ -93,13 +100,21 @@ export function DetailTabsSection({
             displayStock={displayStock}
           />
         </TabsContent>
-        <TabsContent value="reviews" className="py-6 md:py-8" id="reviews">
+        <TabsContent
+          value="reviews"
+          className={PRODUCT_DETAIL_CONTENT_STYLES.tabContent}
+          id="reviews"
+        >
           <ProductReviewsContainer
             productId={product.id}
             enabled={detailTab === "reviews"}
           />
         </TabsContent>
-        <TabsContent value="qna" className="py-6 md:py-8" id="qna">
+        <TabsContent
+          value="qna"
+          className={PRODUCT_DETAIL_CONTENT_STYLES.tabContent}
+          id="qna"
+        >
           <ProductQnaContainer
             productId={product.id}
             enabled={detailTab === "qna"}

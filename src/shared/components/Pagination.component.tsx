@@ -4,6 +4,7 @@ import { DisabledActionHint } from "@/shared/components/DisabledActionHint.compo
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { PaginationItem } from "@/shared/utils/pagination";
+import { paginationStyles } from "./navigationComponents.styles";
 
 interface PaginationProps {
   currentPage: number;
@@ -24,7 +25,7 @@ export function Pagination({
 
   if (isMobile) {
     return (
-      <div className="flex items-center justify-center gap-3">
+      <div className={paginationStyles.mobileContainer}>
         <DisabledActionHint
           disabled={currentPage <= 1}
           message={LABELS.firstPageHint}
@@ -39,7 +40,7 @@ export function Pagination({
             <ChevronLeft size={16} />
           </Button>
         </DisabledActionHint>
-        <span className="text-body-sm text-ink-muted">
+        <span className={paginationStyles.mobileText}>
           {formatLabel(LABELS.pageOf, {
             current: currentPage,
             total: totalPages,
@@ -64,7 +65,7 @@ export function Pagination({
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2">
+    <div className={paginationStyles.desktopContainer}>
       <DisabledActionHint
         disabled={currentPage <= 1}
         message={LABELS.firstPageHint}
@@ -83,7 +84,7 @@ export function Pagination({
         item === "ellipsis" ? (
           <span
             key={`ellipsis-${index}`}
-            className="inline-flex h-11 min-w-11 items-center justify-center text-body-sm text-ink-muted"
+            className={paginationStyles.ellipsis}
             aria-hidden
           >
             …
@@ -95,11 +96,7 @@ export function Pagination({
             size="sm"
             onClick={() => onPageChange(item)}
             aria-current={currentPage === item ? "page" : undefined}
-            className={
-              currentPage === item
-                ? "bg-brand-subtle text-brand hover:bg-brand-subtle"
-                : ""
-            }
+            className={currentPage === item ? paginationStyles.activePage : ""}
           >
             {item}
           </Button>

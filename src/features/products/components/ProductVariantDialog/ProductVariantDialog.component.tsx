@@ -61,7 +61,9 @@ export function ProductVariantDialog({
         {isLoading ? (
           <div className={productVariantDialogStyles.loaderWrapper}>
             <span className={productVariantDialogStyles.spinner} />
-            <span className="sr-only">{LABELS.loading}</span>
+            <span className={productVariantDialogStyles.srOnly}>
+              {LABELS.loading}
+            </span>
           </div>
         ) : product ? (
           <VariantSelector

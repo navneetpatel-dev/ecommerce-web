@@ -8,6 +8,7 @@ import { getApiErrorMessage } from "@/shared/utils/apiErrorMessage";
 import { useCancelOrder } from "../api/orders.queries";
 import { canCancelOrder } from "../utils/orderCancel.utils";
 import type { Order } from "@/shared/api/types";
+import { ordersComponentsStyles } from "./ordersComponents.styles";
 
 interface OrderCancelActionProps {
   order: Order;
@@ -38,7 +39,7 @@ export function OrderCancelAction({ order }: OrderCancelActionProps) {
       <Button
         type="button"
         variant="outline"
-        className="w-full border-danger/40 text-danger hover:bg-danger-subtle"
+        className={ordersComponentsStyles.cancelButton}
         onClick={() => setOpen(true)}
       >
         {LABELS.cancelOrder}
@@ -64,9 +65,11 @@ export function OrderCancelAction({ order }: OrderCancelActionProps) {
       />
 
       {message ? (
-        <p className="text-body-sm text-success">{message}</p>
+        <p className={ordersComponentsStyles.cancelSuccess}>{message}</p>
       ) : null}
-      {error ? <p className="text-body-sm text-danger">{error}</p> : null}
+      {error ? (
+        <p className={ordersComponentsStyles.cancelError}>{error}</p>
+      ) : null}
     </>
   );
 }

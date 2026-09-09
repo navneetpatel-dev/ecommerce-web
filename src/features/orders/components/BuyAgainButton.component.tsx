@@ -5,6 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import type { OrderItem } from "@/shared/api/types";
 import { useBuyAgain } from "../hooks/useBuyAgain.hook";
+import { ordersComponentsStyles } from "./ordersComponents.styles";
 
 interface BuyAgainButtonProps {
   items: OrderItem[];
@@ -28,7 +29,7 @@ export function BuyAgainButton({ items }: BuyAgainButtonProps) {
   })();
 
   return (
-    <div className="space-y-1.5">
+    <div className={ordersComponentsStyles.buyAgainWrapper}>
       <Button
         type="button"
         variant="outline"
@@ -39,7 +40,7 @@ export function BuyAgainButton({ items }: BuyAgainButtonProps) {
         {isPending ? LABELS.buyAgainAdding : LABELS.buyAgain}
       </Button>
       {summary ? (
-        <p className="text-body-sm text-ink-muted">{summary}</p>
+        <p className={ordersComponentsStyles.buyAgainSummary}>{summary}</p>
       ) : null}
     </div>
   );

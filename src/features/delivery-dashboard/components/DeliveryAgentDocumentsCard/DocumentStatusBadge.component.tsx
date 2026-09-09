@@ -1,5 +1,6 @@
 import { CheckCircle2, Clock, XCircle } from "lucide-react";
 import type { DeliveryAgentDocument } from "../../types";
+import { deliveryAgentDocumentsCardStyles as styles } from "./deliveryAgentDocumentsCard.styles";
 
 export function DocumentStatusBadge({
   document,
@@ -7,28 +8,28 @@ export function DocumentStatusBadge({
   document?: DeliveryAgentDocument;
 }) {
   if (!document) {
-    return <span className="text-body-sm text-ink-muted">Not submitted</span>;
+    return <span className={styles.badgeNotSubmitted}>Not submitted</span>;
   }
   if (document.verified) {
     return (
-      <span className="flex items-center gap-1 text-body-sm text-success">
-        <CheckCircle2 className="size-3.5" aria-hidden="true" />
+      <span className={styles.badgeApproved}>
+        <CheckCircle2 className={styles.badgeIcon} aria-hidden="true" />
         Approved
       </span>
     );
   }
   if (document.rejectedAt) {
     return (
-      <span className="flex items-center gap-1 text-body-sm text-danger">
-        <XCircle className="size-3.5" aria-hidden="true" />
+      <span className={styles.badgeRejected}>
+        <XCircle className={styles.badgeIcon} aria-hidden="true" />
         Rejected
         {document.rejectionReason ? `: ${document.rejectionReason}` : ""}
       </span>
     );
   }
   return (
-    <span className="flex items-center gap-1 text-body-sm text-warning">
-      <Clock className="size-3.5" aria-hidden="true" />
+    <span className={styles.badgePending}>
+      <Clock className={styles.badgeIcon} aria-hidden="true" />
       Pending review
     </span>
   );

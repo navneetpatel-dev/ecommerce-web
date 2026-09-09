@@ -1,6 +1,7 @@
 "use client";
 
 import { Checkbox } from "@/shared/components/ui/checkbox";
+import { infiniteMultiSelectStyles } from "./infiniteMultiSelect.styles";
 import type { InfiniteMultiSelectOption } from "./types";
 
 interface OptionRowProps {
@@ -21,16 +22,16 @@ export function OptionRow({
   return (
     <label
       htmlFor={inputId}
-      className="flex cursor-pointer items-start gap-2 rounded-sm px-1 py-1.5 hover:bg-surface"
+      className={infiniteMultiSelectStyles.optionRow.label}
     >
       <Checkbox
         id={inputId}
         checked={checked}
         disabled={disabled}
         onCheckedChange={() => onToggle(option.id)}
-        className="mt-0.5"
+        className={infiniteMultiSelectStyles.optionRow.checkbox}
       />
-      <span className="text-[0.875rem] leading-snug text-ink">
+      <span className={infiniteMultiSelectStyles.optionRow.text}>
         {option.label}
       </span>
     </label>

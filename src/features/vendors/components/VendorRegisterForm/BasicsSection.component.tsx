@@ -17,6 +17,7 @@ import {
 import { vendorEntityTypeLabel } from "@/shared/utils/vendorEntityTypeLabel";
 import { cn } from "@/shared/utils/cn";
 import type { VendorRegisterInput } from "../../schemas/vendor.schema";
+import { vendorRegisterFormStyles as styles } from "./vendorRegisterForm.styles";
 
 type VendorRegisterFormInstance = UseFormReturn<VendorRegisterInput>;
 
@@ -41,7 +42,7 @@ export function VendorRegisterBasicsSection({
         htmlFor="businessName"
         required
         error={errors.businessName?.message}
-        className="sm:col-span-2"
+        className={styles.businessNameFrame}
       >
         <Input
           id="businessName"
@@ -67,7 +68,8 @@ export function VendorRegisterBasicsSection({
             >
               <SelectTrigger
                 className={cn(
-                  Boolean(errors.entityType?.message) && "border-danger",
+                  Boolean(errors.entityType?.message) &&
+                    styles.selectTriggerError,
                 )}
               >
                 <SelectValue placeholder={LABELS.entityType} />

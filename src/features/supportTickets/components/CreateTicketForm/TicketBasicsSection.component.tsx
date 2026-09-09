@@ -17,6 +17,7 @@ import {
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { TICKET_SUBJECT_MAX } from "../../constants/fieldLimits";
 import { TICKET_CATEGORY_LABEL } from "../../utils/labels";
+import { createTicketFormStyles } from "./createTicketForm.styles";
 
 type Props = {
   subjectId: string;
@@ -57,7 +58,7 @@ export function TicketBasicsSection({
           maxLength={TICKET_SUBJECT_MAX}
           error={hasSubjectError}
         />
-        <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
+        <p className={createTicketFormStyles.counterText}>
           {formatLabel(LABELS.ticketCharCounter, {
             count: subject.length,
             max: TICKET_SUBJECT_MAX,

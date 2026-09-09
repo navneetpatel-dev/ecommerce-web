@@ -2,6 +2,7 @@ import type { SubOrder } from "@/shared/api/types";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { VendorGroupHeader } from "@/shared/components/VendorGroupHeader.component";
 import { LABELS } from "@/shared/constants/labels";
+import { SUB_ORDER_CARD_STYLES } from "./subOrderCard.styles";
 
 interface SubOrderCardHeaderProps {
   vendorName: string;
@@ -26,8 +27,8 @@ export function SubOrderCardHeader({
       as="h2"
       className={className}
       trailing={
-        <div className="inline-flex items-center gap-1.5">
-          <span className="text-[0.6875rem] font-medium text-ink-faint">
+        <div className={SUB_ORDER_CARD_STYLES.shipmentBadgeRow}>
+          <span className={SUB_ORDER_CARD_STYLES.shipmentLabel}>
             {LABELS.shipment}
           </span>
           <StatusBadge status={status} />

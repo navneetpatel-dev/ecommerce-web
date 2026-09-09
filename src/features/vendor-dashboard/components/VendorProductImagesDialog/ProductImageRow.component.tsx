@@ -7,6 +7,7 @@ import { MediaImage } from "@/shared/components/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads";
 import type { ProductImage, ProductVariant } from "@/shared/api/types";
+import { productImageRowStyles } from "./vendorProductImagesDialog.styles";
 
 interface ProductImageRowProps {
   image: ProductImage;
@@ -49,18 +50,18 @@ export function ProductImageRow(props: ProductImageRowProps) {
   };
 
   return (
-    <li className="flex flex-col gap-2 rounded-md border border-line bg-surface p-3 sm:flex-row sm:items-start">
-      <div className="relative h-20 w-20 shrink-0 overflow-hidden border border-line bg-paper">
+    <li className={productImageRowStyles.row}>
+      <div className={productImageRowStyles.thumbnailWrapper}>
         <MediaImage
           src={image.url}
           alt=""
           sizes="80px"
-          imageClassName="object-cover"
+          imageClassName={productImageRowStyles.thumbnailImg}
         />
       </div>
-      <div className="min-w-0 flex-1 space-y-2">
+      <div className={productImageRowStyles.contentCol}>
         {image.isPrimary ? (
-          <p className="text-[0.75rem] font-medium text-brand">
+          <p className={productImageRowStyles.primaryBadgeText}>
             {LABELS.primaryImage}
           </p>
         ) : (
@@ -71,16 +72,16 @@ export function ProductImageRow(props: ProductImageRowProps) {
             disabled={isBusy}
             onClick={handleSetPrimary}
           >
-            <Star className="mr-1 size-3.5" aria-hidden />
+            <Star className={productImageRowStyles.starIcon} aria-hidden />
             {LABELS.setPrimaryImage}
           </Button>
         )}
         {variantSku ? (
-          <p className="text-[0.75rem] text-ink-muted">
+          <p className={productImageRowStyles.skuText}>
             {LABELS.sku}: {variantSku}
           </p>
         ) : (
-          <p className="text-[0.75rem] text-ink-muted">
+          <p className={productImageRowStyles.skuText}>
             {LABELS.productImageAllVariants}
           </p>
         )}

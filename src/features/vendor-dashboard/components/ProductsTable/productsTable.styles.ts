@@ -5,11 +5,13 @@ export const productsTableHeaderStyles = {
   titleGroup: "flex flex-col gap-3 sm:flex-row sm:items-center",
   heading: "text-h2 font-semibold text-ink",
   hint: "text-body-sm text-ink-muted",
+  searchInput: "w-full text-body sm:w-64",
 } as const;
 
 export const productMobileCardStyles = {
   card: "rounded-md border border-line bg-surface p-4 shadow-card-hairline",
   topRow: "flex items-start justify-between gap-3",
+  titleGroup: "min-w-0 space-y-1",
   name: "truncate text-body font-medium text-ink",
   sku: "font-mono text-body-sm text-ink-muted",
   metaGrid:
@@ -19,6 +21,11 @@ export const productMobileCardStyles = {
   metaValue: "text-ink",
   metaValueLow: "text-danger font-medium",
   metaValueMono: "font-mono text-ink",
+  actionsWrapper: "mt-4 border-t border-line/80 pt-3",
+} as const;
+
+export const productsTableViewStyles = {
+  notice: "mb-3 text-body-sm text-ink-muted",
 } as const;
 
 export const productsTableContentStyles = {

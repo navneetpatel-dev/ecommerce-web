@@ -14,6 +14,7 @@ import {
   GIFT_CARD_MIN_AMOUNT_INR,
   GIFT_CARD_MAX_AMOUNT_INR,
 } from "../giftCards.constants";
+import { giftCardPurchaseFormStyles as styles } from "./giftCardPurchaseForm.styles";
 
 export function GiftCardPurchaseForm() {
   const { purchase, isBusy, error, successAmount, successEmail, reset } =
@@ -25,17 +26,21 @@ export function GiftCardPurchaseForm() {
 
   if (successAmount != null && successEmail) {
     return (
-      <div className="border border-line bg-surface-raised p-6 text-center shadow-elevation-1">
-        <h2 className="font-display text-[1.25rem] text-ink">
+      <div className={styles.successCard}>
+        <h2 className={styles.successTitle}>
           {giftCardsLabels.giftCardPurchaseSuccessTitle}
         </h2>
-        <p className="mt-2 text-body text-ink-muted">
+        <p className={styles.successBody}>
           {formatLabel(giftCardsLabels.giftCardPurchaseSuccessBody, {
             amount: formatInr(successAmount),
             email: successEmail,
           })}
         </p>
-        <Button className="mt-5" variant="outline" onClick={reset}>
+        <Button
+          className={styles.buyAnotherButton}
+          variant="outline"
+          onClick={reset}
+        >
           {giftCardsLabels.giftCardBuyAnother}
         </Button>
       </div>
@@ -125,7 +130,7 @@ export function GiftCardPurchaseForm() {
         </FormFieldFrame>
 
         {error ? (
-          <p role="alert" className="text-body-sm text-danger">
+          <p role="alert" className={styles.errorText}>
             {error}
           </p>
         ) : null}

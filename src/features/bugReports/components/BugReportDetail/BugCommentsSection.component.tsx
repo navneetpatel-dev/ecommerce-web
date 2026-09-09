@@ -9,6 +9,7 @@ import { formatOrderDate } from "@/shared/utils/orderFormat";
 import { formatLabel } from "@/shared/utils/formatLabel";
 import { BUG_COMMENT_MAX } from "../../constants/fieldLimits";
 import type { BugComment } from "../../api/bugReports.api";
+import { bugReportPanelsStyles } from "./bugReportPanels.styles";
 
 function commentInitials(name: string): string {
   const parts = name.trim().split(/\s+/);
@@ -31,40 +32,42 @@ interface BugCommentsSectionProps {
 /** Internal admin comments thread with add-comment composer. */
 export function BugCommentsSection(props: BugCommentsSectionProps) {
   return (
-    <section className="overflow-hidden border border-line bg-surface shadow-elevation-1">
-      <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+    <section className={bugReportPanelsStyles.panelRoot}>
+      <div className={bugReportPanelsStyles.panelHeader}>
         <TextEyebrow brand>{LABELS.bugInternalComments}</TextEyebrow>
-        <p className="mt-1 text-body-sm text-ink-muted">
+        <p className={bugReportPanelsStyles.panelSubtitle}>
           {LABELS.bugInternalCommentsHint}
         </p>
       </div>
 
-      <div className="space-y-4 px-4 py-4 sm:px-5 sm:py-5">
+      <div className={bugReportPanelsStyles.panelBodyPadded}>
         {props.comments.length === 0 ? (
-          <p className="border border-dashed border-line bg-paper/40 px-4 py-8 text-center text-[0.875rem] text-ink-muted">
+          <p className={bugReportPanelsStyles.commentsEmpty}>
             {LABELS.bugNoCommentsYet}
           </p>
         ) : (
-          <ul className="space-y-4">
+          <ul className={bugReportPanelsStyles.commentsList}>
             {props.comments.map((c) => {
               const name = c.authorName || LABELS.ticketMessageSupport;
               return (
-                <li key={c.id} className="flex gap-3">
-                  <Avatar className="mt-0.5 h-9 w-9 shrink-0 border border-line">
-                    <AvatarFallback className="bg-paper text-[0.75rem] font-semibold text-ink-muted">
+                <li key={c.id} className={bugReportPanelsStyles.commentItem}>
+                  <Avatar className={bugReportPanelsStyles.commentAvatar}>
+                    <AvatarFallback
+                      className={bugReportPanelsStyles.commentFallback}
+                    >
                       {commentInitials(name)}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="min-w-0 flex-1 rounded-xl rounded-tl-md border border-line bg-surface-raised px-3.5 py-2.5 shadow-card-hairline">
-                    <div className="mb-1.5 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                      <span className="text-body-sm font-semibold text-ink">
+                  <div className={bugReportPanelsStyles.commentBubble}>
+                    <div className={bugReportPanelsStyles.commentMeta}>
+                      <span className={bugReportPanelsStyles.commentAuthor}>
                         {name}
                       </span>
-                      <span className="text-[0.6875rem] text-ink-muted">
+                      <span className={bugReportPanelsStyles.commentTime}>
                         {formatOrderDate(c.createdAt)}
                       </span>
                     </div>
-                    <p className="whitespace-pre-wrap text-body leading-relaxed text-ink">
+                    <p className={bugReportPanelsStyles.commentText}>
                       {c.body}
                     </p>
                   </div>
@@ -87,7 +90,7 @@ export function BugCommentsSection(props: BugCommentsSectionProps) {
         ) : null}
       </div>
 
-      <div className="space-y-3 border-t border-line bg-paper/30 px-4 py-4 sm:px-5">
+      <div className={bugReportPanelsStyles.commentComposer}>
         <FormFieldFrame label={LABELS.bugAddComment}>
           <Textarea
             value={props.comment}
@@ -96,10 +99,10 @@ export function BugCommentsSection(props: BugCommentsSectionProps) {
             }
             placeholder={LABELS.bugCommentPlaceholder}
             rows={3}
-            className="min-h-[5rem] resize-y"
+            className={bugReportPanelsStyles.commentTextarea}
             maxLength={BUG_COMMENT_MAX}
           />
-          <p className="mt-1 text-[0.75rem] tabular-nums text-ink-muted">
+          <p className={bugReportPanelsStyles.commentCounter}>
             {formatLabel(LABELS.ticketCharCounter, {
               count: props.comment.length,
               max: BUG_COMMENT_MAX,
@@ -110,7 +113,7 @@ export function BugCommentsSection(props: BugCommentsSectionProps) {
           error={props.error ? new Error(props.error) : null}
           fallback={LABELS.bugCouldNotComment}
         />
-        <div className="flex justify-end">
+        <div className={bugReportPanelsStyles.commentActions}>
           <Button
             type="button"
             loading={props.addPending}

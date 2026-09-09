@@ -43,4 +43,23 @@ export const pageSkeletonsStyles = {
 
   contentContainer: "mx-auto max-w-[800px] space-y-4 px-4 py-12",
   contentImage: "mt-6 h-48 w-full rounded-md",
+
+  h3w16: "h-3 w-16",
+  h3w20: "h-3 w-20",
+  h3w24: "h-3 w-24",
+  h3w28: "h-3 w-28",
+  h4w24: "h-4 w-24",
+  h4w80: "h-4 w-80",
+  h4wFull: "h-4 w-full",
+  h4w4_5: "h-4 w-4/5",
+  h4wFullMaxMd: "h-4 w-full max-w-md",
+  h7w48: "h-7 w-48",
+  h8w36: "h-8 w-36",
+  h8w40: "h-8 w-40",
+  h8w48: "h-8 w-48",
+  h8w72: "h-8 w-72",
+  h9w64: "h-9 w-64",
+  h10w48: "h-10 w-48",
+  h10w64: "h-10 w-64",
+  h10w2_3: "h-10 w-2/3",
 } as const;

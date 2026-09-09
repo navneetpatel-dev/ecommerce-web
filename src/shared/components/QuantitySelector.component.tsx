@@ -6,7 +6,10 @@ import { AnimatedQuantityValue } from "@/shared/components/AnimatedQuantityValue
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/cn";
 import { useQuantitySelector } from "./QuantitySelector/useQuantitySelector.hook";
-import { QUANTITY_SELECTOR_CONTAINER } from "./QuantitySelector/quantitySelector.styles";
+import {
+  QUANTITY_SELECTOR_CONTAINER,
+  QUANTITY_SELECTOR_EXTRA,
+} from "./QuantitySelector/quantitySelector.styles";
 
 export interface QuantitySelectorProps {
   value: number;
@@ -66,7 +69,7 @@ export function QuantitySelector(props: QuantitySelectorProps) {
       type="button"
       onClick={beginEdit}
       disabled={disabled}
-      className={cn(controlBtnClass, "border-x border-line")}
+      className={cn(controlBtnClass, QUANTITY_SELECTOR_EXTRA.borderX)}
       aria-label={editQuantityLabel}
     >
       <AnimatedQuantityValue
@@ -85,7 +88,7 @@ export function QuantitySelector(props: QuantitySelectorProps) {
       <DisabledActionHint
         disabled={decrementHintDisabled}
         message={minHint}
-        className="relative z-[1] max-w-none shrink-0"
+        className={QUANTITY_SELECTOR_EXTRA.hintContainer}
       >
         <button
           type="button"
@@ -103,7 +106,7 @@ export function QuantitySelector(props: QuantitySelectorProps) {
       <DisabledActionHint
         disabled={incrementHintDisabled}
         message={maxHint}
-        className="relative z-[1] max-w-none shrink-0"
+        className={QUANTITY_SELECTOR_EXTRA.hintContainer}
       >
         <button
           type="button"
@@ -120,7 +123,11 @@ export function QuantitySelector(props: QuantitySelectorProps) {
 
   if (disabled && disabledHint) {
     return (
-      <DisabledActionHint disabled message={disabledHint} className="shrink-0">
+      <DisabledActionHint
+        disabled
+        message={disabledHint}
+        className={QUANTITY_SELECTOR_EXTRA.disabledShrink}
+      >
         {control}
       </DisabledActionHint>
     );

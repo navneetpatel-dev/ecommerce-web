@@ -26,6 +26,7 @@ import { AdminCashbackWriteOffPanel } from "../components/AdminCashbackWriteOffP
 import { LABELS } from "@/shared/constants/labels";
 import { AdminConfirmAction } from "../components/AdminConfirmAction.component";
 import { payoutsApi } from "../api/finance.api";
+import { adminFinancePageStyles } from "./adminFinancePage.styles";
 
 export function AdminFinancePage() {
   const page = useAdminFinancePage();
@@ -63,8 +64,8 @@ export function AdminFinancePage() {
       value: "payouts",
       label: LABELS.payouts,
       content: (
-        <div className="space-y-4">
-          <div className="flex justify-end">
+        <div className={adminFinancePageStyles.payoutsStack}>
+          <div className={adminFinancePageStyles.payoutsActionRow}>
             <AdminConfirmAction
               label={LABELS.processPayouts}
               dialogVariant="warning"
@@ -94,55 +95,58 @@ export function AdminFinancePage() {
       value: "reports",
       label: LABELS.reports,
       content: (
-        <Tabs defaultValue="all" className="space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <TabsList className="h-auto flex-wrap justify-start gap-1 rounded-lg border border-line bg-paper/60 p-1">
+        <Tabs defaultValue="all" className={adminFinancePageStyles.reportsTabs}>
+          <div className={adminFinancePageStyles.reportsHeaderRow}>
+            <TabsList className={adminFinancePageStyles.reportsTabsList}>
               <TabsTrigger
                 value="all"
-                className="gap-2 rounded-md border-b-0 px-3.5 py-2 text-body-sm text-ink-muted hover:text-ink data-[state=active]:bg-surface data-[state=active]:text-ink data-[state=active]:shadow-elevation-1"
+                className={adminFinancePageStyles.reportsTabTrigger}
               >
-                <LayoutGrid className="size-4" />
+                <LayoutGrid className={adminFinancePageStyles.tabIcon} />
                 All reports
               </TabsTrigger>
               <TabsTrigger
                 value="settlement"
-                className="gap-2 rounded-md border-b-0 px-3.5 py-2 text-body-sm text-ink-muted hover:text-ink data-[state=active]:bg-surface data-[state=active]:text-ink data-[state=active]:shadow-elevation-1"
+                className={adminFinancePageStyles.reportsTabTrigger}
               >
-                <Receipt className="size-4" />
+                <Receipt className={adminFinancePageStyles.tabIcon} />
                 {LABELS.settlementReports}
               </TabsTrigger>
               <TabsTrigger
                 value="liability"
-                className="gap-2 rounded-md border-b-0 px-3.5 py-2 text-body-sm text-ink-muted hover:text-ink data-[state=active]:bg-surface data-[state=active]:text-ink data-[state=active]:shadow-elevation-1"
+                className={adminFinancePageStyles.reportsTabTrigger}
               >
-                <Wallet className="size-4" />
+                <Wallet className={adminFinancePageStyles.tabIcon} />
                 {LABELS.reportWalletLiability}
               </TabsTrigger>
               <TabsTrigger
                 value="recharge"
-                className="gap-2 rounded-md border-b-0 px-3.5 py-2 text-body-sm text-ink-muted hover:text-ink data-[state=active]:bg-surface data-[state=active]:text-ink data-[state=active]:shadow-elevation-1"
+                className={adminFinancePageStyles.reportsTabTrigger}
               >
-                <Coins className="size-4" />
+                <Coins className={adminFinancePageStyles.tabIcon} />
                 {LABELS.reportWalletRecharge}
               </TabsTrigger>
               <TabsTrigger
                 value="cashback"
-                className="gap-2 rounded-md border-b-0 px-3.5 py-2 text-body-sm text-ink-muted hover:text-ink data-[state=active]:bg-surface data-[state=active]:text-ink data-[state=active]:shadow-elevation-1"
+                className={adminFinancePageStyles.reportsTabTrigger}
               >
-                <Percent className="size-4" />
+                <Percent className={adminFinancePageStyles.tabIcon} />
                 {LABELS.reportCashbackWriteOff}
               </TabsTrigger>
               <TabsTrigger
                 value="adjust"
-                className="gap-2 rounded-md border-b-0 px-3.5 py-2 text-body-sm text-ink-muted hover:text-ink data-[state=active]:bg-surface data-[state=active]:text-ink data-[state=active]:shadow-elevation-1"
+                className={adminFinancePageStyles.reportsTabTrigger}
               >
-                <SlidersHorizontal className="size-4" />
+                <SlidersHorizontal className={adminFinancePageStyles.tabIcon} />
                 {LABELS.walletAdjustTitle}
               </TabsTrigger>
             </TabsList>
           </div>
 
-          <TabsContent value="all" className="mt-0 space-y-6">
+          <TabsContent
+            value="all"
+            className={adminFinancePageStyles.reportsAllContent}
+          >
             <AdminSettlementReportsPanel />
             <AdminWalletLiabilityPanel />
             <AdminWalletRechargePanel />
@@ -150,23 +154,38 @@ export function AdminFinancePage() {
             <AdminCashbackWriteOffPanel />
           </TabsContent>
 
-          <TabsContent value="settlement" className="mt-0">
+          <TabsContent
+            value="settlement"
+            className={adminFinancePageStyles.reportsSingleContent}
+          >
             <AdminSettlementReportsPanel />
           </TabsContent>
 
-          <TabsContent value="liability" className="mt-0">
+          <TabsContent
+            value="liability"
+            className={adminFinancePageStyles.reportsSingleContent}
+          >
             <AdminWalletLiabilityPanel />
           </TabsContent>
 
-          <TabsContent value="recharge" className="mt-0">
+          <TabsContent
+            value="recharge"
+            className={adminFinancePageStyles.reportsSingleContent}
+          >
             <AdminWalletRechargePanel />
           </TabsContent>
 
-          <TabsContent value="cashback" className="mt-0">
+          <TabsContent
+            value="cashback"
+            className={adminFinancePageStyles.reportsSingleContent}
+          >
             <AdminCashbackWriteOffPanel />
           </TabsContent>
 
-          <TabsContent value="adjust" className="mt-0">
+          <TabsContent
+            value="adjust"
+            className={adminFinancePageStyles.reportsSingleContent}
+          >
             <AdminWalletAdjustPanel />
           </TabsContent>
         </Tabs>

@@ -6,18 +6,19 @@ import { PERMISSIONS } from "@/shared/constants/permissions";
 import { ReportFilterBar } from "../components/ReportFilterBar.component";
 import { ReportTable } from "../components/ReportTable.component";
 import { useReportHub } from "../hooks/useReportHub.hook";
+import { reportsPageStyles as styles } from "./reportsPage.styles";
 
 export function AdminReportsPage() {
   const hub = useReportHub();
 
   if (hub.catalogError) {
     return (
-      <div className="border border-line bg-surface px-5 py-10 text-center">
-        <p className="text-body text-danger">{hub.catalogError}</p>
+      <div className={styles.errorContainer}>
+        <p className={styles.errorText}>{hub.catalogError}</p>
         <button
           type="button"
           onClick={hub.onRetryCatalog}
-          className="mt-2 text-[0.875rem] font-medium text-brand underline-offset-4 hover:underline"
+          className={styles.retryButton}
         >
           {LABELS.retry}
         </button>
@@ -37,14 +38,10 @@ export function AdminReportsPage() {
         PERMISSIONS.AUDIT_VIEW,
       ]}
     >
-      <div className="w-full min-w-0 space-y-6">
-        <div className="space-y-1">
-          <h2 className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl">
-            {LABELS.reports}
-          </h2>
-          <p className="max-w-3xl text-body text-ink-muted">
-            {LABELS.reportsHubHint}
-          </p>
+      <div className={styles.pageContent}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>{LABELS.reports}</h2>
+          <p className={styles.description}>{LABELS.reportsHubHint}</p>
         </div>
 
         <ReportFilterBar
@@ -81,7 +78,6 @@ export function AdminReportsPage() {
           error={hub.error}
           onPageChange={hub.setPage}
         />
-
       </div>
     </RequirePermission>
   );

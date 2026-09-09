@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
 import { cn } from "@/shared/utils/cn";
+import { disabledActionHintStyles } from "./disabledActionHint.styles";
 
 interface DisabledActionHintProps {
   disabled: boolean;
@@ -33,7 +34,11 @@ export function DisabledActionHint({
   if (!disabled || !message) {
     if (!className && !block) return <>{children}</>;
     return (
-      <span className={cn(block && "block w-full", className)}>{children}</span>
+      <span
+        className={cn(block && disabledActionHintStyles.blockSpan, className)}
+      >
+        {children}
+      </span>
     );
   }
 
@@ -43,8 +48,10 @@ export function DisabledActionHint({
         <TooltipTrigger asChild>
           <span
             className={cn(
-              block ? "block w-full" : "inline-flex max-w-full",
-              "cursor-not-allowed",
+              block
+                ? disabledActionHintStyles.triggerBlock
+                : disabledActionHintStyles.triggerInline,
+              disabledActionHintStyles.cursorNotAllowed,
               className,
             )}
             tabIndex={0}
@@ -55,7 +62,7 @@ export function DisabledActionHint({
         </TooltipTrigger>
         <TooltipContent
           side={side}
-          className="max-w-[260px] text-center leading-snug"
+          className={disabledActionHintStyles.tooltipContent}
         >
           {message}
         </TooltipContent>

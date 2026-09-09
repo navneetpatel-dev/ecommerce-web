@@ -4,7 +4,9 @@ import { BellRing, Check } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { stockAlertsLabels } from "@/shared/constants/labels/stockAlerts";
+import { cn } from "@/shared/utils/cn";
 import { useNotifyMe } from "../hooks/useNotifyMe.hook";
+import { notifyMeButtonStyles as styles } from "./notifyMeButton.styles";
 
 interface NotifyMeButtonProps {
   variantId: string | null | undefined;
@@ -30,10 +32,8 @@ export function NotifyMeButton({ variantId, className }: NotifyMeButtonProps) {
 
   if (status === "subscribed") {
     return (
-      <p
-        className={`flex items-center gap-1.5 text-body-sm text-success ${className ?? ""}`}
-      >
-        <Check size={14} className="shrink-0" />
+      <p className={cn(styles.subscribedText, className)}>
+        <Check size={14} className={styles.iconShrink} />
         {stockAlertsLabels.notifyMeSubscribed}
       </p>
     );
@@ -41,8 +41,8 @@ export function NotifyMeButton({ variantId, className }: NotifyMeButtonProps) {
 
   if (status === "awaiting-email") {
     return (
-      <div className={`space-y-1.5 ${className ?? ""}`}>
-        <div className="flex gap-2">
+      <div className={cn(styles.awaitingEmailWrapper, className)}>
+        <div className={styles.inputRow}>
           <Input
             type="email"
             value={email}
@@ -63,12 +63,12 @@ export function NotifyMeButton({ variantId, className }: NotifyMeButtonProps) {
           </Button>
         </div>
         {emailError ? (
-          <p role="alert" className="text-body-sm text-danger">
+          <p role="alert" className={styles.errorText}>
             {emailError}
           </p>
         ) : null}
         {errorMessage ? (
-          <p role="alert" className="text-body-sm text-danger">
+          <p role="alert" className={styles.errorText}>
             {errorMessage}
           </p>
         ) : null}
@@ -89,7 +89,7 @@ export function NotifyMeButton({ variantId, className }: NotifyMeButtonProps) {
         {stockAlertsLabels.notifyMe}
       </Button>
       {status === "error" && errorMessage ? (
-        <p role="alert" className="mt-1.5 text-body-sm text-danger">
+        <p role="alert" className={styles.errorMessage}>
           {errorMessage}
         </p>
       ) : null}

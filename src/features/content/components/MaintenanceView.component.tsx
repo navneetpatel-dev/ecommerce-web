@@ -1,16 +1,17 @@
 import { LABELS } from "@/shared/constants/labels";
+import { maintenanceViewStyles as styles } from "./maintenanceView.styles";
 
 export function MaintenanceView() {
   return (
-    <div className="min-h-screen bg-paper flex flex-col items-center justify-center px-4 py-10 text-center">
-      <div className="max-w-md space-y-4">
+    <div className={styles.container}>
+      <div className={styles.content}>
         <h1
-          className="font-display text-ink"
+          className={styles.heading}
           style={{ fontSize: "var(--text-display-sm)" }}
         >
           {LABELS.maintenanceHeading}
         </h1>
-        <p className="text-body text-ink-muted">{LABELS.maintenanceBody}</p>
+        <p className={styles.bodyText}>{LABELS.maintenanceBody}</p>
       </div>
     </div>
   );

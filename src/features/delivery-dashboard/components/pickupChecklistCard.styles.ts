@@ -35,5 +35,6 @@ export const pickupChecklistCardStyles = {
     "flex size-8 items-center justify-center rounded-full border border-line bg-surface text-brand",
   uploadIcon: "size-4",
   dropzoneText: "text-body-sm font-medium text-ink",
+  fileInput: "sr-only",
   submitButton: "w-full",
 } as const;

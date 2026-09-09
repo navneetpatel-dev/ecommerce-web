@@ -4,6 +4,8 @@ import { CookiePreferencesDialog } from "./CookiePreferencesDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { CookiePreferences } from "@/shared/hooks/useCookieBanner.hook";
 
+import { cookieBannerStyles } from "./cookieComponents.styles";
+
 interface CookieBannerProps {
   visible: boolean;
   preferencesOpen: boolean;
@@ -30,17 +32,15 @@ export function CookieBanner({
   onSavePreferences,
 }: CookieBannerProps) {
   const bannerElement = visible && (
-    <div className="fixed bottom-0 left-0 right-0 z-50 animate-slide-in-bottom">
-      <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 bg-surface-raised border-t border-line shadow-elevation-3">
-        <p className="text-body-sm text-ink-muted flex-1 pr-6 sm:pr-0">
-          {LABELS.cookieBannerMessage}
-        </p>
-        <div className="flex items-center gap-2 shrink-0">
+    <div className={cookieBannerStyles.wrapper}>
+      <div className={cookieBannerStyles.banner}>
+        <p className={cookieBannerStyles.text}>{LABELS.cookieBannerMessage}</p>
+        <div className={cookieBannerStyles.actions}>
           <Button
             type="button"
             variant="link"
             size="sm"
-            className="text-body-sm"
+            className={cookieBannerStyles.prefLink}
             onClick={onOpenPreferences}
           >
             {LABELS.manageCookiePreferences}
@@ -59,7 +59,7 @@ export function CookieBanner({
           variant="ghost"
           size="icon-sm"
           onClick={onDismiss}
-          className="absolute top-2 right-2 h-8 w-8 min-h-8 max-h-8 sm:hidden text-ink-muted"
+          className={cookieBannerStyles.dismissButton}
           aria-label={LABELS.dismiss}
         >
           <X size={16} />

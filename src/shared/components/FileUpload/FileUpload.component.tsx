@@ -3,6 +3,7 @@ import { MediaImage } from "@/shared/components/MediaImage.component";
 import { Button } from "@/shared/components/ui/button";
 import dynamic from "next/dynamic";
 import { LABELS } from "@/shared/constants/labels";
+import { fileUploadStyles } from "@/shared/components/fileUploadComponents.styles";
 import { useFileUploadController } from "./useFileUploadController.hook";
 import type { FileUploadProps } from "./types";
 import { isPdfUrl, isVideoUrl } from "./utils";
@@ -37,14 +38,12 @@ export function FileUpload(props: FileUploadProps) {
 
   return (
     <>
-      <div className="space-y-2">
+      <div className={fileUploadStyles.root}>
         {props.label ? (
-          <p className="text-body-sm font-medium text-ink">{props.label}</p>
+          <p className={fileUploadStyles.label}>{props.label}</p>
         ) : null}
-        {hintText ? (
-          <p className="text-body-sm leading-snug text-ink-muted">{hintText}</p>
-        ) : null}
-        <div className="flex flex-wrap items-center gap-2">
+        {hintText ? <p className={fileUploadStyles.hint}>{hintText}</p> : null}
+        <div className={fileUploadStyles.buttonRow}>
           <Button
             type="button"
             variant="outline"
@@ -61,7 +60,7 @@ export function FileUpload(props: FileUploadProps) {
           <input
             ref={fileRef}
             type="file"
-            className="sr-only"
+            className={fileUploadStyles.hiddenInput}
             accept={accept}
             multiple={isMultiple}
             disabled={props.disabled || pending}
@@ -69,23 +68,23 @@ export function FileUpload(props: FileUploadProps) {
           />
         </div>
         {previewEntries.length > 0 ? (
-          <ul className="flex flex-wrap gap-2">
+          <ul className={fileUploadStyles.previewList}>
             {previewEntries.map((entry) =>
               isPdfUrl(entry.displayUrl) ? (
                 <li
                   key={entry.storedUrl}
-                  className="flex h-16 min-w-[4rem] items-center justify-center border border-line bg-paper px-2 text-[0.6875rem] text-ink-muted"
+                  className={fileUploadStyles.pdfPreview}
                 >
                   {LABELS.pdfPreview}
                 </li>
               ) : isVideoUrl(entry.displayUrl) ? (
                 <li
                   key={entry.storedUrl}
-                  className="relative h-16 w-24 overflow-hidden border border-line bg-paper"
+                  className={fileUploadStyles.videoItem}
                 >
                   <video
                     src={entry.displayUrl}
-                    className="h-full w-full object-cover"
+                    className={fileUploadStyles.videoElement}
                     muted
                     playsInline
                     aria-label={LABELS.videoPreview}
@@ -94,13 +93,13 @@ export function FileUpload(props: FileUploadProps) {
               ) : (
                 <li
                   key={entry.storedUrl}
-                  className="relative h-16 w-16 overflow-hidden border border-line bg-paper"
+                  className={fileUploadStyles.imageItem}
                 >
                   <MediaImage
                     src={entry.displayUrl}
                     alt=""
                     sizes="64px"
-                    imageClassName="object-cover"
+                    imageClassName={fileUploadStyles.imageElement}
                   />
                 </li>
               ),

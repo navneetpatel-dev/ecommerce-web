@@ -2,6 +2,7 @@ import { Undo2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { rtoHandoverCardStyles as styles } from "./rtoHandoverCard.styles";
 
 interface RtoHandoverCardProps {
   otpCode: string;
@@ -27,7 +28,7 @@ export function RtoHandoverCard({
 }: RtoHandoverCardProps) {
   const codeSentNotice =
     requestCodeSuccess && expiresInMinutes ? (
-      <p className="text-body-sm text-success">
+      <p className={styles.noticeText}>
         Code sent to the vendor. Expires in {expiresInMinutes} minutes.
       </p>
     ) : null;
@@ -35,34 +36,28 @@ export function RtoHandoverCard({
   const confirmDisabled = otpCode.length !== 6;
 
   return (
-    <div className="border border-line bg-surface shadow-elevation-1">
-      <div className="flex items-center justify-between border-b border-line bg-paper/55 px-5 py-3.5">
-        <div className="flex items-center gap-2">
-          <Undo2 className="size-4 text-warning" aria-hidden="true" />
-          <TextEyebrow className="!mb-0">Return to Origin</TextEyebrow>
+    <div className={styles.card}>
+      <div className={styles.header}>
+        <div className={styles.headerLeft}>
+          <Undo2 className={styles.icon} aria-hidden="true" />
+          <TextEyebrow className={styles.eyebrow}>Return to Origin</TextEyebrow>
         </div>
-        <span className="text-caption font-medium uppercase tracking-wider text-warning">
-          Vendor Handover
-        </span>
+        <span className={styles.badge}>Vendor Handover</span>
       </div>
 
-      <div className="space-y-5 p-5 md:p-6">
+      <div className={styles.body}>
         <div>
-          <h2 className="font-display text-[1.125rem] font-medium text-ink">
-            Hand this parcel back to the seller
-          </h2>
-          <p className="mt-1 text-body-sm text-ink-muted">
+          <h2 className={styles.title}>Hand this parcel back to the seller</h2>
+          <p className={styles.subtitle}>
             Delivery failed after 3 attempts. Ask the vendor for the handover
             code they received by email to confirm they&apos;ve received the
             parcel back.
           </p>
         </div>
 
-        <div className="rounded-lg border border-line bg-paper/40 p-4 space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <label className="text-body-sm font-medium text-ink">
-              Vendor Handover Code
-            </label>
+        <div className={styles.codeSection}>
+          <div className={styles.codeHeader}>
+            <label className={styles.label}>Vendor Handover Code</label>
             <Button
               variant="outline"
               size="sm"
@@ -73,25 +68,23 @@ export function RtoHandoverCard({
             </Button>
           </div>
           {codeSentNotice}
-          <div className="flex items-center gap-3">
+          <div className={styles.inputRow}>
             <Input
               inputMode="numeric"
               maxLength={6}
               value={otpCode}
               placeholder="------"
-              className="max-w-[180px] text-center font-mono text-xl tracking-[0.25em] font-semibold"
+              className={styles.input}
               onChange={(e) =>
                 onOtpCodeChange(e.target.value.replace(/\D/g, "").slice(0, 6))
               }
             />
-            <span className="text-caption text-ink-muted">
-              {otpDigitCount}/6 digits
-            </span>
+            <span className={styles.digitCount}>{otpDigitCount}/6 digits</span>
           </div>
         </div>
 
         <Button
-          className="w-full"
+          className={styles.submitButton}
           size="lg"
           disabled={confirmDisabled}
           loading={confirmPending}

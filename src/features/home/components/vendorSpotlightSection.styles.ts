@@ -5,6 +5,9 @@ export const vendorSpotlightSectionStyles = {
   skeletonCard: "overflow-hidden rounded-md border border-line bg-surface",
   skeletonMedia: "aspect-[16/10] w-full rounded-none",
   skeletonBody: "space-y-3 p-4",
+  skeletonTitle: "h-5 w-2/3",
+  skeletonText: "h-3 w-full",
+  skeletonMeta: "h-3 w-24",
   headerRow: "mb-6 flex items-end justify-between gap-4",
   eyebrow: "mb-2",
   browseAllLink:

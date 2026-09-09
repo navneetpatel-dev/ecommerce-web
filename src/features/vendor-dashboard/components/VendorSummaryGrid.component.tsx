@@ -2,6 +2,7 @@ import { SummaryCard } from "./SummaryCard.component";
 import { Package, Truck, Banknote, Clock } from "lucide-react";
 import type { VendorSummary } from "@/shared/api/types";
 import { formatInr } from "@/shared/utils/orderFormat";
+import { vendorSummaryGridStyles } from "./vendorAnalyticsWidgets.styles";
 
 interface VendorSummaryGridProps {
   summary?: VendorSummary;
@@ -14,7 +15,7 @@ export function VendorSummaryGrid({ summary }: VendorSummaryGridProps) {
   const pendingPayouts = formatInr(summary?.pendingPayouts ?? 0);
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className={vendorSummaryGridStyles.grid}>
       <SummaryCard title="Today's Orders" value={todayOrders} icon={Package} />
       <SummaryCard
         title="Pending Shipments"
@@ -25,7 +26,7 @@ export function VendorSummaryGrid({ summary }: VendorSummaryGridProps) {
         title="Month Revenue"
         value={monthRevenue}
         icon={Banknote}
-        valueClassName="text-success"
+        valueClassName={vendorSummaryGridStyles.revenueValue}
       />
       <SummaryCard
         title="Pending Payouts"

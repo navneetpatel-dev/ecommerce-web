@@ -12,6 +12,7 @@ import {
 } from "../../utils/labels";
 import { AttachmentThumbs } from "./TicketAttachmentThumbs.component";
 import { TicketManageControls } from "./TicketManageControls.component";
+import { ticketDetailsPanelStyles as styles } from "./ticketDetailsPanel.styles";
 
 interface TicketDetailsPanelProps {
   ticket: SupportTicket;
@@ -42,14 +43,14 @@ export function TicketDetailsPanel(props: TicketDetailsPanelProps) {
 
   return (
     <>
-      <div className="border-b border-line/80 bg-paper/35 px-4 py-3.5 sm:px-5">
+      <div className={styles.header}>
         <TextEyebrow brand>{LABELS.ticketAboutTicket}</TextEyebrow>
       </div>
 
-      <div className="space-y-4 px-4 py-4 sm:px-5 sm:py-5">
-        <dl className="grid gap-3 text-body-sm">
-          <div className="flex items-center justify-between gap-3">
-            <dt className="text-ink-muted">{LABELS.status}</dt>
+      <div className={styles.content}>
+        <dl className={styles.list}>
+          <div className={styles.row}>
+            <dt className={styles.label}>{LABELS.status}</dt>
             <dd>
               <StatusBadge
                 status={ticket.status}
@@ -57,8 +58,8 @@ export function TicketDetailsPanel(props: TicketDetailsPanelProps) {
               />
             </dd>
           </div>
-          <div className="flex items-center justify-between gap-3">
-            <dt className="text-ink-muted">{LABELS.priority}</dt>
+          <div className={styles.row}>
+            <dt className={styles.label}>{LABELS.priority}</dt>
             <dd>
               <StatusBadge
                 status={ticket.priority}
@@ -66,39 +67,39 @@ export function TicketDetailsPanel(props: TicketDetailsPanelProps) {
               />
             </dd>
           </div>
-          <div className="flex items-center justify-between gap-3">
-            <dt className="text-ink-muted">{LABELS.category}</dt>
-            <dd className="font-medium text-ink">
+          <div className={styles.row}>
+            <dt className={styles.label}>{LABELS.category}</dt>
+            <dd className={styles.valBold}>
               {TICKET_CATEGORY_LABEL[ticket.category]}
             </dd>
           </div>
-          <div className="flex items-center justify-between gap-3 border-t border-line/60 pt-3">
-            <dt className="text-ink-muted">{LABELS.createdAt}</dt>
-            <dd className="text-ink">{formatOrderDate(ticket.createdAt)}</dd>
+          <div className={styles.rowDivided}>
+            <dt className={styles.label}>{LABELS.createdAt}</dt>
+            <dd className={styles.valText}>
+              {formatOrderDate(ticket.createdAt)}
+            </dd>
           </div>
           {ticket.assignedToName || ticket.assignedToId ? (
-            <div className="flex items-center justify-between gap-3">
-              <dt className="text-ink-muted">{LABELS.ticketAssignee}</dt>
-              <dd className="truncate text-ink">
+            <div className={styles.row}>
+              <dt className={styles.label}>{LABELS.ticketAssignee}</dt>
+              <dd className={styles.valTruncated}>
                 {ticket.assignedToName || LABELS.ticketAssigneeNone}
               </dd>
             </div>
           ) : null}
           {ticket.relatedOrderId ? (
-            <div className="flex items-center justify-between gap-3">
-              <dt className="text-ink-muted">{LABELS.ticketOrderSection}</dt>
-              <dd className="font-mono text-[0.75rem] text-ink">
+            <div className={styles.row}>
+              <dt className={styles.label}>{LABELS.ticketOrderSection}</dt>
+              <dd className={styles.valMono}>
                 #{ticket.relatedOrderId.slice(0, 8)}
               </dd>
             </div>
           ) : null}
         </dl>
 
-        <div className="border-t border-line/60 pt-4">
+        <div className={styles.sectionDivided}>
           <TextEyebrow>{LABELS.ticketOriginalRequest}</TextEyebrow>
-          <p className="mt-2 whitespace-pre-wrap text-body-sm leading-relaxed text-ink-muted">
-            {ticket.description}
-          </p>
+          <p className={styles.requestText}>{ticket.description}</p>
           <AttachmentThumbs attachments={ticket.attachments ?? []} />
         </div>
 
@@ -126,7 +127,7 @@ export function TicketDetailsPanel(props: TicketDetailsPanelProps) {
         ) : null}
 
         {props.showResolve || props.canReopen || canManage ? (
-          <div className="flex flex-wrap gap-2 border-t border-line/60 pt-4">
+          <div className={styles.actionsRow}>
             {props.showResolve ? (
               <Button
                 type="button"
