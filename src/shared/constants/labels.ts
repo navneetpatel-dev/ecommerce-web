@@ -50,6 +50,7 @@ import { paymentMethodsLabels } from "./labels/paymentMethods";
 import { giftCardsLabels } from "./labels/giftCards";
 import { adminRolesLabels } from "./labels/adminRoles";
 import { impersonationLabels } from "./labels/impersonation";
+import { exportsLabels } from "./labels/exports";
 
 export const LABELS = {
   ...commerceLabels,
@@ -99,7 +100,10 @@ export const LABELS = {
   ...giftCardsLabels,
   ...adminRolesLabels,
   ...impersonationLabels,
+  ...exportsLabels,
 } as const;
+
+export { formatExportProcessing } from "./labels/exports";
 
 export const ROLES = {
   SUPER_ADMIN: "SUPER_ADMIN",

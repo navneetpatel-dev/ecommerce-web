@@ -1,82 +1,56 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { LABELS } from "@/shared/constants/labels";
-import {
-  reportsEngineApi,
-  type ReportFiltersInput,
-} from "../../api/table/reportsEngine.api";
+import { useCallback, useState } from "react";
+import { useExportJob } from "@/shared/hooks/exports/useExportJob.hook";
+import { LABELS, formatExportProcessing } from "@/shared/constants/labels";
+import type { ReportFiltersInput } from "../../api/table/reportsEngine.api";
 import {
   defaultRange,
   type ExportFileFormat,
 } from "../table/useReportHubHelpers/index";
 import { deriveExportControlsState } from "../../utils/export/exportControlsState";
-import { getReportExportErrorMessage } from "../../utils/export/reportExportErrorMessage";
-
-type ExportFormat = ExportFileFormat;
 
 export function useReportExport(
   reportType: string,
   buildFilters: () => ReportFiltersInput,
 ) {
-  const [exportingFormat, setExportingFormat] = useState<ExportFormat | null>(
+  const [pendingFormat, setPendingFormat] = useState<ExportFileFormat | null>(
     null,
   );
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const runRef = useRef<Promise<void> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      void runRef.current?.catch(() => undefined);
-    };
-  }, []);
+  const job = useExportJob("report", reportType);
 
   const runExport = useCallback(
-    (format: ExportFormat) => {
+    (format: ExportFileFormat) => {
       if (!reportType) return;
-      void runRef.current?.catch(() => undefined);
-
-      setExportingFormat(format);
-      setMessage(LABELS.reportExportPreparing);
-      setError(null);
-      const filters = buildFilters();
-
-      const request =
-        format === "xlsx"
-          ? reportsEngineApi.exportExcel(reportType, filters)
-          : format === "csv"
-            ? reportsEngineApi.exportCsv(reportType, filters)
-            : reportsEngineApi.exportPdf(reportType, filters);
-
-      const task = request
-        .then(() => setMessage(null))
-        .catch((err) => {
-          setError(getReportExportErrorMessage(err, LABELS.reportLoadError));
-        })
-        .finally(() => setExportingFormat(null));
-
-      runRef.current = task;
-      void task;
+      setPendingFormat(format);
+      void job.start(reportType, format, buildFilters());
     },
-    [buildFilters, reportType],
+    [buildFilters, job, reportType],
   );
 
-  const exporting = exportingFormat !== null;
+  const exportingFormat = job.inProgress ? pendingFormat : null;
   const controls = deriveExportControlsState(exportingFormat);
+  const message =
+    job.status === "PROCESSING"
+      ? formatExportProcessing(job.progressPercent)
+      : job.status === "QUEUED"
+        ? LABELS.exportQueued
+        : null;
 
+  // `void` here is safe specifically because Step 18's `start()` catches
+  // internally and never rejects — it reports a creation failure through
+  // `job.errorMessage` (returned below) instead. Don't `void` a call to a
+  // function that *can* reject; that was the exact bug an earlier draft of
+  // this hook had (see Step 18's "Design correction" note).
   return {
-    exporting,
+    exporting: job.inProgress,
     ...controls,
     message,
-    error,
+    error: job.errorMessage,
     exportExcel: () => runExport("xlsx"),
     exportCsv: () => runExport("csv"),
     exportPdf: () => runExport("pdf"),
-    clearMessages: () => {
-      setMessage(null);
-      setError(null);
-    },
+    clearMessages: job.reset,
   };
 }
 

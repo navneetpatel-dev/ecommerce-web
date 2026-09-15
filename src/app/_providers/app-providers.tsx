@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useAuthBootstrap, ImpersonationBanner } from "@/features/auth";
 import { LoginRequiredDialogContainer } from "@/shared/containers/dialogs/LoginRequiredDialogContainer.container";
 import { ErrorToastContainer } from "@/shared/containers/notifications/ErrorToastContainer.container";
+import { ExportJobsTrayContainer } from "@/shared/containers/exports/ExportJobsTrayContainer.container";
 import { RouteScrollResetContainer } from "@/shared/containers/navigation/RouteScrollResetContainer.container";
 import { BrowseUrlTrackerContainer } from "@/shared/containers/system/BrowseUrlTrackerContainer.container";
 import { RoleSurfaceGuard } from "@/shared/components/RoleSurfaceGuard.component";
@@ -69,6 +70,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <BrowseUrlTrackerContainer />
           <LoginRequiredDialogContainer />
           <ErrorToastContainer />
+          <ExportJobsTrayContainer />
           <ImpersonationBanner />
           <RoleSurfaceGuard>{children}</RoleSurfaceGuard>
         </ThemePaletteProvider>
