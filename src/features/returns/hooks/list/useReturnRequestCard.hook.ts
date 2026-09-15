@@ -5,6 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { RETURN_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { notifyError } from "@/shared/stores/notifications/errorToast.store";
 import type { ReturnRequest } from "@/shared/api/types";
 import {
   buildLogisticsTimeline,
@@ -24,6 +25,8 @@ export function useReturnRequestCard(row: ReturnRequest) {
     setPending(true);
     try {
       await returnsApi.downloadCreditNote(row.id);
+    } catch (error) {
+      notifyError(getApiErrorMessage(error, LABELS.downloadFailed));
     } finally {
       setPending(false);
     }

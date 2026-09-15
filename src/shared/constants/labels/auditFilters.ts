@@ -13,7 +13,12 @@ export const auditFiltersLabels = {
   auditClearFilters: "Clear filters",
 } as const;
 
-/** Known `entityType` values seen in `logAudit({ entityType, ... })` calls across the backend. */
+/**
+ * Every distinct `entityType` value passed to `logAudit({ entityType, ... })` across the
+ * backend (verified by grepping every `logAudit(` call site — see audit finding "entity-type
+ * filter missing RBAC-relevant types"). Re-verify this list if a new `logAudit` call site is
+ * added with a new entity type; there is no backend endpoint that derives it dynamically.
+ */
 export const AUDIT_ENTITY_TYPES = [
   "BugReport",
   "Coupon",
@@ -22,10 +27,19 @@ export const AUDIT_ENTITY_TYPES = [
   "DeliveryAgentDocument",
   "DeliveryAgentPayout",
   "DeliveryCashDeposit",
+  "Order",
   "Payout",
+  "PlatformSetting",
+  "Product",
   "ReturnRequest",
+  "Role",
   "Shipment",
+  "ShippingRate",
+  "ShippingZone",
   "SupportTicket",
+  "TaxRule",
+  "User",
+  "UserWallet",
   "Vendor",
   "VendorDocument",
 ] as const;

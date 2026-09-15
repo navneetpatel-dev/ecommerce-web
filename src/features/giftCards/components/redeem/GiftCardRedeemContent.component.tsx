@@ -21,6 +21,10 @@ function statusBadgeLabel(status: string): string | null {
   if (status === "REDEEMED") return giftCardsLabels.giftCardRedeemedBadge;
   if (status === "CANCELLED" || status === "FAILED")
     return giftCardsLabels.giftCardCancelledBadge;
+  // Created but the purchaser's payment hasn't been captured/verified yet — redeem() rejects
+  // anything not ACTIVE, so this must be caught here rather than let the recipient see an enabled
+  // "Redeem" button that fails with a confusing generic error.
+  if (status === "PENDING") return giftCardsLabels.giftCardPendingBadge;
   return null;
 }
 
@@ -76,6 +80,8 @@ export function GiftCardRedeemContent() {
   }
 
   const badge = statusBadgeLabel(giftCard.status);
+  const badgeStyle =
+    giftCard.status === "PENDING" ? styles.badgeInfo : styles.badgeError;
 
   return (
     <div className={styles.container}>
@@ -85,7 +91,7 @@ export function GiftCardRedeemContent() {
         </h1>
         <p className={styles.amount}>{formatInr(giftCard.amount)}</p>
 
-        {badge ? <p className={styles.badgeError}>{badge}</p> : null}
+        {badge ? <p className={badgeStyle}>{badge}</p> : null}
 
         {!badge && !isAuthenticated ? (
           <>

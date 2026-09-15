@@ -9,6 +9,29 @@ import { registerApiSessionAdapter } from "@/shared/api/client/sessionAdapter";
 import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
 import { isDefinitiveAuthFailure } from "@/shared/utils/auth/authSessionError";
 
+/**
+ * Decodes a JWT's payload without verifying its signature — verification already happened
+ * server-side; this only reads claims already trusted enough to have been handed back to us.
+ */
+function decodeJwtPayload(
+  token: string,
+): { sub?: string; impersonatedBy?: string } | null {
+  try {
+    const segment = token.split(".")[1];
+    if (!segment) return null;
+    const normalized = segment.replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(
+      atob(normalized)
+        .split("")
+        .map((c) => `%${c.charCodeAt(0).toString(16).padStart(2, "0")}`)
+        .join(""),
+    );
+    return JSON.parse(json) as { sub?: string; impersonatedBy?: string };
+  } catch {
+    return null;
+  }
+}
+
 const storeSessionAdapter = {
   getAccessToken: () => useAuthStore.getState().accessToken,
   persistAccessToken: (accessToken: string) => {
@@ -19,6 +42,23 @@ const storeSessionAdapter = {
     useAuthStore.getState().clearSession();
     localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
     localStorage.removeItem(STORAGE_KEYS.SESSION);
+    localStorage.removeItem(STORAGE_KEYS.IMPERSONATION_ORIGINAL_SESSION);
+  },
+  /**
+   * Impersonation tokens are short-lived and deliberately non-renewable (auth.service.ts's
+   * `impersonateUser`) — but the acting admin's OWN refresh cookie is still live the whole time,
+   * so an ordinary 401 -> refresh cycle after the impersonation token expires silently mints a
+   * fresh token for the ADMIN's real identity while the UI still shows "Viewing as X". Reject
+   * that token instead of persisting it: sessionRefresh then treats this as a definitive auth
+   * failure, clearing the (impersonated) session exactly like any other expired session, so the
+   * admin gets a clean re-login/re-impersonate prompt rather than silently acting as themselves
+   * under a stale "impersonating" banner and stale permission set.
+   */
+  acceptRefreshedToken: (accessToken: string) => {
+    const { currentUser } = useAuthStore.getState();
+    if (!currentUser?.impersonatedBy) return true;
+    const decoded = decodeJwtPayload(accessToken);
+    return Boolean(decoded?.impersonatedBy) && decoded?.sub === currentUser.id;
   },
 };
 

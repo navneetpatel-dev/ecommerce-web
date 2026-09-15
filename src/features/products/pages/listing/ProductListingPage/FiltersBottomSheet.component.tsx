@@ -14,6 +14,7 @@ interface FiltersBottomSheetProps {
   rating?: number;
   onUpdateFilter: (key: string, value: unknown) => void;
   onClear: () => void;
+  hideRatingFilter?: boolean;
 }
 
 export function FiltersBottomSheet({
@@ -24,6 +25,7 @@ export function FiltersBottomSheet({
   rating,
   onUpdateFilter,
   onClear,
+  hideRatingFilter = false,
 }: FiltersBottomSheetProps) {
   return (
     <BottomSheet open={open} onClose={onClose} title={LABELS.filters}>
@@ -35,6 +37,7 @@ export function FiltersBottomSheet({
         rating={rating}
         onUpdateFilter={onUpdateFilter}
         onClear={onClear}
+        hideRatingFilter={hideRatingFilter}
       />
       <Button
         className={productListingPageStyles.filterSubmitButton}

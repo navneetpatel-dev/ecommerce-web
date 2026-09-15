@@ -28,6 +28,8 @@ export interface ReturnRequest {
   refundAmount: number | null;
   refundTaxAmount?: number | null;
   shippingRefundAmount?: number;
+  /** Deducted from the customer's refund for certain return reasons (e.g. "changed mind"); 0 when not applicable. */
+  returnShippingFeeAmount?: number | null;
   walletRefundAmount?: number;
   razorpayRefundAmount?: number;
   receivedAt?: string | null;

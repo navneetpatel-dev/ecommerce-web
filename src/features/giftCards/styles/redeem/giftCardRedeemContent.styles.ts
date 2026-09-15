@@ -8,6 +8,7 @@ export const giftCardRedeemContentStyles = {
   subtitle: "mt-2 text-body text-ink-muted",
   amount: "mt-4 text-[2rem] font-semibold tabular-nums text-ink",
   badgeError: "mt-2 text-body-sm font-medium text-danger",
+  badgeInfo: "mt-2 text-body-sm font-medium text-ink-muted",
   promptText: "mt-4 text-body text-ink-muted",
   errorMessage: "mt-4 text-body-sm text-danger",
   button: "mt-5",

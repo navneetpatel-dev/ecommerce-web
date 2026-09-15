@@ -30,6 +30,7 @@ export function ProductListingPage() {
         onOpenFilters={listing.openFilters}
         onOpenSort={listing.openSort}
         onToggleCompareMode={listing.toggleCompareMode}
+        sortDisabled={listing.isSearchActive}
       />
 
       <div className={productListingPageStyles.mainLayout}>
@@ -40,6 +41,7 @@ export function ProductListingPage() {
           rating={listing.filters.rating}
           onUpdateFilter={listing.updateFilterDebounced}
           onClear={listing.clearFilters}
+          hideRatingFilter={listing.isSearchActive}
         />
 
         <div className={productListingPageStyles.resultsWrapper}>
@@ -48,6 +50,7 @@ export function ProductListingPage() {
             totalProducts={listing.data?.total}
             isFetching={listing.isFetching}
             onSortChange={(v) => listing.updateFilter("sort", v)}
+            sortDisabled={listing.isSearchActive}
             compareMode={listing.compareMode}
             onToggleCompare={listing.toggleCompareMode}
             isLoading={!listing.data && listing.isFetching}
@@ -76,6 +79,7 @@ export function ProductListingPage() {
           listing.clearFilters();
           listing.closeFilters();
         }}
+        hideRatingFilter={listing.isSearchActive}
       />
 
       <SortBottomSheet

@@ -11,6 +11,14 @@ export interface ApiSessionAdapter {
   getAccessToken: () => string | null;
   persistAccessToken: (accessToken: string) => void;
   clearSession: () => void;
+  /**
+   * Vets a freshly refreshed access token before it's persisted. Return false to reject it —
+   * sessionRefresh then treats the refresh as a definitive auth failure (clearing the session)
+   * instead of persisting the token and retrying the original request under a possibly different
+   * identity. Optional: only an adapter that needs to guard against this (e.g. detecting that an
+   * impersonation session silently refreshed back to the acting admin's own identity) implements it.
+   */
+  acceptRefreshedToken?: (accessToken: string) => boolean;
 }
 
 const localStorageAdapter: ApiSessionAdapter = {

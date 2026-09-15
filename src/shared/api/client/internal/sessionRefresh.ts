@@ -56,7 +56,15 @@ async function performRefreshAttempt(): Promise<
 
     const body = await parseResponseBody(res);
     if (body && "success" in body && body.success) {
-      persistAccessToken((body.data as { accessToken: string }).accessToken);
+      const accessToken = (body.data as { accessToken: string }).accessToken;
+      const adapter = getApiSessionAdapter();
+      if (
+        adapter.acceptRefreshedToken &&
+        !adapter.acceptRefreshedToken(accessToken)
+      ) {
+        return "auth_failure";
+      }
+      persistAccessToken(accessToken);
       return "ok";
     }
     return "auth_failure";

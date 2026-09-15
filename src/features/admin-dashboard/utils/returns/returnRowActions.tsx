@@ -4,6 +4,8 @@ import { RETURN_STATUS, REFUND_STATUS } from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { returnsApi } from "@/features/returns";
+import { notifyError } from "@/shared/stores/notifications/errorToast.store";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { AdminAssignDeliveryAgentAction } from "../../components/delivery-agents/AdminAssignDeliveryAgentAction.component";
 import { adminRowLabel } from "../shared/adminRowLabel";
@@ -24,7 +26,13 @@ export function buildReturnRowActions(
         type="button"
         variant="outline"
         size="sm"
-        onClick={() => void returnsApi.downloadCreditNote(String(row.id))}
+        onClick={() =>
+          void returnsApi
+            .downloadCreditNote(String(row.id))
+            .catch((error: unknown) =>
+              notifyError(getApiErrorMessage(error, LABELS.downloadFailed)),
+            )
+        }
       >
         {LABELS.downloadCreditNote}
       </Button>,
@@ -37,7 +45,13 @@ export function buildReturnRowActions(
         type="button"
         variant="outline"
         size="sm"
-        onClick={() => void returnsApi.downloadDebitNote(String(row.id))}
+        onClick={() =>
+          void returnsApi
+            .downloadDebitNote(String(row.id))
+            .catch((error: unknown) =>
+              notifyError(getApiErrorMessage(error, LABELS.downloadFailed)),
+            )
+        }
       >
         {LABELS.downloadDebitNote}
       </Button>,
@@ -60,7 +74,7 @@ export function buildReturnRowActions(
     );
   }
 
-  if (status === RETURN_STATUS.REQUESTED || status === RETURN_STATUS.APPROVED) {
+  if (status === RETURN_STATUS.REQUESTED) {
     buttons.push(
       <AdminConfirmAction
         key="reject"

@@ -1,7 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { notifyError } from "@/shared/stores/notifications/errorToast.store";
 import {
   commissionsApi,
   type CommissionInvoiceEntry,
@@ -22,6 +25,8 @@ export function useCommissionInvoices(invoices: CommissionInvoiceEntry[]) {
     setPendingId(id);
     try {
       await commissionsApi.downloadInvoice(id);
+    } catch (error) {
+      notifyError(getApiErrorMessage(error, LABELS.downloadFailed));
     } finally {
       setPendingId(null);
     }

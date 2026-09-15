@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
+import { isSelfAdminTarget } from "../../utils/shared/isSelfAdminTarget";
 import { DetailQuerySkeleton } from "@/shared/components/DetailQuerySkeleton.component";
 import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
@@ -34,6 +36,7 @@ export function AdminUserDetailPage() {
 function AdminUserDetailContent() {
   const params = useParams<{ id: string }>();
   const userId = params.id;
+  const currentUserId = useAuthStore((s) => s.currentUser?.id);
 
   const userQuery = useAdminUser(userId);
   const addressesQuery = useAdminUserAddresses(userId);
@@ -57,6 +60,10 @@ function AdminUserDetailContent() {
 
   const addresses = addressesQuery.data ?? [];
   const orders = ordersQuery.data?.items ?? [];
+  // Backend rejects role/status changes an admin targets at their own account (self-escalation
+  // guard) — hide the actions here rather than let the admin hit a confusing 403 after filling
+  // out the dialog.
+  const isSelf = isSelfAdminTarget(user.id, currentUserId);
 
   const userPhoneDisplay = user.phone ?? "—";
   const statusBadgeElement = user.status ? (
@@ -71,6 +78,29 @@ function AdminUserDetailContent() {
       </dd>
     </>
   ) : null;
+
+  const changeRoleAction = isSelf ? null : (
+    <ChangeUserRoleDialog
+      userId={user.id}
+      userName={user.name}
+      currentRoleName={user.role}
+      currentVendorId={user.vendorId}
+    />
+  );
+
+  const changeRoleEditAction = isSelf ? null : (
+    <ChangeUserRoleDialog
+      userId={user.id}
+      userName={user.name}
+      currentRoleName={user.role}
+      currentVendorId={user.vendorId}
+      trigger={
+        <button type="button" className={adminUserDetailStyles.manageRoleLink}>
+          Edit
+        </button>
+      }
+    />
+  );
 
   const linkedVendorRow = user.vendorId ? (
     <>
@@ -104,12 +134,7 @@ function AdminUserDetailContent() {
 
       <div className={adminUserDetailStyles.actionsRow}>
         <ImpersonateUserButton userId={user.id} />
-        <ChangeUserRoleDialog
-          userId={user.id}
-          userName={user.name}
-          currentRoleName={user.role}
-          currentVendorId={user.vendorId}
-        />
+        {changeRoleAction}
       </div>
 
       <div className={adminUserDetailStyles.gridTwoCols}>
@@ -121,20 +146,7 @@ function AdminUserDetailContent() {
             <dt className={adminUserDetailStyles.dt}>{LABELS.role}</dt>
             <dd className={adminUserDetailStyles.ddFlex}>
               <span>{user.role}</span>
-              <ChangeUserRoleDialog
-                userId={user.id}
-                userName={user.name}
-                currentRoleName={user.role}
-                currentVendorId={user.vendorId}
-                trigger={
-                  <button
-                    type="button"
-                    className={adminUserDetailStyles.manageRoleLink}
-                  >
-                    Edit
-                  </button>
-                }
-              />
+              {changeRoleEditAction}
             </dd>
             <dt className={adminUserDetailStyles.dt}>{LABELS.phone}</dt>
             <dd className={adminUserDetailStyles.dd}>{userPhoneDisplay}</dd>

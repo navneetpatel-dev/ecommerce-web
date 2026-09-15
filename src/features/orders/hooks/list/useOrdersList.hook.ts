@@ -3,7 +3,10 @@
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { LABELS } from "@/shared/constants/labels";
 import { navigate } from "@/shared/utils/navigation/navigate";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { notifyError } from "@/shared/stores/notifications/errorToast.store";
 import type { Order } from "@/shared/api/types";
 import { reportsEngineApi } from "@/features/reports";
 import { defaultHistoryRange } from "../../utils/list/orderHistoryRange";
@@ -26,7 +29,11 @@ export function useOrdersList({ pagination }: UseOrdersListParams) {
 
   const exportHistory = useCallback(() => {
     const range = defaultHistoryRange();
-    void reportsEngineApi.customerOrderHistoryExport(range);
+    reportsEngineApi
+      .customerOrderHistoryExport(range)
+      .catch((error: unknown) =>
+        notifyError(getApiErrorMessage(error, LABELS.downloadFailed)),
+      );
   }, []);
 
   const handleRowClick = useCallback(

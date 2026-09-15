@@ -6,9 +6,10 @@ import { useProductList } from "../../api/listing/products.queries";
 import type { ProductListItem } from "@/shared/api/types";
 import { MAX_COMPARED_PRODUCTS } from "../../constants/compare/compare";
 
+// Kept in sync with SortOptionsList.component.tsx's SORT_OPTIONS — see its comment for why
+// "Popular" isn't offered (byte-identical backend query to "Trending").
 export const SORT_OPTIONS = [
   { value: "trending", label: "Trending" },
-  { value: "popular", label: "Popular" },
   { value: "newest", label: "Newest" },
   { value: "price_asc", label: "Price Low to High" },
   { value: "price_desc", label: "Price High to Low" },
@@ -26,6 +27,10 @@ export function useProductListing() {
   const { filters, updateFilter, updateFilterDebounced, clearFilters } =
     useFilters();
   const { data, isFetching } = useProductList(filters);
+  // The search endpoint (GET /api/search) ranks by text relevance and doesn't accept sort/rating/
+  // attribute params at all — see fetchProductList's dropped-params comment. Surfacing those
+  // controls as interactive while they're silently ignored reads as broken filtering.
+  const isSearchActive = Boolean(filters.search?.trim());
 
   const toggleCompareProduct = (product: ProductListItem) => {
     setComparedProducts((current) => {
@@ -63,6 +68,7 @@ export function useProductListing() {
     filters,
     data,
     isFetching,
+    isSearchActive,
     openFilters: () => setFilterOpen(true),
     closeFilters: () => setFilterOpen(false),
     openSort: () => setSortOpen(true),

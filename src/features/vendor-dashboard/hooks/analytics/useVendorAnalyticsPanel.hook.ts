@@ -9,7 +9,8 @@ function formatShortDate(iso: string): string {
 }
 
 export function useVendorAnalyticsPanel() {
-  const { analytics, isLoading } = useVendorAnalytics();
+  const { analytics, isLoading, isError, error, refetch } =
+    useVendorAnalytics();
   const colors = useChartThemeColors();
 
   const chartData = useMemo(
@@ -30,6 +31,9 @@ export function useVendorAnalyticsPanel() {
     chartData,
     colors,
     isLoading,
+    isError,
+    error,
+    retry: () => void refetch(),
     topProducts,
     onTimePercent,
     latePercent,

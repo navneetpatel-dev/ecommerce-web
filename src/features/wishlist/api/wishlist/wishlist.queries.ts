@@ -2,6 +2,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { wishlistApi } from "./wishlist.api";
 import { cartKeys, useCartDrawerStore } from "@/features/cart";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
+import { LABELS } from "@/shared/constants/labels";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { notifyError } from "@/shared/stores/notifications/errorToast.store";
 import type { WishlistItem } from "@/shared/api/types";
 
 type WishlistData = { items: WishlistItem[] };
@@ -48,10 +51,11 @@ export function useAddToWishlist() {
       });
       return { previous };
     },
-    onError: (_error, _productId, context) => {
+    onError: (error, _productId, context) => {
       if (context?.previous) {
         queryClient.setQueryData(wishlistKeys.all, context.previous);
       }
+      notifyError(getApiErrorMessage(error, LABELS.genericActionFailed));
     },
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: wishlistKeys.all });
@@ -75,10 +79,11 @@ export function useRemoveFromWishlist() {
       });
       return { previous };
     },
-    onError: (_error, _productId, context) => {
+    onError: (error, _productId, context) => {
       if (context?.previous) {
         queryClient.setQueryData(wishlistKeys.all, context.previous);
       }
+      notifyError(getApiErrorMessage(error, LABELS.genericActionFailed));
     },
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: wishlistKeys.all });
@@ -102,10 +107,11 @@ export function useMoveToCart() {
       });
       return { previous };
     },
-    onError: (_error, _productId, context) => {
+    onError: (error, _productId, context) => {
       if (context?.previous) {
         queryClient.setQueryData(wishlistKeys.all, context.previous);
       }
+      notifyError(getApiErrorMessage(error, LABELS.genericActionFailed));
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: cartKeys.all });

@@ -23,10 +23,15 @@ export function getListingEmptyState(
   filters: ProductFilters,
   categoryName?: string,
 ): ListingEmptyState {
+  // The search endpoint (GET /api/search) ignores `rating` entirely (see fetchProductList /
+  // useProductListing.hook.ts's isSearchActive) — while searching, a leftover rating filter from
+  // before the search started isn't actually influencing results, so it shouldn't take priority
+  // over the "no results for {search}" messaging below. minPrice/maxPrice ARE still forwarded to
+  // search, so they still count.
   const hasFacets =
     filters.minPrice !== undefined ||
     filters.maxPrice !== undefined ||
-    filters.rating !== undefined;
+    (filters.rating !== undefined && !filters.search);
 
   if (hasFacets) {
     return {

@@ -10,6 +10,8 @@ interface MobileActionBarProps {
   onOpenFilters: () => void;
   onOpenSort: () => void;
   onToggleCompareMode: () => void;
+  /** Search results are relevance-ranked and can't be re-sorted. */
+  sortDisabled?: boolean;
 }
 
 export function MobileActionBar({
@@ -17,6 +19,7 @@ export function MobileActionBar({
   onOpenFilters,
   onOpenSort,
   onToggleCompareMode,
+  sortDisabled = false,
 }: MobileActionBarProps) {
   return (
     <div className={productListingPageStyles.mobileBarRoot}>
@@ -35,6 +38,8 @@ export function MobileActionBar({
           size="sm"
           className={productListingPageStyles.mobileBarButton}
           onClick={onOpenSort}
+          disabled={sortDisabled}
+          title={sortDisabled ? LABELS.sortUnavailableDuringSearch : undefined}
         >
           <ArrowUpDown size={14} strokeWidth={1.75} aria-hidden />
           {LABELS.sort}

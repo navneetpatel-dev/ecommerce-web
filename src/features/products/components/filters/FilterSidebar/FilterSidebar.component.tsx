@@ -1,6 +1,7 @@
 "use client";
 
 import { Accordion } from "@/shared/components/ui/accordion";
+import { LABELS } from "@/shared/constants/labels";
 import type { CategoryFacet } from "@/shared/api/types";
 import { filterSidebarStyles } from "../../../styles/filters/filterSidebar.styles";
 import { useFilterSidebarPresentation } from "../../../hooks/filters/useFilterSidebarPresentation.hook";
@@ -21,6 +22,9 @@ export interface FilterSidebarProps {
   facets?: CategoryFacet[];
   facetSelections?: Record<string, string[]>;
   onToggleFacet?: (filterKey: string, value: string) => void;
+  /** Search results ignore the rating filter param entirely — hide it rather than let it look
+   * interactive while doing nothing. */
+  hideRatingFilter?: boolean;
 }
 
 export function FilterSidebar({
@@ -34,6 +38,7 @@ export function FilterSidebar({
   facets = [],
   facetSelections = {},
   onToggleFacet,
+  hideRatingFilter = false,
 }: FilterSidebarProps) {
   const { hasFilters, defaultOpen, accordionKey } =
     useFilterSidebarPresentation({
@@ -48,6 +53,12 @@ export function FilterSidebar({
     <aside className={filterSidebarStyles.aside(className)}>
       <div className={filterSidebarStyles.container}>
         <FilterSidebarHeader hasFilters={hasFilters} onClear={onClear} />
+
+        {hideRatingFilter ? (
+          <p className={filterSidebarStyles.searchModeNote}>
+            {LABELS.ratingFilterUnavailableDuringSearch}
+          </p>
+        ) : null}
 
         <Accordion
           key={accordionKey}
@@ -67,11 +78,13 @@ export function FilterSidebar({
             onToggle={onToggleFacet}
           />
 
-          <FilterSidebarRatingFilter
-            rating={rating}
-            idPrefix={idPrefix}
-            onUpdateFilter={onUpdateFilter}
-          />
+          {hideRatingFilter ? null : (
+            <FilterSidebarRatingFilter
+              rating={rating}
+              idPrefix={idPrefix}
+              onUpdateFilter={onUpdateFilter}
+            />
+          )}
         </Accordion>
       </div>
     </aside>

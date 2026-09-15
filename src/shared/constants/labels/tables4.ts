@@ -3,14 +3,20 @@ export const tables4Labels = {
   promoBannerLinkType: "Link type",
   promoBannerLinkTargetId: "Link target ID",
   promoBannerLinkUrl: "Link URL",
+  downloadFailed: "Could not download the file. Please try again.",
+  notFoundDeliveryBody:
+    "This page does not exist. Use the navigation to get back to your tasks.",
   sort: "Sort",
+  sortUnavailableDuringSearch:
+    "Sorting isn't available for search results — showing the best matches for your search.",
+  ratingFilterUnavailableDuringSearch:
+    "Rating filter isn't available for search results.",
   compare: "Compare",
   compareMinRequired: "Add at least 2 products to compare.",
   compareSelectionCount: "{count} of {max} selected",
   compareMaxReached:
     "Maximum of {max} products reached. Remove one to add another.",
   sortTrending: "Trending",
-  sortPopular: "Popular",
   sortNewest: "Newest",
   sortPriceLowHigh: "Price: Low to High",
   sortPriceHighLow: "Price: High to Low",

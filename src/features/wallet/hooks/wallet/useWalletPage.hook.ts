@@ -4,6 +4,8 @@ import { useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
+import { notifyError } from "@/shared/stores/notifications/errorToast.store";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import {
   useWalletBalance,
   useWalletTransactions,
@@ -51,6 +53,12 @@ export function useWalletPage() {
     transactionsLoading: transactionsQuery.isLoading,
     transactionsError,
     retryTransactions: () => void transactionsQuery.refetch(),
-    downloadInvoice: (id: string) => void walletApi.downloadRechargeInvoice(id),
+    downloadInvoice: (id: string) => {
+      walletApi
+        .downloadRechargeInvoice(id)
+        .catch((error: unknown) =>
+          notifyError(getApiErrorMessage(error, LABELS.downloadFailed)),
+        );
+    },
   };
 }

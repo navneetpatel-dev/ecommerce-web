@@ -23,6 +23,8 @@ export interface SortBarProps {
   onToggleCompare?: () => void;
   /** Hide desktop sort control on small screens when a mobile Sort sheet exists. */
   hideSortOnMobile?: boolean;
+  /** Search results are relevance-ranked; the sort endpoint param is silently ignored for them. */
+  disabled?: boolean;
   className?: string;
 }
 
@@ -34,6 +36,7 @@ export function SortBar({
   compareMode = false,
   onToggleCompare,
   hideSortOnMobile = false,
+  disabled = false,
   className,
 }: SortBarProps) {
   const countLabel =
@@ -53,9 +56,14 @@ export function SortBar({
       <p className={sortBarStyles.countText}>{countLabel}</p>
 
       <div className={sortBarStyles.actionsWrapper}>
-        <Select value={sort || "trending"} onValueChange={onSortChange}>
+        <Select
+          value={sort || "trending"}
+          onValueChange={onSortChange}
+          disabled={disabled}
+        >
           <SelectTrigger
             aria-label={LABELS.sort}
+            title={disabled ? LABELS.sortUnavailableDuringSearch : undefined}
             className={sortBarStyles.selectTrigger(hideSortOnMobile)}
           >
             <SelectValue placeholder={LABELS.sort} />

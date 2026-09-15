@@ -30,4 +30,5 @@ export const giftCardsLabels = {
   giftCardExpiredBadge: "Expired",
   giftCardRedeemedBadge: "Already redeemed",
   giftCardCancelledBadge: "Cancelled",
+  giftCardPendingBadge: "Payment processing — check back shortly",
 } as const;

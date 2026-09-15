@@ -17,6 +17,7 @@ export const filterSidebarStyles = {
   clearRatingButton:
     "mt-3 h-auto min-h-0 max-h-none px-0 py-0 text-body-sm font-medium text-brand hover:bg-transparent hover:text-brand-hover",
   facetList: "space-y-2",
+  searchModeNote: "text-body-sm text-ink-muted",
   checkboxField: (disabled: boolean, checked: boolean) =>
     cn("w-full gap-2.5 text-body-sm", disabled && !checked && "text-ink-faint"),
   checkboxLabel: "flex items-center justify-between gap-2",

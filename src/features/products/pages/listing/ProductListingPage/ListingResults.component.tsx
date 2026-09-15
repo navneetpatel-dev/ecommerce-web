@@ -12,6 +12,7 @@ interface ListingResultsProps {
   totalProducts?: number;
   isFetching: boolean;
   onSortChange: (value: string) => void;
+  sortDisabled?: boolean;
   compareMode: boolean;
   onToggleCompare: () => void;
   isLoading: boolean;
@@ -32,6 +33,7 @@ export function ListingResults({
   totalProducts,
   isFetching,
   onSortChange,
+  sortDisabled = false,
   compareMode,
   onToggleCompare,
   isLoading,
@@ -53,6 +55,7 @@ export function ListingResults({
         totalProducts={totalProducts}
         isFetching={isFetching}
         onSortChange={onSortChange}
+        disabled={sortDisabled}
         compareMode={compareMode}
         onToggleCompare={onToggleCompare}
       />
