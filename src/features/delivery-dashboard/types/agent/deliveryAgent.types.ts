@@ -89,6 +89,7 @@ export type ShiftSummary = {
   onTimePercent: number;
   codCashInHand: number;
   pendingEarnings: number;
+  pendingEarningsCount: number;
   earningsToday: number;
   perTaskEarning: number;
   pendingDeposits: number;

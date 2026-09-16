@@ -17,8 +17,7 @@ export function EarningsPayoutsCard() {
     earningsEmpty,
     downloadingId,
     download,
-    pendingTotal,
-    pendingCount,
+    pendingSummaryLabel,
   } = useEarningsPayoutsCardPresentation();
 
   return (
@@ -35,9 +34,7 @@ export function EarningsPayoutsCard() {
         </div>
         <h2 className={earningsPayoutsCardStyles.title}>Payout history</h2>
         <p className={earningsPayoutsCardStyles.subtitle}>
-          ₹{pendingTotal.toFixed(2)} pending across {pendingCount} completed
-          task
-          {pendingCount === 1 ? "" : "s"} — included in the next payout run.
+          {pendingSummaryLabel}
         </p>
       </div>
 

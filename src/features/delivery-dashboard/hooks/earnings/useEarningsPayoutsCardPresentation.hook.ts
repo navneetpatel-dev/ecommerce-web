@@ -5,6 +5,7 @@ import { deliveryAgentApi } from "../../api/agent/deliveryAgent.api";
 import {
   useMyEarningsLedger,
   useMyPayouts,
+  useShiftSummary,
 } from "../../api/agent/deliveryAgent.queries";
 
 export interface PayoutTableRowViewModel {
@@ -25,16 +26,18 @@ export interface RecentTaskRowViewModel {
 export function useEarningsPayoutsCardPresentation() {
   const earnings = useMyEarningsLedger();
   const payouts = useMyPayouts();
+  const shiftSummary = useShiftSummary();
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const earningsData = earnings.data ?? [];
   const payoutsData = payouts.data ?? [];
 
-  const { pendingTotal, pendingCount } = useMemo(() => {
-    const pending = earningsData.filter((e) => e.status === "PENDING");
-    const total = pending.reduce((sum, e) => sum + Number(e.amount), 0);
-    return { pendingTotal: total, pendingCount: pending.length };
-  }, [earningsData]);
+  const pendingLoading = Boolean(shiftSummary.isLoading);
+  const pendingTotal = shiftSummary.data?.pendingEarnings ?? 0;
+  const pendingCount = shiftSummary.data?.pendingEarningsCount ?? 0;
+  const pendingSummaryLabel = pendingLoading
+    ? "Loading pending earnings..."
+    : `₹${pendingTotal.toFixed(2)} pending across ${pendingCount} completed task${pendingCount === 1 ? "" : "s"} — included in the next payout run.`;
 
   const download = useCallback(async (payoutId: string) => {
     setDownloadingId(payoutId);
@@ -86,7 +89,9 @@ export function useEarningsPayoutsCardPresentation() {
     earningsEmpty: earningsData.length === 0,
     downloadingId,
     download,
+    pendingLoading,
     pendingTotal,
     pendingCount,
+    pendingSummaryLabel,
   };
 }
