@@ -60,11 +60,15 @@ export function DataTableMobileCards<T>({
             {primary ? (
               <div
                 className={cn(
-                  dataTableMobileStyles.primaryCell,
                   primary.className,
+                  dataTableMobileStyles.primaryCell,
                 )}
               >
-                {renderCellContent(primary, primaryContent, row)}
+                {renderCellContent(
+                  { ...primary, truncate: false },
+                  primaryContent,
+                  row,
+                )}
               </div>
             ) : null}
 
@@ -90,11 +94,15 @@ export function DataTableMobileCards<T>({
                       </dt>
                       <dd
                         className={cn(
-                          dataTableMobileStyles.dd,
                           column.className,
+                          dataTableMobileStyles.dd,
                         )}
                       >
-                        {renderCellContent(column, content, row)}
+                        {renderCellContent(
+                          { ...column, truncate: false },
+                          content,
+                          row,
+                        )}
                       </dd>
                     </div>
                   );

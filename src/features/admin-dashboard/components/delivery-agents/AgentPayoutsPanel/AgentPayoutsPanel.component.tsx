@@ -1,12 +1,17 @@
 "use client";
 
 import { useCallback } from "react";
-import { PlayCircle, Wallet } from "lucide-react";
+import { Download, PlayCircle, Wallet } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
+import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
+import type { AgentPayout } from "@/features/delivery-dashboard";
 import { useAgentPayoutsPanel } from "../../../hooks/delivery-agents/useAgentPayoutsPanel.hook";
-import { agentPayoutsPanelStyles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
-import { AgentPayoutTableBody } from "./AgentPayoutTableBody.component";
+import { agentPayoutsPanelStyles as styles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
+import { AgentPayoutActions } from "./AgentPayoutActions.component";
 
 /** Admin batch-processes settled agent earnings into payouts, then marks each paid/failed. */
 export function AgentPayoutsPanel() {
@@ -30,85 +35,96 @@ export function AgentPayoutsPanel() {
     void process();
   }, [process]);
 
+  const columns: DataTableColumn<AgentPayout>[] = [
+    {
+      id: "agent",
+      header: "Agent",
+      className: styles.tableCellMedium,
+      cell: (row) => row.agentName ?? "—",
+    },
+    {
+      id: "period",
+      header: "Period",
+      className: styles.tableCellMuted,
+      cell: (row) =>
+        `${new Date(row.periodStart).toLocaleDateString()} – ${new Date(row.periodEnd).toLocaleDateString()}`,
+    },
+    {
+      id: "amount",
+      header: "Amount",
+      className: styles.tableCellAmount,
+      cell: (row) => `₹${row.amount.toFixed(2)}`,
+    },
+    {
+      id: "status",
+      header: "Status",
+      truncate: false,
+      cell: (row) => <StatusBadge status={row.status} />,
+    },
+    {
+      id: "reference",
+      header: "Reference / reason",
+      className: styles.tableCellMuted,
+      cell: (row) =>
+        row.status === "FAILED"
+          ? (row.failureReason ?? "—")
+          : (row.paymentReferenceNumber ?? "—"),
+    },
+    {
+      id: "statement",
+      header: "Statement",
+      truncate: false,
+      cell: (row) => (
+        <button
+          type="button"
+          className={styles.pdfButton}
+          disabled={downloadingId === row.id}
+          onClick={() => {
+            void download(row.id);
+          }}
+        >
+          <Download className={styles.actionIcon} aria-hidden="true" />
+          PDF
+        </button>
+      ),
+    },
+  ];
+
   return (
-    <section className={agentPayoutsPanelStyles.root}>
-      <div className={agentPayoutsPanelStyles.header}>
-        <div className={agentPayoutsPanelStyles.headerLeft}>
-          <Wallet
-            className={agentPayoutsPanelStyles.headerIcon}
-            aria-hidden="true"
-          />
-          <h2 className={agentPayoutsPanelStyles.title}>
-            Agent payouts management
-          </h2>
+    <section className={styles.root}>
+      <div className={styles.header}>
+        <div className={styles.headerLeft}>
+          <Wallet className={styles.headerIcon} aria-hidden="true" />
+          <h2 className={styles.title}>Agent payouts management</h2>
           {pendingCount > 0 ? (
-            <span className={agentPayoutsPanelStyles.pendingBadge}>
-              {pendingCount} pending
-            </span>
+            <span className={styles.pendingBadge}>{pendingCount} pending</span>
           ) : null}
         </div>
         <Button size="sm" loading={processing} onClick={handleProcess}>
-          <PlayCircle
-            className={agentPayoutsPanelStyles.playIcon}
-            aria-hidden="true"
-          />
+          <PlayCircle className={styles.playIcon} aria-hidden="true" />
           Process settled earnings
         </Button>
       </div>
-      {message ? (
-        <div className={agentPayoutsPanelStyles.successAlert}>{message}</div>
-      ) : null}
-      {error ? (
-        <div className={agentPayoutsPanelStyles.errorAlert}>{error}</div>
-      ) : null}
-      {loading ? (
-        <p className={agentPayoutsPanelStyles.loadingText}>
-          Loading payouts...
-        </p>
-      ) : payouts.length === 0 ? (
-        <p className={agentPayoutsPanelStyles.emptyText}>
-          No agent payouts yet.
-        </p>
-      ) : (
-        <TableScrollShell>
-          <table className={agentPayoutsPanelStyles.table}>
-            <thead>
-              <tr className={agentPayoutsPanelStyles.tableHeaderRow}>
-                <th className={agentPayoutsPanelStyles.tableHeaderCell}>
-                  Agent
-                </th>
-                <th className={agentPayoutsPanelStyles.tableHeaderCell}>
-                  Period
-                </th>
-                <th className={agentPayoutsPanelStyles.tableHeaderCell}>
-                  Amount
-                </th>
-                <th className={agentPayoutsPanelStyles.tableHeaderCell}>
-                  Status
-                </th>
-                <th className={agentPayoutsPanelStyles.tableHeaderCell}>
-                  Reference / reason
-                </th>
-                <th className={agentPayoutsPanelStyles.tableHeaderCell}>
-                  Statement
-                </th>
-                <th className={agentPayoutsPanelStyles.tableHeaderCell}>
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <AgentPayoutTableBody
-              payouts={payouts}
-              downloadingId={downloadingId}
-              pendingId={pendingId}
-              onDone={load}
-              onDownload={download}
-              onFail={fail}
-              onRetry={retry}
-            />
-          </table>
-        </TableScrollShell>
-      )}
+      {message ? <div className={styles.successAlert}>{message}</div> : null}
+      {error ? <div className={styles.errorAlert}>{error}</div> : null}
+      <DataTable
+        columns={columns}
+        rows={payouts}
+        getRowId={(row) => row.id}
+        loading={loading}
+        emptyMessage="No agent payouts yet."
+        rowDetails={false}
+        actions={(row) => (
+          <AgentPayoutActions
+            payoutId={row.id}
+            status={row.status}
+            pendingId={pendingId}
+            onDone={load}
+            onFail={fail}
+            onRetry={retry}
+          />
+        )}
+      />
     </section>
   );
 }

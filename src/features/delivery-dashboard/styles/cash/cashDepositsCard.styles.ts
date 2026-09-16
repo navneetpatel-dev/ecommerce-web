@@ -20,6 +20,8 @@ export const cashDepositsCardStyles = {
   tdExpected: (mismatch: boolean) =>
     cn("py-2 pr-3 font-mono", mismatch ? "text-danger" : "text-ink-muted"),
   cellMono: "font-mono",
+  dateCell: "flex items-baseline justify-between gap-3 lg:block",
+  mobileAmount: "shrink-0 font-mono lg:hidden",
   cellExpected: (mismatch: boolean) =>
     cn("font-mono", mismatch ? "text-danger" : "text-ink-muted"),
   tdStatus: "py-2 pr-3",

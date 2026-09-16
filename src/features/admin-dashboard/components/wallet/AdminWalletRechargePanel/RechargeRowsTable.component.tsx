@@ -1,11 +1,14 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
-import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
-import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
-import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
 import type { WalletRechargeReport } from "../../../api/finance/reports.api";
-import { adminWalletRechargePanelStyles } from "../../../styles/wallet/adminWalletRechargePanel.styles";
+import { adminWalletRechargePanelStyles as styles } from "../../../styles/wallet/adminWalletRechargePanel.styles";
+
+type RechargeRow = WalletRechargeReport["rows"][number];
 
 interface RechargeRowsTableProps {
   report: WalletRechargeReport;
@@ -14,103 +17,69 @@ interface RechargeRowsTableProps {
   onPageChange: (page: number) => void;
 }
 
+const COLUMNS: DataTableColumn<RechargeRow>[] = [
+  {
+    id: "userId",
+    header: LABELS.reportUserId,
+    className: styles.cellMono,
+    accessor: "userId",
+  },
+  {
+    id: "amountInr",
+    header: LABELS.reportAmountInr,
+    className: styles.cellNumBold,
+    cell: (row) => formatInr(row.amountInr),
+  },
+  {
+    id: "pointsCredited",
+    header: LABELS.reportPointsCredited,
+    className: styles.cellNum,
+    cell: (row) => formatPoints(row.pointsCredited),
+  },
+  {
+    id: "status",
+    header: LABELS.reportStatus,
+    truncate: false,
+    cell: (row) => <span className={styles.badge}>{row.status}</span>,
+  },
+  {
+    id: "paidAt",
+    header: LABELS.reportPaidAt,
+    className: styles.cellMuted,
+    cell: (row) =>
+      row.paidAt ? new Date(row.paidAt).toLocaleDateString("en-IN") : "—",
+  },
+];
+
 export function RechargeRowsTable({
   report,
   page,
   loading,
   onPageChange,
 }: RechargeRowsTableProps) {
+  const pagination = report.pagination
+    ? {
+        page,
+        totalPages: Math.max(1, report.pagination.totalPages),
+        total: report.pagination.total,
+        from:
+          report.pagination.total > 0
+            ? (page - 1) * report.pagination.limit + 1
+            : 0,
+        to: Math.min(page * report.pagination.limit, report.pagination.total),
+        onPageChange,
+      }
+    : undefined;
+
   return (
-    <>
-      {report.pagination ? (
-        <PaginationResultSummary
-          from={
-            report.pagination.total > 0
-              ? (page - 1) * report.pagination.limit + 1
-              : 0
-          }
-          to={Math.min(page * report.pagination.limit, report.pagination.total)}
-          total={report.pagination.total}
-        />
-      ) : null}
-
-      {report.rows.length > 0 ? (
-        <div className={adminWalletRechargePanelStyles.tableContainer}>
-          <TableScrollShell>
-            <table className={adminWalletRechargePanelStyles.table}>
-              <thead className={adminWalletRechargePanelStyles.thead}>
-                <tr>
-                  <th className={adminWalletRechargePanelStyles.th}>
-                    {LABELS.reportUserId}
-                  </th>
-                  <th className={adminWalletRechargePanelStyles.th}>
-                    {LABELS.reportAmountInr}
-                  </th>
-                  <th className={adminWalletRechargePanelStyles.th}>
-                    {LABELS.reportPointsCredited}
-                  </th>
-                  <th className={adminWalletRechargePanelStyles.th}>
-                    {LABELS.reportStatus}
-                  </th>
-                  <th className={adminWalletRechargePanelStyles.th}>
-                    {LABELS.reportPaidAt}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className={adminWalletRechargePanelStyles.tbody}>
-                {report.rows.map((row) => (
-                  <tr
-                    key={row.id}
-                    className={adminWalletRechargePanelStyles.tr}
-                  >
-                    <td className={adminWalletRechargePanelStyles.cellMono}>
-                      {row.userId}
-                    </td>
-                    <td className={adminWalletRechargePanelStyles.cellNumBold}>
-                      {formatInr(row.amountInr)}
-                    </td>
-                    <td className={adminWalletRechargePanelStyles.cellNum}>
-                      {formatPoints(row.pointsCredited)}
-                    </td>
-                    <td className={adminWalletRechargePanelStyles.cellBadge}>
-                      <span className={adminWalletRechargePanelStyles.badge}>
-                        {row.status}
-                      </span>
-                    </td>
-                    <td className={adminWalletRechargePanelStyles.cellMuted}>
-                      {row.paidAt
-                        ? new Date(row.paidAt).toLocaleDateString("en-IN")
-                        : "—"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </TableScrollShell>
-        </div>
-      ) : (
-        <div className={adminWalletRechargePanelStyles.tableEmpty}>
-          <p className={adminWalletRechargePanelStyles.tableEmptyText}>
-            {LABELS.noReportData}
-          </p>
-        </div>
-      )}
-
-      {report.pagination ? (
-        <div
-          className={
-            loading
-              ? adminWalletRechargePanelStyles.paginationLoading
-              : undefined
-          }
-        >
-          <PaginationContainer
-            currentPage={page}
-            totalPages={Math.max(1, report.pagination.totalPages)}
-            onPageChange={onPageChange}
-          />
-        </div>
-      ) : null}
-    </>
+    <DataTable
+      columns={COLUMNS}
+      rows={report.rows}
+      getRowId={(row) => row.id}
+      loading={loading}
+      emptyMessage={LABELS.noReportData}
+      rowDetails={false}
+      pagination={pagination}
+    />
   );
 }

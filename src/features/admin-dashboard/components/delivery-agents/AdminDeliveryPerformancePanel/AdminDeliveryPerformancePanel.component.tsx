@@ -3,11 +3,76 @@
 import { BarChart3 } from "lucide-react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { Button } from "@/shared/components/ui/button";
-import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
+import type { DeliveryAgentPerformance } from "@/features/delivery-dashboard";
+import { dateRangeToolbarStyles } from "@/shared/styles/forms/dateRangeToolbar.styles";
 import { useAdminDeliveryPerformancePanel } from "../../../hooks/delivery-agents/useAdminDeliveryPerformancePanel.hook";
 import { adminDeliveryPerformancePanelStyles } from "../../../styles/delivery-agents/adminDeliveryPerformancePanel.styles";
-import { PerformanceTableBody } from "./PerformanceTableBody.component";
 import { PerformanceChart } from "./PerformanceChart.component";
+
+const COLUMNS: DataTableColumn<DeliveryAgentPerformance>[] = [
+  {
+    id: "agent",
+    header: "Agent",
+    truncate: false,
+    cell: (row) => (
+      <div className={adminDeliveryPerformancePanelStyles.agentNameWrapper}>
+        {row.fullName}
+        {row.flagged ? (
+          <span
+            title={row.flagReason ?? undefined}
+            className={adminDeliveryPerformancePanelStyles.flagBadge}
+          >
+            Flagged
+          </span>
+        ) : null}
+      </div>
+    ),
+  },
+  {
+    id: "hub",
+    header: "Hub/zone",
+    className: adminDeliveryPerformancePanelStyles.tableCellMuted,
+    accessor: "hubOrZone",
+  },
+  {
+    id: "delivered",
+    header: "Delivered",
+    accessor: "delivered",
+  },
+  {
+    id: "rto",
+    header: "RTO",
+    accessor: "rto",
+  },
+  {
+    id: "rtoRate",
+    header: "RTO rate",
+    cell: (row) => `${row.rtoRatePercent}%`,
+  },
+  {
+    id: "failedAttempts",
+    header: "Failed attempts",
+    accessor: "failedAttempts",
+  },
+  {
+    id: "avgFulfillment",
+    header: "Avg. fulfillment",
+    cell: (row) =>
+      row.avgFulfillmentHours != null ? `${row.avgFulfillmentHours}h` : "—",
+  },
+  {
+    id: "rating",
+    header: "Avg. rating",
+    cell: (row) =>
+      row.averageRating != null
+        ? `${row.averageRating} (${row.ratingCount})`
+        : "—",
+  },
+];
 
 /** Admin-only rollup of delivered/RTO/failed-attempt/rating stats per agent over a date range. */
 export function AdminDeliveryPerformancePanel() {
@@ -43,6 +108,7 @@ export function AdminDeliveryPerformancePanel() {
             onToChange={setTo}
             fromId="performance-from"
             toId="performance-to"
+            className={dateRangeToolbarStyles.dateFields}
           />
           <Button type="button" size="sm" loading={loading} onClick={load}>
             Apply filter
@@ -60,74 +126,12 @@ export function AdminDeliveryPerformancePanel() {
         </p>
       ) : (
         <>
-          <TableScrollShell>
-            <table className={adminDeliveryPerformancePanelStyles.table}>
-              <thead>
-                <tr
-                  className={adminDeliveryPerformancePanelStyles.tableHeaderRow}
-                >
-                  <th
-                    className={
-                      adminDeliveryPerformancePanelStyles.tableHeaderCell
-                    }
-                  >
-                    Agent
-                  </th>
-                  <th
-                    className={
-                      adminDeliveryPerformancePanelStyles.tableHeaderCell
-                    }
-                  >
-                    Hub/zone
-                  </th>
-                  <th
-                    className={
-                      adminDeliveryPerformancePanelStyles.tableHeaderCell
-                    }
-                  >
-                    Delivered
-                  </th>
-                  <th
-                    className={
-                      adminDeliveryPerformancePanelStyles.tableHeaderCell
-                    }
-                  >
-                    RTO
-                  </th>
-                  <th
-                    className={
-                      adminDeliveryPerformancePanelStyles.tableHeaderCell
-                    }
-                  >
-                    RTO rate
-                  </th>
-                  <th
-                    className={
-                      adminDeliveryPerformancePanelStyles.tableHeaderCell
-                    }
-                  >
-                    Failed attempts
-                  </th>
-                  <th
-                    className={
-                      adminDeliveryPerformancePanelStyles.tableHeaderCell
-                    }
-                  >
-                    Avg. fulfillment
-                  </th>
-                  <th
-                    className={
-                      adminDeliveryPerformancePanelStyles.tableHeaderCell
-                    }
-                  >
-                    Avg. rating
-                  </th>
-                </tr>
-              </thead>
-              <PerformanceTableBody rows={rows} />
-            </table>
-          </TableScrollShell>
-
+          <DataTable
+            columns={COLUMNS}
+            rows={rows}
+            getRowId={(row) => row.deliveryAgentId}
+            rowDetails={false}
+          />
           <PerformanceChart rows={rows} />
         </>
       )}

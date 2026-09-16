@@ -1,34 +1,55 @@
 import type { StalePickup } from "@/features/delivery-dashboard";
-import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
-import { staleTasksPanelStyles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
-import { StalePickupRow } from "./StalePickupRow.component";
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
+import { staleTasksPanelStyles as styles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
 
 interface StalePickupsTableProps {
   pickups: StalePickup[];
 }
 
+function hoursSince(dateString: string): number {
+  return Math.floor(
+    (Date.now() - new Date(dateString).getTime()) / (60 * 60 * 1000),
+  );
+}
+
+const COLUMNS: DataTableColumn<StalePickup>[] = [
+  {
+    id: "returnId",
+    header: "Return ID",
+    className: styles.tableCellMono,
+    cell: (row) => row.id.slice(0, 8),
+  },
+  {
+    id: "agent",
+    header: "Agent",
+    cell: (row) => row.deliveryAgent?.fullName ?? "—",
+  },
+  {
+    id: "failureReason",
+    header: "Failure reason",
+    className: styles.tableCellMuted,
+    cell: (row) => row.pickupFailureReason ?? "—",
+  },
+  {
+    id: "stuckFor",
+    header: "Stuck for",
+    className: styles.tableCellWarning,
+    cell: (row) => `${hoursSince(row.updatedAt)}h`,
+  },
+];
+
 export function StalePickupsTable({ pickups }: StalePickupsTableProps) {
   if (pickups.length === 0) return null;
 
   return (
-    <TableScrollShell>
-      <table className={staleTasksPanelStyles.table}>
-        <thead>
-          <tr className={staleTasksPanelStyles.tableHeaderRow}>
-            <th className={staleTasksPanelStyles.tableHeaderCell}>Return ID</th>
-            <th className={staleTasksPanelStyles.tableHeaderCell}>Agent</th>
-            <th className={staleTasksPanelStyles.tableHeaderCell}>
-              Failure reason
-            </th>
-            <th className={staleTasksPanelStyles.tableHeaderCell}>Stuck for</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pickups.map((pickup) => (
-            <StalePickupRow key={pickup.id} pickup={pickup} />
-          ))}
-        </tbody>
-      </table>
-    </TableScrollShell>
+    <DataTable
+      columns={COLUMNS}
+      rows={pickups}
+      getRowId={(row) => row.id}
+      rowDetails={false}
+    />
   );
 }

@@ -8,25 +8,20 @@ import {
   CardDescription,
 } from "@/shared/components/ui/card";
 import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableHead,
-} from "@/shared/components/ui/table";
-import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
-import { TABLE_DATA_CELL_CLASS } from "@/shared/constants/table/table";
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
 import { LABELS } from "@/shared/constants/labels";
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
-import {
-  TopProductsRows,
-  type TopProduct,
-} from "./VendorAnalyticsPanel/TopProductsRows.component";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { type TopProduct } from "./VendorAnalyticsPanel/TopProductsRows.component";
 import {
   TOP_PRODUCTS_CARD,
   TOP_PRODUCTS_CONTENT,
   TOP_PRODUCTS_EMPTY,
   TOP_PRODUCTS_HEADER,
+  TOP_PRODUCTS_NAME_CELL,
+  TOP_PRODUCTS_NUMERIC_CELL,
   TOP_PRODUCTS_TITLE,
 } from "../../styles/analytics/vendorAnalyticsPanel.styles";
 
@@ -35,6 +30,27 @@ export type { TopProduct };
 export interface VendorTopProductsCardProps {
   topProducts: TopProduct[];
 }
+
+const COLUMNS: DataTableColumn<TopProduct>[] = [
+  {
+    id: "name",
+    header: LABELS.productName,
+    className: TOP_PRODUCTS_NAME_CELL,
+    accessor: "name",
+  },
+  {
+    id: "unitsSold",
+    header: vendorDashboardWidgetsLabels.vendorAnalyticsUnitsSold,
+    className: TOP_PRODUCTS_NUMERIC_CELL,
+    accessor: "unitsSold",
+  },
+  {
+    id: "revenue",
+    header: LABELS.revenue,
+    className: TOP_PRODUCTS_NUMERIC_CELL,
+    cell: (row) => formatInr(row.revenue),
+  },
+];
 
 /** Ranked top-products table for the vendor analytics dashboard. */
 export function VendorTopProductsCard({
@@ -58,26 +74,12 @@ export function VendorTopProductsCard({
             {vendorDashboardWidgetsLabels.vendorAnalyticsEmptyProducts}
           </p>
         ) : (
-          <TableScrollShell>
-            <Table scrollContainer={false}>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className={TABLE_DATA_CELL_CLASS}>
-                    {LABELS.productName}
-                  </TableHead>
-                  <TableHead className={TABLE_DATA_CELL_CLASS}>
-                    {vendorDashboardWidgetsLabels.vendorAnalyticsUnitsSold}
-                  </TableHead>
-                  <TableHead className={TABLE_DATA_CELL_CLASS}>
-                    {LABELS.revenue}
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TopProductsRows topProducts={topProducts} />
-              </TableBody>
-            </Table>
-          </TableScrollShell>
+          <DataTable
+            columns={COLUMNS}
+            rows={topProducts}
+            getRowId={(row) => row.id}
+            rowDetails={false}
+          />
         )}
       </CardContent>
     </Card>

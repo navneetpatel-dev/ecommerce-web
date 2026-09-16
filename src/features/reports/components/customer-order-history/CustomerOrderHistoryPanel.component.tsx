@@ -12,6 +12,7 @@ import {
   ReportExportStatus,
 } from "@/features/reports";
 import { ReportTable } from "../table/ReportTable.component";
+import { dateRangeToolbarStyles } from "@/shared/styles/forms/dateRangeToolbar.styles";
 import { useCustomerOrderHistory } from "../../hooks/customer-order-history/useCustomerOrderHistory.hook";
 import { customerOrderHistoryPanelStyles as styles } from "../../styles/customer-order-history/customerOrderHistoryPanel.styles";
 
@@ -39,50 +40,53 @@ export function CustomerOrderHistoryPanel() {
 
   return (
     <div className={styles.container}>
-      <FormSection title={LABELS.orderHistoryStatement} columns={3}>
-        <DateRangeFields
-          from={history.from}
-          to={history.to}
-          onFromChange={history.setFrom}
-          onToChange={history.setTo}
-          fromId="order-history-from"
-          toId="order-history-to"
-          disabled={history.controlsDisabled}
-          disabledHint={filterHint}
-        />
-        <div className={styles.actionsWrapper}>
-          <ButtonGroup align="start">
-            <DisabledActionHint
-              disabled={loadButtonDisabled}
-              message={loadButtonHint}
-              block
-              className={styles.buttonHint}
-            >
-              <Button
-                type="button"
-                fullWidth="mobile"
-                onClick={() => history.load(1)}
-                disabled={loadButtonDisabled}
-              >
-                {LABELS.loadOrderHistory}
-              </Button>
-            </DisabledActionHint>
-            <ReportExportButtons
-              grouped={false}
-              controlsDisabled={history.controlsDisabled}
-              exportingFormat={history.exportingFormat}
-              statusMessage={history.message}
-              onExportExcel={history.exportExcel}
-              onExportCsv={history.exportCsv}
-              onExportPdf={history.exportPdf}
-            />
-          </ButtonGroup>
-          <ReportExportStatus
-            message={history.message}
-            error={history.error}
-            exportingFormat={history.exportingFormat}
-            controlsDisabled={history.controlsDisabled}
+      <FormSection title={LABELS.orderHistoryStatement} columns={1}>
+        <div className={dateRangeToolbarStyles.toolbar}>
+          <DateRangeFields
+            from={history.from}
+            to={history.to}
+            onFromChange={history.setFrom}
+            onToChange={history.setTo}
+            fromId="order-history-from"
+            toId="order-history-to"
+            disabled={history.controlsDisabled}
+            disabledHint={filterHint}
+            className={dateRangeToolbarStyles.dateFields}
           />
+          <div className={dateRangeToolbarStyles.actions}>
+            <ButtonGroup align="start">
+              <DisabledActionHint
+                disabled={loadButtonDisabled}
+                message={loadButtonHint}
+                block
+                className={styles.buttonHint}
+              >
+                <Button
+                  type="button"
+                  fullWidth="mobile"
+                  onClick={() => history.load(1)}
+                  disabled={loadButtonDisabled}
+                >
+                  {LABELS.loadOrderHistory}
+                </Button>
+              </DisabledActionHint>
+              <ReportExportButtons
+                grouped={false}
+                controlsDisabled={history.controlsDisabled}
+                exportingFormat={history.exportingFormat}
+                statusMessage={history.message}
+                onExportExcel={history.exportExcel}
+                onExportCsv={history.exportCsv}
+                onExportPdf={history.exportPdf}
+              />
+            </ButtonGroup>
+            <ReportExportStatus
+              message={history.message}
+              error={history.error}
+              exportingFormat={history.exportingFormat}
+              controlsDisabled={history.controlsDisabled}
+            />
+          </div>
         </div>
       </FormSection>
 

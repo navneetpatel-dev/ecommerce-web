@@ -26,12 +26,21 @@ export function EarningsPayoutsTable({
       {
         id: "period",
         header: "Period",
-        accessor: "periodLabel",
+        truncate: false,
+        cell: (row) => (
+          <div className={earningsPayoutsCardStyles.periodCell}>
+            <span>{row.periodLabel}</span>
+            <span className={earningsPayoutsCardStyles.mobileAmount}>
+              {row.amountLabel}
+            </span>
+          </div>
+        ),
       },
       {
         id: "amount",
         header: "Amount",
         className: earningsPayoutsCardStyles.cellMono,
+        hideOnMobile: true,
         accessor: "amountLabel",
       },
       {

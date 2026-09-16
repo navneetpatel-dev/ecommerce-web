@@ -16,12 +16,21 @@ const COLUMNS: DataTableColumn<CashDepositRowViewModel>[] = [
   {
     id: "date",
     header: "Date",
-    accessor: "createdAtLabel",
+    truncate: false,
+    cell: (row) => (
+      <div className={cashDepositsCardStyles.dateCell}>
+        <span>{row.createdAtLabel}</span>
+        <span className={cashDepositsCardStyles.mobileAmount}>
+          {row.amountLabel}
+        </span>
+      </div>
+    ),
   },
   {
     id: "declared",
     header: "Declared",
     className: cashDepositsCardStyles.cellMono,
+    hideOnMobile: true,
     accessor: "amountLabel",
   },
   {

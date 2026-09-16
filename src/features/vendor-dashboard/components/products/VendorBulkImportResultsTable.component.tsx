@@ -1,13 +1,8 @@
 import { Badge } from "@/shared/components/ui/badge";
 import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-} from "@/shared/components/ui/table";
-import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { BulkImportRowResult } from "@/features/products";
@@ -17,6 +12,31 @@ interface VendorBulkImportResultsTableProps {
   results: BulkImportRowResult[];
   successCount: number;
 }
+
+const COLUMNS: DataTableColumn<BulkImportRowResult>[] = [
+  {
+    id: "row",
+    header: LABELS.bulkImportRowColumn,
+    className: vendorBulkImportDialogStyles.rowCell,
+    accessor: "row",
+  },
+  {
+    id: "status",
+    header: LABELS.bulkImportStatusColumn,
+    truncate: false,
+    cell: (row) => (
+      <Badge variant={row.success ? "success" : "destructive"}>
+        {row.success ? LABELS.bulkImportRowSuccess : LABELS.bulkImportRowFailed}
+      </Badge>
+    ),
+  },
+  {
+    id: "detail",
+    header: LABELS.bulkImportDetailColumn,
+    className: vendorBulkImportDialogStyles.detailCell,
+    cell: (row) => (row.success ? row.productId : row.error),
+  },
+];
 
 export function VendorBulkImportResultsTable({
   results,
@@ -30,36 +50,13 @@ export function VendorBulkImportResultsTable({
           total: results.length,
         })}
       </p>
-      <TableScrollShell>
-        <Table scrollContainer={false}>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{LABELS.bulkImportRowColumn}</TableHead>
-              <TableHead>{LABELS.bulkImportStatusColumn}</TableHead>
-              <TableHead>{LABELS.bulkImportDetailColumn}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {results.map((row) => (
-              <TableRow key={row.row}>
-                <TableCell className={vendorBulkImportDialogStyles.rowCell}>
-                  {row.row}
-                </TableCell>
-                <TableCell>
-                  <Badge variant={row.success ? "success" : "destructive"}>
-                    {row.success
-                      ? LABELS.bulkImportRowSuccess
-                      : LABELS.bulkImportRowFailed}
-                  </Badge>
-                </TableCell>
-                <TableCell className={vendorBulkImportDialogStyles.detailCell}>
-                  {row.success ? row.productId : row.error}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableScrollShell>
+      <DataTable
+        columns={COLUMNS}
+        rows={results}
+        getRowId={(row, index) => `${row.row}-${index}`}
+        emptyMessage={LABELS.noRecordsFound}
+        rowDetails={false}
+      />
     </div>
   );
 }

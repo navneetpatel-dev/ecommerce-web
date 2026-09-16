@@ -21,11 +21,13 @@ export const CompactStatusLine = memo(function CompactStatusLine({
   const field = kind === "order" ? "Order" : "Payment";
 
   return (
-    <div
-      className={ORDER_STATUS_GROUP_STYLES.compactLine}
-      title={`${field}: ${label}`}
-    >
-      <span className={ORDER_STATUS_GROUP_STYLES.compactField}>{field}</span>
+    <div className={ORDER_STATUS_GROUP_STYLES.compactLine}>
+      <span
+        className={ORDER_STATUS_GROUP_STYLES.compactField}
+        title={`${field}: ${label}`}
+      >
+        {field}
+      </span>
       <span
         className={ORDER_STATUS_GROUP_STYLES.compactValue(TONE_CLASS[tone])}
       >

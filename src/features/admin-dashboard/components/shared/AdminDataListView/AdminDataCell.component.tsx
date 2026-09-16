@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TableCellImage } from "@/shared/components/TableCellImage.component";
 import { extractImageUrls, isImageFieldKey } from "@/shared/utils/media/imageField";
+import { shortOrderId } from "@/shared/utils/formatting/orderFormat";
 import type { AdminDataRow } from "../../../hooks/shared/useAdminDataList.hook";
 import {
   formatAdminCellValue,
@@ -41,6 +42,10 @@ export function AdminDataCell({
       return <StatusBadge status={value} />;
     }
     return formatAdminCellValue(value);
+  }
+
+  if (columnKey === "id" && typeof value === "string" && value.trim()) {
+    return `#${shortOrderId(value)}`;
   }
 
   return formatAdminCellValue(value);

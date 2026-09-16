@@ -1,9 +1,12 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { ReportExportButtons, type ExportFileFormat } from "@/features/reports";
-import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
 import type { VendorSettlementRow } from "../../../api/finance/reports.api";
-import { adminSettlementReportsPanelStyles } from "../../../styles/finance/adminSettlementReportsPanel.styles";
+import { adminSettlementReportsPanelStyles as styles } from "../../../styles/finance/adminSettlementReportsPanel.styles";
 
 interface VendorSettlementsTableProps {
   vendors: VendorSettlementRow[];
@@ -13,6 +16,45 @@ interface VendorSettlementsTableProps {
   onExport: (format: ExportFileFormat) => void;
 }
 
+const COLUMNS: DataTableColumn<VendorSettlementRow>[] = [
+  {
+    id: "vendorName",
+    header: LABELS.vendorName,
+    className: styles.cellName,
+    accessor: "vendorName",
+  },
+  {
+    id: "pendingNet",
+    header: LABELS.pendingNet,
+    className: styles.cellNum,
+    cell: (row) => formatInr(row.pendingNet),
+  },
+  {
+    id: "settledNet",
+    header: LABELS.settledNet,
+    className: styles.cellNum,
+    cell: (row) => formatInr(row.settledNet),
+  },
+  {
+    id: "payoutAmount",
+    header: LABELS.payoutAmount,
+    className: styles.cellNum,
+    cell: (row) => formatInr(row.payoutAmount),
+  },
+  {
+    id: "payoutPaid",
+    header: LABELS.payoutPaid,
+    className: styles.cellNum,
+    cell: (row) => formatInr(row.payoutPaid),
+  },
+  {
+    id: "payoutStatus",
+    header: LABELS.payoutStatus,
+    truncate: false,
+    cell: (row) => <span className={styles.badge}>{row.payoutStatus}</span>,
+  },
+];
+
 export function VendorSettlementsTable({
   vendors,
   controlsDisabled,
@@ -21,15 +63,11 @@ export function VendorSettlementsTable({
   onExport,
 }: VendorSettlementsTableProps) {
   return (
-    <div className={adminSettlementReportsPanelStyles.vendorsContainer}>
-      <div className={adminSettlementReportsPanelStyles.vendorsHeader}>
-        <div className={adminSettlementReportsPanelStyles.vendorsHeaderLeft}>
-          <h3 className={adminSettlementReportsPanelStyles.vendorsTitle}>
-            {LABELS.vendorSettlements}
-          </h3>
-          <span className={adminSettlementReportsPanelStyles.vendorsCountBadge}>
-            {vendors.length}
-          </span>
+    <div className={styles.vendorsContainer}>
+      <div className={styles.vendorsHeader}>
+        <div className={styles.vendorsHeaderLeft}>
+          <h3 className={styles.vendorsTitle}>{LABELS.vendorSettlements}</h3>
+          <span className={styles.vendorsCountBadge}>{vendors.length}</span>
         </div>
         <ReportExportButtons
           size="sm"
@@ -41,61 +79,13 @@ export function VendorSettlementsTable({
           onExportPdf={() => onExport("pdf")}
         />
       </div>
-      <TableScrollShell>
-        <table className={adminSettlementReportsPanelStyles.table}>
-          <thead className={adminSettlementReportsPanelStyles.thead}>
-            <tr>
-              <th className={adminSettlementReportsPanelStyles.th}>
-                {LABELS.vendorName}
-              </th>
-              <th className={adminSettlementReportsPanelStyles.th}>
-                {LABELS.pendingNet}
-              </th>
-              <th className={adminSettlementReportsPanelStyles.th}>
-                {LABELS.settledNet}
-              </th>
-              <th className={adminSettlementReportsPanelStyles.th}>
-                {LABELS.payoutAmount}
-              </th>
-              <th className={adminSettlementReportsPanelStyles.th}>
-                {LABELS.payoutPaid}
-              </th>
-              <th className={adminSettlementReportsPanelStyles.th}>
-                {LABELS.payoutStatus}
-              </th>
-            </tr>
-          </thead>
-          <tbody className={adminSettlementReportsPanelStyles.tbody}>
-            {vendors.map((row) => (
-              <tr
-                key={row.vendorId}
-                className={adminSettlementReportsPanelStyles.tr}
-              >
-                <td className={adminSettlementReportsPanelStyles.cellName}>
-                  {row.vendorName}
-                </td>
-                <td className={adminSettlementReportsPanelStyles.cellNum}>
-                  {formatInr(row.pendingNet)}
-                </td>
-                <td className={adminSettlementReportsPanelStyles.cellNum}>
-                  {formatInr(row.settledNet)}
-                </td>
-                <td className={adminSettlementReportsPanelStyles.cellNum}>
-                  {formatInr(row.payoutAmount)}
-                </td>
-                <td className={adminSettlementReportsPanelStyles.cellNum}>
-                  {formatInr(row.payoutPaid)}
-                </td>
-                <td className={adminSettlementReportsPanelStyles.cellBadge}>
-                  <span className={adminSettlementReportsPanelStyles.badge}>
-                    {row.payoutStatus}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </TableScrollShell>
+      <DataTable
+        columns={COLUMNS}
+        rows={vendors}
+        getRowId={(row) => row.vendorId}
+        rowDetails={false}
+        emptyMessage={LABELS.noReportData}
+      />
     </div>
   );
 }

@@ -6,11 +6,10 @@ import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
 import { ReportExportButtons, ReportExportStatus } from "@/features/reports";
+import { dateRangeToolbarStyles } from "@/shared/styles/forms/dateRangeToolbar.styles";
 import { useVendorSettlementReportPanel } from "../../hooks/payouts/useVendorSettlementReportPanel.hook";
 import { SettlementSummaryDl } from "./VendorSettlementReportPanel/SettlementSummaryDl.component";
 import {
-  SETTLEMENT_BUTTON_GROUP,
-  SETTLEMENT_CONTROLS_GRID,
   SETTLEMENT_HINT_CONTAINER,
   SETTLEMENT_MESSAGE_MUTED,
   SETTLEMENT_PANEL_SECTION,
@@ -47,7 +46,7 @@ export function VendorSettlementReportPanel() {
   return (
     <section className={SETTLEMENT_PANEL_SECTION}>
       <h2 className={SETTLEMENT_PANEL_TITLE}>{LABELS.settlementReports}</h2>
-      <div className={SETTLEMENT_CONTROLS_GRID}>
+      <div className={dateRangeToolbarStyles.toolbar}>
         <DateRangeFields
           from={from}
           to={to}
@@ -57,35 +56,38 @@ export function VendorSettlementReportPanel() {
           toId="vendor-report-to"
           disabled={controlsDisabled}
           disabledHint={filterHint}
+          className={dateRangeToolbarStyles.dateFields}
         />
-        <ButtonGroup align="start" className={SETTLEMENT_BUTTON_GROUP}>
-          <DisabledActionHint
-            disabled={isLoadDisabled}
-            message={loadButtonHint}
-            block
-            className={SETTLEMENT_HINT_CONTAINER}
-          >
-            <Button
-              type="button"
-              fullWidth="mobile"
-              onClick={handleLoadClick}
+        <div className={dateRangeToolbarStyles.actions}>
+          <ButtonGroup align="start">
+            <DisabledActionHint
               disabled={isLoadDisabled}
+              message={loadButtonHint}
+              block
+              className={SETTLEMENT_HINT_CONTAINER}
             >
-              {LABELS.reportLoad}
-            </Button>
-          </DisabledActionHint>
-          <ReportExportButtons
-            grouped={false}
-            controlsDisabled={controlsDisabled}
-            exportingFormat={exportingFormat}
-            statusMessage={message}
-            disabled={!vendorId || !summary}
-            blockedHint={LABELS.reportExportLoadReportFirst}
-            onExportExcel={exportExcel}
-            onExportCsv={exportCsv}
-            onExportPdf={exportPdf}
-          />
-        </ButtonGroup>
+              <Button
+                type="button"
+                fullWidth="mobile"
+                onClick={handleLoadClick}
+                disabled={isLoadDisabled}
+              >
+                {LABELS.reportLoad}
+              </Button>
+            </DisabledActionHint>
+            <ReportExportButtons
+              grouped={false}
+              controlsDisabled={controlsDisabled}
+              exportingFormat={exportingFormat}
+              statusMessage={message}
+              disabled={!vendorId || !summary}
+              blockedHint={LABELS.reportExportLoadReportFirst}
+              onExportExcel={exportExcel}
+              onExportCsv={exportCsv}
+              onExportPdf={exportPdf}
+            />
+          </ButtonGroup>
+        </div>
       </div>
 
       <ReportExportStatus

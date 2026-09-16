@@ -44,7 +44,7 @@ export function WalletStatementExportPanel({
           disabledHint={filterHint}
           className={styles.dateFields}
         />
-        <div className={styles.exportContent}>
+        <div className={styles.actions}>
           <ReportExportButtons
             controlsDisabled={exportHub.controlsDisabled}
             exportingFormat={exportHub.exportingFormat}

@@ -17,6 +17,8 @@ export const earningsPayoutsCardStyles = {
   tdMono: "py-2 pr-3 font-mono",
   tdStatus: "py-2 pr-3",
   cellMono: "font-mono",
+  periodCell: "flex items-baseline justify-between gap-3 lg:block",
+  mobileAmount: "shrink-0 font-mono lg:hidden",
   downloadButton:
     "inline-flex items-center gap-1 font-medium text-brand hover:underline disabled:opacity-50",
   downloadIcon: "size-3.5",

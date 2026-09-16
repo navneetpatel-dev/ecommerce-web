@@ -31,12 +31,13 @@ export const dataTableMobileStyles = {
   card: "rounded-md border border-line bg-surface p-4 shadow-card-hairline",
   cardInteractive:
     "cursor-pointer transition-colors hover:border-brand/30 hover:bg-brand-subtle/20 active:bg-brand-subtle/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-  primaryCell: "min-w-0 text-body text-ink",
+  primaryCell: "min-w-0 w-full max-w-none text-body text-ink",
   dl: "space-y-2.5",
   dlWithPrimary: "mt-3 border-t border-line/80 pt-3",
-  rowItem: "grid grid-cols-[minmax(0,6.5rem)_minmax(0,1fr)] gap-x-3 gap-y-1",
+  rowItem:
+    "grid grid-cols-1 gap-y-1 sm:grid-cols-[minmax(0,6.5rem)_minmax(0,1fr)] sm:gap-x-3",
   dt: "text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted",
-  dd: "min-w-0 break-words text-[0.875rem] text-ink",
+  dd: "min-w-0 w-full max-w-none break-words text-[0.875rem] text-ink",
   actionsWrapper: "mt-4 border-t border-line/80 pt-3",
   actionsAlign: "justify-end",
 } as const;

@@ -14,7 +14,16 @@ export const ORDER_COLUMNS: DataTableColumn<Order>[] = [
     headerClassName: ORDERS_LIST_STYLES.colOrderHeader,
     className: ORDERS_LIST_STYLES.colOrderCell,
     truncate: false,
-    cell: (order) => `#${shortOrderId(order.id)}`,
+    cell: (order) => (
+      <div className={ORDERS_LIST_STYLES.orderCell}>
+        <span className={ORDERS_LIST_STYLES.orderId}>
+          #{shortOrderId(order.id)}
+        </span>
+        <span className={ORDERS_LIST_STYLES.mobileTotal}>
+          {formatInr(order.totalAmount)}
+        </span>
+      </div>
+    ),
   },
   {
     id: "placed",
@@ -36,6 +45,7 @@ export const ORDER_COLUMNS: DataTableColumn<Order>[] = [
     header: LABELS.ordersColumnTotal,
     headerClassName: ORDERS_LIST_STYLES.colTotalHeader,
     className: ORDERS_LIST_STYLES.colTotalCell,
+    hideOnMobile: true,
     cell: (order) => (
       <span className={ORDERS_LIST_STYLES.totalAmount}>
         {formatInr(order.totalAmount)}

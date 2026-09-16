@@ -1,11 +1,12 @@
 "use client";
 
-import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
-import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
-import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { LABELS } from "@/shared/constants/labels";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
 import { CashbackWriteOffMetrics } from "./CashbackWriteOffMetrics.component";
-import { CashbackWriteOffTableBody } from "./CashbackWriteOffTableBody.component";
 import type { CashbackWriteOffRowData } from "./CashbackWriteOffTableRow.component";
 import { useCashbackWriteOffReportTable } from "../../../hooks/wallet/useCashbackWriteOffReportTable.hook";
 import { cashbackWriteOffReportTableStyles as styles } from "../../../styles/wallet/cashbackWriteOffReportTable.styles";
@@ -27,6 +28,39 @@ interface CashbackWriteOffReportTableProps {
   onLoadPage: (page: number) => void;
 }
 
+const COLUMNS: DataTableColumn<CashbackWriteOffRowData>[] = [
+  {
+    id: "userId",
+    header: LABELS.reportUserId,
+    className: styles.cellMono,
+    accessor: "userId",
+  },
+  {
+    id: "originalClawback",
+    header: LABELS.reportOriginalClawback,
+    className: styles.cellMedium,
+    cell: (row) => formatInr(row.originalClawbackAmount),
+  },
+  {
+    id: "recovered",
+    header: LABELS.reportRecoveredAmount,
+    className: styles.cellSuccess,
+    cell: (row) => formatInr(row.recoveredAmount),
+  },
+  {
+    id: "writtenOff",
+    header: LABELS.reportWrittenOffAmount,
+    className: styles.cellStandard,
+    cell: (row) => formatInr(row.writtenOffAmount),
+  },
+  {
+    id: "bornBy",
+    header: LABELS.reportBornBy,
+    truncate: false,
+    cell: (row) => <span className={styles.badge}>{row.bornBy}</span>,
+  },
+];
+
 export function CashbackWriteOffReportTable({
   report,
   loading,
@@ -40,49 +74,18 @@ export function CashbackWriteOffReportTable({
     resultFrom,
     resultTo,
     paginationTotalPages,
-    hasRows,
   } = useCashbackWriteOffReportTable({ report, page });
 
-  const paginationSummary = pagination ? (
-    <PaginationResultSummary
-      from={resultFrom}
-      to={resultTo}
-      total={pagination.total}
-    />
-  ) : null;
-
-  const tableContent = hasRows ? (
-    <div className={styles.tableContainer}>
-      <TableScrollShell>
-        <table className={styles.table}>
-          <thead className={styles.thead}>
-            <tr>
-              <th className={styles.th}>{LABELS.reportUserId}</th>
-              <th className={styles.th}>{LABELS.reportOriginalClawback}</th>
-              <th className={styles.th}>{LABELS.reportRecoveredAmount}</th>
-              <th className={styles.th}>{LABELS.reportWrittenOffAmount}</th>
-              <th className={styles.th}>{LABELS.reportBornBy}</th>
-            </tr>
-          </thead>
-          <CashbackWriteOffTableBody rows={report.rows} />
-        </table>
-      </TableScrollShell>
-    </div>
-  ) : (
-    <div className={styles.emptyContainer}>
-      <p className={styles.emptyText}>{LABELS.noReportData}</p>
-    </div>
-  );
-
-  const paginationControls = pagination ? (
-    <div className={styles.paginationWrapper(loading)}>
-      <PaginationContainer
-        currentPage={page}
-        totalPages={paginationTotalPages}
-        onPageChange={onLoadPage}
-      />
-    </div>
-  ) : null;
+  const tablePagination = pagination
+    ? {
+        page,
+        totalPages: paginationTotalPages,
+        total: pagination.total,
+        from: resultFrom,
+        to: resultTo,
+        onPageChange: onLoadPage,
+      }
+    : undefined;
 
   return (
     <div className={styles.container}>
@@ -90,10 +93,15 @@ export function CashbackWriteOffReportTable({
         recoveredTotal={recoveredTotal}
         writtenOffTotal={writtenOffTotal}
       />
-
-      {paginationSummary}
-      {tableContent}
-      {paginationControls}
+      <DataTable
+        columns={COLUMNS}
+        rows={report.rows}
+        getRowId={(row) => row.id}
+        loading={loading}
+        emptyMessage={LABELS.noReportData}
+        rowDetails={false}
+        pagination={tablePagination}
+      />
     </div>
   );
 }
