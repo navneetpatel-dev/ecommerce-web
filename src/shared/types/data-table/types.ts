@@ -14,6 +14,8 @@ export type DataTableColumn<T> = {
   maxChars?: number;
   /** Optional label for mobile card rows when `header` is not a string. */
   mobileLabel?: string;
+  /** Extra classes for this column's mobile card row (`dt`/`dd` wrapper). */
+  mobileRowClassName?: string;
   /** Hide this column in the mobile card list (still shown in table). */
   hideOnMobile?: boolean;
 };

@@ -80,7 +80,10 @@ export function DataTableMobileCards<T>({
                   return (
                     <div
                       key={column.id}
-                      className={dataTableMobileStyles.rowItem}
+                      className={cn(
+                        dataTableMobileStyles.rowItem,
+                        column.mobileRowClassName,
+                      )}
                     >
                       <dt className={dataTableMobileStyles.dt}>
                         {columnLabel(column)}

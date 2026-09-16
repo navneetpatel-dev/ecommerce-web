@@ -9,6 +9,7 @@ import {
   type DataTableColumn,
 } from "@/shared/components/DataTable.component";
 import { LABELS } from "@/shared/constants/labels";
+import { cn } from "@/shared/utils/dom/cn";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import type { WalletTransaction } from "@/shared/api/types";
@@ -35,6 +36,27 @@ function rechargeIdFor(row: WalletTransaction): string | null {
   );
 }
 
+function WalletAmountValue({
+  row,
+  className,
+}: {
+  row: WalletTransaction;
+  className?: string;
+}) {
+  const isCredit = row.type === "CREDIT";
+  const signedAmount = `${isCredit ? "+" : "−"}${formatPoints(row.amount)}`;
+  return (
+    <span
+      className={cn(
+        isCredit ? styles.creditAmountPositive : styles.creditAmountNegative,
+        className,
+      )}
+    >
+      {signedAmount}
+    </span>
+  );
+}
+
 export function WalletTransactionsTable({
   transactions,
   loading,
@@ -54,14 +76,23 @@ export function WalletTransactionsTable({
       header: LABELS.walletColumnDate,
       headerClassName: styles.colDateHeader,
       className: styles.colDateCell,
-      cell: (row) => formatOrderDate(row.createdAt),
+      truncate: false,
+      cell: (row) => (
+        <div className={styles.dateCell}>
+          <span className={styles.dateText}>
+            {formatOrderDate(row.createdAt)}
+          </span>
+          <WalletAmountValue row={row} className={styles.mobileAmount} />
+        </div>
+      ),
     },
     {
       id: "description",
       header: LABELS.walletColumnDescription,
       headerClassName: styles.colDescriptionHeader,
       className: styles.colDescriptionCell,
-      truncate: true,
+      mobileRowClassName: styles.mobileDescriptionRow,
+      truncate: false,
       cell: (row) => {
         const sourceLabel = transactionSourceLabel(row);
         const detail =
@@ -81,21 +112,8 @@ export function WalletTransactionsTable({
       header: LABELS.walletColumnAmount,
       headerClassName: styles.colAmountHeader,
       className: styles.colAmountCell,
-      cell: (row) => {
-        const isCredit = row.type === "CREDIT";
-        const signedAmount = `${isCredit ? "+" : "−"}${formatPoints(row.amount)}`;
-        return (
-          <span
-            className={
-              isCredit
-                ? styles.creditAmountPositive
-                : styles.creditAmountNegative
-            }
-          >
-            {signedAmount}
-          </span>
-        );
-      },
+      hideOnMobile: true,
+      cell: (row) => <WalletAmountValue row={row} />,
     },
     {
       id: "balance",
