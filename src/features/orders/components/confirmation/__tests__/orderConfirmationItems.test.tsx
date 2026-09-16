@@ -44,8 +44,7 @@ describe("OrderConfirmationItems", () => {
     expect(screen.getByText("AutoZone")).toBeInTheDocument();
     expect(screen.getByText("Fragrances Max 441")).toBeInTheDocument();
     // lineTotal from the API, not quantity × unitPrice recomputed here.
-    // Rendered twice: the compact slot and the sm+ column, as cart lines do.
-    expect(screen.getAllByText("₹3,985.67")).toHaveLength(2);
+    expect(screen.getByText("₹3,985.67")).toBeInTheDocument();
   });
 
   it("labels the vendor group the way the cart does", () => {
@@ -129,7 +128,7 @@ describe("OrderConfirmationItems", () => {
       />,
     );
 
-    const thumb = container.querySelector(".aspect-square");
+    const thumb = container.querySelector(".size-14");
     expect(thumb).not.toBeNull();
     expect(thumb?.className).toContain("relative");
     expect(thumb?.className).toContain("overflow-hidden");

@@ -61,10 +61,6 @@ export const SubOrderCardItemRow = memo(function SubOrderCardItemRow({
           {qtyFormatted}
         </p>
 
-        <p className={SUB_ORDER_CARD_ITEMS_STYLES.subtotalMobile}>
-          {subtotalFormatted}
-        </p>
-
         {canReturn ? (
           <Button
             type="button"

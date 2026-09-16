@@ -51,8 +51,6 @@ function OrderLine({ item }: { item: OrderItem }) {
         <p className={styles.lineQty}>
           {formatLabel(LABELS.qtyLabel, { count: String(item.quantity) })}
         </p>
-
-        <p className={styles.lineTotalMobile}>{formatInr(item.lineTotal)}</p>
       </div>
 
       <div className={styles.lineTotalDesktopCol}>

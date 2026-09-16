@@ -1,11 +1,12 @@
 export const vendorGroupHeaderStyles = {
   header:
-    "mb-3 flex flex-wrap items-baseline justify-between gap-3 border-b border-line pb-2",
-  leadingGroup: "flex flex-wrap items-baseline gap-2",
+    "mb-3 flex flex-col gap-2 border-b border-line pb-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3",
+  leadingGroup: "flex min-w-0 flex-wrap items-baseline gap-2",
   eyebrow: "!mb-0",
   name: "font-display text-[1.125rem] text-ink",
   vendorLink: "transition-colors hover:text-brand",
-  trailingGroup: "flex flex-wrap items-center gap-3",
+  trailingGroup:
+    "flex w-full flex-wrap items-center justify-between gap-2 sm:w-auto sm:justify-end sm:gap-3",
   countText:
     "font-mono text-[0.6875rem] uppercase tracking-wider text-ink-faint",
 } as const;

@@ -60,20 +60,19 @@ export const orderConfirmationStyles = {
   vendorHeaderMargin: "mb-1",
   itemsList: "divide-y divide-line",
   lineRoot:
-    "grid grid-cols-[3.5rem_1fr] items-start gap-3 py-3 sm:grid-cols-[4rem_1fr_auto] sm:gap-4",
+    "grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 py-3 sm:gap-4",
   lineMediaWrapper:
-    "relative aspect-square self-start overflow-hidden rounded-sm border border-line bg-paper",
+    "relative size-14 shrink-0 overflow-hidden rounded-sm border border-line bg-paper sm:size-16",
   lineMediaImage: "object-cover",
   lineContent: "flex min-w-0 flex-col gap-0.5",
   lineName:
-    "block text-body font-medium leading-snug text-ink transition-colors",
+    "block break-words text-body font-medium leading-snug text-ink transition-colors",
   lineNameLink:
-    "block text-body font-medium leading-snug text-ink transition-colors hover:text-brand",
+    "block break-words text-body font-medium leading-snug text-ink transition-colors hover:text-brand",
   lineAttrs: "font-mono text-[0.6875rem] tracking-wide text-ink-muted",
   lineQty: "mt-1 text-body-sm text-ink-muted",
-  lineTotalMobile:
-    "mt-1 font-display text-[1.125rem] tabular-nums text-ink sm:hidden",
-  lineTotalDesktopCol: "hidden flex-col items-end gap-1 sm:flex",
-  lineTotalDesktop: "font-display text-[1.125rem] tabular-nums text-ink",
-  lineUnitPrice: "text-[0.75rem] tabular-nums text-ink-muted",
+  lineTotalDesktopCol: "flex shrink-0 flex-col items-end gap-1 pt-0.5",
+  lineTotalDesktop:
+    "text-right font-display text-[1.125rem] tabular-nums text-ink",
+  lineUnitPrice: "text-right text-[0.75rem] tabular-nums text-ink-muted",
 } as const;

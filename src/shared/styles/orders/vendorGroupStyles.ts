@@ -5,4 +5,4 @@
  * reads as one separated block on every surface. Paired with VendorGroupHeader.
  */
 export const VENDOR_GROUP_CARD =
-  "border border-line bg-surface-raised px-4 py-3.5 shadow-elevation-1 sm:px-5";
+  "min-w-0 overflow-hidden border border-line bg-surface-raised px-4 py-3.5 shadow-elevation-1 sm:px-5";
