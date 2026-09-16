@@ -14,7 +14,11 @@ function applicationServerKey(value: string): Uint8Array<ArrayBuffer> {
 }
 
 async function activeSubscription(): Promise<PushSubscription | null> {
-  const registration = await navigator.serviceWorker.ready;
+  // `serviceWorker.ready` never resolves when no worker is registered.
+  // Dev explicitly unregisters the SW, so logout used to hang here forever
+  // (`.catch` does not help — this is a hang, not a rejection).
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (!registration) return null;
   return registration.pushManager.getSubscription();
 }
 

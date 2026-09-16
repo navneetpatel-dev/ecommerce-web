@@ -92,7 +92,14 @@ export function useLogout() {
   return useMutation({
     mutationFn: async () => {
       // Logout must still complete when browser push cleanup is unavailable.
-      await removeCurrentPushSubscription().catch(() => undefined);
+      // `.catch` is not enough — `serviceWorker.ready` can hang forever with
+      // no worker registered (dev unregisters it). Cap the wait and proceed.
+      await Promise.race([
+        removeCurrentPushSubscription().catch(() => undefined),
+        new Promise<void>((resolve) => {
+          setTimeout(resolve, 1500);
+        }),
+      ]);
       return authApi.logout();
     },
     onSuccess: () => {
