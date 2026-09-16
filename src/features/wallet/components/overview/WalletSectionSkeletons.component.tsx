@@ -74,13 +74,15 @@ export function WalletStatementExportPanelSkeleton() {
         <Skeleton className={styles.skeletonStatementHeading} />
       </header>
       <div className={styles.statementGrid}>
-        <div className={styles.statementField}>
-          <Skeleton className={styles.skeletonFieldLabelSm} />
-          <Skeleton className={styles.statementFieldControl} />
-        </div>
-        <div className={styles.statementField}>
-          <Skeleton className={styles.skeletonFieldLabelXs} />
-          <Skeleton className={styles.statementFieldControl} />
+        <div className={styles.statementDateFields}>
+          <div className={styles.statementField}>
+            <Skeleton className={styles.skeletonFieldLabelSm} />
+            <Skeleton className={styles.statementFieldControl} />
+          </div>
+          <div className={styles.statementField}>
+            <Skeleton className={styles.skeletonFieldLabelXs} />
+            <Skeleton className={styles.statementFieldControl} />
+          </div>
         </div>
         <div className={styles.statementActionsRow}>
           <Skeleton className={styles.statementButtonSm} />

@@ -26,12 +26,14 @@ export const walletSectionSkeletonsStyles = {
     "border-b border-line/80 bg-paper/50 px-4 py-4 sm:px-6 sm:py-5",
   skeletonStatementHeading: "h-5 w-40",
   statementGrid:
-    "grid gap-5 p-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-6 sm:p-6 xl:grid-cols-3 lg:gap-x-8 lg:p-8",
-  statementField: "space-y-2",
+    "flex flex-col gap-5 p-4 sm:p-6 md:flex-row md:items-end md:justify-between lg:p-8",
+  statementDateFields: "flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end",
+  statementField: "w-full space-y-2 sm:w-44",
   skeletonFieldLabelSm: "h-4 w-12",
   skeletonFieldLabelXs: "h-4 w-8",
-  statementFieldControl: "h-10 rounded-md",
-  statementActionsRow: "flex flex-wrap gap-2 sm:col-span-2 xl:col-span-3",
+  statementFieldControl: "h-10 w-full rounded-md",
+  statementActionsRow:
+    "flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap md:shrink-0",
   statementButtonSm: "h-10 w-full rounded-md sm:w-32",
   statementButtonXs: "h-10 w-full rounded-md sm:w-28",
 } as const;

@@ -31,32 +31,35 @@ export function WalletStatementExportPanel({
   }
 
   return (
-    <FormSection title={LABELS.walletStatement} columns={3}>
-      <DateRangeFields
-        from={exportHub.from}
-        to={exportHub.to}
-        onFromChange={exportHub.setFrom}
-        onToChange={exportHub.setTo}
-        fromId="wallet-statement-from"
-        toId="wallet-statement-to"
-        disabled={exportHub.controlsDisabled}
-        disabledHint={filterHint}
-      />
-      <div className={styles.exportContent}>
-        <ReportExportButtons
-          controlsDisabled={exportHub.controlsDisabled}
-          exportingFormat={exportHub.exportingFormat}
-          statusMessage={exportHub.message}
-          onExportExcel={exportHub.exportExcel}
-          onExportCsv={exportHub.exportCsv}
-          onExportPdf={exportHub.exportPdf}
+    <FormSection title={LABELS.walletStatement} columns={1}>
+      <div className={styles.toolbar}>
+        <DateRangeFields
+          from={exportHub.from}
+          to={exportHub.to}
+          onFromChange={exportHub.setFrom}
+          onToChange={exportHub.setTo}
+          fromId="wallet-statement-from"
+          toId="wallet-statement-to"
+          disabled={exportHub.controlsDisabled}
+          disabledHint={filterHint}
+          className={styles.dateFields}
         />
-        <ReportExportStatus
-          message={exportHub.message}
-          error={exportHub.error}
-          exportingFormat={exportHub.exportingFormat}
-          controlsDisabled={exportHub.controlsDisabled}
-        />
+        <div className={styles.exportContent}>
+          <ReportExportButtons
+            controlsDisabled={exportHub.controlsDisabled}
+            exportingFormat={exportHub.exportingFormat}
+            statusMessage={exportHub.message}
+            onExportExcel={exportHub.exportExcel}
+            onExportCsv={exportHub.exportCsv}
+            onExportPdf={exportHub.exportPdf}
+          />
+          <ReportExportStatus
+            message={exportHub.message}
+            error={exportHub.error}
+            exportingFormat={exportHub.exportingFormat}
+            controlsDisabled={exportHub.controlsDisabled}
+          />
+        </div>
       </div>
     </FormSection>
   );
