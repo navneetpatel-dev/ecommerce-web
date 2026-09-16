@@ -19,5 +19,8 @@ export const cashDepositsCardStyles = {
   tdMono: "py-2 pr-3 font-mono",
   tdExpected: (mismatch: boolean) =>
     cn("py-2 pr-3 font-mono", mismatch ? "text-danger" : "text-ink-muted"),
+  cellMono: "font-mono",
+  cellExpected: (mismatch: boolean) =>
+    cn("font-mono", mismatch ? "text-danger" : "text-ink-muted"),
   tdStatus: "py-2 pr-3",
 } as const;

@@ -3,6 +3,7 @@
 import { BarChart3 } from "lucide-react";
 import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
 import { Button } from "@/shared/components/ui/button";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { useAdminDeliveryPerformancePanel } from "../../../hooks/delivery-agents/useAdminDeliveryPerformancePanel.hook";
 import { adminDeliveryPerformancePanelStyles } from "../../../styles/delivery-agents/adminDeliveryPerformancePanel.styles";
 import { PerformanceTableBody } from "./PerformanceTableBody.component";
@@ -59,7 +60,7 @@ export function AdminDeliveryPerformancePanel() {
         </p>
       ) : (
         <>
-          <div className={adminDeliveryPerformancePanelStyles.tableWrapper}>
+          <TableScrollShell>
             <table className={adminDeliveryPerformancePanelStyles.table}>
               <thead>
                 <tr
@@ -125,7 +126,7 @@ export function AdminDeliveryPerformancePanel() {
               </thead>
               <PerformanceTableBody rows={rows} />
             </table>
-          </div>
+          </TableScrollShell>
 
           <PerformanceChart rows={rows} />
         </>

@@ -139,6 +139,19 @@ export function ReviewStep(props: ReviewStepProps) {
           <ArrowRight size={16} />
         </Button>
       </div>
+      <div className={REVIEW_STEP_STYLES.stickyPlaceOrderBar}>
+        <Button
+          size="lg"
+          fullWidth
+          className={REVIEW_STEP_STYLES.placeOrderBtn}
+          onClick={onPlaceOrder}
+          loading={isPending}
+          disabled={showsUnavailableWarning}
+        >
+          {LABELS.placeOrder}
+          <ArrowRight size={16} />
+        </Button>
+      </div>
     </div>
   );
 }

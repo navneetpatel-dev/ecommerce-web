@@ -11,7 +11,7 @@ export const analyticsStyles = {
 
   // AnalyticsMetricsGrid
   grid4Cols: "grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4",
-  grid2Cols: "grid grid-cols-2 gap-3 lg:grid-cols-4",
+  grid2Cols: "grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4",
 
   // Shared Card & Charts
   fullHeightCard: "h-full",

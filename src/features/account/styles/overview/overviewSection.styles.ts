@@ -5,7 +5,7 @@ export const overviewSectionStyles = {
   loadingSkeletonAvatar: "h-24 w-24 rounded-full",
   loadingSkeletonInfo: "space-y-2",
   loadingSkeletonName: "h-6 w-40",
-  loadingSkeletonEmail: "h-4 w-56",
+  loadingSkeletonEmail: "h-4 w-56 max-w-full",
   errorContainer: "border border-line bg-surface px-5 py-10 text-center",
   cardSection: "border border-line bg-surface shadow-elevation-1",
   cardHeader: "border-b border-line px-5 py-4 md:px-6",

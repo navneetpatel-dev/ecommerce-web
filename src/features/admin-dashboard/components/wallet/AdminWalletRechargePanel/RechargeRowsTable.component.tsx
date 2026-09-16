@@ -3,6 +3,7 @@ import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import type { WalletRechargeReport } from "../../../api/finance/reports.api";
 import { adminWalletRechargePanelStyles } from "../../../styles/wallet/adminWalletRechargePanel.styles";
 
@@ -35,7 +36,7 @@ export function RechargeRowsTable({
 
       {report.rows.length > 0 ? (
         <div className={adminWalletRechargePanelStyles.tableContainer}>
-          <div className={adminWalletRechargePanelStyles.tableScroll}>
+          <TableScrollShell>
             <table className={adminWalletRechargePanelStyles.table}>
               <thead className={adminWalletRechargePanelStyles.thead}>
                 <tr>
@@ -85,7 +86,7 @@ export function RechargeRowsTable({
                 ))}
               </tbody>
             </table>
-          </div>
+          </TableScrollShell>
         </div>
       ) : (
         <div className={adminWalletRechargePanelStyles.tableEmpty}>

@@ -1,4 +1,6 @@
 import { X, type LucideIcon } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
+import { LABELS } from "@/shared/constants/labels";
 import { filePickerSelectedFileStyles } from "../../styles/file-upload/fileUploadComponents.styles";
 
 interface FilePickerSelectedFileProps {
@@ -33,18 +35,16 @@ export function FilePickerSelectedFile({
           </p>
         </div>
       </div>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon-sm"
         disabled={disabled}
         onClick={onRemove}
-        aria-label="Remove selected file"
-        className={filePickerSelectedFileStyles.removeButton}
+        aria-label={LABELS.remove}
       >
-        <X
-          className={filePickerSelectedFileStyles.removeIcon}
-          aria-hidden="true"
-        />
-      </button>
+        <X size={16} aria-hidden="true" />
+      </Button>
     </div>
   );
 }

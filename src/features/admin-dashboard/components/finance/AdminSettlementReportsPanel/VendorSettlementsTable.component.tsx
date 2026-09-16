@@ -1,6 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { ReportExportButtons, type ExportFileFormat } from "@/features/reports";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import type { VendorSettlementRow } from "../../../api/finance/reports.api";
 import { adminSettlementReportsPanelStyles } from "../../../styles/finance/adminSettlementReportsPanel.styles";
 
@@ -40,7 +41,7 @@ export function VendorSettlementsTable({
           onExportPdf={() => onExport("pdf")}
         />
       </div>
-      <div className={adminSettlementReportsPanelStyles.tableScroll}>
+      <TableScrollShell>
         <table className={adminSettlementReportsPanelStyles.table}>
           <thead className={adminSettlementReportsPanelStyles.thead}>
             <tr>
@@ -94,7 +95,7 @@ export function VendorSettlementsTable({
             ))}
           </tbody>
         </table>
-      </div>
+      </TableScrollShell>
     </div>
   );
 }

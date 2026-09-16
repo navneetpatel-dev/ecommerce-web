@@ -1,5 +1,5 @@
 export const DEFAULT_CELL =
-  "h-8 w-8 min-h-8 max-h-8 sm:h-9 sm:w-9 sm:min-h-9 sm:max-h-9 lg:h-11 lg:w-11 lg:min-h-11 lg:max-h-11 [&_svg]:size-3 sm:[&_svg]:size-3.5 lg:[&_svg]:size-4" as const;
+  "h-11 w-11 min-h-11 max-h-11 [&_svg]:size-3 sm:[&_svg]:size-3.5 lg:[&_svg]:size-4" as const;
 
 export const DEFAULT_VALUE =
   "h-4 w-5 text-[0.75rem] sm:h-5 sm:w-6 sm:text-body-sm lg:w-8 lg:text-body" as const;

@@ -3,6 +3,7 @@
 import { useCallback } from "react";
 import { PlayCircle, Wallet } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { useAgentPayoutsPanel } from "../../../hooks/delivery-agents/useAgentPayoutsPanel.hook";
 import { agentPayoutsPanelStyles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
 import { AgentPayoutTableBody } from "./AgentPayoutTableBody.component";
@@ -69,7 +70,7 @@ export function AgentPayoutsPanel() {
           No agent payouts yet.
         </p>
       ) : (
-        <div className={agentPayoutsPanelStyles.tableWrapper}>
+        <TableScrollShell>
           <table className={agentPayoutsPanelStyles.table}>
             <thead>
               <tr className={agentPayoutsPanelStyles.tableHeaderRow}>
@@ -106,7 +107,7 @@ export function AgentPayoutsPanel() {
               onRetry={retry}
             />
           </table>
-        </div>
+        </TableScrollShell>
       )}
     </section>
   );

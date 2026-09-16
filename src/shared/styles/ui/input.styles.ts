@@ -1,5 +1,5 @@
 export const inputStyles = {
-  base: "flex h-11 w-full rounded-sm border bg-surface-raised px-4 text-body text-ink transition-colors file:border-0 file:bg-transparent file:text-body-sm file:font-medium placeholder:text-ink-faint outline-none focus-visible:border-brand disabled:cursor-not-allowed disabled:opacity-50",
+  base: "flex h-11 w-full rounded-sm border bg-surface-raised px-4 text-[1rem] sm:text-body text-ink transition-colors file:border-0 file:bg-transparent file:text-body-sm file:font-medium placeholder:text-ink-faint outline-none focus-visible:border-brand disabled:cursor-not-allowed disabled:opacity-50",
   number:
     "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
   dateTime:

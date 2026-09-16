@@ -1,5 +1,13 @@
+"use client";
+
+import { useMemo } from "react";
+import { Download } from "lucide-react";
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
+import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { earningsPayoutsCardStyles } from "../../../styles/earnings/earningsPayoutsCard.styles";
-import { EarningsPayoutTableRow } from "./EarningsPayoutTableRow.component";
 import type { PayoutTableRowViewModel } from "../../../hooks/earnings/useEarningsPayoutsCardPresentation.hook";
 
 interface EarningsPayoutsTableProps {
@@ -13,29 +21,60 @@ export function EarningsPayoutsTable({
   downloadingId,
   onDownload,
 }: EarningsPayoutsTableProps) {
-  return (
-    <div className={earningsPayoutsCardStyles.tableWrapper}>
-      <table className={earningsPayoutsCardStyles.table}>
-        <thead>
-          <tr className={earningsPayoutsCardStyles.theadRow}>
-            <th className={earningsPayoutsCardStyles.th}>Period</th>
-            <th className={earningsPayoutsCardStyles.th}>Amount</th>
-            <th className={earningsPayoutsCardStyles.th}>Status</th>
-            <th className={earningsPayoutsCardStyles.th}>Reference</th>
-            <th className={earningsPayoutsCardStyles.th}>Statement</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <EarningsPayoutTableRow
-              key={row.id}
-              row={row}
-              isDownloading={downloadingId === row.id}
-              onDownload={onDownload}
+  const columns = useMemo<DataTableColumn<PayoutTableRowViewModel>[]>(
+    () => [
+      {
+        id: "period",
+        header: "Period",
+        accessor: "periodLabel",
+      },
+      {
+        id: "amount",
+        header: "Amount",
+        className: earningsPayoutsCardStyles.cellMono,
+        accessor: "amountLabel",
+      },
+      {
+        id: "status",
+        header: "Status",
+        cell: (row) => <StatusBadge status={row.status} />,
+      },
+      {
+        id: "reference",
+        header: "Reference",
+        accessor: "referenceLabel",
+      },
+      {
+        id: "statement",
+        header: "Statement",
+        truncate: false,
+        cell: (row) => (
+          <button
+            type="button"
+            className={earningsPayoutsCardStyles.downloadButton}
+            disabled={downloadingId === row.id}
+            onClick={() => {
+              void onDownload(row.id);
+            }}
+          >
+            <Download
+              className={earningsPayoutsCardStyles.downloadIcon}
+              aria-hidden="true"
             />
-          ))}
-        </tbody>
-      </table>
-    </div>
+            PDF
+          </button>
+        ),
+      },
+    ],
+    [downloadingId, onDownload],
+  );
+
+  return (
+    <DataTable
+      columns={columns}
+      rows={rows}
+      getRowId={(row) => row.id}
+      rowDetails={false}
+    />
   );
 }

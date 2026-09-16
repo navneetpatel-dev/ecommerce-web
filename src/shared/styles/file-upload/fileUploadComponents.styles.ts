@@ -48,7 +48,4 @@ export const filePickerSelectedFileStyles = {
   textGroup: "min-w-0",
   filename: "truncate text-body-sm font-semibold text-ink",
   filesize: "text-caption text-ink-muted",
-  removeButton:
-    "flex size-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-paper hover:text-ink disabled:opacity-50",
-  removeIcon: "size-4",
 } as const;

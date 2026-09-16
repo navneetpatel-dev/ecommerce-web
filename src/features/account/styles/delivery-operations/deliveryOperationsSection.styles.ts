@@ -5,7 +5,7 @@ export const deliveryOperationsSectionStyles = {
   skeletonCard:
     "border border-line bg-surface p-6 shadow-elevation-1 space-y-4",
   skeletonTitle: "h-6 w-48",
-  skeletonSubtitle: "h-4 w-72",
+  skeletonSubtitle: "h-4 w-72 max-w-full",
   skeletonAction: "mt-4 h-12 w-full",
   sectionCard: "border border-line bg-surface shadow-elevation-1",
   sectionHeader: "border-b border-line bg-paper/55 px-5 py-4 md:px-6",

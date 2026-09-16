@@ -30,7 +30,7 @@ export const dataTableMobileStyles = {
   list: "space-y-3 lg:hidden",
   card: "rounded-md border border-line bg-surface p-4 shadow-card-hairline",
   cardInteractive:
-    "cursor-pointer transition-colors hover:border-brand/30 hover:bg-brand-subtle/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+    "cursor-pointer transition-colors hover:border-brand/30 hover:bg-brand-subtle/20 active:bg-brand-subtle/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
   primaryCell: "min-w-0 text-body text-ink",
   dl: "space-y-2.5",
   dlWithPrimary: "mt-3 border-t border-line/80 pt-3",

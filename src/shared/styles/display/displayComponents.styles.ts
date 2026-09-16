@@ -93,7 +93,7 @@ export const shareButtonStyles = {
 } as const;
 
 export const chatWidgetStyles = {
-  container: "fixed bottom-6 right-6 z-40",
+  container: "fixed bottom-20 left-6 z-40 lg:bottom-6",
   panel:
     "mb-4 w-80 rounded-lg border border-line bg-surface-raised p-4 shadow-elevation-3",
   title: "text-[1.125rem] font-semibold text-ink",

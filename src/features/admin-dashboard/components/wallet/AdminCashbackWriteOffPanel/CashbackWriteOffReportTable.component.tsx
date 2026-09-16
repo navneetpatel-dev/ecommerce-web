@@ -2,6 +2,7 @@
 
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { LABELS } from "@/shared/constants/labels";
 import { CashbackWriteOffMetrics } from "./CashbackWriteOffMetrics.component";
 import { CashbackWriteOffTableBody } from "./CashbackWriteOffTableBody.component";
@@ -52,7 +53,7 @@ export function CashbackWriteOffReportTable({
 
   const tableContent = hasRows ? (
     <div className={styles.tableContainer}>
-      <div className={styles.tableScroll}>
+      <TableScrollShell>
         <table className={styles.table}>
           <thead className={styles.thead}>
             <tr>
@@ -65,7 +66,7 @@ export function CashbackWriteOffReportTable({
           </thead>
           <CashbackWriteOffTableBody rows={report.rows} />
         </table>
-      </div>
+      </TableScrollShell>
     </div>
   ) : (
     <div className={styles.emptyContainer}>

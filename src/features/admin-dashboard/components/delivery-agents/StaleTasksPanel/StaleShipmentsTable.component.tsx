@@ -1,4 +1,5 @@
 import type { StaleShipment } from "@/features/delivery-dashboard";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { staleTasksPanelStyles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
 import { StaleShipmentRow } from "./StaleShipmentRow.component";
 
@@ -14,7 +15,7 @@ export function StaleShipmentsTable({
   if (shipments.length === 0) return null;
 
   return (
-    <div className={staleTasksPanelStyles.tableWrapper}>
+    <TableScrollShell>
       <table className={staleTasksPanelStyles.table}>
         <thead>
           <tr className={staleTasksPanelStyles.tableHeaderRow}>
@@ -39,6 +40,6 @@ export function StaleShipmentsTable({
           ))}
         </tbody>
       </table>
-    </div>
+    </TableScrollShell>
   );
 }

@@ -11,7 +11,7 @@ export const wishlistViewStyles = {
   badge: "text-[0.6875rem] pointer-events-none",
   notifyWrapper: "pointer-events-auto",
   removeButton:
-    "absolute right-2 top-2 z-10 h-8 w-8 min-h-8 max-h-8 rounded-full text-ink-muted hover:bg-danger-subtle hover:text-danger",
+    "absolute right-2 top-2 z-10 h-11 w-11 min-h-11 max-h-11 rounded-full text-ink-muted hover:bg-danger-subtle hover:text-danger",
   availableCard: "relative",
   priceDropBadgeWrapper: "absolute left-2 top-2 z-10 pointer-events-none",
   paginationWrapper: "mt-8",

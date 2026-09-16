@@ -1,6 +1,7 @@
 "use client";
 
 import { Wallet } from "lucide-react";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { useCashDepositsPanel } from "../../../hooks/delivery-agents/useCashDepositsPanel.hook";
 import { cashDepositsPanelStyles } from "../../../styles/delivery-agents/cashDepositsPanel.styles";
 import { CashDepositTableBody } from "./CashDepositTableBody.component";
@@ -40,7 +41,7 @@ export function CashDepositsPanel() {
           No cash deposits submitted yet.
         </p>
       ) : (
-        <div className={cashDepositsPanelStyles.tableWrapper}>
+        <TableScrollShell>
           <table className={cashDepositsPanelStyles.table}>
             <thead>
               <tr className={cashDepositsPanelStyles.tableHeaderRow}>
@@ -70,7 +71,7 @@ export function CashDepositsPanel() {
               onAct={act}
             />
           </table>
-        </div>
+        </TableScrollShell>
       )}
     </section>
   );

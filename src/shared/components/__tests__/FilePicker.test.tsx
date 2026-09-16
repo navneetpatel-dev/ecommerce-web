@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { LABELS } from "@/shared/constants/labels";
 import { FilePicker, formatFileSize } from "../FilePicker.component";
 
 describe("FilePicker", () => {
@@ -36,9 +37,9 @@ describe("FilePicker", () => {
     render(<FilePicker value={mockFile} onChange={handleChange} />);
 
     expect(screen.getByText("test-agents.csv")).toBeInTheDocument();
-    expect(screen.getByLabelText("Remove selected file")).toBeInTheDocument();
+    expect(screen.getByLabelText(LABELS.remove)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByLabelText("Remove selected file"));
+    fireEvent.click(screen.getByLabelText(LABELS.remove));
     expect(handleChange).toHaveBeenCalledWith(null);
   });
 

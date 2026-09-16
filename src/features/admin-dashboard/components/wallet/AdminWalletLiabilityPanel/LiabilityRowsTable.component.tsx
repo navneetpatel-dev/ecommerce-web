@@ -2,6 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import type { WalletLiabilityReport } from "../../../api/finance/reports.api";
 import { adminWalletLiabilityPanelStyles } from "../../../styles/wallet/adminWalletLiabilityPanel.styles";
 
@@ -34,7 +35,7 @@ export function LiabilityRowsTable({
 
       {report.rows.length > 0 ? (
         <div className={adminWalletLiabilityPanelStyles.tableContainer}>
-          <div className={adminWalletLiabilityPanelStyles.tableScroll}>
+          <TableScrollShell>
             <table className={adminWalletLiabilityPanelStyles.table}>
               <thead className={adminWalletLiabilityPanelStyles.thead}>
                 <tr>
@@ -80,7 +81,7 @@ export function LiabilityRowsTable({
                 ))}
               </tbody>
             </table>
-          </div>
+          </TableScrollShell>
         </div>
       ) : (
         <div className={adminWalletLiabilityPanelStyles.tableEmpty}>

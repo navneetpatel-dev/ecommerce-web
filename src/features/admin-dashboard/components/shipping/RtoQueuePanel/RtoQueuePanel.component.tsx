@@ -1,6 +1,7 @@
 "use client";
 
 import { Undo2 } from "lucide-react";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { rtoQueuePanelStyles } from "../../../styles/shipping/rtoQueuePanel.styles";
 import { useRtoQueuePanel } from "../../../hooks/shipping/useRtoQueuePanel.hook";
 import { RtoQueueTableBody } from "./RtoQueueTableBody.component";
@@ -34,7 +35,7 @@ export function RtoQueuePanel() {
           No shipments are currently returning to origin.
         </p>
       ) : (
-        <div className={rtoQueuePanelStyles.tableWrapper}>
+        <TableScrollShell>
           <table className={rtoQueuePanelStyles.table}>
             <thead>
               <tr className={rtoQueuePanelStyles.tableHeaderRow}>
@@ -53,7 +54,7 @@ export function RtoQueuePanel() {
             </thead>
             <RtoQueueTableBody shipments={shipments} />
           </table>
-        </div>
+        </TableScrollShell>
       )}
     </section>
   );

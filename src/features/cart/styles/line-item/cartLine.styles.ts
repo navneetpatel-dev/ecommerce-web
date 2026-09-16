@@ -18,7 +18,7 @@ export const cartLineStyles = {
     ),
   compactBadge: "w-fit text-[0.6875rem]",
   compactSkeleton: "h-3.5 w-16",
-  compactQuantityControl: "h-8 w-8 min-h-8 max-h-8 [&_svg]:size-3.5",
+  compactQuantityControl: "h-11 w-11 min-h-11 max-h-11 [&_svg]:size-3.5",
   compactQuantityValue: "h-4 w-5 text-body-sm",
 
   // Full cart line styles
@@ -45,8 +45,7 @@ export const cartLineStyles = {
   fullActionsRow: "flex min-w-0 flex-wrap items-center gap-3",
   fullDesktopRemoveButton:
     "hidden h-auto min-h-0 max-h-none items-center gap-1.5 px-0 py-0 text-body-sm text-ink-muted hover:bg-transparent hover:text-danger sm:inline-flex",
-  fullQuantityControl:
-    "h-8 w-8 min-h-8 max-h-8 sm:h-9 sm:w-9 sm:min-h-9 sm:max-h-9 lg:h-10 lg:w-10 lg:min-h-10 lg:max-h-10",
+  fullQuantityControl: "h-11 w-11 min-h-11 max-h-11",
   fullQuantityValue: "h-4 w-5 text-[0.75rem] sm:h-5 sm:w-6 sm:text-body-sm",
   fullAmountColumn:
     "hidden flex-col items-end justify-start gap-1 pt-0.5 sm:flex",

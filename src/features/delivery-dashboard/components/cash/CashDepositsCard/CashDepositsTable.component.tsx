@@ -1,30 +1,57 @@
+"use client";
+
+import {
+  DataTable,
+  type DataTableColumn,
+} from "@/shared/components/DataTable.component";
+import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { cashDepositsCardStyles } from "../../../styles/cash/cashDepositsCard.styles";
-import { CashDepositTableRow } from "./CashDepositTableRow.component";
 import type { CashDepositRowViewModel } from "../../../hooks/cash/useCashDepositsCardPresentation.hook";
 
 interface CashDepositsTableProps {
   rows: CashDepositRowViewModel[];
 }
 
+const COLUMNS: DataTableColumn<CashDepositRowViewModel>[] = [
+  {
+    id: "date",
+    header: "Date",
+    accessor: "createdAtLabel",
+  },
+  {
+    id: "declared",
+    header: "Declared",
+    className: cashDepositsCardStyles.cellMono,
+    accessor: "amountLabel",
+  },
+  {
+    id: "expected",
+    header: "Expected",
+    cell: (row) => (
+      <span className={cashDepositsCardStyles.cellExpected(row.mismatch)}>
+        {row.expectedAmountLabel}
+      </span>
+    ),
+  },
+  {
+    id: "status",
+    header: "Status",
+    cell: (row) => <StatusBadge status={row.status} />,
+  },
+  {
+    id: "notes",
+    header: "Notes",
+    accessor: "notesText",
+  },
+];
+
 export function CashDepositsTable({ rows }: CashDepositsTableProps) {
   return (
-    <div className={cashDepositsCardStyles.tableWrapper}>
-      <table className={cashDepositsCardStyles.table}>
-        <thead>
-          <tr className={cashDepositsCardStyles.theadRow}>
-            <th className={cashDepositsCardStyles.th}>Date</th>
-            <th className={cashDepositsCardStyles.th}>Declared</th>
-            <th className={cashDepositsCardStyles.th}>Expected</th>
-            <th className={cashDepositsCardStyles.th}>Status</th>
-            <th className={cashDepositsCardStyles.th}>Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <CashDepositTableRow key={row.id} row={row} />
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      columns={COLUMNS}
+      rows={rows}
+      getRowId={(row) => row.id}
+      rowDetails={false}
+    />
   );
 }

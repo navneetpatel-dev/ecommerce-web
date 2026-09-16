@@ -17,7 +17,7 @@ export const paginationStyles = {
 
 export const scrollToTopStyles = {
   button:
-    "fixed bottom-6 right-6 z-40 h-14 w-14 min-h-14 max-h-14 rounded-full shadow-elevation-2 hover:shadow-elevation-3 animate-scale-in",
+    "fixed bottom-20 right-6 z-40 h-14 w-14 min-h-14 max-h-14 rounded-full shadow-elevation-2 hover:shadow-elevation-3 animate-scale-in lg:bottom-6",
   icon: "text-ink",
 } as const;
 

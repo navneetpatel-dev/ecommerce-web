@@ -1,6 +1,7 @@
 "use client";
 
 import { FileText } from "lucide-react";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { useAgentDocumentsPanel } from "../../../hooks/delivery-agents/useAgentDocumentsPanel.hook";
 import { agentDocumentsPanelStyles } from "../../../styles/delivery-agents/agentDocumentsPanel.styles";
 import { AgentDocumentTableBody } from "./AgentDocumentTableBody.component";
@@ -40,7 +41,7 @@ export function AgentDocumentsPanel() {
           No documents submitted yet.
         </p>
       ) : (
-        <div className={agentDocumentsPanelStyles.tableWrapper}>
+        <TableScrollShell>
           <table className={agentDocumentsPanelStyles.table}>
             <thead>
               <tr className={agentDocumentsPanelStyles.tableHeaderRow}>
@@ -70,7 +71,7 @@ export function AgentDocumentsPanel() {
               onAct={act}
             />
           </table>
-        </div>
+        </TableScrollShell>
       )}
     </section>
   );
