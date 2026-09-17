@@ -8,6 +8,7 @@ export {
 export { VendorHomePage } from "./pages/overview/VendorHomePage.page";
 export { VendorOverview } from "./pages/overview/VendorOverview.page";
 export { VendorOrdersPage } from "./pages/orders/VendorOrdersPage.page";
+export { VendorReturnsPage } from "./pages/returns/VendorReturnsPage.page";
 export { VendorCouponsPage } from "./pages/coupons/VendorCouponsPage.page";
 export { VendorReviewsPage } from "./pages/reviews/VendorReviewsPage.page";
 export { VendorQnaPage } from "./pages/qna/VendorQnaPage.page";

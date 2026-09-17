@@ -96,6 +96,8 @@ export const ticketsLabels = {
   ticketAttachmentsSectionHint: "Up to 5 images and 1 short video.",
   ticketOrderSection: "Related order",
   ticketOrderSectionHint: "Optionally link one of your orders (any status).",
+  ticketShipmentSection: "Shipment",
+  ticketShipmentEmpty: "No shipment recorded for this order yet.",
   ticketSelectOrder: "Select an order",
   ticketNoOrder: "No related order",
   ticketNoOrdersYet: "You have no orders to link yet.",

@@ -12,6 +12,7 @@ import {
   FileBarChart,
   LifeBuoy,
   Bug,
+  RotateCcw,
 } from "lucide-react";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { VENDOR_NAV } from "@/shared/constants/navigation/vendorNav";
@@ -21,6 +22,7 @@ const VENDOR_NAV_ICONS = {
   [PATHS.vendor.overview]: BarChart3,
   [PATHS.vendor.products]: Package,
   [PATHS.vendor.orders]: Truck,
+  [PATHS.vendor.returns]: RotateCcw,
   [PATHS.vendor.payouts]: Wallet,
   [PATHS.vendor.reports]: FileBarChart,
   [PATHS.vendor.coupons]: Tags,

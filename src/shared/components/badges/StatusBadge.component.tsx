@@ -90,7 +90,7 @@ const DESTRUCTIVE = new Set<string>([
 
 const TAG = new Set<string>([VENDOR_DOCUMENT_CHECKLIST_STATUS.NOT_UPLOADED]);
 
-function getVariant(status: string): BadgeVariant {
+export function getStatusBadgeVariant(status: string): BadgeVariant {
   const normalized = status.toUpperCase();
   if (SUCCESS.has(normalized)) return "success";
   if (BRAND.has(normalized)) return "brand";
@@ -108,7 +108,7 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, label, className }: StatusBadgeProps) {
-  const variant = getVariant(status);
+  const variant = getStatusBadgeVariant(status);
   return (
     <Badge variant={variant} className={className}>
       {label ?? status.replace(/_/g, " ")}

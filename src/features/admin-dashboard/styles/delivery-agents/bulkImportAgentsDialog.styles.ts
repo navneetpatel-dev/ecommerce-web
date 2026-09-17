@@ -35,6 +35,9 @@ export const bulkImportAgentsDialogStyles = {
   stepTitle: "text-body-sm font-semibold text-ink tracking-normal",
   errorBanner:
     "rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-body-sm font-medium text-danger",
+  parseErrorHeading: "font-semibold",
+  parseErrorList: "mt-2 space-y-1 text-body-sm font-normal",
+  parseErrorItem: "font-mono text-caption",
   actionsRow:
     "flex items-center justify-end gap-3 border-t border-line/60 pt-4",
   importButton: "gap-1.5 px-4",

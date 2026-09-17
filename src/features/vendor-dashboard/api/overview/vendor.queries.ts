@@ -27,6 +27,10 @@ export const vendorKeys = {
     all: ["vendor", "suborders"] as const,
     page: (page: number) => [...vendorKeys.suborders.all, page] as const,
   },
+  returns: {
+    all: ["vendor", "returns"] as const,
+    page: (page: number) => [...vendorKeys.returns.all, page] as const,
+  },
 };
 
 export function useVendorSummary() {

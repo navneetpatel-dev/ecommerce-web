@@ -14,6 +14,7 @@ export const subordersRoutes = {
 export const returnsRoutes = {
   list: "/api/returns",
   admin: "/api/returns/admin",
+  vendorList: (query = "") => `/api/returns/vendor/me${query}`,
   create: "/api/returns",
   transition: (id: string) => `/api/returns/${id}/transition`,
   detail: (id: string) => `/api/returns/${id}`,

@@ -27,14 +27,12 @@ type UseInfiniteSelectOptionsArgs = {
   fetchPage: (
     query: InfiniteMultiSelectPageQuery,
   ) => Promise<InfiniteMultiSelectPageResult>;
-  resetKey: string | number | null;
   pageSize: number;
 };
 
 export function useInfiniteSelectOptions({
   disabled,
   fetchPage,
-  resetKey,
   pageSize,
 }: UseInfiniteSelectOptionsArgs) {
   const [options, setOptions] = useState<InfiniteMultiSelectOption[]>([]);
@@ -45,9 +43,17 @@ export function useInfiniteSelectOptions({
   const [initialLoading, setInitialLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const [querySnapshot, setQuerySnapshot] = useState(debouncedQuery);
+
+  if (debouncedQuery !== querySnapshot) {
+    setQuerySnapshot(debouncedQuery);
+    setInitialLoading(true);
+  }
 
   const fetchPageRef = useRef(fetchPage);
-  fetchPageRef.current = fetchPage;
+  useEffect(() => {
+    fetchPageRef.current = fetchPage;
+  }, [fetchPage]);
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const requestIdRef = useRef(0);
@@ -58,22 +64,12 @@ export function useInfiniteSelectOptions({
     return () => window.clearTimeout(timer);
   }, [query]);
 
-  useEffect(() => {
-    setQueryState("");
-    setDebouncedQuery("");
-  }, [resetKey]);
-
-  const loadPage = useCallback(
-    async (pageToLoad: number, replace: boolean) => {
+  const loadMore = useCallback(
+    async (pageToLoad: number) => {
+      if (loadingMoreRef.current) return;
+      loadingMoreRef.current = true;
+      setLoadingMore(true);
       const requestId = ++requestIdRef.current;
-      if (replace) {
-        setInitialLoading(true);
-        setLoadError(false);
-      } else {
-        if (loadingMoreRef.current) return;
-        loadingMoreRef.current = true;
-        setLoadingMore(true);
-      }
 
       try {
         const result = await fetchPageRef.current({
@@ -83,23 +79,15 @@ export function useInfiniteSelectOptions({
         });
         if (requestId !== requestIdRef.current) return;
 
-        setOptions((prev) =>
-          replace ? result.items : mergeUnique(prev, result.items),
-        );
+        setOptions((prev) => mergeUnique(prev, result.items));
         setPage(result.page);
         setTotalPages(Math.max(1, result.totalPages));
         setLoadError(false);
       } catch {
         if (requestId !== requestIdRef.current) return;
-        if (replace) {
-          setOptions([]);
-          setPage(0);
-          setTotalPages(1);
-        }
         setLoadError(true);
       } finally {
         if (requestId === requestIdRef.current) {
-          setInitialLoading(false);
           setLoadingMore(false);
           loadingMoreRef.current = false;
         }
@@ -109,8 +97,38 @@ export function useInfiniteSelectOptions({
   );
 
   useEffect(() => {
-    void loadPage(1, true);
-  }, [loadPage, resetKey]);
+    let cancelled = false;
+    const requestId = ++requestIdRef.current;
+
+    void (async () => {
+      try {
+        const result = await fetchPageRef.current({
+          page: 1,
+          limit: pageSize,
+          search: debouncedQuery || undefined,
+        });
+        if (cancelled || requestId !== requestIdRef.current) return;
+        setOptions(result.items);
+        setPage(result.page);
+        setTotalPages(Math.max(1, result.totalPages));
+        setLoadError(false);
+      } catch {
+        if (cancelled || requestId !== requestIdRef.current) return;
+        setOptions([]);
+        setPage(0);
+        setTotalPages(1);
+        setLoadError(true);
+      } finally {
+        if (!cancelled && requestId === requestIdRef.current) {
+          setInitialLoading(false);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedQuery, pageSize]);
 
   const hasMore = page > 0 && page < totalPages;
 
@@ -123,14 +141,14 @@ export function useInfiniteSelectOptions({
         const entry = entries[0];
         if (!entry?.isIntersecting) return;
         if (initialLoading || loadingMoreRef.current || !hasMore) return;
-        void loadPage(page + 1, false);
+        void loadMore(page + 1);
       },
       { root: node.parentElement, rootMargin: "48px", threshold: 0 },
     );
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [disabled, hasMore, initialLoading, loadPage, page, options.length]);
+  }, [disabled, hasMore, initialLoading, loadMore, page, options.length]);
 
   return {
     options,

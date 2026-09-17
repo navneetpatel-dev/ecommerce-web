@@ -5,14 +5,13 @@ import { authApi } from "@/features/auth";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { navigate } from "@/shared/utils/navigation/navigate";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { persistSessionUser } from "@/shared/api/client/sessionAdapter";
 import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
 import type { VendorRegisterInput } from "../../schemas/register/vendor.schema";
 import type { CurrentUser } from "@/shared/api/types";
 
-function persistSession(accessToken: string, user: CurrentUser) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-  localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(user));
+function persistSession(_accessToken: string, user: CurrentUser) {
+  persistSessionUser(user);
 }
 
 export function useVendorRegistration() {

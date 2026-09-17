@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
+import { persistSessionUser } from "@/shared/api/client/sessionAdapter";
 import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
@@ -10,10 +11,8 @@ import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { authApi } from "../../api/auth/auth.api";
 import type { CurrentUser } from "@/shared/api/types";
 
-function persistSession(accessToken: string, user: CurrentUser) {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-  window.localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(user));
+function persistSession(_accessToken: string, user: CurrentUser) {
+  persistSessionUser(user);
 }
 
 /** Support "log in as user": swaps the session to a short-lived impersonation

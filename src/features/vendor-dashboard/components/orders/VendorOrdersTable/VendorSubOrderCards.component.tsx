@@ -1,6 +1,7 @@
 "use client";
 
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { VendorStrip } from "@/shared/components/VendorStrip.component";
 import type { SubOrderRow } from "../../../types/orders/vendorOrders.types";
 import { formatInr, shortOrderId } from "../../../utils/orders/vendorOrderFormat";
@@ -49,16 +50,10 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
               {row.subOrder.shipment.codCollected ? "(collected)" : "(due)"}
             </p>
           )}
-          {row.subOrder.shipment.proofOfDeliveryUrl && (
-            <a
-              href={row.subOrder.shipment.proofOfDeliveryUrl}
-              target="_blank"
-              rel="noreferrer"
-              className={VENDOR_ORDERS_TABLE_STYLES.proofLink}
-            >
-              View proof photo
-            </a>
-          )}
+          <ProofOfDeliveryThumbnail
+            url={row.subOrder.shipment.proofOfDeliveryUrl}
+            compact
+          />
         </div>
       )}
       {row.subOrder.returnRequests?.length ? (

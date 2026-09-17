@@ -1,14 +1,12 @@
 "use client";
 
 import { useCallback, useState, type ReactNode } from "react";
-import { Download } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { commissionsApi, payoutsApi } from "../../api/finance/finance.api";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { AdminMarkPayoutPaidAction } from "../../components/finance/AdminMarkPayoutPaidAction.component";
+import { AdminCommissionInvoiceDownloadAction } from "../../components/finance/AdminCommissionInvoiceDownloadAction.component";
 import { adminDataListViewStyles } from "../../styles/shared/adminDataListView.styles";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
@@ -86,6 +84,13 @@ export function useAdminFinancePage(): AdminFinancePageModel {
     [],
   );
 
+  const invoiceActions = useCallback(
+    (row: AdminDataRow): ReactNode => (
+      <AdminCommissionInvoiceDownloadAction invoiceId={String(row.id)} />
+    ),
+    [],
+  );
+
   return {
     commissions: {
       title: LABELS.commissions,
@@ -104,18 +109,7 @@ export function useAdminFinancePage(): AdminFinancePageModel {
       title: LABELS.commissionInvoices,
       permission: PERMISSIONS.COMMISSION_VIEW,
       load: loadCommissionInvoices,
-      actions: (row) => (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className={tableMenuButtonClass("neutral")}
-          onClick={() => void commissionsApi.downloadInvoice(String(row.id))}
-        >
-          <Download strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.downloadCommissionInvoice}</span>
-        </Button>
-      ),
+      actions: invoiceActions,
       columnKeys: [
         "number",
         "vendorName",

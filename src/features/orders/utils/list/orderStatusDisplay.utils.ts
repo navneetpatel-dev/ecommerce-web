@@ -1,4 +1,4 @@
-import { ORDER_STATUS, PAYMENT_STATUS } from "@/shared/constants/statuses";
+import { getStatusBadgeVariant } from "@/shared/components/badges/StatusBadge.component";
 import type { Tone } from "../../styles/list/orderStatusGroup.styles";
 
 export type Density = "compact" | "comfortable";
@@ -26,27 +26,28 @@ export const PAYMENT_LABELS: Record<string, string> = {
   REFUNDED: "Refunded",
 };
 
+const BADGE_VARIANT_TO_TONE = {
+  success: "positive",
+  brand: "progress",
+  warning: "caution",
+  destructive: "danger",
+  secondary: "neutral",
+  tag: "neutral",
+  outline: "neutral",
+} as const;
+
+export function badgeVariantToTone(
+  variant: ReturnType<typeof getStatusBadgeVariant>,
+): Tone {
+  return BADGE_VARIANT_TO_TONE[variant];
+}
+
 export function orderTone(status: string): Tone {
-  const key = status.toUpperCase();
-  if (key === ORDER_STATUS.DELIVERED || key === ORDER_STATUS.CONFIRMED) {
-    return "positive";
-  }
-  if (key === ORDER_STATUS.SHIPPED) return "progress";
-  if (key === ORDER_STATUS.PENDING) return "caution";
-  if (key === ORDER_STATUS.CANCELLED || key === ORDER_STATUS.RETURNED) {
-    return "danger";
-  }
-  return "neutral";
+  return badgeVariantToTone(getStatusBadgeVariant(status));
 }
 
 export function paymentTone(status: string): Tone {
-  const key = status.toUpperCase();
-  if (key === PAYMENT_STATUS.PAID) return "positive";
-  if (key === PAYMENT_STATUS.PENDING) return "caution";
-  if (key === PAYMENT_STATUS.FAILED || key === PAYMENT_STATUS.REFUNDED) {
-    return "danger";
-  }
-  return "neutral";
+  return badgeVariantToTone(getStatusBadgeVariant(status));
 }
 
 export function displayLabel(

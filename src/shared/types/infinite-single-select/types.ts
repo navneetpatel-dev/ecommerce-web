@@ -52,7 +52,6 @@ export interface UseInfiniteSelectOptionsArgs {
   fetchPage: (
     query: InfiniteSingleSelectPageQuery,
   ) => Promise<InfiniteSingleSelectPageResult>;
-  resetKey: string | number | null;
   pinnedOption: InfiniteSingleSelectOption | null;
   pageSize: number;
   searchable: boolean;

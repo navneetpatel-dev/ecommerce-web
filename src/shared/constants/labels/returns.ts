@@ -5,6 +5,10 @@ export const returnsLabels = {
   returnReasonNotAsDescribed: "Not as described",
   returnReasonNoLongerNeeded: "No longer needed",
   returnReasonOther: "Other",
+  vendorReturnsHint:
+    "Return requests on your orders — reason, customer photos, pickup tracking, and status.",
+  returnPhotos: "Photos",
+  viewReturnPhotos: "View photos",
   couldNotLoadReturn: "Could not load this return.",
   backToReturns: "Back to returns",
   returnNotFound: "Return not found",

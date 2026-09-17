@@ -42,3 +42,10 @@ export {
 export { ProductCompareBar } from "./components/compare/ProductCompareBar.component";
 export { ProductCompareSection } from "./components/compare/ProductCompareSection.component";
 export { MAX_COMPARED_PRODUCTS } from "./constants/compare/compare";
+export {
+  parseFilters,
+  filtersToParams,
+  parseFacetSelections,
+  writeRepeatedSearchParam,
+  FILTER_RESERVED_PARAMS,
+} from "./utils/filters/productFilters/index";

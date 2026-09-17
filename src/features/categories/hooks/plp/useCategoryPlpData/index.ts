@@ -5,40 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { categoriesApi } from "../../../api/browse/categories.api";
 import { categoryKeys } from "../../../api/browse/categories.queries";
-import { useProductList } from "@/features/products";
+import { useProductList, parseFacetSelections } from "@/features/products";
 import type { ProductFilters } from "@/features/products";
-
-const RESERVED_PARAMS = new Set([
-  "page",
-  "limit",
-  "sort",
-  "minPrice",
-  "maxPrice",
-  "rating",
-  "search",
-  "categoryId",
-  "vendorId",
-  "includeDescendants",
-]);
 
 function parseOptionalNumber(value: string | null): number | undefined {
   if (value === null || value === "") return undefined;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : undefined;
-}
-
-function parseFacetSelections(
-  params: URLSearchParams,
-): Record<string, string[]> {
-  const selected: Record<string, string[]> = {};
-  params.forEach((value, key) => {
-    if (RESERVED_PARAMS.has(key) || !value) return;
-    selected[key] = value
-      .split(",")
-      .map((part) => part.trim())
-      .filter(Boolean);
-  });
-  return selected;
 }
 
 export function useCategoryPlpData(slugPath: string[]) {

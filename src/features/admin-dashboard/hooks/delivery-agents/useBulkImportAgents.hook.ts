@@ -6,7 +6,7 @@ import {
   type BulkCreateAgentResult,
 } from "@/features/delivery-dashboard";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
-import { parseAgentsCsv } from "../../utils/delivery-agents/parseAgentsCsv";
+import { parseAgentsCsv, type CsvParseError } from "../../utils/delivery-agents/parseAgentsCsv";
 
 /** Owns the bulk-agent-import dialog's file/upload/template-download state. */
 export function useBulkImportAgents(onImported: () => void) {
@@ -16,11 +16,13 @@ export function useBulkImportAgents(onImported: () => void) {
     "xlsx" | "csv" | null
   >(null);
   const [error, setError] = useState<string | null>(null);
+  const [parseErrors, setParseErrors] = useState<CsvParseError[]>([]);
   const [results, setResults] = useState<BulkCreateAgentResult[] | null>(null);
 
   const reset = () => {
     setFile(null);
     setError(null);
+    setParseErrors([]);
     setResults(null);
     setDownloadingFormat(null);
   };
@@ -42,6 +44,7 @@ export function useBulkImportAgents(onImported: () => void) {
       return;
     }
     setError(null);
+    setParseErrors([]);
     setResults(null);
     setPending(true);
 
@@ -59,9 +62,9 @@ export function useBulkImportAgents(onImported: () => void) {
       } else {
         // Parse CSV client-side with fast feedback, then bulkCreate
         const text = await file.text();
-        const { rows, error: parseError } = parseAgentsCsv(text);
-        if (parseError) {
-          setError(parseError);
+        const { rows, errors: nextParseErrors } = parseAgentsCsv(text);
+        if (nextParseErrors.length > 0) {
+          setParseErrors(nextParseErrors);
           setPending(false);
           return;
         }
@@ -83,6 +86,8 @@ export function useBulkImportAgents(onImported: () => void) {
     downloadingFormat,
     error,
     setError,
+    parseErrors,
+    setParseErrors,
     results,
     reset,
     handleDownloadTemplate,

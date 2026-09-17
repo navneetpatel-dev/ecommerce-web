@@ -129,6 +129,7 @@ export function TicketThread({ ticket, mode }: Props) {
             <div aria-hidden className={ticketThreadStyles.accentBar} />
             <TicketDetailsPanel
               ticket={ticket}
+              mode={mode}
               showResolve={showResolve}
               canReopen={canReopen}
               canManage={canManage}

@@ -11,11 +11,19 @@ import { OptionRow } from "./OptionRow.component";
 import type { InfiniteMultiSelectProps } from "../../types/infinite-multi-select/types";
 import { useInfiniteSelectOptions } from "../../hooks/infinite-multi-select/useInfiniteSelectOptions.hook";
 
-export function InfiniteMultiSelect({
+export function InfiniteMultiSelect(props: InfiniteMultiSelectProps) {
+  return (
+    <InfiniteMultiSelectBody
+      key={String(props.resetKey ?? "")}
+      {...props}
+    />
+  );
+}
+
+function InfiniteMultiSelectBody({
   value,
   onChange,
   fetchPage,
-  resetKey = null,
   searchPlaceholder = LABELS.search,
   emptyMessage = LABELS.noResults,
   noneSelectedLabel = LABELS.noneSelected,
@@ -35,7 +43,7 @@ export function InfiniteMultiSelect({
     loadingMore,
     loadError,
     sentinelRef,
-  } = useInfiniteSelectOptions({ disabled, fetchPage, resetKey, pageSize });
+  } = useInfiniteSelectOptions({ disabled, fetchPage, pageSize });
 
   const selectedSet = useMemo(() => new Set(value), [value]);
 

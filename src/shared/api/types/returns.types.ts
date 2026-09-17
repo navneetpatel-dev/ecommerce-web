@@ -36,6 +36,7 @@ export interface ReturnRequest {
   resolvedAt: string | null;
   createdAt: string;
   productName: string | null;
+  customerName?: string | null;
   creditNoteNumber?: string | null;
   creditNoteId?: string | null;
   debitNoteNumber?: string | null;

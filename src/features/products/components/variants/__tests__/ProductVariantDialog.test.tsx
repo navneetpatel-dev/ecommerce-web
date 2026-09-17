@@ -71,7 +71,9 @@ describe("ProductVariantDialog", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: "Blue" }));
+    const blue = screen.getByRole("button", { name: "Color: Blue" });
+    expect(blue).toHaveAccessibleName("Color: Blue");
+    await user.click(blue);
     await user.click(screen.getByRole("button", { name: "Add to cart" }));
 
     expect(onConfirm).toHaveBeenCalledWith("variant-blue");

@@ -1,4 +1,5 @@
 import type { BulkCreateAgentResult } from "@/features/delivery-dashboard";
+import { formatBulkAgentImportError } from "../../../utils/delivery-agents/formatBulkAgentImportError";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/dom/cn";
 import { bulkImportAgentsDialogStyles as styles } from "../../../styles/delivery-agents/bulkImportAgentsDialog.styles";
@@ -49,7 +50,7 @@ export function ImportResultsPanel({
                   : styles.resultsRowBadgeDanger,
               )}
             >
-              {row.success ? "Created" : (row.error ?? "Failed")}
+              {row.success ? "Created" : formatBulkAgentImportError(row.error)}
             </span>
           </div>
         ))}

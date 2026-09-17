@@ -2,6 +2,7 @@
 
 import { useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { writeRepeatedSearchParam } from "@/features/products";
 import { navigate } from "@/shared/utils/navigation/navigate";
 
 export function useCategoryPlpParams(
@@ -27,8 +28,7 @@ export function useCategoryPlpParams(
         if (value === "" || value === null || value === undefined) {
           params.delete(key);
         } else if (Array.isArray(value)) {
-          if (value.length === 0) params.delete(key);
-          else params.set(key, value.join(","));
+          writeRepeatedSearchParam(params, key, value.map(String));
         } else {
           params.set(key, String(value));
         }

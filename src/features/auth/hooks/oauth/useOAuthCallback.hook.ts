@@ -13,15 +13,13 @@ import {
 } from "@/shared/stores/auth/auth.store";
 import { navigateReplace } from "@/shared/utils/navigation/navigate";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
+import { persistSessionUser } from "@/shared/api/client/sessionAdapter";
 import { LABELS } from "@/shared/constants/labels";
 import { sanitizeUserFacingMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type { CurrentUser, RoleName } from "@/shared/api/types";
 
-function persistSession(accessToken: string, user: CurrentUser) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-  localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(user));
+function persistSession(_accessToken: string, user: CurrentUser) {
+  persistSessionUser(user);
 }
 
 export function useOAuthCallback() {

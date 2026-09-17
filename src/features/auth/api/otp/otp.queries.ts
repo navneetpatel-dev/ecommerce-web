@@ -10,7 +10,7 @@ import {
 } from "@/features/cart";
 import { useAuthStore, postAuthPath } from "@/shared/stores/auth/auth.store";
 import { navigateReplace } from "@/shared/utils/navigation/navigate";
-import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
+import { persistSessionUser } from "@/shared/api/client/sessionAdapter";
 import type { RoleName } from "@/shared/api/types";
 
 export function useRequestOtp() {
@@ -35,8 +35,7 @@ export function useOtpLogin() {
     }) => authApi.verifyOtp(email, code),
     onSuccess: async (data, variables) => {
       setSession(data.accessToken, data.user);
-      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, data.accessToken);
-      localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(data.user));
+      persistSessionUser(data.user);
       useAuthStore.getState().setAuthBootstrapped(true);
       try {
         const cart = await cartApi.mergeGuest();

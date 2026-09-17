@@ -12,6 +12,7 @@ import type { TrackingLookupResult } from "../../api/tracking/shipping.api";
 import { LiveDeliveryMap } from "../delivery-map/LiveDeliveryMap.component";
 import { timeSince } from "@/shared/utils/geo/geo";
 import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
+import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { useTrackingResult } from "../../hooks/tracking/useTrackingResult.hook";
 
 export function TrackingResult({
@@ -68,16 +69,7 @@ export function TrackingResult({
           </p>
         ) : null}
 
-        {result.proofOfDeliveryUrl ? (
-          <a
-            href={result.proofOfDeliveryUrl}
-            target="_blank"
-            rel="noreferrer"
-            className={ordersComponentsStyles.podLink}
-          >
-            View proof of delivery photo
-          </a>
-        ) : null}
+        <ProofOfDeliveryThumbnail url={result.proofOfDeliveryUrl} />
 
         {hasLiveLocation && mapLat != null && mapLng != null ? (
           <div className={ordersComponentsStyles.liveLocationStack}>

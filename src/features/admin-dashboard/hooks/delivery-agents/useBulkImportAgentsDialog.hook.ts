@@ -18,6 +18,8 @@ export function useBulkImportAgentsDialog({
     downloadingFormat,
     error,
     setError,
+    parseErrors,
+    setParseErrors,
     results,
     reset,
     handleDownloadTemplate,
@@ -36,6 +38,7 @@ export function useBulkImportAgentsDialog({
   const handleFileChange = (f: File | null) => {
     setFile(f);
     setError(null);
+    setParseErrors([]);
   };
 
   const handleDownload = (format: "xlsx" | "csv") => {
@@ -52,6 +55,7 @@ export function useBulkImportAgentsDialog({
     pending,
     downloadingFormat,
     error,
+    parseErrors,
     results,
     reset,
     handleOpenChange,

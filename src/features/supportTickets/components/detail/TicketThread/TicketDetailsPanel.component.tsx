@@ -12,7 +12,9 @@ import {
 } from "../../../utils/detail/labels";
 import { AttachmentThumbs } from "./TicketAttachmentThumbs.component";
 import { TicketManageControls } from "./TicketManageControls.component";
+import { TicketShipmentSummary } from "./TicketShipmentSummary.component";
 import { ticketDetailsPanelStyles as styles } from "../../../styles/detail/ticketDetailsPanel.styles";
+import type { RoleMode } from "../../../utils/detail/ticketThreadShared";
 
 interface TicketDetailsPanelProps {
   ticket: SupportTicket;
@@ -36,10 +38,11 @@ interface TicketDetailsPanelProps {
   escalatePending: boolean;
   onEscalate: () => void;
   actionError: string | null;
+  mode: RoleMode;
 }
 
 export function TicketDetailsPanel(props: TicketDetailsPanelProps) {
-  const { ticket, canManage } = props;
+  const { ticket, canManage, mode } = props;
 
   return (
     <>
@@ -96,6 +99,11 @@ export function TicketDetailsPanel(props: TicketDetailsPanelProps) {
             </div>
           ) : null}
         </dl>
+
+        <TicketShipmentSummary
+          relatedOrderId={ticket.relatedOrderId}
+          mode={mode}
+        />
 
         <div className={styles.sectionDivided}>
           <TextEyebrow>{LABELS.ticketOriginalRequest}</TextEyebrow>

@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { LABELS } from "@/shared/constants/labels";
 import type { SubOrderRow } from "../../../types/orders/vendorOrders.types";
 import { formatInr } from "../../../utils/orders/vendorOrderFormat";
@@ -35,16 +36,9 @@ export const ShipmentCell = memo(function ShipmentCell({
     </p>
   ) : null;
 
-  const proofLink = shipment.proofOfDeliveryUrl ? (
-    <a
-      href={shipment.proofOfDeliveryUrl}
-      target="_blank"
-      rel="noreferrer"
-      className={VENDOR_ORDERS_TABLE_STYLES.proofLink}
-    >
-      View proof photo
-    </a>
-  ) : null;
+  const proofLink = (
+    <ProofOfDeliveryThumbnail url={shipment.proofOfDeliveryUrl} compact />
+  );
 
   return (
     <div className={VENDOR_ORDERS_TABLE_STYLES.shipmentStack}>

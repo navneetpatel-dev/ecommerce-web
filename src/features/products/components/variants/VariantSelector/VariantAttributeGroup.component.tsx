@@ -1,5 +1,6 @@
 import { variantSelectorStyles } from "../../../styles/variants/variantSelector.styles";
 import { VariantAttributeValuesList } from "./VariantAttributeValuesList.component";
+import { useVariantAttributeGroup } from "../../../hooks/variants/useVariantAttributeGroup.hook";
 
 interface VariantAttributeGroupProps {
   groupKey: string;
@@ -16,12 +17,18 @@ export function VariantAttributeGroup({
   isActive,
   onSelectValue,
 }: VariantAttributeGroupProps) {
-  const selected = values.find((value) => isActive(groupKey, value));
+  const { titleId, selected } = useVariantAttributeGroup(
+    groupKey,
+    values,
+    isActive,
+  );
 
   return (
-    <div>
+    <div role="radiogroup" aria-labelledby={titleId}>
       <div className={variantSelectorStyles.groupHeader}>
-        <p className={variantSelectorStyles.groupTitle}>{groupKey}</p>
+        <p id={titleId} className={variantSelectorStyles.groupTitle}>
+          {groupKey}
+        </p>
         {selected ? (
           <p className={variantSelectorStyles.groupSelected}>{selected}</p>
         ) : null}

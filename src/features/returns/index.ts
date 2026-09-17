@@ -9,3 +9,4 @@ export { MyReturnsPage } from "./pages/list/MyReturnsPage.page";
 export { MyReturnDetailPage } from "./pages/detail/MyReturnDetailPage.page";
 export { returnsApi } from "./api/returns/returns.api";
 export { useCreateReturn, useReturn } from "./api/returns/returns.queries";
+export { RETURN_STATUS_LABEL } from "./constants/list/returnStatusLabels";

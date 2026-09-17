@@ -97,6 +97,7 @@ export const PATHS = {
     productImagesQuery: (id: string) =>
       `/vendor/dashboard/products?images=${encodeURIComponent(id)}`,
     orders: "/vendor/dashboard/orders",
+    returns: "/vendor/dashboard/returns",
     payouts: "/vendor/dashboard/payouts",
     coupons: "/vendor/dashboard/coupons",
     couponCreateQuery: "/vendor/dashboard/coupons?create=1",

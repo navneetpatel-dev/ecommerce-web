@@ -19,11 +19,19 @@ import {
 } from "./SingleSelectListbox.component";
 
 export function InfiniteSingleSelect(props: InfiniteSingleSelectProps) {
+  return (
+    <InfiniteSingleSelectBody
+      key={String(props.resetKey ?? "")}
+      {...props}
+    />
+  );
+}
+
+function InfiniteSingleSelectBody(props: InfiniteSingleSelectProps) {
   const {
     value,
     onChange,
     fetchPage,
-    resetKey = null,
     pinnedOption = null,
     allowNone = false,
     noneValue = "__none__",
@@ -57,7 +65,6 @@ export function InfiniteSingleSelect(props: InfiniteSingleSelectProps) {
     open,
     disabled,
     fetchPage,
-    resetKey,
     pinnedOption,
     pageSize,
     searchable,

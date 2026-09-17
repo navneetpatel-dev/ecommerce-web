@@ -1,6 +1,7 @@
-import { ImageIcon, Package } from "lucide-react";
+import { Package } from "lucide-react";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { shipmentOverviewCardStyles as styles } from "../../styles/deliveries/shipmentOverviewCard.styles";
 
 interface ShipmentOverviewCardProps {
@@ -95,15 +96,9 @@ export function ShipmentOverviewCard({
   ) : null;
 
   const proofLink = proofOfDeliveryUrl ? (
-    <a
-      href={proofOfDeliveryUrl}
-      target="_blank"
-      rel="noreferrer"
-      className={styles.proofLink}
-    >
-      <ImageIcon className={styles.proofIcon} aria-hidden="true" />
-      View proof of delivery photo
-    </a>
+    <div className={styles.proofLink}>
+      <ProofOfDeliveryThumbnail url={proofOfDeliveryUrl} />
+    </div>
   ) : null;
 
   return (

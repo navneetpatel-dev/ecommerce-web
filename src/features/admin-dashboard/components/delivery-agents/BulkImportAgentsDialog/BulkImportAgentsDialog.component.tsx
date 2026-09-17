@@ -13,6 +13,7 @@ import { FilePicker } from "@/shared/components/FilePicker.component";
 import { MAX_FILE_BYTES, MAX_ROWS } from "../../../utils/delivery-agents/parseAgentsCsv";
 import { TemplateDownloadCards } from "./TemplateDownloadCards.component";
 import { ImportResultsPanel } from "./ImportResultsPanel.component";
+import { CsvParseErrorList } from "./CsvParseErrorList.component";
 import { RequiredColumnsInfo } from "./RequiredColumnsInfo.component";
 import { useBulkImportAgentsDialog } from "../../../hooks/delivery-agents/useBulkImportAgentsDialog.hook";
 import { bulkImportAgentsDialogStyles as styles } from "../../../styles/delivery-agents/bulkImportAgentsDialog.styles";
@@ -34,6 +35,7 @@ export function BulkImportAgentsDialog({
     pending,
     downloadingFormat,
     error,
+    parseErrors,
     results,
     reset,
     handleOpenChange,
@@ -45,7 +47,9 @@ export function BulkImportAgentsDialog({
 
   const errorBanner = error ? (
     <div className={styles.errorBanner}>{error}</div>
-  ) : null;
+  ) : (
+    <CsvParseErrorList errors={parseErrors} />
+  );
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>

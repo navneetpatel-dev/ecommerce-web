@@ -1,26 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SHARE_COPIED_RESET_MS } from "@/shared/constants/timing/timing";
+
+function resolveShareUrl(url: string): string {
+  if (url.startsWith("http") || typeof window === "undefined") return url;
+  return new URL(url, window.location.origin).toString();
+}
 
 export function useShare(url: string, title: string) {
   const [copied, setCopied] = useState(false);
-  const [resolvedUrl, setResolvedUrl] = useState(url);
-
-  useEffect(() => {
-    if (url.startsWith("http")) {
-      setResolvedUrl(url);
-      return;
-    }
-    if (typeof window !== "undefined") {
-      setResolvedUrl(new URL(url, window.location.origin).toString());
-    }
-  }, [url]);
+  const resolvedUrl = resolveShareUrl(url);
 
   const shareNative = async () => {
+    const shareUrl = resolveShareUrl(url);
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
-        await navigator.share({ title, url: resolvedUrl });
+        await navigator.share({ title, url: shareUrl });
         return true;
       } catch {
         // User cancelled or share failed — fall through to copy.
@@ -31,7 +27,7 @@ export function useShare(url: string, title: string) {
   };
 
   const copyLink = async () => {
-    await navigator.clipboard.writeText(resolvedUrl);
+    await navigator.clipboard.writeText(resolveShareUrl(url));
     setCopied(true);
     window.setTimeout(() => setCopied(false), SHARE_COPIED_RESET_MS);
   };

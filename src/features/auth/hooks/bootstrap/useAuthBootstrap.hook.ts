@@ -5,9 +5,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { authApi } from "../../api/auth/auth.api";
 import { cartKeys } from "@/features/cart";
-import { registerApiSessionAdapter } from "@/shared/api/client/sessionAdapter";
+import {
+  persistSessionUser,
+  registerApiSessionAdapter,
+} from "@/shared/api/client/sessionAdapter";
+import { refreshSessionOrThrow } from "@/shared/api/client/internal/sessionRefresh";
 import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { isDefinitiveAuthFailure } from "@/shared/utils/auth/authSessionError";
+import type { CurrentUser } from "@/shared/api/types";
 
 /**
  * Decodes a JWT's payload without verifying its signature — verification already happened
@@ -32,17 +38,57 @@ function decodeJwtPayload(
   }
 }
 
-const storeSessionAdapter = {
+function readStashedImpersonationSession(): {
+  accessToken: string;
+  user: CurrentUser;
+} | null {
+  if (typeof window === "undefined") return null;
+  const raw = window.localStorage.getItem(
+    STORAGE_KEYS.IMPERSONATION_ORIGINAL_SESSION,
+  );
+  if (!raw) return null;
+  try {
+    const stashed = JSON.parse(raw) as {
+      accessToken?: string;
+      user?: CurrentUser;
+    };
+    if (!stashed.accessToken || !stashed.user) return null;
+    return { accessToken: stashed.accessToken, user: stashed.user };
+  } catch {
+    return null;
+  }
+}
+
+function restoreImpersonationOrigin(): boolean {
+  const stashed = readStashedImpersonationSession();
+  if (!stashed) return false;
+  window.localStorage.removeItem(STORAGE_KEYS.IMPERSONATION_ORIGINAL_SESSION);
+  useAuthStore.getState().setSession(stashed.accessToken, stashed.user);
+  persistSessionUser(stashed.user);
+  window.location.assign(PATHS.admin.root);
+  return true;
+}
+
+function hydrateUserFromPersistedSession() {
+  if (typeof window === "undefined") return;
+  const sessionStr = window.localStorage.getItem(STORAGE_KEYS.SESSION);
+  if (!sessionStr) return;
+  try {
+    const user = JSON.parse(sessionStr) as CurrentUser;
+    useAuthStore.setState({ currentUser: user });
+  } catch {
+    window.localStorage.removeItem(STORAGE_KEYS.SESSION);
+  }
+}
+
+export const storeSessionAdapter = {
   getAccessToken: () => useAuthStore.getState().accessToken,
   persistAccessToken: (accessToken: string) => {
     useAuthStore.getState().setAccessToken(accessToken);
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
   },
   clearSession: () => {
+    if (restoreImpersonationOrigin()) return;
     useAuthStore.getState().clearSession();
-    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.SESSION);
-    localStorage.removeItem(STORAGE_KEYS.IMPERSONATION_ORIGINAL_SESSION);
   },
   /**
    * Impersonation tokens are short-lived and deliberately non-renewable (auth.service.ts's
@@ -50,9 +96,7 @@ const storeSessionAdapter = {
    * so an ordinary 401 -> refresh cycle after the impersonation token expires silently mints a
    * fresh token for the ADMIN's real identity while the UI still shows "Viewing as X". Reject
    * that token instead of persisting it: sessionRefresh then treats this as a definitive auth
-   * failure, clearing the (impersonated) session exactly like any other expired session, so the
-   * admin gets a clean re-login/re-impersonate prompt rather than silently acting as themselves
-   * under a stale "impersonating" banner and stale permission set.
+   * failure, and `clearSession` restores the stashed admin session (F-25) instead of a full logout.
    */
   acceptRefreshedToken: (accessToken: string) => {
     const { currentUser } = useAuthStore.getState();
@@ -63,7 +107,6 @@ const storeSessionAdapter = {
 };
 
 export function useAuthBootstrap() {
-  const setAccessToken = useAuthStore((s) => s.setAccessToken);
   const setSession = useAuthStore((s) => s.setSession);
   const clearSession = useAuthStore((s) => s.clearSession);
   const setAuthBootstrapped = useAuthStore((s) => s.setAuthBootstrapped);
@@ -74,40 +117,29 @@ export function useAuthBootstrap() {
     let cancelled = false;
 
     async function bootstrap() {
-      const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-      const sessionStr = localStorage.getItem(STORAGE_KEYS.SESSION);
-
-      // Guests: cart can load immediately with the session cookie.
-      if (!token) {
-        if (!cancelled) setAuthBootstrapped(true);
-        return;
+      if (typeof window !== "undefined") {
+        window.localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
       }
+      hydrateUserFromPersistedSession();
 
-      if (sessionStr) {
-        try {
-          setSession(token, JSON.parse(sessionStr));
-        } catch {
-          setAccessToken(token);
-        }
-      } else {
-        setAccessToken(token);
-      }
-
-      // Wait for me() (and any 401 → refresh → retry) before enabling cart.
-      // Otherwise optional cart routes used to succeed as guest with an expired Bearer.
       try {
+        await refreshSessionOrThrow();
+        if (cancelled) return;
+        const accessToken = useAuthStore.getState().accessToken;
+        if (!accessToken) {
+          return;
+        }
         const fresh = await authApi.me();
         if (cancelled) return;
-        const accessToken = useAuthStore.getState().accessToken ?? token;
         setSession(accessToken, fresh);
-        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-        localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(fresh));
+        persistSessionUser(fresh);
       } catch (err) {
         if (cancelled) return;
-        if (isDefinitiveAuthFailure(err)) {
+        if (
+          isDefinitiveAuthFailure(err) &&
+          !useAuthStore.getState().accessToken
+        ) {
           clearSession();
-          localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-          localStorage.removeItem(STORAGE_KEYS.SESSION);
         }
       } finally {
         if (!cancelled) {
@@ -121,11 +153,5 @@ export function useAuthBootstrap() {
     return () => {
       cancelled = true;
     };
-  }, [
-    setAccessToken,
-    setSession,
-    clearSession,
-    setAuthBootstrapped,
-    queryClient,
-  ]);
+  }, [setSession, clearSession, setAuthBootstrapped, queryClient]);
 }

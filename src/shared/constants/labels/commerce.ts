@@ -57,6 +57,7 @@ export const commerceLabels = {
   generalCategory: "General",
   notAvailable: "Not available",
   variantUnavailableHint: "Not available with your current selection.",
+  variantOptionAria: "{group}: {value}",
   previousImage: "Previous image",
   nextImage: "Next image",
   hoverToZoom: "Hover to zoom",

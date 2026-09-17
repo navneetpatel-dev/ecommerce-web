@@ -7,6 +7,7 @@ import {
   type PaginationQuery,
 } from "@/shared/api/client/pagination";
 import { API } from "@/shared/constants/apiRoutes";
+import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import type { ReturnRequest } from "@/shared/api/types";
 
 export type CreateReturnBody = {
@@ -24,6 +25,12 @@ export const returnsApi = {
   ): Promise<PaginatedList<ReturnRequest>> => {
     const res = await apiClient.getWithResponse<ReturnRequest[]>(
       withQuery(API.returns.admin, params),
+    );
+    return unwrapPaginatedList(res);
+  },
+  vendorList: async (page = 1, limit = DEFAULT_PAGE_LIMIT) => {
+    const res = await apiClient.getWithResponse<ReturnRequest[]>(
+      API.returns.vendorList(`?page=${page}&limit=${limit}`),
     );
     return unwrapPaginatedList(res);
   },

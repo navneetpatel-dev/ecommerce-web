@@ -10,7 +10,6 @@ export function useInfiniteSelectOptions({
   open,
   disabled,
   fetchPage,
-  resetKey,
   pinnedOption,
   pageSize,
   searchable,
@@ -22,40 +21,41 @@ export function useInfiniteSelectOptions({
   const [initialLoading, setInitialLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const resetQuery = useCallback(() => {
+    setQueryState("");
+  }, []);
+  const debouncedQuery = useDebouncedValue(searchable ? query.trim() : "", 250);
+  const [openSnapshot, setOpenSnapshot] = useState(open);
+  const [querySnapshot, setQuerySnapshot] = useState(debouncedQuery);
+
+  if (open !== openSnapshot) {
+    setOpenSnapshot(open);
+    if (open) setInitialLoading(true);
+  }
+  if (open && debouncedQuery !== querySnapshot) {
+    setQuerySnapshot(debouncedQuery);
+    setInitialLoading(true);
+  }
+  if (!open && debouncedQuery !== querySnapshot) {
+    setQuerySnapshot(debouncedQuery);
+  }
 
   const fetchPageRef = useRef(fetchPage);
-  fetchPageRef.current = fetchPage;
+  useEffect(() => {
+    fetchPageRef.current = fetchPage;
+  }, [fetchPage]);
 
   const listRef = useRef<HTMLDivElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const requestIdRef = useRef(0);
   const loadingMoreRef = useRef(false);
 
-  const resetQuery = useCallback(() => {
-    setQueryState("");
-  }, []);
-
-  // Debounce the search text so typing does not fire a request per keystroke.
-  const debouncedQuery = useDebouncedValue(searchable ? query.trim() : "", 250);
-
-  useEffect(() => {
-    resetQuery();
-    setOptions([]);
-    setPage(0);
-    setTotalPages(1);
-  }, [resetKey, resetQuery]);
-
-  const loadPage = useCallback(
-    async (pageToLoad: number, replace: boolean) => {
+  const loadMore = useCallback(
+    async (pageToLoad: number) => {
+      if (loadingMoreRef.current) return;
+      loadingMoreRef.current = true;
+      setLoadingMore(true);
       const requestId = ++requestIdRef.current;
-      if (replace) {
-        setInitialLoading(true);
-        setLoadError(false);
-      } else {
-        if (loadingMoreRef.current) return;
-        loadingMoreRef.current = true;
-        setLoadingMore(true);
-      }
 
       try {
         const result = await fetchPageRef.current({
@@ -69,7 +69,7 @@ export function useInfiniteSelectOptions({
           mergePageOptions({
             previous: prev,
             incoming: result.items,
-            replace,
+            replace: false,
             pinnedOption,
             query: debouncedQuery,
           }),
@@ -79,15 +79,9 @@ export function useInfiniteSelectOptions({
         setLoadError(false);
       } catch {
         if (requestId !== requestIdRef.current) return;
-        if (replace) {
-          setOptions([]);
-          setPage(0);
-          setTotalPages(1);
-        }
         setLoadError(true);
       } finally {
         if (requestId === requestIdRef.current) {
-          setInitialLoading(false);
           setLoadingMore(false);
           loadingMoreRef.current = false;
         }
@@ -98,8 +92,46 @@ export function useInfiniteSelectOptions({
 
   useEffect(() => {
     if (!open) return;
-    void loadPage(1, true);
-  }, [open, loadPage, resetKey]);
+    let cancelled = false;
+    const requestId = ++requestIdRef.current;
+
+    void (async () => {
+      try {
+        const result = await fetchPageRef.current({
+          page: 1,
+          limit: pageSize,
+          search: searchable && debouncedQuery ? debouncedQuery : undefined,
+        });
+        if (cancelled || requestId !== requestIdRef.current) return;
+        setOptions(
+          mergePageOptions({
+            previous: [],
+            incoming: result.items,
+            replace: true,
+            pinnedOption,
+            query: debouncedQuery,
+          }),
+        );
+        setPage(result.page);
+        setTotalPages(Math.max(1, result.totalPages));
+        setLoadError(false);
+      } catch {
+        if (cancelled || requestId !== requestIdRef.current) return;
+        setOptions([]);
+        setPage(0);
+        setTotalPages(1);
+        setLoadError(true);
+      } finally {
+        if (!cancelled && requestId === requestIdRef.current) {
+          setInitialLoading(false);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [open, debouncedQuery, pageSize, pinnedOption, searchable]);
 
   const hasMore = page > 0 && page < totalPages;
 
@@ -114,14 +146,14 @@ export function useInfiniteSelectOptions({
         const entry = entries[0];
         if (!entry?.isIntersecting) return;
         if (initialLoading || loadingMoreRef.current || !hasMore) return;
-        void loadPage(page + 1, false);
+        void loadMore(page + 1);
       },
       { root, rootMargin: "48px", threshold: 0 },
     );
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [disabled, hasMore, initialLoading, loadPage, open, page, options.length]);
+  }, [disabled, hasMore, initialLoading, loadMore, open, page, options.length]);
 
   return {
     options,

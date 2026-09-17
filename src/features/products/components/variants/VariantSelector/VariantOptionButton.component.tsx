@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { variantSelectorStyles } from "../../../styles/variants/variantSelector.styles";
 
 interface VariantOptionButtonProps {
@@ -34,6 +35,10 @@ export function VariantOptionButton({
         size="sm"
         disabled={!available}
         aria-pressed={active}
+        aria-label={formatLabel(LABELS.variantOptionAria, {
+          group: groupKey,
+          value,
+        })}
         onClick={handleSelect}
         className={variantSelectorStyles.optionButton(active, available)}
       >

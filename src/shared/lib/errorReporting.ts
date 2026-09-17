@@ -1,4 +1,5 @@
 import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
+import { getApiSessionAdapter } from "@/shared/api/client/sessionAdapter";
 
 /**
  * Crash/error reporting (Rule 20). A single pluggable transport is
@@ -34,7 +35,9 @@ function defaultTransport(report: ErrorReport): void {
 
 /** Redacts anything that looks like a stored token before reporting. */
 function redact(input: string): string {
-  const tokenValue = safeRead(STORAGE_KEYS.ACCESS_TOKEN);
+  const tokenValue =
+    getApiSessionAdapter().getAccessToken() ??
+    safeRead(STORAGE_KEYS.ACCESS_TOKEN);
   if (!tokenValue) return input;
   return input.split(tokenValue).join("[redacted]");
 }

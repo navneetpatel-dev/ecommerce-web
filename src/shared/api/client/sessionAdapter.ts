@@ -1,11 +1,12 @@
 import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
+import type { CurrentUser } from "@/shared/api/types";
 
 /**
  * Platform-agnostic session adapter for the API client (Rule 6/15). The
  * client must not depend on any feature's store; the auth feature registers
  * a store-backed adapter at startup via `registerApiSessionAdapter`. The
- * default adapter reads/writes persisted storage directly so requests made
- * before registration behave identically.
+ * default adapter keeps the access token in memory only so requests made
+ * before registration never persist it to readable storage.
  */
 export interface ApiSessionAdapter {
   getAccessToken: () => string | null;
@@ -21,23 +22,21 @@ export interface ApiSessionAdapter {
   acceptRefreshedToken?: (accessToken: string) => boolean;
 }
 
-const localStorageAdapter: ApiSessionAdapter = {
-  getAccessToken: () => {
-    if (typeof window === "undefined") return null;
-    return window.localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-  },
+/** In-memory token used only until `registerApiSessionAdapter` runs. */
+let fallbackAccessToken: string | null = null;
+
+const defaultSessionAdapter: ApiSessionAdapter = {
+  getAccessToken: () => fallbackAccessToken,
   persistAccessToken: (accessToken) => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+    fallbackAccessToken = accessToken;
   },
   clearSession: () => {
-    if (typeof window === "undefined") return;
-    window.localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-    window.localStorage.removeItem(STORAGE_KEYS.SESSION);
+    fallbackAccessToken = null;
+    clearPersistedCredentials();
   },
 };
 
-let adapter: ApiSessionAdapter = localStorageAdapter;
+let adapter: ApiSessionAdapter = defaultSessionAdapter;
 
 export function registerApiSessionAdapter(next: ApiSessionAdapter): void {
   adapter = next;
@@ -48,9 +47,19 @@ export function getApiSessionAdapter(): ApiSessionAdapter {
 }
 
 /**
+ * Persists the current user snapshot for faster UI hydration after reload.
+ * The access token stays in memory only (F-14).
+ */
+export function persistSessionUser(user: CurrentUser): void {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(user));
+}
+
+/**
  * Removes persisted credentials straight from storage without going through
  * the registered adapter. Lets store/session owners clear credentials without
  * an adapter→store→adapter recursion (Rule 21: one storage owner per concern).
+ * Also drops any leftover pre-F-14 `ACCESS_TOKEN` key.
  */
 export function clearPersistedCredentials(): void {
   if (typeof window === "undefined") return;

@@ -10,7 +10,7 @@ import {
 interface AuthState {
   accessToken: string | null;
   currentUser: CurrentUser | null;
-  /** False until localStorage session is restored (or confirmed absent). Prevents cart race on refresh. */
+  /** False until silent refresh finishes (or is confirmed absent). Prevents cart race on refresh. */
   authBootstrapped: boolean;
   setSession: (token: string, user: CurrentUser) => void;
   setAccessToken: (token: string) => void;

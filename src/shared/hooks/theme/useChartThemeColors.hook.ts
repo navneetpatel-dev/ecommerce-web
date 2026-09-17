@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import {
   DEFAULT_PALETTE_ID,
   getThemePalette,
@@ -47,20 +47,16 @@ function readChartColors(): ChartThemeColors {
   };
 }
 
+function subscribe(onStoreChange: () => void) {
+  const observer = new MutationObserver(onStoreChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class", "data-theme", "style"],
+  });
+  return () => observer.disconnect();
+}
+
 /** Resolve theme CSS variables for Recharts (SVG needs concrete colors). */
 export function useChartThemeColors(): ChartThemeColors {
-  const [colors, setColors] = useState<ChartThemeColors>(FALLBACK);
-
-  useEffect(() => {
-    setColors(readChartColors());
-
-    const observer = new MutationObserver(() => setColors(readChartColors()));
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class", "data-theme", "style"],
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  return colors;
+  return useSyncExternalStore(subscribe, readChartColors, () => FALLBACK);
 }

@@ -8,6 +8,7 @@ import { RedeliverySlotPicker } from "@/shared/components/RedeliverySlotPicker.c
 import { DeliveryRatingPrompt } from "../../actions/DeliveryRatingPrompt.component";
 import { subOrderShipmentTrackingStyles as styles } from "../../../styles/sub-order/subOrderShipmentTracking.styles";
 import { useSubOrderShipmentTracking } from "../../../hooks/sub-order/useSubOrderShipmentTracking.hook";
+import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { ShipmentAttemptsList } from "./ShipmentAttemptsList.component";
 
 interface SubOrderShipmentTrackingProps {
@@ -89,14 +90,7 @@ export function SubOrderShipmentTracking({
         </p>
       ) : null}
       {hasProofOfDelivery ? (
-        <a
-          href={shipment.proofOfDeliveryUrl ?? undefined}
-          target="_blank"
-          rel="noreferrer"
-          className={styles.proofOfDeliveryLink}
-        >
-          View proof of delivery photo
-        </a>
+        <ProofOfDeliveryThumbnail url={shipment.proofOfDeliveryUrl} />
       ) : null}
       {isDelivered ? <DeliveryRatingPrompt shipmentId={shipment.id} /> : null}
     </div>

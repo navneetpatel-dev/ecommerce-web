@@ -8,6 +8,7 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { ordersApi } from "@/features/orders";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
+import { AdminOrderShipmentAction } from "../../components/orders/AdminOrderShipmentAction";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
 import { adminDataListViewStyles } from "../../styles/shared/adminDataListView.styles";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
@@ -56,6 +57,7 @@ export function useAdminOrdersPage(
 
       return (
         <div className={adminDataListViewStyles.rowActionsInline}>
+          <AdminOrderShipmentAction row={row} />
           {isPending && (
             <AdminConfirmAction
               label={LABELS.confirm}

@@ -35,6 +35,11 @@ export const VENDOR_NAV = [
     permissions: [PERMISSIONS.SUBORDER_MANAGE] as PermissionKey[],
   },
   {
+    href: PATHS.vendor.returns,
+    label: LABELS.returnsPageTitle,
+    permissions: [PERMISSIONS.SUBORDER_MANAGE] as PermissionKey[],
+  },
+  {
     href: PATHS.vendor.payouts,
     label: LABELS.payouts,
     permissions: [PERMISSIONS.PAYOUT_VIEW] as PermissionKey[],
