@@ -32,11 +32,12 @@ async function uploadViaServer(
 /**
  * Try pre-signed PUT; on failure (e.g. S3 CORS) fall back to server upload.
  */
-async function uploadSingleWithFallback(
+export async function uploadSingleWithFallback(
   body: PresignSingleBody & { file: File },
 ): Promise<PresignSingleResult> {
+  let presign: PresignSingleResult;
   try {
-    const presign = await uploadsApi.presign({
+    presign = await uploadsApi.presign({
       entityType: body.entityType,
       entityId: body.entityId,
       purpose: body.purpose,
@@ -45,7 +46,6 @@ async function uploadSingleWithFallback(
       contentLength: body.contentLength,
     });
     await putFileToPresignedUrl(presign.uploadUrl, body.file, body.contentType);
-    return presign;
   } catch {
     const dataUrl = await readFileAsDataUrl(body.file);
     const uploaded = await uploadViaServer({
@@ -61,6 +61,10 @@ async function uploadSingleWithFallback(
       key: "",
     };
   }
+  // Outside the fallback: a file the server rejects as not its declared type
+  // would be rejected by the server-side upload too, so surface the error.
+  await uploadsApi.verify(presign.key);
+  return presign;
 }
 
 export function usePresignUpload() {
@@ -85,13 +89,14 @@ export function usePresignUploadBulk() {
       for (const item of presign.items) {
         const file = body.fileObjects[item.index];
         if (!file) continue;
+        let putOk = false;
         try {
           await putFileToPresignedUrl(
             item.uploadUrl,
             file,
             file.type || "application/octet-stream",
           );
-          uploaded.push(item);
+          putOk = true;
         } catch {
           try {
             const dataUrl = await readFileAsDataUrl(file);
@@ -108,6 +113,18 @@ export function usePresignUploadBulk() {
               viewUrl: result.viewUrl,
               key: "",
             });
+          } catch (error) {
+            errors.push({
+              index: item.index,
+              message: getApiErrorMessage(error, LABELS.uploadFailed),
+            });
+          }
+        }
+        if (putOk) {
+          // The server deletes a stored file that is not its declared type.
+          try {
+            await uploadsApi.verify(item.key);
+            uploaded.push(item);
           } catch (error) {
             errors.push({
               index: item.index,
