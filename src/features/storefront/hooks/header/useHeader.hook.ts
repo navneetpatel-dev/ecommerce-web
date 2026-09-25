@@ -9,6 +9,7 @@ import { useWalletBalance } from "@/features/wallet";
 import { useCategories, getRootCategories } from "@/features/categories";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
+import { toDisplayAmount } from "@/shared/utils/formatting/displayAmount";
 import {
   MEGA_MENU_CLOSE_DELAY_MS,
   MEGA_MENU_OPEN_DELAY_MS,
@@ -41,7 +42,8 @@ export function useHeader() {
     0,
   );
   const wishlistItemCount = (wishlist?.items ?? []).length;
-  const walletBalance = Number(wallet?.points ?? wallet?.balance ?? 0);
+  // Null until the balance arrives (or when it fails) — the badge hides instead of showing 0.
+  const walletBalance = toDisplayAmount(wallet?.points ?? wallet?.balance);
   /**
    * Header counts are unknown until the session is restored and the badge
    * queries resolve. Rendering zeroes first makes the badges pop in, so the

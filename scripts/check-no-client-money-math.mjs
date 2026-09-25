@@ -12,7 +12,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { findMoneyArithmetic, findRawMoneyDisplay } from "./lib/moneyMath.mjs";
+import {
+  findMoneyArithmetic,
+  findRawMoneyDisplay,
+  findZeroFallbackFormat,
+} from "./lib/moneyMath.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const srcDir = path.join(root, "src");
@@ -59,6 +63,7 @@ const FORMATTING_DIR = "src/shared/utils/formatting/";
 
 const violations = [];
 const displayViolations = [];
+const fallbackViolations = [];
 const usedAllowlist = new Set();
 
 for (const file of sourceFiles(srcDir)) {
@@ -68,6 +73,9 @@ for (const file of sourceFiles(srcDir)) {
     for (const finding of findRawMoneyDisplay(sourceText, file)) {
       displayViolations.push(`  ${rel}:${finding.line}  ${finding.text}`);
     }
+  }
+  for (const finding of findZeroFallbackFormat(sourceText, file)) {
+    fallbackViolations.push(`  ${rel}:${finding.line}  ${finding.text}`);
   }
   const findings = findMoneyArithmetic(sourceText, file);
   if (findings.length === 0) continue;
@@ -106,6 +114,16 @@ if (displayViolations.length > 0) {
   );
 }
 
+if (fallbackViolations.length > 0) {
+  console.error(
+    "\nMissing amounts turned into ₹0 before formatting (`x ?? 0`, `x || 0` or `Number(x)` passed to a money formatter):\n",
+  );
+  console.error(fallbackViolations.join("\n"));
+  console.error(
+    '\nPass the value straight through — the formatters show a missing amount as "—".',
+  );
+}
+
 if (staleEntries.length > 0) {
   console.error(
     "\nAllowlist entries with no money arithmetic left (remove them from scripts/check-no-client-money-math.mjs):\n",
@@ -116,6 +134,7 @@ if (staleEntries.length > 0) {
 if (
   violations.length > 0 ||
   displayViolations.length > 0 ||
+  fallbackViolations.length > 0 ||
   staleEntries.length > 0
 ) {
   process.exit(1);

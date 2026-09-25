@@ -2,7 +2,7 @@ import type { DataTableColumn } from "@/shared/components/DataTable.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatDateTime } from "@/shared/utils/formatting/formatDate";
 import type { CouponBatch } from "@/shared/api/types";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 export function buildCouponBatchColumns(): DataTableColumn<CouponBatch>[] {
   return [
@@ -21,13 +21,13 @@ export function buildCouponBatchColumns(): DataTableColumn<CouponBatch>[] {
       id: "discount",
       header: LABELS.batchDiscountImpact,
       className: "tabular-nums",
-      cell: (row) => `₹${formatInrAmount(Number(row.discountTotal ?? 0))}`,
+      cell: (row) => formatInr(row.discountTotal),
     },
     {
       id: "revenue",
       header: LABELS.batchRevenueImpact,
       className: "tabular-nums",
-      cell: (row) => `₹${formatInrAmount(Number(row.revenueImpact ?? 0))}`,
+      cell: (row) => formatInr(row.revenueImpact),
     },
     {
       id: "expires",

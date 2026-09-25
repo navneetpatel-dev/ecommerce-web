@@ -37,7 +37,6 @@ export function AnalyticsTrendTooltip({
       <ul className={analyticsStyles.tooltipList}>
         {payload.map((entry) => {
           const key = String(entry.dataKey ?? "");
-          const raw = Number(entry.value ?? 0);
           const isRevenue = key === "revenue";
           return (
             <li key={key} className={analyticsStyles.tooltipItem}>
@@ -52,7 +51,9 @@ export function AnalyticsTrendTooltip({
                   : LABELS.analyticsOrdersSeries}
               </span>
               <span className={analyticsStyles.tooltipValue}>
-                {isRevenue ? formatAnalyticsInr(raw) : raw}
+                {isRevenue
+                  ? formatAnalyticsInr(entry.value)
+                  : (entry.value ?? LABELS.emptyCell)}
               </span>
             </li>
           );

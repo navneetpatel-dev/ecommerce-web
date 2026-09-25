@@ -25,9 +25,7 @@ export const ShippingRateButton = memo(function ShippingRateButton({
   const label =
     option.method === SHIPPING_METHOD.EXPRESS ? "Express" : "Standard";
   const cost =
-    option.shippingDisplayKey === "FREE"
-      ? "Free"
-      : formatInr(Number(option.cost));
+    option.shippingDisplayKey === "FREE" ? "Free" : formatInr(option.cost);
   const daysText = formatDays(Number(option.estimatedDays || 5));
 
   const handleClick = () => {

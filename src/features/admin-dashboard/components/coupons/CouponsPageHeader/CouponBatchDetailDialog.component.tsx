@@ -8,7 +8,7 @@ import {
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import type { CouponBatch } from "@/shared/api/types";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { couponsPageHeaderStyles } from "../../../styles/coupons/couponsPageHeader.styles";
 
 interface CouponBatchDetailDialogProps {
@@ -53,7 +53,7 @@ export function CouponBatchDetailDialog({
                   {LABELS.batchDiscountImpact}
                 </dt>
                 <dd className={couponsPageHeaderStyles.batchDd}>
-                  ₹{formatInrAmount(Number(batchDetail.discountTotal ?? 0))}
+                  {formatInr(batchDetail.discountTotal)}
                 </dd>
               </div>
               <div className={couponsPageHeaderStyles.batchRow}>
@@ -61,7 +61,7 @@ export function CouponBatchDetailDialog({
                   {LABELS.batchRevenueImpact}
                 </dt>
                 <dd className={couponsPageHeaderStyles.batchDd}>
-                  ₹{formatInrAmount(Number(batchDetail.revenueImpact ?? 0))}
+                  {formatInr(batchDetail.revenueImpact)}
                 </dd>
               </div>
             </dl>

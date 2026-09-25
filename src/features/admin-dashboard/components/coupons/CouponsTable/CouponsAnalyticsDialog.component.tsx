@@ -8,7 +8,7 @@ import {
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { couponsTableStyles as styles } from "../../../styles/coupons/couponsTable.styles";
 
 interface CouponsAnalyticsDialogProps {
@@ -49,13 +49,13 @@ export function CouponsAnalyticsDialog({
                 {LABELS.discountCostImpact}
               </dt>
               <dd className={styles.analyticsDd}>
-                ₹{formatInrAmount(Number(analytics.totalDiscount))}
+                {formatInr(analytics.totalDiscount)}
               </dd>
             </div>
             <div className={styles.analyticsRow}>
               <dt className={styles.analyticsDt}>{LABELS.revenueImpact}</dt>
               <dd className={styles.analyticsDd}>
-                ₹{formatInrAmount(Number(analytics.revenueImpact ?? 0))}
+                {formatInr(analytics.revenueImpact)}
               </dd>
             </div>
             <div className={styles.analyticsRow}>

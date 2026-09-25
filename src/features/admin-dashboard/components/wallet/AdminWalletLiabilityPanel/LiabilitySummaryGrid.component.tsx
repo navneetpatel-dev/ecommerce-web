@@ -24,11 +24,11 @@ export function LiabilitySummaryGrid({ report }: LiabilitySummaryGridProps) {
         />
         <MetricCard
           label={LABELS.reportPurchasedPointsLiability}
-          value={formatPoints(report.purchasedPointsLiability ?? 0)}
+          value={formatPoints(report.purchasedPointsLiability)}
         />
         <MetricCard
           label={LABELS.reportPromotionalPointsLiability}
-          value={formatPoints(report.promotionalPointsLiability ?? 0)}
+          value={formatPoints(report.promotionalPointsLiability)}
         />
         <MetricCard
           label={LABELS.reportWalletCustomerCount}

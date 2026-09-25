@@ -40,7 +40,7 @@ interface HeaderProps {
   onOpenCart: () => void;
   cartItemCount?: number;
   wishlistItemCount?: number;
-  walletBalance?: number;
+  walletBalance?: number | null;
   /** Session or header badge counts still resolving. */
   actionsLoading?: boolean;
   /** Session not restored yet, so chrome visibility is unknown. */
@@ -69,7 +69,7 @@ export function Header({
   onOpenCart,
   cartItemCount = 0,
   wishlistItemCount = 0,
-  walletBalance = 0,
+  walletBalance = null,
   actionsLoading = false,
   navLoading = false,
 }: HeaderProps) {

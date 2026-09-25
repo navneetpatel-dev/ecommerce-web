@@ -33,13 +33,13 @@ const COLUMNS: DataTableColumn<LiabilityRow>[] = [
     id: "purchasedPoints",
     header: LABELS.reportPurchasedPoints,
     className: styles.cellNum,
-    cell: (row) => formatPoints(row.purchasedPoints ?? 0),
+    cell: (row) => formatPoints(row.purchasedPoints),
   },
   {
     id: "promotionalPoints",
     header: LABELS.reportPromotionalPoints,
     className: styles.cellNum,
-    cell: (row) => formatPoints(row.promotionalPoints ?? 0),
+    cell: (row) => formatPoints(row.promotionalPoints),
   },
   {
     id: "asOf",

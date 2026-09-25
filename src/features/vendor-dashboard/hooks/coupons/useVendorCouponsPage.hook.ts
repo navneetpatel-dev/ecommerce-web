@@ -84,9 +84,9 @@ export function useVendorCouponsPage() {
   const from = total === 0 ? 0 : (currentPage - 1) * limit + 1;
   const to = Math.min(currentPage * limit, total);
   const totalPages = data?.totalPages ?? 1;
-  const absorbedDiscountTotal = Number(
-    absorbedQuery.data?.absorbedDiscountTotal ?? 0,
-  );
+  // Null while loading or after a failure — the summary line hides instead of reading ₹0.
+  const absorbedDiscountTotal =
+    absorbedQuery.data?.absorbedDiscountTotal ?? null;
 
   const setDialogOpen = (next: boolean) => {
     if (next) {

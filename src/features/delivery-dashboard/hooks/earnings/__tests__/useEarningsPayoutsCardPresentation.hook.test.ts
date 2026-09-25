@@ -61,7 +61,7 @@ describe("useEarningsPayoutsCardPresentation", () => {
     );
   });
 
-  it("defaults pending figures to zero when shift summary has not loaded", () => {
+  it("leaves pending figures empty while the shift summary is loading", () => {
     vi.mocked(useShiftSummary).mockReturnValue({
       data: undefined,
       isLoading: true,
@@ -69,9 +69,26 @@ describe("useEarningsPayoutsCardPresentation", () => {
 
     const { result } = renderHook(() => useEarningsPayoutsCardPresentation());
 
-    expect(result.current.pendingTotal).toBe(0);
-    expect(result.current.pendingCount).toBe(0);
+    expect(result.current.pendingTotal).toBeNull();
+    expect(result.current.pendingCount).toBeNull();
     expect(result.current.pendingLoading).toBe(true);
-    expect(result.current.pendingSummaryLabel).toBe("Loading pending earnings...");
+    expect(result.current.pendingSummaryLabel).toBe(
+      "Loading pending earnings...",
+    );
+  });
+
+  it("says pending earnings are unavailable instead of ₹0.00 when the summary failed", () => {
+    vi.mocked(useShiftSummary).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: true,
+    } as unknown as ReturnType<typeof useShiftSummary>);
+
+    const { result } = renderHook(() => useEarningsPayoutsCardPresentation());
+
+    expect(result.current.pendingTotal).toBeNull();
+    expect(result.current.pendingSummaryLabel).toBe(
+      "Pending earnings are unavailable right now.",
+    );
   });
 });

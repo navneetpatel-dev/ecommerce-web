@@ -1,30 +1,44 @@
-/** Format INR for storefront display (Inter + tabular-nums — not mono). */
-export function formatInr(value: number) {
-  return `₹${Number(value || 0).toLocaleString("en-IN", {
+import {
+  MISSING_AMOUNT,
+  toDisplayAmount,
+  type DisplayAmountInput,
+} from "./displayAmount";
+
+/** Format INR for storefront display (Inter + tabular-nums — not mono). Missing → "—". */
+export function formatInr(value: DisplayAmountInput) {
+  const amount = toDisplayAmount(value);
+  if (amount == null) return MISSING_AMOUNT;
+  return `₹${amount.toLocaleString("en-IN", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   })}`;
 }
 
-/** Plain grouped INR amount without the ₹ prefix (₹ is rendered by markup). */
-export function formatInrAmount(value: number) {
-  return Number(value || 0).toLocaleString("en-IN", {
+/** Plain grouped INR amount without the ₹ prefix (₹ is rendered by markup). Missing → "—". */
+export function formatInrAmount(value: DisplayAmountInput) {
+  const amount = toDisplayAmount(value);
+  if (amount == null) return MISSING_AMOUNT;
+  return amount.toLocaleString("en-IN", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   });
 }
 
-/** Always-2dp INR for finance/report tables where columns must align (₹1,250.50). */
-export function formatInrExact(value: number) {
-  return `₹${Number(value || 0).toLocaleString("en-IN", {
+/** Always-2dp INR for finance/report tables where columns must align (₹1,250.50). Missing → "—". */
+export function formatInrExact(value: DisplayAmountInput) {
+  const amount = toDisplayAmount(value);
+  if (amount == null) return MISSING_AMOUNT;
+  return `₹${amount.toLocaleString("en-IN", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
 }
 
-/** Short INR for header pills (₹499, ₹12,500, ₹1.2L). */
-export function formatInrCompact(value: number) {
-  const amount = Math.round(Number(value) || 0);
+/** Short INR for header pills (₹499, ₹12,500, ₹1.2L). Missing → "—". */
+export function formatInrCompact(value: DisplayAmountInput) {
+  const exact = toDisplayAmount(value);
+  if (exact == null) return MISSING_AMOUNT;
+  const amount = Math.round(exact);
   if (amount >= 10_000_000) {
     const crore = amount / 10_000_000;
     return `₹${trimCompact(crore, crore >= 10 ? 0 : 1)}Cr`;

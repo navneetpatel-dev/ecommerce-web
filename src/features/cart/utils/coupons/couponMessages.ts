@@ -21,8 +21,8 @@ export function describeApplyResult(
       return LABELS.couponAppliedCheckout;
     }
     return formatLabel(LABELS.cashbackPayNowMessage, {
-      payNow: `₹${formatInrAmount(Number(result.payNowGrandTotal))}`,
-      cashback: `₹${formatInrAmount(Number(result.cashbackAmount))}`,
+      payNow: `₹${formatInrAmount(result.payNowGrandTotal)}`,
+      cashback: `₹${formatInrAmount(result.cashbackAmount)}`,
     });
   }
   return LABELS.couponAppliedCheckout;

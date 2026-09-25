@@ -11,8 +11,8 @@ interface VendorSummaryGridProps {
 export function VendorSummaryGrid({ summary }: VendorSummaryGridProps) {
   const todayOrders = summary?.todayOrders ?? 0;
   const pendingShipments = summary?.pendingShipments ?? 0;
-  const monthRevenue = formatInr(summary?.monthRevenue ?? 0);
-  const pendingPayouts = formatInr(summary?.pendingPayouts ?? 0);
+  const monthRevenue = formatInr(summary?.monthRevenue);
+  const pendingPayouts = formatInr(summary?.pendingPayouts);
 
   return (
     <div className={vendorSummaryGridStyles.grid}>

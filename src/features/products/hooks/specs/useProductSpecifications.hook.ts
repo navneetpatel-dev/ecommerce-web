@@ -56,7 +56,7 @@ export function useProductSpecifications({
         list,
         seenLabels,
         LABELS.variantPrice,
-        `₹${formatInrAmount(Number(matchedVariant.price))}`,
+        `₹${formatInrAmount(matchedVariant.price)}`,
       );
     }
 
