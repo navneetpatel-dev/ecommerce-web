@@ -27,6 +27,7 @@ import {
   SHIFT_STAT_NUMBER,
   SHIFT_STATS_GRID,
 } from "../../styles/today/shiftSummaryCard.styles";
+import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
   const {
@@ -82,10 +83,10 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
           <IndianRupee className={SHIFT_STAT_ICON_SUCCESS} aria-hidden="true" />
           <div>
             <p className={SHIFT_STAT_NUMBER}>
-              ₹{summary.earningsToday.toFixed(0)}
+              {formatInrExact(summary.earningsToday)}
             </p>
             <p className={SHIFT_STAT_CAPTION}>
-              Earnings (₹{summary.perTaskEarning}/task)
+              Earnings ({formatInrExact(summary.perTaskEarning)}/task)
             </p>
           </div>
         </div>
@@ -93,7 +94,7 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
           <IndianRupee className={SHIFT_STAT_ICON_WARNING} aria-hidden="true" />
           <div>
             <p className={SHIFT_STAT_NUMBER}>
-              ₹{summary.codCashInHand.toFixed(0)}
+              {formatInrExact(summary.codCashInHand)}
             </p>
             <p className={SHIFT_STAT_CAPTION}>COD cash in hand</p>
           </div>

@@ -226,3 +226,99 @@ export function findMoneyArithmetic(sourceText, fileName = "file.tsx") {
   visit(source);
   return findings;
 }
+
+const COERCION_CALLS = new Set(["Number", "parseFloat", "String"]);
+
+/** A `₹` followed by a value nobody formatted: a bare identifier, property, or coercion. */
+function isUnformattedValue(node) {
+  if (ts.isParenthesizedExpression(node))
+    return isUnformattedValue(node.expression);
+  if (ts.isCallExpression(node)) {
+    return (
+      ts.isIdentifier(node.expression) &&
+      COERCION_CALLS.has(node.expression.text)
+    );
+  }
+  const isValue =
+    ts.isIdentifier(node) ||
+    ts.isPropertyAccessExpression(node) ||
+    ts.isElementAccessExpression(node) ||
+    ts.isNonNullExpression(node);
+  // `grandTotalFormatted`, `priceLabel`: already run through a formatter upstream.
+  return isValue && !/formatted|label|text/i.test(operandName(node) ?? "");
+}
+
+function endsWithRupee(text) {
+  return /₹\s*$/.test(text);
+}
+
+/**
+ * Returns every place money is displayed without the shared formatters in
+ * shared/utils/formatting: `.toFixed()` on a money value (no grouping, and
+ * `toFixed(0)` silently rounds), or a `₹` placed directly before a raw value
+ * in a template literal or JSX.
+ * @returns {Array<{ line: number, text: string }>}
+ */
+export function findRawMoneyDisplay(sourceText, fileName = "file.tsx") {
+  const kind = fileName.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
+  const source = ts.createSourceFile(
+    fileName,
+    sourceText,
+    ts.ScriptTarget.Latest,
+    true,
+    kind,
+  );
+  const findings = [];
+  const report = (node) => {
+    const { line } = source.getLineAndCharacterOfPosition(
+      node.getStart(source),
+    );
+    findings.push({
+      line: line + 1,
+      text: node.getText(source).replace(/\s+/g, " "),
+    });
+  };
+
+  function visit(node) {
+    if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression) &&
+      node.expression.name.text === "toFixed"
+    ) {
+      const name = operandName(node.expression.expression);
+      if (name && isMoneyName(name)) report(node);
+    }
+
+    if (ts.isTemplateExpression(node)) {
+      let before = node.head.text;
+      for (const span of node.templateSpans) {
+        if (endsWithRupee(before) && isUnformattedValue(span.expression)) {
+          report(span.expression);
+        }
+        before = span.literal.text;
+      }
+    }
+
+    if (ts.isJsxElement(node) || ts.isJsxFragment(node)) {
+      const children = node.children;
+      for (let i = 1; i < children.length; i += 1) {
+        const prev = children[i - 1];
+        const child = children[i];
+        if (
+          ts.isJsxText(prev) &&
+          endsWithRupee(prev.text) &&
+          ts.isJsxExpression(child) &&
+          child.expression &&
+          isUnformattedValue(child.expression)
+        ) {
+          report(child.expression);
+        }
+      }
+    }
+
+    ts.forEachChild(node, visit);
+  }
+
+  visit(source);
+  return findings;
+}

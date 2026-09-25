@@ -2,6 +2,7 @@ import type { CashDeposit } from "@/features/delivery-dashboard";
 import { cashDepositsPanelStyles } from "../../../styles/delivery-agents/cashDepositsPanel.styles";
 import { CashDepositStatusBadge } from "./CashDepositStatusBadge.component";
 import { CashDepositActionButtons } from "./CashDepositActionButtons.component";
+import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 interface CashDepositTableRowProps {
   deposit: CashDeposit;
@@ -27,12 +28,12 @@ export function CashDepositTableRow({
         {deposit.deliveryAgent?.fullName ?? "—"}
       </td>
       <td className={cashDepositsPanelStyles.tableCellMono}>
-        ₹{deposit.amount.toFixed(2)}
+        {formatInrExact(deposit.amount)}
       </td>
       <td
         className={cashDepositsPanelStyles.expectedCell(deposit.hasDiscrepancy)}
       >
-        ₹{deposit.expectedAmount.toFixed(2)}
+        {formatInrExact(deposit.expectedAmount)}
       </td>
       <td className={cashDepositsPanelStyles.tableCell}>
         <CashDepositStatusBadge status={deposit.status} />

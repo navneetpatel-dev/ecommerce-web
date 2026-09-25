@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { findMoneyArithmetic, isMoneyName } from "../moneyMath.mjs";
+import {
+  findMoneyArithmetic,
+  findRawMoneyDisplay,
+  isMoneyName,
+} from "../moneyMath.mjs";
 
 function flagged(code: string): string[] {
   return findMoneyArithmetic(code, "probe.ts").map(
@@ -80,6 +84,44 @@ describe("findMoneyArithmetic", () => {
         const covered = amount >= minAmount;
         const label = "₹" + amount;
         const tpl = \`\${amount}\` + suffix;
+      `),
+    ).toEqual([]);
+  });
+});
+
+describe("findRawMoneyDisplay", () => {
+  function shown(code: string): string[] {
+    return findRawMoneyDisplay(code, "probe.tsx").map(
+      (finding: { text: string }) => finding.text,
+    );
+  }
+
+  it("catches the hand-rolled ₹ display the app used to have", () => {
+    expect(
+      shown(`
+        const a = \`₹\${payout.amount.toFixed(2)}\`;
+        const b = <span>₹{summary.earningsToday.toFixed(0)}</span>;
+        const c = <span>₹{order.totalAmount}</span>;
+        const d = \`₹\${Number(option.cost)}\`;
+        const e = <span>Earnings (₹{summary.perTaskEarning}/task)</span>;
+      `),
+    ).toEqual([
+      "payout.amount.toFixed(2)",
+      "summary.earningsToday.toFixed(0)",
+      "order.totalAmount",
+      "Number(option.cost)",
+      "summary.perTaskEarning",
+    ]);
+  });
+
+  it("allows the shared formatters and non-money toFixed", () => {
+    expect(
+      shown(`
+        const a = <span>₹{formatInrAmount(order.totalAmount)}</span>;
+        const b = formatInrExact(payout.amount);
+        const c = <span>₹{grandTotalFormatted}</span>;
+        const d = rating.toFixed(1);
+        const e = \`\${(bytes / 1024).toFixed(1)} KB\`;
       `),
     ).toEqual([]);
   });

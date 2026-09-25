@@ -33,7 +33,7 @@ export function CardDetails({
         {showMrp && (
           <>
             <span className={CARD_DETAILS_STYLES.compareAtPrice}>
-              ₹{product.compareAtPrice!.toLocaleString("en-IN")}
+              ₹{formatInrAmount(product.compareAtPrice!)}
             </span>
             <DiscountBadge>-{discountPercent}%</DiscountBadge>
           </>

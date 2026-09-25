@@ -12,7 +12,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { findMoneyArithmetic } from "./lib/moneyMath.mjs";
+import { findMoneyArithmetic, findRawMoneyDisplay } from "./lib/moneyMath.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const srcDir = path.join(root, "src");
@@ -54,12 +54,22 @@ function* sourceFiles(dir) {
   }
 }
 
+/** The shared formatters are where money display belongs; nothing else formats ₹ by hand. */
+const FORMATTING_DIR = "src/shared/utils/formatting/";
+
 const violations = [];
+const displayViolations = [];
 const usedAllowlist = new Set();
 
 for (const file of sourceFiles(srcDir)) {
   const rel = path.relative(root, file).split(path.sep).join("/");
-  const findings = findMoneyArithmetic(fs.readFileSync(file, "utf8"), file);
+  const sourceText = fs.readFileSync(file, "utf8");
+  if (!rel.startsWith(FORMATTING_DIR)) {
+    for (const finding of findRawMoneyDisplay(sourceText, file)) {
+      displayViolations.push(`  ${rel}:${finding.line}  ${finding.text}`);
+    }
+  }
+  const findings = findMoneyArithmetic(sourceText, file);
   if (findings.length === 0) continue;
   if (rel in allowlist) {
     usedAllowlist.add(rel);
@@ -86,6 +96,16 @@ if (violations.length > 0) {
   );
 }
 
+if (displayViolations.length > 0) {
+  console.error(
+    "\nMoney displayed without the shared formatters (toFixed, or ₹ before a raw value):\n",
+  );
+  console.error(displayViolations.join("\n"));
+  console.error(
+    "\nUse formatInr / formatInrExact / formatInrAmount from src/shared/utils/formatting/orderFormat.ts.",
+  );
+}
+
 if (staleEntries.length > 0) {
   console.error(
     "\nAllowlist entries with no money arithmetic left (remove them from scripts/check-no-client-money-math.mjs):\n",
@@ -93,6 +113,10 @@ if (staleEntries.length > 0) {
   console.error(staleEntries.map((rel) => `  ${rel}`).join("\n"));
 }
 
-if (violations.length > 0 || staleEntries.length > 0) {
+if (
+  violations.length > 0 ||
+  displayViolations.length > 0 ||
+  staleEntries.length > 0
+) {
   process.exit(1);
 }

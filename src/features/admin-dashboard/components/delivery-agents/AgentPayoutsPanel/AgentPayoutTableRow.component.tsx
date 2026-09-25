@@ -4,6 +4,7 @@ import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import type { AgentPayout } from "@/features/delivery-dashboard";
 import { agentPayoutsPanelStyles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
 import { AgentPayoutActions } from "./AgentPayoutActions.component";
+import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 interface AgentPayoutTableRowProps {
   payout: AgentPayout;
@@ -44,7 +45,7 @@ export function AgentPayoutTableRow({
       </td>
       <td className={agentPayoutsPanelStyles.tableCellMuted}>{periodString}</td>
       <td className={agentPayoutsPanelStyles.tableCellAmount}>
-        ₹{payout.amount.toFixed(2)}
+        {formatInrExact(payout.amount)}
       </td>
       <td className={agentPayoutsPanelStyles.tableCell}>
         <StatusBadge status={payout.status} />

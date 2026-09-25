@@ -4,6 +4,7 @@ import { Card, CardHeader, CardContent } from "@/shared/components/ui/card";
 import { useOrderCard } from "../../hooks/list/useOrderCard.hook";
 import { OrderCardSubOrdersList } from "./OrderCardSubOrdersList.component";
 import { ORDER_CARD_STYLES } from "../../styles/list/orderCard.styles";
+import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 
 interface OrderCardProps {
   order: Order;
@@ -25,7 +26,7 @@ export function OrderCard({ order }: OrderCardProps) {
           <span className={ORDER_CARD_STYLES.dateText}>{formattedDate}</span>
         </div>
         <span className={ORDER_CARD_STYLES.totalAmount}>
-          ₹{order.totalAmount}
+          ₹{formatInrAmount(order.totalAmount)}
         </span>
       </CardHeader>
       <CardContent>

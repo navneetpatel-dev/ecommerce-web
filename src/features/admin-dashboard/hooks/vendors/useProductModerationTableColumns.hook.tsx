@@ -3,6 +3,7 @@ import type { DataTableColumn } from "@/shared/components/DataTable.component";
 import { TableCellImage } from "@/shared/components/TableCellImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { productModerationTableStyles } from "../../styles/vendors/productModerationTable.styles";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 interface Product {
   id: string;
@@ -31,7 +32,7 @@ export function useProductModerationTableColumns() {
         id: "price",
         header: LABELS.price,
         className: productModerationTableStyles.priceCell,
-        cell: (p) => `₹${p.basePrice}`,
+        cell: (p) => formatInr(Number(p.basePrice)),
       },
     ],
     [],
