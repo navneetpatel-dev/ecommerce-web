@@ -71,6 +71,8 @@ export interface WishlistItem {
   id: string;
   productId: string;
   priceAtAdd: number;
+  /** How far the price has fallen since saving, or null; computed by the backend. */
+  priceDropAmount: number | null;
   isAvailable: boolean;
   unavailableReason: UnavailableReason | null;
   product: ProductListItem;

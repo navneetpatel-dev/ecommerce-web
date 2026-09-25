@@ -16,6 +16,7 @@ import {
   SHIFT_DIALOG_SUBMIT,
 } from "../../../styles/today/shiftSummaryCard.styles";
 import type { useShiftSummaryCard } from "../../../hooks/today/useShiftSummaryCard.hook";
+import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 interface CashDepositDialogProps {
   open: boolean;
@@ -53,7 +54,7 @@ export function CashDepositDialog({
         <div className={SHIFT_DIALOG_BODY}>
           <p className={SHIFT_DIALOG_HINT}>
             Declare the cash you&apos;re handing to the hub. The system expects
-            ₹{expectedCod.toFixed(2)} based on collected COD orders.
+            {formatInrExact(expectedCod)} based on collected COD orders.
           </p>
           <Input
             type="number"

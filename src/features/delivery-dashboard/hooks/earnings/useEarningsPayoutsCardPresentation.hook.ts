@@ -7,6 +7,7 @@ import {
   useMyPayouts,
   useShiftSummary,
 } from "../../api/agent/deliveryAgent.queries";
+import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 export interface PayoutTableRowViewModel {
   id: string;
@@ -37,7 +38,7 @@ export function useEarningsPayoutsCardPresentation() {
   const pendingCount = shiftSummary.data?.pendingEarningsCount ?? 0;
   const pendingSummaryLabel = pendingLoading
     ? "Loading pending earnings..."
-    : `₹${pendingTotal.toFixed(2)} pending across ${pendingCount} completed task${pendingCount === 1 ? "" : "s"} — included in the next payout run.`;
+    : `${formatInrExact(pendingTotal)} pending across ${pendingCount} completed task${pendingCount === 1 ? "" : "s"} — included in the next payout run.`;
 
   const download = useCallback(async (payoutId: string) => {
     setDownloadingId(payoutId);
@@ -61,7 +62,7 @@ export function useEarningsPayoutsCardPresentation() {
         return {
           id: payout.id,
           periodLabel: `${start} – ${end}`,
-          amountLabel: `₹${payout.amount.toFixed(2)}`,
+          amountLabel: formatInrExact(payout.amount),
           status: payout.status,
           referenceLabel: ref,
         };
@@ -75,7 +76,7 @@ export function useEarningsPayoutsCardPresentation() {
         id: row.id,
         typeLabel: row.sourceType === "DELIVERY" ? "Delivery" : "Pickup",
         dateLabel: new Date(row.earnedAt).toLocaleDateString(),
-        amountLabel: `₹${Number(row.amount).toFixed(2)}`,
+        amountLabel: formatInrExact(Number(row.amount)),
       })),
     [earningsData],
   );

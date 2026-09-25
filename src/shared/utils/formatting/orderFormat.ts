@@ -8,7 +8,10 @@ export function formatInr(value: number) {
 
 /** Plain grouped INR amount without the ₹ prefix (₹ is rendered by markup). */
 export function formatInrAmount(value: number) {
-  return Number(value || 0).toLocaleString("en-IN");
+  return Number(value || 0).toLocaleString("en-IN", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  });
 }
 
 /** Always-2dp INR for finance/report tables where columns must align (₹1,250.50). */

@@ -9,6 +9,7 @@ import {
 import { cn } from "@/shared/utils/dom/cn";
 import { ProductActions } from "./ProductActions.component";
 import type { ProductRowActionsProps } from "../../../types/products/ProductsTable-types";
+import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 
 /** Desktop table row for a vendor product. */
 export function ProductRow(props: ProductRowActionsProps) {
@@ -38,7 +39,7 @@ export function ProductRow(props: ProductRowActionsProps) {
         <span className={stockClassName}>{product.stock}</span>
       </TableCell>
       <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-        ₹{product.basePrice}
+        ₹{formatInrAmount(product.basePrice)}
       </TableCell>
       <TableCell className={TABLE_DATA_CELL_CLASS}>
         <StatusBadge status={product.status} />

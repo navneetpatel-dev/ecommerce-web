@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useMyCashDeposits } from "../../api/agent/deliveryAgent.queries";
+import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 export interface CashDepositRowViewModel {
   id: string;
@@ -26,7 +27,6 @@ export function useCashDepositsCardPresentation() {
         : "Cash you hand over to the hub is reconciled here.";
 
     const mappedRows: CashDepositRowViewModel[] = depositRows.map((deposit) => {
-      const mismatch = Math.abs(deposit.amount - deposit.expectedAmount) > 0.01;
       const notesText =
         deposit.status === "REJECTED"
           ? (deposit.rejectionReason ?? "—")
@@ -35,9 +35,9 @@ export function useCashDepositsCardPresentation() {
       return {
         id: deposit.id,
         createdAtLabel: new Date(deposit.createdAt).toLocaleDateString(),
-        amountLabel: `₹${deposit.amount.toFixed(2)}`,
-        expectedAmountLabel: `₹${deposit.expectedAmount.toFixed(2)}`,
-        mismatch,
+        amountLabel: formatInrExact(deposit.amount),
+        expectedAmountLabel: formatInrExact(deposit.expectedAmount),
+        mismatch: deposit.hasDiscrepancy,
         status: deposit.status,
         notesText,
       };

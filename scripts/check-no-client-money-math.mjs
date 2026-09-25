@@ -3,133 +3,120 @@
  * Guardrail: the frontend displays money, it never calculates it.
  *
  * Every monetary figure must arrive from the API already computed by the backend
- * pricing engine (backend/src/modules/pricing). This catches arithmetic on
- * money-named identifiers, which would reintroduce a second source of truth.
- * Formatting — grouping, the ₹ prefix, compact notation — is display, not
- * calculation, and is allowlisted below.
+ * pricing engine (ecommerce-backend/src/modules/pricing). This flags any
+ * arithmetic expression (`+ - * / % **` and compound assignment) with a
+ * money-named operand, found by walking the TypeScript syntax tree — see
+ * scripts/lib/moneyMath.mjs. Formatting (grouping, the ₹ prefix, compact
+ * notation) is display, not calculation, and is allowlisted below.
  */
-import { execFileSync } from "node:child_process";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { findMoneyArithmetic, findRawMoneyDisplay } from "./lib/moneyMath.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const searchDirs = [
-  path.join(root, "src", "features"),
-  path.join(root, "src", "shared"),
-];
+const srcDir = path.join(root, "src");
 
 /**
  * Each entry needs a reason. Keeping this list short is the point — every
  * exception should be a deliberate decision, not a place to hide new math.
+ * An entry that no longer has any finding fails the check, so the list only shrinks.
  */
-const allowlist = [
-  // Pure display formatters: grouping and compact notation over a final amount.
-  "src/shared/utils/formatting/orderFormat.ts",
-  "src/shared/utils/formatting/formatPoints.ts",
-  // Chart geometry: axis domain padding and tick labels over an already-final series.
-  "src/features/admin-dashboard/components/analytics/AnalyticsTrendChart.component.tsx",
-  // `total` here is a page/row count, not money.
-  "src/shared/api/client/pagination.ts",
-  "src/features/admin-dashboard/components/analytics/AnalyticsStatusChart.component.tsx",
-  "src/features/admin-dashboard/hooks/shared/useAdminDataList.hook.ts",
-  // Single pure helper: wishlist price-at-add vs. live product price, used
-  // only to decide whether to show the "Price dropped" badge.
-  "src/features/wishlist/utils/price-drop/priceDrop.utils.ts",
-  // Cash deposit discrepancy threshold check (amount vs expectedAmount)
-  "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/CashDepositsPanel.component.tsx",
-  "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/CashDepositTableRow.component.tsx",
-  "src/features/delivery-dashboard/components/cash/CashDepositsCard.component.tsx",
-  "src/features/delivery-dashboard/hooks/cash/useCashDepositsCardPresentation.hook.ts",
-  // `total` here is pagination item count, not money
-  "src/features/vendor-dashboard/components/products/ProductsTableView.component.tsx",
-];
+const allowlist = {
+  // Pure display formatters: compact notation over a final amount.
+  "src/shared/utils/formatting/orderFormat.ts": "₹ lakh/crore compact display",
+  "src/shared/utils/formatting/formatPoints.ts": "K/M points compact display",
+  // `total` here is a row/item count, not money.
+  "src/shared/api/client/pagination.ts": "page count from item total",
+  "src/shared/hooks/pagination/useClientPagination.hook.ts":
+    "page count from item total",
+  "src/shared/hooks/exports/useExportJobsWatcher.hook.ts":
+    "export progress % from row total",
+  "src/features/admin-dashboard/components/analytics/AnalyticsStatusChart.component.tsx":
+    "status share % from order count total",
+};
 
-/** constants/ holds display strings and route paths — no logic, only false positives. */
-const excludeGlobs = ["!**/__tests__/**", "!**/constants/**"];
+/** Tests build fixtures; constants/ holds display strings and route paths only. */
+const SKIPPED_DIRS = new Set(["__tests__", "constants", "node_modules"]);
 
-/**
- * A money identifier is camelCase (or lowercase) ENDING in a money word, so
- * `saleAmount` and `revenue` match while `totalPages` and `itemCount` do not.
- */
-const MONEY_WORD = [
-  "[Pp]rice",
-  "[Aa]mount",
-  "[Tt]otal",
-  "[Ss]ubtotal",
-  "[Rr]evenue",
-  "[Dd]iscount",
-  "[Rr]efund",
-  "[Pp]ayout",
-  "[Cc]ommission",
-  "[Ee]arnings?",
-  "[Bb]alance",
-  "[Cc]ashback",
-  "[Gg]mv",
-  "[Ff]ee",
-  "[Cc]harge",
-].join("|");
-const MONEY_IDENT = String.raw`\b[a-z_$][A-Za-z0-9_$]*(?:${MONEY_WORD})\b`;
-
-/**
- * Operators must be space-padded on both sides. Prettier (enforced via
- * lint-staged) always formats binary operators that way, so this costs no
- * coverage while excluding kebab-case strings, URLs and import paths.
- */
-const OPERATOR = String.raw`[A-Za-z0-9_$)\]]\s[-+*/]\s`;
-const patterns = [
-  // Money identifier, then arithmetic later on the line.
-  // Catches `Number(order.totalAmount) - walletUsed` as well as `subtotal * qty`.
-  String.raw`${MONEY_IDENT}.*${OPERATOR}`,
-  // Arithmetic, then a money identifier later on the line: `qty * unitPrice`.
-  String.raw`${OPERATOR}.*${MONEY_IDENT}`,
-  // `items.reduce((sum, i) => sum + i.revenue, 0)`
-  String.raw`reduce\([^)]*${MONEY_IDENT}`,
-];
-
-function runRipgrep(pattern) {
-  try {
-    return execFileSync(
-      "rg",
-      [
-        "--no-heading",
-        "--line-number",
-        ...excludeGlobs.flatMap((glob) => ["--glob", glob]),
-        "-e",
-        pattern,
-        ...searchDirs,
-      ],
-      { encoding: "utf8", cwd: root },
-    );
-  } catch (err) {
-    if (err.status === 1) {
-      return "";
+function* sourceFiles(dir) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (!SKIPPED_DIRS.has(entry.name)) yield* sourceFiles(full);
+    } else if (
+      /\.(ts|tsx)$/.test(entry.name) &&
+      !/\.(test|spec)\.(ts|tsx)$/.test(entry.name) &&
+      !entry.name.endsWith(".d.ts")
+    ) {
+      yield full;
     }
-    throw err;
   }
 }
 
-const violations = patterns
-  .flatMap((pattern) => runRipgrep(pattern).trim().split("\n").filter(Boolean))
-  .map((line) => {
-    const firstColon = line.indexOf(":");
-    const file = line.slice(0, firstColon);
-    return {
-      rel: path.relative(root, path.resolve(root, file)),
-      text: `${path.relative(root, path.resolve(root, file))}${line.slice(firstColon)}`,
-    };
-  })
-  .filter(({ rel }) => !allowlist.some((allowed) => rel.endsWith(allowed)));
+/** The shared formatters are where money display belongs; nothing else formats ₹ by hand. */
+const FORMATTING_DIR = "src/shared/utils/formatting/";
+
+const violations = [];
+const displayViolations = [];
+const usedAllowlist = new Set();
+
+for (const file of sourceFiles(srcDir)) {
+  const rel = path.relative(root, file).split(path.sep).join("/");
+  const sourceText = fs.readFileSync(file, "utf8");
+  if (!rel.startsWith(FORMATTING_DIR)) {
+    for (const finding of findRawMoneyDisplay(sourceText, file)) {
+      displayViolations.push(`  ${rel}:${finding.line}  ${finding.text}`);
+    }
+  }
+  const findings = findMoneyArithmetic(sourceText, file);
+  if (findings.length === 0) continue;
+  if (rel in allowlist) {
+    usedAllowlist.add(rel);
+    continue;
+  }
+  for (const finding of findings) {
+    violations.push(`  ${rel}:${finding.line}  ${finding.text}`);
+  }
+}
+
+const staleEntries = Object.keys(allowlist).filter(
+  (rel) => !usedAllowlist.has(rel),
+);
 
 if (violations.length > 0) {
   console.error(
     "Client-side money arithmetic in src/ (money is computed by the backend and only displayed here):\n",
   );
-  for (const text of [...new Set(violations.map((v) => v.text))].sort()) {
-    console.error(`  ${text}`);
-  }
+  console.error(violations.join("\n"));
   console.error(
-    "\nIf a value genuinely cannot come from the API, add the file to the allowlist\n" +
-      "in scripts/check-no-client-money-math.mjs with a reason.",
+    "\nAsk the backend to return the computed value instead. If it genuinely cannot come\n" +
+      "from the API, add the file to the allowlist in scripts/check-no-client-money-math.mjs\n" +
+      "with a reason.",
   );
+}
+
+if (displayViolations.length > 0) {
+  console.error(
+    "\nMoney displayed without the shared formatters (toFixed, or ₹ before a raw value):\n",
+  );
+  console.error(displayViolations.join("\n"));
+  console.error(
+    "\nUse formatInr / formatInrExact / formatInrAmount from src/shared/utils/formatting/orderFormat.ts.",
+  );
+}
+
+if (staleEntries.length > 0) {
+  console.error(
+    "\nAllowlist entries with no money arithmetic left (remove them from scripts/check-no-client-money-math.mjs):\n",
+  );
+  console.error(staleEntries.map((rel) => `  ${rel}`).join("\n"));
+}
+
+if (
+  violations.length > 0 ||
+  displayViolations.length > 0 ||
+  staleEntries.length > 0
+) {
   process.exit(1);
 }

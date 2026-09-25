@@ -45,6 +45,10 @@ export type CashDeposit = {
   deliveryAgentId: string;
   amount: number;
   expectedAmount: number;
+  /** Declared minus expected (negative = short), computed by the backend. */
+  discrepancyAmount: number;
+  /** True when the gap exceeds the backend's review tolerance. */
+  hasDiscrepancy: boolean;
   status: CashDepositStatus;
   note: string | null;
   rejectionReason: string | null;

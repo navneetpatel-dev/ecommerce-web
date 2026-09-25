@@ -10,6 +10,7 @@ import { useCashDepositsPanel } from "../../../hooks/delivery-agents/useCashDepo
 import { cashDepositsPanelStyles as styles } from "../../../styles/delivery-agents/cashDepositsPanel.styles";
 import { CashDepositStatusBadge } from "./CashDepositStatusBadge.component";
 import { CashDepositActionButtons } from "./CashDepositActionButtons.component";
+import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 /** Hub manager reconciliation queue for agent COD cash-deposit submissions. */
 export function CashDepositsPanel() {
@@ -26,18 +27,14 @@ export function CashDepositsPanel() {
       id: "declared",
       header: "Declared",
       className: styles.tableCellMono,
-      cell: (row) => `₹${row.amount.toFixed(2)}`,
+      cell: (row) => formatInrExact(row.amount),
     },
     {
       id: "expected",
       header: "Expected",
       cell: (row) => (
-        <span
-          className={styles.expectedCell(
-            Math.abs(row.amount - row.expectedAmount) > 0.01,
-          )}
-        >
-          ₹{row.expectedAmount.toFixed(2)}
+        <span className={styles.expectedCell(row.hasDiscrepancy)}>
+          {formatInrExact(row.expectedAmount)}
         </span>
       ),
     },
@@ -52,7 +49,9 @@ export function CashDepositsPanel() {
       header: "Note",
       className: styles.tableCellMuted,
       cell: (row) =>
-        row.status === "REJECTED" ? (row.rejectionReason ?? "—") : (row.note ?? "—"),
+        row.status === "REJECTED"
+          ? (row.rejectionReason ?? "—")
+          : (row.note ?? "—"),
     },
   ];
 

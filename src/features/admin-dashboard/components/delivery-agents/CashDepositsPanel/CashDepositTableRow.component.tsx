@@ -2,6 +2,7 @@ import type { CashDeposit } from "@/features/delivery-dashboard";
 import { cashDepositsPanelStyles } from "../../../styles/delivery-agents/cashDepositsPanel.styles";
 import { CashDepositStatusBadge } from "./CashDepositStatusBadge.component";
 import { CashDepositActionButtons } from "./CashDepositActionButtons.component";
+import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 interface CashDepositTableRowProps {
   deposit: CashDeposit;
@@ -14,7 +15,6 @@ export function CashDepositTableRow({
   pendingId,
   onAct,
 }: CashDepositTableRowProps) {
-  const mismatch = Math.abs(deposit.amount - deposit.expectedAmount) > 0.01;
   const isActionPending = pendingId === deposit.id;
 
   const noteText =
@@ -28,10 +28,12 @@ export function CashDepositTableRow({
         {deposit.deliveryAgent?.fullName ?? "—"}
       </td>
       <td className={cashDepositsPanelStyles.tableCellMono}>
-        ₹{deposit.amount.toFixed(2)}
+        {formatInrExact(deposit.amount)}
       </td>
-      <td className={cashDepositsPanelStyles.expectedCell(mismatch)}>
-        ₹{deposit.expectedAmount.toFixed(2)}
+      <td
+        className={cashDepositsPanelStyles.expectedCell(deposit.hasDiscrepancy)}
+      >
+        {formatInrExact(deposit.expectedAmount)}
       </td>
       <td className={cashDepositsPanelStyles.tableCell}>
         <CashDepositStatusBadge status={deposit.status} />

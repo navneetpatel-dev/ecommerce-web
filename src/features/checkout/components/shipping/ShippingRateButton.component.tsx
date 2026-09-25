@@ -4,6 +4,7 @@ import { SHIPPING_METHOD } from "@/shared/constants/statuses";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { ShippingRate } from "@/shared/api/types";
 import { SHIPPING_CARD_STYLES } from "../../styles/shipping/shippingCard.styles";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 interface ShippingRateButtonProps {
   option: ShippingRate;
@@ -24,7 +25,9 @@ export const ShippingRateButton = memo(function ShippingRateButton({
   const label =
     option.method === SHIPPING_METHOD.EXPRESS ? "Express" : "Standard";
   const cost =
-    option.shippingDisplayKey === "FREE" ? "Free" : `₹${Number(option.cost)}`;
+    option.shippingDisplayKey === "FREE"
+      ? "Free"
+      : formatInr(Number(option.cost));
   const daysText = formatDays(Number(option.estimatedDays || 5));
 
   const handleClick = () => {

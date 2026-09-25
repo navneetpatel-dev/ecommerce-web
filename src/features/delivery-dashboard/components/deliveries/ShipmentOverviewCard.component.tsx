@@ -3,6 +3,7 @@ import { StatusBadge } from "@/shared/components/StatusBadge.component";
 import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { shipmentOverviewCardStyles as styles } from "../../styles/deliveries/shipmentOverviewCard.styles";
+import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 interface ShipmentOverviewCardProps {
   trackingNumber: string;
@@ -55,7 +56,7 @@ export function ShipmentOverviewCard({
       <div className={styles.borderRow}>
         <dt className={styles.dt}>Cash on delivery</dt>
         <dd className={styles.ddInkMedium}>
-          ₹{codAmount.toFixed(2)}{" "}
+          {formatInrExact(codAmount)}{" "}
           <span className={styles.codStatusSpan}>({codStatusLabel})</span>
         </dd>
       </div>
