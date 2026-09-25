@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useHeader } from "../../hooks/header/useHeader.hook";
-import { Header } from "../../components/header/Header.component";
+import { Header } from "../../components/Header/Header.component";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { isWorkspaceRole } from "@/shared/utils/roles/roles";
 import { PATHS } from "@/shared/constants/paths/paths";
