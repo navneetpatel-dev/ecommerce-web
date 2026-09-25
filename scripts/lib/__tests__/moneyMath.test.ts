@@ -45,6 +45,35 @@ describe("isMoneyName", () => {
 });
 
 describe("findMoneyArithmetic", () => {
+  it("catches Math.min/max/abs/round choosing or rounding an amount", () => {
+    expect(
+      flagged(`
+        const a = Math.min(walletBalance, amountDue);
+        const b = Math.max(0, grandTotal);
+        const c = Math.round(row.taxAmount);
+        const d = Math.abs(deposit.amount);
+        const e = Math.floor(Number(order.totalAmount ?? 0));
+      `),
+    ).toEqual([
+      "Math.min(walletBalance, amountDue)",
+      "Math.max(0, grandTotal)",
+      "Math.round(row.taxAmount)",
+      "Math.abs(deposit.amount)",
+      "Math.floor(Number(order.totalAmount ?? 0))",
+    ]);
+  });
+
+  it("leaves Math on counts alone, including a row-count total", () => {
+    expect(
+      flagged(`
+        const to = Math.min(page * limit, total);
+        const end = Math.min(currentPage * pageSize, pagination.total);
+        const pages = Math.max(1, totalPages);
+        const pct = Math.round(ratio * 100);
+      `),
+    ).toEqual([]);
+  });
+
   it("catches the forms the old regex guard missed", () => {
     expect(
       flagged(`
