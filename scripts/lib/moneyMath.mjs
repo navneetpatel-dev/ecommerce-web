@@ -178,8 +178,68 @@ function isStringOperand(node) {
   );
 }
 
+/** `Math` functions that compute a new amount (clamp, round, absolute value). */
+const MATH_MONEY_FUNCTIONS = new Set([
+  "min",
+  "max",
+  "abs",
+  "round",
+  "floor",
+  "ceil",
+  "trunc",
+]);
+
+/** Words that make a bare `total` mean money (`grandTotal`) rather than a row count. */
+const TOTAL_MONEY_QUALIFIERS = new Set([
+  "grand",
+  "order",
+  "cart",
+  "line",
+  "customer",
+  "vendor",
+  "payable",
+  "net",
+  "gross",
+  "invoice",
+  "bill",
+]);
+
 /**
- * Returns every arithmetic expression in `sourceText` that has a money-named operand.
+ * `isMoneyName` for a `Math.*` argument. There, a lone `total` is almost always a
+ * row count (`Math.min(page * limit, total)` — the "showing 1–20 of N" clamp), so a
+ * name whose only money word is total(s) needs a qualifier such as grand or order.
+ */
+function isMathMoneyName(name) {
+  if (!isMoneyName(name)) return false;
+  const words = splitWords(name);
+  const moneyWords = words.filter((word) => MONEY_WORDS.has(word));
+  if (moneyWords.some((word) => word !== "total" && word !== "totals")) {
+    return true;
+  }
+  return words.some((word) => TOTAL_MONEY_QUALIFIERS.has(word));
+}
+
+/** `Math.min(walletBalance, amountDue)`: the client choosing or rounding an amount. */
+function mathCallMoneyName(node) {
+  if (
+    !ts.isCallExpression(node) ||
+    !ts.isPropertyAccessExpression(node.expression) ||
+    !ts.isIdentifier(node.expression.expression) ||
+    node.expression.expression.text !== "Math" ||
+    !MATH_MONEY_FUNCTIONS.has(node.expression.name.text)
+  ) {
+    return null;
+  }
+  return (
+    node.arguments
+      .map((arg) => operandName(arg))
+      .find((candidate) => candidate && isMathMoneyName(candidate)) ?? null
+  );
+}
+
+/**
+ * Returns every arithmetic expression — an operator, or a `Math.min/max/abs/round/…`
+ * call — in `sourceText` that has a money-named operand.
  * @returns {Array<{ line: number, text: string, name: string }>}
  */
 export function findMoneyArithmetic(sourceText, fileName = "file.tsx") {
@@ -194,6 +254,18 @@ export function findMoneyArithmetic(sourceText, fileName = "file.tsx") {
   const findings = [];
 
   function visit(node) {
+    const mathName = mathCallMoneyName(node);
+    if (mathName) {
+      const { line } = source.getLineAndCharacterOfPosition(
+        node.getStart(source),
+      );
+      findings.push({
+        line: line + 1,
+        text: node.getText(source).replace(/\s+/g, " "),
+        name: mathName,
+      });
+      return;
+    }
     if (
       ts.isBinaryExpression(node) &&
       ARITHMETIC.has(node.operatorToken.kind)
