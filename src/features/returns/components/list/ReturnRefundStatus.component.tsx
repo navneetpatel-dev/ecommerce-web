@@ -17,7 +17,7 @@ export function ReturnRefundStatus({ row }: ReturnRefundStatusProps) {
   if (kind === "completed") {
     return (
       <p>
-        {LABELS.returnRefundStatusCompleted} {formatInr(row.refundAmount ?? 0)}
+        {LABELS.returnRefundStatusCompleted} {formatInr(row.refundAmount)}
       </p>
     );
   }

@@ -322,3 +322,71 @@ export function findRawMoneyDisplay(sourceText, fileName = "file.tsx") {
   visit(source);
   return findings;
 }
+
+/** The shared money and points formatters (and thin wrappers that forward to them). */
+const MONEY_FORMATTER = /^format(Inr|Points|AnalyticsInr)/;
+
+function isNumberCoercion(node) {
+  return (
+    ts.isCallExpression(node) &&
+    ts.isIdentifier(node.expression) &&
+    node.expression.text === "Number"
+  );
+}
+
+function isZeroLiteral(node) {
+  return ts.isNumericLiteral(node) && Number(node.text) === 0;
+}
+
+/**
+ * A money formatter fed `x ?? 0`, `x || 0` or `Number(x)`. The formatters accept
+ * decimal strings and render a missing amount as "—"; a zero fallback (and
+ * `Number(null)`, which is 0) turns "the server sent nothing" into a confident
+ * ₹0, which reads as real money.
+ */
+export function findZeroFallbackFormat(sourceText, fileName = "file.tsx") {
+  const kind = fileName.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
+  const source = ts.createSourceFile(
+    fileName,
+    sourceText,
+    ts.ScriptTarget.Latest,
+    true,
+    kind,
+  );
+  const findings = [];
+
+  function containsZeroFallback(node) {
+    if (
+      ts.isBinaryExpression(node) &&
+      (node.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken ||
+        node.operatorToken.kind === ts.SyntaxKind.BarBarToken) &&
+      isZeroLiteral(node.right)
+    ) {
+      return true;
+    }
+    return ts.forEachChild(node, containsZeroFallback) === true;
+  }
+
+  function visit(node) {
+    if (
+      ts.isCallExpression(node) &&
+      ts.isIdentifier(node.expression) &&
+      MONEY_FORMATTER.test(node.expression.text) &&
+      node.arguments.some(
+        (arg) => containsZeroFallback(arg) || isNumberCoercion(arg),
+      )
+    ) {
+      const { line } = source.getLineAndCharacterOfPosition(
+        node.getStart(source),
+      );
+      findings.push({
+        line: line + 1,
+        text: node.getText(source).replace(/\s+/g, " "),
+      });
+    }
+    ts.forEachChild(node, visit);
+  }
+
+  visit(source);
+  return findings;
+}

@@ -31,8 +31,9 @@ export function useWalletPage() {
       ? 0
       : Math.min((page - 1) * DEFAULT_PAGE_LIMIT + transactions.length, total);
 
+  // Null when the balance request failed — shown as "—", never as 0 pts.
   const balancePoints =
-    balanceQuery.data?.points ?? balanceQuery.data?.balance ?? 0;
+    balanceQuery.data?.points ?? balanceQuery.data?.balance ?? null;
   const transactionsError = transactionsQuery.isError
     ? LABELS.errorRetryHint
     : null;

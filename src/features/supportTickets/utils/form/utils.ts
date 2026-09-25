@@ -20,7 +20,7 @@ export function formatOrderOption(order: {
 }): string {
   const statusLabel =
     STEP_LABELS[order.status as keyof typeof STEP_LABELS] ?? order.status;
-  return `#${shortOrderId(order.id)} · ${formatOrderDate(order.createdAt)} · ${statusLabel} · ${formatInr(Number(order.totalAmount))}`;
+  return `#${shortOrderId(order.id)} · ${formatOrderDate(order.createdAt)} · ${statusLabel} · ${formatInr(order.totalAmount)}`;
 }
 
 export function collectOrderVendors(

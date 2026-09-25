@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   findMoneyArithmetic,
   findRawMoneyDisplay,
+  findZeroFallbackFormat,
   isMoneyName,
 } from "../moneyMath.mjs";
 
@@ -122,6 +123,43 @@ describe("findRawMoneyDisplay", () => {
         const c = <span>₹{grandTotalFormatted}</span>;
         const d = rating.toFixed(1);
         const e = \`\${(bytes / 1024).toFixed(1)} KB\`;
+      `),
+    ).toEqual([]);
+  });
+});
+
+describe("findZeroFallbackFormat", () => {
+  function zeroed(code: string): string[] {
+    return findZeroFallbackFormat(code, "probe.tsx").map(
+      (finding: { text: string }) => finding.text,
+    );
+  }
+
+  it("catches a missing amount turned into ₹0 before formatting", () => {
+    expect(
+      zeroed(`
+        const a = formatInr(summary?.monthRevenue ?? 0);
+        const b = <dd>{formatInrAmount(Number(analytics.revenueImpact ?? 0))}</dd>;
+        const c = formatPoints(row.purchasedPoints || 0);
+        const d = formatAnalyticsInr(Number(entry.value ?? 0));
+        const e = formatInr(Number(order.totalAmount));
+      `),
+    ).toEqual([
+      "formatInr(summary?.monthRevenue ?? 0)",
+      "formatInrAmount(Number(analytics.revenueImpact ?? 0))",
+      "formatPoints(row.purchasedPoints || 0)",
+      "formatAnalyticsInr(Number(entry.value ?? 0))",
+      "formatInr(Number(order.totalAmount))",
+    ]);
+  });
+
+  it("allows passing the value through, other fallbacks and non-money calls", () => {
+    expect(
+      zeroed(`
+        const a = formatInr(summary?.monthRevenue);
+        const b = formatInr(order.amountDue ?? order.totalAmount);
+        const c = formatLabel(LABELS.count, { n: total ?? 0 });
+        const d = (row.walletRefundAmount ?? 0) > 0 ? formatInr(row.walletRefundAmount) : null;
       `),
     ).toEqual([]);
   });

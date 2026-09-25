@@ -80,7 +80,7 @@ export const SubOrderCardItemRow = memo(function SubOrderCardItemRow({
         </p>
         {item.quantity > 1 ? (
           <p className={SUB_ORDER_CARD_ITEMS_STYLES.unitPrice}>
-            {formatInr(Number(item.unitPrice))} {LABELS.each}
+            {formatInr(item.unitPrice)} {LABELS.each}
           </p>
         ) : null}
       </div>

@@ -32,7 +32,7 @@ export function variantLabel(item: CartItem) {
 
 /** "₹X each" copy used in both cart line layouts. */
 export function eachPriceCopy(item: CartItem) {
-  return `₹${formatInrAmount(Number(item.product.price))} ${LABELS.each}`;
+  return `₹${formatInrAmount(item.product.price)} ${LABELS.each}`;
 }
 
 interface RemoveLineButtonProps {

@@ -8,7 +8,7 @@ import { WalletBalanceCardSkeleton } from "./WalletSectionSkeletons.component";
 import { walletPageContentStyles as styles } from "../../styles/overview/walletPageContent.styles";
 
 interface WalletBalanceCardProps {
-  balance: number;
+  balance: number | null;
   purchasedBalance?: number;
   promotionalBalance?: number;
   isLoading?: boolean;
@@ -39,7 +39,7 @@ export function WalletBalanceCard({
               {LABELS.walletPurchasedBalance}
             </p>
             <p className={styles.breakdownValue}>
-              {formatPoints(purchasedBalance ?? 0)}
+              {formatPoints(purchasedBalance)}
             </p>
           </div>
           <div className={styles.breakdownCard}>
@@ -47,7 +47,7 @@ export function WalletBalanceCard({
               {LABELS.walletPromotionalBalance}
             </p>
             <p className={styles.breakdownValue}>
-              {formatPoints(promotionalBalance ?? 0)}
+              {formatPoints(promotionalBalance)}
             </p>
           </div>
         </div>

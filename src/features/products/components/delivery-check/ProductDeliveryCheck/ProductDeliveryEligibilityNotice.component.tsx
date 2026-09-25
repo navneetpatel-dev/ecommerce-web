@@ -27,12 +27,8 @@ export function ProductDeliveryEligibilityNotice({
     belowCodMin,
   } = eligibility;
 
-  const minOrderAmountFormatted = formatInrAmount(
-    Number(codMinOrderValue ?? 0),
-  );
-  const maxOrderAmountFormatted = formatInrAmount(
-    Number(codMaxOrderValue ?? 0),
-  );
+  const minOrderAmountFormatted = formatInrAmount(codMinOrderValue);
+  const maxOrderAmountFormatted = formatInrAmount(codMaxOrderValue);
 
   const etaLabel = fastest
     ? fastest.shippingDisplayKey === "FREE"

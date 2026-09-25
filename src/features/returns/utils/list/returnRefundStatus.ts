@@ -5,10 +5,7 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { ReturnRequest } from "@/shared/api/types";
 
 export type ReturnRefundStatusKind =
-  | "completed"
-  | "initiated"
-  | "failed"
-  | "pending";
+  "completed" | "initiated" | "failed" | "pending";
 
 export function getReturnRefundStatusKind(
   row: ReturnRequest,
@@ -23,13 +20,13 @@ export function returnInitiatedRefundDetail(row: ReturnRequest): string {
   const bankDetail =
     (row.razorpayRefundAmount ?? 0) > 0
       ? formatLabel(LABELS.returnRefundToBank, {
-          amount: formatInr(row.razorpayRefundAmount ?? 0),
+          amount: formatInr(row.razorpayRefundAmount),
         })
       : "";
   const walletDetail =
     (row.walletRefundAmount ?? 0) > 0
       ? formatLabel(LABELS.returnRefundToWallet, {
-          amount: formatInr(row.walletRefundAmount ?? 0),
+          amount: formatInr(row.walletRefundAmount),
         })
       : "";
   return `${LABELS.returnRefundStatusInitiated}${bankDetail}${walletDetail}`;

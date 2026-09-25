@@ -1,8 +1,9 @@
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import type { DisplayAmountInput } from "@/shared/utils/formatting/displayAmount";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { LABELS } from "@/shared/constants/labels";
 
-export function formatAnalyticsInr(value: number): string {
+export function formatAnalyticsInr(value: DisplayAmountInput): string {
   return formatInr(value);
 }
 

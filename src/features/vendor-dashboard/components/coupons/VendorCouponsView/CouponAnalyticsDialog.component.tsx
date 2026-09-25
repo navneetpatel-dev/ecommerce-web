@@ -8,7 +8,10 @@ import {
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import {
+  formatInr,
+  formatInrAmount,
+} from "@/shared/utils/formatting/orderFormat";
 import type { CouponAnalytics } from "@/shared/api/types";
 import { formatPercent } from "../../../utils/coupons/formatPercent";
 import { couponAnalyticsDialogStyles } from "../../../styles/coupons/vendorCouponsView.styles";
@@ -20,8 +23,6 @@ interface CouponAnalyticsDialogProps {
   analyticsLoading: boolean;
 }
 
-const CURRENCY_PREFIX = "₹";
-
 /** Per-coupon redemption/analytics dialog (Rule 3 split). */
 export function CouponAnalyticsDialog(props: CouponAnalyticsDialogProps) {
   const { analyticsId, setAnalyticsId, analytics, analyticsLoading } = props;
@@ -30,7 +31,7 @@ export function CouponAnalyticsDialog(props: CouponAnalyticsDialogProps) {
 
   const absorbedCopy = analytics
     ? formatLabel(LABELS.absorbedDiscountsSummary, {
-        amount: formatInrAmount(Number(analytics.totalDiscount)),
+        amount: formatInrAmount(analytics.totalDiscount),
       })
     : null;
 
@@ -62,8 +63,7 @@ export function CouponAnalyticsDialog(props: CouponAnalyticsDialogProps) {
                 {LABELS.absorbedDiscounts}
               </dt>
               <dd className={couponAnalyticsDialogStyles.statValue}>
-                {CURRENCY_PREFIX}
-                {formatInrAmount(Number(analytics.totalDiscount))}
+                {formatInr(analytics.totalDiscount)}
               </dd>
             </div>
             <div className={couponAnalyticsDialogStyles.statRow}>
@@ -71,8 +71,7 @@ export function CouponAnalyticsDialog(props: CouponAnalyticsDialogProps) {
                 {LABELS.revenueImpact}
               </dt>
               <dd className={couponAnalyticsDialogStyles.statValue}>
-                {CURRENCY_PREFIX}
-                {formatInrAmount(Number(analytics.revenueImpact ?? 0))}
+                {formatInr(analytics.revenueImpact)}
               </dd>
             </div>
             <div className={couponAnalyticsDialogStyles.statRow}>

@@ -21,7 +21,8 @@ import type { UseFormReturn } from "react-hook-form";
 import { couponsHeaderSectionStyles } from "../../../styles/coupons/vendorCouponsView.styles";
 
 interface CouponsHeaderSectionProps {
-  absorbedDiscountTotal: number;
+  /** Null until the server total arrives; the summary line is hidden meanwhile. */
+  absorbedDiscountTotal: number | null;
   open: boolean;
   setOpen: (open: boolean) => void;
   form: UseFormReturn<CouponFormInput>;
@@ -44,9 +45,12 @@ export function CouponsHeaderSection(props: CouponsHeaderSectionProps) {
     vendorId = null,
   } = props;
 
-  const summaryCopy = formatLabel(LABELS.absorbedDiscountsSummary, {
-    amount: formatInrAmount(absorbedDiscountTotal),
-  });
+  const summaryCopy =
+    absorbedDiscountTotal == null
+      ? null
+      : formatLabel(LABELS.absorbedDiscountsSummary, {
+          amount: formatInrAmount(absorbedDiscountTotal),
+        });
 
   const handleInvalidSubmit = () => {
     void form.trigger();
@@ -56,9 +60,11 @@ export function CouponsHeaderSection(props: CouponsHeaderSectionProps) {
     <div className={couponsHeaderSectionStyles.header}>
       <div className={couponsHeaderSectionStyles.titleGroup}>
         <h2 className={couponsHeaderSectionStyles.heading}>{LABELS.coupons}</h2>
-        <p className={couponsHeaderSectionStyles.summary}>
-          {summaryCopy} ({LABELS.absorbedThisPeriod})
-        </p>
+        {summaryCopy ? (
+          <p className={couponsHeaderSectionStyles.summary}>
+            {summaryCopy} ({LABELS.absorbedThisPeriod})
+          </p>
+        ) : null}
       </div>
       <ButtonGroup>
         <Dialog open={open} onOpenChange={setOpen}>

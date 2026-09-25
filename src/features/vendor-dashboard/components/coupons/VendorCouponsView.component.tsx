@@ -38,7 +38,7 @@ interface VendorCouponsViewProps {
   setAnalyticsId: (id: string | null) => void;
   analytics?: CouponAnalytics;
   analyticsLoading: boolean;
-  absorbedDiscountTotal?: number;
+  absorbedDiscountTotal?: number | null;
   onUpdateStatus: (coupon: Coupon, status: Coupon["status"]) => Promise<void>;
 }
 
@@ -62,7 +62,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     setAnalyticsId,
     analytics,
     analyticsLoading,
-    absorbedDiscountTotal = 0,
+    absorbedDiscountTotal = null,
     onUpdateStatus,
   } = props;
 

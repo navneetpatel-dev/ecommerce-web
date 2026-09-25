@@ -34,11 +34,14 @@ export function useEarningsPayoutsCardPresentation() {
   const payoutsData = payouts.data ?? [];
 
   const pendingLoading = Boolean(shiftSummary.isLoading);
-  const pendingTotal = shiftSummary.data?.pendingEarnings ?? 0;
-  const pendingCount = shiftSummary.data?.pendingEarningsCount ?? 0;
+  // Null when the shift summary failed — said plainly, never shown as ₹0.00 pending.
+  const pendingTotal = shiftSummary.data?.pendingEarnings ?? null;
+  const pendingCount = shiftSummary.data?.pendingEarningsCount ?? null;
   const pendingSummaryLabel = pendingLoading
     ? "Loading pending earnings..."
-    : `${formatInrExact(pendingTotal)} pending across ${pendingCount} completed task${pendingCount === 1 ? "" : "s"} — included in the next payout run.`;
+    : pendingTotal == null || pendingCount == null
+      ? "Pending earnings are unavailable right now."
+      : `${formatInrExact(pendingTotal)} pending across ${pendingCount} completed task${pendingCount === 1 ? "" : "s"} — included in the next payout run.`;
 
   const download = useCallback(async (payoutId: string) => {
     setDownloadingId(payoutId);
@@ -76,7 +79,7 @@ export function useEarningsPayoutsCardPresentation() {
         id: row.id,
         typeLabel: row.sourceType === "DELIVERY" ? "Delivery" : "Pickup",
         dateLabel: new Date(row.earnedAt).toLocaleDateString(),
-        amountLabel: formatInrExact(Number(row.amount)),
+        amountLabel: formatInrExact(row.amount),
       })),
     [earningsData],
   );

@@ -41,7 +41,7 @@ function RevenueTooltip({
   payload?: { value?: number }[];
 }) {
   if (!active || !payload?.length || !label) return null;
-  const formattedValue = formatInr(Number(payload[0]?.value ?? 0));
+  const formattedValue = formatInr(payload[0]?.value);
   return (
     <div className={vendorRevenueChartStyles.tooltipCard}>
       <p className={vendorRevenueChartStyles.tooltipLabel}>{label}</p>

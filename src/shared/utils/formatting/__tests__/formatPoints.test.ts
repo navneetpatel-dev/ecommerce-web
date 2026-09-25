@@ -13,6 +13,13 @@ describe("formatPoints", () => {
   it("formats zero", () => {
     expect(formatPoints(0)).toBe("0 pts");
   });
+
+  it("shows a missing balance as — instead of 0 pts", () => {
+    expect(formatPoints(undefined)).toBe("—");
+    expect(formatPoints(null)).toBe("—");
+    expect(formatPointsCompact(undefined)).toBe("—");
+    expect(formatPointsHeaderBadge(null)).toBe("—");
+  });
 });
 
 describe("formatPointsCompact", () => {

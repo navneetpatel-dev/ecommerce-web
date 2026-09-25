@@ -15,7 +15,10 @@ import {
   formatPoints,
   formatPointsHeaderBadge,
 } from "@/shared/utils/formatting/formatPoints";
-import { HEADER_ICON_BTN, HEADER_INK_TONE } from "../../utils/header/headerShared";
+import {
+  HEADER_ICON_BTN,
+  HEADER_INK_TONE,
+} from "../../utils/header/headerShared";
 import {
   HeaderSearchButtonSkeleton,
   StorefrontActionButtonsSkeleton,
@@ -25,7 +28,8 @@ interface StorefrontActionButtonsProps {
   isTransparent: boolean;
   cartItemCount: number;
   wishlistItemCount: number;
-  walletBalance: number;
+  /** Null when the balance is unknown; the badge is hidden rather than showing 0. */
+  walletBalance: number | null;
   /** Session or badge counts still resolving — show placeholders, not zeroes. */
   isLoading?: boolean;
   /** Session itself unresolved, so even the count-free search trigger is unknown. */
@@ -44,6 +48,11 @@ export function StorefrontActionButtons({
   onOpenCart,
   onOpenMobileSearch,
 }: StorefrontActionButtonsProps) {
+  const walletAriaLabel =
+    walletBalance == null
+      ? LABELS.walletBalance
+      : `${LABELS.walletBalance}, ${formatPoints(walletBalance)}`;
+
   return (
     <>
       {navLoading ? (
@@ -139,10 +148,7 @@ export function StorefrontActionButtons({
               isTransparent ? "hover:bg-paper/10" : undefined,
             )}
           >
-            <Link
-              href={PATHS.wallet}
-              aria-label={`${LABELS.walletBalance}, ${formatPoints(walletBalance)}`}
-            >
+            <Link href={PATHS.wallet} aria-label={walletAriaLabel}>
               <IconBadgeAnchor variant="header-wide">
                 <WalletIcon
                   size={20}
@@ -150,12 +156,14 @@ export function StorefrontActionButtons({
                     HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]
                   }
                 />
-                <CartCountBadge
-                  count={walletBalance}
-                  label={formatPointsHeaderBadge(walletBalance)}
-                  alwaysShow
-                  placement="header-wide"
-                />
+                {walletBalance != null ? (
+                  <CartCountBadge
+                    count={walletBalance}
+                    label={formatPointsHeaderBadge(walletBalance)}
+                    alwaysShow
+                    placement="header-wide"
+                  />
+                ) : null}
               </IconBadgeAnchor>
             </Link>
           </Button>
