@@ -27,6 +27,8 @@ export interface ReturnRequest {
   refundCustomerMessage?: string | null;
   refundAmount: number | null;
   refundTaxAmount?: number | null;
+  /** Pre-tax item part of the refund, as the backend pricing engine froze it at approval. */
+  refundMerchandiseAmount?: number | null;
   shippingRefundAmount?: number;
   /** Deducted from the customer's refund for certain return reasons (e.g. "changed mind"); 0 when not applicable. */
   returnShippingFeeAmount?: number | null;

@@ -29,16 +29,11 @@ function positiveLines(
 export function buildRefundBreakdownLines(
   row: ReturnRequest,
 ): RefundBreakdownGroups {
+  // Every figure is the backend pricing engine's own; nothing is derived here.
+  const merchandise = Number(row.refundMerchandiseAmount ?? 0);
   const tax = Number(row.refundTaxAmount ?? 0);
   const shipping = Number(row.shippingRefundAmount ?? 0);
   const fee = Number(row.returnShippingFeeAmount ?? 0);
-  const total = Number(row.refundAmount ?? 0);
-  // The backend pricing engine nets the return-shipping fee out of the refund total before
-  // sending it here, so recovering a display-only "merchandise" figure means adding that fee
-  // back on top of the tax/shipping deduction — otherwise this line, tax and shipping wouldn't
-  // add back up to the total once a fee is deducted from a return, and the fee line rendered
-  // below (as a deduction) wouldn't have a real merchandise figure to deduct from.
-  const merchandise = Math.max(0, total - tax - shipping + fee);
 
   const compositionLines = positiveLines([
     {

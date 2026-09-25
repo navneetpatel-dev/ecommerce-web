@@ -32,11 +32,7 @@ export function CashDepositsPanel() {
       id: "expected",
       header: "Expected",
       cell: (row) => (
-        <span
-          className={styles.expectedCell(
-            Math.abs(row.amount - row.expectedAmount) > 0.01,
-          )}
-        >
+        <span className={styles.expectedCell(row.hasDiscrepancy)}>
           ₹{row.expectedAmount.toFixed(2)}
         </span>
       ),
@@ -52,7 +48,9 @@ export function CashDepositsPanel() {
       header: "Note",
       className: styles.tableCellMuted,
       cell: (row) =>
-        row.status === "REJECTED" ? (row.rejectionReason ?? "—") : (row.note ?? "—"),
+        row.status === "REJECTED"
+          ? (row.rejectionReason ?? "—")
+          : (row.note ?? "—"),
     },
   ];
 

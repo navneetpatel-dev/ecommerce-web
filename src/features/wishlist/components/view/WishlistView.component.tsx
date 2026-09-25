@@ -13,7 +13,6 @@ import { wishlistPriceDropLabels } from "@/shared/constants/labels/wishlistPrice
 import { UNAVAILABLE_REASON } from "@/shared/constants/statuses";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
-import { priceDropAmount } from "../../utils/price-drop/priceDrop.utils";
 import type { WishlistPageItem } from "../../hooks/view/useWishlistPage.hook";
 import type { UnavailableReason } from "@/shared/constants/statuses";
 import { wishlistViewStyles as styles } from "../../styles/view/wishlistView.styles";
@@ -103,10 +102,7 @@ export function WishlistView(props: WishlistViewProps) {
             );
           }
 
-          const dropAmount = priceDropAmount(
-            wishlistItem.priceAtAdd,
-            product.basePrice,
-          );
+          const dropAmount = wishlistItem.priceDropAmount;
 
           return (
             <div key={product.id} className={styles.availableCard}>

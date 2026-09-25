@@ -14,7 +14,6 @@ export function CashDepositTableRow({
   pendingId,
   onAct,
 }: CashDepositTableRowProps) {
-  const mismatch = Math.abs(deposit.amount - deposit.expectedAmount) > 0.01;
   const isActionPending = pendingId === deposit.id;
 
   const noteText =
@@ -30,7 +29,9 @@ export function CashDepositTableRow({
       <td className={cashDepositsPanelStyles.tableCellMono}>
         ₹{deposit.amount.toFixed(2)}
       </td>
-      <td className={cashDepositsPanelStyles.expectedCell(mismatch)}>
+      <td
+        className={cashDepositsPanelStyles.expectedCell(deposit.hasDiscrepancy)}
+      >
         ₹{deposit.expectedAmount.toFixed(2)}
       </td>
       <td className={cashDepositsPanelStyles.tableCell}>

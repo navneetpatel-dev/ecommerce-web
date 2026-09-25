@@ -34,19 +34,6 @@ const allowlist = {
     "export progress % from row total",
   "src/features/admin-dashboard/components/analytics/AnalyticsStatusChart.component.tsx":
     "status share % from order count total",
-
-  // PENDING REMOVAL — each is replaced by a backend-computed field
-  // (calculation remediation plan, Phases 2–3). Do not add new entries here.
-  "src/features/returns/utils/list/refundBreakdown.ts":
-    "pending: return API field refundMerchandiseAmount",
-  "src/features/wishlist/utils/price-drop/priceDrop.utils.ts":
-    "pending: wishlist API field priceDropAmount",
-  "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/CashDepositsPanel.component.tsx":
-    "pending: cash deposit API field hasDiscrepancy",
-  "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/CashDepositTableRow.component.tsx":
-    "pending: cash deposit API field hasDiscrepancy",
-  "src/features/delivery-dashboard/hooks/cash/useCashDepositsCardPresentation.hook.ts":
-    "pending: cash deposit API field hasDiscrepancy",
 };
 
 /** Tests build fixtures; constants/ holds display strings and route paths only. */
