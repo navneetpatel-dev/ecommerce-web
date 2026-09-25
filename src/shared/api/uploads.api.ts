@@ -79,6 +79,12 @@ export const uploadsApi = {
     apiClient.post<PresignSingleResult>(API.uploads.presign, body),
   presignBulk: (body: PresignBulkBody) =>
     apiClient.post<PresignBulkResult>(API.uploads.presignBulk, body),
+  /**
+   * After a direct-to-S3 PUT: the server reads the stored file's first bytes and
+   * deletes it when they are not the declared type (an HTML page named .png).
+   */
+  verify: (key: string) =>
+    apiClient.post<{ key: string }>(API.uploads.verify, { key }),
   upload: (body: UploadSingleBody) =>
     apiClient.post<UploadSingleResult>(API.uploads.root, body),
   uploadBulk: (body: UploadBulkBody) =>

@@ -63,4 +63,5 @@ export const uploadsRoutes = {
   bulk: "/api/uploads/bulk",
   presign: "/api/uploads/presign",
   presignBulk: "/api/uploads/presign/bulk",
+  verify: "/api/uploads/verify",
 } as const;
