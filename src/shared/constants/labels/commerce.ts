@@ -97,6 +97,13 @@ export const commerceLabels = {
   orderCancelRefundInitiated: "Bank refund initiated",
   orderCancelRefundCompleted: "Refund completed",
   orderCancelRefundFailed: "Refund issue — contact support if needed",
+  cancellationRefundedToCard:
+    "{amount} refunded to your card for cancelled items",
+  partRefundToCard: "{amount} refund to your card",
+  partRefundPending: "processing",
+  partRefundInitiated: "on its way to your bank",
+  partRefundCompleted: "refunded",
+  partRefundFailed: "delayed — we're retrying",
   orderOpenReturnsBadge: "{count} open return(s) on this order",
 
   // Content

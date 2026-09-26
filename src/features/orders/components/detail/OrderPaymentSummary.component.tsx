@@ -24,6 +24,7 @@ interface OrderPaymentSummaryProps {
     | "paymentMethod"
     | "amountDue"
     | "paymentStatus"
+    | "cancellationRefundAmount"
   >;
   className?: string;
 }
@@ -47,6 +48,7 @@ export function OrderPaymentSummary({
    * then made this card contradict the order's own "Awaiting payment" badge.
    */
   const isSettled = order.paymentStatus === PAYMENT_STATUS.PAID;
+  const cancellationRefund = Number(order.cancellationRefundAmount ?? 0);
 
   return (
     <div className={className}>
@@ -83,6 +85,14 @@ export function OrderPaymentSummary({
             </p>
           ) : null}
         </div>
+      ) : null}
+
+      {cancellationRefund > 0 ? (
+        <p className={ordersComponentsStyles.paymentMuted}>
+          {formatLabel(LABELS.cancellationRefundedToCard, {
+            amount: formatInr(cancellationRefund),
+          })}
+        </p>
       ) : null}
 
       {pendingCashback > 0 && !order.cashbackCreditedAt ? (

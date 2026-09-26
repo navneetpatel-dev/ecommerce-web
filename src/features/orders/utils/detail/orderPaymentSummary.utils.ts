@@ -10,6 +10,7 @@ export type OrderPaymentFields = Pick<
   | "cashbackCreditedAt"
   | "paymentMethod"
   | "amountDue"
+  | "cancellationRefundAmount"
 >;
 
 /** Razorpay portion for display — backend always normalizes this on order responses. */
@@ -18,7 +19,9 @@ export function resolveOrderRazorpayPaid(order: OrderPaymentFields): number {
 }
 
 /** Whether the confirmation page should show the payment breakdown card. */
-export function hasOrderPaymentSummaryContent(order: OrderPaymentFields): boolean {
+export function hasOrderPaymentSummaryContent(
+  order: OrderPaymentFields,
+): boolean {
   const walletUsed = Number(order.walletAmountUsed ?? 0);
   const razorpayPaid = resolveOrderRazorpayPaid(order);
   const pendingCashback = Number(order.pendingCashbackAmount ?? 0);
@@ -30,6 +33,7 @@ export function hasOrderPaymentSummaryContent(order: OrderPaymentFields): boolea
     walletUsed > 0 ||
     pendingCashback > 0 ||
     Boolean(order.cashbackCreditedAt) ||
+    Number(order.cancellationRefundAmount ?? 0) > 0 ||
     (isCod && walletUsed <= 0)
   );
 }

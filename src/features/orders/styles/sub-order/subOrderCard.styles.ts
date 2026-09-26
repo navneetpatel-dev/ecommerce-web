@@ -1,6 +1,8 @@
 export const SUB_ORDER_CARD_STYLES = {
   headerMargin: "mb-1",
   buyAgainWrapper: "mt-4",
+  refundNote: "mt-3 text-body-sm text-ink-muted",
+  refundNoteFailed: "mt-3 text-body-sm text-warning-foreground",
   timelineContainer: "mt-5 border-t border-line pt-5",
   timelineEyebrow: "mb-3",
   returnDialogBody: "space-y-4",
