@@ -59,7 +59,6 @@ export function useProductDetailContent({
   const avgRating = product.avgRating ?? 0;
   const formattedPrice = formatInrAmount(displayPrice);
   const compareAtPrice = product.compareAtPrice ?? null;
-  const taxInclusiveEstimate = product.taxInclusivePrice ?? null;
 
   const resolvedVariant = useMemo(() => {
     return (
@@ -67,6 +66,13 @@ export function useProductDetailContent({
       (product.variants?.length === 1 ? product.variants[0] : null)
     );
   }, [variantSelection.matchedVariant, product.variants]);
+
+  // The "incl. GST" figure follows the selected variant's price (API-computed per
+  // variant); the product's own until one is picked.
+  const taxInclusiveEstimate =
+    resolvedVariant?.taxInclusivePrice !== undefined
+      ? (resolvedVariant.taxInclusivePrice ?? null)
+      : (product.taxInclusivePrice ?? null);
 
   // The price shown is the selected variant's, so the "% off" badge and struck-through
   // MRP are that variant's too (computed by the API); the product's own until one is picked.
