@@ -32,6 +32,10 @@ export interface ProductVariant {
   lowStockAt: number;
   weightGrams?: number;
   codEligibleAtUnitPrice?: boolean;
+  /** This variant's "% off" against the product's MRP (API-computed); null when none. */
+  discountPercent?: number | null;
+  /** Whether this variant is priced below the MRP, so the MRP is shown struck through. */
+  showMrp?: boolean;
 }
 
 export interface ProductImage {
