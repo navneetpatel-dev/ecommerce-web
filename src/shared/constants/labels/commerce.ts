@@ -38,6 +38,7 @@ export const commerceLabels = {
   codMaxOrder: "COD on orders up to ₹{amount}",
   taxExclusiveGst: "Exclusive of GST ({percent}%)",
   taxInclusiveEstimate: "Approx. ₹{amount} including GST",
+  priceFrom: "From",
   hsnCodeLabel: "HSN {code}",
   warrantyManufacturer: "manufacturer warranty",
   warrantySeller: "seller warranty",

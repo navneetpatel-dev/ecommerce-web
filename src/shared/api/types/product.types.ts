@@ -11,6 +11,10 @@ export interface ProductListItem {
   discountPercent?: number | null;
   /** BE-derived — show MRP strikethrough when true. */
   showMrp?: boolean;
+  /** True when variants sell at different prices: `basePrice` is the lowest ("From ₹…"). */
+  hasPriceRange?: boolean;
+  /** The highest variant price (API-computed). */
+  priceRangeMax?: number;
   brand?: string | null;
   avgRating: number;
   reviewCount: number;
@@ -36,6 +40,8 @@ export interface ProductVariant {
   discountPercent?: number | null;
   /** Whether this variant is priced below the MRP, so the MRP is shown struck through. */
   showMrp?: boolean;
+  /** This variant's price with GST, for tax-inclusive products (API-computed). */
+  taxInclusivePrice?: number | null;
 }
 
 export interface ProductImage {
