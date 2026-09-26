@@ -53,8 +53,10 @@ export function useProductDetail() {
     isLoading,
     isError,
     retryProduct,
-    freeShippingThreshold:
-      product?.vendorFreeShippingThreshold ?? settings?.freeShippingThreshold,
+    // Resolved by the API from the rates that apply to this seller (the same ones the
+    // cart and checkout charge by); no fallback, so the page never promises free
+    // shipping that checkout would charge for.
+    freeShippingThreshold: product?.vendorFreeShippingThreshold ?? undefined,
     returnWindowDays:
       product?.returnWindowDays ?? settings?.defaultReturnWindow,
     returnsAllowed: product?.returnsAllowed,
