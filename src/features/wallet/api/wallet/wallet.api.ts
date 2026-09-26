@@ -10,7 +10,10 @@ import {
 import { API } from "@/shared/constants/apiRoutes";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import { buildReportExportFilenameFallback } from "@/shared/utils/files/downloadFilename";
-import type { WalletTransaction, RazorpaySignaturePayload } from "@/shared/api/types";
+import type {
+  WalletTransaction,
+  RazorpaySignaturePayload,
+} from "@/shared/api/types";
 
 export type WalletBalanceResponse = {
   balance: number;
@@ -25,7 +28,6 @@ export type WalletBalanceResponse = {
     maxInr: number;
     maxBalance: number;
     presetsInr: number[];
-    pointsPerRupee: number;
   };
 };
 
@@ -81,7 +83,9 @@ export const walletApi = {
       amountInr,
       ...(idempotencyKey ? { idempotencyKey } : {}),
     }),
-  verifyRecharge: (payload: RazorpaySignaturePayload & { rechargeId?: string }) => apiClient.post(API.wallet.rechargeVerify, payload),
+  verifyRecharge: (
+    payload: RazorpaySignaturePayload & { rechargeId?: string },
+  ) => apiClient.post(API.wallet.rechargeVerify, payload),
   getRechargeStatus: (id: string) =>
     apiClient.get<{
       id: string;

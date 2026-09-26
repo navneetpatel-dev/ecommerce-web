@@ -45,7 +45,6 @@ interface PlatformSettingsFormProps {
   onWalletMaxRechargeChange: (value: number) => void;
   onWalletMaxBalanceChange: (value: number) => void;
   onWalletRechargePresetsChange: (value: number[]) => void;
-  onPointsPerRupeeChange: (value: number) => void;
   onPromotionalPointsTtlDaysChange: (value: number) => void;
   onScheduledReportsEnabledChange: (value: boolean) => void;
   onScheduledReportsTypesChange: (value: string[]) => void;
@@ -110,7 +109,6 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onWalletMaxRechargeChange={props.onWalletMaxRechargeChange}
           onWalletMaxBalanceChange={props.onWalletMaxBalanceChange}
           onWalletRechargePresetsChange={props.onWalletRechargePresetsChange}
-          onPointsPerRupeeChange={props.onPointsPerRupeeChange}
           onPromotionalPointsTtlDaysChange={
             props.onPromotionalPointsTtlDaysChange
           }

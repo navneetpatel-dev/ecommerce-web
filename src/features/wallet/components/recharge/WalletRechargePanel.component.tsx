@@ -55,8 +55,6 @@ export function WalletRechargePanel({
       {panel.presets.length > 0 ? (
         <WalletRechargePresetButtons
           presets={panel.presets}
-          previews={panel.presetPreviewQueries}
-          pointsPerRupee={panel.pointsPerRupee}
           disabled={panel.isBusy}
           onSelect={(amount) => void panel.startRecharge(amount)}
         />

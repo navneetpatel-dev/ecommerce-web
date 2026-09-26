@@ -18,7 +18,6 @@ export type PublicPlatformSettings = {
   walletMaxRechargeInr: number;
   walletMaxBalancePoints: number;
   walletRechargePresetsInr: number[];
-  pointsPerRupee: number;
 };
 
 /** App-wide public platform settings — consumed across features via usePublicSettings. */

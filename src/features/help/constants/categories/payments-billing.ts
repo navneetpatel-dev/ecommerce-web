@@ -56,9 +56,9 @@ export const PAYMENTS_BILLING_ARTICLES: HelpArticle[] = [
           "Open Wallet from your account menu to buy points via Razorpay",
           "Minimum and maximum recharge amounts are shown on the wallet page",
           "The maximum balance cap applies to recharge only — refunds and cashback may take you above the cap",
-          "If points-per-rupee is above 1, extra points apply on recharge only; checkout still treats 1 point as ₹1 off",
+          "Every ₹1 you pay adds 1 point, and each point is ₹1 off at checkout",
           "Points are credited after successful payment — usually within seconds",
-          "A prepaid store-credit invoice is available on the wallet page for paid recharges — it is not a merchandise GST invoice",
+          "A payment receipt is available on the wallet page for paid recharges. No GST is charged on a recharge; GST applies to the products you buy with your points",
         ],
       },
       {
