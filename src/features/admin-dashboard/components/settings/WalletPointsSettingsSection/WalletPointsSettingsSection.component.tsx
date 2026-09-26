@@ -21,7 +21,6 @@ export interface WalletPointsSettingsSectionProps {
   onWalletMaxRechargeChange: (value: number) => void;
   onWalletMaxBalanceChange: (value: number) => void;
   onWalletRechargePresetsChange: (value: number[]) => void;
-  onPointsPerRupeeChange: (value: number) => void;
   onPromotionalPointsTtlDaysChange: (value: number) => void;
 }
 
@@ -32,12 +31,10 @@ export function WalletPointsSettingsSection({
   onWalletMaxRechargeChange,
   onWalletMaxBalanceChange,
   onWalletRechargePresetsChange,
-  onPointsPerRupeeChange,
   onPromotionalPointsTtlDaysChange,
 }: WalletPointsSettingsSectionProps) {
   const {
     handleRechargeEnabledChange,
-    handlePointsPerRupeeChange,
     handleMinRechargeChange,
     handleMaxRechargeChange,
     handleMaxBalanceChange,
@@ -49,7 +46,6 @@ export function WalletPointsSettingsSection({
     onWalletMaxRechargeChange,
     onWalletMaxBalanceChange,
     onWalletRechargePresetsChange,
-    onPointsPerRupeeChange,
     onPromotionalPointsTtlDaysChange,
   });
 
@@ -74,17 +70,6 @@ export function WalletPointsSettingsSection({
             <SelectItem value="false">{LABELS.productCodOff}</SelectItem>
           </SelectContent>
         </Select>
-      </FormFieldFrame>
-      <FormFieldFrame
-        label={LABELS.settingsPointsPerRupee}
-        hint={LABELS.settingsPointsPerRupeeHint}
-      >
-        <NumberInput
-          value={form.pointsPerRupee ?? 1}
-          min={0.01}
-          step={0.01}
-          onChange={handlePointsPerRupeeChange}
-        />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.settingsWalletMinRecharge}>
         <NumberInput

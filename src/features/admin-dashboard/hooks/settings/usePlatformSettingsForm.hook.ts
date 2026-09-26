@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { settingsApi, type AdminPlatformSettings } from "../../api/settings/settings.api";
+import {
+  settingsApi,
+  type AdminPlatformSettings,
+} from "../../api/settings/settings.api";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
@@ -35,7 +38,6 @@ export function usePlatformSettingsForm() {
           walletRechargePresetsInr: settings.walletRechargePresetsInr ?? [
             500, 1000, 2000, 5000,
           ],
-          pointsPerRupee: settings.pointsPerRupee ?? 1,
           deliveryAgentPerTaskEarning:
             settings.deliveryAgentPerTaskEarning ?? 20,
           promotionalPointsTtlDays: settings.promotionalPointsTtlDays ?? 0,
@@ -110,7 +112,6 @@ export function usePlatformSettingsForm() {
     setWalletMaxRechargeInr: setField("walletMaxRechargeInr"),
     setWalletMaxBalancePoints: setField("walletMaxBalancePoints"),
     setWalletRechargePresetsInr: setField("walletRechargePresetsInr"),
-    setPointsPerRupee: setField("pointsPerRupee"),
     setDeliveryAgentPerTaskEarning: setField("deliveryAgentPerTaskEarning"),
     setPromotionalPointsTtlDays: setField("promotionalPointsTtlDays"),
     setRefundSlaBusinessDays: setField("refundSlaBusinessDays"),

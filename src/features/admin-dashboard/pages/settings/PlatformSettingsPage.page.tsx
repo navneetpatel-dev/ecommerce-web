@@ -58,7 +58,6 @@ export function PlatformSettingsPage() {
       onWalletMaxRechargeChange={settings.setWalletMaxRechargeInr}
       onWalletMaxBalanceChange={settings.setWalletMaxBalancePoints}
       onWalletRechargePresetsChange={settings.setWalletRechargePresetsInr}
-      onPointsPerRupeeChange={settings.setPointsPerRupee}
       onPromotionalPointsTtlDaysChange={settings.setPromotionalPointsTtlDays}
       onScheduledReportsEnabledChange={settings.setScheduledReportsEnabled}
       onScheduledReportsTypesChange={settings.setScheduledReportsTypes}

@@ -16,7 +16,6 @@ export type AdminPlatformSettings = PublicPlatformSettings & {
   autoApproveProducts: boolean;
   payoutCycle: string;
   returnShippingFee: number;
-  pointsPerRupee: number;
   deliveryAgentPerTaskEarning: number;
   promotionalPointsTtlDays: number;
   refundSlaBusinessDays: number;

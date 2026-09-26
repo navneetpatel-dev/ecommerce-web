@@ -6,7 +6,6 @@ interface UseWalletPointsSettingsHandlersProps {
   onWalletMaxRechargeChange: (value: number) => void;
   onWalletMaxBalanceChange: (value: number) => void;
   onWalletRechargePresetsChange: (value: number[]) => void;
-  onPointsPerRupeeChange: (value: number) => void;
   onPromotionalPointsTtlDaysChange: (value: number) => void;
 }
 
@@ -16,7 +15,6 @@ export function useWalletPointsSettingsHandlers({
   onWalletMaxRechargeChange,
   onWalletMaxBalanceChange,
   onWalletRechargePresetsChange,
-  onPointsPerRupeeChange,
   onPromotionalPointsTtlDaysChange,
 }: UseWalletPointsSettingsHandlersProps) {
   const handleRechargeEnabledChange = useCallback(
@@ -24,13 +22,6 @@ export function useWalletPointsSettingsHandlers({
       onWalletRechargeEnabledChange(value === "true");
     },
     [onWalletRechargeEnabledChange],
-  );
-
-  const handlePointsPerRupeeChange = useCallback(
-    (value: number | undefined) => {
-      onPointsPerRupeeChange(value ?? 1);
-    },
-    [onPointsPerRupeeChange],
   );
 
   const handleMinRechargeChange = useCallback(
@@ -74,7 +65,6 @@ export function useWalletPointsSettingsHandlers({
 
   return {
     handleRechargeEnabledChange,
-    handlePointsPerRupeeChange,
     handleMinRechargeChange,
     handleMaxRechargeChange,
     handleMaxBalanceChange,

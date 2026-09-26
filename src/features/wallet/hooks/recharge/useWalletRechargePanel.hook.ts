@@ -1,9 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { useQueries } from "@tanstack/react-query";
 import { walletApi } from "../../api/wallet/wallet.api";
-import { walletKeys } from "../../api/wallet/wallet.queries";
 import type { WalletBalanceResponse } from "../../api/wallet/wallet.api";
 import { useWalletRecharge } from "./useWalletRecharge.hook";
 import { useWalletRechargePreview } from "./useWalletRechargePreview.hook";
@@ -19,17 +17,8 @@ export function useWalletRechargePanel(
   const limits = balance?.limits;
   const presets = limits?.presetsInr ?? [];
   const rechargeEnabled = balance?.rechargeEnabled !== false;
-  const pointsPerRupee = limits?.pointsPerRupee ?? 1;
 
   const customPreviewQuery = useWalletRechargePreview(customAmount);
-  const presetPreviewQueries = useQueries({
-    queries: presets.map((preset) => ({
-      queryKey: walletKeys.rechargePreview(preset),
-      queryFn: () => walletApi.previewRecharge(preset),
-      enabled: rechargeEnabled && preset > 0,
-      staleTime: 30_000,
-    })),
-  });
 
   const customValidationCode = customPreviewQuery.data?.validationCode ?? null;
 
@@ -74,10 +63,8 @@ export function useWalletRechargePanel(
     limits,
     presets,
     rechargeEnabled,
-    pointsPerRupee,
     customAmount,
     customPreviewQuery,
-    presetPreviewQueries,
     amountError,
     canSubmitCustomAmount,
     startRecharge,

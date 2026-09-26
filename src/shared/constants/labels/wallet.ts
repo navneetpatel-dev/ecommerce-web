@@ -12,7 +12,7 @@ export const walletLabels = {
     "Recharge store points or use credits from returns and cashback at checkout.",
   walletPurchasedBalance: "Purchased",
   walletPromotionalBalance: "Promotional",
-  walletDownloadRechargeInvoice: "Download invoice",
+  walletDownloadRechargeInvoice: "Download receipt",
   walletTransactionHistory: "Transaction history",
   walletColumnDate: "Date",
   walletColumnDescription: "Description",
@@ -43,7 +43,6 @@ export const walletLabels = {
     "This recharge would exceed your maximum balance of {cap}",
   walletMaxBalanceCapNote:
     "Maximum balance from recharges: {cap}. The balance cap applies to recharges only. Refunds and cashback may increase your balance above the cap.",
-  walletRechargeBonusHint: "Recharge bonus: {points} pts for {amount}",
   walletRechargeSuccess: "Points added to your wallet",
   walletTermsNotice:
     "Store points are non-transferable store credit. They cannot be withdrawn as cash.",
