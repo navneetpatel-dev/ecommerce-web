@@ -141,6 +141,14 @@ export const reports3Labels = {
   enterGstPercentage: "Enter a GST percentage to continue.",
   gstPercentage: "GST %",
   hsnOptional: "HSN (optional)",
+  gstPriceBandThreshold: "Higher GST above (per piece)",
+  gstPriceBandHint:
+    "For goods taxed by value per piece, such as apparel and footwear. Leave both empty for one flat rate.",
+  gstPercentageAbove: "GST % above that price",
+  gstPriceBandIncomplete:
+    "Set both the price and the GST % above it, or leave both empty.",
+  priceBandThreshold: "Band above (₹/piece)",
+  gstBandOptional: "Optional",
   addShippingZone: "Add shipping zone",
   enterZoneName: "Enter a zone name to continue.",
   zoneName: "Zone name",
