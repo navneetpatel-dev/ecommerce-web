@@ -48,6 +48,7 @@ export type ReconciliationReport = {
   shippingCollected: number
   refundsToCustomer?: number
   walletRechargeInflow?: number
+  giftCardRedemptionInflow?: number
   walletPointsRedeemedAtCheckout?: number
   accountedTotal: number
   difference: number

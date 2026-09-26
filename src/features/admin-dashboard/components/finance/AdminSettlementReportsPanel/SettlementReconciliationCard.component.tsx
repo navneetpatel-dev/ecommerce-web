@@ -66,6 +66,12 @@ export function SettlementReconciliationCard({
             value={formatInr(recon.walletRechargeInflow)}
           />
         ) : null}
+        {recon.giftCardRedemptionInflow != null ? (
+          <MetricCard
+            label={LABELS.giftCardRedemptionInflow}
+            value={formatInr(recon.giftCardRedemptionInflow)}
+          />
+        ) : null}
         {recon.walletPointsRedeemedAtCheckout != null ? (
           <MetricCard
             label={LABELS.walletPointsRedeemedAtCheckout}
