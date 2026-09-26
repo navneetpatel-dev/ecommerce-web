@@ -42,7 +42,7 @@ export function KycProgressBanner({
             <p className={vendorShopSettingsFormStyles.bannerSubtitle}>
               {isComplete
                 ? LABELS.kycChecklistComplete
-                : LABELS.kycChecklistIncomplete}
+                : LABELS.kycSellingPaused}
             </p>
           </div>
         </div>

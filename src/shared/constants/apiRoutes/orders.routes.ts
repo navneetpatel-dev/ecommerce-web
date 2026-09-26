@@ -9,6 +9,7 @@ export const ordersRoutes = {
 export const subordersRoutes = {
   list: (query = "") => `/api/suborders${query ? `?${query}` : ""}`,
   status: (id: string) => `/api/suborders/${id}/status`,
+  retryRefund: (id: string) => `/api/suborders/${id}/retry-refund`,
 } as const;
 
 export const returnsRoutes = {

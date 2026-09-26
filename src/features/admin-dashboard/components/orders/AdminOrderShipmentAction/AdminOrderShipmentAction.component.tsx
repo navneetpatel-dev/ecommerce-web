@@ -20,7 +20,9 @@ interface AdminOrderShipmentActionProps {
   row: AdminDataRow;
 }
 
-export function AdminOrderShipmentAction({ row }: AdminOrderShipmentActionProps) {
+export function AdminOrderShipmentAction({
+  row,
+}: AdminOrderShipmentActionProps) {
   const shipment = useAdminOrderShipmentAction(row);
 
   return (
@@ -45,7 +47,12 @@ export function AdminOrderShipmentAction({ row }: AdminOrderShipmentActionProps)
             shipments={shipment.shipments}
             isLoading={shipment.isLoading}
             isEmpty={shipment.isEmpty}
+            retryingSubOrderId={shipment.retryingSubOrderId}
+            onRetryRefund={shipment.handleRetryRefund}
           />
+          {shipment.retryError ? (
+            <p className={styles.refundFailedText}>{shipment.retryError}</p>
+          ) : null}
         </DialogContent>
       </Dialog>
     </>

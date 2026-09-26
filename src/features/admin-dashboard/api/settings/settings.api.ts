@@ -9,6 +9,8 @@ export type AdminPlatformSettings = PublicPlatformSettings & {
   defaultCommissionRate: number;
   tcsRatePercent: number;
   tdsRatePercent: number;
+  /** 194-O(4) sole-proprietor exemption threshold, in rupees per financial year. */
+  tds194oExemptionThreshold: number;
   commissionGstRatePercent: number;
   platformGstin: string;
   platformLegalName: string;

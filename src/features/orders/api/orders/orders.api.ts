@@ -37,6 +37,11 @@ export const ordersApi = {
     apiClient.post<Order>(API.orders.list(), body),
   updateStatus: (id: string, status: OrderStatus) =>
     apiClient.patch<{ message: string }>(API.orders.status(id), { status }),
+  /** Admin: retry a cancelled or RTO'd part's failed card refund. */
+  retryPartRefund: (subOrderId: string) =>
+    apiClient.post<{ id: string; cancelRefundStatus: string | null }>(
+      API.suborders.retryRefund(subOrderId),
+    ),
 };
 
 export const subOrdersApi = {

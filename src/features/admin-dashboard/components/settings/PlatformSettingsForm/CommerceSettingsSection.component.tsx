@@ -18,6 +18,7 @@ interface CommerceSettingsSectionProps {
   onCommissionRateChange: (value: number) => void;
   onTcsRateChange: (value: number) => void;
   onTdsRateChange: (value: number) => void;
+  onTds194oExemptionThresholdChange: (value: number) => void;
   onCommissionGstRateChange: (value: number) => void;
   onPlatformGstinChange: (value: string) => void;
   onPlatformLegalNameChange: (value: string) => void;
@@ -30,6 +31,7 @@ export function CommerceSettingsSection({
   onCommissionRateChange,
   onTcsRateChange,
   onTdsRateChange,
+  onTds194oExemptionThresholdChange,
   onCommissionGstRateChange,
   onPlatformGstinChange,
   onPlatformLegalNameChange,
@@ -73,6 +75,18 @@ export function CommerceSettingsSection({
         />
       </FormFieldFrame>
       <FormFieldFrame
+        label={LABELS.tds194oExemptionThreshold}
+        hint={LABELS.tds194oExemptionThresholdHint}
+      >
+        <NumberInput
+          value={form.tds194oExemptionThreshold}
+          min={0}
+          step={10000}
+          prefix="₹"
+          onChange={(value) => onTds194oExemptionThresholdChange(value ?? 0)}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
         label={LABELS.commissionGstRatePercent}
         hint={LABELS.commissionGstRateHint}
       >
@@ -91,7 +105,10 @@ export function CommerceSettingsSection({
           onChange={(e) => onPlatformLegalNameChange(e.target.value)}
         />
       </FormFieldFrame>
-      <FormFieldFrame label={LABELS.platformGstin} hint={LABELS.platformGstinHint}>
+      <FormFieldFrame
+        label={LABELS.platformGstin}
+        hint={LABELS.platformGstinHint}
+      >
         <Input
           value={form.platformGstin ?? ""}
           onChange={(e) => onPlatformGstinChange(e.target.value)}

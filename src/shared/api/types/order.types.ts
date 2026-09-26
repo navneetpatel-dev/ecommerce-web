@@ -69,6 +69,9 @@ export interface SubOrder {
   customerTotal: number;
   taxInvoiceNumber?: string | null;
   taxInvoiceIssuedAt?: string | null;
+  /** Card refund for this part when it was cancelled or came back undelivered (RTO). */
+  cancelRefundAmount?: number | null;
+  cancelRefundStatus?: RefundStatus | null;
   items: OrderItem[];
   shipment?: Shipment | null;
 }

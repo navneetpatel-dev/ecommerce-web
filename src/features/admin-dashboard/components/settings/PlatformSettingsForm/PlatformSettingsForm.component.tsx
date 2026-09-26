@@ -21,6 +21,7 @@ interface PlatformSettingsFormProps {
   onCommissionRateChange: (value: number) => void;
   onTcsRateChange: (value: number) => void;
   onTdsRateChange: (value: number) => void;
+  onTds194oExemptionThresholdChange: (value: number) => void;
   onCommissionGstRateChange: (value: number) => void;
   onPlatformGstinChange: (value: string) => void;
   onPlatformLegalNameChange: (value: string) => void;
@@ -67,6 +68,9 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onCommissionRateChange={props.onCommissionRateChange}
           onTcsRateChange={props.onTcsRateChange}
           onTdsRateChange={props.onTdsRateChange}
+          onTds194oExemptionThresholdChange={
+            props.onTds194oExemptionThresholdChange
+          }
           onCommissionGstRateChange={props.onCommissionGstRateChange}
           onPlatformGstinChange={props.onPlatformGstinChange}
           onPlatformLegalNameChange={props.onPlatformLegalNameChange}

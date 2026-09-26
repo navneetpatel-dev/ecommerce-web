@@ -159,6 +159,8 @@ export const tablesLabels = {
   kycChecklistIncomplete:
     "Complete and verify all required documents before approval.",
   kycChecklistComplete: "All required documents are verified.",
+  kycSellingPaused:
+    "Your products are hidden from customers until every required document is verified.",
   couldNotLoadKycChecklist: "Could not load KYC checklist.",
   kycApproveBlocked:
     "Cannot approve until all required KYC documents are verified.",

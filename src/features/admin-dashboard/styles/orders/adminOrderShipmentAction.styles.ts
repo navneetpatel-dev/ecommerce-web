@@ -5,6 +5,9 @@ export const adminOrderShipmentActionStyles = {
   itemHeader: "flex items-center justify-between gap-3",
   vendorName: "min-w-0 truncate text-body-sm font-medium text-ink",
   tracking: "font-mono text-body-sm text-ink-muted",
+  refundRow: "flex items-center justify-between gap-3",
+  refundText: "text-body-sm text-ink-muted",
+  refundFailedText: "text-body-sm font-medium text-danger",
   emptyText: "py-4 text-center text-body text-ink-muted",
   loadingText: "py-4 text-center text-body text-ink-muted",
 } as const;
