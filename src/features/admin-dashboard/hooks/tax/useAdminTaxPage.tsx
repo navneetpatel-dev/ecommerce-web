@@ -15,9 +15,13 @@ export type AdminTaxPageModel = AdminListPageModel & {
   form: {
     gstPercentage: string;
     hsnCode: string;
+    priceBandThreshold: string;
+    gstPercentageAbove: string;
     createError: string | null;
     onGstChange: (value: string) => void;
     onHsnChange: (value: string) => void;
+    onPriceBandThresholdChange: (value: string) => void;
+    onGstPercentageAboveChange: (value: string) => void;
     onSubmit: (e: FormEvent) => Promise<void>;
   };
 };
@@ -25,6 +29,9 @@ export type AdminTaxPageModel = AdminListPageModel & {
 export function useAdminTaxPage(): AdminTaxPageModel {
   const [gstPercentage, setGstPercentage] = useState("18");
   const [hsnCode, setHsnCode] = useState("");
+  // Optional per-piece price band: above this value, the higher GST % applies.
+  const [priceBandThreshold, setPriceBandThreshold] = useState("");
+  const [gstPercentageAbove, setGstPercentageAbove] = useState("");
   const [createError, setCreateError] = useState<string | null>(null);
   const [listVersion, setListVersion] = useState(0);
 
@@ -33,18 +40,23 @@ export function useAdminTaxPage(): AdminTaxPageModel {
       e.preventDefault();
       setCreateError(null);
       try {
+        const hasBand = priceBandThreshold !== "" && gstPercentageAbove !== "";
         await taxApi.createRule({
           gstPercentage: Number(gstPercentage),
           hsnCode: hsnCode || undefined,
+          priceBandThreshold: hasBand ? Number(priceBandThreshold) : null,
+          gstPercentageAbove: hasBand ? Number(gstPercentageAbove) : null,
         });
         setHsnCode("");
         setGstPercentage("18");
+        setPriceBandThreshold("");
+        setGstPercentageAbove("");
         setListVersion((version) => version + 1);
       } catch (err) {
         setCreateError(getApiErrorMessage(err, LABELS.couldNotCreateTaxRule));
       }
     },
-    [gstPercentage, hsnCode],
+    [gstPercentage, hsnCode, priceBandThreshold, gstPercentageAbove],
   );
 
   const load = useCallback(
@@ -75,15 +87,26 @@ export function useAdminTaxPage(): AdminTaxPageModel {
     form: {
       gstPercentage,
       hsnCode,
+      priceBandThreshold,
+      gstPercentageAbove,
       createError,
       onGstChange: setGstPercentage,
       onHsnChange: setHsnCode,
+      onPriceBandThresholdChange: setPriceBandThreshold,
+      onGstPercentageAboveChange: setGstPercentageAbove,
       onSubmit: handleCreate,
     },
     title: LABELS.tax,
     permission: PERMISSIONS.TAX_MANAGE,
     load,
     actions,
-    columnKeys: ["categoryName", "hsnCode", "gstPercentage", "createdAt"],
+    columnKeys: [
+      "categoryName",
+      "hsnCode",
+      "gstPercentage",
+      "priceBandThreshold",
+      "gstPercentageAbove",
+      "createdAt",
+    ],
   };
 }

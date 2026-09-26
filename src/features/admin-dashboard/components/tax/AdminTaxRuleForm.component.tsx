@@ -17,21 +17,33 @@ import { adminFormWidgetsStyles } from "../../styles/shared/adminFormWidgets.sty
 interface AdminTaxRuleFormProps {
   gstPercentage: string;
   hsnCode: string;
+  priceBandThreshold: string;
+  gstPercentageAbove: string;
   createError?: string | null;
   onGstChange: (value: string) => void;
   onHsnChange: (value: string) => void;
+  onPriceBandThresholdChange: (value: string) => void;
+  onGstPercentageAboveChange: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
 }
 
 export function AdminTaxRuleForm({
   gstPercentage,
   hsnCode,
+  priceBandThreshold,
+  gstPercentageAbove,
   createError = null,
   onGstChange,
   onHsnChange,
+  onPriceBandThresholdChange,
+  onGstPercentageAboveChange,
   onSubmit,
 }: AdminTaxRuleFormProps) {
-  const canCreate = gstPercentage.trim() !== "" && Number(gstPercentage) >= 0;
+  // The price band is optional, but takes both its fields or neither.
+  const bandComplete =
+    (priceBandThreshold === "") === (gstPercentageAbove === "");
+  const canCreate =
+    gstPercentage.trim() !== "" && Number(gstPercentage) >= 0 && bandComplete;
 
   return (
     <form
@@ -64,6 +76,38 @@ export function AdminTaxRuleForm({
             onChange={(e) => onHsnChange(e.target.value)}
           />
         </FormFieldFrame>
+        <FormFieldFrame
+          label={LABELS.gstPriceBandThreshold}
+          hint={LABELS.gstPriceBandHint}
+        >
+          <NumberInput
+            value={
+              priceBandThreshold === "" ? undefined : Number(priceBandThreshold)
+            }
+            min={0}
+            step={100}
+            prefix="₹"
+            placeholder={LABELS.gstBandOptional}
+            onChange={(value) =>
+              onPriceBandThresholdChange(value == null ? "" : String(value))
+            }
+          />
+        </FormFieldFrame>
+        <FormFieldFrame label={LABELS.gstPercentageAbove}>
+          <NumberInput
+            value={
+              gstPercentageAbove === "" ? undefined : Number(gstPercentageAbove)
+            }
+            min={0}
+            max={100}
+            step={0.5}
+            suffix="%"
+            placeholder={LABELS.gstBandOptional}
+            onChange={(value) =>
+              onGstPercentageAboveChange(value == null ? "" : String(value))
+            }
+          />
+        </FormFieldFrame>
         <FormError
           error={createError}
           fallback={LABELS.couldNotCreateTaxRule}
@@ -71,7 +115,11 @@ export function AdminTaxRuleForm({
         <FormActions className={adminFormWidgetsStyles.colSpan2}>
           <DisabledActionHint
             disabled={!canCreate}
-            message={LABELS.enterGstPercentage}
+            message={
+              bandComplete
+                ? LABELS.enterGstPercentage
+                : LABELS.gstPriceBandIncomplete
+            }
           >
             <Button type="submit" fullWidth="mobile" disabled={!canCreate}>
               {LABELS.addTaxRule}
