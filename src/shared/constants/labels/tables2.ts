@@ -112,6 +112,8 @@ export const tables2Labels = {
     "Status, tracking, and proof of delivery for each suborder.",
   noShipmentsOnOrder: "No shipment recorded yet.",
   shipmentTrackingNumber: "Tracking",
+  partRefundLabel: "Card refund {amount}",
+  partRefundFailed: "Card refund failed",
   returnPickup: "Return/Pickup",
   noReturnOrExchange: "No return or exchange",
   noOrdersFound: "No orders found",

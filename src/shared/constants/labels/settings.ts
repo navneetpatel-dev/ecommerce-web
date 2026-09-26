@@ -25,6 +25,9 @@ export const settingsLabels = {
   tdsRatePercent: "TDS rate at payout (%)",
   tdsRateHint:
     "TDS under section 194-O deducted when settling vendor payouts. Set 0 to disable.",
+  tds194oExemptionThreshold: "194-O exemption threshold",
+  tds194oExemptionThresholdHint:
+    "No TDS on sole proprietors whose sales on the platform this financial year stay within this amount. Set 0 to disable.",
   commissionGstRatePercent: "Commission GST rate (%)",
   commissionGstRateHint:
     "GST charged on marketplace commission invoices issued to vendors (SAC 9985).",

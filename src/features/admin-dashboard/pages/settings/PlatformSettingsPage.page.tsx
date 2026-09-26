@@ -32,6 +32,7 @@ export function PlatformSettingsPage() {
       onCommissionRateChange={settings.setCommissionRate}
       onTcsRateChange={settings.setTcsRatePercent}
       onTdsRateChange={settings.setTdsRatePercent}
+      onTds194oExemptionThresholdChange={settings.setTds194oExemptionThreshold}
       onCommissionGstRateChange={settings.setCommissionGstRatePercent}
       onPlatformGstinChange={settings.setPlatformGstin}
       onPlatformLegalNameChange={settings.setPlatformLegalName}

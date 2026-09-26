@@ -4,6 +4,9 @@ export type OrderShipmentSummary = {
   status: string;
   trackingNumber: string | null;
   proofOfDeliveryUrl: string | null;
+  /** Card refund for a cancelled or RTO'd part, and where it stands. */
+  refundAmount: number | null;
+  refundStatus: string | null;
 };
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -14,7 +17,8 @@ function asRecord(value: unknown): Record<string, unknown> | null {
 function vendorNameFrom(value: unknown): string {
   const vendor = asRecord(value);
   const businessName = vendor?.businessName;
-  if (typeof businessName === "string" && businessName.trim()) return businessName;
+  if (typeof businessName === "string" && businessName.trim())
+    return businessName;
   const name = vendor?.name;
   if (typeof name === "string" && name.trim()) return name;
   return "";
@@ -31,7 +35,9 @@ export function mapSubOrderToShipmentSummary(
   if (!subOrder || typeof subOrder.id !== "string") return null;
   const shipment = shipmentFrom(subOrder.shipment);
   const trackingNumber =
-    typeof shipment?.trackingNumber === "string" ? shipment.trackingNumber : null;
+    typeof shipment?.trackingNumber === "string"
+      ? shipment.trackingNumber
+      : null;
   const proofOfDeliveryUrl =
     typeof shipment?.proofOfDeliveryUrl === "string"
       ? shipment.proofOfDeliveryUrl
@@ -47,6 +53,14 @@ export function mapSubOrderToShipmentSummary(
     status: shipmentStatus || subOrderStatus,
     trackingNumber,
     proofOfDeliveryUrl,
+    refundAmount:
+      typeof subOrder.cancelRefundAmount === "number"
+        ? subOrder.cancelRefundAmount
+        : null,
+    refundStatus:
+      typeof subOrder.cancelRefundStatus === "string"
+        ? subOrder.cancelRefundStatus
+        : null,
   };
 }
 

@@ -24,6 +24,8 @@ export function usePlatformSettingsForm() {
         setForm({
           ...settings,
           returnShippingFee: settings.returnShippingFee ?? 0,
+          tds194oExemptionThreshold:
+            settings.tds194oExemptionThreshold ?? 500000,
           commissionGstRatePercent: settings.commissionGstRatePercent ?? 18,
           platformGstin: settings.platformGstin ?? "",
           platformLegalName: settings.platformLegalName ?? "",
@@ -90,6 +92,7 @@ export function usePlatformSettingsForm() {
     setCommissionRate: setField("defaultCommissionRate"),
     setTcsRatePercent: setField("tcsRatePercent"),
     setTdsRatePercent: setField("tdsRatePercent"),
+    setTds194oExemptionThreshold: setField("tds194oExemptionThreshold"),
     setCommissionGstRatePercent: setField("commissionGstRatePercent"),
     setPlatformGstin: setField("platformGstin"),
     setPlatformLegalName: setField("platformLegalName"),
