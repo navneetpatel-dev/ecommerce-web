@@ -154,6 +154,7 @@ export const reportsLabels = {
   reconStatusNotApplicable: "Not applicable",
   reconStatusReview: "Review",
   codAmount: "COD amount",
+  codCollected: "COD collected",
   codStatus: "COD status",
   userId: "User ID",
   email: "Email",
