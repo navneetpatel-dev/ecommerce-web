@@ -91,6 +91,7 @@ export const reports3Labels = {
   reconciliationMismatch: "Mismatch — totals do not reconcile",
   reconciliationDifference: "Difference",
   walletRechargeInflow: "Wallet recharge inflow",
+  giftCardRedemptionInflow: "Gift card redemptions",
   walletPointsRedeemedAtCheckout: "Points redeemed at checkout",
   vendorSettlements: "Vendor settlements",
   grossSales: "Gross sales",
