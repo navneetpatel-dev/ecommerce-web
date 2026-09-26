@@ -7,6 +7,7 @@ import { SubOrderCardHeader } from "./SubOrderCardHeader.component";
 import { SubOrderCardItems } from "./SubOrderCardItems.component";
 import { SubOrderCardTotals } from "./SubOrderCardTotals.component";
 import { SubOrderReturnDialog } from "./SubOrderReturnDialog.component";
+import { SubOrderRefundNote } from "./SubOrderRefundNote.component";
 import { SubOrderShipmentTracking } from "./SubOrderShipmentTracking.component";
 import { BuyAgainButton } from "../../actions/BuyAgainButton.component";
 import { useSubOrderCard } from "../../../hooks/sub-order/useSubOrderCard.hook";
@@ -51,8 +52,15 @@ export function SubOrderCard({
   onPhotoUrlsChange,
   onSubmitReturn,
 }: SubOrderCardProps) {
-  const { timeline, showTimeline, vendorName, itemCount, canReturn, items } =
-    useSubOrderCard({ subOrder });
+  const {
+    timeline,
+    showTimeline,
+    vendorName,
+    itemCount,
+    canReturn,
+    items,
+    refundNote,
+  } = useSubOrderCard({ subOrder });
 
   return (
     <section className={VENDOR_GROUP_CARD}>
@@ -71,6 +79,7 @@ export function SubOrderCard({
       />
 
       <SubOrderCardTotals subOrder={subOrder} />
+      <SubOrderRefundNote note={refundNote} />
 
       <div className={SUB_ORDER_CARD_STYLES.buyAgainWrapper}>
         <BuyAgainButton items={items} />

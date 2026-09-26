@@ -96,6 +96,8 @@ export interface Order {
   walletAmountUsed?: number;
   razorpayAmountPaid?: number;
   cancelRefundStatus?: RefundStatus | null;
+  /** Card money sent back for cancelled or undelivered parts (issued refunds). */
+  cancellationRefundAmount?: number;
   cancelRazorpayRefundId?: string | null;
   originalTotalAmount?: number;
   pendingCashbackAmount?: number;
