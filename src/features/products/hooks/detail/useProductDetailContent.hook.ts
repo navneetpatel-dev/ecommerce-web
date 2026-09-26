@@ -59,8 +59,6 @@ export function useProductDetailContent({
   const avgRating = product.avgRating ?? 0;
   const formattedPrice = formatInrAmount(displayPrice);
   const compareAtPrice = product.compareAtPrice ?? null;
-  const showMrp = product.showMrp ?? false;
-  const discountPercent = product.discountPercent ?? null;
   const taxInclusiveEstimate = product.taxInclusivePrice ?? null;
 
   const resolvedVariant = useMemo(() => {
@@ -69,6 +67,16 @@ export function useProductDetailContent({
       (product.variants?.length === 1 ? product.variants[0] : null)
     );
   }, [variantSelection.matchedVariant, product.variants]);
+
+  // The price shown is the selected variant's, so the "% off" badge and struck-through
+  // MRP are that variant's too (computed by the API); the product's own until one is picked.
+  const variantHasMrpDiscount = resolvedVariant?.showMrp !== undefined;
+  const showMrp = variantHasMrpDiscount
+    ? Boolean(resolvedVariant?.showMrp)
+    : (product.showMrp ?? false);
+  const discountPercent = variantHasMrpDiscount
+    ? (resolvedVariant?.discountPercent ?? null)
+    : (product.discountPercent ?? null);
 
   const lowStockAt = Number(
     resolvedVariant?.lowStockAt ?? VARIANT_LOW_STOCK_DEFAULT,
