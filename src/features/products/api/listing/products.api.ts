@@ -1,6 +1,10 @@
 import { apiClient } from "@/shared/api/client/client";
 import { postFile } from "@/shared/api/client/postFile";
-import { unwrapPaginatedList, buildSearchParams, type PaginatedList } from "@/shared/api/client/pagination";
+import {
+  unwrapPaginatedList,
+  buildSearchParams,
+  type PaginatedList,
+} from "@/shared/api/client/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 import type {
   ProductListItem,
@@ -36,6 +40,12 @@ export interface ProductFilters {
 
 export type ProductListResponse = PaginatedList<ProductListItem>;
 
+/** What customers pay for a pre-GST price in a category, and the GST rate charged. */
+export interface GstPricePreview {
+  gstPercentage: number;
+  displayPrice: number;
+}
+
 export const productsApi = {
   list: async (filters: ProductFilters): Promise<ProductListResponse> => {
     const params = buildSearchParams({
@@ -65,6 +75,13 @@ export const productsApi = {
   },
   detail: (slugOrId: string) =>
     apiClient.get<ProductDetail>(API.products.detail(slugOrId)),
+  /** Vendor/admin. The GST-inclusive price customers see for a pre-GST price. */
+  gstPreview: (categoryId: string, price: number) =>
+    apiClient.get<GstPricePreview>(
+      API.products.gstPreview(
+        buildSearchParams({ categoryId, price }).toString(),
+      ),
+    ),
   detailBySlug: (slug: string) =>
     apiClient.get<ProductDetail>(API.products.bySlug(slug)),
   /** Authenticated-only. Upserts a view so a repeat view refreshes recency instead of duplicating. */

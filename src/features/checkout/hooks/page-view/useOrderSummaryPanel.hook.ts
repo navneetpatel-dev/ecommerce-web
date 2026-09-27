@@ -34,7 +34,9 @@ export function useOrderSummaryPanel({
     return [];
   }, [quote]);
 
-  const summarySubtotal = orderTotals?.merchandiseSubtotal ?? subtotal;
+  // The items with GST, before coupons — the same prices as the cart and product cards.
+  const summarySubtotal =
+    orderTotals?.itemsTotal ?? orderTotals?.merchandiseSubtotal ?? subtotal;
   const summarySubtotalPending =
     !orderTotals && (subtotalPending || summarySubtotal == null);
 

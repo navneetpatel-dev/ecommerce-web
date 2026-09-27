@@ -7,6 +7,7 @@ export const productsRoutes = {
   frequentlyBoughtTogether: (id: string) =>
     `/api/products/${id}/frequently-bought-together`,
   bulkImport: "/api/products/bulk-import",
+  gstPreview: (query: string) => `/api/products/gst-preview?${query}`,
   approve: (id: string) => `/api/products/${id}/approve`,
   reject: (id: string) => `/api/products/${id}/reject`,
   archive: (id: string) => `/api/products/${id}/archive`,

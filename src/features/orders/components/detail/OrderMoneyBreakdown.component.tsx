@@ -1,6 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import type { Order } from "@/shared/api/types";
 import { taxDisplayLabel } from "@/shared/utils/formatting/taxDisplay";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInr } from "../../utils/detail/format";
 import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
 
@@ -10,6 +11,8 @@ interface OrderMoneyBreakdownProps {
     | "totalAmount"
     | "discountTotal"
     | "merchandiseSubtotal"
+    | "itemsTotal"
+    | "couponSavings"
     | "taxTotal"
     | "shippingTotal"
     | "shippingDisplayKey"
@@ -22,7 +25,10 @@ export function OrderMoneyBreakdown({
   order,
   className,
 }: OrderMoneyBreakdownProps) {
-  const merchandiseSubtotal = order.merchandiseSubtotal;
+  // The bill as the customer saw it: items with GST, less coupons, plus shipping; the
+  // GST inside it is shown, not added. Older payloads fall back to the pre-GST figures.
+  const merchandiseSubtotal = order.itemsTotal ?? order.merchandiseSubtotal;
+  const discountTotal = order.couponSavings ?? order.discountTotal;
   const taxTotal = order.taxTotal;
   const shippingTotal = order.shippingTotal;
   const showBreakdown =
@@ -32,9 +38,19 @@ export function OrderMoneyBreakdown({
     <dl className={className ?? ordersComponentsStyles.defaultDl}>
       {showBreakdown && merchandiseSubtotal != null ? (
         <div className={ordersComponentsStyles.row}>
-          <dt className={ordersComponentsStyles.label}>{LABELS.subtotal}</dt>
+          <dt className={ordersComponentsStyles.label}>
+            {LABELS.itemsInclGst}
+          </dt>
           <dd className={ordersComponentsStyles.value}>
             {formatInr(merchandiseSubtotal)}
+          </dd>
+        </div>
+      ) : null}
+      {Number(discountTotal) > 0 ? (
+        <div className={ordersComponentsStyles.rowSuccess}>
+          <dt>{LABELS.discount}</dt>
+          <dd className={ordersComponentsStyles.valueTabular}>
+            −{formatInr(discountTotal)}
           </dd>
         </div>
       ) : null}
@@ -53,18 +69,12 @@ export function OrderMoneyBreakdown({
       {showBreakdown && Number(taxTotal) > 0 ? (
         <div className={ordersComponentsStyles.row}>
           <dt className={ordersComponentsStyles.label}>
-            {taxDisplayLabel(order.taxDisplayKey)}
+            {formatLabel(LABELS.includesTax, {
+              tax: taxDisplayLabel(order.taxDisplayKey),
+            })}
           </dt>
           <dd className={ordersComponentsStyles.value}>
             {formatInr(taxTotal!)}
-          </dd>
-        </div>
-      ) : null}
-      {Number(order.discountTotal) > 0 ? (
-        <div className={ordersComponentsStyles.rowSuccess}>
-          <dt>{LABELS.discount}</dt>
-          <dd className={ordersComponentsStyles.valueTabular}>
-            −{formatInr(order.discountTotal)}
           </dd>
         </div>
       ) : null}

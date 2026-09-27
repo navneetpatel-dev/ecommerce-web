@@ -11,7 +11,10 @@ export interface CartItem {
    * silently clamps to it, so never offer more than this in a stepper.
    */
   maxQuantity?: number;
+  /** Before GST (what the cart is priced on). */
   lineSubtotal?: number;
+  /** The line as the customer sees it: GST included, before coupons (API-computed). */
+  lineDisplaySubtotal?: number;
   isAvailable: boolean;
   unavailableReason: UnavailableReason | null;
   product: {
@@ -19,7 +22,10 @@ export interface CartItem {
     name: string;
     slug: string;
     imageUrl: string;
+    /** Price per piece before GST. */
     price: number;
+    /** Price per piece as the customer sees it, GST included. */
+    displayPrice?: number;
     vendor: VendorInfo;
   };
   variant: {
@@ -41,6 +47,12 @@ export interface Cart {
     shippingTotal: number;
     shippingDisplayKey: "FREE" | "PAID";
     grandTotal: number;
+    /**
+     * The bill as the customer sees it, all GST-inclusive: itemsTotal − couponSavings +
+     * shippingTotal = grandTotal; taxTotal is the GST inside it.
+     */
+    itemsTotal?: number;
+    couponSavings?: number;
     /**
      * What the server based tax and shipping on. The cart has no chosen address or
      * shipping method, so anything but EXACT is an estimate — checkout re-quotes.

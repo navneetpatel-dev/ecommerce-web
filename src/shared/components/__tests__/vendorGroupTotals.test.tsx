@@ -24,9 +24,10 @@ describe("VendorGroupTotals", () => {
   it("shows the breakdown when shipping or tax apply", () => {
     render(<VendorGroupTotals {...base} shippingDisplayKey="FREE" />);
 
-    expect(screen.getByText("Subtotal")).toBeInTheDocument();
+    expect(screen.getByText("Items (incl. GST)")).toBeInTheDocument();
     expect(screen.getByText("Free")).toBeInTheDocument();
-    expect(screen.getByText("IGST")).toBeInTheDocument();
+    // Prices include GST: the tax row says how much of the total it is.
+    expect(screen.getByText("Includes IGST")).toBeInTheDocument();
     expect(screen.getByText("₹7,962.63")).toBeInTheDocument();
   });
 
@@ -41,7 +42,7 @@ describe("VendorGroupTotals", () => {
     );
 
     // A Subtotal row identical to the total would be noise.
-    expect(screen.queryByText("Subtotal")).not.toBeInTheDocument();
+    expect(screen.queryByText("Items (incl. GST)")).not.toBeInTheDocument();
     expect(screen.getByText("Vendor total")).toBeInTheDocument();
   });
 

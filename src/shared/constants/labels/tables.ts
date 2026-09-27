@@ -63,7 +63,7 @@ export const tablesLabels = {
   track: "Track",
   role: "Role",
   createdAt: "Created",
-  basePrice: "Price",
+  basePrice: "Price (excl. GST)",
   totalAmount: "Total",
   rating: "Rating",
   title: "Title",
@@ -91,6 +91,8 @@ export const tablesLabels = {
   suspensionReason: "Suspension reason",
   product: "Product",
   price: "Price",
+  /** Stored product prices are before GST (customers see them with GST). */
+  priceExclGst: "Price (excl. GST)",
   rejectionNote: "Rejection note",
   reasonRequired: "Reason required",
   enterRejectionNote: "Enter a rejection note before rejecting.",

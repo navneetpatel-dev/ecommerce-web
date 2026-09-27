@@ -8,11 +8,16 @@ export function cartHasPendingLineSubtotals(cart: Cart | undefined): boolean {
   return cart?.items?.some(hasPendingCartLineSubtotal) ?? false;
 }
 
-/** Server-provided line subtotal only — no client-side pricing. */
+/** Server-provided line total as the customer sees it (GST included) — no client-side pricing. */
 export function resolveCartLineDisplaySubtotal(
   item: CartItem,
 ): number | undefined {
-  return item.lineSubtotal;
+  return item.lineSubtotal == null ? undefined : item.lineDisplaySubtotal;
+}
+
+/** Price per piece as the customer sees it (GST included); older payloads fall back. */
+export function cartLineUnitPrice(item: CartItem): number {
+  return item.product.displayPrice ?? item.product.price;
 }
 
 /** Clears aggregate totals while waiting for the server after an optimistic qty patch. */
@@ -42,7 +47,12 @@ export function patchExistingCartItemQuantity(
     ...cart,
     items: cart.items.map((item) =>
       item.id === itemId
-        ? { ...item, quantity, lineSubtotal: undefined }
+        ? {
+            ...item,
+            quantity,
+            lineSubtotal: undefined,
+            lineDisplaySubtotal: undefined,
+          }
         : item,
     ),
   });
@@ -74,8 +84,9 @@ export function resolveCartDisplayTotals(
 
   return {
     pendingLineTotals,
-    subtotal: cart?.merchandiseSubtotal,
-    subtotalPending: cart?.merchandiseSubtotal == null && items.length > 0,
+    // The items with GST, before coupons — the same prices as the product cards.
+    subtotal: preview?.itemsTotal,
+    subtotalPending: preview?.itemsTotal == null && items.length > 0,
     total,
     totalIsEstimated: pendingLineTotals || cart?.total == null,
     pricingPreview: preview,

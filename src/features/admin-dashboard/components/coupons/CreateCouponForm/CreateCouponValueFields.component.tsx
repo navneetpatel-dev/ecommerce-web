@@ -32,6 +32,7 @@ export function CreateCouponValueFields({
       <div className={createCouponFormStyles.gridSm2}>
         <FormFieldFrame
           label={LABELS.couponValue}
+          hint={LABELS.couponValueGstHint}
           required={needsValue}
           error={showError("value")}
         >

@@ -17,6 +17,8 @@ export const productKeys = {
   /** Precomputed "frequently bought together" rail for one product. */
   frequentlyBoughtTogether: (productId: string) =>
     [...productKeys.all, "frequently-bought-together", productId] as const,
+  gstPreview: (categoryId: string, price: number) =>
+    [...productKeys.all, "gst-preview", categoryId, price] as const,
 };
 
 const UUID_RE =
@@ -98,6 +100,17 @@ export function useFrequentlyBoughtTogether(
     queryFn: () => productsApi.frequentlyBoughtTogether(productId),
     enabled: !!productId && (options.enabled ?? true),
     staleTime: 1000 * 60,
+  });
+}
+
+/** Vendor form: what customers will pay (GST included) for the entered pre-GST price. */
+export function useGstPricePreview(categoryId: string, price: number) {
+  return useQuery({
+    queryKey: productKeys.gstPreview(categoryId, price),
+    queryFn: () => productsApi.gstPreview(categoryId, price),
+    enabled: Boolean(categoryId) && Number.isFinite(price) && price >= 1,
+    staleTime: 1000 * 60,
+    placeholderData: (previous) => previous,
   });
 }
 

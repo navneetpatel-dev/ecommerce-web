@@ -6,6 +6,7 @@ import {
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import type { CartItem } from "@/shared/api/types";
 import { RemoveCartItemAction } from "../../actions/RemoveCartItemAction.component";
+import { cartLineUnitPrice } from "../../../utils/line-item/cartDisplay.utils";
 
 /** Maps an unavailability reason to its localized label. */
 export function unavailableLabel(
@@ -32,7 +33,7 @@ export function variantLabel(item: CartItem) {
 
 /** "₹X each" copy used in both cart line layouts. */
 export function eachPriceCopy(item: CartItem) {
-  return `₹${formatInrAmount(item.product.price)} ${LABELS.each}`;
+  return `₹${formatInrAmount(cartLineUnitPrice(item))} ${LABELS.each}`;
 }
 
 interface RemoveLineButtonProps {

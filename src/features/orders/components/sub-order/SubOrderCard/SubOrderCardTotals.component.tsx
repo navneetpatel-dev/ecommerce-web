@@ -11,12 +11,12 @@ interface SubOrderCardTotalsProps {
 export function SubOrderCardTotals({ subOrder }: SubOrderCardTotalsProps) {
   return (
     <VendorGroupTotals
-      subtotal={Number(subOrder.subtotal)}
+      subtotal={Number(subOrder.itemsTotal ?? subOrder.subtotal)}
       shippingDisplayKey={subOrder.shippingDisplayKey}
       shippingCost={subOrder.shippingCharged}
       taxLabel={taxDisplayLabel(subOrder.taxDisplayKey)}
       taxAmount={Number(subOrder.taxAmount ?? 0)}
-      discount={Number(subOrder.discountTotal ?? 0)}
+      discount={Number(subOrder.couponSavings ?? subOrder.discountTotal ?? 0)}
       total={Number(subOrder.customerTotal)}
       totalLabel={LABELS.sellerTotal}
     />

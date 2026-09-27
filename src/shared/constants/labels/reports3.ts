@@ -111,7 +111,7 @@ export const reports3Labels = {
   autoApproveEnabled: "Enabled (auto-approve)",
   autoApproveDisabled: "Disabled (moderated)",
   defaultReturnWindow: "Default return window",
-  freeShippingThreshold: "Free shipping threshold",
+  freeShippingThreshold: "Free shipping threshold (incl. GST)",
   returnShippingFee: "Return shipping fee",
   returnShippingFeeHint:
     "Deducted from customer refunds when the return reason does not refund original shipping (for example no longer needed).",
@@ -166,8 +166,10 @@ export const reports3Labels = {
   couldNotCreateShippingZone: "Could not create shipping zone.",
   couldNotCreateTaxRule: "Could not create tax rule.",
   couponValue: "Value",
-  maxDiscountCap: "Max discount cap",
-  minOrderValue: "Min order value",
+  maxDiscountCap: "Max discount cap (incl. GST)",
+  minOrderValue: "Min order value (incl. GST)",
+  couponValueGstHint:
+    "Rupee amounts come off the price customers see, GST included.",
   startDate: "Start date",
   endDate: "End date",
   couponTypePercentage: "Percentage",

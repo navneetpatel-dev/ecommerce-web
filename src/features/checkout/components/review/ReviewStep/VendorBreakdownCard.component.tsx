@@ -34,12 +34,12 @@ export function VendorBreakdownCard({ breakdown }: VendorBreakdownCardProps) {
       <VendorBreakdownItemsList items={breakdown.items} />
 
       <VendorGroupTotals
-        subtotal={breakdown.subtotal}
+        subtotal={breakdown.itemsTotal ?? breakdown.subtotal}
         shippingDisplayKey={breakdown.shippingDisplayKey}
         shippingCost={breakdown.shippingCost}
         taxLabel={taxLabel}
         taxAmount={breakdown.tax.total}
-        discount={breakdown.discount}
+        discount={breakdown.couponSavings ?? breakdown.discount}
         total={breakdown.total}
         totalLabel={LABELS.vendorTotal}
       />
