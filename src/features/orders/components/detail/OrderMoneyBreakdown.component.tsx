@@ -13,6 +13,8 @@ interface OrderMoneyBreakdownProps {
     | "merchandiseSubtotal"
     | "itemsTotal"
     | "couponSavings"
+    | "giftWrapFeeAmount"
+    | "returnAdjustment"
     | "taxTotal"
     | "shippingTotal"
     | "shippingDisplayKey"
@@ -63,6 +65,29 @@ export function OrderMoneyBreakdown({
               : shippingTotal != null
                 ? formatInr(shippingTotal)
                 : "—"}
+          </dd>
+        </div>
+      ) : null}
+      {Number(order.giftWrapFeeAmount ?? 0) > 0 ? (
+        <div className={ordersComponentsStyles.row}>
+          <dt className={ordersComponentsStyles.label}>
+            {LABELS.giftWrapFeeLine}
+          </dt>
+          <dd className={ordersComponentsStyles.value}>
+            {formatInr(order.giftWrapFeeAmount)}
+          </dd>
+        </div>
+      ) : null}
+      {order.returnAdjustment ? (
+        <div className={ordersComponentsStyles.row}>
+          <dt className={ordersComponentsStyles.label}>
+            {order.returnAdjustment.credit
+              ? LABELS.returnShippingRefunded
+              : LABELS.returnShippingFeeKept}
+          </dt>
+          <dd className={ordersComponentsStyles.value}>
+            {order.returnAdjustment.credit ? "−" : ""}
+            {formatInr(order.returnAdjustment.amount)}
           </dd>
         </div>
       ) : null}

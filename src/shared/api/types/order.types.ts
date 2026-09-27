@@ -22,9 +22,9 @@ export interface OrderItem {
   lineSubtotal: number;
   lineTotal: number;
   /** Price per piece as the customer saw it, GST included (API-computed). */
-  displayUnitPrice?: number;
+  displayUnitPrice?: number | null;
   /** The line with GST, before coupons (API-computed). */
-  lineDisplaySubtotal?: number;
+  lineDisplaySubtotal?: number | null;
   discountAmount?: number;
   taxableAmount?: number;
   taxAmount?: number;
@@ -72,8 +72,8 @@ export interface SubOrder {
   discountAmount?: number;
   discountTotal?: number;
   /** The items as the customer saw them (GST included) and what coupons took off. */
-  itemsTotal?: number;
-  couponSavings?: number;
+  itemsTotal?: number | null;
+  couponSavings?: number | null;
   customerTotal: number;
   taxInvoiceNumber?: string | null;
   taxInvoiceIssuedAt?: string | null;
@@ -94,8 +94,13 @@ export interface Order {
    * The bill as the customer sees it, all GST-inclusive: itemsTotal − couponSavings +
    * shippingTotal (+ gift wrap) = totalAmount; taxTotal is the GST inside it.
    */
-  itemsTotal?: number;
-  couponSavings?: number;
+  itemsTotal?: number | null;
+  couponSavings?: number | null;
+  /**
+   * What returns changed on the bill beyond the returned items: outbound shipping
+   * refunded (`credit`) or a return shipping fee kept. Null when there is none.
+   */
+  returnAdjustment?: { amount: number; credit: boolean } | null;
   taxTotal?: number;
   shippingTotal?: number;
   shippingDisplayKey?: "FREE" | "PAID";

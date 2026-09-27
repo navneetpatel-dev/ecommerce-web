@@ -54,10 +54,13 @@ function OrderLine({ item }: { item: OrderItem }) {
       </div>
 
       <div className={styles.lineTotalDesktopCol}>
-        <p className={styles.lineTotalDesktop}>{formatInr(item.lineTotal)}</p>
+        {/* As on the bill below: GST included, before coupons (older orders: as placed). */}
+        <p className={styles.lineTotalDesktop}>
+          {formatInr(item.lineDisplaySubtotal ?? item.lineTotal)}
+        </p>
         {item.quantity > 1 ? (
           <p className={styles.lineUnitPrice}>
-            {formatInr(item.unitPrice)} {LABELS.each}
+            {formatInr(item.displayUnitPrice ?? item.unitPrice)} {LABELS.each}
           </p>
         ) : null}
       </div>
