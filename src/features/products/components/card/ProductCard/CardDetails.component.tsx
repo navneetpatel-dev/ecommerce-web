@@ -12,12 +12,15 @@ import { CARD_DETAILS_STYLES } from "../../../styles/card/cardDetails.styles";
 
 interface CardDetailsProps {
   product: ProductListItem;
+  /** GST-inclusive price the customer pays. */
+  price: number;
   showMrp: boolean;
   discountPercent: number;
 }
 
 export function CardDetails({
   product,
+  price,
   showMrp,
   discountPercent,
 }: CardDetailsProps) {
@@ -34,7 +37,7 @@ export function CardDetails({
           </span>
         ) : null}
         <span className={CARD_DETAILS_STYLES.basePrice}>
-          ₹{formatInrAmount(product.basePrice)}
+          ₹{formatInrAmount(price)}
         </span>
         {showMrp && (
           <>

@@ -6,7 +6,10 @@ export interface ProductListItem {
   id: string;
   slug: string;
   name: string;
+  /** Listed price before GST (the cart adds GST as its own line). */
   basePrice: number;
+  /** What the customer pays for one piece, GST included (API-computed); shown on cards. */
+  displayPrice?: number;
   compareAtPrice?: number | null;
   discountPercent?: number | null;
   /** BE-derived — show MRP strikethrough when true. */
@@ -36,6 +39,8 @@ export interface ProductVariant {
   lowStockAt: number;
   weightGrams?: number;
   codEligibleAtUnitPrice?: boolean;
+  /** This variant's price with GST (API-computed on the product page). */
+  displayPrice?: number;
   /** This variant's "% off" against the product's MRP (API-computed); null when none. */
   discountPercent?: number | null;
   /** Whether this variant is priced below the MRP, so the MRP is shown struck through. */

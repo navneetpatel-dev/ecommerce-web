@@ -34,6 +34,7 @@ export function ProductVariantDialog({
   const {
     titleRef,
     product,
+    listedPrice,
     isLoading,
     selection,
     canAdd,
@@ -70,7 +71,7 @@ export function ProductVariantDialog({
             attributeGroups={selection.attributeGroups}
             currentPrice={selection.currentPrice}
             currentStock={selection.currentStock}
-            basePrice={product.basePrice}
+            basePrice={listedPrice}
             hasPriceChange={selection.hasPriceChange}
             isAvailable={selection.isAvailable}
             isActive={selection.isActive}

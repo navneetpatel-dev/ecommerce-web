@@ -9,5 +9,7 @@ export interface SearchSuggestion {
   path?: string | null;
   imageUrl?: string;
   basePrice?: number;
+  /** GST-inclusive price customers see. */
+  displayPrice?: number;
   sku?: string | null;
 }

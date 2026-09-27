@@ -74,7 +74,7 @@ export function PriceAvailabilityBlock({
         ) : null}
         {gstPercentage > 0 ? (
           <p className={PRODUCT_DETAIL_CONTENT_STYLES.gstText}>
-            {formatLabel(LABELS.taxExclusiveGst, {
+            {formatLabel(LABELS.taxInclusiveGst, {
               percent: gstPercentage,
             })}
           </p>

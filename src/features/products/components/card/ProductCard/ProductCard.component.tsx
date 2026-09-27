@@ -31,6 +31,7 @@ export function ProductCard({
   onToggleCompare,
 }: ProductCardProps) {
   const {
+    price,
     imageUnavailable,
     handleUnavailableChange,
     inCart,
@@ -68,6 +69,7 @@ export function ProductCard({
 
       <CardDetails
         product={product}
+        price={price}
         showMrp={showMrp}
         discountPercent={discountPercent}
       />

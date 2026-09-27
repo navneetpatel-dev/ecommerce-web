@@ -1,6 +1,7 @@
 import type { ProductListItem } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { customerPrice } from "@/shared/utils/pricing/customerPrice";
 import { productCompareSectionStyles } from "../../../styles/compare/productCompareSection.styles";
 
 interface ProductCompareCardProps {
@@ -12,6 +13,7 @@ export function ProductCompareCard({ product }: ProductCompareCardProps) {
     product.stock > 0 ? `${product.stock} available` : LABELS.outOfStock;
 
   const vendorName = product.vendor?.businessName ?? "Marketplace vendor";
+  const price = customerPrice(product);
 
   return (
     <article className={productCompareSectionStyles.card}>
@@ -20,7 +22,7 @@ export function ProductCompareCard({ product }: ProductCompareCardProps) {
         <div>
           <dt className={productCompareSectionStyles.dt}>Price</dt>
           <dd className={productCompareSectionStyles.priceDd}>
-            ₹{formatInrAmount(product.basePrice)}
+            ₹{formatInrAmount(price)}
           </dd>
         </div>
         <div>

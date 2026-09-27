@@ -5,6 +5,7 @@ import { PATHS } from "@/shared/constants/paths/paths";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
 import { getServerApiOrigin } from "@/shared/api/client/serverOrigin";
 import { LABELS } from "@/shared/constants/labels";
+import { customerPrice } from "@/shared/utils/pricing/customerPrice";
 
 async function fetchApi<T>(path: string): Promise<T | null> {
   try {
@@ -28,6 +29,8 @@ interface BackendProduct {
   seoTitle?: string | null;
   seoDescription?: string | null;
   basePrice: number;
+  /** GST-inclusive price customers see. */
+  displayPrice?: number;
   avgRating: number;
   reviewCount: number;
   stock: number;
@@ -86,7 +89,8 @@ export async function getProductBySlug(
     seoDescription: product.seoDescription ?? null,
     slug: product.slug,
     imageUrl: product.imageUrl || "",
-    basePrice: product.basePrice,
+    // Offers carry the price the customer pays, GST included.
+    price: customerPrice(product),
     currency: "INR",
     avgRating: product.avgRating || 0,
     reviewCount: product.reviewCount || 0,

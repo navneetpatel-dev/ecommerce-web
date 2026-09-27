@@ -4,6 +4,7 @@ import { useState, useCallback, useMemo } from "react";
 import type { ProductListItem } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { customerPrice } from "@/shared/utils/pricing/customerPrice";
 import { MAX_COMPARED_PRODUCTS } from "../../constants/compare/compare";
 import { resolveProductStock } from "../../utils/card/productListItem";
 
@@ -48,6 +49,7 @@ export function useProductCard({
   }, []);
 
   return {
+    price: customerPrice(product),
     imageUnavailable,
     handleUnavailableChange,
     inCart,

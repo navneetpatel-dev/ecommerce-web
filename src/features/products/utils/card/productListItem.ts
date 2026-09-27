@@ -20,6 +20,8 @@ export function toProductListItem(
     | "slug"
     | "name"
     | "basePrice"
+    | "displayPrice"
+    | "hasPriceRange"
     | "compareAtPrice"
     | "discountPercent"
     | "showMrp"
@@ -44,6 +46,8 @@ export function toProductListItem(
     slug: product.slug || product.id,
     name: product.name,
     basePrice: product.basePrice,
+    displayPrice: product.displayPrice,
+    hasPriceRange: product.hasPriceRange,
     compareAtPrice: product.compareAtPrice ?? undefined,
     discountPercent: product.discountPercent,
     showMrp: product.showMrp,
