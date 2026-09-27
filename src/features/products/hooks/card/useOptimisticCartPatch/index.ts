@@ -58,6 +58,8 @@ export function patchCartQuantity(
           slug: product.slug,
           imageUrl: product.imageUrl,
           price: product.basePrice,
+          // Shown until the cart reloads: the GST-inclusive price, as on the card.
+          displayPrice: product.displayPrice,
           vendor: product.vendor,
         },
         variant: { sku: "", attributes: {} },

@@ -51,12 +51,14 @@ export function useProductSpecifications({
       pushUniqueRow(list, seenLabels, LABELS.sku, matchedVariant.sku);
     }
 
-    if (matchedVariant?.price != null) {
+    // The price as the customer pays it (GST included), as in the buy box.
+    const variantPrice = matchedVariant?.displayPrice ?? matchedVariant?.price;
+    if (variantPrice != null) {
       pushUniqueRow(
         list,
         seenLabels,
         LABELS.variantPrice,
-        `₹${formatInrAmount(matchedVariant.price)}`,
+        `₹${formatInrAmount(variantPrice)}`,
       );
     }
 
