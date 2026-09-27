@@ -22,7 +22,14 @@ export function EarningsPayoutTableRow({
   return (
     <tr className={earningsPayoutsCardStyles.tr}>
       <td className={earningsPayoutsCardStyles.tdText}>{row.periodLabel}</td>
-      <td className={earningsPayoutsCardStyles.tdMono}>{row.amountLabel}</td>
+      <td className={earningsPayoutsCardStyles.tdMono}>
+        {row.amountLabel}
+        {row.tdsNoteLabel ? (
+          <span className={earningsPayoutsCardStyles.tdsNote}>
+            {row.tdsNoteLabel}
+          </span>
+        ) : null}
+      </td>
       <td className={earningsPayoutsCardStyles.tdStatus}>
         <StatusBadge status={row.status} />
       </td>

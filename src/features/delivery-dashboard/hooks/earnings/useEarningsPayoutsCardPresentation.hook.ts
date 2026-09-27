@@ -8,11 +8,15 @@ import {
   useShiftSummary,
 } from "../../api/agent/deliveryAgent.queries";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { LABELS } from "@/shared/constants/labels";
 
 export interface PayoutTableRowViewModel {
   id: string;
   periodLabel: string;
   amountLabel: string;
+  /** "Gross ₹X · TDS ₹Y" when TDS was deducted; null otherwise. */
+  tdsNoteLabel: string | null;
   status: string;
   referenceLabel: string;
 }
@@ -65,7 +69,15 @@ export function useEarningsPayoutsCardPresentation() {
         return {
           id: payout.id,
           periodLabel: `${start} – ${end}`,
-          amountLabel: formatInrExact(payout.amount),
+          // What the agent is paid (after TDS), with the gross and TDS when TDS applied.
+          amountLabel: formatInrExact(payout.netAmount),
+          tdsNoteLabel:
+            payout.tdsAmount > 0
+              ? formatLabel(LABELS.agentPayoutTdsNote, {
+                  gross: formatInrExact(payout.amount),
+                  tds: formatInrExact(payout.tdsAmount),
+                })
+              : null,
           status: payout.status,
           referenceLabel: ref,
         };

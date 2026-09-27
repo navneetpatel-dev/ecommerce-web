@@ -13,6 +13,7 @@ import { useAgentPayoutsPanel } from "../../../hooks/delivery-agents/useAgentPay
 import { agentPayoutsPanelStyles as styles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
 import { AgentPayoutActions } from "./AgentPayoutActions.component";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
+import { LABELS } from "@/shared/constants/labels";
 
 /** Admin batch-processes settled agent earnings into payouts, then marks each paid/failed. */
 export function AgentPayoutsPanel() {
@@ -52,9 +53,21 @@ export function AgentPayoutsPanel() {
     },
     {
       id: "amount",
-      header: "Amount",
+      header: LABELS.agentPayoutGross,
       className: styles.tableCellAmount,
       cell: (row) => formatInrExact(row.amount),
+    },
+    {
+      id: "tds",
+      header: LABELS.agentPayoutTds,
+      className: styles.tableCellAmount,
+      cell: (row) => formatInrExact(row.tdsAmount),
+    },
+    {
+      id: "net",
+      header: LABELS.agentPayoutNet,
+      className: styles.tableCellAmount,
+      cell: (row) => formatInrExact(row.netAmount),
     },
     {
       id: "status",

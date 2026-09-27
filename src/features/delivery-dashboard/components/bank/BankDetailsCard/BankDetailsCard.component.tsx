@@ -24,6 +24,7 @@ export function BankDetailsCard({ bankDetails }: BankDetailsCardProps) {
     handleAccountNumberChange,
     handleIfscCodeChange,
     handleUpiIdChange,
+    handlePanChange,
     handleSave,
   } = useBankDetailsCardPresentation(bankDetails);
 
@@ -53,6 +54,7 @@ export function BankDetailsCard({ bankDetails }: BankDetailsCardProps) {
           onAccountNumberChange={handleAccountNumberChange}
           onIfscCodeChange={handleIfscCodeChange}
           onUpiIdChange={handleUpiIdChange}
+          onPanChange={handlePanChange}
         />
 
         {message ? (

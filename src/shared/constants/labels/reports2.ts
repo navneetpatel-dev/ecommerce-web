@@ -174,6 +174,22 @@ export const reports2Labels = {
   saveAddress: "Save address",
   couldNotSaveAddress: "Could not save address.",
   deliveryAgentPerTaskEarning: "Delivery agent earning per task",
+  deliveryAgentTdsRate: "Agent TDS rate (194C)",
+  agentPanLabel: "PAN (for TDS)",
+  agentPanHint:
+    "TDS is deducted from payouts above the legal limits: 1% with a PAN, 20% without.",
+  agentPayoutGross: "Gross",
+  agentPayoutTds: "TDS (194C)",
+  agentPayoutNet: "Net paid",
+  agentPayoutTdsNote: "Gross {gross} · TDS {tds}",
+  deliveryAgentTdsRateHint:
+    "Deducted from agent payouts (agents are contractors) when the agent has a PAN on file.",
+  deliveryAgentTdsNoPanRate: "Agent TDS rate without PAN",
+  deliveryAgentTdsNoPanRateHint: "Section 206AA rate when no PAN is on file.",
+  deliveryAgentTdsSingleThreshold: "194C single payout limit",
+  deliveryAgentTdsThresholdHint:
+    "TDS applies to a payout above this, or once the year's payouts pass the annual limit.",
+  deliveryAgentTdsAnnualThreshold: "194C annual limit",
   deliveryAgentPerTaskEarningHint:
     "Flat estimate shown on the agent's shift summary per completed delivery or pickup.",
   addressFormSection: "Address details",

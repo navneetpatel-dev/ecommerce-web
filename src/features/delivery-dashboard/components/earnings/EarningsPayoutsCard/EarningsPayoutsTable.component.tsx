@@ -7,6 +7,7 @@ import {
   type DataTableColumn,
 } from "@/shared/components/DataTable.component";
 import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { LABELS } from "@/shared/constants/labels";
 import { earningsPayoutsCardStyles } from "../../../styles/earnings/earningsPayoutsCard.styles";
 import type { PayoutTableRowViewModel } from "../../../hooks/earnings/useEarningsPayoutsCardPresentation.hook";
 
@@ -38,10 +39,20 @@ export function EarningsPayoutsTable({
       },
       {
         id: "amount",
-        header: "Amount",
+        header: LABELS.agentPayoutNet,
         className: earningsPayoutsCardStyles.cellMono,
         hideOnMobile: true,
-        accessor: "amountLabel",
+        truncate: false,
+        cell: (row) => (
+          <>
+            {row.amountLabel}
+            {row.tdsNoteLabel ? (
+              <span className={earningsPayoutsCardStyles.tdsNote}>
+                {row.tdsNoteLabel}
+              </span>
+            ) : null}
+          </>
+        ),
       },
       {
         id: "status",
