@@ -26,6 +26,8 @@ interface ProductDetailsSectionProps {
   disabled: boolean;
   getError: (field: ProductListingFormField) => string | undefined;
   patchValues: (patch: Partial<ProductListingFormValues>) => void;
+  /** What customers will pay, GST included (server-computed). */
+  priceHint: string;
 }
 
 export function ProductDetailsSection({
@@ -34,6 +36,7 @@ export function ProductDetailsSection({
   disabled,
   getError,
   patchValues,
+  priceHint,
 }: ProductDetailsSectionProps) {
   return (
     <FormSection
@@ -55,7 +58,8 @@ export function ProductDetailsSection({
         />
       </FormFieldFrame>
       <FormFieldFrame
-        label={LABELS.pricePlaceholder}
+        label={LABELS.productPriceExclGst}
+        hint={priceHint}
         required
         error={getError("price")}
       >
@@ -63,7 +67,7 @@ export function ProductDetailsSection({
           prefix="₹"
           min={1}
           step={1}
-          placeholder={LABELS.pricePlaceholder}
+          placeholder={LABELS.productPriceExclGst}
           value={values.price === "" ? undefined : Number(values.price)}
           error={Boolean(getError("price"))}
           disabled={disabled}
@@ -73,7 +77,7 @@ export function ProductDetailsSection({
         />
       </FormFieldFrame>
       <FormFieldFrame
-        label={LABELS.listPrice}
+        label={LABELS.productMrpInclGst}
         hint={LABELS.productMrpHint}
         error={getError("compareAtPrice")}
       >
@@ -81,7 +85,7 @@ export function ProductDetailsSection({
           prefix="₹"
           min={1}
           step={1}
-          placeholder={LABELS.listPrice}
+          placeholder={LABELS.productMrpInclGst}
           value={
             values.compareAtPrice === ""
               ? undefined

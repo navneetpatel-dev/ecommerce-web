@@ -96,7 +96,9 @@ export function OrderSummaryPanel({
       <div className={ORDER_SUMMARY_PANEL_STYLES.footer}>
         <dl className={ORDER_SUMMARY_PANEL_STYLES.totalsList}>
           <div className={ORDER_SUMMARY_PANEL_STYLES.totalsRow}>
-            <dt className={ORDER_SUMMARY_PANEL_STYLES.totalsLabel}>Subtotal</dt>
+            <dt className={ORDER_SUMMARY_PANEL_STYLES.totalsLabel}>
+              {LABELS.itemsInclGst}
+            </dt>
             <dd className={ORDER_SUMMARY_PANEL_STYLES.totalsValue}>
               <MoneyAmount
                 value={summarySubtotal}

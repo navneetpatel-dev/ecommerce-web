@@ -12,6 +12,7 @@ export { VariantSelector } from "./components/variants/VariantSelector.component
 export { ProductListingPage } from "./pages/listing/ProductListingPage.page";
 export { ProductDetailPage } from "./pages/detail/ProductDetailPage.page";
 export { productsApi } from "./api/listing/products.api";
+export { useGstPricePreview } from "./api/listing/products.queries";
 export { PRODUCT_FIELD_LIMITS } from "./constants/listing-form/productFields";
 export {
   emptySpecRow,

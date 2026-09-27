@@ -23,7 +23,11 @@ export const SubOrderCardItemRow = memo(function SubOrderCardItemRow({
 }: SubOrderCardItemRowProps) {
   const attrs = orderLineVariantLabel(item);
   const handleReturnClick = () => onOpenReturn(item);
-  const subtotalFormatted = formatInr(item.lineSubtotal);
+  // As the customer saw it, GST included (older payloads: before GST).
+  const subtotalFormatted = formatInr(
+    item.lineDisplaySubtotal ?? item.lineSubtotal,
+  );
+  const unitPriceFormatted = formatInr(item.displayUnitPrice ?? item.unitPrice);
   const qtyFormatted = formatLabel(LABELS.qtyLabel, {
     count: String(item.quantity),
   });
@@ -80,7 +84,7 @@ export const SubOrderCardItemRow = memo(function SubOrderCardItemRow({
         </p>
         {item.quantity > 1 ? (
           <p className={SUB_ORDER_CARD_ITEMS_STYLES.unitPrice}>
-            {formatInr(item.unitPrice)} {LABELS.each}
+            {unitPriceFormatted} {LABELS.each}
           </p>
         ) : null}
       </div>

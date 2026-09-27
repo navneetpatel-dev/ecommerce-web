@@ -30,7 +30,7 @@ export function useProductModerationTableColumns() {
       },
       {
         id: "price",
-        header: LABELS.price,
+        header: LABELS.priceExclGst,
         className: productModerationTableStyles.priceCell,
         cell: (p) => formatInr(p.basePrice),
       },

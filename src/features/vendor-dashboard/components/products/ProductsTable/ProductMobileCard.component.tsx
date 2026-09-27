@@ -36,7 +36,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
           <dd className={stockValueClassName}>{product.stock}</dd>
         </div>
         <div>
-          <dt className={styles.metaLabel}>{LABELS.price}</dt>
+          <dt className={styles.metaLabel}>{LABELS.priceExclGst}</dt>
           <dd className={styles.metaValueMono}>
             ₹{formatInrAmount(product.basePrice)}
           </dd>

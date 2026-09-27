@@ -50,8 +50,8 @@ export const tables3Labels = {
   settingsCodHint:
     "Platform COD switch and order-value limits. Category, seller, and product flags must also allow COD.",
   settingsCodEnabled: "Enable cash on delivery",
-  settingsCodMinOrder: "COD minimum order value",
-  settingsCodMaxOrder: "COD maximum order value",
+  settingsCodMinOrder: "COD minimum order value (incl. GST)",
+  settingsCodMaxOrder: "COD maximum order value (incl. GST)",
   settingsWalletPoints: "Wallet points & recharge",
   settingsWalletPointsHint:
     "Closed-loop store points customers can buy and spend at checkout (1 point = ₹1 off).",
@@ -65,7 +65,12 @@ export const tables3Labels = {
   vendorCodEnabled: "Accept cash on delivery",
   vendorCodEnabledHint:
     "Turn off to disable COD for every product from this shop.",
-  productMrpHint: "Optional. Must be at least the selling price.",
+  productMrpHint:
+    "Optional. The MRP includes GST, so it must be at least what the customer pays.",
+  productPriceExclGst: "Selling price (excl. GST)",
+  productMrpInclGst: "MRP (incl. GST)",
+  productCustomerPricePreview: "Customers pay ₹{amount} (incl. {percent}% GST)",
+  productPriceGstHint: "GST is added at your category's rate.",
   productFieldTooLong: "Must be {max} characters or fewer.",
   productListTooLong: "You can add at most {max} items.",
   productSpecPairRequired: "Each specification needs both a label and a value.",

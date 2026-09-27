@@ -1,6 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { orderTaxShippingBreakdownStyles } from "../../styles/orders/vendorOrderComponents.styles";
 
 interface OrderTaxShippingBreakdownProps {
@@ -75,8 +76,11 @@ export function OrderTaxShippingBreakdown({
             : `₹${formatInrAmount(shippingTotal)}`}
         </dd>
       </div>
+      {/* Prices include GST: this is the GST inside the total, not added to it. */}
       <div className={orderTaxShippingBreakdownStyles.row}>
-        <dt className={orderTaxShippingBreakdownStyles.label}>{taxLabel}</dt>
+        <dt className={orderTaxShippingBreakdownStyles.label}>
+          {formatLabel(LABELS.includesTax, { tax: taxLabel })}
+        </dt>
         <dd className={orderTaxShippingBreakdownStyles.value}>
           ₹{formatInrAmount(taxTotal)}
         </dd>

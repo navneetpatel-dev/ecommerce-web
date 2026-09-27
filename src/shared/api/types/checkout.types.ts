@@ -26,6 +26,9 @@ export interface VendorBreakdown {
   tax: { cgst: number; sgst: number; igst: number; total: number };
   taxDisplayKey: "IGST" | "CGST_SGST" | "GST";
   discount: number;
+  /** The vendor's items with GST, before coupons, and what coupons take off them. */
+  itemsTotal?: number;
+  couponSavings?: number;
   total: number;
 }
 
@@ -63,5 +66,11 @@ export interface CheckoutQuote {
     discountTotal: number;
     taxDisplayKey: "IGST" | "CGST_SGST" | "GST";
     giftWrapFeeAmount?: number;
+    /**
+     * The bill as the customer sees it, all GST-inclusive: itemsTotal − couponSavings +
+     * shippingTotal (+ gift wrap) = grand total; taxTotal is the GST inside it.
+     */
+    itemsTotal?: number;
+    couponSavings?: number;
   };
 }

@@ -71,7 +71,7 @@ export function ProductsTableContent(props: ProductsTableContentProps) {
                 {LABELS.stock}
               </TableHead>
               <TableHead className={TABLE_DATA_CELL_CLASS}>
-                {LABELS.price}
+                {LABELS.priceExclGst}
               </TableHead>
               <TableHead className={TABLE_DATA_CELL_CLASS}>
                 {LABELS.status}

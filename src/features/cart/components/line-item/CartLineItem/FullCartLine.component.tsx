@@ -62,9 +62,7 @@ export function FullCartLine(props: FullCartLineProps) {
             </Link>
             {attrs && <p className={styles.fullAttributes}>{attrs}</p>}
             {available ? (
-              <p className={styles.fullMobileEachPrice}>
-                ₹{formatInrAmount(item.product.price)} {LABELS.each}
-              </p>
+              <p className={styles.fullMobileEachPrice}>{eachPrice}</p>
             ) : (
               <Badge variant="destructive" className={styles.fullBadge}>
                 {unavailableReasonText}

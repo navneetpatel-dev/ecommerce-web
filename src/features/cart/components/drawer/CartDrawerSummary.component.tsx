@@ -63,6 +63,9 @@ interface CartDrawerSummaryProps {
     taxTotal: number;
     shippingTotal: number;
     shippingDisplayKey: "FREE" | "PAID";
+    itemsTotal?: number;
+    /** What coupons take off the items, GST included. */
+    couponSavings?: number;
   };
   total: number | undefined;
   totalIsEstimated?: boolean;
@@ -95,19 +98,37 @@ export function CartDrawerSummary({
   const totalRefreshing = total == null || amountsPending || totalsFetching;
   const dismissMutationError = onDismissMutationError ?? (() => undefined);
 
+  const couponSavings = pricingPreview?.couponSavings ?? 0;
+  const couponSavingsElement =
+    !amountsPending && couponSavings > 0 ? (
+      <div className={styles.subtotalRow}>
+        <dt className={styles.subtotalLabel}>{LABELS.couponDiscount}</dt>
+        <dd className={styles.subtotalValue}>
+          −₹{formatInrAmount(couponSavings)}
+        </dd>
+      </div>
+    ) : null;
+
   const previewElement =
     pricingPreview || amountsPending ? (
       <dl className={styles.pricingList}>
         <div className={styles.subtotalRow}>
-          <dt className={styles.subtotalLabel}>{LABELS.subtotal}</dt>
+          <dt className={styles.subtotalLabel}>{LABELS.itemsInclGst}</dt>
           <dd className={styles.subtotalValue}>
             {amountsPending ? (
               <InlineAmountSkeleton />
             ) : (
-              <>₹{formatInrAmount(pricingPreview!.merchandiseSubtotal)}</>
+              <>
+                ₹
+                {formatInrAmount(
+                  pricingPreview!.itemsTotal ??
+                    pricingPreview!.merchandiseSubtotal,
+                )}
+              </>
             )}
           </dd>
         </div>
+        {couponSavingsElement}
         <OrderTaxShippingBreakdown
           className={styles.taxShippingBreakdown}
           pending={amountsPending}

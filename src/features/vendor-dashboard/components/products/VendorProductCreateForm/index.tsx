@@ -32,14 +32,20 @@ export function VendorProductCreateForm({
   const disabled = submitting || loading;
   const showImages = mode === "create";
 
-  const { getError, canSubmit, disableHint, patchValues, handleSubmit } =
-    useProductFormController({
-      values,
-      loading,
-      apiFieldErrors,
-      onChange,
-      onValidSubmit,
-    });
+  const {
+    getError,
+    canSubmit,
+    disableHint,
+    patchValues,
+    handleSubmit,
+    priceHint,
+  } = useProductFormController({
+    values,
+    loading,
+    apiFieldErrors,
+    onChange,
+    onValidSubmit,
+  });
 
   return (
     <form
@@ -53,6 +59,7 @@ export function VendorProductCreateForm({
           disabled={disabled}
           getError={getError}
           patchValues={patchValues}
+          priceHint={priceHint}
         />
 
         <ProductCatalogSection

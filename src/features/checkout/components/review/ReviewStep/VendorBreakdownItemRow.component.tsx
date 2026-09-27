@@ -24,7 +24,7 @@ export const VendorBreakdownItemRow = memo(function VendorBreakdownItemRow({
         </span>
       </span>
       <span className={VENDOR_BREAKDOWN_CARD_STYLES.subtotal}>
-        {formatInr(item.lineSubtotal)}
+        {formatInr(item.lineDisplaySubtotal ?? item.lineSubtotal)}
       </span>
     </li>
   );

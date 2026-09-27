@@ -14,8 +14,9 @@ export const shippingRatesLabels = {
   maxWeightGrams: "Max weight (g)",
   price: "Price",
   estimatedDays: "Estimated days",
-  freeShippingThreshold: "Free shipping threshold",
-  freeShippingThresholdOptional: "Free shipping threshold (optional)",
+  freeShippingThreshold: "Free shipping threshold (incl. GST)",
+  freeShippingThresholdOptional:
+    "Free shipping threshold, incl. GST (optional)",
   vendorIdOptional: "Vendor ID (optional, per-vendor override)",
   couldNotLoadShippingRates: "Could not load shipping rates.",
   couldNotCreateShippingRate: "Could not create shipping rate.",

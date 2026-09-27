@@ -1,6 +1,8 @@
 "use client";
 
 import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import { useManualFormFieldErrors } from "@/shared/hooks/forms/useManualFormFieldErrors.hook";
 import {
   allRequiredFieldsMet,
@@ -13,6 +15,7 @@ import {
   type ProductListingFormField,
   type ProductListingFormValues,
   type ProductWriteBody,
+  useGstPricePreview,
 } from "@/features/products";
 
 interface UseProductFormControllerOptions {
@@ -75,5 +78,25 @@ export function useProductFormController({
     onValidSubmit(toProductWriteBody(parsed.data));
   };
 
-  return { getError, canSubmit, disableHint, patchValues, handleSubmit };
+  // What customers will pay for the entered (pre-GST) price, from the server.
+  const { data: gstPreview } = useGstPricePreview(
+    values.categoryId,
+    Number(values.price),
+  );
+  const priceHint =
+    gstPreview && values.categoryId && values.price !== ""
+      ? formatLabel(LABELS.productCustomerPricePreview, {
+          amount: formatInrAmount(gstPreview.displayPrice),
+          percent: gstPreview.gstPercentage,
+        })
+      : LABELS.productPriceGstHint;
+
+  return {
+    getError,
+    canSubmit,
+    disableHint,
+    patchValues,
+    handleSubmit,
+    priceHint,
+  };
 }

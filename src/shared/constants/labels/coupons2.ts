@@ -42,6 +42,9 @@ export const coupons2Labels = {
   shipping: "Shipping",
   shippingAndTax: "Shipping & tax",
   taxGst: "GST",
+  /** Prices include GST: the tax row says how much of the total is GST. */
+  includesTax: "Includes {tax}",
+  itemsInclGst: "Items (incl. GST)",
   taxesAtCheckout: "Calculated at checkout",
   freeShipping: "Free",
   payableNow: "Payable now",

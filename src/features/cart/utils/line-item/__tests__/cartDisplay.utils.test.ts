@@ -41,6 +41,9 @@ const baseCart: Cart = {
     shippingTotal: 0,
     shippingDisplayKey: "FREE",
     grandTotal: 236,
+    // ₹200 before GST is ₹236 with it: the cart shows the items at ₹236.
+    itemsTotal: 236,
+    couponSavings: 0,
     basisKey: "DEFAULT_ADDRESS",
   },
 };
@@ -73,7 +76,8 @@ describe("resolveCartDisplayTotals", () => {
   it("uses backend grand total when no lines are pending", () => {
     expect(resolveCartDisplayTotals(baseCart)).toMatchObject({
       pendingLineTotals: false,
-      subtotal: 200,
+      // The items as the customer sees them, GST included.
+      subtotal: 236,
       total: 236,
       totalIsEstimated: false,
       pricingPreview: baseCart.pricingPreview,

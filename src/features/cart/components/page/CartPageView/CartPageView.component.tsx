@@ -33,6 +33,9 @@ export interface CartPageViewProps {
     taxTotal: number;
     shippingTotal: number;
     shippingDisplayKey: "FREE" | "PAID";
+    itemsTotal?: number;
+    /** What coupons take off the items, GST included. */
+    couponSavings?: number;
   };
   hasUnavailableItems: boolean;
   onUpdateQuantity: (itemId: string, quantity: number) => void;

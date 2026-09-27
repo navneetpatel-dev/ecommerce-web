@@ -1,14 +1,18 @@
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { vendorGroupTotalsStyles } from "../../styles/orders/vendorOrderComponents.styles";
 
 interface VendorGroupTotalsProps {
+  /** The items with GST, before coupons. */
   subtotal: number;
   shippingDisplayKey?: "FREE" | "PAID" | null;
   shippingCost?: number | null;
   taxLabel: string;
+  /** The GST inside the total (prices include it). */
   taxAmount: number;
+  /** What coupons take off the items, GST included. */
   discount?: number;
   total: number;
   /** "Vendor total" at checkout, "Seller total" on a placed order. */
@@ -42,11 +46,22 @@ export function VendorGroupTotals({
       {showBreakdown ? (
         <>
           <div className={vendorGroupTotalsStyles.row}>
-            <dt className={vendorGroupTotalsStyles.label}>{LABELS.subtotal}</dt>
+            <dt className={vendorGroupTotalsStyles.label}>
+              {LABELS.itemsInclGst}
+            </dt>
             <dd className={vendorGroupTotalsStyles.value}>
               {formatInr(subtotal)}
             </dd>
           </div>
+
+          {discount > 0 ? (
+            <div className={vendorGroupTotalsStyles.discountRow}>
+              <dt>{LABELS.couponDiscount}</dt>
+              <dd className={vendorGroupTotalsStyles.discountValue}>
+                −{formatInr(discount)}
+              </dd>
+            </div>
+          ) : null}
 
           {showShipping ? (
             <div className={vendorGroupTotalsStyles.row}>
@@ -65,18 +80,11 @@ export function VendorGroupTotals({
 
           {taxAmount > 0 ? (
             <div className={vendorGroupTotalsStyles.row}>
-              <dt className={vendorGroupTotalsStyles.label}>{taxLabel}</dt>
+              <dt className={vendorGroupTotalsStyles.label}>
+                {formatLabel(LABELS.includesTax, { tax: taxLabel })}
+              </dt>
               <dd className={vendorGroupTotalsStyles.value}>
                 {formatInr(taxAmount)}
-              </dd>
-            </div>
-          ) : null}
-
-          {discount > 0 ? (
-            <div className={vendorGroupTotalsStyles.discountRow}>
-              <dt>{LABELS.couponDiscount}</dt>
-              <dd className={vendorGroupTotalsStyles.discountValue}>
-                −{formatInr(discount)}
               </dd>
             </div>
           ) : null}

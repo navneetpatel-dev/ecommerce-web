@@ -20,7 +20,7 @@ describe("order display contracts", () => {
     );
 
     expect(screen.getByText("—")).toBeInTheDocument();
-    expect(screen.getByText("IGST")).toBeInTheDocument();
+    expect(screen.getByText("Includes IGST")).toBeInTheDocument();
     expect(screen.queryByText("₹0")).not.toBeInTheDocument();
   });
 
@@ -51,6 +51,6 @@ describe("order display contracts", () => {
     );
 
     expect(screen.getByText("—")).toBeInTheDocument();
-    expect(screen.getByText("CGST + SGST")).toBeInTheDocument();
+    expect(screen.getByText("Includes CGST + SGST")).toBeInTheDocument();
   });
 });

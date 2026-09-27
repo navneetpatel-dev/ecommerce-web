@@ -21,6 +21,9 @@ interface OrderSummaryTotalsListProps {
     taxTotal: number;
     shippingTotal: number;
     shippingDisplayKey: "FREE" | "PAID";
+    itemsTotal?: number;
+    /** What coupons take off the items, GST included. */
+    couponSavings?: number;
   };
 }
 
@@ -35,16 +38,19 @@ export function OrderSummaryTotalsList({
   pricingPreview,
 }: OrderSummaryTotalsListProps) {
   const subtotalPendingState = subtotalPending || amountsPending;
+  // What the coupons take off the GST-inclusive items (a free-shipping coupon shows as
+  // free shipping), so the rows add up to the total.
+  const couponSavings = pricingPreview?.couponSavings ?? appliedDiscount;
 
   const discountRowElement =
-    appliedDiscount > 0 ? (
+    couponSavings > 0 ? (
       <div className={styles.discountRow}>
         <dt>{LABELS.couponDiscount}</dt>
         <dd className={styles.totalsValue}>
           {amountsPending ? (
             <InlineAmountSkeleton />
           ) : (
-            <>−₹{formatInrAmount(appliedDiscount)}</>
+            <>−₹{formatInrAmount(couponSavings)}</>
           )}
         </dd>
       </div>
@@ -75,7 +81,7 @@ export function OrderSummaryTotalsList({
   return (
     <dl className={styles.totalsList}>
       <div className={styles.totalsRow}>
-        <dt className={styles.totalsLabel}>{LABELS.subtotal}</dt>
+        <dt className={styles.totalsLabel}>{LABELS.itemsInclGst}</dt>
         <dd className={styles.totalsValue}>
           <MoneyAmount
             value={subtotal}
