@@ -1,4 +1,8 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useMemo } from "react";
+import {
+  customerPrice,
+  withCustomerPrices,
+} from "@/shared/utils/pricing/customerPrice";
 import { useProduct } from "../../api/listing/products.queries";
 import { useVariantSelection } from "./useVariantSelection.hook";
 
@@ -18,9 +22,15 @@ export function useProductVariantDialogPresentation({
     enabled: open,
   });
 
+  // Prices shown are what the customer pays, GST included.
+  const variants = useMemo(
+    () => withCustomerPrices(product?.variants ?? []),
+    [product?.variants],
+  );
+  const listedPrice = product ? customerPrice(product) : 0;
   const selection = useVariantSelection(
-    product?.variants ?? [],
-    product?.basePrice ?? 0,
+    variants,
+    listedPrice,
     product?.stock ?? 0,
   );
 
@@ -42,6 +52,7 @@ export function useProductVariantDialogPresentation({
   return {
     titleRef,
     product,
+    listedPrice,
     isLoading,
     selection,
     canAdd,

@@ -8,6 +8,10 @@ import { useCategories } from "@/features/categories";
 import { usePublicSettings } from "@/shared/hooks/usePublicSettings.hook";
 import { cartLineQuantityMax } from "@/shared/constants/cart/cart";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
+import {
+  customerPrice,
+  withCustomerPrices,
+} from "@/shared/utils/pricing/customerPrice";
 
 export function useProductDetailData() {
   const params = useParams<{ slug: string }>();
@@ -25,13 +29,17 @@ export function useProductDetailData() {
   });
   const { data: settings } = usePublicSettings();
 
-  const variants = useMemo(() => product?.variants ?? [], [product?.variants]);
+  // Prices on the page are what the customer pays, GST included.
+  const variants = useMemo(
+    () => withCustomerPrices(product?.variants ?? []),
+    [product?.variants],
+  );
   const variantStockTotal = variants.reduce(
     (sum, variant) => sum + Number(variant.stock || 0),
     0,
   );
   const baseStock = Number(product?.stock ?? 0) || variantStockTotal;
-  const basePrice = Number(product?.basePrice ?? 0);
+  const basePrice = Number(product ? customerPrice(product) : 0);
 
   const selection = useVariantSelection(variants, basePrice, baseStock);
 

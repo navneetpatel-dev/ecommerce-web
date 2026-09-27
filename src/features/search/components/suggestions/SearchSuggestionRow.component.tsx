@@ -35,8 +35,9 @@ function suggestionMeta(suggestion: SearchSuggestion): string | null {
     if (suggestion.sku) {
       return formatLabel(LABELS.searchSuggestionSku, { sku: suggestion.sku });
     }
-    if (suggestion.basePrice != null) {
-      return formatInr(suggestion.basePrice);
+    const price = suggestion.displayPrice ?? suggestion.basePrice;
+    if (price != null) {
+      return formatInr(price);
     }
   }
   return null;

@@ -10,7 +10,8 @@ export interface ProductSeoData {
   seoDescription?: string | null
   slug: string
   imageUrl: string
-  basePrice: number
+  /** What the customer pays for one piece, GST included. */
+  price: number
   currency: string
   avgRating: number
   reviewCount: number

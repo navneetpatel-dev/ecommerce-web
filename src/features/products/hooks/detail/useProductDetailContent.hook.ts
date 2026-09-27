@@ -6,6 +6,7 @@ import { cartLineQuantityMax } from "@/shared/constants/cart/cart";
 import { WARRANTY_TYPE } from "@/shared/constants/statuses";
 import { VARIANT_LOW_STOCK_DEFAULT } from "../../constants/listing-form/productFields";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { customerPrice } from "@/shared/utils/pricing/customerPrice";
 import {
   getAddToCartHint,
   getAddToCartLabel,
@@ -39,7 +40,7 @@ export function useProductDetailContent({
   const [detailTab, setDetailTab] = useState("description");
 
   const displayPrice = Number(
-    variantSelection.currentPrice || product.basePrice || 0,
+    variantSelection.currentPrice || customerPrice(product) || 0,
   );
   const displayStock = Number(
     variantSelection.currentStock || product.stock || 0,

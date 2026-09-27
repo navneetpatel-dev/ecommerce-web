@@ -8,6 +8,7 @@ const product: ProductListItem = {
   slug: "product-1",
   name: "Test product",
   basePrice: 100,
+  displayPrice: 118,
   compareAtPrice: 150,
   discountPercent: 33,
   showMrp: false,
@@ -26,11 +27,36 @@ const product: ProductListItem = {
 describe("CardDetails", () => {
   it("shows MRP only when the backend showMrp key is true", () => {
     const { rerender } = render(
-      <CardDetails product={product} showMrp={false} discountPercent={33} />,
+      <CardDetails
+        product={product}
+        price={118}
+        showMrp={false}
+        discountPercent={21}
+      />,
     );
     expect(screen.queryByText("₹150")).not.toBeInTheDocument();
 
-    rerender(<CardDetails product={product} showMrp discountPercent={33} />);
+    rerender(
+      <CardDetails
+        product={product}
+        price={118}
+        showMrp
+        discountPercent={21}
+      />,
+    );
     expect(screen.getByText("₹150")).toBeInTheDocument();
+  });
+
+  it("shows the GST-inclusive price, not the price before GST", () => {
+    render(
+      <CardDetails
+        product={product}
+        price={118}
+        showMrp={false}
+        discountPercent={21}
+      />,
+    );
+    expect(screen.getByText("₹118")).toBeInTheDocument();
+    expect(screen.queryByText("₹100")).not.toBeInTheDocument();
   });
 });

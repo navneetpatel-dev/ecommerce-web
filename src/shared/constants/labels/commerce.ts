@@ -36,7 +36,7 @@ export const commerceLabels = {
   codConfirmPincode: "Confirm cash on delivery with your pincode",
   codMinOrder: "COD on orders of ₹{amount} or more",
   codMaxOrder: "COD on orders up to ₹{amount}",
-  taxExclusiveGst: "Exclusive of GST ({percent}%)",
+  taxInclusiveGst: "Inclusive of all taxes (GST {percent}%)",
   taxInclusiveEstimate: "Approx. ₹{amount} including GST",
   priceFrom: "From",
   hsnCodeLabel: "HSN {code}",

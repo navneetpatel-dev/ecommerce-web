@@ -58,7 +58,7 @@ export function generateProductSchema(product: ProductSeoData) {
     },
     offers: {
       "@type": "Offer" as const,
-      price: product.basePrice,
+      price: product.price,
       priceCurrency: product.currency,
       availability:
         product.stock > 0
