@@ -5,7 +5,13 @@ export type AgentPayoutPaymentMethod =
 export type AgentPayout = {
   id: string;
   deliveryAgentId: string;
+  /** Gross earnings in the payout. */
   amount: number;
+  /** TDS u/s 194C deducted (agents are contractors). */
+  tdsAmount: number;
+  tdsRatePercent: number | null;
+  /** What the agent is paid: gross less TDS. */
+  netAmount: number;
   periodStart: string;
   periodEnd: string;
   status: AgentPayoutStatus;
@@ -36,6 +42,8 @@ export type BankDetails = {
   accountNumber: string;
   ifscCode: string;
   upiId?: string | null;
+  /** For TDS u/s 194C: without it the higher s.206AA rate is deducted. */
+  pan?: string | null;
 };
 
 export type CashDepositStatus = "PENDING" | "VERIFIED" | "REJECTED";

@@ -66,7 +66,7 @@ export const tables3Labels = {
   vendorCodEnabledHint:
     "Turn off to disable COD for every product from this shop.",
   productMrpHint:
-    "Optional. The MRP includes GST, so it must be at least what the customer pays.",
+    "Optional. The MRP includes GST, so it must be at least what the customer pays for every variant.",
   productPriceExclGst: "Selling price (excl. GST)",
   productMrpInclGst: "MRP (incl. GST)",
   productCustomerPricePreview: "Customers pay ₹{amount} (incl. {percent}% GST)",

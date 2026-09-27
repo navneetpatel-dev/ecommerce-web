@@ -20,6 +20,10 @@ interface FulfillmentSettingsSectionProps {
   onReturnShippingFeeChange: (value: number) => void;
   onDeliveryAgentPerTaskEarningChange: (value: number) => void;
   onRefundSlaBusinessDaysChange: (value: number) => void;
+  onDeliveryAgentTdsRateChange: (value: number) => void;
+  onDeliveryAgentTdsNoPanRateChange: (value: number) => void;
+  onDeliveryAgentTdsSingleThresholdChange: (value: number) => void;
+  onDeliveryAgentTdsAnnualThresholdChange: (value: number) => void;
 }
 
 export function FulfillmentSettingsSection({
@@ -30,6 +34,10 @@ export function FulfillmentSettingsSection({
   onReturnShippingFeeChange,
   onDeliveryAgentPerTaskEarningChange,
   onRefundSlaBusinessDaysChange,
+  onDeliveryAgentTdsRateChange,
+  onDeliveryAgentTdsNoPanRateChange,
+  onDeliveryAgentTdsSingleThresholdChange,
+  onDeliveryAgentTdsAnnualThresholdChange,
 }: FulfillmentSettingsSectionProps) {
   return (
     <FormSection
@@ -78,6 +86,57 @@ export function FulfillmentSettingsSection({
           step={5}
           prefix="₹"
           onChange={(value) => onDeliveryAgentPerTaskEarningChange(value ?? 0)}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        label={LABELS.deliveryAgentTdsRate}
+        hint={LABELS.deliveryAgentTdsRateHint}
+      >
+        <NumberInput
+          value={form.deliveryAgentTdsRatePercent ?? 1}
+          min={0}
+          max={100}
+          step={0.5}
+          suffix="%"
+          onChange={(value) => onDeliveryAgentTdsRateChange(value ?? 0)}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        label={LABELS.deliveryAgentTdsNoPanRate}
+        hint={LABELS.deliveryAgentTdsNoPanRateHint}
+      >
+        <NumberInput
+          value={form.deliveryAgentTdsNoPanRatePercent ?? 20}
+          min={0}
+          max={100}
+          step={1}
+          suffix="%"
+          onChange={(value) => onDeliveryAgentTdsNoPanRateChange(value ?? 0)}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame
+        label={LABELS.deliveryAgentTdsSingleThreshold}
+        hint={LABELS.deliveryAgentTdsThresholdHint}
+      >
+        <NumberInput
+          value={form.deliveryAgentTdsSingleThreshold ?? 30000}
+          min={0}
+          step={1000}
+          prefix="₹"
+          onChange={(value) =>
+            onDeliveryAgentTdsSingleThresholdChange(value ?? 0)
+          }
+        />
+      </FormFieldFrame>
+      <FormFieldFrame label={LABELS.deliveryAgentTdsAnnualThreshold}>
+        <NumberInput
+          value={form.deliveryAgentTdsAnnualThreshold ?? 100000}
+          min={0}
+          step={5000}
+          prefix="₹"
+          onChange={(value) =>
+            onDeliveryAgentTdsAnnualThresholdChange(value ?? 0)
+          }
         />
       </FormFieldFrame>
       <FormFieldFrame

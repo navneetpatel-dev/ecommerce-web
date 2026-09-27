@@ -10,6 +10,7 @@ const EMPTY: BankDetails = {
   accountNumber: "",
   ifscCode: "",
   upiId: "",
+  pan: "",
 };
 
 export function useBankDetailsCardPresentation(
@@ -64,10 +65,20 @@ export function useBankDetailsCardPresentation(
     [setField],
   );
 
+  const handlePanChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setField("pan", e.target.value.toUpperCase());
+    },
+    [setField],
+  );
+
+  const panValid =
+    !form.pan?.trim() || /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(form.pan.trim());
   const canSave =
     form.accountHolderName.trim().length > 0 &&
     form.accountNumber.trim().length >= 4 &&
-    /^[A-Za-z]{4}0[A-Za-z0-9]{6}$/.test(form.ifscCode.trim());
+    /^[A-Za-z]{4}0[A-Za-z0-9]{6}$/.test(form.ifscCode.trim()) &&
+    panValid;
   const saveDisabled = !canSave;
 
   const handleSave = useCallback(async () => {
@@ -78,6 +89,7 @@ export function useBankDetailsCardPresentation(
         accountNumber: form.accountNumber.trim(),
         ifscCode: form.ifscCode.trim().toUpperCase(),
         upiId: form.upiId?.trim() || undefined,
+        pan: form.pan?.trim() || undefined,
       });
       setMessage("Payout details saved.");
     } catch (saveError) {
@@ -95,6 +107,7 @@ export function useBankDetailsCardPresentation(
     handleAccountNumberChange,
     handleIfscCodeChange,
     handleUpiIdChange,
+    handlePanChange,
     handleSave,
   };
 }

@@ -46,6 +46,16 @@ export function PlatformSettingsPage() {
         settings.setDeliveryAgentPerTaskEarning
       }
       onRefundSlaBusinessDaysChange={settings.setRefundSlaBusinessDays}
+      onDeliveryAgentTdsRateChange={settings.setDeliveryAgentTdsRatePercent}
+      onDeliveryAgentTdsNoPanRateChange={
+        settings.setDeliveryAgentTdsNoPanRatePercent
+      }
+      onDeliveryAgentTdsSingleThresholdChange={
+        settings.setDeliveryAgentTdsSingleThreshold
+      }
+      onDeliveryAgentTdsAnnualThresholdChange={
+        settings.setDeliveryAgentTdsAnnualThreshold
+      }
       onSupportEmailChange={settings.setSupportEmail}
       onSupportHoursChange={settings.setSupportHours}
       onTicketReopenWindowDaysChange={settings.setTicketReopenWindowDays}

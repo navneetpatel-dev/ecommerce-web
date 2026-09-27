@@ -1,5 +1,6 @@
 import { Input } from "@/shared/components/ui/input";
 import { FormFieldFrame } from "@/shared/components/forms";
+import { LABELS } from "@/shared/constants/labels";
 import { bankDetailsCardStyles } from "../../../styles/bank/bankDetailsCard.styles";
 import type { BankDetails } from "../../../types/agent/types";
 
@@ -9,6 +10,7 @@ interface BankDetailsFormFieldsProps {
   onAccountNumberChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onIfscCodeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onUpiIdChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onPanChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function BankDetailsFormFields({
@@ -17,6 +19,7 @@ export function BankDetailsFormFields({
   onAccountNumberChange,
   onIfscCodeChange,
   onUpiIdChange,
+  onPanChange,
 }: BankDetailsFormFieldsProps) {
   return (
     <div className={bankDetailsCardStyles.formGrid}>
@@ -48,6 +51,14 @@ export function BankDetailsFormFields({
           onChange={onUpiIdChange}
           placeholder="name@bank"
           maxLength={120}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame label={LABELS.agentPanLabel} hint={LABELS.agentPanHint}>
+        <Input
+          value={form.pan ?? ""}
+          onChange={onPanChange}
+          placeholder="ABCDE1234F"
+          maxLength={10}
         />
       </FormFieldFrame>
     </div>
