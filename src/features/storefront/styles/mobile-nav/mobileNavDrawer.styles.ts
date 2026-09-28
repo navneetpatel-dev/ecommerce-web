@@ -4,7 +4,7 @@ export const mobileNavDrawerStyles = {
   overlayWrapper: "fixed inset-0 z-50 xl:hidden",
   backdrop: OVERLAY_BACKDROP,
   drawer:
-    "absolute left-0 top-0 bottom-0 w-72 bg-surface shadow-elevation-4 animate-slide-in-left flex flex-col",
+    "absolute left-[env(safe-area-inset-left,0px)] top-0 bottom-[env(safe-area-inset-bottom,0px)] w-72 bg-surface pt-[env(safe-area-inset-top,0px)] shadow-elevation-4 animate-slide-in-left flex flex-col",
   header: "flex items-center justify-between px-4 h-14 border-b border-line",
   title: "text-[1.125rem] font-semibold text-brand",
   closeButton: "text-ink-muted",

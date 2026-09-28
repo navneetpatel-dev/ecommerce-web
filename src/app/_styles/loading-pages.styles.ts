@@ -40,5 +40,5 @@ export const loadingPagesStyles = {
   vendorMetricGrid: "grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4",
 
   // Vendor Register
-  screenBgPaper: "min-h-screen bg-paper",
+  screenBgPaper: "min-h-[100dvh] bg-paper",
 } as const;

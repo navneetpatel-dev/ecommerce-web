@@ -6,7 +6,8 @@ export const authPageShellStyles = {
     "pointer-events-none absolute bottom-[12%] left-[8%] h-64 w-64 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--accent)_10%,transparent),transparent_70%)]",
   bgGradient3:
     "pointer-events-none absolute right-[6%] top-[10%] h-56 w-56 rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--brand)_12%,transparent),transparent_68%)]",
-  topBar: "absolute inset-x-0 top-0 z-10 h-14 lg:h-[72px]",
+  topBar:
+    "absolute inset-x-0 top-0 z-10 h-[calc(3.5rem+env(safe-area-inset-top,0px))] pt-[env(safe-area-inset-top,0px)] lg:h-[calc(72px+env(safe-area-inset-top,0px))]",
   topBarContainer: "storefront-container flex h-full items-center",
   brandLink:
     "min-w-0 shrink truncate font-display text-[1.25rem] font-semibold leading-none text-brand sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]",
@@ -15,7 +16,7 @@ export const authPageShellStyles = {
   brandAside:
     "relative hidden min-w-0 overflow-y-auto lg:flex lg:min-h-[100dvh]",
   brandContent:
-    "relative z-[1] flex min-h-[100dvh] w-full flex-col justify-between px-10 pb-10 pt-[72px] 2xl:px-16 2xl:pb-12",
+    "relative z-[1] flex min-h-[100dvh] w-full flex-col justify-between px-10 pb-10 pt-[calc(72px+env(safe-area-inset-top,0px))] 2xl:px-16 2xl:pb-12",
   brandBlock: "my-auto max-w-xl space-y-6 2xl:max-w-2xl 2xl:space-y-7",
   brandTextStack: "space-y-4",
   brandEyebrow:
@@ -27,7 +28,7 @@ export const authPageShellStyles = {
   brandFeatures: "max-w-md",
   brandFooter: "mt-8 text-body-sm text-ink-faint",
   mainCol:
-    "relative flex min-h-[100dvh] min-w-0 flex-col items-center justify-center px-4 py-8 pt-16 sm:px-6 md:px-8 lg:px-10 lg:py-12 lg:pt-[72px] 2xl:px-14",
+    "relative flex min-h-[100dvh] min-w-0 flex-col items-center justify-center px-4 py-8 pt-16 sm:px-6 md:px-8 lg:px-10 lg:py-12 lg:pt-[calc(72px+env(safe-area-inset-top,0px))] 2xl:px-14",
   ambientBlob:
     "pointer-events-none absolute inset-y-[8%] right-[6%] hidden w-[min(42%,18rem)] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--brand)_14%,transparent),transparent_70%)] blur-2xl lg:block",
   formWrapper:

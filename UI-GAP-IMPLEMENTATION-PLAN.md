@@ -2345,3 +2345,53 @@ below). The pre-existing failure is kept here for context:
 `eslint.config.mjs` comment marks as _"TEMPORARY (Phase 6 scope): pre-existing findings … demoted to
 warnings so CI is green while each is refactored"_. Fixing them is a behavioural refactor of 40+
 hooks and is tracked there, not here.
+
+---
+
+## WS-14 — Mobile conventions & device verification
+
+Scope: close the gap between design spec §3.1–3.5/§6.8 and the code, without changing the theme or
+introducing new UX patterns. Nothing here adds client JS (budget unchanged at 1167.7 KB gz).
+
+**P0 — silent breakages on real devices**
+
+- **`viewportFit: "cover"` added to `ROOT_VIEWPORT`.** Without it every `env(safe-area-inset-*)` in
+  the tab bar, sticky bars, sheets, drawers and toasts resolved to `0` on iOS, so the whole WS-13
+  safe-area layer was inert — and DevTools emulation hid it because the emulator injects insets.
+  Turning cover **on** also exposed the top edge, so the two top-anchored surfaces
+  (storefront header, auth top bar + impersonation banner) now reserve
+  `env(safe-area-inset-top)`, and every full-bleed rail (tab bar, PDP/checkout bars, compare bar,
+  toasts, sheets, drawers, cart drawer, cookie banner) carries its horizontal/top/bottom insets.
+- **16px field fonts on phones.** `Input` already did this; `Textarea`, `NumberInput`, `OtpInput`
+  and the admin role dialog's native `<select>` did not, so iOS zoomed the page on focus —
+  including checkout, reviews and OTP entry. All now use `text-[1rem] sm:text-body(-sm)`.
+
+**Guards (fail the build, so this cannot regress) — `scripts/check-safe-area-offsets.mjs`**
+
+- Fails any `fixed`/`sticky`/`absolute` element pinned to a viewport edge without the matching
+  `env(safe-area-inset-*)`, with three justified allowlist entries for elements that apply the
+  offset inline, and a stale-entry check so the allowlist cannot rot.
+- Fails duplicated rail offsets: those class strings exist once, in
+  `src/shared/constants/layout/mobileRails.ts`, and every consumer imports them.
+- Wired into `npm run lint`; probe-tested both ways (fails on a deliberate violation, passes clean).
+
+**P1 — partial conformance**
+
+- **`vh` → `dvh`** in the mobile-critical heights (storefront layout, bottom sheet, not-found,
+  error boundary, loading pages, maintenance, export tray, checkout summary panel, toast viewport):
+  iOS' dynamic toolbars make `100vh` taller than the visible viewport.
+- **Landscape (§3.5)** now complete: the sheet caps at 90dvh with internal scroll, and the PDP
+  switches from stacked to side-by-side below `md` (skeleton kept in sync).
+- **iOS PWA icons**: `apple-icon.png` (180) plus 192/512 + maskable-512 PNGs, generated
+  reproducibly by `scripts/generate-app-icons.mjs`; the manifest now ships the raster set. iOS
+  ignores SVG for home-screen icons, so the icon was previously a page screenshot.
+
+**P2 — documentation**
+
+- `MOBILE-DEVICE-CHECKLIST.md`: device matrix, per-area expectations, the Web Inspector snippets
+  that prove the insets, and a sign-off table. Referenced from `AGENTS.md` (new rule 10).
+
+**Tests added** (15): `ROOT_VIEWPORT` cover assertion, field-font contract (4 fields + the native
+select), rail-offset module contract, and the admin dialog's field size.
+**Remaining:** the manual device pass — emulation cannot verify insets, so the checklist is the
+artifact and it needs a real iPhone/Android before release.

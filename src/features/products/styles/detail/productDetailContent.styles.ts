@@ -1,8 +1,10 @@
+import { ABOVE_TAB_BAR_CLASS } from "@/shared/constants/layout/mobileRails";
+
 export const PRODUCT_DETAIL_CONTENT_STYLES = {
   container: "storefront-container pb-10 pt-4 sm:pt-6 md:pb-14 md:pt-8",
   breadcrumbs: "mb-5 sm:mb-6",
   layoutGrid:
-    "grid grid-cols-1 items-start gap-8 md:grid-cols-12 lg:gap-10 xl:gap-14",
+    "grid grid-cols-1 items-start gap-8 md:grid-cols-12 max-md:landscape:grid-cols-12 lg:gap-10 xl:gap-14",
 
   // DetailTabsSection
   tabsContainer: "mt-12 border-t border-line pt-8 md:mt-16 md:pt-10",
@@ -61,12 +63,12 @@ export const PRODUCT_DETAIL_CONTENT_STYLES = {
   heartUnwishlisted: "text-ink-muted",
 
   // ProductBuyBoxColumn
-  buyBoxColumn: "min-w-0 md:col-span-6 lg:col-span-5",
+  buyBoxColumn:
+    "min-w-0 md:col-span-6 max-md:landscape:col-span-6 lg:col-span-5",
   buyBoxStack: "space-y-5 lg:space-y-6",
 
   // StickyAddToCartBar
-  stickyBarRoot:
-    "fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] left-0 right-0 z-30 border-t border-line bg-surface/95 p-3 shadow-elevation-3 backdrop-blur-sm md:hidden",
+  stickyBarRoot: `fixed ${ABOVE_TAB_BAR_CLASS} left-[env(safe-area-inset-left,0px)] right-[env(safe-area-inset-right,0px)] z-30 border-t border-line bg-surface/95 p-3 shadow-elevation-3 backdrop-blur-sm md:hidden`,
   stickyBarRow: "flex items-center gap-3",
   stickyBarInfo: "min-w-0 flex-1",
   stickyBarTitle: "truncate text-body-sm font-medium text-ink",

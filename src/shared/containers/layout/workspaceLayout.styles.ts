@@ -1,5 +1,5 @@
 export const workspaceLayoutStyles = {
-  root: "min-h-screen bg-paper",
+  root: "min-h-[100dvh] bg-paper",
   bodyFlex: "flex min-w-0",
   main: "min-w-0 flex-1 overflow-x-hidden bg-surface p-4 sm:p-6 lg:p-8",
   deliveryMain:

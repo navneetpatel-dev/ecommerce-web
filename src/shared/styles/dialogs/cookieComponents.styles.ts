@@ -1,5 +1,6 @@
 export const cookieBannerStyles = {
-  wrapper: "fixed bottom-0 left-0 right-0 z-50 animate-slide-in-bottom",
+  wrapper:
+    "fixed bottom-0 left-[env(safe-area-inset-left,0px)] right-[env(safe-area-inset-right,0px)] z-50 pb-[env(safe-area-inset-bottom,0px)] animate-slide-in-bottom",
   banner:
     "relative flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 bg-surface-raised border-t border-line shadow-elevation-3",
   text: "text-body-sm text-ink-muted flex-1 pr-6 sm:pr-0",

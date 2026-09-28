@@ -42,7 +42,7 @@ export const bottomSheetViewStyles = {
   hideXl: "xl:hidden",
   backdrop: OVERLAY_BACKDROP,
   sheet:
-    "absolute bottom-0 left-0 right-0 flex max-h-[85vh] flex-col rounded-t-lg bg-surface shadow-elevation-4 animate-slide-in-bottom md:max-h-[60vh]",
+    "absolute bottom-0 left-[env(safe-area-inset-left,0px)] right-[env(safe-area-inset-right,0px)] flex max-h-[85dvh] flex-col rounded-t-lg bg-surface shadow-elevation-4 animate-slide-in-bottom max-md:landscape:max-h-[90dvh] md:max-h-[60dvh]",
   handleWrap: "flex items-center justify-center pt-3 pb-1",
   handle: "h-1 w-10 rounded-full bg-line",
   header: "flex items-center justify-between border-b border-line px-4 py-3",

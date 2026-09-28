@@ -1,5 +1,5 @@
 export const ORDER_SUMMARY_PANEL_STYLES = {
-  root: "relative flex max-h-[calc(100vh-7rem)] flex-col border border-line bg-surface-raised shadow-elevation-1",
+  root: "relative flex max-h-[calc(100dvh-7rem)] flex-col border border-line bg-surface-raised shadow-elevation-1",
   accentBorder:
     "pointer-events-none absolute inset-x-0 top-0 z-10 h-0.5 bg-gradient-to-r from-brand via-brand/70 to-transparent",
   header: "shrink-0 border-b border-line px-5 pb-4 pt-5 md:px-6 md:pt-6",

@@ -31,7 +31,7 @@ export const authFormsStyles = {
     "relative flex justify-center text-[0.75rem] font-medium uppercase tracking-[0.08em]",
   dividerText: "bg-surface px-3 text-ink-faint",
   impersonationBanner:
-    "sticky top-0 z-50 flex items-center justify-between gap-3 bg-warning px-4 py-2 text-body-sm font-medium text-ink",
+    "sticky top-0 z-50 flex items-center justify-between gap-3 bg-warning px-4 pb-2 pt-[calc(0.5rem+env(safe-area-inset-top,0px))] text-body-sm font-medium text-ink",
   impersonationButton: "border-ink/30 bg-transparent text-ink hover:bg-ink/10",
   forgotPasswordLink:
     "text-body-sm font-medium text-brand transition-colors hover:text-brand-hover hover:underline",

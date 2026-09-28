@@ -1,7 +1,7 @@
 export const cartDrawerStyles = {
   backdrop: "fixed inset-0 bg-overlay z-50",
   drawer:
-    "fixed right-0 top-0 z-50 flex h-full w-[min(100vw,24rem)] flex-col overflow-hidden border-l border-line bg-surface-raised shadow-elevation-4 overscroll-contain",
+    "fixed right-0 top-0 z-50 flex h-full w-[min(100vw,24rem)] flex-col overflow-hidden border-l border-line bg-surface-raised pt-[env(safe-area-inset-top,0px)] pr-[env(safe-area-inset-right,0px)] shadow-elevation-4 overscroll-contain",
   header:
     "flex items-center justify-between px-4 h-14 border-b border-line shrink-0",
   title: "text-[1.125rem] font-semibold",
@@ -13,7 +13,8 @@ export const cartDrawerStyles = {
   vendorGroup: "space-y-1 py-3 first:pt-0 last:pb-0",
 
   // Drawer Summary styles
-  summaryContainer: "shrink-0 space-y-3 border-t border-line p-4",
+  summaryContainer:
+    "shrink-0 space-y-3 border-t border-line px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]",
   pricingList: "space-y-1.5 text-body-sm",
   subtotalRow: "flex justify-between gap-3",
   subtotalLabel: "text-ink-muted",

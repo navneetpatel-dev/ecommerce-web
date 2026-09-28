@@ -1,6 +1,6 @@
 export const exportJobsTrayStyles = {
   container:
-    "fixed inset-x-4 bottom-28 z-50 flex max-h-[60vh] flex-col gap-2 overflow-y-auto sm:inset-x-auto sm:right-4 sm:w-80",
+    "fixed inset-x-4 bottom-28 z-50 flex max-h-[60dvh] flex-col gap-2 overflow-y-auto sm:inset-x-auto sm:right-4 sm:w-80",
   trayHeader:
     "px-1 text-xs font-semibold uppercase tracking-wide text-ink-muted",
   card: "rounded-lg border border-line bg-surface-raised p-3 shadow-elevation-3 animate-slide-in-bottom",

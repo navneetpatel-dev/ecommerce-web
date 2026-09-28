@@ -15,7 +15,7 @@ export const changeUserRoleDialogStyles = {
   loadingText: "text-body-sm text-ink-muted",
   selectInput: cn(
     "w-full rounded border border-line bg-surface p-2",
-    "text-body-sm text-ink outline-none focus:border-brand",
+    "text-[1rem] sm:text-body-sm text-ink outline-none focus:border-brand",
   ),
   vendorSection: "space-y-1.5 pt-2",
   footer: "gap-2 sm:gap-0",

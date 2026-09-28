@@ -1,6 +1,6 @@
 export const headerStyles = {
   headerBase:
-    "sticky top-0 z-40 overflow-visible transition-all duration-200 h-14 lg:h-[72px]",
+    "sticky top-0 z-40 overflow-visible transition-all duration-200 h-[calc(3.5rem+env(safe-area-inset-top,0px))] pt-[env(safe-area-inset-top,0px)] lg:h-[calc(72px+env(safe-area-inset-top,0px))]",
   headerTransparent: "bg-transparent border-transparent",
   headerSolid: "bg-surface border-b border-line shadow-elevation-1",
   container:

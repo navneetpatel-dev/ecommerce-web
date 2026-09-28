@@ -1,7 +1,8 @@
+import { MOBILE_TAB_BAR_HEIGHT_CLASS } from "@/shared/constants/layout/mobileRails";
 import { OVERLAY_BACKDROP } from "../common.styles";
 
 export const mobileTabBarStyles = {
-  nav: "fixed bottom-0 left-0 right-0 z-40 flex min-h-14 items-stretch justify-around overflow-visible border-t border-line bg-surface lg:hidden",
+  nav: `fixed bottom-0 left-[env(safe-area-inset-left,0px)] right-[env(safe-area-inset-right,0px)] z-40 flex ${MOBILE_TAB_BAR_HEIGHT_CLASS} items-stretch justify-around overflow-visible border-t border-line bg-surface lg:hidden`,
   tabItem:
     "flex min-h-11 min-w-[3.25rem] flex-col items-center justify-center gap-0.5 overflow-visible px-2 py-1 text-ink-muted",
   textLabel: "text-[0.625rem] max-md:landscape:hidden",
@@ -35,7 +36,7 @@ export const workspaceNavDrawerStyles = {
   backdropWrapper: "fixed inset-0 z-50 lg:hidden",
   backdrop: OVERLAY_BACKDROP,
   panel:
-    "absolute left-0 top-0 bottom-0 flex w-72 flex-col bg-surface shadow-elevation-4 animate-slide-in-left",
+    "absolute left-[env(safe-area-inset-left,0px)] top-0 bottom-[env(safe-area-inset-bottom,0px)] flex w-72 flex-col bg-surface pt-[env(safe-area-inset-top,0px)] shadow-elevation-4 animate-slide-in-left",
   header: "flex h-14 items-center justify-between border-b border-line px-4",
   title: "text-[1.125rem] font-semibold text-brand",
   closeButton: "text-ink-muted hover:text-ink",

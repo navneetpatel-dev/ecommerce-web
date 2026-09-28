@@ -1,9 +1,11 @@
+import { ABOVE_TAB_BAR_GAP_CLASS } from "@/shared/constants/layout/mobileRails";
+
 /**
  * Toast presentation (Rule 5): the viewport offset keeps toasts clear of the
  * mobile tab bar and the iOS home indicator on phones.
  */
 export const toastStackStyles = {
-  viewport: "bottom-[calc(4rem+env(safe-area-inset-bottom,0px))] md:bottom-0",
+  viewport: `${ABOVE_TAB_BAR_GAP_CLASS} pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] md:bottom-0`,
   item: "flex items-start gap-3 border-l-[3px]",
   variants: {
     success: "border-l-success bg-success-subtle",

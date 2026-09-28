@@ -94,3 +94,10 @@ All React components across `web/` must adhere to strict separation of concerns 
 - Preserve existing project conventions unless there is a clear architectural reason to improve them.
 - After refactoring, verify TypeScript compilation, linting, tests, and the production build where available.
 - Any additional architectural, maintainability, performance, accessibility, or code-quality issues discovered during the audit should also be addressed when they can be safely fixed without changing intended behavior.
+
+**## 10. Mobile Shell & Safe Areas**
+
+- The root viewport sets `viewport-fit: "cover"`, so the page extends under the status bar, notch and home indicator. Anything pinned to a viewport edge must carry the matching `env(safe-area-inset-*)` offset; `npm run lint` fails otherwise (`scripts/check-safe-area-offsets.mjs`).
+- Bottom-rail offsets (tab-bar clearance, sticky bars, compare bar, toasts) come from `src/shared/constants/layout/mobileRails.ts` — never retype those class strings.
+- Text fields render at 16px on phones (`text-[1rem] sm:text-body`). iOS Safari zooms the page when a focused field is under 16px.
+- Device emulation **injects** safe-area insets, so it cannot verify them. For any layout, viewport or rail change, run the manual pass in `MOBILE-DEVICE-CHECKLIST.md`.

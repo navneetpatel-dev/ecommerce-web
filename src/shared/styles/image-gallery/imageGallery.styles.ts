@@ -1,6 +1,6 @@
 /** Named class groups for the product image gallery stage (Rule 5). */
 export const imageGalleryStyles = {
-  root: "min-w-0 md:col-span-6 lg:col-span-7 lg:sticky lg:top-[88px] lg:z-[1] lg:self-start",
+  root: "min-w-0 md:col-span-6 max-md:landscape:col-span-6 lg:col-span-7 lg:sticky lg:top-[88px] lg:z-[1] lg:self-start",
   layoutRow:
     "flex min-w-0 flex-col gap-2.5 sm:gap-3 lg:flex-row lg:items-stretch lg:gap-3.5",
   thumbColumn:

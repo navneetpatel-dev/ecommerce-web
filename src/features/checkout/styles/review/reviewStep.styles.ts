@@ -17,5 +17,5 @@ export const REVIEW_STEP_STYLES = {
   actionsRow: "flex flex-col-reverse gap-3 sm:flex-row sm:items-center",
   placeOrderBtn: "gap-2",
   stickyPlaceOrderBar:
-    "fixed bottom-14 left-0 right-0 z-30 border-t border-line bg-surface/95 p-3 shadow-elevation-3 backdrop-blur-sm md:hidden",
+    "fixed bottom-14 left-[env(safe-area-inset-left,0px)] right-[env(safe-area-inset-right,0px)] z-30 border-t border-line bg-surface/95 p-3 shadow-elevation-3 backdrop-blur-sm md:hidden",
 } as const;
