@@ -1,10 +1,7 @@
 "use client";
 
 import { FileText } from "lucide-react";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { DeliveryAgentDocument } from "@/features/delivery-dashboard";
 import { useAgentDocumentsPanel } from "../../../hooks/delivery-agents/useAgentDocumentsPanel.hook";
 import { agentDocumentsPanelStyles as styles } from "../../../styles/delivery-agents/agentDocumentsPanel.styles";

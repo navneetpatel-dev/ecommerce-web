@@ -4,11 +4,14 @@ import {
   type DisplayAmountInput,
 } from "./displayAmount";
 
+/** The one definition of the rupee glyph — every amount renderer builds on it. */
+export const CURRENCY_SYMBOL = "₹";
+
 /** Format INR for storefront display (Inter + tabular-nums — not mono). Missing → "—". */
 export function formatInr(value: DisplayAmountInput) {
   const amount = toDisplayAmount(value);
   if (amount == null) return MISSING_AMOUNT;
-  return `₹${amount.toLocaleString("en-IN", {
+  return `${CURRENCY_SYMBOL}${amount.toLocaleString("en-IN", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   })}`;
@@ -28,7 +31,7 @@ export function formatInrAmount(value: DisplayAmountInput) {
 export function formatInrExact(value: DisplayAmountInput) {
   const amount = toDisplayAmount(value);
   if (amount == null) return MISSING_AMOUNT;
-  return `₹${amount.toLocaleString("en-IN", {
+  return `${CURRENCY_SYMBOL}${amount.toLocaleString("en-IN", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
@@ -41,13 +44,13 @@ export function formatInrCompact(value: DisplayAmountInput) {
   const amount = Math.round(exact);
   if (amount >= 10_000_000) {
     const crore = amount / 10_000_000;
-    return `₹${trimCompact(crore, crore >= 10 ? 0 : 1)}Cr`;
+    return `${CURRENCY_SYMBOL}${trimCompact(crore, crore >= 10 ? 0 : 1)}Cr`;
   }
   if (amount >= 100_000) {
     const lakh = amount / 100_000;
-    return `₹${trimCompact(lakh, lakh >= 10 ? 0 : 1)}L`;
+    return `${CURRENCY_SYMBOL}${trimCompact(lakh, lakh >= 10 ? 0 : 1)}L`;
   }
-  return `₹${amount.toLocaleString("en-IN")}`;
+  return `${CURRENCY_SYMBOL}${amount.toLocaleString("en-IN")}`;
 }
 
 function trimCompact(value: number, digits: number) {

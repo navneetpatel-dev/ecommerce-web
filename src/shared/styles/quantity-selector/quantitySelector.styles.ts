@@ -21,3 +21,8 @@ export const QUANTITY_SELECTOR_EXTRA = {
   hintContainer: "relative z-[1] max-w-none shrink-0",
   disabledShrink: "shrink-0",
 } as const;
+
+export const animatedQuantityValueStyles = {
+  container: "relative inline-flex overflow-hidden",
+  hiddenDigit: "invisible tabular-nums",
+} as const;

@@ -1,5 +1,5 @@
 import type { CSSProperties, MouseEvent } from "react";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import type { useGalleryStage } from "../../hooks/image-gallery/useGalleryStage.hook";
 import { LABELS } from "@/shared/constants/labels";
 import {
@@ -54,7 +54,6 @@ export function ImageGalleryStage({
   return (
     <div className={styles.stageWrapper}>
       <div
-        onClick={onOpenLightbox}
         {...zoomHandlers}
         className={cn(
           styles.stageBase,
@@ -62,6 +61,12 @@ export function ImageGalleryStage({
           IMAGE_GALLERY_STAGE_HEIGHT_CLASS,
         )}
       >
+        <button
+          type="button"
+          onClick={onOpenLightbox}
+          aria-label={LABELS.viewLargerImage}
+          className={styles.lightboxHitArea}
+        />
         <div className={styles.mediaWrapper}>
           <div className={styles.mediaInner}>
             <MediaImage

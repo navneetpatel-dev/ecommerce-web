@@ -1,4 +1,4 @@
-import { VendorStrip } from "@/shared/components/VendorStrip.component";
+import { VendorStrip } from "@/shared/components/orders/VendorStrip.component";
 import type { CartItem } from "@/shared/api/types";
 import { CartLineItem } from "../line-item/CartLineItem.component";
 import { cartDrawerStyles as styles } from "../../styles/drawer/cartDrawer.styles";

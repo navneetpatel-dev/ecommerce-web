@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { SubOrderRow } from "../../../types/orders/vendorOrders.types";
 import { VENDOR_ORDERS_TABLE_STYLES } from "../../../styles/orders/vendorOrdersTable.styles";

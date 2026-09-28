@@ -1,7 +1,15 @@
 "use client";
 
 import { useMemo } from "react";
-import { Gift, Heart, LifeBuoy, Package, RotateCcw, Star } from "lucide-react";
+import {
+  Gift,
+  Heart,
+  LifeBuoy,
+  Package,
+  RotateCcw,
+  Star,
+  Truck,
+} from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { giftCardsLabels } from "@/shared/constants/labels/giftCards";
 import { PATHS } from "@/shared/constants/paths/paths";
@@ -106,7 +114,14 @@ export function useOrdersActivitySection() {
         icon: Gift,
         label: giftCardsLabels.giftCards,
         value: LABELS.view,
-        href: "/gift-cards",
+        href: PATHS.giftCards,
+      },
+      {
+        id: "tracking",
+        icon: Truck,
+        label: LABELS.trackOrder,
+        value: LABELS.view,
+        href: PATHS.orderTracking,
       },
       {
         id: "allOrders",

@@ -1,6 +1,12 @@
 export { FormStack } from "./FormStack.component";
 export { FormSection } from "./FormSection.component";
 export { FormFieldFrame } from "./FormFieldFrame.component";
+export {
+  FieldControlProvider,
+  joinAriaIds,
+  useFieldControl,
+} from "./fieldControl.context";
+export type { FieldControlWiring } from "./fieldControl.context";
 export { FormActions } from "./FormActions.component";
 export { FormError } from "./FormError.component";
 export { CheckboxField } from "./CheckboxField.component";

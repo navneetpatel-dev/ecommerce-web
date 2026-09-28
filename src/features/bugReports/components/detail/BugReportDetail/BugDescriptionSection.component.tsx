@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { BUG_REPORT_STATUS } from "@/shared/constants/statuses";
 import type { BugReport } from "../../../api/list/bugReports.api";

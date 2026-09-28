@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import type { StaleShipment } from "@/features/delivery-dashboard";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { deliveryForceConfirmLabels } from "@/shared/constants/labels/deliveryForceConfirm";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { staleTasksPanelStyles } from "../../../styles/delivery-agents/staleTasksPanel.styles";

@@ -1,7 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { vendorApi, type VendorPayoutFrequency } from "../../../api/overview/vendor.api";
+import {
+  vendorApi,
+  type VendorPayoutFrequency,
+} from "../../../api/overview/vendor.api";
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorEntityType } from "@/shared/constants/statuses";
 

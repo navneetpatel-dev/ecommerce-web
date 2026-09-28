@@ -1,10 +1,13 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { TableCellImage } from "@/shared/components/TableCellImage.component";
-import { TruncatedText } from "@/shared/components/TruncatedText.component";
+import { TableCellImage } from "@/shared/components/DataTable/TableCellImage.component";
+import { TruncatedText } from "@/shared/components/display/TruncatedText.component";
 import { TABLE_CELL_MAX_CHARS } from "@/shared/constants/table/table";
-import { extractImageUrls, isImageFieldKey } from "@/shared/utils/media/imageField";
+import {
+  extractImageUrls,
+  isImageFieldKey,
+} from "@/shared/utils/media/imageField";
 import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
 import { dataTableUtilsStyles } from "../../styles/data-table/dataTable.styles";
 import type { DataTableColumn } from "../../types/data-table/types";

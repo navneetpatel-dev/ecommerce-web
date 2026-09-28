@@ -3,7 +3,7 @@
 import { SlidersHorizontal, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { useAdminWalletAdjust } from "../../hooks/wallet/useAdminWalletAdjust.hook";

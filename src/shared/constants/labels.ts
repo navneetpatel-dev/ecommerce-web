@@ -14,6 +14,7 @@ import { tablesLabels } from "./labels/tables";
 import { tables2Labels } from "./labels/tables2";
 import { tables3Labels } from "./labels/tables3";
 import { tables4Labels } from "./labels/tables4";
+import { tables5Labels } from "./labels/tables5";
 import { settingsLabels } from "./labels/settings";
 import { reportsLabels } from "./labels/reports";
 import { walletLabels } from "./labels/wallet";
@@ -26,6 +27,7 @@ import { bugs2Labels } from "./labels/bugs2";
 import { coupons2Labels } from "./labels/coupons2";
 import { reports2Labels } from "./labels/reports2";
 import { reports3Labels } from "./labels/reports3";
+import { reports4Labels } from "./labels/reports4";
 import { apiErrorLabels } from "./labels/apiErrors";
 import { cartLabels } from "./labels/cart";
 import { deliveryForceConfirmLabels } from "./labels/deliveryForceConfirm";
@@ -51,6 +53,8 @@ import { giftCardsLabels } from "./labels/giftCards";
 import { adminRolesLabels } from "./labels/adminRoles";
 import { impersonationLabels } from "./labels/impersonation";
 import { exportsLabels } from "./labels/exports";
+import { appliedFilterLabels } from "./labels/appliedFilters";
+import { mediaUploadLabels } from "./labels/mediaUploads";
 
 export const LABELS = {
   ...commerceLabels,
@@ -65,6 +69,7 @@ export const LABELS = {
   ...tables2Labels,
   ...tables3Labels,
   ...tables4Labels,
+  ...tables5Labels,
   ...settingsLabels,
   ...reportsLabels,
   ...walletLabels,
@@ -76,6 +81,7 @@ export const LABELS = {
   ...coupons2Labels,
   ...reports2Labels,
   ...reports3Labels,
+  ...reports4Labels,
   ...apiErrorLabels,
   ...cartLabels,
   ...deliveryForceConfirmLabels,
@@ -101,6 +107,8 @@ export const LABELS = {
   ...adminRolesLabels,
   ...impersonationLabels,
   ...exportsLabels,
+  ...appliedFilterLabels,
+  ...mediaUploadLabels,
 } as const;
 
 export { formatExportProcessing } from "./labels/exports";

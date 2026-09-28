@@ -1,5 +1,5 @@
 import type { SubOrder } from "@/shared/api/types";
-import { VendorGroupTotals } from "@/shared/components/VendorGroupTotals.component";
+import { VendorGroupTotals } from "@/shared/components/orders/VendorGroupTotals.component";
 import { LABELS } from "@/shared/constants/labels";
 import { taxDisplayLabel } from "@/shared/utils/formatting/taxDisplay";
 

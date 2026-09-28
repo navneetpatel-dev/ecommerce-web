@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { motion } from "motion/react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { LifeBuoy } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
@@ -72,12 +72,7 @@ export function HelpArticleView({ slug }: { slug: string }) {
             {LABELS.helpCenter}
           </Link>
           {categoryEyebrow}
-          <h1
-            className={styles.title}
-            style={{ fontSize: "var(--text-display-sm)" }}
-          >
-            {article.title}
-          </h1>
+          <h1 className={styles.title}>{article.title}</h1>
           <p className={styles.summary}>{article.summary}</p>
         </motion.header>
 

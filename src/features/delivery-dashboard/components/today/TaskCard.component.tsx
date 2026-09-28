@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ChevronRight, MapPin } from "lucide-react";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { taskCardStyles } from "../../styles/today/taskCard.styles";
 
 export function TaskCard({

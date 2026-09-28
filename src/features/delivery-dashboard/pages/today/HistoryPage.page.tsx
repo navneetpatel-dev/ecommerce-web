@@ -1,7 +1,10 @@
 "use client";
 
 import { TaskCard } from "../../components/today/TaskCard.component";
-import { useMyDeliveries, useMyPickups } from "../../api/agent/deliveryAgent.queries";
+import {
+  useMyDeliveries,
+  useMyPickups,
+} from "../../api/agent/deliveryAgent.queries";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { todayPageStyles as styles } from "./todayPage.styles";
 

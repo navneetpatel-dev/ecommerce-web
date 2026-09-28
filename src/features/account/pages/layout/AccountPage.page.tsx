@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { usePathname } from "next/navigation";
 import { UserRound } from "lucide-react";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { PATHS } from "@/shared/constants/paths/paths";

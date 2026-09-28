@@ -16,8 +16,8 @@ import { COUPON_USER_SEGMENT } from "@/shared/constants/statuses";
 import type {
   InfiniteMultiSelectPageQuery,
   InfiniteMultiSelectPageResult,
-} from "@/shared/components/InfiniteMultiSelect.component";
-import { InfiniteMultiSelect } from "@/shared/components/InfiniteMultiSelect.component";
+} from "@/shared/components/InfiniteMultiSelect";
+import { InfiniteMultiSelect } from "@/shared/components/InfiniteMultiSelect";
 import { USER_RESTRICTIONS } from "../../../constants/coupons/constants";
 
 interface CreateCouponRestrictionFieldsProps {

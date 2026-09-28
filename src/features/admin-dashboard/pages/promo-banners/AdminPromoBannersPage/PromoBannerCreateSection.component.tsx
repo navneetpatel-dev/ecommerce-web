@@ -1,15 +1,15 @@
 "use client";
 
-import { FileUpload } from "@/shared/components/FileUpload.component";
+import { FileUpload } from "@/shared/components/FileUpload";
 import {
   FormActions,
   FormFieldFrame,
   FormSection,
 } from "@/shared/components/forms";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import {
   Select,
   SelectContent,
@@ -18,7 +18,10 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import {
   PROMO_BANNER_LINK_TYPE,
   PROMO_BANNER_LINK_TYPE_VALUES,

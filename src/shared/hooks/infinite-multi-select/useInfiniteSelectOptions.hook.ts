@@ -1,26 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useInfiniteScrollSentinel } from "../infinite-select/useInfiniteScrollSentinel.hook";
+import { mergeUniqueById } from "../../utils/infinite-select/mergeUniqueById";
 import type {
   InfiniteMultiSelectOption,
   InfiniteMultiSelectPageQuery,
   InfiniteMultiSelectPageResult,
 } from "../../types/infinite-multi-select/types";
-
-function mergeUnique(
-  existing: InfiniteMultiSelectOption[],
-  incoming: InfiniteMultiSelectOption[],
-): InfiniteMultiSelectOption[] {
-  if (incoming.length === 0) return existing;
-  const seen = new Set(existing.map((item) => item.id));
-  const next = [...existing];
-  for (const item of incoming) {
-    if (seen.has(item.id)) continue;
-    seen.add(item.id);
-    next.push(item);
-  }
-  return next;
-}
 
 type UseInfiniteSelectOptionsArgs = {
   disabled: boolean;
@@ -79,7 +66,7 @@ export function useInfiniteSelectOptions({
         });
         if (requestId !== requestIdRef.current) return;
 
-        setOptions((prev) => mergeUnique(prev, result.items));
+        setOptions((prev) => mergeUniqueById(prev, result.items));
         setPage(result.page);
         setTotalPages(Math.max(1, result.totalPages));
         setLoadError(false);
@@ -132,23 +119,16 @@ export function useInfiniteSelectOptions({
 
   const hasMore = page > 0 && page < totalPages;
 
-  useEffect(() => {
-    const node = sentinelRef.current;
-    if (!node || disabled) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry?.isIntersecting) return;
-        if (initialLoading || loadingMoreRef.current || !hasMore) return;
-        void loadMore(page + 1);
-      },
-      { root: node.parentElement, rootMargin: "48px", threshold: 0 },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [disabled, hasMore, initialLoading, loadMore, page, options.length]);
+  useInfiniteScrollSentinel({
+    enabled: !disabled,
+    hasMore,
+    initialLoading,
+    sentinelRef,
+    page,
+    loadingMoreRef,
+    loadMore,
+    listLength: options.length,
+  });
 
   return {
     options,

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import {
   CategoryCard,
   CategoryMoreCard,

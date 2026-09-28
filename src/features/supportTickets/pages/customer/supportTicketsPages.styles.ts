@@ -22,5 +22,5 @@ export const supportTicketsPagesStyles = {
   customerDetailGlow:
     "pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_10%,transparent),transparent_60%)]",
   customerDetailContainer:
-    "storefront-container relative py-6 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:py-8 lg:pb-10",
+    "storefront-container relative py-6 pb-[4.5rem] md:py-8 lg:pb-10",
 } as const;

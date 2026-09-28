@@ -1,6 +1,9 @@
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";
-import { formatInr, formatOrderDate } from "@/shared/utils/formatting/orderFormat";
+import {
+  formatInr,
+  formatOrderDate,
+} from "@/shared/utils/formatting/orderFormat";
 import type { Order } from "@/shared/api/types";
 import { userRecentOrdersCardStyles } from "./adminUserDetail.styles";
 

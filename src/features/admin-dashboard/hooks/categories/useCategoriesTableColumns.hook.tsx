@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import type { DataTableColumn } from "@/shared/components/DataTable.component";
-import { TableCellImage } from "@/shared/components/TableCellImage.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import type { DataTableColumn } from "@/shared/components/DataTable";
+import { TableCellImage } from "@/shared/components/DataTable/TableCellImage.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { CATEGORY_STATUS } from "@/shared/constants/statuses";
 import type { Category } from "@/shared/api/types";

@@ -12,7 +12,7 @@ import {
 import {
   TableRowActions,
   TableRowAction,
-} from "@/shared/components/TableRowActions.component";
+} from "@/shared/components/DataTable/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
 import { reportsEngineApi } from "@/features/reports";

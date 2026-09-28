@@ -1,7 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
-import { FormError } from "@/shared/components/FormError.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { BUG_REPORT_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";

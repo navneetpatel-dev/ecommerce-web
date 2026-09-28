@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import type { ProductListItem } from "@/shared/api/types";
-import { VendorStrip } from "@/shared/components/VendorStrip.component";
-import { DiscountBadge } from "@/shared/components/DiscountBadge.component";
-import { RatingStars } from "@/shared/components/RatingStars.component";
+import { VendorStrip } from "@/shared/components/orders/VendorStrip.component";
+import { DiscountBadge } from "@/shared/components/badges/DiscountBadge.component";
+import { RatingStars } from "@/shared/components/display/RatingStars.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import { CARD_DETAILS_STYLES } from "../../../styles/card/cardDetails.styles";
 
 interface CardDetailsProps {
@@ -37,12 +37,12 @@ export function CardDetails({
           </span>
         ) : null}
         <span className={CARD_DETAILS_STYLES.basePrice}>
-          ₹{formatInrAmount(price)}
+          <MoneyAmount value={price} />
         </span>
         {showMrp && (
           <>
             <span className={CARD_DETAILS_STYLES.compareAtPrice}>
-              ₹{formatInrAmount(product.compareAtPrice!)}
+              <MoneyAmount value={product.compareAtPrice} />
             </span>
             <DiscountBadge>-{discountPercent}%</DiscountBadge>
           </>

@@ -2,7 +2,10 @@
 
 import { API } from "@/shared/constants/apiRoutes";
 import { useReportPanel } from "@/features/reports";
-import { reportsApi, type WalletRechargeReport } from "../../api/finance/reports.api";
+import {
+  reportsApi,
+  type WalletRechargeReport,
+} from "../../api/finance/reports.api";
 
 export function useWalletRechargeReport() {
   return useReportPanel<WalletRechargeReport>({

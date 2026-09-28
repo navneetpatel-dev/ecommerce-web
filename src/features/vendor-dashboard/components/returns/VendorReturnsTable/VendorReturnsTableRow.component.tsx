@@ -1,5 +1,5 @@
 import { TableRow, TableCell } from "@/shared/components/ui/table";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { vendorReturnsTableStyles } from "../../../styles/returns/vendorReturnsTable.styles";
 import type { VendorReturnRowViewModel } from "../../../hooks/returns/useVendorReturnsTablePresentation.hook";
 import { VendorReturnPhotosCell } from "./VendorReturnPhotosCell.component";

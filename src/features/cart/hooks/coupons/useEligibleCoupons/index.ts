@@ -10,7 +10,10 @@ interface UseEligibleCouponsOptions {
   enabled?: boolean;
 }
 
-export function useEligibleCoupons({ cart, enabled = true }: UseEligibleCouponsOptions) {
+export function useEligibleCoupons({
+  cart,
+  enabled = true,
+}: UseEligibleCouponsOptions) {
   const accessToken = useAuthStore((s) => s.accessToken);
   const [eligible, setEligible] = useState<EligibleCoupon[]>([]);
   const [eligibleLoading, setEligibleLoading] = useState(false);

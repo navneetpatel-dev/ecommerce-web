@@ -1,7 +1,7 @@
 "use client";
 
 import { BottomSheet } from "@/shared/components/BottomSheet.component";
-import { SelectableOptionButton } from "@/shared/components/SelectableOptionButton.component";
+import { SelectableOptionButton } from "@/shared/components/forms/SelectableOptionButton.component";
 import { SORT_OPTIONS } from "../../../hooks/listing/useProductListing.hook";
 import { LABELS } from "@/shared/constants/labels";
 import { productListingPageStyles } from "./productListingPage.styles";

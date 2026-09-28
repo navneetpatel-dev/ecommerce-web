@@ -1,5 +1,9 @@
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { CategoryGridSkeleton, SkeletonGrid } from "./primitives.component";
+import {
+  CategoryGridSkeleton,
+  SkeletonCard,
+  SkeletonGrid,
+} from "./primitives.component";
 import { pageSkeletonsStyles as styles } from "../../styles/skeletons/pageSkeletons.styles";
 
 /** Home / generic storefront content while a soft navigation settles. */
@@ -19,6 +23,63 @@ export function StorefrontPageSkeleton() {
         </div>
         <SkeletonGrid count={8} />
       </div>
+    </div>
+  );
+}
+
+/** Wallet / returns / reviews / gift-cards ledger while the query settles. */
+export function LedgerPageSkeleton() {
+  return (
+    <div className={styles.ledgerContainer}>
+      <div className={styles.ledgerHeaderStack}>
+        <Skeleton className={styles.h3w28} />
+        <Skeleton className={styles.h8w48} />
+      </div>
+      <Skeleton className={styles.ledgerAside} />
+      <SkeletonCard count={3} height={styles.ledgerRow} />
+    </div>
+  );
+}
+
+/** Single-column form pages (order tracking, support create forms). */
+export function FormPageSkeleton() {
+  return (
+    <div className={styles.formContainer}>
+      <div className={styles.ledgerHeaderStack}>
+        <Skeleton className={styles.h3w24} />
+        <Skeleton className={styles.h8w40} />
+      </div>
+      <SkeletonCard count={3} height={styles.formControl} />
+      <div className={styles.formActionRow}>
+        <Skeleton className={styles.formControl} />
+        <Skeleton className={styles.formControl} />
+      </div>
+    </div>
+  );
+}
+
+/** Detail views (return detail, ticket/bug detail, order confirmation). */
+export function DetailPageSkeleton() {
+  return (
+    <div className={styles.detailContainer}>
+      <Skeleton className={styles.h3w28} />
+      <Skeleton className={styles.detailHero} />
+      <SkeletonCard count={3} height={styles.detailCard} />
+    </div>
+  );
+}
+
+/** Delivery agent app shell — list-shaped, matches the task-card UI. */
+export function DeliveryPageSkeleton() {
+  return (
+    <div className={styles.deliveryContainer} aria-busy="true">
+      <Skeleton className={styles.deliveryHeaderCard} />
+      <div className={styles.deliveryMetricGrid}>
+        <Skeleton className={styles.deliveryMetric} />
+        <Skeleton className={styles.deliveryMetric} />
+        <Skeleton className={styles.deliveryMetric} />
+      </div>
+      <SkeletonCard count={4} height={styles.deliveryTaskCard} />
     </div>
   );
 }

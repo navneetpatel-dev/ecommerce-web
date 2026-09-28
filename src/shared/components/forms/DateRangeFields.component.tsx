@@ -1,8 +1,9 @@
-import { DateTimePicker } from "@/shared/components/DateTimePicker.component";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DateTimePicker } from "@/shared/components/DateTimePicker";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
+import { dateRangeFieldsStyles } from "../../styles/forms/forms.styles";
 
 interface DateRangeFieldsProps {
   from: string;
@@ -35,11 +36,11 @@ export function DateRangeFields({
   const hint = disabled ? disabledHint : "";
 
   return (
-    <div className={cn("contents", className)}>
+    <div className={cn(dateRangeFieldsStyles.wrapper, className)}>
       <FormFieldFrame
         label={LABELS.reportDateFrom}
         htmlFor={fromId}
-        className={cn("w-full sm:w-44", fromClassName)}
+        className={cn(dateRangeFieldsStyles.field, fromClassName)}
       >
         <DisabledActionHint disabled={disabled} message={hint} block>
           <DateTimePicker
@@ -55,7 +56,7 @@ export function DateRangeFields({
       <FormFieldFrame
         label={LABELS.reportDateTo}
         htmlFor={toId}
-        className={cn("w-full sm:w-44", toClassName)}
+        className={cn(dateRangeFieldsStyles.field, toClassName)}
       >
         <DisabledActionHint disabled={disabled} message={hint} block>
           <DateTimePicker

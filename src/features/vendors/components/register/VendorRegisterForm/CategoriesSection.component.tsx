@@ -1,4 +1,4 @@
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
+import { CheckboxField } from "@/shared/components/forms/CheckboxField.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorDocumentType } from "@/shared/constants/statuses";

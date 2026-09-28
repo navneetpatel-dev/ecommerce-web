@@ -4,7 +4,7 @@ import {
   TableRow,
   TableHead,
 } from "@/shared/components/ui/table";
-import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { LABELS } from "@/shared/constants/labels";
 import { vendorReturnsTableStyles } from "../../../styles/returns/vendorReturnsTable.styles";
 import { VendorReturnsTableBody } from "./VendorReturnsTableBody.component";

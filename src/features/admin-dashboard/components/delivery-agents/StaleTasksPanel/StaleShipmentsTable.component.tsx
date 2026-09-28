@@ -1,10 +1,7 @@
 import { useCallback } from "react";
 import type { StaleShipment } from "@/features/delivery-dashboard";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { deliveryForceConfirmLabels } from "@/shared/constants/labels/deliveryForceConfirm";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { staleTasksPanelStyles as styles } from "../../../styles/delivery-agents/staleTasksPanel.styles";

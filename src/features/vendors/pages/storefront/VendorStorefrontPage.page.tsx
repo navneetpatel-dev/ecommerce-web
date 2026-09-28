@@ -2,8 +2,8 @@
 
 import { Store } from "lucide-react";
 import { useVendorStorefrontPage } from "../../hooks/storefront/useVendorStorefrontPage.hook";
-import { EmptyState } from "@/shared/components/EmptyState.component";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { ProductGrid } from "@/features/products";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";

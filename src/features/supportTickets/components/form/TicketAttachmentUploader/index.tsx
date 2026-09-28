@@ -1,14 +1,17 @@
 "use client";
 
 import { useId, useRef } from "react";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import {
   getAcceptForUpload,
   getImageUploadHintKey,
 } from "@/shared/constants/imageSpecs";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import {
   BUG_MAX_RECORDING_SECONDS,

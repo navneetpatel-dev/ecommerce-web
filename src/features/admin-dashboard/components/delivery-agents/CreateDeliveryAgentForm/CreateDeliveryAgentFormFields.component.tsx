@@ -34,10 +34,14 @@ export function CreateDeliveryAgentFormFields({
   return (
     <div className={createDeliveryAgentFormStyles.grid}>
       <div className={createDeliveryAgentFormStyles.fieldWrapper}>
-        <label className={createDeliveryAgentFormStyles.fieldLabel}>
+        <label
+          htmlFor="agent-full-name"
+          className={createDeliveryAgentFormStyles.fieldLabel}
+        >
           Full name *
         </label>
         <Input
+          id="agent-full-name"
           placeholder="e.g. John Doe"
           value={form.fullName}
           onChange={handleFullNameChange}
@@ -45,10 +49,14 @@ export function CreateDeliveryAgentFormFields({
       </div>
 
       <div className={createDeliveryAgentFormStyles.fieldWrapper}>
-        <label className={createDeliveryAgentFormStyles.fieldLabel}>
+        <label
+          htmlFor="agent-email"
+          className={createDeliveryAgentFormStyles.fieldLabel}
+        >
           Email address *
         </label>
         <Input
+          id="agent-email"
           type="email"
           placeholder="e.g. agent@example.com"
           value={form.email}
@@ -57,10 +65,14 @@ export function CreateDeliveryAgentFormFields({
       </div>
 
       <div className={createDeliveryAgentFormStyles.fieldWrapper}>
-        <label className={createDeliveryAgentFormStyles.fieldLabel}>
+        <label
+          htmlFor="agent-password"
+          className={createDeliveryAgentFormStyles.fieldLabel}
+        >
           Temporary password (min 8 chars) *
         </label>
         <Input
+          id="agent-password"
           type="password"
           placeholder="••••••••"
           value={form.password}
@@ -69,10 +81,14 @@ export function CreateDeliveryAgentFormFields({
       </div>
 
       <div className={createDeliveryAgentFormStyles.fieldWrapper}>
-        <label className={createDeliveryAgentFormStyles.fieldLabel}>
+        <label
+          htmlFor="agent-phone"
+          className={createDeliveryAgentFormStyles.fieldLabel}
+        >
           Phone number *
         </label>
         <Input
+          id="agent-phone"
           placeholder="e.g. +91 9876543210"
           value={form.phone}
           onChange={handlePhoneChange}
@@ -80,10 +96,14 @@ export function CreateDeliveryAgentFormFields({
       </div>
 
       <div className={createDeliveryAgentFormStyles.fieldWrapper}>
-        <label className={createDeliveryAgentFormStyles.fieldLabel}>
+        <label
+          htmlFor="agent-hub-or-zone"
+          className={createDeliveryAgentFormStyles.fieldLabel}
+        >
           Hub or zone *
         </label>
         <Input
+          id="agent-hub-or-zone"
           placeholder="e.g. South Hub / Zone 110"
           value={form.hubOrZone}
           onChange={handleHubOrZoneChange}
@@ -91,7 +111,10 @@ export function CreateDeliveryAgentFormFields({
       </div>
 
       <div className={createDeliveryAgentFormStyles.fieldWrapper}>
-        <label className={createDeliveryAgentFormStyles.fieldLabel}>
+        <label
+          htmlFor="agent-vehicle-type"
+          className={createDeliveryAgentFormStyles.fieldLabel}
+        >
           Vehicle type
         </label>
         <Select
@@ -99,6 +122,7 @@ export function CreateDeliveryAgentFormFields({
           onValueChange={handleVehicleTypeChange}
         >
           <SelectTrigger
+            id="agent-vehicle-type"
             className={createDeliveryAgentFormStyles.selectTrigger}
           >
             <SelectValue />

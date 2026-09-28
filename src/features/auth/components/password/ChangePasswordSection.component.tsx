@@ -5,7 +5,7 @@ import {
   FormStack,
   FormActions,
 } from "@/shared/components/forms";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { Button } from "@/shared/components/ui/button";
 import { PasswordInputContainer } from "@/shared/containers/forms/PasswordInputContainer.container";
 import { LABELS } from "@/shared/constants/labels";

@@ -5,7 +5,7 @@ import { ProductsTable } from "../products/ProductsTable.page";
 import { VendorSummaryGrid } from "../../components/overview/VendorSummaryGrid.component";
 import { VendorLowStockWidget } from "../../components/products/VendorLowStockWidget.component";
 import { SkeletonGrid } from "@/shared/components/Skeletons.component";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { VENDOR_NAV } from "@/shared/constants/navigation/vendorNav";
 import { vendorPagesStyles } from "./vendorPages.styles";
 

@@ -6,7 +6,7 @@ import {
   TableHead,
   TableCell,
 } from "@/shared/components/ui/table";
-import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { LABELS } from "@/shared/constants/labels";
 import { payoutsTableStyles } from "../../../styles/payouts/payoutsTable.styles";
 import { PayoutDesktopRow } from "./PayoutDesktopRow.component";

@@ -1,5 +1,5 @@
 import { Archive, Check, Trash2, Ban, Play } from "lucide-react";
-import type { StatusDialogVariant } from "@/shared/components/StatusDialog.component";
+import type { StatusDialogVariant } from "@/shared/components/dialogs/StatusDialog.component";
 import type { AdminActionTone } from "./adminActionTone";
 
 export function renderToneIcon(tone: AdminActionTone) {

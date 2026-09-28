@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import type { ProductListItem } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { MAX_COMPARED_PRODUCTS } from "../../../constants/compare/compare";
@@ -14,6 +15,8 @@ export interface ProductCompareBarProps {
   onToggleProduct: (product: ProductListItem) => void;
   onClear: () => void;
   onCompareNow: () => void;
+  /** Persistent destination for the selection (the /compare page). */
+  compareHref?: string;
 }
 
 export function ProductCompareBar({
@@ -21,6 +24,7 @@ export function ProductCompareBar({
   onToggleProduct,
   onClear,
   onCompareNow,
+  compareHref,
 }: ProductCompareBarProps) {
   if (products.length === 0) return null;
 
@@ -54,6 +58,11 @@ export function ProductCompareBar({
           />
         </div>
         <div className={productCompareBarStyles.rightActions}>
+          {compareHref ? (
+            <Button type="button" variant="outline" size="sm" asChild>
+              <Link href={compareHref}>{LABELS.comparePageTitle}</Link>
+            </Button>
+          ) : null}
           <Button type="button" variant="ghost" size="sm" onClick={onClear}>
             {LABELS.clear}
           </Button>

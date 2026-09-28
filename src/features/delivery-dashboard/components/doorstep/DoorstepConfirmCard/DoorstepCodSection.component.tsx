@@ -1,5 +1,5 @@
 import { IndianRupee } from "lucide-react";
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
+import { CheckboxField } from "@/shared/components/forms/CheckboxField.component";
 import { doorstepConfirmCardStyles } from "../../../styles/doorstep/doorstepConfirmCard.styles";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 

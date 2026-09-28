@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
-import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
+import { PaginationResultSummary } from "@/shared/components/navigation/PaginationResultSummary.component";
 import { LABELS } from "@/shared/constants/labels";
 import { dataTableHeaderStyles } from "../../styles/data-table/dataTable.styles";
 

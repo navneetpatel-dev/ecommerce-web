@@ -8,8 +8,8 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { Button } from "@/shared/components/ui/button";
-import { MediaImage } from "@/shared/components/MediaImage.component";
-import { ImageGalleryThumbnailStrip } from "@/shared/components/ImageGalleryThumbnailStrip.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
+import { ImageGalleryThumbnailStrip } from "@/shared/components/ImageGallery/ImageGalleryThumbnailStrip.component";
 import { LABELS } from "@/shared/constants/labels";
 import {
   IMAGE_GALLERY_LIGHTBOX_QUALITY,

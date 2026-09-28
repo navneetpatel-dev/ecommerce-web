@@ -1,6 +1,6 @@
 "use client";
 
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { TableRow, TableCell } from "@/shared/components/ui/table";
 import {
   TABLE_ACTIONS_CELL_CLASS,
@@ -9,7 +9,7 @@ import {
 import { cn } from "@/shared/utils/dom/cn";
 import { ProductActions } from "./ProductActions.component";
 import type { ProductRowActionsProps } from "../../../types/products/ProductsTable-types";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 /** Desktop table row for a vendor product. */
 export function ProductRow(props: ProductRowActionsProps) {
@@ -39,7 +39,7 @@ export function ProductRow(props: ProductRowActionsProps) {
         <span className={stockClassName}>{product.stock}</span>
       </TableCell>
       <TableCell className={cn(TABLE_DATA_CELL_CLASS, "font-mono")}>
-        ₹{formatInrAmount(product.basePrice)}
+        {formatInr(product.basePrice)}
       </TableCell>
       <TableCell className={TABLE_DATA_CELL_CLASS}>
         <StatusBadge status={product.status} />

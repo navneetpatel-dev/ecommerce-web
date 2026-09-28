@@ -4,9 +4,8 @@ import { useState, useCallback, useMemo } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { cartLineQuantityMax } from "@/shared/constants/cart/cart";
 import { WARRANTY_TYPE } from "@/shared/constants/statuses";
-import { VARIANT_LOW_STOCK_DEFAULT } from "../../constants/listing-form/productFields";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
-import { customerPrice } from "@/shared/utils/pricing/customerPrice";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { resolveVariantPricing } from "../../utils/detail/variantPricing";
 import {
   getAddToCartHint,
   getAddToCartLabel,
@@ -39,12 +38,19 @@ export function useProductDetailContent({
   const [deliveryBlocked, setDeliveryBlocked] = useState(false);
   const [detailTab, setDetailTab] = useState("description");
 
-  const displayPrice = Number(
-    variantSelection.currentPrice || customerPrice(product) || 0,
+  const {
+    resolvedVariant,
+    displayPrice,
+    displayStock,
+    taxInclusiveEstimate,
+    showMrp,
+    discountPercent,
+    lowStockAt,
+  } = useMemo(
+    () => resolveVariantPricing(product, variantSelection),
+    [product, variantSelection],
   );
-  const displayStock = Number(
-    variantSelection.currentStock || product.stock || 0,
-  );
+
   const quantityMax = maxQuantity ?? cartLineQuantityMax(displayStock);
   const purchaseBlocked = Boolean(!canAddToCart || deliveryBlocked);
   const addDisabled = Boolean(purchaseBlocked || isAddingToCart);
@@ -58,36 +64,8 @@ export function useProductDetailContent({
 
   const reviewCount = product.reviewCount ?? 0;
   const avgRating = product.avgRating ?? 0;
-  const formattedPrice = formatInrAmount(displayPrice);
+  const formattedPrice = formatInr(displayPrice);
   const compareAtPrice = product.compareAtPrice ?? null;
-
-  const resolvedVariant = useMemo(() => {
-    return (
-      variantSelection.matchedVariant ??
-      (product.variants?.length === 1 ? product.variants[0] : null)
-    );
-  }, [variantSelection.matchedVariant, product.variants]);
-
-  // The "incl. GST" figure follows the selected variant's price (API-computed per
-  // variant); the product's own until one is picked.
-  const taxInclusiveEstimate =
-    resolvedVariant?.taxInclusivePrice !== undefined
-      ? (resolvedVariant.taxInclusivePrice ?? null)
-      : (product.taxInclusivePrice ?? null);
-
-  // The price shown is the selected variant's, so the "% off" badge and struck-through
-  // MRP are that variant's too (computed by the API); the product's own until one is picked.
-  const variantHasMrpDiscount = resolvedVariant?.showMrp !== undefined;
-  const showMrp = variantHasMrpDiscount
-    ? Boolean(resolvedVariant?.showMrp)
-    : (product.showMrp ?? false);
-  const discountPercent = variantHasMrpDiscount
-    ? (resolvedVariant?.discountPercent ?? null)
-    : (product.discountPercent ?? null);
-
-  const lowStockAt = Number(
-    resolvedVariant?.lowStockAt ?? VARIANT_LOW_STOCK_DEFAULT,
-  );
 
   const warrantyTypeLabel =
     product.displayWarrantyType === WARRANTY_TYPE.SELLER
@@ -139,6 +117,7 @@ export function useProductDetailContent({
     quantityDisabledHint,
     reviewCount,
     avgRating,
+    displayPrice,
     formattedPrice,
     compareAtPrice,
     showMrp,

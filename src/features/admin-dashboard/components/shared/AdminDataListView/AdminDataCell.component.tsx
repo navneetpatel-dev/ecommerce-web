@@ -1,7 +1,10 @@
 import type { ReactNode } from "react";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { TableCellImage } from "@/shared/components/TableCellImage.component";
-import { extractImageUrls, isImageFieldKey } from "@/shared/utils/media/imageField";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { TableCellImage } from "@/shared/components/DataTable/TableCellImage.component";
+import {
+  extractImageUrls,
+  isImageFieldKey,
+} from "@/shared/utils/media/imageField";
 import { shortOrderId } from "@/shared/utils/formatting/orderFormat";
 import type { AdminDataRow } from "../../../hooks/shared/useAdminDataList.hook";
 import {

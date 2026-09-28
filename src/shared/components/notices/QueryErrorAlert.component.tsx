@@ -1,4 +1,4 @@
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
 interface QueryErrorAlertProps {

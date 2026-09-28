@@ -1,8 +1,5 @@
 import type { StalePickup } from "@/features/delivery-dashboard";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { staleTasksPanelStyles as styles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
 
 interface StalePickupsTableProps {

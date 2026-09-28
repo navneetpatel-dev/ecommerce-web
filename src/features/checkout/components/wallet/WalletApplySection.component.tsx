@@ -2,10 +2,11 @@
 
 import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useWalletApplySection } from "../../hooks/wallet/useWalletApplySection.hook";
 import { WALLET_APPLY_SECTION_STYLES } from "../../styles/wallet/walletApplySection.styles";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 interface WalletApplySectionProps {
   walletBalance: number;
@@ -78,7 +79,7 @@ export function WalletApplySection({
           min={0}
           max={maxApplicable}
           step={0.01}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           disabled={disabled}
           showSteppers={false}
           onChange={handleNumberChange}

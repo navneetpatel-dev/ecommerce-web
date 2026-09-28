@@ -15,8 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
-import { FormError } from "@/shared/components/FormError.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
 import { shippingRatesLabels } from "@/shared/constants/labels/shippingRates";
 import { SHIPPING_METHOD } from "@/shared/constants/statuses";

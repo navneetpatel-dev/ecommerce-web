@@ -1,10 +1,10 @@
 import type { Order } from "@/shared/api/types";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { Card, CardHeader, CardContent } from "@/shared/components/ui/card";
 import { useOrderCard } from "../../hooks/list/useOrderCard.hook";
 import { OrderCardSubOrdersList } from "./OrderCardSubOrdersList.component";
 import { ORDER_CARD_STYLES } from "../../styles/list/orderCard.styles";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 interface OrderCardProps {
   order: Order;
@@ -26,7 +26,7 @@ export function OrderCard({ order }: OrderCardProps) {
           <span className={ORDER_CARD_STYLES.dateText}>{formattedDate}</span>
         </div>
         <span className={ORDER_CARD_STYLES.totalAmount}>
-          ₹{formatInrAmount(order.totalAmount)}
+          {formatInr(order.totalAmount)}
         </span>
       </CardHeader>
       <CardContent>

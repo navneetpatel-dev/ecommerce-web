@@ -1,12 +1,17 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { cn } from "@/shared/utils/dom/cn";
 import { LABELS } from "@/shared/constants/labels";
+import { useModalOverlay } from "@/shared/hooks/ui/useModalOverlay.hook";
 import type { SidebarNavItem } from "./SidebarNav.component";
-import { workspaceNavDrawerStyles, sidebarNavStyles } from "../../styles/layout/layout.styles";
+import {
+  workspaceNavDrawerStyles,
+  sidebarNavStyles,
+} from "../../styles/layout/layout.styles";
 
 interface WorkspaceNavDrawerProps {
   open: boolean;
@@ -26,12 +31,29 @@ export function WorkspaceNavDrawer({
   title,
   header,
 }: WorkspaceNavDrawerProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  useModalOverlay({ open, onClose, panelRef });
+
   if (!open) return null;
 
   return (
     <div className={workspaceNavDrawerStyles.backdropWrapper}>
-      <div className={workspaceNavDrawerStyles.backdrop} onClick={onClose} />
-      <div className={workspaceNavDrawerStyles.panel}>
+      {/* Hidden, untabbable close target — see OVERLAY_BACKDROP. */}
+      <Button
+        type="button"
+        variant="ghost"
+        tabIndex={-1}
+        aria-hidden
+        onClick={onClose}
+        className={workspaceNavDrawerStyles.backdrop}
+      />
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        className={workspaceNavDrawerStyles.panel}
+      >
         <div className={workspaceNavDrawerStyles.header}>
           <span className={workspaceNavDrawerStyles.title}>{title}</span>
           <Button

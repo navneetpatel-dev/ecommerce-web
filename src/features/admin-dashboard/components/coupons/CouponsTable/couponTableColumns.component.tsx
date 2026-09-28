@@ -1,5 +1,5 @@
-import type { DataTableColumn } from "@/shared/components/DataTable.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import type { DataTableColumn } from "@/shared/components/DataTable";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { DISCOUNT_BEARER } from "@/shared/constants/statuses";
 import { formatDateTime } from "@/shared/utils/formatting/formatDate";

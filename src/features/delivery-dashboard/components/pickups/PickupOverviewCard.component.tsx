@@ -1,6 +1,6 @@
 import { RotateCcw } from "lucide-react";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { pickupOverviewCardStyles as styles } from "../../styles/pickups/pickupOverviewCard.styles";
 
 interface PickupOverviewCardProps {

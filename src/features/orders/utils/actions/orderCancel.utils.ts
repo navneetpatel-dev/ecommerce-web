@@ -1,8 +1,5 @@
 import type { Order } from "@/shared/api/types";
-import {
-  ORDER_STATUS,
-  PAYMENT_STATUS,
-} from "@/shared/constants/statuses";
+import { ORDER_STATUS, PAYMENT_STATUS } from "@/shared/constants/statuses";
 
 const CANCELLABLE_SUB_STATUSES = new Set<string>([
   ORDER_STATUS.PENDING,

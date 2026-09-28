@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import {
   Accordion,
   AccordionContent,

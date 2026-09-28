@@ -60,9 +60,7 @@ export function getProductBreadcrumbItems(
 
   return chain.map((node, index) => ({
     label: node.name,
-    href: PATHS.category(
-      ...chain.slice(0, index + 1).map((item) => item.slug),
-    ),
+    href: PATHS.category(...chain.slice(0, index + 1).map((item) => item.slug)),
   }));
 }
 

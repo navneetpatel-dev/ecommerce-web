@@ -1,9 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { DetailQuerySkeleton } from "@/shared/components/DetailQuerySkeleton.component";
+import { DetailQuerySkeleton } from "@/shared/components/Skeletons/DetailQuerySkeleton.component";
 import { LABELS } from "@/shared/constants/labels";
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useSupportTicket } from "../../api/list/supportTickets.queries";

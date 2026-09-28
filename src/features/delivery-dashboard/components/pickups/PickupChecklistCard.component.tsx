@@ -1,7 +1,7 @@
 import { ClipboardCheck, Upload } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { pickupChecklistCardStyles as styles } from "../../styles/pickups/pickupChecklistCard.styles";
 
 interface PickupChecklistCardProps {
@@ -64,7 +64,9 @@ export function PickupChecklistCard({
 
         <div className={styles.codeBox}>
           <div className={styles.codeLabelRow}>
-            <label className={styles.codeLabel}>Customer Pickup Code</label>
+            <label htmlFor="customer-pickup-code" className={styles.codeLabel}>
+              Customer Pickup Code
+            </label>
             <Button
               variant="outline"
               size="sm"
@@ -81,6 +83,7 @@ export function PickupChecklistCard({
           ) : null}
           <div className={styles.codeInputsRow}>
             <Input
+              id="customer-pickup-code"
               inputMode="numeric"
               maxLength={6}
               value={otpCode}

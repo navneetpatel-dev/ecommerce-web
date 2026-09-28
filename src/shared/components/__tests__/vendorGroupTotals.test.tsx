@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { VendorGroupTotals } from "../VendorGroupTotals.component";
+import { VendorGroupTotals } from "@/shared/components/orders/VendorGroupTotals.component";
 
 const base = {
   subtotal: 7583.46,

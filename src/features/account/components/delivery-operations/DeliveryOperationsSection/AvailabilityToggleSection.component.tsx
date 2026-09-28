@@ -1,5 +1,5 @@
 import { Switch } from "@/shared/components/ui/switch";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type { useSetAvailability } from "@/features/delivery-dashboard";
 

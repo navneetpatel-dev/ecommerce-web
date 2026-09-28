@@ -1,6 +1,6 @@
 "use client";
 
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { LABELS } from "@/shared/constants/labels";
 import { usePersonalInfoSection } from "../../../hooks/personal-info/usePersonalInfoSection.hook";
 import { PersonalInfoForm } from "./PersonalInfoForm.component";

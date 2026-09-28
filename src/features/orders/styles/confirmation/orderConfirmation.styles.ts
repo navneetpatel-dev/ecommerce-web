@@ -49,7 +49,8 @@ export const orderConfirmationStyles = {
   heroInfo: "min-w-0 text-center sm:text-left",
   heroBadgeRow: "flex items-center justify-center gap-2 sm:justify-start",
   heroCheckmark: "m-0 h-7 w-7 shrink-0",
-  heroHeading: "mt-1.5 font-display leading-[1.1] tracking-tight text-ink",
+  heroHeading:
+    "mt-1.5 font-display leading-[1.1] tracking-tight text-ink text-display-sm",
   heroOrderId: "mt-2 font-mono text-body-sm text-ink-muted",
   heroSubtitle: "mt-3 max-w-lg text-body leading-relaxed text-ink-muted",
   heroActions:

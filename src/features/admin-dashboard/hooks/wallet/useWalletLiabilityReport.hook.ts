@@ -2,7 +2,10 @@
 
 import { API } from "@/shared/constants/apiRoutes";
 import { useReportPanel } from "@/features/reports";
-import { reportsApi, type WalletLiabilityReport } from "../../api/finance/reports.api";
+import {
+  reportsApi,
+  type WalletLiabilityReport,
+} from "../../api/finance/reports.api";
 
 /** Owns the wallet liability report panel state (Rule 1/12). */
 export function useWalletLiabilityReport() {

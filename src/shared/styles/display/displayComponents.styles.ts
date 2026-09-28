@@ -8,12 +8,18 @@ export const emptyStateStyles = {
   container:
     "mx-auto flex flex-col items-center px-4 py-12 text-center md:py-16",
   defaultMaxWidth: "max-w-md",
+  /* Token-based art frame (design spec §4.5's illustration slot): brand-subtle
+     disc + tone-coloured mark, so it re-colours with the palette. */
+  artWrap:
+    "mb-6 flex h-28 w-28 items-center justify-center rounded-full bg-brand-subtle text-brand",
+  artIcon: "h-12 w-12",
   iconWrap:
     "mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-line bg-surface shadow-elevation-1",
   icon: "h-5 w-5 text-ink-muted",
   eyebrow: "text-eyebrow mb-2",
-  heading: "font-display font-semibold tracking-tight text-ink",
-  message: "max-w-[36ch] text-ink-muted",
+  heading:
+    "font-display font-semibold tracking-tight text-ink text-h3 leading-[1.25]",
+  message: "max-w-[36ch] text-body leading-[1.55] text-ink-muted",
   messageWithHeading: "mt-2",
   actions: "mt-7 flex flex-wrap items-center justify-center gap-2.5",
   button: "min-w-[9.5rem]",

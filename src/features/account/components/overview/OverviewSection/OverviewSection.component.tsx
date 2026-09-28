@@ -1,9 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import type { AccountSectionId } from "../../../types/layout/types";
 import { GlanceList } from "./GlanceList.component";
 import { ProfileCard } from "./ProfileCard.component";

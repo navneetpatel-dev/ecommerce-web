@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { HelpContactForm } from "../../contact/HelpContactForm.component";
@@ -11,10 +11,7 @@ export function ContactSection() {
   return (
     <section id="contact" className={styles.contactSection}>
       <TextEyebrow brand>{LABELS.helpStillStuckEyebrow}</TextEyebrow>
-      <h2
-        className={styles.contactTitle}
-        style={{ fontSize: "var(--text-display-sm)" }}
-      >
+      <h2 className={styles.contactTitle}>
         {LABELS.helpContactSupportHeading}
       </h2>
       <p className={styles.contactHint}>{LABELS.helpContactDeskHint}</p>

@@ -4,7 +4,10 @@ import { useState } from "react";
 import { inventoryApi } from "../../api/inventory/inventory.api";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
-export function useInventoryStockEditor(currentStock: number, productId: string) {
+export function useInventoryStockEditor(
+  currentStock: number,
+  productId: string,
+) {
   const [stock, setStock] = useState(String(currentStock));
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);

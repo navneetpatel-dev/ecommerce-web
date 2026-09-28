@@ -1,5 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
-import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
+import { CashbackCouponNotice } from "@/shared/components/notices/CashbackCouponNotice.component";
 import type { AppliedCouponSummary } from "@/shared/api/types";
 import { AppliedCouponChipsList } from "./AppliedCouponChipsList.component";
 import { appliedCouponChipsStyles as styles } from "../../styles/coupons/appliedCouponChips.styles";

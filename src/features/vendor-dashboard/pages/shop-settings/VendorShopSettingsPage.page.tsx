@@ -1,6 +1,6 @@
 "use client";
 
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { VendorShopSettingsForm } from "../../components/shop-settings/VendorShopSettingsForm/index";

@@ -1,6 +1,6 @@
 "use client";
 
-import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
+import { DateRangeFields } from "@/shared/components/forms/DateRangeFields.component";
 import { FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import {

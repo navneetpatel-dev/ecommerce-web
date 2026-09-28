@@ -3,7 +3,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { cartKeys } from "@/features/cart";
 import { ordersKeys } from "@/features/orders";
 import { invalidateWalletQueries } from "@/features/wallet";
-import { checkoutKeys, type CheckoutQuoteInput } from "../../api/checkout/checkout.queries";
+import {
+  checkoutKeys,
+  type CheckoutQuoteInput,
+} from "../../api/checkout/checkout.queries";
 
 /** Query-cache invalidation/refetch helpers around placing an order (Rule 3). */
 export function useCheckoutCacheActions(quoteInput: CheckoutQuoteInput) {

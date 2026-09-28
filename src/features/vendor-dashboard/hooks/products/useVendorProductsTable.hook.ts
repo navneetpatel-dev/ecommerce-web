@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useVendorProducts, vendorKeys } from "../../api/overview/vendor.queries";
+import {
+  useVendorProducts,
+  vendorKeys,
+} from "../../api/overview/vendor.queries";
 import { productsApi } from "@/features/products";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";

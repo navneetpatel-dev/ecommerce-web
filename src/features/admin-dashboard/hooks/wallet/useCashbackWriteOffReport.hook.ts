@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { API } from "@/shared/constants/apiRoutes";
 import { useReportPanel } from "@/features/reports";
-import { reportsApi, type CashbackWriteOffReport } from "../../api/finance/reports.api";
+import {
+  reportsApi,
+  type CashbackWriteOffReport,
+} from "../../api/finance/reports.api";
 
 export type WriteOffBornBy = "ALL" | "PLATFORM" | "VENDOR";
 

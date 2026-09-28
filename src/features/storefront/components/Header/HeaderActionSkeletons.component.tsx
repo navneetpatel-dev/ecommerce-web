@@ -15,7 +15,7 @@ export function StorefrontActionButtonsSkeleton() {
   return (
     <>
       <Skeleton
-        className={cn("hidden lg:block", styles.iconButtonBox)}
+        className={cn(styles.iconButtonBoxDesktop, styles.iconButtonBox)}
         aria-hidden
       />
       <Skeleton className={styles.iconButtonBox} aria-hidden />
@@ -67,8 +67,10 @@ function TextSkeleton({
 }) {
   return (
     <span className={styles.textSkeletonWrapper}>
-      <span className={cn("invisible", className)}>{children}</span>
-      <Skeleton className={cn("absolute inset-0", radius)} aria-hidden />
+      <span className={cn(styles.skeletonPlaceholder, className)}>
+        {children}
+      </span>
+      <Skeleton className={cn(styles.skeletonOverlay, radius)} aria-hidden />
     </span>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { UploadedMediaAttachment } from "../../../types/form/TicketAttachmentUploader-types";
 import { isVideoAttachment } from "../../../utils/form/TicketAttachmentUploader-utils";

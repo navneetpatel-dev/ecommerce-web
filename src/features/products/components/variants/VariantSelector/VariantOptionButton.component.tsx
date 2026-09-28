@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { variantSelectorStyles } from "../../../styles/variants/variantSelector.styles";

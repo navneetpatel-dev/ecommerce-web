@@ -13,7 +13,10 @@ import {
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { CouponScopeMultiSelect } from "../CouponScopeMultiSelect.component";
-import { SCOPE_TYPES, scopePickerLabel } from "../../../constants/coupons/constants";
+import {
+  SCOPE_TYPES,
+  scopePickerLabel,
+} from "../../../constants/coupons/constants";
 import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
 
 interface CreateCouponScopeFieldsProps {

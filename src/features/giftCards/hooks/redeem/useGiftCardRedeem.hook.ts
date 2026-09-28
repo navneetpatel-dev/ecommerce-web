@@ -4,7 +4,10 @@ import { useCallback, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { walletKeys } from "@/features/wallet";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
-import { giftCardsApi, type GiftCardRedeemResult } from "../../api/gift-cards/giftCards.api";
+import {
+  giftCardsApi,
+  type GiftCardRedeemResult,
+} from "../../api/gift-cards/giftCards.api";
 
 export function useGiftCardRedeem() {
   const queryClient = useQueryClient();

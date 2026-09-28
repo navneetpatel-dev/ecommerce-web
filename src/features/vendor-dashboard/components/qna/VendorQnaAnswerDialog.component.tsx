@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 
 interface VendorQnaAnswerDialogProps {
@@ -66,6 +66,7 @@ export function VendorQnaAnswerDialog({
           value={answer}
           onChange={(event) => setAnswer(event.target.value)}
           disabled={submitting}
+          // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: this control lives in a dialog/popover that opened from a user action, where moving focus into the panel is the expected behaviour
           autoFocus
         />
       </FormFieldFrame>

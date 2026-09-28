@@ -9,11 +9,11 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { FormActions, FormStack } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import {
   type InfiniteMultiSelectPageQuery,
   type InfiniteMultiSelectPageResult,
-} from "@/shared/components/InfiniteMultiSelect.component";
+} from "@/shared/components/InfiniteMultiSelect";
 import { adminUsersApi } from "../../../api/users/users.api.hook";
 import { useCallback } from "react";
 import { CreateCouponBasicsFields } from "./CreateCouponBasicsFields.component";

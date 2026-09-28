@@ -22,7 +22,7 @@ interface ProductBuyBoxColumnProps {
   avgRating: number;
   reviewCount: number;
   onReviewsClick: () => void;
-  formattedPrice: string;
+  displayPrice: number;
   compareAtPrice: number | null;
   showMrp: boolean;
   discountPercent: number | null;
@@ -61,7 +61,7 @@ export function ProductBuyBoxColumn({
   avgRating,
   reviewCount,
   onReviewsClick,
-  formattedPrice,
+  displayPrice,
   compareAtPrice,
   showMrp,
   discountPercent,
@@ -106,7 +106,7 @@ export function ProductBuyBoxColumn({
         />
 
         <PriceAvailabilityBlock
-          formattedPrice={formattedPrice}
+          displayPrice={displayPrice}
           compareAtPrice={compareAtPrice}
           showMrp={showMrp}
           discountPercent={discountPercent}

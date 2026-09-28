@@ -190,5 +190,7 @@ export const tables3Labels = {
   noProductsYetHeading: "No products yet",
   noProductsYetHint:
     "The collection is empty for now. Check back soon for new pieces.",
+  searchDidYouMean: "Did you mean “{term}”?",
+  searchDidYouMeanAction: "Search instead",
   browseAllProducts: "Browse all products",
 } as const;

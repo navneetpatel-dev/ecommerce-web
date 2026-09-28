@@ -2,10 +2,7 @@
 
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { CashbackWriteOffMetrics } from "./CashbackWriteOffMetrics.component";
 import type { CashbackWriteOffRowData } from "./CashbackWriteOffTableRow.component";
 import { useCashbackWriteOffReportTable } from "../../../hooks/wallet/useCashbackWriteOffReportTable.hook";

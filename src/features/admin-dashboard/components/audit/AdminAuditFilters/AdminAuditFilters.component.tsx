@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
-import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
+import { DateRangeFields } from "@/shared/components/forms/DateRangeFields.component";
 import { dateRangeToolbarStyles } from "@/shared/styles/forms/dateRangeToolbar.styles";
 import { auditFiltersLabels } from "@/shared/constants/labels/auditFilters";
 import { adminAuditFiltersStyles } from "../../../styles/audit/adminAuditFilters.styles";

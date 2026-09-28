@@ -1,8 +1,8 @@
 import { memo } from "react";
 import Link from "next/link";
 import type { SubOrder } from "@/shared/api/types";
-import { VendorStrip } from "@/shared/components/VendorStrip.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { VendorStrip } from "@/shared/components/orders/VendorStrip.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { ORDER_CARD_STYLES } from "../../styles/list/orderCard.styles";
 
 interface OrderCardSubOrdersListProps {

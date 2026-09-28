@@ -1,4 +1,4 @@
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { commissionLedgerTableStyles } from "../../../styles/commission/commissionLedgerTable.styles";
 import type { CommissionRowViewModel } from "../../../hooks/commission/useCommissionLedgerPresentation.hook";
 

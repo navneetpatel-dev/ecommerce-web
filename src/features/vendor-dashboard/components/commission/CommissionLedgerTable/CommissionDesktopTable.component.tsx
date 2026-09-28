@@ -6,7 +6,7 @@ import {
   TableHead,
   TableCell,
 } from "@/shared/components/ui/table";
-import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { commissionLedgerTableStyles } from "../../../styles/commission/commissionLedgerTable.styles";
 import { CommissionDesktopRow } from "./CommissionDesktopRow.component";
 import type { CommissionRowViewModel } from "../../../hooks/commission/useCommissionLedgerPresentation.hook";

@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { TaskContactCard } from "../../components/today/TaskContactCard.component";
 import { FailedAttemptSection } from "../../components/deliveries/FailedAttemptSection.component";
 import { ShipmentOverviewCard } from "../../components/deliveries/ShipmentOverviewCard.component";

@@ -1,7 +1,7 @@
 "use client";
 
 import { BarcodeScanButton } from "../../components/pickups/BarcodeScanButton.component";
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { deliveryListPageStyles as styles } from "./deliveryListPage.styles";
 import { useDeliveriesPage } from "../../hooks/deliveries/useDeliveriesPage.hook";
 import { DeliveryStopsList } from "../../components/deliveries/DeliveryStopsList.component";

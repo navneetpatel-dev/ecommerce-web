@@ -1,12 +1,9 @@
 "use client";
 
 import { BarChart3 } from "lucide-react";
-import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
+import { DateRangeFields } from "@/shared/components/forms/DateRangeFields.component";
 import { Button } from "@/shared/components/ui/button";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { DeliveryAgentPerformance } from "@/features/delivery-dashboard";
 import { dateRangeToolbarStyles } from "@/shared/styles/forms/dateRangeToolbar.styles";
 import { useAdminDeliveryPerformancePanel } from "../../../hooks/delivery-agents/useAdminDeliveryPerformancePanel.hook";

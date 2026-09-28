@@ -6,7 +6,7 @@ import {
   TableRow,
   TableHead,
 } from "@/shared/components/ui/table";
-import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorSubOrder } from "../../types/orders/vendorOrders.types";
 import { VendorSubOrderCards } from "./VendorOrdersTable/VendorSubOrderCards.component";

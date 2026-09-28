@@ -1,6 +1,6 @@
 import { LABELS } from "@/shared/constants/labels";
-import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { InlineAmountSkeleton } from "@/shared/components/Skeletons/InlineAmountSkeleton.component";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { orderTaxShippingBreakdownStyles } from "../../styles/orders/vendorOrderComponents.styles";
 
@@ -73,7 +73,7 @@ export function OrderTaxShippingBreakdown({
         <dd className={orderTaxShippingBreakdownStyles.value}>
           {shippingDisplayKey === "FREE"
             ? LABELS.freeShipping
-            : `₹${formatInrAmount(shippingTotal)}`}
+            : `${formatInr(shippingTotal)}`}
         </dd>
       </div>
       {/* Prices include GST: this is the GST inside the total, not added to it. */}
@@ -82,7 +82,7 @@ export function OrderTaxShippingBreakdown({
           {formatLabel(LABELS.includesTax, { tax: taxLabel })}
         </dt>
         <dd className={orderTaxShippingBreakdownStyles.value}>
-          ₹{formatInrAmount(taxTotal)}
+          {formatInr(taxTotal)}
         </dd>
       </div>
     </dl>

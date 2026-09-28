@@ -5,7 +5,7 @@ import {
   InfiniteSingleSelect,
   type InfiniteSingleSelectPageQuery,
   type InfiniteSingleSelectPageResult,
-} from "@/shared/components/InfiniteSingleSelect.component";
+} from "@/shared/components/InfiniteSingleSelect";
 import { LABELS } from "@/shared/constants/labels";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 

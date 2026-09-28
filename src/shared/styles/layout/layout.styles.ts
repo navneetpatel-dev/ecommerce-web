@@ -1,9 +1,11 @@
+import { OVERLAY_BACKDROP } from "../common.styles";
+
 export const mobileTabBarStyles = {
   nav: "fixed bottom-0 left-0 right-0 z-40 flex min-h-14 items-stretch justify-around overflow-visible border-t border-line bg-surface lg:hidden",
   tabItem:
     "flex min-h-11 min-w-[3.25rem] flex-col items-center justify-center gap-0.5 overflow-visible px-2 py-1 text-ink-muted",
-  textLabel: "text-[0.625rem]",
-  textLabelNormal: "text-[0.625rem] font-normal",
+  textLabel: "text-[0.625rem] max-md:landscape:hidden",
+  textLabelNormal: "text-[0.625rem] font-normal max-md:landscape:hidden",
   skeletonIcon: "size-5 rounded-md",
   skeletonLabelW8: "h-2 w-8 rounded-sm",
   skeletonLabelW6: "h-2 w-6 rounded-sm",
@@ -31,7 +33,7 @@ export const sidebarNavStyles = {
 
 export const workspaceNavDrawerStyles = {
   backdropWrapper: "fixed inset-0 z-50 lg:hidden",
-  backdrop: "absolute inset-0 bg-overlay animate-fade-in",
+  backdrop: OVERLAY_BACKDROP,
   panel:
     "absolute left-0 top-0 bottom-0 flex w-72 flex-col bg-surface shadow-elevation-4 animate-slide-in-left",
   header: "flex h-14 items-center justify-between border-b border-line px-4",

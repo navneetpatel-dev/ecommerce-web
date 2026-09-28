@@ -1,7 +1,7 @@
 import { Undo2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { rtoHandoverCardStyles as styles } from "../../styles/rto/rtoHandoverCard.styles";
 
 interface RtoHandoverCardProps {
@@ -57,7 +57,9 @@ export function RtoHandoverCard({
 
         <div className={styles.codeSection}>
           <div className={styles.codeHeader}>
-            <label className={styles.label}>Vendor Handover Code</label>
+            <label htmlFor="vendor-handover-code" className={styles.label}>
+              Vendor Handover Code
+            </label>
             <Button
               variant="outline"
               size="sm"
@@ -70,6 +72,7 @@ export function RtoHandoverCard({
           {codeSentNotice}
           <div className={styles.inputRow}>
             <Input
+              id="vendor-handover-code"
               inputMode="numeric"
               maxLength={6}
               value={otpCode}

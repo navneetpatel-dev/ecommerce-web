@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import {
   MILESTONE_CARD_BODY,
   MILESTONE_CARD_DESC,

@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { QuantitySelector } from "@/shared/components/QuantitySelector.component";
+import { QuantitySelector } from "@/shared/components/QuantitySelector/QuantitySelector.component";
 import { ShareButtonContainer } from "@/shared/containers/system/ShareButtonContainer.container";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { ProductDeliveryCheck } from "../../delivery-check/ProductDeliveryCheck.component";
 import { Heart } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";

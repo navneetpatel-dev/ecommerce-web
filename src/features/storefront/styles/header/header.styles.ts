@@ -15,6 +15,9 @@ export const headerStyles = {
 
   // Skeletons
   iconButtonBox: "h-11 w-11 shrink-0 rounded-md max-sm:h-9 max-sm:w-9",
+  iconButtonBoxDesktop: "hidden lg:block",
+  skeletonPlaceholder: "invisible",
+  skeletonOverlay: "absolute inset-0",
   ordersSkeleton: "hidden xl:flex items-center gap-1",
   ordersSkeletonBox: "h-8 w-[4.25rem] rounded-md",
   accountSkeletonPill: "border-line bg-surface",

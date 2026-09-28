@@ -4,7 +4,8 @@ export const helpHomeViewStyles = {
     "pointer-events-none absolute inset-x-0 top-0 h-[320px] bg-[radial-gradient(ellipse_at_20%_0%,_color-mix(in_srgb,var(--brand)_12%,transparent),transparent_55%)]",
   container: "storefront-container relative py-6 md:py-8",
   header: "max-w-2xl",
-  title: "mt-1.5 font-display text-ink leading-[1.1] tracking-tight",
+  title:
+    "mt-1.5 font-display text-ink leading-[1.1] tracking-tight text-display-sm",
   subtitle: "mt-2 text-body text-ink-muted",
   searchWrapper: "relative mt-8 max-w-xl",
   searchIcon:
@@ -33,7 +34,8 @@ export const helpHomeViewStyles = {
   quickLinkDesc: "mt-1 text-body-sm text-ink-muted",
   contactSection:
     "mt-14 scroll-mt-24 border border-line bg-surface-raised p-5 shadow-elevation-1 md:p-8",
-  contactTitle: "mt-1.5 font-display text-ink leading-[1.15] tracking-tight",
+  contactTitle:
+    "mt-1.5 font-display text-ink leading-[1.15] tracking-tight text-display-sm",
   contactHint: "mt-2 max-w-xl text-body text-ink-muted",
   contactLinks: "mt-4 flex flex-wrap gap-3",
   contactLink: "text-[0.875rem] font-medium text-brand hover:text-brand-hover",

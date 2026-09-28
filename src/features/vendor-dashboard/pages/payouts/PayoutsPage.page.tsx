@@ -6,7 +6,7 @@ import { CommissionInvoicesTable } from "../../components/commission/CommissionI
 import { PayoutsTable } from "../../components/payouts/PayoutsTable.component";
 import { VendorSettlementReportPanel } from "../../components/payouts/VendorSettlementReportPanel.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { vendorPagesStyles } from "../overview/vendorPages.styles";
 

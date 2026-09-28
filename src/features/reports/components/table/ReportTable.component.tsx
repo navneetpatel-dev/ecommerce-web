@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
 import type {
   ReportColumnMeta,

@@ -1,10 +1,14 @@
 import { ChevronRight } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import type { Order } from "@/shared/api/types";
-import type { DataTableColumn } from "@/shared/components/DataTable.component";
+import type { DataTableColumn } from "@/shared/components/DataTable";
 import { OrderStatusGroup } from "../../components/list/OrderStatusGroup.component";
 import { OrderItemsTableCell } from "../../components/list/OrderItemsTableCell.component";
-import { formatInr, formatOrderDate, shortOrderId } from "../../utils/detail/format";
+import {
+  formatInr,
+  formatOrderDate,
+  shortOrderId,
+} from "../../utils/detail/format";
 import { ORDERS_LIST_STYLES } from "../../styles/list/ordersList.styles";
 
 export const ORDER_COLUMNS: DataTableColumn<Order>[] = [

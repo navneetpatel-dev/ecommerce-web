@@ -1,6 +1,6 @@
 "use client";
 
-import { Breadcrumbs } from "@/shared/components/Breadcrumbs.component";
+import { Breadcrumbs } from "@/shared/components/navigation/Breadcrumbs.component";
 import { ProductRelatedRails } from "../../related/ProductRelatedRails.component";
 import { ProductGallery } from "../../gallery/ProductGallery.component";
 import { ProductBuyBoxColumn } from "./ProductBuyBoxColumn.component";
@@ -43,7 +43,7 @@ export function ProductDetailContent({
     quantityDisabledHint,
     reviewCount,
     avgRating,
-    formattedPrice,
+    displayPrice,
     compareAtPrice,
     showMrp,
     discountPercent,
@@ -92,7 +92,7 @@ export function ProductDetailContent({
           avgRating={avgRating}
           reviewCount={reviewCount}
           onReviewsClick={handleReviewsClick}
-          formattedPrice={formattedPrice}
+          displayPrice={displayPrice}
           compareAtPrice={compareAtPrice}
           showMrp={showMrp}
           discountPercent={discountPercent}
@@ -143,7 +143,7 @@ export function ProductDetailContent({
       <StickyAddToCartBar
         visible={isStickyBarVisible}
         productName={product.name}
-        formattedPrice={formattedPrice}
+        displayPrice={displayPrice}
         addDisabled={addDisabled}
         addToCartHint={addToCartHint}
         addLabel={stickyAddLabel}

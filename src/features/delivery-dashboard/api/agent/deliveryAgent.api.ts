@@ -29,7 +29,10 @@ import {
   deliveryAdminDocumentsApi,
 } from "../documents/deliveryAgentDocuments.api";
 import { deliveryAdminDispatchApi } from "./deliveryAgentDispatch.api";
-import { statusQuery, withOfflineCache } from "../offline/deliveryAgentOfflineFetch";
+import {
+  statusQuery,
+  withOfflineCache,
+} from "../offline/deliveryAgentOfflineFetch";
 
 const deliveryAgentCoreApi = {
   profile: () => apiClient.get<DeliveryAgent>(API.deliveryAgents.meProfile),

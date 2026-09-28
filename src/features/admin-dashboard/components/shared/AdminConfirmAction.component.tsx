@@ -5,8 +5,8 @@ import { Button } from "@/shared/components/ui/button";
 import {
   StatusDialog,
   type StatusDialogVariant,
-} from "@/shared/components/StatusDialog.component";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+} from "@/shared/components/dialogs/StatusDialog.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { AdminActionTone } from "../../utils/shared/adminActionTone";
 import { renderToneIcon } from "../../utils/shared/adminConfirmActionIcon";

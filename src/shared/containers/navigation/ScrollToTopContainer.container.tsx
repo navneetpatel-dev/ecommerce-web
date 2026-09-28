@@ -1,7 +1,7 @@
 "use client";
 
 import { useScrollToTop } from "@/shared/hooks/scroll/useScrollToTop.hook";
-import { ScrollToTop } from "@/shared/components/ScrollToTop.component";
+import { ScrollToTop } from "@/shared/components/navigation/ScrollToTop.component";
 
 export function ScrollToTopContainer() {
   const scroll = useScrollToTop();

@@ -6,7 +6,7 @@ import {
   type CategoryFormInput,
 } from "../../schemas/categories/categories.schema";
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { FormActions } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { AdminCategoryFormFields } from "./AdminCategoryFormFields.component";

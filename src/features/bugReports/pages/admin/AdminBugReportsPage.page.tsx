@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";

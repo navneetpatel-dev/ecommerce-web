@@ -3,11 +3,8 @@
 import { useCallback } from "react";
 import { Download, PlayCircle, Wallet } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { AgentPayout } from "@/features/delivery-dashboard";
 import { useAgentPayoutsPanel } from "../../../hooks/delivery-agents/useAgentPayoutsPanel.hook";
 import { agentPayoutsPanelStyles as styles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";

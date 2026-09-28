@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { AssigneeSelect } from "@/shared/components/AssigneeSelect.component";
+import { AssigneeSelect } from "@/shared/components/forms/AssigneeSelect.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import {

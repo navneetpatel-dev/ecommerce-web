@@ -1,7 +1,7 @@
 "use client";
 
 import { useSuccessCheckmark } from "@/shared/hooks/ui/useSuccessCheckmark.hook";
-import { SuccessCheckmark } from "@/shared/components/SuccessCheckmark.component";
+import { SuccessCheckmark } from "@/shared/components/display/SuccessCheckmark.component";
 
 interface SuccessCheckmarkContainerProps {
   className?: string;

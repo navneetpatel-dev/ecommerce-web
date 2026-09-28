@@ -1,11 +1,11 @@
 "use client";
 
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { ProductActions } from "./ProductActions.component";
 import { productMobileCardStyles as styles } from "../../../styles/products/productsTable.styles";
 import type { ProductRowActionsProps } from "../../../types/products/ProductsTable-types";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 /** Below-lg card treatment for a vendor product (mirrors the desktop row). */
 export function ProductMobileCard(props: ProductRowActionsProps) {
@@ -38,7 +38,7 @@ export function ProductMobileCard(props: ProductRowActionsProps) {
         <div>
           <dt className={styles.metaLabel}>{LABELS.priceExclGst}</dt>
           <dd className={styles.metaValueMono}>
-            ₹{formatInrAmount(product.basePrice)}
+            {formatInr(product.basePrice)}
           </dd>
         </div>
       </dl>

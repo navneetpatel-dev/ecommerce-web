@@ -2,7 +2,7 @@
 
 import { Trash2 } from "lucide-react";
 import type { Address } from "@/shared/api/types";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 
 interface DeleteAddressDialogProps {
   target: Address | null;

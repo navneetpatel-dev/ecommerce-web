@@ -1,5 +1,5 @@
 import { TableRow, TableCell } from "@/shared/components/ui/table";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { payoutsTableStyles } from "../../../styles/payouts/payoutsTable.styles";
 import type { PayoutRowViewModel } from "../../../hooks/payouts/usePayoutsTablePresentation.hook";
 

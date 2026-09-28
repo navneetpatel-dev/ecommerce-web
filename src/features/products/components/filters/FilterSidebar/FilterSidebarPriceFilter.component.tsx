@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import {
   AccordionItem,
   AccordionTrigger,
@@ -7,6 +7,7 @@ import {
 } from "@/shared/components/ui/accordion";
 import { LABELS } from "@/shared/constants/labels";
 import { filterSidebarStyles } from "../../../styles/filters/filterSidebar.styles";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 interface FilterSidebarPriceFilterProps {
   minPrice: number | undefined;
@@ -43,7 +44,7 @@ export function FilterSidebarPriceFilter({
             min={0}
             placeholder={LABELS.minPricePlaceholder}
             aria-label={LABELS.minimumPrice}
-            prefix="₹"
+            prefix={CURRENCY_SYMBOL}
             value={minPrice}
             onChange={handleMinPriceChange}
           />
@@ -53,7 +54,7 @@ export function FilterSidebarPriceFilter({
             min={0}
             placeholder={LABELS.maxPricePlaceholder}
             aria-label={LABELS.maximumPrice}
-            prefix="₹"
+            prefix={CURRENCY_SYMBOL}
             value={maxPrice}
             onChange={handleMaxPriceChange}
           />

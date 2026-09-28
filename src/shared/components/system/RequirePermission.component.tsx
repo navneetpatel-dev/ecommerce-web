@@ -1,6 +1,6 @@
 "use client";
 
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import type { PermissionKey } from "@/shared/constants/permissions/permissions";
 

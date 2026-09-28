@@ -1,7 +1,7 @@
 "use client";
 
 import { useChatWidget } from "@/shared/hooks/chat/useChatWidget.hook";
-import { ChatWidget } from "@/shared/components/ChatWidget.component";
+import { ChatWidget } from "@/shared/components/system/ChatWidget.component";
 
 export function ChatWidgetContainer() {
   const chat = useChatWidget();

@@ -1,1 +1,1 @@
-export * from './gift-cards/giftCards.constants';
+export * from "./gift-cards/giftCards.constants";

@@ -4,7 +4,10 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LABELS } from "@/shared/constants/labels";
-import { useAccountProfile, useUpdateProfile } from "../../api/addresses/account.queries";
+import {
+  useAccountProfile,
+  useUpdateProfile,
+} from "../../api/addresses/account.queries";
 import { useApiFormErrors } from "@/shared/hooks/forms/useApiFormErrors.hook";
 import {
   ProfileSchema,

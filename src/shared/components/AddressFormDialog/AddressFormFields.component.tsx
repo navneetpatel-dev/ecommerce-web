@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
+import { CheckboxField } from "@/shared/components/forms/CheckboxField.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";

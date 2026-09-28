@@ -1,7 +1,7 @@
 "use client";
 
 import { FileText } from "lucide-react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import {
   useDeliveryProfile,
   useMyDocuments,

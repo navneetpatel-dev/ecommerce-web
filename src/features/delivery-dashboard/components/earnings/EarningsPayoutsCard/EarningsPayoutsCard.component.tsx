@@ -1,7 +1,7 @@
 "use client";
 
 import { IndianRupee } from "lucide-react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { earningsPayoutsCardStyles } from "../../../styles/earnings/earningsPayoutsCard.styles";
 import { useEarningsPayoutsCardPresentation } from "../../../hooks/earnings/useEarningsPayoutsCardPresentation.hook";
 import { EarningsPayoutsTable } from "./EarningsPayoutsTable.component";

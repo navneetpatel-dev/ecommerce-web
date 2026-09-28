@@ -2,7 +2,7 @@
 
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import {
   Select,
   SelectContent,

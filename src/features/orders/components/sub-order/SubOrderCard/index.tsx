@@ -1,6 +1,6 @@
 import type { OrderItem, SubOrder } from "@/shared/api/types";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { Timeline } from "@/shared/components/Timeline.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { Timeline } from "@/shared/components/display/Timeline.component";
 import type { ReturnReasonCode } from "../../../hooks/sub-order/useSubOrderReturn.hook";
 import { VENDOR_GROUP_CARD } from "@/shared/styles/orders/vendorGroupStyles";
 import { SubOrderCardHeader } from "./SubOrderCardHeader.component";

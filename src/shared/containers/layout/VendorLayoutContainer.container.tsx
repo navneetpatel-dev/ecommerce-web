@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { SidebarNav } from "@/shared/components/layout/SidebarNav.component";
 import { WorkspaceNavDrawer } from "@/shared/components/layout/WorkspaceNavDrawer.component";
 import { useVendorLayout } from "@/shared/hooks/navigation/useVendorLayout.hook";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { vendorPermissionsForPath } from "@/shared/constants/navigation/vendorNav";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";

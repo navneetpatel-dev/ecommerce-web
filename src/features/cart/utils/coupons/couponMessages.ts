@@ -1,7 +1,7 @@
 import { couponsApi } from "@/features/coupons";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 /**
  * Builds the confirmation message shown after a coupon apply succeeds
@@ -13,7 +13,7 @@ export function describeApplyResult(
 ): string {
   if (result.discount > 0) {
     return formatLabel(LABELS.couponApplied, {
-      amount: String(result.discount),
+      amount: formatInr(Number(result.discount)),
     });
   }
   if ((result.cashbackAmount ?? 0) > 0) {
@@ -21,8 +21,8 @@ export function describeApplyResult(
       return LABELS.couponAppliedCheckout;
     }
     return formatLabel(LABELS.cashbackPayNowMessage, {
-      payNow: `₹${formatInrAmount(result.payNowGrandTotal)}`,
-      cashback: `₹${formatInrAmount(result.cashbackAmount)}`,
+      payNow: `${formatInr(result.payNowGrandTotal)}`,
+      cashback: `${formatInr(result.cashbackAmount)}`,
     });
   }
   return LABELS.couponAppliedCheckout;

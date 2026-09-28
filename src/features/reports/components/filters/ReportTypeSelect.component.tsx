@@ -1,4 +1,4 @@
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import {
   Select,

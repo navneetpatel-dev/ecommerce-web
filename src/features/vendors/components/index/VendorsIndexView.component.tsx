@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { ArrowRight, Store } from "lucide-react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";

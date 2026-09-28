@@ -1,6 +1,6 @@
 "use client";
 
-import { ImageGalleryLightbox } from "@/shared/components/ImageGalleryLightbox.component";
+import { ImageGalleryLightbox } from "@/shared/components/ImageGallery/ImageGalleryLightbox.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { ProductImage } from "@/shared/api/types";
 import { useVendorReturnPhotosCell } from "../../../hooks/returns/useVendorReturnPhotosCell.hook";

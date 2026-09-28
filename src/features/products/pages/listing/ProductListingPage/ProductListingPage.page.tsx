@@ -4,7 +4,10 @@ import { FilterSidebar } from "@/features/products/components/filters/FilterSide
 import { ProductCompareBar } from "@/features/products/components/compare/ProductCompareBar.component";
 import { ProductCompareSection } from "@/features/products/components/compare/ProductCompareSection.component";
 import { useCategories } from "@/features/categories";
+import { suggestionHref, useSearchDidYouMean } from "@/features/search";
 import { useProductListing } from "../../../hooks/listing/useProductListing.hook";
+import { useAppliedFilterChips } from "../../../hooks/filters/useAppliedFilterChips.hook";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { MobileActionBar } from "./MobileActionBar.component";
 import { ListingResults } from "./ListingResults.component";
@@ -20,6 +23,17 @@ export function ProductListingPage() {
     (category) => category.id === listing.filters.categoryId,
   )?.name;
   const empty = getListingEmptyState(listing.filters, categoryName);
+  const chips = useAppliedFilterChips({
+    filters: listing.filters,
+    removeFilters: listing.removeFilters,
+    removeAttrValue: listing.removeAttrValue,
+    categoryName,
+  });
+  const didYouMean = useSearchDidYouMean({
+    term: listing.filters.search,
+    hasNoResults: listing.data?.items.length === 0,
+  });
+  const didYouMeanHref = didYouMean ? suggestionHref(didYouMean) : undefined;
 
   return (
     <div className={productListingPageStyles.container}>
@@ -48,6 +62,7 @@ export function ProductListingPage() {
           <ListingResults
             sort={listing.filters.sort}
             totalProducts={listing.data?.total}
+            chips={chips}
             isFetching={listing.isFetching}
             onSortChange={(v) => listing.updateFilter("sort", v)}
             sortDisabled={listing.isSearchActive}
@@ -56,6 +71,11 @@ export function ProductListingPage() {
             isLoading={!listing.data && listing.isFetching}
             isEmpty={listing.data?.items.length === 0}
             empty={empty}
+            didYouMean={
+              didYouMean && didYouMeanHref
+                ? { term: didYouMean.name, href: didYouMeanHref }
+                : undefined
+            }
             products={listing.data?.items}
             comparedIds={listing.comparedIds}
             compareAtLimit={listing.compareAtLimit}
@@ -94,6 +114,7 @@ export function ProductListingPage() {
         onToggleProduct={listing.toggleCompareProduct}
         onClear={listing.clearComparedProducts}
         onCompareNow={listing.scrollToCompare}
+        compareHref={PATHS.compare}
       />
 
       <ProductCompareSection

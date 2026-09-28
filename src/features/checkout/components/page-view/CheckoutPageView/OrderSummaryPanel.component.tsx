@@ -1,13 +1,14 @@
 import { LABELS } from "@/shared/constants/labels";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { CashbackCouponNotice } from "@/shared/components/CashbackCouponNotice.component";
-import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailableNotice.component";
-import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { CashbackCouponNotice } from "@/shared/components/notices/CashbackCouponNotice.component";
+import { AmountsUnavailableNotice } from "@/shared/components/notices/AmountsUnavailableNotice.component";
+import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
-import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
+import { OrderTaxShippingBreakdown } from "@/shared/components/orders/OrderTaxShippingBreakdown.component";
 import { OrderSummaryItemsList } from "./OrderSummaryItemsList.component";
 import { AppliedCouponsSummaryList } from "./AppliedCouponsSummaryList.component";
 import { useOrderSummaryPanel } from "../../../hooks/page-view/useOrderSummaryPanel.hook";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 import { ORDER_SUMMARY_PANEL_STYLES } from "../../../styles/page-view/orderSummaryPanel.styles";
 
 interface OrderSummaryPanelProps {
@@ -125,7 +126,8 @@ export function OrderSummaryPanel({
                 {LABELS.walletAppliedAtCheckout}
               </dt>
               <dd className={ORDER_SUMMARY_PANEL_STYLES.walletValue}>
-                −₹{walletAmountFormatted}
+                −{CURRENCY_SYMBOL}
+                {walletAmountFormatted}
               </dd>
             </div>
           ) : null}
@@ -164,7 +166,8 @@ export function OrderSummaryPanel({
 
           {walletApplied && grandTotalFormatted ? (
             <p className={ORDER_SUMMARY_PANEL_STYLES.grandTotalReference}>
-              {LABELS.orderTotalLabel}: ₹{grandTotalFormatted}
+              {LABELS.orderTotalLabel}: {CURRENCY_SYMBOL}
+              {grandTotalFormatted}
             </p>
           ) : null}
 

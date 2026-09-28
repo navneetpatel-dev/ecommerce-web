@@ -5,8 +5,8 @@ import { Download } from "lucide-react";
 import {
   DataTable,
   type DataTableColumn,
-} from "@/shared/components/DataTable.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+} from "@/shared/components/DataTable";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { earningsPayoutsCardStyles } from "../../../styles/earnings/earningsPayoutsCard.styles";
 import type { PayoutTableRowViewModel } from "../../../hooks/earnings/useEarningsPayoutsCardPresentation.hook";

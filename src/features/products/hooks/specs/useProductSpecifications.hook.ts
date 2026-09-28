@@ -4,7 +4,10 @@ import { useMemo } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { ProductVariant } from "@/shared/api/types";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import {
+  formatInr,
+  formatInrAmount,
+} from "@/shared/utils/formatting/orderFormat";
 
 export interface SpecRow {
   label: string;
@@ -58,7 +61,7 @@ export function useProductSpecifications({
         list,
         seenLabels,
         LABELS.variantPrice,
-        `₹${formatInrAmount(variantPrice)}`,
+        `${formatInr(variantPrice)}`,
       );
     }
 

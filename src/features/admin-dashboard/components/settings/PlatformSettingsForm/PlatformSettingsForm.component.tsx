@@ -1,7 +1,7 @@
 "use client";
 
 import { FormActions, FormStack } from "@/shared/components/forms";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { PlatformSettings } from "../../../hooks/settings/usePlatformSettingsForm.hook";

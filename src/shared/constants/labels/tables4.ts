@@ -12,6 +12,8 @@ export const tables4Labels = {
   ratingFilterUnavailableDuringSearch:
     "Rating filter isn't available for search results.",
   compare: "Compare",
+  comparePageTitle: "Compare products",
+  compareEmptyHeading: "Nothing to compare yet",
   compareMinRequired: "Add at least 2 products to compare.",
   compareSelectionCount: "{count} of {max} selected",
   compareMaxReached:

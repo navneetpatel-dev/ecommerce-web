@@ -1,7 +1,7 @@
 "use client";
 
 import { useNewsletterForm } from "@/shared/hooks/forms/useNewsletterForm.hook";
-import { NewsletterForm } from "@/shared/components/NewsletterForm.component";
+import { NewsletterForm } from "@/shared/components/forms/NewsletterForm.component";
 
 interface NewsletterFormContainerProps {
   idPrefix: string;

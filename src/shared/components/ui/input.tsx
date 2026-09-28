@@ -3,6 +3,10 @@
 import * as React from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
+import {
+  joinAriaIds,
+  useFieldControl,
+} from "@/shared/components/forms/fieldControl.context";
 import { inputStyles } from "../../styles/ui/input.styles";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -11,7 +15,9 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, error, ...props }, ref) => {
-    const ariaInvalid = error ? true : undefined;
+    const field = useFieldControl();
+    const ariaInvalid =
+      props["aria-invalid"] ?? (error || field?.invalid ? true : undefined);
 
     return (
       <input
@@ -25,8 +31,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className,
         )}
         ref={ref}
-        aria-invalid={ariaInvalid}
         {...props}
+        id={props.id ?? field?.controlId}
+        aria-invalid={ariaInvalid}
+        aria-describedby={joinAriaIds(
+          props["aria-describedby"],
+          field?.describedById,
+        )}
       />
     );
   },

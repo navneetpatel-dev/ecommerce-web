@@ -2,7 +2,7 @@
 
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import {
   Select,
   SelectContent,
@@ -19,6 +19,7 @@ import type {
   ProductListingFormValues,
 } from "@/features/products";
 import { vendorProductCreateFormStyles } from "../../../styles/products/vendorProductCreateForm.styles";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 interface ProductDetailsSectionProps {
   values: ProductListingFormValues;
@@ -64,7 +65,7 @@ export function ProductDetailsSection({
         error={getError("price")}
       >
         <NumberInput
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           min={1}
           step={1}
           placeholder={LABELS.productPriceExclGst}
@@ -82,7 +83,7 @@ export function ProductDetailsSection({
         error={getError("compareAtPrice")}
       >
         <NumberInput
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           min={1}
           step={1}
           placeholder={LABELS.productMrpInclGst}

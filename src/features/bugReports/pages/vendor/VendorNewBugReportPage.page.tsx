@@ -1,6 +1,6 @@
 "use client";
 
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { VENDOR_SUPPORT_ACCESS } from "@/shared/constants/permissions/permissions";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { BugReportForm } from "../../components/form/BugReportForm.component";

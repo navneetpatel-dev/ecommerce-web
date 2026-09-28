@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { TableRowAction } from "@/shared/components/TableRowActions.component";
+import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";

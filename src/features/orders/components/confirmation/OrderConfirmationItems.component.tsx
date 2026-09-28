@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { MediaImage } from "@/shared/components/MediaImage.component";
-import { VendorGroupHeader } from "@/shared/components/VendorGroupHeader.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
+import { VendorGroupHeader } from "@/shared/components/orders/VendorGroupHeader.component";
 import { VENDOR_GROUP_CARD } from "@/shared/styles/orders/vendorGroupStyles";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";

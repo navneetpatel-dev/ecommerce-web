@@ -2,7 +2,7 @@
 
 import { Package } from "lucide-react";
 import { FilterSidebar } from "@/features/products";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { useCategoryPlp } from "../../../hooks/plp/useCategoryPlp.hook";

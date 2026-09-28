@@ -10,10 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 interface CreateCouponConstraintFieldsProps {
   form: UseFormReturn<CouponFormInput>;
@@ -43,7 +44,7 @@ export function CreateCouponConstraintFields({
                 value={field.value ?? undefined}
                 min={0}
                 step={50}
-                prefix="₹"
+                prefix={CURRENCY_SYMBOL}
                 error={hasError("minOrderValue")}
                 onChange={(value) => field.onChange(value)}
                 onBlur={field.onBlur}

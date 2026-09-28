@@ -4,7 +4,10 @@ import {
   TONE_CLASS,
   DOT_CLASS,
 } from "../../styles/list/orderStatusGroup.styles";
-import { orderTone, paymentTone } from "../../utils/list/orderStatusDisplay.utils";
+import {
+  orderTone,
+  paymentTone,
+} from "../../utils/list/orderStatusDisplay.utils";
 
 interface CompactStatusLineProps {
   kind: "order" | "payment";

@@ -4,7 +4,7 @@ import { Button } from "@/shared/components/ui/button";
 import {
   CartCountBadge,
   IconBadgeAnchor,
-} from "@/shared/components/CartCountBadge.component";
+} from "@/shared/components/badges/CartCountBadge.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";

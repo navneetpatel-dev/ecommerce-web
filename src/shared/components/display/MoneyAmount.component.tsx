@@ -1,7 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
-import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
+import { InlineAmountSkeleton } from "@/shared/components/Skeletons/InlineAmountSkeleton.component";
 import { cn } from "@/shared/utils/dom/cn";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 interface MoneyAmountProps {
   /** Server-computed amount. Absent means the client has nothing to show. */
@@ -29,7 +29,7 @@ export function MoneyAmount({
   fallbackClassName,
 }: MoneyAmountProps) {
   if (!pending && value != null) {
-    return <>₹{formatInrAmount(value)}</>;
+    return <>{formatInr(value)}</>;
   }
   if (!unavailable) {
     return <InlineAmountSkeleton className={fallbackClassName} />;

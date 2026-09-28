@@ -15,10 +15,8 @@ export function useCardQuantityControlHandlers({
 }: UseCardQuantityControlHandlersProps) {
   const atMax = value >= max;
 
-  const handleContainerClick = useCallback((e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  }, []);
+  // The +/- buttons stop propagation themselves (see handleDecrease/handleIncrease),
+  // so the container no longer needs a click guard of its own.
 
   const handleDecrease = useCallback(
     (e: MouseEvent) => {
@@ -42,7 +40,6 @@ export function useCardQuantityControlHandlers({
 
   return {
     atMax,
-    handleContainerClick,
     handleDecrease,
     handleIncrease,
   };

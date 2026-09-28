@@ -2,7 +2,7 @@ import { UseFormReturn } from "react-hook-form";
 import Link from "next/link";
 import { LoginFormFields } from "./LoginFormFields.component";
 import { AuthFormCard } from "../shell/AuthFormCard.component";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { OAuthDivider } from "../oauth/OAuthDivider.component";
 import { OAuthButton } from "../oauth/OAuthButton.component";
 import { ResendVerificationByEmail } from "../verify-email/ResendVerificationByEmail.component";

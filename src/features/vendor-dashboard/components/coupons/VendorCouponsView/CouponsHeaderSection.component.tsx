@@ -14,7 +14,7 @@ import {
   type CouponFormInput,
 } from "@/features/admin-dashboard";
 import { LABELS } from "@/shared/constants/labels";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import type { UseFormReturn } from "react-hook-form";

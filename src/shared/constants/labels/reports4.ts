@@ -1,0 +1,22 @@
+/** Copy subset (part 4); merged via labels.ts. */
+export const reports4Labels = {
+  addressFormSection: "Address details",
+  addressFormSectionHint: "Delivery location used at checkout.",
+  addressLocationRequired: "Location access is required to save an address.",
+  addressLocationFetching: "Fetching your location...",
+  addressLocationDenied:
+    "Location access was denied. Enable it in your browser settings and retry.",
+  addressLocationUnsupported: "Your browser doesn't support location access.",
+  addressLocationError: "Could not fetch your location. Please retry.",
+  addressLocationRetry: "Retry",
+  addressDeliveryInstructionsOptional: "Delivery instructions (optional)",
+  addressDeliveryInstructionsPlaceholder:
+    "E.g. Leave at front desk, gate code, call on arrival",
+  defaultCountry: "India",
+  helpContactSection: "Contact details",
+  helpContactSectionHint:
+    "Tell us how to reach you and what you need help with.",
+  helpContactMessageSection: "Message",
+  helpContactMessageSectionHint: "Include enough detail for us to investigate.",
+  enterFullName: "Enter your full name to continue.",
+} as const;

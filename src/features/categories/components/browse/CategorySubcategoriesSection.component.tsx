@@ -1,4 +1,4 @@
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category } from "@/shared/api/types";
 import type { CategoryRootWithChildren } from "../../hooks/browse/useCategoriesPage.hook";

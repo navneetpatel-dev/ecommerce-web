@@ -3,9 +3,10 @@
 import type { UseFormReturn } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
 
 interface CreateCouponValueFieldsProps {
@@ -52,7 +53,7 @@ export function CreateCouponValueFields({
                 }
                 prefix={
                   type === "FLAT" || type === "CASHBACK" || type === "BUNDLE"
-                    ? "₹"
+                    ? CURRENCY_SYMBOL
                     : undefined
                 }
                 error={hasError("value")}
@@ -74,7 +75,7 @@ export function CreateCouponValueFields({
                 value={field.value ?? undefined}
                 min={0}
                 step={10}
-                prefix="₹"
+                prefix={CURRENCY_SYMBOL}
                 error={hasError("maxDiscountCap")}
                 onChange={(value) => field.onChange(value)}
                 onBlur={field.onBlur}
@@ -98,7 +99,7 @@ export function CreateCouponValueFields({
                     value={field.value ?? undefined}
                     min={0}
                     step={50}
-                    prefix="₹"
+                    prefix={CURRENCY_SYMBOL}
                     onChange={(value) => field.onChange(value)}
                     onBlur={field.onBlur}
                   />

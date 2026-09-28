@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
-import { FormError } from "@/shared/components/FormError.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { FormActions, FormStack } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import type { Address, AddressInput } from "@/shared/api/types";

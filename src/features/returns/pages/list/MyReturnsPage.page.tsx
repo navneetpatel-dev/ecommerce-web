@@ -2,11 +2,11 @@
 
 import { RotateCcw } from "lucide-react";
 import Link from "next/link";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { useMyReturns } from "../../api/returns/returns.queries";
 import { ReturnRequestCard } from "../../components/list/ReturnRequestCard.component";
 import { returnsPageStyles as styles } from "./returnsPage.styles";

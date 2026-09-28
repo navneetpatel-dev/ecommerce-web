@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import type { DataTableColumn } from "@/shared/components/DataTable.component";
-import { TableCellImage } from "@/shared/components/TableCellImage.component";
+import type { DataTableColumn } from "@/shared/components/DataTable";
+import { TableCellImage } from "@/shared/components/DataTable/TableCellImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { productModerationTableStyles } from "../../styles/vendors/productModerationTable.styles";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";

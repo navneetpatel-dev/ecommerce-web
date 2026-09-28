@@ -7,7 +7,11 @@ export {
   accountSectionsForRole,
   workspaceAccountSections,
 } from "./constants/layout/constants";
-export type { AccountProfile, AccountSectionId, AccountNavItem } from "./types/layout/types";
+export type {
+  AccountProfile,
+  AccountSectionId,
+  AccountNavItem,
+} from "./types/layout/types";
 export {
   useAccountProfile,
   useUpdateProfile,

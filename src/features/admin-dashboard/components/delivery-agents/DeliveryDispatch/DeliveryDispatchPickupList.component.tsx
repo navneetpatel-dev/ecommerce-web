@@ -56,11 +56,15 @@ export function DeliveryDispatchPickupList({
         </Button>
       </div>
       <div className={deliveryDispatchPickupListStyles.body}>
-        <label className={deliveryDispatchPickupListStyles.label}>
+        <label
+          htmlFor="unassigned-pickup"
+          className={deliveryDispatchPickupListStyles.label}
+        >
           Select unassigned pickup
         </label>
         <Select value={returnId} onValueChange={setReturnId}>
           <SelectTrigger
+            id="unassigned-pickup"
             className={deliveryDispatchPickupListStyles.selectTrigger}
           >
             <SelectValue placeholder={placeholder} />

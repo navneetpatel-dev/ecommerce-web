@@ -1,6 +1,6 @@
 import type { ProductListItem } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import { customerPrice } from "@/shared/utils/pricing/customerPrice";
 import { productCompareSectionStyles } from "../../../styles/compare/productCompareSection.styles";
 
@@ -22,7 +22,7 @@ export function ProductCompareCard({ product }: ProductCompareCardProps) {
         <div>
           <dt className={productCompareSectionStyles.dt}>Price</dt>
           <dd className={productCompareSectionStyles.priceDd}>
-            ₹{formatInrAmount(price)}
+            <MoneyAmount value={price} />
           </dd>
         </div>
         <div>

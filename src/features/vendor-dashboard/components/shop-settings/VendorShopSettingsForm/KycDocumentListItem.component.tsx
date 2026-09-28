@@ -1,13 +1,16 @@
 import { ChevronDown, UploadCloud } from "lucide-react";
-import { FileUpload } from "@/shared/components/FileUpload.component";
-import { DocumentViewerBadge } from "@/shared/components/DocumentViewerBadge.component";
+import { FileUpload } from "@/shared/components/FileUpload";
+import { DocumentViewerBadge } from "@/shared/components/badges/DocumentViewerBadge.component";
 import {
   DocumentStatusBadge,
   DocumentStatusIcon,
-} from "@/shared/components/DocumentStatusBadge.component";
-import { KycRejectionNotice } from "@/shared/components/KycRejectionNotice.component";
+} from "@/shared/components/badges/DocumentStatusBadge.component";
+import { KycRejectionNotice } from "@/shared/components/notices/KycRejectionNotice.component";
 import { LABELS } from "@/shared/constants/labels";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import type { VendorDocumentType } from "@/shared/constants/statuses";
 import type { KycChecklistItem } from "@/features/vendors";
 import { vendorDocumentTypeLabel } from "@/shared/utils/formatting/vendorDocumentTypeLabel";

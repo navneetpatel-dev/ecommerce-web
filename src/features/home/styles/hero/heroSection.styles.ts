@@ -24,7 +24,7 @@ export const heroSectionStyles = {
   copyContainer: "max-w-xl",
   eyebrow:
     "text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-white/70",
-  headline: "mt-3 font-display leading-[1.05] text-white",
+  headline: "mt-3 font-display leading-[1.05] text-white text-display-lg",
   subheadline: "mt-4 max-w-md text-body-lg text-white/80",
   ctaGroup: "mt-8 flex flex-wrap items-center gap-3",
   primaryCta:

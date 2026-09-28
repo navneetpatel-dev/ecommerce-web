@@ -11,8 +11,8 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { FilePicker } from "@/shared/components/FilePicker.component";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { FilePicker } from "@/shared/components/FileUpload/FilePicker.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { AgentPaymentMethodsList } from "./AgentMarkPayoutPaidAction/AgentPaymentMethodsList.component";
 import {
   AGENT_PAYMENT_METHODS,

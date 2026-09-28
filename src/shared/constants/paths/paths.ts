@@ -3,6 +3,8 @@ export const PATHS = {
   home: "/",
   products: "/products",
   product: (slug: string) => `/products/${slug}`,
+  /** Side-by-side comparison tray + results. */
+  compare: "/compare",
   productsNewest: "/products?sort=newest",
   productsTopRated: "/products?sort=rating",
   productsTrending: "/products?sort=trending",
@@ -17,6 +19,8 @@ export const PATHS = {
   orders: "/orders",
   order: (id: string) => `/orders/${id}`,
   orderConfirmation: (id: string) => `/orders/${id}/confirmation`,
+  /** Public tracking lookup — the entry point the footer's "Track order" needs. */
+  orderTracking: "/orders/tracking",
   wishlist: "/wishlist",
   reviews: "/reviews",
   returns: "/returns",

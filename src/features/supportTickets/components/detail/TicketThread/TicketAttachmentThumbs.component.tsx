@@ -1,4 +1,4 @@
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { TICKET_ATTACHMENT_TYPE } from "@/shared/constants/statuses";
 import { cn } from "@/shared/utils/dom/cn";
 import type { TicketAttachment } from "../../../api/list/supportTickets.api";

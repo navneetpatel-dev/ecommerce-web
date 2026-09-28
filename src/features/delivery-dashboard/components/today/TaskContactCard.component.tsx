@@ -1,6 +1,6 @@
 import { ExternalLink, MapPin, MessageSquare, Phone, User } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { taskContactCardStyles as styles } from "../../styles/today/taskContactCard.styles";
 import { googleMapsSearchUrl } from "../../utils/deliveries/mapsUrl";
 

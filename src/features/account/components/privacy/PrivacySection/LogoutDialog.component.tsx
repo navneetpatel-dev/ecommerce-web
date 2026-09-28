@@ -1,7 +1,7 @@
 "use client";
 
 import { LogOut } from "lucide-react";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 
 interface LogoutDialogProps {

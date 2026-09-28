@@ -4,7 +4,7 @@ import { BarChart2 } from "lucide-react";
 import {
   DataTable,
   type DataTablePaginationProps,
-} from "@/shared/components/DataTable.component";
+} from "@/shared/components/DataTable";
 import { Button } from "@/shared/components/ui/button";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";

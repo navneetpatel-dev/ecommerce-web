@@ -1,9 +1,12 @@
 import Link from "next/link";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { BUG_REPORT_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
-import { BUG_SEVERITY_LABEL, BUG_STATUS_LABEL } from "../../utils/detail/labels";
+import {
+  BUG_SEVERITY_LABEL,
+  BUG_STATUS_LABEL,
+} from "../../utils/detail/labels";
 import type { BugReport } from "../../api/list/bugReports.api";
 import { bugReportCardListStyles } from "../../styles/list/bugReportCardList.styles";
 

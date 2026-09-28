@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowRight, Star } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type {
   DeliveryAgent,

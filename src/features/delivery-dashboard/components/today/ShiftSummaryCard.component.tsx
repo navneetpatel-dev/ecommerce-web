@@ -8,7 +8,7 @@ import {
   Timer,
   Wallet,
 } from "lucide-react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import type { ShiftSummary } from "../../types/agent/types";
 import { useShiftSummaryCard } from "../../hooks/today/useShiftSummaryCard.hook";

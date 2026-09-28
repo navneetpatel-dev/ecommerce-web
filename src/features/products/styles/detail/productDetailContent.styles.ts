@@ -66,7 +66,7 @@ export const PRODUCT_DETAIL_CONTENT_STYLES = {
 
   // StickyAddToCartBar
   stickyBarRoot:
-    "fixed bottom-14 left-0 right-0 z-30 border-t border-line bg-surface/95 p-3 shadow-elevation-3 backdrop-blur-sm md:hidden",
+    "fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom,0px))] left-0 right-0 z-30 border-t border-line bg-surface/95 p-3 shadow-elevation-3 backdrop-blur-sm md:hidden",
   stickyBarRow: "flex items-center gap-3",
   stickyBarInfo: "min-w-0 flex-1",
   stickyBarTitle: "truncate text-body-sm font-medium text-ink",
@@ -78,7 +78,7 @@ export const PRODUCT_DETAIL_CONTENT_STYLES = {
   headingStack: "space-y-3",
   eyebrowsRow: "flex flex-wrap items-center gap-2",
   headingTitle:
-    "font-display font-semibold leading-[1.15] tracking-tight text-ink",
+    "text-display-sm font-display font-semibold leading-[1.15] tracking-tight text-ink",
   ratingRow: "flex flex-wrap items-center gap-x-3 gap-y-1",
   reviewsLink:
     "text-body-sm text-ink-muted underline-offset-2 hover:text-brand hover:underline",

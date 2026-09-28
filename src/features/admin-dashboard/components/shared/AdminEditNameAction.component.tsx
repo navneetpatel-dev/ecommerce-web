@@ -4,7 +4,7 @@ import { Pencil } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { useAdminEditNameAction } from "../../hooks/shared/useAdminEditNameAction.hook";
@@ -80,6 +80,7 @@ export function AdminEditNameAction({
             id="admin-edit-name"
             value={name}
             onChange={handleNameChange}
+            // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: this control lives in a dialog/popover that opened from a user action, where moving focus into the panel is the expected behaviour
             autoFocus
             placeholder={fieldLabel}
           />

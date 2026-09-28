@@ -21,4 +21,8 @@ export {
   ProfilePageSkeleton,
   WishlistPageSkeleton,
   ContentPageSkeleton,
+  DeliveryPageSkeleton,
+  DetailPageSkeleton,
+  FormPageSkeleton,
+  LedgerPageSkeleton,
 } from "./Skeletons/pageSkeletons.component";

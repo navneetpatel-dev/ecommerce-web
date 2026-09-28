@@ -11,12 +11,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
-import { DataTable } from "@/shared/components/DataTable.component";
-import { TableRowAction } from "@/shared/components/TableRowActions.component";
+import { DataTable } from "@/shared/components/DataTable";
+import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { Plus, Bell, Eye } from "lucide-react";
 import { CreateCouponForm } from "../CreateCouponForm.component";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";

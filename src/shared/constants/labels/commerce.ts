@@ -114,4 +114,10 @@ export const commerceLabels = {
   maintenanceHeading: "Scheduled maintenance",
   maintenanceBody:
     "We're making improvements to the marketplace. Please check back shortly.",
+
+  // Toasts (design spec §4.4) — one title per severity. Kept flat because
+  // LABELS is consumed as Record<string, string> in several places.
+  toastSuccessTitle: "Done",
+  toastInfoTitle: "Heads up",
+  toastErrorTitle: "Something went wrong",
 } as const;

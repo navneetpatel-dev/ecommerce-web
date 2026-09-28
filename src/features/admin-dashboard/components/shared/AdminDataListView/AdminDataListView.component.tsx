@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { DataTable } from "@/shared/components/DataTable.component";
+import { DataTable } from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
 import type { AdminDataRow } from "../../../hooks/shared/useAdminDataList.hook";
 import { useAdminDataListView } from "../../../hooks/shared/useAdminDataListView.hook";

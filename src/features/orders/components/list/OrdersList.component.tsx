@@ -3,10 +3,10 @@
 import { motion } from "motion/react";
 import { LABELS } from "@/shared/constants/labels";
 import type { Order } from "@/shared/api/types";
-import { DataTable } from "@/shared/components/DataTable.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { DataTable } from "@/shared/components/DataTable";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
-import { ContinueShoppingLink } from "@/shared/components/ContinueShoppingLink.component";
+import { ContinueShoppingLink } from "@/shared/components/navigation/ContinueShoppingLink.component";
 import { CustomerOrderHistoryPanel } from "@/features/reports";
 import { ORDER_COLUMNS } from "../../constants/list/ordersTableColumns";
 import { useOrdersList } from "../../hooks/list/useOrdersList.hook";

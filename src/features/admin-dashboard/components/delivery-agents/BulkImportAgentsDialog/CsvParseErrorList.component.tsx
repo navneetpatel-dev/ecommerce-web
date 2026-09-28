@@ -19,7 +19,9 @@ function formatCsvParseError(entry: CsvParseError): string {
 }
 
 function CsvParseErrorItem({ entry }: { entry: CsvParseError }) {
-  return <li className={styles.parseErrorItem}>{formatCsvParseError(entry)}</li>;
+  return (
+    <li className={styles.parseErrorItem}>{formatCsvParseError(entry)}</li>
+  );
 }
 
 /** Row/column-scoped CSV validation errors shown before an import is submitted. */

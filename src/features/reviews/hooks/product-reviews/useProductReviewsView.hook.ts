@@ -1,6 +1,9 @@
 "use client";
 
-import { useProductReviews, useVoteReview } from "../../api/reviews/reviews.queries";
+import {
+  useProductReviews,
+  useVoteReview,
+} from "../../api/reviews/reviews.queries";
 import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 import type { Review } from "@/shared/api/types";
 

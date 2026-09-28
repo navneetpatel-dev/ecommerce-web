@@ -4,5 +4,5 @@ export function JsonLd({ data }: { data: object }) {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
     />
-  )
+  );
 }

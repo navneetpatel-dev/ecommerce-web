@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { FormError } from "@/shared/components/FormError.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { cn } from "@/shared/utils/dom/cn";

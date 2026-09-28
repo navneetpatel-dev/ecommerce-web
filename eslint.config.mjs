@@ -127,6 +127,21 @@ const eslintConfig = defineConfig([
       "react-hooks/immutability": "warn",
     },
   },
+  // Accessibility gate (WCAG 2.2 AA — design spec §6). `eslint-config-next`
+  // ships jsx-a11y as warnings only; these are promoted to errors because the
+  // codebase is fixed for them (see UI-GAP-IMPLEMENTATION-PLAN.md WS-1/WS-2).
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    rules: {
+      "jsx-a11y/label-has-associated-control": "error",
+      "jsx-a11y/click-events-have-key-events": "error",
+      "jsx-a11y/no-static-element-interactions": "error",
+      "jsx-a11y/no-noninteractive-element-interactions": "error",
+      "jsx-a11y/aria-role": "error",
+      "jsx-a11y/role-supports-aria-props": "error",
+      "jsx-a11y/no-autofocus": "warn", // pre-existing sites, triaged separately
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { Download } from "lucide-react";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import type { AgentPayout } from "@/features/delivery-dashboard";
 import { agentPayoutsPanelStyles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
 import { AgentPayoutActions } from "./AgentPayoutActions.component";

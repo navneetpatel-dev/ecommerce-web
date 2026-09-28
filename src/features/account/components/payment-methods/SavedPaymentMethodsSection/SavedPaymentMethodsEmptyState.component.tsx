@@ -1,5 +1,5 @@
 import { CreditCard } from "lucide-react";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { paymentMethodsLabels as LABELS } from "@/shared/constants/labels/paymentMethods";
 import { savedPaymentMethodsSectionStyles as styles } from "../../../styles/payment-methods/savedPaymentMethodsSection.styles";
 

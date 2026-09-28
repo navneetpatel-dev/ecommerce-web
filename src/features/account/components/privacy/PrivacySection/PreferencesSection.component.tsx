@@ -2,8 +2,8 @@
 
 import { Download, LogOut } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { FormError } from "@/shared/components/FormError.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { privacySectionStyles as styles } from "../../../styles/privacy/privacySection.styles";
 

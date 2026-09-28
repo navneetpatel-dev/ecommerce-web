@@ -4,8 +4,8 @@ import type { ChangeEvent } from "react";
 import { Trash2 } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { FormError } from "@/shared/components/FormError.component";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import { privacySectionStyles as styles } from "../../../styles/privacy/privacySection.styles";
 

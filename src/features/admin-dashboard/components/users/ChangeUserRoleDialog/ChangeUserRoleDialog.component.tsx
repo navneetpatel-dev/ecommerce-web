@@ -50,16 +50,11 @@ export function ChangeUserRoleDialog({
 
   return (
     <>
-      <span
-        onClick={handleOpenTrigger}
-        className={changeUserRoleDialogStyles.triggerWrapper}
-      >
-        {trigger ?? (
-          <Button size="sm" variant="outline">
-            Change Role
-          </Button>
-        )}
-      </span>
+      {trigger ?? (
+        <Button size="sm" variant="outline" onClick={handleOpenTrigger}>
+          Change Role
+        </Button>
+      )}
 
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className={changeUserRoleDialogStyles.dialogContent}>
@@ -82,7 +77,10 @@ export function ChangeUserRoleDialog({
           )}
 
           <div className={changeUserRoleDialogStyles.formBody}>
-            <label className={changeUserRoleDialogStyles.label}>
+            <label
+              htmlFor="change-user-role"
+              className={changeUserRoleDialogStyles.label}
+            >
               Select New Role
             </label>
             {rolesQuery.isLoading ? (
@@ -91,6 +89,7 @@ export function ChangeUserRoleDialog({
               </p>
             ) : (
               <select
+                id="change-user-role"
                 value={selectedRoleId}
                 onChange={handleRoleSelectChange}
                 className={changeUserRoleDialogStyles.selectInput}
@@ -105,7 +104,10 @@ export function ChangeUserRoleDialog({
 
             {isVendorRole && (
               <div className={changeUserRoleDialogStyles.vendorSection}>
-                <label className={changeUserRoleDialogStyles.label}>
+                <label
+                  htmlFor="change-user-vendor"
+                  className={changeUserRoleDialogStyles.label}
+                >
                   Select Associated Vendor Store
                 </label>
                 {vendorsQuery.isLoading ? (
@@ -114,6 +116,7 @@ export function ChangeUserRoleDialog({
                   </p>
                 ) : (
                   <select
+                    id="change-user-vendor"
                     value={selectedVendorId}
                     onChange={handleVendorSelectChange}
                     className={changeUserRoleDialogStyles.selectInput}

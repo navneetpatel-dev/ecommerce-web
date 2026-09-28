@@ -1,5 +1,5 @@
-import { PATHS } from '@/shared/constants/paths/paths'
-import { LABELS } from '@/shared/constants/labels'
+import { PATHS } from "@/shared/constants/paths/paths";
+import { LABELS } from "@/shared/constants/labels";
 
 export const FOOTER_SECTIONS = [
   {
@@ -13,7 +13,7 @@ export const FOOTER_SECTIONS = [
   {
     title: LABELS.customerService,
     links: [
-      { href: PATHS.orders, label: LABELS.trackOrder },
+      { href: PATHS.orderTracking, label: LABELS.trackOrder },
       { href: PATHS.help, label: LABELS.helpCenter },
       { href: PATHS.supportTickets, label: LABELS.mySupportTickets },
       { href: PATHS.bugReports, label: LABELS.reportABug },
@@ -35,4 +35,4 @@ export const FOOTER_SECTIONS = [
     links: [] as Array<{ href: string; label: string }>,
     isNewsletter: true,
   },
-] as const
+] as const;

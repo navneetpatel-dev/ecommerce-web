@@ -1,11 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
-import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
+import { InfiniteLoadMore } from "@/shared/components/DataTable/InfiniteLoadMore.component";
 import { keysetDataTableStyles } from "../../styles/data-table/dataTableComponents.styles";
 
 type Props<T> = {

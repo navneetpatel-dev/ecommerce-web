@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { cn } from "@/shared/utils/dom/cn";
+import { checkboxFieldStyles } from "../../styles/forms/forms.styles";
 
 interface CheckboxFieldProps {
   id: string;
@@ -37,7 +38,9 @@ export function CheckboxField({
         disabled={disabled}
         onCheckedChange={(value) => onCheckedChange(value === true)}
       />
-      <span className={cn("min-w-0 flex-1", labelClassName)}>{label}</span>
+      <span className={cn(checkboxFieldStyles.labelText, labelClassName)}>
+        {label}
+      </span>
     </label>
   );
 }

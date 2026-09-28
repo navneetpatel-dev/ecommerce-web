@@ -3,7 +3,10 @@
 import { useState, type ChangeEvent } from "react";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { usePresignUpload } from "@/shared/hooks/uploads/useUploads.hook";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import { payoutsApi } from "../../api/finance/finance.api";
 import type { PayoutPaymentMethod } from "@/shared/api/types";
 

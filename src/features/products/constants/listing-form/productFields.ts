@@ -15,7 +15,7 @@ export const PRODUCT_FIELD_LIMITS = {
   SEO_TITLE_MAX: 255,
   SEO_DESCRIPTION_MAX: 2000,
   WARRANTY_MONTHS_MAX: 120,
-} as const
+} as const;
 
 /** Matches `product_variants.lowStockAt` default. */
-export const VARIANT_LOW_STOCK_DEFAULT = 5
+export const VARIANT_LOW_STOCK_DEFAULT = 5;

@@ -10,7 +10,10 @@ export {
   useChangePassword,
 } from "./api/auth/auth.queries";
 export { authApi } from "./api/auth/auth.api";
-export { useAuthStore, defaultRouteForRole } from "@/shared/stores/auth/auth.store";
+export {
+  useAuthStore,
+  defaultRouteForRole,
+} from "@/shared/stores/auth/auth.store";
 export { LoginForm } from "./pages/login/LoginForm.page";
 export { RegisterForm } from "./pages/register/RegisterForm.page";
 export { useAuthBootstrap } from "./hooks/bootstrap/useAuthBootstrap.hook";

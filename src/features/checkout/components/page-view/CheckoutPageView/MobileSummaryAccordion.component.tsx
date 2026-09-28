@@ -6,7 +6,7 @@ import {
 } from "@/shared/components/ui/accordion";
 import type { ReactNode } from "react";
 import type { CheckoutQuote } from "@/shared/api/types";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { MOBILE_SUMMARY_ACCORDION_STYLES } from "../../../styles/page-view/mobileSummaryAccordion.styles";
 
 interface MobileSummaryAccordionProps {
@@ -40,7 +40,7 @@ export function MobileSummaryAccordion({
                 Updating…
               </span>
             ) : (
-              <>₹{formatInrAmount(headerTotal)}</>
+              <>{formatInr(headerTotal)}</>
             )}
           </AccordionTrigger>
           <AccordionContent>{summary}</AccordionContent>

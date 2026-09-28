@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { ErrorFallbackActions } from "@/shared/components/ErrorFallbackActions.component";
+import { ErrorFallbackActions } from "@/shared/components/system/ErrorFallbackActions.component";
 import { errorBoundaryStyles as styles } from "@/shared/styles/system/errorBoundary.styles";
 import { productDetailsMiscStyles } from "../../styles/detail/productDetailsMisc.styles";
 

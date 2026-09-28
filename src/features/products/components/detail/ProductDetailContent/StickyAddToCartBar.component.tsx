@@ -1,13 +1,14 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
+import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import { PRODUCT_DETAIL_CONTENT_STYLES } from "../../../styles/detail/productDetailContent.styles";
 
 interface StickyAddToCartBarProps {
   visible: boolean;
   productName: string;
-  formattedPrice: string;
+  displayPrice: number;
   addDisabled: boolean;
   addToCartHint: string;
   addLabel: string;
@@ -19,7 +20,7 @@ interface StickyAddToCartBarProps {
 export function StickyAddToCartBar({
   visible,
   productName,
-  formattedPrice,
+  displayPrice,
   addDisabled,
   addToCartHint,
   addLabel,
@@ -37,7 +38,7 @@ export function StickyAddToCartBar({
             {productName}
           </p>
           <p className={PRODUCT_DETAIL_CONTENT_STYLES.stickyBarPrice}>
-            ₹{formattedPrice}
+            <MoneyAmount value={displayPrice} />
           </p>
         </div>
         <DisabledActionHint

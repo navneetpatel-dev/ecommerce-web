@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertTriangle } from "lucide-react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { staleTasksPanelStyles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
 import { useStaleTasksReport } from "../../../hooks/delivery-agents/useStaleTasksReport.hook";
 import { StaleShipmentsTable } from "./StaleShipmentsTable.component";

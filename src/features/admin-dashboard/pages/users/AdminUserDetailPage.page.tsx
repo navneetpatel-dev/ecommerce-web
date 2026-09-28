@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { isSelfAdminTarget } from "../../utils/shared/isSelfAdminTarget";
-import { DetailQuerySkeleton } from "@/shared/components/DetailQuerySkeleton.component";
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { DetailQuerySkeleton } from "@/shared/components/Skeletons/DetailQuerySkeleton.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { Button } from "@/shared/components/ui/button";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";

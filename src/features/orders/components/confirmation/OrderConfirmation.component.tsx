@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { OrderPaymentSummary } from "../detail/OrderPaymentSummary.component";
 import { OrderMoneyBreakdown } from "../detail/OrderMoneyBreakdown.component";

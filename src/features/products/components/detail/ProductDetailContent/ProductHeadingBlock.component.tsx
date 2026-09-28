@@ -1,6 +1,6 @@
-import { VendorStrip } from "@/shared/components/VendorStrip.component";
-import { RatingStars } from "@/shared/components/RatingStars.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { VendorStrip } from "@/shared/components/orders/VendorStrip.component";
+import { RatingStars } from "@/shared/components/display/RatingStars.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -42,10 +42,7 @@ export function ProductHeadingBlock({
           ) : null}
         </div>
 
-        <h1
-          className={PRODUCT_DETAIL_CONTENT_STYLES.headingTitle}
-          style={{ fontSize: "var(--text-display-sm)" }}
-        >
+        <h1 className={PRODUCT_DETAIL_CONTENT_STYLES.headingTitle}>
           {product.name}
         </h1>
 

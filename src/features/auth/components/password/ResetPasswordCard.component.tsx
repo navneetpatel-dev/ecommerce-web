@@ -1,7 +1,7 @@
 import { UseFormReturn } from "react-hook-form";
 import Link from "next/link";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { AuthFormCard } from "../shell/AuthFormCard.component";
 import { Button } from "@/shared/components/ui/button";
 import { PasswordInputContainer } from "@/shared/containers/forms/PasswordInputContainer.container";

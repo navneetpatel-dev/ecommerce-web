@@ -1,7 +1,7 @@
 "use client";
 
 import { LABELS } from "@/shared/constants/labels";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { WalletBalanceCard } from "../../components/overview/WalletPageContent.component";
 import { WalletRechargePanel } from "../../components/recharge/WalletRechargePanel.component";
 import { WalletStatementExportPanel } from "../../components/statement-export/WalletStatementExportPanel.component";
@@ -16,12 +16,7 @@ export function WalletPage() {
     <div className={styles.container}>
       <header className={styles.header}>
         <TextEyebrow brand>{LABELS.account}</TextEyebrow>
-        <h1
-          className={styles.title}
-          style={{ fontSize: "var(--text-display-sm)" }}
-        >
-          {LABELS.wallet}
-        </h1>
+        <h1 className={styles.title}>{LABELS.wallet}</h1>
         <p className={styles.description}>{LABELS.walletPageDescription}</p>
       </header>
 

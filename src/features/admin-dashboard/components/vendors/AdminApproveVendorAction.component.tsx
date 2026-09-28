@@ -2,10 +2,10 @@
 
 import { Check } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";

@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import {
   type InfiniteSingleSelectPageQuery,
   type InfiniteSingleSelectPageResult,
-} from "@/shared/components/InfiniteSingleSelect.component";
+} from "@/shared/components/InfiniteSingleSelect";
 import { ordersApi } from "@/features/orders";
 import { vendorsApi } from "@/features/vendors";
 import { formatOrderOption } from "../../utils/form/utils";

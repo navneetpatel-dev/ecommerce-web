@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { Star } from "lucide-react";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { Badge } from "@/shared/components/ui/badge";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { useMyReviews } from "../../api/reviews/reviews.queries";
 import { myReviewsPageStyles as styles } from "./myReviewsPage.styles";

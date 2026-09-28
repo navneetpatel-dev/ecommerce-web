@@ -1,4 +1,4 @@
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Heart } from "lucide-react";
 import { PATHS } from "@/shared/constants/paths/paths";
 

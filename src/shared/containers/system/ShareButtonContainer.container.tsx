@@ -1,7 +1,7 @@
 "use client";
 
 import { useShare } from "@/shared/hooks/ui/useShare.hook";
-import { ShareButton } from "@/shared/components/ShareButton.component";
+import { ShareButton } from "@/shared/components/system/ShareButton.component";
 
 interface ShareButtonContainerProps {
   url: string;

@@ -4,7 +4,10 @@ import {
   BUG_REPORT_STATUS,
   type BugReportStatus,
 } from "@/shared/constants/statuses";
-import type { BugReport, BugTimelineEntry } from "../../api/list/bugReports.api";
+import type {
+  BugReport,
+  BugTimelineEntry,
+} from "../../api/list/bugReports.api";
 
 export type BugReportDetailProps = {
   report: BugReport;

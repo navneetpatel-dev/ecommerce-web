@@ -38,7 +38,9 @@ export function useCancelOrder(orderId: string) {
   return useMutation({
     mutationFn: () => ordersApi.cancel(orderId),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ordersKeys.detail(orderId) });
+      void queryClient.invalidateQueries({
+        queryKey: ordersKeys.detail(orderId),
+      });
       void queryClient.invalidateQueries({ queryKey: ordersKeys.all });
     },
   });

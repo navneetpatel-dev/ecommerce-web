@@ -5,7 +5,10 @@ import { usePlaceOrder } from "../../api/checkout/checkout.queries";
 import { useCart } from "@/features/cart";
 import { resolveCheckoutCouponCodes } from "../../utils/checkout/checkoutCouponCodes.utils";
 import { buildPlaceOrderPayload } from "../../utils/checkout/placeOrderPayload.utils";
-import { usePaymentNotice, type PaymentNotice } from "../payment/usePaymentNotice/index";
+import {
+  usePaymentNotice,
+  type PaymentNotice,
+} from "../payment/usePaymentNotice/index";
 import { useRestoreCancelledCheckout } from "./useRestoreCancelledCheckout/index";
 import { useCheckoutPaymentPhase } from "../payment/useCheckoutPaymentPhase.hook";
 import { useCheckoutQuoteState } from "./useCheckoutQuoteState.hook";

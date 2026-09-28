@@ -1,11 +1,14 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import {
+  CURRENCY_SYMBOL,
+  formatInr,
+} from "@/shared/utils/formatting/orderFormat";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import type { WalletBalanceResponse } from "../../api/wallet/wallet.api";
 import { cn } from "@/shared/utils/dom/cn";
@@ -74,7 +77,7 @@ export function WalletRechargePanel({
               min={panel.limits?.minInr}
               max={panel.limits?.maxInr}
               step={50}
-              prefix="₹"
+              prefix={CURRENCY_SYMBOL}
               disabled={panel.isBusy}
               showSteppers={false}
               error={Boolean(panel.amountError)}

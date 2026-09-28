@@ -13,9 +13,10 @@ export const categoryPlpPageStyles = {
   titleRow: "flex flex-col gap-2.5 lg:flex-row lg:items-end lg:gap-6 xl:gap-8",
   titleBlock:
     "min-w-0 shrink-0 lg:max-w-[min(100%,22rem)] xl:max-w-[min(100%,28rem)]",
-  title: "font-display font-semibold tracking-tight text-ink",
+  title:
+    "text-h1 font-display font-semibold leading-[1.15] tracking-tight text-ink",
   seoDescription:
-    "mt-1 line-clamp-2 max-w-2xl text-ink-muted sm:line-clamp-none",
+    "mt-1 line-clamp-2 max-w-2xl text-body-sm leading-[1.4] text-ink-muted sm:line-clamp-none",
   nav: "min-w-0 flex-1 lg:pt-0.5",
   navEyebrow: "mb-1.5 text-eyebrow leading-none lg:text-right",
   navList:

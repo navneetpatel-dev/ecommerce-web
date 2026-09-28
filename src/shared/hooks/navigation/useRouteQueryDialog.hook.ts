@@ -2,7 +2,10 @@
 
 import { useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { QUERY_FLAG, QUERY_PARAMS } from "@/shared/constants/navigation/queryParams";
+import {
+  QUERY_FLAG,
+  QUERY_PARAMS,
+} from "@/shared/constants/navigation/queryParams";
 import { replaceRouteQuery } from "@/shared/utils/navigation/routeQuery";
 
 export type RouteQueryDialogMode = "create" | "edit";

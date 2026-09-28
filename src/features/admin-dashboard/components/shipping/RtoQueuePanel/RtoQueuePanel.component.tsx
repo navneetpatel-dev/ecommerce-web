@@ -1,11 +1,8 @@
 "use client";
 
 import { Undo2 } from "lucide-react";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { DeliveryShipment } from "@/features/delivery-dashboard";
 import { rtoQueuePanelStyles as styles } from "../../../styles/shipping/rtoQueuePanel.styles";
 import { useRtoQueuePanel } from "../../../hooks/shipping/useRtoQueuePanel.hook";

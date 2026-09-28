@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { motion } from "motion/react";
-import { ContinueShoppingLink } from "@/shared/components/ContinueShoppingLink.component";
+import { ContinueShoppingLink } from "@/shared/components/navigation/ContinueShoppingLink.component";
 import type { Order } from "@/shared/api/types";
 import { countOrderItems } from "../../utils/detail/format";
 import { useOrderDocuments } from "../../hooks/documents/useOrderDocuments.hook";

@@ -1,18 +1,24 @@
+import { useRef } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS, ROLES } from "@/shared/constants/labels";
+import { giftCardsLabels } from "@/shared/constants/labels/giftCards";
 import type { Category, CurrentUser } from "@/shared/api/types";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useIsAuthenticated } from "@/shared/hooks/auth/useRequireAuth.hook";
+import { useModalOverlay } from "@/shared/hooks/ui/useModalOverlay.hook";
 import { MobileNavCategoryTree } from "./MobileNavCategoryTree.component";
 import { mobileNavDrawerStyles as styles } from "../../styles/mobile-nav/mobileNavDrawer.styles";
 
 const navLinks = [
   { href: PATHS.products, label: LABELS.allProducts },
   { href: PATHS.productsNewest, label: LABELS.newArrivals },
+  { href: PATHS.categories, label: LABELS.categories },
+  { href: PATHS.vendors, label: LABELS.vendors },
+  { href: PATHS.orderTracking, label: LABELS.trackOrder },
 ];
 
 interface MobileNavDrawerProps {
@@ -33,13 +39,30 @@ export function MobileNavDrawer({
 }: MobileNavDrawerProps) {
   const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
   const isAuthenticated = useIsAuthenticated();
+  const panelRef = useRef<HTMLDivElement>(null);
+  useModalOverlay({ open, onClose, panelRef });
 
   if (!open) return null;
 
   return (
     <div className={styles.overlayWrapper}>
-      <div className={styles.backdrop} onClick={onClose} />
-      <div className={styles.drawer}>
+      {/* Hidden, untabbable close target: click-outside still closes, without a
+          click handler on a static element. */}
+      <Button
+        type="button"
+        variant="ghost"
+        tabIndex={-1}
+        aria-hidden
+        onClick={onClose}
+        className={styles.backdrop}
+      />
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={LABELS.menu}
+        className={styles.drawer}
+      >
         <div className={styles.header}>
           <span className={styles.title}>{LABELS.menu}</span>
           <Button
@@ -102,6 +125,27 @@ export function MobileNavDrawer({
                 className={styles.accountLink}
               >
                 {LABELS.wallet}
+              </Link>
+              <Link
+                href={PATHS.myReturns}
+                onClick={onClose}
+                className={styles.accountLink}
+              >
+                {LABELS.returnsPageTitle}
+              </Link>
+              <Link
+                href={PATHS.reviews}
+                onClick={onClose}
+                className={styles.accountLink}
+              >
+                {LABELS.reviews}
+              </Link>
+              <Link
+                href={PATHS.giftCards}
+                onClick={onClose}
+                className={styles.accountLink}
+              >
+                {giftCardsLabels.giftCards}
               </Link>
               <Link
                 href={PATHS.help}

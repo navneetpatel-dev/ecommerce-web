@@ -3,7 +3,7 @@
 import { CheckCircle2 } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useEmailVerificationStatus } from "../../hooks/personal-info/useEmailVerificationStatus.hook";
 import { emailVerificationStatusStyles as styles } from "../../styles/personal-info/emailVerificationStatus.styles";

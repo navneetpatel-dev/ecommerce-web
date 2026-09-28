@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { useCheckoutStore } from "@/features/checkout/store/checkout.store";
-import { useAddresses, useCreateAddress } from "../../api/checkout/checkout.queries";
+import {
+  useAddresses,
+  useCreateAddress,
+} from "../../api/checkout/checkout.queries";
 import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";

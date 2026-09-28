@@ -1,6 +1,6 @@
 import { generateNoIndexMetadata } from "@/shared/seo/metadata";
 import { MyReturnsPage } from "@/features/returns";
-import { AuthGate } from "@/shared/components/AuthGate.component";
+import { AuthGate } from "@/shared/components/system/AuthGate.component";
 
 export const metadata = generateNoIndexMetadata("Returns");
 

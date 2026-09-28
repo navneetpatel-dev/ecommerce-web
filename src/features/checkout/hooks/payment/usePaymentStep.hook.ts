@@ -4,7 +4,7 @@ import { useMemo, useCallback } from "react";
 import type { CheckoutQuote } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 interface UsePaymentStepParams {
   isPending: boolean;
@@ -59,7 +59,7 @@ export function usePaymentStep({
   const remainderDueText = useMemo(() => {
     if (walletAmountToUse > 0 && amountDue != null && amountDue > 0) {
       return formatLabel(LABELS.paymentMethodWalletRemainderDue, {
-        amount: `₹${formatInrAmount(amountDue)}`,
+        amount: `${formatInr(amountDue)}`,
       });
     }
     return null;

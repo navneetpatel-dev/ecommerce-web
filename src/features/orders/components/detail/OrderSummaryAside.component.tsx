@@ -2,7 +2,7 @@ import Link from "next/link";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type { Order } from "@/shared/api/types";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import { OrderPaymentSummary } from "./OrderPaymentSummary.component";
 import { OrderMoneyBreakdown } from "./OrderMoneyBreakdown.component";

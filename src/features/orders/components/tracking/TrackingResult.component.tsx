@@ -6,8 +6,8 @@ import {
   CardTitle,
   CardContent,
 } from "@/shared/components/ui/card";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { RedeliverySlotPicker } from "@/shared/components/RedeliverySlotPicker.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { RedeliverySlotPicker } from "@/shared/components/orders/RedeliverySlotPicker.component";
 import type { TrackingLookupResult } from "../../api/tracking/shipping.api";
 import { LiveDeliveryMap } from "../delivery-map/LiveDeliveryMap.component";
 import { timeSince } from "@/shared/utils/geo/geo";

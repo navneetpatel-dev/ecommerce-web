@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
+import { CheckboxField } from "@/shared/components/forms/CheckboxField.component";
 import type { CategoryFacetOption } from "@/shared/api/types";
 import { filterSidebarStyles } from "../../../styles/filters/filterSidebar.styles";
 

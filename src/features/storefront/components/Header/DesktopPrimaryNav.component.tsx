@@ -36,6 +36,10 @@ export function DesktopPrimaryNav({
       <nav aria-label="Primary navigation" className={styles.desktopNav}>
         <div
           className={styles.relativeWrapper}
+          /* Pointer-intent zone for the mega menu (open/close delays handle
+             mouse transit); the trigger and links inside are the real
+             controls, so the wrapper is presentational. */
+          role="presentation"
           onMouseEnter={onScheduleMegaOpen}
           onMouseLeave={onScheduleMegaClose}
         >

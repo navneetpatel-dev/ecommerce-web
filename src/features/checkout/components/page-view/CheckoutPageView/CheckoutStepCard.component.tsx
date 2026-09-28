@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { AddressStep } from "../../address/AddressStep.component";
 import { ShippingStep } from "../../shipping/ShippingStep.component";
 import { PaymentStep } from "../../payment/PaymentStep.component";

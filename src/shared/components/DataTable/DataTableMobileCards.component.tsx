@@ -1,7 +1,7 @@
 "use client";
 
 import type { KeyboardEvent, ReactNode } from "react";
-import { TableRowActions } from "@/shared/components/TableRowActions.component";
+import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import { dataTableMobileStyles } from "../../styles/data-table/dataTable.styles";
@@ -43,6 +43,19 @@ export function DataTableMobileCards<T>({
         const primaryContent = primary
           ? resolveCell(primary, row, index)
           : null;
+        // Interactive rows get role/handlers as a block: a conditional `role`
+        // alone reads as a static element, and non-activatable rows must not
+        // advertise button semantics at all.
+        const rowActivationProps = rowsInteractive
+          ? {
+              role: "button" as const,
+              tabIndex: 0,
+              "aria-label": LABELS.viewRecordDetails,
+              onClick: () => onActivateRow(row, index),
+              onKeyDown: (event: KeyboardEvent<HTMLElement>) =>
+                onRowKeyDown(event, row, index),
+            }
+          : {};
 
         return (
           <li
@@ -51,11 +64,7 @@ export function DataTableMobileCards<T>({
               dataTableMobileStyles.card,
               rowsInteractive && dataTableMobileStyles.cardInteractive,
             )}
-            role={rowsInteractive ? "button" : undefined}
-            tabIndex={rowsInteractive ? 0 : undefined}
-            aria-label={rowsInteractive ? LABELS.viewRecordDetails : undefined}
-            onClick={() => onActivateRow(row, index)}
-            onKeyDown={(event) => onRowKeyDown(event, row, index)}
+            {...rowActivationProps}
           >
             {primary ? (
               <div
@@ -117,6 +126,11 @@ export function DataTableMobileCards<T>({
                     ? dataTableMobileStyles.actionsWrapper
                     : undefined,
                 )}
+                /* Row-action area: stops the row's own activation when a row
+                   action is used. It has no semantics of its own (the buttons
+                   inside announce themselves), so it is marked presentational
+                   rather than pretending to be a control. */
+                role="presentation"
                 onClick={(event) => event.stopPropagation()}
                 onKeyDown={(event) => event.stopPropagation()}
               >

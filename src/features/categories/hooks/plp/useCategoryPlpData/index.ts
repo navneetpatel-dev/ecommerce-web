@@ -56,5 +56,11 @@ export function useCategoryPlpData(slugPath: string[]) {
     enabled: Boolean(categoryQuery.data?.id),
   });
 
-  return { categoryQuery, facetsQuery, facetSelections, filters, productsQuery };
+  return {
+    categoryQuery,
+    facetsQuery,
+    facetSelections,
+    filters,
+    productsQuery,
+  };
 }

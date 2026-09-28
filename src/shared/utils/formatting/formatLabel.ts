@@ -6,5 +6,5 @@ export function formatLabel(
   return Object.entries(vars).reduce(
     (result, [key, value]) => result.replaceAll(`{${key}}`, String(value)),
     template,
-  )
+  );
 }

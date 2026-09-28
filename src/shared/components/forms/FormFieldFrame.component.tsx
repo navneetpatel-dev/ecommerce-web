@@ -1,6 +1,7 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import { Label } from "@/shared/components/ui/label";
 import { cn } from "@/shared/utils/dom/cn";
+import { FieldControlProvider, joinAriaIds } from "./fieldControl.context";
 import { formFieldFrameStyles } from "../../styles/forms/forms.styles";
 
 interface FormFieldFrameProps {
@@ -39,46 +40,61 @@ export function FormFieldFrame({
   labelAction,
   footerAction,
 }: FormFieldFrameProps) {
+  // React's useId contains ":" / "«»" — legal in ids, awkward in selectors and
+  // e2e locators — strip them so the id stays copy-pasteable and CSS-safe.
+  const generatedId = `field-${useId().replace(/[:«»]/g, "")}`;
+  const controlId = htmlFor ?? generatedId;
+  const errorId = error ? `${controlId}-error` : undefined;
+  const hintId = hint ? `${controlId}-hint` : undefined;
+  const describedById = joinAriaIds(errorId, hintId);
+
+  const labelNode = (
+    <Label htmlFor={controlId}>
+      {label}
+      {required ? <RequiredMark /> : null}
+    </Label>
+  );
+
+  const errorNode = error ? (
+    <p id={errorId} role="alert" className={formFieldFrameStyles.error}>
+      {error}
+    </p>
+  ) : null;
+
+  const hintNode = hint ? (
+    <p id={hintId} className={formFieldFrameStyles.hint}>
+      {hint}
+    </p>
+  ) : null;
+
   return (
     <div className={cn(formFieldFrameStyles.container, className)}>
       {labelAction ? (
         <div className={formFieldFrameStyles.labelRow}>
-          <Label htmlFor={htmlFor}>
-            {label}
-            {required ? <RequiredMark /> : null}
-          </Label>
+          {labelNode}
           {labelAction}
         </div>
       ) : (
-        <Label htmlFor={htmlFor}>
-          {label}
-          {required ? <RequiredMark /> : null}
-        </Label>
+        labelNode
       )}
-      {children}
+      {/* Publishes the control id + description ids so Input/Select/Textarea
+          inside the frame wire themselves (aria-describedby / aria-invalid). */}
+      <FieldControlProvider
+        value={{ controlId, describedById, invalid: Boolean(error) }}
+      >
+        {children}
+      </FieldControlProvider>
       {footerAction ? (
         <div className={formFieldFrameStyles.footerRow}>
-          {error ? (
-            <p role="alert" className={formFieldFrameStyles.error}>
-              {error}
-            </p>
-          ) : hint ? (
-            <p className={formFieldFrameStyles.hint}>{hint}</p>
-          ) : (
-            <span />
-          )}
+          {errorNode ?? (hint ? hintNode : <span />)}
           <div className={formFieldFrameStyles.footerActionWrapper}>
             {footerAction}
           </div>
         </div>
       ) : (
         <>
-          {error ? (
-            <p role="alert" className={formFieldFrameStyles.error}>
-              {error}
-            </p>
-          ) : null}
-          {hint ? <p className={formFieldFrameStyles.hint}>{hint}</p> : null}
+          {errorNode}
+          {hintNode}
         </>
       )}
     </div>

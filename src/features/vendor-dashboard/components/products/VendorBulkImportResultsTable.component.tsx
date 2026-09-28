@@ -1,8 +1,5 @@
 import { Badge } from "@/shared/components/ui/badge";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { BulkImportRowResult } from "@/features/products";

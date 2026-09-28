@@ -3,7 +3,7 @@
 import { ArrowRight } from "lucide-react";
 import type { CheckoutQuote } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
 import { WalletApplySection } from "../wallet/WalletApplySection.component";
 import { PaymentOptionsList } from "./PaymentOptionsList.component";

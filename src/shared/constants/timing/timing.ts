@@ -39,3 +39,13 @@ export const API_TIMEOUT_MS = 15_000;
 
 /** Token refresh may wait longer when the API is under load. */
 export const REFRESH_TIMEOUT_MS = 30_000;
+
+/** Toast auto-dismiss per severity (UI spec §4.4). Errors linger longest. */
+export const TOAST_DURATION_MS = {
+  success: 4000,
+  info: 5000,
+  error: 6000,
+} as const;
+
+/** Older toasts are dismissed early once this many are visible (spec §4.4). */
+export const TOAST_MAX_VISIBLE = 3;

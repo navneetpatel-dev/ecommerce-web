@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { useOrdersActivitySection } from "../../hooks/orders-activity/useOrdersActivitySection.hook";
 import { RecentOrdersList } from "./RecentOrdersList.component";

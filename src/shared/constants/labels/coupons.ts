@@ -6,7 +6,7 @@ export const couponsLabels = {
   applyCoupon: "Apply",
   removeCoupon: "Remove",
   couponCodePlaceholder: "Enter coupon code",
-  couponApplied: "Coupon applied — ₹{amount} off",
+  couponApplied: "Coupon applied — {amount} off",
   couponAppliedCheckout:
     "Coupon applied — discount will be calculated at checkout",
   couponInvalid: "Invalid or expired coupon code",

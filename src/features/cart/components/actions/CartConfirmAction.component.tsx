@@ -1,7 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { useCartConfirmAction } from "../../hooks/actions/useCartConfirmAction.hook";

@@ -4,7 +4,7 @@ import { useMemo, useCallback } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 interface UseWalletApplySectionParams {
   walletBalance: number;
@@ -27,8 +27,7 @@ export function useWalletApplySection({
 
   const remainderHint = useMemo(() => {
     return formatLabel(LABELS.walletRemainderDue, {
-      amount:
-        amountDue != null ? `₹${formatInrAmount(amountDue)}` : "Updating…",
+      amount: amountDue != null ? `${formatInr(amountDue)}` : "Updating…",
     });
   }, [amountDue]);
 

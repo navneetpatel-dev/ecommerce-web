@@ -8,8 +8,8 @@ import {
   FormSection,
 } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
-import { FormError } from "@/shared/components/FormError.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
 
 interface AdminShippingZoneFormProps {

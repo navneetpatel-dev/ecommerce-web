@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { Order } from "@/shared/api/types";
 import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
@@ -12,15 +12,8 @@ interface OrderCancelActionProps {
 }
 
 export function OrderCancelAction({ order }: OrderCancelActionProps) {
-  const {
-    canCancel,
-    open,
-    setOpen,
-    message,
-    error,
-    isPending,
-    confirmCancel,
-  } = useOrderCancelAction(order);
+  const { canCancel, open, setOpen, message, error, isPending, confirmCancel } =
+    useOrderCancelAction(order);
 
   if (!canCancel) return null;
 

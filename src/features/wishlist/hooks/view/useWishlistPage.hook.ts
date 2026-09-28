@@ -1,7 +1,10 @@
 "use client";
 
 import { useMemo } from "react";
-import { useWishlist, useRemoveFromWishlist } from "../../api/wishlist/wishlist.queries";
+import {
+  useWishlist,
+  useRemoveFromWishlist,
+} from "../../api/wishlist/wishlist.queries";
 import { useClientPagination } from "@/shared/hooks/pagination/useClientPagination.hook";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";

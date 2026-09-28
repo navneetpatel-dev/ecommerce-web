@@ -1,37 +1,43 @@
-import type { Metadata } from 'next'
-import { SITE } from './constants'
-import { productCanonical, categoryCanonical, canonicalUrl } from './canonical'
-import { productOg, ogDefaults } from './open-graph'
-import type { ProductSeoData, CategorySeoData } from './types'
+import type { Metadata } from "next";
+import { SITE } from "./constants";
+import { productCanonical, categoryCanonical, canonicalUrl } from "./canonical";
+import { productOg, ogDefaults } from "./open-graph";
+import type { ProductSeoData, CategorySeoData } from "./types";
 
 export function generateHomeMetadata(): Metadata {
   return {
-    title: 'Premium T-Shirts Online',
+    title: "Premium T-Shirts Online",
     description: SITE.description,
-    keywords: ['t-shirts', 'online shopping', 'premium clothing', 'fashion', 'e-commerce'],
+    keywords: [
+      "t-shirts",
+      "online shopping",
+      "premium clothing",
+      "fashion",
+      "e-commerce",
+    ],
     alternates: { canonical: SITE.url },
     openGraph: {
       ...ogDefaults(),
-      title: 'Premium T-Shirts Online | E-Commerce Marketplace',
+      title: "Premium T-Shirts Online | E-Commerce Marketplace",
       url: SITE.url,
     },
     twitter: {
-      card: 'summary_large_image',
-      title: 'Premium T-Shirts Online | E-Commerce Marketplace',
+      card: "summary_large_image",
+      title: "Premium T-Shirts Online | E-Commerce Marketplace",
       description: SITE.description,
       site: SITE.twitter,
       creator: SITE.twitter,
     },
-  }
+  };
 }
 
 export function generateProductMetadata(product: ProductSeoData): Metadata {
-  const title = product.seoTitle?.trim() || product.name
+  const title = product.seoTitle?.trim() || product.name;
   const description = product.seoDescription?.trim()
     ? product.seoDescription.trim()
     : product.description
-      ? product.description.slice(0, 160).replace(/\s+/g, ' ').trim()
-      : `Buy ${product.name} online at the best price. Fast delivery, easy returns.`
+      ? product.description.slice(0, 160).replace(/\s+/g, " ").trim()
+      : `Buy ${product.name} online at the best price. Fast delivery, easy returns.`;
 
   return {
     title,
@@ -41,9 +47,9 @@ export function generateProductMetadata(product: ProductSeoData): Metadata {
       ...product.tags,
       product.category.name,
       product.vendor.businessName,
-      't-shirts',
-      'buy online',
-      'e-commerce',
+      "t-shirts",
+      "buy online",
+      "e-commerce",
     ],
     alternates: { canonical: productCanonical(product.slug) },
     openGraph: {
@@ -52,7 +58,7 @@ export function generateProductMetadata(product: ProductSeoData): Metadata {
       description,
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title,
       description,
       site: SITE.twitter,
@@ -65,33 +71,35 @@ export function generateProductMetadata(product: ProductSeoData): Metadata {
       googleBot: {
         index: true,
         follow: true,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-        'max-video-preview': -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
       },
     },
-  }
+  };
 }
 
 export function generateCategoryMetadata(
   category: CategorySeoData & {
-    seoTitle?: string | null
-    seoDescription?: string | null
-    pathSlugs?: string[]
+    seoTitle?: string | null;
+    seoDescription?: string | null;
+    pathSlugs?: string[];
   },
   options: { noindex?: boolean } = {},
 ): Metadata {
-  const slugs = category.pathSlugs?.length ? category.pathSlugs : [category.slug]
-  const title = category.seoTitle?.trim() || category.name
+  const slugs = category.pathSlugs?.length
+    ? category.pathSlugs
+    : [category.slug];
+  const title = category.seoTitle?.trim() || category.name;
   const description =
     category.seoDescription?.trim() ||
-    `Shop ${category.name} online. Premium quality, fast delivery, and easy returns at ${SITE.name}.`
-  const canonical = categoryCanonical(...slugs)
+    `Shop ${category.name} online. Premium quality, fast delivery, and easy returns at ${SITE.name}.`;
+  const canonical = categoryCanonical(...slugs);
 
   return {
     title,
     description,
-    keywords: [category.name, 'buy online', 'e-commerce', SITE.name],
+    keywords: [category.name, "buy online", "e-commerce", SITE.name],
     alternates: { canonical },
     robots: options.noindex
       ? { index: false, follow: true }
@@ -106,15 +114,19 @@ export function generateCategoryMetadata(
       url: canonical,
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: `${title} | ${SITE.name}`,
       description,
       site: SITE.twitter,
     },
-  }
+  };
 }
 
-export function generateStaticPageMetadata(title: string, description: string, path: string): Metadata {
+export function generateStaticPageMetadata(
+  title: string,
+  description: string,
+  path: string,
+): Metadata {
   return {
     title,
     description,
@@ -125,12 +137,12 @@ export function generateStaticPageMetadata(title: string, description: string, p
       description,
     },
     twitter: {
-      card: 'summary',
+      card: "summary",
       title: `${title} | ${SITE.name}`,
       description,
       site: SITE.twitter,
     },
-  }
+  };
 }
 
 export function generateNoIndexMetadata(title: string): Metadata {
@@ -141,5 +153,5 @@ export function generateNoIndexMetadata(title: string): Metadata {
       follow: false,
       googleBot: { index: false, follow: false },
     },
-  }
+  };
 }

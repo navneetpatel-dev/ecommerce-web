@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Gift } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
@@ -66,7 +66,7 @@ export function GiftCardRedeemContent() {
           </h1>
           <p className={styles.subtitle}>
             {formatLabel(giftCardsLabels.giftCardRedeemSuccessBody, {
-              amount: result.amount,
+              amount: formatInr(Number(result.amount)),
             })}
           </p>
           <Button className={styles.button} asChild>

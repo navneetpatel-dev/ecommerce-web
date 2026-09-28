@@ -1,4 +1,4 @@
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
+import { CheckboxField } from "@/shared/components/forms/CheckboxField.component";
 import type { Category } from "@/shared/api/types";
 import { vendorShopSettingsFormStyles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
 

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { motion } from "motion/react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { searchHelp } from "../../../constants/helpContent";
@@ -41,12 +41,7 @@ export function HelpHomeView() {
           className={styles.header}
         >
           <TextEyebrow brand>{LABELS.helpSupportEyebrow}</TextEyebrow>
-          <h1
-            className={styles.title}
-            style={{ fontSize: "var(--text-display-sm)" }}
-          >
-            {LABELS.helpCenter}
-          </h1>
+          <h1 className={styles.title}>{LABELS.helpCenter}</h1>
           <p className={styles.subtitle}>{LABELS.helpCenterIntro}</p>
         </motion.header>
 

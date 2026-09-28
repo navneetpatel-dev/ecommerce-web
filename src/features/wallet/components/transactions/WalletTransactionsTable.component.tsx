@@ -2,12 +2,9 @@
 
 import { Download } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { TableRowAction } from "@/shared/components/TableRowActions.component";
+import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";

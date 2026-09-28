@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import type { CartItem } from "@/shared/api/types";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { useShippingStep } from "../../hooks/shipping/useShippingStep.hook";
 import { ShippingCardsList } from "./ShippingCardsList.component";
 import { SHIPPING_STEP_STYLES } from "../../styles/shipping/shippingStep.styles";

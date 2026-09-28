@@ -22,7 +22,10 @@ export function DoorstepPasscodeSection({
   return (
     <div className={doorstepConfirmCardStyles.passcodeBox}>
       <div className={doorstepConfirmCardStyles.passcodeHeader}>
-        <label className={doorstepConfirmCardStyles.passcodeLabel}>
+        <label
+          htmlFor="doorstep-delivery-passcode"
+          className={doorstepConfirmCardStyles.passcodeLabel}
+        >
           Delivery Passcode
         </label>
         <Button
@@ -41,6 +44,7 @@ export function DoorstepPasscodeSection({
       ) : null}
       <div className={doorstepConfirmCardStyles.passcodeInputRow}>
         <Input
+          id="doorstep-delivery-passcode"
           inputMode="numeric"
           maxLength={6}
           value={otpCode}

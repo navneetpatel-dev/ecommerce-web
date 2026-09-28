@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import type { PaymentNotice } from "../../../hooks/checkout/usePlaceOrder.hook";
 
 interface CheckoutPaymentNoticeDialogProps {

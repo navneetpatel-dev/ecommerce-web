@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { useMediaQuery } from "@/shared/hooks/responsive/use-media-query.hook";

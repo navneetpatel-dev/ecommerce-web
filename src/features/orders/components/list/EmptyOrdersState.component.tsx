@@ -1,5 +1,5 @@
 import { Package } from "lucide-react";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { EMPTY_ORDERS_STATE_STYLES } from "../../styles/list/emptyOrdersState.styles";
 

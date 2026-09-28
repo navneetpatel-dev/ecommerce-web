@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { QuantitySelector } from "@/shared/components/QuantitySelector.component";
-import { MediaImage } from "@/shared/components/MediaImage.component";
-import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
+import { QuantitySelector } from "@/shared/components/QuantitySelector/QuantitySelector.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
+import { InlineAmountSkeleton } from "@/shared/components/Skeletons/InlineAmountSkeleton.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart/cart";
 import { LABELS } from "@/shared/constants/labels";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { CartItem } from "@/shared/api/types";
 import { RemoveLineButton } from "./cartLineShared.component";
 import { useCartLineViewModel } from "../../../hooks/line-item/useCartLineViewModel.hook";
@@ -71,7 +71,7 @@ export function CompactCartLine(props: CompactCartLineProps) {
         {available ? (
           <p className={styles.compactAmount(isPendingOrNull)}>
             {lineTotal != null && !linePending ? (
-              <>₹{formatInrAmount(lineTotal)}</>
+              <>{formatInr(lineTotal)}</>
             ) : amountsUnavailable ? (
               LABELS.amountUnavailable
             ) : (

@@ -18,6 +18,14 @@ export const imageGalleryStyles = {
   mediaInner: "relative h-full w-full",
   transitionPrevWrapper: "absolute inset-0",
   zoomOverlay: "pointer-events-none absolute inset-0 z-[1]",
+  /**
+   * Full-bleed labelled button behind the floating controls: click/tap the
+   * image to open the lightbox without putting a click handler on the stage
+   * wrapper. `z-0` keeps it under the zoom overlay and the controls, and
+   * pointer events still bubble to the stage's zoom gesture handlers.
+   */
+  lightboxHitArea:
+    "absolute inset-0 z-0 h-full w-full cursor-zoom-in appearance-none border-0 bg-transparent p-0",
 } as const;
 
 export const imageStageControlsStyles = {

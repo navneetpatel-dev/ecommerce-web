@@ -1,7 +1,7 @@
 "use client";
 
 import { useCookieBanner } from "@/shared/hooks/cookies/useCookieBanner.hook";
-import { CookieBanner } from "@/shared/components/CookieBanner.component";
+import { CookieBanner } from "@/shared/components/dialogs/CookieBanner.component";
 
 export function CookieBannerContainer() {
   const banner = useCookieBanner();

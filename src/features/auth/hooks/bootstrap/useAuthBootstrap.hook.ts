@@ -14,29 +14,7 @@ import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { isDefinitiveAuthFailure } from "@/shared/utils/auth/authSessionError";
 import type { CurrentUser } from "@/shared/api/types";
-
-/**
- * Decodes a JWT's payload without verifying its signature — verification already happened
- * server-side; this only reads claims already trusted enough to have been handed back to us.
- */
-function decodeJwtPayload(
-  token: string,
-): { sub?: string; impersonatedBy?: string } | null {
-  try {
-    const segment = token.split(".")[1];
-    if (!segment) return null;
-    const normalized = segment.replace(/-/g, "+").replace(/_/g, "/");
-    const json = decodeURIComponent(
-      atob(normalized)
-        .split("")
-        .map((c) => `%${c.charCodeAt(0).toString(16).padStart(2, "0")}`)
-        .join(""),
-    );
-    return JSON.parse(json) as { sub?: string; impersonatedBy?: string };
-  } catch {
-    return null;
-  }
-}
+import { decodeJwtPayload } from "../../utils/bootstrap/jwtClaims";
 
 function readStashedImpersonationSession(): {
   accessToken: string;

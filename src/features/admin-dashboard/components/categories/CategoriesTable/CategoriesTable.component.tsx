@@ -9,7 +9,7 @@ import {
 import {
   DataTable,
   type DataTablePaginationProps,
-} from "@/shared/components/DataTable.component";
+} from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
 import { useCategoriesReorder } from "../../../hooks/categories/useCategoriesReorder.hook";
 import type { Category } from "@/shared/api/types";

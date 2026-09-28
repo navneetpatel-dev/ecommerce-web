@@ -126,3 +126,12 @@ export const STATE_STACK_CENTER =
 export function eyebrowText(size: string, color: string): string {
   return cn(EYEBROW_TRACKING, size, color);
 }
+
+/**
+ * Full-bleed backdrop rendered as a real (hidden, untabbable) button behind a
+ * drawer or sheet, so clicking outside closes it without putting a click
+ * handler on a static element. The leading resets undo the locked 44px control
+ * height that `Button` applies, keeping the backdrop edge-to-edge.
+ */
+export const OVERLAY_BACKDROP =
+  "absolute inset-0 h-auto max-h-none min-h-0 w-auto max-w-none rounded-none border-0 bg-overlay p-0 hover:bg-overlay animate-fade-in";

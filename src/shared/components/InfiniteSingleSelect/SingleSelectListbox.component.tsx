@@ -121,6 +121,7 @@ export function SearchField(props: {
         placeholder={props.placeholder}
         aria-label={props.placeholder}
         disabled={props.disabled}
+        // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: this control lives in a dialog/popover that opened from a user action, where moving focus into the panel is the expected behaviour
         autoFocus
       />
     </div>

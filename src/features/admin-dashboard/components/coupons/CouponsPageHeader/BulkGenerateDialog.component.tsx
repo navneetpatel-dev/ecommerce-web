@@ -15,8 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { NumberInput } from "@/shared/components/NumberInput.component";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { CreateCouponForm } from "../CreateCouponForm.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useBulkCouponGeneration } from "../../../hooks/coupons/useBulkCouponGeneration.hook";

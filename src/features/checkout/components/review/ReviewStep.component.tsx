@@ -3,7 +3,7 @@
 import type { CheckoutQuote } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { Button } from "@/shared/components/ui/button";
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
+import { CheckboxField } from "@/shared/components/forms/CheckboxField.component";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { ArrowRight } from "lucide-react";
 import { PayableSummary } from "./ReviewStep/PayableSummary.component";

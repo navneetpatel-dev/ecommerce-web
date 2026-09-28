@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { QuantitySelector } from "@/shared/components/QuantitySelector.component";
-import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { QuantitySelector } from "@/shared/components/QuantitySelector";
+import { InlineAmountSkeleton } from "@/shared/components/Skeletons/InlineAmountSkeleton.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart/cart";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { CartItem } from "@/shared/api/types";
 import { RemoveCartItemAction } from "../../actions/RemoveCartItemAction.component";
 import { useCartLineViewModel } from "../../../hooks/line-item/useCartLineViewModel.hook";
@@ -106,7 +106,7 @@ export function FullCartLine(props: FullCartLineProps) {
             <InlineAmountSkeleton className={styles.fullAmountSkeleton} />
           ) : (
             <p className={styles.fullTotalAmount}>
-              ₹{formatInrAmount(lineTotal)}
+              {formatInr(lineTotal)}
             </p>
           )}
           <p className={styles.fullEachPrice}>{eachPrice}</p>

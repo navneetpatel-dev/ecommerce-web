@@ -1,10 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { WalletRechargeReport } from "../../../api/finance/reports.api";
 import { adminWalletRechargePanelStyles as styles } from "../../../styles/wallet/adminWalletRechargePanel.styles";
 

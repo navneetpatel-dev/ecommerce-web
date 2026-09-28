@@ -1,7 +1,7 @@
 "use client";
 
-import { NumberInput } from "@/shared/components/NumberInput.component";
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
+import { CheckboxField } from "@/shared/components/forms/CheckboxField.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import {
   Select,
@@ -12,6 +12,7 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorPayoutFrequency } from "../../../api/overview/vendor.api";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 const NO_PREFERENCE_VALUE = "__none__";
 
@@ -47,7 +48,7 @@ export function FulfillmentSection({
           value={returnShippingFee ?? undefined}
           min={0}
           step={10}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={(value) =>
             onReturnShippingFeeChange(value == null ? null : value)
           }

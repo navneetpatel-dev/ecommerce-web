@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { shippingApi, type TrackingLookupResult } from "../../api/tracking/shipping.api";
+import {
+  shippingApi,
+  type TrackingLookupResult,
+} from "../../api/tracking/shipping.api";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
 export function useTrackingLookup() {

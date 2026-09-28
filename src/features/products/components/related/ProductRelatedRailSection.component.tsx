@@ -1,4 +1,4 @@
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import type { ProductListItem } from "@/shared/api/types";
 import { ProductGrid } from "../listing/ProductGrid.component";
 import { productRelatedRailsStyles } from "../../styles/related/productRelatedRails.styles";

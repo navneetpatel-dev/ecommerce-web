@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import {
   DataTable,
   type DataTablePaginationProps,
-} from "@/shared/components/DataTable.component";
+} from "@/shared/components/DataTable";
 import { useVendorApprovalTableColumns } from "../../../hooks/vendors/useVendorApprovalTableColumns.hook";
 import { VendorApprovalRowActions } from "./VendorApprovalRowActions.component";
 

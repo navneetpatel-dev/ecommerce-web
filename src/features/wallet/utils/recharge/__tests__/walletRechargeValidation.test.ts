@@ -20,7 +20,9 @@ describe("walletRechargeValidationLabel", () => {
   });
 
   it("maps above-max to a label", () => {
-    expect(walletRechargeValidationLabel("above-max", limits)).toMatch(/10,000/);
+    expect(walletRechargeValidationLabel("above-max", limits)).toMatch(
+      /10,000/,
+    );
   });
 
   it("maps max-balance to a label", () => {

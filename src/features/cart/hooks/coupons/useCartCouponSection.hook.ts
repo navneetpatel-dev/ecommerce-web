@@ -3,7 +3,7 @@
 import { useMemo, type ChangeEvent, type KeyboardEvent } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
 
 export interface UnusedOfferViewModel {
@@ -46,7 +46,7 @@ export function useCartCouponSection({
         code: offer.code,
         discountText:
           offer.discount > 0
-            ? ` · ₹${formatInrAmount(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`
+            ? ` · ${formatInr(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`
             : "",
       }));
   }, [chips, eligible]);

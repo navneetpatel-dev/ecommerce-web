@@ -5,7 +5,10 @@ import { useQueries } from "@tanstack/react-query";
 import type { ProductListItem } from "@/shared/api/types";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { productsApi } from "../../api/listing/products.api";
-import { productKeys, useRecentlyViewedQuery } from "../../api/listing/products.queries";
+import {
+  productKeys,
+  useRecentlyViewedQuery,
+} from "../../api/listing/products.queries";
 import {
   productDetailToListItem,
   productNeedsVariantHydration,

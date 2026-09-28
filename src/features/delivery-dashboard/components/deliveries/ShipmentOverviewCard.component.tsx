@@ -1,6 +1,6 @@
 import { Package } from "lucide-react";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { shipmentOverviewCardStyles as styles } from "../../styles/deliveries/shipmentOverviewCard.styles";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";

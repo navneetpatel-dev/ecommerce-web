@@ -8,8 +8,18 @@ export default function manifest(): MetadataRoute.Manifest {
     description: SITE.description,
     start_url: "/",
     display: "standalone",
-    background_color: "#fafaf8",
-    theme_color: "#2a5c4b",
-    icons: [{ src: "/favicon.ico", sizes: "any", type: "image/x-icon" }],
+    // Manifest JSON cannot read CSS custom properties, so these mirror the
+    // light-palette token values in shared/styles/globals.css (--paper, --brand).
+    background_color: "#f6f3ec",
+    theme_color: "#8a6a2e",
+    icons: [
+      { src: "/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
+      {
+        src: "/icon.svg",
+        sizes: "any",
+        type: "image/svg+xml",
+        purpose: "maskable",
+      },
+    ],
   };
 }

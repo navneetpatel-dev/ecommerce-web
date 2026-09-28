@@ -13,8 +13,9 @@ export function resolveDownloadFilename(
   fallbackFilename: string,
 ): string {
   return (
-    parseContentDispositionFilename(response.headers.get('content-disposition')) ??
-    fallbackFilename
+    parseContentDispositionFilename(
+      response.headers.get("content-disposition"),
+    ) ?? fallbackFilename
   );
 }
 
@@ -23,7 +24,7 @@ export function buildDatedExportFilenameFallback(
   documentKey: string,
   from: string,
   to: string,
-  extension: 'csv' | 'pdf' | 'xlsx',
+  extension: "csv" | "pdf" | "xlsx",
 ): string {
   const fromDate = from.slice(0, 10);
   const toDate = to.slice(0, 10);

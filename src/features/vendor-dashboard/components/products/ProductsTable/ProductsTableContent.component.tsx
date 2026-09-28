@@ -13,7 +13,7 @@ import {
   TABLE_DATA_CELL_CLASS,
   TABLE_PINNED_LAYOUT_CLASS,
 } from "@/shared/constants/table/table";
-import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { ProductRow } from "./ProductRow.component";
 import { ProductMobileCard } from "./ProductMobileCard.component";
 import { productsTableContentStyles as styles } from "../../../styles/products/productsTable.styles";

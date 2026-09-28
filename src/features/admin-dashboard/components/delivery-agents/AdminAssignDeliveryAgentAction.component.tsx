@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { DeliveryAgentOptionsList } from "./AdminAssignDeliveryAgentAction/DeliveryAgentOptionsList.component";
 import { useAdminAssignDeliveryAgentAction } from "../../hooks/delivery-agents/useAdminAssignDeliveryAgentAction.hook";
 import { adminAssignDeliveryAgentActionStyles as styles } from "../../styles/delivery-agents/adminAssignDeliveryAgentAction.styles";

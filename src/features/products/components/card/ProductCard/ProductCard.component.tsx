@@ -1,7 +1,7 @@
 "use client";
 
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
 import { CardControls } from "./CardControls.component";
 import { CardDetails } from "./CardDetails.component";

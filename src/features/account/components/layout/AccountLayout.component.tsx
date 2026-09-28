@@ -1,9 +1,12 @@
 "use client";
 
 import { motion } from "motion/react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
-import type { AccountNavItem, AccountSectionId } from "../../types/layout/types";
+import type {
+  AccountNavItem,
+  AccountSectionId,
+} from "../../types/layout/types";
 import { useAccountLayout } from "../../hooks/layout/useAccountLayout.hook";
 import { AccountMobileNav } from "./AccountMobileNav.component";
 import { AccountDesktopNav } from "./AccountDesktopNav.component";

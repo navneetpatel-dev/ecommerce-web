@@ -1,4 +1,4 @@
-import { VendorStrip } from "@/shared/components/VendorStrip.component";
+import { VendorStrip } from "@/shared/components/orders/VendorStrip.component";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { ShippingRate } from "@/shared/api/types";
 import { ShippingRatesList } from "./ShippingRatesList.component";

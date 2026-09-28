@@ -3,7 +3,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   type InfiniteSingleSelectPageQuery,
   type InfiniteSingleSelectPageResult,
-} from "@/shared/components/InfiniteSingleSelect.component";
+} from "@/shared/components/InfiniteSingleSelect";
 import { VENDOR_STATUS } from "@/shared/constants/statuses";
 import { adminApi } from "@/features/admin-dashboard";
 

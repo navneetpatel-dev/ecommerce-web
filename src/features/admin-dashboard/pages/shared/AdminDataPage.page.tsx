@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useCallback } from "react";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import type { PermissionKey } from "@/shared/constants/permissions/permissions";
 import {
   useAdminDataList,

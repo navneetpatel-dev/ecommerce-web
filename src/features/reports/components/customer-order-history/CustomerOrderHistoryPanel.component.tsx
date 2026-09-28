@@ -1,7 +1,7 @@
 "use client";
 
-import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DateRangeFields } from "@/shared/components/forms/DateRangeFields.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { FormSection } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";

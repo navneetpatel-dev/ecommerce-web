@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { Breadcrumbs } from "@/shared/components/Breadcrumbs.component";
+import { Breadcrumbs } from "@/shared/components/navigation/Breadcrumbs.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -26,19 +26,9 @@ export function CategoryHeader({
 
       <div className={styles.titleRow}>
         <div className={styles.titleBlock}>
-          <h1
-            className={styles.title}
-            style={{ fontSize: "var(--text-h1)", lineHeight: 1.15 }}
-          >
-            {category.name}
-          </h1>
+          <h1 className={styles.title}>{category.name}</h1>
           {category.seoDescription ? (
-            <p
-              className={styles.seoDescription}
-              style={{ fontSize: "var(--text-body-sm)", lineHeight: 1.4 }}
-            >
-              {category.seoDescription}
-            </p>
+            <p className={styles.seoDescription}>{category.seoDescription}</p>
           ) : null}
         </div>
 

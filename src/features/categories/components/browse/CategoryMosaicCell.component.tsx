@@ -1,4 +1,4 @@
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { categoryCardStyles } from "../../styles/browse/categoryCard.styles";
 
 interface CategoryMosaicCellProps {

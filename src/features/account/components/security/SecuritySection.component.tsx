@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { FormError } from "@/shared/components/FormError.component";
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { LABELS } from "@/shared/constants/labels";
 import { ChangePasswordSection } from "@/features/auth";
 import { BrowserNotificationsSetting } from "../notifications/BrowserNotificationsSetting.component";

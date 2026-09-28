@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import {
   TableRowActions,
   TableRowAction,
-} from "@/shared/components/TableRowActions.component";
+} from "@/shared/components/DataTable/TableRowActions.component";
 import { Pencil, Trash2, Send, Images } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";

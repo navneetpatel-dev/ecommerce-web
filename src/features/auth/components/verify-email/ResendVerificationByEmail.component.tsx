@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useResendVerificationByEmail } from "../../api/auth/auth.queries";
 import { authFormsStyles } from "../../styles/shell/authForms.styles";

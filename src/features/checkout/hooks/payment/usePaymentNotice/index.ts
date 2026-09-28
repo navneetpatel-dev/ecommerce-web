@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { StatusDialogVariant } from "@/shared/components/StatusDialog.component";
+import type { StatusDialogVariant } from "@/shared/components/dialogs/StatusDialog.component";
 
 export type PaymentNotice = {
   variant: StatusDialogVariant;

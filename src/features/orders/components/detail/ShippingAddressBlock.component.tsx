@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { MapPin } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import type { Order } from "@/shared/api/types";
 import { ORDER_SUMMARY_ASIDE_STYLES } from "../../styles/detail/orderSummaryAside.styles";
 

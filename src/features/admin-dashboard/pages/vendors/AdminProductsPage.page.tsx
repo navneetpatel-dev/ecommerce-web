@@ -1,7 +1,7 @@
 "use client";
 
 import { AdminDataPage } from "../shared/AdminDataPage.page";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { ProductModerationQueue } from "./ProductModerationQueue.page";
 import { AdminSectionTabs } from "../../components/shared/AdminSectionTabs.component";
 import { useAdminProductsPage } from "../../hooks/vendors/useAdminProductsPage";

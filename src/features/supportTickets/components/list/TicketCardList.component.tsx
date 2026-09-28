@@ -1,9 +1,9 @@
 "use client";
 
 import { LifeBuoy } from "lucide-react";
-import { EmptyState } from "@/shared/components/EmptyState.component";
-import { FormError } from "@/shared/components/FormError.component";
-import { InfiniteLoadMore } from "@/shared/components/InfiniteLoadMore.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
+import { InfiniteLoadMore } from "@/shared/components/DataTable/InfiniteLoadMore.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { LABELS } from "@/shared/constants/labels";
 import type { SupportTicket } from "../../api/list/supportTickets.api";

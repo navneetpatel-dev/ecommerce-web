@@ -1,7 +1,7 @@
 "use client";
 
-import { RecordDetailImage } from "@/shared/components/RecordDetailImage.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { RecordDetailImage } from "@/shared/components/dialogs/RecordDetailImage.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import {
   Dialog,
   DialogContent,

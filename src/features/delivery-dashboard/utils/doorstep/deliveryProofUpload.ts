@@ -1,4 +1,7 @@
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import type { usePresignUpload } from "@/shared/hooks/uploads/useUploads.hook";
 
 type PresignUpload = ReturnType<typeof usePresignUpload>;

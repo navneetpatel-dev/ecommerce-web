@@ -49,10 +49,10 @@ export function EmptyState({
   return (
     <div className={cn(emptyStateStyles.container, maxWidth, className)}>
       {Icon ? (
-        <div className={emptyStateStyles.iconWrap}>
+        <div className={emptyStateStyles.artWrap}>
           <Icon
-            className={cn(emptyStateStyles.icon, iconClassName)}
-            strokeWidth={1.25}
+            className={cn(emptyStateStyles.artIcon, iconClassName)}
+            strokeWidth={1}
             aria-hidden
           />
         </div>
@@ -60,21 +60,13 @@ export function EmptyState({
 
       {eyebrow ? <p className={emptyStateStyles.eyebrow}>{eyebrow}</p> : null}
 
-      {heading ? (
-        <h3
-          className={emptyStateStyles.heading}
-          style={{ fontSize: "var(--text-h3)", lineHeight: 1.25 }}
-        >
-          {heading}
-        </h3>
-      ) : null}
+      {heading ? <h3 className={emptyStateStyles.heading}>{heading}</h3> : null}
 
       <p
         className={cn(
           emptyStateStyles.message,
           heading ? emptyStateStyles.messageWithHeading : undefined,
         )}
-        style={{ fontSize: "var(--text-body)", lineHeight: 1.55 }}
       >
         {message}
       </p>

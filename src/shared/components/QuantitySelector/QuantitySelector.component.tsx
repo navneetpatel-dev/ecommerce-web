@@ -1,7 +1,7 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { AnimatedQuantityValue } from "./AnimatedQuantityValue.component";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
@@ -55,6 +55,7 @@ export function QuantitySelector(props: QuantitySelectorProps) {
     <input
       type="number"
       inputMode="numeric"
+      // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: this control lives in a dialog/popover that opened from a user action, where moving focus into the panel is the expected behaviour
       autoFocus
       value={draft ?? ""}
       onChange={handleInputChange}
@@ -81,10 +82,7 @@ export function QuantitySelector(props: QuantitySelectorProps) {
   );
 
   const control = (
-    <div
-      className={cn(QUANTITY_SELECTOR_CONTAINER, className)}
-      onClick={handleStopBubble}
-    >
+    <div className={cn(QUANTITY_SELECTOR_CONTAINER, className)}>
       <DisabledActionHint
         disabled={decrementHintDisabled}
         message={minHint}

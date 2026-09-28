@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { DataTableColumn } from "@/shared/components/DataTable.component";
+import type { DataTableColumn } from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
 
 interface Vendor {

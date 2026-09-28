@@ -5,7 +5,7 @@ import { Input } from "@/shared/components/ui/input";
 import {
   TableRowActions,
   TableRowAction,
-} from "@/shared/components/TableRowActions.component";
+} from "@/shared/components/DataTable/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
 import { VENDOR_ORDERS_TABLE_STYLES } from "../../../styles/orders/vendorOrdersTable.styles";
@@ -31,6 +31,7 @@ export function ShipTrackingNumberFields({
       <TableRowActions>
         <TableRowAction>
           <Input
+            // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: this control lives in a dialog/popover that opened from a user action, where moving focus into the panel is the expected behaviour
             autoFocus
             value={trackingId}
             onChange={(e) => onTrackingIdChange(e.target.value)}

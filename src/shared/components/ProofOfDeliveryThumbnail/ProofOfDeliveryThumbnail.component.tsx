@@ -1,7 +1,7 @@
 "use client";
 
-import { ImageGalleryLightbox } from "@/shared/components/ImageGalleryLightbox.component";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { ImageGalleryLightbox } from "@/shared/components/ImageGallery/ImageGalleryLightbox.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useProofOfDeliveryThumbnail } from "./useProofOfDeliveryThumbnail.hook";
 import { proofOfDeliveryThumbnailStyles as styles } from "./proofOfDeliveryThumbnail.styles";

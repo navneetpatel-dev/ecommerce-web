@@ -1,4 +1,4 @@
-import { TableCellImage } from "@/shared/components/TableCellImage.component";
+import { TableCellImage } from "@/shared/components/DataTable/TableCellImage.component";
 import { adminDataListViewStyles } from "../../../styles/shared/adminDataListView.styles";
 
 interface TableCellImagesListProps {

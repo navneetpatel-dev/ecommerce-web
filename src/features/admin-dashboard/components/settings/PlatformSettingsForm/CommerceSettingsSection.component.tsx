@@ -1,6 +1,6 @@
 "use client";
 
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import type { PlatformSettings } from "../../../hooks/settings/usePlatformSettingsForm.hook";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 interface CommerceSettingsSectionProps {
   form: PlatformSettings;
@@ -82,7 +83,7 @@ export function CommerceSettingsSection({
           value={form.tds194oExemptionThreshold}
           min={0}
           step={10000}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={(value) => onTds194oExemptionThresholdChange(value ?? 0)}
         />
       </FormFieldFrame>

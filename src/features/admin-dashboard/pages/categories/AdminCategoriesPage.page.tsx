@@ -1,6 +1,6 @@
 "use client";
 
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { CategoriesPageHeader } from "../../components/categories/CategoriesPageHeader.component";
 import { CategoriesTable } from "../../components/categories/CategoriesTable.component";
 import { useAdminCategoriesPage } from "../../hooks/categories/useAdminCategoriesPage";

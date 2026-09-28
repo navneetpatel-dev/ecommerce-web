@@ -5,7 +5,7 @@ import { PackageX } from "lucide-react";
 import { useOrderDetailPage } from "../../hooks/detail/useOrderDetailPage.hook";
 import { OrderDetailContent } from "../../components/detail/OrderDetailContent.component";
 import { OrderDetailSkeleton } from "../../components/detail/OrderDetailSkeleton.component";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { ordersPagesStyles } from "../list/ordersPages.styles";
 

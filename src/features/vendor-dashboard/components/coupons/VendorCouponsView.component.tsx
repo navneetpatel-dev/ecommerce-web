@@ -7,8 +7,8 @@ import {
   DataTable,
   type DataTableColumn,
   type DataTablePaginationProps,
-} from "@/shared/components/DataTable.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+} from "@/shared/components/DataTable";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import {
   AdminConfirmAction,
   type CouponFormInput,

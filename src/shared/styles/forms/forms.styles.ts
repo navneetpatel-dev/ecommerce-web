@@ -5,6 +5,19 @@ export const formActionsStyles = {
   spacer: "hidden sm:block",
 } as const;
 
+export const formStackStyles = {
+  container: "space-y-6",
+} as const;
+
+export const checkboxFieldStyles = {
+  labelText: "min-w-0 flex-1",
+} as const;
+
+export const dateRangeFieldsStyles = {
+  wrapper: "contents",
+  field: "w-full sm:w-44",
+} as const;
+
 export const formFieldFrameStyles = {
   container: "space-y-2",
   requiredMark: "text-danger",

@@ -11,7 +11,8 @@ export const helpArticleViewStyles = {
   backLink:
     "mb-4 inline-flex items-center gap-1.5 text-[0.875rem] text-ink-muted transition-colors hover:text-brand",
   backArrow: "h-4 w-4",
-  title: "mt-1.5 font-display text-ink leading-[1.1] tracking-tight",
+  title:
+    "mt-1.5 font-display text-ink leading-[1.1] tracking-tight text-display-sm",
   summary: "mt-3 text-body text-ink-muted",
   sectionsWrapper: "mt-8 max-w-2xl space-y-8 border-t border-line pt-8",
   supportNotice: "mt-10 max-w-2xl text-[0.875rem] text-ink-muted",

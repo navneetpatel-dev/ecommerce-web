@@ -24,11 +24,17 @@ export function DeliveryDispatchAgentSelect({
 
   return (
     <div className={deliveryDispatchPanelStyles.targetAgentWrapper}>
-      <label className={deliveryDispatchPanelStyles.agentLabel}>
+      <label
+        htmlFor="dispatch-target-agent"
+        className={deliveryDispatchPanelStyles.agentLabel}
+      >
         Dispatch target agent *
       </label>
       <Select value={selectedAgent} onValueChange={onSelectedAgentChange}>
-        <SelectTrigger className={deliveryDispatchPanelStyles.selectTrigger}>
+        <SelectTrigger
+          id="dispatch-target-agent"
+          className={deliveryDispatchPanelStyles.selectTrigger}
+        >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

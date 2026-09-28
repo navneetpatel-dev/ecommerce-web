@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import type { Category } from "@/shared/api/types";
 import { categoryCardStyles } from "../../styles/browse/categoryCard.styles";
 import { useCategoryCardPresentation } from "../../hooks/browse/useCategoryCardPresentation.hook";

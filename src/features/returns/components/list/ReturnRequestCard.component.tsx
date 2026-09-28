@@ -2,9 +2,9 @@
 
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
-import { Timeline } from "@/shared/components/Timeline.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { RedeliverySlotPicker } from "@/shared/components/RedeliverySlotPicker.component";
+import { Timeline } from "@/shared/components/display/Timeline.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { RedeliverySlotPicker } from "@/shared/components/orders/RedeliverySlotPicker.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { ReturnRequest } from "@/shared/api/types";
 import { RefundBreakdown } from "../detail/RefundBreakdown.component";
@@ -49,7 +49,9 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
             <div className={styles.refundBox}>
               <ReturnRefundStatus row={row} />
               {row.refundCustomerMessage ? (
-                <p className={styles.refundMuted}>{row.refundCustomerMessage}</p>
+                <p className={styles.refundMuted}>
+                  {row.refundCustomerMessage}
+                </p>
               ) : null}
               <RefundBreakdown row={row} />
             </div>

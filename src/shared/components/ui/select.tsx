@@ -4,6 +4,10 @@ import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
+import {
+  joinAriaIds,
+  useFieldControl,
+} from "@/shared/components/forms/fieldControl.context";
 import { selectStyles } from "../../styles/ui/select.styles";
 
 const Select = SelectPrimitive.Root;
@@ -13,18 +17,30 @@ const SelectValue = SelectPrimitive.Value;
 const SelectTrigger = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    ref={ref}
-    className={cn(selectStyles.trigger, className)}
-    {...props}
-  >
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown size={16} className={selectStyles.triggerIcon} />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
-));
+>(({ className, children, ...props }, ref) => {
+  const field = useFieldControl();
+
+  return (
+    <SelectPrimitive.Trigger
+      ref={ref}
+      className={cn(selectStyles.trigger, className)}
+      {...props}
+      id={props.id ?? field?.controlId}
+      aria-invalid={
+        props["aria-invalid"] ?? (field?.invalid ? true : undefined)
+      }
+      aria-describedby={joinAriaIds(
+        props["aria-describedby"],
+        field?.describedById,
+      )}
+    >
+      {children}
+      <SelectPrimitive.Icon asChild>
+        <ChevronDown size={16} className={selectStyles.triggerIcon} />
+      </SelectPrimitive.Icon>
+    </SelectPrimitive.Trigger>
+  );
+});
 SelectTrigger.displayName = "SelectTrigger";
 
 const SelectContent = React.forwardRef<

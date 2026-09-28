@@ -66,9 +66,7 @@ describe("PaymentStep insufficient wallet", () => {
       />,
     );
 
-    expect(
-      screen.getByText(/you’ll pay ₹400 online/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/you’ll pay ₹400 online/i)).toBeInTheDocument();
 
     await user.click(
       screen.getByRole("button", { name: /continue to review/i }),

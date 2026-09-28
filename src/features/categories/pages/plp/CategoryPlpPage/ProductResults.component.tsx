@@ -3,7 +3,7 @@ import { SortBar, ProductGrid } from "@/features/products";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import type { ProductFilters, ProductListResponse } from "@/features/products";
 import type { ProductListItem } from "@/shared/api/types";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";

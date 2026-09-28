@@ -4,13 +4,13 @@ import Link from "next/link";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { Button } from "@/shared/components/ui/button";
-import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
-import { AmountsUnavailableNotice } from "@/shared/components/AmountsUnavailableNotice.component";
-import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
-import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
+import { AmountsUnavailableNotice } from "@/shared/components/notices/AmountsUnavailableNotice.component";
+import { OrderTaxShippingBreakdown } from "@/shared/components/orders/OrderTaxShippingBreakdown.component";
+import { InlineAmountSkeleton } from "@/shared/components/Skeletons/InlineAmountSkeleton.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { CartMutationError } from "./CartMutationError.component";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { cartDrawerStyles as styles } from "../../styles/drawer/cartDrawer.styles";
 
 interface CartSummaryLinkProps {
@@ -104,7 +104,7 @@ export function CartDrawerSummary({
       <div className={styles.subtotalRow}>
         <dt className={styles.subtotalLabel}>{LABELS.couponDiscount}</dt>
         <dd className={styles.subtotalValue}>
-          −₹{formatInrAmount(couponSavings)}
+          <>−{formatInr(couponSavings)}</>
         </dd>
       </div>
     ) : null;
@@ -119,10 +119,9 @@ export function CartDrawerSummary({
               <InlineAmountSkeleton />
             ) : (
               <>
-                ₹
-                {formatInrAmount(
-                  pricingPreview!.itemsTotal ??
-                    pricingPreview!.merchandiseSubtotal,
+                {formatInr(
+                  pricingPreview?.itemsTotal ??
+                    pricingPreview?.merchandiseSubtotal,
                 )}
               </>
             )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
 import { VendorAnalyticsPanel } from "../../components/analytics/VendorAnalyticsPanel.component";

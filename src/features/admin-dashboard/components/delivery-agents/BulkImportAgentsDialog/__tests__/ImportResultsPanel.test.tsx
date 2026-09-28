@@ -23,7 +23,11 @@ describe("ImportResultsPanel", () => {
     expect(screen.getByText("Row 1: ok@example.com")).toBeInTheDocument();
     expect(screen.getByText("Created")).toBeInTheDocument();
     expect(screen.getByText("Row 5: dup@example.com")).toBeInTheDocument();
-    expect(screen.getByText("This email is already in use")).toBeInTheDocument();
-    expect(screen.queryByText("Email already registered")).not.toBeInTheDocument();
+    expect(
+      screen.getByText("This email is already in use"),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText("Email already registered"),
+    ).not.toBeInTheDocument();
   });
 });

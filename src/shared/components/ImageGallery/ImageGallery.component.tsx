@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import type { ProductImage } from "@/shared/api/types";
-import { ImageGalleryThumbnailStrip } from "@/shared/components/ImageGalleryThumbnailStrip.component";
+import { ImageGalleryThumbnailStrip } from "@/shared/components/ImageGallery/ImageGalleryThumbnailStrip.component";
 import { IMAGE_GALLERY_THUMB_COLUMN_HEIGHT_CLASS } from "@/shared/constants/media/imageGallery";
 import { cn } from "@/shared/utils/dom/cn";
 import { useGalleryStage } from "../../hooks/image-gallery/useGalleryStage.hook";
@@ -29,7 +29,7 @@ interface ImageGalleryProps {
 /** Rendered only while the lightbox is open (portal overlay): no skeleton needed. */
 const ImageGalleryLightbox = dynamic(
   () =>
-    import("@/shared/components/ImageGalleryLightbox.component").then(
+    import("@/shared/components/ImageGallery/ImageGalleryLightbox.component").then(
       (mod) => mod.ImageGalleryLightbox,
     ),
   { loading: () => null },

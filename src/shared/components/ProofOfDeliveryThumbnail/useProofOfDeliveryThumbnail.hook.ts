@@ -7,10 +7,7 @@ export function useProofOfDeliveryThumbnail(url: string | null | undefined) {
   const hasProof = Boolean(url);
 
   const images = useMemo<ProductImage[]>(
-    () =>
-      url
-        ? [{ id: "proof-of-delivery", url, isPrimary: true }]
-        : [],
+    () => (url ? [{ id: "proof-of-delivery", url, isPrimary: true }] : []),
     [url],
   );
 

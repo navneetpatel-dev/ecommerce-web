@@ -1,18 +1,16 @@
 "use client";
 
 import { LABELS } from "@/shared/constants/labels";
-import { motion } from "motion/react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
 import { CartPageSkeleton } from "@/shared/components/Skeletons.component";
 import type {
   AppliedCouponSummary,
   CartItem,
   EligibleCoupon,
 } from "@/shared/api/types";
-import { EmptyCartState } from "@/shared/components/EmptyCartState.component";
+import { EmptyCartState } from "@/shared/components/display/EmptyCartState.component";
+import { CartPageHeader } from "./CartPageHeader.component";
 import { VendorGroups } from "./VendorGroups.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
-import { ClearCartAction } from "./ClearCartAction.component";
 import { CartMutationError } from "../../drawer/CartMutationError.component";
 import { cartPageViewStyles as styles } from "../../../styles/page/cartPageView.styles";
 
@@ -67,12 +65,6 @@ export interface CartPageViewProps {
   onRemoveCoupon: (code?: string) => void;
   onApplyEligible: (code: string) => void;
 }
-
-const MOTION_CONFIG = {
-  initial: { opacity: 0, y: 8 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.28, ease: [0.2, 0, 0, 1] },
-} as const;
 
 export function CartPageView({
   isLoading,
@@ -133,22 +125,11 @@ export function CartPageView({
       <div aria-hidden className={styles.ambientGradient} />
 
       <div className={styles.container}>
-        <motion.header
-          className={styles.header}
-          initial={MOTION_CONFIG.initial}
-          animate={MOTION_CONFIG.animate}
-          transition={MOTION_CONFIG.transition}
-        >
-          <div className={styles.headerDetails}>
-            <TextEyebrow brand>Shopping bag</TextEyebrow>
-            <h1 className={styles.title}>{LABELS.yourCart}</h1>
-          </div>
-          <ClearCartAction
-            onClear={onClearCart}
-            isClearing={isClearing}
-            disabled={clearCartDisabled}
-          />
-        </motion.header>
+        <CartPageHeader
+          onClearCart={onClearCart}
+          isClearing={isClearing}
+          clearDisabled={clearCartDisabled}
+        />
 
         <CartMutationError
           message={mutationError ?? null}

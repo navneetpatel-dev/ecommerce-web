@@ -1,6 +1,6 @@
 import { ThumbsDown, ThumbsUp, MessageSquare } from "lucide-react";
-import { RatingStars } from "@/shared/components/RatingStars.component";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { RatingStars } from "@/shared/components/display/RatingStars.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Button } from "@/shared/components/ui/button";
 import { ReviewListSkeleton } from "@/shared/components/Skeletons.component";
 import { REVIEW_STATUS } from "@/shared/constants/statuses";

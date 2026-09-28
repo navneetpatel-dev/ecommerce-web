@@ -9,8 +9,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/components/ui/dialog";
-import { FilePicker } from "@/shared/components/FilePicker.component";
-import { MAX_FILE_BYTES, MAX_ROWS } from "../../../utils/delivery-agents/parseAgentsCsv";
+import { FilePicker } from "@/shared/components/FileUpload/FilePicker.component";
+import {
+  MAX_FILE_BYTES,
+  MAX_ROWS,
+} from "../../../utils/delivery-agents/parseAgentsCsv";
 import { TemplateDownloadCards } from "./TemplateDownloadCards.component";
 import { ImportResultsPanel } from "./ImportResultsPanel.component";
 import { CsvParseErrorList } from "./CsvParseErrorList.component";

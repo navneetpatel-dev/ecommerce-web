@@ -1,8 +1,8 @@
 "use client";
 
 import { FormActions, FormSection } from "@/shared/components/forms";
-import { FormError } from "@/shared/components/FormError.component";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import type { SupportTicket } from "../../api/list/supportTickets.api";

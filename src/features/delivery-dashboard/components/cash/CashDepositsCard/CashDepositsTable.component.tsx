@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { cashDepositsCardStyles } from "../../../styles/cash/cashDepositsCard.styles";
 import type { CashDepositRowViewModel } from "../../../hooks/cash/useCashDepositsCardPresentation.hook";
 

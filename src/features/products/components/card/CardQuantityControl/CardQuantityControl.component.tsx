@@ -1,7 +1,7 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
-import { AnimatedQuantityValue } from "@/shared/components/AnimatedQuantityValue.component";
+import { AnimatedQuantityValue } from "@/shared/components/QuantitySelector/AnimatedQuantityValue.component";
 import { Button } from "@/shared/components/ui/button";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart/cart";
 import { LABELS } from "@/shared/constants/labels";
@@ -23,7 +23,7 @@ export function CardQuantityControl({
   onChange,
   className,
 }: CardQuantityControlProps) {
-  const { atMax, handleContainerClick, handleDecrease, handleIncrease } =
+  const { atMax, handleDecrease, handleIncrease } =
     useCardQuantityControlHandlers({
       value,
       max,
@@ -32,10 +32,7 @@ export function CardQuantityControl({
     });
 
   return (
-    <div
-      className={cardQuantityControlStyles.root(className)}
-      onClick={handleContainerClick}
-    >
+    <div className={cardQuantityControlStyles.root(className)}>
       <Button
         type="button"
         variant="ghost"

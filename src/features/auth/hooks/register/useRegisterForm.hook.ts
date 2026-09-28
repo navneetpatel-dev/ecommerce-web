@@ -2,7 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterSchema, type RegisterInput } from "../../schemas/auth/auth.schema";
+import {
+  RegisterSchema,
+  type RegisterInput,
+} from "../../schemas/auth/auth.schema";
 import { useRegister } from "../../api/auth/auth.queries";
 import { useApiFormErrors } from "@/shared/hooks/forms/useApiFormErrors.hook";
 import { LABELS } from "@/shared/constants/labels";

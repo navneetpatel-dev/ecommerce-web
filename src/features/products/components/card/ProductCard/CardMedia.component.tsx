@@ -4,7 +4,7 @@ import { useCallback, type MouseEvent } from "react";
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import type { ProductListItem } from "@/shared/api/types";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";

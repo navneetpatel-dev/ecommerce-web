@@ -1,6 +1,6 @@
 "use client";
 
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import {
   Select,
@@ -11,6 +11,7 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import type { PlatformSettings } from "../../../hooks/settings/usePlatformSettingsForm.hook";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 interface CodSettingsSectionProps {
   form: PlatformSettings;
@@ -50,7 +51,7 @@ export function CodSettingsSection({
           value={form.codMinOrderValue ?? 0}
           min={0}
           step={50}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={(value) => onCodMinOrderValueChange(value ?? 0)}
         />
       </FormFieldFrame>
@@ -59,7 +60,7 @@ export function CodSettingsSection({
           value={form.codMaxOrderValue ?? undefined}
           min={0}
           step={50}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={(value) => onCodMaxOrderValueChange(value ?? null)}
         />
       </FormFieldFrame>

@@ -7,7 +7,10 @@ import {
   useUpdatePickupStatus,
 } from "../../api/agent/deliveryAgent.queries";
 import { usePresignUpload } from "@/shared/hooks/uploads/useUploads.hook";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { isOffline } from "../../offline/offline/deliveryOfflineQueue";
 

@@ -4,7 +4,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type { Order } from "@/shared/api/types";
 import { OrderStatusGroup } from "../list/OrderStatusGroup.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { useOrderDetailHeader } from "../../hooks/detail/useOrderDetailHeader.hook";
 import { ORDER_DETAIL_HEADER_STYLES } from "../../styles/detail/orderDetailHeader.styles";
 

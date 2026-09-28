@@ -3,13 +3,20 @@
 import type { ProductListItem } from "@/shared/api/types";
 import { SortBar } from "@/features/products/components/sort/SortBar.component";
 import { ProductGrid } from "@/features/products/components/listing/ProductGrid.component";
+import { AppliedFilterChips } from "@/features/products/components/filters/AppliedFilterChips";
+import { SearchDidYouMean } from "@/features/search";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
+import type { AppliedFilterChip } from "@/features/products/components/filters/AppliedFilterChips";
 import type { ListingEmptyState } from "./emptyState";
 
 interface ListingResultsProps {
   sort?: string;
   totalProducts?: number;
+  /** Removable applied-filter chips (empty array hides the row). */
+  chips: AppliedFilterChip[];
+  /** Suggestion line shown above the empty state when a close match exists. */
+  didYouMean?: { term: string; href: string };
   isFetching: boolean;
   onSortChange: (value: string) => void;
   sortDisabled?: boolean;
@@ -31,6 +38,8 @@ interface ListingResultsProps {
 export function ListingResults({
   sort,
   totalProducts,
+  chips,
+  didYouMean,
   isFetching,
   onSortChange,
   sortDisabled = false,
@@ -60,20 +69,27 @@ export function ListingResults({
         onToggleCompare={onToggleCompare}
       />
 
+      <AppliedFilterChips chips={chips} />
+
       {isLoading ? (
         <ProductGrid loading skeletonCount={12} />
       ) : isEmpty ? (
-        <EmptyState
-          icon={empty.icon}
-          eyebrow={empty.eyebrow}
-          heading={empty.heading}
-          message={empty.message}
-          actionLabel={empty.actionLabel}
-          actionTo={empty.actionTo}
-          onAction={
-            empty.onAction === "clearFilters" ? onClearFilters : undefined
-          }
-        />
+        <>
+          {didYouMean ? (
+            <SearchDidYouMean term={didYouMean.term} href={didYouMean.href} />
+          ) : null}
+          <EmptyState
+            icon={empty.icon}
+            eyebrow={empty.eyebrow}
+            heading={empty.heading}
+            message={empty.message}
+            actionLabel={empty.actionLabel}
+            actionTo={empty.actionTo}
+            onAction={
+              empty.onAction === "clearFilters" ? onClearFilters : undefined
+            }
+          />
+        </>
       ) : (
         <>
           <ProductGrid

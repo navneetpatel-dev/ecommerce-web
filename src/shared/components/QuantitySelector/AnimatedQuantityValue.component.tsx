@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/shared/utils/dom/cn";
+import { animatedQuantityValueStyles } from "../../styles/quantity-selector/quantitySelector.styles";
 
 interface AnimatedQuantityValueProps {
   value: number;
@@ -26,7 +27,7 @@ export function AnimatedQuantityValue({
   }, [value]);
 
   return (
-    <span className={cn("relative inline-flex overflow-hidden", className)}>
+    <span className={cn(animatedQuantityValueStyles.container, className)}>
       <AnimatePresence initial={false} custom={direction}>
         <motion.span
           key={value}
@@ -45,7 +46,7 @@ export function AnimatedQuantityValue({
       </AnimatePresence>
       {/* Reserve layout size so +/- never shift */}
       <span
-        className={cn("invisible tabular-nums", digitClassName)}
+        className={cn(animatedQuantityValueStyles.hiddenDigit, digitClassName)}
         aria-hidden
       >
         {value}

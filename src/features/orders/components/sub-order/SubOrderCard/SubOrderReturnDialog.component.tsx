@@ -9,8 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { FormError } from "@/shared/components/FormError.component";
-import { FileUpload } from "@/shared/components/FileUpload.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
+import { FileUpload } from "@/shared/components/FileUpload";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import {
   Select,
@@ -20,7 +20,10 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import {
   REASON_CODES,

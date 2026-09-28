@@ -1,6 +1,6 @@
 "use client";
 
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import {
   Select,
@@ -13,6 +13,7 @@ import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import type { PlatformSettings } from "../../../hooks/settings/usePlatformSettingsForm.hook";
 import { useWalletPointsSettingsHandlers } from "../../../hooks/settings/useWalletPointsSettingsHandlers.hook";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 export interface WalletPointsSettingsSectionProps {
   form: PlatformSettings;
@@ -76,7 +77,7 @@ export function WalletPointsSettingsSection({
           value={form.walletMinRechargeInr ?? 1}
           min={1}
           step={50}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={handleMinRechargeChange}
         />
       </FormFieldFrame>
@@ -85,7 +86,7 @@ export function WalletPointsSettingsSection({
           value={form.walletMaxRechargeInr ?? 10000}
           min={1}
           step={100}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={handleMaxRechargeChange}
         />
       </FormFieldFrame>

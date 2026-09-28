@@ -1,7 +1,7 @@
 import type { VendorBreakdown } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
-import { VendorGroupHeader } from "@/shared/components/VendorGroupHeader.component";
-import { VendorGroupTotals } from "@/shared/components/VendorGroupTotals.component";
+import { VendorGroupHeader } from "@/shared/components/orders/VendorGroupHeader.component";
+import { VendorGroupTotals } from "@/shared/components/orders/VendorGroupTotals.component";
 import { VENDOR_GROUP_CARD } from "@/shared/styles/orders/vendorGroupStyles";
 import { taxDisplayLabel } from "@/shared/utils/formatting/taxDisplay";
 import { VendorBreakdownItemsList } from "./VendorBreakdownItemsList.component";

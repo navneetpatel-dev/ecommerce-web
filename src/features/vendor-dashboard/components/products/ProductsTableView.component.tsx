@@ -1,8 +1,11 @@
 import { SkeletonRows } from "@/shared/components/Skeletons.component";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
-import { PaginationResultSummary } from "@/shared/components/PaginationResultSummary.component";
+import { PaginationResultSummary } from "@/shared/components/navigation/PaginationResultSummary.component";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
-import { ProductsTableHeader, ProductsTableContent } from "./ProductsTable/index";
+import {
+  ProductsTableHeader,
+  ProductsTableContent,
+} from "./ProductsTable/index";
 import { productsTableViewStyles } from "../../styles/products/productsTable.styles";
 
 interface ProductRow {

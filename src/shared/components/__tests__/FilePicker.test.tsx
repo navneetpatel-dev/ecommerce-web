@@ -1,7 +1,10 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { LABELS } from "@/shared/constants/labels";
-import { FilePicker, formatFileSize } from "../FilePicker.component";
+import {
+  FilePicker,
+  formatFileSize,
+} from "@/shared/components/FileUpload/FilePicker.component";
 
 describe("FilePicker", () => {
   describe("formatFileSize", () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { Bike, Mail, UserRound } from "lucide-react";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { isDeliveryRole } from "@/shared/utils/roles/roles";

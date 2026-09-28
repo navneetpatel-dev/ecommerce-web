@@ -1,6 +1,6 @@
 "use client";
 
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -8,11 +8,8 @@ import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { ShieldCheck } from "lucide-react";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
-import { TableRowAction } from "@/shared/components/TableRowActions.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
+import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { RolePermissionsDialog } from "../../components/roles/RolePermissionsDialog/index";

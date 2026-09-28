@@ -4,7 +4,10 @@ import { useMemo } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { isWorkspaceRole } from "@/shared/utils/roles/roles";
-import type { AccountNavItem, AccountSectionId } from "../../types/layout/types";
+import type {
+  AccountNavItem,
+  AccountSectionId,
+} from "../../types/layout/types";
 
 interface UseAccountLayoutParams {
   sections: AccountNavItem[];

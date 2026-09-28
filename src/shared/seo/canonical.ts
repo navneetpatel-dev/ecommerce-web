@@ -1,16 +1,16 @@
-import { SITE } from './constants'
-import { PATHS } from '@/shared/constants/paths/paths'
+import { SITE } from "./constants";
+import { PATHS } from "@/shared/constants/paths/paths";
 
 export function canonicalUrl(path: string): string {
-  const base = SITE.url.endsWith('/') ? SITE.url.slice(0, -1) : SITE.url
-  const pathPrefix = path.startsWith('/') ? path : `/${path}`
-  return `${base}${pathPrefix}`
+  const base = SITE.url.endsWith("/") ? SITE.url.slice(0, -1) : SITE.url;
+  const pathPrefix = path.startsWith("/") ? path : `/${path}`;
+  return `${base}${pathPrefix}`;
 }
 
 export function productCanonical(slug: string): string {
-  return canonicalUrl(PATHS.product(slug))
+  return canonicalUrl(PATHS.product(slug));
 }
 
 export function categoryCanonical(...slugs: string[]): string {
-  return canonicalUrl(PATHS.category(...slugs))
+  return canonicalUrl(PATHS.category(...slugs));
 }

@@ -3,7 +3,7 @@
 import { useState, type ChangeEvent } from "react";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
-import type { StatusDialogVariant } from "@/shared/components/StatusDialog.component";
+import type { StatusDialogVariant } from "@/shared/components/dialogs/StatusDialog.component";
 import type { AdminActionTone } from "../../utils/shared/adminActionTone";
 import { toneFromDialog } from "../../utils/shared/adminConfirmActionIcon";
 

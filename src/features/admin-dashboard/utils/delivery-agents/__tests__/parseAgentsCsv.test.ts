@@ -66,9 +66,14 @@ describe("parseAgentsCsv", () => {
   });
 
   it("reports a required-field error on the originating data row", () => {
-    const valid =
-      "ok@example.com,secret123,Name,9999999999,BIKE,North Hub";
-    const rows = [valid, valid, valid, valid, ",secret123,Name,9999999999,BIKE,North Hub"];
+    const valid = "ok@example.com,secret123,Name,9999999999,BIKE,North Hub";
+    const rows = [
+      valid,
+      valid,
+      valid,
+      valid,
+      ",secret123,Name,9999999999,BIKE,North Hub",
+    ];
     const csv = `${HEADER}\n${rows.join("\n")}`;
 
     const { rows: parsed, errors } = parseAgentsCsv(csv);

@@ -30,6 +30,9 @@ export function CategoriesMegaMenu({
   return (
     <div
       className={styles.menuContainer}
+      /* Hover-intent zone wrapping the mega-menu panel: the category links
+         inside are the interactive content, so the shell is presentational. */
+      role="presentation"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >

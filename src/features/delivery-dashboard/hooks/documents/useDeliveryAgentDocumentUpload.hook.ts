@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { usePresignUpload } from "@/shared/hooks/uploads/useUploads.hook";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import { useSubmitDocument } from "../../api/agent/deliveryAgent.queries";
 import type { DeliveryAgentDocumentType } from "../../types/agent/types";
 

@@ -2,7 +2,7 @@
 
 import { useMediaQuery } from "@/shared/hooks/responsive/use-media-query.hook";
 import { getPaginationItems } from "@/shared/utils/pagination/pagination";
-import { Pagination } from "@/shared/components/Pagination.component";
+import { Pagination } from "@/shared/components/navigation/Pagination.component";
 
 interface PaginationContainerProps {
   currentPage: number;

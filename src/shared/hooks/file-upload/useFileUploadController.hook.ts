@@ -11,7 +11,10 @@ import {
 } from "@/shared/constants/imageSpecs";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
-import type { FileUploadProps, PreviewEntry } from "../../types/file-upload/types";
+import type {
+  FileUploadProps,
+  PreviewEntry,
+} from "../../types/file-upload/types";
 import { isPdfFile, isVideoFile, mbLabel } from "../../utils/file-upload/utils";
 import { useFileUploads } from "./useFileUploads.hook";
 import { useFileCropSession } from "./useFileCropSession.hook";

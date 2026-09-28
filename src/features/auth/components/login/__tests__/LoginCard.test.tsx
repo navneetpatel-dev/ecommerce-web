@@ -4,7 +4,10 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginCard } from "../LoginCard.component";
-import { LoginSchema, type LoginInput } from "../../../schemas/auth/auth.schema";
+import {
+  LoginSchema,
+  type LoginInput,
+} from "../../../schemas/auth/auth.schema";
 import { LABELS } from "@/shared/constants/labels";
 
 const mockPush = vi.fn();

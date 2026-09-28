@@ -1,4 +1,4 @@
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { vendorReturnsTableStyles } from "../../../styles/returns/vendorReturnsTable.styles";
 import type { VendorReturnRowViewModel } from "../../../hooks/returns/useVendorReturnsTablePresentation.hook";
 import { VendorReturnPhotosCell } from "./VendorReturnPhotosCell.component";
@@ -19,7 +19,9 @@ export function VendorReturnCard({ row }: VendorReturnCardProps) {
       <p className={vendorReturnsTableStyles.mobileCardMeta}>
         {row.customerLabel}
       </p>
-      <p className={vendorReturnsTableStyles.mobileCardMeta}>{row.reasonLabel}</p>
+      <p className={vendorReturnsTableStyles.mobileCardMeta}>
+        {row.reasonLabel}
+      </p>
       <p className={vendorReturnsTableStyles.mobileCardPickup}>
         {row.pickupLabel}
       </p>

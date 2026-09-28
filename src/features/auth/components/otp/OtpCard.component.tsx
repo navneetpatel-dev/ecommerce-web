@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { AuthFormCard } from "../shell/AuthFormCard.component";
 import { Button } from "@/shared/components/ui/button";
-import { OtpInput } from "@/shared/components/OtpInput.component";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { OtpInput } from "@/shared/components/forms/OtpInput.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { ResendVerificationByEmail } from "../verify-email/ResendVerificationByEmail.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";

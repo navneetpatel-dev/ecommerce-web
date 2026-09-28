@@ -1,11 +1,8 @@
 import { useMemo, type ReactNode } from "react";
-import type { DataTableColumn } from "@/shared/components/DataTable.component";
+import type { DataTableColumn } from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
 import { isImageFieldKey } from "@/shared/utils/media/imageField";
-import {
-  inferAdminColumns,
-  type AdminDataRow,
-} from "./useAdminDataList.hook";
+import { inferAdminColumns, type AdminDataRow } from "./useAdminDataList.hook";
 import { AdminDataCell } from "../../components/shared/AdminDataListView/AdminDataCell.component";
 
 function columnHeader(key: string): string {

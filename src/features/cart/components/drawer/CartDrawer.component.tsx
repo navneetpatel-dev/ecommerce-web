@@ -4,7 +4,7 @@ import { X, ShoppingBag } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/shared/components/ui/button";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { useBodyScrollLock } from "@/shared/hooks/scroll/useBodyScrollLock.hook";
 import { CartDrawerSummary } from "./CartDrawerSummary.component";

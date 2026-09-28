@@ -1,6 +1,6 @@
 "use client";
 
-import { ContinueShoppingLink } from "@/shared/components/ContinueShoppingLink.component";
+import { ContinueShoppingLink } from "@/shared/components/navigation/ContinueShoppingLink.component";
 import type { CartItem } from "@/shared/api/types";
 import { VendorGroupCard } from "./VendorGroupCard.component";
 import { vendorGroupsStyles as styles } from "../../../styles/page/vendorGroups.styles";

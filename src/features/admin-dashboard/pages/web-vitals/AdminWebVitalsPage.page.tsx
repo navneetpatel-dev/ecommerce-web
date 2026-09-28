@@ -2,14 +2,11 @@
 
 import { Gauge } from "lucide-react";
 import { useAdminWebVitalsPage } from "../../hooks/web-vitals/useAdminWebVitalsPage.hook";
-import { DateRangeFields } from "@/shared/components/DateRangeFields.component";
+import { DateRangeFields } from "@/shared/components/forms/DateRangeFields.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { WebVitalSummaryRow } from "../../api/web-vitals/webVitals.api";
 import { webVitalsReportLabels as LABELS } from "@/shared/constants/labels/webVitalsReport";
 import { adminPagesStyles } from "../shared/adminPages.styles";

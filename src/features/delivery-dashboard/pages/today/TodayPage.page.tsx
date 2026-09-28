@@ -1,7 +1,7 @@
 "use client";
 
 import { ShiftSummaryCard } from "../../components/today/ShiftSummaryCard.component";
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { todayPageStyles } from "./todayPage.styles";
 import { useTodayPage } from "../../hooks/today/useTodayPage.hook";
 import { TodayDeliveriesList } from "../../components/today/TodayDeliveriesList.component";

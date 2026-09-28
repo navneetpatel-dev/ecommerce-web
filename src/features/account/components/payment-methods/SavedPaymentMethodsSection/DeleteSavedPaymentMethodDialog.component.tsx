@@ -1,7 +1,7 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { paymentMethodsLabels as LABELS } from "@/shared/constants/labels/paymentMethods";
 import type { SavedPaymentMethod } from "../../../types/layout/types";
 

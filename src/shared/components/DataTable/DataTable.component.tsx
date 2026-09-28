@@ -2,7 +2,7 @@
 
 import { useState, type KeyboardEvent } from "react";
 import { SkeletonRows } from "@/shared/components/Skeletons.component";
-import { RecordDetailDialog } from "@/shared/components/RecordDetailDialog.component";
+import { RecordDetailDialog } from "@/shared/components/dialogs/RecordDetailDialog.component";
 import { TooltipProvider } from "@/shared/components/ui/tooltip";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import { LABELS } from "@/shared/constants/labels";

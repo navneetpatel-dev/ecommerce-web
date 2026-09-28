@@ -10,7 +10,10 @@ export { PickupsPage } from "./pages/pickups/PickupsPage.page";
 export { PickupTaskDetailPage } from "./pages/pickups/PickupTaskDetailPage.page";
 export { HistoryPage } from "./pages/today/HistoryPage.page";
 export { DeliveryProfilePage } from "./pages/profile/ProfilePage.page";
-export { deliveryAdminApi, deliveryAgentApi } from "./api/agent/deliveryAgent.api";
+export {
+  deliveryAdminApi,
+  deliveryAgentApi,
+} from "./api/agent/deliveryAgent.api";
 export {
   deliveryKeys,
   useDeliveryProfile,

@@ -5,7 +5,7 @@ export const giftCardsLabels = {
   giftCardsPageDescription:
     "Send a gift card by email — the recipient redeems it straight into their wallet balance.",
   giftCardAmount: "Amount",
-  giftCardAmountHint: "Choose an amount between ₹{min} and ₹{max}",
+  giftCardAmountHint: "Choose an amount between {min} and {max}",
   giftCardRecipientEmail: "Recipient email",
   giftCardRecipientName: "Recipient name (optional)",
   giftCardMessage: "Add a message (optional)",
@@ -22,7 +22,7 @@ export const giftCardsLabels = {
   giftCardRedeemLoginPrompt:
     "Log in or create an account to redeem this gift card.",
   giftCardRedeemSuccessTitle: "Added to your wallet",
-  giftCardRedeemSuccessBody: "₹{amount} has been added to your wallet balance.",
+  giftCardRedeemSuccessBody: "{amount} has been added to your wallet balance.",
   giftCardRedeemViewWallet: "View wallet",
   giftCardNotFoundTitle: "Gift card not found",
   giftCardNotFoundBody:

@@ -1,11 +1,12 @@
 import { Badge } from "@/shared/components/ui/badge";
+import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import { PRODUCT_DETAIL_CONTENT_STYLES } from "../../../styles/detail/productDetailContent.styles";
 
 interface PriceAvailabilityBlockProps {
-  formattedPrice: string;
+  displayPrice: number;
   compareAtPrice: number | null;
   showMrp: boolean;
   discountPercent: number | null;
@@ -22,7 +23,7 @@ interface PriceAvailabilityBlockProps {
 }
 
 export function PriceAvailabilityBlock({
-  formattedPrice,
+  displayPrice,
   compareAtPrice,
   showMrp,
   discountPercent,
@@ -45,7 +46,7 @@ export function PriceAvailabilityBlock({
       >
         <div className={PRODUCT_DETAIL_CONTENT_STYLES.priceLine}>
           <p className={PRODUCT_DETAIL_CONTENT_STYLES.priceText}>
-            ₹{formattedPrice}
+            <MoneyAmount value={displayPrice} />
           </p>
           {discountPercent != null && discountPercent > 0 ? (
             <Badge
@@ -64,12 +65,12 @@ export function PriceAvailabilityBlock({
               {LABELS.listPrice}:
             </span>
             <span className={PRODUCT_DETAIL_CONTENT_STYLES.strikeThrough}>
-              ₹{formatInrAmount(compareAtPrice)}
+              <MoneyAmount value={compareAtPrice} />
             </span>
           </p>
         ) : hasPriceChange ? (
           <p className={PRODUCT_DETAIL_CONTENT_STYLES.listPriceStrike}>
-            ₹{formatInrAmount(basePrice)}
+            <MoneyAmount value={basePrice} />
           </p>
         ) : null}
         {gstPercentage > 0 ? (

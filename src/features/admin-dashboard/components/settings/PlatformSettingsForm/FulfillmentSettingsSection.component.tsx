@@ -1,6 +1,6 @@
 "use client";
 
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import {
   Select,
@@ -11,6 +11,7 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import type { PlatformSettings } from "../../../hooks/settings/usePlatformSettingsForm.hook";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 interface FulfillmentSettingsSectionProps {
   form: PlatformSettings;
@@ -60,7 +61,7 @@ export function FulfillmentSettingsSection({
           value={form.freeShippingThreshold}
           min={0}
           step={50}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={(value) => onFreeShippingThresholdChange(value ?? 0)}
         />
       </FormFieldFrame>
@@ -72,7 +73,7 @@ export function FulfillmentSettingsSection({
           value={form.returnShippingFee ?? 0}
           min={0}
           step={10}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={(value) => onReturnShippingFeeChange(value ?? 0)}
         />
       </FormFieldFrame>
@@ -84,7 +85,7 @@ export function FulfillmentSettingsSection({
           value={form.deliveryAgentPerTaskEarning}
           min={0}
           step={5}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={(value) => onDeliveryAgentPerTaskEarningChange(value ?? 0)}
         />
       </FormFieldFrame>
@@ -122,7 +123,7 @@ export function FulfillmentSettingsSection({
           value={form.deliveryAgentTdsSingleThreshold ?? 30000}
           min={0}
           step={1000}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={(value) =>
             onDeliveryAgentTdsSingleThresholdChange(value ?? 0)
           }
@@ -133,7 +134,7 @@ export function FulfillmentSettingsSection({
           value={form.deliveryAgentTdsAnnualThreshold ?? 100000}
           min={0}
           step={5000}
-          prefix="₹"
+          prefix={CURRENCY_SYMBOL}
           onChange={(value) =>
             onDeliveryAgentTdsAnnualThresholdChange(value ?? 0)
           }

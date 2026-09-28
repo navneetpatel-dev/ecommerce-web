@@ -1,4 +1,4 @@
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { BUG_REPORTER_ROLE_LABEL } from "../../../utils/detail/labels";

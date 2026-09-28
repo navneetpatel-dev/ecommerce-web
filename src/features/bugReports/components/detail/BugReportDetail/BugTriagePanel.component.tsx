@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import {
   Select,
@@ -8,8 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { AssigneeSelect } from "@/shared/components/AssigneeSelect.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { AssigneeSelect } from "@/shared/components/forms/AssigneeSelect.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import {
@@ -19,7 +19,10 @@ import {
   type BugReportSeverity,
 } from "@/shared/constants/statuses";
 import type { BugReport } from "../../../api/list/bugReports.api";
-import { BUG_MODULE_LABEL, BUG_SEVERITY_LABEL } from "../../../utils/detail/labels";
+import {
+  BUG_MODULE_LABEL,
+  BUG_SEVERITY_LABEL,
+} from "../../../utils/detail/labels";
 import { bugReportPanelsStyles } from "../../../styles/detail/bugReportPanels.styles";
 
 interface BugTriagePanelProps {

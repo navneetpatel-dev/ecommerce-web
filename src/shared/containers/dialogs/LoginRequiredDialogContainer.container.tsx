@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { LoginRequiredDialog } from "@/shared/components/LoginRequiredDialog.component";
+import { LoginRequiredDialog } from "@/shared/components/dialogs/LoginRequiredDialog.component";
 import { useAuthPromptStore } from "@/shared/stores/auth/authPrompt.store";
 import { navigate } from "@/shared/utils/navigation/navigate";
 import { PATHS } from "@/shared/constants/paths/paths";

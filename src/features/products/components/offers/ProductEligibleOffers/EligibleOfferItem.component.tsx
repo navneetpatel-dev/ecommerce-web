@@ -1,5 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { productEligibleOffersStyles } from "../../../styles/offers/productEligibleOffers.styles";
 
 interface Offer {
@@ -14,7 +14,7 @@ interface EligibleOfferItemProps {
 
 function offerDetailLabel(offer: { discount: number; type: string }): string {
   if (offer.discount > 0) {
-    return `₹${formatInrAmount(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`;
+    return `${formatInr(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`;
   }
   if (offer.type === "FREE_SHIPPING") return LABELS.couponTypeFreeShipping;
   return LABELS.offersAtCheckout;

@@ -5,15 +5,15 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { useState } from "react";
 import { useAuthBootstrap, ImpersonationBanner } from "@/features/auth";
 import { LoginRequiredDialogContainer } from "@/shared/containers/dialogs/LoginRequiredDialogContainer.container";
-import { ErrorToastContainer } from "@/shared/containers/notifications/ErrorToastContainer.container";
+import { ToastStackContainer } from "@/shared/containers/notifications/ToastStackContainer.container";
 import { ExportJobsTrayContainer } from "@/shared/containers/exports/ExportJobsTrayContainer.container";
 import { RouteScrollResetContainer } from "@/shared/containers/navigation/RouteScrollResetContainer.container";
 import { BrowseUrlTrackerContainer } from "@/shared/containers/system/BrowseUrlTrackerContainer.container";
-import { RoleSurfaceGuard } from "@/shared/components/RoleSurfaceGuard.component";
+import { RoleSurfaceGuard } from "@/shared/components/system/RoleSurfaceGuard.component";
 import { ThemePaletteProvider } from "@/shared/context/ThemePalette.context";
 import { ErrorReportingProvider } from "@/shared/providers/ErrorReportingProvider";
 import { createQueryPersister } from "@/shared/api/client/queryPersister";
-import { ServiceWorkerRegistration } from "@/shared/components/ServiceWorkerRegistration.component";
+import { ServiceWorkerRegistration } from "@/shared/components/system/ServiceWorkerRegistration.component";
 
 function AuthBootstrap() {
   useAuthBootstrap();
@@ -69,7 +69,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <RouteScrollResetContainer />
           <BrowseUrlTrackerContainer />
           <LoginRequiredDialogContainer />
-          <ErrorToastContainer />
+          <ToastStackContainer />
           <ExportJobsTrayContainer />
           <ImpersonationBanner />
           <RoleSurfaceGuard>{children}</RoleSurfaceGuard>

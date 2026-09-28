@@ -1,9 +1,10 @@
 import { Button } from "@/shared/components/ui/button";
 import { Badge } from "@/shared/components/ui/badge";
 import { Separator } from "@/shared/components/ui/separator";
-import { DisabledActionHint } from "@/shared/components/DisabledActionHint.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import { variantSelectorStyles } from "../../../styles/variants/variantSelector.styles";
 
@@ -47,11 +48,11 @@ export function VariantPriceStockSection({
 
       <div className={variantSelectorStyles.priceWrapper}>
         <span className={variantSelectorStyles.currentPrice}>
-          ₹{formatInrAmount(currentPrice)}
+          <MoneyAmount value={currentPrice} />
         </span>
         {hasPriceChange ? (
           <span className={variantSelectorStyles.basePrice}>
-            ₹{formatInrAmount(basePrice)}
+            <MoneyAmount value={basePrice} />
           </span>
         ) : null}
       </div>

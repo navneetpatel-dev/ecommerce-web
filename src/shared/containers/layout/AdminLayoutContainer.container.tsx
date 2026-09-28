@@ -5,7 +5,7 @@ import { SidebarNav } from "@/shared/components/layout/SidebarNav.component";
 import { WorkspaceNavDrawer } from "@/shared/components/layout/WorkspaceNavDrawer.component";
 import { ShieldCheck } from "lucide-react";
 import { useAdminLayout } from "@/shared/hooks/navigation/useAdminLayout.hook";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { adminPermissionsForPath } from "@/shared/constants/navigation/adminNav";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";

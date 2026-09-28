@@ -2,7 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import type { Address, CurrentUser } from "@/shared/api/types";
 import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import { useUploadFile } from "@/features/uploads";
 import { accountApi } from "./account.api";
 import type { UpdateProfileBody, AddressInput } from "@/features/users";

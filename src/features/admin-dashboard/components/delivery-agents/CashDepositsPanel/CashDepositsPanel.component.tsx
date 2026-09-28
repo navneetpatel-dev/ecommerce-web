@@ -1,10 +1,7 @@
 "use client";
 
 import { Wallet } from "lucide-react";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { CashDeposit } from "@/features/delivery-dashboard";
 import { useCashDepositsPanel } from "../../../hooks/delivery-agents/useCashDepositsPanel.hook";
 import { cashDepositsPanelStyles as styles } from "../../../styles/delivery-agents/cashDepositsPanel.styles";

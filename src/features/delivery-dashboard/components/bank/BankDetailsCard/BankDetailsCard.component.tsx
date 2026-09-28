@@ -2,7 +2,7 @@
 
 import { Landmark } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import type { BankDetails } from "../../../types/agent/types";
 import { bankDetailsCardStyles } from "../../../styles/bank/bankDetailsCard.styles";
 import { useBankDetailsCardPresentation } from "../../../hooks/bank/useBankDetailsCardPresentation.hook";

@@ -14,7 +14,7 @@ import {
 } from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import { WARRANTY_TYPE } from "@/shared/constants/statuses";
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
+import { CheckboxField } from "@/shared/components/forms/CheckboxField.component";
 
 interface AdminCategoryPolicyFieldsProps {
   form: UseFormReturn<CategoryFormInput>;

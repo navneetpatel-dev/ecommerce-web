@@ -1,6 +1,6 @@
 "use client";
 
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import { cn } from "@/shared/utils/dom/cn";

@@ -1,6 +1,6 @@
 "use client";
 
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { extractImageUrls } from "@/shared/utils/media/imageField";
 import { recordDetailImageStyles } from "../../styles/dialogs/dialogComponents.styles";

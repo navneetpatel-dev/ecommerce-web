@@ -1,5 +1,5 @@
 import { MapPin } from "lucide-react";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { addressesSectionStyles as styles } from "../../../styles/addresses/addressesSection.styles";
 
 interface AddressesEmptyStateProps {

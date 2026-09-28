@@ -8,8 +8,8 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/shared/components/ui/avatar";
-import { FormError } from "@/shared/components/FormError.component";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { AccountProfile } from "../../../types/layout/types";

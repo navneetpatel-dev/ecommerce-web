@@ -1,7 +1,7 @@
 "use client";
 
 import { useBodyScrollLock } from "@/shared/hooks/scroll/useBodyScrollLock.hook";
-import { BottomSheetView } from "@/shared/components/BottomSheetView.component";
+import { BottomSheetView } from "@/shared/components/dialogs/BottomSheetView.component";
 
 interface BottomSheetContainerProps {
   open: boolean;

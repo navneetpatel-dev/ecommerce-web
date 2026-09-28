@@ -37,8 +37,6 @@ export function HeroSection({
     <section
       aria-roledescription="carousel"
       aria-labelledby={labelId}
-      tabIndex={0}
-      onKeyDown={onKeyDown}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       className={styles.section}
@@ -64,7 +62,13 @@ export function HeroSection({
           />
         </div>
 
-        {count > 1 ? <SlideControls onPrev={goPrev} onNext={goNext} /> : null}
+        {count > 1 ? (
+          <SlideControls
+            onPrev={goPrev}
+            onNext={goNext}
+            onKeyDown={onKeyDown}
+          />
+        ) : null}
       </div>
     </section>
   );

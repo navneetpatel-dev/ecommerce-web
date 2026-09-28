@@ -11,7 +11,10 @@ import {
 import { LABELS, type RoleName } from "@/shared/constants/labels";
 import { paymentMethodsLabels } from "@/shared/constants/labels/paymentMethods";
 import { isDeliveryRole, isWorkspaceRole } from "@/shared/utils/roles/roles";
-import type { AccountNavItem, AccountSectionId } from "../../types/layout/types";
+import type {
+  AccountNavItem,
+  AccountSectionId,
+} from "../../types/layout/types";
 
 export const ACCOUNT_SECTIONS: AccountNavItem[] = [
   {

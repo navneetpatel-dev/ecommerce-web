@@ -1,4 +1,4 @@
-import { StatCard } from "@/shared/components/StatCard.component";
+import { StatCard } from "@/shared/components/display/StatCard.component";
 import type { LucideIcon } from "lucide-react";
 
 interface SummaryCardProps {

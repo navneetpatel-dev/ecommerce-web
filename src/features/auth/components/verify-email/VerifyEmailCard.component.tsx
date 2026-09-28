@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { AuthFormCard } from "../shell/AuthFormCard.component";
-import { FormError } from "@/shared/components/FormError.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";

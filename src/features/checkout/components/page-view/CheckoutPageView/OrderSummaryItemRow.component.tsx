@@ -1,6 +1,6 @@
 import { memo } from "react";
-import { MediaImage } from "@/shared/components/MediaImage.component";
-import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
+import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import type { CartItem, CheckoutQuote } from "@/shared/api/types";
 import { resolveCartLineSubtotal } from "../../../utils/checkout/checkoutDisplay.utils";
 import { ORDER_SUMMARY_ITEMS_LIST_STYLES } from "../../../styles/page-view/orderSummaryItemsList.styles";

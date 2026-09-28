@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { ProductsTableView } from "../../components/products/ProductsTableView.component";
 import { VendorProductFormDialog } from "../../components/products/VendorProductFormDialog.component";
 import { VendorBulkImportDialog } from "../../components/products/VendorBulkImportDialog.component";

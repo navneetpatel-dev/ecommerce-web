@@ -1,7 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { AppliedCouponSummary } from "@/shared/api/types";
 import { appliedCouponChipsStyles as styles } from "../../styles/coupons/appliedCouponChips.styles";
 
@@ -21,7 +21,7 @@ export function AppliedCouponChipItem({
   };
 
   const discountText =
-    coupon.discount > 0 ? ` (−₹${formatInrAmount(coupon.discount)})` : "";
+    coupon.discount > 0 ? ` (−${formatInr(coupon.discount)})` : "";
   const removeAriaLabel = formatLabel(LABELS.removeCouponCode, {
     code: coupon.code,
   });

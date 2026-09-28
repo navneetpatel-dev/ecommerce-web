@@ -1,8 +1,10 @@
 export const skeletonPrimitivesStyles = {
   rowsContainer: "space-y-2",
   defaultRowHeight: "h-10 w-full",
+  // Column counts mirror productGrid.styles.ts's grid at every band (a
+  // skeleton that disagrees makes the real grid snap on load).
   gridContainer:
-    "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6",
+    "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6",
   gridItem: "space-y-3",
   defaultAspect: "aspect-square",
   imageRounded: "rounded-md w-full",

@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 import { LABELS } from "@/shared/constants/labels";
-import { InlineAmountSkeleton } from "@/shared/components/InlineAmountSkeleton.component";
-import { MoneyAmount } from "@/shared/components/MoneyAmount.component";
-import { OrderTaxShippingBreakdown } from "@/shared/components/OrderTaxShippingBreakdown.component";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { InlineAmountSkeleton } from "@/shared/components/Skeletons/InlineAmountSkeleton.component";
+import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
+import { OrderTaxShippingBreakdown } from "@/shared/components/orders/OrderTaxShippingBreakdown.component";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { cartPageViewStyles as styles } from "../../../styles/page/cartPageView.styles";
 
 interface OrderSummaryTotalsListProps {
@@ -50,7 +50,7 @@ export function OrderSummaryTotalsList({
           {amountsPending ? (
             <InlineAmountSkeleton />
           ) : (
-            <>−₹{formatInrAmount(couponSavings)}</>
+              <>−{formatInr(couponSavings)}</>
           )}
         </dd>
       </div>
@@ -68,7 +68,7 @@ export function OrderSummaryTotalsList({
           {amountsPending ? (
             <InlineAmountSkeleton />
           ) : (
-            <>−₹{formatInrAmount(row.amount)}</>
+            <>−{formatInr(row.amount)}</>
           )}
         </dd>
       </div>

@@ -9,8 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
-import { TableRowActions } from "@/shared/components/TableRowActions.component";
-import { TableScrollShell } from "@/shared/components/TableScrollShell.component";
+import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
+import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { LABELS } from "@/shared/constants/labels";
 import {
   TABLE_ACTIONS_CELL_CLASS,

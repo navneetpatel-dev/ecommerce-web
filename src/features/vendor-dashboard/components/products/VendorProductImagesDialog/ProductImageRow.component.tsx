@@ -2,10 +2,13 @@
 
 import { Trash2, Star } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { FileUpload } from "@/shared/components/FileUpload.component";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { FileUpload } from "@/shared/components/FileUpload";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import type { ProductImage, ProductVariant } from "@/shared/api/types";
 import { productImageRowStyles } from "../../../styles/products/vendorProductImagesDialog.styles";
 

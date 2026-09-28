@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import { HELP_QUICK_LINKS } from "../../../constants/helpContent";
 import { helpHomeViewStyles as styles } from "../../../styles/home/helpHomeView.styles";

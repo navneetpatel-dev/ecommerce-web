@@ -1,9 +1,6 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { WalletLiabilityReport } from "../../../api/finance/reports.api";
 import { adminWalletLiabilityPanelStyles as styles } from "../../../styles/wallet/adminWalletLiabilityPanel.styles";
 

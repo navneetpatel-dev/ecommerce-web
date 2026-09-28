@@ -1,4 +1,7 @@
-import { isPaginatedList, type PaginatedList } from "@/shared/api/client/pagination";
+import {
+  isPaginatedList,
+  type PaginatedList,
+} from "@/shared/api/client/pagination";
 import { shouldInferAdminColumn } from "./adminTableCells";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 

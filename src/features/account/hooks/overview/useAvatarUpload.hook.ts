@@ -4,7 +4,10 @@ import { useRef, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import type { ImageMimeType } from "@/shared/constants/imageSpecs";
 import { getImageUploadSpec } from "@/shared/constants/imageSpecs";
-import { UPLOAD_ENTITY, UPLOAD_PURPOSE } from "@/shared/constants/uploads/uploads";
+import {
+  UPLOAD_ENTITY,
+  UPLOAD_PURPOSE,
+} from "@/shared/constants/uploads/uploads";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { normalizeImageMimeType } from "@/shared/utils/media/imageProcessing";
 import { readFileAsDataUrl } from "@/shared/hooks/uploads/useUploads.hook";

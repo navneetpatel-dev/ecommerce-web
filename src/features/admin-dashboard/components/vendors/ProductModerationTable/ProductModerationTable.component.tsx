@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import {
   DataTable,
   type DataTablePaginationProps,
-} from "@/shared/components/DataTable.component";
+} from "@/shared/components/DataTable";
 import { useProductModerationTableColumns } from "../../../hooks/vendors/useProductModerationTableColumns.hook";
 import { ProductModerationRowActions } from "./ProductModerationRowActions.component";
 

@@ -2,7 +2,7 @@ import { memo } from "react";
 import Link from "next/link";
 import type { OrderItem } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";

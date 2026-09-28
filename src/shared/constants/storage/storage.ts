@@ -9,6 +9,8 @@ export const STORAGE_KEYS = {
   THEME_MODE: "theme",
   /** Selected theme palette preset id (Rule 29 runtime theming). */
   THEME_PALETTE: "themePalette",
+  /** Compare tray selection (sessionStorage — survives navigation, not the tab). */
+  COMPARE_SELECTION: "compareSelection",
 } as const;
 
 /** Cookie names shared with the API (must match backend COOKIES). */

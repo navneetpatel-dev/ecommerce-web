@@ -7,8 +7,8 @@ import { Button } from "@/shared/components/ui/button";
 import {
   CartCountBadge,
   IconBadgeAnchor,
-} from "@/shared/components/CartCountBadge.component";
-import { WalletIcon } from "@/shared/components/WalletIcon.component";
+} from "@/shared/components/badges/CartCountBadge.component";
+import { WalletIcon } from "@/shared/components/display/WalletIcon.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import {

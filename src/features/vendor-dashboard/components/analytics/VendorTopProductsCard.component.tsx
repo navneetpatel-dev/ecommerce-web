@@ -7,10 +7,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/shared/components/ui/card";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable.component";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";

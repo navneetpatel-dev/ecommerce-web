@@ -1,5 +1,8 @@
 import { Button } from "@/shared/components/ui/button";
-import type { AccountNavItem, AccountSectionId } from "../../types/layout/types";
+import type {
+  AccountNavItem,
+  AccountSectionId,
+} from "../../types/layout/types";
 import { accountLayoutStyles as styles } from "../../styles/layout/accountLayout.styles";
 
 interface AccountMobileNavProps {

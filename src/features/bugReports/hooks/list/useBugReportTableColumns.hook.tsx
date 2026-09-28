@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { type DataTableColumn } from "@/shared/components/DataTable.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { type DataTableColumn } from "@/shared/components/DataTable";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import {

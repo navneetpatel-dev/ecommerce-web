@@ -1,11 +1,11 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { DetailQuerySkeleton } from "@/shared/components/DetailQuerySkeleton.component";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { DetailQuerySkeleton } from "@/shared/components/Skeletons/DetailQuerySkeleton.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { resolveQueryDetailState } from "@/shared/utils/resolveQueryDetailState";
 import { useBugReport } from "../../api/list/bugReports.queries";
 import { BugReportDetail } from "../../components/detail/BugReportDetail.component";

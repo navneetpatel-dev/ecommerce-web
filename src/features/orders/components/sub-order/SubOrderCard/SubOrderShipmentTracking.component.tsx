@@ -2,9 +2,9 @@
 
 import { Phone } from "lucide-react";
 import type { Shipment } from "@/shared/api/types";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { RedeliverySlotPicker } from "@/shared/components/RedeliverySlotPicker.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { RedeliverySlotPicker } from "@/shared/components/orders/RedeliverySlotPicker.component";
 import { DeliveryRatingPrompt } from "../../actions/DeliveryRatingPrompt.component";
 import { subOrderShipmentTrackingStyles as styles } from "../../../styles/sub-order/subOrderShipmentTracking.styles";
 import { useSubOrderShipmentTracking } from "../../../hooks/sub-order/useSubOrderShipmentTracking.hook";

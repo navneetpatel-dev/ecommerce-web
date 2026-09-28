@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "motion/react";
-import { EmptyCartState } from "@/shared/components/EmptyCartState.component";
+import { EmptyCartState } from "@/shared/components/display/EmptyCartState.component";
 import { CheckoutStepIndicator } from "../../../containers/page-view/CheckoutStepIndicator.container";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { CheckoutPageSkeleton } from "@/shared/components/Skeletons.component";
 import { OrderSummaryPanel } from "./OrderSummaryPanel.component";
 import { MobileSummaryAccordion } from "./MobileSummaryAccordion.component";

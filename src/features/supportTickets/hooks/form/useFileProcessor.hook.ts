@@ -15,7 +15,11 @@ import { usePresignUpload } from "@/shared/hooks/uploads/useUploads.hook";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type { UploadedMediaAttachment } from "../../types/form/TicketAttachmentUploader-types";
 import type { Mode } from "../../types/form/TicketAttachmentUploader-types";
-import { mapBugType, mapTicketType, mbLabel } from "../../utils/form/TicketAttachmentUploader-utils";
+import {
+  mapBugType,
+  mapTicketType,
+  mbLabel,
+} from "../../utils/form/TicketAttachmentUploader-utils";
 import { prepareUpload } from "../../utils/form/prepareUpload";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 

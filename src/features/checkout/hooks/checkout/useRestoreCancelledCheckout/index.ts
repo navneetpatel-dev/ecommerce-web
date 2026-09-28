@@ -69,7 +69,13 @@ export function useRestoreCancelledCheckout({
       inFlightRef.current.set(orderId, promise);
       return promise;
     },
-    [showNotice, refetchCart, invalidateWalletCache, onPhaseChange, onRestoreComplete],
+    [
+      showNotice,
+      refetchCart,
+      invalidateWalletCache,
+      onPhaseChange,
+      onRestoreComplete,
+    ],
   );
 
   const awaitPendingRestores = useCallback(async () => {

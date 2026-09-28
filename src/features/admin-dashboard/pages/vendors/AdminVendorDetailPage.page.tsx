@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
-import { DetailQuerySkeleton } from "@/shared/components/DetailQuerySkeleton.component";
-import { QueryErrorAlert } from "@/shared/components/QueryErrorAlert.component";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
-import { NumberInput } from "@/shared/components/NumberInput.component";
-import { CheckboxField } from "@/shared/components/CheckboxField.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
+import { DetailQuerySkeleton } from "@/shared/components/Skeletons/DetailQuerySkeleton.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
+import { CheckboxField } from "@/shared/components/forms/CheckboxField.component";
 import {
   FormActions,
   FormFieldFrame,
@@ -23,6 +23,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";
 import { useAdminVendorDetail } from "../../hooks/vendors/useAdminVendorDetail.hook";
 import { adminPagesStyles } from "../shared/adminPages.styles";
+import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 export function AdminVendorDetailPage() {
   return (
@@ -125,7 +126,7 @@ function AdminVendorDetailContent() {
               value={form.returnShippingFee}
               min={0}
               step={10}
-              prefix="₹"
+              prefix={CURRENCY_SYMBOL}
               onChange={(value) => patchForm({ returnShippingFee: value })}
             />
           </FormFieldFrame>

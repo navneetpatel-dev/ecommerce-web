@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { DocumentViewerBadge } from "@/shared/components/DocumentViewerBadge.component";
+import { DocumentViewerBadge } from "@/shared/components/badges/DocumentViewerBadge.component";
 import {
   DocumentStatusBadge,
   DocumentStatusIcon,
-} from "@/shared/components/DocumentStatusBadge.component";
-import { KycRejectionNotice } from "@/shared/components/KycRejectionNotice.component";
+} from "@/shared/components/badges/DocumentStatusBadge.component";
+import { KycRejectionNotice } from "@/shared/components/notices/KycRejectionNotice.component";
 import { LABELS } from "@/shared/constants/labels";
 import { VENDOR_DOCUMENT_CHECKLIST_STATUS } from "@/shared/constants/statuses";
 import { vendorDocumentTypeLabel } from "@/shared/utils/formatting/vendorDocumentTypeLabel";

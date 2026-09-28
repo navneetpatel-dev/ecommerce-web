@@ -1,3 +1,5 @@
+import { OVERLAY_BACKDROP } from "../common.styles";
+
 export const loginRequiredDialogStyles = {
   content: "max-w-[400px]",
 } as const;
@@ -38,9 +40,9 @@ export const bottomSheetViewStyles = {
   hideMd: "md:hidden",
   hideLg: "lg:hidden",
   hideXl: "xl:hidden",
-  backdrop: "absolute inset-0 bg-overlay animate-fade-in",
+  backdrop: OVERLAY_BACKDROP,
   sheet:
-    "absolute bottom-0 left-0 right-0 flex max-h-[85vh] flex-col rounded-t-lg bg-surface shadow-elevation-4 animate-slide-in-bottom",
+    "absolute bottom-0 left-0 right-0 flex max-h-[85vh] flex-col rounded-t-lg bg-surface shadow-elevation-4 animate-slide-in-bottom md:max-h-[60vh]",
   handleWrap: "flex items-center justify-center pt-3 pb-1",
   handle: "h-1 w-10 rounded-full bg-line",
   header: "flex items-center justify-between border-b border-line px-4 py-3",

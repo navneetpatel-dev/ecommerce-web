@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { StatusBadge } from "@/shared/components/StatusBadge.component";
+import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import type { SupportTicket } from "../../../api/list/supportTickets.api";
@@ -9,7 +9,10 @@ import {
   TICKET_PRIORITY_LABEL,
   TICKET_STATUS_LABEL,
 } from "../../../utils/detail/labels";
-import { listHref, type RoleMode } from "../../../utils/detail/ticketThreadShared";
+import {
+  listHref,
+  type RoleMode,
+} from "../../../utils/detail/ticketThreadShared";
 import { ticketThreadStyles } from "../../../styles/detail/ticketThread.styles";
 
 /** Back link, subject and status/priority badges. */

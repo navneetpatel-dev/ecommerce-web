@@ -1,5 +1,9 @@
 import * as React from "react";
 import { cn } from "@/shared/utils/dom/cn";
+import {
+  joinAriaIds,
+  useFieldControl,
+} from "@/shared/components/forms/fieldControl.context";
 
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: boolean;
@@ -7,7 +11,9 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, error, ...props }, ref) => {
-    const ariaInvalid = error ? true : undefined;
+    const field = useFieldControl();
+    const ariaInvalid =
+      props["aria-invalid"] ?? (error || field?.invalid ? true : undefined);
 
     return (
       <textarea
@@ -17,8 +23,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           className,
         )}
         ref={ref}
-        aria-invalid={ariaInvalid}
         {...props}
+        id={props.id ?? field?.controlId}
+        aria-invalid={ariaInvalid}
+        aria-describedby={joinAriaIds(
+          props["aria-describedby"],
+          field?.describedById,
+        )}
       />
     );
   },

@@ -38,7 +38,6 @@ export function SlideCopy({ slide, direction, reduceMotion }: SlideCopyProps) {
           custom={direction}
           variants={reduceMotion ? undefined : copyItem}
           className={styles.headline}
-          style={{ fontSize: "var(--text-display-lg)" }}
         >
           {slide.headline}
         </motion.h1>

@@ -34,6 +34,10 @@ export function AccountMenu({ currentUser, isTransparent }: AccountMenuProps) {
     <div
       ref={accountMenuRef}
       className={styles.relativeWrapper}
+      /* Pointer-intent zone only: every real control (trigger + panel items)
+         lives inside and is focusable, so the wrapper itself carries no
+         semantics to announce — hence the presentational role. */
+      role="presentation"
       onMouseEnter={() => {
         if (canHoverAccountMenu) setAccountMenuOpen(true);
       }}

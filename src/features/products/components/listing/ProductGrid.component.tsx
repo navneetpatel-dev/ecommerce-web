@@ -1,7 +1,7 @@
 import { Package } from "lucide-react";
 import type { ProductListItem } from "@/shared/api/types";
 import { SkeletonGrid } from "@/shared/components/Skeletons.component";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { ProductGridList } from "./ProductGridList.component";
 
 interface ProductGridProps {

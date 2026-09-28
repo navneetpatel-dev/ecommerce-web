@@ -5,7 +5,7 @@ import {
   InfiniteSingleSelect,
   type InfiniteSingleSelectPageQuery,
   type InfiniteSingleSelectPageResult,
-} from "@/shared/components/InfiniteSingleSelect.component";
+} from "@/shared/components/InfiniteSingleSelect";
 import {
   assigneesApi,
   type AssigneePermission,

@@ -8,7 +8,10 @@ import { CATEGORY_ATTRIBUTE_TYPE } from "@/shared/constants/statuses";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { categoriesApi } from "@/features/categories";
 import type { CategoryAttribute } from "@/shared/api/types";
-import { optionsToInput, parseOptions } from "../../utils/categories/attributeOptionUtils";
+import {
+  optionsToInput,
+  parseOptions,
+} from "../../utils/categories/attributeOptionUtils";
 
 interface UseAdminCategoryAttributesActionParams {
   categoryId: string;

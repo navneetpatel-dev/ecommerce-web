@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/shared/components/ui/button";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { SuccessCheckmarkContainer } from "@/shared/containers/display/SuccessCheckmarkContainer.container";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
@@ -29,12 +29,7 @@ export function OrderConfirmationHero({ orderId }: OrderConfirmationHeroProps) {
           <TextEyebrow brand>Thank you</TextEyebrow>
         </div>
         <div>
-          <h1
-            className={styles.heroHeading}
-            style={{ fontSize: "var(--text-display-sm)" }}
-          >
-            Order confirmed
-          </h1>
+          <h1 className={styles.heroHeading}>Order confirmed</h1>
           {orderId ? (
             <p className={styles.heroOrderId}>#{shortOrderId(orderId)}</p>
           ) : null}

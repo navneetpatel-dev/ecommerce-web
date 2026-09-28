@@ -5,7 +5,7 @@ import {
   InfiniteMultiSelect,
   type InfiniteMultiSelectPageQuery,
   type InfiniteMultiSelectPageResult,
-} from "@/shared/components/InfiniteMultiSelect.component";
+} from "@/shared/components/InfiniteMultiSelect";
 import { LABELS } from "@/shared/constants/labels";
 import {
   CATEGORY_STATUS,

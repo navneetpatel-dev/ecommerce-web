@@ -4,10 +4,13 @@ import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { NumberInput } from "@/shared/components/NumberInput.component";
+import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormStack } from "@/shared/components/forms";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import {
+  CURRENCY_SYMBOL,
+  formatInr,
+} from "@/shared/utils/formatting/orderFormat";
 import { giftCardsLabels } from "@/shared/constants/labels/giftCards";
 import { useGiftCardPurchase } from "../../hooks/purchase/useGiftCardPurchase.hook";
 import {
@@ -73,8 +76,8 @@ export function GiftCardPurchaseForm() {
           htmlFor="gift-card-amount"
           required
           hint={formatLabel(giftCardsLabels.giftCardAmountHint, {
-            min: GIFT_CARD_MIN_AMOUNT_INR,
-            max: GIFT_CARD_MAX_AMOUNT_INR,
+            min: formatInr(GIFT_CARD_MIN_AMOUNT_INR),
+            max: formatInr(GIFT_CARD_MAX_AMOUNT_INR),
           })}
         >
           <NumberInput
@@ -84,7 +87,7 @@ export function GiftCardPurchaseForm() {
             min={GIFT_CARD_MIN_AMOUNT_INR}
             max={GIFT_CARD_MAX_AMOUNT_INR}
             step={50}
-            prefix="₹"
+            prefix={CURRENCY_SYMBOL}
             disabled={isBusy}
           />
         </FormFieldFrame>

@@ -1,5 +1,5 @@
 import { MessageCircleQuestion, Store, User } from "lucide-react";
-import { EmptyState } from "@/shared/components/EmptyState.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { ReviewListSkeleton } from "@/shared/components/Skeletons.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PRODUCT_ANSWER_AUTHOR_TYPE } from "@/shared/constants/statuses";

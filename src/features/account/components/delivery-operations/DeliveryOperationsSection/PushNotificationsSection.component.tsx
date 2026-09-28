@@ -1,6 +1,6 @@
 import { Bell } from "lucide-react";
 import { Switch } from "@/shared/components/ui/switch";
-import { TextEyebrow } from "@/shared/components/TextEyebrow.component";
+import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import type { usePushSubscription } from "@/shared/hooks/usePushSubscription.hook";
 
 import { deliveryOperationsSectionStyles as styles } from "../../../styles/delivery-operations/deliveryOperationsSection.styles";

@@ -6,7 +6,7 @@ import { generateRootMetadata, ROOT_VIEWPORT } from "@/shared/seo/rootMetadata";
 import "@/shared/styles/globals.css";
 import Script from "next/script";
 import { Providers } from "./_providers/app-providers";
-import { WebVitalsReporter } from "@/shared/components/WebVitalsReporter.component";
+import { WebVitalsReporter } from "@/shared/components/system/WebVitalsReporter.component";
 import { rootLayoutStyles } from "./_styles/root-layout.styles";
 
 const inter = Inter({

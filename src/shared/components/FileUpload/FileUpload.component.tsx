@@ -1,5 +1,5 @@
-import { FormError } from "@/shared/components/FormError.component";
-import { MediaImage } from "@/shared/components/MediaImage.component";
+import { FormError } from "@/shared/components/forms/FormError.component";
+import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { Button } from "@/shared/components/ui/button";
 import dynamic from "next/dynamic";
 import { LABELS } from "@/shared/constants/labels";

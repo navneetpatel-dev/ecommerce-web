@@ -4,7 +4,7 @@ import { useState } from "react";
 import { SidebarNav } from "@/shared/components/layout/SidebarNav.component";
 import { WorkspaceNavDrawer } from "@/shared/components/layout/WorkspaceNavDrawer.component";
 import { useDeliveryLayout } from "@/shared/hooks/navigation/useDeliveryLayout.hook";
-import { RequirePermission } from "@/shared/components/RequirePermission.component";
+import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { deliveryPermissionsForPath } from "@/shared/constants/navigation/deliveryNav";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";

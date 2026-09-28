@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { FilePicker } from "@/shared/components/FilePicker.component";
-import { StatusDialog } from "@/shared/components/StatusDialog.component";
+import { FilePicker } from "@/shared/components/FileUpload/FilePicker.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import { vendorBulkImportDialogStyles } from "../../styles/products/vendorDialogs.styles";
 import { useVendorBulkImportDialog } from "../../hooks/products/useVendorBulkImportDialog.hook";

@@ -7,7 +7,7 @@ import type { PromoBanner } from "@/shared/api/types";
 import {
   TableRowActions,
   TableRowAction,
-} from "@/shared/components/TableRowActions.component";
+} from "@/shared/components/DataTable/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { PromoBannerEditForm } from "./PromoBannerEditForm.component";
 import { promoBannersListStyles } from "./adminPromoBanners.styles";
