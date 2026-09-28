@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { ScanLine } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -10,14 +10,46 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 
+import {
+  useBarcodeScanner,
+  type BarcodeScannerError,
+} from "../../hooks/pickups/useBarcodeScanner.hook";
 import { barcodeScanButtonStyles } from "../../styles/pickups/barcodeScanButton.styles";
 
-const SCANNER_ELEMENT_ID = "delivery-barcode-scanner";
+const SCANNER_ERROR_COPY: Record<BarcodeScannerError, string> = {
+  unsupported:
+    "This browser can't scan barcodes. Type the tracking number instead.",
+  camera: "Camera unavailable. Check permissions and try again.",
+};
+
+/** Mounted only while the dialog is open, so the camera follows the dialog. */
+function ScannerViewport({ onDecoded }: { onDecoded: (text: string) => void }) {
+  const { videoRef, error } = useBarcodeScanner(onDecoded);
+
+  return (
+    <>
+      <video
+        ref={videoRef}
+        className={barcodeScanButtonStyles.scannerViewport}
+        autoPlay
+        playsInline
+        muted
+        aria-label="Camera preview"
+      />
+      {error ? (
+        <p className={barcodeScanButtonStyles.errorNotice}>
+          {SCANNER_ERROR_COPY[error]}
+        </p>
+      ) : null}
+    </>
+  );
+}
 
 /**
  * Camera barcode/QR scanner for matching a package's tracking number without
  * manually reading and typing 12-digit codes. Scans against whatever the
  * caller passes in `onDecoded` — typically a lookup into the loaded task list.
+ * Browsers without the native `BarcodeDetector` get the manual-entry notice.
  */
 export function BarcodeScanButton({
   onDecoded,
@@ -25,59 +57,10 @@ export function BarcodeScanButton({
   onDecoded: (text: string) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const scannerRef = useRef<import("html5-qrcode").Html5Qrcode | null>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    let cancelled = false;
-
-    void import("html5-qrcode").then(({ Html5Qrcode }) => {
-      if (cancelled) return;
-      const scanner = new Html5Qrcode(SCANNER_ELEMENT_ID);
-      scannerRef.current = scanner;
-      scanner
-        .start(
-          { facingMode: "environment" },
-          { fps: 10, qrbox: { width: 220, height: 220 } },
-          (decodedText) => {
-            onDecoded(decodedText.trim());
-            setOpen(false);
-          },
-          undefined,
-        )
-        .catch(() =>
-          setError("Camera unavailable. Check permissions and try again."),
-        );
-    });
-
-    return () => {
-      cancelled = true;
-      const scanner = scannerRef.current;
-      if (scanner) {
-        scanner
-          .stop()
-          .catch(() => undefined)
-          .finally(() => scanner.clear());
-      }
-      scannerRef.current = null;
-    };
-  }, [open, onDecoded]);
-
-  const errorNotice = error ? (
-    <p className={barcodeScanButtonStyles.errorNotice}>{error}</p>
-  ) : null;
 
   return (
     <>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => {
-          setError(null);
-          setOpen(true);
-        }}
-      >
+      <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
         <ScanLine
           className={barcodeScanButtonStyles.buttonIcon}
           aria-hidden="true"
@@ -89,11 +72,12 @@ export function BarcodeScanButton({
           <DialogHeader>
             <DialogTitle>Scan package barcode</DialogTitle>
           </DialogHeader>
-          <div
-            id={SCANNER_ELEMENT_ID}
-            className={barcodeScanButtonStyles.scannerViewport}
+          <ScannerViewport
+            onDecoded={(text) => {
+              onDecoded(text);
+              setOpen(false);
+            }}
           />
-          {errorNotice}
         </DialogContent>
       </Dialog>
     </>

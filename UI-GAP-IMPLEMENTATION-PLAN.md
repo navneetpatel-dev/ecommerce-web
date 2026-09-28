@@ -2315,7 +2315,8 @@ passes · 268 tests pass (63 files) · `next build` succeeds.
   number; the gift-card amount hint and redeem-success copy interpolated raw numbers into `₹{}`
   templates. All three now go through `formatInr`.
 
-**Not done — one pre-existing gate remains:**
+**Budget gate — now passing: `1167.7 KB` gz vs the 1200 KB ceiling** (1272.2 KB before the fix
+below). The pre-existing failure is kept here for context:
 
 - **`npm run budgets` fails: 1268 KB gzipped vs a 1200 KB ceiling.** This was already failing
   before any of the above (measured baseline: **1266 KB**), so it is not a regression — the
@@ -2324,13 +2325,21 @@ passes · 268 tests pass (63 files) · `next build` succeeds.
   94/98 KB gz vendor chunks, `24hmv2jc4w76g.js` 42 KB gz = `leaflet` (also dynamic), and
   `recharts` spread across the admin route chunks. Because the budget sums _all_ generated client
   JS (not first-load), the only way to move it is to drop shipped code:
-  1. **Replace `html5-qrcode` with the native `BarcodeDetector` API** (Chrome/Edge/Android, with a
-     manual-entry fallback) — worth ~104 KB gz, which alone puts the total back under the ceiling.
-     This is a feature-level change to the delivery scanner and needs device testing, so it was
-     deliberately not landed unverified.
+  1. **Replaced `html5-qrcode` with the native `BarcodeDetector` API — done.** The camera loop now
+     lives in `features/delivery-dashboard/hooks/pickups/useBarcodeScanner.hook.ts` (detects ~10×/s
+     against a rear-camera `<video>`, stops on the first decode, releases the tracks on unmount) over
+     the pure helpers in `utils/pickups/barcodeDetection.ts` (constructor probe, format intersection,
+     decode normalisation). Browsers with no usable detector — Firefox, older Safari — get an
+     explicit "type the tracking number instead" notice; the pickups/deliveries pages already had the
+     manual search box for that path, so no capability is lost. Covered by 14 unit tests (8 helper +
+     6 hook: decode-once, unsupported, camera failure, quiet frames, track release, no camera when
+     unmounted early), and the dependency plus its lock entry are gone, so the ~104 KB gz chunk
+     leaves the build rather than being deferred. **Wants a real device pass on Android Chrome and
+     iOS Safari before release** — the unit tests mock `getUserMedia` and `BarcodeDetector`.
   2. Lazy-mount the admin `recharts` panels (moves weight between chunks; does not reduce the total).
-  3. Raise the ceiling with a documented justification (the 1200 KB figure predates the delivery
-     PWA scanner and the admin analytics suite).
+     Not needed once option 1 landed.
+  3. Raise the ceiling with a documented justification. Not taken: the ceiling now has ~32 KB of
+     headroom, so the 1200 KB figure stands.
 
 **Warning baseline** (unchanged by this work): 74 `react-hooks/*` warnings, which the repo's own
 `eslint.config.mjs` comment marks as _"TEMPORARY (Phase 6 scope): pre-existing findings … demoted to
