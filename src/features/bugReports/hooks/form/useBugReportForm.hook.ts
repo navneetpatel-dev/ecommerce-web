@@ -15,6 +15,7 @@ import {
   BUG_STEPS_MAX,
   BUG_TITLE_MAX,
 } from "../../constants/form/fieldLimits";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
 export interface UseBugReportFormParams {
   /** Builds the post-submit redirect target from the created bug id. */
@@ -45,6 +46,8 @@ export function useBugReportForm(params: UseBugReportFormParams) {
     mode: "onChange",
     defaultValues: { title: "", description: "", steps: "" },
   });
+
+  useUnsavedChanges(form.formState.isDirty);
 
   const title = form.watch("title");
   const description = form.watch("description");

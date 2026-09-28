@@ -4,6 +4,16 @@ import type { ProductSeoData, BreadcrumbItem, FaqQuestion } from "./types";
 
 type WithContext<T> = T & { "@context": "https://schema.org" };
 
+/** The marketplace, as a nested reference (publisher/parent organization). */
+function marketplaceRef() {
+  return {
+    "@type": "Organization" as const,
+    name: SITE.name,
+    url: SITE.url,
+    logo: `${SITE.url}/icon-512.png`,
+  };
+}
+
 export function generateOrganizationSchema(): WithContext<{
   "@type": "Organization";
   name: string;
@@ -13,10 +23,7 @@ export function generateOrganizationSchema(): WithContext<{
 }> {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: SITE.name,
-    url: SITE.url,
-    logo: `${SITE.url}/icon-512.png`,
+    ...marketplaceRef(),
     sameAs: [`https://twitter.com/${SITE.twitter.replace("@", "")}`],
   };
 }
@@ -104,5 +111,43 @@ export function generateFAQSchema(questions: FaqQuestion[]) {
         text: q.answer,
       },
     })),
+  };
+}
+
+/**
+ * Help-centre article. The pages are static and server-rendered, so the schema
+ * describes exactly what is on the page (never marked up from client-only data).
+ */
+export function generateArticleSchema(article: {
+  title: string;
+  summary: string;
+  url: string;
+}) {
+  return {
+    "@context": "https://schema.org" as const,
+    "@type": "Article" as const,
+    headline: article.title,
+    description: article.summary,
+    mainEntityOfPage: article.url,
+    url: article.url,
+    publisher: marketplaceRef(),
+  };
+}
+
+/** A vendor's public storefront, published within the marketplace. */
+export function generateStoreSchema(store: {
+  name: string;
+  url: string;
+  description?: string | null;
+  imageUrl?: string | null;
+}) {
+  return {
+    "@context": "https://schema.org" as const,
+    "@type": "Store" as const,
+    name: store.name,
+    url: store.url,
+    ...(store.description ? { description: store.description } : {}),
+    ...(store.imageUrl ? { image: store.imageUrl } : {}),
+    parentOrganization: marketplaceRef(),
   };
 }

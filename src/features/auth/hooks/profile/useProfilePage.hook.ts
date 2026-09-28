@@ -13,6 +13,7 @@ import { LABELS } from "@/shared/constants/labels";
 export function useProfilePage() {
   const changePassword = useChangePassword();
   const form = useForm<ChangePasswordInput>({
+    mode: "onTouched",
     resolver: zodResolver(ChangePasswordSchema),
   });
 

@@ -8,12 +8,15 @@ import {
 } from "../../schemas/auth/auth.schema";
 import { useRegister } from "../../api/auth/auth.queries";
 import { useApiFormErrors } from "@/shared/hooks/forms/useApiFormErrors.hook";
+import { normalisePhoneNumber } from "@/shared/utils/validation/phoneNumber";
 import { LABELS } from "@/shared/constants/labels";
 
 export function useRegisterForm() {
   const register = useRegister();
   const form = useForm<RegisterInput>({
+    mode: "onTouched",
     resolver: zodResolver(RegisterSchema),
+    defaultValues: { phone: "" },
   });
 
   const { formLevelError } = useApiFormErrors(
@@ -30,7 +33,13 @@ export function useRegisterForm() {
     registeredEmail: register.data?.user.email ?? null,
     onSubmit: (data: RegisterInput) => {
       form.clearErrors();
-      register.mutate(data);
+      register.mutate({
+        ...data,
+        // Registered phone is stored as digits, matching the profile form.
+        phone: data.phone?.trim()
+          ? normalisePhoneNumber(data.phone)
+          : undefined,
+      });
     },
   };
 }

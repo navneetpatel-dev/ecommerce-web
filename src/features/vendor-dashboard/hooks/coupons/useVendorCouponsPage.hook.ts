@@ -25,6 +25,7 @@ import { useRouteQueryDialog } from "@/shared/hooks/navigation/useRouteQueryDial
 import { useApiFormErrors } from "@/shared/hooks/forms/useApiFormErrors.hook";
 import { LABELS } from "@/shared/constants/labels";
 import type { Coupon } from "@/shared/api/types";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
 export function useVendorCouponsPage() {
   const user = useAuthStore((s) => s.currentUser);
@@ -48,6 +49,8 @@ export function useVendorCouponsPage() {
       applicableScopeIds: vendorId ? [vendorId] : [],
     },
   });
+
+  useUnsavedChanges(form.formState.isDirty);
 
   const { formLevelError } = useApiFormErrors(
     form,

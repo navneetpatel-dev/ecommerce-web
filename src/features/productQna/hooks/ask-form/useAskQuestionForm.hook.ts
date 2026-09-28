@@ -10,15 +10,19 @@ import {
   type AskQuestionFormInput,
 } from "../../schemas/ask-form/productQna.schema";
 import { useAskQuestion } from "../../api/qna/productQna.queries";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
 export function useAskQuestionForm(productId: string) {
   const askQuestion = useAskQuestion();
   const { requireAuth } = useRequireAuth();
 
   const form = useForm<AskQuestionFormInput>({
+    mode: "onTouched",
     resolver: zodResolver(AskQuestionFormSchema),
     defaultValues: { question: "" },
   });
+
+  useUnsavedChanges(form.formState.isDirty);
 
   const { formLevelError } = useApiFormErrors(
     form,

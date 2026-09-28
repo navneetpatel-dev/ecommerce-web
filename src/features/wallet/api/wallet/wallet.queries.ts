@@ -23,6 +23,9 @@ export function useWalletBalance() {
     queryKey: walletKeys.balance(),
     queryFn: () => walletApi.getBalance(),
     enabled: Boolean(currentUser),
+    // Money moved on another device (or in another tab) should be visible the
+    // moment the customer comes back and looks at it.
+    refetchOnWindowFocus: true,
   });
 }
 

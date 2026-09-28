@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { LABELS } from "@/shared/constants/labels";
+import { phoneField } from "@/shared/schemas/phone.schema";
 
-/** Account profile name/phone limits (Rule 8: limits live with the schema). */
+/** Account profile name limit (Rule 8: limits live with the schema). */
 export const PROFILE_NAME_MAX = 80;
-export const PROFILE_PHONE_MAX = 15;
 
 /** Personal-info form schema; field messages come from centralized copy. */
 export const ProfileSchema = z.object({
@@ -12,11 +12,7 @@ export const ProfileSchema = z.object({
     .trim()
     .min(1, LABELS.nameRequired)
     .max(PROFILE_NAME_MAX, LABELS.couldNotSaveProfile),
-  phone: z
-    .string()
-    .trim()
-    .max(PROFILE_PHONE_MAX, LABELS.couldNotSaveProfile)
-    .optional(),
+  phone: phoneField,
 });
 
 export type ProfileFormInput = z.infer<typeof ProfileSchema>;

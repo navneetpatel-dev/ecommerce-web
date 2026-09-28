@@ -15,6 +15,7 @@ export const authLabels = {
   useEmailCode: "Use an email code instead",
   emailRequired: "Email is required",
   invalidEmail: "Enter a valid email address",
+  invalidPhone: "Enter a valid phone number",
   passwordRequired: "Password is required",
   forgotPasswordTitle: "Forgot password",
   forgotPasswordHint: "Enter your email and we’ll send you a reset link.",

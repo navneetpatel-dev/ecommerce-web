@@ -15,6 +15,7 @@ export function useResetPasswordForm() {
   const searchParams = useSearchParams();
   const resetPassword = useResetPassword();
   const form = useForm<ResetPasswordInput>({
+    mode: "onTouched",
     resolver: zodResolver(ResetPasswordSchema),
     defaultValues: { token: searchParams.get("token") || "" },
   });

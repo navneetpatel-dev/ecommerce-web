@@ -18,6 +18,7 @@ import {
   type CategoryFormInput,
 } from "../../schemas/categories/categories.schema";
 import { categoriesApi } from "@/features/categories";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
 interface CategoryData {
   id: string;
@@ -68,6 +69,8 @@ export function useAdminEditCategoryAction({
       defaultWarrantyType: "",
     },
   });
+
+  useUnsavedChanges(form.formState.isDirty);
 
   const values = form.watch();
   const canSubmit = CategoryFormSchema.safeParse(values).success;

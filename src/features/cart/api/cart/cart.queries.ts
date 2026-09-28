@@ -19,6 +19,9 @@ export function useCart() {
     // Wait until localStorage auth is restored so refresh does not GET /cart as a new guest.
     enabled: authBootstrapped,
     staleTime: 1000 * 30,
+    // "Live" query: the cart changes from other tabs/devices, and focus is the
+    // moment the customer is about to look at (or act on) the count.
+    refetchOnWindowFocus: true,
     placeholderData: (previousData) => previousData,
   });
 }

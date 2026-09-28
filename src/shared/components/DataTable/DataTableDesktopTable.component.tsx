@@ -29,6 +29,8 @@ export type DataTableDesktopTableProps<T> = {
   getRowId?: (row: T, index: number) => string;
   tableLayout: "auto" | "fixed";
   rowsInteractive: boolean;
+  /** Accessible name for the table (the section title, when it is text). */
+  ariaLabel?: string;
   actions?: (row: T, index: number) => ReactNode;
   actionsHeader?: ReactNode;
   actionsClassName?: string;
@@ -46,6 +48,7 @@ export function DataTableDesktopTable<T>({
   getRowId,
   tableLayout,
   rowsInteractive,
+  ariaLabel,
   actions,
   actionsHeader,
   actionsClassName,
@@ -56,6 +59,7 @@ export function DataTableDesktopTable<T>({
     <TableScrollShell desktopOnly>
       <Table
         scrollContainer={false}
+        aria-label={ariaLabel}
         className={cn(
           actions && TABLE_PINNED_LAYOUT_CLASS,
           tableLayout === "fixed" && dataTableDesktopStyles.tableFixed,
@@ -66,6 +70,7 @@ export function DataTableDesktopTable<T>({
             {columns.map((column) => (
               <TableHead
                 key={column.id}
+                scope="col"
                 className={cn(
                   TABLE_DATA_CELL_CLASS,
                   tableLayout === "auto" &&
@@ -80,6 +85,7 @@ export function DataTableDesktopTable<T>({
             ))}
             {actions ? (
               <TableHead
+                scope="col"
                 className={cn(TABLE_ACTIONS_HEAD_CLASS, actionsClassName)}
               >
                 {actionsHeader}

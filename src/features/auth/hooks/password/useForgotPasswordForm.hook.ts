@@ -13,6 +13,7 @@ import { useForgotPassword } from "../../api/auth/auth.queries";
 export function useForgotPasswordForm() {
   const forgotPassword = useForgotPassword();
   const form = useForm<ForgotPasswordInput>({
+    mode: "onTouched",
     resolver: zodResolver(ForgotPasswordSchema),
   });
 

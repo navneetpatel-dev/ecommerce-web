@@ -104,6 +104,7 @@ export function DataTable<T>({
               getRowId={getRowId}
               tableLayout={tableLayout}
               rowsInteractive={rowsInteractive}
+              ariaLabel={typeof title === "string" ? title : undefined}
               actions={actions}
               actionsHeader={actionsHeader}
               actionsClassName={actionsClassName}

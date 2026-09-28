@@ -12,6 +12,7 @@ import {
   toCouponCreateBody,
   type CouponFormInput,
 } from "../../schemas/coupons/coupons.schema";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
 export function useCreateCoupon() {
   const queryClient = useQueryClient();
@@ -23,6 +24,8 @@ export function useCreateCoupon() {
     reValidateMode: "onChange",
     defaultValues: COUPON_FORM_DEFAULTS,
   });
+
+  useUnsavedChanges(form.formState.isDirty);
 
   const createCoupon = useMutation({
     mutationFn: (body: CouponFormInput) =>

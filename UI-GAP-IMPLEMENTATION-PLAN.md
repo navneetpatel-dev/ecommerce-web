@@ -2449,3 +2449,61 @@ address autofill tokens, and the new date formatters.
 **Not done in this pass** (deliberately, needs its own scope): standardising `mode: "onTouched"`
 across the ~form hooks that omit it (validation timing), a storefront offline/stale banner, and the
 destructive-action audit across 29 `useCancel*/useDelete*/useRemove*` hooks.
+
+---
+
+## WS-16 — Interaction gaps: tables, undo, session, structure
+
+Audited first; one earlier finding was **corrected** on inspection — the tables are not sortable in
+place (the `sortable` hits were dnd-kit drag-reordering), so no `aria-sort` was invented.
+
+**Fixed**
+
+- **Table semantics.** `DataTable` header cells are now `scope="col"` (data and actions columns),
+  and the table is named from its `title` (`aria-label`), so dense dashboard tables are announced
+  with their structure instead of as an anonymous grid. The title stays the page's `<h1>`: admin
+  page headers render `<h2>`, so demoting it would have stripped h1s from those pages.
+- **Listing counts are live regions.** Filtering, sorting and paging change the grid with no
+  navigation — and the route announcer only fires on pathname changes — so `SortBar` (PLP) and
+  `PaginationResultSummary` (tables, vendor lists) are now `role="status"` + `aria-atomic`.
+- **Structured data extended**: `Article` on `/help/[slug]` (real static content, canonical added to
+  its metadata) and `Store` on `/vendors/[slug]` (reusing the resolver the metadata already calls,
+  so no extra request). `generateOrganizationSchema` now shares one `marketplaceRef()` with both.
+  **Deliberately not done:** `FAQPage` — the only FAQ content in the repo (`features/content`
+  `faqItems`) is unreachable, since `/faq` redirects to `/help` and nothing renders it; and
+  `ItemList` on the PLP — the listings are client-fetched, so emitting it would mean claiming
+  content the server never renders.
+- **Undo for the reversible mistake.** Cart line removal now offers "Undo" in the toast, re-adding
+  the same variant and quantity without reopening the drawer. This needed the toast action slot to
+  accept a callback, not just an href: `ToastActionSpec`, `runAction` and a button-vs-link branch in
+  `ToastStackItem` (existing href callers unchanged). Clear-cart and account/product deletion stay
+  confirm-only.
+- **Unsaved-changes protection.** `useUnsavedChanges(form.formState.isDirty)` on the nine longest
+  forms (vendor registration, coupon create/bulk, category edit, vendor coupons, profile, review,
+  bug report, product Q&A). The App Router has no supported history-blocking API, so this guards
+  refresh/tab-close/back-out-of-site; in-app link navigation still relies on each form's own cancel
+  behaviour (documented in the hook).
+- **Session expiry now recovers.** A definitive auth failure (refresh token gone too) previously
+  surfaced as a generic error on whichever request failed first. A global `QueryCache`/`MutationCache`
+  handler clears the session, says so once (10s throttle, so a burst of parallel failures is one
+  message), and offers "Log in" as a link back to `PATHS.loginWithRedirect(currentPath)`.
+- **Stale data on return.** The cart and wallet balance — the two counts a returning customer acts
+  on — opt into `refetchOnWindowFocus`; everything else keeps the 60s staleTime default.
+- **Phone validation.** The profile had a length-only rule and registration had none. One shared
+  field (`shared/schemas/phone.schema`) validates Indian mobiles _and_ international/landline
+  numbers — lenient on purpose so no existing account is locked out — rejects junk ("123",
+  "call me"), and the payload is normalised to digits at submit in both forms.
+
+**Also standardised:** `mode: "onTouched"` on the nine form hooks that had no mode (six already did),
+so errors surface on blur rather than only at submit.
+
+**Deliberate non-goal:** funnel analytics. There is no destination configured and no requirement, and
+the repo's Rule 3 forbids abstractions without genuine reuse — an unused typed event layer would be
+exactly that. The decision is recorded here so it is a choice, not an oversight.
+
+**Tests added** (29): table semantics (4), listing-count announcements (3), toast callback actions +
+`runAction` (2), unsaved-changes hook (4), session-expiry handler (3), phone validation + field (7),
+structured-data builders (4), plus the form-mode and normalisation paths.
+
+**Remaining:** the two items already listed above (offline/stale banner for the storefront, and the
+destructive-action confirmation sweep across 29 hooks), and WS-14's real-device pass.

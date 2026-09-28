@@ -8,6 +8,8 @@ export const cartLabels = {
   removeCartItemDescription:
     "Remove “{name}” from your cart? You can add it again later.",
   cartUpdatingActionHint: "Please wait while your cart updates.",
+  cartItemRemoved: "Removed “{name}” from your cart.",
+  undo: "Undo",
   /** Screen-reader announcements when the cart count changes (route announcer style). */
   cartCountAnnouncement: "{count} items in your cart.",
   cartCountOneAnnouncement: "1 item in your cart.",

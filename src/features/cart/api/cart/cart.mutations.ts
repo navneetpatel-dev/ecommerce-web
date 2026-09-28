@@ -4,6 +4,10 @@ import {
   patchExistingCartItemQuantity,
   patchRemoveCartItem,
 } from "../../utils/line-item/cartDisplay.utils";
+import {
+  findCachedCartItem,
+  offerRemovedItemUndo,
+} from "../../utils/line-item/cartUndo";
 import { cartApi } from "./cart.api";
 import { cartKeys } from "./cart.queries";
 import { useCartDrawerStore } from "../../store/drawer/cart.store";
@@ -112,6 +116,9 @@ export function useUpdateCartItem() {
 
 export function useRemoveCartItem() {
   const queryClient = useQueryClient();
+  // Same hook file: the undo re-adds the line through the add mutation.
+  const addToCart = useAddToCart();
+
   return useMutation({
     mutationKey: cartMutationKeys.remove,
     mutationFn: (itemId: string) => cartApi.removeItem(itemId),
@@ -121,11 +128,13 @@ export function useRemoveCartItem() {
       const previous = queryClient.getQueriesData<Cart>({
         queryKey: cartKeys.all,
       });
+      // Captured before the patch so Undo can restore the exact line.
+      const removedItem = findCachedCartItem(previous, itemId);
       queryClient.setQueriesData<Cart>({ queryKey: cartKeys.all }, (cart) => {
         if (!cart?.items.length) return cart;
         return patchRemoveCartItem(cart, itemId);
       });
-      return { previous };
+      return { previous, removedItem };
     },
     onError: (_error, _variables, context) => {
       context?.previous.forEach(([queryKey, data]) => {
@@ -133,9 +142,16 @@ export function useRemoveCartItem() {
       });
       showCartMutationError(_error, LABELS.couldNotRemoveCartItem);
     },
-    onSuccess: (cart) => {
+    onSuccess: (cart, _itemId, context) => {
       clearCartMutationError();
       syncCartCache(queryClient, cart);
+
+      const removedItem = context?.removedItem;
+      if (removedItem) {
+        offerRemovedItemUndo(removedItem, (variantId, quantity) =>
+          addToCart.mutate({ variantId, quantity, openDrawer: false }),
+        );
+      }
     },
   });
 }

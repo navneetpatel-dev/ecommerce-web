@@ -17,6 +17,7 @@ export function useLoginForm() {
   const redirect = searchParams.get("redirect");
   const oauthError = searchParams.get("oauthError");
   const form = useForm<LoginInput>({
+    mode: "onTouched",
     resolver: zodResolver(LoginSchema),
   });
 

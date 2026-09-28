@@ -41,6 +41,32 @@ export function ToastStackItem({
   onAction,
 }: ToastStackItemProps) {
   const Icon = TOAST_ICONS[toast.kind];
+  const actionLabel = toast.actionLabel;
+  const actionHref = toast.actionHref;
+
+  // Callback actions (undo) are buttons; navigation actions stay links.
+  const actionElement =
+    actionLabel && toast.action ? (
+      <ToastAction
+        altText={actionLabel}
+        asChild
+        className={toastStackStyles.action}
+      >
+        <button type="button" onClick={onAction}>
+          {actionLabel}
+        </button>
+      </ToastAction>
+    ) : actionLabel && actionHref ? (
+      <ToastAction
+        altText={actionLabel}
+        asChild
+        className={toastStackStyles.action}
+      >
+        <Link href={actionHref} onClick={onAction}>
+          {actionLabel}
+        </Link>
+      </ToastAction>
+    ) : null;
 
   return (
     <Toast
@@ -68,17 +94,7 @@ export function ToastStackItem({
         <ToastDescription className={toastStackStyles.message}>
           {toast.message}
         </ToastDescription>
-        {toast.actionLabel && toast.actionHref ? (
-          <ToastAction
-            altText={toast.actionLabel}
-            asChild
-            className={toastStackStyles.action}
-          >
-            <Link href={toast.actionHref} onClick={onAction}>
-              {toast.actionLabel}
-            </Link>
-          </ToastAction>
-        ) : null}
+        {actionElement}
       </div>
       <ToastClose aria-label={LABELS.dismiss} />
     </Toast>

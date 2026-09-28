@@ -1,6 +1,11 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useState } from "react";
 import { useAuthBootstrap, ImpersonationBanner } from "@/features/auth";
@@ -13,6 +18,7 @@ import { RoleSurfaceGuard } from "@/shared/components/system/RoleSurfaceGuard.co
 import { ThemePaletteProvider } from "@/shared/context/ThemePalette.context";
 import { ErrorReportingProvider } from "@/shared/providers/ErrorReportingProvider";
 import { createQueryPersister } from "@/shared/api/client/queryPersister";
+import { handleSessionExpiry } from "@/shared/lib/session/handleSessionExpiry";
 import { ServiceWorkerRegistration } from "@/shared/components/system/ServiceWorkerRegistration.component";
 
 function AuthBootstrap() {
@@ -37,6 +43,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
+        // A session that expired mid-visit is recovered in one place: the
+        // caches, so every query and mutation is covered without each call
+        // site remembering to branch on the auth-failure codes.
+        queryCache: new QueryCache({ onError: handleSessionExpiry }),
+        mutationCache: new MutationCache({ onError: handleSessionExpiry }),
         defaultOptions: {
           queries: {
             staleTime: 60 * 1000,

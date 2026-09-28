@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { LABELS } from "@/shared/constants/labels";
+import { phoneField } from "@/shared/schemas/phone.schema";
 
 export const LoginSchema = z.object({
   email: z
@@ -18,7 +19,7 @@ export const RegisterSchema = z.object({
     .email(LABELS.invalidEmail),
   password: z.string().min(8),
   name: z.string().min(1),
-  phone: z.string().optional(),
+  phone: phoneField,
 });
 
 export const ForgotPasswordSchema = z.object({

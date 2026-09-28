@@ -53,7 +53,11 @@ export function SortBar({
 
   return (
     <div className={sortBarStyles.root(className)}>
-      <p className={sortBarStyles.countText}>{countLabel}</p>
+      {/* Polite live region: filters and sort change the grid without a
+          navigation, so the new count is the only feedback assistive tech gets. */}
+      <p role="status" aria-atomic="true" className={sortBarStyles.countText}>
+        {countLabel}
+      </p>
 
       <div className={sortBarStyles.actionsWrapper}>
         <Select

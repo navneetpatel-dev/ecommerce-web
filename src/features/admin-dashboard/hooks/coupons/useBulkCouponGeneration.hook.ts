@@ -16,6 +16,7 @@ import {
 } from "../../schemas/coupons/bulkCouponForm.schema";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
 const BULK_TEMPLATE_CODE = "BULK";
 
@@ -37,6 +38,11 @@ export function useBulkCouponGeneration(onDone: () => void) {
     resolver: zodResolver(BulkFormSchema),
     defaultValues: { ...BULK_FORM_DEFAULTS },
   });
+
+  // Bulk generation edits two forms; either one being dirty is unsaved work.
+  useUnsavedChanges(
+    templateForm.formState.isDirty || bulkMetaForm.formState.isDirty,
+  );
 
   const resetForms = () => {
     bulkMetaForm.reset({ ...BULK_FORM_DEFAULTS });

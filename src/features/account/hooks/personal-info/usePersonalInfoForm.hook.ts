@@ -9,10 +9,12 @@ import {
   useUpdateProfile,
 } from "../../api/addresses/account.queries";
 import { useApiFormErrors } from "@/shared/hooks/forms/useApiFormErrors.hook";
+import { normalisePhoneNumber } from "@/shared/utils/validation/phoneNumber";
 import {
   ProfileSchema,
   type ProfileFormInput,
 } from "../../schemas/personal-info/profile.schema";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
 /**
  * Personal-info form state (Rule 22): schema-driven via zod, submit and
@@ -23,9 +25,12 @@ export function usePersonalInfoForm() {
   const updateProfile = useUpdateProfile();
 
   const form = useForm<ProfileFormInput>({
+    mode: "onTouched",
     resolver: zodResolver(ProfileSchema),
     defaultValues: { name: "", phone: "" },
   });
+
+  useUnsavedChanges(form.formState.isDirty);
   const { reset, watch, formState, handleSubmit } = form;
 
   useEffect(() => {
@@ -55,7 +60,8 @@ export function usePersonalInfoForm() {
   const onSubmit = handleSubmit(async (data) => {
     await updateProfile.mutateAsync({
       name: data.name.trim(),
-      phone: data.phone?.trim() || null,
+      // Stored as digits so "+91 98765 43210" and "09876543210" are one value.
+      phone: data.phone?.trim() ? normalisePhoneNumber(data.phone) : null,
     });
   });
 

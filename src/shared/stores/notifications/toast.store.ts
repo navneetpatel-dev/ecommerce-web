@@ -9,15 +9,29 @@ export interface AppToast {
   id: number;
   kind: ToastKind;
   message: string;
-  /** Optional single action (spec §4.4). */
+  /** Optional single action (spec §4.4): a link, or an in-place callback (undo). */
   actionLabel?: string;
   actionHref?: string;
+  action?: () => void;
 }
+
+/** A toast action is either navigation (href) or an in-place command (undo). */
+export type ToastActionSpec =
+  { label: string; href: string } | { label: string; onClick: () => void };
 
 interface ToastState {
   toasts: AppToast[];
   push: (toast: Omit<AppToast, "id">) => void;
   dismiss: (id: number) => void;
+  /** Runs the toast's callback action, if it has one, then removes the toast. */
+  runAction: (id: number) => void;
+}
+
+function actionFields(action?: ToastActionSpec) {
+  if (!action) return {};
+  return "href" in action
+    ? { actionLabel: action.label, actionHref: action.href }
+    : { actionLabel: action.label, action: action.onClick };
 }
 
 /**
@@ -33,28 +47,25 @@ export const useToastStore = create<ToastState>((set, get) => ({
     set({ toasts: [...get().toasts, next].slice(-TOAST_MAX_VISIBLE) });
   },
   dismiss: (id) => set({ toasts: get().toasts.filter((t) => t.id !== id) }),
+  runAction: (id) => {
+    const toast = get().toasts.find((t) => t.id === id);
+    toast?.action?.();
+    set({ toasts: get().toasts.filter((t) => t.id !== id) });
+  },
 }));
 
-export function notifySuccess(
-  message: string,
-  action?: { label: string; href: string },
-): void {
+export function notifySuccess(message: string, action?: ToastActionSpec): void {
   useToastStore.getState().push({
     kind: "success",
     message,
-    actionLabel: action?.label,
-    actionHref: action?.href,
+    ...actionFields(action),
   });
 }
 
-export function notifyInfo(
-  message: string,
-  action?: { label: string; href: string },
-): void {
+export function notifyInfo(message: string, action?: ToastActionSpec): void {
   useToastStore.getState().push({
     kind: "info",
     message,
-    actionLabel: action?.label,
-    actionHref: action?.href,
+    ...actionFields(action),
   });
 }

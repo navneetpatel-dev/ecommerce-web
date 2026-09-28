@@ -5,6 +5,7 @@ import {
 } from "@/features/vendors";
 import { SITE } from "@/shared/seo/constants";
 import { canonicalUrl } from "@/shared/seo/canonical";
+import { JsonLd, generateStoreSchema } from "@/shared/seo";
 import { PATHS } from "@/shared/constants/paths/paths";
 
 const SEO_VENDOR_FALLBACK_TITLE = "Vendor";
@@ -40,5 +41,21 @@ export async function generateMetadata({
 
 export default async function VendorPage({ params }: VendorPageProps) {
   const { slug } = await params;
-  return <VendorStorefrontPage slug={slug} />;
+  const vendor = await resolveVendorBySlugServer(slug);
+
+  return (
+    <>
+      {vendor ? (
+        <JsonLd
+          data={generateStoreSchema({
+            name: vendor.businessName,
+            description: vendor.description,
+            imageUrl: vendor.logoUrl,
+            url: canonicalUrl(PATHS.vendorPage(slug)),
+          })}
+        />
+      ) : null}
+      <VendorStorefrontPage slug={slug} />
+    </>
+  );
 }

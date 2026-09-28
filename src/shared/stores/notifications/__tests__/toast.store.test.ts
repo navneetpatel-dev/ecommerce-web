@@ -1,6 +1,6 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { TOAST_MAX_VISIBLE } from "@/shared/constants/timing/timing";
-import { useToastStore } from "../toast.store";
+import { notifySuccess, useToastStore } from "../toast.store";
 import { notifyError } from "../errorToast.store";
 
 describe("toast store", () => {
@@ -25,6 +25,31 @@ describe("toast store", () => {
     const [toast] = useToastStore.getState().toasts;
     expect(toast.kind).toBe("error");
     expect(toast.message).toBe("Download failed");
+  });
+
+  it("stores a callback action and runs it when the toast action fires", () => {
+    const undoSomething = vi.fn();
+    notifySuccess("Removed from your cart.", {
+      label: "Undo",
+      onClick: undoSomething,
+    });
+
+    const toast = useToastStore.getState().toasts.at(-1);
+    expect(toast?.actionLabel).toBe("Undo");
+    expect(toast?.actionHref).toBeUndefined();
+
+    useToastStore.getState().runAction(toast!.id);
+
+    expect(undoSomething).toHaveBeenCalledTimes(1);
+    expect(useToastStore.getState().toasts).toHaveLength(0);
+  });
+
+  it("keeps href actions as links (no callback)", () => {
+    notifySuccess("Coupon applied.", { label: "View cart", href: "/cart" });
+
+    const toast = useToastStore.getState().toasts.at(-1);
+    expect(toast?.actionHref).toBe("/cart");
+    expect(toast?.action).toBeUndefined();
   });
 
   it("dismiss removes only the targeted toast", () => {

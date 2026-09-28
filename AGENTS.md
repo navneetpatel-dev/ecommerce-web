@@ -109,3 +109,9 @@ All React components across `web/` must adhere to strict separation of concerns 
 - Client-side navigation is announced by `RouteAnnouncer` and focus moves into the page body. Do not add a second announcer; put page-specific copy in the page's own `<h1>`.
 - Do not render dates/times with bare `toLocaleDateString()` / `toLocaleTimeString()` / `toLocaleString()` — use `formatDate` / `formatTime` / `formatDateTime`, or pass a locale. `scripts/check-date-locale.mjs` enforces it.
 - Shared, repeated a11y primitives live in `shared/components/a11y`, `shared/hooks/a11y`, `shared/utils/a11y` and `shared/styles/a11y`.
+- Result counts that change without a navigation (filtering, paging) must be a `role="status"` region — `PaginationResultSummary` and the listing `SortBar` already are.
+- Data tables get their structure from `DataTable`: every header cell is `scope="col"` and the table is named by its `title`. Do not hand-roll a table.
+- Reversible destructive actions offer undo through a toast callback action (`notifySuccess(message, { label, onClick })`); reserve confirm dialogs for irreversible ones.
+- Long forms call `useUnsavedChanges(form.formState.isDirty)`. Forms use `mode: "onTouched"` so errors appear on blur, not only on submit.
+- Phone input is validated and stored through `shared/schemas/phone.schema` + `shared/utils/validation/phoneNumber` — never a local regex.
+- Structured data is server-generated from visible content only: `Product`/`BreadcrumbList` (PDP, category), `Article` (help articles), `Store` (vendor storefronts), `Organization`/`WebSite` (home). Add a builder to `shared/seo/structured-data.ts` rather than inlining JSON-LD.

@@ -9,6 +9,7 @@ import {
 } from "../../schemas/review-form/reviews.schema";
 import { useSubmitReview } from "../../api/reviews/reviews.queries";
 import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
 export function useReviewSubmission(orderItemId: string, productId: string) {
   const submitReview = useSubmitReview();
@@ -16,9 +17,12 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
   const [hoverRating, setHoverRating] = useState(0);
 
   const form = useForm<ReviewFormInput>({
+    mode: "onTouched",
     resolver: zodResolver(ReviewFormSchema),
     defaultValues: { rating: 0 },
   });
+
+  useUnsavedChanges(form.formState.isDirty);
 
   const { formLevelError } = useApiFormErrors(
     form,

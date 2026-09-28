@@ -18,6 +18,8 @@ export {
   generateProductSchema,
   generateBreadcrumbSchema,
   generateFAQSchema,
+  generateArticleSchema,
+  generateStoreSchema,
 } from "./structured-data";
 export { JsonLd } from "./JsonLd";
 export { canonicalUrl, productCanonical, categoryCanonical } from "./canonical";
