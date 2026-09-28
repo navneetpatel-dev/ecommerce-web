@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AuthBrandFeatures } from "@/features/auth/components/shell/AuthBrandFeatures.component";
 import { AuthBrandVisual } from "@/features/auth/components/shell/AuthBrandVisual.component";
+import { MAIN_CONTENT_ID } from "@/shared/constants/a11y/landmarks";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { authPageShellStyles as styles } from "../../styles/shell/authPageShell.styles";
@@ -41,7 +42,7 @@ export function AuthPageShell({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
 
-        <main className={styles.mainCol}>
+        <main id={MAIN_CONTENT_ID} tabIndex={-1} className={styles.mainCol}>
           <div aria-hidden className={styles.ambientBlob} />
 
           <div className={styles.formWrapper}>

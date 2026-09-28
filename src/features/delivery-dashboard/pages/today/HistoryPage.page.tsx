@@ -6,6 +6,7 @@ import {
   useMyPickups,
 } from "../../api/agent/deliveryAgent.queries";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { formatDateTime } from "@/shared/utils/formatting/formatDate";
 import { todayPageStyles as styles } from "./todayPage.styles";
 
 export function HistoryPage() {
@@ -44,7 +45,7 @@ export function HistoryPage() {
                   title={shipment.trackingNumber}
                   subtitle={
                     shipment.deliveredAt
-                      ? new Date(shipment.deliveredAt).toLocaleString()
+                      ? formatDateTime(shipment.deliveredAt)
                       : null
                   }
                   status={shipment.status}

@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { formatDate } from "@/shared/utils/formatting/formatDate";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 export interface Commission {
@@ -44,7 +45,7 @@ export function useCommissionLedgerPresentation(commissions?: {
       items.map((c) => ({
         id: c.id,
         status: c.status,
-        dateLabel: new Date(c.createdAt).toLocaleDateString(),
+        dateLabel: formatDate(c.createdAt),
         saleAmountLabel: formatInr(c.saleAmount),
         rateLabel: `${c.commissionRate}%`,
         commissionAmountLabel: formatInr(c.commissionAmount),

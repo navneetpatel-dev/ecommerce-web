@@ -14,5 +14,6 @@ export const errorBoundaryStyles = {
   workspaceBody: "flex",
   workspaceSidebar:
     "w-56 shrink-0 border-r border-line min-h-[calc(100dvh-3.5rem)]",
-  workspaceMain: "flex-1 p-6 flex flex-col items-center justify-center gap-4",
+  workspaceMain:
+    "flex-1 p-6 flex flex-col items-center justify-center gap-4 outline-none",
 } as const;

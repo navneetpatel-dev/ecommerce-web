@@ -5,6 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { notifyError } from "@/shared/stores/notifications/errorToast.store";
+import { formatDate } from "@/shared/utils/formatting/formatDate";
 import {
   commissionsApi,
   type CommissionInvoiceEntry,
@@ -37,7 +38,7 @@ export function useCommissionInvoices(invoices: CommissionInvoiceEntry[]) {
       invoices.map((invoice) => ({
         id: invoice.id,
         number: invoice.number,
-        formattedDate: new Date(invoice.issuedAt).toLocaleDateString(),
+        formattedDate: formatDate(invoice.issuedAt),
         formattedAmount: formatInr(invoice.totalAmount),
         isDownloading: pendingId === invoice.id,
       })),

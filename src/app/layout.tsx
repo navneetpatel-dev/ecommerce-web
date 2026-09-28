@@ -7,6 +7,8 @@ import "@/shared/styles/globals.css";
 import Script from "next/script";
 import { Providers } from "./_providers/app-providers";
 import { WebVitalsReporter } from "@/shared/components/system/WebVitalsReporter.component";
+import { SkipToContentLink } from "@/shared/components/a11y/SkipToContentLink.component";
+import { RouteAnnouncer } from "@/shared/components/a11y/RouteAnnouncer.component";
 import { rootLayoutStyles } from "./_styles/root-layout.styles";
 
 const inter = Inter({
@@ -73,6 +75,8 @@ export default function RootLayout({
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
         />
+        <SkipToContentLink />
+        <RouteAnnouncer />
         <Providers>{children}</Providers>
         <WebVitalsReporter />
       </body>

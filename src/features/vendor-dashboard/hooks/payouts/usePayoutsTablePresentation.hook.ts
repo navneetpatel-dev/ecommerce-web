@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { formatDate } from "@/shared/utils/formatting/formatDate";
 import type { PayoutEntry } from "@/shared/api/types";
 
 export interface PayoutRowViewModel {
@@ -11,8 +12,8 @@ export interface PayoutRowViewModel {
 }
 
 function formatPayoutPeriod(payout: PayoutEntry): string {
-  const start = new Date(payout.periodStart).toLocaleDateString();
-  const end = new Date(payout.periodEnd).toLocaleDateString();
+  const start = formatDate(payout.periodStart);
+  const end = formatDate(payout.periodEnd);
   return `${start} – ${end}`;
 }
 

@@ -36,7 +36,7 @@ export function VendorReportsPage() {
     >
       <div className={styles.pageContent}>
         <div className={styles.header}>
-          <h2 className={styles.title}>{LABELS.reports}</h2>
+          <h1 className={styles.title}>{LABELS.reports}</h1>
           <p className={styles.description}>{LABELS.reportsHubHint}</p>
         </div>
 

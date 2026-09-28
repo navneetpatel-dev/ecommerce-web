@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import type { Order } from "@/shared/api/types";
+import { formatDate } from "@/shared/utils/formatting/formatDate";
 import { PATHS } from "@/shared/constants/paths/paths";
 
 interface UseOrderCardParams {
@@ -14,7 +15,7 @@ export function useOrderCard({ order }: UseOrderCardParams) {
   }, [order.id]);
 
   const formattedDate = useMemo(() => {
-    return new Date(order.createdAt).toLocaleDateString();
+    return formatDate(order.createdAt);
   }, [order.createdAt]);
 
   const subOrders = useMemo(() => {

@@ -8,12 +8,12 @@ import { suggestionHref, useSearchDidYouMean } from "@/features/search";
 import { useProductListing } from "../../../hooks/listing/useProductListing.hook";
 import { useAppliedFilterChips } from "../../../hooks/filters/useAppliedFilterChips.hook";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { LABELS } from "@/shared/constants/labels";
 import { MobileActionBar } from "./MobileActionBar.component";
 import { ListingResults } from "./ListingResults.component";
 import { FiltersBottomSheet } from "./FiltersBottomSheet.component";
 import { SortBottomSheet } from "./SortBottomSheet.component";
 import { getListingEmptyState } from "./emptyState";
+import { getListingHeading } from "./listingHeading";
 import { productListingPageStyles } from "./productListingPage.styles";
 
 export function ProductListingPage() {
@@ -23,6 +23,7 @@ export function ProductListingPage() {
     (category) => category.id === listing.filters.categoryId,
   )?.name;
   const empty = getListingEmptyState(listing.filters, categoryName);
+  const heading = getListingHeading(listing.filters, categoryName);
   const chips = useAppliedFilterChips({
     filters: listing.filters,
     removeFilters: listing.removeFilters,
@@ -37,7 +38,7 @@ export function ProductListingPage() {
 
   return (
     <div className={productListingPageStyles.container}>
-      <h1 className={productListingPageStyles.srOnly}>{LABELS.allProducts}</h1>
+      <h1 className={productListingPageStyles.srOnly}>{heading}</h1>
 
       <MobileActionBar
         compareMode={listing.compareMode}

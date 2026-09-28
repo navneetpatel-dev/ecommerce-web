@@ -3,6 +3,7 @@ import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { shipmentOverviewCardStyles as styles } from "../../styles/deliveries/shipmentOverviewCard.styles";
+import { formatTime } from "@/shared/utils/formatting/formatDate";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 interface ShipmentOverviewCardProps {
@@ -37,12 +38,7 @@ export function ShipmentOverviewCard({
     </div>
   ) : null;
 
-  const assignedAtTime = assignedAt
-    ? new Date(assignedAt).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : null;
+  const assignedAtTime = assignedAt ? formatTime(assignedAt) : null;
   const assignedAtSection = assignedAt ? (
     <div className={styles.borderRow}>
       <dt className={styles.dt}>Assigned</dt>

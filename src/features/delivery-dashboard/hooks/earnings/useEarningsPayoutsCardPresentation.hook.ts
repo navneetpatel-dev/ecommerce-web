@@ -9,6 +9,7 @@ import {
 } from "../../api/agent/deliveryAgent.queries";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { formatDate } from "@/shared/utils/formatting/formatDate";
 import { LABELS } from "@/shared/constants/labels";
 
 export interface PayoutTableRowViewModel {
@@ -59,8 +60,8 @@ export function useEarningsPayoutsCardPresentation() {
   const payoutRows: PayoutTableRowViewModel[] = useMemo(
     () =>
       payoutsData.map((payout) => {
-        const start = new Date(payout.periodStart).toLocaleDateString();
-        const end = new Date(payout.periodEnd).toLocaleDateString();
+        const start = formatDate(payout.periodStart);
+        const end = formatDate(payout.periodEnd);
         const ref =
           payout.status === "FAILED"
             ? (payout.failureReason ?? "—")
@@ -90,7 +91,7 @@ export function useEarningsPayoutsCardPresentation() {
       earningsData.slice(0, 10).map((row) => ({
         id: row.id,
         typeLabel: row.sourceType === "DELIVERY" ? "Delivery" : "Pickup",
-        dateLabel: new Date(row.earnedAt).toLocaleDateString(),
+        dateLabel: formatDate(row.earnedAt),
         amountLabel: formatInrExact(row.amount),
       })),
     [earningsData],

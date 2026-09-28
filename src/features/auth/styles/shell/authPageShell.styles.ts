@@ -28,7 +28,7 @@ export const authPageShellStyles = {
   brandFeatures: "max-w-md",
   brandFooter: "mt-8 text-body-sm text-ink-faint",
   mainCol:
-    "relative flex min-h-[100dvh] min-w-0 flex-col items-center justify-center px-4 py-8 pt-16 sm:px-6 md:px-8 lg:px-10 lg:py-12 lg:pt-[calc(72px+env(safe-area-inset-top,0px))] 2xl:px-14",
+    "relative flex min-h-[100dvh] min-w-0 flex-col items-center justify-center px-4 py-8 pt-16 outline-none sm:px-6 md:px-8 lg:px-10 lg:py-12 lg:pt-[calc(72px+env(safe-area-inset-top,0px))] 2xl:px-14",
   ambientBlob:
     "pointer-events-none absolute inset-y-[8%] right-[6%] hidden w-[min(42%,18rem)] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--brand)_14%,transparent),transparent_70%)] blur-2xl lg:block",
   formWrapper:

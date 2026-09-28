@@ -14,6 +14,7 @@ import { AccountSection } from "./AccountSection.component";
 import { DesktopPrimaryNavSkeleton } from "./HeaderActionSkeletons.component";
 import { HeaderMenuButton } from "./HeaderMenuButton.component";
 import { MobileOverlays } from "./MobileOverlays.component";
+import { CartCountAnnouncer } from "@/shared/components/a11y/CartCountAnnouncer.component";
 import { headerStyles as styles } from "../../styles/header/header.styles";
 
 interface HeaderProps {
@@ -153,18 +154,21 @@ export function Header({
       </header>
 
       {showStorefrontChrome ? (
-        <MobileOverlays
-          currentUser={currentUser}
-          categories={categories}
-          mobileNavOpen={mobileNavOpen}
-          mobileSearchOpen={mobileSearchOpen}
-          cartItemCount={cartItemCount}
-          isLoading={actionsLoading}
-          onCloseMobileNav={onCloseMobileNav}
-          onOpenCart={onOpenCart}
-          onOpenMobileSearch={onOpenMobileSearch}
-          onCloseMobileSearch={onCloseMobileSearch}
-        />
+        <>
+          <CartCountAnnouncer count={cartItemCount} />
+          <MobileOverlays
+            currentUser={currentUser}
+            categories={categories}
+            mobileNavOpen={mobileNavOpen}
+            mobileSearchOpen={mobileSearchOpen}
+            cartItemCount={cartItemCount}
+            isLoading={actionsLoading}
+            onCloseMobileNav={onCloseMobileNav}
+            onOpenCart={onOpenCart}
+            onOpenMobileSearch={onOpenMobileSearch}
+            onCloseMobileSearch={onCloseMobileSearch}
+          />
+        </>
       ) : null}
     </>
   );

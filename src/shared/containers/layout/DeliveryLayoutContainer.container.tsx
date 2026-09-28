@@ -7,6 +7,7 @@ import { useDeliveryLayout } from "@/shared/hooks/navigation/useDeliveryLayout.h
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { deliveryPermissionsForPath } from "@/shared/constants/navigation/deliveryNav";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { MAIN_CONTENT_ID } from "@/shared/constants/a11y/landmarks";
 import { LABELS } from "@/shared/constants/labels";
 import { workspaceLayoutStyles as styles } from "./workspaceLayout.styles";
 
@@ -38,7 +39,11 @@ export function DeliveryLayoutContainer({
           currentPath={pathname}
           title={LABELS.deliveryDashboard}
         />
-        <main className={styles.deliveryMain}>
+        <main
+          id={MAIN_CONTENT_ID}
+          tabIndex={-1}
+          className={styles.deliveryMain}
+        >
           {pathname === PATHS.delivery.root ||
           pathname === PATHS.delivery.profile ? (
             children

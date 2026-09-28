@@ -4,6 +4,7 @@ import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import type { AgentPayout } from "@/features/delivery-dashboard";
 import { agentPayoutsPanelStyles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
 import { AgentPayoutActions } from "./AgentPayoutActions.component";
+import { formatDate } from "@/shared/utils/formatting/formatDate";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 interface AgentPayoutTableRowProps {
@@ -31,7 +32,7 @@ export function AgentPayoutTableRow({
     void onDownload(payout.id);
   }, [onDownload, payout.id]);
 
-  const periodString = `${new Date(payout.periodStart).toLocaleDateString()} – ${new Date(payout.periodEnd).toLocaleDateString()}`;
+  const periodString = `${formatDate(payout.periodStart)} – ${formatDate(payout.periodEnd)}`;
 
   const referenceOrReason =
     payout.status === "FAILED"

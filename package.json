@@ -6,7 +6,7 @@
     "dev": "next dev -p 5173",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . && node scripts/check-no-raw-error-message.mjs && node scripts/check-no-inline-currency.mjs && node scripts/check-no-client-money-math.mjs && node scripts/check-safe-area-offsets.mjs",
+    "lint": "eslint . && node scripts/check-no-raw-error-message.mjs && node scripts/check-no-inline-currency.mjs && node scripts/check-no-client-money-math.mjs && node scripts/check-safe-area-offsets.mjs && node scripts/check-page-structure.mjs && node scripts/check-date-locale.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

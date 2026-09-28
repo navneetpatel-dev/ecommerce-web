@@ -8,6 +8,7 @@ import { useAdminLayout } from "@/shared/hooks/navigation/useAdminLayout.hook";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { adminPermissionsForPath } from "@/shared/constants/navigation/adminNav";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { MAIN_CONTENT_ID } from "@/shared/constants/a11y/landmarks";
 import { LABELS } from "@/shared/constants/labels";
 import { workspaceLayoutStyles as styles } from "./workspaceLayout.styles";
 
@@ -49,7 +50,7 @@ export function AdminLayoutContainer({
           currentPath={pathname}
           title={LABELS.adminPanel}
         />
-        <main className={styles.main}>
+        <main id={MAIN_CONTENT_ID} tabIndex={-1} className={styles.main}>
           {pathname === PATHS.admin.root || pathname === PATHS.admin.profile ? (
             children
           ) : (

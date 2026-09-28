@@ -2395,3 +2395,57 @@ introducing new UX patterns. Nothing here adds client JS (budget unchanged at 11
 select), rail-offset module contract, and the admin dialog's field size.
 **Remaining:** the manual device pass — emulation cannot verify insets, so the checklist is the
 artifact and it needs a real iPhone/Android before release.
+
+---
+
+## WS-15 — Assistive-tech & input-purpose pass
+
+Audit first, then fixes; every item below was verified in the code before being touched (two
+"obvious" findings turned out to be false positives — Home _does_ have an `h1` via `motion.h1`,
+and the auth cards already render one — so they were left alone).
+
+**Verified gaps, fixed**
+
+- **No skip link (WCAG 2.4.1).** `SkipToContentLink` now renders as the first focusable element in
+  the root layout; all nine `<main>` landmarks (storefront, auth, three workspace shells, four
+  workspace error boundaries) carry `id={MAIN_CONTENT_ID}` + `tabIndex={-1}` so the target is real
+  and focusable everywhere, including the error pages.
+- **Client-side navigation was silent for assistive tech.** The App Router neither announces route
+  changes nor moves focus, so a screen-reader user got no confirmation and kept reading from the old
+  position. `useRouteAnnouncement` + `RouteAnnouncer` now announce the new page's heading (document
+  title as fallback) through a polite live region, and move focus into the page body — except when
+  the user is typing (debounced filter navigation) or an overlay owns focus, and never for in-page
+  anchors or the first render.
+- **Address/checkout fields had no autofill.** Only auth forms set `autoComplete`. The shared
+  `AddressFormFields` (used by both the account dialog and the checkout address step) now carries
+  `address-line1`, `address-line2`, `address-level2`, `address-level1`, `postal-code`,
+  `country-name` — the difference between a typed Indian address and an autofilled one on mobile.
+- **The product listing's `<h1>` said "All Products" on every one of its URLs.** It now names the
+  surface: the search term ("Results for “kurta”"), the category, or the generic label as fallback —
+  still visually hidden, so nothing moves on screen.
+- **Heading hierarchy:** the admin/vendor reports pages used `<h2>` as their page title, leaving
+  those documents without an `h1`; both are now `<h1>`. The four workspace error boundaries also
+  rendered their heading as `<h2>`—now `<h1>`.
+- **Cart changes were silent.** `CartCountAnnouncer` (mounted once in the storefront header) writes
+  to a polite live region when the count changes, with its own message for an emptied cart; it stays
+  silent on mount and on unchanged counts.
+- **Browser-locale dates inside an en-IN app.** 15 call sites used `toLocaleDateString()` /
+  `toLocaleTimeString([], …)` / `toLocaleString()` with no locale, so an order placed on a US-locale
+  browser rendered `3/14/2026` while the rest of the app showed `14 Mar 2026`. All now use the
+  shared `formatDate` / `formatTime` / `formatDateTime` (two new formatters added), including two
+  admin wallet tables that were pinned to en-IN but in a different date style.
+
+**Guards added (both wired into `npm run lint`, both probe-tested to fail on a violation)**
+
+- `scripts/check-page-structure.mjs` — every `<main>` must carry `id={MAIN_CONTENT_ID}`; every
+  feature with a `pages/` directory must render an `<h1>`; every `src/app` route file that renders
+  `<main>` must render one too. Stale allowlist entries fail the run.
+- `scripts/check-date-locale.mjs` — a locale-sensitive call must pass a locale-looking argument.
+
+**Tests added** (34): skip-link target/behaviour, route-announcement helpers and hook (silent first
+render, announce + focus, no focus while typing, silent on anchors), cart announcement + component,
+address autofill tokens, and the new date formatters.
+
+**Not done in this pass** (deliberately, needs its own scope): standardising `mode: "onTouched"`
+across the ~form hooks that omit it (validation timing), a storefront offline/stale banner, and the
+destructive-action audit across 29 `useCancel*/useDelete*/useRemove*` hooks.

@@ -85,6 +85,8 @@ export const commerceLabels = {
   newArrivals: "New Arrivals",
   topRated: "Top Rated",
   allProducts: "All Products",
+  /** Page heading for a search-results listing (mirrors the results copy style). */
+  searchResultsHeading: "Results for “{search}”",
   shop: "Shop",
   goToMyOrders: "Go to my orders",
   allOrders: "All orders",

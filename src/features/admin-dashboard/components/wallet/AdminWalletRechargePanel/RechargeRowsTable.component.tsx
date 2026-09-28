@@ -3,6 +3,7 @@ import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { WalletRechargeReport } from "../../../api/finance/reports.api";
+import { formatDate } from "@/shared/utils/formatting/formatDate";
 import { adminWalletRechargePanelStyles as styles } from "../../../styles/wallet/adminWalletRechargePanel.styles";
 
 type RechargeRow = WalletRechargeReport["rows"][number];
@@ -43,8 +44,7 @@ const COLUMNS: DataTableColumn<RechargeRow>[] = [
     id: "paidAt",
     header: LABELS.reportPaidAt,
     className: styles.cellMuted,
-    cell: (row) =>
-      row.paidAt ? new Date(row.paidAt).toLocaleDateString("en-IN") : "—",
+    cell: (row) => (row.paidAt ? formatDate(row.paidAt) : "—"),
   },
 ];
 

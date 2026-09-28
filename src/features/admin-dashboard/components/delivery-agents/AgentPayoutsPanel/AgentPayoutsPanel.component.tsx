@@ -10,6 +10,7 @@ import { useAgentPayoutsPanel } from "../../../hooks/delivery-agents/useAgentPay
 import { agentPayoutsPanelStyles as styles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
 import { AgentPayoutActions } from "./AgentPayoutActions.component";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
+import { formatDate } from "@/shared/utils/formatting/formatDate";
 import { LABELS } from "@/shared/constants/labels";
 
 /** Admin batch-processes settled agent earnings into payouts, then marks each paid/failed. */
@@ -46,7 +47,7 @@ export function AgentPayoutsPanel() {
       header: "Period",
       className: styles.tableCellMuted,
       cell: (row) =>
-        `${new Date(row.periodStart).toLocaleDateString()} – ${new Date(row.periodEnd).toLocaleDateString()}`,
+        `${formatDate(row.periodStart)} – ${formatDate(row.periodEnd)}`,
     },
     {
       id: "amount",

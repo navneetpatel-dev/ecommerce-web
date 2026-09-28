@@ -2,6 +2,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { WalletLiabilityReport } from "../../../api/finance/reports.api";
+import { formatDate } from "@/shared/utils/formatting/formatDate";
 import { adminWalletLiabilityPanelStyles as styles } from "../../../styles/wallet/adminWalletLiabilityPanel.styles";
 
 type LiabilityRow = WalletLiabilityReport["rows"][number];
@@ -42,7 +43,7 @@ const COLUMNS: DataTableColumn<LiabilityRow>[] = [
     id: "asOf",
     header: LABELS.reportAsOf,
     className: styles.cellMuted,
-    cell: (row) => new Date(row.asOf).toLocaleDateString("en-IN"),
+    cell: (row) => formatDate(row.asOf),
   },
 ];
 

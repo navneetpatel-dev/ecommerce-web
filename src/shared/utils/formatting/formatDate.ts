@@ -41,3 +41,28 @@ export function tryFormatDateTime(value: unknown): string | null {
     return formatDateTime(value);
   return null;
 }
+
+/**
+ * Date without the time (order lists, payout periods, report tables). Always
+ * en-IN: a browser-locale date would print 3/14/2026 inside an otherwise
+ * Indian-formatted app, and the API sends ISO strings the date alone is enough
+ * to label.
+ */
+export function formatDate(value: string | Date): string {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return date.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+/** Clock time on its own, e.g. "03:42 PM" (agent hand-off timestamps). */
+export function formatTime(value: string | Date): string {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return date
+    .toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })
+    .toUpperCase();
+}

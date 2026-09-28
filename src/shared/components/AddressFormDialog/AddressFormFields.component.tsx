@@ -60,6 +60,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-line1"
+          autoComplete="address-line1"
           value={form.line1}
           onChange={(e) => setField("line1", e.target.value)}
           placeholder={LABELS.addressLine1Placeholder}
@@ -83,6 +84,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-line2"
+          autoComplete="address-line2"
           value={form.line2}
           onChange={(e) => setField("line2", e.target.value)}
           placeholder={LABELS.addressLine2Placeholder}
@@ -98,6 +100,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-city"
+          autoComplete="address-level2"
           value={form.city}
           onChange={(e) => setField("city", e.target.value)}
           required
@@ -113,6 +116,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-state"
+          autoComplete="address-level1"
           value={form.state}
           onChange={(e) => setField("state", e.target.value)}
           required
@@ -129,6 +133,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
         <Input
           id="shared-addr-pincode"
           inputMode="numeric"
+          autoComplete="postal-code"
           maxLength={PINCODE_LENGTH}
           value={form.pincode}
           onChange={(e) => updatePincode(e.target.value)}
@@ -144,6 +149,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-country"
+          autoComplete="country-name"
           value={form.country}
           onChange={(e) => setField("country", e.target.value)}
           error={Boolean(fieldError("country"))}

@@ -1,4 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
+import { formatDateTime } from "@/shared/utils/formatting/formatDate";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 
 const PG_RECON_STATUS_LABELS: Record<string, string> = {
@@ -27,11 +28,15 @@ export function formatReportCell(
   }
   if (format === "points") {
     const n = Number(value);
-    return Number.isFinite(n) ? `${n.toLocaleString()} pts` : String(value);
+    return Number.isFinite(n)
+      ? `${n.toLocaleString("en-IN")} pts`
+      : String(value);
   }
   if (format === "date") {
     const d = new Date(String(value));
-    return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleString();
+    return Number.isNaN(d.getTime())
+      ? String(value)
+      : formatDateTime(value as string | Date);
   }
   if (typeof value === "object") return JSON.stringify(value);
   return String(value);

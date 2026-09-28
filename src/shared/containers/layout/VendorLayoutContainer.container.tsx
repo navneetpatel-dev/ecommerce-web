@@ -7,6 +7,7 @@ import { useVendorLayout } from "@/shared/hooks/navigation/useVendorLayout.hook"
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { vendorPermissionsForPath } from "@/shared/constants/navigation/vendorNav";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { MAIN_CONTENT_ID } from "@/shared/constants/a11y/landmarks";
 import { LABELS } from "@/shared/constants/labels";
 import { workspaceLayoutStyles as styles } from "./workspaceLayout.styles";
 
@@ -37,7 +38,7 @@ export function VendorLayoutContainer({
           currentPath={pathname}
           title={LABELS.vendorDashboard}
         />
-        <main className={styles.main}>
+        <main id={MAIN_CONTENT_ID} tabIndex={-1} className={styles.main}>
           {pathname === PATHS.vendor.root ||
           pathname === PATHS.vendor.profile ? (
             children

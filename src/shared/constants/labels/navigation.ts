@@ -17,6 +17,10 @@ export const navigationLabels = {
   becomeSeller: "Become a Seller",
   vendorDashboard: "Vendor Dashboard",
   deliveryDashboard: "Delivery Dashboard",
+  /** First focusable element on every page (WCAG 2.4.1). */
+  skipToContent: "Skip to main content",
+  /** Announced by the route announcer when a page has no heading to read. */
+  pageLoadedFallback: "Page loaded",
 
   // Admin nav
 } as const;

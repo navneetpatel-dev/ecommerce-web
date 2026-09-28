@@ -13,6 +13,10 @@ import { LiveDeliveryMap } from "../delivery-map/LiveDeliveryMap.component";
 import { timeSince } from "@/shared/utils/geo/geo";
 import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
 import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
+import {
+  formatDate,
+  formatDateTime,
+} from "@/shared/utils/formatting/formatDate";
 import { useTrackingResult } from "../../hooks/tracking/useTrackingResult.hook";
 
 export function TrackingResult({
@@ -50,12 +54,11 @@ export function TrackingResult({
           ) : null}
         </div>
         <p className={ordersComponentsStyles.updateText}>
-          Last update: {new Date(result.lastUpdate).toLocaleString()}
+          Last update: {formatDateTime(result.lastUpdate)}
         </p>
         {result.estimatedDeliveryDate ? (
           <p className={ordersComponentsStyles.detailText}>
-            Estimated delivery:{" "}
-            {new Date(result.estimatedDeliveryDate).toLocaleDateString()}
+            Estimated delivery: {formatDate(result.estimatedDeliveryDate)}
           </p>
         ) : null}
 

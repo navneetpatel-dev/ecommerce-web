@@ -101,3 +101,11 @@ All React components across `web/` must adhere to strict separation of concerns 
 - Bottom-rail offsets (tab-bar clearance, sticky bars, compare bar, toasts) come from `src/shared/constants/layout/mobileRails.ts` — never retype those class strings.
 - Text fields render at 16px on phones (`text-[1rem] sm:text-body`). iOS Safari zooms the page when a focused field is under 16px.
 - Device emulation **injects** safe-area insets, so it cannot verify them. For any layout, viewport or rail change, run the manual pass in `MOBILE-DEVICE-CHECKLIST.md`.
+
+**## 11. Accessibility & Formatting Conventions**
+
+- Every shell `<main>` carries `id={MAIN_CONTENT_ID}` (from `shared/constants/a11y/landmarks`) and `tabIndex={-1}`: the skip link and the route announcer both target it. `npm run lint` fails otherwise (`scripts/check-page-structure.mjs`).
+- Every feature with a `pages/` directory, and every `src/app` route that renders `<main>`, must render an `<h1>` (visually hidden is fine). Same guard.
+- Client-side navigation is announced by `RouteAnnouncer` and focus moves into the page body. Do not add a second announcer; put page-specific copy in the page's own `<h1>`.
+- Do not render dates/times with bare `toLocaleDateString()` / `toLocaleTimeString()` / `toLocaleString()` — use `formatDate` / `formatTime` / `formatDateTime`, or pass a locale. `scripts/check-date-locale.mjs` enforces it.
+- Shared, repeated a11y primitives live in `shared/components/a11y`, `shared/hooks/a11y`, `shared/utils/a11y` and `shared/styles/a11y`.

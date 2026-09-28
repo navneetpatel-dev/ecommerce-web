@@ -1,5 +1,6 @@
 "use client";
 
+import { MAIN_CONTENT_ID } from "@/shared/constants/a11y/landmarks";
 import { HeaderContainer } from "../../containers/header/HeaderContainer.container";
 import { Footer } from "@/shared/components/layout/Footer.component";
 import { CartDrawerContainer } from "@/features/cart";
@@ -12,7 +13,9 @@ export function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={styles.container}>
       <HeaderContainer />
-      <main className={styles.main}>{children}</main>
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className={styles.main}>
+        {children}
+      </main>
       <CartDrawerContainer />
       <Footer />
       <ScrollToTopContainer />
