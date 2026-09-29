@@ -15,6 +15,11 @@ export function PayoutDesktopRow({ row }: PayoutDesktopRowProps) {
       </TableCell>
       <TableCell className={payoutsTableStyles.desktopCellMono}>
         {row.amountLabel}
+        {row.breakdownLabel ? (
+          <span className={payoutsTableStyles.breakdownNote}>
+            {row.breakdownLabel}
+          </span>
+        ) : null}
       </TableCell>
       <TableCell className={payoutsTableStyles.desktopCell}>
         <StatusBadge status={row.status} />

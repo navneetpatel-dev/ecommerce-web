@@ -43,7 +43,7 @@ const COLUMNS: DataTableColumn<TopProduct>[] = [
   },
   {
     id: "revenue",
-    header: LABELS.revenue,
+    header: LABELS.gmv,
     className: TOP_PRODUCTS_NUMERIC_CELL,
     cell: (row) => formatInr(row.revenue),
   },

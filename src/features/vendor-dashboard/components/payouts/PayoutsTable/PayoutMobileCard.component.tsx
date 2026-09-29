@@ -14,6 +14,9 @@ export function PayoutMobileCard({ row }: PayoutMobileCardProps) {
         <StatusBadge status={row.status} />
       </div>
       <p className={payoutsTableStyles.mobileCardAmount}>{row.amountLabel}</p>
+      {row.breakdownLabel ? (
+        <p className={payoutsTableStyles.breakdownNote}>{row.breakdownLabel}</p>
+      ) : null}
       <p className={payoutsTableStyles.mobileCardDetails}>{row.detailsLabel}</p>
     </li>
   );

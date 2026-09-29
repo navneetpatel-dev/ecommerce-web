@@ -1,15 +1,11 @@
 import { LABELS } from "@/shared/constants/labels";
+import { istDateString } from "@/shared/utils/formatting/istDate";
 
 export type ExportFileFormat = "csv" | "pdf" | "xlsx";
 
 export function defaultRange() {
-  const to = new Date();
-  const from = new Date();
-  from.setDate(to.getDate() - 30);
-  return {
-    from: from.toISOString().slice(0, 10),
-    to: to.toISOString().slice(0, 10),
-  };
+  const now = new Date();
+  return { from: istDateString(now, 30), to: istDateString(now) };
 }
 
 export function labelForKey(key: string): string {

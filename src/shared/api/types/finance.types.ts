@@ -45,6 +45,14 @@ export interface PayoutEntry {
   vendorId: string;
   vendorName?: string | null;
   amount: number;
+  /** Sales net before TDS and GST on commission. */
+  grossAmount?: number;
+  /** 194-O TDS withheld (net of reversals and any catch-up). */
+  tdsAmount?: number;
+  /** GST on the platform's commission. */
+  commissionGstAmount?: number;
+  /** Cashback costs and returns after payout (net). */
+  adjustmentAmount?: number;
   periodStart: string;
   periodEnd: string;
   status: PayoutStatus;

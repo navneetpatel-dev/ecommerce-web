@@ -5,9 +5,10 @@ import {
   deliveryAdminApi,
   type DeliveryAgentPerformance,
 } from "@/features/delivery-dashboard";
+import { istDateString } from "@/shared/utils/formatting/istDate";
 
 function isoDate(date: Date): string {
-  return date.toISOString().slice(0, 10);
+  return istDateString(date);
 }
 
 const DEFAULT_TO = new Date();
