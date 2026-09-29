@@ -2687,3 +2687,57 @@ broke two line-limit ceilings, which is how this round started.
 **Gates after this round:** `tsc` 0 errors · `lint` 0 errors / 74 warnings · **426 tests** / 96 files ·
 `next build` succeeds · `limits` passes (baseline back to its single entry) · budgets **1173.3 KB**
 gzipped vs 1200 KB.
+
+## Third sweep: soft 404s, env footguns, and a status-code ceiling
+
+The first two sweeps covered UI/a11y and then motion, headers and injected JSON. This one went after
+indexing and configuration — and turned up one finding that invalidates the obvious fix.
+
+**Fixed:**
+
+- **Vendor storefronts were indexable at any slug.** `/vendors/<anything>` answered 200 with
+  `title: "Vendor"` and a generic description, and no `noindex`. It now mirrors what product pages do.
+- **`fetchSeoApi` could not tell "does not exist" from "API is down"**, which is why missing entities
+  were a silently indexable 200 one way and a de-indexing the other. `fetchSeoApiEntry` returns
+  `found | missing | unavailable` (HTTP 404 and a `NOT_FOUND` envelope are misses; everything else is
+  an outage), and the product route now applies `noindex` **only** to a miss — previously an outage
+  also returned "Product not found" + `noindex`, so a backend hiccup could push real products out of
+  the index.
+- **Help articles** served 200 for unknown slugs with no `noindex` (local content, so a miss is
+  definitive). `category` and `blog` already handled it.
+- **A missing production env var silently pointed everything at localhost.** `NEXT_PUBLIC_SITE_URL`
+  feeds canonicals, the sitemap and robots.txt, and its fallback is `http://localhost:5173`. A
+  prebuild guard (`scripts/check-production-env.mjs`, wired into `build` and `start`) fails when a
+  required var is unset and warns when one still points at localhost. Two constraints shaped it: it
+  must live in a **script**, not `next.config.mjs` (Next evaluates the config _before_ reading
+  `.env*`, so a check there sees every var as missing and fails a correct build — observed as a real
+  build failure), and `NEXT_PUBLIC_API_URL` **must be allowed to be empty**, because this repo ships
+  the same-origin proxy mode with it deliberately blank.
+- **The sitemap claimed false freshness.** Every entry carried `lastModified: new Date()` — the build
+  time — which teaches crawlers to distrust the field. Omitted, with a note to restore it per entry
+  once the API exposes real content timestamps.
+
+**The finding that changed the plan: no route in this app can return a 404 status for a missing
+entity.** Root and group `loading.tsx` boundaries stream every page, so the status is committed
+before the page body resolves, and `notFound()` renders the not-found UI _into a 200_. Measured, not
+assumed: an unmatched URL returns 404, while `/category/…`, `/help/…`, `/blog/…` and `/products/…`
+all return 200 with the not-found UI — and it stayed 200 even after removing the route-level
+`loading.tsx` (the group-level one still streams). `noindex` is therefore what actually keeps these
+URLs out of search. Real 404s would need either the app-wide loading boundaries removed (loses the
+navigation skeleton) or a middleware existence pre-check (an extra fetch per request plus duplicated
+logic). Left as a decision, not guessed at.
+
+**End-to-end verification** (stub backend + production server, three cases):
+
+| Case                    | Status | `noindex` | Body                                |
+| ----------------------- | ------ | --------- | ----------------------------------- |
+| API answers `NOT_FOUND` | 200    | present   | not-found UI                        |
+| API healthy             | 200    | absent    | real product/vendor, real `<title>` |
+| API unreachable         | 200    | absent    | page still renders (no de-indexing) |
+
+That matrix is the point of the discrimination: a miss is excluded from the index and shows the
+customer a sensible page; an outage does neither.
+
+**Gates:** `tsc` 0 errors · `lint` 0 errors / 74 warnings · **441 tests** / 99 files · `next build`
+succeeds (with the prebuild env guard running first) · `limits` passes · budgets **1173.3 KB**
+gzipped vs 1200 KB.

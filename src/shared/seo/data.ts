@@ -5,7 +5,11 @@ import type {
   BackendCategory,
 } from "./types";
 import { canonicalUrl } from "./canonical";
-import { fetchSeoApi } from "./fetchSeoApi";
+import {
+  fetchSeoApi,
+  fetchSeoApiEntry,
+  type SeoFetchEntry,
+} from "./fetchSeoApi";
 import { API } from "@/shared/constants/apiRoutes";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
@@ -38,12 +42,8 @@ interface BackendProduct {
   } | null;
 }
 
-export async function getProductBySlug(
-  slug: string,
-): Promise<ProductSeoData | null> {
-  const product = await fetchSeoApi<BackendProduct>(API.products.bySlug(slug));
-  if (!product) return null;
-
+/** Maps a backend product onto the SEO shape: breadcrumbs, price, vendor. */
+function toProductSeoData(product: BackendProduct): ProductSeoData {
   const breadcrumbs: BreadcrumbItem[] = [
     { name: LABELS.categoryBreadcrumbHome, href: canonicalUrl(PATHS.home) },
   ];
@@ -88,6 +88,29 @@ export async function getProductBySlug(
     },
     tags: product.tags || [],
   };
+}
+
+/**
+ * Reports *why* a lookup found nothing, which is what lets a route answer with a
+ * real 404 for a product that does not exist without 404-ing a valid one during
+ * an API outage.
+ */
+export async function getProductSeoEntry(
+  slug: string,
+): Promise<SeoFetchEntry<ProductSeoData>> {
+  const entry = await fetchSeoApiEntry<BackendProduct>(
+    API.products.bySlug(slug),
+  );
+  if (entry.status !== "found") return entry;
+  return { status: "found", data: toProductSeoData(entry.data) };
+}
+
+/** Metadata / JSON-LD lookup: missing and unavailable both yield null. */
+export async function getProductBySlug(
+  slug: string,
+): Promise<ProductSeoData | null> {
+  const entry = await getProductSeoEntry(slug);
+  return entry.status === "found" ? entry.data : null;
 }
 
 export async function getCategories(): Promise<CategorySeoData[]> {

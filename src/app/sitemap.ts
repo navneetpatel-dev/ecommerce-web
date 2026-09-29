@@ -12,6 +12,12 @@ import { getAllArticles } from "@/features/help";
  * vendor storefronts, help articles and blog posts. No hand-maintained URL
  * copies that can drift. Every fetch degrades to an empty list rather than
  * failing the build (see `fetchApi` in shared/seo/data.ts).
+ *
+ * `lastModified` is deliberately omitted: the only value available here is the
+ * build time, which stamps every URL as freshly changed on every deploy. A
+ * crawler that keeps seeing that stops trusting the field entirely — worse than
+ * having none. Add it back per entry once the API exposes a real content
+ * timestamp (`updatedAt`) for products and articles.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [products, categoryPaths, vendorSlugs] = await Promise.all([
@@ -22,7 +28,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const entries: MetadataRoute.Sitemap = PUBLIC_SITEMAP_ROUTES.map((route) => ({
     url: `${SITE.url}${route.path}`,
-    lastModified: new Date(),
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
@@ -30,7 +35,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const slug of products) {
     entries.push({
       url: `${SITE.url}/products/${slug}`,
-      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.6,
     });
@@ -39,7 +43,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const pathSlugs of categoryPaths) {
     entries.push({
       url: `${SITE.url}${PATHS.category(...pathSlugs)}`,
-      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
     });
@@ -48,7 +51,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const slug of vendorSlugs) {
     entries.push({
       url: `${SITE.url}${PATHS.vendorPage(slug)}`,
-      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.5,
     });
@@ -59,7 +61,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const article of getAllArticles()) {
     entries.push({
       url: `${SITE.url}${PATHS.help}/${article.slug}`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.5,
     });
@@ -68,7 +69,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const post of blogPosts) {
     entries.push({
       url: `${SITE.url}/blog/${post.slug}`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.4,
     });
@@ -76,7 +76,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   entries.push({
     url: `${SITE.url}/orders/tracking`,
-    lastModified: new Date(),
     changeFrequency: "monthly",
     priority: 0.3,
   });

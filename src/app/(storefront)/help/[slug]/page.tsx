@@ -15,7 +15,15 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = getArticleBySlug(slug);
-  if (!article) return { title: "Help" };
+  // Help articles are local content, so a miss is definitive: keep it out of the
+  // index. (The response itself cannot be a 404 — the root `loading.tsx` streams
+  // every route, so a status is committed before `notFound()` runs.)
+  if (!article) {
+    return {
+      title: "Help",
+      robots: { index: false, follow: false },
+    };
+  }
   return {
     title: article.title,
     description: article.summary,

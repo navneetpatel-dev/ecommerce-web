@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 5173",
-    "build": "next build",
-    "start": "next start",
+    "build": "node scripts/check-production-env.mjs && next build",
+    "start": "node scripts/check-production-env.mjs && next start",
     "lint": "eslint . && node scripts/check-no-raw-error-message.mjs && node scripts/check-no-inline-currency.mjs && node scripts/check-no-client-money-math.mjs && node scripts/check-safe-area-offsets.mjs && node scripts/check-page-structure.mjs && node scripts/check-date-locale.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

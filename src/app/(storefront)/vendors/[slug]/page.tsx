@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import {
   VendorStorefrontPage,
-  resolveVendorBySlugServer,
+  resolveVendorSeoEntry,
 } from "@/features/vendors";
 import { SITE } from "@/shared/seo/constants";
 import { canonicalUrl } from "@/shared/seo/canonical";
@@ -19,7 +20,21 @@ export async function generateMetadata({
   params,
 }: VendorPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const vendor = await resolveVendorBySlugServer(slug);
+  const entry = await resolveVendorSeoEntry(slug);
+
+  // A missing storefront must stay out of the index. The response status cannot
+  // be 404: the root/group `loading.tsx` streams every route, so `notFound()`
+  // renders the not-found UI into an already-committed 200 (measured on this
+  // app). `noindex` is what actually keeps `/vendors/<anything>` out of search.
+  if (entry.status === "missing") {
+    return {
+      title: SEO_VENDOR_FALLBACK_TITLE,
+      robots: { index: false, follow: false },
+    };
+  }
+
+  // An outage keeps the page as it was rather than de-indexing a real vendor.
+  const vendor = entry.status === "found" ? entry.data : null;
   const title = vendor?.businessName ?? SEO_VENDOR_FALLBACK_TITLE;
   const description =
     vendor?.description?.trim() ||
@@ -41,7 +56,12 @@ export async function generateMetadata({
 
 export default async function VendorPage({ params }: VendorPageProps) {
   const { slug } = await params;
-  const vendor = await resolveVendorBySlugServer(slug);
+  const entry = await resolveVendorSeoEntry(slug);
+  // The API says this storefront does not exist: answer 404 instead of serving
+  // an empty 200 that crawlers happily index. "unavailable" still renders, so a
+  // backend outage never hides a real vendor.
+  if (entry.status === "missing") notFound();
+  const vendor = entry.status === "found" ? entry.data : null;
 
   return (
     <>
