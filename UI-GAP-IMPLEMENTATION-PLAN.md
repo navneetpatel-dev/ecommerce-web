@@ -2628,3 +2628,62 @@ static route · `limits` passes · budgets **1172.2 KB** gzipped vs the 1200 KB 
 real-device run for notch/inset behaviour, live-region verbosity with a screen reader, and a
 web-vitals LCP/CLS pass on a real network. Everything else that was on this list is now verified in
 CI.
+
+## Second gap sweep (post-#20): five more fixes, six disproved
+
+The first sweep covered UI structure and a11y semantics. This one went after the layers underneath —
+motion, focus, security headers, injected JSON, and the gates themselves. It also found that PR #20
+broke two line-limit ceilings, which is how this round started.
+
+**Fixed:**
+
+- **JSON-LD could be closed early.** `JsonLd` injected `JSON.stringify(data)` into a `<script>` with
+  no escaping, and that payload carries user copy (product, vendor and help-article names). A name
+  containing `</script>` would end the block and let the rest render as markup. `escapeJsonForScript`
+  now emits `\u003c`/`\u003e`/`\u0026`, which is still valid JSON and parses back identically. Three
+  tests, including one that renders the component and parses the script body.
+- **Animations ignored "reduce motion".** framer-motion only honours the OS setting per component,
+  and just two of the ~24 animating files asked for it. `MotionPreferenceProvider`
+  (`MotionConfig reducedMotion="user"`) now wraps the provider tree, asserted through
+  `MotionConfigContext` rather than assumed. The CSS side was already correct: every
+  `--animate-*` token resolves through `--motion-*`, which the reduced-motion block zeroes.
+- **Two hardening headers missing.** `Strict-Transport-Security` and `Permissions-Policy` are now
+  set, with camera and geolocation scoped to `self` because delivery barcode scanning and the
+  location beacon depend on them — blocking either would have broken working features silently.
+  Verified on the wire (`next start` + `curl -I`), not just in config; a test pins the values.
+- **Two ceiling violations from #20.** `api/finance/reports.api.ts` was 216 lines: the wallet report
+  types moved to `walletReports.api.ts` and are re-exported, so all ten importers keep their import
+  path. `labels/reports.ts` was 209: eighteen keys moved to part 4 (191/195/197/41 now).
+
+**Checked and disproved** (worth recording so nobody re-audits them):
+
+- _Focus indicators removed without replacement_ — the 43 `outline-none` sites all pair with
+  something: `focus-visible:outline-2 outline-brand` on buttons and cards, `focus-visible:border-brand`
+  on fields, `focus-within:border-brand` on the number input, or deliberately marking a programmatic
+  focus target (`<main>`, dialogs).
+- _Missing `aria-sort`_ — there are no sortable table headers; product sorting is a select.
+- _`target="_blank"` without `rel`_ — all six carry `noreferrer` or `noopener noreferrer`; the early
+  grep matched line-by-line while `rel` sat on the next line.
+- _Image `alt` gaps_ — `MediaImage` requires `alt` and forwards it to `next/image`; there are zero raw
+  `<img>` tags in the tree.
+- _Search request races_ — suggestions use React Query keyed per term, so a slow earlier response
+  cannot overwrite a newer one; there is no manual fetch to cancel.
+- _Timer leaks_ — every file that calls `setInterval` also clears it.
+
+**Reported, deliberately not changed:**
+
+- **No CSP.** The other hardening headers are in place, but a policy strict enough to be worth having
+  needs a nonce wired through the App Router; adding one blind risks breaking inline bootstrap and
+  styles.
+- **No cross-tab sync.** Nothing listens for `storage`, so a theme change in one tab leaves others on
+  the old palette until reload, and a logout in one tab leaves another showing signed-in chrome until
+  its next request 401s and the session-expiry handler fires. The theme half is a small, safe change;
+  the auth half interacts with refresh-token rotation and deserves its own change with tests.
+- **~50 hardcoded user-facing strings** outside the legal copy (delivery-dashboard 26, account 12,
+  admin 8, cart 3, orders 2, cookie dialog 2, reviews/home/checkout 1 each). Not a documented rule
+  (AGENTS.md only mandates class-name centralisation), but it diverges from the `LABELS` convention —
+  and the regex undercounts, so treat it as a floor.
+
+**Gates after this round:** `tsc` 0 errors · `lint` 0 errors / 74 warnings · **426 tests** / 96 files ·
+`next build` succeeds · `limits` passes (baseline back to its single entry) · budgets **1173.3 KB**
+gzipped vs 1200 KB.

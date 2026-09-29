@@ -17,6 +17,7 @@ import { BrowseUrlTrackerContainer } from "@/shared/containers/system/BrowseUrlT
 import { RoleSurfaceGuard } from "@/shared/components/system/RoleSurfaceGuard.component";
 import { ThemePaletteProvider } from "@/shared/context/ThemePalette.context";
 import { ErrorReportingProvider } from "@/shared/providers/ErrorReportingProvider";
+import { MotionPreferenceProvider } from "@/shared/providers/MotionPreferenceProvider";
 import { createQueryPersister } from "@/shared/api/client/queryPersister";
 import { handleSessionExpiry } from "@/shared/lib/session/handleSessionExpiry";
 import { ServiceWorkerRegistration } from "@/shared/components/system/ServiceWorkerRegistration.component";
@@ -73,18 +74,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
         client={queryClient}
         persistOptions={persistOptions}
       >
-        <ThemePaletteProvider>
-          <ErrorReportingProvider />
-          <ServiceWorkerRegistration />
-          <AuthBootstrap />
-          <RouteScrollResetContainer />
-          <BrowseUrlTrackerContainer />
-          <LoginRequiredDialogContainer />
-          <ToastStackContainer />
-          <ExportJobsTrayContainer />
-          <ImpersonationBanner />
-          <RoleSurfaceGuard>{children}</RoleSurfaceGuard>
-        </ThemePaletteProvider>
+        <MotionPreferenceProvider>
+          <ThemePaletteProvider>
+            <ErrorReportingProvider />
+            <ServiceWorkerRegistration />
+            <AuthBootstrap />
+            <RouteScrollResetContainer />
+            <BrowseUrlTrackerContainer />
+            <LoginRequiredDialogContainer />
+            <ToastStackContainer />
+            <ExportJobsTrayContainer />
+            <ImpersonationBanner />
+            <RoleSurfaceGuard>{children}</RoleSurfaceGuard>
+          </ThemePaletteProvider>
+        </MotionPreferenceProvider>
       </PersistQueryClientProvider>
     </QueryClientProvider>
   );

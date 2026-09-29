@@ -52,6 +52,22 @@ const nextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "DENY" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          // Browsers ignore this over plain HTTP, so it is inert locally and
+          // only binds once the app is served over TLS. `preload` and
+          // `includeSubDomains` are deliberately omitted: the latter would
+          // force HTTPS on every sibling subdomain (image hosts, API) and the
+          // deployment does not guarantee they all terminate TLS yet.
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000",
+          },
+          // Camera: delivery barcode scanning. Geolocation: delivery location
+          // beacon and address capture. Everything else stays switched off.
+          {
+            key: "Permissions-Policy",
+            value:
+              "camera=(self), geolocation=(self), microphone=(), payment=(self)",
+          },
         ],
       },
     ];

@@ -1,5 +1,11 @@
 import { apiClient } from "@/shared/api/client/client";
 import { API } from "@/shared/constants/apiRoutes";
+import type {
+  CashbackWriteOffReport,
+  WalletLiabilityReport,
+  WalletRechargeReport,
+  WriteOffReportRange,
+} from "./walletReports.api";
 
 export type ReportRange = {
   from: string;
@@ -63,86 +69,19 @@ export type ReconciliationReport = {
   error: string | null;
 };
 
-export type WalletLiabilityRow = {
-  userId: string;
-  balance: number;
-  asOf: string;
-  purchasedPoints?: number;
-  promotionalPoints?: number;
-};
-
-export type WalletLiabilityReport = {
-  totalLiability: number;
-  customerCount: number;
-  totalPointsLiability?: number;
-  purchasedPointsLiability?: number;
-  promotionalPointsLiability?: number;
-  rows: WalletLiabilityRow[];
-  pagination?: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  };
-};
-
-export type WalletRechargeRow = {
-  id: string;
-  userId: string;
-  amountInr: number;
-  pointsCredited: number;
-  status: string;
-  razorpayOrderId: string | null;
-  paidAt: string | null;
-  createdAt: string;
-};
-
-export type WalletRechargeReport = {
-  from: string;
-  to: string;
-  totalInrCollected: number;
-  successCount: number;
-  failedCount: number;
-  pointsIssued: number;
-  rows: WalletRechargeRow[];
-  pagination?: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  };
-};
-
-export type CashbackWriteOffRow = {
-  id: string;
-  userId: string;
-  originalClawbackAmount: number;
-  recoveredAmount: number;
-  writtenOffAmount: number;
-  bornBy: "PLATFORM" | "VENDOR";
-  referenceType: string | null;
-  referenceId: string | null;
-  createdAt: string;
-};
-
-export type CashbackWriteOffReport = {
-  from: string;
-  to: string;
-  bornBy: "PLATFORM" | "VENDOR" | null;
-  recoveredTotal: number;
-  writtenOffTotal: number;
-  rows: CashbackWriteOffRow[];
-  pagination?: {
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  };
-};
-
-export type WriteOffReportRange = ReportRange & {
-  bornBy?: "PLATFORM" | "VENDOR";
-};
+/**
+ * Wallet report shapes live next door to keep both files under the ceiling;
+ * re-exported so every existing import from this module keeps working.
+ */
+export type {
+  CashbackWriteOffReport,
+  CashbackWriteOffRow,
+  WalletLiabilityReport,
+  WalletLiabilityRow,
+  WalletRechargeReport,
+  WalletRechargeRow,
+  WriteOffReportRange,
+} from "./walletReports.api";
 
 export type VendorReportSummary = {
   from: string;
