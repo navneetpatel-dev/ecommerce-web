@@ -2,13 +2,27 @@ import { useMemo } from "react";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { formatDate } from "@/shared/utils/formatting/formatDate";
 import type { PayoutEntry } from "@/shared/api/types";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 
 export interface PayoutRowViewModel {
   id: string;
   status: string;
   periodLabel: string;
   amountLabel: string;
+  /** What the amount is made of, as the API returned it; null for older payouts. */
+  breakdownLabel: string | null;
   detailsLabel: string;
+}
+
+function formatPayoutBreakdown(payout: PayoutEntry): string | null {
+  if (payout.grossAmount == null) return null;
+  return formatLabel(LABELS.payoutBreakdownNote, {
+    gross: formatInr(payout.grossAmount),
+    tds: formatInr(payout.tdsAmount),
+    gst: formatInr(payout.commissionGstAmount),
+    adjustments: formatInr(payout.adjustmentAmount),
+  });
 }
 
 function formatPayoutPeriod(payout: PayoutEntry): string {
@@ -41,6 +55,7 @@ export function usePayoutsTablePresentation(payouts?: {
         status: payout.status,
         periodLabel: formatPayoutPeriod(payout),
         amountLabel: formatInr(payout.amount),
+        breakdownLabel: formatPayoutBreakdown(payout),
         detailsLabel: formatPayoutDetails(payout),
       })),
     [items],

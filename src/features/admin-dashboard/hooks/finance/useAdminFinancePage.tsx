@@ -126,6 +126,10 @@ export function useAdminFinancePage(): AdminFinancePageModel {
       actions: payoutActions,
       columnKeys: [
         "vendorName",
+        "grossAmount",
+        "tdsAmount",
+        "commissionGstAmount",
+        "adjustmentAmount",
         "amount",
         "periodStart",
         "periodEnd",

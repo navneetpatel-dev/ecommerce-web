@@ -45,6 +45,12 @@ const COLUMNS: DataTableColumn<VendorSettlementRow>[] = [
     cell: (row) => formatInr(row.payoutPaid),
   },
   {
+    id: "payoutFailed",
+    header: LABELS.payoutFailed,
+    className: styles.cellNum,
+    cell: (row) => formatInr(row.payoutFailed),
+  },
+  {
     id: "payoutStatus",
     header: LABELS.payoutStatus,
     truncate: false,

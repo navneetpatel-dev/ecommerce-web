@@ -6,6 +6,8 @@ import { cn } from "@/shared/utils/dom/cn";
 import { ReportExportButtons, type ExportFileFormat } from "@/features/reports";
 import type { ReconciliationReport } from "../../../api/finance/reports.api";
 import { MetricCard } from "../../shared/MetricCard.component";
+import { SettlementReconciliationLines } from "./SettlementReconciliationLines.component";
+import { useSettlementReconciliationLines } from "../../../hooks/finance/useSettlementReconciliationLines.hook";
 import { adminSettlementReportsPanelStyles } from "../../../styles/finance/adminSettlementReportsPanel.styles";
 
 interface SettlementReconciliationCardProps {
@@ -23,6 +25,7 @@ export function SettlementReconciliationCard({
   message,
   onExport,
 }: SettlementReconciliationCardProps) {
+  const lines = useSettlementReconciliationLines(recon);
   return (
     <div className={adminSettlementReportsPanelStyles.reconCard}>
       <div className={adminSettlementReportsPanelStyles.reconHeader}>
@@ -59,6 +62,7 @@ export function SettlementReconciliationCard({
           {LABELS.reconciliationDifference}: {formatInr(recon.difference)}
         </p>
       ) : null}
+      <SettlementReconciliationLines lines={lines} />
       <div className={adminSettlementReportsPanelStyles.reconGrid}>
         {recon.walletRechargeInflow != null ? (
           <MetricCard

@@ -17,6 +17,7 @@ export const payoutsTableStyles = {
   mobileCardHeader: TABLE_CARD_MOBILE_HEADER,
   mobileCardPeriod: "text-[0.875rem] text-ink",
   mobileCardAmount: "mt-2 font-mono text-[1rem] text-ink",
+  breakdownNote: "block font-sans text-[0.7rem] text-ink-muted",
   mobileCardDetails: "mt-2 text-body-sm text-ink-muted",
   desktopCell: TABLE_DATA_CELL_CLASS,
   desktopCellBody: cn(TABLE_DATA_CELL_CLASS, "text-body"),
