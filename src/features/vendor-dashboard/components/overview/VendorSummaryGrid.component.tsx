@@ -23,7 +23,7 @@ export function VendorSummaryGrid({ summary }: VendorSummaryGridProps) {
         icon={Truck}
       />
       <SummaryCard
-        title="Month Revenue"
+        title="Month GMV"
         value={monthRevenue}
         icon={Banknote}
         valueClassName={vendorSummaryGridStyles.revenueValue}

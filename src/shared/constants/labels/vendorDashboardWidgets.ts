@@ -4,10 +4,11 @@ export const vendorDashboardWidgetsLabels = {
   vendorLowStockEmpty: "No low-stock items right now.",
   vendorLowStockMoreItemsSuffix: "more low-stock item(s)",
   vendorAnalyticsTitle: "Sales analytics",
-  vendorAnalyticsRevenueTrend: "Revenue trend",
-  vendorAnalyticsRevenueTrendHint: "Daily revenue over the last 30 days.",
+  vendorAnalyticsRevenueTrend: "GMV trend",
+  vendorAnalyticsRevenueTrendHint:
+    "Daily GMV (before discounts, excl. GST) over the last 30 days.",
   vendorAnalyticsTopProducts: "Top products",
-  vendorAnalyticsTopProductsHint: "Ranked by revenue over the last 30 days.",
+  vendorAnalyticsTopProductsHint: "Ranked by GMV over the last 30 days.",
   vendorAnalyticsFulfillmentSla: "Fulfillment SLA",
   vendorAnalyticsFulfillmentSlaHint:
     "Share of delivered orders shipped within SLA.",
