@@ -2,7 +2,7 @@
 
 import { SearchBarContainer } from "@/features/search";
 import { MobileTabBar } from "@/shared/components/layout/MobileTabBar.component";
-import { BottomSheet } from "@/shared/components/BottomSheet.component";
+import { BottomSheet } from "@/shared/containers/dialogs";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category, CurrentUser } from "@/shared/api/types";
 import { MobileNavDrawer } from "../mobile-nav/MobileNavDrawer.component";

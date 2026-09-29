@@ -63,7 +63,7 @@ export function generateProductMetadata(product: ProductSeoData): Metadata {
       description,
       site: SITE.twitter,
       creator: SITE.twitter,
-      images: product.imageUrl ? [{ url: product.imageUrl }] : undefined,
+      /* Image comes from the segment's generated `twitter-image`. */
     },
     robots: {
       index: true,

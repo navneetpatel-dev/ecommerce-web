@@ -23,8 +23,14 @@ export function VariantAttributeGroup({
     isActive,
   );
 
+  /*
+   * `role="group"`, not `radiogroup`: the options are toggle buttons carrying
+   * `aria-pressed`, and a radiogroup requires `role="radio"` children with
+   * `aria-checked` plus arrow-key navigation. A labelled group with pressed
+   * toggles is the valid, honest description of what this is.
+   */
   return (
-    <div role="radiogroup" aria-labelledby={titleId}>
+    <div role="group" aria-labelledby={titleId}>
       <div className={variantSelectorStyles.groupHeader}>
         <p id={titleId} className={variantSelectorStyles.groupTitle}>
           {groupKey}

@@ -2507,3 +2507,60 @@ structured-data builders (4), plus the form-mode and normalisation paths.
 
 **Remaining:** the two items already listed above (offline/stale banner for the storefront, and the
 destructive-action confirmation sweep across 29 hooks), and WS-14's real-device pass.
+
+---
+
+## WS-17 — Final audit pass: a11y semantics, listing drift, SEO coverage
+
+A full sweep of the areas no earlier workstream had touched. Three claims from the previous audit
+were **corrected on inspection** rather than "fixed": the card compare control is already a native
+checkbox, delivery tracking already has a live location socket, and the quantity steppers are
+already keyboard-served through the input's arrow keys. No `aria-sort` was invented either — the
+tables are not sortable in place.
+
+**Fixed**
+
+- **Invalid ARIA in the variant selector.** The group was `role="radiogroup"` while its options were
+  buttons with `aria-pressed`; a radiogroup requires `role="radio"` children (and arrow-key
+  navigation). Now a labelled `role="group"` of pressed toggles — the honest description.
+- **Numeric fields never announced themselves as spinbuttons.** They are `type="text"` with
+  ArrowUp/ArrowDown support, so AT users had no way to know the arrows do anything. `NumberInput`
+  now exposes `role="spinbutton"` + `aria-valuenow/min/max` (valuenow omitted while empty, rather
+  than claiming a zero), and the steppers document why they stay out of the tab order.
+- **Listing action bars had drifted.** `MobileActionBar` existed twice; only the product listing
+  disabled Sort during search with an explanation, so the category listing offered a control that
+  cannot work. One shared component now, with a `variant` prop preserving each surface's spacing.
+- **Customer order tracking never refreshed.** It was a one-shot lookup: a customer watching a
+  parcel had to re-submit the number to see the next scan. It now polls every 60s while the page is
+  visible, stops at customer-terminal states (DELIVERED / RTO_DELIVERED / CANCELLED — not the
+  agent's terminal set, since FAILED/RTO_INITIATED are still reschedulable), and swallows refresh
+  failures so a dropped request never replaces a good status.
+- **Dead FAQ content removed.** `faqItems` + `FaqView` + `FaqPage` were unreachable (`/faq`
+  redirects to `/help`), carried hardcoded English copy, and would have injected a second `<h1>` if
+  embedded as-is. Deleted rather than half-revived; `generateFAQSchema` stays in the SEO layer,
+  tested, for the day a proper Help FAQ section ships.
+- **`BottomSheet` alias** moved from `shared/components/` (a component file exporting a _container_)
+  to the `shared/containers/dialogs` barrel.
+- **Sitemap covered only half the indexable content.** Categories (with correct nested paths, not
+  bare slugs), vendor storefronts and help articles are now included — the Article-schema help
+  pages previously had nothing pointing crawlers at them. Enumerators moved to
+  `shared/seo/sitemapData.ts` (which also brought `data.ts` back under its line ceiling) and all of
+  them degrade to an empty list so an API outage cannot fail a build.
+- **Per-product social cards.** A shared product link used to preview the raw square catalogue
+  photo, which every platform cropped. `/products/[slug]` now ships a generated 1200×630
+  `opengraph-image` (reused by `twitter-image`), and products declare no `openGraph.images` so the
+  card is the only candidate regardless of file-vs-metadata precedence.
+
+**Verified fine (so the audit is trustworthy):** no `TODO`/`FIXME`, no stray `console.log`; 102/103
+route files carry metadata (the three exceptions are redirects/client routes) with 84 no-indexed;
+`robots.ts` correct for prod/preview; canonicals correct including facet-free listing URLs; loading
+coverage via ancestor `loading.tsx`; empty states on every list surface; search suggestions use
+`combobox` + `aria-activedescendant`; `aria-current` on nav/pagination/breadcrumbs/steps; a service
+worker with delivery-shell precaching, offline queue and offline banner.
+
+**Tests added (10):** tracking refresh (3), category-path nesting + vendor enumeration (4),
+shared `MobileActionBar` behaviour (3), spinbutton semantics (3) — plus the earlier suites.
+
+**Still open, unchanged:** the storefront offline/stale indicator, the destructive-action sweep, and
+the unverifiable-by-static-analysis set (contrast, 320px/200% zoom, real-device insets, live-region
+verbosity, field LCP/CLS).

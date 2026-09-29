@@ -8,7 +8,7 @@ import { suggestionHref, useSearchDidYouMean } from "@/features/search";
 import { useProductListing } from "../../../hooks/listing/useProductListing.hook";
 import { useAppliedFilterChips } from "../../../hooks/filters/useAppliedFilterChips.hook";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { MobileActionBar } from "./MobileActionBar.component";
+import { MobileActionBar } from "@/shared/components/listing/MobileActionBar.component";
 import { ListingResults } from "./ListingResults.component";
 import { FiltersBottomSheet } from "./FiltersBottomSheet.component";
 import { SortBottomSheet } from "./SortBottomSheet.component";

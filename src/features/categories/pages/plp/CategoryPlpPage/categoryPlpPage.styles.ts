@@ -30,11 +30,6 @@ export const categoryPlpPageStyles = {
   ),
   chevronIcon:
     "h-3.5 w-3.5 text-ink-faint transition-colors group-hover:text-brand",
-  actionBarContainer:
-    "sticky top-14 z-20 -mx-4 mb-3 border-y border-line bg-paper/95 px-4 py-2 backdrop-blur-sm xl:hidden lg:top-[72px]",
-  buttonRow: "flex items-center gap-1.5 sm:gap-2",
-  actionButton: "min-w-0 flex-1 gap-1 px-2 sm:gap-1.5 sm:px-4",
-  buttonText: "truncate",
   resultsContainer: "min-w-0 flex-1",
   sortBar: "mb-4 border-b-0 pb-0 xl:mb-6 xl:border-b xl:pb-4",
   emptyState: "py-14 md:py-16",

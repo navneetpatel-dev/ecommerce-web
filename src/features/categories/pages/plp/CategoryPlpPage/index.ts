@@ -4,6 +4,5 @@
 export { CategoryHeader } from "./CategoryHeader.component";
 export { CompareTray } from "./CompareTray.component";
 export { FilterSheet } from "./FilterSheet.component";
-export { MobileActionBar } from "./MobileActionBar.component";
 export { ProductResults } from "./ProductResults.component";
 export { SortSheet } from "./SortSheet.component";

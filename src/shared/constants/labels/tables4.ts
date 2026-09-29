@@ -12,6 +12,8 @@ export const tables4Labels = {
   ratingFilterUnavailableDuringSearch:
     "Rating filter isn't available for search results.",
   compare: "Compare",
+  /** Compare control label on a product card; `{name}` is the product. */
+  compareOptionAria: "Compare {name}",
   comparePageTitle: "Compare products",
   compareEmptyHeading: "Nothing to compare yet",
   compareMinRequired: "Add at least 2 products to compare.",

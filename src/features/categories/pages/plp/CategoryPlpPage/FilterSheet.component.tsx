@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
-import { BottomSheet } from "@/shared/components/BottomSheet.component";
+import { BottomSheet } from "@/shared/containers/dialogs";
 import { FilterSidebar } from "@/features/products";
 import type { ProductFilters } from "@/features/products";
 import type { CategoryFacet } from "@/shared/api/types";

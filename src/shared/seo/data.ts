@@ -1,25 +1,16 @@
-import type { BreadcrumbItem, ProductSeoData, CategorySeoData } from "./types";
+import type {
+  BreadcrumbItem,
+  ProductSeoData,
+  CategorySeoData,
+  BackendCategory,
+} from "./types";
 import { canonicalUrl } from "./canonical";
+import { fetchSeoApi } from "./fetchSeoApi";
 import { API } from "@/shared/constants/apiRoutes";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { PRODUCT_STATUS } from "@/shared/constants/statuses";
-import { getServerApiOrigin } from "@/shared/api/client/serverOrigin";
 import { LABELS } from "@/shared/constants/labels";
 import { customerPrice } from "@/shared/utils/pricing/customerPrice";
-
-async function fetchApi<T>(path: string): Promise<T | null> {
-  try {
-    const res = await fetch(`${getServerApiOrigin()}${path}`, {
-      headers: { "Content-Type": "application/json" },
-      next: { revalidate: 300 },
-    });
-    if (!res.ok) return null;
-    const body = (await res.json()) as { success: boolean; data: T };
-    return body.success ? body.data : null;
-  } catch {
-    return null;
-  }
-}
 
 interface BackendProduct {
   id: string;
@@ -47,18 +38,10 @@ interface BackendProduct {
   } | null;
 }
 
-interface BackendCategory {
-  id: string;
-  name: string;
-  slug: string;
-  parentId: string | null;
-  children?: BackendCategory[];
-}
-
 export async function getProductBySlug(
   slug: string,
 ): Promise<ProductSeoData | null> {
-  const product = await fetchApi<BackendProduct>(API.products.bySlug(slug));
+  const product = await fetchSeoApi<BackendProduct>(API.products.bySlug(slug));
   if (!product) return null;
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -108,7 +91,7 @@ export async function getProductBySlug(
 }
 
 export async function getCategories(): Promise<CategorySeoData[]> {
-  const categories = await fetchApi<BackendCategory[]>(API.categories.list);
+  const categories = await fetchSeoApi<BackendCategory[]>(API.categories.list);
   if (!categories) return [];
   return categories.map((cat) => ({
     name: cat.name,
@@ -132,7 +115,7 @@ export async function getLiveProductSlugs(): Promise<string[]> {
     offset < SITEMAP_MAX_PRODUCTS;
     offset += SITEMAP_PRODUCT_PAGE_SIZE
   ) {
-    const data = await fetchApi<{ items: BackendProduct[] }>(
+    const data = await fetchSeoApi<{ items: BackendProduct[] }>(
       API.products.list(
         `status=${PRODUCT_STATUS.LIVE}&limit=${SITEMAP_PRODUCT_PAGE_SIZE}&offset=${offset}`,
       ),
@@ -147,7 +130,7 @@ export async function getLiveProductSlugs(): Promise<string[]> {
 export async function getCategorySlugs(): Promise<
   { name: string; slug: string }[]
 > {
-  const categories = await fetchApi<BackendCategory[]>(API.categories.list);
+  const categories = await fetchSeoApi<BackendCategory[]>(API.categories.list);
   if (!categories) return [];
 
   const result: { name: string; slug: string }[] = [];

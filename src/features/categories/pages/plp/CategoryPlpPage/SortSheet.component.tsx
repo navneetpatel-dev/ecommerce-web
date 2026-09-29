@@ -1,4 +1,4 @@
-import { BottomSheet } from "@/shared/components/BottomSheet.component";
+import { BottomSheet } from "@/shared/containers/dialogs";
 import { SelectableOptionButton } from "@/shared/components/forms/SelectableOptionButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import { categoryPlpPageStyles as styles } from "./categoryPlpPage.styles";

@@ -14,6 +14,12 @@ export function ogDefaults(): OpenGraph {
   };
 }
 
+/**
+ * Product Open Graph fields. Deliberately declares **no** `images`: the
+ * `/products/[slug]` segment ships a generated 1200x630 `opengraph-image`, and
+ * a declared image would compete with it (the raw catalogue photo is square, so
+ * platforms cropped it).
+ */
 export function productOg(product: ProductSeoData): OpenGraph {
   return {
     type: "website",
@@ -22,8 +28,5 @@ export function productOg(product: ProductSeoData): OpenGraph {
     title: product.name,
     description: product.description,
     url: productCanonical(product.slug),
-    images: product.imageUrl
-      ? [{ url: product.imageUrl, width: 800, height: 800, alt: product.name }]
-      : undefined,
   };
 }

@@ -7,7 +7,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { useCategoryPlp } from "../../../hooks/plp/useCategoryPlp.hook";
 import { CategoryHeader } from "./CategoryHeader.component";
-import { MobileActionBar } from "./MobileActionBar.component";
+import { MobileActionBar } from "@/shared/components/listing/MobileActionBar.component";
 import { ProductResults } from "./ProductResults.component";
 import { FilterSheet } from "./FilterSheet.component";
 import { SortSheet } from "./SortSheet.component";
@@ -63,6 +63,7 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
         onOpenSort={plp.openSort}
         compareMode={plp.compareMode}
         onToggleCompareMode={plp.toggleCompareMode}
+        variant="dense"
       />
 
       <div className={styles.layoutRow}>

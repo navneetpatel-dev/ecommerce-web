@@ -9,7 +9,14 @@ interface NumberInputSteppersProps {
   onBump: (direction: 1 | -1) => void;
 }
 
-/** Vertical up/down stepper buttons for NumberInput. */
+/**
+ * Vertical up/down stepper buttons for NumberInput.
+ *
+ * Deliberately out of the tab order: the adjacent input is a spinbutton that
+ * already answers ArrowUp/ArrowDown (and accepts typing), so tabbing through
+ * both would give every quantity field three tab stops for one value. These
+ * are the pointer affordance; they stay aria-labelled for AT that browses.
+ */
 export function NumberInputSteppers({
   disabled,
   atMin,

@@ -3,6 +3,7 @@
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { CardControls } from "./CardControls.component";
 import { CardDetails } from "./CardDetails.component";
 import { CardMedia } from "./CardMedia.component";
@@ -101,7 +102,9 @@ export function ProductCard({
               checked={isCompared}
               disabled={compareAtLimit && !isCompared}
               onCheckedChange={handleCompareCheckedChange}
-              aria-label={`Compare ${product.name}`}
+              aria-label={formatLabel(LABELS.compareOptionAria, {
+                name: product.name,
+              })}
             />
             {LABELS.compare}
           </label>

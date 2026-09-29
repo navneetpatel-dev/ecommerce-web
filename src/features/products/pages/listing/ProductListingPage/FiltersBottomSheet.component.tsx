@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { BottomSheet } from "@/shared/components/BottomSheet.component";
+import { BottomSheet } from "@/shared/containers/dialogs";
 import { FilterSidebar } from "@/features/products/components/filters/FilterSidebar.component";
 import { LABELS } from "@/shared/constants/labels";
 import { productListingPageStyles } from "./productListingPage.styles";

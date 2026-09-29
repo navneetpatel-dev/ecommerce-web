@@ -115,3 +115,9 @@ All React components across `web/` must adhere to strict separation of concerns 
 - Long forms call `useUnsavedChanges(form.formState.isDirty)`. Forms use `mode: "onTouched"` so errors appear on blur, not only on submit.
 - Phone input is validated and stored through `shared/schemas/phone.schema` + `shared/utils/validation/phoneNumber` — never a local regex.
 - Structured data is server-generated from visible content only: `Product`/`BreadcrumbList` (PDP, category), `Article` (help articles), `Store` (vendor storefronts), `Organization`/`WebSite` (home). Add a builder to `shared/seo/structured-data.ts` rather than inlining JSON-LD.
+- Product social images are generated per segment (`products/[slug]/opengraph-image.tsx`, reused by `twitter-image.tsx`); products intentionally declare no `openGraph.images`, so the generated 1200×630 card is the only candidate.
+- Sitemap enumerators live in `shared/seo/sitemapData.ts` and must degrade to an empty list, never fail the build. New indexable content types belong there, plus an entry in `app/sitemap.ts`.
+- Numeric fields are spinbuttons: `NumberInput` answers ArrowUp/ArrowDown and exposes `role="spinbutton"` with `aria-valuenow/min/max`. Its stepper buttons stay out of the tab order by design.
+- A group of toggle buttons is `role="group"` + `aria-pressed`, never `role="radiogroup"` (radios need `role="radio"` children and arrow-key navigation).
+- Listing action bars (filters/sort/compare) are the shared `MobileActionBar`; the `variant` prop is the only per-surface difference.
+- Customer-facing "live" surfaces refresh themselves (tracking polls until the shipment settles; cart and wallet refetch on focus) instead of relying on a manual reload.

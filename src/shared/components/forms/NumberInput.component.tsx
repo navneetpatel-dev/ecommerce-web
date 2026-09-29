@@ -165,6 +165,13 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           inputMode="decimal"
           disabled={disabled}
           value={display}
+          /* ArrowUp/ArrowDown adjust the value below, so the field announces
+             itself as a spinbutton; `aria-valuenow` is omitted while empty
+             rather than claiming a zero the customer never entered. */
+          role="spinbutton"
+          aria-valuenow={numeric}
+          aria-valuemin={min}
+          aria-valuemax={max}
           aria-invalid={error ? true : undefined}
           className={numberInputStyles.input}
           onFocus={beginDraft}
