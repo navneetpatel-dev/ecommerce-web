@@ -2564,3 +2564,67 @@ shared `MobileActionBar` behaviour (3), spinbutton semantics (3) — plus the ea
 **Still open, unchanged:** the storefront offline/stale indicator, the destructive-action sweep, and
 the unverifiable-by-static-analysis set (contrast, 320px/200% zoom, real-device insets, live-region
 verbosity, field LCP/CLS).
+
+## Closing the last three (offline shell, destructive sweep, contrast)
+
+**Storefront offline experience — there was none.** The service worker precached only the five
+delivery routes, so a storefront navigation with no signal hit the browser's error screen, and a
+customer already on a page had no way to know the prices in front of them were hours old (the
+persisted query cache renders them exactly like live data). Three pieces now cover it:
+
+- `/offline` — a **static** route (no client bundle needed, so it renders from cache with no
+  network) that says what happened and offers the home page.
+- `public/sw.js` — the shell cache is renamed to `app-shell-v3` and now precaches `/offline`
+  alongside the delivery routes, plus a navigation branch: any same-origin page navigation keeps
+  going to the network first (a cached per-customer page would show stale carts and orders) and
+  falls back to `/offline` only when it fails. Delivery shell routes keep their own network-first
+  cache. The activate handler already purged older shells, so the rename is safe.
+- `OfflineNotice` in the storefront layout — a sticky banner via a `useSyncExternalStore`-based
+  `useOnlineStatus` hook (server snapshot `true`, so no hydration mismatch) that disappears the
+  moment the connection returns; React Query refetches on reconnect by itself.
+  Six tests now drive `public/sw.js` in a fake worker scope: precache contents, stale-cache purge,
+  the offline fallback for a storefront navigation, the cached page for a delivery route, the
+  network-first-then-cache path for build chunks, and the cross-origin/non-GET early returns.
+
+**Destructive-action sweep: audited, already consistent — no changes needed.** Every irreversible
+action is gated: order cancel and clear cart by copy-driven confirm dialogs, address and saved
+payment-method deletion by dedicated dialogs, delete-account by its own dialog, and every admin
+action through the shared `AdminConfirmAction`. The actions that _don't_ confirm are reversible by
+design (wishlist toggle, stock alert, cart line removal which has undo, session revocation which is
+a security action rather than data loss). Recorded here so it is not "audited" twice.
+
+**Contrast was listed as unverifiable without eyes — it is arithmetic.** `themeContrast.test.ts`
+now computes WCAG ratios from the real palette presets for all four palettes in both modes:
+32 text pairs at 4.5:1, control borders at 3:1, the ink hierarchy, and — for the first time — that
+`globals.css` matches the `inkBrass` preset exactly (the pre-hydration paint comment demanded this
+and nothing enforced it). It immediately found `--ink-faint` at **2.65:1** in light mode (below even
+the 3:1 non-text floor) across all eight palettes, where 77 call sites use it for placeholders,
+hints, captions, timestamps and faint icons. Fixed by re-solving the token per palette, then three
+further findings fixed as minimally as the maths allows:
+
+- `inkFaint` re-solved in all 8 palettes (e.g. ink-brass light `#9c968d` → `#6c6761`).
+- `brand`/`accent` as text and as button/tab fills (ember-noir brand 4.41, ivory-sage accent 3.32)
+  nudged in value only, keeping each hue; `brand badge`/`accent badge` fixed by lightening the
+  _tint_ so the hue is untouched — the default `ink-brass` brand colour is unchanged.
+- Light-mode `lineStrong` control borders went from **1.92:1** to 3:1+: a white input on a white
+  card is identified by its border alone, so 1.4.11 applies. Decorative `line` (544 usages, card
+  edges and separators) is deliberately excluded — 1.4.11 exempts it, and darkening it would
+  restyle the whole product.
+
+**A failing guard was hiding three others.** `check-no-client-money-math.mjs` exited 1, and since
+`npm run lint` chains its six guards with `&&`, the safe-area, page-structure and date-locale
+guards never ran. Its findings: three `formatInr(Number(x))` / `formatInr(x ?? 0)` sites (which
+turn "the server sent nothing" into a confident ₹0 — the formatters already render "—"), and one
+allowlist entry whose code had moved to `useExportJobsSocket.hook.ts` during a refactor. All four
+resolved; the chain now runs end to end, which is how the safe-area guard caught the new sticky
+offline banner missing `env(safe-area-inset-top)` — the same class of bug as the earlier
+`viewportFit: cover` fix.
+
+**Gates after this pass:** `tsc` 0 errors · `lint` 0 errors / 74 warnings (baseline unchanged, all
+six guards passing) · **420 tests** / 93 files · `next build` succeeds with `/offline` emitted as a
+static route · `limits` passes · budgets **1172.2 KB** gzipped vs the 1200 KB ceiling.
+
+**Still human-only (unchanged):** 320px/200% zoom reflow, the `MOBILE-DEVICE-CHECKLIST.md`
+real-device run for notch/inset behaviour, live-region verbosity with a screen reader, and a
+web-vitals LCP/CLS pass on a real network. Everything else that was on this list is now verified in
+CI.

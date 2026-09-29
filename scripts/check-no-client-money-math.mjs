@@ -34,7 +34,7 @@ const allowlist = {
   "src/shared/api/client/pagination.ts": "page count from item total",
   "src/shared/hooks/pagination/useClientPagination.hook.ts":
     "page count from item total",
-  "src/shared/hooks/exports/useExportJobsWatcher.hook.ts":
+  "src/shared/hooks/exports/useExportJobsSocket.hook.ts":
     "export progress % from row total",
   "src/features/admin-dashboard/components/analytics/AnalyticsStatusChart.component.tsx":
     "status share % from order count total",

@@ -106,6 +106,6 @@ function priceRangeLabel(min?: number, max?: number): string {
     });
   }
   return formatLabel(LABELS.activeFilterPriceUpTo, {
-    amount: formatInr(max ?? 0),
+    amount: formatInr(max),
   });
 }

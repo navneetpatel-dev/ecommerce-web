@@ -21,6 +21,16 @@ export const navigationLabels = {
   skipToContent: "Skip to main content",
   /** Announced by the route announcer when a page has no heading to read. */
   pageLoadedFallback: "Page loaded",
+  /** Storefront notice while the browser reports no connection. */
+  offlineNoticeTitle: "You're offline",
+  offlineNoticeBody:
+    "Prices, stock and delivery estimates may be out of date. They refresh automatically when you're back online.",
+  /** The cached page the service worker falls back to for a failed navigation. */
+  offlinePageTitle: "You're offline",
+  offlinePageBody:
+    "This page isn't saved for offline use. Reconnect to keep browsing, or open the home page to see what was saved.",
+  offlinePageHome: "Go to the home page",
+  offlinePageRetry: "Try again",
 
   // Admin nav
 } as const;

@@ -11,17 +11,18 @@
 :root {
   --brand: #8a6a2e;
   --brand-hover: #6e5322;
-  --brand-subtle: #f3ecda;
+  --brand-subtle: #f8f4e9;
   --accent: #a8432b;
   --accent-subtle: #f5e6e1;
   --ink: #1b1917;
   --ink-muted: #5c5750;
-  --ink-faint: #9c968d;
+  /* Tertiary text/icons: must stay ≥4.5:1 on paper and surface (WCAG 1.4.3) */
+  --ink-faint: #6c6761;
   --paper: #f6f3ec;
   --surface: #ffffff;
   --surface-raised: #ffffff;
   --line: #d8d1c2;
-  --line-strong: #c4baa6;
+  --line-strong: #948c7d;
   --danger: #a13a32;
   --danger-subtle: #f6e7e4;
   --success: #2c4a6b;
@@ -92,10 +93,10 @@
   --brand-hover: #e8c476;
   --brand-subtle: #2e2717;
   --accent: #d2694a;
-  --accent-subtle: #3a241e;
+  --accent-subtle: #2c1c17;
   --ink: #f4f1ea;
   --ink-muted: #b7b1a8;
-  --ink-faint: #7c766d;
+  --ink-faint: #989186;
   --paper: #121113;
   --surface: #1c1b1d;
   --surface-raised: #242226;
@@ -103,7 +104,7 @@
   --line: #5a534c;
   --line-strong: #746c63;
   --danger: #e2685c;
-  --danger-subtle: #3a211d;
+  --danger-subtle: #39201d;
   --success: #7fa6c9;
   --success-subtle: #1c2a36;
   --warning: #e0902e;

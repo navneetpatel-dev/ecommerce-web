@@ -66,7 +66,7 @@ export function GiftCardRedeemContent() {
           </h1>
           <p className={styles.subtitle}>
             {formatLabel(giftCardsLabels.giftCardRedeemSuccessBody, {
-              amount: formatInr(Number(result.amount)),
+              amount: formatInr(result.amount),
             })}
           </p>
           <Button className={styles.button} asChild>

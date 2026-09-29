@@ -13,7 +13,7 @@ export function describeApplyResult(
 ): string {
   if (result.discount > 0) {
     return formatLabel(LABELS.couponApplied, {
-      amount: formatInr(Number(result.discount)),
+      amount: formatInr(result.discount),
     });
   }
   if ((result.cashbackAmount ?? 0) > 0) {
