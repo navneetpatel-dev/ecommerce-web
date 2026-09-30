@@ -3,10 +3,11 @@ import type { CartItem } from "@/shared/api/types";
 /**
  * Checkout session identity (Rule 16: pure logic, no React).
  *
- * A checkout flow belongs to one basket: the chosen address, per-vendor shipping methods
- * and payment method mean nothing for a different one. Confirming an order empties the
- * basket, so the next purchase must start at step 1 — while editing the basket currently
- * being checked out (quantity, removing a line) must not throw those choices away.
+ * Entering the checkout page always starts a fresh flow (see `useCheckoutSession`), so the
+ * rules here cover the flow's *life* while the page stays mounted: the address, per-vendor
+ * shipping methods and payment method chosen for one basket mean nothing for a different
+ * one — a basket that shares no line with the flow's is a new purchase and starts over,
+ * while editing the basket being checked out (quantity, removing a line) is not.
  */
 
 /** Identity of the basket a flow belongs to: its line ids, quantities ignored. */

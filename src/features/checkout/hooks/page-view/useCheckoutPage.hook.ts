@@ -62,8 +62,8 @@ export function useCheckoutPage() {
     [cart],
   );
 
-  // A checkout flow belongs to one basket: a different basket starts at step 1 (the bug
-  // this fixes was a second purchase resuming the first one's review step).
+  // Going to checkout always starts a fresh flow — step 1, whatever an earlier visit left
+  // in the store (see `useCheckoutSession`).
   useCheckoutSession(cart?.items);
 
   const shippingReady = useMemo(
