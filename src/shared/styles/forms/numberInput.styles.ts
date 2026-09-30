@@ -12,7 +12,7 @@ export const numberInputStyles = {
     "flex shrink-0 items-center px-3 text-body-sm font-medium text-ink-muted",
   stepperContainer: "flex w-11 shrink-0 flex-col border-l border-line-strong",
   stepperBtn:
-    "flex flex-1 items-center justify-center text-ink-muted transition-colors hover:bg-paper hover:text-ink disabled:pointer-events-none disabled:opacity-40",
+    "flex flex-1 items-center justify-center text-ink-muted transition-colors hover:bg-brand-subtle hover:text-ink disabled:pointer-events-none disabled:opacity-40",
   stepperBtnDown:
-    "flex flex-1 items-center justify-center border-t border-line-strong text-ink-muted transition-colors hover:bg-paper hover:text-ink disabled:pointer-events-none disabled:opacity-40",
+    "flex flex-1 items-center justify-center border-t border-line-strong text-ink-muted transition-colors hover:bg-brand-subtle hover:text-ink disabled:pointer-events-none disabled:opacity-40",
 } as const;

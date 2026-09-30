@@ -13,7 +13,7 @@ export const deliveryDispatchShipmentListStyles = {
   loadingText: "text-body-sm text-ink-muted",
   emptyText: "py-4 text-center text-body-sm text-ink-muted",
   selectAllLabel:
-    "flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-body-sm font-medium text-ink-muted hover:bg-paper/40 cursor-pointer select-none transition-colors border-b border-line/40 pb-2",
+    "flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-body-sm font-medium text-ink-muted hover:bg-brand-subtle/40 cursor-pointer select-none transition-colors border-b border-line/40 pb-2",
   groupWrapper: "pt-2",
   groupBadgeWrapper: "mb-1.5",
   groupBadge:
@@ -24,7 +24,7 @@ export const deliveryDispatchShipmentListStyles = {
       "flex items-center gap-3 rounded-md px-2.5 py-2 text-body-sm transition-all cursor-pointer select-none border",
       isSelected
         ? "bg-brand/10 border-brand/40 text-ink shadow-xs"
-        : "border-transparent hover:bg-paper/60 text-ink hover:text-ink",
+        : "border-transparent hover:bg-brand-subtle/40 text-ink hover:text-ink",
     ),
   trackingNumber: "min-w-0 flex-1 truncate font-mono text-body-sm font-medium",
   vendorBadge:

@@ -16,7 +16,7 @@ export const infiniteSingleSelectStyles = {
     loadingMore: "px-4 py-1 text-body-sm text-ink-muted",
     searchFieldContainer: "px-1 pt-1",
     triggerButton:
-      "flex h-11 w-full cursor-pointer items-center justify-between rounded-sm border border-line-strong bg-surface-raised px-4 text-left text-body outline-none hover:bg-paper/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50",
+      "flex h-11 w-full cursor-pointer items-center justify-between rounded-sm border border-line-strong bg-surface-raised px-4 text-left text-body outline-none hover:bg-brand-subtle/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50",
     triggerButtonError: "border-danger",
     triggerButtonMuted: "text-ink-muted",
     triggerButtonLabel: "line-clamp-1 min-w-0 flex-1",

@@ -105,9 +105,7 @@ export function FullCartLine(props: FullCartLineProps) {
           {linePending || lineTotal == null ? (
             <InlineAmountSkeleton className={styles.fullAmountSkeleton} />
           ) : (
-            <p className={styles.fullTotalAmount}>
-              {formatInr(lineTotal)}
-            </p>
+            <p className={styles.fullTotalAmount}>{formatInr(lineTotal)}</p>
           )}
           <p className={styles.fullEachPrice}>{eachPrice}</p>
         </div>

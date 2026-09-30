@@ -8,6 +8,7 @@ import {
 } from "@/features/cart";
 import { useCheckoutStore } from "@/features/checkout/store/checkout.store";
 import { usePlaceOrderWithRazorpay } from "../checkout/usePlaceOrder.hook";
+import { useCheckoutSession } from "../checkout/useCheckoutSession.hook";
 import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { useCheckoutAddresses } from "../address/useCheckoutAddresses.hook";
 import {
@@ -31,7 +32,6 @@ export function useCheckoutPage() {
     paymentMethod,
     setStep,
     setShippingMethod,
-    ensureDefaultShippingMethods,
     setPaymentMethod,
     walletAmountToUse,
     setWalletAmountToUse,
@@ -62,22 +62,25 @@ export function useCheckoutPage() {
     [cart],
   );
 
-  useCheckoutStepGuards({
-    groupedByVendor,
-    ensureDefaultShippingMethods,
-    paymentMethod,
-    quote: orderPlacement.quote,
-    setPaymentMethod,
-    setWalletAmountToUse,
-  });
-
-  const displayTotals = resolveCartDisplayTotals(cart, { isError: cartError });
-  const totals = resolveCheckoutPageTotals(displayTotals, orderPlacement.quote);
+  // A checkout flow belongs to one basket: a different basket starts at step 1 (the bug
+  // this fixes was a second purchase resuming the first one's review step).
+  useCheckoutSession(cart?.items);
 
   const shippingReady = useMemo(
     () => isShippingReadyForAllVendors(groupedByVendor, shippingMethodByVendor),
     [groupedByVendor, shippingMethodByVendor],
   );
+
+  useCheckoutStepGuards({
+    groupedByVendor,
+    shippingReady,
+    addressesResolved: addressesState.addresses !== undefined,
+    quote: orderPlacement.quote,
+    quoteResolved: Boolean(orderPlacement.quote) || orderPlacement.isQuoteError,
+  });
+
+  const displayTotals = resolveCartDisplayTotals(cart, { isError: cartError });
+  const totals = resolveCheckoutPageTotals(displayTotals, orderPlacement.quote);
 
   const canAdvance = () =>
     canAdvanceFromPayment(
@@ -104,6 +107,7 @@ export function useCheckoutPage() {
     giftWrap,
     giftMessage,
     addresses: addressesState.addresses,
+    deliveryArea: addressesState.deliveryArea,
     quote: orderPlacement.quote,
     isQuoteLoading: orderPlacement.isQuoteLoading,
     isQuoteError: orderPlacement.isQuoteError,

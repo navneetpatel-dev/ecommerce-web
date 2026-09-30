@@ -9,7 +9,7 @@ export const adminWalletLiabilityPanelStyles = {
   thead: "border-b border-line bg-paper/70 text-ink-muted",
   th: "px-4 py-3 font-medium",
   tbody: "divide-y divide-line/60",
-  tr: "transition-colors hover:bg-paper/40",
+  tr: "transition-colors hover:bg-brand-subtle/40",
   cellMono: "px-4 py-3 font-mono text-body-sm text-ink",
   cellNumBold: "px-4 py-3 tabular-nums font-medium text-ink",
   cellNum: "px-4 py-3 tabular-nums text-ink",

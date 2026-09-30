@@ -50,7 +50,7 @@ export function OrderSummaryTotalsList({
           {amountsPending ? (
             <InlineAmountSkeleton />
           ) : (
-              <>−{formatInr(couponSavings)}</>
+            <>−{formatInr(couponSavings)}</>
           )}
         </dd>
       </div>

@@ -5,6 +5,12 @@ import type { Address } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { AddressFormDialog } from "@/shared/components/AddressFormDialog.component";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
+import { DeliveryServiceabilityNotice } from "@/shared/components/delivery/DeliveryServiceabilityNotice.component";
+import {
+  isDeliveryAreaBlocked,
+  UNKNOWN_DELIVERY_AREA,
+  type DeliveryAreaSummary,
+} from "@/shared/utils/delivery/deliveryArea";
 import { LABELS } from "@/shared/constants/labels";
 import { useAddressStep } from "../../hooks/address/useAddressStep.hook";
 import { AddressEmptyState } from "./AddressEmptyState.component";
@@ -15,6 +21,8 @@ interface AddressStepProps {
   addresses?: Address[];
   selectedId: string | null;
   isCreating?: boolean;
+  /** The delivery area the chosen address implies — warns, and blocks Continue on a "no". */
+  deliveryArea?: DeliveryAreaSummary;
   onSelect: (id: string) => void;
   onContinue: () => void;
   onCreateAddress: (body: Omit<Address, "id" | "userId">) => Promise<void>;
@@ -24,6 +32,7 @@ export function AddressStep({
   addresses,
   selectedId,
   isCreating,
+  deliveryArea,
   onSelect,
   onContinue,
   onCreateAddress,
@@ -42,6 +51,15 @@ export function AddressStep({
     selectedId,
     onSelect,
   });
+
+  const area = deliveryArea ?? UNKNOWN_DELIVERY_AREA;
+  // Hard gate: an address we can't deliver to isn't fixable here, so Continue stays closed
+  // and the hint says which decision to revisit. Saving the address itself is still allowed.
+  const isAreaBlocked = isDeliveryAreaBlocked(area);
+  const canProceed = canContinue && !isAreaBlocked;
+  const continueHint = isAreaBlocked
+    ? LABELS.deliveryAreaChooseAnotherAddress
+    : emptyHintMessage;
 
   return (
     <div className={ADDRESS_STEP_STYLES.root}>
@@ -81,15 +99,21 @@ export function AddressStep({
         />
       )}
 
+      <DeliveryServiceabilityNotice
+        pincode={area.pincode}
+        status={area.status}
+        isChecking={area.isChecking}
+      />
+
       <DisabledActionHint
-        disabled={!canContinue}
-        message={emptyHintMessage}
+        disabled={!canProceed}
+        message={continueHint}
         className={ADDRESS_STEP_STYLES.actionHint}
       >
         <Button
           size="lg"
           onClick={onContinue}
-          disabled={!canContinue}
+          disabled={!canProceed}
           fullWidth="mobile"
           className={ADDRESS_STEP_STYLES.continueButton}
         >

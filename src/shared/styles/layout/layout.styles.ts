@@ -29,7 +29,7 @@ export const sidebarNavStyles = {
     "flex h-11 items-center gap-3 rounded-md border-l-[3px] px-3 text-body-sm font-medium transition-colors",
   linkActive: "border-l-brand bg-brand-subtle text-brand",
   linkInactive:
-    "border-l-transparent text-ink-muted hover:bg-paper hover:text-ink",
+    "border-l-transparent text-ink-muted hover:bg-brand-subtle hover:text-ink",
 } as const;
 
 export const workspaceNavDrawerStyles = {

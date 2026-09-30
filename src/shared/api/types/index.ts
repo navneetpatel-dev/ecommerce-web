@@ -10,4 +10,5 @@ export * from "./product.types";
 export * from "./productQna.types";
 export * from "./returns.types";
 export * from "./review.types";
+export * from "./shipping.types";
 export * from "./vendor.types";

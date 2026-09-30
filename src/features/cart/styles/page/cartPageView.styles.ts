@@ -30,6 +30,7 @@ export const cartPageViewStyles = {
     "font-display text-[1.5rem] leading-none tabular-nums text-brand",
   asideTotalFallback: "text-[1rem]",
   asideUnavailableNotice: "mt-3",
+  asideDeliveryArea: "mt-4 space-y-1.5",
   asideCashbackNotice: "mt-3 text-body-sm text-brand",
   asideWarningBanner:
     "mt-4 rounded-sm bg-warning-subtle px-3 py-2 text-body-sm text-warning-foreground",

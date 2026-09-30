@@ -21,6 +21,7 @@ export function CartPage() {
       pendingLineTotals={cart.pendingLineTotals}
       pricingPreview={cart.pricingPreview}
       hasUnavailableItems={cart.hasUnavailableItems}
+
       onUpdateQuantity={cart.updateQuantity}
       onRemoveItem={cart.removeItem}
       onClearCart={cart.clearCart}

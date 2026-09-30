@@ -8,7 +8,7 @@ export const QUANTITY_SELECTOR_CONTAINER =
   "relative z-[1] inline-flex shrink-0 items-center rounded-sm border border-line" as const;
 
 export const QUANTITY_CONTROL_BUTTON_BASE =
-  "relative z-[1] inline-flex shrink-0 items-center justify-center text-ink touch-manipulation transition-colors hover:bg-paper outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0" as const;
+  "relative z-[1] inline-flex shrink-0 items-center justify-center text-ink touch-manipulation transition-colors hover:bg-brand-subtle outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0" as const;
 
 export const QUANTITY_INPUT_BASE =
   "relative z-[1] shrink-0 border-x border-line bg-transparent text-center font-mono font-medium tabular-nums text-ink outline-none [appearance:textfield] focus-visible:shadow-[inset_0_0_0_1px_var(--brand)] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" as const;

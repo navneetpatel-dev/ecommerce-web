@@ -18,7 +18,7 @@ export const vendorsIndexViewStyles = {
   gridItem: "min-w-0",
   tileLink: cn(
     "group/tile flex h-full flex-col rounded-lg border border-line bg-paper/40 p-4 transition-all duration-200",
-    "hover:border-brand/30 hover:bg-paper hover:shadow-elevation-1",
+    "hover:border-brand/30 hover:bg-surface-raised hover:shadow-elevation-1",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
   ),
   tileRow: "flex items-start gap-3",

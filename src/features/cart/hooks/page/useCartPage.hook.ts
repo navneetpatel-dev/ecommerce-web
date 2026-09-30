@@ -15,6 +15,7 @@ import { resolveCartDisplayTotals } from "../../utils/line-item/cartDisplay.util
 import { clampCartQuantity } from "@/shared/constants/cart/cart";
 import type { CartItem } from "@/shared/api/types";
 import { useCartDrawerStore } from "../../store/drawer/cart.store";
+import { useDeliveryServiceability } from "@/shared/hooks/delivery/useDeliveryLocation.hook";
 
 export function useCartPage() {
   const { data: cart, isLoading, isError, refetch } = useCart();
@@ -41,6 +42,14 @@ export function useCartPage() {
     () => (hasItems ? groupItemsByVendor(items) : {}),
     [hasItems, items],
   );
+
+  // One vendor that doesn't ship to the checked delivery area blocks checkout: the order
+  // would be rejected at payment, so the cart is where that has to surface.
+  const vendorIds = useMemo(
+    () => Object.keys(groupedByVendor),
+    [groupedByVendor],
+  );
+  const delivery = useDeliveryServiceability(vendorIds);
 
   const displayTotals = resolveCartDisplayTotals(cart, { isError });
 
@@ -69,6 +78,9 @@ export function useCartPage() {
     itemCount,
     hasUnavailableItems,
     groupedByVendor,
+    vendorIds,
+    /** The delivery area the checkout gate reads; only a known "no" blocks. */
+    deliveryArea: delivery,
     subtotal: displayTotals.subtotal,
     subtotalPending: displayTotals.subtotalPending,
     total: displayTotals.total,

@@ -9,8 +9,7 @@ export function getRazorpayCheckoutTheme(): {
 
   const style = getComputedStyle(document.documentElement);
   const color = style.getPropertyValue("--brand").trim() || "#8a6a2e";
-  const backdrop_color =
-    style.getPropertyValue("--ink").trim() || "#1b1917";
+  const backdrop_color = style.getPropertyValue("--ink").trim() || "#1b1917";
 
   return { color, backdrop_color };
 }

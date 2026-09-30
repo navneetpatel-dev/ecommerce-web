@@ -1,7 +1,7 @@
 export const analyticsStyles = {
   // MetricCard
   metricCardBase:
-    "rounded-lg border border-line bg-paper/50 p-4 transition-all duration-200 hover:border-line-strong hover:bg-paper/70",
+    "rounded-lg border border-line bg-paper/50 p-4 transition-all duration-200 hover:border-line-strong hover:bg-brand-subtle/40",
   metricCardHighlight: "border-brand/30 bg-brand/[0.04]",
   metricCardTitle:
     "text-body-xs font-medium uppercase tracking-wider text-ink-muted",

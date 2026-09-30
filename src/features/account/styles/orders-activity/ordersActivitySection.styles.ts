@@ -15,7 +15,7 @@ export const ordersActivitySectionStyles = {
   emptyLink: "font-medium text-brand hover:underline",
   ordersList: "divide-y divide-line",
   orderRow:
-    "flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-paper md:px-6",
+    "flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-brand-subtle/40 md:px-6",
   orderInfo: "min-w-0",
   orderId: "font-medium text-ink",
   orderSummary: "mt-0.5 truncate text-body-sm text-ink-muted",

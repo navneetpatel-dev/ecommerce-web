@@ -28,7 +28,7 @@ export const platformSettingsFormStyles = {
     "absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-ink-faint pointer-events-none",
   searchInput: "pl-10 pr-10",
   searchClearButton:
-    "absolute right-3 top-1/2 -translate-y-1/2 rounded-sm p-1 text-ink-muted transition-colors hover:bg-paper hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand",
+    "absolute right-3 top-1/2 -translate-y-1/2 rounded-sm p-1 text-ink-muted transition-colors hover:bg-brand-subtle hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand",
   searchClearIcon: "size-4",
 
   // Header

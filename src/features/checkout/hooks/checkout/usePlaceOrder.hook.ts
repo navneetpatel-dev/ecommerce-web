@@ -10,6 +10,7 @@ import {
   type PaymentNotice,
 } from "../payment/usePaymentNotice/index";
 import { useRestoreCancelledCheckout } from "./useRestoreCancelledCheckout/index";
+import { useResetCheckoutOnOrderPlaced } from "./useCheckoutSession.hook";
 import { useCheckoutPaymentPhase } from "../payment/useCheckoutPaymentPhase.hook";
 import { useCheckoutQuoteState } from "./useCheckoutQuoteState.hook";
 import { useOrderPlacementErrorHandler } from "./useOrderPlacementErrorHandler.hook";
@@ -77,6 +78,11 @@ export function usePlaceOrderWithRazorpay() {
     clearCartCache,
   });
 
+  // Both success paths call this (cash/COD immediately, Razorpay after verification), and
+  // the cancelled/failed ones deliberately don't: ending the flow here is what stops the
+  // next purchase from resuming this one.
+  const handleOrderPlaced = useResetCheckoutOnOrderPlaced(onOrderPlaced);
+
   const handlePlaceOrder = async (method: string) => {
     if (!addressId) return;
     resetNotice();
@@ -117,7 +123,7 @@ export function usePlaceOrderWithRazorpay() {
         currentUser,
         showNotice,
         clearCartCache,
-        onOrderPlaced,
+        onOrderPlaced: handleOrderPlaced,
         restoreCancelledCheckout,
         setPaymentPhase,
         clearPendingOrder,

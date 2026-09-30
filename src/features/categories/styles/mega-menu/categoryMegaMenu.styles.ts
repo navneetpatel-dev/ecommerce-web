@@ -29,7 +29,7 @@ export const categoryMegaMenuStyles = {
   tileItem: "min-w-0",
   tileCard: cn(
     "group/tile h-full rounded-lg border border-line bg-paper/40 p-3 transition-all duration-200",
-    "hover:border-brand/30 hover:bg-paper hover:shadow-elevation-1",
+    "hover:border-brand/30 hover:bg-brand-subtle hover:shadow-elevation-1",
   ),
   tileHeaderLink:
     "mb-3 flex items-start gap-3 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-brand/40",

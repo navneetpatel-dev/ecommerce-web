@@ -6,7 +6,7 @@ export const cashbackWriteOffReportTableStyles = {
   summaryTitle: "font-display text-body font-semibold text-ink",
   metricGrid: "grid gap-3.5 sm:grid-cols-2",
   metricCard:
-    "rounded-lg border border-line bg-paper/50 p-4 transition-all duration-200 hover:border-line-strong hover:bg-paper/70",
+    "rounded-lg border border-line bg-paper/50 p-4 transition-all duration-200 hover:border-line-strong hover:bg-brand-subtle/40",
   metricLabel:
     "text-body-xs font-medium uppercase tracking-wider text-ink-muted",
   metricValue: (variant?: "default" | "success" | "danger") =>
@@ -22,7 +22,7 @@ export const cashbackWriteOffReportTableStyles = {
   thead: "border-b border-line bg-paper/70 text-ink-muted",
   th: "px-4 py-3 font-medium",
   tbody: "divide-y divide-line/60",
-  row: "transition-colors hover:bg-paper/40",
+  row: "transition-colors hover:bg-brand-subtle/40",
   cellMono: "px-4 py-3 font-mono text-body-sm text-ink",
   cellMedium: "px-4 py-3 tabular-nums font-medium text-ink",
   cellSuccess: "px-4 py-3 tabular-nums text-success font-medium",

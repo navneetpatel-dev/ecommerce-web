@@ -22,6 +22,7 @@ export function CheckoutPageView({
   addressId,
   shippingMethodByVendor,
   addresses,
+  deliveryArea,
   paymentMethod,
   walletAmountToUse = 0,
   giftWrap = false,
@@ -138,6 +139,7 @@ export function CheckoutPageView({
               addressId={addressId}
               shippingMethodByVendor={shippingMethodByVendor}
               addresses={addresses}
+              deliveryArea={deliveryArea}
               paymentMethod={paymentMethod}
               walletAmountToUse={walletAmountToUse}
               giftWrap={giftWrap}

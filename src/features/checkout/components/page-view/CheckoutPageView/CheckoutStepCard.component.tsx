@@ -9,6 +9,7 @@ import { ReviewStep } from "../../review/ReviewStep.component";
 import { CheckoutStepTransition } from "./CheckoutStepTransition.component";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import type { Address, CartItem, CheckoutQuote } from "@/shared/api/types";
+import type { DeliveryAreaSummary } from "@/shared/utils/delivery/deliveryArea";
 import { useCheckoutStepCard } from "../../../hooks/page-view/useCheckoutStepCard.hook";
 import { CHECKOUT_STEP_CARD_STYLES } from "../../../styles/page-view/checkoutStepCard.styles";
 
@@ -17,6 +18,7 @@ interface CheckoutStepCardProps {
   addressId: string | null;
   shippingMethodByVendor: Record<string, ShippingMethod>;
   addresses?: Address[];
+  deliveryArea?: DeliveryAreaSummary;
   paymentMethod?: string | null;
   walletAmountToUse: number;
   giftWrap?: boolean;
@@ -50,6 +52,7 @@ export function CheckoutStepCard({
   addressId,
   shippingMethodByVendor,
   addresses,
+  deliveryArea,
   paymentMethod,
   walletAmountToUse,
   giftWrap = false,
@@ -101,6 +104,7 @@ export function CheckoutStepCard({
               <CheckoutStepTransition stepKey="address">
                 <AddressStep
                   addresses={addresses}
+                  deliveryArea={deliveryArea}
                   selectedId={addressId}
                   isCreating={isCreatingAddress}
                   onSelect={onSelectAddress}

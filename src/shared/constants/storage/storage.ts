@@ -11,6 +11,11 @@ export const STORAGE_KEYS = {
   THEME_PALETTE: "themePalette",
   /** Compare tray selection (sessionStorage — survives navigation, not the tab). */
   COMPARE_SELECTION: "compareSelection",
+  /**
+   * The delivery area the funnel is shopped in (sessionStorage): the pincode a customer
+   * checked on a product page has to still be there on the cart and at checkout.
+   */
+  DELIVERY_LOCATION: "deliveryLocation",
 } as const;
 
 /** Cookie names shared with the API (must match backend COOKIES). */

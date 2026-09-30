@@ -1,5 +1,6 @@
 import type { Address, CartItem, CheckoutQuote } from "@/shared/api/types";
 import type { ShippingMethod } from "@/shared/constants/statuses";
+import type { DeliveryAreaSummary } from "@/shared/utils/delivery/deliveryArea";
 import type { PaymentNotice } from "../../hooks/checkout/usePlaceOrder.hook";
 import type { CheckoutPaymentPhase } from "../../hooks/payment/useCheckoutPaymentPhase.hook";
 
@@ -10,6 +11,8 @@ export interface CheckoutPageViewProps {
   addressId: string | null;
   shippingMethodByVendor: Record<string, ShippingMethod>;
   addresses?: Address[];
+  /** The delivery area the chosen address implies — the address step's hard gate reads it. */
+  deliveryArea?: DeliveryAreaSummary;
   paymentMethod?: string | null;
   walletAmountToUse?: number;
   giftWrap?: boolean;

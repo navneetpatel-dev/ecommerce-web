@@ -13,7 +13,7 @@ export const deliveryAgentDocumentsCardStyles = {
   actionsRow: "flex flex-wrap items-center gap-2",
   dateInput: "w-40",
   uploadButton:
-    "inline-flex cursor-pointer items-center gap-2 rounded-md border border-line px-3 py-1.5 text-body-sm font-medium text-brand hover:bg-paper/60",
+    "inline-flex cursor-pointer items-center gap-2 rounded-md border border-line px-3 py-1.5 text-body-sm font-medium text-brand hover:bg-brand-subtle/40",
   fileInput: "sr-only",
   errorText: "px-5 pb-4 text-body-sm text-danger md:px-6",
   badgeNotSubmitted: "text-body-sm text-ink-muted",

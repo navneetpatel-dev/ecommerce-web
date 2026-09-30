@@ -1,3 +1,9 @@
+import {
+  HOVER_ON_DARK,
+  HOVER_ON_SURFACE,
+  HOVER_TEXT_CLAMP,
+} from "@/shared/styles/interaction.styles";
+
 export const headerStyles = {
   headerBase:
     "sticky top-0 z-40 overflow-visible transition-all duration-200 h-[calc(3.5rem+env(safe-area-inset-top,0px))] pt-[env(safe-area-inset-top,0px)] lg:h-[calc(72px+env(safe-area-inset-top,0px))]",
@@ -39,34 +45,34 @@ export const headerStyles = {
   desktopNav: "hidden xl:flex items-center gap-1",
   relativeWrapper: "relative",
   categoriesButtonBase: "gap-1",
-  categoriesButtonTransparent: "text-paper hover:bg-paper/10 hover:text-paper",
+  categoriesButtonTransparent: `text-paper ${HOVER_ON_DARK} hover:text-paper`,
   categoriesChevron: "transition-transform",
   categoriesChevronOpen: "rotate-180",
   primaryLink:
     "px-3 py-2 rounded-md text-body-sm font-medium transition-colors",
-  primaryLinkTransparent: "text-paper hover:bg-paper/10",
-  primaryLinkSolid: "text-ink hover:bg-paper",
+  primaryLinkTransparent: `text-paper ${HOVER_ON_DARK}`,
+  primaryLinkSolid: `text-ink ${HOVER_ON_SURFACE}`,
   searchWrapper: "hidden xl:flex flex-1 max-w-xl mx-auto",
 
   // Account Section
   loginLink:
     "hidden sm:inline-flex items-center px-3 py-1.5 text-body-sm font-medium rounded-md transition-colors",
-  loginLinkTransparent: "text-paper hover:bg-paper/10",
-  loginLinkSolid: "text-ink hover:bg-paper",
+  loginLinkTransparent: `text-paper ${HOVER_ON_DARK}`,
+  loginLinkSolid: `text-ink ${HOVER_ON_SURFACE}`,
   ordersLinkWrapper: "hidden xl:flex items-center gap-1",
   ordersLink:
     "px-3 py-1.5 text-body-sm font-medium rounded-md transition-colors",
-  ordersLinkTransparent: "text-paper hover:bg-paper/10",
-  ordersLinkSolid: "hover:bg-paper",
+  ordersLinkTransparent: `text-paper ${HOVER_ON_DARK}`,
+  ordersLinkSolid: HOVER_ON_SURFACE,
   dashboardLink:
     "hidden xl:inline-flex items-center px-3 py-1.5 text-body-sm font-medium rounded-md transition-colors",
-  dashboardLinkTransparent: "text-paper hover:bg-paper/10",
+  dashboardLinkTransparent: `text-paper ${HOVER_ON_DARK}`,
   dashboardLinkSolid: "text-brand hover:bg-brand-subtle",
 
   // Account Menu
   triggerSvgSize: "[&_svg]:!size-[0.875rem] sm:[&_svg]:!size-3",
-  triggerTransparent: "border-paper/20 hover:bg-paper/10",
-  triggerSolid: "border-line bg-surface hover:bg-paper",
+  triggerTransparent: `border-paper/20 ${HOVER_ON_DARK}`,
+  triggerSolid: `border-line bg-surface ${HOVER_ON_SURFACE}`,
   avatar: "size-7 border-0 sm:size-8 sm:border sm:border-line/70",
   avatarFallback:
     "flex items-center justify-center bg-brand-subtle text-[0.6875rem] font-semibold leading-none text-ink sm:text-[0.75rem]",
@@ -82,13 +88,12 @@ export const headerStyles = {
   userName: "truncate text-[0.875rem] font-medium text-ink",
   userEmail: "truncate text-[0.75rem] text-ink-muted",
   linksList: "py-1.5",
-  menuItem:
-    "block px-4 py-2.5 text-[0.875rem] text-ink-muted transition-colors hover:bg-paper hover:text-ink",
+  menuItem: `block px-4 py-2.5 text-[0.875rem] text-ink-muted transition-colors ${HOVER_ON_SURFACE} ${HOVER_TEXT_CLAMP}`,
 
   // Header Menu Button
   storefrontMenuButton:
     "xl:hidden -ml-2 max-sm:h-9 max-sm:w-9 max-sm:min-h-9 max-sm:max-h-9",
-  storefrontHoverTransparent: "hover:bg-paper/10",
+  storefrontHoverTransparent: HOVER_ON_DARK,
   workspaceMenuButton: "lg:hidden -ml-2",
   workspaceMenuIcon: "text-ink",
 } as const;

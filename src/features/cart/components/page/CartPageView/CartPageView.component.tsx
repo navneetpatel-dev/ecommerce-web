@@ -8,6 +8,7 @@ import type {
   EligibleCoupon,
 } from "@/shared/api/types";
 import { EmptyCartState } from "@/shared/components/display/EmptyCartState.component";
+import type { DeliveryAreaSummary } from "@/shared/utils/delivery/deliveryArea";
 import { CartPageHeader } from "./CartPageHeader.component";
 import { VendorGroups } from "./VendorGroups.component";
 import { OrderSummaryAside } from "./OrderSummaryAside.component";
@@ -36,6 +37,8 @@ export interface CartPageViewProps {
     couponSavings?: number;
   };
   hasUnavailableItems: boolean;
+  /** The delivery area this basket was checked against (owned by the cart page hook). */
+  deliveryArea?: DeliveryAreaSummary;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
   onClearCart: () => void;
@@ -80,6 +83,7 @@ export function CartPageView({
   pendingLineTotals = false,
   pricingPreview,
   hasUnavailableItems,
+  deliveryArea,
   onUpdateQuantity,
   onRemoveItem,
   onClearCart,
@@ -149,6 +153,7 @@ export function CartPageView({
 
           <OrderSummaryAside
             itemCount={itemCount}
+            deliveryArea={deliveryArea}
             subtotal={subtotal}
             subtotalPending={subtotalPending}
             amountsUnavailable={amountsUnavailable}

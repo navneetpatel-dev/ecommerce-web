@@ -25,9 +25,9 @@ const buttonVariants = cva(
           "border border-transparent bg-danger text-paper hover:bg-danger/90",
         /** Stronger edge so outline reads equal height to solid fills in dark mode. */
         outline:
-          "border border-line-strong bg-surface text-ink hover:bg-paper hover:text-ink",
+          "border border-line-strong bg-surface text-ink hover:bg-brand-subtle hover:text-ink",
         secondary:
-          "border border-line-strong bg-surface text-ink hover:bg-paper",
+          "border border-line-strong bg-surface text-ink hover:bg-brand-subtle",
         ghost: "border border-transparent hover:bg-brand-subtle hover:text-ink",
         link: "border border-transparent text-brand underline-offset-4 hover:underline",
       },

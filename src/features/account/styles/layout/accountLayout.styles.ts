@@ -21,7 +21,7 @@ export const accountLayoutStyles = {
     cn(
       "h-auto min-h-0 max-h-none gap-2 px-3.5 py-2 text-body-sm",
       selected
-        ? "border-line-strong bg-paper text-brand shadow-[inset_0_-2px_0_0_var(--brand)] hover:bg-paper hover:text-brand"
+        ? "border-line-strong bg-paper text-brand shadow-[inset_0_-2px_0_0_var(--brand)] hover:bg-brand-subtle/40 hover:text-brand"
         : "border-line text-ink-muted hover:border-ink/25 hover:text-ink",
     ),
   layoutGrid: "grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10",
@@ -33,8 +33,8 @@ export const accountLayoutStyles = {
     cn(
       "h-auto min-h-0 max-h-none w-full items-start gap-3 rounded-none px-4 py-3.5 text-left font-normal",
       selected
-        ? "bg-paper shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-paper"
-        : "hover:bg-paper/70",
+        ? "bg-paper shadow-[inset_3px_0_0_0_var(--brand)] hover:bg-brand-subtle/40"
+        : "hover:bg-brand-subtle/40",
     ),
   desktopNavIcon: (selected: boolean) =>
     cn("mt-0.5 shrink-0", selected ? "text-brand" : "text-ink-muted"),

@@ -27,7 +27,7 @@ export const TABLE_CARD_MOBILE_LABEL =
 
 /** Interactive table row hover effect. */
 export const TABLE_ROW_INTERACTIVE =
-  "border-b border-line/60 hover:bg-paper/40 transition-colors";
+  "border-b border-line/60 hover:bg-brand-subtle/40 transition-colors";
 
 /** Centered empty table cell for desktop tables. */
 export const TABLE_CELL_EMPTY = "text-center text-ink-muted";

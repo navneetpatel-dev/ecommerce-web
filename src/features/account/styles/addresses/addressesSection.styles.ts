@@ -7,7 +7,7 @@ export const addressesSectionStyles = {
   emptyState: "py-12 md:py-14",
   listGrid: "grid gap-3 sm:grid-cols-2",
   addNewCardButton:
-    "h-full min-h-[10rem] max-h-none w-full flex-col gap-2 border-dashed border-line bg-paper/40 p-4 text-ink-muted hover:border-ink/30 hover:bg-paper hover:text-ink",
+    "h-full min-h-[10rem] max-h-none w-full flex-col gap-2 border-dashed border-line bg-paper/40 p-4 text-ink-muted hover:border-ink/30 hover:bg-surface-raised hover:text-ink",
   addNewCardLabel: "text-[0.875rem] font-medium",
   listErrorNotice: "text-[0.875rem] text-danger",
   skeletonContainer: "space-y-3",

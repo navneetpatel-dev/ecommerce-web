@@ -40,6 +40,7 @@ export const reviewsRoutes = {
 
 export const shippingRoutes = {
   rates: "/api/shipping/rates",
+  serviceability: "/api/shipping/serviceability",
   zones: "/api/shipping/zones",
   zone: (id: string) => `/api/shipping/zones/${id}`,
   adminRates: "/api/shipping/rates/admin",

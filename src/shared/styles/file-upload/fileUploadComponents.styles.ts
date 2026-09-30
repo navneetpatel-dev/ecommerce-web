@@ -26,7 +26,7 @@ export const filePickerDropzoneStyles = {
     "relative flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed p-7 text-center transition-all cursor-pointer select-none",
   dropzoneActive: "border-brand bg-brand/10 shadow-xs",
   dropzoneIdle:
-    "border-line-strong/70 bg-paper/20 hover:border-brand/60 hover:bg-paper/40",
+    "border-line-strong/70 bg-paper/20 hover:border-brand/60 hover:bg-brand-subtle/40",
   dropzoneDisabled:
     "cursor-not-allowed opacity-50 hover:border-line hover:bg-paper/20",
   iconWrapper:

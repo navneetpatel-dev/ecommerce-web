@@ -46,7 +46,7 @@ export const helpHomeViewStyles = {
   searchResultsCount: "text-[0.875rem] text-ink-muted",
   searchResultsList: "divide-y divide-line",
   searchResultLink:
-    "flex items-start justify-between gap-4 px-5 py-4 transition-colors hover:bg-paper",
+    "flex items-start justify-between gap-4 px-5 py-4 transition-colors hover:bg-brand-subtle/40",
   searchResultContent: "min-w-0",
   searchResultTitle: "font-medium text-ink",
   searchResultSummary: "mt-1 text-[0.875rem] text-ink-muted",

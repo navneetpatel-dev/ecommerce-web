@@ -30,6 +30,19 @@ export const commerceLabels = {
   deliveryEtaFree: "Arrives in {days} day(s) · free delivery",
   deliveryNotServiceable: "Not deliverable to this pincode",
   deliveryCheckFailed: "Could not check delivery for this pincode.",
+  deliveryAreaHeading: "Delivery area",
+  deliveryAreaChange: "Change",
+  deliveryAreaChecking: "Checking delivery to {pincode}…",
+  deliveryAreaEtaDays: "Delivers to {pincode} in {days} day(s)",
+  deliveryAreaEtaRange: "Delivers to {pincode} in {min}–{max} days",
+  deliveryAreaFreeShipping: "Free delivery over {amount}",
+  deliveryAreaNotServiceable:
+    "Some items in your bag can’t be delivered to {pincode}.",
+  deliveryAreaChangeToContinue: "Change the delivery area to continue.",
+  deliveryAreaChooseAnotherAddress:
+    "Choose a delivery address we serve, or change the delivery area.",
+  deliveryAreaCheckHint:
+    "Check delivery on a product page to see if we reach you.",
   cashOnDelivery: "Cash on delivery",
   codAvailable: "Cash on delivery available",
   codUnavailable: "Cash on delivery not available",

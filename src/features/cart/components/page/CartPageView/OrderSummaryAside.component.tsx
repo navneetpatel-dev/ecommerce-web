@@ -1,17 +1,17 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
-import { PATHS } from "@/shared/constants/paths/paths";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
-import { Button } from "@/shared/components/ui/button";
 import { CartCouponSection } from "../../coupons/CartCouponSection.component";
 import { CashbackCouponNotice } from "@/shared/components/notices/CashbackCouponNotice.component";
 import { AmountsUnavailableNotice } from "@/shared/components/notices/AmountsUnavailableNotice.component";
 import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import { OrderSummaryTotalsList } from "./OrderSummaryTotalsList.component";
+import { CartDeliveryArea } from "./CartDeliveryArea.component";
+import { CartCheckoutAction } from "./CartCheckoutAction.component";
 import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
+import type { DeliveryAreaSummary } from "@/shared/utils/delivery/deliveryArea";
+import { isDeliveryAreaBlocked } from "@/shared/utils/delivery/deliveryArea";
 import { cartPageViewStyles as styles } from "../../../styles/page/cartPageView.styles";
 
 interface OrderSummaryAsideProps {
@@ -33,6 +33,8 @@ interface OrderSummaryAsideProps {
     couponSavings?: number;
   };
   hasUnavailableItems: boolean;
+  /** The delivery area this basket was checked against (owned by the cart page hook). */
+  deliveryArea?: DeliveryAreaSummary;
   couponInput: string;
   couponMessage: string | null;
   couponError: string | null;
@@ -66,6 +68,7 @@ export function OrderSummaryAside({
   pendingLineTotals = false,
   pricingPreview,
   hasUnavailableItems,
+  deliveryArea,
   couponInput,
   couponMessage,
   couponError,
@@ -106,19 +109,6 @@ export function OrderSummaryAside({
       />
     ) : null;
 
-  const checkoutActionElement = hasUnavailableItems ? (
-    <p className={styles.asideWarningBanner}>
-      {LABELS.removeUnavailableToCheckout}
-    </p>
-  ) : (
-    <Button asChild className={styles.asideCheckoutButton} size="lg">
-      <Link href={PATHS.checkout} className={styles.asideCheckoutLink}>
-        {LABELS.checkout}
-        <ArrowRight size={16} />
-      </Link>
-    </Button>
-  );
-
   return (
     <aside className={styles.aside}>
       <div className={styles.asideCard}>
@@ -138,6 +128,8 @@ export function OrderSummaryAside({
 
         <TextEyebrow className={styles.asideEyebrow}>Order summary</TextEyebrow>
         <h2 className={styles.asideTitle}>Ready to checkout</h2>
+
+        <CartDeliveryArea deliveryArea={deliveryArea} />
 
         <OrderSummaryTotalsList
           subtotal={subtotal}
@@ -185,7 +177,10 @@ export function OrderSummaryAside({
           {cashbackNoticeElement}
         </div>
 
-        {checkoutActionElement}
+        <CartCheckoutAction
+          hasUnavailableItems={hasUnavailableItems}
+          isDeliveryAreaBlocked={isDeliveryAreaBlocked(deliveryArea)}
+        />
 
         <p className={styles.asideFooterNote}>Secure checkout · Easy returns</p>
       </div>

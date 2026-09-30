@@ -10,7 +10,7 @@ export const searchSuggestionRowStyles = {
   rowButton:
     "group/row flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors duration-150 outline-none focus-visible:bg-brand-subtle/70",
   rowActive: "bg-brand-subtle/80",
-  rowInactive: "hover:bg-paper",
+  rowInactive: "hover:bg-brand-subtle/40",
   contentCol: "min-w-0 flex-1",
   nameRow: "flex items-center gap-2",
   nameText:

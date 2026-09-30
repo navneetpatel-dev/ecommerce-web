@@ -16,7 +16,8 @@ export const agentDocumentsPanelStyles = {
   table: "w-full min-w-[640px] text-body-sm",
   tableHeaderRow: "border-b border-line text-left text-ink-muted",
   tableHeaderCell: "py-2.5 pr-3 font-medium",
-  tableRow: "border-b border-line/60 hover:bg-paper/40 transition-colors",
+  tableRow:
+    "border-b border-line/60 hover:bg-brand-subtle/40 transition-colors",
   tableCellMedium: "py-2.5 pr-3 font-medium",
   tableCellCapitalize: "py-2.5 pr-3 capitalize",
   tableCell: "py-2.5 pr-3",
