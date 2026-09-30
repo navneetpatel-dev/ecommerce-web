@@ -40,6 +40,7 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
     hasMultipleSellers,
     itemCopy,
     formattedTotalAmount,
+    invoiceAvailability,
     allInvoicesDisabled,
     singleInvoiceDisabled,
   } = useOrderSummaryAside({
@@ -47,6 +48,14 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
     itemCount,
     invoicePending,
   });
+
+  // Invoices are numbered at dispatch, so before any part ships there is nothing to
+  // download. Say so instead of leaving greyed-out buttons unexplained.
+  const invoiceHint = invoiceAvailability.hasDownloadableInvoice ? null : (
+    <p className={ORDER_SUMMARY_ASIDE_STYLES.invoiceHint}>
+      {LABELS.taxInvoiceIssueHint}
+    </p>
+  );
 
   return (
     <div className={ORDER_SUMMARY_ASIDE_STYLES.root}>
@@ -88,8 +97,10 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
             <p className={ORDER_SUMMARY_ASIDE_STYLES.downloadTitle}>
               {LABELS.downloadTaxInvoice}
             </p>
+            {invoiceHint}
             <SubOrderInvoicesList
               subOrders={subOrders}
+              stateBySubOrder={invoiceAvailability.stateBySubOrder}
               invoicePending={invoicePending}
               pendingSubOrderId={pendingSubOrderId}
               onDownloadSubOrderInvoice={onDownloadSubOrderInvoice}
@@ -106,16 +117,19 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
             </Button>
           </div>
         ) : (
-          <Button
-            type="button"
-            variant="outline"
-            className={ORDER_SUMMARY_ASIDE_STYLES.fullWidthButton}
-            onClick={onDownloadAllInvoices}
-            loading={invoicePending}
-            disabled={singleInvoiceDisabled}
-          >
-            {LABELS.downloadTaxInvoice}
-          </Button>
+          <>
+            {invoiceHint}
+            <Button
+              type="button"
+              variant="outline"
+              className={ORDER_SUMMARY_ASIDE_STYLES.fullWidthButton}
+              onClick={onDownloadAllInvoices}
+              loading={invoicePending}
+              disabled={singleInvoiceDisabled}
+            >
+              {LABELS.downloadTaxInvoice}
+            </Button>
+          </>
         )}
 
         {invoiceError ? (

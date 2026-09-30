@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import type { Order } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "../../utils/detail/format";
+import { resolveTaxInvoiceAvailability } from "../../utils/documents/invoiceAvailability.utils";
 
 interface UseOrderSummaryAsideParams {
   order: Order;
@@ -30,11 +31,10 @@ export function useOrderSummaryAside({
     return formatInr(order.totalAmount);
   }, [order.totalAmount]);
 
-  const allInvoicesDisabled = useMemo(() => {
-    return invoicePending || subOrders.every((sub) => !sub.taxInvoiceNumber);
-  }, [invoicePending, subOrders]);
-
-  const singleInvoiceDisabled = !subOrders[0]?.taxInvoiceNumber;
+  const invoiceAvailability = useMemo(
+    () => resolveTaxInvoiceAvailability(subOrders),
+    [subOrders],
+  );
 
   return {
     address,
@@ -42,7 +42,10 @@ export function useOrderSummaryAside({
     hasMultipleSellers,
     itemCopy,
     formattedTotalAmount,
-    allInvoicesDisabled,
-    singleInvoiceDisabled,
+    invoiceAvailability,
+    // A download in flight locks the whole panel, not just the part being fetched.
+    allInvoicesDisabled:
+      invoicePending || invoiceAvailability.allInvoicesDisabled,
+    singleInvoiceDisabled: invoiceAvailability.singleInvoiceDisabled,
   };
 }

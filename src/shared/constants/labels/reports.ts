@@ -81,6 +81,11 @@ export const reportsLabels = {
   downloadTaxInvoice: "Download tax invoice",
   downloadAllTaxInvoices: "Download all invoices (ZIP)",
   sellerFallback: "Seller",
+  /** Why a disabled invoice button is disabled — invoices are numbered at dispatch. */
+  taxInvoiceIssueHint:
+    "Tax invoices are issued once a seller ships your items.",
+  taxInvoiceAwaitingDispatch: "Not issued yet",
+  taxInvoiceNotApplicable: "No invoice for this part",
   downloadCreditNote: "Download credit note",
   downloadDebitNote: "Download debit note",
   commissionInvoices: "Commission invoices",

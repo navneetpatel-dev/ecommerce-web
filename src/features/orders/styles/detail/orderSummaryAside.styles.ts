@@ -15,6 +15,7 @@ export const ORDER_SUMMARY_ASIDE_STYLES = {
   actionsContainer: "mt-5 border-t border-line pt-5 space-y-2",
   multiSellersContainer: "space-y-2",
   downloadTitle: "text-body-sm font-medium text-ink",
+  invoiceHint: "text-body-sm text-ink-muted",
   fullWidthButton: "w-full",
   invoiceError: "text-body-sm text-danger",
   shippingAddressContainer: "mt-5 border-t border-line pt-5",
