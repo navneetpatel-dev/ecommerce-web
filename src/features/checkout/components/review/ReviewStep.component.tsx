@@ -25,6 +25,12 @@ interface ReviewStepProps {
   onGiftMessageChange?: (giftMessage: string) => void;
   onPlaceOrder: () => void;
   onBack: () => void;
+  /**
+   * Where the failure card sends the customer when the quote cannot be priced. The causes
+   * (no rate for the address, an unserviceable method) live in the delivery steps, not in
+   * payment — which is why this defaults to `onBack` but is wired to the shipping step.
+   */
+  onFixDelivery?: () => void;
 }
 
 /** Order review step: vendor breakdowns + payable summary + actions. */
@@ -41,6 +47,7 @@ export function ReviewStep(props: ReviewStepProps) {
     onGiftMessageChange,
     onPlaceOrder,
     onBack,
+    onFixDelivery,
   } = props;
 
   const {
@@ -68,8 +75,12 @@ export function ReviewStep(props: ReviewStepProps) {
             </p>
           ) : null}
         </div>
-        <Button variant="outline" onClick={onBack} fullWidth="mobile">
-          {LABELS.backToPayment}
+        <Button
+          variant="outline"
+          onClick={onFixDelivery ?? onBack}
+          fullWidth="mobile"
+        >
+          {LABELS.backToShipping}
         </Button>
       </div>
     );

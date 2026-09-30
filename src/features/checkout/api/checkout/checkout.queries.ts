@@ -69,12 +69,21 @@ export function useCreateAddress() {
   });
 }
 
-export function useShippingRates(pincode: string, vendorId: string) {
-  return useQuery({
+/**
+ * One definition of the per-vendor rate lookup. The shipping cards run it once per vendor;
+ * the shipping step runs it for every vendor at once (via `useQueries`) to know whether the
+ * customer's selection can actually be quoted. Same key either way, so one cache entry.
+ */
+export function shippingRatesQueryOptions(pincode: string, vendorId: string) {
+  return {
     queryKey: checkoutKeys.shippingRates(pincode, vendorId),
     queryFn: () => checkoutApi.getShippingRates(pincode, { vendorId }),
     enabled: PINCODE_PATTERN.test(pincode) && Boolean(vendorId),
-  });
+  };
+}
+
+export function useShippingRates(pincode: string, vendorId: string) {
+  return useQuery(shippingRatesQueryOptions(pincode, vendorId));
 }
 
 export function useCheckoutQuote(input: CheckoutQuoteInput) {

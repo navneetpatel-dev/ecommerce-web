@@ -150,6 +150,7 @@ export function CheckoutStepCard({
                   onGiftMessageChange={onGiftMessageChange}
                   onPlaceOrder={onPlaceOrder}
                   onBack={onBackToPayment}
+                  onFixDelivery={onBackToShipping}
                 />
               </CheckoutStepTransition>
             )}

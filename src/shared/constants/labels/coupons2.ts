@@ -87,10 +87,17 @@ export const coupons2Labels = {
   backToPayment: "Back to payment",
   preparingSummary: "Preparing your summary",
   calculatingShippingTaxes: "Calculating shipping and taxes for your order…",
-  summaryLoadFailed:
-    "We couldn't calculate shipping and taxes. Go back to payment and try again.",
+  summaryLoadFailed: "We couldn't calculate shipping and taxes for this order.",
   couldNotLoadShippingRates:
     "Could not load shipping rates for this delivery area.",
+  /** Shown while the per-vendor rate lookups for the chosen address are in flight. */
+  checkingDeliveryOptions: "Checking delivery options for this address…",
+  /** No rate in this area for the method the customer picked — fix address or method. */
+  noRateForSelectedMethod:
+    "We don't deliver to this address with the shipping method you picked. Choose another method, or use a different delivery address.",
+  /** Short version for the hint beside the blocked Continue button. */
+  noRateForSelectedMethodHint:
+    "Pick another shipping method or delivery address to continue.",
   couponCodeLabel: "Coupon code",
   yourCart: "Your Cart",
   closeCart: "Close cart",

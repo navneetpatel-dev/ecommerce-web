@@ -1,3 +1,5 @@
+"use client";
+
 import { useSyncExternalStore } from "react";
 import {
   DEFAULT_PALETTE_ID,
@@ -28,23 +30,42 @@ const FALLBACK: ChartThemeColors = (() => {
   };
 })();
 
+/** Ordered token -> CSS variable pairs: one source for reading + comparing. */
+const CHART_TOKENS = [
+  ["brand", "--brand"],
+  ["brandSubtle", "--brand-subtle"],
+  ["ink", "--ink"],
+  ["inkMuted", "--ink-muted"],
+  ["inkFaint", "--ink-faint"],
+  ["line", "--line"],
+  ["success", "--success"],
+  ["warning", "--warning"],
+  ["danger", "--danger"],
+  ["surface", "--surface"],
+] as const satisfies readonly (readonly [keyof ChartThemeColors, string])[];
+
+/**
+ * `useSyncExternalStore` schedules a re-render whenever `getSnapshot()` returns
+ * a new reference, so the parsed tokens are memoized: while the CSS variables
+ * are unchanged every read hands back the very same object and no update is
+ * scheduled. Handing out a fresh object per read is what tripped React's
+ * "The result of getSnapshot should be cached to avoid an infinite loop".
+ */
+let cachedColors: ChartThemeColors = FALLBACK;
+
 function readChartColors(): ChartThemeColors {
   if (typeof window === "undefined") return FALLBACK;
-  const s = getComputedStyle(document.documentElement);
-  const read = (name: string, fallback: string) =>
-    s.getPropertyValue(name).trim() || fallback;
-  return {
-    brand: read("--brand", FALLBACK.brand),
-    brandSubtle: read("--brand-subtle", FALLBACK.brandSubtle),
-    ink: read("--ink", FALLBACK.ink),
-    inkMuted: read("--ink-muted", FALLBACK.inkMuted),
-    inkFaint: read("--ink-faint", FALLBACK.inkFaint),
-    line: read("--line", FALLBACK.line),
-    success: read("--success", FALLBACK.success),
-    warning: read("--warning", FALLBACK.warning),
-    danger: read("--danger", FALLBACK.danger),
-    surface: read("--surface", FALLBACK.surface),
-  };
+  const styles = getComputedStyle(document.documentElement);
+  const next = { ...FALLBACK };
+  for (const [token, cssVar] of CHART_TOKENS) {
+    next[token] = styles.getPropertyValue(cssVar).trim() || FALLBACK[token];
+  }
+  const unchanged = CHART_TOKENS.every(
+    ([token]) => next[token] === cachedColors[token],
+  );
+  if (unchanged) return cachedColors;
+  cachedColors = next;
+  return cachedColors;
 }
 
 function subscribe(onStoreChange: () => void) {
@@ -56,7 +77,12 @@ function subscribe(onStoreChange: () => void) {
   return () => observer.disconnect();
 }
 
+/** Stable server snapshot: hydration paints the palette baseline, not refs. */
+function getServerSnapshot(): ChartThemeColors {
+  return FALLBACK;
+}
+
 /** Resolve theme CSS variables for Recharts (SVG needs concrete colors). */
 export function useChartThemeColors(): ChartThemeColors {
-  return useSyncExternalStore(subscribe, readChartColors, () => FALLBACK);
+  return useSyncExternalStore(subscribe, readChartColors, getServerSnapshot);
 }
