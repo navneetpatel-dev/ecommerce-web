@@ -6,7 +6,7 @@ export const cartLineStyles = {
     cn("flex items-center gap-3 py-2", !available && "opacity-50 grayscale"),
   compactImageWrapper: "relative h-14 w-14 shrink-0 overflow-hidden rounded-sm",
   compactGrid:
-    "grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1",
+    "grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-0.5",
   compactTitle:
     "truncate text-body-sm font-medium leading-snug text-ink hover:text-brand",
   compactRemoveButton:
@@ -18,7 +18,12 @@ export const cartLineStyles = {
     ),
   compactBadge: "w-fit text-[0.6875rem]",
   compactSkeleton: "h-3.5 w-16",
-  compactQuantityControl: "h-11 w-11 min-h-11 max-h-11 [&_svg]:size-3.5",
+  /**
+   * Drawer-sized cell: the stepper sits in the row's lower half beside the `h-14` thumbnail,
+   * so page-sized 44px cells (the project's default control height) made the row 96px tall
+   * with the buttons hanging below the image. 32px matches the drawer's remove button.
+   */
+  compactQuantityControl: "h-8 w-8 min-h-8 max-h-8 [&_svg]:size-3.5",
   compactQuantityValue: "h-4 w-5 text-body-sm",
 
   // Full cart line styles
