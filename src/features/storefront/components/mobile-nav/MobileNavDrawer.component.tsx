@@ -29,7 +29,9 @@ interface MobileNavDrawerProps {
 }
 
 /**
- * Mobile category nav — mirrors mega menu depth (Department → Category → Subcategory).
+ * Lightweight drawer categories in the navbar's tile language: each department renders as a
+ * tile with a brand icon square and its children as pills, so the drawer looks like the mega
+ * menu it mirrors without inheriting its wide-panel spacing (Rule 5: one look per concept).
  */
 export function MobileNavDrawer({
   open,

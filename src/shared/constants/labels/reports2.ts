@@ -64,6 +64,8 @@ export const reports2Labels = {
   onlyOneInStock: "Only 1 available in stock.",
   browse: "Browse",
   viewAll: "View all",
+  viewAllInCategory: "View all {name}",
+  categoryCountLabel: "{count} categories",
   shopByCategory: "Shop by category",
   noCategoriesYet: "No categories yet",
   browseProducts: "Browse products",
