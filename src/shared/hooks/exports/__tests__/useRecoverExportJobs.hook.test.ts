@@ -1,6 +1,7 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { exportJobsApi } from "@/shared/api/exports/exportJobs.api";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useExportJobsStore } from "@/shared/stores/exports/exportJobs.store";
 import { useRecoverExportJobs } from "../useRecoverExportJobs.hook";
 import type { ExportJobListItem } from "@/shared/types/exports.types";
@@ -30,6 +31,9 @@ function item(overrides: Partial<ExportJobListItem>): ExportJobListItem {
 describe("useRecoverExportJobs", () => {
   beforeEach(() => {
     useExportJobsStore.setState({ jobs: [] });
+    // The hook waits for bootstrap + a token, so the recovery tests all start
+    // from a bootstrapped session unless a test overrides it.
+    useAuthStore.setState({ authBootstrapped: true, accessToken: "token" });
     vi.mocked(exportJobsApi.list).mockReset();
   });
 
@@ -91,5 +95,46 @@ describe("useRecoverExportJobs", () => {
       await Promise.resolve();
     });
     expect(useExportJobsStore.getState().jobs).toEqual([]);
+  });
+
+  it("waits for auth bootstrap before hitting GET /api/exports", async () => {
+    useAuthStore.setState({ authBootstrapped: false, accessToken: null });
+    vi.mocked(exportJobsApi.list).mockResolvedValue([]);
+    renderHook(() => useRecoverExportJobs());
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(exportJobsApi.list).not.toHaveBeenCalled();
+  });
+
+  it("never lists for an anonymous visitor, so it cannot force a refresh", async () => {
+    useAuthStore.setState({ authBootstrapped: true, accessToken: null });
+    vi.mocked(exportJobsApi.list).mockResolvedValue([]);
+    renderHook(() => useRecoverExportJobs());
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(exportJobsApi.list).not.toHaveBeenCalled();
+  });
+
+  it("recovers once a token arrives after a guest boot", async () => {
+    useAuthStore.setState({ authBootstrapped: true, accessToken: null });
+    vi.mocked(exportJobsApi.list).mockResolvedValue([
+      item({ id: "late", status: "PROCESSING", progressPercent: 37 }),
+    ]);
+    renderHook(() => useRecoverExportJobs());
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(exportJobsApi.list).not.toHaveBeenCalled();
+
+    act(() => useAuthStore.setState({ accessToken: "fresh" }));
+
+    await waitFor(() =>
+      expect(
+        useExportJobsStore.getState().jobs.find((j) => j.jobId === "late")
+          ?.progressPercent,
+      ).toBe(37),
+    );
   });
 });

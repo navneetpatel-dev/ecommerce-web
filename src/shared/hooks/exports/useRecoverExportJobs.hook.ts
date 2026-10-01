@@ -2,12 +2,32 @@
 
 import { useEffect } from "react";
 import { exportJobsApi } from "@/shared/api/exports/exportJobs.api";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useExportJobsStore } from "@/shared/stores/exports/exportJobs.store";
 
 export function useRecoverExportJobs() {
   const trackJob = useExportJobsStore((s) => s.trackJob);
+  const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
+  const accessToken = useAuthStore((s) => s.accessToken);
 
   useEffect(() => {
+    // Same reasoning as `useCart`'s `enabled: authBootstrapped`: the access
+    // token is memory-only, so on a hard refresh this request used to leave
+    // before the bootstrap's silent `POST /api/auth/refresh` resolved. Without
+    // an Authorization header it was a guaranteed 401, and the client's
+    // 401-recovery path then spent a refresh round-trip before the retry
+    // succeeded — the browser network tab showed four rows for two logical
+    // calls. Anonymous visitors were worse off: they own no export jobs at
+    // all, yet the same 401 pushed `sessionRefresh` into a failing refresh
+    // plus `clearPersistedSession()` on every single page load.
+    //
+    // `authBootstrapped` (not `isAuthenticated`) is the load-bearing half: the
+    // bootstrap hydrates `currentUser` from localStorage *before* the refresh
+    // resolves, so an auth check on `accessToken || currentUser` already reads
+    // true inside the race window. The flag only flips in the bootstrap's
+    // `finally`, by which point the token is either present or definitively
+    // absent-and-cleared.
+    if (!authBootstrapped || !accessToken) return;
     let cancelled = false;
     void exportJobsApi
       .list()
@@ -59,5 +79,10 @@ export function useRecoverExportJobs() {
     return () => {
       cancelled = true;
     };
-  }, [trackJob]);
+    // `accessToken` is a dep on purpose: a mid-session rotation (401-recovery,
+    // sign-in) re-runs the recovery once. `trackJob` de-dupes by `jobId` and
+    // seeds from the server's *current* state, so a re-run re-syncs instead of
+    // duplicating — and it's what makes recovery work after signing in on a
+    // page that was first loaded as a guest.
+  }, [authBootstrapped, accessToken, trackJob]);
 }
