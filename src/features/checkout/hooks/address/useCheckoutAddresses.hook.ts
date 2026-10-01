@@ -5,6 +5,7 @@ import {
   useCreateAddress,
 } from "../../api/checkout/checkout.queries";
 import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useCart, groupItemsByVendor } from "@/features/cart";
 import {
   useDeliveryLocation,
@@ -24,11 +25,23 @@ export type AddressDraft = Omit<Address, "id" | "userId">;
 export function useCheckoutAddresses() {
   const setAddress = useCheckoutStore((s) => s.setAddress);
   const addressId = useCheckoutStore((s) => s.addressId);
+  const currentUser = useAuthStore((s) => s.currentUser);
+  const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
   const { data: addresses, isLoading } = useAddresses();
   const createAddress = useCreateAddress();
   const { requireAuth } = useRequireAuth();
   const { data: cart } = useCart();
   const { setDeliveryLocation } = useDeliveryLocation();
+
+  /**
+   * `useAddresses` waits for the access token so a cold load cannot fire an
+   * unauthenticated `GET /addresses`, but a *disabled* query reports
+   * `isLoading: false` — so without this the address step would flash "no saved
+   * addresses" for the whole bootstrap window instead of the skeleton it shows
+   * today. A hydrated snapshot is the hint that a session is on its way; guests
+   * (`currentUser` null) are untouched and never wait.
+   */
+  const awaitingSession = Boolean(currentUser) && !authBootstrapped;
 
   // Prefer default address, otherwise first saved address
   useEffect(() => {
@@ -80,7 +93,7 @@ export function useCheckoutAddresses() {
     addressId,
     addresses,
     deliveryArea,
-    isLoadingAddresses: isLoading,
+    isLoadingAddresses: awaitingSession || isLoading,
     isCreatingAddress: createAddress.isPending,
     onSelectAddress: setAddress,
     onCreateAddress,

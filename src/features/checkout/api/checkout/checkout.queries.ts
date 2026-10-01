@@ -35,12 +35,19 @@ function sortAddresses(list: Address[]) {
 }
 
 export function useAddresses() {
-  const currentUser = useAuthStore((s) => s.currentUser);
+  const accessToken = useAuthStore((s) => s.accessToken);
 
   return useQuery({
     queryKey: checkoutKeys.addresses,
     queryFn: () => checkoutApi.getAddresses(),
-    enabled: Boolean(currentUser),
+    // The token, not `currentUser` (see `useWalletBalance`): a hydrated snapshot
+    // is not a session, and `/checkout` is deliberately not behind `AuthGate` —
+    // guests use it and get prompted — so a `currentUser` gate meant every
+    // signed-in customer's cold load fired `GET /addresses` with no bearer, got
+    // the guaranteed 401, then rode the refresh round-trip to retry it.
+    // `useCheckoutAddresses` holds the address-step skeleton until this token
+    // arrives, because a disabled query reports `isLoading: false`.
+    enabled: Boolean(accessToken),
   });
 }
 

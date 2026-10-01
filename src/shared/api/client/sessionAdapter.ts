@@ -56,6 +56,28 @@ export function persistSessionUser(user: CurrentUser): void {
 }
 
 /**
+ * Reads the persisted user snapshot, dropping an unparseable entry.
+ *
+ * Doubles as the "a session may exist in this browser" hint the auth bootstrap
+ * needs before it spends a request on `POST /api/auth/refresh`: the access token
+ * is memory-only (F-14) and the refresh cookie is httpOnly, so on a cold load
+ * this key is the only client-readable evidence that a login ever happened here.
+ * Every login path writes it via `persistSessionUser`, and every session-clearing
+ * path drops it, so "no snapshot" is a reliable proxy for "no session to restore".
+ */
+export function readPersistedSessionUser(): CurrentUser | null {
+  if (typeof window === "undefined") return null;
+  const sessionStr = window.localStorage.getItem(STORAGE_KEYS.SESSION);
+  if (!sessionStr) return null;
+  try {
+    return JSON.parse(sessionStr) as CurrentUser;
+  } catch {
+    window.localStorage.removeItem(STORAGE_KEYS.SESSION);
+    return null;
+  }
+}
+
+/**
  * Removes persisted credentials straight from storage without going through
  * the registered adapter. Lets store/session owners clear credentials without
  * an adapter→store→adapter recursion (Rule 21: one storage owner per concern).

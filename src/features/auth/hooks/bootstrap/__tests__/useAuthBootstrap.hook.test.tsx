@@ -55,6 +55,9 @@ describe("storeSessionAdapter + useAuthBootstrap (F-14 / F-25)", () => {
   });
 
   it("bootstraps an authenticated session from a refresh cookie with no stored access token", async () => {
+    // A session that exists in this browser always left its snapshot on disk —
+    // that is what makes the refresh attempt worth making at all.
+    localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(adminUser));
     vi.mocked(refreshSessionOrThrow).mockImplementation(async () => {
       storeSessionAdapter.persistAccessToken("refreshed-token");
     });
@@ -75,6 +78,9 @@ describe("storeSessionAdapter + useAuthBootstrap (F-14 / F-25)", () => {
   });
 
   it("resolves as guest when silent refresh fails and does not retry forever", async () => {
+    // Snapshot on disk but the refresh cookie is already dead — the only case
+    // where the attempt is made and the honest answer is still "guest".
+    localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(adminUser));
     vi.mocked(refreshSessionOrThrow).mockRejectedValue(
       new ApiError(ERROR_CODES.UNAUTHORIZED, "expired"),
     );
@@ -86,8 +92,43 @@ describe("storeSessionAdapter + useAuthBootstrap (F-14 / F-25)", () => {
     });
 
     expect(useAuthStore.getState().accessToken).toBeNull();
+    // The snapshot was hydrated into `currentUser` before the attempt, so this
+    // null also proves the auth failure cleared the session.
     expect(useAuthStore.getState().currentUser).toBeNull();
     expect(refreshSessionOrThrow).toHaveBeenCalledTimes(1);
     expect(authApi.me).not.toHaveBeenCalled();
+    // Clearing drops the snapshot with it, so the next cold load skips the
+    // probe instead of repeating the guaranteed 401.
+    expect(localStorage.getItem(STORAGE_KEYS.SESSION)).toBeNull();
+  });
+
+  it("treats a browser with no persisted session as a guest without calling refresh", async () => {
+    renderHook(() => useAuthBootstrap(), { wrapper });
+
+    await waitFor(() => {
+      expect(useAuthStore.getState().authBootstrapped).toBe(true);
+    });
+
+    // No login ever wrote a snapshot here, so no refresh cookie can belong to
+    // this browser: the request could only come back 401, and `sessionRefresh`
+    // answers a 401 with `clearPersistedSession()`.
+    expect(refreshSessionOrThrow).not.toHaveBeenCalled();
+    expect(authApi.me).not.toHaveBeenCalled();
+    expect(useAuthStore.getState().accessToken).toBeNull();
+    expect(useAuthStore.getState().currentUser).toBeNull();
+  });
+
+  it("drops a corrupt session snapshot instead of asking the server about it", async () => {
+    localStorage.setItem(STORAGE_KEYS.SESSION, "{not-json");
+
+    renderHook(() => useAuthBootstrap(), { wrapper });
+
+    await waitFor(() => {
+      expect(useAuthStore.getState().authBootstrapped).toBe(true);
+    });
+
+    expect(refreshSessionOrThrow).not.toHaveBeenCalled();
+    expect(authApi.me).not.toHaveBeenCalled();
+    expect(localStorage.getItem(STORAGE_KEYS.SESSION)).toBeNull();
   });
 });

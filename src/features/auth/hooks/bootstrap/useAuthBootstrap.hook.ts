@@ -7,6 +7,7 @@ import { authApi } from "../../api/auth/auth.api";
 import { cartKeys } from "@/features/cart";
 import {
   persistSessionUser,
+  readPersistedSessionUser,
   registerApiSessionAdapter,
 } from "@/shared/api/client/sessionAdapter";
 import { refreshSessionOrThrow } from "@/shared/api/client/internal/sessionRefresh";
@@ -47,16 +48,17 @@ function restoreImpersonationOrigin(): boolean {
   return true;
 }
 
-function hydrateUserFromPersistedSession() {
-  if (typeof window === "undefined") return;
-  const sessionStr = window.localStorage.getItem(STORAGE_KEYS.SESSION);
-  if (!sessionStr) return;
-  try {
-    const user = JSON.parse(sessionStr) as CurrentUser;
-    useAuthStore.setState({ currentUser: user });
-  } catch {
-    window.localStorage.removeItem(STORAGE_KEYS.SESSION);
-  }
+/**
+ * Restores the persisted user snapshot and reports whether one existed. That
+ * boolean is also the silent-refresh gate in `bootstrap` — reading it once here
+ * keeps the two decisions ("who am I showing?" and "is there a session to ask
+ * about?") from ever disagreeing.
+ */
+function hydrateUserFromPersistedSession(): boolean {
+  const user = readPersistedSessionUser();
+  if (!user) return false;
+  useAuthStore.setState({ currentUser: user });
+  return true;
 }
 
 export const storeSessionAdapter = {
@@ -98,9 +100,22 @@ export function useAuthBootstrap() {
       if (typeof window !== "undefined") {
         window.localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
       }
-      hydrateUserFromPersistedSession();
+      const hasSessionHint = hydrateUserFromPersistedSession();
 
       try {
+        // No snapshot on disk means this browser has no session to restore, and
+        // a refresh attempt is the wrong way to find that out: the cookie is
+        // httpOnly, so the only answer the server can give an anonymous visitor
+        // is a 401 — which `sessionRefresh` treats as a definitive auth failure
+        // and answers with `clearPersistedSession()`. That was the network tab's
+        // red `refresh` row on every cold load, in every tab, for a visitor who
+        // was never logged in. Skipping it costs nothing: the access token is
+        // memory-only (F-14), so a session that exists in this browser always
+        // wrote its snapshot here first (login, OTP verify, OAuth callback,
+        // vendor registration and impersonation all call `persistSessionUser`),
+        // and a stale snapshot — cookie long dead — still enters the branch
+        // below and resolves to a guest exactly as before.
+        if (!hasSessionHint) return;
         await refreshSessionOrThrow();
         if (cancelled) return;
         const accessToken = useAuthStore.getState().accessToken;
