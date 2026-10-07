@@ -13,12 +13,14 @@ interface StepIndicatorProps {
   onStepClick: (step: number) => void;
 }
 
-const STEP_META: Record<string, { description: string }> = {
-  Address: { description: "Delivery details" },
-  Shipping: { description: "Arrival speed" },
-  Payment: { description: "How you pay" },
-  Review: { description: "Confirm & place" },
-};
+/** Checkout step blurbs, keyed by position so label copy can change freely. */
+const STEP_DESCRIPTIONS = [
+  "Delivery details",
+  "Arrival speed",
+  "How you pay",
+  "Confirm & place",
+] as const;
+const stepDescription = (stepNum: number) => STEP_DESCRIPTIONS[stepNum - 1];
 
 function stepNumber(n: number) {
   return String(n).padStart(2, "0");
@@ -70,7 +72,6 @@ function DesktopStepItem({
   const isCompleted = stepNum < currentStep;
   const isCurrent = stepNum === currentStep;
   const isUpcoming = stepNum > currentStep;
-  const meta = STEP_META[label];
   const ariaCurrent = isCurrent ? "step" : undefined;
 
   const connector = !isLast && (
@@ -122,7 +123,7 @@ function DesktopStepItem({
         <span className={stepIndicatorStyles.textWrap}>
           <span className={labelClassName}>{label}</span>
           <span className={stepIndicatorStyles.description}>
-            {meta?.description}
+            {stepDescription(stepNum)}
           </span>
         </span>
       </Button>
@@ -137,7 +138,7 @@ export function StepIndicator({
   onStepClick,
 }: StepIndicatorProps) {
   const currentLabel = steps[currentStep - 1];
-  const currentDescription = STEP_META[currentLabel ?? ""]?.description;
+  const currentDescription = stepDescription(currentStep);
   const progressWidth = `${(currentStep / steps.length) * 100}%`;
   const mobileDots = steps.map((label, i) => (
     <MobileStepDot

@@ -48,10 +48,14 @@ export function OrderCancelAction({ order }: OrderCancelActionProps) {
       />
 
       {message ? (
-        <p className={ordersComponentsStyles.cancelSuccess}>{message}</p>
+        <p role="status" className={ordersComponentsStyles.cancelSuccess}>
+          {message}
+        </p>
       ) : null}
       {error ? (
-        <p className={ordersComponentsStyles.cancelError}>{error}</p>
+        <p role="alert" className={ordersComponentsStyles.cancelError}>
+          {error}
+        </p>
       ) : null}
     </>
   );

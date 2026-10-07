@@ -26,16 +26,23 @@ export function ExportJobRow({
   const statusMessage = resolveExportJobStatusMessage(job);
   const errorText = resolveExportJobErrorText(job);
 
+  const handleDismiss = () => {
+    onDismiss(job.jobId);
+  };
+
+  const handleCancel = () => {
+    onCancel(job.jobId);
+  };
+
+  const handleDownload = () => {
+    onDownload(job.jobId);
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.header}>
         <span className={styles.title}>{job.label}</span>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => onDismiss(job.jobId)}
-        >
+        <Button type="button" variant="ghost" size="sm" onClick={handleDismiss}>
           {LABELS.exportDismissAction}
         </Button>
       </div>
@@ -58,7 +65,7 @@ export function ExportJobRow({
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => onCancel(job.jobId)}
+            onClick={handleCancel}
           >
             {LABELS.exportCancelAction}
           </Button>
@@ -70,7 +77,7 @@ export function ExportJobRow({
             type="button"
             variant="outline"
             size="sm"
-            onClick={() => onDownload(job.jobId)}
+            onClick={handleDownload}
           >
             {LABELS.exportDownloadAction}
           </Button>

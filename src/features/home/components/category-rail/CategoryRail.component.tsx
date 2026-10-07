@@ -4,15 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
-import {
-  CategoryCard,
-  CategoryMoreCard,
-  getRootCategories,
-} from "@/features/categories";
+import { getRootCategories } from "@/features/categories";
 import { CategoryGridSkeleton } from "@/shared/components/Skeletons.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { Category } from "@/shared/api/types";
+import { CategoryRailGrid } from "./CategoryRailGrid.component";
 import { categoryRailStyles as styles } from "../../styles/category-rail/categoryRail.styles";
 
 const HOME_CATEGORY_LIMIT = 10;
@@ -78,19 +75,11 @@ export function CategoryRail({
     <section>
       <CategoryRailHeader totalCount={mounted ? roots.length : undefined} />
 
-      <div className={styles.grid}>
-        {visible.map((cat) => (
-          <CategoryCard key={cat.id} category={cat} />
-        ))}
-
-        {hasMore ? (
-          <CategoryMoreCard
-            href={PATHS.categories}
-            moreCount={roots.length - HOME_CATEGORY_LIMIT}
-            overflowCategories={overflow}
-          />
-        ) : null}
-      </div>
+      <CategoryRailGrid
+        visible={visible}
+        overflow={overflow}
+        hasMore={hasMore}
+      />
     </section>
   );
 }

@@ -1,26 +1,29 @@
 import { useCallback } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { LABELS } from "@/shared/constants/labels";
 import { agentDocumentsPanelStyles } from "../../../styles/delivery-agents/agentDocumentsPanel.styles";
 
 interface AgentDocumentActionButtonsProps {
   documentId: string;
   isPending: boolean;
-  onAct: (docId: string, action: "APPROVE" | "REJECT") => Promise<void>;
+  onApprove: (documentId: string) => void;
+  onReject: (documentId: string) => void;
 }
 
 export function AgentDocumentActionButtons({
   documentId,
   isPending,
-  onAct,
+  onApprove,
+  onReject,
 }: AgentDocumentActionButtonsProps) {
   const handleApprove = useCallback(() => {
-    void onAct(documentId, "APPROVE");
-  }, [documentId, onAct]);
+    onApprove(documentId);
+  }, [documentId, onApprove]);
 
   const handleReject = useCallback(() => {
-    void onAct(documentId, "REJECT");
-  }, [documentId, onAct]);
+    onReject(documentId);
+  }, [documentId, onReject]);
 
   return (
     <div className={agentDocumentsPanelStyles.actionsWrapper}>
@@ -35,7 +38,7 @@ export function AgentDocumentActionButtons({
           className={agentDocumentsPanelStyles.actionIcon}
           aria-hidden="true"
         />
-        Approve
+        {LABELS.approve}
       </Button>
       <Button
         size="sm"
@@ -48,7 +51,7 @@ export function AgentDocumentActionButtons({
           className={agentDocumentsPanelStyles.actionIcon}
           aria-hidden="true"
         />
-        Reject
+        {LABELS.reject}
       </Button>
     </div>
   );

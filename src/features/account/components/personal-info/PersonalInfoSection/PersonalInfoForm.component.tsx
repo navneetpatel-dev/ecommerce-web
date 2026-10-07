@@ -78,6 +78,7 @@ export function PersonalInfoForm({
             <Input
               id="account-phone"
               type="tel"
+              autoComplete="tel"
               placeholder={LABELS.phonePlaceholder}
               error={phoneHasError}
               {...register("phone")}

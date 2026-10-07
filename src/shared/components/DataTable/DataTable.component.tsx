@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, type KeyboardEvent } from "react";
+import { Inbox } from "lucide-react";
 import { SkeletonRows } from "@/shared/components/Skeletons.component";
+import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
+import { Button } from "@/shared/components/ui/button";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { RecordDetailDialog } from "@/shared/components/dialogs/RecordDetailDialog.component";
 import { TooltipProvider } from "@/shared/components/ui/tooltip";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
@@ -78,12 +82,26 @@ export function DataTable<T>({
           />
         )}
 
-        {error ? <p className={dataTableStyles.error}>{error}</p> : null}
+        {error ? (
+          <div className={dataTableStyles.errorBox}>
+            <QueryErrorAlert error={error} fallback={error} />
+            {onRefresh ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={onRefresh}
+              >
+                {LABELS.retry}
+              </Button>
+            ) : null}
+          </div>
+        ) : null}
 
         {loading ? (
           <SkeletonRows count={6} height={dataTableStyles.skeletonHeight} />
         ) : rows.length === 0 ? (
-          <div className={dataTableStyles.emptyContainer}>{emptyMessage}</div>
+          <EmptyState icon={Inbox} message={emptyMessage} />
         ) : (
           <>
             {/* Below lg: stacked cards — row actions collapse to kebab */}

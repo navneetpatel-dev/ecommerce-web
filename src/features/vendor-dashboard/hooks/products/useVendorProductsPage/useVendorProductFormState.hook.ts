@@ -21,6 +21,7 @@ import {
   getFormLevelApiError,
 } from "@/shared/utils/api-errors/applyApiFormErrors";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { createProductWithImages } from "../../../utils/products/createProductWithImages";
 
 export function useVendorProductFormState(options: {
   mode: "create" | "edit" | null;
@@ -105,14 +106,7 @@ export function useVendorProductFormState(options: {
         if (mode === "edit" && editId) {
           await productsApi.update(editId, body);
         } else {
-          const product = await productsApi.create(body);
-          for (let index = 0; index < imageUrls.length; index += 1) {
-            const url = imageUrls[index]!;
-            await productsApi.addImage(product.id, {
-              url,
-              isPrimary: index === 0,
-            });
-          }
+          await createProductWithImages(body, imageUrls);
         }
         close();
         resetFormState(categories[0]?.id);

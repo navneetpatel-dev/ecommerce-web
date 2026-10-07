@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent } from "react";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { LABELS } from "@/shared/constants/labels";
 import { useCloseCashShift } from "../../api/agent/deliveryAgent.queries";
 import type { ShiftSummary } from "../../types/agent/types";
 
@@ -25,6 +26,8 @@ export function useShiftSummaryCard(summary: ShiftSummary) {
     setNote(e.target.value);
   };
 
+  const isDirty = amount !== String(summary.codCashInHand) || note.length > 0;
+
   const submit = async () => {
     setError(null);
     try {
@@ -34,9 +37,7 @@ export function useShiftSummaryCard(summary: ShiftSummary) {
       });
       setOpen(false);
     } catch (submitError) {
-      setError(
-        getApiErrorMessage(submitError, "Could not submit cash deposit."),
-      );
+      setError(getApiErrorMessage(submitError, LABELS.depositFailedFallback));
     }
   };
 
@@ -52,6 +53,7 @@ export function useShiftSummaryCard(summary: ShiftSummary) {
     amount,
     note,
     error,
+    isDirty,
     isPending: closeShift.isPending,
     isSubmitDisabled,
     openDialog,

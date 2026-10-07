@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef } from "react";
+import { useId, useRef, type ChangeEvent } from "react";
 import { FormError } from "@/shared/components/forms/FormError.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
@@ -79,6 +79,14 @@ export function TicketAttachmentUploader({
     void processFile(list[0]!);
   };
 
+  const handleUploadClick = () => {
+    fileRef.current?.click();
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onPick(event.target.files);
+  };
+
   const removeAt = (index: number) => {
     onChange(value.filter((_, i) => i !== index));
   };
@@ -97,7 +105,7 @@ export function TicketAttachmentUploader({
           variant="outline"
           size="sm"
           disabled={disabled || pending || !entityId}
-          onClick={() => fileRef.current?.click()}
+          onClick={handleUploadClick}
         >
           {pending ? LABELS.uploading : LABELS.uploadFiles}
         </Button>
@@ -108,7 +116,9 @@ export function TicketAttachmentUploader({
           className={ticketAttachmentUploaderStyles.fileInput}
           accept={accept}
           disabled={disabled || pending}
-          onChange={(e) => onPick(e.target.files)}
+          tabIndex={-1}
+          aria-label={LABELS.uploadFiles}
+          onChange={handleFileChange}
         />
       </div>
       <p className={ticketAttachmentUploaderStyles.counterText}>

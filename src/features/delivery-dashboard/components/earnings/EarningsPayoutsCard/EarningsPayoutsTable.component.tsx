@@ -2,10 +2,7 @@
 
 import { useMemo } from "react";
 import { Download } from "lucide-react";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "@/shared/components/DataTable";
+import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { earningsPayoutsCardStyles } from "../../../styles/earnings/earningsPayoutsCard.styles";

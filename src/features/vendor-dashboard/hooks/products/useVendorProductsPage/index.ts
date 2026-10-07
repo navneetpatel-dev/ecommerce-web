@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { useRouteQueryDialog } from "@/shared/hooks/navigation/useRouteQueryDialog.hook";
@@ -29,6 +29,7 @@ export function useVendorProductsPage() {
   const form = useVendorProductFormState({ mode, editId, close });
 
   const lastDialogKeyRef = useRef<string | null>(null);
+  const [formDirty, setFormDirty] = useState(false);
 
   useEffect(() => {
     if (!open || !mode) {
@@ -39,6 +40,7 @@ export function useVendorProductsPage() {
     const dialogKey = mode === "edit" ? `edit:${editId ?? ""}` : "create";
     if (lastDialogKeyRef.current === dialogKey) return;
     lastDialogKeyRef.current = dialogKey;
+    setFormDirty(false);
 
     if (mode === "create") {
       if (!canCreate) {
@@ -77,9 +79,20 @@ export function useVendorProductsPage() {
   const showProductDialog =
     open && ((mode === "create" && canCreate) || (mode === "edit" && canEdit));
 
+  /** User edits mark the form dirty so the dialog can confirm before discarding. */
+  const handleFormChange = (patch: Partial<ProductListingFormValues>) => {
+    setFormDirty(true);
+    form.setValues((current) => ({ ...current, ...patch }));
+  };
+  const handleImageUrlsChange = (urls: string[]) => {
+    setFormDirty(true);
+    form.setImageUrls(urls);
+  };
+
   const formDialogProps = {
     open: showProductDialog,
     mode: (mode === "edit" ? "edit" : "create") as "create" | "edit",
+    isDirty: formDirty,
     onOpenChange: setOpen,
     onCancel: close,
     formProps: {
@@ -91,10 +104,8 @@ export function useVendorProductsPage() {
       apiFieldErrors: form.apiFieldErrors,
       submitting: form.submitting,
       loading: form.loading,
-      onChange: (patch: Partial<ProductListingFormValues>) => {
-        form.setValues((current) => ({ ...current, ...patch }));
-      },
-      onImageUrlsChange: form.setImageUrls,
+      onChange: handleFormChange,
+      onImageUrlsChange: handleImageUrlsChange,
       onValidSubmit: form.handleValidSubmit,
     },
   };

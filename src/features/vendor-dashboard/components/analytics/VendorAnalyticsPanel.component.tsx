@@ -1,10 +1,11 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { SkeletonGrid } from "@/shared/components/Skeletons.component";
+import { SkeletonChartCard } from "@/shared/components/Skeletons.component";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
-import { VendorRevenueChartCard } from "./VendorRevenueChartCard.component";
 import { VendorTopProductsCard } from "./VendorTopProductsCard.component";
 import { VendorFulfillmentSlaCard } from "./VendorFulfillmentSlaCard.component";
 import { useVendorAnalyticsPanel } from "../../hooks/analytics/useVendorAnalyticsPanel.hook";
@@ -12,6 +13,15 @@ import {
   VENDOR_ANALYTICS_GRID,
   VENDOR_ANALYTICS_PANEL_ROOT,
 } from "../../styles/analytics/vendorAnalyticsPanel.styles";
+
+// Lazy so recharts stays out of the vendor analytics route bundle.
+const VendorRevenueChartCard = dynamic(
+  () =>
+    import("./VendorRevenueChartCard.component").then(
+      (mod) => mod.VendorRevenueChartCard,
+    ),
+  { loading: () => <SkeletonChartCard bodyHeight="h-64 sm:h-72" /> },
+);
 
 export function VendorAnalyticsPanel() {
   const {

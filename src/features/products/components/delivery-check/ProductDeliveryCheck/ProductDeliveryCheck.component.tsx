@@ -86,10 +86,12 @@ export function ProductDeliveryCheck({
         </Button>
       </div>
       {pincodeError ? (
-        <p className={productDeliveryCheckStyles.errorText}>{pincodeError}</p>
+        <p role="alert" className={productDeliveryCheckStyles.errorText}>
+          {pincodeError}
+        </p>
       ) : null}
       {quoteQuery.isError ? (
-        <p className={productDeliveryCheckStyles.errorText}>
+        <p role="alert" className={productDeliveryCheckStyles.errorText}>
           {getApiErrorMessage(quoteQuery.error, LABELS.deliveryCheckFailed)}
         </p>
       ) : null}

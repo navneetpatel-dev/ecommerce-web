@@ -26,6 +26,15 @@ interface UseProductFormControllerOptions {
   onValidSubmit: (body: ProductWriteBody) => void;
 }
 
+/** After a failed submit, bring the first invalid control into view. */
+function focusFirstInvalidField() {
+  window.requestAnimationFrame(() => {
+    const field = document.querySelector<HTMLElement>('[aria-invalid="true"]');
+    field?.scrollIntoView({ block: "center", behavior: "smooth" });
+    field?.focus({ preventScroll: true });
+  });
+}
+
 export function useProductFormController({
   values,
   loading,
@@ -73,6 +82,7 @@ export function useProductFormController({
     const parsed = parseProductListingForm(values);
     if (!parsed.success) {
       setErrors(productFormFieldErrors(parsed.error));
+      focusFirstInvalidField();
       return;
     }
     onValidSubmit(toProductWriteBody(parsed.data));

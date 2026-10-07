@@ -55,6 +55,10 @@ import { impersonationLabels } from "./labels/impersonation";
 import { exportsLabels } from "./labels/exports";
 import { appliedFilterLabels } from "./labels/appliedFilters";
 import { mediaUploadLabels } from "./labels/mediaUploads";
+import { homeLabels } from "./labels/home";
+import { deliveryAgentTablesLabels } from "./labels/deliveryAgentTables";
+import { deliveryAgentOpsLabels } from "./labels/deliveryAgentOps";
+import { adminOrdersFiltersLabels } from "./labels/adminOrdersFilters";
 
 export const LABELS = {
   ...commerceLabels,
@@ -109,6 +113,10 @@ export const LABELS = {
   ...exportsLabels,
   ...appliedFilterLabels,
   ...mediaUploadLabels,
+  ...homeLabels,
+  ...deliveryAgentTablesLabels,
+  ...deliveryAgentOpsLabels,
+  ...adminOrdersFiltersLabels,
 } as const;
 
 export { formatExportProcessing } from "./labels/exports";

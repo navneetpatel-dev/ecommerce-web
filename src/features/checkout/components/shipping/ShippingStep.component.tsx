@@ -88,7 +88,7 @@ export function ShippingStep({
           fullWidth="mobile"
           className={SHIPPING_STEP_STYLES.continueButton}
         >
-          Continue to payment
+          {LABELS.continueToPayment}
           <ArrowRight size={16} />
         </Button>
       </DisabledActionHint>

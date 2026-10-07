@@ -6,6 +6,17 @@
  */
 export const adminUsersFiltersLabels = {
   usersFilters: "Filters",
+  changeRoleTrigger: "Change Role",
+  changeUserRoleTitle: "Change User Role",
+  changeUserRoleDescription:
+    "Update role and permission access for {name}. Current role: {role}.",
+  selectNewRoleLabel: "Select New Role",
+  selectRolePlaceholder: "Select a role",
+  loadingRoles: "Loading roles…",
+  selectVendorStoreLabel: "Select Associated Vendor Store",
+  selectVendorStorePlaceholder: "Select a vendor store",
+  loadingVendorStores: "Loading vendor stores…",
+  currentRoleMarker: "(Current)",
   usersSearch: "Search",
   usersSearchPlaceholder: "Search by name or email",
   usersStatus: "Status",

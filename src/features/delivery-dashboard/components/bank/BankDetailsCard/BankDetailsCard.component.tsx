@@ -61,7 +61,9 @@ export function BankDetailsCard({ bankDetails }: BankDetailsCardProps) {
           <p className={bankDetailsCardStyles.successMessage}>{message}</p>
         ) : null}
         {error ? (
-          <p className={bankDetailsCardStyles.errorMessage}>{error}</p>
+          <p role="alert" className={bankDetailsCardStyles.errorMessage}>
+            {error}
+          </p>
         ) : null}
 
         <Button

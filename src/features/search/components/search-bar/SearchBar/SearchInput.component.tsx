@@ -51,6 +51,8 @@ export function SearchInput({
       <Input
         ref={inputRef}
         type="search"
+        name="search"
+        enterKeyHint="search"
         role="combobox"
         aria-expanded={showPanel}
         aria-controls={showPanel ? SEARCH_LIST_ID : undefined}

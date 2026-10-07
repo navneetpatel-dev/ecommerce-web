@@ -50,6 +50,12 @@ export const coupons2Labels = {
   payableNow: "Payable now",
   includingShippingTaxes: "Including shipping and taxes",
   placeOrder: "Place order",
+  continueToShipping: "Continue to shipping",
+  continueToPayment: "Continue to payment",
+  discardChangesTitle: "Discard changes?",
+  discardChangesBody: "Your unsaved changes will be lost.",
+  discardChanges: "Discard changes",
+  keepEditing: "Keep editing",
   placingOrder: "Placing your order…",
   placingOrderBody:
     "Hang tight — we're reserving your items and preparing checkout.",
@@ -88,8 +94,6 @@ export const coupons2Labels = {
   preparingSummary: "Preparing your summary",
   calculatingShippingTaxes: "Calculating shipping and taxes for your order…",
   summaryLoadFailed: "We couldn't calculate shipping and taxes for this order.",
-  couldNotLoadShippingRates:
-    "Could not load shipping rates for this delivery area.",
   /** Shown while the per-vendor rate lookups for the chosen address are in flight. */
   checkingDeliveryOptions: "Checking delivery options for this address…",
   /** No rate in this area for the method the customer picked — fix address or method. */

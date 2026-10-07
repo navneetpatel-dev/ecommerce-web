@@ -58,6 +58,7 @@ export function CreateDeliveryAgentFormFields({
         <Input
           id="agent-email"
           type="email"
+          autoComplete="off"
           placeholder="e.g. agent@example.com"
           value={form.email}
           onChange={handleEmailChange}
@@ -74,6 +75,7 @@ export function CreateDeliveryAgentFormFields({
         <Input
           id="agent-password"
           type="password"
+          autoComplete="new-password"
           placeholder="••••••••"
           value={form.password}
           onChange={handlePasswordChange}

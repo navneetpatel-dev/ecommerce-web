@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
-import { Download, PlayCircle, Wallet } from "lucide-react";
+import { PlayCircle, Wallet } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
@@ -9,6 +9,9 @@ import type { AgentPayout } from "@/features/delivery-dashboard";
 import { useAgentPayoutsPanel } from "../../../hooks/delivery-agents/useAgentPayoutsPanel.hook";
 import { agentPayoutsPanelStyles as styles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
 import { AgentPayoutActions } from "./AgentPayoutActions.component";
+import { AgentPayoutStatementButton } from "./AgentPayoutStatementButton.component";
+import { ReasonPromptDialog } from "@/shared/components/dialogs/ReasonPromptDialog.component";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
 import { formatDate } from "@/shared/utils/formatting/formatDate";
 import { LABELS } from "@/shared/constants/labels";
@@ -27,24 +30,32 @@ export function AgentPayoutsPanel() {
     load,
     download,
     process,
-    fail,
     retry,
+    requestFail,
+    failReason,
   } = useAgentPayoutsPanel();
 
   const handleProcess = useCallback(() => {
     void process();
   }, [process]);
 
+  const handleDownload = useCallback(
+    (payoutId: string) => {
+      void download(payoutId);
+    },
+    [download],
+  );
+
   const columns: DataTableColumn<AgentPayout>[] = [
     {
       id: "agent",
-      header: "Agent",
+      header: LABELS.agentName,
       className: styles.tableCellMedium,
       cell: (row) => row.agentName ?? "—",
     },
     {
       id: "period",
-      header: "Period",
+      header: LABELS.periodColumn,
       className: styles.tableCellMuted,
       cell: (row) =>
         `${formatDate(row.periodStart)} – ${formatDate(row.periodEnd)}`,
@@ -69,13 +80,13 @@ export function AgentPayoutsPanel() {
     },
     {
       id: "status",
-      header: "Status",
+      header: LABELS.status,
       truncate: false,
       cell: (row) => <StatusBadge status={row.status} />,
     },
     {
       id: "reference",
-      header: "Reference / reason",
+      header: LABELS.referenceReasonColumn,
       className: styles.tableCellMuted,
       cell: (row) =>
         row.status === "FAILED"
@@ -84,58 +95,79 @@ export function AgentPayoutsPanel() {
     },
     {
       id: "statement",
-      header: "Statement",
+      header: LABELS.commissionStatement,
       truncate: false,
       cell: (row) => (
-        <button
-          type="button"
-          className={styles.pdfButton}
-          disabled={downloadingId === row.id}
-          onClick={() => {
-            void download(row.id);
-          }}
-        >
-          <Download className={styles.actionIcon} aria-hidden="true" />
-          PDF
-        </button>
+        <AgentPayoutStatementButton
+          payoutId={row.id}
+          isDownloading={downloadingId === row.id}
+          onDownload={handleDownload}
+        />
       ),
     },
   ];
+
+  const renderActions = (row: AgentPayout) => (
+    <AgentPayoutActions
+      payoutId={row.id}
+      status={row.status}
+      pendingId={pendingId}
+      onDone={load}
+      onRequestFail={requestFail}
+      onRetry={retry}
+    />
+  );
 
   return (
     <section className={styles.root}>
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <Wallet className={styles.headerIcon} aria-hidden="true" />
-          <h2 className={styles.title}>Agent payouts management</h2>
+          <h2 className={styles.title}>{LABELS.agentPayoutsPanelTitle}</h2>
           {pendingCount > 0 ? (
-            <span className={styles.pendingBadge}>{pendingCount} pending</span>
+            <span className={styles.pendingBadge}>
+              {formatLabel(LABELS.agentPayoutsPendingBadge, {
+                count: pendingCount,
+              })}
+            </span>
           ) : null}
         </div>
         <Button size="sm" loading={processing} onClick={handleProcess}>
           <PlayCircle className={styles.playIcon} aria-hidden="true" />
-          Process settled earnings
+          {LABELS.processSettledEarnings}
         </Button>
       </div>
-      {message ? <div className={styles.successAlert}>{message}</div> : null}
-      {error ? <div className={styles.errorAlert}>{error}</div> : null}
+      {message ? (
+        <div role="status" className={styles.successAlert}>
+          {message}
+        </div>
+      ) : null}
+      {error ? (
+        <div role="alert" className={styles.errorAlert}>
+          {error}
+        </div>
+      ) : null}
       <DataTable
         columns={columns}
         rows={payouts}
         getRowId={(row) => row.id}
         loading={loading}
-        emptyMessage="No agent payouts yet."
+        emptyMessage={LABELS.noPayoutsEmpty}
         rowDetails={false}
-        actions={(row) => (
-          <AgentPayoutActions
-            payoutId={row.id}
-            status={row.status}
-            pendingId={pendingId}
-            onDone={load}
-            onFail={fail}
-            onRetry={retry}
-          />
-        )}
+        actions={renderActions}
+      />
+      <ReasonPromptDialog
+        open={failReason.open}
+        pending={failReason.pending}
+        title={LABELS.failPayoutTitle}
+        description={LABELS.failPayoutBody}
+        placeholder={LABELS.failPayoutPlaceholder}
+        confirmLabel={LABELS.markPayoutFailed}
+        htmlFor="fail-payout-reason"
+        reason={failReason.reason}
+        onReasonChange={failReason.onReasonChange}
+        onOpenChange={failReason.onOpenChange}
+        onSubmit={failReason.onSubmit}
       />
     </section>
   );

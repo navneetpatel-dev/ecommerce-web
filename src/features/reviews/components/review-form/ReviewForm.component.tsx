@@ -11,10 +11,9 @@ import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { cn } from "@/shared/utils/dom/cn";
-import { Star } from "lucide-react";
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import type { ReviewFormInput } from "../../schemas/review-form/reviews.schema";
+import { ReviewRatingStars } from "./ReviewRatingStars.component";
 import { reviewFormStyles as styles } from "../../styles/review-form/reviewForm.styles";
 
 interface ReviewFormProps {
@@ -61,29 +60,12 @@ export function ReviewForm({
           columns={1}
         >
           <FormFieldFrame label={LABELS.rating} error={errors.rating?.message}>
-            <div className={styles.starsContainer}>
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Button
-                  key={i}
-                  type="button"
-                  size="icon-sm"
-                  variant="ghost"
-                  onClick={() => onSetRating(i)}
-                  onMouseEnter={() => onSetHoverRating(i)}
-                  onMouseLeave={() => onSetHoverRating(0)}
-                  className={styles.starButton}
-                >
-                  <Star
-                    className={cn(
-                      styles.starIcon,
-                      i <= (hoverRating || rating)
-                        ? styles.starActive
-                        : styles.starInactive,
-                    )}
-                  />
-                </Button>
-              ))}
-            </div>
+            <ReviewRatingStars
+              rating={rating}
+              hoverRating={hoverRating}
+              onSetRating={onSetRating}
+              onSetHoverRating={onSetHoverRating}
+            />
           </FormFieldFrame>
 
           <FormFieldFrame label={LABELS.reviewTitleOptional} htmlFor="title">

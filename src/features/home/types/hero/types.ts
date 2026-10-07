@@ -7,7 +7,8 @@ export interface HeroSlide {
   ctaHref: string;
   secondaryCtaLabel?: string;
   secondaryCtaHref?: string;
-  imageSrc: string;
+  /** Omit for a text-only branded slide (the built-in fallback). */
+  imageSrc?: string;
   imageMobileSrc?: string;
-  imageAlt: string;
+  imageAlt?: string;
 }

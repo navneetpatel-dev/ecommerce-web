@@ -84,8 +84,6 @@ export function useHeader() {
   };
 
   // Always solid chrome so header and hero stay visually distinct in light + dark.
-  const isTransparent = false;
-
   return {
     currentUser,
     categories: rootCategories,
@@ -93,7 +91,6 @@ export function useHeader() {
     mobileNavOpen,
     mobileSearchOpen,
     megaMenuOpen,
-    isTransparent,
     openMobileNav: () => setMobileNavOpen(true),
     closeMobileNav: () => setMobileNavOpen(false),
     openMobileSearch: () => setMobileSearchOpen(true),

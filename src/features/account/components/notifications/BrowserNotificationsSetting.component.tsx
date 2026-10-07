@@ -30,7 +30,11 @@ export function BrowserNotificationsSetting() {
                 This browser does not support push notifications.
               </p>
             )}
-            {errorNotice && <p className={styles.errorNotice}>{errorNotice}</p>}
+            {errorNotice && (
+              <p role="alert" className={styles.errorNotice}>
+                {errorNotice}
+              </p>
+            )}
           </div>
         </div>
         <Switch

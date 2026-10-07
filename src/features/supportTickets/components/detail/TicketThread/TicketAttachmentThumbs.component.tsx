@@ -30,6 +30,7 @@ export function AttachmentThumbs({
               muted
               playsInline
               preload="metadata"
+              aria-hidden="true"
             />
           ) : (
             <MediaImage

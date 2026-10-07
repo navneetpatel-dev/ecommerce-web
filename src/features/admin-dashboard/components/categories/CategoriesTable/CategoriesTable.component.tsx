@@ -53,7 +53,9 @@ export function CategoriesTable({
           {LABELS.categoryReorderHint}
         </p>
         {reorderError ? (
-          <p className={categoriesTableStyles.error}>{reorderError}</p>
+          <p role="alert" className={categoriesTableStyles.error}>
+            {reorderError}
+          </p>
         ) : null}
         <DataTable
           columns={columns}

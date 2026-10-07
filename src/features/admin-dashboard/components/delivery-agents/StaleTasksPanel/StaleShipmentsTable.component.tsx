@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import type { StaleShipment } from "@/features/delivery-dashboard";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
+import { LABELS } from "@/shared/constants/labels";
 import { deliveryForceConfirmLabels } from "@/shared/constants/labels/deliveryForceConfirm";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { staleTasksPanelStyles as styles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
@@ -24,24 +25,24 @@ export function StaleShipmentsTable({
   const columns: DataTableColumn<StaleShipment>[] = [
     {
       id: "tracking",
-      header: "Tracking #",
+      header: LABELS.trackingNumber,
       className: styles.tableCellMono,
       accessor: "trackingNumber",
     },
     {
       id: "status",
-      header: "Status",
+      header: LABELS.status,
       truncate: false,
       cell: (row) => <StatusBadge status={row.status} />,
     },
     {
       id: "agent",
-      header: "Agent",
+      header: LABELS.agentName,
       cell: (row) => row.deliveryAgent?.fullName ?? "—",
     },
     {
       id: "stuckFor",
-      header: "Stuck for",
+      header: LABELS.flagsStuckFor,
       className: styles.tableCellWarning,
       cell: (row) => `${hoursSince(row.updatedAt)}h`,
     },

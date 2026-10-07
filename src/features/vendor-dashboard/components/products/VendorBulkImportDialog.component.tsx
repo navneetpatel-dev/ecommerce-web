@@ -78,7 +78,10 @@ export function VendorBulkImportDialog({
               hint="CSV format • Max 2 MB • Up to 500 rows"
             />
             {error ? (
-              <p className={vendorBulkImportDialogStyles.errorMessage}>
+              <p
+                role="alert"
+                className={vendorBulkImportDialogStyles.errorMessage}
+              >
                 {error}
               </p>
             ) : null}
@@ -90,7 +93,9 @@ export function VendorBulkImportDialog({
           />
         )}
         {error ? (
-          <p className={vendorBulkImportDialogStyles.errorMessage}>{error}</p>
+          <p role="alert" className={vendorBulkImportDialogStyles.errorMessage}>
+            {error}
+          </p>
         ) : null}
       </StatusDialog>
     </>

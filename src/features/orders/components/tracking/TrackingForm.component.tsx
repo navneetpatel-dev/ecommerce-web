@@ -1,4 +1,6 @@
+import type { ChangeEvent } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
@@ -15,6 +17,12 @@ export function TrackingForm({
   onTrackingNumberChange,
   onSubmit,
 }: TrackingFormProps) {
+  const canSubmit = trackingNumber.trim().length > 0;
+
+  const handleTrackingNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onTrackingNumberChange(event.target.value);
+  };
+
   return (
     <FormFieldFrame label={LABELS.trackingNumber} htmlFor="tracking-number">
       <div className={ordersComponentsStyles.formRow}>
@@ -23,15 +31,21 @@ export function TrackingForm({
           placeholder={LABELS.trackingNumber}
           className={ordersComponentsStyles.inputFlex}
           value={trackingNumber}
-          onChange={(e) => onTrackingNumberChange(e.target.value)}
+          onChange={handleTrackingNumberChange}
         />
-        <Button
-          type="button"
-          className={ordersComponentsStyles.buttonShrink}
-          onClick={onSubmit}
+        <DisabledActionHint
+          disabled={!canSubmit}
+          message={LABELS.trackingNumberRequired}
         >
-          {LABELS.track}
-        </Button>
+          <Button
+            type="button"
+            className={ordersComponentsStyles.buttonShrink}
+            disabled={!canSubmit}
+            onClick={onSubmit}
+          >
+            {LABELS.track}
+          </Button>
+        </DisabledActionHint>
       </div>
     </FormFieldFrame>
   );

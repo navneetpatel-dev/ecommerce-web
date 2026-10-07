@@ -49,7 +49,7 @@ export function ProductCard({
   });
 
   return (
-    <div className={PRODUCT_CARD_STYLES.root}>
+    <article aria-label={product.name} className={PRODUCT_CARD_STYLES.root}>
       <CardMedia
         product={product}
         imageUnavailable={imageUnavailable}
@@ -110,6 +110,6 @@ export function ProductCard({
           </label>
         </DisabledActionHint>
       )}
-    </div>
+    </article>
   );
 }

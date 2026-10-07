@@ -28,6 +28,8 @@ import {
   SHIFT_STATS_GRID,
 } from "../../styles/today/shiftSummaryCard.styles";
 import { formatInrExact } from "@/shared/utils/formatting/orderFormat";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { LABELS } from "@/shared/constants/labels";
 
 export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
   const {
@@ -38,6 +40,7 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
     error,
     isPending,
     isSubmitDisabled,
+    isDirty,
     openDialog,
     handleAmountChange,
     handleNoteChange,
@@ -48,12 +51,12 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
     <section className={SHIFT_CARD_ROOT}>
       <div className={SHIFT_CARD_HEADER}>
         <TextEyebrow className={SHIFT_CARD_EYEBROW}>
-          Today&apos;s shift
+          {LABELS.shiftCardTitle}
         </TextEyebrow>
         {summary.codCashInHand > 0 ? (
           <Button size="sm" variant="outline" onClick={openDialog}>
             <Wallet className={SHIFT_HEADER_ICON} aria-hidden="true" />
-            Deposit cash
+            {LABELS.depositCash}
           </Button>
         ) : null}
       </div>
@@ -62,21 +65,21 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
           <PackageCheck className={SHIFT_STAT_ICON_BRAND} aria-hidden="true" />
           <div>
             <p className={SHIFT_STAT_NUMBER}>{summary.deliveredToday}</p>
-            <p className={SHIFT_STAT_CAPTION}>Delivered</p>
+            <p className={SHIFT_STAT_CAPTION}>{LABELS.deliveredTodayCaption}</p>
           </div>
         </div>
         <div className={SHIFT_STAT_ITEM}>
           <RotateCcw className={SHIFT_STAT_ICON_BRAND} aria-hidden="true" />
           <div>
             <p className={SHIFT_STAT_NUMBER}>{summary.pickupsToday}</p>
-            <p className={SHIFT_STAT_CAPTION}>Pickups</p>
+            <p className={SHIFT_STAT_CAPTION}>{LABELS.pickupsTodayCaption}</p>
           </div>
         </div>
         <div className={SHIFT_STAT_ITEM}>
           <Timer className={SHIFT_STAT_ICON_BRAND} aria-hidden="true" />
           <div>
             <p className={SHIFT_STAT_NUMBER}>{summary.onTimePercent}%</p>
-            <p className={SHIFT_STAT_CAPTION}>On-time</p>
+            <p className={SHIFT_STAT_CAPTION}>{LABELS.onTimeCaption}</p>
           </div>
         </div>
         <div className={SHIFT_STAT_ITEM}>
@@ -86,7 +89,9 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
               {formatInrExact(summary.earningsToday)}
             </p>
             <p className={SHIFT_STAT_CAPTION}>
-              Earnings ({formatInrExact(summary.perTaskEarning)}/task)
+              {formatLabel(LABELS.earningsPerTaskCaption, {
+                rate: formatInrExact(summary.perTaskEarning),
+              })}
             </p>
           </div>
         </div>
@@ -96,15 +101,19 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
             <p className={SHIFT_STAT_NUMBER}>
               {formatInrExact(summary.codCashInHand)}
             </p>
-            <p className={SHIFT_STAT_CAPTION}>COD cash in hand</p>
+            <p className={SHIFT_STAT_CAPTION}>{LABELS.codCashInHandCaption}</p>
           </div>
         </div>
       </div>
       {summary.pendingDeposits > 0 ? (
         <div className={SHIFT_PENDING_BANNER}>
           <AlertCircle className={SHIFT_STAT_ICON_WARNING} aria-hidden="true" />
-          {summary.pendingDeposits} cash deposit
-          {summary.pendingDeposits === 1 ? "" : "s"} awaiting hub verification.
+          {formatLabel(
+            summary.pendingDeposits === 1
+              ? LABELS.pendingDepositOne
+              : LABELS.pendingDepositMany,
+            { count: summary.pendingDeposits },
+          )}
         </div>
       ) : null}
 
@@ -117,6 +126,7 @@ export function ShiftSummaryCard({ summary }: { summary: ShiftSummary }) {
         error={error}
         isPending={isPending}
         isSubmitDisabled={isSubmitDisabled}
+        isDirty={isDirty}
         onAmountChange={handleAmountChange}
         onNoteChange={handleNoteChange}
         onSubmit={handleSubmit}

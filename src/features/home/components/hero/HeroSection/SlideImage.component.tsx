@@ -28,6 +28,7 @@ export function SlideImage(props: SlideImageProps) {
   const activeSrc = isDesktop
     ? slide.imageSrc
     : (slide.imageMobileSrc ?? slide.imageSrc);
+  const hasImage = Boolean(activeSrc);
   const unavailableCopy = formatLabel(LABELS.heroSlideImageUnavailable, {
     headline: slide.headline,
   });
@@ -54,15 +55,20 @@ export function SlideImage(props: SlideImageProps) {
               ease: "linear",
             }}
           >
-            <MediaImage
-              src={activeSrc}
-              alt={slide.imageAlt}
-              unavailableLabel={unavailableCopy}
-              priority={index === 0}
-              imageClassName={styles.mediaCover}
-              sizes="100vw"
-              className={styles.mediaInset}
-            />
+            {hasImage ? (
+              <MediaImage
+                src={activeSrc}
+                alt={slide.imageAlt ?? slide.headline}
+                unavailableLabel={unavailableCopy}
+                priority={index === 0}
+                imageClassName={styles.mediaCover}
+                sizes="100vw"
+                className={styles.mediaInset}
+              />
+            ) : (
+              /* Branded backdrop for the built-in fallback slide. */
+              <div className={styles.brandedBackdrop} aria-hidden />
+            )}
           </motion.div>
         </div>
 

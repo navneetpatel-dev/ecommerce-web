@@ -1,6 +1,7 @@
 import type { OrderItem, SubOrder } from "@/shared/api/types";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { Timeline } from "@/shared/components/display/Timeline.component";
+import { LABELS } from "@/shared/constants/labels";
 import type { ReturnReasonCode } from "../../../hooks/sub-order/useSubOrderReturn.hook";
 import { VENDOR_GROUP_CARD } from "@/shared/styles/orders/vendorGroupStyles";
 import { SubOrderCardHeader } from "./SubOrderCardHeader.component";
@@ -25,12 +26,19 @@ interface SubOrderCardProps {
   isSuccess: boolean;
   error: Error | null;
   onOpenReturn: (item: OrderItem) => void;
-  onCloseReturn: () => void;
-  onReasonCodeChange: (code: ReturnReasonCode) => void;
-  onReasonChange: (value: string) => void;
-  onReturnTypeChange: (value: "REFUND" | "EXCHANGE") => void;
+  /** Dialog dismissal (Escape/backdrop) — guard-aware. */
+  onDialogOpenChange: (open: boolean) => void;
+  /** Cancel button — guard-aware. */
+  onRequestClose: () => void;
+  onReasonCodeSelect: (value: string) => void;
+  onReasonInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onReturnTypeSelect: (value: string) => void;
   onPhotoUrlsChange: (urls: string[]) => void;
   onSubmitReturn: () => void;
+  discardOpen: boolean;
+  onDiscardOpenChange: (open: boolean) => void;
+  onConfirmDiscard: () => void;
+  onKeepEditing: () => void;
 }
 
 export function SubOrderCard({
@@ -45,12 +53,17 @@ export function SubOrderCard({
   isSuccess,
   error,
   onOpenReturn,
-  onCloseReturn,
-  onReasonCodeChange,
-  onReasonChange,
-  onReturnTypeChange,
+  onDialogOpenChange,
+  onRequestClose,
+  onReasonCodeSelect,
+  onReasonInput,
+  onReturnTypeSelect,
   onPhotoUrlsChange,
   onSubmitReturn,
+  discardOpen,
+  onDiscardOpenChange,
+  onConfirmDiscard,
+  onKeepEditing,
 }: SubOrderCardProps) {
   const {
     timeline,
@@ -88,7 +101,7 @@ export function SubOrderCard({
       {showTimeline && (
         <div className={SUB_ORDER_CARD_STYLES.timelineContainer}>
           <TextEyebrow className={SUB_ORDER_CARD_STYLES.timelineEyebrow}>
-            Progress
+            {LABELS.subOrderProgress}
           </TextEyebrow>
           <Timeline steps={timeline} />
         </div>
@@ -111,12 +124,17 @@ export function SubOrderCard({
         isPending={isPending}
         isSuccess={isSuccess}
         error={error}
-        onCloseReturn={onCloseReturn}
-        onReasonCodeChange={onReasonCodeChange}
-        onReasonChange={onReasonChange}
-        onReturnTypeChange={onReturnTypeChange}
+        onDialogOpenChange={onDialogOpenChange}
+        onRequestClose={onRequestClose}
+        onReasonCodeSelect={onReasonCodeSelect}
+        onReasonInput={onReasonInput}
+        onReturnTypeSelect={onReturnTypeSelect}
         onPhotoUrlsChange={onPhotoUrlsChange}
         onSubmitReturn={onSubmitReturn}
+        discardOpen={discardOpen}
+        onDiscardOpenChange={onDiscardOpenChange}
+        onConfirmDiscard={onConfirmDiscard}
+        onKeepEditing={onKeepEditing}
       />
     </section>
   );

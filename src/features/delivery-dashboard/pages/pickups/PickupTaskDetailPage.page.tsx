@@ -10,12 +10,25 @@ import { PickupChecklistCard } from "../../components/pickups/PickupChecklistCar
 import { PickupOverviewCard } from "../../components/pickups/PickupOverviewCard.component";
 import { LocationBeacon } from "../../components/location/LocationBeacon.component";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { LABELS } from "@/shared/constants/labels";
 import { usePickupTaskDetailPage } from "../../hooks/pickups/usePickupTaskDetailPage.hook";
 import { deliveryDetailPageStyles as styles } from "../deliveries/deliveryDetailPage.styles";
 
 export function PickupTaskDetailPage() {
   const page = usePickupTaskDetailPage();
   const { query, pickup, actions } = page;
+
+  const handleConfirmPickup = () => {
+    void page.onConfirm();
+  };
+
+  const handleRequestCode = () => {
+    actions.requestCode.mutate(page.returnId);
+  };
+
+  const handleRecordFailure = () => {
+    void actions.recordFailure();
+  };
 
   if (query.isLoading)
     return <p className={styles.loadingText}>Loading pickup...</p>;
@@ -50,7 +63,9 @@ export function PickupTaskDetailPage() {
       </header>
 
       {actions.error ? (
-        <p className={styles.errorText}>{actions.error}</p>
+        <p role="alert" className={styles.errorText}>
+          {actions.error}
+        </p>
       ) : null}
 
       <div className={styles.grid}>
@@ -64,14 +79,14 @@ export function PickupTaskDetailPage() {
               onConditionFilesChange={actions.setConditionFiles}
               replacementFile={actions.replacementFile}
               onReplacementFileChange={actions.setReplacementFile}
-              onConfirm={() => void page.onConfirm()}
+              onConfirm={handleConfirmPickup}
               confirmPending={
                 actions.confirm.isPending || actions.upload.isPending
               }
               requestCodePending={actions.requestCode.isPending}
               requestCodeSuccess={actions.requestCode.isSuccess}
               expiresInMinutes={actions.requestCode.data?.expiresInMinutes}
-              onRequestCode={() => actions.requestCode.mutate(page.returnId)}
+              onRequestCode={handleRequestCode}
             />
           ) : (
             <div className={styles.processedBanner}>
@@ -101,12 +116,12 @@ export function PickupTaskDetailPage() {
             <FailedAttemptSection
               value={actions.failureNote}
               onChange={actions.setFailureNote}
-              onSubmit={() => void actions.recordFailure()}
+              onSubmit={handleRecordFailure}
               pending={actions.failed.isPending}
-              title="Report Pickup Issue"
-              description="If the customer is unavailable, the item is damaged or missing, or the pickup cannot proceed, record the reason below:"
-              placeholder="Required reason for failed pickup attempt (min 3 chars)"
-              submitLabel="Record failed attempt"
+              title={LABELS.reportPickupIssueTitle}
+              description={LABELS.reportPickupIssueBody}
+              placeholder={LABELS.pickupFailurePlaceholder}
+              submitLabel={LABELS.recordFailedAttempt}
             />
           ) : null}
         </div>

@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Home, Search, ShoppingCart, User } from "lucide-react";
+import { cn } from "@/shared/utils/dom/cn";
 import { Button } from "@/shared/components/ui/button";
 import {
   CartCountBadge,
@@ -28,12 +30,24 @@ export function MobileTabBar({
   cartItemCount = 0,
   isLoading = false,
 }: MobileTabBarProps) {
+  // usePathname can be null outside a mounted router (e.g. isolated renders).
+  const pathname = usePathname() ?? "";
+  const isHomeActive = pathname === PATHS.home;
+  const isAccountActive = pathname.startsWith(PATHS.profile);
+
   return (
     <nav
       className={mobileTabBarStyles.nav}
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
-      <Link href={PATHS.home} className={mobileTabBarStyles.tabItem}>
+      <Link
+        href={PATHS.home}
+        aria-current={isHomeActive ? "page" : undefined}
+        className={cn(
+          mobileTabBarStyles.tabItem,
+          isHomeActive && mobileTabBarStyles.tabItemActive,
+        )}
+      >
         <Home size={20} />
         <span className={mobileTabBarStyles.textLabel}>{LABELS.home}</span>
       </Link>
@@ -88,7 +102,11 @@ export function MobileTabBar({
       ) : (
         <Link
           href={currentUser ? PATHS.profile : PATHS.login}
-          className={mobileTabBarStyles.tabItem}
+          aria-current={isAccountActive ? "page" : undefined}
+          className={cn(
+            mobileTabBarStyles.tabItem,
+            isAccountActive && mobileTabBarStyles.tabItemActive,
+          )}
         >
           <User size={20} />
           <span className={mobileTabBarStyles.textLabel}>

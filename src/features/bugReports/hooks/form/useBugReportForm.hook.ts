@@ -43,7 +43,7 @@ export function useBugReportForm(params: UseBugReportFormParams) {
     steps: string;
   }>({
     resolver: zodResolver(BugReportSchema.omit({ attachments: true })),
-    mode: "onChange",
+    mode: "onTouched",
     defaultValues: { title: "", description: "", steps: "" },
   });
 

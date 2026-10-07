@@ -1,7 +1,6 @@
 "use client";
 
 import { Menu } from "lucide-react";
-import { cn } from "@/shared/utils/dom/cn";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { HEADER_INK_TONE } from "../../utils/header/headerShared";
@@ -11,7 +10,6 @@ import { headerStyles as styles } from "../../styles/header/header.styles";
 interface HeaderMenuButtonProps {
   showStorefrontChrome: boolean;
   showWorkspaceMenu: boolean;
-  isTransparent: boolean;
   /** Session unresolved — which menu (if any) belongs here is not known yet. */
   navLoading: boolean;
   onOpenMobileNav: () => void;
@@ -22,7 +20,6 @@ interface HeaderMenuButtonProps {
 export function HeaderMenuButton({
   showStorefrontChrome,
   showWorkspaceMenu,
-  isTransparent,
   navLoading,
   onOpenMobileNav,
   onOpenWorkspaceNav,
@@ -38,16 +35,10 @@ export function HeaderMenuButton({
         variant="ghost"
         size="icon-sm"
         onClick={onOpenMobileNav}
-        className={cn(
-          styles.storefrontMenuButton,
-          isTransparent ? styles.storefrontHoverTransparent : undefined,
-        )}
+        className={styles.storefrontMenuButton}
         aria-label={LABELS.menu}
       >
-        <Menu
-          size={20}
-          className={HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]}
-        />
+        <Menu size={20} className={HEADER_INK_TONE} />
       </Button>
     );
   }

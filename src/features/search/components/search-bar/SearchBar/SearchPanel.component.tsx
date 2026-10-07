@@ -8,6 +8,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import { SEARCH_SUGGESTION_TYPE } from "../../../constants/search/index";
 import type { SearchSuggestion } from "../../../types/search/index";
 import { SearchSuggestionRow } from "../../suggestions/SearchSuggestionRow.component";
+import { RecentSearchesList } from "./RecentSearchesList.component";
 import {
   SECTION_ORDER,
   SEARCH_LIST_ID,
@@ -21,6 +22,11 @@ interface SearchPanelProps {
   activeIndex?: number;
   isFetching?: boolean;
   isInline: boolean;
+  /** Empty field with remembered terms — the panel shows the recent list. */
+  showRecent: boolean;
+  recentSearches: readonly string[];
+  onSelectRecent: (term: string) => void;
+  onClearRecent: () => void;
   onSelect: (suggestion: SearchSuggestion) => void;
   onExitComplete: () => void;
 }
@@ -43,6 +49,10 @@ export function SearchPanel({
   activeIndex = -1,
   isFetching = false,
   isInline,
+  showRecent,
+  recentSearches,
+  onSelectRecent,
+  onClearRecent,
   onSelect,
   onExitComplete,
 }: SearchPanelProps) {
@@ -57,6 +67,16 @@ export function SearchPanel({
   }, [suggestions]);
 
   const renderBody = () => {
+    if (showRecent && recentSearches.length > 0) {
+      return (
+        <RecentSearchesList
+          recentSearches={recentSearches}
+          onSelectRecent={onSelectRecent}
+          onClearRecent={onClearRecent}
+        />
+      );
+    }
+
     if (isFetching && !suggestions?.length) {
       return (
         <div className={styles.skeletonStack}>
@@ -130,7 +150,7 @@ export function SearchPanel({
         >
           <div
             id={SEARCH_LIST_ID}
-            role="listbox"
+            role={showRecent ? "group" : "listbox"}
             aria-label={LABELS.searchSuggestions}
             className={cn(
               styles.panelListbox,

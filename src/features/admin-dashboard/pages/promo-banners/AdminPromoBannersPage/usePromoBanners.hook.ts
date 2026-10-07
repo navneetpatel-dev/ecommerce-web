@@ -8,7 +8,6 @@ import {
 } from "@/shared/constants/statuses";
 import type { PromoBanner } from "@/shared/api/types";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { homepageAdminApi } from "../../../api/promo-banners/homepage.api";
 import { usePromoBannerCreateForm } from "./usePromoBannerCreateForm.hook";
 import { usePromoBannerEdit } from "./usePromoBannerEdit.hook";
@@ -22,6 +21,7 @@ export function usePromoBanners() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [createSaving, setCreateSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<PromoBanner | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -70,24 +70,33 @@ export function usePromoBanners() {
     }
   };
 
-  const onDelete = async (banner: PromoBanner) => {
-    if (
-      !window.confirm(
-        formatLabel(LABELS.confirmDeletePromoBannerBody, {
-          name: banner.title,
-        }),
-      )
-    ) {
-      return;
-    }
+  const requestDelete = (banner: PromoBanner) => {
+    setDeleteTarget(banner);
+  };
+
+  const cancelDelete = () => {
+    setDeleteTarget(null);
+  };
+
+  const handleDeleteOpenChange = (open: boolean) => {
+    if (!open) cancelDelete();
+  };
+
+  const runDelete = async (banner: PromoBanner) => {
     setMessage(null);
     try {
       await homepageAdminApi.deleteBanner(banner.id);
       setMessage(LABELS.promoBannerDeleted);
+      setDeleteTarget(null);
       await load();
     } catch (err) {
       setMessage(getApiErrorMessage(err, LABELS.couldNotSavePromoBanner));
     }
+  };
+
+  const confirmDelete = () => {
+    if (!deleteTarget) return;
+    void runDelete(deleteTarget);
   };
 
   const onActivate = async (banner: PromoBanner) => {
@@ -122,7 +131,11 @@ export function usePromoBanners() {
     editPriority: edit.editPriority,
     setEditPriority: edit.setEditPriority,
     onCreate,
-    onDelete,
+    deleteTarget,
+    requestDelete,
+    cancelDelete,
+    handleDeleteOpenChange,
+    confirmDelete,
     onActivate,
     startEdit: edit.startEdit,
     cancelEdit: edit.cancelEdit,

@@ -2,6 +2,7 @@
 
 import { Phone } from "lucide-react";
 import type { Shipment } from "@/shared/api/types";
+import { LABELS } from "@/shared/constants/labels";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { RedeliverySlotPicker } from "@/shared/components/orders/RedeliverySlotPicker.component";
@@ -76,10 +77,12 @@ export function SubOrderShipmentTracking({
             currentSlot={shipment.preferredRedeliverySlot}
             onSubmit={(slot) => void submitReschedule(slot)}
             isPending={isRescheduling}
-            prompt="Delivery didn't go through — pick a redelivery window:"
+            prompt={LABELS.trackingRedeliveryPrompt}
           />
           {rescheduleError ? (
-            <p className={styles.errorMessage}>{rescheduleError}</p>
+            <p role="alert" className={styles.errorMessage}>
+              {rescheduleError}
+            </p>
           ) : null}
         </div>
       ) : null}

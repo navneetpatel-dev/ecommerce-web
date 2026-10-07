@@ -41,7 +41,8 @@ export type PurchaseGiftCardPayload = {
 export const giftCardsApi = {
   purchase: (payload: PurchaseGiftCardPayload) =>
     apiClient.post<GiftCardCheckout>(API.giftCards.purchase, payload),
-  verify: (payload: RazorpaySignaturePayload & { giftCardId?: string }) => apiClient.post<GiftCardVerifyResult>(API.giftCards.verify, payload),
+  verify: (payload: RazorpaySignaturePayload & { giftCardId?: string }) =>
+    apiClient.post<GiftCardVerifyResult>(API.giftCards.verify, payload),
   redeem: (code: string) =>
     apiClient.post<GiftCardRedeemResult>(API.giftCards.redeem, { code }),
   getByCode: (code: string) =>

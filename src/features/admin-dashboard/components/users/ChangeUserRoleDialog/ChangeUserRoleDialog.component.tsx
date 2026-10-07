@@ -11,6 +11,8 @@ import {
 } from "@/shared/components/ui/dialog";
 import { Button } from "@/shared/components/ui/button";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { changeUserRoleDialogStyles } from "../../../styles/users/changeUserRoleDialog.styles";
 import { RoleOptionsList } from "./RoleOptionsList.component";
 import { VendorOptionsList } from "./VendorOptionsList.component";
@@ -52,7 +54,7 @@ export function ChangeUserRoleDialog({
     <>
       {trigger ?? (
         <Button size="sm" variant="outline" onClick={handleOpenTrigger}>
-          Change Role
+          {LABELS.changeRoleTrigger}
         </Button>
       )}
 
@@ -61,16 +63,18 @@ export function ChangeUserRoleDialog({
           <DialogHeader>
             <DialogTitle className={changeUserRoleDialogStyles.title}>
               <ShieldCheck className={changeUserRoleDialogStyles.titleIcon} />
-              Change User Role
+              {LABELS.changeUserRoleTitle}
             </DialogTitle>
             <DialogDescription>
-              Update role and permission access for {userName}. Current role:{" "}
-              <strong>{currentRoleName}</strong>.
+              {formatLabel(LABELS.changeUserRoleDescription, {
+                name: userName,
+                role: currentRoleName,
+              })}
             </DialogDescription>
           </DialogHeader>
 
           {errorMsg && (
-            <div className={changeUserRoleDialogStyles.errorAlert}>
+            <div role="alert" className={changeUserRoleDialogStyles.errorAlert}>
               <ShieldAlert className={changeUserRoleDialogStyles.errorIcon} />
               <span>{errorMsg}</span>
             </div>
@@ -81,20 +85,25 @@ export function ChangeUserRoleDialog({
               htmlFor="change-user-role"
               className={changeUserRoleDialogStyles.label}
             >
-              Select New Role
+              {LABELS.selectNewRoleLabel}
             </label>
             {rolesQuery.isLoading ? (
-              <p className={changeUserRoleDialogStyles.loadingText}>
-                Loading roles...
+              <p
+                aria-busy="true"
+                className={changeUserRoleDialogStyles.loadingText}
+              >
+                {LABELS.loadingRoles}
               </p>
             ) : (
+              /* Native picker on purpose: role and vendor lists run long and
+                 the OS picker beats a custom popover on mobile. */
               <select
                 id="change-user-role"
                 value={selectedRoleId}
                 onChange={handleRoleSelectChange}
                 className={changeUserRoleDialogStyles.selectInput}
               >
-                <option value="">-- Select a role --</option>
+                <option value="">{LABELS.selectRolePlaceholder}</option>
                 <RoleOptionsList
                   roles={rolesQuery.data}
                   currentRoleName={currentRoleName}
@@ -108,11 +117,14 @@ export function ChangeUserRoleDialog({
                   htmlFor="change-user-vendor"
                   className={changeUserRoleDialogStyles.label}
                 >
-                  Select Associated Vendor Store
+                  {LABELS.selectVendorStoreLabel}
                 </label>
                 {vendorsQuery.isLoading ? (
-                  <p className={changeUserRoleDialogStyles.loadingText}>
-                    Loading vendor stores...
+                  <p
+                    aria-busy="true"
+                    className={changeUserRoleDialogStyles.loadingText}
+                  >
+                    {LABELS.loadingVendorStores}
                   </p>
                 ) : (
                   <select
@@ -121,7 +133,9 @@ export function ChangeUserRoleDialog({
                     onChange={handleVendorSelectChange}
                     className={changeUserRoleDialogStyles.selectInput}
                   >
-                    <option value="">-- Select a vendor store --</option>
+                    <option value="">
+                      {LABELS.selectVendorStorePlaceholder}
+                    </option>
                     <VendorOptionsList vendors={vendorsQuery.data?.items} />
                   </select>
                 )}
@@ -136,7 +150,7 @@ export function ChangeUserRoleDialog({
               onClick={handleCancel}
               disabled={mutation.isPending}
             >
-              Cancel
+              {LABELS.cancel}
             </Button>
             <Button
               size="sm"

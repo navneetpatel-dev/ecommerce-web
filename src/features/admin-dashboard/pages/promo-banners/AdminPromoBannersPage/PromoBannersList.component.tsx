@@ -1,15 +1,9 @@
 "use client";
 
-import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
-import { PROMO_BANNER_STATUS } from "@/shared/constants/statuses";
 import type { PromoBanner } from "@/shared/api/types";
-import {
-  TableRowActions,
-  TableRowAction,
-} from "@/shared/components/DataTable/TableRowActions.component";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { PromoBannerEditForm } from "./PromoBannerEditForm.component";
+import { PromoBannerRowActions } from "./PromoBannerRowActions.component";
 import { promoBannersListStyles } from "./adminPromoBanners.styles";
 
 interface PromoBannersListProps {
@@ -79,40 +73,12 @@ export function PromoBannersList({
                   {LABELS.promoBannerPriority} {banner.priority}
                 </p>
               </div>
-              <TableRowActions className={promoBannersListStyles.actions}>
-                <TableRowAction>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className={tableMenuButtonClass("edit")}
-                    onClick={() => onStartEdit(banner)}
-                  >
-                    {LABELS.editPromoBanner}
-                  </Button>
-                </TableRowAction>
-                {banner.status !== PROMO_BANNER_STATUS.ACTIVE ? (
-                  <TableRowAction>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className={tableMenuButtonClass("success")}
-                      onClick={() => onActivate(banner)}
-                    >
-                      {PROMO_BANNER_STATUS.ACTIVE}
-                    </Button>
-                  </TableRowAction>
-                ) : null}
-                <TableRowAction destructive>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className={tableMenuButtonClass("danger")}
-                    onClick={() => onDelete(banner)}
-                  >
-                    {LABELS.delete}
-                  </Button>
-                </TableRowAction>
-              </TableRowActions>
+              <PromoBannerRowActions
+                banner={banner}
+                onStartEdit={onStartEdit}
+                onActivate={onActivate}
+                onDelete={onDelete}
+              />
             </>
           )}
         </li>

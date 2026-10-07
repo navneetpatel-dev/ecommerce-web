@@ -46,8 +46,6 @@ export const tablesLabels = {
   productName: "Product",
   customerName: "Customer",
   actorName: "Actor",
-  category: "Category",
-  email: "Email",
   newsletterEmailPlaceholder: "Your email",
   subscribe: "Subscribe",
   newsletterInvalidEmail: "Enter a valid email address",
@@ -57,6 +55,16 @@ export const tablesLabels = {
   newsletterCouldNotSubscribe:
     "Could not subscribe right now. Try again or contact support.",
   trackingNumber: "Tracking number",
+  trackingHeading: "Track Shipment",
+  trackingResultTitle: "Tracking Result",
+  trackingViaCarrier: "via {carrier}",
+  trackingLastUpdate: "Last update: {value}",
+  trackingEstimatedDelivery: "Estimated delivery: {value}",
+  trackingLastAttempt: "Last attempt note: {note}",
+  trackingPingUpdated: "Updated {value}",
+  trackingRedeliveryPrompt:
+    "Delivery didn't go through — pick a redelivery window:",
+  trackingNumberRequired: "Enter a tracking number to search.",
   trackingNumberPlaceholder: "Enter carrier tracking number",
   trackingNumberRequiredToShip:
     "A tracking number is required to mark this order shipped.",
@@ -90,7 +98,6 @@ export const tablesLabels = {
   rejectionReason: "Rejection reason",
   suspensionReason: "Suspension reason",
   product: "Product",
-  price: "Price",
   /** Stored product prices are before GST (customers see them with GST). */
   priceExclGst: "Price (excl. GST)",
   rejectionNote: "Rejection note",

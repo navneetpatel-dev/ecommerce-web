@@ -77,11 +77,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       fullWidth,
       children,
       disabled,
+      type,
       ...props
     },
     ref,
   ) => {
     const Comp = asChild ? Slot : "button";
+    /* Default to a non-submit button: native default is `submit`, which turns
+       any future in-form usage without an explicit type into an accidental
+       form submission. In-form submit buttons declare type="submit". */
+    const resolvedType = asChild ? type : (type ?? "button");
     const resolvedFullWidth =
       fullWidth === true ? true : fullWidth === "mobile" ? "mobile" : undefined;
 
@@ -124,6 +129,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className,
         )}
         ref={ref}
+        type={resolvedType}
         disabled={isDisabled}
         aria-busy={ariaBusy}
         data-size={dataSize}

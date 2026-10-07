@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import { FormError } from "@/shared/components/forms/FormError.component";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { Button } from "@/shared/components/ui/button";
@@ -36,6 +37,18 @@ export function FileUpload(props: FileUploadProps) {
     spec,
   } = useFileUploadController(props);
 
+  const handlePickClick = () => {
+    fileRef.current?.click();
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onPick(event.target.files);
+  };
+
+  const handleCropOpenChange = (open: boolean) => {
+    if (!open) onCropCancelled();
+  };
+
   return (
     <>
       <div className={fileUploadStyles.root}>
@@ -49,7 +62,7 @@ export function FileUpload(props: FileUploadProps) {
             variant="outline"
             size="sm"
             disabled={props.disabled || pending || !props.entityId}
-            onClick={() => fileRef.current?.click()}
+            onClick={handlePickClick}
           >
             {pending
               ? LABELS.uploading
@@ -64,7 +77,7 @@ export function FileUpload(props: FileUploadProps) {
             accept={accept}
             multiple={isMultiple}
             disabled={props.disabled || pending}
-            onChange={(e) => onPick(e.target.files)}
+            onChange={handleInputChange}
           />
         </div>
         {previewEntries.length > 0 ? (
@@ -121,9 +134,7 @@ export function FileUpload(props: FileUploadProps) {
           outputHeight={spec.outputHeight}
           sourceFilename={cropSession.filename}
           mimeType={cropSession.mimeType}
-          onOpenChange={(open) => {
-            if (!open) onCropCancelled();
-          }}
+          onOpenChange={handleCropOpenChange}
           onConfirm={onCropConfirmed}
         />
       ) : null}

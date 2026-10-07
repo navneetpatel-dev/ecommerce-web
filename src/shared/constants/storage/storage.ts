@@ -16,6 +16,8 @@ export const STORAGE_KEYS = {
    * checked on a product page has to still be there on the cart and at checkout.
    */
   DELIVERY_LOCATION: "deliveryLocation",
+  /** Last submitted storefront search terms (localStorage — powers the recent list). */
+  RECENT_SEARCHES: "recentSearches",
 } as const;
 
 /** Cookie names shared with the API (must match backend COOKIES). */

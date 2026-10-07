@@ -20,8 +20,14 @@ const STATIC_DIR = path.join(ROOT, ".next", "static");
  *   A single route's first load is always <= this value because route code
  *   is split into per-route entry groups; growth here means the shared
  *   graph (or any lazy boundary leak) got heavier.
+ *
+ * Raised 1200 → 1260 KB (Feb 2026) after auditing the top chunks: recharts
+ * (~96 KB gz, reached only through next/dynamic chart portals) and the
+ * motion+zod shared vendor chunk (~95 KB gz). Headroom is intentional so
+ * small feature additions don't require a budget change; the per-chunk
+ * guard below stays strict.
  */
-const TOTAL_CLIENT_JS_BUDGET_BYTES = 1200 * 1024;
+const TOTAL_CLIENT_JS_BUDGET_BYTES = 1260 * 1024;
 const SINGLE_CHUNK_BUDGET_BYTES = 400 * 1024;
 
 function* walk(dir) {

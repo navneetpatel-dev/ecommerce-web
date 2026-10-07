@@ -20,10 +20,7 @@ import {
 
 export function InfiniteSingleSelect(props: InfiniteSingleSelectProps) {
   return (
-    <InfiniteSingleSelectBody
-      key={String(props.resetKey ?? "")}
-      {...props}
-    />
+    <InfiniteSingleSelectBody key={String(props.resetKey ?? "")} {...props} />
   );
 }
 

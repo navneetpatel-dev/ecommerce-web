@@ -15,7 +15,11 @@ export function VendorShopSettingsPage() {
   }
 
   if (settings.loadError) {
-    return <p className={vendorPagesStyles.errorText}>{settings.loadError}</p>;
+    return (
+      <p role="alert" className={vendorPagesStyles.errorText}>
+        {settings.loadError}
+      </p>
+    );
   }
 
   return (

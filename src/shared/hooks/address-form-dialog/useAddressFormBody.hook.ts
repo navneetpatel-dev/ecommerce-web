@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
 import { useCaptureLocation } from "./useCaptureLocation.hook";
 import { LABELS } from "@/shared/constants/labels";
 import { useManualFormFieldErrors } from "@/shared/hooks/forms/useManualFormFieldErrors.hook";
@@ -12,6 +18,7 @@ import {
 } from "@/shared/utils/validation/firstMissingRequiredHint";
 import {
   addressFieldChecks,
+  PINCODE_LENGTH,
   toAddressFormState as toFormState,
   toAddressInput as toInput,
   type AddressFormValues,
@@ -25,6 +32,8 @@ interface UseAddressFormBodyParams {
   hasAddresses: boolean;
   onSubmit: (body: AddressInput) => Promise<void>;
   onClose: () => void;
+  /** Notifies the host dialog so it can confirm before discarding edits. */
+  onDirtyChange?: (dirty: boolean) => void;
 }
 
 export function useAddressFormBody({
@@ -32,9 +41,11 @@ export function useAddressFormBody({
   hasAddresses,
   onSubmit,
   onClose,
+  onDirtyChange,
 }: UseAddressFormBodyParams) {
   const [form, setForm] = useState<AddressFormValues>(toFormState(address));
   const [formError, setFormError] = useState<string | null>(null);
+  const [isDirty, setIsDirty] = useState(false);
   const { fieldErrors, clearAll, setErrors, getError } =
     useManualFormFieldErrors<AddressField>();
   const location = useCaptureLocation(
@@ -57,15 +68,34 @@ export function useAddressFormBody({
     }
   }, [location.coords]);
 
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty, onDirtyChange]);
+
   const setField = useCallback(
     <K extends keyof AddressFormValues>(
       field: K,
       value: AddressFormValues[K],
     ) => {
+      setIsDirty(true);
       setForm((previous) => ({ ...previous, [field]: value }));
     },
     [],
   );
+
+  const updatePincode = (raw: string) =>
+    setField("pincode", raw.replace(/\D/g, "").slice(0, PINCODE_LENGTH));
+
+  const handleFieldInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    if (name === "pincode") updatePincode(value);
+    else setField(name as keyof AddressFormValues, value);
+  };
+  const handleDeliveryInstructionsChange = (
+    event: ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setField("deliveryInstructions", event.target.value);
+  };
 
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
@@ -104,6 +134,8 @@ export function useAddressFormBody({
     canSubmit,
     disableHint,
     setField,
+    handleFieldInputChange,
+    handleDeliveryInstructionsChange,
     handleSubmit,
   };
 }

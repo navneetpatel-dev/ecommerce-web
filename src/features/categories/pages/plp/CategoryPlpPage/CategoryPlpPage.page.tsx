@@ -75,7 +75,7 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
           facets={plp.facets}
           facetSelections={plp.facetSelections}
           onToggleFacet={plp.toggleFacetValue}
-          onUpdateFilter={plp.updateFilter}
+          onUpdateFilter={plp.updateFilterDebounced}
           onClear={plp.clearFilters}
         />
 
@@ -104,7 +104,7 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
         facets={plp.facets}
         facetSelections={plp.facetSelections}
         onToggleFacet={plp.toggleFacetValue}
-        onUpdateFilter={plp.updateFilter}
+        onUpdateFilter={plp.updateFilterDebounced}
         onClear={plp.clearFilters}
       />
 

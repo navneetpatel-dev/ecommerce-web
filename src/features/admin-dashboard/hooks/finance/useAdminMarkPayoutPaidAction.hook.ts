@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ChangeEvent } from "react";
+import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { usePresignUpload } from "@/shared/hooks/uploads/useUploads.hook";
 import {
@@ -101,9 +102,7 @@ export function useAdminMarkPayoutPaidAction({
       setOpen(false);
       onDone();
     } catch (submitError) {
-      setError(
-        getApiErrorMessage(submitError, "Could not mark this payout as paid."),
-      );
+      setError(getApiErrorMessage(submitError, LABELS.couldNotMarkPayoutPaid));
     } finally {
       setPending(false);
     }

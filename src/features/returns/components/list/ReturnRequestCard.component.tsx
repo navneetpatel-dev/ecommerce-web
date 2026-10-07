@@ -114,7 +114,9 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
             />
           ) : null}
           {rescheduleError ? (
-            <p className={styles.errorText}>{rescheduleError}</p>
+            <p role="alert" className={styles.errorText}>
+              {rescheduleError}
+            </p>
           ) : null}
         </div>
       ) : null}

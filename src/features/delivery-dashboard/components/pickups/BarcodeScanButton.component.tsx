@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
+import { LABELS } from "@/shared/constants/labels";
 
 import {
   useBarcodeScanner,
@@ -17,9 +18,8 @@ import {
 import { barcodeScanButtonStyles } from "../../styles/pickups/barcodeScanButton.styles";
 
 const SCANNER_ERROR_COPY: Record<BarcodeScannerError, string> = {
-  unsupported:
-    "This browser can't scan barcodes. Type the tracking number instead.",
-  camera: "Camera unavailable. Check permissions and try again.",
+  unsupported: LABELS.scannerUnsupported,
+  camera: LABELS.scannerCameraError,
 };
 
 /** Mounted only while the dialog is open, so the camera follows the dialog. */
@@ -34,10 +34,10 @@ function ScannerViewport({ onDecoded }: { onDecoded: (text: string) => void }) {
         autoPlay
         playsInline
         muted
-        aria-label="Camera preview"
+        aria-label={LABELS.cameraPreviewAria}
       />
       {error ? (
-        <p className={barcodeScanButtonStyles.errorNotice}>
+        <p role="alert" className={barcodeScanButtonStyles.errorNotice}>
           {SCANNER_ERROR_COPY[error]}
         </p>
       ) : null}
@@ -58,26 +58,30 @@ export function BarcodeScanButton({
 }) {
   const [open, setOpen] = useState(false);
 
+  const handleOpenScan = () => {
+    setOpen(true);
+  };
+
+  const handleDecoded = (text: string) => {
+    onDecoded(text);
+    setOpen(false);
+  };
+
   return (
     <>
-      <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
+      <Button variant="outline" size="sm" onClick={handleOpenScan}>
         <ScanLine
           className={barcodeScanButtonStyles.buttonIcon}
           aria-hidden="true"
         />
-        Scan barcode
+        {LABELS.scanBarcode}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className={barcodeScanButtonStyles.dialogContent}>
           <DialogHeader>
-            <DialogTitle>Scan package barcode</DialogTitle>
+            <DialogTitle>{LABELS.scanDialogTitle}</DialogTitle>
           </DialogHeader>
-          <ScannerViewport
-            onDecoded={(text) => {
-              onDecoded(text);
-              setOpen(false);
-            }}
-          />
+          <ScannerViewport onDecoded={handleDecoded} />
         </DialogContent>
       </Dialog>
     </>

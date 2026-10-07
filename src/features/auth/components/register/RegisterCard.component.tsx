@@ -10,14 +10,9 @@ import { Input } from "@/shared/components/ui/input";
 import { PasswordInputContainer } from "@/shared/containers/forms/PasswordInputContainer.container";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
+import type { RegisterInput } from "../../schemas/auth/auth.schema";
+import { RegisterTermsField } from "./RegisterTermsField.component";
 import { authFormsStyles } from "../../styles/shell/authForms.styles";
-
-interface RegisterInput {
-  name: string;
-  email: string;
-  phone?: string;
-  password: string;
-}
 
 interface RegisterCardProps {
   form: UseFormReturn<RegisterInput>;
@@ -39,8 +34,18 @@ export function RegisterCard({
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = form;
+
+  const acceptTerms = watch("acceptTerms");
+  const handleAcceptedChange = (accepted: boolean) => {
+    setValue("acceptTerms", accepted, {
+      shouldValidate: true,
+      shouldTouch: true,
+    });
+  };
 
   if (isSuccess) {
     return (
@@ -127,6 +132,7 @@ export function RegisterCard({
           htmlFor="password"
           required
           error={errors.password?.message}
+          hint={LABELS.passwordMinLength}
         >
           <PasswordInputContainer
             id="password"
@@ -136,6 +142,11 @@ export function RegisterCard({
           />
         </FormFieldFrame>
         <FormError error={error} fallback={LABELS.registrationFailed} />
+        <RegisterTermsField
+          accepted={acceptTerms}
+          error={errors.acceptTerms?.message}
+          onAcceptedChange={handleAcceptedChange}
+        />
         <Button
           type="submit"
           className={authFormsStyles.fullWidth}

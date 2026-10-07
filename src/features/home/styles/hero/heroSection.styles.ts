@@ -14,6 +14,9 @@ export const heroSectionStyles = {
     "absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-black/25",
   gradientVertical:
     "absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20",
+  /** Text-only fallback slide: brand gradient instead of borrowed imagery. */
+  brandedBackdrop:
+    "absolute inset-0 bg-gradient-to-br from-ink via-brand to-ink",
   iconButton:
     "rounded-full border-white/40 bg-black/55 text-white shadow-elevation-2 backdrop-blur-md hover:border-white/70 hover:bg-black/70 hover:text-white",
   desktopControls:
@@ -21,6 +24,7 @@ export const heroSectionStyles = {
   desktopGroup: "pointer-events-auto flex flex-col gap-2",
   mobilePrev: "absolute bottom-5 left-3 z-20 md:hidden",
   mobileNext: "absolute bottom-5 right-3 z-20 md:hidden",
+  mobilePause: "absolute bottom-20 right-3 z-20 md:hidden",
   copyContainer: "max-w-xl",
   eyebrow:
     "text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-white/70",

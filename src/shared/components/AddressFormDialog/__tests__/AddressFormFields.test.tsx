@@ -37,6 +37,8 @@ function renderFields() {
       setField={vi.fn()}
       hasAddresses={false}
       isEditing={false}
+      onFieldInputChange={vi.fn()}
+      onDeliveryInstructionsChange={vi.fn()}
     />,
   );
 }

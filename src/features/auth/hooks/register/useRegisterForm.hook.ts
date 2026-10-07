@@ -16,7 +16,7 @@ export function useRegisterForm() {
   const form = useForm<RegisterInput>({
     mode: "onTouched",
     resolver: zodResolver(RegisterSchema),
-    defaultValues: { phone: "" },
+    defaultValues: { phone: "", acceptTerms: false },
   });
 
   const { formLevelError } = useApiFormErrors(

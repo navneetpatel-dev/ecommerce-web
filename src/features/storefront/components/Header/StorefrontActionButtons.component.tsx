@@ -25,7 +25,6 @@ import {
 } from "./HeaderActionSkeletons.component";
 
 interface StorefrontActionButtonsProps {
-  isTransparent: boolean;
   cartItemCount: number;
   wishlistItemCount: number;
   /** Null when the balance is unknown; the badge is hidden rather than showing 0. */
@@ -39,7 +38,6 @@ interface StorefrontActionButtonsProps {
 }
 
 export function StorefrontActionButtons({
-  isTransparent,
   cartItemCount,
   wishlistItemCount,
   walletBalance,
@@ -63,17 +61,10 @@ export function StorefrontActionButtons({
           variant="ghost"
           size="icon-sm"
           onClick={onOpenMobileSearch}
-          className={cn(
-            "hidden lg:inline-flex xl:hidden",
-            HEADER_ICON_BTN,
-            isTransparent ? "hover:bg-paper/10" : undefined,
-          )}
+          className={cn("hidden lg:inline-flex xl:hidden", HEADER_ICON_BTN)}
           aria-label={LABELS.search}
         >
-          <Search
-            size={20}
-            className={HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]}
-          />
+          <Search size={20} className={HEADER_INK_TONE} />
         </Button>
       )}
 
@@ -86,11 +77,7 @@ export function StorefrontActionButtons({
             variant="ghost"
             size="icon-sm"
             onClick={onOpenCart}
-            className={cn(
-              "hidden lg:inline-flex",
-              HEADER_ICON_BTN,
-              isTransparent ? "hover:bg-paper/10" : undefined,
-            )}
+            className={cn("hidden lg:inline-flex", HEADER_ICON_BTN)}
             aria-label={
               cartItemCount > 0
                 ? `${LABELS.cart}, ${cartItemCount}`
@@ -98,12 +85,7 @@ export function StorefrontActionButtons({
             }
           >
             <IconBadgeAnchor>
-              <ShoppingCart
-                size={20}
-                className={
-                  HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]
-                }
-              />
+              <ShoppingCart size={20} className={HEADER_INK_TONE} />
               <CartCountBadge count={cartItemCount} placement="header" />
             </IconBadgeAnchor>
           </Button>
@@ -113,10 +95,7 @@ export function StorefrontActionButtons({
             variant="ghost"
             size="icon-sm"
             asChild
-            className={cn(
-              HEADER_ICON_BTN,
-              isTransparent ? "hover:bg-paper/10" : undefined,
-            )}
+            className={cn(HEADER_ICON_BTN)}
           >
             <Link
               href={PATHS.wishlist}
@@ -127,12 +106,7 @@ export function StorefrontActionButtons({
               }
             >
               <IconBadgeAnchor>
-                <Heart
-                  size={20}
-                  className={
-                    HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]
-                  }
-                />
+                <Heart size={20} className={HEADER_INK_TONE} />
                 <CartCountBadge count={wishlistItemCount} placement="header" />
               </IconBadgeAnchor>
             </Link>
@@ -143,19 +117,11 @@ export function StorefrontActionButtons({
             variant="ghost"
             size="icon-sm"
             asChild
-            className={cn(
-              HEADER_ICON_BTN,
-              isTransparent ? "hover:bg-paper/10" : undefined,
-            )}
+            className={cn(HEADER_ICON_BTN)}
           >
             <Link href={PATHS.wallet} aria-label={walletAriaLabel}>
               <IconBadgeAnchor variant="header-wide">
-                <WalletIcon
-                  size={20}
-                  className={
-                    HEADER_INK_TONE[isTransparent ? "transparent" : "solid"]
-                  }
-                />
+                <WalletIcon size={20} className={HEADER_INK_TONE} />
                 {walletBalance != null ? (
                   <CartCountBadge
                     count={walletBalance}

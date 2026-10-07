@@ -14,6 +14,10 @@ export const adminRolesLabels = {
   managePermissionsFor: "Permissions for {name}",
   permissionCount: "{count} permission(s)",
   savePermissions: "Save permissions",
+  searchPermissionsPlaceholder: "Search permissions...",
+  clearPermissionSearch: "Clear search",
+  selectAllVisible: "Select all",
+  clearAllVisible: "Clear all",
   confirmDeleteRoleTitle: "Delete this role?",
   confirmDeleteRoleBody:
     'Delete role "{name}"? This cannot be undone. Users must be reassigned before a role can be deleted.',

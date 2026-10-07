@@ -87,7 +87,7 @@ export function CouponAnalyticsDialog(props: CouponAnalyticsDialogProps) {
             </p>
           </dl>
         ) : (
-          <p className={couponAnalyticsDialogStyles.errorText}>
+          <p role="alert" className={couponAnalyticsDialogStyles.errorText}>
             {LABELS.couldNotLoadData}
           </p>
         )}

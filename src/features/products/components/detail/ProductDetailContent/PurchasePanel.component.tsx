@@ -67,6 +67,11 @@ export function PurchasePanel({
   productName,
   productUrl,
 }: PurchasePanelProps) {
+  const handleAddToCartClick = () => {
+    if (addDisabled) return;
+    onAddToCart?.(quantity);
+  };
+
   return (
     <div className={PRODUCT_DETAIL_CONTENT_STYLES.purchasePanelRoot}>
       {needsOptionSelection ? (
@@ -117,10 +122,7 @@ export function PurchasePanel({
           <Button
             className={PRODUCT_DETAIL_CONTENT_STYLES.addToCartButton}
             disabled={addDisabled}
-            onClick={() => {
-              if (addDisabled) return;
-              onAddToCart?.(quantity);
-            }}
+            onClick={handleAddToCartClick}
             loading={isAddingToCart}
           >
             {addToCartLabel}

@@ -1,9 +1,7 @@
 "use client";
 
-import { MediaImage } from "@/shared/components/media/MediaImage.component";
-import { LABELS } from "@/shared/constants/labels";
 import type { UploadedMediaAttachment } from "../../../types/form/TicketAttachmentUploader-types";
-import { isVideoAttachment } from "../../../utils/form/TicketAttachmentUploader-utils";
+import { AttachmentRow } from "./AttachmentRow.component";
 import { ticketAttachmentUploaderStyles } from "../../../styles/form/ticketAttachmentUploader.styles";
 
 type Props = {
@@ -17,34 +15,12 @@ export function AttachmentList({ items, onRemove }: Props) {
   return (
     <ul className={ticketAttachmentUploaderStyles.list}>
       {items.map((item, index) => (
-        <li
+        <AttachmentRow
           key={`${item.url}-${index}`}
-          className={ticketAttachmentUploaderStyles.item}
-        >
-          {isVideoAttachment(item) ? (
-            <video
-              src={item.displayUrl ?? item.url}
-              className={ticketAttachmentUploaderStyles.video}
-              muted
-              playsInline
-              preload="metadata"
-            />
-          ) : (
-            <MediaImage
-              src={item.displayUrl ?? item.url}
-              alt=""
-              sizes="80px"
-              imageClassName={ticketAttachmentUploaderStyles.img}
-            />
-          )}
-          <button
-            type="button"
-            className={ticketAttachmentUploaderStyles.removeBtn}
-            onClick={() => onRemove(index)}
-          >
-            {LABELS.ticketRemoveAttachment}
-          </button>
-        </li>
+          item={item}
+          index={index}
+          onRemove={onRemove}
+        />
       ))}
     </ul>
   );

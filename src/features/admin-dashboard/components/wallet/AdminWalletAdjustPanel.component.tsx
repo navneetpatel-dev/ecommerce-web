@@ -36,8 +36,7 @@ export function AdminWalletAdjustPanel() {
                 {LABELS.walletAdjustTitle}
               </h2>
               <p className={adminFormWidgetsStyles.walletSubtitle}>
-                Manually credit or debit customer wallet points with audit
-                logging and reason tracking
+                {LABELS.walletAdjustSubtitle}
               </p>
             </div>
           </div>
@@ -54,8 +53,8 @@ export function AdminWalletAdjustPanel() {
               <Input
                 id="wallet-adjust-user"
                 value={form.userId}
-                placeholder="e.g. usr_123456789"
-                onChange={(e) => form.setUserId(e.target.value)}
+                placeholder={LABELS.walletAdjustUserPlaceholder}
+                onChange={form.handleUserIdChange}
                 error={Boolean(form.fieldError("userId"))}
               />
             </FormFieldFrame>
@@ -66,9 +65,7 @@ export function AdminWalletAdjustPanel() {
             >
               <Select
                 value={form.direction}
-                onValueChange={(value) =>
-                  form.setDirection(value as "CREDIT" | "DEBIT")
-                }
+                onValueChange={form.handleDirectionChange}
               >
                 <SelectTrigger id="wallet-adjust-direction">
                   <SelectValue />
@@ -103,9 +100,7 @@ export function AdminWalletAdjustPanel() {
               >
                 <Select
                   value={form.pointSource}
-                  onValueChange={(value) =>
-                    form.setPointSource(value as "PURCHASED" | "PROMOTIONAL")
-                  }
+                  onValueChange={form.handlePointSourceChange}
                 >
                   <SelectTrigger id="wallet-adjust-source">
                     <SelectValue />
@@ -131,9 +126,9 @@ export function AdminWalletAdjustPanel() {
             <Textarea
               id="wallet-adjust-reason"
               value={form.reason}
-              placeholder="Provide a detailed audit reason for this points adjustment..."
+              placeholder={LABELS.walletAdjustReasonPlaceholder}
               rows={3}
-              onChange={(e) => form.setReason(e.target.value)}
+              onChange={form.handleReasonChange}
               error={Boolean(form.fieldError("reason"))}
             />
           </FormFieldFrame>
@@ -142,21 +137,27 @@ export function AdminWalletAdjustPanel() {
             <Button
               type="button"
               disabled={form.loading}
-              onClick={() => void form.submit()}
+              onClick={form.handleSubmit}
             >
               {form.loading ? LABELS.loading : LABELS.walletAdjustSubmit}
             </Button>
           </div>
 
           {form.error ? (
-            <div className={adminFormWidgetsStyles.walletErrorAlert}>
+            <div
+              role="alert"
+              className={adminFormWidgetsStyles.walletErrorAlert}
+            >
               <AlertCircle className={adminFormWidgetsStyles.iconSmShrink0} />
               <span>{form.error}</span>
             </div>
           ) : null}
 
           {form.message ? (
-            <div className={adminFormWidgetsStyles.walletSuccessAlert}>
+            <div
+              role="status"
+              className={adminFormWidgetsStyles.walletSuccessAlert}
+            >
               <CheckCircle2 className={adminFormWidgetsStyles.iconSmShrink0} />
               <span>{form.message}</span>
             </div>

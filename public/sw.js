@@ -33,7 +33,8 @@ self.addEventListener("activate", (event) => {
           keys
             .filter(
               (key) =>
-                key.startsWith("delivery-app-shell-") && key !== APP_SHELL_CACHE,
+                key.startsWith("delivery-app-shell-") &&
+                key !== APP_SHELL_CACHE,
             )
             .map((key) => caches.delete(key)),
         ),
@@ -55,7 +56,9 @@ self.addEventListener("fetch", (event) => {
       fetch(request)
         .then((response) => {
           const copy = response.clone();
-          void caches.open(APP_SHELL_CACHE).then((cache) => cache.put(request, copy));
+          void caches
+            .open(APP_SHELL_CACHE)
+            .then((cache) => cache.put(request, copy));
           return response;
         })
         .catch(() => caches.match(request)),
@@ -83,18 +86,20 @@ self.addEventListener("fetch", (event) => {
   // page would show stale prices, carts or orders), and only when it fails
   // fall back to the cached /offline page instead of the browser error screen.
   if (request.mode === "navigate") {
-    event.respondWith(
-      fetch(request).catch(() => caches.match(OFFLINE_URL)),
-    );
+    event.respondWith(fetch(request).catch(() => caches.match(OFFLINE_URL)));
   }
 });
 
 self.addEventListener("sync", (event) => {
   if (event.tag !== "delivery-status-sync") return;
   event.waitUntil(
-    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientsList) => {
-      clientsList.forEach((client) => client.postMessage({ type: "DELIVERY_FLUSH_QUEUE" }));
-    }),
+    self.clients
+      .matchAll({ type: "window", includeUncontrolled: true })
+      .then((clientsList) => {
+        clientsList.forEach((client) =>
+          client.postMessage({ type: "DELIVERY_FLUSH_QUEUE" }),
+        );
+      }),
   );
 });
 

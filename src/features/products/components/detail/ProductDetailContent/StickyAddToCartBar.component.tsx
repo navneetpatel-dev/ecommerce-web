@@ -28,6 +28,11 @@ export function StickyAddToCartBar({
   quantity,
   onAddToCart,
 }: StickyAddToCartBarProps) {
+  const handleAddToCartClick = () => {
+    if (addDisabled) return;
+    onAddToCart?.(quantity);
+  };
+
   if (!visible) return null;
 
   return (
@@ -50,10 +55,7 @@ export function StickyAddToCartBar({
             size="lg"
             className={PRODUCT_DETAIL_CONTENT_STYLES.stickyBarButton}
             disabled={addDisabled}
-            onClick={() => {
-              if (addDisabled) return;
-              onAddToCart?.(quantity);
-            }}
+            onClick={handleAddToCartClick}
             loading={isAddingToCart}
           >
             {addLabel}

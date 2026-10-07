@@ -1,4 +1,7 @@
+import type { ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { latestForType } from "../../../utils/documents/deliveryDocumentStatus";
 import type {
   DeliveryAgentDocument,
@@ -30,7 +33,19 @@ export function DocumentTypeRow({
   const document = latestForType(documents, type);
   const canReplace = !document?.verified;
   const uploadLabel =
-    pendingType === type ? "Uploading..." : document ? "Re-upload" : "Upload";
+    pendingType === type
+      ? LABELS.docUploading
+      : document
+        ? LABELS.docReupload
+        : LABELS.docUpload;
+
+  const handleExpiryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onExpiryChange(event.target.value);
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onFileChange(event.target.files?.[0] ?? null);
+  };
 
   return (
     <div className={styles.row}>
@@ -45,11 +60,11 @@ export function DocumentTypeRow({
         <div className={styles.actionsRow}>
           <Input
             type="date"
-            aria-label={`${label} expiry date`}
-            placeholder="Expiry date (optional)"
+            aria-label={formatLabel(LABELS.docExpiryAriaLabel, { label })}
+            placeholder={LABELS.docExpiryPlaceholder}
             className={styles.dateInput}
             value={expiryValue}
-            onChange={(e) => onExpiryChange(e.target.value)}
+            onChange={handleExpiryChange}
           />
           <label className={styles.uploadButton}>
             {uploadLabel}
@@ -58,7 +73,7 @@ export function DocumentTypeRow({
               type="file"
               accept="image/jpeg,image/png,image/webp,application/pdf"
               disabled={pendingType === type}
-              onChange={(e) => onFileChange(e.target.files?.[0] ?? null)}
+              onChange={handleFileChange}
             />
           </label>
         </div>

@@ -101,7 +101,7 @@ export function VendorProductCreateForm({
         ) : null}
 
         {submitError ? (
-          <p className={vendorProductCreateFormStyles.submitError}>
+          <p role="alert" className={vendorProductCreateFormStyles.submitError}>
             {submitError}
           </p>
         ) : null}

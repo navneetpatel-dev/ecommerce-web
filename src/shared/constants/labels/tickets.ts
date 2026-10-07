@@ -60,7 +60,6 @@ export const ticketsLabels = {
   ticketNoMessages: "No messages yet.",
   ticketLatestPreview: "Latest",
   ticketNumberLabel: "Ticket {number}",
-  ticketNumber: "Ticket #",
   ticketCustomer: "Customer",
   ticketVendor: "Vendor",
   ticketView: "View",
@@ -141,6 +140,7 @@ export const ticketsLabels = {
   ticketCompressFailed:
     "Could not compress video. Try a shorter or smaller file.",
   ticketCompressingVideo: "Compressing video…",
+  screenRecording: "Screen recording",
   bugVideoTooLong: "Screen recording must be {seconds} seconds or less.",
   bugVideoTooLarge: "Screen recording must be under {mb}MB.",
   bugCompressFailed:

@@ -81,7 +81,9 @@ export function CreateDeliveryAgentForm({
       </div>
 
       {error ? (
-        <p className={createDeliveryAgentFormStyles.errorText}>{error}</p>
+        <p role="alert" className={createDeliveryAgentFormStyles.errorText}>
+          {error}
+        </p>
       ) : null}
     </section>
   );

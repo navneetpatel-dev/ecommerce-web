@@ -19,4 +19,5 @@ export const failedAttemptSectionStyles = {
   uploadText: "text-body-sm font-medium text-ink",
   fileInput: "sr-only",
   submitButton: "w-full",
+  submitHintWrapper: "block w-full",
 } as const;

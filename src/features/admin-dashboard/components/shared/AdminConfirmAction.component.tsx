@@ -124,7 +124,9 @@ export function AdminConfirmAction({
   ) : null;
 
   const actionErrorMessage = actionError ? (
-    <p className={styles.errorMessage}>{actionError}</p>
+    <p role="alert" className={styles.errorMessage}>
+      {actionError}
+    </p>
   ) : null;
 
   return (

@@ -43,6 +43,8 @@ export function ProductResults({
   slugPath,
 }: ProductResultsProps) {
   const emptyIcon = hasActiveFacets ? SlidersHorizontal : Package;
+  const handleSortChange = (value: string) => onUpdateFilter("sort", value);
+  const handlePageChange = (page: number) => onUpdateFilter("page", page);
 
   return (
     <div className={styles.resultsContainer}>
@@ -50,7 +52,7 @@ export function ProductResults({
         sort={filters.sort}
         totalProducts={data?.total}
         isFetching={isFetching}
-        onSortChange={(v) => onUpdateFilter("sort", v)}
+        onSortChange={handleSortChange}
         compareMode={compareMode}
         onToggleCompare={onToggleCompareMode}
         hideSortOnMobile
@@ -119,7 +121,7 @@ export function ProductResults({
             <PaginationContainer
               currentPage={filters.page ?? 1}
               totalPages={data.totalPages}
-              onPageChange={(p) => onUpdateFilter("page", p)}
+              onPageChange={handlePageChange}
             />
           ) : null}
         </>

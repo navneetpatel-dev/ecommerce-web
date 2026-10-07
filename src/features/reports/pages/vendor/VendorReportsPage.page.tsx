@@ -13,7 +13,7 @@ export function VendorReportsPage() {
 
   if (hub.catalogError) {
     return (
-      <div className={styles.errorContainer}>
+      <div role="alert" className={styles.errorContainer}>
         <p className={styles.errorText}>{hub.catalogError}</p>
         <button
           type="button"

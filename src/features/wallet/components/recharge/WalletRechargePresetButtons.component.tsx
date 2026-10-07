@@ -1,5 +1,4 @@
-import { Button } from "@/shared/components/ui/button";
-import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { WalletRechargePresetButton } from "./WalletRechargePresetButton.component";
 import { walletRechargePanelStyles as styles } from "../../styles/recharge/walletRechargePanel.styles";
 
 interface WalletRechargePresetButtonsProps {
@@ -16,19 +15,12 @@ export function WalletRechargePresetButtons({
   return (
     <div className={styles.presetsGrid}>
       {presets.map((preset) => (
-        <Button
+        <WalletRechargePresetButton
           key={preset}
-          type="button"
-          variant="outline"
-          size="sm"
+          amount={preset}
           disabled={disabled}
-          className={styles.presetButton}
-          onClick={() => onSelect(preset)}
-        >
-          <span className={styles.presetContent}>
-            <span>{formatInr(preset)}</span>
-          </span>
-        </Button>
+          onSelect={onSelect}
+        />
       ))}
     </div>
   );

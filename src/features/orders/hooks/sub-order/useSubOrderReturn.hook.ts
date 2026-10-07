@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { useCreateReturn } from "@/features/returns";
 import { LABELS } from "@/shared/constants/labels";
+import { useDiscardChangesGuard } from "@/shared/hooks/dialogs/useDiscardChangesGuard.hook";
 import { RETURN_REASON, type ReturnReason } from "@/shared/constants/statuses";
 import type { OrderItem } from "@/shared/api/types";
 
@@ -47,6 +48,33 @@ export function useSubOrderReturn() {
 
   const closeDialog = () => setTarget(null);
 
+  // Any typed reason, attached photo, or non-default resolution is unsaved
+  // work — dismissing the dialog then asks for confirmation first.
+  const isDirty =
+    reason.trim().length > 0 || photoUrls.length > 0 || type !== "REFUND";
+  const discard = useDiscardChangesGuard(isDirty);
+
+  const handleDialogOpenChange = (open: boolean) => {
+    if (open) return;
+    discard.requestClose(closeDialog);
+  };
+
+  const handleCancelReturn = () => {
+    discard.requestClose(closeDialog);
+  };
+
+  const handleReturnTypeSelect = (value: string) => {
+    setType(value as "REFUND" | "EXCHANGE");
+  };
+
+  const handleReasonCodeSelect = (value: string) => {
+    setReasonCode(value as ReturnReasonCode);
+  };
+
+  const handleReasonInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setReason(event.target.value);
+  };
+
   const submitReturn = async () => {
     if (!target) return;
     await createReturn.mutateAsync({
@@ -62,20 +90,25 @@ export function useSubOrderReturn() {
   return {
     target,
     reasonCode,
-    setReasonCode,
     reason,
     type,
-    setType,
-    setReason,
     photoUrls,
     setPhotoUrls,
     draftUploadId,
     openDialog,
-    closeDialog,
     submitReturn,
     isPending: createReturn.isPending,
     isSuccess: createReturn.isSuccess,
     error: createReturn.error as Error | null,
     reset: createReturn.reset,
+    handleDialogOpenChange,
+    handleCancelReturn,
+    handleReturnTypeSelect,
+    handleReasonCodeSelect,
+    handleReasonInput,
+    discardOpen: discard.confirmOpen,
+    handleDiscardOpenChange: discard.handleConfirmOpenChange,
+    confirmDiscard: discard.confirmDiscard,
+    cancelDiscard: discard.cancelDiscard,
   };
 }

@@ -55,10 +55,16 @@ export function VendorKycDocumentsDialog({
   ) : null;
 
   const errorText =
-    !loading && error ? <p className={styles.errorText}>{error}</p> : null;
+    !loading && error ? (
+      <p role="alert" className={styles.errorText}>
+        {error}
+      </p>
+    ) : null;
 
   const actionErrorText = actionError ? (
-    <p className={styles.actionErrorText}>{actionError}</p>
+    <p role="alert" className={styles.actionErrorText}>
+      {actionError}
+    </p>
   ) : null;
 
   const emptyText =

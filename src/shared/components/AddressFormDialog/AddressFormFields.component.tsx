@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { CheckboxField } from "@/shared/components/forms/CheckboxField.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
@@ -26,6 +27,10 @@ interface AddressFormFieldsProps {
   getError?: (field: keyof AddressFormValues) => string | undefined;
   locationStatus?: LocationCaptureStatus;
   onRetryLocation?: () => void;
+  onFieldInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onDeliveryInstructionsChange: (
+    event: ChangeEvent<HTMLTextAreaElement>,
+  ) => void;
 }
 
 /** Shared field grid for the address create/edit dialog (Rule 2/3 split). */
@@ -38,13 +43,14 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
     getError,
     locationStatus,
     onRetryLocation,
+    onFieldInputChange,
+    onDeliveryInstructionsChange,
   } = props;
 
   const fieldError = (field: keyof AddressFormValues) => getError?.(field);
 
-  const updatePincode = (raw: string) => {
-    setField("pincode", raw.replace(/\D/g, "").slice(0, PINCODE_LENGTH));
-  };
+  const handleDefaultChange = (checked: boolean) =>
+    setField("isDefault", checked);
 
   return (
     <FormSection
@@ -60,9 +66,10 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-line1"
+          name="line1"
           autoComplete="address-line1"
           value={form.line1}
-          onChange={(e) => setField("line1", e.target.value)}
+          onChange={onFieldInputChange}
           placeholder={LABELS.addressLine1Placeholder}
           required
           error={Boolean(fieldError("line1"))}
@@ -84,9 +91,10 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-line2"
+          name="line2"
           autoComplete="address-line2"
           value={form.line2}
-          onChange={(e) => setField("line2", e.target.value)}
+          onChange={onFieldInputChange}
           placeholder={LABELS.addressLine2Placeholder}
           error={Boolean(fieldError("line2"))}
         />
@@ -100,9 +108,10 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-city"
+          name="city"
           autoComplete="address-level2"
           value={form.city}
-          onChange={(e) => setField("city", e.target.value)}
+          onChange={onFieldInputChange}
           required
           error={Boolean(fieldError("city"))}
         />
@@ -116,9 +125,10 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-state"
+          name="state"
           autoComplete="address-level1"
           value={form.state}
-          onChange={(e) => setField("state", e.target.value)}
+          onChange={onFieldInputChange}
           required
           error={Boolean(fieldError("state"))}
         />
@@ -132,11 +142,12 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-pincode"
+          name="pincode"
           inputMode="numeric"
           autoComplete="postal-code"
           maxLength={PINCODE_LENGTH}
           value={form.pincode}
-          onChange={(e) => updatePincode(e.target.value)}
+          onChange={onFieldInputChange}
           required
           error={Boolean(fieldError("pincode"))}
         />
@@ -149,9 +160,10 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
       >
         <Input
           id="shared-addr-country"
+          name="country"
           autoComplete="country-name"
           value={form.country}
-          onChange={(e) => setField("country", e.target.value)}
+          onChange={onFieldInputChange}
           error={Boolean(fieldError("country"))}
         />
       </FormFieldFrame>
@@ -165,7 +177,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
         <Textarea
           id="shared-addr-delivery-instructions"
           value={form.deliveryInstructions}
-          onChange={(e) => setField("deliveryInstructions", e.target.value)}
+          onChange={onDeliveryInstructionsChange}
           placeholder={LABELS.addressDeliveryInstructionsPlaceholder}
           rows={2}
           maxLength={500}
@@ -178,7 +190,7 @@ export function AddressFormFields(props: AddressFormFieldsProps) {
           id="shared-addr-default"
           className={addressFormDialogStyles.colSpan2}
           checked={form.isDefault}
-          onCheckedChange={(checked) => setField("isDefault", checked)}
+          onCheckedChange={handleDefaultChange}
           label={LABELS.addressSetDefault}
         />
       ) : null}

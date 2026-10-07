@@ -17,6 +17,11 @@ interface UseModalOverlayParams {
   onClose: () => void;
   /** Panel that receives focus and traps Tab while the overlay is open. */
   panelRef: RefObject<HTMLElement | null>;
+  /**
+   * Control to focus when the panel opens. Defaults to the first focusable in
+   * DOM order — pass this when that default is not the safe landing spot.
+   */
+  initialFocusRef?: RefObject<HTMLElement | null>;
 }
 
 /**
@@ -30,6 +35,7 @@ export function useModalOverlay({
   open,
   onClose,
   panelRef,
+  initialFocusRef,
 }: UseModalOverlayParams) {
   useEffect(() => {
     if (!open) return;
@@ -41,7 +47,7 @@ export function useModalOverlay({
         panel?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? [],
       );
 
-    focusables()[0]?.focus();
+    (initialFocusRef?.current ?? focusables()[0])?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -77,5 +83,5 @@ export function useModalOverlay({
       document.body.style.overflow = previousOverflow;
       previouslyFocused?.focus();
     };
-  }, [open, onClose, panelRef]);
+  }, [open, onClose, panelRef, initialFocusRef]);
 }

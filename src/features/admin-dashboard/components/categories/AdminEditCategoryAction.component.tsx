@@ -75,7 +75,11 @@ export function AdminEditCategoryAction({
               excludeCategoryId={category.id}
               idPrefix={`category-edit-${category.id}`}
             />
-            {error ? <p className={styles.errorMessage}>{error}</p> : null}
+            {error ? (
+              <p role="alert" className={styles.errorMessage}>
+                {error}
+              </p>
+            ) : null}
             <FormActions>
               <Button
                 type="button"

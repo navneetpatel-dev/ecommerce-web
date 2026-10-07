@@ -45,6 +45,7 @@ export const reports2Labels = {
     "Chat support is available for orders, returns, and account questions.",
   cookieBannerMessage:
     "This site uses cookies to improve your experience. By continuing, you agree to our use of cookies.",
+  cookieBannerAriaLabel: "Cookie consent",
   manageCookiePreferences: "Manage preferences",
   acceptCookies: "Accept",
   dismiss: "Dismiss",

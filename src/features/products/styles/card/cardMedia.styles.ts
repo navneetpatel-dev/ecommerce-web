@@ -1,7 +1,7 @@
 import { cn } from "@/shared/utils/dom/cn";
 
 export const CARD_MEDIA_STYLES = {
-  link: "block",
+  link: "absolute inset-0 z-10 block",
   imageWrapper: (imageUnavailable: boolean) =>
     cn(
       "aspect-square rounded-md overflow-hidden bg-paper border border-line relative",
@@ -17,14 +17,14 @@ export const CARD_MEDIA_STYLES = {
     "bg-surface text-ink text-body-sm font-medium rounded-sm px-3 py-1.5",
   wishlistButton: (isWishlisted: boolean) =>
     cn(
-      "absolute top-2 right-2 h-8 w-8 min-h-8 max-h-8 rounded-full bg-surface/80 backdrop-blur-xs hover:bg-surface",
+      "absolute top-2 right-2 z-20 h-8 w-8 min-h-8 max-h-8 rounded-full bg-surface/80 backdrop-blur-xs hover:bg-surface",
       isWishlisted ? "text-danger" : "text-ink-muted",
     ),
   wishlistIcon: (isWishlisted: boolean) =>
     cn(isWishlisted && "fill-current", isWishlisted && "animate-pulse-scale"),
   quickAddOverlay: (inCart: boolean) =>
     cn(
-      "absolute bottom-0 left-0 right-0 hidden p-3 md:flex",
+      "absolute bottom-0 left-0 right-0 z-20 hidden p-3 md:flex",
       "transition-[opacity,transform] duration-200",
       inCart
         ? "opacity-100 translate-y-0"

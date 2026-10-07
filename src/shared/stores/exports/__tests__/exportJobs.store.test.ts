@@ -34,12 +34,10 @@ describe("useExportJobsStore", () => {
     useExportJobsStore.setState({ jobs: [] });
     useExportJobsStore.getState().trackJob("a", "one");
     useExportJobsStore.getState().trackJob("b", "two");
-    useExportJobsStore
-      .getState()
-      .trackJob("a", "one-again", {
-        status: "PROCESSING",
-        progressPercent: 10,
-      });
+    useExportJobsStore.getState().trackJob("a", "one-again", {
+      status: "PROCESSING",
+      progressPercent: 10,
+    });
     const jobs = useExportJobsStore.getState().jobs;
     expect(jobs).toHaveLength(2);
     expect(jobs[0]?.jobId).toBe("a");

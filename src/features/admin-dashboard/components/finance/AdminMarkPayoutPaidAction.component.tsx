@@ -13,6 +13,7 @@ import {
 import { FormFieldFrame } from "@/shared/components/forms";
 import { FilePicker } from "@/shared/components/FileUpload/FilePicker.component";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
+import { LABELS } from "@/shared/constants/labels";
 import { PaymentMethodsList } from "./AdminMarkPayoutPaidAction/PaymentMethodsList.component";
 import {
   PAYOUT_PAYMENT_METHODS,
@@ -50,32 +51,38 @@ export function AdminMarkPayoutPaidAction({
   } = useAdminMarkPayoutPaidAction({ payoutId, onDone });
 
   const errorMessage = error ? (
-    <p className={styles.errorMessage}>{error}</p>
+    <p role="alert" className={styles.errorMessage}>
+      {error}
+    </p>
   ) : null;
 
   return (
     <>
       <Button size="sm" variant="outline" onClick={openDialog}>
         <CheckCircle2 className={styles.icon} aria-hidden="true" />
-        Mark paid
+        {LABELS.markPayoutPaid}
       </Button>
       <StatusDialog
         open={open}
         onOpenChange={handleOpenChange}
         variant="success"
-        title="Mark payout as paid"
-        description="Record the completed transfer. This action cannot be reversed here."
-        secondaryAction={{ label: "Cancel", onClick: close, disabled: pending }}
+        title={LABELS.markPaidFinanceDialogTitle}
+        description={LABELS.markPaidFinanceDialogBody}
+        secondaryAction={{
+          label: LABELS.cancel,
+          onClick: close,
+          disabled: pending,
+        }}
         primaryAction={{
-          label: "Mark paid",
+          label: LABELS.markPayoutPaid,
           onClick: submit,
           loading: pending,
           disabled: !reference.trim(),
-          disabledHint: "Enter a payment reference number.",
+          disabledHint: LABELS.referenceRequiredHint,
         }}
       >
         <FormFieldFrame
-          label="Payment method"
+          label={LABELS.paymentMethodLabel}
           htmlFor={`payout-method-${payoutId}`}
           required
         >
@@ -89,7 +96,7 @@ export function AdminMarkPayoutPaidAction({
           </Select>
         </FormFieldFrame>
         <FormFieldFrame
-          label="Payment reference number"
+          label={LABELS.paymentReferenceLabel}
           htmlFor={`payout-reference-${payoutId}`}
           required
         >
@@ -97,12 +104,12 @@ export function AdminMarkPayoutPaidAction({
             id={`payout-reference-${payoutId}`}
             value={reference}
             maxLength={120}
-            placeholder="UTR, transaction ID, or cheque number"
+            placeholder={LABELS.paymentReferencePlaceholder}
             onChange={handleReferenceChange}
           />
         </FormFieldFrame>
         <FormFieldFrame
-          label="Paid at (optional)"
+          label={LABELS.paidAtLabel}
           htmlFor={`payout-date-${payoutId}`}
         >
           <Input
@@ -113,7 +120,7 @@ export function AdminMarkPayoutPaidAction({
           />
         </FormFieldFrame>
         <FormFieldFrame
-          label="Proof of payment (optional)"
+          label={LABELS.proofOfPaymentLabel}
           htmlFor={`payout-proof-${payoutId}`}
         >
           <FilePicker
@@ -123,11 +130,11 @@ export function AdminMarkPayoutPaidAction({
             value={proof}
             onChange={setProof}
             disabled={pending}
-            hint="PNG, JPEG, WebP, or PDF • Max 5 MB"
+            hint={LABELS.proofFileHint}
           />
         </FormFieldFrame>
         <FormFieldFrame
-          label="Remarks (optional)"
+          label={LABELS.remarksLabel}
           htmlFor={`payout-remarks-${payoutId}`}
         >
           <Textarea

@@ -6,6 +6,9 @@ import {
   type AgentPayout,
 } from "@/features/delivery-dashboard";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { useReasonPrompt } from "@/shared/hooks/dialogs/useReasonPrompt.hook";
 
 /** Owns the agent-payouts admin panel's data + batch/settle/fail/retry actions. */
 export function useAgentPayoutsPanel() {
@@ -16,6 +19,7 @@ export function useAgentPayoutsPanel() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const failPrompt = useReasonPrompt();
 
   const load = () => {
     setLoading(true);
@@ -45,34 +49,40 @@ export function useAgentPayoutsPanel() {
       const created = await deliveryAdminApi.processPayouts();
       setMessage(
         created.length > 0
-          ? `${created.length} payout batch(es) created from settled earnings.`
-          : "No pending earnings to process.",
+          ? formatLabel(LABELS.payoutBatchesCreated, { count: created.length })
+          : LABELS.noPendingEarnings,
       );
       load();
     } catch (processError) {
-      setError(
-        getApiErrorMessage(processError, "Could not process agent payouts."),
-      );
+      setError(getApiErrorMessage(processError, LABELS.couldNotProcessPayouts));
     } finally {
       setProcessing(false);
     }
   };
 
-  const fail = async (payoutId: string) => {
-    const reason = window.prompt("Reason this payout failed?");
-    if (!reason) return;
+  const requestFail = (payoutId: string) => {
+    failPrompt.openFor(payoutId);
+  };
+
+  const runFail = async (payoutId: string, reason: string) => {
     setPendingId(payoutId);
-    setError(null);
     try {
       await deliveryAdminApi.markPayoutFailed(payoutId, reason);
+      failPrompt.cancel();
       load();
     } catch (failError) {
-      setError(
-        getApiErrorMessage(failError, "Could not mark this payout failed."),
-      );
+      setError(getApiErrorMessage(failError, LABELS.couldNotMarkPayoutFailed));
     } finally {
       setPendingId(null);
     }
+  };
+
+  const confirmFail = () => {
+    const payoutId = failPrompt.targetId;
+    const reason = failPrompt.reason.trim();
+    if (!payoutId || !reason) return;
+    setError(null);
+    void runFail(payoutId, reason);
   };
 
   const retry = async (payoutId: string) => {
@@ -82,7 +92,7 @@ export function useAgentPayoutsPanel() {
       await deliveryAdminApi.retryPayout(payoutId);
       load();
     } catch (retryError) {
-      setError(getApiErrorMessage(retryError, "Could not retry this payout."));
+      setError(getApiErrorMessage(retryError, LABELS.couldNotRetryPayout));
     } finally {
       setPendingId(null);
     }
@@ -102,7 +112,15 @@ export function useAgentPayoutsPanel() {
     load,
     download,
     process,
-    fail,
     retry,
+    requestFail,
+    failReason: {
+      open: failPrompt.open,
+      pending: pendingId === failPrompt.targetId,
+      reason: failPrompt.reason,
+      onOpenChange: failPrompt.handleOpenChange,
+      onReasonChange: failPrompt.handleReasonChange,
+      onSubmit: confirmFail,
+    },
   };
 }

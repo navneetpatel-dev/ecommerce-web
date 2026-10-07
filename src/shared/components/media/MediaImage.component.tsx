@@ -21,24 +21,21 @@ interface MediaImageProps {
   onUnavailableChange?: (unavailable: boolean) => void;
 }
 
-type LoadStatus = "idle" | "ready" | "error";
-
-interface ProbeState {
+interface ImageState {
   src: string | null;
-  status: LoadStatus;
+  failed: boolean;
 }
 
-function initialProbeState(src?: string | null): ProbeState {
+function initialImageState(src?: string | null): ImageState {
   const normalized = src ?? null;
-  return {
-    src: normalized,
-    status: normalized ? "idle" : "error",
-  };
+  return { src: normalized, failed: !normalized };
 }
 
 /**
- * Renders a media image, or the shared unavailable placeholder when
- * `src` is missing or the remote asset fails to load.
+ * Renders a media image, or the shared unavailable placeholder when `src` is
+ * missing or the asset fails to load. Failure detection lives on the <Image>
+ * onError handler itself, so every image is fetched exactly once — no
+ * pre-flight probe that would download lazy media twice.
  */
 export function MediaImage({
   src,
@@ -53,58 +50,17 @@ export function MediaImage({
   onUnavailableChange,
 }: MediaImageProps) {
   const currentSrc = src ?? null;
-  // Priority/eager images must paint immediately: probing would serialize a
-  // second full download and delay LCP (§7). Their failure fallback is the
-  // <Image> onError handler below instead of the pre-probe.
-  const skipProbe = Boolean(priority) || loading === "eager";
-  const [probeState, setProbeState] = useState<ProbeState>(() =>
-    initialProbeState(src),
-  );
+  const [state, setState] = useState<ImageState>(() => initialImageState(src));
 
-  if (currentSrc !== probeState.src) {
-    setProbeState(initialProbeState(src));
+  if (currentSrc !== state.src) {
+    setState(initialImageState(src));
   }
 
-  useEffect(() => {
-    if (!currentSrc || skipProbe || probeState.status !== "idle") return;
-
-    let cancelled = false;
-    const probe = new window.Image();
-    probe.decoding = "async";
-    probe.onload = () => {
-      if (cancelled) return;
-      setProbeState((prev) =>
-        prev.src === currentSrc ? { ...prev, status: "ready" } : prev,
-      );
-    };
-    probe.onerror = () => {
-      if (cancelled) return;
-      setProbeState((prev) =>
-        prev.src === currentSrc ? { ...prev, status: "error" } : prev,
-      );
-    };
-    probe.src = currentSrc;
-
-    return () => {
-      cancelled = true;
-    };
-  }, [currentSrc, probeState.status, skipProbe]);
-
-  const unavailable = !currentSrc || probeState.status === "error";
+  const unavailable = !currentSrc || (state.src === currentSrc && state.failed);
 
   useEffect(() => {
     onUnavailableChange?.(unavailable);
   }, [unavailable, onUnavailableChange]);
-
-  if (!skipProbe && probeState.status === "idle" && currentSrc) {
-    return (
-      <div
-        aria-hidden
-        className={cn("absolute inset-0 bg-paper", className)}
-        data-image-state="loading"
-      />
-    );
-  }
 
   if (unavailable) {
     return (
@@ -126,8 +82,8 @@ export function MediaImage({
       loading={loading}
       className={cn(imageClassName, className)}
       onError={() => {
-        setProbeState((prev) =>
-          prev.src === currentSrc ? { ...prev, status: "error" } : prev,
+        setState((prev) =>
+          prev.src === currentSrc ? { ...prev, failed: true } : prev,
         );
       }}
       data-image-state="loaded"

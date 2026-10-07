@@ -18,7 +18,7 @@ export function PlatformSettingsPage() {
 
   if (settings.loadError || !settings.form) {
     return (
-      <p className={adminPagesStyles.errorText}>
+      <p role="alert" className={adminPagesStyles.errorText}>
         {settings.loadError ?? LABELS.settingsUnavailable}
       </p>
     );

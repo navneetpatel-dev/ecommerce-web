@@ -34,7 +34,11 @@ export function AdminNotificationsPage() {
       {message ? (
         <p className={adminPagesStyles.successSmText}>{message}</p>
       ) : null}
-      {error ? <p className={adminPagesStyles.errorSmText}>{error}</p> : null}
+      {error ? (
+        <p role="alert" className={adminPagesStyles.errorSmText}>
+          {error}
+        </p>
+      ) : null}
 
       <BroadcastNotificationForm />
 

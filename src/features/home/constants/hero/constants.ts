@@ -4,54 +4,23 @@ import type { HeroSlide } from "../../types/hero/types";
 export const AUTOPLAY_MS = 4500;
 export const EASE = [0.22, 1, 0.36, 1] as const;
 
+/**
+ * Built-in fallback for when the banners API returns nothing: a single,
+ * static, text-only slide on the branded gradient. Deliberately no remote
+ * stock photography — placeholder art on a live storefront misrepresents the
+ * catalog, and the hero should not depend on a third-party image host.
+ */
 export const DEFAULT_SLIDES: HeroSlide[] = [
   {
-    id: "makers",
-    eyebrow: "Marketplace",
-    headline: "Discover independent sellers",
+    id: "marketplace",
+    eyebrow: "Welcome",
+    headline: "Shop independent sellers",
     subheadline:
-      "Handcrafted goods, artisan food, and unique finds from India's best small businesses.",
-    ctaLabel: "Shop Now",
+      "One checkout across every seller — browse the catalog, or start with this week's new arrivals.",
+    ctaLabel: "Shop now",
     ctaHref: PATHS.products,
     secondaryCtaLabel: "New arrivals",
     secondaryCtaHref: PATHS.productsNewest,
-    imageSrc:
-      "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=2400&q=80",
-    imageMobileSrc:
-      "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Artisan hands shaping clay on a pottery wheel",
-  },
-  {
-    id: "textiles",
-    eyebrow: "Crafted textiles",
-    headline: "Woven with intention",
-    subheadline:
-      "From handloom cotton to block-printed linen — pieces made slowly, meant to last.",
-    ctaLabel: "Shop Now",
-    ctaHref: `${PATHS.products}?search=textile`,
-    secondaryCtaLabel: "New arrivals",
-    secondaryCtaHref: PATHS.productsNewest,
-    imageSrc:
-      "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=2400&q=80",
-    imageMobileSrc:
-      "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Folded handwoven textiles in warm natural tones",
-  },
-  {
-    id: "kitchen",
-    eyebrow: "Pantry & table",
-    headline: "Taste the small-batch story",
-    subheadline:
-      "Spice blends, preserves, and tableware from kitchens and studios across the country.",
-    ctaLabel: "Shop Now",
-    ctaHref: `${PATHS.products}?search=food`,
-    secondaryCtaLabel: "New arrivals",
-    secondaryCtaHref: PATHS.productsNewest,
-    imageSrc:
-      "https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=2400&q=80",
-    imageMobileSrc:
-      "https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&w=1200&q=80",
-    imageAlt: "Artisan spices and ingredients arranged on a wooden table",
   },
 ];
 

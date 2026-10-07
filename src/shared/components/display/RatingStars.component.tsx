@@ -1,4 +1,6 @@
 import { Star } from "lucide-react";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { cn } from "@/shared/utils/dom/cn";
 import { ratingStarsStyles } from "../../styles/display/displayComponents.styles";
 
@@ -47,7 +49,13 @@ export function RatingStars({ value, count, size = "sm" }: RatingStarsProps) {
 
   return (
     <div className={ratingStarsStyles.container}>
-      <div className={ratingStarsStyles.starsRow}>{stars}</div>
+      {/* The visual stars convey nothing to assistive tech: announce the value. */}
+      <span className={ratingStarsStyles.srOnly}>
+        {formatLabel(LABELS.ratingOutOfFive, { value: value.toFixed(1) })}
+      </span>
+      <div className={ratingStarsStyles.starsRow} aria-hidden>
+        {stars}
+      </div>
       {countElement}
     </div>
   );

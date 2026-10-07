@@ -47,7 +47,11 @@ export function DeliveryAgentDocumentsCard() {
           />
         ))}
       </div>
-      {error ? <p className={styles.errorText}>{error}</p> : null}
+      {error ? (
+        <p role="alert" className={styles.errorText}>
+          {error}
+        </p>
+      ) : null}
     </section>
   );
 }

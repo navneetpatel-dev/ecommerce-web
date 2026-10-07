@@ -49,7 +49,9 @@ export function BulkImportAgentsDialog({
   } = useBulkImportAgentsDialog({ onImported });
 
   const errorBanner = error ? (
-    <div className={styles.errorBanner}>{error}</div>
+    <div role="alert" className={styles.errorBanner}>
+      {error}
+    </div>
   ) : (
     <CsvParseErrorList errors={parseErrors} />
   );

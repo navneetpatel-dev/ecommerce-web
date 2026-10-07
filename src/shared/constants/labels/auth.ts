@@ -17,6 +17,12 @@ export const authLabels = {
   invalidEmail: "Enter a valid email address",
   invalidPhone: "Enter a valid phone number",
   passwordRequired: "Password is required",
+  passwordMinLength: "Password must be at least 8 characters",
+  otpDigit: "OTP digit {index}",
+  agreeToTermsLead: "I agree to the",
+  agreeToTermsJoin: "and",
+  agreeToTermsRequired:
+    "Please accept the Terms of Service and Privacy Policy to continue",
   forgotPasswordTitle: "Forgot password",
   forgotPasswordHint: "Enter your email and we’ll send you a reset link.",
   sendResetLink: "Send reset link",

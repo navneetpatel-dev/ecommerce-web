@@ -1,5 +1,7 @@
 "use client";
 
+import { LABELS } from "@/shared/constants/labels";
+
 import { Undo2 } from "lucide-react";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
@@ -10,29 +12,29 @@ import { useRtoQueuePanel } from "../../../hooks/shipping/useRtoQueuePanel.hook"
 const COLUMNS: DataTableColumn<DeliveryShipment>[] = [
   {
     id: "tracking",
-    header: "Tracking #",
+    header: LABELS.trackingNumber,
     className: styles.tableCellMono,
     accessor: "trackingNumber",
   },
   {
     id: "status",
-    header: "Status",
+    header: LABELS.status,
     truncate: false,
     cell: (row) => <StatusBadge status={row.status} />,
   },
   {
     id: "agent",
-    header: "Agent",
+    header: LABELS.agentName,
     cell: (row) => row.deliveryAgent?.fullName ?? "—",
   },
   {
     id: "failedAttempts",
-    header: "Failed attempts",
+    header: LABELS.flagsFailedAttempts,
     accessor: "failedAttemptCount",
   },
   {
     id: "lastNote",
-    header: "Last note",
+    header: LABELS.lastNoteColumn,
     className: styles.tableCellMuted,
     cell: (row) => row.failureReason ?? "—",
   },

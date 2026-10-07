@@ -43,6 +43,8 @@ export const couponsLabels = {
   searchCategories: "Search categories",
   searchProducts: "Search products",
   searchProductsVendors: "Search products, vendors, categories...",
+  recentSearches: "Recent searches",
+  clearRecentSearches: "Clear",
   searchVendors: "Search vendors",
   searchSuggestions: "Search suggestions",
   searchAutocompleteEmpty: "No matching results",
@@ -103,7 +105,6 @@ export const couponsLabels = {
   stackable: "Stackable",
   stackableHint:
     "When enabled, this coupon can combine with other stackable coupons on the same order.",
-  priority: "Priority",
   userRestriction: "User restriction",
   userRestrictionSegment: "Customer segment",
   userRestrictionAll: "All users",

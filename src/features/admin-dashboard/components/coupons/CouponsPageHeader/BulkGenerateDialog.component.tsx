@@ -20,6 +20,8 @@ import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint
 import { CreateCouponForm } from "../CreateCouponForm.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useBulkCouponGeneration } from "../../../hooks/coupons/useBulkCouponGeneration.hook";
+import { useDiscardChangesGuard } from "@/shared/hooks/dialogs/useDiscardChangesGuard.hook";
+import { DiscardChangesDialog } from "@/shared/components/dialogs/DiscardChangesDialog.component";
 import { bulkGenerateDialogStyles as styles } from "../../../styles/coupons/bulkGenerateDialog.styles";
 
 interface BulkGenerateDialogProps {
@@ -29,11 +31,20 @@ interface BulkGenerateDialogProps {
 
 export function BulkGenerateDialog({ open, setOpen }: BulkGenerateDialogProps) {
   const bulk = useBulkCouponGeneration(() => setOpen(false));
+  const guard = useDiscardChangesGuard(bulk.isDirty);
 
-  const close = () => {
-    if (bulk.isPending) return;
+  const performClose = () => {
     bulk.closeAndReset();
     setOpen(false);
+  };
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (nextOpen) {
+      setOpen(true);
+      return;
+    }
+    if (bulk.isPending) return;
+    guard.requestClose(performClose);
   };
 
   const countFieldChange = (value: number | undefined) => {
@@ -43,81 +54,89 @@ export function BulkGenerateDialog({ open, setOpen }: BulkGenerateDialogProps) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={close}>
-      <DialogContent className={styles.dialog}>
-        <DialogHeader>
-          <DialogTitle>{LABELS.bulkGenerateTitle}</DialogTitle>
-        </DialogHeader>
-        <FormStack>
-          <FormSection
-            title={LABELS.bulkCouponMetaSection}
-            hint={LABELS.bulkCouponMetaSectionHint}
-          >
-            <FormFieldFrame
-              label={LABELS.bulkBatchName}
-              htmlFor="bulk-name"
-              className={styles.metaNameField}
-              error={bulk.bulkMetaForm.formState.errors.name?.message}
+    <>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogContent className={styles.dialog}>
+          <DialogHeader>
+            <DialogTitle>{LABELS.bulkGenerateTitle}</DialogTitle>
+          </DialogHeader>
+          <FormStack>
+            <FormSection
+              title={LABELS.bulkCouponMetaSection}
+              hint={LABELS.bulkCouponMetaSectionHint}
             >
-              <Input id="bulk-name" {...bulk.bulkMetaForm.register("name")} />
-            </FormFieldFrame>
-            <FormFieldFrame label={LABELS.bulkCount}>
-              <Controller
-                name="count"
-                control={bulk.bulkMetaForm.control}
-                render={({ field }) => (
-                  <NumberInput
-                    value={field.value}
-                    min={1}
-                    max={500}
-                    step={1}
-                    onChange={countFieldChange}
-                    onBlur={field.onBlur}
-                  />
-                )}
-              />
-            </FormFieldFrame>
-            <FormFieldFrame
-              label={LABELS.bulkPrefix}
-              htmlFor="bulk-prefix"
-              error={bulk.bulkMetaForm.formState.errors.prefix?.message}
-            >
-              <Input
-                id="bulk-prefix"
-                {...bulk.bulkMetaForm.register("prefix")}
-              />
-            </FormFieldFrame>
-          </FormSection>
-          <CreateCouponForm
-            form={bulk.templateForm}
-            isPending={false}
-            hideSubmit
-            hideCodeField
-          />
-          {bulk.errorMessage ? (
-            <p className={styles.errorMessage} role="alert">
-              {bulk.errorMessage}
-            </p>
-          ) : null}
-          <FormActions>
-            <DisabledActionHint
-              disabled={!bulk.canBulk}
-              message={LABELS.bulkGenerateHint}
-              className={styles.actionsWrapper}
-            >
-              <Button
-                type="button"
-                className={styles.submitButton}
-                loading={bulk.isPending}
-                disabled={!bulk.canBulk || bulk.isPending}
-                onClick={bulk.submit}
+              <FormFieldFrame
+                label={LABELS.bulkBatchName}
+                htmlFor="bulk-name"
+                className={styles.metaNameField}
+                error={bulk.bulkMetaForm.formState.errors.name?.message}
               >
-                {LABELS.bulkGenerate}
-              </Button>
-            </DisabledActionHint>
-          </FormActions>
-        </FormStack>
-      </DialogContent>
-    </Dialog>
+                <Input id="bulk-name" {...bulk.bulkMetaForm.register("name")} />
+              </FormFieldFrame>
+              <FormFieldFrame label={LABELS.bulkCount}>
+                <Controller
+                  name="count"
+                  control={bulk.bulkMetaForm.control}
+                  render={({ field }) => (
+                    <NumberInput
+                      value={field.value}
+                      min={1}
+                      max={500}
+                      step={1}
+                      onChange={countFieldChange}
+                      onBlur={field.onBlur}
+                    />
+                  )}
+                />
+              </FormFieldFrame>
+              <FormFieldFrame
+                label={LABELS.bulkPrefix}
+                htmlFor="bulk-prefix"
+                error={bulk.bulkMetaForm.formState.errors.prefix?.message}
+              >
+                <Input
+                  id="bulk-prefix"
+                  {...bulk.bulkMetaForm.register("prefix")}
+                />
+              </FormFieldFrame>
+            </FormSection>
+            <CreateCouponForm
+              form={bulk.templateForm}
+              isPending={false}
+              hideSubmit
+              hideCodeField
+            />
+            {bulk.errorMessage ? (
+              <p className={styles.errorMessage} role="alert">
+                {bulk.errorMessage}
+              </p>
+            ) : null}
+            <FormActions>
+              <DisabledActionHint
+                disabled={!bulk.canBulk}
+                message={LABELS.bulkGenerateHint}
+                className={styles.actionsWrapper}
+              >
+                <Button
+                  type="button"
+                  className={styles.submitButton}
+                  loading={bulk.isPending}
+                  disabled={!bulk.canBulk || bulk.isPending}
+                  onClick={bulk.submit}
+                >
+                  {LABELS.bulkGenerate}
+                </Button>
+              </DisabledActionHint>
+            </FormActions>
+          </FormStack>
+        </DialogContent>
+      </Dialog>
+      <DiscardChangesDialog
+        open={guard.confirmOpen}
+        onOpenChange={guard.handleConfirmOpenChange}
+        onDiscard={guard.confirmDiscard}
+        onKeepEditing={guard.cancelDiscard}
+      />
+    </>
   );
 }

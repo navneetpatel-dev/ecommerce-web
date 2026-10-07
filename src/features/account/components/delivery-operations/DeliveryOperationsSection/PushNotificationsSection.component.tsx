@@ -13,7 +13,9 @@ export function PushNotificationsSection({
   push,
 }: PushNotificationsSectionProps) {
   const errorNotice = push.error ? (
-    <p className={styles.errorNotice}>{push.error}</p>
+    <p role="alert" className={styles.errorNotice}>
+      {push.error}
+    </p>
   ) : null;
   const switchDisabled = !push.supported || push.pending;
 

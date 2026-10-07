@@ -30,7 +30,9 @@ export function AvailabilityToggleSection({
     "Could not update availability.",
   );
   const availabilityErrorNotice = availability.isError ? (
-    <p className={styles.availabilityErrorNotice}>{availabilityErrorMessage}</p>
+    <p role="alert" className={styles.availabilityErrorNotice}>
+      {availabilityErrorMessage}
+    </p>
   ) : null;
 
   return (

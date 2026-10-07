@@ -22,4 +22,6 @@ export const FOOTER_BOTTOM_ROW =
   "storefront-container flex flex-col items-center justify-between gap-4 sm:flex-row" as const;
 export const FOOTER_COPYRIGHT = "text-body-sm text-ink-muted" as const;
 export const FOOTER_PAYMENT_METHODS =
-  "flex items-center gap-4 text-body-sm text-ink-muted" as const;
+  "flex flex-wrap items-center gap-2 text-body-sm text-ink-muted" as const;
+export const FOOTER_PAYMENT_CHIP =
+  "inline-flex items-center gap-1.5 rounded-sm border border-line bg-surface-raised px-2.5 py-1" as const;

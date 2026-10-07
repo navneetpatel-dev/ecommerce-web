@@ -11,7 +11,6 @@ import { MobileTabBar } from "@/shared/components/layout/MobileTabBar.component"
 import { ACCOUNT_TRIGGER_BOX } from "../../../utils/header/headerShared";
 
 const baseProps = {
-  isTransparent: false,
   cartItemCount: 3,
   wishlistItemCount: 2,
   walletBalance: 620,

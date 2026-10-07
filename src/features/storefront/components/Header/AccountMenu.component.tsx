@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useId } from "react";
 import { ChevronDown, UserRound } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
 import { Button } from "@/shared/components/ui/button";
@@ -12,23 +12,26 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import type { CurrentUser } from "@/shared/api/types";
 import { useAccountMenu } from "../../hooks/header/useAccountMenu.hook";
+import { AccountMenuLinksList } from "./AccountMenuLinksList.component";
 import { ACCOUNT_TRIGGER_BOX } from "../../utils/header/headerShared";
 import { headerStyles as styles } from "../../styles/header/header.styles";
 
 interface AccountMenuProps {
   currentUser: CurrentUser;
-  isTransparent: boolean;
 }
 
-export function AccountMenu({ currentUser, isTransparent }: AccountMenuProps) {
+export function AccountMenu({ currentUser }: AccountMenuProps) {
   const {
     accountMenuOpen,
-    setAccountMenuOpen,
-    canHoverAccountMenu,
+    toggleAccountMenu,
+    closeAccountMenu,
+    handleMouseEnter,
+    handleMouseLeave,
     accountMenuRef,
     fallbackLabel,
     accountLinks,
   } = useAccountMenu(currentUser);
+  const accountMenuId = useId();
 
   return (
     <div
@@ -38,25 +41,24 @@ export function AccountMenu({ currentUser, isTransparent }: AccountMenuProps) {
          lives inside and is focusable, so the wrapper itself carries no
          semantics to announce — hence the presentational role. */
       role="presentation"
-      onMouseEnter={() => {
-        if (canHoverAccountMenu) setAccountMenuOpen(true);
-      }}
-      onMouseLeave={() => {
-        if (canHoverAccountMenu) setAccountMenuOpen(false);
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
+      {/* Disclosure, not a menu: the panel is a plain list of links reached by
+          Tab, so it must not advertise menu arrow-key semantics it does not
+          implement (WAI-ARIA APG). */}
       <Button
         type="button"
         variant="ghost"
-        onClick={() => setAccountMenuOpen((open) => !open)}
+        onClick={toggleAccountMenu}
         className={cn(
           ACCOUNT_TRIGGER_BOX,
           styles.triggerSvgSize,
-          isTransparent ? styles.triggerTransparent : styles.triggerSolid,
+          styles.triggerSolid,
         )}
         title={currentUser.name}
-        aria-haspopup="menu"
         aria-expanded={accountMenuOpen}
+        aria-controls={accountMenuId}
         aria-label={LABELS.openAccountMenu}
       >
         <Avatar className={styles.avatar}>
@@ -81,9 +83,7 @@ export function AccountMenu({ currentUser, isTransparent }: AccountMenuProps) {
           strokeWidth={2}
           className={cn(
             styles.accountChevron,
-            isTransparent
-              ? styles.accountChevronTransparent
-              : styles.accountChevronSolid,
+            styles.accountChevronSolid,
             accountMenuOpen && styles.accountChevronOpen,
           )}
         />
@@ -91,25 +91,16 @@ export function AccountMenu({ currentUser, isTransparent }: AccountMenuProps) {
 
       {accountMenuOpen ? (
         <div className={styles.dropdown} role="presentation">
-          <div role="menu" className={styles.dropdownMenu}>
+          <div id={accountMenuId} className={styles.dropdownMenu}>
             <div className={styles.userHeader}>
               <p className={styles.userName}>{currentUser.name}</p>
               <p className={styles.userEmail}>{currentUser.email}</p>
             </div>
 
-            <div className={styles.linksList}>
-              {accountLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  role="menuitem"
-                  onClick={() => setAccountMenuOpen(false)}
-                  className={styles.menuItem}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+            <AccountMenuLinksList
+              links={accountLinks}
+              onNavigate={closeAccountMenu}
+            />
           </div>
         </div>
       ) : null}

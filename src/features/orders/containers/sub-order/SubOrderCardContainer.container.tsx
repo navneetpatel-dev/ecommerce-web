@@ -26,12 +26,17 @@ export function SubOrderCardContainer({
       isSuccess={returnDialog.isSuccess}
       error={returnDialog.error}
       onOpenReturn={returnDialog.openDialog}
-      onCloseReturn={returnDialog.closeDialog}
-      onReasonCodeChange={returnDialog.setReasonCode}
-      onReasonChange={returnDialog.setReason}
-      onReturnTypeChange={returnDialog.setType}
+      onDialogOpenChange={returnDialog.handleDialogOpenChange}
+      onRequestClose={returnDialog.handleCancelReturn}
+      onReasonCodeSelect={returnDialog.handleReasonCodeSelect}
+      onReasonInput={returnDialog.handleReasonInput}
+      onReturnTypeSelect={returnDialog.handleReturnTypeSelect}
       onPhotoUrlsChange={returnDialog.setPhotoUrls}
       onSubmitReturn={returnDialog.submitReturn}
+      discardOpen={returnDialog.discardOpen}
+      onDiscardOpenChange={returnDialog.handleDiscardOpenChange}
+      onConfirmDiscard={returnDialog.confirmDiscard}
+      onKeepEditing={returnDialog.cancelDiscard}
     />
   );
 }

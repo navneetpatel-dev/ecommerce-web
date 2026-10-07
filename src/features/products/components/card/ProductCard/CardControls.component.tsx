@@ -35,6 +35,11 @@ export function CardControls({
   onAddToCart,
   onQuantityChange,
 }: CardControlsProps) {
+  const handleAddClick = () => {
+    if (isAddingToCart) return;
+    onAddToCart?.();
+  };
+
   return (
     <AnimatePresence mode="wait" initial={false}>
       {inCart ? (
@@ -63,11 +68,7 @@ export function CardControls({
               variant === "overlay" && PRODUCT_CARD_STYLES.controlButtonOverlay,
             )}
             disabled={isAddingToCart}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onAddToCart?.();
-            }}
+            onClick={handleAddClick}
           >
             {isAddingToCart && !inCart ? (
               <span className={PRODUCT_CARD_STYLES.spinner} />

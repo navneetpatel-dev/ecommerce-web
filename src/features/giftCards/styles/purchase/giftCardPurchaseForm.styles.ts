@@ -5,4 +5,5 @@ export const giftCardPurchaseFormStyles = {
   successBody: "mt-2 text-body text-ink-muted",
   buyAnotherButton: "mt-5",
   errorText: "text-body-sm text-danger",
+  submitHintWrapper: "block w-full",
 } as const;

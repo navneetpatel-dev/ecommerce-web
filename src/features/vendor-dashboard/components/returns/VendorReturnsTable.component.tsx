@@ -21,7 +21,9 @@ export function VendorReturnsTable({ returns }: VendorReturnsTableProps) {
       <h2 className={vendorReturnsTableStyles.title}>
         {LABELS.returnsPageTitle}
       </h2>
-      <p className={vendorReturnsTableStyles.hint}>{LABELS.vendorReturnsHint}</p>
+      <p className={vendorReturnsTableStyles.hint}>
+        {LABELS.vendorReturnsHint}
+      </p>
       <VendorReturnCards rows={rows} isEmpty={isEmpty} />
       <VendorReturnsDesktopTable rows={rows} isEmpty={isEmpty} />
     </div>

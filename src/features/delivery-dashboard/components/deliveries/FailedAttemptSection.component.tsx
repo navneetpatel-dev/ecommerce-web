@@ -1,8 +1,11 @@
+import type { ChangeEvent } from "react";
 import { AlertTriangle, Upload } from "lucide-react";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
+import { LABELS } from "@/shared/constants/labels";
 import { failedAttemptSectionStyles as styles } from "../../styles/deliveries/failedAttemptSection.styles";
 
 export function FailedAttemptSection({
@@ -12,8 +15,8 @@ export function FailedAttemptSection({
   pending,
   placeholder,
   submitLabel,
-  title = "Report Delivery Issue",
-  description = "If the customer is unavailable, the address cannot be reached, or this task cannot be completed, record the reason below:",
+  title = LABELS.reportDeliveryIssueTitle,
+  description = LABELS.reportDeliveryIssueBody,
   photo,
   onPhotoChange,
 }: {
@@ -30,6 +33,16 @@ export function FailedAttemptSection({
   photo?: File | null;
   onPhotoChange?: (file: File | null) => void;
 }) {
+  const reasonTooShort = value.trim().length < 3;
+
+  const handleReasonChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    onChange(event.target.value);
+  };
+
+  const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onPhotoChange?.(event.target.files?.[0] ?? null);
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.header}>
@@ -37,7 +50,7 @@ export function FailedAttemptSection({
           <AlertTriangle className={styles.icon} aria-hidden="true" />
           <TextEyebrow className={styles.eyebrow}>{title}</TextEyebrow>
         </div>
-        <span className={styles.badge}>Exception</span>
+        <span className={styles.badge}>{LABELS.exceptionBadge}</span>
       </div>
 
       <div className={styles.body}>
@@ -47,7 +60,7 @@ export function FailedAttemptSection({
           placeholder={placeholder}
           rows={3}
           className={styles.textarea}
-          onChange={(event) => onChange(event.target.value)}
+          onChange={handleReasonChange}
         />
         {onPhotoChange ? (
           <div className={styles.dropzone}>
@@ -56,27 +69,33 @@ export function FailedAttemptSection({
                 <Upload className={styles.uploadIcon} aria-hidden="true" />
               </div>
               <span className={styles.uploadText}>
-                {photo ? photo.name : "Add evidence photo (optional)"}
+                {photo ? photo.name : LABELS.addEvidencePhoto}
               </span>
               <Input
                 className={styles.fileInput}
                 type="file"
                 accept="image/*"
                 capture="environment"
-                onChange={(e) => onPhotoChange(e.target.files?.[0] ?? null)}
+                onChange={handlePhotoChange}
               />
             </label>
           </div>
         ) : null}
-        <Button
-          className={styles.submitButton}
-          variant="outline"
-          disabled={value.trim().length < 3}
-          loading={pending}
-          onClick={onSubmit}
+        <DisabledActionHint
+          disabled={reasonTooShort}
+          message={LABELS.failureReasonMinHint}
+          className={styles.submitHintWrapper}
         >
-          {submitLabel}
-        </Button>
+          <Button
+            className={styles.submitButton}
+            variant="outline"
+            disabled={reasonTooShort}
+            loading={pending}
+            onClick={onSubmit}
+          >
+            {submitLabel}
+          </Button>
+        </DisabledActionHint>
       </div>
     </div>
   );

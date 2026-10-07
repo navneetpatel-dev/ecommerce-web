@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, type MouseEvent } from "react";
+import { useCallback } from "react";
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import type { ProductListItem } from "@/shared/api/types";
@@ -8,6 +8,8 @@ import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { LOW_STOCK_THRESHOLD } from "../../../constants/card/card";
 import { CardControls } from "./CardControls.component";
 import { CARD_MEDIA_STYLES } from "../../../styles/card/cardMedia.styles";
 
@@ -46,25 +48,23 @@ export function CardMedia({
   onAddToCart,
   onQuantityChange,
 }: CardMediaProps) {
-  const handleWishlistClick = useCallback(
-    (e: MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
-      onToggleWishlist?.();
-    },
-    [onToggleWishlist],
-  );
+  const handleWishlistClick = useCallback(() => {
+    onToggleWishlist?.();
+  }, [onToggleWishlist]);
 
-  const isLowStock = product.stock <= 5 && product.stock > 0;
+  const isLowStock = product.stock <= LOW_STOCK_THRESHOLD && product.stock > 0;
   const isOutOfStock = product.stock === 0;
 
   return (
-    <Link
-      href={PATHS.product(product.slug)}
-      className={CARD_MEDIA_STYLES.link}
-      onMouseEnter={onPrefetch}
-    >
-      <div className={CARD_MEDIA_STYLES.imageWrapper(imageUnavailable)}>
+    <div className={CARD_MEDIA_STYLES.imageWrapper(imageUnavailable)}>
+      {/* Only the media links to the product: the wishlist and quick-add
+          controls layer above it as siblings, so no button is ever nested
+          inside the anchor. */}
+      <Link
+        href={PATHS.product(product.slug)}
+        className={CARD_MEDIA_STYLES.link}
+        onMouseEnter={onPrefetch}
+      >
         <MediaImage
           src={product.imageUrl}
           alt={product.name}
@@ -77,7 +77,7 @@ export function CardMedia({
 
         {isLowStock && (
           <span className={CARD_MEDIA_STYLES.lowStockBadge}>
-            Only {product.stock} left
+            {formatLabel(LABELS.lowStockLeft, { count: product.stock })}
           </span>
         )}
 
@@ -88,40 +88,40 @@ export function CardMedia({
             </span>
           </div>
         )}
+      </Link>
 
-        {showWishlist && (
-          <Button
-            type="button"
-            variant="secondary"
-            size="icon-sm"
-            onClick={handleWishlistClick}
-            className={CARD_MEDIA_STYLES.wishlistButton(isWishlisted)}
-            aria-label={
-              isWishlisted ? LABELS.removeFromWishlist : LABELS.addToWishlist
-            }
-          >
-            <Heart
-              size={18}
-              className={CARD_MEDIA_STYLES.wishlistIcon(isWishlisted)}
-            />
-          </Button>
-        )}
+      {showWishlist && (
+        <Button
+          type="button"
+          variant="secondary"
+          size="icon-sm"
+          onClick={handleWishlistClick}
+          className={CARD_MEDIA_STYLES.wishlistButton(isWishlisted)}
+          aria-label={
+            isWishlisted ? LABELS.removeFromWishlist : LABELS.addToWishlist
+          }
+        >
+          <Heart
+            size={18}
+            className={CARD_MEDIA_STYLES.wishlistIcon(isWishlisted)}
+          />
+        </Button>
+      )}
 
-        {canQuickAdd && (
-          <div className={CARD_MEDIA_STYLES.quickAddOverlay(inCart)}>
-            <CardControls
-              variant="overlay"
-              inCart={inCart}
-              isAddingToCart={isAddingToCart}
-              cartQuantity={cartQuantity}
-              maxQuantity={maxQuantity}
-              quickAddLabel={quickAddLabel}
-              onAddToCart={onAddToCart}
-              onQuantityChange={onQuantityChange}
-            />
-          </div>
-        )}
-      </div>
-    </Link>
+      {canQuickAdd && (
+        <div className={CARD_MEDIA_STYLES.quickAddOverlay(inCart)}>
+          <CardControls
+            variant="overlay"
+            inCart={inCart}
+            isAddingToCart={isAddingToCart}
+            cartQuantity={cartQuantity}
+            maxQuantity={maxQuantity}
+            quickAddLabel={quickAddLabel}
+            onAddToCart={onAddToCart}
+            onQuantityChange={onQuantityChange}
+          />
+        </div>
+      )}
+    </div>
   );
 }

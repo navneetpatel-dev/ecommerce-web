@@ -27,7 +27,9 @@ export function AdminCategoryCreateForm({
   const canSubmit = CategoryFormSchema.safeParse(values).success;
   const submitDisabled = !canSubmit || isPending;
   const errorMessage = error ? (
-    <p className={adminCategoryStyles.errorSm}>{error}</p>
+    <p role="alert" className={adminCategoryStyles.errorSm}>
+      {error}
+    </p>
   ) : null;
 
   return (

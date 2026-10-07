@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { LABELS, ROLES } from "@/shared/constants/labels";
 import {
@@ -94,10 +94,26 @@ export function useAccountMenu(currentUser: CurrentUser | null) {
     };
   }, [accountMenuOpen]);
 
+  const toggleAccountMenu = useCallback(
+    () => setAccountMenuOpen((open) => !open),
+    [],
+  );
+  const closeAccountMenu = useCallback(() => setAccountMenuOpen(false), []);
+  const handleMouseEnter = useCallback(() => {
+    if (canHoverAccountMenu) setAccountMenuOpen(true);
+  }, [canHoverAccountMenu]);
+  const handleMouseLeave = useCallback(() => {
+    if (canHoverAccountMenu) setAccountMenuOpen(false);
+  }, [canHoverAccountMenu]);
+
   return {
     accountMenuOpen,
     setAccountMenuOpen,
+    toggleAccountMenu,
+    closeAccountMenu,
     canHoverAccountMenu,
+    handleMouseEnter,
+    handleMouseLeave,
     accountMenuRef,
     fallbackLabel,
     accountLinks,

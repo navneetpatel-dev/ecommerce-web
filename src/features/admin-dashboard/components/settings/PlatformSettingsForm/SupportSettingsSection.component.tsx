@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
@@ -23,6 +24,26 @@ export function SupportSettingsSection({
   onBugVerifyWindowDaysChange,
   onBugCloseWindowDaysChange,
 }: SupportSettingsSectionProps) {
+  const handleSupportEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onSupportEmailChange(event.target.value);
+  };
+
+  const handleSupportHoursChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onSupportHoursChange(event.target.value);
+  };
+
+  const handleTicketReopenWindowDaysChange = (value: number | undefined) => {
+    onTicketReopenWindowDaysChange(value ?? 7);
+  };
+
+  const handleBugVerifyWindowDaysChange = (value: number | undefined) => {
+    onBugVerifyWindowDaysChange(value ?? 7);
+  };
+
+  const handleBugCloseWindowDaysChange = (value: number | undefined) => {
+    onBugCloseWindowDaysChange(value ?? 7);
+  };
+
   return (
     <FormSection
       title={LABELS.settingsSupport}
@@ -36,8 +57,9 @@ export function SupportSettingsSection({
         <Input
           id="platform-support-email"
           type="email"
+          autoComplete="off"
           value={form.supportEmail}
-          onChange={(e) => onSupportEmailChange(e.target.value)}
+          onChange={handleSupportEmailChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -47,7 +69,7 @@ export function SupportSettingsSection({
         <Input
           id="platform-support-hours"
           value={form.supportHours}
-          onChange={(e) => onSupportHoursChange(e.target.value)}
+          onChange={handleSupportHoursChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -60,7 +82,7 @@ export function SupportSettingsSection({
           max={365}
           step={1}
           suffix={LABELS.daysShort}
-          onChange={(value) => onTicketReopenWindowDaysChange(value ?? 7)}
+          onChange={handleTicketReopenWindowDaysChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -73,7 +95,7 @@ export function SupportSettingsSection({
           max={365}
           step={1}
           suffix={LABELS.daysShort}
-          onChange={(value) => onBugVerifyWindowDaysChange(value ?? 7)}
+          onChange={handleBugVerifyWindowDaysChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -86,7 +108,7 @@ export function SupportSettingsSection({
           max={365}
           step={1}
           suffix={LABELS.daysShort}
-          onChange={(value) => onBugCloseWindowDaysChange(value ?? 7)}
+          onChange={handleBugCloseWindowDaysChange}
         />
       </FormFieldFrame>
     </FormSection>

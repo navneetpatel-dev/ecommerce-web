@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import { ClipboardCheck, Upload } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -39,6 +40,10 @@ export function PickupChecklistCard({
     otpCode.length === 6 &&
     (!exchange || (conditionFiles.length > 0 && replacementFile !== null));
 
+  const handleOtpCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onOtpCodeChange(event.target.value.replace(/\D/g, "").slice(0, 6));
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.header}>
@@ -77,7 +82,7 @@ export function PickupChecklistCard({
             </Button>
           </div>
           {requestCodeSuccess && expiresInMinutes ? (
-            <p className={styles.codeSuccessText}>
+            <p role="status" className={styles.codeSuccessText}>
               Code sent. Expires in {expiresInMinutes} minutes.
             </p>
           ) : null}
@@ -89,11 +94,9 @@ export function PickupChecklistCard({
               value={otpCode}
               placeholder="------"
               className={styles.otpInput}
-              onChange={(e) =>
-                onOtpCodeChange(e.target.value.replace(/\D/g, "").slice(0, 6))
-              }
+              onChange={handleOtpCodeChange}
             />
-            <span className={styles.digitsCount}>
+            <span className={styles.digitsCount} aria-live="polite">
               {otpCode.length}/6 digits
             </span>
           </div>

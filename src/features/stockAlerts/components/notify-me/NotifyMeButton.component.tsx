@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { BellRing, Check } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -28,6 +29,10 @@ export function NotifyMeButton({ variantId, className }: NotifyMeButtonProps) {
     onCancel,
   } = useNotifyMe(variantId);
 
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
   if (!variantId) return null;
 
   if (status === "subscribed") {
@@ -45,8 +50,9 @@ export function NotifyMeButton({ variantId, className }: NotifyMeButtonProps) {
         <div className={styles.inputRow}>
           <Input
             type="email"
+            autoComplete="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             placeholder={stockAlertsLabels.notifyMeEmailPlaceholder}
             error={Boolean(emailError)}
           />

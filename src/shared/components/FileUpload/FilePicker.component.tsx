@@ -4,17 +4,16 @@ import {
   useCallback,
   useRef,
   useState,
+  type ChangeEvent,
   type DragEvent,
   type KeyboardEvent,
 } from "react";
-import {
-  AlertCircle,
-  FileSpreadsheet,
-  FileText,
-  ImageIcon,
-  Upload,
-} from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
+import {
+  resolveFilePickerIcon,
+  resolveFilePickerVariant,
+} from "@/shared/utils/uploads/filePickerIcon";
 import { filePickerStyles } from "../../styles/file-upload/fileUploadComponents.styles";
 import { FilePickerSelectedFile } from "./FilePickerSelectedFile.component";
 import { FilePickerDropzone } from "./FilePickerDropzone.component";
@@ -60,22 +59,6 @@ export function FilePicker({
   const [isDragOver, setIsDragOver] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
-  const isSheet = Boolean(
-    accept?.includes(".csv") ||
-    accept?.includes("text/csv") ||
-    accept?.includes(".xlsx") ||
-    accept?.includes("spreadsheet"),
-  );
-  const resolvedVariant =
-    iconVariant ??
-    (isSheet
-      ? "csv"
-      : accept?.includes("image")
-        ? "image"
-        : accept?.includes("pdf")
-          ? "document"
-          : "generic");
-
   const reportError = useCallback(
     (msg: string | null) => {
       setLocalError(msg);
@@ -108,29 +91,36 @@ export function FilePicker({
     [maxBytes, maxRows, validate, reportError, onChange],
   );
 
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    void validateAndSelectFile(event.target.files?.[0] ?? null);
+  };
+
+  const handleActivate = () => {
+    inputRef.current?.click();
+  };
+
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
     if (disabled) return;
     setIsDragOver(true);
   };
 
-  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
+  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
     setIsDragOver(false);
   };
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
     setIsDragOver(false);
     if (disabled) return;
-    const droppedFile = e.dataTransfer.files?.[0] ?? null;
-    void validateAndSelectFile(droppedFile);
+    void validateAndSelectFile(event.dataTransfer.files?.[0] ?? null);
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (disabled) return;
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
       inputRef.current?.click();
     }
   };
@@ -141,14 +131,9 @@ export function FilePicker({
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  const resolvedIcon =
-    resolvedVariant === "csv"
-      ? FileSpreadsheet
-      : resolvedVariant === "document"
-        ? FileText
-        : resolvedVariant === "image"
-          ? ImageIcon
-          : Upload;
+  const resolvedIcon = resolveFilePickerIcon(
+    resolveFilePickerVariant(accept, iconVariant),
+  );
 
   return (
     <div className={cn(filePickerStyles.root, className)}>
@@ -165,10 +150,7 @@ export function FilePicker({
         accept={accept}
         disabled={disabled}
         className={filePickerStyles.hiddenInput}
-        onChange={(e) => {
-          const picked = e.target.files?.[0] ?? null;
-          void validateAndSelectFile(picked);
-        }}
+        onChange={handleFileChange}
       />
 
       {value ? (
@@ -185,7 +167,7 @@ export function FilePicker({
           disabled={disabled}
           hint={hint}
           isDragOver={isDragOver}
-          onActivate={() => inputRef.current?.click()}
+          onActivate={handleActivate}
           onKeyDown={handleKeyDown}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -194,7 +176,7 @@ export function FilePicker({
       )}
 
       {localError ? (
-        <p className={filePickerStyles.errorText}>
+        <p role="alert" className={filePickerStyles.errorText}>
           <AlertCircle
             className={filePickerStyles.errorIcon}
             aria-hidden="true"

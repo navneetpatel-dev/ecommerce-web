@@ -6,6 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
+import { useDiscardChangesGuard } from "@/shared/hooks/dialogs/useDiscardChangesGuard.hook";
 import {
   applyApiErrorsToForm,
   getFormLevelApiError,
@@ -37,6 +39,8 @@ export function useAdminCategoriesPage() {
     reValidateMode: "onChange",
     defaultValues: CATEGORY_FORM_DEFAULTS,
   });
+
+  useUnsavedChanges(form.formState.isDirty);
 
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
@@ -82,6 +86,13 @@ export function useAdminCategoriesPage() {
     [form],
   );
 
+  // Dirty dismissal asks for confirmation; the post-save close calls setOpen.
+  const discard = useDiscardChangesGuard(form.formState.isDirty);
+  const handleDialogOpenChange = (next: boolean) => {
+    if (next) setDialogOpen(true);
+    else discard.requestClose(() => setDialogOpen(false));
+  };
+
   const renderActions = useCallback(
     (row: Category) => (
       <>
@@ -108,6 +119,11 @@ export function useAdminCategoriesPage() {
   return {
     open,
     setOpen: setDialogOpen,
+    handleDialogOpenChange,
+    discardOpen: discard.confirmOpen,
+    handleDiscardOpenChange: discard.handleConfirmOpenChange,
+    confirmDiscard: discard.confirmDiscard,
+    cancelDiscard: discard.cancelDiscard,
     form,
     isPending,
     createError,

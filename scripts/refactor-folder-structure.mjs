@@ -88,7 +88,8 @@ function mapModuleId(moduleId) {
   if (!moduleId) return null;
   if (moduleMap.has(moduleId)) return moduleMap.get(moduleId);
   // index imports: ./foo -> foo/index
-  if (moduleMap.has(moduleId + "/index")) return moduleMap.get(moduleId + "/index");
+  if (moduleMap.has(moduleId + "/index"))
+    return moduleMap.get(moduleId + "/index");
   return moduleId;
 }
 

@@ -16,12 +16,24 @@ export function useHeroCarousel({
   const reduceMotion = useReducedMotion();
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [userPaused, setUserPaused] = useState(false);
+  const [hoverPaused, setHoverPaused] = useState(false);
+  const [focusPaused, setFocusPaused] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const indexRef = useRef(0);
 
   const count = slides.length;
   const active = slides[index] ?? slides[0];
-  const paused = Boolean(reduceMotion) || count <= 1;
+  // WCAG 2.2.2: autoplay yields to reduced motion, an explicit pause, and any
+  // hover/focus inside the carousel — a slide never moves under the pointer or
+  // while a control has keyboard focus.
+  const paused =
+    Boolean(reduceMotion) ||
+    count <= 1 ||
+    userPaused ||
+    hoverPaused ||
+    focusPaused;
+  const canTogglePause = !reduceMotion && count > 1;
 
   const goTo = useCallback(
     (next: number, forcedDirection?: 1 | -1) => {
@@ -50,6 +62,17 @@ export function useHeroCarousel({
     const timer = window.setInterval(goNext, autoplayMs);
     return () => window.clearInterval(timer);
   }, [paused, autoplayMs, goNext]);
+
+  const togglePause = useCallback(() => setUserPaused((value) => !value), []);
+  const handleMouseEnter = useCallback(() => setHoverPaused(true), []);
+  const handleMouseLeave = useCallback(() => setHoverPaused(false), []);
+  const handleFocus = useCallback(() => setFocusPaused(true), []);
+  const handleBlur = useCallback((event: React.FocusEvent<HTMLElement>) => {
+    if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
+      return;
+    }
+    setFocusPaused(false);
+  }, []);
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key === "ArrowRight") {
@@ -87,5 +110,12 @@ export function useHeroCarousel({
     onKeyDown,
     onTouchStart,
     onTouchEnd,
+    canTogglePause,
+    isPaused: userPaused,
+    togglePause,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleFocus,
+    handleBlur,
   };
 }

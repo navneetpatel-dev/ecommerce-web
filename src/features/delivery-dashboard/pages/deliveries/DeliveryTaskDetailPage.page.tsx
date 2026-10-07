@@ -10,12 +10,25 @@ import { ShipmentOverviewCard } from "../../components/deliveries/ShipmentOvervi
 import { DeliveryAttemptsList } from "../../components/deliveries/DeliveryAttemptsList.component";
 import { DeliveryTaskPrimaryPanel } from "../../components/deliveries/DeliveryTaskPrimaryPanel.component";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { LABELS } from "@/shared/constants/labels";
 import { useDeliveryTaskDetailPage } from "../../hooks/deliveries/useDeliveryTaskDetailPage.hook";
 import { deliveryDetailPageStyles as styles } from "./deliveryDetailPage.styles";
 
 export function DeliveryTaskDetailPage() {
   const page = useDeliveryTaskDetailPage();
   const { query, shipment, actions } = page;
+
+  const handleConfirm = () => {
+    void page.onConfirm();
+  };
+
+  const handleConfirmRtoHandover = () => {
+    void page.onConfirmRtoHandover();
+  };
+
+  const handleMarkFailed = () => {
+    void actions.runStatus("FAILED", actions.failureNote.trim());
+  };
 
   if (query.isLoading)
     return <p className={styles.loadingText}>Loading delivery...</p>;
@@ -48,7 +61,9 @@ export function DeliveryTaskDetailPage() {
       </header>
 
       {actions.error ? (
-        <p className={styles.errorText}>{actions.error}</p>
+        <p role="alert" className={styles.errorText}>
+          {actions.error}
+        </p>
       ) : null}
 
       <div className={styles.grid}>
@@ -62,8 +77,8 @@ export function DeliveryTaskDetailPage() {
             isRtoInitiated={page.isRtoInitiated}
             isDelivered={page.isDelivered}
             isRtoDelivered={page.isRtoDelivered}
-            onConfirm={() => void page.onConfirm()}
-            onConfirmRtoHandover={() => void page.onConfirmRtoHandover()}
+            onConfirm={handleConfirm}
+            onConfirmRtoHandover={handleConfirmRtoHandover}
           />
 
           {page.hasAttempts && shipment.attempts ? (
@@ -74,11 +89,9 @@ export function DeliveryTaskDetailPage() {
             <FailedAttemptSection
               value={actions.failureNote}
               onChange={actions.setFailureNote}
-              onSubmit={() =>
-                void actions.runStatus("FAILED", actions.failureNote.trim())
-              }
-              placeholder="Required reason for failed attempt (min 3 chars)"
-              submitLabel="Mark attempt failed"
+              onSubmit={handleMarkFailed}
+              placeholder={LABELS.failureReasonPlaceholder}
+              submitLabel={LABELS.markAttemptFailed}
               photo={actions.failurePhoto}
               onPhotoChange={actions.setFailurePhoto}
             />

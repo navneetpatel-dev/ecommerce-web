@@ -1,12 +1,13 @@
 "use client";
 
+import { useRef } from "react";
 import { X, ShoppingBag } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/shared/components/ui/button";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { useBodyScrollLock } from "@/shared/hooks/scroll/useBodyScrollLock.hook";
+import { useModalOverlay } from "@/shared/hooks/ui/useModalOverlay.hook";
 import { CartDrawerSummary } from "./CartDrawerSummary.component";
 import { CartDrawerVendorGroupsList } from "./CartDrawerVendorGroupsList.component";
 import { ClearCartAction } from "../page/CartPageView/ClearCartAction.component";
@@ -69,7 +70,15 @@ export function CartDrawer({
   onClearCart,
   isClearing = false,
 }: CartDrawerProps) {
-  useBodyScrollLock(isOpen);
+  const panelRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  useModalOverlay({
+    open: isOpen,
+    onClose,
+    panelRef,
+    /* Land on Close, not the first focusable — that is the Clear cart action. */
+    initialFocusRef: closeButtonRef,
+  });
 
   const clearCartActionElement = hasItems ? (
     <ClearCartAction
@@ -134,10 +143,15 @@ export function CartDrawer({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
+        aria-hidden
         className={styles.backdrop}
         onClick={onClose}
       />
       <motion.aside
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={LABELS.yourCart}
         initial={{ x: "100%" }}
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
@@ -149,6 +163,7 @@ export function CartDrawer({
           <div className={styles.headerActions}>
             {clearCartActionElement}
             <Button
+              ref={closeButtonRef}
               type="button"
               variant="ghost"
               size="icon-sm"

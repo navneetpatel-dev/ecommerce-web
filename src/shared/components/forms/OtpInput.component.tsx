@@ -1,4 +1,5 @@
 import { otpInputStyles } from "../../styles/forms/otpInput.styles";
+import { OtpDigitInput } from "./OtpDigitInput.component";
 
 interface OtpInputProps {
   digits: string[];
@@ -21,18 +22,14 @@ export function OtpInput({
   return (
     <div className={otpInputStyles.container}>
       {digits.map((digit, index) => (
-        <input
+        <OtpDigitInput
           key={index}
-          ref={(node) => onSetInputRef(index, node)}
-          inputMode="numeric"
-          pattern="[0-9]*"
-          maxLength={1}
-          value={digit}
-          onChange={(e) => onUpdateDigit(index, e.target.value)}
-          onKeyDown={(event) => onKeyDown(index, event)}
+          index={index}
+          digit={digit}
+          onSetInputRef={onSetInputRef}
+          onUpdateDigit={onUpdateDigit}
+          onKeyDown={onKeyDown}
           onPaste={onPaste}
-          className={otpInputStyles.input}
-          aria-label={`OTP digit ${index + 1}`}
         />
       ))}
     </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { infiniteMultiSelectStyles } from "../../styles/infinite-multi-select/infiniteMultiSelect.styles";
 import type { InfiniteMultiSelectOption } from "../../types/infinite-multi-select/types";
@@ -19,6 +20,10 @@ export function OptionRow({
   inputId,
   onToggle,
 }: OptionRowProps) {
+  const handleToggle = useCallback(() => {
+    onToggle(option.id);
+  }, [onToggle, option.id]);
+
   return (
     <label
       htmlFor={inputId}
@@ -28,7 +33,7 @@ export function OptionRow({
         id={inputId}
         checked={checked}
         disabled={disabled}
-        onCheckedChange={() => onToggle(option.id)}
+        onCheckedChange={handleToggle}
         className={infiniteMultiSelectStyles.optionRow.checkbox}
       />
       <span className={infiniteMultiSelectStyles.optionRow.text}>

@@ -69,7 +69,9 @@ export function AttributeFormFields({
   );
 
   const errorMessage = error ? (
-    <p className={styles.errorMessage}>{error}</p>
+    <p role="alert" className={styles.errorMessage}>
+      {error}
+    </p>
   ) : null;
 
   const cancelButton = isEditing ? (

@@ -31,8 +31,17 @@ export function CookieBanner({
   onMarketingChange,
   onSavePreferences,
 }: CookieBannerProps) {
+  const handlePreferencesOpenChange = (open: boolean) => {
+    if (open) onOpenPreferences();
+    else onClosePreferences();
+  };
+
   const bannerElement = visible && (
-    <div className={cookieBannerStyles.wrapper}>
+    <div
+      role="region"
+      aria-label={LABELS.cookieBannerAriaLabel}
+      className={cookieBannerStyles.wrapper}
+    >
       <div className={cookieBannerStyles.banner}>
         <p className={cookieBannerStyles.text}>{LABELS.cookieBannerMessage}</p>
         <div className={cookieBannerStyles.actions}>
@@ -75,10 +84,7 @@ export function CookieBanner({
       <CookiePreferencesDialog
         open={preferencesOpen}
         preferences={preferences}
-        onOpenChange={(open) => {
-          if (open) onOpenPreferences();
-          else onClosePreferences();
-        }}
+        onOpenChange={handlePreferencesOpenChange}
         onAnalyticsChange={onAnalyticsChange}
         onMarketingChange={onMarketingChange}
         onSave={onSavePreferences}

@@ -62,7 +62,9 @@ export function BroadcastNotificationForm() {
         />
       </FormFieldFrame>
       {form.error ? (
-        <p className={adminFormWidgetsStyles.errorSm}>{form.error}</p>
+        <p role="alert" className={adminFormWidgetsStyles.errorSm}>
+          {form.error}
+        </p>
       ) : null}
       {form.result ? (
         <p className={adminFormWidgetsStyles.successSm}>{form.result}</p>

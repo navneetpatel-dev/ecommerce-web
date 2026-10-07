@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { ChevronDown } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
@@ -52,10 +53,11 @@ export function SingleSelectListbox(props: SingleSelectListboxProps) {
   const renderOption = (option: InfiniteSingleSelectOption) => (
     <OptionRow
       key={option.id}
+      optionId={option.id}
       selected={value === option.id}
       label={option.label}
       disabled={disabled}
-      onSelect={() => onSelect(option.id)}
+      onSelect={onSelect}
     />
   );
 
@@ -79,10 +81,11 @@ export function SingleSelectListbox(props: SingleSelectListboxProps) {
         <>
           {allowNone ? (
             <OptionRow
+              optionId={noneValue}
               selected={!value}
               label={noneLabel}
               disabled={disabled}
-              onSelect={() => onSelect(noneValue)}
+              onSelect={onSelect}
             />
           ) : null}
           {options.map(renderOption)}
@@ -113,11 +116,15 @@ export function SearchField(props: {
   disabled: boolean;
   onQueryChange: (query: string) => void;
 }) {
+  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    props.onQueryChange(event.target.value);
+  };
+
   return (
     <div className={infiniteSingleSelectStyles.listbox.searchFieldContainer}>
       <Input
         value={props.query}
-        onChange={(event) => props.onQueryChange(event.target.value)}
+        onChange={handleQueryChange}
         placeholder={props.placeholder}
         aria-label={props.placeholder}
         disabled={props.disabled}

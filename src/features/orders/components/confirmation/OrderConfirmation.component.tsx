@@ -70,7 +70,7 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
               {order ? <OrderConfirmationItems order={order} /> : null}
 
               {showLoadError ? (
-                <p className={styles.errorNotice}>
+                <p role="alert" className={styles.errorNotice}>
                   {LABELS.orderDetailsLoadFailed}
                 </p>
               ) : null}

@@ -134,7 +134,6 @@ export const tables3Labels = {
   couldNotReorderCategories: "Could not save category order.",
   couldNotReassignProducts: "Could not reassign products.",
   productsReassigned: "Reassigned {count} product(s).",
-  name: "Name",
   imageUrl: "Image",
   parentId: "Parent",
   parentName: "Parent",

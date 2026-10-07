@@ -18,6 +18,11 @@ interface SearchBarProps {
   panelLayout?: SearchPanelLayout;
   term: string;
   showPanel: boolean;
+  /** Empty field with remembered terms — the panel shows the recent list. */
+  showRecent: boolean;
+  recentSearches: readonly string[];
+  onSelectRecent: (term: string) => void;
+  onClearRecent: () => void;
   suggestions?: SearchSuggestion[];
   activeIndex?: number;
   isFetching?: boolean;
@@ -37,6 +42,10 @@ export function SearchBar({
   panelLayout = "dropdown",
   term,
   showPanel,
+  showRecent,
+  recentSearches,
+  onSelectRecent,
+  onClearRecent,
   suggestions,
   activeIndex,
   isFetching,
@@ -90,6 +99,10 @@ export function SearchBar({
           activeIndex={activeIndex}
           isFetching={isFetching}
           isInline={isInline}
+          showRecent={showRecent}
+          recentSearches={recentSearches}
+          onSelectRecent={onSelectRecent}
+          onClearRecent={onClearRecent}
           onSelect={onSelect}
           onExitComplete={() => setShellExpanded(false)}
         />

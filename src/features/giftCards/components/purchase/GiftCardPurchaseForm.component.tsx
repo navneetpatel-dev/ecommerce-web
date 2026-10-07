@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { NumberInput } from "@/shared/components/forms/NumberInput.component";
-import { FormFieldFrame, FormStack } from "@/shared/components/forms";
+import {
+  DisabledActionHint,
+  FormFieldFrame,
+  FormStack,
+} from "@/shared/components/forms";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import {
   CURRENCY_SYMBOL,
@@ -57,19 +61,37 @@ export function GiftCardPurchaseForm() {
     /.+@.+\..+/.test(recipientEmail) &&
     !isBusy;
 
+  const showIncompleteHint = !isBusy && !canSubmit;
+
+  const handleAmountChange = (value: number | undefined) => {
+    setAmount(value);
+  };
+
+  const handleRecipientEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setRecipientEmail(event.target.value);
+  };
+
+  const handleRecipientNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setRecipientName(event.target.value);
+  };
+
+  const handleMessageChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(event.target.value);
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!canSubmit || amount == null) return;
+    void purchase({
+      amount,
+      recipientEmail: recipientEmail.trim(),
+      recipientName: recipientName.trim() || undefined,
+      message: message.trim() || undefined,
+    });
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!canSubmit || amount == null) return;
-        void purchase({
-          amount,
-          recipientEmail: recipientEmail.trim(),
-          recipientName: recipientName.trim() || undefined,
-          message: message.trim() || undefined,
-        });
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       <FormStack>
         <FormFieldFrame
           label={giftCardsLabels.giftCardAmount}
@@ -83,7 +105,7 @@ export function GiftCardPurchaseForm() {
           <NumberInput
             id="gift-card-amount"
             value={amount}
-            onChange={setAmount}
+            onChange={handleAmountChange}
             min={GIFT_CARD_MIN_AMOUNT_INR}
             max={GIFT_CARD_MAX_AMOUNT_INR}
             step={50}
@@ -100,8 +122,9 @@ export function GiftCardPurchaseForm() {
           <Input
             id="gift-card-recipient-email"
             type="email"
+            autoComplete="off"
             value={recipientEmail}
-            onChange={(e) => setRecipientEmail(e.target.value)}
+            onChange={handleRecipientEmailChange}
             disabled={isBusy}
             required
           />
@@ -114,7 +137,7 @@ export function GiftCardPurchaseForm() {
           <Input
             id="gift-card-recipient-name"
             value={recipientName}
-            onChange={(e) => setRecipientName(e.target.value)}
+            onChange={handleRecipientNameChange}
             disabled={isBusy}
           />
         </FormFieldFrame>
@@ -126,7 +149,7 @@ export function GiftCardPurchaseForm() {
           <Textarea
             id="gift-card-message"
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={handleMessageChange}
             disabled={isBusy}
             maxLength={500}
           />
@@ -138,11 +161,19 @@ export function GiftCardPurchaseForm() {
           </p>
         ) : null}
 
-        <Button type="submit" disabled={!canSubmit} fullWidth="mobile">
-          {isBusy
-            ? giftCardsLabels.giftCardBuyButtonBusy
-            : giftCardsLabels.giftCardBuyButton}
-        </Button>
+        <DisabledActionHint
+          disabled={!canSubmit}
+          message={
+            showIncompleteHint ? giftCardsLabels.giftCardFormInvalidHint : ""
+          }
+          className={styles.submitHintWrapper}
+        >
+          <Button type="submit" disabled={!canSubmit} fullWidth="mobile">
+            {isBusy
+              ? giftCardsLabels.giftCardBuyButtonBusy
+              : giftCardsLabels.giftCardBuyButton}
+          </Button>
+        </DisabledActionHint>
       </FormStack>
     </form>
   );

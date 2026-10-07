@@ -45,7 +45,9 @@ export function AdminAssignDeliveryAgentAction({
   ) : null;
 
   const errorMessage = error ? (
-    <p className={styles.errorMessage}>{error}</p>
+    <p role="alert" className={styles.errorMessage}>
+      {error}
+    </p>
   ) : null;
 
   return (

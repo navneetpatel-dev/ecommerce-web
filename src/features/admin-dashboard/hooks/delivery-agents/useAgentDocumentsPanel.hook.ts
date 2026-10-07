@@ -6,6 +6,8 @@ import {
   type DeliveryAgentDocument,
 } from "@/features/delivery-dashboard";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { LABELS } from "@/shared/constants/labels";
+import { useReasonPrompt } from "@/shared/hooks/dialogs/useReasonPrompt.hook";
 
 /** Owns the admin agent-KYC-documents review panel's data + approve/reject actions. */
 export function useAgentDocumentsPanel() {
@@ -13,6 +15,7 @@ export function useAgentDocumentsPanel() {
   const [loading, setLoading] = useState(true);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const rejectPrompt = useReasonPrompt();
 
   function fetchDocuments() {
     return deliveryAdminApi
@@ -31,36 +34,59 @@ export function useAgentDocumentsPanel() {
     fetchDocuments();
   };
 
-  const act = async (documentId: string, action: "APPROVE" | "REJECT") => {
+  const approve = async (documentId: string) => {
     setError(null);
     setPendingId(documentId);
     try {
-      const rejectionReason =
-        action === "REJECT"
-          ? (window.prompt("Reason for rejecting this document?") ?? "")
-          : undefined;
-      if (action === "REJECT" && !rejectionReason) {
-        setPendingId(null);
-        return;
-      }
-      await deliveryAdminApi.reviewDocument(
-        documentId,
-        action,
-        rejectionReason,
-      );
+      await deliveryAdminApi.reviewDocument(documentId, "APPROVE");
       load();
     } catch (actionError) {
-      setError(
-        getApiErrorMessage(actionError, "Could not update this document."),
-      );
+      setError(getApiErrorMessage(actionError, LABELS.couldNotUpdateDocument));
     } finally {
       setPendingId(null);
     }
+  };
+
+  const runReject = async (documentId: string, reason: string) => {
+    setPendingId(documentId);
+    try {
+      await deliveryAdminApi.reviewDocument(documentId, "REJECT", reason);
+      rejectPrompt.cancel();
+      load();
+    } catch (actionError) {
+      setError(getApiErrorMessage(actionError, LABELS.couldNotUpdateDocument));
+    } finally {
+      setPendingId(null);
+    }
+  };
+
+  const confirmReject = () => {
+    const documentId = rejectPrompt.targetId;
+    const reason = rejectPrompt.reason.trim();
+    if (!documentId || !reason) return;
+    setError(null);
+    void runReject(documentId, reason);
   };
 
   const pendingReview = documents.filter(
     (doc) => !doc.verified && !doc.rejectedAt,
   );
 
-  return { documents, loading, pendingId, error, act, pendingReview };
+  return {
+    documents,
+    loading,
+    pendingId,
+    error,
+    approve,
+    pendingReview,
+    rejectReason: {
+      open: rejectPrompt.open,
+      pending: pendingId === rejectPrompt.targetId,
+      reason: rejectPrompt.reason,
+      onOpenChange: rejectPrompt.handleOpenChange,
+      onReasonChange: rejectPrompt.handleReasonChange,
+      onSubmit: confirmReject,
+      request: rejectPrompt.openFor,
+    },
+  };
 }

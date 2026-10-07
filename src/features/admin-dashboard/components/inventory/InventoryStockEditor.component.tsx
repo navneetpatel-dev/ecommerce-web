@@ -42,7 +42,9 @@ export function InventoryStockEditor({
         Save
       </Button>
       {error ? (
-        <span className={adminPagesStyles.stockEditorError}>{error}</span>
+        <span role="alert" className={adminPagesStyles.stockEditorError}>
+          {error}
+        </span>
       ) : null}
     </div>
   );

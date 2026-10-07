@@ -1,57 +1,66 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   parseFilters,
   filtersToParams,
-  clearFacetFilters,
 } from "../../utils/variants/products.utils";
-import { navigate } from "@/shared/utils/navigation/navigate";
-import { useDebouncedCallback } from "@/shared/hooks/ui/use-debounce.hook";
 import { FILTER_INPUT_DEBOUNCE_MS } from "../../constants/filters/filterTiming";
-import type { ProductFilters } from "../../api/listing/products.api";
+import { navigate } from "@/shared/utils/navigation/navigate";
+import { useDebouncedWriteQueue } from "@/shared/hooks/ui/useDebouncedWriteQueue.hook";
 
 export function useFilters() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const filters = useMemo(() => parseFilters(searchParams), [searchParams]);
 
-  const pushFilters = useCallback(
-    (next: ProductFilters | Record<string, unknown>) => {
-      const params = filtersToParams(next as Record<string, unknown>);
+  // Debounced writes merge onto the URL as it is at flush time, so two fields
+  // edited inside one debounce window both apply — the later call no longer
+  // cancels the earlier one.
+  const latestParamsRef = useRef(searchParams);
+  useEffect(() => {
+    latestParamsRef.current = searchParams;
+  }, [searchParams]);
+
+  const applyWrites = useCallback(
+    (writes: Record<string, unknown>) => {
+      const base = parseFilters(
+        new URLSearchParams(latestParamsRef.current.toString()),
+      );
+      const next: Record<string, unknown> = { ...base, ...writes };
+      if (!("page" in writes)) next.page = 1;
+      const params = filtersToParams(next);
       const query = params.toString();
       navigate(router, query ? `?${query}` : window.location.pathname);
     },
     [router],
   );
 
-  const updateFilter = useCallback(
-    (key: string, value: unknown) => {
-      const next = {
-        ...filters,
-        [key]:
-          value === "" || value === null || value === undefined
-            ? undefined
-            : value,
-        ...(key !== "page" ? { page: 1 } : {}),
-      };
-      pushFilters(next);
-    },
-    [filters, pushFilters],
+  const { queue, flushNow, clear } = useDebouncedWriteQueue(
+    applyWrites,
+    FILTER_INPUT_DEBOUNCE_MS,
   );
 
-  const updateFilterDebounced = useDebouncedCallback(
-    updateFilter,
-    FILTER_INPUT_DEBOUNCE_MS,
+  const updateFilter = useCallback(
+    (key: string, value: unknown) => {
+      queue(key, value);
+      flushNow();
+    },
+    [queue, flushNow],
+  );
+
+  /** High-frequency inputs (price min/max, rating): merged into one flush. */
+  const updateFilterDebounced = useCallback(
+    (key: string, value: unknown) => queue(key, value),
+    [queue],
   );
 
   /** Clear several facets in one URL write (e.g. a price range's two keys). */
   const removeFilters = useCallback(
     (keys: string[]) => {
-      const next: Record<string, unknown> = { ...filters, page: 1 };
-      for (const key of keys) next[key] = undefined;
-      pushFilters(next);
+      for (const key of keys) queue(key, undefined);
+      flushNow();
     },
-    [filters, pushFilters],
+    [queue, flushNow],
   );
 
   /** Drop one selected value of one attribute facet, keeping the rest. */
@@ -63,18 +72,22 @@ export function useFilters() {
       const nextAttrs = { ...(filters.attrs ?? {}) };
       if (remaining.length > 0) nextAttrs[attrKey] = remaining;
       else delete nextAttrs[attrKey];
-      pushFilters({
-        ...filters,
-        attrs: Object.keys(nextAttrs).length > 0 ? nextAttrs : undefined,
-        page: 1,
-      });
+      queue("attrs", Object.keys(nextAttrs).length > 0 ? nextAttrs : undefined);
+      flushNow();
     },
-    [filters, pushFilters],
+    [filters, queue, flushNow],
   );
 
   const clearFilters = useCallback(() => {
-    pushFilters(clearFacetFilters(filters));
-  }, [filters, pushFilters]);
+    // Supersede queued keystrokes so a pending flush cannot revive them.
+    clear();
+    applyWrites({
+      minPrice: undefined,
+      maxPrice: undefined,
+      rating: undefined,
+      attrs: undefined,
+    });
+  }, [clear, applyWrites]);
 
   return {
     filters,

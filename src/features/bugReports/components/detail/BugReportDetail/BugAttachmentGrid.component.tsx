@@ -1,5 +1,6 @@
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { BUG_ATTACHMENT_TYPE } from "@/shared/constants/statuses";
+import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import type { BugAttachment } from "../../../api/list/bugReports.api";
 import { bugReportDetailStyles } from "../../../styles/detail/bugReportDetail.styles";
@@ -25,6 +26,7 @@ export function AttachmentGrid({
               playsInline
               preload="metadata"
               controls
+              aria-label={LABELS.screenRecording}
             />
           ) : (
             <MediaImage

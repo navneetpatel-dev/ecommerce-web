@@ -1,6 +1,7 @@
 "use client";
 
 import { AUTOPLAY_MS, DEFAULT_SLIDES } from "../../../constants/hero/constants";
+import { LABELS } from "@/shared/constants/labels";
 import { SlideControls } from "./SlideControls.component";
 import { SlideCopy } from "./SlideCopy.component";
 import { SlideImage } from "./SlideImage.component";
@@ -29,20 +30,35 @@ export function HeroSection({
     onKeyDown,
     onTouchStart,
     onTouchEnd,
+    canTogglePause,
+    isPaused,
+    togglePause,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleFocus,
+    handleBlur,
   } = useHeroCarousel({ slides, autoplayMs });
 
   if (!active) return null;
 
   return (
+    /* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions --
+       Passive intent listeners only: autoplay pauses while a pointer or
+       keyboard focus is inside the carousel (WCAG 2.2.2). No click/keyboard
+       action, and no interactive role, is implied. */
     <section
       aria-roledescription="carousel"
       aria-labelledby={labelId}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
       className={styles.section}
     >
       <h2 id={labelId} className={styles.srOnly}>
-        Featured collections
+        {LABELS.featuredCollections}
       </h2>
 
       <div className={styles.slideWrapper}>
@@ -67,6 +83,9 @@ export function HeroSection({
             onPrev={goPrev}
             onNext={goNext}
             onKeyDown={onKeyDown}
+            canTogglePause={canTogglePause}
+            isPaused={isPaused}
+            onTogglePause={togglePause}
           />
         ) : null}
       </div>

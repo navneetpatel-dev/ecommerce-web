@@ -129,7 +129,6 @@ export const reports3Labels = {
   autoApproveEnabled: "Enabled (auto-approve)",
   autoApproveDisabled: "Disabled (moderated)",
   defaultReturnWindow: "Default return window",
-  freeShippingThreshold: "Free shipping threshold (incl. GST)",
   returnShippingFee: "Return shipping fee",
   returnShippingFeeHint:
     "Deducted from customer refunds when the return reason does not refund original shipping (for example no longer needed).",

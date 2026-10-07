@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { RotateCw, XCircle } from "lucide-react";
+import { LABELS } from "@/shared/constants/labels";
 import { AgentMarkPayoutPaidAction } from "../AgentMarkPayoutPaidAction.component";
 import { agentPayoutsPanelStyles } from "../../../styles/delivery-agents/agentPayoutsPanel.styles";
 
@@ -8,8 +9,8 @@ interface AgentPayoutActionsProps {
   status: string;
   pendingId: string | null;
   onDone: () => void;
-  onFail: (payoutId: string) => Promise<void>;
-  onRetry: (payoutId: string) => Promise<void>;
+  onRequestFail: (payoutId: string) => void;
+  onRetry: (payoutId: string) => void;
 }
 
 export function AgentPayoutActions({
@@ -17,17 +18,17 @@ export function AgentPayoutActions({
   status,
   pendingId,
   onDone,
-  onFail,
+  onRequestFail,
   onRetry,
 }: AgentPayoutActionsProps) {
   const isPendingAction = pendingId === payoutId;
 
   const handleFail = useCallback(() => {
-    void onFail(payoutId);
-  }, [onFail, payoutId]);
+    onRequestFail(payoutId);
+  }, [onRequestFail, payoutId]);
 
   const handleRetry = useCallback(() => {
-    void onRetry(payoutId);
+    onRetry(payoutId);
   }, [onRetry, payoutId]);
 
   if (status === "PENDING") {
@@ -44,7 +45,7 @@ export function AgentPayoutActions({
             className={agentPayoutsPanelStyles.actionIcon}
             aria-hidden="true"
           />
-          Mark failed
+          {LABELS.markPayoutFailed}
         </button>
       </div>
     );
@@ -62,7 +63,7 @@ export function AgentPayoutActions({
           className={agentPayoutsPanelStyles.actionIcon}
           aria-hidden="true"
         />
-        Retry
+        {LABELS.retryPayout}
       </button>
     );
   }

@@ -23,33 +23,33 @@ export function BankDetailsFormFields({
 }: BankDetailsFormFieldsProps) {
   return (
     <div className={bankDetailsCardStyles.formGrid}>
-      <FormFieldFrame label="Account holder name" required>
+      <FormFieldFrame label={LABELS.bankAccountHolder} required>
         <Input
           value={form.accountHolderName}
           onChange={onAccountHolderNameChange}
           maxLength={120}
         />
       </FormFieldFrame>
-      <FormFieldFrame label="Account number" required>
+      <FormFieldFrame label={LABELS.bankAccountNumber} required>
         <Input
           value={form.accountNumber}
           onChange={onAccountNumberChange}
           maxLength={34}
         />
       </FormFieldFrame>
-      <FormFieldFrame label="IFSC code" required>
+      <FormFieldFrame label={LABELS.bankIfscLabel} required>
         <Input
           value={form.ifscCode}
           onChange={onIfscCodeChange}
           maxLength={11}
-          placeholder="SBIN0001234"
+          placeholder={LABELS.bankIfscPlaceholder}
         />
       </FormFieldFrame>
-      <FormFieldFrame label="UPI ID (optional)">
+      <FormFieldFrame label={LABELS.bankUpiLabel}>
         <Input
           value={form.upiId ?? ""}
           onChange={onUpiIdChange}
-          placeholder="name@bank"
+          placeholder={LABELS.bankUpiPlaceholder}
           maxLength={120}
         />
       </FormFieldFrame>
@@ -57,7 +57,7 @@ export function BankDetailsFormFields({
         <Input
           value={form.pan ?? ""}
           onChange={onPanChange}
-          placeholder="ABCDE1234F"
+          placeholder={LABELS.agentPanPlaceholder}
           maxLength={10}
         />
       </FormFieldFrame>

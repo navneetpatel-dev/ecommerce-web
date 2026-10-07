@@ -86,7 +86,9 @@ export function VendorProductImagesDialog({
           </p>
         ) : null}
         {error ? (
-          <p className={vendorProductImagesDialogStyles.errorText}>{error}</p>
+          <p role="alert" className={vendorProductImagesDialogStyles.errorText}>
+            {error}
+          </p>
         ) : null}
 
         <ul className={vendorProductImagesDialogStyles.imageList}>

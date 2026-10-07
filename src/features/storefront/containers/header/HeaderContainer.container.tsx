@@ -38,7 +38,6 @@ export function HeaderContainer({
       mobileNavOpen={header.mobileNavOpen}
       mobileSearchOpen={header.mobileSearchOpen}
       megaMenuOpen={header.megaMenuOpen}
-      isTransparent={header.isTransparent}
       showStorefrontChrome={storefrontChrome}
       showWorkspaceMenu={showWorkspaceMenu && !storefrontChrome}
       onOpenMobileNav={header.openMobileNav}

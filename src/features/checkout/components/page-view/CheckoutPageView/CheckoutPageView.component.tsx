@@ -5,8 +5,10 @@ import { EmptyCartState } from "@/shared/components/display/EmptyCartState.compo
 import { CheckoutStepIndicator } from "../../../containers/page-view/CheckoutStepIndicator.container";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { CheckoutPageSkeleton } from "@/shared/components/Skeletons.component";
+import { LABELS } from "@/shared/constants/labels";
 import { OrderSummaryPanel } from "./OrderSummaryPanel.component";
 import { MobileSummaryAccordion } from "./MobileSummaryAccordion.component";
+import { CheckoutStepAnnouncer } from "./CheckoutStepAnnouncer.component";
 import { CheckoutStepCard } from "./CheckoutStepCard.component";
 import { CheckoutPaymentNoticeDialog } from "./CheckoutPaymentNoticeDialog.component";
 import { PaymentProcessingOverlay } from "../../payment/PaymentProcessingOverlay.component";
@@ -79,8 +81,8 @@ export function CheckoutPageView({
   if (!hasItems) {
     return (
       <EmptyCartState
-        heading="Nothing to check out"
-        message="Your bag is empty — add a few pieces, then return here to complete your order."
+        heading={LABELS.checkoutEmptyHeading}
+        message={LABELS.checkoutEmptyBody}
       />
     );
   }
@@ -111,12 +113,12 @@ export function CheckoutPageView({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
             >
-              <TextEyebrow brand>Checkout</TextEyebrow>
+              <TextEyebrow brand>{LABELS.checkoutEyebrowLabel}</TextEyebrow>
               <h1
                 className={CHECKOUT_PAGE_VIEW_STYLES.heading}
                 style={CHECKOUT_PAGE_VIEW_STYLES.headingStyle}
               >
-                Complete your order
+                {LABELS.checkoutCompleteOrderHeading}
               </h1>
             </motion.header>
 
@@ -133,6 +135,8 @@ export function CheckoutPageView({
               estimatedTotalPending={estimatedTotalPending}
               quote={quote}
             />
+
+            <CheckoutStepAnnouncer step={step} />
 
             <CheckoutStepCard
               step={step}

@@ -5,6 +5,7 @@ export const mobileTabBarStyles = {
   nav: `fixed bottom-0 left-[env(safe-area-inset-left,0px)] right-[env(safe-area-inset-right,0px)] z-40 flex ${MOBILE_TAB_BAR_HEIGHT_CLASS} items-stretch justify-around overflow-visible border-t border-line bg-surface lg:hidden`,
   tabItem:
     "flex min-h-11 min-w-[3.25rem] flex-col items-center justify-center gap-0.5 overflow-visible px-2 py-1 text-ink-muted",
+  tabItemActive: "text-brand",
   textLabel: "text-[0.625rem] max-md:landscape:hidden",
   textLabelNormal: "text-[0.625rem] font-normal max-md:landscape:hidden",
   skeletonIcon: "size-5 rounded-md",

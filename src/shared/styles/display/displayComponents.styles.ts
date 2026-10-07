@@ -55,6 +55,7 @@ export const ratingStarsStyles = {
   count: "text-body-sm text-ink-muted",
   container: "flex items-center gap-1",
   starsRow: "flex",
+  srOnly: "sr-only",
 } as const;
 
 export const successCheckmarkStyles = {

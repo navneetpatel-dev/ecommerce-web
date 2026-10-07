@@ -44,7 +44,6 @@ export const settingsLabels = {
     "Choose a report and date range, then load or export results.",
   reportSelect: "Report",
   reportCategory: "Category",
-  reportStatus: "Status",
   reportVendor: "Vendor",
   exportExcel: "Export Excel",
   reportExportPreparing: "Preparing your export…",

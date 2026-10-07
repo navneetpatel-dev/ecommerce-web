@@ -4,6 +4,7 @@ import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { newsletterFormStyles } from "@/shared/styles/display/displayComponents.styles";
+import type { ChangeEvent } from "react";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -29,6 +30,10 @@ export function NewsletterForm({
   const fieldId = `${idPrefix}-newsletter-email`;
   const canSubmit = EMAIL_RE.test(email.trim());
 
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onEmailChange(event.target.value);
+  };
+
   return (
     <form onSubmit={onSubmit} className={newsletterFormStyles.form}>
       <FormFieldFrame
@@ -40,10 +45,11 @@ export function NewsletterForm({
           <Input
             id={fieldId}
             type="email"
+            autoComplete="email"
             placeholder={LABELS.newsletterEmailPlaceholder}
             className={newsletterFormStyles.input}
             value={email}
-            onChange={(e) => onEmailChange(e.target.value)}
+            onChange={handleEmailChange}
             error={Boolean(error)}
             required
           />

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
@@ -39,6 +40,26 @@ export function CommerceSettingsSection({
   onPlatformStateChange,
   onAutoApproveChange,
 }: CommerceSettingsSectionProps) {
+  const handleCommissionRateChange = (value: number | undefined) =>
+    onCommissionRateChange(value ?? 0);
+  const handleTcsRateChange = (value: number | undefined) =>
+    onTcsRateChange(value ?? 0);
+  const handleTdsRateChange = (value: number | undefined) =>
+    onTdsRateChange(value ?? 0);
+  const handleTds194oExemptionThresholdChange = (value: number | undefined) =>
+    onTds194oExemptionThresholdChange(value ?? 0);
+  const handleCommissionGstRateChange = (value: number | undefined) =>
+    onCommissionGstRateChange(value ?? 18);
+  const handlePlatformLegalNameChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => onPlatformLegalNameChange(event.target.value);
+  const handlePlatformGstinChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onPlatformGstinChange(event.target.value);
+  const handlePlatformStateChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onPlatformStateChange(event.target.value);
+  const handleAutoApproveChange = (value: string) =>
+    onAutoApproveChange(value === "true");
+
   return (
     <FormSection
       title={LABELS.settingsCommerce}
@@ -52,7 +73,7 @@ export function CommerceSettingsSection({
           max={100}
           step={0.5}
           suffix="%"
-          onChange={(value) => onCommissionRateChange(value ?? 0)}
+          onChange={handleCommissionRateChange}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.tcsRatePercent} hint={LABELS.tcsRateHint}>
@@ -62,7 +83,7 @@ export function CommerceSettingsSection({
           max={100}
           step={0.1}
           suffix="%"
-          onChange={(value) => onTcsRateChange(value ?? 0)}
+          onChange={handleTcsRateChange}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.tdsRatePercent} hint={LABELS.tdsRateHint}>
@@ -72,7 +93,7 @@ export function CommerceSettingsSection({
           max={100}
           step={0.1}
           suffix="%"
-          onChange={(value) => onTdsRateChange(value ?? 0)}
+          onChange={handleTdsRateChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -84,7 +105,7 @@ export function CommerceSettingsSection({
           min={0}
           step={10000}
           prefix={CURRENCY_SYMBOL}
-          onChange={(value) => onTds194oExemptionThresholdChange(value ?? 0)}
+          onChange={handleTds194oExemptionThresholdChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -97,13 +118,13 @@ export function CommerceSettingsSection({
           max={100}
           step={0.5}
           suffix="%"
-          onChange={(value) => onCommissionGstRateChange(value ?? 18)}
+          onChange={handleCommissionGstRateChange}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.platformLegalName}>
         <Input
           value={form.platformLegalName ?? ""}
-          onChange={(e) => onPlatformLegalNameChange(e.target.value)}
+          onChange={handlePlatformLegalNameChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -112,19 +133,19 @@ export function CommerceSettingsSection({
       >
         <Input
           value={form.platformGstin ?? ""}
-          onChange={(e) => onPlatformGstinChange(e.target.value)}
+          onChange={handlePlatformGstinChange}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.platformState}>
         <Input
           value={form.platformState ?? ""}
-          onChange={(e) => onPlatformStateChange(e.target.value)}
+          onChange={handlePlatformStateChange}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.autoApproveProducts}>
         <Select
           value={form.autoApproveProducts ? "true" : "false"}
-          onValueChange={(value) => onAutoApproveChange(value === "true")}
+          onValueChange={handleAutoApproveChange}
         >
           <SelectTrigger>
             <SelectValue />

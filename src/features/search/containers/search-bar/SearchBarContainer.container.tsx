@@ -31,6 +31,10 @@ export function SearchBarContainer({
       panelLayout={panelLayout}
       term={search.term}
       showPanel={search.showPanel}
+      showRecent={search.showRecent}
+      recentSearches={search.recentSearches}
+      onSelectRecent={search.submitSearch}
+      onClearRecent={search.clearRecentSearches}
       suggestions={search.suggestions}
       activeIndex={search.activeIndex}
       isFetching={search.isFetching}

@@ -17,9 +17,12 @@ export const RegisterSchema = z.object({
     .trim()
     .min(1, LABELS.emailRequired)
     .email(LABELS.invalidEmail),
-  password: z.string().min(8),
-  name: z.string().min(1),
+  password: z.string().min(8, LABELS.passwordMinLength),
+  name: z.string().min(1, LABELS.nameRequired),
   phone: phoneField,
+  acceptTerms: z
+    .boolean()
+    .refine((value) => value, LABELS.agreeToTermsRequired),
 });
 
 export const ForgotPasswordSchema = z.object({
@@ -32,12 +35,12 @@ export const ForgotPasswordSchema = z.object({
 
 export const ResetPasswordSchema = z.object({
   token: z.string(),
-  newPassword: z.string().min(8),
+  newPassword: z.string().min(8, LABELS.passwordMinLength),
 });
 
 export const ChangePasswordSchema = z.object({
   currentPassword: z.string(),
-  newPassword: z.string().min(8),
+  newPassword: z.string().min(8, LABELS.passwordMinLength),
 });
 
 export const VerifyEmailSchema = z.object({

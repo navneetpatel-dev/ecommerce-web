@@ -14,8 +14,5 @@ export const ACCOUNT_TRIGGER_BOX = [
   "sm:!h-auto sm:!min-h-0 sm:!max-h-none sm:!w-auto",
 ].join(" ");
 
-/** Named ink tone by chrome transparency (Rule 5: no inline class ternaries). */
-export const HEADER_INK_TONE = {
-  transparent: "text-paper",
-  solid: "text-ink",
-} as const;
+/** Standard ink tone for header icons on the solid chrome. */
+export const HEADER_INK_TONE = "text-ink";

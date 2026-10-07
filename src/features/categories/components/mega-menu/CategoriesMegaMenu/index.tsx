@@ -10,6 +10,8 @@ import { CategoryMegaMenuTile } from "./CategoryMegaMenuTile.component";
 import { categoryMegaMenuStyles as styles } from "../../../styles/mega-menu/categoryMegaMenu.styles";
 
 interface CategoriesMegaMenuProps {
+  /** Id referenced by the trigger's aria-controls. */
+  id?: string;
   categories: Category[];
   onClose: () => void;
   onMouseEnter: () => void;
@@ -20,6 +22,7 @@ interface CategoriesMegaMenuProps {
  * ACTIVE taxonomy mega menu — up to 3 levels (Department → Category → Subcategory).
  */
 export function CategoriesMegaMenu({
+  id,
   categories,
   onClose,
   onMouseEnter,
@@ -29,6 +32,7 @@ export function CategoriesMegaMenu({
 
   return (
     <div
+      id={id}
       className={styles.menuContainer}
       /* Hover-intent zone wrapping the mega-menu panel: the category links
          inside are the interactive content, so the shell is presentational. */
@@ -50,8 +54,7 @@ export function CategoriesMegaMenu({
           onClick={onClose}
           className={styles.headerAllCategoriesLink}
         >
-          {LABELS.allCategories}{" "}
-          <ArrowRight className={styles.headerArrowIcon} />
+          {LABELS.viewAll} <ArrowRight className={styles.headerArrowIcon} />
         </Link>
       </div>
 

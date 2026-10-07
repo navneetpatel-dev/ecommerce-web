@@ -1,9 +1,7 @@
 export const dataTableStyles = {
   section: "min-w-0 space-y-5",
   skeletonHeight: "h-12 w-full",
-  error: "text-body text-danger",
-  emptyContainer:
-    "rounded-md border border-line bg-surface px-4 py-14 text-center text-ink-muted",
+  errorBox: "flex flex-wrap items-center justify-between gap-3",
   paginationWrapper: "flex justify-center border-t border-line/70 pt-2",
 } as const;
 

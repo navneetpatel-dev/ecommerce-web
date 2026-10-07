@@ -133,7 +133,11 @@ export function CartCouponSection({
 
       {showSuccess && <p className={styles.successMessage}>{couponMessage}</p>}
       {showInfo && <p className={styles.infoMessage}>{couponMessage}</p>}
-      {couponError && <p className={styles.errorMessage}>{couponError}</p>}
+      {couponError && (
+        <p role="alert" className={styles.errorMessage}>
+          {couponError}
+        </p>
+      )}
 
       <Accordion type="single" collapsible>
         <AccordionItem value="offers" className={styles.accordionItem}>

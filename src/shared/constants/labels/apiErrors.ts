@@ -4,8 +4,7 @@ export const apiErrorLabels = {
   rateLimited: "Too many requests. Please wait and try again.",
   authRateLimited:
     "Too many login attempts. Please wait a few minutes and try again.",
-  couponApplyRateLimited:
-    "Too many coupon attempts. Please try again shortly.",
+  couponApplyRateLimited: "Too many coupon attempts. Please try again shortly.",
   vendorUnavailableCheckout:
     "This seller is not available for checkout right now.",
   vendorKycIncomplete: "Complete seller verification before continuing.",

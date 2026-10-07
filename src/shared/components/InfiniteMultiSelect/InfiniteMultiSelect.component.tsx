@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, type ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
@@ -13,10 +13,7 @@ import { useInfiniteSelectOptions } from "../../hooks/infinite-multi-select/useI
 
 export function InfiniteMultiSelect(props: InfiniteMultiSelectProps) {
   return (
-    <InfiniteMultiSelectBody
-      key={String(props.resetKey ?? "")}
-      {...props}
-    />
+    <InfiniteMultiSelectBody key={String(props.resetKey ?? "")} {...props} />
   );
 }
 
@@ -58,11 +55,15 @@ function InfiniteMultiSelectBody({
 
   const showEmpty = !initialLoading && options.length === 0;
 
+  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
   return (
     <div className={cn(infiniteMultiSelectStyles.root, className)}>
       <Input
         value={query}
-        onChange={(event) => setQuery(event.target.value)}
+        onChange={handleQueryChange}
         placeholder={searchPlaceholder}
         aria-label={searchPlaceholder}
         disabled={disabled}

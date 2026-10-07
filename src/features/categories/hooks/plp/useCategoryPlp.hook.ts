@@ -18,8 +18,12 @@ export function useCategoryPlp(slugPath: string[]) {
     filters,
     productsQuery,
   } = useCategoryPlpData(slugPath);
-  const { updateFilter, toggleFacetValue, clearFilters } =
-    useCategoryPlpParams(facetSelections);
+  const {
+    updateFilter,
+    updateFilterDebounced,
+    toggleFacetValue,
+    clearFilters,
+  } = useCategoryPlpParams(facetSelections);
   const compareTray = useCompareTray();
 
   const hasActiveFacets =
@@ -65,6 +69,7 @@ export function useCategoryPlp(slugPath: string[]) {
     clearComparedProducts: compareTray.clearComparedProducts,
     scrollToCompare: compareTray.scrollToCompare,
     updateFilter,
+    updateFilterDebounced,
     toggleFacetValue,
     clearFilters,
     selectSort: (value: string) => {

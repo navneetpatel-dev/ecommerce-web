@@ -11,6 +11,8 @@ import {
 } from "../../constants/search/index";
 import { suggestionHref } from "../../utils/suggestions/suggestionHref";
 import { useSuggestionKeyboardNav } from "../keyboard/useSuggestionKeyboardNav.hook";
+import { useSearchHotkey } from "../keyboard/useSearchHotkey.hook";
+import { useRecentSearches } from "../recent/useRecentSearches.hook";
 import type { SearchSuggestion } from "../../types/search/index";
 
 export function useSearchNavigation(onAfterSubmit?: () => void) {
@@ -31,6 +33,10 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
     isFetching,
     isFetched,
   } = useAutocomplete(debouncedTerm, open && canSuggest);
+
+  const recents = useRecentSearches();
+  const { refreshRecentSearches, rememberSearch } = recents;
+  useSearchHotkey(inputRef);
 
   const closeDropdown = useCallback(() => {
     setOpen(false);
@@ -57,17 +63,11 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
     [closeDropdown, onAfterSubmit, router],
   );
 
-  const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      const trimmed = term.trim();
+  /** Navigates to the results page for a term — shared by submit and recents. */
+  const submitSearch = useCallback(
+    (raw: string) => {
+      const trimmed = raw.trim();
       if (!trimmed) return;
-
-      if (activeIndex >= 0 && suggestions[activeIndex]) {
-        handleSelect(suggestions[activeIndex]);
-        return;
-      }
-
       closeDropdown();
       setTerm("");
       inputRef.current?.blur();
@@ -75,17 +75,22 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
         router,
         `${PATHS.products}?search=${encodeURIComponent(trimmed)}`,
       );
+      rememberSearch(trimmed);
       onAfterSubmit?.();
     },
-    [
-      activeIndex,
-      closeDropdown,
-      handleSelect,
-      onAfterSubmit,
-      router,
-      suggestions,
-      term,
-    ],
+    [closeDropdown, onAfterSubmit, rememberSearch, router],
+  );
+
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      if (activeIndex >= 0 && suggestions[activeIndex]) {
+        handleSelect(suggestions[activeIndex]);
+        return;
+      }
+      submitSearch(term);
+    },
+    [activeIndex, handleSelect, submitSearch, suggestions, term],
   );
 
   const updateTerm = useCallback((value: string) => {
@@ -93,7 +98,10 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
     setOpen(true);
   }, []);
 
-  const openDropdown = useCallback(() => setOpen(true), []);
+  const openDropdown = useCallback(() => {
+    setOpen(true);
+    refreshRecentSearches();
+  }, [refreshRecentSearches]);
 
   const scheduleCloseDropdown = useCallback(() => {
     window.setTimeout(() => closeDropdown(), SEARCH_DROPDOWN_CLOSE_MS);
@@ -110,10 +118,14 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
     onAfterSubmit,
   });
 
+  /** Empty field with remembered terms → the panel opens on the recent list. */
+  const showRecent =
+    open && term.trim() === "" && recents.recentSearches.length > 0;
   const showPanel =
-    open &&
-    canSuggest &&
-    (isFetching || suggestions.length > 0 || (isFetched && !isFetching));
+    showRecent ||
+    (open &&
+      canSuggest &&
+      (isFetching || suggestions.length > 0 || (isFetched && !isFetching)));
 
   return {
     term,
@@ -122,11 +134,15 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
     activeIndex,
     inputRef,
     showPanel,
+    showRecent,
+    recentSearches: recents.recentSearches,
     isFetching: canSuggest && isFetching,
     updateTerm,
     handleSelect,
     handleSubmit,
+    submitSearch,
     handleKeyDown,
+    clearRecentSearches: recents.clearRecentSearches,
     openDropdown,
     closeDropdown: scheduleCloseDropdown,
   };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatPoints } from "@/shared/utils/formatting/formatPoints";
@@ -63,21 +63,46 @@ export function useAdminWalletAdjust() {
     }
   };
 
+  const handleUserIdChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setUserId(event.target.value);
+  };
+
+  const handleDirectionChange = (value: string) => {
+    setDirection(value as "CREDIT" | "DEBIT");
+  };
+
+  const handlePointSourceChange = (value: string) => {
+    setPointSource(value as "PURCHASED" | "PROMOTIONAL");
+  };
+
+  const handleReasonChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setReason(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    void submit();
+  };
+
   return {
     userId,
     setUserId,
+    handleUserIdChange,
     direction,
     setDirection,
+    handleDirectionChange,
     amount,
     setAmount,
     reason,
     setReason,
+    handleReasonChange,
     pointSource,
     setPointSource,
+    handlePointSourceChange,
     loading,
     error,
     fieldError: getError,
     message,
     submit,
+    handleSubmit,
   };
 }

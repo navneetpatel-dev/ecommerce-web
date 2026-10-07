@@ -11,15 +11,8 @@ import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { useIsAuthenticated } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { useModalOverlay } from "@/shared/hooks/ui/useModalOverlay.hook";
 import { MobileNavCategoryTree } from "./MobileNavCategoryTree.component";
+import { MobileNavPrimaryLinks } from "./MobileNavPrimaryLinks.component";
 import { mobileNavDrawerStyles as styles } from "../../styles/mobile-nav/mobileNavDrawer.styles";
-
-const navLinks = [
-  { href: PATHS.products, label: LABELS.allProducts },
-  { href: PATHS.productsNewest, label: LABELS.newArrivals },
-  { href: PATHS.categories, label: LABELS.categories },
-  { href: PATHS.vendors, label: LABELS.vendors },
-  { href: PATHS.orderTracking, label: LABELS.trackOrder },
-];
 
 interface MobileNavDrawerProps {
   open: boolean;
@@ -80,16 +73,7 @@ export function MobileNavDrawer({
         </div>
 
         <nav className={styles.nav}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={onClose}
-              className={styles.navLink}
-            >
-              {link.label}
-            </Link>
-          ))}
+          <MobileNavPrimaryLinks onNavigate={onClose} />
 
           <MobileNavCategoryTree categories={categories} onNavigate={onClose} />
 

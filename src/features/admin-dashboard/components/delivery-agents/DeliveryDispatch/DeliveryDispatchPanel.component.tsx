@@ -72,7 +72,9 @@ export function DeliveryDispatchPanel({
         </div>
       ) : null}
       {error ? (
-        <div className={deliveryDispatchPanelStyles.errorAlert}>{error}</div>
+        <div role="alert" className={deliveryDispatchPanelStyles.errorAlert}>
+          {error}
+        </div>
       ) : null}
     </section>
   );

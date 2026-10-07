@@ -36,6 +36,14 @@ export function ProductListingPage() {
   });
   const didYouMeanHref = didYouMean ? suggestionHref(didYouMean) : undefined;
 
+  const handleSortChange = (value: string) =>
+    listing.updateFilter("sort", value);
+  const handlePageChange = (page: number) => listing.updateFilter("page", page);
+  const handleClearFiltersInSheet = () => {
+    listing.clearFilters();
+    listing.closeFilters();
+  };
+
   return (
     <div className={productListingPageStyles.container}>
       <h1 className={productListingPageStyles.srOnly}>{heading}</h1>
@@ -65,7 +73,7 @@ export function ProductListingPage() {
             totalProducts={listing.data?.total}
             chips={chips}
             isFetching={listing.isFetching}
-            onSortChange={(v) => listing.updateFilter("sort", v)}
+            onSortChange={handleSortChange}
             sortDisabled={listing.isSearchActive}
             compareMode={listing.compareMode}
             onToggleCompare={listing.toggleCompareMode}
@@ -83,7 +91,7 @@ export function ProductListingPage() {
             onToggleCompareProduct={listing.toggleCompareProduct}
             currentPage={listing.filters.page ?? 1}
             totalPages={listing.data?.totalPages}
-            onPageChange={(p) => listing.updateFilter("page", p)}
+            onPageChange={handlePageChange}
             onClearFilters={listing.clearFilters}
           />
         </div>
@@ -96,10 +104,7 @@ export function ProductListingPage() {
         maxPrice={listing.filters.maxPrice}
         rating={listing.filters.rating}
         onUpdateFilter={listing.updateFilterDebounced}
-        onClear={() => {
-          listing.clearFilters();
-          listing.closeFilters();
-        }}
+        onClear={handleClearFiltersInSheet}
         hideRatingFilter={listing.isSearchActive}
       />
 

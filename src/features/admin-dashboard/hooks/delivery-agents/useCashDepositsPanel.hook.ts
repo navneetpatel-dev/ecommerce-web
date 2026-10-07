@@ -6,6 +6,8 @@ import {
   type CashDeposit,
 } from "@/features/delivery-dashboard";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { LABELS } from "@/shared/constants/labels";
+import { useReasonPrompt } from "@/shared/hooks/dialogs/useReasonPrompt.hook";
 
 /** Owns the admin cash-deposits reconciliation panel's data + verify/reject actions. */
 export function useCashDepositsPanel() {
@@ -13,6 +15,7 @@ export function useCashDepositsPanel() {
   const [loading, setLoading] = useState(true);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const rejectPrompt = useReasonPrompt();
 
   const load = () => {
     setLoading(true);
@@ -25,34 +28,57 @@ export function useCashDepositsPanel() {
 
   useEffect(load, []);
 
-  const act = async (depositId: string, action: "VERIFY" | "REJECT") => {
+  const verify = async (depositId: string) => {
     setError(null);
     setPendingId(depositId);
     try {
-      const rejectionReason =
-        action === "REJECT"
-          ? (window.prompt("Reason for rejecting this deposit?") ?? "")
-          : undefined;
-      if (action === "REJECT" && !rejectionReason) {
-        setPendingId(null);
-        return;
-      }
-      await deliveryAdminApi.verifyCashDeposit(
-        depositId,
-        action,
-        rejectionReason,
-      );
+      await deliveryAdminApi.verifyCashDeposit(depositId, "VERIFY");
       load();
     } catch (actionError) {
-      setError(
-        getApiErrorMessage(actionError, "Could not update this deposit."),
-      );
+      setError(getApiErrorMessage(actionError, LABELS.couldNotUpdateDeposit));
     } finally {
       setPendingId(null);
     }
   };
 
+  const runReject = async (depositId: string, reason: string) => {
+    setPendingId(depositId);
+    try {
+      await deliveryAdminApi.verifyCashDeposit(depositId, "REJECT", reason);
+      rejectPrompt.cancel();
+      load();
+    } catch (actionError) {
+      setError(getApiErrorMessage(actionError, LABELS.couldNotUpdateDeposit));
+    } finally {
+      setPendingId(null);
+    }
+  };
+
+  const confirmReject = () => {
+    const depositId = rejectPrompt.targetId;
+    const reason = rejectPrompt.reason.trim();
+    if (!depositId || !reason) return;
+    setError(null);
+    void runReject(depositId, reason);
+  };
+
   const pending = deposits.filter((d) => d.status === "PENDING");
 
-  return { deposits, loading, pendingId, error, act, pending };
+  return {
+    deposits,
+    loading,
+    pendingId,
+    error,
+    verify,
+    pending,
+    rejectReason: {
+      open: rejectPrompt.open,
+      pending: pendingId === rejectPrompt.targetId,
+      reason: rejectPrompt.reason,
+      onOpenChange: rejectPrompt.handleOpenChange,
+      onReasonChange: rejectPrompt.handleReasonChange,
+      onSubmit: confirmReject,
+      request: rejectPrompt.openFor,
+    },
+  };
 }

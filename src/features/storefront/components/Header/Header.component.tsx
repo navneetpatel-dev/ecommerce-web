@@ -24,7 +24,6 @@ interface HeaderProps {
   mobileNavOpen: boolean;
   mobileSearchOpen: boolean;
   megaMenuOpen: boolean;
-  isTransparent: boolean;
   /** Shopper chrome: categories, search, cart, mobile tabs. Off on admin/vendor dashboards. */
   showStorefrontChrome?: boolean;
   /** Hamburger for admin/vendor sidebar drawer (lg and below). */
@@ -55,7 +54,6 @@ export function Header({
   mobileNavOpen,
   mobileSearchOpen,
   megaMenuOpen,
-  isTransparent,
   showStorefrontChrome = true,
   showWorkspaceMenu = false,
   onOpenMobileNav,
@@ -83,17 +81,11 @@ export function Header({
 
   return (
     <>
-      <header
-        className={cn(
-          styles.headerBase,
-          isTransparent ? styles.headerTransparent : styles.headerSolid,
-        )}
-      >
+      <header className={cn(styles.headerBase, styles.headerSolid)}>
         <div className={styles.container}>
           <HeaderMenuButton
             showStorefrontChrome={showStorefrontChrome}
             showWorkspaceMenu={showWorkspaceMenu}
-            isTransparent={isTransparent}
             navLoading={navLoading}
             onOpenMobileNav={onOpenMobileNav}
             onOpenWorkspaceNav={onOpenWorkspaceNav}
@@ -101,12 +93,7 @@ export function Header({
 
           <Link
             href={homeHref}
-            className={cn(
-              styles.brandName,
-              isTransparent
-                ? styles.brandNameTransparent
-                : styles.brandNameSolid,
-            )}
+            className={cn(styles.brandName, styles.brandNameSolid)}
           >
             {LABELS.brandName}
           </Link>
@@ -120,7 +107,6 @@ export function Header({
               categories={categories}
               primaryLinks={primaryLinks}
               megaMenuOpen={megaMenuOpen}
-              isTransparent={isTransparent}
               onToggleMegaMenu={onToggleMegaMenu}
               onCloseMegaMenu={onCloseMegaMenu}
               onScheduleMegaOpen={onScheduleMegaOpen}
@@ -129,11 +115,10 @@ export function Header({
           )}
 
           <nav aria-label="Header actions" className={styles.actionsNav}>
-            <ThemeToggleButton isTransparent={isTransparent} />
+            <ThemeToggleButton />
 
             {showStorefrontChrome ? (
               <StorefrontActionButtons
-                isTransparent={isTransparent}
                 cartItemCount={cartItemCount}
                 wishlistItemCount={wishlistItemCount}
                 walletBalance={walletBalance}
@@ -146,7 +131,6 @@ export function Header({
 
             <AccountSection
               currentUser={currentUser}
-              isTransparent={isTransparent}
               showStorefrontChrome={showStorefrontChrome}
             />
           </nav>

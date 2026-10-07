@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -13,15 +12,8 @@ import { cn } from "@/shared/utils/dom/cn";
 import { dateTimePickerStyles } from "../../styles/date-time-picker/dateTimePicker.styles";
 import { CalendarGrid } from "./CalendarGrid.component";
 import { TimeSelectors } from "./TimeSelectors.component";
-import {
-  formatDisplay,
-  monthLabel,
-  parseValue,
-  roundMinute,
-  startOfDay,
-  toDateOnly,
-  toIso,
-} from "../../utils/date-time-picker/utils";
+import { useDateTimePicker } from "./useDateTimePicker.hook";
+import { formatDisplay, monthLabel } from "../../utils/date-time-picker/utils";
 
 interface DateTimePickerProps {
   value?: string;
@@ -50,51 +42,25 @@ export function DateTimePicker({
 }: DateTimePickerProps) {
   const resolvedPlaceholder =
     placeholder ?? (mode === "date" ? LABELS.pickDate : LABELS.pickDateTime);
-  const selected = parseValue(value);
-  const [open, setOpen] = useState(false);
-  const initial = selected ?? new Date();
-  const [viewYear, setViewYear] = useState(initial.getFullYear());
-  const [viewMonth, setViewMonth] = useState(initial.getMonth());
-  const [draftDay, setDraftDay] = useState<Date>(startOfDay(initial));
-  const [hour, setHour] = useState(String(initial.getHours()).padStart(2, "0"));
-  const [minute, setMinute] = useState(
-    String(roundMinute(initial.getMinutes())).padStart(2, "0"),
-  );
-
-  const syncFromValue = () => {
-    const base = parseValue(value) ?? new Date();
-    setViewYear(base.getFullYear());
-    setViewMonth(base.getMonth());
-    setDraftDay(startOfDay(base));
-    setHour(String(base.getHours()).padStart(2, "0"));
-    setMinute(String(roundMinute(base.getMinutes())).padStart(2, "0"));
-  };
-
-  const apply = (day: Date, h: string, m: string, close = false) => {
-    if (mode === "date") {
-      onChange(toDateOnly(day));
-      if (close) setOpen(false);
-      return;
-    }
-    const next = new Date(day);
-    next.setHours(Number(h), Number(m), 0, 0);
-    onChange(toIso(next));
-  };
-
-  const shiftMonth = (delta: number) => {
-    const next = new Date(viewYear, viewMonth + delta, 1);
-    setViewYear(next.getFullYear());
-    setViewMonth(next.getMonth());
-  };
+  const {
+    open,
+    selected,
+    viewYear,
+    viewMonth,
+    draftDay,
+    hour,
+    minute,
+    handleOpenChange,
+    handleSelectDay,
+    handleHourChange,
+    handleMinuteChange,
+    handlePreviousMonth,
+    handleNextMonth,
+    handleDone,
+  } = useDateTimePicker(value, mode, onChange);
 
   return (
-    <Popover
-      open={open}
-      onOpenChange={(next) => {
-        if (next) syncFromValue();
-        setOpen(next);
-      }}
-    >
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <button
           type="button"
@@ -135,7 +101,7 @@ export function DateTimePicker({
             type="button"
             aria-label={LABELS.previousMonth}
             className={dateTimePickerStyles.navButton}
-            onClick={() => shiftMonth(-1)}
+            onClick={handlePreviousMonth}
           >
             <ChevronLeft size={16} aria-hidden />
           </button>
@@ -146,7 +112,7 @@ export function DateTimePicker({
             type="button"
             aria-label={LABELS.nextMonth}
             className={dateTimePickerStyles.navButton}
-            onClick={() => shiftMonth(1)}
+            onClick={handleNextMonth}
           >
             <ChevronRight size={16} aria-hidden />
           </button>
@@ -156,34 +122,20 @@ export function DateTimePicker({
           viewYear={viewYear}
           viewMonth={viewMonth}
           draftDay={draftDay}
-          onSelectDay={(day) => {
-            setDraftDay(day);
-            apply(day, hour, minute, mode === "date");
-          }}
+          onSelectDay={handleSelectDay}
         />
 
         {mode === "datetime" ? (
           <TimeSelectors
             hour={hour}
             minute={minute}
-            onHourChange={(h) => {
-              setHour(h);
-              apply(draftDay, h, minute);
-            }}
-            onMinuteChange={(m) => {
-              setMinute(m);
-              apply(draftDay, hour, m);
-            }}
+            onHourChange={handleHourChange}
+            onMinuteChange={handleMinuteChange}
           />
         ) : null}
 
         <div className={dateTimePickerStyles.footer}>
-          <Button
-            type="button"
-            size="sm"
-            variant="ghost"
-            onClick={() => setOpen(false)}
-          >
+          <Button type="button" size="sm" variant="ghost" onClick={handleDone}>
             {LABELS.done}
           </Button>
         </div>

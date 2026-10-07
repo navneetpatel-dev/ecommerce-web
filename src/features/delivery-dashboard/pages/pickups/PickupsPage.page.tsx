@@ -25,7 +25,11 @@ export function PickupsPage() {
         </div>
       </header>
 
-      {scanError ? <p className={styles.errorNotice}>{scanError}</p> : null}
+      {scanError ? (
+        <p role="alert" className={styles.errorNotice}>
+          {scanError}
+        </p>
+      ) : null}
 
       {query.isError ? (
         <QueryErrorAlert

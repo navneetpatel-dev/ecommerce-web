@@ -21,13 +21,11 @@ import { headerStyles as styles } from "../../styles/header/header.styles";
 
 interface AccountSectionProps {
   currentUser: CurrentUser | null;
-  isTransparent: boolean;
   showStorefrontChrome: boolean;
 }
 
 export function AccountSection({
   currentUser,
-  isTransparent,
   showStorefrontChrome,
 }: AccountSectionProps) {
   const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
@@ -46,10 +44,7 @@ export function AccountSection({
     return (
       <Link
         href={PATHS.login}
-        className={cn(
-          styles.loginLink,
-          isTransparent ? styles.loginLinkTransparent : styles.loginLinkSolid,
-        )}
+        className={cn(styles.loginLink, styles.loginLinkSolid)}
       >
         {LABELS.logIn}
       </Link>
@@ -62,12 +57,7 @@ export function AccountSection({
         <div className={styles.ordersLinkWrapper}>
           <Link
             href={PATHS.orders}
-            className={cn(
-              styles.ordersLink,
-              isTransparent
-                ? styles.ordersLinkTransparent
-                : styles.ordersLinkSolid,
-            )}
+            className={cn(styles.ordersLink, styles.ordersLinkSolid)}
           >
             {LABELS.orders}
           </Link>
@@ -77,12 +67,7 @@ export function AccountSection({
       {isVendorRole(currentUser.role) ? (
         <Link
           href={PATHS.vendor.overview}
-          className={cn(
-            styles.dashboardLink,
-            isTransparent
-              ? styles.dashboardLinkTransparent
-              : styles.dashboardLinkSolid,
-          )}
+          className={cn(styles.dashboardLink, styles.dashboardLinkSolid)}
         >
           {LABELS.vendorDashboard}
         </Link>
@@ -91,18 +76,13 @@ export function AccountSection({
       {isAdminRole(currentUser.role) ? (
         <Link
           href={PATHS.admin.vendors}
-          className={cn(
-            styles.dashboardLink,
-            isTransparent
-              ? styles.dashboardLinkTransparent
-              : styles.dashboardLinkSolid,
-          )}
+          className={cn(styles.dashboardLink, styles.dashboardLinkSolid)}
         >
           {LABELS.adminPanel}
         </Link>
       ) : null}
 
-      <AccountMenu currentUser={currentUser} isTransparent={isTransparent} />
+      <AccountMenu currentUser={currentUser} />
     </>
   );
 }

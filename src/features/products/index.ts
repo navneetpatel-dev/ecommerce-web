@@ -52,3 +52,4 @@ export {
   writeRepeatedSearchParam,
   FILTER_RESERVED_PARAMS,
 } from "./utils/filters/productFilters/index";
+export { FILTER_INPUT_DEBOUNCE_MS } from "./constants/filters/filterTiming";

@@ -39,10 +39,11 @@ export function useBulkCouponGeneration(onDone: () => void) {
     defaultValues: { ...BULK_FORM_DEFAULTS },
   });
 
-  // Bulk generation edits two forms; either one being dirty is unsaved work.
-  useUnsavedChanges(
-    templateForm.formState.isDirty || bulkMetaForm.formState.isDirty,
-  );
+  const isDirty =
+    templateForm.formState.isDirty || bulkMetaForm.formState.isDirty;
+  // Either form being dirty is unsaved work (browser unload guard; the dialog's
+  // own dismissal guard reads `isDirty` and lives in BulkGenerateDialog).
+  useUnsavedChanges(isDirty);
 
   const resetForms = () => {
     bulkMetaForm.reset({ ...BULK_FORM_DEFAULTS });
@@ -94,6 +95,7 @@ export function useBulkCouponGeneration(onDone: () => void) {
     templateForm,
     bulkMetaForm,
     canBulk,
+    isDirty,
     isPending: bulkMutation.isPending,
     errorMessage: bulkMutation.isError
       ? getApiErrorMessage(bulkMutation.error, LABELS.genericActionFailed)

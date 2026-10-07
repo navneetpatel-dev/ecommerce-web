@@ -48,5 +48,9 @@ export const returnsTimelinesLabels = {
     'Return "{product}". We\'ll review and update you by email.',
   returnReasonLabel: "Reason",
   returnDetailsLabel: "Details",
+  returnResolutionLabel: "Resolution",
+  returnTypeRefund: "Refund",
+  returnTypeExchange: "Exchange",
+  subOrderProgress: "Progress",
   returnDetailsPlaceholder: "Briefly describe the issue",
 } as const;

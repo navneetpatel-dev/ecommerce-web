@@ -1,8 +1,10 @@
 "use client";
 
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
+import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { PromoBannerStatus } from "@/shared/constants/statuses";
 import { usePromoBanners } from "./usePromoBanners.hook";
 import { PromoBannerCreateSection } from "./PromoBannerCreateSection.component";
@@ -44,7 +46,7 @@ export function AdminPromoBannersPage() {
           message={promo.message}
           canSubmit={promo.canSubmit}
           disableHint={promo.disableHint}
-          onCreate={() => void promo.onCreate()}
+          onCreate={promo.onCreate}
         />
 
         {promo.loading ? (
@@ -53,7 +55,9 @@ export function AdminPromoBannersPage() {
           </p>
         ) : null}
         {promo.error ? (
-          <p className={adminPromoBannersPageStyles.errorText}>{promo.error}</p>
+          <p role="alert" className={adminPromoBannersPageStyles.errorText}>
+            {promo.error}
+          </p>
         ) : null}
         {!promo.loading && !promo.error && promo.banners.length === 0 ? (
           <p className={adminPromoBannersPageStyles.emptyText}>
@@ -75,12 +79,30 @@ export function AdminPromoBannersPage() {
             editPriority={promo.editPriority}
             onEditPriorityChange={promo.setEditPriority}
             onCancelEdit={promo.cancelEdit}
-            onSaveEdit={() => void promo.onSaveEdit()}
+            onSaveEdit={promo.onSaveEdit}
             onStartEdit={promo.startEdit}
-            onActivate={(banner) => void promo.onActivate(banner)}
-            onDelete={(banner) => void promo.onDelete(banner)}
+            onActivate={promo.onActivate}
+            onDelete={promo.requestDelete}
           />
         ) : null}
+        <StatusDialog
+          open={promo.deleteTarget !== null}
+          onOpenChange={promo.handleDeleteOpenChange}
+          variant="danger"
+          title={LABELS.confirmDeletePromoBannerTitle}
+          description={formatLabel(LABELS.confirmDeletePromoBannerBody, {
+            name: promo.deleteTarget?.title ?? "",
+          })}
+          secondaryAction={{
+            label: LABELS.cancel,
+            onClick: promo.cancelDelete,
+          }}
+          primaryAction={{
+            label: LABELS.delete,
+            variant: "destructive",
+            onClick: promo.confirmDelete,
+          }}
+        />
       </div>
     </RequirePermission>
   );

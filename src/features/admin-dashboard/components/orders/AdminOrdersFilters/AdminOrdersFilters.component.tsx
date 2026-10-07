@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
+import { LABELS } from "@/shared/constants/labels";
 import { adminOrdersFiltersStyles } from "../../../styles/orders/adminOrdersFilters.styles";
 import {
   OrderStatusOptionsList,
@@ -35,20 +36,23 @@ export function AdminOrdersFilters({
     useAdminOrdersFiltersHandlers({ onSearchChange, onStatusChange });
 
   return (
-    <FormSection title="Order Filters" columns={3}>
+    <FormSection title={LABELS.orderFiltersTitle} columns={3}>
       <FormFieldFrame
-        label="Search Orders"
+        label={LABELS.searchOrdersLabel}
         htmlFor="admin-orders-filter-search"
       >
         <Input
           id="admin-orders-filter-search"
           value={search}
           onChange={handleSearchChange}
-          placeholder="Search by Order ID, customer name or email..."
+          placeholder={LABELS.searchOrdersPlaceholder}
         />
       </FormFieldFrame>
 
-      <FormFieldFrame label="Order Status" htmlFor="admin-orders-filter-status">
+      <FormFieldFrame
+        label={LABELS.orderStatus}
+        htmlFor="admin-orders-filter-status"
+      >
         <Select
           value={status || ALL_STATUSES_VALUE}
           onValueChange={handleStatusChange}
@@ -64,7 +68,7 @@ export function AdminOrdersFilters({
 
       <div className={adminOrdersFiltersStyles.clearButtonWrapper}>
         <Button type="button" variant="outline" onClick={onClear}>
-          Clear Filters
+          {LABELS.clearFilters}
         </Button>
       </div>
     </FormSection>

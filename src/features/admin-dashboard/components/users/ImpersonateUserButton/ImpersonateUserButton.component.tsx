@@ -30,7 +30,9 @@ export function ImpersonateUserButton({ userId }: ImpersonateUserButtonProps) {
         {LABELS.impersonateUserHint}
       </p>
       {error ? (
-        <p className={impersonateUserButtonStyles.error}>{error}</p>
+        <p role="alert" className={impersonateUserButtonStyles.error}>
+          {error}
+        </p>
       ) : null}
     </div>
   );

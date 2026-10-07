@@ -5,6 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { PaginationItem } from "@/shared/utils/pagination/pagination";
 import { paginationStyles } from "../../styles/navigation/navigationComponents.styles";
+import { PageNumberButton } from "./PageNumberButton.component";
 
 interface PaginationProps {
   currentPage: number;
@@ -23,6 +24,14 @@ export function Pagination({
 }: PaginationProps) {
   if (totalPages < 1) return null;
 
+  const handlePrevious = () => {
+    onPageChange(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    onPageChange(currentPage + 1);
+  };
+
   if (isMobile) {
     return (
       <div className={paginationStyles.mobileContainer}>
@@ -33,7 +42,7 @@ export function Pagination({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onPageChange(currentPage - 1)}
+            onClick={handlePrevious}
             disabled={currentPage <= 1}
             aria-label={LABELS.previousPage}
           >
@@ -53,7 +62,7 @@ export function Pagination({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onPageChange(currentPage + 1)}
+            onClick={handleNext}
             disabled={currentPage >= totalPages}
             aria-label={LABELS.nextPage}
           >
@@ -73,7 +82,7 @@ export function Pagination({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onPageChange(currentPage - 1)}
+          onClick={handlePrevious}
           disabled={currentPage <= 1}
           aria-label={LABELS.previousPage}
         >
@@ -90,16 +99,12 @@ export function Pagination({
             …
           </span>
         ) : (
-          <Button
+          <PageNumberButton
             key={item}
-            variant={currentPage === item ? "default" : "ghost"}
-            size="sm"
-            onClick={() => onPageChange(item)}
-            aria-current={currentPage === item ? "page" : undefined}
-            className={currentPage === item ? paginationStyles.activePage : ""}
-          >
-            {item}
-          </Button>
+            page={item}
+            isActive={currentPage === item}
+            onPageChange={onPageChange}
+          />
         ),
       )}
       <DisabledActionHint
@@ -109,7 +114,7 @@ export function Pagination({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => onPageChange(currentPage + 1)}
+          onClick={handleNext}
           disabled={currentPage >= totalPages}
           aria-label={LABELS.nextPage}
         >

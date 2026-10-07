@@ -117,7 +117,7 @@ export function AddressStep({
           fullWidth="mobile"
           className={ADDRESS_STEP_STYLES.continueButton}
         >
-          Continue to shipping
+          {LABELS.continueToShipping}
           <ArrowRight size={16} />
         </Button>
       </DisabledActionHint>

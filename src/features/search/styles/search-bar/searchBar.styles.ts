@@ -40,4 +40,10 @@ export const searchBarStyles = {
   sectionHeader:
     "px-4 pb-1 pt-2 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-faint",
   sectionList: "px-1.5",
+  recentHeader: "flex items-center justify-between gap-3 px-3.5 pt-2.5 pb-1",
+  recentClear: "text-body-sm font-medium text-brand hover:underline",
+  recentItem:
+    "flex w-full items-center gap-2 rounded-sm px-2 py-2 text-left text-body-sm text-ink hover:bg-brand-subtle",
+  recentIcon: "shrink-0 text-ink-faint",
+  recentLabel: "min-w-0 truncate",
 } as const;

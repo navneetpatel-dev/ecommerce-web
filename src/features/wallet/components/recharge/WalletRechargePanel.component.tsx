@@ -30,6 +30,10 @@ export function WalletRechargePanel({
 }: WalletRechargePanelProps) {
   const panel = useWalletRechargePanel(balance);
 
+  const handlePresetSelect = (amount: number) => {
+    void panel.startRecharge(amount);
+  };
+
   if (isLoading) {
     return <WalletRechargePanelSkeleton className={className} />;
   }
@@ -59,7 +63,7 @@ export function WalletRechargePanel({
         <WalletRechargePresetButtons
           presets={panel.presets}
           disabled={panel.isBusy}
-          onSelect={(amount) => void panel.startRecharge(amount)}
+          onSelect={handlePresetSelect}
         />
       ) : null}
 
@@ -103,9 +107,15 @@ export function WalletRechargePanel({
         </p>
       ) : null}
 
-      {panel.error ? <p className={styles.errorText}>{panel.error}</p> : null}
+      {panel.error ? (
+        <p role="alert" className={styles.errorText}>
+          {panel.error}
+        </p>
+      ) : null}
       {panel.successMessage ? (
-        <p className={styles.successText}>{panel.successMessage}</p>
+        <p role="status" className={styles.successText}>
+          {panel.successMessage}
+        </p>
       ) : null}
 
       <p className={styles.termsNotice}>{LABELS.walletTermsNotice}</p>

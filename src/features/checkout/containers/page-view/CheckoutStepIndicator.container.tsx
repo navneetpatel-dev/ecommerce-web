@@ -3,7 +3,12 @@
 import { useMediaQuery } from "@/shared/hooks/responsive/use-media-query.hook";
 import { StepIndicator } from "@/shared/components/display/StepIndicator.component";
 
-const CHECKOUT_STEPS = ["Address", "Shipping", "Payment", "Review"] as const;
+export const CHECKOUT_STEPS = [
+  "Address",
+  "Shipping",
+  "Payment",
+  "Review",
+] as const;
 
 interface CheckoutStepIndicatorProps {
   currentStep: number;

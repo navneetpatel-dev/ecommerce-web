@@ -58,7 +58,9 @@ export function OtpCard({
         }
       >
         <div className={authFormsStyles.formSpace5}>
-          <p className={authFormsStyles.dangerBodySm}>{error}</p>
+          {error ? (
+            <p className={authFormsStyles.dangerBodySm}>{error}</p>
+          ) : null}
           <ResendVerificationByEmail email={email} />
         </div>
       </AuthFormCard>

@@ -24,7 +24,7 @@ export function OrderHistoryPage() {
 
   if (history.isError) {
     return (
-      <div className={ordersPagesStyles.historyErrorContainer}>
+      <div role="alert" className={ordersPagesStyles.historyErrorContainer}>
         <div className={ordersPagesStyles.historyErrorBox}>
           <p className={ordersPagesStyles.historyErrorText}>
             {LABELS.errorRetryHint}

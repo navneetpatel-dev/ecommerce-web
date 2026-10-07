@@ -2,8 +2,14 @@
 export const commerceLabels = {
   continueShopping: "Continue shopping",
   outOfStock: "Out of stock",
+  lowStockLeft: "Only {count} left",
   addToWishlist: "Add to wishlist",
   removeFromWishlist: "Remove from wishlist",
+  wishlistEmptyMessage: "Your wishlist is empty",
+  ratingOutOfFive: "Rated {value} out of 5",
+  rateStar: "Rate {count} out of 5 stars",
+  productImagesPartialFailure:
+    "Product saved, but {count} image(s) could not be attached — add them from the product's images.",
   addToCart: "Add to cart",
   selectOptions: "Select options",
   selectAllOptionsHint: "Select all options to add this item to your cart.",
@@ -15,6 +21,12 @@ export const commerceLabels = {
   onlyLeft: "Only {count} left",
   freeDeliveryAbove: "Free delivery on orders above ₹{amount}",
   deliveryAtCheckout: "Delivery options shown at checkout",
+  checkoutEyebrowLabel: "Checkout",
+  checkoutCompleteOrderHeading: "Complete your order",
+  checkoutEmptyHeading: "Nothing to check out",
+  checkoutEmptyBody:
+    "Your bag is empty — add a few pieces, then return here to complete your order.",
+  checkoutStepAnnouncement: "Step {current} of {total}: {name}",
   easyReturnsDays: "{days}-day easy returns",
   returnsEligible: "Returns available on eligible items",
   notReturnable: "This item is not returnable",
@@ -63,7 +75,6 @@ export const commerceLabels = {
   moreFromSeller: "More from this seller",
   pdfPreview: "PDF",
   videoPreview: "Video",
-  description: "Description",
   specifications: "Specifications",
   reviewsWithCount: "Reviews ({count})",
   stockAvailable: "{count} available",
@@ -90,7 +101,6 @@ export const commerceLabels = {
   listPrice: "MRP",
   variantPrice: "Price",
   soldBy: "Sold by",
-  sellerFallback: "Seller",
   shipment: "Shipment",
   visitStore: "Visit store",
   productTags: "Tags",
@@ -119,7 +129,6 @@ export const commerceLabels = {
   partRefundPending: "processing",
   partRefundInitiated: "on its way to your bank",
   partRefundCompleted: "refunded",
-  partRefundFailed: "delayed — we're retrying",
   orderOpenReturnsBadge: "{count} open return(s) on this order",
 
   // Content

@@ -38,7 +38,9 @@ export function AdminEditShippingZoneAction({
   } = useAdminEditShippingZoneAction({ row, onSaved });
 
   const errorMessage = actionError ? (
-    <p className={styles.errorMessage}>{actionError}</p>
+    <p role="alert" className={styles.errorMessage}>
+      {actionError}
+    </p>
   ) : null;
 
   return (

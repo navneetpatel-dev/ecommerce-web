@@ -32,7 +32,11 @@ export function DeliveriesPage() {
         </div>
       </header>
 
-      {scanError ? <p className={styles.errorNotice}>{scanError}</p> : null}
+      {scanError ? (
+        <p role="alert" className={styles.errorNotice}>
+          {scanError}
+        </p>
+      ) : null}
       {scanMessage ? (
         <p className={styles.successNotice}>{scanMessage}</p>
       ) : null}

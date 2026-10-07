@@ -9,6 +9,8 @@ import {
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { RedeliverySlotPicker } from "@/shared/components/orders/RedeliverySlotPicker.component";
 import type { TrackingLookupResult } from "../../api/tracking/shipping.api";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { LiveDeliveryMap } from "../delivery-map/LiveDeliveryMap.component";
 import { timeSince } from "@/shared/utils/geo/geo";
 import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
@@ -42,23 +44,29 @@ export function TrackingResult({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Tracking Result</CardTitle>
+        <CardTitle>{LABELS.trackingResultTitle}</CardTitle>
       </CardHeader>
       <CardContent className={ordersComponentsStyles.resultContent}>
         <div className={ordersComponentsStyles.carrierRow}>
           <StatusBadge status={result.status} />
           {result.carrier ? (
             <span className={ordersComponentsStyles.carrierText}>
-              via {result.carrier}
+              {formatLabel(LABELS.trackingViaCarrier, {
+                carrier: result.carrier,
+              })}
             </span>
           ) : null}
         </div>
         <p className={ordersComponentsStyles.updateText}>
-          Last update: {formatDateTime(result.lastUpdate)}
+          {formatLabel(LABELS.trackingLastUpdate, {
+            value: formatDateTime(result.lastUpdate),
+          })}
         </p>
         {result.estimatedDeliveryDate ? (
           <p className={ordersComponentsStyles.detailText}>
-            Estimated delivery: {formatDate(result.estimatedDeliveryDate)}
+            {formatLabel(LABELS.trackingEstimatedDelivery, {
+              value: formatDate(result.estimatedDeliveryDate),
+            })}
           </p>
         ) : null}
 
@@ -68,7 +76,9 @@ export function TrackingResult({
 
         {result.failureReason ? (
           <p className={ordersComponentsStyles.failureNote}>
-            Last attempt note: {result.failureReason}
+            {formatLabel(LABELS.trackingLastAttempt, {
+              note: result.failureReason,
+            })}
           </p>
         ) : null}
 
@@ -82,7 +92,9 @@ export function TrackingResult({
               </p>
               {lastPingAt ? (
                 <span className={ordersComponentsStyles.liveLocationTime}>
-                  Updated {timeSince(lastPingAt)}
+                  {formatLabel(LABELS.trackingPingUpdated, {
+                    value: timeSince(lastPingAt),
+                  })}
                 </span>
               ) : null}
             </div>
@@ -95,7 +107,7 @@ export function TrackingResult({
             currentSlot={result.preferredRedeliverySlot}
             onSubmit={onReschedule}
             isPending={isRescheduling}
-            prompt="Delivery didn't go through — pick a redelivery window:"
+            prompt={LABELS.trackingRedeliveryPrompt}
           />
         ) : null}
       </CardContent>

@@ -52,7 +52,9 @@ export function VendorQnaView({
           ))}
         </div>
       ) : loadError ? (
-        <p className={vendorFeedbackViewsStyles.errorBox}>{loadError}</p>
+        <p role="alert" className={vendorFeedbackViewsStyles.errorBox}>
+          {loadError}
+        </p>
       ) : null}
 
       {!isLoading && !loadError

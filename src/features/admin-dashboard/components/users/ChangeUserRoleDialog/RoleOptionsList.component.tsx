@@ -1,3 +1,5 @@
+import { LABELS } from "@/shared/constants/labels";
+
 interface Role {
   id: string;
   name: string;
@@ -18,7 +20,8 @@ export function RoleOptionsList({
     <>
       {roles.map((role) => (
         <option key={role.id} value={role.id}>
-          {role.name} {role.name === currentRoleName ? "(Current)" : ""}
+          {role.name}{" "}
+          {role.name === currentRoleName ? LABELS.currentRoleMarker : ""}
         </option>
       ))}
     </>

@@ -13,7 +13,12 @@ export interface AddressFormBodyProps {
   isPending: boolean;
   submitLabel: string;
   onSubmit: (body: AddressInput) => Promise<void>;
+  /** Direct close (post-save). */
   onClose: () => void;
+  /** User-initiated cancel — the host wraps this in its discard guard. */
+  onRequestClose?: () => void;
+  /** Reports edit state so the host dialog can confirm before discarding. */
+  onDirtyChange?: (dirty: boolean) => void;
 }
 
 export function AddressFormBody({
@@ -23,6 +28,8 @@ export function AddressFormBody({
   submitLabel,
   onSubmit,
   onClose,
+  onRequestClose,
+  onDirtyChange,
 }: AddressFormBodyProps) {
   const {
     form,
@@ -33,13 +40,18 @@ export function AddressFormBody({
     canSubmit,
     disableHint,
     setField,
+    handleFieldInputChange,
+    handleDeliveryInstructionsChange,
     handleSubmit,
   } = useAddressFormBody({
     address,
     hasAddresses,
     onSubmit,
     onClose,
+    onDirtyChange,
   });
+
+  const handleCancelClick = onRequestClose ?? onClose;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -53,10 +65,12 @@ export function AddressFormBody({
           getError={getError}
           locationStatus={location.status}
           onRetryLocation={location.retry}
+          onFieldInputChange={handleFieldInputChange}
+          onDeliveryInstructionsChange={handleDeliveryInstructionsChange}
         />
         <FormError error={formError} fallback={LABELS.couldNotSaveAddress} />
         <FormActions>
-          <Button type="button" variant="outline" onClick={onClose}>
+          <Button type="button" variant="outline" onClick={handleCancelClick}>
             {LABELS.cancel}
           </Button>
           <DisabledActionHint disabled={!canSubmit} message={disableHint}>

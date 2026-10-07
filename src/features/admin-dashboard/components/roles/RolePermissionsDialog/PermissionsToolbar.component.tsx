@@ -1,6 +1,8 @@
+import type { ChangeEvent } from "react";
 import { CheckSquare, Search, Square, X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
+import { LABELS } from "@/shared/constants/labels";
 import { rolePermissionsDialogStyles } from "../../../styles/roles/rolePermissionsDialog.styles";
 
 interface PermissionsToolbarProps {
@@ -19,22 +21,30 @@ export function PermissionsToolbar({
   onClearVisible,
   clearDisabled,
 }: PermissionsToolbarProps) {
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onSearchChange(event.target.value);
+  };
+
+  const handleClearSearch = () => {
+    onSearchChange("");
+  };
+
   return (
     <div className={rolePermissionsDialogStyles.toolbarRoot}>
       <div className={rolePermissionsDialogStyles.searchWrap}>
         <Search className={rolePermissionsDialogStyles.searchIcon} />
         <Input
           value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search permissions..."
+          onChange={handleSearchChange}
+          placeholder={LABELS.searchPermissionsPlaceholder}
           className={rolePermissionsDialogStyles.searchInput}
         />
         {search ? (
           <button
             type="button"
-            onClick={() => onSearchChange("")}
+            onClick={handleClearSearch}
             className={rolePermissionsDialogStyles.clearIconBtn}
-            aria-label="Clear search"
+            aria-label={LABELS.clearPermissionSearch}
           >
             <X className={rolePermissionsDialogStyles.iconXs} />
           </button>
@@ -50,7 +60,7 @@ export function PermissionsToolbar({
           className={rolePermissionsDialogStyles.actionBtn}
         >
           <CheckSquare className={rolePermissionsDialogStyles.iconXsBrand} />
-          Select all
+          {LABELS.selectAllVisible}
         </Button>
         <Button
           type="button"
@@ -61,7 +71,7 @@ export function PermissionsToolbar({
           className={rolePermissionsDialogStyles.actionBtnMuted}
         >
           <Square className={rolePermissionsDialogStyles.iconXsMuted} />
-          Clear all
+          {LABELS.clearAllVisible}
         </Button>
       </div>
     </div>

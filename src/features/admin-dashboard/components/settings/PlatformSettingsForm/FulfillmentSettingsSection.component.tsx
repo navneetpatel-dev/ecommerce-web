@@ -40,6 +40,27 @@ export function FulfillmentSettingsSection({
   onDeliveryAgentTdsSingleThresholdChange,
   onDeliveryAgentTdsAnnualThresholdChange,
 }: FulfillmentSettingsSectionProps) {
+  const handleReturnWindowChange = (value: number | undefined) =>
+    onReturnWindowChange(value ?? 0);
+  const handleFreeShippingThresholdChange = (value: number | undefined) =>
+    onFreeShippingThresholdChange(value ?? 0);
+  const handleReturnShippingFeeChange = (value: number | undefined) =>
+    onReturnShippingFeeChange(value ?? 0);
+  const handleDeliveryAgentPerTaskEarningChange = (value: number | undefined) =>
+    onDeliveryAgentPerTaskEarningChange(value ?? 0);
+  const handleDeliveryAgentTdsRateChange = (value: number | undefined) =>
+    onDeliveryAgentTdsRateChange(value ?? 0);
+  const handleDeliveryAgentTdsNoPanRateChange = (value: number | undefined) =>
+    onDeliveryAgentTdsNoPanRateChange(value ?? 0);
+  const handleDeliveryAgentTdsSingleThresholdChange = (
+    value: number | undefined,
+  ) => onDeliveryAgentTdsSingleThresholdChange(value ?? 0);
+  const handleDeliveryAgentTdsAnnualThresholdChange = (
+    value: number | undefined,
+  ) => onDeliveryAgentTdsAnnualThresholdChange(value ?? 0);
+  const handleRefundSlaBusinessDaysChange = (value: number | undefined) =>
+    onRefundSlaBusinessDaysChange(value ?? 7);
+
   return (
     <FormSection
       title={LABELS.settingsFulfillment}
@@ -53,7 +74,7 @@ export function FulfillmentSettingsSection({
           max={365}
           step={1}
           suffix={LABELS.daysShort}
-          onChange={(value) => onReturnWindowChange(value ?? 0)}
+          onChange={handleReturnWindowChange}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.freeShippingThreshold}>
@@ -62,7 +83,7 @@ export function FulfillmentSettingsSection({
           min={0}
           step={50}
           prefix={CURRENCY_SYMBOL}
-          onChange={(value) => onFreeShippingThresholdChange(value ?? 0)}
+          onChange={handleFreeShippingThresholdChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -74,7 +95,7 @@ export function FulfillmentSettingsSection({
           min={0}
           step={10}
           prefix={CURRENCY_SYMBOL}
-          onChange={(value) => onReturnShippingFeeChange(value ?? 0)}
+          onChange={handleReturnShippingFeeChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -86,7 +107,7 @@ export function FulfillmentSettingsSection({
           min={0}
           step={5}
           prefix={CURRENCY_SYMBOL}
-          onChange={(value) => onDeliveryAgentPerTaskEarningChange(value ?? 0)}
+          onChange={handleDeliveryAgentPerTaskEarningChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -99,7 +120,7 @@ export function FulfillmentSettingsSection({
           max={100}
           step={0.5}
           suffix="%"
-          onChange={(value) => onDeliveryAgentTdsRateChange(value ?? 0)}
+          onChange={handleDeliveryAgentTdsRateChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -112,7 +133,7 @@ export function FulfillmentSettingsSection({
           max={100}
           step={1}
           suffix="%"
-          onChange={(value) => onDeliveryAgentTdsNoPanRateChange(value ?? 0)}
+          onChange={handleDeliveryAgentTdsNoPanRateChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -124,9 +145,7 @@ export function FulfillmentSettingsSection({
           min={0}
           step={1000}
           prefix={CURRENCY_SYMBOL}
-          onChange={(value) =>
-            onDeliveryAgentTdsSingleThresholdChange(value ?? 0)
-          }
+          onChange={handleDeliveryAgentTdsSingleThresholdChange}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.deliveryAgentTdsAnnualThreshold}>
@@ -135,9 +154,7 @@ export function FulfillmentSettingsSection({
           min={0}
           step={5000}
           prefix={CURRENCY_SYMBOL}
-          onChange={(value) =>
-            onDeliveryAgentTdsAnnualThresholdChange(value ?? 0)
-          }
+          onChange={handleDeliveryAgentTdsAnnualThresholdChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -150,7 +167,7 @@ export function FulfillmentSettingsSection({
           max={30}
           step={1}
           suffix={LABELS.daysShort}
-          onChange={(value) => onRefundSlaBusinessDaysChange(value ?? 7)}
+          onChange={handleRefundSlaBusinessDaysChange}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.payoutCycle}>

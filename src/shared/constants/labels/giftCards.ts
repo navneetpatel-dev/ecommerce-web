@@ -10,6 +10,8 @@ export const giftCardsLabels = {
   giftCardRecipientName: "Recipient name (optional)",
   giftCardMessage: "Add a message (optional)",
   giftCardBuyButton: "Pay and send gift card",
+  giftCardFormInvalidHint:
+    "Enter a valid amount and recipient email to continue.",
   giftCardBuyButtonBusy: "Processing…",
   giftCardPurchaseSuccessTitle: "Gift card sent!",
   giftCardPurchaseSuccessBody:

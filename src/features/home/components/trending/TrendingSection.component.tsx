@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { ProductGrid } from "@/features/products";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { LABELS } from "@/shared/constants/labels";
 import type { ProductListItem } from "@/shared/api/types";
 import { trendingSectionStyles as styles } from "../../styles/trending/trendingSection.styles";
 
@@ -17,12 +18,12 @@ export function TrendingSection({ products, isLoading }: TrendingSectionProps) {
       <div className={styles.header}>
         <div>
           <TextEyebrow className={styles.eyebrow}>
-            Featured this week
+            {LABELS.featuredThisWeek}
           </TextEyebrow>
-          <h2 className={styles.title}>Trending now</h2>
+          <h2 className={styles.title}>{LABELS.trendingNow}</h2>
         </div>
         <Link href={PATHS.productsTrending} className={styles.viewAllLink}>
-          View all <ArrowRight className={styles.arrowIcon} />
+          {LABELS.viewAll} <ArrowRight className={styles.arrowIcon} />
         </Link>
       </div>
       <ProductGrid products={products} loading={isLoading} skeletonCount={8} />

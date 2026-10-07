@@ -1,26 +1,29 @@
 import { useCallback } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { LABELS } from "@/shared/constants/labels";
 import { cashDepositsPanelStyles } from "../../../styles/delivery-agents/cashDepositsPanel.styles";
 
 interface CashDepositActionButtonsProps {
   depositId: string;
   isPending: boolean;
-  onAct: (depositId: string, action: "VERIFY" | "REJECT") => Promise<void>;
+  onVerify: (depositId: string) => void;
+  onReject: (depositId: string) => void;
 }
 
 export function CashDepositActionButtons({
   depositId,
   isPending,
-  onAct,
+  onVerify,
+  onReject,
 }: CashDepositActionButtonsProps) {
   const handleVerify = useCallback(() => {
-    void onAct(depositId, "VERIFY");
-  }, [depositId, onAct]);
+    onVerify(depositId);
+  }, [depositId, onVerify]);
 
   const handleReject = useCallback(() => {
-    void onAct(depositId, "REJECT");
-  }, [depositId, onAct]);
+    onReject(depositId);
+  }, [depositId, onReject]);
 
   return (
     <div className={cashDepositsPanelStyles.actionsWrapper}>
@@ -35,7 +38,7 @@ export function CashDepositActionButtons({
           className={cashDepositsPanelStyles.actionIcon}
           aria-hidden="true"
         />
-        Verify
+        {LABELS.verifyDocument}
       </Button>
       <Button
         size="sm"
@@ -48,7 +51,7 @@ export function CashDepositActionButtons({
           className={cashDepositsPanelStyles.actionIcon}
           aria-hidden="true"
         />
-        Reject
+        {LABELS.reject}
       </Button>
     </div>
   );

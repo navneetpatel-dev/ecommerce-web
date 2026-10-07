@@ -20,7 +20,6 @@ export const adminNavigationLabels = {
   noReviewsFound: "No reviews found.",
   couldNotLoadReviews: "Could not load reviews.",
   tax: "Tax",
-  shipping: "Shipping",
   financePayouts: "Finance / Payouts",
   users: "Users",
   analytics: "Analytics",

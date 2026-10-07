@@ -108,7 +108,9 @@ export function AdminSettlementReportsPanel() {
       </div>
 
       {error ? (
-        <p className={adminSettlementReportsPanelStyles.errorText}>{error}</p>
+        <p role="alert" className={adminSettlementReportsPanelStyles.errorText}>
+          {error}
+        </p>
       ) : null}
 
       <ReportExportStatus
