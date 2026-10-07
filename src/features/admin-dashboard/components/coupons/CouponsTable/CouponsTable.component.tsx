@@ -134,6 +134,8 @@ export function CouponsTable({
   return (
     <>
       <DataTable
+        ariaLabel={LABELS.couponsTableAria}
+
         columns={columns}
         rows={coupons}
         loading={loading}

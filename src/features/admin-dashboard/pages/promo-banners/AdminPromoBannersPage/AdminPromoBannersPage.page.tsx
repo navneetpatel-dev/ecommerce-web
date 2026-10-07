@@ -1,7 +1,9 @@
 "use client";
 
+import { ImagePlus } from "lucide-react";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -60,9 +62,11 @@ export function AdminPromoBannersPage() {
           </p>
         ) : null}
         {!promo.loading && !promo.error && promo.banners.length === 0 ? (
-          <p className={adminPromoBannersPageStyles.emptyText}>
-            {LABELS.noPromoBanners}
-          </p>
+          <EmptyState
+            icon={ImagePlus}
+            heading={LABELS.noPromoBanners}
+            message={LABELS.promoBannersEmptyHint}
+          />
         ) : null}
 
         {!promo.loading && promo.banners.length > 0 ? (

@@ -60,6 +60,8 @@ export function OrdersList({ orders, pagination }: OrdersListProps) {
         </motion.header>
 
         <DataTable
+          ariaLabel={LABELS.ordersTableAria}
+
           className={ORDERS_LIST_STYLES.tableMargin}
           columns={ORDER_COLUMNS}
           rows={orders}

@@ -161,6 +161,8 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
       />
 
       <DataTable
+        ariaLabel={LABELS.vendorCouponsTableAria}
+
         columns={columns}
         rows={coupons}
         loading={loading}

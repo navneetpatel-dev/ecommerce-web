@@ -103,6 +103,8 @@ export function AgentDocumentsPanel() {
         </div>
       ) : null}
       <DataTable
+        ariaLabel={LABELS.agentDocsTableAria}
+
         columns={columns}
         rows={documents}
         getRowId={(row) => row.id}

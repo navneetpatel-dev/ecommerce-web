@@ -79,6 +79,8 @@ export function StaleShipmentsTable({
 
   return (
     <DataTable
+      ariaLabel={LABELS.staleShipmentsTableAria}
+
       columns={columns}
       rows={shipments}
       getRowId={(row) => row.id}

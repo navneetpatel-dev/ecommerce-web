@@ -1,6 +1,6 @@
 "use client";
 
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
   FormActions,
@@ -35,23 +35,37 @@ export function AdminShippingZoneForm({
 }: AdminShippingZoneFormProps) {
   const canCreate = Boolean(name.trim());
 
+  const handleSubmit = (event: FormEvent) => {
+    if (!canCreate) {
+      event.preventDefault();
+      return;
+    }
+    onSubmit(event);
+  };
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onNameChange(event.target.value);
+  };
+
+  const handleStatesChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onStatesChange(event.target.value);
+  };
+
+  const handlePincodePrefixesChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    onPincodePrefixesChange(event.target.value);
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        if (!canCreate) {
-          e.preventDefault();
-          return;
-        }
-        onSubmit(e);
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       <FormSection title={LABELS.addShippingZone} columns={1}>
         <FormFieldFrame label={LABELS.zoneName} htmlFor="shipping-zone-name">
           <Input
             id="shipping-zone-name"
             placeholder={LABELS.zoneName}
             value={name}
-            onChange={(e) => onNameChange(e.target.value)}
+            onChange={handleNameChange}
           />
         </FormFieldFrame>
         <FormFieldFrame
@@ -63,7 +77,7 @@ export function AdminShippingZoneForm({
             id="shipping-zone-states"
             placeholder={LABELS.states}
             value={states}
-            onChange={(e) => onStatesChange(e.target.value)}
+            onChange={handleStatesChange}
           />
         </FormFieldFrame>
         <FormFieldFrame
@@ -75,7 +89,7 @@ export function AdminShippingZoneForm({
             id="shipping-zone-prefixes"
             placeholder={LABELS.pincodePrefixes}
             value={pincodePrefixes}
-            onChange={(e) => onPincodePrefixesChange(e.target.value)}
+            onChange={handlePincodePrefixesChange}
           />
         </FormFieldFrame>
         <FormError

@@ -143,6 +143,8 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
       <section className={styles.batchesSection}>
         <h3 className={styles.batchesHeading}>{LABELS.couponBatches}</h3>
         <DataTable
+          ariaLabel={LABELS.couponBatchesTableAria}
+
           columns={batchColumns}
           rows={batches.batches ?? []}
           loading={batches.isLoading}

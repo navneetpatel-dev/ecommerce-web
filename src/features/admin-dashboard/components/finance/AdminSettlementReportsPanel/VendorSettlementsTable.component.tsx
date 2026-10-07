@@ -83,6 +83,8 @@ export function VendorSettlementsTable({
         />
       </div>
       <DataTable
+        ariaLabel={LABELS.vendorSettlementsTableAria}
+
         columns={COLUMNS}
         rows={vendors}
         getRowId={(row) => row.vendorId}

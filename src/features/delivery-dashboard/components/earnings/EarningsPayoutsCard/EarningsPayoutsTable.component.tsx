@@ -88,6 +88,7 @@ export function EarningsPayoutsTable({
 
   return (
     <DataTable
+      ariaLabel={LABELS.payoutsTableAria}
       columns={columns}
       rows={rows}
       getRowId={(row) => row.id}

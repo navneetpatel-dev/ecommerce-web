@@ -56,6 +56,8 @@ export function RtoQueuePanel() {
         ) : null}
       </div>
       <DataTable
+        ariaLabel={LABELS.rtoQueueTableAria}
+
         columns={COLUMNS}
         rows={shipments}
         getRowId={(row) => row.id}

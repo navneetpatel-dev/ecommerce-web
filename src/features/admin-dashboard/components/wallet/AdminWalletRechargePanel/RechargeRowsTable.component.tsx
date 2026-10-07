@@ -70,6 +70,8 @@ export function RechargeRowsTable({
 
   return (
     <DataTable
+      ariaLabel={LABELS.walletRechargeTableAria}
+
       columns={COLUMNS}
       rows={report.rows}
       getRowId={(row) => row.id}

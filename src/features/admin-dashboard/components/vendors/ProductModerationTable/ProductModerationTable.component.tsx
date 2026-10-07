@@ -5,6 +5,7 @@ import {
   DataTable,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
+import { LABELS } from "@/shared/constants/labels";
 import { useProductModerationTableColumns } from "../../../hooks/vendors/useProductModerationTableColumns.hook";
 import { ProductModerationRowActions } from "./ProductModerationRowActions.component";
 
@@ -55,6 +56,8 @@ export function ProductModerationTable({
 
   return (
     <DataTable
+      ariaLabel={LABELS.productModerationTableAria}
+
       columns={columns}
       rows={products}
       loading={loading}

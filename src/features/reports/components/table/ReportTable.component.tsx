@@ -72,6 +72,8 @@ export function ReportTable({
     <div className={styles.container}>
       {mismatchNotice}
       <DataTable
+        ariaLabel={LABELS.reportTableAria}
+
         columns={columns}
         rows={rows}
         loading={loading}

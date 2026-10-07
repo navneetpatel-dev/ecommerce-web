@@ -90,6 +90,8 @@ export function VendorLowStockWidget() {
   const tableState = (
     <>
       <DataTable
+        ariaLabel={LABELS.lowStockTableAria}
+
         columns={COLUMNS}
         rows={visible}
         getRowId={(row) => row.id}

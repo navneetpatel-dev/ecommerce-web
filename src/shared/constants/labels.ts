@@ -59,6 +59,8 @@ import { homeLabels } from "./labels/home";
 import { deliveryAgentTablesLabels } from "./labels/deliveryAgentTables";
 import { deliveryAgentOpsLabels } from "./labels/deliveryAgentOps";
 import { adminOrdersFiltersLabels } from "./labels/adminOrdersFilters";
+import { tableAriaLabels } from "./labels/tableAriaLabels";
+import { adminQueuesLabels } from "./labels/adminQueues";
 
 export const LABELS = {
   ...commerceLabels,
@@ -117,6 +119,8 @@ export const LABELS = {
   ...deliveryAgentTablesLabels,
   ...deliveryAgentOpsLabels,
   ...adminOrdersFiltersLabels,
+  ...tableAriaLabels,
+  ...adminQueuesLabels,
 } as const;
 
 export { formatExportProcessing } from "./labels/exports";

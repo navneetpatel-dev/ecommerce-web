@@ -114,6 +114,8 @@ function AdminRolesContent() {
       </div>
 
       <DataTable
+        ariaLabel={LABELS.rolesTableAria}
+
         columns={columns}
         rows={page.roles}
         loading={page.loading}

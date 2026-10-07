@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -48,6 +49,26 @@ export function ScheduledReportsSettingsSection({
   const selectedTypes = form.scheduledReportsTypes ?? [];
   const recipientsText = (form.scheduledReportsRecipients ?? []).join(", ");
 
+  const handleEnabledChange = (value: string) => {
+    onScheduledReportsEnabledChange(value === "true");
+  };
+
+  const handleDayOfWeekChange = (value: string) => {
+    onScheduledReportsDayOfWeekChange(Number(value));
+  };
+
+  const handleHourUtcChange = (value: string) => {
+    onScheduledReportsHourUtcChange(Number(value));
+  };
+
+  const handleRecipientsChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const parsed = event.target.value
+      .split(",")
+      .map((part) => part.trim())
+      .filter((email) => email.length > 0);
+    onScheduledReportsRecipientsChange(parsed);
+  };
+
   return (
     <FormSection
       title={LABELS.settingsScheduledReports}
@@ -57,9 +78,7 @@ export function ScheduledReportsSettingsSection({
       <FormFieldFrame label={LABELS.scheduledReportsEnabled}>
         <Select
           value={form.scheduledReportsEnabled ? "true" : "false"}
-          onValueChange={(value) =>
-            onScheduledReportsEnabledChange(value === "true")
-          }
+          onValueChange={handleEnabledChange}
         >
           <SelectTrigger>
             <SelectValue />
@@ -73,9 +92,7 @@ export function ScheduledReportsSettingsSection({
       <FormFieldFrame label={LABELS.scheduledReportsDayOfWeek}>
         <Select
           value={String(form.scheduledReportsDayOfWeek ?? 1)}
-          onValueChange={(value) =>
-            onScheduledReportsDayOfWeekChange(Number(value))
-          }
+          onValueChange={handleDayOfWeekChange}
         >
           <SelectTrigger>
             <SelectValue />
@@ -92,9 +109,7 @@ export function ScheduledReportsSettingsSection({
       <FormFieldFrame label={LABELS.scheduledReportsHourUtc}>
         <Select
           value={String(form.scheduledReportsHourUtc ?? 6)}
-          onValueChange={(value) =>
-            onScheduledReportsHourUtcChange(Number(value))
-          }
+          onValueChange={handleHourUtcChange}
         >
           <SelectTrigger>
             <SelectValue />
@@ -115,13 +130,7 @@ export function ScheduledReportsSettingsSection({
         <Input
           value={recipientsText}
           placeholder={LABELS.scheduledReportsRecipientsPlaceholder}
-          onChange={(event) => {
-            const parsed = event.target.value
-              .split(",")
-              .map((part) => part.trim())
-              .filter((email) => email.length > 0);
-            onScheduledReportsRecipientsChange(parsed);
-          }}
+          onChange={handleRecipientsChange}
         />
       </FormFieldFrame>
       <div className={styles.typeSelectorWrapper}>

@@ -1,5 +1,7 @@
 export const dataTableStyles = {
   section: "min-w-0 space-y-5",
+  /** Visually-hidden loading announcement paired with `aria-busy` on the section. */
+  loadingHint: "sr-only",
   skeletonHeight: "h-12 w-full",
   errorBox: "flex flex-wrap items-center justify-between gap-3",
   paginationWrapper: "flex justify-center border-t border-line/70 pt-2",

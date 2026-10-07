@@ -132,6 +132,8 @@ export function AdminDeliveryPerformancePanel() {
       ) : (
         <>
           <DataTable
+            ariaLabel={LABELS.deliveryPerformanceTableAria}
+
             columns={COLUMNS}
             rows={rows}
             getRowId={(row) => row.deliveryAgentId}

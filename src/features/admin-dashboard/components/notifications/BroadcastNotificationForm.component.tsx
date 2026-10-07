@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { Send } from "lucide-react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import {
@@ -20,6 +21,22 @@ import { BroadcastRoleOptions } from "./BroadcastRoleOptions.component";
 export function BroadcastNotificationForm() {
   const form = useBroadcastNotificationForm();
 
+  const handleRoleChange = (value: string) => {
+    form.setRole(value as RoleName);
+  };
+
+  const handleSubjectChange = (event: ChangeEvent<HTMLInputElement>) => {
+    form.setSubject(event.target.value);
+  };
+
+  const handleMessageChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    form.setMessage(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    void form.submit();
+  };
+
   return (
     <div className={adminFormWidgetsStyles.broadcastCard}>
       <div>
@@ -32,10 +49,7 @@ export function BroadcastNotificationForm() {
       </div>
       <div className={adminFormWidgetsStyles.gridSm2}>
         <FormFieldFrame label={LABELS.broadcastTargetRole}>
-          <Select
-            value={form.role}
-            onValueChange={(value) => form.setRole(value as RoleName)}
-          >
+          <Select value={form.role} onValueChange={handleRoleChange}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -47,7 +61,7 @@ export function BroadcastNotificationForm() {
         <FormFieldFrame label={LABELS.broadcastSubject}>
           <Input
             value={form.subject}
-            onChange={(event) => form.setSubject(event.target.value)}
+            onChange={handleSubjectChange}
             placeholder={LABELS.broadcastSubjectPlaceholder}
             maxLength={200}
           />
@@ -56,7 +70,7 @@ export function BroadcastNotificationForm() {
       <FormFieldFrame label={LABELS.broadcastMessage}>
         <Textarea
           value={form.message}
-          onChange={(event) => form.setMessage(event.target.value)}
+          onChange={handleMessageChange}
           placeholder={LABELS.broadcastMessagePlaceholder}
           maxLength={5000}
         />
@@ -67,9 +81,11 @@ export function BroadcastNotificationForm() {
         </p>
       ) : null}
       {form.result ? (
-        <p className={adminFormWidgetsStyles.successSm}>{form.result}</p>
+        <p role="status" className={adminFormWidgetsStyles.successSm}>
+          {form.result}
+        </p>
       ) : null}
-      <Button loading={form.pending} onClick={() => void form.submit()}>
+      <Button loading={form.pending} onClick={handleSubmit}>
         <Send className={adminFormWidgetsStyles.iconSm} aria-hidden="true" />
         {LABELS.broadcastSubmit}
       </Button>

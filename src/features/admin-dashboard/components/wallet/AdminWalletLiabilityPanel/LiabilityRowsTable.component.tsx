@@ -69,6 +69,8 @@ export function LiabilityRowsTable({
 
   return (
     <DataTable
+      ariaLabel={LABELS.walletLiabilityTableAria}
+
       columns={COLUMNS}
       rows={report.rows}
       getRowId={(row) => row.userId}

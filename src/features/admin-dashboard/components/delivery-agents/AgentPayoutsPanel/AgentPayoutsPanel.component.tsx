@@ -148,6 +148,8 @@ export function AgentPayoutsPanel() {
         </div>
       ) : null}
       <DataTable
+        ariaLabel={LABELS.agentPayoutsTableAria}
+
         columns={columns}
         rows={payouts}
         getRowId={(row) => row.id}

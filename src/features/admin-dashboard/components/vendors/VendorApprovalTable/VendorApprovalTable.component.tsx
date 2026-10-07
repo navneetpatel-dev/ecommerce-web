@@ -5,6 +5,7 @@ import {
   DataTable,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
+import { LABELS } from "@/shared/constants/labels";
 import { useVendorApprovalTableColumns } from "../../../hooks/vendors/useVendorApprovalTableColumns.hook";
 import { VendorApprovalRowActions } from "./VendorApprovalRowActions.component";
 
@@ -56,6 +57,8 @@ export function VendorApprovalTable({
 
   return (
     <DataTable
+      ariaLabel={LABELS.vendorApprovalTableAria}
+
       columns={columns}
       rows={vendors}
       loading={loading}

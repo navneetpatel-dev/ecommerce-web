@@ -2,6 +2,7 @@
 
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { LABELS } from "@/shared/constants/labels";
 import { cashDepositsCardStyles } from "../../../styles/cash/cashDepositsCard.styles";
 import type { CashDepositRowViewModel } from "../../../hooks/cash/useCashDepositsCardPresentation.hook";
 
@@ -54,6 +55,8 @@ const COLUMNS: DataTableColumn<CashDepositRowViewModel>[] = [
 export function CashDepositsTable({ rows }: CashDepositsTableProps) {
   return (
     <DataTable
+      ariaLabel={LABELS.cashDepositsTableAria}
+
       columns={COLUMNS}
       rows={rows}
       getRowId={(row) => row.id}

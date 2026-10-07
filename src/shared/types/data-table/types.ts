@@ -37,6 +37,11 @@ export type DataTableProps<T> = {
   loading?: boolean;
   error?: string | null;
   emptyMessage?: string;
+  /**
+   * Accessible name for the table. Defaults to `title` when that is a string;
+   * pass this for titled-less tables (e.g. widget tables under a card heading).
+   */
+  ariaLabel?: string;
   title?: ReactNode;
   toolbar?: ReactNode;
   onRefresh?: () => void;

@@ -25,6 +25,7 @@ export function DataTable<T>({
   loading = false,
   error = null,
   emptyMessage = LABELS.noRecordsFound,
+  ariaLabel,
   title,
   toolbar,
   onRefresh,
@@ -38,6 +39,9 @@ export function DataTable<T>({
   onRowClick,
 }: DataTableProps<T>) {
   const [detailRow, setDetailRow] = useState<T | null>(null);
+
+  const resolvedAriaLabel =
+    ariaLabel ?? (typeof title === "string" ? title : undefined);
 
   const showSummary =
     Boolean(pagination) &&
@@ -70,7 +74,10 @@ export function DataTable<T>({
 
   return (
     <TooltipProvider delayDuration={250}>
-      <section className={cn(dataTableStyles.section, className)}>
+      <section
+        aria-busy={loading || undefined}
+        className={cn(dataTableStyles.section, className)}
+      >
         {(title || onRefresh || toolbar || showSummary) && (
           <DataTableHeader
             title={title}
@@ -99,7 +106,12 @@ export function DataTable<T>({
         ) : null}
 
         {loading ? (
-          <SkeletonRows count={6} height={dataTableStyles.skeletonHeight} />
+          <>
+            <span className={dataTableStyles.loadingHint}>
+              {LABELS.loading}
+            </span>
+            <SkeletonRows count={6} height={dataTableStyles.skeletonHeight} />
+          </>
         ) : rows.length === 0 ? (
           <EmptyState icon={Inbox} message={emptyMessage} />
         ) : (
@@ -122,7 +134,7 @@ export function DataTable<T>({
               getRowId={getRowId}
               tableLayout={tableLayout}
               rowsInteractive={rowsInteractive}
-              ariaLabel={typeof title === "string" ? title : undefined}
+              ariaLabel={resolvedAriaLabel}
               actions={actions}
               actionsHeader={actionsHeader}
               actionsClassName={actionsClassName}

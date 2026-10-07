@@ -58,6 +58,8 @@ export function CategoriesTable({
           </p>
         ) : null}
         <DataTable
+          ariaLabel={LABELS.categoriesTableAria}
+
           columns={columns}
           rows={rows}
           loading={loading}

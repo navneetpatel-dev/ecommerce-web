@@ -1,6 +1,6 @@
 "use client";
 
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
   FormActions,
@@ -46,16 +46,32 @@ export function AdminTaxRuleForm({
   const canCreate =
     gstPercentage.trim() !== "" && Number(gstPercentage) >= 0 && bandComplete;
 
+  const handleSubmit = (event: FormEvent) => {
+    if (!canCreate) {
+      event.preventDefault();
+      return;
+    }
+    onSubmit(event);
+  };
+
+  const handleGstPercentageChange = (value: number | undefined) => {
+    onGstChange(value == null ? "" : String(value));
+  };
+
+  const handleHsnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onHsnChange(event.target.value);
+  };
+
+  const handlePriceBandThresholdChange = (value: number | undefined) => {
+    onPriceBandThresholdChange(value == null ? "" : String(value));
+  };
+
+  const handleGstPercentageAboveChange = (value: number | undefined) => {
+    onGstPercentageAboveChange(value == null ? "" : String(value));
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        if (!canCreate) {
-          e.preventDefault();
-          return;
-        }
-        onSubmit(e);
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       <FormSection title={LABELS.addTaxRule} columns={2}>
         <FormFieldFrame label={LABELS.gstPercentage}>
           <NumberInput
@@ -65,16 +81,14 @@ export function AdminTaxRuleForm({
             step={0.5}
             suffix="%"
             placeholder={LABELS.gstPercentage}
-            onChange={(value) =>
-              onGstChange(value == null ? "" : String(value))
-            }
+            onChange={handleGstPercentageChange}
           />
         </FormFieldFrame>
         <FormFieldFrame label={LABELS.hsnOptional}>
           <Input
             placeholder={LABELS.hsnOptional}
             value={hsnCode}
-            onChange={(e) => onHsnChange(e.target.value)}
+            onChange={handleHsnChange}
           />
         </FormFieldFrame>
         <FormFieldFrame
@@ -89,9 +103,7 @@ export function AdminTaxRuleForm({
             step={100}
             prefix={CURRENCY_SYMBOL}
             placeholder={LABELS.gstBandOptional}
-            onChange={(value) =>
-              onPriceBandThresholdChange(value == null ? "" : String(value))
-            }
+            onChange={handlePriceBandThresholdChange}
           />
         </FormFieldFrame>
         <FormFieldFrame label={LABELS.gstPercentageAbove}>
@@ -104,9 +116,7 @@ export function AdminTaxRuleForm({
             step={0.5}
             suffix="%"
             placeholder={LABELS.gstBandOptional}
-            onChange={(value) =>
-              onGstPercentageAboveChange(value == null ? "" : String(value))
-            }
+            onChange={handleGstPercentageAboveChange}
           />
         </FormFieldFrame>
         <FormError

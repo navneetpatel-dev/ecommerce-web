@@ -91,6 +91,8 @@ export function CashbackWriteOffReportTable({
         writtenOffTotal={writtenOffTotal}
       />
       <DataTable
+        ariaLabel={LABELS.cashbackWriteOffTableAria}
+
         columns={COLUMNS}
         rows={report.rows}
         getRowId={(row) => row.id}

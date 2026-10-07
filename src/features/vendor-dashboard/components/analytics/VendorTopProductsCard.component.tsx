@@ -72,6 +72,8 @@ export function VendorTopProductsCard({
           </p>
         ) : (
           <DataTable
+            ariaLabel={LABELS.vendorTopProductsTableAria}
+
             columns={COLUMNS}
             rows={topProducts}
             getRowId={(row) => row.id}

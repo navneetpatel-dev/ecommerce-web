@@ -44,6 +44,8 @@ export function StalePickupsTable({ pickups }: StalePickupsTableProps) {
 
   return (
     <DataTable
+      ariaLabel={LABELS.stalePickupsTableAria}
+
       columns={COLUMNS}
       rows={pickups}
       getRowId={(row) => row.id}

@@ -87,6 +87,8 @@ export function CashDepositsPanel() {
         </div>
       ) : null}
       <DataTable
+        ariaLabel={LABELS.adminCashDepositsTableAria}
+
         columns={columns}
         rows={deposits}
         getRowId={(row) => row.id}

@@ -8,7 +8,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import type { WebVitalSummaryRow } from "../../api/web-vitals/webVitals.api";
-import { webVitalsReportLabels as LABELS } from "@/shared/constants/labels/webVitalsReport";
+import { LABELS } from "@/shared/constants/labels";
 import { adminPagesStyles } from "../shared/adminPages.styles";
 
 /** CLS is ingested scaled by 1000 (see web/src/shared/utils/webVitals.ts); undo that for display. */
@@ -96,6 +96,8 @@ export function AdminWebVitalsPage() {
       </div>
 
       <DataTable
+        ariaLabel={LABELS.webVitalsTableAria}
+
         columns={columns}
         rows={page.rows}
         loading={page.loading}

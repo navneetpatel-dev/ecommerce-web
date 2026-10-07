@@ -48,6 +48,8 @@ export function VendorBulkImportResultsTable({
         })}
       </p>
       <DataTable
+        ariaLabel={LABELS.bulkImportResultsTableAria}
+
         columns={COLUMNS}
         rows={results}
         getRowId={(row, index) => `${row.row}-${index}`}

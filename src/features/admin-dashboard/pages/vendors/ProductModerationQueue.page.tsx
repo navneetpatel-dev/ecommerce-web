@@ -1,18 +1,21 @@
 "use client";
 
+import { PackageSearch } from "lucide-react";
+import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { useProductModerationQueue } from "../../hooks/vendors/useProductModerationQueue.hook";
 import { ProductModerationTable } from "../../components/vendors/ProductModerationTable.component";
 import { LABELS } from "@/shared/constants/labels";
-import { adminPagesStyles } from "../shared/adminPages.styles";
 
 export function ProductModerationQueue() {
   const queue = useProductModerationQueue();
 
   if (!queue.isLoading && queue.pagination.total === 0) {
     return (
-      <p className={adminPagesStyles.emptyCenteredNotice}>
-        {LABELS.noPendingProductApprovals}
-      </p>
+      <EmptyState
+        icon={PackageSearch}
+        heading={LABELS.noPendingProductApprovals}
+        message={LABELS.productApprovalsEmptyHint}
+      />
     );
   }
 
