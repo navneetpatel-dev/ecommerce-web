@@ -100,6 +100,8 @@ export const tables3Labels = {
   categoryAttributes: "Filter attributes",
   categoryAttributesHint:
     "Define category-specific filters (Material, Size, etc.).",
+  categoryAttributesReorderHint:
+    "Drag to reorder, or focus a handle and press Space to use the keyboard.",
   addCategoryAttribute: "Add attribute",
   attributeName: "Attribute name",
   attributeType: "Attribute type",
@@ -130,7 +132,8 @@ export const tables3Labels = {
   confirmReactivateCategoryTitle: "Reactivate this category?",
   confirmReactivateCategoryBody:
     'Restore "{name}" to active navigation and filters?',
-  categoryReorderHint: "Drag rows to change display order.",
+  categoryReorderHint:
+    "Drag rows to change display order, or focus a handle and press Space to reorder with the keyboard.",
   couldNotReorderCategories: "Could not save category order.",
   couldNotReassignProducts: "Could not reassign products.",
   productsReassigned: "Reassigned {count} product(s).",

@@ -16,4 +16,5 @@ export const tableRowActionsStyles = {
 export const infiniteLoadMoreStyles = {
   container: "flex flex-col items-center gap-3 border-t border-line/70 pt-4",
   sentinel: "h-1 w-full",
+  status: "sr-only",
 } as const;

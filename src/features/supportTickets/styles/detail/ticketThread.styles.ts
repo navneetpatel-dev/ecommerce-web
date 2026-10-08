@@ -67,6 +67,11 @@ export const ticketThreadStyles = {
   thumbBoxMd: "h-20 w-20",
   thumbImg: "h-full w-full object-cover",
   thumbObjectCover: "object-cover",
+  thumbLink: "relative block h-full w-full transition-opacity hover:opacity-90",
+  thumbPlayBadge:
+    "pointer-events-none absolute inset-0 flex items-center justify-center",
+  thumbPlayIcon:
+    "h-7 w-7 rounded-full bg-surface/90 p-1.5 text-ink shadow-elevation-1",
 
   composerBlockedBox: "border-t border-line bg-paper/40 px-3 py-3 sm:px-4",
   composerBlockedText: "text-body-sm text-ink-muted",

@@ -28,6 +28,6 @@ export const CARD_MEDIA_STYLES = {
       "transition-[opacity,transform] duration-200",
       inCart
         ? "opacity-100 translate-y-0"
-        : "opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0",
+        : "opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 focus-within:opacity-100 focus-within:translate-y-0",
     ),
 } as const;

@@ -2,6 +2,7 @@
 
 import {
   DndContext,
+  KeyboardSensor,
   closestCenter,
   PointerSensor,
   useSensor,
@@ -10,6 +11,7 @@ import {
 } from "@dnd-kit/core";
 import {
   SortableContext,
+  sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { LABELS } from "@/shared/constants/labels";
@@ -34,6 +36,9 @@ export function AttributesSortableList({
 }: AttributesSortableListProps) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   );
   const ids = rows.map((row) => row.id);
   const isEmpty = rows.length === 0;

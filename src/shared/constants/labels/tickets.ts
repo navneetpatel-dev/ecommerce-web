@@ -149,6 +149,8 @@ export const ticketsLabels = {
   ticketRemoveAttachment: "Remove",
   ticketAttachmentImage: "Image",
   ticketAttachmentVideo: "Video",
+  ticketOpenImageAttachment: "Open image attachment",
+  ticketOpenVideoAttachment: "Open video attachment",
   loadMore: "Load more",
 
   // Bug reports

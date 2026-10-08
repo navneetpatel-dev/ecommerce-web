@@ -68,6 +68,9 @@ export function AdminCategoryAttributesAction({
           <DialogDescription className={styles.dialogDescription}>
             {LABELS.categoryAttributesHint}
           </DialogDescription>
+          <p className={styles.listHint}>
+            {LABELS.categoryAttributesReorderHint}
+          </p>
 
           <AttributesSortableList
             rows={rows}

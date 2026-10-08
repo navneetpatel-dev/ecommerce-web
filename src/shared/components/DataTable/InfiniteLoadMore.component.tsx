@@ -59,6 +59,13 @@ export function InfiniteLoadMore({
       >
         {loadMoreLabel}
       </Button>
+      <span
+        role="status"
+        aria-atomic="true"
+        className={infiniteLoadMoreStyles.status}
+      >
+        {isFetchingNextPage ? LABELS.loadingMore : ""}
+      </span>
     </div>
   );
 }
