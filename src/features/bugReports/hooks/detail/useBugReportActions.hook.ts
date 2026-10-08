@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   BUG_REPORT_STATUS,
   type BugReportStatus,
@@ -65,11 +65,17 @@ export function useBugReportActions(
     [report.status],
   );
 
-  useEffect(() => {
+  // Clamp the selected status when the allowed set changes (during render —
+  // the effect version painted an invalid option for a frame first).
+  const [syncedStatusOptions, setSyncedStatusOptions] = useState<
+    typeof statusOptions | null
+  >(null);
+  if (statusOptions !== syncedStatusOptions) {
+    setSyncedStatusOptions(statusOptions);
     if (statusOptions.length > 0 && !statusOptions.includes(status)) {
       setStatus(statusOptions[0]!);
     }
-  }, [statusOptions, status]);
+  }
 
   const progress = useMemo(() => statusTimeline(report), [report]);
   const isNewReport = triageForm.isNewReport;

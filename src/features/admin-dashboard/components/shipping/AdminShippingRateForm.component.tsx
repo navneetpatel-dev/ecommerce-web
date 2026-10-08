@@ -121,7 +121,6 @@ export function AdminShippingRateForm({
         <ShippingRateNumberField
           label={shippingRatesLabels.minWeightGrams}
           htmlFor="shipping-rate-min-weight"
-          min={0}
           value={minWeightGrams}
           onChange={onMinWeightGramsChange}
         />
@@ -129,7 +128,6 @@ export function AdminShippingRateForm({
         <ShippingRateNumberField
           label={shippingRatesLabels.maxWeightGrams}
           htmlFor="shipping-rate-max-weight"
-          min={1}
           value={maxWeightGrams}
           onChange={onMaxWeightGramsChange}
         />
@@ -137,8 +135,6 @@ export function AdminShippingRateForm({
         <ShippingRateNumberField
           label={LABELS.price}
           htmlFor="shipping-rate-price"
-          min={0}
-          step="0.01"
           value={price}
           onChange={onPriceChange}
         />
@@ -146,7 +142,6 @@ export function AdminShippingRateForm({
         <ShippingRateNumberField
           label={shippingRatesLabels.estimatedDays}
           htmlFor="shipping-rate-estimated-days"
-          min={1}
           value={estimatedDays}
           onChange={onEstimatedDaysChange}
         />
@@ -154,8 +149,6 @@ export function AdminShippingRateForm({
         <ShippingRateNumberField
           label={shippingRatesLabels.freeShippingThresholdOptional}
           htmlFor="shipping-rate-free-threshold"
-          min={0}
-          step="0.01"
           value={freeShippingThreshold}
           onChange={onFreeShippingThresholdChange}
         />

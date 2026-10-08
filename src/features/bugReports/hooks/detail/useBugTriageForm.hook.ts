@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   BUG_AFFECTED_MODULE,
   BUG_REPORT_SEVERITY,
@@ -28,11 +28,16 @@ export function useBugTriageForm(report: BugReport) {
   const [assigneeId, setAssigneeId] = useState(report.assignedToId ?? "");
   const [assignmentError, setAssignmentError] = useState<string | null>(null);
 
-  useEffect(() => {
+  // Re-sync from the report during render when its triage fields change
+  // (React's "adjust state on prop change" pattern; no sync-in-effect).
+  const reportSyncKey = `${report.assignedToId ?? ""}|${report.severity ?? ""}|${report.affectedModule ?? ""}`;
+  const [syncedReportKey, setSyncedReportKey] = useState<string | null>(null);
+  if (reportSyncKey !== syncedReportKey) {
+    setSyncedReportKey(reportSyncKey);
     setAssigneeId(report.assignedToId ?? "");
     setSeverity(report.severity ?? BUG_REPORT_SEVERITY.MEDIUM);
     setModule(report.affectedModule ?? BUG_AFFECTED_MODULE.OTHER);
-  }, [report.assignedToId, report.severity, report.affectedModule]);
+  }
 
   const isNewReport = report.status === "NEW";
 

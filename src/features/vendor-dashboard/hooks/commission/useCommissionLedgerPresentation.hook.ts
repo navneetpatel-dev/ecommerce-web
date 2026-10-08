@@ -37,7 +37,7 @@ function formatOrDash(amount?: number | null) {
 export function useCommissionLedgerPresentation(commissions?: {
   items?: Commission[];
 }) {
-  const items = commissions?.items ?? [];
+  const items = useMemo(() => commissions?.items ?? [], [commissions]);
   const isEmpty = items.length === 0;
 
   const rows: CommissionRowViewModel[] = useMemo(

@@ -17,7 +17,7 @@ export interface CashDepositRowViewModel {
 
 export function useCashDepositsCardPresentation() {
   const deposits = useMyCashDeposits();
-  const depositRows = deposits.data ?? [];
+  const depositRows = useMemo(() => deposits.data ?? [], [deposits.data]);
 
   const { rows, summaryText } = useMemo(() => {
     const pending = depositRows.filter((d) => d.status === "PENDING");

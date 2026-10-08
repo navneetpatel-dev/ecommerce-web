@@ -23,18 +23,26 @@ export function usePromoBanners() {
   const [createSaving, setCreateSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<PromoBanner | null>(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      setBanners(await homepageAdminApi.listBanners());
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadPromoBanners));
-      setBanners([]);
-    } finally {
-      setLoading(false);
-    }
+  const load = useCallback(() => {
+    return homepageAdminApi
+      .listBanners()
+      .then((rows) => {
+        setBanners(rows);
+        setError(null);
+      })
+      .catch((err) => {
+        setError(getApiErrorMessage(err, LABELS.couldNotLoadPromoBanners));
+        setBanners([]);
+      })
+      .finally(() => setLoading(false));
   }, []);
+
+  // Action refreshes flip the loading state; the mount call relies on the
+  // initial `true` so `load` itself never setState-synchronously.
+  const reload = async () => {
+    setLoading(true);
+    await reload();
+  };
 
   useEffect(() => {
     void load();
@@ -62,7 +70,7 @@ export function usePromoBanners() {
       });
       setMessage(LABELS.promoBannerSaved);
       createForm.resetForm();
-      await load();
+      await reload();
     } catch (err) {
       setMessage(getApiErrorMessage(err, LABELS.couldNotSavePromoBanner));
     } finally {
@@ -88,7 +96,7 @@ export function usePromoBanners() {
       await homepageAdminApi.deleteBanner(banner.id);
       setMessage(LABELS.promoBannerDeleted);
       setDeleteTarget(null);
-      await load();
+      await reload();
     } catch (err) {
       setMessage(getApiErrorMessage(err, LABELS.couldNotSavePromoBanner));
     }
@@ -106,7 +114,7 @@ export function usePromoBanners() {
         status: PROMO_BANNER_STATUS.ACTIVE,
       });
       setMessage(LABELS.promoBannerSaved);
-      await load();
+      await reload();
     } catch (err) {
       setMessage(getApiErrorMessage(err, LABELS.couldNotSavePromoBanner));
     }

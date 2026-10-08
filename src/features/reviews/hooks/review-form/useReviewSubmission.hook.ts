@@ -38,6 +38,9 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
     formState: { errors },
   } = form;
 
+  // react-hook-form's watch() is compiler-incompatible by design; the
+  // value is used directly in render, so no memoization is needed.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const rating = watch("rating") || 0;
   const body = watch("body") || "";
   const setRating = (next: number) =>

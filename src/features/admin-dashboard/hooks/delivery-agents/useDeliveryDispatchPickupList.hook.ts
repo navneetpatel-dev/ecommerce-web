@@ -21,13 +21,17 @@ export function useDeliveryDispatchPickupList({
   const [returnId, setReturnId] = useState("");
 
   const load = useCallback(() => {
-    setLoading(true);
     deliveryAdminApi
       .unassignedPickups()
       .then(setPickups)
       .catch(() => setPickups([]))
       .finally(() => setLoading(false));
   }, []);
+
+  const reload = useCallback(() => {
+    setLoading(true);
+    load();
+  }, [load]);
 
   useEffect(() => {
     load();
@@ -42,9 +46,9 @@ export function useDeliveryDispatchPickupList({
       "Return pickup assigned.",
     ).then(() => {
       setReturnId("");
-      load();
+      reload();
     });
-  }, [selectedAgent, returnId, run, load]);
+  }, [selectedAgent, returnId, run, reload]);
 
   const placeholder = loading
     ? "Loading pickups..."

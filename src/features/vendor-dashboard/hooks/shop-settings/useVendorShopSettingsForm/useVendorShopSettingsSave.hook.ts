@@ -39,6 +39,9 @@ export function useVendorShopSettingsSave(
   const [message, setMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- one-shot consumption of
+     a sessionStorage flag written by the KYC flow before navigating here; an
+     external-store read, not render state. */
   useEffect(() => {
     if (typeof window !== "undefined") {
       const flag = sessionStorage.getItem(
@@ -50,6 +53,7 @@ export function useVendorShopSettingsSave(
       }
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const save = (override?: ShopSettingsSaveOverride) => {
     setSaving(true);

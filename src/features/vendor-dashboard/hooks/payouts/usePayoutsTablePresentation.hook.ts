@@ -45,7 +45,7 @@ function formatPayoutDetails(payout: PayoutEntry): string {
 export function usePayoutsTablePresentation(payouts?: {
   items?: PayoutEntry[];
 }) {
-  const items = payouts?.items ?? [];
+  const items = useMemo(() => payouts?.items ?? [], [payouts]);
   const isEmpty = items.length === 0;
 
   const rows: PayoutRowViewModel[] = useMemo(

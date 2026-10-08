@@ -15,22 +15,22 @@ export function useManualFormFieldErrors<T extends string>() {
     setFieldErrorsState({});
   }, []);
 
-  const clearField = (name: T) => {
+  const clearField = useCallback((name: T) => {
     setFieldErrorsState((prev) => {
       if (!prev[name]) return prev;
       const next = { ...prev };
       delete next[name];
       return next;
     });
-  };
+  }, []);
 
-  const setErrors = (errors: Partial<Record<T, string>>) => {
+  const setErrors = useCallback((errors: Partial<Record<T, string>>) => {
     setFieldErrorsState(errors);
-  };
+  }, []);
 
-  const setFieldError = (name: T, message: string) => {
+  const setFieldError = useCallback((name: T, message: string) => {
     setFieldErrorsState((prev) => ({ ...prev, [name]: message }));
-  };
+  }, []);
 
   const getError = (name: T) => fieldErrors[name];
 

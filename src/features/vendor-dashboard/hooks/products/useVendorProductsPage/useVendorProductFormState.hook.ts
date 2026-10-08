@@ -75,7 +75,7 @@ export function useVendorProductFormState(options: {
       clearApiFieldErrors();
       setLoading(false);
     },
-    [categories],
+    [categories, clearApiFieldErrors],
   );
 
   const loadEditProduct = useCallback(
@@ -94,37 +94,34 @@ export function useVendorProductFormState(options: {
         setLoading(false);
       }
     },
-    [categories],
+    [categories, clearApiFieldErrors],
   );
 
-  const handleValidSubmit = useCallback(
-    async (body: ProductWriteBody) => {
-      setSubmitting(true);
-      setSubmitError(null);
-      clearApiFieldErrors();
-      try {
-        if (mode === "edit" && editId) {
-          await productsApi.update(editId, body);
-        } else {
-          await createProductWithImages(body, imageUrls);
-        }
-        close();
-        resetFormState(categories[0]?.id);
-        router.refresh();
-      } catch (err: unknown) {
-        const mapped = applyApiErrorsToManualForm<ProductListingFormField>(
-          err,
-          setApiFieldErrors,
-        );
-        setSubmitError(
-          mapped ? null : getFormLevelApiError(err, LABELS.couldNotSaveProduct),
-        );
-      } finally {
-        setSubmitting(false);
+  const handleValidSubmit = async (body: ProductWriteBody) => {
+    setSubmitting(true);
+    setSubmitError(null);
+    clearApiFieldErrors();
+    try {
+      if (mode === "edit" && editId) {
+        await productsApi.update(editId, body);
+      } else {
+        await createProductWithImages(body, imageUrls);
       }
-    },
-    [categories, close, editId, imageUrls, mode, resetFormState, router],
-  );
+      close();
+      resetFormState(categories[0]?.id);
+      router.refresh();
+    } catch (err: unknown) {
+      const mapped = applyApiErrorsToManualForm<ProductListingFormField>(
+        err,
+        setApiFieldErrors,
+      );
+      setSubmitError(
+        mapped ? null : getFormLevelApiError(err, LABELS.couldNotSaveProduct),
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return {
     values,

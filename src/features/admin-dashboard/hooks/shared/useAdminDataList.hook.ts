@@ -32,7 +32,7 @@ export function useAdminDataList(
   const client = useClientPagination(clientRows, pageSize);
 
   const fetchPage = useCallback(
-    (nextPage: number, background = false) => {
+    function fetchPage(nextPage: number, background = false) {
       setPending(background ? "reload" : "load");
       setError(null);
       load({ page: nextPage, limit: pageSize })
@@ -55,6 +55,8 @@ export function useAdminDataList(
             data.total > 0 &&
             resolvedPage > resolvedTotalPages
           ) {
+            // Recurse through the named function expression, not the outer
+            // binding (rule: immutability / access-before-declared).
             fetchPage(resolvedTotalPages);
             return;
           }

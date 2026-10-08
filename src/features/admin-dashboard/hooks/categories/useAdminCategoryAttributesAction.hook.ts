@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { LABELS } from "@/shared/constants/labels";
@@ -36,7 +36,7 @@ export function useAdminCategoryAttributesAction({
     setOptions("");
   };
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -46,14 +46,7 @@ export function useAdminCategoryAttributesAction({
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    if (open) {
-      resetForm();
-      void load();
-    }
-  }, [open, categoryId]);
+  }, [categoryId]);
 
   const onSave = async () => {
     if (!name.trim()) return;
@@ -120,7 +113,11 @@ export function useAdminCategoryAttributesAction({
     setOptions(optionsToInput(row.options));
   };
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    resetForm();
+    void load();
+    setOpen(true);
+  };
   const handleOpenChange = (next: boolean) => setOpen(next);
 
   return {

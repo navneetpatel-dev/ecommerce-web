@@ -7,9 +7,9 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import {
   categoryHref,
-  resolveCategoryIcon,
   resolveCategoryImageUrl,
 } from "../../../utils/browse/categoryHelpers";
+import { CategoryIcon } from "../../browse/CategoryIcon.component";
 import type { Category } from "@/shared/api/types";
 import { categoryMegaMenuStyles as styles } from "../../../styles/mega-menu/categoryMegaMenu.styles";
 
@@ -26,7 +26,6 @@ export function CategoryMegaMenuTile({
   tree,
   onClose,
 }: CategoryMegaMenuTileProps) {
-  const Icon = resolveCategoryIcon(department);
   const imageUrl = resolveCategoryImageUrl(department);
   const children = department.children ?? [];
   const visibleChildren = children.slice(0, MAX_VISIBLE_CHILDREN);
@@ -53,7 +52,7 @@ export function CategoryMegaMenuTile({
                 className={styles.tileMediaImage}
               />
             ) : (
-              <Icon className={styles.tileIcon} strokeWidth={1.5} aria-hidden />
+              <CategoryIcon category={department} className={styles.tileIcon} />
             )}
           </span>
           <span className={styles.tileTextWrapper}>

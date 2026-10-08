@@ -61,10 +61,14 @@ export function ThemePaletteProvider({ children }: { children: ReactNode }) {
   }));
   const [mounted, setMounted] = useState(false);
 
+  // Client-only storage read must happen after hydration; the compiler
+  // heuristic cannot see that this is an external-store sync (Rule 29), not
+  // render state — hence the disable on the first write below.
   useEffect(() => {
     // Mount-time sync of persisted preferences: storage is client-only, so
     // the read must happen in an effect after hydration (Rule 29).
     const stored = resolveStoredSelection();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelection(stored);
     setMounted(true);
     const palette = getThemePalette(stored.paletteId);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMounted } from "@/shared/hooks/ui/useMounted.hook";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
@@ -50,11 +50,9 @@ export function CategoryRail({
   categories = [],
   isLoading,
 }: CategoryRailProps) {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
   const roots = getRootCategories(categories);
   const showSkeleton = !mounted || (isLoading && roots.length === 0);
-
-  useEffect(() => setMounted(true), []);
 
   if (showSkeleton) {
     return (

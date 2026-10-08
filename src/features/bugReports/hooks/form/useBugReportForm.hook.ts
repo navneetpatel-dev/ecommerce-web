@@ -49,6 +49,9 @@ export function useBugReportForm(params: UseBugReportFormParams) {
 
   useUnsavedChanges(form.formState.isDirty);
 
+  // react-hook-form's watch() is compiler-incompatible by design; the
+  // value is used directly in render, so no memoization is needed.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const title = form.watch("title");
   const description = form.watch("description");
 

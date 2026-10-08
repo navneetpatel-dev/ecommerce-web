@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SidebarNav } from "@/shared/components/layout/SidebarNav.component";
 import { WorkspaceNavDrawer } from "@/shared/components/layout/WorkspaceNavDrawer.component";
 import { useVendorLayout } from "@/shared/hooks/navigation/useVendorLayout.hook";
@@ -24,9 +24,12 @@ export function VendorLayoutContainer({
 
   const closeNav = () => setNavOpen(false);
 
-  useEffect(() => {
+  // Close the drawer when the route changes (during render — no sync-in-effect).
+  const [syncedPathname, setSyncedPathname] = useState(pathname);
+  if (pathname !== syncedPathname) {
+    setSyncedPathname(pathname);
     setNavOpen(false);
-  }, [pathname]);
+  }
 
   return (
     <div className={styles.root}>

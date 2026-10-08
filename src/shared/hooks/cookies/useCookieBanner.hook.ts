@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useMounted } from "@/shared/hooks/ui/useMounted.hook";
 import { COOKIE_BANNER_SHOW_DELAY_MS } from "@/shared/constants/timing/timing";
 
 export interface CookiePreferences {
@@ -34,22 +35,29 @@ function readStoredPreferences(): CookiePreferences {
 }
 
 export function useCookieBanner() {
+  const mounted = useMounted();
   const [visible, setVisible] = useState(false);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [preferences, setPreferences] =
     useState<CookiePreferences>(defaultPreferences);
 
-  useEffect(() => {
-    const consent = localStorage.getItem(CONSENT_KEY);
+  // Hydrate stored preferences once, after mount, during render (SSR and the
+  // first client render both use the defaults, so hydration stays safe).
+  const [syncedStoredPreferences, setSyncedStoredPreferences] = useState(false);
+  if (mounted && !syncedStoredPreferences) {
+    setSyncedStoredPreferences(true);
     setPreferences(readStoredPreferences());
-    if (!consent) {
-      const timer = setTimeout(
-        () => setVisible(true),
-        COOKIE_BANNER_SHOW_DELAY_MS,
-      );
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  }
+
+  useEffect(() => {
+    if (!mounted) return;
+    if (localStorage.getItem(CONSENT_KEY)) return;
+    const timer = setTimeout(
+      () => setVisible(true),
+      COOKIE_BANNER_SHOW_DELAY_MS,
+    );
+    return () => clearTimeout(timer);
+  }, [mounted]);
 
   const persistConsent = (
     next: CookiePreferences,

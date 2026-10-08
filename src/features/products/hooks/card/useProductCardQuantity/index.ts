@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   cartKeys,
@@ -37,12 +37,11 @@ export function useProductCardQuantity({
 
   const [optimisticQty, setOptimisticQty] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (optimisticQty === null) return;
-    if (serverQty === optimisticQty) {
-      setOptimisticQty(null);
-    }
-  }, [serverQty, optimisticQty]);
+  // Clear the optimistic override during render once the server catches up
+  // (React's "adjust state on prop change" pattern; no sync-in-effect).
+  if (optimisticQty !== null && serverQty === optimisticQty) {
+    setOptimisticQty(null);
+  }
 
   const cartQuantity = optimisticQty ?? serverQty;
   /**

@@ -20,16 +20,17 @@ export function useAccountMenu(currentUser: CurrentUser | null) {
   const [canHoverAccountMenu, setCanHoverAccountMenu] = useState(false);
   const accountMenuRef = useRef<HTMLDivElement | null>(null);
 
+  const userName = currentUser?.name;
   const fallbackLabel = useMemo(() => {
-    if (!currentUser?.name) return LABELS.profile;
-    const initials = currentUser.name
+    if (!userName) return LABELS.profile;
+    const initials = userName
       .trim()
       .split(/\s+/)
       .slice(0, 2)
       .map((part) => part[0]?.toUpperCase() ?? "")
       .join("");
     return initials || LABELS.profile;
-  }, [currentUser?.name]);
+  }, [userName]);
 
   const accountLinks = useMemo(() => {
     if (!currentUser) return [];

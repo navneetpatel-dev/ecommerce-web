@@ -1,6 +1,7 @@
 "use client";
 
 import { LABELS } from "@/shared/constants/labels";
+import { motionSafeScrollBehavior } from "@/shared/utils/a11y/scrollMotion";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import { useManualFormFieldErrors } from "@/shared/hooks/forms/useManualFormFieldErrors.hook";
@@ -30,7 +31,10 @@ interface UseProductFormControllerOptions {
 function focusFirstInvalidField() {
   window.requestAnimationFrame(() => {
     const field = document.querySelector<HTMLElement>('[aria-invalid="true"]');
-    field?.scrollIntoView({ block: "center", behavior: "smooth" });
+    field?.scrollIntoView({
+      block: "center",
+      behavior: motionSafeScrollBehavior(),
+    });
     field?.focus({ preventScroll: true });
   });
 }

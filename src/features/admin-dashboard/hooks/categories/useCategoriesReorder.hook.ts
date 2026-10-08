@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   KeyboardSensor,
   PointerSensor,
@@ -28,9 +28,13 @@ export function useCategoriesReorder(
     }),
   );
 
-  useEffect(() => {
+  // Re-sync from the source list during render (React's "adjust state on prop
+  // change" pattern) — an effect here would animate a stale frame first.
+  const [syncedCategories, setSyncedCategories] = useState(categories);
+  if (categories !== syncedCategories) {
+    setSyncedCategories(categories);
     setRows(categories);
-  }, [categories]);
+  }
 
   const ids = useMemo(() => rows.map((row) => row.id), [rows]);
 

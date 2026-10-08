@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/shared/utils/dom/cn";
 import type { SearchPanelLayout } from "../../../constants/search/index";
 import type { SearchSuggestion } from "../../../types/search/index";
@@ -63,9 +63,11 @@ export function SearchBar({
 
   const handleExitComplete = () => setShellExpanded(false);
 
-  useEffect(() => {
-    if (showPanel) setShellExpanded(true);
-  }, [showPanel]);
+  // Latch the shell open while the panel is shown (during render — the shell
+  // stays expanded through the exit animation, collapsed by onExitComplete).
+  if (showPanel && !shellExpanded) {
+    setShellExpanded(true);
+  }
 
   return (
     <div className={cn(styles.root, className)}>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { motionSafeScrollBehavior } from "@/shared/utils/a11y/scrollMotion";
 import { useFilters } from "../filters/useFilters.hook";
 import { useCompare } from "../compare/useCompare.hook";
 import { useProductList } from "../../api/listing/products.queries";
@@ -40,7 +41,7 @@ export function useProductListing() {
 
   const scrollToCompare = () => {
     compareSectionRef.current?.scrollIntoView({
-      behavior: "smooth",
+      behavior: motionSafeScrollBehavior(),
       block: "start",
     });
   };

@@ -8,7 +8,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import type { Category } from "@/shared/api/types";
 import {
-  resolveCategoryIcon,
+  CategoryIcon,
   resolveCategoryImageUrl,
   categoryHref,
 } from "@/features/categories";
@@ -39,7 +39,6 @@ export function MobileNavCategoryTile({
 }: MobileNavCategoryTileProps) {
   const { department, visibleChildren, hiddenCount, childCountLabel } =
     dropdown;
-  const Icon = resolveCategoryIcon(department);
   const imageUrl = resolveCategoryImageUrl(department);
   const departmentHref = categoryHref(department, tree);
 
@@ -68,10 +67,9 @@ export function MobileNavCategoryTile({
                 className={styles.categoryCoverLayer}
               />
             ) : (
-              <Icon
+              <CategoryIcon
+                category={department}
                 className={styles.categoryIcon}
-                strokeWidth={1.5}
-                aria-hidden
               />
             )}
           </span>

@@ -16,37 +16,35 @@ export function useEligibleCoupons({
 }: UseEligibleCouponsOptions) {
   const accessToken = useAuthStore((s) => s.accessToken);
   const [eligible, setEligible] = useState<EligibleCoupon[]>([]);
-  const [eligibleLoading, setEligibleLoading] = useState(false);
+  const [eligibleLoading, setEligibleLoading] = useState(true);
+  const cartHasItems = Boolean(cart?.items?.length);
 
-  const loadEligible = useCallback(async () => {
+  const loadEligible = useCallback((): Promise<EligibleCoupon[]> => {
     if (!accessToken || !enabled) {
-      setEligible([]);
-      return [];
+      return Promise.resolve([]);
     }
-    setEligibleLoading(true);
-    try {
-      const list = await couponsApi.eligible();
-      setEligible(list);
-      return list;
-    } catch {
-      setEligible([]);
-      return [];
-    } finally {
-      setEligibleLoading(false);
-    }
+    return couponsApi
+      .eligible()
+      .then((list) => {
+        setEligible(list);
+        return list;
+      })
+      .catch(() => {
+        setEligible([]);
+        return [] as EligibleCoupon[];
+      })
+      .finally(() => setEligibleLoading(false));
   }, [accessToken, enabled]);
 
   // Load eligible offers without auto-applying
   useEffect(() => {
-    if (!enabled || !accessToken || !cart?.items?.length) return;
+    if (!enabled || !accessToken || !cartHasItems) return;
     void loadEligible();
-  }, [accessToken, cart?.items?.length, enabled, loadEligible]);
+  }, [accessToken, cartHasItems, enabled, loadEligible]);
 
-  useEffect(() => {
-    if (!cart?.items?.length) {
-      setEligible([]);
-    }
-  }, [cart?.items?.length]);
-
-  return { eligible, eligibleLoading, loadEligible };
+  return {
+    eligible: cartHasItems ? eligible : [],
+    eligibleLoading: enabled && cartHasItems ? eligibleLoading : false,
+    loadEligible,
+  };
 }

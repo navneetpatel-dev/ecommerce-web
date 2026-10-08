@@ -25,25 +25,36 @@ export function useVendorProductImages({
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const product = await productsApi.detail(productId);
-      setImages(product.images ?? []);
-      setVariants(product.variants ?? []);
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadProduct));
-      setImages([]);
-    } finally {
-      setLoading(false);
-    }
+  const load = useCallback(() => {
+    return productsApi
+      .detail(productId)
+      .then((product) => {
+        setImages(product.images ?? []);
+        setVariants(product.variants ?? []);
+        setError(null);
+      })
+      .catch((err) => {
+        setError(getApiErrorMessage(err, LABELS.couldNotLoadProduct));
+        setImages([]);
+      })
+      .finally(() => setLoading(false));
   }, [productId]);
 
   useEffect(() => {
     if (!open) return;
     void load();
   }, [open, load]);
+
+  // Re-arm the spinner while the dialog is closed so the next open starts
+  // fresh (during render — keeps `load` free of synchronous setState).
+  const [syncedOpen, setSyncedOpen] = useState(open);
+  if (open !== syncedOpen) {
+    setSyncedOpen(open);
+    if (!open) {
+      setLoading(true);
+      setError(null);
+    }
+  }
 
   const runImageAction = async (
     busyKey: string,

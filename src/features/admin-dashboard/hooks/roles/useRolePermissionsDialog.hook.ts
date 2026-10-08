@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type { AdminRole, AdminPermission } from "../../api/roles/roles.api";
@@ -18,16 +18,23 @@ export function useRolePermissionsDialog({
   onClose,
   onSave,
 }: UseRolePermissionsDialogParams) {
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [selected, setSelected] = useState<Set<string>>(
+    () => new Set(role?.permissionKeys ?? []),
+  );
   const [search, setSearch] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  // Reset per-role editing state during render when the target role changes
+  // (React's "adjust state on prop change" pattern; a reset effect would paint
+  // the previous role's selection for a frame).
+  const [syncedRole, setSyncedRole] = useState(role);
+  if (role !== syncedRole) {
+    setSyncedRole(role);
     setSelected(new Set(role?.permissionKeys ?? []));
     setSearch("");
     setError(null);
-  }, [role]);
+  }
 
   const toggle = (key: string) => {
     setSelected((prev) => {

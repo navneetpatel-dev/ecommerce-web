@@ -63,9 +63,10 @@ export function useCheckoutAddresses() {
 
   // One vendor that doesn't serve the area blocks the address step: the order would be
   // rejected at payment, so it has to surface where the address is chosen.
+  const cartItems = cart?.items;
   const vendorIds = useMemo(
-    () => Object.keys(cart?.items ? groupItemsByVendor(cart.items) : {}),
-    [cart?.items],
+    () => Object.keys(cartItems ? groupItemsByVendor(cartItems) : {}),
+    [cartItems],
   );
   const deliveryArea = useDeliveryServiceability(vendorIds);
 

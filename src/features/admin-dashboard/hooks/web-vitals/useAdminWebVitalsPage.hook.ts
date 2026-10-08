@@ -23,8 +23,6 @@ export function useAdminWebVitalsPage() {
   const [error, setError] = useState<string | null>(null);
 
   function load(rangeFrom: string, rangeTo: string, filterPath: string) {
-    setLoading(true);
-    setError(null);
     return webVitalsAdminApi
       .summary({
         from: rangeFrom,
@@ -54,6 +52,10 @@ export function useAdminWebVitalsPage() {
     rows,
     loading,
     error,
-    reload: () => load(from, to, path),
+    reload: () => {
+      setLoading(true);
+      setError(null);
+      return load(from, to, path);
+    },
   };
 }

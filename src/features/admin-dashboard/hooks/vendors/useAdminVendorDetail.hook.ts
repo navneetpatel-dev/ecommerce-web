@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useVendorById, useUpdateVendor } from "@/features/vendors";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";
@@ -38,9 +38,14 @@ export function useAdminVendorDetail(vendorId: string | undefined) {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  // Feed the fetched vendor into the editable form during render (React's
+  // "adjust state on prop change" pattern — never a sync-in-effect setState).
+  const [syncedVendorData, setSyncedVendorData] =
+    useState<typeof query.data>(undefined);
+  if (query.data !== syncedVendorData) {
+    setSyncedVendorData(query.data);
     if (query.data) setForm(toForm(query.data));
-  }, [query.data]);
+  }
 
   const patchForm = (patch: Partial<VendorEditForm>) => {
     setForm((prev) => (prev ? { ...prev, ...patch } : prev));

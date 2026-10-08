@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SidebarNav } from "@/shared/components/layout/SidebarNav.component";
 import { WorkspaceNavDrawer } from "@/shared/components/layout/WorkspaceNavDrawer.component";
 import { ShieldCheck } from "lucide-react";
@@ -25,9 +25,12 @@ export function AdminLayoutContainer({
 
   const closeNav = () => setNavOpen(false);
 
-  useEffect(() => {
+  // Close the drawer when the route changes (during render — no sync-in-effect).
+  const [syncedPathname, setSyncedPathname] = useState(pathname);
+  if (pathname !== syncedPathname) {
+    setSyncedPathname(pathname);
     setNavOpen(false);
-  }, [pathname]);
+  }
 
   const sidebarHeader = (
     <div className={styles.adminSidebarHeader}>

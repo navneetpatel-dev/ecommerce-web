@@ -60,12 +60,15 @@ export function useHeader() {
     };
   }, []);
 
-  // Close overlays when the route changes (search select, links, etc.).
-  useEffect(() => {
+  // Close overlays when the route changes (search select, links, etc.) —
+  // during render, so no sync-in-effect setState.
+  const [syncedPathname, setSyncedPathname] = useState(pathname);
+  if (pathname !== syncedPathname) {
+    setSyncedPathname(pathname);
     setMobileSearchOpen(false);
     setMobileNavOpen(false);
     setMegaMenuOpen(false);
-  }, [pathname]);
+  }
 
   const scheduleMegaOpen = () => {
     if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);

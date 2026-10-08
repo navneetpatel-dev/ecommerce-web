@@ -39,10 +39,6 @@ export function resolveCategoryIconName(category: Category): CategoryIconName {
   return (match?.[0] as CategoryIconName | undefined) ?? "default";
 }
 
-export function resolveCategoryIcon(category: Category): LucideIcon {
-  return CATEGORY_ICONS[resolveCategoryIconName(category)];
-}
-
 /** Prefer API image only — no demo Unsplash fallbacks. */
 export function resolveCategoryImageUrl(
   category: Category,

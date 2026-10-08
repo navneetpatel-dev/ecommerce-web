@@ -15,19 +15,17 @@ export function useVendorReviewsPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!vendorId) {
-      setIsLoading(false);
-      return;
-    }
+    if (!vendorId) return;
 
     let cancelled = false;
-    setIsLoading(true);
-    setLoadError(null);
 
     void reviewsApi
       .forVendorMe()
       .then((items) => {
-        if (!cancelled) setReviews(items);
+        if (!cancelled) {
+          setReviews(items);
+          setLoadError(null);
+        }
       })
       .catch((err) => {
         if (!cancelled) {
@@ -54,5 +52,11 @@ export function useVendorReviewsPage() {
     }
   };
 
-  return { reviews, isLoading, loadError, submitting, handleRespond };
+  return {
+    reviews,
+    isLoading: vendorId ? isLoading : false,
+    loadError,
+    submitting,
+    handleRespond,
+  };
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -67,18 +67,33 @@ function InfiniteSingleSelectBody(props: InfiniteSingleSelectProps) {
     searchable,
   });
 
-  useEffect(() => {
+  // Keep the selected label in step with the value/options during render
+  // (React's "adjust state on prop change" pattern; no sync-in-effect). The
+  // label persists when the current options page has no match yet.
+  const [syncedLabelInputs, setSyncedLabelInputs] = useState<{
+    value: string | null;
+    pinnedId: string | null;
+    options: typeof options;
+  } | null>(null);
+  if (
+    syncedLabelInputs?.value !== value ||
+    syncedLabelInputs?.pinnedId !== (pinnedOption?.id ?? null) ||
+    syncedLabelInputs?.options !== options
+  ) {
+    setSyncedLabelInputs({
+      value,
+      pinnedId: pinnedOption?.id ?? null,
+      options,
+    });
     if (!value) {
       setSelectedLabel(null);
-      return;
-    }
-    if (pinnedOption?.id === value) {
+    } else if (pinnedOption?.id === value) {
       setSelectedLabel(pinnedOption.label);
-      return;
+    } else {
+      const match = options.find((option) => option.id === value);
+      if (match) setSelectedLabel(match.label);
     }
-    const match = options.find((option) => option.id === value);
-    if (match) setSelectedLabel(match.label);
-  }, [value, pinnedOption, options]);
+  }
 
   const showSearchField = searchable;
 

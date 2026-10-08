@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motionSafeScrollBehavior } from "@/shared/utils/a11y/scrollMotion";
 import type { ProductImage } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
@@ -34,7 +35,7 @@ export function ImageGalleryThumbnailStrip({
     if (!strip) return;
     const selected = strip.querySelector<HTMLElement>('[aria-selected="true"]');
     selected?.scrollIntoView({
-      behavior: "smooth",
+      behavior: motionSafeScrollBehavior(),
       block: "nearest",
       inline: "nearest",
     });

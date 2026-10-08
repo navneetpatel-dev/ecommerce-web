@@ -16,14 +16,15 @@ export function useReportCatalog(options?: { preferAudience?: string }) {
   const [catalog, setCatalog] = useState<ReportCatalogItem[]>([]);
   const [catalogError, setCatalogError] = useState<string | null>(null);
   const [reportType, setReportTypeState] = useState<string>("");
+  const preferAudience = options?.preferAudience;
 
   const loadCatalog = useCallback(() => {
-    setCatalogError(null);
     return reportsEngineApi
       .catalog()
       .then((items) => {
-        const filtered = options?.preferAudience
-          ? items.filter((i) => i.audience.startsWith(options.preferAudience!))
+        setCatalogError(null);
+        const filtered = preferAudience
+          ? items.filter((i) => i.audience.startsWith(preferAudience))
           : items;
         setCatalog(filtered.length ? filtered : items);
         if ((filtered.length ? filtered : items)[0]) {
@@ -33,7 +34,7 @@ export function useReportCatalog(options?: { preferAudience?: string }) {
       .catch((error) =>
         setCatalogError(getApiErrorMessage(error, LABELS.reportCatalogError)),
       );
-  }, [options?.preferAudience]);
+  }, [preferAudience]);
 
   useEffect(() => {
     void loadCatalog();

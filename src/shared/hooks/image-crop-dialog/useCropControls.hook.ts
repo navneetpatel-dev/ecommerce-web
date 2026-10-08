@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import type { Area } from "react-easy-crop";
 import type { ImageMimeType } from "@/shared/constants/imageSpecs";
 import { getCroppedImageBlob } from "@/shared/utils/media/imageProcessing";
@@ -45,13 +45,18 @@ export function useCropControls(params: UseCropControlsParams) {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [processing, setProcessing] = useState(false);
 
-  useEffect(() => {
-    if (!open) return;
+  // Reset controls during render whenever the dialog opens or the source
+  // image changes (React's "adjust state on prop change" pattern; no
+  // sync-in-effect).
+  const cropResetKey = `${open}|${imageSrc ?? ""}`;
+  const [syncedCropKey, setSyncedCropKey] = useState<string | null>(null);
+  if (open && cropResetKey !== syncedCropKey) {
+    setSyncedCropKey(cropResetKey);
     setCrop({ x: 0, y: 0 });
     setZoom(DEFAULT_ZOOM);
     setRotation(DEFAULT_ROTATION);
     setCroppedAreaPixels(null);
-  }, [open, imageSrc]);
+  }
 
   const onCropComplete = useCallback((_area: Area, pixels: Area) => {
     setCroppedAreaPixels(pixels);

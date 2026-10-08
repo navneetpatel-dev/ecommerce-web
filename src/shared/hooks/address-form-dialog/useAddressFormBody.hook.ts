@@ -58,15 +58,18 @@ export function useAddressFormBody({
     firstMissingRequiredHint(requiredChecks) ??
     (location.status === "pending" ? LABELS.addressLocationFetching : "");
 
-  useEffect(() => {
-    if (location.coords) {
-      setForm((current) => ({
-        ...current,
-        lat: location.coords!.lat,
-        lng: location.coords!.lng,
-      }));
-    }
-  }, [location.coords]);
+  // Fold captured GPS coordinates into the address draft during render
+  // (React's "adjust state on prop change" pattern; no sync-in-effect).
+  const [syncedLocationCoords, setSyncedLocationCoords] =
+    useState<typeof location.coords>(null);
+  if (location.coords && location.coords !== syncedLocationCoords) {
+    setSyncedLocationCoords(location.coords);
+    setForm((current) => ({
+      ...current,
+      lat: location.coords!.lat,
+      lng: location.coords!.lng,
+    }));
+  }
 
   useEffect(() => {
     onDirtyChange?.(isDirty);

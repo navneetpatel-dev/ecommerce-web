@@ -21,7 +21,6 @@ export function useDeliveryDispatchShipmentList({
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const load = useCallback(() => {
-    setLoading(true);
     deliveryAdminApi
       .unassignedShipments()
       .then((rows) => {
@@ -33,6 +32,11 @@ export function useDeliveryDispatchShipmentList({
       .catch(() => setShipments([]))
       .finally(() => setLoading(false));
   }, []);
+
+  const reload = useCallback(() => {
+    setLoading(true);
+    load();
+  }, [load]);
 
   useEffect(() => {
     load();
@@ -51,9 +55,9 @@ export function useDeliveryDispatchShipmentList({
       `${selectedIds.length} shipment(s) assigned.`,
     ).then(() => {
       setSelectedIds([]);
-      load();
+      reload();
     });
-  }, [selectedAgent, selectedIds, run, load]);
+  }, [selectedAgent, selectedIds, run, reload]);
 
   const allIds = useMemo(() => shipments.map((s) => s.id), [shipments]);
 

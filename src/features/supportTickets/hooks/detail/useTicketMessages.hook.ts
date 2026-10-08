@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useTicketMessagesInfinite } from "../../api/list/supportTickets.queries";
 
@@ -19,6 +19,9 @@ export function useTicketMessages(ticketId: string) {
   }, [messagesQuery.data]);
 
   const useVirtual = messages.length > 0;
+  // TanStack Virtual returns functions the compiler cannot memoize; the
+  // virtualizer is consumed directly, so no memoization is needed.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: messages.length,
     getScrollElement: () => messagesParentRef.current,
@@ -27,11 +30,11 @@ export function useTicketMessages(ticketId: string) {
     enabled: useVirtual,
   });
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     if (messages.length > 0) {
       virtualizer.scrollToIndex(messages.length - 1, { align: "end" });
     }
-  };
+  }, [messages.length, virtualizer]);
 
   const initialScrollDone = useRef(false);
   useEffect(() => {
@@ -39,7 +42,7 @@ export function useTicketMessages(ticketId: string) {
       initialScrollDone.current = true;
       requestAnimationFrame(scrollToBottom);
     }
-  }, [messages.length]);
+  }, [messages.length, scrollToBottom]);
 
   const onLoadEarlier = async () => {
     const el = messagesParentRef.current;

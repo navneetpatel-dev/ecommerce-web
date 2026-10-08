@@ -20,11 +20,7 @@ export function useCaptureLocation(hasExisting: boolean) {
   );
 
   const capture = useCallback(() => {
-    if (typeof navigator === "undefined" || !navigator.geolocation) {
-      setStatus("unsupported");
-      return;
-    }
-    setStatus("pending");
+    if (typeof navigator === "undefined" || !navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setCoords({
@@ -40,12 +36,21 @@ export function useCaptureLocation(hasExisting: boolean) {
     );
   }, []);
 
+  const retry = useCallback(() => {
+    setStatus("pending");
+    capture();
+  }, [capture]);
+
   useEffect(() => {
-    if (!hasExisting) capture();
     // Only auto-capture once on mount for a brand-new address; editing an
     // address that already has coordinates keeps them unless the user retries.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (!hasExisting) capture();
+  }, [hasExisting, capture]);
 
-  return { status, coords, retry: capture };
+  // Derived so `capture` itself never setStates synchronously (the mount
+  // effect above stays free of set-state-in-effect).
+  const unsupported =
+    typeof navigator !== "undefined" && !navigator.geolocation;
+
+  return { status: unsupported ? "unsupported" : status, coords, retry };
 }

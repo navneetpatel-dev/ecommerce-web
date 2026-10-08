@@ -48,6 +48,9 @@ export function usePersonalInfoForm() {
     }
   }, [profile, reset]);
 
+  // react-hook-form's watch() is compiler-incompatible by design; the
+  // value is used directly in render, so no memoization is needed.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const nameValue = watch("name");
   const canSubmit =
     Boolean(nameValue?.trim()) && formState.isValid && formState.isDirty;

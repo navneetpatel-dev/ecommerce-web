@@ -90,7 +90,8 @@ export function useQuantitySelector({
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDraft(e.target.value);
+    // text + inputMode=numeric: digits only, so the draft never holds "e"/"+-".
+    setDraft(e.target.value.replace(/\D/g, ""));
   };
 
   const handleStopBubble = (event: MouseEvent) => {

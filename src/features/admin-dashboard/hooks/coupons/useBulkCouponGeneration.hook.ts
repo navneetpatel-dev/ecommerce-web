@@ -71,6 +71,9 @@ export function useBulkCouponGeneration(onDone: () => void) {
   });
 
   const canBulk =
+    // react-hook-form's watch() is compiler-incompatible by design; the
+    // value is used directly in render, so no memoization is needed.
+    // eslint-disable-next-line react-hooks/incompatible-library
     BulkFormSchema.safeParse(bulkMetaForm.watch()).success &&
     CouponSchema.safeParse(templateForm.watch()).success;
 

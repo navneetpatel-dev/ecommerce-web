@@ -53,7 +53,7 @@ export function QuantitySelector(props: QuantitySelectorProps) {
 
   const valueCell = isEditingUnlocked ? (
     <input
-      type="number"
+      type="text"
       inputMode="numeric"
       // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: this control lives in a dialog/popover that opened from a user action, where moving focus into the panel is the expected behaviour
       autoFocus

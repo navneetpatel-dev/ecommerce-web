@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   SUPPORT_TICKET_STATUS,
   type SupportTicketPriority,
@@ -42,13 +42,15 @@ export function useTicketThreadState(ticket: SupportTicket, mode: RoleMode) {
   );
   const ratingState = useTicketRating(actions.rate);
 
-  useEffect(() => {
+  // Re-sync assignee/priority from the ticket during render when they change
+  // (React's "adjust state on prop change" pattern; no sync-in-effect).
+  const ticketSyncKey = `${ticket.assignedToId ?? ""}|${ticket.priority}`;
+  const [syncedTicketKey, setSyncedTicketKey] = useState<string | null>(null);
+  if (ticketSyncKey !== syncedTicketKey) {
+    setSyncedTicketKey(ticketSyncKey);
     setAssigneeId(ticket.assignedToId ?? "");
-  }, [ticket.assignedToId]);
-
-  useEffect(() => {
     setPriority(ticket.priority);
-  }, [ticket.priority]);
+  }
 
   const existingImageCount = ticket.imageAttachmentCount ?? 0;
   const existingVideoCount = ticket.videoAttachmentCount ?? 0;

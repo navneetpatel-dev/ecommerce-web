@@ -92,9 +92,10 @@ export function useAdminCategoriesPage() {
     if (next) setDialogOpen(true);
     else discard.requestClose(() => setDialogOpen(false));
   };
-
-  const deleteCategoryFor = (rowId: string) => () =>
-    categoriesApi.delete(rowId).then(list.reload);
+  const deleteCategoryFor = useCallback(
+    (rowId: string) => () => categoriesApi.delete(rowId).then(list.reload),
+    [list.reload],
+  );
   const renderActions = useCallback(
     (row: Category) => (
       <>
@@ -115,9 +116,8 @@ export function useAdminCategoriesPage() {
         />
       </>
     ),
-    [list.reload],
+    [deleteCategoryFor, list.reload],
   );
-
   return {
     open,
     setOpen: setDialogOpen,

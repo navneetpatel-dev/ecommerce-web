@@ -72,6 +72,7 @@ export function useAdminEditCategoryAction({
 
   useUnsavedChanges(form.formState.isDirty);
 
+  // eslint-disable-next-line react-hooks/incompatible-library -- react-hook-form watch() is compiler-incompatible; used directly in render.
   const values = form.watch();
   const canSubmit = CategoryFormSchema.safeParse(values).success;
 
@@ -85,9 +86,7 @@ export function useAdminEditCategoryAction({
       seoTitle: category.seoTitle ?? "",
       seoDescription: category.seoDescription ?? "",
       commissionRate:
-        category.commissionRate != null && category.commissionRate !== undefined
-          ? String(category.commissionRate)
-          : "",
+        category.commissionRate != null ? String(category.commissionRate) : "",
       returnWindowDays:
         category.returnWindowDays != null
           ? String(category.returnWindowDays)

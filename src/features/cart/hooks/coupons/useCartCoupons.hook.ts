@@ -83,9 +83,8 @@ export function useCartCoupons({
         setCouponPending(false);
       }
     },
-    [couponInput, cart, loadEligible, refreshCart, requireAuth, setCouponCode],
+    [couponInput, loadEligible, refreshCart, requireAuth, setCouponCode],
   );
-
   /** Omit `code` to clear every stacked coupon (legacy "Remove" behavior). */
   const removeCoupon = useCallback(
     async (code?: string) => {
@@ -116,7 +115,8 @@ export function useCartCoupons({
     [loadEligible, refreshCart, requireAuth, setCouponCode],
   );
 
-  // Sync store from cart revalidation
+  // Sync coupon store (external system) from server cart truth.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (cartApplied?.code) {
       setCouponCode(cartApplied.code, { manual: manualCouponOverride });
@@ -125,7 +125,7 @@ export function useCartCoupons({
       setCouponMessage(removedReason);
     }
   }, [cartApplied?.code, manualCouponOverride, removedReason, setCouponCode]);
-
+  /* eslint-enable react-hooks/set-state-in-effect */
   const applyFromInput = () => applyCoupon(undefined, { manual: true });
   const applyEligibleCode = (code: string) =>
     applyCoupon(code, { manual: true });

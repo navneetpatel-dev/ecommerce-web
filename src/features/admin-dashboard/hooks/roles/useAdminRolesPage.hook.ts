@@ -19,8 +19,6 @@ export function useAdminRolesPage() {
   const [editingRoleId, setEditingRoleId] = useState<string | null>(null);
 
   const load = useCallback(() => {
-    setLoading(true);
-    setError(null);
     Promise.all([rolesApi.list(), rolesApi.listPermissions()])
       .then(([roleRows, permissionRows]) => {
         setRoles(roleRows);
@@ -31,6 +29,12 @@ export function useAdminRolesPage() {
       )
       .finally(() => setLoading(false));
   }, []);
+
+  const reload = () => {
+    setLoading(true);
+    setError(null);
+    load();
+  };
 
   useEffect(() => {
     load();
@@ -43,7 +47,7 @@ export function useAdminRolesPage() {
     try {
       await rolesApi.create(newRoleName.trim());
       setNewRoleName("");
-      load();
+      reload();
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotCreateRole));
     } finally {
@@ -55,7 +59,7 @@ export function useAdminRolesPage() {
     setError(null);
     try {
       await rolesApi.delete(id);
-      load();
+      reload();
     } catch (err) {
       setError(getApiErrorMessage(err, LABELS.couldNotDeleteRole));
     }
@@ -63,7 +67,7 @@ export function useAdminRolesPage() {
 
   const savePermissions = async (id: string, permissionKeys: string[]) => {
     await rolesApi.setPermissions(id, permissionKeys);
-    load();
+    reload();
     setEditingRoleId(null);
   };
 

@@ -15,19 +15,17 @@ export function useVendorQnaPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!vendorId) {
-      setIsLoading(false);
-      return;
-    }
+    if (!vendorId) return;
 
     let cancelled = false;
-    setIsLoading(true);
-    setLoadError(null);
 
     void productQnaApi
       .forVendorMe()
       .then((items) => {
-        if (!cancelled) setQuestions(items);
+        if (!cancelled) {
+          setQuestions(items);
+          setLoadError(null);
+        }
       })
       .catch((err) => {
         if (!cancelled) {
@@ -54,5 +52,11 @@ export function useVendorQnaPage() {
     }
   };
 
-  return { questions, isLoading, loadError, submitting, handleAnswer };
+  return {
+    questions,
+    isLoading: vendorId ? isLoading : false,
+    loadError,
+    submitting,
+    handleAnswer,
+  };
 }

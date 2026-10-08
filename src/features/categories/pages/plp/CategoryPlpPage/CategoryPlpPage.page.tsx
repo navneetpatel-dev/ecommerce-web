@@ -20,8 +20,41 @@ interface CategoryPlpPageProps {
 
 export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
   const plp = useCategoryPlp(slugPath);
+  const {
+    breadcrumbItems,
+    category,
+    categoryError,
+    categoryLoading,
+    clearComparedProducts,
+    clearFilters,
+    closeFilters,
+    closeSort,
+    compareAtLimit,
+    compareMode,
+    compareSectionRef,
+    comparedIds,
+    comparedProducts,
+    data,
+    facetSelections,
+    facets,
+    filterOpen,
+    filters,
+    hasActiveFacets,
+    isFetching,
+    openFilters,
+    openSort,
+    scrollToCompare,
+    selectSort,
+    sortOpen,
+    sortOptions,
+    toggleCompareMode,
+    toggleCompareProduct,
+    toggleFacetValue,
+    updateFilter,
+    updateFilterDebounced,
+  } = plp;
 
-  if (plp.categoryLoading) {
+  if (categoryLoading) {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.loadingLine1} />
@@ -31,7 +64,7 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
     );
   }
 
-  if (plp.categoryError || !plp.category) {
+  if (categoryError || !category) {
     return (
       <div className={styles.emptyContainer}>
         <EmptyState
@@ -47,81 +80,80 @@ export function CategoryPlpPage({ slugPath }: CategoryPlpPageProps) {
   }
 
   const parentCategoryLabel =
-    plp.breadcrumbItems[plp.breadcrumbItems.length - 2]?.label ??
-    LABELS.categories;
+    breadcrumbItems[breadcrumbItems.length - 2]?.label ?? LABELS.categories;
 
   return (
     <div className={styles.pageContainer}>
       <CategoryHeader
-        category={plp.category}
-        breadcrumbItems={plp.breadcrumbItems}
+        category={category}
+        breadcrumbItems={breadcrumbItems}
         slugPath={slugPath}
       />
 
       <MobileActionBar
-        onOpenFilters={plp.openFilters}
-        onOpenSort={plp.openSort}
-        compareMode={plp.compareMode}
-        onToggleCompareMode={plp.toggleCompareMode}
+        onOpenFilters={openFilters}
+        onOpenSort={openSort}
+        compareMode={compareMode}
+        onToggleCompareMode={toggleCompareMode}
         variant="dense"
       />
 
       <div className={styles.layoutRow}>
         <FilterSidebar
           idPrefix="cat-desktop"
-          minPrice={plp.filters.minPrice}
-          maxPrice={plp.filters.maxPrice}
-          rating={plp.filters.rating}
-          facets={plp.facets}
-          facetSelections={plp.facetSelections}
-          onToggleFacet={plp.toggleFacetValue}
-          onUpdateFilter={plp.updateFilterDebounced}
-          onClear={plp.clearFilters}
+          minPrice={filters.minPrice}
+          maxPrice={filters.maxPrice}
+          rating={filters.rating}
+          facets={facets}
+          facetSelections={facetSelections}
+          onToggleFacet={toggleFacetValue}
+          onUpdateFilter={updateFilterDebounced}
+          onClear={clearFilters}
         />
 
         <ProductResults
-          filters={plp.filters}
-          data={plp.data}
-          isFetching={plp.isFetching}
-          compareMode={plp.compareMode}
-          comparedIds={plp.comparedIds}
-          compareAtLimit={plp.compareAtLimit}
-          onToggleCompare={plp.toggleCompareProduct}
-          onToggleCompareMode={plp.toggleCompareMode}
-          onUpdateFilter={plp.updateFilter}
-          hasActiveFacets={plp.hasActiveFacets}
-          categoryName={plp.category.name}
-          onClearFilters={plp.clearFilters}
+          filters={filters}
+          data={data}
+          isFetching={isFetching}
+          compareMode={compareMode}
+          comparedIds={comparedIds}
+          compareAtLimit={compareAtLimit}
+          onToggleCompare={toggleCompareProduct}
+          onToggleCompareMode={toggleCompareMode}
+          onUpdateFilter={updateFilter}
+          hasActiveFacets={hasActiveFacets}
+          categoryName={category.name}
+          onClearFilters={clearFilters}
           parentCategoryLabel={parentCategoryLabel}
           slugPath={slugPath}
         />
       </div>
 
       <FilterSheet
-        open={plp.filterOpen}
-        onClose={plp.closeFilters}
-        filters={plp.filters}
-        facets={plp.facets}
-        facetSelections={plp.facetSelections}
-        onToggleFacet={plp.toggleFacetValue}
-        onUpdateFilter={plp.updateFilterDebounced}
-        onClear={plp.clearFilters}
+        open={filterOpen}
+        onClose={closeFilters}
+        filters={filters}
+        facets={facets}
+        facetSelections={facetSelections}
+        onToggleFacet={toggleFacetValue}
+        onUpdateFilter={updateFilterDebounced}
+        onClear={clearFilters}
       />
 
       <SortSheet
-        open={plp.sortOpen}
-        onClose={plp.closeSort}
-        sortOptions={plp.sortOptions}
-        currentSort={plp.filters.sort}
-        onSelect={plp.selectSort}
+        open={sortOpen}
+        onClose={closeSort}
+        sortOptions={sortOptions}
+        currentSort={filters.sort}
+        onSelect={selectSort}
       />
 
       <CompareTray
-        ref={plp.compareSectionRef}
-        products={plp.comparedProducts}
-        onToggleProduct={plp.toggleCompareProduct}
-        onClear={plp.clearComparedProducts}
-        onCompareNow={plp.scrollToCompare}
+        ref={compareSectionRef}
+        products={comparedProducts}
+        onToggleProduct={toggleCompareProduct}
+        onClear={clearComparedProducts}
+        onCompareNow={scrollToCompare}
       />
     </div>
   );

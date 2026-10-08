@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useMounted } from "@/shared/hooks/ui/useMounted.hook";
 import { useQueries } from "@tanstack/react-query";
 import type { ProductListItem } from "@/shared/api/types";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
@@ -23,12 +24,17 @@ export function useRecentlyViewed(limit = 8) {
   const isAuthenticated = useAuthStore((s) => Boolean(s.accessToken));
   const serverQuery = useRecentlyViewedQuery(isAuthenticated);
 
-  const [stored, setStored] = useState<ProductListItem[]>([]);
+  const mounted = useMounted();
 
-  useEffect(() => {
-    if (isAuthenticated) return;
-    setStored(getRecentlyViewedProducts().slice(0, limit));
-  }, [limit, isAuthenticated]);
+  // Guests read localStorage after hydration only (client-only source; the
+  // mounted gate keeps SSR and the first client render identical).
+  const stored = useMemo(
+    () =>
+      mounted && !isAuthenticated
+        ? getRecentlyViewedProducts().slice(0, limit)
+        : [],
+    [mounted, isAuthenticated, limit],
+  );
 
   const slugsToHydrate = useMemo(
     () =>

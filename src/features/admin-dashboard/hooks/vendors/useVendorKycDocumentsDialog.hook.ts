@@ -21,25 +21,36 @@ export function useVendorKycDocumentsDialog(vendorId: string, open: boolean) {
   const [actionError, setActionError] = useState<string | null>(null);
   const [openingDocId, setOpeningDocId] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const checklist = await vendorsApi.getKycChecklist(vendorId);
-      setItems(checklist.items);
-      setIsComplete(checklist.isComplete);
-    } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist));
-      setItems([]);
-    } finally {
-      setLoading(false);
-    }
+  const load = useCallback(() => {
+    return vendorsApi
+      .getKycChecklist(vendorId)
+      .then((checklist) => {
+        setError(null);
+        setItems(checklist.items);
+        setIsComplete(checklist.isComplete);
+      })
+      .catch((err) => {
+        setError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist));
+        setItems([]);
+      })
+      .finally(() => setLoading(false));
   }, [vendorId]);
 
   useEffect(() => {
     if (!open) return;
     void load();
   }, [open, load]);
+
+  // Re-arm the spinner while the dialog is closed so the next open starts
+  // fresh (during render — keeps `load` free of synchronous setState).
+  const [syncedOpen, setSyncedOpen] = useState(open);
+  if (open !== syncedOpen) {
+    setSyncedOpen(open);
+    if (!open) {
+      setLoading(true);
+      setError(null);
+    }
+  }
 
   const openDocument = async (documentId: string) => {
     setOpeningDocId(documentId);
@@ -68,6 +79,7 @@ export function useVendorKycDocumentsDialog(vendorId: string, open: boolean) {
     try {
       await vendorsApi.verifyDocument(activeItem.documentId);
       closeConfirm();
+      setLoading(true);
       await load();
     } catch (err) {
       setActionError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist));
@@ -83,6 +95,7 @@ export function useVendorKycDocumentsDialog(vendorId: string, open: boolean) {
     try {
       await vendorsApi.rejectDocument(activeItem.documentId, reason.trim());
       closeConfirm();
+      setLoading(true);
       await load();
     } catch (err) {
       setActionError(getApiErrorMessage(err, LABELS.couldNotLoadKycChecklist));

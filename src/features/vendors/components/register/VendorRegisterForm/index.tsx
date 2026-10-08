@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn, useWatch } from "react-hook-form";
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { FormActions, FormStack } from "@/shared/components/forms";
@@ -58,9 +58,15 @@ export function VendorRegisterForm({
   } = form;
   const [auxError, setAuxError] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [requiredDocs, setRequiredDocs] = useState<VendorDocumentType[]>([]);
+  const [requiredDocsState, setRequiredDocsState] = useState<
+    VendorDocumentType[]
+  >([]);
   const entityType = watch("entityType");
-  const categoryIds = watch("categoryIds") ?? [];
+  const watchedCategoryIds = useWatch({ control, name: "categoryIds" });
+  const categoryIds = useMemo(
+    () => watchedCategoryIds ?? [],
+    [watchedCategoryIds],
+  );
   const panHolderName = watch("panHolderName");
   const bankAccountHolderName = watch("bankAccountHolderName");
   const showNameWarning = namesMismatch(panHolderName, bankAccountHolderName);
@@ -89,21 +95,22 @@ export function VendorRegisterForm({
   }, []);
 
   useEffect(() => {
-    if (!entityType || categoryIds.length === 0) {
-      setRequiredDocs([]);
-      return;
-    }
+    if (!entityType || categoryIds.length === 0) return;
     void vendorsApi
       .previewRequiredDocuments(entityType, categoryIds)
       .then((res) => {
-        setRequiredDocs(res.requiredDocumentTypes);
+        setRequiredDocsState(res.requiredDocumentTypes);
         setAuxError(null);
       })
       .catch((err: unknown) => {
-        setRequiredDocs([]);
+        setRequiredDocsState([]);
         setAuxError(getApiErrorMessage(err, LABELS.couldNotLoadData));
       });
   }, [entityType, categoryIds]);
+
+  // Clearing the selection hides the docs list without a state reset effect.
+  const hasCategorySelection = Boolean(entityType) && categoryIds.length > 0;
+  const requiredDocs = hasCategorySelection ? requiredDocsState : [];
 
   const selectedSet = useMemo(() => new Set(categoryIds), [categoryIds]);
 

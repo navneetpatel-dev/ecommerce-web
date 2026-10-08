@@ -21,10 +21,18 @@ export function useShipmentLocationSocket(
   const [subscribed, setSubscribed] = useState(false);
   const socketRef = useRef<Socket | null>(null);
 
+  // Reset the subscription flag during render when the socket target changes
+  // (React's "adjust state on prop change" pattern; no sync-in-effect).
+  const socketKey = `${enabled}|${trackingNumber ?? ""}`;
+  const [syncedSocketKey, setSyncedSocketKey] = useState(socketKey);
+  if (socketKey !== syncedSocketKey) {
+    setSyncedSocketKey(socketKey);
+    setSubscribed(false);
+  }
+
   useEffect(() => {
     if (!enabled || !trackingNumber) return;
     let cancelled = false;
-    setSubscribed(false);
 
     void import("socket.io-client").then(({ io }) => {
       if (cancelled) return;

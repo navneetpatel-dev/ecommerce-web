@@ -84,9 +84,8 @@ export function CashDepositDialog({
             >
               <Input
                 id="cash-deposit-amount"
-                type="number"
-                min={0}
-                step="0.01"
+                type="text"
+                inputMode="decimal"
                 value={amount}
                 onChange={onAmountChange}
               />

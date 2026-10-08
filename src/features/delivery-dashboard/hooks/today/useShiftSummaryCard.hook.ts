@@ -19,7 +19,11 @@ export function useShiftSummaryCard(summary: ShiftSummary) {
   };
 
   const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAmount(e.target.value);
+    // text + inputMode=decimal: strip non-numeric and collapse to one dot so
+    // the draft can never hold "12.3.4" or stray letters.
+    const cleaned = e.target.value.replace(/[^0-9.]/g, "");
+    const [whole, ...decimals] = cleaned.split(".");
+    setAmount(decimals.length ? `${whole}.${decimals.join("")}` : whole);
   };
 
   const handleNoteChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +49,8 @@ export function useShiftSummaryCard(summary: ShiftSummary) {
     void submit();
   };
 
-  const isSubmitDisabled = !amount || Number(amount) < 0;
+  const isSubmitDisabled =
+    !amount || !Number.isFinite(Number(amount)) || Number(amount) < 0;
 
   return {
     open,

@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import type { ProductListItem } from "@/shared/api/types";
 import { MAX_COMPARED_PRODUCTS } from "@/features/products";
+import { motionSafeScrollBehavior } from "@/shared/utils/a11y/scrollMotion";
 
 export function useCompareTray() {
   const [compareMode, setCompareMode] = useState(false);
@@ -32,7 +33,7 @@ export function useCompareTray() {
     clearComparedProducts: () => setComparedProducts([]),
     scrollToCompare: () => {
       compareSectionRef.current?.scrollIntoView({
-        behavior: "smooth",
+        behavior: motionSafeScrollBehavior(),
         block: "start",
       });
     },

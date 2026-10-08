@@ -18,12 +18,16 @@ export function useCashDepositsPanel() {
   const rejectPrompt = useReasonPrompt();
 
   const load = () => {
-    setLoading(true);
     deliveryAdminApi
       .cashDeposits()
       .then(setDeposits)
       .catch(() => setDeposits([]))
       .finally(() => setLoading(false));
+  };
+
+  const reload = () => {
+    setLoading(true);
+    load();
   };
 
   useEffect(load, []);
@@ -33,7 +37,7 @@ export function useCashDepositsPanel() {
     setPendingId(depositId);
     try {
       await deliveryAdminApi.verifyCashDeposit(depositId, "VERIFY");
-      load();
+      reload();
     } catch (actionError) {
       setError(getApiErrorMessage(actionError, LABELS.couldNotUpdateDeposit));
     } finally {
@@ -46,7 +50,7 @@ export function useCashDepositsPanel() {
     try {
       await deliveryAdminApi.verifyCashDeposit(depositId, "REJECT", reason);
       rejectPrompt.cancel();
-      load();
+      reload();
     } catch (actionError) {
       setError(getApiErrorMessage(actionError, LABELS.couldNotUpdateDeposit));
     } finally {

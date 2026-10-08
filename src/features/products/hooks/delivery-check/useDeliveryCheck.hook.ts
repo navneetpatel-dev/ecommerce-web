@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { PINCODE_PATTERN } from "@/shared/constants/geo/pincode";
 import { checkoutApi, checkoutKeys } from "@/features/checkout";
@@ -26,11 +26,16 @@ export function useDeliveryCheck(params: UseDeliveryCheckParams) {
   const [pincode, setPincode] = useState("");
   const [submitted, setSubmitted] = useState("");
 
-  useEffect(() => {
-    if (!deliveryAreaPincode) return;
+  // Mirror the funnel-wide delivery area into this PDP-local check during
+  // render (React's "adjust state on prop change" pattern; no sync-in-effect).
+  const [syncedAreaPincode, setSyncedAreaPincode] = useState<string | null>(
+    null,
+  );
+  if (deliveryAreaPincode && deliveryAreaPincode !== syncedAreaPincode) {
+    setSyncedAreaPincode(deliveryAreaPincode);
     setSubmitted(deliveryAreaPincode);
     setPincode((current) => current || deliveryAreaPincode);
-  }, [deliveryAreaPincode]);
+  }
 
   const quoteQuery = useQuery({
     queryKey: checkoutKeys.pdpShippingRates(

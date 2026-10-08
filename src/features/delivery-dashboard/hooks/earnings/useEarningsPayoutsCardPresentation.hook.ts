@@ -35,8 +35,8 @@ export function useEarningsPayoutsCardPresentation() {
   const shiftSummary = useShiftSummary();
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
-  const earningsData = earnings.data ?? [];
-  const payoutsData = payouts.data ?? [];
+  const earningsData = useMemo(() => earnings.data ?? [], [earnings.data]);
+  const payoutsData = useMemo(() => payouts.data ?? [], [payouts.data]);
 
   const pendingLoading = Boolean(shiftSummary.isLoading);
   // Null when the shift summary failed — said plainly, never shown as ₹0.00 pending.

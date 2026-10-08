@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motionSafeScrollBehavior } from "@/shared/utils/a11y/scrollMotion";
 
 export function useScrollToTop(thresholdMultiplier = 1.5) {
   const [visible, setVisible] = useState(false);
@@ -14,7 +15,7 @@ export function useScrollToTop(thresholdMultiplier = 1.5) {
   }, [thresholdMultiplier]);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: motionSafeScrollBehavior() });
   };
 
   return { visible, scrollToTop };

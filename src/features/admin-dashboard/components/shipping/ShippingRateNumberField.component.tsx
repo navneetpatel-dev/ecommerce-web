@@ -9,8 +9,6 @@ interface ShippingRateNumberFieldProps {
   htmlFor: string;
   value: string;
   onChange: (value: string) => void;
-  min?: number;
-  step?: string;
   placeholder?: string;
 }
 
@@ -20,20 +18,22 @@ export function ShippingRateNumberField({
   htmlFor,
   value,
   onChange,
-  min,
-  step,
   placeholder,
 }: ShippingRateNumberFieldProps) {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
-    onChange(event.target.value);
+  // type="text" + inputMode keeps mobile numeric keyboards without the
+  // scroll-wheel/`e` pitfalls of type="number"; non-numeric input is stripped.
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const cleaned = event.target.value.replace(/[^0-9.]/g, "");
+    const [whole, ...decimals] = cleaned.split(".");
+    onChange(decimals.length ? `${whole}.${decimals.join("")}` : whole);
+  };
 
   return (
     <FormFieldFrame label={label} htmlFor={htmlFor}>
       <Input
         id={htmlFor}
-        type="number"
-        min={min}
-        step={step}
+        type="text"
+        inputMode="decimal"
         value={value}
         onChange={handleChange}
         placeholder={placeholder}

@@ -24,28 +24,27 @@ export function useCouponEligibility(
 ): UseCouponEligibilityResult {
   const accessToken = useAuthStore((s) => s.accessToken);
   const [eligible, setEligible] = useState<EligibleCoupon[]>([]);
-  const [eligibleLoading, setEligibleLoading] = useState(false);
+  const [eligibleLoading, setEligibleLoading] = useState(true);
   const [eligibleError, setEligibleError] = useState<string | null>(null);
 
-  const loadEligible = useCallback(async () => {
+  const loadEligible = useCallback((): Promise<EligibleCoupon[]> => {
     if (!accessToken || !enabled) {
-      setEligible([]);
-      return [];
+      return Promise.resolve([]);
     }
-    setEligibleLoading(true);
-    setEligibleError(null);
-    try {
-      const list = await couponsApi.eligible();
-      setEligible(list);
-      return list;
-    } catch (error) {
-      // Offers are supplementary: keep the cart usable on failure.
-      setEligible([]);
-      setEligibleError(getApiErrorMessage(error, LABELS.couldNotLoadOptions));
-      return [];
-    } finally {
-      setEligibleLoading(false);
-    }
+    return couponsApi
+      .eligible()
+      .then((list) => {
+        setEligible(list);
+        setEligibleError(null);
+        return list;
+      })
+      .catch((error) => {
+        // Offers are supplementary: keep the cart usable on failure.
+        setEligible([]);
+        setEligibleError(getApiErrorMessage(error, LABELS.couldNotLoadOptions));
+        return [] as EligibleCoupon[];
+      })
+      .finally(() => setEligibleLoading(false));
   }, [accessToken, enabled]);
 
   // Load eligible offers without auto-applying
@@ -54,11 +53,10 @@ export function useCouponEligibility(
     void loadEligible();
   }, [accessToken, hasItems, enabled, loadEligible]);
 
-  useEffect(() => {
-    if (!hasItems) {
-      setEligible([]);
-    }
-  }, [hasItems]);
-
-  return { eligible, eligibleLoading, eligibleError, loadEligible };
+  return {
+    eligible: hasItems ? eligible : [],
+    eligibleLoading: enabled && hasItems ? eligibleLoading : false,
+    eligibleError,
+    loadEligible,
+  };
 }

@@ -23,7 +23,7 @@ export function InventoryStockEditor({
   );
 
   const handleStockChange = (event: ChangeEvent<HTMLInputElement>) =>
-    setStock(event.target.value);
+    setStock(event.target.value.replace(/\D/g, ""));
   const handleSave = () => {
     void save(reload);
   };
@@ -33,9 +33,8 @@ export function InventoryStockEditor({
       <Input
         aria-label={`Stock for ${row.sku}`}
         className={adminPagesStyles.stockEditorInput}
-        min={0}
-        step={1}
-        type="number"
+        type="text"
+        inputMode="numeric"
         value={stock}
         onChange={handleStockChange}
       />

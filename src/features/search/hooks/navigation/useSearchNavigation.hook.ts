@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { useAutocomplete } from "../../api/search/search.queries";
@@ -43,15 +43,13 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
     setActiveIndex(-1);
   }, []);
 
-  useEffect(() => {
-    setActiveIndex(-1);
-  }, [trimmedDebounced, suggestions]);
-
-  useEffect(() => {
+  // Close the dropdown and clear the term when the route changes.
+  const [syncedPathname, setSyncedPathname] = useState(pathname);
+  if (pathname !== syncedPathname) {
+    setSyncedPathname(pathname);
     closeDropdown();
     setTerm("");
-  }, [pathname, closeDropdown]);
-
+  }
   const handleSelect = useCallback(
     (suggestion: SearchSuggestion) => {
       closeDropdown();
@@ -111,6 +109,7 @@ export function useSearchNavigation(onAfterSubmit?: () => void) {
     open,
     canSuggest,
     suggestions,
+    term: trimmedDebounced,
     activeIndex,
     setActiveIndex,
     closeDropdown,

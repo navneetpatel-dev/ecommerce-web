@@ -22,12 +22,18 @@ export function useAgentPayoutsPanel() {
   const failPrompt = useReasonPrompt();
 
   const load = () => {
-    setLoading(true);
     deliveryAdminApi
       .payouts()
       .then(setPayouts)
       .catch(() => setPayouts([]))
       .finally(() => setLoading(false));
+  };
+
+  // Manual reloads flip loading back on; the mount call relies on the initial
+  // `true` so `load` itself never setState-synchronously (rule: set-state-in-effect).
+  const reload = () => {
+    setLoading(true);
+    load();
   };
 
   useEffect(load, []);
@@ -52,7 +58,7 @@ export function useAgentPayoutsPanel() {
           ? formatLabel(LABELS.payoutBatchesCreated, { count: created.length })
           : LABELS.noPendingEarnings,
       );
-      load();
+      reload();
     } catch (processError) {
       setError(getApiErrorMessage(processError, LABELS.couldNotProcessPayouts));
     } finally {
@@ -69,7 +75,7 @@ export function useAgentPayoutsPanel() {
     try {
       await deliveryAdminApi.markPayoutFailed(payoutId, reason);
       failPrompt.cancel();
-      load();
+      reload();
     } catch (failError) {
       setError(getApiErrorMessage(failError, LABELS.couldNotMarkPayoutFailed));
     } finally {
@@ -90,7 +96,7 @@ export function useAgentPayoutsPanel() {
     setError(null);
     try {
       await deliveryAdminApi.retryPayout(payoutId);
-      load();
+      reload();
     } catch (retryError) {
       setError(getApiErrorMessage(retryError, LABELS.couldNotRetryPayout));
     } finally {

@@ -18,30 +18,56 @@ import { productListingPageStyles } from "./productListingPage.styles";
 
 export function ProductListingPage() {
   const listing = useProductListing();
+  const {
+    clearComparedProducts,
+    clearFilters,
+    closeFilters,
+    closeSort,
+    compareAtLimit,
+    compareMode,
+    compareSectionRef,
+    comparedIds,
+    comparedProducts,
+    data,
+    filterOpen,
+    filters,
+    isFetching,
+    isSearchActive,
+    openFilters,
+    openSort,
+    removeAttrValue,
+    removeFilters,
+    scrollToCompare,
+    selectSort,
+    sortOpen,
+    toggleCompareMode,
+    toggleCompareProduct,
+    updateFilter,
+    updateFilterDebounced,
+  } = listing;
   const { data: categories } = useCategories();
   const categoryName = categories?.find(
-    (category) => category.id === listing.filters.categoryId,
+    (category) => category.id === filters.categoryId,
   )?.name;
-  const empty = getListingEmptyState(listing.filters, categoryName);
-  const heading = getListingHeading(listing.filters, categoryName);
+  const empty = getListingEmptyState(filters, categoryName);
+  const heading = getListingHeading(filters, categoryName);
   const chips = useAppliedFilterChips({
-    filters: listing.filters,
-    removeFilters: listing.removeFilters,
-    removeAttrValue: listing.removeAttrValue,
+    filters: filters,
+    removeFilters: removeFilters,
+    removeAttrValue: removeAttrValue,
     categoryName,
   });
   const didYouMean = useSearchDidYouMean({
-    term: listing.filters.search,
-    hasNoResults: listing.data?.items.length === 0,
+    term: filters.search,
+    hasNoResults: data?.items.length === 0,
   });
   const didYouMeanHref = didYouMean ? suggestionHref(didYouMean) : undefined;
 
-  const handleSortChange = (value: string) =>
-    listing.updateFilter("sort", value);
-  const handlePageChange = (page: number) => listing.updateFilter("page", page);
+  const handleSortChange = (value: string) => updateFilter("sort", value);
+  const handlePageChange = (page: number) => updateFilter("page", page);
   const handleClearFiltersInSheet = () => {
-    listing.clearFilters();
-    listing.closeFilters();
+    clearFilters();
+    closeFilters();
   };
 
   return (
@@ -49,83 +75,83 @@ export function ProductListingPage() {
       <h1 className={productListingPageStyles.srOnly}>{heading}</h1>
 
       <MobileActionBar
-        compareMode={listing.compareMode}
-        onOpenFilters={listing.openFilters}
-        onOpenSort={listing.openSort}
-        onToggleCompareMode={listing.toggleCompareMode}
-        sortDisabled={listing.isSearchActive}
+        compareMode={compareMode}
+        onOpenFilters={openFilters}
+        onOpenSort={openSort}
+        onToggleCompareMode={toggleCompareMode}
+        sortDisabled={isSearchActive}
       />
 
       <div className={productListingPageStyles.mainLayout}>
         <FilterSidebar
           idPrefix="desktop"
-          minPrice={listing.filters.minPrice}
-          maxPrice={listing.filters.maxPrice}
-          rating={listing.filters.rating}
-          onUpdateFilter={listing.updateFilterDebounced}
-          onClear={listing.clearFilters}
-          hideRatingFilter={listing.isSearchActive}
+          minPrice={filters.minPrice}
+          maxPrice={filters.maxPrice}
+          rating={filters.rating}
+          onUpdateFilter={updateFilterDebounced}
+          onClear={clearFilters}
+          hideRatingFilter={isSearchActive}
         />
 
         <div className={productListingPageStyles.resultsWrapper}>
           <ListingResults
-            sort={listing.filters.sort}
-            totalProducts={listing.data?.total}
+            sort={filters.sort}
+            totalProducts={data?.total}
             chips={chips}
-            isFetching={listing.isFetching}
+            isFetching={isFetching}
             onSortChange={handleSortChange}
-            sortDisabled={listing.isSearchActive}
-            compareMode={listing.compareMode}
-            onToggleCompare={listing.toggleCompareMode}
-            isLoading={!listing.data && listing.isFetching}
-            isEmpty={listing.data?.items.length === 0}
+            sortDisabled={isSearchActive}
+            compareMode={compareMode}
+            onToggleCompare={toggleCompareMode}
+            isLoading={!data && isFetching}
+            isEmpty={data?.items.length === 0}
             empty={empty}
             didYouMean={
               didYouMean && didYouMeanHref
                 ? { term: didYouMean.name, href: didYouMeanHref }
                 : undefined
             }
-            products={listing.data?.items}
-            comparedIds={listing.comparedIds}
-            compareAtLimit={listing.compareAtLimit}
-            onToggleCompareProduct={listing.toggleCompareProduct}
-            currentPage={listing.filters.page ?? 1}
-            totalPages={listing.data?.totalPages}
+            products={data?.items}
+            comparedIds={comparedIds}
+            compareAtLimit={compareAtLimit}
+            onToggleCompareProduct={toggleCompareProduct}
+            currentPage={filters.page ?? 1}
+            totalPages={data?.totalPages}
             onPageChange={handlePageChange}
-            onClearFilters={listing.clearFilters}
+            onClearFilters={clearFilters}
           />
         </div>
       </div>
 
       <FiltersBottomSheet
-        open={listing.filterOpen}
-        onClose={listing.closeFilters}
-        minPrice={listing.filters.minPrice}
-        maxPrice={listing.filters.maxPrice}
-        rating={listing.filters.rating}
-        onUpdateFilter={listing.updateFilterDebounced}
+        open={filterOpen}
+        onClose={closeFilters}
+        minPrice={filters.minPrice}
+        maxPrice={filters.maxPrice}
+        rating={filters.rating}
+        onUpdateFilter={updateFilterDebounced}
         onClear={handleClearFiltersInSheet}
-        hideRatingFilter={listing.isSearchActive}
+        hideRatingFilter={isSearchActive}
       />
 
       <SortBottomSheet
-        open={listing.sortOpen}
-        onClose={listing.closeSort}
-        sort={listing.filters.sort}
-        onSelectSort={listing.selectSort}
+        open={sortOpen}
+        onClose={closeSort}
+        sort={filters.sort}
+        onSelectSort={selectSort}
       />
 
       <ProductCompareBar
-        products={listing.comparedProducts}
-        onToggleProduct={listing.toggleCompareProduct}
-        onClear={listing.clearComparedProducts}
-        onCompareNow={listing.scrollToCompare}
+        products={comparedProducts}
+        onToggleProduct={toggleCompareProduct}
+        onClear={clearComparedProducts}
+        onCompareNow={scrollToCompare}
         compareHref={PATHS.compare}
       />
 
       <ProductCompareSection
-        ref={listing.compareSectionRef}
-        products={listing.comparedProducts}
+        ref={compareSectionRef}
+        products={comparedProducts}
       />
     </div>
   );
