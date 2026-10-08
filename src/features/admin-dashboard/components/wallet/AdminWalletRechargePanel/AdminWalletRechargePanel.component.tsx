@@ -42,6 +42,9 @@ export function AdminWalletRechargePanel() {
     controlsDisabled,
   });
 
+  const handleLoad = () => void load(1);
+  const handlePageChange = (nextPage: number) => void load(nextPage);
+
   return (
     <div className={reportPanelStyles.container}>
       {/* Header */}
@@ -85,7 +88,7 @@ export function AdminWalletRechargePanel() {
               <Button
                 type="button"
                 fullWidth="mobile"
-                onClick={() => void load(1)}
+                onClick={handleLoad}
                 disabled={loading || controlsDisabled}
               >
                 {LABELS.reportLoad}
@@ -139,7 +142,7 @@ export function AdminWalletRechargePanel() {
             report={report}
             page={page}
             loading={loading}
-            onPageChange={(nextPage) => void load(nextPage)}
+            onPageChange={handlePageChange}
           />
         </>
       ) : null}

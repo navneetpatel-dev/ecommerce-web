@@ -58,66 +58,68 @@ export function DataTableMobileCards<T>({
           : {};
 
         return (
-          <li
-            key={rowId}
-            className={cn(
-              dataTableMobileStyles.card,
-              rowsInteractive && dataTableMobileStyles.cardInteractive,
-            )}
-            {...rowActivationProps}
-          >
-            {primary ? (
-              <div
-                className={cn(
-                  primary.className,
-                  dataTableMobileStyles.primaryCell,
-                )}
-              >
-                {renderCellContent(
-                  { ...primary, truncate: false },
-                  primaryContent,
-                  row,
-                )}
-              </div>
-            ) : null}
+          <li key={rowId} className={dataTableMobileStyles.card}>
+            {/* Activation sits on an inner region so the action buttons below
+                are siblings — never nested inside a button-role element. */}
+            <div
+              className={cn(
+                rowsInteractive && dataTableMobileStyles.cardInteractive,
+              )}
+              {...rowActivationProps}
+            >
+              {primary ? (
+                <div
+                  className={cn(
+                    primary.className,
+                    dataTableMobileStyles.primaryCell,
+                  )}
+                >
+                  {renderCellContent(
+                    { ...primary, truncate: false },
+                    primaryContent,
+                    row,
+                  )}
+                </div>
+              ) : null}
 
-            {rest.length > 0 ? (
-              <dl
-                className={cn(
-                  dataTableMobileStyles.dl,
-                  primary ? dataTableMobileStyles.dlWithPrimary : undefined,
-                )}
-              >
-                {rest.map((column) => {
-                  const content = resolveCell(column, row, index);
-                  return (
-                    <div
-                      key={column.id}
-                      className={cn(
-                        dataTableMobileStyles.rowItem,
-                        column.mobileRowClassName,
-                      )}
-                    >
-                      <dt className={dataTableMobileStyles.dt}>
-                        {columnLabel(column)}
-                      </dt>
-                      <dd
+              {rest.length > 0 ? (
+                <dl
+                  className={cn(
+                    dataTableMobileStyles.dl,
+                    primary ? dataTableMobileStyles.dlWithPrimary : undefined,
+                  )}
+                >
+                  {rest.map((column) => {
+                    const content = resolveCell(column, row, index);
+                    return (
+                      <div
+                        key={column.id}
                         className={cn(
-                          column.className,
-                          dataTableMobileStyles.dd,
+                          dataTableMobileStyles.rowItem,
+                          column.mobileRowClassName,
                         )}
                       >
-                        {renderCellContent(
-                          { ...column, truncate: false },
-                          content,
-                          row,
-                        )}
-                      </dd>
-                    </div>
-                  );
-                })}
-              </dl>
-            ) : null}
+                        <dt className={dataTableMobileStyles.dt}>
+                          {columnLabel(column)}
+                        </dt>
+                        <dd
+                          className={cn(
+                            column.className,
+                            dataTableMobileStyles.dd,
+                          )}
+                        >
+                          {renderCellContent(
+                            { ...column, truncate: false },
+                            content,
+                            row,
+                          )}
+                        </dd>
+                      </div>
+                    );
+                  })}
+                </dl>
+              ) : null}
+            </div>
 
             {actions ? (
               <div
@@ -126,13 +128,6 @@ export function DataTableMobileCards<T>({
                     ? dataTableMobileStyles.actionsWrapper
                     : undefined,
                 )}
-                /* Row-action area: stops the row's own activation when a row
-                   action is used. It has no semantics of its own (the buttons
-                   inside announce themselves), so it is marked presentational
-                   rather than pretending to be a control. */
-                role="presentation"
-                onClick={(event) => event.stopPropagation()}
-                onKeyDown={(event) => event.stopPropagation()}
               >
                 <TableRowActions className={dataTableMobileStyles.actionsAlign}>
                   {actions(row, index)}

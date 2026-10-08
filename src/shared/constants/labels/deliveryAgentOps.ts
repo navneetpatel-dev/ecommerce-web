@@ -46,6 +46,10 @@ export const deliveryAgentOpsLabels = {
   couldNotRetryPayout: "Could not retry this payout.",
   couldNotUpdateDeposit: "Could not update this deposit.",
   couldNotUpdateDocument: "Could not update this document.",
+  deliveriesCouldNotLoad: "Could not load deliveries.",
+  deliveriesLoading: "Loading deliveries...",
+  pickupsCouldNotLoad: "Could not load pickups.",
+  pickupsLoading: "Loading pickups...",
 
   // Reason prompts (destructive admin actions)
   rejectDepositTitle: "Reject this cash deposit?",

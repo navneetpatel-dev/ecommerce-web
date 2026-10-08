@@ -65,22 +65,25 @@ export function EarningsPayoutsTable({
         id: "statement",
         header: "Statement",
         truncate: false,
-        cell: (row) => (
-          <button
-            type="button"
-            className={earningsPayoutsCardStyles.downloadButton}
-            disabled={downloadingId === row.id}
-            onClick={() => {
-              void onDownload(row.id);
-            }}
-          >
-            <Download
-              className={earningsPayoutsCardStyles.downloadIcon}
-              aria-hidden="true"
-            />
-            PDF
-          </button>
-        ),
+        cell: (row) => {
+          const handleDownload = () => {
+            void onDownload(row.id);
+          };
+          return (
+            <button
+              type="button"
+              className={earningsPayoutsCardStyles.downloadButton}
+              disabled={downloadingId === row.id}
+              onClick={handleDownload}
+            >
+              <Download
+                className={earningsPayoutsCardStyles.downloadIcon}
+                aria-hidden="true"
+              />
+              PDF
+            </button>
+          );
+        },
       },
     ],
     [downloadingId, onDownload],

@@ -54,6 +54,11 @@ export function useAdminOrdersPage(
         row.status !== ORDER_STATUS.CANCELLED &&
         row.status !== ORDER_STATUS.DELIVERED &&
         row.status !== ORDER_STATUS.RETURNED;
+      const confirmOrder = () =>
+        ordersApi
+          .updateStatus(String(row.id), ORDER_STATUS.CONFIRMED)
+          .then(reload);
+      const cancelOrder = () => ordersApi.cancel(String(row.id)).then(reload);
 
       return (
         <div className={adminDataListViewStyles.rowActionsInline}>
@@ -65,11 +70,7 @@ export function useAdminOrdersPage(
               tone="success"
               title={LABELS.confirmOrderTitle}
               description={formatLabel(LABELS.confirmOrderBody, { name })}
-              onConfirm={() =>
-                ordersApi
-                  .updateStatus(String(row.id), ORDER_STATUS.CONFIRMED)
-                  .then(reload)
-              }
+              onConfirm={confirmOrder}
             />
           )}
           {canCancel && (
@@ -80,7 +81,7 @@ export function useAdminOrdersPage(
               tone="danger"
               title="Cancel Order"
               description={`Are you sure you want to cancel order ${name || row.id}? This will restock items, void ledgers, and trigger refund if already paid.`}
-              onConfirm={() => ordersApi.cancel(String(row.id)).then(reload)}
+              onConfirm={cancelOrder}
             />
           )}
         </div>

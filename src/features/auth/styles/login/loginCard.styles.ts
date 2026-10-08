@@ -4,3 +4,5 @@ export const AUTH_LINK =
   "font-medium text-brand transition-colors hover:text-brand-hover hover:underline" as const;
 export const AUTH_SUBMIT_BUTTON = "w-full" as const;
 export const AUTH_OAUTH_CONTAINER = "space-y-3" as const;
+export const AUTH_SESSION_EXPIRED_NOTICE =
+  "rounded-sm border border-warning/25 bg-warning-subtle px-3 py-2 text-body-sm text-warning" as const;

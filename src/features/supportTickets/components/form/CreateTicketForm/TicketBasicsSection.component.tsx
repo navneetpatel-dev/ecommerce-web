@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -38,6 +39,11 @@ export function TicketBasicsSection({
   category,
   onCategoryChange,
 }: Props) {
+  const handleSubjectChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onSubjectChange(event.target.value);
+  const handleCategoryChange = (value: string) =>
+    onCategoryChange(value as SupportTicketCategory);
+
   return (
     <FormSection
       title={LABELS.ticketBasicsSection}
@@ -53,7 +59,7 @@ export function TicketBasicsSection({
         <Input
           id={subjectId}
           value={subject}
-          onChange={(e) => onSubjectChange(e.target.value)}
+          onChange={handleSubjectChange}
           placeholder={LABELS.ticketSubjectPlaceholder}
           maxLength={TICKET_SUBJECT_MAX}
           error={hasSubjectError}
@@ -66,10 +72,7 @@ export function TicketBasicsSection({
         </p>
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.ticketCategory} required>
-        <Select
-          value={category}
-          onValueChange={(v) => onCategoryChange(v as SupportTicketCategory)}
-        >
+        <Select value={category} onValueChange={handleCategoryChange}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>

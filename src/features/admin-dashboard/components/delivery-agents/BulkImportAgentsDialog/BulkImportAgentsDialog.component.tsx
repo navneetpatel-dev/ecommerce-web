@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -82,10 +83,10 @@ export function BulkImportAgentsDialog({
               <DialogTitle className={styles.title}>
                 Bulk import delivery agents
               </DialogTitle>
-              <p className={styles.subtitle}>
+              <DialogDescription className={styles.subtitle}>
                 Quickly onboard multiple field agents at once using an Excel
                 (.xlsx) or CSV template.
-              </p>
+              </DialogDescription>
             </div>
           </div>
         </DialogHeader>

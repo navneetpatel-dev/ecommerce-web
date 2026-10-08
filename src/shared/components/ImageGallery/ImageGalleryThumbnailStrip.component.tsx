@@ -42,6 +42,8 @@ export function ImageGalleryThumbnailStrip({
 
   if (images.length <= 1) return null;
 
+  const selectThumb = (index: number) => () => onSelect(index);
+
   const isHorizontal =
     orientation === "horizontal" || orientation === "responsive";
 
@@ -69,7 +71,7 @@ export function ImageGalleryThumbnailStrip({
           variant="outline"
           size="icon-sm"
           aria-selected={index === selectedIndex}
-          onClick={() => onSelect(index)}
+          onClick={selectThumb(index)}
           className={cn(
             "relative shrink-0 overflow-hidden rounded-lg border p-0",
             thumbClassName,

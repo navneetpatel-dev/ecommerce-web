@@ -19,6 +19,11 @@ export function useTodayPage() {
   const count = deliveryCount + pickupCount;
   const taskCountLabel = `${count} active task${count === 1 ? "" : "s"} in your current assignment queue.`;
 
+  const refetch = () => {
+    void deliveries.refetch();
+    void pickups.refetch();
+  };
+
   return {
     deliveries,
     pickups,
@@ -26,6 +31,7 @@ export function useTodayPage() {
     deliveryCount,
     pickupCount,
     taskCountLabel,
+    refetch,
     hasQueryError: deliveries.isError || pickups.isError,
     queryError: deliveries.error ?? pickups.error,
   };

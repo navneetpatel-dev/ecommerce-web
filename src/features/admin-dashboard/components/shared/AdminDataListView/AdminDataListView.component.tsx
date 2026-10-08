@@ -8,6 +8,8 @@ export interface AdminDataListViewProps {
   title: string;
   rows: AdminDataRow[];
   loading: boolean;
+  /** Background reload in progress — rows stay mounted with a status hint. */
+  refreshing?: boolean;
   error: string | null;
   onRefresh: () => void;
   page: number;
@@ -25,6 +27,7 @@ export function AdminDataListView({
   title,
   rows,
   loading,
+  refreshing,
   error,
   onRefresh,
   page,
@@ -51,6 +54,7 @@ export function AdminDataListView({
       columns={columns}
       rows={rows}
       loading={loading}
+      refreshing={refreshing}
       error={error}
       emptyMessage={LABELS.noRecordsFound}
       onRefresh={onRefresh}

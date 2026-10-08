@@ -14,6 +14,7 @@ import {
   type ChartThemeColors,
 } from "@/shared/hooks/theme/useChartThemeColors.hook";
 import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { analyticsStyles } from "../../styles/analytics/analyticsComponents.styles";
 
 interface StatusSlice {
@@ -52,7 +53,14 @@ export function AnalyticsStatusChart({
           </p>
         ) : (
           <div className={analyticsStyles.statusChartFlex}>
-            <div className={analyticsStyles.donutWrapper}>
+            <div
+              role="img"
+              aria-label={formatLabel(LABELS.chartAriaLabelWithTotal, {
+                title,
+                total: String(total),
+              })}
+              className={analyticsStyles.donutWrapper}
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie

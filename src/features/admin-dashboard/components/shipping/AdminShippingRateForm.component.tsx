@@ -1,6 +1,6 @@
 "use client";
 
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
   FormActions,
@@ -70,16 +70,20 @@ export function AdminShippingRateForm({
     zoneId && maxWeightGrams.trim() && price.trim() && estimatedDays.trim(),
   );
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    if (!canCreate) {
+      event.preventDefault();
+      return;
+    }
+    onSubmit(event);
+  };
+  const handleMethodChange = (value: string) =>
+    onMethodChange(value as "STANDARD" | "EXPRESS");
+  const handleVendorIdChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onVendorIdChange(event.target.value);
+
   return (
-    <form
-      onSubmit={(e) => {
-        if (!canCreate) {
-          e.preventDefault();
-          return;
-        }
-        onSubmit(e);
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       <FormSection title={shippingRatesLabels.addShippingRate} columns={3}>
         <FormFieldFrame
           label={shippingRatesLabels.zone}
@@ -103,12 +107,7 @@ export function AdminShippingRateForm({
           label={shippingRatesLabels.method}
           htmlFor="shipping-rate-method"
         >
-          <Select
-            value={method}
-            onValueChange={(value) =>
-              onMethodChange(value as "STANDARD" | "EXPRESS")
-            }
-          >
+          <Select value={method} onValueChange={handleMethodChange}>
             <SelectTrigger id="shipping-rate-method">
               <SelectValue />
             </SelectTrigger>
@@ -168,7 +167,7 @@ export function AdminShippingRateForm({
           <Input
             id="shipping-rate-vendor-id"
             value={vendorId}
-            onChange={(e) => onVendorIdChange(e.target.value)}
+            onChange={handleVendorIdChange}
             placeholder={shippingRatesLabels.vendorIdOptional}
           />
         </FormFieldFrame>

@@ -14,7 +14,7 @@ export function OfflineSyncBanner() {
   if (!shouldRenderBanner) return null;
 
   return (
-    <div className={OFFLINE_BANNER_ROOT}>
+    <div role="status" className={OFFLINE_BANNER_ROOT}>
       <WifiOff className={OFFLINE_BANNER_ICON} aria-hidden="true" />
       {statusMessage}
     </div>

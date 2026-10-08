@@ -2,6 +2,7 @@
 
 import { BarcodeScanButton } from "../../components/pickups/BarcodeScanButton.component";
 import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
+import { LABELS } from "@/shared/constants/labels";
 import { deliveryListPageStyles as styles } from "./deliveryListPage.styles";
 import { useDeliveriesPage } from "../../hooks/deliveries/useDeliveriesPage.hook";
 import { DeliveryStopsList } from "../../components/deliveries/DeliveryStopsList.component";
@@ -28,7 +29,7 @@ export function DeliveriesPage() {
         </div>
         <div className={styles.headerActions}>
           <span className={styles.headerCount}>{shipmentCountLabel}</span>
-          <BarcodeScanButton onDecoded={(text) => void handleScanned(text)} />
+          <BarcodeScanButton onDecoded={handleScanned} />
         </div>
       </header>
 
@@ -44,12 +45,13 @@ export function DeliveriesPage() {
       {query.isError ? (
         <QueryErrorAlert
           error={query.error}
-          fallback="Could not load deliveries."
+          fallback={LABELS.deliveriesCouldNotLoad}
+          onRetry={query.refetch}
         />
       ) : null}
 
       {query.isLoading ? (
-        <p className={styles.loadingText}>Loading deliveries...</p>
+        <p className={styles.loadingText}>{LABELS.deliveriesLoading}</p>
       ) : count > 0 ? (
         <DeliveryStopsList stops={stops} />
       ) : (

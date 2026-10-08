@@ -36,6 +36,9 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
     submitReschedule,
   } = useReturnRequestCard(row);
 
+  const handleDownloadCredit = () => void downloadCredit();
+  const handleRescheduleSubmit = (slot: string) => void submitReschedule(slot);
+
   return (
     <div className={styles.card}>
       <div className={styles.header}>
@@ -70,7 +73,7 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
             variant="outline"
             size="sm"
             loading={pending}
-            onClick={() => void downloadCredit()}
+            onClick={handleDownloadCredit}
           >
             {LABELS.downloadCreditNote}
           </Button>
@@ -108,7 +111,7 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
           {canReschedulePickup ? (
             <RedeliverySlotPicker
               currentSlot={row.preferredRepickupSlot}
-              onSubmit={(slot) => void submitReschedule(slot)}
+              onSubmit={handleRescheduleSubmit}
               isPending={isRescheduling}
               prompt="Pickup didn't go through — pick a new time window:"
             />

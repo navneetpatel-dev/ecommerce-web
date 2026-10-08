@@ -24,12 +24,16 @@ export function CouponsAnalyticsDialog({
   loading,
   onClose,
 }: CouponsAnalyticsDialogProps) {
+  const handleOpenChange = (open: boolean) => {
+    if (!open) onClose();
+  };
+
   return (
-    <Dialog
-      open={Boolean(analyticsCoupon)}
-      onOpenChange={(open) => !open && onClose()}
-    >
-      <DialogContent className={styles.dialogContent}>
+    <Dialog open={Boolean(analyticsCoupon)} onOpenChange={handleOpenChange}>
+      <DialogContent
+        className={styles.dialogContent}
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle>
             {LABELS.couponAnalytics}

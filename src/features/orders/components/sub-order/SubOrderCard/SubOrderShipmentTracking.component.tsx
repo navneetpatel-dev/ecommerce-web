@@ -5,6 +5,7 @@ import type { Shipment } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { CopyTextButton } from "@/shared/components/actions/CopyTextButton.component";
 import { RedeliverySlotPicker } from "@/shared/components/orders/RedeliverySlotPicker.component";
 import { DeliveryRatingPrompt } from "../../actions/DeliveryRatingPrompt.component";
 import { subOrderShipmentTrackingStyles as styles } from "../../../styles/sub-order/subOrderShipmentTracking.styles";
@@ -39,11 +40,19 @@ export function SubOrderShipmentTracking({
     failureMessage,
   } = useSubOrderShipmentTracking(shipment, orderId);
 
+  const handleRescheduleSubmit = (slot: string) => void submitReschedule(slot);
+
   return (
     <div className={styles.root}>
       <TextEyebrow className={styles.eyebrow}>Tracking</TextEyebrow>
       <p className={styles.carrier}>{shipment.carrier}</p>
-      <p className={styles.trackingNumber}>{shipment.trackingNumber}</p>
+      <div className={styles.trackingRow}>
+        <p className={styles.trackingNumber}>{shipment.trackingNumber}</p>
+        <CopyTextButton
+          value={shipment.trackingNumber}
+          label={LABELS.copyTrackingNumber}
+        />
+      </div>
       <div className={styles.statusWrapper}>
         <StatusBadge status={shipment.status} />
       </div>
@@ -75,7 +84,7 @@ export function SubOrderShipmentTracking({
           <p className={styles.warningNotice}>{failureMessage}</p>
           <RedeliverySlotPicker
             currentSlot={shipment.preferredRedeliverySlot}
-            onSubmit={(slot) => void submitReschedule(slot)}
+            onSubmit={handleRescheduleSubmit}
             isPending={isRescheduling}
             prompt={LABELS.trackingRedeliveryPrompt}
           />

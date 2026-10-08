@@ -53,6 +53,7 @@ function AdminUserDetailContent() {
         <QueryErrorAlert
           error={userQuery.error}
           fallback={adminEntityDetailLabels.userCouldNotLoadDetail}
+          onRetry={userQuery.refetch}
         />
       </div>
     );

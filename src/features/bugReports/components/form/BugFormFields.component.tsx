@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -34,6 +35,10 @@ export function CharCountedField(props: CharCountedFieldProps) {
     counter,
   } = props;
 
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => onChange(event.target.value);
+
   return (
     <FormFieldFrame
       label={label}
@@ -45,7 +50,7 @@ export function CharCountedField(props: CharCountedFieldProps) {
         <Textarea
           id={id}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           placeholder={placeholder}
           rows={multilineRows}
           maxLength={maxLength}
@@ -55,7 +60,7 @@ export function CharCountedField(props: CharCountedFieldProps) {
         <Input
           id={id}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           placeholder={placeholder}
           maxLength={maxLength}
           error={hasError}

@@ -21,6 +21,9 @@ export function ProductReviews({
   onVoteHelpful,
   onVoteUnhelpful,
 }: ProductReviewsProps) {
+  const voteHelpful = (reviewId: string) => () => onVoteHelpful(reviewId);
+  const voteUnhelpful = (reviewId: string) => () => onVoteUnhelpful(reviewId);
+
   if (isLoading) {
     return <ReviewListSkeleton count={3} />;
   }
@@ -78,7 +81,7 @@ export function ProductReviews({
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => onVoteHelpful(review.id)}
+              onClick={voteHelpful(review.id)}
             >
               <ThumbsUp className={styles.voteIcon} /> {review.helpfulCount}
             </Button>
@@ -86,7 +89,7 @@ export function ProductReviews({
               type="button"
               variant="ghost"
               size="sm"
-              onClick={() => onVoteUnhelpful(review.id)}
+              onClick={voteUnhelpful(review.id)}
             >
               <ThumbsDown className={styles.voteIcon} /> {review.unhelpfulCount}
             </Button>

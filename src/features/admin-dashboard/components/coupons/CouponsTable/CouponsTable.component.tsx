@@ -8,7 +8,10 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
-import { COUPON_STATUS } from "@/shared/constants/statuses";
+import {
+  COUPON_STATUS,
+  type CouponStatusValue,
+} from "@/shared/constants/statuses";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { useCouponRowActions } from "../../../hooks/coupons/useCouponRowActions.hook";
@@ -38,94 +41,82 @@ export function CouponsTable({
   const setAnalyticsCouponId = rowActions.setAnalyticsCouponId;
 
   const columns = buildCouponColumns();
+  const closeAnalytics = () => setAnalyticsCouponId(null);
 
-  const renderActions = (row: Coupon) => (
-    <>
-      <Button
-        type="button"
-        size="sm"
-        variant="outline"
-        className={tableMenuButtonClass("neutral")}
-        onClick={() => setAnalyticsCouponId(row.id)}
-      >
-        <BarChart2 strokeWidth={2.25} aria-hidden />
-        <span>{LABELS.viewAnalytics}</span>
-      </Button>
-      {!readOnly && row.status === COUPON_STATUS.ACTIVE ? (
-        <AdminConfirmAction
-          label={LABELS.pauseCoupon}
-          tone="neutral"
-          dialogVariant="warning"
-          title={LABELS.confirmPauseCouponTitle}
-          description={formatLabel(LABELS.confirmPauseCouponBody, {
-            code: row.code,
-          })}
-          onConfirm={() =>
-            rowActions.changeStatus({
-              id: row.id,
-              status: COUPON_STATUS.PAUSED,
-            })
-          }
-        />
-      ) : null}
-      {!readOnly &&
-      (row.status === COUPON_STATUS.PAUSED ||
-        row.status === COUPON_STATUS.DRAFT) ? (
-        <AdminConfirmAction
-          label={LABELS.activateCoupon}
-          tone="success"
-          dialogVariant="success"
-          title={LABELS.confirmActivateCouponTitle}
-          description={formatLabel(LABELS.confirmActivateCouponBody, {
-            code: row.code,
-          })}
-          onConfirm={() =>
-            rowActions.changeStatus({
-              id: row.id,
-              status: COUPON_STATUS.ACTIVE,
-            })
-          }
-        />
-      ) : null}
-      {!readOnly && row.status !== COUPON_STATUS.ARCHIVED ? (
-        <AdminConfirmAction
-          label={LABELS.archiveCoupon}
-          tone="archive"
-          dialogVariant="warning"
-          title={LABELS.confirmArchiveCouponTitle}
-          description={formatLabel(LABELS.confirmArchiveCouponBody, {
-            code: row.code,
-          })}
-          onConfirm={() =>
-            rowActions.changeStatus({
-              id: row.id,
-              status: COUPON_STATUS.ARCHIVED,
-            })
-          }
-        />
-      ) : null}
-      {allowReject &&
-      row.vendorId &&
-      row.status !== COUPON_STATUS.REJECTED &&
-      row.status !== COUPON_STATUS.ARCHIVED ? (
-        <AdminConfirmAction
-          label={LABELS.rejectCoupon}
-          tone="danger"
-          dialogVariant="danger"
-          title={LABELS.confirmRejectCouponTitle}
-          description={formatLabel(LABELS.confirmRejectCouponBody, {
-            code: row.code,
-          })}
-          onConfirm={() =>
-            rowActions.changeStatus({
-              id: row.id,
-              status: COUPON_STATUS.REJECTED,
-            })
-          }
-        />
-      ) : null}
-    </>
-  );
+  const renderActions = (row: Coupon) => {
+    const setStatus = (status: CouponStatusValue) => () => {
+      rowActions.changeStatus({ id: row.id, status });
+    };
+    const openAnalytics = () => setAnalyticsCouponId(row.id);
+
+    return (
+      <>
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className={tableMenuButtonClass("neutral")}
+          onClick={openAnalytics}
+        >
+          <BarChart2 strokeWidth={2.25} aria-hidden />
+          <span>{LABELS.viewAnalytics}</span>
+        </Button>
+        {!readOnly && row.status === COUPON_STATUS.ACTIVE ? (
+          <AdminConfirmAction
+            label={LABELS.pauseCoupon}
+            tone="neutral"
+            dialogVariant="warning"
+            title={LABELS.confirmPauseCouponTitle}
+            description={formatLabel(LABELS.confirmPauseCouponBody, {
+              code: row.code,
+            })}
+            onConfirm={setStatus(COUPON_STATUS.PAUSED)}
+          />
+        ) : null}
+        {!readOnly &&
+        (row.status === COUPON_STATUS.PAUSED ||
+          row.status === COUPON_STATUS.DRAFT) ? (
+          <AdminConfirmAction
+            label={LABELS.activateCoupon}
+            tone="success"
+            dialogVariant="success"
+            title={LABELS.confirmActivateCouponTitle}
+            description={formatLabel(LABELS.confirmActivateCouponBody, {
+              code: row.code,
+            })}
+            onConfirm={setStatus(COUPON_STATUS.ACTIVE)}
+          />
+        ) : null}
+        {!readOnly && row.status !== COUPON_STATUS.ARCHIVED ? (
+          <AdminConfirmAction
+            label={LABELS.archiveCoupon}
+            tone="archive"
+            dialogVariant="warning"
+            title={LABELS.confirmArchiveCouponTitle}
+            description={formatLabel(LABELS.confirmArchiveCouponBody, {
+              code: row.code,
+            })}
+            onConfirm={setStatus(COUPON_STATUS.ARCHIVED)}
+          />
+        ) : null}
+        {allowReject &&
+        row.vendorId &&
+        row.status !== COUPON_STATUS.REJECTED &&
+        row.status !== COUPON_STATUS.ARCHIVED ? (
+          <AdminConfirmAction
+            label={LABELS.rejectCoupon}
+            tone="danger"
+            dialogVariant="danger"
+            title={LABELS.confirmRejectCouponTitle}
+            description={formatLabel(LABELS.confirmRejectCouponBody, {
+              code: row.code,
+            })}
+            onConfirm={setStatus(COUPON_STATUS.REJECTED)}
+          />
+        ) : null}
+      </>
+    );
+  };
 
   const analytics: CouponAnalytics | undefined = rowActions.analytics;
   const analyticsCoupon =
@@ -149,7 +140,7 @@ export function CouponsTable({
         analyticsCoupon={analyticsCoupon}
         analytics={analytics}
         loading={rowActions.analyticsLoading}
-        onClose={() => setAnalyticsCouponId(null)}
+        onClose={closeAnalytics}
       />
     </>
   );

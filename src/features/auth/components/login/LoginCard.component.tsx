@@ -16,6 +16,7 @@ import {
   AUTH_FORM_ROOT,
   AUTH_LINK,
   AUTH_OAUTH_CONTAINER,
+  AUTH_SESSION_EXPIRED_NOTICE,
   AUTH_SUBMIT_BUTTON,
 } from "../../styles/login/loginCard.styles";
 
@@ -27,6 +28,8 @@ interface LoginCardProps {
   oauthRedirect?: string | null;
   needsVerification?: boolean;
   unverifiedEmail?: string | null;
+  /** True when a terminal 401 forced the sign-out that led here. */
+  sessionExpired?: boolean;
 }
 
 export function LoginCard({
@@ -37,6 +40,7 @@ export function LoginCard({
   oauthRedirect,
   needsVerification,
   unverifiedEmail,
+  sessionExpired = false,
 }: LoginCardProps) {
   const { register, trigger } = form;
   const { errors, handleUseEmailCode, onFormSubmit } = useLoginCard({
@@ -59,6 +63,11 @@ export function LoginCard({
       }
     >
       <form onSubmit={onFormSubmit} className={AUTH_FORM_ROOT}>
+        {sessionExpired ? (
+          <p role="status" className={AUTH_SESSION_EXPIRED_NOTICE}>
+            {LABELS.sessionExpired}
+          </p>
+        ) : null}
         <LoginFormFields
           register={register}
           errors={errors}

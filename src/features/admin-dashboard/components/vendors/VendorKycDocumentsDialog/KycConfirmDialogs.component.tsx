@@ -1,5 +1,6 @@
 "use client";
 
+import { type ChangeEvent } from "react";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -32,13 +33,17 @@ export function KycConfirmDialogs({
   onVerify,
   onReject,
 }: KycConfirmDialogsProps) {
+  const handleOpenChange = (next: boolean) => {
+    if (!next) onClose();
+  };
+  const handleReasonChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
+    onReasonChange(event.target.value);
+
   return (
     <>
       <StatusDialog
         open={mode === "verify" && Boolean(activeItem)}
-        onOpenChange={(next) => {
-          if (!next) onClose();
-        }}
+        onOpenChange={handleOpenChange}
         variant="success"
         title={LABELS.confirmVerifyDocumentTitle}
         description={
@@ -63,9 +68,7 @@ export function KycConfirmDialogs({
 
       <StatusDialog
         open={mode === "reject" && Boolean(activeItem)}
-        onOpenChange={(next) => {
-          if (!next) onClose();
-        }}
+        onOpenChange={handleOpenChange}
         variant="danger"
         title={LABELS.confirmRejectDocumentTitle}
         description={
@@ -95,7 +98,7 @@ export function KycConfirmDialogs({
           <Textarea
             id="kyc-reject-reason"
             value={reason}
-            onChange={(e) => onReasonChange(e.target.value)}
+            onChange={handleReasonChange}
             className={vendorKycDocumentsDialogStyles.rejectTextarea}
           />
         </FormFieldFrame>

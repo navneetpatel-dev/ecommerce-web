@@ -29,22 +29,25 @@ export function VendorBulkImportDialog({
     submit,
   } = useVendorBulkImportDialog(onImported);
 
+  const handleOpenDialog = () => setOpen(true);
+  const handleOpenChange = (next: boolean) => {
+    if (!next) close();
+  };
+
   return (
     <>
       <Button
         type="button"
         variant="outline"
         size="sm"
-        onClick={() => setOpen(true)}
+        onClick={handleOpenDialog}
       >
         {LABELS.bulkImportProducts}
       </Button>
 
       <StatusDialog
         open={open}
-        onOpenChange={(next) => {
-          if (!next) close();
-        }}
+        onOpenChange={handleOpenChange}
         variant="info"
         title={LABELS.bulkImportDialogTitle}
         description={LABELS.bulkImportDialogHint}

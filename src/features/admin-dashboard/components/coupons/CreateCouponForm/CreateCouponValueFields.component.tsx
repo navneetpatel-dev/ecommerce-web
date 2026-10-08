@@ -1,13 +1,12 @@
 "use client";
 
 import type { UseFormReturn } from "react-hook-form";
-import { Controller } from "react-hook-form";
 import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
-import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
+import { ControlledNumberInput } from "./ControlledFields.component";
 
 interface CreateCouponValueFieldsProps {
   form: UseFormReturn<CouponFormInput>;
@@ -26,8 +25,6 @@ export function CreateCouponValueFields({
   needsValue,
   isTiered,
 }: CreateCouponValueFieldsProps) {
-  const { control } = form;
-
   return (
     <FormSection title={LABELS.couponSectionValue} columns={1}>
       <div className={createCouponFormStyles.gridSm2}>
@@ -37,50 +34,34 @@ export function CreateCouponValueFields({
           required={needsValue}
           error={showError("value")}
         >
-          <Controller
+          <ControlledNumberInput
+            form={form}
             name="value"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                value={field.value ?? undefined}
-                min={0}
-                max={
-                  type === "PERCENTAGE" || type === "TIERED" ? 100 : undefined
-                }
-                step={1}
-                suffix={
-                  type === "PERCENTAGE" || type === "TIERED" ? "%" : undefined
-                }
-                prefix={
-                  type === "FLAT" || type === "CASHBACK" || type === "BUNDLE"
-                    ? CURRENCY_SYMBOL
-                    : undefined
-                }
-                error={hasError("value")}
-                onChange={(value) => field.onChange(value)}
-                onBlur={field.onBlur}
-              />
-            )}
+            min={0}
+            max={type === "PERCENTAGE" || type === "TIERED" ? 100 : undefined}
+            step={1}
+            suffix={
+              type === "PERCENTAGE" || type === "TIERED" ? "%" : undefined
+            }
+            prefix={
+              type === "FLAT" || type === "CASHBACK" || type === "BUNDLE"
+                ? CURRENCY_SYMBOL
+                : undefined
+            }
+            error={hasError("value")}
           />
         </FormFieldFrame>
         <FormFieldFrame
           label={LABELS.maxDiscountCap}
           error={showError("maxDiscountCap")}
         >
-          <Controller
+          <ControlledNumberInput
+            form={form}
             name="maxDiscountCap"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                value={field.value ?? undefined}
-                min={0}
-                step={10}
-                prefix={CURRENCY_SYMBOL}
-                error={hasError("maxDiscountCap")}
-                onChange={(value) => field.onChange(value)}
-                onBlur={field.onBlur}
-              />
-            )}
+            min={0}
+            step={10}
+            prefix={CURRENCY_SYMBOL}
+            error={hasError("maxDiscountCap")}
           />
         </FormFieldFrame>
       </div>
@@ -91,36 +72,22 @@ export function CreateCouponValueFields({
           </p>
           <div className={createCouponFormStyles.gridSm2}>
             <FormFieldFrame label={LABELS.couponTier2Min}>
-              <Controller
+              <ControlledNumberInput
+                form={form}
                 name="tier2MinSubtotal"
-                control={control}
-                render={({ field }) => (
-                  <NumberInput
-                    value={field.value ?? undefined}
-                    min={0}
-                    step={50}
-                    prefix={CURRENCY_SYMBOL}
-                    onChange={(value) => field.onChange(value)}
-                    onBlur={field.onBlur}
-                  />
-                )}
+                min={0}
+                step={50}
+                prefix={CURRENCY_SYMBOL}
               />
             </FormFieldFrame>
             <FormFieldFrame label={LABELS.couponTier2Percent}>
-              <Controller
+              <ControlledNumberInput
+                form={form}
                 name="tier2Percent"
-                control={control}
-                render={({ field }) => (
-                  <NumberInput
-                    value={field.value ?? undefined}
-                    min={0}
-                    max={100}
-                    step={1}
-                    suffix="%"
-                    onChange={(value) => field.onChange(value)}
-                    onBlur={field.onBlur}
-                  />
-                )}
+                min={0}
+                max={100}
+                step={1}
+                suffix="%"
               />
             </FormFieldFrame>
           </div>

@@ -56,12 +56,12 @@ export function BugReportDetail({
               isLoading={actions.commentsQuery.isLoading}
               hasNextPage={Boolean(actions.commentsQuery.hasNextPage)}
               isFetchingNextPage={actions.commentsQuery.isFetchingNextPage}
-              onLoadMore={() => void actions.commentsQuery.fetchNextPage()}
+              onLoadMore={actions.commentsQuery.fetchNextPage}
               comment={actions.comment}
               onCommentChange={actions.setComment}
               addPending={actions.addComment.isPending}
               error={actions.error}
-              onAdd={() => void actions.onAddComment()}
+              onAdd={actions.onAddComment}
             />
           ) : null}
         </div>
@@ -78,7 +78,7 @@ export function BugReportDetail({
               progress={actions.progress}
               verifyPending={actions.verify.isPending}
               actionError={actions.actionError}
-              onVerify={() => void actions.onVerify()}
+              onVerify={actions.onVerify}
             />
 
             {mode === "reporter" ? (
@@ -99,7 +99,7 @@ export function BugReportDetail({
                   savePending={actions.savePending}
                   canEditAssignment={actions.canEditAssignment}
                   isNewReport={actions.isNewReport}
-                  onSave={() => void actions.onSaveTriage()}
+                  onSave={actions.onSaveTriage}
                 />
 
                 <BugStatusUpdatePanel
@@ -116,9 +116,9 @@ export function BugReportDetail({
                   onWontFixReasonChange={actions.setWontFixReason}
                   wontFixPending={actions.wontFix.isPending}
                   actionError={actions.actionError}
-                  onChangeStatus={() => void actions.onChangeStatus()}
-                  onMarkDuplicate={() => void actions.onMarkDuplicate()}
-                  onWontFix={() => void actions.onWontFix()}
+                  onChangeStatus={actions.onChangeStatus}
+                  onMarkDuplicate={actions.onMarkDuplicate}
+                  onWontFix={actions.onWontFix}
                 />
               </>
             ) : null}

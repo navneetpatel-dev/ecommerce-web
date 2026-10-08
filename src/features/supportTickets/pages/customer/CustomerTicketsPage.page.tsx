@@ -80,7 +80,7 @@ function CustomerTicketsContent() {
         }
         hasNextPage={query.hasNextPage}
         isFetchingNextPage={query.isFetchingNextPage}
-        onLoadMore={() => void query.fetchNextPage()}
+        onLoadMore={query.fetchNextPage}
       />
     </div>
   );

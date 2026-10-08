@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Plus } from "lucide-react";
@@ -9,6 +10,9 @@ import { productsTableHeaderStyles as styles } from "../../../styles/products/pr
 
 export function ProductsTableHeader(props: ProductsTableHeaderProps) {
   const { search, onSearchChange, onAddProduct } = props;
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onSearchChange(event.target.value);
   const addProductButton = onAddProduct ? (
     <Button size="sm" type="button" fullWidth="mobile" onClick={onAddProduct}>
       <Plus aria-hidden /> {LABELS.addProduct}
@@ -24,7 +28,7 @@ export function ProductsTableHeader(props: ProductsTableHeaderProps) {
             placeholder={LABELS.searchProducts}
             className={styles.searchInput}
             value={search}
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={handleSearchChange}
           />
         </div>
         {addProductButton}

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { TABLE_SCROLL_SHELL_CLASS } from "@/shared/constants/table/table";
+import { LABELS } from "@/shared/constants/labels";
 import { useScrollShadow } from "@/shared/hooks/scroll/useScrollShadow.hook";
 import { cn } from "@/shared/utils/dom/cn";
 
@@ -30,8 +31,12 @@ export function TableScrollShell({
     <div
       ref={scrollRef}
       data-scrolled={scrolled ? true : undefined}
+      role="region"
+      aria-label={LABELS.scrollableTable}
+      tabIndex={0}
       className={cn(
         TABLE_SCROLL_SHELL_CLASS,
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
         desktopOnly && "hidden lg:block",
         className,
       )}

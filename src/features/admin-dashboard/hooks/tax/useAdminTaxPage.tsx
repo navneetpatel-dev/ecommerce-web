@@ -69,6 +69,8 @@ export function useAdminTaxPage(): AdminTaxPageModel {
 
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
+      const deleteRule = () => taxApi.deleteRule(String(row.id)).then(reload);
+
       const name = adminRowLabel(row);
       return (
         <AdminConfirmAction
@@ -76,7 +78,7 @@ export function useAdminTaxPage(): AdminTaxPageModel {
           dialogVariant="danger"
           title={LABELS.confirmDeleteTaxTitle}
           description={formatLabel(LABELS.confirmDeleteTaxBody, { name })}
-          onConfirm={() => taxApi.deleteRule(String(row.id)).then(reload)}
+          onConfirm={deleteRule}
         />
       );
     },

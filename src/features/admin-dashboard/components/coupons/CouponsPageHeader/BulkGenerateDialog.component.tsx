@@ -56,7 +56,7 @@ export function BulkGenerateDialog({ open, setOpen }: BulkGenerateDialogProps) {
   return (
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className={styles.dialog}>
+        <DialogContent className={styles.dialog} aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>{LABELS.bulkGenerateTitle}</DialogTitle>
           </DialogHeader>

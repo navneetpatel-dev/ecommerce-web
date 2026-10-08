@@ -1,3 +1,4 @@
+import { type ChangeEvent } from "react";
 import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/forms/FormError.component";
@@ -31,6 +32,10 @@ interface BugCommentsSectionProps {
 
 /** Internal admin comments thread with add-comment composer. */
 export function BugCommentsSection(props: BugCommentsSectionProps) {
+  const handleCommentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    props.onCommentChange(event.target.value.slice(0, BUG_COMMENT_MAX));
+  };
+
   return (
     <section className={bugReportPanelsStyles.panelRoot}>
       <div className={bugReportPanelsStyles.panelHeader}>
@@ -94,9 +99,7 @@ export function BugCommentsSection(props: BugCommentsSectionProps) {
         <FormFieldFrame label={LABELS.bugAddComment}>
           <Textarea
             value={props.comment}
-            onChange={(e) =>
-              props.onCommentChange(e.target.value.slice(0, BUG_COMMENT_MAX))
-            }
+            onChange={handleCommentChange}
             placeholder={LABELS.bugCommentPlaceholder}
             rows={3}
             className={bugReportPanelsStyles.commentTextarea}

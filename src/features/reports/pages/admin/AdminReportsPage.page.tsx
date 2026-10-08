@@ -11,6 +11,9 @@ import { reportsPageStyles as styles } from "./reportsPage.styles";
 export function AdminReportsPage() {
   const hub = useReportHub();
 
+  const handleLoad = () => void hub.load(1);
+  const handleRetry = () => void hub.load();
+
   if (hub.catalogError) {
     return (
       <div role="alert" className={styles.errorContainer}>
@@ -60,7 +63,7 @@ export function AdminReportsPage() {
           onCategoryIdChange={hub.setCategoryId}
           status={hub.status}
           onStatusChange={hub.setStatus}
-          onLoad={() => hub.load(1)}
+          onLoad={handleLoad}
           onExportExcel={hub.exportExcel}
           onExportCsv={hub.exportCsv}
           onExportPdf={hub.exportPdf}
@@ -72,7 +75,7 @@ export function AdminReportsPage() {
         />
 
         <ReportTable
-          onRetry={() => hub.load()}
+          onRetry={handleRetry}
           result={hub.result}
           loading={hub.loading}
           error={hub.error}

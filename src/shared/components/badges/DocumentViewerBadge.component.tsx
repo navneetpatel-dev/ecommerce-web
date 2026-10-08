@@ -61,15 +61,16 @@ export function DocumentViewerBadge({
   }[format];
 
   const Icon = config.icon;
+  const handleOpenClick = (event: { stopPropagation: () => void }) => {
+    event.stopPropagation();
+    onOpen();
+  };
 
   return (
     <button
       type="button"
       disabled={disabled}
-      onClick={(e) => {
-        e.stopPropagation();
-        onOpen();
-      }}
+      onClick={handleOpenClick}
       title={LABELS.openInNewTab}
       className={cn(documentViewerStyles.button, className)}
     >

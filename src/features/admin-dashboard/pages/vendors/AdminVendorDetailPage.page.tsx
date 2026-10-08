@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -47,6 +48,7 @@ function AdminVendorDetailContent() {
     saving,
     message,
     error,
+    refetch,
   } = useAdminVendorDetail(vendorId);
 
   if (isLoading)
@@ -58,6 +60,7 @@ function AdminVendorDetailContent() {
         <QueryErrorAlert
           error={loadError}
           fallback={adminEntityDetailLabels.vendorCouldNotLoadDetail}
+          onRetry={refetch}
         />
       </div>
     );
@@ -67,6 +70,30 @@ function AdminVendorDetailContent() {
     <StatusBadge status={vendor.status} />
   ) : null;
   const formLeadingMessage = message ?? error;
+
+  const handleBusinessNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    patchForm({ businessName: event.target.value });
+  };
+
+  const handleCommissionRateChange = (value: number | undefined) => {
+    patchForm({ commissionRate: value });
+  };
+
+  const handleReturnShippingFeeChange = (value: number | undefined) => {
+    patchForm({ returnShippingFee: value });
+  };
+
+  const handleCodEnabledChange = (checked: boolean) => {
+    patchForm({ codEnabled: checked });
+  };
+
+  const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    patchForm({ description: event.target.value });
+  };
+
+  const handleSave = () => {
+    void save();
+  };
 
   return (
     <div className={adminPagesStyles.pageRoot}>
@@ -98,7 +125,7 @@ function AdminVendorDetailContent() {
             <Input
               id="vendor-business-name"
               value={form.businessName}
-              onChange={(e) => patchForm({ businessName: e.target.value })}
+              onChange={handleBusinessNameChange}
             />
           </FormFieldFrame>
           <FormFieldFrame
@@ -113,7 +140,7 @@ function AdminVendorDetailContent() {
               max={100}
               step={1}
               suffix="%"
-              onChange={(value) => patchForm({ commissionRate: value })}
+              onChange={handleCommissionRateChange}
             />
           </FormFieldFrame>
           <FormFieldFrame
@@ -127,14 +154,14 @@ function AdminVendorDetailContent() {
               min={0}
               step={10}
               prefix={CURRENCY_SYMBOL}
-              onChange={(value) => patchForm({ returnShippingFee: value })}
+              onChange={handleReturnShippingFeeChange}
             />
           </FormFieldFrame>
           <FormFieldFrame label={LABELS.vendorCodEnabled}>
             <CheckboxField
               id="vendor-cod-enabled"
               checked={form.codEnabled}
-              onCheckedChange={(checked) => patchForm({ codEnabled: checked })}
+              onCheckedChange={handleCodEnabledChange}
               label={LABELS.vendorCodEnabled}
             />
           </FormFieldFrame>
@@ -147,7 +174,7 @@ function AdminVendorDetailContent() {
               id="vendor-description"
               rows={4}
               value={form.description}
-              onChange={(e) => patchForm({ description: e.target.value })}
+              onChange={handleDescriptionChange}
             />
           </FormFieldFrame>
         </FormSection>
@@ -157,7 +184,7 @@ function AdminVendorDetailContent() {
             type="button"
             fullWidth="mobile"
             disabled={saving}
-            onClick={() => void save()}
+            onClick={handleSave}
           >
             {LABELS.save}
           </Button>

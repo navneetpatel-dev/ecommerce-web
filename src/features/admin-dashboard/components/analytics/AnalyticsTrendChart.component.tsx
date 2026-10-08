@@ -20,6 +20,7 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card";
 import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import {
   fillAnalyticsTrendDays,
   pickTrendTickIndexes,
@@ -75,7 +76,13 @@ export function AnalyticsTrendChart({ data }: AnalyticsTrendChartProps) {
             {LABELS.analyticsEmptyChart}
           </p>
         ) : (
-          <div className={analyticsStyles.trendChartContainer}>
+          <div
+            role="img"
+            aria-label={formatLabel(LABELS.chartAriaLabel, {
+              title: LABELS.analyticsOrderTrend,
+            })}
+            className={analyticsStyles.trendChartContainer}
+          >
             <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <ComposedChart
                 data={chartData}

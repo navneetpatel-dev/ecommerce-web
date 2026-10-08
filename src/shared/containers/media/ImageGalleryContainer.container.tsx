@@ -22,11 +22,13 @@ export function ImageGalleryContainer({
   productName,
 }: ImageGalleryContainerProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const openLightbox = () => setLightboxOpen(true);
+  const closeLightbox = () => setLightboxOpen(false);
   const gallery = useImageGalleryTransition(selectedIndex, onSelect);
   const count = images?.length ? images.length : 1;
   const zoom = useImageGalleryZoom({
     enabled: !lightboxOpen,
-    onTap: () => setLightboxOpen(true),
+    onTap: openLightbox,
     onSwipe: (direction) => {
       if (count <= 1) return;
       const next = (selectedIndex + direction + count) % count;
@@ -47,8 +49,8 @@ export function ImageGalleryContainer({
       zoomOrigin={zoom.origin}
       zoomHandlers={zoom.stageHandlers}
       lightboxOpen={lightboxOpen}
-      onOpenLightbox={() => setLightboxOpen(true)}
-      onCloseLightbox={() => setLightboxOpen(false)}
+      onOpenLightbox={openLightbox}
+      onCloseLightbox={closeLightbox}
     />
   );
 }

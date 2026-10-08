@@ -64,6 +64,15 @@ export function useAdminUsersPage(): AdminUsersPageModel {
       // (self-escalation guard) — hide those actions here rather than let the admin hit a
       // confusing 403.
       const isSelf = isSelfAdminTarget(row.id, currentUserId);
+      const toggleBlocked = () =>
+        adminUsersApi
+          .updateStatus(
+            String(row.id),
+            isBlocked ? USER_STATUS.ACTIVE : USER_STATUS.BLOCKED,
+          )
+          .then(reload);
+      const deleteUser = () =>
+        adminUsersApi.delete(String(row.id)).then(reload);
 
       return (
         <>
@@ -94,14 +103,7 @@ export function useAdminUsersPage(): AdminUsersPageModel {
                   : LABELS.confirmBlockUserBody,
                 { name },
               )}
-              onConfirm={() =>
-                adminUsersApi
-                  .updateStatus(
-                    String(row.id),
-                    isBlocked ? USER_STATUS.ACTIVE : USER_STATUS.BLOCKED,
-                  )
-                  .then(reload)
-              }
+              onConfirm={toggleBlocked}
             />
           )}
           {isSelf ? null : (
@@ -110,9 +112,7 @@ export function useAdminUsersPage(): AdminUsersPageModel {
               dialogVariant="danger"
               title={LABELS.confirmDeleteUserTitle}
               description={formatLabel(LABELS.confirmDeleteUserBody, { name })}
-              onConfirm={() =>
-                adminUsersApi.delete(String(row.id)).then(reload)
-              }
+              onConfirm={deleteUser}
             />
           )}
         </>

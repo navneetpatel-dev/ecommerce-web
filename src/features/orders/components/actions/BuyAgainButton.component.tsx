@@ -15,6 +15,10 @@ interface BuyAgainButtonProps {
 export function BuyAgainButton({ items }: BuyAgainButtonProps) {
   const { buyAgain, isPending, result } = useBuyAgain();
 
+  const handleBuyAgain = () => {
+    void buyAgain(items);
+  };
+
   const summary = (() => {
     if (!result) return null;
     if (result.addedCount === 0) return LABELS.buyAgainNoneAvailable;
@@ -35,7 +39,7 @@ export function BuyAgainButton({ items }: BuyAgainButtonProps) {
         variant="outline"
         size="sm"
         disabled={isPending || items.length === 0}
-        onClick={() => void buyAgain(items)}
+        onClick={handleBuyAgain}
       >
         {isPending ? LABELS.buyAgainAdding : LABELS.buyAgain}
       </Button>

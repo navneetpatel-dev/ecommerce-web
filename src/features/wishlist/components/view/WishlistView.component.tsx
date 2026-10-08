@@ -50,6 +50,9 @@ interface WishlistViewProps {
 export function WishlistView(props: WishlistViewProps) {
   const { isLoading, isEmpty, items, pagination, removeError, onRemoveItem } =
     props;
+
+  const removeFor = (productId: string) => () => onRemoveItem(productId);
+
   if (isLoading) {
     return (
       <div className={styles.loadingContainer}>
@@ -94,7 +97,7 @@ export function WishlistView(props: WishlistViewProps) {
                   aria-label={formatLabel(LABELS.removeNamedFromWishlist, {
                     name: product.name,
                   })}
-                  onClick={() => onRemoveItem(wishlistItem.productId)}
+                  onClick={removeFor(wishlistItem.productId)}
                 >
                   <Trash2 size={14} />
                 </Button>

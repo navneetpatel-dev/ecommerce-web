@@ -1,4 +1,5 @@
 import { Input } from "@/shared/components/ui/input";
+import { PasswordInputContainer } from "@/shared/containers/forms/PasswordInputContainer.container";
 import {
   Select,
   SelectContent,
@@ -72,9 +73,8 @@ export function CreateDeliveryAgentFormFields({
         >
           Temporary password (min 8 chars) *
         </label>
-        <Input
+        <PasswordInputContainer
           id="agent-password"
-          type="password"
           autoComplete="new-password"
           placeholder="••••••••"
           value={form.password}

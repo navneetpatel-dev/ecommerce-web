@@ -2,6 +2,7 @@
 
 import { BarcodeScanButton } from "../../components/pickups/BarcodeScanButton.component";
 import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
+import { LABELS } from "@/shared/constants/labels";
 import { deliveryListPageStyles as styles } from "../deliveries/deliveryListPage.styles";
 import { usePickupsPage } from "../../hooks/pickups/usePickupsPage.hook";
 import { PickupTaskList } from "../../components/pickups/PickupTaskList.component";
@@ -34,12 +35,13 @@ export function PickupsPage() {
       {query.isError ? (
         <QueryErrorAlert
           error={query.error}
-          fallback="Could not load pickups."
+          fallback={LABELS.pickupsCouldNotLoad}
+          onRetry={query.refetch}
         />
       ) : null}
 
       {query.isLoading ? (
-        <p className={styles.loadingText}>Loading pickups...</p>
+        <p className={styles.loadingText}>{LABELS.pickupsLoading}</p>
       ) : count > 0 && query.data ? (
         <PickupTaskList pickups={query.data} />
       ) : (

@@ -6,6 +6,7 @@ import {
   type SupportTicketPriority,
 } from "@/shared/constants/statuses";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
+import { LABELS } from "@/shared/constants/labels";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { usePublicSettings } from "@/shared/hooks/usePublicSettings.hook";
@@ -87,6 +88,10 @@ export function useTicketThreadState(ticket: SupportTicket, mode: RoleMode) {
     if (sent) setAttachments([]);
   };
 
+  const actionHandler = (run: () => Promise<unknown>, message: string) => {
+    return () => void actions.runAction(run, message);
+  };
+
   return {
     currentUserId,
     ratePending: actions.rate.isPending,
@@ -109,5 +114,29 @@ export function useTicketThreadState(ticket: SupportTicket, mode: RoleMode) {
     replyClosed,
     showResolve,
     onSendReply,
+    onResolve: actionHandler(
+      () => actions.resolve.mutateAsync(),
+      LABELS.ticketCouldNotResolve,
+    ),
+    onReopen: actionHandler(
+      () => actions.reopen.mutateAsync(),
+      LABELS.ticketCouldNotReopen,
+    ),
+    onClose: actionHandler(
+      () => actions.close.mutateAsync(),
+      LABELS.ticketCouldNotClose,
+    ),
+    onReassign: actionHandler(
+      () => actions.reassign.mutateAsync(assigneeId.trim()),
+      LABELS.ticketCouldNotReassign,
+    ),
+    onSavePriority: actionHandler(
+      () => actions.updatePriority.mutateAsync(priority),
+      LABELS.ticketCouldNotUpdatePriority,
+    ),
+    onEscalate: actionHandler(
+      () => actions.escalate.mutateAsync(),
+      LABELS.ticketCouldNotEscalate,
+    ),
   };
 }

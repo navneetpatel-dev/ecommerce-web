@@ -27,6 +27,11 @@ export function FilterSheet({
   onUpdateFilter,
   onClear,
 }: FilterSheetProps) {
+  const handleClearAll = () => {
+    onClear();
+    onClose();
+  };
+
   return (
     <BottomSheet open={open} onClose={onClose} title={LABELS.filters}>
       <FilterSidebar
@@ -39,10 +44,7 @@ export function FilterSheet({
         facetSelections={facetSelections}
         onToggleFacet={onToggleFacet}
         onUpdateFilter={onUpdateFilter}
-        onClear={() => {
-          onClear();
-          onClose();
-        }}
+        onClear={handleClearAll}
       />
       <Button className={styles.showResultsButton} onClick={onClose}>
         {LABELS.showResults}

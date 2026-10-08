@@ -1,20 +1,15 @@
 "use client";
 
 import type { UseFormReturn } from "react-hook-form";
-import { Controller } from "react-hook-form";
 import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
-import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
 import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
+import {
+  ControlledNumberInput,
+  ControlledStackableSelect,
+} from "./ControlledFields.component";
 
 interface CreateCouponConstraintFieldsProps {
   form: UseFormReturn<CouponFormInput>;
@@ -27,8 +22,6 @@ export function CreateCouponConstraintFields({
   showError,
   hasError,
 }: CreateCouponConstraintFieldsProps) {
-  const { control } = form;
-
   return (
     <FormSection title={LABELS.couponSectionConstraints} columns={1}>
       <div className={createCouponFormStyles.gridSm2}>
@@ -36,39 +29,25 @@ export function CreateCouponConstraintFields({
           label={LABELS.minOrderValue}
           error={showError("minOrderValue")}
         >
-          <Controller
+          <ControlledNumberInput
+            form={form}
             name="minOrderValue"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                value={field.value ?? undefined}
-                min={0}
-                step={50}
-                prefix={CURRENCY_SYMBOL}
-                error={hasError("minOrderValue")}
-                onChange={(value) => field.onChange(value)}
-                onBlur={field.onBlur}
-              />
-            )}
+            min={0}
+            step={50}
+            prefix={CURRENCY_SYMBOL}
+            error={hasError("minOrderValue")}
           />
         </FormFieldFrame>
         <FormFieldFrame
           label={LABELS.minQuantity}
           error={showError("minQuantity")}
         >
-          <Controller
+          <ControlledNumberInput
+            form={form}
             name="minQuantity"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                value={field.value ?? undefined}
-                min={0}
-                step={1}
-                error={hasError("minQuantity")}
-                onChange={(value) => field.onChange(value)}
-                onBlur={field.onBlur}
-              />
-            )}
+            min={0}
+            step={1}
+            error={hasError("minQuantity")}
           />
         </FormFieldFrame>
       </div>
@@ -77,55 +56,35 @@ export function CreateCouponConstraintFields({
           label={LABELS.usageLimitTotal}
           error={showError("usageLimitTotal")}
         >
-          <Controller
+          <ControlledNumberInput
+            form={form}
             name="usageLimitTotal"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                value={field.value ?? undefined}
-                min={1}
-                step={1}
-                error={hasError("usageLimitTotal")}
-                onChange={(value) => field.onChange(value)}
-                onBlur={field.onBlur}
-              />
-            )}
+            min={1}
+            step={1}
+            error={hasError("usageLimitTotal")}
           />
         </FormFieldFrame>
         <FormFieldFrame
           label={LABELS.usageLimitPerUser}
           error={showError("usageLimitPerUser")}
         >
-          <Controller
+          <ControlledNumberInput
+            form={form}
             name="usageLimitPerUser"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                value={field.value ?? undefined}
-                min={1}
-                step={1}
-                error={hasError("usageLimitPerUser")}
-                onChange={(value) => field.onChange(value)}
-                onBlur={field.onBlur}
-              />
-            )}
+            min={1}
+            step={1}
+            error={hasError("usageLimitPerUser")}
           />
         </FormFieldFrame>
       </div>
       <div className={createCouponFormStyles.gridSm2}>
         <FormFieldFrame label={LABELS.priority} error={showError("priority")}>
-          <Controller
+          <ControlledNumberInput
+            form={form}
             name="priority"
-            control={control}
-            render={({ field }) => (
-              <NumberInput
-                value={field.value ?? 0}
-                step={1}
-                error={hasError("priority")}
-                onChange={(value) => field.onChange(value ?? 0)}
-                onBlur={field.onBlur}
-              />
-            )}
+            step={1}
+            emptyValue={0}
+            error={hasError("priority")}
           />
         </FormFieldFrame>
         <FormFieldFrame
@@ -133,24 +92,7 @@ export function CreateCouponConstraintFields({
           hint={LABELS.stackableHint}
           htmlFor="coupon-stackable"
         >
-          <Controller
-            name="stackable"
-            control={control}
-            render={({ field }) => (
-              <Select
-                value={field.value ? "true" : "false"}
-                onValueChange={(next) => field.onChange(next === "true")}
-              >
-                <SelectTrigger id="coupon-stackable">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="false">{LABELS.no}</SelectItem>
-                  <SelectItem value="true">{LABELS.yes}</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          />
+          <ControlledStackableSelect form={form} />
         </FormFieldFrame>
       </div>
     </FormSection>

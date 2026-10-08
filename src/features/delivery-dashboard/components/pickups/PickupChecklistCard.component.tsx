@@ -36,6 +36,11 @@ export function PickupChecklistCard({
   expiresInMinutes,
   onRequestCode,
 }: PickupChecklistCardProps) {
+  const handleConditionFilesChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onConditionFilesChange(Array.from(event.target.files ?? []));
+  const handleReplacementFileChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onReplacementFileChange(event.target.files?.[0] ?? null);
+
   const canSubmit =
     otpCode.length === 6 &&
     (!exchange || (conditionFiles.length > 0 && replacementFile !== null));
@@ -119,9 +124,7 @@ export function PickupChecklistCard({
                 multiple
                 accept="image/*"
                 capture="environment"
-                onChange={(e) =>
-                  onConditionFilesChange(Array.from(e.target.files ?? []))
-                }
+                onChange={handleConditionFilesChange}
               />
             </label>
           </div>
@@ -141,9 +144,7 @@ export function PickupChecklistCard({
                   type="file"
                   accept="image/*"
                   capture="environment"
-                  onChange={(e) =>
-                    onReplacementFileChange(e.target.files?.[0] ?? null)
-                  }
+                  onChange={handleReplacementFileChange}
                 />
               </label>
             </div>

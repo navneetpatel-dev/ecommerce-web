@@ -19,6 +19,8 @@ export function ProductNotFound(props: {
 }) {
   const { variant = "notFound", onRetry } = props;
 
+  const handleReset = () => onRetry?.();
+
   return (
     <div className={productDetailsMiscStyles.notFoundContainer}>
       <p className={productDetailsMiscStyles.notFoundText}>
@@ -26,7 +28,7 @@ export function ProductNotFound(props: {
       </p>
       {variant === "error" ? (
         <div className={styles.root}>
-          <ErrorFallbackActions onReset={() => onRetry?.()} />
+          <ErrorFallbackActions onReset={handleReset} />
         </div>
       ) : (
         <Button

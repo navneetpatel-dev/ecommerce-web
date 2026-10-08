@@ -34,6 +34,10 @@ export function GiftCardRedeemContent() {
   const isAuthenticated = useIsAuthenticated();
   const { redeem, isRedeeming, error, result } = useGiftCardRedeem();
 
+  const handleRedeem = () => {
+    void redeem(code);
+  };
+
   if (isLoading || !authBootstrapped) {
     return (
       <div className={styles.loadingContainer}>
@@ -118,7 +122,7 @@ export function GiftCardRedeemContent() {
             <Button
               className={styles.button}
               disabled={isRedeeming}
-              onClick={() => void redeem(code)}
+              onClick={handleRedeem}
             >
               {isRedeeming
                 ? giftCardsLabels.giftCardRedeemButtonBusy

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { cn } from "@/shared/utils/dom/cn";
+import { LABELS } from "@/shared/constants/labels";
 import type { LucideIcon } from "lucide-react";
 import { sidebarNavStyles } from "../../styles/layout/layout.styles";
 
@@ -40,6 +41,7 @@ export function SidebarNav({
         <div className={sidebarNavStyles.headerWrapper}>{header}</div>
       ) : null}
       <nav
+        aria-label={LABELS.workspaceNavigation}
         className={cn(
           sidebarNavStyles.nav,
           header
@@ -54,6 +56,7 @@ export function SidebarNav({
             <Link
               key={href}
               href={href}
+              aria-current={isActive ? "page" : undefined}
               className={cn(
                 sidebarNavStyles.linkBase,
                 isActive

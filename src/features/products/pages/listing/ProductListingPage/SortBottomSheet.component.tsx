@@ -19,6 +19,8 @@ export function SortBottomSheet({
   sort,
   onSelectSort,
 }: SortBottomSheetProps) {
+  const selectSort = (value: string) => () => onSelectSort(value);
+
   return (
     <BottomSheet open={open} onClose={onClose} title={LABELS.sort}>
       <div className={productListingPageStyles.sortOptionsList}>
@@ -26,7 +28,7 @@ export function SortBottomSheet({
           <SelectableOptionButton
             key={option.value}
             selected={sort === option.value}
-            onClick={() => onSelectSort(option.value)}
+            onClick={selectSort(option.value)}
           >
             {option.label}
           </SelectableOptionButton>

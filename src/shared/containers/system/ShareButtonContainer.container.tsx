@@ -19,8 +19,8 @@ export function ShareButtonContainer({
   return (
     <ShareButton
       copied={share.copied}
-      onShareNative={() => void share.shareNative()}
-      onCopyLink={() => void share.copyLink()}
+      onShareNative={share.shareNative}
+      onCopyLink={share.copyLink}
       label={label}
     />
   );

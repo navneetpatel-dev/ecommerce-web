@@ -36,6 +36,7 @@ export function DeliveryPincodeChip({ className }: DeliveryPincodeChipProps) {
     setDraft(pincode ?? "");
     setIsEditing(true);
   };
+  const cancelEditing = () => setIsEditing(false);
 
   const commit = () => {
     const next = draft.trim();
@@ -105,11 +106,7 @@ export function DeliveryPincodeChip({ className }: DeliveryPincodeChipProps) {
           >
             {LABELS.checkPincode}
           </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => setIsEditing(false)}
-          >
+          <Button type="button" variant="ghost" onClick={cancelEditing}>
             {LABELS.cancel}
           </Button>
         </div>

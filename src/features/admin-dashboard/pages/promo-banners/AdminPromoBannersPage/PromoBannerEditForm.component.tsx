@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { FileUpload } from "@/shared/components/FileUpload";
 import {
   FormActions,
@@ -56,6 +57,13 @@ export function PromoBannerEditForm({
   onCancelEdit,
   onSaveEdit,
 }: PromoBannerEditFormProps) {
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onEditTitleChange(event.target.value);
+  const handleStatusChange = (value: string) =>
+    onEditStatusChange(value as PromoBannerStatus);
+  const handlePriorityChange = (value: number | undefined) =>
+    onEditPriorityChange(value == null ? "" : String(value));
+
   return (
     <FormSection
       title={LABELS.promoBannerEditSection}
@@ -66,10 +74,7 @@ export function PromoBannerEditForm({
         label={LABELS.promoBannerTitle}
         className={promoBannerSectionStyles.colSpan2}
       >
-        <Input
-          value={editTitle}
-          onChange={(e) => onEditTitleChange(e.target.value)}
-        />
+        <Input value={editTitle} onChange={handleTitleChange} />
       </FormFieldFrame>
       <FormFieldFrame
         label={LABELS.promoBannerImage}
@@ -87,12 +92,7 @@ export function PromoBannerEditForm({
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.promoBannerStatus}>
-        <Select
-          value={editStatus}
-          onValueChange={(value) =>
-            onEditStatusChange(value as PromoBannerStatus)
-          }
-        >
+        <Select value={editStatus} onValueChange={handleStatusChange}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -109,9 +109,7 @@ export function PromoBannerEditForm({
         <NumberInput
           value={editPriority === "" ? undefined : Number(editPriority)}
           step={1}
-          onChange={(value) =>
-            onEditPriorityChange(value == null ? "" : String(value))
-          }
+          onChange={handlePriorityChange}
         />
       </FormFieldFrame>
       <FormActions className={promoBannerSectionStyles.colSpan2}>

@@ -61,6 +61,8 @@ export function SearchBar({
   const overlayDropdown = !isInline;
   const [shellExpanded, setShellExpanded] = useState(false);
 
+  const handleExitComplete = () => setShellExpanded(false);
+
   useEffect(() => {
     if (showPanel) setShellExpanded(true);
   }, [showPanel]);
@@ -104,7 +106,7 @@ export function SearchBar({
           onSelectRecent={onSelectRecent}
           onClearRecent={onClearRecent}
           onSelect={onSelect}
-          onExitComplete={() => setShellExpanded(false)}
+          onExitComplete={handleExitComplete}
         />
       </div>
     </div>

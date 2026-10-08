@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { NumberInput } from "@/shared/components/forms/NumberInput.component";
@@ -34,6 +35,32 @@ export function ProductPoliciesSection({
   getError,
   patchValues,
 }: ProductPoliciesSectionProps) {
+  const handleDeliveryNoteChange = (
+    event: ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    patchValues({ deliveryNote: event.target.value });
+  };
+
+  const handleReturnNoteChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    patchValues({ returnNote: event.target.value });
+  };
+
+  const handleWarrantyMonthsChange = (value: number | undefined) => {
+    patchValues({ warrantyMonths: value == null ? "" : String(value) });
+  };
+
+  const handleWarrantyTypeChange = (value: string) => {
+    patchValues({ warrantyType: value === "__inherit__" ? "" : value });
+  };
+
+  const handleHsnCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    patchValues({ hsnCode: event.target.value });
+  };
+
+  const handleCodModeChange = (value: string) => {
+    patchValues({ codMode: value as ProductCodMode });
+  };
+
   return (
     <FormSection
       title={LABELS.productFormSectionPolicies}
@@ -49,9 +76,7 @@ export function ProductPoliciesSection({
           maxLength={PRODUCT_FIELD_LIMITS.NOTE_MAX}
           error={Boolean(getError("deliveryNote"))}
           disabled={disabled}
-          onChange={(event) =>
-            patchValues({ deliveryNote: event.target.value })
-          }
+          onChange={handleDeliveryNoteChange}
           className={vendorProductCreateFormStyles.policyTextarea}
         />
       </FormFieldFrame>
@@ -65,7 +90,7 @@ export function ProductPoliciesSection({
           maxLength={PRODUCT_FIELD_LIMITS.NOTE_MAX}
           error={Boolean(getError("returnNote"))}
           disabled={disabled}
-          onChange={(event) => patchValues({ returnNote: event.target.value })}
+          onChange={handleReturnNoteChange}
           className={vendorProductCreateFormStyles.policyTextarea}
         />
       </FormFieldFrame>
@@ -84,11 +109,7 @@ export function ProductPoliciesSection({
           max={PRODUCT_FIELD_LIMITS.WARRANTY_MONTHS_MAX}
           step={1}
           disabled={disabled}
-          onChange={(value) =>
-            patchValues({
-              warrantyMonths: value == null ? "" : String(value),
-            })
-          }
+          onChange={handleWarrantyMonthsChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -97,11 +118,7 @@ export function ProductPoliciesSection({
       >
         <Select
           value={values.warrantyType || "__inherit__"}
-          onValueChange={(value) =>
-            patchValues({
-              warrantyType: value === "__inherit__" ? "" : value,
-            })
-          }
+          onValueChange={handleWarrantyTypeChange}
         >
           <SelectTrigger disabled={disabled}>
             <SelectValue placeholder={LABELS.inheritDefault} />
@@ -127,19 +144,14 @@ export function ProductPoliciesSection({
           maxLength={PRODUCT_FIELD_LIMITS.HSN_MAX}
           error={Boolean(getError("hsnCode"))}
           disabled={disabled}
-          onChange={(event) => patchValues({ hsnCode: event.target.value })}
+          onChange={handleHsnCodeChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
         label={LABELS.productCodEnabled}
         error={getError("codMode")}
       >
-        <Select
-          value={values.codMode}
-          onValueChange={(value) =>
-            patchValues({ codMode: value as ProductCodMode })
-          }
-        >
+        <Select value={values.codMode} onValueChange={handleCodModeChange}>
           <SelectTrigger disabled={disabled}>
             <SelectValue />
           </SelectTrigger>

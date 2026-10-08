@@ -27,6 +27,7 @@ export function useAccountOverview() {
     profile: profileQuery.data,
     isLoadingProfile: profileQuery.isLoading,
     profileError: profileQuery.error as Error | null,
+    refetch: profileQuery.refetch,
     ordersCount: ordersPayload?.total ?? orders.length,
     wishlistCount: wishlistQuery.data?.items?.length ?? 0,
     reviewsCount: reviewsQuery.data?.length ?? 0,

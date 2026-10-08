@@ -25,6 +25,7 @@ export function TicketRatingSection(props: TicketRatingSectionProps) {
       /* error surfaced by parent via ratingError state */
     }
   };
+  const handleSubmitClick = () => void ratingErrorSubmit();
 
   return (
     <section className={ticketThreadStyles.ratingCard}>
@@ -36,32 +37,35 @@ export function TicketRatingSection(props: TicketRatingSectionProps) {
           role="radiogroup"
           aria-label={LABELS.ticketRate}
         >
-          {[1, 2, 3, 4, 5].map((n) => (
-            <button
-              key={n}
-              type="button"
-              role="radio"
-              aria-checked={Number(props.rating) >= n}
-              className={ticketThreadStyles.starBtn}
-              onClick={() => props.onRatingChange(String(n))}
-            >
-              <Star
-                size={22}
-                className={cn(
-                  ticketThreadStyles.starTransition,
-                  Number(props.rating) >= n
-                    ? ticketThreadStyles.starActive
-                    : ticketThreadStyles.starInactive,
-                )}
-              />
-            </button>
-          ))}
+          {[1, 2, 3, 4, 5].map((n) => {
+            const selectRating = () => props.onRatingChange(String(n));
+            return (
+              <button
+                key={n}
+                type="button"
+                role="radio"
+                aria-checked={Number(props.rating) >= n}
+                className={ticketThreadStyles.starBtn}
+                onClick={selectRating}
+              >
+                <Star
+                  size={22}
+                  className={cn(
+                    ticketThreadStyles.starTransition,
+                    Number(props.rating) >= n
+                      ? ticketThreadStyles.starActive
+                      : ticketThreadStyles.starInactive,
+                  )}
+                />
+              </button>
+            );
+          })}
         </div>
         <Button
           type="button"
           size="sm"
           loading={props.ratePending}
-          onClick={() => void ratingErrorSubmit()}
+          onClick={handleSubmitClick}
         >
           {LABELS.ticketRateSubmit}
         </Button>

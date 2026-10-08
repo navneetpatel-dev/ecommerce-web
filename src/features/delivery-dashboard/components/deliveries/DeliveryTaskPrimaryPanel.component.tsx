@@ -36,6 +36,12 @@ export function DeliveryTaskPrimaryPanel({
   onConfirm,
   onConfirmRtoHandover,
 }: DeliveryTaskPrimaryPanelProps) {
+  const handleRequestCode = () => actions.requestCode.mutate(shipmentId);
+  const handleRequestRtoCode = () => actions.requestRtoCode.mutate(shipmentId);
+  const handleAdvance = () => {
+    if (next) void actions.runStatus(next.status);
+  };
+
   if (isOutForDelivery) {
     return (
       <>
@@ -50,7 +56,7 @@ export function DeliveryTaskPrimaryPanel({
           requestCodePending={actions.requestCode.isPending}
           requestCodeSuccess={actions.requestCode.isSuccess}
           expiresInMinutes={actions.requestCode.data?.expiresInMinutes}
-          onRequestCode={() => actions.requestCode.mutate(shipmentId)}
+          onRequestCode={handleRequestCode}
           codAmount={shipment.codAmount}
           codCollected={actions.codCollected}
           onCodCollectedChange={actions.setCodCollected}
@@ -69,7 +75,7 @@ export function DeliveryTaskPrimaryPanel({
         requestCodePending={actions.requestRtoCode.isPending}
         requestCodeSuccess={actions.requestRtoCode.isSuccess}
         expiresInMinutes={actions.requestRtoCode.data?.expiresInMinutes}
-        onRequestCode={() => actions.requestRtoCode.mutate(shipmentId)}
+        onRequestCode={handleRequestRtoCode}
       />
     );
   }
@@ -79,7 +85,7 @@ export function DeliveryTaskPrimaryPanel({
       <DeliveryMilestoneCard
         label={next.label}
         loading={actions.update.isPending}
-        onAdvance={() => void actions.runStatus(next.status)}
+        onAdvance={handleAdvance}
       />
     );
   }

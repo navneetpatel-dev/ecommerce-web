@@ -2,6 +2,7 @@
 export const tablesLabels = {
   refresh: "Refresh",
   loading: "Loading…",
+  refreshing: "Refreshing…",
   noRecordsFound: "No records found.",
   recordDetails: "Record details",
   recordDetailsHint:

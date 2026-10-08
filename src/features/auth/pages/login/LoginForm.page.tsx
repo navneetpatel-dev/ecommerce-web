@@ -17,6 +17,7 @@ export function LoginForm() {
         oauthRedirect={login.redirect}
         needsVerification={login.needsVerification}
         unverifiedEmail={login.unverifiedEmail}
+        sessionExpired={login.forcedSignOut}
       />
     </AuthPageShell>
   );

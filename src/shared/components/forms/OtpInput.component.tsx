@@ -3,6 +3,8 @@ import { OtpDigitInput } from "./OtpDigitInput.component";
 
 interface OtpInputProps {
   digits: string[];
+  /** Marks every cell aria-invalid while a verification error is showing. */
+  invalid?: boolean;
   onSetInputRef: (index: number, node: HTMLInputElement | null) => void;
   onUpdateDigit: (index: number, value: string) => void;
   onKeyDown: (
@@ -14,6 +16,7 @@ interface OtpInputProps {
 
 export function OtpInput({
   digits,
+  invalid,
   onSetInputRef,
   onUpdateDigit,
   onKeyDown,
@@ -26,6 +29,7 @@ export function OtpInput({
           key={index}
           index={index}
           digit={digit}
+          invalid={invalid}
           onSetInputRef={onSetInputRef}
           onUpdateDigit={onUpdateDigit}
           onKeyDown={onKeyDown}

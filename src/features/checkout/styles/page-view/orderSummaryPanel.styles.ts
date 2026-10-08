@@ -29,4 +29,5 @@ export const ORDER_SUMMARY_PANEL_STYLES = {
   grandTotalReference: "mt-1.5 text-[0.75rem] text-ink-muted",
   amountsUnavailableNotice: "mt-2",
   totalHint: "mt-1.5 text-[0.75rem] text-ink-muted",
+  totalStatus: "sr-only",
 } as const;

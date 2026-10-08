@@ -4,6 +4,7 @@ export const subOrderShipmentTrackingStyles = {
   root: "mt-4 border-t border-dashed border-line pt-4",
   eyebrow: "mb-2",
   carrier: "text-body text-ink",
+  trackingRow: "flex items-center gap-1",
   trackingNumber: "mt-0.5 font-mono text-body-sm text-ink-muted",
   statusWrapper: "mt-2",
   agentRow: "mt-2 flex flex-wrap items-center gap-x-3 gap-y-1",

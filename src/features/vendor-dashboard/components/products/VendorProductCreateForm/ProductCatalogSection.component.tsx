@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import type {
@@ -23,6 +24,20 @@ export function ProductCatalogSection({
   getError,
   patchValues,
 }: ProductCatalogSectionProps) {
+  const handleTagsInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    patchValues({ tagsInput: event.target.value });
+  };
+
+  const handleHighlightsChange = (
+    highlights: ProductListingFormValues["highlights"],
+  ) => {
+    patchValues({ highlights });
+  };
+
+  const handleSpecsChange = (specs: ProductListingFormValues["specs"]) => {
+    patchValues({ specs });
+  };
+
   return (
     <FormSection
       title={LABELS.productFormSectionCatalog}
@@ -39,7 +54,7 @@ export function ProductCatalogSection({
           value={values.tagsInput}
           error={Boolean(getError("tagsInput"))}
           disabled={disabled}
-          onChange={(event) => patchValues({ tagsInput: event.target.value })}
+          onChange={handleTagsInputChange}
         />
       </FormFieldFrame>
 
@@ -51,7 +66,7 @@ export function ProductCatalogSection({
           highlights={values.highlights}
           disabled={disabled}
           hasError={Boolean(getError("highlights"))}
-          onChange={(highlights) => patchValues({ highlights })}
+          onChange={handleHighlightsChange}
         />
       </FormFieldFrame>
 
@@ -60,7 +75,7 @@ export function ProductCatalogSection({
           specs={values.specs}
           disabled={disabled}
           hasError={Boolean(getError("specs"))}
-          onChange={(specs) => patchValues({ specs })}
+          onChange={handleSpecsChange}
         />
       </FormFieldFrame>
     </FormSection>

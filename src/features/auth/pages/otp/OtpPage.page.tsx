@@ -23,7 +23,7 @@ export function OtpPage() {
         onUpdateDigit={otp.updateDigit}
         onKeyDown={otp.handleKeyDown}
         onPaste={otp.handlePaste}
-        onVerify={() => void otp.verify()}
+        onVerify={otp.verify}
         onResend={otp.resend}
       />
     </AuthPageShell>

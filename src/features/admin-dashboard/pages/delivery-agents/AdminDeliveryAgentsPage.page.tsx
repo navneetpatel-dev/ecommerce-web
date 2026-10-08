@@ -27,6 +27,9 @@ export function AdminDeliveryAgentsPage() {
 
   const renderAgentRowActions = (row: AdminDataRow, reload: () => void) => {
     const { actionLabel, actionTitle } = nextAgentStatus(String(row.status));
+    const confirmStatusChange = () =>
+      page.handleAgentStatusConfirm(row, reload);
+
     return (
       <AdminConfirmAction
         inline
@@ -34,7 +37,7 @@ export function AdminDeliveryAgentsPage() {
         title={actionTitle}
         description="This updates both field availability and sign-in access."
         dialogVariant="warning"
-        onConfirm={() => page.handleAgentStatusConfirm(row, reload)}
+        onConfirm={confirmStatusChange}
       />
     );
   };

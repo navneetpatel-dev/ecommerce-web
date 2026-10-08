@@ -28,6 +28,11 @@ export function ProductCardContainer({
   onToggleCompare,
 }: ProductCardContainerProps) {
   const [variantDialogOpen, setVariantDialogOpen] = useState(false);
+
+  const handleVariantConfirm = (variantId: string) => {
+    card.addToCart(variantId);
+    setVariantDialogOpen(false);
+  };
   const card = useProductCard(product);
   const requiresVariantSelection = (product.variants?.length ?? 0) > 1;
 
@@ -69,10 +74,7 @@ export function ProductCardContainer({
           productSlug={product.slug || product.id}
           isAddingToCart={card.isAddingToCart}
           onOpenChange={setVariantDialogOpen}
-          onConfirm={(variantId) => {
-            card.addToCart(variantId);
-            setVariantDialogOpen(false);
-          }}
+          onConfirm={handleVariantConfirm}
         />
       ) : null}
     </>

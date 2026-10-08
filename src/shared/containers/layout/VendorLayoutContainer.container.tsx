@@ -22,6 +22,8 @@ export function VendorLayoutContainer({
   const { pathname, navItems } = useVendorLayout();
   const [navOpen, setNavOpen] = useState(false);
 
+  const closeNav = () => setNavOpen(false);
+
   useEffect(() => {
     setNavOpen(false);
   }, [pathname]);
@@ -33,7 +35,7 @@ export function VendorLayoutContainer({
         <SidebarNav items={navItems} currentPath={pathname} />
         <WorkspaceNavDrawer
           open={navOpen}
-          onClose={() => setNavOpen(false)}
+          onClose={closeNav}
           items={navItems}
           currentPath={pathname}
           title={LABELS.vendorDashboard}

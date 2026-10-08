@@ -23,6 +23,9 @@ export function NumberInputSteppers({
   atMax,
   onBump,
 }: NumberInputSteppersProps) {
+  const bumpUp = () => onBump(1);
+  const bumpDown = () => onBump(-1);
+
   return (
     <div className={numberInputStyles.stepperContainer}>
       <button
@@ -31,7 +34,7 @@ export function NumberInputSteppers({
         disabled={disabled || atMax}
         aria-label={LABELS.increaseValue}
         className={numberInputStyles.stepperBtn}
-        onClick={() => onBump(1)}
+        onClick={bumpUp}
       >
         <ChevronUp size={14} strokeWidth={2.25} aria-hidden />
       </button>
@@ -41,7 +44,7 @@ export function NumberInputSteppers({
         disabled={disabled || atMin}
         aria-label={LABELS.decreaseValue}
         className={numberInputStyles.stepperBtnDown}
-        onClick={() => onBump(-1)}
+        onClick={bumpDown}
       >
         <ChevronDown size={14} strokeWidth={2.25} aria-hidden />
       </button>

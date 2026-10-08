@@ -77,7 +77,10 @@ export function BarcodeScanButton({
         {LABELS.scanBarcode}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className={barcodeScanButtonStyles.dialogContent}>
+        <DialogContent
+          className={barcodeScanButtonStyles.dialogContent}
+          aria-describedby={undefined}
+        >
           <DialogHeader>
             <DialogTitle>{LABELS.scanDialogTitle}</DialogTitle>
           </DialogHeader>

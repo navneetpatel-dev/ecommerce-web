@@ -1,5 +1,6 @@
 "use client";
 
+import { type ChangeEvent } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -26,6 +27,9 @@ export function ShipTrackingNumberFields({
 }: ShipTrackingNumberFieldsProps) {
   const trimmed = trackingId.trim();
 
+  const handleTrackingIdChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onTrackingIdChange(event.target.value);
+
   return (
     <div className={VENDOR_ORDERS_TABLE_STYLES.trackingRoot}>
       <TableRowActions>
@@ -34,7 +38,7 @@ export function ShipTrackingNumberFields({
             // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: this control lives in a dialog/popover that opened from a user action, where moving focus into the panel is the expected behaviour
             autoFocus
             value={trackingId}
-            onChange={(e) => onTrackingIdChange(e.target.value)}
+            onChange={handleTrackingIdChange}
             placeholder={LABELS.trackingNumberPlaceholder}
             aria-label={LABELS.trackingNumber}
             className={VENDOR_ORDERS_TABLE_STYLES.trackingInput}

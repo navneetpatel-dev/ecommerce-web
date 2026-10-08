@@ -67,6 +67,9 @@ export function useAdminShippingPage(): AdminShippingPageModel {
 
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
+      const deleteZone = () =>
+        adminShippingApi.deleteZone(String(row.id)).then(reload);
+
       const label = adminRowLabel(row);
       return (
         <>
@@ -78,9 +81,7 @@ export function useAdminShippingPage(): AdminShippingPageModel {
             description={formatLabel(LABELS.confirmDeleteShippingBody, {
               name: label,
             })}
-            onConfirm={() =>
-              adminShippingApi.deleteZone(String(row.id)).then(reload)
-            }
+            onConfirm={deleteZone}
           />
         </>
       );

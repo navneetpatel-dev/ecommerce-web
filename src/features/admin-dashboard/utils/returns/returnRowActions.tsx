@@ -1,6 +1,10 @@
 import type { ReactNode } from "react";
 import { Button } from "@/shared/components/ui/button";
-import { RETURN_STATUS, REFUND_STATUS } from "@/shared/constants/statuses";
+import {
+  RETURN_STATUS,
+  REFUND_STATUS,
+  type ReturnStatus,
+} from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { returnsApi } from "@/features/returns";
@@ -19,6 +23,41 @@ export function buildReturnRowActions(
   const status = String(row.status ?? "");
   const buttons: ReactNode[] = [];
 
+  const transitionTo = (next: ReturnStatus) => () =>
+    returnsApi.transition(String(row.id), next).then(reload);
+
+  const handleRejectReturn = (reason?: string) =>
+    returnsApi
+      .transition(String(row.id), RETURN_STATUS.REJECTED, reason)
+      .then(reload);
+
+  const handleDownloadCreditNote = () => {
+    void returnsApi
+      .downloadCreditNote(String(row.id))
+      .catch((error: unknown) => {
+        notifyError(getApiErrorMessage(error, LABELS.downloadFailed));
+      });
+  };
+
+  const handleDownloadDebitNote = () => {
+    void returnsApi
+      .downloadDebitNote(String(row.id))
+      .catch((error: unknown) => {
+        notifyError(getApiErrorMessage(error, LABELS.downloadFailed));
+      });
+  };
+
+  const handleRetryRefund = () =>
+    returnsApi.retryRefund(String(row.id)).then(reload);
+
+  const handleApproveReturn = transitionTo(RETURN_STATUS.APPROVED);
+  const handleSchedulePickup = transitionTo(RETURN_STATUS.PICKUP_SCHEDULED);
+  const handleMarkReceived = transitionTo(RETURN_STATUS.RECEIVED);
+  const handleCloseReturn = transitionTo(RETURN_STATUS.CLOSED);
+
+  const handleDeleteReturn = () =>
+    returnsApi.delete(String(row.id)).then(reload);
+
   if (row.creditNoteNumber) {
     buttons.push(
       <Button
@@ -26,13 +65,7 @@ export function buildReturnRowActions(
         type="button"
         variant="outline"
         size="sm"
-        onClick={() =>
-          void returnsApi
-            .downloadCreditNote(String(row.id))
-            .catch((error: unknown) =>
-              notifyError(getApiErrorMessage(error, LABELS.downloadFailed)),
-            )
-        }
+        onClick={handleDownloadCreditNote}
       >
         {LABELS.downloadCreditNote}
       </Button>,
@@ -45,13 +78,7 @@ export function buildReturnRowActions(
         type="button"
         variant="outline"
         size="sm"
-        onClick={() =>
-          void returnsApi
-            .downloadDebitNote(String(row.id))
-            .catch((error: unknown) =>
-              notifyError(getApiErrorMessage(error, LABELS.downloadFailed)),
-            )
-        }
+        onClick={handleDownloadDebitNote}
       >
         {LABELS.downloadDebitNote}
       </Button>,
@@ -69,7 +96,7 @@ export function buildReturnRowActions(
         dialogVariant="warning"
         title={LABELS.confirmRetryRefundTitle}
         description={formatLabel(LABELS.confirmRetryRefundBody, { name })}
-        onConfirm={() => returnsApi.retryRefund(String(row.id)).then(reload)}
+        onConfirm={handleRetryRefund}
       />,
     );
   }
@@ -84,11 +111,7 @@ export function buildReturnRowActions(
         title={LABELS.confirmRejectReturnTitle}
         description={formatLabel(LABELS.confirmRejectReturnBody, { name })}
         requireReason
-        onConfirm={(reason) =>
-          returnsApi
-            .transition(String(row.id), RETURN_STATUS.REJECTED, reason)
-            .then(reload)
-        }
+        onConfirm={handleRejectReturn}
       />,
     );
   }
@@ -101,11 +124,7 @@ export function buildReturnRowActions(
         dialogVariant="success"
         title={LABELS.confirmApproveReturnTitle}
         description={formatLabel(LABELS.confirmApproveReturnBody, { name })}
-        onConfirm={() =>
-          returnsApi
-            .transition(String(row.id), RETURN_STATUS.APPROVED)
-            .then(reload)
-        }
+        onConfirm={handleApproveReturn}
       />,
     );
   }
@@ -120,11 +139,7 @@ export function buildReturnRowActions(
         description={formatLabel(LABELS.confirmSchedulePickupBody, {
           name,
         })}
-        onConfirm={() =>
-          returnsApi
-            .transition(String(row.id), RETURN_STATUS.PICKUP_SCHEDULED)
-            .then(reload)
-        }
+        onConfirm={handleSchedulePickup}
       />,
     );
   }
@@ -147,11 +162,7 @@ export function buildReturnRowActions(
         dialogVariant="success"
         title={LABELS.confirmMarkReceivedTitle}
         description={formatLabel(LABELS.confirmMarkReceivedBody, { name })}
-        onConfirm={() =>
-          returnsApi
-            .transition(String(row.id), RETURN_STATUS.RECEIVED)
-            .then(reload)
-        }
+        onConfirm={handleMarkReceived}
       />,
     );
   }
@@ -167,11 +178,7 @@ export function buildReturnRowActions(
         dialogVariant="success"
         title={LABELS.confirmCloseReturnTitle}
         description={formatLabel(LABELS.confirmCloseReturnBody, { name })}
-        onConfirm={() =>
-          returnsApi
-            .transition(String(row.id), RETURN_STATUS.CLOSED)
-            .then(reload)
-        }
+        onConfirm={handleCloseReturn}
       />,
     );
   }
@@ -184,7 +191,7 @@ export function buildReturnRowActions(
       tone="danger"
       title={LABELS.confirmDeleteReturnTitle}
       description={formatLabel(LABELS.confirmDeleteReturnBody, { name })}
-      onConfirm={() => returnsApi.delete(String(row.id)).then(reload)}
+      onConfirm={handleDeleteReturn}
     />,
   );
 

@@ -15,16 +15,20 @@ export function ToastStackList({
 }: ToastStackListProps) {
   return (
     <>
-      {toasts.map((toast) => (
-        <ToastStackItem
-          key={toast.id}
-          toast={toast}
-          onOpenChange={(open) => {
-            if (!open) onDismiss(toast.id);
-          }}
-          onAction={() => onAction(toast.id)}
-        />
-      ))}
+      {toasts.map((toast) => {
+        const handleOpenChange = (open: boolean) => {
+          if (!open) onDismiss(toast.id);
+        };
+        const handleAction = () => onAction(toast.id);
+        return (
+          <ToastStackItem
+            key={toast.id}
+            toast={toast}
+            onOpenChange={handleOpenChange}
+            onAction={handleAction}
+          />
+        );
+      })}
     </>
   );
 }

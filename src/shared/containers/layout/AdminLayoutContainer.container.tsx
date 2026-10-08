@@ -23,6 +23,8 @@ export function AdminLayoutContainer({
   const { pathname, navItems } = useAdminLayout();
   const [navOpen, setNavOpen] = useState(false);
 
+  const closeNav = () => setNavOpen(false);
+
   useEffect(() => {
     setNavOpen(false);
   }, [pathname]);
@@ -45,7 +47,7 @@ export function AdminLayoutContainer({
         />
         <WorkspaceNavDrawer
           open={navOpen}
-          onClose={() => setNavOpen(false)}
+          onClose={closeNav}
           items={navItems}
           currentPath={pathname}
           title={LABELS.adminPanel}

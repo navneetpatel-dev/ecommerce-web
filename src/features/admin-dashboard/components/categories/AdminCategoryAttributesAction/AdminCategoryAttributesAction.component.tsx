@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
@@ -64,9 +65,9 @@ export function AdminCategoryAttributesAction({
               {LABELS.categoryAttributes} — {categoryName}
             </DialogTitle>
           </DialogHeader>
-          <p className={styles.dialogDescription}>
+          <DialogDescription className={styles.dialogDescription}>
             {LABELS.categoryAttributesHint}
-          </p>
+          </DialogDescription>
 
           <AttributesSortableList
             rows={rows}

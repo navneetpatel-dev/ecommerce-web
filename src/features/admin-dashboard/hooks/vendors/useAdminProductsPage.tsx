@@ -36,6 +36,10 @@ export function useAdminProductsPage(): AdminProductsPageModel {
     (row: AdminDataRow, reload: () => void): ReactNode => {
       const name = adminRowLabel(row);
       const isArchived = row.status === "ARCHIVED";
+      const reactivateProduct = () =>
+        adminApi.unarchiveProduct(String(row.id)).then(reload);
+      const archiveProduct = () =>
+        adminApi.archiveProduct(String(row.id)).then(reload);
 
       if (isArchived) {
         return (
@@ -45,9 +49,7 @@ export function useAdminProductsPage(): AdminProductsPageModel {
             tone="success"
             title="Reactivate Product"
             description={`Are you sure you want to restore "${name || "this product"}" to active status?`}
-            onConfirm={() =>
-              adminApi.unarchiveProduct(String(row.id)).then(reload)
-            }
+            onConfirm={reactivateProduct}
           />
         );
       }
@@ -59,7 +61,7 @@ export function useAdminProductsPage(): AdminProductsPageModel {
           tone="archive"
           title={LABELS.confirmArchiveProductTitle}
           description={formatLabel(LABELS.confirmArchiveProductBody, { name })}
-          onConfirm={() => adminApi.archiveProduct(String(row.id)).then(reload)}
+          onConfirm={archiveProduct}
         />
       );
     },

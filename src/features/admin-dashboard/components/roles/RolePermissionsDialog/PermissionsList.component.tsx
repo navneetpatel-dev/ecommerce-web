@@ -24,6 +24,8 @@ export function PermissionsList({
   onToggle,
   onResetSearch,
 }: PermissionsListProps) {
+  const permissionToggleFor = (key: string) => () => onToggle(key);
+
   if (permissions.length === 0) {
     return (
       <div className={rolePermissionsDialogStyles.emptyContainer}>
@@ -65,7 +67,7 @@ export function PermissionsList({
                   <div className={rolePermissionsDialogStyles.itemLabelRow}>
                     <Checkbox
                       checked={isChecked}
-                      onCheckedChange={() => onToggle(permission.key)}
+                      onCheckedChange={permissionToggleFor(permission.key)}
                     />
                     <span
                       className={cn(

@@ -21,14 +21,16 @@ export function LoginRequiredDialogContainer() {
     navigate(router, PATHS.loginWithRedirect(next));
   };
 
+  const handleOpenChange = (next: boolean) => {
+    if (!next) closePrompt();
+  };
+
   return (
     <LoginRequiredDialog
       open={open}
       title={title}
       message={message}
-      onOpenChange={(next) => {
-        if (!next) closePrompt();
-      }}
+      onOpenChange={handleOpenChange}
       onCancel={closePrompt}
       onLogin={goToLogin}
     />

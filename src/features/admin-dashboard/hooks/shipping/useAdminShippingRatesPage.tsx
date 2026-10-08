@@ -71,19 +71,22 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
   );
 
   const actions = useCallback(
-    (row: { id?: string | number }, reload: () => void) => (
-      <AdminConfirmAction
-        label="Delete"
-        dialogVariant="danger"
-        confirmVariant="destructive"
-        tone="danger"
-        title="Delete Shipping Rate"
-        description="Are you sure you want to delete this shipping rate? This action cannot be undone."
-        onConfirm={() =>
-          adminShippingApi.deleteRate(String(row.id)).then(reload)
-        }
-      />
-    ),
+    (row: { id?: string | number }, reload: () => void) => {
+      const deleteRate = () =>
+        adminShippingApi.deleteRate(String(row.id)).then(reload);
+
+      return (
+        <AdminConfirmAction
+          label="Delete"
+          dialogVariant="danger"
+          confirmVariant="destructive"
+          tone="danger"
+          title="Delete Shipping Rate"
+          description="Are you sure you want to delete this shipping rate? This action cannot be undone."
+          onConfirm={deleteRate}
+        />
+      );
+    },
     [],
   );
 

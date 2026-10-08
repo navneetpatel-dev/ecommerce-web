@@ -39,6 +39,8 @@ export function CardControls({
     if (isAddingToCart) return;
     onAddToCart?.();
   };
+  const handleQuantityChange = (quantity: number) =>
+    onQuantityChange?.(quantity);
 
   return (
     <AnimatePresence mode="wait" initial={false}>
@@ -51,7 +53,7 @@ export function CardControls({
           <CardQuantityControl
             value={cartQuantity}
             max={maxQuantity}
-            onChange={(qty) => onQuantityChange?.(qty)}
+            onChange={handleQuantityChange}
           />
         </motion.div>
       ) : (

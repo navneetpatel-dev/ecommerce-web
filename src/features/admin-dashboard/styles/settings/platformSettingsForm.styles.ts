@@ -22,7 +22,7 @@ export const platformSettingsFormStyles = {
   tabTrigger:
     "group gap-1.5 rounded-sm border-0 border-b-0 px-3 py-1.5 text-body-sm text-ink-muted hover:text-ink data-[state=active]:bg-brand data-[state=active]:text-paper data-[state=active]:hover:bg-brand-hover",
   tabCountBadge:
-    "inline-flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full px-1 text-[10px] font-bold leading-none bg-line-strong/60 text-ink-muted group-data-[state=active]:bg-paper group-data-[state=active]:text-brand",
+    "inline-flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full px-1 text-[0.6875rem] font-bold leading-none bg-line-strong/60 text-ink-muted group-data-[state=active]:bg-paper group-data-[state=active]:text-brand",
   searchContainer: "relative w-full sm:w-64 sm:max-w-64 shrink-0",
   searchIcon:
     "absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-ink-faint pointer-events-none",
@@ -60,7 +60,7 @@ export const platformSettingsFormStyles = {
   itemLabelActive: "font-semibold text-ink",
   itemLabelInactive: "font-normal text-ink",
   itemCategory:
-    "shrink-0 text-[10px] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted",
+    "shrink-0 text-[0.6875rem] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted",
   tooltipContent: "max-w-xs",
   root: "w-full min-w-0",
   formStack: "space-y-8",

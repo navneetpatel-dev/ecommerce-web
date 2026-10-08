@@ -14,6 +14,10 @@ export function AdminNotificationsPage() {
   const { pending, message, error, filters, setFilters, loadLogs, sendTest } =
     useAdminNotificationsPage();
 
+  const handleSendTest = () => {
+    void sendTest();
+  };
+
   return (
     <div className={adminPagesStyles.stack5}>
       <div className={adminPagesStyles.headerRow}>
@@ -26,7 +30,7 @@ export function AdminNotificationsPage() {
             push.
           </p>
         </div>
-        <Button loading={pending} onClick={() => void sendTest()}>
+        <Button loading={pending} onClick={handleSendTest}>
           <Send className={adminPagesStyles.iconSm} aria-hidden="true" />
           Send test
         </Button>

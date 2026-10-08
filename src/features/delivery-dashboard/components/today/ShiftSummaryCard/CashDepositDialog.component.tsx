@@ -5,6 +5,7 @@ import { Input } from "@/shared/components/ui/input";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
@@ -71,11 +72,11 @@ export function CashDepositDialog({
             <DialogTitle>{LABELS.depositDialogTitle}</DialogTitle>
           </DialogHeader>
           <div className={SHIFT_DIALOG_BODY}>
-            <p className={SHIFT_DIALOG_HINT}>
+            <DialogDescription className={SHIFT_DIALOG_HINT}>
               {formatLabel(LABELS.depositDialogHint, {
                 amount: formatInrExact(expectedCod),
               })}
-            </p>
+            </DialogDescription>
             <FormFieldFrame
               label={LABELS.depositAmountLabel}
               htmlFor="cash-deposit-amount"

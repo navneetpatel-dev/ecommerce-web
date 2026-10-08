@@ -1,6 +1,6 @@
 "use client";
 
-import type { KeyboardEvent, ReactNode } from "react";
+import type { KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import {
   Table,
   TableBody,
@@ -98,6 +98,12 @@ export function DataTableDesktopTable<T>({
             const rowId =
               getRowId?.(row, index) ??
               String((row as { id?: unknown }).id ?? index);
+            const activateRow = () => onActivateRow(row, index);
+            const handleRowKeyDown = (event: KeyboardEvent<HTMLElement>) =>
+              onRowKeyDown(event, row, index);
+            const stopRowEvent = (event: SyntheticEvent) =>
+              event.stopPropagation();
+
             return (
               <TableRow
                 key={rowId}
@@ -108,8 +114,8 @@ export function DataTableDesktopTable<T>({
                 aria-label={
                   rowsInteractive ? LABELS.viewRecordDetails : undefined
                 }
-                onClick={() => onActivateRow(row, index)}
-                onKeyDown={(event) => onRowKeyDown(event, row, index)}
+                onClick={activateRow}
+                onKeyDown={handleRowKeyDown}
               >
                 {columns.map((column) => {
                   const content = resolveCell(column, row, index);
@@ -133,8 +139,8 @@ export function DataTableDesktopTable<T>({
                 {actions ? (
                   <TableCell
                     className={cn(TABLE_ACTIONS_CELL_CLASS, actionsClassName)}
-                    onClick={(event) => event.stopPropagation()}
-                    onKeyDown={(event) => event.stopPropagation()}
+                    onClick={stopRowEvent}
+                    onKeyDown={stopRowEvent}
                   >
                     <TableRowActions>{actions(row, index)}</TableRowActions>
                   </TableCell>

@@ -22,6 +22,8 @@ export function DeliveryLayoutContainer({
   const [navOpen, setNavOpen] = useState(false);
   const [prevPathname, setPrevPathname] = useState(pathname);
 
+  const closeNav = () => setNavOpen(false);
+
   if (prevPathname !== pathname) {
     setPrevPathname(pathname);
     setNavOpen(false);
@@ -34,7 +36,7 @@ export function DeliveryLayoutContainer({
         <SidebarNav items={navItems} currentPath={pathname} />
         <WorkspaceNavDrawer
           open={navOpen}
-          onClose={() => setNavOpen(false)}
+          onClose={closeNav}
           items={navItems}
           currentPath={pathname}
           title={LABELS.deliveryDashboard}

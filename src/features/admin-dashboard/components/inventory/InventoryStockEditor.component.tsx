@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { Save } from "lucide-react";
 import type { LowStockInventoryRow } from "../../api/inventory/inventory.api";
 import { Button } from "@/shared/components/ui/button";
@@ -21,6 +22,12 @@ export function InventoryStockEditor({
     row.id,
   );
 
+  const handleStockChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setStock(event.target.value);
+  const handleSave = () => {
+    void save(reload);
+  };
+
   return (
     <div className={adminPagesStyles.stockEditorRow}>
       <Input
@@ -30,13 +37,13 @@ export function InventoryStockEditor({
         step={1}
         type="number"
         value={stock}
-        onChange={(event) => setStock(event.target.value)}
+        onChange={handleStockChange}
       />
       <Button
         size="sm"
         variant="outline"
         loading={pending}
-        onClick={() => void save(reload)}
+        onClick={handleSave}
       >
         <Save className={adminPagesStyles.iconSm} aria-hidden="true" />
         Save

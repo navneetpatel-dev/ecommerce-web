@@ -53,6 +53,7 @@ export function CalendarGrid({
           );
         const isSelected = sameDay(day, draftDay);
         const isToday = sameDay(day, today);
+        const selectDay = () => onSelectDay(day);
         return (
           <button
             key={day.toISOString()}
@@ -66,7 +67,7 @@ export function CalendarGrid({
                 isToday &&
                 dateTimePickerStyles.calendar.dayButtonToday,
             )}
-            onClick={() => onSelectDay(day)}
+            onClick={selectDay}
           >
             {day.getDate()}
           </button>

@@ -9,6 +9,7 @@ import {
   isTransientNetworkError,
 } from "@/shared/utils/auth/authSessionError";
 import { parseResponseBody, type ApiFailure } from "./envelope";
+import { markForcedSignOut } from "@/shared/utils/auth/sessionExpiryNotice";
 
 const BASE_URL = CLIENT_API_BASE_URL;
 
@@ -89,6 +90,7 @@ async function refreshSessionWithRetries(): Promise<void> {
     if (outcome === "ok") return;
     if (outcome === "auth_failure") {
       clearPersistedSession();
+      markForcedSignOut();
       throw throwSessionExpired();
     }
     if (attempt < maxAttempts - 1) {

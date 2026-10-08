@@ -1,7 +1,7 @@
 "use client";
 
 import type { UseFormReturn } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { Controller, type ControllerRenderProps } from "react-hook-form";
 import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
 import {
   Select,
@@ -32,6 +32,41 @@ interface CreateCouponRestrictionFieldsProps {
   ) => Promise<InfiniteMultiSelectPageResult>;
 }
 
+function UserRestrictionTypeField({
+  field,
+  setValue,
+  options,
+}: {
+  field: ControllerRenderProps<CouponFormInput, "userRestrictionType">;
+  setValue: UseFormReturn<CouponFormInput>["setValue"];
+  options: ReadonlyArray<{ value: string; label: string }>;
+}) {
+  const handleChange = (next: string) => {
+    field.onChange(next);
+    if (next !== "segment") {
+      setValue("userRestrictionSegment", null);
+    }
+    if (next !== "specific") {
+      setValue("userRestrictionUserIds", []);
+    }
+  };
+
+  return (
+    <Select value={field.value ?? "all"} onValueChange={handleChange}>
+      <SelectTrigger>
+        <SelectValue placeholder={LABELS.userRestriction} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
 export function CreateCouponRestrictionFields({
   form,
   showError,
@@ -57,29 +92,11 @@ export function CreateCouponRestrictionFields({
           name="userRestrictionType"
           control={control}
           render={({ field }) => (
-            <Select
-              value={field.value ?? "all"}
-              onValueChange={(next) => {
-                field.onChange(next);
-                if (next !== "segment") {
-                  setValue("userRestrictionSegment", null);
-                }
-                if (next !== "specific") {
-                  setValue("userRestrictionUserIds", []);
-                }
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder={LABELS.userRestriction} />
-              </SelectTrigger>
-              <SelectContent>
-                {availableUserRestrictions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <UserRestrictionTypeField
+              field={field}
+              setValue={setValue}
+              options={availableUserRestrictions}
+            />
           )}
         />
       </FormFieldFrame>

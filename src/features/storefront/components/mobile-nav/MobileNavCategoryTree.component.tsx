@@ -40,6 +40,9 @@ export function MobileNavCategoryTree({
     panelId,
   } = useMobileNavCategories(categories);
 
+  const toggleFor = (departmentId: string) => () =>
+    toggleDepartment(departmentId);
+
   return (
     <section className={styles.categorySection}>
       <div className={styles.categoryHeaderRow}>
@@ -99,7 +102,7 @@ export function MobileNavCategoryTree({
               tree={categories}
               expanded={expandedId === department.department.id}
               panelId={panelId(department.department.id)}
-              onToggle={() => toggleDepartment(department.department.id)}
+              onToggle={toggleFor(department.department.id)}
               onNavigate={onNavigate}
             />
           ))}

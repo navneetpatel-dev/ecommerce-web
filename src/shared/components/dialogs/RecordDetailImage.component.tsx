@@ -5,6 +5,9 @@ import { LABELS } from "@/shared/constants/labels";
 import { extractImageUrls } from "@/shared/utils/media/imageField";
 import { recordDetailImageStyles } from "../../styles/dialogs/dialogComponents.styles";
 
+const stopLinkPropagation = (event: { stopPropagation: () => void }) =>
+  event.stopPropagation();
+
 interface RecordDetailImageProps {
   value: unknown;
   alt: string;
@@ -25,7 +28,7 @@ export function RecordDetailImage({ value, alt }: RecordDetailImageProps) {
       target="_blank"
       rel="noopener noreferrer"
       className={recordDetailImageStyles.link}
-      onClick={(event) => event.stopPropagation()}
+      onClick={stopLinkPropagation}
     >
       <div className={recordDetailImageStyles.thumb}>
         <MediaImage

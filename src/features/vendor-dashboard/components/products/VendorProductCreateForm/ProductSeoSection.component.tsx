@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
@@ -24,6 +25,12 @@ export function ProductSeoSection({
   getError,
   patchValues,
 }: ProductSeoSectionProps) {
+  const handleSeoTitleChange = (event: ChangeEvent<HTMLInputElement>) =>
+    patchValues({ seoTitle: event.target.value });
+  const handleSeoDescriptionChange = (
+    event: ChangeEvent<HTMLTextAreaElement>,
+  ) => patchValues({ seoDescription: event.target.value });
+
   return (
     <FormSection
       title={LABELS.productFormSectionSeo}
@@ -38,7 +45,7 @@ export function ProductSeoSection({
           maxLength={PRODUCT_FIELD_LIMITS.SEO_TITLE_MAX}
           error={Boolean(getError("seoTitle"))}
           disabled={disabled}
-          onChange={(event) => patchValues({ seoTitle: event.target.value })}
+          onChange={handleSeoTitleChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -50,9 +57,7 @@ export function ProductSeoSection({
           maxLength={PRODUCT_FIELD_LIMITS.SEO_DESCRIPTION_MAX}
           error={Boolean(getError("seoDescription"))}
           disabled={disabled}
-          onChange={(event) =>
-            patchValues({ seoDescription: event.target.value })
-          }
+          onChange={handleSeoDescriptionChange}
           className={vendorProductCreateFormStyles.seoDescriptionTextarea}
         />
       </FormFieldFrame>

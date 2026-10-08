@@ -57,7 +57,12 @@ export function TicketThread({ ticket, mode }: Props) {
     onSendReply,
     onLoadEarlier,
     onRateSubmit,
-    runAction,
+    onResolve,
+    onReopen,
+    onClose,
+    onReassign,
+    onSavePriority,
+    onEscalate,
     resolve,
     reopen,
     close,
@@ -88,7 +93,7 @@ export function TicketThread({ ticket, mode }: Props) {
             useVirtual={useVirtual}
             virtualizer={virtualizer}
             messagesParentRef={messagesParentRef}
-            onLoadEarlier={() => void onLoadEarlier()}
+            onLoadEarlier={onLoadEarlier}
           />
 
           {replyBlocked ? (
@@ -104,7 +109,7 @@ export function TicketThread({ ticket, mode }: Props) {
               existingImageCount={existingImageCount}
               existingVideoCount={existingVideoCount}
               error={error}
-              onSend={() => void onSendReply()}
+              onSend={onSendReply}
             />
           )}
 
@@ -136,49 +141,19 @@ export function TicketThread({ ticket, mode }: Props) {
               resolvePending={resolve.isPending}
               reopenPending={reopen.isPending}
               closePending={close.isPending}
-              onResolve={() =>
-                void runAction(
-                  () => resolve.mutateAsync(),
-                  LABELS.ticketCouldNotResolve,
-                )
-              }
-              onReopen={() =>
-                void runAction(
-                  () => reopen.mutateAsync(),
-                  LABELS.ticketCouldNotReopen,
-                )
-              }
-              onClose={() =>
-                void runAction(
-                  () => close.mutateAsync(),
-                  LABELS.ticketCouldNotClose,
-                )
-              }
+              onResolve={onResolve}
+              onReopen={onReopen}
+              onClose={onClose}
               assigneeId={assigneeId}
               onAssigneeChange={setAssigneeId}
               reassignPending={reassign.isPending}
-              onReassign={() =>
-                void runAction(
-                  () => reassign.mutateAsync(assigneeId.trim()),
-                  LABELS.ticketCouldNotReassign,
-                )
-              }
+              onReassign={onReassign}
               priority={priority}
               onPriorityChange={setPriority}
               priorityPending={updatePriority.isPending}
-              onSavePriority={() =>
-                void runAction(
-                  () => updatePriority.mutateAsync(priority),
-                  LABELS.ticketCouldNotUpdatePriority,
-                )
-              }
+              onSavePriority={onSavePriority}
               escalatePending={escalate.isPending}
-              onEscalate={() =>
-                void runAction(
-                  () => escalate.mutateAsync(),
-                  LABELS.ticketCouldNotEscalate,
-                )
-              }
+              onEscalate={onEscalate}
               actionError={actionError}
             />
           </section>

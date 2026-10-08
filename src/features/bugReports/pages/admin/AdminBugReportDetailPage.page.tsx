@@ -39,6 +39,7 @@ function AdminBugReportDetailContent() {
         <QueryErrorAlert
           error={error}
           fallback={LABELS.bugCouldNotLoadDetail}
+          onRetry={query.refetch}
         />
       </div>
     );

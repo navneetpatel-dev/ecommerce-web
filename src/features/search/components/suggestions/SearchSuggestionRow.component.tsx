@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import Image from "next/image";
 import { ArrowUpRight, LayoutGrid, Package, Store } from "lucide-react";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
@@ -64,6 +64,7 @@ function SuggestionThumb({
   type: SearchSuggestion["type"];
 }) {
   const [unavailable, setUnavailable] = useState(!src);
+  const markUnavailable = () => setUnavailable(true);
 
   if (!unavailable && src) {
     return (
@@ -74,7 +75,7 @@ function SuggestionThumb({
           width={44}
           height={44}
           className={styles.thumbImage}
-          onError={() => setUnavailable(true)}
+          onError={markUnavailable}
         />
       </span>
     );
@@ -102,6 +103,11 @@ export function SearchSuggestionRow({
   const meta = suggestionMeta(suggestion);
   const typeLabel = suggestionTypeLabel(suggestion.type);
 
+  const handleMouseDown = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    onSelect(suggestion);
+  };
+
   return (
     <button
       type="button"
@@ -112,10 +118,7 @@ export function SearchSuggestionRow({
         styles.rowButton,
         active ? styles.rowActive : styles.rowInactive,
       )}
-      onMouseDown={(event) => {
-        event.preventDefault();
-        onSelect(suggestion);
-      }}
+      onMouseDown={handleMouseDown}
     >
       <SuggestionThumb
         src={suggestion.imageUrl}

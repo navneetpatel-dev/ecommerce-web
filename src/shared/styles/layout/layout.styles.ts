@@ -6,8 +6,8 @@ export const mobileTabBarStyles = {
   tabItem:
     "flex min-h-11 min-w-[3.25rem] flex-col items-center justify-center gap-0.5 overflow-visible px-2 py-1 text-ink-muted",
   tabItemActive: "text-brand",
-  textLabel: "text-[0.625rem] max-md:landscape:hidden",
-  textLabelNormal: "text-[0.625rem] font-normal max-md:landscape:hidden",
+  textLabel: "text-[0.75rem] max-md:landscape:hidden",
+  textLabelNormal: "text-[0.75rem] font-normal max-md:landscape:hidden",
   skeletonIcon: "size-5 rounded-md",
   skeletonLabelW8: "h-2 w-8 rounded-sm",
   skeletonLabelW6: "h-2 w-6 rounded-sm",

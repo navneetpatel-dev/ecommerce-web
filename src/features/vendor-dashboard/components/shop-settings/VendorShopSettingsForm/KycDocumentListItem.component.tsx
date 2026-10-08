@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from "react";
 import { ChevronDown, UploadCloud } from "lucide-react";
 import { FileUpload } from "@/shared/components/FileUpload";
 import { DocumentViewerBadge } from "@/shared/components/badges/DocumentViewerBadge.component";
@@ -41,6 +42,21 @@ export function KycDocumentListItem({
 }: KycDocumentListItemProps) {
   const hasDocument = Boolean(item.documentId && item.url);
 
+  const handleHeaderKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onToggle();
+    }
+  };
+
+  const handleOpenDocument = () => {
+    if (item.documentId) onOpenDocument(item.documentId);
+  };
+
+  const handleUploaded = (url: string) => {
+    onUploaded(url, item.documentType);
+  };
+
   return (
     <li
       className={cn(
@@ -56,12 +72,7 @@ export function KycDocumentListItem({
         tabIndex={0}
         aria-expanded={isExpanded}
         onClick={onToggle}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onToggle();
-          }
-        }}
+        onKeyDown={handleHeaderKeyDown}
         className={vendorShopSettingsFormStyles.headerButton}
       >
         {/* Primary Row: Desktop = 1 horizontal row; Mobile = Title on top, Badges below */}
@@ -98,10 +109,7 @@ export function KycDocumentListItem({
             <DocumentStatusBadge status={item.status} />
 
             {hasDocument ? (
-              <DocumentViewerBadge
-                url={item.url}
-                onOpen={() => onOpenDocument(item.documentId!)}
-              />
+              <DocumentViewerBadge url={item.url} onOpen={handleOpenDocument} />
             ) : null}
 
             {/* Desktop Chevron Indicator */}
@@ -162,7 +170,7 @@ export function KycDocumentListItem({
               entityId={vendorId}
               purpose={UPLOAD_PURPOSE.KYC}
               accept="image/png,image/jpeg,image/webp,application/pdf"
-              onUploaded={(url) => onUploaded(url, item.documentType)}
+              onUploaded={handleUploaded}
               disabled={!vendorId || saving || kycSaving}
             />
           </div>

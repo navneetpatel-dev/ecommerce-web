@@ -1,5 +1,6 @@
 "use client";
 
+import { type ChangeEvent } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/forms/FormError.component";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -34,13 +35,14 @@ export function TicketReplyBlockedNotice({ message }: { message: string }) {
 
 /** Reply textarea, attachment uploader and send button. */
 export function TicketReplyComposer(props: TicketReplyComposerProps) {
+  const handleBodyChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
+    props.onBodyChange(event.target.value.slice(0, TICKET_REPLY_MAX));
+
   return (
     <div className={ticketThreadStyles.composerBox}>
       <Textarea
         value={props.body}
-        onChange={(e) =>
-          props.onBodyChange(e.target.value.slice(0, TICKET_REPLY_MAX))
-        }
+        onChange={handleBodyChange}
         placeholder={LABELS.ticketReplyPlaceholder}
         rows={3}
         className={ticketThreadStyles.composerTextarea}

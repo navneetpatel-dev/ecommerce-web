@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ChangeEvent } from "react";
 import { Search } from "lucide-react";
 import { motion } from "motion/react";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
@@ -15,6 +15,8 @@ import { helpHomeViewStyles as styles } from "../../../styles/home/helpHomeView.
 
 export function HelpHomeView() {
   const [query, setQuery] = useState("");
+  const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setQuery(event.target.value);
   const isSearching = query.trim().length >= 2;
   const results = useMemo(
     () => (isSearching ? searchHelp(query) : []),
@@ -48,8 +50,9 @@ export function HelpHomeView() {
         <div className={styles.searchWrapper}>
           <Search size={16} strokeWidth={1.5} className={styles.searchIcon} />
           <Input
+            type="search"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={handleQueryChange}
             placeholder={LABELS.helpSearchPlaceholder}
             className={styles.searchInput}
             aria-label={LABELS.helpSearchAriaLabel}

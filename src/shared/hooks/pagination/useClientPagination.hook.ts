@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
+import { scrollPageTopOnPageChange } from "@/shared/utils/navigation/paginationScroll";
 
 export function useClientPagination<T>(
   rows: T[],
@@ -21,6 +22,11 @@ export function useClientPagination<T>(
   const from = total === 0 ? 0 : (currentPage - 1) * safeSize + 1;
   const to = Math.min(currentPage * safeSize, total);
 
+  const handlePageChange = (nextPage: number) => {
+    setPage(nextPage);
+    scrollPageTopOnPageChange();
+  };
+
   return {
     page: currentPage,
     pageSize: safeSize,
@@ -30,6 +36,6 @@ export function useClientPagination<T>(
     from,
     to,
     setPage,
-    onPageChange: setPage,
+    onPageChange: handlePageChange,
   };
 }

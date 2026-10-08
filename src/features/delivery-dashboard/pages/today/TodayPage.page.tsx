@@ -24,6 +24,7 @@ export function TodayPage() {
         <QueryErrorAlert
           error={page.queryError}
           fallback="Could not load assigned tasks."
+          onRetry={page.refetch}
         />
       ) : null}
 

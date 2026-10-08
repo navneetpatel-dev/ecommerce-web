@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
@@ -54,7 +55,9 @@ export function AdminReassignProductsAction({
   ) : null;
 
   const successMessage = message ? (
-    <p className={styles.successMessage}>{message}</p>
+    <p role="status" className={styles.successMessage}>
+      {message}
+    </p>
   ) : null;
 
   return (
@@ -75,9 +78,9 @@ export function AdminReassignProductsAction({
           <DialogHeader>
             <DialogTitle>{LABELS.reassignProductsTitle}</DialogTitle>
           </DialogHeader>
-          <p className={styles.dialogDescription}>
+          <DialogDescription className={styles.dialogDescription}>
             {LABELS.reassignProductsBody}
-          </p>
+          </DialogDescription>
           <FormSection
             title={LABELS.reassignProducts}
             columns={1}

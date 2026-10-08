@@ -28,6 +28,9 @@ export function CouponAnalyticsDialog(props: CouponAnalyticsDialogProps) {
   const { analyticsId, setAnalyticsId, analytics, analyticsLoading } = props;
 
   const close = () => setAnalyticsId(null);
+  const handleOpenChange = (next: boolean) => {
+    if (!next) close();
+  };
 
   const absorbedCopy = analytics
     ? formatLabel(LABELS.absorbedDiscountsSummary, {
@@ -36,11 +39,11 @@ export function CouponAnalyticsDialog(props: CouponAnalyticsDialogProps) {
     : null;
 
   return (
-    <Dialog
-      open={Boolean(analyticsId)}
-      onOpenChange={(next) => !next && close()}
-    >
-      <DialogContent className={couponAnalyticsDialogStyles.dialogContent}>
+    <Dialog open={Boolean(analyticsId)} onOpenChange={handleOpenChange}>
+      <DialogContent
+        className={couponAnalyticsDialogStyles.dialogContent}
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle>{LABELS.couponAnalytics}</DialogTitle>
         </DialogHeader>

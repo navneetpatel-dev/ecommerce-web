@@ -20,6 +20,10 @@ export function useAdminReviewsPage(): AdminListPageModel {
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
       const name = adminRowLabel(row);
+      const approveReview = () =>
+        reviewsApi.approve(String(row.id)).then(reload);
+      const rejectReview = () => reviewsApi.reject(String(row.id)).then(reload);
+
       return (
         <>
           <AdminConfirmAction
@@ -27,14 +31,14 @@ export function useAdminReviewsPage(): AdminListPageModel {
             dialogVariant="success"
             title={LABELS.confirmApproveReviewTitle}
             description={formatLabel(LABELS.confirmApproveReviewBody, { name })}
-            onConfirm={() => reviewsApi.approve(String(row.id)).then(reload)}
+            onConfirm={approveReview}
           />
           <AdminConfirmAction
             label={LABELS.reject}
             dialogVariant="danger"
             title={LABELS.confirmRejectReviewTitle}
             description={formatLabel(LABELS.confirmRejectReviewBody, { name })}
-            onConfirm={() => reviewsApi.reject(String(row.id)).then(reload)}
+            onConfirm={rejectReview}
           />
         </>
       );

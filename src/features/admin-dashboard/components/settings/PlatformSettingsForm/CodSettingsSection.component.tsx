@@ -26,6 +26,13 @@ export function CodSettingsSection({
   onCodMinOrderValueChange,
   onCodMaxOrderValueChange,
 }: CodSettingsSectionProps) {
+  const handleEnabledChange = (value: string) =>
+    onCodEnabledChange(value === "true");
+  const handleMinOrderChange = (value: number | undefined) =>
+    onCodMinOrderValueChange(value ?? 0);
+  const handleMaxOrderChange = (value: number | undefined) =>
+    onCodMaxOrderValueChange(value ?? null);
+
   return (
     <FormSection
       title={LABELS.settingsCod}
@@ -35,7 +42,7 @@ export function CodSettingsSection({
       <FormFieldFrame label={LABELS.settingsCodEnabled}>
         <Select
           value={form.codEnabled === false ? "false" : "true"}
-          onValueChange={(value) => onCodEnabledChange(value === "true")}
+          onValueChange={handleEnabledChange}
         >
           <SelectTrigger>
             <SelectValue />
@@ -52,7 +59,7 @@ export function CodSettingsSection({
           min={0}
           step={50}
           prefix={CURRENCY_SYMBOL}
-          onChange={(value) => onCodMinOrderValueChange(value ?? 0)}
+          onChange={handleMinOrderChange}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.settingsCodMaxOrder}>
@@ -61,7 +68,7 @@ export function CodSettingsSection({
           min={0}
           step={50}
           prefix={CURRENCY_SYMBOL}
-          onChange={(value) => onCodMaxOrderValueChange(value ?? null)}
+          onChange={handleMaxOrderChange}
         />
       </FormFieldFrame>
     </FormSection>

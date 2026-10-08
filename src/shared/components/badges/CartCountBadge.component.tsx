@@ -100,10 +100,10 @@ export function CartCountBadge({
           "flex items-center justify-center whitespace-nowrap rounded-full bg-brand font-mono font-medium leading-none text-paper tabular-nums",
           placement === "header" && "shadow-[0_0_0_1px_rgba(0,0,0,0.28)]",
           size === "sm"
-            ? "h-4 min-w-4 px-0.5 text-[0.5625rem]"
+            ? "h-4 min-w-4 px-0.5 text-[0.6875rem]"
             : placement === "header-wide"
-              ? "h-[0.9375rem] min-w-[0.9375rem] px-1 text-[0.5625rem]"
-              : "h-4 min-w-4 px-1 text-[0.625rem]",
+              ? "h-[0.9375rem] min-w-[0.9375rem] px-1 text-[0.6875rem]"
+              : "h-4 min-w-4 px-1 text-[0.6875rem]",
         )}
       >
         {display}

@@ -59,8 +59,8 @@ function AdminTicketsContent() {
         }
         hasNextPage={query.hasNextPage}
         isFetchingNextPage={query.isFetchingNextPage}
-        onLoadMore={() => void query.fetchNextPage()}
-        onRefresh={() => void query.refetch()}
+        onLoadMore={query.fetchNextPage}
+        onRefresh={query.refetch}
         showCustomer
         showVendor
       />

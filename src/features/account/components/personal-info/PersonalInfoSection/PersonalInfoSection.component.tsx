@@ -15,6 +15,7 @@ export function PersonalInfoSection() {
     isLoading,
     isError,
     error,
+    refetch,
     form,
     errors,
     isWorkspace,
@@ -33,7 +34,11 @@ export function PersonalInfoSection() {
   if (isError || !profile) {
     return (
       <div className={styles.errorContainer}>
-        <QueryErrorAlert error={error} fallback={LABELS.couldNotLoadProfile} />
+        <QueryErrorAlert
+          error={error}
+          fallback={LABELS.couldNotLoadProfile}
+          onRetry={refetch}
+        />
       </div>
     );
   }

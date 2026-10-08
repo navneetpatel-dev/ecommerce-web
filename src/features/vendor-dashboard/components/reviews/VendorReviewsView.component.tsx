@@ -26,6 +26,15 @@ export function VendorReviewsView({
 }: VendorReviewsViewProps) {
   const [targetId, setTargetId] = useState<string | null>(null);
 
+  const closeRespond = () => setTargetId(null);
+  const handleRespondOpenChange = (open: boolean) => {
+    if (!open) setTargetId(null);
+  };
+  const handleRespondSubmit = (response: string) => {
+    if (!targetId) return;
+    void Promise.resolve(onRespond(targetId, response)).then(closeRespond);
+  };
+
   return (
     <section className={vendorFeedbackViewsStyles.section}>
       <div className={vendorFeedbackViewsStyles.header}>
@@ -57,33 +66,39 @@ export function VendorReviewsView({
       ) : null}
 
       {!isLoading && !loadError
-        ? reviews.map((review) => (
-            <article key={review.id} className={vendorFeedbackViewsStyles.card}>
-              <p className={vendorFeedbackViewsStyles.cardTitle}>
-                {review.title?.trim() || LABELS.reviewUntitled} ·{" "}
-                {formatLabel(LABELS.reviewRatingOutOf, {
-                  rating: String(review.rating),
-                })}
-              </p>
-              {review.product?.name ? (
-                <p className={vendorFeedbackViewsStyles.cardSubtitle}>
-                  {review.product.name}
-                </p>
-              ) : null}
-              <p className={vendorFeedbackViewsStyles.cardBody}>
-                {review.body}
-              </p>
-              <Button
-                className={vendorFeedbackViewsStyles.actionBtn}
-                size="sm"
-                variant="secondary"
-                type="button"
-                onClick={() => setTargetId(review.id)}
+        ? reviews.map((review) => {
+            const openRespond = () => setTargetId(review.id);
+            return (
+              <article
+                key={review.id}
+                className={vendorFeedbackViewsStyles.card}
               >
-                {LABELS.respondToReview}
-              </Button>
-            </article>
-          ))
+                <p className={vendorFeedbackViewsStyles.cardTitle}>
+                  {review.title?.trim() || LABELS.reviewUntitled} ·{" "}
+                  {formatLabel(LABELS.reviewRatingOutOf, {
+                    rating: String(review.rating),
+                  })}
+                </p>
+                {review.product?.name ? (
+                  <p className={vendorFeedbackViewsStyles.cardSubtitle}>
+                    {review.product.name}
+                  </p>
+                ) : null}
+                <p className={vendorFeedbackViewsStyles.cardBody}>
+                  {review.body}
+                </p>
+                <Button
+                  className={vendorFeedbackViewsStyles.actionBtn}
+                  size="sm"
+                  variant="secondary"
+                  type="button"
+                  onClick={openRespond}
+                >
+                  {LABELS.respondToReview}
+                </Button>
+              </article>
+            );
+          })
         : null}
 
       {!isLoading && !loadError && !reviews.length ? (
@@ -95,15 +110,8 @@ export function VendorReviewsView({
       <VendorReviewRespondDialog
         open={Boolean(targetId)}
         submitting={submitting}
-        onOpenChange={(open) => {
-          if (!open) setTargetId(null);
-        }}
-        onSubmit={(response) => {
-          if (!targetId) return;
-          void Promise.resolve(onRespond(targetId, response)).then(() =>
-            setTargetId(null),
-          );
-        }}
+        onOpenChange={handleRespondOpenChange}
+        onSubmit={handleRespondSubmit}
       />
     </section>
   );

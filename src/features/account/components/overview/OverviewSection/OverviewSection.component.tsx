@@ -44,6 +44,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
     handleCropOpenChange,
     onAvatarCropped,
     glanceItems,
+    refetch,
   } = useOverviewSection({ onNavigate });
 
   if (isLoadingProfile) {
@@ -56,6 +57,7 @@ export function OverviewSection({ onNavigate }: OverviewSectionProps) {
         <QueryErrorAlert
           error={profileError}
           fallback={LABELS.couldNotLoadProfile}
+          onRetry={refetch}
         />
       </div>
     );

@@ -6,5 +6,6 @@ export const couponsTableStyles = {
   analyticsDt: "text-ink-muted",
   analyticsDd: "tabular-nums font-medium",
   columnMono: "font-mono",
+  codeCell: "flex items-center gap-1",
   columnMonoSm: "font-mono text-body-sm",
 } as const;

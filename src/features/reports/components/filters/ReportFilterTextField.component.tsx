@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
@@ -22,6 +23,9 @@ export function ReportFilterTextField({
   disabledHint,
   onChange,
 }: ReportFilterTextFieldProps) {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onChange(event.target.value);
+
   return (
     <FormFieldFrame label={label} htmlFor={id}>
       <DisabledActionHint disabled={disabled} message={disabledHint} block>
@@ -30,7 +34,7 @@ export function ReportFilterTextField({
           value={value}
           placeholder={placeholder}
           disabled={disabled}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
         />
       </DisabledActionHint>
     </FormFieldFrame>

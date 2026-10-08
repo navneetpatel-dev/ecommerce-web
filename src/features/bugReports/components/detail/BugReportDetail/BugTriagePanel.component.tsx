@@ -44,6 +44,11 @@ interface BugTriagePanelProps {
 export function BugTriagePanel(props: BugTriagePanelProps) {
   const { report } = props;
 
+  const handleSeverityChange = (value: string) =>
+    props.onSeverityChange(value as BugReportSeverity);
+  const handleModuleChange = (value: string) =>
+    props.onModuleChange(value as BugAffectedModule);
+
   return (
     <section className={bugReportPanelsStyles.panelRootWithBar}>
       <div aria-hidden className={bugReportPanelsStyles.panelAccentBar} />
@@ -52,12 +57,7 @@ export function BugTriagePanel(props: BugTriagePanelProps) {
       </div>
       <div className={bugReportPanelsStyles.panelBodyTight}>
         <FormFieldFrame label={LABELS.bugSeverity}>
-          <Select
-            value={props.severity}
-            onValueChange={(v) =>
-              props.onSeverityChange(v as BugReportSeverity)
-            }
-          >
+          <Select value={props.severity} onValueChange={handleSeverityChange}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -71,10 +71,7 @@ export function BugTriagePanel(props: BugTriagePanelProps) {
           </Select>
         </FormFieldFrame>
         <FormFieldFrame label={LABELS.bugAffectedModule}>
-          <Select
-            value={props.module}
-            onValueChange={(v) => props.onModuleChange(v as BugAffectedModule)}
-          >
+          <Select value={props.module} onValueChange={handleModuleChange}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>

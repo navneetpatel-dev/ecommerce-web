@@ -8,6 +8,8 @@ import { otpInputStyles } from "../../styles/forms/otpInput.styles";
 interface OtpDigitInputProps {
   index: number;
   digit: string;
+  /** Set while a verification error is showing — announced per cell. */
+  invalid?: boolean;
   onSetInputRef: (index: number, node: HTMLInputElement | null) => void;
   onUpdateDigit: (index: number, value: string) => void;
   onKeyDown: (index: number, event: KeyboardEvent<HTMLInputElement>) => void;
@@ -18,6 +20,7 @@ interface OtpDigitInputProps {
 export function OtpDigitInput({
   index,
   digit,
+  invalid,
   onSetInputRef,
   onUpdateDigit,
   onKeyDown,
@@ -57,6 +60,7 @@ export function OtpDigitInput({
       onPaste={onPaste}
       className={otpInputStyles.input}
       aria-label={formatLabel(LABELS.otpDigit, { index: index + 1 })}
+      aria-invalid={invalid ? true : undefined}
     />
   );
 }

@@ -37,6 +37,7 @@ export function HeaderMenuButton({
         onClick={onOpenMobileNav}
         className={styles.storefrontMenuButton}
         aria-label={LABELS.menu}
+        aria-haspopup="dialog"
       >
         <Menu size={20} className={HEADER_INK_TONE} />
       </Button>
@@ -52,6 +53,7 @@ export function HeaderMenuButton({
         onClick={onOpenWorkspaceNav}
         className={styles.workspaceMenuButton}
         aria-label={LABELS.menu}
+        aria-haspopup="dialog"
       >
         <Menu size={20} className={styles.workspaceMenuIcon} />
       </Button>

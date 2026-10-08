@@ -4,7 +4,6 @@ import { useState, type KeyboardEvent } from "react";
 import { Inbox } from "lucide-react";
 import { SkeletonRows } from "@/shared/components/Skeletons.component";
 import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
-import { Button } from "@/shared/components/ui/button";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { RecordDetailDialog } from "@/shared/components/dialogs/RecordDetailDialog.component";
 import { TooltipProvider } from "@/shared/components/ui/tooltip";
@@ -23,6 +22,7 @@ export function DataTable<T>({
   rows,
   getRowId,
   loading = false,
+  refreshing = false,
   error = null,
   emptyMessage = LABELS.noRecordsFound,
   ariaLabel,
@@ -39,6 +39,10 @@ export function DataTable<T>({
   onRowClick,
 }: DataTableProps<T>) {
   const [detailRow, setDetailRow] = useState<T | null>(null);
+
+  const handleDetailOpenChange = (open: boolean) => {
+    if (!open) setDetailRow(null);
+  };
 
   const resolvedAriaLabel =
     ariaLabel ?? (typeof title === "string" ? title : undefined);
@@ -75,7 +79,7 @@ export function DataTable<T>({
   return (
     <TooltipProvider delayDuration={250}>
       <section
-        aria-busy={loading || undefined}
+        aria-busy={loading || refreshing || undefined}
         className={cn(dataTableStyles.section, className)}
       >
         {(title || onRefresh || toolbar || showSummary) && (
@@ -91,18 +95,18 @@ export function DataTable<T>({
 
         {error ? (
           <div className={dataTableStyles.errorBox}>
-            <QueryErrorAlert error={error} fallback={error} />
-            {onRefresh ? (
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                onClick={onRefresh}
-              >
-                {LABELS.retry}
-              </Button>
-            ) : null}
+            <QueryErrorAlert
+              error={error}
+              fallback={error}
+              onRetry={onRefresh}
+            />
           </div>
+        ) : null}
+
+        {refreshing && !loading ? (
+          <span role="status" className={dataTableStyles.loadingHint}>
+            {LABELS.refreshing}
+          </span>
         ) : null}
 
         {loading ? (
@@ -157,9 +161,7 @@ export function DataTable<T>({
         {rowDetails ? (
           <RecordDetailDialog
             open={detailRow != null}
-            onOpenChange={(open) => {
-              if (!open) setDetailRow(null);
-            }}
+            onOpenChange={handleDetailOpenChange}
             record={detailRow ? toDetailRecord(detailRow) : null}
           />
         ) : null}

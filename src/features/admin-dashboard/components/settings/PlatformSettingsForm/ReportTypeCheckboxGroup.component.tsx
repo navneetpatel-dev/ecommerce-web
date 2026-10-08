@@ -31,6 +31,8 @@ export function ReportTypeCheckboxGroup({
   onToggle,
   onResetFilters,
 }: ReportTypeCheckboxGroupProps) {
+  const reportToggleFor = (type: string) => () => onToggle(type);
+
   if (reports.length === 0) {
     return (
       <div className={styles.emptyContainer}>
@@ -66,7 +68,7 @@ export function ReportTypeCheckboxGroup({
                   <div className={styles.itemLeft}>
                     <Checkbox
                       checked={isChecked}
-                      onCheckedChange={() => onToggle(option.type)}
+                      onCheckedChange={reportToggleFor(option.type)}
                     />
                     <span
                       className={cn(

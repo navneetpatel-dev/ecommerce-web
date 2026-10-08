@@ -35,6 +35,8 @@ export type DataTableProps<T> = {
   rows: T[];
   getRowId?: (row: T, index: number) => string;
   loading?: boolean;
+  /** Background refetch — keeps the current rows and shows a status hint. */
+  refreshing?: boolean;
   error?: string | null;
   emptyMessage?: string;
   /**

@@ -13,7 +13,7 @@ import { useMyReviews } from "../../api/reviews/reviews.queries";
 import { myReviewsPageStyles as styles } from "./myReviewsPage.styles";
 
 export function MyReviewsPage() {
-  const { data, isLoading, isError, error } = useMyReviews();
+  const { data, isLoading, isError, error, refetch } = useMyReviews();
   const reviews = data ?? [];
 
   return (
@@ -35,6 +35,7 @@ export function MyReviewsPage() {
           <QueryErrorAlert
             error={error}
             fallback={LABELS.couldNotLoadReviews}
+            onRetry={refetch}
           />
         </div>
       ) : reviews.length === 0 ? (

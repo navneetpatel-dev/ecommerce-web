@@ -14,11 +14,13 @@ export function ProductsTable() {
   const ImagesDialog = page.ImagesDialog;
   const router = useRouter();
 
+  const handleImported = () => router.refresh();
+
   return (
     <RequirePermission permission={[...page.permission]}>
       <>
         <div className={vendorPagesStyles.headerActions}>
-          <VendorBulkImportDialog onImported={() => router.refresh()} />
+          <VendorBulkImportDialog onImported={handleImported} />
         </div>
         <ProductsTableView {...page.tableViewProps} />
         <VendorProductFormDialog {...page.formDialogProps} />

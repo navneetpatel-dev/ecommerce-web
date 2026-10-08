@@ -85,6 +85,9 @@ export function SubOrderActions(props: SubOrderActionsProps) {
       setInvoicePending(false);
     }
   };
+  const handleDownloadInvoice = () => {
+    void downloadInvoice();
+  };
 
   if (!isEditing) {
     return (
@@ -97,7 +100,7 @@ export function SubOrderActions(props: SubOrderActionsProps) {
                 variant="outline"
                 className={tableMenuButtonClass("neutral")}
                 loading={invoicePending}
-                onClick={() => void downloadInvoice()}
+                onClick={handleDownloadInvoice}
               >
                 {LABELS.downloadTaxInvoice}
               </Button>

@@ -17,6 +17,8 @@ import {
   CardDescription,
 } from "@/shared/components/ui/card";
 import { vendorDashboardWidgetsLabels } from "@/shared/constants/labels/vendorDashboardWidgets";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { useChartThemeColors } from "@/shared/hooks/theme/useChartThemeColors.hook";
 import { vendorRevenueChartStyles } from "../../styles/analytics/vendorAnalyticsWidgets.styles";
@@ -64,7 +66,13 @@ export function VendorRevenueChartCard({
   );
 
   const chart = (
-    <div className={vendorRevenueChartStyles.chartContainer}>
+    <div
+      role="img"
+      aria-label={formatLabel(LABELS.chartAriaLabel, {
+        title: vendorDashboardWidgetsLabels.vendorAnalyticsRevenueTrend,
+      })}
+      className={vendorRevenueChartStyles.chartContainer}
+    >
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <LineChart
           data={chartData}

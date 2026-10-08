@@ -97,55 +97,61 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     },
   ];
 
-  const renderActions = (row: Coupon) => (
-    <>
-      <Button
-        type="button"
-        size="sm"
-        variant="outline"
-        className={tableMenuButtonClass("neutral")}
-        onClick={() => setAnalyticsId(row.id)}
-      >
-        <BarChart2 strokeWidth={2.25} aria-hidden />
-        <span>{LABELS.viewAnalytics}</span>
-      </Button>
-      {row.status === COUPON_STATUS.ACTIVE ? (
-        <AdminConfirmAction
-          label={LABELS.pauseCoupon}
-          tone="neutral"
-          title={LABELS.confirmPauseCouponTitle}
-          description={formatLabel(LABELS.confirmPauseCouponBody, {
-            code: row.code,
-          })}
-          onConfirm={() => onUpdateStatus(row, COUPON_STATUS.PAUSED)}
-        />
-      ) : null}
-      {row.status === COUPON_STATUS.PAUSED ||
-      row.status === COUPON_STATUS.DRAFT ? (
-        <AdminConfirmAction
-          label={LABELS.activateCoupon}
-          tone="success"
-          dialogVariant="success"
-          title={LABELS.confirmActivateCouponTitle}
-          description={formatLabel(LABELS.confirmActivateCouponBody, {
-            code: row.code,
-          })}
-          onConfirm={() => onUpdateStatus(row, COUPON_STATUS.ACTIVE)}
-        />
-      ) : null}
-      {row.status !== COUPON_STATUS.ARCHIVED ? (
-        <AdminConfirmAction
-          label={LABELS.archiveCoupon}
-          tone="archive"
-          title={LABELS.confirmArchiveCouponTitle}
-          description={formatLabel(LABELS.confirmArchiveCouponBody, {
-            code: row.code,
-          })}
-          onConfirm={() => onUpdateStatus(row, COUPON_STATUS.ARCHIVED)}
-        />
-      ) : null}
-    </>
-  );
+  const renderActions = (row: Coupon) => {
+    const setStatus = (status: Coupon["status"]) => () =>
+      onUpdateStatus(row, status);
+    const openAnalytics = () => setAnalyticsId(row.id);
+
+    return (
+      <>
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className={tableMenuButtonClass("neutral")}
+          onClick={openAnalytics}
+        >
+          <BarChart2 strokeWidth={2.25} aria-hidden />
+          <span>{LABELS.viewAnalytics}</span>
+        </Button>
+        {row.status === COUPON_STATUS.ACTIVE ? (
+          <AdminConfirmAction
+            label={LABELS.pauseCoupon}
+            tone="neutral"
+            title={LABELS.confirmPauseCouponTitle}
+            description={formatLabel(LABELS.confirmPauseCouponBody, {
+              code: row.code,
+            })}
+            onConfirm={setStatus(COUPON_STATUS.PAUSED)}
+          />
+        ) : null}
+        {row.status === COUPON_STATUS.PAUSED ||
+        row.status === COUPON_STATUS.DRAFT ? (
+          <AdminConfirmAction
+            label={LABELS.activateCoupon}
+            tone="success"
+            dialogVariant="success"
+            title={LABELS.confirmActivateCouponTitle}
+            description={formatLabel(LABELS.confirmActivateCouponBody, {
+              code: row.code,
+            })}
+            onConfirm={setStatus(COUPON_STATUS.ACTIVE)}
+          />
+        ) : null}
+        {row.status !== COUPON_STATUS.ARCHIVED ? (
+          <AdminConfirmAction
+            label={LABELS.archiveCoupon}
+            tone="archive"
+            title={LABELS.confirmArchiveCouponTitle}
+            description={formatLabel(LABELS.confirmArchiveCouponBody, {
+              code: row.code,
+            })}
+            onConfirm={setStatus(COUPON_STATUS.ARCHIVED)}
+          />
+        ) : null}
+      </>
+    );
+  };
 
   return (
     <div className={vendorCouponsViewStyles.stack}>

@@ -34,7 +34,7 @@ export const rolePermissionsDialogStyles = {
   gridSm2: "grid grid-cols-1 sm:grid-cols-2 gap-2.5",
   itemLabelRow: "flex items-center gap-2.5 min-w-0 flex-1",
   itemScopeText:
-    "shrink-0 text-[10px] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted",
+    "shrink-0 text-[0.6875rem] font-mono uppercase tracking-wider text-ink-faint group-hover:text-ink-muted",
   tooltipContent: "font-mono text-xs max-w-xs break-all",
   toolbarRoot:
     "mt-4 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between",

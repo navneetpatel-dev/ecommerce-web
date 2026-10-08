@@ -35,6 +35,9 @@ export function CategoriesSection({
   const { categories, selectedSet, toggleCategory, canSave } =
     useVendorShopCategories(categoryIds, onCategoryIdsChange);
 
+  const handleEntityTypeChange = (value: string) =>
+    onEntityTypeChange(value as VendorEntityType);
+
   return (
     <FormSection
       title={LABELS.vendorCategories}
@@ -46,9 +49,7 @@ export function CategoriesSection({
       >
         <Select
           value={entityType ?? undefined}
-          onValueChange={(value) =>
-            onEntityTypeChange(value as VendorEntityType)
-          }
+          onValueChange={handleEntityTypeChange}
         >
           <SelectTrigger>
             <SelectValue placeholder={LABELS.entityType} />

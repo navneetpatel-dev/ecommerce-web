@@ -75,6 +75,7 @@ export function useAdminVendorDetail(vendorId: string | undefined) {
     isLoading: query.isPending,
     isError: query.isError,
     loadError: query.error,
+    refetch: query.refetch,
     form,
     patchForm,
     save,

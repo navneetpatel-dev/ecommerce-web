@@ -27,12 +27,16 @@ export function FilePickerDropzone({
   onDragLeave,
   onDrop,
 }: FilePickerDropzoneProps) {
+  const handleClick = () => {
+    if (!disabled) onActivate();
+  };
+
   return (
     <div
       role="button"
       tabIndex={disabled ? -1 : 0}
       aria-disabled={disabled}
-      onClick={() => !disabled && onActivate()}
+      onClick={handleClick}
       onKeyDown={onKeyDown}
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}

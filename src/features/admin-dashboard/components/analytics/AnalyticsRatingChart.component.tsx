@@ -52,7 +52,13 @@ export function AnalyticsRatingChart({ data }: AnalyticsRatingChartProps) {
             {LABELS.analyticsEmptyChart}
           </p>
         ) : (
-          <div className={analyticsStyles.ratingChartContainer}>
+          <div
+            role="img"
+            aria-label={formatLabel(LABELS.chartAriaLabel, {
+              title: LABELS.analyticsRatingDistribution,
+            })}
+            className={analyticsStyles.ratingChartContainer}
+          >
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={chartData}

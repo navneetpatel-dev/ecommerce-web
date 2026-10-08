@@ -22,6 +22,9 @@ export function VendorRegisterCategoriesSection({
   requiredDocs,
   errorMessage,
 }: VendorRegisterCategoriesSectionProps) {
+  const toggleCategoryFor = (categoryId: string) => () =>
+    onToggleCategory(categoryId);
+
   return (
     <FormSection
       title={LABELS.vendorRegisterSectionCategories}
@@ -34,6 +37,8 @@ export function VendorRegisterCategoriesSection({
         error={errorMessage}
       >
         <div
+          role="group"
+          aria-label={LABELS.vendorCategories}
           className={cn(
             styles.categoryList,
             errorMessage ? styles.borderDanger : styles.borderLine,
@@ -44,7 +49,7 @@ export function VendorRegisterCategoriesSection({
               key={category.id}
               id={`vendor-register-category-${category.id}`}
               checked={selectedSet.has(category.id)}
-              onCheckedChange={() => onToggleCategory(category.id)}
+              onCheckedChange={toggleCategoryFor(category.id)}
               label={category.name}
             />
           ))}

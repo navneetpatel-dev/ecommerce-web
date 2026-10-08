@@ -18,6 +18,8 @@ export const STORAGE_KEYS = {
   DELIVERY_LOCATION: "deliveryLocation",
   /** Last submitted storefront search terms (localStorage — powers the recent list). */
   RECENT_SEARCHES: "recentSearches",
+  /** sessionStorage flag: a terminal 401 forced a sign-out (one-shot login notice). */
+  SESSION_EXPIRED_NOTICE: "sessionExpiredNotice",
 } as const;
 
 /** Cookie names shared with the API (must match backend COOKIES). */

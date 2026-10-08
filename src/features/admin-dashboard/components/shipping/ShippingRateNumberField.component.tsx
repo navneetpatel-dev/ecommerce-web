@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 
@@ -23,6 +24,9 @@ export function ShippingRateNumberField({
   step,
   placeholder,
 }: ShippingRateNumberFieldProps) {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onChange(event.target.value);
+
   return (
     <FormFieldFrame label={label} htmlFor={htmlFor}>
       <Input
@@ -31,7 +35,7 @@ export function ShippingRateNumberField({
         min={min}
         step={step}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={handleChange}
         placeholder={placeholder}
       />
     </FormFieldFrame>

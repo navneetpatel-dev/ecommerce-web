@@ -74,6 +74,7 @@ export function SecuritySection() {
             <QueryErrorAlert
               error={sessions.error}
               fallback={LABELS.couldNotLoadSessions}
+              onRetry={sessions.refetch}
             />
           </div>
         ) : sessionViewModels.length === 0 ? (

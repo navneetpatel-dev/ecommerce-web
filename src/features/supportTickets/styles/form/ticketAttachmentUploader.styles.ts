@@ -4,7 +4,7 @@ export const ticketAttachmentUploaderStyles = {
   video: "h-full w-full object-cover",
   img: "object-cover",
   removeBtn:
-    "absolute inset-x-0 bottom-0 bg-ink/70 px-1 py-0.5 text-[0.625rem] text-paper",
+    "absolute inset-x-0 bottom-0 bg-ink/70 px-1 py-0.5 text-[0.6875rem] text-paper",
 
   root: "space-y-2",
   label: "text-body-sm font-medium text-ink",

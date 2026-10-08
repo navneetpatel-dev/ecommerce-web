@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { FormError } from "@/shared/components/forms/FormError.component";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -46,6 +47,22 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
 
   if (!showPanel) return null;
 
+  const handleStatusChange = (value: string) => {
+    props.onStatusChange(value as BugReportStatus);
+  };
+
+  const handleDuplicateOfChange = (event: ChangeEvent<HTMLInputElement>) => {
+    props.onDuplicateOfChange(event.target.value);
+  };
+
+  const handleWontFixReasonChange = (
+    event: ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    props.onWontFixReasonChange(
+      event.target.value.slice(0, BUG_WONT_FIX_REASON_MAX),
+    );
+  };
+
   return (
     <section className={bugReportPanelsStyles.panelRoot}>
       <div className={bugReportPanelsStyles.panelHeader}>
@@ -55,12 +72,7 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
         {props.statusOptions.length > 0 ? (
           <>
             <FormFieldFrame label={LABELS.status}>
-              <Select
-                value={props.status}
-                onValueChange={(v) =>
-                  props.onStatusChange(v as BugReportStatus)
-                }
-              >
+              <Select value={props.status} onValueChange={handleStatusChange}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -90,7 +102,7 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
             <FormFieldFrame label={LABELS.bugDuplicateOfId}>
               <Input
                 value={props.duplicateOf}
-                onChange={(e) => props.onDuplicateOfChange(e.target.value)}
+                onChange={handleDuplicateOfChange}
                 placeholder={LABELS.bugDuplicateOfPlaceholder}
               />
               <p className={bugReportPanelsStyles.panelHint}>
@@ -115,11 +127,7 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
             <FormFieldFrame label={LABELS.bugWontFixReason}>
               <Textarea
                 value={props.wontFixReason}
-                onChange={(e) =>
-                  props.onWontFixReasonChange(
-                    e.target.value.slice(0, BUG_WONT_FIX_REASON_MAX),
-                  )
-                }
+                onChange={handleWontFixReasonChange}
                 rows={3}
                 maxLength={BUG_WONT_FIX_REASON_MAX}
               />

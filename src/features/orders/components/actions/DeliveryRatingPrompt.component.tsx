@@ -1,5 +1,6 @@
 "use client";
 
+import { type ChangeEvent } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -20,6 +21,9 @@ export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {
     dismiss,
     submitRating,
   } = useDeliveryRatingPrompt(shipmentId);
+
+  const handleCommentChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
+    setComment(event.target.value);
 
   if (!shouldRender) return null;
 
@@ -46,7 +50,7 @@ export function DeliveryRatingPrompt({ shipmentId }: { shipmentId: string }) {
         <>
           <Textarea
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            onChange={handleCommentChange}
             placeholder="Add a comment (optional)"
             rows={2}
             maxLength={500}

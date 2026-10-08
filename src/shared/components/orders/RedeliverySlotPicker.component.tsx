@@ -32,6 +32,7 @@ export function RedeliverySlotPicker({
   const [slot, setSlot] = useState("");
   const promptText = currentSlot ? `Requested: ${currentSlot}` : prompt;
   const confirmDisabled = !slot;
+  const handleConfirm = () => onSubmit(slot);
   const slotOptions = REDELIVERY_SLOTS.map((option) => (
     <SelectItem key={option} value={option}>
       {option}
@@ -51,7 +52,7 @@ export function RedeliverySlotPicker({
         <Button
           disabled={confirmDisabled}
           loading={isPending}
-          onClick={() => onSubmit(slot)}
+          onClick={handleConfirm}
         >
           Confirm
         </Button>

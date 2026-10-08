@@ -26,7 +26,7 @@ export const documentViewerStyles = {
   button:
     "group/viewer inline-flex h-7.5 items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 text-xs font-semibold text-ink transition-all hover:border-brand/70 hover:bg-surface-raised hover:shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:pointer-events-none disabled:opacity-50",
   badgeTag:
-    "flex size-4.5 items-center justify-center rounded-full border text-[8px] font-bold tracking-tight",
+    "flex h-4.5 min-w-4.5 items-center justify-center rounded-full border px-1 text-[0.6875rem] font-bold tracking-tight",
   icon: "size-2.5 shrink-0",
   labelText:
     "font-semibold text-ink group-hover/viewer:text-brand transition-colors whitespace-nowrap",

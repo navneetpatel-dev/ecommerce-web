@@ -59,7 +59,9 @@ export function OtpCard({
       >
         <div className={authFormsStyles.formSpace5}>
           {error ? (
-            <p className={authFormsStyles.dangerBodySm}>{error}</p>
+            <p role="alert" className={authFormsStyles.dangerBodySm}>
+              {error}
+            </p>
           ) : null}
           <ResendVerificationByEmail email={email} />
         </div>
@@ -75,6 +77,7 @@ export function OtpCard({
       <div className={authFormsStyles.formSpace5}>
         <OtpInput
           digits={digits}
+          invalid={Boolean(error)}
           onSetInputRef={onSetInputRef}
           onUpdateDigit={onUpdateDigit}
           onKeyDown={onKeyDown}
@@ -98,8 +101,16 @@ export function OtpCard({
             </Button>
           </DisabledActionHint>
         </div>
-        {info ? <p className={authFormsStyles.mutedBodySm}>{info}</p> : null}
-        {error ? <p className={authFormsStyles.dangerBodySm}>{error}</p> : null}
+        {info ? (
+          <p role="status" className={authFormsStyles.mutedBodySm}>
+            {info}
+          </p>
+        ) : null}
+        {error ? (
+          <p role="alert" className={authFormsStyles.dangerBodySm}>
+            {error}
+          </p>
+        ) : null}
         <DisabledActionHint
           disabled={!completed}
           message={LABELS.enterCompleteOtp}

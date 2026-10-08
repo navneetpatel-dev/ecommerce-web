@@ -75,20 +75,26 @@ export function ImageGalleryLightbox({
     resetTransform();
   }, [safeIndex, open, resetTransform]);
 
+  const handleKeyDown = (event: {
+    key: string;
+    preventDefault: () => void;
+  }) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      goPrev();
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      goNext();
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         presentation="fullscreen"
-        onKeyDown={(event) => {
-          if (event.key === "ArrowLeft") {
-            event.preventDefault();
-            goPrev();
-          }
-          if (event.key === "ArrowRight") {
-            event.preventDefault();
-            goNext();
-          }
-        }}
+        aria-describedby={undefined}
+        onKeyDown={handleKeyDown}
       >
         <DialogTitle className={imageLightboxStyles.titleSrOnly}>
           {productName}

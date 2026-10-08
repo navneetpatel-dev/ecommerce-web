@@ -3,6 +3,7 @@
 import { AlertCircle } from "lucide-react";
 import { FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
+import type { VendorDocumentType } from "@/shared/constants/statuses";
 import { useKycChecklist } from "../../../hooks/shop-settings/useKycChecklist.hook";
 import { KycProgressBanner } from "./KycProgressBanner.component";
 import { KycDocumentListItem } from "./KycDocumentListItem.component";
@@ -34,6 +35,9 @@ export function KycChecklistSection({
     onKycUploaded,
     toggleRow,
   } = useKycChecklist({ vendorId, checklistKey });
+
+  const toggleFor = (documentType: VendorDocumentType) => () =>
+    toggleRow(documentType);
 
   return (
     <FormSection title={LABELS.kycChecklist} hint={LABELS.kycChecklistHint}>
@@ -75,11 +79,9 @@ export function KycChecklistSection({
               saving={saving}
               kycSaving={kycSaving}
               isExpanded={activeType === item.documentType}
-              onToggle={() => toggleRow(item.documentType)}
-              onOpenDocument={(documentId) => void openKycDocument(documentId)}
-              onUploaded={(url, documentType) =>
-                void onKycUploaded(url, documentType)
-              }
+              onToggle={toggleFor(item.documentType)}
+              onOpenDocument={openKycDocument}
+              onUploaded={onKycUploaded}
             />
           ))}
         </ul>

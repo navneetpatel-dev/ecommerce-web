@@ -12,7 +12,7 @@ import { ReturnRequestCard } from "../../components/list/ReturnRequestCard.compo
 import { returnsPageStyles as styles } from "./returnsPage.styles";
 
 export function MyReturnsPage() {
-  const { data, isLoading, isError, error } = useMyReturns();
+  const { data, isLoading, isError, error, refetch } = useMyReturns();
   const returns = data ?? [];
 
   return (
@@ -32,6 +32,7 @@ export function MyReturnsPage() {
           <QueryErrorAlert
             error={error}
             fallback={LABELS.couldNotLoadReturns}
+            onRetry={refetch}
           />
         </div>
       ) : returns.length === 0 ? (

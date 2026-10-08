@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
@@ -27,6 +28,13 @@ export function AdminRolesPage() {
 
 function AdminRolesContent() {
   const page = useAdminRolesPage();
+
+  const handleNewRoleNameChange = (event: ChangeEvent<HTMLInputElement>) =>
+    page.setNewRoleName(event.target.value);
+  const handleCreateRole = () => {
+    void page.createRole();
+  };
+  const closePermissions = () => page.setEditingRoleId(null);
 
   const columns: DataTableColumn<AdminRole>[] = [
     {
@@ -56,6 +64,9 @@ function AdminRolesContent() {
   ];
 
   const renderRoleActions = (role: AdminRole) => {
+    const deleteRole = () => page.deleteRole(role.id);
+    const editRole = () => page.setEditingRoleId(role.id);
+
     const deleteAction = !role.isSystemRole ? (
       <TableRowAction destructive>
         <AdminConfirmAction
@@ -66,7 +77,7 @@ function AdminRolesContent() {
           description={formatLabel(LABELS.confirmDeleteRoleBody, {
             name: role.name,
           })}
-          onConfirm={() => page.deleteRole(role.id)}
+          onConfirm={deleteRole}
         />
       </TableRowAction>
     ) : null;
@@ -79,7 +90,7 @@ function AdminRolesContent() {
             size="sm"
             variant="outline"
             className={tableMenuButtonClass("edit")}
-            onClick={() => page.setEditingRoleId(role.id)}
+            onClick={editRole}
           >
             <ShieldCheck strokeWidth={2.25} aria-hidden />
             <span>{LABELS.managePermissions}</span>
@@ -100,14 +111,14 @@ function AdminRolesContent() {
       <div className={adminPagesStyles.flexWrapGap2}>
         <Input
           value={page.newRoleName}
-          onChange={(e) => page.setNewRoleName(e.target.value)}
+          onChange={handleNewRoleNameChange}
           placeholder={LABELS.newRoleNamePlaceholder}
           className={adminPagesStyles.inputMaxXs}
         />
         <Button
           type="button"
           disabled={page.creating || !page.newRoleName.trim()}
-          onClick={() => void page.createRole()}
+          onClick={handleCreateRole}
         >
           {LABELS.createRole}
         </Button>
@@ -129,7 +140,7 @@ function AdminRolesContent() {
       <RolePermissionsDialog
         role={page.editingRole}
         permissions={page.permissions}
-        onClose={() => page.setEditingRoleId(null)}
+        onClose={closePermissions}
         onSave={page.savePermissions}
       />
     </div>

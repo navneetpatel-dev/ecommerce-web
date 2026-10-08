@@ -31,7 +31,9 @@ export function EmailVerificationStatus({
     <div className={styles.container}>
       <Badge variant="outline">{LABELS.personalInfoUnverified}</Badge>
       {isSuccess ? (
-        <p className={styles.successMessage}>{successMessage}</p>
+        <p role="status" className={styles.successMessage}>
+          {successMessage}
+        </p>
       ) : (
         <Button
           type="button"

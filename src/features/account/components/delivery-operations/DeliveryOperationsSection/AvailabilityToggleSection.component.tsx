@@ -25,6 +25,8 @@ export function AvailabilityToggleSection({
   const dutyLabel = availableForAssignment ? "On Duty" : "Off Duty";
   const switchChecked = availableForAssignment ?? false;
   const switchDisabled = !hasAgent || availability.isPending;
+  const handleAvailabilityToggle = (checked: boolean) =>
+    availability.mutate(checked);
   const availabilityErrorMessage = getApiErrorMessage(
     availability.error,
     "Could not update availability.",
@@ -68,7 +70,7 @@ export function AvailabilityToggleSection({
             <Switch
               checked={switchChecked}
               disabled={switchDisabled}
-              onCheckedChange={(checked) => availability.mutate(checked)}
+              onCheckedChange={handleAvailabilityToggle}
             />
           </div>
         </div>

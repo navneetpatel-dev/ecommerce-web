@@ -37,6 +37,7 @@ export function MobileTabBar({
 
   return (
     <nav
+      aria-label={LABELS.bottomNavigation}
       className={mobileTabBarStyles.nav}
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >

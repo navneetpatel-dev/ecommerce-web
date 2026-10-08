@@ -18,6 +18,8 @@ export function SortSheet({
   currentSort,
   onSelect,
 }: SortSheetProps) {
+  const selectSort = (value: string) => () => onSelect(value);
+
   return (
     <BottomSheet open={open} onClose={onClose} title={LABELS.sort}>
       <div className={styles.optionsContainer}>
@@ -25,7 +27,7 @@ export function SortSheet({
           <SelectableOptionButton
             key={option.value}
             selected={currentSort === option.value}
-            onClick={() => onSelect(option.value)}
+            onClick={selectSort(option.value)}
           >
             {option.label}
           </SelectableOptionButton>

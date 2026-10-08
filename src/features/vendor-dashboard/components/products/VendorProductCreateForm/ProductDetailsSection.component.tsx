@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { NumberInput } from "@/shared/components/forms/NumberInput.component";
@@ -39,6 +40,30 @@ export function ProductDetailsSection({
   patchValues,
   priceHint,
 }: ProductDetailsSectionProps) {
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    patchValues({ name: event.target.value });
+  };
+
+  const handlePriceChange = (value: number | undefined) => {
+    patchValues({ price: value == null ? "" : String(value) });
+  };
+
+  const handleCompareAtPriceChange = (value: number | undefined) => {
+    patchValues({ compareAtPrice: value == null ? "" : String(value) });
+  };
+
+  const handleBrandChange = (event: ChangeEvent<HTMLInputElement>) => {
+    patchValues({ brand: event.target.value });
+  };
+
+  const handleCategoryChange = (value: string) => {
+    patchValues({ categoryId: value });
+  };
+
+  const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    patchValues({ description: event.target.value });
+  };
+
   return (
     <FormSection
       title={LABELS.productFormSectionDetails}
@@ -55,7 +80,7 @@ export function ProductDetailsSection({
           maxLength={PRODUCT_FIELD_LIMITS.NAME_MAX}
           error={Boolean(getError("name"))}
           disabled={disabled}
-          onChange={(event) => patchValues({ name: event.target.value })}
+          onChange={handleNameChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -72,9 +97,7 @@ export function ProductDetailsSection({
           value={values.price === "" ? undefined : Number(values.price)}
           error={Boolean(getError("price"))}
           disabled={disabled}
-          onChange={(value) =>
-            patchValues({ price: value == null ? "" : String(value) })
-          }
+          onChange={handlePriceChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -94,11 +117,7 @@ export function ProductDetailsSection({
           }
           error={Boolean(getError("compareAtPrice"))}
           disabled={disabled}
-          onChange={(value) =>
-            patchValues({
-              compareAtPrice: value == null ? "" : String(value),
-            })
-          }
+          onChange={handleCompareAtPriceChange}
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.productBrand} error={getError("brand")}>
@@ -108,7 +127,7 @@ export function ProductDetailsSection({
           maxLength={PRODUCT_FIELD_LIMITS.BRAND_MAX}
           error={Boolean(getError("brand"))}
           disabled={disabled}
-          onChange={(event) => patchValues({ brand: event.target.value })}
+          onChange={handleBrandChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -119,7 +138,7 @@ export function ProductDetailsSection({
       >
         <Select
           value={values.categoryId || undefined}
-          onValueChange={(value) => patchValues({ categoryId: value })}
+          onValueChange={handleCategoryChange}
           disabled={disabled}
         >
           <SelectTrigger
@@ -151,7 +170,7 @@ export function ProductDetailsSection({
           maxLength={PRODUCT_FIELD_LIMITS.DESCRIPTION_MAX}
           error={Boolean(getError("description"))}
           disabled={disabled}
-          onChange={(event) => patchValues({ description: event.target.value })}
+          onChange={handleDescriptionChange}
           className={vendorProductCreateFormStyles.descriptionTextarea}
         />
       </FormFieldFrame>

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { FileUpload } from "@/shared/components/FileUpload";
 import {
   FormActions,
@@ -76,6 +77,19 @@ export function PromoBannerCreateSection({
   disableHint,
   onCreate,
 }: PromoBannerCreateSectionProps) {
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onTitleChange(event.target.value);
+  const handleLinkTypeChange = (value: string) =>
+    onLinkTypeChange(value as PromoBannerLinkType);
+  const handleStatusChange = (value: string) =>
+    onStatusChange(value as PromoBannerStatus);
+  const handleLinkUrlChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onLinkUrlChange(event.target.value);
+  const handleLinkTargetIdChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onLinkTargetIdChange(event.target.value);
+  const handlePriorityChange = (value: number | undefined) =>
+    onPriorityChange(value == null ? "" : String(value));
+
   return (
     <FormSection
       title={LABELS.promoBannerFormSection}
@@ -85,7 +99,7 @@ export function PromoBannerCreateSection({
         label={LABELS.promoBannerTitle}
         className={promoBannerSectionStyles.colSpan2}
       >
-        <Input value={title} onChange={(e) => onTitleChange(e.target.value)} />
+        <Input value={title} onChange={handleTitleChange} />
       </FormFieldFrame>
       <FormFieldFrame
         label={LABELS.promoBannerImage}
@@ -103,12 +117,7 @@ export function PromoBannerCreateSection({
         />
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.promoBannerLinkType}>
-        <Select
-          value={linkType}
-          onValueChange={(value) =>
-            onLinkTypeChange(value as PromoBannerLinkType)
-          }
-        >
+        <Select value={linkType} onValueChange={handleLinkTypeChange}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -122,10 +131,7 @@ export function PromoBannerCreateSection({
         </Select>
       </FormFieldFrame>
       <FormFieldFrame label={LABELS.promoBannerStatus}>
-        <Select
-          value={status}
-          onValueChange={(value) => onStatusChange(value as PromoBannerStatus)}
-        >
+        <Select value={status} onValueChange={handleStatusChange}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -143,29 +149,21 @@ export function PromoBannerCreateSection({
           label={LABELS.promoBannerLinkUrl}
           className={promoBannerSectionStyles.colSpan2}
         >
-          <Input
-            value={linkUrl}
-            onChange={(e) => onLinkUrlChange(e.target.value)}
-          />
+          <Input value={linkUrl} onChange={handleLinkUrlChange} />
         </FormFieldFrame>
       ) : (
         <FormFieldFrame
           label={LABELS.promoBannerLinkTargetId}
           className={promoBannerSectionStyles.colSpan2}
         >
-          <Input
-            value={linkTargetId}
-            onChange={(e) => onLinkTargetIdChange(e.target.value)}
-          />
+          <Input value={linkTargetId} onChange={handleLinkTargetIdChange} />
         </FormFieldFrame>
       )}
       <FormFieldFrame label={LABELS.promoBannerPriority}>
         <NumberInput
           value={priority === "" ? undefined : Number(priority)}
           step={1}
-          onChange={(value) =>
-            onPriorityChange(value == null ? "" : String(value))
-          }
+          onChange={handlePriorityChange}
         />
       </FormFieldFrame>
       <FormActions

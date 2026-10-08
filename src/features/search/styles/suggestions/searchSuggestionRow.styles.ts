@@ -18,7 +18,7 @@ export const searchSuggestionRowStyles = {
   nameActive: "text-brand",
   metaRow: "mt-0.5 flex min-w-0 items-center gap-2",
   typeBadge:
-    "inline-flex shrink-0 items-center gap-1 rounded-full border border-line bg-surface px-2 py-0.5 text-[0.625rem] font-semibold uppercase tracking-[0.08em] text-ink-muted",
+    "inline-flex shrink-0 items-center gap-1 rounded-full border border-line bg-surface px-2 py-0.5 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-muted",
   metaText: "truncate text-body-sm text-ink-muted",
   arrowButton:
     "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-transparent text-ink-faint transition-all duration-200 group-hover/row:border-line group-hover/row:bg-surface group-hover/row:text-brand",

@@ -25,6 +25,15 @@ export function VendorQnaView({
 }: VendorQnaViewProps) {
   const [targetId, setTargetId] = useState<string | null>(null);
 
+  const closeAnswer = () => setTargetId(null);
+  const handleAnswerOpenChange = (open: boolean) => {
+    if (!open) setTargetId(null);
+  };
+  const handleAnswerSubmit = (answer: string) => {
+    if (!targetId) return;
+    void Promise.resolve(onAnswer(targetId, answer)).then(closeAnswer);
+  };
+
   return (
     <section className={vendorFeedbackViewsStyles.section}>
       <div className={vendorFeedbackViewsStyles.header}>
@@ -58,30 +67,33 @@ export function VendorQnaView({
       ) : null}
 
       {!isLoading && !loadError
-        ? questions.map((question) => (
-            <article
-              key={question.id}
-              className={vendorFeedbackViewsStyles.card}
-            >
-              {question.productName ? (
-                <p className={vendorFeedbackViewsStyles.cardSubtitle}>
-                  {question.productName}
-                </p>
-              ) : null}
-              <p className={vendorFeedbackViewsStyles.cardTitle}>
-                {question.question}
-              </p>
-              <Button
-                className={vendorFeedbackViewsStyles.actionBtn}
-                size="sm"
-                variant="secondary"
-                type="button"
-                onClick={() => setTargetId(question.id)}
+        ? questions.map((question) => {
+            const openAnswer = () => setTargetId(question.id);
+            return (
+              <article
+                key={question.id}
+                className={vendorFeedbackViewsStyles.card}
               >
-                {LABELS.answerQuestion}
-              </Button>
-            </article>
-          ))
+                {question.productName ? (
+                  <p className={vendorFeedbackViewsStyles.cardSubtitle}>
+                    {question.productName}
+                  </p>
+                ) : null}
+                <p className={vendorFeedbackViewsStyles.cardTitle}>
+                  {question.question}
+                </p>
+                <Button
+                  className={vendorFeedbackViewsStyles.actionBtn}
+                  size="sm"
+                  variant="secondary"
+                  type="button"
+                  onClick={openAnswer}
+                >
+                  {LABELS.answerQuestion}
+                </Button>
+              </article>
+            );
+          })
         : null}
 
       {!isLoading && !loadError && !questions.length ? (
@@ -93,15 +105,8 @@ export function VendorQnaView({
       <VendorQnaAnswerDialog
         open={Boolean(targetId)}
         submitting={submitting}
-        onOpenChange={(open) => {
-          if (!open) setTargetId(null);
-        }}
-        onSubmit={(answer) => {
-          if (!targetId) return;
-          void Promise.resolve(onAnswer(targetId, answer)).then(() =>
-            setTargetId(null),
-          );
-        }}
+        onOpenChange={handleAnswerOpenChange}
+        onSubmit={handleAnswerSubmit}
       />
     </section>
   );

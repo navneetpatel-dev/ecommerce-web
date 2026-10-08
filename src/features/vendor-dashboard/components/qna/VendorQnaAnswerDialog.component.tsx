@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
@@ -29,17 +29,21 @@ export function VendorQnaAnswerDialog({
 
   const canSend = Boolean(answer.trim());
 
+  const handleOpenChange = (next: boolean) => {
+    if (!next) {
+      close();
+      setAnswer("");
+      return;
+    }
+    onOpenChange(true);
+  };
+  const handleAnswerChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
+    setAnswer(event.target.value);
+
   return (
     <StatusDialog
       open={open}
-      onOpenChange={(next) => {
-        if (!next) {
-          close();
-          setAnswer("");
-          return;
-        }
-        onOpenChange(true);
-      }}
+      onOpenChange={handleOpenChange}
       variant="info"
       title={LABELS.answerQuestionTitle}
       description={LABELS.answerQuestionBody}
@@ -64,7 +68,7 @@ export function VendorQnaAnswerDialog({
         <Textarea
           id="vendor-qna-answer"
           value={answer}
-          onChange={(event) => setAnswer(event.target.value)}
+          onChange={handleAnswerChange}
           disabled={submitting}
           // eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: this control lives in a dialog/popover that opened from a user action, where moving focus into the panel is the expected behaviour
           autoFocus

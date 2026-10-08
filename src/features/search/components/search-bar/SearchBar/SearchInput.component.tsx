@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
@@ -36,6 +37,9 @@ export function SearchInput({
   onKeyDown,
   onSubmit,
 }: SearchInputProps) {
+  const handleTermChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onTermChange(event.target.value);
+
   return (
     <form onSubmit={onSubmit} className={styles.form}>
       <Search
@@ -63,7 +67,7 @@ export function SearchInput({
         }
         aria-autocomplete="list"
         value={term}
-        onChange={(e) => onTermChange(e.target.value)}
+        onChange={handleTermChange}
         onFocus={onFocus}
         onBlur={onBlur}
         onKeyDown={onKeyDown}

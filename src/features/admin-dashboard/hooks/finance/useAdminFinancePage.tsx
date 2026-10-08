@@ -40,6 +40,9 @@ export function useAdminFinancePage(): AdminFinancePageModel {
   const payoutActions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
       const status = String(row.status);
+      const markPayoutFailed = (reason?: string) =>
+        payoutsApi.markFailed(String(row.id), reason ?? "").then(reload);
+      const retryPayout = () => payoutsApi.retry(String(row.id)).then(reload);
       if (status === "PENDING") {
         return (
           <div className={adminDataListViewStyles.rowActionsEndWrap}>
@@ -54,9 +57,7 @@ export function useAdminFinancePage(): AdminFinancePageModel {
               title="Mark payout as failed?"
               description="Record why the external transfer could not be completed."
               requireReason
-              onConfirm={(reason) =>
-                payoutsApi.markFailed(String(row.id), reason ?? "").then(reload)
-              }
+              onConfirm={markPayoutFailed}
             />
           </div>
         );
@@ -69,7 +70,7 @@ export function useAdminFinancePage(): AdminFinancePageModel {
             tone="success"
             title="Retry this payout?"
             description="Return this payout to pending after arranging another transfer attempt."
-            onConfirm={() => payoutsApi.retry(String(row.id)).then(reload)}
+            onConfirm={retryPayout}
           />
         );
       }

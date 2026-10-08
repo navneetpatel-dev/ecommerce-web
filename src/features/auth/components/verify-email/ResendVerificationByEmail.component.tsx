@@ -17,6 +17,8 @@ export function ResendVerificationByEmail({
 }: ResendVerificationByEmailProps) {
   const resend = useResendVerificationByEmail();
 
+  const handleResend = () => resend.mutate(email);
+
   const message = resend.data?.alreadyVerified
     ? LABELS.emailAlreadyVerified
     : LABELS.verificationEmailSent;
@@ -24,7 +26,9 @@ export function ResendVerificationByEmail({
   return (
     <div className={authFormsStyles.resendWrapper}>
       {resend.isSuccess ? (
-        <p className={authFormsStyles.mutedBodySm}>{message}</p>
+        <p role="status" className={authFormsStyles.mutedBodySm}>
+          {message}
+        </p>
       ) : (
         <Button
           type="button"
@@ -32,7 +36,7 @@ export function ResendVerificationByEmail({
           size="sm"
           fullWidth="mobile"
           loading={resend.isPending}
-          onClick={() => resend.mutate(email)}
+          onClick={handleResend}
         >
           {LABELS.resendVerificationEmail}
         </Button>

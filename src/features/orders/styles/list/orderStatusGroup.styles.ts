@@ -17,7 +17,7 @@ export const ORDER_STATUS_GROUP_STYLES = {
   badge: "px-1.5 py-0.5 text-[0.6875rem] font-medium",
   compactLine: "contents",
   compactField:
-    "whitespace-nowrap text-[0.625rem] font-medium uppercase tracking-[0.06em] text-ink-faint",
+    "whitespace-nowrap text-[0.6875rem] font-medium uppercase tracking-[0.06em] text-ink-faint",
   compactValue: (toneClass: string) =>
     cn(
       "inline-flex items-center gap-1.5 whitespace-nowrap text-[0.75rem] leading-none",

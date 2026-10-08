@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/shared/utils/dom/cn";
+import { joinAriaIds, useFieldControl } from "./fieldControl.context";
 import { NumberInputSteppers } from "./NumberInputSteppers.component";
 import { clamp, parseValue } from "@/shared/utils/validation/numberInputMath";
 
@@ -44,6 +45,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       error,
       disabled,
       id,
+      "aria-describedby": ownAria,
       onBlur,
       onFocus,
       onKeyDown,
@@ -51,6 +53,8 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     },
     ref,
   ) => {
+    const fieldControl = useFieldControl();
+    const describedBy = joinAriaIds(ownAria, fieldControl?.describedById);
     const [draft, setDraft] = React.useState<string | null>(null);
 
     const committed =
@@ -135,11 +139,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     const commitDraft = (raw: string) => {
       setDraft(null);
       const parsed = parseValue(raw);
-      if (parsed === undefined) {
-        onChange(undefined);
-        return;
-      }
-      onChange(clamp(parsed, min, max));
+      onChange(parsed === undefined ? undefined : clamp(parsed, min, max));
     };
 
     return (
@@ -160,19 +160,18 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         <input
           {...props}
           ref={ref}
-          id={id}
+          id={id ?? fieldControl?.controlId}
           type="text"
           inputMode="decimal"
           disabled={disabled}
           value={display}
-          /* ArrowUp/ArrowDown adjust the value below, so the field announces
-             itself as a spinbutton; `aria-valuenow` is omitted while empty
-             rather than claiming a zero the customer never entered. */
+          /* Announces as a spinbutton; aria-valuenow is omitted while empty. */
           role="spinbutton"
           aria-valuenow={numeric}
           aria-valuemin={min}
           aria-valuemax={max}
-          aria-invalid={error ? true : undefined}
+          aria-invalid={error || fieldControl?.invalid ? true : undefined}
+          aria-describedby={describedBy}
           className={numberInputStyles.input}
           onFocus={beginDraft}
           onChange={handleInput}

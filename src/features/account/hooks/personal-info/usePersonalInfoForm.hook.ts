@@ -21,7 +21,13 @@ import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
  * dirty tracking owned here, not in the component.
  */
 export function usePersonalInfoForm() {
-  const { data: profile, isLoading, isError, error } = useAccountProfile();
+  const {
+    data: profile,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useAccountProfile();
   const updateProfile = useUpdateProfile();
 
   const form = useForm<ProfileFormInput>({
@@ -70,6 +76,7 @@ export function usePersonalInfoForm() {
     isLoading,
     isError,
     error: error as Error | null,
+    refetch,
     form,
     errors: formState.errors,
     canSubmit,

@@ -18,6 +18,9 @@ export function PushNotificationsSection({
     </p>
   ) : null;
   const switchDisabled = !push.supported || push.pending;
+  const handlePushToggle = (checked: boolean) => {
+    void push.toggle(checked);
+  };
 
   return (
     <section className={styles.sectionCard}>
@@ -52,7 +55,7 @@ export function PushNotificationsSection({
             <Switch
               checked={push.enabled}
               disabled={switchDisabled}
-              onCheckedChange={(checked) => void push.toggle(checked)}
+              onCheckedChange={handlePushToggle}
             />
           </div>
         </div>

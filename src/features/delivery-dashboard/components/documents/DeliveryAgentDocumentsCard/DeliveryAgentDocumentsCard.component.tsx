@@ -34,18 +34,24 @@ export function DeliveryAgentDocumentsCard() {
         </p>
       </div>
       <div className={styles.list}>
-        {DELIVERY_AGENT_DOCUMENT_TYPES.map(({ type, label }) => (
-          <DocumentTypeRow
-            key={type}
-            type={type}
-            label={label}
-            documents={documentRows}
-            pendingType={pendingType}
-            expiryValue={expiryInputs[type] ?? ""}
-            onExpiryChange={(value) => setExpiryInput(type, value)}
-            onFileChange={(file) => void handleFile(type, file)}
-          />
-        ))}
+        {DELIVERY_AGENT_DOCUMENT_TYPES.map(({ type, label }) => {
+          const handleExpiryChange = (value: string) =>
+            setExpiryInput(type, value);
+          const handleFileChange = (file: File | null) =>
+            void handleFile(type, file);
+          return (
+            <DocumentTypeRow
+              key={type}
+              type={type}
+              label={label}
+              documents={documentRows}
+              pendingType={pendingType}
+              expiryValue={expiryInputs[type] ?? ""}
+              onExpiryChange={handleExpiryChange}
+              onFileChange={handleFileChange}
+            />
+          );
+        })}
       </div>
       {error ? (
         <p role="alert" className={styles.errorText}>

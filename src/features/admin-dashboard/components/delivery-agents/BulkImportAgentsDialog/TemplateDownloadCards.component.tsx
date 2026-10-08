@@ -12,6 +12,8 @@ export function TemplateDownloadCards({
   downloadingFormat,
   onDownload,
 }: TemplateDownloadCardsProps) {
+  const handleDownloadExcel = () => onDownload("xlsx");
+  const handleDownloadCsv = () => onDownload("csv");
   return (
     <div className={styles.stepContainer}>
       <div className={styles.stepHeadingRow}>
@@ -45,7 +47,7 @@ export function TemplateDownloadCards({
             variant="outline"
             size="sm"
             disabled={Boolean(downloadingFormat)}
-            onClick={() => onDownload("xlsx")}
+            onClick={handleDownloadExcel}
             className={styles.excelDownloadButton}
           >
             <Download className={styles.downloadIcon} aria-hidden="true" />
@@ -79,7 +81,7 @@ export function TemplateDownloadCards({
             variant="outline"
             size="sm"
             disabled={Boolean(downloadingFormat)}
-            onClick={() => onDownload("csv")}
+            onClick={handleDownloadCsv}
             className={styles.csvDownloadButton}
           >
             <Download className={styles.downloadIcon} aria-hidden="true" />

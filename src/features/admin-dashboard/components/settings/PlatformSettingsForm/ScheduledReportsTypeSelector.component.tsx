@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, type ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
@@ -45,6 +45,12 @@ export function ScheduledReportsTypeSelector({
     clearVisible,
     resetFilters,
   } = useScheduledReportsFilter(catalog, selectedTypes, onChange);
+
+  const handleCategoryChange = (value: string) =>
+    setActiveCategory(value as ScheduledReportsCategoryKey);
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setSearch(event.target.value);
+  const handleClearSearch = () => setSearch("");
 
   return (
     <div className={styles.selectorContainer}>
@@ -94,9 +100,7 @@ export function ScheduledReportsTypeSelector({
       <div className={styles.selectorFilterSearchBar}>
         <Tabs
           value={activeCategory}
-          onValueChange={(val) =>
-            setActiveCategory(val as ScheduledReportsCategoryKey)
-          }
+          onValueChange={handleCategoryChange}
           className={styles.tabsRoot}
         >
           <TabsList className={styles.tabsList}>
@@ -114,14 +118,14 @@ export function ScheduledReportsTypeSelector({
           <Input
             id={searchInputId}
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleSearchChange}
             placeholder={LABELS.scheduledReportsSearchPlaceholder}
             className={styles.searchInput}
           />
           {search ? (
             <button
               type="button"
-              onClick={() => setSearch("")}
+              onClick={handleClearSearch}
               className={styles.searchClearButton}
               aria-label="Clear search"
             >

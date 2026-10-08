@@ -68,7 +68,10 @@ export function WorkspaceNavDrawer({
           </Button>
         </div>
 
-        <nav className={workspaceNavDrawerStyles.nav}>
+        <nav
+          aria-label={LABELS.workspaceNavigation}
+          className={workspaceNavDrawerStyles.nav}
+        >
           {header}
           {items.map(({ href, icon: Icon, label }) => {
             const isActive =
@@ -78,6 +81,7 @@ export function WorkspaceNavDrawer({
                 key={href}
                 href={href}
                 onClick={onClose}
+                aria-current={isActive ? "page" : undefined}
                 className={cn(
                   sidebarNavStyles.linkBase,
                   isActive

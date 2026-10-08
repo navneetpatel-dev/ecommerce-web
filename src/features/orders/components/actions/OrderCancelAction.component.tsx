@@ -15,6 +15,8 @@ export function OrderCancelAction({ order }: OrderCancelActionProps) {
   const { canCancel, open, setOpen, message, error, isPending, confirmCancel } =
     useOrderCancelAction(order);
 
+  const handleOpenDialog = () => setOpen(true);
+
   if (!canCancel) return null;
 
   return (
@@ -23,7 +25,7 @@ export function OrderCancelAction({ order }: OrderCancelActionProps) {
         type="button"
         variant="outline"
         className={ordersComponentsStyles.cancelButton}
-        onClick={() => setOpen(true)}
+        onClick={handleOpenDialog}
       >
         {LABELS.cancelOrder}
       </Button>

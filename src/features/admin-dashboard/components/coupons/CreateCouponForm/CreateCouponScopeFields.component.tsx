@@ -1,7 +1,7 @@
 "use client";
 
 import type { UseFormReturn } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { Controller, type ControllerRenderProps } from "react-hook-form";
 import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
 import {
   Select,
@@ -28,6 +28,48 @@ interface CreateCouponScopeFieldsProps {
   scopeType: CouponFormInput["applicableScopeType"];
   isBundle: boolean;
   showScopeIds: boolean;
+}
+
+function ApplicableScopeTypeField({
+  field,
+  setValue,
+  options,
+  vendorMode,
+  vendorId,
+}: {
+  field: ControllerRenderProps<CouponFormInput, "applicableScopeType">;
+  setValue: UseFormReturn<CouponFormInput>["setValue"];
+  options: ReadonlyArray<{ value: string; label: string }>;
+  vendorMode: boolean;
+  vendorId: string | null;
+}) {
+  const handleChange = (next: string) => {
+    field.onChange(next);
+    if (next === "all") {
+      setValue("applicableScopeIds", [], { shouldValidate: true });
+      return;
+    }
+    if (vendorMode && next === "vendor" && vendorId) {
+      setValue("applicableScopeIds", [vendorId], { shouldValidate: true });
+      return;
+    }
+    setValue("applicableScopeIds", [], { shouldValidate: true });
+  };
+
+  return (
+    <Select value={field.value} onValueChange={handleChange}>
+      <SelectTrigger>
+        <SelectValue placeholder={LABELS.applicableScope} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
 }
 
 export function CreateCouponScopeFields({
@@ -83,38 +125,13 @@ export function CreateCouponScopeFields({
               name="applicableScopeType"
               control={control}
               render={({ field }) => (
-                <Select
-                  value={field.value}
-                  onValueChange={(next) => {
-                    field.onChange(next);
-                    if (next === "all") {
-                      setValue("applicableScopeIds", [], {
-                        shouldValidate: true,
-                      });
-                      return;
-                    }
-                    if (vendorMode && next === "vendor" && vendorId) {
-                      setValue("applicableScopeIds", [vendorId], {
-                        shouldValidate: true,
-                      });
-                      return;
-                    }
-                    setValue("applicableScopeIds", [], {
-                      shouldValidate: true,
-                    });
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={LABELS.applicableScope} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableScopeTypes.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <ApplicableScopeTypeField
+                  field={field}
+                  setValue={setValue}
+                  options={availableScopeTypes}
+                  vendorMode={vendorMode}
+                  vendorId={vendorId}
+                />
               )}
             />
           </FormFieldFrame>

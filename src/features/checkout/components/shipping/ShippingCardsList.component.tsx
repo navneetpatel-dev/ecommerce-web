@@ -23,6 +23,8 @@ export const ShippingCardsList = memo(function ShippingCardsList({
     },
     [onSelect],
   );
+  const methodSelectorFor = (vendorId: string) => (method: ShippingMethod) =>
+    handleSelectVendorMethod(vendorId, method);
 
   return (
     <div className={SHIPPING_STEP_STYLES.vendorList}>
@@ -33,7 +35,7 @@ export const ShippingCardsList = memo(function ShippingCardsList({
           vendor={items[0].product.vendor}
           pincode={pincode}
           selected={selectedMethods[vendorId]}
-          onSelect={(method) => handleSelectVendorMethod(vendorId, method)}
+          onSelect={methodSelectorFor(vendorId)}
         />
       ))}
     </div>

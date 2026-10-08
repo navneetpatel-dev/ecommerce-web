@@ -25,6 +25,9 @@ export function CustomerOrderHistoryPanel() {
   });
   const loadButtonDisabled = history.loading || history.controlsDisabled;
   const loadButtonHint = history.controlsDisabled ? filterHint : "";
+
+  const handleRetry = () => void history.load();
+  const handleLoad = () => void history.load(1);
   const hasHistoryContent = Boolean(
     history.result || history.loading || history.error,
   );
@@ -34,7 +37,7 @@ export function CustomerOrderHistoryPanel() {
       loading={history.loading}
       error={history.error}
       onPageChange={history.setPage}
-      onRetry={() => history.load()}
+      onRetry={handleRetry}
     />
   ) : null;
 
@@ -64,7 +67,7 @@ export function CustomerOrderHistoryPanel() {
                 <Button
                   type="button"
                   fullWidth="mobile"
-                  onClick={() => history.load(1)}
+                  onClick={handleLoad}
                   disabled={loadButtonDisabled}
                 >
                   {LABELS.loadOrderHistory}

@@ -72,7 +72,7 @@ export function MobileNavDrawer({
           </Button>
         </div>
 
-        <nav className={styles.nav}>
+        <nav aria-label={LABELS.menu} className={styles.nav}>
           <MobileNavPrimaryLinks onNavigate={onClose} />
 
           <MobileNavCategoryTree categories={categories} onNavigate={onClose} />

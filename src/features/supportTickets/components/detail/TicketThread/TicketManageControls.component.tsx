@@ -37,16 +37,14 @@ interface TicketManageControlsProps {
 export function TicketManageControls(props: TicketManageControlsProps) {
   const { ticket } = props;
 
+  const handlePriorityChange = (value: string) =>
+    props.onPriorityChange(value as SupportTicketPriority);
+
   return (
     <>
       <div className={ticketThreadStyles.controlsSection}>
         <FormFieldFrame label={LABELS.ticketUpdatePriority}>
-          <Select
-            value={props.priority}
-            onValueChange={(v) =>
-              props.onPriorityChange(v as SupportTicketPriority)
-            }
-          >
+          <Select value={props.priority} onValueChange={handlePriorityChange}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>

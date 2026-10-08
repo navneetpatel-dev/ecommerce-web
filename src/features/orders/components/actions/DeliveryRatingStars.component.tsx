@@ -14,6 +14,8 @@ export function DeliveryRatingStars({
   selected,
   onSelect,
 }: DeliveryRatingStarsProps) {
+  const selectStar = (value: number) => () => onSelect(value);
+
   return (
     <div className={ordersComponentsStyles.promptStarsRow}>
       {DELIVERY_RATING_STAR_VALUES.map((value) => (
@@ -21,7 +23,7 @@ export function DeliveryRatingStars({
           key={value}
           type="button"
           aria-label={deliveryRatingStarLabel(value)}
-          onClick={() => onSelect(value)}
+          onClick={selectStar(value)}
         >
           <Star
             className={

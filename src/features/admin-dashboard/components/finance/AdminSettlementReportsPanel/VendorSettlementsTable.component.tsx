@@ -65,6 +65,10 @@ export function VendorSettlementsTable({
   message,
   onExport,
 }: VendorSettlementsTableProps) {
+  const handleExportExcel = () => onExport("xlsx");
+  const handleExportCsv = () => onExport("csv");
+  const handleExportPdf = () => onExport("pdf");
+
   return (
     <div className={styles.vendorsContainer}>
       <div className={styles.vendorsHeader}>
@@ -77,9 +81,9 @@ export function VendorSettlementsTable({
           controlsDisabled={controlsDisabled}
           exportingFormat={exportingFormat}
           statusMessage={message}
-          onExportExcel={() => onExport("xlsx")}
-          onExportCsv={() => onExport("csv")}
-          onExportPdf={() => onExport("pdf")}
+          onExportExcel={handleExportExcel}
+          onExportCsv={handleExportCsv}
+          onExportPdf={handleExportPdf}
         />
       </div>
       <DataTable

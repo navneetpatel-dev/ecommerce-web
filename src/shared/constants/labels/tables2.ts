@@ -70,6 +70,7 @@ export const tables2Labels = {
   categoryNameRequired: "Category name is required",
   enterCategoryNameToSave: "Enter a category name to save.",
   imageNotAvailable: "Image not available",
+  scrollableTable: "Scrollable table",
   parentCategory: "Parent category",
   parentCategoryNone: "None (top-level)",
   selectParentCategory: "Select a parent category",

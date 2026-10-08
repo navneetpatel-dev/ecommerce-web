@@ -36,6 +36,7 @@ export function ProductSizeChartButton({
       </DialogTrigger>
       <DialogContent
         className={productDetailsMiscStyles.sizeChartDialogContent}
+        aria-describedby={undefined}
       >
         <DialogHeader>
           <DialogTitle>{LABELS.sizeChart}</DialogTitle>

@@ -107,13 +107,14 @@ function DesktopStepItem({
     isUpcoming && stepIndicatorStyles.labelUpcoming,
   );
 
+  const handleStepClick = () => onStepClick(stepNum);
   return (
     <li key={label} className={stepIndicatorStyles.desktopLi}>
       {connector}
       <Button
         type="button"
         variant="ghost"
-        onClick={() => onStepClick(stepNum)}
+        onClick={handleStepClick}
         disabled={isUpcoming}
         aria-current={ariaCurrent}
         className={buttonClassName}

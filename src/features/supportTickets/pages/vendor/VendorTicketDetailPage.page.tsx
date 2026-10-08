@@ -39,6 +39,7 @@ function VendorTicketDetailContent() {
         <QueryErrorAlert
           error={error}
           fallback={LABELS.ticketCouldNotLoadDetail}
+          onRetry={query.refetch}
         />
       </div>
     );

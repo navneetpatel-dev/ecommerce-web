@@ -1,5 +1,7 @@
 "use client";
 
+import type { ChangeEvent } from "react";
+
 import { Gauge } from "lucide-react";
 import { useAdminWebVitalsPage } from "../../hooks/web-vitals/useAdminWebVitalsPage.hook";
 import { DateRangeFields } from "@/shared/components/forms/DateRangeFields.component";
@@ -19,6 +21,9 @@ function displayValue(name: string, value: number): string {
 
 export function AdminWebVitalsPage() {
   const page = useAdminWebVitalsPage();
+
+  const handlePathChange = (event: ChangeEvent<HTMLInputElement>) =>
+    page.setPath(event.target.value);
 
   const columns: DataTableColumn<WebVitalSummaryRow>[] = [
     {
@@ -78,7 +83,7 @@ export function AdminWebVitalsPage() {
             <Input
               id="web-vitals-path"
               value={page.path}
-              onChange={(e) => page.setPath(e.target.value)}
+              onChange={handlePathChange}
               placeholder={LABELS.webVitalsPathFilterPlaceholder}
             />
           </FormFieldFrame>

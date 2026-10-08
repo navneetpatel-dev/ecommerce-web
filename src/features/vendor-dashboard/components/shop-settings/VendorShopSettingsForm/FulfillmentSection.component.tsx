@@ -34,6 +34,13 @@ export function FulfillmentSection({
   onCodEnabledChange,
   onPayoutFrequencyChange,
 }: FulfillmentSectionProps) {
+  const handleReturnShippingFeeChange = (value: number | undefined) =>
+    onReturnShippingFeeChange(value ?? null);
+  const handlePayoutFrequencyChange = (value: string) =>
+    onPayoutFrequencyChange(
+      value === NO_PREFERENCE_VALUE ? null : (value as VendorPayoutFrequency),
+    );
+
   return (
     <FormSection
       title={LABELS.settingsFulfillment}
@@ -49,9 +56,7 @@ export function FulfillmentSection({
           min={0}
           step={10}
           prefix={CURRENCY_SYMBOL}
-          onChange={(value) =>
-            onReturnShippingFeeChange(value == null ? null : value)
-          }
+          onChange={handleReturnShippingFeeChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
@@ -71,13 +76,7 @@ export function FulfillmentSection({
       >
         <Select
           value={payoutFrequency ?? NO_PREFERENCE_VALUE}
-          onValueChange={(value) =>
-            onPayoutFrequencyChange(
-              value === NO_PREFERENCE_VALUE
-                ? null
-                : (value as VendorPayoutFrequency),
-            )
-          }
+          onValueChange={handlePayoutFrequencyChange}
         >
           <SelectTrigger id="vendor-shop-payout-frequency">
             <SelectValue />

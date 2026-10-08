@@ -1,5 +1,6 @@
 /** Footer and storefront navigation labels. Subset of LABELS; merged in labels/index.ts. */
 export const navigationLabels = {
+  bottomNavigation: "Bottom navigation",
   company: "Company",
   customerService: "Customer Service",
   sellOnMarketplace: "Sell on Marketplace",

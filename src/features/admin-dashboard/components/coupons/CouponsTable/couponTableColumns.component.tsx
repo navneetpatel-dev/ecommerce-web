@@ -1,5 +1,6 @@
 import type { DataTableColumn } from "@/shared/components/DataTable";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
+import { CopyTextButton } from "@/shared/components/actions/CopyTextButton.component";
 import { LABELS } from "@/shared/constants/labels";
 import { DISCOUNT_BEARER } from "@/shared/constants/statuses";
 import { formatDateTime } from "@/shared/utils/formatting/formatDate";
@@ -18,7 +19,12 @@ export function buildCouponColumns(): DataTableColumn<Coupon>[] {
       id: "code",
       header: LABELS.couponCode,
       className: styles.columnMono,
-      cell: (row) => row.code,
+      cell: (row) => (
+        <span className={styles.codeCell}>
+          {row.code}
+          <CopyTextButton value={row.code} label={LABELS.copyCouponCode} />
+        </span>
+      ),
     },
     {
       id: "type",

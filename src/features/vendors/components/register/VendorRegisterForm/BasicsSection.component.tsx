@@ -1,4 +1,8 @@
-import { Controller, type UseFormReturn } from "react-hook-form";
+import {
+  Controller,
+  type UseFormReturn,
+  type ControllerRenderProps,
+} from "react-hook-form";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -25,6 +29,32 @@ interface VendorRegisterBasicsSectionProps {
   register: VendorRegisterFormInstance["register"];
   control: VendorRegisterFormInstance["control"];
   errors: VendorRegisterFormInstance["formState"]["errors"];
+}
+
+function EntityTypeField({
+  field,
+  hasError,
+}: {
+  field: ControllerRenderProps<VendorRegisterInput, "entityType">;
+  hasError: boolean;
+}) {
+  const handleChange = (value: string) =>
+    field.onChange(value as VendorEntityType);
+
+  return (
+    <Select value={field.value} onValueChange={handleChange}>
+      <SelectTrigger className={cn(hasError && styles.selectTriggerError)}>
+        <SelectValue placeholder={LABELS.entityType} />
+      </SelectTrigger>
+      <SelectContent>
+        {VENDOR_ENTITY_TYPE_VALUES.map((value) => (
+          <SelectItem key={value} value={value}>
+            {vendorEntityTypeLabel(value)}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
 }
 
 export function VendorRegisterBasicsSection({
@@ -60,28 +90,10 @@ export function VendorRegisterBasicsSection({
           control={control}
           name="entityType"
           render={({ field }) => (
-            <Select
-              value={field.value}
-              onValueChange={(value) =>
-                field.onChange(value as VendorEntityType)
-              }
-            >
-              <SelectTrigger
-                className={cn(
-                  Boolean(errors.entityType?.message) &&
-                    styles.selectTriggerError,
-                )}
-              >
-                <SelectValue placeholder={LABELS.entityType} />
-              </SelectTrigger>
-              <SelectContent>
-                {VENDOR_ENTITY_TYPE_VALUES.map((value) => (
-                  <SelectItem key={value} value={value}>
-                    {vendorEntityTypeLabel(value)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <EntityTypeField
+              field={field}
+              hasError={Boolean(errors.entityType?.message)}
+            />
           )}
         />
       </FormFieldFrame>

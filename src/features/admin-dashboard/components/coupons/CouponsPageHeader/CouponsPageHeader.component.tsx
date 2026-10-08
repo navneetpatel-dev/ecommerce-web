@@ -51,6 +51,8 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
   const batches = useCouponBatches();
   const notifyAlerts = useNotifyCouponAlerts();
 
+  const handleNotifyAlerts = () => notifyAlerts.mutate();
+
   const batchColumns = buildCouponBatchColumns();
 
   const submitWithValidation = (data: CouponFormInput) => {
@@ -61,20 +63,24 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
     void form.trigger();
   };
 
-  const renderBatchActions = (row: CouponBatch) => (
-    <TableRowAction>
-      <Button
-        type="button"
-        size="sm"
-        variant="outline"
-        className={tableMenuButtonClass("neutral")}
-        onClick={() => setBatchDetail(row)}
-      >
-        <Eye strokeWidth={2.25} aria-hidden />
-        <span>{LABELS.view}</span>
-      </Button>
-    </TableRowAction>
-  );
+  const renderBatchActions = (row: CouponBatch) => {
+    const openBatchDetail = () => setBatchDetail(row);
+
+    return (
+      <TableRowAction>
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className={tableMenuButtonClass("neutral")}
+          onClick={openBatchDetail}
+        >
+          <Eye strokeWidth={2.25} aria-hidden />
+          <span>{LABELS.view}</span>
+        </Button>
+      </TableRowAction>
+    );
+  };
 
   const closeBatchDetail = () => {
     setBatchDetail(null);
@@ -91,7 +97,7 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
             variant="outline"
             fullWidth="mobile"
             loading={notifyAlerts.isPending}
-            onClick={() => notifyAlerts.mutate()}
+            onClick={handleNotifyAlerts}
           >
             <Bell aria-hidden /> {LABELS.runCouponAlerts}
           </Button>
@@ -103,7 +109,10 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
                 <Plus aria-hidden /> {LABELS.createCoupon}
               </Button>
             </DialogTrigger>
-            <DialogContent className={styles.dialog}>
+            <DialogContent
+              className={styles.dialog}
+              aria-describedby={undefined}
+            >
               <DialogHeader>
                 <DialogTitle>{LABELS.createCoupon}</DialogTitle>
               </DialogHeader>

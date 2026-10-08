@@ -46,7 +46,13 @@ export function SearchResultsSection({ query, results }: Props) {
   return (
     <section className={styles.searchResultsSection}>
       <div className={styles.searchResultsHeader}>
-        <p className={styles.searchResultsCount}>{resultCountMessage}</p>
+        <p
+          role="status"
+          aria-atomic="true"
+          className={styles.searchResultsCount}
+        >
+          {resultCountMessage}
+        </p>
       </div>
       {resultsList}
     </section>

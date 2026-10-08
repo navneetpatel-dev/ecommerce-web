@@ -15,6 +15,9 @@ import { adminPagesStyles } from "../shared/adminPages.styles";
 export function AdminCouponsPage() {
   const page = useAdminCouponsPage();
 
+  const handleTabChange = (value: string) =>
+    page.setTab(value as "platform" | "vendor");
+
   return (
     <div className={adminPagesStyles.stack6}>
       <CouponsPageHeader
@@ -28,7 +31,7 @@ export function AdminCouponsPage() {
 
       <Tabs
         value={page.tab}
-        onValueChange={(value) => page.setTab(value as "platform" | "vendor")}
+        onValueChange={handleTabChange}
         className={adminPagesStyles.minW0}
       >
         <TabsList className={adminPagesStyles.tabsListStrong}>

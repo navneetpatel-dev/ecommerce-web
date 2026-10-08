@@ -43,9 +43,9 @@ export function CartPage() {
       eligible={cart.eligible}
       eligibleLoading={cart.eligibleLoading}
       onCouponInputChange={cart.setCouponInput}
-      onApplyCoupon={() => void cart.applyCoupon()}
-      onRemoveCoupon={(code) => void cart.removeCoupon(code)}
-      onApplyEligible={(code) => void cart.applyEligible(code)}
+      onApplyCoupon={cart.applyCoupon}
+      onRemoveCoupon={cart.removeCoupon}
+      onApplyEligible={cart.applyEligible}
     />
   );
 }

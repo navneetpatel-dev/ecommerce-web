@@ -42,6 +42,7 @@ function CustomerTicketDetailContent({ id }: { id: string }) {
           <QueryErrorAlert
             error={error}
             fallback={LABELS.ticketCouldNotLoadDetail}
+            onRetry={query.refetch}
           />
         </div>
       </div>

@@ -1,5 +1,6 @@
 import type { ChangeEvent } from "react";
 import { FormError } from "@/shared/components/forms/FormError.component";
+import { useFieldControl } from "@/shared/components/forms/fieldControl.context";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { Button } from "@/shared/components/ui/button";
 import dynamic from "next/dynamic";
@@ -37,6 +38,8 @@ export function FileUpload(props: FileUploadProps) {
     spec,
   } = useFileUploadController(props);
 
+  const fieldControl = useFieldControl();
+
   const handlePickClick = () => {
     fileRef.current?.click();
   };
@@ -51,7 +54,16 @@ export function FileUpload(props: FileUploadProps) {
 
   return (
     <>
-      <div className={fileUploadStyles.root}>
+      <div
+        className={fileUploadStyles.root}
+        {...(fieldControl
+          ? {
+              role: "group" as const,
+              "aria-describedby": fieldControl.describedById,
+              "aria-invalid": fieldControl.invalid ? true : undefined,
+            }
+          : {})}
+      >
         {props.label ? (
           <p className={fileUploadStyles.label}>{props.label}</p>
         ) : null}

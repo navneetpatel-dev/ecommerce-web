@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import { Undo2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -34,6 +35,8 @@ export function RtoHandoverCard({
     ) : null;
   const otpDigitCount = otpCode.length;
   const confirmDisabled = otpCode.length !== 6;
+  const handleOtpChange = (event: ChangeEvent<HTMLInputElement>) =>
+    onOtpCodeChange(event.target.value.replace(/\D/g, "").slice(0, 6));
 
   return (
     <div className={styles.card}>
@@ -78,9 +81,7 @@ export function RtoHandoverCard({
               value={otpCode}
               placeholder="------"
               className={styles.input}
-              onChange={(e) =>
-                onOtpCodeChange(e.target.value.replace(/\D/g, "").slice(0, 6))
-              }
+              onChange={handleOtpChange}
             />
             <span className={styles.digitCount}>{otpDigitCount}/6 digits</span>
           </div>

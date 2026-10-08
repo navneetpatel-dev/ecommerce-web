@@ -39,6 +39,11 @@ export function BugReportForm(props: Props) {
     </p>
   );
 
+  const handleAttachmentsChange = (next: typeof attachments) => {
+    form.clearAttachmentErrors();
+    form.setAttachments(next);
+  };
+
   return (
     <form onSubmit={form.onSubmit} className={bugReportFormStyles.form}>
       <FormStack className={bugReportFormStyles.stack}>
@@ -107,10 +112,7 @@ export function BugReportForm(props: Props) {
         <BugFormFooter
           draftId={draftId}
           attachments={attachments}
-          onAttachmentsChange={(next) => {
-            form.clearAttachmentErrors();
-            form.setAttachments(next);
-          }}
+          onAttachmentsChange={handleAttachmentsChange}
           attachmentError={form.errorFor("attachments")}
           isPending={form.create.isPending}
           canSubmit={form.canSubmit}

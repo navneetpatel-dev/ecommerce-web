@@ -21,6 +21,12 @@ export function VendorKycDocumentsMenuAction({
 }: VendorKycDocumentsMenuActionProps) {
   const [open, setOpen] = useState(false);
 
+  const handleOpenDialog = () => setOpen(true);
+  const handleOpenChange = (next: boolean) => {
+    setOpen(next);
+    if (!next) onClose?.();
+  };
+
   return (
     <>
       <Button
@@ -28,7 +34,7 @@ export function VendorKycDocumentsMenuAction({
         variant="outline"
         type="button"
         className={tableMenuButtonClass("edit")}
-        onClick={() => setOpen(true)}
+        onClick={handleOpenDialog}
       >
         <FileText strokeWidth={2.25} aria-hidden />
         <span>{LABELS.viewKycDocuments}</span>
@@ -37,10 +43,7 @@ export function VendorKycDocumentsMenuAction({
         vendorId={vendorId}
         vendorName={vendorName}
         open={open}
-        onOpenChange={(next) => {
-          setOpen(next);
-          if (!next) onClose?.();
-        }}
+        onOpenChange={handleOpenChange}
       />
     </>
   );

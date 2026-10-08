@@ -11,13 +11,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { DateTimePicker } from "@/shared/components/DateTimePicker";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { DISCOUNT_BEARER } from "@/shared/constants/statuses";
 import { cn } from "@/shared/utils/dom/cn";
 import { COUPON_TYPES } from "../../../constants/coupons/constants";
 import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
+import { ControlledDateTimePicker } from "./ControlledFields.component";
 
 interface CreateCouponBasicsFieldsProps {
   form: UseFormReturn<CouponFormInput>;
@@ -124,19 +124,10 @@ export function CreateCouponBasicsFields({
           required
           error={showError("startDate")}
         >
-          <Controller
+          <ControlledDateTimePicker
+            form={form}
             name="startDate"
-            control={control}
-            render={({ field }) => (
-              <DateTimePicker
-                value={field.value}
-                onChange={(iso) => {
-                  field.onChange(iso);
-                  field.onBlur();
-                }}
-                error={hasError("startDate")}
-              />
-            )}
+            error={hasError("startDate")}
           />
         </FormFieldFrame>
         <FormFieldFrame
@@ -144,19 +135,10 @@ export function CreateCouponBasicsFields({
           required
           error={showError("endDate")}
         >
-          <Controller
+          <ControlledDateTimePicker
+            form={form}
             name="endDate"
-            control={control}
-            render={({ field }) => (
-              <DateTimePicker
-                value={field.value}
-                onChange={(iso) => {
-                  field.onChange(iso);
-                  field.onBlur();
-                }}
-                error={hasError("endDate")}
-              />
-            )}
+            error={hasError("endDate")}
           />
         </FormFieldFrame>
       </div>

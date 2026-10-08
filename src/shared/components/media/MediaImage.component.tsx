@@ -58,6 +58,12 @@ export function MediaImage({
 
   const unavailable = !currentSrc || (state.src === currentSrc && state.failed);
 
+  const handleError = () => {
+    setState((prev) =>
+      prev.src === currentSrc ? { ...prev, failed: true } : prev,
+    );
+  };
+
   useEffect(() => {
     onUnavailableChange?.(unavailable);
   }, [unavailable, onUnavailableChange]);
@@ -81,11 +87,7 @@ export function MediaImage({
       priority={priority}
       loading={loading}
       className={cn(imageClassName, className)}
-      onError={() => {
-        setState((prev) =>
-          prev.src === currentSrc ? { ...prev, failed: true } : prev,
-        );
-      }}
+      onError={handleError}
       data-image-state="loaded"
     />
   );

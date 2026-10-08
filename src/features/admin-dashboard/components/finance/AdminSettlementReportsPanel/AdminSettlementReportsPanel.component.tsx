@@ -10,6 +10,7 @@ import {
   exportFilterDisableHint,
   ReportExportButtons,
   ReportExportStatus,
+  type ExportFileFormat,
 } from "@/features/reports";
 import { useAdminSettlementReports } from "../../../hooks/finance/useAdminSettlementReports.hook";
 import { reportPanelStyles } from "../../../styles/shared/reportPanel.styles";
@@ -43,6 +44,19 @@ export function AdminSettlementReportsPanel() {
     exportingFormat,
     controlsDisabled,
   });
+
+  const handleLoad = () => {
+    void load();
+  };
+
+  const handleExportExcel = () => void exportSummary("xlsx");
+  const handleExportCsv = () => void exportSummary("csv");
+  const handleExportPdf = () => void exportSummary("pdf");
+
+  const handleExportReconciliation = (format: ExportFileFormat) =>
+    void exportReconciliation(format);
+  const handleExportVendors = (format: ExportFileFormat) =>
+    void exportVendors(format);
 
   return (
     <div className={reportPanelStyles.container}>
@@ -86,7 +100,7 @@ export function AdminSettlementReportsPanel() {
               <Button
                 type="button"
                 fullWidth="mobile"
-                onClick={() => void load()}
+                onClick={handleLoad}
                 disabled={loading || controlsDisabled}
               >
                 {LABELS.reportLoad}
@@ -99,9 +113,9 @@ export function AdminSettlementReportsPanel() {
               statusMessage={message}
               disabled={!summary}
               blockedHint={LABELS.reportExportLoadReportFirst}
-              onExportExcel={() => void exportSummary("xlsx")}
-              onExportCsv={() => void exportSummary("csv")}
-              onExportPdf={() => void exportSummary("pdf")}
+              onExportExcel={handleExportExcel}
+              onExportCsv={handleExportCsv}
+              onExportPdf={handleExportPdf}
             />
           </ButtonGroup>
         </div>
@@ -150,7 +164,7 @@ export function AdminSettlementReportsPanel() {
           controlsDisabled={controlsDisabled}
           exportingFormat={exportingFormat}
           message={message}
-          onExport={(format) => void exportReconciliation(format)}
+          onExport={handleExportReconciliation}
         />
       ) : null}
 
@@ -160,7 +174,7 @@ export function AdminSettlementReportsPanel() {
           controlsDisabled={controlsDisabled}
           exportingFormat={exportingFormat}
           message={message}
-          onExport={(format) => void exportVendors(format)}
+          onExport={handleExportVendors}
         />
       ) : null}
     </div>

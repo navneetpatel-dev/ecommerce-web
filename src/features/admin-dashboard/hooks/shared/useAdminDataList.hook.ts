@@ -24,14 +24,16 @@ export function useAdminDataList(
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [pending, setPending] = useState<"load" | "reload" | null>("load");
+  const loading = pending === "load";
+  const refreshing = pending === "reload";
   const [error, setError] = useState<string | null>(null);
 
   const client = useClientPagination(clientRows, pageSize);
 
   const fetchPage = useCallback(
-    (nextPage: number) => {
-      setLoading(true);
+    (nextPage: number, background = false) => {
+      setPending(background ? "reload" : "load");
       setError(null);
       load({ page: nextPage, limit: pageSize })
         .then((raw) => {
@@ -64,7 +66,7 @@ export function useAdminDataList(
         .catch((err) =>
           setError(getApiErrorMessage(err, LABELS.couldNotLoadData)),
         )
-        .finally(() => setLoading(false));
+        .finally(() => setPending(null));
     },
     [load, pageSize],
   );
@@ -75,10 +77,7 @@ export function useAdminDataList(
 
   const onPageChange = useCallback(
     (nextPage: number) => {
-      if (mode === "client") {
-        client.onPageChange(nextPage);
-        return;
-      }
+      if (mode === "client") return client.onPageChange(nextPage);
       setPage(nextPage);
       fetchPage(nextPage);
     },
@@ -87,10 +86,10 @@ export function useAdminDataList(
 
   const reload = useCallback(() => {
     if (mode === "client") {
-      fetchPage(1);
+      fetchPage(1, true);
       return;
     }
-    fetchPage(page);
+    fetchPage(page, true);
   }, [mode, fetchPage, page]);
 
   const rows = mode === "client" ? client.pageRows : serverRows;
@@ -114,6 +113,7 @@ export function useAdminDataList(
     () => ({
       rows,
       loading,
+      refreshing,
       error,
       reload,
       page: currentPage,
@@ -127,6 +127,7 @@ export function useAdminDataList(
     [
       rows,
       loading,
+      refreshing,
       error,
       reload,
       currentPage,

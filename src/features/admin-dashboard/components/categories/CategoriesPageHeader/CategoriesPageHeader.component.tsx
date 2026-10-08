@@ -58,7 +58,10 @@ export function CategoriesPageHeader({
               {LABELS.createCategory}
             </Button>
           </DialogTrigger>
-          <DialogContent className={categoriesPageHeaderStyles.dialogContent}>
+          <DialogContent
+            className={categoriesPageHeaderStyles.dialogContent}
+            aria-describedby={undefined}
+          >
             <DialogHeader>
               <DialogTitle>{LABELS.createCategory}</DialogTitle>
             </DialogHeader>

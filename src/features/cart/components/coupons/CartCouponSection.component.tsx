@@ -74,7 +74,11 @@ export function CartCouponSection({
 
   let offersContent: ReactNode;
   if (eligibleLoading) {
-    offersContent = <p className={styles.statusMessage}>{LABELS.loading}</p>;
+    offersContent = (
+      <p role="status" className={styles.statusMessage}>
+        {LABELS.loading}
+      </p>
+    );
   } else if (unusedOffers.length === 0) {
     offersContent = (
       <p className={styles.statusMessage}>{LABELS.noAvailableOffers}</p>
@@ -131,8 +135,16 @@ export function CartCouponSection({
         onRemoveCoupon={onRemoveCoupon}
       />
 
-      {showSuccess && <p className={styles.successMessage}>{couponMessage}</p>}
-      {showInfo && <p className={styles.infoMessage}>{couponMessage}</p>}
+      {showSuccess && (
+        <p role="status" className={styles.successMessage}>
+          {couponMessage}
+        </p>
+      )}
+      {showInfo && (
+        <p role="status" className={styles.infoMessage}>
+          {couponMessage}
+        </p>
+      )}
       {couponError && (
         <p role="alert" className={styles.errorMessage}>
           {couponError}

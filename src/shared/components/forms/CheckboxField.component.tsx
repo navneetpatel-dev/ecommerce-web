@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { cn } from "@/shared/utils/dom/cn";
+import { useFieldControl } from "./fieldControl.context";
 import { checkboxFieldStyles } from "../../styles/forms/forms.styles";
 
 interface CheckboxFieldProps {
@@ -23,6 +24,11 @@ export function CheckboxField({
   className,
   labelClassName,
 }: CheckboxFieldProps) {
+  const fieldControl = useFieldControl();
+
+  const handleCheckedChange = (value: boolean | "indeterminate") =>
+    onCheckedChange(value === true);
+
   return (
     <label
       htmlFor={id}
@@ -34,9 +40,11 @@ export function CheckboxField({
     >
       <Checkbox
         id={id}
+        aria-invalid={fieldControl?.invalid ? true : undefined}
+        aria-describedby={fieldControl?.describedById}
         checked={checked}
         disabled={disabled}
-        onCheckedChange={(value) => onCheckedChange(value === true)}
+        onCheckedChange={handleCheckedChange}
       />
       <span className={cn(checkboxFieldStyles.labelText, labelClassName)}>
         {label}

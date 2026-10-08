@@ -52,7 +52,7 @@ export const bugReportPanelsStyles = {
   trackLineCompleted: "bg-brand/50",
   trackLineIncomplete: "bg-line",
   trackIcon:
-    "relative z-10 mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[0.625rem] font-semibold",
+    "relative z-10 mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[0.6875rem] font-semibold",
   trackIconCompleted: "border-brand bg-brand text-paper",
   trackIconCurrent: "border-brand bg-brand-subtle text-brand",
   trackIconUpcoming: "border-line bg-paper text-ink-muted",

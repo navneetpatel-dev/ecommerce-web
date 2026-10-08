@@ -147,6 +147,7 @@ export function WalletTransactionsTable({
       actions={(row) => {
         const rechargeId = rechargeIdFor(row);
         if (!rechargeId || !onDownloadInvoice) return null;
+        const handleDownload = () => onDownloadInvoice(rechargeId);
         return (
           <TableRowAction>
             <Button
@@ -154,7 +155,7 @@ export function WalletTransactionsTable({
               variant="outline"
               size="sm"
               className={tableMenuButtonClass("neutral")}
-              onClick={() => onDownloadInvoice(rechargeId)}
+              onClick={handleDownload}
             >
               <Download strokeWidth={2.25} aria-hidden />
               <span>{LABELS.walletDownloadRechargeInvoice}</span>

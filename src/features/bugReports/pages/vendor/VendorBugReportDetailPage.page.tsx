@@ -40,6 +40,7 @@ function VendorBugReportDetailContent() {
         <QueryErrorAlert
           error={error}
           fallback={LABELS.bugCouldNotLoadDetail}
+          onRetry={query.refetch}
         />
       </div>
     );

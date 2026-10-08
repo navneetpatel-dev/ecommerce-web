@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
@@ -64,11 +65,13 @@ export function VendorProductFormDialog({
               {mode === "edit" ? LABELS.editProductTitle : LABELS.createProduct}
             </DialogTitle>
           </DialogHeader>
-          <p className={vendorProductFormDialogStyles.description}>
+          <DialogDescription
+            className={vendorProductFormDialogStyles.description}
+          >
             {mode === "edit"
               ? LABELS.editProductBody
               : LABELS.createProductBody}
-          </p>
+          </DialogDescription>
           <VendorProductCreateForm
             mode={mode}
             {...formProps}

@@ -44,6 +44,7 @@ function CustomerBugReportDetailContent({ id }: { id: string }) {
           <QueryErrorAlert
             error={error}
             fallback={LABELS.bugCouldNotLoadDetail}
+            onRetry={query.refetch}
           />
         </div>
       </div>

@@ -63,7 +63,7 @@ export function AskQuestionForm({
         />
 
         {isSuccess ? (
-          <p className={styles.successMessage}>
+          <p role="status" className={styles.successMessage}>
             {LABELS.questionSubmittedForReview}
           </p>
         ) : null}

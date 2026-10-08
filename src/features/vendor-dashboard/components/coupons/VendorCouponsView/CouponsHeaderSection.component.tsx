@@ -45,6 +45,8 @@ export function CouponsHeaderSection(props: CouponsHeaderSectionProps) {
     vendorId = null,
   } = props;
 
+  const handleOpenDialog = () => setOpen(true);
+
   const summaryCopy =
     absorbedDiscountTotal == null
       ? null
@@ -72,11 +74,14 @@ export function CouponsHeaderSection(props: CouponsHeaderSectionProps) {
             type="button"
             size="sm"
             fullWidth="mobile"
-            onClick={() => setOpen(true)}
+            onClick={handleOpenDialog}
           >
             <Plus aria-hidden /> {LABELS.createVendorCoupon}
           </Button>
-          <DialogContent className={couponsHeaderSectionStyles.dialogContent}>
+          <DialogContent
+            className={couponsHeaderSectionStyles.dialogContent}
+            aria-describedby={undefined}
+          >
             <DialogHeader>
               <DialogTitle>{LABELS.createVendorCoupon}</DialogTitle>
             </DialogHeader>

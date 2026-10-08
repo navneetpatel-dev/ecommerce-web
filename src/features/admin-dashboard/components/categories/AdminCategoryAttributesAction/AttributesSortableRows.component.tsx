@@ -18,15 +18,19 @@ export function AttributesSortableRows({
 }: AttributesSortableRowsProps) {
   return (
     <>
-      {rows.map((row) => (
-        <SortableAttributeRow
-          key={row.id}
-          row={row}
-          disabled={disabled}
-          onEdit={() => onEdit(row)}
-          onDelete={() => onDelete(row.id)}
-        />
-      ))}
+      {rows.map((row) => {
+        const editRow = () => onEdit(row);
+        const deleteRow = () => onDelete(row.id);
+        return (
+          <SortableAttributeRow
+            key={row.id}
+            row={row}
+            disabled={disabled}
+            onEdit={editRow}
+            onDelete={deleteRow}
+          />
+        );
+      })}
     </>
   );
 }

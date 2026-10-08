@@ -6,6 +6,7 @@ import {
   isValidElement,
   type ReactElement,
   type ReactNode,
+  type SyntheticEvent,
 } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
@@ -144,6 +145,8 @@ export function TableRowActions({
 
   if (menuItems.length === 0) return null;
 
+  const stopRowEvent = (event: SyntheticEvent) => event.stopPropagation();
+
   const menuItemElements = menuItems.map((item, index) => (
     <div key={index} className={tableRowActionsStyles.menuItemDiv}>
       {item}
@@ -160,7 +163,7 @@ export function TableRowActions({
             variant="ghost"
             className={tableRowActionsStyles.triggerBtn}
             aria-label={LABELS.moreActions}
-            onClick={(event) => event.stopPropagation()}
+            onClick={stopRowEvent}
           >
             <MoreHorizontal aria-hidden />
           </Button>
@@ -168,7 +171,7 @@ export function TableRowActions({
         <PopoverContent
           align="end"
           className={cn(tableRowActionsStyles.popoverContent, menuClassName)}
-          onClick={(event) => event.stopPropagation()}
+          onClick={stopRowEvent}
         >
           {menuItemElements}
         </PopoverContent>

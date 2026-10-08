@@ -13,6 +13,8 @@ export function VendorCategoryCheckboxList({
   selectedSet,
   onToggle,
 }: VendorCategoryCheckboxListProps) {
+  const toggleFor = (categoryId: string) => () => onToggle(categoryId);
+
   return (
     <div className={vendorShopSettingsFormStyles.categoriesScrollBox}>
       {categories.map((category) => (
@@ -20,7 +22,7 @@ export function VendorCategoryCheckboxList({
           key={category.id}
           id={`vendor-shop-category-${category.id}`}
           checked={selectedSet.has(category.id)}
-          onCheckedChange={() => onToggle(category.id)}
+          onCheckedChange={toggleFor(category.id)}
           label={category.name}
         />
       ))}

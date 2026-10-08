@@ -43,6 +43,9 @@ export function AdminWalletLiabilityPanel() {
     controlsDisabled,
   });
 
+  const handleLoad = () => void load(1);
+  const handlePageChange = (nextPage: number) => void load(nextPage);
+
   return (
     <div className={reportPanelStyles.container}>
       {/* Header */}
@@ -86,7 +89,7 @@ export function AdminWalletLiabilityPanel() {
               <Button
                 type="button"
                 fullWidth="mobile"
-                onClick={() => void load(1)}
+                onClick={handleLoad}
                 disabled={loading || controlsDisabled}
               >
                 {LABELS.reportLoad}
@@ -145,7 +148,7 @@ export function AdminWalletLiabilityPanel() {
             report={report}
             page={page}
             loading={loading}
-            onPageChange={(nextPage) => void load(nextPage)}
+            onPageChange={handlePageChange}
           />
         </>
       ) : null}

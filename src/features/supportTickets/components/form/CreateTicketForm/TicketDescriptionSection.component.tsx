@@ -1,5 +1,6 @@
 "use client";
 
+import type { ChangeEvent } from "react";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
@@ -22,6 +23,9 @@ export function TicketDescriptionSection({
   descriptionError,
   hasDescriptionError,
 }: Props) {
+  const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
+    onDescriptionChange(event.target.value);
+
   return (
     <FormSection
       title={LABELS.ticketDescriptionSection}
@@ -37,7 +41,7 @@ export function TicketDescriptionSection({
         <Textarea
           id={descId}
           value={description}
-          onChange={(e) => onDescriptionChange(e.target.value)}
+          onChange={handleDescriptionChange}
           placeholder={LABELS.ticketDescriptionPlaceholder}
           rows={8}
           maxLength={TICKET_DESCRIPTION_MAX}

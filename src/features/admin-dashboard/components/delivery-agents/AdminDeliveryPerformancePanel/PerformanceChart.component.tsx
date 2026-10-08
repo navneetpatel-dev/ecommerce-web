@@ -9,6 +9,8 @@ import {
   YAxis,
 } from "recharts";
 import type { DeliveryAgentPerformance } from "@/features/delivery-dashboard";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { useChartThemeColors } from "@/shared/hooks/theme/useChartThemeColors.hook";
 import { adminDeliveryPerformancePanelStyles } from "../../../styles/delivery-agents/adminDeliveryPerformancePanel.styles";
 
@@ -25,7 +27,13 @@ export function PerformanceChart({ rows }: PerformanceChartProps) {
   );
 
   return (
-    <div className={adminDeliveryPerformancePanelStyles.chartContainer}>
+    <div
+      role="img"
+      aria-label={formatLabel(LABELS.chartAriaLabel, {
+        title: LABELS.agentRtoRateChartTitle,
+      })}
+      className={adminDeliveryPerformancePanelStyles.chartContainer}
+    >
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={rows}

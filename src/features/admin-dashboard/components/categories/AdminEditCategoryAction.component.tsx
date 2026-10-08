@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
@@ -68,7 +69,9 @@ export function AdminEditCategoryAction({
           <DialogHeader>
             <DialogTitle>{LABELS.editCategoryTitle}</DialogTitle>
           </DialogHeader>
-          <p className={styles.dialogDescription}>{LABELS.editCategoryBody}</p>
+          <DialogDescription className={styles.dialogDescription}>
+            {LABELS.editCategoryBody}
+          </DialogDescription>
           <form onSubmit={onSubmit} className={styles.form}>
             <AdminCategoryFormFields
               form={form}

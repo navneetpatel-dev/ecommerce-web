@@ -8,7 +8,10 @@ import { OrderTaxShippingBreakdown } from "@/shared/components/orders/OrderTaxSh
 import { OrderSummaryItemsList } from "./OrderSummaryItemsList.component";
 import { AppliedCouponsSummaryList } from "./AppliedCouponsSummaryList.component";
 import { useOrderSummaryPanel } from "../../../hooks/page-view/useOrderSummaryPanel.hook";
-import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
+import {
+  CURRENCY_SYMBOL,
+  formatInr,
+} from "@/shared/utils/formatting/orderFormat";
 import { ORDER_SUMMARY_PANEL_STYLES } from "../../../styles/page-view/orderSummaryPanel.styles";
 
 interface OrderSummaryPanelProps {
@@ -163,6 +166,17 @@ export function OrderSummaryPanel({
               />
             </span>
           </div>
+
+          {/* AT never sees in-place re-renders — announce the settled total. */}
+          <span
+            role="status"
+            aria-atomic="true"
+            className={ORDER_SUMMARY_PANEL_STYLES.totalStatus}
+          >
+            {displayTotal == null || displayTotalPending || amountsUnavailable
+              ? ""
+              : `${totalLabel}: ${formatInr(displayTotal)}`}
+          </span>
 
           {walletApplied && grandTotalFormatted ? (
             <p className={ORDER_SUMMARY_PANEL_STYLES.grandTotalReference}>

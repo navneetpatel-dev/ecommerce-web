@@ -27,6 +27,10 @@ export function ProductMediaSection({
   getError,
   patchValues,
 }: ProductMediaSectionProps) {
+  const handleVideoUploaded = (url: string) => patchValues({ videoUrl: url });
+  const handleSizeChartUploaded = (url: string) =>
+    patchValues({ sizeChartUrl: url });
+
   return (
     <FormSection
       title={LABELS.productFormSectionMedia}
@@ -42,7 +46,7 @@ export function ProductMediaSection({
           entityId={draftUploadId}
           purpose={UPLOAD_PURPOSE.VIDEO}
           valueUrl={values.videoUrl || null}
-          onUploaded={(url) => patchValues({ videoUrl: url })}
+          onUploaded={handleVideoUploaded}
           disabled={disabled}
         />
       </FormFieldFrame>
@@ -55,7 +59,7 @@ export function ProductMediaSection({
           entityId={draftUploadId}
           purpose={UPLOAD_PURPOSE.SIZE_CHART}
           valueUrl={values.sizeChartUrl || null}
-          onUploaded={(url) => patchValues({ sizeChartUrl: url })}
+          onUploaded={handleSizeChartUploaded}
           disabled={disabled}
         />
       </FormFieldFrame>

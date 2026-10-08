@@ -20,12 +20,16 @@ export function CouponBatchDetailDialog({
   batchDetail,
   onClose,
 }: CouponBatchDetailDialogProps) {
+  const handleOpenChange = (next: boolean) => {
+    if (!next) onClose();
+  };
+
   return (
-    <Dialog
-      open={Boolean(batchDetail)}
-      onOpenChange={(next) => !next && onClose()}
-    >
-      <DialogContent className={couponsPageHeaderStyles.batchDialog}>
+    <Dialog open={Boolean(batchDetail)} onOpenChange={handleOpenChange}>
+      <DialogContent
+        className={couponsPageHeaderStyles.batchDialog}
+        aria-describedby={undefined}
+      >
         <DialogHeader>
           <DialogTitle>{batchDetail?.name ?? LABELS.couponBatches}</DialogTitle>
         </DialogHeader>

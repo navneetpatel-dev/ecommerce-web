@@ -93,6 +93,8 @@ export function useAdminCategoriesPage() {
     else discard.requestClose(() => setDialogOpen(false));
   };
 
+  const deleteCategoryFor = (rowId: string) => () =>
+    categoriesApi.delete(rowId).then(list.reload);
   const renderActions = useCallback(
     (row: Category) => (
       <>
@@ -109,7 +111,7 @@ export function useAdminCategoriesPage() {
           description={formatLabel(LABELS.confirmDeleteCategoryBody, {
             name: row.name,
           })}
-          onConfirm={() => categoriesApi.delete(row.id).then(list.reload)}
+          onConfirm={deleteCategoryFor(row.id)}
         />
       </>
     ),

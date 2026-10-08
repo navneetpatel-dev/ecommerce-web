@@ -42,6 +42,7 @@ export function AdminDataPage({
         title={displayTitle}
         rows={list.rows}
         loading={list.loading}
+        refreshing={list.refreshing}
         error={list.error}
         onRefresh={list.reload}
         page={list.page}

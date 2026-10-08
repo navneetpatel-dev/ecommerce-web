@@ -26,6 +26,10 @@ export function SettlementReconciliationCard({
   onExport,
 }: SettlementReconciliationCardProps) {
   const lines = useSettlementReconciliationLines(recon);
+  const handleExportExcel = () => onExport("xlsx");
+  const handleExportCsv = () => onExport("csv");
+  const handleExportPdf = () => onExport("pdf");
+
   return (
     <div className={adminSettlementReportsPanelStyles.reconCard}>
       <div className={adminSettlementReportsPanelStyles.reconHeader}>
@@ -52,9 +56,9 @@ export function SettlementReconciliationCard({
           controlsDisabled={controlsDisabled}
           exportingFormat={exportingFormat}
           statusMessage={message}
-          onExportExcel={() => onExport("xlsx")}
-          onExportCsv={() => onExport("csv")}
-          onExportPdf={() => onExport("pdf")}
+          onExportExcel={handleExportExcel}
+          onExportCsv={handleExportCsv}
+          onExportPdf={handleExportPdf}
         />
       </div>
       {!recon.balanced ? (

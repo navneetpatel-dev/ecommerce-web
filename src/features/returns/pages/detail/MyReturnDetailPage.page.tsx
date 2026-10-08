@@ -33,6 +33,7 @@ export function MyReturnDetailPage() {
             <QueryErrorAlert
               error={error}
               fallback={LABELS.couldNotLoadReturn}
+              onRetry={query.refetch}
             />
           </div>
         </div>
