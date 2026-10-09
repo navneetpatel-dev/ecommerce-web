@@ -87,7 +87,7 @@ export const ticketThreadStyles = {
   ratingRow: "mt-3 flex flex-wrap items-center gap-3",
   ratingStars: "flex gap-0.5",
   starBtn:
-    "rounded-sm p-0.5 transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50",
+    "inline-flex min-h-11 items-center justify-center rounded-sm p-0.5 transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50",
   starTransition: "transition-colors",
   starActive: "fill-brand text-brand",
   starInactive: "fill-transparent text-ink-muted/50",

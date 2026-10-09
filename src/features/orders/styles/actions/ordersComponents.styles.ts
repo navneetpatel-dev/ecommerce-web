@@ -37,9 +37,13 @@ export const ordersComponentsStyles = {
     "mt-2 flex flex-col gap-2 rounded-md border border-line bg-surface-muted p-3",
   promptHeader: "flex items-center justify-between gap-2",
   promptTitle: "text-body-sm font-medium text-ink",
-  promptDismissButton: "text-ink-muted hover:text-ink",
+  /** Both compact controls carry 44px-tall hit areas over small glyphs. */
+  promptDismissButton:
+    "flex min-h-11 min-w-6 touch-manipulation items-center justify-center text-ink-muted hover:text-ink",
   promptDismissIcon: "size-4",
   promptStarsRow: "flex items-center gap-1",
+  promptStarButton:
+    "flex min-h-11 min-w-6 touch-manipulation items-center justify-center",
   starSelected: "size-5 fill-warning text-warning",
   starUnselected: "size-5 text-ink-muted",
   promptSubmitButton: "self-start",

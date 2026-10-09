@@ -28,7 +28,8 @@ export const reportsRoutes = {
   adminWalletLiability: "/api/reports/admin/wallet-liability",
   adminWalletRecharge: "/api/reports/admin/wallet-recharge",
   adminCashbackWriteOffs: "/api/reports/admin/cashback-write-offs",
-  vendor: (vendorId: string) => `/api/reports/vendor/${vendorId}`,
+  /** Vendor settlement summary — BE route: GET /api/reports/vendor/:vendorId/summary. */
+  vendor: (vendorId: string) => `/api/reports/vendor/${vendorId}/summary`,
 } as const;
 
 export const settingsRoutes = {

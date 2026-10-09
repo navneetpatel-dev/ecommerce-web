@@ -23,6 +23,7 @@ export function DeliveryRatingStars({
           key={value}
           type="button"
           aria-label={deliveryRatingStarLabel(value)}
+          className={ordersComponentsStyles.promptStarButton}
           onClick={selectStar(value)}
         >
           <Star
