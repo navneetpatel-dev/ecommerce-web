@@ -1,0 +1,136 @@
+name: Deploy
+
+# main → CI → build image (NEXT_PUBLIC_* baked in) → roll the web service on ECS.
+#
+# Re-running an older successful run redeploys that commit (its image is reused
+# from ECR), which is the rollback path. Changing a NEXT_PUBLIC_* variable needs
+# a new image, so after editing one run this manually and the image is rebuilt
+# under a new tag.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-web-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    name: Deploy to AWS (production)
+    needs: ci
+    # Skipped until the AWS side exists (see DEPLOYMENT.md in the backend repo).
+    if: vars.AWS_DEPLOY_ROLE_ARN != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: production
+      url: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+    permissions:
+      contents: read
+      id-token: write
+
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+      ECS_CLUSTER: ${{ vars.ECS_CLUSTER }}
+      ECS_WEB_SERVICE: ${{ vars.ECS_WEB_SERVICE }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Check build-time configuration
+        run: |
+          missing=()
+          [[ -n "${{ vars.NEXT_PUBLIC_API_URL }}" ]] || missing+=(NEXT_PUBLIC_API_URL)
+          [[ -n "${{ vars.NEXT_PUBLIC_SITE_URL }}" ]] || missing+=(NEXT_PUBLIC_SITE_URL)
+          if (( ${#missing[@]} )); then
+            echo "::error::Set repository variables: ${missing[*]}"
+            exit 1
+          fi
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Log in to ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # The tag covers the commit *and* the public build config, so changing a
+      # NEXT_PUBLIC_* variable produces a new image instead of reusing a stale one.
+      - name: Resolve image
+        id: image
+        env:
+          BUILD_CONFIG: >-
+            ${{ vars.NEXT_PUBLIC_API_URL }}|${{ vars.NEXT_PUBLIC_SITE_URL }}|${{ vars.NEXT_PUBLIC_RAZORPAY_KEY_ID }}|${{ vars.NEXT_PUBLIC_RAZORPAY_CHECKOUT_CONFIG_ID }}|${{ vars.GOOGLE_SITE_VERIFICATION }}
+        run: |
+          config_hash=$(printf '%s' "$BUILD_CONFIG" | sha256sum | cut -c1-8)
+          tag="${GITHUB_SHA}-${config_hash}"
+          image="${{ steps.ecr.outputs.registry }}/${ECR_REPOSITORY}:${tag}"
+          echo "uri=$image" >> "$GITHUB_OUTPUT"
+          if aws ecr describe-images --repository-name "$ECR_REPOSITORY" \
+               --image-ids imageTag="$tag" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Image $tag already in ECR — reusing it."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: docker/setup-buildx-action@v3
+        if: steps.image.outputs.exists == 'false'
+
+      - name: Build and push image
+        if: steps.image.outputs.exists == 'false'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.image.outputs.uri }}
+          provenance: false
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
+            NEXT_PUBLIC_RAZORPAY_KEY_ID=${{ vars.NEXT_PUBLIC_RAZORPAY_KEY_ID }}
+            NEXT_PUBLIC_RAZORPAY_CHECKOUT_CONFIG_ID=${{ vars.NEXT_PUBLIC_RAZORPAY_CHECKOUT_CONFIG_ID }}
+            GOOGLE_SITE_VERIFICATION=${{ vars.GOOGLE_SITE_VERIFICATION }}
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
+
+      - name: Register task definition
+        id: taskdef
+        run: |
+          chmod +x .github/scripts/ecs-deploy.sh
+          echo "web=$(.github/scripts/ecs-deploy.sh register "$ECS_WEB_SERVICE" "${{ steps.image.outputs.uri }}")" >> "$GITHUB_OUTPUT"
+
+      - name: Roll out web
+        run: |
+          .github/scripts/ecs-deploy.sh roll "$ECS_WEB_SERVICE=${{ steps.taskdef.outputs.web }}"
+
+      - name: Smoke test
+        run: |
+          for _ in $(seq 1 10); do
+            if curl -fsS "${{ vars.NEXT_PUBLIC_SITE_URL }}/healthz"; then echo; exit 0; fi
+            sleep 6
+          done
+          echo "::error::${{ vars.NEXT_PUBLIC_SITE_URL }}/healthz did not respond"
+          exit 1
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Web deploy"
+            echo "- Commit: \`${GITHUB_SHA::7}\`"
+            echo "- Image: \`${{ steps.image.outputs.uri }}\`"
+            echo "- Task definition: \`${{ steps.taskdef.outputs.web }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
