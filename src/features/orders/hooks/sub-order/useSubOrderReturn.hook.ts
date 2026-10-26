@@ -25,8 +25,16 @@ export type ReturnReasonCode = ReturnReason;
 
 export { REASON_CODES };
 
+/** The quantity input for a multi-unit line (a single unit needs none). */
+export type ReturnQuantityField = {
+  value: number;
+  max: number;
+  onChange: (value: number | undefined) => void;
+};
+
 export function useSubOrderReturn() {
   const [target, setTarget] = useState<OrderItem | null>(null);
+  const [returnQuantity, setReturnQuantity] = useState(1);
   const [reasonCode, setReasonCode] = useState<ReturnReasonCode>(
     RETURN_REASON.DAMAGED,
   );
@@ -38,6 +46,7 @@ export function useSubOrderReturn() {
 
   const openDialog = (item: OrderItem) => {
     setTarget(item);
+    setReturnQuantity(item.quantity);
     setReason("");
     setReasonCode(RETURN_REASON.DAMAGED);
     setType("REFUND");
@@ -75,10 +84,24 @@ export function useSubOrderReturn() {
     setReason(event.target.value);
   };
 
+  const handleReturnQuantityChange = (value: number | undefined) => {
+    const max = target?.quantity ?? 1;
+    setReturnQuantity(Math.min(Math.max(1, Math.trunc(value ?? 1)), max));
+  };
+  const quantityField: ReturnQuantityField | null =
+    target && target.quantity > 1
+      ? {
+          value: returnQuantity,
+          max: target.quantity,
+          onChange: handleReturnQuantityChange,
+        }
+      : null;
+
   const submitReturn = async () => {
     if (!target) return;
     await createReturn.mutateAsync({
       orderItemId: target.id,
+      returnQuantity,
       reasonCode,
       reason: reason.trim(),
       type,
@@ -89,6 +112,7 @@ export function useSubOrderReturn() {
 
   return {
     target,
+    quantityField,
     reasonCode,
     reason,
     type,

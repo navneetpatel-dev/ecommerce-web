@@ -19,7 +19,7 @@ export const VendorReturnsTableBody = memo(function VendorReturnsTableBody({
       <TableBody>
         <TableRow>
           <TableCell
-            colSpan={6}
+            colSpan={7}
             className={vendorReturnsTableStyles.desktopEmptyCell}
           >
             {LABELS.noReturnsYet}

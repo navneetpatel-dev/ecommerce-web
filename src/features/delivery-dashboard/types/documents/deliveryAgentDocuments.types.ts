@@ -33,6 +33,8 @@ export type StaleShipment = {
   id: string;
   trackingNumber: string;
   status: string;
+  /** Cash owed at the door; null when the order isn't COD. */
+  codAmount?: number | string | null;
   updatedAt: string;
   deliveryAgent: { id: string; fullName: string } | null;
 };

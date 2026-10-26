@@ -37,6 +37,7 @@ interface ReviewStepProps {
 export function ReviewStep(props: ReviewStepProps) {
   const {
     quote,
+    isQuoteLoading,
     isQuoteError,
     quoteErrorMessage,
     isPending,
@@ -53,10 +54,13 @@ export function ReviewStep(props: ReviewStepProps) {
   const {
     payable,
     showsUnavailableWarning,
+    placeOrderDisabled,
     handleGiftWrapCheckedChange,
     handleGiftMessageChange,
   } = useReviewStep({
     quote,
+    isQuoteLoading,
+    isQuoteError,
     hasUnavailableItems,
     onGiftWrapChange,
     onGiftMessageChange,
@@ -144,7 +148,7 @@ export function ReviewStep(props: ReviewStepProps) {
           className={REVIEW_STEP_STYLES.placeOrderBtn}
           onClick={onPlaceOrder}
           loading={isPending}
-          disabled={showsUnavailableWarning}
+          disabled={placeOrderDisabled}
         >
           {LABELS.placeOrder}
           <ArrowRight size={16} />
@@ -157,7 +161,7 @@ export function ReviewStep(props: ReviewStepProps) {
           className={REVIEW_STEP_STYLES.placeOrderBtn}
           onClick={onPlaceOrder}
           loading={isPending}
-          disabled={showsUnavailableWarning}
+          disabled={placeOrderDisabled}
         >
           {LABELS.placeOrder}
           <ArrowRight size={16} />

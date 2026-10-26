@@ -12,6 +12,8 @@ import type { ReturnRequest } from "@/shared/api/types";
 
 export type CreateReturnBody = {
   orderItemId: string;
+  /** Units of the line to return (the whole line when absent). */
+  returnQuantity?: number;
   reasonCode: ReturnRequest["reasonCode"];
   reason: string;
   type?: "REFUND" | "EXCHANGE";
@@ -56,6 +58,9 @@ export const returnsApi = {
     downloadFile(API.returns.debitNote(id), `debit-note_${id.slice(0, 8)}.pdf`),
   retryRefund: (id: string) =>
     apiClient.post<ReturnRequest>(API.returns.retryRefund(id)),
+  /** Puts a picked-up return's units back into sellable stock (once; never automatic). */
+  restock: (id: string) =>
+    apiClient.post<ReturnRequest>(API.returns.restock(id)),
   reschedulePickup: (id: string, slot: string) =>
     apiClient.post<ReturnRequest>(API.returns.reschedulePickup(id), { slot }),
 };

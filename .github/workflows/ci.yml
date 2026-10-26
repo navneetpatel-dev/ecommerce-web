@@ -2,12 +2,14 @@ name: CI
 
 on:
   pull_request:
-  push:
-    branches: [main]
+  # Pushes to main run this via deploy.yml (workflow_call) so CI gates the deploy
+  # without running twice.
+  workflow_call:
+  workflow_dispatch:
 
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
@@ -28,6 +30,13 @@ jobs:
 
       - run: npm ci
 
+      # Production dependencies only: dev tooling advisories don't ship in the image.
+      - name: Dependency audit (production deps)
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Format
+        run: npm run format:check
+
       - name: Typecheck
         run: npm run typecheck
 
@@ -36,8 +45,35 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Line-limit ratchet
+        run: npm run limits
+
       - name: Test
         run: npm test
 
       - name: Build
         run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL || 'http://localhost:9000' }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'http://localhost:5173' }}
+
+  docker:
+    name: Docker image builds
+    # deploy.yml builds and pushes the real image; PRs just prove it builds.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          build-args: |
+            NEXT_PUBLIC_API_URL=https://api.example.com
+            NEXT_PUBLIC_SITE_URL=https://shop.example.com
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web

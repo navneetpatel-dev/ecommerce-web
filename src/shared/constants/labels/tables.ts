@@ -35,6 +35,10 @@ export const tablesLabels = {
   orderActionDeliver: "Deliver",
   updateStatus: "Update",
   selectStatus: "Select status",
+  cancelSubOrder: "Cancel order",
+  confirmCancelSubOrderTitle: "Cancel this order?",
+  confirmCancelSubOrderBody:
+    "Items go back into stock and the customer is refunded for this part. This can't be undone.",
   processPayouts: "Process payouts",
   commissions: "Commissions",
   couponCode: "Code",

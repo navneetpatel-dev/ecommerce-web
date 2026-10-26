@@ -31,9 +31,10 @@ export function useVendorOrdersTable({
   const isEmpty = rows.length === 0;
 
   const renderActions = useCallback(
-    (subOrderId: string, canDownloadInvoice: boolean) => (
+    (subOrderId: string, status: string, canDownloadInvoice: boolean) => (
       <SubOrderActions
         subOrderId={subOrderId}
+        status={status}
         canDownloadInvoice={canDownloadInvoice}
         updatingId={updatingId}
         onSetUpdatingId={onSetUpdatingId}

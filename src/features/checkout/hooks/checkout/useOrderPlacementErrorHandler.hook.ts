@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { ApiError } from "@/shared/types/apiError.types";
+import { ApiError, isApiErrorCode } from "@/shared/types/apiError.types";
 import { ERROR_CODES } from "@/shared/constants/http/errors";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
@@ -23,6 +23,7 @@ interface UseOrderPlacementErrorHandlerOptions {
     options?: { silent?: boolean },
   ) => Promise<void>;
   clearCartCache: () => void;
+  invalidateCheckoutQuote: () => void;
 }
 
 /** Failure branch of place-order: cart-empty recovery vs. a plain error notice (Rule 3). */
@@ -30,9 +31,20 @@ export function useOrderPlacementErrorHandler({
   showNotice,
   restoreCancelledCheckout,
   clearCartCache,
+  invalidateCheckoutQuote,
 }: UseOrderPlacementErrorHandlerOptions) {
   return useCallback(
     async (err: unknown, pendingOrderId: string | null) => {
+      if (isApiErrorCode(err, ERROR_CODES.CHECKOUT_TOTAL_CHANGED)) {
+        // Nothing was placed: show the new total and let the customer decide.
+        invalidateCheckoutQuote();
+        showNotice({
+          variant: "warning",
+          title: LABELS.checkoutTotalChangedTitle,
+          description: LABELS.checkoutTotalChangedBody,
+        });
+        return;
+      }
       if (isCartEmptyError(err) && pendingOrderId) {
         try {
           await restoreCancelledCheckout(pendingOrderId, {
@@ -66,6 +78,11 @@ export function useOrderPlacementErrorHandler({
         clearCartCache();
       }
     },
-    [showNotice, restoreCancelledCheckout, clearCartCache],
+    [
+      showNotice,
+      restoreCancelledCheckout,
+      clearCartCache,
+      invalidateCheckoutQuote,
+    ],
   );
 }

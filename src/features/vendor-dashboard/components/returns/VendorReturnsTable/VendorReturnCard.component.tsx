@@ -2,6 +2,7 @@ import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { vendorReturnsTableStyles } from "../../../styles/returns/vendorReturnsTable.styles";
 import type { VendorReturnRowViewModel } from "../../../hooks/returns/useVendorReturnsTablePresentation.hook";
 import { VendorReturnPhotosCell } from "./VendorReturnPhotosCell.component";
+import { VendorReturnRestockAction } from "./VendorReturnRestockAction.component";
 
 interface VendorReturnCardProps {
   row: VendorReturnRowViewModel;
@@ -30,6 +31,9 @@ export function VendorReturnCard({ row }: VendorReturnCardProps) {
           images={row.images}
           productName={row.productLabel}
         />
+      </div>
+      <div className={vendorReturnsTableStyles.mobileCardActions}>
+        <VendorReturnRestockAction row={row} />
       </div>
     </li>
   );

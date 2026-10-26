@@ -2,7 +2,10 @@ import type { OrderItem, SubOrder } from "@/shared/api/types";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { Timeline } from "@/shared/components/display/Timeline.component";
 import { LABELS } from "@/shared/constants/labels";
-import type { ReturnReasonCode } from "../../../hooks/sub-order/useSubOrderReturn.hook";
+import type {
+  ReturnQuantityField,
+  ReturnReasonCode,
+} from "../../../hooks/sub-order/useSubOrderReturn.hook";
 import { VENDOR_GROUP_CARD } from "@/shared/styles/orders/vendorGroupStyles";
 import { SubOrderCardHeader } from "./SubOrderCardHeader.component";
 import { SubOrderCardItems } from "./SubOrderCardItems.component";
@@ -20,6 +23,7 @@ interface SubOrderCardProps {
   reasonCode: ReturnReasonCode;
   reason: string;
   returnType: "REFUND" | "EXCHANGE";
+  returnQuantityField: ReturnQuantityField | null;
   photoUrls: string[];
   draftUploadId: string;
   isPending: boolean;
@@ -47,6 +51,7 @@ export function SubOrderCard({
   reasonCode,
   reason,
   returnType,
+  returnQuantityField,
   photoUrls,
   draftUploadId,
   isPending,
@@ -116,6 +121,7 @@ export function SubOrderCard({
 
       <SubOrderReturnDialog
         returnTarget={returnTarget}
+        quantityField={returnQuantityField}
         reasonCode={reasonCode}
         reason={reason}
         returnType={returnType}

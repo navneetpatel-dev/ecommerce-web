@@ -50,6 +50,7 @@ export const VendorOrdersTableRow = memo(function VendorOrdersTableRow({
       <TableCell className={VENDOR_ORDERS_TABLE_STYLES.cellActions}>
         <SubOrderActions
           subOrderId={row.subOrder.id}
+          status={row.subOrder.status}
           canDownloadInvoice={canDownloadInvoice}
           updatingId={updatingId}
           onSetUpdatingId={onSetUpdatingId}

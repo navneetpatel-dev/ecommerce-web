@@ -11,6 +11,7 @@ interface BuildPlaceOrderPayloadInput {
   walletAmountToUse: number;
   giftWrap: boolean;
   giftMessage: string;
+  expectedGrandTotal?: number;
 }
 
 /**
@@ -27,6 +28,7 @@ export function buildPlaceOrderPayload({
   walletAmountToUse,
   giftWrap,
   giftMessage,
+  expectedGrandTotal,
 }: BuildPlaceOrderPayloadInput): {
   apiPaymentMethod: string;
   apiWalletAmount: number;
@@ -47,6 +49,7 @@ export function buildPlaceOrderPayload({
       walletAmountToUse: apiWalletAmount,
       giftWrap,
       giftMessage: giftWrap ? giftMessage.trim() || undefined : undefined,
+      expectedGrandTotal,
     },
   };
 }

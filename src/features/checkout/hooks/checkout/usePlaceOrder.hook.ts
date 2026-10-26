@@ -76,6 +76,7 @@ export function usePlaceOrderWithRazorpay() {
     showNotice,
     restoreCancelledCheckout,
     clearCartCache,
+    invalidateCheckoutQuote,
   });
 
   // Both success paths call this (cash/COD immediately, Razorpay after verification), and
@@ -84,7 +85,7 @@ export function usePlaceOrderWithRazorpay() {
   const handleOrderPlaced = useResetCheckoutOnOrderPlaced(onOrderPlaced);
 
   const handlePlaceOrder = async (method: string) => {
-    if (!addressId) return;
+    if (!addressId || !quote || isQuoteLoading || isQuoteError) return;
     resetNotice();
     await awaitPendingRestores();
 
@@ -107,14 +108,13 @@ export function usePlaceOrderWithRazorpay() {
           walletAmountToUse,
           giftWrap,
           giftMessage,
+          expectedGrandTotal: quote.grandTotal,
         });
 
       const result = await placeOrder.mutateAsync(payload);
       pendingOrderIdRef.current = result.orderId;
 
-      if (apiWalletAmount > 0) {
-        invalidateWalletCache();
-      }
+      if (apiWalletAmount > 0) invalidateWalletCache();
 
       await handleOrderPlacementSuccess({
         result,

@@ -11,6 +11,11 @@ export interface OrderItem {
   id: string;
   variantId: string;
   productName: string;
+  /**
+   * Whether this line can still be returned (delivered, units left, no return yet, inside
+   * the window), as the server decides. Absent on older payloads.
+   */
+  canReturn?: boolean;
   /** Looked up live from the catalogue, so it can be absent for removed products. */
   imageUrl?: string | null;
   productSlug?: string | null;

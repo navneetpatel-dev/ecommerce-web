@@ -38,7 +38,7 @@ export function CommissionDesktopTable({
               Commission
             </TableHead>
             <TableHead className={commissionLedgerTableStyles.desktopCell}>
-              GST Amount
+              GST on Sale
             </TableHead>
             <TableHead className={commissionLedgerTableStyles.desktopCell}>
               TDS Amount

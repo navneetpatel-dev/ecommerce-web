@@ -26,7 +26,7 @@ export const vendorGroupTotalsStyles = {
 export const vendorStripStyles = {
   link: "inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-0.5 text-brand hover:bg-brand-subtle transition-colors",
   sizeMd: "px-3 py-1",
-  logo: "rounded-full object-cover",
+  logo: "h-5 w-5 rounded-full object-cover shrink-0",
   avatar:
     "h-5 w-5 rounded-full bg-brand-subtle flex items-center justify-center text-[0.6875rem] font-medium text-brand",
   name: "text-body-sm font-medium",

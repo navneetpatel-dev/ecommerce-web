@@ -15,6 +15,7 @@ interface VendorSubOrderCardsProps {
   updatingId: string | null;
   renderActions: (
     subOrderId: string,
+    status: string,
     canDownloadInvoice: boolean,
   ) => React.ReactNode;
 }
@@ -77,7 +78,11 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
         </div>
       ) : null}
       <div className={VENDOR_ORDERS_TABLE_STYLES.cardActionsWrap}>
-        {renderActions(row.subOrder.id, Boolean(row.subOrder.taxInvoiceNumber))}
+        {renderActions(
+          row.subOrder.id,
+          row.subOrder.status,
+          Boolean(row.subOrder.taxInvoiceNumber),
+        )}
       </div>
     </li>
   );

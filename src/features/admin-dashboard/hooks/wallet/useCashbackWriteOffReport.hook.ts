@@ -19,8 +19,8 @@ export function useCashbackWriteOffReport() {
       const bornOn: "PLATFORM" | "VENDOR" | undefined =
         bornBy === "ALL" ? undefined : bornBy;
       return reportsApi.adminCashbackWriteOffs({
-        from: `${from}T00:00:00.000Z`,
-        to: `${to}T23:59:59.999Z`,
+        from,
+        to,
         bornBy: bornOn,
         page,
         limit: 50,
@@ -30,8 +30,8 @@ export function useCashbackWriteOffReport() {
       const bornOn = bornBy === "ALL" ? undefined : bornBy;
       const bornQuery = bornOn ? `&bornBy=${bornOn}` : "";
       return `${API.reports.adminCashbackWriteOffs}?from=${encodeURIComponent(
-        `${from}T00:00:00.000Z`,
-      )}&to=${encodeURIComponent(`${to}T23:59:59.999Z`)}&format=${format}${bornQuery}`;
+        from,
+      )}&to=${encodeURIComponent(to)}&format=${format}${bornQuery}`;
     },
     documentKey: "admin-cashback-write-offs",
   });

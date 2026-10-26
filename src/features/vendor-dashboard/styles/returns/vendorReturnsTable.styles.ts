@@ -25,4 +25,6 @@ export const vendorReturnsTableStyles = {
   desktopCellMuted: cn(TABLE_DATA_CELL_CLASS, "text-body-sm text-ink-muted"),
   desktopEmptyCell: TABLE_CELL_EMPTY,
   photoButton: "text-body-sm font-medium text-brand hover:underline",
+  restockedText: "text-body-sm text-ink-muted",
+  mobileCardActions: "mt-3",
 } as const;

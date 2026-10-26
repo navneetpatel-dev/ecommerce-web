@@ -29,12 +29,15 @@ import {
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import {
   REASON_CODES,
+  type ReturnQuantityField,
   type ReturnReasonCode,
 } from "../../../hooks/sub-order/useSubOrderReturn.hook";
+import { SubOrderReturnQuantityField } from "./SubOrderReturnQuantityField.component";
 import { SUB_ORDER_CARD_STYLES } from "../../../styles/sub-order/subOrderCard.styles";
 
 interface SubOrderReturnDialogProps {
   returnTarget: OrderItem | null;
+  quantityField: ReturnQuantityField | null;
   reasonCode: ReturnReasonCode;
   reason: string;
   returnType: "REFUND" | "EXCHANGE";
@@ -60,6 +63,7 @@ interface SubOrderReturnDialogProps {
 
 export function SubOrderReturnDialog({
   returnTarget,
+  quantityField,
   reasonCode,
   reason,
   returnType,
@@ -118,6 +122,7 @@ export function SubOrderReturnDialog({
                   </SelectContent>
                 </Select>
               </FormFieldFrame>
+              <SubOrderReturnQuantityField field={quantityField} />
               <FormFieldFrame
                 label={LABELS.returnReasonLabel}
                 htmlFor="return-reason-code"

@@ -17,6 +17,7 @@ export function SubOrderCardContainer({
     <SubOrderCard
       subOrder={subOrder}
       returnTarget={returnDialog.target}
+      returnQuantityField={returnDialog.quantityField}
       reasonCode={returnDialog.reasonCode}
       reason={returnDialog.reason}
       returnType={returnDialog.type}

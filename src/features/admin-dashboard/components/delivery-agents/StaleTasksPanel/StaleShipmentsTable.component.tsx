@@ -3,13 +3,13 @@ import type { StaleShipment } from "@/features/delivery-dashboard";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
-import { deliveryForceConfirmLabels } from "@/shared/constants/labels/deliveryForceConfirm";
-import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
+import type { ForceConfirmFn } from "../../../hooks/delivery-agents/useStaleShipmentForceConfirm.hook";
+import { StaleShipmentForceConfirm } from "./StaleShipmentForceConfirm.component";
 import { staleTasksPanelStyles as styles } from "../../../styles/delivery-agents/staleTasksPanel.styles";
 
 interface StaleShipmentsTableProps {
   shipments: StaleShipment[];
-  onForceConfirm: (shipmentId: string, reason: string) => Promise<void>;
+  onForceConfirm: ForceConfirmFn;
 }
 
 function hoursSince(dateString: string): number {
@@ -52,23 +52,9 @@ export function StaleShipmentsTable({
     (shipment: StaleShipment) => {
       if (shipment.status !== "OUT_FOR_DELIVERY") return null;
       return (
-        <AdminConfirmAction
-          inline
-          label={deliveryForceConfirmLabels.forceConfirmDelivery}
-          title={deliveryForceConfirmLabels.forceConfirmDeliveryTitle}
-          description={deliveryForceConfirmLabels.forceConfirmDeliveryBody}
-          dialogVariant="warning"
-          tone="archive"
-          triggerVariant="outline"
-          triggerClassName={styles.confirmTrigger}
-          requireReason
-          reasonLabel={
-            deliveryForceConfirmLabels.forceConfirmDeliveryReasonLabel
-          }
-          reasonHint={deliveryForceConfirmLabels.forceConfirmDeliveryReasonHint}
-          onConfirm={async (reason?: string) => {
-            await onForceConfirm(shipment.id, reason ?? "");
-          }}
+        <StaleShipmentForceConfirm
+          shipment={shipment}
+          onForceConfirm={onForceConfirm}
         />
       );
     },

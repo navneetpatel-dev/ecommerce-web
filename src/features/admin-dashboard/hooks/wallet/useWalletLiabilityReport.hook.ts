@@ -12,15 +12,15 @@ export function useWalletLiabilityReport() {
   const panel = useReportPanel<WalletLiabilityReport>({
     fetchReport: ({ from, to, page }) =>
       reportsApi.adminWalletLiability({
-        from: `${from}T00:00:00.000Z`,
-        to: `${to}T23:59:59.999Z`,
+        from,
+        to,
         page,
         limit: 50,
       }),
     exportPath: ({ from, to }, format) =>
       reportsApi.exportUrl(API.reports.adminWalletLiability, {
-        from: `${from}T00:00:00.000Z`,
-        to: `${to}T23:59:59.999Z`,
+        from,
+        to,
         format,
       }),
     documentKey: "admin-wallet-liability",

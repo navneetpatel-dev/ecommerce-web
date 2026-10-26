@@ -39,6 +39,7 @@ export function VendorStrip({
           width={20}
           height={20}
           className={vendorStripStyles.logo}
+          style={{ width: "auto", height: "auto" }}
         />
       ) : (
         <div className={vendorStripStyles.avatar}>{businessName.charAt(0)}</div>

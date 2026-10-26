@@ -26,10 +26,14 @@ export const deliveryAdminDispatchApi = {
     apiClient.get<DeliveryShipment[]>(API.deliveryAgents.rtoShipments),
   staleTasks: () =>
     apiClient.get<StaleTasksReport>(API.deliveryAgents.staleTasks),
-  forceConfirmDelivery: (shipmentId: string, reason: string) =>
+  forceConfirmDelivery: (
+    shipmentId: string,
+    reason: string,
+    codCollected = false,
+  ) =>
     apiClient.post<DeliveryShipment>(
       API.deliveryAgents.forceConfirmDelivery(shipmentId),
-      { reason },
+      { reason, codCollected },
     ),
   assignShipment: (shipmentId: string, deliveryAgentId: string) =>
     apiClient.post<DeliveryShipment>(

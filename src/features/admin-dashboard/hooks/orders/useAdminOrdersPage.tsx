@@ -2,7 +2,11 @@
 
 import { useCallback, useState, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
-import { ORDER_STATUS } from "@/shared/constants/statuses";
+import {
+  ORDER_STATUS,
+  PAYMENT_METHOD,
+  PAYMENT_STATUS,
+} from "@/shared/constants/statuses";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { ordersApi } from "@/features/orders";
@@ -49,9 +53,15 @@ export function useAdminOrdersPage(
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
       const name = adminRowLabel(row);
-      const isPending = row.status === ORDER_STATUS.PENDING;
+      // An online order is confirmed by its payment, never by hand before it lands.
+      const awaitingPayment =
+        row.paymentMethod === PAYMENT_METHOD.RAZORPAY &&
+        row.paymentStatus === PAYMENT_STATUS.PENDING;
+      const isPending = row.status === ORDER_STATUS.PENDING && !awaitingPayment;
+      // Once a part has shipped the order can't be cancelled whole.
       const canCancel =
         row.status !== ORDER_STATUS.CANCELLED &&
+        row.status !== ORDER_STATUS.SHIPPED &&
         row.status !== ORDER_STATUS.DELIVERED &&
         row.status !== ORDER_STATUS.RETURNED;
       const confirmOrder = () =>

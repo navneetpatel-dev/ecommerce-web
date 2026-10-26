@@ -1,5 +1,7 @@
 import { useCallback, useRef } from "react";
 import { LABELS } from "@/shared/constants/labels";
+import { ERROR_CODES } from "@/shared/constants/http/errors";
+import { isApiErrorCode } from "@/shared/types/apiError.types";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { checkoutApi } from "../../../api/checkout/checkout.api";
 import type { PaymentNotice } from "../../payment/usePaymentNotice/index";
@@ -48,7 +50,12 @@ export function useRestoreCancelledCheckout({
           }
         } catch (err) {
           await refetchCart();
-          if (!options?.silent) {
+          // Paid after all: the caller takes the customer to the order instead.
+          const paid = isApiErrorCode(
+            err,
+            ERROR_CODES.CHECKOUT_PAID_CANNOT_CANCEL,
+          );
+          if (!options?.silent && !paid) {
             const description = getApiErrorMessage(
               err,
               notice?.description ?? LABELS.couldNotRestoreCart,

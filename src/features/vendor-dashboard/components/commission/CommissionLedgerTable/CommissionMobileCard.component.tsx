@@ -37,7 +37,9 @@ export function CommissionMobileCard({ row }: CommissionMobileCardProps) {
           </dd>
         </div>
         <div>
-          <dt className={commissionLedgerTableStyles.mobileLabel}>GST</dt>
+          <dt className={commissionLedgerTableStyles.mobileLabel}>
+            GST on sale
+          </dt>
           <dd className={commissionLedgerTableStyles.mobileValMono}>
             {row.gstAmountLabel}
           </dd>

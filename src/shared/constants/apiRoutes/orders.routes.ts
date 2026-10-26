@@ -23,6 +23,7 @@ export const returnsRoutes = {
   creditNote: (id: string) => `/api/returns/${id}/credit-note`,
   debitNote: (id: string) => `/api/returns/${id}/debit-note`,
   retryRefund: (id: string) => `/api/returns/${id}/retry-refund`,
+  restock: (id: string) => `/api/returns/${id}/restock`,
   reschedulePickup: (id: string) => `/api/returns/${id}/reschedule-pickup`,
 } as const;
 

@@ -9,7 +9,8 @@ export const ORDER_LABELS: Record<string, string> = {
   SHIPPED: "Shipped",
   DELIVERED: "Delivered",
   CANCELLED: "Cancelled",
-  RETURNED: "Returned",
+  // Came back undelivered (RTO); a customer's own return keeps the order Delivered.
+  RETURNED: "Returned to seller",
 };
 
 export const PAYMENT_LABELS_COMPACT: Record<string, string> = {

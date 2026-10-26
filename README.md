@@ -29,8 +29,20 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Pushes to `main` run CI and then deploy to AWS ECS Fargate
+(`.github/workflows/deploy.yml`): the app is built into a standalone Next.js
+Docker image with `NEXT_PUBLIC_*` values baked in from GitHub repository
+variables, pushed to ECR, and rolled out behind the load balancer.
+Health check: `GET /healthz`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Infrastructure, one-time setup, rollbacks and logs are documented in the backend
+repo: `ecommerce-backend/docs/DEPLOYMENT.md`.
+
+Local production build:
+
+```bash
+NEXT_PUBLIC_API_URL=https://api.example.com NEXT_PUBLIC_SITE_URL=https://shop.example.com npm run build
+docker build -t ecommerce-web --build-arg NEXT_PUBLIC_API_URL=… --build-arg NEXT_PUBLIC_SITE_URL=… .
+```

@@ -22,6 +22,8 @@ export const SubOrderCardItemRow = memo(function SubOrderCardItemRow({
   onOpenReturn,
 }: SubOrderCardItemRowProps) {
   const attrs = orderLineVariantLabel(item);
+  // The part is delivered; the server says whether this line can still be returned.
+  const showReturn = canReturn && item.canReturn !== false;
   const handleReturnClick = () => onOpenReturn(item);
   // As the customer saw it, GST included (older payloads: before GST).
   const subtotalFormatted = formatInr(
@@ -65,7 +67,7 @@ export const SubOrderCardItemRow = memo(function SubOrderCardItemRow({
           {qtyFormatted}
         </p>
 
-        {canReturn ? (
+        {showReturn ? (
           <Button
             type="button"
             variant="ghost"

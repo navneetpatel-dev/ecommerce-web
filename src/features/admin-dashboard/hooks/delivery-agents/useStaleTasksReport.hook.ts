@@ -26,8 +26,12 @@ export function useStaleTasksReport() {
   const total = report.shipments.length + report.pickups.length;
 
   const forceConfirmDelivery = useCallback(
-    async (shipmentId: string, reason: string) => {
-      await deliveryAdminApi.forceConfirmDelivery(shipmentId, reason);
+    async (shipmentId: string, reason: string, codCollected = false) => {
+      await deliveryAdminApi.forceConfirmDelivery(
+        shipmentId,
+        reason,
+        codCollected,
+      );
       await loadReport();
     },
     [loadReport],

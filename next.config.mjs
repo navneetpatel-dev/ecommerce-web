@@ -59,6 +59,11 @@ const remotePatterns = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // The Docker image runs the minimal standalone server (`node server.js`).
+  // Opt-in so `npm run build && npm start` keeps working outside Docker.
+  ...(process.env.NEXT_OUTPUT_STANDALONE === "true"
+    ? { output: "standalone" }
+    : {}),
   async redirects() {
     return [
       {

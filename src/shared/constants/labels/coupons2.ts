@@ -90,6 +90,9 @@ export const coupons2Labels = {
   placeOrderFailedTitle: "Could not place order",
   placeOrderFailedBody: "Could not place order. Please try again.",
   itemsUnavailableTitle: "Items unavailable",
+  checkoutTotalChangedTitle: "Your total has changed",
+  checkoutTotalChangedBody:
+    "A price, coupon or delivery charge changed since you last saw your total. Check the updated total and place your order again.",
   backToPayment: "Back to payment",
   preparingSummary: "Preparing your summary",
   calculatingShippingTaxes: "Calculating shipping and taxes for your order…",

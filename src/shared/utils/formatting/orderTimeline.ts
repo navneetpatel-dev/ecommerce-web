@@ -22,7 +22,8 @@ export const STEP_LABELS: Record<string, string> = {
   [ORDER_STATUS.SHIPPED]: "Shipped",
   [ORDER_STATUS.DELIVERED]: "Delivered",
   [ORDER_STATUS.CANCELLED]: "Cancelled",
-  [ORDER_STATUS.RETURNED]: "Returned",
+  // Came back undelivered (RTO); a customer's own return keeps the part Delivered.
+  [ORDER_STATUS.RETURNED]: "Returned to seller",
 };
 
 export function formatShortDate(value: string) {

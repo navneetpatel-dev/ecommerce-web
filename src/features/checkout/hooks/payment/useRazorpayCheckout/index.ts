@@ -8,6 +8,8 @@ import {
 import { navigate } from "@/shared/utils/navigation/navigate";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
+import { ERROR_CODES } from "@/shared/constants/http/errors";
+import { isApiErrorCode } from "@/shared/types/apiError.types";
 import type { CheckoutPaymentPhase } from "../useCheckoutPaymentPhase.hook";
 import type { PlaceOrderResult, LaunchRazorpayPaymentHelpers } from "./types";
 
@@ -48,6 +50,15 @@ export async function launchRazorpayPayment(
   }
 
   const theme = getRazorpayCheckoutTheme();
+  // A failed attempt leaves Razorpay's window open for a retry on the same order, so it
+  // is only remembered here; the order is cancelled when the customer closes the window.
+  let lastFailure: string | null = null;
+
+  const goToConfirmation = () => {
+    onCheckoutComplete?.(result.orderId);
+    onOrderPlaced();
+    navigate(router, PATHS.orderConfirmation(result.orderId));
+  };
 
   const rzp = new window.Razorpay({
     key: keyId,
@@ -79,11 +90,25 @@ export async function launchRazorpayPayment(
       animation: true,
       ondismiss: () => {
         onPhaseChange?.("idle");
-        void restoreCancelledCheckout(result.orderId, {
-          variant: "info",
-          title: LABELS.paymentCancelledTitle,
-          description: LABELS.paymentCancelledBody,
-        });
+        const notice = lastFailure
+          ? {
+              variant: "danger" as const,
+              title: LABELS.paymentFailedTitle,
+              description: lastFailure,
+            }
+          : {
+              variant: "info" as const,
+              title: LABELS.paymentCancelledTitle,
+              description: LABELS.paymentCancelledBody,
+            };
+        restoreCancelledCheckout(result.orderId, notice).catch(
+          (err: unknown) => {
+            // Paid after all (e.g. a UPI approval as the window closed): show the order.
+            if (isApiErrorCode(err, ERROR_CODES.CHECKOUT_PAID_CANNOT_CANCEL)) {
+              goToConfirmation();
+            }
+          },
+        );
       },
     },
     handler: async (response) => {
@@ -112,12 +137,7 @@ export async function launchRazorpayPayment(
   });
 
   rzp.on("payment.failed", (resp) => {
-    onPhaseChange?.("idle");
-    void restoreCancelledCheckout(result.orderId, {
-      variant: "danger",
-      title: LABELS.paymentFailedTitle,
-      description: resp.error?.description || LABELS.paymentFailedBody,
-    });
+    lastFailure = resp.error?.description || LABELS.paymentFailedBody;
   });
 
   rzp.open();

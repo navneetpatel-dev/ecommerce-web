@@ -35,6 +35,7 @@ export interface ReturnRequest {
   walletRefundAmount?: number;
   razorpayRefundAmount?: number;
   receivedAt?: string | null;
+  restockedAt?: string | null;
   resolvedAt: string | null;
   createdAt: string;
   productName: string | null;

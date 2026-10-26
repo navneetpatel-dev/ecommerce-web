@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { Button } from "@/shared/components/ui/button";
 import {
   RETURN_STATUS,
   REFUND_STATUS,
@@ -8,11 +7,10 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { returnsApi } from "@/features/returns";
-import { notifyError } from "@/shared/stores/notifications/errorToast.store";
-import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { AdminAssignDeliveryAgentAction } from "../../components/delivery-agents/AdminAssignDeliveryAgentAction.component";
 import { adminRowLabel } from "../shared/adminRowLabel";
+import { buildReturnDocumentActions } from "./returnDocumentActions";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 
 export function buildReturnRowActions(
@@ -31,22 +29,6 @@ export function buildReturnRowActions(
       .transition(String(row.id), RETURN_STATUS.REJECTED, reason)
       .then(reload);
 
-  const handleDownloadCreditNote = () => {
-    void returnsApi
-      .downloadCreditNote(String(row.id))
-      .catch((error: unknown) => {
-        notifyError(getApiErrorMessage(error, LABELS.downloadFailed));
-      });
-  };
-
-  const handleDownloadDebitNote = () => {
-    void returnsApi
-      .downloadDebitNote(String(row.id))
-      .catch((error: unknown) => {
-        notifyError(getApiErrorMessage(error, LABELS.downloadFailed));
-      });
-  };
-
   const handleRetryRefund = () =>
     returnsApi.retryRefund(String(row.id)).then(reload);
 
@@ -54,36 +36,12 @@ export function buildReturnRowActions(
   const handleSchedulePickup = transitionTo(RETURN_STATUS.PICKUP_SCHEDULED);
   const handleMarkReceived = transitionTo(RETURN_STATUS.RECEIVED);
   const handleCloseReturn = transitionTo(RETURN_STATUS.CLOSED);
+  const handleRestock = () => returnsApi.restock(String(row.id)).then(reload);
 
   const handleDeleteReturn = () =>
     returnsApi.delete(String(row.id)).then(reload);
 
-  if (row.creditNoteNumber) {
-    buttons.push(
-      <Button
-        key="cn"
-        type="button"
-        variant="outline"
-        size="sm"
-        onClick={handleDownloadCreditNote}
-      >
-        {LABELS.downloadCreditNote}
-      </Button>,
-    );
-  }
-  if (row.debitNoteNumber) {
-    buttons.push(
-      <Button
-        key="dn"
-        type="button"
-        variant="outline"
-        size="sm"
-        onClick={handleDownloadDebitNote}
-      >
-        {LABELS.downloadDebitNote}
-      </Button>,
-    );
-  }
+  buttons.push(...buildReturnDocumentActions(row));
 
   if (
     row.refundStatus === REFUND_STATUS.FAILED &&
@@ -183,17 +141,34 @@ export function buildReturnRowActions(
     );
   }
 
-  buttons.push(
-    <AdminConfirmAction
-      key="delete"
-      label={LABELS.delete}
-      dialogVariant="danger"
-      tone="danger"
-      title={LABELS.confirmDeleteReturnTitle}
-      description={formatLabel(LABELS.confirmDeleteReturnBody, { name })}
-      onConfirm={handleDeleteReturn}
-    />,
-  );
+  // Never automatic: restock only what is fit to resell, once the item is picked up.
+  if (row.receivedAt && !row.restockedAt) {
+    buttons.push(
+      <AdminConfirmAction
+        key="restock"
+        label={LABELS.returnRestock}
+        tone="neutral"
+        title={LABELS.confirmRestockReturnTitle}
+        description={formatLabel(LABELS.confirmRestockReturnBody, { name })}
+        onConfirm={handleRestock}
+      />,
+    );
+  }
+
+  // Only a request nothing came of (never approved): the rest carry refunds and notes.
+  if (status === RETURN_STATUS.REQUESTED || status === RETURN_STATUS.REJECTED) {
+    buttons.push(
+      <AdminConfirmAction
+        key="delete"
+        label={LABELS.delete}
+        dialogVariant="danger"
+        tone="danger"
+        title={LABELS.confirmDeleteReturnTitle}
+        description={formatLabel(LABELS.confirmDeleteReturnBody, { name })}
+        onConfirm={handleDeleteReturn}
+      />,
+    );
+  }
 
   return <>{buttons}</>;
 }

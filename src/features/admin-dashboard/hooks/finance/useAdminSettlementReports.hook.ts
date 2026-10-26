@@ -32,10 +32,8 @@ export function useAdminSettlementReports() {
   const [recon, setRecon] = useState<ReconciliationReport | null>(null);
   const runRef = useRef<Promise<void> | null>(null);
 
-  const buildRange = () => ({
-    from: `${from}T00:00:00.000Z`,
-    to: `${to}T23:59:59.999Z`,
-  });
+  // Plain dates: the server reads each as a whole Indian calendar day.
+  const buildRange = () => ({ from, to });
 
   const load = async () => {
     setLoading(true);

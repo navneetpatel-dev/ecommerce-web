@@ -3,6 +3,7 @@ import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { vendorReturnsTableStyles } from "../../../styles/returns/vendorReturnsTable.styles";
 import type { VendorReturnRowViewModel } from "../../../hooks/returns/useVendorReturnsTablePresentation.hook";
 import { VendorReturnPhotosCell } from "./VendorReturnPhotosCell.component";
+import { VendorReturnRestockAction } from "./VendorReturnRestockAction.component";
 
 interface VendorReturnsTableRowProps {
   row: VendorReturnRowViewModel;
@@ -31,6 +32,9 @@ export function VendorReturnsTableRow({ row }: VendorReturnsTableRowProps) {
       </TableCell>
       <TableCell className={vendorReturnsTableStyles.desktopCell}>
         <StatusBadge status={row.status} label={row.statusLabel} />
+      </TableCell>
+      <TableCell className={vendorReturnsTableStyles.desktopCell}>
+        <VendorReturnRestockAction row={row} />
       </TableCell>
     </TableRow>
   );

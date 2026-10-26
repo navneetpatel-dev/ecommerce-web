@@ -66,6 +66,8 @@ export const checkoutApi = {
     walletAmountToUse?: number;
     giftWrap?: boolean;
     giftMessage?: string;
+    /** The grand total the customer saw; the order is refused if it changed. */
+    expectedGrandTotal?: number;
   }) => apiClient.post<PlaceOrderResponse>(API.checkout.create, body),
   /** UX confirmation only — webhook is the source of truth for PAID. */
   verifyPayment: (payload: VerifyPaymentPayload) =>

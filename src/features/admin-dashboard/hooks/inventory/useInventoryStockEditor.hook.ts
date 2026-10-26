@@ -21,7 +21,7 @@ export function useInventoryStockEditor(
     setPending(true);
     setError(null);
     try {
-      await inventoryApi.updateStock(productId, nextStock);
+      await inventoryApi.updateStock(productId, nextStock, currentStock);
       onSaved();
     } catch (saveError) {
       setError(getApiErrorMessage(saveError, "Could not update stock."));

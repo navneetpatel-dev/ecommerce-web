@@ -29,7 +29,7 @@ export const tables2Labels = {
   couldNotLoadDocuments: "Could not load documents.",
   confirmApproveReturnTitle: "Approve this return?",
   confirmApproveReturnBody:
-    'Approve return request "{name}" and continue the refund flow?',
+    'Approve return request "{name}"? The customer is refunded once the item is picked up.',
   confirmRejectReturnTitle: "Reject this return?",
   confirmRejectReturnBody:
     'Reject return request "{name}"? Your reason will be shown to the customer on their return.',

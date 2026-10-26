@@ -13,4 +13,10 @@ export const deliveryForceConfirmLabels = {
   forceConfirmDeliveryReasonHint:
     "Explain the proof of delivery you're relying on (at least 3 characters).",
   forceConfirmDeliverySuccess: "Delivery force-confirmed.",
+  forceConfirmCodCollected: "Force confirm · cash collected",
+  forceConfirmCodNotCollected: "Force confirm · cash not collected",
+  forceConfirmCodCollectedBody:
+    "Marks the shipment DELIVERED without OTP verification, with the cash on delivery collected: the agent owes it. Only with proof the cash was paid. Audited.",
+  forceConfirmCodNotCollectedBody:
+    "Marks the shipment DELIVERED without OTP verification, with no cash collected: the order stays unpaid and the agent owes nothing for it. Audited.",
 } as const;

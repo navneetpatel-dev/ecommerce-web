@@ -1,11 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
   Select,
   SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
@@ -15,18 +13,16 @@ import {
 } from "@/shared/components/DataTable/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
-import { reportsEngineApi } from "@/features/reports";
-import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
-import {
-  SUB_ORDER_STATUS_CONFIRMED,
-  SUB_ORDER_STATUS_SHIPPED,
-  SUB_ORDER_STATUS_CANCELLED,
-} from "../../../constants/orders/subOrderStatuses";
+import { AdminConfirmAction } from "@/features/admin-dashboard";
+import { SUB_ORDER_STATUS_SHIPPED } from "../../../constants/orders/subOrderStatuses";
+import { useSubOrderActions } from "../../../hooks/orders/useSubOrderActions.hook";
 import { ShipTrackingNumberFields } from "./ShipTrackingNumberFields.component";
+import { SubOrderStatusOptions } from "./SubOrderStatusOptions.component";
 import { VENDOR_ORDERS_TABLE_STYLES } from "../../../styles/orders/vendorOrdersTable.styles";
 
 interface SubOrderActionsProps {
   subOrderId: string;
+  status: string;
   canDownloadInvoice?: boolean;
   updatingId: string | null;
   onSetUpdatingId: (id: string | null) => void;
@@ -35,61 +31,16 @@ interface SubOrderActionsProps {
 
 const DEFAULT_NEXT_STATUS = SUB_ORDER_STATUS_SHIPPED;
 
-/** Inline status editor for a vendor sub-order row. */
+/**
+ * Inline status editor for a vendor sub-order row. Only the moves the backend accepts
+ * from the current status are offered, and cancelling (restock + refund, irreversible)
+ * goes through a confirmation dialog.
+ */
 export function SubOrderActions(props: SubOrderActionsProps) {
-  const {
-    subOrderId,
-    canDownloadInvoice = false,
-    updatingId,
-    onSetUpdatingId,
-    onStatusChange,
-  } = props;
-  const isEditing = updatingId === subOrderId;
-  const [invoicePending, setInvoicePending] = useState(false);
-  const [invoiceError, setInvoiceError] = useState<string | null>(null);
-  const [pendingShipment, setPendingShipment] = useState(false);
-  const [trackingId, setTrackingId] = useState("");
+  const { canDownloadInvoice = false } = props;
+  const actions = useSubOrderActions(props);
 
-  const handleStatusSelect = (value: string) => {
-    if (value === SUB_ORDER_STATUS_SHIPPED) {
-      setPendingShipment(true);
-      return;
-    }
-    onStatusChange(subOrderId, value);
-  };
-
-  const confirmShipment = () => {
-    const trimmed = trackingId.trim();
-    if (!trimmed) return;
-    onStatusChange(subOrderId, SUB_ORDER_STATUS_SHIPPED, trimmed);
-  };
-
-  const startEditing = () => {
-    onSetUpdatingId(subOrderId);
-  };
-
-  const cancelEditing = () => {
-    setPendingShipment(false);
-    setTrackingId("");
-    onSetUpdatingId(null);
-  };
-
-  const downloadInvoice = async () => {
-    setInvoicePending(true);
-    setInvoiceError(null);
-    try {
-      await reportsEngineApi.vendorSubOrderInvoice(subOrderId);
-    } catch (err) {
-      setInvoiceError(getApiErrorMessage(err, LABELS.genericActionFailed));
-    } finally {
-      setInvoicePending(false);
-    }
-  };
-  const handleDownloadInvoice = () => {
-    void downloadInvoice();
-  };
-
-  if (!isEditing) {
+  if (!actions.isEditing) {
     return (
       <div className={VENDOR_ORDERS_TABLE_STYLES.actionsRoot}>
         <TableRowActions>
@@ -99,40 +50,54 @@ export function SubOrderActions(props: SubOrderActionsProps) {
                 size="sm"
                 variant="outline"
                 className={tableMenuButtonClass("neutral")}
-                loading={invoicePending}
-                onClick={handleDownloadInvoice}
+                loading={actions.invoicePending}
+                onClick={actions.handleDownloadInvoice}
               >
                 {LABELS.downloadTaxInvoice}
               </Button>
             </TableRowAction>
           ) : null}
-          <TableRowAction>
-            <Button
-              size="sm"
-              variant="outline"
-              className={tableMenuButtonClass("edit")}
-              onClick={startEditing}
-            >
-              {LABELS.updateStatus}
-            </Button>
-          </TableRowAction>
+          {actions.canEditStatus ? (
+            <TableRowAction>
+              <Button
+                size="sm"
+                variant="outline"
+                className={tableMenuButtonClass("edit")}
+                onClick={actions.startEditing}
+              >
+                {LABELS.updateStatus}
+              </Button>
+            </TableRowAction>
+          ) : null}
+          {actions.canCancel ? (
+            <TableRowAction>
+              <AdminConfirmAction
+                label={LABELS.cancelSubOrder}
+                tone="danger"
+                dialogVariant="danger"
+                title={LABELS.confirmCancelSubOrderTitle}
+                description={LABELS.confirmCancelSubOrderBody}
+                onConfirm={actions.confirmCancel}
+              />
+            </TableRowAction>
+          ) : null}
         </TableRowActions>
-        {invoiceError ? (
+        {actions.invoiceError ? (
           <p role="alert" className={VENDOR_ORDERS_TABLE_STYLES.actionsError}>
-            {invoiceError}
+            {actions.invoiceError}
           </p>
         ) : null}
       </div>
     );
   }
 
-  if (pendingShipment) {
+  if (actions.pendingShipment) {
     return (
       <ShipTrackingNumberFields
-        trackingId={trackingId}
-        onTrackingIdChange={setTrackingId}
-        onConfirm={confirmShipment}
-        onCancel={cancelEditing}
+        trackingId={actions.trackingId}
+        onTrackingIdChange={actions.setTrackingId}
+        onConfirm={actions.confirmShipment}
+        onCancel={actions.cancelEditing}
       />
     );
   }
@@ -142,7 +107,7 @@ export function SubOrderActions(props: SubOrderActionsProps) {
       <TableRowAction>
         <Select
           defaultValue={DEFAULT_NEXT_STATUS}
-          onValueChange={handleStatusSelect}
+          onValueChange={actions.handleStatusSelect}
         >
           <SelectTrigger
             aria-label={LABELS.selectStatus}
@@ -151,15 +116,7 @@ export function SubOrderActions(props: SubOrderActionsProps) {
             <SelectValue placeholder={LABELS.selectStatus} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={SUB_ORDER_STATUS_CONFIRMED}>
-              {LABELS.confirm}
-            </SelectItem>
-            <SelectItem value={SUB_ORDER_STATUS_SHIPPED}>
-              {LABELS.orderActionShip}
-            </SelectItem>
-            <SelectItem value={SUB_ORDER_STATUS_CANCELLED}>
-              {LABELS.cancel}
-            </SelectItem>
+            <SubOrderStatusOptions statuses={actions.nextStatuses} />
           </SelectContent>
         </Select>
       </TableRowAction>
@@ -168,9 +125,9 @@ export function SubOrderActions(props: SubOrderActionsProps) {
           size="sm"
           variant="outline"
           className={tableMenuButtonClass("neutral")}
-          onClick={cancelEditing}
+          onClick={actions.cancelEditing}
         >
-          {LABELS.cancel}
+          {LABELS.close}
         </Button>
       </TableRowAction>
     </TableRowActions>

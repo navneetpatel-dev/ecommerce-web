@@ -35,9 +35,10 @@ export const inventoryApi = {
     );
     return rows.map(mapLowStockRow);
   },
-  updateStock: (variantId: string, stock: number) =>
+  /** `expectedStock`: the stock the editor showed, so concurrent order changes survive. */
+  updateStock: (variantId: string, stock: number, expectedStock?: number) =>
     apiClient.patch<LowStockVariantResponse>(
       API.inventory.variantStock(variantId),
-      { stock },
+      { stock, expectedStock },
     ),
 };

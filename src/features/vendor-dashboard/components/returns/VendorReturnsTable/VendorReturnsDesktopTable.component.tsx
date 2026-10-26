@@ -42,6 +42,9 @@ export function VendorReturnsDesktopTable({
             <TableHead className={vendorReturnsTableStyles.desktopCell}>
               {LABELS.status}
             </TableHead>
+            <TableHead className={vendorReturnsTableStyles.desktopCell}>
+              {LABELS.actions}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <VendorReturnsTableBody rows={rows} isEmpty={isEmpty} />
