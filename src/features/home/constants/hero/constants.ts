@@ -21,6 +21,23 @@ export const DEFAULT_SLIDES: HeroSlide[] = [
     ctaHref: PATHS.products,
     secondaryCtaLabel: "New arrivals",
     secondaryCtaHref: PATHS.productsNewest,
+    imageSrc:
+      "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&auto=format&fit=crop&q=80",
+    imageAlt: "Boutique storefront with curated products",
+  },
+  {
+    id: "curated-collections",
+    eyebrow: "Featured",
+    headline: "Curated goods for modern living",
+    subheadline:
+      "Handcrafted lifestyle goods, timeless apparel, and artisan decor shipped directly from makers.",
+    ctaLabel: "Explore collections",
+    ctaHref: PATHS.productsNewest,
+    secondaryCtaLabel: "Top rated",
+    secondaryCtaHref: PATHS.products,
+    imageSrc:
+      "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1600&auto=format&fit=crop&q=80",
+    imageAlt: "Artisan marketplace storefront",
   },
 ];
 
