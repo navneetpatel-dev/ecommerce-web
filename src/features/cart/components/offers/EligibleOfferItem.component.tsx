@@ -21,7 +21,7 @@ export function EligibleOfferItem({
   return (
     <li className={styles.offerRow}>
       <span className={styles.offerCode}>
-        {offer.code}
+        {offer.label}
         {offer.discountText}
       </span>
       <Button

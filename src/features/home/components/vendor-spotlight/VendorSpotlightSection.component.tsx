@@ -113,7 +113,11 @@ export function VendorSpotlightSection({
                 </p>
               </div>
 
-              <RatingStars value={vendor.avgRating || 4} size="sm" />
+              <RatingStars
+                value={vendor.avgRating}
+                count={vendor.avgRating > 0 ? undefined : 0}
+                size="sm"
+              />
             </div>
           </Link>
         ))}

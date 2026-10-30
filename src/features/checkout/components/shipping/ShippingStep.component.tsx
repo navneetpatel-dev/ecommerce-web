@@ -41,7 +41,8 @@ export function ShippingStep({
 
   // A vendor whose picked method has no rate for this address cannot be quoted, so the
   // review step would fail after payment. Block it here and say why.
-  const canContinueWithRates = canContinue && !hasUnservableVendor;
+  const canContinueWithRates =
+    canContinue && !hasUnservableVendor && !isRateLookupPending;
 
   return (
     <div className={SHIPPING_STEP_STYLES.root}>
@@ -75,9 +76,11 @@ export function ShippingStep({
       <DisabledActionHint
         disabled={!canContinueWithRates}
         message={
-          hasUnservableVendor
-            ? LABELS.noRateForSelectedMethodHint
-            : "Select a shipping method for each vendor to continue."
+          isRateLookupPending
+            ? LABELS.checkingDeliveryOptions
+            : hasUnservableVendor
+              ? LABELS.noRateForSelectedMethodHint
+              : "Select a shipping method for each vendor to continue."
         }
         className={SHIPPING_STEP_STYLES.actionHint}
       >

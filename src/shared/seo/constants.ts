@@ -15,9 +15,9 @@ export const SITE = {
  */
 export const SEO_PAGE_COPY = {
   home: {
-    title: "Premium T-Shirts Online",
+    title: "Shop the Marketplace",
     description:
-      "Shop premium t-shirts from verified sellers with fast delivery and easy returns.",
+      "Shop from verified sellers across home, fashion, and everyday essentials, with fast delivery and easy returns.",
   },
   products: {
     title: "All Products",

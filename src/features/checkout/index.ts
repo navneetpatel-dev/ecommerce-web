@@ -16,3 +16,9 @@ export {
   getRazorpayCheckoutMethods,
 } from "./utils/payment/razorpayCheckoutConfig";
 export { getRazorpayCheckoutTheme } from "./utils/payment/razorpayTheme";
+export { launchRazorpayPayment } from "./hooks/payment/useRazorpayCheckout";
+export type { PaymentNotice } from "./hooks/payment/usePaymentNotice";
+export type {
+  PlaceOrderResult,
+  LaunchRazorpayPaymentHelpers,
+} from "./hooks/payment/useRazorpayCheckout/types";

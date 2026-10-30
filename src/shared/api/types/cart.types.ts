@@ -71,6 +71,8 @@ export interface Cart {
 
 export interface AppliedCouponSummary {
   code: string;
+  /** Shopper-facing offer name. The code stays the value sent back to the API. */
+  name?: string;
   discount: number;
   cashbackAmount?: number;
   type?: string;

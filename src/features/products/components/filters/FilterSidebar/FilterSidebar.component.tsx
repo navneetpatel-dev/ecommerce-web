@@ -55,9 +55,10 @@ export function FilterSidebar({
         <FilterSidebarHeader hasFilters={hasFilters} onClear={onClear} />
 
         {hideRatingFilter ? (
-          <p className={filterSidebarStyles.searchModeNote}>
-            {LABELS.ratingFilterUnavailableDuringSearch}
-          </p>
+          <div className={filterSidebarStyles.searchModeNote}>
+            <p>{LABELS.sortUnavailableDuringSearch}</p>
+            <p className="mt-2">{LABELS.ratingFilterUnavailableDuringSearch}</p>
+          </div>
         ) : null}
 
         <Accordion

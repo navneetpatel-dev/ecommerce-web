@@ -35,23 +35,35 @@ function starElement(
 }
 
 export function RatingStars({ value, count, size = "sm" }: RatingStarsProps) {
-  const fullStars = Math.floor(value);
-  const hasHalf = value - fullStars >= 0.25 && value - fullStars < 0.75;
-  const adjustedFull = value - fullStars >= 0.75 ? fullStars + 1 : fullStars;
+  const noReviews = count === 0;
+  const shownValue = noReviews ? 0 : value;
+  const fullStars = Math.floor(shownValue);
+  const hasHalf =
+    shownValue - fullStars >= 0.25 && shownValue - fullStars < 0.75;
+  const adjustedFull =
+    shownValue - fullStars >= 0.75 ? fullStars + 1 : fullStars;
   const starSize =
     size === "md" ? ratingStarsStyles.sizeMd : ratingStarsStyles.sizeSm;
   const stars = [1, 2, 3, 4, 5].map((i) =>
     starElement(i, adjustedFull, hasHalf, starSize),
   );
-  const countElement = count !== undefined && (
-    <span className={ratingStarsStyles.count}>({count})</span>
+  const countElement = noReviews ? (
+    <span className={ratingStarsStyles.count}>{LABELS.noReviewsYet}</span>
+  ) : (
+    count !== undefined && (
+      <span className={ratingStarsStyles.count}>({count})</span>
+    )
   );
 
   return (
     <div className={ratingStarsStyles.container}>
       {/* The visual stars convey nothing to assistive tech: announce the value. */}
       <span className={ratingStarsStyles.srOnly}>
-        {formatLabel(LABELS.ratingOutOfFive, { value: value.toFixed(1) })}
+        {noReviews
+          ? LABELS.noReviewsYet
+          : formatLabel(LABELS.ratingOutOfFive, {
+              value: shownValue.toFixed(1),
+            })}
       </span>
       <div className={ratingStarsStyles.starsRow} aria-hidden>
         {stars}

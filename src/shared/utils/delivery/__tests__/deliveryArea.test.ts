@@ -114,7 +114,7 @@ describe("isDeliveryAreaBlocked", () => {
 describe("delivery area copy", () => {
   it("reads one day differently from a range", () => {
     expect(deliveryEtaLabel("560001", { min: 3, max: 3 })).toBe(
-      "Delivers to 560001 in 3 day(s)",
+      "Delivers to 560001 in 3 days",
     );
     expect(deliveryEtaLabel("560001", { min: 2, max: 5 })).toBe(
       "Delivers to 560001 in 2–5 days",

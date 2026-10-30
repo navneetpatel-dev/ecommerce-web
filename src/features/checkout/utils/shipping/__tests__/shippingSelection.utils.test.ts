@@ -61,6 +61,17 @@ describe("resolveShippingSelectionStatus", () => {
     expect(status.unservableVendorIds).toEqual([]);
   });
 
+  it("flags an empty rate list even when nothing is selected", () => {
+    const status = resolveShippingSelectionStatus(
+      ["vendor-1"],
+      {},
+      { "vendor-1": [] },
+    );
+
+    expect(status.unservableVendorIds).toEqual(["vendor-1"]);
+    expect(status.isRateLookupPending).toBe(false);
+  });
+
   it("leaves the not-yet-picked case to the select-a-method hint", () => {
     const status = resolveShippingSelectionStatus(
       ["vendor-1"],

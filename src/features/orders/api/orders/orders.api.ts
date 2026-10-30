@@ -52,5 +52,14 @@ export const subOrdersApi = {
     return unwrapPaginatedList(res);
   },
   updateStatus: (id: string, body: { status: string; trackingId?: string }) =>
-    apiClient.patch<{ message: string }>(API.suborders.status(id), body),
+    apiClient.patch<{
+      id: string;
+      status: string;
+      taxInvoiceNumber?: string | null;
+      shipment?: {
+        id: string;
+        status: string;
+        trackingId?: string | null;
+      } | null;
+    }>(API.suborders.status(id), body),
 };

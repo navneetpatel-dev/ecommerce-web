@@ -80,7 +80,7 @@ export function PriceAvailabilityBlock({
             })}
           </p>
         ) : null}
-        {hsnCode ? (
+        {hsnCode && !/default/i.test(hsnCode) ? (
           <p className={PRODUCT_DETAIL_CONTENT_STYLES.hsnText}>
             {formatLabel(LABELS.hsnCodeLabel, {
               code: hsnCode,
@@ -94,7 +94,7 @@ export function PriceAvailabilityBlock({
             })}
           </p>
         ) : null}
-        {sku ? (
+        {sku && !/^[0-9a-f-]{16,}$/i.test(sku.trim()) ? (
           <p className={PRODUCT_DETAIL_CONTENT_STYLES.skuText}>
             {LABELS.sku}: {sku}
           </p>

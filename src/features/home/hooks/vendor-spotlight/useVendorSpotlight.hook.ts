@@ -21,7 +21,13 @@ export function useVendorSpotlight() {
     return Array.from(
       new Map(
         (data?.items ?? [])
-          .filter((item) => item.vendor?.id)
+          .filter(
+            (item) =>
+              Boolean(item.vendor?.id) &&
+              Boolean(item.name) &&
+              item.name.trim().toLowerCase() !==
+                item.vendor.businessName.trim().toLowerCase(),
+          )
           .map((item) => [
             item.vendor.id,
             {

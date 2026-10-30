@@ -4,6 +4,7 @@ import { EligibleOfferItem } from "./EligibleOfferItem.component";
 
 interface Offer {
   code: string;
+  name?: string;
   discount: number;
   type: string;
 }

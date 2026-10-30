@@ -29,7 +29,9 @@ export function AppliedCouponChipItem({
   return (
     <li className={styles.chipRow}>
       <p className={styles.chipText}>
-        {formatLabel(LABELS.couponAppliedLabel, { code: coupon.code })}
+        {formatLabel(LABELS.couponAppliedLabel, {
+          code: coupon.name || coupon.code,
+        })}
         {discountText}
       </p>
       <Button

@@ -11,6 +11,7 @@ export const checkoutRoutes = {
   quote: "/api/checkout/quote",
   create: "/api/checkout",
   cancel: "/api/checkout/cancel",
+  resume: "/api/checkout/resume",
   verify: "/api/checkout/verify",
 } as const;
 

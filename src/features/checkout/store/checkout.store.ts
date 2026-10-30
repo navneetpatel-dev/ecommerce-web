@@ -27,6 +27,8 @@ interface CheckoutState {
   ensureDefaultShippingMethods: (vendorIds: string[]) => void;
   /** Drop methods for vendors no longer in the basket (the quote keys off the rest). */
   pruneShippingMethods: (vendorIds: string[]) => void;
+  /** Drop every method when the delivery pincode changes so a prior area cannot stick. */
+  clearShippingMethods: () => void;
   setCouponCode: (code: string | null, opts?: { manual?: boolean }) => void;
   setPaymentMethod: (method: string | null) => void;
   setWalletAmountToUse: (amount: number) => void;
@@ -84,6 +86,7 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
         ? s
         : { shippingMethodByVendor: Object.fromEntries(kept) };
     }),
+  clearShippingMethods: () => set({ shippingMethodByVendor: {} }),
   setCouponCode: (code, opts) =>
     set((s) => ({
       appliedCouponCode: code,

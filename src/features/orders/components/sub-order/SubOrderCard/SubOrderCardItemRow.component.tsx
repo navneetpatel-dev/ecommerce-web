@@ -77,6 +77,10 @@ export const SubOrderCardItemRow = memo(function SubOrderCardItemRow({
           >
             {LABELS.requestReturn}
           </Button>
+        ) : canReturn && item.returnWindowClosed ? (
+          <p className={SUB_ORDER_CARD_ITEMS_STYLES.quantityText}>
+            {LABELS.returnWindowClosed}
+          </p>
         ) : null}
       </div>
 

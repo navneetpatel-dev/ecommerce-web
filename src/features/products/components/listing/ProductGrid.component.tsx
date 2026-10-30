@@ -31,9 +31,12 @@ export function ProductGrid({
   compareAtLimit = false,
   onToggleCompare,
 }: ProductGridProps) {
-  if (loading) return <SkeletonGrid count={skeletonCount} />;
+  // Undefined means the query has not settled. An empty array is a real zero.
+  if (loading || products === undefined) {
+    return <SkeletonGrid count={skeletonCount} />;
+  }
 
-  if (!products?.length) {
+  if (products.length === 0) {
     return (
       <EmptyState
         heading={emptyHeading}

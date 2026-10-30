@@ -77,4 +77,7 @@ export const checkoutApi = {
       API.checkout.cancel,
       payload,
     ),
+  /** Reopens Checkout for an existing unpaid Razorpay order. */
+  resumePayment: (payload: CancelCheckoutPayload) =>
+    apiClient.post<PlaceOrderResponse>(API.checkout.resume, payload),
 };

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useCheckoutStore } from "@/features/checkout/store/checkout.store";
 import {
   useAddresses,
@@ -32,6 +32,8 @@ export function useCheckoutAddresses() {
   const { requireAuth } = useRequireAuth();
   const { data: cart } = useCart();
   const { setDeliveryLocation } = useDeliveryLocation();
+  const clearShippingMethods = useCheckoutStore((s) => s.clearShippingMethods);
+  const previousPincode = useRef<string | null>(null);
 
   /**
    * `useAddresses` waits for the access token so a cold load cannot fire an
@@ -58,8 +60,13 @@ export function useCheckoutAddresses() {
   useEffect(() => {
     const selected = addresses?.find((address) => address.id === addressId);
     if (!selected?.pincode) return;
-    setDeliveryLocation(selected.pincode, selected.state ?? null);
-  }, [addresses, addressId, setDeliveryLocation]);
+    const nextPincode = selected.pincode.trim();
+    if (previousPincode.current && previousPincode.current !== nextPincode) {
+      clearShippingMethods();
+    }
+    previousPincode.current = nextPincode;
+    setDeliveryLocation(nextPincode, selected.state ?? null);
+  }, [addresses, addressId, setDeliveryLocation, clearShippingMethods]);
 
   // One vendor that doesn't serve the area blocks the address step: the order would be
   // rejected at payment, so it has to surface where the address is chosen.

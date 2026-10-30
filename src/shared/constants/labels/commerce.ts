@@ -7,6 +7,7 @@ export const commerceLabels = {
   removeFromWishlist: "Remove from wishlist",
   wishlistEmptyMessage: "Your wishlist is empty",
   ratingOutOfFive: "Rated {value} out of 5",
+  noReviewsYet: "No reviews",
   rateStar: "Rate {count} out of 5 stars",
   productImagesPartialFailure:
     "Product saved, but {count} image(s) could not be attached — add them from the product's images.",
@@ -37,15 +38,15 @@ export const commerceLabels = {
   deliveryPincodeHint:
     "Check delivery time and cash-on-delivery for your area.",
   invalidPincode: "Enter a valid 6-digit pincode",
-  deliveryEtaDays: "Arrives in {days} day(s)",
-  deliveryEtaWithCost: "Arrives in {days} day(s) · ₹{amount}",
-  deliveryEtaFree: "Arrives in {days} day(s) · free delivery",
+  deliveryEtaDays: "Arrives in {days}",
+  deliveryEtaWithCost: "Arrives in {days} · ₹{amount}",
+  deliveryEtaFree: "Arrives in {days} · free delivery",
   deliveryNotServiceable: "Not deliverable to this pincode",
   deliveryCheckFailed: "Could not check delivery for this pincode.",
   deliveryAreaHeading: "Delivery area",
   deliveryAreaChange: "Change",
   deliveryAreaChecking: "Checking delivery to {pincode}…",
-  deliveryAreaEtaDays: "Delivers to {pincode} in {days} day(s)",
+  deliveryAreaEtaDays: "Delivers to {pincode} in {days}",
   deliveryAreaEtaRange: "Delivers to {pincode} in {min}–{max} days",
   deliveryAreaFreeShipping: "Free delivery over {amount}",
   deliveryAreaNotServiceable:
@@ -114,6 +115,10 @@ export const commerceLabels = {
   goToMyOrders: "Go to my orders",
   allOrders: "All orders",
   cancelOrder: "Cancel order",
+  payNow: "Pay now",
+  confirmCancelUnpaidOrderBody:
+    "This cancels the unpaid order and puts the items back in your cart.",
+  unpaidOrderCancelled: "Order cancelled. Your cart is restored.",
   confirmCancelOrderTitle: "Cancel this order?",
   confirmCancelOrderBody:
     "We'll restore any points used and refund card/UPI payments for items that haven't shipped yet.",

@@ -7,11 +7,12 @@ import {
 
 describe("formatPoints", () => {
   it("formats whole points with pts suffix", () => {
-    expect(formatPoints(1250)).toBe("1,250 pts");
+    expect(formatPoints(1250)).toBe("1,250.00 pts");
+    expect(formatPoints(1740.55)).toBe("1,740.55 pts");
   });
 
   it("formats zero", () => {
-    expect(formatPoints(0)).toBe("0 pts");
+    expect(formatPoints(0)).toBe("0.00 pts");
   });
 
   it("shows a missing balance as — instead of 0 pts", () => {

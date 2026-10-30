@@ -10,7 +10,6 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
 import { sortBarStyles } from "../../../styles/sort/sortBar.styles";
 import { SortOptionsList } from "./SortOptionsList.component";
 
@@ -45,7 +44,7 @@ export function SortBar({
           totalProducts === 1
             ? LABELS.productCountSingular
             : LABELS.productCountPlural,
-          { count: formatInrAmount(totalProducts) },
+          { count: totalProducts.toLocaleString("en-IN") },
         )
       : isFetching
         ? LABELS.updatingEllipsis
@@ -60,22 +59,23 @@ export function SortBar({
       </p>
 
       <div className={sortBarStyles.actionsWrapper}>
-        <Select
-          value={sort || "trending"}
-          onValueChange={onSortChange}
-          disabled={disabled}
-        >
-          <SelectTrigger
-            aria-label={LABELS.sort}
-            title={disabled ? LABELS.sortUnavailableDuringSearch : undefined}
-            className={sortBarStyles.selectTrigger(hideSortOnMobile)}
-          >
-            <SelectValue placeholder={LABELS.sort} />
-          </SelectTrigger>
-          <SelectContent>
-            <SortOptionsList />
-          </SelectContent>
-        </Select>
+        {disabled ? (
+          <p className="max-w-sm text-body-sm text-ink-muted">
+            {LABELS.sortUnavailableDuringSearch}
+          </p>
+        ) : (
+          <Select value={sort || "trending"} onValueChange={onSortChange}>
+            <SelectTrigger
+              aria-label={LABELS.sort}
+              className={sortBarStyles.selectTrigger(hideSortOnMobile)}
+            >
+              <SelectValue placeholder={LABELS.sort} />
+            </SelectTrigger>
+            <SelectContent>
+              <SortOptionsList />
+            </SelectContent>
+          </Select>
+        )}
 
         {onToggleCompare ? (
           <Button

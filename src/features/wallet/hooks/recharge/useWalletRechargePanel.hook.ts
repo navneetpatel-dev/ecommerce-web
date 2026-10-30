@@ -13,9 +13,16 @@ export function useWalletRechargePanel(
   const { recharge, isBusy, error, successMessage, clearMessages } =
     useWalletRecharge();
   const [customAmount, setCustomAmount] = useState<number | undefined>();
+  const [presetError, setPresetError] = useState<string | null>(null);
 
   const limits = balance?.limits;
-  const presets = limits?.presetsInr ?? [];
+  const presets = useMemo(() => {
+    const offered = limits?.presetsInr ?? [];
+    if (!limits) return offered;
+    return offered.filter(
+      (amount) => amount >= limits.minInr && amount <= limits.maxInr,
+    );
+  }, [limits]);
   const rechargeEnabled = balance?.rechargeEnabled !== false;
 
   const customPreviewQuery = useWalletRechargePreview(customAmount);
@@ -36,12 +43,16 @@ export function useWalletRechargePanel(
   const startRecharge = useCallback(
     async (amount: number) => {
       clearMessages();
+      setPresetError(null);
       const preview = await walletApi.previewRecharge(amount);
       const message = walletRechargeValidationLabel(
         preview.validationCode,
         limits,
       );
-      if (message) return;
+      if (message) {
+        setPresetError(message);
+        return;
+      }
       await recharge(amount);
     },
     [clearMessages, limits, recharge],
@@ -49,6 +60,7 @@ export function useWalletRechargePanel(
 
   const onCustomAmountChange = (value: number | undefined) => {
     setCustomAmount(value);
+    setPresetError(null);
     clearMessages();
   };
 
@@ -58,7 +70,7 @@ export function useWalletRechargePanel(
 
   return {
     isBusy,
-    error,
+    error: presetError ?? error,
     successMessage,
     limits,
     presets,

@@ -2,7 +2,10 @@ import { MessageCircleQuestion, Store, User } from "lucide-react";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { ReviewListSkeleton } from "@/shared/components/Skeletons.component";
 import { LABELS } from "@/shared/constants/labels";
-import { PRODUCT_ANSWER_AUTHOR_TYPE } from "@/shared/constants/statuses";
+import {
+  PRODUCT_ANSWER_AUTHOR_TYPE,
+  PRODUCT_QUESTION_STATUS,
+} from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import type { ProductQuestion } from "@/shared/api/types";
 import { productQnaStyles as styles } from "../../styles/list/productQna.styles";
@@ -43,6 +46,9 @@ export function ProductQuestions({
               <p className={styles.questionMeta}>
                 {q.customerName ?? LABELS.verifiedCustomer} ·{" "}
                 {formatOrderDate(q.createdAt)}
+                {q.status === PRODUCT_QUESTION_STATUS.PENDING
+                  ? ` · ${LABELS.questionPendingReview}`
+                  : ""}
               </p>
             </div>
           </div>

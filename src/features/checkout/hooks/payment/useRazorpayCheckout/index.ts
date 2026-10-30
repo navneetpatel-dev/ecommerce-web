@@ -10,6 +10,7 @@ import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { ERROR_CODES } from "@/shared/constants/http/errors";
 import { isApiErrorCode } from "@/shared/types/apiError.types";
+import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import type { CheckoutPaymentPhase } from "../useCheckoutPaymentPhase.hook";
 import type { PlaceOrderResult, LaunchRazorpayPaymentHelpers } from "./types";
 
@@ -26,6 +27,7 @@ export async function launchRazorpayPayment(
     restoreCancelledCheckout,
     onPhaseChange,
     onCheckoutComplete,
+    keepOrderOnDismiss,
     prefill,
   }: LaunchRazorpayPaymentHelpers,
 ): Promise<void> {
@@ -39,7 +41,7 @@ export async function launchRazorpayPayment(
     return;
   }
 
-  const keyId = result.keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "";
+  const keyId = result.keyId ?? "";
   if (!keyId || !result.amount || !result.currency) {
     showNotice({
       variant: "danger",
@@ -90,6 +92,14 @@ export async function launchRazorpayPayment(
       animation: true,
       ondismiss: () => {
         onPhaseChange?.("idle");
+        if (keepOrderOnDismiss) {
+          showNotice({
+            variant: "info",
+            title: LABELS.paymentStillOpenTitle,
+            description: LABELS.paymentStillOpenBody,
+          });
+          return;
+        }
         const notice = lastFailure
           ? {
               variant: "danger" as const,
@@ -123,8 +133,16 @@ export async function launchRazorpayPayment(
         onPhaseChange?.("redirecting");
         onOrderPlaced();
         navigate(router, PATHS.orderConfirmation(result.orderId));
-      } catch {
+      } catch (err) {
         onPhaseChange?.("idle");
+        if (isApiErrorCode(err, ERROR_CODES.PAYMENT_AMOUNT_MISMATCH)) {
+          showNotice({
+            variant: "danger",
+            title: LABELS.paymentFailedTitle,
+            description: getApiErrorMessage(err, LABELS.paymentAmountMismatch),
+          });
+          return;
+        }
         onCheckoutComplete?.(result.orderId);
         showNotice({
           variant: "warning",

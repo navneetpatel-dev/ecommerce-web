@@ -24,7 +24,9 @@ export function useCartDrawer() {
   const close = useCartDrawerStore((s) => s.close);
   const mutationError = useCartDrawerStore((s) => s.mutationError);
   const setMutationError = useCartDrawerStore((s) => s.setMutationError);
-  const { data: cart, isLoading, isFetching, isError, refetch } = useCart();
+  const cartQuery = useCart();
+  const { data: cart, isFetching, isError, refetch } = cartQuery;
+  const cartSettled = cartQuery.isSuccess || cartQuery.isError;
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
   const clearCart = useClearCart();
@@ -57,7 +59,7 @@ export function useCartDrawer() {
   return {
     isOpen,
     close,
-    isLoading,
+    isLoading: !cartSettled,
     items,
     hasItems,
     hasUnavailableItems,

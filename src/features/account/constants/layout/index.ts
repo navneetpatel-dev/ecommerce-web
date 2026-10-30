@@ -81,6 +81,16 @@ const DELIVERY_ACCOUNT_SECTION_IDS: AccountSectionId[] = [
   "privacy",
 ];
 
+const CUSTOMER_ACCOUNT_SECTION_IDS: AccountSectionId[] = [
+  "overview",
+  "personal",
+  "security",
+  "addresses",
+  "paymentMethods",
+  "orders",
+  "privacy",
+];
+
 export function deliveryAccountSections(): AccountNavItem[] {
   return ACCOUNT_SECTIONS.filter((section) =>
     DELIVERY_ACCOUNT_SECTION_IDS.includes(section.id),
@@ -96,7 +106,9 @@ export function accountSectionsForRole(
 ): AccountNavItem[] {
   if (isDeliveryRole(role)) return deliveryAccountSections();
   if (isWorkspaceRole(role)) return workspaceAccountSections();
-  return ACCOUNT_SECTIONS;
+  return ACCOUNT_SECTIONS.filter((section) =>
+    CUSTOMER_ACCOUNT_SECTION_IDS.includes(section.id),
+  );
 }
 
 /** Staff sections before role hydrates on /admin/profile or /vendor/.../profile. */

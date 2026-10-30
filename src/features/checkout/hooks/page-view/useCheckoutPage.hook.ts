@@ -19,6 +19,7 @@ import {
 } from "../../utils/checkout/checkoutDerivedState";
 import { useCheckoutStepGuards } from "./useCheckoutStepGuards.hook";
 import { useCheckoutStepNavigation } from "./useCheckoutStepNavigation.hook";
+import { useShippingStep } from "../shipping/useShippingStep.hook";
 
 /**
  * Checkout flow orchestration (Rule 3: address concern lives in
@@ -66,10 +67,38 @@ export function useCheckoutPage() {
   // in the store (see `useCheckoutSession`).
   useCheckoutSession(cart?.items);
 
-  const shippingReady = useMemo(
-    () => isShippingReadyForAllVendors(groupedByVendor, shippingMethodByVendor),
-    [groupedByVendor, shippingMethodByVendor],
-  );
+  const checkoutPincode = useMemo(() => {
+    const selected = addressesState.addresses?.find(
+      (address) => address.id === addressesState.addressId,
+    );
+    return selected?.pincode?.trim() ?? "";
+  }, [addressesState.addresses, addressesState.addressId]);
+
+  const shippingStatus = useShippingStep({
+    groupedByVendor,
+    selectedMethods: shippingMethodByVendor,
+    pincode: checkoutPincode,
+  });
+
+  const shippingReady = useMemo(() => {
+    if (!checkoutPincode) return false;
+    if (
+      shippingStatus.isRateLookupPending ||
+      shippingStatus.hasUnservableVendor
+    ) {
+      return false;
+    }
+    return isShippingReadyForAllVendors(
+      groupedByVendor,
+      shippingMethodByVendor,
+    );
+  }, [
+    checkoutPincode,
+    groupedByVendor,
+    shippingMethodByVendor,
+    shippingStatus.isRateLookupPending,
+    shippingStatus.hasUnservableVendor,
+  ]);
 
   useCheckoutStepGuards({
     groupedByVendor,

@@ -6,6 +6,8 @@ import { VendorOrdersTableRow } from "./VendorOrdersTableRow.component";
 interface VendorOrdersTableBodyProps {
   rows: SubOrderRow[];
   updatingId: string | null;
+  statusError: string | null;
+  statusErrorId: string | null;
   onSetUpdatingId: (id: string | null) => void;
   onStatusChange: (id: string, status: string, trackingId?: string) => void;
 }
@@ -13,6 +15,8 @@ interface VendorOrdersTableBodyProps {
 export const VendorOrdersTableBody = memo(function VendorOrdersTableBody({
   rows,
   updatingId,
+  statusError,
+  statusErrorId,
   onSetUpdatingId,
   onStatusChange,
 }: VendorOrdersTableBodyProps) {
@@ -23,6 +27,7 @@ export const VendorOrdersTableBody = memo(function VendorOrdersTableBody({
           key={row.subOrder.id}
           row={row}
           updatingId={updatingId}
+          statusError={statusErrorId === row.subOrder.id ? statusError : null}
           onSetUpdatingId={onSetUpdatingId}
           onStatusChange={onStatusChange}
         />

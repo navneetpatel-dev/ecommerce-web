@@ -82,6 +82,12 @@ export function resolveDeliveryAreaStatus(
   };
 }
 
+/** "2 days" or "1 day" — never "2 day(s)". */
+export function formatDayPhrase(days: number) {
+  const count = Math.max(0, Math.trunc(days));
+  return count === 1 ? "1 day" : `${count} days`;
+}
+
 /** "Delivers to 560001 in 2–5 days" — one day reads differently from a range. */
 export function deliveryEtaLabel(
   pincode: string,
@@ -91,7 +97,7 @@ export function deliveryEtaLabel(
   if (estimatedDays.min === estimatedDays.max) {
     return formatLabel(LABELS.deliveryAreaEtaDays, {
       pincode,
-      days: estimatedDays.min,
+      days: formatDayPhrase(estimatedDays.min),
     });
   }
   return formatLabel(LABELS.deliveryAreaEtaRange, {

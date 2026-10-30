@@ -4,6 +4,7 @@ import { productEligibleOffersStyles } from "../../../styles/offers/productEligi
 
 interface Offer {
   code: string;
+  name?: string;
   discount: number;
   type: string;
 }
@@ -24,7 +25,7 @@ export function EligibleOfferItem({ offer }: EligibleOfferItemProps) {
   return (
     <li className={productEligibleOffersStyles.offerItem}>
       <span className={productEligibleOffersStyles.offerCode}>
-        {offer.code}
+        {offer.name || offer.code}
       </span>
       <span className={productEligibleOffersStyles.offerDetail}>
         {offerDetailLabel(offer)}

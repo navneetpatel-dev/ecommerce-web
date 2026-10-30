@@ -22,7 +22,7 @@ export const AppliedCouponsSummaryList = memo(
             key={coupon.code}
             className={ORDER_SUMMARY_PANEL_STYLES.couponRow}
           >
-            <dt>Coupon · {coupon.code}</dt>
+            <dt>Coupon · {coupon.name || coupon.code}</dt>
             <dd className={ORDER_SUMMARY_PANEL_STYLES.couponDiscount}>
               −{formatInr(coupon.discount)}
             </dd>

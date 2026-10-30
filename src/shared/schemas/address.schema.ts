@@ -19,8 +19,8 @@ export const addressFormSchema = z.object({
   pincode: z.string().trim().regex(PINCODE_PATTERN, LABELS.invalidPincode),
   isDefault: z.boolean(),
   deliveryInstructions: z.string().max(500),
-  // Device-captured GPS fix, not a geocode of the typed address — required to
-  // save so the delivery-tracking page can show a live-ETA distance.
+  // Device-captured GPS fix when the browser allows it. Saving does not
+  // depend on it; a denied or failed capture still stores the typed address.
   lat: z.number().nullable(),
   lng: z.number().nullable(),
 });
@@ -46,10 +46,6 @@ export function addressFieldChecks(
     {
       ok: PINCODE_PATTERN.test(values.pincode.trim()),
       message: LABELS.invalidPincode,
-    },
-    {
-      ok: values.lat != null && values.lng != null,
-      message: LABELS.addressLocationRequired,
     },
   ];
 }

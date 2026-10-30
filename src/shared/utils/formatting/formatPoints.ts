@@ -20,8 +20,8 @@ export function formatPoints(value: DisplayAmountInput) {
   const amount = toDisplayAmount(value);
   if (amount == null) return MISSING_AMOUNT;
   return `${amount.toLocaleString("en-IN", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   })} pts`;
 }
 

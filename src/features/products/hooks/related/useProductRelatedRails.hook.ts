@@ -63,10 +63,8 @@ export function useProductRelatedRails({
     sellerItems,
     sellerLoading: fromSeller.isLoading,
     recent,
-    showFbt: frequentlyBoughtTogether.isLoading || fbtItems.length > 0,
-    showRelated:
-      Boolean(categoryId) && (related.isLoading || relatedItems.length > 0),
-    showSeller:
-      Boolean(vendorId) && (fromSeller.isLoading || sellerItems.length > 0),
+    showFbt: fbtItems.length > 0,
+    showRelated: relatedItems.length > 0,
+    showSeller: sellerItems.length > 0,
   };
 }

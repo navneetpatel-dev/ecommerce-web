@@ -26,6 +26,8 @@ export interface LaunchRazorpayPaymentHelpers {
   ) => Promise<void>;
   onPhaseChange?: (phase: CheckoutPaymentPhase) => void;
   onCheckoutComplete?: (orderId: string) => void;
+  /** Order-page Pay now: closing the modal leaves the unpaid order in place. */
+  keepOrderOnDismiss?: boolean;
   prefill?: {
     name?: string;
     email?: string;

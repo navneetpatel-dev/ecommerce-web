@@ -37,6 +37,12 @@ export function useSubOrderActions({
   const nextStatuses = SUB_ORDER_NEXT_STATUSES[status] ?? [];
   const canEditStatus = nextStatuses.length > 0;
   const canCancel = SUB_ORDER_CANCELLABLE_STATUSES.has(status);
+  const shipOnly =
+    nextStatuses.length === 1 && nextStatuses[0] === SUB_ORDER_STATUS_SHIPPED;
+  const otherStatuses = nextStatuses.filter(
+    (next) => next !== SUB_ORDER_STATUS_SHIPPED,
+  );
+  const canShip = nextStatuses.includes(SUB_ORDER_STATUS_SHIPPED);
 
   const handleStatusSelect = (value: string) => {
     if (value === SUB_ORDER_STATUS_SHIPPED) {
@@ -44,6 +50,10 @@ export function useSubOrderActions({
       return;
     }
     onStatusChange(subOrderId, value);
+  };
+
+  const beginShipment = () => {
+    setPendingShipment(true);
   };
 
   const confirmShipment = () => {
@@ -57,6 +67,8 @@ export function useSubOrderActions({
   };
 
   const startEditing = () => {
+    setPendingShipment(false);
+    setTrackingId("");
     onSetUpdatingId(subOrderId);
   };
 
@@ -89,9 +101,13 @@ export function useSubOrderActions({
     trackingId,
     setTrackingId,
     nextStatuses,
+    otherStatuses,
+    shipOnly,
+    canShip,
     canEditStatus,
     canCancel,
     handleStatusSelect,
+    beginShipment,
     confirmShipment,
     confirmCancel,
     startEditing,

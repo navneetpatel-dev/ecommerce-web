@@ -28,7 +28,7 @@ export function usePayableSummary({ quote, payable }: UsePayableSummaryParams) {
       .filter((coupon) => coupon.discount > 0)
       .map((coupon) =>
         formatLabel(LABELS.couponAppliedReview, {
-          code: coupon.code,
+          code: coupon.name || coupon.code,
           amount: formatInr(coupon.discount),
         }),
       );

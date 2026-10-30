@@ -8,10 +8,11 @@ import {
 
 describe("INR formatters", () => {
   it("format server amounts, including decimal strings and zero", () => {
-    expect(formatInr(1250.5)).toBe("₹1,250.5");
-    expect(formatInr("1250.50")).toBe("₹1,250.5");
-    expect(formatInr(0)).toBe("₹0");
-    expect(formatInrAmount(99999)).toBe("99,999");
+    expect(formatInr(1250.5)).toBe("₹1,250.50");
+    expect(formatInr("1250.50")).toBe("₹1,250.50");
+    expect(formatInr(3221.4)).toBe("₹3,221.40");
+    expect(formatInr(0)).toBe("₹0.00");
+    expect(formatInrAmount(99999)).toBe("99,999.00");
     expect(formatInrExact(1250.5)).toBe("₹1,250.50");
     expect(formatInrCompact(150_000)).toBe("₹1.5L");
   });

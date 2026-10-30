@@ -94,7 +94,10 @@ export function WalletTransactionsTable({
         const sourceLabel = transactionSourceLabel(row);
         const detail =
           row.description && row.description !== sourceLabel
-            ? row.description
+            ? row.description.replace(
+                /#([0-9a-fA-F]{8})\b/g,
+                (_, orderId: string) => `#${orderId.toLowerCase()}`,
+              )
             : null;
         return (
           <div className={styles.descriptionWrapper}>

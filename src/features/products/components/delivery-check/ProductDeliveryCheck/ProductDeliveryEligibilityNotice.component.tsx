@@ -1,6 +1,7 @@
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInrAmount } from "@/shared/utils/formatting/orderFormat";
+import { formatDayPhrase } from "@/shared/utils/delivery/deliveryArea";
 import type { DeliveryEligibility } from "../../../utils/delivery-check/productDeliveryEligibility";
 import { productDeliveryCheckStyles } from "../../../styles/delivery-check/productDeliveryCheck.styles";
 
@@ -33,10 +34,10 @@ export function ProductDeliveryEligibilityNotice({
   const etaLabel = fastest
     ? fastest.shippingDisplayKey === "FREE"
       ? formatLabel(LABELS.deliveryEtaFree, {
-          days: fastest.estimatedDays,
+          days: formatDayPhrase(fastest.estimatedDays),
         })
       : formatLabel(LABELS.deliveryEtaWithCost, {
-          days: fastest.estimatedDays,
+          days: formatDayPhrase(fastest.estimatedDays),
           amount: formatInrAmount(fastest.cost),
         })
     : null;

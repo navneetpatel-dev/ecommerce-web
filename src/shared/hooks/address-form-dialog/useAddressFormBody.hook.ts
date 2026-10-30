@@ -52,11 +52,9 @@ export function useAddressFormBody({
     address?.lat != null && address?.lng != null,
   );
   const requiredChecks = addressFieldChecks(form);
-  const canSubmit =
-    allRequiredFieldsMet(requiredChecks) && location.status !== "pending";
-  const disableHint =
-    firstMissingRequiredHint(requiredChecks) ??
-    (location.status === "pending" ? LABELS.addressLocationFetching : "");
+  // GPS is optional: a denied or failed capture must not block Save.
+  const canSubmit = allRequiredFieldsMet(requiredChecks);
+  const disableHint = firstMissingRequiredHint(requiredChecks) ?? "";
 
   // Fold captured GPS coordinates into the address draft during render
   // (React's "adjust state on prop change" pattern; no sync-in-effect).

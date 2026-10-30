@@ -44,6 +44,7 @@ export const returnsTimelinesLabels = {
   couldNotLoadReturns: "Could not load returns.",
   orderItemFallback: "Order item",
   requestReturn: "Request return",
+  returnWindowClosed: "The return window for this item has closed.",
   submitReturn: "Submit return",
   cancelReturn: "Cancel",
   returnRequestedSuccess: "Return requested.",

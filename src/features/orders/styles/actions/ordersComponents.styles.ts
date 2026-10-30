@@ -7,6 +7,7 @@ export const ordersComponentsStyles = {
   buyAgainSummary: "text-body-sm text-ink-muted",
 
   // OrderCancelAction
+  payNowButton: "w-full",
   cancelButton: "w-full border-danger/40 text-danger hover:bg-danger-subtle",
   cancelSuccess: "text-body-sm text-success",
   cancelError: "text-body-sm text-danger",

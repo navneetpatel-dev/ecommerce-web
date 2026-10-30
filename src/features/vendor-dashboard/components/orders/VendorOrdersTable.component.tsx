@@ -19,16 +19,27 @@ export type { VendorSubOrder } from "../../types/orders/vendorOrders.types";
 interface VendorOrdersTableProps {
   orders: VendorSubOrder[];
   updatingId: string | null;
+  statusError: string | null;
+  statusErrorId: string | null;
   onSetUpdatingId: (id: string | null) => void;
   onStatusChange: (id: string, status: string, trackingId?: string) => void;
 }
 
 /** Vendor order management table with inline status updates. */
 export function VendorOrdersTable(props: VendorOrdersTableProps) {
-  const { orders, updatingId, onSetUpdatingId, onStatusChange } = props;
+  const {
+    orders,
+    updatingId,
+    statusError,
+    statusErrorId,
+    onSetUpdatingId,
+    onStatusChange,
+  } = props;
   const { rows, isEmpty, renderActions } = useVendorOrdersTable({
     orders,
     updatingId,
+    statusError,
+    statusErrorId,
     onSetUpdatingId,
     onStatusChange,
   });
@@ -93,6 +104,8 @@ export function VendorOrdersTable(props: VendorOrdersTableProps) {
           <VendorOrdersTableBody
             rows={rows}
             updatingId={updatingId}
+            statusError={statusError}
+            statusErrorId={statusErrorId}
             onSetUpdatingId={onSetUpdatingId}
             onStatusChange={onStatusChange}
           />

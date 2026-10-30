@@ -46,13 +46,11 @@ function CategoryRailHeader({ totalCount }: { totalCount?: number }) {
   );
 }
 
-export function CategoryRail({
-  categories = [],
-  isLoading,
-}: CategoryRailProps) {
+export function CategoryRail({ categories, isLoading }: CategoryRailProps) {
   const mounted = useMounted();
-  const roots = getRootCategories(categories);
-  const showSkeleton = !mounted || (isLoading && roots.length === 0);
+  const roots = getRootCategories(categories ?? []);
+  const showSkeleton =
+    !mounted || categories === undefined || (isLoading && roots.length === 0);
 
   if (showSkeleton) {
     return (

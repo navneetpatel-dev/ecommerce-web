@@ -7,6 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { OrderPaymentSummary } from "./OrderPaymentSummary.component";
 import { OrderMoneyBreakdown } from "./OrderMoneyBreakdown.component";
 import { OrderCancelAction } from "../actions/OrderCancelAction.component";
+import { UnpaidRazorpayActions } from "../actions/UnpaidRazorpayActions.component";
 import { ShippingAddressBlock } from "./ShippingAddressBlock.component";
 import { SubOrderInvoicesList } from "../documents/SubOrderInvoicesList.component";
 import { useOrderSummaryAside } from "../../hooks/detail/useOrderSummaryAside.hook";
@@ -40,6 +41,7 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
     hasMultipleSellers,
     itemCopy,
     formattedTotalAmount,
+    moneyHeading,
     invoiceAvailability,
     allInvoicesDisabled,
     singleInvoiceDisabled,
@@ -72,7 +74,7 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
       <TextEyebrow className={ORDER_SUMMARY_ASIDE_STYLES.eyebrow}>
         {LABELS.orderSummary}
       </TextEyebrow>
-      <h2 className={ORDER_SUMMARY_ASIDE_STYLES.title}>{LABELS.whatYouPaid}</h2>
+      <h2 className={ORDER_SUMMARY_ASIDE_STYLES.title}>{moneyHeading}</h2>
 
       <div className={ORDER_SUMMARY_ASIDE_STYLES.itemsRow}>
         <dl className={ORDER_SUMMARY_ASIDE_STYLES.itemsDl}>
@@ -138,6 +140,7 @@ export function OrderSummaryAside(props: OrderSummaryAsideProps) {
           </p>
         ) : null}
 
+        <UnpaidRazorpayActions order={order} />
         <OrderCancelAction order={order} />
 
         <Button className={ORDER_SUMMARY_ASIDE_STYLES.fullWidthButton} asChild>

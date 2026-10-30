@@ -16,6 +16,8 @@ export interface OrderItem {
    * the window), as the server decides. Absent on older payloads.
    */
   canReturn?: boolean;
+  /** Delivered, but the return window has closed and no return was requested. */
+  returnWindowClosed?: boolean;
   /** Looked up live from the catalogue, so it can be absent for removed products. */
   imageUrl?: string | null;
   productSlug?: string | null;

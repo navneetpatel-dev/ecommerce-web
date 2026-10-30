@@ -22,6 +22,12 @@ export function ProductHeadingBlock({
   reviewCount,
   onReviewsClick,
 }: ProductHeadingBlockProps) {
+  const visibleTags = (product.tags ?? []).filter((tag) => {
+    if (reviewCount > 0) return true;
+    const normalized = tag.trim().toLowerCase();
+    return normalized !== "featured" && normalized !== "top rated";
+  });
+
   return (
     <>
       {product.vendor ? (
@@ -61,9 +67,9 @@ export function ProductHeadingBlock({
           ) : null}
         </div>
 
-        {product.tags?.length ? (
+        {visibleTags.length ? (
           <div className={PRODUCT_DETAIL_CONTENT_STYLES.tagsRow}>
-            {product.tags.slice(0, 4).map((tag) => (
+            {visibleTags.slice(0, 4).map((tag) => (
               <Badge
                 key={tag}
                 variant="secondary"

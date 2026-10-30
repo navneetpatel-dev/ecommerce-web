@@ -23,9 +23,12 @@ export const VENDOR_ORDERS_TABLE_STYLES = {
   proofLink: "text-body-sm font-medium text-brand hover:underline",
   mutedText: "text-body-sm text-ink-muted",
 
-  trackingRoot: "space-y-1",
-  trackingInput: "w-full min-w-[10rem] text-body-sm",
+  trackingRoot: "flex min-w-[14rem] flex-col gap-2",
+  trackingActions: "flex flex-wrap items-center gap-2",
+  trackingInput: "h-8 min-w-[10rem] flex-1 text-body-sm",
   trackingText: "text-body-sm text-ink-muted",
+  editorRoot: "flex min-w-[12rem] flex-col gap-2",
+  editorActions: "flex flex-wrap items-center gap-2",
 
   actionsRoot: "space-y-2",
   actionsError: "text-body-sm text-danger",

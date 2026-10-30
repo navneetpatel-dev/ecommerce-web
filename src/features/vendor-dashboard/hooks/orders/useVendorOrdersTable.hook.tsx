@@ -14,6 +14,8 @@ function flattenSubOrders(orders: VendorSubOrder[]): SubOrderRow[] {
 interface UseVendorOrdersTableParams {
   orders: VendorSubOrder[];
   updatingId: string | null;
+  statusError: string | null;
+  statusErrorId: string | null;
   onSetUpdatingId: (id: string | null) => void;
   onStatusChange: (id: string, status: string, trackingId?: string) => void;
 }
@@ -21,6 +23,8 @@ interface UseVendorOrdersTableParams {
 export function useVendorOrdersTable({
   orders,
   updatingId,
+  statusError,
+  statusErrorId,
   onSetUpdatingId,
   onStatusChange,
 }: UseVendorOrdersTableParams) {
@@ -37,11 +41,12 @@ export function useVendorOrdersTable({
         status={status}
         canDownloadInvoice={canDownloadInvoice}
         updatingId={updatingId}
+        statusError={statusErrorId === subOrderId ? statusError : null}
         onSetUpdatingId={onSetUpdatingId}
         onStatusChange={onStatusChange}
       />
     ),
-    [updatingId, onSetUpdatingId, onStatusChange],
+    [updatingId, statusError, statusErrorId, onSetUpdatingId, onStatusChange],
   );
 
   return {

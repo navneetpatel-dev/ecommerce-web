@@ -1,30 +1,31 @@
 import type { Metadata } from "next";
-import { SITE } from "./constants";
+import { SEO_PAGE_COPY, SITE } from "./constants";
 import { productCanonical, categoryCanonical, canonicalUrl } from "./canonical";
 import { productOg, ogDefaults } from "./open-graph";
 import type { ProductSeoData, CategorySeoData } from "./types";
 
 export function generateHomeMetadata(): Metadata {
   return {
-    title: "Premium T-Shirts Online",
-    description: SITE.description,
+    title: SEO_PAGE_COPY.home.title,
+    description: SEO_PAGE_COPY.home.description,
     keywords: [
-      "t-shirts",
       "online shopping",
-      "premium clothing",
+      "marketplace",
+      "verified sellers",
+      "home",
       "fashion",
-      "e-commerce",
     ],
     alternates: { canonical: SITE.url },
     openGraph: {
       ...ogDefaults(),
-      title: "Premium T-Shirts Online | E-Commerce Marketplace",
+      title: `${SEO_PAGE_COPY.home.title} | ${SITE.name}`,
+      description: SEO_PAGE_COPY.home.description,
       url: SITE.url,
     },
     twitter: {
       card: "summary_large_image",
-      title: "Premium T-Shirts Online | E-Commerce Marketplace",
-      description: SITE.description,
+      title: `${SEO_PAGE_COPY.home.title} | ${SITE.name}`,
+      description: SEO_PAGE_COPY.home.description,
       site: SITE.twitter,
       creator: SITE.twitter,
     },

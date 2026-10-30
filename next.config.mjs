@@ -24,16 +24,19 @@ const isDev = process.env.NODE_ENV === "development";
  * sources. jsdelivr serves the ffmpeg WASM the vendor media compressor fetches
  * at runtime (worker-src blob: covers its blob workers), and
  * 'wasm-unsafe-eval' is required for WebAssembly compilation in
- * Chrome-family browsers. Add any new third-party origin here explicitly.
+ * Chrome-family browsers. Razorpay Checkout loads checkout.js and opens its
+ * payment iframe from the hosts below. Add any new third-party origin here
+ * explicitly.
  */
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://checkout.razorpay.com https://cdn.razorpay.com${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "media-src 'self' data: blob: https:",
   "font-src 'self' data:",
   `connect-src 'self' https: wss:${isDev ? " ws:" : ""}`,
+  "frame-src https://api.razorpay.com https://checkout.razorpay.com",
   "worker-src 'self' blob:",
   "frame-ancestors 'none'",
   "base-uri 'self'",

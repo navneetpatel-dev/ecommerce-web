@@ -4,10 +4,7 @@ import { useMemo } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { ProductVariant } from "@/shared/api/types";
-import {
-  formatInr,
-  formatInrAmount,
-} from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 
 export interface SpecRow {
   label: string;
@@ -24,7 +21,7 @@ interface UseProductSpecificationsParams {
 function formatWeightGrams(grams?: number) {
   if (!grams || grams <= 0) return null;
   return formatLabel(LABELS.productWeightGrams, {
-    grams: formatInrAmount(grams),
+    grams: grams.toLocaleString("en-IN"),
   });
 }
 
@@ -50,7 +47,10 @@ export function useProductSpecifications({
     const list: SpecRow[] = [];
     const seenLabels = new Set<string>();
 
-    if (matchedVariant?.sku) {
+    if (
+      matchedVariant?.sku &&
+      !/^[0-9a-f-]{16,}$/i.test(matchedVariant.sku.trim())
+    ) {
       pushUniqueRow(list, seenLabels, LABELS.sku, matchedVariant.sku);
     }
 

@@ -17,7 +17,8 @@ export type ShippingSelectionStatus = {
  * ships to is fixed there instead of dead-ending on the review step.
  *
  * A vendor with no rates at all for the address counts as unservable — its card already says
- * so — and a vendor still loading is left out of the verdict rather than blocking the button.
+ * so, even when nothing is selected yet. A vendor still loading is pending, and checkout
+ * must not continue until that lookup settles.
  */
 export function resolveShippingSelectionStatus(
   vendorIds: string[],
@@ -29,12 +30,17 @@ export function resolveShippingSelectionStatus(
 
   for (const vendorId of vendorIds) {
     const rates = ratesByVendor[vendorId];
-    if (!rates) {
+    if (rates === undefined) {
       isRateLookupPending = true;
       continue;
     }
+    // An empty list means this seller does not deliver here, picked method or not.
+    if (rates.length === 0) {
+      unservableVendorIds.push(vendorId);
+      continue;
+    }
     const method = selectedMethodByVendor[vendorId];
-    // Nothing picked yet is the "select a method" state, not a delivery failure.
+    // Rates exist and nothing is picked yet: the "select a method" state, not a failure.
     if (!method) continue;
     if (!rates.some((rate) => rate.method === method)) {
       unservableVendorIds.push(vendorId);

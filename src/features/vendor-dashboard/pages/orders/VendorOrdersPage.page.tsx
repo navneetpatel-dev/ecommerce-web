@@ -29,6 +29,8 @@ export function VendorOrdersPage() {
       <VendorOrdersTable
         orders={orders.data.items as unknown as VendorSubOrder[]}
         updatingId={orders.updatingId}
+        statusError={orders.statusError}
+        statusErrorId={orders.statusErrorId}
         onSetUpdatingId={orders.setUpdatingId}
         onStatusChange={orders.handleStatusChange}
       />

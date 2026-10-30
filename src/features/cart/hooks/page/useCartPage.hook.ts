@@ -18,7 +18,9 @@ import { useCartDrawerStore } from "../../store/drawer/cart.store";
 import { useDeliveryServiceability } from "@/shared/hooks/delivery/useDeliveryLocation.hook";
 
 export function useCartPage() {
-  const { data: cart, isLoading, isError, refetch } = useCart();
+  const cartQuery = useCart();
+  const { data: cart, isError, refetch } = cartQuery;
+  const cartSettled = cartQuery.isSuccess || cartQuery.isError;
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
   const clearCart = useClearCart();
@@ -73,7 +75,7 @@ export function useCartPage() {
   const removeItemById = (itemId: string) => removeItem.mutate(itemId);
 
   return {
-    isLoading,
+    isLoading: !cartSettled,
     hasItems,
     itemCount,
     hasUnavailableItems,

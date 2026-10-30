@@ -6,10 +6,9 @@ export type LocationCaptureStatus =
   "pending" | "success" | "denied" | "unsupported" | "error";
 
 /**
- * Captures a device GPS fix via the browser Geolocation API. Addresses are
- * required to have a real lat/lng before they can be saved (see
- * address.schema.ts `addressFieldChecks`) — this is the capture mechanism
- * behind that requirement, not a geocode of the typed address.
+ * Captures a device GPS fix via the browser Geolocation API when the browser
+ * allows it. A denied or failed capture does not block saving the address;
+ * coordinates are stored only when this succeeds.
  */
 export function useCaptureLocation(hasExisting: boolean) {
   const [status, setStatus] = useState<LocationCaptureStatus>(

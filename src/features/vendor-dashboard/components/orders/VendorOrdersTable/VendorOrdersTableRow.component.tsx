@@ -15,6 +15,7 @@ import { VENDOR_ORDERS_TABLE_STYLES } from "../../../styles/orders/vendorOrdersT
 interface VendorOrdersTableRowProps {
   row: SubOrderRow;
   updatingId: string | null;
+  statusError: string | null;
   onSetUpdatingId: (id: string | null) => void;
   onStatusChange: (id: string, status: string, trackingId?: string) => void;
 }
@@ -22,6 +23,7 @@ interface VendorOrdersTableRowProps {
 export const VendorOrdersTableRow = memo(function VendorOrdersTableRow({
   row,
   updatingId,
+  statusError,
   onSetUpdatingId,
   onStatusChange,
 }: VendorOrdersTableRowProps) {
@@ -53,6 +55,7 @@ export const VendorOrdersTableRow = memo(function VendorOrdersTableRow({
           status={row.subOrder.status}
           canDownloadInvoice={canDownloadInvoice}
           updatingId={updatingId}
+          statusError={statusError}
           onSetUpdatingId={onSetUpdatingId}
           onStatusChange={onStatusChange}
         />

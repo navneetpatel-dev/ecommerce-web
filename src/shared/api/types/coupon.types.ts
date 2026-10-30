@@ -86,6 +86,7 @@ export interface CouponBatch {
 
 export interface EligibleCoupon {
   code: string;
+  name?: string;
   type: string;
   discount: number;
   cashbackAmount: number;

@@ -5,9 +5,11 @@ export const reports4Labels = {
   addressLocationRequired: "Location access is required to save an address.",
   addressLocationFetching: "Fetching your location...",
   addressLocationDenied:
-    "Location access was denied. Enable it in your browser settings and retry.",
-  addressLocationUnsupported: "Your browser doesn't support location access.",
-  addressLocationError: "Could not fetch your location. Please retry.",
+    "Location access was denied. You can still save this address, or retry to attach your location.",
+  addressLocationUnsupported:
+    "This browser can't share a location. You can still save this address.",
+  addressLocationError:
+    "Could not fetch your location. You can still save this address, or retry.",
   addressLocationRetry: "Retry",
   addressDeliveryInstructionsOptional: "Delivery instructions (optional)",
   addressDeliveryInstructionsPlaceholder:

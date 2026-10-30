@@ -9,6 +9,7 @@ import { OrderMoneyBreakdown } from "../detail/OrderMoneyBreakdown.component";
 import { OrderConfirmationItems } from "./OrderConfirmationItems.component";
 import { OrderConfirmationHero } from "./OrderConfirmationHero.component";
 import { useOrderConfirmation } from "../../hooks/confirmation/useOrderConfirmation.hook";
+import { orderMoneyHeading } from "../../utils/detail/orderMoneyHeading.utils";
 import { orderConfirmationStyles as styles } from "../../styles/confirmation/orderConfirmation.styles";
 
 const SKELETON_GROUPS = [0, 1];
@@ -83,7 +84,9 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
 
             <aside className={styles.aside}>
               <TextEyebrow>{LABELS.orderTotalsHeading}</TextEyebrow>
-              <h2 className={styles.sectionHeading}>{LABELS.whatYouPaid}</h2>
+              <h2 className={styles.sectionHeading}>
+                {order ? orderMoneyHeading(order) : LABELS.orderTotalsHeading}
+              </h2>
 
               {showItemsSkeleton ? (
                 <div className={styles.asideLoadingCard}>

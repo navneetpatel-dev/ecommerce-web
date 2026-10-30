@@ -12,7 +12,7 @@ export function formatInr(value: DisplayAmountInput) {
   const amount = toDisplayAmount(value);
   if (amount == null) return MISSING_AMOUNT;
   return `${CURRENCY_SYMBOL}${amount.toLocaleString("en-IN", {
-    minimumFractionDigits: 0,
+    minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
 }
@@ -22,7 +22,7 @@ export function formatInrAmount(value: DisplayAmountInput) {
   const amount = toDisplayAmount(value);
   if (amount == null) return MISSING_AMOUNT;
   return amount.toLocaleString("en-IN", {
-    minimumFractionDigits: 0,
+    minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 }

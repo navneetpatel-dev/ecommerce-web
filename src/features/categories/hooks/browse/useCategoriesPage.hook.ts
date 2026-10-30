@@ -9,7 +9,9 @@ import {
 import type { Category } from "@/shared/api/types";
 
 export function useCategoriesPage() {
-  const { data: categories = [], isLoading } = useCategories();
+  const categoriesQuery = useCategories();
+  const categories = categoriesQuery.data ?? [];
+  const settled = categoriesQuery.isSuccess || categoriesQuery.isError;
 
   const roots = useMemo(() => getRootCategories(categories), [categories]);
 
@@ -31,11 +33,11 @@ export function useCategoriesPage() {
   );
 
   return {
-    isLoading,
+    isLoading: !settled,
     categories,
     roots,
     rootsWithChildren,
-    isEmpty: !isLoading && roots.length === 0,
+    isEmpty: categoriesQuery.isSuccess && roots.length === 0,
   };
 }
 

@@ -17,6 +17,7 @@ export const coupons2Labels = {
   itemPlural: "items",
   orderSummary: "Order summary",
   whatYouPaid: "What you paid",
+  amountDueHeading: "Amount due",
   whatYouOrdered: "What you ordered",
   orderTotalsHeading: "Order total",
   itemsLine: "Items",
@@ -84,6 +85,8 @@ export const coupons2Labels = {
   paymentCancelledTitle: "Payment cancelled",
   paymentCancelledBody:
     "No charge was made. Your cart has been restored and is ready whenever you want to try again.",
+  paymentAmountMismatch:
+    "The payment amount does not match this order, so it was not marked paid.",
   paymentFailedTitle: "Payment failed",
   paymentFailedBody:
     "Payment could not be completed. Your cart has been restored so you can try again.",

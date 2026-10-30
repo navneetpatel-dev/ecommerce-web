@@ -14,7 +14,7 @@ import {
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
 import { AdminConfirmAction } from "@/features/admin-dashboard";
-import { SUB_ORDER_STATUS_SHIPPED } from "../../../constants/orders/subOrderStatuses";
+import { SUB_ORDER_STATUS_OPTION_LABELS } from "../../../constants/orders/subOrderStatuses";
 import { useSubOrderActions } from "../../../hooks/orders/useSubOrderActions.hook";
 import { ShipTrackingNumberFields } from "./ShipTrackingNumberFields.component";
 import { SubOrderStatusOptions } from "./SubOrderStatusOptions.component";
@@ -25,20 +25,27 @@ interface SubOrderActionsProps {
   status: string;
   canDownloadInvoice?: boolean;
   updatingId: string | null;
+  statusError?: string | null;
   onSetUpdatingId: (id: string | null) => void;
   onStatusChange: (id: string, status: string, trackingId?: string) => void;
 }
 
-const DEFAULT_NEXT_STATUS = SUB_ORDER_STATUS_SHIPPED;
-
 /**
  * Inline status editor for a vendor sub-order row. Only the moves the backend accepts
  * from the current status are offered, and cancelling (restock + refund, irreversible)
- * goes through a confirmation dialog.
+ * goes through a confirmation dialog. Ship always opens the tracking fields on the row:
+ * a select whose current value is already Ship would not fire a change.
  */
 export function SubOrderActions(props: SubOrderActionsProps) {
-  const { canDownloadInvoice = false } = props;
+  const { canDownloadInvoice = false, statusError = null } = props;
   const actions = useSubOrderActions(props);
+  const showTracking = actions.pendingShipment || actions.shipOnly;
+
+  const error = statusError ? (
+    <p role="alert" className={VENDOR_ORDERS_TABLE_STYLES.actionsError}>
+      {statusError}
+    </p>
+  ) : null;
 
   if (!actions.isEditing) {
     return (
@@ -87,49 +94,51 @@ export function SubOrderActions(props: SubOrderActionsProps) {
             {actions.invoiceError}
           </p>
         ) : null}
+        {error}
       </div>
     );
   }
 
-  if (actions.pendingShipment) {
+  if (showTracking) {
     return (
-      <ShipTrackingNumberFields
-        trackingId={actions.trackingId}
-        onTrackingIdChange={actions.setTrackingId}
-        onConfirm={actions.confirmShipment}
-        onCancel={actions.cancelEditing}
-      />
+      <div className={VENDOR_ORDERS_TABLE_STYLES.actionsRoot}>
+        <ShipTrackingNumberFields
+          trackingId={actions.trackingId}
+          onTrackingIdChange={actions.setTrackingId}
+          onConfirm={actions.confirmShipment}
+          onCancel={actions.cancelEditing}
+        />
+        {error}
+      </div>
     );
   }
 
   return (
-    <TableRowActions>
-      <TableRowAction>
-        <Select
-          defaultValue={DEFAULT_NEXT_STATUS}
-          onValueChange={actions.handleStatusSelect}
-        >
-          <SelectTrigger
-            aria-label={LABELS.selectStatus}
-            className={VENDOR_ORDERS_TABLE_STYLES.actionsSelect}
-          >
-            <SelectValue placeholder={LABELS.selectStatus} />
-          </SelectTrigger>
-          <SelectContent>
-            <SubOrderStatusOptions statuses={actions.nextStatuses} />
-          </SelectContent>
-        </Select>
-      </TableRowAction>
-      <TableRowAction>
-        <Button
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("neutral")}
-          onClick={actions.cancelEditing}
-        >
+    <div className={VENDOR_ORDERS_TABLE_STYLES.editorRoot}>
+      <div className={VENDOR_ORDERS_TABLE_STYLES.editorActions}>
+        {actions.otherStatuses.length > 0 ? (
+          <Select onValueChange={actions.handleStatusSelect}>
+            <SelectTrigger
+              aria-label={LABELS.selectStatus}
+              className={VENDOR_ORDERS_TABLE_STYLES.actionsSelect}
+            >
+              <SelectValue placeholder={LABELS.selectStatus} />
+            </SelectTrigger>
+            <SelectContent>
+              <SubOrderStatusOptions statuses={actions.otherStatuses} />
+            </SelectContent>
+          </Select>
+        ) : null}
+        {actions.canShip ? (
+          <Button size="sm" variant="outline" onClick={actions.beginShipment}>
+            {SUB_ORDER_STATUS_OPTION_LABELS.SHIPPED}
+          </Button>
+        ) : null}
+        <Button size="sm" variant="outline" onClick={actions.cancelEditing}>
           {LABELS.close}
         </Button>
-      </TableRowAction>
-    </TableRowActions>
+      </div>
+      {error}
+    </div>
   );
 }

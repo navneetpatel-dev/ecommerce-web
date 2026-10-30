@@ -53,8 +53,11 @@ export const walletLabels = {
   paymentSplitRazorpay: "{amount} via Razorpay",
   /** Razorpay leg before capture is confirmed — never claim it is settled. */
   paymentSplitRazorpayDue: "{amount} due via Razorpay",
-  paymentAwaitingConfirmation:
-    "We're still confirming this payment with Razorpay. It usually clears within a few minutes.",
+  paymentAwaitingConfirmation: "This payment is still open.",
+  paymentAlreadyConfirmed: "This payment is already confirmed.",
+  paymentStillOpenTitle: "Payment still open",
+  paymentStillOpenBody:
+    "You can pay now from this order, or cancel it to restore your cart.",
   paymentSplitCod: "Cash on delivery",
   cashbackPendingAfterDelivery:
     "Cashback pending — credited as points after delivery",

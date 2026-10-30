@@ -8,6 +8,7 @@ import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
 
 export interface UnusedOfferViewModel {
   code: string;
+  label: string;
   discountText: string;
 }
 
@@ -44,6 +45,7 @@ export function useCartCouponSection({
       .filter((offer) => !appliedCodes.has(offer.code.toUpperCase()))
       .map((offer) => ({
         code: offer.code,
+        label: offer.name || offer.code,
         discountText:
           offer.discount > 0
             ? ` · ${formatInr(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`

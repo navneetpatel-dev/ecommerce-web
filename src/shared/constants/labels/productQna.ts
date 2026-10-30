@@ -13,6 +13,7 @@ export const productQnaLabels = {
   enterYourQuestion: "Enter a question (at least 3 characters)",
   submitQuestion: "Submit question",
   noQuestionsYet: "No questions yet",
+  questionPendingReview: "Pending review",
   beFirstToAskQuestion: "Be the first to ask a question about this product.",
   verifiedCustomer: "Verified customer",
   sellerAnswer: "Seller",

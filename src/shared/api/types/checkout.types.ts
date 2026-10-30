@@ -43,12 +43,14 @@ export interface CheckoutQuote {
   maxWalletApplicable?: number;
   appliedCoupon: {
     code: string;
+    name?: string;
     discount: number;
     cashbackAmount?: number;
     type?: string;
   } | null;
   appliedCoupons?: Array<{
     code: string;
+    name?: string;
     discount: number;
     cashbackAmount?: number;
     type?: string;

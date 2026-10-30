@@ -5,6 +5,7 @@ import type { Order } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "../../utils/detail/format";
 import { resolveTaxInvoiceAvailability } from "../../utils/documents/invoiceAvailability.utils";
+import { orderMoneyHeading } from "../../utils/detail/orderMoneyHeading.utils";
 
 interface UseOrderSummaryAsideParams {
   order: Order;
@@ -42,6 +43,7 @@ export function useOrderSummaryAside({
     hasMultipleSellers,
     itemCopy,
     formattedTotalAmount,
+    moneyHeading: orderMoneyHeading(order),
     invoiceAvailability,
     // A download in flight locks the whole panel, not just the part being fetched.
     allInvoicesDisabled:

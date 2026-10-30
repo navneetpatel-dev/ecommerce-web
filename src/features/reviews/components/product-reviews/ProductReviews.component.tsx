@@ -32,7 +32,7 @@ export function ProductReviews({
     return (
       <EmptyState
         heading="No reviews yet"
-        message="Be the first to review this product after purchase."
+        message="After an order is delivered, you can leave a review from the order page."
         icon={MessageSquare}
         maxWidth="max-w-[65ch]"
         className={styles.emptyClass}
