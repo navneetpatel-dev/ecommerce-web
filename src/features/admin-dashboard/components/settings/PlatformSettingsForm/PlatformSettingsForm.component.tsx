@@ -31,12 +31,7 @@ interface PlatformSettingsFormProps {
   onPayoutCycleChange: (value: string) => void;
   onFreeShippingThresholdChange: (value: number) => void;
   onReturnShippingFeeChange: (value: number) => void;
-  onDeliveryAgentPerTaskEarningChange: (value: number) => void;
   onRefundSlaBusinessDaysChange: (value: number) => void;
-  onDeliveryAgentTdsRateChange: (value: number) => void;
-  onDeliveryAgentTdsNoPanRateChange: (value: number) => void;
-  onDeliveryAgentTdsSingleThresholdChange: (value: number) => void;
-  onDeliveryAgentTdsAnnualThresholdChange: (value: number) => void;
   onSupportEmailChange: (value: string) => void;
   onSupportHoursChange: (value: string) => void;
   onTicketReopenWindowDaysChange: (value: number) => void;
@@ -88,20 +83,7 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onPayoutCycleChange={props.onPayoutCycleChange}
           onFreeShippingThresholdChange={props.onFreeShippingThresholdChange}
           onReturnShippingFeeChange={props.onReturnShippingFeeChange}
-          onDeliveryAgentPerTaskEarningChange={
-            props.onDeliveryAgentPerTaskEarningChange
-          }
           onRefundSlaBusinessDaysChange={props.onRefundSlaBusinessDaysChange}
-          onDeliveryAgentTdsRateChange={props.onDeliveryAgentTdsRateChange}
-          onDeliveryAgentTdsNoPanRateChange={
-            props.onDeliveryAgentTdsNoPanRateChange
-          }
-          onDeliveryAgentTdsSingleThresholdChange={
-            props.onDeliveryAgentTdsSingleThresholdChange
-          }
-          onDeliveryAgentTdsAnnualThresholdChange={
-            props.onDeliveryAgentTdsAnnualThresholdChange
-          }
         />
 
         <SupportSettingsSection

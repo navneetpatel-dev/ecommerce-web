@@ -40,16 +40,6 @@ export function usePlatformSettingsForm() {
           walletRechargePresetsInr: settings.walletRechargePresetsInr ?? [
             500, 1000, 2000, 5000,
           ],
-          deliveryAgentPerTaskEarning:
-            settings.deliveryAgentPerTaskEarning ?? 20,
-          deliveryAgentTdsRatePercent:
-            settings.deliveryAgentTdsRatePercent ?? 1,
-          deliveryAgentTdsNoPanRatePercent:
-            settings.deliveryAgentTdsNoPanRatePercent ?? 20,
-          deliveryAgentTdsSingleThreshold:
-            settings.deliveryAgentTdsSingleThreshold ?? 30000,
-          deliveryAgentTdsAnnualThreshold:
-            settings.deliveryAgentTdsAnnualThreshold ?? 100000,
           promotionalPointsTtlDays: settings.promotionalPointsTtlDays ?? 0,
           refundSlaBusinessDays: settings.refundSlaBusinessDays ?? 7,
           scheduledReportsEnabled: settings.scheduledReportsEnabled ?? false,
@@ -123,17 +113,6 @@ export function usePlatformSettingsForm() {
     setWalletMaxRechargeInr: setField("walletMaxRechargeInr"),
     setWalletMaxBalancePoints: setField("walletMaxBalancePoints"),
     setWalletRechargePresetsInr: setField("walletRechargePresetsInr"),
-    setDeliveryAgentPerTaskEarning: setField("deliveryAgentPerTaskEarning"),
-    setDeliveryAgentTdsRatePercent: setField("deliveryAgentTdsRatePercent"),
-    setDeliveryAgentTdsNoPanRatePercent: setField(
-      "deliveryAgentTdsNoPanRatePercent",
-    ),
-    setDeliveryAgentTdsSingleThreshold: setField(
-      "deliveryAgentTdsSingleThreshold",
-    ),
-    setDeliveryAgentTdsAnnualThreshold: setField(
-      "deliveryAgentTdsAnnualThreshold",
-    ),
     setPromotionalPointsTtlDays: setField("promotionalPointsTtlDays"),
     setRefundSlaBusinessDays: setField("refundSlaBusinessDays"),
     setScheduledReportsEnabled: setField("scheduledReportsEnabled"),

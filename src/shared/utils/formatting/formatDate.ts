@@ -58,7 +58,7 @@ export function formatDate(value: string | Date): string {
   });
 }
 
-/** Clock time on its own, e.g. "03:42 PM" (agent hand-off timestamps). */
+/** Clock time on its own, e.g. "03:42 PM". */
 export function formatTime(value: string | Date): string {
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) return String(value);

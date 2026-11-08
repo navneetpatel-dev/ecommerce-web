@@ -4,8 +4,6 @@ export const tables4Labels = {
   promoBannerLinkTargetId: "Link target ID",
   promoBannerLinkUrl: "Link URL",
   downloadFailed: "Could not download the file. Please try again.",
-  notFoundDeliveryBody:
-    "This page does not exist. Use the navigation to get back to your tasks.",
   sort: "Sort",
   sortUnavailableDuringSearch:
     "Sorting isn't available for search results — showing the best matches for your search.",

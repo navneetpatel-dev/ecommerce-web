@@ -1,7 +1,6 @@
 "use client";
 
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
-import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { VendorStrip } from "@/shared/components/orders/VendorStrip.component";
 import type { SubOrderRow } from "../../../types/orders/vendorOrders.types";
 import {
@@ -43,21 +42,12 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
       {row.subOrder.shipment && (
         <div className={VENDOR_ORDERS_TABLE_STYLES.cardShipmentWrap}>
           <StatusBadge status={row.subOrder.shipment.status} />
-          {row.subOrder.shipment.deliveryAgent && (
-            <p className={VENDOR_ORDERS_TABLE_STYLES.mutedText}>
-              {row.subOrder.shipment.deliveryAgent.fullName}
-            </p>
-          )}
           {row.subOrder.shipment.codAmount != null && (
             <p className={VENDOR_ORDERS_TABLE_STYLES.mutedText}>
               COD: {formatInr(row.subOrder.shipment.codAmount)}{" "}
               {row.subOrder.shipment.codCollected ? "(collected)" : "(due)"}
             </p>
           )}
-          <ProofOfDeliveryThumbnail
-            url={row.subOrder.shipment.proofOfDeliveryUrl}
-            compact
-          />
         </div>
       )}
       {row.subOrder.returnRequests?.length ? (
@@ -68,11 +58,6 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
               className={VENDOR_ORDERS_TABLE_STYLES.returnRow}
             >
               <StatusBadge status={returnRequest.status} />
-              {returnRequest.deliveryAgent && (
-                <p className={VENDOR_ORDERS_TABLE_STYLES.mutedText}>
-                  {returnRequest.deliveryAgent.fullName}
-                </p>
-              )}
             </div>
           ))}
         </div>

@@ -4,7 +4,6 @@ import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Timeline } from "@/shared/components/display/Timeline.component";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
-import { RedeliverySlotPicker } from "@/shared/components/orders/RedeliverySlotPicker.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { ReturnRequest } from "@/shared/api/types";
 import { RefundBreakdown } from "../detail/RefundBreakdown.component";
@@ -25,19 +24,13 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
     hasRefundAmount,
     creditNoteLine,
     isRejected,
-    hasPickupFailure,
     refundTimeline,
     logisticsTimeline,
     pending,
-    rescheduleError,
-    isRescheduling,
-    canReschedulePickup,
     downloadCredit,
-    submitReschedule,
   } = useReturnRequestCard(row);
 
   const handleDownloadCredit = () => void downloadCredit();
-  const handleRescheduleSubmit = (slot: string) => void submitReschedule(slot);
 
   return (
     <div className={styles.card}>
@@ -100,27 +93,6 @@ export function ReturnRequestCard({ row }: ReturnRequestCardProps) {
           <p className={styles.rejectionBanner}>
             {LABELS.returnRejectionReasonPrefix} {row.rejectionReason}
           </p>
-        </div>
-      ) : null}
-
-      {hasPickupFailure ? (
-        <div className={styles.pickupFailSection}>
-          <p className={styles.pickupFailBanner}>
-            Last pickup attempt note: {row.pickupFailureReason}
-          </p>
-          {canReschedulePickup ? (
-            <RedeliverySlotPicker
-              currentSlot={row.preferredRepickupSlot}
-              onSubmit={handleRescheduleSubmit}
-              isPending={isRescheduling}
-              prompt="Pickup didn't go through — pick a new time window:"
-            />
-          ) : null}
-          {rescheduleError ? (
-            <p role="alert" className={styles.errorText}>
-              {rescheduleError}
-            </p>
-          ) : null}
         </div>
       ) : null}
     </div>

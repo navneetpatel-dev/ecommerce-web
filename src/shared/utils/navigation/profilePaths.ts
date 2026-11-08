@@ -3,7 +3,6 @@ import type { RoleName } from "@/shared/constants/labels";
 import {
   isAdminRole,
   isCustomerRole,
-  isDeliveryRole,
   isVendorRole,
 } from "@/shared/utils/roles/roles";
 import {
@@ -17,7 +16,6 @@ export function profileBasePathForRole(
 ): string {
   if (isAdminRole(role)) return PATHS.admin.profile;
   if (isVendorRole(role)) return PATHS.vendor.profile;
-  if (isDeliveryRole(role)) return PATHS.delivery.profile;
   return PATHS.profile;
 }
 
@@ -42,9 +40,5 @@ export function profilePathForRole(
 
 /** True when pathname is a workspace (admin/vendor) profile surface. */
 export function isWorkspaceProfilePath(pathname: string): boolean {
-  return (
-    pathname === PATHS.admin.profile ||
-    pathname === PATHS.vendor.profile ||
-    pathname === PATHS.delivery.profile
-  );
+  return pathname === PATHS.admin.profile || pathname === PATHS.vendor.profile;
 }

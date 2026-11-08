@@ -3,7 +3,10 @@ export type OrderShipmentSummary = {
   vendorName: string;
   status: string;
   trackingNumber: string | null;
-  proofOfDeliveryUrl: string | null;
+  /** The parcel's own id, once the part has shipped. */
+  shipmentId: string | null;
+  /** Cash on delivery: marking it delivered must say whether the cash was collected. */
+  isCashOnDelivery: boolean;
   /** Card refund for a cancelled or RTO'd part, and where it stands. */
   refundAmount: number | null;
   refundStatus: string | null;
@@ -38,10 +41,6 @@ export function mapSubOrderToShipmentSummary(
     typeof shipment?.trackingNumber === "string"
       ? shipment.trackingNumber
       : null;
-  const proofOfDeliveryUrl =
-    typeof shipment?.proofOfDeliveryUrl === "string"
-      ? shipment.proofOfDeliveryUrl
-      : null;
   const shipmentStatus =
     typeof shipment?.status === "string" ? shipment.status : null;
   const subOrderStatus =
@@ -52,7 +51,8 @@ export function mapSubOrderToShipmentSummary(
     vendorName: vendorNameFrom(subOrder.vendor),
     status: shipmentStatus || subOrderStatus,
     trackingNumber,
-    proofOfDeliveryUrl,
+    shipmentId: typeof shipment?.id === "string" ? shipment.id : null,
+    isCashOnDelivery: shipment?.codAmount != null,
     refundAmount:
       typeof subOrder.cancelRefundAmount === "number"
         ? subOrder.cancelRefundAmount

@@ -83,7 +83,6 @@ export const PATHS = {
     audit: "/admin/audit",
     settings: "/admin/settings",
     notifications: "/admin/notifications",
-    deliveryAgents: "/admin/delivery-agents",
     profile: "/admin/profile",
     supportTickets: "/admin/support-tickets",
     supportTicket: (id: string) => `/admin/support-tickets/${id}`,
@@ -116,16 +115,5 @@ export const PATHS = {
     bugReports: "/vendor/dashboard/bug-reports",
     bugReport: (id: string) => `/vendor/dashboard/bug-reports/${id}`,
     bugReportNew: "/vendor/dashboard/bug-reports/new",
-  },
-  delivery: {
-    root: "/delivery",
-    today: "/delivery/dashboard/today",
-    deliveries: "/delivery/dashboard/deliveries",
-    delivery: (shipmentId: string) =>
-      `/delivery/dashboard/deliveries/${shipmentId}`,
-    pickups: "/delivery/dashboard/pickups",
-    pickup: (returnId: string) => `/delivery/dashboard/pickups/${returnId}`,
-    history: "/delivery/dashboard/history",
-    profile: "/delivery/dashboard/profile",
   },
 } as const;

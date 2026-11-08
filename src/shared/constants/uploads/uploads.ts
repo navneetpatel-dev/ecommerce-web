@@ -9,8 +9,6 @@ export const UPLOAD_ENTITY = {
   TICKETS: "tickets",
   BUG_REPORTS: "bug-reports",
   PAYOUTS: "payouts",
-  SHIPMENTS: "shipments",
-  DELIVERY_AGENT_DOCUMENTS: "delivery-agent-documents",
 } as const;
 
 export type UploadEntityType =
@@ -27,7 +25,6 @@ export const UPLOAD_PURPOSE = {
   ATTACHMENTS: "attachments",
   VIDEO: "video",
   SIZE_CHART: "size-chart",
-  PROOF: "proof",
 } as const;
 
 export type UploadPurpose =

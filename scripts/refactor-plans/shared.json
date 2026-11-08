@@ -41,10 +41,6 @@
       "to": "src/shared/hooks/cookies/useCookieBanner.hook.ts"
     },
     {
-      "from": "src/shared/hooks/useDeliveryLayout.hook.ts",
-      "to": "src/shared/hooks/navigation/useDeliveryLayout.hook.ts"
-    },
-    {
       "from": "src/shared/hooks/useImageGalleryTransition.hook.ts",
       "to": "src/shared/hooks/media/useImageGalleryTransition.hook.ts"
     },
@@ -329,10 +325,6 @@
       "to": "src/shared/constants/cart/cart.ts"
     },
     {
-      "from": "src/shared/constants/deliveryNav.ts",
-      "to": "src/shared/constants/navigation/deliveryNav.ts"
-    },
-    {
       "from": "src/shared/constants/errors.ts",
       "to": "src/shared/constants/http/errors.ts"
     },
@@ -423,10 +415,6 @@
     {
       "from": "src/shared/containers/CookieBannerContainer.container.tsx",
       "to": "src/shared/containers/dialogs/CookieBannerContainer.container.tsx"
-    },
-    {
-      "from": "src/shared/containers/DeliveryLayoutContainer.container.tsx",
-      "to": "src/shared/containers/layout/DeliveryLayoutContainer.container.tsx"
     },
     {
       "from": "src/shared/containers/ImageGalleryContainer.container.tsx",

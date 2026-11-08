@@ -86,8 +86,6 @@ export const reports3Labels = {
   discountAbsorbedPlatform: "Discount absorbed (platform)",
   discountAbsorbedVendor: "Discount absorbed (vendor)",
   vendorNetPayouts: "Vendor net payouts",
-  reportDeliveryAgentTds194c: "Delivery agent TDS (194C)",
-  agentName: "Agent",
   pan: "PAN",
   quarter: "Quarter",
   payoutGross: "Sales net",

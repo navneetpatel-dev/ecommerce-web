@@ -5,7 +5,6 @@ export { CartPageSkeleton } from "./pageSkeletons.component";
 export { CategoriesPageSkeleton } from "./pageSkeletons.component";
 export { CheckoutPageSkeleton } from "./pageSkeletons.component";
 export { ContentPageSkeleton } from "./pageSkeletons.component";
-export { DeliveryPageSkeleton } from "./pageSkeletons.component";
 export { DetailPageSkeleton } from "./pageSkeletons.component";
 export { FormPageSkeleton } from "./pageSkeletons.component";
 export { LedgerPageSkeleton } from "./pageSkeletons.component";

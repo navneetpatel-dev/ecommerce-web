@@ -32,7 +32,6 @@ export { AdminFinancePage } from "./pages/finance/AdminFinancePage.page";
 export { AdminOrdersPage } from "./pages/orders/AdminOrdersPage.page";
 export { AdminProductsPage } from "./pages/vendors/AdminProductsPage.page";
 export { AdminInventoryPage } from "./pages/inventory/AdminInventoryPage.page";
-export { AdminDeliveryAgentsPage } from "./pages/delivery-agents/AdminDeliveryAgentsPage.page";
 export { AdminNotificationsPage } from "./pages/notifications/AdminNotificationsPage.page";
 export { AdminPromoBannersPage } from "./pages/promo-banners/AdminPromoBannersPage.page";
 export { AdminReturnsPage } from "./pages/returns/AdminReturnsPage.page";

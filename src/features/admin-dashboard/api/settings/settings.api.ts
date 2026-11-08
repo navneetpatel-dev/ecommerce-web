@@ -18,12 +18,6 @@ export type AdminPlatformSettings = PublicPlatformSettings & {
   autoApproveProducts: boolean;
   payoutCycle: string;
   returnShippingFee: number;
-  deliveryAgentPerTaskEarning: number;
-  /** TDS u/s 194C on agent payouts (agents are contractors). */
-  deliveryAgentTdsRatePercent?: number;
-  deliveryAgentTdsNoPanRatePercent?: number;
-  deliveryAgentTdsSingleThreshold?: number;
-  deliveryAgentTdsAnnualThreshold?: number;
   promotionalPointsTtlDays: number;
   refundSlaBusinessDays: number;
   scheduledReportsEnabled: boolean;

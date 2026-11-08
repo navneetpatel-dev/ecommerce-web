@@ -15,8 +15,6 @@ export const personalInfoSectionStyles = {
   asideRow: "flex items-start gap-3",
   asideIconBox:
     "flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-ink-muted",
-  asideIconBoxBrand:
-    "flex h-10 w-10 shrink-0 items-center justify-center border border-line bg-paper text-brand",
   asideDetails: "min-w-0",
   asideLabel:
     "text-[0.75rem] font-semibold uppercase tracking-[0.08em] text-ink-faint",
@@ -25,7 +23,6 @@ export const personalInfoSectionStyles = {
   asideTextMuted: "mt-0.5 text-body-sm text-ink-muted",
   asideTextFaint: "mt-0.5 text-body-sm text-ink-faint",
   verificationWrapper: "mt-2",
-  deliveryDetailRow: "flex items-start gap-3 border-t border-line/60 pt-4",
   asideFooter: "border-t border-line pt-4",
   asideFooterText: "text-body-sm leading-6 text-ink-muted",
 } as const;

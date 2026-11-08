@@ -19,8 +19,6 @@ export interface VendorReturnRowViewModel {
 }
 
 function pickupLabelFor(row: ReturnRequest): string {
-  if (row.pickupFailureReason) return row.pickupFailureReason;
-  if (row.pickupOtpVerifiedAt) return LABELS.returnLogisticsReceived;
   if (row.status === RETURN_STATUS.PICKUP_SCHEDULED) {
     return LABELS.returnLogisticsPickupScheduled;
   }

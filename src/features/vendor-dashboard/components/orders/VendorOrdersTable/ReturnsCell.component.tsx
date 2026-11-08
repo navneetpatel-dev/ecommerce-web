@@ -22,23 +22,14 @@ export const ReturnsCell = memo(function ReturnsCell({
 
   return (
     <div className={VENDOR_ORDERS_TABLE_STYLES.returnsStack}>
-      {returnRequests.map((returnRequest) => {
-        const agentName = returnRequest.deliveryAgent ? (
-          <p className={VENDOR_ORDERS_TABLE_STYLES.mutedText}>
-            {returnRequest.deliveryAgent.fullName}
-          </p>
-        ) : null;
-
-        return (
-          <div
-            key={returnRequest.id}
-            className={VENDOR_ORDERS_TABLE_STYLES.returnRow}
-          >
-            <StatusBadge status={returnRequest.status} />
-            {agentName}
-          </div>
-        );
-      })}
+      {returnRequests.map((returnRequest) => (
+        <div
+          key={returnRequest.id}
+          className={VENDOR_ORDERS_TABLE_STYLES.returnRow}
+        >
+          <StatusBadge status={returnRequest.status} />
+        </div>
+      ))}
     </div>
   );
 });

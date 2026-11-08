@@ -8,15 +8,8 @@ import { describe, expect, it } from "vitest";
  * user-visible dead-end if it regresses, and it cannot be exercised by hand
  * without a real phone in a tunnel, so its routing is pinned here.
  */
-const SHELL_CACHE = "delivery-app-shell-v3";
+const SHELL_CACHE = "app-shell-v4";
 const OFFLINE_URL = "/offline";
-const DELIVERY_ROUTES = [
-  "/delivery/dashboard/today",
-  "/delivery/dashboard/deliveries",
-  "/delivery/dashboard/pickups",
-  "/delivery/dashboard/history",
-  "/delivery/dashboard/profile",
-];
 
 const ORIGIN = "https://shop.test";
 
@@ -105,20 +98,19 @@ const navigation = (pathname: string) => {
 };
 
 describe("service worker offline shell", () => {
-  it("precaches the delivery shell and the offline page on install", async () => {
+  it("precaches only the offline page on install", async () => {
     const sw = createServiceWorker(offlineNetwork);
 
     await Promise.all(sw.fire("install"));
 
-    expect(sw.cachedPages()).toEqual(
-      expect.arrayContaining([...DELIVERY_ROUTES, OFFLINE_URL]),
-    );
+    expect(sw.cachedPages()).toEqual([OFFLINE_URL]);
   });
 
-  it("drops caches from earlier shells on activate", async () => {
+  it("drops caches from earlier versions on activate", async () => {
     const sw = createServiceWorker(offlineNetwork);
     await Promise.all(sw.fire("install"));
-    sw.stores.set("delivery-app-shell-v2", new Map());
+    sw.stores.set("app-shell-v3", new Map());
+    sw.stores.set("legacy-cache", new Map());
 
     await Promise.all(sw.fire("activate"));
 
@@ -136,18 +128,6 @@ describe("service worker offline shell", () => {
     // A per-customer page is never cached, so the fallback is the static page
     // rather than a stale cart or price.
     expect(await settled()).toMatchObject({ url: OFFLINE_URL });
-  });
-
-  it("serves the precached delivery page instead for shell routes", async () => {
-    const sw = createServiceWorker(offlineNetwork);
-    await Promise.all(sw.fire("install"));
-
-    const { event, settled } = navigation("/delivery/dashboard/today");
-    sw.fire("fetch", event);
-
-    expect(await settled()).toMatchObject({
-      url: "/delivery/dashboard/today",
-    });
   });
 
   it("falls back to the cached chunk for build assets when offline", async () => {

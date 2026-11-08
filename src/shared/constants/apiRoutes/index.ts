@@ -39,7 +39,6 @@ import {
   webVitalsRoutes,
 } from "./discovery.routes";
 import { bugReportsRoutes, supportTicketsRoutes } from "./support.routes";
-import { deliveryAgentsRoutes } from "./deliveryAgents.routes";
 import { paymentsRoutes } from "./payments.routes";
 import { productQnaRoutes } from "./productQna.routes";
 import { giftCardsRoutes } from "./giftCards.routes";
@@ -82,7 +81,6 @@ export const API = {
   webVitals: webVitalsRoutes,
   supportTickets: supportTicketsRoutes,
   bugReports: bugReportsRoutes,
-  deliveryAgents: deliveryAgentsRoutes,
   productQna: productQnaRoutes,
   giftCards: giftCardsRoutes,
   roles: rolesRoutes,

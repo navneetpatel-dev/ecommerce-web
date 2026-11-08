@@ -1,6 +1,6 @@
 # Frontend structure conventions — authoritative reference
 
-**Purpose:** every frontend file touched anywhere in this plan must strictly follow the rules below. This is a direct synthesis of `web/AGENTS.md`'s numbered rules (loaded automatically as this repo's frontend `CLAUDE.md`), scoped to the much wider set of frontend areas this plan touches: `vendor-dashboard`, `admin-dashboard`, `orders`, `categories`, `products` (variants/filters), `auth`, `delivery-dashboard`, `supportTickets`, `wallet`, plus `shared/` (session adapter, badges, breadcrumbs), following the same method as `../calculation-audit-remediation-plan/FRONTEND-STRUCTURE-CONVENTIONS.md`.
+**Purpose:** every frontend file touched anywhere in this plan must strictly follow the rules below. This is a direct synthesis of `web/AGENTS.md`'s numbered rules (loaded automatically as this repo's frontend `CLAUDE.md`), scoped to the much wider set of frontend areas this plan touches: `vendor-dashboard`, `admin-dashboard`, `orders`, `categories`, `products` (variants/filters), `auth`, `supportTickets`, `wallet`, plus `shared/` (session adapter, badges, breadcrumbs), following the same method as `../calculation-audit-remediation-plan/FRONTEND-STRUCTURE-CONVENTIONS.md`.
 
 **Compliance status of this plan:** every FE file this plan specifies was checked against every rule below — see "Compliance audit" at the bottom.
 
@@ -36,7 +36,7 @@ Every new file this plan creates (F-05's vendor returns tab, F-21's structured C
 | `.api.ts`                                | Network calls only                                                                              | Business logic, React state, JSX                                                                        |
 | `.page.tsx` (route wrapper under `app/`) | Thin re-export of a feature's page component + metadata                                         | Any logic at all — confirmed pattern: every `app/**/page.tsx` in this codebase is 5-9 lines             |
 
-**Zero business/state logic in JSX components** (`web/AGENTS.md` rule 1) — every fix in this plan that touches a `.component.tsx` file (F-12's PoD thumbnail, F-24's badge unification, F-27's ARIA labels) confines its change to markup/props/attributes; any new derived value goes in the paired `.hook.ts`.
+**Zero business/state logic in JSX components** (`web/AGENTS.md` rule 1) — every fix in this plan that touches a `.component.tsx` file (F-24's badge unification, F-27's ARIA labels) confines its change to markup/props/attributes; any new derived value goes in the paired `.hook.ts`.
 
 ## 3. Money-math guardrail — `web/scripts/check-no-client-money-math.mjs`
 

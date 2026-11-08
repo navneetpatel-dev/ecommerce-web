@@ -21,7 +21,6 @@ export {
   ProfilePageSkeleton,
   WishlistPageSkeleton,
   ContentPageSkeleton,
-  DeliveryPageSkeleton,
   DetailPageSkeleton,
   FormPageSkeleton,
   LedgerPageSkeleton,

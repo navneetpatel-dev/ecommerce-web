@@ -11,10 +11,7 @@ import { RedeliverySlotPicker } from "@/shared/components/orders/RedeliverySlotP
 import type { TrackingLookupResult } from "../../api/tracking/shipping.api";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { LiveDeliveryMap } from "../delivery-map/LiveDeliveryMap.component";
-import { timeSince } from "@/shared/utils/geo/geo";
 import { ordersComponentsStyles } from "../../styles/actions/ordersComponents.styles";
-import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import {
   formatDate,
   formatDateTime,
@@ -30,16 +27,7 @@ export function TrackingResult({
   onReschedule: (slot: string) => void;
   isRescheduling?: boolean;
 }) {
-  const {
-    canReschedule,
-    hasLiveLocation,
-    mapLat,
-    mapLng,
-    lastPingAt,
-    liveLocationTitle,
-    mapLabel,
-    codLabel,
-  } = useTrackingResult(result);
+  const { canReschedule, codLabel } = useTrackingResult(result);
 
   return (
     <Card>
@@ -80,26 +68,6 @@ export function TrackingResult({
               note: result.failureReason,
             })}
           </p>
-        ) : null}
-
-        <ProofOfDeliveryThumbnail url={result.proofOfDeliveryUrl} />
-
-        {hasLiveLocation && mapLat != null && mapLng != null ? (
-          <div className={ordersComponentsStyles.liveLocationStack}>
-            <div className={ordersComponentsStyles.liveLocationHeader}>
-              <p className={ordersComponentsStyles.liveLocationTitle}>
-                {liveLocationTitle}
-              </p>
-              {lastPingAt ? (
-                <span className={ordersComponentsStyles.liveLocationTime}>
-                  {formatLabel(LABELS.trackingPingUpdated, {
-                    value: timeSince(lastPingAt),
-                  })}
-                </span>
-              ) : null}
-            </div>
-            <LiveDeliveryMap lat={mapLat} lng={mapLng} label={mapLabel} />
-          </div>
         ) : null}
 
         {canReschedule ? (

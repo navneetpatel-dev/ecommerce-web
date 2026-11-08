@@ -35,9 +35,7 @@ describe("OrderPaymentSummary payment wording", () => {
   it("explains the wait instead of contradicting the order badge", () => {
     render(<OrderPaymentSummary order={order()} />);
 
-    expect(
-      screen.getByText(/still confirming this payment/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/this payment is still open/i)).toBeInTheDocument();
   });
 
   it("says paid once the order records the capture", () => {
@@ -45,7 +43,7 @@ describe("OrderPaymentSummary payment wording", () => {
 
     expect(screen.getByText("₹5,924.11 via Razorpay")).toBeInTheDocument();
     expect(
-      screen.queryByText(/still confirming this payment/i),
+      screen.queryByText(/this payment is still open/i),
     ).not.toBeInTheDocument();
   });
 
@@ -67,7 +65,7 @@ describe("OrderPaymentSummary payment wording", () => {
     );
 
     expect(
-      screen.queryByText(/still confirming this payment/i),
+      screen.queryByText(/this payment is still open/i),
     ).not.toBeInTheDocument();
   });
 });

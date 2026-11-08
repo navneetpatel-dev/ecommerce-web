@@ -69,21 +69,6 @@ export function DetailPageSkeleton() {
   );
 }
 
-/** Delivery agent app shell — list-shaped, matches the task-card UI. */
-export function DeliveryPageSkeleton() {
-  return (
-    <div className={styles.deliveryContainer} aria-busy="true">
-      <Skeleton className={styles.deliveryHeaderCard} />
-      <div className={styles.deliveryMetricGrid}>
-        <Skeleton className={styles.deliveryMetric} />
-        <Skeleton className={styles.deliveryMetric} />
-        <Skeleton className={styles.deliveryMetric} />
-      </div>
-      <SkeletonCard count={4} height={styles.deliveryTaskCard} />
-    </div>
-  );
-}
-
 export function CartPageSkeleton() {
   return (
     <div className={styles.pageRoot}>

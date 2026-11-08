@@ -11,7 +11,6 @@ export type AccountProfile = CurrentUser & {
 export type AccountSectionId =
   | "overview"
   | "personal"
-  | "operations"
   | "security"
   | "addresses"
   | "paymentMethods"

@@ -12,7 +12,6 @@ const FEATURES = [
   "checkout",
   "content",
   "coupons",
-  "delivery-dashboard",
   "giftCards",
   "help",
   "home",

@@ -4,7 +4,6 @@ import { useState } from "react";
 import type { Shipment } from "@/shared/api/types";
 import { SHIPMENT_STATUS } from "@/shared/constants/statuses";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
-import { CALLABLE_SHIPMENT_STATUSES } from "../../constants/sub-order/callableShipmentStatuses";
 import { formatCodAmountLabel } from "../../utils/tracking/codLabel";
 import { useRescheduleShipment } from "../../api/tracking/shipping.queries";
 
@@ -26,21 +25,11 @@ export function useSubOrderShipmentTracking(
     }
   };
 
-  const canCallAgent =
-    Boolean(shipment.deliveryAgent?.phone) &&
-    CALLABLE_SHIPMENT_STATUSES.includes(shipment.status);
-
-  const agentTelHref = shipment.deliveryAgent?.phone
-    ? `tel:${shipment.deliveryAgent.phone}`
-    : null;
-
   const isOutForDelivery = shipment.status === SHIPMENT_STATUS.OUT_FOR_DELIVERY;
   const isFailed = shipment.status === SHIPMENT_STATUS.FAILED;
   const isRtoInitiated = shipment.status === SHIPMENT_STATUS.RTO_INITIATED;
-  const isDelivered = shipment.status === SHIPMENT_STATUS.DELIVERED;
   const hasAttempts = Boolean(shipment.attempts?.length);
   const hasCod = shipment.codAmount != null;
-  const hasProofOfDelivery = Boolean(shipment.proofOfDeliveryUrl);
 
   const codLabel =
     shipment.codAmount != null
@@ -55,15 +44,11 @@ export function useSubOrderShipmentTracking(
     rescheduleError,
     isRescheduling: reschedule.isPending,
     submitReschedule,
-    canCallAgent,
-    agentTelHref,
     isOutForDelivery,
     isFailed,
     isRtoInitiated,
-    isDelivered,
     hasAttempts,
     hasCod,
-    hasProofOfDelivery,
     codLabel,
     failureMessage,
   };

@@ -18,13 +18,7 @@ export function ServiceWorkerRegistration() {
         );
       void caches
         .keys()
-        .then((keys) =>
-          Promise.all(
-            keys
-              .filter((key) => key.startsWith("delivery-app-shell-"))
-              .map((key) => caches.delete(key)),
-          ),
-        );
+        .then((keys) => Promise.all(keys.map((key) => caches.delete(key))));
       return;
     }
 

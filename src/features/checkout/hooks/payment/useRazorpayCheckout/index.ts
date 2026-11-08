@@ -5,6 +5,10 @@ import {
   getRazorpayCheckoutConfig,
   getRazorpayCheckoutMethods,
 } from "../../../utils/payment/razorpayCheckoutConfig";
+import {
+  razorpayDismissNotice,
+  razorpayOrderExtras,
+} from "../../../utils/payment/razorpayOrderOptions";
 import { navigate } from "@/shared/utils/navigation/navigate";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
@@ -71,20 +75,7 @@ export async function launchRazorpayPayment(
     theme,
     method: getRazorpayCheckoutMethods(),
     config: getRazorpayCheckoutConfig(),
-    // Lets Razorpay Checkout's own UI offer this shopper's saved cards/UPI
-    // and the "save this instrument" toggle — Checkout-side behavior only.
-    ...(result.razorpayCustomerId
-      ? { customer_id: result.razorpayCustomerId }
-      : {}),
-    ...(result.checkoutConfigId ||
-    process.env.NEXT_PUBLIC_RAZORPAY_CHECKOUT_CONFIG_ID
-      ? {
-          checkout_config_id:
-            result.checkoutConfigId ||
-            process.env.NEXT_PUBLIC_RAZORPAY_CHECKOUT_CONFIG_ID,
-        }
-      : {}),
-    ...(prefill ? { prefill } : {}),
+    ...razorpayOrderExtras(result, prefill),
     modal: {
       backdropclose: true,
       escape: true,
@@ -100,17 +91,7 @@ export async function launchRazorpayPayment(
           });
           return;
         }
-        const notice = lastFailure
-          ? {
-              variant: "danger" as const,
-              title: LABELS.paymentFailedTitle,
-              description: lastFailure,
-            }
-          : {
-              variant: "info" as const,
-              title: LABELS.paymentCancelledTitle,
-              description: LABELS.paymentCancelledBody,
-            };
+        const notice = razorpayDismissNotice(lastFailure);
         restoreCancelledCheckout(result.orderId, notice).catch(
           (err: unknown) => {
             // Paid after all (e.g. a UPI approval as the window closed): show the order.

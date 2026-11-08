@@ -1,29 +1,22 @@
-// App-shell caching for the whole app (offline PWA support): precache the
-// delivery shell routes — which still work with no signal — plus a static
-// offline page, then serve navigations cache-first with a network refresh.
-// The storefront deliberately does NOT precache pages (prices, carts and
-// orders are per-customer): a failed navigation lands on /offline instead of
-// the browser's error screen.
-const APP_SHELL_CACHE = "delivery-app-shell-v3";
+// Offline fallback for the whole app (PWA support): precache a static offline
+// page, and keep build assets available offline. Pages are deliberately NOT
+// precached (prices, carts and orders are per-customer): a failed navigation
+// lands on /offline instead of the browser's error screen.
+const APP_SHELL_CACHE = "app-shell-v4";
 const OFFLINE_URL = "/offline";
-const DELIVERY_SHELL_PATHS = [
-  "/delivery/dashboard/today",
-  "/delivery/dashboard/deliveries",
-  "/delivery/dashboard/pickups",
-  "/delivery/dashboard/history",
-  "/delivery/dashboard/profile",
-];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(APP_SHELL_CACHE)
-      .then((cache) => cache.addAll([...DELIVERY_SHELL_PATHS, OFFLINE_URL]))
+      .then((cache) => cache.addAll([OFFLINE_URL]))
       .catch(() => undefined),
   );
   self.skipWaiting();
 });
 
+// This worker owns the origin's Cache Storage: anything that is not the
+// current cache is left over from an earlier version and is dropped.
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
@@ -31,11 +24,7 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter(
-              (key) =>
-                key.startsWith("delivery-app-shell-") &&
-                key !== APP_SHELL_CACHE,
-            )
+            .filter((key) => key !== APP_SHELL_CACHE)
             .map((key) => caches.delete(key)),
         ),
       )
@@ -48,23 +37,6 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
-
-  // Delivery shell pages: network-first, falling back to the precached copy
-  // offline (kept fresh on every successful online visit).
-  if (DELIVERY_SHELL_PATHS.includes(url.pathname)) {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const copy = response.clone();
-          void caches
-            .open(APP_SHELL_CACHE)
-            .then((cache) => cache.put(request, copy));
-          return response;
-        })
-        .catch(() => caches.match(request)),
-    );
-    return;
-  }
 
   // Static build assets: network-first so a new deploy (or Turbopack rebuild)
   // is never blocked by a stale chunk. Cache is only used when offline.
@@ -88,19 +60,6 @@ self.addEventListener("fetch", (event) => {
   if (request.mode === "navigate") {
     event.respondWith(fetch(request).catch(() => caches.match(OFFLINE_URL)));
   }
-});
-
-self.addEventListener("sync", (event) => {
-  if (event.tag !== "delivery-status-sync") return;
-  event.waitUntil(
-    self.clients
-      .matchAll({ type: "window", includeUncontrolled: true })
-      .then((clientsList) => {
-        clientsList.forEach((client) =>
-          client.postMessage({ type: "DELIVERY_FLUSH_QUEUE" }),
-        );
-      }),
-  );
 });
 
 self.addEventListener("push", (event) => {

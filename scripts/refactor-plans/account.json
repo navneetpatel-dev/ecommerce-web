@@ -105,46 +105,6 @@
       "to": "src/features/account/components/addresses/AddressesSection/useAddressesSection.hook.ts"
     },
     {
-      "from": "src/features/account/components/sections/DeliveryOperationsSection/AvailabilityToggleSection.component.tsx",
-      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/AvailabilityToggleSection.component.tsx"
-    },
-    {
-      "from": "src/features/account/components/sections/DeliveryOperationsSection/DeliveryOperationsSection.component.tsx",
-      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/DeliveryOperationsSection.component.tsx"
-    },
-    {
-      "from": "src/features/account/components/sections/DeliveryOperationsSection/DeliveryOperationsSkeleton.component.tsx",
-      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/DeliveryOperationsSkeleton.component.tsx"
-    },
-    {
-      "from": "src/features/account/components/sections/DeliveryOperationsSection/OperatingStatusAside.component.tsx",
-      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/OperatingStatusAside.component.tsx"
-    },
-    {
-      "from": "src/features/account/components/sections/DeliveryOperationsSection/PushNotificationsSection.component.tsx",
-      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/PushNotificationsSection.component.tsx"
-    },
-    {
-      "from": "src/features/account/components/sections/DeliveryOperationsSection/VehicleHubSection.component.tsx",
-      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/VehicleHubSection.component.tsx"
-    },
-    {
-      "from": "src/features/account/components/sections/DeliveryOperationsSection/deliveryOperationsSection.styles.ts",
-      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/deliveryOperationsSection.styles.ts"
-    },
-    {
-      "from": "src/features/account/components/sections/DeliveryOperationsSection/index.ts",
-      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/index.ts"
-    },
-    {
-      "from": "src/features/account/components/sections/DeliveryOperationsSection/operatingStatusAside.styles.ts",
-      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/operatingStatusAside.styles.ts"
-    },
-    {
-      "from": "src/features/account/components/sections/DeliveryOperationsSection/useDeliveryOperationsSection.hook.ts",
-      "to": "src/features/account/components/delivery-operations/DeliveryOperationsSection/useDeliveryOperationsSection.hook.ts"
-    },
-    {
       "from": "src/features/account/components/sections/ActivitySummaryList.component.tsx",
       "to": "src/features/account/components/orders-activity/ActivitySummaryList.component.tsx"
     },

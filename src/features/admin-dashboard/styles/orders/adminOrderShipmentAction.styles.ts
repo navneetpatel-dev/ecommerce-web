@@ -10,4 +10,8 @@ export const adminOrderShipmentActionStyles = {
   refundFailedText: "text-body-sm font-medium text-danger",
   emptyText: "py-4 text-center text-body text-ink-muted",
   loadingText: "py-4 text-center text-body text-ink-muted",
+  statusControl: "space-y-3 border-t border-line/60 pt-3",
+  statusHint: "text-body-sm text-ink-muted",
+  statusActions: "flex justify-end",
+  codField: "space-y-1",
 } as const;

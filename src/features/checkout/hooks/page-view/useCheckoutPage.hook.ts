@@ -1,11 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
-import {
-  useCart,
-  groupItemsByVendor,
-  resolveCartDisplayTotals,
-} from "@/features/cart";
+import { useCart, resolveCartDisplayTotals } from "@/features/cart";
 import { useCheckoutStore } from "@/features/checkout/store/checkout.store";
 import { usePlaceOrderWithRazorpay } from "../checkout/usePlaceOrder.hook";
 import { useCheckoutSession } from "../checkout/useCheckoutSession.hook";
@@ -13,13 +8,11 @@ import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { useCheckoutAddresses } from "../address/useCheckoutAddresses.hook";
 import {
   canAdvanceFromPayment,
-  hasUnavailableCartItems,
-  isShippingReadyForAllVendors,
   resolveCheckoutPageTotals,
 } from "../../utils/checkout/checkoutDerivedState";
 import { useCheckoutStepGuards } from "./useCheckoutStepGuards.hook";
 import { useCheckoutStepNavigation } from "./useCheckoutStepNavigation.hook";
-import { useShippingStep } from "../shipping/useShippingStep.hook";
+import { useCheckoutShippingReadiness } from "./useCheckoutShippingReadiness.hook";
 
 /**
  * Checkout flow orchestration (Rule 3: address concern lives in
@@ -53,52 +46,17 @@ export function useCheckoutPage() {
 
   const isLoading = cartLoading || addressesState.isLoadingAddresses;
 
-  const groupedByVendor = useMemo(() => {
-    if (!cart?.items) return {};
-    return groupItemsByVendor(cart.items);
-  }, [cart]);
-
-  const hasUnavailableItems = useMemo(
-    () => hasUnavailableCartItems(cart?.items),
-    [cart],
-  );
-
   // Going to checkout always starts a fresh flow — step 1, whatever an earlier visit left
   // in the store (see `useCheckoutSession`).
   useCheckoutSession(cart?.items);
 
-  const checkoutPincode = useMemo(() => {
-    const selected = addressesState.addresses?.find(
-      (address) => address.id === addressesState.addressId,
-    );
-    return selected?.pincode?.trim() ?? "";
-  }, [addressesState.addresses, addressesState.addressId]);
-
-  const shippingStatus = useShippingStep({
-    groupedByVendor,
-    selectedMethods: shippingMethodByVendor,
-    pincode: checkoutPincode,
-  });
-
-  const shippingReady = useMemo(() => {
-    if (!checkoutPincode) return false;
-    if (
-      shippingStatus.isRateLookupPending ||
-      shippingStatus.hasUnservableVendor
-    ) {
-      return false;
-    }
-    return isShippingReadyForAllVendors(
-      groupedByVendor,
+  const { groupedByVendor, hasUnavailableItems, shippingReady } =
+    useCheckoutShippingReadiness({
+      items: cart?.items,
+      addresses: addressesState.addresses,
+      addressId: addressesState.addressId,
       shippingMethodByVendor,
-    );
-  }, [
-    checkoutPincode,
-    groupedByVendor,
-    shippingMethodByVendor,
-    shippingStatus.isRateLookupPending,
-    shippingStatus.hasUnservableVendor,
-  ]);
+    });
 
   useCheckoutStepGuards({
     groupedByVendor,

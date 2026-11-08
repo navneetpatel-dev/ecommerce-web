@@ -34,7 +34,7 @@ describe("CardDetails", () => {
         discountPercent={21}
       />,
     );
-    expect(screen.queryByText("₹150")).not.toBeInTheDocument();
+    expect(screen.queryByText("₹150.00")).not.toBeInTheDocument();
 
     rerender(
       <CardDetails
@@ -44,7 +44,7 @@ describe("CardDetails", () => {
         discountPercent={21}
       />,
     );
-    expect(screen.getByText("₹150")).toBeInTheDocument();
+    expect(screen.getByText("₹150.00")).toBeInTheDocument();
   });
 
   it("shows the GST-inclusive price, not the price before GST", () => {
@@ -56,7 +56,7 @@ describe("CardDetails", () => {
         discountPercent={21}
       />,
     );
-    expect(screen.getByText("₹118")).toBeInTheDocument();
-    expect(screen.queryByText("₹100")).not.toBeInTheDocument();
+    expect(screen.getByText("₹118.00")).toBeInTheDocument();
+    expect(screen.queryByText("₹100.00")).not.toBeInTheDocument();
   });
 });

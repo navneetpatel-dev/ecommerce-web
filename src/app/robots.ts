@@ -32,7 +32,6 @@ export default function robots(): MetadataRoute.Robots {
           PATHS.myReturns,
           "/admin/",
           "/vendor/",
-          "/delivery/",
           "/auth/",
           "/support/",
           "/gift-cards/redeem/",

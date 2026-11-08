@@ -13,7 +13,6 @@ import { isWorkspaceProfilePath } from "@/shared/utils/navigation/profilePaths";
 import { AccountLayout } from "../../components/layout/AccountLayout.component";
 import { OverviewSection } from "../../components/overview/OverviewSection.component";
 import { PersonalInfoSection } from "../../components/personal-info/PersonalInfoSection.component";
-import { DeliveryOperationsSection } from "../../components/delivery-operations/DeliveryOperationsSection/index";
 import { SecuritySection } from "../../components/security/SecuritySection.component";
 import { AddressesSection } from "../../components/addresses/AddressesSection.component";
 import { SavedPaymentMethodsSection } from "../../components/payment-methods/SavedPaymentMethodsSection/index";
@@ -35,8 +34,6 @@ function AccountSectionBody({
       return <OverviewSection onNavigate={onNavigate} />;
     case "personal":
       return <PersonalInfoSection />;
-    case "operations":
-      return <DeliveryOperationsSection />;
     case "security":
       return <SecuritySection />;
     case "addresses":

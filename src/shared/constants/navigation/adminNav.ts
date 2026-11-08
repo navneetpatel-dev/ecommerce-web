@@ -47,11 +47,6 @@ export const ADMIN_NAV = [
     permissions: [PERMISSIONS.ORDER_MANAGE] as PermissionKey[],
   },
   {
-    href: PATHS.admin.deliveryAgents,
-    label: LABELS.deliveryAgents,
-    permissions: [PERMISSIONS.DELIVERY_AGENT_MANAGE] as PermissionKey[],
-  },
-  {
     href: PATHS.admin.returns,
     label: LABELS.returnsRefunds,
     permissions: [PERMISSIONS.ORDER_REFUND] as PermissionKey[],

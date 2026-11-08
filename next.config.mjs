@@ -67,6 +67,15 @@ const nextConfig = {
   ...(process.env.NEXT_OUTPUT_STANDALONE === "true"
     ? { output: "standalone" }
     : {}),
+  turbopack: {
+    ignoreIssue: [
+      // @ffmpeg/ffmpeg's `load()` only builds a worker from a caller-supplied
+      // `classWorkerURL` when one is passed; the video compressor never passes
+      // it, so the bundled `./worker.js` branch is the one that runs. Turbopack
+      // (16.4+) cannot resolve that unused dynamic URL and fails the build.
+      { path: "**/@ffmpeg/ffmpeg/dist/esm/classes.js" },
+    ],
+  },
   async redirects() {
     return [
       {
@@ -104,12 +113,11 @@ const nextConfig = {
             key: "Strict-Transport-Security",
             value: "max-age=63072000",
           },
-          // Camera: delivery barcode scanning. Geolocation: delivery location
-          // beacon and address capture. Everything else stays switched off.
+          // Geolocation: address capture. Everything else stays switched off.
           {
             key: "Permissions-Policy",
             value:
-              "camera=(self), geolocation=(self), microphone=(), payment=(self)",
+              "camera=(), geolocation=(self), microphone=(), payment=(self)",
           },
           { key: "Content-Security-Policy", value: contentSecurityPolicy },
         ],
