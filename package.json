@@ -61,7 +61,7 @@
     "leaflet": "^1.9.4",
     "lucide-react": "^0.508.0",
     "motion": "^12.43.0",
-    "next": "16.3.8",
+    "next": "^16.4.5",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-easy-crop": "^6.2.3",
@@ -69,7 +69,7 @@
     "recharts": "^2.15.4",
     "socket.io-client": "^4.8.3",
     "tailwind-merge": "^3.3.1",
-    "zod": "^4.4.3",
+    "zod": "^4.6.7",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
@@ -85,7 +85,7 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.1.0",
     "eslint": "^9",
-    "eslint-config-next": "16.3.8",
+    "eslint-config-next": "^16.4.5",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
     "lint-staged": "^16.4.0",
