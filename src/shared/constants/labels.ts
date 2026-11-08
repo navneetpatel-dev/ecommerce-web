@@ -55,6 +55,8 @@ import { appliedFilterLabels } from "./labels/appliedFilters";
 import { mediaUploadLabels } from "./labels/mediaUploads";
 import { homeLabels } from "./labels/home";
 import { payoutSettlementLabels } from "./labels/payoutSettlement";
+import { couponEditLabels } from "./labels/couponEdit";
+import { reviewMediaLabels } from "./labels/reviewMedia";
 import { shipmentStatusAdminLabels } from "./labels/shipmentStatusAdmin";
 import { adminOrdersFiltersLabels } from "./labels/adminOrdersFilters";
 import { tableAriaLabels } from "./labels/tableAriaLabels";
@@ -115,6 +117,8 @@ export const LABELS = {
   ...mediaUploadLabels,
   ...homeLabels,
   ...payoutSettlementLabels,
+  ...couponEditLabels,
+  ...reviewMediaLabels,
   ...shipmentStatusAdminLabels,
   ...adminOrdersFiltersLabels,
   ...tableAriaLabels,

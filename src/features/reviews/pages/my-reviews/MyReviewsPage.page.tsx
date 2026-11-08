@@ -11,6 +11,7 @@ import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.com
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { useMyReviews } from "../../api/reviews/reviews.queries";
 import { myReviewsPageStyles as styles } from "./myReviewsPage.styles";
+import { ReviewMediaGallery } from "../../components/media/ReviewMediaGallery.component";
 
 export function MyReviewsPage() {
   const { data, isLoading, isError, error, refetch } = useMyReviews();
@@ -79,6 +80,7 @@ export function MyReviewsPage() {
                 <p className={styles.reviewTitle}>{review.title}</p>
               ) : null}
               <p className={styles.reviewBody}>{review.body}</p>
+              <ReviewMediaGallery media={review.media} />
             </li>
           ))}
         </ul>

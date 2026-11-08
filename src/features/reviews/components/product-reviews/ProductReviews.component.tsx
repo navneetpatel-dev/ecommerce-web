@@ -7,6 +7,7 @@ import { REVIEW_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import type { Review } from "@/shared/api/types";
 import { productReviewsStyles as styles } from "../../styles/product-reviews/productReviews.styles";
+import { ReviewMediaGallery } from "../media/ReviewMediaGallery.component";
 
 interface ProductReviewsProps {
   reviews: Review[];
@@ -61,6 +62,7 @@ export function ProductReviews({
           )}
 
           <p className={styles.reviewBody}>{review.body}</p>
+          <ReviewMediaGallery media={review.media} />
 
           {review.vendorResponse ? (
             <div className={styles.sellerResponse}>

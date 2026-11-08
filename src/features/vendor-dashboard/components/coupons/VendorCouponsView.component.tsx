@@ -5,22 +5,23 @@ import { Button } from "@/shared/components/ui/button";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import {
   DataTable,
-  type DataTableColumn,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
-import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import {
   AdminConfirmAction,
+  EditCouponAction,
   type CouponFormInput,
 } from "@/features/admin-dashboard";
+import { couponsApi } from "@/features/coupons";
+import { vendorCouponKeys } from "../../api/coupons/vendor-coupons.queries";
 import { LABELS } from "@/shared/constants/labels";
 import { COUPON_STATUS } from "@/shared/constants/statuses";
-import { formatDateTime } from "@/shared/utils/formatting/formatDate";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { CouponAnalyticsDialog } from "./VendorCouponsView/CouponAnalyticsDialog.component";
 import { CouponsHeaderSection } from "./VendorCouponsView/CouponsHeaderSection.component";
+import { buildVendorCouponColumns } from "./VendorCouponsView/vendorCouponColumns.component";
 import { vendorCouponsViewStyles } from "../../styles/coupons/vendorCouponsView.styles";
 
 interface VendorCouponsViewProps {
@@ -42,8 +43,8 @@ interface VendorCouponsViewProps {
   onUpdateStatus: (coupon: Coupon, status: Coupon["status"]) => Promise<void>;
 }
 
-const usageCell = (row: Coupon) =>
-  `${row.usedCount}/${row.usageLimitTotal ?? LABELS.usageUnlimited}`;
+const saveVendorCoupon = (id: string, body: unknown) =>
+  couponsApi.vendorUpdate(id, body);
 
 /** Vendor coupons screen: header + table with status actions + analytics. */
 export function VendorCouponsView(props: VendorCouponsViewProps) {
@@ -66,36 +67,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     onUpdateStatus,
   } = props;
 
-  const columns: DataTableColumn<Coupon>[] = [
-    {
-      id: "code",
-      header: LABELS.couponCode,
-      className: vendorCouponsViewStyles.colMono,
-      cell: (row) => row.code,
-    },
-    {
-      id: "type",
-      header: LABELS.couponType,
-      accessor: "type",
-    },
-    {
-      id: "usage",
-      header: LABELS.couponUsage,
-      className: vendorCouponsViewStyles.colMonoSm,
-      cell: usageCell,
-    },
-    {
-      id: "status",
-      header: LABELS.status,
-      truncate: false,
-      cell: (row) => <StatusBadge status={row.status} />,
-    },
-    {
-      id: "expires",
-      header: LABELS.expires,
-      cell: (row) => formatDateTime(row.endDate),
-    },
-  ];
+  const columns = buildVendorCouponColumns();
 
   const renderActions = (row: Coupon) => {
     const setStatus = (status: Coupon["status"]) => () =>
@@ -114,6 +86,16 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
           <BarChart2 strokeWidth={2.25} aria-hidden />
           <span>{LABELS.viewAnalytics}</span>
         </Button>
+        {row.status !== COUPON_STATUS.ARCHIVED &&
+        row.status !== COUPON_STATUS.REJECTED ? (
+          <EditCouponAction
+            coupon={row}
+            save={saveVendorCoupon}
+            invalidateKey={vendorCouponKeys.all}
+            forceVendorId={vendorId}
+            vendorMode
+          />
+        ) : null}
         {row.status === COUPON_STATUS.ACTIVE ? (
           <AdminConfirmAction
             label={LABELS.pauseCoupon}

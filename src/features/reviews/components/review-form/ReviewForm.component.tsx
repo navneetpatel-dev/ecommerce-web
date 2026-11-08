@@ -10,6 +10,11 @@ import {
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
+import { UPLOAD_ENTITY } from "@/shared/constants/uploads/uploads";
+import {
+  TicketAttachmentUploader,
+  type UploadedMediaAttachment,
+} from "@/features/supportTickets";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import type { ReviewFormInput } from "../../schemas/review-form/reviews.schema";
@@ -25,6 +30,10 @@ interface ReviewFormProps {
   hoverRating: number;
   isPending: boolean;
   formLevelError?: string | null;
+  /** Upload id for this review's photos/video (the id the review takes). */
+  draftId: string;
+  attachments: UploadedMediaAttachment[];
+  onAttachmentsChange: (next: UploadedMediaAttachment[]) => void;
   onSetHoverRating: (value: number) => void;
   onSetRating: (value: number) => void;
   onSubmit: (event: React.FormEvent) => void;
@@ -39,6 +48,9 @@ export function ReviewForm({
   hoverRating,
   isPending,
   formLevelError = null,
+  draftId,
+  attachments,
+  onAttachmentsChange,
   onSetHoverRating,
   onSetRating,
   onSubmit,
@@ -89,6 +101,15 @@ export function ReviewForm({
               rows={4}
             />
           </FormFieldFrame>
+
+          <TicketAttachmentUploader
+            entityType={UPLOAD_ENTITY.REVIEWS}
+            entityId={draftId}
+            value={attachments}
+            onChange={onAttachmentsChange}
+            disabled={isPending}
+            label={LABELS.reviewMediaLabel}
+          />
         </FormSection>
 
         <FormError

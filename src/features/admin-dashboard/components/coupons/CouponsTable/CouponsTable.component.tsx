@@ -17,7 +17,18 @@ import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { useCouponRowActions } from "../../../hooks/coupons/useCouponRowActions.hook";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { CouponsAnalyticsDialog } from "./CouponsAnalyticsDialog.component";
+import { EditCouponAction } from "../EditCouponAction";
+import { adminApi } from "../../../api/analytics/admin.api";
+import { adminKeys } from "../../../api/analytics/admin.queries";
 import { buildCouponColumns } from "./couponTableColumns.component";
+
+const saveCoupon = (id: string, body: unknown) =>
+  adminApi.updateCoupon(id, body);
+
+/** Archived and rejected coupons are closed; everything else (expired too) can be edited. */
+const isEditable = (row: Coupon) =>
+  row.status !== COUPON_STATUS.ARCHIVED &&
+  row.status !== COUPON_STATUS.REJECTED;
 
 interface CouponsTableProps {
   coupons?: Coupon[];
@@ -61,6 +72,13 @@ export function CouponsTable({
           <BarChart2 strokeWidth={2.25} aria-hidden />
           <span>{LABELS.viewAnalytics}</span>
         </Button>
+        {!readOnly && isEditable(row) ? (
+          <EditCouponAction
+            coupon={row}
+            save={saveCoupon}
+            invalidateKey={adminKeys.coupons.all}
+          />
+        ) : null}
         {!readOnly && row.status === COUPON_STATUS.ACTIVE ? (
           <AdminConfirmAction
             label={LABELS.pauseCoupon}

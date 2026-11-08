@@ -1,5 +1,11 @@
 import type { ReviewStatus } from "@/shared/constants/statuses";
 
+export interface ReviewMediaItem {
+  url: string;
+  type: "IMAGE" | "VIDEO";
+  durationSeconds: number | null;
+}
+
 export interface Review {
   id: string;
   productId: string;
@@ -12,6 +18,8 @@ export interface Review {
   helpfulCount: number;
   unhelpfulCount: number;
   createdAt: string;
+  /** Photos and at most one video (approved reviews show them). */
+  media?: ReviewMediaItem[];
   vendorResponse?: string | null;
   vendorRespondedAt?: string | null;
   user?: { name: string };

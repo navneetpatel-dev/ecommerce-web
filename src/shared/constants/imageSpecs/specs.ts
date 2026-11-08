@@ -126,6 +126,15 @@ export const IMAGE_UPLOAD_SPECS: Record<string, ImageUploadSpec> = {
     mimeTypes: ATTACHMENT_MEDIA_TYPES,
     cropRequired: false,
   },
+  "reviews:attachments": {
+    outputWidth: 0,
+    outputHeight: 0,
+    aspectRatio: 0,
+    maxBytes: MAX_UPLOAD_BYTES,
+    videoMaxBytes: MAX_VIDEO_UPLOAD_BYTES,
+    mimeTypes: ATTACHMENT_MEDIA_TYPES,
+    cropRequired: false,
+  },
   "bug-reports:attachments": {
     outputWidth: 0,
     outputHeight: 0,
@@ -164,4 +173,5 @@ export const IMAGE_UPLOAD_HINT_KEYS: Record<string, ImageUploadHintKey> = {
   "vendors:kyc": "imageUploadHintKyc",
   "tickets:attachments": "imageUploadHintTicketAttachment",
   "bug-reports:attachments": "imageUploadHintBugAttachment",
+  "reviews:attachments": "imageUploadHintTicketAttachment",
 };
