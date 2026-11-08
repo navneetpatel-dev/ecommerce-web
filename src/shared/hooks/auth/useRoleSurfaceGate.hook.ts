@@ -46,11 +46,7 @@ export function useRoleSurfaceGate(): UseRoleSurfaceGateResult {
   // Avoid flashing the wrong role's UI while deciding / redirecting.
   if (!authBootstrapped) {
     return {
-      shouldRender: !(
-        surface === "admin" ||
-        surface === "vendor" ||
-        surface === "delivery"
-      ),
+      shouldRender: !(surface === "admin" || surface === "vendor"),
       surface,
     };
   }

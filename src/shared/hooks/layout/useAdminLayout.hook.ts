@@ -21,7 +21,6 @@ import {
   Bug,
   Boxes,
   Bell,
-  Bike,
   Shield,
   Activity,
 } from "lucide-react";
@@ -36,7 +35,6 @@ const ADMIN_NAV_ICONS = {
   [PATHS.admin.categories]: FolderTree,
   [PATHS.admin.banners]: Images,
   [PATHS.admin.orders]: ShoppingBag,
-  [PATHS.admin.deliveryAgents]: Bike,
   [PATHS.admin.returns]: RotateCcw,
   [PATHS.admin.supportTickets]: LifeBuoy,
   [PATHS.admin.bugReports]: Bug,

@@ -12,14 +12,11 @@ import {
   buildRefundTimeline,
 } from "../../utils/timeline/returnTimeline";
 import { returnsApi } from "../../api/returns/returns.api";
-import { useReschedulePickup } from "../../api/returns/returns.queries";
 import { RETURN_STATUS_LABEL } from "../../constants/list/returnStatusLabels";
 import { returnCreditNoteLine } from "../../utils/list/returnRefundStatus";
 
 export function useReturnRequestCard(row: ReturnRequest) {
   const [pending, setPending] = useState(false);
-  const [rescheduleError, setRescheduleError] = useState<string | null>(null);
-  const reschedulePickup = useReschedulePickup();
 
   const downloadCredit = async () => {
     setPending(true);
@@ -32,21 +29,6 @@ export function useReturnRequestCard(row: ReturnRequest) {
     }
   };
 
-  const canReschedulePickup =
-    row.status === RETURN_STATUS.PICKUP_SCHEDULED &&
-    Boolean(row.pickupFailureReason);
-
-  const submitReschedule = async (slot: string) => {
-    setRescheduleError(null);
-    try {
-      await reschedulePickup.mutateAsync({ id: row.id, slot });
-    } catch (error) {
-      setRescheduleError(
-        getApiErrorMessage(error, "Could not reschedule pickup."),
-      );
-    }
-  };
-
   return {
     productTitle: row.productName || LABELS.orderItemFallback,
     reasonCodeLabel: row.reasonCode.replaceAll("_", " "),
@@ -56,14 +38,9 @@ export function useReturnRequestCard(row: ReturnRequest) {
     creditNoteLine: returnCreditNoteLine(row),
     isRejected:
       row.status === RETURN_STATUS.REJECTED && Boolean(row.rejectionReason),
-    hasPickupFailure: Boolean(row.pickupFailureReason),
     refundTimeline: buildRefundTimeline(row),
     logisticsTimeline: buildLogisticsTimeline(row),
     pending,
-    rescheduleError,
-    isRescheduling: reschedulePickup.isPending,
-    canReschedulePickup,
     downloadCredit,
-    submitReschedule,
   };
 }

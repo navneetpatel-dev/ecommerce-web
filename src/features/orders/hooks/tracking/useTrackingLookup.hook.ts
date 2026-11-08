@@ -11,8 +11,8 @@ import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 const TRACKING_REFRESH_INTERVAL_MS = 60_000;
 
 /**
- * Customer-facing settled states. Not the same as the agent's terminal set
- * (FAILED/RTO_INITIATED are still actionable here via reschedule), and nothing
+ * Customer-facing settled states. FAILED/RTO_INITIATED are not among them
+ * (they are still actionable here via reschedule), and nothing
  * more will ever change on the page once one of these is showing.
  */
 const SETTLED_STATUSES = new Set(["DELIVERED", "RTO_DELIVERED", "CANCELLED"]);

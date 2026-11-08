@@ -66,7 +66,6 @@ export const tablesLabels = {
   trackingLastUpdate: "Last update: {value}",
   trackingEstimatedDelivery: "Estimated delivery: {value}",
   trackingLastAttempt: "Last attempt note: {note}",
-  trackingPingUpdated: "Updated {value}",
   trackingRedeliveryPrompt:
     "Delivery didn't go through — pick a redelivery window:",
   trackingNumberRequired: "Enter a tracking number to search.",

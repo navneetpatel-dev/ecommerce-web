@@ -105,12 +105,10 @@ export const tables2Labels = {
   vendorColumn: "Vendor",
   delivery: "Delivery",
   notShippedYet: "Not shipped yet",
-  proofOfDeliveryPhoto: "Proof of delivery photo",
-  viewProofOfDelivery: "View proof of delivery photo",
   viewShipment: "Shipment",
   shipmentDetails: "Shipment details",
   shipmentDetailsHint:
-    "Status, tracking, and proof of delivery for each suborder.",
+    "Status and tracking for each suborder, and moving it on by hand.",
   noShipmentsOnOrder: "No shipment recorded yet.",
   shipmentTrackingNumber: "Tracking",
   partRefundLabel: "Card refund {amount}",

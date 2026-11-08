@@ -1,5 +1,4 @@
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
-import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { LABELS } from "@/shared/constants/labels";
 import type { OrderShipmentSummary } from "@/shared/utils/orders/orderShipmentSummary";
 import { ticketShipmentSummaryStyles as styles } from "../../../styles/detail/ticketShipmentSummary.styles";
@@ -22,7 +21,6 @@ export function TicketShipmentItem({ shipment }: TicketShipmentItemProps) {
         {shipment.status ? <StatusBadge status={shipment.status} /> : null}
       </div>
       <p className={styles.tracking}>{trackingLabel}</p>
-      <ProofOfDeliveryThumbnail url={shipment.proofOfDeliveryUrl} compact />
     </li>
   );
 }

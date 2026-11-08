@@ -15,10 +15,6 @@ export const returnRequestCardStyles = {
   sectionDivided: "mt-5 border-t border-line pt-5",
   rejectionBanner:
     "rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-danger",
-  pickupFailSection: "mt-5 space-y-3 border-t border-line pt-5",
-  pickupFailBanner:
-    "rounded-md border border-line bg-surface-muted px-3 py-2 text-body-sm text-warning",
-  errorText: "text-body-sm text-danger",
   breakdownList:
     "mt-2 space-y-0.5 border-t border-line pt-2 text-body-sm text-ink-muted",
   breakdownRow: "flex justify-between gap-4",

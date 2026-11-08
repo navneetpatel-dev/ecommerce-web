@@ -1,16 +1,13 @@
 "use client";
 
-import { Phone } from "lucide-react";
 import type { Shipment } from "@/shared/api/types";
 import { LABELS } from "@/shared/constants/labels";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { CopyTextButton } from "@/shared/components/actions/CopyTextButton.component";
 import { RedeliverySlotPicker } from "@/shared/components/orders/RedeliverySlotPicker.component";
-import { DeliveryRatingPrompt } from "../../actions/DeliveryRatingPrompt.component";
 import { subOrderShipmentTrackingStyles as styles } from "../../../styles/sub-order/subOrderShipmentTracking.styles";
 import { useSubOrderShipmentTracking } from "../../../hooks/sub-order/useSubOrderShipmentTracking.hook";
-import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { ShipmentAttemptsList } from "./ShipmentAttemptsList.component";
 
 interface SubOrderShipmentTrackingProps {
@@ -18,7 +15,7 @@ interface SubOrderShipmentTrackingProps {
   orderId: string;
 }
 
-/** Tracking/carrier/delivery-agent block for a suborder's shipment (Rule 3 split). */
+/** Tracking/carrier block for a suborder's shipment (Rule 3 split). */
 export function SubOrderShipmentTracking({
   shipment,
   orderId,
@@ -27,15 +24,11 @@ export function SubOrderShipmentTracking({
     rescheduleError,
     isRescheduling,
     submitReschedule,
-    canCallAgent,
-    agentTelHref,
     isOutForDelivery,
     isFailed,
     isRtoInitiated,
-    isDelivered,
     hasAttempts,
     hasCod,
-    hasProofOfDelivery,
     codLabel,
     failureMessage,
   } = useSubOrderShipmentTracking(shipment, orderId);
@@ -56,24 +49,8 @@ export function SubOrderShipmentTracking({
       <div className={styles.statusWrapper}>
         <StatusBadge status={shipment.status} />
       </div>
-      {shipment.deliveryAgent ? (
-        <div className={styles.agentRow}>
-          <p className={styles.agentLabel}>
-            Delivery agent: {shipment.deliveryAgent.fullName}
-          </p>
-          {canCallAgent && agentTelHref ? (
-            <a href={agentTelHref} className={styles.callAgentLink}>
-              <Phone className={styles.phoneIcon} aria-hidden="true" />
-              Call agent
-            </a>
-          ) : null}
-        </div>
-      ) : null}
       {isOutForDelivery ? (
-        <p className={styles.bannerNotice}>
-          Your order is out for delivery. Share the code from your email with
-          the delivery agent to receive it.
-        </p>
+        <p className={styles.bannerNotice}>Your order is out for delivery.</p>
       ) : null}
       {hasCod ? <p className={styles.codAmount}>{codLabel}</p> : null}
       {hasAttempts && shipment.attempts ? (
@@ -101,10 +78,6 @@ export function SubOrderShipmentTracking({
           being routed back to the seller.
         </p>
       ) : null}
-      {hasProofOfDelivery ? (
-        <ProofOfDeliveryThumbnail url={shipment.proofOfDeliveryUrl} />
-      ) : null}
-      {isDelivered ? <DeliveryRatingPrompt shipmentId={shipment.id} /> : null}
     </div>
   );
 }

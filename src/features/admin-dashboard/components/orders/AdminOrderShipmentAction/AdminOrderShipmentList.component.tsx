@@ -4,6 +4,7 @@ import { adminOrderShipmentActionStyles as styles } from "../../../styles/orders
 import { AdminOrderShipmentItem } from "./AdminOrderShipmentItem.component";
 
 interface AdminOrderShipmentListProps {
+  orderId: string;
   shipments: OrderShipmentSummary[];
   isLoading: boolean;
   isEmpty: boolean;
@@ -12,6 +13,7 @@ interface AdminOrderShipmentListProps {
 }
 
 export function AdminOrderShipmentList({
+  orderId,
   shipments,
   isLoading,
   isEmpty,
@@ -29,6 +31,7 @@ export function AdminOrderShipmentList({
   const items = shipments.map((shipment) => (
     <AdminOrderShipmentItem
       key={shipment.id}
+      orderId={orderId}
       shipment={shipment}
       isRetrying={retryingSubOrderId === shipment.id}
       onRetryRefund={onRetryRefund}

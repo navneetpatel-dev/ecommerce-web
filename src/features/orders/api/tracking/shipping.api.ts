@@ -13,24 +13,6 @@ export interface TrackingLookupResult {
   preferredRedeliverySlot?: string | null;
   codAmount?: number | null;
   codCollected?: boolean;
-  proofOfDeliveryUrl?: string | null;
-  deliveryAgent?: {
-    id: string;
-    fullName: string;
-    lastLat?: number | null;
-    lastLng?: number | null;
-    locationUpdatedAt?: string | null;
-  } | null;
-  /** Delivery address's device-captured GPS fix — null for legacy addresses saved before this existed. */
-  destination?: { lat: number; lng: number } | null;
-}
-
-export interface DeliveryRating {
-  id: string;
-  shipmentId: string;
-  rating: number;
-  comment: string | null;
-  createdAt: string;
 }
 
 export const shippingApi = {
@@ -41,11 +23,4 @@ export const shippingApi = {
       API.shipping.reschedule(trackingNumber),
       { slot },
     ),
-  getRating: (shipmentId: string) =>
-    apiClient.get<DeliveryRating | null>(API.shipping.rating(shipmentId)),
-  submitRating: (shipmentId: string, rating: number, comment?: string) =>
-    apiClient.post<DeliveryRating>(API.shipping.rating(shipmentId), {
-      rating,
-      comment,
-    }),
 };

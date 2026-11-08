@@ -30,9 +30,6 @@ export const PERMISSIONS = {
   TICKET_MANAGE: "ticket.manage",
   BUG_REPORT_MANAGE: "bug_report.manage",
   WALLET_ADJUST: "wallet.adjust",
-  DELIVERY_AGENT_MANAGE: "delivery_agent.manage",
-  SHIPMENT_DELIVERY_UPDATE: "shipment.delivery_update",
-  RETURN_PICKUP_UPDATE: "return.pickup_update",
   ROLE_MANAGE: "role.manage",
   USER_IMPERSONATE: "user.impersonate",
 } as const;

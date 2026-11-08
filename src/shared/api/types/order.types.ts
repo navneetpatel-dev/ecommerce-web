@@ -46,8 +46,6 @@ export interface Shipment {
   estimatedDeliveryDate: string | null;
   shippedAt: string | null;
   deliveredAt: string | null;
-  deliveryAgent?: { id: string; fullName: string; phone: string } | null;
-  proofOfDeliveryUrl?: string | null;
   failureReason?: string | null;
   failedAttemptCount?: number;
   codAmount?: number | null;

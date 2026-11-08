@@ -28,13 +28,6 @@ export const pageSkeletonsStyles = {
   detailHero: "h-36 w-full",
   detailCard: "h-28 w-full",
 
-  // Delivery agent app: every /delivery/dashboard/* route
-  deliveryContainer: "space-y-4 px-4 py-4",
-  deliveryHeaderCard: "h-24 w-full",
-  deliveryMetricGrid: "grid grid-cols-2 gap-3 sm:grid-cols-3",
-  deliveryMetric: "h-20 w-full",
-  deliveryTaskCard: "h-28 w-full",
-
   pageRoot: "relative",
   cartContainer: "storefront-container space-y-6 py-6 md:py-8",
   cartTitleStack: "space-y-2",

@@ -1,19 +1,21 @@
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
-import { ProofOfDeliveryThumbnail } from "@/shared/components/ProofOfDeliveryThumbnail";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { REFUND_STATUS } from "@/shared/constants/statuses";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { OrderShipmentSummary } from "@/shared/utils/orders/orderShipmentSummary";
 import { adminOrderShipmentActionStyles as styles } from "../../../styles/orders/adminOrderShipmentAction.styles";
+import { AdminShipmentStatusControl } from "./AdminShipmentStatusControl.component";
 
 interface AdminOrderShipmentItemProps {
+  orderId: string;
   shipment: OrderShipmentSummary;
   isRetrying: boolean;
   onRetryRefund: (subOrderId: string) => void;
 }
 
 export function AdminOrderShipmentItem({
+  orderId,
   shipment,
   isRetrying,
   onRetryRefund,
@@ -61,7 +63,14 @@ export function AdminOrderShipmentItem({
           ) : null}
         </div>
       ) : null}
-      <ProofOfDeliveryThumbnail url={shipment.proofOfDeliveryUrl} compact />
+      {shipment.shipmentId ? (
+        <AdminShipmentStatusControl
+          orderId={orderId}
+          shipmentId={shipment.shipmentId}
+          status={shipment.status}
+          isCashOnDelivery={shipment.isCashOnDelivery}
+        />
+      ) : null}
     </li>
   );
 }

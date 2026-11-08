@@ -30,7 +30,6 @@ import { reports3Labels } from "./labels/reports3";
 import { reports4Labels } from "./labels/reports4";
 import { apiErrorLabels } from "./labels/apiErrors";
 import { cartLabels } from "./labels/cart";
-import { deliveryForceConfirmLabels } from "./labels/deliveryForceConfirm";
 import { webVitalsReportLabels } from "./labels/webVitalsReport";
 import { shippingRatesLabels } from "./labels/shippingRates";
 import { auditFiltersLabels } from "./labels/auditFilters";
@@ -40,7 +39,6 @@ import { wishlistPriceDropLabels } from "./labels/wishlistPriceDrop";
 import { returnRefundBreakdownLabels } from "./labels/returnRefundBreakdown";
 import { notificationsAdminLabels } from "./labels/notificationsAdmin";
 import { adminUsersFiltersLabels } from "./labels/adminUsersFilters";
-import { deliveryDispatchZoneLabels } from "./labels/deliveryDispatchZones";
 import { vendorPayoutFrequencyLabels } from "./labels/vendorPayoutFrequency";
 import { vendorBulkImportLabels } from "./labels/vendorBulkImport";
 import { buyAgainLabels } from "./labels/buyAgain";
@@ -56,8 +54,8 @@ import { exportsLabels } from "./labels/exports";
 import { appliedFilterLabels } from "./labels/appliedFilters";
 import { mediaUploadLabels } from "./labels/mediaUploads";
 import { homeLabels } from "./labels/home";
-import { deliveryAgentTablesLabels } from "./labels/deliveryAgentTables";
-import { deliveryAgentOpsLabels } from "./labels/deliveryAgentOps";
+import { payoutSettlementLabels } from "./labels/payoutSettlement";
+import { shipmentStatusAdminLabels } from "./labels/shipmentStatusAdmin";
 import { adminOrdersFiltersLabels } from "./labels/adminOrdersFilters";
 import { tableAriaLabels } from "./labels/tableAriaLabels";
 import { adminQueuesLabels } from "./labels/adminQueues";
@@ -92,7 +90,6 @@ export const LABELS = {
   ...reports4Labels,
   ...apiErrorLabels,
   ...cartLabels,
-  ...deliveryForceConfirmLabels,
   ...webVitalsReportLabels,
   ...shippingRatesLabels,
   ...auditFiltersLabels,
@@ -102,7 +99,6 @@ export const LABELS = {
   ...returnRefundBreakdownLabels,
   ...notificationsAdminLabels,
   ...adminUsersFiltersLabels,
-  ...deliveryDispatchZoneLabels,
   ...vendorPayoutFrequencyLabels,
   ...vendorBulkImportLabels,
   ...buyAgainLabels,
@@ -118,8 +114,8 @@ export const LABELS = {
   ...appliedFilterLabels,
   ...mediaUploadLabels,
   ...homeLabels,
-  ...deliveryAgentTablesLabels,
-  ...deliveryAgentOpsLabels,
+  ...payoutSettlementLabels,
+  ...shipmentStatusAdminLabels,
   ...adminOrdersFiltersLabels,
   ...tableAriaLabels,
   ...adminQueuesLabels,
@@ -135,7 +131,6 @@ export const ROLES = {
   ADMIN_CATALOG_MANAGER: "ADMIN_CATALOG_MANAGER",
   VENDOR_OWNER: "VENDOR_OWNER",
   VENDOR_STAFF: "VENDOR_STAFF",
-  DELIVERY_AGENT: "DELIVERY_AGENT",
   CUSTOMER: "CUSTOMER",
 } as const;
 
@@ -148,7 +143,6 @@ export const ROLE_LABELS: Record<RoleName, string> = {
   [ROLES.ADMIN_CATALOG_MANAGER]: "Catalog Manager",
   [ROLES.VENDOR_OWNER]: "Vendor Owner",
   [ROLES.VENDOR_STAFF]: "Vendor Staff",
-  [ROLES.DELIVERY_AGENT]: "Delivery Agent",
   [ROLES.CUSTOMER]: "Customer",
 };
 
@@ -159,4 +153,3 @@ export const ADMIN_ROLES = [
 ] as const;
 
 export const VENDOR_ROLES = [ROLES.VENDOR_OWNER, ROLES.VENDOR_STAFF] as const;
-export const DELIVERY_ROLES = [ROLES.DELIVERY_AGENT] as const;

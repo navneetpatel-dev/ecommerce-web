@@ -241,54 +241,6 @@
       "to": "src/features/admin-dashboard/styles/audit/adminAuditExportPanel.styles.ts"
     },
     {
-      "from": "src/features/admin-dashboard/components/delivery-agents/CashDepositsPanel/cashDepositsPanel.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/cashDepositsPanel.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/AgentDocumentsPanel/agentDocumentsPanel.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/agentDocumentsPanel.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/deliveryDispatchShipmentList.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/deliveryDispatchShipmentList.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/deliveryDispatchPickupList.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/deliveryDispatchPickupList.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/deliveryDispatchPanel.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/deliveryDispatchPanel.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/AgentMarkPayoutPaidAction/agentMarkPayoutPaidAction.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/agentMarkPayoutPaidAction.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/AgentPayoutsPanel/agentPayoutsPanel.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/agentPayoutsPanel.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/AdminAssignDeliveryAgentAction/adminAssignDeliveryAgentAction.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/adminAssignDeliveryAgentAction.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/AdminDeliveryPerformancePanel/adminDeliveryPerformancePanel.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/adminDeliveryPerformancePanel.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/staleTasksPanel.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/staleTasksPanel.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/createDeliveryAgentForm.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/createDeliveryAgentForm.styles.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/bulkImportAgentsDialog.styles.ts",
-      "to": "src/features/admin-dashboard/styles/delivery-agents/bulkImportAgentsDialog.styles.ts"
-    },
-    {
       "from": "src/features/admin-dashboard/components/users/ImpersonateUserButton/impersonateUserButton.styles.ts",
       "to": "src/features/admin-dashboard/styles/users/impersonateUserButton.styles.ts"
     },
@@ -733,14 +685,6 @@
       "to": "src/features/account/styles/notifications/browserNotificationsSetting.styles.ts"
     },
     {
-      "from": "src/features/account/components/delivery-operations/DeliveryOperationsSection/deliveryOperationsSection.styles.ts",
-      "to": "src/features/account/styles/delivery-operations/deliveryOperationsSection.styles.ts"
-    },
-    {
-      "from": "src/features/account/components/delivery-operations/DeliveryOperationsSection/operatingStatusAside.styles.ts",
-      "to": "src/features/account/styles/delivery-operations/operatingStatusAside.styles.ts"
-    },
-    {
       "from": "src/features/categories/components/mega-menu/CategoriesMegaMenu/categoryMegaMenu.styles.ts",
       "to": "src/features/categories/styles/mega-menu/categoryMegaMenu.styles.ts"
     },
@@ -751,82 +695,6 @@
     {
       "from": "src/features/categories/components/browse/categoryCard.styles.ts",
       "to": "src/features/categories/styles/browse/categoryCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/rto/rtoHandoverCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/rto/rtoHandoverCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/today/taskCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/today/taskCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/today/taskContactCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/today/taskContactCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/today/ShiftSummaryCard/shiftSummaryCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/today/shiftSummaryCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/bank/BankDetailsCard/bankDetailsCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/bank/bankDetailsCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/location/LocationBeacon/locationBeacon.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/location/locationBeacon.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/cash/CashDepositsCard/cashDepositsCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/cash/cashDepositsCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/doorstepConfirmCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/doorstep/doorstepConfirmCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/earningsPayoutsCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/earnings/earningsPayoutsCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/documents/DeliveryAgentDocumentsCard/deliveryAgentDocumentsCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/documents/deliveryAgentDocumentsCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/offline/OfflineSyncBanner/offlineSyncBanner.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/offline/offlineSyncBanner.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/pickups/pickupChecklistCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/pickups/pickupChecklistCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/pickups/barcodeScanButton.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/pickups/barcodeScanButton.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/pickups/pickupOverviewCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/pickups/pickupOverviewCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/deliveries/failedAttemptSection.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/deliveries/failedAttemptSection.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/deliveries/deliveryTerminalStatusBanner.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/deliveries/deliveryTerminalStatusBanner.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/deliveries/shipmentOverviewCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/deliveries/shipmentOverviewCard.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/deliveries/DeliveryAttemptsList/deliveryAttemptsList.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/deliveries/deliveryAttemptsList.styles.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/deliveries/DeliveryMilestoneCard/deliveryMilestoneCard.styles.ts",
-      "to": "src/features/delivery-dashboard/styles/deliveries/deliveryMilestoneCard.styles.ts"
     },
     {
       "from": "src/features/help/components/home/HelpHomeView/helpHomeView.styles.ts",
@@ -1181,38 +1049,6 @@
       "to": "src/features/admin-dashboard/hooks/audit/useAdminAuditExportPanel.hook.ts"
     },
     {
-      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/useDeliveryDispatchPanel.hook.ts",
-      "to": "src/features/admin-dashboard/hooks/delivery-agents/useDeliveryDispatchPanel.hook.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/useDeliveryDispatchShipmentList.hook.ts",
-      "to": "src/features/admin-dashboard/hooks/delivery-agents/useDeliveryDispatchShipmentList.hook.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/DeliveryDispatch/useDeliveryDispatchPickupList.hook.ts",
-      "to": "src/features/admin-dashboard/hooks/delivery-agents/useDeliveryDispatchPickupList.hook.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/AgentMarkPayoutPaidAction/useAgentMarkPayoutPaidAction.hook.ts",
-      "to": "src/features/admin-dashboard/hooks/delivery-agents/useAgentMarkPayoutPaidAction.hook.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/AdminAssignDeliveryAgentAction/useAdminAssignDeliveryAgentAction.hook.ts",
-      "to": "src/features/admin-dashboard/hooks/delivery-agents/useAdminAssignDeliveryAgentAction.hook.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/StaleTasksPanel/useStaleTasksReport.hook.ts",
-      "to": "src/features/admin-dashboard/hooks/delivery-agents/useStaleTasksReport.hook.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/useCreateDeliveryAgentFormFieldsHandlers.hook.ts",
-      "to": "src/features/admin-dashboard/hooks/delivery-agents/useCreateDeliveryAgentFormFieldsHandlers.hook.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/BulkImportAgentsDialog/useBulkImportAgentsDialog.hook.ts",
-      "to": "src/features/admin-dashboard/hooks/delivery-agents/useBulkImportAgentsDialog.hook.ts"
-    },
-    {
       "from": "src/features/admin-dashboard/components/users/ImpersonateUserButton/useImpersonateUserButton.hook.ts",
       "to": "src/features/admin-dashboard/hooks/users/useImpersonateUserButton.hook.ts"
     },
@@ -1453,44 +1289,12 @@
       "to": "src/features/account/hooks/notifications/useBrowserNotificationsSetting.hook.ts"
     },
     {
-      "from": "src/features/account/components/delivery-operations/DeliveryOperationsSection/useDeliveryOperationsSection.hook.ts",
-      "to": "src/features/account/hooks/delivery-operations/useDeliveryOperationsSection.hook.ts"
-    },
-    {
       "from": "src/features/categories/components/browse/useCategoryMoreCardPresentation.hook.ts",
       "to": "src/features/categories/hooks/browse/useCategoryMoreCardPresentation.hook.ts"
     },
     {
       "from": "src/features/categories/components/browse/useCategoryCardPresentation.hook.ts",
       "to": "src/features/categories/hooks/browse/useCategoryCardPresentation.hook.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/today/ShiftSummaryCard/useShiftSummaryCard.hook.ts",
-      "to": "src/features/delivery-dashboard/hooks/today/useShiftSummaryCard.hook.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/bank/BankDetailsCard/useBankDetailsCardPresentation.hook.ts",
-      "to": "src/features/delivery-dashboard/hooks/bank/useBankDetailsCardPresentation.hook.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/location/LocationBeacon/useLocationBeacon.hook.ts",
-      "to": "src/features/delivery-dashboard/hooks/location/useLocationBeacon.hook.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/cash/CashDepositsCard/useCashDepositsCardPresentation.hook.ts",
-      "to": "src/features/delivery-dashboard/hooks/cash/useCashDepositsCardPresentation.hook.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/doorstep/DoorstepConfirmCard/useDoorstepConfirmHandlers.hook.ts",
-      "to": "src/features/delivery-dashboard/hooks/doorstep/useDoorstepConfirmHandlers.hook.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/earnings/EarningsPayoutsCard/useEarningsPayoutsCardPresentation.hook.ts",
-      "to": "src/features/delivery-dashboard/hooks/earnings/useEarningsPayoutsCardPresentation.hook.ts"
-    },
-    {
-      "from": "src/features/delivery-dashboard/components/offline/OfflineSyncBanner/useOfflineSyncBanner.hook.ts",
-      "to": "src/features/delivery-dashboard/hooks/offline/useOfflineSyncBanner.hook.ts"
     },
     {
       "from": "src/shared/components/InfiniteSingleSelect/useInfiniteSelectOptions.hook.ts",
@@ -1511,10 +1315,6 @@
     {
       "from": "src/shared/components/FileUpload/useFileUploads.hook.ts",
       "to": "src/shared/hooks/file-upload/useFileUploads.hook.ts"
-    },
-    {
-      "from": "src/shared/components/layout/useDeliveryLayout.hook.ts",
-      "to": "src/shared/hooks/layout/useDeliveryLayout.hook.ts"
     },
     {
       "from": "src/shared/components/layout/useAdminLayout.hook.ts",
@@ -1631,10 +1431,6 @@
     {
       "from": "src/features/admin-dashboard/components/coupons/CreateCouponForm/constants.ts",
       "to": "src/features/admin-dashboard/constants/coupons/constants.ts"
-    },
-    {
-      "from": "src/features/admin-dashboard/components/delivery-agents/CreateDeliveryAgentForm/createDeliveryAgentForm.types.ts",
-      "to": "src/features/admin-dashboard/types/delivery-agents/createDeliveryAgentForm.types.ts"
     },
     {
       "from": "src/features/admin-dashboard/components/categories/AdminCategoryAttributesAction/attributeOptionUtils.ts",

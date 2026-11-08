@@ -1,11 +1,8 @@
 "use client";
 
-import { Bike, Mail, UserRound } from "lucide-react";
+import { Mail, UserRound } from "lucide-react";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
-import { useAuthStore } from "@/shared/stores/auth/auth.store";
-import { isDeliveryRole } from "@/shared/utils/roles/roles";
-import { useDeliveryProfile } from "@/features/delivery-dashboard";
 import type { AccountProfile } from "../../../types/layout/types";
 import { EmailVerificationStatus } from "../EmailVerificationStatus.component";
 import { personalInfoSectionStyles as styles } from "../../../styles/personal-info/personalInfoSection.styles";
@@ -15,33 +12,7 @@ interface ProfileAsideProps {
   isWorkspace: boolean;
 }
 
-function DeliveryProfileAsideDetail() {
-  const profile = useDeliveryProfile();
-  const agent = profile.data;
-  if (!agent) return null;
-  const dutyStatusLabel = agent.availableForAssignment
-    ? "Available for duty"
-    : "Off duty";
-
-  return (
-    <div className={styles.deliveryDetailRow}>
-      <span className={styles.asideIconBoxBrand}>
-        <Bike size={18} strokeWidth={1.5} />
-      </span>
-      <div className={styles.asideDetails}>
-        <p className={styles.asideLabel}>Operating Unit</p>
-        <p className={styles.asideValue}>
-          {agent.vehicleType} · {agent.hubOrZone}
-        </p>
-        <p className={styles.asideTextMuted}>{dutyStatusLabel}</p>
-      </div>
-    </div>
-  );
-}
-
 export function ProfileAside({ profile, isWorkspace }: ProfileAsideProps) {
-  const role = useAuthStore((s) => s.currentUser?.role);
-  const isDelivery = isDeliveryRole(role);
   const emailFixedHint = isWorkspace
     ? LABELS.emailFixedWorkspace
     : LABELS.emailFixedStorefront;
@@ -87,8 +58,6 @@ export function ProfileAside({ profile, isWorkspace }: ProfileAsideProps) {
             </div>
           </div>
         </div>
-
-        {isDelivery && <DeliveryProfileAsideDetail />}
 
         <div className={styles.asideFooter}>
           <p className={styles.asideFooterText}>{emailFixedHint}</p>

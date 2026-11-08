@@ -2,14 +2,13 @@ import type { Shipment, VendorInfo } from "@/shared/api/types";
 
 /**
  * Read-only return/exchange visibility for a vendor sub-order — vendors can
- * see status and the assigned pickup agent, but can't change either here
+ * see its status, but can't change it here
  * (that lifecycle stays owned by the returns module).
  */
 export interface VendorReturnRequest {
   id: string;
   status: string;
   type?: "REFUND" | "EXCHANGE";
-  deliveryAgent?: { id: string; fullName: string; phone: string } | null;
 }
 
 export interface VendorSubOrder {

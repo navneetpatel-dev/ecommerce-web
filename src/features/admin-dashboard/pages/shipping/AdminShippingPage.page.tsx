@@ -3,6 +3,7 @@
 import { AdminDataPage } from "../shared/AdminDataPage.page";
 import { AdminShippingZoneForm } from "../../components/shipping/AdminShippingZoneForm.component";
 import { AdminShippingRateForm } from "../../components/shipping/AdminShippingRateForm.component";
+import { RtoQueuePanel } from "../../components/shipping/RtoQueuePanel.component";
 import { useAdminShippingPage } from "../../hooks/shipping/useAdminShippingPage";
 import { useAdminShippingRatesPage } from "../../hooks/shipping/useAdminShippingRatesPage";
 import { adminPagesStyles } from "../shared/adminPages.styles";
@@ -29,6 +30,7 @@ export function AdminShippingPage() {
         actions={ratesPage.actions}
         columnKeys={ratesPage.columnKeys}
       />
+      <RtoQueuePanel />
     </div>
   );
 }

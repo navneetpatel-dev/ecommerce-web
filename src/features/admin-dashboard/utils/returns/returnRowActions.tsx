@@ -8,7 +8,6 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { returnsApi } from "@/features/returns";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
-import { AdminAssignDeliveryAgentAction } from "../../components/delivery-agents/AdminAssignDeliveryAgentAction.component";
 import { adminRowLabel } from "../shared/adminRowLabel";
 import { buildReturnDocumentActions } from "./returnDocumentActions";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
@@ -98,16 +97,6 @@ export function buildReturnRowActions(
           name,
         })}
         onConfirm={handleSchedulePickup}
-      />,
-    );
-  }
-
-  if (status === RETURN_STATUS.PICKUP_SCHEDULED && !row.deliveryAgentId) {
-    buttons.push(
-      <AdminAssignDeliveryAgentAction
-        key="assign-agent"
-        returnId={String(row.id)}
-        onDone={reload}
       />,
     );
   }

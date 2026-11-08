@@ -44,6 +44,7 @@ export function AdminOrderShipmentAction({
             <DialogDescription>{LABELS.shipmentDetailsHint}</DialogDescription>
           </DialogHeader>
           <AdminOrderShipmentList
+            orderId={shipment.orderId}
             shipments={shipment.shipments}
             isLoading={shipment.isLoading}
             isEmpty={shipment.isEmpty}

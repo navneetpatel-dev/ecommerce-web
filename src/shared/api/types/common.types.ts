@@ -11,7 +11,6 @@ export interface CurrentUser {
   status?: string | null;
   permissions?: string[];
   vendorId: string | null;
-  deliveryAgentId?: string | null;
   emailVerified: boolean;
   emailMarketingConsent?: boolean;
   avatarUrl?: string | null;
@@ -41,7 +40,7 @@ export interface Address {
   pincode: string;
   isDefault: boolean;
   deliveryInstructions?: string | null;
-  /** Device-captured GPS fix at save time — powers the delivery live-ETA distance. */
+  /** Device-captured GPS fix at save time. */
   lat?: number | null;
   lng?: number | null;
 }

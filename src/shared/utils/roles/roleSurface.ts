@@ -1,20 +1,17 @@
 import { PATHS } from "@/shared/constants/paths/paths";
 import {
   ADMIN_ROLES,
-  DELIVERY_ROLES,
   VENDOR_ROLES,
   type RoleName,
 } from "@/shared/constants/labels";
 import {
   isAdminRole,
   isCustomerRole,
-  isDeliveryRole,
   isVendorRole,
   isWorkspaceRole,
 } from "@/shared/utils/roles/roles";
 
-export type AppSurface =
-  "admin" | "vendor" | "delivery" | "storefront" | "auth";
+export type AppSurface = "admin" | "vendor" | "storefront" | "auth";
 
 /**
  * Vendor dashboard surface (`/vendor`, `/vendor/dashboard/...`).
@@ -27,21 +24,12 @@ export function isVendorWorkspacePath(pathname: string): boolean {
   );
 }
 
-export function isDeliveryWorkspacePath(pathname: string): boolean {
-  return (
-    pathname === PATHS.delivery.root ||
-    pathname.startsWith(`${PATHS.delivery.root}/`)
-  );
-}
-
 /** Default landing path for a signed-in role. */
 export function defaultRouteForRole(role: RoleName): string {
   if ((ADMIN_ROLES as readonly string[]).includes(role))
     return PATHS.admin.root;
   if ((VENDOR_ROLES as readonly string[]).includes(role))
     return PATHS.vendor.overview;
-  if ((DELIVERY_ROLES as readonly string[]).includes(role))
-    return PATHS.delivery.today;
   return PATHS.home;
 }
 
@@ -59,13 +47,12 @@ export function surfaceForPath(pathname: string): AppSurface {
   }
   if (pathname.startsWith(PATHS.admin.root)) return "admin";
   if (isVendorWorkspacePath(pathname)) return "vendor";
-  if (isDeliveryWorkspacePath(pathname)) return "delivery";
   return "storefront";
 }
 
 export function isWorkspacePath(pathname: string): boolean {
   const surface = surfaceForPath(pathname);
-  return surface === "admin" || surface === "vendor" || surface === "delivery";
+  return surface === "admin" || surface === "vendor";
 }
 
 /** Whether this role may remain on the given path (hardcoded URL safe). */
@@ -86,10 +73,6 @@ export function isPathAllowedForRole(
     return authenticated && isVendorRole(role);
   }
 
-  if (surface === "delivery") {
-    return authenticated && isDeliveryRole(role);
-  }
-
   // Storefront: guests + customers only (never admin/vendor).
   if (!authenticated) return true;
   return isCustomerRole(role);
@@ -103,10 +86,7 @@ export function deniedAccessRedirect(
 ): string {
   const surface = surfaceForPath(pathname);
 
-  if (
-    (surface === "admin" || surface === "vendor" || surface === "delivery") &&
-    !authenticated
-  ) {
+  if ((surface === "admin" || surface === "vendor") && !authenticated) {
     return PATHS.loginWithRedirect(pathname);
   }
 
@@ -132,7 +112,6 @@ export function homePathForContext(
   const surface = surfaceForPath(pathname);
   if (surface === "admin") return PATHS.admin.root;
   if (surface === "vendor") return PATHS.vendor.overview;
-  if (surface === "delivery") return PATHS.delivery.today;
   if (role && isWorkspaceRole(role)) return defaultRouteForRole(role);
   return PATHS.home;
 }

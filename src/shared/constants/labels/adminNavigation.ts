@@ -58,7 +58,6 @@ export const adminNavigationLabels = {
   audit: "Audit",
   settings: "Settings",
   notifications: "Notifications",
-  deliveryAgents: "Delivery agents",
 
   // Vendor / account nav
 } as const;

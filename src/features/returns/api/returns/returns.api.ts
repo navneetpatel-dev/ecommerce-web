@@ -61,6 +61,4 @@ export const returnsApi = {
   /** Puts a picked-up return's units back into sellable stock (once; never automatic). */
   restock: (id: string) =>
     apiClient.post<ReturnRequest>(API.returns.restock(id)),
-  reschedulePickup: (id: string, slot: string) =>
-    apiClient.post<ReturnRequest>(API.returns.reschedulePickup(id), { slot }),
 };

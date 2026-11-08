@@ -1,68 +1,38 @@
 "use client";
 
-import { LABELS } from "@/shared/constants/labels";
-
 import { Undo2 } from "lucide-react";
-import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
-import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
-import type { DeliveryShipment } from "@/features/delivery-dashboard";
+import { DataTable } from "@/shared/components/DataTable";
+import { LABELS } from "@/shared/constants/labels";
+import type { RtoQueueShipment } from "../../../api/shipping/shipping.api";
 import { rtoQueuePanelStyles as styles } from "../../../styles/shipping/rtoQueuePanel.styles";
 import { useRtoQueuePanel } from "../../../hooks/shipping/useRtoQueuePanel.hook";
 
-const COLUMNS: DataTableColumn<DeliveryShipment>[] = [
-  {
-    id: "tracking",
-    header: LABELS.trackingNumber,
-    className: styles.tableCellMono,
-    accessor: "trackingNumber",
-  },
-  {
-    id: "status",
-    header: LABELS.status,
-    truncate: false,
-    cell: (row) => <StatusBadge status={row.status} />,
-  },
-  {
-    id: "agent",
-    header: LABELS.agentName,
-    cell: (row) => row.deliveryAgent?.fullName ?? "—",
-  },
-  {
-    id: "failedAttempts",
-    header: LABELS.flagsFailedAttempts,
-    accessor: "failedAttemptCount",
-  },
-  {
-    id: "lastNote",
-    header: LABELS.lastNoteColumn,
-    className: styles.tableCellMuted,
-    cell: (row) => row.failureReason ?? "—",
-  },
-];
+const getRowId = (row: RtoQueueShipment) => row.id;
 
-/** Admin/hub visibility into every shipment currently mid-RTO or already handed back. */
+/** Every shipment returning to origin or already received back, with the "received" action. */
 export function RtoQueuePanel() {
-  const { shipments, loading, pendingCount } = useRtoQueuePanel();
+  const { visible, shipments, columns, loading, pendingBadge } =
+    useRtoQueuePanel();
+  if (!visible) return null;
 
   return (
     <section className={styles.root}>
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <Undo2 className={styles.headerIcon} aria-hidden="true" />
-          <h2 className={styles.title}>Return to Origin (RTO) queue</h2>
+          <h2 className={styles.title}>{LABELS.rtoQueueTitle}</h2>
         </div>
-        {pendingCount > 0 ? (
-          <span className={styles.badge}>{pendingCount} awaiting handover</span>
+        {pendingBadge ? (
+          <span className={styles.badge}>{pendingBadge}</span>
         ) : null}
       </div>
       <DataTable
         ariaLabel={LABELS.rtoQueueTableAria}
-
-        columns={COLUMNS}
+        columns={columns}
         rows={shipments}
-        getRowId={(row) => row.id}
+        getRowId={getRowId}
         loading={loading}
-        emptyMessage="No shipments are currently returning to origin."
+        emptyMessage={LABELS.rtoQueueEmpty}
         rowDetails={false}
       />
     </section>

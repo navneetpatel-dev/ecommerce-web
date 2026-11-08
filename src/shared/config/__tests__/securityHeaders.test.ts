@@ -32,15 +32,15 @@ describe("security headers", () => {
     expect(headers.get("Strict-Transport-Security")).toContain("max-age=");
   });
 
-  it("keeps camera and geolocation available to the app itself", async () => {
+  it("keeps geolocation available to the app itself and blocks the camera", async () => {
     const [rule] = await readHeaderRules();
     const policy = rule.headers.find(
       ({ key }) => key === "Permissions-Policy",
     )?.value;
 
-    // Delivery agents scan barcodes (camera) and share live location; blocking
-    // either here would break those features with no visible cause.
-    expect(policy).toContain("camera=(self)");
+    // Address forms capture the customer's location; blocking it here would
+    // break that with no visible cause. Nothing uses the camera.
+    expect(policy).toContain("camera=()");
     expect(policy).toContain("geolocation=(self)");
     expect(policy).toContain("microphone=()");
   });

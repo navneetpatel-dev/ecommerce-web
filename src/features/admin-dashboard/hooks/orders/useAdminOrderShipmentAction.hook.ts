@@ -53,6 +53,7 @@ export function useAdminOrderShipmentAction(row: AdminDataRow) {
   }, []);
 
   return {
+    orderId,
     open,
     shipments,
     isLoading: open && detailQuery.isLoading && fallbackShipments.length === 0,

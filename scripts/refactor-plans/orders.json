@@ -81,20 +81,12 @@
       "to": "src/features/orders/components/actions/BuyAgainButton.component.tsx"
     },
     {
-      "from": "src/features/orders/components/DeliveryRatingPrompt.component.tsx",
-      "to": "src/features/orders/components/actions/DeliveryRatingPrompt.component.tsx"
-    },
-    {
       "from": "src/features/orders/components/OrderCancelAction.component.tsx",
       "to": "src/features/orders/components/actions/OrderCancelAction.component.tsx"
     },
     {
       "from": "src/features/orders/components/ordersComponents.styles.ts",
       "to": "src/features/orders/components/actions/ordersComponents.styles.ts"
-    },
-    {
-      "from": "src/features/orders/components/LiveDeliveryMap.component.tsx",
-      "to": "src/features/orders/components/delivery-map/LiveDeliveryMap.component.tsx"
     },
     {
       "from": "src/features/orders/components/OrderConfirmation.component.tsx",
@@ -271,10 +263,6 @@
     {
       "from": "src/features/orders/hooks/useOrderHistoryPage.hook.ts",
       "to": "src/features/orders/hooks/list/useOrderHistoryPage.hook.ts"
-    },
-    {
-      "from": "src/features/orders/hooks/useShipmentLocationSocket.hook.ts",
-      "to": "src/features/orders/hooks/delivery-map/useShipmentLocationSocket.hook.ts"
     },
     {
       "from": "src/features/orders/hooks/useSubOrderReturn.hook.ts",

@@ -24,7 +24,6 @@ export const returnsRoutes = {
   debitNote: (id: string) => `/api/returns/${id}/debit-note`,
   retryRefund: (id: string) => `/api/returns/${id}/retry-refund`,
   restock: (id: string) => `/api/returns/${id}/restock`,
-  reschedulePickup: (id: string) => `/api/returns/${id}/reschedule-pickup`,
 } as const;
 
 export const reviewsRoutes = {
@@ -51,8 +50,9 @@ export const shippingRoutes = {
     `/api/shipping/tracking/${trackingNumber}`,
   reschedule: (trackingNumber: string) =>
     `/api/shipping/tracking/${trackingNumber}/reschedule`,
-  rating: (shipmentId: string) =>
-    `/api/shipping/shipments/${shipmentId}/rating`,
+  adminRtoShipments: "/api/shipping/admin/rto-shipments",
+  adminShipmentStatus: (shipmentId: string) =>
+    `/api/shipping/admin/shipments/${shipmentId}/status`,
 } as const;
 
 export const taxRoutes = {
