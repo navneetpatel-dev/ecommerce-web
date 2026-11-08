@@ -30,7 +30,7 @@ describe("cart authoritative totals", () => {
     expect(screen.getAllByRole("status", { name: "Updating…" })).toHaveLength(
       5,
     );
-    expect(screen.queryByText("₹0")).not.toBeInTheDocument();
+    expect(screen.queryByText("₹0.00")).not.toBeInTheDocument();
   });
 
   it("renders cashback pay-now copy only with an authoritative pay-now total", () => {
@@ -50,7 +50,7 @@ describe("cart authoritative totals", () => {
 
     rerender(<CartCouponSection {...props} payNowGrandTotal={500} />);
     expect(
-      screen.getByText(/Pay ₹500 now, ₹100 cashback after delivery/),
+      screen.getByText(/Pay ₹500\.00 now, ₹100\.00 cashback after delivery/),
     ).toBeInTheDocument();
   });
 });
