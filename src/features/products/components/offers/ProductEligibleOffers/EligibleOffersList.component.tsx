@@ -1,32 +1,17 @@
 import { LABELS } from "@/shared/constants/labels";
+import type { EligibleCoupon } from "@/shared/api/types";
 import { productEligibleOffersStyles } from "../../../styles/offers/productEligibleOffers.styles";
 import { EligibleOfferItem } from "./EligibleOfferItem.component";
 
-interface Offer {
-  code: string;
-  name?: string;
-  discount: number;
-  type: string;
-}
-
 interface EligibleOffersListProps {
-  offers: Offer[];
-  isScrollable: boolean;
+  offers: EligibleCoupon[];
 }
 
-export function EligibleOffersList({
-  offers,
-  isScrollable,
-}: EligibleOffersListProps) {
-  const ariaLabel = isScrollable
-    ? LABELS.availableOffersList
-    : LABELS.availableOffers;
-
+export function EligibleOffersList({ offers }: EligibleOffersListProps) {
   return (
     <ul
-      className={productEligibleOffersStyles.list(isScrollable)}
-      aria-label={ariaLabel}
-      tabIndex={isScrollable ? 0 : undefined}
+      className={productEligibleOffersStyles.list}
+      aria-label={LABELS.availableOffers}
     >
       {offers.map((offer) => (
         <EligibleOfferItem key={offer.code} offer={offer} />

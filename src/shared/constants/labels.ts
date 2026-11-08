@@ -25,6 +25,7 @@ import { bugsLabels } from "./labels/bugs";
 import { bugs2Labels } from "./labels/bugs2";
 
 import { coupons2Labels } from "./labels/coupons2";
+import { coupons3Labels } from "./labels/coupons3";
 import { reports2Labels } from "./labels/reports2";
 import { reports3Labels } from "./labels/reports3";
 import { reports4Labels } from "./labels/reports4";
@@ -87,6 +88,7 @@ export const LABELS = {
   ...bugsLabels,
   ...bugs2Labels,
   ...coupons2Labels,
+  ...coupons3Labels,
   ...reports2Labels,
   ...reports3Labels,
   ...reports4Labels,

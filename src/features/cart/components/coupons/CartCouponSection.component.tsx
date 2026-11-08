@@ -12,7 +12,12 @@ import {
   AccordionTrigger,
 } from "@/shared/components/ui/accordion";
 import { LABELS } from "@/shared/constants/labels";
-import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
+import type {
+  AppliedCouponSummary,
+  EligibleCoupon,
+  InactiveCoupon,
+} from "@/shared/api/types";
+import { InactiveCouponsList } from "./InactiveCouponsList.component";
 import { AppliedCouponChips } from "./AppliedCouponChips.component";
 import { EligibleOffersList } from "../offers/EligibleOffersList.component";
 import { useCartCouponSection } from "../../hooks/coupons/useCartCouponSection.hook";
@@ -26,6 +31,8 @@ interface CartCouponSectionProps {
   appliedCouponCode: string | null;
   appliedDiscount?: number;
   appliedCoupons?: AppliedCouponSummary[];
+  inactiveCoupons?: InactiveCoupon[];
+  eligibleError?: string | null;
   appliedCashbackAmount?: number;
   payNowGrandTotal?: number;
   eligible: EligibleCoupon[];
@@ -45,6 +52,8 @@ export function CartCouponSection({
   appliedCouponCode,
   appliedDiscount = 0,
   appliedCoupons = [],
+  inactiveCoupons = [],
+  eligibleError = null,
   appliedCashbackAmount = 0,
   payNowGrandTotal,
   eligible,
@@ -77,6 +86,12 @@ export function CartCouponSection({
     offersContent = (
       <p role="status" className={styles.statusMessage}>
         {LABELS.loading}
+      </p>
+    );
+  } else if (eligibleError) {
+    offersContent = (
+      <p role="alert" className={styles.errorMessage}>
+        {eligibleError}
       </p>
     );
   } else if (unusedOffers.length === 0) {
@@ -132,6 +147,12 @@ export function CartCouponSection({
         couponPending={couponPending}
         appliedCashbackAmount={appliedCashbackAmount}
         payNowGrandTotal={payNowGrandTotal}
+        onRemoveCoupon={onRemoveCoupon}
+      />
+
+      <InactiveCouponsList
+        coupons={inactiveCoupons}
+        couponPending={couponPending}
         onRemoveCoupon={onRemoveCoupon}
       />
 

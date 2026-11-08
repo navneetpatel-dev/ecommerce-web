@@ -33,6 +33,7 @@ import {
   type ReturnReasonCode,
 } from "../../../hooks/sub-order/useSubOrderReturn.hook";
 import { SubOrderReturnQuantityField } from "./SubOrderReturnQuantityField.component";
+import { SubOrderReturnEstimate } from "./SubOrderReturnEstimate.component";
 import { SUB_ORDER_CARD_STYLES } from "../../../styles/sub-order/subOrderCard.styles";
 
 interface SubOrderReturnDialogProps {
@@ -162,6 +163,14 @@ export function SubOrderReturnDialog({
                 label={LABELS.returnPhotosLabel}
               />
             </FormSection>
+            <SubOrderReturnEstimate
+              orderItemId={returnTarget?.id ?? null}
+              returnQuantity={
+                quantityField?.value ?? returnTarget?.quantity ?? 1
+              }
+              reasonCode={reasonCode}
+              enabled={returnType === "REFUND"}
+            />
             <FormError error={error} fallback={LABELS.couldNotSubmitReturn} />
             {isSuccess ? (
               <p className={SUB_ORDER_CARD_STYLES.returnSuccessText}>

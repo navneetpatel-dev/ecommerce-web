@@ -123,6 +123,10 @@ export const commerceLabels = {
   confirmCancelOrderBody:
     "We'll restore any points used and refund card/UPI payments for items that haven't shipped yet.",
   orderCancelledSuccess: "Order cancelled",
+  orderCancelledItemsInCart:
+    "Order cancelled. Its items are back in your cart.",
+  orderCancelledItemsAndCouponInCart:
+    "Order cancelled. Its items and coupon are back in your cart.",
   orderCancelFailed: "Could not cancel this order",
   orderCancelRefundPending: "Refund processing",
   orderCancelRefundInitiated: "Bank refund initiated",

@@ -69,7 +69,6 @@ export function PayableSummary({ quote, payable }: PayableSummaryProps) {
           className={PAYABLE_SUMMARY_STYLES.cashbackNotice}
           payNow={payable}
           cashbackAmount={quote.cashbackAmount}
-          code={quote.appliedCoupon?.code}
         />
       ) : null}
 

@@ -28,11 +28,23 @@ export function useOrderSummaryPanel({
     return quote ? quoteOrderTotals(quote) : null;
   }, [quote]);
 
-  const appliedCoupons = useMemo(() => {
-    if (quote?.appliedCoupons?.length) return quote.appliedCoupons;
-    if (quote?.appliedCoupon) return [quote.appliedCoupon];
-    return [];
-  }, [quote]);
+  // Only what comes off the items is a minus line: free shipping already shows in the
+  // shipping row, and cashback arrives later in its own notice.
+  const appliedCoupons = useMemo(
+    () =>
+      (quote?.appliedCoupons ?? []).filter(
+        (coupon) => coupon.discount > 0 && !coupon.freeShipping,
+      ),
+    [quote],
+  );
+  // Named, with no minus line: the shipping row already shows it free.
+  const freeShippingCoupons = useMemo(
+    () =>
+      (quote?.appliedCoupons ?? []).filter(
+        (coupon) => coupon.freeShipping && coupon.discount > 0,
+      ),
+    [quote],
+  );
 
   // The items with GST, before coupons — the same prices as the cart and product cards.
   const summarySubtotal =
@@ -81,6 +93,7 @@ export function useOrderSummaryPanel({
   return {
     orderTotals,
     appliedCoupons,
+    couponRows: { coupons: appliedCoupons, freeShippingCoupons },
     summarySubtotal,
     summarySubtotalPending,
     itemCountText,

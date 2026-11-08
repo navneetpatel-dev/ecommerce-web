@@ -9,6 +9,8 @@ import { API } from "@/shared/constants/apiRoutes";
 export type ReportColumnMeta = {
   key: string;
   labelKey: string;
+  /** The display name the server gives it (the same one exports use). */
+  label?: string | null;
   format?: string;
 };
 

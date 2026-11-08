@@ -102,6 +102,14 @@ export interface Order {
    * shippingTotal (+ gift wrap) = totalAmount; taxTotal is the GST inside it.
    */
   itemsTotal?: number | null;
+  /** Coupons used on this order (API-provided; absent in lists). */
+  appliedCoupons?: Array<{
+    code: string;
+    name: string;
+    type: string;
+    discount: number;
+    cashback: boolean;
+  }>;
   couponSavings?: number | null;
   /**
    * What returns changed on the bill beyond the returned items: outbound shipping

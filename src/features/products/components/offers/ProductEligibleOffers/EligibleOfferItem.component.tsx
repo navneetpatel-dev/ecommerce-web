@@ -1,34 +1,24 @@
 import { LABELS } from "@/shared/constants/labels";
-import { formatInr } from "@/shared/utils/formatting/orderFormat";
-import { productEligibleOffersStyles } from "../../../styles/offers/productEligibleOffers.styles";
-
-interface Offer {
-  code: string;
-  name?: string;
-  discount: number;
-  type: string;
-}
+import { CopyTextButton } from "@/shared/components/actions/CopyTextButton.component";
+import type { EligibleCoupon } from "@/shared/api/types";
+import { offerDetailText, offerDisplayName } from "@/features/coupons";
+import { productEligibleOffersStyles as styles } from "../../../styles/offers/productEligibleOffers.styles";
 
 interface EligibleOfferItemProps {
-  offer: Offer;
+  offer: EligibleCoupon;
 }
 
-function offerDetailLabel(offer: { discount: number; type: string }): string {
-  if (offer.discount > 0) {
-    return `${formatInr(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`;
-  }
-  if (offer.type === "FREE_SHIPPING") return LABELS.couponTypeFreeShipping;
-  return LABELS.offersAtCheckout;
-}
-
+/** One offer: its name and what it gives, then the actual code to copy. */
 export function EligibleOfferItem({ offer }: EligibleOfferItemProps) {
   return (
-    <li className={productEligibleOffersStyles.offerItem}>
-      <span className={productEligibleOffersStyles.offerCode}>
-        {offer.name || offer.code}
+    <li className={styles.offerItem}>
+      <span className={styles.offerText}>
+        <span className={styles.offerName}>{offerDisplayName(offer)}</span>
+        <span className={styles.offerDetail}>{offerDetailText(offer)}</span>
       </span>
-      <span className={productEligibleOffersStyles.offerDetail}>
-        {offerDetailLabel(offer)}
+      <span className={styles.offerCodeRow}>
+        <span className={styles.offerCode}>{offer.code}</span>
+        <CopyTextButton value={offer.code} label={LABELS.copyCouponCode} />
       </span>
     </li>
   );

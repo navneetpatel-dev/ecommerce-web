@@ -44,7 +44,7 @@ export function OrderSummaryPanel({
 }: OrderSummaryPanelProps) {
   const {
     orderTotals,
-    appliedCoupons,
+    couponRows,
     summarySubtotal,
     summarySubtotalPending,
     itemCountText,
@@ -112,13 +112,12 @@ export function OrderSummaryPanel({
             </dd>
           </div>
 
-          <AppliedCouponsSummaryList coupons={appliedCoupons} />
+          <AppliedCouponsSummaryList {...couponRows} />
 
           {showCashbackNotice ? (
             <CashbackCouponNotice
               payNow={quote?.amountDue ?? estimatedTotal!}
               cashbackAmount={quote?.cashbackAmount ?? 0}
-              code={quote?.appliedCoupon?.code}
               className={ORDER_SUMMARY_PANEL_STYLES.cashbackNotice}
             />
           ) : null}

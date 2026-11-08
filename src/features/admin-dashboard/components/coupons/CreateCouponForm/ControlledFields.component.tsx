@@ -93,28 +93,39 @@ function BoundNumberInput({
 /** Stackable boolean exposed as a Yes/No select, bound to RHF. */
 export function ControlledStackableSelect({
   form,
+  name,
 }: {
   form: UseFormReturn<CouponFormInput>;
+  name: "stackable" | "showInOffers";
 }) {
   return (
     <Controller
-      name="stackable"
+      name={name}
       control={form.control}
-      render={({ field }) => <BoundStackableSelect field={field} />}
+      render={({ field }) => (
+        <BoundStackableSelect
+          field={field}
+          id={
+            name === "stackable" ? "coupon-stackable" : "coupon-show-in-offers"
+          }
+        />
+      )}
     />
   );
 }
 
 function BoundStackableSelect({
   field,
+  id,
 }: {
-  field: ControllerRenderProps<CouponFormInput, "stackable">;
+  field: ControllerRenderProps<CouponFormInput, "stackable" | "showInOffers">;
+  id: string;
 }) {
   const handleChange = (next: string) => field.onChange(next === "true");
 
   return (
     <Select value={field.value ? "true" : "false"} onValueChange={handleChange}>
-      <SelectTrigger id="coupon-stackable">
+      <SelectTrigger id={id}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

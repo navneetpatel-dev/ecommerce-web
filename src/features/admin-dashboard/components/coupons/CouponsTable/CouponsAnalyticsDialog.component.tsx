@@ -53,7 +53,19 @@ export function CouponsAnalyticsDialog({
                 {LABELS.discountCostImpact}
               </dt>
               <dd className={styles.analyticsDd}>
-                {formatInr(analytics.totalDiscount)}
+                {formatInr(analytics.fundingCost)}
+              </dd>
+            </div>
+            <div className={styles.analyticsRow}>
+              <dt className={styles.analyticsDt}>{LABELS.customerSavings}</dt>
+              <dd className={styles.analyticsDd}>
+                {formatInr(analytics.customerSavings)}
+              </dd>
+            </div>
+            <div className={styles.analyticsRow}>
+              <dt className={styles.analyticsDt}>{LABELS.cashbackCredited}</dt>
+              <dd className={styles.analyticsDd}>
+                {formatInr(analytics.cashbackTotal)}
               </dd>
             </div>
             <div className={styles.analyticsRow}>
@@ -65,9 +77,9 @@ export function CouponsAnalyticsDialog({
             <div className={styles.analyticsRow}>
               <dt className={styles.analyticsDt}>{LABELS.conversionRate}</dt>
               <dd className={styles.analyticsDd}>
-                {analytics.conversionRate == null
+                {analytics.limitUsedPercent == null
                   ? "—"
-                  : `${Math.round(Number(analytics.conversionRate) * 100)}%`}
+                  : `${analytics.limitUsedPercent}%`}
               </dd>
             </div>
             <div className={styles.analyticsRow}>

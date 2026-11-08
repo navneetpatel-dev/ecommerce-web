@@ -30,6 +30,7 @@ interface CouponsHeaderSectionProps {
   formLevelError?: string | null;
   onSubmit: (data: CouponFormInput) => void;
   vendorId?: string | null;
+  canManage?: boolean;
 }
 
 /** Heading + absorbed-discounts summary + create-coupon dialog (Rule 3). */
@@ -43,6 +44,7 @@ export function CouponsHeaderSection(props: CouponsHeaderSectionProps) {
     formLevelError = null,
     onSubmit,
     vendorId = null,
+    canManage = true,
   } = props;
 
   const handleOpenDialog = () => setOpen(true);
@@ -68,38 +70,40 @@ export function CouponsHeaderSection(props: CouponsHeaderSectionProps) {
           </p>
         ) : null}
       </div>
-      <ButtonGroup>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <Button
-            type="button"
-            size="sm"
-            fullWidth="mobile"
-            onClick={handleOpenDialog}
-          >
-            <Plus aria-hidden /> {LABELS.createVendorCoupon}
-          </Button>
-          <DialogContent
-            className={couponsHeaderSectionStyles.dialogContent}
-            aria-describedby={undefined}
-          >
-            <DialogHeader>
-              <DialogTitle>{LABELS.createVendorCoupon}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={form.handleSubmit(onSubmit, handleInvalidSubmit)}>
-              <CreateCouponForm
-                form={form}
-                isPending={isPending}
-                vendorMode
-                vendorId={vendorId}
-              />
-              <FormError
-                error={formLevelError}
-                fallback={LABELS.couldNotCreateCoupon}
-              />
-            </form>
-          </DialogContent>
-        </Dialog>
-      </ButtonGroup>
+      {canManage ? (
+        <ButtonGroup>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <Button
+              type="button"
+              size="sm"
+              fullWidth="mobile"
+              onClick={handleOpenDialog}
+            >
+              <Plus aria-hidden /> {LABELS.createVendorCoupon}
+            </Button>
+            <DialogContent
+              className={couponsHeaderSectionStyles.dialogContent}
+              aria-describedby={undefined}
+            >
+              <DialogHeader>
+                <DialogTitle>{LABELS.createVendorCoupon}</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={form.handleSubmit(onSubmit, handleInvalidSubmit)}>
+                <CreateCouponForm
+                  form={form}
+                  isPending={isPending}
+                  vendorMode
+                  vendorId={vendorId}
+                />
+                <FormError
+                  error={formLevelError}
+                  fallback={LABELS.couldNotCreateCoupon}
+                />
+              </form>
+            </DialogContent>
+          </Dialog>
+        </ButtonGroup>
+      ) : null}
     </div>
   );
 }

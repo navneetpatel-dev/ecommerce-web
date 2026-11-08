@@ -44,6 +44,8 @@ export const couponsRoutes = {
   analytics: (id: string) => `/api/coupons/${id}/analytics`,
   bulk: "/api/coupons/bulk",
   batches: "/api/coupons/batches",
+  batchStatus: (id: string) => `/api/coupons/batches/${id}/status`,
+  customerOptions: (query: string) => `/api/coupons/customer-options?${query}`,
   notifyAlerts: "/api/coupons/jobs/notify-alerts",
   vendor: {
     list: "/api/coupons/vendor",

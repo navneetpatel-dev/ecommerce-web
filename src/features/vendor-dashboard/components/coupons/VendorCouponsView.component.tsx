@@ -1,27 +1,31 @@
 "use client";
 
-import { BarChart2 } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import {
   DataTable,
   type DataTableColumn,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
-import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import {
-  AdminConfirmAction,
+  CouponDetailDialog,
+  CouponStatusCell,
+  CouponTableFilters,
+  EditCouponDialog,
+  couponScopeLabel,
+  couponTypeLabel,
+  couponValueLabel,
   type CouponFormInput,
 } from "@/features/admin-dashboard";
+import type { useCouponFilters } from "@/features/admin-dashboard";
 import { LABELS } from "@/shared/constants/labels";
-import { COUPON_STATUS } from "@/shared/constants/statuses";
 import { formatDateTime } from "@/shared/utils/formatting/formatDate";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
+import { VendorCouponRowActions } from "./VendorCouponsView/VendorCouponRowActions.component";
 import { CouponAnalyticsDialog } from "./VendorCouponsView/CouponAnalyticsDialog.component";
 import { CouponsHeaderSection } from "./VendorCouponsView/CouponsHeaderSection.component";
 import { vendorCouponsViewStyles } from "../../styles/coupons/vendorCouponsView.styles";
+
+type CouponFilters = ReturnType<typeof useCouponFilters>;
 
 interface VendorCouponsViewProps {
   coupons: Coupon[];
@@ -40,6 +44,13 @@ interface VendorCouponsViewProps {
   analyticsLoading: boolean;
   absorbedDiscountTotal?: number | null;
   onUpdateStatus: (coupon: Coupon, status: Coupon["status"]) => Promise<void>;
+  filters: CouponFilters;
+  canManage: boolean;
+  detailCoupon: Coupon | null;
+  setDetailCoupon: (coupon: Coupon | null) => void;
+  editCoupon: Coupon | null;
+  setEditCoupon: (coupon: Coupon | null) => void;
+  saveCoupon: (values: CouponFormInput, coupon: Coupon) => Promise<unknown>;
 }
 
 const usageCell = (row: Coupon) =>
@@ -64,7 +75,16 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     analyticsLoading,
     absorbedDiscountTotal = null,
     onUpdateStatus,
+    filters,
+    canManage,
+    detailCoupon,
+    setDetailCoupon,
+    editCoupon,
+    setEditCoupon,
+    saveCoupon,
   } = props;
+  const closeDetail = () => setDetailCoupon(null);
+  const closeEdit = () => setEditCoupon(null);
 
   const columns: DataTableColumn<Coupon>[] = [
     {
@@ -76,7 +96,17 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     {
       id: "type",
       header: LABELS.couponType,
-      accessor: "type",
+      cell: (row) => couponTypeLabel(row),
+    },
+    {
+      id: "value",
+      header: LABELS.valueColumn,
+      cell: (row) => couponValueLabel(row),
+    },
+    {
+      id: "scope",
+      header: LABELS.scopeColumn,
+      cell: (row) => couponScopeLabel(row),
     },
     {
       id: "usage",
@@ -88,7 +118,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
       id: "status",
       header: LABELS.status,
       truncate: false,
-      cell: (row) => <StatusBadge status={row.status} />,
+      cell: (row) => <CouponStatusCell coupon={row} />,
     },
     {
       id: "expires",
@@ -97,61 +127,16 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     },
   ];
 
-  const renderActions = (row: Coupon) => {
-    const setStatus = (status: Coupon["status"]) => () =>
-      onUpdateStatus(row, status);
-    const openAnalytics = () => setAnalyticsId(row.id);
-
-    return (
-      <>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("neutral")}
-          onClick={openAnalytics}
-        >
-          <BarChart2 strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.viewAnalytics}</span>
-        </Button>
-        {row.status === COUPON_STATUS.ACTIVE ? (
-          <AdminConfirmAction
-            label={LABELS.pauseCoupon}
-            tone="neutral"
-            title={LABELS.confirmPauseCouponTitle}
-            description={formatLabel(LABELS.confirmPauseCouponBody, {
-              code: row.code,
-            })}
-            onConfirm={setStatus(COUPON_STATUS.PAUSED)}
-          />
-        ) : null}
-        {row.status === COUPON_STATUS.PAUSED ||
-        row.status === COUPON_STATUS.DRAFT ? (
-          <AdminConfirmAction
-            label={LABELS.activateCoupon}
-            tone="success"
-            dialogVariant="success"
-            title={LABELS.confirmActivateCouponTitle}
-            description={formatLabel(LABELS.confirmActivateCouponBody, {
-              code: row.code,
-            })}
-            onConfirm={setStatus(COUPON_STATUS.ACTIVE)}
-          />
-        ) : null}
-        {row.status !== COUPON_STATUS.ARCHIVED ? (
-          <AdminConfirmAction
-            label={LABELS.archiveCoupon}
-            tone="archive"
-            title={LABELS.confirmArchiveCouponTitle}
-            description={formatLabel(LABELS.confirmArchiveCouponBody, {
-              code: row.code,
-            })}
-            onConfirm={setStatus(COUPON_STATUS.ARCHIVED)}
-          />
-        ) : null}
-      </>
-    );
-  };
+  const renderActions = (row: Coupon) => (
+    <VendorCouponRowActions
+      row={row}
+      canManage={canManage}
+      onUpdateStatus={onUpdateStatus}
+      onAnalytics={setAnalyticsId}
+      onDetail={setDetailCoupon}
+      onEdit={setEditCoupon}
+    />
+  );
 
   return (
     <div className={vendorCouponsViewStyles.stack}>
@@ -164,6 +149,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
         formLevelError={formLevelError}
         onSubmit={onSubmit}
         vendorId={vendorId}
+        canManage={canManage}
       />
 
       <DataTable
@@ -176,7 +162,20 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
         getRowId={(row) => row.id}
         pagination={pagination}
         actions={renderActions}
+        toolbar={<CouponTableFilters filters={filters} />}
       />
+
+      <CouponDetailDialog coupon={detailCoupon} onClose={closeDetail} />
+      {editCoupon ? (
+        <EditCouponDialog
+          key={editCoupon.id}
+          coupon={editCoupon}
+          onClose={closeEdit}
+          onSave={saveCoupon}
+          vendorMode
+          vendorId={vendorId}
+        />
+      ) : null}
 
       <CouponAnalyticsDialog
         analyticsId={analyticsId}

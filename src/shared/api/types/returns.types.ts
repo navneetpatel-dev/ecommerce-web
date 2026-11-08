@@ -26,6 +26,10 @@ export interface ReturnRequest {
   refundStatus?: RefundStatus;
   refundCustomerMessage?: string | null;
   refundAmount: number | null;
+  /** Held back because the items kept no longer qualify for the offer. */
+  offerAdjustment?: number | null;
+  /** Cashback from this order taken back from the wallet when the item came back. */
+  cashbackClawback?: number | null;
   refundTaxAmount?: number | null;
   /** Pre-tax item part of the refund, as the backend pricing engine froze it at approval. */
   refundMerchandiseAmount?: number | null;

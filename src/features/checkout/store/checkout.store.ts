@@ -7,9 +7,6 @@ interface CheckoutState {
   step: 1 | 2 | 3 | 4;
   addressId: string | null;
   shippingMethodByVendor: Record<string, ShippingMethod>;
-  appliedCouponCode: string | null;
-  /** When true, auto-apply must not replace the customer's chosen code. */
-  manualCouponOverride: boolean;
   paymentMethod: string | null;
   walletAmountToUse: number;
   giftWrap: boolean;
@@ -29,7 +26,6 @@ interface CheckoutState {
   pruneShippingMethods: (vendorIds: string[]) => void;
   /** Drop every method when the delivery pincode changes so a prior area cannot stick. */
   clearShippingMethods: () => void;
-  setCouponCode: (code: string | null, opts?: { manual?: boolean }) => void;
   setPaymentMethod: (method: string | null) => void;
   setWalletAmountToUse: (amount: number) => void;
   setGiftWrap: (giftWrap: boolean) => void;
@@ -45,8 +41,6 @@ const initialCheckoutState = {
   step: 1 as const,
   addressId: null,
   shippingMethodByVendor: {},
-  appliedCouponCode: null,
-  manualCouponOverride: false,
   paymentMethod: null,
   walletAmountToUse: 0,
   giftWrap: false,
@@ -87,16 +81,6 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
         : { shippingMethodByVendor: Object.fromEntries(kept) };
     }),
   clearShippingMethods: () => set({ shippingMethodByVendor: {} }),
-  setCouponCode: (code, opts) =>
-    set((s) => ({
-      appliedCouponCode: code,
-      manualCouponOverride:
-        opts?.manual === true
-          ? true
-          : opts?.manual === false
-            ? false
-            : s.manualCouponOverride,
-    })),
   setPaymentMethod: (paymentMethod) =>
     set((s) => ({
       paymentMethod,

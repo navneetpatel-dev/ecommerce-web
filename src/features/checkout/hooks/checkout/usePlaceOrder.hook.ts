@@ -23,14 +23,13 @@ export function usePlaceOrderWithRazorpay() {
   const {
     addressId,
     shippingMethodByVendor,
-    appliedCouponCode,
     walletAmountToUse,
     giftWrap,
     giftMessage,
   } = useCheckoutStore();
   const placeOrder = usePlaceOrder();
   const { data: cart } = useCart();
-  const couponCodes = resolveCheckoutCouponCodes(cart, appliedCouponCode);
+  const couponCodes = resolveCheckoutCouponCodes(cart);
   const router = useRouter();
   const currentUser = useAuthStore((s) => s.currentUser);
   const { paymentNotice, showNotice, resetNotice, clearPaymentNotice } =
@@ -51,7 +50,6 @@ export function usePlaceOrderWithRazorpay() {
   } = useCheckoutQuoteState({
     addressId,
     shippingMethodByVendor,
-    appliedCouponCode,
     couponCodes,
     walletAmountToUse,
     giftWrap,
@@ -102,7 +100,6 @@ export function usePlaceOrderWithRazorpay() {
         buildPlaceOrderPayload({
           method,
           addressId,
-          appliedCouponCode,
           couponCodes,
           shippingMethodByVendor,
           walletAmountToUse,

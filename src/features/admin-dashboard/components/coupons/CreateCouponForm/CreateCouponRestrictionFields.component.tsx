@@ -19,6 +19,8 @@ import type {
 } from "@/shared/components/InfiniteMultiSelect";
 import { InfiniteMultiSelect } from "@/shared/components/InfiniteMultiSelect";
 import { USER_RESTRICTIONS } from "../../../constants/coupons/constants";
+import { createCouponFormStyles } from "../../../styles/coupons/createCouponForm.styles";
+import { ControlledStackableSelect } from "./ControlledFields.component";
 
 interface CreateCouponRestrictionFieldsProps {
   form: UseFormReturn<CouponFormInput>;
@@ -30,6 +32,7 @@ interface CreateCouponRestrictionFieldsProps {
   fetchUsersPage: (
     query: InfiniteMultiSelectPageQuery,
   ) => Promise<InfiniteMultiSelectPageResult>;
+  hideShowInOffers?: boolean;
 }
 
 function UserRestrictionTypeField({
@@ -75,6 +78,7 @@ export function CreateCouponRestrictionFields({
   showSegment,
   showSpecificUsers,
   fetchUsersPage,
+  hideShowInOffers = false,
 }: CreateCouponRestrictionFieldsProps) {
   const { control, setValue } = form;
 
@@ -157,6 +161,19 @@ export function CreateCouponRestrictionFields({
           />
         </FormFieldFrame>
       ) : null}
+      {hideShowInOffers || showSegment || showSpecificUsers ? (
+        <p className={createCouponFormStyles.hintMuted}>
+          {LABELS.couponHiddenFromOffers}
+        </p>
+      ) : (
+        <FormFieldFrame
+          label={LABELS.showInOffers}
+          hint={LABELS.showInOffersHint}
+          htmlFor="coupon-show-in-offers"
+        >
+          <ControlledStackableSelect form={form} name="showInOffers" />
+        </FormFieldFrame>
+      )}
     </FormSection>
   );
 }

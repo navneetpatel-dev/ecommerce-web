@@ -1,5 +1,4 @@
 import { Button } from "@/shared/components/ui/button";
-import { LABELS } from "@/shared/constants/labels";
 import type { UnusedOfferViewModel } from "../../hooks/coupons/useCartCouponSection.hook";
 import { cartCouponSectionStyles as styles } from "../../styles/coupons/cartCouponSection.styles";
 
@@ -9,6 +8,7 @@ interface EligibleOfferItemProps {
   onApplyEligible: (code: string) => void;
 }
 
+/** One offer: its name (wrapping, never cut), what it gives and its code, then the button. */
 export function EligibleOfferItem({
   offer,
   couponPending,
@@ -20,9 +20,12 @@ export function EligibleOfferItem({
 
   return (
     <li className={styles.offerRow}>
-      <span className={styles.offerCode}>
-        {offer.label}
-        {offer.discountText}
+      <span className={styles.offerText}>
+        <span className={styles.offerName}>{offer.label}</span>
+        <span className={styles.offerDetail}>
+          {offer.detailText}
+          <span className={styles.offerCode}>{offer.code}</span>
+        </span>
       </span>
       <Button
         type="button"
@@ -30,9 +33,9 @@ export function EligibleOfferItem({
         variant="outline"
         className={styles.offerButton}
         onClick={handleApply}
-        disabled={couponPending}
+        disabled={couponPending || offer.locked}
       >
-        {LABELS.applyOffer}
+        {offer.actionLabel}
       </Button>
     </li>
   );

@@ -1,3 +1,4 @@
+import { cartKeys } from "@/features/cart";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ROLES } from "@/shared/constants/labels";
 import { ordersApi, subOrdersApi } from "./orders.api";
@@ -42,6 +43,8 @@ export function useCancelOrder(orderId: string) {
         queryKey: ordersKeys.detail(orderId),
       });
       void queryClient.invalidateQueries({ queryKey: ordersKeys.all });
+      // The items (and coupon) go back into the cart.
+      void queryClient.invalidateQueries({ queryKey: cartKeys.all });
     },
   });
 }

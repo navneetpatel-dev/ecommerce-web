@@ -65,8 +65,17 @@ export interface Cart {
   appliedCoupon?: AppliedCouponSummary | null;
   appliedCoupons?: AppliedCouponSummary[];
   removedCouponReason?: string | null;
+  /** On the cart but not applying right now, and why. */
+  inactiveCoupons?: InactiveCoupon[];
   /** Diagnostic/read-only weights; shipping APIs recompute them server-side. */
   vendorShippingWeights?: Record<string, number>;
+}
+
+export interface InactiveCoupon {
+  code: string;
+  name: string;
+  reason: string;
+  reasonCode?: string | null;
 }
 
 export interface AppliedCouponSummary {

@@ -9,7 +9,11 @@ import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import { OrderSummaryTotalsList } from "./OrderSummaryTotalsList.component";
 import { CartDeliveryArea } from "./CartDeliveryArea.component";
 import { CartCheckoutAction } from "./CartCheckoutAction.component";
-import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
+import type {
+  AppliedCouponSummary,
+  EligibleCoupon,
+  InactiveCoupon,
+} from "@/shared/api/types";
 import type { DeliveryAreaSummary } from "@/shared/utils/delivery/deliveryArea";
 import { isDeliveryAreaBlocked } from "@/shared/utils/delivery/deliveryArea";
 import { cartPageViewStyles as styles } from "../../../styles/page/cartPageView.styles";
@@ -42,6 +46,8 @@ interface OrderSummaryAsideProps {
   appliedCouponCode: string | null;
   appliedDiscount: number;
   appliedCoupons?: AppliedCouponSummary[];
+  inactiveCoupons?: InactiveCoupon[];
+  eligibleError?: string | null;
   appliedCashbackAmount?: number;
   payNowGrandTotal?: number;
   appliedCouponType?: string | null;
@@ -76,6 +82,8 @@ export function OrderSummaryAside({
   appliedCouponCode,
   appliedDiscount,
   appliedCoupons = [],
+  inactiveCoupons = [],
+  eligibleError = null,
   appliedCashbackAmount = 0,
   payNowGrandTotal,
   appliedCouponType,
@@ -105,7 +113,6 @@ export function OrderSummaryAside({
         className={styles.asideCashbackNotice}
         payNow={payNowGrandTotal}
         cashbackAmount={appliedCashbackAmount}
-        code={appliedCouponCode}
       />
     ) : null;
 
@@ -150,6 +157,8 @@ export function OrderSummaryAside({
             appliedCouponCode={appliedCouponCode}
             appliedDiscount={appliedDiscount}
             appliedCoupons={appliedCoupons}
+            inactiveCoupons={inactiveCoupons}
+            eligibleError={eligibleError}
             appliedCashbackAmount={appliedCashbackAmount}
             payNowGrandTotal={payNowGrandTotal}
             eligible={eligible}

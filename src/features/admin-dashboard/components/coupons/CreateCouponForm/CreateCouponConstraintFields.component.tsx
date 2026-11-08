@@ -15,12 +15,14 @@ interface CreateCouponConstraintFieldsProps {
   form: UseFormReturn<CouponFormInput>;
   showError: (name: keyof CouponFormInput) => string | undefined;
   hasError: (name: keyof CouponFormInput) => boolean;
+  hideTotalLimit?: boolean;
 }
 
 export function CreateCouponConstraintFields({
   form,
   showError,
   hasError,
+  hideTotalLimit = false,
 }: CreateCouponConstraintFieldsProps) {
   return (
     <FormSection title={LABELS.couponSectionConstraints} columns={1}>
@@ -52,20 +54,28 @@ export function CreateCouponConstraintFields({
         </FormFieldFrame>
       </div>
       <div className={createCouponFormStyles.gridSm2}>
-        <FormFieldFrame
-          label={LABELS.usageLimitTotal}
-          error={showError("usageLimitTotal")}
-        >
-          <ControlledNumberInput
-            form={form}
-            name="usageLimitTotal"
-            min={1}
-            step={1}
-            error={hasError("usageLimitTotal")}
-          />
-        </FormFieldFrame>
+        {hideTotalLimit ? (
+          <p className={createCouponFormStyles.hintMuted}>
+            {LABELS.bulkCodesSingleUse}
+          </p>
+        ) : (
+          <FormFieldFrame
+            label={LABELS.usageLimitTotal}
+            hint={LABELS.usageLimitBlankHint}
+            error={showError("usageLimitTotal")}
+          >
+            <ControlledNumberInput
+              form={form}
+              name="usageLimitTotal"
+              min={1}
+              step={1}
+              error={hasError("usageLimitTotal")}
+            />
+          </FormFieldFrame>
+        )}
         <FormFieldFrame
           label={LABELS.usageLimitPerUser}
+          hint={LABELS.usageLimitBlankHint}
           error={showError("usageLimitPerUser")}
         >
           <ControlledNumberInput
@@ -92,7 +102,7 @@ export function CreateCouponConstraintFields({
           hint={LABELS.stackableHint}
           htmlFor="coupon-stackable"
         >
-          <ControlledStackableSelect form={form} />
+          <ControlledStackableSelect form={form} name="stackable" />
         </FormFieldFrame>
       </div>
     </FormSection>

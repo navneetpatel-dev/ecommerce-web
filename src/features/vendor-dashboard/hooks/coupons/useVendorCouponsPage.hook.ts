@@ -9,6 +9,7 @@ import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import {
   CouponSchema,
   VENDOR_COUPON_FORM_DEFAULTS,
+  useCouponFilters,
   type CouponFormInput,
 } from "@/features/admin-dashboard";
 import {
@@ -25,6 +26,7 @@ import { useRouteQueryDialog } from "@/shared/hooks/navigation/useRouteQueryDial
 import { useApiFormErrors } from "@/shared/hooks/forms/useApiFormErrors.hook";
 import { LABELS } from "@/shared/constants/labels";
 import type { Coupon } from "@/shared/api/types";
+import { useVendorCouponEditing } from "./useVendorCouponEditing.hook";
 import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
 export function useVendorCouponsPage() {
@@ -37,7 +39,13 @@ export function useVendorCouponsPage() {
 
   const analyticsId = searchParams.get(QUERY_PARAMS.analytics);
 
-  const { data, isLoading } = useVendorCoupons(page, DEFAULT_PAGE_LIMIT);
+  const filters = useCouponFilters(() => setPage(1));
+  const { data, isLoading } = useVendorCoupons(
+    page,
+    DEFAULT_PAGE_LIMIT,
+    filters.query,
+  );
+  const editing = useVendorCouponEditing(vendorId, user?.role);
   const createMutation = useCreateVendorCoupon(vendorId);
 
   const form = useForm<CouponFormInput>({
@@ -136,5 +144,7 @@ export function useVendorCouponsPage() {
     analyticsLoading: analyticsQuery.isLoading,
     absorbedDiscountTotal,
     updateStatus,
+    filters,
+    ...editing,
   };
 }

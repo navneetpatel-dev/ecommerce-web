@@ -8,6 +8,8 @@ export const returnRefundBreakdownLabels = {
   returnRefundBreakdownTax: "Tax refunded",
   returnRefundBreakdownShipping: "Shipping refunded",
   returnRefundBreakdownFee: "Return shipping fee",
+  /** Taken off because the items kept no longer qualify for the order's offer. */
+  returnRefundBreakdownOffer: "Offer no longer applies",
   returnRefundBreakdownWallet: "To wallet",
   returnRefundBreakdownBank: "To bank / UPI",
   /** Caption above the wallet/bank split — makes clear it's a payment-method breakdown of the

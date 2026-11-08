@@ -1,20 +1,26 @@
 import type { DataTableColumn } from "@/shared/components/DataTable";
-import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { CopyTextButton } from "@/shared/components/actions/CopyTextButton.component";
 import { LABELS } from "@/shared/constants/labels";
-import { DISCOUNT_BEARER } from "@/shared/constants/statuses";
-import { formatDateTime } from "@/shared/utils/formatting/formatDate";
 import type { Coupon } from "@/shared/api/types";
+import {
+  couponRestrictionLabel,
+  couponScopeLabel,
+  couponTypeLabel,
+  couponValidityLabel,
+  couponValueLabel,
+} from "../../../utils/coupons/couponSummary";
+import { CouponStatusCell } from "./CouponStatusCell.component";
 import { couponsTableStyles as styles } from "../../../styles/coupons/couponsTable.styles";
 
-function bearerLabel(bearer: Coupon["discountBearer"]) {
-  return bearer === DISCOUNT_BEARER.VENDOR
-    ? LABELS.discountBearerVendor
-    : LABELS.discountBearerPlatform;
-}
-
-export function buildCouponColumns(): DataTableColumn<Coupon>[] {
-  return [
+/**
+ * Columns for one coupons tab. Who funds the coupon is the tab itself (platform or
+ * vendor), so no column repeats it, and the vendor name only means something on the
+ * vendor tab. Status sits next to the code so it's never under the sticky actions.
+ */
+export function buildCouponColumns(
+  options: { vendorTab?: boolean } = {},
+): DataTableColumn<Coupon>[] {
+  const columns: DataTableColumn<Coupon>[] = [
     {
       id: "code",
       header: LABELS.couponCode,
@@ -27,21 +33,40 @@ export function buildCouponColumns(): DataTableColumn<Coupon>[] {
       ),
     },
     {
+      id: "status",
+      header: LABELS.status,
+      truncate: false,
+      cell: (row) => <CouponStatusCell coupon={row} />,
+    },
+    {
       id: "type",
       header: LABELS.couponType,
-      accessor: "type",
+      cell: (row) => couponTypeLabel(row),
     },
     {
-      id: "bearer",
-      header: LABELS.discountBearer,
-      cell: (row) => bearerLabel(row.discountBearer),
+      id: "value",
+      header: LABELS.valueColumn,
+      cell: (row) => couponValueLabel(row),
     },
     {
+      id: "scope",
+      header: LABELS.scopeColumn,
+      cell: (row) => couponScopeLabel(row),
+    },
+    {
+      id: "restriction",
+      header: LABELS.restrictionColumn,
+      cell: (row) => couponRestrictionLabel(row),
+    },
+  ];
+  if (options.vendorTab) {
+    columns.push({
       id: "vendor",
-      header: LABELS.vendorId,
-      className: styles.columnMonoSm,
-      cell: (row) => row.vendorId ?? "—",
-    },
+      header: LABELS.vendorColumn,
+      cell: (row) => row.vendorName ?? "—",
+    });
+  }
+  columns.push(
     {
       id: "usage",
       header: LABELS.couponUsage,
@@ -51,15 +76,10 @@ export function buildCouponColumns(): DataTableColumn<Coupon>[] {
         `${row.usedCount}/${row.usageLimitTotal ?? LABELS.usageUnlimited}`,
     },
     {
-      id: "status",
-      header: LABELS.status,
-      truncate: false,
-      cell: (row) => <StatusBadge status={row.status} />,
+      id: "valid",
+      header: LABELS.validColumn,
+      cell: (row) => couponValidityLabel(row),
     },
-    {
-      id: "expires",
-      header: LABELS.expires,
-      cell: (row) => formatDateTime(row.endDate),
-    },
-  ];
+  );
+  return columns;
 }

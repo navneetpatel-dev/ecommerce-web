@@ -11,6 +11,15 @@ import { formatInr } from "@/shared/utils/formatting/orderFormat";
 export function describeApplyResult(
   result: Awaited<ReturnType<typeof couponsApi.apply>>,
 ): string {
+  const applied = describeSavings(result);
+  return result.replacedCodes?.length
+    ? `${LABELS.couponReplacedPrevious} ${applied}`
+    : applied;
+}
+
+function describeSavings(
+  result: Awaited<ReturnType<typeof couponsApi.apply>>,
+): string {
   if (result.discount > 0) {
     return formatLabel(LABELS.couponApplied, {
       amount: formatInr(result.discount),

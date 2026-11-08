@@ -46,3 +46,14 @@ export { AdminVendorDetailPage } from "./pages/vendors/AdminVendorDetailPage.pag
 export { PlatformSettingsPage } from "./pages/settings/PlatformSettingsPage.page";
 export { AdminWebVitalsPage } from "./pages/web-vitals/AdminWebVitalsPage.page";
 export { AdminRolesPage } from "./pages/roles/AdminRolesPage.page";
+export { toCouponUpdateBody } from "./schemas/coupons/coupons.schema";
+export { CouponDetailDialog } from "./components/coupons/CouponDialogs/CouponDetailDialog.component";
+export { CouponStatusCell } from "./components/coupons/CouponsTable/CouponStatusCell.component";
+export { EditCouponDialog } from "./components/coupons/CouponDialogs/EditCouponDialog.component";
+export { CouponTableFilters } from "./components/coupons/CouponDialogs/CouponTableFilters.component";
+export { useCouponFilters } from "./hooks/coupons/useCouponFilters.hook";
+export {
+  couponScopeLabel,
+  couponTypeLabel,
+  couponValueLabel,
+} from "./utils/coupons/couponSummary";

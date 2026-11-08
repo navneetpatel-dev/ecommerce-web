@@ -109,6 +109,8 @@ export function useCartPage() {
     appliedCouponCode: coupons.appliedCouponCode,
     appliedDiscount: coupons.appliedDiscount,
     appliedCoupons: coupons.appliedCoupons,
+    inactiveCoupons: coupons.inactiveCoupons,
+    eligibleError: coupons.eligibleError,
     appliedCashbackAmount: Number(cart?.appliedCoupon?.cashbackAmount ?? 0),
     payNowGrandTotal: cart?.appliedCoupon?.payNowGrandTotal,
     appliedCouponType: cart?.appliedCoupon?.type ?? null,

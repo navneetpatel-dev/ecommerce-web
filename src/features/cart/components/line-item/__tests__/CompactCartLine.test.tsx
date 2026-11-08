@@ -96,7 +96,7 @@ describe("CompactCartLine sizing", () => {
     renderLine();
 
     expect(screen.getByText("Makeup Premium 107")).toBeInTheDocument();
-    expect(screen.getByText("₹118")).toBeInTheDocument();
+    expect(screen.getByText("₹118.00")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /click to edit/i }),
     ).toBeInTheDocument();

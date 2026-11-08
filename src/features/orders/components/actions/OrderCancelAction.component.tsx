@@ -17,18 +17,21 @@ export function OrderCancelAction({ order }: OrderCancelActionProps) {
 
   const handleOpenDialog = () => setOpen(true);
 
-  if (!canCancel) return null;
+  // Once cancelled the button goes, but the outcome stays: where the items and coupon went.
+  if (!canCancel && !message) return null;
 
   return (
     <>
-      <Button
-        type="button"
-        variant="outline"
-        className={ordersComponentsStyles.cancelButton}
-        onClick={handleOpenDialog}
-      >
-        {LABELS.cancelOrder}
-      </Button>
+      {canCancel ? (
+        <Button
+          type="button"
+          variant="outline"
+          className={ordersComponentsStyles.cancelButton}
+          onClick={handleOpenDialog}
+        >
+          {LABELS.cancelOrder}
+        </Button>
+      ) : null}
 
       <StatusDialog
         open={open}

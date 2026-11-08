@@ -5,7 +5,32 @@ import { returnsApi, type CreateReturnBody } from "./returns.api";
 export const returnsKeys = {
   mine: ["returns", "mine"] as const,
   detail: (id: string) => ["returns", "detail", id] as const,
+  estimate: (orderItemId: string, quantity: number, reasonCode: string) =>
+    ["returns", "estimate", orderItemId, quantity, reasonCode] as const,
 };
+
+/** The refund a return would give, re-asked as the quantity or reason changes. */
+export function useReturnEstimate(
+  orderItemId: string | null,
+  returnQuantity: number,
+  reasonCode: string,
+) {
+  return useQuery({
+    queryKey: returnsKeys.estimate(
+      orderItemId ?? "",
+      returnQuantity,
+      reasonCode,
+    ),
+    queryFn: () =>
+      returnsApi.estimate({
+        orderItemId: orderItemId!,
+        returnQuantity,
+        reasonCode,
+      }),
+    enabled: Boolean(orderItemId),
+    staleTime: 30_000,
+  });
+}
 
 export function useMyReturns() {
   const accessToken = useAuthStore((s) => s.accessToken);

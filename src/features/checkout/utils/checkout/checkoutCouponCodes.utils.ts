@@ -1,16 +1,13 @@
 import type { Cart } from "@/shared/api/types";
 
 /**
- * Full stacked-coupon code set to send with a quote/place-order call.
- * Prefers the cart's stacked `appliedCoupons`; falls back to the single
- * manually-typed code from the checkout store when the cart has none.
+ * The coupons to price with: whatever applies on the cart right now, the only source of
+ * truth. Sent even when empty, so a coupon that just stopped working can't block checkout.
+ * Undefined until the cart has loaded: the backend then uses the cart's own.
  */
 export function resolveCheckoutCouponCodes(
   cart: Pick<Cart, "appliedCoupons"> | undefined,
-  appliedCouponCode: string | null,
 ): string[] | undefined {
-  if (cart?.appliedCoupons?.length) {
-    return cart.appliedCoupons.map((c) => c.code);
-  }
-  return appliedCouponCode ? [appliedCouponCode] : undefined;
+  if (!cart) return undefined;
+  return (cart.appliedCoupons ?? []).map((coupon) => coupon.code);
 }

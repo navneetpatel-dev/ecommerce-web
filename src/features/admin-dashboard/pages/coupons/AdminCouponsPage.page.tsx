@@ -3,6 +3,8 @@
 import { useAdminCouponsPage } from "../../hooks/coupons/useAdminCouponsPage.hook";
 import { CouponsPageHeader } from "../../components/coupons/CouponsPageHeader.component";
 import { CouponsTable } from "../../components/coupons/CouponsTable.component";
+import { CouponTableFilters } from "../../components/coupons/CouponDialogs/CouponTableFilters.component";
+import { CouponBatchFilterChip } from "../../components/coupons/CouponDialogs/CouponBatchFilterChip.component";
 import {
   Tabs,
   TabsContent,
@@ -18,6 +20,18 @@ export function AdminCouponsPage() {
   const handleTabChange = (value: string) =>
     page.setTab(value as "platform" | "vendor");
 
+  const toolbar = (
+    <>
+      <CouponTableFilters filters={page.filters} />
+      {page.batchFilter ? (
+        <CouponBatchFilterChip
+          batchName={page.batchFilter.name}
+          onClear={page.clearBatchFilter}
+        />
+      ) : null}
+    </>
+  );
+
   return (
     <div className={adminPagesStyles.stack6}>
       <CouponsPageHeader
@@ -27,6 +41,7 @@ export function AdminCouponsPage() {
         onSubmit={page.onSubmit}
         isPending={page.isPending}
         formLevelError={page.formLevelError}
+        onShowBatch={page.showBatch}
       />
 
       <Tabs
@@ -54,6 +69,7 @@ export function AdminCouponsPage() {
             coupons={page.coupons}
             loading={page.isLoading}
             pagination={page.pagination}
+            toolbar={toolbar}
           />
         </TabsContent>
         <TabsContent value="vendor" className={adminPagesStyles.tabContent}>
@@ -63,6 +79,7 @@ export function AdminCouponsPage() {
             pagination={page.pagination}
             readOnly
             allowReject
+            toolbar={toolbar}
           />
         </TabsContent>
       </Tabs>

@@ -1,5 +1,6 @@
 "use client";
 
+import { CheckoutCouponNotice } from "./CheckoutCouponNotice.component";
 import { motion } from "motion/react";
 import { EmptyCartState } from "@/shared/components/display/EmptyCartState.component";
 import { CheckoutStepIndicator } from "../../../containers/page-view/CheckoutStepIndicator.container";
@@ -138,6 +139,7 @@ export function CheckoutPageView({
 
             <CheckoutStepAnnouncer step={step} />
 
+            <CheckoutCouponNotice />
             <CheckoutStepCard
               step={step}
               addressId={addressId}

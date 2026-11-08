@@ -1,23 +1,18 @@
 "use client";
 
-import { BarChart2 } from "lucide-react";
 import {
   DataTable,
   type DataTablePaginationProps,
 } from "@/shared/components/DataTable";
-import { Button } from "@/shared/components/ui/button";
-import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { LABELS } from "@/shared/constants/labels";
-import {
-  COUPON_STATUS,
-  type CouponStatusValue,
-} from "@/shared/constants/statuses";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { useCouponRowActions } from "../../../hooks/coupons/useCouponRowActions.hook";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { CouponsAnalyticsDialog } from "./CouponsAnalyticsDialog.component";
 import { buildCouponColumns } from "./couponTableColumns.component";
+import { CouponRowActions } from "./CouponRowActions.component";
+import { CouponDetailDialog } from "../CouponDialogs/CouponDetailDialog.component";
+import { EditCouponDialog } from "../CouponDialogs/EditCouponDialog.component";
+import type { ReactNode } from "react";
 
 interface CouponsTableProps {
   coupons?: Coupon[];
@@ -27,6 +22,7 @@ interface CouponsTableProps {
   readOnly?: boolean;
   /** Allow reject on vendor-oversight rows (admin moderation). */
   allowReject?: boolean;
+  toolbar?: ReactNode;
 }
 
 export function CouponsTable({
@@ -35,88 +31,25 @@ export function CouponsTable({
   pagination,
   readOnly = false,
   allowReject = false,
+  toolbar,
 }: CouponsTableProps) {
   const rowActions = useCouponRowActions();
   const analyticsCouponId = rowActions.analyticsCouponId;
   const setAnalyticsCouponId = rowActions.setAnalyticsCouponId;
 
-  const columns = buildCouponColumns();
+  const columns = buildCouponColumns({ vendorTab: allowReject });
   const closeAnalytics = () => setAnalyticsCouponId(null);
+  const closeDetail = () => rowActions.setDetailCoupon(null);
+  const closeEdit = () => rowActions.setEditCoupon(null);
 
-  const renderActions = (row: Coupon) => {
-    const setStatus = (status: CouponStatusValue) => () => {
-      rowActions.changeStatus({ id: row.id, status });
-    };
-    const openAnalytics = () => setAnalyticsCouponId(row.id);
-
-    return (
-      <>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("neutral")}
-          onClick={openAnalytics}
-        >
-          <BarChart2 strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.viewAnalytics}</span>
-        </Button>
-        {!readOnly && row.status === COUPON_STATUS.ACTIVE ? (
-          <AdminConfirmAction
-            label={LABELS.pauseCoupon}
-            tone="neutral"
-            dialogVariant="warning"
-            title={LABELS.confirmPauseCouponTitle}
-            description={formatLabel(LABELS.confirmPauseCouponBody, {
-              code: row.code,
-            })}
-            onConfirm={setStatus(COUPON_STATUS.PAUSED)}
-          />
-        ) : null}
-        {!readOnly &&
-        (row.status === COUPON_STATUS.PAUSED ||
-          row.status === COUPON_STATUS.DRAFT) ? (
-          <AdminConfirmAction
-            label={LABELS.activateCoupon}
-            tone="success"
-            dialogVariant="success"
-            title={LABELS.confirmActivateCouponTitle}
-            description={formatLabel(LABELS.confirmActivateCouponBody, {
-              code: row.code,
-            })}
-            onConfirm={setStatus(COUPON_STATUS.ACTIVE)}
-          />
-        ) : null}
-        {!readOnly && row.status !== COUPON_STATUS.ARCHIVED ? (
-          <AdminConfirmAction
-            label={LABELS.archiveCoupon}
-            tone="archive"
-            dialogVariant="warning"
-            title={LABELS.confirmArchiveCouponTitle}
-            description={formatLabel(LABELS.confirmArchiveCouponBody, {
-              code: row.code,
-            })}
-            onConfirm={setStatus(COUPON_STATUS.ARCHIVED)}
-          />
-        ) : null}
-        {allowReject &&
-        row.vendorId &&
-        row.status !== COUPON_STATUS.REJECTED &&
-        row.status !== COUPON_STATUS.ARCHIVED ? (
-          <AdminConfirmAction
-            label={LABELS.rejectCoupon}
-            tone="danger"
-            dialogVariant="danger"
-            title={LABELS.confirmRejectCouponTitle}
-            description={formatLabel(LABELS.confirmRejectCouponBody, {
-              code: row.code,
-            })}
-            onConfirm={setStatus(COUPON_STATUS.REJECTED)}
-          />
-        ) : null}
-      </>
-    );
-  };
+  const renderActions = (row: Coupon) => (
+    <CouponRowActions
+      row={row}
+      readOnly={readOnly}
+      allowReject={allowReject}
+      rowActions={rowActions}
+    />
+  );
 
   const analytics: CouponAnalytics | undefined = rowActions.analytics;
   const analyticsCoupon =
@@ -134,7 +67,21 @@ export function CouponsTable({
         getRowId={(row) => row.id}
         pagination={pagination}
         actions={renderActions}
+        toolbar={toolbar}
       />
+
+      <CouponDetailDialog
+        coupon={rowActions.detailCoupon}
+        onClose={closeDetail}
+      />
+      {rowActions.editCoupon ? (
+        <EditCouponDialog
+          key={rowActions.editCoupon.id}
+          coupon={rowActions.editCoupon}
+          onClose={closeEdit}
+          onSave={rowActions.saveCoupon}
+        />
+      ) : null}
 
       <CouponsAnalyticsDialog
         analyticsCoupon={analyticsCoupon}

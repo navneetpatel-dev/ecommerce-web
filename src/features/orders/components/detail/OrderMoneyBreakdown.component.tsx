@@ -19,6 +19,7 @@ interface OrderMoneyBreakdownProps {
     | "shippingTotal"
     | "shippingDisplayKey"
     | "taxDisplayKey"
+    | "appliedCoupons"
   >;
   className?: string;
 }
@@ -29,6 +30,9 @@ export function OrderMoneyBreakdown({
 }: OrderMoneyBreakdownProps) {
   // The bill as the customer saw it: items with GST, less coupons, plus shipping; the
   // GST inside it is shown, not added. Older payloads fall back to the pre-GST figures.
+  const couponNames = order.appliedCoupons
+    ?.map((coupon) => coupon.name)
+    .join(", ");
   const merchandiseSubtotal = order.itemsTotal ?? order.merchandiseSubtotal;
   const discountTotal = order.couponSavings ?? order.discountTotal;
   const taxTotal = order.taxTotal;
@@ -54,6 +58,12 @@ export function OrderMoneyBreakdown({
           <dd className={ordersComponentsStyles.valueTabular}>
             −{formatInr(discountTotal)}
           </dd>
+        </div>
+      ) : null}
+      {order.appliedCoupons?.length ? (
+        <div className={ordersComponentsStyles.row}>
+          <dt className={ordersComponentsStyles.label}>{LABELS.couponsUsed}</dt>
+          <dd className={ordersComponentsStyles.value}>{couponNames}</dd>
         </div>
       ) : null}
       {showBreakdown && order.shippingDisplayKey != null ? (

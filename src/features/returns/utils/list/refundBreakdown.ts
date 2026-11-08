@@ -56,6 +56,15 @@ export function buildRefundBreakdownLines(
       isDeduction: true,
     });
   }
+  // What the offer took back, so the lines add up to the refund paid.
+  const offerAdjustment = Number(row.offerAdjustment ?? 0);
+  if (offerAdjustment > 0) {
+    compositionLines.push({
+      label: returnRefundBreakdownLabels.returnRefundBreakdownOffer,
+      amount: offerAdjustment,
+      isDeduction: true,
+    });
+  }
 
   const methodLines = positiveLines([
     {

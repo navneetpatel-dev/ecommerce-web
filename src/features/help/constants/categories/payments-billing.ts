@@ -97,10 +97,10 @@ export const PAYMENTS_BILLING_ARTICLES: HelpArticle[] = [
       {
         heading: "Coupons and offers",
         bullets: [
-          "Enter coupon codes at checkout when a field is available",
-          "Offers may exclude certain sellers, categories, or payment methods",
+          "Enter coupon codes in your cart, or apply an available offer there",
+          "Offers may exclude certain sellers, products, or categories",
           "One coupon per order unless a promotion explicitly stacks",
-          "Expired or ineligible codes show an error — remove them to continue",
+          "A coupon that stops applying is shown with the reason, and you can still check out without it",
         ],
       },
       {

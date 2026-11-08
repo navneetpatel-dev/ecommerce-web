@@ -7,7 +7,13 @@ export type CouponType =
   | "CASHBACK"
   | "BUNDLE";
 export type CouponStatus =
-  "DRAFT" | "ACTIVE" | "PAUSED" | "EXPIRED" | "ARCHIVED" | "REJECTED";
+  | "DRAFT"
+  | "PENDING_APPROVAL"
+  | "ACTIVE"
+  | "PAUSED"
+  | "EXPIRED"
+  | "ARCHIVED"
+  | "REJECTED";
 export type DiscountBearer = "PLATFORM" | "VENDOR";
 export type CouponScopeType = "all" | "vendor" | "product" | "category";
 export type CouponUserRestrictionType =
@@ -51,6 +57,9 @@ export interface Coupon {
   stackable: boolean;
   priority: number;
   status: CouponStatus;
+  rejectionNote?: string | null;
+  showInOffers?: boolean;
+  vendorName?: string | null;
   vendorId: string | null;
   discountBearer: DiscountBearer;
   batchId: string | null;
@@ -66,7 +75,20 @@ export interface CouponAnalytics {
   usedCountCached: number;
   usageLimitTotal: number | null;
   revenueImpact: number;
-  conversionRate: number | null;
+  /** What the customer saw come off, GST included. */
+  customerSavings: number;
+  /** What the coupon costs its funder. */
+  fundingCost: number;
+  cashbackTotal: number;
+  /** Share of the total limit used; null without a limit. */
+  limitUsedPercent: number | null;
+}
+
+/** A customer a coupon can be limited to (the picker's row). */
+export interface CouponCustomerOption {
+  id: string;
+  name: string | null;
+  email: string;
 }
 
 export interface CouponBatch {
@@ -91,6 +113,12 @@ export interface EligibleCoupon {
   discount: number;
   cashbackAmount: number;
   priority: number;
+  /** Applied codes this offer would swap out. */
+  replaces?: string[];
+  /** A bundle not complete yet: products still to add before it can apply. */
+  missingCount?: number;
+  /** The vendor's name on a vendor's own offer, so same-named offers can be told apart. */
+  sellerName?: string | null;
 }
 
 export interface BulkGenerateResult {

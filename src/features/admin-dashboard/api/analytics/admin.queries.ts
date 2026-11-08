@@ -2,6 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { adminApi } from "./admin.api";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 
+export type AdminCouponFilters = {
+  search?: string;
+  status?: string;
+  type?: string;
+  batchId?: string;
+  excludeBatches?: boolean;
+};
+
 export const adminKeys = {
   all: ["admin"] as const,
   dashboard: () => [...adminKeys.all, "dashboard"] as const,
@@ -16,8 +24,13 @@ export const adminKeys = {
   },
   coupons: {
     all: ["admin", "coupons"] as const,
-    page: (page: number, limit: number, vendorScoped?: boolean) =>
-      [...adminKeys.coupons.all, page, limit, vendorScoped] as const,
+    page: (
+      page: number,
+      limit: number,
+      vendorScoped?: boolean,
+      filters?: AdminCouponFilters,
+    ) =>
+      [...adminKeys.coupons.all, page, limit, vendorScoped, filters] as const,
   },
   couponAnalytics: (couponId: string | null | undefined) =>
     [...adminKeys.all, "coupon-analytics", couponId] as const,
@@ -50,10 +63,11 @@ export function useAdminCoupons(
   page = 1,
   limit = DEFAULT_PAGE_LIMIT,
   vendorScoped?: boolean,
+  filters?: AdminCouponFilters,
 ) {
   return useQuery({
-    queryKey: adminKeys.coupons.page(page, limit, vendorScoped),
-    queryFn: () => adminApi.coupons({ page, limit, vendorScoped }),
+    queryKey: adminKeys.coupons.page(page, limit, vendorScoped, filters),
+    queryFn: () => adminApi.coupons({ page, limit, vendorScoped, ...filters }),
     placeholderData: (prev) => prev,
   });
 }

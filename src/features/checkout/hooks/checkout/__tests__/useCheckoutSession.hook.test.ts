@@ -14,7 +14,6 @@ function abandonFlowMidWay() {
   s.setStep(4);
   s.setAddress("address-1");
   s.setShippingMethod("vendor-1", "EXPRESS");
-  s.setCouponCode("SAVE10", { manual: true });
   s.setPaymentMethod("wallet");
   s.setWalletAmountToUse(250);
   s.setGiftWrap(true);
@@ -40,8 +39,6 @@ describe("useCheckoutSession on arrival", () => {
     expect(state.step).toBe(1);
     expect(state.addressId).toBeNull();
     expect(state.shippingMethodByVendor).toEqual({});
-    expect(state.appliedCouponCode).toBeNull();
-    expect(state.manualCouponOverride).toBe(false);
     expect(state.paymentMethod).toBeNull();
     expect(state.walletAmountToUse).toBe(0);
     expect(state.giftWrap).toBe(false);

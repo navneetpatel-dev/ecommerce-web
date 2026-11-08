@@ -64,6 +64,6 @@ describe("VendorGroupTotals", () => {
       <VendorGroupTotals {...base} shippingDisplayKey="FREE" discount={250} />,
     );
 
-    expect(screen.getByText("−₹250")).toBeInTheDocument();
+    expect(screen.getByText(/₹250\.00/)).toBeInTheDocument();
   });
 });

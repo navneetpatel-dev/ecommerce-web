@@ -49,6 +49,7 @@ export interface CheckoutQuote {
     type?: string;
   } | null;
   appliedCoupons?: Array<{
+    freeShipping?: boolean;
     code: string;
     name?: string;
     discount: number;

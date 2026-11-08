@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { couponsApi } from "@/features/coupons";
 import { cartKeys } from "../../api/cart/cart.queries";
-import { useCheckoutStore } from "@/features/checkout";
 import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
@@ -24,23 +23,29 @@ export function useCartCoupons({
 }: UseCartCouponsOptions) {
   const queryClient = useQueryClient();
   const { requireAuth } = useRequireAuth();
-  const setCouponCode = useCheckoutStore((s) => s.setCouponCode);
-  const appliedCouponCode = useCheckoutStore((s) => s.appliedCouponCode);
-  const manualCouponOverride = useCheckoutStore((s) => s.manualCouponOverride);
 
   const [couponInput, setCouponInput] = useState("");
-  const [couponMessage, setCouponMessage] = useState<string | null>(null);
+  // The "applied" message belongs to one coupon on one cart: it goes once the cart
+  // changes or that coupon stops applying, so it can't contradict the notice below.
+  const [appliedNotice, setAppliedNotice] = useState<{
+    code: string;
+    text: string;
+    signature: string;
+  } | null>(null);
   const [couponError, setCouponError] = useState<string | null>(null);
   const [couponPending, setCouponPending] = useState(false);
 
   const hasItems = Boolean(cart?.items?.length);
+  const cartSignature = (cart?.items ?? [])
+    .map((item) => `${item.variantId}:${item.quantity}`)
+    .join(",");
   const { eligible, eligibleLoading, eligibleError, loadEligible } =
-    useCouponEligibility(enabled, hasItems);
+    useCouponEligibility(enabled, hasItems, cartSignature);
 
   const cartApplied = cart?.appliedCoupon ?? null;
-  const displayCode = cartApplied?.code ?? appliedCouponCode;
+  const displayCode = cartApplied?.code ?? null;
   const displayDiscount = cartApplied?.discount ?? 0;
-  const removedReason = cart?.removedCouponReason ?? null;
+  const inactiveCoupons = cart?.inactiveCoupons ?? [];
   // Stacked codes — fall back to the singular field for older cart responses.
   const appliedCoupons = cart?.appliedCoupons?.length
     ? cart.appliedCoupons
@@ -53,7 +58,7 @@ export function useCartCoupons({
   }, [queryClient]);
 
   const applyCoupon = useCallback(
-    async (rawCode?: string, opts?: { manual?: boolean }) => {
+    async (rawCode?: string) => {
       const code = (rawCode ?? couponInput).trim();
       if (!code) return;
       if (
@@ -66,24 +71,24 @@ export function useCartCoupons({
       }
       setCouponPending(true);
       setCouponError(null);
-      setCouponMessage(null);
+      setAppliedNotice(null);
       try {
         const result = await couponsApi.apply(code);
-        setCouponCode(code, { manual: opts?.manual !== false });
-        setCouponMessage(describeApplyResult(result));
+        setAppliedNotice({
+          code: code.toUpperCase(),
+          text: describeApplyResult(result),
+          signature: cartSignature,
+        });
         setCouponInput("");
         refreshCart();
         void loadEligible();
       } catch (error) {
         setCouponError(getApiErrorMessage(error, LABELS.couponInvalid));
-        if (opts?.manual !== false) {
-          setCouponCode(null, { manual: true });
-        }
       } finally {
         setCouponPending(false);
       }
     },
-    [couponInput, loadEligible, refreshCart, requireAuth, setCouponCode],
+    [cartSignature, couponInput, loadEligible, refreshCart, requireAuth],
   );
   /** Omit `code` to clear every stacked coupon (legacy "Remove" behavior). */
   const removeCoupon = useCallback(
@@ -98,12 +103,9 @@ export function useCartCoupons({
       }
       setCouponPending(true);
       setCouponError(null);
-      setCouponMessage(null);
+      setAppliedNotice(null);
       try {
-        const result = await couponsApi.remove(code);
-        if (!code || result.cleared) {
-          setCouponCode(null, { manual: true });
-        }
+        await couponsApi.remove(code);
         refreshCart();
         void loadEligible();
       } catch (error) {
@@ -112,23 +114,22 @@ export function useCartCoupons({
         setCouponPending(false);
       }
     },
-    [loadEligible, refreshCart, requireAuth, setCouponCode],
+    [loadEligible, refreshCart, requireAuth],
   );
 
-  // Sync coupon store (external system) from server cart truth.
-  /* eslint-disable react-hooks/set-state-in-effect */
-  useEffect(() => {
-    if (cartApplied?.code) {
-      setCouponCode(cartApplied.code, { manual: manualCouponOverride });
-    } else if (removedReason) {
-      setCouponCode(null);
-      setCouponMessage(removedReason);
-    }
-  }, [cartApplied?.code, manualCouponOverride, removedReason, setCouponCode]);
-  /* eslint-enable react-hooks/set-state-in-effect */
-  const applyFromInput = () => applyCoupon(undefined, { manual: true });
-  const applyEligibleCode = (code: string) =>
-    applyCoupon(code, { manual: true });
+  const noticeStillTrue =
+    appliedNotice !== null &&
+    appliedNotice.signature === cartSignature &&
+    appliedCoupons.some(
+      (coupon) => coupon.code?.toUpperCase() === appliedNotice.code,
+    ) &&
+    !inactiveCoupons.some(
+      (coupon) => coupon.code?.toUpperCase() === appliedNotice.code,
+    );
+  const couponMessage = noticeStillTrue ? appliedNotice.text : null;
+
+  const applyFromInput = () => applyCoupon();
+  const applyEligibleCode = (code: string) => applyCoupon(code);
 
   return {
     couponInput,
@@ -139,6 +140,7 @@ export function useCartCoupons({
     appliedCouponCode: displayCode,
     appliedDiscount: displayDiscount,
     appliedCoupons,
+    inactiveCoupons,
     eligible,
     eligibleLoading,
     eligibleError,

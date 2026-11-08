@@ -50,7 +50,7 @@ describe("cart authoritative totals", () => {
 
     rerender(<CartCouponSection {...props} payNowGrandTotal={500} />);
     expect(
-      screen.getByText(/Pay ₹500 now, ₹100 cashback after delivery/),
+      screen.getByText(/Pay ₹500\.00 now, ₹100\.00 cashback after delivery/),
     ).toBeInTheDocument();
   });
 });

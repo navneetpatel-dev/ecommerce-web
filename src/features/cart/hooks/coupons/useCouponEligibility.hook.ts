@@ -21,6 +21,8 @@ interface UseCouponEligibilityResult {
 export function useCouponEligibility(
   enabled: boolean,
   hasItems: boolean,
+  /** Changes with the cart's items and quantities, so offers never go stale. */
+  cartSignature: string,
 ): UseCouponEligibilityResult {
   const accessToken = useAuthStore((s) => s.accessToken);
   const [eligible, setEligible] = useState<EligibleCoupon[]>([]);
@@ -51,7 +53,7 @@ export function useCouponEligibility(
   useEffect(() => {
     if (!enabled || !accessToken || !hasItems) return;
     void loadEligible();
-  }, [accessToken, hasItems, enabled, loadEligible]);
+  }, [accessToken, hasItems, enabled, cartSignature, loadEligible]);
 
   return {
     eligible: hasItems ? eligible : [],

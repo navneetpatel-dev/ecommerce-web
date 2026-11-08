@@ -4,6 +4,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { CartPageSkeleton } from "@/shared/components/Skeletons.component";
 import type {
   AppliedCouponSummary,
+  InactiveCoupon,
   CartItem,
   EligibleCoupon,
 } from "@/shared/api/types";
@@ -53,6 +54,8 @@ export interface CartPageViewProps {
   appliedCouponCode: string | null;
   appliedDiscount: number;
   appliedCoupons?: AppliedCouponSummary[];
+  inactiveCoupons?: InactiveCoupon[];
+  eligibleError?: string | null;
   appliedCashbackAmount?: number;
   payNowGrandTotal?: number;
   appliedCouponType?: string | null;
@@ -98,6 +101,8 @@ export function CartPageView({
   appliedCouponCode,
   appliedDiscount,
   appliedCoupons = [],
+  inactiveCoupons = [],
+  eligibleError = null,
   appliedCashbackAmount = 0,
   payNowGrandTotal,
   appliedCouponType,
@@ -170,6 +175,8 @@ export function CartPageView({
             appliedCouponCode={appliedCouponCode}
             appliedDiscount={appliedDiscount}
             appliedCoupons={appliedCoupons}
+            inactiveCoupons={inactiveCoupons}
+            eligibleError={eligibleError}
             appliedCashbackAmount={appliedCashbackAmount}
             payNowGrandTotal={payNowGrandTotal}
             appliedCouponType={appliedCouponType}

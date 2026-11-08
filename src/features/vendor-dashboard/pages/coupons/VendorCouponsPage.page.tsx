@@ -29,6 +29,13 @@ export function VendorCouponsPage() {
         analyticsLoading={page.analyticsLoading}
         absorbedDiscountTotal={page.absorbedDiscountTotal}
         onUpdateStatus={page.updateStatus}
+        filters={page.filters}
+        canManage={page.canManage}
+        detailCoupon={page.detailCoupon}
+        setDetailCoupon={page.setDetailCoupon}
+        editCoupon={page.editCoupon}
+        setEditCoupon={page.setEditCoupon}
+        saveCoupon={page.saveCoupon}
       />
     </RequirePermission>
   );

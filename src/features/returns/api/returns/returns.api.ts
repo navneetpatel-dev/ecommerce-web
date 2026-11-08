@@ -20,7 +20,30 @@ export type CreateReturnBody = {
   photoUrls?: string[];
 };
 
+/** What a return would refund, before it's asked for (rupees, from the server). */
+export type ReturnEstimate = {
+  refund: number;
+  offerAdjustment: number;
+  offerNames: string[];
+  cashbackClawback: number;
+  returnShippingFee: number;
+};
+
 export const returnsApi = {
+  estimate: (params: {
+    orderItemId: string;
+    returnQuantity?: number;
+    reasonCode?: string;
+  }) =>
+    apiClient.get<ReturnEstimate>(
+      API.returns.estimate(
+        new URLSearchParams(
+          Object.entries(params).flatMap(([key, value]) =>
+            value == null ? [] : [[key, String(value)]],
+          ),
+        ).toString(),
+      ),
+    ),
   list: () => apiClient.get<ReturnRequest[]>(API.returns.list),
   listAdmin: async (
     params: PaginationQuery = {},

@@ -158,6 +158,36 @@ export function CreateCouponScopeFields({
           ) : null}
         </>
       )}
+      <FormFieldFrame
+        label={LABELS.excludedProducts}
+        hint={LABELS.excludedHint}
+      >
+        <Controller
+          name="excludedProductIds"
+          control={control}
+          render={({ field }) => (
+            <CouponScopeMultiSelect
+              scopeType="product"
+              value={field.value ?? []}
+              onChange={field.onChange}
+              vendorId={vendorMode ? vendorId : null}
+            />
+          )}
+        />
+      </FormFieldFrame>
+      <FormFieldFrame label={LABELS.excludedCategories}>
+        <Controller
+          name="excludedCategoryIds"
+          control={control}
+          render={({ field }) => (
+            <CouponScopeMultiSelect
+              scopeType="category"
+              value={field.value ?? []}
+              onChange={field.onChange}
+            />
+          )}
+        />
+      </FormFieldFrame>
     </FormSection>
   );
 }

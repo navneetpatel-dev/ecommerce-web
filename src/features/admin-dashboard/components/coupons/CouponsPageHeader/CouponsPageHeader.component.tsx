@@ -14,7 +14,7 @@ import {
 import { DataTable } from "@/shared/components/DataTable";
 import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
-import { Plus, Bell, Eye } from "lucide-react";
+import { Plus, Bell, Eye, Layers } from "lucide-react";
 import { CreateCouponForm } from "../CreateCouponForm.component";
 import { FormError } from "@/shared/components/forms/FormError.component";
 import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
@@ -35,6 +35,7 @@ interface CouponsPageHeaderProps {
   onSubmit: (data: CouponFormInput) => void;
   isPending: boolean;
   formLevelError?: string | null;
+  onShowBatch?: (batch: { id: string; name: string } | null) => void;
 }
 
 export function CouponsPageHeader(props: CouponsPageHeaderProps) {
@@ -45,6 +46,7 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
     onSubmit,
     isPending,
     formLevelError = null,
+    onShowBatch,
   } = props;
   const [bulkOpen, setBulkOpen] = useState(false);
   const [batchDetail, setBatchDetail] = useState<CouponBatch | null>(null);
@@ -52,6 +54,7 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
   const notifyAlerts = useNotifyCouponAlerts();
 
   const handleNotifyAlerts = () => notifyAlerts.mutate();
+  const openBulkGenerate = () => setBulkOpen(true);
 
   const batchColumns = buildCouponBatchColumns();
 
@@ -100,6 +103,15 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
             onClick={handleNotifyAlerts}
           >
             <Bell aria-hidden /> {LABELS.runCouponAlerts}
+          </Button>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            fullWidth="mobile"
+            onClick={openBulkGenerate}
+          >
+            <Layers aria-hidden /> {LABELS.bulkGenerate}
           </Button>
           <BulkGenerateDialog open={bulkOpen} setOpen={setBulkOpen} />
 
@@ -168,6 +180,7 @@ export function CouponsPageHeader(props: CouponsPageHeaderProps) {
       <CouponBatchDetailDialog
         batchDetail={batchDetail}
         onClose={closeBatchDetail}
+        onShowBatch={onShowBatch}
       />
     </div>
   );

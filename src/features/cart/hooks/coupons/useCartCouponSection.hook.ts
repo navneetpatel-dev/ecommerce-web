@@ -3,13 +3,17 @@
 import { useMemo, type ChangeEvent, type KeyboardEvent } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { offerDetailText, offerDisplayName } from "@/features/coupons";
 import type { AppliedCouponSummary, EligibleCoupon } from "@/shared/api/types";
 
 export interface UnusedOfferViewModel {
   code: string;
   label: string;
-  discountText: string;
+  /** What it gives: "Save ₹120.00", "Add 1 more to save ₹100.00", cashback after delivery. */
+  detailText: string;
+  actionLabel: string;
+  /** A bundle still missing items: shown, but it can't be applied yet. */
+  locked: boolean;
 }
 
 interface UseCartCouponSectionParams {
@@ -45,11 +49,12 @@ export function useCartCouponSection({
       .filter((offer) => !appliedCodes.has(offer.code.toUpperCase()))
       .map((offer) => ({
         code: offer.code,
-        label: offer.name || offer.code,
-        discountText:
-          offer.discount > 0
-            ? ` · ${formatInr(offer.discount)} ${LABELS.couponDiscount.toLowerCase()}`
-            : "",
+        label: offerDisplayName(offer),
+        detailText: offerDetailText(offer),
+        locked: Boolean(offer.missingCount),
+        actionLabel: offer.replaces?.length
+          ? LABELS.replaceOffer
+          : LABELS.applyOffer,
       }));
   }, [chips, eligible]);
 

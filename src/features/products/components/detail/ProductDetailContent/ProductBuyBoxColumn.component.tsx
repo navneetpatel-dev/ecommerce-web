@@ -133,7 +133,10 @@ export function ProductBuyBoxColumn({
           />
         ) : null}
 
-        <ProductEligibleOffers productId={product.id} />
+        <ProductEligibleOffers
+          productId={product.id}
+          variantId={variantSelection.matchedVariant?.id}
+        />
 
         {product.variants && product.variants.length > 0 ? (
           <VariantSelector
