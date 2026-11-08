@@ -133,14 +133,14 @@ describe("findRawMoneyDisplay", () => {
         const b = <span>₹{summary.earningsToday.toFixed(0)}</span>;
         const c = <span>₹{order.totalAmount}</span>;
         const d = \`₹\${Number(option.cost)}\`;
-        const e = <span>Earnings (₹{summary.perTaskEarning}/task)</span>;
+        const e = <span>Earnings (₹{summary.vendorEarning}/order)</span>;
       `),
     ).toEqual([
       "payout.amount.toFixed(2)",
       "summary.earningsToday.toFixed(0)",
       "order.totalAmount",
       "Number(option.cost)",
-      "summary.perTaskEarning",
+      "summary.vendorEarning",
     ]);
   });
 

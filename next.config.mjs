@@ -104,8 +104,7 @@ const nextConfig = {
             key: "Strict-Transport-Security",
             value: "max-age=63072000",
           },
-          // Camera: delivery barcode scanning. Geolocation: delivery location
-          // beacon and address capture. Everything else stays switched off.
+          // Geolocation: address capture. Everything else stays switched off.
           {
             key: "Permissions-Policy",
             value:

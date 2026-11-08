@@ -20,7 +20,6 @@ export const VENDOR_ORDERS_TABLE_STYLES = {
   shipmentStack: "space-y-1",
   returnsStack: "space-y-1",
   returnRow: "flex items-center gap-2",
-  proofLink: "text-body-sm font-medium text-brand hover:underline",
   mutedText: "text-body-sm text-ink-muted",
 
   trackingRoot: "flex min-w-[14rem] flex-col gap-2",
