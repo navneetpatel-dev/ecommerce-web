@@ -1,4 +1,6 @@
 import { useCheckoutQuote } from "../../api/checkout/checkout.queries";
+import { useCheckoutStore } from "../../store/checkout.store";
+import { toApiPaymentMethod } from "../../utils/checkout/placeOrderPayload.utils";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { LABELS } from "@/shared/constants/labels";
 import { useCheckoutCacheActions } from "./useCheckoutCacheActions.hook";
@@ -21,6 +23,8 @@ export function useCheckoutQuoteState({
   walletAmountToUse,
   giftWrap,
 }: UseCheckoutQuoteStateInput) {
+  // Sent so cashback offers limited to a payment method show once one is picked.
+  const paymentMethod = useCheckoutStore((s) => s.paymentMethod);
   const quoteInput = {
     addressId,
     shippingMethodByVendor,
@@ -28,6 +32,9 @@ export function useCheckoutQuoteState({
     couponCodes,
     walletAmountToUse,
     giftWrap,
+    paymentMethod: paymentMethod
+      ? toApiPaymentMethod(paymentMethod)
+      : undefined,
   };
   const {
     data: quote,

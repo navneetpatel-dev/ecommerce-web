@@ -2,7 +2,10 @@
 
 import type { UseFormReturn } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import type { CouponFormInput } from "../../../schemas/coupons/coupons.schema";
+import type {
+  CouponFormInput,
+  CouponLockedField,
+} from "../../../schemas/coupons/coupons.schema";
 import { Input } from "@/shared/components/ui/input";
 import {
   Select,
@@ -25,6 +28,7 @@ interface CreateCouponBasicsFieldsProps {
   hasError: (name: keyof CouponFormInput) => boolean;
   vendorMode: boolean;
   hideCodeField: boolean;
+  lockedFields: readonly CouponLockedField[];
 }
 
 export function CreateCouponBasicsFields({
@@ -33,8 +37,12 @@ export function CreateCouponBasicsFields({
   hasError,
   vendorMode,
   hideCodeField,
+  lockedFields,
 }: CreateCouponBasicsFieldsProps) {
   const { register, control } = form;
+  const codeLocked = lockedFields.includes("code");
+  const typeLocked = lockedFields.includes("type");
+  const bearerLocked = lockedFields.includes("discountBearer");
 
   return (
     <FormSection title={LABELS.couponSectionBasics} columns={1}>
@@ -49,6 +57,7 @@ export function CreateCouponBasicsFields({
             id="coupon-code"
             error={hasError("code")}
             placeholder={LABELS.couponCode}
+            disabled={codeLocked}
             {...register("code")}
           />
         </FormFieldFrame>
@@ -63,7 +72,11 @@ export function CreateCouponBasicsFields({
           name="type"
           control={control}
           render={({ field }) => (
-            <Select value={field.value} onValueChange={field.onChange}>
+            <Select
+              value={field.value}
+              onValueChange={field.onChange}
+              disabled={typeLocked}
+            >
               <SelectTrigger
                 className={cn(
                   hasError("type") && createCouponFormStyles.borderDanger,
@@ -95,7 +108,11 @@ export function CreateCouponBasicsFields({
             name="discountBearer"
             control={control}
             render={({ field }) => (
-              <Select value={field.value} onValueChange={field.onChange}>
+              <Select
+                value={field.value}
+                onValueChange={field.onChange}
+                disabled={bearerLocked}
+              >
                 <SelectTrigger
                   className={cn(
                     hasError("discountBearer") &&

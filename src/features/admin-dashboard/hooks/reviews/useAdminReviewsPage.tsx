@@ -4,7 +4,8 @@ import { useCallback, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { reviewsApi } from "@/features/reviews";
+import { reviewsApi, ReviewMediaModerationAction } from "@/features/reviews";
+import type { ReviewMediaItem } from "@/shared/api/types";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
@@ -26,6 +27,9 @@ export function useAdminReviewsPage(): AdminListPageModel {
 
       return (
         <>
+          <ReviewMediaModerationAction
+            media={row.media as ReviewMediaItem[] | undefined}
+          />
           <AdminConfirmAction
             label={LABELS.approve}
             dialogVariant="success"

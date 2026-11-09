@@ -8,6 +8,7 @@ import { RatingStars } from "@/shared/components/display/RatingStars.component";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
+import { CashbackOfferBadge } from "@/features/cashback";
 import { CARD_DETAILS_STYLES } from "../../../styles/card/cardDetails.styles";
 
 interface CardDetailsProps {
@@ -48,6 +49,7 @@ export function CardDetails({
           </>
         )}
       </div>
+      <CashbackOfferBadge categoryId={product.categoryId} />
       <RatingStars
         value={product.avgRating}
         count={product.reviewCount}

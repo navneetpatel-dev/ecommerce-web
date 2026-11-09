@@ -70,6 +70,7 @@ export function PayableSummary({ quote, payable }: PayableSummaryProps) {
           payNow={payable}
           cashbackAmount={quote.cashbackAmount}
           code={quote.appliedCoupon?.code}
+          offerName={quote.cashbackOffer?.name}
         />
       ) : null}
 

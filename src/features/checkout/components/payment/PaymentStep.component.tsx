@@ -6,6 +6,7 @@ import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { LABELS } from "@/shared/constants/labels";
 import { WalletApplySection } from "../wallet/WalletApplySection.component";
+import { CheckoutGiftCardSection } from "../wallet/CheckoutGiftCardSection.component";
 import { PaymentOptionsList } from "./PaymentOptionsList.component";
 import { usePaymentStep } from "../../hooks/payment/usePaymentStep.hook";
 import { PAYMENT_STEP_STYLES } from "../../styles/payment/paymentStep.styles";
@@ -59,6 +60,12 @@ export function PaymentStep({
         canUseCod={canUseCod}
         canUseWallet={canUseWallet}
         onSelect={handleSelectMethod}
+      />
+
+      <CheckoutGiftCardSection
+        disabled={isPending || !quote}
+        onSelect={onSelect}
+        onWalletAmountChange={onWalletAmountChange}
       />
 
       {walletSelected ? (

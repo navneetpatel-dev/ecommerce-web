@@ -3,6 +3,9 @@ import { describe, expect, it, vi } from "vitest";
 import { CartCouponSection } from "../../coupons/CartCouponSection.component";
 import { OrderSummaryAside } from "../CartPageView/OrderSummaryAside.component";
 
+// Live cashback offers are fetched by their own component; these tests are about totals.
+vi.mock("@/features/cashback", () => ({ CartCashbackOffers: () => null }));
+
 const couponActions = {
   onCouponInputChange: vi.fn(),
   onApplyCoupon: vi.fn(),

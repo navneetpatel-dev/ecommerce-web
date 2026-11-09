@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import type { UploadedMediaAttachment } from "@/features/supportTickets";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LABELS } from "@/shared/constants/labels";
@@ -15,6 +16,9 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
   const submitReview = useSubmitReview();
   const { requireAuth } = useRequireAuth();
   const [hoverRating, setHoverRating] = useState(0);
+  // The id the review will take: its photos/video upload under it before posting.
+  const draftId = useMemo(() => crypto.randomUUID(), []);
+  const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>([]);
 
   const form = useForm<ReviewFormInput>({
     mode: "onTouched",
@@ -22,7 +26,7 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
     defaultValues: { rating: 0 },
   });
 
-  useUnsavedChanges(form.formState.isDirty);
+  useUnsavedChanges(form.formState.isDirty || attachments.length > 0);
 
   const { formLevelError } = useApiFormErrors(
     form,
@@ -61,6 +65,12 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
       rating: data.rating,
       title: data.title,
       body: data.body,
+      draftId,
+      attachments: attachments.map(({ url, type, durationSeconds }) => ({
+        url,
+        type,
+        durationSeconds,
+      })),
     });
   };
 
@@ -75,6 +85,9 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
     setHoverRating,
     setRating,
     onSubmit,
+    draftId,
+    attachments,
+    setAttachments,
     isPending: submitReview.isPending,
   };
 }

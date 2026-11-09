@@ -121,6 +121,8 @@ export const adminApi = {
 
   createCoupon: (body: unknown) =>
     apiClient.post<Coupon>(API.coupons.create, body),
+  updateCoupon: (id: string, body: unknown) =>
+    apiClient.patch<Coupon>(API.coupons.detail(id), body),
   updateCouponStatus: (id: string, status: CouponStatus) =>
     apiClient.patch<Coupon>(API.coupons.status(id), { status }),
   couponAnalytics: (id: string) =>

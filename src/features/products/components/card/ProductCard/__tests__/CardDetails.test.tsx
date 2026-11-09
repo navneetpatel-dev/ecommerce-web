@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { CardDetails } from "../CardDetails.component";
 import type { ProductListItem } from "@/shared/api/types";
+
+// The cashback badge fetches live offers; this test is about the price row.
+vi.mock("@/features/cashback", () => ({ CashbackOfferBadge: () => null }));
 
 const product: ProductListItem = {
   id: "product-1",

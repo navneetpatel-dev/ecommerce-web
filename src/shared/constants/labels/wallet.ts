@@ -64,6 +64,7 @@ export const walletLabels = {
   cashbackCreditedToWallet: "{amount} cashback credited as points",
   cashbackPayNowMessage: "Pay {payNow} now, {cashback} cashback after delivery",
   couponCashbackApplied: "Cashback offer: {code}",
+  cashbackOfferIncluded: "Includes {offer}",
 
   // Checkout payment methods
   paymentMethodRazorpay: "Card / UPI / Netbanking",

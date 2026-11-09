@@ -37,6 +37,8 @@ export interface CheckoutQuote {
   grandTotal: number;
   giftWrapFeeAmount?: number;
   cashbackAmount: number;
+  /** Platform cashback offer included in `cashbackAmount`, when the order qualifies. */
+  cashbackOffer?: { offerId: string; name: string; amount: number } | null;
   walletBalance: number;
   walletAmountToUse: number;
   amountDue: number;

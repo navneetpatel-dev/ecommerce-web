@@ -38,13 +38,8 @@ export function useMyReviews() {
 export function useSubmitReview() {
   const router = useRouter();
   return useMutation({
-    mutationFn: (input: {
-      orderItemId: string;
-      productId: string;
-      rating: number;
-      title?: string;
-      body: string;
-    }) => reviewsApi.submit(input),
+    mutationFn: (input: Parameters<typeof reviewsApi.submit>[0]) =>
+      reviewsApi.submit(input),
     onSuccess: () => {
       navigate(router, PATHS.orders);
     },

@@ -57,6 +57,8 @@ export const couponsApi = {
   },
   vendorCreate: (body: unknown) =>
     apiClient.post<Coupon>(API.coupons.vendor.create, body),
+  vendorUpdate: (id: string, body: unknown) =>
+    apiClient.patch<Coupon>(API.coupons.vendor.detail(id), body),
   vendorUpdateStatus: (id: string, status: CouponStatus) =>
     apiClient.patch<Coupon>(API.coupons.vendor.status(id), { status }),
   vendorAnalytics: (id: string) =>

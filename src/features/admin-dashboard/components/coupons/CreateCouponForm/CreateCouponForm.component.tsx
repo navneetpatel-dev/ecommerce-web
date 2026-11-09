@@ -5,6 +5,7 @@ import {
   CouponSchema,
   couponRequiresValue,
   type CouponFormInput,
+  type CouponLockedField,
 } from "../../../schemas/coupons/coupons.schema";
 import { Button } from "@/shared/components/ui/button";
 import { FormActions, FormStack } from "@/shared/components/forms";
@@ -36,6 +37,8 @@ interface CreateCouponFormProps {
   hideSubmit?: boolean;
   /** Hide the coupon code field (bulk template). */
   hideCodeField?: boolean;
+  /** Edit of a used coupon: these fields show their value but can't change. */
+  lockedFields?: readonly CouponLockedField[];
 }
 
 export function CreateCouponForm({
@@ -46,6 +49,7 @@ export function CreateCouponForm({
   submitLabel = LABELS.createCoupon,
   hideSubmit = false,
   hideCodeField = false,
+  lockedFields = [],
 }: CreateCouponFormProps) {
   const {
     watch,
@@ -106,6 +110,7 @@ export function CreateCouponForm({
         hasError={hasError}
         vendorMode={vendorMode}
         hideCodeField={hideCodeField}
+        lockedFields={lockedFields}
       />
 
       <CreateCouponValueFields

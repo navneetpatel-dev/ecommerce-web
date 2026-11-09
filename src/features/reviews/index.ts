@@ -6,3 +6,5 @@ export { ReviewFormContainer } from "./containers/review-form/ReviewFormContaine
 export { reviewKeys } from "./api/reviews/reviews.queries";
 export { MyReviewsPage } from "./pages/my-reviews/MyReviewsPage.page";
 export { ProductReviewsContainer } from "./containers/product-reviews/ProductReviewsContainer.container";
+export { ReviewMediaGallery } from "./components/media/ReviewMediaGallery.component";
+export { ReviewMediaModerationAction } from "./components/media/ReviewMediaModerationAction.component";

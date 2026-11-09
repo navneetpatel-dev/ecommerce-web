@@ -7,6 +7,11 @@ export {
 } from "./couponShape.schema";
 export { toCouponCreateBody } from "./couponMapping.schema";
 export {
+  couponToFormValues,
+  couponLockedFields,
+  type CouponLockedField,
+} from "./couponFromApi.schema";
+export {
   BulkCouponSchema,
   type BulkCouponFormInput,
 } from "./couponBatch.schema";

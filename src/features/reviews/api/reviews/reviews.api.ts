@@ -18,6 +18,13 @@ export const reviewsApi = {
     rating: number;
     title?: string;
     body: string;
+    /** Id the review takes; its photos/video were uploaded under it. */
+    draftId?: string;
+    attachments?: Array<{
+      url: string;
+      type: "IMAGE" | "VIDEO";
+      durationSeconds?: number | null;
+    }>;
   }) => apiClient.post<Review>(API.reviews.create, body),
   myReviews: () => apiClient.get<Review[]>(API.reviews.mine),
   vote: (reviewId: string, vote: "HELPFUL" | "UNHELPFUL") =>

@@ -1,5 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import { BadgePercent } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { WalletBalanceCard } from "../../components/overview/WalletPageContent.component";
@@ -18,6 +22,17 @@ export function WalletPage() {
         <TextEyebrow brand>{LABELS.account}</TextEyebrow>
         <h1 className={styles.title}>{LABELS.wallet}</h1>
         <p className={styles.description}>{LABELS.walletPageDescription}</p>
+        <Button
+          asChild
+          variant="outline"
+          size="sm"
+          className={styles.cashbackLink}
+        >
+          <Link href={PATHS.walletCashback}>
+            <BadgePercent aria-hidden />
+            <span>{LABELS.cashbackHistoryLink}</span>
+          </Link>
+        </Button>
       </header>
 
       <div className={styles.cardsGrid}>

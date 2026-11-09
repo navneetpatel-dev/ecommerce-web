@@ -1,0 +1,16 @@
+export const adminCashbackOffersStyles = {
+  root: "w-full min-w-0 space-y-5",
+  headerRow: "flex flex-wrap items-start justify-between gap-3",
+  headerInfo: "min-w-0 space-y-1",
+  heading: "font-display text-xl font-semibold text-ink",
+  description: "max-w-2xl text-body-sm text-ink-muted",
+  dialogContent: "max-h-[90dvh] max-w-2xl overflow-y-auto",
+  form: "space-y-5",
+  grid: "grid gap-4 sm:grid-cols-3",
+  gridTwo: "grid gap-4 sm:grid-cols-2",
+  checkboxRow: "flex flex-wrap gap-5",
+  switchRow: "flex items-center gap-3 text-body-sm text-ink",
+  actions: "flex justify-end",
+  actionsCell: "flex flex-wrap gap-2",
+  muted: "text-ink-muted",
+} as const;

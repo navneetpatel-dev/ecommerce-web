@@ -9,6 +9,7 @@ export const UPLOAD_ENTITY = {
   TICKETS: "tickets",
   BUG_REPORTS: "bug-reports",
   PAYOUTS: "payouts",
+  REVIEWS: "reviews",
 } as const;
 
 export type UploadEntityType =

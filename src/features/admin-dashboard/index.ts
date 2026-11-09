@@ -22,6 +22,7 @@ export {
   type CouponFormInput,
 } from "./schemas/coupons/coupons.schema";
 export { CreateCouponForm } from "./components/coupons/CreateCouponForm.component";
+export { EditCouponAction } from "./components/coupons/EditCouponAction";
 export { AdminConfirmAction } from "./components/shared/AdminConfirmAction.component";
 export { AdminHomePage } from "./pages/analytics/AdminHomePage.page";
 export { AdminAnalyticsPage } from "./pages/analytics/AdminAnalyticsPage.page";
@@ -37,6 +38,8 @@ export { AdminPromoBannersPage } from "./pages/promo-banners/AdminPromoBannersPa
 export { AdminReturnsPage } from "./pages/returns/AdminReturnsPage.page";
 export { AdminReviewsPage } from "./pages/reviews/AdminReviewsPage.page";
 export { AdminShippingPage } from "./pages/shipping/AdminShippingPage.page";
+export { AdminGiftCardsPage } from "./pages/gift-cards/AdminGiftCardsPage.page";
+export { AdminCashbackOffersPage } from "./pages/cashback-offers/AdminCashbackOffersPage.page";
 export { AdminTaxPage } from "./pages/tax/AdminTaxPage.page";
 export { AdminUsersPage } from "./pages/users/AdminUsersPage.page";
 export { AdminUserDetailPage } from "./pages/users/AdminUserDetailPage.page";
