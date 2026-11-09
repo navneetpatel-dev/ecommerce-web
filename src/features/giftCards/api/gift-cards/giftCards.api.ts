@@ -1,4 +1,9 @@
 import { apiClient } from "@/shared/api/client/client";
+import {
+  unwrapPaginatedList,
+  withQuery,
+  type PaginatedList,
+} from "@/shared/api/client/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 import type { RazorpaySignaturePayload } from "@/shared/api/types";
 
@@ -38,6 +43,47 @@ export type PurchaseGiftCardPayload = {
   message?: string;
 };
 
+export type GiftCardStatus = GiftCardPublicView["status"];
+
+type GiftCardPerson = { id: string; name: string | null; email: string } | null;
+
+/** A gift card as its buyer, redeemer or an admin sees it. */
+export type GiftCardView = {
+  id: string;
+  code: string;
+  amount: number;
+  status: GiftCardStatus;
+  recipientEmail: string;
+  recipientName: string | null;
+  message: string | null;
+  purchasedAt: string;
+  expiresAt: string;
+  redeemedAt: string | null;
+  purchaser?: GiftCardPerson;
+  redeemer?: GiftCardPerson;
+};
+
+export type MyGiftCards = {
+  purchased: GiftCardView[];
+  redeemed: GiftCardView[];
+};
+
+export type GiftCardLiability = {
+  outstanding: number;
+  outstandingCount: number;
+  redeemed: number;
+  expired: number;
+  cancelled: number;
+  issued: number;
+};
+
+export type AdminGiftCardListParams = {
+  page?: number;
+  limit?: number;
+  status?: GiftCardStatus;
+  search?: string;
+};
+
 export const giftCardsApi = {
   purchase: (payload: PurchaseGiftCardPayload) =>
     apiClient.post<GiftCardCheckout>(API.giftCards.purchase, payload),
@@ -47,4 +93,19 @@ export const giftCardsApi = {
     apiClient.post<GiftCardRedeemResult>(API.giftCards.redeem, { code }),
   getByCode: (code: string) =>
     apiClient.get<GiftCardPublicView>(API.giftCards.byCode(code)),
+  mine: () => apiClient.get<MyGiftCards>(API.giftCards.mine),
+  resend: (id: string) =>
+    apiClient.post<{ sent: true }>(API.giftCards.resend(id), {}),
+  adminList: async (
+    params: AdminGiftCardListParams,
+  ): Promise<PaginatedList<GiftCardView>> => {
+    const res = await apiClient.getWithResponse<GiftCardView[]>(
+      withQuery(API.giftCards.adminList, params),
+    );
+    return unwrapPaginatedList(res);
+  },
+  adminLiability: () =>
+    apiClient.get<GiftCardLiability>(API.giftCards.adminLiability),
+  adminCancel: (id: string, reason: string) =>
+    apiClient.post<GiftCardView>(API.giftCards.adminCancel(id), { reason }),
 };

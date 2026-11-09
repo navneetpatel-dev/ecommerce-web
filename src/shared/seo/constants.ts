@@ -83,6 +83,7 @@ export const WORKSPACE_PAGE_COPY = {
   "/admin/bug-reports/[id]": { title: "Bug report detail" },
   "/admin/categories": { title: "Categories" },
   "/admin/finance": { title: "Finance" },
+  "/admin/gift-cards": { title: "Gift cards" },
   "/admin/orders": { title: "Orders" },
   "/admin/reports": { title: "Reports" },
   "/admin/returns": { title: "Returns" },

@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
+import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { giftCardsLabels } from "@/shared/constants/labels/giftCards";
 import { GiftCardPurchaseForm } from "../../components/purchase/GiftCardPurchaseForm.component";
@@ -15,6 +17,9 @@ export function GiftCardPurchasePage() {
         <p className={styles.subtitle}>
           {giftCardsLabels.giftCardsPageDescription}
         </p>
+        <Link href={PATHS.giftCardsMine} className={styles.mineLink}>
+          {LABELS.myGiftCards}
+        </Link>
       </header>
 
       <GiftCardPurchaseForm />

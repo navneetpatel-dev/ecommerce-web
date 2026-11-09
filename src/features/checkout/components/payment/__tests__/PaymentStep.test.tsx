@@ -1,8 +1,18 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import type { ReactElement } from "react";
+import { render as rtlRender, screen } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import userEvent from "@testing-library/user-event";
 import type { CheckoutQuote } from "@/shared/api/types";
 import { PaymentStep } from "../PaymentStep.component";
+
+// The gift card section redeems through react-query, so the step needs a client.
+function render(ui: ReactElement) {
+  const client = new QueryClient();
+  return rtlRender(
+    <QueryClientProvider client={client}>{ui}</QueryClientProvider>,
+  );
+}
 
 function quote(partial: Partial<CheckoutQuote>): CheckoutQuote {
   return {

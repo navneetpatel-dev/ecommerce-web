@@ -23,6 +23,7 @@ import {
   Bell,
   Shield,
   Activity,
+  Gift,
 } from "lucide-react";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { ADMIN_NAV } from "@/shared/constants/navigation/adminNav";
@@ -39,6 +40,7 @@ const ADMIN_NAV_ICONS = {
   [PATHS.admin.supportTickets]: LifeBuoy,
   [PATHS.admin.bugReports]: Bug,
   [PATHS.admin.coupons]: Tags,
+  [PATHS.admin.giftCards]: Gift,
   [PATHS.admin.reviews]: MessageSquare,
   [PATHS.admin.tax]: Percent,
   [PATHS.admin.shipping]: Truck,
