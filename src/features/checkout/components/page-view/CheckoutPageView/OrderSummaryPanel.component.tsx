@@ -56,6 +56,7 @@ export function OrderSummaryPanel({
     walletAmountFormatted,
     grandTotalFormatted,
     taxLabel,
+    showCashbackNotice,
   } = useOrderSummaryPanel({
     groupedByVendor,
     subtotal,
@@ -64,10 +65,6 @@ export function OrderSummaryPanel({
     estimatedTotalPending,
     quote,
   });
-
-  const showCashbackNotice =
-    (quote?.cashbackAmount ?? 0) > 0 &&
-    (quote?.amountDue != null || estimatedTotal != null);
 
   return (
     <div className={ORDER_SUMMARY_PANEL_STYLES.root}>
@@ -119,6 +116,7 @@ export function OrderSummaryPanel({
               payNow={quote?.amountDue ?? estimatedTotal!}
               cashbackAmount={quote?.cashbackAmount ?? 0}
               code={quote?.appliedCoupon?.code}
+              offerName={quote?.cashbackOffer?.name}
               className={ORDER_SUMMARY_PANEL_STYLES.cashbackNotice}
             />
           ) : null}

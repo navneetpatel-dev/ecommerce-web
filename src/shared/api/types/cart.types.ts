@@ -22,6 +22,7 @@ export interface CartItem {
     name: string;
     slug: string;
     imageUrl: string;
+    categoryId?: string | null;
     /** Price per piece before GST. */
     price: number;
     /** Price per piece as the customer sees it, GST included. */

@@ -4,6 +4,7 @@ export const walletPageStyles = {
   title:
     "mt-1.5 font-display text-ink leading-[1.1] tracking-tight text-display-sm",
   description: "mt-2 max-w-2xl text-body text-ink-muted",
+  cashbackLink: "mt-4",
   cardsGrid: "grid gap-6 md:grid-cols-2 lg:gap-8",
   fullHeight: "h-full",
   statementWrapper: "mt-6 lg:mt-8",

@@ -56,6 +56,7 @@ export const checkoutApi = {
     walletAmountToUse?: number;
     /** Drives the gift-wrap fee line in the live quote. */
     giftWrap?: boolean;
+    paymentMethod?: string;
   }) => apiClient.post<CheckoutQuote>(API.checkout.quote, body),
   placeOrder: (body: {
     addressId: string;

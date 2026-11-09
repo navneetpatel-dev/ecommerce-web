@@ -79,6 +79,9 @@ export function useOrderSummaryPanel({
     : undefined;
 
   return {
+    showCashbackNotice:
+      (quote?.cashbackAmount ?? 0) > 0 &&
+      (quote?.amountDue != null || estimatedTotal != null),
     orderTotals,
     appliedCoupons,
     summarySubtotal,

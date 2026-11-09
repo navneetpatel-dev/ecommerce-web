@@ -4,6 +4,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { CartCouponSection } from "../../coupons/CartCouponSection.component";
 import { CashbackCouponNotice } from "@/shared/components/notices/CashbackCouponNotice.component";
+import { CartCashbackOffers } from "@/features/cashback";
 import { AmountsUnavailableNotice } from "@/shared/components/notices/AmountsUnavailableNotice.component";
 import { MoneyAmount } from "@/shared/components/display/MoneyAmount.component";
 import { OrderSummaryTotalsList } from "./OrderSummaryTotalsList.component";
@@ -45,6 +46,8 @@ interface OrderSummaryAsideProps {
   appliedCashbackAmount?: number;
   payNowGrandTotal?: number;
   appliedCouponType?: string | null;
+  /** Each line's category, for the live cashback offers that cover the cart. */
+  cashbackCategoryIds?: Array<string | null>;
   vendorDiscountBreakdown?: Array<{
     vendorId: string;
     name: string;
@@ -79,6 +82,7 @@ export function OrderSummaryAside({
   appliedCashbackAmount = 0,
   payNowGrandTotal,
   appliedCouponType,
+  cashbackCategoryIds = [],
   vendorDiscountBreakdown = [],
   eligible,
   eligibleLoading,
@@ -175,6 +179,7 @@ export function OrderSummaryAside({
           </div>
           {unavailableNoticeElement}
           {cashbackNoticeElement}
+          <CartCashbackOffers categoryIds={cashbackCategoryIds} />
         </div>
 
         <CartCheckoutAction

@@ -81,6 +81,7 @@ export const WORKSPACE_PAGE_COPY = {
   "/admin/banners": { title: "Promo banners" },
   "/admin/bug-reports": { title: "Bug reports" },
   "/admin/bug-reports/[id]": { title: "Bug report detail" },
+  "/admin/cashback-offers": { title: "Cashback offers" },
   "/admin/categories": { title: "Categories" },
   "/admin/finance": { title: "Finance" },
   "/admin/gift-cards": { title: "Gift cards" },

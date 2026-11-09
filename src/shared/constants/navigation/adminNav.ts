@@ -67,6 +67,11 @@ export const ADMIN_NAV = [
     permissions: [PERMISSIONS.COUPON_MANAGE] as PermissionKey[],
   },
   {
+    href: PATHS.admin.cashbackOffers,
+    label: LABELS.adminCashbackOffers,
+    permissions: [PERMISSIONS.COUPON_MANAGE] as PermissionKey[],
+  },
+  {
     href: PATHS.admin.giftCards,
     label: LABELS.adminGiftCards,
     permissions: [PERMISSIONS.GIFT_CARD_MANAGE] as PermissionKey[],

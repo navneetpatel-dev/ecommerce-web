@@ -56,6 +56,7 @@ export interface CartPageViewProps {
   appliedCashbackAmount?: number;
   payNowGrandTotal?: number;
   appliedCouponType?: string | null;
+  cashbackCategoryIds?: Array<string | null>;
   vendorDiscountBreakdown?: Array<{
     vendorId: string;
     name: string;
@@ -101,6 +102,7 @@ export function CartPageView({
   appliedCashbackAmount = 0,
   payNowGrandTotal,
   appliedCouponType,
+  cashbackCategoryIds,
   vendorDiscountBreakdown = [],
   eligible,
   eligibleLoading,
@@ -173,6 +175,7 @@ export function CartPageView({
             appliedCashbackAmount={appliedCashbackAmount}
             payNowGrandTotal={payNowGrandTotal}
             appliedCouponType={appliedCouponType}
+            cashbackCategoryIds={cashbackCategoryIds}
             vendorDiscountBreakdown={vendorDiscountBreakdown}
             eligible={eligible}
             eligibleLoading={eligibleLoading}

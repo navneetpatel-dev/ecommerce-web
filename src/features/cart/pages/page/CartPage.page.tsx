@@ -39,6 +39,7 @@ export function CartPage() {
       appliedCashbackAmount={cart.appliedCashbackAmount}
       payNowGrandTotal={cart.payNowGrandTotal}
       appliedCouponType={cart.appliedCouponType}
+      cashbackCategoryIds={cart.cashbackCategoryIds}
       vendorDiscountBreakdown={cart.vendorDiscountBreakdown}
       eligible={cart.eligible}
       eligibleLoading={cart.eligibleLoading}

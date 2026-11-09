@@ -33,6 +33,10 @@ export function useCartPage() {
   const coupons = useCartCoupons({ cart, enabled: true });
 
   const items = useMemo(() => cart?.items ?? [], [cart?.items]);
+  const cashbackCategoryIds = useMemo(
+    () => items.map((item) => item.product.categoryId ?? null),
+    [items],
+  );
   const hasItems = items.length > 0;
   const itemCount = items.reduce(
     (sum, item) => sum + Number(item.quantity || 0),
@@ -112,6 +116,7 @@ export function useCartPage() {
     appliedCashbackAmount: Number(cart?.appliedCoupon?.cashbackAmount ?? 0),
     payNowGrandTotal: cart?.appliedCoupon?.payNowGrandTotal,
     appliedCouponType: cart?.appliedCoupon?.type ?? null,
+    cashbackCategoryIds,
     eligible: coupons.eligible,
     eligibleLoading: coupons.eligibleLoading,
     applyCoupon: coupons.applyCoupon,

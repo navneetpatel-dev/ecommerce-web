@@ -19,6 +19,11 @@ interface BuildPlaceOrderPayloadInput {
  * payment-method enum, so wallet recharges are placed as a `razorpay` order
  * with the wallet amount attached.
  */
+/** The checkout step's method as the API takes it: paying with points is a Razorpay order. */
+export function toApiPaymentMethod(method: string): string {
+  return method === "wallet" ? "razorpay" : method;
+}
+
 export function buildPlaceOrderPayload({
   method,
   addressId,
@@ -34,7 +39,7 @@ export function buildPlaceOrderPayload({
   apiWalletAmount: number;
   payload: PlaceOrderBody;
 } {
-  const apiPaymentMethod = method === "wallet" ? "razorpay" : method;
+  const apiPaymentMethod = toApiPaymentMethod(method);
   const apiWalletAmount = method === "wallet" ? walletAmountToUse : 0;
 
   return {

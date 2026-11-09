@@ -53,4 +53,6 @@ export const giftCardsManageLabels = {
   checkoutGiftCardApplied:
     "Gift card {code} added {amount} to your wallet, applied to this order.",
   checkoutGiftCardFailed: "Could not apply this gift card.",
+  checkoutGiftCardNotFound:
+    "No gift card has this code. Check it and try again.",
 } as const;

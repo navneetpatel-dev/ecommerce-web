@@ -39,6 +39,7 @@ export { AdminReturnsPage } from "./pages/returns/AdminReturnsPage.page";
 export { AdminReviewsPage } from "./pages/reviews/AdminReviewsPage.page";
 export { AdminShippingPage } from "./pages/shipping/AdminShippingPage.page";
 export { AdminGiftCardsPage } from "./pages/gift-cards/AdminGiftCardsPage.page";
+export { AdminCashbackOffersPage } from "./pages/cashback-offers/AdminCashbackOffersPage.page";
 export { AdminTaxPage } from "./pages/tax/AdminTaxPage.page";
 export { AdminUsersPage } from "./pages/users/AdminUsersPage.page";
 export { AdminUserDetailPage } from "./pages/users/AdminUserDetailPage.page";

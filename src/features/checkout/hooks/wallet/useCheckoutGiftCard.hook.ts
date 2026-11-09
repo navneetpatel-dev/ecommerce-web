@@ -3,6 +3,7 @@
 import { useCallback, useState, type ChangeEvent, type FormEvent } from "react";
 import { useQueryClient, type QueryClient } from "@tanstack/react-query";
 import type { CheckoutQuote } from "@/shared/api/types";
+import { ApiError } from "@/shared/types/apiError.types";
 import { giftCardsApi } from "@/features/giftCards";
 import { walletKeys } from "@/features/wallet";
 import { LABELS } from "@/shared/constants/labels";
@@ -79,7 +80,11 @@ export function useCheckoutGiftCard({
         }),
       );
     } catch (err) {
-      setError(getApiErrorMessage(err, LABELS.checkoutGiftCardFailed));
+      setError(
+        err instanceof ApiError && err.code === "NOT_FOUND"
+          ? LABELS.checkoutGiftCardNotFound
+          : getApiErrorMessage(err, LABELS.checkoutGiftCardFailed),
+      );
     } finally {
       setPending(false);
     }

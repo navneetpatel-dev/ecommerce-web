@@ -13,6 +13,8 @@ export type CheckoutQuoteInput = {
   walletAmountToUse?: number;
   /** In the query key so toggling gift wrap live-refetches the fee. */
   giftWrap?: boolean;
+  /** API payment method (`razorpay` / `cod`), for cashback offers limited to one. */
+  paymentMethod?: string;
 };
 
 export const checkoutKeys = {
