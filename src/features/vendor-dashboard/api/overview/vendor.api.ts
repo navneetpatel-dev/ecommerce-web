@@ -50,8 +50,14 @@ export const vendorApi = {
     codEnabled?: boolean;
     payoutFrequency?: VendorPayoutFrequency | null;
   }) => apiClient.patch<VendorShop>(API.vendors.me, body),
-  products: (page = 1, filters?: { status?: string; search?: string }) =>
+  /** The shop's own catalogue, every status: the API lists unpublished items only for the vendor's own id. */
+  products: (
+    vendorId: string,
+    page = 1,
+    filters?: { status?: string; search?: string },
+  ) =>
     productsApi.list({
+      vendorId,
       page,
       status: filters?.status,
       search: filters?.search,

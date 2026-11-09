@@ -11,8 +11,8 @@ export const vendorKeys = {
   lowStock: () => [...vendorKeys.all, "low-stock"] as const,
   products: {
     all: ["vendor", "products"] as const,
-    page: (page: number, filters?: VendorProductFilters) =>
-      [...vendorKeys.products.all, page, filters] as const,
+    page: (vendorId: string, page: number, filters?: VendorProductFilters) =>
+      [...vendorKeys.products.all, vendorId, page, filters] as const,
   },
   commissions: {
     all: ["vendor", "commissions"] as const,
@@ -55,9 +55,11 @@ export function useVendorLowStock() {
 }
 
 export function useVendorProducts(page = 1, filters?: VendorProductFilters) {
+  const vendorId = useAuthStore((s) => s.currentUser?.vendorId);
   return useQuery({
-    queryKey: vendorKeys.products.page(page, filters),
-    queryFn: () => vendorApi.products(page, filters),
+    queryKey: vendorKeys.products.page(vendorId ?? "", page, filters),
+    queryFn: () => vendorApi.products(vendorId!, page, filters),
+    enabled: Boolean(vendorId),
     placeholderData: (prev) => prev,
   });
 }
