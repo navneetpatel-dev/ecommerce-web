@@ -41,6 +41,7 @@ interface ProductBuyBoxColumnProps {
   quantityDisabled: boolean;
   quantityDisabledHint: string;
   addDisabled: boolean;
+  isSoldOut: boolean;
   addToCartHint: string;
   addToCartLabel: string;
   isAddingToCart?: boolean;
@@ -80,6 +81,7 @@ export function ProductBuyBoxColumn({
   quantityDisabled,
   quantityDisabledHint,
   addDisabled,
+  isSoldOut,
   addToCartHint,
   addToCartLabel,
   isAddingToCart,
@@ -139,14 +141,7 @@ export function ProductBuyBoxColumn({
 
         {product.variants && product.variants.length > 0 ? (
           <VariantSelector
-            attributeGroups={variantSelection.attributeGroups}
-            currentPrice={variantSelection.currentPrice}
-            currentStock={variantSelection.currentStock}
-            basePrice={variantSelection.basePrice}
-            hasPriceChange={variantSelection.hasPriceChange}
-            isAvailable={variantSelection.isAvailable}
-            isActive={variantSelection.isActive}
-            onSelectValue={variantSelection.onSelectValue}
+            {...variantSelection}
             showAddToCart={false}
             optionsOnly
             lowStockAt={lowStockAt}
@@ -175,6 +170,7 @@ export function ProductBuyBoxColumn({
           quantityDisabled={quantityDisabled}
           quantityDisabledHint={quantityDisabledHint}
           addDisabled={addDisabled}
+          isSoldOut={isSoldOut}
           addToCartHint={addToCartHint}
           addToCartLabel={addToCartLabel}
           isAddingToCart={isAddingToCart}

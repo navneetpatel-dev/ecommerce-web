@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-import { useParams } from "next/navigation";
+import { useEffect, useMemo } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import { useProduct } from "../../../api/listing/products.queries";
 import { useVariantSelection } from "../../variants/useVariantSelection.hook";
 import { useCategories } from "@/features/categories";
@@ -13,9 +13,14 @@ import {
   withCustomerPrices,
 } from "@/shared/utils/pricing/customerPrice";
 
+/** Query key that keeps the chosen variant in the product URL. */
+export const VARIANT_QUERY_PARAM = "variant";
+
 export function useProductDetailData() {
   const params = useParams<{ slug: string }>();
+  const searchParams = useSearchParams();
   const slug = params?.slug ?? "";
+  const urlVariantId = searchParams?.get(VARIANT_QUERY_PARAM) ?? null;
   const productQuery = useProduct(slug);
   const {
     data: product,
@@ -41,7 +46,19 @@ export function useProductDetailData() {
   const baseStock = Number(product?.stock ?? 0) || variantStockTotal;
   const basePrice = Number(product ? customerPrice(product) : 0);
 
-  const selection = useVariantSelection(variants, basePrice, baseStock);
+  const selection = useVariantSelection(variants, basePrice, baseStock, {
+    initialVariantId: urlVariantId,
+  });
+
+  // Keep the chosen variant in the URL so reload and shared links keep it.
+  const chosenVariantId = selection.selectedVariant?.id ?? null;
+  useEffect(() => {
+    if (!chosenVariantId || variants.length < 2) return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get(VARIANT_QUERY_PARAM) === chosenVariantId) return;
+    url.searchParams.set(VARIANT_QUERY_PARAM, chosenVariantId);
+    window.history.replaceState(window.history.state, "", url);
+  }, [chosenVariantId, variants.length]);
 
   const resolvedVariantId =
     selection.variantId ??
@@ -57,10 +74,12 @@ export function useProductDetailData() {
   const hasAttributeOptions = Object.keys(selection.attributeGroups).length > 0;
   const needsOptionSelection =
     hasAttributeOptions && !selection.hasCompleteSelection;
+  // Only a combination that no variant has. A sold-out variant is a real choice:
+  // it shows "Out of stock" and Notify me instead.
   const variantUnavailable =
     hasAttributeOptions &&
     selection.hasCompleteSelection &&
-    !selection.matchedVariant;
+    !selection.selectedVariant;
 
   const maxQuantity = cartLineQuantityMax(selectedStock);
 

@@ -12,6 +12,7 @@ export function pickResolvedVariant(
 ) {
   return (
     variantSelection.matchedVariant ??
+    variantSelection.selectedVariant ??
     (product.variants?.length === 1 ? product.variants[0] : null)
   );
 }
@@ -42,7 +43,10 @@ export function resolveVariantPricing(
     displayPrice: Number(
       variantSelection.currentPrice || customerPrice(product) || 0,
     ),
-    displayStock: Number(variantSelection.currentStock || product.stock || 0),
+    // A chosen variant's own stock, even 0; the product total only before a choice.
+    displayStock: variantSelection.selectedVariant
+      ? Number(variantSelection.currentStock || 0)
+      : Number(variantSelection.currentStock || product.stock || 0),
     taxInclusiveEstimate:
       resolvedVariant?.taxInclusivePrice !== undefined
         ? (resolvedVariant.taxInclusivePrice ?? null)

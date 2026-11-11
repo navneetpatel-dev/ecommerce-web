@@ -4,6 +4,7 @@ import { VariantAttributeGroup } from "./VariantAttributeGroup.component";
 interface VariantAttributeGroupsListProps {
   attributeGroups: Record<string, string[]>;
   isAvailable: (key: string, value: string) => boolean;
+  changesOtherChoices?: (key: string, value: string) => string[];
   isActive: (key: string, value: string) => boolean;
   onSelectValue: (key: string, value: string) => void;
 }
@@ -11,6 +12,7 @@ interface VariantAttributeGroupsListProps {
 export function VariantAttributeGroupsList({
   attributeGroups,
   isAvailable,
+  changesOtherChoices,
   isActive,
   onSelectValue,
 }: VariantAttributeGroupsListProps) {
@@ -25,6 +27,7 @@ export function VariantAttributeGroupsList({
           groupKey={key}
           values={values}
           isAvailable={isAvailable}
+          changesOtherChoices={changesOtherChoices}
           isActive={isActive}
           onSelectValue={onSelectValue}
         />

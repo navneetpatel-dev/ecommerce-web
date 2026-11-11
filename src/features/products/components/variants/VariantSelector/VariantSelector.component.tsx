@@ -10,6 +10,7 @@ export interface VariantSelectorProps {
   basePrice: number;
   hasPriceChange: boolean;
   isAvailable: (key: string, value: string) => boolean;
+  changesOtherChoices?: (key: string, value: string) => string[];
   isActive: (key: string, value: string) => boolean;
   onSelectValue: (key: string, value: string) => void;
   /** When true, shows Add to Cart (legacy). Prefer page-level ATC. */
@@ -31,6 +32,7 @@ export function VariantSelector({
   basePrice,
   hasPriceChange,
   isAvailable,
+  changesOtherChoices,
   isActive,
   onSelectValue,
   showAddToCart = false,
@@ -54,6 +56,7 @@ export function VariantSelector({
         <VariantAttributeGroupsList
           attributeGroups={attributeGroups}
           isAvailable={isAvailable}
+          changesOtherChoices={changesOtherChoices}
           isActive={isActive}
           onSelectValue={onSelectValue}
         />

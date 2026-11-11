@@ -11,7 +11,12 @@ export function useProductReviewsView(
   productId: string,
   options: { enabled?: boolean } = {},
 ) {
-  const { data: reviews, isLoading } = useProductReviews(productId, options);
+  const {
+    data: reviews,
+    isLoading,
+    isError,
+    refetch,
+  } = useProductReviews(productId, options);
   const voteReview = useVoteReview();
   const { requireAuth } = useRequireAuth();
 
@@ -27,9 +32,16 @@ export function useProductReviewsView(
     voteReview.mutate({ reviewId, vote });
   };
 
+  const retry = () => {
+    void refetch();
+  };
+
   return {
     reviews: (reviews ?? []) as Review[],
     isLoading,
+    // A failed load must not read as "No reviews yet".
+    isError: isError && !reviews,
+    retry,
     voteHelpful: (reviewId: string) => vote(reviewId, "HELPFUL"),
     voteUnhelpful: (reviewId: string) => vote(reviewId, "UNHELPFUL"),
   };

@@ -31,6 +31,7 @@ export function VariantSelectorContainer({
       basePrice={basePrice}
       hasPriceChange={selector.hasPriceChange}
       isAvailable={selector.isAvailable}
+      changesOtherChoices={selector.changesOtherChoices}
       isActive={selector.isActive}
       onSelectValue={selector.selectValue}
       showAddToCart={showAddToCart}

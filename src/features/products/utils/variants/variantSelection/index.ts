@@ -152,28 +152,6 @@ export function findMatchingVariant(
   return match;
 }
 
-export function isVariantCombinationAvailable(
-  variants: ProductVariant[],
-  selected: Record<string, string>,
-  key: string,
-  value: string,
-): boolean {
-  const matrixKeys = getMatrixAttributeKeys(variants);
-  const testSelection = { ...selected, [key]: value };
-  const matrixVariants = getMatrixVariants(variants, matrixKeys);
-
-  return matrixVariants.some((variant) => {
-    if (!variantIsInStock(variant)) return false;
-    if (!variantHasMatrixAttributes(variant, matrixKeys)) return false;
-
-    return matrixKeys.every((attrKey) => {
-      const chosen = testSelection[attrKey];
-      if (chosen == null || chosen === "") return true;
-      return variant.attributes[attrKey] === chosen;
-    });
-  });
-}
-
 /**
  * The variant a selection points at, regardless of stock.
  *

@@ -39,6 +39,7 @@ export function ProductDetailContent({
     displayStock,
     quantityMax,
     addDisabled,
+    isSoldOut,
     quantityDisabled,
     quantityDisabledHint,
     reviewCount,
@@ -110,6 +111,7 @@ export function ProductDetailContent({
           quantityDisabled={quantityDisabled}
           quantityDisabledHint={quantityDisabledHint}
           addDisabled={addDisabled}
+          isSoldOut={isSoldOut}
           addToCartHint={addToCartHint}
           addToCartLabel={addToCartLabel}
           isAddingToCart={isAddingToCart}

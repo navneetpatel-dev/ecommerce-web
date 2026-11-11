@@ -18,6 +18,8 @@ export function ProductReviewsContainer({
     <ProductReviews
       reviews={reviews.reviews}
       isLoading={reviews.isLoading}
+      isError={reviews.isError}
+      onRetry={reviews.retry}
       onVoteHelpful={reviews.voteHelpful}
       onVoteUnhelpful={reviews.voteUnhelpful}
     />

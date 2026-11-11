@@ -1,13 +1,12 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/button";
-import { QuantitySelector } from "@/shared/components/QuantitySelector/QuantitySelector.component";
 import { ShareButtonContainer } from "@/shared/containers/system/ShareButtonContainer.container";
-import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { ProductDeliveryCheck } from "../../delivery-check/ProductDeliveryCheck.component";
 import { Heart } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { NotifyMeButton } from "@/features/stockAlerts";
+import { PurchaseActions } from "./PurchaseActions.component";
 import { PRODUCT_DETAIL_CONTENT_STYLES } from "../../../styles/detail/productDetailContent.styles";
 
 interface PurchasePanelProps {
@@ -29,6 +28,8 @@ interface PurchasePanelProps {
   quantityDisabled: boolean;
   quantityDisabledHint: string;
   addDisabled: boolean;
+  /** Nothing left of the chosen variant: hide quantity and Add, show Notify me. */
+  isSoldOut: boolean;
   addToCartHint: string;
   addToCartLabel: string;
   isAddingToCart?: boolean;
@@ -58,6 +59,7 @@ export function PurchasePanel({
   quantityDisabled,
   quantityDisabledHint,
   addDisabled,
+  isSoldOut,
   addToCartHint,
   addToCartLabel,
   isAddingToCart,
@@ -67,6 +69,7 @@ export function PurchasePanel({
   productName,
   productUrl,
 }: PurchasePanelProps) {
+  const actionsQuantityMax = Math.max(quantityMax, 1);
   const handleAddToCartClick = () => {
     if (addDisabled) return;
     onAddToCart?.(quantity);
@@ -82,7 +85,7 @@ export function PurchasePanel({
         <p className={PRODUCT_DETAIL_CONTENT_STYLES.helperText}>
           {LABELS.variantUnavailableHint}
         </p>
-      ) : !canAddToCart && displayStock === 0 ? (
+      ) : isSoldOut || (!canAddToCart && displayStock === 0) ? (
         <div className={PRODUCT_DETAIL_CONTENT_STYLES.outOfStockStack}>
           <p className={PRODUCT_DETAIL_CONTENT_STYLES.helperText}>
             {LABELS.outOfStockHint}
@@ -103,32 +106,20 @@ export function PurchasePanel({
       />
 
       <div className={PRODUCT_DETAIL_CONTENT_STYLES.actionRow}>
-        <QuantitySelector
-          value={quantity}
-          onChange={onQuantityChange}
-          max={Math.max(quantityMax, 1)}
-          disabled={quantityDisabled}
-          disabledHint={quantityDisabledHint}
-          className={PRODUCT_DETAIL_CONTENT_STYLES.quantitySelector}
-          controlClassName={PRODUCT_DETAIL_CONTENT_STYLES.quantityControl}
-          valueClassName={PRODUCT_DETAIL_CONTENT_STYLES.quantityValue}
-        />
-
-        <DisabledActionHint
-          disabled={addDisabled}
-          message={addToCartHint}
-          className={PRODUCT_DETAIL_CONTENT_STYLES.addToCartWrapper}
-        >
-          <Button
-            className={PRODUCT_DETAIL_CONTENT_STYLES.addToCartButton}
-            disabled={addDisabled}
-            onClick={handleAddToCartClick}
-            loading={isAddingToCart}
-          >
-            {addToCartLabel}
-          </Button>
-        </DisabledActionHint>
-
+        {isSoldOut ? null : (
+          <PurchaseActions
+            quantity={quantity}
+            onQuantityChange={onQuantityChange}
+            quantityMax={actionsQuantityMax}
+            quantityDisabled={quantityDisabled}
+            quantityDisabledHint={quantityDisabledHint}
+            addDisabled={addDisabled}
+            addToCartHint={addToCartHint}
+            addToCartLabel={addToCartLabel}
+            isAddingToCart={isAddingToCart}
+            onAddToCart={handleAddToCartClick}
+          />
+        )}
         <Button
           variant="outline"
           size="icon"

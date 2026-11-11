@@ -1,13 +1,13 @@
 import { useState, useMemo } from "react";
 import type { ProductVariant } from "@/shared/api/types";
 import {
+  changedGroupsForOption,
   findMatchingVariant,
   findSelectedVariant,
-  getMatrixAttributeKeys,
-  getMatrixVariants,
   groupVariantAttributes,
-  isVariantCombinationAvailable,
-  resolveDefaultVariantSelection,
+  isOptionInStock,
+  resolveInitialVariantSelection,
+  resolveSelectionForOption,
 } from "../../utils/variants/products.utils";
 
 function isSameSelection(a: Record<string, string>, b: Record<string, string>) {
@@ -17,10 +17,16 @@ function isSameSelection(a: Record<string, string>, b: Record<string, string>) {
   return aKeys.every((key) => a[key] === b[key]);
 }
 
+interface VariantSelectionOptions {
+  /** A variant to start on (the PDP passes the one named in its URL). */
+  initialVariantId?: string | null;
+}
+
 export function useVariantSelection(
   variants: ProductVariant[],
   basePrice: number,
   baseStock: number,
+  { initialVariantId }: VariantSelectionOptions = {},
 ) {
   const variantKey = useMemo(
     () => variants.map((variant) => variant.id).join("|"),
@@ -28,16 +34,17 @@ export function useVariantSelection(
   );
   const [selectionState, setSelectionState] = useState(() => ({
     key: variantKey,
-    selected: resolveDefaultVariantSelection(variants),
+    selected: resolveInitialVariantSelection(variants, initialVariantId),
   }));
 
   let selected = selectionState.selected;
   if (selectionState.key !== variantKey) {
-    const next = resolveDefaultVariantSelection(variants);
+    const next = resolveInitialVariantSelection(variants, initialVariantId);
     selected = next;
     setSelectionState({ key: variantKey, selected: next });
   }
 
+  /** The in-stock variant the selection points at (what can go in the cart). */
   const matchedVariant = useMemo(
     () => findMatchingVariant(variants, selected),
     [variants, selected],
@@ -51,21 +58,7 @@ export function useVariantSelection(
   const selectValue = (key: string, value: string) => {
     setSelectionState((prev) => {
       const current = prev.key === variantKey ? prev.selected : selected;
-      const next = { ...current, [key]: value };
-      const resolved = (() => {
-        if (findMatchingVariant(variants, next)) return next;
-
-        const matrixKeys = getMatrixAttributeKeys(variants);
-        const matrixVariants = getMatrixVariants(variants, matrixKeys);
-        const inStockMatch = matrixVariants.find(
-          (variant) =>
-            Number(variant.stock) > 0 && variant.attributes[key] === value,
-        );
-
-        if (inStockMatch) return { ...inStockMatch.attributes };
-        return next;
-      })();
-
+      const resolved = resolveSelectionForOption(variants, current, key, value);
       if (prev.key === variantKey && isSameSelection(prev.selected, resolved)) {
         return prev;
       }
@@ -73,8 +66,12 @@ export function useVariantSelection(
     });
   };
 
+  /** False only styles the option as sold out; every option stays clickable. */
   const isAvailable = (key: string, value: string) =>
-    isVariantCombinationAvailable(variants, selected, key, value);
+    isOptionInStock(variants, selected, key, value);
+
+  const changesOtherChoices = (key: string, value: string) =>
+    changedGroupsForOption(variants, selected, key, value);
 
   const isActive = (key: string, value: string) => selected[key] === value;
 
@@ -83,9 +80,9 @@ export function useVariantSelection(
     Object.keys(attributeGroups).every((key) => Boolean(selected[key]));
 
   /**
-   * Price follows the selection even when that variant is sold out — otherwise a
-   * sold-out option silently shows basePrice, which is a different amount on any
-   * product whose variants are priced differently.
+   * The variant the selection points at, in stock or not. Price and stock follow
+   * it, so a sold-out choice shows its own price and "Out of stock" rather than
+   * the product's figures.
    */
   const selectedVariant = useMemo(
     () => matchedVariant ?? findSelectedVariant(variants, selected),
@@ -93,9 +90,14 @@ export function useVariantSelection(
   );
 
   const currentPrice = selectedVariant?.price ?? basePrice;
-  const currentStock =
-    matchedVariant?.stock ?? (variants.length === 1 ? baseStock : 0);
+  const currentStock = selectedVariant
+    ? Number(selectedVariant.stock ?? 0)
+    : variants.length === 1
+      ? baseStock
+      : 0;
   const variantId = matchedVariant?.id ?? null;
+  const soldOutVariant =
+    selectedVariant && !matchedVariant ? selectedVariant : null;
 
   return {
     attributeGroups,
@@ -103,7 +105,10 @@ export function useVariantSelection(
     currentStock,
     variantId,
     matchedVariant,
+    selectedVariant,
+    soldOutVariant,
     isAvailable,
+    changesOtherChoices,
     isActive,
     selectValue,
     hasCompleteSelection,
