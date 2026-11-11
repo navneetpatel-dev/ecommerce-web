@@ -141,15 +141,7 @@ export function ProductBuyBoxColumn({
 
         {product.variants && product.variants.length > 0 ? (
           <VariantSelector
-            attributeGroups={variantSelection.attributeGroups}
-            currentPrice={variantSelection.currentPrice}
-            currentStock={variantSelection.currentStock}
-            basePrice={variantSelection.basePrice}
-            hasPriceChange={variantSelection.hasPriceChange}
-            isAvailable={variantSelection.isAvailable}
-            changesOtherChoices={variantSelection.changesOtherChoices}
-            isActive={variantSelection.isActive}
-            onSelectValue={variantSelection.onSelectValue}
+            {...variantSelection}
             showAddToCart={false}
             optionsOnly
             lowStockAt={lowStockAt}
