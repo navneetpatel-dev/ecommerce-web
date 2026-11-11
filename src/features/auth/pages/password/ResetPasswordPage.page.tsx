@@ -14,6 +14,8 @@ export function ResetPasswordPage() {
         onSubmit={reset.onSubmit}
         error={reset.error}
         isPending={reset.isPending}
+        hasToken={reset.hasToken}
+        linkInvalid={reset.linkInvalid}
       />
     </AuthPageShell>
   );

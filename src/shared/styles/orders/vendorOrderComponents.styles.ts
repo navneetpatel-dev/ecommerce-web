@@ -24,12 +24,13 @@ export const vendorGroupTotalsStyles = {
 } as const;
 
 export const vendorStripStyles = {
-  link: "inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-0.5 text-brand hover:bg-brand-subtle transition-colors",
+  link: "inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full border border-line px-2.5 py-0.5 text-brand hover:bg-brand-subtle transition-colors",
+  logoFrame: "inline-flex h-5 w-5 shrink-0 overflow-hidden rounded-full",
   sizeMd: "px-3 py-1",
-  logo: "h-5 w-5 rounded-full object-cover shrink-0",
+  logo: "h-5 w-5 rounded-full object-cover",
   avatar:
     "h-5 w-5 rounded-full bg-brand-subtle flex items-center justify-center text-[0.6875rem] font-medium text-brand",
-  name: "text-body-sm font-medium",
+  name: "min-w-0 truncate text-body-sm font-medium",
   nameMd: "text-body",
   ratingWrap: "flex items-center gap-0.5 text-body-sm text-ink-muted",
   star: "h-3.5 w-3.5 fill-warning text-warning",

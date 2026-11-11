@@ -19,6 +19,9 @@ export const authFormsStyles = {
   dangerBanner:
     "rounded-md border border-danger/25 bg-danger-subtle/60 px-4 py-3 text-body text-danger",
   registeredEmailText: "mt-1 font-medium",
+  linkProblem:
+    "space-y-2 rounded-md border border-danger/25 bg-danger-subtle/60 px-4 py-3 text-body text-ink",
+  linkProblemTitle: "font-medium text-danger",
   formSpace4: "space-y-4",
   formSpace5: "space-y-5",
   fullWidth: "w-full",

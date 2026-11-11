@@ -32,5 +32,20 @@ export const navigationLabels = {
   offlinePageHome: "Go to the home page",
   offlinePageRetry: "Try again",
 
+  // Desktop account menu groups (shoppers)
+  accountMenuShopping: "Shopping",
+  accountMenuMoney: "Money",
+  accountMenuHelp: "Help",
+  accountMenuAccount: "Account",
+  accountMenuOrders: "Orders",
+  accountMenuReturns: "Returns",
+  accountMenuWishlist: "Wishlist",
+  accountMenuReviews: "My reviews",
+  accountMenuWallet: "Wallet",
+  accountMenuCashback: "Cashback",
+  accountMenuGiftCards: "Gift cards",
+  accountMenuSupportTickets: "Support tickets",
+  accountMenuBugReports: "Bug reports",
+
   // Admin nav
 } as const;

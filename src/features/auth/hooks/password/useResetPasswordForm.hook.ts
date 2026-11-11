@@ -13,11 +13,12 @@ import { LABELS } from "@/shared/constants/labels";
 
 export function useResetPasswordForm() {
   const searchParams = useSearchParams();
+  const token = searchParams.get("token") || "";
   const resetPassword = useResetPassword();
   const form = useForm<ResetPasswordInput>({
     mode: "onTouched",
     resolver: zodResolver(ResetPasswordSchema),
-    defaultValues: { token: searchParams.get("token") || "" },
+    defaultValues: { token },
   });
 
   const { formLevelError } = useApiFormErrors(
@@ -32,9 +33,15 @@ export function useResetPasswordForm() {
     resetPassword.mutate(data);
   };
 
+  // The token is a hidden field, so an error on it would show nowhere: say the
+  // link is the problem instead, and offer a new one.
+  const linkInvalid = Boolean(form.formState.errors.token);
+
   return {
     form,
-    error: formLevelError,
+    hasToken: Boolean(token),
+    linkInvalid,
+    error: linkInvalid ? LABELS.resetLinkInvalid : formLevelError,
     isPending: resetPassword.isPending,
     onSubmit,
   };

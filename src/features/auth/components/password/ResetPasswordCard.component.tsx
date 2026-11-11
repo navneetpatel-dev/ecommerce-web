@@ -8,6 +8,7 @@ import { PasswordInputContainer } from "@/shared/containers/forms/PasswordInputC
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { authFormsStyles } from "../../styles/shell/authForms.styles";
+import { ResetLinkProblem } from "./ResetLinkProblem.component";
 
 interface ResetPasswordInput {
   token: string;
@@ -19,6 +20,10 @@ interface ResetPasswordCardProps {
   onSubmit: (data: ResetPasswordInput) => void;
   error: string | null;
   isPending: boolean;
+  /** False when the page was opened without the link's token. */
+  hasToken: boolean;
+  /** The API refused the token (expired, used or broken). */
+  linkInvalid: boolean;
 }
 
 export function ResetPasswordCard({
@@ -26,6 +31,8 @@ export function ResetPasswordCard({
   onSubmit,
   error,
   isPending,
+  hasToken,
+  linkInvalid,
 }: ResetPasswordCardProps) {
   const {
     register,
@@ -43,7 +50,9 @@ export function ResetPasswordCard({
         </Link>
       }
     >
+      {hasToken ? null : <ResetLinkProblem message={LABELS.resetLinkMissing} />}
       <form
+        hidden={!hasToken}
         onSubmit={handleSubmit(onSubmit)}
         className={authFormsStyles.formSpace5}
       >
@@ -61,7 +70,11 @@ export function ResetPasswordCard({
             {...register("newPassword")}
           />
         </FormFieldFrame>
-        <FormError error={error} fallback={LABELS.resetPasswordFailed} />
+        {linkInvalid && error ? (
+          <ResetLinkProblem message={error} />
+        ) : (
+          <FormError error={error} fallback={LABELS.resetPasswordFailed} />
+        )}
         <Button
           type="submit"
           className={authFormsStyles.fullWidth}
