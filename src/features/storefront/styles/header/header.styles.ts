@@ -77,8 +77,14 @@ export const headerStyles = {
   userHeader: "border-b border-line bg-paper/60 px-4 py-3",
   userName: "truncate text-[0.875rem] font-medium text-ink",
   userEmail: "truncate text-[0.75rem] text-ink-muted",
-  linksList: "py-1.5",
-  menuItem: `block px-4 py-2.5 text-[0.875rem] text-ink-muted transition-colors ${HOVER_ON_SURFACE} ${HOVER_TEXT_CLAMP}`,
+  linksList: "py-0.5",
+  menuGroups: "max-h-[min(80vh,40rem)] overflow-y-auto py-1",
+  menuGroup: "border-b border-line/70 py-1 last-of-type:border-b-0",
+  menuGroupTitle:
+    "px-4 pb-0.5 pt-2 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-ink-faint",
+  menuSignOut: `flex w-full items-center gap-2 border-t border-line/70 px-4 py-2 text-left text-[0.875rem] text-ink-muted transition-colors disabled:opacity-60 ${HOVER_ON_SURFACE} ${HOVER_TEXT_CLAMP}`,
+  menuSignOutIcon: "h-4 w-4",
+  menuItem: `block px-4 py-1.5 text-[0.875rem] text-ink-muted transition-colors ${HOVER_ON_SURFACE} ${HOVER_TEXT_CLAMP}`,
 
   // Header Menu Button
   storefrontMenuButton:

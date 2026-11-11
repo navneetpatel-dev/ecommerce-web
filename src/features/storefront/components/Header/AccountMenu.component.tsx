@@ -12,7 +12,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import type { CurrentUser } from "@/shared/api/types";
 import { useAccountMenu } from "../../hooks/header/useAccountMenu.hook";
-import { AccountMenuLinksList } from "./AccountMenuLinksList.component";
+import { AccountMenuGroupsList } from "./AccountMenuGroupsList.component";
 import { ACCOUNT_TRIGGER_BOX } from "../../utils/header/headerShared";
 import { headerStyles as styles } from "../../styles/header/header.styles";
 
@@ -25,29 +25,22 @@ export function AccountMenu({ currentUser }: AccountMenuProps) {
     accountMenuOpen,
     toggleAccountMenu,
     closeAccountMenu,
-    handleMouseEnter,
-    handleMouseLeave,
     accountMenuRef,
+    triggerRef,
     fallbackLabel,
-    accountLinks,
+    accountGroups,
+    signOut,
+    isSigningOut,
   } = useAccountMenu(currentUser);
   const accountMenuId = useId();
 
   return (
-    <div
-      ref={accountMenuRef}
-      className={styles.relativeWrapper}
-      /* Pointer-intent zone only: every real control (trigger + panel items)
-         lives inside and is focusable, so the wrapper itself carries no
-         semantics to announce — hence the presentational role. */
-      role="presentation"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div ref={accountMenuRef} className={styles.relativeWrapper}>
       {/* Disclosure, not a menu: the panel is a plain list of links reached by
           Tab, so it must not advertise menu arrow-key semantics it does not
           implement (WAI-ARIA APG). */}
       <Button
+        ref={triggerRef}
         type="button"
         variant="ghost"
         onClick={toggleAccountMenu}
@@ -97,9 +90,11 @@ export function AccountMenu({ currentUser }: AccountMenuProps) {
               <p className={styles.userEmail}>{currentUser.email}</p>
             </div>
 
-            <AccountMenuLinksList
-              links={accountLinks}
+            <AccountMenuGroupsList
+              groups={accountGroups}
               onNavigate={closeAccountMenu}
+              onSignOut={signOut}
+              isSigningOut={isSigningOut}
             />
           </div>
         </div>

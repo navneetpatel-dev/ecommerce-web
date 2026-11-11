@@ -13,12 +13,18 @@ import {
 import { isWorkspaceRole } from "@/shared/utils/roles/roles";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type { CurrentUser } from "@/shared/api/types";
+import { useLogout } from "@/features/auth";
+import {
+  SHOPPER_MENU_GROUPS,
+  type AccountMenuGroup,
+} from "../../constants/header/accountMenuGroups";
 
 export function useAccountMenu(currentUser: CurrentUser | null) {
   const pathname = usePathname();
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-  const [canHoverAccountMenu, setCanHoverAccountMenu] = useState(false);
   const accountMenuRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const logout = useLogout();
 
   const userName = currentUser?.name;
   const fallbackLabel = useMemo(() => {
@@ -46,30 +52,21 @@ export function useAccountMenu(currentUser: CurrentUser | null) {
         : isVendorWorkspacePath(pathname)
           ? ROLES.VENDOR_OWNER
           : currentUser.role;
-    return sections.map((section) => ({
-      href: profilePathForRole(roleForPaths, section.id),
-      label: section.label,
-    }));
+    const accountGroup: AccountMenuGroup = {
+      title: LABELS.accountMenuAccount,
+      // Shoppers reach orders from the Shopping group, so the profile tab is not repeated.
+      links: sections
+        .filter((section) => onWorkspace || section.id !== "orders")
+        .map((section) => ({
+          href: profilePathForRole(roleForPaths, section.id),
+          label: section.label,
+        })),
+    };
+    // Shoppers get their orders, money and help pages too; staff keep the profile list.
+    return onWorkspace
+      ? [accountGroup]
+      : [...SHOPPER_MENU_GROUPS, accountGroup];
   }, [currentUser, pathname]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-
-    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const syncHoverCapability = () =>
-      setCanHoverAccountMenu(mediaQuery.matches);
-
-    syncHoverCapability();
-
-    if (typeof mediaQuery.addEventListener === "function") {
-      mediaQuery.addEventListener("change", syncHoverCapability);
-      return () =>
-        mediaQuery.removeEventListener("change", syncHoverCapability);
-    }
-
-    mediaQuery.addListener(syncHoverCapability);
-    return () => mediaQuery.removeListener(syncHoverCapability);
-  }, []);
 
   useEffect(() => {
     if (!accountMenuOpen) return;
@@ -83,6 +80,7 @@ export function useAccountMenu(currentUser: CurrentUser | null) {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setAccountMenuOpen(false);
+        triggerRef.current?.focus();
       }
     };
 
@@ -100,23 +98,23 @@ export function useAccountMenu(currentUser: CurrentUser | null) {
     [],
   );
   const closeAccountMenu = useCallback(() => setAccountMenuOpen(false), []);
-  const handleMouseEnter = useCallback(() => {
-    if (canHoverAccountMenu) setAccountMenuOpen(true);
-  }, [canHoverAccountMenu]);
-  const handleMouseLeave = useCallback(() => {
-    if (canHoverAccountMenu) setAccountMenuOpen(false);
-  }, [canHoverAccountMenu]);
+  const signOut = useCallback(() => {
+    setAccountMenuOpen(false);
+    logout.mutate();
+  }, [logout]);
 
+  // Opens on click only. Opening on hover meant the click that followed
+  // toggled it straight shut, and hover does nothing on touch screens.
   return {
     accountMenuOpen,
     setAccountMenuOpen,
     toggleAccountMenu,
     closeAccountMenu,
-    canHoverAccountMenu,
-    handleMouseEnter,
-    handleMouseLeave,
     accountMenuRef,
+    triggerRef,
     fallbackLabel,
-    accountLinks,
+    accountGroups: accountLinks,
+    signOut,
+    isSigningOut: logout.isPending,
   };
 }

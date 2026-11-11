@@ -32,6 +32,12 @@ export const authLabels = {
   newPassword: "New password",
   resetPassword: "Reset password",
   resetPasswordFailed: "Reset failed or link expired.",
+  resetLinkInvalidTitle: "This reset link doesn’t work",
+  resetLinkInvalid:
+    "This link has expired, was already used, or is incomplete. Reset links work once, for 15 minutes.",
+  resetLinkMissing:
+    "This page needs the link from your reset email. Open the latest email, or ask for a new link.",
+  requestNewResetLink: "Request a new link",
   password: "Password",
   verifyOtpTitle: "Verify OTP",
   verifyOtpHint: "Enter the 6-digit code sent to your email.",

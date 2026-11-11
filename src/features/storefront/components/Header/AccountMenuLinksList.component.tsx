@@ -1,17 +1,13 @@
 import Link from "next/link";
+import type { AccountMenuLink } from "../../constants/header/accountMenuGroups";
 import { headerStyles as styles } from "../../styles/header/header.styles";
 
-interface AccountLinkItem {
-  href: string;
-  label: string;
-}
-
 interface AccountMenuLinksListProps {
-  links: readonly AccountLinkItem[];
+  links: readonly AccountMenuLink[];
   onNavigate: () => void;
 }
 
-/** Panel links for the account dropdown — one Link per account section. */
+/** One group's links in the account dropdown. */
 export function AccountMenuLinksList({
   links,
   onNavigate,

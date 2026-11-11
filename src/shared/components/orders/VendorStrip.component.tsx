@@ -1,10 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Star } from "lucide-react";
 import type { VendorInfo } from "@/shared/api/types";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { cn } from "@/shared/utils/dom/cn";
 import { vendorStripStyles } from "../../styles/orders/vendorOrderComponents.styles";
+import { VendorLogo } from "./VendorLogo.component";
 
 interface VendorStripProps {
   vendor: VendorInfo;
@@ -32,18 +32,7 @@ export function VendorStrip({
         className,
       )}
     >
-      {vendor.logoUrl ? (
-        <Image
-          src={vendor.logoUrl}
-          alt={`${businessName} logo`}
-          width={20}
-          height={20}
-          className={vendorStripStyles.logo}
-          style={{ width: "auto", height: "auto" }}
-        />
-      ) : (
-        <div className={vendorStripStyles.avatar}>{businessName.charAt(0)}</div>
-      )}
+      <VendorLogo logoUrl={vendor.logoUrl} businessName={businessName} />
       <span
         className={cn(
           vendorStripStyles.name,
