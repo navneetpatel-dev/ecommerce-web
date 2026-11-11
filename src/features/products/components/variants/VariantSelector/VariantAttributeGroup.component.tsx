@@ -6,6 +6,7 @@ interface VariantAttributeGroupProps {
   groupKey: string;
   values: string[];
   isAvailable: (key: string, value: string) => boolean;
+  changesOtherChoices?: (key: string, value: string) => string[];
   isActive: (key: string, value: string) => boolean;
   onSelectValue: (key: string, value: string) => void;
 }
@@ -14,6 +15,7 @@ export function VariantAttributeGroup({
   groupKey,
   values,
   isAvailable,
+  changesOtherChoices,
   isActive,
   onSelectValue,
 }: VariantAttributeGroupProps) {
@@ -43,6 +45,7 @@ export function VariantAttributeGroup({
         groupKey={groupKey}
         values={values}
         isAvailable={isAvailable}
+        changesOtherChoices={changesOtherChoices}
         isActive={isActive}
         onSelectValue={onSelectValue}
       />

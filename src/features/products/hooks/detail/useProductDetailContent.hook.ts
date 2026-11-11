@@ -52,6 +52,9 @@ export function useProductDetailContent({
   );
 
   const quantityMax = maxQuantity ?? cartLineQuantityMax(displayStock);
+  // A real choice with nothing left: offer Notify me instead of a dead Add button.
+  const isSoldOut =
+    !needsOptionSelection && !variantUnavailable && displayStock === 0;
   const purchaseBlocked = Boolean(!canAddToCart || deliveryBlocked);
   const addDisabled = Boolean(purchaseBlocked || isAddingToCart);
   const quantityDisabled = purchaseBlocked;
@@ -113,6 +116,7 @@ export function useProductDetailContent({
     displayStock,
     quantityMax,
     addDisabled,
+    isSoldOut,
     quantityDisabled,
     quantityDisabledHint,
     reviewCount,

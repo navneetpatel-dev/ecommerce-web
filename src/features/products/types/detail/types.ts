@@ -13,7 +13,10 @@ export interface VariantSelectionProps {
   basePrice: number;
   hasPriceChange: boolean;
   matchedVariant?: ProductVariant | null;
+  /** The variant the selection points at, sold out or not. */
+  selectedVariant?: ProductVariant | null;
   isAvailable: (key: string, value: string) => boolean;
+  changesOtherChoices?: (key: string, value: string) => string[];
   isActive: (key: string, value: string) => boolean;
   onSelectValue: (key: string, value: string) => void;
 }

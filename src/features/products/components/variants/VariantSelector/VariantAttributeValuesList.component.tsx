@@ -5,6 +5,7 @@ interface VariantAttributeValuesListProps {
   groupKey: string;
   values: string[];
   isAvailable: (key: string, value: string) => boolean;
+  changesOtherChoices?: (key: string, value: string) => string[];
   isActive: (key: string, value: string) => boolean;
   onSelectValue: (key: string, value: string) => void;
 }
@@ -13,6 +14,7 @@ export function VariantAttributeValuesList({
   groupKey,
   values,
   isAvailable,
+  changesOtherChoices,
   isActive,
   onSelectValue,
 }: VariantAttributeValuesListProps) {
@@ -24,6 +26,7 @@ export function VariantAttributeValuesList({
           groupKey={groupKey}
           value={value}
           available={isAvailable(groupKey, value)}
+          changedGroups={changesOtherChoices?.(groupKey, value) ?? []}
           active={isActive(groupKey, value)}
           onSelectValue={onSelectValue}
         />

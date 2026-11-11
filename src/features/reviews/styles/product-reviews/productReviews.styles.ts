@@ -1,5 +1,6 @@
 export const productReviewsStyles = {
   emptyClass: "px-0 py-8",
+  stateMaxWidth: "max-w-[65ch]",
   list: "max-w-[65ch] divide-y divide-line",
   article: "py-6 first:pt-0",
   header: "flex items-center justify-between gap-4",

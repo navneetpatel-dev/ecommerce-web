@@ -8,14 +8,15 @@ export const variantSelectorStyles = {
     "text-body-sm font-semibold uppercase tracking-[0.08em] text-ink-muted",
   groupSelected: "truncate text-body-sm font-medium text-ink",
   valuesList: "flex flex-wrap gap-2",
-  optionButton: (active: boolean, available: boolean) =>
+  optionButton: (active: boolean, available: boolean, changesOthers = false) =>
     cn(
       "h-10 min-h-10 max-h-none rounded-full px-4 font-medium transition-all",
       active
         ? "border-brand bg-brand text-paper hover:bg-brand-hover hover:text-paper"
         : available
           ? "border-line bg-surface hover:border-brand hover:text-brand"
-          : "border-line bg-paper text-ink/30 line-through",
+          : "border-line bg-paper text-ink-muted line-through hover:border-brand",
+      !active && changesOthers && "border-dashed",
     ),
   priceWrapper: "flex items-baseline gap-3",
   currentPrice: "font-sans text-[1.75rem] font-semibold text-brand",

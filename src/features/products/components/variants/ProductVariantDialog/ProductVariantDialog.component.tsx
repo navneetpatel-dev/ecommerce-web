@@ -74,6 +74,7 @@ export function ProductVariantDialog({
             basePrice={listedPrice}
             hasPriceChange={selection.hasPriceChange}
             isAvailable={selection.isAvailable}
+            changesOtherChoices={selection.changesOtherChoices}
             isActive={selection.isActive}
             onSelectValue={selection.selectValue}
           />

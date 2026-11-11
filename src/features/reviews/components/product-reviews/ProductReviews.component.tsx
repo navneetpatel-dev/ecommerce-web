@@ -1,17 +1,15 @@
-import { ThumbsDown, ThumbsUp, MessageSquare } from "lucide-react";
-import { RatingStars } from "@/shared/components/display/RatingStars.component";
+import { AlertTriangle, MessageSquare } from "lucide-react";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
-import { Button } from "@/shared/components/ui/button";
 import { ReviewListSkeleton } from "@/shared/components/Skeletons.component";
-import { REVIEW_STATUS } from "@/shared/constants/statuses";
-import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import type { Review } from "@/shared/api/types";
 import { productReviewsStyles as styles } from "../../styles/product-reviews/productReviews.styles";
-import { ReviewMediaGallery } from "../media/ReviewMediaGallery.component";
+import { ProductReviewList } from "./ProductReviewList.component";
 
 interface ProductReviewsProps {
   reviews: Review[];
   isLoading?: boolean;
+  isError?: boolean;
+  onRetry?: () => void;
   onVoteHelpful: (reviewId: string) => void;
   onVoteUnhelpful: (reviewId: string) => void;
 }
@@ -19,14 +17,27 @@ interface ProductReviewsProps {
 export function ProductReviews({
   reviews,
   isLoading,
+  isError,
+  onRetry,
   onVoteHelpful,
   onVoteUnhelpful,
 }: ProductReviewsProps) {
-  const voteHelpful = (reviewId: string) => () => onVoteHelpful(reviewId);
-  const voteUnhelpful = (reviewId: string) => () => onVoteUnhelpful(reviewId);
-
   if (isLoading) {
     return <ReviewListSkeleton count={3} />;
+  }
+
+  if (isError) {
+    return (
+      <EmptyState
+        heading="Reviews could not be loaded"
+        message="Something went wrong on our side. Try again in a moment."
+        icon={AlertTriangle}
+        actionLabel="Try again"
+        onAction={onRetry}
+        maxWidth={styles.stateMaxWidth}
+        className={styles.emptyClass}
+      />
+    );
   }
 
   if (!reviews.length) {
@@ -35,69 +46,17 @@ export function ProductReviews({
         heading="No reviews yet"
         message="After an order is delivered, you can leave a review from the order page."
         icon={MessageSquare}
-        maxWidth="max-w-[65ch]"
+        maxWidth={styles.stateMaxWidth}
         className={styles.emptyClass}
       />
     );
   }
 
   return (
-    <div className={styles.list}>
-      {reviews.map((review) => (
-        <article key={review.id} className={styles.article}>
-          <div className={styles.header}>
-            <div className={styles.userGroup}>
-              <p className={styles.userName}>
-                {review.user?.name ?? "Verified buyer"}
-              </p>
-              <RatingStars value={review.rating} size="sm" />
-            </div>
-            {review.status === REVIEW_STATUS.APPROVED && (
-              <span className={styles.verifiedBadge}>Verified Purchase</span>
-            )}
-          </div>
-
-          {review.title && (
-            <h3 className={styles.reviewTitle}>{review.title}</h3>
-          )}
-
-          <p className={styles.reviewBody}>{review.body}</p>
-          <ReviewMediaGallery media={review.media} />
-
-          {review.vendorResponse ? (
-            <div className={styles.sellerResponse}>
-              <p className={styles.sellerTitle}>
-                Seller response
-                {review.vendorRespondedAt ? (
-                  <span className={styles.sellerDate}>
-                    {formatOrderDate(review.vendorRespondedAt)}
-                  </span>
-                ) : null}
-              </p>
-              <p className={styles.sellerBody}>{review.vendorResponse}</p>
-            </div>
-          ) : null}
-
-          <div className={styles.voteRow}>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={voteHelpful(review.id)}
-            >
-              <ThumbsUp className={styles.voteIcon} /> {review.helpfulCount}
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={voteUnhelpful(review.id)}
-            >
-              <ThumbsDown className={styles.voteIcon} /> {review.unhelpfulCount}
-            </Button>
-          </div>
-        </article>
-      ))}
-    </div>
+    <ProductReviewList
+      reviews={reviews}
+      onVoteHelpful={onVoteHelpful}
+      onVoteUnhelpful={onVoteUnhelpful}
+    />
   );
 }
