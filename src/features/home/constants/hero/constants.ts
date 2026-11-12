@@ -100,3 +100,12 @@ export const copyItem = {
     transition: { duration: 0.55, ease: EASE },
   },
 };
+
+/**
+ * `sizes` for the hero banner image. On phones the hero is a tall portrait box
+ * (about 1.75× taller than wide) that a landscape 3:2 banner fills with
+ * object-fit: cover, so the rendered image is about 2.6× the screen width. Saying
+ * "100vw" there made the browser pick a source 2.6× too small, and the banner
+ * looked blurry. Wider screens show the hero landscape, so the viewport width is right.
+ */
+export const HERO_IMAGE_SIZES = "(max-width: 767px) 260vw, 100vw";
