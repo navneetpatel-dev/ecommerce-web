@@ -2,9 +2,14 @@ import { cn } from "@/shared/utils/dom/cn";
 
 export const cartLineStyles = {
   // Compact cart line styles
-  compactRoot: (available: boolean) =>
-    cn("flex items-center gap-3 py-2", !available && "opacity-50 grayscale"),
-  compactImageWrapper: "relative h-14 w-14 shrink-0 overflow-hidden rounded-sm",
+  // B-63: only the image fades on an unavailable line; dimming the text dropped it
+  // to 2.2–3.4:1 contrast. The "Out of stock" badge says why.
+  compactRoot: (_available: boolean) => "flex items-center gap-3 py-2",
+  compactImageWrapper: (available: boolean) =>
+    cn(
+      "relative h-14 w-14 shrink-0 overflow-hidden rounded-sm",
+      !available && "opacity-50 grayscale",
+    ),
   compactGrid:
     "grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-0.5",
   compactTitle:
@@ -35,10 +40,13 @@ export const cartLineStyles = {
   fullRoot: (available: boolean) =>
     cn(
       "group grid grid-cols-[4.5rem_1fr] gap-3 py-3.5 sm:grid-cols-[5.5rem_1fr_auto] sm:gap-4",
+      !available && "text-ink-muted",
+    ),
+  fullImageLink: (available: boolean) =>
+    cn(
+      "relative aspect-square self-end overflow-hidden rounded-sm border border-line bg-paper",
       !available && "opacity-50 grayscale",
     ),
-  fullImageLink:
-    "relative aspect-square self-end overflow-hidden rounded-sm border border-line bg-paper",
   fullImage:
     "object-cover transition-transform duration-[var(--motion-moderate)] group-hover:scale-[1.03]",
   fullDetailsColumn: "min-w-0 flex flex-col gap-2.5",

@@ -18,6 +18,8 @@ import { searchBarStyles as styles } from "../../../styles/search-bar/searchBar.
 
 interface SearchPanelProps {
   showPanel: boolean;
+  /** The typed term, highlighted in each suggestion. */
+  term?: string;
   suggestions?: SearchSuggestion[];
   activeIndex?: number;
   isFetching?: boolean;
@@ -45,6 +47,7 @@ function sectionLabel(type: SearchSuggestion["type"]): string {
 
 export function SearchPanel({
   showPanel,
+  term = "",
   suggestions,
   activeIndex = -1,
   isFetching = false,
@@ -124,6 +127,7 @@ export function SearchPanel({
                 <li key={`${suggestion.type}-${suggestion.id}`}>
                   <SearchSuggestionRow
                     suggestion={suggestion}
+                    term={term}
                     active={index === activeIndex}
                     id={`${SEARCH_LIST_ID}-option-${index}`}
                     onSelect={onSelect}

@@ -17,4 +17,8 @@ export const productQnaStyles = {
   answerBody:
     "mt-1 text-body-sm leading-relaxed text-ink-muted whitespace-pre-wrap",
   noAnswersText: "ml-6 mt-3 text-body-sm text-ink-muted",
+  answerActions: "ml-6 mt-3",
+  answerForm: "ml-6 mt-3 space-y-2",
+  answerFormButtons: "flex flex-wrap gap-2",
+  answerSubmitted: "ml-6 mt-3 text-body-sm text-success",
 } as const;

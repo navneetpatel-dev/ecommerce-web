@@ -43,7 +43,7 @@ export function OrderCancelAction({ order }: OrderCancelActionProps) {
           onClick: () => void confirmCancel(),
         }}
         secondaryAction={{
-          label: LABELS.cancel,
+          label: LABELS.keepOrder,
           variant: "outline",
           onClick: () => setOpen(false),
         }}

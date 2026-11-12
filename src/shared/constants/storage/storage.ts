@@ -21,6 +21,8 @@ export const STORAGE_KEYS = {
    * resumes it. Cleared when the customer leaves checkout, so a later visit starts fresh.
    */
   CHECKOUT_FLOW: "checkoutFlow",
+  /** sessionStorage: the product a guest hearted before signing in, saved after sign-in (C-05). */
+  PENDING_WISHLIST: "pendingWishlistProduct",
   /** Last submitted storefront search terms (localStorage — powers the recent list). */
   RECENT_SEARCHES: "recentSearches",
   /** sessionStorage flag: a terminal 401 forced a sign-out (one-shot login notice). */

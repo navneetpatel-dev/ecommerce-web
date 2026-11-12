@@ -66,6 +66,7 @@ export function SearchInput({
             : undefined
         }
         aria-autocomplete="list"
+        aria-keyshortcuts="/ Control+K Meta+K"
         value={term}
         onChange={handleTermChange}
         onFocus={onFocus}
@@ -80,6 +81,12 @@ export function SearchInput({
             : cn(styles.inputCollapsed, onDark && styles.inputOnDark),
         )}
       />
+      {/* C-11: the "/" shortcut was invisible; the input also declares it. */}
+      {term ? null : (
+        <kbd aria-hidden className={styles.shortcutHint}>
+          /
+        </kbd>
+      )}
     </form>
   );
 }

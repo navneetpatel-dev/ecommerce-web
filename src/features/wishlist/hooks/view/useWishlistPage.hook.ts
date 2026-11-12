@@ -3,8 +3,10 @@
 import { useMemo } from "react";
 import {
   useWishlist,
+  useAddToWishlist,
   useRemoveFromWishlist,
 } from "../../api/wishlist/wishlist.queries";
+import { notifySuccess } from "@/shared/stores/notifications/toast.store";
 import { useClientPagination } from "@/shared/hooks/pagination/useClientPagination.hook";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
@@ -19,6 +21,17 @@ export interface WishlistPageItem {
 export function useWishlistPage() {
   const { data, isLoading } = useWishlist();
   const removeFromWishlist = useRemoveFromWishlist();
+  const addToWishlist = useAddToWishlist();
+
+  // Removing is reversible, so it offers Undo rather than a confirm (B-59).
+  const removeItem = (productId: string) =>
+    removeFromWishlist.mutate(productId, {
+      onSuccess: () =>
+        notifySuccess(LABELS.removedFromWishlist, {
+          label: LABELS.undo,
+          onClick: () => addToWishlist.mutate(productId),
+        }),
+    });
 
   const items = useMemo<WishlistPageItem[]>(() => {
     if (!data?.items?.length) return [];
@@ -64,6 +77,6 @@ export function useWishlistPage() {
     pagination,
     removePending: removeFromWishlist.isPending,
     removeError,
-    removeItem: (productId: string) => removeFromWishlist.mutate(productId),
+    removeItem,
   };
 }

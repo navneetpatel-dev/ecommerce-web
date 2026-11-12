@@ -49,7 +49,7 @@ export function UnpaidRazorpayActions({ order }: UnpaidRazorpayActionsProps) {
           onClick: () => void actions.confirmCancel(),
         }}
         secondaryAction={{
-          label: LABELS.cancel,
+          label: LABELS.keepOrder,
           variant: "outline",
           onClick: () => actions.setOpen(false),
         }}

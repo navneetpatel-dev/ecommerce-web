@@ -16,6 +16,13 @@ export const availabilityLabels = {
   vendorsIndexEyebrow: "Makers",
   vendorsIndexHint: "Explore approved shops on {site}.",
   noVendorsYet: "No shops to show yet",
+  searchShops: "Search shops",
+  searchShopsPlaceholder: "Shop name",
+  shopsCount: "{count} shops",
+  noShopsMatch: "No shops match “{term}”",
+  noShopsMatchHint:
+    "Check the spelling, or clear the search to see every shop.",
+  clearSearch: "Clear search",
   noVendorsYetHint:
     "Approved vendors will appear here once they publish their storefront.",
   visitShop: "Visit shop",

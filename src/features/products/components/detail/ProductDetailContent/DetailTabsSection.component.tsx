@@ -38,7 +38,10 @@ export function DetailTabsSection({
   return (
     <div className={PRODUCT_DETAIL_CONTENT_STYLES.tabsContainer}>
       <Tabs value={detailTab} onValueChange={onTabChange}>
-        <TabsList className={PRODUCT_DETAIL_CONTENT_STYLES.tabsList}>
+        <TabsList
+          aria-label={LABELS.productDetailsTabs}
+          className={PRODUCT_DETAIL_CONTENT_STYLES.tabsList}
+        >
           <TabsTrigger
             value="description"
             className={PRODUCT_DETAIL_CONTENT_STYLES.tabTrigger}

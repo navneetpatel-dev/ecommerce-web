@@ -25,6 +25,7 @@ export function useOtpDigits(length = 6) {
     if (sanitized && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1]?.focus();
     }
+    return next;
   };
 
   const handleKeyDown = (
@@ -47,7 +48,7 @@ export function useOtpDigits(length = 6) {
       .getData("text")
       .replace(/\D/g, "")
       .slice(0, digits.length);
-    if (!pasted) return;
+    if (!pasted) return null;
 
     event.preventDefault();
     const next = Array.from(
@@ -58,6 +59,7 @@ export function useOtpDigits(length = 6) {
 
     const lastIndex = Math.min(pasted.length, digits.length) - 1;
     if (lastIndex >= 0) inputRefs.current[lastIndex]?.focus();
+    return next;
   };
 
   return {

@@ -5,6 +5,8 @@ export const buyAgainLabels = {
   buyAgainAllAdded: "All {total} item(s) added to cart.",
   buyAgainPartial:
     "{added} of {total} item(s) added to cart. Not available: {names}.",
+  buyAgainAddedToast: "Added {count} item(s) to your cart.",
+  buyAgainViewCart: "View cart",
   buyAgainNoneAvailable:
     "None of these items are available to reorder right now.",
 } as const;

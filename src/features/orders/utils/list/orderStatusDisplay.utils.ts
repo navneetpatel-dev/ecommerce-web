@@ -15,6 +15,7 @@ export const ORDER_LABELS: Record<string, string> = {
 
 export const PAYMENT_LABELS_COMPACT: Record<string, string> = {
   PENDING: "Unpaid",
+  NOT_CHARGED: "Not charged",
   PAID: "Paid",
   FAILED: "Failed",
   REFUNDED: "Refunded",
@@ -22,6 +23,7 @@ export const PAYMENT_LABELS_COMPACT: Record<string, string> = {
 
 export const PAYMENT_LABELS: Record<string, string> = {
   PENDING: "Awaiting payment",
+  NOT_CHARGED: "Not charged",
   PAID: "Paid",
   FAILED: "Payment failed",
   REFUNDED: "Refunded",
@@ -49,6 +51,21 @@ export function orderTone(status: string): Tone {
 
 export function paymentTone(status: string): Tone {
   return badgeVariantToTone(getStatusBadgeVariant(status));
+}
+
+/**
+ * A cancelled order that was never paid is not waiting for anything (B-58): it reads
+ * "Not charged" instead of "Awaiting payment".
+ */
+export function effectivePaymentStatus(
+  orderStatus: string,
+  paymentStatus: string | null | undefined,
+): string | null {
+  if (!paymentStatus) return null;
+  return orderStatus.toUpperCase() === "CANCELLED" &&
+    paymentStatus.toUpperCase() === "PENDING"
+    ? "NOT_CHARGED"
+    : paymentStatus;
 }
 
 export function displayLabel(

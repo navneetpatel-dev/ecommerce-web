@@ -8,5 +8,5 @@ export const contactViewStyles = {
   cardTitle: "text-[1.125rem] font-semibold text-ink",
   detailText: "text-body text-ink-muted",
   selfServeNotice: "text-body-sm text-ink-muted",
-  helpLink: "text-brand underline-offset-2 hover:underline",
+  helpLink: "text-brand underline underline-offset-2 hover:decoration-2",
 } as const;

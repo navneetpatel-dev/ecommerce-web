@@ -128,6 +128,7 @@ export const commerceLabels = {
   goToMyOrders: "Go to my orders",
   allOrders: "All orders",
   cancelOrder: "Cancel order",
+  keepOrder: "Keep order",
   payNow: "Pay now",
   confirmCancelUnpaidOrderBody:
     "This cancels the unpaid order and puts the items back in your cart.",

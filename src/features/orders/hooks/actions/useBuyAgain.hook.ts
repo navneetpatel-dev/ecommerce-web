@@ -1,8 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { cartApi } from "@/features/cart";
+import { useQueryClient } from "@tanstack/react-query";
+import { cartApi, cartKeys, useCartDrawerStore } from "@/features/cart";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { notifySuccess } from "@/shared/stores/notifications/toast.store";
 import type { OrderItem } from "@/shared/api/types";
+
+/** Wide screens open the cart drawer straight away; phones get the toast's View cart. */
+const DESKTOP_QUERY = "(min-width: 1024px)";
+
+const openCartDrawer = () => useCartDrawerStore.getState().open();
 
 export interface BuyAgainResult {
   addedCount: number;
@@ -12,6 +21,7 @@ export interface BuyAgainResult {
 
 /** Re-adds every item from a past order/suborder to the cart, skipping whatever's no longer purchasable. */
 export function useBuyAgain() {
+  const queryClient = useQueryClient();
   const [isPending, setIsPending] = useState(false);
   const [result, setResult] = useState<BuyAgainResult | null>(null);
 
@@ -32,6 +42,14 @@ export function useBuyAgain() {
 
     setResult({ addedCount, totalCount: items.length, unavailableNames });
     setIsPending(false);
+    if (addedCount === 0) return;
+    // C-14: the cart count was stale and there was no next step.
+    void queryClient.invalidateQueries({ queryKey: cartKeys.all });
+    notifySuccess(
+      formatLabel(LABELS.buyAgainAddedToast, { count: addedCount }),
+      { label: LABELS.buyAgainViewCart, onClick: openCartDrawer },
+    );
+    if (window.matchMedia?.(DESKTOP_QUERY).matches) openCartDrawer();
   };
 
   return {

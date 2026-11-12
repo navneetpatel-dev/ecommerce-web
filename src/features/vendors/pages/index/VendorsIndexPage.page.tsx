@@ -9,8 +9,17 @@ export function VendorsIndexPage() {
   return (
     <VendorsIndexView
       vendors={page.vendors}
+      total={page.total}
+      term={page.term}
+      search={page.search}
       isLoading={page.isLoading}
       isEmpty={page.isEmpty}
+      noMatches={page.noMatches}
+      hasNextPage={page.hasNextPage}
+      isFetchingNextPage={page.isFetchingNextPage}
+      onTermChange={page.handleTermChange}
+      onClearSearch={page.clearSearch}
+      onLoadMore={page.loadMore}
     />
   );
 }

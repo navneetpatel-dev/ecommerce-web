@@ -24,6 +24,11 @@ export const heroSectionStyles = {
   desktopGroup: "pointer-events-auto flex flex-col gap-2",
   mobilePrev: "absolute bottom-5 left-3 z-20 md:hidden",
   mobileNext: "absolute bottom-5 right-3 z-20 md:hidden",
+  dots: "absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1",
+  dotButton:
+    "inline-flex h-8 w-8 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+  dot: "h-2 w-2 rounded-full bg-white/50 shadow-elevation-1 transition-all motion-reduce:transition-none",
+  dotActive: "w-5 bg-white",
   mobilePause: "absolute bottom-20 right-3 z-20 md:hidden",
   copyContainer: "max-w-xl",
   eyebrow:

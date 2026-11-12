@@ -44,8 +44,10 @@ export function IconBadgeAnchor({
         variant === "tab"
           ? "min-h-6 min-w-6 pt-1.5 pr-4"
           : variant === "header-wide"
-            ? "size-5 mr-1.5"
-            : "size-5",
+            ? // Phones: the amount sits beside the icon instead of over it.
+              "size-5 mr-1.5 max-lg:w-auto max-lg:mr-0 max-lg:gap-1"
+            : // Phones: leave room for the corner pill before the next icon.
+              "size-5 max-lg:mr-2",
         className,
       )}
     >
@@ -85,9 +87,11 @@ export function CartCountBadge({
       className={cn(
         "pointer-events-none absolute z-[1] leading-none",
         placement === "tab" && "right-0 top-0",
-        placement === "header" && "-right-2.5 -top-2",
+        // Phones: the pill hangs off the icon's top-right corner, not over it.
+        placement === "header" &&
+          "-right-2.5 -top-2 max-lg:right-auto max-lg:left-[calc(100%-4px)]",
         placement === "header-wide" &&
-          "right-0 top-0 translate-x-[55%] -translate-y-[45%]",
+          "right-0 top-0 translate-x-[55%] -translate-y-[45%] max-lg:static max-lg:translate-x-0 max-lg:translate-y-0",
         className,
       )}
     >

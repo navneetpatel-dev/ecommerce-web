@@ -3,6 +3,8 @@ export const productQnaRoutes = {
   ask: "/api/product-qna/questions",
   forProduct: (productId: string) =>
     `/api/product-qna/products/${productId}/questions`,
+  canAnswer: (productId: string) =>
+    `/api/product-qna/products/${productId}/can-answer`,
   answer: (questionId: string) =>
     `/api/product-qna/questions/${questionId}/answers`,
   moderate: (questionId: string) =>

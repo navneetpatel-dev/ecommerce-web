@@ -22,6 +22,15 @@ export function useProductQuestions(
   });
 }
 
+export function useCanAnswer(productId: string, signedIn: boolean) {
+  return useQuery({
+    queryKey: [...productQnaKeys.product(productId), "can-answer"],
+    queryFn: () => productQnaApi.canAnswer(productId),
+    enabled: Boolean(productId) && signedIn,
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
 export function usePendingQuestions() {
   return useQuery({
     queryKey: productQnaKeys.pending(),

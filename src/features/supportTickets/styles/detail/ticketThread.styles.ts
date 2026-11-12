@@ -36,7 +36,8 @@ export const ticketThreadStyles = {
   convEmpty:
     "border border-dashed border-line bg-paper/40 px-4 py-8 text-center text-[0.875rem] text-ink-muted",
   convList: "space-y-3",
-  convContainer: "max-h-[min(70vh,36rem)] overflow-y-auto overscroll-contain",
+  convContainer:
+    "max-h-[min(70vh,36rem)] overflow-y-auto overscroll-contain rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
   convViewport: "relative w-full",
   convItemWrapper: "absolute left-0 top-0 w-full pb-3",
 

@@ -28,6 +28,7 @@ export function OtpInput({
         <OtpDigitInput
           key={index}
           index={index}
+          total={digits.length}
           digit={digit}
           invalid={invalid}
           onSetInputRef={onSetInputRef}

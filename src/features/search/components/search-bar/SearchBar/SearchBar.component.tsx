@@ -99,6 +99,7 @@ export function SearchBar({
 
         <SearchPanel
           showPanel={showPanel}
+          term={term}
           suggestions={suggestions}
           activeIndex={activeIndex}
           isFetching={isFetching}

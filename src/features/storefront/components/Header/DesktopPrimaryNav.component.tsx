@@ -1,6 +1,7 @@
 "use client";
 
-import { useId, type FocusEvent, type KeyboardEvent } from "react";
+import { useId } from "react";
+import { useMegaMenuKeyboard } from "../../hooks/header/useMegaMenuKeyboard.hook";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
 import { Button } from "@/shared/components/ui/button";
@@ -31,21 +32,14 @@ export function DesktopPrimaryNav({
   onScheduleMegaClose,
 }: DesktopPrimaryNavProps) {
   const megaMenuId = useId();
-
-  // Hover intent cannot dismiss the panel for keyboard users: Escape closes it,
-  // and focus leaving the wrapper (Tab past the panel) closes it too.
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== "Escape" || !megaMenuOpen) return;
-    event.stopPropagation();
-    onCloseMegaMenu();
-  };
-  const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
-    if (!megaMenuOpen) return;
-    if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
-      return;
-    }
-    onCloseMegaMenu();
-  };
+  // Hover intent cannot dismiss the panel for keyboard users: arrows move through it,
+  // Escape closes it, and focus leaving the wrapper closes it too.
+  const { triggerRef, handleKeyDown, handleBlur } = useMegaMenuKeyboard({
+    open: megaMenuOpen,
+    menuId: megaMenuId,
+    onToggle: onToggleMegaMenu,
+    onClose: onCloseMegaMenu,
+  });
 
   return (
     <>
@@ -62,6 +56,7 @@ export function DesktopPrimaryNav({
           onBlur={handleBlur}
         >
           <Button
+            ref={triggerRef}
             type="button"
             variant="ghost"
             size="sm"

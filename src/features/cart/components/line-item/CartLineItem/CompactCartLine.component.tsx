@@ -47,7 +47,7 @@ export function CompactCartLine(props: CompactCartLineProps) {
 
   return (
     <div className={styles.compactRoot(available)}>
-      <div className={styles.compactImageWrapper}>
+      <div className={styles.compactImageWrapper(available)}>
         <MediaImage
           src={item.product.imageUrl}
           alt={item.product.name}

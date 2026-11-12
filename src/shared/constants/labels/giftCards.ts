@@ -18,6 +18,7 @@ export const giftCardsLabels = {
     "We've emailed a gift card worth {amount} to {email}.",
   giftCardBuyAnother: "Buy another gift card",
   giftCardRedeemTitle: "You've received a gift card",
+  giftCardFrom: "From {name}",
   giftCardRedeemAmountLabel: "Gift card value",
   giftCardRedeemButton: "Redeem to wallet",
   giftCardRedeemButtonBusy: "Redeeming…",

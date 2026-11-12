@@ -21,6 +21,9 @@ export const productQnaApi = {
   forVendorMe: () => apiClient.get<ProductQuestion[]>(API.productQna.vendorMe),
   ask: (body: { productId: string; question: string }) =>
     apiClient.post<ProductQuestion>(API.productQna.ask, body),
+  /** C-01: only the seller or a shopper who received the product may answer. */
+  canAnswer: (productId: string) =>
+    apiClient.get<{ canAnswer: boolean }>(API.productQna.canAnswer(productId)),
   answer: (questionId: string, body: { answer: string }) =>
     apiClient.post<ProductAnswer>(API.productQna.answer(questionId), body),
   moderate: (questionId: string, body: { status: "PUBLISHED" | "REJECTED" }) =>
