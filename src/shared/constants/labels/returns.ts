@@ -15,5 +15,15 @@ export const returnsLabels = {
   returnNotFoundMessage:
     "This return may have been removed, or you may not have access to view it.",
 
+  returnDetailHeading: "Return details",
+  // Cancel a requested return (B-50)
+  cancelReturn: "Cancel return",
+  cancelReturnTitle: "Cancel this return?",
+  cancelReturnBody:
+    "The request is withdrawn and the item stays with you. You can request a return again while the return window is open.",
+  keepReturn: "Keep return",
+  returnCancelled: "Return cancelled.",
+  couldNotCancelReturn: "Could not cancel this return.",
+
   // Unavailable item badges
 } as const;

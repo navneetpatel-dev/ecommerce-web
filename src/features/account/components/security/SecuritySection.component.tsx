@@ -8,6 +8,7 @@ import { ChangePasswordSection } from "@/features/auth";
 import { BrowserNotificationsSetting } from "../notifications/BrowserNotificationsSetting.component";
 import { useSecuritySection } from "../../hooks/security/useSecuritySection.hook";
 import { SessionsList } from "./SessionsList.component";
+import { InfiniteLoadMore } from "@/shared/components/DataTable/InfiniteLoadMore.component";
 import { SessionsLoadingSkeleton } from "./SessionsLoadingSkeleton.component";
 import { SessionsEmptyState } from "./SessionsEmptyState.component";
 import { RevokeOtherSessionsDialog } from "./RevokeOtherSessionsDialog.component";
@@ -20,6 +21,7 @@ export function SecuritySection() {
     sessions,
     sessionViewModels,
     hasOthers,
+    handleLoadMoreSessions,
     revokeOthersOpen,
     isRevokingOthers,
     revokeFamily,
@@ -85,6 +87,11 @@ export function SecuritySection() {
             onRevoke={handleOpenRevokeSession}
           />
         )}
+        <InfiniteLoadMore
+          hasNextPage={sessions.hasNextPage}
+          isFetchingNextPage={sessions.isFetchingNextPage}
+          onLoadMore={handleLoadMoreSessions}
+        />
 
         <div className={styles.errorWrapper}>
           <FormError

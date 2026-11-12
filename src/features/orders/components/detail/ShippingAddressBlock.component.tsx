@@ -3,6 +3,7 @@ import { MapPin } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import type { Order } from "@/shared/api/types";
+import { formatAddressRecipient } from "@/shared/utils/formatting/addressRecipient";
 import { ORDER_SUMMARY_ASIDE_STYLES } from "../../styles/detail/orderSummaryAside.styles";
 
 interface ShippingAddressBlockProps {
@@ -12,6 +13,7 @@ interface ShippingAddressBlockProps {
 export const ShippingAddressBlock = memo(function ShippingAddressBlock({
   address,
 }: ShippingAddressBlockProps) {
+  const recipient = formatAddressRecipient(address);
   return (
     <div className={ORDER_SUMMARY_ASIDE_STYLES.shippingAddressContainer}>
       <div className={ORDER_SUMMARY_ASIDE_STYLES.shippingHeader}>
@@ -24,6 +26,11 @@ export const ShippingAddressBlock = memo(function ShippingAddressBlock({
         </TextEyebrow>
       </div>
       <address className={ORDER_SUMMARY_ASIDE_STYLES.address}>
+        {recipient ? (
+          <span className={ORDER_SUMMARY_ASIDE_STYLES.addressRecipient}>
+            {recipient}
+          </span>
+        ) : null}
         <span className={ORDER_SUMMARY_ASIDE_STYLES.addressLineBlock}>
           {address.line1}
         </span>

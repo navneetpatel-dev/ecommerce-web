@@ -50,6 +50,7 @@ function fetchProductList(
       vendorId: filters.vendorId,
       minPrice: filters.minPrice,
       maxPrice: filters.maxPrice,
+      inStock: filters.inStock,
     });
   }
   return productsApi.list(filters);

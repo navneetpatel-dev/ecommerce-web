@@ -8,14 +8,26 @@ import { Badge } from "@/shared/components/ui/badge";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
+import { InfiniteLoadMore } from "@/shared/components/DataTable/InfiniteLoadMore.component";
+import { flattenPages } from "@/shared/api/client/pagination";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { useMyReviews } from "../../api/reviews/reviews.queries";
 import { myReviewsPageStyles as styles } from "./myReviewsPage.styles";
 import { ReviewMediaGallery } from "../../components/media/ReviewMediaGallery.component";
 
 export function MyReviewsPage() {
-  const { data, isLoading, isError, error, refetch } = useMyReviews();
-  const reviews = data ?? [];
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useMyReviews();
+  const reviews = flattenPages(data);
+  const handleLoadMore = () => void fetchNextPage();
 
   return (
     <div className={styles.container}>
@@ -85,6 +97,11 @@ export function MyReviewsPage() {
           ))}
         </ul>
       )}
+      <InfiniteLoadMore
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={handleLoadMore}
+      />
     </div>
   );
 }

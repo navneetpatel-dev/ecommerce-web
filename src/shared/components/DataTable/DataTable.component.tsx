@@ -27,6 +27,7 @@ export function DataTable<T>({
   emptyMessage = LABELS.noRecordsFound,
   ariaLabel,
   title,
+  titleLevel = 1,
   toolbar,
   onRefresh,
   pagination,
@@ -85,6 +86,7 @@ export function DataTable<T>({
         {(title || onRefresh || toolbar || showSummary) && (
           <DataTableHeader
             title={title}
+            titleLevel={titleLevel}
             toolbar={toolbar}
             onRefresh={onRefresh}
             from={pagination?.from}

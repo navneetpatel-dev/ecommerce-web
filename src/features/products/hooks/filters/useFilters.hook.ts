@@ -85,6 +85,7 @@ export function useFilters() {
       minPrice: undefined,
       maxPrice: undefined,
       rating: undefined,
+      inStock: undefined,
       attrs: undefined,
     });
   }, [clear, applyWrites]);

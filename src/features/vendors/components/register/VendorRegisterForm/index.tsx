@@ -9,7 +9,6 @@ import { FormError } from "@/shared/components/forms/FormError.component";
 import {
   Card,
   CardHeader,
-  CardTitle,
   CardDescription,
   CardContent,
 } from "@/shared/components/ui/card";
@@ -125,9 +124,8 @@ export function VendorRegisterForm({
     <div className={styles.container}>
       <Card>
         <CardHeader>
-          <CardTitle className={styles.cardTitle}>
-            {LABELS.registerAsVendor}
-          </CardTitle>
+          {/* The page's own title (B-62): CardTitle renders an h3. */}
+          <h1 className={styles.cardTitle}>{LABELS.registerAsVendor}</h1>
           <CardDescription>{LABELS.registerAsVendorHint}</CardDescription>
         </CardHeader>
         <CardContent>

@@ -3,6 +3,7 @@ import {
   unwrapPaginatedList,
   withQuery,
   type PaginatedList,
+  type PaginationMeta,
 } from "@/shared/api/client/pagination";
 import { API } from "@/shared/constants/apiRoutes";
 import type { RazorpaySignaturePayload } from "@/shared/api/types";
@@ -63,10 +64,15 @@ export type GiftCardView = {
   redeemer?: GiftCardPerson;
 };
 
+/** Sent and redeemed cards, each paged on its own (B-44). */
 export type MyGiftCards = {
   purchased: GiftCardView[];
   redeemed: GiftCardView[];
+  purchasedPagination: PaginationMeta;
+  redeemedPagination: PaginationMeta;
 };
+
+export type MyGiftCardsSide = "purchased" | "redeemed";
 
 export type GiftCardLiability = {
   outstanding: number;
@@ -93,7 +99,17 @@ export const giftCardsApi = {
     apiClient.post<GiftCardRedeemResult>(API.giftCards.redeem, { code }),
   getByCode: (code: string) =>
     apiClient.get<GiftCardPublicView>(API.giftCards.byCode(code)),
-  mine: () => apiClient.get<MyGiftCards>(API.giftCards.mine),
+  /** One page of one side; the other side's first page rides along and is ignored. */
+  mine: async (
+    side: MyGiftCardsSide,
+    page = 1,
+  ): Promise<PaginatedList<GiftCardView>> => {
+    const body = await apiClient.get<MyGiftCards>(
+      withQuery(API.giftCards.mine, { [`${side}Page`]: page }),
+    );
+    const meta = body[`${side}Pagination`];
+    return { items: body[side], ...meta };
+  },
   resend: (id: string) =>
     apiClient.post<{ sent: true }>(API.giftCards.resend(id), {}),
   adminList: async (

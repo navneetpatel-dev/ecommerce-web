@@ -69,7 +69,10 @@ export const ticketsLabels = {
   ticketBackToList: "Back to tickets",
   ticketShowDetails: "Ticket details",
   ticketHideDetails: "Hide details",
+  ticketDetailHeading: "Support ticket",
   ticketClosedNotice: "This ticket is closed. You can no longer send replies.",
+  ticketClosedCanReopenNotice:
+    "This ticket is closed. Reopen it to send another reply.",
   ticketMustReopenToReplyCustomer:
     "This ticket is resolved. Reopen it to send another reply.",
   ticketMustReopenToReplyStaff:

@@ -45,6 +45,8 @@ export type DataTableProps<T> = {
    */
   ariaLabel?: string;
   title?: ReactNode;
+  /** A string title is the page's h1 unless the page has its own (B-62: then pass 2). */
+  titleLevel?: 1 | 2;
   toolbar?: ReactNode;
   onRefresh?: () => void;
   pagination?: DataTablePaginationProps;

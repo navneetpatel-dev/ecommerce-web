@@ -2,6 +2,14 @@
 export const reports4Labels = {
   addressFormSection: "Address details",
   addressFormSectionHint: "Delivery location used at checkout.",
+  // Address recipient (B-37)
+  addressRecipientSection: "Recipient",
+  addressRecipientSectionHint:
+    "Who the courier hands the parcel to and calls on arrival.",
+  addressRecipientName: "Full name",
+  addressRecipientPhone: "Phone number",
+  enterRecipientName: "Enter the recipient's name to continue.",
+  enterRecipientPhone: "Enter a valid phone number for the recipient.",
   addressLocationRequired: "Location access is required to save an address.",
   addressLocationFetching: "Fetching your location...",
   addressLocationDenied:

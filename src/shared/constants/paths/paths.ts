@@ -43,12 +43,15 @@ export const PATHS = {
     return `/otp?${query.toString()}`;
   },
   register: "/register",
+  registerWithRedirect: (next: string) =>
+    `/register?redirect=${encodeURIComponent(next)}`,
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
   verifyEmail: "/verify-email",
   authCallback: "/auth/callback",
   about: "/about",
   contact: "/contact",
+  unsubscribe: "/unsubscribe",
   blog: "/blog",
   blogPost: (slug: string) => `/blog/${slug}`,
   help: "/help",

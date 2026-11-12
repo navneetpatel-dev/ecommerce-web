@@ -13,6 +13,21 @@ export function LoginRequiredDialogContainer() {
   const message = useAuthPromptStore((s) => s.message);
   const redirectTo = useAuthPromptStore((s) => s.redirectTo);
   const closePrompt = useAuthPromptStore((s) => s.closePrompt);
+  const returnFocusTo = useAuthPromptStore((s) => s.returnFocusTo);
+
+  // Back to the heart (or whatever opened the prompt) instead of the page body.
+  const handleCloseAutoFocus = (event: Event) => {
+    if (!returnFocusTo?.isConnected) return;
+    event.preventDefault();
+    returnFocusTo.focus();
+  };
+
+  const goToRegister = () => {
+    closePrompt();
+    const next =
+      redirectTo && redirectTo !== PATHS.login ? redirectTo : PATHS.home;
+    navigate(router, PATHS.registerWithRedirect(next));
+  };
 
   const goToLogin = () => {
     closePrompt();
@@ -33,6 +48,8 @@ export function LoginRequiredDialogContainer() {
       onOpenChange={handleOpenChange}
       onCancel={closePrompt}
       onLogin={goToLogin}
+      onRegister={goToRegister}
+      onCloseAutoFocus={handleCloseAutoFocus}
     />
   );
 }

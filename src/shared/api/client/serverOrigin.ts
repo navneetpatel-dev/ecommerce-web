@@ -1,12 +1,9 @@
-import { CLIENT_API_BASE_URL, SITE_URL } from "@/shared/config/appConfig";
+import { SERVER_API_ORIGIN } from "@/shared/config/appConfig";
 
 /**
- * Origin for server-side API fetches (RSC / generateMetadata).
- * When NEXT_PUBLIC_API_URL is empty, the browser uses same-origin `/api` via Next rewrites;
- * SSR must hit the Next origin so those rewrites apply (not a stale localhost default).
+ * Origin for server-side API calls: the backend itself, never the public site
+ * URL (which made every server-side category lookup fail when it was unset).
  */
 export function getServerApiOrigin(): string {
-  const configured = CLIENT_API_BASE_URL.trim();
-  if (configured) return configured.replace(/\/$/, "");
-  return SITE_URL;
+  return SERVER_API_ORIGIN;
 }

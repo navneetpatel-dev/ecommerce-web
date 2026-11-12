@@ -57,17 +57,21 @@ export function useTicketThreadState(ticket: SupportTicket, mode: RoleMode) {
 
   const [mountedAt] = useState(() => Date.now());
   const reopenWindowDays = publicSettings?.ticketReopenWindowDays ?? 7;
+  // A closed ticket counts from when it closed (B-48), as on the server.
+  const settledAt = ticket.resolvedAt ?? ticket.closedAt ?? null;
   const withinReopenWindow = Boolean(
-    ticket.resolvedAt &&
-    mountedAt - new Date(ticket.resolvedAt).getTime() <=
+    settledAt &&
+    mountedAt - new Date(settledAt).getTime() <=
       reopenWindowDays * 24 * 60 * 60 * 1000,
   );
 
   const canManage =
     mode === "admin" && hasPermission(PERMISSIONS.TICKET_MANAGE);
-  const canResolve = mode === "admin" || mode === "vendor";
+  // The shopper can also mark their own ticket solved, and reopen a resolved
+  // or closed one within the window (B-48).
   const canReopen =
-    ticket.status === SUPPORT_TICKET_STATUS.RESOLVED &&
+    (ticket.status === SUPPORT_TICKET_STATUS.RESOLVED ||
+      ticket.status === SUPPORT_TICKET_STATUS.CLOSED) &&
     mode === "customer" &&
     withinReopenWindow;
   const canRate =
@@ -80,10 +84,9 @@ export function useTicketThreadState(ticket: SupportTicket, mode: RoleMode) {
   const replyNeedsReopen = ticket.status === SUPPORT_TICKET_STATUS.RESOLVED;
   const replyBlocked = replyClosed || replyNeedsReopen;
   const showResolve =
-    canResolve &&
-    (ticket.status === SUPPORT_TICKET_STATUS.OPEN ||
-      ticket.status === SUPPORT_TICKET_STATUS.IN_PROGRESS ||
-      ticket.status === SUPPORT_TICKET_STATUS.REOPENED);
+    ticket.status === SUPPORT_TICKET_STATUS.OPEN ||
+    ticket.status === SUPPORT_TICKET_STATUS.IN_PROGRESS ||
+    ticket.status === SUPPORT_TICKET_STATUS.REOPENED;
 
   const onSendReply = async () => {
     const sent = await replyState.onSend(attachments, replyBlocked);

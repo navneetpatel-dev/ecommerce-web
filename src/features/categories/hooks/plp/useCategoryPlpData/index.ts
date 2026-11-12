@@ -44,6 +44,7 @@ export function useCategoryPlpData(slugPath: string[]) {
       minPrice: parseOptionalNumber(searchParams.get("minPrice")),
       maxPrice: parseOptionalNumber(searchParams.get("maxPrice")),
       rating: parseOptionalNumber(searchParams.get("rating")),
+      inStock: searchParams.get("inStock") === "true" ? true : undefined,
       sort: searchParams.get("sort") || undefined,
       page: parseOptionalNumber(searchParams.get("page")) || 1,
       limit: 20,

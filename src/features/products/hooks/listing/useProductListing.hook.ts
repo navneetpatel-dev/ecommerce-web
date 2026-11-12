@@ -31,7 +31,18 @@ export function useProductListing() {
     removeAttrValue,
     clearFilters,
   } = useFilters();
-  const { data, isFetching } = useProductList(filters);
+  const { data, isFetching, isError, refetch } = useProductList(filters);
+  const page = filters.page ?? 1;
+  const totalPages = data?.totalPages ?? 0;
+  // A page number past the end (e.g. ?page=99999) gets its own message and a way back.
+  const isPastEnd =
+    Boolean(data) &&
+    data!.items.length === 0 &&
+    totalPages > 0 &&
+    page > totalPages;
+  const retry = () => {
+    void refetch();
+  };
   // The search endpoint (GET /api/search) ranks by text relevance and doesn't accept sort/rating/
   // attribute params at all — see fetchProductList's dropped-params comment. Surfacing those
   // controls as interactive while they're silently ignored reads as broken filtering.
@@ -62,6 +73,12 @@ export function useProductListing() {
     filters,
     data,
     isFetching,
+    // Shown when the products request fails, instead of skeletons forever.
+    isError: isError && !data,
+    retry,
+    isPastEnd,
+    goToFirstPage: () => updateFilter("page", 1),
+    goToLastPage: () => updateFilter("page", totalPages),
     isSearchActive,
     openFilters: () => setFilterOpen(true),
     closeFilters: () => setFilterOpen(false),

@@ -9,11 +9,14 @@ import { FilterSidebarHeader } from "./FilterSidebarHeader.component";
 import { FilterSidebarPriceFilter } from "./FilterSidebarPriceFilter.component";
 import { FilterSidebarFacetsList } from "./FilterSidebarFacetsList.component";
 import { FilterSidebarRatingFilter } from "./FilterSidebarRatingFilter.component";
+import { FilterSidebarStockToggle } from "./FilterSidebarStockToggle.component";
 
 export interface FilterSidebarProps {
   minPrice: number | undefined;
   maxPrice: number | undefined;
   rating: number | undefined;
+  /** "Show in-stock items only" (B-23). */
+  inStock?: boolean;
   onUpdateFilter: (key: string, value: unknown) => void;
   onClear: () => void;
   className?: string;
@@ -31,6 +34,7 @@ export function FilterSidebar({
   minPrice,
   maxPrice,
   rating,
+  inStock = false,
   onUpdateFilter,
   onClear,
   className,
@@ -45,6 +49,7 @@ export function FilterSidebar({
       minPrice,
       maxPrice,
       rating,
+      inStock,
       facets,
       facetSelections,
     });
@@ -60,6 +65,12 @@ export function FilterSidebar({
             <p className="mt-2">{LABELS.ratingFilterUnavailableDuringSearch}</p>
           </div>
         ) : null}
+
+        <FilterSidebarStockToggle
+          inStock={inStock}
+          idPrefix={idPrefix}
+          onUpdateFilter={onUpdateFilter}
+        />
 
         <Accordion
           key={accordionKey}

@@ -47,6 +47,6 @@ export const orderTaxShippingBreakdownStyles = {
 export const redeliverySlotPickerStyles = {
   container: "space-y-2 rounded-md border border-line bg-surface-muted p-3",
   prompt: "text-body-sm font-medium text-ink",
-  controlsRow: "flex gap-2",
+  controlsRow: "flex flex-col gap-2 sm:flex-row",
   selectTrigger: "min-w-0 flex-1",
 } as const;

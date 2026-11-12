@@ -16,6 +16,11 @@ export const STORAGE_KEYS = {
    * checked on a product page has to still be there on the cart and at checkout.
    */
   DELIVERY_LOCATION: "deliveryLocation",
+  /**
+   * The checkout flow in progress (sessionStorage, B-56): a reload on the payment step
+   * resumes it. Cleared when the customer leaves checkout, so a later visit starts fresh.
+   */
+  CHECKOUT_FLOW: "checkoutFlow",
   /** Last submitted storefront search terms (localStorage — powers the recent list). */
   RECENT_SEARCHES: "recentSearches",
   /** sessionStorage flag: a terminal 401 forced a sign-out (one-shot login notice). */

@@ -73,7 +73,9 @@ export function TicketThread({ ticket, mode }: Props) {
   } = state;
 
   const blockedNoticeText = replyClosed
-    ? LABELS.ticketClosedNotice
+    ? canReopen
+      ? LABELS.ticketClosedCanReopenNotice
+      : LABELS.ticketClosedNotice
     : mode === "customer"
       ? LABELS.ticketMustReopenToReplyCustomer
       : LABELS.ticketMustReopenToReplyStaff;

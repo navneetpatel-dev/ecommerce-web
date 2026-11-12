@@ -6,6 +6,7 @@ import { notifyError } from "@/shared/stores/notifications/errorToast.store";
 import { notifySuccess } from "@/shared/stores/notifications/toast.store";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { flattenPages } from "@/shared/api/client/pagination";
 import type { GiftCardView } from "../../api/gift-cards/giftCards.api";
 import {
   useMyGiftCards,
@@ -14,7 +15,8 @@ import {
 
 /** The customer's sent and redeemed gift cards, and emailing a sent one again. */
 export function useMyGiftCardsPage() {
-  const query = useMyGiftCards();
+  const purchasedQuery = useMyGiftCards("purchased");
+  const redeemedQuery = useMyGiftCards("redeemed");
   const resend = useResendGiftCard();
 
   const handleResend = useCallback(
@@ -31,12 +33,33 @@ export function useMyGiftCardsPage() {
     [resend],
   );
 
+  const loadMorePurchased = useCallback(
+    () => void purchasedQuery.fetchNextPage(),
+    [purchasedQuery],
+  );
+  const loadMoreRedeemed = useCallback(
+    () => void redeemedQuery.fetchNextPage(),
+    [redeemedQuery],
+  );
+  const firstError = purchasedQuery.error ?? redeemedQuery.error;
+
   return {
-    purchased: query.data?.purchased ?? [],
-    redeemed: query.data?.redeemed ?? [],
-    loading: query.isLoading,
-    error: query.error
-      ? getApiErrorMessage(query.error, LABELS.genericActionFailed)
+    purchased: flattenPages(purchasedQuery.data),
+    redeemed: flattenPages(redeemedQuery.data),
+    loading: purchasedQuery.isLoading,
+    redeemedLoading: redeemedQuery.isLoading,
+    purchasedPaging: {
+      hasNextPage: purchasedQuery.hasNextPage,
+      isFetchingNextPage: purchasedQuery.isFetchingNextPage,
+      onLoadMore: loadMorePurchased,
+    },
+    redeemedPaging: {
+      hasNextPage: redeemedQuery.hasNextPage,
+      isFetchingNextPage: redeemedQuery.isFetchingNextPage,
+      onLoadMore: loadMoreRedeemed,
+    },
+    error: firstError
+      ? getApiErrorMessage(firstError, LABELS.genericActionFailed)
       : null,
     resendingId: resend.isPending ? (resend.variables ?? null) : null,
     handleResend,

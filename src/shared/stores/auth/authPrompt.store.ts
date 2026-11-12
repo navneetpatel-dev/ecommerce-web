@@ -12,6 +12,8 @@ interface AuthPromptState {
   title: string;
   message: string;
   redirectTo: string | null;
+  /** The control that opened the prompt; focus goes back to it on close (B-08). */
+  returnFocusTo: HTMLElement | null;
   openPrompt: (options: AuthPromptOptions) => void;
   closePrompt: () => void;
 }
@@ -23,9 +25,15 @@ export const useAuthPromptStore = create<AuthPromptState>((set) => ({
   title: DEFAULT_TITLE,
   message: "",
   redirectTo: null,
+  returnFocusTo: null,
   openPrompt: ({ title, message, redirectTo }) =>
     set({
       open: true,
+      returnFocusTo:
+        typeof document !== "undefined" &&
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null,
       title: title ?? DEFAULT_TITLE,
       message,
       redirectTo:

@@ -47,6 +47,9 @@ export function usePlatformSettingsForm() {
           scheduledReportsRecipients: settings.scheduledReportsRecipients ?? [],
           scheduledReportsDayOfWeek: settings.scheduledReportsDayOfWeek ?? 1,
           scheduledReportsHourUtc: settings.scheduledReportsHourUtc ?? 6,
+          maintenanceEnabled: settings.maintenanceEnabled ?? false,
+          maintenanceMessage: settings.maintenanceMessage ?? "",
+          maintenanceUntil: settings.maintenanceUntil ?? null,
         }),
       )
       .catch((err) =>
@@ -120,5 +123,8 @@ export function usePlatformSettingsForm() {
     setScheduledReportsRecipients: setField("scheduledReportsRecipients"),
     setScheduledReportsDayOfWeek: setField("scheduledReportsDayOfWeek"),
     setScheduledReportsHourUtc: setField("scheduledReportsHourUtc"),
+    setMaintenanceEnabled: setField("maintenanceEnabled"),
+    setMaintenanceMessage: setField("maintenanceMessage"),
+    setMaintenanceUntil: setField("maintenanceUntil"),
   };
 }

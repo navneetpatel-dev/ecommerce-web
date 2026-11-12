@@ -5,6 +5,8 @@ import { LABELS } from "@/shared/constants/labels";
 import type { AddressFormValues } from "@/shared/schemas/address.schema";
 
 const emptyAddress: AddressFormValues = {
+  recipientName: "",
+  recipientPhone: "",
   line1: "",
   line2: "",
   city: "",

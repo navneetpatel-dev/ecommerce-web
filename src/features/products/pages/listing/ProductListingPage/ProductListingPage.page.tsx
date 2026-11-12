@@ -32,6 +32,11 @@ export function ProductListingPage() {
     filterOpen,
     filters,
     isFetching,
+    isError,
+    retry,
+    isPastEnd,
+    goToFirstPage,
+    goToLastPage,
     isSearchActive,
     openFilters,
     openSort,
@@ -88,6 +93,7 @@ export function ProductListingPage() {
           minPrice={filters.minPrice}
           maxPrice={filters.maxPrice}
           rating={filters.rating}
+          inStock={Boolean(filters.inStock)}
           onUpdateFilter={updateFilterDebounced}
           onClear={clearFilters}
           hideRatingFilter={isSearchActive}
@@ -103,7 +109,12 @@ export function ProductListingPage() {
             sortDisabled={isSearchActive}
             compareMode={compareMode}
             onToggleCompare={toggleCompareMode}
-            isLoading={!data && isFetching}
+            isLoading={!data && isFetching && !isError}
+            isError={isError}
+            onRetry={retry}
+            isPastEnd={isPastEnd}
+            onFirstPage={goToFirstPage}
+            onLastPage={goToLastPage}
             isEmpty={data?.items.length === 0}
             empty={empty}
             didYouMean={
@@ -129,6 +140,7 @@ export function ProductListingPage() {
         minPrice={filters.minPrice}
         maxPrice={filters.maxPrice}
         rating={filters.rating}
+        inStock={Boolean(filters.inStock)}
         onUpdateFilter={updateFilterDebounced}
         onClear={handleClearFiltersInSheet}
         hideRatingFilter={isSearchActive}

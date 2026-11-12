@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useAuthStore, postAuthPath } from "@/shared/stores/auth/auth.store";
 import { authApi } from "./auth.api";
@@ -161,15 +161,6 @@ export function useChangePassword() {
   return useMutation({
     mutationFn: (input: { currentPassword: string; newPassword: string }) =>
       authApi.changePassword(input),
-  });
-}
-
-export function useSessions() {
-  const accessToken = useAuthStore((s) => s.accessToken);
-  return useQuery({
-    queryKey: sessionKeys.all,
-    queryFn: () => authApi.listSessions(),
-    enabled: Boolean(accessToken),
   });
 }
 

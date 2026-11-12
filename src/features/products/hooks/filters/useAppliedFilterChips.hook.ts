@@ -68,6 +68,14 @@ export function useAppliedFilterChips({
       });
     }
 
+    if (filters.inStock) {
+      chips.push({
+        id: "inStock",
+        label: LABELS.activeFilterInStock,
+        onRemove: () => removeFilters(["inStock"]),
+      });
+    }
+
     if (filters.rating !== undefined) {
       chips.push({
         id: "rating",

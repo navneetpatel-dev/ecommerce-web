@@ -65,6 +65,7 @@ import { tableAriaLabels } from "./labels/tableAriaLabels";
 import { adminQueuesLabels } from "./labels/adminQueues";
 import { clipboardLabels } from "./labels/clipboard";
 import { chartLabels } from "./labels/charts";
+import { redeliveryLabels } from "./labels/redelivery";
 
 export const LABELS = {
   ...commerceLabels,
@@ -129,6 +130,7 @@ export const LABELS = {
   ...adminQueuesLabels,
   ...clipboardLabels,
   ...chartLabels,
+  ...redeliveryLabels,
 } as const;
 
 export { formatExportProcessing } from "./labels/exports";

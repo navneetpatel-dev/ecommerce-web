@@ -12,6 +12,7 @@ import { SupportSettingsSection } from "./SupportSettingsSection.component";
 import { CodSettingsSection } from "./CodSettingsSection.component";
 import { WalletPointsSettingsSection } from "../WalletPointsSettingsSection.component";
 import { ScheduledReportsSettingsSection } from "./ScheduledReportsSettingsSection.component";
+import { MaintenanceSettingsSection } from "./MaintenanceSettingsSection.component";
 import { platformSettingsFormStyles } from "../../../styles/settings/platformSettingsForm.styles";
 
 interface PlatformSettingsFormProps {
@@ -51,6 +52,9 @@ interface PlatformSettingsFormProps {
   onScheduledReportsRecipientsChange: (value: string[]) => void;
   onScheduledReportsDayOfWeekChange: (value: number) => void;
   onScheduledReportsHourUtcChange: (value: number) => void;
+  onMaintenanceEnabledChange: (value: boolean) => void;
+  onMaintenanceMessageChange: (value: string) => void;
+  onMaintenanceUntilChange: (value: string | null) => void;
   onSave: () => void;
 }
 
@@ -129,6 +133,13 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onScheduledReportsHourUtcChange={
             props.onScheduledReportsHourUtcChange
           }
+        />
+
+        <MaintenanceSettingsSection
+          form={form}
+          onMaintenanceEnabledChange={props.onMaintenanceEnabledChange}
+          onMaintenanceMessageChange={props.onMaintenanceMessageChange}
+          onMaintenanceUntilChange={props.onMaintenanceUntilChange}
         />
 
         <FormError error={saveError} fallback={LABELS.couldNotSaveSettings} />

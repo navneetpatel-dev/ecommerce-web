@@ -1,6 +1,7 @@
 import { cn } from "@/shared/utils/dom/cn";
 
 export const filterSidebarStyles = {
+  stockToggle: "py-3",
   aside: (className?: string) =>
     cn(className ?? "hidden w-64 shrink-0 xl:block"),
   container: "sticky top-[88px] space-y-5",
@@ -9,6 +10,7 @@ export const filterSidebarStyles = {
   headerTitle: "text-body-lg font-semibold text-ink",
   clearAllButton:
     "h-auto min-h-0 max-h-none gap-1 px-2 py-1 text-[0.75rem] font-medium text-brand hover:bg-transparent hover:text-brand-hover",
+  priceError: "mt-2 text-body-sm text-danger",
   priceRow: "flex items-center gap-2",
   priceSeparator: "text-body-sm text-ink-faint",
   ratingGroup: "gap-2.5",

@@ -8,6 +8,8 @@ import { SearchDidYouMean } from "@/features/search";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import type { AppliedFilterChip } from "@/features/products/components/filters/AppliedFilterChips";
+import { AlertTriangle, SearchX } from "lucide-react";
+import { LABELS } from "@/shared/constants/labels";
 import type { ListingEmptyState } from "./emptyState";
 
 interface ListingResultsProps {
@@ -23,6 +25,13 @@ interface ListingResultsProps {
   compareMode: boolean;
   onToggleCompare: () => void;
   isLoading: boolean;
+  /** The products request failed (B-13). */
+  isError?: boolean;
+  onRetry?: () => void;
+  /** The page number is past the last page (B-18). */
+  isPastEnd?: boolean;
+  onFirstPage?: () => void;
+  onLastPage?: () => void;
   isEmpty: boolean;
   empty: ListingEmptyState;
   products?: ProductListItem[];
@@ -46,6 +55,11 @@ export function ListingResults({
   compareMode,
   onToggleCompare,
   isLoading,
+  isError = false,
+  onRetry,
+  isPastEnd = false,
+  onFirstPage,
+  onLastPage,
   isEmpty,
   empty,
   products,
@@ -71,8 +85,25 @@ export function ListingResults({
 
       <AppliedFilterChips chips={chips} />
 
-      {isLoading ? (
+      {isError ? (
+        <EmptyState
+          icon={AlertTriangle}
+          heading={LABELS.productsLoadFailed}
+          message={LABELS.productsLoadFailedHint}
+          actionLabel={LABELS.tryAgain}
+          onAction={onRetry}
+        />
+      ) : isLoading ? (
         <ProductGrid loading skeletonCount={12} />
+      ) : isPastEnd ? (
+        <EmptyState
+          icon={SearchX}
+          heading={LABELS.pastLastPage}
+          message={LABELS.pastLastPageHint}
+          actionLabel={LABELS.goToFirstPage}
+          onAction={onFirstPage}
+          secondaryAction={{ label: LABELS.goToLastPage, onClick: onLastPage }}
+        />
       ) : isEmpty ? (
         <>
           {didYouMean ? (

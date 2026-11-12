@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { SHIPPING_METHOD } from "@/shared/constants/statuses";
 import type { ShippingMethod } from "@/shared/constants/statuses";
 import { isNewCheckoutSession } from "../utils/checkout/checkoutSession.utils";
+import type { StoredCheckoutFlow } from "../utils/checkout/checkoutFlowStorage";
 
 interface CheckoutState {
   step: 1 | 2 | 3 | 4;
@@ -17,8 +18,8 @@ interface CheckoutState {
   /**
    * The basket these choices were made for (see checkoutSession.utils). Not rendered — it
    * exists so a *different* basket can be told apart from an edit of the current one, which
-   * is what decides whether the flow starts fresh. Deliberately in memory only: a reload
-   * has no flow to resume, and nothing here should survive the tab.
+   * is what decides whether the flow starts fresh. A reload resumes the flow from
+   * sessionStorage (B-56, see useCheckoutSession); nothing here outlives the tab.
    */
   cartSignature: string | null;
   setStep: (step: CheckoutState["step"]) => void;
@@ -36,6 +37,8 @@ interface CheckoutState {
   setGiftMessage: (giftMessage: string) => void;
   /** Start over: every selection below belongs to a flow that is finished or stale. */
   resetCheckout: () => void;
+  /** Resume a flow saved before a reload (B-56). */
+  restoreCheckout: (flow: StoredCheckoutFlow) => void;
   /** Point the flow at the basket being checked out, resetting it when that basket is new. */
   syncCartSignature: (signature: string) => void;
 }
@@ -108,6 +111,7 @@ export const useCheckoutStore = create<CheckoutState>((set) => ({
     set((s) => ({ giftWrap, giftMessage: giftWrap ? s.giftMessage : "" })),
   setGiftMessage: (giftMessage) => set({ giftMessage }),
   resetCheckout: () => set({ ...initialCheckoutState }),
+  restoreCheckout: (flow) => set({ ...initialCheckoutState, ...flow }),
   syncCartSignature: (signature) =>
     set((s) => {
       if (s.cartSignature === signature) return s;

@@ -9,6 +9,7 @@ import { dataTableHeaderStyles } from "../../styles/data-table/dataTable.styles"
 
 export type DataTableHeaderProps = {
   title?: ReactNode;
+  titleLevel?: 1 | 2;
   toolbar?: ReactNode;
   onRefresh?: () => void;
   from?: number;
@@ -18,6 +19,7 @@ export type DataTableHeaderProps = {
 
 export function DataTableHeader({
   title,
+  titleLevel = 1,
   toolbar,
   onRefresh,
   from,
@@ -31,7 +33,11 @@ export function DataTableHeader({
       <div className={dataTableHeaderStyles.titleGroup}>
         {title ? (
           typeof title === "string" ? (
-            <h1 className={dataTableHeaderStyles.title}>{title}</h1>
+            titleLevel === 1 ? (
+              <h1 className={dataTableHeaderStyles.title}>{title}</h1>
+            ) : (
+              <h2 className={dataTableHeaderStyles.title}>{title}</h2>
+            )
           ) : (
             title
           )

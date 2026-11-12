@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { DataTable } from "@/shared/components/DataTable";
+import { InfiniteLoadMore } from "@/shared/components/DataTable/InfiniteLoadMore.component";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
@@ -44,6 +45,7 @@ export function MyGiftCardsPage() {
 
       <DataTable
         title={LABELS.giftCardsPurchased}
+        titleLevel={2}
         columns={purchasedColumns}
         rows={page.purchased}
         getRowId={getRowId}
@@ -53,16 +55,19 @@ export function MyGiftCardsPage() {
         actions={renderResend}
         rowDetails={false}
       />
+      <InfiniteLoadMore {...page.purchasedPaging} />
 
       <DataTable
         title={LABELS.giftCardsRedeemedByYou}
+        titleLevel={2}
         columns={redeemedColumns}
         rows={page.redeemed}
         getRowId={getRowId}
-        loading={page.loading}
+        loading={page.redeemedLoading}
         emptyMessage={LABELS.giftCardsRedeemedEmpty}
         rowDetails={false}
       />
+      <InfiniteLoadMore {...page.redeemedPaging} />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import {
   useRevokeOtherSessions,
 } from "@/features/auth";
 import { formatSessionDateTime } from "@/shared/utils/formatting/formatDate";
+import { flattenPages } from "@/shared/api/client/pagination";
 
 export interface SessionViewModel {
   family: string;
@@ -38,8 +39,11 @@ export function useSecuritySection() {
   const [revokeOthersOpen, setRevokeOthersOpen] = useState(false);
   const [revokeFamily, setRevokeFamily] = useState<string | null>(null);
 
-  const list = useMemo(() => sessions.data ?? [], [sessions.data]);
-  const hasOthers = list.some((s) => !s.isCurrent);
+  const list = useMemo(() => flattenPages(sessions.data), [sessions.data]);
+  // Paged (B-44): other devices may sit on a page not loaded yet.
+  const totalSessions = sessions.data?.pages[0]?.total ?? list.length;
+  const hasOthers = totalSessions > 1 || list.some((s) => !s.isCurrent);
+  const handleLoadMoreSessions = () => void sessions.fetchNextPage();
   const revokeTarget = list.find((s) => s.family === revokeFamily) ?? null;
 
   const sessionViewModels = useMemo<SessionViewModel[]>(() => {
@@ -93,6 +97,7 @@ export function useSecuritySection() {
     sessions,
     sessionViewModels,
     hasOthers,
+    handleLoadMoreSessions,
     revokeOthersOpen,
     isRevokingOthers: revokeOthers.isPending,
     revokeFamily,

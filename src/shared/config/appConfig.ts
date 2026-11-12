@@ -9,7 +9,16 @@
 
 /** Public site origin (used for SEO metadata, sitemap, robots). */
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:5173"
+  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+).replace(/\/$/, "");
+
+/**
+ * Backend origin for server-side fetches (SEO lookups, Proxy). Same default as the
+ * `/api` rewrite in next.config.mjs. Server code must not go through SITE_URL:
+ * when that was unset every category page resolved to "not found" (B-20).
+ */
+export const SERVER_API_ORIGIN = (
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:9000"
 ).replace(/\/$/, "");
 
 /**

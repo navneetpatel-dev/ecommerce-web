@@ -50,6 +50,7 @@ export const bugsLabels = {
   bugCouldNotCreate: "Could not submit bug report.",
   bugCouldNotLoad: "Could not load bug reports.",
   bugCouldNotLoadDetail: "Could not load this bug report.",
+  bugDetailHeading: "Bug report",
   bugVerifyFixed: "Confirm fixed",
   bugVerifiedThanks: "Thanks — marked as verified.",
   bugAdminQueueDescription:

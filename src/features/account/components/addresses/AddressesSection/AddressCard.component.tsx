@@ -4,6 +4,7 @@ import { Pencil, Star, Trash2 } from "lucide-react";
 import type { Address } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { formatAddressRecipient } from "@/shared/utils/formatting/addressRecipient";
 import { addressCardStyles as styles } from "../../../styles/addresses/addressCard.styles";
 
 interface AddressCardProps {
@@ -33,6 +34,7 @@ export function AddressCard({
     onDelete(addr);
   };
 
+  const recipient = formatAddressRecipient(addr);
   const line2Suffix = addr.line2 ? `, ${addr.line2}` : "";
   const setDefaultDisabled = addr.isDefault || defaulting;
   const setDefaultLabel = addr.isDefault
@@ -42,6 +44,7 @@ export function AddressCard({
   return (
     <li className={styles.card}>
       <div className={styles.details}>
+        {recipient ? <p className={styles.recipient}>{recipient}</p> : null}
         <p className={styles.line1}>
           {addr.line1}
           {line2Suffix}

@@ -5,12 +5,21 @@ import {
 } from "@/shared/constants/geo/pincode";
 import { LABELS } from "@/shared/constants/labels";
 import type { Address, AddressInput } from "@/shared/api/types";
+import {
+  isValidPhoneNumber,
+  normalisePhoneNumber,
+} from "@/shared/utils/validation/phoneNumber";
 
 /**
  * Schema module for the shared address form (Rule 16): field shapes,
  * validation rules and error messages live here — not in components.
  */
 export const addressFormSchema = z.object({
+  recipientName: z.string().trim().min(1, LABELS.enterRecipientName),
+  recipientPhone: z
+    .string()
+    .trim()
+    .refine(isValidPhoneNumber, LABELS.enterRecipientPhone),
   line1: z.string().trim().min(1, LABELS.enterAddressLine1),
   line2: z.string(),
   city: z.string().trim().min(1, LABELS.enterAddressCity),
@@ -38,6 +47,14 @@ export function addressFieldChecks(
 ): AddressFieldCheck[] {
   return [
     {
+      ok: values.recipientName.trim().length > 0,
+      message: LABELS.enterRecipientName,
+    },
+    {
+      ok: isValidPhoneNumber(values.recipientPhone),
+      message: LABELS.enterRecipientPhone,
+    },
+    {
       ok: values.line1.trim().length > 0,
       message: LABELS.enterAddressLine1,
     },
@@ -50,10 +67,19 @@ export function addressFieldChecks(
   ];
 }
 
+/** The signed-in shopper, used to prefill the recipient on a new address. */
+interface RecipientDefaults {
+  name?: string | null;
+  phone?: string | null;
+}
+
 export function toAddressFormState(
   address?: Address | null,
+  defaults: RecipientDefaults = {},
 ): AddressFormValues {
   return {
+    recipientName: address?.recipientName ?? defaults.name ?? "",
+    recipientPhone: address?.recipientPhone ?? defaults.phone ?? "",
     line1: address?.line1 ?? "",
     line2: address?.line2 ?? "",
     city: address?.city ?? "",
@@ -72,6 +98,8 @@ export function toAddressInput(
   hasAddresses: boolean,
 ): AddressInput {
   return {
+    recipientName: values.recipientName.trim(),
+    recipientPhone: normalisePhoneNumber(values.recipientPhone),
     line1: values.line1.trim(),
     line2: values.line2.trim() || null,
     city: values.city.trim(),

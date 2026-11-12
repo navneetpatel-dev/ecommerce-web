@@ -7,6 +7,12 @@ export function ChatWidgetContainer() {
   const chat = useChatWidget();
 
   return (
-    <ChatWidget open={chat.open} onToggle={chat.toggle} onClose={chat.close} />
+    <ChatWidget
+      open={chat.open}
+      onToggle={chat.toggle}
+      onClose={chat.close}
+      triggerRef={chat.triggerRef}
+      supportHours={chat.supportHours}
+    />
   );
 }

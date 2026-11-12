@@ -19,6 +19,9 @@ export function ShareButtonContainer({
   return (
     <ShareButton
       copied={share.copied}
+      copyFailed={share.copyFailed}
+      shareUrl={share.resolvedUrl}
+      onLinkFocus={share.handleLinkFocus}
       onShareNative={share.shareNative}
       onCopyLink={share.copyLink}
       label={label}

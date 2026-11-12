@@ -5,6 +5,7 @@ interface UseFilterSidebarPresentationParams {
   minPrice: number | undefined;
   maxPrice: number | undefined;
   rating: number | undefined;
+  inStock?: boolean;
   facets?: CategoryFacet[];
   facetSelections?: Record<string, string[]>;
 }
@@ -13,6 +14,7 @@ export function useFilterSidebarPresentation({
   minPrice,
   maxPrice,
   rating,
+  inStock = false,
   facets = [],
   facetSelections = {},
 }: UseFilterSidebarPresentationParams) {
@@ -25,6 +27,7 @@ export function useFilterSidebarPresentation({
     minPrice !== undefined ||
     maxPrice !== undefined ||
     rating !== undefined ||
+    inStock ||
     hasFacetSelections;
 
   const defaultOpen = useMemo(

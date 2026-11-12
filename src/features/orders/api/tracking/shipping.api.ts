@@ -1,5 +1,6 @@
 import { apiClient } from "@/shared/api/client/client";
 import { API } from "@/shared/constants/apiRoutes";
+import type { RedeliveryChoice } from "@/shared/utils/orders/redeliveryOptions";
 
 export interface TrackingLookupResult {
   status: string;
@@ -18,9 +19,10 @@ export interface TrackingLookupResult {
 export const shippingApi = {
   tracking: (trackingNumber: string) =>
     apiClient.get<TrackingLookupResult>(API.shipping.tracking(trackingNumber)),
-  reschedule: (trackingNumber: string, slot: string) =>
+  /** A day (tomorrow to 14 days ahead) and a window (B-45). */
+  reschedule: (trackingNumber: string, choice: RedeliveryChoice) =>
     apiClient.post<TrackingLookupResult>(
       API.shipping.reschedule(trackingNumber),
-      { slot },
+      choice,
     ),
 };

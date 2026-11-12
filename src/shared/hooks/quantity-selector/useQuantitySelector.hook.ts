@@ -3,6 +3,7 @@ import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart/cart";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { cn } from "@/shared/utils/dom/cn";
+import { notifyInfo } from "@/shared/stores/notifications/toast.store";
 import {
   DEFAULT_CELL,
   DEFAULT_VALUE,
@@ -58,6 +59,9 @@ export function useQuantitySelector({
       onChange(min);
       return;
     }
+    // B-57: a typed amount over the cap says why it changed instead of snapping silently.
+    if (parsed > max)
+      notifyInfo(formatLabel(LABELS.quantityClampedToMax, { max }));
     onChange(Math.min(max, Math.max(min, parsed)));
   };
 

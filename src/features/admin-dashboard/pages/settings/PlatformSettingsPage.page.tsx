@@ -64,6 +64,9 @@ export function PlatformSettingsPage() {
       }
       onScheduledReportsDayOfWeekChange={settings.setScheduledReportsDayOfWeek}
       onScheduledReportsHourUtcChange={settings.setScheduledReportsHourUtc}
+      onMaintenanceEnabledChange={settings.setMaintenanceEnabled}
+      onMaintenanceMessageChange={settings.setMaintenanceMessage}
+      onMaintenanceUntilChange={settings.setMaintenanceUntil}
       onSave={settings.save}
     />
   );

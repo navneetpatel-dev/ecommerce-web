@@ -8,6 +8,7 @@ import { CopyTextButton } from "@/shared/components/actions/CopyTextButton.compo
 import { RedeliverySlotPicker } from "@/shared/components/orders/RedeliverySlotPicker.component";
 import { subOrderShipmentTrackingStyles as styles } from "../../../styles/sub-order/subOrderShipmentTracking.styles";
 import { useSubOrderShipmentTracking } from "../../../hooks/sub-order/useSubOrderShipmentTracking.hook";
+import type { RedeliveryChoice } from "@/shared/utils/orders/redeliveryOptions";
 import { ShipmentAttemptsList } from "./ShipmentAttemptsList.component";
 
 interface SubOrderShipmentTrackingProps {
@@ -33,7 +34,8 @@ export function SubOrderShipmentTracking({
     failureMessage,
   } = useSubOrderShipmentTracking(shipment, orderId);
 
-  const handleRescheduleSubmit = (slot: string) => void submitReschedule(slot);
+  const handleRescheduleSubmit = (choice: RedeliveryChoice) =>
+    void submitReschedule(choice);
 
   return (
     <div className={styles.root}>

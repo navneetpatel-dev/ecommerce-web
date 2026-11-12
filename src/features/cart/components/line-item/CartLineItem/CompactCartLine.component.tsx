@@ -8,6 +8,7 @@ import { InlineAmountSkeleton } from "@/shared/components/Skeletons/InlineAmount
 import { Badge } from "@/shared/components/ui/badge";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart/cart";
 import { LABELS } from "@/shared/constants/labels";
+import { cn } from "@/shared/utils/dom/cn";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { CartItem } from "@/shared/api/types";
 import { RemoveLineButton } from "./cartLineShared.component";
@@ -37,6 +38,8 @@ export function CompactCartLine(props: CompactCartLineProps) {
     linePending,
     lineTotal,
     unavailableReasonText,
+    priceChangeText,
+    priceChangeDirection,
     handleQuantityChange,
   } = useCartLineViewModel({ item, onUpdateQuantity });
 
@@ -98,6 +101,16 @@ export function CompactCartLine(props: CompactCartLineProps) {
         ) : (
           <span />
         )}
+        {available && priceChangeText ? (
+          <p
+            className={cn(
+              styles.compactPriceChange,
+              styles.priceChangeTone(priceChangeDirection),
+            )}
+          >
+            {priceChangeText}
+          </p>
+        ) : null}
       </div>
     </div>
   );

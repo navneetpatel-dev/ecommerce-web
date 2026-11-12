@@ -12,9 +12,10 @@ export function useAccountOverview() {
   const profileQuery = useAccountProfile();
   const ordersQuery = useMyOrders();
   const wishlistQuery = useWishlist();
+  // One row is enough: the count comes from the pagination total.
   const reviewsQuery = useQuery({
-    queryKey: reviewKeys.mine(),
-    queryFn: () => reviewsApi.myReviews(),
+    queryKey: [...reviewKeys.mine(), "count"],
+    queryFn: () => reviewsApi.myReviews(1, 1),
   });
 
   const ordersPayload = ordersQuery.data;
@@ -30,7 +31,7 @@ export function useAccountOverview() {
     refetch: profileQuery.refetch,
     ordersCount: ordersPayload?.total ?? orders.length,
     wishlistCount: wishlistQuery.data?.items?.length ?? 0,
-    reviewsCount: reviewsQuery.data?.length ?? 0,
+    reviewsCount: reviewsQuery.data?.total ?? 0,
     isLoadingReviews: reviewsQuery.isLoading,
     recentOrders,
     isLoadingStats: ordersQuery.isLoading || wishlistQuery.isLoading,

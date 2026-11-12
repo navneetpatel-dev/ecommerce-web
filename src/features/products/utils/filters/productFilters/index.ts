@@ -7,6 +7,7 @@ export const FILTER_RESERVED_PARAMS = new Set([
   "minPrice",
   "maxPrice",
   "rating",
+  "inStock",
   "sort",
   "page",
   "limit",
@@ -61,6 +62,7 @@ export function parseFilters(params: URLSearchParams): ProductFilters {
     minPrice: parseOptionalNumber(params.get("minPrice")),
     maxPrice: parseOptionalNumber(params.get("maxPrice")),
     rating: parseOptionalNumber(params.get("rating")),
+    inStock: params.get("inStock") === "true" ? true : undefined,
     sort: params.get("sort") || undefined,
     page: parseOptionalNumber(params.get("page")) || 1,
     limit: 20,
@@ -71,7 +73,8 @@ export function parseFilters(params: URLSearchParams): ProductFilters {
 export function filtersToParams(filters: Record<string, unknown>) {
   const p = new URLSearchParams();
   Object.entries(filters).forEach(([k, v]) => {
-    if (v === undefined || v === null || v === "" || k === "limit") return;
+    if (v === undefined || v === null || v === "" || v === false) return;
+    if (k === "limit") return;
     if (k === "page" && v === 1) return;
     if (k === "attrs" && typeof v === "object" && !Array.isArray(v)) {
       for (const [attrKey, values] of Object.entries(
