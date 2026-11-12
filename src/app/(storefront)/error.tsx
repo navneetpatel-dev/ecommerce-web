@@ -3,8 +3,7 @@
 import { useEffect } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { reportError } from "@/shared/lib/errorReporting";
-import { ErrorFallbackActions } from "@/shared/components/system/ErrorFallbackActions.component";
-import { errorBoundaryStyles as styles } from "@/shared/styles/system/errorBoundary.styles";
+import { ErrorState } from "@/shared/components/system/ErrorState.component";
 
 interface StorefrontErrorProps {
   error: Error & { digest?: string };
@@ -21,9 +20,12 @@ export default function StorefrontError({
   }, [error]);
 
   return (
-    <div className={styles.screenCenterCol}>
-      <h2 className={styles.heading}>{LABELS.unexpectedErrorHeading}</h2>
-      <ErrorFallbackActions onReset={reset} />
-    </div>
+    <ErrorState
+      headingLevel="h1"
+      heading={LABELS.unexpectedErrorHeading}
+      message={LABELS.unexpectedErrorBody}
+      onRetry={reset}
+      reference={error.digest}
+    />
   );
 }

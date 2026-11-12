@@ -4,6 +4,7 @@ import { useOrderHistoryPage } from "../../hooks/list/useOrderHistoryPage.hook";
 import { OrdersList } from "../../components/list/OrdersList.component";
 import { EmptyOrdersState } from "../../components/list/EmptyOrdersState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { ErrorState } from "@/shared/components/system/ErrorState.component";
 import { LABELS } from "@/shared/constants/labels";
 import { ordersPagesStyles } from "./ordersPages.styles";
 
@@ -25,18 +26,12 @@ export function OrderHistoryPage() {
   if (history.isError) {
     return (
       <div role="alert" className={ordersPagesStyles.historyErrorContainer}>
-        <div className={ordersPagesStyles.historyErrorBox}>
-          <p className={ordersPagesStyles.historyErrorText}>
-            {LABELS.errorRetryHint}
-          </p>
-          <button
-            type="button"
-            onClick={history.onRetry}
-            className={ordersPagesStyles.historyRetryButton}
-          >
-            {LABELS.retry}
-          </button>
-        </div>
+        <ErrorState
+          headingLevel="h1"
+          heading={LABELS.ordersLoadFailedTitle}
+          message={LABELS.unexpectedErrorBody}
+          onRetry={history.onRetry}
+        />
       </div>
     );
   }

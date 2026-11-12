@@ -7,8 +7,9 @@ import { AppliedFilterChips } from "@/features/products/components/filters/Appli
 import { SearchDidYouMean } from "@/features/search";
 import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
+import { ErrorState } from "@/shared/components/system/ErrorState.component";
 import type { AppliedFilterChip } from "@/features/products/components/filters/AppliedFilterChips";
-import { AlertTriangle, SearchX } from "lucide-react";
+import { SearchX } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import type { ListingEmptyState } from "./emptyState";
 
@@ -86,12 +87,11 @@ export function ListingResults({
       <AppliedFilterChips chips={chips} />
 
       {isError ? (
-        <EmptyState
-          icon={AlertTriangle}
+        <ErrorState
+          size="section"
           heading={LABELS.productsLoadFailed}
           message={LABELS.productsLoadFailedHint}
-          actionLabel={LABELS.tryAgain}
-          onAction={onRetry}
+          onRetry={onRetry}
         />
       ) : isLoading ? (
         <ProductGrid loading skeletonCount={12} />

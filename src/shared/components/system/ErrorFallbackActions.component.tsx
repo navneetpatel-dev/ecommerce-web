@@ -6,28 +6,32 @@ import { PATHS } from "@/shared/constants/paths/paths";
 import { errorBoundaryStyles as styles } from "../../styles/system/errorBoundary.styles";
 
 interface ErrorFallbackActionsProps {
-  /** Re-render the failing segment (App Router `reset`). */
+  /** Re-render the failing segment (App Router `reset`) or re-run the failed query. */
   onReset: () => void;
 }
 
 /**
- * Shared recoverable error fallback used by route error boundaries
- * (Rule 13: failed requests surface a recoverable error with retry).
+ * The recover/escape pair rendered by `ErrorState` (Rule 13: failed requests
+ * surface a recoverable error with retry). Stacks full-width on phones.
  */
 export function ErrorFallbackActions({ onReset }: ErrorFallbackActionsProps) {
+  // Hard navigation: the client router may be part of what failed.
   const goHome = () => {
     window.location.assign(PATHS.home);
   };
 
   return (
-    <>
-      <p className={styles.body}>{LABELS.unexpectedErrorBody}</p>
-      <div className={styles.actions}>
-        <Button onClick={onReset}>{LABELS.retry}</Button>
-        <Button variant="outline" onClick={goHome}>
-          {LABELS.backToHome}
-        </Button>
-      </div>
-    </>
+    <div className={styles.actions}>
+      <Button className={styles.actionButton} onClick={onReset}>
+        {LABELS.retry}
+      </Button>
+      <Button
+        variant="outline"
+        className={styles.actionButton}
+        onClick={goHome}
+      >
+        {LABELS.backToHome}
+      </Button>
+    </div>
   );
 }

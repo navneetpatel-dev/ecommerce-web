@@ -2,6 +2,8 @@ export { AuthGate } from "./AuthGate.component";
 export { BrowseUrlTracker } from "./BrowseUrlTracker.component";
 export { ChatWidget } from "./ChatWidget.component";
 export { ErrorFallbackActions } from "./ErrorFallbackActions.component";
+export { ErrorIllustration } from "./ErrorIllustration.component";
+export { ErrorState } from "./ErrorState.component";
 export { RequirePermission } from "./RequirePermission.component";
 export { RoleSurfaceGuard } from "./RoleSurfaceGuard.component";
 export { ServiceWorkerRegistration } from "./ServiceWorkerRegistration.component";

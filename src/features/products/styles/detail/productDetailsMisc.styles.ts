@@ -13,9 +13,8 @@ export const productDetailsMiscStyles = {
     "text-body-lg leading-relaxed text-ink-muted whitespace-pre-wrap",
 
   // ProductNotFound
-  notFoundContainer: "storefront-container py-16 text-center",
-  notFoundText: "text-ink-muted text-body-lg",
-  notFoundBackButton: "mt-4",
+  notFoundContainer: "storefront-container",
+  notFoundBackButton: "w-full xs:w-auto xs:min-w-[9.5rem]",
 
   // RecentlyViewedSection
   recentEyebrow: "mb-2",

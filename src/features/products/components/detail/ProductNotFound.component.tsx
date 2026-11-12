@@ -2,11 +2,22 @@
 
 import Link from "next/link";
 import { Button } from "@/shared/components/ui/button";
+import { ErrorState } from "@/shared/components/system/ErrorState.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { ErrorFallbackActions } from "@/shared/components/system/ErrorFallbackActions.component";
-import { errorBoundaryStyles as styles } from "@/shared/styles/system/errorBoundary.styles";
-import { productDetailsMiscStyles } from "../../styles/detail/productDetailsMisc.styles";
+import { productDetailsMiscStyles as styles } from "../../styles/detail/productDetailsMisc.styles";
+
+const PRODUCT_FALLBACK_COPY = {
+  // A failed load is not a missing product: say so (B-13).
+  error: {
+    heading: LABELS.productLoadFailedTitle,
+    message: LABELS.productLoadFailedBody,
+  },
+  notFound: {
+    heading: LABELS.productNotFoundTitle,
+    message: LABELS.productNotFoundBody,
+  },
+} as const;
 
 /**
  * Distinguishes a genuine 404 from a failed load (Rule 13):
@@ -18,30 +29,29 @@ export function ProductNotFound(props: {
   onRetry?: () => void;
 }) {
   const { variant = "notFound", onRetry } = props;
+  const copy = PRODUCT_FALLBACK_COPY[variant];
 
   const handleReset = () => onRetry?.();
-  // A failed load is not a missing product: say so (B-13).
-  const message =
-    variant === "error"
-      ? LABELS.productLoadFailedTitle
-      : LABELS.productNotFoundTitle;
+  const retry = variant === "error" ? handleReset : undefined;
 
   return (
-    <div className={productDetailsMiscStyles.notFoundContainer}>
-      <p className={productDetailsMiscStyles.notFoundText}>{message}</p>
-      {variant === "error" ? (
-        <div className={styles.root}>
-          <ErrorFallbackActions onReset={handleReset} />
-        </div>
-      ) : (
-        <Button
-          variant="outline"
-          className={productDetailsMiscStyles.notFoundBackButton}
-          asChild
-        >
-          <Link href={PATHS.home}>{LABELS.backToHome}</Link>
-        </Button>
-      )}
+    <div className={styles.notFoundContainer}>
+      <ErrorState
+        variant={variant}
+        headingLevel="h1"
+        heading={copy.heading}
+        message={copy.message}
+        onRetry={retry}
+        action={
+          <Button
+            variant="outline"
+            className={styles.notFoundBackButton}
+            asChild
+          >
+            <Link href={PATHS.home}>{LABELS.backToHome}</Link>
+          </Button>
+        }
+      />
     </div>
   );
 }

@@ -58,6 +58,7 @@ import { payoutSettlementLabels } from "./labels/payoutSettlement";
 import { couponEditLabels } from "./labels/couponEdit";
 import { reviewMediaLabels } from "./labels/reviewMedia";
 import { notFoundLabels } from "./labels/notFound";
+import { errorStateLabels } from "./labels/errorState";
 import { giftCardsManageLabels } from "./labels/giftCardsManage";
 import { cashbackLabels } from "./labels/cashback";
 import { shipmentStatusAdminLabels } from "./labels/shipmentStatusAdmin";
@@ -124,6 +125,7 @@ export const LABELS = {
   ...couponEditLabels,
   ...reviewMediaLabels,
   ...notFoundLabels,
+  ...errorStateLabels,
   ...giftCardsManageLabels,
   ...cashbackLabels,
   ...shipmentStatusAdminLabels,

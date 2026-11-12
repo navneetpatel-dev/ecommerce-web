@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { MAIN_CONTENT_ID } from "@/shared/constants/a11y/landmarks";
 import { LABELS } from "@/shared/constants/labels";
 import { reportError } from "@/shared/lib/errorReporting";
-import { ErrorFallbackActions } from "@/shared/components/system/ErrorFallbackActions.component";
+import { ErrorState } from "@/shared/components/system/ErrorState.component";
 import { errorBoundaryStyles as styles } from "@/shared/styles/system/errorBoundary.styles";
 
 interface VendorDashboardErrorProps {
@@ -31,8 +31,13 @@ export default function VendorDashboardError({
           tabIndex={-1}
           className={styles.workspaceMain}
         >
-          <h1 className={styles.heading}>{LABELS.unexpectedErrorHeading}</h1>
-          <ErrorFallbackActions onReset={reset} />
+          <ErrorState
+            headingLevel="h1"
+            heading={LABELS.unexpectedErrorHeading}
+            message={LABELS.unexpectedErrorBody}
+            onRetry={reset}
+            reference={error.digest}
+          />
         </main>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
-import { notFoundStyles as styles } from "@/shared/styles/notFound.styles";
+import { ErrorState } from "@/shared/components/system/ErrorState.component";
 
 /**
  * Vendor-workspace not-found: keeps the vendor layout context instead of
@@ -7,9 +7,10 @@ import { notFoundStyles as styles } from "@/shared/styles/notFound.styles";
  */
 export default function VendorDashboardNotFound() {
   return (
-    <div className={styles.workspaceContainer}>
-      <h2 className={styles.workspaceHeading}>{LABELS.notFoundHeading}</h2>
-      <p className={styles.workspaceBody}>{LABELS.notFoundVendorBody}</p>
-    </div>
+    <ErrorState
+      variant="notFound"
+      heading={LABELS.notFoundHeading}
+      message={LABELS.notFoundVendorBody}
+    />
   );
 }

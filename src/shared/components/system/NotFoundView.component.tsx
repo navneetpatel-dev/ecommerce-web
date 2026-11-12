@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { PackageSearch } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { notFoundStyles as styles } from "@/shared/styles/notFound.styles";
+import { ErrorIllustration } from "./ErrorIllustration.component";
 
 /**
  * The storefront 404 body. C-09: a way on besides Home — search (a plain GET form, so it
@@ -13,7 +13,7 @@ import { notFoundStyles as styles } from "@/shared/styles/notFound.styles";
 export function NotFoundView() {
   return (
     <div className={styles.container}>
-      <PackageSearch size={160} className={styles.icon} strokeWidth={1} />
+      <ErrorIllustration variant="notFound" className={styles.icon} />
       <h1 className={styles.heading}>{LABELS.pageNotFound}</h1>
       <p className={styles.body}>{LABELS.pageNotFoundBody}</p>
       <form
