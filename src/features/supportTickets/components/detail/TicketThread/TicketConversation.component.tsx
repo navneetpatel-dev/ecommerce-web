@@ -101,7 +101,14 @@ function TicketVirtualizedMessages({
   parentRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <div ref={parentRef} className={ticketThreadStyles.convContainer}>
+    // B-63: the scroll area takes focus, so the messages can be scrolled from the keyboard.
+    <div
+      ref={parentRef}
+      role="region"
+      aria-label={LABELS.ticketConversation}
+      tabIndex={0}
+      className={ticketThreadStyles.convContainer}
+    >
       <ul
         className={ticketThreadStyles.convViewport}
         style={{ height: `${virtualizer.getTotalSize()}px` }}

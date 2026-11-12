@@ -11,6 +11,9 @@ import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { useOtpLogin, useRequestOtp } from "../../api/otp/otp.queries";
 import { useOtpDigits } from "./useOtpDigits.hook";
 
+/** Matches the server's one-code-per-minute cooldown (C-07). */
+const OTP_RESEND_SECONDS = 60;
+
 export function useOtpInput(length = 6) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -19,7 +22,7 @@ export function useOtpInput(length = 6) {
   const requestOtp = useRequestOtp();
   const otpLogin = useOtpLogin();
   const otp = useOtpDigits(length);
-  const [secondsLeft, setSecondsLeft] = useState(30);
+  const [secondsLeft, setSecondsLeft] = useState(OTP_RESEND_SECONDS);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -49,31 +52,34 @@ export function useOtpInput(length = 6) {
     return () => window.clearTimeout(timer);
   }, [secondsLeft]);
 
-  const updateDigit = (index: number, value: string) => {
-    setError(null);
-    otp.updateDigit(index, value);
-  };
-
-  const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
-    setError(null);
-    otp.handlePaste(event);
-  };
-
-  const verify = async () => {
-    if (!otp.completed) return;
+  const verifyCode = async (code: string) => {
+    if (code.length !== length || isVerifying) return;
     setIsVerifying(true);
     setError(null);
     try {
-      await otpLogin.mutateAsync({
-        email,
-        code: otp.digits.join(""),
-        redirect,
-      });
+      await otpLogin.mutateAsync({ email, code, redirect });
     } catch (verifyError) {
       setError(getApiErrorMessage(verifyError, LABELS.otpVerifyFailed));
     } finally {
       setIsVerifying(false);
     }
+  };
+
+  const verify = () => verifyCode(otp.digits.join(""));
+
+  /** B-09: the sixth digit (typed or pasted) submits; Verify stays for a retry. */
+  const submitWhenComplete = (next: string[] | null) => {
+    if (next?.every(Boolean)) void verifyCode(next.join(""));
+  };
+
+  const updateDigit = (index: number, value: string) => {
+    setError(null);
+    submitWhenComplete(otp.updateDigit(index, value));
+  };
+
+  const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    setError(null);
+    submitWhenComplete(otp.handlePaste(event));
   };
 
   const resend = async () => {
@@ -83,7 +89,7 @@ export function useOtpInput(length = 6) {
       await requestOtp.mutateAsync(email);
       setNeedsVerification(false);
       otp.reset();
-      setSecondsLeft(30);
+      setSecondsLeft(OTP_RESEND_SECONDS);
       setInfo(LABELS.otpSent);
     } catch (requestError) {
       setNeedsVerification(

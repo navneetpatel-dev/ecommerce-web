@@ -109,7 +109,7 @@ export function OrderSummaryAside({
         className={styles.asideCashbackNotice}
         payNow={payNowGrandTotal}
         cashbackAmount={appliedCashbackAmount}
-        code={appliedCouponCode}
+        code={appliedCouponType === "CASHBACK" ? appliedCouponCode : undefined}
       />
     ) : null;
 

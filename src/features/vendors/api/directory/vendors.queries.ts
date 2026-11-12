@@ -1,4 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { nextPageOf } from "@/shared/api/client/pagination";
 import { vendorsApi } from "./vendors.api";
 
 export const vendorKeys = {
@@ -46,5 +52,20 @@ export function useStorefrontVendors(
   return useQuery({
     queryKey: vendorKeys.storefront(params),
     queryFn: () => vendorsApi.listStorefront(params),
+  });
+}
+
+/** All shops page: searchable and paged (B-59; it stopped at the first 48). */
+export function useStorefrontVendorsInfinite(search: string, limit = 24) {
+  return useInfiniteQuery({
+    queryKey: [...vendorKeys.all, "storefront-infinite", { search, limit }],
+    queryFn: ({ pageParam }) =>
+      vendorsApi.listStorefront({
+        page: pageParam,
+        limit,
+        search: search || undefined,
+      }),
+    initialPageParam: 1,
+    getNextPageParam: nextPageOf,
   });
 }

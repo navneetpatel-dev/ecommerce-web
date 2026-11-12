@@ -1,12 +1,9 @@
 import { Button } from "@/shared/components/ui/button";
-import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
 import { newsletterFormStyles } from "@/shared/styles/display/displayComponents.styles";
 import type { ChangeEvent } from "react";
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface NewsletterFormProps {
   idPrefix: string;
@@ -28,14 +25,15 @@ export function NewsletterForm({
   onSubmit,
 }: NewsletterFormProps) {
   const fieldId = `${idPrefix}-newsletter-email`;
-  const canSubmit = EMAIL_RE.test(email.trim());
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     onEmailChange(event.target.value);
   };
 
   return (
-    <form onSubmit={onSubmit} className={newsletterFormStyles.form}>
+    // C-08: Subscribe stays enabled; a bad email gets a message on submit instead of
+    // a silently disabled button (noValidate keeps the browser bubble out of the way).
+    <form onSubmit={onSubmit} noValidate className={newsletterFormStyles.form}>
       <FormFieldFrame
         label={LABELS.email}
         htmlFor={fieldId}
@@ -53,23 +51,20 @@ export function NewsletterForm({
             error={Boolean(error)}
             required
           />
-          <DisabledActionHint
-            disabled={!canSubmit}
-            message={LABELS.enterNewsletterEmail}
+          <Button
+            type="submit"
+            className={newsletterFormStyles.submitBtn}
+            loading={pending}
+            disabled={pending}
           >
-            <Button
-              type="submit"
-              className={newsletterFormStyles.submitBtn}
-              loading={pending}
-              disabled={!canSubmit || pending}
-            >
-              {LABELS.subscribe}
-            </Button>
-          </DisabledActionHint>
+            {LABELS.subscribe}
+          </Button>
         </div>
       </FormFieldFrame>
       {message ? (
-        <p className={newsletterFormStyles.successMessage}>{message}</p>
+        <p role="status" className={newsletterFormStyles.successMessage}>
+          {message}
+        </p>
       ) : null}
     </form>
   );

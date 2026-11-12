@@ -7,6 +7,8 @@ import { otpInputStyles } from "../../styles/forms/otpInput.styles";
 
 interface OtpDigitInputProps {
   index: number;
+  /** How many digits the code has, for "Digit 2 of 6" (B-09). */
+  total: number;
   digit: string;
   /** Set while a verification error is showing — announced per cell. */
   invalid?: boolean;
@@ -19,6 +21,7 @@ interface OtpDigitInputProps {
 /** One single-character OTP cell. */
 export function OtpDigitInput({
   index,
+  total,
   digit,
   invalid,
   onSetInputRef,
@@ -59,7 +62,7 @@ export function OtpDigitInput({
       onKeyDown={handleKeyDown}
       onPaste={onPaste}
       className={otpInputStyles.input}
-      aria-label={formatLabel(LABELS.otpDigit, { index: index + 1 })}
+      aria-label={formatLabel(LABELS.otpDigit, { index: index + 1, total })}
       aria-invalid={invalid ? true : undefined}
     />
   );

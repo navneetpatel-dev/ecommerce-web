@@ -15,6 +15,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { useAddressStep } from "../../hooks/address/useAddressStep.hook";
 import { AddressEmptyState } from "./AddressEmptyState.component";
 import { AddressList } from "./AddressList.component";
+import { AddressSearchField } from "./AddressSearchField.component";
 import { ADDRESS_STEP_STYLES } from "../../styles/address/addressStep.styles";
 
 interface AddressStepProps {
@@ -45,6 +46,10 @@ export function AddressStep({
     addressCountText,
     emptyHintMessage,
     handleSelect,
+    showSearch,
+    searchTerm,
+    visibleAddresses,
+    handleSearchChange,
     canContinue,
   } = useAddressStep({
     addresses,
@@ -91,9 +96,17 @@ export function AddressStep({
         onSubmit={onCreateAddress}
       />
 
-      {hasAddresses && addresses && (
+      {showSearch ? (
+        <AddressSearchField
+          value={searchTerm}
+          resultCount={visibleAddresses.length}
+          onChange={handleSearchChange}
+        />
+      ) : null}
+
+      {hasAddresses && (
         <AddressList
-          addresses={addresses}
+          addresses={visibleAddresses}
           selectedId={selectedId}
           onSelect={handleSelect}
         />

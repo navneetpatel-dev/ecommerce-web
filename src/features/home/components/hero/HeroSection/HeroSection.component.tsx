@@ -3,6 +3,7 @@
 import { AUTOPLAY_MS, DEFAULT_SLIDES } from "../../../constants/hero/constants";
 import { LABELS } from "@/shared/constants/labels";
 import { SlideControls } from "./SlideControls.component";
+import { SlideDots } from "./SlideDots.component";
 import { SlideCopy } from "./SlideCopy.component";
 import { SlideImage } from "./SlideImage.component";
 import { useHeroCarousel } from "../../../hooks/hero/useHeroCarousel.hook";
@@ -27,6 +28,7 @@ export function HeroSection({
     count,
     goNext,
     goPrev,
+    goTo,
     onKeyDown,
     onTouchStart,
     onTouchEnd,
@@ -78,6 +80,9 @@ export function HeroSection({
           />
         </div>
 
+        {count > 1 ? (
+          <SlideDots count={count} index={index} onSelect={goTo} />
+        ) : null}
         {count > 1 ? (
           <SlideControls
             onPrev={goPrev}

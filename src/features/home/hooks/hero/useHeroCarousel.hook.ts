@@ -107,6 +107,7 @@ export function useHeroCarousel({
     count,
     goNext,
     goPrev,
+    goTo,
     onKeyDown,
     onTouchStart,
     onTouchEnd,

@@ -25,4 +25,6 @@ export const searchSuggestionRowStyles = {
   arrowActive: "border-line bg-surface text-brand",
   arrowIcon: "h-3.5 w-3.5",
   srOnly: "sr-only",
+  match:
+    "bg-transparent font-semibold text-ink underline decoration-brand/60 underline-offset-2",
 } as const;

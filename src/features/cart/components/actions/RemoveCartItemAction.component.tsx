@@ -32,7 +32,8 @@ export function RemoveCartItemAction({
   return (
     <CartConfirmAction
       triggerLabel={LABELS.remove}
-      triggerAriaLabel={display === "icon" ? accessibleLabel : undefined}
+      // Both forms name the item (B-58); the visible "Remove" starts the name.
+      triggerAriaLabel={accessibleLabel}
       title={LABELS.removeCartItemTitle}
       description={formatLabel(LABELS.removeCartItemDescription, {
         name: item.product.name,

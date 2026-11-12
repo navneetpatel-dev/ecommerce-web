@@ -47,6 +47,13 @@ export function ImageGalleryStage({
   onPrev,
   onNext,
 }: ImageGalleryStageProps) {
+  // B-29: "Name - view 2" like the thumbnails, so each view is told apart.
+  const mainAlt = hasMultiple
+    ? formatLabel(LABELS.productImageView, {
+        name: productName,
+        index: safeIndex + 1,
+      })
+    : productName;
   const stopStageClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
   };
@@ -71,7 +78,7 @@ export function ImageGalleryStage({
           <div className={styles.mediaInner}>
             <MediaImage
               src={currentUrl}
-              alt={showZoom ? LABELS.imageZoomPreview : productName}
+              alt={showZoom ? LABELS.imageZoomPreview : mainAlt}
               unavailableLabel={LABELS.imageNotAvailable}
               sizes={IMAGE_GALLERY_STAGE_SIZES}
               quality={IMAGE_GALLERY_STAGE_QUALITY}
@@ -86,7 +93,7 @@ export function ImageGalleryStage({
               <div className={styles.transitionPrevWrapper}>
                 <MediaImage
                   src={prevUrl}
-                  alt={productName}
+                  alt=""
                   unavailableLabel={LABELS.imageNotAvailable}
                   sizes={IMAGE_GALLERY_STAGE_SIZES}
                   quality={IMAGE_GALLERY_STAGE_QUALITY}

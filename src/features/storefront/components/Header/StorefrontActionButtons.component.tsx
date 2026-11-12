@@ -18,6 +18,7 @@ import {
 import {
   HEADER_ICON_BTN,
   HEADER_INK_TONE,
+  HEADER_WIDE_BADGE_BTN,
 } from "../../utils/header/headerShared";
 import {
   HeaderSearchButtonSkeleton,
@@ -117,7 +118,7 @@ export function StorefrontActionButtons({
             variant="ghost"
             size="icon-sm"
             asChild
-            className={cn(HEADER_ICON_BTN)}
+            className={cn(HEADER_ICON_BTN, HEADER_WIDE_BADGE_BTN)}
           >
             <Link href={PATHS.wallet} aria-label={walletAriaLabel}>
               <IconBadgeAnchor variant="header-wide">

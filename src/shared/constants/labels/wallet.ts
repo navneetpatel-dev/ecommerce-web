@@ -63,7 +63,7 @@ export const walletLabels = {
     "Cashback pending — credited as points after delivery",
   cashbackCreditedToWallet: "{amount} cashback credited as points",
   cashbackPayNowMessage: "Pay {payNow} now, {cashback} cashback after delivery",
-  couponCashbackApplied: "Cashback offer: {code}",
+  couponCashbackApplied: "Cashback coupon {code}",
   cashbackOfferIncluded: "Includes {offer}",
 
   // Checkout payment methods

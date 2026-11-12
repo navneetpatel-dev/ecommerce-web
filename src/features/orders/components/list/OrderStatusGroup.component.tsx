@@ -2,6 +2,7 @@ import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { ORDER_STATUS_GROUP_STYLES } from "../../styles/list/orderStatusGroup.styles";
 import {
   displayLabel,
+  effectivePaymentStatus,
   type Density,
 } from "../../utils/list/orderStatusDisplay.utils";
 import { CompactStatusLine } from "./CompactStatusLine.component";
@@ -16,10 +17,11 @@ interface OrderStatusGroupProps {
 /** Clearly separates fulfillment vs payment — never two unlabeled identical badges. */
 export function OrderStatusGroup({
   orderStatus,
-  paymentStatus,
+  paymentStatus: rawPaymentStatus,
   density = "comfortable",
   className,
 }: OrderStatusGroupProps) {
+  const paymentStatus = effectivePaymentStatus(orderStatus, rawPaymentStatus);
   const orderLabel = displayLabel("order", orderStatus, density);
   const paymentLabel = paymentStatus
     ? displayLabel("payment", paymentStatus, density)

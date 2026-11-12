@@ -1,4 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
+import { cashbackCouponCode } from "@/shared/utils/pricing/cashbackCouponCode";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { CashbackCouponNotice } from "@/shared/components/notices/CashbackCouponNotice.component";
 import { AmountsUnavailableNotice } from "@/shared/components/notices/AmountsUnavailableNotice.component";
@@ -115,7 +116,7 @@ export function OrderSummaryPanel({
             <CashbackCouponNotice
               payNow={quote?.amountDue ?? estimatedTotal!}
               cashbackAmount={quote?.cashbackAmount ?? 0}
-              code={quote?.appliedCoupon?.code}
+              code={cashbackCouponCode(quote?.appliedCoupon)}
               offerName={quote?.cashbackOffer?.name}
               className={ORDER_SUMMARY_PANEL_STYLES.cashbackNotice}
             />

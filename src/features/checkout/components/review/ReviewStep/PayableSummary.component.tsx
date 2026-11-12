@@ -1,4 +1,5 @@
 import type { CheckoutQuote } from "@/shared/api/types";
+import { cashbackCouponCode } from "@/shared/utils/pricing/cashbackCouponCode";
 import { LABELS } from "@/shared/constants/labels";
 import { CashbackCouponNotice } from "@/shared/components/notices/CashbackCouponNotice.component";
 import { usePayableSummary } from "../../../hooks/review/usePayableSummary.hook";
@@ -69,7 +70,7 @@ export function PayableSummary({ quote, payable }: PayableSummaryProps) {
           className={PAYABLE_SUMMARY_STYLES.cashbackNotice}
           payNow={payable}
           cashbackAmount={quote.cashbackAmount}
-          code={quote.appliedCoupon?.code}
+          code={cashbackCouponCode(quote.appliedCoupon)}
           offerName={quote.cashbackOffer?.name}
         />
       ) : null}

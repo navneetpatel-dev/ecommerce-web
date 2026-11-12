@@ -94,6 +94,16 @@ export function GiftCardRedeemContent() {
           {giftCardsLabels.giftCardRedeemTitle}
         </h1>
         <p className={styles.amount}>{formatInr(giftCard.amount)}</p>
+        {giftCard.fromName ? (
+          <p className={styles.subtitle}>
+            {formatLabel(giftCardsLabels.giftCardFrom, {
+              name: giftCard.fromName,
+            })}
+          </p>
+        ) : null}
+        {giftCard.message ? (
+          <blockquote className={styles.message}>{giftCard.message}</blockquote>
+        ) : null}
 
         {badge ? <p className={badgeStyle}>{badge}</p> : null}
 

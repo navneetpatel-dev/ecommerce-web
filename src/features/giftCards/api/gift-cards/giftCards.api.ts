@@ -35,6 +35,9 @@ export type GiftCardPublicView = {
   status:
     "PENDING" | "ACTIVE" | "REDEEMED" | "EXPIRED" | "CANCELLED" | "FAILED";
   expiresAt: string;
+  /** Who sent it, by name, and their note (C-13); older APIs leave them out. */
+  fromName?: string | null;
+  message?: string | null;
 };
 
 export type PurchaseGiftCardPayload = {

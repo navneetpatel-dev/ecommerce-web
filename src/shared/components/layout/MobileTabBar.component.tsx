@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, ShoppingCart, User } from "lucide-react";
+import { Home, LayoutGrid, Search, ShoppingCart, User } from "lucide-react";
 import { cn } from "@/shared/utils/dom/cn";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -33,6 +33,7 @@ export function MobileTabBar({
   // usePathname can be null outside a mounted router (e.g. isolated renders).
   const pathname = usePathname() ?? "";
   const isHomeActive = pathname === PATHS.home;
+  const isCategoriesActive = pathname.startsWith(PATHS.categories);
   const isAccountActive = pathname.startsWith(PATHS.profile);
 
   return (
@@ -51,6 +52,19 @@ export function MobileTabBar({
       >
         <Home size={20} />
         <span className={mobileTabBarStyles.textLabel}>{LABELS.home}</span>
+      </Link>
+      <Link
+        href={PATHS.categories}
+        aria-current={isCategoriesActive ? "page" : undefined}
+        className={cn(
+          mobileTabBarStyles.tabItem,
+          isCategoriesActive && mobileTabBarStyles.tabItemActive,
+        )}
+      >
+        <LayoutGrid size={20} />
+        <span className={mobileTabBarStyles.textLabel}>
+          {LABELS.categories}
+        </span>
       </Link>
       {isLoading ? (
         <div className={mobileTabBarStyles.tabItem} aria-hidden>

@@ -94,6 +94,9 @@ export function ProfileCard({
             ref={fileInputRef}
             type="file"
             accept="image/png,image/jpeg,image/webp"
+            // B-63: named like the avatar button that opens it, and out of the tab order.
+            aria-label={LABELS.uploadProfilePhoto}
+            tabIndex={-1}
             className={styles.fileInput}
             onChange={handleFileInputChange}
           />

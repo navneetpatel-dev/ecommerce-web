@@ -12,8 +12,10 @@ export const searchBarStyles = {
   searchIconDark: "text-paper/70",
   inputBase:
     "h-11 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none",
-  inputSm: "pl-9 text-body-sm",
-  inputLg: "pl-11",
+  inputSm: "pl-9 text-body-sm lg:pr-10",
+  inputLg: "pl-11 lg:pr-10",
+  shortcutHint:
+    "pointer-events-none absolute right-4 top-1/2 hidden -translate-y-1/2 rounded border border-line bg-surface px-1.5 font-mono text-caption text-ink-muted lg:inline-flex",
   inputExpanded:
     "rounded-none border-0 bg-transparent text-ink shadow-none placeholder:text-ink-faint focus-visible:border-transparent",
   inputCollapsed: "rounded-full",

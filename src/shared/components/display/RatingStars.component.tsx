@@ -48,7 +48,10 @@ export function RatingStars({ value, count, size = "sm" }: RatingStarsProps) {
     starElement(i, adjustedFull, hasHalf, starSize),
   );
   const countElement = noReviews ? (
-    <span className={ratingStarsStyles.count}>{LABELS.noReviewsYet}</span>
+    // aria-hidden: the screen-reader line above already says it (B-29: read twice).
+    <span className={ratingStarsStyles.count} aria-hidden>
+      {LABELS.noReviewsYet}
+    </span>
   ) : (
     count !== undefined && (
       <span className={ratingStarsStyles.count}>({count})</span>

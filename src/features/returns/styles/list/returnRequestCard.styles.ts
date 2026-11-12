@@ -21,6 +21,7 @@ export const returnRequestCardStyles = {
   breakdownValue: "tabular-nums text-ink",
   breakdownMethodGroup:
     "mt-2 space-y-0.5 border-t border-line pt-2 text-body-sm text-ink-muted",
+  breakdownMethodList: "space-y-0.5",
   breakdownGroupCaption:
     "text-[0.75rem] font-medium uppercase tracking-[0.04em] text-ink-muted",
 } as const;

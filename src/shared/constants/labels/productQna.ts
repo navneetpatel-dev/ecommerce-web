@@ -18,6 +18,11 @@ export const productQnaLabels = {
   verifiedCustomer: "Verified customer",
   sellerAnswer: "Seller",
   noAnswersYet: "No answers yet.",
+  answerQuestionFor: "Answer: {question}",
+  // C-01: shopper answers come only from people who received the product.
+  verifiedBuyerAnswer: "{name} · Verified buyer",
+  answerSubmitted: "Thanks. Your answer will appear once it has been checked.",
+  couldNotSubmitAnswer: "Could not post your answer. Please try again.",
   vendorQnaHint: "Answer customer questions about your products.",
   answerQuestion: "Answer",
   answerQuestionTitle: "Answer this question",

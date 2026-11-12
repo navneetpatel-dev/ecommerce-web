@@ -9,10 +9,13 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { cn } from "@/shared/utils/dom/cn";
 import { SEARCH_SUGGESTION_TYPE } from "../../constants/search/index";
 import type { SearchSuggestion } from "../../types/search/index";
+import { HighlightedText } from "./HighlightedText.component";
 import { searchSuggestionRowStyles as styles } from "../../styles/suggestions/searchSuggestionRow.styles";
 
 interface SearchSuggestionRowProps {
   suggestion: SearchSuggestion;
+  /** What the shopper typed, marked in the name (B-15). */
+  term?: string;
   active?: boolean;
   id?: string;
   onSelect: (suggestion: SearchSuggestion) => void;
@@ -96,12 +99,17 @@ function SuggestionThumb({
 
 export function SearchSuggestionRow({
   suggestion,
+  term = "",
   active = false,
   id,
   onSelect,
 }: SearchSuggestionRowProps) {
   const meta = suggestionMeta(suggestion);
   const typeLabel = suggestionTypeLabel(suggestion.type);
+  // One name per option for screen readers: "Audio Plus 225, ₹2,189, Product" (B-15).
+  const accessibleName = [suggestion.name, meta, typeLabel]
+    .filter(Boolean)
+    .join(", ");
 
   const handleMouseDown = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -113,6 +121,7 @@ export function SearchSuggestionRow({
       type="button"
       role="option"
       aria-selected={active}
+      aria-label={accessibleName}
       id={id}
       className={cn(
         styles.rowButton,
@@ -129,7 +138,7 @@ export function SearchSuggestionRow({
       <span className={styles.contentCol}>
         <span className={styles.nameRow}>
           <span className={cn(styles.nameText, active && styles.nameActive)}>
-            {suggestion.name}
+            <HighlightedText text={suggestion.name} term={term} />
           </span>
         </span>
         <span className={styles.metaRow}>
@@ -147,7 +156,6 @@ export function SearchSuggestionRow({
       >
         <ArrowUpRight className={styles.arrowIcon} strokeWidth={1.75} />
       </span>
-      <span className={styles.srOnly}>{LABELS.searchOpenResult}</span>
     </button>
   );
 }

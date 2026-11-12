@@ -43,7 +43,7 @@ export function FullCartLine(props: FullCartLineProps) {
     <li className={styles.fullRoot(available)}>
       <Link
         href={PATHS.product(item.product.slug)}
-        className={styles.fullImageLink}
+        className={styles.fullImageLink(available)}
         tabIndex={imageLinkTabIndex}
       >
         <MediaImage

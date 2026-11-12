@@ -6,6 +6,7 @@ import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint
 import { ResendVerificationByEmail } from "../verify-email/ResendVerificationByEmail.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 interface OtpCardProps {
@@ -72,7 +73,12 @@ export function OtpCard({
   return (
     <AuthFormCard
       title={LABELS.verifyOtpTitle}
-      description={LABELS.verifyOtpHint}
+      description={formatLabel(LABELS.verifyOtpSentTo, { email })}
+      footer={
+        <Link href={PATHS.login} className={authFormsStyles.footerLink}>
+          {LABELS.useDifferentEmail}
+        </Link>
+      }
     >
       <div className={authFormsStyles.formSpace5}>
         <OtpInput

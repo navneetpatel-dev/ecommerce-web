@@ -17,6 +17,7 @@ import { RefundBreakdownLines } from "./RefundBreakdownLines.component";
  */
 export function RefundBreakdown({ row }: { row: ReturnRequest }) {
   const { compositionLines, methodLines } = buildRefundBreakdownLines(row);
+  const methodCaptionId = `refund-method-${row.id}`;
 
   if (compositionLines.length === 0 && methodLines.length === 0) return null;
 
@@ -27,13 +28,19 @@ export function RefundBreakdown({ row }: { row: ReturnRequest }) {
           <RefundBreakdownLines lines={compositionLines} />
         </dl>
       )}
+      {/* B-63: the caption sits outside the <dl> (only dt/dd groups belong inside) and names it. */}
       {methodLines.length > 0 && (
-        <dl className={styles.breakdownMethodGroup}>
-          <div className={styles.breakdownGroupCaption}>
+        <div className={styles.breakdownMethodGroup}>
+          <p id={methodCaptionId} className={styles.breakdownGroupCaption}>
             {returnRefundBreakdownLabels.returnRefundBreakdownMethodCaption}
-          </div>
-          <RefundBreakdownLines lines={methodLines} />
-        </dl>
+          </p>
+          <dl
+            aria-labelledby={methodCaptionId}
+            className={styles.breakdownMethodList}
+          >
+            <RefundBreakdownLines lines={methodLines} />
+          </dl>
+        </div>
       )}
     </>
   );

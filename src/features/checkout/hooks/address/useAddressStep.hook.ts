@@ -1,7 +1,11 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, type ChangeEvent } from "react";
 import type { Address } from "@/shared/api/types";
+import {
+  ADDRESS_SEARCH_THRESHOLD,
+  filterAddresses,
+} from "../../utils/address/addressSearch";
 
 interface UseAddressStepParams {
   addresses?: Address[];
@@ -15,7 +19,15 @@ export function useAddressStep({
   onSelect,
 }: UseAddressStepParams) {
   const [showDialog, setShowDialog] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const hasAddresses = Boolean(addresses?.length);
+  const showSearch = (addresses?.length ?? 0) > ADDRESS_SEARCH_THRESHOLD;
+  const visibleAddresses = useMemo(
+    () => filterAddresses(addresses ?? [], showSearch ? searchTerm : ""),
+    [addresses, searchTerm, showSearch],
+  );
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setSearchTerm(event.target.value);
 
   const addressCountText = useMemo(() => {
     if (!addresses?.length) return "";
@@ -53,6 +65,10 @@ export function useAddressStep({
     addressCountText,
     emptyHintMessage,
     handleSelect,
+    showSearch,
+    searchTerm,
+    visibleAddresses,
+    handleSearchChange,
     canContinue: Boolean(selectedId),
   };
 }

@@ -7,6 +7,10 @@ export const vendorsIndexViewStyles = {
   title:
     "font-display text-[2rem] font-semibold leading-tight text-ink md:text-[2.5rem]",
   subtitle: "mt-3 text-body-lg text-ink-muted",
+  searchRow: "mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4",
+  searchInput: "w-full text-[1rem] sm:max-w-sm sm:text-body",
+  resultCount: "text-body-sm text-ink-muted",
+  srOnly: "sr-only",
   grid: "grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3",
   skeletonCard: "rounded-lg border border-line bg-paper/40 p-4",
   skeletonRow: "flex items-start gap-3",

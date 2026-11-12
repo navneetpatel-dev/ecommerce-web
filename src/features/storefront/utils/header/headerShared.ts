@@ -1,6 +1,9 @@
 export const HEADER_ICON_BTN =
   "relative !overflow-visible [&_svg]:!size-5 max-sm:h-9 max-sm:w-9 max-sm:min-h-9 max-sm:max-h-9";
 
+/** Phones: the wallet button grows to fit the amount shown beside its icon. */
+export const HEADER_WIDE_BADGE_BTN = "max-lg:!w-auto max-lg:px-2";
+
 /**
  * Box geometry of the account menu trigger, shared with its skeleton so the two
  * occupy identical space and the navbar does not shift when the session
