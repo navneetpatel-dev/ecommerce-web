@@ -26,7 +26,13 @@ export const reviewsApi = {
       durationSeconds?: number | null;
     }>;
   }) => apiClient.post<Review>(API.reviews.create, body),
-  myReviews: () => apiClient.get<Review[]>(API.reviews.mine),
+  /** The shopper's reviews, a page at a time (B-44). */
+  myReviews: async (page = 1, limit = 20): Promise<PaginatedList<Review>> =>
+    unwrapPaginatedList(
+      await apiClient.getWithResponse<Review[]>(
+        withQuery(API.reviews.mine, { page, limit }),
+      ),
+    ),
   vote: (reviewId: string, vote: "HELPFUL" | "UNHELPFUL") =>
     apiClient.post<Review>(API.reviews.vote(reviewId), { vote }),
   approve: (id: string) => apiClient.patch<Review>(API.reviews.approve(id), {}),

@@ -9,6 +9,7 @@ import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { MAX_CART_LINE_QUANTITY } from "@/shared/constants/cart/cart";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { cn } from "@/shared/utils/dom/cn";
 import type { CartItem } from "@/shared/api/types";
 import { RemoveCartItemAction } from "../../actions/RemoveCartItemAction.component";
 import { useCartLineViewModel } from "../../../hooks/line-item/useCartLineViewModel.hook";
@@ -31,6 +32,8 @@ export function FullCartLine(props: FullCartLineProps) {
     attrs,
     eachPrice,
     unavailableReasonText,
+    priceChangeText,
+    priceChangeDirection,
     handleQuantityChange,
   } = useCartLineViewModel({ item, onUpdateQuantity });
 
@@ -61,6 +64,16 @@ export function FullCartLine(props: FullCartLineProps) {
               {item.product.name}
             </Link>
             {attrs && <p className={styles.fullAttributes}>{attrs}</p>}
+            {available && priceChangeText ? (
+              <p
+                className={cn(
+                  styles.fullPriceChange,
+                  styles.priceChangeTone(priceChangeDirection),
+                )}
+              >
+                {priceChangeText}
+              </p>
+            ) : null}
             {available ? (
               <p className={styles.fullMobileEachPrice}>{eachPrice}</p>
             ) : (

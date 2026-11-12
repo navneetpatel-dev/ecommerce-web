@@ -91,3 +91,15 @@ export function isPaginatedList<T>(value: unknown): value is PaginatedList<T> {
     typeof (value as PaginatedList<T>).total === "number",
   );
 }
+
+/** `getNextPageParam` for page/limit lists: the next page number, or undefined on the last one. */
+export function nextPageOf(last: PaginatedList<unknown>): number | undefined {
+  return last.page < last.totalPages ? last.page + 1 : undefined;
+}
+
+/** Every loaded page of an infinite page/limit query, in order. */
+export function flattenPages<T>(
+  data: { pages: PaginatedList<T>[] } | undefined,
+): T[] {
+  return data?.pages.flatMap((page) => page.items) ?? [];
+}

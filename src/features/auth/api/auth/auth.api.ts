@@ -1,5 +1,11 @@
 import { apiClient } from "@/shared/api/client/client";
 import { API } from "@/shared/constants/apiRoutes";
+import {
+  unwrapPaginatedList,
+  withQuery,
+  type PaginatedList,
+} from "@/shared/api/client/pagination";
+import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import type { CurrentUser, AuthSession } from "@/shared/api/types";
 import type {
   LoginInput,
@@ -49,7 +55,13 @@ export const authApi = {
     ),
   changePassword: (input: ChangePasswordInput) =>
     apiClient.post<{ message: string }>(API.auth.changePassword, input),
-  listSessions: () => apiClient.get<AuthSession[]>(API.auth.sessions),
+  /** Signed-in devices, this one first, a page at a time (B-44). */
+  listSessions: async (page = 1): Promise<PaginatedList<AuthSession>> =>
+    unwrapPaginatedList(
+      await apiClient.getWithResponse<AuthSession[]>(
+        withQuery(API.auth.sessions, { page, limit: DEFAULT_PAGE_LIMIT }),
+      ),
+    ),
   revokeSession: (family: string) =>
     apiClient.delete<void>(API.auth.session(family)),
   revokeOtherSessions: () => apiClient.delete<void>(API.auth.sessions),

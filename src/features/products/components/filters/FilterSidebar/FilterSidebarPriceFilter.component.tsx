@@ -1,4 +1,5 @@
-import { useCallback } from "react";
+"use client";
+
 import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import {
   AccordionItem,
@@ -8,6 +9,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { filterSidebarStyles } from "../../../styles/filters/filterSidebar.styles";
 import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
+import { usePriceRangeFilter } from "../../../hooks/filters/usePriceRangeFilter.hook";
 
 interface FilterSidebarPriceFilterProps {
   minPrice: number | undefined;
@@ -20,19 +22,7 @@ export function FilterSidebarPriceFilter({
   maxPrice,
   onUpdateFilter,
 }: FilterSidebarPriceFilterProps) {
-  const handleMinPriceChange = useCallback(
-    (value: number | undefined) => {
-      onUpdateFilter("minPrice", value);
-    },
-    [onUpdateFilter],
-  );
-
-  const handleMaxPriceChange = useCallback(
-    (value: number | undefined) => {
-      onUpdateFilter("maxPrice", value);
-    },
-    [onUpdateFilter],
-  );
+  const price = usePriceRangeFilter({ minPrice, maxPrice, onUpdateFilter });
 
   return (
     <AccordionItem value="price">
@@ -45,8 +35,10 @@ export function FilterSidebarPriceFilter({
             placeholder={LABELS.minPricePlaceholder}
             aria-label={LABELS.minimumPrice}
             prefix={CURRENCY_SYMBOL}
-            value={minPrice}
-            onChange={handleMinPriceChange}
+            value={price.min}
+            onChange={price.handleMinChange}
+            aria-invalid={price.error ? true : undefined}
+            aria-describedby={price.error ? price.errorId : undefined}
           />
           <span className={filterSidebarStyles.priceSeparator}>—</span>
           <NumberInput
@@ -55,10 +47,21 @@ export function FilterSidebarPriceFilter({
             placeholder={LABELS.maxPricePlaceholder}
             aria-label={LABELS.maximumPrice}
             prefix={CURRENCY_SYMBOL}
-            value={maxPrice}
-            onChange={handleMaxPriceChange}
+            value={price.max}
+            onChange={price.handleMaxChange}
+            aria-invalid={price.error ? true : undefined}
+            aria-describedby={price.error ? price.errorId : undefined}
           />
         </div>
+        {price.error ? (
+          <p
+            id={price.errorId}
+            role="alert"
+            className={filterSidebarStyles.priceError}
+          >
+            {price.error}
+          </p>
+        ) : null}
       </AccordionContent>
     </AccordionItem>
   );

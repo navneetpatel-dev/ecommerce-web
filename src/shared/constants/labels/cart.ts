@@ -20,6 +20,9 @@ export const cartLabels = {
     "We couldn't update this quantity. Your previous quantity has been restored. Check your connection and try again.",
   couldNotRemoveCartItem:
     "We couldn't remove this item. It has been restored to your cart. Check your connection and try again.",
+  // B-55: a price that moved while the item sat in the cart
+  cartPriceDropped: "Price dropped from {price} since you added it.",
+  cartPriceRose: "Price went up from {price} since you added it.",
   couldNotClearCart:
     "We couldn't clear your cart. Your items have been restored. Check your connection and try again.",
 } as const;

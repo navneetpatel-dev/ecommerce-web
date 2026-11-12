@@ -1,4 +1,6 @@
+import type { FocusEvent } from "react";
 import { Share2, Link as LinkIcon } from "lucide-react";
+import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import {
   Popover,
@@ -10,6 +12,10 @@ import { shareButtonStyles } from "@/shared/styles/display/displayComponents.sty
 
 interface ShareButtonProps {
   copied: boolean;
+  /** Copying failed: show the link to copy by hand (B-28). */
+  copyFailed?: boolean;
+  shareUrl?: string;
+  onLinkFocus?: (event: FocusEvent<HTMLInputElement>) => void;
   onShareNative: () => void;
   onCopyLink: () => void;
   label?: string;
@@ -17,6 +23,9 @@ interface ShareButtonProps {
 
 export function ShareButton({
   copied,
+  copyFailed = false,
+  shareUrl = "",
+  onLinkFocus,
   onShareNative,
   onCopyLink,
   label = LABELS.shareThisProduct,
@@ -36,6 +45,11 @@ export function ShareButton({
       >
         <Share2 size={18} />
       </Button>
+
+      {/* Announces the copy for screen readers and anyone who missed the label change. */}
+      <span role="status" className={shareButtonStyles.status}>
+        {copied ? LABELS.linkCopied : ""}
+      </span>
 
       <Popover>
         <PopoverTrigger asChild>
@@ -61,6 +75,19 @@ export function ShareButton({
               <LinkIcon className={shareButtonStyles.linkIcon} />
               {copyLinkLabel}
             </Button>
+            {copyFailed ? (
+              <div className={shareButtonStyles.manualCopy}>
+                <p className={shareButtonStyles.manualCopyHint}>
+                  {LABELS.copyLinkManually}
+                </p>
+                <Input
+                  readOnly
+                  value={shareUrl}
+                  aria-label={LABELS.productLink}
+                  onFocus={onLinkFocus}
+                />
+              </div>
+            ) : null}
           </div>
         </PopoverContent>
       </Popover>

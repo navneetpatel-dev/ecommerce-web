@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { DetailQuerySkeleton } from "@/shared/components/Skeletons/DetailQuerySkeleton.component";
+import { VisuallyHiddenHeading } from "@/shared/components/a11y/VisuallyHiddenHeading.component";
 import { LABELS } from "@/shared/constants/labels";
 import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { PATHS } from "@/shared/constants/paths/paths";
@@ -32,12 +33,22 @@ function CustomerTicketDetailContent({ id }: { id: string }) {
   });
 
   if (isLoading) {
-    return <DetailQuerySkeleton />;
+    return (
+      <>
+        <VisuallyHiddenHeading>
+          {LABELS.ticketDetailHeading}
+        </VisuallyHiddenHeading>
+        <DetailQuerySkeleton />
+      </>
+    );
   }
 
   if (isEmpty) {
     return (
       <div className={supportTicketsPagesStyles.customerDetailErrorContainer}>
+        <VisuallyHiddenHeading>
+          {LABELS.ticketDetailHeading}
+        </VisuallyHiddenHeading>
         <div className={supportTicketsPagesStyles.errorBox}>
           <QueryErrorAlert
             error={error}

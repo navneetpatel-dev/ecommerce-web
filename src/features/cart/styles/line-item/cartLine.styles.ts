@@ -17,6 +17,11 @@ export const cartLineStyles = {
       isPendingOrNull ? "text-ink-muted" : "text-brand",
     ),
   compactBadge: "w-fit text-[0.6875rem]",
+  compactPriceChange: "col-span-2 text-[0.6875rem] leading-snug",
+  // The wording carries the direction; both stay at body-text contrast.
+  priceChangeTone: (direction: "UP" | "DOWN" | null) =>
+    direction ? "font-medium text-ink" : "",
+  fullPriceChange: "mt-1 text-body-sm",
   compactSkeleton: "h-3.5 w-16",
   /**
    * Drawer-sized cell: the stepper sits in the row's lower half beside the `h-14` thumbnail,

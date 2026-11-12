@@ -49,6 +49,7 @@ export const notificationsRoutes = {
   broadcast: "/api/notifications/broadcast",
   pushPublicKey: "/api/notifications/push/public-key",
   pushSubscribe: "/api/notifications/push/subscribe",
+  unsubscribe: "/api/notifications/unsubscribe",
 } as const;
 
 export const inventoryRoutes = {

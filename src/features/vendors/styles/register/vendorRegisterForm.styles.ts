@@ -1,6 +1,7 @@
 export const vendorRegisterFormStyles = {
   container: "mx-auto max-w-2xl px-4 py-8",
-  cardTitle: "font-display text-[1.75rem]",
+  cardTitle:
+    "font-display text-[1.75rem] font-semibold leading-none tracking-tight",
   auxError: "text-body-sm text-danger",
   submitHint: "w-full",
   businessNameFrame: "sm:col-span-2",

@@ -1,6 +1,12 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { nextPageOf } from "@/shared/api/client/pagination";
 import { useRouter } from "next/navigation";
 import { reviewsApi } from "./reviews.api";
 import { navigate } from "@/shared/utils/navigation/navigate";
@@ -28,9 +34,11 @@ export function useProductReviews(
 
 export function useMyReviews() {
   const accessToken = useAuthStore((s) => s.accessToken);
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: reviewKeys.mine(),
-    queryFn: () => reviewsApi.myReviews(),
+    queryFn: ({ pageParam }) => reviewsApi.myReviews(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: nextPageOf,
     enabled: Boolean(accessToken),
   });
 }

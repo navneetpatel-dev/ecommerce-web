@@ -5,6 +5,7 @@ import { FormActions, FormStack } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import type { Address, AddressInput } from "@/shared/api/types";
 import { AddressFormFields } from "./AddressFormFields.component";
+import { AddressRecipientFields } from "./AddressRecipientFields.component";
 import { useAddressFormBody } from "../../hooks/address-form-dialog/useAddressFormBody.hook";
 
 export interface AddressFormBodyProps {
@@ -56,6 +57,11 @@ export function AddressFormBody({
   return (
     <form onSubmit={handleSubmit}>
       <FormStack>
+        <AddressRecipientFields
+          form={form}
+          getError={getError}
+          onFieldInputChange={handleFieldInputChange}
+        />
         <AddressFormFields
           form={form}
           setField={setField}

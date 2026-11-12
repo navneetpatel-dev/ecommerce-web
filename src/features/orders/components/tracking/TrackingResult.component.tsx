@@ -1,5 +1,6 @@
 "use client";
 
+import type { RedeliveryChoice } from "@/shared/utils/orders/redeliveryOptions";
 import {
   Card,
   CardHeader,
@@ -24,7 +25,7 @@ export function TrackingResult({
   isRescheduling,
 }: {
   result: TrackingLookupResult;
-  onReschedule: (slot: string) => void;
+  onReschedule: (choice: RedeliveryChoice) => void;
   isRescheduling?: boolean;
 }) {
   const { canReschedule, codLabel } = useTrackingResult(result);

@@ -16,6 +16,9 @@ export const navigationLabels = {
   trackOrder: "Track Order",
   helpCenter: "Help Center",
   becomeSeller: "Become a Seller",
+  sellWithUs: "Sell with us",
+  allShops: "All shops",
+  returnsPolicy: "Returns policy",
   vendorDashboard: "Vendor Dashboard",
   /** First focusable element on every page (WCAG 2.4.1). */
   skipToContent: "Skip to main content",

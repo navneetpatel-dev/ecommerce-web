@@ -9,5 +9,7 @@ export const appliedFilterLabels = {
   activeFilterPriceFrom: "{amount} & up",
   activeFilterPriceUpTo: "Up to {amount}",
   activeFilterRating: "{value} stars & up",
+  activeFilterInStock: "In stock only",
+  inStockOnly: "Show in-stock items only",
   activeFilterAttribute: "{name}: {value}",
 } as const;

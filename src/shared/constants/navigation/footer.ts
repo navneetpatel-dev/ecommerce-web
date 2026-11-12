@@ -13,7 +13,9 @@ export const FOOTER_SECTIONS = [
   {
     title: LABELS.customerService,
     links: [
+      { href: PATHS.vendors, label: LABELS.allShops },
       { href: PATHS.orderTracking, label: LABELS.trackOrder },
+      { href: PATHS.returns, label: LABELS.returnsPolicy },
       { href: PATHS.help, label: LABELS.helpCenter },
       { href: PATHS.supportTickets, label: LABELS.mySupportTickets },
       { href: PATHS.bugReports, label: LABELS.reportABug },
@@ -26,8 +28,9 @@ export const FOOTER_SECTIONS = [
   {
     title: LABELS.sellOnMarketplace,
     links: [
+      // The landing page explains selling first; sellers reach their dashboard from their own menu.
+      { href: PATHS.vendor.root, label: LABELS.sellWithUs },
       { href: PATHS.vendor.register, label: LABELS.becomeSeller },
-      { href: PATHS.vendor.overview, label: LABELS.vendorDashboard },
     ],
   },
   {

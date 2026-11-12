@@ -5,6 +5,7 @@ import {
   shippingApi,
   type TrackingLookupResult,
 } from "../../api/tracking/shipping.api";
+import type { RedeliveryChoice } from "@/shared/utils/orders/redeliveryOptions";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
 /** How often a still-moving shipment is re-checked while the page is open. */
@@ -36,11 +37,11 @@ export function useTrackingLookup() {
     }
   };
 
-  const reschedule = async (slot: string) => {
+  const reschedule = async (choice: RedeliveryChoice) => {
     setIsRescheduling(true);
     setError(null);
     try {
-      const data = await shippingApi.reschedule(trackingNumber, slot);
+      const data = await shippingApi.reschedule(trackingNumber, choice);
       setResult(data);
     } catch (rescheduleError) {
       setError(

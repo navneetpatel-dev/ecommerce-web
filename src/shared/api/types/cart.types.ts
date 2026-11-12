@@ -15,6 +15,12 @@ export interface CartItem {
   lineSubtotal?: number;
   /** The line as the customer sees it: GST included, before coupons (API-computed). */
   lineDisplaySubtotal?: number;
+  /** Set by the API when the price moved since the line was added (B-55). */
+  priceChange?: {
+    direction: "UP" | "DOWN";
+    /** GST-inclusive price per piece when it was added. */
+    previousDisplayPrice: number;
+  } | null;
   isAvailable: boolean;
   unavailableReason: UnavailableReason | null;
   product: {

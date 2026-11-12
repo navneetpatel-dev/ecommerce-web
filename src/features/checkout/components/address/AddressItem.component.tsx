@@ -2,6 +2,7 @@ import { memo } from "react";
 import type { Address } from "@/shared/api/types";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
+import { formatAddressRecipient } from "@/shared/utils/formatting/addressRecipient";
 import { ADDRESS_STEP_STYLES } from "../../styles/address/addressStep.styles";
 
 interface AddressItemProps {
@@ -16,6 +17,7 @@ export const AddressItem = memo(function AddressItem({
   onSelect,
 }: AddressItemProps) {
   const handleClick = () => onSelect(address.id);
+  const recipient = formatAddressRecipient(address);
 
   return (
     <li>
@@ -28,6 +30,11 @@ export const AddressItem = memo(function AddressItem({
       >
         <div className={ADDRESS_STEP_STYLES.addressContent}>
           <div className={ADDRESS_STEP_STYLES.addressDetails}>
+            {recipient ? (
+              <p className={ADDRESS_STEP_STYLES.addressRecipient}>
+                {recipient}
+              </p>
+            ) : null}
             <p className={ADDRESS_STEP_STYLES.addressLine1}>
               {address.line1}
               {address.line2 ? `, ${address.line2}` : ""}

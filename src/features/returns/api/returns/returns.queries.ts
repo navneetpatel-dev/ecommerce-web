@@ -1,4 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { nextPageOf } from "@/shared/api/client/pagination";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { returnsApi, type CreateReturnBody } from "./returns.api";
 
@@ -9,9 +15,11 @@ export const returnsKeys = {
 
 export function useMyReturns() {
   const accessToken = useAuthStore((s) => s.accessToken);
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: returnsKeys.mine,
-    queryFn: () => returnsApi.list(),
+    queryFn: ({ pageParam }) => returnsApi.list(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: nextPageOf,
     enabled: Boolean(accessToken),
   });
 }
@@ -31,6 +39,19 @@ export function useCreateReturn() {
     mutationFn: (body: CreateReturnBody) => returnsApi.create(body),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: returnsKeys.mine });
+    },
+  });
+}
+
+export function useCancelReturn() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => returnsApi.cancel(id),
+    onSuccess: (_data, id) => {
+      queryClient.removeQueries({ queryKey: returnsKeys.detail(id) });
+      void queryClient.invalidateQueries({ queryKey: returnsKeys.mine });
+      // The order's line can be returned again.
+      void queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
 }

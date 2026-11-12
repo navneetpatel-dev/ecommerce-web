@@ -21,6 +21,8 @@ interface RegisterCardProps {
   isPending: boolean;
   isSuccess: boolean;
   registeredEmail: string | null;
+  /** Show "Continue with Google" only when the server has it configured (C-03). */
+  googleSignInEnabled?: boolean;
 }
 
 export function RegisterCard({
@@ -30,6 +32,7 @@ export function RegisterCard({
   isPending,
   isSuccess,
   registeredEmail,
+  googleSignInEnabled = false,
 }: RegisterCardProps) {
   const {
     register,
@@ -157,10 +160,12 @@ export function RegisterCard({
         </Button>
       </form>
 
-      <div className={authFormsStyles.oauthGroup}>
-        <OAuthDivider />
-        <OAuthButton provider="google" />
-      </div>
+      {googleSignInEnabled ? (
+        <div className={authFormsStyles.oauthGroup}>
+          <OAuthDivider />
+          <OAuthButton provider="google" />
+        </div>
+      ) : null}
     </AuthFormCard>
   );
 }

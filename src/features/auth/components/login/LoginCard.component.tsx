@@ -30,6 +30,8 @@ interface LoginCardProps {
   unverifiedEmail?: string | null;
   /** True when a terminal 401 forced the sign-out that led here. */
   sessionExpired?: boolean;
+  /** Show "Continue with Google" only when the server has it configured (C-03). */
+  googleSignInEnabled?: boolean;
 }
 
 export function LoginCard({
@@ -41,6 +43,7 @@ export function LoginCard({
   needsVerification,
   unverifiedEmail,
   sessionExpired = false,
+  googleSignInEnabled = false,
 }: LoginCardProps) {
   const { register, trigger } = form;
   const { errors, handleUseEmailCode, onFormSubmit } = useLoginCard({
@@ -99,10 +102,12 @@ export function LoginCard({
         </Button>
       </form>
 
-      <div className={AUTH_OAUTH_CONTAINER}>
-        <OAuthDivider />
-        <OAuthButton provider="google" redirect={oauthRedirect} />
-      </div>
+      {googleSignInEnabled ? (
+        <div className={AUTH_OAUTH_CONTAINER}>
+          <OAuthDivider />
+          <OAuthButton provider="google" redirect={oauthRedirect} />
+        </div>
+      ) : null}
     </AuthFormCard>
   );
 }

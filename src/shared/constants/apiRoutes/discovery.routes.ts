@@ -6,6 +6,7 @@ export interface SearchProductsRouteParams {
   vendorId?: string;
   minPrice?: number;
   maxPrice?: number;
+  inStock?: boolean;
 }
 
 /** Frontend discovery/misc API path builders — must stay aligned with backend mounts under `/api`. */
@@ -22,6 +23,7 @@ export const searchRoutes = {
     if (params.vendorId) sp.set("vendorId", params.vendorId);
     if (params.minPrice != null) sp.set("minPrice", String(params.minPrice));
     if (params.maxPrice != null) sp.set("maxPrice", String(params.maxPrice));
+    if (params.inStock) sp.set("inStock", "true");
     return `/api/search?${sp.toString()}`;
   },
 } as const;

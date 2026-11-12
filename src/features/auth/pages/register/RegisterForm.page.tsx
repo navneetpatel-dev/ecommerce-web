@@ -2,9 +2,11 @@
 
 import { useRegisterForm } from "../../hooks/register/useRegisterForm.hook";
 import { RegisterCard } from "../../components/register/RegisterCard.component";
+import { useGoogleSignInEnabled } from "../../hooks/oauth/useGoogleSignInEnabled.hook";
 import { AuthPageShell } from "../../components/shell/AuthPageShell.component";
 
 export function RegisterForm() {
+  const googleSignInEnabled = useGoogleSignInEnabled();
   const register = useRegisterForm();
 
   return (
@@ -16,6 +18,7 @@ export function RegisterForm() {
         isPending={register.isPending}
         isSuccess={register.isSuccess}
         registeredEmail={register.registeredEmail}
+        googleSignInEnabled={googleSignInEnabled}
       />
     </AuthPageShell>
   );

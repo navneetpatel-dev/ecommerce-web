@@ -103,5 +103,16 @@ export const settingsLabels = {
   scheduledReportsCategoryCatalog: "Catalog & Growth",
   scheduledReportsNoMatches: "No report types match your search",
   scheduledReportsSelectedCount: "selected",
+  // Maintenance mode (B-11)
+  settingsMaintenance: "Maintenance mode",
+  settingsMaintenanceHint:
+    "While on, shoppers see the maintenance page. Admin, seller and sign-in pages stay open.",
+  settingsMaintenanceEnabled: "Storefront status",
+  settingsMaintenanceOn: "Under maintenance",
+  settingsMaintenanceOff: "Open",
+  settingsMaintenanceMessage: "Message to shoppers",
+  settingsMaintenanceMessagePlaceholder: "e.g. We're upgrading checkout.",
+  settingsMaintenanceUntil: "Expected back (optional)",
+  maintenanceBackBy: "We expect to be back by {time}.",
   // Report column headers not already covered above (must match BE REPORT_COLUMN_LABELS keys)
 } as const;

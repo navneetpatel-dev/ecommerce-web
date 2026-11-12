@@ -28,7 +28,7 @@ export { useProfilePage } from "./hooks/profile/useProfilePage.hook";
 export { useImpersonation } from "./hooks/impersonation/useImpersonation.hook";
 export { ImpersonationBanner } from "./components/impersonation/ImpersonationBanner.component";
 export {
-  useSessions,
   useRevokeSession,
   useRevokeOtherSessions,
 } from "./api/auth/auth.queries";
+export { useSessions } from "./api/auth/sessions.queries";

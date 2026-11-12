@@ -30,7 +30,8 @@ export function useCategoryPlp(slugPath: string[]) {
     Object.keys(facetSelections).length > 0 ||
     filters.minPrice !== undefined ||
     filters.maxPrice !== undefined ||
-    filters.rating !== undefined;
+    filters.rating !== undefined ||
+    Boolean(filters.inStock);
 
   const hasSeoNoindex =
     hasActiveFacets || Boolean(filters.sort && filters.sort !== "trending");

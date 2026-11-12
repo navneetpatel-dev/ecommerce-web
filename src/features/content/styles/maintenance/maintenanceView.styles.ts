@@ -4,4 +4,5 @@ export const maintenanceViewStyles = {
   content: "max-w-md space-y-4",
   heading: "font-display text-ink text-display-sm",
   bodyText: "text-body text-ink-muted",
+  backBy: "text-body-sm text-ink font-medium",
 } as const;

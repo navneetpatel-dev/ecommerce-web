@@ -19,6 +19,8 @@ export const HEADER_PRIMARY_LINKS = [
   { href: PATHS.products, label: LABELS.shop },
   { href: PATHS.productsNewest, label: LABELS.newArrivals },
   { href: PATHS.productsTopRated, label: LABELS.topRated },
+  // The phone menu linked All shops; desktop had no way there.
+  { href: PATHS.vendors, label: LABELS.allShops },
 ] as const;
 
 export function useHeader() {

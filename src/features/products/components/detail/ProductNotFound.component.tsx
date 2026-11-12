@@ -20,12 +20,15 @@ export function ProductNotFound(props: {
   const { variant = "notFound", onRetry } = props;
 
   const handleReset = () => onRetry?.();
+  // A failed load is not a missing product: say so (B-13).
+  const message =
+    variant === "error"
+      ? LABELS.productLoadFailedTitle
+      : LABELS.productNotFoundTitle;
 
   return (
     <div className={productDetailsMiscStyles.notFoundContainer}>
-      <p className={productDetailsMiscStyles.notFoundText}>
-        {LABELS.productNotFoundTitle}
-      </p>
+      <p className={productDetailsMiscStyles.notFoundText}>{message}</p>
       {variant === "error" ? (
         <div className={styles.root}>
           <ErrorFallbackActions onReset={handleReset} />

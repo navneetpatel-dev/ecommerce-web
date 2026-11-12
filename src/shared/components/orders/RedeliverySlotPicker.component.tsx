@@ -1,60 +1,71 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
   Select,
   SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { redeliverySlotPickerStyles } from "../../styles/orders/vendorOrderComponents.styles";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { useRedeliverySlotPicker } from "@/shared/hooks/orders/useRedeliverySlotPicker.hook";
+import {
+  REDELIVERY_WINDOW_OPTIONS,
+  type RedeliveryChoice,
+} from "@/shared/utils/orders/redeliveryOptions";
+import { RedeliveryOptionItems } from "./RedeliveryOptionItems.component";
+import { redeliverySlotPickerStyles as styles } from "../../styles/orders/vendorOrderComponents.styles";
 
-export const REDELIVERY_SLOTS = [
-  "Tomorrow morning (9am - 12pm)",
-  "Tomorrow afternoon (12pm - 4pm)",
-  "Tomorrow evening (4pm - 8pm)",
-];
-
-/** Shared slot-picker for rescheduling a failed delivery or return-pickup attempt. */
+/** Shared picker for rescheduling a failed delivery attempt: a day and a window (B-45). */
 export function RedeliverySlotPicker({
   currentSlot,
   onSubmit,
   isPending,
-  prompt = "This attempt didn't go through — pick a new time window:",
+  prompt = LABELS.redeliveryPrompt,
 }: {
   currentSlot?: string | null;
-  onSubmit: (slot: string) => void;
+  onSubmit: (choice: RedeliveryChoice) => void;
   isPending?: boolean;
   prompt?: string;
 }) {
-  const [slot, setSlot] = useState("");
-  const promptText = currentSlot ? `Requested: ${currentSlot}` : prompt;
-  const confirmDisabled = !slot;
-  const handleConfirm = () => onSubmit(slot);
-  const slotOptions = REDELIVERY_SLOTS.map((option) => (
-    <SelectItem key={option} value={option}>
-      {option}
-    </SelectItem>
-  ));
+  const picker = useRedeliverySlotPicker(onSubmit);
+  const promptText = currentSlot
+    ? formatLabel(LABELS.redeliveryRequested, { slot: currentSlot })
+    : prompt;
 
   return (
-    <div className={redeliverySlotPickerStyles.container}>
-      <p className={redeliverySlotPickerStyles.prompt}>{promptText}</p>
-      <div className={redeliverySlotPickerStyles.controlsRow}>
-        <Select value={slot} onValueChange={setSlot}>
-          <SelectTrigger className={redeliverySlotPickerStyles.selectTrigger}>
-            <SelectValue placeholder="Choose a time window" />
+    <div className={styles.container}>
+      <p className={styles.prompt}>{promptText}</p>
+      <div className={styles.controlsRow}>
+        <Select value={picker.date} onValueChange={picker.handleDateChange}>
+          <SelectTrigger
+            className={styles.selectTrigger}
+            aria-label={LABELS.redeliveryDay}
+          >
+            <SelectValue placeholder={LABELS.redeliveryDayPlaceholder} />
           </SelectTrigger>
-          <SelectContent>{slotOptions}</SelectContent>
+          <SelectContent>
+            <RedeliveryOptionItems options={picker.dayOptions} />
+          </SelectContent>
+        </Select>
+        <Select value={picker.window} onValueChange={picker.handleWindowChange}>
+          <SelectTrigger
+            className={styles.selectTrigger}
+            aria-label={LABELS.redeliveryWindow}
+          >
+            <SelectValue placeholder={LABELS.redeliveryWindowPlaceholder} />
+          </SelectTrigger>
+          <SelectContent>
+            <RedeliveryOptionItems options={REDELIVERY_WINDOW_OPTIONS} />
+          </SelectContent>
         </Select>
         <Button
-          disabled={confirmDisabled}
+          disabled={picker.confirmDisabled}
           loading={isPending}
-          onClick={handleConfirm}
+          onClick={picker.handleConfirm}
         >
-          Confirm
+          {LABELS.redeliveryConfirm}
         </Button>
       </div>
     </div>

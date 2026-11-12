@@ -28,6 +28,8 @@ export interface ProductFilters {
   minPrice?: number;
   maxPrice?: number;
   rating?: number;
+  /** Only products with a variant in stock (B-23). */
+  inStock?: boolean;
   sort?: string;
   page?: number;
   limit?: number;
@@ -55,6 +57,7 @@ export const productsApi = {
       minPrice: filters.minPrice,
       maxPrice: filters.maxPrice,
       rating: filters.rating,
+      inStock: filters.inStock ? true : undefined,
       sort: filters.sort,
       page: filters.page,
       limit: filters.limit,

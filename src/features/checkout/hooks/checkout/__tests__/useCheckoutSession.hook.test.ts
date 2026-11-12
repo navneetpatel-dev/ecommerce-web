@@ -83,3 +83,59 @@ describe("useCheckoutSession on arrival", () => {
     expect(useCheckoutStore.getState().addressId).toBe("address-1");
   });
 });
+
+/**
+ * A reload: the page goes away without React's unmount cleanup, so what was saved stays,
+ * and the next load starts with an empty store.
+ */
+function simulateReload(unmount: () => void) {
+  const saved = window.sessionStorage.getItem("checkoutFlow");
+  unmount();
+  if (saved) window.sessionStorage.setItem("checkoutFlow", saved);
+  useCheckoutStore.getState().resetCheckout();
+}
+
+/** B-56: a reload resumes the flow; leaving checkout does not. */
+describe("useCheckoutSession across a reload", () => {
+  beforeEach(() => window.sessionStorage.clear());
+
+  it("resumes the step and choices after a reload", () => {
+    const items = cartItems(["line-a"]);
+    const page = renderHook(() => useCheckoutSession(items));
+    abandonFlowMidWay();
+    simulateReload(page.unmount);
+
+    renderHook(() => useCheckoutSession(undefined));
+
+    const state = useCheckoutStore.getState();
+    expect(state.step).toBe(4);
+    expect(state.addressId).toBe("address-1");
+    expect(state.paymentMethod).toBe("wallet");
+  });
+
+  it("keeps the resumed flow once the same basket loads", () => {
+    const items = cartItems(["line-a"]);
+    const page = renderHook(() => useCheckoutSession(items));
+    abandonFlowMidWay();
+    simulateReload(page.unmount);
+
+    const { rerender } = renderHook(
+      ({ cart }: { cart: CartItem[] | undefined }) => useCheckoutSession(cart),
+      { initialProps: { cart: undefined as CartItem[] | undefined } },
+    );
+    rerender({ cart: items });
+
+    expect(useCheckoutStore.getState().step).toBe(4);
+  });
+
+  it("does not resume after leaving checkout", () => {
+    const items = cartItems(["line-a"]);
+    const first = renderHook(() => useCheckoutSession(items));
+    abandonFlowMidWay();
+    first.unmount();
+
+    renderHook(() => useCheckoutSession(items));
+
+    expect(useCheckoutStore.getState().step).toBe(1);
+  });
+});

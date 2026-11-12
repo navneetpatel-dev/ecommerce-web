@@ -7,13 +7,25 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
+import { InfiniteLoadMore } from "@/shared/components/DataTable/InfiniteLoadMore.component";
+import { flattenPages } from "@/shared/api/client/pagination";
 import { useMyReturns } from "../../api/returns/returns.queries";
 import { ReturnRequestCard } from "../../components/list/ReturnRequestCard.component";
 import { returnsPageStyles as styles } from "./returnsPage.styles";
 
 export function MyReturnsPage() {
-  const { data, isLoading, isError, error, refetch } = useMyReturns();
-  const returns = data ?? [];
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useMyReturns();
+  const returns = flattenPages(data);
+  const handleLoadMore = () => void fetchNextPage();
 
   return (
     <div className={styles.container}>
@@ -57,6 +69,11 @@ export function MyReturnsPage() {
           ))}
         </ul>
       )}
+      <InfiniteLoadMore
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={handleLoadMore}
+      />
     </div>
   );
 }

@@ -97,14 +97,25 @@ export const shareButtonStyles = {
   popoverTitle: "text-body font-medium text-ink",
   copyLinkBtn: "w-full justify-start gap-2 font-normal",
   linkIcon: "h-4 w-4",
+  manualCopy: "space-y-2",
+  manualCopyHint: "text-body-sm text-ink-muted",
+  status: "sr-only",
 } as const;
 
 export const chatWidgetStyles = {
-  container: "fixed bottom-20 left-6 z-40 lg:bottom-6",
+  // Desktop only: on phones the bubble covered the first card's Quick add and
+  // order thumbnails (B-61); help is in the footer and account pages there.
+  container:
+    "fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] left-6 z-40 hidden lg:block",
   panel:
     "mb-4 w-80 rounded-lg border border-line bg-surface-raised p-4 shadow-elevation-3",
   title: "text-[1.125rem] font-semibold text-ink",
   message: "mt-2 text-body text-ink-muted",
+  links: "mt-4 flex flex-col gap-2",
+  primaryLink:
+    "inline-flex items-center justify-center rounded-md bg-brand px-4 py-2 text-body font-medium text-paper hover:bg-brand-hover",
+  link: "text-body font-medium text-brand underline-offset-4 hover:underline",
+  hours: "mt-3 text-body-sm text-ink-muted",
   closeBtn:
     "mt-4 h-auto min-h-0 max-h-none px-0 py-0 text-body-sm font-medium text-brand",
   triggerBtn:

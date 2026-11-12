@@ -40,6 +40,7 @@ export function FilterSheet({
         minPrice={filters.minPrice}
         maxPrice={filters.maxPrice}
         rating={filters.rating}
+        inStock={Boolean(filters.inStock)}
         facets={facets}
         facetSelections={facetSelections}
         onToggleFacet={onToggleFacet}

@@ -6,6 +6,7 @@ import { SHIPMENT_STATUS } from "@/shared/constants/statuses";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { formatCodAmountLabel } from "../../utils/tracking/codLabel";
 import { useRescheduleShipment } from "../../api/tracking/shipping.queries";
+import type { RedeliveryChoice } from "@/shared/utils/orders/redeliveryOptions";
 
 export function useSubOrderShipmentTracking(
   shipment: Shipment,
@@ -14,10 +15,10 @@ export function useSubOrderShipmentTracking(
   const [rescheduleError, setRescheduleError] = useState<string | null>(null);
   const reschedule = useRescheduleShipment(orderId, shipment.trackingNumber);
 
-  const submitReschedule = async (slot: string) => {
+  const submitReschedule = async (choice: RedeliveryChoice) => {
     setRescheduleError(null);
     try {
-      await reschedule.mutateAsync(slot);
+      await reschedule.mutateAsync(choice);
     } catch (error) {
       setRescheduleError(
         getApiErrorMessage(error, "Could not reschedule delivery."),

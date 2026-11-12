@@ -21,7 +21,16 @@ export type CreateReturnBody = {
 };
 
 export const returnsApi = {
-  list: () => apiClient.get<ReturnRequest[]>(API.returns.list),
+  /** The shopper's returns, a page at a time (B-44). */
+  list: async (page = 1): Promise<PaginatedList<ReturnRequest>> =>
+    unwrapPaginatedList(
+      await apiClient.getWithResponse<ReturnRequest[]>(
+        withQuery(API.returns.list, { page, limit: DEFAULT_PAGE_LIMIT }),
+      ),
+    ),
+  /** The shopper withdraws a return nobody has acted on yet (B-50). */
+  cancel: (id: string) =>
+    apiClient.post<{ cancelled: true }>(API.returns.cancel(id), {}),
   listAdmin: async (
     params: PaginationQuery = {},
   ): Promise<PaginatedList<ReturnRequest>> => {

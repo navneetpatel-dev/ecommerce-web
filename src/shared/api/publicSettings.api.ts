@@ -18,6 +18,13 @@ export type PublicPlatformSettings = {
   walletMaxRechargeInr: number;
   walletMaxBalancePoints: number;
   walletRechargePresetsInr: number[];
+  /** Maintenance mode (B-11): the storefront proxy sends shoppers to /maintenance while on. */
+  maintenanceEnabled?: boolean;
+  maintenanceMessage?: string;
+  /** When the store expects to be back (ISO time), or null. */
+  maintenanceUntil?: string | null;
+  /** False when Google sign-in is not configured, so the button is hidden (C-03). */
+  googleSignInEnabled?: boolean;
 };
 
 /** App-wide public platform settings — consumed across features via usePublicSettings. */

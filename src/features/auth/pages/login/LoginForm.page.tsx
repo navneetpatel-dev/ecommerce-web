@@ -2,9 +2,11 @@
 
 import { useLoginForm } from "../../hooks/login/useLoginForm.hook";
 import { LoginCard } from "../../components/login/LoginCard.component";
+import { useGoogleSignInEnabled } from "../../hooks/oauth/useGoogleSignInEnabled.hook";
 import { AuthPageShell } from "../../components/shell/AuthPageShell.component";
 
 export function LoginForm() {
+  const googleSignInEnabled = useGoogleSignInEnabled();
   const login = useLoginForm();
 
   return (
@@ -18,6 +20,7 @@ export function LoginForm() {
         needsVerification={login.needsVerification}
         unverifiedEmail={login.unverifiedEmail}
         sessionExpired={login.forcedSignOut}
+        googleSignInEnabled={googleSignInEnabled}
       />
     </AuthPageShell>
   );

@@ -12,6 +12,7 @@ interface FiltersBottomSheetProps {
   minPrice?: number;
   maxPrice?: number;
   rating?: number;
+  inStock?: boolean;
   onUpdateFilter: (key: string, value: unknown) => void;
   onClear: () => void;
   hideRatingFilter?: boolean;
@@ -23,6 +24,7 @@ export function FiltersBottomSheet({
   minPrice,
   maxPrice,
   rating,
+  inStock = false,
   onUpdateFilter,
   onClear,
   hideRatingFilter = false,
@@ -35,6 +37,7 @@ export function FiltersBottomSheet({
         minPrice={minPrice}
         maxPrice={maxPrice}
         rating={rating}
+        inStock={inStock}
         onUpdateFilter={onUpdateFilter}
         onClear={onClear}
         hideRatingFilter={hideRatingFilter}

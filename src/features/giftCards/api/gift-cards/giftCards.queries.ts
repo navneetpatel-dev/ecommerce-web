@@ -1,5 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { giftCardsApi, type AdminGiftCardListParams } from "./giftCards.api";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { nextPageOf } from "@/shared/api/client/pagination";
+import {
+  giftCardsApi,
+  type AdminGiftCardListParams,
+  type MyGiftCardsSide,
+} from "./giftCards.api";
 
 export const giftCardsKeys = {
   all: ["gift-cards"] as const,
@@ -20,10 +30,12 @@ export function useGiftCardByCode(code: string | undefined) {
   });
 }
 
-export function useMyGiftCards() {
-  return useQuery({
-    queryKey: giftCardsKeys.mine(),
-    queryFn: giftCardsApi.mine,
+export function useMyGiftCards(side: MyGiftCardsSide) {
+  return useInfiniteQuery({
+    queryKey: [...giftCardsKeys.mine(), side],
+    queryFn: ({ pageParam }) => giftCardsApi.mine(side, pageParam),
+    initialPageParam: 1,
+    getNextPageParam: nextPageOf,
   });
 }
 

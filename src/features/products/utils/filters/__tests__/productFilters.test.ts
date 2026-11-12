@@ -1,4 +1,4 @@
-import { describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import assert from "node:assert/strict";
 import {
   filtersToParams,
@@ -34,5 +34,24 @@ describe("facet URL encoding (F-20 system 2)", () => {
 
     const selected = parseFacetSelections(params);
     assert.deepEqual(selected.storage, ["16GB, 128GB", "256GB"]);
+  });
+});
+
+describe("inStock filter (B-23)", () => {
+  it("reads only an explicit true and is never an attribute facet", () => {
+    expect(parseFilters(new URLSearchParams("inStock=true")).inStock).toBe(
+      true,
+    );
+    expect(
+      parseFilters(new URLSearchParams("inStock=false")).inStock,
+    ).toBeUndefined();
+    expect(
+      parseFilters(new URLSearchParams("inStock=true")).attrs,
+    ).toBeUndefined();
+  });
+
+  it("writes true and drops false", () => {
+    expect(filtersToParams({ inStock: true }).toString()).toBe("inStock=true");
+    expect(filtersToParams({ inStock: false }).toString()).toBe("");
   });
 });

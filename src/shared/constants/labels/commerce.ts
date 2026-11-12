@@ -110,6 +110,16 @@ export const commerceLabels = {
   productTags: "Tags",
   approvalQueue: "Approval queue",
   newArrivals: "New Arrivals",
+  productsLoadFailed: "Products could not be loaded",
+  priceRangeInvalid: "Min price must be less than max price",
+  productLoadFailedTitle: "We couldn't load this product",
+  productsLoadFailedHint:
+    "Something went wrong on our side. Try again in a moment.",
+  pastLastPage: "This page is past the end of the results",
+  pastLastPageHint:
+    "There are fewer pages than that. Start again from the first page or jump to the last one.",
+  goToFirstPage: "Go to page 1",
+  goToLastPage: "Go to last page",
   topRated: "Top Rated",
   allProducts: "All Products",
   /** Page heading for a search-results listing (mirrors the results copy style). */
@@ -143,6 +153,18 @@ export const commerceLabels = {
   readArticle: "Read article",
 
   // Auth
+  // Marketing email unsubscribe (B-54)
+  unsubscribeHeading: "Unsubscribe from marketing emails",
+  unsubscribeBody:
+    "You'll stop getting offers and recommendations by email. Order, delivery and account emails still arrive.",
+  unsubscribeConfirm: "Unsubscribe",
+  unsubscribeDoneHeading: "You're unsubscribed",
+  unsubscribeDoneBody:
+    "We won't send you marketing emails. You can turn them back on in your profile at any time.",
+  unsubscribeInvalid:
+    "This unsubscribe link is not valid. Turn marketing emails off in your profile instead.",
+  unsubscribeFailed: "Could not unsubscribe right now. Please try again.",
+  unsubscribeGoToProfile: "Go to profile",
   maintenanceHeading: "Scheduled maintenance",
   maintenanceBody:
     "We're making improvements to the marketplace. Please check back shortly.",

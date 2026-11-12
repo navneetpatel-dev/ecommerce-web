@@ -38,6 +38,9 @@ export interface Address {
   state: string;
   country: string;
   pincode: string;
+  /** Who receives the parcel (B-37); older rows were filled from the account holder. */
+  recipientName?: string | null;
+  recipientPhone?: string | null;
   isDefault: boolean;
   deliveryInstructions?: string | null;
   /** Device-captured GPS fix at save time. */

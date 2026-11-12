@@ -24,6 +24,7 @@ import {
   type AddressFormValues,
 } from "@/shared/schemas/address.schema";
 import type { Address, AddressInput } from "@/shared/api/types";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 
 type AddressField = keyof AddressFormValues;
 
@@ -43,7 +44,13 @@ export function useAddressFormBody({
   onClose,
   onDirtyChange,
 }: UseAddressFormBodyParams) {
-  const [form, setForm] = useState<AddressFormValues>(toFormState(address));
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const [form, setForm] = useState<AddressFormValues>(() =>
+    toFormState(address, {
+      name: currentUser?.name,
+      phone: currentUser?.phone,
+    }),
+  );
   const [formError, setFormError] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
   const { fieldErrors, clearAll, setErrors, getError } =
