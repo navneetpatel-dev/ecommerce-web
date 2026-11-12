@@ -5,7 +5,11 @@ import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { useMediaQuery } from "@/shared/hooks/responsive/use-media-query.hook";
-import { EASE, imageVariants } from "../../../constants/hero/constants";
+import {
+  EASE,
+  HERO_IMAGE_SIZES,
+  imageVariants,
+} from "../../../constants/hero/constants";
 import type { HeroSlide } from "../../../types/hero/types";
 import { heroSectionStyles as styles } from "../../../styles/hero/heroSection.styles";
 
@@ -62,7 +66,7 @@ export function SlideImage(props: SlideImageProps) {
                 unavailableLabel={unavailableCopy}
                 priority={index === 0}
                 imageClassName={styles.mediaCover}
-                sizes="100vw"
+                sizes={HERO_IMAGE_SIZES}
                 className={styles.mediaInset}
               />
             ) : (
