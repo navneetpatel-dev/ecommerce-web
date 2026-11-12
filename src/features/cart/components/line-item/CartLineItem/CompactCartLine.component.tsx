@@ -12,6 +12,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { CartItem } from "@/shared/api/types";
 import { RemoveLineButton } from "./cartLineShared.component";
+import { SetToAvailableButton } from "./SetToAvailableButton.component";
 import { useCartLineViewModel } from "../../../hooks/line-item/useCartLineViewModel.hook";
 import { cartLineStyles as styles } from "../../../styles/line-item/cartLine.styles";
 
@@ -40,7 +41,9 @@ export function CompactCartLine(props: CompactCartLineProps) {
     unavailableReasonText,
     priceChangeText,
     priceChangeDirection,
+    setToAvailableLabel,
     handleQuantityChange,
+    handleSetToAvailable,
   } = useCartLineViewModel({ item, onUpdateQuantity });
 
   const isPendingOrNull = linePending || lineTotal == null;
@@ -97,6 +100,13 @@ export function CompactCartLine(props: CompactCartLineProps) {
             disabledHint={LABELS.cartUpdatingActionHint}
             controlClassName={styles.compactQuantityControl}
             valueClassName={styles.compactQuantityValue}
+          />
+        ) : setToAvailableLabel ? (
+          <SetToAvailableButton
+            label={setToAvailableLabel}
+            onClick={handleSetToAvailable}
+            disabled={disabled}
+            className={styles.setToAvailable}
           />
         ) : (
           <span />
