@@ -4,6 +4,7 @@ import { DangerZoneSection } from "./DangerZoneSection.component";
 import { DeleteAccountDialog } from "./DeleteAccountDialog.component";
 import { LogoutDialog } from "./LogoutDialog.component";
 import { PreferencesSection } from "./PreferencesSection.component";
+import { BrowserNotificationsSetting } from "../../notifications/BrowserNotificationsSetting.component";
 import { usePrivacySection } from "../../../hooks/privacy/usePrivacySection.hook";
 import { privacySectionStyles as styles } from "../../../styles/privacy/privacySection.styles";
 
@@ -48,6 +49,8 @@ export function PrivacySection() {
         onExport={handleExport}
         onSignOutClick={handleOpenLogout}
       />
+
+      <BrowserNotificationsSetting />
 
       <DangerZoneSection
         isWorkspace={isWorkspace}

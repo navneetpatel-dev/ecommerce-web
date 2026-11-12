@@ -5,7 +5,6 @@ import { FormError } from "@/shared/components/forms/FormError.component";
 import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { LABELS } from "@/shared/constants/labels";
 import { ChangePasswordSection } from "@/features/auth";
-import { BrowserNotificationsSetting } from "../notifications/BrowserNotificationsSetting.component";
 import { useSecuritySection } from "../../hooks/security/useSecuritySection.hook";
 import { SessionsList } from "./SessionsList.component";
 import { InfiniteLoadMore } from "@/shared/components/DataTable/InfiniteLoadMore.component";
@@ -46,8 +45,6 @@ export function SecuritySection() {
         isSuccess={profile.isSuccess}
         onChangeAgain={profile.resetSuccess}
       />
-
-      <BrowserNotificationsSetting />
 
       <section className={styles.sessionsSection}>
         <div className={styles.headerRow}>
