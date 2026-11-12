@@ -22,6 +22,7 @@ export const cartLineStyles = {
       isPendingOrNull ? "text-ink-muted" : "text-brand",
     ),
   compactBadge: "w-fit text-[0.6875rem]",
+  setToAvailable: "h-8 w-fit px-3 text-[0.8125rem]",
   compactPriceChange: "col-span-2 text-[0.6875rem] leading-snug",
   // The wording carries the direction; both stay at body-text contrast.
   priceChangeTone: (direction: "UP" | "DOWN" | null) =>

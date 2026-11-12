@@ -1,6 +1,8 @@
 /** Unavailable-item badges and availability copy. Subset of LABELS; merged in labels/index.ts. */
 export const availabilityLabels = {
   unavailableReasonOutOfStock: "Out of stock",
+  unavailableReasonLowStock: "Only {count} left",
+  cartSetQuantityTo: "Set to {count}",
   unavailableReasonProductUnpublished: "No longer available",
   unavailableReasonVendorUnavailable: "Shop unavailable",
   unavailableGeneric: "Unavailable",

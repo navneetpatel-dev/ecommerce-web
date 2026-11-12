@@ -69,6 +69,8 @@ export const CATEGORY_ATTRIBUTE_TYPE_VALUES = Object.values(
 /** Matches backend unavailableReason values on cart/wishlist items. */
 export const UNAVAILABLE_REASON = {
   OUT_OF_STOCK: "OUT_OF_STOCK",
+  /** Some stock left, but less than the line's quantity. */
+  LOW_STOCK: "LOW_STOCK",
   PRODUCT_UNPUBLISHED: "PRODUCT_UNPUBLISHED",
   VENDOR_UNAVAILABLE: "VENDOR_UNAVAILABLE",
 } as const;

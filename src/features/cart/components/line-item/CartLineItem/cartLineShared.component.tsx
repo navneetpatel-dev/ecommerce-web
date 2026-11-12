@@ -4,6 +4,7 @@ import {
   type UnavailableReason,
 } from "@/shared/constants/statuses";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { CartItem } from "@/shared/api/types";
 import { RemoveCartItemAction } from "../../actions/RemoveCartItemAction.component";
 import { cartLineUnitPrice } from "../../../utils/line-item/cartDisplay.utils";
@@ -11,10 +12,15 @@ import { cartLineUnitPrice } from "../../../utils/line-item/cartDisplay.utils";
 /** Maps an unavailability reason to its localized label. */
 export function unavailableLabel(
   reason: UnavailableReason | null | undefined,
+  availableQuantity = 0,
 ): string {
   switch (reason) {
     case UNAVAILABLE_REASON.OUT_OF_STOCK:
       return LABELS.unavailableReasonOutOfStock;
+    case UNAVAILABLE_REASON.LOW_STOCK:
+      return formatLabel(LABELS.unavailableReasonLowStock, {
+        count: availableQuantity,
+      });
     case UNAVAILABLE_REASON.PRODUCT_UNPUBLISHED:
       return LABELS.unavailableReasonProductUnpublished;
     case UNAVAILABLE_REASON.VENDOR_UNAVAILABLE:
