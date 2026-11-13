@@ -9,7 +9,7 @@ export const PRODUCT_DETAIL_CONTENT_STYLES = {
   // DetailTabsSection
   tabsContainer: "mt-12 border-t border-line pt-8 md:mt-16 md:pt-10",
   tabsList:
-    "w-full justify-start gap-1 overflow-x-auto rounded-none border-b border-line bg-transparent p-0",
+    "scrollbar-none h-auto w-full justify-start gap-1 overflow-x-auto overflow-y-hidden overscroll-x-contain rounded-none border-b border-line bg-transparent p-0",
   tabTrigger:
     "rounded-none border-b-2 border-transparent px-3 pb-3 pt-1 data-[state=active]:border-brand data-[state=active]:bg-transparent data-[state=active]:shadow-none",
   tabContent: "py-6 md:py-8",

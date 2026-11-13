@@ -1,53 +1,39 @@
 "use client";
 
 import { useProductQnaView } from "../../hooks/list/useProductQnaView.hook";
-import { useAskQuestionForm } from "../../hooks/ask-form/useAskQuestionForm.hook";
-import { useAnswerQuestionForm } from "../../hooks/answer-form/useAnswerQuestionForm.hook";
+import { useAnsweringState } from "../../hooks/answer-form/useAnsweringState.hook";
 import { ProductQuestions } from "../../components/list/ProductQuestions.component";
-import { AskQuestionForm } from "../../components/ask-form/AskQuestionForm.component";
-import { productQnaStyles } from "../../styles/list/productQna.styles";
+import { AskQuestionCardContainer } from "../ask-form/AskQuestionCardContainer.container";
+import { QnaEditProvider } from "../edit/QnaEditProvider.container";
 
 interface ProductQnaContainerProps {
   productId: string;
+  productSlug: string;
   enabled?: boolean;
 }
 
 export function ProductQnaContainer({
   productId,
+  productSlug,
   enabled = true,
 }: ProductQnaContainerProps) {
-  const view = useProductQnaView(productId, { enabled });
-  const askForm = useAskQuestionForm(productId);
-  const answerForm = useAnswerQuestionForm(productId);
-  const answering = answerForm.canAnswer
-    ? {
-        openId: answerForm.openId,
-        submittedId: answerForm.submittedId,
-        draft: answerForm.draft,
-        isPending: answerForm.isPending,
-        error: answerForm.error,
-        onToggle: answerForm.toggle,
-        onDraftChange: answerForm.handleDraftChange,
-        onSubmit: answerForm.handleSubmit,
-      }
-    : undefined;
+  const view = useProductQnaView(productId, productSlug, { enabled });
+  const answering = useAnsweringState(productId);
 
   return (
-    <div className={productQnaStyles.container}>
-      <AskQuestionForm
-        register={askForm.register}
-        errors={askForm.errors}
-        question={askForm.question}
-        isPending={askForm.isPending}
-        isSuccess={askForm.isSuccess}
-        formLevelError={askForm.formLevelError}
-        onSubmit={askForm.handleSubmit(askForm.onSubmit)}
-      />
+    <QnaEditProvider>
       <ProductQuestions
         questions={view.questions}
+        summary={view.summary}
         isLoading={view.isLoading}
+        isError={view.isError}
+        onRetry={view.retry}
         answering={answering}
+        askSlot={<AskQuestionCardContainer productId={productId} />}
+        allQuestionsHref={view.allQuestionsHref}
+        viewAllLabel={view.viewAllLabel}
+        hasMore={view.hasMore}
       />
-    </div>
+    </QnaEditProvider>
   );
 }

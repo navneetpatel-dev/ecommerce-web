@@ -10,7 +10,7 @@ export const productQnaLabels = {
   couldNotSubmitQuestion: "Could not submit your question. Please try again.",
   questionSubmittedForReview:
     "Thanks! Your question has been submitted for review.",
-  enterYourQuestion: "Enter a question (at least 3 characters)",
+  enterYourQuestion: "Enter a question of at least 10 characters.",
   submitQuestion: "Submit question",
   noQuestionsYet: "No questions yet",
   questionPendingReview: "Pending review",

@@ -1,16 +1,16 @@
 "use client";
 
+import { LockKeyhole } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
-import { loginRequiredDialogStyles } from "../../styles/dialogs/dialogComponents.styles";
+import { loginRequiredDialogStyles as styles } from "../../styles/dialogs/dialogComponents.styles";
 
 interface LoginRequiredDialogProps {
   open: boolean;
@@ -24,6 +24,10 @@ interface LoginRequiredDialogProps {
   onCloseAutoFocus: (event: Event) => void;
 }
 
+/**
+ * The sign-in interruption. Actions stack full-width in priority order
+ * (Log in → Create an account → Not now) so none of them wraps on its own.
+ */
 export function LoginRequiredDialog({
   open,
   title,
@@ -37,24 +41,39 @@ export function LoginRequiredDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={loginRequiredDialogStyles.content}
+        className={styles.content}
         onCloseAutoFocus={onCloseAutoFocus}
       >
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{message}</DialogDescription>
+        <DialogHeader className={styles.header}>
+          <span className={styles.iconWrap} aria-hidden>
+            <LockKeyhole className={styles.icon} />
+          </span>
+          <DialogTitle className={styles.title}>{title}</DialogTitle>
+          <DialogDescription className={styles.description}>
+            {message}
+          </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Button type="button" variant="outline" onClick={onCancel}>
-            {LABELS.cancel}
-          </Button>
-          <Button type="button" variant="outline" onClick={onRegister}>
-            {LABELS.createAccount}
-          </Button>
-          <Button type="button" onClick={onLogin}>
+        <div className={styles.actions}>
+          <Button type="button" className={styles.action} onClick={onLogin}>
             {LABELS.logIn}
           </Button>
-        </DialogFooter>
+          <Button
+            type="button"
+            variant="outline"
+            className={styles.action}
+            onClick={onRegister}
+          >
+            {LABELS.createAccount}
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            className={styles.action}
+            onClick={onCancel}
+          >
+            {LABELS.signInPromptNotNow}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

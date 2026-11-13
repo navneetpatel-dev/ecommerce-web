@@ -1,6 +1,9 @@
 /** Authentication copy. Subset of LABELS; merged in labels/index.ts. */
 export const authLabels = {
   logIn: "Log in",
+  loginToContinueNotice:
+    "Log in to continue. We'll take you right back to where you were.",
+  signInPromptNotNow: "Not now",
   backToLogin: "Back to login",
   alreadyHaveAccount: "Already have an account?",
   welcomeBack: "Welcome back",

@@ -3,6 +3,9 @@ import { Button } from "@/shared/components/ui/button";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { FormError } from "@/shared/components/forms/FormError.component";
 import { LABELS } from "@/shared/constants/labels";
+import { UGC_LIMITS } from "@/shared/constants/ugc/ugcLimits";
+import { isUgcTextValid } from "@/shared/schemas/ugcText.schema";
+import { CharacterCount } from "@/shared/components/forms/CharacterCount.component";
 import { productQnaStyles as styles } from "../../styles/list/productQna.styles";
 
 interface AnswerQuestionFormProps {
@@ -26,9 +29,10 @@ export function AnswerQuestionForm({
   onCancel,
 }: AnswerQuestionFormProps) {
   const fieldId = `answer-${questionId}`;
+  const countId = `${fieldId}-count`;
   return (
     <form onSubmit={onSubmit} className={styles.answerForm}>
-      <label htmlFor={fieldId} className={styles.answerAuthor}>
+      <label htmlFor={fieldId} className={styles.answerFormLabel}>
         {LABELS.yourAnswer}
       </label>
       <Textarea
@@ -36,16 +40,18 @@ export function AnswerQuestionForm({
         value={draft}
         onChange={onDraftChange}
         rows={3}
-        maxLength={2000}
+        maxLength={UGC_LIMITS.answer.max}
+        aria-describedby={countId}
         required
       />
+      <CharacterCount id={countId} value={draft} limits={UGC_LIMITS.answer} />
       <FormError error={error} fallback={LABELS.couldNotSubmitAnswer} />
       <div className={styles.answerFormButtons}>
         <Button
           type="submit"
           size="sm"
           loading={isPending}
-          disabled={!draft.trim()}
+          disabled={!isUgcTextValid(draft, UGC_LIMITS.answer)}
         >
           {LABELS.submitAnswer}
         </Button>

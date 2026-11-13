@@ -278,6 +278,64 @@ body {
   color-scheme: dark;
 }
 
+/* ============================================
+   Scrollbars — themed everywhere (page + every scroll container)
+   The page scrollbar belongs to <html>, so the root needs the colour scheme
+   too (it was only on <body>, which left a light scrollbar in dark mode).
+   Chromium/Firefox use the standard properties; Safari only understands the
+   ::-webkit-scrollbar pseudo-elements, which are scoped to engines without
+   `scrollbar-color` so Chromium doesn't get two competing definitions.
+   ============================================ */
+:root {
+  color-scheme: light;
+  --scrollbar-thumb: color-mix(in oklab, var(--ink) 24%, transparent);
+  --scrollbar-thumb-hover: color-mix(in oklab, var(--brand) 75%, transparent);
+  --scrollbar-track: transparent;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* In the base layer so Tailwind utilities (e.g. `scrollbar-none`, arbitrary
+   `[scrollbar-width:none]`) still override it per element. */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+
+  html {
+    scrollbar-color: var(--scrollbar-thumb) var(--paper);
+  }
+}
+
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 9999px;
+    background-color: var(--scrollbar-thumb);
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
 /* Display type — editorial tracking at Fraunces sizes (≥28px) */
 .font-display {
   letter-spacing: -0.01em;

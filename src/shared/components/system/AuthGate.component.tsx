@@ -1,49 +1,32 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
-import { useAuthPromptStore } from "@/shared/stores/auth/authPrompt.store";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { currentReturnPath } from "@/shared/utils/auth/authReturn";
 
 interface AuthGateProps {
   children: React.ReactNode;
-  promptTitle?: string;
-  promptMessage?: string;
 }
 
-export function AuthGate({
-  children,
-  promptTitle = "Sign in to continue",
-  promptMessage = "Please log in to access this page.",
-}: AuthGateProps) {
+/**
+ * Page-level sign-in gate. A signed-out visitor is sent straight to the login
+ * page (which explains why), carrying the full path + query to come back to.
+ * It deliberately does not also open the sign-in prompt: that stacked a modal
+ * on top of the login form it was asking them to open.
+ */
+export function AuthGate({ children }: AuthGateProps) {
   const router = useRouter();
-  const pathname = usePathname();
   const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
   const accessToken = useAuthStore((s) => s.accessToken);
-  const openPrompt = useAuthPromptStore((s) => s.openPrompt);
 
   const isAuthenticated = Boolean(accessToken);
 
   useEffect(() => {
-    if (!authBootstrapped) return;
-    if (!isAuthenticated) {
-      openPrompt({
-        title: promptTitle,
-        message: promptMessage,
-        redirectTo: pathname,
-      });
-      router.replace(PATHS.loginWithRedirect(pathname));
-    }
-  }, [
-    authBootstrapped,
-    isAuthenticated,
-    openPrompt,
-    pathname,
-    promptMessage,
-    promptTitle,
-    router,
-  ]);
+    if (!authBootstrapped || isAuthenticated) return;
+    router.replace(PATHS.loginWithRedirect(currentReturnPath()));
+  }, [authBootstrapped, isAuthenticated, router]);
 
   if (!authBootstrapped || !isAuthenticated) {
     return null;

@@ -2,6 +2,16 @@ import { OVERLAY_BACKDROP } from "../common.styles";
 
 export const loginRequiredDialogStyles = {
   content: "max-w-[400px]",
+  header: "items-center space-y-2 text-center sm:text-center",
+  iconWrap:
+    "mb-1 flex h-12 w-12 items-center justify-center rounded-full border border-brand/25 bg-brand-subtle text-brand",
+  icon: "h-5 w-5",
+  title: "font-display text-[1.375rem] tracking-tight text-ink",
+  description: "max-w-[32ch] text-body leading-relaxed text-ink-muted",
+  /* Stacked, full-width actions at every width: three side-by-side buttons
+     wrapped onto two ragged rows in a 400px dialog. */
+  actions: "flex flex-col gap-2.5",
+  action: "h-11 w-full",
 } as const;
 
 export const statusDialogStyles = {

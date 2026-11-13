@@ -9,7 +9,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { PasswordInputContainer } from "@/shared/containers/forms/PasswordInputContainer.container";
 import { LABELS } from "@/shared/constants/labels";
-import { PATHS } from "@/shared/constants/paths/paths";
+import { useAuthReturnPath } from "@/shared/hooks/auth/useAuthReturnPath.hook";
 import type { RegisterInput } from "../../schemas/auth/auth.schema";
 import { RegisterTermsField } from "./RegisterTermsField.component";
 import { authFormsStyles } from "../../styles/shell/authForms.styles";
@@ -34,6 +34,7 @@ export function RegisterCard({
   registeredEmail,
   googleSignInEnabled = false,
 }: RegisterCardProps) {
+  const { loginHref, returnPath } = useAuthReturnPath();
   const {
     register,
     handleSubmit,
@@ -56,7 +57,7 @@ export function RegisterCard({
         title={LABELS.registrationSuccessTitle}
         description={LABELS.registrationSuccessNextSteps}
         footer={
-          <Link href={PATHS.login} className={authFormsStyles.footerLink}>
+          <Link href={loginHref} className={authFormsStyles.footerLink}>
             {LABELS.backToLogin}
           </Link>
         }
@@ -80,7 +81,7 @@ export function RegisterCard({
       footer={
         <p className={authFormsStyles.footerText}>
           {LABELS.alreadyHaveAccount}{" "}
-          <Link href={PATHS.login} className={authFormsStyles.footerLinkInline}>
+          <Link href={loginHref} className={authFormsStyles.footerLinkInline}>
             {LABELS.logIn}
           </Link>
         </p>
@@ -163,7 +164,7 @@ export function RegisterCard({
       {googleSignInEnabled ? (
         <div className={authFormsStyles.oauthGroup}>
           <OAuthDivider />
-          <OAuthButton provider="google" />
+          <OAuthButton provider="google" redirect={returnPath} />
         </div>
       ) : null}
     </AuthFormCard>

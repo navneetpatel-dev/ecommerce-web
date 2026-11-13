@@ -9,6 +9,9 @@ import {
 } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
+import { UGC_LIMITS } from "@/shared/constants/ugc/ugcLimits";
+import { isUgcTextValid } from "@/shared/schemas/ugcText.schema";
+import { CharacterCount } from "@/shared/components/forms/CharacterCount.component";
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import type { AskQuestionFormInput } from "../../schemas/ask-form/productQna.schema";
 import { productQnaStyles as styles } from "../../styles/list/productQna.styles";
@@ -32,7 +35,7 @@ export function AskQuestionForm({
   formLevelError = null,
   onSubmit,
 }: AskQuestionFormProps) {
-  const canSubmit = question.trim().length >= 3;
+  const canSubmit = isUgcTextValid(question, UGC_LIMITS.question);
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
@@ -53,6 +56,13 @@ export function AskQuestionForm({
               {...register("question")}
               placeholder={LABELS.questionPlaceholder}
               rows={3}
+              maxLength={UGC_LIMITS.question.max}
+              aria-describedby="question-count"
+            />
+            <CharacterCount
+              id="question-count"
+              value={question}
+              limits={UGC_LIMITS.question}
             />
           </FormFieldFrame>
         </FormSection>

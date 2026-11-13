@@ -59,6 +59,7 @@ import { couponEditLabels } from "./labels/couponEdit";
 import { reviewMediaLabels } from "./labels/reviewMedia";
 import { notFoundLabels } from "./labels/notFound";
 import { errorStateLabels } from "./labels/errorState";
+import { productReviewsLabels } from "./labels/productReviews";
 import { giftCardsManageLabels } from "./labels/giftCardsManage";
 import { cashbackLabels } from "./labels/cashback";
 import { shipmentStatusAdminLabels } from "./labels/shipmentStatusAdmin";
@@ -126,6 +127,7 @@ export const LABELS = {
   ...reviewMediaLabels,
   ...notFoundLabels,
   ...errorStateLabels,
+  ...productReviewsLabels,
   ...giftCardsManageLabels,
   ...cashbackLabels,
   ...shipmentStatusAdminLabels,

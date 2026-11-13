@@ -15,6 +15,7 @@ const mockReplace = vi.fn();
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: mockPush, replace: mockReplace }),
+  useSearchParams: () => new URLSearchParams(),
 }));
 
 function LoginCardTestHarness() {

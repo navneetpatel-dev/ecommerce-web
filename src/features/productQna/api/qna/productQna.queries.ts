@@ -1,24 +1,76 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { productQnaApi } from "./productQna.api";
+import { nextPageOf } from "@/shared/api/client/pagination";
+import { ANSWER_THREAD_PAGE_SIZE } from "../../constants/productQna.constants";
+import type { ProductQuestionsParams } from "../../types/productQna.types";
 
 export const productQnaKeys = {
   all: ["productQna"] as const,
   product: (productId: string) =>
     [...productQnaKeys.all, "product", productId] as const,
+  productList: (productId: string, params: ProductQuestionsParams) =>
+    [...productQnaKeys.product(productId), "list", params] as const,
   pending: () => [...productQnaKeys.all, "pending"] as const,
 };
 
 export function useProductQuestions(
   productId: string,
+  params: ProductQuestionsParams,
   options: { enabled?: boolean } = {},
 ) {
   return useQuery({
-    queryKey: productQnaKeys.product(productId),
-    queryFn: () => productQnaApi.forProduct(productId),
+    queryKey: productQnaKeys.productList(productId, params),
+    queryFn: () => productQnaApi.forProduct(productId, params),
     enabled: Boolean(productId) && (options.enabled ?? true),
     staleTime: 1000 * 60,
+    // Keep the current page on screen while the next filter/page loads.
+    placeholderData: keepPreviousData,
+  });
+}
+
+/** A question's answer thread, a page at a time, fetched only once opened. */
+export function useQuestionAnswers(questionId: string, enabled: boolean) {
+  return useInfiniteQuery({
+    queryKey: [...productQnaKeys.all, "answers", questionId] as const,
+    queryFn: ({ pageParam }) =>
+      productQnaApi.answers(questionId, {
+        page: pageParam,
+        limit: ANSWER_THREAD_PAGE_SIZE,
+      }),
+    initialPageParam: 1,
+    getNextPageParam: nextPageOf,
+    enabled: Boolean(questionId) && enabled,
+    staleTime: 1000 * 60,
+  });
+}
+
+export function useUpdateQuestion() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { questionId: string; question: string }) =>
+      productQnaApi.updateQuestion(input.questionId, {
+        question: input.question,
+      }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: productQnaKeys.all }),
+  });
+}
+
+export function useUpdateAnswer() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { answerId: string; answer: string }) =>
+      productQnaApi.updateAnswer(input.answerId, { answer: input.answer }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: productQnaKeys.all }),
   });
 }
 

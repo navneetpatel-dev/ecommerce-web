@@ -1,6 +1,20 @@
 export const myReviewsPageStyles = {
   container: "storefront-container py-8 md:py-10",
-  header: "mb-8 max-w-2xl",
+  header:
+    "mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between",
+  headerText: "max-w-2xl",
+  writeButton: "w-full gap-2 sm:w-auto",
+  banner:
+    "mb-6 flex flex-col gap-3 rounded-2xl border border-brand/30 bg-brand-subtle p-4 sm:flex-row sm:items-center",
+  bannerIconWrap:
+    "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface text-brand",
+  bannerIcon: "h-5 w-5",
+  bannerText: "flex-1 text-body font-medium text-ink",
+  bannerButton: "w-full gap-2 sm:w-auto",
+  cardActions: "flex items-center gap-2",
+  editButton: "h-8 gap-1.5 rounded-full px-3",
+  editIcon: "h-4 w-4",
+  editedTag: "ml-1 text-[0.75rem] italic text-ink-faint",
   title: "font-display text-[1.75rem] text-ink md:text-[2rem]",
   subtitle: "mt-2 text-body text-ink-muted",
   loadingSkeletonStack: "space-y-3",
@@ -9,7 +23,7 @@ export const myReviewsPageStyles = {
   emptyContainer: "border border-dashed border-line bg-paper/50",
   emptyState: "py-14",
   reviewsList: "divide-y divide-line border border-line bg-surface-raised",
-  reviewItem: "px-5 py-5",
+  reviewItem: "px-4 py-5 sm:px-5",
   reviewHeader: "flex flex-wrap items-start justify-between gap-3",
   productInfo: "min-w-0",
   productLink: "font-medium text-ink hover:text-brand",

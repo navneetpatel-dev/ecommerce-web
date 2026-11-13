@@ -10,6 +10,9 @@ import {
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
+import { UGC_LIMITS } from "@/shared/constants/ugc/ugcLimits";
+import { isUgcTextValid } from "@/shared/schemas/ugcText.schema";
+import { CharacterCount } from "@/shared/components/forms/CharacterCount.component";
 import { UPLOAD_ENTITY } from "@/shared/constants/uploads/uploads";
 import {
   TicketAttachmentUploader,
@@ -27,7 +30,11 @@ interface ReviewFormProps {
   errors: FieldErrors<ReviewFormInput>;
   rating: number;
   body: string;
+  title: string;
   hoverRating: number;
+  /** Photos/video upload (new reviews only; an edit keeps the posted media). */
+  showMedia?: boolean;
+  submitLabel?: string;
   isPending: boolean;
   formLevelError?: string | null;
   /** Upload id for this review's photos/video (the id the review takes). */
@@ -45,7 +52,10 @@ export function ReviewForm({
   errors,
   rating,
   body,
+  title,
   hoverRating,
+  showMedia = true,
+  submitLabel = LABELS.submitReview,
   isPending,
   formLevelError = null,
   draftId,
@@ -55,7 +65,7 @@ export function ReviewForm({
   onSetRating,
   onSubmit,
 }: ReviewFormProps) {
-  const canSubmit = rating >= 1 && body.trim().length >= 10;
+  const canSubmit = rating >= 1 && isUgcTextValid(body, UGC_LIMITS.reviewBody);
   const disableHint =
     rating < 1 ? LABELS.selectReviewRating : LABELS.enterReviewBody;
 
@@ -85,6 +95,13 @@ export function ReviewForm({
               id="title"
               {...register("title")}
               placeholder={LABELS.reviewTitlePlaceholder}
+              maxLength={UGC_LIMITS.reviewTitle.max}
+              aria-describedby="review-title-count"
+            />
+            <CharacterCount
+              id="review-title-count"
+              value={title}
+              limits={UGC_LIMITS.reviewTitle}
             />
           </FormFieldFrame>
 
@@ -99,17 +116,26 @@ export function ReviewForm({
               {...register("body")}
               placeholder={LABELS.reviewBodyPlaceholder}
               rows={4}
+              maxLength={UGC_LIMITS.reviewBody.max}
+              aria-describedby="review-body-count"
+            />
+            <CharacterCount
+              id="review-body-count"
+              value={body}
+              limits={UGC_LIMITS.reviewBody}
             />
           </FormFieldFrame>
 
-          <TicketAttachmentUploader
-            entityType={UPLOAD_ENTITY.REVIEWS}
-            entityId={draftId}
-            value={attachments}
-            onChange={onAttachmentsChange}
-            disabled={isPending}
-            label={LABELS.reviewMediaLabel}
-          />
+          {showMedia ? (
+            <TicketAttachmentUploader
+              entityType={UPLOAD_ENTITY.REVIEWS}
+              entityId={draftId}
+              value={attachments}
+              onChange={onAttachmentsChange}
+              disabled={isPending}
+              label={LABELS.reviewMediaLabel}
+            />
+          ) : null}
         </FormSection>
 
         <FormError
@@ -124,7 +150,7 @@ export function ReviewForm({
               loading={isPending}
               disabled={!canSubmit || isPending}
             >
-              {LABELS.submitReview}
+              {submitLabel}
             </Button>
           </DisabledActionHint>
         </FormActions>

@@ -2,6 +2,8 @@
 
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { LABELS } from "@/shared/constants/labels";
+import { UGC_LIMITS } from "@/shared/constants/ugc/ugcLimits";
+import { isUgcTextValid } from "@/shared/schemas/ugcText.schema";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import {
@@ -32,7 +34,7 @@ export function useAnswerQuestionForm(productId: string) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const text = draft.trim();
-    if (!openId || !text) return;
+    if (!openId || !isUgcTextValid(text, UGC_LIMITS.answer)) return;
     const questionId = openId;
     answer.mutate(
       { questionId, answer: text },

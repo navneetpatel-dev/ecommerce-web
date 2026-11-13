@@ -6,7 +6,7 @@ import { AuthFormCard } from "../shell/AuthFormCard.component";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { LABELS } from "@/shared/constants/labels";
-import { PATHS } from "@/shared/constants/paths/paths";
+import { useAuthReturnPath } from "@/shared/hooks/auth/useAuthReturnPath.hook";
 import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
 interface ForgotPasswordInput {
@@ -28,6 +28,7 @@ export function ForgotPasswordCard({
   isSuccess,
   formLevelError = null,
 }: ForgotPasswordCardProps) {
+  const { loginHref } = useAuthReturnPath();
   const {
     register,
     handleSubmit,
@@ -39,7 +40,7 @@ export function ForgotPasswordCard({
       title={LABELS.forgotPasswordTitle}
       description={LABELS.forgotPasswordHint}
       footer={
-        <Link href={PATHS.login} className={authFormsStyles.footerLink}>
+        <Link href={loginHref} className={authFormsStyles.footerLink}>
           {LABELS.backToLogin}
         </Link>
       }

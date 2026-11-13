@@ -7,14 +7,17 @@ interface ReviewFormContainerProps {
   orderItemId: string;
   productId: string;
   productName: string;
+  /** Called after a successful post (e.g. close the dialog). */
+  onSubmitted?: () => void;
 }
 
 export function ReviewFormContainer({
   orderItemId,
   productId,
   productName,
+  onSubmitted,
 }: ReviewFormContainerProps) {
-  const review = useReviewSubmission(orderItemId, productId);
+  const review = useReviewSubmission(orderItemId, productId, onSubmitted);
 
   return (
     <ReviewForm
@@ -23,6 +26,7 @@ export function ReviewFormContainer({
       errors={review.errors}
       rating={review.rating}
       body={review.body}
+      title={review.title}
       hoverRating={review.hoverRating}
       isPending={review.isPending}
       formLevelError={review.formLevelError}

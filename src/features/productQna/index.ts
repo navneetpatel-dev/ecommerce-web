@@ -9,3 +9,4 @@ export {
   useModerateQuestion,
 } from "./api/qna/productQna.queries";
 export { ProductQnaContainer } from "./containers/list/ProductQnaContainer.container";
+export { AllQuestionsPage } from "./pages/all-questions/AllQuestionsPage.page";

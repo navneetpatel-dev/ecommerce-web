@@ -1,8 +1,13 @@
+import { Suspense } from "react";
 import { generateNoIndexMetadata } from "@/shared/seo/metadata";
-import { ForgotPasswordPage } from "@/features/auth";
+import { AuthPageSkeleton, ForgotPasswordPage } from "@/features/auth";
 
 export const metadata = generateNoIndexMetadata("Forgot Password");
 
 export default function ForgotPassword() {
-  return <ForgotPasswordPage />;
+  return (
+    <Suspense fallback={<AuthPageSkeleton />}>
+      <ForgotPasswordPage />
+    </Suspense>
+  );
 }

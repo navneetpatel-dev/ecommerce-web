@@ -9,6 +9,9 @@ export interface ProductAnswer {
   authorType: ProductAnswerAuthorType;
   authorName: string | null;
   createdAt: string;
+  /** The answer's author (lets them edit it). */
+  authorId?: string;
+  editedAt?: string | null;
 }
 
 export interface ProductQuestion {
@@ -18,6 +21,11 @@ export interface ProductQuestion {
   status: ProductQuestionStatus;
   createdAt: string;
   customerName: string | null;
+  /** The asker (lets them edit it while unanswered). */
+  userId?: string;
+  editedAt?: string | null;
+  /** Published answers in the thread; `answers` holds only the best one(s). */
+  answerCount?: number;
   productName?: string | null;
   answers: ProductAnswer[];
 }

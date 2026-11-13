@@ -7,15 +7,16 @@ import { OAuthDivider } from "../oauth/OAuthDivider.component";
 import { OAuthButton } from "../oauth/OAuthButton.component";
 import { ResendVerificationByEmail } from "../verify-email/ResendVerificationByEmail.component";
 import { Button } from "@/shared/components/ui/button";
-import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import type { LoginInput } from "../../schemas/auth/auth.schema";
 import { useLoginCard } from "../../hooks/login/useLoginCard.hook";
+import { useAuthReturnPath } from "@/shared/hooks/auth/useAuthReturnPath.hook";
 import {
   AUTH_FOOTER_TEXT,
   AUTH_FORM_ROOT,
   AUTH_LINK,
   AUTH_OAUTH_CONTAINER,
+  AUTH_RETURN_NOTICE,
   AUTH_SESSION_EXPIRED_NOTICE,
   AUTH_SUBMIT_BUTTON,
 } from "../../styles/login/loginCard.styles";
@@ -51,6 +52,8 @@ export function LoginCard({
     onSubmit,
     oauthRedirect,
   });
+  const { returnPath, registerHref } = useAuthReturnPath();
+  const showReturnNotice = Boolean(returnPath) && !sessionExpired;
 
   return (
     <AuthFormCard
@@ -59,7 +62,7 @@ export function LoginCard({
       footer={
         <p className={AUTH_FOOTER_TEXT}>
           {LABELS.dontHaveAccount}{" "}
-          <Link href={PATHS.register} className={AUTH_LINK}>
+          <Link href={registerHref} className={AUTH_LINK}>
             {LABELS.register}
           </Link>
         </p>
@@ -69,6 +72,11 @@ export function LoginCard({
         {sessionExpired ? (
           <p role="status" className={AUTH_SESSION_EXPIRED_NOTICE}>
             {LABELS.sessionExpired}
+          </p>
+        ) : null}
+        {showReturnNotice ? (
+          <p role="status" className={AUTH_RETURN_NOTICE}>
+            {LABELS.loginToContinueNotice}
           </p>
         ) : null}
         <LoginFormFields

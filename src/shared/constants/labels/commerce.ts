@@ -17,7 +17,7 @@ export const commerceLabels = {
   selectOptionsHint: "Select product options to add this item to your cart.",
   outOfStockHint: "This item is currently out of stock.",
   addingToCart: "Adding to your cart…",
-  addToCartWithPrice: "Add to cart — ₹{price}",
+  addToCartWithPrice: "Add to cart — {price}",
   inStock: "In stock",
   onlyLeft: "Only {count} left",
   freeDeliveryAbove: "Free delivery on orders above ₹{amount}",

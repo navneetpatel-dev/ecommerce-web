@@ -5,7 +5,7 @@ import { OtpInput } from "@/shared/components/forms/OtpInput.component";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { ResendVerificationByEmail } from "../verify-email/ResendVerificationByEmail.component";
 import { LABELS } from "@/shared/constants/labels";
-import { PATHS } from "@/shared/constants/paths/paths";
+import { useAuthReturnPath } from "@/shared/hooks/auth/useAuthReturnPath.hook";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { authFormsStyles } from "../../styles/shell/authForms.styles";
 
@@ -47,13 +47,14 @@ export function OtpCard({
   onVerify,
   onResend,
 }: OtpCardProps) {
+  const { loginHref } = useAuthReturnPath();
   if (needsVerification) {
     return (
       <AuthFormCard
         title={LABELS.verifyOtpTitle}
         description={LABELS.verifyOtpHint}
         footer={
-          <Link href={PATHS.login} className={authFormsStyles.footerLink}>
+          <Link href={loginHref} className={authFormsStyles.footerLink}>
             {LABELS.backToLogin}
           </Link>
         }
@@ -75,7 +76,7 @@ export function OtpCard({
       title={LABELS.verifyOtpTitle}
       description={formatLabel(LABELS.verifyOtpSentTo, { email })}
       footer={
-        <Link href={PATHS.login} className={authFormsStyles.footerLink}>
+        <Link href={loginHref} className={authFormsStyles.footerLink}>
           {LABELS.useDifferentEmail}
         </Link>
       }

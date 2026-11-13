@@ -1,3 +1,4 @@
+import type { ReviewStatus } from "@/shared/constants/statuses/catalogStatuses";
 import type {
   OrderStatus,
   PaymentStatus,
@@ -18,6 +19,12 @@ export interface OrderItem {
   canReturn?: boolean;
   /** Delivered, but the return window has closed and no return was requested. */
   returnWindowClosed?: boolean;
+  /** The product this line was bought as (reviews are posted against it). */
+  productId?: string | null;
+  /** Delivered, and the buyer has not reviewed this line yet (server-decided). */
+  canReview?: boolean;
+  /** The buyer's review of this line, in any moderation state. */
+  review?: { id: string; rating: number; status: ReviewStatus } | null;
   /** Looked up live from the catalogue, so it can be absent for removed products. */
   imageUrl?: string | null;
   productSlug?: string | null;

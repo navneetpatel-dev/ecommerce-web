@@ -12,8 +12,12 @@ import { useSubmitReview } from "../../api/reviews/reviews.queries";
 import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
-export function useReviewSubmission(orderItemId: string, productId: string) {
-  const submitReview = useSubmitReview();
+export function useReviewSubmission(
+  orderItemId: string,
+  productId: string,
+  onSubmitted?: () => void,
+) {
+  const submitReview = useSubmitReview({ onSubmitted });
   const { requireAuth } = useRequireAuth();
   const [hoverRating, setHoverRating] = useState(0);
   // The id the review will take: its photos/video upload under it before posting.
@@ -47,6 +51,7 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
   // eslint-disable-next-line react-hooks/incompatible-library
   const rating = watch("rating") || 0;
   const body = watch("body") || "";
+  const title = watch("title") || "";
   const setRating = (next: number) =>
     setValue("rating", next, { shouldValidate: true });
 
@@ -78,6 +83,7 @@ export function useReviewSubmission(orderItemId: string, productId: string) {
     register,
     handleSubmit,
     errors,
+    title,
     formLevelError,
     rating,
     body,

@@ -47,7 +47,8 @@ describe("AuthGate", () => {
     expect(useAuthPromptStore.getState().open).toBe(false);
   });
 
-  it("keeps a signed-out visitor away from the gated query and prompts to log in", async () => {
+  it("sends a signed-out visitor to login with the full path to come back to", async () => {
+    window.history.pushState({}, "", "/orders/order-1?tab=items");
     useAuthStore.setState({ authBootstrapped: true });
 
     render(
@@ -59,12 +60,11 @@ describe("AuthGate", () => {
     expect(screen.queryByText("order body")).toBeNull();
     await waitFor(() => {
       expect(replace).toHaveBeenCalledWith(
-        PATHS.loginWithRedirect("/orders/order-1"),
+        PATHS.loginWithRedirect("/orders/order-1?tab=items"),
       );
     });
-    const prompt = useAuthPromptStore.getState();
-    expect(prompt.open).toBe(true);
-    expect(prompt.redirectTo).toBe("/orders/order-1");
+    // The login page explains itself; a modal on top of it would be noise.
+    expect(useAuthPromptStore.getState().open).toBe(false);
   });
 
   it("renders the page as soon as the token exists", () => {

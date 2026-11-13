@@ -1,107 +1,91 @@
 "use client";
 
 import Link from "next/link";
-import { Star } from "lucide-react";
+import { PenLine, Star } from "lucide-react";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
 import { QueryErrorAlert } from "@/shared/components/notices/QueryErrorAlert.component";
 import { InfiniteLoadMore } from "@/shared/components/DataTable/InfiniteLoadMore.component";
-import { flattenPages } from "@/shared/api/client/pagination";
-import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
-import { useMyReviews } from "../../api/reviews/reviews.queries";
+import { useMyReviewsPage } from "../../hooks/my-reviews/useMyReviewsPage.hook";
+import { MyReviewList } from "../../components/my-reviews/MyReviewList.component";
+import { AwaitingReviewsBanner } from "../../components/my-reviews/AwaitingReviewsBanner.component";
+import { ReviewEditProvider } from "../../containers/review-edit/ReviewEditProvider.container";
 import { myReviewsPageStyles as styles } from "./myReviewsPage.styles";
-import { ReviewMediaGallery } from "../../components/media/ReviewMediaGallery.component";
+
+function MyReviewsBody({
+  view,
+}: {
+  view: ReturnType<typeof useMyReviewsPage>;
+}) {
+  if (view.isLoading) {
+    return (
+      <div className={styles.loadingSkeletonStack}>
+        <Skeleton className={styles.skeleton} />
+        <Skeleton className={styles.skeleton} />
+      </div>
+    );
+  }
+  if (view.isError) {
+    return (
+      <div className={styles.errorContainer}>
+        <QueryErrorAlert
+          error={view.error}
+          fallback={LABELS.couldNotLoadReviews}
+          onRetry={view.retry}
+        />
+      </div>
+    );
+  }
+  if (!view.reviews.length) {
+    return (
+      <div className={styles.emptyContainer}>
+        <EmptyState
+          icon={Star}
+          heading={LABELS.noReviewsYetHeading}
+          message={LABELS.noReviewsHint}
+          actionLabel={LABELS.writeAReview}
+          actionTo={PATHS.reviewsAwaiting}
+          className={styles.emptyState}
+        />
+      </div>
+    );
+  }
+  return <MyReviewList reviews={view.reviews} />;
+}
 
 export function MyReviewsPage() {
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  } = useMyReviews();
-  const reviews = flattenPages(data);
-  const handleLoadMore = () => void fetchNextPage();
+  const view = useMyReviewsPage();
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>Your reviews</h1>
-        <p className={styles.subtitle}>
-          Feedback you&apos;ve left on products after delivery.
-        </p>
-      </header>
+    <ReviewEditProvider>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <div className={styles.headerText}>
+            <h1 className={styles.title}>{LABELS.myReviewsTitle}</h1>
+            <p className={styles.subtitle}>{LABELS.myReviewsSubtitle}</p>
+          </div>
+          <Button asChild className={styles.writeButton}>
+            <Link href={PATHS.reviewsAwaiting}>
+              <PenLine className={styles.editIcon} aria-hidden />
+              {LABELS.writeAReview}
+            </Link>
+          </Button>
+        </header>
 
-      {isLoading ? (
-        <div className={styles.loadingSkeletonStack}>
-          <Skeleton className={styles.skeleton} />
-          <Skeleton className={styles.skeleton} />
-        </div>
-      ) : isError ? (
-        <div className={styles.errorContainer}>
-          <QueryErrorAlert
-            error={error}
-            fallback={LABELS.couldNotLoadReviews}
-            onRetry={refetch}
-          />
-        </div>
-      ) : reviews.length === 0 ? (
-        <div className={styles.emptyContainer}>
-          <EmptyState
-            icon={Star}
-            heading="No reviews yet"
-            message="After an order is delivered, you can leave a review from the order page."
-            actionLabel="View orders"
-            actionTo={PATHS.orders}
-            className={styles.emptyState}
-          />
-        </div>
-      ) : (
-        <ul className={styles.reviewsList}>
-          {reviews.map((review) => (
-            <li key={review.id} className={styles.reviewItem}>
-              <div className={styles.reviewHeader}>
-                <div className={styles.productInfo}>
-                  {review.product ? (
-                    <Link
-                      href={PATHS.product(review.product.slug)}
-                      className={styles.productLink}
-                    >
-                      {review.product.name}
-                    </Link>
-                  ) : (
-                    <p className={styles.productFallback}>Product</p>
-                  )}
-                  <p className={styles.ratingRow}>
-                    <Star size={12} className={styles.starIcon} />
-                    {review.rating}/5
-                    <span className={styles.dateText}>
-                      · {formatOrderDate(review.createdAt)}
-                    </span>
-                  </p>
-                </div>
-                <Badge variant="outline">{review.status}</Badge>
-              </div>
-              {review.title ? (
-                <p className={styles.reviewTitle}>{review.title}</p>
-              ) : null}
-              <p className={styles.reviewBody}>{review.body}</p>
-              <ReviewMediaGallery media={review.media} />
-            </li>
-          ))}
-        </ul>
-      )}
-      <InfiniteLoadMore
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-        onLoadMore={handleLoadMore}
-      />
-    </div>
+        {view.awaitingCount ? (
+          <AwaitingReviewsBanner label={view.awaitingLabel} />
+        ) : null}
+
+        <MyReviewsBody view={view} />
+        <InfiniteLoadMore
+          hasNextPage={view.hasNextPage}
+          isFetchingNextPage={view.isFetchingNextPage}
+          onLoadMore={view.loadMore}
+        />
+      </div>
+    </ReviewEditProvider>
   );
 }

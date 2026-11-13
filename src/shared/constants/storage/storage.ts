@@ -27,6 +27,7 @@ export const STORAGE_KEYS = {
   RECENT_SEARCHES: "recentSearches",
   /** sessionStorage flag: a terminal 401 forced a sign-out (one-shot login notice). */
   SESSION_EXPIRED_NOTICE: "sessionExpiredNotice",
+  AUTH_RETURN_SCROLL: "auth-return-scroll",
 } as const;
 
 /** Cookie names shared with the API (must match backend COOKIES). */

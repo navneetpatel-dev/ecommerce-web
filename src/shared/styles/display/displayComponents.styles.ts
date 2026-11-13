@@ -108,16 +108,20 @@ export const chatWidgetStyles = {
   container:
     "fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] left-6 z-40 hidden lg:block",
   panel:
-    "mb-4 w-80 rounded-lg border border-line bg-surface-raised p-4 shadow-elevation-3",
-  title: "text-[1.125rem] font-semibold text-ink",
-  message: "mt-2 text-body text-ink-muted",
-  links: "mt-4 flex flex-col gap-2",
+    "mb-4 w-80 rounded-lg border border-line bg-surface-raised p-5 shadow-elevation-3 motion-safe:animate-scale-in",
+  header: "flex items-start justify-between gap-3",
+  title: "text-[1.125rem] font-semibold leading-tight text-ink",
+  closeBtn: "-mr-2 -mt-1.5 h-8 w-8 shrink-0 text-ink-muted hover:text-ink",
+  closeIcon: "h-4 w-4",
+  message: "mt-2 text-body leading-relaxed text-ink-muted",
+  actions: "mt-5 flex flex-col gap-2.5",
   primaryLink:
-    "inline-flex items-center justify-center rounded-md bg-brand px-4 py-2 text-body font-medium text-paper hover:bg-brand-hover",
-  link: "text-body font-medium text-brand underline-offset-4 hover:underline",
-  hours: "mt-3 text-body-sm text-ink-muted",
-  closeBtn:
-    "mt-4 h-auto min-h-0 max-h-none px-0 py-0 text-body-sm font-medium text-brand",
+    "inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-brand px-4 text-body font-medium text-paper transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+  secondaryRow: "grid grid-cols-2 gap-2.5",
+  secondaryLink:
+    "inline-flex h-10 items-center justify-center gap-1.5 rounded-md border border-line bg-surface px-3 text-body-sm font-medium text-ink transition-colors hover:border-line-strong hover:bg-brand-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+  linkIcon: "h-4 w-4 shrink-0",
+  hours: "mt-4 border-t border-line pt-3 text-body-sm text-ink-muted",
   triggerBtn:
     "h-14 w-14 min-h-14 max-h-14 rounded-full shadow-elevation-2 hover:shadow-elevation-3",
   icon: "h-6 w-6 text-ink",
@@ -129,4 +133,25 @@ export const newsletterFormStyles = {
   input: "min-w-0 flex-1",
   submitBtn: "shrink-0",
   successMessage: "text-body-sm text-success",
+} as const;
+
+export const expandableTextStyles = {
+  root: "min-w-0",
+  clampByLines: {
+    3: "line-clamp-3",
+    4: "line-clamp-4",
+    5: "line-clamp-5",
+  },
+  toggle:
+    "mt-1 inline-flex items-center gap-1 text-body-sm font-medium text-brand underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+  toggleIcon: "h-3.5 w-3.5 transition-transform",
+  toggleIconOpen: "rotate-180",
+} as const;
+
+export const characterCountStyles = {
+  root: "mt-1.5 flex items-center justify-between gap-3 text-[0.75rem] leading-tight",
+  hint: "text-ink-muted",
+  count: "ml-auto tabular-nums text-ink-muted",
+  countNear: "text-warning",
+  countFull: "font-medium text-danger",
 } as const;

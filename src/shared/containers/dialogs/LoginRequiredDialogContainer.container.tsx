@@ -5,6 +5,10 @@ import { LoginRequiredDialog } from "@/shared/components/dialogs/LoginRequiredDi
 import { useAuthPromptStore } from "@/shared/stores/auth/authPrompt.store";
 import { navigate } from "@/shared/utils/navigation/navigate";
 import { PATHS } from "@/shared/constants/paths/paths";
+import {
+  rememberAuthReturnScroll,
+  safeReturnPath,
+} from "@/shared/utils/auth/authReturn";
 
 export function LoginRequiredDialogContainer() {
   const router = useRouter();
@@ -22,18 +26,21 @@ export function LoginRequiredDialogContainer() {
     returnFocusTo.focus();
   };
 
-  const goToRegister = () => {
+  // Where to come back to after signing in, and where on that page (scroll).
+  const prepareReturn = () => {
     closePrompt();
-    const next =
-      redirectTo && redirectTo !== PATHS.login ? redirectTo : PATHS.home;
-    navigate(router, PATHS.registerWithRedirect(next));
+    const safe = safeReturnPath(redirectTo);
+    const next = safe && !safe.startsWith(PATHS.login) ? safe : PATHS.home;
+    rememberAuthReturnScroll(next);
+    return next;
+  };
+
+  const goToRegister = () => {
+    navigate(router, PATHS.registerWithRedirect(prepareReturn()));
   };
 
   const goToLogin = () => {
-    closePrompt();
-    const next =
-      redirectTo && redirectTo !== PATHS.login ? redirectTo : PATHS.home;
-    navigate(router, PATHS.loginWithRedirect(next));
+    navigate(router, PATHS.loginWithRedirect(prepareReturn()));
   };
 
   const handleOpenChange = (next: boolean) => {

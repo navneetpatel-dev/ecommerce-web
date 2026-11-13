@@ -110,6 +110,8 @@ export function DetailTabsSection({
         >
           <ProductReviewsContainer
             productId={product.id}
+            productSlug={product.slug}
+            productName={product.name}
             enabled={detailTab === "reviews"}
           />
         </TabsContent>
@@ -120,6 +122,7 @@ export function DetailTabsSection({
         >
           <ProductQnaContainer
             productId={product.id}
+            productSlug={product.slug}
             enabled={detailTab === "qna"}
           />
         </TabsContent>

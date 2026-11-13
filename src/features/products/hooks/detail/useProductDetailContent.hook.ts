@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { LABELS } from "@/shared/constants/labels";
 import { cartLineQuantityMax } from "@/shared/constants/cart/cart";
 import { WARRANTY_TYPE } from "@/shared/constants/statuses";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { resolveVariantPricing } from "../../utils/detail/variantPricing";
+import { initialDetailTab } from "../../utils/detail/detailTabs";
 import {
   getAddToCartHint,
   getAddToCartLabel,
@@ -36,7 +38,11 @@ export function useProductDetailContent({
   showStickyBar = false,
 }: UseProductDetailContentParams) {
   const [deliveryBlocked, setDeliveryBlocked] = useState(false);
-  const [detailTab, setDetailTab] = useState("description");
+  const searchParams = useSearchParams();
+  // `?tab=reviews` (e.g. from "Write a review") opens that tab on arrival.
+  const [detailTab, setDetailTab] = useState(() =>
+    initialDetailTab(searchParams?.get("tab") ?? null),
+  );
 
   const {
     resolvedVariant,

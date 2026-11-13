@@ -3,6 +3,15 @@ export const PATHS = {
   home: "/",
   products: "/products",
   product: (slug: string) => `/products/${slug}`,
+  /** Every review for a product, filterable (the PDP shows the top few). */
+  productReviews: (slug: string) => `/products/${slug}/reviews`,
+  /** Every question for a product, searchable (the PDP shows the top few). */
+  productQuestions: (slug: string) => `/products/${slug}/questions`,
+  /** PDP with the Reviews tab open and the write-review box focused for this line. */
+  productWriteReview: (slug: string, orderItemId: string) =>
+    `/products/${slug}?tab=reviews&review=${encodeURIComponent(orderItemId)}`,
+  /** Delivered products the shopper has not reviewed yet. */
+  reviewsAwaiting: "/reviews/write",
   /** Side-by-side comparison tray + results. */
   compare: "/compare",
   productsNewest: "/products?sort=newest",

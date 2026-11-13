@@ -1,48 +1,54 @@
 "use client";
 
+import { useProductReviews } from "../../api/reviews/reviews.queries";
+import { PATHS } from "@/shared/constants/paths/paths";
+import { withQuery } from "@/shared/api/client/pagination";
+import { LABELS } from "@/shared/constants/labels";
+import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import {
-  useProductReviews,
-  useVoteReview,
-} from "../../api/reviews/reviews.queries";
-import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
-import type { Review } from "@/shared/api/types";
+  DEFAULT_REVIEW_SORT,
+  PDP_REVIEW_PREVIEW_LIMIT,
+  REVIEW_QUERY,
+} from "../../constants/productReviews.constants";
+import { EMPTY_REVIEW_SUMMARY } from "../../utils/productReviews.utils";
+import type { RatingValue } from "../../types/productReviews.types";
+import { useReviewVoting } from "./useReviewVoting.hook";
 
+const PREVIEW_PARAMS = {
+  limit: PDP_REVIEW_PREVIEW_LIMIT,
+  sort: DEFAULT_REVIEW_SORT,
+} as const;
+
+/** PDP reviews: the star summary plus the few most helpful reviews. */
 export function useProductReviewsView(
   productId: string,
+  productSlug: string,
   options: { enabled?: boolean } = {},
 ) {
-  const {
-    data: reviews,
-    isLoading,
-    isError,
-    refetch,
-  } = useProductReviews(productId, options);
-  const voteReview = useVoteReview();
-  const { requireAuth } = useRequireAuth();
-
-  const vote = (reviewId: string, vote: "HELPFUL" | "UNHELPFUL") => {
-    if (
-      !requireAuth({
-        title: "Vote on reviews",
-        message: "Sign in to mark reviews as helpful or unhelpful.",
-      })
-    ) {
-      return;
-    }
-    voteReview.mutate({ reviewId, vote });
-  };
+  const query = useProductReviews(productId, PREVIEW_PARAMS, options);
+  const voting = useReviewVoting();
+  const summary = query.data?.summary ?? EMPTY_REVIEW_SUMMARY;
+  const allReviewsHref = PATHS.productReviews(productSlug);
 
   const retry = () => {
-    void refetch();
+    void query.refetch();
   };
 
   return {
-    reviews: (reviews ?? []) as Review[],
-    isLoading,
+    reviews: query.data?.items ?? [],
+    summary,
+    isLoading: query.isLoading,
     // A failed load must not read as "No reviews yet".
-    isError: isError && !reviews,
+    isError: query.isError && !query.data,
     retry,
-    voteHelpful: (reviewId: string) => vote(reviewId, "HELPFUL"),
-    voteUnhelpful: (reviewId: string) => vote(reviewId, "UNHELPFUL"),
+    allReviewsHref,
+    viewAllLabel: formatLabel(LABELS.viewAllReviews, {
+      count: summary.total.toLocaleString("en-IN"),
+    }),
+    hasMore: summary.total > PDP_REVIEW_PREVIEW_LIMIT,
+    ratingHref: (rating: RatingValue) =>
+      withQuery(allReviewsHref, { [REVIEW_QUERY.rating]: rating }),
+    voteHelpful: voting.voteHelpful,
+    voteUnhelpful: voting.voteUnhelpful,
   };
 }

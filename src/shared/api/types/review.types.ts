@@ -22,6 +22,7 @@ export interface Review {
   media?: ReviewMediaItem[];
   vendorResponse?: string | null;
   vendorRespondedAt?: string | null;
+  editedAt?: string | null;
   user?: { name: string };
   product?: { id: string; name: string; slug: string };
 }

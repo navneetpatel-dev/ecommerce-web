@@ -10,5 +10,9 @@ export const productQnaRoutes = {
   moderate: (questionId: string) =>
     `/api/product-qna/questions/${questionId}/status`,
   moderation: "/api/product-qna/moderation",
+  /** Owner edits. */
+  updateQuestion: (questionId: string) =>
+    `/api/product-qna/questions/${questionId}`,
+  updateAnswer: (answerId: string) => `/api/product-qna/answers/${answerId}`,
   vendorMe: "/api/product-qna/questions/vendor/me",
 };

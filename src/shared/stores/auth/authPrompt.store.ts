@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { currentReturnPath } from "@/shared/utils/auth/authReturn";
 
 export interface AuthPromptOptions {
   title?: string;
@@ -36,11 +37,7 @@ export const useAuthPromptStore = create<AuthPromptState>((set) => ({
           : null,
       title: title ?? DEFAULT_TITLE,
       message,
-      redirectTo:
-        redirectTo ??
-        (typeof window !== "undefined"
-          ? `${window.location.pathname}${window.location.search}`
-          : "/"),
+      redirectTo: redirectTo ?? currentReturnPath(),
     }),
   closePrompt: () => set({ open: false }),
 }));

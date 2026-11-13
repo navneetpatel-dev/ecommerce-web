@@ -9,22 +9,26 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { formatInr } from "../../../utils/detail/format";
 import { orderLineVariantLabel } from "../../../utils/sub-order/orderLine.utils";
 import { SUB_ORDER_CARD_ITEMS_STYLES } from "../../../styles/sub-order/subOrderCardItems.styles";
+import { OrderLineReviewSlot } from "../review/OrderLineReviewSlot.component";
 
 interface SubOrderCardItemRowProps {
   item: OrderItem;
   canReturn: boolean;
   onOpenReturn: (item: OrderItem) => void;
+  onWriteReview: (item: OrderItem) => void;
 }
 
 export const SubOrderCardItemRow = memo(function SubOrderCardItemRow({
   item,
   canReturn,
   onOpenReturn,
+  onWriteReview,
 }: SubOrderCardItemRowProps) {
   const attrs = orderLineVariantLabel(item);
   // The part is delivered; the server says whether this line can still be returned.
   const showReturn = canReturn && item.canReturn !== false;
   const handleReturnClick = () => onOpenReturn(item);
+  const handleWriteReview = () => onWriteReview(item);
   // As the customer saw it, GST included (older payloads: before GST).
   const subtotalFormatted = formatInr(
     item.lineDisplaySubtotal ?? item.lineSubtotal,
@@ -66,6 +70,8 @@ export const SubOrderCardItemRow = memo(function SubOrderCardItemRow({
         <p className={SUB_ORDER_CARD_ITEMS_STYLES.quantityText}>
           {qtyFormatted}
         </p>
+
+        <OrderLineReviewSlot item={item} onWriteReview={handleWriteReview} />
 
         {showReturn ? (
           <Button

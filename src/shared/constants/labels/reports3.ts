@@ -8,7 +8,7 @@ export const reports3Labels = {
   reviewBody: "Review",
   reviewBodyPlaceholder: "What did you think?",
   selectReviewRating: "Select a star rating to continue.",
-  enterReviewBody: "Enter a review of at least 10 characters.",
+  enterReviewBody: "Enter a review of at least 20 characters.",
   enterProductName: "Enter a product name to continue.",
   enterProductPrice: "Enter a price to continue.",
   selectProductCategory: "Select a category to continue.",
