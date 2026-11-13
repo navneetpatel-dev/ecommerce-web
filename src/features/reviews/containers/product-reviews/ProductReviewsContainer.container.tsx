@@ -40,7 +40,6 @@ export function ProductReviewsContainer({
             state={writePanel}
             panelRef={panelRef}
             productId={productId}
-            productName={productName}
           />
         }
         onVoteHelpful={view.voteHelpful}

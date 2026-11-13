@@ -28,7 +28,6 @@ describe("WriteReviewPanel", () => {
         state={{ ...base, orderItemId: null }}
         panelRef={ref}
         productId="p"
-        productName="Tee"
       />,
     );
     expect(container).toBeEmptyDOMElement();
@@ -36,12 +35,7 @@ describe("WriteReviewPanel", () => {
 
   it("invites, then shows the form inline when opened", () => {
     const { rerender } = render(
-      <WriteReviewPanel
-        state={base}
-        panelRef={ref}
-        productId="p"
-        productName="Tee"
-      />,
+      <WriteReviewPanel state={base} panelRef={ref} productId="p" />,
     );
     expect(
       screen.getByRole("button", { name: "Write a review" }),
@@ -51,7 +45,6 @@ describe("WriteReviewPanel", () => {
         state={{ ...base, open: true }}
         panelRef={ref}
         productId="p"
-        productName="Tee"
       />,
     );
     expect(
@@ -65,7 +58,6 @@ describe("WriteReviewPanel", () => {
         state={{ ...base, submitted: true }}
         panelRef={ref}
         productId="p"
-        productName="Tee"
       />,
     );
     expect(screen.getByRole("status")).toHaveTextContent(

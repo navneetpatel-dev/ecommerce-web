@@ -13,7 +13,6 @@ interface WriteReviewPanelProps {
   state: WriteReviewPanelState;
   panelRef: RefObject<HTMLDivElement | null>;
   productId: string;
-  productName: string;
 }
 
 /** Top of the Reviews tab: invite → inline form → thanks. Only for eligible buyers. */
@@ -21,7 +20,6 @@ export function WriteReviewPanel({
   state,
   panelRef,
   productId,
-  productName,
 }: WriteReviewPanelProps) {
   if (state.submitted) {
     return (
@@ -64,7 +62,8 @@ export function WriteReviewPanel({
           <ReviewFormContainer
             orderItemId={state.orderItemId}
             productId={productId}
-            productName={productName}
+            // Already on this product's page: no "Reviewing: …" line.
+            productName=""
             onSubmitted={state.handleSubmitted}
           />
         </div>

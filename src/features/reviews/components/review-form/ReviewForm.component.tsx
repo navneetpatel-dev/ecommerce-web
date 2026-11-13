@@ -1,12 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
 import { FormError } from "@/shared/components/forms/FormError.component";
-import {
-  FormActions,
-  FormFieldFrame,
-  FormSection,
-  FormStack,
-} from "@/shared/components/forms";
+import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
@@ -75,18 +70,15 @@ export function ReviewForm({
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
-      <FormStack>
-        {productName ? (
-          <p className={styles.reviewingText}>
-            {formatLabel(LABELS.reviewingProduct, { name: productName })}
-          </p>
-        ) : null}
+      {productName ? (
+        <p className={styles.reviewingText}>
+          {formatLabel(LABELS.reviewingProduct, { name: productName })}
+        </p>
+      ) : null}
 
-        <FormSection
-          title={LABELS.reviewFormSection}
-          hint={LABELS.reviewFormSectionHint}
-          columns={1}
-        >
+      {/* One flat form: stacks in a dialog, splits into text | photos when wide. */}
+      <div className={styles.layout}>
+        <div className={styles.mainColumn}>
           <FormFieldFrame label={LABELS.rating} error={errors.rating?.message}>
             <ReviewRatingStars
               rating={rating}
@@ -121,7 +113,7 @@ export function ReviewForm({
               error={Boolean(errors.body?.message)}
               {...register("body")}
               placeholder={LABELS.reviewBodyPlaceholder}
-              rows={4}
+              rows={5}
               maxLength={UGC_LIMITS.reviewBody.max}
               aria-describedby="review-body-count"
             />
@@ -131,49 +123,50 @@ export function ReviewForm({
               limits={UGC_LIMITS.reviewBody}
             />
           </FormFieldFrame>
+        </div>
 
-          {showMedia ? (
-            <div className={styles.mediaBlock}>
-              <TicketAttachmentUploader
-                entityType={UPLOAD_ENTITY.REVIEWS}
-                entityId={draftId}
-                value={attachments}
-                onChange={onAttachmentsChange}
+        {showMedia ? (
+          <div className={styles.mediaColumn}>
+            <TicketAttachmentUploader
+              entityType={UPLOAD_ENTITY.REVIEWS}
+              entityId={draftId}
+              value={attachments}
+              onChange={onAttachmentsChange}
+              disabled={isPending}
+              label={LABELS.reviewMediaLabel}
+            />
+            {attachments.length > 1 ? (
+              <button
+                type="button"
+                className={styles.removeAllMedia}
                 disabled={isPending}
-                label={LABELS.reviewMediaLabel}
-              />
-              {attachments.length > 1 ? (
-                <button
-                  type="button"
-                  className={styles.removeAllMedia}
-                  disabled={isPending}
-                  onClick={handleRemoveAllMedia}
-                >
-                  {LABELS.removeAllMedia}
-                </button>
-              ) : null}
-            </div>
-          ) : null}
-        </FormSection>
+                onClick={handleRemoveAllMedia}
+              >
+                {LABELS.removeAllMedia}
+              </button>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
 
-        <FormError
-          error={formLevelError}
-          fallback={LABELS.couldNotSubmitReview}
-        />
+      <FormError
+        error={formLevelError}
+        fallback={LABELS.couldNotSubmitReview}
+      />
 
-        <FormActions>
-          {extraAction}
-          <DisabledActionHint disabled={!canSubmit} message={disableHint}>
-            <Button
-              type="submit"
-              loading={isPending}
-              disabled={!canSubmit || isPending}
-            >
-              {submitLabel}
-            </Button>
-          </DisabledActionHint>
-        </FormActions>
-      </FormStack>
+      <div className={styles.actions}>
+        {extraAction}
+        <DisabledActionHint disabled={!canSubmit} message={disableHint}>
+          <Button
+            type="submit"
+            loading={isPending}
+            disabled={!canSubmit || isPending}
+            className={styles.submit}
+          >
+            {submitLabel}
+          </Button>
+        </DisabledActionHint>
+      </div>
     </form>
   );
 }

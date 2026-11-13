@@ -12,7 +12,7 @@ export const writeReviewPanelStyles = {
   body: "mt-1 text-body-sm text-ink-muted",
   toggle: "w-full gap-2 sm:w-auto",
   toggleIcon: "h-4 w-4",
-  form: "mt-5 max-w-3xl rounded-xl border border-line bg-surface p-4 sm:p-5",
+  form: "mt-5 border-t border-line pt-5",
   thanks:
     "mb-8 flex items-center gap-3 rounded-2xl border border-success/30 bg-success-subtle px-4 py-3 text-body-sm font-medium text-success",
   thanksIcon: "h-5 w-5 shrink-0",
