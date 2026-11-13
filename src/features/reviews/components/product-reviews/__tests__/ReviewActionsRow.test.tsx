@@ -38,3 +38,28 @@ describe("ReviewActionsRow", () => {
     expect(h.onDelete).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("ReviewActionsRow — the viewer's own vote", () => {
+  it("lights up the chosen vote and says so in words", () => {
+    render(
+      <ReviewActionsRow
+        review={{ ...review, myVote: "HELPFUL" }}
+        isMine={false}
+        {...handlers()}
+      />,
+    );
+    expect(
+      screen.getByRole("button", { name: "Mark as helpful (46)" }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(
+      screen.getByRole("button", { name: "Mark as not helpful (2)" }),
+    ).toHaveAttribute("aria-pressed", "false");
+    expect(screen.getByText("You found this helpful")).toBeInTheDocument();
+  });
+
+  it("shows no note before the viewer votes", () => {
+    render(<ReviewActionsRow review={review} isMine={false} {...handlers()} />);
+    expect(screen.queryByText(/You found this/)).toBeNull();
+    expect(screen.queryByText(/You didn't find/)).toBeNull();
+  });
+});

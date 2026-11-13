@@ -17,10 +17,11 @@ export const SUB_ORDER_CARD_ITEMS_STYLES = {
   reviewIcon: "h-3.5 w-3.5",
   reviewStatus:
     "inline-flex flex-wrap items-center gap-x-2 gap-y-1 text-body-sm text-ink-muted",
+  reviewStatusGroup: "inline-flex items-center gap-x-2 whitespace-nowrap",
   reviewStatusStrong: "font-medium text-ink",
   reviewLink: "font-medium text-brand underline-offset-4 hover:underline",
   returnButton:
-    "mt-1 h-auto min-h-0 max-h-none self-start px-0 py-0 text-body-sm text-brand hover:bg-transparent hover:text-brand-hover",
+    "mt-1 h-auto min-h-0 max-h-none self-start border-0 px-0 py-0 text-body-sm text-brand hover:bg-transparent hover:text-brand-hover",
   desktopPricingCol: "flex shrink-0 flex-col items-end gap-1 pt-0.5",
   subtotalDesktop:
     "text-right font-display text-[1.125rem] tabular-nums text-ink",

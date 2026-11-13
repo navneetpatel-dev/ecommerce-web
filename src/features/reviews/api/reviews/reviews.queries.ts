@@ -14,7 +14,9 @@ import { navigate } from "@/shared/utils/navigation/navigate";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type { ProductReviewsParams } from "../../types/productReviews.types";
-import { updateReviewInCaches } from "./reviewCache";
+import { findReviewInCaches, updateReviewInCaches } from "./reviewCache";
+import { withViewerVote } from "../../utils/reviewVotes.utils";
+import type { ReviewVote } from "@/shared/api/types";
 
 export const reviewKeys = {
   all: ["reviews"] as const,
@@ -133,15 +135,36 @@ export function useDeleteReview() {
 export function useVoteReview() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: { reviewId: string; vote: "HELPFUL" | "UNHELPFUL" }) =>
-      reviewsApi.vote(input.reviewId, input.vote),
-    // New counts in place — no refetch, so "Most helpful" does not re-rank
-    // the list under the shopper's cursor.
-    onSuccess: (saved, { reviewId }) =>
+    /** `vote: null` takes the viewer's vote back. */
+    mutationFn: (input: { reviewId: string; vote: ReviewVote | null }) =>
+      input.vote
+        ? reviewsApi.vote(input.reviewId, input.vote)
+        : reviewsApi.clearVote(input.reviewId),
+    // The chip lights up (and the count moves) on click; nothing re-ranks
+    // "Most helpful" under the shopper's cursor because nothing is refetched.
+    onMutate: ({ reviewId, vote }) => {
+      const before = findReviewInCaches(queryClient, reviewId);
+      updateReviewInCaches(queryClient, reviewId, (review) =>
+        withViewerVote(review, vote),
+      );
+      return { before };
+    },
+    onError: (_error, { reviewId }, context) => {
+      const before = context?.before;
+      if (!before) return;
+      updateReviewInCaches(queryClient, reviewId, (review) => ({
+        ...review,
+        helpfulCount: before.helpfulCount,
+        unhelpfulCount: before.unhelpfulCount,
+        myVote: before.myVote ?? null,
+      }));
+    },
+    onSuccess: (saved, { reviewId, vote }) =>
       updateReviewInCaches(queryClient, reviewId, (review) => ({
         ...review,
         helpfulCount: saved.helpfulCount,
         unhelpfulCount: saved.unhelpfulCount,
+        myVote: saved.myVote === undefined ? vote : saved.myVote,
       })),
   });
 }

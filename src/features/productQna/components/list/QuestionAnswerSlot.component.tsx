@@ -80,6 +80,7 @@ export function QuestionAnswerSlot({
           question: question.question,
         })}
         onClick={handleToggle}
+        className={styles.answerButton}
       >
         {LABELS.answerQuestion}
       </Button>

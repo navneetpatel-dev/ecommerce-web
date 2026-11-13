@@ -6,6 +6,9 @@ export interface ReviewMediaItem {
   durationSeconds: number | null;
 }
 
+/** Helpful / Not helpful. */
+export type ReviewVote = "HELPFUL" | "UNHELPFUL";
+
 export interface Review {
   id: string;
   productId: string;
@@ -17,6 +20,8 @@ export interface Review {
   status: ReviewStatus;
   helpfulCount: number;
   unhelpfulCount: number;
+  /** The signed-in viewer's own vote on this review (null: they have not voted). */
+  myVote?: ReviewVote | null;
   createdAt: string;
   /** Photos and at most one video (approved reviews show them). */
   media?: ReviewMediaItem[];

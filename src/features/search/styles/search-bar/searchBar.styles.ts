@@ -11,7 +11,7 @@ export const searchBarStyles = {
   searchIconMuted: "text-ink-muted",
   searchIconDark: "text-paper/70",
   inputBase:
-    "h-11 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none",
+    "h-11 text-ellipsis [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none",
   inputSm: "pl-9 text-body-sm lg:pr-10",
   inputLg: "pl-11 lg:pr-10",
   shortcutHint:

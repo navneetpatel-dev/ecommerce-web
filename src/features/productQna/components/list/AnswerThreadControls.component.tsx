@@ -10,7 +10,8 @@ interface AnswerThreadControlsProps {
 }
 
 /**
- * Collapsed: one "See 54 more answers" button. Open: a footer with how far the
+ * Collapsed: one "See 54 more answers" button (sharing the question's footer
+ * row with "Answer"). Open: a footer with how far the
  * reader is ("Showing 40 of 72 answers" + bar) beside equal-size Load more /
  * Show fewer buttons; on phones the buttons share the row.
  */
@@ -30,7 +31,7 @@ export function AnswerThreadControls({
           aria-expanded={false}
           aria-controls={controlsId}
           onClick={thread.toggle}
-          className={styles.threadButton}
+          className={styles.threadToggle}
         >
           {thread.expandLabel}
           <ChevronDown aria-hidden />

@@ -8,7 +8,7 @@ export const headerStyles = {
     "sticky top-0 z-40 overflow-visible transition-all duration-200 h-[calc(3.5rem+env(safe-area-inset-top,0px))] pt-[env(safe-area-inset-top,0px)] lg:h-[calc(72px+env(safe-area-inset-top,0px))]",
   headerSolid: "bg-surface border-b border-line shadow-elevation-1",
   container:
-    "storefront-container flex h-full flex-nowrap items-center gap-1.5 sm:gap-3 lg:gap-4 xl:gap-6",
+    "storefront-container flex h-full flex-nowrap items-center gap-1.5 sm:gap-3 lg:gap-4 2xl:gap-6",
   brandName:
     "min-w-0 shrink truncate text-[1.25rem] font-display font-semibold leading-none sm:text-[1.5rem] lg:text-[1.625rem] xl:text-[1.75rem]",
   brandNameSolid: "text-brand",
@@ -31,8 +31,9 @@ export const headerStyles = {
   navCategoriesText:
     "inline-flex h-11 items-center gap-1 px-4 text-[0.875rem] sm:px-5 sm:text-body",
   navCategoriesIconSlot: "size-4",
-  navLinkText: "inline-block px-3 py-2 text-body-sm font-medium",
-  searchSkeletonWrapper: "mx-auto hidden max-w-xl flex-1 xl:flex",
+  navLinkText:
+    "inline-block whitespace-nowrap px-3 py-2 text-body-sm font-medium",
+  searchSkeletonWrapper: "mx-auto hidden min-w-[10rem] max-w-xl flex-1 xl:flex",
   searchSkeletonInput: "h-11 w-full rounded-full",
   menuButtonSkeleton:
     "-ml-2 h-11 w-11 shrink-0 rounded-md xl:hidden max-sm:h-9 max-sm:w-9",
@@ -45,9 +46,9 @@ export const headerStyles = {
   categoriesChevron: "transition-transform",
   categoriesChevronOpen: "rotate-180",
   primaryLink:
-    "px-3 py-2 rounded-md text-body-sm font-medium transition-colors",
+    "whitespace-nowrap px-3 py-2 rounded-md text-body-sm font-medium transition-colors",
   primaryLinkSolid: `text-ink ${HOVER_ON_SURFACE}`,
-  searchWrapper: "hidden xl:flex flex-1 max-w-xl mx-auto",
+  searchWrapper: "hidden xl:flex flex-1 max-w-xl mx-auto min-w-[10rem]",
 
   // Account Section
   loginLink:

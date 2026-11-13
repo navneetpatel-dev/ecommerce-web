@@ -12,7 +12,7 @@ import type {
 } from "../../types/productReviews.types";
 import { readReviewSummary } from "../../utils/productReviews.utils";
 import { API } from "@/shared/constants/apiRoutes";
-import type { Review } from "@/shared/api/types";
+import type { Review, ReviewVote } from "@/shared/api/types";
 
 export const reviewsApi = {
   /** One filtered page of a product's public reviews + its star summary. */
@@ -84,8 +84,12 @@ export const reviewsApi = {
   /** The author deletes their review (permanently). */
   remove: (reviewId: string) =>
     apiClient.delete<{ deleted: boolean }>(`${API.reviews.create}/${reviewId}`),
-  vote: (reviewId: string, vote: "HELPFUL" | "UNHELPFUL") =>
+  /** Casts the viewer's vote; the response carries the new counts and `myVote`. */
+  vote: (reviewId: string, vote: ReviewVote) =>
     apiClient.post<Review>(API.reviews.vote(reviewId), { vote }),
+  /** Takes the viewer's vote back. */
+  clearVote: (reviewId: string) =>
+    apiClient.delete<Review>(API.reviews.vote(reviewId)),
   approve: (id: string) => apiClient.patch<Review>(API.reviews.approve(id), {}),
   reject: (id: string) => apiClient.patch<Review>(API.reviews.reject(id), {}),
   pending: async (

@@ -17,6 +17,7 @@ import {
 } from "@/shared/constants/media/imageGallery";
 import { useImageLightboxGestures } from "@/shared/hooks/media/useImageLightboxGestures.hook";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
+import { galleryEdges, galleryStep } from "@/shared/utils/media/galleryStep";
 import { imageLightboxStyles } from "../../styles/image-gallery/imageLightbox.styles";
 import type { ProductImage } from "@/shared/api/types";
 
@@ -46,14 +47,13 @@ export function ImageGalleryLightbox({
   const hasMultiple = count > 1;
   const viewportRef = useRef<HTMLDivElement>(null);
 
+  const edges = galleryEdges(safeIndex, count);
   const goPrev = () => {
-    if (!hasMultiple) return;
-    onSelect((safeIndex - 1 + count) % count);
+    if (edges.canPrev) onSelect(galleryStep(safeIndex, -1, count));
   };
 
   const goNext = () => {
-    if (!hasMultiple) return;
-    onSelect((safeIndex + 1) % count);
+    if (edges.canNext) onSelect(galleryStep(safeIndex, 1, count));
   };
 
   const { transform, resetTransform, viewportHandlers } =
@@ -130,6 +130,7 @@ export function ImageGalleryLightbox({
                   variant="secondary"
                   size="icon"
                   onClick={goPrev}
+                  disabled={!edges.canPrev}
                   aria-label={LABELS.previousImage}
                   className={imageLightboxStyles.navPrevButton}
                 >
@@ -143,6 +144,7 @@ export function ImageGalleryLightbox({
                   variant="secondary"
                   size="icon"
                   onClick={goNext}
+                  disabled={!edges.canNext}
                   aria-label={LABELS.nextImage}
                   className={imageLightboxStyles.navNextButton}
                 >

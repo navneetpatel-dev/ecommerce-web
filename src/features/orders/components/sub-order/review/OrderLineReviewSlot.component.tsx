@@ -25,11 +25,16 @@ export function OrderLineReviewSlot({
   if (item.review) {
     return (
       <p className={cn(styles.lineActions, styles.reviewStatus)}>
-        <span className={styles.reviewStatusStrong}>
-          {formatLabel(LABELS.yourReviewRating, { rating: item.review.rating })}
+        {/* Rating and status stay on one line; only the link wraps on phones. */}
+        <span className={styles.reviewStatusGroup}>
+          <span className={styles.reviewStatusStrong}>
+            {formatLabel(LABELS.yourReviewRating, {
+              rating: item.review.rating,
+            })}
+          </span>
+          <span aria-hidden>·</span>
+          <span>{reviewStatusLabel(item.review.status)}</span>
         </span>
-        <span aria-hidden>·</span>
-        <span>{reviewStatusLabel(item.review.status)}</span>
         <Link href={PATHS.reviews} className={styles.reviewLink}>
           {LABELS.viewYourReviews}
         </Link>

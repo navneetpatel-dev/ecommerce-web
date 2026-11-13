@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import type { MouseEvent } from "react";
+import type { GalleryEdges } from "@/shared/utils/media/galleryStep";
 import { imageStageControlsStyles } from "../../styles/image-gallery/imageGallery.styles";
 
 interface ImageStageControlsProps {
@@ -11,13 +12,16 @@ interface ImageStageControlsProps {
   onOpenLightbox: () => void;
   onPrev: () => void;
   onNext: () => void;
+  /** First image disables "Previous", last disables "Next" (no wrap-around). */
+  edges: GalleryEdges;
   /** Stops the click from also triggering the stage's lightbox open. */
   stopStageClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 /** Floating zoom / prev / next controls over the gallery stage (Rule 3 split). */
 export function ImageStageControls(props: ImageStageControlsProps) {
-  const { hasMultiple, onOpenLightbox, onPrev, onNext, stopStageClick } = props;
+  const { hasMultiple, onOpenLightbox, onPrev, onNext, edges, stopStageClick } =
+    props;
 
   const handleZoom = (event: MouseEvent<HTMLButtonElement>) => {
     stopStageClick(event);
@@ -57,6 +61,7 @@ export function ImageStageControls(props: ImageStageControlsProps) {
             variant="secondary"
             size="icon-sm"
             onClick={handlePrev}
+            disabled={!edges.canPrev}
             aria-label={LABELS.previousImage}
             className={imageStageControlsStyles.prevButton}
           >
@@ -70,6 +75,7 @@ export function ImageStageControls(props: ImageStageControlsProps) {
             variant="secondary"
             size="icon-sm"
             onClick={handleNext}
+            disabled={!edges.canNext}
             aria-label={LABELS.nextImage}
             className={imageStageControlsStyles.nextButton}
           >

@@ -9,25 +9,39 @@ interface ReviewMediaThumbProps {
   item: ReviewMediaItem;
   index: number;
   onOpen: (index: number) => void;
+  /** Inside the viewer: the strip marks the item on screen. */
+  selection?: { selected: boolean; total: number };
 }
 
 export function ReviewMediaThumb({
   item,
   index,
   onOpen,
+  selection,
 }: ReviewMediaThumbProps) {
   const isVideo = item.type === "VIDEO";
   const handleClick = () => onOpen(index);
-  const label = isVideo
-    ? LABELS.reviewMediaOpenVideo
-    : formatLabel(LABELS.reviewMediaOpenPhoto, { index: index + 1 });
+  const label = selection
+    ? formatLabel(LABELS.reviewMediaShow, {
+        index: index + 1,
+        total: selection.total,
+      })
+    : isVideo
+      ? LABELS.reviewMediaOpenVideo
+      : formatLabel(LABELS.reviewMediaOpenPhoto, { index: index + 1 });
+  const className = selection
+    ? selection.selected
+      ? styles.stripThumbSelected
+      : styles.stripThumb
+    : styles.thumbButton;
 
   return (
     <li>
       <button
         type="button"
-        className={styles.thumbButton}
+        className={className}
         aria-label={label}
+        aria-current={selection?.selected ? "true" : undefined}
         onClick={handleClick}
       >
         {isVideo ? (

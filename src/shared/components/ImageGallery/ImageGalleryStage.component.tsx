@@ -1,3 +1,4 @@
+import type { GalleryEdges } from "@/shared/utils/media/galleryStep";
 import type { CSSProperties, MouseEvent } from "react";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import type { useGalleryStage } from "../../hooks/image-gallery/useGalleryStage.hook";
@@ -28,6 +29,7 @@ interface ImageGalleryStageProps {
   onOpenLightbox: () => void;
   onPrev: () => void;
   onNext: () => void;
+  edges: GalleryEdges;
 }
 
 /** The main enlarged-image stage: current/previous image crossfade, zoom overlay, nav controls. */
@@ -46,6 +48,7 @@ export function ImageGalleryStage({
   onOpenLightbox,
   onPrev,
   onNext,
+  edges,
 }: ImageGalleryStageProps) {
   // B-29: "Name - view 2" like the thumbnails, so each view is told apart.
   const mainAlt = hasMultiple
@@ -126,6 +129,7 @@ export function ImageGalleryStage({
           onOpenLightbox={onOpenLightbox}
           onPrev={onPrev}
           onNext={onNext}
+          edges={edges}
           stopStageClick={stopStageClick}
         />
       </div>

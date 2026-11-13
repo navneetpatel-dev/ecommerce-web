@@ -21,7 +21,11 @@ import {
 } from "./QuestionAnswerSlot.component";
 import { productQnaStyles as styles } from "../../styles/list/productQna.styles";
 
-/** "Q" + the question, its best answer (thread on demand) and the Answer action. */
+/**
+ * One question, laid out like a review: the question with its Edit / Delete on
+ * the right, who asked and when beneath it, the answers on a quiet rail, and a
+ * single footer row ("See 69 more answers" · "Answer").
+ */
 export function QuestionItem({
   question: q,
   answering,
@@ -39,6 +43,7 @@ export function QuestionItem({
   );
   const handleEdit = () => editQuestion(q);
   const handleDelete = () => deleteQuestion(q);
+  const hasAnswersShown = Boolean(q.myAnswer || thread.visible.length);
 
   return (
     <article ref={articleRef} className={styles.questionArticle}>
@@ -47,11 +52,22 @@ export function QuestionItem({
           {LABELS.questionLabel}
         </span>
         <div className={styles.questionBody}>
-          <ExpandableText
-            text={q.question}
-            threshold={QUESTION_CLAMP_CHARS}
-            className={styles.questionText}
-          />
+          <div className={styles.questionHead}>
+            <ExpandableText
+              text={q.question}
+              threshold={QUESTION_CLAMP_CHARS}
+              className={styles.questionText}
+            />
+            {isMine ? (
+              <OwnerActions
+                compact
+                onEdit={canEdit ? handleEdit : undefined}
+                onDelete={handleDelete}
+                editLabel={LABELS.editQuestionAria}
+                deleteLabel={LABELS.deleteQuestionAria}
+              />
+            ) : null}
+          </div>
           <div className={styles.questionMeta}>
             {isMine ? (
               <span className={styles.mineTag}>{LABELS.yourQuestionTag}</span>
@@ -75,40 +91,33 @@ export function QuestionItem({
                 {LABELS.questionPendingReview}
               </span>
             ) : null}
-            {isMine ? (
-              <OwnerActions
-                compact
-                onEdit={canEdit ? handleEdit : undefined}
-                onDelete={handleDelete}
-                editLabel={LABELS.editQuestionAria}
-                deleteLabel={LABELS.deleteQuestionAria}
-              />
-            ) : null}
           </div>
-          {q.myAnswer ? (
-            <div className={styles.answersList}>
-              <AnswerItem answer={q.myAnswer} pinned />
+          {hasAnswersShown ? (
+            <div className={styles.answersRail}>
+              {q.myAnswer ? <AnswerItem answer={q.myAnswer} pinned /> : null}
+              {thread.visible.length ? (
+                <AnswerList id={answersId} answers={thread.visible} />
+              ) : null}
             </div>
           ) : null}
-          {thread.visible.length ? (
-            <AnswerList id={answersId} answers={thread.visible} />
+          {thread.isLoadingThread ? (
+            <div className={styles.threadLoading}>
+              <ReviewListSkeleton count={2} />
+            </div>
           ) : null}
+          {thread.total || q.myAnswer ? null : (
+            <p className={styles.noAnswersText}>{LABELS.noAnswersYet}</p>
+          )}
+          <div className={styles.questionFooter}>
+            <AnswerThreadControls thread={thread} controlsId={answersId} />
+            <QuestionAnswerSlot
+              question={q}
+              answering={answering}
+              ownQuestion={isMine}
+            />
+          </div>
         </div>
       </div>
-      {thread.isLoadingThread ? (
-        <div className={styles.threadLoading}>
-          <ReviewListSkeleton count={2} />
-        </div>
-      ) : null}
-      <AnswerThreadControls thread={thread} controlsId={answersId} />
-      {thread.total ? null : (
-        <p className={styles.noAnswersText}>{LABELS.noAnswersYet}</p>
-      )}
-      <QuestionAnswerSlot
-        question={q}
-        answering={answering}
-        ownQuestion={isMine}
-      />
     </article>
   );
 }

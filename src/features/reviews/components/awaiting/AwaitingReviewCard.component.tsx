@@ -15,30 +15,30 @@ export function AwaitingReviewCard({ item }: { item: AwaitingReviewItem }) {
 
   return (
     <li className={styles.card}>
-      <Link href={href} className={styles.thumb} tabIndex={-1} aria-hidden>
-        <MediaImage
-          src={item.imageUrl}
-          alt={item.productName}
-          sizes="96px"
-          imageClassName={styles.thumbImage}
-        />
-      </Link>
-      <div className={styles.body}>
-        <p className={styles.name}>{item.productName}</p>
-        <p className={styles.meta}>
-          {formatLabel(LABELS.deliveredOn, {
-            date: formatOrderDate(item.deliveredAt),
-          })}
-        </p>
-        <div className={styles.action}>
-          <Button asChild size="sm" className={styles.actionButton}>
-            <Link href={href}>
-              <Star className={styles.actionIcon} aria-hidden />
-              {LABELS.writeAReview}
-            </Link>
-          </Button>
+      <div className={styles.product}>
+        <Link href={href} className={styles.thumb} tabIndex={-1} aria-hidden>
+          <MediaImage
+            src={item.imageUrl}
+            alt={item.productName}
+            sizes="80px"
+            imageClassName={styles.thumbImage}
+          />
+        </Link>
+        <div className={styles.body}>
+          <p className={styles.name}>{item.productName}</p>
+          <p className={styles.meta}>
+            {formatLabel(LABELS.deliveredOn, {
+              date: formatOrderDate(item.deliveredAt),
+            })}
+          </p>
         </div>
       </div>
+      <Button asChild size="sm" className={styles.actionButton}>
+        <Link href={href}>
+          <Star className={styles.actionIcon} aria-hidden />
+          {LABELS.writeAReview}
+        </Link>
+      </Button>
     </li>
   );
 }

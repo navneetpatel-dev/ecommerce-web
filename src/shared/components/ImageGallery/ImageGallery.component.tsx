@@ -1,5 +1,6 @@
 "use client";
 
+import { galleryEdges, galleryStep } from "@/shared/utils/media/galleryStep";
 import dynamic from "next/dynamic";
 import type { ProductImage } from "@/shared/api/types";
 import { ImageGalleryThumbnailStrip } from "@/shared/components/ImageGallery/ImageGalleryThumbnailStrip.component";
@@ -74,14 +75,13 @@ export function ImageGallery(props: ImageGalleryProps) {
     ? ""
     : "transition-opacity duration-[var(--motion-base)]";
 
+  const edges = galleryEdges(safeIndex, gallery.length);
   const goPrev = () => {
-    if (!hasMultiple) return;
-    onSelect((safeIndex - 1 + gallery.length) % gallery.length);
+    if (edges.canPrev) onSelect(galleryStep(safeIndex, -1, gallery.length));
   };
 
   const goNext = () => {
-    if (!hasMultiple) return;
-    onSelect((safeIndex + 1) % gallery.length);
+    if (edges.canNext) onSelect(galleryStep(safeIndex, 1, gallery.length));
   };
 
   const handleLightboxOpenChange = (open: boolean) => {
@@ -122,6 +122,7 @@ export function ImageGallery(props: ImageGalleryProps) {
           onOpenLightbox={onOpenLightbox}
           onPrev={goPrev}
           onNext={goNext}
+          edges={edges}
         />
       </div>
 

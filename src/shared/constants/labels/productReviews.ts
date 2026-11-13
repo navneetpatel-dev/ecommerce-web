@@ -24,6 +24,9 @@ export const productReviewsLabels = {
   wasThisHelpful: "Helpful?",
   markHelpful: "Mark as helpful ({count})",
   markUnhelpful: "Mark as not helpful ({count})",
+  youFoundHelpful: "You found this helpful",
+  youFoundUnhelpful: "You didn't find this helpful",
+  removeYourVote: "Click again to remove your vote",
   sellerResponse: "Response from the seller",
   reviewsLoadFailed: "Reviews could not be loaded",
   reviewsLoadFailedHint:

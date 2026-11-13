@@ -5,5 +5,9 @@ export const reviewMediaLabels = {
   reviewMediaOpenPhoto: "Open photo {index}",
   reviewMediaOpenVideo: "Play video",
   reviewMediaViewerTitle: "Review photos and video",
+  reviewMediaPrevious: "Previous photo or video",
+  reviewMediaNext: "Next photo or video",
+  reviewMediaShow: "Show item {index} of {total}",
+  reviewMediaViewerThumbs: "All photos and video in this review",
   reviewMediaModerate: "Photos & video ({count})",
 } as const;

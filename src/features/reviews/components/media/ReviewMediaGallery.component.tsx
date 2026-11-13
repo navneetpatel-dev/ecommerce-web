@@ -1,7 +1,6 @@
 "use client";
 
 import type { ReviewMediaItem } from "@/shared/api/types";
-import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import {
   Dialog,
   DialogContent,
@@ -11,13 +10,17 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { useReviewMediaGallery } from "../../hooks/media/useReviewMediaGallery.hook";
 import { reviewMediaGalleryStyles as styles } from "../../styles/media/reviewMediaGallery.styles";
-import { ReviewMediaThumb } from "./ReviewMediaThumb.component";
+import { ReviewMediaThumbList } from "./ReviewMediaThumbList.component";
+import { ReviewMediaViewerStage } from "./ReviewMediaViewerStage.component";
 
 interface ReviewMediaGalleryProps {
   media?: readonly ReviewMediaItem[] | null;
 }
 
-/** A review's photos and video as thumbnails; one opens full size in a viewer. */
+/**
+ * A review's photos and video as thumbnails; one opens full size in a viewer
+ * that steps through the rest (buttons, ← / →, swipe), stopping at both ends.
+ */
 export function ReviewMediaGallery({ media }: ReviewMediaGalleryProps) {
   const items = media ?? [];
   const gallery = useReviewMediaGallery(items);
@@ -25,41 +28,42 @@ export function ReviewMediaGallery({ media }: ReviewMediaGalleryProps) {
 
   return (
     <>
-      <ul className={styles.list} aria-label={LABELS.reviewMediaGalleryAria}>
-        {items.map((item, index) => (
-          <ReviewMediaThumb
-            key={item.url}
-            item={item}
-            index={index}
-            onOpen={gallery.handleOpen}
-          />
-        ))}
-      </ul>
+      <ReviewMediaThumbList
+        items={items}
+        onOpen={gallery.handleOpen}
+        className={styles.list}
+        label={LABELS.reviewMediaGalleryAria}
+      />
       <Dialog open={gallery.open} onOpenChange={gallery.handleOpenChange}>
         <DialogContent
           className={styles.viewerContent}
           aria-describedby={undefined}
+          onKeyDown={gallery.handleKeyDown}
         >
-          <DialogHeader>
-            <DialogTitle>{LABELS.reviewMediaViewerTitle}</DialogTitle>
+          <DialogHeader className={styles.viewerHeader}>
+            <DialogTitle className={styles.viewerTitle}>
+              {LABELS.reviewMediaViewerTitle}
+            </DialogTitle>
+            {gallery.hasMultiple ? (
+              <p className={styles.counter} aria-live="polite">
+                {gallery.positionLabel}
+              </p>
+            ) : null}
           </DialogHeader>
-          {gallery.current?.type === "VIDEO" ? (
-            <video
-              src={gallery.current.url}
-              className={styles.viewerMedia}
-              controls
-              autoPlay
-              playsInline
+          {gallery.current ? (
+            <ReviewMediaViewerStage
+              current={gallery.current}
+              gallery={gallery}
             />
-          ) : gallery.current ? (
-            <div className={styles.viewerFrame}>
-              <MediaImage
-                src={gallery.current.url}
-                alt=""
-                sizes="(min-width: 768px) 768px, 100vw"
-                imageClassName={styles.viewerImage}
-              />
-            </div>
+          ) : null}
+          {gallery.hasMultiple ? (
+            <ReviewMediaThumbList
+              items={items}
+              onOpen={gallery.handleOpen}
+              className={styles.strip}
+              label={LABELS.reviewMediaViewerThumbs}
+              selectedIndex={gallery.index}
+            />
           ) : null}
         </DialogContent>
       </Dialog>

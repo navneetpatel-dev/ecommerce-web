@@ -70,10 +70,17 @@ export const productReviewsStyles = {
   // Footer: voting left, the author's Edit / Delete right.
   actionsRow:
     "mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2",
-  helpfulGroup: "flex items-center gap-2",
+  helpfulGroup: "flex flex-wrap items-center gap-2",
   helpfulSummary: "text-body-sm text-ink-muted tabular-nums",
   voteChip:
     "inline-flex h-9 min-w-[3.75rem] items-center justify-center gap-1.5 rounded-full border border-line px-3 text-body-sm font-medium tabular-nums text-ink-muted transition-colors hover:border-line-strong hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+  // The viewer's own vote: brand ring + filled thumb, so they can see what they chose.
+  voteChipActive:
+    "inline-flex h-9 min-w-[3.75rem] items-center justify-center gap-1.5 rounded-full border border-brand/60 bg-brand-subtle px-3 text-body-sm font-semibold tabular-nums text-brand transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
   voteLabel: "mr-1 text-body-sm text-ink-muted",
   voteIcon: "h-3.5 w-3.5",
+  voteIconActive: "h-3.5 w-3.5 fill-current",
+  voteNote:
+    "inline-flex items-center gap-1 text-body-sm text-brand basis-full xs:basis-auto",
+  voteNoteIcon: "h-3.5 w-3.5",
 } as const;

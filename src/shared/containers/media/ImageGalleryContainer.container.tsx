@@ -1,5 +1,6 @@
 "use client";
 
+import { galleryStep } from "@/shared/utils/media/galleryStep";
 import { useState } from "react";
 import { useImageGalleryTransition } from "@/shared/hooks/media/useImageGalleryTransition.hook";
 import { useImageGalleryZoom } from "@/shared/hooks/media/useImageGalleryZoom.hook";
@@ -30,9 +31,8 @@ export function ImageGalleryContainer({
     enabled: !lightboxOpen,
     onTap: openLightbox,
     onSwipe: (direction) => {
-      if (count <= 1) return;
-      const next = (selectedIndex + direction + count) % count;
-      gallery.selectImage(next);
+      const next = galleryStep(selectedIndex, direction < 0 ? -1 : 1, count);
+      if (next !== selectedIndex) gallery.selectImage(next);
     },
   });
 

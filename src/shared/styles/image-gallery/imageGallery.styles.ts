@@ -32,8 +32,8 @@ export const imageStageControlsStyles = {
   zoomButton:
     "absolute right-2.5 top-2.5 z-[2] h-10 w-10 min-h-10 max-h-10 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:top-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11",
   prevButton:
-    "absolute left-2.5 top-1/2 z-[2] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:left-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11 opacity-100 lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100",
+    "absolute left-2.5 top-1/2 z-[2] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:left-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11 opacity-100 lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100 lg:disabled:opacity-0 lg:group-hover:disabled:opacity-40",
   nextButton:
-    "absolute right-2.5 top-1/2 z-[2] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11 opacity-100 lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100",
+    "absolute right-2.5 top-1/2 z-[2] h-10 w-10 min-h-10 max-h-10 -translate-y-1/2 rounded-full border border-line bg-surface/90 shadow-elevation-1 backdrop-blur-sm sm:right-3 sm:h-11 sm:w-11 sm:min-h-11 sm:max-h-11 opacity-100 lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100 lg:disabled:opacity-0 lg:group-hover:disabled:opacity-40",
   icon: "h-4 w-4",
 } as const;

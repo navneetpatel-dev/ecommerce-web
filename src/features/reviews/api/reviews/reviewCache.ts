@@ -114,3 +114,24 @@ export function updateReviewInCaches(
     return data;
   });
 }
+
+/** The first cached copy of a review (any list it appears in), if any. */
+export function findReviewInCaches(
+  queryClient: QueryClient,
+  reviewId: string,
+): Review | undefined {
+  for (const [, data] of queryClient.getQueriesData({
+    queryKey: ALL_REVIEWS,
+  })) {
+    if (isReviewPage(data)) {
+      const hit = data.items.find((r) => r.id === reviewId);
+      if (hit) return hit;
+    } else if (isInfiniteReviews(data)) {
+      for (const page of data.pages) {
+        const hit = page.items?.find((r) => r.id === reviewId);
+        if (hit) return hit;
+      }
+    }
+  }
+  return undefined;
+}
