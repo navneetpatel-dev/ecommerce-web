@@ -11,7 +11,7 @@ import type { ProductAnswer, ProductQuestion } from "@/shared/api/types";
 import {
   useUpdateAnswer,
   useUpdateQuestion,
-} from "../../api/qna/productQna.queries";
+} from "../../api/qna/productQnaEdits.mutations";
 
 type EditTarget =
   { kind: "question"; id: string } | { kind: "answer"; id: string };

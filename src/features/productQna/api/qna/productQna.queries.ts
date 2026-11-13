@@ -11,6 +11,7 @@ import { productQnaApi } from "./productQna.api";
 import { nextPageOf } from "@/shared/api/client/pagination";
 import { ANSWER_THREAD_PAGE_SIZE } from "../../constants/productQna.constants";
 import type { ProductQuestionsParams } from "../../types/productQna.types";
+import { setMyAnswerInCaches } from "./productQnaCache";
 
 export const productQnaKeys = {
   all: ["productQna"] as const,
@@ -21,6 +22,8 @@ export const productQnaKeys = {
   pending: () => [...productQnaKeys.all, "pending"] as const,
   myQuestions: () => [...productQnaKeys.all, "mine", "questions"] as const,
   myAnswers: () => [...productQnaKeys.all, "mine", "answers"] as const,
+  answers: (questionId: string) =>
+    [...productQnaKeys.all, "answers", questionId] as const,
 };
 
 export function useProductQuestions(
@@ -41,7 +44,7 @@ export function useProductQuestions(
 /** A question's answer thread, a page at a time, fetched only once opened. */
 export function useQuestionAnswers(questionId: string, enabled: boolean) {
   return useInfiniteQuery({
-    queryKey: [...productQnaKeys.all, "answers", questionId] as const,
+    queryKey: productQnaKeys.answers(questionId),
     queryFn: ({ pageParam }) =>
       productQnaApi.answers(questionId, {
         page: pageParam,
@@ -72,47 +75,6 @@ export function useMyAnswers() {
   });
 }
 
-export function useUpdateQuestion() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: { questionId: string; question: string }) =>
-      productQnaApi.updateQuestion(input.questionId, {
-        question: input.question,
-      }),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: productQnaKeys.all }),
-  });
-}
-
-export function useDeleteQuestion() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (questionId: string) =>
-      productQnaApi.deleteQuestion(questionId),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: productQnaKeys.all }),
-  });
-}
-
-export function useDeleteAnswer() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (answerId: string) => productQnaApi.deleteAnswer(answerId),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: productQnaKeys.all }),
-  });
-}
-
-export function useUpdateAnswer() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: { answerId: string; answer: string }) =>
-      productQnaApi.updateAnswer(input.answerId, { answer: input.answer }),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: productQnaKeys.all }),
-  });
-}
-
 export function useCanAnswer(productId: string, signedIn: boolean) {
   return useQuery({
     queryKey: [...productQnaKeys.product(productId), "can-answer"],
@@ -134,9 +96,13 @@ export function useAskQuestion() {
   return useMutation({
     mutationFn: (input: { productId: string; question: string }) =>
       productQnaApi.ask(input),
+    // The new question is pinned on top for its asker, so this list does reload.
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({
+      void queryClient.invalidateQueries({
         queryKey: productQnaKeys.product(variables.productId),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: productQnaKeys.myQuestions(),
       });
     },
   });
@@ -147,8 +113,11 @@ export function useAnswerQuestion() {
   return useMutation({
     mutationFn: (input: { questionId: string; answer: string }) =>
       productQnaApi.answer(input.questionId, { answer: input.answer }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: productQnaKeys.all });
+    onSuccess: (answer, { questionId }) => {
+      setMyAnswerInCaches(queryClient, questionId, answer);
+      void queryClient.invalidateQueries({
+        queryKey: productQnaKeys.myAnswers(),
+      });
     },
   });
 }

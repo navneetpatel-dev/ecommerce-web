@@ -14,6 +14,7 @@ import { navigate } from "@/shared/utils/navigation/navigate";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { PATHS } from "@/shared/constants/paths/paths";
 import type { ProductReviewsParams } from "../../types/productReviews.types";
+import { updateReviewInCaches } from "./reviewCache";
 
 export const reviewKeys = {
   all: ["reviews"] as const,
@@ -96,8 +97,18 @@ export function useUpdateReview() {
       ...body
     }: { reviewId: string } & Parameters<typeof reviewsApi.update>[1]) =>
       reviewsApi.update(reviewId, body),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: reviewKeys.all }),
+    // In place (no refetch): the edited review stays where the shopper sees it,
+    // now marked as awaiting approval; nothing around it re-orders.
+    onSuccess: (saved, { reviewId }) =>
+      updateReviewInCaches(queryClient, reviewId, (review) => ({
+        ...review,
+        rating: saved.rating,
+        title: saved.title,
+        body: saved.body,
+        media: saved.media ?? review.media,
+        status: saved.status,
+        editedAt: saved.editedAt ?? new Date().toISOString(),
+      })),
   });
 }
 
@@ -105,9 +116,17 @@ export function useDeleteReview() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (reviewId: string) => reviewsApi.remove(reviewId),
-    // Deleting frees the order line: "write a review" lists change too.
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: reviewKeys.all }),
+    onSuccess: (_result, reviewId) => {
+      // Only this review leaves; every other row stays exactly where it was.
+      updateReviewInCaches(queryClient, reviewId, () => null);
+      // The order line is free again: refresh the small "write a review" prompts.
+      void queryClient.invalidateQueries({
+        predicate: (query) =>
+          query.queryKey[0] === reviewKeys.all[0] &&
+          (query.queryKey[1] === "eligibility" ||
+            query.queryKey[1] === "awaiting"),
+      });
+    },
   });
 }
 
@@ -116,8 +135,13 @@ export function useVoteReview() {
   return useMutation({
     mutationFn: (input: { reviewId: string; vote: "HELPFUL" | "UNHELPFUL" }) =>
       reviewsApi.vote(input.reviewId, input.vote),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: reviewKeys.all });
-    },
+    // New counts in place — no refetch, so "Most helpful" does not re-rank
+    // the list under the shopper's cursor.
+    onSuccess: (saved, { reviewId }) =>
+      updateReviewInCaches(queryClient, reviewId, (review) => ({
+        ...review,
+        helpfulCount: saved.helpfulCount,
+        unhelpfulCount: saved.unhelpfulCount,
+      })),
   });
 }

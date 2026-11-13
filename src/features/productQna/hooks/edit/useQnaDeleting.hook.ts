@@ -9,7 +9,7 @@ import type { ProductAnswer, ProductQuestion } from "@/shared/api/types";
 import {
   useDeleteAnswer,
   useDeleteQuestion,
-} from "../../api/qna/productQna.queries";
+} from "../../api/qna/productQnaEdits.mutations";
 
 type DeleteTarget =
   { kind: "question"; id: string } | { kind: "answer"; id: string };

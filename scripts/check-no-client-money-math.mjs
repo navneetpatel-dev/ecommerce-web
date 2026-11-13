@@ -38,6 +38,17 @@ const allowlist = {
     "export progress % from row total",
   "src/features/admin-dashboard/components/analytics/AnalyticsStatusChart.component.tsx":
     "status share % from order count total",
+  // Review / Q&A counts and star ratings — no money involved.
+  "src/features/reviews/api/reviews/reviewCache.ts":
+    "review count + star average after a delete, patched in place",
+  "src/features/reviews/utils/productReviews.utils.ts":
+    "rating share % from review count total",
+  "src/features/productQna/api/qna/productQnaCache.ts":
+    "question / answer counts after a delete, patched in place",
+  "src/features/productQna/hooks/list/useAnswerThread.hook.ts":
+    "answers shown of answer total",
+  "src/features/productQna/utils/productQna.utils.ts":
+    "answered share % from question count total",
 };
 
 /** Tests build fixtures; constants/ holds display strings and route paths only. */
