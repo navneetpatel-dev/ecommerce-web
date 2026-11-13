@@ -69,8 +69,21 @@ export const reviewsApi = {
   /** Owner edit of stars and text; the review goes back to moderation. */
   update: (
     reviewId: string,
-    body: { rating: number; title?: string; body: string },
+    body: {
+      rating: number;
+      title?: string;
+      body: string;
+      /** The full photo/video list after editing. */
+      attachments?: Array<{
+        url: string;
+        type: "IMAGE" | "VIDEO";
+        durationSeconds?: number | null;
+      }>;
+    },
   ) => apiClient.patch<Review>(`${API.reviews.create}/${reviewId}`, body),
+  /** The author deletes their review (permanently). */
+  remove: (reviewId: string) =>
+    apiClient.delete<{ deleted: boolean }>(`${API.reviews.create}/${reviewId}`),
   vote: (reviewId: string, vote: "HELPFUL" | "UNHELPFUL") =>
     apiClient.post<Review>(API.reviews.vote(reviewId), { vote }),
   approve: (id: string) => apiClient.patch<Review>(API.reviews.approve(id), {}),

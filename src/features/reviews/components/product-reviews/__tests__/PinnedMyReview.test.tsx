@@ -21,7 +21,11 @@ describe("PinnedMyReview", () => {
   it("shows the viewer's review tagged, with its status and Edit", () => {
     render(
       <ReviewEditContext.Provider
-        value={{ currentUserId: "me", editReview: vi.fn() }}
+        value={{
+          currentUserId: "me",
+          editReview: vi.fn(),
+          deleteReview: vi.fn(),
+        }}
       >
         <PinnedMyReview
           review={review}

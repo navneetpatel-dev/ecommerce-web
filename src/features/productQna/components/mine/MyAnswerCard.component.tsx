@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Pencil } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { OwnerActions } from "@/shared/components/actions/OwnerActions.component";
 import { ExpandableText } from "@/shared/components/display/ExpandableText.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
@@ -15,9 +14,10 @@ import { MyQnaStatusBadge } from "./MyQnaStatusBadge.component";
 import { myQnaPagesStyles as styles } from "../../styles/mine/myQnaPages.styles";
 
 export function MyAnswerCard({ answer }: { answer: MyAnswer }) {
-  const { editAnswer } = useQnaEditActions();
+  const { editAnswer, deleteAnswer } = useQnaEditActions();
   const product = answer.question?.product ?? null;
   const handleEdit = () => editAnswer(answer);
+  const handleDelete = () => deleteAnswer(answer);
 
   return (
     <li className={styles.item}>
@@ -34,17 +34,12 @@ export function MyAnswerCard({ answer }: { answer: MyAnswer }) {
         )}
         <div className={styles.actions}>
           <MyQnaStatusBadge status={answer.status} />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className={styles.editButton}
-            aria-label={LABELS.editAnswerAria}
-            onClick={handleEdit}
-          >
-            <Pencil className={styles.editIcon} aria-hidden />
-            {LABELS.edit}
-          </Button>
+          <OwnerActions
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            editLabel={LABELS.editAnswerAria}
+            deleteLabel={LABELS.deleteAnswerAria}
+          />
         </div>
       </div>
       {answer.question ? (

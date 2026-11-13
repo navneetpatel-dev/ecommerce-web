@@ -1,37 +1,40 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import type { Review } from "@/shared/api/types";
+import type { ReactNode } from "react";
 import { LABELS } from "@/shared/constants/labels";
-import { useAuthStore } from "@/shared/stores/auth/auth.store";
-import { notifySuccess } from "@/shared/stores/notifications/toast.store";
+import { ConfirmDeleteDialog } from "@/shared/components/dialogs/ConfirmDeleteDialog.component";
 import { ReviewEditContext } from "../../context/reviewEdit.context";
+import { useReviewOwnerActions } from "../../hooks/review-edit/useReviewOwnerActions.hook";
 import { EditReviewDialog } from "../../components/review-edit/EditReviewDialog.component";
 
-/** Lets the shopper edit their own reviews anywhere below it; one dialog. */
-export function ReviewEditProvider({ children }: { children: ReactNode }) {
-  const sessionUserId = useAuthStore((s) => s.currentUser?.id ?? null);
-  const [editing, setEditing] = useState<Review | null>(null);
-  const handleOpenChange = (open: boolean) => {
-    if (!open) setEditing(null);
-  };
-  const handleSaved = () => {
-    setEditing(null);
-    notifySuccess(LABELS.editSubmitted);
-  };
+/** Lets the shopper edit or delete their own reviews anywhere below it. */
+export function ReviewEditProvider({
+  children,
+  productName,
+}: {
+  children: ReactNode;
+  /** On a product page: names the product in the edit dialog. */
+  productName?: string;
+}) {
+  const owner = useReviewOwnerActions();
 
   return (
-    <ReviewEditContext.Provider
-      value={{
-        currentUserId: sessionUserId,
-        editReview: setEditing,
-      }}
-    >
+    <ReviewEditContext.Provider value={owner.actions}>
       {children}
       <EditReviewDialog
-        review={editing}
-        onOpenChange={handleOpenChange}
-        onSaved={handleSaved}
+        review={owner.edit.review}
+        onOpenChange={owner.edit.onOpenChange}
+        onSaved={owner.edit.onSaved}
+        onDelete={owner.edit.onDelete}
+        productName={productName}
+      />
+      <ConfirmDeleteDialog
+        open={owner.remove.open}
+        title={LABELS.deleteReviewTitle}
+        description={LABELS.deleteReviewBody}
+        isPending={owner.remove.isPending}
+        onConfirm={owner.remove.onConfirm}
+        onOpenChange={owner.remove.onOpenChange}
       />
     </ReviewEditContext.Provider>
   );

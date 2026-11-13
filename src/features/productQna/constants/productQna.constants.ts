@@ -12,6 +12,8 @@ export const QUESTION_SEARCH_DEBOUNCE_MS = 350;
 export const ANSWER_THREAD_PAGE_SIZE = 10;
 /** Answers longer than this start clamped to three lines with "Read more". */
 export const ANSWER_CLAMP_CHARS = 220;
+/** Questions (max 300 chars) longer than this start clamped with "Read more". */
+export const QUESTION_CLAMP_CHARS = 160;
 
 export const QUESTION_SORT_OPTIONS: readonly FilterChipOption<QuestionSort>[] =
   [

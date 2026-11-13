@@ -16,5 +16,9 @@ export const productQnaRoutes = {
   updateQuestion: (questionId: string) =>
     `/api/product-qna/questions/${questionId}`,
   updateAnswer: (answerId: string) => `/api/product-qna/answers/${answerId}`,
+  /** DELETE: the asker's question (answers go with it) / the author's answer. */
+  deleteQuestion: (questionId: string) =>
+    `/api/product-qna/questions/${questionId}`,
+  deleteAnswer: (answerId: string) => `/api/product-qna/answers/${answerId}`,
   vendorMe: "/api/product-qna/questions/vendor/me",
 };

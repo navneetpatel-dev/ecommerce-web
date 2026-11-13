@@ -29,7 +29,7 @@ export const productQnaStyles = {
 
   // Question item
   questionsList: "divide-y divide-line",
-  questionArticle: "py-6",
+  questionArticle: "scroll-mt-28 py-6",
   questionRow: "flex items-start gap-3",
   qBadge:
     "flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-[0.75rem] font-semibold text-paper",
@@ -44,7 +44,7 @@ export const productQnaStyles = {
     "rounded-full bg-warning-subtle px-2 py-0.5 text-[0.75rem] font-medium text-warning",
   answerCount: "font-medium text-ink",
   answersList: "mt-4 space-y-4",
-  answerItem: "flex items-start gap-3",
+  answerItem: "flex scroll-mt-28 items-start gap-3 motion-safe:animate-fade-in",
   answerContent: "min-w-0 flex-1",
   answerBody: "text-body leading-relaxed text-ink-muted whitespace-pre-wrap",
   answerAuthor:

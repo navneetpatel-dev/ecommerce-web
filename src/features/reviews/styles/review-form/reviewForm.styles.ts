@@ -7,4 +7,9 @@ export const reviewFormStyles = {
   starIcon: "h-6 w-6",
   starActive: "fill-warning text-warning",
   starInactive: "text-line",
+  mediaBlock: "space-y-2",
+  deleteReview:
+    "mr-auto gap-1.5 text-danger hover:bg-danger-subtle hover:text-danger",
+  removeAllMedia:
+    "text-body-sm font-medium text-danger underline-offset-4 hover:underline disabled:opacity-50",
 } as const;

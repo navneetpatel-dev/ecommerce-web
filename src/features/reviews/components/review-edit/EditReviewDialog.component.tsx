@@ -16,12 +16,17 @@ interface EditReviewDialogProps {
   review: Review | null;
   onOpenChange: (open: boolean) => void;
   onSaved: () => void;
+  onDelete: () => void;
+  /** Where the review is shown on its product page (the review row has no product). */
+  productName?: string;
 }
 
 export function EditReviewDialog({
   review,
   onOpenChange,
   onSaved,
+  onDelete,
+  productName,
 }: EditReviewDialogProps) {
   return (
     <Dialog open={Boolean(review)} onOpenChange={onOpenChange}>
@@ -35,7 +40,12 @@ export function EditReviewDialog({
           </DialogDescription>
         </DialogHeader>
         {review ? (
-          <EditReviewFormContainer review={review} onSaved={onSaved} />
+          <EditReviewFormContainer
+            review={review}
+            productName={review.product?.name ?? productName ?? ""}
+            onSaved={onSaved}
+            onDelete={onDelete}
+          />
         ) : null}
       </DialogContent>
     </Dialog>

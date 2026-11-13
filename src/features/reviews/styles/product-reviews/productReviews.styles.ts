@@ -67,8 +67,13 @@ export const productReviewsStyles = {
   sellerDate: "font-normal text-ink-muted",
   sellerBody:
     "mt-1 text-body-sm leading-relaxed text-ink-muted whitespace-pre-wrap",
-  voteRow: "mt-4 flex flex-wrap items-center gap-2",
+  // Footer: voting left, the author's Edit / Delete right.
+  actionsRow:
+    "mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2",
+  helpfulGroup: "flex items-center gap-2",
+  helpfulSummary: "text-body-sm text-ink-muted tabular-nums",
+  voteChip:
+    "inline-flex h-9 min-w-[3.75rem] items-center justify-center gap-1.5 rounded-full border border-line px-3 text-body-sm font-medium tabular-nums text-ink-muted transition-colors hover:border-line-strong hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
   voteLabel: "mr-1 text-body-sm text-ink-muted",
-  voteButton: "h-8 gap-1.5 rounded-full px-3 tabular-nums",
   voteIcon: "h-3.5 w-3.5",
 } as const;

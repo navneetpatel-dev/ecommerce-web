@@ -16,8 +16,6 @@ export const myQnaPagesStyles = {
     "text-body-sm font-medium text-brand underline-offset-4 hover:underline",
   productFallback: "text-body-sm font-medium text-ink-muted",
   actions: "flex items-center gap-2",
-  editButton: "h-8 gap-1.5 rounded-full px-3",
-  editIcon: "h-4 w-4",
   questionText: "mt-2 text-body font-medium leading-relaxed text-ink",
   quotedQuestion:
     "mt-2 border-l-2 border-line pl-3 text-body-sm text-ink-muted line-clamp-2",

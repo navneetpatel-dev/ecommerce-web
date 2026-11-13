@@ -34,6 +34,8 @@ interface ReviewFormProps {
   hoverRating: number;
   /** Photos/video upload (new reviews only; an edit keeps the posted media). */
   showMedia?: boolean;
+  /** Shown beside Submit (edit mode: "Delete review"). */
+  extraAction?: React.ReactNode;
   submitLabel?: string;
   isPending: boolean;
   formLevelError?: string | null;
@@ -55,6 +57,7 @@ export function ReviewForm({
   title,
   hoverRating,
   showMedia = true,
+  extraAction = null,
   submitLabel = LABELS.submitReview,
   isPending,
   formLevelError = null,
@@ -65,6 +68,7 @@ export function ReviewForm({
   onSetRating,
   onSubmit,
 }: ReviewFormProps) {
+  const handleRemoveAllMedia = () => onAttachmentsChange([]);
   const canSubmit = rating >= 1 && isUgcTextValid(body, UGC_LIMITS.reviewBody);
   const disableHint =
     rating < 1 ? LABELS.selectReviewRating : LABELS.enterReviewBody;
@@ -72,9 +76,11 @@ export function ReviewForm({
   return (
     <form onSubmit={onSubmit} className={styles.form}>
       <FormStack>
-        <p className={styles.reviewingText}>
-          {formatLabel(LABELS.reviewingProduct, { name: productName })}
-        </p>
+        {productName ? (
+          <p className={styles.reviewingText}>
+            {formatLabel(LABELS.reviewingProduct, { name: productName })}
+          </p>
+        ) : null}
 
         <FormSection
           title={LABELS.reviewFormSection}
@@ -127,14 +133,26 @@ export function ReviewForm({
           </FormFieldFrame>
 
           {showMedia ? (
-            <TicketAttachmentUploader
-              entityType={UPLOAD_ENTITY.REVIEWS}
-              entityId={draftId}
-              value={attachments}
-              onChange={onAttachmentsChange}
-              disabled={isPending}
-              label={LABELS.reviewMediaLabel}
-            />
+            <div className={styles.mediaBlock}>
+              <TicketAttachmentUploader
+                entityType={UPLOAD_ENTITY.REVIEWS}
+                entityId={draftId}
+                value={attachments}
+                onChange={onAttachmentsChange}
+                disabled={isPending}
+                label={LABELS.reviewMediaLabel}
+              />
+              {attachments.length > 1 ? (
+                <button
+                  type="button"
+                  className={styles.removeAllMedia}
+                  disabled={isPending}
+                  onClick={handleRemoveAllMedia}
+                >
+                  {LABELS.removeAllMedia}
+                </button>
+              ) : null}
+            </div>
           ) : null}
         </FormSection>
 
@@ -144,6 +162,7 @@ export function ReviewForm({
         />
 
         <FormActions>
+          {extraAction}
           <DisabledActionHint disabled={!canSubmit} message={disableHint}>
             <Button
               type="submit"

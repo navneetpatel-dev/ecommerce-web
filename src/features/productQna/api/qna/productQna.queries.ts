@@ -84,6 +84,25 @@ export function useUpdateQuestion() {
   });
 }
 
+export function useDeleteQuestion() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (questionId: string) =>
+      productQnaApi.deleteQuestion(questionId),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: productQnaKeys.all }),
+  });
+}
+
+export function useDeleteAnswer() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (answerId: string) => productQnaApi.deleteAnswer(answerId),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: productQnaKeys.all }),
+  });
+}
+
 export function useUpdateAnswer() {
   const queryClient = useQueryClient();
   return useMutation({

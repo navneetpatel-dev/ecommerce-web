@@ -53,7 +53,7 @@ export function AllReviewsPage() {
             />
           </div>
         </aside>
-        <ReviewEditProvider>
+        <ReviewEditProvider productName={view.product.name}>
           <section className={styles.main} aria-label={LABELS.customerReviews}>
             <AllReviewsToolbar
               ratingFilter={view.ratingFilter}

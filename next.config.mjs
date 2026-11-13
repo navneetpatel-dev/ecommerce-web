@@ -95,6 +95,8 @@ const nextConfig = {
   },
   images: {
     remotePatterns,
+    // 75 is the default; the product gallery stage asks for 90, its lightbox for 92.
+    qualities: [75, 90, 92],
   },
   async headers() {
     return [

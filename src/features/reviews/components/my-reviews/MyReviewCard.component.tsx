@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Pencil, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
+import { OwnerActions } from "@/shared/components/actions/OwnerActions.component";
 import { ExpandableText } from "@/shared/components/display/ExpandableText.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
@@ -16,8 +16,9 @@ import { ReviewMediaGallery } from "../media/ReviewMediaGallery.component";
 import { myReviewsPageStyles as styles } from "../../pages/my-reviews/myReviewsPage.styles";
 
 export function MyReviewCard({ review }: { review: Review }) {
-  const { editReview } = useReviewEditActions();
+  const { editReview, deleteReview } = useReviewEditActions();
   const handleEdit = () => editReview(review);
+  const handleDelete = () => deleteReview(review);
 
   return (
     <li className={styles.reviewItem}>
@@ -46,17 +47,12 @@ export function MyReviewCard({ review }: { review: Review }) {
         </div>
         <div className={styles.cardActions}>
           <Badge variant="outline">{reviewStatusText(review.status)}</Badge>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className={styles.editButton}
-            aria-label={LABELS.editReviewAria}
-            onClick={handleEdit}
-          >
-            <Pencil className={styles.editIcon} aria-hidden />
-            {LABELS.edit}
-          </Button>
+          <OwnerActions
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            editLabel={LABELS.editReviewAria}
+            deleteLabel={LABELS.deleteReviewAria}
+          />
         </div>
       </div>
       {review.title ? (

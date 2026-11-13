@@ -66,6 +66,12 @@ export const productQnaApi = {
       API.productQna.updateQuestion(questionId),
       body,
     ),
+  deleteQuestion: (questionId: string) =>
+    apiClient.delete<{ deleted: boolean }>(
+      API.productQna.deleteQuestion(questionId),
+    ),
+  deleteAnswer: (answerId: string) =>
+    apiClient.delete<void>(API.productQna.deleteAnswer(answerId)),
   updateAnswer: (answerId: string, body: { answer: string }) =>
     apiClient.patch<ProductAnswer>(API.productQna.updateAnswer(answerId), body),
   answer: (questionId: string, body: { answer: string }) =>

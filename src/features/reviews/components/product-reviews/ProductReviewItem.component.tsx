@@ -1,12 +1,10 @@
 "use client";
 
-import { BadgeCheck, Pencil, Store, ThumbsDown, ThumbsUp } from "lucide-react";
+import { BadgeCheck, Store } from "lucide-react";
 import { RatingStars } from "@/shared/components/display/RatingStars.component";
-import { Button } from "@/shared/components/ui/button";
 import { LABELS } from "@/shared/constants/labels";
 import { REVIEW_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { Review } from "@/shared/api/types";
 import {
   reviewerInitials,
@@ -16,6 +14,7 @@ import { cn } from "@/shared/utils/dom/cn";
 import { useReviewEditActions } from "../../context/reviewEdit.context";
 import { productReviewsStyles as styles } from "../../styles/product-reviews/productReviews.styles";
 import { ReviewMediaGallery } from "../media/ReviewMediaGallery.component";
+import { ReviewActionsRow } from "./ReviewActionsRow.component";
 import { ExpandableText } from "@/shared/components/display/ExpandableText.component";
 import { REVIEW_CLAMP_CHARS } from "../../constants/productReviews.constants";
 
@@ -34,9 +33,10 @@ export function ProductReviewItem({
   onVoteUnhelpful,
 }: ProductReviewItemProps) {
   const name = review.user?.name ?? LABELS.verifiedCustomer;
-  const { currentUserId, editReview } = useReviewEditActions();
+  const { currentUserId, editReview, deleteReview } = useReviewEditActions();
   const isMine = Boolean(currentUserId && review.userId === currentUserId);
   const handleEdit = () => editReview(review);
+  const handleDelete = () => deleteReview(review);
 
   return (
     <article className={cn(styles.article, pinned && styles.pinnedArticle)}>
@@ -100,48 +100,14 @@ export function ProductReviewItem({
         </div>
       ) : null}
 
-      <div className={styles.voteRow}>
-        {isMine ? (
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className={styles.voteButton}
-            aria-label={LABELS.editReviewAria}
-            onClick={handleEdit}
-          >
-            <Pencil className={styles.voteIcon} aria-hidden />
-            {LABELS.edit}
-          </Button>
-        ) : null}
-        <span className={styles.voteLabel}>{LABELS.wasThisHelpful}</span>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className={styles.voteButton}
-          aria-label={formatLabel(LABELS.markHelpful, {
-            count: review.helpfulCount,
-          })}
-          onClick={onVoteHelpful}
-        >
-          <ThumbsUp className={styles.voteIcon} aria-hidden />
-          {review.helpfulCount}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className={styles.voteButton}
-          aria-label={formatLabel(LABELS.markUnhelpful, {
-            count: review.unhelpfulCount,
-          })}
-          onClick={onVoteUnhelpful}
-        >
-          <ThumbsDown className={styles.voteIcon} aria-hidden />
-          {review.unhelpfulCount}
-        </Button>
-      </div>
+      <ReviewActionsRow
+        review={review}
+        isMine={isMine}
+        onVoteHelpful={onVoteHelpful}
+        onVoteUnhelpful={onVoteUnhelpful}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
     </article>
   );
 }

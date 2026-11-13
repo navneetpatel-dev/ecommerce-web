@@ -91,17 +91,21 @@ export function useReviewEligibility(productId: string, enabled: boolean) {
 export function useUpdateReview() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: {
-      reviewId: string;
-      rating: number;
-      title?: string;
-      body: string;
-    }) =>
-      reviewsApi.update(input.reviewId, {
-        rating: input.rating,
-        title: input.title,
-        body: input.body,
-      }),
+    mutationFn: ({
+      reviewId,
+      ...body
+    }: { reviewId: string } & Parameters<typeof reviewsApi.update>[1]) =>
+      reviewsApi.update(reviewId, body),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: reviewKeys.all }),
+  });
+}
+
+export function useDeleteReview() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (reviewId: string) => reviewsApi.remove(reviewId),
+    // Deleting frees the order line: "write a review" lists change too.
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: reviewKeys.all }),
   });

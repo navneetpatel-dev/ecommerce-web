@@ -23,7 +23,7 @@ export function ExpandableText({
   className,
 }: ExpandableTextProps) {
   const textId = useId();
-  const { isLong, expanded, clamped, toggle } = useExpandableText(
+  const { isLong, expanded, clamped, displayText, toggle } = useExpandableText(
     text,
     threshold,
   );
@@ -34,7 +34,7 @@ export function ExpandableText({
         id={textId}
         className={cn(className, clamped && styles.clampByLines[lines])}
       >
-        {text}
+        {displayText}
       </p>
       {isLong ? (
         <button

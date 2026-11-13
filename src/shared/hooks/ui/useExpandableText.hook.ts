@@ -10,10 +10,14 @@ export function useExpandableText(text: string, threshold: number) {
   const [expanded, setExpanded] = useState(false);
   const isLong = text.length > threshold;
 
+  const clamped = isLong && !expanded;
   return {
     isLong,
     expanded,
-    clamped: isLong && !expanded,
+    clamped,
+    // Clamped, paragraphs flow as one (blank lines would eat the visible lines
+    // and leave the ellipsis alone on its own line); expanded keeps them.
+    displayText: clamped ? text.replace(/\s*\n+\s*/g, " ") : text,
     toggle: () => setExpanded((open) => !open),
   };
 }

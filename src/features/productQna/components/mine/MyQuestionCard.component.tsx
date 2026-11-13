@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Pencil } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
+import { OwnerActions } from "@/shared/components/actions/OwnerActions.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
@@ -13,11 +12,12 @@ import { MyQnaStatusBadge } from "./MyQnaStatusBadge.component";
 import { myQnaPagesStyles as styles } from "../../styles/mine/myQnaPages.styles";
 
 export function MyQuestionCard({ question }: { question: MyQuestion }) {
-  const { editQuestion } = useQnaEditActions();
+  const { editQuestion, deleteQuestion } = useQnaEditActions();
   const answers = question.answerCount ?? 0;
   // Editable only while unanswered — answers would lose their context.
   const canEdit = answers === 0;
   const handleEdit = () => editQuestion(question);
+  const handleDelete = () => deleteQuestion(question);
 
   return (
     <li className={styles.item}>
@@ -34,19 +34,12 @@ export function MyQuestionCard({ question }: { question: MyQuestion }) {
         )}
         <div className={styles.actions}>
           <MyQnaStatusBadge status={question.status} />
-          {canEdit ? (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className={styles.editButton}
-              aria-label={LABELS.editQuestionAria}
-              onClick={handleEdit}
-            >
-              <Pencil className={styles.editIcon} aria-hidden />
-              {LABELS.edit}
-            </Button>
-          ) : null}
+          <OwnerActions
+            onEdit={canEdit ? handleEdit : undefined}
+            onDelete={handleDelete}
+            editLabel={LABELS.editQuestionAria}
+            deleteLabel={LABELS.deleteQuestionAria}
+          />
         </div>
       </div>
       <p className={styles.questionText}>{question.question}</p>

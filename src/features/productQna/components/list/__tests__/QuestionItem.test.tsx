@@ -48,16 +48,23 @@ function wrap(ui: ReactNode, currentUserId: string | null = null) {
     defaultOptions: { queries: { retry: false } },
   });
   const editQuestion = vi.fn();
+  const deleteQuestion = vi.fn();
   render(
     <QueryClientProvider client={client}>
       <QnaEditContext.Provider
-        value={{ currentUserId, editQuestion, editAnswer: vi.fn() }}
+        value={{
+          currentUserId,
+          editQuestion,
+          editAnswer: vi.fn(),
+          deleteQuestion,
+          deleteAnswer: vi.fn(),
+        }}
       >
         {ui}
       </QnaEditContext.Provider>
     </QueryClientProvider>,
   );
-  return { editQuestion };
+  return { editQuestion, deleteQuestion };
 }
 
 describe("QuestionItem answer thread", () => {
@@ -138,5 +145,19 @@ describe("QuestionItem — the viewer's own posts", () => {
     expect(
       screen.getByRole("button", { name: "Edit your answer" }),
     ).toBeInTheDocument();
+  });
+});
+
+describe("QuestionItem — deleting", () => {
+  it("offers the asker Delete even once answered (Edit only while unanswered)", async () => {
+    const mine = { ...question, userId: "asker" } as ProductQuestion;
+    const { deleteQuestion } = wrap(<QuestionItem question={mine} />, "asker");
+    expect(
+      screen.queryByRole("button", { name: "Edit your question" }),
+    ).toBeNull();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Delete your question" }),
+    );
+    expect(deleteQuestion).toHaveBeenCalledWith(mine);
   });
 });

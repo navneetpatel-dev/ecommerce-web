@@ -12,7 +12,9 @@ import { useQnaEditActions } from "../../context/qnaEdit.context";
 import { AnswerList } from "./AnswerList.component";
 import { AnswerItem } from "./AnswerItem.component";
 import { AnswerThreadControls } from "./AnswerThreadControls.component";
-import { OwnerEditButton } from "./OwnerEditButton.component";
+import { OwnerActions } from "@/shared/components/actions/OwnerActions.component";
+import { ExpandableText } from "@/shared/components/display/ExpandableText.component";
+import { QUESTION_CLAMP_CHARS } from "../../constants/productQna.constants";
 import {
   QuestionAnswerSlot,
   type AnsweringState,
@@ -28,24 +30,29 @@ export function QuestionItem({
   answering?: AnsweringState;
 }) {
   const answersId = useId();
-  const thread = useAnswerThread(q);
-  const { currentUserId, editQuestion } = useQnaEditActions();
+  const { thread, articleRef } = useAnswerThread(q);
+  const { currentUserId, editQuestion, deleteQuestion } = useQnaEditActions();
   // Editable by the asker only while nobody has answered (answers would lose their context).
   const isMine = Boolean(currentUserId && q.userId === currentUserId);
   const canEdit = Boolean(
     currentUserId && q.userId === currentUserId && thread.total === 0,
   );
   const handleEdit = () => editQuestion(q);
+  const handleDelete = () => deleteQuestion(q);
 
   return (
-    <article className={styles.questionArticle}>
+    <article ref={articleRef} className={styles.questionArticle}>
       <div className={styles.questionRow}>
         <span className={styles.qBadge} aria-hidden>
           {LABELS.questionLabel}
         </span>
         <div className={styles.questionBody}>
-          <p className={styles.questionText}>{q.question}</p>
-          <p className={styles.questionMeta}>
+          <ExpandableText
+            text={q.question}
+            threshold={QUESTION_CLAMP_CHARS}
+            className={styles.questionText}
+          />
+          <div className={styles.questionMeta}>
             {isMine ? (
               <span className={styles.mineTag}>{LABELS.yourQuestionTag}</span>
             ) : null}
@@ -68,13 +75,16 @@ export function QuestionItem({
                 {LABELS.questionPendingReview}
               </span>
             ) : null}
-            {canEdit ? (
-              <OwnerEditButton
-                label={LABELS.editQuestionAria}
-                onClick={handleEdit}
+            {isMine ? (
+              <OwnerActions
+                compact
+                onEdit={canEdit ? handleEdit : undefined}
+                onDelete={handleDelete}
+                editLabel={LABELS.editQuestionAria}
+                deleteLabel={LABELS.deleteQuestionAria}
               />
             ) : null}
-          </p>
+          </div>
           {q.myAnswer ? (
             <div className={styles.answersList}>
               <AnswerItem answer={q.myAnswer} pinned />

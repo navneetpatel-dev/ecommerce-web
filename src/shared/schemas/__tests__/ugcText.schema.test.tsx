@@ -34,3 +34,18 @@ describe("CharacterCount", () => {
     expect(screen.getByText("5 more characters needed")).toBeInTheDocument();
   });
 });
+
+describe("ExpandableText", () => {
+  it("flows paragraphs together while clamped and restores them when expanded", async () => {
+    const { ExpandableText } =
+      await import("@/shared/components/display/ExpandableText.component");
+    const { default: userEvent } = await import("@testing-library/user-event");
+    const text = `${"First paragraph. ".repeat(15)}\n\n${"Second paragraph. ".repeat(15)}`;
+    render(<ExpandableText text={text} threshold={100} />);
+    expect(screen.getByText(/First paragraph\./).textContent).not.toContain(
+      "\n",
+    );
+    await userEvent.click(screen.getByRole("button", { name: /Read more/ }));
+    expect(screen.getByText(/First paragraph\./).textContent).toContain("\n\n");
+  });
+});

@@ -23,7 +23,7 @@ export function ProductReviewsContainer({
   const { panelRef, ...writePanel } = useWriteReviewPanel(productId, enabled);
 
   return (
-    <ReviewEditProvider>
+    <ReviewEditProvider productName={productName}>
       <ProductReviews
         reviews={view.reviews}
         myReview={view.myReview}
