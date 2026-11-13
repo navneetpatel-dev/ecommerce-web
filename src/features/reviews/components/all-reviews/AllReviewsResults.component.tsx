@@ -11,9 +11,12 @@ import type { Review } from "@/shared/api/types";
 import { productSubPageStyles as styles } from "@/shared/styles/layout/productSubPage.styles";
 import { productReviewsStyles } from "../../styles/product-reviews/productReviews.styles";
 import { ProductReviewList } from "../product-reviews/ProductReviewList.component";
+import { PinnedMyReview } from "../product-reviews/PinnedMyReview.component";
 
 interface AllReviewsResultsProps {
   reviews: Review[];
+  /** The viewer's own review, pinned above the first page. */
+  myReview?: Review | null;
   isLoading: boolean;
   isFetching: boolean;
   isError: boolean;
@@ -64,6 +67,13 @@ export function AllReviewsResults(props: AllReviewsResultsProps) {
           </Button>
         ) : null}
       </div>
+      {props.page === 1 ? (
+        <PinnedMyReview
+          review={props.myReview ?? null}
+          onVoteHelpful={props.onVoteHelpful}
+          onVoteUnhelpful={props.onVoteUnhelpful}
+        />
+      ) : null}
       {props.reviews.length ? (
         <div className={cn(props.isFetching && styles.resultsFetching)}>
           <ProductReviewList

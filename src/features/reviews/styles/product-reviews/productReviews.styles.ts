@@ -39,6 +39,12 @@ export const productReviewsStyles = {
   // Review item
   list: "divide-y divide-line",
   article: "py-6",
+  pinnedArticle:
+    "my-4 rounded-2xl border border-brand/30 bg-brand-subtle/50 px-4 sm:px-5",
+  mineTag:
+    "rounded-full border border-brand/40 bg-brand-subtle px-2 py-0.5 text-[0.75rem] font-medium text-brand",
+  pendingTag:
+    "rounded-full bg-warning-subtle px-2 py-0.5 text-[0.75rem] font-medium text-warning",
   articleHeader: "flex items-start gap-3",
   avatar:
     "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-subtle text-body-sm font-semibold text-brand",

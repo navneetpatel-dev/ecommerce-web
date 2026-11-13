@@ -20,11 +20,28 @@ import { AdminWalletRechargePanel } from "../wallet/AdminWalletRechargePanel/ind
 import { AdminWalletAdjustPanel } from "../wallet/AdminWalletAdjustPanel.component";
 import { AdminCashbackWriteOffPanel } from "../wallet/AdminCashbackWriteOffPanel.component";
 import { LABELS } from "@/shared/constants/labels";
+import { useUrlTabState } from "@/shared/hooks/navigation/useUrlTabState.hook";
 import { adminFinancePageStyles } from "../../pages/finance/adminFinancePage.styles";
 
+const REPORT_TABS = [
+  "all",
+  "settlement",
+  "liability",
+  "recharge",
+  "cashback",
+  "adjust",
+] as const;
+
 export function AdminFinanceReportsTabs() {
+  // Own URL key: this sits inside the page's section tabs (`?tab=`).
+  const [report, setReport] = useUrlTabState(REPORT_TABS, "all", "report");
+
   return (
-    <Tabs defaultValue="all" className={adminFinancePageStyles.reportsTabs}>
+    <Tabs
+      value={report}
+      onValueChange={setReport}
+      className={adminFinancePageStyles.reportsTabs}
+    >
       <div className={adminFinancePageStyles.reportsHeaderRow}>
         <TabsList className={adminFinancePageStyles.reportsTabsList}>
           <TabsTrigger

@@ -26,6 +26,7 @@ export const reviewsApi = {
     return {
       ...unwrapPaginatedList(res),
       summary: readReviewSummary(res.meta?.summary),
+      myReview: (res.meta?.myReview as Review | null | undefined) ?? null,
     };
   },
   /** The signed-in shopper's delivered, unreviewed line for this product (or null). */

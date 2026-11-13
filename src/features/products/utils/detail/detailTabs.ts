@@ -1,8 +1,8 @@
-const DETAIL_TABS = ["description", "specifications", "reviews", "qna"];
-
-/** The PDP tab to open first: `?tab=reviews` (e.g. from "Write a review") or Description. */
-export function initialDetailTab(requested: string | null): string {
-  return requested && DETAIL_TABS.includes(requested)
-    ? requested
-    : "description";
-}
+/** The PDP's tabs, in order; the first is the default (kept out of the URL). */
+export const DETAIL_TABS = [
+  "description",
+  "specifications",
+  "reviews",
+  "qna",
+] as const;
+export type DetailTab = (typeof DETAIL_TABS)[number];

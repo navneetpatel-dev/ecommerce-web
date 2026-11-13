@@ -8,7 +8,11 @@ import { REVIEW_STATUS } from "@/shared/constants/statuses";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { Review } from "@/shared/api/types";
-import { reviewerInitials } from "../../utils/productReviews.utils";
+import {
+  reviewerInitials,
+  reviewStatusText,
+} from "../../utils/productReviews.utils";
+import { cn } from "@/shared/utils/dom/cn";
 import { useReviewEditActions } from "../../context/reviewEdit.context";
 import { productReviewsStyles as styles } from "../../styles/product-reviews/productReviews.styles";
 import { ReviewMediaGallery } from "../media/ReviewMediaGallery.component";
@@ -17,12 +21,15 @@ import { REVIEW_CLAMP_CHARS } from "../../constants/productReviews.constants";
 
 interface ProductReviewItemProps {
   review: Review;
+  /** The viewer's own review: highlighted, tagged, with its moderation state. */
+  pinned?: boolean;
   onVoteHelpful: () => void;
   onVoteUnhelpful: () => void;
 }
 
 export function ProductReviewItem({
   review,
+  pinned = false,
   onVoteHelpful,
   onVoteUnhelpful,
 }: ProductReviewItemProps) {
@@ -32,7 +39,7 @@ export function ProductReviewItem({
   const handleEdit = () => editReview(review);
 
   return (
-    <article className={styles.article}>
+    <article className={cn(styles.article, pinned && styles.pinnedArticle)}>
       <div className={styles.articleHeader}>
         <span className={styles.avatar} aria-hidden>
           {reviewerInitials(review.user?.name)}
@@ -40,6 +47,14 @@ export function ProductReviewItem({
         <div className={styles.authorBlock}>
           <div className={styles.authorRow}>
             <p className={styles.userName}>{name}</p>
+            {pinned ? (
+              <span className={styles.mineTag}>{LABELS.yourReviewHeading}</span>
+            ) : null}
+            {pinned && review.status !== REVIEW_STATUS.APPROVED ? (
+              <span className={styles.pendingTag}>
+                {reviewStatusText(review.status)}
+              </span>
+            ) : null}
             {review.status === REVIEW_STATUS.APPROVED ? (
               <span className={styles.verified}>
                 <BadgeCheck className={styles.verifiedIcon} aria-hidden />

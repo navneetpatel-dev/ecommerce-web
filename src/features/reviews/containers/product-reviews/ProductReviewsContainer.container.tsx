@@ -26,6 +26,7 @@ export function ProductReviewsContainer({
     <ReviewEditProvider>
       <ProductReviews
         reviews={view.reviews}
+        myReview={view.myReview}
         summary={view.summary}
         isLoading={view.isLoading}
         isError={view.isError}

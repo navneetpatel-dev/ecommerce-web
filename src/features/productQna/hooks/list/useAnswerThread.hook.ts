@@ -26,16 +26,26 @@ export function useAnswerThread(question: ProductQuestion) {
     hiddenCount,
     expanded,
     // The first page starts with the same best answer, so it replaces the preview.
-    visible: showThread ? loaded : question.answers,
+    // The viewer's own answer is pinned above the thread, so it is not repeated in it.
+    visible: (showThread ? loaded : question.answers).filter(
+      (answer) => answer.id !== question.myAnswer?.id,
+    ),
     isLoadingThread: expanded && thread.isLoading,
     isThreadError: expanded && thread.isError && !thread.data,
     hasMore: showThread && Boolean(thread.hasNextPage),
     isLoadingMore: thread.isFetchingNextPage,
     expandLabel: moreAnswersLabel(hiddenCount),
-    progressLabel: formatLabel(LABELS.answersShownOf, {
-      shown: loaded.length.toLocaleString("en-IN"),
-      total: total.toLocaleString("en-IN"),
-    }),
+    progressLabel: thread.hasNextPage
+      ? formatLabel(LABELS.answersShownOf, {
+          shown: loaded.length.toLocaleString("en-IN"),
+          total: total.toLocaleString("en-IN"),
+        })
+      : formatLabel(LABELS.allAnswersShown, {
+          total: total.toLocaleString("en-IN"),
+        }),
+    progressPercent: total
+      ? Math.min(100, Math.round((loaded.length / total) * 100))
+      : 0,
     toggle: () => setExpanded((open) => !open),
     loadMore: () => void thread.fetchNextPage(),
     retry: () => void thread.refetch(),

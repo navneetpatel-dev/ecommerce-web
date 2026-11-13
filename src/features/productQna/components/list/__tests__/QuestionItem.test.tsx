@@ -115,3 +115,28 @@ describe("QuestionItem answer thread", () => {
     ).toBeNull();
   });
 });
+
+describe("QuestionItem — the viewer's own posts", () => {
+  it("pins the viewer's answer first (with its status) and does not repeat it", () => {
+    const mine = {
+      ...answer("mine", "My own answer", "CUSTOMER"),
+      authorId: "me",
+      status: "PENDING",
+    } as ProductAnswer;
+    const withMine = {
+      ...question,
+      userId: "me",
+      answers: [answer("seller", "True to size.", "VENDOR"), mine],
+      myAnswer: mine,
+    } as unknown as ProductQuestion;
+    wrap(<QuestionItem question={withMine} />, "me");
+
+    expect(screen.getByText("Your question")).toBeInTheDocument();
+    expect(screen.getByText("Your answer")).toBeInTheDocument();
+    expect(screen.getByText("Awaiting approval")).toBeInTheDocument();
+    expect(screen.getAllByText("My own answer")).toHaveLength(1);
+    expect(
+      screen.getByRole("button", { name: "Edit your answer" }),
+    ).toBeInTheDocument();
+  });
+});

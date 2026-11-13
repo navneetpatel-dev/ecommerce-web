@@ -9,7 +9,11 @@ interface AnswerThreadControlsProps {
   controlsId: string;
 }
 
-/** "See 120,430 more answers" → then "Load more answers · 20 of 120,431" + "Show fewer". */
+/**
+ * Collapsed: one "See 54 more answers" button. Open: a footer with how far the
+ * reader is ("Showing 40 of 72 answers" + bar) beside equal-size Load more /
+ * Show fewer buttons; on phones the buttons share the row.
+ */
 export function AnswerThreadControls({
   thread,
   controlsId,
@@ -19,61 +23,81 @@ export function AnswerThreadControls({
   if (!thread.expanded) {
     return (
       <div className={styles.threadControls}>
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="sm"
           aria-expanded={false}
           aria-controls={controlsId}
           onClick={thread.toggle}
-          className={styles.moreAnswers}
+          className={styles.threadButton}
         >
           {thread.expandLabel}
-          <ChevronDown className={styles.moreAnswersIcon} aria-hidden />
-        </button>
+          <ChevronDown aria-hidden />
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className={styles.threadControls}>
-      {thread.isThreadError ? (
-        <p role="alert" className={styles.threadError}>
-          {LABELS.answersLoadFailed}{" "}
-          <button
+    <div className={styles.threadFooter}>
+      <div className={styles.threadProgressBlock}>
+        {thread.isThreadError ? (
+          <p role="alert" className={styles.threadError}>
+            {LABELS.answersLoadFailed}{" "}
+            <button
+              type="button"
+              onClick={thread.retry}
+              className={styles.threadRetry}
+            >
+              {LABELS.retry}
+            </button>
+          </p>
+        ) : (
+          <>
+            <p role="status" className={styles.threadProgress}>
+              {thread.progressLabel}
+            </p>
+            <span className={styles.threadProgressTrack} aria-hidden>
+              <span
+                className={styles.threadProgressFill}
+                style={{ width: `${thread.progressPercent}%` }}
+              />
+            </span>
+          </>
+        )}
+      </div>
+      <div
+        className={
+          thread.hasMore ? styles.threadActions : styles.threadActionsSingle
+        }
+      >
+        {thread.hasMore ? (
+          <Button
             type="button"
-            onClick={thread.retry}
-            className={styles.threadRetry}
+            variant="outline"
+            size="sm"
+            loading={thread.isLoadingMore}
+            onClick={thread.loadMore}
+            className={styles.threadButton}
           >
-            {LABELS.retry}
-          </button>
-        </p>
-      ) : null}
-      {thread.hasMore ? (
+            {LABELS.loadMoreAnswers}
+            <ChevronDown aria-hidden />
+          </Button>
+        ) : null}
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           size="sm"
-          className={styles.loadMoreAnswers}
-          loading={thread.isLoadingMore}
-          onClick={thread.loadMore}
+          aria-expanded
+          aria-controls={controlsId}
+          onClick={thread.toggle}
+          className={styles.threadButtonQuiet}
         >
-          {LABELS.loadMoreAnswers}
+          {LABELS.showFewerAnswers}
+          <ChevronUp aria-hidden />
         </Button>
-      ) : null}
-      {thread.hasMore ? (
-        <span role="status" className={styles.threadProgress}>
-          {thread.progressLabel}
-        </span>
-      ) : null}
-      <button
-        type="button"
-        aria-expanded
-        aria-controls={controlsId}
-        onClick={thread.toggle}
-        className={styles.moreAnswers}
-      >
-        {LABELS.showFewerAnswers}
-        <ChevronUp className={styles.moreAnswersIcon} aria-hidden />
-      </button>
+      </div>
     </div>
   );
 }

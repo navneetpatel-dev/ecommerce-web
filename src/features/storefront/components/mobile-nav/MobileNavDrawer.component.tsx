@@ -127,6 +127,20 @@ export function MobileNavDrawer({
                 {LABELS.reviews}
               </Link>
               <Link
+                href={PATHS.myQuestions}
+                onClick={onClose}
+                className={styles.accountLink}
+              >
+                {LABELS.accountMenuQuestions}
+              </Link>
+              <Link
+                href={PATHS.myAnswers}
+                onClick={onClose}
+                className={styles.accountLink}
+              >
+                {LABELS.accountMenuAnswers}
+              </Link>
+              <Link
                 href={PATHS.giftCards}
                 onClick={onClose}
                 className={styles.accountLink}

@@ -1,26 +1,16 @@
 "use client";
 
-import { useLayoutEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useRouteScrollMemory } from "@/shared/hooks/navigation/useRouteScrollMemory.hook";
 
 /**
- * Resets window scroll on client navigations (path + query) so pages don't
- * open mid-scroll under the sticky header.
+ * New pages open at the top; Back/Forward returns to the remembered position;
+ * in-page URL state (tabs, filters) can keep the scroll. See `useRouteScrollMemory`.
  */
 export function RouteScrollReset() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const routeKey = `${pathname}?${searchParams.toString()}`;
-
-  useLayoutEffect(() => {
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
-  }, []);
-
-  useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [routeKey]);
-
+  const query = searchParams.toString();
+  useRouteScrollMemory(query ? `${pathname}?${query}` : pathname);
   return null;
 }

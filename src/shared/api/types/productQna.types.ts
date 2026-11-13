@@ -12,6 +12,8 @@ export interface ProductAnswer {
   /** The answer's author (lets them edit it). */
   authorId?: string;
   editedAt?: string | null;
+  /** Present on the viewer's own answer (it can still be awaiting approval). */
+  status?: "PENDING" | "PUBLISHED" | "REJECTED";
 }
 
 export interface ProductQuestion {
@@ -26,6 +28,8 @@ export interface ProductQuestion {
   editedAt?: string | null;
   /** Published answers in the thread; `answers` holds only the best one(s). */
   answerCount?: number;
+  /** The viewer's own answer on this question (any status): pinned first, editable. */
+  myAnswer?: ProductAnswer | null;
   productName?: string | null;
   answers: ProductAnswer[];
 }

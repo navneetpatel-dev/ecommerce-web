@@ -8,6 +8,8 @@ import {
 import { API } from "@/shared/constants/apiRoutes";
 import type { ProductQuestion, ProductAnswer } from "@/shared/api/types";
 import type {
+  MyAnswer,
+  MyQuestion,
   ProductQuestionPage,
   ProductQuestionsParams,
 } from "../../types/productQna.types";
@@ -41,6 +43,22 @@ export const productQnaApi = {
     unwrapPaginatedList(
       await apiClient.getWithResponse<ProductAnswer[]>(
         withQuery(API.productQna.answer(questionId), params),
+      ),
+    ),
+  /** The shopper's own questions / answers, newest first. */
+  myQuestions: async (
+    page = 1,
+    limit = 12,
+  ): Promise<PaginatedList<MyQuestion>> =>
+    unwrapPaginatedList(
+      await apiClient.getWithResponse<MyQuestion[]>(
+        withQuery(API.productQna.myQuestions, { page, limit }),
+      ),
+    ),
+  myAnswers: async (page = 1, limit = 12): Promise<PaginatedList<MyAnswer>> =>
+    unwrapPaginatedList(
+      await apiClient.getWithResponse<MyAnswer[]>(
+        withQuery(API.productQna.myAnswers, { page, limit }),
       ),
     ),
   updateQuestion: (questionId: string, body: { question: string }) =>

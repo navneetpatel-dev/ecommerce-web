@@ -64,7 +64,10 @@ export function useAllReviewsPage() {
     productLoadFailed: productQuery.isError && !product,
     isProductMissing: !productQuery.isLoading && !product,
     retryProduct: () => void productQuery.refetch(),
-    reviews: data?.items ?? [],
+    myReview: data?.myReview ?? null,
+    reviews: (data?.items ?? []).filter(
+      (review) => review.id !== data?.myReview?.id,
+    ),
     summary: data?.summary ?? EMPTY_REVIEW_SUMMARY,
     isLoading: Boolean(product) && !data && !reviewsQuery.isError,
     isFetching: reviewsQuery.isFetching,

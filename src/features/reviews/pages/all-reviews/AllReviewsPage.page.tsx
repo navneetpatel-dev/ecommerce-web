@@ -65,6 +65,7 @@ export function AllReviewsPage() {
             />
             <AllReviewsResults
               reviews={view.reviews}
+              myReview={view.myReview}
               isLoading={view.isLoading}
               isFetching={view.isFetching}
               isError={view.isError}

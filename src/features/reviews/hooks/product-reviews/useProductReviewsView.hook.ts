@@ -35,7 +35,11 @@ export function useProductReviewsView(
   };
 
   return {
-    reviews: query.data?.items ?? [],
+    // The viewer's own review is pinned on top, so it is not repeated in the list.
+    myReview: query.data?.myReview ?? null,
+    reviews: (query.data?.items ?? []).filter(
+      (review) => review.id !== query.data?.myReview?.id,
+    ),
     summary,
     isLoading: query.isLoading,
     // A failed load must not read as "No reviews yet".

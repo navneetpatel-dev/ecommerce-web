@@ -19,6 +19,8 @@ export const productQnaKeys = {
   productList: (productId: string, params: ProductQuestionsParams) =>
     [...productQnaKeys.product(productId), "list", params] as const,
   pending: () => [...productQnaKeys.all, "pending"] as const,
+  myQuestions: () => [...productQnaKeys.all, "mine", "questions"] as const,
+  myAnswers: () => [...productQnaKeys.all, "mine", "answers"] as const,
 };
 
 export function useProductQuestions(
@@ -49,6 +51,24 @@ export function useQuestionAnswers(questionId: string, enabled: boolean) {
     getNextPageParam: nextPageOf,
     enabled: Boolean(questionId) && enabled,
     staleTime: 1000 * 60,
+  });
+}
+
+export function useMyQuestions() {
+  return useInfiniteQuery({
+    queryKey: productQnaKeys.myQuestions(),
+    queryFn: ({ pageParam }) => productQnaApi.myQuestions(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: nextPageOf,
+  });
+}
+
+export function useMyAnswers() {
+  return useInfiniteQuery({
+    queryKey: productQnaKeys.myAnswers(),
+    queryFn: ({ pageParam }) => productQnaApi.myAnswers(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: nextPageOf,
   });
 }
 

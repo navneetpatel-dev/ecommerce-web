@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useMemo } from "react";
+import { useUrlTabState } from "@/shared/hooks/navigation/useUrlTabState.hook";
 import { LABELS } from "@/shared/constants/labels";
 import { cartLineQuantityMax } from "@/shared/constants/cart/cart";
 import { WARRANTY_TYPE } from "@/shared/constants/statuses";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { resolveVariantPricing } from "../../utils/detail/variantPricing";
-import { initialDetailTab } from "../../utils/detail/detailTabs";
+import { DETAIL_TABS } from "../../utils/detail/detailTabs";
 import {
   getAddToCartHint,
   getAddToCartLabel,
@@ -38,11 +38,8 @@ export function useProductDetailContent({
   showStickyBar = false,
 }: UseProductDetailContentParams) {
   const [deliveryBlocked, setDeliveryBlocked] = useState(false);
-  const searchParams = useSearchParams();
-  // `?tab=reviews` (e.g. from "Write a review") opens that tab on arrival.
-  const [detailTab, setDetailTab] = useState(() =>
-    initialDetailTab(searchParams?.get("tab") ?? null),
-  );
+  // In the URL (`?tab=reviews`): Back from "View all reviews" lands on the same tab.
+  const [detailTab, setDetailTab] = useUrlTabState(DETAIL_TABS, "description");
 
   const {
     resolvedVariant,
@@ -110,9 +107,7 @@ export function useProductDetailContent({
     showStickyBar &&
     (displayStock > 0 || needsOptionSelection || variantUnavailable);
 
-  const handleReviewsClick = useCallback(() => {
-    setDetailTab("reviews");
-  }, []);
+  const handleReviewsClick = () => setDetailTab("reviews");
 
   return {
     deliveryBlocked,

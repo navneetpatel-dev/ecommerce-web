@@ -7,6 +7,7 @@ import { Button } from "@/shared/components/ui/button";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
+import { scrollWithinContainer } from "@/shared/utils/dom/scrollWithinContainer";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 
 interface ImageGalleryThumbnailStripProps {
@@ -34,11 +35,9 @@ export function ImageGalleryThumbnailStrip({
     const strip = stripRef.current;
     if (!strip) return;
     const selected = strip.querySelector<HTMLElement>('[aria-selected="true"]');
-    selected?.scrollIntoView({
-      behavior: motionSafeScrollBehavior(),
-      block: "nearest",
-      inline: "nearest",
-    });
+    // Scroll the strip only — never the page (scrollIntoView would move the window too).
+    if (selected)
+      scrollWithinContainer(strip, selected, motionSafeScrollBehavior());
   }, [selectedIndex]);
 
   if (images.length <= 1) return null;

@@ -9,10 +9,13 @@ import {
 const question = {
   id: "q-1",
   question: "Is it waterproof?",
+  status: "PUBLISHED",
 } as ProductQuestion;
 
 function state(overrides: Partial<AnsweringState> = {}): AnsweringState {
   return {
+    mode: "answer",
+    onSignIn: vi.fn(),
     openId: null,
     submittedId: null,
     draft: "",
@@ -58,5 +61,43 @@ describe("QuestionAnswerSlot", () => {
     expect(screen.getByRole("status")).toHaveTextContent(
       /once it has been checked/,
     );
+  });
+
+  it("asks a signed-out visitor to sign in instead of opening the form", () => {
+    const answering = state({ mode: "signedOut" });
+    render(<QuestionAnswerSlot question={question} answering={answering} />);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Answer: Is it waterproof?" }),
+    );
+    expect(answering.onSignIn).toHaveBeenCalledTimes(1);
+    expect(answering.onToggle).not.toHaveBeenCalled();
+  });
+
+  it("offers nothing to a non-buyer, nor on a question the viewer already answered", () => {
+    const { container, rerender } = render(
+      <QuestionAnswerSlot
+        question={question}
+        answering={state({ mode: "notBuyer" })}
+      />,
+    );
+    expect(container).toBeEmptyDOMElement();
+    rerender(
+      <QuestionAnswerSlot
+        question={{ ...question, myAnswer: { id: "a-1" } } as ProductQuestion}
+        answering={state()}
+      />,
+    );
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("does not offer Answer on the viewer's own question", () => {
+    const { container } = render(
+      <QuestionAnswerSlot
+        question={question}
+        answering={state()}
+        ownQuestion
+      />,
+    );
+    expect(container).toBeEmptyDOMElement();
   });
 });

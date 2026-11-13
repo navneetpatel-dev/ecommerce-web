@@ -22,6 +22,8 @@ export interface ProductReviewsParams {
 
 export type ProductReviewPage = PaginatedList<Review> & {
   summary: ReviewSummary;
+  /** The signed-in viewer's own review of this product, in any moderation state. */
+  myReview: Review | null;
 };
 
 /** A delivered product the shopper has not reviewed yet (latest delivery). */

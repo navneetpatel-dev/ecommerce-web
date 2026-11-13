@@ -23,6 +23,8 @@ export const SHOPPER_MENU_GROUPS: readonly AccountMenuGroup[] = [
       { href: PATHS.myReturns, label: LABELS.accountMenuReturns },
       { href: PATHS.wishlist, label: LABELS.accountMenuWishlist },
       { href: PATHS.reviews, label: LABELS.accountMenuReviews },
+      { href: PATHS.myQuestions, label: LABELS.accountMenuQuestions },
+      { href: PATHS.myAnswers, label: LABELS.accountMenuAnswers },
     ],
   },
   {

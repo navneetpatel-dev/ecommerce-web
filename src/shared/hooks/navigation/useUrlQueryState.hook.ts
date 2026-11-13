@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { preserveScrollOnNextNavigation } from "@/shared/utils/navigation/scrollMemory";
 
 export type QueryUpdates = Record<string, string | number | null | undefined>;
 
@@ -32,6 +33,8 @@ export function useUrlQueryState() {
   };
 
   const update = (updates: QueryUpdates) => {
+    // A filter/sort change keeps the reader where they are; a new page starts at the top.
+    if (!("page" in updates)) preserveScrollOnNextNavigation();
     router.replace(hrefWith(updates), { scroll: false });
   };
 

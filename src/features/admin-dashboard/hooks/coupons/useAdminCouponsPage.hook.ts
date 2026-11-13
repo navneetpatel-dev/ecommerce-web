@@ -1,16 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { useUrlTabState } from "@/shared/hooks/navigation/useUrlTabState.hook";
 import { useAdminCoupons } from "../../api/analytics/admin.queries";
 import { useCreateCoupon } from "./useCreateCoupon.hook";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import type { CouponFormInput } from "../../schemas/coupons/coupons.schema";
 
 export type CouponsTab = "platform" | "vendor";
+const COUPON_TABS: readonly CouponsTab[] = ["platform", "vendor"];
 
 export function useAdminCouponsPage() {
   const [page, setPage] = useState(1);
-  const [tab, setTab] = useState<CouponsTab>("platform");
+  const [tab, setTab] = useUrlTabState(COUPON_TABS, "platform");
   const vendorScoped = tab === "vendor";
   const { data, isLoading } = useAdminCoupons(
     page,

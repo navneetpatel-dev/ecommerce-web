@@ -26,6 +26,9 @@ export const PRODUCT_QUESTION_STATUS = {
 export type ProductQuestionStatus =
   (typeof PRODUCT_QUESTION_STATUS)[keyof typeof PRODUCT_QUESTION_STATUS];
 
+/** Answers share the questions' moderation states. */
+export const PRODUCT_ANSWER_STATUS = PRODUCT_QUESTION_STATUS;
+
 /** Who wrote a product-question answer. */
 export const PRODUCT_ANSWER_AUTHOR_TYPE = {
   VENDOR: "VENDOR",

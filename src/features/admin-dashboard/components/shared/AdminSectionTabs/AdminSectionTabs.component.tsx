@@ -1,6 +1,7 @@
 "use client";
 
 import { Tabs } from "@/shared/components/ui/tabs";
+import { useUrlTabState } from "@/shared/hooks/navigation/useUrlTabState.hook";
 import { adminSectionTabsStyles } from "../../../styles/shared/adminSectionTabs.styles";
 import { AdminSectionTabTriggersList } from "./AdminSectionTabTriggersList.component";
 import { AdminSectionTabPanelsList } from "./AdminSectionTabPanelsList.component";
@@ -24,6 +25,12 @@ export function AdminSectionTabs({
   tabs,
   className,
 }: AdminSectionTabsProps) {
+  // In the URL, so Back from a detail page returns to the same tab.
+  const [tab, setTab] = useUrlTabState(
+    tabs.map((item) => item.value),
+    defaultValue,
+  );
+
   return (
     <div className={adminSectionTabsStyles.root(className)}>
       <header className={adminSectionTabsStyles.header}>
@@ -34,7 +41,8 @@ export function AdminSectionTabs({
       </header>
 
       <Tabs
-        defaultValue={defaultValue}
+        value={tab}
+        onValueChange={setTab}
         className={adminSectionTabsStyles.tabsRoot}
       >
         <AdminSectionTabTriggersList tabs={tabs} />

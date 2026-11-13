@@ -12,6 +12,9 @@ export const PATHS = {
     `/products/${slug}?tab=reviews&review=${encodeURIComponent(orderItemId)}`,
   /** Delivered products the shopper has not reviewed yet. */
   reviewsAwaiting: "/reviews/write",
+  /** Questions the shopper asked / answers they wrote, across products. */
+  myQuestions: "/questions",
+  myAnswers: "/answers",
   /** Side-by-side comparison tray + results. */
   compare: "/compare",
   productsNewest: "/products?sort=newest",

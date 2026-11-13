@@ -1,15 +1,32 @@
 "use client";
 
+import { LABELS } from "@/shared/constants/labels";
+import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { useAnswerQuestionForm } from "./useAnswerQuestionForm.hook";
 import type { AnsweringState } from "../../components/list/QuestionAnswerSlot.component";
 
-/** The Answer controls for this product, or undefined when the viewer may not answer (C-01). */
-export function useAnsweringState(
-  productId: string,
-): AnsweringState | undefined {
+/**
+ * Who may answer this product's questions: its seller, or a shopper who has
+ * received it (C-01). Signed-out visitors still see Answer — it asks them to
+ * sign in; signed-in non-buyers get one explanatory note instead of buttons.
+ */
+export function useAnsweringState(productId: string): AnsweringState {
   const answerForm = useAnswerQuestionForm(productId);
-  if (!answerForm.canAnswer) return undefined;
+  const { isAuthenticated, requireAuth } = useRequireAuth();
+  const mode = !isAuthenticated
+    ? "signedOut"
+    : answerForm.canAnswer
+      ? "answer"
+      : "notBuyer";
+
   return {
+    mode,
+    onSignIn: () => {
+      requireAuth({
+        title: LABELS.answerPromptTitle,
+        message: LABELS.signInToAnswer,
+      });
+    },
     openId: answerForm.openId,
     submittedId: answerForm.submittedId,
     draft: answerForm.draft,

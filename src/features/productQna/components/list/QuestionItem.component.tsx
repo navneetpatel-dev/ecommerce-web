@@ -10,6 +10,7 @@ import { answerCountLabel } from "../../utils/productQna.utils";
 import { useAnswerThread } from "../../hooks/list/useAnswerThread.hook";
 import { useQnaEditActions } from "../../context/qnaEdit.context";
 import { AnswerList } from "./AnswerList.component";
+import { AnswerItem } from "./AnswerItem.component";
 import { AnswerThreadControls } from "./AnswerThreadControls.component";
 import { OwnerEditButton } from "./OwnerEditButton.component";
 import {
@@ -30,6 +31,7 @@ export function QuestionItem({
   const thread = useAnswerThread(q);
   const { currentUserId, editQuestion } = useQnaEditActions();
   // Editable by the asker only while nobody has answered (answers would lose their context).
+  const isMine = Boolean(currentUserId && q.userId === currentUserId);
   const canEdit = Boolean(
     currentUserId && q.userId === currentUserId && thread.total === 0,
   );
@@ -44,6 +46,9 @@ export function QuestionItem({
         <div className={styles.questionBody}>
           <p className={styles.questionText}>{q.question}</p>
           <p className={styles.questionMeta}>
+            {isMine ? (
+              <span className={styles.mineTag}>{LABELS.yourQuestionTag}</span>
+            ) : null}
             <span>{q.customerName ?? LABELS.verifiedCustomer}</span>
             <span aria-hidden>·</span>
             <time dateTime={q.createdAt}>{formatOrderDate(q.createdAt)}</time>
@@ -70,6 +75,11 @@ export function QuestionItem({
               />
             ) : null}
           </p>
+          {q.myAnswer ? (
+            <div className={styles.answersList}>
+              <AnswerItem answer={q.myAnswer} pinned />
+            </div>
+          ) : null}
           {thread.visible.length ? (
             <AnswerList id={answersId} answers={thread.visible} />
           ) : null}
@@ -84,7 +94,11 @@ export function QuestionItem({
       {thread.total ? null : (
         <p className={styles.noAnswersText}>{LABELS.noAnswersYet}</p>
       )}
-      <QuestionAnswerSlot question={q} answering={answering} />
+      <QuestionAnswerSlot
+        question={q}
+        answering={answering}
+        ownQuestion={isMine}
+      />
     </article>
   );
 }

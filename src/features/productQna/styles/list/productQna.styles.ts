@@ -53,23 +53,37 @@ export const productQnaStyles = {
     "inline-flex items-center gap-1 rounded-full border border-brand/30 bg-brand-subtle px-2 py-0.5 text-[0.75rem] font-medium text-brand",
   authorIcon: "h-3.5 w-3.5",
   answerDate: "text-ink-faint",
-  threadControls: "mt-3 ml-10 flex flex-wrap items-center gap-x-3 gap-y-2",
-  loadMoreAnswers: "h-8 rounded-full px-3 text-body-sm",
+  // Answer thread controls — every button the same 44px rounded control.
+  threadControls: "mt-3 ml-10",
+  threadFooter:
+    "mt-4 flex flex-col gap-3 rounded-xl border border-line bg-surface/60 p-3 sm:ml-10 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-4",
+  threadProgressBlock: "min-w-0 flex-1 space-y-2",
   threadProgress: "text-body-sm text-ink-muted tabular-nums",
-  threadError: "w-full text-body-sm text-danger",
+  threadProgressTrack:
+    "block h-1 w-full overflow-hidden rounded-full bg-line/60 sm:max-w-[16rem]",
+  threadProgressFill: "block h-full rounded-full bg-brand transition-[width]",
+  // Phones: stacked full-width (two labels do not fit side by side under 480px).
+  threadActions: "flex flex-col gap-2 xs:flex-row sm:shrink-0",
+  threadActionsSingle: "flex flex-col xs:flex-row sm:shrink-0",
+  threadButton: "w-full gap-1.5 rounded-full xs:w-auto xs:flex-1 sm:flex-none",
+  threadButtonQuiet:
+    "w-full gap-1.5 rounded-full border border-line text-ink-muted hover:text-ink xs:w-auto xs:flex-1 sm:flex-none",
+  threadError: "text-body-sm text-danger",
   threadRetry: "font-medium underline underline-offset-4",
   threadLoading: "ml-10 mt-3 space-y-3",
   ownerAction:
     "inline-flex items-center gap-1 text-body-sm font-medium text-brand underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
   ownerActionIcon: "h-3.5 w-3.5",
   editedTag: "text-[0.75rem] italic text-ink-faint",
+  answerPolicyNote:
+    "mt-4 rounded-lg border border-line bg-paper/60 px-3 py-2 text-body-sm text-ink-muted",
+  mineTag:
+    "rounded-full border border-brand/40 bg-brand-subtle px-2 py-0.5 text-[0.75rem] font-medium text-brand",
+  mineAnswer: "-ml-1 rounded-lg border border-brand/25 bg-brand-subtle/50 p-3",
   editDialog: "max-w-[520px]",
   editHeader: "text-left sm:text-left",
   editForm: "space-y-2",
   editActions: "flex flex-col-reverse gap-2 pt-2 xs:flex-row xs:justify-end",
-  moreAnswers:
-    "inline-flex items-center gap-1 rounded-full border border-line px-3 py-1 text-body-sm font-medium text-ink transition-colors hover:border-line-strong hover:bg-brand-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-  moreAnswersIcon: "h-3.5 w-3.5 transition-transform",
   noAnswersText: "mt-3 pl-10 text-body-sm italic text-ink-muted",
   answerActions: "mt-3 pl-10",
   answerForm: "mt-3 space-y-2 pl-10",

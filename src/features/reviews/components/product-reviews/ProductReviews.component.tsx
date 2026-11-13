@@ -14,9 +14,12 @@ import type {
 import { productReviewsStyles as styles } from "../../styles/product-reviews/productReviews.styles";
 import { ProductReviewList } from "./ProductReviewList.component";
 import { ReviewSummaryCard } from "./ReviewSummaryCard.component";
+import { PinnedMyReview } from "./PinnedMyReview.component";
 
 interface ProductReviewsProps {
   reviews: Review[];
+  /** The viewer's own review, pinned first. */
+  myReview?: Review | null;
   summary: ReviewSummary;
   isLoading?: boolean;
   isError?: boolean;
@@ -45,15 +48,26 @@ function ReviewsBody(props: ProductReviewsProps) {
     );
   }
 
+  const pinned = (
+    <PinnedMyReview
+      review={props.myReview ?? null}
+      onVoteHelpful={props.onVoteHelpful}
+      onVoteUnhelpful={props.onVoteUnhelpful}
+    />
+  );
+
   if (!props.summary.total) {
     return (
-      <EmptyState
-        heading={LABELS.noReviewsYetHeading}
-        message={LABELS.noReviewsHint}
-        icon={MessageSquare}
-        maxWidth={styles.stateMaxWidth}
-        className={styles.emptyClass}
-      />
+      <>
+        {pinned}
+        <EmptyState
+          heading={LABELS.noReviewsYetHeading}
+          message={LABELS.noReviewsHint}
+          icon={MessageSquare}
+          maxWidth={styles.stateMaxWidth}
+          className={styles.emptyClass}
+        />
+      </>
     );
   }
 
@@ -72,6 +86,7 @@ function ReviewsBody(props: ProductReviewsProps) {
         <div className={styles.listHeader}>
           <h3 className={styles.listTitle}>{LABELS.topReviews}</h3>
         </div>
+        {pinned}
         <ProductReviewList
           reviews={props.reviews}
           onVoteHelpful={props.onVoteHelpful}

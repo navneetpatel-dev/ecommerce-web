@@ -44,6 +44,8 @@ export const navigationLabels = {
   accountMenuReturns: "Returns",
   accountMenuWishlist: "Wishlist",
   accountMenuReviews: "My reviews",
+  accountMenuQuestions: "My questions",
+  accountMenuAnswers: "My answers",
   accountMenuWallet: "Wallet",
   accountMenuCashback: "Cashback",
   accountMenuGiftCards: "Gift cards",
