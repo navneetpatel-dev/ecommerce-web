@@ -155,3 +155,12 @@ export const characterCountStyles = {
   countNear: "text-warning",
   countFull: "font-medium text-danger",
 } as const;
+
+/** Under the author's own review / question / answer while an edit is pending or was declined. */
+export const revisionNoteStyles = {
+  pending:
+    "mt-2 flex items-start gap-1.5 text-[0.8125rem] leading-snug text-ink-muted",
+  declined:
+    "mt-2 flex items-start gap-1.5 text-[0.8125rem] leading-snug text-warning",
+  icon: "mt-px h-3.5 w-3.5 shrink-0",
+} as const;

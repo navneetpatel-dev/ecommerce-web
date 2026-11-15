@@ -89,6 +89,7 @@ export const PATHS = {
     returns: "/admin/returns",
     coupons: "/admin/coupons",
     reviews: "/admin/reviews",
+    qna: "/admin/questions",
     tax: "/admin/tax",
     shipping: "/admin/shipping",
     finance: "/admin/finance",

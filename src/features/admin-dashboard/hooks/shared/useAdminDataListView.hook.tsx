@@ -4,6 +4,10 @@ import { LABELS } from "@/shared/constants/labels";
 import { isImageFieldKey } from "@/shared/utils/media/imageField";
 import { inferAdminColumns, type AdminDataRow } from "./useAdminDataList.hook";
 import { AdminDataCell } from "../../components/shared/AdminDataListView/AdminDataCell.component";
+import { adminCellText } from "../../utils/shared/adminTableCells";
+
+const isRichCell = (key: string) =>
+  key === "status" || key.endsWith(".status") || isImageFieldKey(key);
 
 function columnHeader(key: string): string {
   const leaf = key.includes(".") ? key.split(".").pop()! : key;
@@ -29,7 +33,14 @@ export function useAdminDataListView(
         header: columnHeader(key),
         truncate:
           key !== "status" && !key.endsWith(".status") && !isImageFieldKey(key),
-        cell: (row) => <AdminDataCell row={row} columnKey={key} />,
+        // Badges and images render as components; everything else as text, so
+        // the table can shorten it (desktop) or show it whole (phone cards).
+        cell: (row) =>
+          isRichCell(key) ? (
+            <AdminDataCell row={row} columnKey={key} />
+          ) : (
+            adminCellText(row, key)
+          ),
       })),
     [keys],
   );

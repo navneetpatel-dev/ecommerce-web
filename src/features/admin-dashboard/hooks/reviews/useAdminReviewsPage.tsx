@@ -5,22 +5,37 @@ import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { reviewsApi, ReviewMediaModerationAction } from "@/features/reviews";
-import type { ReviewMediaItem } from "@/shared/api/types";
+import type { Review, ReviewMediaItem } from "@/shared/api/types";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
+/** A queue row: "New" or "Edit of approved" in words, plus a flag for the actions. */
+function toModerationRow(review: Review & { submission?: string }) {
+  const isEdit = review.submission === "EDIT";
+  return {
+    ...review,
+    isEdit,
+    submission: isEdit ? LABELS.submissionEdit : LABELS.submissionNew,
+  };
+}
+
 export function useAdminReviewsPage(): AdminListPageModel {
+  // New reviews and edits of approved ones share the queue; an edit row shows
+  // the proposed version, with the live text beside it ("Live version").
   const load = useCallback(
-    ({ page, limit }: { page: number; limit: number }) =>
-      reviewsApi.pending({ page, limit }),
+    async ({ page, limit }: { page: number; limit: number }) => {
+      const result = await reviewsApi.pending({ page, limit });
+      return { ...result, items: result.items.map(toModerationRow) };
+    },
     [],
   );
 
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
       const name = adminRowLabel(row);
+      const isEdit = row.isEdit === true;
       const approveReview = () =>
         reviewsApi.approve(String(row.id)).then(reload);
       const rejectReview = () => reviewsApi.reject(String(row.id)).then(reload);
@@ -33,15 +48,33 @@ export function useAdminReviewsPage(): AdminListPageModel {
           <AdminConfirmAction
             label={LABELS.approve}
             dialogVariant="success"
-            title={LABELS.confirmApproveReviewTitle}
-            description={formatLabel(LABELS.confirmApproveReviewBody, { name })}
+            title={
+              isEdit
+                ? LABELS.confirmApproveEditTitle
+                : LABELS.confirmApproveReviewTitle
+            }
+            description={formatLabel(
+              isEdit
+                ? LABELS.confirmApproveEditBody
+                : LABELS.confirmApproveReviewBody,
+              { name },
+            )}
             onConfirm={approveReview}
           />
           <AdminConfirmAction
             label={LABELS.reject}
             dialogVariant="danger"
-            title={LABELS.confirmRejectReviewTitle}
-            description={formatLabel(LABELS.confirmRejectReviewBody, { name })}
+            title={
+              isEdit
+                ? LABELS.confirmRejectEditTitle
+                : LABELS.confirmRejectReviewTitle
+            }
+            description={formatLabel(
+              isEdit
+                ? LABELS.confirmRejectEditBody
+                : LABELS.confirmRejectReviewBody,
+              { name },
+            )}
             onConfirm={rejectReview}
           />
         </>
@@ -58,9 +91,11 @@ export function useAdminReviewsPage(): AdminListPageModel {
     columnKeys: [
       "productName",
       "customerName",
+      "submission",
       "rating",
       "title",
-      "status",
+      "body",
+      "previousBody",
       "createdAt",
     ],
   };

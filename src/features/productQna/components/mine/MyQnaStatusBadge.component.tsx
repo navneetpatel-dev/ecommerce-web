@@ -8,8 +8,21 @@ const STATUS_TEXT: Record<string, string> = {
   [PRODUCT_QUESTION_STATUS.REJECTED]: LABELS.reviewStatusRejected,
 };
 
-/** "Awaiting approval" / "Published" / "Not published" for a question or answer. */
-export function MyQnaStatusBadge({ status }: { status?: string }) {
+/**
+ * "Awaiting approval" / "Published" / "Not published" for a question or answer,
+ * or "Edit awaiting approval" while an edit of a published one waits.
+ */
+export function MyQnaStatusBadge({
+  status,
+  editPending = false,
+}: {
+  status?: string;
+  editPending?: boolean;
+}) {
   if (!status) return null;
-  return <Badge variant="outline">{STATUS_TEXT[status] ?? status}</Badge>;
+  return (
+    <Badge variant="outline">
+      {editPending ? LABELS.editAwaitingTag : (STATUS_TEXT[status] ?? status)}
+    </Badge>
+  );
 }

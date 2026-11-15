@@ -127,6 +127,11 @@ export const productReviewsLabels = {
   allAnswersShown: "All {total} answers shown",
   answersLoadFailed: "Answers could not be loaded.",
   editedTag: "Edited",
+  editAwaitingTag: "Edit awaiting approval",
+  editAwaitingNote:
+    "Shoppers still see your previous version until this edit is approved.",
+  editDeclinedNote:
+    "Your last edit wasn't approved, so shoppers still see this version. You can edit it again.",
   deleteLabel: "Delete",
   deleteReviewAria: "Delete your review",
   deleteQuestionAria: "Delete your question",

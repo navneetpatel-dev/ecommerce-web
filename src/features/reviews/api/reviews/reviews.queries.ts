@@ -99,8 +99,10 @@ export function useUpdateReview() {
       ...body
     }: { reviewId: string } & Parameters<typeof reviewsApi.update>[1]) =>
       reviewsApi.update(reviewId, body),
-    // In place (no refetch): the edited review stays where the shopper sees it,
-    // now marked as awaiting approval; nothing around it re-orders.
+    // In place (no refetch): the edited review stays where the shopper sees it;
+    // nothing around it re-orders. The server's copy is the truth: for an
+    // approved review the live fields are unchanged and the edit arrives as
+    // `pendingRevision`; for one not yet approved the fields themselves changed.
     onSuccess: (saved, { reviewId }) =>
       updateReviewInCaches(queryClient, reviewId, (review) => ({
         ...review,
@@ -109,7 +111,9 @@ export function useUpdateReview() {
         body: saved.body,
         media: saved.media ?? review.media,
         status: saved.status,
-        editedAt: saved.editedAt ?? new Date().toISOString(),
+        editedAt: saved.editedAt ?? review.editedAt ?? null,
+        pendingRevision: saved.pendingRevision ?? null,
+        revisionRejectedAt: saved.revisionRejectedAt ?? null,
       })),
   });
 }

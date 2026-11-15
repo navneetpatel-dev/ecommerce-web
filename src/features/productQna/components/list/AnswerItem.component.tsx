@@ -11,6 +11,8 @@ import { ANSWER_CLAMP_CHARS } from "../../constants/productQna.constants";
 import { useQnaEditActions } from "../../context/qnaEdit.context";
 import { OwnerActions } from "@/shared/components/actions/OwnerActions.component";
 import { productQnaStyles as styles } from "../../styles/list/productQna.styles";
+import { RevisionNote } from "@/shared/components/display/RevisionNote.component";
+import { asAuthorSees, revisionState } from "@/shared/utils/ugc/ugcRevision";
 import { AnswerByline } from "./AnswerByline.component";
 
 /**
@@ -31,6 +33,8 @@ export function AnswerItem({
   const isMine = Boolean(currentUserId && answer.authorId === currentUserId);
   const handleEdit = () => editAnswer(answer);
   const handleDelete = () => deleteAnswer(answer);
+  // The author sees their latest wording; everyone else, the published answer.
+  const revision = isMine ? revisionState(answer) : null;
   const ownerActions = isMine ? (
     <OwnerActions
       compact
@@ -52,11 +56,14 @@ export function AnswerItem({
     </AnswerByline>
   );
   const body = (
-    <ExpandableText
-      text={answer.answer}
-      threshold={ANSWER_CLAMP_CHARS}
-      className={styles.answerBody}
-    />
+    <>
+      <ExpandableText
+        text={isMine ? asAuthorSees(answer).answer : answer.answer}
+        threshold={ANSWER_CLAMP_CHARS}
+        className={styles.answerBody}
+      />
+      <RevisionNote state={revision} />
+    </>
   );
 
   if (pinned) {
@@ -68,6 +75,11 @@ export function AnswerItem({
           <div className={styles.answerTags}>
             {badge}
             <span className={styles.mineTag}>{LABELS.yourAnswerTag}</span>
+            {revision === "pending" ? (
+              <span className={styles.pendingTag}>
+                {LABELS.editAwaitingTag}
+              </span>
+            ) : null}
             {answer.status === PRODUCT_ANSWER_STATUS.PENDING ? (
               <span className={styles.pendingTag}>
                 {LABELS.pendingReviewTag}

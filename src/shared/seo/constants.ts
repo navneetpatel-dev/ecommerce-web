@@ -89,6 +89,7 @@ export const WORKSPACE_PAGE_COPY = {
   "/admin/reports": { title: "Reports" },
   "/admin/returns": { title: "Returns" },
   "/admin/reviews": { title: "Reviews" },
+  "/admin/questions": { title: "Questions & answers" },
   "/admin/shipping": { title: "Shipping" },
   "/admin/support-tickets": { title: "Support tickets" },
   "/admin/support-tickets/[id]": { title: "Support ticket detail" },

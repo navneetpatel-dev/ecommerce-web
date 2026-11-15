@@ -12,6 +12,7 @@ import type {
   MyQuestion,
   ProductQuestionPage,
   ProductQuestionsParams,
+  QnaModerationItem,
 } from "../../types/productQna.types";
 import { readQnaSummary } from "../../utils/productQna.utils";
 
@@ -76,6 +77,24 @@ export const productQnaApi = {
     apiClient.patch<ProductAnswer>(API.productQna.updateAnswer(answerId), body),
   answer: (questionId: string, body: { answer: string }) =>
     apiClient.post<ProductAnswer>(API.productQna.answer(questionId), body),
+  /** Moderators: new and edited questions and answers, oldest first. */
+  moderationQueue: async (
+    params: PaginationQuery = {},
+  ): Promise<PaginatedList<QnaModerationItem>> =>
+    unwrapPaginatedList(
+      await apiClient.getWithResponse<QnaModerationItem[]>(
+        withQuery(API.productQna.moderationQueue, params),
+      ),
+    ),
+  /** Publish / reject an answer — or, for an edit, apply / discard the edit. */
+  moderateAnswer: (
+    answerId: string,
+    body: { status: "PUBLISHED" | "REJECTED" },
+  ) =>
+    apiClient.patch<ProductAnswer>(
+      API.productQna.moderateAnswer(answerId),
+      body,
+    ),
   moderate: (questionId: string, body: { status: "PUBLISHED" | "REJECTED" }) =>
     apiClient.patch<ProductQuestion>(API.productQna.moderate(questionId), body),
   pending: async (

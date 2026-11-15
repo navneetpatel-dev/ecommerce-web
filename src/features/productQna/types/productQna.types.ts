@@ -35,3 +35,19 @@ export interface MyAnswer extends ProductAnswer {
 export type ProductQuestionPage = PaginatedList<ProductQuestion> & {
   summary: QnaSummary;
 };
+
+/** One row of the Q&A moderation queue (a new post, or an edit of a published one). */
+export interface QnaModerationItem {
+  id: string;
+  kind: "QUESTION" | "ANSWER";
+  submission: "NEW" | "EDIT";
+  /** The text approving would publish. */
+  text: string;
+  /** For an edit: what shoppers see now. */
+  previousText: string | null;
+  /** For an answer: the question it answers. */
+  questionText: string | null;
+  productName: string | null;
+  authorName: string | null;
+  submittedAt: string;
+}

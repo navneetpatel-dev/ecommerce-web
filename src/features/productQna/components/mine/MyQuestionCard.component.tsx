@@ -8,6 +8,8 @@ import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { useQnaEditActions } from "../../context/qnaEdit.context";
 import { answerCountLabel } from "../../utils/productQna.utils";
 import type { MyQuestion } from "../../types/productQna.types";
+import { RevisionNote } from "@/shared/components/display/RevisionNote.component";
+import { asAuthorSees, revisionState } from "@/shared/utils/ugc/ugcRevision";
 import { MyQnaStatusBadge } from "./MyQnaStatusBadge.component";
 import { myQnaPagesStyles as styles } from "../../styles/mine/myQnaPages.styles";
 
@@ -18,6 +20,8 @@ export function MyQuestionCard({ question }: { question: MyQuestion }) {
   const canEdit = answers === 0;
   const handleEdit = () => editQuestion(question);
   const handleDelete = () => deleteQuestion(question);
+  // Their latest wording (an edit may still be awaiting approval).
+  const revision = revisionState(question);
 
   return (
     <li className={styles.item}>
@@ -33,7 +37,10 @@ export function MyQuestionCard({ question }: { question: MyQuestion }) {
           <span className={styles.productFallback}>{LABELS.product}</span>
         )}
         <div className={styles.actions}>
-          <MyQnaStatusBadge status={question.status} />
+          <MyQnaStatusBadge
+            status={question.status}
+            editPending={revision === "pending"}
+          />
           <OwnerActions
             onEdit={canEdit ? handleEdit : undefined}
             onDelete={handleDelete}
@@ -42,7 +49,7 @@ export function MyQuestionCard({ question }: { question: MyQuestion }) {
           />
         </div>
       </div>
-      <p className={styles.questionText}>{question.question}</p>
+      <p className={styles.questionText}>{asAuthorSees(question).question}</p>
       <p className={styles.meta}>
         <time dateTime={question.createdAt}>
           {formatOrderDate(question.createdAt)}
@@ -53,6 +60,7 @@ export function MyQuestionCard({ question }: { question: MyQuestion }) {
           <span className={styles.editedTag}>{LABELS.editedTag}</span>
         ) : null}
       </p>
+      <RevisionNote state={revision} />
     </li>
   );
 }

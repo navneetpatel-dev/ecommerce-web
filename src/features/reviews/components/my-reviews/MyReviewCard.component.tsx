@@ -13,12 +13,17 @@ import { useReviewEditActions } from "../../context/reviewEdit.context";
 import { REVIEW_CLAMP_CHARS } from "../../constants/productReviews.constants";
 import { reviewStatusText } from "../../utils/productReviews.utils";
 import { ReviewMediaGallery } from "../media/ReviewMediaGallery.component";
+import { RevisionNote } from "@/shared/components/display/RevisionNote.component";
+import { asAuthorSees, revisionState } from "@/shared/utils/ugc/ugcRevision";
 import { myReviewsPageStyles as styles } from "../../pages/my-reviews/myReviewsPage.styles";
 
 export function MyReviewCard({ review }: { review: Review }) {
   const { editReview, deleteReview } = useReviewEditActions();
   const handleEdit = () => editReview(review);
   const handleDelete = () => deleteReview(review);
+  // Their latest wording (an edit may still be awaiting approval).
+  const shown = asAuthorSees(review);
+  const revision = revisionState(review);
 
   return (
     <li className={styles.reviewItem}>
@@ -36,7 +41,7 @@ export function MyReviewCard({ review }: { review: Review }) {
           )}
           <p className={styles.ratingRow}>
             <Star size={12} className={styles.starIcon} aria-hidden />
-            {review.rating}/5
+            {shown.rating}/5
             <span className={styles.dateText}>
               · {formatOrderDate(review.createdAt)}
             </span>
@@ -46,7 +51,11 @@ export function MyReviewCard({ review }: { review: Review }) {
           </p>
         </div>
         <div className={styles.cardActions}>
-          <Badge variant="outline">{reviewStatusText(review.status)}</Badge>
+          <Badge variant="outline">
+            {revision === "pending"
+              ? LABELS.editAwaitingTag
+              : reviewStatusText(review.status)}
+          </Badge>
           <OwnerActions
             onEdit={handleEdit}
             onDelete={handleDelete}
@@ -55,16 +64,15 @@ export function MyReviewCard({ review }: { review: Review }) {
           />
         </div>
       </div>
-      {review.title ? (
-        <p className={styles.reviewTitle}>{review.title}</p>
-      ) : null}
+      {shown.title ? <p className={styles.reviewTitle}>{shown.title}</p> : null}
       <ExpandableText
-        text={review.body}
+        text={shown.body}
         threshold={REVIEW_CLAMP_CHARS}
         lines={4}
         className={styles.reviewBody}
       />
-      <ReviewMediaGallery media={review.media} />
+      <ReviewMediaGallery media={shown.media} />
+      <RevisionNote state={revision} />
     </li>
   );
 }

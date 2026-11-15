@@ -1,5 +1,6 @@
 "use client";
 
+import { asAuthorSees } from "@/shared/utils/ugc/ugcRevision";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { UGC_LIMITS, type UgcLimit } from "@/shared/constants/ugc/ugcLimits";
@@ -75,9 +76,10 @@ export function useQnaEditing() {
     actions: {
       currentUserId,
       editQuestion: (q: ProductQuestion) =>
-        open({ kind: "question", id: q.id }, q.question),
+        // Prefill with what they last wrote (their waiting edit, if any).
+        open({ kind: "question", id: q.id }, asAuthorSees(q).question),
       editAnswer: (a: ProductAnswer) =>
-        open({ kind: "answer", id: a.id }, a.answer),
+        open({ kind: "answer", id: a.id }, asAuthorSees(a).answer),
     },
     dialog: {
       open: Boolean(target),

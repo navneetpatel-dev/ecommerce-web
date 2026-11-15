@@ -10,6 +10,8 @@ import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { useQnaEditActions } from "../../context/qnaEdit.context";
 import { ANSWER_CLAMP_CHARS } from "../../constants/productQna.constants";
 import type { MyAnswer } from "../../types/productQna.types";
+import { RevisionNote } from "@/shared/components/display/RevisionNote.component";
+import { asAuthorSees, revisionState } from "@/shared/utils/ugc/ugcRevision";
 import { MyQnaStatusBadge } from "./MyQnaStatusBadge.component";
 import { myQnaPagesStyles as styles } from "../../styles/mine/myQnaPages.styles";
 
@@ -18,6 +20,8 @@ export function MyAnswerCard({ answer }: { answer: MyAnswer }) {
   const product = answer.question?.product ?? null;
   const handleEdit = () => editAnswer(answer);
   const handleDelete = () => deleteAnswer(answer);
+  // Their latest wording (an edit may still be awaiting approval).
+  const revision = revisionState(answer);
 
   return (
     <li className={styles.item}>
@@ -33,7 +37,10 @@ export function MyAnswerCard({ answer }: { answer: MyAnswer }) {
           <span className={styles.productFallback}>{LABELS.product}</span>
         )}
         <div className={styles.actions}>
-          <MyQnaStatusBadge status={answer.status} />
+          <MyQnaStatusBadge
+            status={answer.status}
+            editPending={revision === "pending"}
+          />
           <OwnerActions
             onEdit={handleEdit}
             onDelete={handleDelete}
@@ -50,7 +57,7 @@ export function MyAnswerCard({ answer }: { answer: MyAnswer }) {
         </p>
       ) : null}
       <ExpandableText
-        text={answer.answer}
+        text={asAuthorSees(answer).answer}
         threshold={ANSWER_CLAMP_CHARS}
         className={styles.answerBody}
       />
@@ -62,6 +69,7 @@ export function MyAnswerCard({ answer }: { answer: MyAnswer }) {
           <span className={styles.editedTag}>{LABELS.editedTag}</span>
         ) : null}
       </p>
+      <RevisionNote state={revision} />
     </li>
   );
 }

@@ -10,6 +10,10 @@ export const productQnaRoutes = {
   moderate: (questionId: string) =>
     `/api/product-qna/questions/${questionId}/status`,
   moderation: "/api/product-qna/moderation",
+  /** New and edited questions + answers awaiting a decision, oldest first. */
+  moderationQueue: "/api/product-qna/moderation/queue",
+  moderateAnswer: (answerId: string) =>
+    `/api/product-qna/answers/${answerId}/status`,
   myQuestions: "/api/product-qna/questions/mine",
   myAnswers: "/api/product-qna/answers/mine",
   /** Owner edits. */

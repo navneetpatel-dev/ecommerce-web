@@ -12,3 +12,4 @@ export { ProductQnaContainer } from "./containers/list/ProductQnaContainer.conta
 export { AllQuestionsPage } from "./pages/all-questions/AllQuestionsPage.page";
 export { MyQuestionsPage } from "./pages/mine/MyQuestionsPage.page";
 export { MyAnswersPage } from "./pages/mine/MyAnswersPage.page";
+export type { QnaModerationItem } from "./types/productQna.types";

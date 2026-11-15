@@ -1,5 +1,6 @@
 import { LABELS } from "@/shared/constants/labels";
 import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
+import { shortOrderId } from "@/shared/utils/formatting/orderFormat";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 
 const SKIP_COLUMN_KEYS = new Set([
@@ -55,4 +56,18 @@ export function shouldInferAdminColumn(key: string): boolean {
   if (SKIP_COLUMN_KEYS.has(key)) return false;
   if (isIdLikeKey(key)) return false;
   return true;
+}
+
+/**
+ * A plain-text admin cell (not an image, not a status badge) as a string, so
+ * the table treats it as text: cut short with the full value on hover in the
+ * desktop table, shown in full on phone cards. Wrapped in a component it would
+ * skip that and long text (a review, an answer) would spill into the next column.
+ */
+export function adminCellText(row: AdminDataRow, columnKey: string): string {
+  const value = getAdminCellValue(row, columnKey);
+  if (columnKey === "id" && typeof value === "string" && value.trim()) {
+    return `#${shortOrderId(value)}`;
+  }
+  return formatAdminCellValue(value);
 }

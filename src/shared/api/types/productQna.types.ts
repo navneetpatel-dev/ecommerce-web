@@ -3,7 +3,13 @@ import type {
   ProductAnswerAuthorType,
 } from "@/shared/constants/statuses";
 
-export interface ProductAnswer {
+/** Author only: their edit of published text, waiting for approval, or when one was declined. */
+export interface UgcRevisionFields<K extends string> {
+  pendingRevision?: ({ submittedAt: string } & Record<K, string>) | null;
+  revisionRejectedAt?: string | null;
+}
+
+export interface ProductAnswer extends UgcRevisionFields<"answer"> {
   id: string;
   answer: string;
   authorType: ProductAnswerAuthorType;
@@ -16,7 +22,7 @@ export interface ProductAnswer {
   status?: "PENDING" | "PUBLISHED" | "REJECTED";
 }
 
-export interface ProductQuestion {
+export interface ProductQuestion extends UgcRevisionFields<"question"> {
   id: string;
   productId: string;
   question: string;

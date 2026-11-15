@@ -83,6 +83,11 @@ export const ADMIN_NAV = [
     permissions: [PERMISSIONS.REVIEW_MODERATE] as PermissionKey[],
   },
   {
+    href: PATHS.admin.qna,
+    label: LABELS.adminQnaModerationTitle,
+    permissions: [PERMISSIONS.REVIEW_MODERATE] as PermissionKey[],
+  },
+  {
     href: PATHS.admin.tax,
     label: LABELS.tax,
     permissions: [PERMISSIONS.TAX_MANAGE] as PermissionKey[],

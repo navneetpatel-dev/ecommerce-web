@@ -17,6 +17,8 @@ import { ReviewMediaGallery } from "../media/ReviewMediaGallery.component";
 import { ReviewActionsRow } from "./ReviewActionsRow.component";
 import { ExpandableText } from "@/shared/components/display/ExpandableText.component";
 import { REVIEW_CLAMP_CHARS } from "../../constants/productReviews.constants";
+import { RevisionNote } from "@/shared/components/display/RevisionNote.component";
+import { asAuthorSees, revisionState } from "@/shared/utils/ugc/ugcRevision";
 
 interface ProductReviewItemProps {
   review: Review;
@@ -37,6 +39,9 @@ export function ProductReviewItem({
   const isMine = Boolean(currentUserId && review.userId === currentUserId);
   const handleEdit = () => editReview(review);
   const handleDelete = () => deleteReview(review);
+  // The author sees their own latest wording; everyone else, the approved review.
+  const shown = isMine ? asAuthorSees(review) : review;
+  const revision = isMine ? revisionState(review) : null;
 
   return (
     <article className={cn(styles.article, pinned && styles.pinnedArticle)}>
@@ -55,6 +60,11 @@ export function ProductReviewItem({
                 {reviewStatusText(review.status)}
               </span>
             ) : null}
+            {revision === "pending" ? (
+              <span className={styles.pendingTag}>
+                {LABELS.editAwaitingTag}
+              </span>
+            ) : null}
             {review.status === REVIEW_STATUS.APPROVED ? (
               <span className={styles.verified}>
                 <BadgeCheck className={styles.verifiedIcon} aria-hidden />
@@ -63,7 +73,7 @@ export function ProductReviewItem({
             ) : null}
           </div>
           <div className={styles.ratingRow}>
-            <RatingStars value={review.rating} size="sm" />
+            <RatingStars value={shown.rating} size="sm" />
             <time dateTime={review.createdAt} className={styles.reviewDate}>
               {formatOrderDate(review.createdAt)}
             </time>
@@ -74,16 +84,17 @@ export function ProductReviewItem({
         </div>
       </div>
 
-      {review.title ? (
-        <h3 className={styles.reviewTitle}>{review.title}</h3>
+      {shown.title ? (
+        <h3 className={styles.reviewTitle}>{shown.title}</h3>
       ) : null}
       <ExpandableText
-        text={review.body}
+        text={shown.body}
         threshold={REVIEW_CLAMP_CHARS}
         lines={4}
         className={styles.reviewBody}
       />
-      <ReviewMediaGallery media={review.media} />
+      <ReviewMediaGallery media={shown.media} />
+      <RevisionNote state={revision} />
 
       {review.vendorResponse ? (
         <div className={styles.sellerResponse}>

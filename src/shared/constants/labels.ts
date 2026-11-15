@@ -57,6 +57,7 @@ import { homeLabels } from "./labels/home";
 import { payoutSettlementLabels } from "./labels/payoutSettlement";
 import { couponEditLabels } from "./labels/couponEdit";
 import { reviewMediaLabels } from "./labels/reviewMedia";
+import { ugcModerationLabels } from "./labels/ugcModeration";
 import { notFoundLabels } from "./labels/notFound";
 import { errorStateLabels } from "./labels/errorState";
 import { productReviewsLabels } from "./labels/productReviews";
@@ -125,6 +126,7 @@ export const LABELS = {
   ...payoutSettlementLabels,
   ...couponEditLabels,
   ...reviewMediaLabels,
+  ...ugcModerationLabels,
   ...notFoundLabels,
   ...errorStateLabels,
   ...productReviewsLabels,

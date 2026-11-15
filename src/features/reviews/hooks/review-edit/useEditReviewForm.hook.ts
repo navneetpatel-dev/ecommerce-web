@@ -1,5 +1,6 @@
 "use client";
 
+import { asAuthorSees } from "@/shared/utils/ugc/ugcRevision";
 import { useState } from "react";
 import type { UploadedMediaAttachment } from "@/features/supportTickets";
 import { useForm } from "react-hook-form";
@@ -13,14 +14,18 @@ import {
 } from "../../schemas/review-form/reviews.schema";
 import { useUpdateReview } from "../../api/reviews/reviews.queries";
 
-/** The review form pre-filled with the shopper's review; saves stars + text. */
+/**
+ * The review form pre-filled with the shopper's review — their waiting edit if
+ * there is one (that is what they last wrote); saves stars + text + photos.
+ */
 export function useEditReviewForm(review: Review, onSaved: () => void) {
+  const current = asAuthorSees(review);
   const updateReview = useUpdateReview();
   const [hoverRating, setHoverRating] = useState(0);
   // The review's photos/video, editable like a new review's (add, remove, remove all).
   const [attachments, setAttachments] = useState<UploadedMediaAttachment[]>(
     () =>
-      (review.media ?? []).map((item) => ({
+      (current.media ?? []).map((item) => ({
         url: item.url,
         type: item.type,
         durationSeconds: item.durationSeconds ?? null,
@@ -31,9 +36,9 @@ export function useEditReviewForm(review: Review, onSaved: () => void) {
     mode: "onTouched",
     resolver: zodResolver(ReviewFormSchema),
     defaultValues: {
-      rating: review.rating,
-      title: review.title ?? "",
-      body: review.body,
+      rating: current.rating,
+      title: current.title ?? "",
+      body: current.body,
     },
   });
   const { formLevelError } = useApiFormErrors(

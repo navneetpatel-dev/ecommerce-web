@@ -9,6 +9,15 @@ export interface ReviewMediaItem {
 /** Helpful / Not helpful. */
 export type ReviewVote = "HELPFUL" | "UNHELPFUL";
 
+/** An edit of an approved review awaiting moderation — sent to its author only. */
+export interface ReviewRevision {
+  rating: number;
+  title: string | null;
+  body: string;
+  media: ReviewMediaItem[];
+  submittedAt: string;
+}
+
 export interface Review {
   id: string;
   productId: string;
@@ -28,6 +37,10 @@ export interface Review {
   vendorResponse?: string | null;
   vendorRespondedAt?: string | null;
   editedAt?: string | null;
+  /** Author only: their edit waiting for approval (shoppers still see the fields above). */
+  pendingRevision?: ReviewRevision | null;
+  /** Author only: when their last edit was turned down. */
+  revisionRejectedAt?: string | null;
   user?: { name: string };
   product?: { id: string; name: string; slug: string };
 }

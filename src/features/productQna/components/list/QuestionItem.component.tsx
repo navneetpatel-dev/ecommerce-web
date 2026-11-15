@@ -19,6 +19,8 @@ import {
   QuestionAnswerSlot,
   type AnsweringState,
 } from "./QuestionAnswerSlot.component";
+import { RevisionNote } from "@/shared/components/display/RevisionNote.component";
+import { asAuthorSees, revisionState } from "@/shared/utils/ugc/ugcRevision";
 import { productQnaStyles as styles } from "../../styles/list/productQna.styles";
 
 /**
@@ -43,6 +45,9 @@ export function QuestionItem({
   );
   const handleEdit = () => editQuestion(q);
   const handleDelete = () => deleteQuestion(q);
+  // The asker sees their latest wording; everyone else, the published question.
+  const revision = isMine ? revisionState(q) : null;
+  const questionText = isMine ? asAuthorSees(q).question : q.question;
   const hasAnswersShown = Boolean(q.myAnswer || thread.visible.length);
 
   return (
@@ -54,7 +59,7 @@ export function QuestionItem({
         <div className={styles.questionBody}>
           <div className={styles.questionHead}>
             <ExpandableText
-              text={q.question}
+              text={questionText}
               threshold={QUESTION_CLAMP_CHARS}
               className={styles.questionText}
             />
@@ -86,12 +91,18 @@ export function QuestionItem({
             {q.editedAt ? (
               <span className={styles.editedTag}>{LABELS.editedTag}</span>
             ) : null}
+            {revision === "pending" ? (
+              <span className={styles.pendingTag}>
+                {LABELS.editAwaitingTag}
+              </span>
+            ) : null}
             {q.status === PRODUCT_QUESTION_STATUS.PENDING ? (
               <span className={styles.pendingTag}>
                 {LABELS.questionPendingReview}
               </span>
             ) : null}
           </div>
+          <RevisionNote state={revision} />
           {hasAnswersShown ? (
             <div className={styles.answersRail}>
               {q.myAnswer ? <AnswerItem answer={q.myAnswer} pinned /> : null}
