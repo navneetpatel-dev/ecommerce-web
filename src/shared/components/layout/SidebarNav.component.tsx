@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
 import { cn } from "@/shared/utils/dom/cn";
 import { LABELS } from "@/shared/constants/labels";
@@ -10,6 +11,7 @@ export interface SidebarNavItem {
   href: string;
   icon?: LucideIcon;
   label: string;
+  category?: string;
 }
 
 interface SidebarNavProps {
@@ -27,6 +29,20 @@ export function SidebarNav({
   variant = "dashboard",
   className,
 }: SidebarNavProps) {
+  const categories = useMemo(() => {
+    const groups: { title?: string; items: SidebarNavItem[] }[] = [];
+    let currentGroup: { title?: string; items: SidebarNavItem[] } | null = null;
+
+    for (const item of items) {
+      if (!currentGroup || currentGroup.title !== item.category) {
+        currentGroup = { title: item.category, items: [] };
+        groups.push(currentGroup);
+      }
+      currentGroup.items.push(item);
+    }
+    return groups;
+  }, [items]);
+
   return (
     <aside
       className={cn(
@@ -49,26 +65,38 @@ export function SidebarNav({
             : sidebarNavStyles.navWithoutHeader,
         )}
       >
-        {items.map(({ href, icon: Icon, label }) => {
-          const isActive =
-            currentPath === href || currentPath.startsWith(`${href}/`);
-          return (
-            <Link
-              key={href}
-              href={href}
-              aria-current={isActive ? "page" : undefined}
-              className={cn(
-                sidebarNavStyles.linkBase,
-                isActive
-                  ? sidebarNavStyles.linkActive
-                  : sidebarNavStyles.linkInactive,
-              )}
-            >
-              {Icon ? <Icon size={16} /> : null}
-              {label}
-            </Link>
-          );
-        })}
+        {categories.map((group, groupIdx) => (
+          <div
+            key={group.title ?? `group-${groupIdx}`}
+            role={group.title ? "group" : undefined}
+            aria-label={group.title}
+            className={group.title ? sidebarNavStyles.categoryGroup : undefined}
+          >
+            {group.title ? (
+              <p className={sidebarNavStyles.categoryHeader}>{group.title}</p>
+            ) : null}
+            {group.items.map(({ href, icon: Icon, label }) => {
+              const isActive =
+                currentPath === href || currentPath.startsWith(`${href}/`);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    sidebarNavStyles.linkBase,
+                    isActive
+                      ? sidebarNavStyles.linkActive
+                      : sidebarNavStyles.linkInactive,
+                  )}
+                >
+                  {Icon ? <Icon size={16} /> : null}
+                  {label}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
     </aside>
   );

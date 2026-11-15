@@ -13,6 +13,8 @@ import { ReportExportButtons } from "../export/ReportExportButtons.component";
 import { ReportExportStatus } from "../export/ReportExportStatus.component";
 import { ReportFilterTextField } from "./ReportFilterTextField.component";
 import { ReportTypeSelect } from "./ReportTypeSelect.component";
+import { ReportVendorSelect } from "./ReportVendorSelect.component";
+import { ReportCategorySelect } from "./ReportCategorySelect.component";
 import { reportFilterBarStyles as styles } from "../../styles/filters/reportFilterBar.styles";
 
 interface ReportFilterBarProps {
@@ -73,17 +75,7 @@ export function ReportFilterBar({
     exportingFormat,
     controlsDisabled,
   });
-  const vendorFilterField = showVendorFilter ? (
-    <ReportFilterTextField
-      id="report-vendor"
-      label={LABELS.reportVendor}
-      value={vendorId}
-      placeholder={LABELS.uuidPlaceholder}
-      disabled={controlsDisabled}
-      disabledHint={filterHint}
-      onChange={onVendorIdChange}
-    />
-  ) : null;
+
   const loadButtonDisabled = loading || !reportType || controlsDisabled;
   const loadButtonHint = controlsDisabled
     ? filterHint
@@ -117,16 +109,18 @@ export function ReportFilterBar({
         disabledHint={filterHint}
       />
 
-      {vendorFilterField}
+      {showVendorFilter && (
+        <ReportVendorSelect
+          value={vendorId}
+          onChange={onVendorIdChange}
+          disabled={controlsDisabled}
+        />
+      )}
 
-      <ReportFilterTextField
-        id="report-category"
-        label={LABELS.reportCategory}
+      <ReportCategorySelect
         value={categoryId}
-        placeholder={LABELS.uuidPlaceholder}
-        disabled={controlsDisabled}
-        disabledHint={filterHint}
         onChange={onCategoryIdChange}
+        disabled={controlsDisabled}
       />
 
       <ReportFilterTextField

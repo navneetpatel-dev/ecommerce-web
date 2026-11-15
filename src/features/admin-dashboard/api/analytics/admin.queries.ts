@@ -39,6 +39,14 @@ export function usePendingVendors() {
   });
 }
 
+export function useAdminVendorsList() {
+  return useQuery({
+    queryKey: [...adminKeys.vendors.all, "list"],
+    queryFn: () => adminApi.vendors({ page: 1, limit: 100 }),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 export function usePendingProducts() {
   return useQuery({
     queryKey: adminKeys.products.pendingMeta(),
@@ -50,11 +58,13 @@ export function useAdminCoupons(
   page = 1,
   limit = DEFAULT_PAGE_LIMIT,
   vendorScoped?: boolean,
+  options?: { enabled?: boolean },
 ) {
   return useQuery({
     queryKey: adminKeys.coupons.page(page, limit, vendorScoped),
     queryFn: () => adminApi.coupons({ page, limit, vendorScoped }),
     placeholderData: (prev) => prev,
+    enabled: options?.enabled,
   });
 }
 

@@ -21,6 +21,8 @@ export interface AdminDataListViewProps {
   actions?: (row: AdminDataRow, reload: () => void) => ReactNode;
   /** Prefer explicit columns; falls back to inferred keys from the first row. */
   columnKeys?: string[];
+  titleLevel?: 1 | 2;
+  onRowClick?: (row: AdminDataRow) => void;
 }
 
 export function AdminDataListView({
@@ -38,6 +40,8 @@ export function AdminDataListView({
   onPageChange,
   actions,
   columnKeys,
+  titleLevel,
+  onRowClick,
 }: AdminDataListViewProps) {
   const { columns, getRowId, renderActions } = useAdminDataListView(
     rows,
@@ -51,6 +55,7 @@ export function AdminDataListView({
   return (
     <DataTable
       title={title}
+      titleLevel={titleLevel}
       columns={columns}
       rows={rows}
       loading={loading}
@@ -61,6 +66,7 @@ export function AdminDataListView({
       getRowId={getRowId}
       pagination={paginationConfig}
       actions={renderActions}
+      onRowClick={onRowClick}
     />
   );
 }

@@ -2,7 +2,6 @@
 
 import type { KeyboardEvent, ReactNode } from "react";
 import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
-import { LABELS } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
 import { dataTableMobileStyles } from "../../styles/data-table/dataTable.styles";
 import type { DataTableColumn } from "../../types/data-table/types";
@@ -50,7 +49,6 @@ export function DataTableMobileCards<T>({
           ? {
               role: "button" as const,
               tabIndex: 0,
-              "aria-label": LABELS.viewRecordDetails,
               onClick: () => onActivateRow(row, index),
               onKeyDown: (event: KeyboardEvent<HTMLElement>) =>
                 onRowKeyDown(event, row, index),

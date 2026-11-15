@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 import {
   settingsApi,
   type AdminPlatformSettings,
@@ -12,10 +13,13 @@ export type PlatformSettings = AdminPlatformSettings;
 
 export function usePlatformSettingsForm() {
   const [form, setForm] = useState<PlatformSettings | null>(null);
+  const [isDirty, setIsDirty] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  useUnsavedChanges(isDirty);
 
   useEffect(() => {
     settingsApi
@@ -66,6 +70,7 @@ export function usePlatformSettingsForm() {
       .update(form)
       .then((saved) => {
         setForm(saved);
+        setIsDirty(false);
         setMessage(LABELS.settingsSaved);
       })
       .catch((err) =>
@@ -78,6 +83,7 @@ export function usePlatformSettingsForm() {
     <K extends keyof PlatformSettings>(field: K) =>
     (value: PlatformSettings[K]) => {
       setMessage(null);
+      setIsDirty(true);
       setForm((current) =>
         current ? { ...current, [field]: value } : current,
       );
@@ -85,6 +91,7 @@ export function usePlatformSettingsForm() {
 
   return {
     form,
+    isDirty,
     loading,
     loadError,
     saveError,

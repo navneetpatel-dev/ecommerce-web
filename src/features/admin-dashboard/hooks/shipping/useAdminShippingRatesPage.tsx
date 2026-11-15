@@ -2,8 +2,10 @@
 
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
+import { LABELS } from "@/shared/constants/labels";
 import { shippingRatesLabels } from "@/shared/constants/labels/shippingRates";
 import { adminShippingApi } from "@/features/admin-dashboard/api/shipping/shipping.api";
+import { adminApi } from "../../api/analytics/admin.api";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 import { useShippingRateForm } from "./useShippingRateForm.hook";
@@ -36,6 +38,9 @@ export type AdminShippingRatesPageModel = AdminListPageModel & {
 
 export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
   const [zones, setZones] = useState<ShippingZoneOption[]>([]);
+  const [vendors, setVendors] = useState<Array<{ id: string; name: string }>>(
+    [],
+  );
   const [listVersion, setListVersion] = useState(0);
   const formState = useShippingRateForm(
     useCallback(() => setListVersion((version) => version + 1), []),
@@ -53,6 +58,18 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
         ),
       )
       .catch(() => setZones([]));
+
+    adminApi
+      .vendors({ page: 1, limit: 100 })
+      .then((res) =>
+        setVendors(
+          res.items.map((v) => ({
+            id: String(v.id),
+            name: v.businessName,
+          })),
+        ),
+      )
+      .catch(() => setVendors([]));
   }, []);
 
   const load = useCallback(
@@ -62,12 +79,16 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
       void listVersion;
       const rows = await adminShippingApi.rates();
       const zoneNameById = new Map(zones.map((zone) => [zone.id, zone.name]));
+      const vendorNameById = new Map(vendors.map((v) => [v.id, v.name]));
       return rows.map((row) => ({
         ...row,
         zoneName: zoneNameById.get(String(row.zoneId)) ?? row.zoneId,
+        vendorName: row.vendorId
+          ? (vendorNameById.get(String(row.vendorId)) ?? String(row.vendorId))
+          : shippingRatesLabels.allVendorsDefault,
       }));
     },
-    [zones, listVersion],
+    [zones, vendors, listVersion],
   );
 
   const actions = useCallback(
@@ -77,12 +98,12 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
 
       return (
         <AdminConfirmAction
-          label="Delete"
+          label={LABELS.delete}
           dialogVariant="danger"
           confirmVariant="destructive"
           tone="danger"
-          title="Delete Shipping Rate"
-          description="Are you sure you want to delete this shipping rate? This action cannot be undone."
+          title={shippingRatesLabels.deleteShippingRate}
+          description={shippingRatesLabels.deleteShippingRateConfirm}
           onConfirm={deleteRate}
         />
       );
@@ -107,7 +128,7 @@ export function useAdminShippingRatesPage(): AdminShippingRatesPageModel {
       "price",
       "estimatedDays",
       "freeShippingThreshold",
-      "vendorId",
+      "vendorName",
     ],
   };
 }

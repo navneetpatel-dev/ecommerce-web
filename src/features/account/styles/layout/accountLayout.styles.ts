@@ -17,6 +17,9 @@ export const accountLayoutStyles = {
   mobileNavContainer:
     "scrollbar-none mb-6 -mx-1 overflow-x-auto overscroll-x-contain pb-1 lg:hidden",
   mobileNavList: "flex min-w-max gap-1 px-1",
+  workspaceNavContainer: "mb-6 flex flex-wrap gap-1 border-b border-line pb-3",
+  workspaceNavList: "flex flex-wrap gap-1",
+  workspaceActiveHeader: "mb-5",
   mobileNavButton: (selected: boolean) =>
     cn(
       "h-auto min-h-0 max-h-none gap-2 px-3.5 py-2 text-body-sm",
@@ -24,7 +27,10 @@ export const accountLayoutStyles = {
         ? "border-line-strong bg-paper text-brand shadow-[inset_0_-2px_0_0_var(--brand)] hover:bg-brand-subtle/40 hover:text-brand"
         : "border-line text-ink-muted hover:border-ink/25 hover:text-ink",
     ),
-  layoutGrid: "grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10",
+  layoutGrid: (isWorkspace: boolean) =>
+    isWorkspace
+      ? "w-full min-w-0"
+      : "grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10",
   desktopAside: "hidden lg:block",
   desktopNav:
     "sticky top-24 isolate border border-line bg-paper shadow-elevation-1",

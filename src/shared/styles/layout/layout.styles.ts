@@ -26,6 +26,9 @@ export const sidebarNavStyles = {
   nav: "min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-contain px-4 pb-4",
   navWithHeader: "pt-1",
   navWithoutHeader: "pt-4",
+  categoryGroup: "space-y-1 pt-3 first:pt-0",
+  categoryHeader:
+    "px-3 pb-1 text-[0.6875rem] font-semibold uppercase tracking-wider text-ink-muted/80",
   linkBase:
     "flex h-11 items-center gap-3 rounded-md border-l-[3px] px-3 text-body-sm font-medium transition-colors",
   linkActive: "border-l-brand bg-brand-subtle text-brand",
@@ -42,4 +45,7 @@ export const workspaceNavDrawerStyles = {
   title: "text-[1.125rem] font-semibold text-brand",
   closeButton: "text-ink-muted hover:text-ink",
   nav: "flex-1 space-y-1 overflow-y-auto p-4",
+  categoryGroup: "space-y-1 pt-3 first:pt-0",
+  categoryHeader:
+    "px-3 pb-1 text-[0.6875rem] font-semibold uppercase tracking-wider text-ink-muted/80",
 } as const;

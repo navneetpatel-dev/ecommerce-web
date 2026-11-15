@@ -11,7 +11,6 @@ import {
 } from "@/shared/components/ui/table";
 import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
 import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
-import { LABELS } from "@/shared/constants/labels";
 import {
   TABLE_ACTIONS_CELL_CLASS,
   TABLE_ACTIONS_HEAD_CLASS,
@@ -111,9 +110,6 @@ export function DataTableDesktopTable<T>({
                   rowsInteractive && dataTableDesktopStyles.rowInteractive,
                 )}
                 tabIndex={rowsInteractive ? 0 : undefined}
-                aria-label={
-                  rowsInteractive ? LABELS.viewRecordDetails : undefined
-                }
                 onClick={activateRow}
                 onKeyDown={handleRowKeyDown}
               >

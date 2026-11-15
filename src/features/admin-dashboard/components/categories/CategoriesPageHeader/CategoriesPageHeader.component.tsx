@@ -42,9 +42,9 @@ export function CategoriesPageHeader({
   return (
     <div className={categoriesPageHeaderStyles.root}>
       <div className={categoriesPageHeaderStyles.headingWrapper}>
-        <h2 className={categoriesPageHeaderStyles.title}>
+        <h1 className={categoriesPageHeaderStyles.title}>
           {LABELS.categories}
-        </h2>
+        </h1>
         <p className={categoriesPageHeaderStyles.hint}>
           {LABELS.createCategoryHint}
         </p>

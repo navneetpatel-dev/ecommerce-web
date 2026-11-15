@@ -44,11 +44,13 @@ export function useAdminProductsPage(): AdminProductsPageModel {
       if (isArchived) {
         return (
           <AdminConfirmAction
-            label="Reactivate"
+            label={LABELS.reactivateProduct}
             dialogVariant="info"
             tone="success"
-            title="Reactivate Product"
-            description={`Are you sure you want to restore "${name || "this product"}" to active status?`}
+            title={LABELS.confirmReactivateProductTitle}
+            description={formatLabel(LABELS.confirmReactivateProductBody, {
+              name: name || LABELS.thisItem,
+            })}
             onConfirm={reactivateProduct}
           />
         );

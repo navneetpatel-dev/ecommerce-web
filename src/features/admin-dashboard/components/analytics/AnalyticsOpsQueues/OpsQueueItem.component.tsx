@@ -9,11 +9,12 @@ export interface QueueDef {
   label: string;
   href: string;
   icon: ElementType;
+  permissions: readonly string[];
 }
 
 interface OpsQueueItemProps {
   queue: QueueDef;
-  count: number;
+  count?: number;
 }
 
 export function OpsQueueItem({ queue, count }: OpsQueueItemProps) {
@@ -27,7 +28,7 @@ export function OpsQueueItem({ queue, count }: OpsQueueItemProps) {
         </span>
         <span className={styles.queueLabel}>{queue.label}</span>
       </div>
-      <span className={styles.countText}>{count}</span>
+      <span className={styles.countText}>{count != null ? count : "—"}</span>
     </Link>
   );
 }

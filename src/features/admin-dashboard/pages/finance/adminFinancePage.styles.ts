@@ -10,4 +10,13 @@ export const adminFinancePageStyles = {
   tabIcon: "size-4",
   reportsAllContent: "mt-0 space-y-6",
   reportsSingleContent: "mt-0",
+  overviewGrid: "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3",
+  overviewCard:
+    "flex flex-col justify-between rounded-lg border border-line bg-surface p-5 shadow-elevation-1 transition hover:border-line-strong hover:shadow-elevation-2",
+  overviewCardHeader: "space-y-2",
+  overviewCardIconWrapper:
+    "flex size-9 items-center justify-center rounded-md border border-line bg-paper text-ink",
+  overviewCardTitle: "text-body-base font-semibold text-ink",
+  overviewCardDescription: "text-body-sm text-ink-muted",
+  overviewCardFooter: "mt-4 pt-3 border-t border-line/60 flex justify-end",
 } as const;

@@ -18,7 +18,13 @@ export const shippingRatesLabels = {
   freeShippingThresholdOptional:
     "Free shipping threshold, incl. GST (optional)",
   vendorIdOptional: "Vendor ID (optional, per-vendor override)",
+  vendorOptional: "Vendor (optional, per-vendor override)",
+  allVendorsDefault: "Platform default (all vendors)",
+  selectVendor: "Select a vendor",
   couldNotLoadShippingRates: "Could not load shipping rates.",
   couldNotCreateShippingRate: "Could not create shipping rate.",
   selectZoneToCreateRate: "Select a zone to continue.",
+  deleteShippingRate: "Delete shipping rate",
+  deleteShippingRateConfirm:
+    "Are you sure you want to delete this shipping rate? This action cannot be undone.",
 } as const;

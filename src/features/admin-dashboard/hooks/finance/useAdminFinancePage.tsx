@@ -61,11 +61,11 @@ export function useAdminFinancePage(): AdminFinancePageModel {
               onDone={reload}
             />
             <AdminConfirmAction
-              label="Mark failed"
+              label={LABELS.markPayoutFailed}
               dialogVariant="danger"
               tone="danger"
-              title="Mark payout as failed?"
-              description="Record why the external transfer could not be completed."
+              title={LABELS.confirmMarkPayoutFailedTitle}
+              description={LABELS.confirmMarkPayoutFailedBody}
               requireReason
               onConfirm={markPayoutFailed}
             />
@@ -75,11 +75,11 @@ export function useAdminFinancePage(): AdminFinancePageModel {
       if (status === "FAILED" && row.preparedAt) {
         return (
           <AdminConfirmAction
-            label="Retry payout"
+            label={LABELS.retryPayout}
             dialogVariant="warning"
             tone="success"
-            title="Retry this payout?"
-            description="Return this payout to pending after arranging another transfer attempt."
+            title={LABELS.confirmRetryPayoutTitle}
+            description={LABELS.confirmRetryPayoutBody}
             onConfirm={retryPayout}
           />
         );

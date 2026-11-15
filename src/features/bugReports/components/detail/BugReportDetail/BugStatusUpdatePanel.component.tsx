@@ -71,9 +71,9 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
       <div className={bugReportPanelsStyles.panelBodyTight}>
         {props.statusOptions.length > 0 ? (
           <>
-            <FormFieldFrame label={LABELS.status}>
+            <FormFieldFrame label={LABELS.status} htmlFor="bug-status-select">
               <Select value={props.status} onValueChange={handleStatusChange}>
-                <SelectTrigger>
+                <SelectTrigger id="bug-status-select">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -99,8 +99,12 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
 
         {props.canMarkDuplicate ? (
           <div className={bugReportPanelsStyles.panelSectionDivider}>
-            <FormFieldFrame label={LABELS.bugDuplicateOfId}>
+            <FormFieldFrame
+              label={LABELS.bugDuplicateOfId}
+              htmlFor="bug-duplicate-of-input"
+            >
               <Input
+                id="bug-duplicate-of-input"
                 value={props.duplicateOf}
                 onChange={handleDuplicateOfChange}
                 placeholder={LABELS.bugDuplicateOfPlaceholder}
@@ -124,8 +128,12 @@ export function BugStatusUpdatePanel(props: BugStatusUpdatePanelProps) {
 
         {props.canWontFix ? (
           <div className={bugReportPanelsStyles.panelSectionDivider}>
-            <FormFieldFrame label={LABELS.bugWontFixReason}>
+            <FormFieldFrame
+              label={LABELS.bugWontFixReason}
+              htmlFor="bug-wontfix-reason-input"
+            >
               <Textarea
+                id="bug-wontfix-reason-input"
                 value={props.wontFixReason}
                 onChange={handleWontFixReasonChange}
                 rows={3}

@@ -43,9 +43,12 @@ export function TicketManageControls(props: TicketManageControlsProps) {
   return (
     <>
       <div className={ticketThreadStyles.controlsSection}>
-        <FormFieldFrame label={LABELS.ticketUpdatePriority}>
+        <FormFieldFrame
+          label={LABELS.ticketUpdatePriority}
+          htmlFor="ticket-priority-select"
+        >
           <Select value={props.priority} onValueChange={handlePriorityChange}>
-            <SelectTrigger>
+            <SelectTrigger id="ticket-priority-select">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

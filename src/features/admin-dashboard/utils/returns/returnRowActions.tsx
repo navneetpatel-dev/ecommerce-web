@@ -10,6 +10,7 @@ import { returnsApi } from "@/features/returns";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../shared/adminRowLabel";
 import { buildReturnDocumentActions } from "./returnDocumentActions";
+import { buildReturnDisputeActions } from "./returnDisputeActions";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 
 export function buildReturnRowActions(
@@ -144,42 +145,7 @@ export function buildReturnRowActions(
     );
   }
 
-  if (row.disputeStatus === "PENDING") {
-    buttons.push(
-      <AdminConfirmAction
-        key="uphold-dispute"
-        label="Uphold Dispute"
-        dialogVariant="warning"
-        title="Uphold Seller Return Dispute"
-        description={`The seller reported: "${row.disputeReason ?? "Damaged/wrong item"}". Uphold seller dispute?`}
-        requireReason
-        onConfirm={(notes) =>
-          returnsApi
-            .resolveDispute(String(row.id), {
-              resolution: "UPHELD",
-              notes: notes ?? "Dispute upheld by platform admin",
-            })
-            .then(reload)
-        }
-      />,
-      <AdminConfirmAction
-        key="reject-dispute"
-        label="Reject Dispute"
-        dialogVariant="danger"
-        title="Reject Seller Return Dispute"
-        description="Reject the seller dispute and uphold the customer return?"
-        requireReason
-        onConfirm={(notes) =>
-          returnsApi
-            .resolveDispute(String(row.id), {
-              resolution: "REJECTED",
-              notes: notes ?? "Dispute rejected by platform admin",
-            })
-            .then(reload)
-        }
-      />,
-    );
-  }
+  buttons.push(...buildReturnDisputeActions(row, reload));
 
   // Only a request nothing came of (never approved): the rest carry refunds and notes.
   if (status === RETURN_STATUS.REQUESTED || status === RETURN_STATUS.REJECTED) {

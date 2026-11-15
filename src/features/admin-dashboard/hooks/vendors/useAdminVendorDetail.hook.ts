@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useVendorById, useUpdateVendor } from "@/features/vendors";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 import { adminEntityDetailLabels } from "@/shared/constants/labels/adminEntityDetail";
+import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 
-interface VendorEditForm {
+export interface VendorEditForm {
   businessName: string;
   description: string;
   commissionRate: number | undefined;
@@ -51,6 +52,17 @@ export function useAdminVendorDetail(vendorId: string | undefined) {
     setForm((prev) => (prev ? { ...prev, ...patch } : prev));
     setMessage(null);
   };
+
+  const isDirty = Boolean(
+    form &&
+    query.data &&
+    (form.businessName !== (query.data.businessName ?? "") ||
+      form.description !== (query.data.description ?? "") ||
+      form.commissionRate !== (query.data.commissionRate ?? undefined) ||
+      form.returnShippingFee !== (query.data.returnShippingFee ?? undefined) ||
+      form.codEnabled !== (query.data.codEnabled ?? true)),
+  );
+  useUnsavedChanges(isDirty);
 
   const save = async () => {
     if (!form) return;

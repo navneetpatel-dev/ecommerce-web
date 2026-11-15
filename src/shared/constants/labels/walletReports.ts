@@ -13,7 +13,7 @@ export const walletReportsLabels = {
   reportBornByAll: "All",
   reportBornByPlatform: "Platform",
   reportBornByVendor: "Vendor",
-  reportUserId: "User ID",
+  reportUserId: "Customer",
   reportBalance: "Balance",
   reportPurchasedPoints: "Purchased",
   reportPromotionalPoints: "Promotional",

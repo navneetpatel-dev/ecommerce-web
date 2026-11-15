@@ -36,7 +36,7 @@ export function useAdminVendorsPage(): AdminVendorsPageModel {
   return {
     gatePermission: [PERMISSIONS.VENDOR_MANAGE, PERMISSIONS.VENDOR_APPROVE],
     title: LABELS.vendors,
-    permission: PERMISSIONS.VENDOR_MANAGE,
+    permission: [PERMISSIONS.VENDOR_MANAGE, PERMISSIONS.VENDOR_APPROVE],
     load,
     actions,
     columnKeys: [

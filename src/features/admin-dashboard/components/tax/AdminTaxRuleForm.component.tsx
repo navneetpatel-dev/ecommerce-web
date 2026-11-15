@@ -73,8 +73,12 @@ export function AdminTaxRuleForm({
   return (
     <form onSubmit={handleSubmit}>
       <FormSection title={LABELS.addTaxRule} columns={2}>
-        <FormFieldFrame label={LABELS.gstPercentage}>
+        <FormFieldFrame
+          label={LABELS.gstPercentage}
+          htmlFor="tax-gst-percentage"
+        >
           <NumberInput
+            id="tax-gst-percentage"
             value={gstPercentage === "" ? undefined : Number(gstPercentage)}
             min={0}
             max={100}
@@ -84,8 +88,9 @@ export function AdminTaxRuleForm({
             onChange={handleGstPercentageChange}
           />
         </FormFieldFrame>
-        <FormFieldFrame label={LABELS.hsnOptional}>
+        <FormFieldFrame label={LABELS.hsnOptional} htmlFor="tax-hsn-code">
           <Input
+            id="tax-hsn-code"
             placeholder={LABELS.hsnOptional}
             value={hsnCode}
             onChange={handleHsnChange}
@@ -94,8 +99,10 @@ export function AdminTaxRuleForm({
         <FormFieldFrame
           label={LABELS.gstPriceBandThreshold}
           hint={LABELS.gstPriceBandHint}
+          htmlFor="tax-price-band-threshold"
         >
           <NumberInput
+            id="tax-price-band-threshold"
             value={
               priceBandThreshold === "" ? undefined : Number(priceBandThreshold)
             }
@@ -106,8 +113,12 @@ export function AdminTaxRuleForm({
             onChange={handlePriceBandThresholdChange}
           />
         </FormFieldFrame>
-        <FormFieldFrame label={LABELS.gstPercentageAbove}>
+        <FormFieldFrame
+          label={LABELS.gstPercentageAbove}
+          htmlFor="tax-gst-percentage-above"
+        >
           <NumberInput
+            id="tax-gst-percentage-above"
             value={
               gstPercentageAbove === "" ? undefined : Number(gstPercentageAbove)
             }

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { LABELS } from "@/shared/constants/labels";
 import type {
@@ -52,21 +53,58 @@ export function AccountLayout({
           <p className={styles.hint}>{settingsHint}</p>
         </motion.header>
 
-        <AccountMobileNav
-          sections={sections}
-          activeSection={activeSection}
-          onSectionChange={onSectionChange}
-        />
-
-        <div className={styles.layoutGrid}>
-          <AccountDesktopNav
+        {isWorkspace ? (
+          <nav
+            aria-label="Account sections"
+            className={styles.workspaceNavContainer}
+          >
+            <ul className={styles.workspaceNavList}>
+              {sections.map((section) => {
+                const selected = section.id === activeSection;
+                const Icon = section.icon;
+                return (
+                  <li key={section.id}>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onSectionChange(section.id)}
+                      aria-current={selected ? "page" : undefined}
+                      className={styles.mobileNavButton(selected)}
+                    >
+                      <Icon size={15} strokeWidth={1.5} aria-hidden />
+                      {section.label}
+                    </Button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        ) : (
+          <AccountMobileNav
             sections={sections}
             activeSection={activeSection}
             onSectionChange={onSectionChange}
           />
+        )}
+
+        <div className={styles.layoutGrid(isWorkspace)}>
+          {!isWorkspace && (
+            <AccountDesktopNav
+              sections={sections}
+              activeSection={activeSection}
+              onSectionChange={onSectionChange}
+            />
+          )}
 
           <div className={styles.mainColumn}>
-            <div className={styles.mobileActiveHeader}>
+            <div
+              className={
+                isWorkspace
+                  ? styles.workspaceActiveHeader
+                  : styles.mobileActiveHeader
+              }
+            >
               <TextEyebrow>{active.label}</TextEyebrow>
               <p className={styles.mobileActiveDescription}>
                 {active.description}

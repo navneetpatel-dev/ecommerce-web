@@ -13,7 +13,9 @@ function bearerLabel(bearer: Coupon["discountBearer"]) {
     : LABELS.discountBearerPlatform;
 }
 
-export function buildCouponColumns(): DataTableColumn<Coupon>[] {
+export function buildCouponColumns(
+  vendorMap?: Map<string, string>,
+): DataTableColumn<Coupon>[] {
   return [
     {
       id: "code",
@@ -40,7 +42,10 @@ export function buildCouponColumns(): DataTableColumn<Coupon>[] {
       id: "vendor",
       header: LABELS.vendorId,
       className: styles.columnMonoSm,
-      cell: (row) => row.vendorId ?? "—",
+      cell: (row) =>
+        row.vendorId
+          ? (vendorMap?.get(row.vendorId) ?? LABELS.discountBearerVendor)
+          : LABELS.discountBearerPlatform,
     },
     {
       id: "usage",

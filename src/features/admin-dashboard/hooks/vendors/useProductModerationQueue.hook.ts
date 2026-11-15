@@ -4,13 +4,7 @@ import { useCallback } from "react";
 import { useAdminDataList } from "../shared/useAdminDataList.hook";
 import { useProductModeration } from "./useProductModeration.hook";
 import { adminApi } from "../../api/analytics/admin.api";
-
-type PendingProduct = {
-  id: string;
-  name: string;
-  imageUrl?: string | null;
-  basePrice: number;
-};
+import type { ProductDetail } from "@/shared/api/types";
 
 export function useProductModerationQueue() {
   const load = useCallback(
@@ -38,7 +32,7 @@ export function useProductModerationQueue() {
   );
 
   return {
-    products: list.rows as unknown as PendingProduct[],
+    products: list.rows as unknown as ProductDetail[],
     isLoading: list.loading,
     reload: list.reload,
     pagination: {

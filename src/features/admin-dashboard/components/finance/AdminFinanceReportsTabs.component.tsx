@@ -19,11 +19,12 @@ import { AdminWalletLiabilityPanel } from "../wallet/AdminWalletLiabilityPanel/i
 import { AdminWalletRechargePanel } from "../wallet/AdminWalletRechargePanel/index";
 import { AdminWalletAdjustPanel } from "../wallet/AdminWalletAdjustPanel.component";
 import { AdminCashbackWriteOffPanel } from "../wallet/AdminCashbackWriteOffPanel.component";
+import { AdminFinanceReportsOverview } from "./AdminFinanceReportsOverview.component";
 import { LABELS } from "@/shared/constants/labels";
 import { useUrlTabState } from "@/shared/hooks/navigation/useUrlTabState.hook";
 import { adminFinancePageStyles } from "../../pages/finance/adminFinancePage.styles";
 
-const REPORT_TABS = [
+export const REPORT_TABS = [
   "all",
   "settlement",
   "liability",
@@ -31,6 +32,8 @@ const REPORT_TABS = [
   "cashback",
   "adjust",
 ] as const;
+
+export type FinanceReportTab = (typeof REPORT_TABS)[number];
 
 export function AdminFinanceReportsTabs() {
   // Own URL key: this sits inside the page's section tabs (`?tab=`).
@@ -49,7 +52,7 @@ export function AdminFinanceReportsTabs() {
             className={adminFinancePageStyles.reportsTabTrigger}
           >
             <LayoutGrid className={adminFinancePageStyles.tabIcon} />
-            All reports
+            {LABELS.allReports}
           </TabsTrigger>
           <TabsTrigger
             value="settlement"
@@ -93,42 +96,38 @@ export function AdminFinanceReportsTabs() {
         value="all"
         className={adminFinancePageStyles.reportsAllContent}
       >
-        <AdminSettlementReportsPanel />
-        <AdminWalletLiabilityPanel />
-        <AdminWalletRechargePanel />
-        <AdminWalletAdjustPanel />
-        <AdminCashbackWriteOffPanel />
+        <AdminFinanceReportsOverview onSelectTab={setReport} />
       </TabsContent>
 
       <TabsContent
         value="settlement"
         className={adminFinancePageStyles.reportsSingleContent}
       >
-        <AdminSettlementReportsPanel />
+        {report === "settlement" && <AdminSettlementReportsPanel />}
       </TabsContent>
       <TabsContent
         value="liability"
         className={adminFinancePageStyles.reportsSingleContent}
       >
-        <AdminWalletLiabilityPanel />
+        {report === "liability" && <AdminWalletLiabilityPanel />}
       </TabsContent>
       <TabsContent
         value="recharge"
         className={adminFinancePageStyles.reportsSingleContent}
       >
-        <AdminWalletRechargePanel />
+        {report === "recharge" && <AdminWalletRechargePanel />}
       </TabsContent>
       <TabsContent
         value="cashback"
         className={adminFinancePageStyles.reportsSingleContent}
       >
-        <AdminCashbackWriteOffPanel />
+        {report === "cashback" && <AdminCashbackWriteOffPanel />}
       </TabsContent>
       <TabsContent
         value="adjust"
         className={adminFinancePageStyles.reportsSingleContent}
       >
-        <AdminWalletAdjustPanel />
+        {report === "adjust" && <AdminWalletAdjustPanel />}
       </TabsContent>
     </Tabs>
   );

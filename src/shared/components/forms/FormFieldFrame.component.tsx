@@ -5,7 +5,7 @@ import { FieldControlProvider, joinAriaIds } from "./fieldControl.context";
 import { formFieldFrameStyles } from "../../styles/forms/forms.styles";
 
 interface FormFieldFrameProps {
-  label: string;
+  label?: string;
   htmlFor?: string;
   required?: boolean;
   error?: string;
@@ -48,12 +48,12 @@ export function FormFieldFrame({
   const hintId = hint ? `${controlId}-hint` : undefined;
   const describedById = joinAriaIds(errorId, hintId);
 
-  const labelNode = (
+  const labelNode = label ? (
     <Label htmlFor={controlId}>
       {label}
       {required ? <RequiredMark /> : null}
     </Label>
-  );
+  ) : null;
 
   const errorNode = error ? (
     <p id={errorId} role="alert" className={formFieldFrameStyles.error}>

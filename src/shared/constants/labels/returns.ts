@@ -1,5 +1,10 @@
 /** Return reason options. Subset of LABELS; merged in labels/index.ts. */
 export const returnsLabels = {
+  returnsFiltersTitle: "Filter returns",
+  searchReturnsLabel: "Search returns",
+  searchReturnsPlaceholder: "Product, customer, or reason",
+  returnStatus: "Return status",
+  allReturnStatuses: "All statuses",
   returnReasonDamaged: "Damaged",
   returnReasonWrongItem: "Wrong item",
   returnReasonNotAsDescribed: "Not as described",
@@ -24,6 +29,15 @@ export const returnsLabels = {
   keepReturn: "Keep return",
   returnCancelled: "Return cancelled.",
   couldNotCancelReturn: "Could not cancel this return.",
+  upholdDispute: "Uphold Dispute",
+  upholdDisputeTitle: "Uphold Seller Return Dispute",
+  upholdDisputeBody: 'The seller reported: "{reason}". Uphold seller dispute?',
+  upholdDisputeDefaultNotes: "Dispute upheld by platform admin",
+  rejectDispute: "Reject Dispute",
+  rejectDisputeTitle: "Reject Seller Return Dispute",
+  rejectDisputeBody:
+    "Reject the seller dispute and uphold the customer return?",
+  rejectDisputeDefaultNotes: "Dispute rejected by platform admin",
 
   // Unavailable item badges
 } as const;

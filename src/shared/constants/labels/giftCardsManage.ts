@@ -43,6 +43,10 @@ export const giftCardsManageLabels = {
   giftCardDeactivated: "Gift card deactivated.",
   giftCardDeactivateFailed: "Could not deactivate the gift card.",
   giftCardsTableAria: "Gift cards",
+  issueGiftCard: "Issue gift card",
+  issueGiftCardTitle: "Issue a new gift card",
+  issueGiftCardDescription:
+    "Send a promotional or administrative gift card to a customer's email.",
 
   // Checkout
   checkoutGiftCardTitle: "Have a gift card?",

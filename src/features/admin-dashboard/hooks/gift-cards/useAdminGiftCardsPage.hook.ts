@@ -93,5 +93,9 @@ export function useAdminGiftCardsPage() {
         }
       : null,
     handleDeactivate,
+    refresh: () => {
+      void list.refetch();
+      void liability.refetch();
+    },
   };
 }

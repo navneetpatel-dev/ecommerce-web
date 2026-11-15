@@ -20,7 +20,6 @@ export function AdminAuditPage() {
           permission={page.permission}
           load={page.load}
           columnKeys={page.columnKeys}
-          hideTitle
         />
       </div>
     </RequirePermission>

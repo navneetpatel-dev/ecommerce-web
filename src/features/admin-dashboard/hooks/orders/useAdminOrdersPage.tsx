@@ -85,12 +85,12 @@ export function useAdminOrdersPage(
           )}
           {canCancel && (
             <AdminConfirmAction
-              label="Cancel"
+              label={LABELS.cancelOrder}
               dialogVariant="danger"
               confirmVariant="destructive"
               tone="danger"
-              title="Cancel Order"
-              description={`Are you sure you want to cancel order ${name || row.id}? This will restock items, void ledgers, and trigger refund if already paid.`}
+              title={LABELS.confirmCancelOrderTitle}
+              description={LABELS.confirmCancelOrderBody}
               onConfirm={cancelOrder}
             />
           )}
@@ -105,7 +105,7 @@ export function useAdminOrdersPage(
     permission: PERMISSIONS.ORDER_MANAGE,
     load,
     actions,
-    columnKeys: ["id", "customerName", "status", "totalAmount", "createdAt"],
+    columnKeys: ["customerName", "status", "totalAmount", "createdAt"],
     filters: {
       search,
       status,

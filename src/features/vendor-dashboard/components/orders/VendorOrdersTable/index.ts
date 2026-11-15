@@ -7,4 +7,3 @@ export { SUB_ORDER_STATUS_CANCELLED } from "../../../constants/orders/subOrderSt
 export { SUB_ORDER_STATUS_CONFIRMED } from "../../../constants/orders/subOrderStatuses";
 export { SUB_ORDER_STATUS_SHIPPED } from "../../../constants/orders/subOrderStatuses";
 export { formatInr } from "../../../utils/orders/vendorOrderFormat";
-export { shortOrderId } from "../../../utils/orders/vendorOrderFormat";

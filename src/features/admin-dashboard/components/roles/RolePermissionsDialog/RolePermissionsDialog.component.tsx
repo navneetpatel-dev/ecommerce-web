@@ -1,7 +1,12 @@
 "use client";
 
 import { ShieldCheck } from "lucide-react";
-import { Dialog, DialogContent } from "@/shared/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/shared/components/ui/dialog";
 import { Button } from "@/shared/components/ui/button";
 import { Badge } from "@/shared/components/ui/badge";
 import { LABELS } from "@/shared/constants/labels";
@@ -64,7 +69,12 @@ export function RolePermissionsDialog({
           <div className={styles.headerRow}>
             <div className={styles.titleWrapper}>
               <ShieldCheck className={styles.shieldIcon} aria-hidden />
-              <h2 className={styles.title}>{LABELS.managePermissions}</h2>
+              <DialogTitle className={styles.title}>
+                {LABELS.managePermissions}
+              </DialogTitle>
+              <DialogDescription className="sr-only">
+                {LABELS.managePermissions}
+              </DialogDescription>
             </div>
             <span className={styles.counterBadge}>
               {selected.size} / {permissions.length} selected

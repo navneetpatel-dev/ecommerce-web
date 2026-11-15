@@ -86,10 +86,12 @@ export function useAdminReviewsPage(): AdminListPageModel {
           />
           {row.vendorResponse ? (
             <AdminConfirmAction
-              label="Clear Seller Response"
+              label={LABELS.clearSellerResponse}
               dialogVariant="danger"
-              title="Remove Seller Response"
-              description={`Are you sure you want to remove the seller's response on this review for "${name}"?`}
+              title={LABELS.removeSellerResponse}
+              description={formatLabel(LABELS.confirmRemoveSellerResponseBody, {
+                name,
+              })}
               onConfirm={() =>
                 reviewsApi
                   .respond(String(row.id), { response: "" })

@@ -8,6 +8,7 @@ import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { AdminGiftCardsFilters } from "../../components/gift-cards/AdminGiftCardsFilters.component";
 import { DeactivateGiftCardAction } from "../../components/gift-cards/DeactivateGiftCardAction.component";
 import { GiftCardLiabilityMetrics } from "../../components/gift-cards/GiftCardLiabilityMetrics.component";
+import { IssueGiftCardDialog } from "../../components/gift-cards/IssueGiftCardDialog.component";
 import { useAdminGiftCardsPage } from "../../hooks/gift-cards/useAdminGiftCardsPage.hook";
 import { adminGiftCardsStyles as styles } from "../../styles/gift-cards/adminGiftCards.styles";
 
@@ -30,8 +31,15 @@ function AdminGiftCardsContent() {
   return (
     <div className={styles.root}>
       <header className={styles.header}>
-        <h1 className={styles.heading}>{LABELS.adminGiftCards}</h1>
-        <p className={styles.description}>{LABELS.adminGiftCardsDescription}</p>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className={styles.heading}>{LABELS.adminGiftCards}</h1>
+            <p className={styles.description}>
+              {LABELS.adminGiftCardsDescription}
+            </p>
+          </div>
+          <IssueGiftCardDialog onSuccess={page.refresh} />
+        </div>
       </header>
       <GiftCardLiabilityMetrics metrics={page.metrics} />
       <DataTable

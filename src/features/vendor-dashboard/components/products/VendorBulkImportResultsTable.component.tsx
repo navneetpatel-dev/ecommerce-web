@@ -31,7 +31,10 @@ const COLUMNS: DataTableColumn<BulkImportRowResult>[] = [
     id: "detail",
     header: LABELS.bulkImportDetailColumn,
     className: vendorBulkImportDialogStyles.detailCell,
-    cell: (row) => (row.success ? row.productId : row.error),
+    cell: (row) =>
+      row.success
+        ? LABELS.bulkImportRowSuccess
+        : (row.error ?? LABELS.bulkImportRowFailed),
   },
 ];
 

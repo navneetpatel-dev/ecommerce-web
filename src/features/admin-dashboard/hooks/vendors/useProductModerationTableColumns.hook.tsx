@@ -4,16 +4,10 @@ import { TableCellImage } from "@/shared/components/DataTable/TableCellImage.com
 import { LABELS } from "@/shared/constants/labels";
 import { productModerationTableStyles } from "../../styles/vendors/productModerationTable.styles";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
-
-interface Product {
-  id: string;
-  name: string;
-  imageUrl?: string | null;
-  basePrice: number;
-}
+import type { ProductDetail } from "@/shared/api/types";
 
 export function useProductModerationTableColumns() {
-  const columns: DataTableColumn<Product>[] = useMemo(
+  const columns: DataTableColumn<ProductDetail>[] = useMemo(
     () => [
       {
         id: "product",
@@ -27,6 +21,16 @@ export function useProductModerationTableColumns() {
             </span>
           </div>
         ),
+      },
+      {
+        id: "vendor",
+        header: LABELS.vendorName,
+        cell: (p) => p.vendor?.businessName || "—",
+      },
+      {
+        id: "category",
+        header: LABELS.category,
+        cell: (p) => p.category?.name || p.categoryName || "—",
       },
       {
         id: "price",

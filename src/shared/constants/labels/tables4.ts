@@ -1,6 +1,8 @@
 /** Table and pagination copy (part 4); merged via labels.ts. */
 export const tables4Labels = {
   promoBannerLinkType: "Link type",
+  editStock: "Edit stock",
+  updateStock: "Update stock",
   promoBannerLinkTargetId: "Link target ID",
   promoBannerLinkUrl: "Link URL",
   downloadFailed: "Could not download the file. Please try again.",

@@ -6,6 +6,7 @@ import {
   type LowStockInventoryRow,
 } from "../../api/inventory/inventory.api";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
+import { LABELS } from "@/shared/constants/labels";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 import { InventoryStockEditor } from "../../components/inventory/InventoryStockEditor.component";
 
@@ -18,7 +19,7 @@ function renderStockEditorAction(row: AdminDataRow, reload: () => void) {
 export function AdminInventoryPage() {
   return (
     <AdminDataPage
-      title="Low-stock inventory"
+      title={LABELS.inventory}
       permission={[PERMISSIONS.PRODUCT_MANAGE, PERMISSIONS.PRODUCT_UPDATE]}
       load={() => inventoryApi.lowStock()}
       columnKeys={["productName", "sku", "stock", "lowStockAt"]}

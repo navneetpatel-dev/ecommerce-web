@@ -83,6 +83,9 @@ export function useAdminQnaModerationPage(): AdminListPageModel {
           <AdminConfirmAction
             label={LABELS.reject}
             dialogVariant="danger"
+            requireReason
+            reasonLabel={LABELS.rejectionNote}
+            reasonHint={LABELS.enterRejectionNote}
             title={
               isEdit
                 ? LABELS.confirmRejectEditTitle

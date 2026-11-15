@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import {
   DataTable,
   type DataTablePaginationProps,
@@ -8,16 +8,11 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { useProductModerationTableColumns } from "../../../hooks/vendors/useProductModerationTableColumns.hook";
 import { ProductModerationRowActions } from "./ProductModerationRowActions.component";
-
-interface Product {
-  id: string;
-  name: string;
-  imageUrl?: string | null;
-  basePrice: number;
-}
+import { ProductModerationPreviewModal } from "./ProductModerationPreviewModal.component";
+import type { ProductDetail } from "@/shared/api/types";
 
 export interface ProductModerationTableProps {
-  products: Product[];
+  products: ProductDetail[];
   onApprove: (id: string) => void | Promise<unknown>;
   onReject: (id: string, note: string) => void | Promise<unknown>;
   isApproving?: boolean;
@@ -37,34 +32,50 @@ export function ProductModerationTable({
   onRefresh,
   pagination,
 }: ProductModerationTableProps) {
+  const [previewProduct, setPreviewProduct] = useState<ProductDetail | null>(
+    null,
+  );
   const columns = useProductModerationTableColumns();
   const rowBusy = isApproving || isRejecting;
 
-  const getRowId = useCallback((row: Product) => row.id, []);
+  const getRowId = useCallback((row: ProductDetail) => row.id, []);
+
+  const closePreview = useCallback(() => {
+    setPreviewProduct(null);
+  }, []);
 
   const renderActions = useCallback(
-    (p: Product) => (
+    (p: ProductDetail) => (
       <ProductModerationRowActions
         product={p}
         rowBusy={rowBusy}
         onApprove={onApprove}
         onReject={onReject}
+        onPreview={setPreviewProduct}
       />
     ),
     [rowBusy, onApprove, onReject],
   );
 
   return (
-    <DataTable
-      ariaLabel={LABELS.productModerationTableAria}
-
-      columns={columns}
-      rows={products}
-      loading={loading}
-      onRefresh={onRefresh}
-      getRowId={getRowId}
-      pagination={pagination}
-      actions={renderActions}
-    />
+    <>
+      <DataTable
+        ariaLabel={LABELS.productModerationTableAria}
+        columns={columns}
+        rows={products}
+        loading={loading}
+        onRefresh={onRefresh}
+        getRowId={getRowId}
+        pagination={pagination}
+        actions={renderActions}
+      />
+      <ProductModerationPreviewModal
+        product={previewProduct}
+        onClose={closePreview}
+        onApprove={onApprove}
+        onReject={onReject}
+        rowBusy={rowBusy}
+      />
+    </>
   );
 }

@@ -1,13 +1,12 @@
 "use client";
 
-import type { ChangeEvent, FormEvent } from "react";
+import type { FormEvent } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
   FormActions,
   FormFieldFrame,
   FormSection,
 } from "@/shared/components/forms";
-import { Input } from "@/shared/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -21,6 +20,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { shippingRatesLabels } from "@/shared/constants/labels/shippingRates";
 import { SHIPPING_METHOD } from "@/shared/constants/statuses";
 import type { ShippingZoneOption } from "../../hooks/shipping/useAdminShippingRatesPage";
+import { useAdminVendorsList } from "../../api/analytics/admin.queries";
 import { ShippingRateNumberField } from "./ShippingRateNumberField.component";
 
 interface AdminShippingRateFormProps {
@@ -66,6 +66,9 @@ export function AdminShippingRateForm({
   onVendorIdChange,
   onSubmit,
 }: AdminShippingRateFormProps) {
+  const { data: vendorsData } = useAdminVendorsList();
+  const vendors = vendorsData?.items ?? [];
+
   const canCreate = Boolean(
     zoneId && maxWeightGrams.trim() && price.trim() && estimatedDays.trim(),
   );
@@ -79,8 +82,8 @@ export function AdminShippingRateForm({
   };
   const handleMethodChange = (value: string) =>
     onMethodChange(value as "STANDARD" | "EXPRESS");
-  const handleVendorIdChange = (event: ChangeEvent<HTMLInputElement>) =>
-    onVendorIdChange(event.target.value);
+  const handleVendorSelect = (value: string) =>
+    onVendorIdChange(value === "all" ? "" : value);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -154,15 +157,24 @@ export function AdminShippingRateForm({
         />
 
         <FormFieldFrame
-          label={shippingRatesLabels.vendorIdOptional}
-          htmlFor="shipping-rate-vendor-id"
+          label={shippingRatesLabels.vendorOptional}
+          htmlFor="shipping-rate-vendor"
         >
-          <Input
-            id="shipping-rate-vendor-id"
-            value={vendorId}
-            onChange={handleVendorIdChange}
-            placeholder={shippingRatesLabels.vendorIdOptional}
-          />
+          <Select value={vendorId || "all"} onValueChange={handleVendorSelect}>
+            <SelectTrigger id="shipping-rate-vendor">
+              <SelectValue placeholder={shippingRatesLabels.selectVendor} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                {shippingRatesLabels.allVendorsDefault}
+              </SelectItem>
+              {vendors.map((vendor) => (
+                <SelectItem key={vendor.id} value={vendor.id}>
+                  {vendor.businessName}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </FormFieldFrame>
 
         <FormError

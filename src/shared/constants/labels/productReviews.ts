@@ -48,6 +48,11 @@ export const productReviewsLabels = {
   reviewStatusPending: "Awaiting approval",
   reviewStatusApproved: "Published",
   reviewStatusRejected: "Not published",
+  clearSellerResponse: "Clear seller response",
+  removeSellerResponse: "Remove seller response",
+  confirmRemoveSellerResponseBody:
+    'Are you sure you want to remove the seller\'s response on this review for "{name}"?',
+  pendingReviews: "Pending moderation",
   viewYourReviews: "View your reviews",
   // Q&A
   qnaSummary: "{total} questions · {answered} answered",

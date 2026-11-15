@@ -48,6 +48,7 @@ export const tablesLabels = {
   expires: "Expires",
   businessName: "Business name",
   vendorName: "Vendor",
+  selectVendor: "Select a vendor",
   productName: "Product",
   customerName: "Customer",
   actorName: "Actor",

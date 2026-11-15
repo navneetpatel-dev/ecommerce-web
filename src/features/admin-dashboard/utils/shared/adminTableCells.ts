@@ -1,6 +1,5 @@
 import { LABELS } from "@/shared/constants/labels";
 import { tryFormatDateTime } from "@/shared/utils/formatting/formatDate";
-import { shortOrderId } from "@/shared/utils/formatting/orderFormat";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
 
 const SKIP_COLUMN_KEYS = new Set([
@@ -67,7 +66,13 @@ export function shouldInferAdminColumn(key: string): boolean {
 export function adminCellText(row: AdminDataRow, columnKey: string): string {
   const value = getAdminCellValue(row, columnKey);
   if (columnKey === "id" && typeof value === "string" && value.trim()) {
-    return `#${shortOrderId(value)}`;
+    const humanName =
+      row.name ??
+      row.businessName ??
+      row.productName ??
+      row.title ??
+      row.customerName;
+    return typeof humanName === "string" && humanName.trim() ? humanName : "—";
   }
   return formatAdminCellValue(value);
 }

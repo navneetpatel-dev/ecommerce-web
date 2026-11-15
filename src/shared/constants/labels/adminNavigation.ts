@@ -45,6 +45,9 @@ export const adminNavigationLabels = {
   analyticsPendingProducts: "Pending products",
   analyticsPendingVendors: "Pending vendors",
   analyticsPendingReviews: "Pending reviews",
+  analyticsPendingReturns: "Pending returns",
+  analyticsOpenTickets: "Open support tickets",
+  analyticsPendingRto: "RTO shipments",
   analyticsGrowthOrders: "Orders (14d)",
   analyticsGrowthRevenue: "GMV (14d)",
   analyticsNoData: "No analytics data available",
@@ -58,6 +61,20 @@ export const adminNavigationLabels = {
   audit: "Audit",
   settings: "Settings",
   notifications: "Notifications",
+
+  // Admin navigation categories
+  adminNavCategoryOverview: "Overview & Intelligence",
+  adminNavCategoryOperations: "Fulfillment & Operations",
+  adminNavCategoryCatalog: "Catalog & Inventory",
+  adminNavCategoryMarketing: "Marketing & Promotions",
+  adminNavCategoryCommunity: "Community & UGC",
+  adminNavCategoryFinance: "Finance & Vendors",
+  adminNavCategoryAdministration: "Administration & Security",
+
+  // Shipping tabs
+  shippingZonesTab: "Zones & Coverage",
+  shippingRatesTab: "Rates & Rules",
+  shippingRtoTab: "RTO Operations",
 
   // Vendor / account nav
 } as const;

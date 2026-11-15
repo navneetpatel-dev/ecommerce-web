@@ -7,6 +7,8 @@ import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { Button } from "@/shared/components/ui/button";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
+import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
+import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { AdminConfirmAction } from "../../shared/AdminConfirmAction.component";
 import { VendorKycDocumentsMenuAction } from "../VendorKycDocumentsMenuAction.component";
 import { adminRowLabel } from "../../../utils/shared/adminRowLabel";
@@ -19,6 +21,8 @@ export interface VendorRowActionsProps {
 }
 
 export function VendorRowActions({ row, onReload }: VendorRowActionsProps) {
+  const { hasPermission } = usePermissions();
+  const canManage = hasPermission(PERMISSIONS.VENDOR_MANAGE);
   const name = adminRowLabel(row);
   const vendorId = String(row.id);
 
@@ -39,7 +43,7 @@ export function VendorRowActions({ row, onReload }: VendorRowActionsProps) {
         </Link>
       </Button>
       <VendorKycDocumentsMenuAction vendorId={vendorId} vendorName={name} />
-      {row.status === "SUSPENDED" ? (
+      {canManage && row.status === "SUSPENDED" ? (
         <AdminConfirmAction
           label={LABELS.unsuspend}
           dialogVariant="info"
@@ -48,7 +52,7 @@ export function VendorRowActions({ row, onReload }: VendorRowActionsProps) {
           description={formatLabel(LABELS.confirmUnsuspendVendorBody, { name })}
           onConfirm={handleUnsuspend}
         />
-      ) : row.status === "APPROVED" ? (
+      ) : canManage && row.status === "APPROVED" ? (
         <AdminConfirmAction
           label={LABELS.suspend}
           dialogVariant="warning"
@@ -60,14 +64,16 @@ export function VendorRowActions({ row, onReload }: VendorRowActionsProps) {
           onConfirm={handleSuspend}
         />
       ) : null}
-      <AdminConfirmAction
-        label={LABELS.delete}
-        dialogVariant="danger"
-        tone="danger"
-        title={LABELS.confirmDeleteVendorTitle}
-        description={formatLabel(LABELS.confirmDeleteVendorBody, { name })}
-        onConfirm={handleDelete}
-      />
+      {canManage ? (
+        <AdminConfirmAction
+          label={LABELS.delete}
+          dialogVariant="danger"
+          tone="danger"
+          title={LABELS.confirmDeleteVendorTitle}
+          description={formatLabel(LABELS.confirmDeleteVendorBody, { name })}
+          onConfirm={handleDelete}
+        />
+      ) : null}
     </>
   );
 }

@@ -4,11 +4,7 @@ import type { Order } from "@/shared/api/types";
 import type { DataTableColumn } from "@/shared/components/DataTable";
 import { OrderStatusGroup } from "../../components/list/OrderStatusGroup.component";
 import { OrderItemsTableCell } from "../../components/list/OrderItemsTableCell.component";
-import {
-  formatInr,
-  formatOrderDate,
-  shortOrderId,
-} from "../../utils/detail/format";
+import { formatInr, formatOrderDate } from "../../utils/detail/format";
 import { ORDERS_LIST_STYLES } from "../../styles/list/ordersList.styles";
 
 export const ORDER_COLUMNS: DataTableColumn<Order>[] = [
@@ -21,7 +17,7 @@ export const ORDER_COLUMNS: DataTableColumn<Order>[] = [
     cell: (order) => (
       <div className={ORDERS_LIST_STYLES.orderCell}>
         <span className={ORDERS_LIST_STYLES.orderId}>
-          #{shortOrderId(order.id)}
+          {order.subOrders?.[0]?.taxInvoiceNumber ?? LABELS.orderDetails}
         </span>
         <span className={ORDERS_LIST_STYLES.mobileTotal}>
           {formatInr(order.totalAmount)}

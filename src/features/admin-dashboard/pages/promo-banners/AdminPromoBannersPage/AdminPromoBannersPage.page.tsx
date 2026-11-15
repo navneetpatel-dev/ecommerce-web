@@ -20,9 +20,9 @@ export function AdminPromoBannersPage() {
     <RequirePermission permission={PERMISSIONS.BANNER_MANAGE}>
       <div className={adminPromoBannersPageStyles.container}>
         <div className={adminPromoBannersPageStyles.headerGroup}>
-          <h2 className={adminPromoBannersPageStyles.heading}>
+          <h1 className={adminPromoBannersPageStyles.heading}>
             {LABELS.promoBanners}
-          </h2>
+          </h1>
           <p className={adminPromoBannersPageStyles.subheading}>
             {LABELS.promoBannersHint}
           </p>

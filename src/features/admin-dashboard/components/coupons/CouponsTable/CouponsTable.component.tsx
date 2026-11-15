@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { BarChart2 } from "lucide-react";
 import {
   DataTable,
@@ -19,7 +20,10 @@ import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { CouponsAnalyticsDialog } from "./CouponsAnalyticsDialog.component";
 import { EditCouponAction } from "../EditCouponAction";
 import { adminApi } from "../../../api/analytics/admin.api";
-import { adminKeys } from "../../../api/analytics/admin.queries";
+import {
+  adminKeys,
+  useAdminVendorsList,
+} from "../../../api/analytics/admin.queries";
 import { buildCouponColumns } from "./couponTableColumns.component";
 
 const saveCoupon = (id: string, body: unknown) =>
@@ -51,7 +55,20 @@ export function CouponsTable({
   const analyticsCouponId = rowActions.analyticsCouponId;
   const setAnalyticsCouponId = rowActions.setAnalyticsCouponId;
 
-  const columns = buildCouponColumns();
+  const { data: vendorsData } = useAdminVendorsList();
+  const vendorMap = useMemo(() => {
+    const map = new Map<string, string>();
+    vendorsData?.items?.forEach((v) => {
+      const name =
+        v.businessName ??
+        (v as { storeName?: string }).storeName ??
+        (v as { name?: string }).name;
+      if (name) map.set(v.id, name);
+    });
+    return map;
+  }, [vendorsData]);
+
+  const columns = useMemo(() => buildCouponColumns(vendorMap), [vendorMap]);
   const closeAnalytics = () => setAnalyticsCouponId(null);
 
   const renderActions = (row: Coupon) => {

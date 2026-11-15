@@ -32,7 +32,7 @@ export const returnsApi = {
   cancel: (id: string) =>
     apiClient.post<{ cancelled: true }>(API.returns.cancel(id), {}),
   listAdmin: async (
-    params: PaginationQuery = {},
+    params: PaginationQuery & { status?: string; search?: string } = {},
   ): Promise<PaginatedList<ReturnRequest>> => {
     const res = await apiClient.getWithResponse<ReturnRequest[]>(
       withQuery(API.returns.admin, params),

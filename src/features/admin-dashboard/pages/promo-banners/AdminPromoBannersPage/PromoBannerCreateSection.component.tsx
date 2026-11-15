@@ -24,13 +24,13 @@ import {
   UPLOAD_PURPOSE,
 } from "@/shared/constants/uploads/uploads";
 import {
-  PROMO_BANNER_LINK_TYPE,
   PROMO_BANNER_LINK_TYPE_VALUES,
   PROMO_BANNER_STATUS_VALUES,
   type PromoBannerLinkType,
   type PromoBannerStatus,
 } from "@/shared/constants/statuses";
 import { promoBannerSectionStyles } from "./adminPromoBanners.styles";
+import { PromoBannerTargetField } from "./PromoBannerTargetField.component";
 
 interface PromoBannerCreateSectionProps {
   draftId: string;
@@ -79,14 +79,12 @@ export function PromoBannerCreateSection({
 }: PromoBannerCreateSectionProps) {
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) =>
     onTitleChange(event.target.value);
-  const handleLinkTypeChange = (value: string) =>
+  const handleLinkTypeChange = (value: string) => {
     onLinkTypeChange(value as PromoBannerLinkType);
+    onLinkTargetIdChange("");
+  };
   const handleStatusChange = (value: string) =>
     onStatusChange(value as PromoBannerStatus);
-  const handleLinkUrlChange = (event: ChangeEvent<HTMLInputElement>) =>
-    onLinkUrlChange(event.target.value);
-  const handleLinkTargetIdChange = (event: ChangeEvent<HTMLInputElement>) =>
-    onLinkTargetIdChange(event.target.value);
   const handlePriorityChange = (value: number | undefined) =>
     onPriorityChange(value == null ? "" : String(value));
 
@@ -97,9 +95,10 @@ export function PromoBannerCreateSection({
     >
       <FormFieldFrame
         label={LABELS.promoBannerTitle}
+        htmlFor="banner-title"
         className={promoBannerSectionStyles.colSpan2}
       >
-        <Input value={title} onChange={handleTitleChange} />
+        <Input id="banner-title" value={title} onChange={handleTitleChange} />
       </FormFieldFrame>
       <FormFieldFrame
         label={LABELS.promoBannerImage}
@@ -116,9 +115,12 @@ export function PromoBannerCreateSection({
           label={LABELS.promoBannerImage}
         />
       </FormFieldFrame>
-      <FormFieldFrame label={LABELS.promoBannerLinkType}>
+      <FormFieldFrame
+        label={LABELS.promoBannerLinkType}
+        htmlFor="banner-link-type"
+      >
         <Select value={linkType} onValueChange={handleLinkTypeChange}>
-          <SelectTrigger>
+          <SelectTrigger id="banner-link-type">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -130,9 +132,9 @@ export function PromoBannerCreateSection({
           </SelectContent>
         </Select>
       </FormFieldFrame>
-      <FormFieldFrame label={LABELS.promoBannerStatus}>
+      <FormFieldFrame label={LABELS.promoBannerStatus} htmlFor="banner-status">
         <Select value={status} onValueChange={handleStatusChange}>
-          <SelectTrigger>
+          <SelectTrigger id="banner-status">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -144,23 +146,19 @@ export function PromoBannerCreateSection({
           </SelectContent>
         </Select>
       </FormFieldFrame>
-      {linkType === PROMO_BANNER_LINK_TYPE.URL ? (
-        <FormFieldFrame
-          label={LABELS.promoBannerLinkUrl}
-          className={promoBannerSectionStyles.colSpan2}
-        >
-          <Input value={linkUrl} onChange={handleLinkUrlChange} />
-        </FormFieldFrame>
-      ) : (
-        <FormFieldFrame
-          label={LABELS.promoBannerLinkTargetId}
-          className={promoBannerSectionStyles.colSpan2}
-        >
-          <Input value={linkTargetId} onChange={handleLinkTargetIdChange} />
-        </FormFieldFrame>
-      )}
-      <FormFieldFrame label={LABELS.promoBannerPriority}>
+      <PromoBannerTargetField
+        linkType={linkType}
+        linkUrl={linkUrl}
+        onLinkUrlChange={onLinkUrlChange}
+        linkTargetId={linkTargetId}
+        onLinkTargetIdChange={onLinkTargetIdChange}
+      />
+      <FormFieldFrame
+        label={LABELS.promoBannerPriority}
+        htmlFor="banner-priority"
+      >
         <NumberInput
+          id="banner-priority"
           value={priority === "" ? undefined : Number(priority)}
           step={1}
           onChange={handlePriorityChange}

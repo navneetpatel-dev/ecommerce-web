@@ -56,9 +56,12 @@ export function BugTriagePanel(props: BugTriagePanelProps) {
         <TextEyebrow brand>{LABELS.bugTriage}</TextEyebrow>
       </div>
       <div className={bugReportPanelsStyles.panelBodyTight}>
-        <FormFieldFrame label={LABELS.bugSeverity}>
+        <FormFieldFrame
+          label={LABELS.bugSeverity}
+          htmlFor="bug-severity-select"
+        >
           <Select value={props.severity} onValueChange={handleSeverityChange}>
-            <SelectTrigger>
+            <SelectTrigger id="bug-severity-select">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -70,9 +73,12 @@ export function BugTriagePanel(props: BugTriagePanelProps) {
             </SelectContent>
           </Select>
         </FormFieldFrame>
-        <FormFieldFrame label={LABELS.bugAffectedModule}>
+        <FormFieldFrame
+          label={LABELS.bugAffectedModule}
+          htmlFor="bug-module-select"
+        >
           <Select value={props.module} onValueChange={handleModuleChange}>
-            <SelectTrigger>
+            <SelectTrigger id="bug-module-select">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

@@ -24,4 +24,8 @@ export const tables5Labels = {
     "Homepage hero banners. Upload the image first, then save the banner.",
   promoBannerTitle: "Title",
   promoBannerImage: "Banner image",
+  reactivateProduct: "Reactivate",
+  confirmReactivateProductTitle: "Reactivate this product?",
+  confirmReactivateProductBody:
+    'Are you sure you want to restore "{name}" to active status?',
 } as const;

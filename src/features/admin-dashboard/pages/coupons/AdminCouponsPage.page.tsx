@@ -1,8 +1,12 @@
 "use client";
 
-import { useAdminCouponsPage } from "../../hooks/coupons/useAdminCouponsPage.hook";
+import {
+  useAdminCouponsPage,
+  type CouponsTab,
+} from "../../hooks/coupons/useAdminCouponsPage.hook";
 import { CouponsPageHeader } from "../../components/coupons/CouponsPageHeader.component";
 import { CouponsTable } from "../../components/coupons/CouponsTable.component";
+import { CouponBatchesTab } from "../../components/coupons/CouponBatchesTab.component";
 import {
   Tabs,
   TabsContent,
@@ -15,8 +19,7 @@ import { adminPagesStyles } from "../shared/adminPages.styles";
 export function AdminCouponsPage() {
   const page = useAdminCouponsPage();
 
-  const handleTabChange = (value: string) =>
-    page.setTab(value as "platform" | "vendor");
+  const handleTabChange = (value: string) => page.setTab(value as CouponsTab);
 
   return (
     <div className={adminPagesStyles.stack6}>
@@ -47,6 +50,12 @@ export function AdminCouponsPage() {
           >
             {LABELS.vendorCoupons}
           </TabsTrigger>
+          <TabsTrigger
+            value="batches"
+            className={adminPagesStyles.tabTriggerBrand}
+          >
+            {LABELS.couponBatches}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="platform" className={adminPagesStyles.tabContent}>
@@ -64,6 +73,9 @@ export function AdminCouponsPage() {
             readOnly
             allowReject
           />
+        </TabsContent>
+        <TabsContent value="batches" className={adminPagesStyles.tabContent}>
+          <CouponBatchesTab />
         </TabsContent>
       </Tabs>
     </div>

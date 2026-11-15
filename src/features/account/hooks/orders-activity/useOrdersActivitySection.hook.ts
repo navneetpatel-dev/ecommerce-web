@@ -18,7 +18,6 @@ import {
   formatInr,
   formatOrderDate,
   orderItemSummary,
-  shortOrderId,
 } from "@/shared/utils/formatting/orderFormat";
 import { useAccountOverview } from "../overview/useAccountOverview.hook";
 
@@ -52,7 +51,7 @@ export function useOrdersActivitySection() {
   const orderViewModels = useMemo<RecentOrderViewModel[]>(() => {
     return recentOrders.slice(0, 4).map((order) => ({
       id: order.id,
-      shortId: `#${shortOrderId(order.id)}`,
+      shortId: order.subOrders?.[0]?.taxInvoiceNumber ?? LABELS.orderDetails,
       summary: `${orderItemSummary(order)} · ${countOrderItems(order)} items`,
       date: formatOrderDate(order.createdAt),
       formattedAmount: formatInr(order.totalAmount),

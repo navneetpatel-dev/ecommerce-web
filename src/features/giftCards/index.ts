@@ -10,6 +10,7 @@ export {
   useGiftCardLiability,
   useCancelGiftCard,
 } from "./api/gift-cards/giftCards.queries";
+export { useGiftCardPurchase } from "./hooks/purchase/useGiftCardPurchase.hook";
 export type {
   GiftCardView,
   GiftCardLiability,

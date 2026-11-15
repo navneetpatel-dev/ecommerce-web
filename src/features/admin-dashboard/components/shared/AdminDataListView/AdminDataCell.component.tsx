@@ -5,7 +5,6 @@ import {
   extractImageUrls,
   isImageFieldKey,
 } from "@/shared/utils/media/imageField";
-import { shortOrderId } from "@/shared/utils/formatting/orderFormat";
 import type { AdminDataRow } from "../../../hooks/shared/useAdminDataList.hook";
 import {
   formatAdminCellValue,
@@ -48,7 +47,13 @@ export function AdminDataCell({
   }
 
   if (columnKey === "id" && typeof value === "string" && value.trim()) {
-    return `#${shortOrderId(value)}`;
+    const humanName =
+      row.name ??
+      row.businessName ??
+      row.productName ??
+      row.title ??
+      row.customerName;
+    return typeof humanName === "string" && humanName.trim() ? humanName : "—";
   }
 
   return formatAdminCellValue(value);

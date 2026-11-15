@@ -48,9 +48,12 @@ export function BroadcastNotificationForm() {
         </p>
       </div>
       <div className={adminFormWidgetsStyles.gridSm2}>
-        <FormFieldFrame label={LABELS.broadcastTargetRole}>
+        <FormFieldFrame
+          label={LABELS.broadcastTargetRole}
+          htmlFor="broadcast-target-role"
+        >
           <Select value={form.role} onValueChange={handleRoleChange}>
-            <SelectTrigger>
+            <SelectTrigger id="broadcast-target-role">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -58,8 +61,12 @@ export function BroadcastNotificationForm() {
             </SelectContent>
           </Select>
         </FormFieldFrame>
-        <FormFieldFrame label={LABELS.broadcastSubject}>
+        <FormFieldFrame
+          label={LABELS.broadcastSubject}
+          htmlFor="broadcast-subject"
+        >
           <Input
+            id="broadcast-subject"
             value={form.subject}
             onChange={handleSubjectChange}
             placeholder={LABELS.broadcastSubjectPlaceholder}
@@ -67,8 +74,12 @@ export function BroadcastNotificationForm() {
           />
         </FormFieldFrame>
       </div>
-      <FormFieldFrame label={LABELS.broadcastMessage}>
+      <FormFieldFrame
+        label={LABELS.broadcastMessage}
+        htmlFor="broadcast-message"
+      >
         <Textarea
+          id="broadcast-message"
           value={form.message}
           onChange={handleMessageChange}
           placeholder={LABELS.broadcastMessagePlaceholder}

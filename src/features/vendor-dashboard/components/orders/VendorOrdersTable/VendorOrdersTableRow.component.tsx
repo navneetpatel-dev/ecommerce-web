@@ -2,11 +2,9 @@ import { memo } from "react";
 import { TableRow, TableCell } from "@/shared/components/ui/table";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { VendorStrip } from "@/shared/components/orders/VendorStrip.component";
+import { LABELS } from "@/shared/constants/labels";
 import type { SubOrderRow } from "../../../types/orders/vendorOrders.types";
-import {
-  formatInr,
-  shortOrderId,
-} from "../../../utils/orders/vendorOrderFormat";
+import { formatInr } from "../../../utils/orders/vendorOrderFormat";
 import { SubOrderActions } from "./SubOrderActions.component";
 import { ShipmentCell } from "./ShipmentCell.component";
 import { ReturnsCell } from "./ReturnsCell.component";
@@ -32,7 +30,7 @@ export const VendorOrdersTableRow = memo(function VendorOrdersTableRow({
   return (
     <TableRow>
       <TableCell className={VENDOR_ORDERS_TABLE_STYLES.cellDataOrder}>
-        {shortOrderId(row.orderId)}
+        {row.subOrder.taxInvoiceNumber ?? LABELS.taxInvoiceAwaitingDispatch}
       </TableCell>
       <TableCell className={VENDOR_ORDERS_TABLE_STYLES.cellData}>
         <VendorStrip vendor={row.subOrder.vendor} size="sm" />

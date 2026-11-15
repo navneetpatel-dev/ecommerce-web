@@ -2,6 +2,8 @@
 
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
+import { LABELS } from "@/shared/constants/labels";
+import { PATHS } from "@/shared/constants/paths/paths";
 import type { PermissionKey } from "@/shared/constants/permissions/permissions";
 
 export function RequirePermission({
@@ -18,8 +20,10 @@ export function RequirePermission({
   if (!allowed) {
     return (
       <EmptyState
-        heading="You don't have access"
-        message="Your role does not include permission for this page."
+        heading={LABELS.accessDeniedHeading}
+        message={LABELS.accessDeniedMessage}
+        actionLabel={LABELS.goToAdminDashboard}
+        actionTo={PATHS.admin.root}
       />
     );
   }

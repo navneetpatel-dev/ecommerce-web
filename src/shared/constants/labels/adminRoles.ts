@@ -21,4 +21,7 @@ export const adminRolesLabels = {
   confirmDeleteRoleTitle: "Delete this role?",
   confirmDeleteRoleBody:
     'Delete role "{name}"? This cannot be undone. Users must be reassigned before a role can be deleted.',
+  accessDeniedHeading: "You don't have access",
+  accessDeniedMessage: "Your role does not include permission for this page.",
+  goToAdminDashboard: "Go to admin overview",
 } as const;

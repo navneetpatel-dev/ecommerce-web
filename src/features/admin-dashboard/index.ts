@@ -5,6 +5,7 @@ export {
   usePendingProducts,
   useAdminCoupons,
   useAdminAnalytics,
+  useAdminVendorsList,
 } from "./api/analytics/admin.queries";
 export { adminApi } from "./api/analytics/admin.api";
 export {

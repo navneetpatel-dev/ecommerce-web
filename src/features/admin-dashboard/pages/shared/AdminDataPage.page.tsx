@@ -19,6 +19,8 @@ interface AdminDataPageProps {
   columnKeys?: string[];
   /** Hide the list title when the parent page already provides one (e.g. tabs). */
   hideTitle?: boolean;
+  titleLevel?: 1 | 2;
+  onRowClick?: (row: AdminDataRow) => void;
 }
 
 export function AdminDataPage({
@@ -28,6 +30,8 @@ export function AdminDataPage({
   actions,
   columnKeys,
   hideTitle = false,
+  titleLevel,
+  onRowClick,
 }: AdminDataPageProps) {
   const stableLoad = useCallback<AdminListLoadFn>(
     (params) => load(params),
@@ -40,6 +44,7 @@ export function AdminDataPage({
     <RequirePermission permission={permission}>
       <AdminDataListView
         title={displayTitle}
+        titleLevel={titleLevel}
         rows={list.rows}
         loading={list.loading}
         refreshing={list.refreshing}
@@ -53,6 +58,7 @@ export function AdminDataPage({
         onPageChange={list.onPageChange}
         actions={actions}
         columnKeys={columnKeys}
+        onRowClick={onRowClick}
       />
     </RequirePermission>
   );

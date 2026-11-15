@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
@@ -33,6 +33,20 @@ export function WorkspaceNavDrawer({
 }: WorkspaceNavDrawerProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   useModalOverlay({ open, onClose, panelRef });
+
+  const categories = useMemo(() => {
+    const groups: { title?: string; items: SidebarNavItem[] }[] = [];
+    let currentGroup: { title?: string; items: SidebarNavItem[] } | null = null;
+
+    for (const item of items) {
+      if (!currentGroup || currentGroup.title !== item.category) {
+        currentGroup = { title: item.category, items: [] };
+        groups.push(currentGroup);
+      }
+      currentGroup.items.push(item);
+    }
+    return groups;
+  }, [items]);
 
   if (!open) return null;
 
@@ -73,27 +87,43 @@ export function WorkspaceNavDrawer({
           className={workspaceNavDrawerStyles.nav}
         >
           {header}
-          {items.map(({ href, icon: Icon, label }) => {
-            const isActive =
-              currentPath === href || currentPath.startsWith(`${href}/`);
-            return (
-              <Link
-                key={href}
-                href={href}
-                onClick={onClose}
-                aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  sidebarNavStyles.linkBase,
-                  isActive
-                    ? sidebarNavStyles.linkActive
-                    : sidebarNavStyles.linkInactive,
-                )}
-              >
-                {Icon ? <Icon size={16} /> : null}
-                {label}
-              </Link>
-            );
-          })}
+          {categories.map((group, groupIdx) => (
+            <div
+              key={group.title ?? `drawer-group-${groupIdx}`}
+              role={group.title ? "group" : undefined}
+              aria-label={group.title}
+              className={
+                group.title ? workspaceNavDrawerStyles.categoryGroup : undefined
+              }
+            >
+              {group.title ? (
+                <p className={workspaceNavDrawerStyles.categoryHeader}>
+                  {group.title}
+                </p>
+              ) : null}
+              {group.items.map(({ href, icon: Icon, label }) => {
+                const isActive =
+                  currentPath === href || currentPath.startsWith(`${href}/`);
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={onClose}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      sidebarNavStyles.linkBase,
+                      isActive
+                        ? sidebarNavStyles.linkActive
+                        : sidebarNavStyles.linkInactive,
+                    )}
+                  >
+                    {Icon ? <Icon size={16} /> : null}
+                    {label}
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
         </nav>
       </div>
     </div>

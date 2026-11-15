@@ -7,8 +7,8 @@ import { useCreateCoupon } from "./useCreateCoupon.hook";
 import { DEFAULT_PAGE_LIMIT } from "@/shared/constants/pagination/pagination";
 import type { CouponFormInput } from "../../schemas/coupons/coupons.schema";
 
-export type CouponsTab = "platform" | "vendor";
-const COUPON_TABS: readonly CouponsTab[] = ["platform", "vendor"];
+export type CouponsTab = "platform" | "vendor" | "batches";
+const COUPON_TABS: readonly CouponsTab[] = ["platform", "vendor", "batches"];
 
 export function useAdminCouponsPage() {
   const [page, setPage] = useState(1);
@@ -18,6 +18,7 @@ export function useAdminCouponsPage() {
     page,
     DEFAULT_PAGE_LIMIT,
     vendorScoped,
+    { enabled: tab !== "batches" },
   );
   const { open, setOpen, createCoupon, form, formLevelError } =
     useCreateCoupon();

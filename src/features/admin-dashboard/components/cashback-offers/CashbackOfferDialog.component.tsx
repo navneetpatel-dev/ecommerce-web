@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/shared/components/ui/dialog";
 import { LABELS } from "@/shared/constants/labels";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
@@ -29,23 +30,25 @@ export function CashbackOfferDialog({
 
   return (
     <Dialog open={dialog.open} onOpenChange={dialog.setOpen}>
-      {offer ? (
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className={tableMenuButtonClass("neutral")}
-          onClick={dialog.handleOpen}
-        >
-          <Pencil strokeWidth={2.25} aria-hidden />
-          <span>{LABELS.cashbackOfferEdit}</span>
-        </Button>
-      ) : (
-        <Button type="button" onClick={dialog.handleOpen}>
-          <Plus aria-hidden />
-          <span>{LABELS.cashbackOfferNew}</span>
-        </Button>
-      )}
+      <DialogTrigger asChild>
+        {offer ? (
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            className={tableMenuButtonClass("neutral")}
+            onClick={dialog.handleOpen}
+          >
+            <Pencil strokeWidth={2.25} aria-hidden />
+            <span>{LABELS.cashbackOfferEdit}</span>
+          </Button>
+        ) : (
+          <Button type="button" onClick={dialog.handleOpen}>
+            <Plus aria-hidden />
+            <span>{LABELS.cashbackOfferNew}</span>
+          </Button>
+        )}
+      </DialogTrigger>
       <DialogContent
         className={styles.dialogContent}
         aria-describedby={undefined}

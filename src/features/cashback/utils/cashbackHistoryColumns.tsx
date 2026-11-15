@@ -5,7 +5,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatDate } from "@/shared/utils/formatting/formatDate";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { formatInr, shortOrderId } from "@/shared/utils/formatting/orderFormat";
+import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import type { CashbackEntry, CashbackEntryStatus } from "../api/cashback.api";
 import { cashbackHistoryPageStyles as styles } from "../styles/cashbackHistoryPage.styles";
 
@@ -48,7 +48,7 @@ export function buildCashbackHistoryColumns(): DataTableColumn<CashbackEntry>[] 
       truncate: false,
       cell: (row) => (
         <Link href={PATHS.order(row.orderId)} className={styles.orderLink}>
-          #{shortOrderId(row.orderId)}
+          {LABELS.orderDetails}
         </Link>
       ),
     },

@@ -2,11 +2,9 @@
 
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { VendorStrip } from "@/shared/components/orders/VendorStrip.component";
+import { LABELS } from "@/shared/constants/labels";
 import type { SubOrderRow } from "../../../types/orders/vendorOrders.types";
-import {
-  formatInr,
-  shortOrderId,
-} from "../../../utils/orders/vendorOrderFormat";
+import { formatInr } from "../../../utils/orders/vendorOrderFormat";
 import { VENDOR_ORDERS_TABLE_STYLES } from "../../../styles/orders/vendorOrdersTable.styles";
 
 interface VendorSubOrderCardsProps {
@@ -28,7 +26,7 @@ export function VendorSubOrderCards(props: VendorSubOrderCardsProps) {
       <div className={VENDOR_ORDERS_TABLE_STYLES.cardHeader}>
         <div className={VENDOR_ORDERS_TABLE_STYLES.cardHeaderLeft}>
           <p className={VENDOR_ORDERS_TABLE_STYLES.cardOrderNum}>
-            #{shortOrderId(row.orderId)}
+            {row.subOrder.taxInvoiceNumber ?? LABELS.taxInvoiceAwaitingDispatch}
           </p>
           <div className={VENDOR_ORDERS_TABLE_STYLES.cardBadgeWrap}>
             <VendorStrip vendor={row.subOrder.vendor} size="sm" />

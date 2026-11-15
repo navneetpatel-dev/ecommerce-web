@@ -1,5 +1,17 @@
 /** Copy subset (part 4); merged via labels.ts. */
 export const reports4Labels = {
+  allReports: "All reports",
+  viewReport: "View report",
+  reportSettlementDesc:
+    "Review vendor settlement calculations, commission reconciliations, and payout statuses.",
+  reportLiabilityDesc:
+    "Monitor platform customer wallet balances and accrued liabilities.",
+  reportRechargeDesc:
+    "Audit wallet recharge transactions, payment gateway fees, and success rates.",
+  reportCashbackDesc:
+    "Track expired, refunded, and written-off promotional cashback balances.",
+  reportAdjustDesc:
+    "Manage manual administrative wallet credits, debits, and adjustments.",
   addressFormSection: "Address details",
   addressFormSectionHint: "Delivery location used at checkout.",
   // Address recipient (B-37)

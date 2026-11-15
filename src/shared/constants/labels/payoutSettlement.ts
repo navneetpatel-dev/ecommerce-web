@@ -14,4 +14,12 @@ export const payoutSettlementLabels = {
   proofFileHint: "PNG, JPEG, WebP, or PDF • Max 5 MB",
   remarksLabel: "Remarks (optional)",
   couldNotMarkPayoutPaid: "Could not mark this payout as paid.",
+  markPayoutFailed: "Mark failed",
+  confirmMarkPayoutFailedTitle: "Mark payout as failed?",
+  confirmMarkPayoutFailedBody:
+    "Record why the external transfer could not be completed.",
+  retryPayout: "Retry payout",
+  confirmRetryPayoutTitle: "Retry this payout?",
+  confirmRetryPayoutBody:
+    "Return this payout to pending after arranging another transfer attempt.",
 } as const;
