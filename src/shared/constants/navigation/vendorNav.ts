@@ -106,7 +106,7 @@ export const VENDOR_NAV = [
   },
   {
     href: PATHS.vendor.team,
-    label: "Team",
+    label: LABELS.team,
     permissions: [PERMISSIONS.PAYOUT_VIEW] as PermissionKey[],
   },
 ] as const;

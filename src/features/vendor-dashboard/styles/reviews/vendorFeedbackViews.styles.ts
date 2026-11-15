@@ -15,4 +15,17 @@ export const vendorFeedbackViewsStyles = {
   cardBody: "mt-2 text-body leading-relaxed text-ink-muted",
   actionBtn: "mt-4",
   emptyText: "text-ink-muted",
+  reviewHeader: "flex items-start justify-between gap-4",
+  flaggedBadge:
+    "text-caption rounded border border-warning/30 bg-warning-subtle px-2 py-0.5 font-medium text-warning-foreground",
+  flagButton: "h-7 px-2 text-xs text-ink-muted hover:text-ink",
+  replyBox:
+    "mt-3 space-y-1 rounded-md border border-line bg-surface-raised p-3 text-body-sm",
+  replyHeader: "flex items-center justify-between text-xs text-ink-muted",
+  replyTitle: "font-semibold text-ink",
+  replyBody: "text-ink",
+  replyActions: "mt-2 flex gap-2",
+  editReplyBtn: "h-7 text-xs",
+  removeReplyBtn: "h-7 text-xs text-danger hover:bg-danger/10",
+  qnaStack: "space-y-4",
 } as const;

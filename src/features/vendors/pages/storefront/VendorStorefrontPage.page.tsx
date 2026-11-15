@@ -9,8 +9,8 @@ import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { ProductGrid } from "@/features/products";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
-import { Skeleton } from "@/shared/components/ui/skeleton";
 import Image from "next/image";
+import { VendorStorefrontLoadingSkeleton } from "./VendorStorefrontLoadingSkeleton.component";
 import { vendorStorefrontPageStyles as styles } from "./vendorStorefrontPage.styles";
 
 interface VendorStorefrontPageProps {
@@ -28,18 +28,7 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
   const isKycPending = vendor?.kycComplete === false;
 
   if (vendorLoading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <Skeleton className={styles.loadingBanner} />
-        <Skeleton className={styles.loadingTitle} />
-        <Skeleton className={styles.loadingSubtitle} />
-        <div className={styles.loadingGrid}>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className={styles.loadingProductCard} />
-          ))}
-        </div>
-      </div>
-    );
+    return <VendorStorefrontLoadingSkeleton />;
   }
 
   if (vendorNotFound || !vendor) {
@@ -59,14 +48,14 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
   return (
     <div className={styles.pageRoot}>
       {isOwnMerchant ? (
-        <div className="bg-primary/10 border-b border-primary/20 px-4 py-2.5 text-xs sm:text-sm flex flex-wrap items-center justify-between gap-2 text-primary font-medium">
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" />
+        <div className={styles.merchantBanner}>
+          <div className={styles.merchantBannerLeft}>
+            <span className={styles.merchantPulseDot} />
             <span>Store Preview Mode · Logged in as Merchant</span>
           </div>
           <Link
             href={PATHS.vendor.overview}
-            className="underline hover:no-underline font-semibold"
+            className={styles.merchantDashboardLink}
           >
             Return to Vendor Dashboard →
           </Link>
@@ -74,7 +63,7 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
       ) : null}
 
       {isKycPending ? (
-        <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-2 text-xs sm:text-sm text-amber-800 dark:text-amber-300 text-center font-medium">
+        <div className={styles.kycBanner}>
           Verification in Progress: This store is currently undergoing merchant
           verification. Checkout may be temporarily paused.
         </div>

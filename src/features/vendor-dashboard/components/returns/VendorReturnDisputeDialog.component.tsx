@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
+import { useVendorReturnDisputeDialog } from "../../hooks/returns/useVendorReturnDisputeDialog.hook";
+import { vendorReturnsTableStyles as styles } from "../../styles/returns/vendorReturnsTable.styles";
 
 interface VendorReturnDisputeDialogProps {
   open: boolean;
@@ -26,27 +27,18 @@ export function VendorReturnDisputeDialog({
   onOpenChange,
   onSubmit,
 }: VendorReturnDisputeDialogProps) {
-  const [reason, setReason] = useState("");
-  const [description, setDescription] = useState("");
-  const [evidenceUrl, setEvidenceUrl] = useState("");
-
-  const close = () => {
-    if (submitting) return;
-    onOpenChange(false);
-  };
-
-  const canSend = Boolean(reason.trim()) && Boolean(description.trim());
-
-  const handleOpenChange = (next: boolean) => {
-    if (!next) {
-      close();
-      setReason("");
-      setDescription("");
-      setEvidenceUrl("");
-      return;
-    }
-    onOpenChange(true);
-  };
+  const {
+    reason,
+    description,
+    evidenceUrl,
+    canSend,
+    handleClose,
+    handleOpenChange,
+    handleReasonChange,
+    handleDescriptionChange,
+    handleEvidenceUrlChange,
+    handleSubmit,
+  } = useVendorReturnDisputeDialog({ submitting, onOpenChange, onSubmit });
 
   return (
     <StatusDialog
@@ -58,21 +50,16 @@ export function VendorReturnDisputeDialog({
       secondaryAction={{
         label: LABELS.cancel,
         disabled: submitting,
-        onClick: close,
+        onClick: handleClose,
       }}
       primaryAction={{
         label: "Submit Dispute",
         loading: submitting,
         disabled: !canSend,
-        onClick: () =>
-          onSubmit({
-            reason: reason.trim(),
-            description: description.trim(),
-            evidenceUrls: evidenceUrl.trim() ? [evidenceUrl.trim()] : [],
-          }),
+        onClick: handleSubmit,
       }}
     >
-      <div className="space-y-4">
+      <div className={styles.dialogFormStack}>
         <FormFieldFrame
           label="Dispute Reason"
           htmlFor="vendor-return-dispute-reason"
@@ -82,9 +69,7 @@ export function VendorReturnDisputeDialog({
             id="vendor-return-dispute-reason"
             placeholder="e.g. Damaged goods returned, Missing tags, Wrong product"
             value={reason}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setReason(e.target.value)
-            }
+            onChange={handleReasonChange}
             disabled={submitting}
           />
         </FormFieldFrame>
@@ -99,9 +84,7 @@ export function VendorReturnDisputeDialog({
             id="vendor-return-dispute-description"
             placeholder="Provide full details for admin review..."
             value={description}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-              setDescription(e.target.value)
-            }
+            onChange={handleDescriptionChange}
             disabled={submitting}
           />
         </FormFieldFrame>
@@ -116,9 +99,7 @@ export function VendorReturnDisputeDialog({
             type="url"
             placeholder="https://..."
             value={evidenceUrl}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setEvidenceUrl(e.target.value)
-            }
+            onChange={handleEvidenceUrlChange}
             disabled={submitting}
           />
         </FormFieldFrame>

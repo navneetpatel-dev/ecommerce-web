@@ -14,6 +14,9 @@ export function useVendorTeam() {
   const [error, setError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
+  const [selectedForRemoval, setSelectedForRemoval] =
+    useState<StaffMember | null>(null);
 
   const fetchStaff = useCallback(async () => {
     setIsLoading(true);
@@ -53,35 +56,66 @@ export function useVendorTeam() {
     };
   }, []);
 
-  const addStaff = async (payload: AddStaffPayload) => {
-    setIsSubmitting(true);
-    setActionError(null);
-    try {
-      await vendorStaffApi.add(payload);
-      await fetchStaff();
-      return true;
-    } catch (err) {
-      setActionError(getApiErrorMessage(err, "Failed to add team member"));
-      return false;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const addStaff = useCallback(
+    async (payload: AddStaffPayload) => {
+      setIsSubmitting(true);
+      setActionError(null);
+      try {
+        await vendorStaffApi.add(payload);
+        await fetchStaff();
+        return true;
+      } catch (err) {
+        setActionError(getApiErrorMessage(err, "Failed to add team member"));
+        return false;
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [fetchStaff],
+  );
 
-  const removeStaff = async (userId: string) => {
-    setIsSubmitting(true);
+  const removeStaff = useCallback(
+    async (userId: string) => {
+      setIsSubmitting(true);
+      setActionError(null);
+      try {
+        await vendorStaffApi.remove(userId);
+        await fetchStaff();
+        return true;
+      } catch (err) {
+        setActionError(getApiErrorMessage(err, "Failed to remove team member"));
+        return false;
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [fetchStaff],
+  );
+
+  const handleOpenAdd = useCallback(() => {
     setActionError(null);
-    try {
-      await vendorStaffApi.remove(userId);
-      await fetchStaff();
-      return true;
-    } catch (err) {
-      setActionError(getApiErrorMessage(err, "Failed to remove team member"));
-      return false;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    setAddOpen(true);
+  }, []);
+
+  const handleCloseAdd = useCallback(() => {
+    setAddOpen(false);
+  }, []);
+
+  const handleOpenRemove = useCallback((member: StaffMember) => {
+    setActionError(null);
+    setSelectedForRemoval(member);
+  }, []);
+
+  const handleCloseRemove = useCallback(() => {
+    setSelectedForRemoval(null);
+  }, []);
+
+  const handleConfirmRemove = useCallback(async () => {
+    if (!selectedForRemoval) return false;
+    const ok = await removeStaff(selectedForRemoval.id);
+    if (ok) setSelectedForRemoval(null);
+    return ok;
+  }, [selectedForRemoval, removeStaff]);
 
   return {
     members,
@@ -93,5 +127,13 @@ export function useVendorTeam() {
     refresh: fetchStaff,
     addStaff,
     removeStaff,
+    addOpen,
+    setAddOpen,
+    selectedForRemoval,
+    handleOpenAdd,
+    handleCloseAdd,
+    handleOpenRemove,
+    handleCloseRemove,
+    handleConfirmRemove,
   };
 }

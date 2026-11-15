@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
+import { useAddStaffDialog } from "../../hooks/team/useAddStaffDialog.hook";
+import { vendorTeamStyles as styles } from "../../styles/team/vendorTeam.styles";
 
 interface AddStaffDialogProps {
   open: boolean;
@@ -21,37 +22,16 @@ export function AddStaffDialog({
   onOpenChange,
   onSubmit,
 }: AddStaffDialogProps) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-
-  const close = () => {
-    if (submitting) return;
-    onOpenChange(false);
-  };
-
-  const canSubmit = Boolean(name.trim() && email.trim());
-
-  const handleOpenChange = (next: boolean) => {
-    if (!next) {
-      close();
-      setName("");
-      setEmail("");
-      return;
-    }
-    onOpenChange(true);
-  };
-
-  const handleSubmit = async () => {
-    const success = await onSubmit({
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-    });
-    if (success) {
-      setName("");
-      setEmail("");
-      onOpenChange(false);
-    }
-  };
+  const {
+    name,
+    email,
+    canSubmit,
+    close,
+    handleOpenChange,
+    handleNameChange,
+    handleEmailChange,
+    handleSubmit,
+  } = useAddStaffDialog({ submitting, onOpenChange, onSubmit });
 
   return (
     <StatusDialog
@@ -72,17 +52,13 @@ export function AddStaffDialog({
         onClick: handleSubmit,
       }}
     >
-      {error && (
-        <div className="mb-4 rounded-md bg-destructive/10 p-3 text-xs text-destructive">
-          {error}
-        </div>
-      )}
-      <div className="space-y-4">
+      {error ? <div className={styles.dialogError}>{error}</div> : null}
+      <div className={styles.dialogStack}>
         <FormFieldFrame label="Full Name" htmlFor="staff-name" required>
           <Input
             id="staff-name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleNameChange}
             placeholder="John Doe"
             disabled={submitting}
           />
@@ -92,7 +68,7 @@ export function AddStaffDialog({
             id="staff-email"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             placeholder="colleague@example.com"
             disabled={submitting}
           />

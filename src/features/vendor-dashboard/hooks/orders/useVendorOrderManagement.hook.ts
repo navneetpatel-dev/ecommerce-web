@@ -43,7 +43,7 @@ function applyStatusToList(
 }
 
 export function useVendorOrderManagement() {
-  const [page] = useState(1);
+  const [page, setPage] = useState(1);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [statusErrorId, setStatusErrorId] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -104,5 +104,9 @@ export function useVendorOrderManagement() {
     handleStatusChange,
     isPending: updateStatus.isPending,
     statusError,
+    page,
+    setPage,
+    totalPages: data?.totalPages ?? 1,
+    total: data?.total ?? 0,
   };
 }

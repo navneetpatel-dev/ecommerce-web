@@ -25,4 +25,13 @@ export const vendorStorefrontPageStyles = {
     "text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-ink-muted",
   vendorHeading: "font-display text-[1.75rem] leading-tight text-ink",
   vendorDescription: "mt-1 max-w-prose text-body text-ink-muted",
+
+  merchantBanner:
+    "bg-brand-subtle border-b border-brand/20 px-4 py-2.5 text-body-xs sm:text-body-sm flex flex-wrap items-center justify-between gap-2 text-brand font-medium",
+  merchantBannerLeft: "flex items-center gap-2",
+  merchantPulseDot: "inline-block size-2 rounded-full bg-brand animate-pulse",
+  merchantDashboardLink:
+    "underline hover:no-underline font-semibold text-brand",
+  kycBanner:
+    "bg-warning-subtle border-b border-warning/20 px-4 py-2 text-body-xs sm:text-body-sm text-warning-foreground text-center font-medium",
 } as const;

@@ -15,6 +15,7 @@ import { FilePicker } from "@/shared/components/FileUpload/FilePicker.component"
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PaymentMethodsList } from "./AdminMarkPayoutPaidAction/PaymentMethodsList.component";
+import { AdminPayoutBankDetailsSummary } from "./AdminMarkPayoutPaidAction/AdminPayoutBankDetailsSummary.component";
 import {
   PAYOUT_PAYMENT_METHODS,
   useAdminMarkPayoutPaidAction,
@@ -89,51 +90,7 @@ export function AdminMarkPayoutPaidAction({
           disabledHint: LABELS.referenceRequiredHint,
         }}
       >
-        {bankDetails ? (
-          <div className="mb-4 rounded-lg border border-line bg-surface p-3 text-xs">
-            <p className="font-semibold text-ink mb-1.5 flex items-center gap-1.5">
-              <span>Settlement Account Details</span>
-            </p>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-ink-muted">
-              <div>
-                <span className="text-ink-faint">Bank:</span>{" "}
-                <span className="font-medium text-ink">
-                  {bankDetails.bankName || "—"}
-                </span>
-              </div>
-              <div>
-                <span className="text-ink-faint">Account Holder:</span>{" "}
-                <span className="font-medium text-ink">
-                  {bankDetails.accountHolderName || "—"}
-                </span>
-              </div>
-              <div>
-                <span className="text-ink-faint">Account No:</span>{" "}
-                <span className="font-mono font-medium text-ink">
-                  {bankDetails.accountNumber || "—"}
-                </span>
-              </div>
-              <div>
-                <span className="text-ink-faint">IFSC:</span>{" "}
-                <span className="font-mono font-medium text-ink">
-                  {bankDetails.ifscCode || "—"}
-                </span>
-              </div>
-              {bankDetails.branchName ? (
-                <div className="col-span-2">
-                  <span className="text-ink-faint">Branch:</span>{" "}
-                  <span className="font-medium text-ink">
-                    {bankDetails.branchName}
-                  </span>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        ) : (
-          <div className="mb-4 rounded-lg border border-warning/30 bg-warning-subtle p-2.5 text-xs text-warning-foreground">
-            No bank settlement details registered for this vendor.
-          </div>
-        )}
+        <AdminPayoutBankDetailsSummary bankDetails={bankDetails} />
         <FormFieldFrame
           label={LABELS.paymentMethodLabel}
           htmlFor={`payout-method-${payoutId}`}

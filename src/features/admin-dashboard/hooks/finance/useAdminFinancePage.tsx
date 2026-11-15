@@ -8,6 +8,11 @@ import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.c
 import { AdminMarkPayoutPaidAction } from "../../components/finance/AdminMarkPayoutPaidAction.component";
 import { AdminCommissionInvoiceDownloadAction } from "../../components/finance/AdminCommissionInvoiceDownloadAction.component";
 import { adminDataListViewStyles } from "../../styles/shared/adminDataListView.styles";
+import {
+  ADMIN_COMMISSION_COLUMN_KEYS,
+  ADMIN_COMMISSION_INVOICE_COLUMN_KEYS,
+  ADMIN_PAYOUT_COLUMN_KEYS,
+} from "../../constants/finance/adminFinanceColumns.constants";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
@@ -102,50 +107,21 @@ export function useAdminFinancePage(): AdminFinancePageModel {
       title: LABELS.commissions,
       permission: PERMISSIONS.COMMISSION_VIEW,
       load: loadCommissions,
-      columnKeys: [
-        "vendorName",
-        "saleAmount",
-        "commissionRate",
-        "commissionAmount",
-        "status",
-        "createdAt",
-      ],
+      columnKeys: [...ADMIN_COMMISSION_COLUMN_KEYS],
     },
     commissionInvoices: {
       title: LABELS.commissionInvoices,
       permission: PERMISSIONS.COMMISSION_VIEW,
       load: loadCommissionInvoices,
       actions: invoiceActions,
-      columnKeys: [
-        "number",
-        "vendorName",
-        "taxableAmount",
-        "gstAmount",
-        "totalAmount",
-        "issuedAt",
-      ],
+      columnKeys: [...ADMIN_COMMISSION_INVOICE_COLUMN_KEYS],
     },
     payouts: {
       title: LABELS.payouts,
       permission: PERMISSIONS.PAYOUT_MANAGE,
       load: loadPayouts,
       actions: payoutActions,
-      columnKeys: [
-        "vendorName",
-        "grossAmount",
-        "tdsAmount",
-        "commissionGstAmount",
-        "adjustmentAmount",
-        "amount",
-        "periodStart",
-        "periodEnd",
-        "status",
-        "paymentMethod",
-        "paymentReferenceNumber",
-        "paidAt",
-        "failureReason",
-        "createdAt",
-      ],
+      columnKeys: [...ADMIN_PAYOUT_COLUMN_KEYS],
     },
     payoutRevision,
     processPayouts,

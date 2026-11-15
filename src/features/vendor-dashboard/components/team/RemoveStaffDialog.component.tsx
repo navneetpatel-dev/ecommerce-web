@@ -1,8 +1,10 @@
 "use client";
 
+import { useCallback } from "react";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
 import type { StaffMember } from "../../api/vendorStaff.api";
+import { vendorTeamStyles as styles } from "../../styles/team/vendorTeam.styles";
 
 interface RemoveStaffDialogProps {
   member: StaffMember | null;
@@ -19,17 +21,19 @@ export function RemoveStaffDialog({
   onOpenChange,
   onConfirm,
 }: RemoveStaffDialogProps) {
-  const close = () => {
+  const close = useCallback(() => {
     if (submitting) return;
     onOpenChange(false);
-  };
+  }, [onOpenChange, submitting]);
 
-  const handleConfirm = async () => {
+  const handleConfirm = useCallback(async () => {
     const success = await onConfirm();
     if (success) {
       onOpenChange(false);
     }
-  };
+  }, [onConfirm, onOpenChange]);
+
+  const description = `Are you sure you want to remove ${member?.name || "this user"} (${member?.email}) from your vendor team? They will immediately lose access to your vendor dashboard.`;
 
   return (
     <StatusDialog
@@ -37,7 +41,7 @@ export function RemoveStaffDialog({
       onOpenChange={onOpenChange}
       variant="danger"
       title="Remove Team Member"
-      description={`Are you sure you want to remove ${member?.name || "this user"} (${member?.email}) from your vendor team? They will immediately lose access to your vendor dashboard.`}
+      description={description}
       secondaryAction={{
         label: LABELS.cancel,
         disabled: submitting,
@@ -49,11 +53,7 @@ export function RemoveStaffDialog({
         onClick: handleConfirm,
       }}
     >
-      {error && (
-        <div className="mb-2 rounded-md bg-destructive/10 p-3 text-xs text-destructive">
-          {error}
-        </div>
-      )}
+      {error ? <div className={styles.dialogError}>{error}</div> : null}
     </StatusDialog>
   );
 }

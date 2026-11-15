@@ -27,4 +27,9 @@ export const vendorReturnsTableStyles = {
   photoButton: "text-body-sm font-medium text-brand hover:underline",
   restockedText: "text-body-sm text-ink-muted",
   mobileCardActions: "mt-3",
+  disputeBadge:
+    "text-body-xs font-semibold text-warning-foreground bg-warning-subtle px-2 py-0.5 rounded border border-warning/30",
+  restockContainer: "flex items-center gap-1.5",
+  disputeBtn: "text-body-xs text-danger hover:bg-danger-subtle h-8 px-2",
+  dialogFormStack: "space-y-4",
 } as const;

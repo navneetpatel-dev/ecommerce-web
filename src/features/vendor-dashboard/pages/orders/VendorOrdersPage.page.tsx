@@ -3,6 +3,7 @@
 import { useVendorOrderManagement } from "../../hooks/orders/useVendorOrderManagement.hook";
 import { SkeletonRows } from "@/shared/components/Skeletons.component";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
+import { PaginationContainer } from "@/shared/containers/navigation/PaginationContainer.container";
 import {
   VendorOrdersTable,
   type VendorSubOrder,
@@ -34,6 +35,13 @@ export function VendorOrdersPage() {
         onSetUpdatingId={orders.setUpdatingId}
         onStatusChange={orders.handleStatusChange}
       />
+      {orders.totalPages > 1 ? (
+        <PaginationContainer
+          currentPage={orders.page}
+          totalPages={orders.totalPages}
+          onPageChange={orders.setPage}
+        />
+      ) : null}
     </RequirePermission>
   );
 }

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
+import { useVendorReviewFlagDialog } from "../../hooks/reviews/useVendorReviewFlagDialog.hook";
 
 interface VendorReviewFlagDialogProps {
   open: boolean;
@@ -19,26 +19,14 @@ export function VendorReviewFlagDialog({
   onOpenChange,
   onSubmit,
 }: VendorReviewFlagDialogProps) {
-  const [reason, setReason] = useState("");
-
-  const close = () => {
-    if (submitting) return;
-    onOpenChange(false);
-  };
-
-  const canSend = Boolean(reason.trim());
-
-  const handleOpenChange = (next: boolean) => {
-    if (!next) {
-      close();
-      setReason("");
-      return;
-    }
-    onOpenChange(true);
-  };
-
-  const handleReasonChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
-    setReason(event.target.value);
+  const {
+    reason,
+    canSend,
+    close,
+    handleOpenChange,
+    handleReasonChange,
+    handleSubmit,
+  } = useVendorReviewFlagDialog({ submitting, onOpenChange, onSubmit });
 
   return (
     <StatusDialog
@@ -56,7 +44,7 @@ export function VendorReviewFlagDialog({
         label: "Submit Report",
         loading: submitting,
         disabled: !canSend,
-        onClick: () => onSubmit(reason.trim()),
+        onClick: handleSubmit,
       }}
     >
       <FormFieldFrame

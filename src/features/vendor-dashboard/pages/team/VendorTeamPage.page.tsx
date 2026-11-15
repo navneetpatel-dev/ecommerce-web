@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { UserPlus } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
@@ -8,7 +7,7 @@ import { useVendorTeam } from "../../hooks/team/useVendorTeam.hook";
 import { StaffMembersTable } from "../../components/team/StaffMembersTable.component";
 import { AddStaffDialog } from "../../components/team/AddStaffDialog.component";
 import { RemoveStaffDialog } from "../../components/team/RemoveStaffDialog.component";
-import type { StaffMember } from "../../api/vendorStaff.api";
+import { vendorTeamStyles as styles } from "../../styles/team/vendorTeam.styles";
 
 export function VendorTeamPage() {
   const {
@@ -16,54 +15,49 @@ export function VendorTeamPage() {
     isLoading,
     error,
     actionError,
-    setActionError,
     isSubmitting,
     addStaff,
-    removeStaff,
+    addOpen,
+    setAddOpen,
+    selectedForRemoval,
+    handleOpenAdd,
+    handleOpenRemove,
+    handleCloseRemove,
+    handleConfirmRemove,
   } = useVendorTeam();
 
-  const [addOpen, setAddOpen] = useState(false);
-  const [selectedForRemoval, setSelectedForRemoval] =
-    useState<StaffMember | null>(null);
+  const loadingContent = (
+    <div className={styles.loadingStack}>
+      <div className={styles.loadingPulseRaised} />
+      <div className={styles.loadingPulseSurface} />
+    </div>
+  );
 
-  const handleOpenAdd = () => {
-    setActionError(null);
-    setAddOpen(true);
-  };
-
-  const handleOpenRemove = (member: StaffMember) => {
-    setActionError(null);
-    setSelectedForRemoval(member);
-  };
+  const errorContent = error ? (
+    <div className={styles.errorAlert}>{error}</div>
+  ) : null;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className={styles.container}>
+      <div className={styles.header}>
         <div>
           <TextEyebrow>Store Administration</TextEyebrow>
-          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
-            Team &amp; Staff Members
-          </h1>
-          <p className="mt-1 text-sm text-ink-muted">
+          <h1 className={styles.heading}>Team &amp; Staff Members</h1>
+          <p className={styles.description}>
             Manage who has access to update products, process orders, and handle
             fulfillment for your store.
           </p>
         </div>
-        <Button onClick={handleOpenAdd} className="gap-2">
-          <UserPlus className="h-4 w-4" />
+        <Button onClick={handleOpenAdd}>
+          <UserPlus className={styles.addBtnIcon} />
           Add Member
         </Button>
       </div>
 
-      {error ? (
-        <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-4 text-sm text-destructive">
-          {error}
-        </div>
-      ) : isLoading ? (
-        <div className="space-y-3">
-          <div className="h-12 w-full animate-pulse rounded-xl bg-surface-raised" />
-          <div className="h-40 w-full animate-pulse rounded-xl bg-surface" />
-        </div>
+      {errorContent}
+
+      {isLoading ? (
+        loadingContent
       ) : (
         <StaffMembersTable members={members} onRemove={handleOpenRemove} />
       )}
@@ -80,8 +74,8 @@ export function VendorTeamPage() {
         member={selectedForRemoval}
         submitting={isSubmitting}
         error={actionError}
-        onOpenChange={(open) => !open && setSelectedForRemoval(null)}
-        onConfirm={() => removeStaff(selectedForRemoval!.id)}
+        onOpenChange={handleCloseRemove}
+        onConfirm={handleConfirmRemove}
       />
     </div>
   );

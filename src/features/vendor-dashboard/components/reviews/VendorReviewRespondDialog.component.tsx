@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
+import { useVendorReviewRespondDialog } from "../../hooks/reviews/useVendorReviewRespondDialog.hook";
 
 interface VendorReviewRespondDialogProps {
   open: boolean;
@@ -22,26 +22,19 @@ export function VendorReviewRespondDialog({
   onOpenChange,
   onSubmit,
 }: VendorReviewRespondDialogProps) {
-  const [response, setResponse] = useState(initialResponse);
-
-  const close = () => {
-    if (submitting) return;
-    onOpenChange(false);
-  };
-
-  const canSend = Boolean(response.trim());
-
-  const handleOpenChange = (next: boolean) => {
-    if (!next) {
-      close();
-      setResponse("");
-      return;
-    }
-    setResponse(initialResponse ?? "");
-    onOpenChange(true);
-  };
-  const handleResponseChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
-    setResponse(event.target.value);
+  const {
+    response,
+    canSend,
+    handleClose,
+    handleOpenChange,
+    handleResponseChange,
+    handleSubmit,
+  } = useVendorReviewRespondDialog({
+    initialResponse,
+    submitting,
+    onOpenChange,
+    onSubmit,
+  });
 
   return (
     <StatusDialog
@@ -53,22 +46,20 @@ export function VendorReviewRespondDialog({
       secondaryAction={{
         label: LABELS.cancel,
         disabled: submitting,
-        onClick: close,
+        onClick: handleClose,
       }}
       primaryAction={{
         label: LABELS.respondToReview,
         loading: submitting,
         disabled: !canSend,
-        disabledHint: !response.trim()
-          ? LABELS.reviewResponseEmptyHint
-          : undefined,
-        onClick: () => onSubmit(response.trim()),
+        disabledHint: !canSend ? LABELS.reviewResponseEmptyHint : undefined,
+        onClick: handleSubmit,
       }}
     >
       <FormFieldFrame
         label={LABELS.reviewResponseLabel}
         htmlFor="vendor-review-response"
-        hint={!response.trim() ? LABELS.reviewResponseEmptyHint : undefined}
+        hint={!canSend ? LABELS.reviewResponseEmptyHint : undefined}
       >
         <Textarea
           id="vendor-review-response"

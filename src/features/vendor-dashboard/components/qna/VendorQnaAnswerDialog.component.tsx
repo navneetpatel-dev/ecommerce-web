@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { LABELS } from "@/shared/constants/labels";
+import { useVendorQnaAnswerDialog } from "../../hooks/qna/useVendorQnaAnswerDialog.hook";
 
 interface VendorQnaAnswerDialogProps {
   open: boolean;
@@ -20,25 +20,14 @@ export function VendorQnaAnswerDialog({
   onOpenChange,
   onSubmit,
 }: VendorQnaAnswerDialogProps) {
-  const [answer, setAnswer] = useState("");
-
-  const close = () => {
-    if (submitting) return;
-    onOpenChange(false);
-  };
-
-  const canSend = Boolean(answer.trim());
-
-  const handleOpenChange = (next: boolean) => {
-    if (!next) {
-      close();
-      setAnswer("");
-      return;
-    }
-    onOpenChange(true);
-  };
-  const handleAnswerChange = (event: ChangeEvent<HTMLTextAreaElement>) =>
-    setAnswer(event.target.value);
+  const {
+    answer,
+    canSend,
+    handleClose,
+    handleOpenChange,
+    handleAnswerChange,
+    handleSubmit,
+  } = useVendorQnaAnswerDialog({ submitting, onOpenChange, onSubmit });
 
   return (
     <StatusDialog
@@ -50,20 +39,20 @@ export function VendorQnaAnswerDialog({
       secondaryAction={{
         label: LABELS.cancel,
         disabled: submitting,
-        onClick: close,
+        onClick: handleClose,
       }}
       primaryAction={{
         label: LABELS.submitAnswer,
         loading: submitting,
         disabled: !canSend,
-        disabledHint: !answer.trim() ? LABELS.answerEmptyHint : undefined,
-        onClick: () => onSubmit(answer.trim()),
+        disabledHint: !canSend ? LABELS.answerEmptyHint : undefined,
+        onClick: handleSubmit,
       }}
     >
       <FormFieldFrame
         label={LABELS.yourAnswer}
         htmlFor="vendor-qna-answer"
-        hint={!answer.trim() ? LABELS.answerEmptyHint : undefined}
+        hint={!canSend ? LABELS.answerEmptyHint : undefined}
       >
         <Textarea
           id="vendor-qna-answer"

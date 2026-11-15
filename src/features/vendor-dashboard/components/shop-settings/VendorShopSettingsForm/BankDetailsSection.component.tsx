@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import type { VendorBankDetails } from "../../../api/overview/vendor.api";
-import { vendorShopSettingsFormStyles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
+import { useBankDetailsSection } from "../../../hooks/shop-settings/useBankDetailsSection.hook";
+import { vendorShopSettingsFormStyles as styles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
 
 interface BankDetailsSectionProps {
   bankDetails: VendorBankDetails | null;
@@ -17,30 +17,16 @@ export function BankDetailsSection({
   onChange,
   isOwner = true,
 }: BankDetailsSectionProps) {
-  const [confirmAccount, setConfirmAccount] = useState(
-    bankDetails?.accountNumber ?? "",
-  );
-  const [confirmTouched, setConfirmTouched] = useState(false);
-
-  const handleFieldChange =
-    (field: keyof VendorBankDetails) => (e: ChangeEvent<HTMLInputElement>) => {
-      onChange({
-        ...(bankDetails ?? {}),
-        [field]: e.target.value,
-      });
-    };
-
-  const handleConfirmChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setConfirmAccount(e.target.value);
-    setConfirmTouched(true);
-  };
-
-  const isMismatch =
-    confirmTouched && confirmAccount !== (bankDetails?.accountNumber ?? "");
-
-  const maskedAccountNumber = bankDetails?.accountNumber
-    ? `••••••••${bankDetails.accountNumber.slice(-4)}`
-    : "Not configured";
+  const {
+    confirmAccount,
+    isMismatch,
+    maskedAccountNumber,
+    handleHolderNameChange,
+    handleBankNameChange,
+    handleAccountNumberChange,
+    handleConfirmChange,
+    handleIfscCodeChange,
+  } = useBankDetailsSection({ bankDetails, onChange });
 
   return (
     <FormSection
@@ -49,14 +35,14 @@ export function BankDetailsSection({
       columns={2}
     >
       {!isOwner ? (
-        <div className="col-span-full rounded-md border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-900">
-          <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+        <div className={styles.bankDetailsDisabledNotice}>
+          <p className={styles.bankDetailsMaskedTitle}>
             Account Number (Masked)
           </p>
-          <p className="mt-1 font-mono text-sm text-neutral-600 dark:text-neutral-400">
+          <p className={styles.bankDetailsMaskedNumber}>
             {maskedAccountNumber}
           </p>
-          <p className="mt-2 text-xs text-neutral-500">
+          <p className={styles.bankDetailsMaskedHint}>
             Only the store proprietor (Vendor Owner) can view and modify bank
             account details.
           </p>
@@ -66,11 +52,11 @@ export function BankDetailsSection({
           <FormFieldFrame
             label="Account Holder Name"
             hint="Name as registered with the bank"
-            className={vendorShopSettingsFormStyles.inputCol}
+            className={styles.inputCol}
           >
             <Input
               value={bankDetails?.accountHolderName ?? ""}
-              onChange={handleFieldChange("accountHolderName")}
+              onChange={handleHolderNameChange}
               placeholder="e.g. Acme Enterprises"
             />
           </FormFieldFrame>
@@ -78,11 +64,11 @@ export function BankDetailsSection({
           <FormFieldFrame
             label="Bank Name"
             hint="Full name of banking institution"
-            className={vendorShopSettingsFormStyles.inputCol}
+            className={styles.inputCol}
           >
             <Input
               value={bankDetails?.bankName ?? ""}
-              onChange={handleFieldChange("bankName")}
+              onChange={handleBankNameChange}
               placeholder="e.g. HDFC Bank"
             />
           </FormFieldFrame>
@@ -90,12 +76,12 @@ export function BankDetailsSection({
           <FormFieldFrame
             label="Account Number"
             hint="Bank account number for payouts"
-            className={vendorShopSettingsFormStyles.inputCol}
+            className={styles.inputCol}
           >
             <Input
               type="password"
               value={bankDetails?.accountNumber ?? ""}
-              onChange={handleFieldChange("accountNumber")}
+              onChange={handleAccountNumberChange}
               placeholder="Enter account number"
             />
           </FormFieldFrame>
@@ -103,7 +89,7 @@ export function BankDetailsSection({
           <FormFieldFrame
             label="Confirm Account Number"
             hint="Re-type account number for verification"
-            className={vendorShopSettingsFormStyles.inputCol}
+            className={styles.inputCol}
           >
             <Input
               value={confirmAccount}
@@ -111,7 +97,7 @@ export function BankDetailsSection({
               placeholder="Re-enter account number"
             />
             {isMismatch ? (
-              <p className="mt-1 text-xs text-red-500">
+              <p className={styles.bankDetailsMismatchText}>
                 Account numbers do not match
               </p>
             ) : null}
@@ -120,13 +106,13 @@ export function BankDetailsSection({
           <FormFieldFrame
             label="IFSC Code"
             hint="11-character Indian Financial System Code"
-            className={vendorShopSettingsFormStyles.inputCol}
+            className={styles.inputCol}
           >
             <Input
               value={bankDetails?.ifscCode ?? ""}
-              onChange={handleFieldChange("ifscCode")}
+              onChange={handleIfscCodeChange}
               placeholder="e.g. HDFC0001234"
-              className="uppercase"
+              className={styles.ifscInput}
               maxLength={11}
             />
           </FormFieldFrame>

@@ -9,7 +9,7 @@ import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
  * Vendor return management data: list of returns on this vendor's suborders.
  */
 export function useVendorReturnManagement() {
-  const [page] = useState(1);
+  const [page, setPage] = useState(1);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: vendorKeys.returns.page(page),
@@ -24,5 +24,9 @@ export function useVendorReturnManagement() {
     data,
     isLoading,
     loadError,
+    page,
+    setPage,
+    totalPages: data?.totalPages ?? 1,
+    total: data?.total ?? 0,
   };
 }

@@ -13,6 +13,9 @@ import {
   LifeBuoy,
   Bug,
   RotateCcw,
+  TrendingUp,
+  HelpCircle,
+  Users,
 } from "lucide-react";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { VENDOR_NAV } from "@/shared/constants/navigation/vendorNav";
@@ -24,12 +27,15 @@ const VENDOR_NAV_ICONS = {
   [PATHS.vendor.orders]: Truck,
   [PATHS.vendor.returns]: RotateCcw,
   [PATHS.vendor.payouts]: Wallet,
+  [PATHS.vendor.analytics]: TrendingUp,
   [PATHS.vendor.reports]: FileBarChart,
   [PATHS.vendor.coupons]: Tags,
   [PATHS.vendor.reviews]: MessageSquare,
+  [PATHS.vendor.productQna]: HelpCircle,
   [PATHS.vendor.supportTickets]: LifeBuoy,
   [PATHS.vendor.bugReports]: Bug,
   [PATHS.vendor.shopSettings]: Settings,
+  [PATHS.vendor.team]: Users,
 } as const;
 
 export function useVendorLayout() {

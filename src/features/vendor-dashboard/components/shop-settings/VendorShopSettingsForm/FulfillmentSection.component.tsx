@@ -13,6 +13,7 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorPayoutFrequency } from "../../../api/overview/vendor.api";
 import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
+import { vendorShopSettingsFormStyles as styles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
 
 const NO_PREFERENCE_VALUE = "__none__";
 
@@ -50,7 +51,7 @@ export function FulfillmentSection({
       columns={3}
     >
       {disabled ? (
-        <p className="col-span-full text-xs text-muted-foreground">
+        <p className={styles.fulfillmentNotice}>
           Only the store proprietor (Vendor Owner) can adjust delivery
           surcharges, COD availability, and payout schedule.
         </p>

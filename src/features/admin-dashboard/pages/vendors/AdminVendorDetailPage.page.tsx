@@ -28,7 +28,9 @@ import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
 export function AdminVendorDetailPage() {
   return (
-    <RequirePermission permission={PERMISSIONS.VENDOR_MANAGE}>
+    <RequirePermission
+      permission={[PERMISSIONS.VENDOR_MANAGE, PERMISSIONS.VENDOR_APPROVE]}
+    >
       <AdminVendorDetailContent />
     </RequirePermission>
   );
