@@ -1,7 +1,10 @@
 "use client";
 
 import type { VendorEntityType } from "@/shared/constants/statuses";
-import type { VendorPayoutFrequency } from "../../../api/overview/vendor.api";
+import type {
+  VendorPayoutFrequency,
+  VendorBankDetails,
+} from "../../../api/overview/vendor.api";
 import { useVendorShopSettingsData } from "./useVendorShopSettingsData.hook";
 import { useVendorShopSettingsSave } from "./useVendorShopSettingsSave.hook";
 
@@ -13,6 +16,7 @@ export function useVendorShopSettingsForm() {
     returnShippingFee: data.returnShippingFee,
     codEnabled: data.codEnabled,
     payoutFrequency: data.payoutFrequency,
+    bankDetails: data.bankDetails,
     logoUrl: data.logoUrl,
     bannerUrl: data.bannerUrl,
     applyShop: data.applyShop,
@@ -25,6 +29,7 @@ export function useVendorShopSettingsForm() {
     returnShippingFee: data.returnShippingFee,
     codEnabled: data.codEnabled,
     payoutFrequency: data.payoutFrequency,
+    bankDetails: data.bankDetails,
     logoUrl: data.logoUrl,
     bannerUrl: data.bannerUrl,
     entityType: data.entityType,
@@ -34,8 +39,12 @@ export function useVendorShopSettingsForm() {
     loadError: data.loadError,
     message: saveApi.message,
     saving: saveApi.saving,
-    save: () => saveApi.save(),
+    save: () => saveApi.save({ bankDetails: data.bankDetails }),
     clearOverride: saveApi.clearOverride,
+    setBankDetails: (details: VendorBankDetails) => {
+      saveApi.setMessage(null);
+      data.setBankDetails(details);
+    },
     setReturnShippingFee: (value: number | null) => {
       saveApi.setMessage(null);
       data.setReturnShippingFee(value);

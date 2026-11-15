@@ -36,6 +36,8 @@ export interface Review {
   media?: ReviewMediaItem[];
   vendorResponse?: string | null;
   vendorRespondedAt?: string | null;
+  flaggedReason?: string | null;
+  flaggedAt?: string | null;
   editedAt?: string | null;
   /** Author only: their edit waiting for approval (shoppers still see the fields above). */
   pendingRevision?: ReviewRevision | null;

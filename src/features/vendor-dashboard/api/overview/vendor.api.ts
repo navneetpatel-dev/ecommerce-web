@@ -22,6 +22,13 @@ export type { LowStockInventoryRow };
 
 export type VendorPayoutFrequency = "WEEKLY" | "BIWEEKLY" | "MONTHLY";
 
+export type VendorBankDetails = {
+  accountHolderName?: string | null;
+  accountNumber?: string | null;
+  ifscCode?: string | null;
+  bankName?: string | null;
+};
+
 export type VendorShop = {
   id: string;
   businessName: string;
@@ -33,6 +40,7 @@ export type VendorShop = {
   status?: string;
   codEnabled?: boolean;
   payoutFrequency?: VendorPayoutFrequency | null;
+  bankDetails?: VendorBankDetails | null;
 };
 
 export const vendorApi = {
@@ -49,6 +57,7 @@ export const vendorApi = {
     categoryIds?: string[];
     codEnabled?: boolean;
     payoutFrequency?: VendorPayoutFrequency | null;
+    bankDetails?: VendorBankDetails | null;
   }) => apiClient.patch<VendorShop>(API.vendors.me, body),
   /** The shop's own catalogue, every status: the API lists unpublished items only for the vendor's own id. */
   products: (

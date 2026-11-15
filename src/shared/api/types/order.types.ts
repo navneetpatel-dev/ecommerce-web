@@ -92,6 +92,8 @@ export interface SubOrder {
   /** Card refund for this part when it was cancelled or came back undelivered (RTO). */
   cancelRefundAmount?: number | null;
   cancelRefundStatus?: RefundStatus | null;
+  cancellationReason?: string | null;
+  cancelledByRole?: string | null;
   items: OrderItem[];
   shipment?: Shipment | null;
 }

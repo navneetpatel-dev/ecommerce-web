@@ -33,4 +33,9 @@ export const myReviewsPageStyles = {
   dateText: "text-ink-faint",
   reviewTitle: "mt-3 font-medium text-ink",
   reviewBody: "mt-1 text-body text-ink-muted whitespace-pre-wrap",
+  sellerResponse: "mt-4 rounded-xl border border-line bg-paper/60 p-4",
+  sellerTitle: "flex items-center gap-1.5 text-body-sm font-medium text-ink",
+  sellerIcon: "h-4 w-4 text-brand",
+  sellerDate: "font-normal text-ink-faint",
+  sellerBody: "mt-1.5 text-body-sm text-ink-muted whitespace-pre-wrap",
 } as const;

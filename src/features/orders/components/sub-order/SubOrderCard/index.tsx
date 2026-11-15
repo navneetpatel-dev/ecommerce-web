@@ -87,6 +87,8 @@ export function SubOrderCard({
         vendorId={subOrder.vendor?.id}
         itemCount={itemCount}
         status={subOrder.status}
+        cancellationReason={subOrder.cancellationReason}
+        cancelledByRole={subOrder.cancelledByRole}
         className={SUB_ORDER_CARD_STYLES.headerMargin}
       />
 

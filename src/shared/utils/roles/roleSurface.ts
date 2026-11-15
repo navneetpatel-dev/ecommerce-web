@@ -55,12 +55,26 @@ export function isWorkspacePath(pathname: string): boolean {
   return surface === "admin" || surface === "vendor";
 }
 
+/** Public catalog routes that any role (or guest) can view. */
+export function isPublicCatalogPath(pathname: string): boolean {
+  return (
+    pathname === PATHS.home ||
+    pathname.startsWith("/products") ||
+    pathname.startsWith("/categories") ||
+    pathname.startsWith("/vendors") ||
+    pathname.startsWith("/search") ||
+    pathname.startsWith("/brands")
+  );
+}
+
 /** Whether this role may remain on the given path (hardcoded URL safe). */
 export function isPathAllowedForRole(
   pathname: string,
   role: RoleName | null | undefined,
   authenticated: boolean,
+  isImpersonating = false,
 ): boolean {
+  if (isImpersonating) return true;
   const surface = surfaceForPath(pathname);
 
   if (surface === "auth") return true;
@@ -73,9 +87,12 @@ export function isPathAllowedForRole(
     return authenticated && isVendorRole(role);
   }
 
-  // Storefront: guests + customers only (never admin/vendor).
+  // Public catalog storefront pages are viewable by any role
+  if (isPublicCatalogPath(pathname)) return true;
+
+  // Personal shopper routes (cart, checkout, orders, account):
   if (!authenticated) return true;
-  return isCustomerRole(role);
+  return isCustomerRole(role) || isVendorRole(role);
 }
 
 /** Where to send a user that opened a path outside their role surface. */

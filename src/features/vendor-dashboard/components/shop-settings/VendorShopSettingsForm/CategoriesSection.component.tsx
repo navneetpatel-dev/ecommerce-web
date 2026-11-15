@@ -19,6 +19,7 @@ interface CategoriesSectionProps {
   entityType: VendorEntityType | null;
   categoryIds: string[];
   saving: boolean;
+  isOwner?: boolean;
   onEntityTypeChange: (value: VendorEntityType) => void;
   onCategoryIdsChange: (ids: string[]) => void;
   onSaveCategories: () => void;
@@ -28,6 +29,7 @@ export function CategoriesSection({
   entityType,
   categoryIds,
   saving,
+  isOwner = true,
   onEntityTypeChange,
   onCategoryIdsChange,
   onSaveCategories,
@@ -45,10 +47,16 @@ export function CategoriesSection({
     >
       <FormFieldFrame
         label={LABELS.entityType}
+        hint={
+          !isOwner
+            ? "Legal entity structure can only be modified by the store owner."
+            : undefined
+        }
         className={vendorShopSettingsFormStyles.inputCol}
       >
         <Select
           value={entityType ?? undefined}
+          disabled={!isOwner}
           onValueChange={handleEntityTypeChange}
         >
           <SelectTrigger>

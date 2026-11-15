@@ -29,13 +29,15 @@ export function useRoleSurfaceGate(): UseRoleSurfaceGateResult {
   const router = useRouter();
   const authBootstrapped = useAuthStore((s) => s.authBootstrapped);
   const accessToken = useAuthStore((s) => s.accessToken);
-  const role = useAuthStore((s) => s.currentUser?.role);
+  const currentUser = useAuthStore((s) => s.currentUser);
+  const role = currentUser?.role;
+  const isImpersonating = Boolean(currentUser?.impersonatedBy);
 
   const authenticated = Boolean(accessToken && role);
   const surface = useMemo(() => surfaceForPath(pathname), [pathname]);
   const allowed = useMemo(
-    () => isPathAllowedForRole(pathname, role, authenticated),
-    [authenticated, pathname, role],
+    () => isPathAllowedForRole(pathname, role, authenticated, isImpersonating),
+    [authenticated, isImpersonating, pathname, role],
   );
 
   useEffect(() => {

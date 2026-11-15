@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Star } from "lucide-react";
+import { Star, Store } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
 import { OwnerActions } from "@/shared/components/actions/OwnerActions.component";
 import { ExpandableText } from "@/shared/components/display/ExpandableText.component";
@@ -73,6 +73,21 @@ export function MyReviewCard({ review }: { review: Review }) {
       />
       <ReviewMediaGallery media={shown.media} />
       <RevisionNote state={revision} />
+      {review.vendorResponse ? (
+        <div className={styles.sellerResponse}>
+          <p className={styles.sellerTitle}>
+            <Store className={styles.sellerIcon} aria-hidden />
+            {LABELS.sellerResponse}
+            {review.vendorRespondedAt ? (
+              <span className={styles.sellerDate}>
+                {" · "}
+                {formatOrderDate(review.vendorRespondedAt)}
+              </span>
+            ) : null}
+          </p>
+          <p className={styles.sellerBody}>{review.vendorResponse}</p>
+        </div>
+      ) : null}
     </li>
   );
 }

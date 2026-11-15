@@ -16,6 +16,9 @@ export interface VendorReturnRowViewModel {
   /** Picked up and not yet put back in stock: the vendor may restock it. */
   canRestock: boolean;
   restocked: boolean;
+  canDispute: boolean;
+  isDisputed: boolean;
+  disputeStatus: string | null;
 }
 
 function pickupLabelFor(row: ReturnRequest): string {
@@ -48,8 +51,16 @@ export function useVendorReturnsTablePresentation(returns: ReturnRequest[]) {
         status: row.status,
         statusLabel: RETURN_STATUS_LABEL[row.status] ?? row.status,
         images: imagesFor(row),
-        canRestock: Boolean(row.receivedAt) && !row.restockedAt,
+        canRestock:
+          Boolean(row.receivedAt) && !row.restockedAt && !row.disputedAt,
         restocked: Boolean(row.restockedAt),
+        canDispute:
+          (Boolean(row.receivedAt) ||
+            row.status === RETURN_STATUS.PICKUP_SCHEDULED) &&
+          !row.disputedAt &&
+          !row.restockedAt,
+        isDisputed: Boolean(row.disputedAt),
+        disputeStatus: row.disputeStatus ?? null,
       })),
     [returns],
   );

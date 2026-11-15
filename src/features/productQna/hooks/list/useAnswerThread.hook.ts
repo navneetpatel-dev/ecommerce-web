@@ -11,10 +11,12 @@ import { moreAnswersLabel } from "../../utils/productQna.utils";
 
 /** Bring an element to the top of the view (smoothly, unless reduced motion). */
 function scrollToStart(element: Element | null | undefined) {
-  element?.scrollIntoView({
-    behavior: motionSafeScrollBehavior(),
-    block: "start",
-  });
+  if (typeof element?.scrollIntoView === "function") {
+    element.scrollIntoView({
+      behavior: motionSafeScrollBehavior(),
+      block: "start",
+    });
+  }
 }
 
 /**

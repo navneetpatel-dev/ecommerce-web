@@ -1,7 +1,9 @@
 "use client";
 
 import { Store } from "lucide-react";
+import Link from "next/link";
 import { useVendorStorefrontPage } from "../../hooks/storefront/useVendorStorefrontPage.hook";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { MediaImage } from "@/shared/components/media/MediaImage.component";
 import { ProductGrid } from "@/features/products";
@@ -16,8 +18,14 @@ interface VendorStorefrontPageProps {
 }
 
 export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
+  const currentUser = useAuthStore((state) => state.currentUser);
   const { vendor, vendorLoading, vendorNotFound, products, productsLoading } =
     useVendorStorefrontPage(slug);
+
+  const isOwnMerchant = Boolean(
+    currentUser?.vendorId && vendor?.id && currentUser.vendorId === vendor.id,
+  );
+  const isKycPending = vendor?.kycComplete === false;
 
   if (vendorLoading) {
     return (
@@ -50,6 +58,28 @@ export function VendorStorefrontPage({ slug }: VendorStorefrontPageProps) {
 
   return (
     <div className={styles.pageRoot}>
+      {isOwnMerchant ? (
+        <div className="bg-primary/10 border-b border-primary/20 px-4 py-2.5 text-xs sm:text-sm flex flex-wrap items-center justify-between gap-2 text-primary font-medium">
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span>Store Preview Mode · Logged in as Merchant</span>
+          </div>
+          <Link
+            href={PATHS.vendor.overview}
+            className="underline hover:no-underline font-semibold"
+          >
+            Return to Vendor Dashboard →
+          </Link>
+        </div>
+      ) : null}
+
+      {isKycPending ? (
+        <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-2 text-xs sm:text-sm text-amber-800 dark:text-amber-300 text-center font-medium">
+          Verification in Progress: This store is currently undergoing merchant
+          verification. Checkout may be temporarily paused.
+        </div>
+      ) : null}
+
       {vendor.bannerUrl ? (
         <div className={styles.bannerContainer}>
           <MediaImage

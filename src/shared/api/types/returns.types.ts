@@ -31,6 +31,13 @@ export interface ReturnRequest {
   razorpayRefundAmount?: number;
   receivedAt?: string | null;
   restockedAt?: string | null;
+  disputeReason?: string | null;
+  disputeDescription?: string | null;
+  disputeEvidenceUrls?: string[];
+  disputedAt?: string | null;
+  disputeStatus?: "PENDING" | "UPHELD" | "REJECTED" | null;
+  disputeResolvedAt?: string | null;
+  disputeResolutionNotes?: string | null;
   resolvedAt: string | null;
   createdAt: string;
   productName: string | null;

@@ -46,7 +46,38 @@ export function useVendorReviewsPage() {
     setSubmitting(true);
     try {
       await reviewsApi.respond(reviewId, { response });
-      setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+      setReviews((prev) =>
+        prev.map((r) =>
+          r.id === reviewId
+            ? {
+                ...r,
+                vendorResponse: response.trim() || null,
+                vendorRespondedAt: response.trim()
+                  ? new Date().toISOString()
+                  : null,
+              }
+            : r,
+        ),
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleFlagReview = async (reviewId: string, reason: string) => {
+    setSubmitting(true);
+    try {
+      await reviewsApi.flag(reviewId, { reason });
+      setReviews((prev) =>
+        prev.map((r) =>
+          r.id === reviewId
+            ? {
+                ...r,
+                flaggedReason: reason.trim(),
+              }
+            : r,
+        ),
+      );
     } finally {
       setSubmitting(false);
     }
@@ -58,5 +89,6 @@ export function useVendorReviewsPage() {
     loadError,
     submitting,
     handleRespond,
+    handleFlagReview,
   };
 }

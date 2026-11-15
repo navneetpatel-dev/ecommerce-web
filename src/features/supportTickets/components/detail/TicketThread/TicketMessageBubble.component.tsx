@@ -2,12 +2,10 @@ import { Avatar, AvatarFallback } from "@/shared/components/ui/avatar";
 import { LABELS } from "@/shared/constants/labels";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
 import { cn } from "@/shared/utils/dom/cn";
+import { TICKET_SENDER_ROLE } from "@/shared/constants/statuses";
 import type { TicketMessage } from "../../../api/list/supportTickets.api";
 import { AttachmentThumbs } from "./TicketAttachmentThumbs.component";
-import {
-  initials,
-  isStaffRole,
-} from "../../../utils/detail/ticketThreadShared";
+import { initials } from "../../../utils/detail/ticketThreadShared";
 import { ticketThreadStyles } from "../../../styles/detail/ticketThread.styles";
 
 export function MessageBubble({
@@ -17,12 +15,23 @@ export function MessageBubble({
   message: TicketMessage;
   isOwn: boolean;
 }) {
+  const isVendorRole =
+    message.senderRole === TICKET_SENDER_ROLE.VENDOR ||
+    message.senderRole === TICKET_SENDER_ROLE.VENDOR_STAFF;
+  const isAdminRole =
+    !isVendorRole && message.senderRole !== TICKET_SENDER_ROLE.CUSTOMER;
+
+  const roleLabel = isVendorRole
+    ? "Seller"
+    : isAdminRole
+      ? "Platform Support"
+      : LABELS.ticketMessageCustomer;
+
   const displayName = isOwn
     ? LABELS.ticketMessageYou
-    : message.senderName ||
-      (isStaffRole(message.senderRole)
-        ? LABELS.ticketMessageSupport
-        : LABELS.ticketMessageCustomer);
+    : message.senderName
+      ? `${message.senderName} (${roleLabel})`
+      : roleLabel;
 
   return (
     <div

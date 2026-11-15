@@ -49,5 +49,7 @@ export interface QnaModerationItem {
   questionText: string | null;
   productName: string | null;
   authorName: string | null;
+  authorType?: "VENDOR" | "CUSTOMER";
+  vendorName?: string | null;
   submittedAt: string;
 }

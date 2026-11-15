@@ -2,13 +2,18 @@
 
 import { FormActions, FormStack } from "@/shared/components/forms";
 import { Button } from "@/shared/components/ui/button";
-import { LABELS } from "@/shared/constants/labels";
+import { LABELS, ROLES } from "@/shared/constants/labels";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import type { VendorEntityType } from "@/shared/constants/statuses";
-import type { VendorPayoutFrequency } from "../../../api/overview/vendor.api";
+import type {
+  VendorPayoutFrequency,
+  VendorBankDetails,
+} from "../../../api/overview/vendor.api";
 import { CategoriesSection } from "./CategoriesSection.component";
 import { UploadsSection } from "./UploadsSection.component";
 import { KycChecklistSection } from "./KycChecklistSection.component";
 import { FulfillmentSection } from "./FulfillmentSection.component";
+import { BankDetailsSection } from "./BankDetailsSection.component";
 import { vendorShopSettingsFormStyles } from "../../../styles/shop-settings/vendorShopSettingsForm.styles";
 
 interface VendorShopSettingsFormProps {
@@ -17,6 +22,7 @@ interface VendorShopSettingsFormProps {
   returnShippingFee: number | null;
   codEnabled: boolean;
   payoutFrequency: VendorPayoutFrequency | null;
+  bankDetails?: VendorBankDetails | null;
   logoUrl: string | null;
   bannerUrl: string | null;
   entityType: VendorEntityType | null;
@@ -27,6 +33,7 @@ interface VendorShopSettingsFormProps {
   onReturnShippingFeeChange: (value: number | null) => void;
   onCodEnabledChange: (value: boolean) => void;
   onPayoutFrequencyChange: (value: VendorPayoutFrequency | null) => void;
+  onBankDetailsChange?: (details: VendorBankDetails) => void;
   onLogoUploaded: (url: string) => void;
   onBannerUploaded: (url: string) => void;
   onEntityTypeChange: (value: VendorEntityType) => void;
@@ -42,6 +49,7 @@ export function VendorShopSettingsForm({
   returnShippingFee,
   codEnabled,
   payoutFrequency,
+  bankDetails,
   logoUrl,
   bannerUrl,
   entityType,
@@ -52,6 +60,7 @@ export function VendorShopSettingsForm({
   onReturnShippingFeeChange,
   onCodEnabledChange,
   onPayoutFrequencyChange,
+  onBankDetailsChange,
   onLogoUploaded,
   onBannerUploaded,
   onEntityTypeChange,
@@ -60,6 +69,9 @@ export function VendorShopSettingsForm({
   onSave,
   onClearOverride,
 }: VendorShopSettingsFormProps) {
+  const isOwner = useAuthStore(
+    (s) => s.currentUser?.role === ROLES.VENDOR_OWNER,
+  );
   return (
     <div className={vendorShopSettingsFormStyles.root}>
       <FormStack className={vendorShopSettingsFormStyles.stack}>
@@ -91,6 +103,7 @@ export function VendorShopSettingsForm({
           entityType={entityType}
           categoryIds={categoryIds}
           saving={saving}
+          isOwner={isOwner}
           onEntityTypeChange={onEntityTypeChange}
           onCategoryIdsChange={onCategoryIdsChange}
           onSaveCategories={onSaveCategories}
@@ -115,9 +128,16 @@ export function VendorShopSettingsForm({
           returnShippingFee={returnShippingFee}
           codEnabled={codEnabled}
           payoutFrequency={payoutFrequency}
+          disabled={!isOwner}
           onReturnShippingFeeChange={onReturnShippingFeeChange}
           onCodEnabledChange={onCodEnabledChange}
           onPayoutFrequencyChange={onPayoutFrequencyChange}
+        />
+
+        <BankDetailsSection
+          bankDetails={bankDetails ?? null}
+          onChange={onBankDetailsChange ?? (() => {})}
+          isOwner={isOwner}
         />
 
         <FormActions leading={message}>

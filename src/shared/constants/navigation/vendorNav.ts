@@ -104,15 +104,25 @@ export const VENDOR_NAV = [
       PERMISSIONS.PAYOUT_VIEW,
     ] as PermissionKey[],
   },
+  {
+    href: PATHS.vendor.team,
+    label: "Team",
+    permissions: [PERMISSIONS.PAYOUT_VIEW] as PermissionKey[],
+  },
 ] as const;
 
 export function vendorPermissionsForPath(
   pathname: string,
 ): PermissionKey | PermissionKey[] {
+  const normalized =
+    pathname.endsWith("/") && pathname.length > 1
+      ? pathname.slice(0, -1)
+      : pathname;
   const match = VENDOR_NAV.find(
-    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
+    (item) =>
+      normalized === item.href || normalized.startsWith(`${item.href}/`),
   );
-  if (!match) return PERMISSIONS.VENDOR_MANAGE;
+  if (!match) return [PERMISSIONS.PRODUCT_UPDATE, PERMISSIONS.SUBORDER_MANAGE];
   return match.permissions.length === 1
     ? match.permissions[0]!
     : [...match.permissions];

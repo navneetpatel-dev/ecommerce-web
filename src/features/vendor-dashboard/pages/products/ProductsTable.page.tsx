@@ -19,9 +19,11 @@ export function ProductsTable() {
   return (
     <RequirePermission permission={[...page.permission]}>
       <>
-        <div className={vendorPagesStyles.headerActions}>
-          <VendorBulkImportDialog onImported={handleImported} />
-        </div>
+        {page.tableViewProps.onAddProduct ? (
+          <div className={vendorPagesStyles.headerActions}>
+            <VendorBulkImportDialog onImported={handleImported} />
+          </div>
+        ) : null}
         <ProductsTableView {...page.tableViewProps} />
         <VendorProductFormDialog {...page.formDialogProps} />
         <StatusDialog {...page.deleteDialogProps} />

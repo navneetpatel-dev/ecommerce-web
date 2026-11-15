@@ -12,6 +12,13 @@ import type { AdminListPageModel } from "../../types/shared/adminListPage.types"
 
 /** Words for the table; the raw kind / submission stay on the row for the actions. */
 function toRow(item: QnaModerationItem) {
+  const isVendor = item.authorType === "VENDOR";
+  const authorBadge = isVendor
+    ? item.vendorName
+      ? `${item.authorName} (Verified Seller: ${item.vendorName})`
+      : `${item.authorName} (Verified Seller)`
+    : item.authorName;
+
   return {
     ...item,
     rawKind: item.kind,
@@ -20,6 +27,7 @@ function toRow(item: QnaModerationItem) {
       item.kind === "ANSWER" ? LABELS.qnaKindAnswer : LABELS.qnaKindQuestion,
     submission:
       item.submission === "EDIT" ? LABELS.submissionEdit : LABELS.submissionNew,
+    authorName: authorBadge,
   };
 }
 

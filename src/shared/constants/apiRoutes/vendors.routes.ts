@@ -20,6 +20,8 @@ export const vendorsRoutes = {
     `/api/vendors/document-requirements${query ? `?${query}` : ""}`,
   meKycChecklist: "/api/vendors/me/kyc-checklist",
   kycChecklist: (id: string) => `/api/vendors/${id}/kyc-checklist`,
+  meStaff: "/api/vendors/me/staff",
+  removeStaff: (userId: string) => `/api/vendors/me/staff/${userId}`,
 } as const;
 
 export const vendorDocsRoutes = {

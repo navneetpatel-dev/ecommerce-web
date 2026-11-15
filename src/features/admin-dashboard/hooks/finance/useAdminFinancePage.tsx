@@ -48,6 +48,11 @@ export function useAdminFinancePage(): AdminFinancePageModel {
           <div className={adminDataListViewStyles.rowActionsEndWrap}>
             <AdminMarkPayoutPaidAction
               payoutId={String(row.id)}
+              bankDetails={
+                row.bankDetails as Parameters<
+                  typeof AdminMarkPayoutPaidAction
+                >[0]["bankDetails"]
+              }
               onDone={reload}
             />
             <AdminConfirmAction

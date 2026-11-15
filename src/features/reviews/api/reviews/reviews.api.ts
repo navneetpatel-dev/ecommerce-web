@@ -102,4 +102,6 @@ export const reviewsApi = {
   },
   respond: (id: string, body: { response: string }) =>
     apiClient.patch<Review>(API.reviews.respond(id), body),
+  flag: (id: string, body: { reason: string }) =>
+    apiClient.post<Review>(`${API.reviews.create}/${id}/flag`, body),
 };

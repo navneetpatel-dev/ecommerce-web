@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import {
   vendorApi,
   type VendorPayoutFrequency,
+  type VendorBankDetails,
 } from "../../../api/overview/vendor.api";
-import { LABELS } from "@/shared/constants/labels";
+import { LABELS, ROLES } from "@/shared/constants/labels";
 import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import type { VendorEntityType } from "@/shared/constants/statuses";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
@@ -18,6 +20,7 @@ export interface ShopSettingsSaveOverride {
   categoryIds?: string[];
   codEnabled?: boolean;
   payoutFrequency?: VendorPayoutFrequency | null;
+  bankDetails?: VendorBankDetails | null;
 }
 
 interface UseVendorShopSettingsSaveOptions {
@@ -26,6 +29,7 @@ interface UseVendorShopSettingsSaveOptions {
   returnShippingFee: number | null;
   codEnabled: boolean;
   payoutFrequency: VendorPayoutFrequency | null;
+  bankDetails?: VendorBankDetails | null;
   logoUrl: string | null;
   bannerUrl: string | null;
   applyShop: (shop: Awaited<ReturnType<typeof vendorApi.getMyShop>>) => void;
@@ -58,6 +62,9 @@ export function useVendorShopSettingsSave(
   const save = (override?: ShopSettingsSaveOverride) => {
     setSaving(true);
     setMessage(null);
+    const isOwner =
+      useAuthStore.getState().currentUser?.role === ROLES.VENDOR_OWNER;
+
     const nextEntityType =
       override && "entityType" in override
         ? override.entityType
@@ -67,47 +74,57 @@ export function useVendorShopSettingsSave(
         ? override.categoryIds
         : options.categoryIds;
 
+    const payload: Record<string, unknown> = {
+      logoUrl:
+        override && "logoUrl" in override ? override.logoUrl : options.logoUrl,
+      bannerUrl:
+        override && "bannerUrl" in override
+          ? override.bannerUrl
+          : options.bannerUrl,
+      ...(nextCategoryIds && nextCategoryIds.length > 0
+        ? { categoryIds: nextCategoryIds }
+        : {}),
+    };
+
+    if (isOwner) {
+      payload.returnShippingFee =
+        override && "returnShippingFee" in override
+          ? override.returnShippingFee
+          : options.returnShippingFee;
+      payload.codEnabled =
+        override && "codEnabled" in override
+          ? override.codEnabled
+          : options.codEnabled;
+      payload.payoutFrequency =
+        override && "payoutFrequency" in override
+          ? override.payoutFrequency
+          : options.payoutFrequency;
+      if (nextEntityType) payload.entityType = nextEntityType;
+      const nextBank =
+        override && "bankDetails" in override
+          ? override.bankDetails
+          : options.bankDetails;
+      if (nextBank !== undefined) payload.bankDetails = nextBank;
+    }
+
+    const isCat = Boolean(
+      override && ("categoryIds" in override || "entityType" in override),
+    );
+
     vendorApi
-      .updateMyShop({
-        returnShippingFee:
-          override && "returnShippingFee" in override
-            ? override.returnShippingFee
-            : options.returnShippingFee,
-        codEnabled:
-          override && "codEnabled" in override
-            ? override.codEnabled
-            : options.codEnabled,
-        payoutFrequency:
-          override && "payoutFrequency" in override
-            ? override.payoutFrequency
-            : options.payoutFrequency,
-        logoUrl:
-          override && "logoUrl" in override
-            ? override.logoUrl
-            : options.logoUrl,
-        bannerUrl:
-          override && "bannerUrl" in override
-            ? override.bannerUrl
-            : options.bannerUrl,
-        ...(nextEntityType ? { entityType: nextEntityType } : {}),
-        ...(nextCategoryIds && nextCategoryIds.length > 0
-          ? { categoryIds: nextCategoryIds }
-          : {}),
-      })
+      .updateMyShop(payload)
       .then((shop) => {
         options.applyShop(shop);
         setChecklistKey((key) => key + 1);
         setMessage(
-          override && ("categoryIds" in override || "entityType" in override)
-            ? LABELS.categoriesSaved
-            : LABELS.vendorShopSettingsSaved,
+          isCat ? LABELS.categoriesSaved : LABELS.vendorShopSettingsSaved,
         );
       })
       .catch((err) =>
         setMessage(
           getApiErrorMessage(
             err,
-            override && ("categoryIds" in override || "entityType" in override)
+            isCat
               ? LABELS.couldNotSaveCategories
               : LABELS.couldNotSaveVendorShopSettings,
           ),

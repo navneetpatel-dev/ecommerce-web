@@ -12,8 +12,9 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
-import { LABELS } from "@/shared/constants/labels";
+import { LABELS, ROLES } from "@/shared/constants/labels";
 import { cn } from "@/shared/utils/dom/cn";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { PRODUCT_FIELD_LIMITS } from "@/features/products";
 import type {
   ProductListingFormField,
@@ -40,6 +41,11 @@ export function ProductDetailsSection({
   patchValues,
   priceHint,
 }: ProductDetailsSectionProps) {
+  const isStaff = useAuthStore(
+    (state) => state.currentUser?.role === ROLES.VENDOR_STAFF,
+  );
+  const isPriceDisabled = disabled || isStaff;
+
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     patchValues({ name: event.target.value });
   };
@@ -85,7 +91,11 @@ export function ProductDetailsSection({
       </FormFieldFrame>
       <FormFieldFrame
         label={LABELS.productPriceExclGst}
-        hint={priceHint}
+        hint={
+          isStaff
+            ? "Base product pricing is configured exclusively by the store owner."
+            : priceHint
+        }
         required
         error={getError("price")}
       >
@@ -96,13 +106,17 @@ export function ProductDetailsSection({
           placeholder={LABELS.productPriceExclGst}
           value={values.price === "" ? undefined : Number(values.price)}
           error={Boolean(getError("price"))}
-          disabled={disabled}
+          disabled={isPriceDisabled}
           onChange={handlePriceChange}
         />
       </FormFieldFrame>
       <FormFieldFrame
         label={LABELS.productMrpInclGst}
-        hint={LABELS.productMrpHint}
+        hint={
+          isStaff
+            ? "MRP is configured exclusively by the store owner."
+            : LABELS.productMrpHint
+        }
         error={getError("compareAtPrice")}
       >
         <NumberInput
@@ -116,7 +130,7 @@ export function ProductDetailsSection({
               : Number(values.compareAtPrice)
           }
           error={Boolean(getError("compareAtPrice"))}
-          disabled={disabled}
+          disabled={isPriceDisabled}
           onChange={handleCompareAtPriceChange}
         />
       </FormFieldFrame>

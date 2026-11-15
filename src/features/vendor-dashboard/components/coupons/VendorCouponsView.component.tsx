@@ -14,8 +14,9 @@ import {
 } from "@/features/admin-dashboard";
 import { couponsApi } from "@/features/coupons";
 import { vendorCouponKeys } from "../../api/coupons/vendor-coupons.queries";
-import { LABELS } from "@/shared/constants/labels";
+import { LABELS, ROLES } from "@/shared/constants/labels";
 import { COUPON_STATUS } from "@/shared/constants/statuses";
+import { useAuthStore } from "@/shared/stores/auth/auth.store";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
@@ -67,12 +68,30 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     onUpdateStatus,
   } = props;
 
+  const isOwner = useAuthStore(
+    (s) => s.currentUser?.role === ROLES.VENDOR_OWNER,
+  );
   const columns = buildVendorCouponColumns();
 
   const renderActions = (row: Coupon) => {
     const setStatus = (status: Coupon["status"]) => () =>
       onUpdateStatus(row, status);
     const openAnalytics = () => setAnalyticsId(row.id);
+
+    if (!isOwner) {
+      return (
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className={tableMenuButtonClass("neutral")}
+          onClick={openAnalytics}
+        >
+          <BarChart2 strokeWidth={2.25} aria-hidden />
+          <span>{LABELS.viewAnalytics}</span>
+        </Button>
+      );
+    }
 
     return (
       <>
@@ -146,6 +165,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
         formLevelError={formLevelError}
         onSubmit={onSubmit}
         vendorId={vendorId}
+        canManage={isOwner}
       />
 
       <DataTable

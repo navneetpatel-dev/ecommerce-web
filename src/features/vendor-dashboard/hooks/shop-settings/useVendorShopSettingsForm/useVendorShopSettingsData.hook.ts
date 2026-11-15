@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   vendorApi,
   type VendorPayoutFrequency,
+  type VendorBankDetails,
 } from "../../../api/overview/vendor.api";
 import { LABELS } from "@/shared/constants/labels";
 import type { VendorEntityType } from "@/shared/constants/statuses";
@@ -23,6 +24,9 @@ export function useVendorShopSettingsData() {
   const [businessName, setBusinessName] = useState("");
   const [entityType, setEntityType] = useState<VendorEntityType | null>(null);
   const [categoryIds, setCategoryIds] = useState<string[]>([]);
+  const [bankDetails, setBankDetails] = useState<VendorBankDetails | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -36,6 +40,7 @@ export function useVendorShopSettingsData() {
     setBannerUrl(shop.bannerUrl ?? null);
     setEntityType((shop.entityType as VendorEntityType | null) ?? null);
     setCategoryIds(shop.categoryIds ?? []);
+    setBankDetails(shop.bankDetails ?? null);
   }, []);
 
   useEffect(() => {
@@ -60,6 +65,7 @@ export function useVendorShopSettingsData() {
     bannerUrl,
     entityType,
     categoryIds,
+    bankDetails,
     loading,
     loadError,
     applyShop,
@@ -70,5 +76,6 @@ export function useVendorShopSettingsData() {
     setBannerUrl,
     setEntityType,
     setCategoryIds,
+    setBankDetails,
   };
 }

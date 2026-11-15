@@ -8,6 +8,7 @@ import { LABELS } from "@/shared/constants/labels";
 
 interface VendorReviewRespondDialogProps {
   open: boolean;
+  initialResponse?: string;
   submitting?: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (response: string) => void;
@@ -16,11 +17,12 @@ interface VendorReviewRespondDialogProps {
 /** In-app review reply dialog — replaces window.prompt. */
 export function VendorReviewRespondDialog({
   open,
+  initialResponse = "",
   submitting = false,
   onOpenChange,
   onSubmit,
 }: VendorReviewRespondDialogProps) {
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState(initialResponse);
 
   const close = () => {
     if (submitting) return;
@@ -35,6 +37,7 @@ export function VendorReviewRespondDialog({
       setResponse("");
       return;
     }
+    setResponse(initialResponse ?? "");
     onOpenChange(true);
   };
   const handleResponseChange = (event: ChangeEvent<HTMLTextAreaElement>) =>

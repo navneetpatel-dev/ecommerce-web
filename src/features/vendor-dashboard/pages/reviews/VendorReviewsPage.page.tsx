@@ -6,8 +6,14 @@ import { VendorReviewsView } from "../../components/reviews/VendorReviewsView.co
 import { useVendorReviewsPage } from "../../hooks/reviews/useVendorReviewsPage.hook";
 
 export function VendorReviewsPage() {
-  const { reviews, isLoading, loadError, submitting, handleRespond } =
-    useVendorReviewsPage();
+  const {
+    reviews,
+    isLoading,
+    loadError,
+    submitting,
+    handleRespond,
+    handleFlagReview,
+  } = useVendorReviewsPage();
 
   return (
     <RequirePermission permission={PERMISSIONS.REVIEW_RESPOND}>
@@ -17,6 +23,7 @@ export function VendorReviewsPage() {
         loadError={loadError}
         submitting={submitting}
         onRespond={handleRespond}
+        onFlag={handleFlagReview}
       />
     </RequirePermission>
   );

@@ -9,6 +9,8 @@ interface SubOrderCardHeaderProps {
   vendorId?: string | null;
   itemCount: number;
   status: SubOrder["status"];
+  cancellationReason?: string | null;
+  cancelledByRole?: string | null;
   className?: string;
 }
 
@@ -17,23 +19,50 @@ export function SubOrderCardHeader({
   vendorId,
   itemCount,
   status,
+  cancellationReason,
+  cancelledByRole,
   className,
 }: SubOrderCardHeaderProps) {
+  const isCancelled = status === "CANCELLED";
+  const actorLabel =
+    cancelledByRole === "VENDOR"
+      ? "Seller"
+      : cancelledByRole === "ADMIN"
+        ? "Support"
+        : cancelledByRole === "CUSTOMER"
+          ? "Customer"
+          : null;
+
   return (
-    <VendorGroupHeader
-      vendorName={vendorName}
-      vendorId={vendorId}
-      count={itemCount}
-      as="h2"
-      className={className}
-      trailing={
-        <div className={SUB_ORDER_CARD_STYLES.shipmentBadgeRow}>
-          <span className={SUB_ORDER_CARD_STYLES.shipmentLabel}>
-            {LABELS.shipment}
+    <div>
+      <VendorGroupHeader
+        vendorName={vendorName}
+        vendorId={vendorId}
+        count={itemCount}
+        as="h2"
+        className={className}
+        trailing={
+          <div className={SUB_ORDER_CARD_STYLES.shipmentBadgeRow}>
+            <span className={SUB_ORDER_CARD_STYLES.shipmentLabel}>
+              {LABELS.shipment}
+            </span>
+            <StatusBadge status={status} />
+          </div>
+        }
+      />
+      {isCancelled && (actorLabel || cancellationReason) && (
+        <div className="mt-1 mb-2 rounded bg-amber-50 px-2.5 py-1.5 text-xs text-amber-900 border border-amber-200">
+          <span className="font-semibold">
+            {actorLabel ? `Cancelled by ${actorLabel}` : "Cancelled"}
           </span>
-          <StatusBadge status={status} />
+          {cancellationReason && (
+            <span className="text-amber-800">
+              {" "}
+              · Reason: {cancellationReason}
+            </span>
+          )}
         </div>
-      }
-    />
+      )}
+    </div>
   );
 }

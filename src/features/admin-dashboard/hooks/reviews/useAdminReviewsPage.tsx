@@ -12,12 +12,19 @@ import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
 /** A queue row: "New" or "Edit of approved" in words, plus a flag for the actions. */
-function toModerationRow(review: Review & { submission?: string }) {
+function toModerationRow(
+  review: Review & { submission?: string; flaggedReason?: string | null },
+) {
   const isEdit = review.submission === "EDIT";
+  const submission = review.flaggedReason
+    ? `⚠️ Flagged: ${review.flaggedReason}`
+    : isEdit
+      ? LABELS.submissionEdit
+      : LABELS.submissionNew;
   return {
     ...review,
     isEdit,
-    submission: isEdit ? LABELS.submissionEdit : LABELS.submissionNew,
+    submission,
   };
 }
 
@@ -77,6 +84,19 @@ export function useAdminReviewsPage(): AdminListPageModel {
             )}
             onConfirm={rejectReview}
           />
+          {row.vendorResponse ? (
+            <AdminConfirmAction
+              label="Clear Seller Response"
+              dialogVariant="danger"
+              title="Remove Seller Response"
+              description={`Are you sure you want to remove the seller's response on this review for "${name}"?`}
+              onConfirm={() =>
+                reviewsApi
+                  .respond(String(row.id), { response: "" })
+                  .then(reload)
+              }
+            />
+          ) : null}
         </>
       );
     },
@@ -96,6 +116,7 @@ export function useAdminReviewsPage(): AdminListPageModel {
       "title",
       "body",
       "previousBody",
+      "vendorResponse",
       "createdAt",
     ],
   };

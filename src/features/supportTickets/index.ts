@@ -10,6 +10,7 @@ export { CustomerTicketsPage } from "./pages/customer/CustomerTicketsPage.page";
 export { CustomerNewTicketPage } from "./pages/customer/CustomerNewTicketPage.page";
 export { CustomerTicketDetailPage } from "./pages/customer/CustomerTicketDetailPage.page";
 export { VendorTicketsPage } from "./pages/vendor/VendorTicketsPage.page";
+export { VendorNewTicketPage } from "./pages/vendor/VendorNewTicketPage.page";
 export { VendorTicketDetailPage } from "./pages/vendor/VendorTicketDetailPage.page";
 export { AdminTicketsPage } from "./pages/admin/AdminTicketsPage.page";
 export { AdminTicketDetailPage } from "./pages/admin/AdminTicketDetailPage.page";

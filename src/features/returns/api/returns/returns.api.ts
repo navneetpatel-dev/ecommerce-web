@@ -70,4 +70,17 @@ export const returnsApi = {
   /** Puts a picked-up return's units back into sellable stock (once; never automatic). */
   restock: (id: string) =>
     apiClient.post<ReturnRequest>(API.returns.restock(id)),
+  dispute: (
+    id: string,
+    body: { reason: string; description: string; evidenceUrls?: string[] },
+  ) =>
+    apiClient.post<ReturnRequest>(`${API.returns.create}/${id}/dispute`, body),
+  resolveDispute: (
+    id: string,
+    body: { resolution: "UPHELD" | "REJECTED"; notes: string },
+  ) =>
+    apiClient.post<ReturnRequest>(
+      `${API.returns.create}/${id}/resolve-dispute`,
+      body,
+    ),
 };

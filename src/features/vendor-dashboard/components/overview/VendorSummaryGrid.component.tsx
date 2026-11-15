@@ -11,8 +11,14 @@ interface VendorSummaryGridProps {
 export function VendorSummaryGrid({ summary }: VendorSummaryGridProps) {
   const todayOrders = summary?.todayOrders ?? 0;
   const pendingShipments = summary?.pendingShipments ?? 0;
-  const monthRevenue = formatInr(summary?.monthRevenue);
-  const pendingPayouts = formatInr(summary?.pendingPayouts);
+  const hasFinancialAccess =
+    summary?.monthRevenue != null && summary?.pendingPayouts != null;
+  const monthRevenue = hasFinancialAccess
+    ? formatInr(summary.monthRevenue)
+    : null;
+  const pendingPayouts = hasFinancialAccess
+    ? formatInr(summary.pendingPayouts)
+    : null;
 
   return (
     <div className={vendorSummaryGridStyles.grid}>
@@ -22,17 +28,21 @@ export function VendorSummaryGrid({ summary }: VendorSummaryGridProps) {
         value={pendingShipments}
         icon={Truck}
       />
-      <SummaryCard
-        title="Month GMV"
-        value={monthRevenue}
-        icon={Banknote}
-        valueClassName={vendorSummaryGridStyles.revenueValue}
-      />
-      <SummaryCard
-        title="Pending Payouts"
-        value={pendingPayouts}
-        icon={Clock}
-      />
+      {hasFinancialAccess ? (
+        <>
+          <SummaryCard
+            title="Month GMV"
+            value={monthRevenue ?? "—"}
+            icon={Banknote}
+            valueClassName={vendorSummaryGridStyles.revenueValue}
+          />
+          <SummaryCard
+            title="Pending Payouts"
+            value={pendingPayouts ?? "—"}
+            icon={Clock}
+          />
+        </>
+      ) : null}
     </div>
   );
 }
