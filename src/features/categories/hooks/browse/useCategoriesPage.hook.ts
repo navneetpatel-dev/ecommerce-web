@@ -8,9 +8,11 @@ import {
 } from "../../utils/browse/categoryHelpers";
 import type { Category } from "@/shared/api/types";
 
+const EMPTY_CATEGORIES: Category[] = [];
+
 export function useCategoriesPage() {
   const categoriesQuery = useCategories();
-  const categories = categoriesQuery.data ?? [];
+  const categories = categoriesQuery.data ?? EMPTY_CATEGORIES;
   const settled = categoriesQuery.isSuccess || categoriesQuery.isError;
 
   const roots = useMemo(() => getRootCategories(categories), [categories]);
