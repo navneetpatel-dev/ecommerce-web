@@ -34,7 +34,10 @@ export function useAdminCouponsPage() {
     setTab(next);
     setPage(1);
   };
-  const onSubmit = (data: CouponFormInput) => createCoupon.mutate(data);
+  const onSubmit = (data: CouponFormInput) => {
+    if (createCoupon.isPending) return;
+    createCoupon.mutate(data);
+  };
 
   return {
     tab,

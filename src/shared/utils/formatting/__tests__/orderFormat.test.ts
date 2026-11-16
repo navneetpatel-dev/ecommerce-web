@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  countOrderItems,
   formatInr,
   formatInrAmount,
   formatInrCompact,
   formatInrExact,
+  formatOrderDate,
 } from "../orderFormat";
 
 describe("INR formatters", () => {
@@ -24,5 +26,26 @@ describe("INR formatters", () => {
       expect(formatInrExact(missing)).toBe("—");
       expect(formatInrCompact(missing)).toBe("—");
     }
+  });
+
+  it("formatOrderDate returns — for empty, null, or invalid dates", () => {
+    expect(formatOrderDate(undefined)).toBe("—");
+    expect(formatOrderDate(null)).toBe("—");
+    expect(formatOrderDate("")).toBe("—");
+    expect(formatOrderDate("invalid-date-string")).toBe("—");
+    expect(formatOrderDate("2026-03-15T10:30:00.000Z")).toContain("2026");
+  });
+
+  it("countOrderItems safely handles empty, null, or missing items", () => {
+    expect(countOrderItems(undefined)).toBe(0);
+    expect(countOrderItems(null)).toBe(0);
+    expect(countOrderItems({})).toBe(0);
+    expect(countOrderItems({ subOrders: [] })).toBe(0);
+    expect(countOrderItems({ subOrders: [null, { items: undefined }] })).toBe(
+      0,
+    );
+    expect(
+      countOrderItems({ subOrders: [{ items: [{}, {}] }, { items: [{}] }] }),
+    ).toBe(3);
   });
 });

@@ -42,6 +42,7 @@ export function useWalletRechargePanel(
 
   const startRecharge = useCallback(
     async (amount: number) => {
+      if (isBusy) return;
       clearMessages();
       setPresetError(null);
       const preview = await walletApi.previewRecharge(amount);
@@ -55,7 +56,7 @@ export function useWalletRechargePanel(
       }
       await recharge(amount);
     },
-    [clearMessages, limits, recharge],
+    [clearMessages, isBusy, limits, recharge],
   );
 
   const onCustomAmountChange = (value: number | undefined) => {

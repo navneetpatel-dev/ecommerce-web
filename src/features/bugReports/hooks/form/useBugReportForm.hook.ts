@@ -95,6 +95,7 @@ export function useBugReportForm(params: UseBugReportFormParams) {
   );
 
   const onSubmit = form.handleSubmit(async (values) => {
+    if (create.isPending) return;
     setClientError(null);
     create.reset();
     // Full-schema validation incl. attachment classification (Rule 16).

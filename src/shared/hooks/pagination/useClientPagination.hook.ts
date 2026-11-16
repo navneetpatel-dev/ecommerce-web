@@ -9,12 +9,16 @@ export function useClientPagination<T>(
   pageSize = DEFAULT_PAGE_LIMIT,
 ) {
   const [page, setPage] = useState(1);
-  const safeSize = Math.max(1, pageSize);
-  const total = rows.length;
+  const safeSize = Number.isFinite(pageSize)
+    ? Math.max(1, Math.floor(pageSize))
+    : DEFAULT_PAGE_LIMIT;
+  const total = Array.isArray(rows) ? rows.length : 0;
   const totalPages = Math.max(1, Math.ceil(total / safeSize));
-  const currentPage = Math.min(Math.max(1, page), totalPages);
+  const validPage = Number.isFinite(page) ? Math.floor(page) : 1;
+  const currentPage = Math.min(Math.max(1, validPage), totalPages);
 
   const pageRows = useMemo(() => {
+    if (!Array.isArray(rows)) return [];
     const start = (currentPage - 1) * safeSize;
     return rows.slice(start, start + safeSize);
   }, [rows, currentPage, safeSize]);
@@ -23,7 +27,10 @@ export function useClientPagination<T>(
   const to = Math.min(currentPage * safeSize, total);
 
   const handlePageChange = (nextPage: number) => {
-    setPage(nextPage);
+    const safeNext = Number.isFinite(nextPage)
+      ? Math.min(Math.max(1, Math.floor(nextPage)), totalPages)
+      : 1;
+    setPage(safeNext);
     scrollPageTopOnPageChange();
   };
 

@@ -49,6 +49,7 @@ export function useSubmitTicket(props: SubmitTicketOptions) {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (create.isPending) return;
     setApiError(null);
     clearAll();
 

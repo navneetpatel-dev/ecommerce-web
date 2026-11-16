@@ -19,6 +19,7 @@ function isIdLikeKey(key: string): boolean {
 
 /** Resolve `a.b.c` paths on admin list rows. */
 export function getAdminCellValue(row: AdminDataRow, key: string): unknown {
+  if (row == null || typeof row !== "object") return undefined;
   if (!key.includes(".")) return row[key];
   return key.split(".").reduce<unknown>((acc, part) => {
     if (acc == null || typeof acc !== "object") return undefined;
@@ -68,6 +69,7 @@ export function shouldInferAdminColumn(key: string): boolean {
  * skip that and long text (a review, an answer) would spill into the next column.
  */
 export function adminCellText(row: AdminDataRow, columnKey: string): string {
+  if (row == null || typeof row !== "object") return "—";
   const value = getAdminCellValue(row, columnKey);
   if (columnKey === "id" && typeof value === "string" && value.trim()) {
     const humanName =

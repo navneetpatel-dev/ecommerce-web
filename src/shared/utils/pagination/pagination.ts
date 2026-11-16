@@ -9,19 +9,23 @@ export function getPaginationItems(
   totalPages: number,
   siblingCount = 1,
 ): PaginationItem[] {
-  if (totalPages < 1) return [];
-  if (totalPages === 1) return [1];
+  if (!Number.isFinite(totalPages) || totalPages < 1) return [];
+  const safePage = Number.isFinite(currentPage)
+    ? Math.max(1, Math.floor(currentPage))
+    : 1;
+  const safeTotalPages = Math.floor(totalPages);
+  if (safeTotalPages === 1) return [1];
 
   const totalNumbers = siblingCount * 2 + 5;
 
-  if (totalPages <= totalNumbers) {
-    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  if (safeTotalPages <= totalNumbers) {
+    return Array.from({ length: safeTotalPages }, (_, index) => index + 1);
   }
 
-  const leftSibling = Math.max(currentPage - siblingCount, 1);
-  const rightSibling = Math.min(currentPage + siblingCount, totalPages);
+  const leftSibling = Math.max(safePage - siblingCount, 1);
+  const rightSibling = Math.min(safePage + siblingCount, safeTotalPages);
   const showLeftEllipsis = leftSibling > 2;
-  const showRightEllipsis = rightSibling < totalPages - 1;
+  const showRightEllipsis = rightSibling < safeTotalPages - 1;
 
   if (!showLeftEllipsis && showRightEllipsis) {
     const leftCount = 3 + siblingCount * 2;
@@ -29,14 +33,14 @@ export function getPaginationItems(
       { length: leftCount },
       (_, index) => index + 1,
     );
-    return [...leftRange, "ellipsis", totalPages];
+    return [...leftRange, "ellipsis", safeTotalPages];
   }
 
   if (showLeftEllipsis && !showRightEllipsis) {
     const rightCount = 3 + siblingCount * 2;
     const rightRange = Array.from(
       { length: rightCount },
-      (_, index) => totalPages - rightCount + index + 1,
+      (_, index) => safeTotalPages - rightCount + index + 1,
     );
     return [1, "ellipsis", ...rightRange];
   }
@@ -46,5 +50,5 @@ export function getPaginationItems(
     (_, index) => leftSibling + index,
   );
 
-  return [1, "ellipsis", ...middleRange, "ellipsis", totalPages];
+  return [1, "ellipsis", ...middleRange, "ellipsis", safeTotalPages];
 }

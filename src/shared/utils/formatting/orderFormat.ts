@@ -57,8 +57,11 @@ function trimCompact(value: number, digits: number) {
   return value.toFixed(digits).replace(/\.0$/, "");
 }
 
-export function formatOrderDate(value: string | Date) {
-  return new Date(value).toLocaleDateString("en-IN", {
+export function formatOrderDate(value?: string | Date | null) {
+  if (!value) return "—";
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+  return date.toLocaleDateString("en-IN", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -69,11 +72,11 @@ export function shortOrderId(id: string) {
   return id.slice(0, 8);
 }
 
-export function countOrderItems(order: {
-  subOrders?: Array<{ items?: unknown[] }>;
-}) {
-  return (order.subOrders ?? []).reduce(
-    (sum, so) => sum + (so.items?.length ?? 0),
+export function countOrderItems(
+  order?: { subOrders?: Array<{ items?: unknown[] } | null> } | null,
+) {
+  return (order?.subOrders ?? []).reduce(
+    (sum, so) => sum + (so?.items?.length ?? 0),
     0,
   );
 }

@@ -39,6 +39,17 @@ describe("sanitizeUserFacingMessage", () => {
       "Try again",
     );
   });
+  it("sanitizes raw html and proxy gateway error pages to fallback", () => {
+    expect(
+      sanitizeUserFacingMessage(
+        "<html><head><title>502 Bad Gateway</title></head><body>502 Bad Gateway nginx</body></html>",
+        "Something went wrong",
+      ),
+    ).toBe("Something went wrong");
+    expect(
+      sanitizeUserFacingMessage("504 Gateway Time-out", "Something went wrong"),
+    ).toBe("Something went wrong");
+  });
 });
 
 describe("apiErrorFromFailureBody", () => {
@@ -82,6 +93,21 @@ describe("getApiErrorMessage", () => {
       email: ["Invalid credentials"],
     });
     expect(getApiErrorMessage(err, "fallback")).toBe("Invalid credentials");
+  });
+
+  it("maps INVALID_RESPONSE and EMPTY_RESPONSE to unexpectedError label", () => {
+    const invalidErr = new ApiError(
+      "INVALID_RESPONSE",
+      "<html>502 Bad Gateway</html>",
+    );
+    expect(getApiErrorMessage(invalidErr, "fallback")).toBe(
+      LABELS.unexpectedError,
+    );
+
+    const emptyErr = new ApiError("EMPTY_RESPONSE", "Empty response (500)");
+    expect(getApiErrorMessage(emptyErr, "fallback")).toBe(
+      LABELS.unexpectedError,
+    );
   });
 });
 

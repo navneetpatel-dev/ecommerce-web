@@ -85,7 +85,14 @@ export function usePlaceOrderWithRazorpay() {
   const handleOrderPlaced = useResetCheckoutOnOrderPlaced(onOrderPlaced);
 
   const handlePlaceOrder = async (method: string) => {
-    if (!addressId || !quote || isQuoteLoading || isQuoteError) return;
+    const blocked =
+      !addressId ||
+      !quote ||
+      isQuoteLoading ||
+      isQuoteError ||
+      paymentPhase !== "idle" ||
+      placeOrder.isPending;
+    if (blocked) return;
     resetNotice();
     await awaitPendingRestores();
 

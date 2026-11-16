@@ -41,6 +41,7 @@ export function useVendorRegisterPage() {
     error: formLevelError,
     isPending: register.isPending,
     onSubmit: (data: VendorRegisterInput) => {
+      if (register.isPending) return;
       if (!requireAuth(LABELS.loginToContinueNotice)) return;
       register.mutate(data);
     },

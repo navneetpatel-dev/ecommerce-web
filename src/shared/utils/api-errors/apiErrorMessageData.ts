@@ -64,6 +64,8 @@ export const API_ERROR_LABEL_KEYS: Partial<
   ITEM_MUST_BE_DELIVERED: "itemMustBeDelivered",
   INVALID_SIGNATURE: "paymentFailedBody",
   RAZORPAY_NOT_CONFIGURED: "paymentUnavailableLoadScript",
+  INVALID_RESPONSE: "unexpectedError",
+  EMPTY_RESPONSE: "unexpectedError",
 };
 
 export const INTERNAL_ERROR_PATTERNS = [
@@ -81,4 +83,9 @@ export const INTERNAL_ERROR_PATTERNS = [
   /^(?:TypeError:\s*)?Failed to fetch$/i,
   /^(?:NetworkError|Network request failed|Load failed|fetch failed)\b/i,
   /\bERR_(?:NETWORK|CONNECTION|INTERNET|BLOCKED_BY_CLIENT)\b/i,
+  /<!?doctype/i,
+  /<html/i,
+  /<[a-z][\s\S]*>/i,
+  /\b(?:502|503|504)\s+(?:Bad Gateway|Service Unavailable|Gateway Time-out)/i,
+  /\bnginx\b/i,
 ];
