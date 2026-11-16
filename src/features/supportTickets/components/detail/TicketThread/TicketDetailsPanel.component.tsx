@@ -93,9 +93,7 @@ export function TicketDetailsPanel(props: TicketDetailsPanelProps) {
           {ticket.relatedOrderId ? (
             <div className={styles.row}>
               <dt className={styles.label}>{LABELS.ticketOrderSection}</dt>
-              <dd className={styles.valMono}>
-                #{ticket.relatedOrderId.slice(0, 8)}
-              </dd>
+              <dd className={styles.valTruncated}>{LABELS.orderDetails}</dd>
             </div>
           ) : null}
         </dl>

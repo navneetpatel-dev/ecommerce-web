@@ -192,14 +192,4 @@ export const ADMIN_NAV = [
   },
 ] as const;
 
-export function adminPermissionsForPath(
-  pathname: string,
-): PermissionKey | PermissionKey[] {
-  const match = ADMIN_NAV.find(
-    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
-  );
-  if (!match) return PERMISSIONS.ANALYTICS_VIEW;
-  return match.permissions.length === 1
-    ? match.permissions[0]!
-    : [...match.permissions];
-}
+export { adminPermissionsForPath } from "./adminPermissionsForPath";

@@ -61,15 +61,11 @@ export function BugDescriptionSection({
                 href={duplicateOfHref}
                 className={bugReportDetailStyles.descLinkMono}
               >
-                #
-                {report.duplicateOfReportNumber ??
-                  report.duplicateOfId.slice(0, 8)}
+                {report.duplicateOfReportNumber ?? LABELS.bugReport}
               </Link>
             ) : (
               <span className={bugReportDetailStyles.descTextMono}>
-                #
-                {report.duplicateOfReportNumber ??
-                  report.duplicateOfId.slice(0, 8)}
+                {report.duplicateOfReportNumber ?? LABELS.bugReport}
               </span>
             )}
           </p>
