@@ -13,12 +13,18 @@ const PG_RECON_STATUS_LABELS: Record<string, string> = {
   REVIEW: LABELS.reconStatusReview,
 };
 
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export function formatReportCell(
   value: unknown,
   format?: string,
   columnKey?: string,
 ): string {
   if (value == null) return LABELS.emptyCell;
+  if (typeof value === "string" && UUID_REGEX.test(value)) {
+    return "—";
+  }
   if (columnKey === "reconStatus" && typeof value === "string") {
     return PG_RECON_STATUS_LABELS[value] ?? value;
   }

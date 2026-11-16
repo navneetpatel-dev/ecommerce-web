@@ -17,6 +17,11 @@ interface ReportTableProps {
   onRetry?: () => void;
 }
 
+function shouldIncludeReportColumn(col: ReportColumnMeta): boolean {
+  if (col.key === "id" || col.key.endsWith("Id")) return false;
+  return true;
+}
+
 export function ReportTable({
   result,
   loading,
@@ -24,8 +29,11 @@ export function ReportTable({
   onPageChange,
   onRetry,
 }: ReportTableProps) {
+  const filteredColumns =
+    result?.columns.filter((col) => shouldIncludeReportColumn(col)) ?? [];
+
   const columns: DataTableColumn<Record<string, unknown>>[] =
-    result?.columns.map((col: ReportColumnMeta) => {
+    filteredColumns.map((col: ReportColumnMeta) => {
       const labelMap = LABELS as Record<string, string>;
       return {
         id: col.key,
@@ -33,7 +41,7 @@ export function ReportTable({
         cell: (row: Record<string, unknown>) =>
           formatReportCell(row[col.key], col.format, col.key),
       };
-    }) ?? [];
+    });
 
   const pagination = result
     ? {

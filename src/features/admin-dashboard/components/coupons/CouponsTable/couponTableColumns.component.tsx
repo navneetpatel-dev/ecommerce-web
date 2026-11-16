@@ -40,7 +40,7 @@ export function buildCouponColumns(
     },
     {
       id: "vendor",
-      header: LABELS.vendorId,
+      header: LABELS.vendorName,
       className: styles.columnMonoSm,
       cell: (row) =>
         row.vendorId

@@ -26,9 +26,13 @@ export function getAdminCellValue(row: AdminDataRow, key: string): unknown {
   }, row);
 }
 
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 /** Prefer human labels over UUIDs / nested association dumps. */
 export function formatAdminCellValue(value: unknown): string {
   if (value == null || value === "") return "—";
+  if (typeof value === "string" && UUID_REGEX.test(value)) return "—";
   const asDate = tryFormatDateTime(value);
   if (asDate) return asDate;
   if (typeof value === "object") {
@@ -73,6 +77,18 @@ export function adminCellText(row: AdminDataRow, columnKey: string): string {
       row.title ??
       row.customerName;
     return typeof humanName === "string" && humanName.trim() ? humanName : "—";
+  }
+  if (columnKey.endsWith("Id") && typeof value === "string") {
+    const base = columnKey.slice(0, -2);
+    const candidateName =
+      row[`${base}Name`] ??
+      row[`${base}Title`] ??
+      row.name ??
+      row.businessName ??
+      row.productName;
+    if (typeof candidateName === "string" && candidateName.trim()) {
+      return candidateName;
+    }
   }
   return formatAdminCellValue(value);
 }
