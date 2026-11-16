@@ -10,8 +10,10 @@ import {
 } from "../../schemas/register/vendor.schema";
 import { useVendorRegistration } from "./useVendorRegistration.hook";
 import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
+import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 
 export function useVendorRegisterPage() {
+  const { requireAuth } = useRequireAuth();
   const register = useVendorRegistration();
   const form = useForm<VendorRegisterInput>({
     mode: "onTouched",
@@ -38,6 +40,9 @@ export function useVendorRegisterPage() {
     form,
     error: formLevelError,
     isPending: register.isPending,
-    onSubmit: (data: VendorRegisterInput) => register.mutate(data),
+    onSubmit: (data: VendorRegisterInput) => {
+      if (!requireAuth(LABELS.loginToContinueNotice)) return;
+      register.mutate(data);
+    },
   };
 }
