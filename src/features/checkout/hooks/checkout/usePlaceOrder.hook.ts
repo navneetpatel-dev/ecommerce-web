@@ -79,9 +79,6 @@ export function usePlaceOrderWithRazorpay() {
     invalidateCheckoutQuote,
   });
 
-  // Both success paths call this (cash/COD immediately, Razorpay after verification), and
-  // the cancelled/failed ones deliberately don't: ending the flow here is what stops the
-  // next purchase from resuming this one.
   const handleOrderPlaced = useResetCheckoutOnOrderPlaced(onOrderPlaced);
 
   const handlePlaceOrder = async (method: string) => {
