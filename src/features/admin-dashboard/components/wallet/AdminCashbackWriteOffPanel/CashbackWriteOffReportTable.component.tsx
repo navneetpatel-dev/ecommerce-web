@@ -27,10 +27,10 @@ interface CashbackWriteOffReportTableProps {
 
 const COLUMNS: DataTableColumn<CashbackWriteOffRowData>[] = [
   {
-    id: "userId",
-    header: LABELS.reportUserId,
-    className: styles.cellMono,
-    accessor: "userId",
+    id: "customer",
+    header: LABELS.customerName,
+    className: styles.cellStandard,
+    cell: (row) => row.customerName || row.customerEmail || LABELS.customerName,
   },
   {
     id: "originalClawback",

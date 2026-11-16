@@ -1,7 +1,6 @@
 import {
   formatInr,
   formatOrderDate,
-  shortOrderId,
 } from "@/shared/utils/formatting/orderFormat";
 import { STEP_LABELS } from "@/shared/utils/formatting/orderTimeline";
 import { LABELS } from "@/shared/constants/labels";
@@ -17,10 +16,13 @@ export function formatOrderOption(order: {
   createdAt: string;
   status: string;
   totalAmount: string | number;
+  subOrders?: Array<{ taxInvoiceNumber?: string | null }>;
 }): string {
   const statusLabel =
     STEP_LABELS[order.status as keyof typeof STEP_LABELS] ?? order.status;
-  return `#${shortOrderId(order.id)} · ${formatOrderDate(order.createdAt)} · ${statusLabel} · ${formatInr(order.totalAmount)}`;
+  const invoice = order.subOrders?.[0]?.taxInvoiceNumber;
+  const prefix = invoice ? `${invoice} · ` : "";
+  return `${prefix}${formatOrderDate(order.createdAt)} · ${statusLabel} · ${formatInr(order.totalAmount)}`;
 }
 
 export function collectOrderVendors(

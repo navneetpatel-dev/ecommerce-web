@@ -11,7 +11,7 @@ export function RecentOrderCard({ order }: RecentOrderCardProps) {
     <li>
       <Link href={order.href} className={styles.orderRow}>
         <div className={styles.orderInfo}>
-          <p className={styles.orderId}>{order.shortId}</p>
+          <p className={styles.orderId}>{order.orderLabel}</p>
           <p className={styles.orderSummary}>{order.summary}</p>
           <p className={styles.orderDate}>{order.date}</p>
         </div>

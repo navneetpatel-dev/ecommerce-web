@@ -7,7 +7,10 @@ import type { ReportRange } from "./reports.api";
  */
 
 export type WalletLiabilityRow = {
-  userId: string;
+  userId?: string;
+  customerName?: string;
+  name?: string;
+  email?: string;
   balance: number;
   asOf: string;
   purchasedPoints?: number;
@@ -31,7 +34,9 @@ export type WalletLiabilityReport = {
 
 export type WalletRechargeRow = {
   id: string;
-  userId: string;
+  userId?: string;
+  customerName?: string;
+  customerEmail?: string;
   amountInr: number;
   pointsCredited: number;
   status: string;
@@ -58,7 +63,9 @@ export type WalletRechargeReport = {
 
 export type CashbackWriteOffRow = {
   id: string;
-  userId: string;
+  userId?: string;
+  customerName?: string;
+  customerEmail?: string;
   originalClawbackAmount: number;
   recoveredAmount: number;
   writtenOffAmount: number;

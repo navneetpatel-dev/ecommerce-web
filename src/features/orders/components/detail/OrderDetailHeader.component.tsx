@@ -20,7 +20,7 @@ export function OrderDetailHeader({
   itemCount,
   vendorCount,
 }: OrderDetailHeaderProps) {
-  const { orderIdShort, metaText } = useOrderDetailHeader({
+  const { orderLabel, metaText } = useOrderDetailHeader({
     order,
     itemCount,
     vendorCount,
@@ -43,7 +43,7 @@ export function OrderDetailHeader({
             className={ORDER_DETAIL_HEADER_STYLES.heading}
             style={ORDER_DETAIL_HEADER_STYLES.headingStyle}
           >
-            Order #{orderIdShort}
+            {orderLabel}
           </h1>
           <p className={ORDER_DETAIL_HEADER_STYLES.metaText}>{metaText}</p>
           <OrderStatusGroup

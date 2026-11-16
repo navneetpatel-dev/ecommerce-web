@@ -1,11 +1,14 @@
 "use client";
 
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
+import { LABELS } from "@/shared/constants/labels";
 import { cashbackWriteOffReportTableStyles as styles } from "../../../styles/wallet/cashbackWriteOffReportTable.styles";
 
 export interface CashbackWriteOffRowData {
   id: string;
-  userId: string;
+  userId?: string;
+  customerName?: string;
+  customerEmail?: string;
   originalClawbackAmount: number;
   recoveredAmount: number;
   writtenOffAmount: number;
@@ -25,7 +28,9 @@ export function CashbackWriteOffTableRow({
 
   return (
     <tr className={styles.row}>
-      <td className={styles.cellMono}>{row.userId}</td>
+      <td className={styles.cellStandard}>
+        {row.customerName || row.customerEmail || LABELS.customerName}
+      </td>
       <td className={styles.cellMedium}>{originalClawback}</td>
       <td className={styles.cellSuccess}>{recoveredAmount}</td>
       <td className={styles.cellStandard}>{writtenOffAmount}</td>

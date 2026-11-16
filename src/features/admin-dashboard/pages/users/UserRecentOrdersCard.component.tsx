@@ -12,13 +12,15 @@ interface UserRecentOrdersCardProps {
 }
 
 function renderOrderItem(order: Order) {
-  const orderShortId = order.id.slice(0, 8).toUpperCase();
+  const orderLabel =
+    order.subOrders?.[0]?.taxInvoiceNumber ??
+    adminEntityDetailLabels.recentOrders;
   const orderDate = formatOrderDate(order.createdAt);
   const orderTotal = formatInr(order.totalAmount);
   return (
     <li key={order.id} className={userRecentOrdersCardStyles.orderItem}>
       <div className={userRecentOrdersCardStyles.orderInfo}>
-        <p className={userRecentOrdersCardStyles.orderId}>{orderShortId}</p>
+        <p className={userRecentOrdersCardStyles.orderId}>{orderLabel}</p>
         <p className={userRecentOrdersCardStyles.orderDate}>{orderDate}</p>
       </div>
       <p className={userRecentOrdersCardStyles.orderTotal}>{orderTotal}</p>

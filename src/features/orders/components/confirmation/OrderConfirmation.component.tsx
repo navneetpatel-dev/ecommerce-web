@@ -60,7 +60,10 @@ export function OrderConfirmation({ orderId }: OrderConfirmationProps) {
         transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}
       >
         <div className={styles.contentWrapper}>
-          <OrderConfirmationHero orderId={orderId} />
+          <OrderConfirmationHero
+            orderId={orderId}
+            invoiceNumber={order?.subOrders?.[0]?.taxInvoiceNumber}
+          />
 
           <div className={styles.grid}>
             <div className={styles.mainCol}>

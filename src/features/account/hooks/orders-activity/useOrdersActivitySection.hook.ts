@@ -23,6 +23,7 @@ import { useAccountOverview } from "../overview/useAccountOverview.hook";
 
 export interface RecentOrderViewModel {
   id: string;
+  orderLabel: string;
   shortId: string;
   summary: string;
   date: string;
@@ -49,14 +50,19 @@ export function useOrdersActivitySection() {
   } = useAccountOverview();
 
   const orderViewModels = useMemo<RecentOrderViewModel[]>(() => {
-    return recentOrders.slice(0, 4).map((order) => ({
-      id: order.id,
-      shortId: order.subOrders?.[0]?.taxInvoiceNumber ?? LABELS.orderDetails,
-      summary: `${orderItemSummary(order)} · ${countOrderItems(order)} items`,
-      date: formatOrderDate(order.createdAt),
-      formattedAmount: formatInr(order.totalAmount),
-      href: PATHS.order(order.id),
-    }));
+    return recentOrders.slice(0, 4).map((order) => {
+      const orderLabel =
+        order.subOrders?.[0]?.taxInvoiceNumber ?? LABELS.orderDetails;
+      return {
+        id: order.id,
+        orderLabel,
+        shortId: orderLabel,
+        summary: `${orderItemSummary(order)} · ${countOrderItems(order)} items`,
+        date: formatOrderDate(order.createdAt),
+        formattedAmount: formatInr(order.totalAmount),
+        href: PATHS.order(order.id),
+      };
+    });
   }, [recentOrders]);
 
   const ordersSubtitle = isLoadingStats ? "Loading…" : `${ordersCount} total`;

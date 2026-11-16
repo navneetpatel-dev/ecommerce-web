@@ -11,7 +11,7 @@ interface OrderCardProps {
 }
 
 export function OrderCard({ order }: OrderCardProps) {
-  const { shortId, formattedDate, subOrders, orderLink } = useOrderCard({
+  const { orderLabel, formattedDate, subOrders, orderLink } = useOrderCard({
     order,
   });
 
@@ -19,9 +19,7 @@ export function OrderCard({ order }: OrderCardProps) {
     <Card>
       <CardHeader className={ORDER_CARD_STYLES.header}>
         <div className={ORDER_CARD_STYLES.headerLeft}>
-          <span className={ORDER_CARD_STYLES.orderIdText}>
-            Order #{shortId}
-          </span>
+          <span className={ORDER_CARD_STYLES.orderIdText}>{orderLabel}</span>
           <StatusBadge status={order.status} />
           <span className={ORDER_CARD_STYLES.dateText}>{formattedDate}</span>
         </div>

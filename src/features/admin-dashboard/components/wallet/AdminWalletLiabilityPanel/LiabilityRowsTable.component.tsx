@@ -16,10 +16,11 @@ interface LiabilityRowsTableProps {
 
 const COLUMNS: DataTableColumn<LiabilityRow>[] = [
   {
-    id: "userId",
-    header: LABELS.reportUserId,
-    className: styles.cellMono,
-    accessor: "userId",
+    id: "customer",
+    header: LABELS.customerName,
+    className: styles.cellMuted,
+    cell: (row) =>
+      row.customerName || row.name || row.email || LABELS.customerName,
   },
   {
     id: "balance",
@@ -73,7 +74,7 @@ export function LiabilityRowsTable({
 
       columns={COLUMNS}
       rows={report.rows}
-      getRowId={(row) => row.userId}
+      getRowId={(row, index) => row.userId ?? String(index)}
       loading={loading}
       emptyMessage={LABELS.noReportData}
       rowDetails={false}

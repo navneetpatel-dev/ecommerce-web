@@ -17,10 +17,10 @@ interface RechargeRowsTableProps {
 
 const COLUMNS: DataTableColumn<RechargeRow>[] = [
   {
-    id: "userId",
-    header: LABELS.reportUserId,
-    className: styles.cellMono,
-    accessor: "userId",
+    id: "customer",
+    header: LABELS.customerName,
+    className: styles.cellMuted,
+    cell: (row) => row.customerName || row.customerEmail || LABELS.customerName,
   },
   {
     id: "amountInr",

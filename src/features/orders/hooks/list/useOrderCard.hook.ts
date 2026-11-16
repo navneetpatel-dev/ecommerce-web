@@ -4,15 +4,16 @@ import { useMemo } from "react";
 import type { Order } from "@/shared/api/types";
 import { formatDate } from "@/shared/utils/formatting/formatDate";
 import { PATHS } from "@/shared/constants/paths/paths";
+import { LABELS } from "@/shared/constants/labels";
 
 interface UseOrderCardParams {
   order: Order;
 }
 
 export function useOrderCard({ order }: UseOrderCardParams) {
-  const shortId = useMemo(() => {
-    return order.id.slice(0, 8);
-  }, [order.id]);
+  const orderLabel = useMemo(() => {
+    return order.subOrders?.[0]?.taxInvoiceNumber ?? LABELS.orderDetails;
+  }, [order.subOrders]);
 
   const formattedDate = useMemo(() => {
     return formatDate(order.createdAt);
@@ -27,7 +28,8 @@ export function useOrderCard({ order }: UseOrderCardParams) {
   }, [order.id]);
 
   return {
-    shortId,
+    orderLabel,
+    shortId: orderLabel,
     formattedDate,
     subOrders,
     orderLink,

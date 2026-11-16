@@ -6,11 +6,11 @@ import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { SuccessCheckmarkContainer } from "@/shared/containers/display/SuccessCheckmarkContainer.container";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { LABELS } from "@/shared/constants/labels";
-import { shortOrderId } from "../../utils/detail/format";
 import { orderConfirmationStyles as styles } from "../../styles/confirmation/orderConfirmation.styles";
 
 interface OrderConfirmationHeroProps {
   orderId: string | undefined;
+  invoiceNumber?: string | null;
 }
 
 /**
@@ -20,7 +20,10 @@ interface OrderConfirmationHeroProps {
  * sit side by side — stacking them left of the summary stranded most of the
  * viewport on large screens.
  */
-export function OrderConfirmationHero({ orderId }: OrderConfirmationHeroProps) {
+export function OrderConfirmationHero({
+  orderId,
+  invoiceNumber,
+}: OrderConfirmationHeroProps) {
   return (
     <div className={styles.heroRoot}>
       <div className={styles.heroInfo}>
@@ -30,8 +33,8 @@ export function OrderConfirmationHero({ orderId }: OrderConfirmationHeroProps) {
         </div>
         <div>
           <h1 className={styles.heroHeading}>Order confirmed</h1>
-          {orderId ? (
-            <p className={styles.heroOrderId}>#{shortOrderId(orderId)}</p>
+          {invoiceNumber ? (
+            <p className={styles.heroOrderId}>{invoiceNumber}</p>
           ) : null}
           <p className={styles.heroSubtitle}>
             You&apos;ll get a shipping update by email for each seller&apos;s
