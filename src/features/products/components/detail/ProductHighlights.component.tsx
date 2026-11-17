@@ -6,7 +6,13 @@ interface ProductHighlightsProps {
 }
 
 export function ProductHighlights({ highlights }: ProductHighlightsProps) {
-  if (!highlights?.length) return null;
+  const cleanHighlights = (highlights ?? [])
+    .map((item) =>
+      typeof item === "string" ? item.trim() : String(item ?? "").trim(),
+    )
+    .filter(Boolean);
+
+  if (!cleanHighlights.length) return null;
 
   return (
     <section className={productDetailsMiscStyles.highlightsSection}>
@@ -14,8 +20,11 @@ export function ProductHighlights({ highlights }: ProductHighlightsProps) {
         {LABELS.productHighlights}
       </h3>
       <ul className={productDetailsMiscStyles.highlightsGrid}>
-        {highlights.map((item) => (
-          <li key={item} className={productDetailsMiscStyles.highlightsItem}>
+        {cleanHighlights.map((item, index) => (
+          <li
+            key={`${item}-${index}`}
+            className={productDetailsMiscStyles.highlightsItem}
+          >
             <span
               className={productDetailsMiscStyles.highlightsBullet}
               aria-hidden

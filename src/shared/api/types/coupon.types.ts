@@ -88,8 +88,11 @@ export interface EligibleCoupon {
   code: string;
   name?: string;
   type: string;
+  value?: number | null;
   discount: number;
   cashbackAmount: number;
+  minOrderValue?: number | null;
+  maxDiscountCap?: number | null;
   priority: number;
 }
 

@@ -42,6 +42,7 @@ export function useDeliveryCheck(params: UseDeliveryCheckParams) {
       submitted,
       params.productId,
       params.variantId,
+      params.vendorId,
     ),
     queryFn: () =>
       checkoutApi.getShippingRates(submitted, {

@@ -11,7 +11,7 @@ import {
 import { useSubmitReview } from "../../api/reviews/reviews.queries";
 import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
-import type { Review } from "../../types/reviews/reviews.types";
+import type { Review } from "@/shared/api/types";
 
 export function useReviewSubmission(
   orderItemId: string,

@@ -16,7 +16,12 @@ export const productEligibleOffersStyles = {
   list: (isScrollable: boolean) =>
     cn("space-y-1 pr-0.5", isScrollable && PDP_OFFERS_EXPANDED_SCROLL_CLASS),
   offerItem:
-    "flex items-center justify-between gap-2 rounded-md border border-dashed border-brand/25 bg-brand-subtle/30 px-2 py-1",
+    "flex items-center justify-between gap-2 rounded-md border border-dashed border-brand/25 bg-brand-subtle/30 px-2.5 py-1.5",
+  offerLeft: "flex min-w-0 items-center gap-2",
+  offerCodeBadge:
+    "inline-flex items-center gap-1 rounded bg-brand/10 px-1.5 py-0.5 font-mono text-[0.6875rem] font-bold tracking-wider text-brand hover:bg-brand/20 transition-colors cursor-pointer shrink-0 select-all",
+  offerName: "truncate text-[0.75rem] font-medium text-ink",
+  offerRight: "flex shrink-0 items-center gap-1.5 text-right",
   offerCode:
     "truncate font-mono text-[0.75rem] font-semibold tracking-wide text-ink",
   offerDetail: "shrink-0 text-[0.6875rem] text-ink-muted",

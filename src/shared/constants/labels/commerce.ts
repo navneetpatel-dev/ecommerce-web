@@ -66,6 +66,7 @@ export const commerceLabels = {
   taxInclusiveEstimate: "Approx. ₹{amount} including GST",
   priceFrom: "From",
   hsnCodeLabel: "HSN {code}",
+  warranty: "Warranty",
   warrantyManufacturer: "manufacturer warranty",
   warrantySeller: "seller warranty",
   warrantyMonthsLabel: "{months}-month {type}",

@@ -1,16 +1,12 @@
 import { LABELS } from "@/shared/constants/labels";
 import { productEligibleOffersStyles } from "../../../styles/offers/productEligibleOffers.styles";
-import { EligibleOfferItem } from "./EligibleOfferItem.component";
-
-interface Offer {
-  code: string;
-  name?: string;
-  discount: number;
-  type: string;
-}
+import {
+  EligibleOfferItem,
+  type EligibleOffer,
+} from "./EligibleOfferItem.component";
 
 interface EligibleOffersListProps {
-  offers: Offer[];
+  offers: EligibleOffer[];
   isScrollable: boolean;
 }
 

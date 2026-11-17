@@ -2,7 +2,7 @@
 
 import { useReviewSubmission } from "../../hooks/review-form/useReviewSubmission.hook";
 import { ReviewForm } from "../../components/review-form/ReviewForm.component";
-import type { Review } from "../../types/reviews/reviews.types";
+import type { Review } from "@/shared/api/types";
 
 interface ReviewFormContainerProps {
   orderItemId: string;

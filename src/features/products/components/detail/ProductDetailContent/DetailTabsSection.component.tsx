@@ -101,6 +101,18 @@ export function DetailTabsSection({
             categoryName={categoryName}
             secondaryCategories={product.secondaryCategories}
             displayStock={displayStock}
+            brand={product.brand}
+            vendorName={product.vendor?.businessName}
+            hsnCode={product.displayHsnCode ?? product.hsnCode}
+            warrantyMonths={
+              product.displayWarrantyMonths ?? product.warrantyMonths
+            }
+            warrantyType={product.displayWarrantyType ?? product.warrantyType}
+            returnsAllowed={product.returnsAllowed}
+            returnWindowDays={product.returnWindowDays}
+            returnNote={product.returnNote}
+            deliveryNote={product.deliveryNote}
+            codAvailable={product.codAvailable}
           />
         </TabsContent>
         <TabsContent

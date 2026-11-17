@@ -25,7 +25,8 @@ export const checkoutKeys = {
     pincode: string,
     productId: string,
     variantId?: string | null,
-  ) => ["shipping", "pdp", pincode, productId, variantId] as const,
+    vendorId?: string | null,
+  ) => ["shipping", "pdp", pincode, productId, variantId, vendorId] as const,
   quote: (input: CheckoutQuoteInput) => ["checkout", "quote", input] as const,
 };
 

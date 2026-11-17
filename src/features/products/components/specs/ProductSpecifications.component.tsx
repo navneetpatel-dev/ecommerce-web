@@ -15,6 +15,16 @@ interface ProductSpecificationsProps {
   categoryName?: string | null;
   secondaryCategories?: Array<{ id: string; name: string; slug: string }>;
   displayStock: number;
+  brand?: string | null;
+  vendorName?: string | null;
+  hsnCode?: string | null;
+  warrantyMonths?: number | null;
+  warrantyType?: string | null;
+  returnsAllowed?: boolean;
+  returnWindowDays?: number | null;
+  returnNote?: string | null;
+  deliveryNote?: string | null;
+  codAvailable?: boolean;
 }
 
 export function ProductSpecifications({
@@ -23,12 +33,32 @@ export function ProductSpecifications({
   categoryName,
   secondaryCategories,
   displayStock,
+  brand,
+  vendorName,
+  hsnCode,
+  warrantyMonths,
+  warrantyType,
+  returnsAllowed,
+  returnWindowDays,
+  returnNote,
+  deliveryNote,
+  codAvailable,
 }: ProductSpecificationsProps) {
   const { rows } = useProductSpecifications({
     specs,
     matchedVariant,
     categoryName,
     displayStock,
+    brand,
+    vendorName,
+    hsnCode,
+    warrantyMonths,
+    warrantyType,
+    returnsAllowed,
+    returnWindowDays,
+    returnNote,
+    deliveryNote,
+    codAvailable,
   });
 
   const categories = useMemo(() => {

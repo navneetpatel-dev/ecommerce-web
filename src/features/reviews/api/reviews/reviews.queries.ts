@@ -16,7 +16,7 @@ import { PATHS } from "@/shared/constants/paths/paths";
 import type { ProductReviewsParams } from "../../types/productReviews.types";
 import { findReviewInCaches, updateReviewInCaches } from "./reviewCache";
 import { withViewerVote } from "../../utils/reviewVotes.utils";
-import type { ReviewVote } from "@/shared/api/types";
+import type { Review, ReviewVote } from "@/shared/api/types";
 
 export const reviewKeys = {
   all: ["reviews"] as const,
