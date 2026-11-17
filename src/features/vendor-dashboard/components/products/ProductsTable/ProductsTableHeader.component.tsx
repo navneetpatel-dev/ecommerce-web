@@ -96,14 +96,6 @@ export function ProductsTableHeader(props: ProductsTableHeaderProps) {
               </Select>
             </FormFieldFrame>
           ) : null}
-
-          {activeCount > 0 && onClear ? (
-            <div className="flex items-end">
-              <Button type="button" variant="outline" onClick={onClear}>
-                {LABELS.clearFilters}
-              </Button>
-            </div>
-          ) : null}
         </div>
       </CollapsibleTableFilters>
     </div>

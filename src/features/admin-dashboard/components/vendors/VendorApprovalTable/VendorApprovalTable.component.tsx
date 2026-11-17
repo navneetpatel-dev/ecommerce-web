@@ -58,7 +58,6 @@ export function VendorApprovalTable({
   return (
     <DataTable
       ariaLabel={LABELS.vendorApprovalTableAria}
-
       columns={columns}
       rows={vendors}
       loading={loading}
@@ -66,6 +65,12 @@ export function VendorApprovalTable({
       getRowId={getRowId}
       pagination={pagination}
       actions={renderActions}
+      tableId="admin-vendor-approvals"
+      enableColumnVisibility
+      enableDensityToggle
+      enableExport
+      enableSorting
+      enableFullscreen
     />
   );
 }

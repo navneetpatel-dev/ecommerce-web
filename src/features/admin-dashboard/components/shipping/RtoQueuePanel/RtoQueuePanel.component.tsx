@@ -2,8 +2,7 @@
 
 import { Undo2 } from "lucide-react";
 import { DataTable } from "@/shared/components/DataTable";
-import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import {
   Select,
   SelectContent,
@@ -35,10 +34,10 @@ export function RtoQueuePanel() {
     onClearFilters,
   } = useRtoQueuePanel();
 
-  if (!visible) return null;
-
   const activeCount =
     (search.trim() ? 1 : 0) + (statusFilter !== "ALL" ? 1 : 0);
+
+  if (!visible) return null;
 
   return (
     <section className={styles.root}>
@@ -58,10 +57,11 @@ export function RtoQueuePanel() {
       >
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
           <FormFieldFrame label={LABELS.search} htmlFor="rto-filter-search">
-            <Input
+            <SearchInput
               id="rto-filter-search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onClear={() => setSearch("")}
               placeholder="Search by tracking #, customer, order ID, or reason..."
             />
           </FormFieldFrame>
@@ -78,14 +78,6 @@ export function RtoQueuePanel() {
               </SelectContent>
             </Select>
           </FormFieldFrame>
-
-          {activeCount > 0 && (
-            <div className="flex items-end">
-              <Button type="button" variant="outline" onClick={onClearFilters}>
-                {LABELS.clearFilters}
-              </Button>
-            </div>
-          )}
         </div>
       </CollapsibleTableFilters>
 
@@ -97,6 +89,12 @@ export function RtoQueuePanel() {
         loading={loading}
         emptyMessage={LABELS.rtoQueueEmpty}
         rowDetails={false}
+        tableId="admin-rto-queue"
+        enableColumnVisibility
+        enableDensityToggle
+        enableExport
+        enableSorting
+        enableFullscreen
       />
     </section>
   );

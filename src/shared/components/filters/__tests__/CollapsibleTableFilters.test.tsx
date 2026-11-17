@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { CollapsibleTableFilters } from "../CollapsibleTableFilters.component";
@@ -62,5 +62,52 @@ describe("CollapsibleTableFilters", () => {
     expect(
       screen.queryByRole("button", { name: /clear filters/i }),
     ).not.toBeInTheDocument();
+  });
+
+  it("renders result count when resultCount prop is passed", () => {
+    render(
+      <CollapsibleTableFilters resultCount={{ count: 5, total: 20 }}>
+        <div>Inputs</div>
+      </CollapsibleTableFilters>,
+    );
+
+    expect(screen.getByText(/showing/i)).toBeInTheDocument();
+    expect(screen.getByText("5")).toBeInTheDocument();
+    expect(screen.getByText(/of 20/)).toBeInTheDocument();
+  });
+
+  it("collapses when toggle button is clicked again", async () => {
+    const user = userEvent.setup();
+    render(
+      <CollapsibleTableFilters defaultOpen>
+        <div data-testid="filter-inputs">Inputs</div>
+      </CollapsibleTableFilters>,
+    );
+
+    expect(screen.getByTestId("filter-inputs")).toBeInTheDocument();
+    const toggleBtn = screen.getByRole("button", { name: /hide filters/i });
+    await user.click(toggleBtn);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("filter-inputs")).not.toBeInTheDocument();
+    });
+  });
+
+  it("expands filter drawer and focuses search input when / is pressed", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <CollapsibleTableFilters>
+        <input type="search" placeholder="Search data..." />
+      </CollapsibleTableFilters>,
+    );
+
+    expect(
+      screen.queryByPlaceholderText("Search data..."),
+    ).not.toBeInTheDocument();
+
+    await user.keyboard("/");
+
+    expect(screen.getByPlaceholderText("Search data...")).toBeInTheDocument();
   });
 });

@@ -1,5 +1,8 @@
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
-import type { DataTableColumn } from "@/shared/components/DataTable";
+import {
+  type DataTableColumn,
+  CopyableText,
+} from "@/shared/components/DataTable";
 import { LABELS } from "@/shared/constants/labels";
 import type { RtoQueueShipment } from "../../api/shipping/shipping.api";
 import { RtoReceivedAction } from "../../components/shipping/RtoQueuePanel/RtoReceivedAction.component";
@@ -14,7 +17,8 @@ export function buildRtoQueueColumns(
       id: "tracking",
       header: LABELS.trackingNumber,
       className: styles.tableCellMono,
-      accessor: "trackingNumber",
+      cell: (row) =>
+        row.trackingNumber ? <CopyableText value={row.trackingNumber} /> : "—",
     },
     {
       id: "status",

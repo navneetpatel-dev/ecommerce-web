@@ -18,7 +18,17 @@ export type DataTableColumn<T> = {
   mobileRowClassName?: string;
   /** Hide this column in the mobile card list (still shown in table). */
   hideOnMobile?: boolean;
+  /** Whether the column can be sorted (defaults to true when enableSorting is active). */
+  sortable?: boolean;
 };
+
+export type TableDensity = "comfortable" | "compact";
+export type SortDirection = "asc" | "desc";
+
+export interface ColumnSortState {
+  columnId: string;
+  direction: SortDirection;
+}
 
 export type DataTablePaginationProps = {
   page: number;
@@ -28,6 +38,11 @@ export type DataTablePaginationProps = {
   total?: number;
   from?: number;
   to?: number;
+  isFiltered?: boolean;
+  /** Page size options and selection */
+  pageSize?: number;
+  pageSizeOptions?: number[];
+  onPageSizeChange?: (pageSize: number) => void;
 };
 
 export type DataTableProps<T> = {
@@ -64,4 +79,43 @@ export type DataTableProps<T> = {
   rowDetails?: boolean;
   /** Optional row activation handler (e.g. navigate to detail). Takes precedence over the detail modal. */
   onRowClick?: (row: T, index: number) => void;
+  /** Identifier for persisting column visibility and density in localStorage */
+  tableId?: string;
+  /** Whether to show the column visibility dropdown in the header */
+  enableColumnVisibility?: boolean;
+  /** Controlled visible column IDs */
+  visibleColumnIds?: string[];
+  /** Callback when visible columns change */
+  onVisibleColumnIdsChange?: (ids: string[]) => void;
+  /** Whether to show the row density toggle in the header */
+  enableDensityToggle?: boolean;
+  /** Controlled table row density */
+  density?: TableDensity;
+  /** Callback when density changes */
+  onDensityChange?: (density: TableDensity) => void;
+  /** Enable row selection */
+  selectable?: boolean;
+  /** Controlled selected row IDs */
+  selectedIds?: string[];
+  /** Callback when selected row IDs change */
+  onSelectionChange?: (selectedIds: string[]) => void;
+  /** Actions rendered in the floating bulk action bar when rows are selected */
+  bulkActions?:
+    ReactNode | ((selectedIds: string[], deselectAll: () => void) => ReactNode);
+  /** Whether to show the multi-format export dropdown in the header */
+  enableExport?: boolean;
+  /** Custom export file name prefix */
+  exportFilename?: string;
+  /** Whether the table header sticks to the top during vertical scroll (default true) */
+  stickyHeader?: boolean;
+  /** Enable arrow keys and j/k row keyboard navigation (default true when rowsInteractive or selectable) */
+  enableKeyboardNavigation?: boolean;
+  /** Whether to enable column sorting (click to sort, Shift-click to multi-sort) */
+  enableSorting?: boolean;
+  /** Controlled sort states */
+  sortStates?: ColumnSortState[];
+  /** Callback when sorting changes */
+  onSortChange?: (sortStates: ColumnSortState[]) => void;
+  /** Whether to enable the table fullscreen toggle */
+  enableFullscreen?: boolean;
 };

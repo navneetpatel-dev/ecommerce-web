@@ -1,6 +1,8 @@
 "use client";
 
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useSearchParams } from "next/navigation";
+import { useUrlQueryState } from "@/shared/hooks/navigation/useUrlQueryState.hook";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import {
   ORDER_STATUS,
@@ -31,10 +33,41 @@ interface UseAdminOrdersPageProps {
 export function useAdminOrdersPage(
   props: UseAdminOrdersPageProps = {},
 ): AdminOrdersPageModel {
-  const { initialSearch = "", initialStatus = "" } = props;
+  const searchParams = useSearchParams();
+  const { update } = useUrlQueryState();
+
+  const urlSearch = searchParams.get("search") ?? "";
+  const urlStatus = searchParams.get("status") ?? "";
+
+  const { initialSearch = urlSearch, initialStatus = urlStatus } = props;
   const [search, setSearch] = useState(initialSearch);
   const [status, setStatus] = useState(initialStatus);
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
+
+  // Sync from URL changes (e.g. browser back/forward)
+  useEffect(() => {
+    const nextSearch = searchParams.get("search") ?? "";
+    const nextStatus = searchParams.get("status") ?? "";
+    setSearch((prev) =>
+      prev.trim() !== nextSearch.trim() ? nextSearch : prev,
+    );
+    setStatus((prev) => (prev !== nextStatus ? nextStatus : prev));
+  }, [searchParams]);
+
+  // Sync to URL only when active filters actually differ from URL parameters
+  useEffect(() => {
+    const currentSearch = (searchParams.get("search") ?? "").trim();
+    const currentStatus = (searchParams.get("status") ?? "").trim();
+    const targetSearch = debouncedSearch.trim();
+    const targetStatus = status.trim();
+
+    if (currentSearch !== targetSearch || currentStatus !== targetStatus) {
+      update({
+        search: targetSearch || undefined,
+        status: targetStatus || undefined,
+      });
+    }
+  }, [debouncedSearch, status, searchParams, update]);
 
   const load = useCallback(
     ({ page, limit }: { page: number; limit: number }) =>
@@ -48,7 +81,8 @@ export function useAdminOrdersPage(
   const onClear = useCallback(() => {
     setSearch("");
     setStatus("");
-  }, []);
+    update({ search: undefined, status: undefined });
+  }, [update]);
 
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {

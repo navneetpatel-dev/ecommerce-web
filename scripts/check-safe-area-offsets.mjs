@@ -97,6 +97,11 @@ const allowlist = [
     match: /^"fixed bottom-0 right-0 z-\[100\]/,
     why: "Radix viewport base; toastStackStyles.viewport overrides it with the inset-aware offsets.",
   },
+  {
+    file: "shared/components/DataTable/DataTableDesktopTable.component.tsx",
+    match: /sticky top-0/,
+    why: "Sticky table header pins to its own scroll container, not the viewport edge.",
+  },
 ];
 
 function* codeFiles(dir) {

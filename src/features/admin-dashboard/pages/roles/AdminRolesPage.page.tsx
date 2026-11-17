@@ -181,14 +181,6 @@ function AdminRolesContent() {
               </SelectContent>
             </Select>
           </FormFieldFrame>
-
-          {activeCount > 0 && (
-            <div className="flex items-end">
-              <Button type="button" variant="outline" onClick={handleClear}>
-                {LABELS.clearFilters}
-              </Button>
-            </div>
-          )}
         </div>
       </CollapsibleTableFilters>
 

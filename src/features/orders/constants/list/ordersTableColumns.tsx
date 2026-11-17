@@ -1,7 +1,10 @@
 import { ChevronRight } from "lucide-react";
 import { LABELS } from "@/shared/constants/labels";
 import type { Order } from "@/shared/api/types";
-import type { DataTableColumn } from "@/shared/components/DataTable";
+import {
+  type DataTableColumn,
+  CopyableText,
+} from "@/shared/components/DataTable";
 import { OrderStatusGroup } from "../../components/list/OrderStatusGroup.component";
 import { OrderItemsTableCell } from "../../components/list/OrderItemsTableCell.component";
 import { formatInr, formatOrderDate } from "../../utils/detail/format";
@@ -14,16 +17,23 @@ export const ORDER_COLUMNS: DataTableColumn<Order>[] = [
     headerClassName: ORDERS_LIST_STYLES.colOrderHeader,
     className: ORDERS_LIST_STYLES.colOrderCell,
     truncate: false,
-    cell: (order) => (
-      <div className={ORDERS_LIST_STYLES.orderCell}>
-        <span className={ORDERS_LIST_STYLES.orderId}>
-          {order.subOrders?.[0]?.taxInvoiceNumber ?? LABELS.orderDetails}
-        </span>
-        <span className={ORDERS_LIST_STYLES.mobileTotal}>
-          {formatInr(order.totalAmount)}
-        </span>
-      </div>
-    ),
+    cell: (order) => {
+      const invoiceNumber = order.subOrders?.[0]?.taxInvoiceNumber;
+      return (
+        <div className={ORDERS_LIST_STYLES.orderCell}>
+          <span className={ORDERS_LIST_STYLES.orderId}>
+            {invoiceNumber ? (
+              <CopyableText value={invoiceNumber} />
+            ) : (
+              LABELS.orderDetails
+            )}
+          </span>
+          <span className={ORDERS_LIST_STYLES.mobileTotal}>
+            {formatInr(order.totalAmount)}
+          </span>
+        </div>
+      );
+    },
   },
   {
     id: "placed",

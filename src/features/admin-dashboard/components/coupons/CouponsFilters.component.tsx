@@ -2,7 +2,6 @@
 
 import { type ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -39,12 +38,11 @@ export function CouponsFilters({
     onStatusChange(value === ALL_STATUSES ? "" : value);
   };
 
-  const hasFilters = Boolean(search || status);
   const activeCount = (search.trim() ? 1 : 0) + (status ? 1 : 0);
 
   return (
     <CollapsibleTableFilters activeCount={activeCount} onClear={onClear}>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-end">
         <FormFieldFrame label={LABELS.search} htmlFor="coupons-filter-search">
           <Input
             id="coupons-filter-search"
@@ -70,14 +68,6 @@ export function CouponsFilters({
             </SelectContent>
           </Select>
         </FormFieldFrame>
-
-        {hasFilters && (
-          <div className="flex items-end">
-            <Button type="button" variant="outline" onClick={onClear}>
-              {LABELS.clearFilters}
-            </Button>
-          </div>
-        )}
       </div>
     </CollapsibleTableFilters>
   );

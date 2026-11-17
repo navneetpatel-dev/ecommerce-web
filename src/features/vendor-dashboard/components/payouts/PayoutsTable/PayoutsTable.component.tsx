@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -43,8 +42,6 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
       return true;
     });
   }, [rows, search, status]);
-
-  const hasFilters = Boolean(search || status);
 
   return (
     <div>
@@ -91,21 +88,6 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
                 </SelectContent>
               </Select>
             </FormFieldFrame>
-
-            {hasFilters && (
-              <div className="flex items-end">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setSearch("");
-                    setStatus("");
-                  }}
-                >
-                  {LABELS.clearFilters}
-                </Button>
-              </div>
-            )}
           </div>
         </CollapsibleTableFilters>
       )}

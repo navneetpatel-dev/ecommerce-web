@@ -1,5 +1,8 @@
 import { useMemo } from "react";
-import { type DataTableColumn } from "@/shared/components/DataTable";
+import {
+  type DataTableColumn,
+  CopyableText,
+} from "@/shared/components/DataTable";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
@@ -33,7 +36,7 @@ export function useTicketTableColumns({
                 title={LABELS.ticketHasUnread}
               />
             ) : null}
-            {row.ticketNumber}
+            <CopyableText value={row.ticketNumber} />
           </span>
         ),
         className: "whitespace-nowrap",

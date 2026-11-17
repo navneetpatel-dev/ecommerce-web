@@ -161,7 +161,6 @@ export function CouponsTable({
     <>
       <DataTable
         ariaLabel={LABELS.couponsTableAria}
-
         columns={columns}
         rows={coupons}
         loading={loading}
@@ -169,6 +168,12 @@ export function CouponsTable({
         getRowId={(row) => row.id}
         pagination={pagination}
         actions={renderActions}
+        tableId="admin-coupons"
+        enableColumnVisibility
+        enableDensityToggle
+        enableExport
+        enableSorting
+        enableFullscreen
       />
 
       <CouponsAnalyticsDialog

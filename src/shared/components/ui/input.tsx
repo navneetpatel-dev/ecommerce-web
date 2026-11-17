@@ -87,3 +87,4 @@ PasswordInput.displayName = "PasswordInput";
 
 export { Input, PasswordInput };
 export type { PasswordInputProps };
+export { SearchInput, type SearchInputProps } from "./SearchInput.component";

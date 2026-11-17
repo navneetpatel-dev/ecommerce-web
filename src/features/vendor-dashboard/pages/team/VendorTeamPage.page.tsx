@@ -63,8 +63,6 @@ export function VendorTeamPage() {
     return Array.from(set);
   }, [members]);
 
-  const hasFilters = Boolean(search || role);
-
   const loadingContent = (
     <div className={styles.loadingStack}>
       <div className={styles.loadingPulseRaised} />
@@ -138,21 +136,6 @@ export function VendorTeamPage() {
                   </SelectContent>
                 </Select>
               </FormFieldFrame>
-            )}
-
-            {hasFilters && (
-              <div className="flex items-end">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setSearch("");
-                    setRole("");
-                  }}
-                >
-                  {LABELS.clearFilters}
-                </Button>
-              </div>
             )}
           </div>
         </CollapsibleTableFilters>

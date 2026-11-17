@@ -4,7 +4,6 @@ import { AdminDataPage } from "../shared/AdminDataPage.page";
 import { AdminTaxRuleForm } from "../../components/tax/AdminTaxRuleForm.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { LABELS } from "@/shared/constants/labels";
 import { useAdminTaxPage } from "../../hooks/tax/useAdminTaxPage";
@@ -31,18 +30,6 @@ export function AdminTaxPage() {
               placeholder="Search by HSN code, category, GST %..."
             />
           </FormFieldFrame>
-
-          {activeCount > 0 && (
-            <div className="flex items-end">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={page.filters.onClear}
-              >
-                {LABELS.clearFilters}
-              </Button>
-            </div>
-          )}
         </div>
       </CollapsibleTableFilters>
 

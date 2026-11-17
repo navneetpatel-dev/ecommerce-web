@@ -1,6 +1,7 @@
 "use client";
 
 import type { KeyboardEvent, ReactNode } from "react";
+import { Checkbox } from "@/shared/components/ui/checkbox";
 import { TableRowActions } from "@/shared/components/DataTable/TableRowActions.component";
 import { cn } from "@/shared/utils/dom/cn";
 import { dataTableMobileStyles } from "../../styles/data-table/dataTable.styles";
@@ -12,6 +13,9 @@ export type DataTableMobileCardsProps<T> = {
   rows: T[];
   getRowId?: (row: T, index: number) => string;
   rowsInteractive: boolean;
+  selectable?: boolean;
+  selectedIds?: string[];
+  onToggleSelectRow?: (rowId: string) => void;
   actions?: (row: T, index: number) => ReactNode;
   onActivateRow: (row: T, index: number) => void;
   onRowKeyDown: (
@@ -26,6 +30,9 @@ export function DataTableMobileCards<T>({
   rows,
   getRowId,
   rowsInteractive,
+  selectable,
+  selectedIds,
+  onToggleSelectRow,
   actions,
   onActivateRow,
   onRowKeyDown,
@@ -38,6 +45,7 @@ export function DataTableMobileCards<T>({
         const rowId =
           getRowId?.(row, index) ??
           String((row as { id?: unknown }).id ?? index);
+        const isSelected = selectedIds?.includes(rowId) ?? false;
         const [primary, ...rest] = mobileColumns;
         const primaryContent = primary
           ? resolveCell(primary, row, index)
@@ -56,7 +64,27 @@ export function DataTableMobileCards<T>({
           : {};
 
         return (
-          <li key={rowId} className={dataTableMobileStyles.card}>
+          <li
+            key={rowId}
+            data-state={isSelected ? "selected" : undefined}
+            className={cn(
+              dataTableMobileStyles.card,
+              isSelected && "ring-2 ring-brand/50 bg-brand/5",
+            )}
+          >
+            {selectable && (
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-line">
+                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- Checkbox renders the control */}
+                <label className="flex items-center gap-2 cursor-pointer text-caption text-ink font-medium">
+                  <Checkbox
+                    checked={isSelected}
+                    onCheckedChange={() => onToggleSelectRow?.(rowId)}
+                    aria-label={`Select item ${rowId}`}
+                  />
+                  <span>Select</span>
+                </label>
+              </div>
+            )}
             {/* Activation sits on an inner region so the action buttons below
                 are siblings — never nested inside a button-role element. */}
             <div

@@ -1,8 +1,7 @@
 "use client";
 
-import type { ChangeEvent } from "react";
-import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
+import { type ChangeEvent } from "react";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { LABELS } from "@/shared/constants/labels";
@@ -31,21 +30,14 @@ export function AdminShippingZonesFilters({
           label={LABELS.search}
           htmlFor="admin-shipping-zones-filter-search"
         >
-          <Input
+          <SearchInput
             id="admin-shipping-zones-filter-search"
             value={search}
             onChange={handleSearchChange}
+            onClear={() => onSearchChange("")}
             placeholder="Search zones by name, state, or pincode prefix..."
           />
         </FormFieldFrame>
-
-        {activeCount > 0 && (
-          <div className="flex items-end">
-            <Button type="button" variant="outline" onClick={onClear}>
-              {LABELS.clearFilters}
-            </Button>
-          </div>
-        )}
       </div>
     </CollapsibleTableFilters>
   );

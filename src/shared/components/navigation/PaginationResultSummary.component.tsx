@@ -5,6 +5,7 @@ interface PaginationResultSummaryProps {
   from: number;
   to: number;
   total: number;
+  isFiltered?: boolean;
   className?: string;
 }
 
@@ -18,9 +19,13 @@ export function PaginationResultSummary({
   from,
   to,
   total,
+  isFiltered,
   className,
 }: PaginationResultSummaryProps) {
   if (total <= 0) return null;
+
+  const baseText = formatLabel(LABELS.showingResults, { from, to, total });
+  const text = isFiltered ? `${baseText} (filtered)` : baseText;
 
   return (
     <p
@@ -28,7 +33,7 @@ export function PaginationResultSummary({
       aria-atomic="true"
       className={className ?? "text-body-sm text-ink-muted"}
     >
-      {formatLabel(LABELS.showingResults, { from, to, total })}
+      {text}
     </p>
   );
 }

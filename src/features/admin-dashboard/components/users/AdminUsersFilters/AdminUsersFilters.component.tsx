@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import {
   Select,
   SelectContent,
@@ -11,7 +10,6 @@ import {
 import { FormFieldFrame } from "@/shared/components/forms";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { adminUsersFiltersLabels } from "@/shared/constants/labels/adminUsersFilters";
-import { adminUsersFiltersStyles } from "../../../styles/users/adminUsersFilters.styles";
 import {
   UserStatusOptionsList,
   ALL_STATUSES_VALUE,
@@ -61,15 +59,16 @@ export function AdminUsersFilters({
       activeCount={activeCount}
       onClear={onClear}
     >
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
         <FormFieldFrame
           label={adminUsersFiltersLabels.usersSearch}
           htmlFor="admin-users-filter-search"
         >
-          <Input
+          <SearchInput
             id="admin-users-filter-search"
             value={search}
             onChange={handleSearchChange}
+            onClear={() => onSearchChange("")}
             placeholder={adminUsersFiltersLabels.usersSearchPlaceholder}
           />
         </FormFieldFrame>
@@ -107,12 +106,6 @@ export function AdminUsersFilters({
             </SelectContent>
           </Select>
         </FormFieldFrame>
-
-        <div className={adminUsersFiltersStyles.clearButtonWrapper}>
-          <Button type="button" variant="outline" onClick={onClear}>
-            {adminUsersFiltersLabels.usersClearFilters}
-          </Button>
-        </div>
       </div>
     </CollapsibleTableFilters>
   );

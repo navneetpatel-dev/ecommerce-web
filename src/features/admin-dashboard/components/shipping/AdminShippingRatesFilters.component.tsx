@@ -1,8 +1,7 @@
 "use client";
 
-import type { ChangeEvent } from "react";
-import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
+import { type ChangeEvent } from "react";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import {
   Select,
   SelectContent,
@@ -61,10 +60,11 @@ export function AdminShippingRatesFilters({
           label={LABELS.search}
           htmlFor="admin-shipping-rates-filter-search"
         >
-          <Input
+          <SearchInput
             id="admin-shipping-rates-filter-search"
             value={search}
             onChange={handleSearchChange}
+            onClear={() => onSearchChange("")}
             placeholder="Search rates by zone, vendor, or method..."
           />
         </FormFieldFrame>
@@ -122,14 +122,6 @@ export function AdminShippingRatesFilters({
             </SelectContent>
           </Select>
         </FormFieldFrame>
-
-        {activeCount > 0 && (
-          <div className="flex items-end">
-            <Button type="button" variant="outline" onClick={onClear}>
-              {LABELS.clearFilters}
-            </Button>
-          </div>
-        )}
       </div>
     </CollapsibleTableFilters>
   );

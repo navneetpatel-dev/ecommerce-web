@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import type { Review } from "@/shared/api/types";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { Input } from "@/shared/components/ui/input";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import {
   Select,
   SelectContent,
@@ -130,6 +130,10 @@ export function VendorReviewsView({
         <CollapsibleTableFilters
           activeCount={activeCount}
           onClear={handleClear}
+          resultCount={{
+            count: filteredReviews.length,
+            total: reviews.length,
+          }}
         >
           <div className="flex flex-wrap items-end gap-3">
             <FormFieldFrame
@@ -137,11 +141,11 @@ export function VendorReviewsView({
               htmlFor="vendor-reviews-search"
               className="w-72"
             >
-              <Input
+              <SearchInput
                 id="vendor-reviews-search"
-                type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                onClear={() => setSearch("")}
                 placeholder="Search reviewer, product, or review text..."
               />
             </FormFieldFrame>

@@ -1,7 +1,6 @@
 "use client";
 
 import type { ChangeEvent } from "react";
-import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
   Select,
@@ -14,7 +13,6 @@ import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { RETURN_STATUS } from "@/shared/constants/statuses";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
-import { adminOrdersFiltersStyles } from "../../styles/orders/adminOrdersFilters.styles";
 
 export interface AdminReturnsFiltersProps {
   search: string;
@@ -50,7 +48,7 @@ export function AdminReturnsFilters({
       activeCount={activeCount}
       onClear={onClear}
     >
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-end">
         <FormFieldFrame
           label={LABELS.searchReturnsLabel}
           htmlFor="admin-returns-filter-search"
@@ -81,12 +79,6 @@ export function AdminReturnsFilters({
             </SelectContent>
           </Select>
         </FormFieldFrame>
-
-        <div className={adminOrdersFiltersStyles.clearButtonWrapper}>
-          <Button type="button" variant="outline" onClick={onClear}>
-            {LABELS.clearFilters}
-          </Button>
-        </div>
       </div>
     </CollapsibleTableFilters>
   );

@@ -3,7 +3,6 @@
 import { AdminDataPage } from "../shared/AdminDataPage.page";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { LABELS } from "@/shared/constants/labels";
 import { useAdminQnaModerationPage } from "../../hooks/qna/useAdminQnaModerationPage";
@@ -29,18 +28,6 @@ export function AdminQnaModerationPage() {
               placeholder="Search by question, answer, product..."
             />
           </FormFieldFrame>
-
-          {activeCount > 0 && (
-            <div className="flex items-end">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={page.filters.onClear}
-              >
-                {LABELS.clearFilters}
-              </Button>
-            </div>
-          )}
         </div>
       </CollapsibleTableFilters>
 

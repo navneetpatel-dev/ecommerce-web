@@ -68,6 +68,12 @@ export function ProductModerationTable({
         getRowId={getRowId}
         pagination={pagination}
         actions={renderActions}
+        tableId="admin-product-moderation"
+        enableColumnVisibility
+        enableDensityToggle
+        enableExport
+        enableSorting
+        enableFullscreen
       />
       <ProductModerationPreviewModal
         product={previewProduct}

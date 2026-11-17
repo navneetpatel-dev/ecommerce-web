@@ -199,18 +199,6 @@ export function AdminPromoBannersPage() {
                     </SelectContent>
                   </Select>
                 </FormFieldFrame>
-
-                {(searchQuery || statusFilter !== "ALL") && (
-                  <div className="flex items-end">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleResetFilters}
-                    >
-                      {LABELS.clearFilters}
-                    </Button>
-                  </div>
-                )}
               </div>
             </CollapsibleTableFilters>
 

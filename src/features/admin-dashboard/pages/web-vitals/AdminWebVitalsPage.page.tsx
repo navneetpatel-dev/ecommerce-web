@@ -104,11 +104,6 @@ export function AdminWebVitalsPage() {
             >
               {LABELS.webVitalsLoad}
             </Button>
-            {activeCount > 0 && (
-              <Button type="button" variant="outline" onClick={handleClear}>
-                {LABELS.clearFilters}
-              </Button>
-            )}
           </div>
         </div>
       </CollapsibleTableFilters>

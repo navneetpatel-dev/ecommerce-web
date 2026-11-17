@@ -16,6 +16,7 @@ import { RouteScrollResetContainer } from "@/shared/containers/navigation/RouteS
 import { BrowseUrlTrackerContainer } from "@/shared/containers/system/BrowseUrlTrackerContainer.container";
 import { RoleSurfaceGuard } from "@/shared/components/system/RoleSurfaceGuard.component";
 import { ThemePaletteProvider } from "@/shared/context/ThemePalette.context";
+import { CommandPalette } from "@/shared/components/command-palette/CommandPalette.component";
 import { ErrorReportingProvider } from "@/shared/providers/ErrorReportingProvider";
 import { MotionPreferenceProvider } from "@/shared/providers/MotionPreferenceProvider";
 import { createQueryPersister } from "@/shared/api/client/queryPersister";
@@ -84,6 +85,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             <LoginRequiredDialogContainer />
             <ToastStackContainer />
             <ExportJobsTrayContainer />
+            <CommandPalette />
             <ImpersonationBanner />
             <RoleSurfaceGuard>{children}</RoleSurfaceGuard>
           </ThemePaletteProvider>

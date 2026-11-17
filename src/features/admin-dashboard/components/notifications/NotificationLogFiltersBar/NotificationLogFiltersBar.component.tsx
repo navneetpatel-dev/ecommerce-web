@@ -4,7 +4,6 @@ import { notificationsAdminLabels as LABELS } from "@/shared/constants/labels/no
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
 import type { NotificationLogFilters } from "../../../api/notifications/notifications.api";
 import { NOTIFICATION_TYPE_OPTIONS } from "../../../constants/notifications/notificationTypes";
 import { NotificationFilterSelect } from "./NotificationFilterSelect.component";
@@ -75,13 +74,6 @@ export function NotificationLogFiltersBar({
           options={STATUS_OPTIONS}
           onChange={handleStatusChange}
         />
-        {activeCount > 0 && (
-          <div className="flex items-end">
-            <Button type="button" variant="outline" onClick={handleClear}>
-              Clear filters
-            </Button>
-          </div>
-        )}
       </div>
     </CollapsibleTableFilters>
   );

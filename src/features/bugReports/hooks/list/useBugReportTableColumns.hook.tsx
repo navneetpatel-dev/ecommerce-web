@@ -1,5 +1,8 @@
 import { useMemo } from "react";
-import { type DataTableColumn } from "@/shared/components/DataTable";
+import {
+  type DataTableColumn,
+  CopyableText,
+} from "@/shared/components/DataTable";
 import { StatusBadge } from "@/shared/components/badges/StatusBadge.component";
 import { LABELS } from "@/shared/constants/labels";
 import { formatOrderDate } from "@/shared/utils/formatting/orderFormat";
@@ -28,9 +31,10 @@ export function useBugReportTableColumns({
         id: "reportNumber",
         header: LABELS.bugReportNumber,
         cell: (row) => (
-          <span className={bugReportListStyles.reportNumberCell}>
-            {row.reportNumber}
-          </span>
+          <CopyableText
+            value={row.reportNumber}
+            className={bugReportListStyles.reportNumberCell}
+          />
         ),
         className: bugReportListStyles.reportNumberCol,
       },

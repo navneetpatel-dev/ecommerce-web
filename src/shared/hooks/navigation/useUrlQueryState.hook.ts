@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { preserveScrollOnNextNavigation } from "@/shared/utils/navigation/scrollMemory";
 
@@ -27,16 +28,33 @@ export function useUrlQueryState() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const hrefWith = (updates: QueryUpdates): string => {
-    const query = nextQuery(searchParams, updates).toString();
-    return query ? `${pathname}?${query}` : pathname;
-  };
+  const hrefWith = useCallback(
+    (updates: QueryUpdates): string => {
+      const query = nextQuery(searchParams, updates).toString();
+      return query ? `${pathname}?${query}` : pathname;
+    },
+    [pathname, searchParams],
+  );
 
-  const update = (updates: QueryUpdates) => {
-    // A filter/sort change keeps the reader where they are; a new page starts at the top.
-    if (!("page" in updates)) preserveScrollOnNextNavigation();
-    router.replace(hrefWith(updates), { scroll: false });
-  };
+  const update = useCallback(
+    (updates: QueryUpdates) => {
+      const next = nextQuery(searchParams, updates);
+      // Prevent redundant navigation and infinite re-render loops if query is unchanged
+      if (next.toString() === searchParams.toString()) {
+        return;
+      }
+      if (!("page" in updates)) preserveScrollOnNextNavigation();
+      const query = next.toString();
+      const targetUrl = query ? `${pathname}?${query}` : pathname;
+
+      // Update URL without triggering server RSC reload loop
+      if (typeof window !== "undefined") {
+        window.history.replaceState(null, "", targetUrl);
+      }
+      router.replace(targetUrl, { scroll: false });
+    },
+    [router, pathname, searchParams],
+  );
 
   return { searchParams, update, hrefWith };
 }

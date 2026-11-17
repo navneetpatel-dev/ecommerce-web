@@ -67,6 +67,12 @@ export function AdminDataListView({
       pagination={paginationConfig}
       actions={renderActions}
       onRowClick={onRowClick}
+      tableId={`admin-${title.toLowerCase().replace(/\s+/g, "-")}`}
+      enableColumnVisibility
+      enableDensityToggle
+      enableExport
+      enableSorting
+      enableFullscreen
     />
   );
 }

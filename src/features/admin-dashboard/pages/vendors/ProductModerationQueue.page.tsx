@@ -3,8 +3,7 @@
 import { PackageSearch } from "lucide-react";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { useProductModerationQueue } from "../../hooks/vendors/useProductModerationQueue.hook";
 import { ProductModerationTable } from "../../components/vendors/ProductModerationTable.component";
@@ -40,21 +39,14 @@ export function ProductModerationQueue() {
             label={LABELS.search}
             htmlFor="product-moderation-filter-search"
           >
-            <Input
+            <SearchInput
               id="product-moderation-filter-search"
               value={queue.search}
               onChange={(e) => queue.onSearchChange(e.target.value)}
+              onClear={() => queue.onSearchChange("")}
               placeholder="Search by product name or SKU..."
             />
           </FormFieldFrame>
-
-          {activeCount > 0 && (
-            <div className="flex items-end">
-              <Button type="button" variant="outline" onClick={queue.onClear}>
-                {LABELS.clearFilters}
-              </Button>
-            </div>
-          )}
         </div>
       </CollapsibleTableFilters>
 

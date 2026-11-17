@@ -6,7 +6,7 @@ import type { Order } from "@/shared/api/types";
 import { DataTable } from "@/shared/components/DataTable";
 import { TextEyebrow } from "@/shared/components/display/TextEyebrow.component";
 import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import {
   Select,
   SelectContent,
@@ -97,10 +97,11 @@ export function OrdersList({ orders, filters, pagination }: OrdersListProps) {
                 label={LABELS.search}
                 htmlFor="customer-orders-search"
               >
-                <Input
+                <SearchInput
                   id="customer-orders-search"
                   value={filters.search}
                   onChange={(e) => filters.onSearchChange(e.target.value)}
+                  onClear={() => filters.onSearchChange("")}
                   placeholder={LABELS.searchOrdersPlaceholder}
                 />
               </FormFieldFrame>
@@ -128,18 +129,6 @@ export function OrdersList({ orders, filters, pagination }: OrdersListProps) {
                   </SelectContent>
                 </Select>
               </FormFieldFrame>
-
-              {activeCount > 0 && (
-                <div className="flex items-end">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={filters.onClear}
-                  >
-                    {LABELS.clearFilters}
-                  </Button>
-                </div>
-              )}
             </div>
           </CollapsibleTableFilters>
         )}
@@ -154,6 +143,13 @@ export function OrdersList({ orders, filters, pagination }: OrdersListProps) {
           tableLayout="fixed"
           onRowClick={handleRowClick}
           pagination={paginationConfig}
+          tableId="customer-orders"
+          enableColumnVisibility
+          enableDensityToggle
+          enableExport
+          enableSorting
+          enableFullscreen
+          exportFilename="my-orders"
         />
 
         <CustomerOrderHistoryPanel />

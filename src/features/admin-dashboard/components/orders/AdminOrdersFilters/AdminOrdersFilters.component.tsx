@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import {
   Select,
   SelectContent,
@@ -11,7 +10,6 @@ import {
 import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
-import { adminOrdersFiltersStyles } from "../../../styles/orders/adminOrdersFilters.styles";
 import {
   OrderStatusOptionsList,
   ALL_STATUSES_VALUE,
@@ -45,15 +43,16 @@ export function AdminOrdersFilters({
       activeCount={activeCount}
       onClear={onClear}
     >
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-end">
         <FormFieldFrame
           label={LABELS.searchOrdersLabel}
           htmlFor="admin-orders-filter-search"
         >
-          <Input
+          <SearchInput
             id="admin-orders-filter-search"
             value={search}
             onChange={handleSearchChange}
+            onClear={() => onSearchChange("")}
             placeholder={LABELS.searchOrdersPlaceholder}
           />
         </FormFieldFrame>
@@ -74,12 +73,6 @@ export function AdminOrdersFilters({
             </SelectContent>
           </Select>
         </FormFieldFrame>
-
-        <div className={adminOrdersFiltersStyles.clearButtonWrapper}>
-          <Button type="button" variant="outline" onClick={onClear}>
-            {LABELS.clearFilters}
-          </Button>
-        </div>
       </div>
     </CollapsibleTableFilters>
   );

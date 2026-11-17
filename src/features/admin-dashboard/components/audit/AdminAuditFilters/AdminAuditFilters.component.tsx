@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
   Select,
@@ -13,7 +12,6 @@ import { DateRangeFields } from "@/shared/components/forms/DateRangeFields.compo
 import { dateRangeToolbarStyles } from "@/shared/styles/forms/dateRangeToolbar.styles";
 import { auditFiltersLabels } from "@/shared/constants/labels/auditFilters";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
-import { adminAuditFiltersStyles } from "../../../styles/audit/adminAuditFilters.styles";
 import {
   EntityTypeOptionsList,
   ALL_ENTITY_TYPES_VALUE,
@@ -91,12 +89,6 @@ export function AdminAuditFilters({
               placeholder={auditFiltersLabels.auditActorPlaceholder}
             />
           </FormFieldFrame>
-
-          <div className={adminAuditFiltersStyles.clearButtonWrapper}>
-            <Button type="button" variant="outline" onClick={onClear}>
-              {auditFiltersLabels.auditClearFilters}
-            </Button>
-          </div>
         </div>
 
         <DateRangeFields

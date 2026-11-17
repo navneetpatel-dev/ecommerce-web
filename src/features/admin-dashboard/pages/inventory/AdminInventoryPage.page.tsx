@@ -10,7 +10,6 @@ import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { FormFieldFrame } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import type { AdminDataRow } from "../../hooks/shared/useAdminDataList.hook";
@@ -56,13 +55,6 @@ export function AdminInventoryPage() {
               placeholder="Search by product name or SKU..."
             />
           </FormFieldFrame>
-          {activeCount > 0 && (
-            <div className="flex items-end">
-              <Button type="button" variant="outline" onClick={handleClear}>
-                {LABELS.clearFilters}
-              </Button>
-            </div>
-          )}
         </div>
       </CollapsibleTableFilters>
 

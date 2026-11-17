@@ -2,8 +2,7 @@
 
 import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import { LABELS } from "@/shared/constants/labels";
 import {
   useBugReportFiltersHandlers,
@@ -46,10 +45,11 @@ export function BugReportFilters({ variant = "admin" }: BugReportFiltersProps) {
     <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
         <FormFieldFrame label={LABELS.search} htmlFor="bug-filter-search">
-          <Input
+          <SearchInput
             id="bug-filter-search"
             value={currentSearch}
             onChange={(e) => handleSearchChange(e.target.value)}
+            onClear={() => handleSearchChange("")}
             placeholder="Search by title or BUG-#"
           />
         </FormFieldFrame>
@@ -73,13 +73,6 @@ export function BugReportFilters({ variant = "admin" }: BugReportFiltersProps) {
             />
           </>
         ) : null}
-        {activeCount > 0 && (
-          <div className="flex items-end">
-            <Button type="button" variant="outline" onClick={handleClear}>
-              {LABELS.clearFilters}
-            </Button>
-          </div>
-        )}
       </div>
     </CollapsibleTableFilters>
   );

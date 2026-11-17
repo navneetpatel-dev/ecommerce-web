@@ -4,8 +4,7 @@ import { useState, useMemo } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import type { ProductQuestion } from "@/shared/api/types";
 import { FormFieldFrame } from "@/shared/components/forms";
-import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
+import { SearchInput } from "@/shared/components/ui/SearchInput.component";
 import {
   Select,
   SelectContent,
@@ -117,13 +116,18 @@ export function VendorQnaView({
         <CollapsibleTableFilters
           activeCount={activeCount}
           onClear={handleClear}
+          resultCount={{
+            count: filteredQuestions.length,
+            total: questions.length,
+          }}
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
             <FormFieldFrame label={LABELS.search} htmlFor="vendor-qna-search">
-              <Input
+              <SearchInput
                 id="vendor-qna-search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                onClear={() => setSearch("")}
                 placeholder="Search questions, answers, or products..."
               />
             </FormFieldFrame>
@@ -143,14 +147,6 @@ export function VendorQnaView({
                 </SelectContent>
               </Select>
             </FormFieldFrame>
-
-            {activeCount > 0 && (
-              <div className="flex items-end">
-                <Button type="button" variant="outline" onClick={handleClear}>
-                  {LABELS.clearFilters}
-                </Button>
-              </div>
-            )}
           </div>
         </CollapsibleTableFilters>
       )}

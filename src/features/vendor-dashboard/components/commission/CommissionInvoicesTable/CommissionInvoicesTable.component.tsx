@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
 import { Table } from "@/shared/components/ui/table";
 import { TableScrollShell } from "@/shared/components/DataTable/TableScrollShell.component";
 import { FormFieldFrame } from "@/shared/components/forms";
@@ -62,14 +61,6 @@ export function CommissionInvoicesTable({
                 placeholder="Search by invoice # or period..."
               />
             </FormFieldFrame>
-
-            {activeCount > 0 && (
-              <div className="flex items-end">
-                <Button type="button" variant="outline" onClick={handleClear}>
-                  {LABELS.clearFilters}
-                </Button>
-              </div>
-            )}
           </div>
         </CollapsibleTableFilters>
       )}

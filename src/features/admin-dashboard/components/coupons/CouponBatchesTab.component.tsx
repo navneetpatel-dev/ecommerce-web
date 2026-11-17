@@ -76,14 +76,6 @@ export function CouponBatchesTab() {
               placeholder="Search coupon batches by name..."
             />
           </FormFieldFrame>
-
-          {activeCount > 0 && (
-            <div className="flex items-end">
-              <Button type="button" variant="outline" onClick={handleClear}>
-                {LABELS.clearFilters}
-              </Button>
-            </div>
-          )}
         </div>
       </CollapsibleTableFilters>
 

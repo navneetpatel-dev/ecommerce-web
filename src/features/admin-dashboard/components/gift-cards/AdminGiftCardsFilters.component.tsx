@@ -2,7 +2,6 @@
 
 import type { ChangeEvent } from "react";
 import { Input } from "@/shared/components/ui/input";
-import { Button } from "@/shared/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -37,7 +36,7 @@ export function AdminGiftCardsFilters({
 
   return (
     <CollapsibleTableFilters activeCount={activeCount} onClear={onClear}>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-end">
         <FormFieldFrame
           label={LABELS.search}
           htmlFor="admin-gift-cards-filter-search"
@@ -64,14 +63,6 @@ export function AdminGiftCardsFilters({
             </SelectContent>
           </Select>
         </FormFieldFrame>
-
-        {activeCount > 0 && (
-          <div className="flex items-end">
-            <Button type="button" variant="outline" onClick={onClear}>
-              {LABELS.clearFilters}
-            </Button>
-          </div>
-        )}
       </div>
     </CollapsibleTableFilters>
   );
