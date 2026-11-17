@@ -1,7 +1,6 @@
 "use client";
 
 import { type ChangeEvent } from "react";
-import { Search, X } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -11,9 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { FormFieldFrame } from "@/shared/components/forms";
 import { ORDER_STATUS } from "@/shared/constants/statuses";
 import { formatStatusLabel } from "@/shared/utils/formatting/formatStatus";
 import { LABELS } from "@/shared/constants/labels";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 
 export interface VendorOrdersFiltersProps {
   search: string;
@@ -41,26 +42,32 @@ export function VendorOrdersFilters({
   };
 
   const hasFilters = Boolean(search || status);
+  const activeCount = (search.trim() ? 1 : 0) + (status ? 1 : 0);
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-line bg-surface p-4 shadow-sm mb-4">
-      <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-text-muted pointer-events-none" />
+    <CollapsibleTableFilters activeCount={activeCount} onClear={onClear}>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+        <FormFieldFrame
+          label={LABELS.search}
+          htmlFor="vendor-orders-filter-search"
+        >
           <Input
-            type="search"
+            id="vendor-orders-filter-search"
             value={search}
             onChange={handleInputChange}
-            placeholder="Search by order ID, item name, SKU, invoice #, tracking..."
-            className="pl-9 h-9 text-sm"
+            placeholder="Search by order ID, item name, SKU, tracking..."
           />
-        </div>
-        <div className="w-full sm:w-48">
+        </FormFieldFrame>
+
+        <FormFieldFrame
+          label={LABELS.orderStatus}
+          htmlFor="vendor-orders-filter-status"
+        >
           <Select
             value={status || ALL_STATUSES}
             onValueChange={handleSelectChange}
           >
-            <SelectTrigger className="h-9 text-sm">
+            <SelectTrigger id="vendor-orders-filter-status">
               <SelectValue placeholder="All Statuses" />
             </SelectTrigger>
             <SelectContent>
@@ -72,20 +79,16 @@ export function VendorOrdersFilters({
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </FormFieldFrame>
+
+        {hasFilters && (
+          <div className="flex items-end">
+            <Button type="button" variant="outline" onClick={onClear}>
+              {LABELS.clearFilters}
+            </Button>
+          </div>
+        )}
       </div>
-      {hasFilters && (
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={onClear}
-          className="text-text-muted hover:text-text shrink-0 h-9"
-        >
-          <X className="size-4 mr-1.5" />
-          {LABELS.clearFilters}
-        </Button>
-      )}
-    </div>
+    </CollapsibleTableFilters>
   );
 }

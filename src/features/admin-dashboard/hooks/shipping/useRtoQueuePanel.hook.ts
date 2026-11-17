@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
@@ -28,6 +28,44 @@ export function useRtoQueuePanel() {
     () => query.data ?? [],
     [query.data],
   );
+
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+
+  const filteredShipments = useMemo(() => {
+    return shipments.filter((item) => {
+      if (statusFilter !== "ALL" && item.status !== statusFilter) {
+        return false;
+      }
+      if (search.trim()) {
+        const q = search.trim().toLowerCase();
+        const trackingMatch = item.trackingNumber?.toLowerCase().includes(q);
+        const customerMatch = item.subOrder?.order?.user?.name
+          ?.toLowerCase()
+          .includes(q);
+        const reasonMatch = item.failureReason?.toLowerCase().includes(q);
+        const subOrderIdMatch = item.subOrder?.id?.toLowerCase().includes(q);
+        const orderIdMatch = item.subOrder?.order?.id
+          ?.toLowerCase()
+          .includes(q);
+        if (
+          !trackingMatch &&
+          !customerMatch &&
+          !reasonMatch &&
+          !subOrderIdMatch &&
+          !orderIdMatch
+        ) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [shipments, search, statusFilter]);
+
+  const onClearFilters = useCallback(() => {
+    setSearch("");
+    setStatusFilter("ALL");
+  }, []);
 
   const markReceived = useMutation({
     mutationFn: (shipmentId: string) =>
@@ -63,9 +101,15 @@ export function useRtoQueuePanel() {
   return {
     visible,
     shipments,
+    filteredShipments,
     columns,
     loading: query.isLoading,
     pendingCount,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    onClearFilters,
     pendingBadge:
       pendingCount > 0
         ? formatLabel(LABELS.rtoAwaitingReceiptBadge, { count: pendingCount })

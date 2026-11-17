@@ -2,6 +2,17 @@
 
 import { Undo2 } from "lucide-react";
 import { DataTable } from "@/shared/components/DataTable";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { LABELS } from "@/shared/constants/labels";
 import type { RtoQueueShipment } from "../../../api/shipping/shipping.api";
 import { rtoQueuePanelStyles as styles } from "../../../styles/shipping/rtoQueuePanel.styles";
@@ -9,11 +20,25 @@ import { useRtoQueuePanel } from "../../../hooks/shipping/useRtoQueuePanel.hook"
 
 const getRowId = (row: RtoQueueShipment) => row.id;
 
-/** Every shipment returning to origin or already received back, with the "received" action. */
+/** Every shipment returning to origin or already received back, with search, filters, and the "received" action. */
 export function RtoQueuePanel() {
-  const { visible, shipments, columns, loading, pendingBadge } =
-    useRtoQueuePanel();
+  const {
+    visible,
+    filteredShipments,
+    columns,
+    loading,
+    pendingBadge,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    onClearFilters,
+  } = useRtoQueuePanel();
+
   if (!visible) return null;
+
+  const activeCount =
+    (search.trim() ? 1 : 0) + (statusFilter !== "ALL" ? 1 : 0);
 
   return (
     <section className={styles.root}>
@@ -26,10 +51,48 @@ export function RtoQueuePanel() {
           <span className={styles.badge}>{pendingBadge}</span>
         ) : null}
       </div>
+
+      <CollapsibleTableFilters
+        activeCount={activeCount}
+        onClear={onClearFilters}
+      >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+          <FormFieldFrame label={LABELS.search} htmlFor="rto-filter-search">
+            <Input
+              id="rto-filter-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by tracking #, customer, order ID, or reason..."
+            />
+          </FormFieldFrame>
+
+          <FormFieldFrame label={LABELS.status} htmlFor="rto-filter-status">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger id="rto-filter-status">
+                <SelectValue placeholder="All Statuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">All Statuses</SelectItem>
+                <SelectItem value="RTO_INITIATED">RTO Initiated</SelectItem>
+                <SelectItem value="RTO_DELIVERED">RTO Delivered</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+
+          {activeCount > 0 && (
+            <div className="flex items-end">
+              <Button type="button" variant="outline" onClick={onClearFilters}>
+                {LABELS.clearFilters}
+              </Button>
+            </div>
+          )}
+        </div>
+      </CollapsibleTableFilters>
+
       <DataTable
         ariaLabel={LABELS.rtoQueueTableAria}
         columns={columns}
-        rows={shipments}
+        rows={filteredShipments}
         getRowId={getRowId}
         loading={loading}
         emptyMessage={LABELS.rtoQueueEmpty}

@@ -8,8 +8,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { FormFieldFrame, FormSection } from "@/shared/components/forms";
+import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { adminOrdersFiltersStyles } from "../../../styles/orders/adminOrdersFilters.styles";
 import {
   OrderStatusOptionsList,
@@ -35,42 +36,51 @@ export function AdminOrdersFilters({
   const { handleSearchChange, handleStatusChange } =
     useAdminOrdersFiltersHandlers({ onSearchChange, onStatusChange });
 
+  const activeCount =
+    (search.trim() ? 1 : 0) + (status && status !== ALL_STATUSES_VALUE ? 1 : 0);
+
   return (
-    <FormSection title={LABELS.orderFiltersTitle} columns={3}>
-      <FormFieldFrame
-        label={LABELS.searchOrdersLabel}
-        htmlFor="admin-orders-filter-search"
-      >
-        <Input
-          id="admin-orders-filter-search"
-          value={search}
-          onChange={handleSearchChange}
-          placeholder={LABELS.searchOrdersPlaceholder}
-        />
-      </FormFieldFrame>
-
-      <FormFieldFrame
-        label={LABELS.orderStatus}
-        htmlFor="admin-orders-filter-status"
-      >
-        <Select
-          value={status || ALL_STATUSES_VALUE}
-          onValueChange={handleStatusChange}
+    <CollapsibleTableFilters
+      title={LABELS.orderFiltersTitle}
+      activeCount={activeCount}
+      onClear={onClear}
+    >
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+        <FormFieldFrame
+          label={LABELS.searchOrdersLabel}
+          htmlFor="admin-orders-filter-search"
         >
-          <SelectTrigger id="admin-orders-filter-status">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <OrderStatusOptionsList />
-          </SelectContent>
-        </Select>
-      </FormFieldFrame>
+          <Input
+            id="admin-orders-filter-search"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder={LABELS.searchOrdersPlaceholder}
+          />
+        </FormFieldFrame>
 
-      <div className={adminOrdersFiltersStyles.clearButtonWrapper}>
-        <Button type="button" variant="outline" onClick={onClear}>
-          {LABELS.clearFilters}
-        </Button>
+        <FormFieldFrame
+          label={LABELS.orderStatus}
+          htmlFor="admin-orders-filter-status"
+        >
+          <Select
+            value={status || ALL_STATUSES_VALUE}
+            onValueChange={handleStatusChange}
+          >
+            <SelectTrigger id="admin-orders-filter-status">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <OrderStatusOptionsList />
+            </SelectContent>
+          </Select>
+        </FormFieldFrame>
+
+        <div className={adminOrdersFiltersStyles.clearButtonWrapper}>
+          <Button type="button" variant="outline" onClick={onClear}>
+            {LABELS.clearFilters}
+          </Button>
+        </div>
       </div>
-    </FormSection>
+    </CollapsibleTableFilters>
   );
 }

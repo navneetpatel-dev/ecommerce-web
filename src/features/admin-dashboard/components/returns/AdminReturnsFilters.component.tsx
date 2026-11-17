@@ -10,9 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { FormFieldFrame, FormSection } from "@/shared/components/forms";
+import { FormFieldFrame } from "@/shared/components/forms";
 import { LABELS } from "@/shared/constants/labels";
 import { RETURN_STATUS } from "@/shared/constants/statuses";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { adminOrdersFiltersStyles } from "../../styles/orders/adminOrdersFilters.styles";
 
 export interface AdminReturnsFiltersProps {
@@ -40,44 +41,53 @@ export function AdminReturnsFilters({
     onStatusChange(val === "ALL" ? "" : val);
   };
 
+  const activeCount =
+    (search.trim() ? 1 : 0) + (status && status !== "ALL" ? 1 : 0);
+
   return (
-    <FormSection title={LABELS.returnsFiltersTitle} columns={3}>
-      <FormFieldFrame
-        label={LABELS.searchReturnsLabel}
-        htmlFor="admin-returns-filter-search"
-      >
-        <Input
-          id="admin-returns-filter-search"
-          value={search}
-          onChange={handleSearchChange}
-          placeholder={LABELS.searchReturnsPlaceholder}
-        />
-      </FormFieldFrame>
+    <CollapsibleTableFilters
+      title={LABELS.returnsFiltersTitle}
+      activeCount={activeCount}
+      onClear={onClear}
+    >
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+        <FormFieldFrame
+          label={LABELS.searchReturnsLabel}
+          htmlFor="admin-returns-filter-search"
+        >
+          <Input
+            id="admin-returns-filter-search"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder={LABELS.searchReturnsPlaceholder}
+          />
+        </FormFieldFrame>
 
-      <FormFieldFrame
-        label={LABELS.returnStatus}
-        htmlFor="admin-returns-filter-status"
-      >
-        <Select value={status || "ALL"} onValueChange={handleStatusChange}>
-          <SelectTrigger id="admin-returns-filter-status">
-            <SelectValue placeholder={LABELS.allReturnStatuses} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="ALL">{LABELS.allReturnStatuses}</SelectItem>
-            {RETURN_STATUS_LIST.map((s) => (
-              <SelectItem key={s} value={s}>
-                {s}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </FormFieldFrame>
+        <FormFieldFrame
+          label={LABELS.returnStatus}
+          htmlFor="admin-returns-filter-status"
+        >
+          <Select value={status || "ALL"} onValueChange={handleStatusChange}>
+            <SelectTrigger id="admin-returns-filter-status">
+              <SelectValue placeholder={LABELS.allReturnStatuses} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">{LABELS.allReturnStatuses}</SelectItem>
+              {RETURN_STATUS_LIST.map((s) => (
+                <SelectItem key={s} value={s}>
+                  {s}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </FormFieldFrame>
 
-      <div className={adminOrdersFiltersStyles.clearButtonWrapper}>
-        <Button type="button" variant="outline" onClick={onClear}>
-          {LABELS.clearFilters}
-        </Button>
+        <div className={adminOrdersFiltersStyles.clearButtonWrapper}>
+          <Button type="button" variant="outline" onClick={onClear}>
+            {LABELS.clearFilters}
+          </Button>
+        </div>
       </div>
-    </FormSection>
+    </CollapsibleTableFilters>
   );
 }

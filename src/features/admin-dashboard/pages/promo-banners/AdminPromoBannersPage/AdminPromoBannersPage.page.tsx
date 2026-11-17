@@ -1,13 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ImagePlus, Plus, RotateCcw, Search } from "lucide-react";
+import { ImagePlus, Plus, RotateCcw } from "lucide-react";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
 import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
+import { FormFieldFrame } from "@/shared/components/forms";
 import {
   Select,
   SelectContent,
@@ -19,6 +20,7 @@ import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { PromoBannerStatus } from "@/shared/constants/statuses";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { usePromoBanners } from "./usePromoBanners.hook";
 import { PromoBannerCreateDialog } from "./PromoBannerCreateSection.component";
 import { PromoBannersList } from "./PromoBannersList.component";
@@ -143,7 +145,7 @@ export function AdminPromoBannersPage() {
 
         {!promo.loading && promo.banners.length > 0 ? (
           <div className="space-y-4">
-            {/* Header & Filter Controls for the Banners List */}
+            {/* Header for the Banners List */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-line/80 pt-6">
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2">
@@ -160,45 +162,57 @@ export function AdminPromoBannersPage() {
                   storefront.
                 </p>
               </div>
+            </div>
 
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="relative min-w-[200px] flex-1 sm:w-60 sm:flex-initial">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
+            <CollapsibleTableFilters
+              activeCount={
+                (searchQuery.trim() ? 1 : 0) + (statusFilter !== "ALL" ? 1 : 0)
+              }
+              onClear={handleResetFilters}
+            >
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+                <FormFieldFrame
+                  label={LABELS.search}
+                  htmlFor="promo-banners-filter-search"
+                >
                   <Input
-                    type="search"
-                    placeholder="Search banners..."
+                    id="promo-banners-filter-search"
+                    placeholder="Search banners by title or link..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 h-9 text-body-sm"
                   />
-                </div>
+                </FormFieldFrame>
 
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-[140px] h-9 text-body-sm">
-                    <SelectValue placeholder="All Statuses" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ALL">All Statuses</SelectItem>
-                    <SelectItem value="ACTIVE">Active</SelectItem>
-                    <SelectItem value="DRAFT">Draft</SelectItem>
-                    <SelectItem value="ARCHIVED">Archived</SelectItem>
-                  </SelectContent>
-                </Select>
+                <FormFieldFrame
+                  label={LABELS.status}
+                  htmlFor="promo-banners-filter-status"
+                >
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger id="promo-banners-filter-status">
+                      <SelectValue placeholder="All Statuses" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ALL">All Statuses</SelectItem>
+                      <SelectItem value="ACTIVE">Active</SelectItem>
+                      <SelectItem value="DRAFT">Draft</SelectItem>
+                      <SelectItem value="ARCHIVED">Archived</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormFieldFrame>
 
                 {(searchQuery || statusFilter !== "ALL") && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleResetFilters}
-                    className="h-9 gap-1 text-ink-muted hover:text-ink"
-                  >
-                    <RotateCcw className="h-3.5 w-3.5" />
-                    Reset
-                  </Button>
+                  <div className="flex items-end">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleResetFilters}
+                    >
+                      {LABELS.clearFilters}
+                    </Button>
+                  </div>
                 )}
               </div>
-            </div>
+            </CollapsibleTableFilters>
 
             {filteredBanners.length === 0 ? (
               <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line bg-surface p-8 text-center">

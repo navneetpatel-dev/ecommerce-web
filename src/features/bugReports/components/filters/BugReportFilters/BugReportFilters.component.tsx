@@ -1,5 +1,6 @@
 "use client";
 
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { bugReportFiltersStyles } from "../../../styles/filters/bugReportFilters.styles";
 import { useBugReportFiltersHandlers } from "../../../hooks/filters/useBugReportFiltersHandlers.hook";
 import { BugStatusFilterSelect } from "./BugStatusFilterSelect.component";
@@ -25,28 +26,36 @@ export function BugReportFilters({ variant = "admin" }: BugReportFiltersProps) {
     handleReporterRoleChange,
   } = useBugReportFiltersHandlers();
 
+  const activeCount =
+    (currentStatus ? 1 : 0) +
+    (currentSeverity ? 1 : 0) +
+    (currentModule ? 1 : 0) +
+    (currentReporterRole ? 1 : 0);
+
   return (
-    <div className={bugReportFiltersStyles.container(isAdmin)}>
-      <BugStatusFilterSelect
-        value={currentStatus}
-        onChange={handleStatusChange}
-      />
-      <BugSeverityFilterSelect
-        value={currentSeverity}
-        onChange={handleSeverityChange}
-      />
-      {isAdmin ? (
-        <>
-          <BugModuleFilterSelect
-            value={currentModule}
-            onChange={handleModuleChange}
-          />
-          <BugReporterRoleFilterSelect
-            value={currentReporterRole}
-            onChange={handleReporterRoleChange}
-          />
-        </>
-      ) : null}
-    </div>
+    <CollapsibleTableFilters activeCount={activeCount}>
+      <div className={bugReportFiltersStyles.container(isAdmin)}>
+        <BugStatusFilterSelect
+          value={currentStatus}
+          onChange={handleStatusChange}
+        />
+        <BugSeverityFilterSelect
+          value={currentSeverity}
+          onChange={handleSeverityChange}
+        />
+        {isAdmin ? (
+          <>
+            <BugModuleFilterSelect
+              value={currentModule}
+              onChange={handleModuleChange}
+            />
+            <BugReporterRoleFilterSelect
+              value={currentReporterRole}
+              onChange={handleReporterRoleChange}
+            />
+          </>
+        ) : null}
+      </div>
+    </CollapsibleTableFilters>
   );
 }

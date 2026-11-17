@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, X } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -17,6 +16,8 @@ import { payoutsTableStyles } from "../../../styles/payouts/payoutsTable.styles"
 import { usePayoutsTablePresentation } from "../../../hooks/payouts/usePayoutsTablePresentation.hook";
 import { PayoutMobileList } from "./PayoutMobileList.component";
 import { PayoutDesktopTable } from "./PayoutDesktopTable.component";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 
 interface PayoutsTableProps {
   payouts?: { items?: PayoutEntry[] };
@@ -49,24 +50,37 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
     <div>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3">
         <h2 className={payoutsTableStyles.title}>{LABELS.payouts}</h2>
-        {!isEmpty && (
-          <div className="flex flex-1 max-w-lg items-center gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-text-muted pointer-events-none" />
+      </div>
+      {!isEmpty && (
+        <CollapsibleTableFilters
+          activeCount={(search ? 1 : 0) + (status ? 1 : 0)}
+          onClear={() => {
+            setSearch("");
+            setStatus("");
+          }}
+        >
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+            <FormFieldFrame
+              label={LABELS.search}
+              htmlFor="vendor-payouts-filter-search"
+            >
               <Input
-                type="search"
+                id="vendor-payouts-filter-search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search payouts by ID, ref, period..."
-                className="pl-8 h-8 text-xs"
               />
-            </div>
-            <div className="w-32">
+            </FormFieldFrame>
+
+            <FormFieldFrame
+              label={LABELS.status}
+              htmlFor="vendor-payouts-filter-status"
+            >
               <Select
                 value={status || "__ALL__"}
                 onValueChange={(val) => setStatus(val === "__ALL__" ? "" : val)}
               >
-                <SelectTrigger className="h-8 text-xs">
+                <SelectTrigger id="vendor-payouts-filter-status">
                   <SelectValue placeholder="All Statuses" />
                 </SelectTrigger>
                 <SelectContent>
@@ -76,25 +90,25 @@ export function PayoutsTable({ payouts }: PayoutsTableProps) {
                   <SelectItem value="FAILED">Failed</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </FormFieldFrame>
+
             {hasFilters && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setSearch("");
-                  setStatus("");
-                }}
-                className="h-8 px-2 text-xs"
-              >
-                <X className="size-3 mr-1" />
-                Clear
-              </Button>
+              <div className="flex items-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setSearch("");
+                    setStatus("");
+                  }}
+                >
+                  {LABELS.clearFilters}
+                </Button>
+              </div>
             )}
           </div>
-        )}
-      </div>
+        </CollapsibleTableFilters>
+      )}
       <PayoutMobileList
         rows={filteredRows}
         isEmpty={isEmpty || filteredRows.length === 0}

@@ -1,5 +1,6 @@
 "use client";
 
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { ticketFiltersStyles } from "../../../styles/filters/ticketFilters.styles";
 import { useTicketFiltersHandlers } from "../../../hooks/filters/useTicketFiltersHandlers.hook";
 import { TicketStatusFilterSelect } from "./TicketStatusFilterSelect.component";
@@ -24,27 +25,35 @@ export function TicketFilters({ showVendorId = true }: TicketFiltersProps) {
     fetchVendorPage,
   } = useTicketFiltersHandlers();
 
+  const activeCount =
+    (currentStatus ? 1 : 0) +
+    (currentPriority ? 1 : 0) +
+    (currentCategory ? 1 : 0) +
+    (currentVendorId ? 1 : 0);
+
   return (
-    <div className={ticketFiltersStyles.container(showVendorId)}>
-      <TicketStatusFilterSelect
-        value={currentStatus}
-        onChange={handleStatusChange}
-      />
-      <TicketPriorityFilterSelect
-        value={currentPriority}
-        onChange={handlePriorityChange}
-      />
-      <TicketCategoryFilterSelect
-        value={currentCategory}
-        onChange={handleCategoryChange}
-      />
-      {showVendorId ? (
-        <TicketVendorFilterSelect
-          value={currentVendorId}
-          onChange={handleVendorChange}
-          fetchPage={fetchVendorPage}
+    <CollapsibleTableFilters activeCount={activeCount}>
+      <div className={ticketFiltersStyles.container(showVendorId)}>
+        <TicketStatusFilterSelect
+          value={currentStatus}
+          onChange={handleStatusChange}
         />
-      ) : null}
-    </div>
+        <TicketPriorityFilterSelect
+          value={currentPriority}
+          onChange={handlePriorityChange}
+        />
+        <TicketCategoryFilterSelect
+          value={currentCategory}
+          onChange={handleCategoryChange}
+        />
+        {showVendorId ? (
+          <TicketVendorFilterSelect
+            value={currentVendorId}
+            onChange={handleVendorChange}
+            fetchPage={fetchVendorPage}
+          />
+        ) : null}
+      </div>
+    </CollapsibleTableFilters>
   );
 }

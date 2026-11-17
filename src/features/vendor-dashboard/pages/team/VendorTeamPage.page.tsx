@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { UserPlus, Search, X } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -16,6 +16,9 @@ import { useVendorTeam } from "../../hooks/team/useVendorTeam.hook";
 import { StaffMembersTable } from "../../components/team/StaffMembersTable.component";
 import { AddStaffDialog } from "../../components/team/AddStaffDialog.component";
 import { RemoveStaffDialog } from "../../components/team/RemoveStaffDialog.component";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { LABELS } from "@/shared/constants/labels";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { vendorTeamStyles as styles } from "../../styles/team/vendorTeam.styles";
 
 export function VendorTeamPage() {
@@ -93,25 +96,36 @@ export function VendorTeamPage() {
       {errorContent}
 
       {members.length > 0 && (
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-line bg-surface p-4 shadow-sm mb-4">
-          <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-text-muted pointer-events-none" />
+        <CollapsibleTableFilters
+          activeCount={(search ? 1 : 0) + (role ? 1 : 0)}
+          onClear={() => {
+            setSearch("");
+            setRole("");
+          }}
+        >
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+            <FormFieldFrame
+              label={LABELS.search}
+              htmlFor="vendor-team-filter-search"
+            >
               <Input
-                type="search"
+                id="vendor-team-filter-search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search staff by name or email..."
-                className="pl-9 h-9 text-sm"
               />
-            </div>
+            </FormFieldFrame>
+
             {uniqueRoles.length > 0 && (
-              <div className="w-full sm:w-44">
+              <FormFieldFrame
+                label={LABELS.role}
+                htmlFor="vendor-team-filter-role"
+              >
                 <Select
                   value={role || "__ALL__"}
                   onValueChange={(val) => setRole(val === "__ALL__" ? "" : val)}
                 >
-                  <SelectTrigger className="h-9 text-sm">
+                  <SelectTrigger id="vendor-team-filter-role">
                     <SelectValue placeholder="All Roles" />
                   </SelectTrigger>
                   <SelectContent>
@@ -123,25 +137,25 @@ export function VendorTeamPage() {
                     ))}
                   </SelectContent>
                 </Select>
+              </FormFieldFrame>
+            )}
+
+            {hasFilters && (
+              <div className="flex items-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setSearch("");
+                    setRole("");
+                  }}
+                >
+                  {LABELS.clearFilters}
+                </Button>
               </div>
             )}
           </div>
-          {hasFilters && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSearch("");
-                setRole("");
-              }}
-              className="text-text-muted hover:text-text shrink-0 h-9"
-            >
-              <X className="size-4 mr-1.5" />
-              Clear Filters
-            </Button>
-          )}
-        </div>
+        </CollapsibleTableFilters>
       )}
 
       {isLoading ? (

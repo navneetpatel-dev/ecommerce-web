@@ -8,7 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { FormFieldFrame, FormSection } from "@/shared/components/forms";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { adminUsersFiltersLabels } from "@/shared/constants/labels/adminUsersFilters";
 import { adminUsersFiltersStyles } from "../../../styles/users/adminUsersFilters.styles";
 import {
@@ -49,59 +50,70 @@ export function AdminUsersFilters({
       onRoleIdChange,
     });
 
+  const activeCount =
+    (search.trim() ? 1 : 0) +
+    (status && status !== ALL_STATUSES_VALUE ? 1 : 0) +
+    (roleId && roleId !== ALL_ROLES_VALUE ? 1 : 0);
+
   return (
-    <FormSection title={adminUsersFiltersLabels.usersFilters} columns={3}>
-      <FormFieldFrame
-        label={adminUsersFiltersLabels.usersSearch}
-        htmlFor="admin-users-filter-search"
-      >
-        <Input
-          id="admin-users-filter-search"
-          value={search}
-          onChange={handleSearchChange}
-          placeholder={adminUsersFiltersLabels.usersSearchPlaceholder}
-        />
-      </FormFieldFrame>
-
-      <FormFieldFrame
-        label={adminUsersFiltersLabels.usersStatus}
-        htmlFor="admin-users-filter-status"
-      >
-        <Select
-          value={status || ALL_STATUSES_VALUE}
-          onValueChange={handleStatusChange}
+    <CollapsibleTableFilters
+      title={adminUsersFiltersLabels.usersFilters}
+      activeCount={activeCount}
+      onClear={onClear}
+    >
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
+        <FormFieldFrame
+          label={adminUsersFiltersLabels.usersSearch}
+          htmlFor="admin-users-filter-search"
         >
-          <SelectTrigger id="admin-users-filter-status">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <UserStatusOptionsList />
-          </SelectContent>
-        </Select>
-      </FormFieldFrame>
+          <Input
+            id="admin-users-filter-search"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder={adminUsersFiltersLabels.usersSearchPlaceholder}
+          />
+        </FormFieldFrame>
 
-      <FormFieldFrame
-        label={adminUsersFiltersLabels.usersRole}
-        htmlFor="admin-users-filter-role"
-      >
-        <Select
-          value={roleId || ALL_ROLES_VALUE}
-          onValueChange={handleRoleIdChange}
+        <FormFieldFrame
+          label={adminUsersFiltersLabels.usersStatus}
+          htmlFor="admin-users-filter-status"
         >
-          <SelectTrigger id="admin-users-filter-role">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <UserRoleOptionsList roles={roles} />
-          </SelectContent>
-        </Select>
-      </FormFieldFrame>
+          <Select
+            value={status || ALL_STATUSES_VALUE}
+            onValueChange={handleStatusChange}
+          >
+            <SelectTrigger id="admin-users-filter-status">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <UserStatusOptionsList />
+            </SelectContent>
+          </Select>
+        </FormFieldFrame>
 
-      <div className={adminUsersFiltersStyles.clearButtonWrapper}>
-        <Button type="button" variant="outline" onClick={onClear}>
-          {adminUsersFiltersLabels.usersClearFilters}
-        </Button>
+        <FormFieldFrame
+          label={adminUsersFiltersLabels.usersRole}
+          htmlFor="admin-users-filter-role"
+        >
+          <Select
+            value={roleId || ALL_ROLES_VALUE}
+            onValueChange={handleRoleIdChange}
+          >
+            <SelectTrigger id="admin-users-filter-role">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <UserRoleOptionsList roles={roles} />
+            </SelectContent>
+          </Select>
+        </FormFieldFrame>
+
+        <div className={adminUsersFiltersStyles.clearButtonWrapper}>
+          <Button type="button" variant="outline" onClick={onClear}>
+            {adminUsersFiltersLabels.usersClearFilters}
+          </Button>
+        </div>
       </div>
-    </FormSection>
+    </CollapsibleTableFilters>
   );
 }

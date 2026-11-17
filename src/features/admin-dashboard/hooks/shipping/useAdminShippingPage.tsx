@@ -14,6 +14,11 @@ import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
 export type AdminShippingPageModel = AdminListPageModel & {
+  isCreateOpen: boolean;
+  setIsCreateOpen: (open: boolean) => void;
+  search: string;
+  setSearch: (value: string) => void;
+  onClearFilters: () => void;
   form: {
     name: string;
     states: string;
@@ -31,6 +36,8 @@ export function useAdminShippingPage(): AdminShippingPageModel {
   const [states, setStates] = useState("");
   const [pincodePrefixes, setPincodePrefixes] = useState("");
   const [createError, setCreateError] = useState<string | null>(null);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const [listVersion, setListVersion] = useState(0);
 
   const handleCreate = useCallback(
@@ -47,6 +54,7 @@ export function useAdminShippingPage(): AdminShippingPageModel {
         setName("");
         setStates("");
         setPincodePrefixes("");
+        setIsCreateOpen(false);
         setListVersion((version) => version + 1);
       } catch (err) {
         setCreateError(
@@ -59,11 +67,38 @@ export function useAdminShippingPage(): AdminShippingPageModel {
 
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
+      void page;
+      void limit;
       void listVersion;
-      return adminShippingApi.zones({ page, limit });
+      const res = await adminShippingApi.zones({ page: 1, limit: 100 });
+      let items = res.items;
+      if (search.trim()) {
+        const q = search.trim().toLowerCase();
+        items = items.filter((zone) => {
+          const nameMatch = String(zone.name ?? "")
+            .toLowerCase()
+            .includes(q);
+          const statesList = Array.isArray(zone.states) ? zone.states : [];
+          const statesMatch = statesList.some((s) =>
+            String(s).toLowerCase().includes(q),
+          );
+          const prefixesList = Array.isArray(zone.pincodePrefixes)
+            ? zone.pincodePrefixes
+            : [];
+          const prefixesMatch = prefixesList.some((p) =>
+            String(p).toLowerCase().includes(q),
+          );
+          return nameMatch || statesMatch || prefixesMatch;
+        });
+      }
+      return items;
     },
-    [listVersion],
+    [listVersion, search],
   );
+
+  const onClearFilters = useCallback(() => {
+    setSearch("");
+  }, []);
 
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
@@ -90,6 +125,11 @@ export function useAdminShippingPage(): AdminShippingPageModel {
   );
 
   return {
+    isCreateOpen,
+    setIsCreateOpen,
+    search,
+    setSearch,
+    onClearFilters,
     form: {
       name,
       states,
