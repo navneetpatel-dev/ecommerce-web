@@ -34,6 +34,9 @@ interface VendorShopSettingsFormProps {
   onCodEnabledChange: (value: boolean) => void;
   onPayoutFrequencyChange: (value: VendorPayoutFrequency | null) => void;
   onBankDetailsChange?: (details: VendorBankDetails) => void;
+  savedAccountNumber: string;
+  confirmAccountNumber: string;
+  onConfirmAccountNumberChange: (value: string) => void;
   onLogoUploaded: (url: string) => void;
   onBannerUploaded: (url: string) => void;
   onEntityTypeChange: (value: VendorEntityType) => void;
@@ -61,6 +64,9 @@ export function VendorShopSettingsForm({
   onCodEnabledChange,
   onPayoutFrequencyChange,
   onBankDetailsChange,
+  savedAccountNumber,
+  confirmAccountNumber,
+  onConfirmAccountNumberChange,
   onLogoUploaded,
   onBannerUploaded,
   onEntityTypeChange,
@@ -138,6 +144,9 @@ export function VendorShopSettingsForm({
           bankDetails={bankDetails ?? null}
           onChange={onBankDetailsChange ?? (() => {})}
           isOwner={isOwner}
+          savedAccountNumber={savedAccountNumber}
+          confirmAccount={confirmAccountNumber}
+          onConfirmChange={onConfirmAccountNumberChange}
         />
 
         <FormActions leading={message}>

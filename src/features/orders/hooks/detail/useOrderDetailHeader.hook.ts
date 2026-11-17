@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { Order } from "@/shared/api/types";
-import { formatOrderDate } from "../../utils/detail/format";
+import { formatOrderDate, shortOrderId } from "../../utils/detail/format";
 
 interface UseOrderDetailHeaderParams {
   order: Order;
@@ -23,9 +23,13 @@ export function useOrderDetailHeader({
     });
   }, [order.createdAt]);
 
-  const orderLabel = useMemo(() => {
-    return order.subOrders?.[0]?.taxInvoiceNumber ?? LABELS.orderDetails;
-  }, [order.subOrders]);
+  const orderLabel = useMemo(
+    () =>
+      formatLabel(LABELS.orderReferenceLabel, {
+        reference: shortOrderId(order.id),
+      }),
+    [order.id],
+  );
 
   const metaText = useMemo(() => {
     if (vendorCount <= 0) return placedCopy;

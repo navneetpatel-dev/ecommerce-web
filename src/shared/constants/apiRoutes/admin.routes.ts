@@ -50,6 +50,14 @@ export const notificationsRoutes = {
   pushPublicKey: "/api/notifications/push/public-key",
   pushSubscribe: "/api/notifications/push/subscribe",
   unsubscribe: "/api/notifications/unsubscribe",
+  health: "/api/notifications/health",
+  resend: (id: string) =>
+    `/api/notifications/logs/${encodeURIComponent(id)}/resend`,
+  templates: "/api/notifications/templates",
+  templatePreview: (type: string, theme: "light" | "dark") =>
+    `/api/notifications/templates/${encodeURIComponent(type)}/preview?theme=${theme}`,
+  templateTest: (type: string) =>
+    `/api/notifications/templates/${encodeURIComponent(type)}/test`,
 } as const;
 
 export const inventoryRoutes = {

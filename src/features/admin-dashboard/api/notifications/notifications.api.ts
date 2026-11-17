@@ -7,6 +7,9 @@ export type NotificationLogRow = {
   channel: string;
   recipient: string;
   status: string;
+  /** Why a failed email failed (TEMPORARY, PERMANENT, RENDER, RECIPIENT, CONFIG, UNCERTAIN). */
+  errorCategory: string | null;
+  error: string | null;
   sentAt: string | null;
   createdAt: string;
 };
@@ -16,6 +19,7 @@ export type NotificationLogFilters = {
   type?: string;
   channel?: string;
   status?: string;
+  errorCategory?: string;
 };
 
 export type BroadcastTarget =
@@ -35,6 +39,40 @@ export type BroadcastResult = {
 
 type NotificationLogResponse = Omit<NotificationLogRow, "recipient"> & {
   user?: { email?: string | null } | null;
+  /** Set for recipients without an account (subscribers, contact enquiries, gift-card recipients). */
+  recipientEmail?: string | null;
+};
+
+export type EmailAudience = "customer" | "vendor" | "admin";
+
+export type EmailTemplateSummary = {
+  type: string;
+  audience: EmailAudience;
+  group: string;
+  subject: string;
+  marketing: boolean;
+};
+
+export type EmailHealth = {
+  status: "OK" | "DEGRADED" | "DOWN";
+  headline: string;
+  windowMinutes: number;
+  sent: number;
+  failed: number;
+  stuck: number;
+  failuresByCategory: Record<string, number>;
+  lastSentAt: string | null;
+  lastFailure: {
+    category: string | null;
+    error: string | null;
+    at: string;
+  } | null;
+};
+
+export type EmailTemplatePreview = {
+  subject: string;
+  html: string;
+  text: string;
 };
 
 export const notificationsApi = {
@@ -46,6 +84,8 @@ export const notificationsApi = {
     if (filters.type) query.set("type", filters.type);
     if (filters.channel) query.set("channel", filters.channel);
     if (filters.status) query.set("status", filters.status);
+    if (filters.errorCategory)
+      query.set("errorCategory", filters.errorCategory);
     const qs = query.toString();
     const rows = await apiClient.get<NotificationLogResponse[]>(
       qs ? `${API.notifications.logs}?${qs}` : API.notifications.logs,
@@ -54,12 +94,31 @@ export const notificationsApi = {
       id: row.id,
       type: row.type,
       channel: row.channel,
-      recipient: row.user?.email ?? "Unknown recipient",
+      recipient: row.user?.email ?? row.recipientEmail ?? "Unknown recipient",
       status: row.status,
+      errorCategory: row.errorCategory ?? null,
+      error: row.error ?? null,
       sentAt: row.sentAt,
       createdAt: row.createdAt,
     }));
   },
+  health: () => apiClient.get<EmailHealth>(API.notifications.health),
+  resend: (id: string) =>
+    apiClient.post<{ id: string; status: string }>(
+      API.notifications.resend(id),
+      {},
+    ),
+  templates: () =>
+    apiClient.get<EmailTemplateSummary[]>(API.notifications.templates),
+  previewTemplate: (type: string, theme: "light" | "dark") =>
+    apiClient.get<EmailTemplatePreview>(
+      API.notifications.templatePreview(type, theme),
+    ),
+  sendTemplateTest: (type: string) =>
+    apiClient.post<{ sentTo: string }>(
+      API.notifications.templateTest(type),
+      {},
+    ),
   sendTest: () =>
     apiClient.post<{ message: string }>(API.notifications.test, {}),
   broadcast: (payload: BroadcastNotificationPayload) =>

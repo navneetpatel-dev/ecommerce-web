@@ -13,11 +13,13 @@ import { CodSettingsSection } from "./CodSettingsSection.component";
 import { WalletPointsSettingsSection } from "../WalletPointsSettingsSection.component";
 import { ScheduledReportsSettingsSection } from "./ScheduledReportsSettingsSection.component";
 import { MaintenanceSettingsSection } from "./MaintenanceSettingsSection.component";
+import { WelcomeOfferSettingsSection } from "./WelcomeOfferSettingsSection.component";
 import { platformSettingsFormStyles } from "../../../styles/settings/platformSettingsForm.styles";
 
 interface PlatformSettingsFormProps {
   form: PlatformSettings;
   message?: string | null;
+  saving?: boolean;
   saveError?: string | null;
   onCommissionRateChange: (value: number) => void;
   onTcsRateChange: (value: number) => void;
@@ -28,6 +30,8 @@ interface PlatformSettingsFormProps {
   onPlatformLegalNameChange: (value: string) => void;
   onPlatformStateChange: (value: string) => void;
   onAutoApproveChange: (value: boolean) => void;
+  onAutoApproveReviewsChange: (value: boolean) => void;
+  onAutoApproveQuestionsChange: (value: boolean) => void;
   onReturnWindowChange: (value: number) => void;
   onPayoutCycleChange: (value: string) => void;
   onFreeShippingThresholdChange: (value: number) => void;
@@ -55,16 +59,21 @@ interface PlatformSettingsFormProps {
   onMaintenanceEnabledChange: (value: boolean) => void;
   onMaintenanceMessageChange: (value: string) => void;
   onMaintenanceUntilChange: (value: string | null) => void;
+  onWelcomeOfferEnabledChange: (value: boolean) => void;
+  onWelcomeOfferPercentChange: (value: number) => void;
+  onWelcomeOfferMaxDiscountChange: (value: number) => void;
+  onWelcomeOfferMinOrderChange: (value: number) => void;
+  onWelcomeOfferValidDaysChange: (value: number) => void;
   onSave: () => void;
 }
 
 export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
-  const { form, message, saveError = null, onSave } = props;
+  const { form, message, saving = false, saveError = null, onSave } = props;
 
   return (
     <div className={platformSettingsFormStyles.root}>
       <FormStack className={platformSettingsFormStyles.formStack}>
-        <PlatformSettingsHeader onSave={onSave} />
+        <PlatformSettingsHeader onSave={onSave} saving={saving} />
 
         <CommerceSettingsSection
           form={form}
@@ -79,6 +88,8 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           onPlatformLegalNameChange={props.onPlatformLegalNameChange}
           onPlatformStateChange={props.onPlatformStateChange}
           onAutoApproveChange={props.onAutoApproveChange}
+          onAutoApproveReviewsChange={props.onAutoApproveReviewsChange}
+          onAutoApproveQuestionsChange={props.onAutoApproveQuestionsChange}
         />
 
         <FulfillmentSettingsSection
@@ -135,6 +146,15 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
           }
         />
 
+        <WelcomeOfferSettingsSection
+          form={form}
+          onEnabledChange={props.onWelcomeOfferEnabledChange}
+          onPercentChange={props.onWelcomeOfferPercentChange}
+          onMaxDiscountChange={props.onWelcomeOfferMaxDiscountChange}
+          onMinOrderChange={props.onWelcomeOfferMinOrderChange}
+          onValidDaysChange={props.onWelcomeOfferValidDaysChange}
+        />
+
         <MaintenanceSettingsSection
           form={form}
           onMaintenanceEnabledChange={props.onMaintenanceEnabledChange}
@@ -144,8 +164,13 @@ export function PlatformSettingsForm(props: PlatformSettingsFormProps) {
 
         <FormError error={saveError} fallback={LABELS.couldNotSaveSettings} />
         <FormActions leading={message}>
-          <Button type="button" fullWidth="mobile" onClick={onSave}>
-            {LABELS.saveSettings}
+          <Button
+            type="button"
+            fullWidth="mobile"
+            onClick={onSave}
+            disabled={saving}
+          >
+            {saving ? LABELS.savingSettings : LABELS.saveSettings}
           </Button>
         </FormActions>
       </FormStack>

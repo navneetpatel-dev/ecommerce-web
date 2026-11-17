@@ -72,7 +72,8 @@ export function useAdminVendorDetail(vendorId: string | undefined) {
       await update.mutateAsync({
         businessName: form.businessName,
         description: form.description,
-        commissionRate: form.commissionRate,
+        // Blank means "follow the platform default", so it is sent as an explicit clear.
+        commissionRate: form.commissionRate ?? null,
         returnShippingFee: form.returnShippingFee ?? null,
         codEnabled: form.codEnabled,
       });

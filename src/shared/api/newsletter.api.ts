@@ -4,6 +4,8 @@ import { API } from "@/shared/constants/apiRoutes";
 export type NewsletterSubscribeResult = {
   subscribed: boolean;
   alreadySubscribed: boolean;
+  /** True when a confirmation email was sent (double opt-in). */
+  confirmationSent?: boolean;
 };
 
 export const newsletterApi = {
@@ -11,4 +13,6 @@ export const newsletterApi = {
     apiClient.post<NewsletterSubscribeResult>(API.newsletter.subscribe, {
       email,
     }),
+  confirm: (token: string) =>
+    apiClient.post<{ confirmed: boolean }>(API.newsletter.confirm, { token }),
 };

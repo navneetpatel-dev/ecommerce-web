@@ -56,7 +56,8 @@ export const tablesLabels = {
   subscribe: "Subscribe",
   newsletterInvalidEmail: "Enter a valid email address",
   enterNewsletterEmail: "Enter a valid email address to subscribe.",
-  newsletterSuccess: "Thanks — you're on the list. We'll be in touch.",
+  newsletterSuccess:
+    "Almost done — check your inbox and tap the link to confirm your subscription.",
   newsletterAlreadySubscribed: "You're already on the list. We'll be in touch.",
   newsletterCouldNotSubscribe:
     "Could not subscribe right now. Try again or contact support.",

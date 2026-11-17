@@ -1,4 +1,5 @@
-import { useCallback, type ChangeEvent } from "react";
+import { useCallback } from "react";
+import { useDelimitedListInput } from "@/shared/hooks/forms/useDelimitedListInput.hook";
 
 interface UseWalletPointsSettingsHandlersProps {
   onWalletRechargeEnabledChange: (value: boolean) => void;
@@ -7,7 +8,14 @@ interface UseWalletPointsSettingsHandlersProps {
   onWalletMaxBalanceChange: (value: number) => void;
   onWalletRechargePresetsChange: (value: number[]) => void;
   onPromotionalPointsTtlDaysChange: (value: number) => void;
+  walletRechargePresetsInr: readonly number[];
 }
+
+const parsePresets = (text: string): number[] =>
+  text
+    .split(",")
+    .map((part) => Number(part.trim()))
+    .filter((n) => Number.isFinite(n) && n > 0);
 
 export function useWalletPointsSettingsHandlers({
   onWalletRechargeEnabledChange,
@@ -16,6 +24,7 @@ export function useWalletPointsSettingsHandlers({
   onWalletMaxBalanceChange,
   onWalletRechargePresetsChange,
   onPromotionalPointsTtlDaysChange,
+  walletRechargePresetsInr,
 }: UseWalletPointsSettingsHandlersProps) {
   const handleRechargeEnabledChange = useCallback(
     (value: string) => {
@@ -26,7 +35,7 @@ export function useWalletPointsSettingsHandlers({
 
   const handleMinRechargeChange = useCallback(
     (value: number | undefined) => {
-      onWalletMinRechargeChange(value ?? 100);
+      onWalletMinRechargeChange(value ?? 1);
     },
     [onWalletMinRechargeChange],
   );
@@ -45,16 +54,12 @@ export function useWalletPointsSettingsHandlers({
     [onWalletMaxBalanceChange],
   );
 
-  const handlePresetsChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const parsed = event.target.value
-        .split(",")
-        .map((part) => Number(part.trim()))
-        .filter((n) => Number.isFinite(n) && n > 0);
-      onWalletRechargePresetsChange(parsed);
-    },
-    [onWalletRechargePresetsChange],
-  );
+  const { text: presetsText, handleChange: handlePresetsChange } =
+    useDelimitedListInput(
+      walletRechargePresetsInr,
+      parsePresets,
+      onWalletRechargePresetsChange,
+    );
 
   const handlePromotionalTtlChange = useCallback(
     (value: number | undefined) => {
@@ -68,6 +73,7 @@ export function useWalletPointsSettingsHandlers({
     handleMinRechargeChange,
     handleMaxRechargeChange,
     handleMaxBalanceChange,
+    presetsText,
     handlePresetsChange,
     handlePromotionalTtlChange,
   };

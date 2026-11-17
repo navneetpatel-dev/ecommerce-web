@@ -42,6 +42,10 @@ export function useOtpInput(length = 6) {
           isApiErrorCode(requestError, ERROR_CODES.EMAIL_NOT_VERIFIED),
         );
         setError(getApiErrorMessage(requestError, LABELS.otpRequestFailed));
+        // The email never left, so there is nothing to wait a minute for: let them retry now.
+        if (isApiErrorCode(requestError, ERROR_CODES.EMAIL_UNAVAILABLE)) {
+          setSecondsLeft(0);
+        }
       },
     });
   }, [email, requestOtp, router]);

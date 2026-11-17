@@ -119,7 +119,7 @@ export const vendorsApi = {
       categoryIds?: string[];
       codEnabled?: boolean;
       /** Admin-only; stripped server-side on the vendor self-service PATCH /vendors/me route. */
-      commissionRate?: number;
+      commissionRate?: number | null;
     },
   ) => apiClient.patch<VendorInfo>(API.vendors.detail(id), body),
   register: (body: VendorRegisterBody) =>

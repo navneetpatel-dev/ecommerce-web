@@ -2,7 +2,7 @@
 export const vendorPayoutFrequencyLabels = {
   payoutFrequency: "Preferred payout frequency",
   payoutFrequencyHint:
-    "For reference only — payouts are still processed manually by the platform.",
+    "Pay me no more often than this. A payout run only settles deliveries before the end of your chosen cycle (or the platform cycle, whichever is longer).",
   payoutFrequencyNoPreference: "No preference",
   payoutFrequencyWeekly: "Weekly",
   payoutFrequencyBiweekly: "Every two weeks",

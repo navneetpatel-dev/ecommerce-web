@@ -5,6 +5,7 @@ export const adminPagesStyles = {
   stack4: "space-y-4",
   stack1: "space-y-1",
   headerRow: "flex flex-wrap items-center justify-between gap-3",
+  headerActions: "flex flex-wrap items-center gap-2",
   headerInfo: "min-w-0 space-y-1",
   pageHeadingLg: "font-display text-[1.5rem] tracking-tight text-ink",
   pageHeadingLgNormal: "font-display text-[1.5rem] text-ink",

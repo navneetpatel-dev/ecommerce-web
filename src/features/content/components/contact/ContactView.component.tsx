@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HelpContactForm } from "@/features/help";
+import { ContactMessageForm } from "./ContactMessageForm.component";
 import { LABELS } from "@/shared/constants/labels";
 import { PATHS } from "@/shared/constants/paths/paths";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -21,6 +22,7 @@ export function ContactView({
       <section className={styles.formSection}>
         <h1 className={styles.heading}>{LABELS.contactUsHeading}</h1>
         <p className={styles.intro}>{LABELS.contactUsIntro}</p>
+        <ContactMessageForm />
         <HelpContactForm />
       </section>
       <aside className={styles.detailsCard}>

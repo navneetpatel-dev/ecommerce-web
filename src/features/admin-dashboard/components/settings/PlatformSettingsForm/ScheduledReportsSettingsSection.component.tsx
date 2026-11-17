@@ -1,6 +1,6 @@
 "use client";
 
-import type { ChangeEvent } from "react";
+import { useDelimitedListInput } from "@/shared/hooks/forms/useDelimitedListInput.hook";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -25,6 +25,12 @@ interface ScheduledReportsSettingsSectionProps {
   onScheduledReportsHourUtcChange: (value: number) => void;
 }
 
+const parseRecipients = (text: string): string[] =>
+  text
+    .split(",")
+    .map((part) => part.trim())
+    .filter((email) => email.length > 0);
+
 const HOURS_UTC = Array.from({ length: 24 }, (_, hour) => hour);
 
 const WEEKDAY_LABELS = [
@@ -47,7 +53,6 @@ export function ScheduledReportsSettingsSection({
 }: ScheduledReportsSettingsSectionProps) {
   const catalog = useScheduledReportsCatalog();
   const selectedTypes = form.scheduledReportsTypes ?? [];
-  const recipientsText = (form.scheduledReportsRecipients ?? []).join(", ");
 
   const handleEnabledChange = (value: string) => {
     onScheduledReportsEnabledChange(value === "true");
@@ -61,13 +66,12 @@ export function ScheduledReportsSettingsSection({
     onScheduledReportsHourUtcChange(Number(value));
   };
 
-  const handleRecipientsChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const parsed = event.target.value
-      .split(",")
-      .map((part) => part.trim())
-      .filter((email) => email.length > 0);
-    onScheduledReportsRecipientsChange(parsed);
-  };
+  const { text: recipientsText, handleChange: handleRecipientsChange } =
+    useDelimitedListInput(
+      form.scheduledReportsRecipients ?? [],
+      parseRecipients,
+      onScheduledReportsRecipientsChange,
+    );
 
   return (
     <FormSection

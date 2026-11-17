@@ -39,6 +39,7 @@ export { AdminOrdersPage } from "./pages/orders/AdminOrdersPage.page";
 export { AdminProductsPage } from "./pages/vendors/AdminProductsPage.page";
 export { AdminInventoryPage } from "./pages/inventory/AdminInventoryPage.page";
 export { AdminNotificationsPage } from "./pages/notifications/AdminNotificationsPage.page";
+export { AdminEmailTemplatesPage } from "./pages/notifications/AdminEmailTemplatesPage.page";
 export { AdminPromoBannersPage } from "./pages/promo-banners/AdminPromoBannersPage.page";
 export { AdminReturnsPage } from "./pages/returns/AdminReturnsPage.page";
 export { AdminReviewsPage } from "./pages/reviews/AdminReviewsPage.page";

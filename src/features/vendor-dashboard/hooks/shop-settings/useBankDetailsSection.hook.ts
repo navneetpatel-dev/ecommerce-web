@@ -1,22 +1,27 @@
 "use client";
 
-import { useState, useCallback, type ChangeEvent } from "react";
+import { useCallback, type ChangeEvent } from "react";
 import type { VendorBankDetails } from "../../api/overview/vendor.api";
 
 interface UseBankDetailsSectionOptions {
   bankDetails: VendorBankDetails | null;
   onChange: (details: VendorBankDetails) => void;
+  /** Account number as last saved: only an edit to it needs re-confirming. */
+  savedAccountNumber: string;
+  confirmAccount: string;
+  onConfirmChange: (value: string) => void;
 }
+
+const ACCOUNT_NUMBER = /^\d{9,18}$/;
+const IFSC = /^[A-Z]{4}0[A-Z0-9]{6}$/i;
 
 export function useBankDetailsSection({
   bankDetails,
   onChange,
+  savedAccountNumber,
+  confirmAccount,
+  onConfirmChange,
 }: UseBankDetailsSectionOptions) {
-  const [confirmAccount, setConfirmAccount] = useState(
-    bankDetails?.accountNumber ?? "",
-  );
-  const [confirmTouched, setConfirmTouched] = useState(false);
-
   const handleHolderNameChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       onChange({
@@ -49,31 +54,37 @@ export function useBankDetailsSection({
 
   const handleConfirmChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      setConfirmAccount(e.target.value);
-      setConfirmTouched(true);
+      onConfirmChange(e.target.value);
     },
-    [],
+    [onConfirmChange],
   );
 
   const handleIfscCodeChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       onChange({
         ...(bankDetails ?? {}),
-        ifscCode: e.target.value,
+        ifscCode: e.target.value.toUpperCase(),
       });
     },
     [bankDetails, onChange],
   );
 
+  const accountNumber = bankDetails?.accountNumber ?? "";
+  const accountEdited = accountNumber !== savedAccountNumber;
+  const accountInvalid = accountEdited && !ACCOUNT_NUMBER.test(accountNumber);
+  // An edited number is never trusted until it has been typed a second time.
   const isMismatch =
-    confirmTouched && confirmAccount !== (bankDetails?.accountNumber ?? "");
+    accountEdited && !accountInvalid && confirmAccount !== accountNumber;
+  const ifscInvalid =
+    Boolean(bankDetails?.ifscCode) && !IFSC.test(bankDetails?.ifscCode ?? "");
 
   const maskedAccountNumber = bankDetails?.accountNumber
     ? `••••••••${bankDetails.accountNumber.slice(-4)}`
     : "Not configured";
 
   return {
-    confirmAccount,
+    accountInvalid,
+    ifscInvalid,
     isMismatch,
     maskedAccountNumber,
     handleHolderNameChange,

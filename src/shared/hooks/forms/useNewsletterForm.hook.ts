@@ -38,6 +38,12 @@ export function useNewsletterForm() {
       } catch {
         // ignore storage failures
       }
+      if (!result.alreadySubscribed && result.confirmationSent === false) {
+        // Saved, but the confirmation email could not be handed over: say so rather than
+        // promising mail that is not coming.
+        setError(LABELS.newsletterConfirmationNotSent);
+        return;
+      }
       setMessage(
         result.alreadySubscribed
           ? LABELS.newsletterAlreadySubscribed

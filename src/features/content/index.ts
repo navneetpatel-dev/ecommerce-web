@@ -11,6 +11,7 @@ export { PrivacyPage } from "./pages/legal/PrivacyPage.page";
 export { ContactPage } from "./pages/contact/ContactPage.page";
 export { MaintenancePage } from "./pages/maintenance/MaintenancePage.page";
 export { UnsubscribePage } from "./pages/unsubscribe/UnsubscribePage.page";
+export { NewsletterConfirmPage } from "./pages/newsletter/NewsletterConfirmPage.page";
 export { ReturnsPage } from "./pages/legal/ReturnsPage.page";
 export { BlogPage } from "./pages/blog/BlogPage.page";
 export { BlogDetailPage } from "./pages/blog/BlogDetailPage.page";

@@ -27,6 +27,8 @@ export function useVendorShopSettingsData() {
   const [bankDetails, setBankDetails] = useState<VendorBankDetails | null>(
     null,
   );
+  const [savedAccountNumber, setSavedAccountNumber] = useState("");
+  const [confirmAccountNumber, setConfirmAccountNumber] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -41,6 +43,9 @@ export function useVendorShopSettingsData() {
     setEntityType((shop.entityType as VendorEntityType | null) ?? null);
     setCategoryIds(shop.categoryIds ?? []);
     setBankDetails(shop.bankDetails ?? null);
+    // A freshly loaded or saved account is its own confirmation until it is edited.
+    setSavedAccountNumber(shop.bankDetails?.accountNumber ?? "");
+    setConfirmAccountNumber(shop.bankDetails?.accountNumber ?? "");
   }, []);
 
   useEffect(() => {
@@ -66,6 +71,8 @@ export function useVendorShopSettingsData() {
     entityType,
     categoryIds,
     bankDetails,
+    savedAccountNumber,
+    confirmAccountNumber,
     loading,
     loadError,
     applyShop,
@@ -77,5 +84,6 @@ export function useVendorShopSettingsData() {
     setEntityType,
     setCategoryIds,
     setBankDetails,
+    setConfirmAccountNumber,
   };
 }

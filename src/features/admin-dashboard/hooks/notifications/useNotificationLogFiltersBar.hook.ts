@@ -31,6 +31,13 @@ export function useNotificationLogFiltersBar({
     [filters, onChange],
   );
 
+  const handleErrorCategoryChange = useCallback(
+    (value: string | undefined) => {
+      onChange({ ...filters, errorCategory: value });
+    },
+    [filters, onChange],
+  );
+
   const handleSearchChange = useCallback(
     (value: string | undefined) => {
       onChange({ ...filters, search: value });
@@ -43,5 +50,6 @@ export function useNotificationLogFiltersBar({
     handleTypeChange,
     handleChannelChange,
     handleStatusChange,
+    handleErrorCategoryChange,
   };
 }

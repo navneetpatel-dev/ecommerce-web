@@ -4,14 +4,8 @@ import type { ChangeEvent } from "react";
 import { NumberInput } from "@/shared/components/forms/NumberInput.component";
 import { FormFieldFrame, FormSection } from "@/shared/components/forms";
 import { Input } from "@/shared/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
+import { AutoApproveField } from "./AutoApproveField.component";
 import type { PlatformSettings } from "../../../hooks/settings/usePlatformSettingsForm.hook";
 import { CURRENCY_SYMBOL } from "@/shared/utils/formatting/orderFormat";
 
@@ -26,6 +20,8 @@ interface CommerceSettingsSectionProps {
   onPlatformLegalNameChange: (value: string) => void;
   onPlatformStateChange: (value: string) => void;
   onAutoApproveChange: (value: boolean) => void;
+  onAutoApproveReviewsChange: (value: boolean) => void;
+  onAutoApproveQuestionsChange: (value: boolean) => void;
 }
 
 export function CommerceSettingsSection({
@@ -39,6 +35,8 @@ export function CommerceSettingsSection({
   onPlatformLegalNameChange,
   onPlatformStateChange,
   onAutoApproveChange,
+  onAutoApproveReviewsChange,
+  onAutoApproveQuestionsChange,
 }: CommerceSettingsSectionProps) {
   const handleCommissionRateChange = (value: number | undefined) =>
     onCommissionRateChange(value ?? 0);
@@ -57,8 +55,6 @@ export function CommerceSettingsSection({
     onPlatformGstinChange(event.target.value);
   const handlePlatformStateChange = (event: ChangeEvent<HTMLInputElement>) =>
     onPlatformStateChange(event.target.value);
-  const handleAutoApproveChange = (value: string) =>
-    onAutoApproveChange(value === "true");
 
   return (
     <FormSection
@@ -142,20 +138,24 @@ export function CommerceSettingsSection({
           onChange={handlePlatformStateChange}
         />
       </FormFieldFrame>
-      <FormFieldFrame label={LABELS.autoApproveProducts}>
-        <Select
-          value={form.autoApproveProducts ? "true" : "false"}
-          onValueChange={handleAutoApproveChange}
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="true">{LABELS.autoApproveEnabled}</SelectItem>
-            <SelectItem value="false">{LABELS.autoApproveDisabled}</SelectItem>
-          </SelectContent>
-        </Select>
-      </FormFieldFrame>
+      <AutoApproveField
+        label={LABELS.autoApproveProducts}
+        hint={LABELS.autoApproveProductsHint}
+        value={form.autoApproveProducts}
+        onChange={onAutoApproveChange}
+      />
+      <AutoApproveField
+        label={LABELS.autoApproveReviews}
+        hint={LABELS.autoApproveReviewsHint}
+        value={form.autoApproveReviews !== false}
+        onChange={onAutoApproveReviewsChange}
+      />
+      <AutoApproveField
+        label={LABELS.autoApproveQuestions}
+        hint={LABELS.autoApproveQuestionsHint}
+        value={form.autoApproveQuestions !== false}
+        onChange={onAutoApproveQuestionsChange}
+      />
     </FormSection>
   );
 }

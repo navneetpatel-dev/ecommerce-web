@@ -1,37 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { vendorApi } from "../../../api/overview/vendor.api";
 import {
-  vendorApi,
-  type VendorPayoutFrequency,
-  type VendorBankDetails,
-} from "../../../api/overview/vendor.api";
+  bankDetailsProblem,
+  buildShopSettingsPayload,
+  type ShopSettingsSaveOverride,
+  type ShopSettingsSnapshot,
+} from "./shopSettingsPayload";
 import { LABELS, ROLES } from "@/shared/constants/labels";
 import { STORAGE_KEYS } from "@/shared/constants/storage/storage";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
-import type { VendorEntityType } from "@/shared/constants/statuses";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
-export interface ShopSettingsSaveOverride {
-  returnShippingFee?: number | null;
-  logoUrl?: string | null;
-  bannerUrl?: string | null;
-  entityType?: VendorEntityType | null;
-  categoryIds?: string[];
-  codEnabled?: boolean;
-  payoutFrequency?: VendorPayoutFrequency | null;
-  bankDetails?: VendorBankDetails | null;
-}
+export type { ShopSettingsSaveOverride } from "./shopSettingsPayload";
 
-interface UseVendorShopSettingsSaveOptions {
-  entityType: VendorEntityType | null;
-  categoryIds: string[];
-  returnShippingFee: number | null;
-  codEnabled: boolean;
-  payoutFrequency: VendorPayoutFrequency | null;
-  bankDetails?: VendorBankDetails | null;
-  logoUrl: string | null;
-  bannerUrl: string | null;
+interface UseVendorShopSettingsSaveOptions extends ShopSettingsSnapshot {
   applyShop: (shop: Awaited<ReturnType<typeof vendorApi.getMyShop>>) => void;
   setReturnShippingFee: (value: number | null) => void;
 }
@@ -59,53 +43,26 @@ export function useVendorShopSettingsSave(
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  const save = (override?: ShopSettingsSaveOverride) => {
+  /**
+   * `partial` sends only the override (a logo upload or a category change), so an
+   * unrelated half-edited field — a new bank account being typed — is never saved by it.
+   */
+  const save = (override?: ShopSettingsSaveOverride, partial = false) => {
+    const bankProblem = partial ? null : bankDetailsProblem(options);
+    if (bankProblem) {
+      setMessage(bankProblem);
+      return;
+    }
     setSaving(true);
     setMessage(null);
     const isOwner =
       useAuthStore.getState().currentUser?.role === ROLES.VENDOR_OWNER;
-
-    const nextEntityType =
-      override && "entityType" in override
-        ? override.entityType
-        : options.entityType;
-    const nextCategoryIds =
-      override && "categoryIds" in override
-        ? override.categoryIds
-        : options.categoryIds;
-
-    const payload: Record<string, unknown> = {
-      logoUrl:
-        override && "logoUrl" in override ? override.logoUrl : options.logoUrl,
-      bannerUrl:
-        override && "bannerUrl" in override
-          ? override.bannerUrl
-          : options.bannerUrl,
-      ...(nextCategoryIds && nextCategoryIds.length > 0
-        ? { categoryIds: nextCategoryIds }
-        : {}),
-    };
-
-    if (isOwner) {
-      payload.returnShippingFee =
-        override && "returnShippingFee" in override
-          ? override.returnShippingFee
-          : options.returnShippingFee;
-      payload.codEnabled =
-        override && "codEnabled" in override
-          ? override.codEnabled
-          : options.codEnabled;
-      payload.payoutFrequency =
-        override && "payoutFrequency" in override
-          ? override.payoutFrequency
-          : options.payoutFrequency;
-      if (nextEntityType) payload.entityType = nextEntityType;
-      const nextBank =
-        override && "bankDetails" in override
-          ? override.bankDetails
-          : options.bankDetails;
-      if (nextBank !== undefined) payload.bankDetails = nextBank;
-    }
+    const payload = buildShopSettingsPayload(
+      options,
+      override,
+      partial,
+      isOwner,
+    );
 
     const isCat = Boolean(
       override && ("categoryIds" in override || "entityType" in override),
@@ -136,7 +93,7 @@ export function useVendorShopSettingsSave(
   const clearOverride = () => {
     setMessage(null);
     options.setReturnShippingFee(null);
-    save({ returnShippingFee: null });
+    save({ returnShippingFee: null }, true);
   };
 
   return {

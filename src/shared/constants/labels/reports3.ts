@@ -144,7 +144,6 @@ export const reports3Labels = {
   payoutCycleWeekly: "Weekly",
   payoutCycleBiweekly: "Bi-weekly",
   payoutCycleMonthly: "Monthly",
-  payoutCycleWeeklyLegacy: "Weekly (legacy)",
   supportEmail: "Support email",
   supportHours: "Support hours",
   saveSettings: "Save settings",

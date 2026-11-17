@@ -49,6 +49,9 @@ export function VendorShopSettingsPage() {
         onCodEnabledChange={settings.setCodEnabled}
         onPayoutFrequencyChange={settings.setPayoutFrequency}
         onBankDetailsChange={settings.setBankDetails}
+        savedAccountNumber={settings.savedAccountNumber}
+        confirmAccountNumber={settings.confirmAccountNumber}
+        onConfirmAccountNumberChange={settings.onConfirmAccountNumberChange}
         onLogoUploaded={settings.setLogoUrl}
         onBannerUploaded={settings.setBannerUrl}
         onEntityTypeChange={settings.setEntityType}

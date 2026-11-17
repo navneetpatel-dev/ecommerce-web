@@ -35,6 +35,7 @@ import {
 } from "./admin.routes";
 import {
   newsletterRoutes,
+  contactRoutes,
   searchRoutes,
   webVitalsRoutes,
 } from "./discovery.routes";
@@ -79,6 +80,7 @@ export const API = {
   uploads: uploadsRoutes,
   search: searchRoutes,
   newsletter: newsletterRoutes,
+  contact: contactRoutes,
   webVitals: webVitalsRoutes,
   supportTickets: supportTicketsRoutes,
   bugReports: bugReportsRoutes,

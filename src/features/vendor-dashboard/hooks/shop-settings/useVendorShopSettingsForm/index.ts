@@ -17,6 +17,8 @@ export function useVendorShopSettingsForm() {
     codEnabled: data.codEnabled,
     payoutFrequency: data.payoutFrequency,
     bankDetails: data.bankDetails,
+    savedAccountNumber: data.savedAccountNumber,
+    confirmAccountNumber: data.confirmAccountNumber,
     logoUrl: data.logoUrl,
     bannerUrl: data.bannerUrl,
     applyShop: data.applyShop,
@@ -30,6 +32,12 @@ export function useVendorShopSettingsForm() {
     codEnabled: data.codEnabled,
     payoutFrequency: data.payoutFrequency,
     bankDetails: data.bankDetails,
+    savedAccountNumber: data.savedAccountNumber,
+    confirmAccountNumber: data.confirmAccountNumber,
+    onConfirmAccountNumberChange: (value: string) => {
+      saveApi.setMessage(null);
+      data.setConfirmAccountNumber(value);
+    },
     logoUrl: data.logoUrl,
     bannerUrl: data.bannerUrl,
     entityType: data.entityType,
@@ -60,12 +68,12 @@ export function useVendorShopSettingsForm() {
     setLogoUrl: (url: string) => {
       saveApi.setMessage(null);
       data.setLogoUrl(url);
-      saveApi.save({ logoUrl: url });
+      saveApi.save({ logoUrl: url }, true);
     },
     setBannerUrl: (url: string) => {
       saveApi.setMessage(null);
       data.setBannerUrl(url);
-      saveApi.save({ bannerUrl: url });
+      saveApi.save({ bannerUrl: url }, true);
     },
     setEntityType: (value: VendorEntityType) => {
       saveApi.setMessage(null);
@@ -76,9 +84,12 @@ export function useVendorShopSettingsForm() {
       data.setCategoryIds(ids);
     },
     saveCategories: () =>
-      saveApi.save({
-        entityType: data.entityType,
-        categoryIds: data.categoryIds,
-      }),
+      saveApi.save(
+        {
+          entityType: data.entityType,
+          categoryIds: data.categoryIds,
+        },
+        true,
+      ),
   };
 }

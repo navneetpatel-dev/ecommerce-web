@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { settingsKeys } from "@/shared/hooks/usePublicSettings.hook";
 import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
 import {
   settingsApi,
   type AdminPlatformSettings,
 } from "../../api/settings/settings.api";
 import { LABELS } from "@/shared/constants/labels";
+import { normalizeLoadedSettings } from "../../utils/settings/normalizeLoadedSettings";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
 
 export type PlatformSettings = AdminPlatformSettings;
@@ -18,44 +21,15 @@ export function usePlatformSettingsForm() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const queryClient = useQueryClient();
 
   useUnsavedChanges(isDirty);
 
   useEffect(() => {
     settingsApi
       .get()
-      .then((settings) =>
-        setForm({
-          ...settings,
-          returnShippingFee: settings.returnShippingFee ?? 0,
-          tds194oExemptionThreshold:
-            settings.tds194oExemptionThreshold ?? 500000,
-          commissionGstRatePercent: settings.commissionGstRatePercent ?? 18,
-          platformGstin: settings.platformGstin ?? "",
-          platformLegalName: settings.platformLegalName ?? "",
-          platformState: settings.platformState ?? "",
-          codEnabled: settings.codEnabled !== false,
-          codMinOrderValue: settings.codMinOrderValue ?? 0,
-          codMaxOrderValue: settings.codMaxOrderValue ?? null,
-          walletRechargeEnabled: settings.walletRechargeEnabled !== false,
-          walletMinRechargeInr: settings.walletMinRechargeInr ?? 1,
-          walletMaxRechargeInr: settings.walletMaxRechargeInr ?? 10000,
-          walletMaxBalancePoints: settings.walletMaxBalancePoints ?? 50000,
-          walletRechargePresetsInr: settings.walletRechargePresetsInr ?? [
-            500, 1000, 2000, 5000,
-          ],
-          promotionalPointsTtlDays: settings.promotionalPointsTtlDays ?? 0,
-          refundSlaBusinessDays: settings.refundSlaBusinessDays ?? 7,
-          scheduledReportsEnabled: settings.scheduledReportsEnabled ?? false,
-          scheduledReportsTypes: settings.scheduledReportsTypes ?? [],
-          scheduledReportsRecipients: settings.scheduledReportsRecipients ?? [],
-          scheduledReportsDayOfWeek: settings.scheduledReportsDayOfWeek ?? 1,
-          scheduledReportsHourUtc: settings.scheduledReportsHourUtc ?? 6,
-          maintenanceEnabled: settings.maintenanceEnabled ?? false,
-          maintenanceMessage: settings.maintenanceMessage ?? "",
-          maintenanceUntil: settings.maintenanceUntil ?? null,
-        }),
-      )
+      .then((settings) => setForm(normalizeLoadedSettings(settings)))
       .catch((err) =>
         setLoadError(getApiErrorMessage(err, LABELS.couldNotLoadSettings)),
       )
@@ -63,19 +37,23 @@ export function usePlatformSettingsForm() {
   }, []);
 
   const save = () => {
-    if (!form) return;
+    if (!form || saving) return;
     setSaveError(null);
     setMessage(null);
+    setSaving(true);
     settingsApi
       .update(form)
       .then((saved) => {
         setForm(saved);
         setIsDirty(false);
         setMessage(LABELS.settingsSaved);
+        // Storefront readers (checkout, product pages, maintenance) must not keep the old copy.
+        void queryClient.invalidateQueries({ queryKey: settingsKeys.public });
       })
       .catch((err) =>
         setSaveError(getApiErrorMessage(err, LABELS.couldNotSaveSettings)),
-      );
+      )
+      .finally(() => setSaving(false));
   };
 
   /** Every field setter follows the same shape: clear the save message, patch one field. */
@@ -92,6 +70,7 @@ export function usePlatformSettingsForm() {
   return {
     form,
     isDirty,
+    saving,
     loading,
     loadError,
     saveError,
@@ -106,6 +85,8 @@ export function usePlatformSettingsForm() {
     setPlatformLegalName: setField("platformLegalName"),
     setPlatformState: setField("platformState"),
     setAutoApproveProducts: setField("autoApproveProducts"),
+    setAutoApproveReviews: setField("autoApproveReviews"),
+    setAutoApproveQuestions: setField("autoApproveQuestions"),
     setReturnWindow: setField("defaultReturnWindow"),
     setPayoutCycle: setField("payoutCycle"),
     setFreeShippingThreshold: setField("freeShippingThreshold"),
@@ -133,5 +114,10 @@ export function usePlatformSettingsForm() {
     setMaintenanceEnabled: setField("maintenanceEnabled"),
     setMaintenanceMessage: setField("maintenanceMessage"),
     setMaintenanceUntil: setField("maintenanceUntil"),
+    setWelcomeOfferEnabled: setField("welcomeOfferEnabled"),
+    setWelcomeOfferPercent: setField("welcomeOfferPercent"),
+    setWelcomeOfferMaxDiscount: setField("welcomeOfferMaxDiscount"),
+    setWelcomeOfferMinOrder: setField("welcomeOfferMinOrder"),
+    setWelcomeOfferValidDays: setField("welcomeOfferValidDays"),
   };
 }

@@ -48,14 +48,17 @@ export function FulfillmentSettingsSection({
       <FormFieldFrame label={LABELS.defaultReturnWindow}>
         <NumberInput
           value={form.defaultReturnWindow}
-          min={0}
+          min={1}
           max={365}
           step={1}
           suffix={LABELS.daysShort}
           onChange={handleReturnWindowChange}
         />
       </FormFieldFrame>
-      <FormFieldFrame label={LABELS.freeShippingThreshold}>
+      <FormFieldFrame
+        label={LABELS.freeShippingThreshold}
+        hint={LABELS.freeShippingThresholdHint}
+      >
         <NumberInput
           value={form.freeShippingThreshold}
           min={0}
@@ -89,20 +92,18 @@ export function FulfillmentSettingsSection({
           onChange={handleRefundSlaBusinessDaysChange}
         />
       </FormFieldFrame>
-      <FormFieldFrame label={LABELS.payoutCycle}>
+      <FormFieldFrame label={LABELS.payoutCycle} hint={LABELS.payoutCycleHint}>
         <Select value={form.payoutCycle} onValueChange={onPayoutCycleChange}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="DAILY">{LABELS.payoutCycleDaily}</SelectItem>
             <SelectItem value="WEEKLY">{LABELS.payoutCycleWeekly}</SelectItem>
             <SelectItem value="BIWEEKLY">
               {LABELS.payoutCycleBiweekly}
             </SelectItem>
             <SelectItem value="MONTHLY">{LABELS.payoutCycleMonthly}</SelectItem>
-            <SelectItem value="weekly">
-              {LABELS.payoutCycleWeeklyLegacy}
-            </SelectItem>
           </SelectContent>
         </Select>
       </FormFieldFrame>

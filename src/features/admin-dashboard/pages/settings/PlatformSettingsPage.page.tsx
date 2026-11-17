@@ -28,6 +28,7 @@ export function PlatformSettingsPage() {
     <PlatformSettingsForm
       form={settings.form}
       message={settings.message}
+      saving={settings.saving}
       saveError={settings.saveError}
       onCommissionRateChange={settings.setCommissionRate}
       onTcsRateChange={settings.setTcsRatePercent}
@@ -38,6 +39,8 @@ export function PlatformSettingsPage() {
       onPlatformLegalNameChange={settings.setPlatformLegalName}
       onPlatformStateChange={settings.setPlatformState}
       onAutoApproveChange={settings.setAutoApproveProducts}
+      onAutoApproveReviewsChange={settings.setAutoApproveReviews}
+      onAutoApproveQuestionsChange={settings.setAutoApproveQuestions}
       onReturnWindowChange={settings.setReturnWindow}
       onPayoutCycleChange={settings.setPayoutCycle}
       onFreeShippingThresholdChange={settings.setFreeShippingThreshold}
@@ -67,6 +70,11 @@ export function PlatformSettingsPage() {
       onMaintenanceEnabledChange={settings.setMaintenanceEnabled}
       onMaintenanceMessageChange={settings.setMaintenanceMessage}
       onMaintenanceUntilChange={settings.setMaintenanceUntil}
+      onWelcomeOfferEnabledChange={settings.setWelcomeOfferEnabled}
+      onWelcomeOfferPercentChange={settings.setWelcomeOfferPercent}
+      onWelcomeOfferMaxDiscountChange={settings.setWelcomeOfferMaxDiscount}
+      onWelcomeOfferMinOrderChange={settings.setWelcomeOfferMinOrder}
+      onWelcomeOfferValidDaysChange={settings.setWelcomeOfferValidDays}
       onSave={settings.save}
     />
   );

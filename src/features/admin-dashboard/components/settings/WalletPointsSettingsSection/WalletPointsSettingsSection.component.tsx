@@ -39,6 +39,7 @@ export function WalletPointsSettingsSection({
     handleMinRechargeChange,
     handleMaxRechargeChange,
     handleMaxBalanceChange,
+    presetsText,
     handlePresetsChange,
     handlePromotionalTtlChange,
   } = useWalletPointsSettingsHandlers({
@@ -48,9 +49,8 @@ export function WalletPointsSettingsSection({
     onWalletMaxBalanceChange,
     onWalletRechargePresetsChange,
     onPromotionalPointsTtlDaysChange,
+    walletRechargePresetsInr: form.walletRechargePresetsInr ?? [],
   });
-
-  const presetsText = (form.walletRechargePresetsInr ?? []).join(", ");
 
   return (
     <FormSection

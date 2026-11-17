@@ -68,8 +68,9 @@ export function formatOrderDate(value?: string | Date | null) {
   });
 }
 
+/** The short order reference shown in the account and quoted in emails (A1B2C3D4). */
 export function shortOrderId(id: string) {
-  return id.slice(0, 8);
+  return id.slice(0, 8).toUpperCase();
 }
 
 export function countOrderItems(

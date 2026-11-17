@@ -6,10 +6,12 @@ import { platformSettingsFormStyles as styles } from "../../../styles/settings/p
 
 interface PlatformSettingsHeaderProps {
   onSave: () => void;
+  saving?: boolean;
 }
 
 export function PlatformSettingsHeader({
   onSave,
+  saving = false,
 }: PlatformSettingsHeaderProps) {
   return (
     <div className={styles.header}>
@@ -21,8 +23,9 @@ export function PlatformSettingsHeader({
         type="button"
         className={styles.headerSaveButton}
         onClick={onSave}
+        disabled={saving}
       >
-        {LABELS.saveSettings}
+        {saving ? LABELS.savingSettings : LABELS.saveSettings}
       </Button>
     </div>
   );

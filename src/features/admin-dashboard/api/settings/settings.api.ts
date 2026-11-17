@@ -16,6 +16,13 @@ export type AdminPlatformSettings = PublicPlatformSettings & {
   platformLegalName: string;
   platformState: string;
   autoApproveProducts: boolean;
+  autoApproveReviews: boolean;
+  welcomeOfferEnabled: boolean;
+  welcomeOfferPercent: number;
+  welcomeOfferMaxDiscount: number;
+  welcomeOfferMinOrder: number;
+  welcomeOfferValidDays: number;
+  autoApproveQuestions: boolean;
   payoutCycle: string;
   returnShippingFee: number;
   promotionalPointsTtlDays: number;

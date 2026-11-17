@@ -3,6 +3,8 @@
  * file and are merged into the single `LABELS` object consumed app-wide.
  */
 import { commerceLabels } from "./labels/commerce";
+import { emailLabels } from "./labels/emails";
+import { platformSettingsLabels } from "./labels/platformSettings";
 import { authLabels } from "./labels/auth";
 import { navigationLabels } from "./labels/navigation";
 import { adminNavigationLabels } from "./labels/adminNavigation";
@@ -139,6 +141,8 @@ export const LABELS = {
   ...clipboardLabels,
   ...chartLabels,
   ...redeliveryLabels,
+  ...emailLabels,
+  ...platformSettingsLabels,
 } as const;
 
 export { formatExportProcessing } from "./labels/exports";

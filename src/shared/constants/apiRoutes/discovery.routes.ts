@@ -30,6 +30,11 @@ export const searchRoutes = {
 
 export const newsletterRoutes = {
   subscribe: "/api/newsletter/subscribe",
+  confirm: "/api/newsletter/confirm",
+} as const;
+
+export const contactRoutes = {
+  send: "/api/contact",
 } as const;
 
 export const webVitalsRoutes = {
