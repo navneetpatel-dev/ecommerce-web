@@ -8,6 +8,7 @@ export const productQnaLabels = {
   yourQuestion: "Your question",
   questionPlaceholder: "What would you like to know about this product?",
   couldNotSubmitQuestion: "Could not submit your question. Please try again.",
+  questionPublished: "Thanks! Your question has been posted.",
   questionSubmittedForReview:
     "Thanks! Your question has been submitted for review.",
   enterYourQuestion: "Enter a question of at least 10 characters.",

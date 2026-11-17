@@ -16,6 +16,7 @@ export function AskQuestionCardContainer({ productId }: { productId: string }) {
         question={askForm.question}
         isPending={askForm.isPending}
         isSuccess={askForm.isSuccess}
+        successMessage={askForm.successMessage}
         formLevelError={askForm.formLevelError}
         onSubmit={askForm.handleSubmit(askForm.onSubmit)}
       />

@@ -43,6 +43,7 @@ export const productReviewsLabels = {
   ratingWordExcellent: "Excellent",
   tapToRate: "Tap a star to rate",
   writeReviewPrompt: "You bought this. How was it?",
+  reviewPublished: "Thanks! Your review has been published.",
   reviewThanks: "Thanks! Your review will appear once it has been checked.",
   yourReviewRating: "Your review: {rating}★",
   reviewStatusPending: "Awaiting approval",

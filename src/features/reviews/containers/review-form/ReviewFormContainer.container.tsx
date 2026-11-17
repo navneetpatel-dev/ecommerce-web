@@ -2,13 +2,14 @@
 
 import { useReviewSubmission } from "../../hooks/review-form/useReviewSubmission.hook";
 import { ReviewForm } from "../../components/review-form/ReviewForm.component";
+import type { Review } from "../../types/reviews/reviews.types";
 
 interface ReviewFormContainerProps {
   orderItemId: string;
   productId: string;
   productName: string;
   /** Called after a successful post (e.g. close the dialog). */
-  onSubmitted?: () => void;
+  onSubmitted?: (review?: Review) => void;
 }
 
 export function ReviewFormContainer({

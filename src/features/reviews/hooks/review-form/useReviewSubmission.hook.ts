@@ -11,11 +11,12 @@ import {
 import { useSubmitReview } from "../../api/reviews/reviews.queries";
 import { useRequireAuth } from "@/shared/hooks/auth/useRequireAuth.hook";
 import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
+import type { Review } from "../../types/reviews/reviews.types";
 
 export function useReviewSubmission(
   orderItemId: string,
   productId: string,
-  onSubmitted?: () => void,
+  onSubmitted?: (review?: Review) => void,
 ) {
   const submitReview = useSubmitReview({ onSubmitted });
   const { requireAuth } = useRequireAuth();

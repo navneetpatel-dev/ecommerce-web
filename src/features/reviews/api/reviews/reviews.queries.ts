@@ -68,15 +68,17 @@ export function useAwaitingReviews() {
   });
 }
 
-export function useSubmitReview(options: { onSubmitted?: () => void } = {}) {
+export function useSubmitReview(
+  options: { onSubmitted?: (review?: Review) => void } = {},
+) {
   const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (input: Parameters<typeof reviewsApi.submit>[0]) =>
       reviewsApi.submit(input),
-    onSuccess: () => {
+    onSuccess: (saved) => {
       void queryClient.invalidateQueries({ queryKey: reviewKeys.all });
-      if (options.onSubmitted) options.onSubmitted();
+      if (options.onSubmitted) options.onSubmitted(saved);
       else navigate(router, PATHS.orders);
     },
   });

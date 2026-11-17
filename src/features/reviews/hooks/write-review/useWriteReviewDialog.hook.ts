@@ -15,9 +15,13 @@ export function useWriteReviewDialog(onReviewed?: () => void) {
     handleOpenChange: (open: boolean) => {
       if (!open) setTarget(null);
     },
-    handleSubmitted: () => {
+    handleSubmitted: (review?: { status?: string }) => {
       setTarget(null);
-      notifySuccess(LABELS.reviewThanks);
+      if (review?.status === "APPROVED") {
+        notifySuccess(LABELS.reviewPublished);
+      } else {
+        notifySuccess(LABELS.reviewThanks);
+      }
       onReviewed?.();
     },
   };

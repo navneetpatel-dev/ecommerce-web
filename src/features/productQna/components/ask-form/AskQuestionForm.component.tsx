@@ -22,6 +22,7 @@ interface AskQuestionFormProps {
   question: string;
   isPending: boolean;
   isSuccess: boolean;
+  successMessage?: string | null;
   formLevelError?: string | null;
   onSubmit: (event: React.FormEvent) => void;
 }
@@ -32,6 +33,7 @@ export function AskQuestionForm({
   question,
   isPending,
   isSuccess,
+  successMessage = null,
   formLevelError = null,
   onSubmit,
 }: AskQuestionFormProps) {
@@ -74,7 +76,7 @@ export function AskQuestionForm({
 
         {isSuccess ? (
           <p role="status" className={styles.successMessage}>
-            {LABELS.questionSubmittedForReview}
+            {successMessage ?? LABELS.questionSubmittedForReview}
           </p>
         ) : null}
 

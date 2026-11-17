@@ -84,10 +84,14 @@ export function useWriteReviewPanel(
     highlighted,
     toggle: () => setOpen((value) => !value),
     close: () => setOpen(false),
-    handleSubmitted: () => {
+    handleSubmitted: (review?: { status?: string }) => {
       setSubmitted(true);
       setOpen(false);
-      notifySuccess(LABELS.reviewThanks);
+      if (review?.status === "APPROVED") {
+        notifySuccess(LABELS.reviewPublished);
+      } else {
+        notifySuccess(LABELS.reviewThanks);
+      }
       clearRequestParam();
     },
   };

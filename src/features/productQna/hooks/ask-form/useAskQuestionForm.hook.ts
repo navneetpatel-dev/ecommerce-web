@@ -58,6 +58,11 @@ export function useAskQuestionForm(productId: string) {
     );
   };
 
+  const successMessage =
+    askQuestion.data?.status === "PUBLISHED"
+      ? LABELS.questionPublished
+      : LABELS.questionSubmittedForReview;
+
   return {
     register,
     handleSubmit,
@@ -67,5 +72,6 @@ export function useAskQuestionForm(productId: string) {
     onSubmit,
     isPending: askQuestion.isPending,
     isSuccess: askQuestion.isSuccess,
+    successMessage,
   };
 }
