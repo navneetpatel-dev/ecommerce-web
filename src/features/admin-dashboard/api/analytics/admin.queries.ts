@@ -16,8 +16,13 @@ export const adminKeys = {
   },
   coupons: {
     all: ["admin", "coupons"] as const,
-    page: (page: number, limit: number, vendorScoped?: boolean) =>
-      [...adminKeys.coupons.all, page, limit, vendorScoped] as const,
+    page: (
+      page: number,
+      limit: number,
+      vendorScoped?: boolean,
+      filters?: { search?: string; status?: string },
+    ) =>
+      [...adminKeys.coupons.all, page, limit, vendorScoped, filters] as const,
   },
   couponAnalytics: (couponId: string | null | undefined) =>
     [...adminKeys.all, "coupon-analytics", couponId] as const,
@@ -58,11 +63,12 @@ export function useAdminCoupons(
   page = 1,
   limit = DEFAULT_PAGE_LIMIT,
   vendorScoped?: boolean,
+  filters?: { search?: string; status?: string },
   options?: { enabled?: boolean },
 ) {
   return useQuery({
-    queryKey: adminKeys.coupons.page(page, limit, vendorScoped),
-    queryFn: () => adminApi.coupons({ page, limit, vendorScoped }),
+    queryKey: adminKeys.coupons.page(page, limit, vendorScoped, filters),
+    queryFn: () => adminApi.coupons({ page, limit, vendorScoped, ...filters }),
     placeholderData: (prev) => prev,
     enabled: options?.enabled,
   });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -26,6 +26,7 @@ import { useApiFormErrors } from "@/shared/hooks/forms/useApiFormErrors.hook";
 import { LABELS } from "@/shared/constants/labels";
 import type { Coupon } from "@/shared/api/types";
 import { useUnsavedChanges } from "@/shared/hooks/forms/useUnsavedChanges.hook";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 
 export function useVendorCouponsPage() {
   const user = useAuthStore((s) => s.currentUser);
@@ -34,10 +35,25 @@ export function useVendorCouponsPage() {
   const searchParams = useSearchParams();
   const dialog = useRouteQueryDialog();
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const analyticsId = searchParams.get(QUERY_PARAMS.analytics);
 
-  const { data, isLoading } = useVendorCoupons(page, DEFAULT_PAGE_LIMIT);
+  const couponFilters = useMemo(
+    () => ({
+      search: debouncedSearch || undefined,
+      status: status || undefined,
+    }),
+    [debouncedSearch, status],
+  );
+
+  const { data, isLoading } = useVendorCoupons(
+    page,
+    DEFAULT_PAGE_LIMIT,
+    couponFilters,
+  );
   const createMutation = useCreateVendorCoupon(vendorId);
 
   const form = useForm<CouponFormInput>({
@@ -110,6 +126,22 @@ export function useVendorCouponsPage() {
     void queryClient.invalidateQueries({ queryKey: vendorCouponKeys.all });
   };
 
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+    setPage(1);
+  }, []);
+
+  const handleStatusChange = useCallback((value: string) => {
+    setStatus(value);
+    setPage(1);
+  }, []);
+
+  const handleClearFilters = useCallback(() => {
+    setSearch("");
+    setStatus("");
+    setPage(1);
+  }, []);
+
   return {
     vendorId,
     coupons,
@@ -127,6 +159,13 @@ export function useVendorCouponsPage() {
       from,
       to,
       onPageChange: setPage,
+    },
+    filters: {
+      search,
+      status,
+      onSearchChange: handleSearchChange,
+      onStatusChange: handleStatusChange,
+      onClear: handleClearFilters,
     },
     analyticsId,
     setAnalyticsId: (id: string | null) => {

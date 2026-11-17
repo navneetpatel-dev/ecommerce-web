@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, type ReactNode } from "react";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -15,6 +15,7 @@ import { useCategoriesReorder } from "../../../hooks/categories/useCategoriesReo
 import type { Category } from "@/shared/api/types";
 import { categoriesTableStyles } from "../../../styles/categories/categoriesTable.styles";
 import { useCategoriesTableColumns } from "../../../hooks/categories/useCategoriesTableColumns.hook";
+import { CategoriesFilters } from "../CategoriesFilters.component";
 
 export interface CategoriesTableProps {
   categories: Category[];
@@ -33,8 +34,27 @@ export function CategoriesTable({
   pagination,
   actions,
 }: CategoriesTableProps) {
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+
+  const filteredCategories = useMemo(() => {
+    return categories.filter((cat) => {
+      if (search.trim()) {
+        const q = search.trim().toLowerCase();
+        const match =
+          cat.name?.toLowerCase().includes(q) ||
+          cat.slug?.toLowerCase().includes(q) ||
+          cat.seoDescription?.toLowerCase().includes(q);
+        if (!match) return false;
+      }
+      if (status === "active" && cat.status !== "ACTIVE") return false;
+      if (status === "inactive" && cat.status === "ACTIVE") return false;
+      return true;
+    });
+  }, [categories, search, status]);
+
   const { rows, ids, sensors, reorderError, onDragEnd } = useCategoriesReorder(
-    categories,
+    filteredCategories,
     onRefresh,
   );
 
@@ -42,35 +62,50 @@ export function CategoriesTable({
 
   const getRowId = useCallback((row: Category) => row.id, []);
 
-  return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={onDragEnd}
-    >
-      <SortableContext items={ids} strategy={verticalListSortingStrategy}>
-        <p className={categoriesTableStyles.hint}>
-          {LABELS.categoryReorderHint}
-        </p>
-        {reorderError ? (
-          <p role="alert" className={categoriesTableStyles.error}>
-            {reorderError}
-          </p>
-        ) : null}
-        <DataTable
-          ariaLabel={LABELS.categoriesTableAria}
+  const hasFilters = Boolean(search || status);
 
-          columns={columns}
-          rows={rows}
-          loading={loading}
-          error={error}
-          emptyMessage={LABELS.noRecordsFound}
-          onRefresh={onRefresh}
-          getRowId={getRowId}
-          pagination={pagination}
-          actions={actions}
-        />
-      </SortableContext>
-    </DndContext>
+  return (
+    <div>
+      <CategoriesFilters
+        search={search}
+        status={status}
+        onSearchChange={setSearch}
+        onStatusChange={setStatus}
+        onClear={() => {
+          setSearch("");
+          setStatus("");
+        }}
+      />
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={onDragEnd}
+      >
+        <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+          <p className={categoriesTableStyles.hint}>
+            {hasFilters
+              ? "Filtering categories by search/status. Clear filters to reorder."
+              : LABELS.categoryReorderHint}
+          </p>
+          {reorderError ? (
+            <p role="alert" className={categoriesTableStyles.error}>
+              {reorderError}
+            </p>
+          ) : null}
+          <DataTable
+            ariaLabel={LABELS.categoriesTableAria}
+            columns={columns}
+            rows={rows}
+            loading={loading}
+            error={error}
+            emptyMessage={LABELS.noRecordsFound}
+            onRefresh={onRefresh}
+            getRowId={getRowId}
+            pagination={pagination}
+            actions={actions}
+          />
+        </SortableContext>
+      </DndContext>
+    </div>
   );
 }

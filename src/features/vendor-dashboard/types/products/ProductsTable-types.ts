@@ -26,6 +26,8 @@ export interface ProductRowActionsProps extends ProductActionCallbacks {
 export interface ProductsTableHeaderProps {
   search: string;
   onSearchChange: (value: string) => void;
+  status?: string;
+  onStatusChange?: (value: string) => void;
   onAddProduct?: () => void;
 }
 

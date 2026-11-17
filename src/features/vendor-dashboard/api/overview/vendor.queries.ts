@@ -25,11 +25,13 @@ export const vendorKeys = {
   },
   suborders: {
     all: ["vendor", "suborders"] as const,
-    page: (page: number) => [...vendorKeys.suborders.all, page] as const,
+    page: (page: number, filters?: { status?: string; search?: string }) =>
+      [...vendorKeys.suborders.all, page, filters] as const,
   },
   returns: {
     all: ["vendor", "returns"] as const,
-    page: (page: number) => [...vendorKeys.returns.all, page] as const,
+    page: (page: number, filters?: { status?: string; search?: string }) =>
+      [...vendorKeys.returns.all, page, filters] as const,
   },
 };
 

@@ -48,7 +48,7 @@ export const couponsApi = {
     ),
 
   vendorList: async (
-    params: PaginationQuery = {},
+    params: PaginationQuery & { search?: string; status?: string } = {},
   ): Promise<PaginatedList<Coupon>> => {
     const res = await apiClient.getWithResponse<Coupon[]>(
       withQuery(API.coupons.vendor.list, params),

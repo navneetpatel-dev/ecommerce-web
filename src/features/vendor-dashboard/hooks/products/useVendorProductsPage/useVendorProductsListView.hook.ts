@@ -66,6 +66,7 @@ export function useVendorProductsListView(options: {
 
   const tableViewProps = {
     search: table.search,
+    status: table.status,
     isLoading: table.isLoading,
     products,
     page: table.page,
@@ -75,6 +76,7 @@ export function useVendorProductsListView(options: {
     isSubmitting: table.isSubmitting,
     actionMessage: table.actionMessage,
     onSearchChange: table.handleSearchChange,
+    onStatusChange: table.handleStatusChange,
     onPageChange: table.setPage,
     onAddProduct: canCreate ? () => openCreate() : undefined,
     onEditProduct: canEdit

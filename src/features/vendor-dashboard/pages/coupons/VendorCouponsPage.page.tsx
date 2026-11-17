@@ -16,6 +16,7 @@ export function VendorCouponsPage() {
         coupons={page.coupons}
         loading={page.isLoading}
         pagination={page.pagination}
+        filters={page.filters}
         open={page.open}
         setOpen={page.setOpen}
         form={page.form}

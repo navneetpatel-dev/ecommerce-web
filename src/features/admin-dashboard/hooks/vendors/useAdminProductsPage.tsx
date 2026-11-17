@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import {
   PERMISSIONS,
   type PermissionKey,
@@ -8,11 +8,13 @@ import {
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { productsApi } from "@/features/products";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import { adminApi } from "../../api/analytics/admin.api";
 import { usePendingProducts } from "../../api/analytics/admin.queries";
 import { usePermissions } from "@/shared/hooks/auth/usePermissions.hook";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { adminRowLabel } from "../../utils/shared/adminRowLabel";
+import type { AdminProductsFiltersProps } from "../../components/vendors/AdminProductsFilters.component";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
@@ -20,17 +22,31 @@ export type AdminProductsPageModel = AdminListPageModel & {
   approvePermission: PermissionKey;
   showApprovalQueue: boolean;
   pendingCount: number;
+  filters: AdminProductsFiltersProps;
 };
 
 export function useAdminProductsPage(): AdminProductsPageModel {
   const { hasPermission } = usePermissions();
   const { data: pendingProducts } = usePendingProducts();
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(
     ({ page, limit }: { page: number; limit: number }) =>
-      productsApi.list({ page, limit }),
-    [],
+      productsApi.list({
+        page,
+        limit,
+        search: debouncedSearch || undefined,
+        status: status || undefined,
+      }),
+    [debouncedSearch, status],
   );
+
+  const onClear = useCallback(() => {
+    setSearch("");
+    setStatus("");
+  }, []);
 
   const actions = useCallback(
     (row: AdminDataRow, reload: () => void): ReactNode => {
@@ -79,5 +95,12 @@ export function useAdminProductsPage(): AdminProductsPageModel {
     columnKeys: ["name", "vendorName", "categoryName", "status", "basePrice"],
     showApprovalQueue: hasPermission(PERMISSIONS.PRODUCT_APPROVE),
     pendingCount: pendingProducts?.total ?? 0,
+    filters: {
+      search,
+      status,
+      onSearchChange: setSearch,
+      onStatusChange: setStatus,
+      onClear,
+    },
   };
 }

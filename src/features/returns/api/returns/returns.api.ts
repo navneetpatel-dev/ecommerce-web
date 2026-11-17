@@ -39,9 +39,19 @@ export const returnsApi = {
     );
     return unwrapPaginatedList(res);
   },
-  vendorList: async (page = 1, limit = DEFAULT_PAGE_LIMIT) => {
+  vendorList: async (
+    page = 1,
+    limit = DEFAULT_PAGE_LIMIT,
+    filters?: { status?: string; search?: string },
+  ) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+    if (filters?.status?.trim()) params.set("status", filters.status.trim());
+    if (filters?.search?.trim()) params.set("search", filters.search.trim());
     const res = await apiClient.getWithResponse<ReturnRequest[]>(
-      API.returns.vendorList(`?page=${page}&limit=${limit}`),
+      API.returns.vendorList(`?${params.toString()}`),
     );
     return unwrapPaginatedList(res);
   },

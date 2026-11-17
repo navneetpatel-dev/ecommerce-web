@@ -23,6 +23,10 @@ export {
   type CouponFormInput,
 } from "./schemas/coupons/coupons.schema";
 export { CreateCouponForm } from "./components/coupons/CreateCouponForm.component";
+export {
+  CouponsFilters,
+  type CouponsFiltersProps,
+} from "./components/coupons/CouponsFilters.component";
 export { EditCouponAction } from "./components/coupons/EditCouponAction";
 export { AdminConfirmAction } from "./components/shared/AdminConfirmAction.component";
 export { AdminHomePage } from "./pages/analytics/AdminHomePage.page";

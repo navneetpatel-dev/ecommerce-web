@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   useVendorProducts,
@@ -9,20 +9,30 @@ import {
 import { productsApi } from "@/features/products";
 import { LABELS } from "@/shared/constants/labels";
 import { getApiErrorMessage } from "@/shared/utils/api-errors/apiErrorMessage";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 
 export function useVendorProductsTable() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
+
   const [deleteTarget, setDeleteTarget] = useState<{
     id: string;
     name: string;
   } | null>(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
-  const { data, isLoading } = useVendorProducts(
-    page,
-    search ? { search } : undefined,
+
+  const filters = useMemo(
+    () => ({
+      search: debouncedSearch || undefined,
+      status: status || undefined,
+    }),
+    [debouncedSearch, status],
   );
+
+  const { data, isLoading } = useVendorProducts(page, filters);
 
   const deleteProduct = useMutation({
     mutationFn: (id: string) => productsApi.delete(id),
@@ -48,13 +58,20 @@ export function useVendorProductsTable() {
     setPage(1);
   };
 
+  const handleStatusChange = (value: string) => {
+    setStatus(value);
+    setPage(1);
+  };
+
   return {
     page,
     search,
+    status,
     data,
     isLoading,
     setPage,
     handleSearchChange,
+    handleStatusChange,
     deleteTarget,
     setDeleteTarget,
     confirmDelete: () => {

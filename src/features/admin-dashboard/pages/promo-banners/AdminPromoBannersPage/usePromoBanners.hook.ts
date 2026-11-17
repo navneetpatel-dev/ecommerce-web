@@ -23,6 +23,12 @@ export function usePromoBanners() {
   const [createSaving, setCreateSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<PromoBanner | null>(null);
 
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  const toggleCreateOpen = useCallback(() => {
+    setIsCreateOpen((prev) => !prev);
+  }, []);
+
   const load = useCallback(() => {
     return homepageAdminApi
       .listBanners()
@@ -41,7 +47,7 @@ export function usePromoBanners() {
   // initial `true` so `load` itself never setState-synchronously.
   const reload = async () => {
     setLoading(true);
-    await reload();
+    await load();
   };
 
   useEffect(() => {
@@ -70,6 +76,7 @@ export function usePromoBanners() {
       });
       setMessage(LABELS.promoBannerSaved);
       createForm.resetForm();
+      setIsCreateOpen(false);
       await reload();
     } catch (err) {
       setMessage(getApiErrorMessage(err, LABELS.couldNotSavePromoBanner));
@@ -128,6 +135,9 @@ export function usePromoBanners() {
     loading,
     error,
     message,
+    isCreateOpen,
+    setIsCreateOpen,
+    toggleCreateOpen,
     saving: createSaving || edit.saving,
     editingId: edit.editingId,
     editTitle: edit.editTitle,

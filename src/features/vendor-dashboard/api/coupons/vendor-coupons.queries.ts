@@ -6,16 +6,21 @@ import { toCouponCreateBody } from "@/features/admin-dashboard";
 
 export const vendorCouponKeys = {
   all: ["vendor", "coupons"] as const,
-  list: (page: number) => [...vendorCouponKeys.all, "list", page] as const,
+  list: (page: number, filters?: { search?: string; status?: string }) =>
+    [...vendorCouponKeys.all, "list", page, filters] as const,
   analytics: (id: string) =>
     [...vendorCouponKeys.all, "analytics", id] as const,
   absorbed: [...(["vendor", "coupons"] as const), "absorbed"] as const,
 };
 
-export function useVendorCoupons(page = 1, limit = DEFAULT_PAGE_LIMIT) {
+export function useVendorCoupons(
+  page = 1,
+  limit = DEFAULT_PAGE_LIMIT,
+  filters?: { search?: string; status?: string },
+) {
   return useQuery({
-    queryKey: vendorCouponKeys.list(page),
-    queryFn: () => couponsApi.vendorList({ page, limit }),
+    queryKey: vendorCouponKeys.list(page, filters),
+    queryFn: () => couponsApi.vendorList({ page, limit, ...filters }),
   });
 }
 

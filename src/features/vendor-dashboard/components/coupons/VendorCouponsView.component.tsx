@@ -22,6 +22,10 @@ import type { UseFormReturn } from "react-hook-form";
 import type { Coupon, CouponAnalytics } from "@/shared/api/types";
 import { CouponAnalyticsDialog } from "./VendorCouponsView/CouponAnalyticsDialog.component";
 import { CouponsHeaderSection } from "./VendorCouponsView/CouponsHeaderSection.component";
+import {
+  CouponsFilters,
+  type CouponsFiltersProps,
+} from "@/features/admin-dashboard";
 import { buildVendorCouponColumns } from "./VendorCouponsView/vendorCouponColumns.component";
 import { vendorCouponsViewStyles } from "../../styles/coupons/vendorCouponsView.styles";
 
@@ -29,6 +33,7 @@ interface VendorCouponsViewProps {
   coupons: Coupon[];
   loading: boolean;
   pagination: DataTablePaginationProps;
+  filters?: CouponsFiltersProps;
   open: boolean;
   setOpen: (open: boolean) => void;
   form: UseFormReturn<CouponFormInput>;
@@ -53,6 +58,7 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
     coupons,
     loading,
     pagination,
+    filters,
     open,
     setOpen,
     form,
@@ -167,6 +173,8 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
         vendorId={vendorId}
         canManage={isOwner}
       />
+
+      {filters ? <CouponsFilters {...filters} /> : null}
 
       <DataTable
         ariaLabel={LABELS.vendorCouponsTableAria}

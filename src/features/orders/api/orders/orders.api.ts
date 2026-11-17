@@ -45,9 +45,19 @@ export const ordersApi = {
 };
 
 export const subOrdersApi = {
-  vendorSubOrders: async (page = 1, limit = DEFAULT_PAGE_LIMIT) => {
+  vendorSubOrders: async (
+    page = 1,
+    limit = DEFAULT_PAGE_LIMIT,
+    filters?: { search?: string; status?: string },
+  ) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
+    if (filters?.search?.trim()) params.set("search", filters.search.trim());
+    if (filters?.status?.trim()) params.set("status", filters.status.trim());
     const res = await apiClient.getWithResponse<Order[]>(
-      API.suborders.list(`page=${page}&limit=${limit}`),
+      API.suborders.list(params.toString()),
     );
     return unwrapPaginatedList(res);
   },

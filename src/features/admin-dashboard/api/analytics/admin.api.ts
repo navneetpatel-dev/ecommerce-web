@@ -104,6 +104,7 @@ export const adminApi = {
     params: PaginationQuery & {
       vendorId?: string | null;
       status?: string;
+      search?: string;
       vendorScoped?: boolean;
     } = {},
   ): Promise<PaginatedList<Coupon>> => {
@@ -113,6 +114,7 @@ export const adminApi = {
         limit: params.limit,
         vendorId: params.vendorId,
         status: params.status,
+        search: params.search,
         vendorScoped: params.vendorScoped,
       }),
     );

@@ -4,21 +4,26 @@ import { AdminDataPage } from "../shared/AdminDataPage.page";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { ProductModerationQueue } from "./ProductModerationQueue.page";
 import { AdminSectionTabs } from "../../components/shared/AdminSectionTabs.component";
+import { AdminProductsFilters } from "../../components/vendors/AdminProductsFilters.component";
 import { useAdminProductsPage } from "../../hooks/vendors/useAdminProductsPage";
+import { adminPagesStyles } from "../shared/adminPages.styles";
 import { LABELS } from "@/shared/constants/labels";
 
 export function AdminProductsPage() {
   const page = useAdminProductsPage();
 
   const catalog = (
-    <AdminDataPage
-      title={page.title}
-      permission={page.permission}
-      load={page.load}
-      actions={page.actions}
-      columnKeys={page.columnKeys}
-      hideTitle={page.showApprovalQueue}
-    />
+    <div className={adminPagesStyles.stack6}>
+      <AdminProductsFilters {...page.filters} />
+      <AdminDataPage
+        title={page.title}
+        permission={page.permission}
+        load={page.load}
+        actions={page.actions}
+        columnKeys={page.columnKeys}
+        hideTitle={page.showApprovalQueue}
+      />
+    </div>
   );
 
   if (!page.showApprovalQueue) {

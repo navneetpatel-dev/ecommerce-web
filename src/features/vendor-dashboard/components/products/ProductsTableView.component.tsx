@@ -21,6 +21,7 @@ interface ProductRow {
 
 interface ProductsTableViewProps {
   search: string;
+  status?: string;
   isLoading: boolean;
   products?: ProductRow[];
   page: number;
@@ -30,6 +31,7 @@ interface ProductsTableViewProps {
   isSubmitting?: boolean;
   actionMessage?: string | null;
   onSearchChange: (value: string) => void;
+  onStatusChange?: (value: string) => void;
   onPageChange: (page: number) => void;
   onAddProduct?: () => void;
   onEditProduct?: (product: ProductRow) => void;
@@ -40,6 +42,7 @@ interface ProductsTableViewProps {
 
 export function ProductsTableView({
   search,
+  status,
   isLoading,
   products,
   page,
@@ -49,6 +52,7 @@ export function ProductsTableView({
   isSubmitting,
   actionMessage,
   onSearchChange,
+  onStatusChange,
   onPageChange,
   onAddProduct,
   onEditProduct,
@@ -100,6 +104,8 @@ export function ProductsTableView({
       <ProductsTableHeader
         search={search}
         onSearchChange={onSearchChange}
+        status={status}
+        onStatusChange={onStatusChange}
         onAddProduct={onAddProduct}
       />
       {actionMessageNotice}

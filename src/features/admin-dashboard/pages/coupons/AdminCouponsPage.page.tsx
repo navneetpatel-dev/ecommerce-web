@@ -6,6 +6,7 @@ import {
 } from "../../hooks/coupons/useAdminCouponsPage.hook";
 import { CouponsPageHeader } from "../../components/coupons/CouponsPageHeader.component";
 import { CouponsTable } from "../../components/coupons/CouponsTable.component";
+import { CouponsFilters } from "../../components/coupons/CouponsFilters.component";
 import { CouponBatchesTab } from "../../components/coupons/CouponBatchesTab.component";
 import {
   Tabs,
@@ -59,6 +60,7 @@ export function AdminCouponsPage() {
         </TabsList>
 
         <TabsContent value="platform" className={adminPagesStyles.tabContent}>
+          <CouponsFilters {...page.filters} />
           <CouponsTable
             coupons={page.coupons}
             loading={page.isLoading}
@@ -66,6 +68,7 @@ export function AdminCouponsPage() {
           />
         </TabsContent>
         <TabsContent value="vendor" className={adminPagesStyles.tabContent}>
+          <CouponsFilters {...page.filters} />
           <CouponsTable
             coupons={page.coupons}
             loading={page.isLoading}
