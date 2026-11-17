@@ -3,17 +3,25 @@
 import { useState, useCallback, type ChangeEvent } from "react";
 
 interface UseVendorQnaAnswerDialogOptions {
+  initialAnswer?: string;
   submitting?: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (answer: string) => void;
 }
 
 export function useVendorQnaAnswerDialog({
+  initialAnswer = "",
   submitting = false,
   onOpenChange,
   onSubmit,
 }: UseVendorQnaAnswerDialogOptions) {
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState(initialAnswer);
+  const [prevInitialAnswer, setPrevInitialAnswer] = useState(initialAnswer);
+
+  if (initialAnswer !== prevInitialAnswer) {
+    setPrevInitialAnswer(initialAnswer);
+    setAnswer(initialAnswer);
+  }
 
   const handleClose = useCallback(() => {
     if (submitting) return;

@@ -45,8 +45,46 @@ export function useVendorQnaPage() {
   const handleAnswer = async (questionId: string, answer: string) => {
     setSubmitting(true);
     try {
-      await productQnaApi.answer(questionId, { answer });
-      setQuestions((prev) => prev.filter((q) => q.id !== questionId));
+      const created = await productQnaApi.answer(questionId, { answer });
+      setQuestions((prev) =>
+        prev.map((q) => {
+          if (q.id !== questionId) return q;
+          const answers = q.answers ? [...q.answers] : [];
+          const answerObj: ProductQuestion["answers"][number] = created || {
+            id: `${questionId}-answer`,
+            answer,
+            authorType: "VENDOR",
+            authorName: null,
+            status: "PUBLISHED",
+            createdAt: new Date().toISOString(),
+          };
+          return {
+            ...q,
+            answers: [...answers, answerObj],
+          };
+        }),
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleUpdateAnswer = async (answerId: string, answer: string) => {
+    setSubmitting(true);
+    try {
+      const updated = await productQnaApi.updateAnswer(answerId, { answer });
+      setQuestions((prev) =>
+        prev.map((q) => {
+          const hasAnswer = q.answers?.some((a) => a.id === answerId);
+          if (!hasAnswer) return q;
+          return {
+            ...q,
+            answers: (q.answers ?? []).map((a) =>
+              a.id === answerId ? { ...a, ...updated, answer } : a,
+            ),
+          };
+        }),
+      );
     } finally {
       setSubmitting(false);
     }
@@ -58,5 +96,6 @@ export function useVendorQnaPage() {
     loadError,
     submitting,
     handleAnswer,
+    handleUpdateAnswer,
   };
 }

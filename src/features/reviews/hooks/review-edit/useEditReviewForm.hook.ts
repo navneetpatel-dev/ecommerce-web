@@ -59,7 +59,7 @@ export function useEditReviewForm(review: Review, onSaved: () => void) {
         reviewId: review.id,
         rating: data.rating,
         title: data.title || undefined,
-        body: data.body,
+        body: data.body || "",
         attachments: attachments.map(({ url, type, durationSeconds }) => ({
           url,
           type,

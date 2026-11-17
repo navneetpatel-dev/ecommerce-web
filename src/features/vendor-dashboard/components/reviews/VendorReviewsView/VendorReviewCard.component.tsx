@@ -57,7 +57,7 @@ export function VendorReviewCard({
         ) : null}
       </div>
 
-      <p className={styles.cardBody}>{review.body}</p>
+      {review.body ? <p className={styles.cardBody}>{review.body}</p> : null}
 
       {review.vendorResponse ? (
         <div className={styles.replyBox}>

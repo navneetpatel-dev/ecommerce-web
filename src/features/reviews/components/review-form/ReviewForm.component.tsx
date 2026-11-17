@@ -6,7 +6,6 @@ import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { LABELS } from "@/shared/constants/labels";
 import { UGC_LIMITS } from "@/shared/constants/ugc/ugcLimits";
-import { isUgcTextValid } from "@/shared/schemas/ugcText.schema";
 import { CharacterCount } from "@/shared/components/forms/CharacterCount.component";
 import { UPLOAD_ENTITY } from "@/shared/constants/uploads/uploads";
 import {
@@ -64,9 +63,9 @@ export function ReviewForm({
   onSubmit,
 }: ReviewFormProps) {
   const handleRemoveAllMedia = () => onAttachmentsChange([]);
-  const canSubmit = rating >= 1 && isUgcTextValid(body, UGC_LIMITS.reviewBody);
-  const disableHint =
-    rating < 1 ? LABELS.selectReviewRating : LABELS.enterReviewBody;
+  const isBodyValid = !body || body.trim().length <= UGC_LIMITS.reviewBody.max;
+  const canSubmit = rating >= 1 && isBodyValid;
+  const disableHint = rating < 1 ? LABELS.selectReviewRating : "";
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
@@ -104,7 +103,7 @@ export function ReviewForm({
           </FormFieldFrame>
 
           <FormFieldFrame
-            label={LABELS.reviewBody}
+            label={LABELS.reviewBodyOptional ?? "Review (optional)"}
             htmlFor="body"
             error={errors.body?.message}
           >

@@ -118,21 +118,53 @@ export function ProductModerationPreviewModal({
             </div>
           )}
 
-          {product.specs && Object.keys(product.specs).length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-body-sm font-semibold text-ink">
-                {LABELS.productPreviewSpecifications}
-              </h4>
-              <dl className="grid grid-cols-2 gap-2 text-body-xs">
-                {Object.entries(product.specs).map(([key, val]) => (
-                  <div key={key} className="rounded border border-line/40 p-2">
-                    <dt className="text-ink-muted">{key}</dt>
-                    <dd className="font-medium text-ink">{val}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          )}
+          {(() => {
+            const rawSpecs = product.specs as unknown;
+            const entries: Array<[string, string]> = [];
+            if (rawSpecs) {
+              if (Array.isArray(rawSpecs)) {
+                for (const item of rawSpecs) {
+                  if (item && typeof item === "object") {
+                    const itemObj = item as Record<string, unknown>;
+                    const k =
+                      "key" in itemObj
+                        ? String(itemObj.key ?? "")
+                        : "name" in itemObj
+                          ? String(itemObj.name ?? "")
+                          : "";
+                    const v =
+                      "value" in itemObj ? String(itemObj.value ?? "") : "";
+                    if (k) entries.push([k, v]);
+                  }
+                }
+              } else if (typeof rawSpecs === "object") {
+                for (const [key, val] of Object.entries(
+                  rawSpecs as Record<string, unknown>,
+                )) {
+                  entries.push([key, String(val ?? "")]);
+                }
+              }
+            }
+            if (!entries.length) return null;
+            return (
+              <div className="space-y-2">
+                <h4 className="text-body-sm font-semibold text-ink">
+                  {LABELS.productPreviewSpecifications}
+                </h4>
+                <dl className="grid grid-cols-2 gap-2 text-body-xs">
+                  {entries.map(([key, val]) => (
+                    <div
+                      key={key}
+                      className="rounded border border-line/40 p-2"
+                    >
+                      <dt className="text-ink-muted">{key}</dt>
+                      <dd className="font-medium text-ink">{val}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            );
+          })()}
         </div>
 
         <DialogFooter className="flex-wrap items-center justify-between gap-2 border-t border-line/60 pt-4">

@@ -78,7 +78,38 @@ export function sanitizeProductListingValues(
 export function listingValuesFromProduct(
   product: ProductDetail,
 ): ProductListingFormValues {
-  const specEntries = Object.entries(product.specs ?? {});
+  let specEntries: Array<{ key: string; value: string }> = [];
+  if (product.specs) {
+    let rawSpecs: unknown = product.specs;
+    if (typeof rawSpecs === "string") {
+      try {
+        rawSpecs = JSON.parse(rawSpecs);
+      } catch {
+        rawSpecs = {};
+      }
+    }
+    if (Array.isArray(rawSpecs)) {
+      specEntries = rawSpecs
+        .filter((s): s is Record<string, unknown> =>
+          Boolean(s && typeof s === "object"),
+        )
+        .map((s) => ({
+          key: String(s.key || s.name || ""),
+          value: String(s.value ?? ""),
+        }));
+    } else if (rawSpecs && typeof rawSpecs === "object") {
+      specEntries = Object.entries(rawSpecs as Record<string, unknown>).map(
+        ([key, value]) => ({
+          key,
+          value:
+            typeof value === "object"
+              ? JSON.stringify(value)
+              : String(value ?? ""),
+        }),
+      );
+    }
+  }
+
   return {
     name: product.name,
     categoryId: product.categoryId,
@@ -89,9 +120,7 @@ export function listingValuesFromProduct(
     brand: product.brand ?? "",
     tagsInput: (product.tags ?? []).join(", "),
     highlights: product.highlights?.length ? [...product.highlights] : [""],
-    specs: specEntries.length
-      ? specEntries.map(([key, value]) => ({ key, value }))
-      : [emptySpecRow()],
+    specs: specEntries.length ? specEntries : [emptySpecRow()],
     deliveryNote: product.deliveryNote ?? "",
     returnNote: product.returnNote ?? "",
     warrantyMonths:

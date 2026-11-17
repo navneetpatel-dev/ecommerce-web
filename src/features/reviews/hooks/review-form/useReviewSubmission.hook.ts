@@ -27,7 +27,7 @@ export function useReviewSubmission(
   const form = useForm<ReviewFormInput>({
     mode: "onTouched",
     resolver: zodResolver(ReviewFormSchema),
-    defaultValues: { rating: 0 },
+    defaultValues: { rating: 0, body: "" },
   });
 
   useUnsavedChanges(form.formState.isDirty || attachments.length > 0);

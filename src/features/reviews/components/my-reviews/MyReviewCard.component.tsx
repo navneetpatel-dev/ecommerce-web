@@ -65,12 +65,14 @@ export function MyReviewCard({ review }: { review: Review }) {
         </div>
       </div>
       {shown.title ? <p className={styles.reviewTitle}>{shown.title}</p> : null}
-      <ExpandableText
-        text={shown.body}
-        threshold={REVIEW_CLAMP_CHARS}
-        lines={4}
-        className={styles.reviewBody}
-      />
+      {shown.body?.trim() ? (
+        <ExpandableText
+          text={shown.body}
+          threshold={REVIEW_CLAMP_CHARS}
+          lines={4}
+          className={styles.reviewBody}
+        />
+      ) : null}
       <ReviewMediaGallery media={shown.media} />
       <RevisionNote state={revision} />
       {review.vendorResponse ? (

@@ -6,6 +6,7 @@ export const reports3Labels = {
   reviewTitleOptional: "Title (optional)",
   reviewTitlePlaceholder: "Summarize your experience",
   reviewBody: "Review",
+  reviewBodyOptional: "Review (optional)",
   reviewBodyPlaceholder: "What did you think?",
   selectReviewRating: "Select a star rating to continue.",
   enterReviewBody: "Enter a review of at least 20 characters.",

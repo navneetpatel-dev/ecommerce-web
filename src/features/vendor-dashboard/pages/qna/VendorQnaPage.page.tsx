@@ -6,8 +6,14 @@ import { VendorQnaView } from "../../components/qna/VendorQnaView.component";
 import { useVendorQnaPage } from "../../hooks/qna/useVendorQnaPage.hook";
 
 export function VendorQnaPage() {
-  const { questions, isLoading, loadError, submitting, handleAnswer } =
-    useVendorQnaPage();
+  const {
+    questions,
+    isLoading,
+    loadError,
+    submitting,
+    handleAnswer,
+    handleUpdateAnswer,
+  } = useVendorQnaPage();
 
   return (
     <RequirePermission permission={PERMISSIONS.REVIEW_RESPOND}>
@@ -17,6 +23,7 @@ export function VendorQnaPage() {
         loadError={loadError}
         submitting={submitting}
         onAnswer={handleAnswer}
+        onUpdateAnswer={handleUpdateAnswer}
       />
     </RequirePermission>
   );

@@ -20,7 +20,11 @@ export function ProductReviewsContainer({
   enabled = true,
 }: ProductReviewsContainerProps) {
   const view = useProductReviewsView(productId, productSlug, { enabled });
-  const { panelRef, ...writePanel } = useWriteReviewPanel(productId, enabled);
+  const { panelRef, ...writePanel } = useWriteReviewPanel(
+    productId,
+    enabled,
+    Boolean(view.myReview),
+  );
 
   return (
     <ReviewEditProvider productName={productName}>

@@ -8,6 +8,7 @@ import { useVendorQnaAnswerDialog } from "../../hooks/qna/useVendorQnaAnswerDial
 
 interface VendorQnaAnswerDialogProps {
   open: boolean;
+  initialAnswer?: string;
   submitting?: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (answer: string) => void;
@@ -16,6 +17,7 @@ interface VendorQnaAnswerDialogProps {
 /** In-app answer dialog for a customer's product question — mirrors VendorReviewRespondDialog. */
 export function VendorQnaAnswerDialog({
   open,
+  initialAnswer = "",
   submitting = false,
   onOpenChange,
   onSubmit,
@@ -27,7 +29,12 @@ export function VendorQnaAnswerDialog({
     handleOpenChange,
     handleAnswerChange,
     handleSubmit,
-  } = useVendorQnaAnswerDialog({ submitting, onOpenChange, onSubmit });
+  } = useVendorQnaAnswerDialog({
+    initialAnswer,
+    submitting,
+    onOpenChange,
+    onSubmit,
+  });
 
   return (
     <StatusDialog

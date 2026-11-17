@@ -21,6 +21,12 @@ export function ogDefaults(): OpenGraph {
  * platforms cropped it).
  */
 export function productOg(product: ProductSeoData): OpenGraph {
+  const imageUrl = product.imageUrl
+    ? product.imageUrl.startsWith("http")
+      ? product.imageUrl
+      : `${SITE.url}${product.imageUrl.startsWith("/") ? "" : "/"}${product.imageUrl}`
+    : `${SITE.url}${SITE.ogImage}`;
+
   return {
     type: "website",
     locale: SITE.locale,
@@ -28,5 +34,13 @@ export function productOg(product: ProductSeoData): OpenGraph {
     title: product.name,
     description: product.description,
     url: productCanonical(product.slug),
+    images: [
+      {
+        url: imageUrl,
+        width: 1200,
+        height: 630,
+        alt: product.name,
+      },
+    ],
   };
 }

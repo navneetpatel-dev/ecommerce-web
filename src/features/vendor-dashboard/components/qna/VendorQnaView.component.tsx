@@ -14,6 +14,7 @@ interface VendorQnaViewProps {
   loadError?: string | null;
   submitting?: boolean;
   onAnswer: (questionId: string, answer: string) => void | Promise<void>;
+  onUpdateAnswer?: (answerId: string, answer: string) => void | Promise<void>;
 }
 
 export function VendorQnaView({
@@ -22,13 +23,15 @@ export function VendorQnaView({
   loadError = null,
   submitting = false,
   onAnswer,
+  onUpdateAnswer,
 }: VendorQnaViewProps) {
   const {
     targetId,
+    initialAnswer,
     handleOpenAnswer,
     handleAnswerOpenChange,
     handleAnswerSubmit,
-  } = useVendorQnaViewState({ onAnswer });
+  } = useVendorQnaViewState({ questions, onAnswer, onUpdateAnswer });
 
   const loadingContent = isLoading ? <VendorQnaSkeletonList /> : null;
 
@@ -64,6 +67,7 @@ export function VendorQnaView({
 
       <VendorQnaAnswerDialog
         open={Boolean(targetId)}
+        initialAnswer={initialAnswer}
         submitting={submitting}
         onOpenChange={handleAnswerOpenChange}
         onSubmit={handleAnswerSubmit}

@@ -38,6 +38,9 @@ interface PurchasePanelProps {
   onAddToCart?: (quantity: number) => void;
   productName: string;
   productUrl: string;
+  imageUrl?: string;
+  price?: number;
+  description?: string;
 }
 
 export function PurchasePanel({
@@ -68,6 +71,9 @@ export function PurchasePanel({
   onAddToCart,
   productName,
   productUrl,
+  imageUrl,
+  price,
+  description,
 }: PurchasePanelProps) {
   const actionsQuantityMax = Math.max(quantityMax, 1);
   const handleAddToCartClick = () => {
@@ -138,7 +144,14 @@ export function PurchasePanel({
             }
           />
         </Button>
-        <ShareButtonContainer title={productName} url={productUrl} />
+        <ShareButtonContainer
+          productId={productId}
+          title={productName}
+          url={productUrl}
+          imageUrl={imageUrl}
+          price={price}
+          description={description}
+        />
       </div>
     </div>
   );

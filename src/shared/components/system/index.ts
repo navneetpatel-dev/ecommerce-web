@@ -8,5 +8,7 @@ export { RequirePermission } from "./RequirePermission.component";
 export { RoleSurfaceGuard } from "./RoleSurfaceGuard.component";
 export { ServiceWorkerRegistration } from "./ServiceWorkerRegistration.component";
 export { ShareButton } from "./ShareButton.component";
+export { ShareModal } from "./ShareModal.component";
+export { SocialShareGrid } from "./SocialShareGrid.component";
 export { WebVitalsReporter } from "./WebVitalsReporter.component";
 export * from "../../styles/system/errorBoundary.styles";

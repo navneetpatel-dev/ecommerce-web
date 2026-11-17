@@ -12,7 +12,11 @@ export interface SpecRow {
 }
 
 interface UseProductSpecificationsParams {
-  specs?: Record<string, string> | null;
+  specs?:
+    | Record<string, unknown>
+    | Array<{ key?: string; name?: string; value?: unknown }>
+    | string
+    | null;
   matchedVariant?: ProductVariant | null;
   categoryName?: string | null;
   displayStock: number;
@@ -29,12 +33,14 @@ function pushUniqueRow(
   rows: SpecRow[],
   seen: Set<string>,
   label: string,
-  value: string,
+  value: unknown,
 ) {
+  if (value == null) return;
+  const stringValue = typeof value === "string" ? value : String(value);
   const normalized = label.trim().toLowerCase();
-  if (!value || seen.has(normalized)) return;
+  if (!stringValue.trim() || seen.has(normalized)) return;
   seen.add(normalized);
-  rows.push({ label, value });
+  rows.push({ label: label.trim(), value: stringValue.trim() });
 }
 
 export function useProductSpecifications({
@@ -46,6 +52,54 @@ export function useProductSpecifications({
   const rows = useMemo(() => {
     const list: SpecRow[] = [];
     const seenLabels = new Set<string>();
+
+    // 1. Direct specifications from the admin/vendor side exactly as provided
+    if (specs) {
+      let raw: unknown = specs;
+      if (typeof raw === "string") {
+        try {
+          raw = JSON.parse(raw);
+        } catch {
+          raw = {};
+        }
+      }
+      if (Array.isArray(raw)) {
+        for (const item of raw) {
+          if (item && typeof item === "object") {
+            const key =
+              "key" in item
+                ? String(item.key)
+                : "name" in item
+                  ? String(item.name)
+                  : "";
+            const val = "value" in item ? item.value : "";
+            if (key) pushUniqueRow(list, seenLabels, key, val);
+          }
+        }
+      } else if (raw && typeof raw === "object") {
+        for (const [key, value] of Object.entries(
+          raw as Record<string, unknown>,
+        )) {
+          pushUniqueRow(list, seenLabels, key, value);
+        }
+      }
+    }
+
+    // 2. Category, variant attributes, and physical product metadata
+    if (categoryName) {
+      pushUniqueRow(list, seenLabels, LABELS.categoryLabel, categoryName);
+    }
+
+    if (matchedVariant?.attributes) {
+      for (const [key, value] of Object.entries(matchedVariant.attributes)) {
+        pushUniqueRow(list, seenLabels, key, value);
+      }
+    }
+
+    const weight = formatWeightGrams(matchedVariant?.weightGrams);
+    if (weight) {
+      pushUniqueRow(list, seenLabels, LABELS.productWeight, weight);
+    }
 
     if (
       matchedVariant?.sku &&
@@ -63,27 +117,6 @@ export function useProductSpecifications({
         LABELS.variantPrice,
         `${formatInr(variantPrice)}`,
       );
-    }
-
-    if (matchedVariant?.attributes) {
-      for (const [key, value] of Object.entries(matchedVariant.attributes)) {
-        pushUniqueRow(list, seenLabels, key, value);
-      }
-    }
-
-    const weight = formatWeightGrams(matchedVariant?.weightGrams);
-    if (weight) {
-      pushUniqueRow(list, seenLabels, LABELS.productWeight, weight);
-    }
-
-    if (categoryName) {
-      pushUniqueRow(list, seenLabels, LABELS.categoryLabel, categoryName);
-    }
-
-    if (specs) {
-      for (const [key, value] of Object.entries(specs)) {
-        pushUniqueRow(list, seenLabels, key, value);
-      }
     }
 
     pushUniqueRow(

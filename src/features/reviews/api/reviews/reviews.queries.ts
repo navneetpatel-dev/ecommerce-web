@@ -125,12 +125,12 @@ export function useDeleteReview() {
     onSuccess: (_result, reviewId) => {
       // Only this review leaves; every other row stays exactly where it was.
       updateReviewInCaches(queryClient, reviewId, () => null);
-      // The order line is free again: refresh the small "write a review" prompts.
-      void queryClient.invalidateQueries({
+      // The order line is free again: refresh eligibility, awaiting reviews, and product review lists.
+      void queryClient.invalidateQueries({ queryKey: reviewKeys.all });
+      void queryClient.refetchQueries({
         predicate: (query) =>
           query.queryKey[0] === reviewKeys.all[0] &&
-          (query.queryKey[1] === "eligibility" ||
-            query.queryKey[1] === "awaiting"),
+          query.queryKey[1] === "eligibility",
       });
     },
   });

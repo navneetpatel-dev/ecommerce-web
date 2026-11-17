@@ -16,7 +16,11 @@ const HIGHLIGHT_MS = 2600;
  * the "Write a review" list) opens it, scrolls to it, highlights it and puts
  * focus on the stars.
  */
-export function useWriteReviewPanel(productId: string, enabled: boolean) {
+export function useWriteReviewPanel(
+  productId: string,
+  enabled: boolean,
+  hasExistingReview = false,
+) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -34,9 +38,18 @@ export function useWriteReviewPanel(productId: string, enabled: boolean) {
 
   const [open, setOpen] = useState(Boolean(requestedItemId));
   const [submitted, setSubmitted] = useState(false);
+  const [prevHasExistingReview, setPrevHasExistingReview] =
+    useState(hasExistingReview);
   const [highlighted, setHighlighted] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const arrivedRef = useRef(false);
+
+  if (prevHasExistingReview !== hasExistingReview) {
+    setPrevHasExistingReview(hasExistingReview);
+    if (!hasExistingReview) {
+      setSubmitted(false);
+    }
+  }
 
   useEffect(() => {
     if (!requestedItemId || !orderItemId || arrivedRef.current || !enabled)

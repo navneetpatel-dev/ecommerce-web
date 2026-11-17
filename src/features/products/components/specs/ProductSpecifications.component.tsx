@@ -6,7 +6,11 @@ import { SecondaryCategoriesList } from "./SecondaryCategoriesList.component";
 import { PRODUCT_SPECIFICATIONS_STYLES } from "../../styles/specs/productSpecifications.styles";
 
 interface ProductSpecificationsProps {
-  specs?: Record<string, string> | null;
+  specs?:
+    | Record<string, unknown>
+    | Array<{ key?: string; name?: string; value?: unknown }>
+    | string
+    | null;
   matchedVariant?: ProductVariant | null;
   categoryName?: string | null;
   secondaryCategories?: Array<{ id: string; name: string; slug: string }>;

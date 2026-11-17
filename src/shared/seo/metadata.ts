@@ -64,7 +64,19 @@ export function generateProductMetadata(product: ProductSeoData): Metadata {
       description,
       site: SITE.twitter,
       creator: SITE.twitter,
-      /* Image comes from the segment's generated `twitter-image`. */
+      images: product.imageUrl
+        ? [
+            product.imageUrl.startsWith("http")
+              ? product.imageUrl
+              : `${SITE.url}${product.imageUrl.startsWith("/") ? "" : "/"}${product.imageUrl}`,
+          ]
+        : undefined,
+    },
+    other: {
+      "product:price:amount": String(product.price),
+      "product:price:currency": product.currency || "INR",
+      "og:price:amount": String(product.price),
+      "og:price:currency": product.currency || "INR",
     },
     robots: {
       index: true,

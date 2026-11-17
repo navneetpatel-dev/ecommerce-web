@@ -179,6 +179,9 @@ export function ProductBuyBoxColumn({
           onAddToCart={onAddToCart}
           productName={product.name}
           productUrl={PATHS.product(product.slug ?? product.id)}
+          imageUrl={product.imageUrl}
+          price={displayPrice}
+          description={product.description}
         />
 
         <SellerPerksBlock

@@ -46,6 +46,55 @@ describe("VendorQnaView", () => {
     );
   });
 
+  it("renders existing vendor answer and allows editing", () => {
+    const handleUpdateAnswer = vi.fn().mockResolvedValue(undefined);
+    const questionsWithAnswer: ProductQuestion[] = [
+      {
+        ...mockQuestions[0],
+        answers: [
+          {
+            id: "ans-1",
+            authorId: "v-1",
+            authorType: "VENDOR",
+            authorName: "Audio Pro",
+            answer: "Initial vendor answer text",
+            status: "PUBLISHED",
+            createdAt: new Date().toISOString(),
+          },
+        ],
+      },
+    ];
+
+    render(
+      <VendorQnaView
+        questions={questionsWithAnswer}
+        onAnswer={vi.fn()}
+        onUpdateAnswer={handleUpdateAnswer}
+      />,
+    );
+
+    expect(screen.getByText("Your Answer:")).toBeInTheDocument();
+    expect(screen.getByText("Initial vendor answer text")).toBeInTheDocument();
+
+    const editBtn = screen.getByRole("button", { name: "Edit Answer" });
+    fireEvent.click(editBtn);
+
+    const textarea = screen.getByRole("textbox");
+    expect(textarea).toHaveValue("Initial vendor answer text");
+
+    fireEvent.change(textarea, {
+      target: { value: "Updated vendor answer text" },
+    });
+
+    const submitBtn = screen.getByRole("button", { name: "Submit answer" });
+    fireEvent.click(submitBtn);
+
+    expect(handleUpdateAnswer).toHaveBeenCalledWith(
+      "ans-1",
+      "Updated vendor answer text",
+    );
+  });
+
   it("renders empty state when there are no questions", () => {
     render(<VendorQnaView questions={[]} onAnswer={vi.fn()} />);
     expect(

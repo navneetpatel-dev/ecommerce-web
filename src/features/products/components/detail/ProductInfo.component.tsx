@@ -5,11 +5,11 @@ interface ProductInfoProps {
 }
 
 export function ProductInfo({ product }: ProductInfoProps) {
-  if (!product.description) return null;
+  if (!product.description?.trim()) return null;
 
   return (
-    <p className={productDetailsMiscStyles.productDescription}>
+    <div className={productDetailsMiscStyles.productDescription}>
       {product.description}
-    </p>
+    </div>
   );
 }
