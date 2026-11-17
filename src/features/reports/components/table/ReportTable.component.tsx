@@ -87,7 +87,7 @@ export function ReportTable({
         loading={loading}
         error={error}
         onRefresh={onRefresh}
-        emptyMessage={LABELS.noResults}
+        emptyMessage={result ? LABELS.reportNoRowsHint : LABELS.noResults}
         pagination={pagination}
         rowDetails={false}
         tableLayout="fixed"

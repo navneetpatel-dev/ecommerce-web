@@ -2,7 +2,7 @@
 
 import { DateRangeFields } from "@/shared/components/forms/DateRangeFields.component";
 import { DisabledActionHint } from "@/shared/components/forms/DisabledActionHint.component";
-import { FormSection } from "@/shared/components/forms";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { Button } from "@/shared/components/ui/button";
 import { ButtonGroup } from "@/shared/components/ui/button-group";
 import { LABELS } from "@/shared/constants/labels";
@@ -33,6 +33,10 @@ interface ReportFilterBarProps {
   onCategoryIdChange: (value: string) => void;
   status: string;
   onStatusChange: (value: string) => void;
+  onClear: () => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  resultTotal?: number;
   onLoad: () => void;
   onExportExcel: () => void;
   onExportCsv: () => void;
@@ -60,6 +64,10 @@ export function ReportFilterBar({
   onCategoryIdChange,
   status,
   onStatusChange,
+  onClear,
+  open,
+  onOpenChange,
+  resultTotal,
   onLoad,
   onExportExcel,
   onExportCsv,
@@ -83,91 +91,114 @@ export function ReportFilterBar({
       ? LABELS.reportExportSelectReportFirst
       : "";
 
+  const activeCount = [from, to, vendorId, categoryId, status].filter((v) =>
+    v.trim(),
+  ).length;
+
+  const selectedItem = catalog.find((item) => item.type === reportType);
+  const summaryText = [
+    selectedItem ? labelForKey(selectedItem.labelKey) : "",
+    from || to ? `${from || "…"} – ${to || "…"}` : "",
+    vendorId ? LABELS.reportVendor : "",
+    categoryId ? LABELS.reportCategory : "",
+    status ? `${LABELS.reportFilterSummaryStatus}: ${status}` : "",
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
-    <FormSection
+    <CollapsibleTableFilters
       title={LABELS.reportFilters}
-      hint={LABELS.reportFiltersHint}
-      columns={3}
+      open={open}
+      onOpenChange={onOpenChange}
+      activeCount={activeCount}
+      onClear={controlsDisabled ? undefined : onClear}
+      resultCount={resultTotal == null ? undefined : { count: resultTotal }}
+      summary={open ? LABELS.reportFiltersHint : summaryText}
     >
-      <ReportTypeSelect
-        catalog={catalog}
-        reportType={reportType}
-        onReportTypeChange={onReportTypeChange}
-        labelForKey={labelForKey}
-        disabled={controlsDisabled}
-        disabledHint={filterHint}
-      />
+      <div className={styles.grid}>
+        <ReportTypeSelect
+          catalog={catalog}
+          reportType={reportType}
+          onReportTypeChange={onReportTypeChange}
+          labelForKey={labelForKey}
+          disabled={controlsDisabled}
+          disabledHint={filterHint}
+        />
 
-      <DateRangeFields
-        from={from}
-        to={to}
-        onFromChange={onFromChange}
-        onToChange={onToChange}
-        fromId="report-from"
-        toId="report-to"
-        disabled={controlsDisabled}
-        disabledHint={filterHint}
-      />
+        <DateRangeFields
+          from={from}
+          to={to}
+          onFromChange={onFromChange}
+          onToChange={onToChange}
+          fromId="report-from"
+          toId="report-to"
+          fromClassName={styles.dateField}
+          toClassName={styles.dateField}
+          disabled={controlsDisabled}
+          disabledHint={filterHint}
+        />
 
-      {showVendorFilter && (
-        <ReportVendorSelect
-          value={vendorId}
-          onChange={onVendorIdChange}
+        {showVendorFilter && (
+          <ReportVendorSelect
+            value={vendorId}
+            onChange={onVendorIdChange}
+            disabled={controlsDisabled}
+          />
+        )}
+
+        <ReportCategorySelect
+          value={categoryId}
+          onChange={onCategoryIdChange}
           disabled={controlsDisabled}
         />
-      )}
 
-      <ReportCategorySelect
-        value={categoryId}
-        onChange={onCategoryIdChange}
-        disabled={controlsDisabled}
-      />
-
-      <ReportFilterTextField
-        id="report-status"
-        label={LABELS.reportStatus}
-        value={status}
-        disabled={controlsDisabled}
-        disabledHint={filterHint}
-        onChange={onStatusChange}
-      />
-
-      <div className={styles.actionsWrapper}>
-        <ButtonGroup align="start">
-          <DisabledActionHint
-            disabled={loadButtonDisabled}
-            message={loadButtonHint}
-            block
-            className={styles.buttonHint}
-          >
-            <Button
-              type="button"
-              fullWidth="mobile"
-              onClick={onLoad}
-              disabled={loadButtonDisabled}
-            >
-              {LABELS.reportLoad}
-            </Button>
-          </DisabledActionHint>
-          <ReportExportButtons
-            grouped={false}
-            controlsDisabled={controlsDisabled}
-            exportingFormat={exportingFormat}
-            statusMessage={message}
-            disabled={!reportType}
-            blockedHint={LABELS.reportExportSelectReportFirst}
-            onExportExcel={onExportExcel}
-            onExportCsv={onExportCsv}
-            onExportPdf={onExportPdf}
-          />
-        </ButtonGroup>
-        <ReportExportStatus
-          message={message}
-          error={error}
-          exportingFormat={exportingFormat}
-          controlsDisabled={controlsDisabled}
+        <ReportFilterTextField
+          id="report-status"
+          label={LABELS.reportStatus}
+          value={status}
+          disabled={controlsDisabled}
+          disabledHint={filterHint}
+          onChange={onStatusChange}
         />
+
+        <div className={styles.actionsWrapper}>
+          <ButtonGroup align="start">
+            <DisabledActionHint
+              disabled={loadButtonDisabled}
+              message={loadButtonHint}
+              block
+              className={styles.buttonHint}
+            >
+              <Button
+                type="button"
+                fullWidth="mobile"
+                onClick={onLoad}
+                disabled={loadButtonDisabled}
+              >
+                {LABELS.reportLoad}
+              </Button>
+            </DisabledActionHint>
+            <ReportExportButtons
+              grouped={false}
+              controlsDisabled={controlsDisabled}
+              exportingFormat={exportingFormat}
+              statusMessage={message}
+              disabled={!reportType}
+              blockedHint={LABELS.reportExportSelectReportFirst}
+              onExportExcel={onExportExcel}
+              onExportCsv={onExportCsv}
+              onExportPdf={onExportPdf}
+            />
+          </ButtonGroup>
+          <ReportExportStatus
+            message={message}
+            error={error}
+            exportingFormat={exportingFormat}
+            controlsDisabled={controlsDisabled}
+          />
+        </div>
       </div>
-    </FormSection>
+    </CollapsibleTableFilters>
   );
 }

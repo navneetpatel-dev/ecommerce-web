@@ -13,6 +13,13 @@ export function VendorReportsPage() {
 
   const handleLoad = () => void hub.load(1);
   const handleRetry = () => void hub.load();
+  const handleClear = () => {
+    hub.setFrom("");
+    hub.setTo("");
+    hub.setVendorId("");
+    hub.setCategoryId("");
+    hub.setStatus("");
+  };
 
   if (hub.catalogError) {
     return (
@@ -59,6 +66,10 @@ export function VendorReportsPage() {
           onCategoryIdChange={hub.setCategoryId}
           status={hub.status}
           onStatusChange={hub.setStatus}
+          onClear={handleClear}
+          open={hub.filtersOpen}
+          onOpenChange={hub.setFiltersOpen}
+          resultTotal={hub.result?.pagination.total}
           onLoad={handleLoad}
           onExportExcel={hub.exportExcel}
           onExportCsv={hub.exportCsv}

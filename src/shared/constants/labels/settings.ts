@@ -42,6 +42,9 @@ export const settingsLabels = {
   reportFilters: "Filters",
   reportFiltersHint:
     "Choose a report and date range, then load or export results.",
+  reportFilterSummaryStatus: "Status",
+  reportNoRowsHint:
+    "No rows match these filters. Adjust the filters above and load again.",
   reportSelect: "Report",
   reportCategory: "Category",
   reportVendor: "Vendor",

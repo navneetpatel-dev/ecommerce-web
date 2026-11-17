@@ -31,6 +31,7 @@ export function useReportHub(options?: { preferAudience?: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(true);
 
   const buildFilters = useCallback(
     () => ({
@@ -45,7 +46,12 @@ export function useReportHub(options?: { preferAudience?: string }) {
 
   const exportHub = useReportExport(reportType, buildFilters);
 
-  const load = (nextPage = page) => {
+  /**
+   * `syncPanel` is false for pagination so paging never moves the filter panel.
+   * A fresh load collapses the panel when rows came back and keeps it open on
+   * empty results or errors so the user can adjust filters straight away.
+   */
+  const load = (nextPage = page, syncPanel = true) => {
     if (!reportType) return;
     setLoading(true);
     setError(null);
@@ -60,9 +66,21 @@ export function useReportHub(options?: { preferAudience?: string }) {
       .then((data) => {
         setResult(data);
         setPage(nextPage);
+        if (syncPanel) setFiltersOpen(data.rows.length === 0);
       })
-      .catch((err) => setError(getApiErrorMessage(err, LABELS.reportLoadError)))
+      .catch((err) => {
+        setError(getApiErrorMessage(err, LABELS.reportLoadError));
+        if (syncPanel) setFiltersOpen(true);
+      })
       .finally(() => setLoading(false));
+  };
+
+  const changeReportType = (type: string) => {
+    setReportTypeState(type);
+    setResult(null);
+    setPage(1);
+    setError(null);
+    setFiltersOpen(true);
   };
 
   const displayMessage = exportHub.message ?? message;
@@ -73,7 +91,9 @@ export function useReportHub(options?: { preferAudience?: string }) {
     catalogError,
     onRetryCatalog,
     reportType,
-    setReportType: setReportTypeState,
+    setReportType: changeReportType,
+    filtersOpen,
+    setFiltersOpen,
     selected,
     from,
     setFrom,
@@ -98,6 +118,6 @@ export function useReportHub(options?: { preferAudience?: string }) {
     exportingFormat: exportHub.exportingFormat,
     controlsDisabled: exportHub.controlsDisabled,
     labelForKey,
-    setPage: (nextPage: number) => load(nextPage),
+    setPage: (nextPage: number) => load(nextPage, false),
   };
 }

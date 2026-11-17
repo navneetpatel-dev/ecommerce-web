@@ -111,3 +111,26 @@ describe("CollapsibleTableFilters", () => {
     expect(screen.getByPlaceholderText("Search data...")).toBeInTheDocument();
   });
 });
+
+describe("CollapsibleTableFilters (controlled)", () => {
+  it("follows the open prop and reports toggles via onOpenChange", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    const { rerender } = render(
+      <CollapsibleTableFilters open={false} onOpenChange={onOpenChange}>
+        <input aria-label="inner" />
+      </CollapsibleTableFilters>,
+    );
+
+    expect(screen.queryByLabelText("inner")).toBeNull();
+    await user.click(screen.getByRole("button", { name: /filters/i }));
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+
+    rerender(
+      <CollapsibleTableFilters open onOpenChange={onOpenChange}>
+        <input aria-label="inner" />
+      </CollapsibleTableFilters>,
+    );
+    expect(screen.getByLabelText("inner")).toBeInTheDocument();
+  });
+});

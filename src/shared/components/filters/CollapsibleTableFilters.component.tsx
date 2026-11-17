@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { ChevronDown, RotateCcw, SlidersHorizontal } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { Button } from "@/shared/components/ui/button";
@@ -19,6 +25,10 @@ export interface CollapsibleTableFiltersProps {
   defaultOpen?: boolean;
   /** Optional custom class name for the wrapper. */
   className?: string;
+  /** Controlled open state. When set, the parent decides when the panel opens. */
+  open?: boolean;
+  /** Called when the user toggles the panel (or the hotkey opens it). */
+  onOpenChange?: (open: boolean) => void;
   /** Optional right-aligned summary or secondary action. */
   summary?: ReactNode;
   /** Enables pressing '/' to expand and focus the search filter (defaults to true). */
@@ -40,11 +50,21 @@ export function CollapsibleTableFilters({
   children,
   defaultOpen = false,
   className,
+  open,
+  onOpenChange,
   summary,
   enableHotkey = true,
   resultCount,
 }: CollapsibleTableFiltersProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [openState, setOpenState] = useState(defaultOpen);
+  const isOpen = open ?? openState;
+  const setIsOpen = useCallback(
+    (next: boolean) => {
+      setOpenState(next);
+      onOpenChange?.(next);
+    },
+    [onOpenChange],
+  );
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -85,7 +105,7 @@ export function CollapsibleTableFilters({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [enableHotkey]);
+  }, [enableHotkey, setIsOpen]);
 
   return (
     <div ref={containerRef} className={cn("space-y-3 mb-4", className)}>
@@ -95,7 +115,7 @@ export function CollapsibleTableFilters({
             type="button"
             variant={isOpen ? "secondary" : "outline"}
             size="sm"
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
             className="h-9 gap-2 text-body-sm font-medium transition-all"
           >
