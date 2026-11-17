@@ -1,8 +1,14 @@
 "use client";
 
 import { CollapsibleTableFilters } from "@/shared/components/filters";
-import { ticketFiltersStyles } from "../../../styles/filters/ticketFilters.styles";
-import { useTicketFiltersHandlers } from "../../../hooks/filters/useTicketFiltersHandlers.hook";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { Input } from "@/shared/components/ui/input";
+import { Button } from "@/shared/components/ui/button";
+import { LABELS } from "@/shared/constants/labels";
+import {
+  useTicketFiltersHandlers,
+  ALL,
+} from "../../../hooks/filters/useTicketFiltersHandlers.hook";
 import { TicketStatusFilterSelect } from "./TicketStatusFilterSelect.component";
 import { TicketPriorityFilterSelect } from "./TicketPriorityFilterSelect.component";
 import { TicketCategoryFilterSelect } from "./TicketCategoryFilterSelect.component";
@@ -14,10 +20,13 @@ interface TicketFiltersProps {
 
 export function TicketFilters({ showVendorId = true }: TicketFiltersProps) {
   const {
+    currentSearch,
     currentStatus,
     currentPriority,
     currentCategory,
     currentVendorId,
+    handleSearchChange,
+    handleClear,
     handleStatusChange,
     handlePriorityChange,
     handleCategoryChange,
@@ -26,14 +35,23 @@ export function TicketFilters({ showVendorId = true }: TicketFiltersProps) {
   } = useTicketFiltersHandlers();
 
   const activeCount =
-    (currentStatus ? 1 : 0) +
-    (currentPriority ? 1 : 0) +
-    (currentCategory ? 1 : 0) +
+    (currentSearch.trim() ? 1 : 0) +
+    (currentStatus && currentStatus !== ALL ? 1 : 0) +
+    (currentPriority && currentPriority !== ALL ? 1 : 0) +
+    (currentCategory && currentCategory !== ALL ? 1 : 0) +
     (currentVendorId ? 1 : 0);
 
   return (
-    <CollapsibleTableFilters activeCount={activeCount}>
-      <div className={ticketFiltersStyles.container(showVendorId)}>
+    <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
+        <FormFieldFrame label={LABELS.search} htmlFor="ticket-filter-search">
+          <Input
+            id="ticket-filter-search"
+            value={currentSearch}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Search by subject or TCKT-#"
+          />
+        </FormFieldFrame>
         <TicketStatusFilterSelect
           value={currentStatus}
           onChange={handleStatusChange}
@@ -53,6 +71,13 @@ export function TicketFilters({ showVendorId = true }: TicketFiltersProps) {
             fetchPage={fetchVendorPage}
           />
         ) : null}
+        {activeCount > 0 && (
+          <div className="flex items-end">
+            <Button type="button" variant="outline" onClick={handleClear}>
+              {LABELS.clearFilters}
+            </Button>
+          </div>
+        )}
       </div>
     </CollapsibleTableFilters>
   );

@@ -36,7 +36,17 @@ export function OrderHistoryPage() {
     );
   }
 
-  if (history.isEmpty) return <EmptyOrdersState />;
+  const hasActiveFilters = Boolean(
+    history.filters.search || history.filters.status,
+  );
 
-  return <OrdersList orders={history.orders} pagination={history.pagination} />;
+  if (history.isEmpty && !hasActiveFilters) return <EmptyOrdersState />;
+
+  return (
+    <OrdersList
+      orders={history.orders}
+      filters={history.filters}
+      pagination={history.pagination}
+    />
+  );
 }

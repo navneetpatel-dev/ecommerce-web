@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useMyOrders } from "../../api/orders/orders.queries";
 import { useAuthStore } from "@/shared/stores/auth/auth.store";
@@ -28,8 +28,23 @@ export function useOrderHistoryPage() {
   const router = useRouter();
 
   const page = Math.max(1, Number(searchParams.get("page")) || 1);
+  const search = searchParams.get("search") ?? "";
+  const status = searchParams.get("status") ?? "";
   const currentSearch = searchParams.toString();
-  const { data, isLoading, isError, refetch } = useMyOrders(role, page);
+
+  const filters = useMemo(
+    () => ({
+      search: search.trim() || undefined,
+      status: status.trim() || undefined,
+    }),
+    [search, status],
+  );
+
+  const { data, isLoading, isError, refetch } = useMyOrders(
+    role,
+    page,
+    filters,
+  );
   const totalPages = data?.totalPages ?? 1;
 
   useEffect(() => {
@@ -46,6 +61,33 @@ export function useOrderHistoryPage() {
     navigate(router, orderHistoryHref(pathname, currentSearch, boundedPage));
   };
 
+  const handleSearchChange = (val: string) => {
+    const params = new URLSearchParams(currentSearch);
+    if (val.trim()) params.set("search", val);
+    else params.delete("search");
+    params.delete("page");
+    const qs = params.toString();
+    navigate(router, qs ? `${pathname}?${qs}` : pathname);
+  };
+
+  const handleStatusChange = (val: string) => {
+    const params = new URLSearchParams(currentSearch);
+    if (val.trim()) params.set("status", val);
+    else params.delete("status");
+    params.delete("page");
+    const qs = params.toString();
+    navigate(router, qs ? `${pathname}?${qs}` : pathname);
+  };
+
+  const handleClear = () => {
+    const params = new URLSearchParams(currentSearch);
+    params.delete("search");
+    params.delete("status");
+    params.delete("page");
+    const qs = params.toString();
+    navigate(router, qs ? `${pathname}?${qs}` : pathname);
+  };
+
   const onRetry = () => void refetch();
   const isEmpty = !isLoading && data?.total === 0;
   const total = data?.total ?? 0;
@@ -59,6 +101,13 @@ export function useOrderHistoryPage() {
     onRetry,
     orders: data?.items ?? [],
     isEmpty,
+    filters: {
+      search,
+      status,
+      onSearchChange: handleSearchChange,
+      onStatusChange: handleStatusChange,
+      onClear: handleClear,
+    },
     pagination: {
       currentPage: page,
       totalPages,

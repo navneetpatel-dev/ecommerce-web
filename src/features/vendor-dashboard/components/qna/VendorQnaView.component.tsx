@@ -1,7 +1,19 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import type { ProductQuestion } from "@/shared/api/types";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { Input } from "@/shared/components/ui/input";
+import { Button } from "@/shared/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { VendorQnaAnswerDialog } from "./VendorQnaAnswerDialog.component";
 import { VendorQnaList } from "./VendorQnaView/VendorQnaList.component";
 import { VendorQnaSkeletonList } from "./VendorQnaView/VendorQnaSkeletonList.component";
@@ -25,6 +37,9 @@ export function VendorQnaView({
   onAnswer,
   onUpdateAnswer,
 }: VendorQnaViewProps) {
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+
   const {
     targetId,
     initialAnswer,
@@ -32,6 +47,41 @@ export function VendorQnaView({
     handleAnswerOpenChange,
     handleAnswerSubmit,
   } = useVendorQnaViewState({ questions, onAnswer, onUpdateAnswer });
+
+  const filteredQuestions = useMemo(() => {
+    return questions.filter((q) => {
+      if (search.trim()) {
+        const query = search.trim().toLowerCase();
+        const text = String(q.question ?? "").toLowerCase();
+        const answersText = (q.answers ?? [])
+          .map((a) => a.answer)
+          .join(" ")
+          .toLowerCase();
+        const myAns = String(q.myAnswer?.answer ?? "").toLowerCase();
+        const prod = String(q.productName ?? "").toLowerCase();
+        if (
+          !text.includes(query) &&
+          !answersText.includes(query) &&
+          !myAns.includes(query) &&
+          !prod.includes(query)
+        ) {
+          return false;
+        }
+      }
+      const hasAnswer = Boolean(
+        (q.answers && q.answers.length > 0) || q.myAnswer,
+      );
+      if (status === "UNANSWERED" && hasAnswer) return false;
+      if (status === "ANSWERED" && !hasAnswer) return false;
+      return true;
+    });
+  }, [questions, search, status]);
+
+  const activeCount = (search.trim() ? 1 : 0) + (status ? 1 : 0);
+  const handleClear = () => {
+    setSearch("");
+    setStatus("");
+  };
 
   const loadingContent = isLoading ? <VendorQnaSkeletonList /> : null;
 
@@ -42,13 +92,16 @@ export function VendorQnaView({
   ) : null;
 
   const emptyContent =
-    !isLoading && !loadError && !questions.length ? (
+    !isLoading && !loadError && !filteredQuestions.length ? (
       <p className={styles.emptyText}>{LABELS.noQuestionsFound}</p>
     ) : null;
 
   const listContent =
-    !isLoading && !loadError && questions.length > 0 ? (
-      <VendorQnaList questions={questions} onOpenAnswer={handleOpenAnswer} />
+    !isLoading && !loadError && filteredQuestions.length > 0 ? (
+      <VendorQnaList
+        questions={filteredQuestions}
+        onOpenAnswer={handleOpenAnswer}
+      />
     ) : null;
 
   return (
@@ -59,6 +112,48 @@ export function VendorQnaView({
           <p className={styles.hint}>{LABELS.vendorQnaHint}</p>
         </div>
       </div>
+
+      {questions.length > 0 && (
+        <CollapsibleTableFilters
+          activeCount={activeCount}
+          onClear={handleClear}
+        >
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+            <FormFieldFrame label={LABELS.search} htmlFor="vendor-qna-search">
+              <Input
+                id="vendor-qna-search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search questions, answers, or products..."
+              />
+            </FormFieldFrame>
+
+            <FormFieldFrame label={LABELS.status} htmlFor="vendor-qna-status">
+              <Select
+                value={status || "__ALL__"}
+                onValueChange={(val) => setStatus(val === "__ALL__" ? "" : val)}
+              >
+                <SelectTrigger id="vendor-qna-status">
+                  <SelectValue placeholder="All Statuses" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__ALL__">All Questions</SelectItem>
+                  <SelectItem value="UNANSWERED">Unanswered</SelectItem>
+                  <SelectItem value="ANSWERED">Answered</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormFieldFrame>
+
+            {activeCount > 0 && (
+              <div className="flex items-end">
+                <Button type="button" variant="outline" onClick={handleClear}>
+                  {LABELS.clearFilters}
+                </Button>
+              </div>
+            )}
+          </div>
+        </CollapsibleTableFilters>
+      )}
 
       {loadingContent}
       {errorContent}

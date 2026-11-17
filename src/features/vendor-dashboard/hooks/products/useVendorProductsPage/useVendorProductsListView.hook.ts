@@ -77,6 +77,7 @@ export function useVendorProductsListView(options: {
     actionMessage: table.actionMessage,
     onSearchChange: table.handleSearchChange,
     onStatusChange: table.handleStatusChange,
+    onClear: table.handleClear,
     onPageChange: table.setPage,
     onAddProduct: canCreate ? () => openCreate() : undefined,
     onEditProduct: canEdit

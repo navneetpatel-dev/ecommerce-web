@@ -1,19 +1,35 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useAdminDataList } from "../shared/useAdminDataList.hook";
 import { useProductModeration } from "./useProductModeration.hook";
 import { adminApi } from "../../api/analytics/admin.api";
+import { useDebouncedValue } from "@/shared/hooks/ui/use-debounce.hook";
 import type { ProductDetail } from "@/shared/api/types";
 
 export function useProductModerationQueue() {
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search.trim(), 350);
+
   const load = useCallback(
     ({ page, limit }: { page: number; limit: number }) =>
-      adminApi.pendingProducts({ page, limit }),
-    [],
+      adminApi.pendingProducts({
+        page,
+        limit,
+        search: debouncedSearch || undefined,
+      }),
+    [debouncedSearch],
   );
   const list = useAdminDataList(load);
   const { approve, reject } = useProductModeration();
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+  };
+
+  const handleClear = () => {
+    setSearch("");
+  };
 
   const onApprove = useCallback(
     async (id: string) => {
@@ -34,6 +50,9 @@ export function useProductModerationQueue() {
   return {
     products: list.rows as unknown as ProductDetail[],
     isLoading: list.loading,
+    search,
+    onSearchChange: handleSearchChange,
+    onClear: handleClear,
     reload: list.reload,
     pagination: {
       page: list.page,

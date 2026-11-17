@@ -32,12 +32,13 @@ export const adminApi = {
     }>(API.admin.dashboard),
 
   pendingVendors: async (
-    params: PaginationQuery = {},
+    params: PaginationQuery & { search?: string } = {},
   ): Promise<PaginatedList<VendorInfo>> => {
     const res = await apiClient.getWithResponse<VendorInfo[]>(
       API.vendors.list(
         buildSearchParams({
           status: VENDOR_STATUS.PENDING,
+          search: params.search,
           page: params.page,
           limit: params.limit,
         }).toString(),
@@ -75,12 +76,13 @@ export const adminApi = {
   deleteVendor: (id: string) => apiClient.delete(API.vendors.delete(id)),
 
   pendingProducts: async (
-    params: PaginationQuery = {},
+    params: PaginationQuery & { search?: string } = {},
   ): Promise<PaginatedList<ProductDetail>> => {
     const res = await apiClient.getWithResponse<ProductDetail[]>(
       API.products.list(
         buildSearchParams({
           status: PRODUCT_STATUS.PENDING_APPROVAL,
+          search: params.search,
           page: params.page,
           limit: params.limit,
         }).toString(),

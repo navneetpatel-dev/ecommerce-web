@@ -15,10 +15,33 @@ const PAGE_SIZE = 20;
 /** Admin list of platform cashback offers, with paging and delete. */
 export function useAdminCashbackOffersPage() {
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
   const list = useAdminCashbackOffers({ page, limit: PAGE_SIZE });
   const remove = useDeleteCashbackOffer();
   const columns = useMemo(() => buildCashbackOfferColumns(), []);
   const data = list.data;
+
+  const filteredRows = useMemo(() => {
+    const items = data?.items ?? [];
+    return items.filter((item) => {
+      if (
+        search.trim() &&
+        !item.name.toLowerCase().includes(search.trim().toLowerCase())
+      ) {
+        return false;
+      }
+      if (status === "ACTIVE" && !item.isActive) return false;
+      if (status === "INACTIVE" && item.isActive) return false;
+      return true;
+    });
+  }, [data?.items, search, status]);
+
+  const activeCount = (search.trim() ? 1 : 0) + (status ? 1 : 0);
+  const handleClear = () => {
+    setSearch("");
+    setStatus("");
+  };
 
   const handleDelete = useCallback(
     async (id: string) => {
@@ -30,7 +53,7 @@ export function useAdminCashbackOffersPage() {
 
   return {
     columns,
-    rows: data?.items ?? [],
+    rows: filteredRows,
     loading: list.isLoading,
     refreshing: list.isFetching && !list.isLoading,
     error: list.error
@@ -44,6 +67,14 @@ export function useAdminCashbackOffersPage() {
           onPageChange: setPage,
         }
       : undefined,
+    filters: {
+      search,
+      status,
+      activeCount,
+      onSearchChange: setSearch,
+      onStatusChange: setStatus,
+      onClear: handleClear,
+    },
     handleDelete,
   };
 }

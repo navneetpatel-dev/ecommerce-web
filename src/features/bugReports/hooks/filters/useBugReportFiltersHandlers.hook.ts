@@ -47,16 +47,38 @@ export function useBugReportFiltersHandlers() {
     [setParam],
   );
 
+  const handleSearchChange = useCallback(
+    (v: string) => {
+      setParam("search", v);
+    },
+    [setParam],
+  );
+
+  const handleClear = useCallback(() => {
+    const next = new URLSearchParams(searchParams.toString());
+    next.delete("search");
+    next.delete("status");
+    next.delete("severity");
+    next.delete("affectedModule");
+    next.delete("reporterRole");
+    const qs = next.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname);
+  }, [pathname, router, searchParams]);
+
+  const currentSearch = searchParams.get("search") ?? "";
   const currentStatus = searchParams.get("status") ?? ALL;
   const currentSeverity = searchParams.get("severity") ?? ALL;
   const currentModule = searchParams.get("affectedModule") ?? ALL;
   const currentReporterRole = searchParams.get("reporterRole") ?? ALL;
 
   return {
+    currentSearch,
     currentStatus,
     currentSeverity,
     currentModule,
     currentReporterRole,
+    handleSearchChange,
+    handleClear,
     handleStatusChange,
     handleSeverityChange,
     handleModuleChange,

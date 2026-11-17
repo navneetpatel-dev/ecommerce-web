@@ -12,6 +12,11 @@ import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
 export type AdminTaxPageModel = AdminListPageModel & {
+  filters: {
+    search: string;
+    onSearchChange: (value: string) => void;
+    onClear: () => void;
+  };
   form: {
     gstPercentage: string;
     hsnCode: string;
@@ -27,6 +32,7 @@ export type AdminTaxPageModel = AdminListPageModel & {
 };
 
 export function useAdminTaxPage(): AdminTaxPageModel {
+  const [search, setSearch] = useState("");
   const [gstPercentage, setGstPercentage] = useState("18");
   const [hsnCode, setHsnCode] = useState("");
   // Optional per-piece price band: above this value, the higher GST % applies.
@@ -62,9 +68,22 @@ export function useAdminTaxPage(): AdminTaxPageModel {
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
       void listVersion;
-      return taxApi.getRules({ page, limit });
+      const result = await taxApi.getRules({ page, limit });
+      if (!search.trim()) return result;
+      const q = search.trim().toLowerCase();
+      const filtered = result.items.filter((item) => {
+        const hsn = String(item.hsnCode ?? "").toLowerCase();
+        const cat = String(item.categoryName ?? "").toLowerCase();
+        const gst = String(item.gstPercentage ?? "");
+        return hsn.includes(q) || cat.includes(q) || gst.includes(q);
+      });
+      return {
+        ...result,
+        items: filtered,
+        total: filtered.length,
+      };
     },
-    [listVersion],
+    [listVersion, search],
   );
 
   const actions = useCallback(
@@ -86,6 +105,11 @@ export function useAdminTaxPage(): AdminTaxPageModel {
   );
 
   return {
+    filters: {
+      search,
+      onSearchChange: setSearch,
+      onClear: () => setSearch(""),
+    },
     form: {
       gstPercentage,
       hsnCode,

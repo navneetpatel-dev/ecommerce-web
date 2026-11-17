@@ -48,6 +48,12 @@ export function useAdminGiftCardsPage() {
     setPage(1);
   }, []);
 
+  const handleClear = useCallback(() => {
+    setSearch("");
+    setStatus("");
+    setPage(1);
+  }, []);
+
   const handleDeactivate = useCallback(
     async (id: string, reason?: string) => {
       await cancel.mutateAsync({ id, reason: reason ?? "" });
@@ -81,6 +87,7 @@ export function useAdminGiftCardsPage() {
       status: status || ALL_GIFT_CARD_STATUSES,
       onSearchChange: handleSearchChange,
       onStatusChange: handleStatusChange,
+      onClear: handleClear,
     },
     metrics: totals
       ? {

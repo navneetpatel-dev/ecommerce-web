@@ -109,7 +109,7 @@ describe("Shipping Module Modals and Filters", () => {
       );
 
       // Open collapsible filter bar
-      const filterButton = screen.getByRole("button", { name: /filters/i });
+      const filterButton = screen.getByRole("button", { name: /^filters/i });
       expect(filterButton).toBeInTheDocument();
       await user.click(filterButton);
 
@@ -143,7 +143,7 @@ describe("Shipping Module Modals and Filters", () => {
       );
 
       // Collapsible toggle should show active count
-      const filterButton = screen.getByRole("button", { name: /filters/i });
+      const filterButton = screen.getByRole("button", { name: /^filters/i });
       expect(filterButton).toBeInTheDocument();
       await user.click(filterButton);
 

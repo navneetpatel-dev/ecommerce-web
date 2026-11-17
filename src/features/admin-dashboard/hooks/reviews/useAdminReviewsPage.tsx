@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, type ReactNode } from "react";
+import { useState, useCallback, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -13,7 +13,14 @@ import type { AdminListPageModel } from "../../types/shared/adminListPage.types"
 
 /** A queue row: "New" or "Edit of approved" in words, plus a flag for the actions. */
 function toModerationRow(
-  review: Review & { submission?: string; flaggedReason?: string | null },
+  review: Review & {
+    submission?: string;
+    flaggedReason?: string | null;
+    product?: { name?: string };
+    user?: { name?: string };
+    productName?: string;
+    customerName?: string;
+  },
 ) {
   const isEdit = review.submission === "EDIT";
   const submission = review.flaggedReason
@@ -23,20 +30,51 @@ function toModerationRow(
       : LABELS.submissionNew;
   return {
     ...review,
+    productName: review.productName ?? review.product?.name ?? "—",
+    customerName: review.customerName ?? review.user?.name ?? "—",
     isEdit,
     submission,
   };
 }
 
-export function useAdminReviewsPage(): AdminListPageModel {
+export type AdminReviewsPageModel = AdminListPageModel & {
+  filters: {
+    search: string;
+    onSearchChange: (value: string) => void;
+    onClear: () => void;
+  };
+};
+
+export function useAdminReviewsPage(): AdminReviewsPageModel {
+  const [search, setSearch] = useState("");
+
   // New reviews and edits of approved ones share the queue; an edit row shows
   // the proposed version, with the live text beside it ("Live version").
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
       const result = await reviewsApi.pending({ page, limit });
-      return { ...result, items: result.items.map(toModerationRow) };
+      const mapped = result.items.map(toModerationRow);
+      if (!search.trim()) return { ...result, items: mapped };
+      const q = search.trim().toLowerCase();
+      const filtered = mapped.filter((r) => {
+        const prod = String(r.productName ?? "").toLowerCase();
+        const cust = String(r.customerName ?? "").toLowerCase();
+        const title = String(r.title ?? "").toLowerCase();
+        const body = String(r.body ?? "").toLowerCase();
+        return (
+          prod.includes(q) ||
+          cust.includes(q) ||
+          title.includes(q) ||
+          body.includes(q)
+        );
+      });
+      return {
+        ...result,
+        items: filtered,
+        total: filtered.length,
+      };
     },
-    [],
+    [search],
   );
 
   const actions = useCallback(
@@ -106,6 +144,11 @@ export function useAdminReviewsPage(): AdminListPageModel {
   );
 
   return {
+    filters: {
+      search,
+      onSearchChange: setSearch,
+      onClear: () => setSearch(""),
+    },
     title: LABELS.reviews,
     permission: PERMISSIONS.REVIEW_MODERATE,
     load,

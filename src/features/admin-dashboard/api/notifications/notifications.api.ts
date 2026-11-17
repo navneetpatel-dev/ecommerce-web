@@ -12,6 +12,7 @@ export type NotificationLogRow = {
 };
 
 export type NotificationLogFilters = {
+  search?: string;
   type?: string;
   channel?: string;
   status?: string;
@@ -41,6 +42,7 @@ export const notificationsApi = {
     filters: NotificationLogFilters = {},
   ): Promise<NotificationLogRow[]> => {
     const query = new URLSearchParams();
+    if (filters.search) query.set("search", filters.search);
     if (filters.type) query.set("type", filters.type);
     if (filters.channel) query.set("channel", filters.channel);
     if (filters.status) query.set("status", filters.status);

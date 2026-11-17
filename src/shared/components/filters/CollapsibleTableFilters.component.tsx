@@ -51,11 +51,11 @@ export function CollapsibleTableFilters({
           >
             <SlidersHorizontal className="size-4 text-ink-muted" aria-hidden />
             <span>{isOpen ? `Hide ${title}` : title}</span>
-            {activeCount > 0 && (
+            {Boolean(activeCount && activeCount > 0) ? (
               <span className="flex size-5 items-center justify-center rounded-full bg-ink text-paper text-caption font-semibold">
                 {activeCount}
               </span>
-            )}
+            ) : null}
             <ChevronDown
               className={cn(
                 "size-3.5 text-ink-muted transition-transform duration-200",
@@ -65,18 +65,18 @@ export function CollapsibleTableFilters({
             />
           </Button>
 
-          {activeCount > 0 && onClear && (
+          {Boolean(activeCount && activeCount > 0) && onClear ? (
             <Button
               type="button"
               variant="ghost"
               size="sm"
               onClick={onClear}
-              className="h-9 gap-1 text-body-sm text-ink-muted hover:text-ink"
+              className="h-9 gap-1.5 text-body-sm text-ink-muted hover:text-ink"
             >
               <RotateCcw className="size-3.5" aria-hidden />
-              <span>Reset</span>
+              <span>Clear filters</span>
             </Button>
-          )}
+          ) : null}
         </div>
 
         {summary && (

@@ -53,6 +53,24 @@ export function useTicketFiltersHandlers() {
     [setParam],
   );
 
+  const handleSearchChange = useCallback(
+    (v: string) => {
+      setParam("search", v);
+    },
+    [setParam],
+  );
+
+  const handleClear = useCallback(() => {
+    const next = new URLSearchParams(searchParams.toString());
+    next.delete("search");
+    next.delete("status");
+    next.delete("priority");
+    next.delete("category");
+    next.delete("vendorId");
+    const qs = next.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname);
+  }, [pathname, router, searchParams]);
+
   const fetchVendorPage = useCallback(
     async (
       query: InfiniteSingleSelectPageQuery,
@@ -76,16 +94,20 @@ export function useTicketFiltersHandlers() {
     [],
   );
 
+  const currentSearch = searchParams.get("search") ?? "";
   const currentStatus = searchParams.get("status") ?? ALL;
   const currentPriority = searchParams.get("priority") ?? ALL;
   const currentCategory = searchParams.get("category") ?? ALL;
   const currentVendorId = searchParams.get("vendorId") ?? "";
 
   return {
+    currentSearch,
     currentStatus,
     currentPriority,
     currentCategory,
     currentVendorId,
+    handleSearchChange,
+    handleClear,
     handleStatusChange,
     handlePriorityChange,
     handleCategoryChange,

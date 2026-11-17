@@ -1,8 +1,14 @@
 "use client";
 
 import { CollapsibleTableFilters } from "@/shared/components/filters";
-import { bugReportFiltersStyles } from "../../../styles/filters/bugReportFilters.styles";
-import { useBugReportFiltersHandlers } from "../../../hooks/filters/useBugReportFiltersHandlers.hook";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { Input } from "@/shared/components/ui/input";
+import { Button } from "@/shared/components/ui/button";
+import { LABELS } from "@/shared/constants/labels";
+import {
+  useBugReportFiltersHandlers,
+  ALL,
+} from "../../../hooks/filters/useBugReportFiltersHandlers.hook";
 import { BugStatusFilterSelect } from "./BugStatusFilterSelect.component";
 import { BugSeverityFilterSelect } from "./BugSeverityFilterSelect.component";
 import { BugModuleFilterSelect } from "./BugModuleFilterSelect.component";
@@ -16,10 +22,13 @@ interface BugReportFiltersProps {
 export function BugReportFilters({ variant = "admin" }: BugReportFiltersProps) {
   const isAdmin = variant === "admin";
   const {
+    currentSearch,
     currentStatus,
     currentSeverity,
     currentModule,
     currentReporterRole,
+    handleSearchChange,
+    handleClear,
     handleStatusChange,
     handleSeverityChange,
     handleModuleChange,
@@ -27,14 +36,23 @@ export function BugReportFilters({ variant = "admin" }: BugReportFiltersProps) {
   } = useBugReportFiltersHandlers();
 
   const activeCount =
-    (currentStatus ? 1 : 0) +
-    (currentSeverity ? 1 : 0) +
-    (currentModule ? 1 : 0) +
-    (currentReporterRole ? 1 : 0);
+    (currentSearch.trim() ? 1 : 0) +
+    (currentStatus && currentStatus !== ALL ? 1 : 0) +
+    (currentSeverity && currentSeverity !== ALL ? 1 : 0) +
+    (currentModule && currentModule !== ALL ? 1 : 0) +
+    (currentReporterRole && currentReporterRole !== ALL ? 1 : 0);
 
   return (
-    <CollapsibleTableFilters activeCount={activeCount}>
-      <div className={bugReportFiltersStyles.container(isAdmin)}>
+    <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
+        <FormFieldFrame label={LABELS.search} htmlFor="bug-filter-search">
+          <Input
+            id="bug-filter-search"
+            value={currentSearch}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Search by title or BUG-#"
+          />
+        </FormFieldFrame>
         <BugStatusFilterSelect
           value={currentStatus}
           onChange={handleStatusChange}
@@ -55,6 +73,13 @@ export function BugReportFilters({ variant = "admin" }: BugReportFiltersProps) {
             />
           </>
         ) : null}
+        {activeCount > 0 && (
+          <div className="flex items-end">
+            <Button type="button" variant="outline" onClick={handleClear}>
+              {LABELS.clearFilters}
+            </Button>
+          </div>
+        )}
       </div>
     </CollapsibleTableFilters>
   );

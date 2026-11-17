@@ -42,6 +42,7 @@ function AdminGiftCardsContent() {
         </div>
       </header>
       <GiftCardLiabilityMetrics metrics={page.metrics} />
+      <AdminGiftCardsFilters {...page.filters} />
       <DataTable
         ariaLabel={LABELS.giftCardsTableAria}
         columns={page.columns}
@@ -50,7 +51,6 @@ function AdminGiftCardsContent() {
         loading={page.loading}
         refreshing={page.refreshing}
         error={page.error}
-        toolbar={<AdminGiftCardsFilters {...page.filters} />}
         pagination={page.pagination}
         actions={renderActions}
         rowDetails={false}

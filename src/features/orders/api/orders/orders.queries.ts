@@ -5,8 +5,19 @@ import { ordersApi, subOrdersApi } from "./orders.api";
 /** Centralized, stable cache keys for order queries (§3). */
 export const ordersKeys = {
   all: ["orders"] as const,
-  mine: (role: string | undefined, page: number) =>
-    [...ordersKeys.all, "mine", role ?? null, page] as const,
+  mine: (
+    role: string | undefined,
+    page: number,
+    filters?: { search?: string; status?: string },
+  ) =>
+    [
+      ...ordersKeys.all,
+      "mine",
+      role ?? null,
+      page,
+      ...(filters?.search ? [filters.search] : []),
+      ...(filters?.status ? [filters.status] : []),
+    ] as const,
   detail: (id: string) => [...ordersKeys.all, "detail", id] as const,
 };
 
@@ -14,13 +25,17 @@ function isVendorRole(role?: string) {
   return role === ROLES.VENDOR_OWNER || role === ROLES.VENDOR_STAFF;
 }
 
-export function useMyOrders(role?: string, page = 1) {
+export function useMyOrders(
+  role?: string,
+  page = 1,
+  filters?: { search?: string; status?: string },
+) {
   return useQuery({
-    queryKey: ordersKeys.mine(role, page),
+    queryKey: ordersKeys.mine(role, page, filters),
     queryFn: () =>
       isVendorRole(role)
-        ? subOrdersApi.vendorSubOrders(page)
-        : ordersApi.myOrders(page),
+        ? subOrdersApi.vendorSubOrders(page, undefined, filters)
+        : ordersApi.myOrders(page, undefined, undefined, filters),
     placeholderData: (prev) => prev,
   });
 }

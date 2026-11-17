@@ -28,6 +28,7 @@ export interface ProductsTableHeaderProps {
   onSearchChange: (value: string) => void;
   status?: string;
   onStatusChange?: (value: string) => void;
+  onClear?: () => void;
   onAddProduct?: () => void;
 }
 

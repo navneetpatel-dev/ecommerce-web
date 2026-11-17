@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, type ReactNode } from "react";
+import { useState, useCallback, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
@@ -36,17 +36,40 @@ const excerpt = (text: unknown) => {
   return value.length > 60 ? `${value.slice(0, 60)}…` : value;
 };
 
+export type AdminQnaModerationPageModel = AdminListPageModel & {
+  filters: {
+    search: string;
+    onSearchChange: (value: string) => void;
+    onClear: () => void;
+  };
+};
+
 /**
  * Q&A moderation: new questions and answers, and edits of published ones (the
  * live text keeps showing until an edit is approved; rejecting drops only the edit).
  */
-export function useAdminQnaModerationPage(): AdminListPageModel {
+export function useAdminQnaModerationPage(): AdminQnaModerationPageModel {
+  const [search, setSearch] = useState("");
+
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
       const result = await productQnaApi.moderationQueue({ page, limit });
-      return { ...result, items: result.items.map(toRow) };
+      const mapped = result.items.map(toRow);
+      if (!search.trim()) return { ...result, items: mapped };
+      const q = search.trim().toLowerCase();
+      const filtered = mapped.filter((r) => {
+        const text = String(r.text ?? "").toLowerCase();
+        const prod = String(r.productName ?? "").toLowerCase();
+        const author = String(r.authorName ?? "").toLowerCase();
+        return text.includes(q) || prod.includes(q) || author.includes(q);
+      });
+      return {
+        ...result,
+        items: filtered,
+        total: filtered.length,
+      };
     },
-    [],
+    [search],
   );
 
   const actions = useCallback(
@@ -106,6 +129,11 @@ export function useAdminQnaModerationPage(): AdminListPageModel {
   );
 
   return {
+    filters: {
+      search,
+      onSearchChange: setSearch,
+      onClear: () => setSearch(""),
+    },
     title: LABELS.adminQnaModerationTitle,
     permission: PERMISSIONS.REVIEW_MODERATE,
     load,

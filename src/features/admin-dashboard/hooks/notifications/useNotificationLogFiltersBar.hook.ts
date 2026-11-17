@@ -31,7 +31,15 @@ export function useNotificationLogFiltersBar({
     [filters, onChange],
   );
 
+  const handleSearchChange = useCallback(
+    (value: string | undefined) => {
+      onChange({ ...filters, search: value });
+    },
+    [filters, onChange],
+  );
+
   return {
+    handleSearchChange,
     handleTypeChange,
     handleChannelChange,
     handleStatusChange,

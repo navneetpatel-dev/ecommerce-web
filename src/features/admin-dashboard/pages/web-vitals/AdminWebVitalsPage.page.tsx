@@ -6,6 +6,7 @@ import { Gauge } from "lucide-react";
 import { useAdminWebVitalsPage } from "../../hooks/web-vitals/useAdminWebVitalsPage.hook";
 import { DateRangeFields } from "@/shared/components/forms/DateRangeFields.component";
 import { FormFieldFrame } from "@/shared/components/forms";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
@@ -53,6 +54,14 @@ export function AdminWebVitalsPage() {
     },
   ];
 
+  const activeCount =
+    (page.path.trim() ? 1 : 0) + (page.from ? 1 : 0) + (page.to ? 1 : 0);
+  const handleClear = () => {
+    page.setPath("");
+    page.setFrom("");
+    page.setTo("");
+  };
+
   return (
     <div className={adminPagesStyles.stack6}>
       <header className={adminPagesStyles.stack1}>
@@ -63,8 +72,8 @@ export function AdminWebVitalsPage() {
         <p className={adminPagesStyles.hintMax2xl}>{LABELS.webVitalsHint}</p>
       </header>
 
-      <div className={adminPagesStyles.cardSurface}>
-        <div className={adminPagesStyles.filterRow}>
+      <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
           <DateRangeFields
             from={page.from}
             to={page.to}
@@ -78,7 +87,6 @@ export function AdminWebVitalsPage() {
           <FormFieldFrame
             label={LABELS.webVitalsPathFilterLabel}
             htmlFor="web-vitals-path"
-            className={adminPagesStyles.fieldFlex1MinW}
           >
             <Input
               id="web-vitals-path"
@@ -87,7 +95,7 @@ export function AdminWebVitalsPage() {
               placeholder={LABELS.webVitalsPathFilterPlaceholder}
             />
           </FormFieldFrame>
-          <div className={adminPagesStyles.wFullSmAuto}>
+          <div className="flex items-end gap-2">
             <Button
               type="button"
               loading={page.loading}
@@ -96,9 +104,14 @@ export function AdminWebVitalsPage() {
             >
               {LABELS.webVitalsLoad}
             </Button>
+            {activeCount > 0 && (
+              <Button type="button" variant="outline" onClick={handleClear}>
+                {LABELS.clearFilters}
+              </Button>
+            )}
           </div>
         </div>
-      </div>
+      </CollapsibleTableFilters>
 
       <DataTable
         ariaLabel={LABELS.webVitalsTableAria}

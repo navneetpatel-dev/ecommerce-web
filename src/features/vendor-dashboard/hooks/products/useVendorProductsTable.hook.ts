@@ -63,6 +63,12 @@ export function useVendorProductsTable() {
     setPage(1);
   };
 
+  const handleClear = () => {
+    setSearch("");
+    setStatus("");
+    setPage(1);
+  };
+
   return {
     page,
     search,
@@ -72,6 +78,7 @@ export function useVendorProductsTable() {
     setPage,
     handleSearchChange,
     handleStatusChange,
+    handleClear,
     deleteTarget,
     setDeleteTarget,
     confirmDelete: () => {

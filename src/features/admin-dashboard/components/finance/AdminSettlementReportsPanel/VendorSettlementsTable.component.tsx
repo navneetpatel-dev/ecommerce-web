@@ -1,7 +1,18 @@
+import { useState, useMemo } from "react";
 import { LABELS } from "@/shared/constants/labels";
 import { formatInr } from "@/shared/utils/formatting/orderFormat";
 import { ReportExportButtons, type ExportFileFormat } from "@/features/reports";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { Input } from "@/shared/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import type { VendorSettlementRow } from "../../../api/finance/reports.api";
 import { adminSettlementReportsPanelStyles as styles } from "../../../styles/finance/adminSettlementReportsPanel.styles";
 
@@ -65,16 +76,49 @@ export function VendorSettlementsTable({
   message,
   onExport,
 }: VendorSettlementsTableProps) {
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+
   const handleExportExcel = () => onExport("xlsx");
   const handleExportCsv = () => onExport("csv");
   const handleExportPdf = () => onExport("pdf");
+
+  const filteredVendors = useMemo(() => {
+    return vendors.filter((v) => {
+      if (search.trim()) {
+        const query = search.trim().toLowerCase();
+        const matchesName = v.vendorName?.toLowerCase().includes(query);
+        const matchesId = v.vendorId?.toLowerCase().includes(query);
+        if (!matchesName && !matchesId) return false;
+      }
+      if (status && v.payoutStatus !== status) {
+        return false;
+      }
+      return true;
+    });
+  }, [vendors, search, status]);
+
+  const uniqueStatuses = useMemo(() => {
+    return Array.from(
+      new Set(vendors.map((v) => v.payoutStatus).filter(Boolean)),
+    );
+  }, [vendors]);
+
+  const activeCount = (search.trim() ? 1 : 0) + (status ? 1 : 0);
+
+  const handleClear = () => {
+    setSearch("");
+    setStatus("");
+  };
 
   return (
     <div className={styles.vendorsContainer}>
       <div className={styles.vendorsHeader}>
         <div className={styles.vendorsHeaderLeft}>
           <h3 className={styles.vendorsTitle}>{LABELS.vendorSettlements}</h3>
-          <span className={styles.vendorsCountBadge}>{vendors.length}</span>
+          <span className={styles.vendorsCountBadge}>
+            {filteredVendors.length}
+          </span>
         </div>
         <ReportExportButtons
           size="sm"
@@ -86,11 +130,59 @@ export function VendorSettlementsTable({
           onExportPdf={handleExportPdf}
         />
       </div>
+
+      <div className="mb-4">
+        <CollapsibleTableFilters
+          activeCount={activeCount}
+          onClear={handleClear}
+        >
+          <div className="flex flex-wrap items-end gap-3">
+            <FormFieldFrame
+              label={LABELS.search ?? "Search"}
+              htmlFor="vendor-settlements-search"
+              className="w-64"
+            >
+              <Input
+                id="vendor-settlements-search"
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search vendor name or ID..."
+              />
+            </FormFieldFrame>
+
+            {uniqueStatuses.length > 0 && (
+              <FormFieldFrame
+                label="Payout Status"
+                htmlFor="vendor-settlements-status"
+                className="w-44"
+              >
+                <Select
+                  value={status}
+                  onValueChange={(val) => setStatus(val === "ALL" ? "" : val)}
+                >
+                  <SelectTrigger id="vendor-settlements-status">
+                    <SelectValue placeholder="All statuses" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">All statuses</SelectItem>
+                    {uniqueStatuses.map((st) => (
+                      <SelectItem key={st} value={st}>
+                        {st}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormFieldFrame>
+            )}
+          </div>
+        </CollapsibleTableFilters>
+      </div>
+
       <DataTable
         ariaLabel={LABELS.vendorSettlementsTableAria}
-
         columns={COLUMNS}
-        rows={vendors}
+        rows={filteredVendors}
         getRowId={(row) => row.vendorId}
         rowDetails={false}
         emptyMessage={LABELS.noReportData}

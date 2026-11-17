@@ -2,9 +2,11 @@
 
 import { notificationsAdminLabels as LABELS } from "@/shared/constants/labels/notificationsAdmin";
 import { CollapsibleTableFilters } from "@/shared/components/filters";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { Input } from "@/shared/components/ui/input";
+import { Button } from "@/shared/components/ui/button";
 import type { NotificationLogFilters } from "../../../api/notifications/notifications.api";
 import { NOTIFICATION_TYPE_OPTIONS } from "../../../constants/notifications/notificationTypes";
-import { notificationLogFiltersBarStyles } from "../../../styles/notifications/notificationLogFiltersBar.styles";
 import { NotificationFilterSelect } from "./NotificationFilterSelect.component";
 import { useNotificationLogFiltersBar } from "../../../hooks/notifications/useNotificationLogFiltersBar.hook";
 
@@ -26,20 +28,32 @@ export function NotificationLogFiltersBar({
   filters,
   onChange,
 }: NotificationLogFiltersBarProps) {
-  const { handleTypeChange, handleChannelChange, handleStatusChange } =
-    useNotificationLogFiltersBar({ filters, onChange });
+  const {
+    handleSearchChange,
+    handleTypeChange,
+    handleChannelChange,
+    handleStatusChange,
+  } = useNotificationLogFiltersBar({ filters, onChange });
 
   const activeCount =
+    (filters.search?.trim() ? 1 : 0) +
     (filters.type ? 1 : 0) +
     (filters.channel ? 1 : 0) +
     (filters.status ? 1 : 0);
 
+  const handleClear = () => onChange({});
+
   return (
-    <CollapsibleTableFilters
-      activeCount={activeCount}
-      onClear={() => onChange({})}
-    >
-      <div className={notificationLogFiltersBarStyles.root}>
+    <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 items-end">
+        <FormFieldFrame label="Recipient" htmlFor="notification-filter-search">
+          <Input
+            id="notification-filter-search"
+            value={filters.search ?? ""}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="Search by recipient email..."
+          />
+        </FormFieldFrame>
         <NotificationFilterSelect
           label={LABELS.notificationFilterType}
           placeholder={LABELS.notificationFilterAllTypes}
@@ -61,6 +75,13 @@ export function NotificationLogFiltersBar({
           options={STATUS_OPTIONS}
           onChange={handleStatusChange}
         />
+        {activeCount > 0 && (
+          <div className="flex items-end">
+            <Button type="button" variant="outline" onClick={handleClear}>
+              Clear filters
+            </Button>
+          </div>
+        )}
       </div>
     </CollapsibleTableFilters>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import type { ChangeEvent } from "react";
+import { useState, useMemo, type ChangeEvent } from "react";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
@@ -8,6 +8,15 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { ShieldCheck } from "lucide-react";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
@@ -28,6 +37,8 @@ export function AdminRolesPage() {
 
 function AdminRolesContent() {
   const page = useAdminRolesPage();
+  const [search, setSearch] = useState("");
+  const [roleType, setRoleType] = useState("");
 
   const handleNewRoleNameChange = (event: ChangeEvent<HTMLInputElement>) =>
     page.setNewRoleName(event.target.value);
@@ -35,6 +46,26 @@ function AdminRolesContent() {
     void page.createRole();
   };
   const closePermissions = () => page.setEditingRoleId(null);
+
+  const filteredRoles = useMemo(() => {
+    return page.roles.filter((role) => {
+      if (
+        search.trim() &&
+        !role.name.toLowerCase().includes(search.trim().toLowerCase())
+      ) {
+        return false;
+      }
+      if (roleType === "system" && !role.isSystemRole) return false;
+      if (roleType === "custom" && role.isSystemRole) return false;
+      return true;
+    });
+  }, [page.roles, search, roleType]);
+
+  const activeCount = (search.trim() ? 1 : 0) + (roleType ? 1 : 0);
+  const handleClear = () => {
+    setSearch("");
+    setRoleType("");
+  };
 
   const columns: DataTableColumn<AdminRole>[] = [
     {
@@ -124,11 +155,47 @@ function AdminRolesContent() {
         </Button>
       </div>
 
+      <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+          <FormFieldFrame label={LABELS.search} htmlFor="roles-filter-search">
+            <Input
+              id="roles-filter-search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search roles by name..."
+            />
+          </FormFieldFrame>
+
+          <FormFieldFrame label="Role Type" htmlFor="roles-filter-type">
+            <Select
+              value={roleType || "__ALL__"}
+              onValueChange={(val) => setRoleType(val === "__ALL__" ? "" : val)}
+            >
+              <SelectTrigger id="roles-filter-type">
+                <SelectValue placeholder="All Roles" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__ALL__">All Roles</SelectItem>
+                <SelectItem value="system">Built-in Roles</SelectItem>
+                <SelectItem value="custom">Custom Roles</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+
+          {activeCount > 0 && (
+            <div className="flex items-end">
+              <Button type="button" variant="outline" onClick={handleClear}>
+                {LABELS.clearFilters}
+              </Button>
+            </div>
+          )}
+        </div>
+      </CollapsibleTableFilters>
+
       <DataTable
         ariaLabel={LABELS.rolesTableAria}
-
         columns={columns}
-        rows={page.roles}
+        rows={filteredRoles}
         loading={page.loading}
         error={page.error}
         emptyMessage={LABELS.noRecordsFound}

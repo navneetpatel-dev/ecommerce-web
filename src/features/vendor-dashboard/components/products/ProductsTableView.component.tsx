@@ -32,6 +32,7 @@ interface ProductsTableViewProps {
   actionMessage?: string | null;
   onSearchChange: (value: string) => void;
   onStatusChange?: (value: string) => void;
+  onClear?: () => void;
   onPageChange: (page: number) => void;
   onAddProduct?: () => void;
   onEditProduct?: (product: ProductRow) => void;
@@ -53,6 +54,7 @@ export function ProductsTableView({
   actionMessage,
   onSearchChange,
   onStatusChange,
+  onClear,
   onPageChange,
   onAddProduct,
   onEditProduct,
@@ -106,6 +108,7 @@ export function ProductsTableView({
         onSearchChange={onSearchChange}
         status={status}
         onStatusChange={onStatusChange}
+        onClear={onClear}
         onAddProduct={onAddProduct}
       />
       {actionMessageNotice}

@@ -34,7 +34,7 @@ describe("CollapsibleTableFilters", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows active count badge and reset button when activeCount > 0", async () => {
+  it("shows active count badge and clear button when activeCount > 0", async () => {
     const onClear = vi.fn();
     const user = userEvent.setup();
     render(
@@ -44,10 +44,23 @@ describe("CollapsibleTableFilters", () => {
     );
 
     expect(screen.getByText("2")).toBeInTheDocument();
-    const resetBtn = screen.getByRole("button", { name: /reset/i });
-    expect(resetBtn).toBeInTheDocument();
+    const clearBtn = screen.getByRole("button", { name: /clear filters/i });
+    expect(clearBtn).toBeInTheDocument();
 
-    await user.click(resetBtn);
+    await user.click(clearBtn);
     expect(onClear).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not render a count badge when activeCount is 0", () => {
+    render(
+      <CollapsibleTableFilters activeCount={0} onClear={vi.fn()}>
+        <div>Inputs</div>
+      </CollapsibleTableFilters>,
+    );
+
+    expect(screen.queryByText("0")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /clear filters/i }),
+    ).not.toBeInTheDocument();
   });
 });

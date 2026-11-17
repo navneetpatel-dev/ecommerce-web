@@ -3,6 +3,17 @@
 import type { CashbackOffer } from "@/features/cashback";
 import { DataTable } from "@/shared/components/DataTable";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
+import { FormFieldFrame } from "@/shared/components/forms";
+import { Input } from "@/shared/components/ui/input";
+import { Button } from "@/shared/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { CashbackOfferDialog } from "../../components/cashback-offers/CashbackOfferDialog.component";
@@ -37,6 +48,59 @@ function AdminCashbackOffersContent() {
         </div>
         <CashbackOfferDialog />
       </header>
+
+      <CollapsibleTableFilters
+        activeCount={page.filters.activeCount}
+        onClear={page.filters.onClear}
+      >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
+          <FormFieldFrame
+            label={LABELS.search}
+            htmlFor="cashback-offers-filter-search"
+          >
+            <Input
+              id="cashback-offers-filter-search"
+              value={page.filters.search}
+              onChange={(e) => page.filters.onSearchChange(e.target.value)}
+              placeholder="Search by offer title..."
+            />
+          </FormFieldFrame>
+
+          <FormFieldFrame
+            label={LABELS.status}
+            htmlFor="cashback-offers-filter-status"
+          >
+            <Select
+              value={page.filters.status || "__ALL__"}
+              onValueChange={(val) =>
+                page.filters.onStatusChange(val === "__ALL__" ? "" : val)
+              }
+            >
+              <SelectTrigger id="cashback-offers-filter-status">
+                <SelectValue placeholder="All Statuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__ALL__">All Statuses</SelectItem>
+                <SelectItem value="ACTIVE">Active</SelectItem>
+                <SelectItem value="INACTIVE">Inactive</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormFieldFrame>
+
+          {page.filters.activeCount > 0 && (
+            <div className="flex items-end">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={page.filters.onClear}
+              >
+                {LABELS.clearFilters}
+              </Button>
+            </div>
+          )}
+        </div>
+      </CollapsibleTableFilters>
+
       <DataTable
         ariaLabel={LABELS.cashbackOffersTableAria}
         columns={page.columns}
