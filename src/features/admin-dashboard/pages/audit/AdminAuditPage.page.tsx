@@ -20,6 +20,9 @@ export function AdminAuditPage() {
           permission={page.permission}
           load={page.load}
           columnKeys={page.columnKeys}
+          fetchRowDetail={async (row) =>
+            row as unknown as Record<string, unknown>
+          }
         />
       </div>
     </RequirePermission>

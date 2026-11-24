@@ -93,6 +93,9 @@ export function AdminNotificationsPage() {
           "createdAt",
         ]}
         actions={renderRowActions}
+        fetchRowDetail={async (row) =>
+          row as unknown as Record<string, unknown>
+        }
       />
     </div>
   );

@@ -62,6 +62,17 @@ const CUSTOM_LABELS: Record<string, string> = {
   discountType: "Discount Type",
   discountValue: "Discount Value",
   maxDiscountAmount: "Max Discount",
+  entityType: "Entity Type",
+  entityId: "Entity ID",
+  actorName: "Actor / Admin",
+  channel: "Delivery Channel",
+  errorCategory: "Failure Category",
+  sentAt: "Sent Date",
+  permissionsCount: "Total Permissions",
+  isSystemRole: "System Role",
+  emailVerified: "Email Verified",
+  twoFactorEnabled: "Two-Factor Auth",
+  lastLoginAt: "Last Login Date",
 };
 
 export type RecordDetailField = {

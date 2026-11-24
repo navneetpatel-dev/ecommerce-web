@@ -2,6 +2,7 @@
 
 import { PlatformSettingsForm } from "../../components/settings/PlatformSettingsForm.component";
 import { usePlatformSettingsForm } from "../../hooks/settings/usePlatformSettingsForm.hook";
+import { FormPageSkeleton } from "@/shared/components/Skeletons.component";
 import { LABELS } from "@/shared/constants/labels";
 import { adminPagesStyles } from "../shared/adminPages.styles";
 
@@ -9,11 +10,7 @@ export function PlatformSettingsPage() {
   const settings = usePlatformSettingsForm();
 
   if (settings.loading) {
-    return (
-      <p className={adminPagesStyles.emptyText}>
-        {LABELS.loadingPlatformSettings}
-      </p>
-    );
+    return <FormPageSkeleton />;
   }
 
   if (settings.loadError || !settings.form) {

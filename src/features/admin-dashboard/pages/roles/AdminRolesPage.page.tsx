@@ -8,21 +8,13 @@ import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
-import { FormFieldFrame } from "@/shared/components/forms";
-import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { ShieldCheck } from "lucide-react";
 import { DataTable, type DataTableColumn } from "@/shared/components/DataTable";
 import { TableRowAction } from "@/shared/components/DataTable/TableRowActions.component";
 import { tableMenuButtonClass } from "@/shared/constants/table/tableActionTone";
 import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
 import { RolePermissionsDialog } from "../../components/roles/RolePermissionsDialog/index";
+import { RolesFilterBar } from "../../components/roles/RolesFilterBar.component";
 import { useAdminRolesPage } from "../../hooks/roles/useAdminRolesPage.hook";
 import type { AdminRole } from "../../api/roles/roles.api";
 import { adminPagesStyles } from "../shared/adminPages.styles";
@@ -61,7 +53,6 @@ function AdminRolesContent() {
     });
   }, [page.roles, search, roleType]);
 
-  const activeCount = (search.trim() ? 1 : 0) + (roleType ? 1 : 0);
   const handleClear = () => {
     setSearch("");
     setRoleType("");
@@ -155,34 +146,13 @@ function AdminRolesContent() {
         </Button>
       </div>
 
-      <CollapsibleTableFilters activeCount={activeCount} onClear={handleClear}>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
-          <FormFieldFrame label={LABELS.search} htmlFor="roles-filter-search">
-            <Input
-              id="roles-filter-search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search roles by name..."
-            />
-          </FormFieldFrame>
-
-          <FormFieldFrame label="Role Type" htmlFor="roles-filter-type">
-            <Select
-              value={roleType || "__ALL__"}
-              onValueChange={(val) => setRoleType(val === "__ALL__" ? "" : val)}
-            >
-              <SelectTrigger id="roles-filter-type">
-                <SelectValue placeholder="All Roles" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="__ALL__">All Roles</SelectItem>
-                <SelectItem value="system">Built-in Roles</SelectItem>
-                <SelectItem value="custom">Custom Roles</SelectItem>
-              </SelectContent>
-            </Select>
-          </FormFieldFrame>
-        </div>
-      </CollapsibleTableFilters>
+      <RolesFilterBar
+        search={search}
+        onSearchChange={setSearch}
+        roleType={roleType}
+        onRoleTypeChange={setRoleType}
+        onClear={handleClear}
+      />
 
       <DataTable
         ariaLabel={LABELS.rolesTableAria}
@@ -192,8 +162,15 @@ function AdminRolesContent() {
         error={page.error}
         emptyMessage={LABELS.noRecordsFound}
         getRowId={(role) => role.id}
-        rowDetails={false}
         actions={renderRoleActions}
+        fetchRowDetail={async (role) =>
+          ({
+            name: role.name,
+            isSystemRole: role.isSystemRole,
+            permissionsCount: role.permissionKeys?.length ?? 0,
+            permissionKeys: role.permissionKeys?.join(", ") ?? "—",
+          }) as unknown as Record<string, unknown>
+        }
       />
 
       <RolePermissionsDialog

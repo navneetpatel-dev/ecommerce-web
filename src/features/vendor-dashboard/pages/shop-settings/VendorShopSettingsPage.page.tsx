@@ -1,7 +1,7 @@
 "use client";
 
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
-import { LABELS } from "@/shared/constants/labels";
+import { FormPageSkeleton } from "@/shared/components/Skeletons.component";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { VendorShopSettingsForm } from "../../components/shop-settings/VendorShopSettingsForm/index";
 import { useVendorShopSettingsForm } from "../../hooks/shop-settings/useVendorShopSettingsForm.hook";
@@ -11,7 +11,7 @@ export function VendorShopSettingsPage() {
   const settings = useVendorShopSettingsForm();
 
   if (settings.loading) {
-    return <p className={vendorPagesStyles.loadingText}>{LABELS.loading}</p>;
+    return <FormPageSkeleton />;
   }
 
   if (settings.loadError) {
