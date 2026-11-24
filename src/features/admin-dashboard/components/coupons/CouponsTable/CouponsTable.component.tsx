@@ -168,6 +168,9 @@ export function CouponsTable({
         getRowId={(row) => row.id}
         pagination={pagination}
         actions={renderActions}
+        fetchRowDetail={async (row) =>
+          row as unknown as Record<string, unknown>
+        }
         tableId="admin-coupons"
         enableColumnVisibility
         enableDensityToggle

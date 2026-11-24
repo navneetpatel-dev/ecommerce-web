@@ -53,7 +53,9 @@ function AdminGiftCardsContent() {
         error={page.error}
         pagination={page.pagination}
         actions={renderActions}
-        rowDetails={false}
+        fetchRowDetail={async (row) =>
+          row as unknown as Record<string, unknown>
+        }
       />
     </div>
   );

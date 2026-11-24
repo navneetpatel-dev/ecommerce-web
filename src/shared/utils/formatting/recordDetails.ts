@@ -52,6 +52,16 @@ const CUSTOM_LABELS: Record<string, string> = {
   resolvedAt: "Resolved Date",
   createdAt: "Date Created",
   updatedAt: "Last Updated",
+  cashbackType: "Cashback Type",
+  cashbackValue: "Cashback Value",
+  maxCashbackAmount: "Max Cashback",
+  minOrderAmount: "Min Order Amount",
+  initialBalance: "Initial Balance",
+  currentBalance: "Current Balance",
+  recipientEmail: "Recipient Email",
+  discountType: "Discount Type",
+  discountValue: "Discount Value",
+  maxDiscountAmount: "Max Discount",
 };
 
 export type RecordDetailField = {
@@ -82,7 +92,8 @@ export const isMoneyKey = (k: string): boolean => {
     k.endsWith("Amount") ||
     k.endsWith("Price") ||
     k.endsWith("Total") ||
-    k.endsWith("Fee")
+    k.endsWith("Fee") ||
+    k.endsWith("Balance")
   );
 };
 

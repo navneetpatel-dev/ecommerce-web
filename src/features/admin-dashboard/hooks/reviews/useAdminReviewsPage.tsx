@@ -3,11 +3,9 @@
 import { useState, useCallback, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
-import { reviewsApi, ReviewMediaModerationAction } from "@/features/reviews";
-import type { Review, ReviewMediaItem } from "@/shared/api/types";
-import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
-import { adminRowLabel } from "../../utils/shared/adminRowLabel";
+import { reviewsApi } from "@/features/reviews";
+import type { Review } from "@/shared/api/types";
+import { ReviewModerationActions } from "../../components/reviews/ReviewModerationActions.component";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
@@ -48,8 +46,6 @@ export type AdminReviewsPageModel = AdminListPageModel & {
 export function useAdminReviewsPage(): AdminReviewsPageModel {
   const [search, setSearch] = useState("");
 
-  // New reviews and edits of approved ones share the queue; an edit row shows
-  // the proposed version, with the live text beside it ("Live version").
   const load = useCallback(
     async ({ page, limit }: { page: number; limit: number }) => {
       const result = await reviewsApi.pending({ page, limit });
@@ -78,68 +74,14 @@ export function useAdminReviewsPage(): AdminReviewsPageModel {
   );
 
   const actions = useCallback(
-    (row: AdminDataRow, reload: () => void): ReactNode => {
-      const name = adminRowLabel(row);
-      const isEdit = row.isEdit === true;
-      const approveReview = () =>
-        reviewsApi.approve(String(row.id)).then(reload);
-      const rejectReview = () => reviewsApi.reject(String(row.id)).then(reload);
+    (row: AdminDataRow, reload: () => void): ReactNode => (
+      <ReviewModerationActions row={row} reload={reload} />
+    ),
+    [],
+  );
 
-      return (
-        <>
-          <ReviewMediaModerationAction
-            media={row.media as ReviewMediaItem[] | undefined}
-          />
-          <AdminConfirmAction
-            label={LABELS.approve}
-            dialogVariant="success"
-            title={
-              isEdit
-                ? LABELS.confirmApproveEditTitle
-                : LABELS.confirmApproveReviewTitle
-            }
-            description={formatLabel(
-              isEdit
-                ? LABELS.confirmApproveEditBody
-                : LABELS.confirmApproveReviewBody,
-              { name },
-            )}
-            onConfirm={approveReview}
-          />
-          <AdminConfirmAction
-            label={LABELS.reject}
-            dialogVariant="danger"
-            title={
-              isEdit
-                ? LABELS.confirmRejectEditTitle
-                : LABELS.confirmRejectReviewTitle
-            }
-            description={formatLabel(
-              isEdit
-                ? LABELS.confirmRejectEditBody
-                : LABELS.confirmRejectReviewBody,
-              { name },
-            )}
-            onConfirm={rejectReview}
-          />
-          {row.vendorResponse ? (
-            <AdminConfirmAction
-              label={LABELS.clearSellerResponse}
-              dialogVariant="danger"
-              title={LABELS.removeSellerResponse}
-              description={formatLabel(LABELS.confirmRemoveSellerResponseBody, {
-                name,
-              })}
-              onConfirm={() =>
-                reviewsApi
-                  .respond(String(row.id), { response: "" })
-                  .then(reload)
-              }
-            />
-          ) : null}
-        </>
-      );
-    },
+  const fetchDetail = useCallback(
+    async (row: AdminDataRow) => row as unknown as Record<string, unknown>,
     [],
   );
 
@@ -153,6 +95,7 @@ export function useAdminReviewsPage(): AdminReviewsPageModel {
     permission: PERMISSIONS.REVIEW_MODERATE,
     load,
     actions,
+    fetchDetail,
     columnKeys: [
       "productName",
       "customerName",

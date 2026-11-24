@@ -19,6 +19,10 @@ export function AdminFinancePage() {
           title={page.commissions.title}
           permission={page.commissions.permission}
           load={page.commissions.load}
+          fetchRowDetail={
+            page.commissions.fetchDetail ??
+            (async (row) => row as unknown as Record<string, unknown>)
+          }
           columnKeys={page.commissions.columnKeys}
           hideTitle
         />
@@ -33,6 +37,10 @@ export function AdminFinancePage() {
           permission={page.commissionInvoices.permission}
           load={page.commissionInvoices.load}
           actions={page.commissionInvoices.actions}
+          fetchRowDetail={
+            page.commissionInvoices.fetchDetail ??
+            (async (row) => row as unknown as Record<string, unknown>)
+          }
           columnKeys={page.commissionInvoices.columnKeys}
           hideTitle
         />

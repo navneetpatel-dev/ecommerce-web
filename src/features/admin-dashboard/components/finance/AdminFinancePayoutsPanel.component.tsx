@@ -35,6 +35,10 @@ export function AdminFinancePayoutsPanel({
         permission={payouts.permission}
         load={payouts.load}
         actions={payouts.actions}
+        fetchRowDetail={
+          payouts.fetchDetail ??
+          (async (row) => row as unknown as Record<string, unknown>)
+        }
         columnKeys={payouts.columnKeys}
         hideTitle
       />

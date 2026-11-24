@@ -3,10 +3,9 @@
 import { useState, useCallback, type ReactNode } from "react";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { LABELS } from "@/shared/constants/labels";
-import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import { productQnaApi } from "@/features/productQna";
 import type { QnaModerationItem } from "@/features/productQna";
-import { AdminConfirmAction } from "../../components/shared/AdminConfirmAction.component";
+import { QnaModerationActions } from "../../components/qna/QnaModerationActions.component";
 import type { AdminDataRow } from "../shared/useAdminDataList.hook";
 import type { AdminListPageModel } from "../../types/shared/adminListPage.types";
 
@@ -30,11 +29,6 @@ function toRow(item: QnaModerationItem) {
     authorName: authorBadge,
   };
 }
-
-const excerpt = (text: unknown) => {
-  const value = String(text ?? "");
-  return value.length > 60 ? `${value.slice(0, 60)}…` : value;
-};
 
 export type AdminQnaModerationPageModel = AdminListPageModel & {
   filters: {
@@ -73,58 +67,14 @@ export function useAdminQnaModerationPage(): AdminQnaModerationPageModel {
   );
 
   const actions = useCallback(
-    (row: AdminDataRow, reload: () => void): ReactNode => {
-      const id = String(row.id);
-      const isEdit = row.isEdit === true;
-      const isAnswer = row.rawKind === "ANSWER";
-      const kind = String(row.kind).toLowerCase();
-      const name = excerpt(row.text);
-      const decide = (status: "PUBLISHED" | "REJECTED") => () =>
-        (isAnswer
-          ? productQnaApi.moderateAnswer(id, { status })
-          : productQnaApi.moderate(id, { status })
-        ).then(reload);
+    (row: AdminDataRow, reload: () => void): ReactNode => (
+      <QnaModerationActions row={row} reload={reload} />
+    ),
+    [],
+  );
 
-      return (
-        <>
-          <AdminConfirmAction
-            label={LABELS.approve}
-            dialogVariant="success"
-            title={
-              isEdit
-                ? LABELS.confirmApproveEditTitle
-                : formatLabel(LABELS.confirmApproveQnaTitle, { kind })
-            }
-            description={formatLabel(
-              isEdit
-                ? LABELS.confirmApproveEditBody
-                : LABELS.confirmApproveQnaBody,
-              { name },
-            )}
-            onConfirm={decide("PUBLISHED")}
-          />
-          <AdminConfirmAction
-            label={LABELS.reject}
-            dialogVariant="danger"
-            requireReason
-            reasonLabel={LABELS.rejectionNote}
-            reasonHint={LABELS.enterRejectionNote}
-            title={
-              isEdit
-                ? LABELS.confirmRejectEditTitle
-                : formatLabel(LABELS.confirmRejectQnaTitle, { kind })
-            }
-            description={formatLabel(
-              isEdit
-                ? LABELS.confirmRejectEditBody
-                : LABELS.confirmRejectQnaBody,
-              { name },
-            )}
-            onConfirm={decide("REJECTED")}
-          />
-        </>
-      );
-    },
+  const fetchDetail = useCallback(
+    async (row: AdminDataRow) => row as unknown as Record<string, unknown>,
     [],
   );
 
@@ -138,6 +88,7 @@ export function useAdminQnaModerationPage(): AdminQnaModerationPageModel {
     permission: PERMISSIONS.REVIEW_MODERATE,
     load,
     actions,
+    fetchDetail,
     columnKeys: [
       "productName",
       "authorName",

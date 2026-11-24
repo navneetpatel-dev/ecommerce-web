@@ -1,29 +1,24 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ImagePlus, Plus, RotateCcw } from "lucide-react";
+import { Plus } from "lucide-react";
 import { RequirePermission } from "@/shared/components/system/RequirePermission.component";
 import { StatusDialog } from "@/shared/components/dialogs/StatusDialog.component";
-import { EmptyState } from "@/shared/components/display/EmptyState.component";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
-import { FormFieldFrame } from "@/shared/components/forms";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
 import { LABELS } from "@/shared/constants/labels";
 import { PERMISSIONS } from "@/shared/constants/permissions/permissions";
 import { formatLabel } from "@/shared/utils/formatting/formatLabel";
 import type { PromoBannerStatus } from "@/shared/constants/statuses";
-import { CollapsibleTableFilters } from "@/shared/components/filters";
 import { usePromoBanners } from "./usePromoBanners.hook";
 import { PromoBannerCreateDialog } from "./PromoBannerCreateSection.component";
 import { PromoBannersList } from "./PromoBannersList.component";
+import { PromoBannersFilterBar } from "./PromoBannersFilterBar.component";
+import { PromoBannersSkeleton } from "./PromoBannersSkeleton.component";
+import {
+  PromoBannersEmptyState,
+  PromoBannersNoMatch,
+} from "./PromoBannersEmpty.component";
 import { adminPromoBannersPageStyles } from "./adminPromoBanners.styles";
 
 export function AdminPromoBannersPage() {
@@ -36,23 +31,16 @@ export function AdminPromoBannersPage() {
       if (statusFilter !== "ALL" && banner.status !== statusFilter) {
         return false;
       }
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
-        const matchTitle = banner.title.toLowerCase().includes(q);
-        const matchUrl = banner.linkUrl
-          ? banner.linkUrl.toLowerCase().includes(q)
-          : false;
-        const matchTarget = banner.linkTargetId
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase().trim();
+      return (
+        banner.title.toLowerCase().includes(q) ||
+        (banner.linkUrl ? banner.linkUrl.toLowerCase().includes(q) : false) ||
+        (banner.linkTargetId
           ? banner.linkTargetId.toLowerCase().includes(q)
-          : false;
-        const matchSlug = banner.linkSlug
-          ? banner.linkSlug.toLowerCase().includes(q)
-          : false;
-        if (!matchTitle && !matchUrl && !matchTarget && !matchSlug) {
-          return false;
-        }
-      }
-      return true;
+          : false) ||
+        (banner.linkSlug ? banner.linkSlug.toLowerCase().includes(q) : false)
+      );
     });
   }, [promo.banners, statusFilter, searchQuery]);
 
@@ -64,7 +52,6 @@ export function AdminPromoBannersPage() {
   return (
     <RequirePermission permission={PERMISSIONS.BANNER_MANAGE}>
       <div className={adminPromoBannersPageStyles.container}>
-        {/* Top Header with title and Top-Right Action Button that opens the Modal */}
         <header className="flex flex-wrap items-center justify-between gap-4">
           <div className={adminPromoBannersPageStyles.headerGroup}>
             <h1 className={adminPromoBannersPageStyles.heading}>
@@ -84,7 +71,6 @@ export function AdminPromoBannersPage() {
           </Button>
         </header>
 
-        {/* Promo Banner Create Modal Dialog */}
         <PromoBannerCreateDialog
           open={promo.isCreateOpen}
           onOpenChange={promo.setIsCreateOpen}
@@ -110,11 +96,7 @@ export function AdminPromoBannersPage() {
           onCreate={promo.onCreate}
         />
 
-        {promo.loading ? (
-          <p className={adminPromoBannersPageStyles.loadingText}>
-            {LABELS.loading}
-          </p>
-        ) : null}
+        {promo.loading ? <PromoBannersSkeleton /> : null}
 
         {promo.error ? (
           <p role="alert" className={adminPromoBannersPageStyles.errorText}>
@@ -123,29 +105,13 @@ export function AdminPromoBannersPage() {
         ) : null}
 
         {!promo.loading && !promo.error && promo.banners.length === 0 ? (
-          <div className="space-y-4">
-            <EmptyState
-              icon={ImagePlus}
-              heading={LABELS.noPromoBanners}
-              message={LABELS.promoBannersEmptyHint}
-            />
-            <div className="flex justify-center">
-              <Button
-                type="button"
-                variant="default"
-                onClick={() => promo.setIsCreateOpen(true)}
-                className="gap-2"
-              >
-                <Plus className="size-4" />
-                {LABELS.createPromoBanner}
-              </Button>
-            </div>
-          </div>
+          <PromoBannersEmptyState
+            onCreateClick={() => promo.setIsCreateOpen(true)}
+          />
         ) : null}
 
         {!promo.loading && promo.banners.length > 0 ? (
           <div className="space-y-4">
-            {/* Header for the Banners List */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-line/80 pt-6">
               <div className="space-y-0.5">
                 <div className="flex items-center gap-2">
@@ -164,63 +130,16 @@ export function AdminPromoBannersPage() {
               </div>
             </div>
 
-            <CollapsibleTableFilters
-              activeCount={
-                (searchQuery.trim() ? 1 : 0) + (statusFilter !== "ALL" ? 1 : 0)
-              }
-              onClear={handleResetFilters}
-            >
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 items-end">
-                <FormFieldFrame
-                  label={LABELS.search}
-                  htmlFor="promo-banners-filter-search"
-                >
-                  <Input
-                    id="promo-banners-filter-search"
-                    placeholder="Search banners by title or link..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                </FormFieldFrame>
-
-                <FormFieldFrame
-                  label={LABELS.status}
-                  htmlFor="promo-banners-filter-status"
-                >
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger id="promo-banners-filter-status">
-                      <SelectValue placeholder="All Statuses" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ALL">All Statuses</SelectItem>
-                      <SelectItem value="ACTIVE">Active</SelectItem>
-                      <SelectItem value="DRAFT">Draft</SelectItem>
-                      <SelectItem value="ARCHIVED">Archived</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormFieldFrame>
-              </div>
-            </CollapsibleTableFilters>
+            <PromoBannersFilterBar
+              searchQuery={searchQuery}
+              onSearchQueryChange={setSearchQuery}
+              statusFilter={statusFilter}
+              onStatusFilterChange={setStatusFilter}
+              onResetFilters={handleResetFilters}
+            />
 
             {filteredBanners.length === 0 ? (
-              <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-line bg-surface p-8 text-center">
-                <p className="text-body font-medium text-ink">
-                  No banners found matching your filters
-                </p>
-                <p className="mt-1 text-body-sm text-ink-muted">
-                  Try adjusting your search query or status filter.
-                </p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleResetFilters}
-                  className="mt-4 gap-1.5"
-                >
-                  <RotateCcw className="h-3.5 w-3.5" />
-                  Clear Filters
-                </Button>
-              </div>
+              <PromoBannersNoMatch onResetFilters={handleResetFilters} />
             ) : (
               <PromoBannersList
                 banners={filteredBanners}

@@ -178,7 +178,6 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
 
       <DataTable
         ariaLabel={LABELS.vendorCouponsTableAria}
-
         columns={columns}
         rows={coupons}
         loading={loading}
@@ -186,6 +185,9 @@ export function VendorCouponsView(props: VendorCouponsViewProps) {
         getRowId={(row) => row.id}
         pagination={pagination}
         actions={renderActions}
+        fetchRowDetail={async (row) =>
+          row as unknown as Record<string, unknown>
+        }
       />
 
       <CouponAnalyticsDialog

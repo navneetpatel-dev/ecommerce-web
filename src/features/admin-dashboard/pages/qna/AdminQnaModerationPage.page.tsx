@@ -36,6 +36,7 @@ export function AdminQnaModerationPage() {
         permission={page.permission}
         load={page.load}
         actions={page.actions}
+        fetchRowDetail={page.fetchDetail}
         columnKeys={page.columnKeys}
       />
     </div>
