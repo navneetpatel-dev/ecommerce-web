@@ -35,13 +35,6 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
         ? String(category.name)
         : null;
 
-  const categorySlug =
-    typeof category?.slug === "string"
-      ? category.slug
-      : typeof product.categorySlug === "string"
-        ? product.categorySlug
-        : null;
-
   const displayPrice =
     product.displayPrice ?? product.basePrice ?? product.price;
   const compareAtPrice = product.compareAtPrice ?? product.mrp;
@@ -53,9 +46,9 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
     typeof product.reviewCount === "number" ? product.reviewCount : 0;
   const status = typeof product.status === "string" ? product.status : null;
   const slug = typeof product.slug === "string" ? product.slug : null;
-  const storeUrl = slug
-    ? PATHS.product(slug)
-    : `${PATHS.products}?search=${encodeURIComponent(name)}`;
+  const isActive = status === "ACTIVE";
+  const catalogUrl = `${PATHS.admin.products}?tab=all&search=${encodeURIComponent(name)}`;
+  const storeUrl = isActive && slug ? PATHS.product(slug) : catalogUrl;
 
   return (
     <div className="rounded-2xl border border-line/80 bg-gradient-to-b from-surface-subtle/60 to-surface p-4 sm:p-5 shadow-xs space-y-4">
@@ -64,7 +57,11 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
           href={storeUrl}
           target="_blank"
           rel="noopener noreferrer"
-          title="Open product on storefront in new tab"
+          title={
+            isActive
+              ? "Open product on storefront in new tab"
+              : "View product in Admin catalog in new tab"
+          }
           className="group relative size-20 sm:size-24 rounded-xl overflow-hidden border border-line bg-paper shrink-0 shadow-xs hover:border-brand/40 transition-colors"
         >
           <MediaImage
@@ -83,10 +80,10 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
             {status && <StatusBadge status={status} />}
             {brand && (
               <a
-                href={`${PATHS.products}?brand=${encodeURIComponent(brand)}`}
+                href={`${PATHS.admin.products}?tab=all&search=${encodeURIComponent(brand)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="View brand products in new tab"
+                title="Search brand in Admin catalog in new tab"
                 className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-brand-subtle text-brand text-[11px] font-semibold border border-brand/30 hover:bg-brand hover:text-paper hover:border-brand transition-all"
               >
                 <span>{brand}</span>
@@ -95,12 +92,10 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
             )}
             {categoryName && (
               <a
-                href={
-                  categorySlug ? PATHS.category(categorySlug) : PATHS.categories
-                }
+                href={`${PATHS.admin.products}?tab=all&search=${encodeURIComponent(categoryName)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="View category in new tab"
+                title="Search category in Admin catalog in new tab"
                 className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface text-ink-muted text-[11px] font-medium border border-line hover:bg-brand-subtle hover:text-ink hover:border-brand/40 transition-all"
               >
                 <Tag className="size-3" />
@@ -115,7 +110,11 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
               href={storeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              title="Open product on storefront in new tab"
+              title={
+                isActive
+                  ? "Open product on storefront in new tab"
+                  : "View product in Admin catalog in new tab"
+              }
               className="hover:text-brand hover:underline inline-flex items-center gap-1.5 transition-colors"
             >
               <span>{name}</span>
@@ -126,14 +125,10 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-ink-muted">
             {avgRating != null && avgRating > 0 && (
               <a
-                href={
-                  slug
-                    ? PATHS.productReviews(slug)
-                    : `${PATHS.admin.reviews}?search=${encodeURIComponent(name)}`
-                }
+                href={`${PATHS.admin.reviews}?search=${encodeURIComponent(name)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="View reviews in new tab"
+                title="View reviews in Admin Review Moderation in new tab"
                 className="flex items-center gap-1 font-semibold text-ink hover:text-brand transition-colors"
               >
                 <Star className="size-3.5 fill-amber-400 text-amber-500" />
@@ -173,7 +168,9 @@ export function ProductHeroCard({ product }: ProductHeroCardProps) {
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line-strong/80 bg-surface text-ink font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
         >
           <ExternalLink className="size-3.5 text-brand" />
-          <span>View on Storefront</span>
+          <span>
+            {isActive ? "View on Storefront" : "View in Admin Catalog"}
+          </span>
         </a>
       </div>
     </div>

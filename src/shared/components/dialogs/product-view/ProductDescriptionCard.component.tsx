@@ -77,10 +77,10 @@ export function ProductDescriptionCard({
             {tags.map((tag, idx) => (
               <a
                 key={idx}
-                href={`${PATHS.products}?search=${encodeURIComponent(tag)}`}
+                href={`${PATHS.admin.products}?tab=all&search=${encodeURIComponent(tag)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                title={`Find all products tagged "${tag}" in new tab`}
+                title={`Find products tagged "${tag}" in Admin catalog in new tab`}
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface text-[11px] font-medium text-ink-muted border border-line hover:border-brand hover:text-brand hover:bg-brand-subtle transition-all"
               >
                 <Tag className="size-3 text-ink-muted/70" />

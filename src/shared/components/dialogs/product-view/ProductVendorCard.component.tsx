@@ -34,9 +34,16 @@ export function ProductVendorCard({ product }: ProductVendorCardProps) {
         : null;
 
   const status = typeof vendor?.status === "string" ? vendor.status : null;
+  const isApproved = status === "APPROVED";
   const kycComplete = vendor?.kycComplete === true;
 
   if (!vendorName && !vendorId) return null;
+
+  const vendorAdminUrl = vendorId
+    ? PATHS.admin.vendorDetail(vendorId)
+    : `${PATHS.admin.vendors}?tab=all&search=${encodeURIComponent(vendorName ?? "")}`;
+  const vendorStoreUrl =
+    isApproved && vendorSlug ? PATHS.vendorPage(vendorSlug) : vendorAdminUrl;
 
   return (
     <div className="rounded-2xl border border-line/80 bg-surface p-4 sm:p-5 shadow-xs space-y-4">
@@ -48,51 +55,36 @@ export function ProductVendorCard({ product }: ProductVendorCardProps) {
 
         <div className="flex items-center gap-2">
           {status && <StatusBadge status={status} />}
-          {vendorId ? (
-            <a
-              href={PATHS.admin.vendorDetail(vendorId)}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Open vendor admin profile in new tab"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
-            >
-              <span>Admin Profile</span>
-              <ExternalLink className="size-3" />
-            </a>
-          ) : (
-            <a
-              href={PATHS.admin.vendors}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Open vendors in admin in new tab"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
-            >
-              <span>All Vendors</span>
-              <ExternalLink className="size-3" />
-            </a>
-          )}
+          <a
+            href={vendorAdminUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open vendor admin profile in new tab"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
+          >
+            <span>{vendorId ? "Admin Profile" : "All Vendors"}</span>
+            <ExternalLink className="size-3" />
+          </a>
         </div>
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl border border-line/60 bg-paper/60">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            {vendorSlug ? (
-              <a
-                href={PATHS.vendorPage(vendorSlug)}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Open merchant storefront in new tab"
-                className="font-bold text-base text-ink hover:text-brand hover:underline inline-flex items-center gap-1.5 transition-colors"
-              >
-                <span>{vendorName ?? "Seller"}</span>
-                <ExternalLink className="size-3.5 opacity-60" />
-              </a>
-            ) : (
-              <span className="font-bold text-base text-ink">
-                {vendorName ?? "Seller"}
-              </span>
-            )}
+            <a
+              href={vendorStoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={
+                isApproved && vendorSlug
+                  ? "Open merchant storefront in new tab"
+                  : "Open vendor admin profile in new tab"
+              }
+              className="font-bold text-base text-ink hover:text-brand hover:underline inline-flex items-center gap-1.5 transition-colors"
+            >
+              <span>{vendorName ?? "Seller"}</span>
+              <ExternalLink className="size-3.5 opacity-60" />
+            </a>
             {kycComplete && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success-subtle text-success text-[10px] font-bold border border-success/30">
                 <ShieldCheck className="size-3 text-success" />
@@ -111,27 +103,17 @@ export function ProductVendorCard({ product }: ProductVendorCardProps) {
           )}
         </div>
 
-        {vendorSlug ? (
-          <a
-            href={PATHS.vendorPage(vendorSlug)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline shrink-0"
-          >
-            <span>Visit Storefront</span>
-            <ExternalLink className="size-3" />
-          </a>
-        ) : (
-          <a
-            href={PATHS.vendors}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline shrink-0"
-          >
-            <span>Browse Merchants</span>
-            <ExternalLink className="size-3" />
-          </a>
-        )}
+        <a
+          href={vendorStoreUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline shrink-0"
+        >
+          <span>
+            {isApproved && vendorSlug ? "Visit Storefront" : "View in Admin"}
+          </span>
+          <ExternalLink className="size-3" />
+        </a>
       </div>
 
       <ProductVendorContactGrid

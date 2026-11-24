@@ -27,12 +27,19 @@ export function AdminVendorsPage() {
     </div>
   );
 
+  const hasFilter = Boolean(page.filters.search || page.filters.status);
+  const defaultTab = hasFilter
+    ? "all"
+    : page.pendingCount > 0
+      ? "pending"
+      : "all";
+
   return (
     <RequirePermission permission={page.gatePermission}>
       {page.showApprovalQueue ? (
         <AdminSectionTabs
           title={page.title}
-          defaultValue={page.pendingCount > 0 ? "pending" : "all"}
+          defaultValue={defaultTab}
           tabs={[
             {
               value: "pending",

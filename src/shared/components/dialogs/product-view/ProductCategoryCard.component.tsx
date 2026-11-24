@@ -18,28 +18,20 @@ interface ProductCategoryCardProps {
 
 export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
   const category = (product.category as Record<string, unknown>) ?? null;
-  const categoryName =
-    typeof category?.name === "string"
-      ? category.name
-      : typeof product.categoryName === "string"
-        ? product.categoryName
-        : null;
-
-  const categorySlug =
-    typeof category?.slug === "string"
-      ? category.slug
-      : typeof product.categorySlug === "string"
-        ? product.categorySlug
-        : null;
-
+  const categoryName = (
+    typeof category?.name === "string" ? category.name : product.categoryName
+  ) as string | null;
+  const categorySlug = (
+    typeof category?.slug === "string" ? category.slug : product.categorySlug
+  ) as string | null;
   const categoryStatus =
     typeof category?.status === "string" ? category.status : null;
+  const isCategoryActive = categoryStatus === "ACTIVE";
   const description =
     typeof category?.description === "string" ? category.description : null;
   const parent = (category?.parent as Record<string, unknown>) ?? null;
   const parentName = typeof parent?.name === "string" ? parent.name : null;
   const parentSlug = typeof parent?.slug === "string" ? parent.slug : null;
-
   const commissionRate = category?.commissionRate;
   const returnWindowDays = category?.returnWindowDays;
   const defaultWarrantyMonths = category?.defaultWarrantyMonths;
@@ -49,6 +41,18 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
     : [];
 
   if (!categoryName && secondaryCategories.length === 0) return null;
+
+  const parentUrl =
+    isCategoryActive && parentSlug
+      ? PATHS.category(parentSlug)
+      : `${PATHS.admin.products}?tab=all&search=${encodeURIComponent(parentName ?? "")}`;
+
+  const categoryUrl =
+    isCategoryActive && categorySlug
+      ? parentSlug
+        ? PATHS.category(parentSlug, categorySlug)
+        : PATHS.category(categorySlug)
+      : `${PATHS.admin.products}?tab=all&search=${encodeURIComponent(categoryName ?? "")}`;
 
   return (
     <div className="rounded-2xl border border-line/80 bg-surface p-4 sm:p-5 shadow-xs space-y-4">
@@ -61,10 +65,10 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
         <div className="flex items-center gap-2">
           {categoryStatus && <StatusBadge status={categoryStatus} />}
           <a
-            href={PATHS.categories}
+            href={PATHS.admin.categories}
             target="_blank"
             rel="noopener noreferrer"
-            title="Browse all categories in new tab"
+            title="Browse all categories in Admin in new tab"
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
           >
             <span>All Categories</span>
@@ -77,36 +81,37 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
         <div className="flex items-center gap-2 flex-wrap">
           {parentName && (
             <div className="inline-flex items-center gap-1 text-xs text-ink-muted">
-              {parentSlug ? (
-                <a
-                  href={PATHS.category(parentSlug)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-brand hover:underline"
-                >
-                  {parentName}
-                </a>
-              ) : (
-                <span>{parentName}</span>
-              )}
+              <a
+                href={parentUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={
+                  isCategoryActive && parentSlug
+                    ? "Open parent category on storefront in new tab"
+                    : "Search parent category in Admin in new tab"
+                }
+                className="hover:text-brand hover:underline"
+              >
+                {parentName}
+              </a>
               <ChevronRight className="size-3 text-ink-muted/60" />
             </div>
           )}
 
-          {categorySlug ? (
-            <a
-              href={PATHS.category(categorySlug)}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Open category page in new tab"
-              className="font-bold text-base text-ink hover:text-brand hover:underline inline-flex items-center gap-1.5 transition-colors"
-            >
-              <span>{categoryName}</span>
-              <ExternalLink className="size-3.5 opacity-60" />
-            </a>
-          ) : (
-            <span className="font-bold text-base text-ink">{categoryName}</span>
-          )}
+          <a
+            href={categoryUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={
+              isCategoryActive && categorySlug
+                ? "Open category on storefront in new tab"
+                : "Search category in Admin catalog in new tab"
+            }
+            className="font-bold text-base text-ink hover:text-brand hover:underline inline-flex items-center gap-1.5 transition-colors"
+          >
+            <span>{categoryName}</span>
+            <ExternalLink className="size-3.5 opacity-60" />
+          </a>
         </div>
 
         {categorySlug && (
@@ -130,41 +135,46 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
         returnWindowDays != null ||
         defaultWarrantyMonths != null) && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {commissionRate != null && (
-            <div className="p-3 rounded-xl border border-line/50 bg-paper/40 space-y-1">
-              <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
-                <Percent className="size-3" />
-                <span>Default Commission</span>
+          {[
+            {
+              show: commissionRate != null,
+              Icon: Percent,
+              label: "Default Commission",
+              val: `${Number(commissionRate)}%`,
+              mono: true,
+            },
+            {
+              show: returnWindowDays != null,
+              Icon: Calendar,
+              label: "Category Return Window",
+              val: `${Number(returnWindowDays)} Days`,
+              mono: false,
+            },
+            {
+              show: defaultWarrantyMonths != null,
+              Icon: Shield,
+              label: "Default Warranty",
+              val: `${String(defaultWarrantyMonths)} Months`,
+              mono: false,
+            },
+          ]
+            .filter((m) => m.show)
+            .map((m) => (
+              <div
+                key={m.label}
+                className="p-3 rounded-xl border border-line/50 bg-paper/40 space-y-1"
+              >
+                <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
+                  <m.Icon className="size-3" />
+                  <span>{m.label}</span>
+                </div>
+                <p
+                  className={`text-xs text-ink ${m.mono ? "font-mono font-bold" : "font-medium"}`}
+                >
+                  {m.val}
+                </p>
               </div>
-              <p className="font-mono font-bold text-xs text-ink">
-                {Number(commissionRate)}%
-              </p>
-            </div>
-          )}
-
-          {returnWindowDays != null && (
-            <div className="p-3 rounded-xl border border-line/50 bg-paper/40 space-y-1">
-              <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
-                <Calendar className="size-3" />
-                <span>Category Return Window</span>
-              </div>
-              <p className="font-medium text-xs text-ink">
-                {Number(returnWindowDays)} Days
-              </p>
-            </div>
-          )}
-
-          {defaultWarrantyMonths != null && (
-            <div className="p-3 rounded-xl border border-line/50 bg-paper/40 space-y-1">
-              <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">
-                <Shield className="size-3" />
-                <span>Default Warranty</span>
-              </div>
-              <p className="font-medium text-xs text-ink">
-                {String(defaultWarrantyMonths)} Months
-              </p>
-            </div>
-          )}
+            ))}
         </div>
       )}
 
@@ -174,19 +184,22 @@ export function ProductCategoryCard({ product }: ProductCategoryCardProps) {
             Secondary & Cross-Listed Categories
           </span>
           <div className="flex flex-wrap gap-1.5">
-            {secondaryCategories.map((sc, i) => (
-              <a
-                key={i}
-                href={sc.slug ? PATHS.category(sc.slug) : PATHS.categories}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`Open ${sc.name ?? sc.slug} in new tab`}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface text-[11px] font-medium text-ink-muted border border-line hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all"
-              >
-                <span>{sc.name ?? sc.slug}</span>
-                <ExternalLink className="size-2.5 opacity-60" />
-              </a>
-            ))}
+            {secondaryCategories.map((sc, i) => {
+              const name = sc.name ?? sc.slug ?? "";
+              return (
+                <a
+                  key={i}
+                  href={`${PATHS.admin.products}?tab=all&search=${encodeURIComponent(name)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`Find products in ${name} in Admin catalog in new tab`}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface text-[11px] font-medium text-ink-muted border border-line hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all"
+                >
+                  <span>{name}</span>
+                  <ExternalLink className="size-2.5 opacity-60" />
+                </a>
+              );
+            })}
           </div>
         </div>
       )}

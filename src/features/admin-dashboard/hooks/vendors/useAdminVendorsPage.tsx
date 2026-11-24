@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   PERMISSIONS,
   type PermissionKey,
@@ -26,8 +27,15 @@ export type AdminVendorsPageModel = AdminListPageModel & {
 export function useAdminVendorsPage(): AdminVendorsPageModel {
   const { hasPermission } = usePermissions();
   const { data: pendingVendors } = usePendingVendors();
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
+  const searchParams = useSearchParams();
+  const paramSearch = searchParams.get("search") ?? searchParams.get("q") ?? "";
+  const paramStatus = searchParams.get("status") ?? "";
+
+  const [userSearch, setUserSearch] = useState<string | null>(null);
+  const [userStatus, setUserStatus] = useState<string | null>(null);
+
+  const search = userSearch ?? paramSearch;
+  const status = userStatus ?? paramStatus;
   const debouncedSearch = useDebouncedValue(search.trim(), 350);
 
   const load = useCallback(
@@ -42,8 +50,8 @@ export function useAdminVendorsPage(): AdminVendorsPageModel {
   );
 
   const onClear = useCallback(() => {
-    setSearch("");
-    setStatus("");
+    setUserSearch("");
+    setUserStatus("");
   }, []);
 
   const actions = useCallback((row: AdminDataRow, reload: () => void) => {
@@ -80,8 +88,8 @@ export function useAdminVendorsPage(): AdminVendorsPageModel {
     filters: {
       search,
       status,
-      onSearchChange: setSearch,
-      onStatusChange: setStatus,
+      onSearchChange: setUserSearch,
+      onStatusChange: setUserStatus,
       onClear,
     },
   };

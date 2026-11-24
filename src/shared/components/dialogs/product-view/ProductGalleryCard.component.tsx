@@ -42,6 +42,17 @@ function extractAllProductImages(
   return images;
 }
 
+function safeExternalHref(url: string): string {
+  if (
+    url.startsWith("http://") ||
+    url.startsWith("https://") ||
+    url.startsWith("/")
+  ) {
+    return url;
+  }
+  return `https://${url}`;
+}
+
 export function ProductGalleryCard({ product }: ProductGalleryCardProps) {
   const images = extractAllProductImages(product);
   if (images.length === 0) return null;
@@ -62,7 +73,7 @@ export function ProductGalleryCard({ product }: ProductGalleryCardProps) {
         {images.map((img, i) => (
           <a
             key={i}
-            href={img.url}
+            href={safeExternalHref(img.url)}
             target="_blank"
             rel="noopener noreferrer"
             title="View full image in new tab"

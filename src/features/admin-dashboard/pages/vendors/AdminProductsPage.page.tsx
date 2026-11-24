@@ -31,7 +31,12 @@ export function AdminProductsPage() {
     return catalog;
   }
 
-  const defaultTab = page.pendingCount > 0 ? "pending" : "all";
+  const hasFilter = Boolean(page.filters.search || page.filters.status);
+  const defaultTab = hasFilter
+    ? "all"
+    : page.pendingCount > 0
+      ? "pending"
+      : "all";
   const pendingTabContent = (
     <RequirePermission permission={page.approvePermission}>
       <ProductModerationQueue />

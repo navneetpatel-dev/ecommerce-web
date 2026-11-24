@@ -14,6 +14,17 @@ interface ProductAuditMetaCardProps {
   product: Record<string, unknown>;
 }
 
+function safeExternalHref(url: string): string {
+  if (
+    url.startsWith("http://") ||
+    url.startsWith("https://") ||
+    url.startsWith("/")
+  ) {
+    return url;
+  }
+  return `https://${url}`;
+}
+
 export function ProductAuditMetaCard({ product }: ProductAuditMetaCardProps) {
   const rejectionReason =
     typeof product.rejectionReason === "string"
@@ -85,7 +96,7 @@ export function ProductAuditMetaCard({ product }: ProductAuditMetaCardProps) {
         <div className="flex flex-wrap gap-2 pt-1">
           {videoUrl && (
             <a
-              href={videoUrl}
+              href={safeExternalHref(videoUrl)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
@@ -97,7 +108,7 @@ export function ProductAuditMetaCard({ product }: ProductAuditMetaCardProps) {
           )}
           {sizeChartUrl && (
             <a
-              href={sizeChartUrl}
+              href={safeExternalHref(sizeChartUrl)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-line-strong/80 bg-surface text-ink text-xs font-semibold hover:border-brand hover:bg-brand-subtle hover:text-brand transition-all shadow-xs"
